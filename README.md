@@ -12,7 +12,7 @@ The documentation can be found in the Documentation folder. open the ./Documenta
 
 * [The UMI3D SDK for Unity](https://github.com/Gfi-Innovation/UMI3D-SDK)
 * [Server Samples Scenes](https://github.com/Gfi-Innovation/UMI3D-Samples)
-* [An UMI3D steam browser](url) (Coming soon)
+* [A UMI3D steam browser](url) (Coming soon)
 
 ## Getting Started
 * Launch a Server (Server sample scenes can be found [here](https://github.com/Gfi-Innovation/UMI3D-Samples))
