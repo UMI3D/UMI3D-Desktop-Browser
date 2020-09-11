@@ -295,7 +295,7 @@ namespace BrowserDesktop.Controller
                 Vector3 screenPosition = Input.mousePosition;
                 Ray ray = Camera.main.ScreenPointToRay(screenPosition);
                 Debug.DrawRay(ray.origin, ray.direction.normalized * 100f, Color.red, 0, true);
-                RaycastHit[] hits = umi3d.Physics.RaycastAll(ray, 100f);
+                RaycastHit[] hits = umi3d.common.Physics.RaycastAll(ray, 100f);
                 foreach (RaycastHit hit in hits)
                 {
                     if (hit.collider.gameObject.GetComponentInParent<UMI3DEnvironmentLoader>() == null)

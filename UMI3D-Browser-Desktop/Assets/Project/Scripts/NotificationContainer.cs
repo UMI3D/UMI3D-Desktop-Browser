@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d;
+using umi3d.common;
 
 public class NotificationContainer : Singleton<NotificationContainer>
 {

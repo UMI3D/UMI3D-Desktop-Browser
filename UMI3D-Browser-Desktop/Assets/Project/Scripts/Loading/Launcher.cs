@@ -64,7 +64,7 @@ public class Launcher : MonoBehaviour
     /// <param name="directory">Directory to write the file into.</param>
     void SetDataSet(DataSet data)
     {
-        string path = umi3d.Path.Combine(Application.persistentDataPath, dataFile);
+        string path = umi3d.common.Path.Combine(Application.persistentDataPath, dataFile);
         FileStream file;
         if (File.Exists(path)) file = File.OpenWrite(path);
         else file = File.Create(path);
@@ -80,7 +80,7 @@ public class Launcher : MonoBehaviour
     /// <returns>A DataFile if the directory containe one, null otherwhise.</returns>
     DataSet GetDataSet()
     {
-        string path = umi3d.Path.Combine(Application.persistentDataPath, dataFile);
+        string path = umi3d.common.Path.Combine(Application.persistentDataPath, dataFile);
         if (File.Exists(path))
         {
             FileStream file;

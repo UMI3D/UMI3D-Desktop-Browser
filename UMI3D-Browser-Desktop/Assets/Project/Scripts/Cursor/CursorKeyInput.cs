@@ -72,7 +72,7 @@ namespace BrowserDesktop.Cursor
             }
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit[] hits = umi3d.Physics.RaycastAll(ray, constrainDistanceChange ? distCursor + MaxDistCursorDelta : 100);
+            RaycastHit[] hits = umi3d.common.Physics.RaycastAll(ray, constrainDistanceChange ? distCursor + MaxDistCursorDelta : 100);
 
             ignore = new List<Transform>();
             ignore.AddRange(AvatarParent.gameObject.GetComponentsInChildren<Transform>());

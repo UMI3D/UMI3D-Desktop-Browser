@@ -19,7 +19,7 @@ using UnityEngine;
 
 namespace BrowserDesktop.Cursor
 {
-    public class CursorHandler : umi3d.PersistentSingleton<CursorHandler>
+    public class CursorHandler : umi3d.common.PersistentSingleton<CursorHandler>
     {
         //SpriteRenderer spriteRenderer;
         public Texture2D HintCursor;

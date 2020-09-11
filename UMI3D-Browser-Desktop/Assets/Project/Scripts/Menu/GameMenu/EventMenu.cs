@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace BrowserDesktop.Menu
 {
-    public class EventMenu : umi3d.Singleton<EventMenu>
+    public class EventMenu : umi3d.common.Singleton<EventMenu>
     {
         [SerializeField]
         GameObject EventDisplayerPrefab = null;
