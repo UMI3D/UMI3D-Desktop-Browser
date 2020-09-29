@@ -146,6 +146,8 @@ namespace BrowserDesktop.Interaction
 
         ManipulationDisplayer ManipulationDisplayer;
 
+        string toolId;
+
         protected void Start()
         {
             if (ManipulationDisplayer == null)
@@ -171,7 +173,7 @@ namespace BrowserDesktop.Interaction
             }
         }
 
-        public override void Associate(AbstractInteractionDto interaction)
+        public override void Associate(AbstractInteractionDto interaction, string toolId)
         {
             if (associatedInteraction != null)
             {
@@ -180,13 +182,14 @@ namespace BrowserDesktop.Interaction
 
             if (IsCompatibleWith(interaction))
             {
+                this.toolId = toolId;
                 foreach (DofGroupOptionDto group in (interaction as ManipulationDto).dofSeparationOptions)
                 {
                     foreach (DofGroupDto sep in group.separations)
                     {
                         if (sep.dofs == DofGroup)
                         {
-                            Associate(interaction as ManipulationDto, sep.dofs);
+                            Associate(interaction as ManipulationDto, sep.dofs, toolId);
                             return;
                         }
                     }
@@ -204,7 +207,7 @@ namespace BrowserDesktop.Interaction
         }
 
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId)
         {
             if (associatedInteraction != null)
             {
@@ -279,7 +282,8 @@ namespace BrowserDesktop.Interaction
 
                                 var pararmeterDto = new ManipulationRequestDto()
                                 {
-                                    entityId =  associatedInteraction.id
+                                    id =  associatedInteraction.id,
+                                    toolId = this.toolId
                                 };
                                 MapDistanceWithDof(distanceInFrame, ref pararmeterDto);
                                 UMI3DClientServer.Send(pararmeterDto, true);

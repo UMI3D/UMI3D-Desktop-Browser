@@ -23,7 +23,7 @@ namespace BrowserDesktop.Parameters
     public abstract class AbstractEnumParameterInput<InputMenuItem, ValueType> : AbstractParameterInput<InputMenuItem, EnumParameterDto<ValueType>, ValueType>
         where InputMenuItem : AbstractEnumInputMenuItem<ValueType>, new()
     {
-        public override void Associate(AbstractInteractionDto interaction)
+        public override void Associate(AbstractInteractionDto interaction, string toolId)
         {
             if (currentInteraction != null)
             {
@@ -40,7 +40,8 @@ namespace BrowserDesktop.Parameters
                     dto.value = newValue;
                     var pararmeterDto = new ParameterSettingRequestDto()
                     {
-                        entityId = currentInteraction.id,
+                        id = currentInteraction.id,
+                        toolId = toolId,
                         parameter = dto,
                     };
                     UMI3DCollaborationClientServer.Send(pararmeterDto, true);

@@ -32,12 +32,14 @@ public class KeyMenuInput : AbstractUMI3DInput
     /// </summary>
     public string bone = BoneType.RightHand;
 
+    string toolId;
+
     protected BoneDto boneDto;
     bool risingEdgeEventSent;
 
     HoldableButtonMenuItem menuItem;
 
-    public override void Associate(AbstractInteractionDto interaction)
+    public override void Associate(AbstractInteractionDto interaction, string toolId)
     {
         if (associatedInteraction != null)
         {
@@ -46,6 +48,7 @@ public class KeyMenuInput : AbstractUMI3DInput
 
         if (IsCompatibleWith(interaction))
         {
+            this.toolId = toolId;
             associatedInteraction = interaction as EventDto;
             menuItem = new HoldableButtonMenuItem
             {
@@ -64,7 +67,7 @@ public class KeyMenuInput : AbstractUMI3DInput
         }
     }
 
-    public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs)
+    public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId)
     {
         throw new System.Exception("This input is can not be associated with a manipulation");
     }
@@ -108,7 +111,8 @@ public class KeyMenuInput : AbstractUMI3DInput
                 {
                     active = true,
                     boneType = boneDto.boneType,
-                    entityId = associatedInteraction.id
+                    id = associatedInteraction.id,
+                    toolId = this.toolId
                 };
                 UMI3DClientServer.Send(eventdto, true);
                 risingEdgeEventSent = true;
@@ -118,7 +122,8 @@ public class KeyMenuInput : AbstractUMI3DInput
                 var eventdto = new EventTriggeredDto
                 {
                     boneType = boneDto.boneType,
-                    entityId = associatedInteraction.id
+                    id = associatedInteraction.id,
+                    toolId = this.toolId
                 };
                 UMI3DClientServer.Send(eventdto, true);
             }
@@ -134,7 +139,8 @@ public class KeyMenuInput : AbstractUMI3DInput
                     {
                         active = false,
                         boneType = boneDto.boneType,
-                        entityId = associatedInteraction.id
+                        id = associatedInteraction.id,
+                        toolId = this.toolId
                     };
                     UMI3DClientServer.Send(eventdto, true);
                     risingEdgeEventSent = false;
