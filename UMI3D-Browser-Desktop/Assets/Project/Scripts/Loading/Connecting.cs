@@ -69,7 +69,7 @@ public class Connecting : Singleton<Connecting>
         {
             debugForm(form);
             Menu.menu.RemoveAll();
-            foreach(var param in form.interactions)
+            foreach(var param in form.Fields)
             {
                 Menu.menu.Add(getInteractionItem(param));
             }
