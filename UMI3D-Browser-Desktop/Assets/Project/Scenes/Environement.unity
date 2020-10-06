@@ -3358,9 +3358,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1318732803}
   - component: {fileID: 1318732802}
-  - component: {fileID: 1318732804}
-  - component: {fileID: 1318732806}
-  - component: {fileID: 1318732805}
   m_Layer: 0
   m_Name: Server
   m_TagString: Untagged
@@ -3401,50 +3398,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1318732804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1318732801}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98226d6ee67fab84384f74fcdd97431e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  key: 5ZQKBKtQW1E9zvIhq6dhseEHCZde6PtaCjsKj8LK0Uw=
-  user: vrdatastreamer
-  serverName: VRdata-hub
-  hubName: ObjectPeriodic
-  packetSent: 0
-  confirmationReceived: 0
---- !u!114 &1318732805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1318732801}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 768b4ba031d27004a822274ffa8c8850, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1318732806
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1318732801}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e14e196e6e81ce4b8470104f5f5940a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data_packet_size: 1
-  loggingActivated: 1
 --- !u!1 &1370384012
 GameObject:
   m_ObjectHideFlags: 0
