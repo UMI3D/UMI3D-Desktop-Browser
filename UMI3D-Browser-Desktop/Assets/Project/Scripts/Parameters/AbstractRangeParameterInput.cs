@@ -39,16 +39,16 @@ namespace BrowserDesktop.Parameters
                 menuItem = new InputMenuItem()
                 {
                     dto = interaction as ParameterType,
-                    min = param.Min,
-                    max = param.Max,
+                    min = param.min,
+                    max = param.max,
                     Name = param.name,
                     value = param.value,
-                    increment = param.Increment
+                    increment = param.increment
                 };
 
                 callback = x =>
                 {
-                    if ((x.CompareTo(param.Min) >= 0) && (x.CompareTo(param.Max) <= 0))
+                    if ((x.CompareTo(param.min) >= 0) && (x.CompareTo(param.max) <= 0))
                     {
                         var dto = interaction as ParameterType;
                         dto.value = x;

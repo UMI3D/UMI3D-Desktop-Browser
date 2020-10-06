@@ -51,7 +51,7 @@ namespace BrowserDesktop.Parameters
                 {
                     dto = stringEnum,
                     Name = interaction.name,
-                    options = stringEnum.PossibleValues
+                    options = stringEnum.possibleValues
                 };
 
                 menuItem.NotifyValueChange(stringEnum.value);
