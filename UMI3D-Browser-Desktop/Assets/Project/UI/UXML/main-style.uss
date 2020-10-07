@@ -1,0 +1,144 @@
+Button {
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    -unity-font-style: bold;
+}
+
+TextField > #unity-text-input {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-left-color: rgb(52, 133, 153);
+    border-right-color: rgb(52, 133, 153);
+    border-top-color: rgb(52, 133, 153);
+    border-bottom-color: rgb(52, 133, 153);
+    height: 100%;
+}
+
+TextField {
+    height: 45px;
+    align-items: center;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+TextField > Label {
+    -unity-font-style: bold;
+    color: rgb(52, 133, 153);
+    min-width: 0;
+}
+
+.dark-grey1-bck {
+    background-color: rgb(41, 44, 48);
+}
+
+.dark-grey2-bck {
+    background-color: rgb(58, 58, 58);
+}
+
+.green-bck {
+}
+
+.btn-blue-bck {
+    background-color: rgb(52, 133, 153);
+}
+
+.btn-blue-bck:hover {
+    background-color: rgb(78, 162, 183);
+}
+
+.btn-red-bck {
+    background-color: rgb(169, 20, 46);
+}
+
+.btn-red-bck:hover {
+    background-color: rgb(188, 52, 76);
+}
+
+.btn-green-bck {
+    background-color: rgb(60, 177, 75);
+}
+
+.btn-green-bck:hover {
+    background-color: rgb(44, 130, 55);
+}
+
+.btn-dark-grey-bck {
+    background-color: rgb(41, 44, 48);
+}
+
+.btn-dark-grey-bck:hover {
+    background-color: rgb(111, 111, 111);
+}
+
+.txt-blue {
+    color: rgb(52, 133, 153);
+}
+
+.text-red {
+    color: rgb(169, 20, 46);
+}
+
+.top-left-menu-btn {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(255, 255, 255);
+}
+
+.top-left-menu-btn:hover {
+    background-color: rgb(111, 111, 111);
+}
+
+.medium-size-txt {
+    font-size: 20px;
+}
+
+.textfield-label-medium-size {
+}
+
+.textfield-label-medium-size > Label {
+    width: 100px;
+}
+
+.border-radius {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.list-entry {
+    height: 35px;
+    background-color: rgb(217, 241, 240);
+    border-left-color: rgb(52, 133, 153);
+    border-right-color: rgb(52, 133, 153);
+    border-top-color: rgb(52, 133, 153);
+    border-bottom-color: rgb(52, 133, 153);
+    border-bottom-width: 1px;
+}

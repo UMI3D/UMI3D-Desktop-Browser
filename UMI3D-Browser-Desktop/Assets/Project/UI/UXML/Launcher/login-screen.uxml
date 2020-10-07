@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="login-password-screen" style="display: flex;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:VisualElement style="height: 440px;">
+            <ui:TextField picking-mode="Ignore" label="Login" name="login-input" class="textfield-label-medium-size" />
+            <ui:TextField picking-mode="Ignore" label="Password" name="password-input" password="true" class="textfield-label-medium-size" style="margin-top: 20px;" />
+            <ui:VisualElement style="flex-direction: row; height: 40px; width: 250px; justify-content: space-between; margin-left: auto; margin-right: auto; margin-top: 20px;">
+                <ui:Button text="Confirm" name="confirm-login-btn" class="btn-blue-bck medium-size-txt border-radius" style="width: 100px; color: rgb(255, 255, 255);" />
+                <ui:Button text="Cancel" name="cancel-login-btn" class="btn-red-bck medium-size-txt border-radius" style="width: 100px; color: rgb(255, 255, 255);" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/logo/icon_consortium.png&apos;); width: 100px; height: 100px; margin-left: auto; margin-right: auto; margin-top: 40px;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="url-screen" style="display: flex;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:VisualElement style="height: 440px;">
+            <ui:VisualElement name="test" class="dark-grey1-bck" style="height: 150px; width: 100%;" />
+            <ui:VisualElement name="test" class="dark-grey1-bck" style="height: 150px; width: 100%; margin-top: 20px;" />
+            <ui:VisualElement name="inputs" style="flex-direction: row; margin-top: 20px; justify-content: space-between;">
+                <ui:TextField picking-mode="Ignore" name="url-input" label="IP" style="-unity-text-align: upper-center; width: 63%;" />
+                <ui:TextField picking-mode="Ignore" name="port-input" label="Port" style="-unity-text-align: upper-center; width: 18%;" />
+                <ui:Button text="Enter" name="url-enter-btn" class="btn-blue-bck medium-size-txt" style="width: 15%; color: rgb(255, 255, 255); -unity-font-style: bold; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; height: 45px;" />
+            </ui:VisualElement>
+            <ui:Label text="The domain do no exist" name="url-error" style="color: rgb(169, 20, 46); -unity-font-style: bold;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/logo/icon_consortium.png&apos;); width: 100px; height: 100px; margin-left: auto; margin-right: auto; margin-top: 40px; -unity-background-scale-mode: scale-and-crop;" />
+        <ui:Button text="Manage libraries" name="manage-library-btn" class="border-radius btn-red-bck medium-size-txt" style="height: 45px; color: rgba(255, 255, 255, 255); width: 186px;" />
+    </ui:VisualElement>
+</ui:UXML>

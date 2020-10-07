@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Project/Scenes/Environement.unity
     guid: 6cb7bdc9d181cb845be6728b880f81ae
+  - enabled: 1
+    path: Assets/Project/Scenes/ConnectionMigrationUI.unity
+    guid: 5cc0dd036b560484a9ccb2139ec3adb7
+  - enabled: 1
+    path: Assets/Project/Scenes/EnvironementMigrationUI.unity
+    guid: 136286708533ec24c94550dd0aa38c56
   m_configObjects: {}

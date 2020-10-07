@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <DialogueBoxElement>
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:VisualElement name="dialogue-box" class="dark-grey1-bck" style="width: 400px;">
+            <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+            <ui:Label text="Label" name="dialogue-box-title" class="medium-size-txt" style="color: rgb(255, 255, 255); -unity-font-style: bold; -unity-text-align: upper-center; margin-bottom: 10px; margin-top: 10px;" />
+            <ui:Label text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel ullamcorper lectus. Donec tincidunt purus sit amet elit pretium imperdiet. Proin a tempor dui, ac luctus orci." name="dialogue-box-message" class="medium-size-txt" style="color: rgb(255, 255, 255); -unity-font-style: normal; -unity-text-align: upper-center; white-space: normal; font-size: 18px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+            <ui:VisualElement style="flex-direction: row; height: 40px; justify-content: space-between; margin-left: auto; margin-right: auto; margin-top: 20px; width: 100%;">
+                <ui:Button text="Leave" name="dialogue-box-btn1" class="btn-blue-bck medium-size-txt" style="color: rgb(255, 255, 255); width: 50%; -unity-font-style: normal;" />
+                <ui:Button text="Also Leave" name="dialogue-box-btn2" class="btn-red-bck medium-size-txt" style="color: rgb(255, 255, 255); width: 50%; -unity-font-style: normal;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </DialogueBoxElement>
+</ui:UXML>
