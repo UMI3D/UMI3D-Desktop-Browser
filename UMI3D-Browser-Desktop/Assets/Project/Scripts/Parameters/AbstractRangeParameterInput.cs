@@ -26,7 +26,7 @@ namespace BrowserDesktop.Parameters
     where ParameterType : AbstractRangeParameterDto<ValueType>
     {
 
-        public override void Associate(AbstractInteractionDto interaction)
+        public override void Associate(AbstractInteractionDto interaction, string toolId)
         {
             if (currentInteraction != null)
             {
@@ -39,22 +39,23 @@ namespace BrowserDesktop.Parameters
                 menuItem = new InputMenuItem()
                 {
                     dto = interaction as ParameterType,
-                    min = param.Min,
-                    max = param.Max,
+                    min = param.min,
+                    max = param.max,
                     Name = param.name,
                     value = param.value,
-                    increment = param.Increment
+                    increment = param.increment
                 };
 
                 callback = x =>
                 {
-                    if ((x.CompareTo(param.Min) >= 0) && (x.CompareTo(param.Max) <= 0))
+                    if ((x.CompareTo(param.min) >= 0) && (x.CompareTo(param.max) <= 0))
                     {
                         var dto = interaction as ParameterType;
                         dto.value = x;
                         var pararmeterDto = new ParameterSettingRequestDto()
                         {
-                            entityId = currentInteraction.id,
+                            id = currentInteraction.id,
+                            toolId = toolId,
                             parameter = dto,
                         };
                         UMI3DCollaborationClientServer.Send(pararmeterDto, true);

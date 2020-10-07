@@ -117,6 +117,7 @@ namespace BrowserDesktop.Controller
         List<KeyInput> KeyInputs = new List<KeyInput>();
 
         List<KeyMenuInput> KeyMenuInputs = new List<KeyMenuInput>();
+        List<FormInput> FormInputs = new List<FormInput>();
 
         /// <summary>
         /// Instantiated float parameter inputs.
@@ -153,6 +154,8 @@ namespace BrowserDesktop.Controller
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
         protected List<StringEnumParameterInput> stringEnumParameterInputs = new List<StringEnumParameterInput>();
+
+
 
         public override List<AbstractUMI3DInput> inputs
         {
@@ -559,6 +562,18 @@ namespace BrowserDesktop.Controller
                 return inputMenu;
             }
             return input;
+        }
+
+        public override AbstractUMI3DInput FindInput(FormDto form, bool unused = true)
+        {
+            FormInput inputMenu = FormInputs.Find(i => i.IsAvailable() || !unused);
+            if (inputMenu == null)
+            {
+                inputMenu = this.gameObject.AddComponent<FormInput>();
+                inputMenu.bone = BoneType.RightHand;
+                FormInputs.Add(inputMenu);
+            }
+            return inputMenu;
         }
 
         public override AbstractUMI3DInput FindInput(AbstractParameterDto param, bool unused = true)

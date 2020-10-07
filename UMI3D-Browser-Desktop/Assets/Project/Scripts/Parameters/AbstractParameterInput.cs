@@ -44,9 +44,7 @@ namespace BrowserDesktop.Parameters
         /// <see cref="Associate(AbstractInteractionDto)"/>
         protected UnityAction<ValueType> callback;
 
-
-
-        public override void Associate(AbstractInteractionDto interaction)
+        public override void Associate(AbstractInteractionDto interaction, string toolId)
         {
             if (currentInteraction != null)
             {
@@ -70,7 +68,8 @@ namespace BrowserDesktop.Parameters
                     dto.value = x;
                     var pararmeterDto = new ParameterSettingRequestDto()
                     {
-                        entityId = currentInteraction.id,
+                        id = currentInteraction.id,
+                        toolId = toolId,
                         parameter = dto,
                     };
                     UMI3DCollaborationClientServer.Send(pararmeterDto, true);
@@ -86,7 +85,7 @@ namespace BrowserDesktop.Parameters
         }
 
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId)
         {
             throw new System.Exception("Incompatible interaction");
         }
