@@ -19,7 +19,7 @@ Button {
 }
 
 TextField > #unity-text-input {
-    padding-left: 0;
+    padding-left: 7px;
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
@@ -51,6 +51,7 @@ TextField > Label {
     -unity-font-style: bold;
     color: rgb(52, 133, 153);
     min-width: 0;
+    margin-right: 10px;
 }
 
 .dark-grey1-bck {
@@ -141,4 +142,30 @@ TextField > Label {
     border-top-color: rgb(52, 133, 153);
     border-bottom-color: rgb(52, 133, 153);
     border-bottom-width: 1px;
+}
+
+.blue-scroll-view {
+}
+
+.blue-scroll-view #unity-dragger {
+    background-color: rgb(52, 133, 153);
+    border-radius: 1px;
+    border-width: 0;
+}
+
+.blue-scroll-view #unity-slider {
+    background-color: rgb(217, 241, 240);
+}
+
+.password-visible {
+    background-color: rgb(52, 133, 153);
+}
+
+.password-invisible {
+    background-color: rgb(169, 20, 46);
+}
+
+Slider > Label {
+    min-width: 0;
+    padding-right: 10px;
 }

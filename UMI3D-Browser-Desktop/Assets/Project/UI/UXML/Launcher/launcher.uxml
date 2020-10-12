@@ -21,6 +21,7 @@
                 <ui:Instance template="libraries-manager-screen" name="libraries-manager-screen" />
             </ui:VisualElement>
         </ui:VisualElement>
+        <ui:Label text="version x.x.x" name="version" style="position: absolute; bottom: 36px; right: 10px; color: rgb(41, 44, 48); font-size: 18px;" />
         <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 30px;" />
     </ui:VisualElement>
 </ui:UXML>

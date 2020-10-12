@@ -20,23 +20,27 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="main" style="width: 100%; flex-grow: 1; height: 100%; background-color: rgba(0, 0, 0, 0);">
+            <ui:VisualElement name="notification-entry" class="dark-grey1-bck" style="position: absolute; width: 250px; height: 100px; bottom: 10px; left: 10px; display: flex;">
+                <ui:VisualElement name="notification-content" style="flex-grow: 1;">
+                    <ui:Label text="Notification" name="notification-title" style="color: rgb(255, 255, 255); border-left-color: rgb(154, 154, 154); border-right-color: rgb(154, 154, 154); border-top-color: rgb(154, 154, 154); border-bottom-color: rgb(154, 154, 154); border-bottom-width: 1px; margin-left: 5px; margin-top: 5px; width: 80%;" />
+                    <ui:Label text="Fusce et eros ultricies, malesuada massa at, lacinia magna. Curabitur ac nulla gravida, vestibulum enim a, convallis dolor. Sed a dolor ut orci fermentum venenatis. In hac habitasse " name="notification-message" style="margin-top: 5px; margin-left: 5px; color: rgb(154, 154, 154); white-space: normal; height: 64px; overflow: hidden;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="notification-time-container" style="height: 5px;">
+                    <ui:VisualElement name="time-progess" class="btn-blue-bck" style="width: 80%; height: 100%;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="connection-menu" style="display: flex; background-color: rgb(255, 255, 255); flex-grow: 1;">
+                <ui:VisualElement name="container" style="width: 70%; margin-left: auto; margin-right: auto; padding-top: 179px;">
+                    <ui:Instance template="loading-screen" name="loading-screen" style="margin-bottom: 20px;" />
+                    <ui:Instance template="password-screen" name="password-screen" />
+                    <ui:Instance template="libraries-screen" name="libraries-screen" />
+                    <ui:VisualElement name="parameters-screen" />
+                </ui:VisualElement>
+            </ui:VisualElement>
             <ui:VisualElement name="right-side-menu" style="height: 100%; flex-direction: row; display: none;">
-                <ui:VisualElement name="viewport" style="flex-grow: 1; background-color: rgba(255, 255, 255, 255);" />
-                <ui:VisualElement name="menu" class="dark-grey2-bck" style="width: 280px;">
-                    <ui:VisualElement name="session-info" class="dark-grey1-bck" style="width: 300px; height: 128px; right: 20px; margin-top: 20px; flex-direction: row;">
-                        <ui:VisualElement name="session-left" style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; flex-grow: 1;">
-                            <ui:Label text="My VR Session" name="sesion-title" class="medium-size-txt" style="-unity-font-style: bold; color: rgb(255, 255, 255);">
-                                <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-                            </ui:Label>
-                            <ui:Label text="4 Participants" name="session-participants" class="border-radius" style="background-color: rgb(169, 20, 46); color: rgb(255, 255, 255); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; width: 92px; margin-top: 10px;">
-                                <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-                            </ui:Label>
-                            <ui:Label text="04:39 pm" name="session-time" class="medium-size-txt" style="color: rgb(255, 255, 255); margin-top: 10px;">
-                                <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-                            </ui:Label>
-                        </ui:VisualElement>
-                        <ui:VisualElement name="session-right" style="background-image: url(&apos;/Assets/Project/logo/logo_umi3d_consortium_3d.png&apos;); width: 128px; height: 128px;" />
-                    </ui:VisualElement>
+                <ui:VisualElement name="viewport" style="flex-grow: 1;" />
+                <ui:VisualElement name="side-menu" class="dark-grey2-bck" style="width: 280px; padding-top: 148px; display: flex; left: 280px;">
+                    <Style src="/Assets/Project/UI/UXML/main-style.uss" />
                     <ui:VisualElement name="tool-inspector" style="flex-grow: 1;">
                         <ui:VisualElement name="contacts" style="width: 100%; height: 100%; display: flex;">
                             <ui:Label text="Online" class="medium-size-txt" style="-unity-font-style: bold; color: rgb(154, 154, 154); border-left-color: rgb(41, 44, 48); border-right-color: rgb(41, 44, 48); border-top-color: rgb(41, 44, 48); border-bottom-color: rgb(41, 44, 48); border-bottom-width: 1px; margin-top: 10px; margin-right: 10px; margin-left: 10px; padding-bottom: 10px; margin-bottom: 10px;" />
@@ -48,7 +52,7 @@
                                     <ui:VisualElement name="contact-right" style="padding-top: 5px;">
                                         <ui:Label text="Marie Le Blanc" name="contact-name" style="color: rgb(255, 255, 255); -unity-font-style: bold; font-size: 14px;" />
                                         <ui:Label text="Happiness Manager" name="contact-job" class="txt-blue" style="-unity-font-style: normal; font-size: 12px;" />
-                                        <ui:Label text="Lyon" name="contact-location" style="color: rgb(154, 154, 154); -unity-font-style: normal; font-size: 12px;" />
+                                        <ui:Label text="Strasbourg" name="contact-location" style="color: rgb(154, 154, 154); -unity-font-style: normal; font-size: 12px;" />
                                     </ui:VisualElement>
                                 </ui:VisualElement>
                                 <ui:VisualElement name="contact-entry" style="flex-direction: row; height: 60px; margin-left: 20px;">
@@ -93,21 +97,19 @@
                         <ui:Button text="Hang up" name="tool-hang-up" class="btn-red-bck" style="flex-grow: 1;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-            </ui:VisualElement>
-            <ui:VisualElement name="notification-entry" class="dark-grey1-bck" style="position: absolute; width: 250px; height: 100px; bottom: 10px; left: 10px; display: flex;">
-                <ui:VisualElement name="notification-content" style="flex-grow: 1;">
-                    <ui:Label text="Notification" name="notification-title" style="color: rgb(255, 255, 255); border-left-color: rgb(154, 154, 154); border-right-color: rgb(154, 154, 154); border-top-color: rgb(154, 154, 154); border-bottom-color: rgb(154, 154, 154); border-bottom-width: 1px; margin-left: 5px; margin-top: 5px; width: 80%;" />
-                    <ui:Label text="Fusce et eros ultricies, malesuada massa at, lacinia magna. Curabitur ac nulla gravida, vestibulum enim a, convallis dolor. Sed a dolor ut orci fermentum venenatis. In hac habitasse " name="notification-message" style="margin-top: 5px; margin-left: 5px; color: rgb(154, 154, 154); white-space: normal; height: 64px; overflow: hidden;" />
-                </ui:VisualElement>
-                <ui:VisualElement name="notification-time-container" style="height: 5px;">
-                    <ui:VisualElement name="time-progess" class="btn-blue-bck" style="width: 80%; height: 100%;" />
-                </ui:VisualElement>
-            </ui:VisualElement>
-            <ui:VisualElement name="connection-menu" style="display: flex; background-color: rgb(255, 255, 255); flex-grow: 1;">
-                <ui:VisualElement name="container" style="width: 70%; margin-left: auto; margin-right: auto; padding-top: 179px;">
-                    <ui:Instance template="loading-screen" name="loading-screen" style="margin-bottom: 20px;" />
-                    <ui:Instance template="password-screen" name="password-screen" />
-                    <ui:Instance template="libraries-screen" name="libraries-screen" />
+                <ui:VisualElement name="session-info" class="dark-grey1-bck" style="width: 300px; height: 128px; margin-top: 20px; flex-direction: row; position: absolute; right: 0;">
+                    <ui:VisualElement name="session-left" style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; flex-grow: 1;">
+                        <ui:Label text="My VR Session" name="sesion-title" class="medium-size-txt" style="-unity-font-style: bold; color: rgb(255, 255, 255);">
+                            <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+                        </ui:Label>
+                        <ui:Label text="4 Participants" name="session-participants" class="border-radius" style="background-color: rgb(169, 20, 46); color: rgb(255, 255, 255); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; width: 92px; margin-top: 10px;">
+                            <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+                        </ui:Label>
+                        <ui:Label text="04:39 pm" name="session-time" class="medium-size-txt" style="color: rgb(255, 255, 255); margin-top: 10px;">
+                            <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+                        </ui:Label>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="session-right" style="background-image: url(&apos;/Assets/Project/logo/logo_umi3d_consortium_3d.png&apos;); width: 128px; height: 128px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

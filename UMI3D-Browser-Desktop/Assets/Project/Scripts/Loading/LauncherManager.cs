@@ -10,6 +10,9 @@ using umi3d.cdk.collaboration;
 using BrowserDesktop.Cursor;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
+using umi3d.cdk;
+using BrowserDesktop.Controller;
 
 public class LauncherManager : MonoBehaviour
 {
@@ -19,12 +22,16 @@ public class LauncherManager : MonoBehaviour
     [SerializeField]
     private PanelRenderer panelRenderer;
 
+    [SerializeField]
+    private VisualTreeAsset libraryEntryTreeAsset;
+    [SerializeField]
+    private VisualTreeAsset dialogueBoxTreeAsset;
+
     private VisualElement root;
 
     //Domain screen
     VisualElement urlScreen;
     TextField urlInput;
-    TextField portInput;
     Button urlEnterBtn;
 
     //Login password screen
@@ -33,6 +40,7 @@ public class LauncherManager : MonoBehaviour
     TextField passwordInput;
     Button confirmLoginBtn;
     Button cancelLoginBtn;
+    Label loginInputError;
 
     //Libraries
     VisualElement librariesScreen;
@@ -47,7 +55,6 @@ public class LauncherManager : MonoBehaviour
     public class Data
     {
         public string ip;
-        public string port;
         public string login;
     }
 
@@ -58,6 +65,9 @@ public class LauncherManager : MonoBehaviour
     [SerializeField]
     public string sceneToLoad;
 
+    Action nextStep = null;
+    Action previousStep = null;
+
     #endregion
 
     #endregion
@@ -65,6 +75,8 @@ public class LauncherManager : MonoBehaviour
     void Start()
     {
         Debug.Assert(panelRenderer != null);
+        Debug.Assert(dialogueBoxTreeAsset != null);
+        Debug.Assert(libraryEntryTreeAsset != null);
         root = panelRenderer.visualTree;
 
         InitUI();
@@ -78,6 +90,7 @@ public class LauncherManager : MonoBehaviour
 
     private void InitUI()
     {
+        root.Q<Label>("version").text = umi3d.UMI3DVersion.version;
         BindURLScreen();
         BindLoginScreen();
         BindLibrariesScreen();
@@ -88,16 +101,11 @@ public class LauncherManager : MonoBehaviour
         urlScreen = root.Q<VisualElement>("url-screen");
 
         urlInput = urlScreen.Q<TextField>("url-input");
-        portInput = urlScreen.Q<TextField>("port-input");
         urlEnterBtn = urlScreen.Q<Button>("url-enter-btn");
 
         urlEnterBtn.clickable.clicked += SetDomain;
 
-        urlScreen.Q<Button>("manage-library-btn").clickable.clicked += () =>
-        {
-            HideAllScreens();
-            librariesScreen.style.display = DisplayStyle.Flex;
-        };
+        urlScreen.Q<Button>("manage-library-btn").clickable.clicked += DisplayLibraries;
     }
 
     private void BindLoginScreen()
@@ -105,7 +113,7 @@ public class LauncherManager : MonoBehaviour
         loginPasswordScreen = root.Q<VisualElement>("login-password-screen");
         loginInput = loginPasswordScreen.Q<TextField>("login-input");
         passwordInput = loginPasswordScreen.Q<TextField>("password-input");
-        Debug.Assert(passwordInput != null);
+        loginInputError = loginPasswordScreen.Q<Label>("login-input-error");
 
         confirmLoginBtn = loginPasswordScreen.Q<Button>("confirm-login-btn");
         confirmLoginBtn.clickable.clicked += Login;
@@ -122,9 +130,22 @@ public class LauncherManager : MonoBehaviour
         var backMenuBnt = librariesScreen.Q<Button>("back-menu-btn");
         backMenuBnt.clickable.clicked += ResetLauncher;
     }
+
     #endregion
 
     #region Action
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            nextStep?.Invoke();
+        }
+        else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
+        {
+            previousStep?.Invoke();
+        }
+    }
 
     /// <summary>
     /// Gets the url and port written by the users and stores them.
@@ -132,7 +153,6 @@ public class LauncherManager : MonoBehaviour
     private void SetDomain()
     {
         string url = urlInput.value;
-        string port = portInput.value;
 
         if (string.IsNullOrEmpty(url))
         {
@@ -141,12 +161,11 @@ public class LauncherManager : MonoBehaviour
         } else
         {
             currentConnectionData.ip = url;
-            currentConnectionData.port = port;
 
             urlScreen.style.display = DisplayStyle.None;
             loginPasswordScreen.style.display = DisplayStyle.Flex;
-
-            Debug.Log("<color=green> Connection info : " + url + " " + port + " + </color>");
+            nextStep = Login;
+            previousStep = ResetLauncher;
         }
     }
 
@@ -161,15 +180,14 @@ public class LauncherManager : MonoBehaviour
         if (string.IsNullOrEmpty(login))
         {
             Debug.Log("<color=red> Connection error : The login can not be empty </color>");
-            //TODO : display error message
+            loginInputError.text = "Login is empty.";
         } else
         {
             currentConnectionData.login = login;
-            Debug.Log("<color=green> Connection info : " + currentConnectionData.ip + ":" + currentConnectionData.port + " + </color>");
+            Debug.Log("<color=green> Connection info : " + currentConnectionData.ip + "</color>");
             Connect();
         }
     }
-
 
     /// <summary>
     /// Initiates the connection
@@ -202,10 +220,11 @@ public class LauncherManager : MonoBehaviour
 
         HideAllScreens();
         urlScreen.style.display = DisplayStyle.Flex;
+        previousStep = null;
+        nextStep = SetDomain;
 
         loginInput.value = currentConnectionData.login;
         passwordInput.value = string.Empty;
-        portInput.value = currentConnectionData.port;
         urlInput.value = currentConnectionData.ip;
     }
 
@@ -214,6 +233,7 @@ public class LauncherManager : MonoBehaviour
         urlScreen.style.display = DisplayStyle.None;
         urlScreen.Q<Label>("url-error").style.display = DisplayStyle.None;
         loginPasswordScreen.style.display = DisplayStyle.None;
+        loginInputError.text = string.Empty;
         librariesScreen.style.display = DisplayStyle.None;
     }
 
@@ -252,5 +272,74 @@ public class LauncherManager : MonoBehaviour
         }
         return new Data();
     }
+
+    private bool isLibraryCurrentRemoved = false;
+
+    private void DisplayLibraries()
+    {
+        HideAllScreens();
+        librariesScreen.style.display = DisplayStyle.Flex;
+        nextStep = null;
+        previousStep = ResetLauncher;
+
+        librariesList.Clear();
+
+        Dictionary<string, List<UMI3DResourcesManager.DataFile>> libs = new Dictionary<string, List<UMI3DResourcesManager.DataFile>>();
+        foreach (var lib in UMI3DResourcesManager.Libraries)
+        {
+            if (lib.applications != null)
+                foreach (var app in lib.applications)
+                {
+                    if (!libs.ContainsKey(app)) libs[app] = new List<UMI3DResourcesManager.DataFile>();
+                    libs[app].Add(lib);
+                }
+        }
+
+        if (libs.Count == 0)
+            librariesScreen.Q<Label>("libraries-title").text = "There is currently no libraries installed";
+        else if (libs.Count == 1)
+            librariesScreen.Q<Label>("libraries-title").text = "There is one library currently installed";
+        else
+            librariesScreen.Q<Label>("libraries-title").text = "There are " + libs.Count + " libraries currently installed";
+
+
+
+        foreach (var app in libs)
+        {
+            var entry = libraryEntryTreeAsset.CloneTree();
+            entry.Q<Label>("library-name").text = app.Key;
+            var librariesInstalled = entry.Q<ScrollView>();
+            app.Value.ForEach(l => librariesInstalled.Add(new Label { text = l.key }));
+
+            entry.Q<Button>("library-unistall").clickable.clicked += () =>
+            {
+                if (isLibraryCurrentRemoved)
+                    return;
+
+                isLibraryCurrentRemoved = true;
+
+                DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
+                dialogue.Setup("Remove library", "Are your sure to unistall all libraries required for " + app.Key, "Unistall", "Cancel", (b) =>
+                {
+                    if (b)
+                    {
+                        foreach (var lib in app.Value)
+                        {
+                            lib.applications.Remove(app.Key);
+                            if (lib.applications.Count <= 0)
+                                UMI3DResourcesManager.RemoveLibrary(lib.key);
+                        }
+                        DisplayLibraries();
+                    }
+                    isLibraryCurrentRemoved = false;
+                });
+
+                root.Add(dialogue);
+            };
+
+            librariesList.Add(entry);
+        }
+    }
+
     #endregion
 }

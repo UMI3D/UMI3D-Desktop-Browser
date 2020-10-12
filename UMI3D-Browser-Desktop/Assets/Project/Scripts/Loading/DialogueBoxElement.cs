@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using umi3d.cdk;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -33,7 +34,7 @@ public class DialogueBoxElement : VisualElement
             choiceCallback.Invoke(false);
         };
 
-        ConnectionMenu.Instance.StartCoroutine(SetPosition());
+        UMI3DResourcesManager.Instance.StartCoroutine(SetPosition());
     }
 
 

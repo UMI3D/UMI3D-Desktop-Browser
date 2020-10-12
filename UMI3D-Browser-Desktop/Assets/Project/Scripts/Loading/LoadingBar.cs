@@ -14,8 +14,6 @@ public class LoadingBar
 
     public LoadingBar(VisualElement root)
     {
-        root = ConnectionMenu.Instance.renderer.visualTree;
-
         loadingBarProgress = root.Q<VisualElement>("loading-bar-progress");
         loadingBarContainer = root.Q<VisualElement>("loading-bar-container");
         loadingScreen = root.Q<VisualElement>("loading-screen");
@@ -34,21 +32,13 @@ public class LoadingBar
         }
 
         loadingBarProgress.style.width = val * loadingBarContainer.resolvedStyle.width;
-
-        //TODO DELETE
-        if (val >= 1)
-        {
-            Hide();
-            Debug.Log("<color=green>Loading finished.</color>");
-        }
-
     }
 
     void Hide()
     {
+        Debug.Log("<color=green>Loading finished.</color>");
+
         loadingScreen.style.display = DisplayStyle.None;
-        //TODO
-        //ConnectionPannel.SetActive(false);
         MouseAndKeyboardController.CanProcess = true;
     }
 

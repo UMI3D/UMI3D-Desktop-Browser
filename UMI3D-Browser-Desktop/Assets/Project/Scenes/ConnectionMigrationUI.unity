@@ -816,7 +816,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400, y: -55}
+  m_AnchoredPosition: {x: 400.08804, y: -55}
   m_SizeDelta: {x: 240, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &440536970
@@ -2981,6 +2981,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panelRenderer: {fileID: 1049023329}
+  libraryEntryTreeAsset: {fileID: 9197481963319205126, guid: ec57cd8e64bf5c449abe31eb0c8c4487,
+    type: 3}
+  dialogueBoxTreeAsset: {fileID: 9197481963319205126, guid: 952193403cd37744f9ac513022d96731,
+    type: 3}
   currentScene: ConnectionMigrationUI
   sceneToLoad: EnvironementMigrationUI
 --- !u!1 &1104465894
@@ -3196,7 +3200,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400, y: -135}
+  m_AnchoredPosition: {x: 400.08804, y: -135}
   m_SizeDelta: {x: 240, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1231598695
@@ -3369,7 +3373,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400, y: -15}
+  m_AnchoredPosition: {x: 400.08804, y: -15}
   m_SizeDelta: {x: 240, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1242275889
@@ -4115,7 +4119,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400, y: -95}
+  m_AnchoredPosition: {x: 400.08804, y: -95}
   m_SizeDelta: {x: 240, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1492985636
@@ -4289,7 +4293,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400, y: -175}
+  m_AnchoredPosition: {x: 400.08804, y: -175}
   m_SizeDelta: {x: 240, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1506572087

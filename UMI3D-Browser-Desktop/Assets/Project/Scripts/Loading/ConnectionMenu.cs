@@ -5,9 +5,13 @@ using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
+using umi3d.cdk.menu;
+using umi3d.cdk.menu.view;
 using umi3d.common;
+using umi3d.common.interaction;
 using Unity.UIElements.Runtime;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -19,6 +23,9 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     public ClientPCIdentifier identifier;
 
+    public MenuAsset Menu;
+    public MenuDisplayManager MenuDisplayManager;
+
     [SerializeField]
     private string launcherScene;
 
@@ -29,7 +36,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     #region UI Fields
 
-    public PanelRenderer renderer;
+    public PanelRenderer panelRenderer;
 
     private VisualElement connectionScreen;
 
@@ -46,6 +53,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     private Button confirmDLLibrariesBtn;
     private Button denyDLLibrariesBtn;
 
+    private VisualElement parametersScreen;
+
     #endregion
 
     #endregion
@@ -57,24 +66,23 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     protected override void Awake()
     {
         base.Awake();
-        Debug.Assert(renderer != null);
+        Debug.Assert(panelRenderer != null);
         Debug.Assert(!string.IsNullOrEmpty(launcherScene));
         Debug.Assert(identifier != null);
-
-        loader = new LoadingBar(renderer.visualTree);
-
-        InitUI();
+        Debug.Assert(Menu != null);
+        Debug.Assert(MenuDisplayManager != null);
 
         identifier.GetPasswordAction = GetPassword;
         identifier.ShouldDownloadLib = ShouldDownloadLibraries;
-        // TODO : identifier.GetParameters = GetParameterDtos;
-
-        ShouldDownloadLibraries(new List<string> { "Lib 1", "Lib 2" }, (b) => Debug.Log("Pomme"));
+        identifier.GetParameters = GetParameterDtos;
     }
 
     private void Start()
     {
+        InitUI();
+
         UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
+        UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(Hide);
     }
 
     #endregion
@@ -83,10 +91,14 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void InitUI()
     {
-        connectionScreen = renderer.visualTree.Q<VisualElement>("connection-menu");
+        loader = new LoadingBar(panelRenderer.visualTree);
+
+        connectionScreen = panelRenderer.visualTree.Q<VisualElement>("connection-menu");
 
         BindPasswordScreen();
         BindAssetsLibrariesRequiredScreen();
+
+        parametersScreen = panelRenderer.visualTree.Q<VisualElement>("parameters-screen");
 
         HideAllScreens();
     }
@@ -98,6 +110,20 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         connectBtn = passwordScreen.Q<Button>("connect-btn");
         goBackButton = passwordScreen.Q<Button>("go-back-btn");
         goBackButton.clickable.clicked += Leave;
+
+        var passwordVisibleBtn = passwordScreen.Q<VisualElement>("password-visibility");
+        passwordVisibleBtn.RegisterCallback<MouseDownEvent>(e =>
+        {
+            passwordVisibleBtn.ClearClassList();
+            passwordVisibleBtn.AddToClassList("btn-red-bck");
+            passwordInput.isPasswordField = false;
+        });
+        passwordVisibleBtn.RegisterCallback<MouseUpEvent>(e =>
+        {
+            passwordVisibleBtn.ClearClassList();
+            passwordVisibleBtn.AddToClassList("btn-blue-bck");
+            passwordInput.isPasswordField = true;
+        });
     }
 
     private void BindAssetsLibrariesRequiredScreen()
@@ -124,8 +150,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         connectionScreen.style.display = DisplayStyle.Flex;
 
         loader.OnProgressChange(0);
-        //DisplayLoginPassword(false);
-        string url = "http://" + connectionData.ip + ":" + connectionData.port + UMI3DNetworkingKeys.media;
+        string url = "http://" + connectionData.ip + UMI3DNetworkingKeys.media;
         UMI3DCollaborationClientServer.GetMedia(url, GetMediaSucces, GetMediaFailed);
     }
     
@@ -147,6 +172,17 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         assetsLibrariesScreen.style.display = DisplayStyle.None;
     }
 
+    private void Hide()
+    {
+        connectionScreen.style.display = DisplayStyle.None;
+        CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+    }
+
+    public void DisplayParametersScreen(bool val)
+    {
+        parametersScreen.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;   
+    }
+
     #endregion
 
     #region Events/Callbacks
@@ -155,7 +191,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     {
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         var dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        renderer.visualTree.Add(dialogueBox);
+        panelRenderer.visualTree.Add(dialogueBox);
 
         dialogueBox.Setup("Server error",
             error,
@@ -184,7 +220,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     {
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         var dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        renderer.visualTree.Add(dialogueBox);
+        panelRenderer.visualTree.Add(dialogueBox);
 
         dialogueBox.Setup("Connection to the server lost",
             "Leave to the connection menu or try again ?",
@@ -198,11 +234,17 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// </summary>
     private void GetPassword(Action<string> callback)
     {
-        HideAllScreens();
+        var loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
+        loadingScreen.style.display = DisplayStyle.None;
+
+
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         passwordScreen.style.display = DisplayStyle.Flex;
 
-        connectBtn.clickable.clicked += () => callback.Invoke(passwordInput.value);
+        connectBtn.clickable.clicked += () => {
+            passwordScreen.style.display = DisplayStyle.None;
+            callback.Invoke(passwordInput.value);
+        };
     }
 
     /// <summary>
@@ -211,10 +253,12 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// </summary>
     private void ShouldDownloadLibraries(List<string> ids, Action<bool> callback)
     {
-        if (ids.Count == 0) callback.Invoke(true);
+        if (ids.Count == 0)
+        {
+            callback.Invoke(true);
+        }
         else
         {
-            HideAllScreens();
             assetsLibrariesScreen.style.display = DisplayStyle.Flex;
             if (ids.Count > 1)
                 assetsRequiredWarning.text = ids.Count + " libraries are required to join the environement :";
@@ -222,7 +266,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 assetsRequiredWarning.text = "1 library is required to join the environement :";
 
             assetsRequiredList.Clear();
-            foreach(string id in ids)
+            foreach (string id in ids)
             {
                 var library = libraryEntryTreeAsset.CloneTree();
                 library.Q<Label>("library-name").text = id;
@@ -234,15 +278,95 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
             confirmDLLibrariesBtn.clickable.clicked += () =>
             {
-                Debug.Log("Ananas");
                 CloseAssetsLibrariesRequiredScreen(true, callback);
             };
             denyDLLibrariesBtn.clickable.clicked += () =>
             {
-                Debug.Log("Fraise");
                 CloseAssetsLibrariesRequiredScreen(false, callback);
             };
         }
+    }
+
+    void GetParameterDtos(FormDto form, Action<FormDto> callback)
+    {
+        var loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
+        loadingScreen.style.display = DisplayStyle.None;
+
+        if (form == null)
+            callback.Invoke(form);
+        else
+        {
+            //debugForm(form);
+            Menu.menu.RemoveAll();
+            foreach (var param in form.fields)
+            {
+                Menu.menu.Add(GetInteractionItem(param));
+            }
+
+            ButtonMenuItem send = new ButtonMenuItem() { Name = "Send", toggle = false };
+            UnityAction<bool> action = (bool b) => {
+                MenuDisplayManager.Hide(true);
+                Menu.menu.RemoveAll();
+                callback.Invoke(form);
+                CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+                loadingScreen.style.display = DisplayStyle.Flex;
+            };
+            send.Subscribe(action);
+            Menu.menu.Add(send);
+
+            MenuDisplayManager.Display(true);
+        }
+    }
+
+    static MenuItem GetInteractionItem(AbstractInteractionDto dto)
+    {
+        MenuItem result = null;
+        switch (dto)
+        {
+            case BooleanParameterDto booleanParameterDto:
+                var b = new BooleanInputMenuItem() { dto = booleanParameterDto };
+                b.Subscribe((x) =>
+                {
+                    booleanParameterDto.value = x;
+                }
+                );
+                result = b;
+                break;
+            case FloatRangeParameterDto floatRangeParameterDto:
+                var f = new FloatRangeInputMenuItem() { dto = floatRangeParameterDto, max = floatRangeParameterDto.max, min = floatRangeParameterDto.min, value = floatRangeParameterDto.value, increment = floatRangeParameterDto.increment };
+                f.Subscribe((x) =>
+                {
+                    floatRangeParameterDto.value = x;
+                }
+                );
+                result = f;
+                break;
+            case EnumParameterDto<string> enumParameterDto:
+                var en = new DropDownInputMenuItem() { dto = enumParameterDto, options = enumParameterDto.possibleValues };
+                en.Subscribe((x) =>
+                {
+                    enumParameterDto.value = x;
+                }
+                );
+                result = en;
+                break;
+            case StringParameterDto stringParameterDto:
+                var s = new TextInputMenuItem() { dto = stringParameterDto };
+                s.Subscribe((x) =>
+                {
+                    stringParameterDto.value = x;
+                }
+                );
+                result = s;
+                break;
+            default:
+                result = new MenuItem();
+                result.Subscribe(() => Debug.Log("hellooo 2"));
+                break;
+        }
+        result.Name = dto.name;
+        //icon;
+        return result;
     }
 
     private void CloseAssetsLibrariesRequiredScreen(bool b, Action<bool> callback)
@@ -250,8 +374,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         callback.Invoke(b);
         HideAllScreens();
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
-
-        Debug.Log("ROOO");
     }
 
     #endregion
