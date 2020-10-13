@@ -56,6 +56,7 @@ namespace BrowserDesktop.Menu
         public override void Clear()
         {
             base.Clear();
+            button.RemoveFromHierarchy();
         }
 
         public override void Display(bool forceUpdate = false)

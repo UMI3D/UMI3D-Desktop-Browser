@@ -42,7 +42,7 @@
                 <ui:VisualElement name="side-menu" class="dark-grey2-bck" style="width: 280px; padding-top: 148px; display: flex; left: 280px;">
                     <Style src="/Assets/Project/UI/UXML/main-style.uss" />
                     <ui:VisualElement name="tool-inspector" style="flex-grow: 1;">
-                        <ui:VisualElement name="contacts" style="width: 100%; height: 100%; display: flex;">
+                        <ui:VisualElement name="contacts" style="width: 100%; height: 100%; display: none;">
                             <ui:Label text="Online" class="medium-size-txt" style="-unity-font-style: bold; color: rgb(154, 154, 154); border-left-color: rgb(41, 44, 48); border-right-color: rgb(41, 44, 48); border-top-color: rgb(41, 44, 48); border-bottom-color: rgb(41, 44, 48); border-bottom-width: 1px; margin-top: 10px; margin-right: 10px; margin-left: 10px; padding-bottom: 10px; margin-bottom: 10px;" />
                             <ui:ListView focusable="True" name="contact-list" style="flex-grow: 1;">
                                 <ui:VisualElement name="contact-entry" style="flex-direction: row; height: 60px; margin-left: 20px;">
@@ -87,6 +87,7 @@
                                 </ui:VisualElement>
                             </ui:ListView>
                         </ui:VisualElement>
+                        <ui:VisualElement name="side-menu-toolbox" style="width: 100%; height: 100%; display: flex;" />
                     </ui:VisualElement>
                     <ui:VisualElement name="tools" style="height: 60px; background-color: rgb(255, 0, 0); flex-direction: row;">
                         <ui:Button text="Mic" name="tool-microphone" class="btn-dark-grey-bck" style="flex-grow: 1;" />

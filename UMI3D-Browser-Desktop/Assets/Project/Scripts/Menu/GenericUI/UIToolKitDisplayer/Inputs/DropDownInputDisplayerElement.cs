@@ -14,6 +14,7 @@ namespace BrowserDesktop.Menu
         public override void Clear()
         {
             base.Clear();
+            label.RemoveFromHierarchy();
             //TODO
             //dropdown.onValueChanged.RemoveAllListeners();
         }

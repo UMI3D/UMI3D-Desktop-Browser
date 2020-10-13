@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="circular-menu-displayer" style="width: 150px; height: 150px;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:VisualElement name="circular-menu-circle" style="width: 50px; height: 50px; border-top-left-radius: 50%; border-bottom-left-radius: 50%; border-top-right-radius: 50%; border-bottom-right-radius: 50%; border-left-color: rgba(52, 133, 153, 255); border-right-color: rgba(52, 133, 153, 255); border-top-color: rgba(52, 133, 153, 255); border-bottom-color: rgba(52, 133, 153, 255); border-left-width: 5px; border-right-width: 5px; border-top-width: 5px; border-bottom-width: 5px; position: absolute; left: 50px; top: 50px;" />
+        <ui:VisualElement name="circular-menu-actions" style="flex-direction: row; width: 60px; position: absolute; left: 45px; top: 107px;">
+            <ui:Button text="&lt;" name="circular-menu-previous" class="btn-blue-bck" style="width: 50%; color: rgba(255, 255, 255, 255);" />
+            <ui:Button text="&gt;" name="circular-menu-next" class="btn-blue-bck" style="width: 50%; color: rgba(255, 255, 255, 255);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <ui:VisualElement name="login-password-screen" style="display: flex;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-        <ui:VisualElement style="height: 440px;">
+        <ui:VisualElement style="height: 440px; width: 400px; margin-left: auto; margin-right: auto;">
             <ui:TextField picking-mode="Ignore" label="Login" name="login-input" class="textfield-label-medium-size" />
             <ui:Label text="Login is empty" name="login-input-error" class="text-red" style="-unity-font-style: normal; margin-top: 10px;" />
             <ui:TextField picking-mode="Ignore" label="Password" name="password-input" password="true" class="textfield-label-medium-size" style="margin-top: 20px; display: none;" />

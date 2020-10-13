@@ -25,6 +25,7 @@ namespace BrowserDesktop.Menu
         {
             base.Clear();
             button.clickable.clicked += NotifyPress;
+            button.RemoveFromHierarchy();
         }
 
 
@@ -41,6 +42,7 @@ namespace BrowserDesktop.Menu
             button.clickable.clicked -= NotifyPress;
             button.style.display = DisplayStyle.None;
         }
+
 
         /// <summary>
         /// Notify that the button has been pressed.

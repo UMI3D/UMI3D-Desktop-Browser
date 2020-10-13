@@ -5,8 +5,8 @@
             <ui:VisualElement name="test" class="dark-grey1-bck" style="height: 150px; width: 100%;" />
             <ui:VisualElement name="test" class="dark-grey1-bck" style="height: 150px; width: 100%; margin-top: 20px;" />
             <ui:VisualElement name="inputs" style="flex-direction: row; margin-top: 20px; justify-content: space-between;">
-                <ui:TextField picking-mode="Ignore" name="url-input" style="-unity-text-align: upper-center; width: 80%;" />
-                <ui:Button text="Enter" name="url-enter-btn" class="btn-blue-bck medium-size-txt" style="width: 15%; color: rgb(255, 255, 255); -unity-font-style: bold; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; height: 45px;" />
+                <ui:TextField picking-mode="Ignore" name="url-input" class="textfield-with-image-bck" style="-unity-text-align: upper-center; flex-grow: 1;" />
+                <ui:Button text="&#10;" name="url-enter-btn" class="medium-size-txt input-button input-search-button" style="width: 45px; color: rgb(255, 255, 255); -unity-font-style: bold; height: 45px;" />
             </ui:VisualElement>
             <ui:Label text="The domain do no exist" name="url-error" style="color: rgb(169, 20, 46); -unity-font-style: bold; padding-top: 10px;" />
         </ui:VisualElement>

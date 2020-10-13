@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
 {
-    public class SimpleUIContainer2D : AbstractMenuDisplayContainer
+    public class SimpleUIContainer2D : AbstractMenuDisplayContainer, IDisplayerElement
     {
         #region Fields
 
@@ -49,14 +49,17 @@ namespace BrowserDesktop.Menu
                 if (virtualContainer != null && backButton != null)
                     backButton.clickable.clicked -= virtualContainer.backButtonPressed.Invoke;
                 virtualContainer = value;
-                bool display = virtualContainer?.parent != null;
 
+                bool display = virtualContainer?.parent != null;
+              
                 if (backButton != null && (backButton.resolvedStyle.display == DisplayStyle.Flex) != display)
                 {
                     backButton.style.display = display ? DisplayStyle.Flex : DisplayStyle.None;
                 }
                 if (display && backButton!= null)
+                {
                     backButton.clickable.clicked += virtualContainer.backButtonPressed.Invoke;
+                }
             }
         }
 
@@ -66,7 +69,12 @@ namespace BrowserDesktop.Menu
 
         #region Methods
 
-        private void InitUI()
+        private void Awake()
+        {
+            gameObject.SetActive(true);
+        }
+
+        public void InitAndBindUI()
         {
             if(containerElement == null)
             {
@@ -108,6 +116,8 @@ namespace BrowserDesktop.Menu
             if (selectButton != null)
                 selectButton.clickable.clicked -= Select;
 
+            contentElement.Clear();
+
             RemoveAll();
         }
 
@@ -118,6 +128,8 @@ namespace BrowserDesktop.Menu
 
         public override void Display(bool forceUpdate = false)
         {
+            InitAndBindUI();
+
             if (isDisplayed && !forceUpdate)
             {
                 return;
@@ -193,7 +205,7 @@ namespace BrowserDesktop.Menu
         /// <param name="updateDisplay">Should update the display (default is true)</param>
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
-            InitUI();
+            InitAndBindUI();
 
             if (element is IDisplayerElement elt)
             {
@@ -201,12 +213,15 @@ namespace BrowserDesktop.Menu
                 uxmlContent.style.marginBottom = uxmlContent.resolvedStyle.marginBottom + spaceBetweenElements;
                 contentElement.Add(elt.GetUXMLContent());
                 containedDisplayers.Add(element);
+
+                element.transform.SetParent(this.transform, false);
+
                 if (updateDisplay)
                     Display();
             }
             else
             {
-                throw new System.NotImplementedException("This container is only made to work with IDisplayerElement");
+                throw new System.NotImplementedException("This container is only made to work with IDisplayerElement. " + element.GetType().ToString() + " displayer given");
             }
         }
 
@@ -231,10 +246,12 @@ namespace BrowserDesktop.Menu
             {
                 contentElement.Insert(index, elt.GetUXMLContent());
 
+                element.transform.SetParent(this.transform, false);
+                element.transform.SetSiblingIndex(index);
+
                 containedDisplayers.Add(element);
                 if (updateDisplay)
                     Display();
-
             }
             else
             {
@@ -293,6 +310,7 @@ namespace BrowserDesktop.Menu
                     {
                         displayer.Hide();
                         (VirtualContainer as SimpleUIContainer2D)?.contentElement.Add(elt.GetUXMLContent());
+                        displayer.transform.SetParent((VirtualContainer as SimpleUIContainer2D)?.transform);
                     }
                     else
                     {
@@ -389,6 +407,7 @@ namespace BrowserDesktop.Menu
                 if (displayer is IDisplayerElement elt)
                 {
                     contentElement.Add(elt.GetUXMLContent());
+                    displayer.transform.SetParent(this.transform);
                     displayer.Display();
                 }
             }
@@ -400,7 +419,6 @@ namespace BrowserDesktop.Menu
             return VirtualContainer;
         }
 
-
         public override int IsSuitableFor(umi3d.cdk.menu.AbstractMenuItem menu)
         {
             return (menu is umi3d.cdk.menu.Menu) ? 1 : 0;
@@ -411,7 +429,15 @@ namespace BrowserDesktop.Menu
             return containedDisplayers.Count;
         }
 
-        #endregion
+        public VisualElement GetUXMLContent()
+        {
+            return containerElement;
+        }
 
+        /*public void OnDestroy()
+        {
+            containerElement?.RemoveFromHierarchy();
+        }*/
+        #endregion
     }
 }

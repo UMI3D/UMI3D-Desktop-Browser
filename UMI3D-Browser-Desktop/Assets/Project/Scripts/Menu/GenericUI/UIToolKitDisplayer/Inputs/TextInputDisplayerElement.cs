@@ -65,6 +65,7 @@ namespace BrowserDesktop.Menu
         {
             base.Clear();
             textInput.UnregisterValueChangedCallback(OnValueChanged);
+            textInput.RemoveFromHierarchy();
             StopAllCoroutines();
         }
 

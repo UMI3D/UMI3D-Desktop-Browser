@@ -41,6 +41,7 @@ namespace BrowserDesktop.Menu
         {
             base.Clear();
             toggle.UnregisterValueChangedCallback(OnValueChanged);
+            toggle.RemoveFromHierarchy();
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)

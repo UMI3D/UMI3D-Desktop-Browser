@@ -52,6 +52,8 @@ namespace BrowserDesktop.Menu
             base.Clear();
             slider.UnregisterValueChangedCallback(SliderOnValueChanged);
             sliderValue.UnregisterCallback<FocusOutEvent>(SliderTextFieldOnValueChanged);
+
+            sliderContainer.RemoveFromHierarchy();
             StopAllCoroutines();
         }
 
@@ -81,7 +83,6 @@ namespace BrowserDesktop.Menu
             sliderValue.value = FormatValue(slider.value);
 
             slider.RegisterValueChangedCallback(SliderOnValueChanged);
-            //sliderValue.RegisterValueChangedCallback(SliderTextFieldOnValueChanged);
             sliderValue.RegisterCallback<FocusOutEvent>(SliderTextFieldOnValueChanged);
 
             if (sliderContainer.resolvedStyle.display == DisplayStyle.Flex)
@@ -121,11 +122,11 @@ namespace BrowserDesktop.Menu
             sliderContainer.style.display = DisplayStyle.None;
 
             slider.UnregisterValueChangedCallback(SliderOnValueChanged);
-            //sliderValue.UnregisterValueChangedCallback(SliderTextFieldOnValueChanged);
             sliderValue.UnregisterCallback<FocusOutEvent>(SliderTextFieldOnValueChanged);
 
             StopCoroutine(messageSenderCoroutine);
         }
+
 
         public VisualElement GetUXMLContent()
         {

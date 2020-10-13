@@ -19,10 +19,6 @@ Button {
 }
 
 TextField > #unity-text-input {
-    padding-left: 7px;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
     border-top-right-radius: 3px;
@@ -31,6 +27,7 @@ TextField > #unity-text-input {
     border-right-color: rgb(52, 133, 153);
     border-top-color: rgb(52, 133, 153);
     border-bottom-color: rgb(52, 133, 153);
+    padding-left: 7px;
     height: 100%;
 }
 
@@ -168,4 +165,34 @@ TextField > Label {
 Slider > Label {
     min-width: 0;
     padding-right: 10px;
+}
+
+.textfield-with-image-bck {
+}
+
+.textfield-with-image-bck > #unity-text-input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right-width: 0;
+}
+
+.input-button {
+    border-left-color: rgb(52, 133, 153);
+    border-right-color: rgb(52, 133, 153);
+    border-top-color: rgb(52, 133, 153);
+    border-bottom-color: rgb(52, 133, 153);
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    background-color: rgb(240, 240, 240);
+}
+
+.input-button:hover {
+    background-color: rgb(217, 209, 209);
+}
+
+.input-search-button {
+    background-image: url('/Assets/Project/PrefabsAndResources/Menu/Connection/Icons/search-icon.png');
 }

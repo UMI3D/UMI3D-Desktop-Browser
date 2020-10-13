@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk;
+using umi3d.cdk.menu;
+using umi3d.cdk.menu.view;
 using umi3d.common;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,6 +19,7 @@ namespace BrowserDesktop.Menu
 
         static public bool IsDisplayed { get { return Exists ? Instance.isDisplayed : false; } }
 
+        [Header("Side menu general settings")]
         VisualElement sideMenuScreen;
 
         Label sessionTime;
@@ -26,6 +29,10 @@ namespace BrowserDesktop.Menu
         Button hangUpBtn;
 
         DateTime startOfSession;
+
+        [Header("Toolbox menu")]
+        public MenuDisplayManager toolBoxMenuDisplayManager;
+        public MenuAsset ToolboxMenu;
 
         #endregion
 
@@ -42,6 +49,8 @@ namespace BrowserDesktop.Menu
                 sideMenuScreen.style.display = DisplayStyle.Flex;
                 startOfSession = DateTime.Now;
             });
+
+            InteractionMapper.Instance.toolboxMenu = ToolboxMenu.menu;
         }
 
         static public void Display(bool display = true)
@@ -90,6 +99,7 @@ namespace BrowserDesktop.Menu
 
             isDisplayed = display;
             CursorHandler.SetMovement(this, display ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
+            toolBoxMenuDisplayManager.Display(true);
         }
 
         void ShowMenu()

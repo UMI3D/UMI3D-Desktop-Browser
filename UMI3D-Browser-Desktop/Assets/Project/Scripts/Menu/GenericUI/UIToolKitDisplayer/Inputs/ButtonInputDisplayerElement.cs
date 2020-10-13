@@ -17,6 +17,7 @@ namespace BrowserDesktop.Menu
         {
             base.Clear();
             button.clickable.clicked -= NotifyPress;
+            button.RemoveFromHierarchy();
         }
 
         public override void Display(bool forceUpdate = false)
