@@ -1,6 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <ui:Template name="ip-screen" src="ip-screen.uxml" />
-    <ui:Template name="login-screen" src="login-screen.uxml" />
     <ui:Template name="libraries-manager-screen" src="libraries-manager-screen.uxml" />
     <ui:VisualElement name="body" style="height: 100%; width: 100%;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
@@ -17,7 +16,6 @@
         <ui:VisualElement name="main" style="width: 100%; flex-grow: 1; background-color: rgb(255, 255, 255); height: 100%;">
             <ui:VisualElement name="container" class="medium-size-txt" style="width: 70%; margin-left: auto; margin-right: auto; padding-top: 150px;">
                 <ui:Instance template="ip-screen" name="ip-screen" />
-                <ui:Instance template="login-screen" name="login-screen" style="display: flex;" />
                 <ui:Instance template="libraries-manager-screen" name="libraries-manager-screen" />
             </ui:VisualElement>
         </ui:VisualElement>

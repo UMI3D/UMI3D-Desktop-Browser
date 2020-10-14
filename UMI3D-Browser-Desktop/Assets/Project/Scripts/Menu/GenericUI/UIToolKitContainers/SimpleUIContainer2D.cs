@@ -141,10 +141,10 @@ namespace BrowserDesktop.Menu
                 selectButton.text = menu.Name;
             }
 
-            contentElement.style.display = DisplayStyle.Flex;
+            containerElement.style.display = DisplayStyle.Flex;
 
             if (VirtualContainer != null) VirtualContainer = this;
-
+            
             foreach (AbstractDisplayer disp in containedDisplayers)
             {
                 if (disp is IDisplayerElement)
@@ -194,7 +194,9 @@ namespace BrowserDesktop.Menu
             HideBackButton();
             if (selectButton != null)
                 selectButton.clickable.clicked -= Select;
-            contentElement.style.display = DisplayStyle.None;
+
+            containerElement.style.display = DisplayStyle.None;
+
             isDisplayed = false;
         }
 

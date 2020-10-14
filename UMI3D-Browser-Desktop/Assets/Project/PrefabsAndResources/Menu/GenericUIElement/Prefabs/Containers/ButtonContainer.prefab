@@ -49,7 +49,7 @@ MonoBehaviour:
   backButtonPressed:
     m_PersistentCalls:
       m_Calls: []
-  generationOffsetOnExpand: -1
+  generationOffsetOnExpand: 0
   parallelNavigation: 0
   parent: {fileID: 0}
   panelRenderer: {fileID: 0}

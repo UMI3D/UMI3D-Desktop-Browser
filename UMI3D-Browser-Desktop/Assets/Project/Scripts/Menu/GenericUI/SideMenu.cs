@@ -89,12 +89,20 @@ namespace BrowserDesktop.Menu
                 {
                     elt.style.left = val;
                 });
+                //To remove 
+                var viewport = ConnectionMenu.Instance.panelRenderer.visualTree.Q<VisualElement>("game-menu");
+                viewport.style.backgroundColor = Color.white;
+                viewport.style.display = DisplayStyle.Flex;
             } else
             {
                 sideMenu.experimental.animation.Start(0, sideMenu.resolvedStyle.width, 100, (elt, val) =>
                 {
                     elt.style.left = val;
                 });
+                //To remove 
+                var viewport = ConnectionMenu.Instance.panelRenderer.visualTree.Q<VisualElement>("game-menu");
+                viewport.style.backgroundColor = new Color(0, 0, 0, 0);
+                viewport.style.display = DisplayStyle.None;
             }
 
             isDisplayed = display;

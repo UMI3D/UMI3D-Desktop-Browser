@@ -38,7 +38,9 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="right-side-menu" style="height: 100%; flex-direction: row; display: none;">
-                <ui:VisualElement name="viewport" style="flex-grow: 1;" />
+                <ui:VisualElement name="viewport" style="flex-grow: 1;">
+                    <ui:VisualElement name="game-menu" style="flex-grow: 1;" />
+                </ui:VisualElement>
                 <ui:VisualElement name="side-menu" class="dark-grey2-bck" style="width: 280px; padding-top: 148px; display: flex; left: 280px;">
                     <Style src="/Assets/Project/UI/UXML/main-style.uss" />
                     <ui:VisualElement name="tool-inspector" style="flex-grow: 1;">
