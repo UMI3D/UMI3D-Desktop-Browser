@@ -99,6 +99,8 @@ namespace BrowserDesktop.Menu
         {
             if (display)
             {
+                toolBoxMenuDisplayManager.Display(true);
+
                 sideMenu.experimental.animation.Start(sideMenu.resolvedStyle.width,0, 100, (elt, val) =>
                 {
                     elt.style.left = val;
@@ -109,10 +111,13 @@ namespace BrowserDesktop.Menu
                 viewport.style.display = DisplayStyle.Flex;
             } else
             {
+                toolBoxMenuDisplayManager.Hide(true);
+
                 sideMenu.experimental.animation.Start(0, sideMenu.resolvedStyle.width, 100, (elt, val) =>
                 {
                     elt.style.left = val;
                 });
+
                 //To remove 
                 var viewport = ConnectionMenu.Instance.panelRenderer.visualTree.Q<VisualElement>("game-menu");
                 viewport.style.backgroundColor = new Color(0, 0, 0, 0);
@@ -121,7 +126,7 @@ namespace BrowserDesktop.Menu
 
             isDisplayed = display;
             CursorHandler.SetMovement(this, display ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
-            toolBoxMenuDisplayManager.Display(true);
+            
         }
 
         void ShowMenu()

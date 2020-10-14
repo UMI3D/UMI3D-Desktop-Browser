@@ -41,6 +41,7 @@ public class NotificationLoader : umi3d.cdk.NotificationLoader
         else
         {
             notif = Instantiate(notificationPrefab, NotificationContainer.Instance.transform);
+            NotificationDisplayer.Instance.DisplayNotification(dto);
         }
         notif.Title = dto.title;
         notif.Content = dto.content;

@@ -327,10 +327,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1994689718, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
-      propertyPath: uxmlParentTag
-      value: game-menu
-      objectReference: {fileID: 0}
     - target: {fileID: 4423324782737819672, guid: 50541f86f5f01194eb2b175264de3f46,
         type: 3}
       propertyPath: m_Name
@@ -390,11 +386,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5317450853681117898, guid: 50541f86f5f01194eb2b175264de3f46,
-        type: 3}
-      propertyPath: uxmlParentTag
-      value: game-menu
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
@@ -3300,6 +3291,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1957946547}
     m_Modifications:
+    - target: {fileID: 8282273436486587820, guid: e83951eb9ae8eef4b80cf3ff76add40a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8282273437465462772, guid: e83951eb9ae8eef4b80cf3ff76add40a,
         type: 3}
       propertyPath: m_LocalPosition.x

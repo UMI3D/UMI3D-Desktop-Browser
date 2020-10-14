@@ -89,6 +89,53 @@ MonoBehaviour:
   exceptions:
     keys: []
     values: []
+--- !u!1 &1471203229
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1471203230}
+  - component: {fileID: 1471203231}
+  m_Layer: 0
+  m_Name: NotificationDisplayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1471203230
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471203229}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4423324782737819675}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1471203231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471203229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a22fca1e6831c8e4db8ccd6167c77854, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelRenderer: {fileID: 4423324782737819674}
+  notifTreeAsset: {fileID: 9197481963319205126, guid: a3ff933b05757e349a31eb9346543182,
+    type: 3}
+  maxNotificationsDisplayed: 4
 --- !u!114 &87752527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,6 +296,7 @@ Transform:
   m_Children:
   - {fileID: 5303577233696426089}
   - {fileID: 3548115367119916315}
+  - {fileID: 1471203230}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -585,7 +633,7 @@ PrefabInstance:
     - target: {fileID: 5317450853189604428, guid: ccb1c12991d844b4abcde36b1b93b12f,
         type: 3}
       propertyPath: uxmlParentTag
-      value: viewport
+      value: game-menu
       objectReference: {fileID: 0}
     - target: {fileID: 5317450853189604428, guid: ccb1c12991d844b4abcde36b1b93b12f,
         type: 3}
@@ -706,12 +754,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ccb1c12991d844b4abcde36b1b93b12f, type: 3}
---- !u!4 &758095955527845207 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 758095955120225979, guid: ccb1c12991d844b4abcde36b1b93b12f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1752972268}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5317450853585186720 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5317450853189604428, guid: ccb1c12991d844b4abcde36b1b93b12f,
@@ -724,6 +766,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 449fbd4db5d5c534baed57690c7989b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &758095955527845207 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 758095955120225979, guid: ccb1c12991d844b4abcde36b1b93b12f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1752972268}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2177661337729850682
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -736,6 +784,11 @@ PrefabInstance:
       propertyPath: panelRenderer
       value: 
       objectReference: {fileID: 4423324782737819674}
+    - target: {fileID: 2177661336355983756, guid: d0518535c3160a84390f27305bd7d091,
+        type: 3}
+      propertyPath: uxmlParentTag
+      value: game-menu
+      objectReference: {fileID: 0}
     - target: {fileID: 2177661336355983757, guid: d0518535c3160a84390f27305bd7d091,
         type: 3}
       propertyPath: m_LocalPosition.x
