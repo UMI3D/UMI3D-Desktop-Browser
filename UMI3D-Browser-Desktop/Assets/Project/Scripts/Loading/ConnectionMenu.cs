@@ -41,6 +41,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     private VisualElement connectionScreen;
 
     private VisualElement passwordScreen;
+    private TextField loginInput;
     private TextField passwordInput;
     private Button connectBtn;
     private Button goBackButton;
@@ -72,7 +73,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         Debug.Assert(Menu != null);
         Debug.Assert(MenuDisplayManager != null);
 
-        identifier.GetPasswordAction = GetPassword;
+        identifier.GetIdentityAction = GetIdentity;
         identifier.ShouldDownloadLib = ShouldDownloadLibraries;
         identifier.GetParameters = GetParameterDtos;
     }
@@ -107,6 +108,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     {
         passwordScreen = connectionScreen.Q<VisualElement>("password-screen");
         passwordInput = passwordScreen.Q<TextField>("password-input");
+        loginInput = passwordScreen.Q<TextField>("login-input");
         connectBtn = passwordScreen.Q<Button>("connect-btn");
         goBackButton = passwordScreen.Q<Button>("go-back-btn");
         goBackButton.clickable.clicked += Leave;
@@ -114,14 +116,11 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         var passwordVisibleBtn = passwordScreen.Q<VisualElement>("password-visibility");
         passwordVisibleBtn.RegisterCallback<MouseDownEvent>(e =>
         {
-            passwordVisibleBtn.ClearClassList();
-            passwordVisibleBtn.AddToClassList("btn-red-bck");
+
             passwordInput.isPasswordField = false;
         });
         passwordVisibleBtn.RegisterCallback<MouseUpEvent>(e =>
         {
-            passwordVisibleBtn.ClearClassList();
-            passwordVisibleBtn.AddToClassList("btn-blue-bck");
             passwordInput.isPasswordField = true;
         });
     }
@@ -230,20 +229,19 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     }
 
     /// <summary>
-    /// Asks users a password to join the environement.
+    /// Asks users a login/password to join the environement.
     /// </summary>
-    private void GetPassword(Action<string> callback)
+    private void GetIdentity(Action<string, string> callback)
     {
         var loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
         loadingScreen.style.display = DisplayStyle.None;
-
 
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         passwordScreen.style.display = DisplayStyle.Flex;
 
         connectBtn.clickable.clicked += () => {
             passwordScreen.style.display = DisplayStyle.None;
-            callback.Invoke(passwordInput.value);
+            callback.Invoke(loginInput.value, passwordInput.value);
         };
     }
 

@@ -35,12 +35,12 @@ public class LauncherManager : MonoBehaviour
     Button urlEnterBtn;
 
     //Login password screen
-    VisualElement loginPasswordScreen;
+    /*VisualElement loginPasswordScreen;
     TextField loginInput;
     TextField passwordInput;
     Button confirmLoginBtn;
     Button cancelLoginBtn;
-    Label loginInputError;
+    Label loginInputError;*/
 
     //Libraries
     VisualElement librariesScreen;
@@ -55,7 +55,6 @@ public class LauncherManager : MonoBehaviour
     public class Data
     {
         public string ip;
-        public string login;
     }
 
     private Data currentConnectionData;
@@ -92,7 +91,7 @@ public class LauncherManager : MonoBehaviour
     {
         root.Q<Label>("version").text = umi3d.UMI3DVersion.version;
         BindURLScreen();
-        BindLoginScreen();
+        //BindLoginScreen();
         BindLibrariesScreen();
     }
 
@@ -108,7 +107,7 @@ public class LauncherManager : MonoBehaviour
         urlScreen.Q<Button>("manage-library-btn").clickable.clicked += DisplayLibraries;
     }
 
-    private void BindLoginScreen()
+    /*private void BindLoginScreen()
     {
         loginPasswordScreen = root.Q<VisualElement>("login-password-screen");
         loginInput = loginPasswordScreen.Q<TextField>("login-input");
@@ -120,7 +119,7 @@ public class LauncherManager : MonoBehaviour
 
         cancelLoginBtn = loginPasswordScreen.Q<Button>("cancel-login-btn");
         cancelLoginBtn.clickable.clicked += ResetLauncher;
-    }
+    }*/
 
     private void BindLibrariesScreen()
     {
@@ -163,16 +162,17 @@ public class LauncherManager : MonoBehaviour
             currentConnectionData.ip = url;
 
             urlScreen.style.display = DisplayStyle.None;
-            loginPasswordScreen.style.display = DisplayStyle.Flex;
-            nextStep = Login;
+            //loginPasswordScreen.style.display = DisplayStyle.Flex;
+            //nextStep = Login;
             previousStep = ResetLauncher;
+            Connect();
         }
     }
 
     /// <summary>
     /// Gets the login entered by te users and initiates the connection if there is no problem.
     /// </summary>
-    private void Login()
+    /*private void Login()
     {
         string login = loginInput.value;
         string password = passwordInput.value;
@@ -187,16 +187,16 @@ public class LauncherManager : MonoBehaviour
             Debug.Log("<color=green> Connection info : " + currentConnectionData.ip + "</color>");
             Connect();
         }
-    }
+    }*/
 
     /// <summary>
     /// Initiates the connection
     /// </summary>
     private void Connect()
     {
-        loginPasswordScreen.style.display = DisplayStyle.None;
+        //loginPasswordScreen.style.display = DisplayStyle.None;
 
-        UMI3DCollaborationClientServer.Identity.login = currentConnectionData.login;
+        //UMI3DCollaborationClientServer.Identity.login = currentConnectionData.login;
 
         StoreUserData(currentConnectionData);
 
@@ -223,8 +223,9 @@ public class LauncherManager : MonoBehaviour
         previousStep = null;
         nextStep = SetDomain;
 
-        loginInput.value = currentConnectionData.login;
-        passwordInput.value = string.Empty;
+        /*loginInput.value = currentConnectionData.login;
+        passwordInput.value = string.Empty;*/
+
         urlInput.value = currentConnectionData.ip;
     }
 
@@ -232,8 +233,8 @@ public class LauncherManager : MonoBehaviour
     {
         urlScreen.style.display = DisplayStyle.None;
         urlScreen.Q<Label>("url-error").style.display = DisplayStyle.None;
-        loginPasswordScreen.style.display = DisplayStyle.None;
-        loginInputError.text = string.Empty;
+        /*loginPasswordScreen.style.display = DisplayStyle.None;
+        loginInputError.text = string.Empty;*/
         librariesScreen.style.display = DisplayStyle.None;
     }
 
