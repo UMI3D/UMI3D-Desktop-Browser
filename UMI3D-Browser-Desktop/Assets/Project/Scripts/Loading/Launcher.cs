@@ -34,7 +34,6 @@ public class Launcher : MonoBehaviour
     public TMP_Text version;
     public TMP_InputField ip;
     public TMP_InputField port;
-    public TMP_InputField login;
     public TMP_Dropdown dropdown;
     public Button deleteOption;
     public Button RunButton;
@@ -46,7 +45,6 @@ public class Launcher : MonoBehaviour
     {
         public string ip;
         public string port;
-        public string login;
     }
     [Serializable]
     class DataSet
@@ -110,7 +108,6 @@ public class Launcher : MonoBehaviour
         current = data;
         ip.text = data?.ip;
         port.text = data?.port;
-        login.text = data?.login;
         Canvas.ForceUpdateCanvases();
     }
 
@@ -140,10 +137,9 @@ public class Launcher : MonoBehaviour
     {
         if (current != null && current.ip == ip.text)
             data.datas.Remove(current);
-        current = new Data() { ip = ip.text, login = login.text, port = port.text };
+        current = new Data() { ip = ip.text, port = port.text };
         data.datas.Add(current);
         SetDataSet(data);
-        UMI3DCollaborationClientServer.Identity.login = login.text;
         StartCoroutine(WaitReady(current));
         
     }
