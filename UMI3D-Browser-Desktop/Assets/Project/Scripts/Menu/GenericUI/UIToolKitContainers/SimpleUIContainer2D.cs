@@ -300,7 +300,7 @@ namespace BrowserDesktop.Menu
             {
                 return;
             }
-
+            
             if (VirtualContainer != null && VirtualContainer != this)
             {
                 selectButton.text = menu.Name;
