@@ -226,7 +226,7 @@ namespace BrowserDesktop.Interaction
             return associatedInteraction;
         }
 
-        public override void Associate(AbstractInteractionDto interaction)
+        public override void Associate(AbstractInteractionDto interaction, string toolId)
         {
             if (associatedInteraction != null)
             {
@@ -248,7 +248,7 @@ namespace BrowserDesktop.Interaction
                     if (!ok) continue;
                     foreach (DofGroupDto sep in group.separations)
                     {
-                        Associate(interaction as ManipulationDto, sep.dofs);
+                        Associate(interaction as ManipulationDto, sep.dofs, toolId);
                     }
                     return;
                 }
@@ -259,14 +259,14 @@ namespace BrowserDesktop.Interaction
             }
         }
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId)
         {
             if ((associatedInteraction == null || associatedInteraction == manipulation) && dofGroups.Contains(dofs))
             {
                 associatedInteraction = manipulation;
                 Add();
                 ManipulationInput input = ManipulationInputGenerator.Instanciate(controller, Inputs.Find((a) => (a.IsAvailable() || a.Locked)), dofs, ref manipulationInputs);
-                input.Associate(manipulation, dofs);
+                input.Associate(manipulation, dofs, toolId);
                 Add(input);
             }
             else

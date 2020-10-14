@@ -20,13 +20,12 @@ using umi3d.common.interaction;
 using umi3d.common.userCapture;
 
 [System.Serializable]
-public class KeyMenuInput : AbstractUMI3DInput
+public class FormInput : AbstractUMI3DInput
 {
-
     /// <summary>
     /// Associtated interaction (if any).
     /// </summary>
-    public EventDto associatedInteraction { get; protected set; }
+    public FormDto associatedInteraction { get; protected set; }
     /// <summary>
     /// Avatar bone linked to this input.
     /// </summary>
@@ -49,11 +48,11 @@ public class KeyMenuInput : AbstractUMI3DInput
         if (IsCompatibleWith(interaction))
         {
             this.toolId = toolId;
-            associatedInteraction = interaction as EventDto;
+            associatedInteraction = interaction as FormDto;
             menuItem = new HoldableButtonMenuItem
             {
                 Name = associatedInteraction.name,
-                Holdable = associatedInteraction.hold
+                Holdable = false
             };
             menuItem.Subscribe(Pressed);
             if (CircleMenu.Exists)
@@ -95,7 +94,7 @@ public class KeyMenuInput : AbstractUMI3DInput
 
     public override bool IsCompatibleWith(AbstractInteractionDto interaction)
     {
-        return interaction is EventDto;
+        return interaction is FormDto;
     }
 
     void Pressed(bool down)
@@ -105,47 +104,15 @@ public class KeyMenuInput : AbstractUMI3DInput
         if (down)
         {
             onInputDown.Invoke();
-            if ((associatedInteraction).hold)
+          
+            var formAnswer = new FormAnswer
             {
-                var eventdto = new EventStateChangedDto
-                {
-                    active = true,
-                    boneType = boneDto.boneType,
-                    id = associatedInteraction.id,
-                    toolId = this.toolId
-                };
-                UMI3DClientServer.Send(eventdto, true);
-                risingEdgeEventSent = true;
-            }
-            else
-            {
-                var eventdto = new EventTriggeredDto
-                {
-                    boneType = boneDto.boneType,
-                    id = associatedInteraction.id,
-                    toolId = this.toolId
-                };
-                UMI3DClientServer.Send(eventdto, true);
-            }
-        }
-        else
-        {
-            onInputUp.Invoke();
-            if ((associatedInteraction).hold)
-            {
-                if (risingEdgeEventSent)
-                {
-                    var eventdto = new EventStateChangedDto
-                    {
-                        active = false,
-                        boneType = boneDto.boneType,
-                        id = associatedInteraction.id,
-                        toolId = this.toolId
-                    };
-                    UMI3DClientServer.Send(eventdto, true);
-                    risingEdgeEventSent = false;
-                }
-            }
+                boneType = boneDto.boneType,
+                id = associatedInteraction.id,
+                toolId = this.toolId,
+                form = associatedInteraction
+            };
+            UMI3DClientServer.Send(formAnswer, true);
         }
     }
 }

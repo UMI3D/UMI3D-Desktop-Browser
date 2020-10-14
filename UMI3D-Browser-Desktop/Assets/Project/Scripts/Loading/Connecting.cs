@@ -18,6 +18,7 @@ using UnityEngine.UI;
 public class Connecting : Singleton<Connecting>
 {
     public GameObject passwordPannel;
+    public TMP_InputField login;
     public TMP_InputField password;
     public Button button;
 
@@ -37,7 +38,8 @@ public class Connecting : Singleton<Connecting>
     {
         base.Awake();
         passwordPannel.SetActive(false);
-        identifier.GetPasswordAction = GetPassword;
+        identifier.GetIdentityAction = GetIdentifier;
+        identifier.GetLoginAction = GetLogin;
         identifier.ShouldDownloadLib = shouldDlLibraries;
         identifier.GetParameters = GetParameterDtos;
     }
@@ -50,9 +52,14 @@ public class Connecting : Singleton<Connecting>
     }
 
 
-    void GetPassword(Action<string> callback)
+    void GetLogin(Action<string> callback)
     {
-        DisplayLoginPassword(true,(s)=> { DisplayLoginPassword(false); callback.Invoke(s); });
+        DisplayLoginPassword(true,false, (identity, password) => { DisplayLoginPassword(false,false); callback.Invoke(identity); });
+    }
+
+    void GetIdentifier(Action<string,string> callback)
+    {
+        DisplayLoginPassword(true,true,(identity,password)=> { DisplayLoginPassword(false,true); callback.Invoke(identity,password); });
     }
 
     void shouldDlLibraries(List<string> ids,Action<bool> callback)
@@ -69,7 +76,7 @@ public class Connecting : Singleton<Connecting>
         {
             debugForm(form);
             Menu.menu.RemoveAll();
-            foreach(var param in form.interactions)
+            foreach(var param in form.fields)
             {
                 Menu.menu.Add(getInteractionItem(param));
             }
@@ -120,7 +127,7 @@ public class Connecting : Singleton<Connecting>
                 result = b;
                 break;
             case FloatRangeParameterDto floatRangeParameterDto:
-                var f = new FloatRangeInputMenuItem() { dto = floatRangeParameterDto, max = floatRangeParameterDto.Max, min = floatRangeParameterDto.Min, value = floatRangeParameterDto.value, increment = floatRangeParameterDto.Increment };
+                var f = new FloatRangeInputMenuItem() { dto = floatRangeParameterDto, max = floatRangeParameterDto.max, min = floatRangeParameterDto.min, value = floatRangeParameterDto.value, increment = floatRangeParameterDto.increment };
                 f.Subscribe((x) =>
                 {
                     floatRangeParameterDto.value = x;
@@ -129,7 +136,7 @@ public class Connecting : Singleton<Connecting>
                 result = f;
                 break;
             case EnumParameterDto<string> enumParameterDto:
-                var en = new DropDownInputMenuItem() { dto = enumParameterDto, options = enumParameterDto.PossibleValues };
+                var en = new DropDownInputMenuItem() { dto = enumParameterDto, options = enumParameterDto.possibleValues };
                 en.Subscribe((x) =>
                 {
                     enumParameterDto.value = x;
@@ -160,7 +167,7 @@ public class Connecting : Singleton<Connecting>
     {
         this.data = data;
         LoadingScreen.OnProgressChange(0);
-        DisplayLoginPassword(false);
+        DisplayLoginPassword(false,true);
         string url = "http://" + data.ip + ":" + data.port + UMI3DNetworkingKeys.media;
         UMI3DCollaborationClientServer.GetMedia(url, GetMediaSucces, GetMediaFailed);
     }
@@ -180,12 +187,16 @@ public class Connecting : Singleton<Connecting>
     }
 
 
-    void DisplayLoginPassword(bool active, Action<string> callback = null) {
+    void DisplayLoginPassword(bool active, bool askPassword, Action<string,string> callback = null) {
         CursorHandler.SetMovement(this, active ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
         passwordPannel.SetActive(active);
         button.onClick.RemoveAllListeners();
-        if(callback != null)
-            button.onClick.AddListener(()=> { callback.Invoke(password.text); });
+        password.gameObject.SetActive(askPassword);
+        if(active && callback != null)
+        {
+            login.text = "Login";
+            button.onClick.AddListener(()=> { callback.Invoke(login.text,password.text); });
+        }
     }
 
     void DisplayAccept(int count, Action<bool> callback)

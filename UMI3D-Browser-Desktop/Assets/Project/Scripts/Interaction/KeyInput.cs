@@ -58,6 +58,8 @@ namespace BrowserDesktop.Interaction
 
         EventDisplayer EventDisplayer;
 
+        string toolId;
+
         protected virtual void Start()
         {
             EventDisplayer = EventMenu.CreateDisplayer();
@@ -65,7 +67,7 @@ namespace BrowserDesktop.Interaction
         }
 
 
-        public override void Associate(AbstractInteractionDto interaction)
+        public override void Associate(AbstractInteractionDto interaction, string toolId)
         {
             if (associatedInteraction != null)
             {
@@ -75,6 +77,7 @@ namespace BrowserDesktop.Interaction
             if (IsCompatibleWith(interaction))
             {
                 associatedInteraction = interaction as EventDto;
+                this.toolId = toolId;
                 if (associatedInteraction.icon2D != null)
                 {
                     Debug.Log("need to work on icon");
@@ -146,7 +149,8 @@ namespace BrowserDesktop.Interaction
                         {
                             active = true,
                             boneType = boneDto.boneType,
-                            entityId = associatedInteraction.id
+                            id = associatedInteraction.id,
+                            toolId = this.toolId
                         };
                         UMI3DCollaborationClientServer.Send(eventdto, true);
                         risingEdgeEventSent = true;
@@ -156,7 +160,8 @@ namespace BrowserDesktop.Interaction
                         var eventdto = new EventTriggeredDto
                         {
                             boneType = boneDto.boneType,
-                            entityId = associatedInteraction.id
+                            id = associatedInteraction.id,
+                            toolId = this.toolId
                         };
                         UMI3DCollaborationClientServer.Send(eventdto, true);
                     }
@@ -173,7 +178,8 @@ namespace BrowserDesktop.Interaction
                             {
                                 active = false,
                                 boneType = boneDto.boneType,
-                                entityId = associatedInteraction.id
+                                id = associatedInteraction.id,
+                                toolId = this.toolId
                             };
                             UMI3DCollaborationClientServer.Send(eventdto, true);
                             risingEdgeEventSent = false;
@@ -183,7 +189,7 @@ namespace BrowserDesktop.Interaction
             }
         }
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId)
         {
             throw new System.NotImplementedException();
         }
@@ -208,7 +214,8 @@ namespace BrowserDesktop.Interaction
                 {
                     active = false,
                     boneType = boneDto.boneType,
-                    entityId = associatedInteraction.id
+                    id = associatedInteraction.id,
+                    toolId = this.toolId
                 };
                 UMI3DCollaborationClientServer.Send(eventdto, true);
             }
