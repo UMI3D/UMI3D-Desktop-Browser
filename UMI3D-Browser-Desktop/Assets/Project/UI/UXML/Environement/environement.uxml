@@ -20,7 +20,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="main" style="width: 100%; flex-grow: 1; height: 100%; background-color: rgba(0, 0, 0, 0);">
-            <ui:VisualElement name="connection-menu" style="display: none; background-color: rgb(255, 255, 255); flex-grow: 1;">
+            <ui:VisualElement name="connection-menu" style="display: flex; background-color: rgb(255, 255, 255); flex-grow: 1;">
                 <ui:VisualElement name="container" style="width: 70%; margin-left: auto; margin-right: auto; padding-top: 179px;">
                     <ui:Instance template="loading-screen" name="loading-screen" style="margin-bottom: 20px;" />
                     <ui:Instance template="password-screen" name="password-screen" />
@@ -28,7 +28,8 @@
                     <ui:VisualElement name="parameters-screen" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="right-side-menu" style="height: 100%; flex-direction: row; display: flex;">
+            <ui:VisualElement name="right-side-menu" style="height: 100%; flex-direction: row; display: none;">
+                <ui:VisualElement name="manipulation-container" style="position: absolute; bottom: 50px; right: 0; height: 60px; left: 0; flex-direction: row; justify-content: center;" />
                 <ui:VisualElement name="notification-container" style="height: 100%; position: absolute; left: 10px; flex-direction: column-reverse;" />
                 <ui:VisualElement name="viewport" style="flex-grow: 1;">
                     <ui:VisualElement name="game-menu" style="flex-grow: 1;" />
