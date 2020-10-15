@@ -38,7 +38,6 @@ namespace BrowserDesktop.Menu
 
         protected bool valueChanged = false;
 
-
         protected IEnumerator networkMessageSender()
         {
             while (true)
@@ -51,8 +50,6 @@ namespace BrowserDesktop.Menu
                 yield return new WaitForSeconds(1f / networkFrameRate);
             }
         }
-
-
 
         public override void Display(bool forceUpdate = false)
         {
@@ -103,6 +100,11 @@ namespace BrowserDesktop.Menu
         {
             if (textInput == null)
                 textInput = new TextField();
+        }
+
+        private void OnDestroy()
+        {
+            textInput?.RemoveFromHierarchy();
         }
     }
 }

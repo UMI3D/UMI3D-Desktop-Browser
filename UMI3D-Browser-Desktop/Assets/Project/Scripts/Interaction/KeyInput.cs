@@ -114,7 +114,7 @@ namespace BrowserDesktop.Interaction
                     }
                 }
 
-                //if ((!CircleMenu.Exist || !CircleMenu.Instance.IsExpanded) && Input.GetKey(InputLayoutManager.GetInputCode(activationButton)) && !Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)) && (associatedInteraction).Hold)
+                //if ((!CircularMenu.Exist || !CircularMenu.Instance.IsExpanded) && Input.GetKey(InputLayoutManager.GetInputCode(activationButton)) && !Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)) && (associatedInteraction).Hold)
                 //{
                 //    onInputDown.Invoke();
                 //    UMI3DHttpClient.Interact(associatedInteraction.id, new object[2] { true, boneDto.id });
@@ -138,7 +138,7 @@ namespace BrowserDesktop.Interaction
                 LastFrameButton = InputLayoutManager.GetInputCode(activationButton);
             }
 
-            if (associatedInteraction != null && (!CircleMenu.Exists || !CircleMenu.Instance.IsExpanded))
+            if (associatedInteraction != null && (!CircularMenu.Exists || !CircularMenu.Instance.IsExpanded))
             {
                 if (Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)))
                 {

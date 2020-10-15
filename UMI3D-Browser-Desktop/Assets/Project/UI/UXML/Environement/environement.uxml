@@ -20,7 +20,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="main" style="width: 100%; flex-grow: 1; height: 100%; background-color: rgba(0, 0, 0, 0);">
-            <ui:VisualElement name="connection-menu" style="display: flex; background-color: rgb(255, 255, 255); flex-grow: 1;">
+            <ui:VisualElement name="connection-menu" style="display: none; background-color: rgb(255, 255, 255); flex-grow: 1;">
                 <ui:VisualElement name="container" style="width: 70%; margin-left: auto; margin-right: auto; padding-top: 179px;">
                     <ui:Instance template="loading-screen" name="loading-screen" style="margin-bottom: 20px;" />
                     <ui:Instance template="password-screen" name="password-screen" />
@@ -108,6 +108,7 @@
                     <ui:VisualElement name="session-right" style="background-image: url(&apos;/Assets/Project/logo/logo_umi3d_consortium_3d.png&apos;); width: 128px; height: 128px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
+            <ui:VisualElement name="circular-menu" style="position: absolute; width: 100%; height: 100%; display: none;" />
         </ui:VisualElement>
         <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 30px;" />
     </ui:VisualElement>

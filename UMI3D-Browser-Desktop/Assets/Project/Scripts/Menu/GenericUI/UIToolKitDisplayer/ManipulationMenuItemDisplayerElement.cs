@@ -108,5 +108,10 @@ namespace BrowserDesktop.Menu
             if (button == null)
                 button = manipulationMenuItemTreeAsset.CloneTree().Q<Button>();
         }
+
+        private void OnDestroy()
+        {
+            button?.RemoveFromHierarchy();
+        }
     }
 }

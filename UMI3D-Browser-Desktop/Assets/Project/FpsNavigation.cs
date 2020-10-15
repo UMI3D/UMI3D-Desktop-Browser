@@ -125,9 +125,9 @@ public class FpsNavigation : AbstractNavigation
             return;
         if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
         {
-            if (CircleMenu.Exists && CircleMenu.Instance.IsExpanded)
+            if (CircularMenu.Exists && CircularMenu.Instance.IsExpanded)
             {
-                CircleMenu.Instance.Collapse();
+                CircularMenu.Instance.Collapse();
             }
 
             MainMenu.Display(!MainMenu.IsDisplaying);

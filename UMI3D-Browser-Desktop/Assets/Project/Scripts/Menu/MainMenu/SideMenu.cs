@@ -109,6 +109,7 @@ namespace BrowserDesktop.Menu
                 var viewport = ConnectionMenu.Instance.panelRenderer.visualTree.Q<VisualElement>("game-menu");
                 viewport.style.backgroundColor = Color.white;
                 viewport.style.display = DisplayStyle.Flex;
+                CircularMenu.Instance.HideMenu();
             } else
             {
                 toolBoxMenuDisplayManager.Hide(true);
@@ -122,6 +123,7 @@ namespace BrowserDesktop.Menu
                 var viewport = ConnectionMenu.Instance.panelRenderer.visualTree.Q<VisualElement>("game-menu");
                 viewport.style.backgroundColor = new Color(0, 0, 0, 0);
                 viewport.style.display = DisplayStyle.None;
+                CircularMenu.Instance.ShowMenu();
             }
 
             isDisplayed = display;

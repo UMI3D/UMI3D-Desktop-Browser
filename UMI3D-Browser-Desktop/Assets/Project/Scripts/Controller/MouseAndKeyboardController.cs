@@ -178,13 +178,14 @@ namespace BrowserDesktop.Controller
 
         void CreateForceProjectionMenuItem()
         {
-            if (CircleMenu.Exists && mouseData.ForceProjectionMenuItem != null)
+            if (CircularMenu.Exists && mouseData.ForceProjectionMenuItem != null)
             {
-                if (!CircleMenu.Instance.MenuDisplayManager.menu.Contains(mouseData.ForceProjectionMenuItem))
+                if (!CircularMenu.Instance.menuDisplayManager.menu.Contains(mouseData.ForceProjectionMenuItem))
                 {
-                    CircleMenu.Instance.MenuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
+                    Debug.Log("POmme");
+                    CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
                 }
-                else if (CircleMenu.Instance.MenuDisplayManager.menu.Count == 1)
+                else if (CircularMenu.Instance.menuDisplayManager.menu.Count == 1)
                 {
                     DeleteForceProjectionMenuItem();
                 }
@@ -198,7 +199,7 @@ namespace BrowserDesktop.Controller
             mouseData.CurentHovered = null;
             mouseData.CurentHoveredTransform = null;
             mouseData.OldHovered = null;
-            CircleMenu.Instance.Collapse();
+            CircularMenu.Instance.Collapse();
             mouseData.HoverState = HoverState.None;
         }
 
@@ -212,9 +213,9 @@ namespace BrowserDesktop.Controller
         {
             if (mouseData.ForceProjectionMenuItem != null)
             {
-                if (CircleMenu.Exists)
+                if (CircularMenu.Exists)
                 {
-                    CircleMenu.Instance.MenuDisplayManager.menu.Remove(mouseData.ForceProjectionMenuItem);
+                    CircularMenu.Instance.menuDisplayManager.menu.Remove(mouseData.ForceProjectionMenuItem);
                 }
             }
         }
@@ -282,7 +283,7 @@ namespace BrowserDesktop.Controller
         public void CircleMenuColapsed()
         {
             if (mouseData.CurentHovered == null) return;
-            // CircleMenu.Instance.MenuColapsed.RemoveListener(CircleMenuColapsed);
+            // CircularMenu.Instance.MenuColapsed.RemoveListener(CircleMenuColapsed);
             CursorHandler.State = CursorHandler.CursorState.Hover;
             mouseData.saveDelay = 3;
         }
@@ -291,7 +292,7 @@ namespace BrowserDesktop.Controller
         {
             if (!(
                         mouseData.HoverState == HoverState.AutoProjected
-                        && (CursorHandler.State == CursorHandler.CursorState.Clicked || CircleMenu.Exists && CircleMenu.Instance.IsExpanded)
+                        && (CursorHandler.State == CursorHandler.CursorState.Clicked || CircularMenu.Exists && CircularMenu.Instance.IsExpanded)
                ))
             {
                 mouseData.save();
@@ -329,7 +330,8 @@ namespace BrowserDesktop.Controller
             }
             else
             {
-                CircleMenu.Instance.Follow(mouseData.centeredWorldPoint);
+                //TODO
+                //CircularMenu.Instance.Follow(mouseData.centeredWorldPoint);
             }
         }
 
@@ -337,7 +339,7 @@ namespace BrowserDesktop.Controller
         {
             if (mouseData.ForcePorjection)
             {
-                if (CircleMenu.Exists && !CircleMenu.Instance.IsEmpty())
+                if (CircularMenu.Exists && !CircularMenu.Instance.IsEmpty())
                 {
                     CreateForceProjectionMenuItem();
                 }
@@ -365,7 +367,7 @@ namespace BrowserDesktop.Controller
                                 InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                             }
                             mouseData.OldHovered.HoverExit(boneDto.boneType,mouseData.LastHoveredId);
-                            CircleMenu.Instance.Collapse();
+                            CircularMenu.Instance.Collapse();
                             mouseData.OldHovered = null;
                         }
                         mouseData.HoverState = HoverState.Hovering;
@@ -374,7 +376,7 @@ namespace BrowserDesktop.Controller
                             InteractionMapper.SelectTool(mouseData.CurentHovered.dto.id, this, reason);
                             CursorHandler.State = CursorHandler.CursorState.Hover;
                             mouseData.HoverState = HoverState.AutoProjected;
-                            CircleMenu.Instance.MenuColapsed.AddListener(CircleMenuColapsed);
+                            CircularMenu.Instance.MenuColapsed.AddListener(CircleMenuColapsed);
                             mouseData.OldHovered = mouseData.CurentHovered;
                         }
                         mouseData.CurentHovered.HoverEnter(boneDto.boneType,mouseData.CurrentHoveredId);
@@ -385,11 +387,11 @@ namespace BrowserDesktop.Controller
                 {
                     if (mouseData.HoverState == HoverState.AutoProjected)
                     {
-                        CircleMenu.Instance.MenuColapsed.RemoveListener(CircleMenuColapsed);
+                        CircularMenu.Instance.MenuColapsed.RemoveListener(CircleMenuColapsed);
                         InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                     }
                     mouseData.OldHovered.HoverExit(boneDto.boneType,mouseData.LastHoveredId);
-                    CircleMenu.Instance.Collapse();
+                    CircularMenu.Instance.Collapse();
                     CursorHandler.State = CursorHandler.CursorState.Default;
                     mouseData.OldHovered = null;
                     mouseData.HoverState = HoverState.None;

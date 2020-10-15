@@ -67,5 +67,10 @@ namespace BrowserDesktop.Menu
             if (label == null)
                 label = new Label();
         }
+
+        private void OnDestroy()
+        {
+            label?.RemoveFromHierarchy();
+        }
     }
 }

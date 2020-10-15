@@ -44,6 +44,8 @@ namespace BrowserDesktop.Menu
 
         public VisualTreeAsset containerTreeAsset;
 
+        protected VisualElement parentElement;
+
         protected VisualElement containerElement;
         protected VisualElement contentElement;
         private Button backButton;
@@ -94,7 +96,8 @@ namespace BrowserDesktop.Menu
             if(containerElement == null)
             {
                 containerElement = containerTreeAsset.CloneTree();
-                panelRenderer.visualTree.Q<VisualElement>(uxmlParentTag).Add(containerElement);
+                parentElement = panelRenderer.visualTree.Q<VisualElement>(uxmlParentTag);
+                parentElement.Add(containerElement);
 
                 BindUI();
             }
@@ -106,8 +109,6 @@ namespace BrowserDesktop.Menu
             selectButton = containerElement.Q<Button>(uxmlSelectButtonTag);
             backButton = containerElement.Q<Button>(uxmlBackButtonTag);
             Debug.Assert(contentElement != null);
-            Debug.Assert(selectButton != null);
-            Debug.Assert(backButton != null);
         }
 
         public override AbstractDisplayer this[int i] { get => containedDisplayers[i]; set { RemoveAt(i); Insert(value, i); } }
@@ -339,7 +340,8 @@ namespace BrowserDesktop.Menu
 
             VirtualContainer = this;
 
-            selectButton.clickable.clicked -= Select;
+            if(selectButton != null)
+                selectButton.clickable.clicked -= Select;
 
             foreach (AbstractDisplayer displayer in this)
             {
@@ -451,10 +453,11 @@ namespace BrowserDesktop.Menu
             return containerElement;
         }
 
-        /*public void OnDestroy()
+        public void OnDestroy()
         {
             containerElement?.RemoveFromHierarchy();
-        }*/
+        }
+
         #endregion
     }
 }

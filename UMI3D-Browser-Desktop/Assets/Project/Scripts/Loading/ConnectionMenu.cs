@@ -16,6 +16,7 @@ limitations under the License.
 
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
+using BrowserDesktop.Menu;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -163,7 +164,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         this.connectionData = connectionData;
 
         connectionScreen.style.display = DisplayStyle.Flex;
-
+        CircularMenu.Instance.HideMenu();
+       
         loader.OnProgressChange(0);
         string url = "http://" + connectionData.ip + UMI3DNetworkingKeys.media;
         UMI3DCollaborationClientServer.GetMedia(url, GetMediaSucces, GetMediaFailed);
@@ -190,6 +192,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     private void Hide()
     {
         connectionScreen.style.display = DisplayStyle.None;
+        CircularMenu.Instance.ShowMenu();
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
     }
 

@@ -67,8 +67,8 @@ namespace BrowserDesktop.Interaction
         internal void Activate()
         {
             Active = true;
-            if (CircleMenu.Exists && menuItem != null)
-                CircleMenu.Instance.MenuDisplayManager.menu.Remove(menuItem);
+            if (CircularMenu.Exists && menuItem != null)
+                CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
             ManipulationInput.SelectFirst();
             foreach (ManipulationInput input in manipulationInputs)
             {
@@ -78,9 +78,9 @@ namespace BrowserDesktop.Interaction
         internal void Deactivate()
         {
             Active = false;
-            if (CircleMenu.Exists)
+            if (CircularMenu.Exists)
             {
-                CircleMenu.Instance.MenuDisplayManager.menu.Add(menuItem);
+                CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
             }
             foreach (ManipulationInput input in manipulationInputs)
             {
@@ -124,8 +124,8 @@ namespace BrowserDesktop.Interaction
                     currentInstance = 0;
                     CursorHandler.State = CursorHandler.CursorState.Hover;
                 }
-                if (CircleMenu.Exists && menuItem != null)
-                    CircleMenu.Instance.MenuDisplayManager.menu.Remove(menuItem);
+                if (CircularMenu.Exists && menuItem != null)
+                    CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
                 if (menuItem != null)
                 {
                     menuItem.UnSubscribe(Select);
@@ -174,8 +174,8 @@ namespace BrowserDesktop.Interaction
         void Select(bool state)
         {
             SwicthManipulation(instances.FindIndex(a => a == this));
-            if (CircleMenu.Exists)
-                CircleMenu.Instance.Collapse();
+            if (CircularMenu.Exists)
+                CircularMenu.Instance.Collapse();
         }
 
         #endregion

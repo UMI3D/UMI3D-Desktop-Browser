@@ -92,5 +92,10 @@ namespace BrowserDesktop.Menu
             if (button == null)
                 button = new Button();
         }
+
+        private void OnDestroy()
+        {
+            button?.RemoveFromHierarchy();
+        }
     }
 }

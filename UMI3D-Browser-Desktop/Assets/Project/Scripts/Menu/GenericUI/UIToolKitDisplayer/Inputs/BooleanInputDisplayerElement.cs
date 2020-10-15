@@ -72,5 +72,10 @@ namespace BrowserDesktop.Menu
             if (toggle == null)
                 toggle = booleanInputVisualTreeAsset.CloneTree().Q<Toggle>();
         }
+
+        private void OnDestroy()
+        {
+            toggle?.RemoveFromHierarchy();
+        }
     }
 }

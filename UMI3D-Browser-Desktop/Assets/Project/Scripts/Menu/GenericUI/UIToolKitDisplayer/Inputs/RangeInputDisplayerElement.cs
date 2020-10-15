@@ -128,7 +128,6 @@ namespace BrowserDesktop.Menu
             }
         }
 
-
         /// <summary>
         /// Hide the range input.
         /// </summary>
@@ -141,7 +140,6 @@ namespace BrowserDesktop.Menu
 
             StopCoroutine(messageSenderCoroutine);
         }
-
 
         public VisualElement GetUXMLContent()
         {
@@ -157,6 +155,11 @@ namespace BrowserDesktop.Menu
                 sliderValue = sliderContainer.Q<TextField>();
                 slider = sliderContainer.Q<Slider>();
             }
+        }
+
+        private void OnDestroy()
+        {
+            sliderContainer?.RemoveFromHierarchy();
         }
     }
 }

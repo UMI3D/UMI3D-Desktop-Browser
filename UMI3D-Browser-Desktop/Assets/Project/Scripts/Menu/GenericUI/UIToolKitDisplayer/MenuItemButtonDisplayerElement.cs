@@ -28,7 +28,6 @@ namespace BrowserDesktop.Menu
             button.RemoveFromHierarchy();
         }
 
-
         public override void Display(bool forceUpdate = false)
         {
             InitAndBindUI();
@@ -42,7 +41,6 @@ namespace BrowserDesktop.Menu
             button.clickable.clicked -= NotifyPress;
             button.style.display = DisplayStyle.None;
         }
-
 
         /// <summary>
         /// Notify that the button has been pressed.
@@ -84,6 +82,11 @@ namespace BrowserDesktop.Menu
         {   
             if (button == null)
                 button = menuItemTreeAsset.CloneTree().Q<Button>();
+        }
+
+        private void OnDestroy()
+        {
+            button?.RemoveFromHierarchy();
         }
     }
 }

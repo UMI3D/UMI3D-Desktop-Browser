@@ -212,9 +212,9 @@ Slider > Label {
 
 .manipulation-element-active {
     background-color: rgb(111, 108, 108);
-    color: rgba(31, 31, 31, 255);
+    color: rgb(31, 31, 31);
 }
 
 .white-txt {
-    color: rgba(255, 255, 255, 255);
+    color: rgb(255, 255, 255);
 }

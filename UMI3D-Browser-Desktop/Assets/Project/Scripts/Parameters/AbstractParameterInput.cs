@@ -58,8 +58,8 @@ namespace BrowserDesktop.Parameters
                     dto = interaction as ParameterType,
                     Name = interaction.name
                 };
-                if (CircleMenu.Exists)
-                    CircleMenu.Instance.MenuDisplayManager.menu.Add(menuItem);
+                if (CircularMenu.Exists)
+                    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
 
                 menuItem.NotifyValueChange((interaction as ParameterType).value);
                 callback = x =>
@@ -99,8 +99,8 @@ namespace BrowserDesktop.Parameters
         {
             currentInteraction = null;
             menuItem.UnSubscribe(callback);
-            if (CircleMenu.Exists)
-                CircleMenu.Instance?.MenuDisplayManager?.menu?.Remove(menuItem);
+            if (CircularMenu.Exists)
+                CircularMenu.Instance?.menuDisplayManager?.menu?.Remove(menuItem);
         }
 
         public override bool IsCompatibleWith(AbstractInteractionDto interaction)

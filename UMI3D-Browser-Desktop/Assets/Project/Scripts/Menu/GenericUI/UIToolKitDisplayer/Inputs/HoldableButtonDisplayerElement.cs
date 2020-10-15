@@ -27,11 +27,12 @@ namespace BrowserDesktop.Menu
         /// </summary>
         protected HoldableButtonMenuItem menuItem;
 
+        public VisualTreeAsset holdableButtonTreeAsset;
+
         /// <summary>
         /// Button
         /// </summary>
-        Button button;
-
+        Label button;
 
         /// <summary>
         /// Notify that the button has been pressed.
@@ -40,6 +41,7 @@ namespace BrowserDesktop.Menu
         {
             menuItem.NotifyValueChange(true);
         }
+
         public void NotifyPressUp()
         {
             menuItem.NotifyValueChange(false);
@@ -55,6 +57,7 @@ namespace BrowserDesktop.Menu
             if (item is HoldableButtonMenuItem)
             {
                 menuItem = item as HoldableButtonMenuItem;
+                InitAndBindUI();
                 button.text = item.Name;
             }
             else
@@ -92,7 +95,21 @@ namespace BrowserDesktop.Menu
         public void InitAndBindUI()
         {
             if (button == null)
-                button = new Button();
+            {
+                button = holdableButtonTreeAsset.CloneTree().Q<Label>();
+                button.RegisterCallback<MouseDownEvent>((e) =>{ //Pointer down does not seem to work with UIToolKit 0.0.4-preview
+                    NotifyPressDown();
+                });
+                button.RegisterCallback<PointerUpEvent>((e) =>
+                {
+                    NotifyPressUp();
+                });
+            }
+        }
+
+        private void OnDestroy()
+        {
+            button?.RemoveFromHierarchy();
         }
     }
 }

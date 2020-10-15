@@ -46,3 +46,5 @@ MonoBehaviour:
   onClear:
     m_PersistentCalls:
       m_Calls: []
+  holdableButtonTreeAsset: {fileID: 9197481963319205126, guid: 3103727e988b76f488dc12ead2306d73,
+    type: 3}
