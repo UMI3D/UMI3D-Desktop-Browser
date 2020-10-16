@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <BrowserDesktop.Menu.EventDisplayer class="dark-grey1-bck white-txt" style="flex-direction: row; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; width: 250px; margin-bottom: 10px;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:VisualElement name="icon" style="width: 30px; height: 30px; margin-right: 10px; background-color: rgba(164, 164, 164, 255);" />
+        <ui:Label text="Label" name="label" class="white-txt" />
+        <ui:Label text="Label" name="input" class="white-txt" />
+    </BrowserDesktop.Menu.EventDisplayer>
+</ui:UXML>

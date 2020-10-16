@@ -21,10 +21,8 @@ using umi3d.cdk;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-
 public class DialogueBoxElement : VisualElement
 {
-    // UxmlFactory and UxmlTraits allow UIBuilder to use CardElement as a building block
     public new class UxmlFactory : UxmlFactory<DialogueBoxElement, UxmlTraits> { }
     public new class UxmlTraits : VisualElement.UxmlTraits { }
 

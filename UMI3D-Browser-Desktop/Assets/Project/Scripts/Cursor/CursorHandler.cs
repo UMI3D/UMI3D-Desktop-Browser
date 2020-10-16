@@ -31,7 +31,7 @@ namespace BrowserDesktop.Cursor
         public RectTransform LeftClickExitCursor;
         public RectTransform FollowCursor;
 
-        public enum CursorState { Default, Hover, Clicked }
+        public enum CursorState { Default, Hover, Clicked, FollowCursor }
         public enum CursorMovement { Free, Center, Confined, FreeHiden }
 
         public bool MenuIndicator = false;
@@ -126,9 +126,9 @@ namespace BrowserDesktop.Cursor
                     {
                         CursorDisplayer.Instance.DisplayCursor(true, state);
 					}
-                    else
+                    else if (cursorMovement == CursorMovement.FreeHiden)
                     {
-                        // TODO Follow
+                        CursorDisplayer.Instance.DisplayCursor(true, CursorState.FollowCursor);
                     }
                 }
                 /*if (CrossCursor.gameObject.activeSelf != (cursorMovement == CursorMovement.Center && state == CursorState.Default && LastMenuState))

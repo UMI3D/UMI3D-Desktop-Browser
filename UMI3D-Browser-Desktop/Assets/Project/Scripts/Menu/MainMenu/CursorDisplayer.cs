@@ -26,13 +26,13 @@ public class CursorDisplayer : Singleton<CursorDisplayer>
 
     [Header("Class names")]
     [SerializeField]
-    string defaultCursorClassName = "cursor-cross";
+    Sprite defaultCursor;
     [SerializeField]
-    string hoverCursorClassName = "circle-cursor";
+    Sprite hoverCursor;
     [SerializeField]
-    string followCursorClassName = "circle-follow";
+    Sprite followCursor;
     [SerializeField]
-    string clickedCursorClassName = "circle-follow";
+    Sprite clickedCursor;
 
     VisualElement cursorContainer;
     VisualElement cursorCenter;
@@ -65,13 +65,16 @@ public class CursorDisplayer : Singleton<CursorDisplayer>
 		switch (state)
 		{
 			case CursorState.Default:
-                cursorCenter.AddToClassList(defaultCursorClassName);
+                cursorCenter.style.backgroundImage = new StyleBackground(defaultCursor.texture);
                 break;
 			case CursorState.Hover:
-                cursorCenter.AddToClassList(hoverCursorClassName);
+                cursorCenter.style.backgroundImage = new StyleBackground(hoverCursor.texture);
                 break;
 			case CursorState.Clicked:
-                cursorCenter.AddToClassList(clickedCursorClassName);
+                cursorCenter.style.backgroundImage = new StyleBackground(clickedCursor.texture);
+                break;
+            case CursorState.FollowCursor:
+                cursorCenter.style.backgroundImage = new StyleBackground(followCursor.texture);
                 break;
 			default:
 				break;

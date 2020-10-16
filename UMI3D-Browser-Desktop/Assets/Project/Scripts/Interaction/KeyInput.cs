@@ -56,14 +56,14 @@ namespace BrowserDesktop.Interaction
         /// </summary>
         protected bool risingEdgeEventSent = false;
 
-        EventDisplayer EventDisplayer;
+        EventDisplayer eventDisplayer;
 
         string toolId;
 
         protected virtual void Start()
         {
-            EventDisplayer = EventMenu.CreateDisplayer();
-            EventDisplayer.gameObject.SetActive(false);
+            eventDisplayer = EventMenu.CreateDisplayer();
+            eventDisplayer.Display(false);
         }
 
 
@@ -107,10 +107,10 @@ namespace BrowserDesktop.Interaction
                 }
                 else
                 {
-                    if (EventDisplayer != null)
+                    if (eventDisplayer != null)
                     {
-                        EventDisplayer.gameObject.SetActive(true);
-                        EventDisplayer.Set(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), null);
+                        eventDisplayer.Display(true);
+                        eventDisplayer.SetUp(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), null);
                     }
                 }
 
@@ -202,7 +202,7 @@ namespace BrowserDesktop.Interaction
         public override void Dissociate()
         {
             ResetButton();
-            EventDisplayer?.gameObject.SetActive(false);
+            eventDisplayer?.Remove();
             associatedInteraction = null;
         }
 

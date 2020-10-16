@@ -13,21 +13,34 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using TMPro;
+
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
 {
-    public class EventDisplayer : ManipulationDisplayer
+    public class EventDisplayer : VisualElement
     {
-        [SerializeField]
-        TextMeshProUGUI input = null;
+        public new class UxmlFactory : UxmlFactory<EventDisplayer, UxmlTraits> { }
+        public new class UxmlTraits : VisualElement.UxmlTraits { }
 
-        public void Set(string label, string inputName, Sprite icon)
+
+        public void SetUp(string label, string inputName, Sprite icon = null)
         {
-            Set(label, icon);
-            //State(true);
-            this.input.text = inputName;
+            this.Q<Label>("label").text = label;
+            if(icon != null)
+                this.Q<VisualElement>("icon").style.backgroundImage = new StyleBackground(icon.texture);
+            this.Q<Label>("input").text = inputName;
+        }
+
+        public void Display(bool display)
+        {
+            style.display = display ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        public void Remove()
+        {
+            RemoveFromHierarchy();
         }
     }
 }

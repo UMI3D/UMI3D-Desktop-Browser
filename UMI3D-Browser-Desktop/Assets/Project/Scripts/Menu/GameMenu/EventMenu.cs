@@ -13,20 +13,36 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using Unity.UIElements.Runtime;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
 {
     public class EventMenu : umi3d.common.Singleton<EventMenu>
     {
+        public PanelRenderer panelRenderer;
+
         [SerializeField]
-        GameObject EventDisplayerPrefab = null;
+        string containerTagName;
+        VisualElement container;
+
+        [SerializeField]
+        VisualTreeAsset eventDisplayerTreeAsset;
+
+        void Start()
+        {
+            container = panelRenderer.visualTree.Q<VisualElement>(containerTagName);
+            Debug.Assert(container != null);
+        }
 
         static public EventDisplayer CreateDisplayer()
         {
             if (Exists)
             {
-                return Instantiate(Instance.EventDisplayerPrefab, Instance.transform).gameObject.GetComponent<EventDisplayer>();
+                var displayer = Instance.eventDisplayerTreeAsset.CloneTree().Q<EventDisplayer>();
+                Instance.container.Add(displayer);
+                return displayer;
             }
             return null;
         }

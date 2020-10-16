@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -23,7 +21,6 @@ namespace BrowserDesktop.Menu
 {
     public class ManipulationElement : VisualElement
     {
-        // UxmlFactory and UxmlTraits allow UIBuilder to use CardElement as a building block
         public new class UxmlFactory : UxmlFactory<ManipulationElement, UxmlTraits> { }
         public new class UxmlTraits : VisualElement.UxmlTraits { }
 
