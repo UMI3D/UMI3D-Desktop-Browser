@@ -218,3 +218,17 @@ Slider > Label {
 .white-txt {
     color: rgb(255, 255, 255);
 }
+
+.cursor-cross {
+    background-image: url('/Assets/Project/PrefabsAndResources/Cursor/cross1.png');
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.circle-cursor {
+    background-image: url('/Assets/Project/PrefabsAndResources/Cursor/circle3.png');
+    background-color: rgba(255, 0, 0, 0);
+}
+
+.cursor-gears {
+    background-image: url('/Assets/Project/PrefabsAndResources/Cursor/gears.png');
+}

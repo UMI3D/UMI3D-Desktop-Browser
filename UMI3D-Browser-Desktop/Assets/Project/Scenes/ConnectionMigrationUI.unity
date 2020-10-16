@@ -1444,7 +1444,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &644092310
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1762,7 +1762,6 @@ MonoBehaviour:
   version: {fileID: 1985952755}
   ip: {fileID: 440536970}
   port: {fileID: 1492985636}
-  login: {fileID: 1231598695}
   dropdown: {fileID: 122238891}
   deleteOption: {fileID: 944996572}
   RunButton: {fileID: 1506572087}
@@ -2650,7 +2649,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &967360683
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4026,7 +4025,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1402317226
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4626,7 +4625,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1566211621
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5714,7 +5713,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1848224681
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6203,7 +6202,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1995043677
 RectTransform:
   m_ObjectHideFlags: 0

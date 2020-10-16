@@ -133,7 +133,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         var passwordVisibleBtn = passwordScreen.Q<VisualElement>("password-visibility");
         passwordVisibleBtn.RegisterCallback<MouseDownEvent>(e =>
         {
-
             passwordInput.isPasswordField = false;
         });
         passwordVisibleBtn.RegisterCallback<MouseUpEvent>(e =>
@@ -261,6 +260,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         connectBtn.clickable.clicked += () => {
             passwordScreen.style.display = DisplayStyle.None;
             callback.Invoke(loginInput.value, passwordInput.value);
+            loadingScreen.style.display = DisplayStyle.Flex;
         };
     }
 
