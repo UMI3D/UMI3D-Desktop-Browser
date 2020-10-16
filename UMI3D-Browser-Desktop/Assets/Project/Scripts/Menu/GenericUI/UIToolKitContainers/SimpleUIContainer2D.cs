@@ -96,6 +96,7 @@ namespace BrowserDesktop.Menu
             if(containerElement == null)
             {
                 containerElement = containerTreeAsset.CloneTree();
+                containerElement.style.flexGrow = 1;
                 parentElement = panelRenderer.visualTree.Q<VisualElement>(uxmlParentTag);
                 parentElement.Add(containerElement);
 

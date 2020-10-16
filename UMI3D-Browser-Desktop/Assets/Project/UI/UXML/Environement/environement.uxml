@@ -27,8 +27,8 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="main" style="width: 100%; flex-grow: 1; height: 100%; background-color: rgba(0, 0, 0, 0);">
-            <ui:VisualElement name="connection-menu" style="display: none; background-color: rgb(255, 255, 255); flex-grow: 1;">
-                <ui:VisualElement name="container" style="width: 70%; margin-left: auto; margin-right: auto; padding-top: 179px;">
+            <ui:VisualElement name="connection-menu" style="display: flex; background-color: rgb(255, 255, 255); flex-grow: 1;">
+                <ui:VisualElement name="container" style="width: 70%; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;">
                     <ui:Instance template="loading-screen" name="loading-screen" style="margin-bottom: 20px;" />
                     <ui:Instance template="password-screen" name="password-screen" />
                     <ui:Instance template="libraries-screen" name="libraries-screen" />
