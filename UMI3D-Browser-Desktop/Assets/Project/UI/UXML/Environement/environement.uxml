@@ -11,23 +11,25 @@
     </ui:VisualElement>
     <ui:VisualElement name="body" style="height: 100%; width: 100%; display: flex;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-        <ui:VisualElement name="top" class="dark-grey1-bck" style="width: 100%; height: 40px; flex-direction: row;">
+        <ui:VisualElement name="top" class="dark-grey1-bck" style="width: 100%; height: 40px; flex-direction: row; align-items: center;">
             <ui:VisualElement name="top-right-menu" style="width: 33%; justify-content: center;">
                 <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/logo/logo_umi3d_consortium_white.png&apos;); width: 79px; height: 35px; -unity-background-scale-mode: scale-to-fit;" />
             </ui:VisualElement>
-            <ui:VisualElement name="top-center-menu" style="flex-grow: 1; flex-direction: row; justify-content: center;">
-                <ui:Button text="Mic" name="top-tool-microphone" style="width: 50px;" />
-                <ui:Button text="Cam" name="top-tool-webcam" style="width: 50px;" />
-                <ui:Button text="People" name="top-tool-other-people" style="width: 50px;" />
+            <ui:VisualElement name="top-center-menu" style="flex-grow: 1; flex-direction: row; justify-content: center; height: 35px; display: flex;">
+                <ui:VisualElement name="top-menu-tools" style="flex-direction: row;">
+                    <ui:VisualElement name="top-tool-microphone" style="background-image: url(&apos;/Assets/Project/UI/Icons/micro-on.png&apos;); width: 35px; height: 35px;" />
+                    <ui:VisualElement name="top-tool-webcam" style="background-image: url(&apos;/Assets/Project/UI/Icons/webcam-on.png&apos;); width: 35px; height: 35px;" />
+                    <ui:VisualElement name="top-tool-display-others" style="background-image: url(&apos;/Assets/Project/UI/Icons/display-others-on.png&apos;); width: 35px; height: 35px;" />
+                </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="top-left-menu" style="flex-direction: row-reverse; width: 33%; flex-wrap: nowrap;">
-                <ui:Button text="X" name="close-window-btn" class="top-left-menu-btn" />
-                <ui:Button text="|-|" name="fullscreen-btn" class="top-left-menu-btn" />
-                <ui:Button text="_" name="reduce-window-btn" class="top-left-menu-btn" />
+                <ui:Button name="close-window-btn" text="X" class="top-left-menu-btn" />
+                <ui:Button name="fullscreen-btn" class="top-left-menu-btn" style="background-image: url(&apos;/Assets/Project/UI/Icons/Windows/restore.png&apos;);" />
+                <ui:Button name="minimize-window-btn" class="top-left-menu-btn" style="background-image: url(&apos;/Assets/Project/UI/Icons/Windows/minimize.png&apos;);" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="main" style="width: 100%; flex-grow: 1; height: 100%; background-color: rgba(0, 0, 0, 0);">
-            <ui:VisualElement name="connection-menu" style="display: flex; background-color: rgb(255, 255, 255); flex-grow: 1;">
+        <ui:VisualElement name="main" style="width: 100%; flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+            <ui:VisualElement name="connection-menu" style="display: none; background-color: rgb(255, 255, 255); flex-grow: 1;">
                 <ui:VisualElement name="container" style="width: 70%; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;">
                     <ui:Instance template="loading-screen" name="loading-screen" style="margin-bottom: 20px;" />
                     <ui:Instance template="password-screen" name="password-screen" />
@@ -35,7 +37,7 @@
                     <ui:VisualElement name="parameters-screen" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="right-side-menu" style="height: 100%; flex-direction: row; display: none;">
+            <ui:VisualElement name="right-side-menu" style="height: 100%; flex-direction: row; display: flex;">
                 <ui:VisualElement name="manipulation-container" style="position: absolute; bottom: 50px; right: 0; height: 60px; left: 0; flex-direction: row; justify-content: center;" />
                 <ui:VisualElement name="notification-container" style="height: 100%; position: absolute; left: 10px; flex-direction: column-reverse;" />
                 <ui:VisualElement name="event-container" style="height: 60%; position: absolute; flex-direction: column-reverse; right: 10px; display: flex; margin-right: 10px; bottom: 10px;" />
@@ -92,32 +94,33 @@
                         </ui:VisualElement>
                         <ui:VisualElement name="side-menu-toolbox" style="width: 100%; height: 100%; display: flex;" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="tools" style="height: 60px; background-color: rgb(255, 0, 0); flex-direction: row;">
-                        <ui:Button text="Mic" name="tool-microphone" class="btn-dark-grey-bck" style="flex-grow: 1;" />
-                        <ui:Button text="Cam" name="tool-microphone" class="btn-dark-grey-bck" style="flex-grow: 1;" />
-                        <ui:Button text="Other" name="tool-other-people" class="btn-dark-grey-bck" style="flex-grow: 1;" />
-                        <ui:Button text="Chat" name="tool-chat" class="btn-dark-grey-bck" style="flex-grow: 1;" />
-                        <ui:Button text="Contact" name="tool-contact" class="btn-dark-grey-bck" style="flex-grow: 1;" />
-                        <ui:Button text="Hang up" name="tool-hang-up" class="btn-red-bck" style="flex-grow: 1;" />
+                    <ui:VisualElement name="tools" style="height: 50px; flex-direction: row;">
+                        <ui:Button name="tool-microphone" class="btn-dark-grey-bck" style="flex-grow: 1; background-image: url(&apos;/Assets/Project/UI/Icons/micro-on.png&apos;); width: 50px; height: 50px;" />
+                        <ui:Button name="tool-webcam" class="btn-dark-grey-bck" style="flex-grow: 1; width: 50px; height: 50px; background-image: url(&apos;/Assets/Project/UI/Icons/webcam-on.png&apos;);" />
+                        <ui:Button text="&#10;" name="tool-other-people" class="btn-dark-grey-bck" style="flex-grow: 1; width: 50px; height: 50px; background-image: url(&apos;/Assets/Project/UI/Icons/display-others-on.png&apos;);" />
+                        <ui:Button name="tool-contact" class="btn-dark-grey-bck" style="flex-grow: 1; width: 50px; height: 50px;" />
+                        <ui:Button name="tool-hang-up" class="btn-red-bck" style="flex-grow: 1; width: 50px; height: 50px; background-image: url(&apos;/Assets/Project/UI/Icons/hang-up.png&apos;);" />
                     </ui:VisualElement>
-                </ui:VisualElement>
-                <ui:VisualElement name="session-info" class="dark-grey1-bck" style="width: 300px; height: 128px; margin-top: 20px; flex-direction: row; position: absolute; right: 0;">
-                    <ui:VisualElement name="session-left" style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; flex-grow: 1;">
-                        <ui:Label text="My VR Session" name="sesion-title" class="medium-size-txt" style="-unity-font-style: bold; color: rgb(255, 255, 255);">
-                            <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-                        </ui:Label>
-                        <ui:Label text="4 Participants" name="session-participants" class="border-radius" style="background-color: rgb(169, 20, 46); color: rgb(255, 255, 255); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; width: 92px; margin-top: 10px;">
-                            <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-                        </ui:Label>
-                        <ui:Label text="04:39 pm" name="session-time" class="medium-size-txt" style="color: rgb(255, 255, 255); margin-top: 10px;">
-                            <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-                        </ui:Label>
+                    <ui:VisualElement name="session-info" class="dark-grey1-bck" style="width: 300px; height: 128px; margin-top: 20px; flex-direction: row; position: absolute; right: -20px;">
+                        <ui:VisualElement name="session-left" style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; flex-grow: 1;">
+                            <ui:Label text="My VR Session" name="sesion-title" class="medium-size-txt" style="-unity-font-style: bold; color: rgb(255, 255, 255);">
+                                <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+                            </ui:Label>
+                            <ui:Label text="4 Participants" name="session-participants" class="border-radius" style="background-color: rgb(169, 20, 46); color: rgb(255, 255, 255); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; width: 92px; margin-top: 10px;">
+                                <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+                            </ui:Label>
+                            <ui:Label text="04:39 pm" name="session-time" class="medium-size-txt" style="color: rgb(255, 255, 255); margin-top: 10px;">
+                                <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+                            </ui:Label>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="session-right" style="background-image: url(&apos;/Assets/Project/logo/logo_umi3d_consortium_3d.png&apos;); width: 128px; height: 128px;" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="session-right" style="background-image: url(&apos;/Assets/Project/logo/logo_umi3d_consortium_3d.png&apos;); width: 128px; height: 128px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 30px;" />
+        <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 30px; justify-content: center;">
+            <ui:Label text="Escape : show/hide menu      T : mute/unmute" name="shortcuts" style="color: rgb(182, 182, 182); margin-left: 10px; font-size: 14px;" />
+        </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="circular-menu" style="position: absolute; width: 100%; height: 100%; display: none;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />

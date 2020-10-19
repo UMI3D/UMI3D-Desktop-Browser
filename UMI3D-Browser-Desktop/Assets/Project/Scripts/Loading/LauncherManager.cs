@@ -22,7 +22,6 @@ using Unity.UIElements.Runtime;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 
-using umi3d.cdk.collaboration;
 using BrowserDesktop.Cursor;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -107,7 +106,6 @@ public class LauncherManager : MonoBehaviour
     {
         root.Q<Label>("version").text = umi3d.UMI3DVersion.version;
         BindURLScreen();
-        //BindLoginScreen();
         BindLibrariesScreen();
     }
 
@@ -122,20 +120,6 @@ public class LauncherManager : MonoBehaviour
 
         urlScreen.Q<Button>("manage-library-btn").clickable.clicked += DisplayLibraries;
     }
-
-    /*private void BindLoginScreen()
-    {
-        loginPasswordScreen = root.Q<VisualElement>("login-password-screen");
-        loginInput = loginPasswordScreen.Q<TextField>("login-input");
-        passwordInput = loginPasswordScreen.Q<TextField>("password-input");
-        loginInputError = loginPasswordScreen.Q<Label>("login-input-error");
-
-        confirmLoginBtn = loginPasswordScreen.Q<Button>("confirm-login-btn");
-        confirmLoginBtn.clickable.clicked += Login;
-
-        cancelLoginBtn = loginPasswordScreen.Q<Button>("cancel-login-btn");
-        cancelLoginBtn.clickable.clicked += ResetLauncher;
-    }*/
 
     private void BindLibrariesScreen()
     {

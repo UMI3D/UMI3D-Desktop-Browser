@@ -7,13 +7,13 @@
             <ui:VisualElement name="top-right-menu" style="width: 50%; justify-content: center;">
                 <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/logo/logo_umi3d_consortium_white.png&apos;); width: 79px; height: 35px; -unity-background-scale-mode: scale-to-fit;" />
             </ui:VisualElement>
-            <ui:VisualElement name="top-left-menu" style="flex-direction: row-reverse; width: 50%; flex-wrap: nowrap;">
-                <ui:Button text="X" name="close-window-btn" class="top-left-menu-btn" />
-                <ui:Button text="|-|" name="fullscreen-btn" class="top-left-menu-btn" />
-                <ui:Button text="_" name="reduce-window-btn" class="top-left-menu-btn" />
+            <ui:VisualElement name="top-left-menu" style="flex-direction: row-reverse; width: 50%; flex-wrap: nowrap; height: 100%;">
+                <ui:Button text="X" name="close-window-btn" class="top-left-menu-btn" style="color: rgba(255, 255, 255, 255); font-size: 18px;" />
+                <ui:Button name="fullscreen-btn" class="top-left-menu-btn" style="background-image: url(&apos;/Assets/Project/UI/Icons/Windows/restore.png&apos;);" />
+                <ui:Button name="minimize-window-btn" class="top-left-menu-btn" style="background-image: url(&apos;/Assets/Project/UI/Icons/Windows/minimize.png&apos;);" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="main" style="width: 100%; flex-grow: 1; background-color: rgb(255, 255, 255); height: 100%;">
+        <ui:VisualElement name="main" style="width: 100%; background-color: rgb(255, 255, 255); height: 100%;">
             <ui:VisualElement name="container" class="medium-size-txt" style="width: 70%; margin-left: auto; margin-right: auto; padding-top: 150px;">
                 <ui:Instance template="ip-screen" name="ip-screen" />
                 <ui:Instance template="libraries-manager-screen" name="libraries-manager-screen" />

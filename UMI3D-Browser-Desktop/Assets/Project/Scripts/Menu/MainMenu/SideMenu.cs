@@ -17,10 +17,12 @@ limitations under the License.
 using BrowserDesktop.Cursor;
 using System;
 using umi3d.cdk;
+using umi3d.cdk.collaboration;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3d.common;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
@@ -32,6 +34,7 @@ namespace BrowserDesktop.Menu
         private bool isDisplayed = false;
 
         static public bool IsDisplayed { get { return Exists ? Instance.isDisplayed : false; } }
+
 
         [Header("Side menu general settings")]
         VisualElement sideMenuScreen;
@@ -47,6 +50,22 @@ namespace BrowserDesktop.Menu
         [Header("Toolbox menu")]
         public MenuDisplayManager toolBoxMenuDisplayManager;
         public MenuAsset ToolboxMenu;
+
+        [Header("Icons")]
+        public Texture2D webcamOn;
+        public Texture2D webcamOff;
+        public Texture2D microOn;
+        public Texture2D microOff;
+        public Texture2D displayOn;
+        public Texture2D displayOff;
+
+        Button sideMenuWebcamBtn;
+        Button sideMenuMicroBtn;
+        Button sideMenuDisplayOthersBtn;
+
+        VisualElement webcamIndicator;
+        VisualElement microIndicator;
+        VisualElement displayOthersIndicator;
 
         #endregion
 
@@ -65,12 +84,16 @@ namespace BrowserDesktop.Menu
             });
 
             InteractionMapper.Instance.toolboxMenu = ToolboxMenu.menu;
+
         }
 
-        static public void Display(bool display = true)
+        private void Update()
         {
-            if (Exists) Instance._Display(display);
+            var time = DateTime.Now - startOfSession;
+            sessionTime.text = time.ToString("hh") + ":" + time.ToString("mm") + ":" + time.ToString("ss");
         }
+       
+        #region UI Bindings
 
         private void BindUI()
         {
@@ -78,6 +101,7 @@ namespace BrowserDesktop.Menu
 
             BindSideMenu(root);
             BindSessionInfo(root);
+            BindIndicators(root);
         }
 
         private void BindSideMenu(VisualElement root)
@@ -95,6 +119,29 @@ namespace BrowserDesktop.Menu
             sessionTime = sessionInfo.Q<Label>("session-time");
         }
 
+        private void BindIndicators(VisualElement root)
+        {
+            sideMenuWebcamBtn = root.Q<Button>("tool-webcam");
+            sideMenuMicroBtn = root.Q<Button>("tool-microphone");
+            sideMenuMicroBtn.clickable.clicked += ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus;
+            sideMenuDisplayOthersBtn = root.Q<Button>("tool-other-people");
+
+            webcamIndicator = root.Q<VisualElement>("top-tool-webcam");
+            microIndicator = root.Q<VisualElement>("top-tool-microphone");
+            displayOthersIndicator = root.Q<VisualElement>("top-tool-display-others");
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Displays the side menu.
+        /// </summary>
+        /// <param name="display"></param>
+        static public void Display(bool display = true)
+        {
+            if (Exists) Instance._Display(display);
+        }
+
         void _Display(bool display = true)
         {
             if (display)
@@ -105,6 +152,11 @@ namespace BrowserDesktop.Menu
                 {
                     elt.style.left = val;
                 });
+                sessionInfo.experimental.animation.Start(-20, 0, 100, (elt, val) =>
+                {
+                    elt.style.right = val;
+                });
+
                 //To remove 
                 var viewport = ConnectionMenu.Instance.panelRenderer.visualTree.Q<VisualElement>("game-menu");
                 viewport.style.backgroundColor = Color.white;
@@ -117,6 +169,10 @@ namespace BrowserDesktop.Menu
                 sideMenu.experimental.animation.Start(0, sideMenu.resolvedStyle.width, 100, (elt, val) =>
                 {
                     elt.style.left = val;
+                });
+                sessionInfo.experimental.animation.Start(0, -20, 100, (elt, val) =>
+                {
+                    elt.style.right = val;
                 });
 
                 //To remove 
@@ -131,24 +187,51 @@ namespace BrowserDesktop.Menu
             
         }
 
-        void ShowMenu()
-        {
+        #region Events
 
-        }
-
-        void HideMenu()
+        public void OnMicrophoneStatusChanged(bool status)
         {
-            sideMenu.experimental.animation.Start(0, -sideMenu.resolvedStyle.width, 1000, (elt, val) =>
+            if (!status)
             {
-                elt.style.left = val;
-            });
+                microIndicator.style.backgroundImage = new StyleBackground(microOn);
+                sideMenuMicroBtn.style.backgroundImage = new StyleBackground(microOn);
+            } else
+            {
+                microIndicator.style.backgroundImage = new StyleBackground(microOff);
+                sideMenuMicroBtn.style.backgroundImage = new StyleBackground(microOff);
+            }
         }
 
-        private void Update()
+        void WebcamStatusChanged(bool status)
         {
-            var time = DateTime.Now - startOfSession;
-            sessionTime.text = time.ToString("hh") + ":"+ time.ToString("mm") + ":" + time.ToString("ss");
+            if (status)
+            {
+                webcamIndicator.style.backgroundImage = new StyleBackground(microOn);
+                sideMenuWebcamBtn.style.backgroundImage = new StyleBackground(microOn);
+            }
+            else
+            {
+                webcamIndicator.style.backgroundImage = new StyleBackground(microOff);
+                sideMenuWebcamBtn.style.backgroundImage = new StyleBackground(microOff);
+            }
         }
+
+        void DisplayOthersStatusChanged(bool status)
+        {
+            if (status)
+            {
+                displayOthersIndicator.style.backgroundImage = new StyleBackground(microOn);
+                sideMenuDisplayOthersBtn.style.backgroundImage = new StyleBackground(microOn);
+            }
+            else
+            {
+                displayOthersIndicator.style.backgroundImage = new StyleBackground(microOff);
+                sideMenuMicroBtn.style.backgroundImage = new StyleBackground(microOff);
+            }
+        }
+
+        #endregion
+
         #endregion
     }
 }

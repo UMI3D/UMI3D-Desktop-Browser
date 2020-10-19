@@ -73,6 +73,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private VisualElement parametersScreen;
 
+    private VisualElement topMenuTools;
+
     #endregion
 
     #endregion
@@ -112,6 +114,9 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         loader = new LoadingBar(panelRenderer.visualTree);
 
         connectionScreen = panelRenderer.visualTree.Q<VisualElement>("connection-menu");
+
+        topMenuTools = panelRenderer.visualTree.Q<VisualElement>("top-menu-tools");
+        topMenuTools.style.display = DisplayStyle.None;
 
         BindPasswordScreen();
         BindAssetsLibrariesRequiredScreen();
@@ -188,9 +193,17 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         assetsLibrariesScreen.style.display = DisplayStyle.None;
     }
 
+    private void HideLoadingScreen()
+    {
+        var loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
+        loadingScreen.style.display = DisplayStyle.None;
+    }
+
     private void Hide()
     {
         connectionScreen.style.display = DisplayStyle.None;
+        topMenuTools.style.display = DisplayStyle.Flex;
+
         CircularMenu.Instance.ShowMenu();
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
     }
@@ -276,6 +289,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         }
         else
         {
+            HideLoadingScreen();
+
             assetsLibrariesScreen.style.display = DisplayStyle.Flex;
             if (ids.Count > 1)
                 assetsRequiredWarning.text = ids.Count + " libraries are required to join the environement :";
@@ -304,16 +319,21 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         }
     }
 
+    /// <summary>
+    /// Asks users some parameters when they join the environement.
+    /// </summary>
+    /// <param name="form"></param>
+    /// <param name="callback"></param>
     void GetParameterDtos(FormDto form, Action<FormDto> callback)
     {
-        var loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
-        loadingScreen.style.display = DisplayStyle.None;
+        HideLoadingScreen();
+
+        CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
 
         if (form == null)
             callback.Invoke(form);
         else
         {
-            //debugForm(form);
             Menu.menu.RemoveAll();
             foreach (var param in form.fields)
             {
@@ -326,7 +346,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 Menu.menu.RemoveAll();
                 callback.Invoke(form);
                 CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
-                loadingScreen.style.display = DisplayStyle.Flex;
             };
             send.Subscribe(action);
             Menu.menu.Add(send);

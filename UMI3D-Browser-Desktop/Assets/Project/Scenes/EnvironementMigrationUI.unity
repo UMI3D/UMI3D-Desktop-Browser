@@ -391,8 +391,56 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7513129744976991190, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
+      propertyPath: webcamOn
+      value: 
+      objectReference: {fileID: 2800000, guid: c3f9c9027cb3d8f45a61839487b3751f, type: 3}
+    - target: {fileID: 7513129744976991190, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
+      propertyPath: webcamOff
+      value: 
+      objectReference: {fileID: 2800000, guid: 73b58cb57d9a44647b3d35c5a8cfa299, type: 3}
+    - target: {fileID: 7513129744976991190, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
+      propertyPath: microOn
+      value: 
+      objectReference: {fileID: 2800000, guid: 79cc3da5aab503745aca6f25ac1da2a8, type: 3}
+    - target: {fileID: 7513129744976991190, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
+      propertyPath: microOff
+      value: 
+      objectReference: {fileID: 2800000, guid: 60951e7cdbebd7a459e8535ddeebc194, type: 3}
+    - target: {fileID: 7513129744976991190, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
+      propertyPath: displayOn
+      value: 
+      objectReference: {fileID: 2800000, guid: aa127786b5eb0e44cb43d88ce69841df, type: 3}
+    - target: {fileID: 7513129744976991190, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
+      propertyPath: displayOff
+      value: 
+      objectReference: {fileID: 2800000, guid: 4654edb1dcbe6d9409b68aeb3f638d25, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
+--- !u!114 &87752526 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4423324782737819674, guid: 50541f86f5f01194eb2b175264de3f46,
+    type: 3}
+  m_PrefabInstance: {fileID: 87752525}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8302b9857102e44c8c26813e6008537, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &87752527 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4423324782737819675, guid: 50541f86f5f01194eb2b175264de3f46,
+    type: 3}
+  m_PrefabInstance: {fileID: 87752525}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &133532551
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4607,6 +4655,55 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1897058547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1897058548}
+  - component: {fileID: 1897058549}
+  m_Layer: 0
+  m_Name: WindowsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1897058548
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897058547}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 87752527}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1897058549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897058547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f5ab6d6d6e24f2499f0107614a6fbf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minimizeTagName: minimize-window-btn
+  maximizeTagName: fullscreen-btn
+  closeTagName: close-window-btn
+  maximizeTexture: {fileID: 2800000, guid: 883663dc1a173014e9bf8d63fd919db5, type: 3}
+  restoreTexture: {fileID: 2800000, guid: 428b394451fca374eb17c3e5418cbdcb, type: 3}
+  panelRenderer: {fileID: 87752526}
 --- !u!1 &1957946543
 GameObject:
   m_ObjectHideFlags: 0
@@ -5577,7 +5674,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Microphone: {fileID: 2079147380}
-  toggle: {fileID: 1659216884}
 --- !u!1 &2096641626
 GameObject:
   m_ObjectHideFlags: 0
