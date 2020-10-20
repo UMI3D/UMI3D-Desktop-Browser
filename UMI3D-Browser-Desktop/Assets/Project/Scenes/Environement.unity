@@ -3175,8 +3175,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1202536834}
-  - component: {fileID: 1202536840}
   - component: {fileID: 1202536839}
+  - component: {fileID: 1202536840}
   - component: {fileID: 1202536838}
   - component: {fileID: 1202536837}
   - component: {fileID: 1202536836}
@@ -3221,7 +3221,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 18
-  bone: 1
+  bone: head
 --- !u!114 &1202536836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3241,7 +3241,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 17
-  bone: 1
+  bone: head
 --- !u!114 &1202536837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3261,7 +3261,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 16
-  bone: 1
+  bone: head
 --- !u!114 &1202536838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3281,7 +3281,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 15
-  bone: 1
+  bone: head
 --- !u!114 &1202536839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3301,7 +3301,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 14
-  bone: 1
+  bone: head
 --- !u!114 &1202536840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3320,8 +3320,8 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  activationButton: 13
-  bone: 1
+  activationButton: 15
+  bone: head
 --- !u!1001 &1202966576
 PrefabInstance:
   m_ObjectHideFlags: 0
