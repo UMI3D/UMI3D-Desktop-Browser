@@ -218,3 +218,11 @@ Slider > Label {
 .white-txt {
     color: rgb(255, 255, 255);
 }
+
+.choices-dropdown {
+    background-color: rgb(255, 0, 0);
+    border-left-color: rgb(52, 133, 153);
+    border-right-color: rgb(52, 133, 153);
+    border-top-color: rgb(52, 133, 153);
+    border-bottom-color: rgb(52, 133, 153);
+}

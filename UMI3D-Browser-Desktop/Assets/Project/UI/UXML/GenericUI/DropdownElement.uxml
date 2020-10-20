@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <DropdownElement focusable="true" style="flex-direction: row; height: 20px; align-items: center;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:Label text="Label" name="label" style="margin-right: 5px; height: 100%; -unity-text-align: middle-left;" />
+        <ui:Label text="Label" name="dropdown-current-choice-label" style="flex-grow: 1; border-left-color: rgb(52, 133, 153); border-right-color: rgb(52, 133, 153); border-top-color: rgb(52, 133, 153); border-bottom-color: rgb(52, 133, 153); height: 100%; padding-left: 5px; padding-top: 0; padding-bottom: 0; -unity-text-align: middle-left; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; background-color: rgb(255, 255, 255);" />
+        <ui:VisualElement name="dropdown-open-choice" class="btn-blue-bck" style="width: 20px; height: 20px; background-image: url(&apos;/Assets/Project/UI/Icons/dropdown-arrow.png&apos;);" />
+    </DropdownElement>
+</ui:UXML>

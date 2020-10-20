@@ -21,56 +21,58 @@ namespace BrowserDesktop.Menu
 {
     public class DropDownInputDisplayerElement : AbstractDropDownInputDisplayer, IDisplayerElement
     {
+        public VisualTreeAsset dropdownTreeAsset;
 
-        Label label; //TO REPLACE
+        DropdownElement dropdown;
 
         public override void Clear()
         {
             base.Clear();
-            label.RemoveFromHierarchy();
-            //TODO
-            //dropdown.onValueChanged.RemoveAllListeners();
+            dropdown.RemoveFromHierarchy();
+            dropdown.OnValueChanged -= OnValueChanged;
         }
 
         public override void Display(bool forceUpdate = false)
         {
-            // TODO
-            /*dropdown.gameObject.SetActive(true);
-            dropdown.ClearOptions();
-            dropdown.AddOptions(menuItem.options);
-            dropdown.value = menuItem.options.IndexOf(GetValue());
-            dropdown.onValueChanged.AddListener((i) => NotifyValueChange(menuItem.options[i]));
-            label.text = menuItem.ToString();*/
-
             InitAndBindUI();
+            dropdown.ClearOptions();
+            dropdown.SetOptions(menuItem.options);
+            dropdown.SetValue(menuItem.options.IndexOf(GetValue()));
+            dropdown.OnValueChanged += OnValueChanged;
+            dropdown.SetLabel(menuItem.ToString());
 
-            label.style.display = DisplayStyle.Flex;
-            label.text = menuItem.ToString();
+            dropdown.style.display = DisplayStyle.Flex;
+        }
+
+        private void OnValueChanged(int i)
+        {
+            NotifyValueChange(menuItem.options[i]);
         }
 
         public VisualElement GetUXMLContent()
         {
             InitAndBindUI();
-            return label;
+            return dropdown;
         }
 
         public override void Hide()
         {
-            // TODO
-            /*dropdown.onValueChanged.RemoveAllListeners();
-            dropdown.gameObject.SetActive(false);*/
-            label.style.display = DisplayStyle.None;
+            dropdown.OnValueChanged -= OnValueChanged;
+            dropdown.style.display = DisplayStyle.None;
         }
 
         public void InitAndBindUI()
         {
-            if (label == null)
-                label = new Label();
+            if (dropdown == null)
+            {
+                dropdown = dropdownTreeAsset.CloneTree().Q<DropdownElement>();
+                dropdown.SetUp();
+            }
         }
 
         private void OnDestroy()
         {
-            label?.RemoveFromHierarchy();
+            dropdown?.RemoveFromHierarchy();
         }
     }
 }

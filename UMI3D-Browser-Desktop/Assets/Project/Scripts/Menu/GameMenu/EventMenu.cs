@@ -32,13 +32,14 @@ namespace BrowserDesktop.Menu
 
         void Start()
         {
+            Debug.Assert(panelRenderer.visualTree != null);
             container = panelRenderer.visualTree.Q<VisualElement>(containerTagName);
             Debug.Assert(container != null);
         }
 
         static public EventDisplayer CreateDisplayer()
         {
-            if (Exists)
+            if (Exists && Instance.container != null)
             {
                 var displayer = Instance.eventDisplayerTreeAsset.CloneTree().Q<EventDisplayer>();
                 Instance.container.Add(displayer);

@@ -63,7 +63,7 @@ namespace BrowserDesktop.Interaction
         protected virtual void Start()
         {
             eventDisplayer = EventMenu.CreateDisplayer();
-            eventDisplayer.Display(false);
+            eventDisplayer?.Display(false);
         }
 
 
