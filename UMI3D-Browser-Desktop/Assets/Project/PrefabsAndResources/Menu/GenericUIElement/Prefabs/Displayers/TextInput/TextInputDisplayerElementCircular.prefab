@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8721158857110409941}
   - component: {fileID: 717908647631599470}
   m_Layer: 0
-  m_Name: TextInputDisplayerElement
+  m_Name: TextInputDisplayerElementCircular
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,6 +46,6 @@ MonoBehaviour:
   onClear:
     m_PersistentCalls:
       m_Calls: []
-  textFieldTreeAsset: {fileID: 9197481963319205126, guid: 891c074a5f78b8e45878c05326724648,
+  textFieldTreeAsset: {fileID: 9197481963319205126, guid: 7b652d6300054cb47a60317d210e9860,
     type: 3}
   networkFrameRate: 30

@@ -18,7 +18,12 @@ Button {
     -unity-font-style: bold;
 }
 
-TextField > #unity-text-input {
+TextField > Label {
+    min-width: 0;
+    margin-right: 5px;
+}
+
+.big-text-field > #unity-text-input {
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
     border-top-right-radius: 3px;
@@ -31,7 +36,7 @@ TextField > #unity-text-input {
     height: 100%;
 }
 
-TextField {
+.big-text-field {
     height: 45px;
     align-items: center;
     margin-left: 0;
@@ -44,11 +49,18 @@ TextField {
     padding-bottom: 0;
 }
 
-TextField > Label {
+.big-text-field > Label {
     -unity-font-style: bold;
     color: rgb(52, 133, 153);
     min-width: 0;
     margin-right: 10px;
+}
+
+.white-label {
+}
+
+.white-label > Label {
+    color: white;
 }
 
 .dark-grey1-bck {
@@ -219,10 +231,7 @@ Slider > Label {
     color: rgb(255, 255, 255);
 }
 
-.choices-dropdown {
-    background-color: rgb(255, 0, 0);
-    border-left-color: rgb(52, 133, 153);
-    border-right-color: rgb(52, 133, 153);
-    border-top-color: rgb(52, 133, 153);
-    border-bottom-color: rgb(52, 133, 153);
+Toggle > Label {
+    min-width: 0;
+    padding-right: 5px;
 }

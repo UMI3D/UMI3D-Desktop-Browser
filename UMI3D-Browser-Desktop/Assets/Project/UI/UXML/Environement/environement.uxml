@@ -6,7 +6,7 @@
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:VisualElement name="cursor-container" style="position: relative; width: 40px; height: 40px; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;">
             <ui:VisualElement name="cursor-center" class="cursor-follow" style="width: 10px; height: 10px; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;" />
-            <ui:VisualElement name="cursor-settings" class="cursor-gears" style="position: absolute; width: 15px; height: 15px; right: 0;" />
+            <ui:VisualElement name="cursor-settings" style="position: absolute; width: 15px; height: 15px; right: 0; background-image: resource(&apos;/Asset/Project/PrefabsAndResourcesCursor/gears&apos;);" />
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="body" style="height: 100%; width: 100%; display: flex;">

@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="toggle-container" class="border-radius" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; background-color: rgba(52, 133, 153, 255);">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:Toggle label="Toggle" class="white-label" />
+    </ui:VisualElement>
+</ui:UXML>

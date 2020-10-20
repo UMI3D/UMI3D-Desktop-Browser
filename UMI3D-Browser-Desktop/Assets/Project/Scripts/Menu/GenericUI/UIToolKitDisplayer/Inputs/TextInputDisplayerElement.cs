@@ -23,6 +23,9 @@ namespace BrowserDesktop.Menu
 {
     public class TextInputDisplayerElement : AbstractTextInputDisplayer, IDisplayerElement
     {
+        public VisualTreeAsset textFieldTreeAsset;
+
+        VisualElement textInputContainer;
         TextField textInput;
 
         /// <summary>
@@ -55,15 +58,16 @@ namespace BrowserDesktop.Menu
         {
             InitAndBindUI();
 
-            if (textInput.resolvedStyle.display == DisplayStyle.None)
-                textInput.style.display = DisplayStyle.Flex;
+            if (textInputContainer.resolvedStyle.display == DisplayStyle.None)
+                textInputContainer.style.display = DisplayStyle.Flex;
 
-            textInput.label = menuItem.ToString();
+            if(!string.IsNullOrEmpty(menuItem.ToString()))
+                textInput.label = menuItem.ToString();
             textInput.value = menuItem.GetValue();
 
             textInput.RegisterValueChangedCallback(OnValueChanged);
 
-            if(textInput.enabledInHierarchy && (textInput.resolvedStyle.display == DisplayStyle.Flex))
+            if(textInputContainer.enabledInHierarchy && (textInputContainer.resolvedStyle.display == DisplayStyle.Flex))
                 messageSenderCoroutine = StartCoroutine(networkMessageSender());
 
         }
@@ -77,7 +81,7 @@ namespace BrowserDesktop.Menu
         {
             base.Clear();
             textInput.UnregisterValueChangedCallback(OnValueChanged);
-            textInput.RemoveFromHierarchy();
+            textInputContainer.RemoveFromHierarchy();
             StopAllCoroutines();
         }
 
@@ -86,25 +90,28 @@ namespace BrowserDesktop.Menu
             textInput.UnregisterValueChangedCallback(OnValueChanged);
             StopCoroutine(networkMessageSender());
 
-            if (textInput.resolvedStyle.display == DisplayStyle.Flex)
-                textInput.style.display = DisplayStyle.None;
+            if (textInputContainer.resolvedStyle.display == DisplayStyle.Flex)
+                textInputContainer.style.display = DisplayStyle.None;
         }
 
         public VisualElement GetUXMLContent()
         {
             InitAndBindUI();
-            return textInput;
+            return textInputContainer;
         }
 
         public void InitAndBindUI()
         {
-            if (textInput == null)
-                textInput = new TextField();
+            if (textInputContainer == null)
+            {
+                textInputContainer = textFieldTreeAsset.CloneTree();
+                textInput = textInputContainer.Q<TextField>();
+            }
         }
 
         private void OnDestroy()
         {
-            textInput?.RemoveFromHierarchy();
+            textInputContainer?.RemoveFromHierarchy();
         }
     }
 }

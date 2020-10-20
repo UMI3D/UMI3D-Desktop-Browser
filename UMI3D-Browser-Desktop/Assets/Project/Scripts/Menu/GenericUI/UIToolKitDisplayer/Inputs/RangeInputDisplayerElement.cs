@@ -85,7 +85,6 @@ namespace BrowserDesktop.Menu
             {
                 slider.lowValue = menuItem.min;
                 slider.highValue = menuItem.max;
-
             }
             else
             {
@@ -93,7 +92,10 @@ namespace BrowserDesktop.Menu
                 slider.highValue = (menuItem.max - menuItem.min) / menuItem.increment;
 
             }
-            slider.label = menuItem.ToString();
+
+            if(!string.IsNullOrEmpty(menuItem.ToString()))
+                slider.label = menuItem.ToString();
+
             slider.value = menuItem.GetValue();
             sliderValue.value = FormatValue(slider.value);
 

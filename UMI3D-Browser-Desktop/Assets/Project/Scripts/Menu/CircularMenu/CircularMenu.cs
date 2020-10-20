@@ -16,8 +16,6 @@ limitations under the License.
 
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
-using System.Collections;
-using System.Collections.Generic;
 using umi3d.cdk.menu.view;
 using UnityEngine;
 using UnityEngine.Events;
@@ -30,8 +28,6 @@ namespace BrowserDesktop.Menu
 
         public bool IsExpanded { get { return circularMenuContainer.isExpanded; } }
         public MenuDisplayManager menuDisplayManager;
-
-        public Camera camera;
 
         public UnityEvent MenuColapsed = new UnityEvent();
         public UnityEvent MenuExpand = new UnityEvent();
@@ -47,7 +43,6 @@ namespace BrowserDesktop.Menu
         {
             Debug.Assert(circularMenuContainer != null);
             Debug.Assert(circularMenuContainer != menuDisplayManager);
-            Debug.Assert(camera != menuDisplayManager);
 
             menuDisplayManager.firstButtonBackButtonPressed.AddListener(Collapse);
             menuDisplayManager.Display(true);

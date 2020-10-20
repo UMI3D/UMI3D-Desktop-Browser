@@ -34,6 +34,9 @@ public class CursorDisplayer : Singleton<CursorDisplayer>
     [SerializeField]
     Sprite clickedCursor;
 
+    [SerializeField]
+    Sprite settingsCursor;
+
     VisualElement cursorContainer;
     VisualElement cursorCenter;
     VisualElement cursorSettings;
@@ -45,16 +48,8 @@ public class CursorDisplayer : Singleton<CursorDisplayer>
 
         cursorContainer = root.Q<VisualElement>("cursor-container");
         cursorCenter = root.Q<VisualElement>("cursor-center");
-        cursorSettings = root.Q<VisualElement>("cursor-settings"); 
-    }
-
-    void HideAndClearCursors()
-    {
-        cursorCenter.style.display = DisplayStyle.None;
-        cursorSettings.style.display = DisplayStyle.None;
-
-        cursorCenter.ClearClassList();
-        cursorSettings.ClearClassList();
+        cursorSettings = root.Q<VisualElement>("cursor-settings");
+        cursorSettings.style.backgroundImage = new StyleBackground(settingsCursor.texture);
     }
 
     public void DisplayCursor(bool display, CursorState state)

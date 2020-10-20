@@ -125,7 +125,7 @@ namespace BrowserDesktop.Menu
             {
                 if (i >= currentFirstDisplayed && i < (currentFirstDisplayed + sameTimeDisplayable))
                 {
-                    SetDisplayerPosition(VirtualContainer[i], i, angle);
+                    StartCoroutine(SetDisplayerPosition(VirtualContainer[i], i, angle));
                 }
                 else
                 {
@@ -137,18 +137,38 @@ namespace BrowserDesktop.Menu
         /// <summary>
         /// Sets the position of an item along the circular menu and displays it.
         /// </summary>
-        private void SetDisplayerPosition(AbstractDisplayer displayer, int i, float angle)
+        private IEnumerator SetDisplayerPosition(AbstractDisplayer displayer, int i, float angle)
         {
-            if (displayer is IDisplayerElement displayerElement)
+            yield return null;
+
+            if (displayer != null) // The gameobject could have been destroyed at th end of the previous frame;
             {
-                displayer.Display(true);
-                VisualElement elt = displayerElement.GetUXMLContent();
-                elt.style.position = Position.Absolute;
-                Vector3 dir = (Quaternion.AngleAxis((-i + currentFirstDisplayed - 1) * -angle, Vector3.forward) * Vector3.down).normalized;
-                elt.transform.position = (Vector3) offset - dir * radius;
-            } else
-            {
-                throw new System.NotImplementedException("This container is only made to work with IDisplayerElement");
+                if (displayer is IDisplayerElement displayerElement)
+                {
+                    displayer.Display(true);
+                    VisualElement elt = displayerElement.GetUXMLContent();
+                    elt.style.position = Position.Absolute;
+
+                    var angleRes = (-i + currentFirstDisplayed - 1) * - angle;
+
+                    Vector3 dir = (Quaternion.AngleAxis(angleRes , Vector3.forward) * Vector3.down).normalized;
+                    Vector3 center = - new Vector3(elt.worldBound.width, elt.worldBound.height , 0)/2;
+
+                    //elt.transform.position = (Vector3)offset - dir * radius;  
+                    elt.style.left = 0;
+                    elt.style.top = 0;
+
+                    yield return null;
+
+                    center = -new Vector3(elt.worldBound.width, elt.worldBound.height, 0) / 2;
+                    elt.style.left = ((Vector3)offset + center - dir * radius).x;
+                    elt.style.top = ((Vector3)offset + center - dir * radius).y;
+
+                }
+                else
+                {
+                    throw new System.NotImplementedException("This container is only made to work with IDisplayerElement");
+                }
             }
         }
 

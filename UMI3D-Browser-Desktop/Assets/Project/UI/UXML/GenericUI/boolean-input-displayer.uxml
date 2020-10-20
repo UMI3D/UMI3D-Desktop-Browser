@@ -1,3 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:Toggle label="Toggle" name="toggle-displayer" />
+    <ui:VisualElement>
+        <ui:Toggle label="Toggle" name="toggle-displayer" />
+    </ui:VisualElement>
 </ui:UXML>

@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" text="filler text" name="generic-text-field" class="medium-size-txt">
+    <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" text="filler text" name="generic-text-field">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
     </ui:TextField>
 </ui:UXML>

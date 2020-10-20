@@ -27,13 +27,14 @@ namespace BrowserDesktop.Menu
     {
         public VisualTreeAsset booleanInputVisualTreeAsset;
 
+        VisualElement container;
         Toggle toggle;
 
         public override void Display(bool forceUpdate = false)
         {
             InitAndBindUI();
 
-            toggle.style.display = DisplayStyle.Flex;
+            container.style.display = DisplayStyle.Flex;
             toggle.value = GetValue();
             toggle.RegisterValueChangedCallback(OnValueChanged);
         }
@@ -41,12 +42,12 @@ namespace BrowserDesktop.Menu
         public VisualElement GetUXMLContent()
         {
             InitAndBindUI();
-            return toggle;
+            return container;
         }
 
         public override void Hide()
         {
-            toggle.style.display = DisplayStyle.None;
+            container.style.display = DisplayStyle.None;
             toggle.UnregisterValueChangedCallback(OnValueChanged);
         }
 
@@ -54,7 +55,7 @@ namespace BrowserDesktop.Menu
         {
             base.Clear();
             toggle.UnregisterValueChangedCallback(OnValueChanged);
-            toggle.RemoveFromHierarchy();
+            container.RemoveFromHierarchy();
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)
@@ -69,13 +70,16 @@ namespace BrowserDesktop.Menu
 
         public void InitAndBindUI()
         {
-            if (toggle == null)
-                toggle = booleanInputVisualTreeAsset.CloneTree().Q<Toggle>();
+            if (container == null)
+            {
+                container = booleanInputVisualTreeAsset.CloneTree();
+                toggle = container.Q<Toggle>();
+            }
         }
 
         private void OnDestroy()
         {
-            toggle?.RemoveFromHierarchy();
+            container?.RemoveFromHierarchy();
         }
     }
 }
