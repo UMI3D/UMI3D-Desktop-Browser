@@ -35,7 +35,6 @@ namespace BrowserDesktop.Menu
 
         static public bool IsDisplayed { get { return Exists ? Instance.isDisplayed : false; } }
 
-
         [Header("Side menu general settings")]
         VisualElement sideMenuScreen;
 
@@ -159,7 +158,6 @@ namespace BrowserDesktop.Menu
 
                 //To remove 
                 var viewport = ConnectionMenu.Instance.panelRenderer.visualTree.Q<VisualElement>("game-menu");
-                viewport.style.backgroundColor = Color.white;
                 viewport.style.display = DisplayStyle.Flex;
                 CircularMenu.Instance.HideMenu();
             } else

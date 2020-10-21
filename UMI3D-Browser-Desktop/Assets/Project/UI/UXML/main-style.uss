@@ -20,25 +20,37 @@ Button {
 
 TextField > Label {
     min-width: 0;
-    margin-right: 5px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-right: 0;
 }
 
-.big-text-field > #unity-text-input {
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-    border-left-color: rgb(52, 133, 153);
-    border-right-color: rgb(52, 133, 153);
-    border-top-color: rgb(52, 133, 153);
-    border-bottom-color: rgb(52, 133, 153);
+.grey-text-field > #unity-text-input {
     padding-left: 7px;
     height: 100%;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(73, 73, 75);
+    border-right-color: rgb(73, 73, 75);
+    border-top-color: rgb(73, 73, 75);
+    border-bottom-color: rgb(73, 73, 75);
+    color: rgb(102, 102, 102);
+    background-color: rgb(63, 63, 66);
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
-.big-text-field {
-    height: 45px;
-    align-items: center;
+.grey-text-field {
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;
@@ -49,11 +61,10 @@ TextField > Label {
     padding-bottom: 0;
 }
 
-.big-text-field > Label {
-    -unity-font-style: bold;
-    color: rgb(52, 133, 153);
+.grey-text-field > Label {
+    -unity-font-style: normal;
+    color: rgb(247, 182, 87);
     min-width: 0;
-    margin-right: 10px;
 }
 
 .white-label {
@@ -64,54 +75,11 @@ TextField > Label {
 }
 
 .dark-grey1-bck {
-    background-color: rgb(41, 44, 48);
+    background-color: rgb(38, 38, 38);
 }
 
 .dark-grey2-bck {
-    background-color: rgb(58, 58, 58);
-}
-
-.green-bck {
-}
-
-.btn-blue-bck {
-    background-color: rgb(52, 133, 153);
-}
-
-.btn-blue-bck:hover {
-    background-color: rgb(78, 162, 183);
-}
-
-.btn-red-bck {
-    background-color: rgb(169, 20, 46);
-}
-
-.btn-red-bck:hover {
-    background-color: rgb(188, 52, 76);
-}
-
-.btn-green-bck {
-    background-color: rgb(60, 177, 75);
-}
-
-.btn-green-bck:hover {
-    background-color: rgb(44, 130, 55);
-}
-
-.btn-dark-grey-bck {
-    background-color: rgb(41, 44, 48);
-}
-
-.btn-dark-grey-bck:hover {
-    background-color: rgb(111, 111, 111);
-}
-
-.txt-blue {
-    color: rgb(52, 133, 153);
-}
-
-.text-red {
-    color: rgb(169, 20, 46);
+    background-color: rgb(50, 50, 50);
 }
 
 .top-left-menu-btn {
@@ -126,7 +94,7 @@ TextField > Label {
 }
 
 .medium-size-txt {
-    font-size: 20px;
+    font-size: 15px;
 }
 
 .textfield-label-medium-size {
@@ -153,17 +121,30 @@ TextField > Label {
     border-bottom-width: 1px;
 }
 
-.blue-scroll-view {
+.orange-scroll-view {
 }
 
-.blue-scroll-view #unity-dragger {
-    background-color: rgb(52, 133, 153);
+.orange-scroll-view #unity-dragger {
     border-radius: 1px;
     border-width: 0;
+    border-left-color: rgb(247, 182, 87);
+    border-right-color: rgb(247, 182, 87);
+    border-top-color: rgb(247, 182, 87);
+    border-bottom-color: rgb(247, 182, 87);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    background-color: rgba(0, 0, 0, 0);
+    width: 7px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.blue-scroll-view #unity-slider {
-    background-color: rgb(217, 241, 240);
+.orange-scroll-view #unity-slider {
+    background-color: rgb(38, 38, 38);
+    padding-top: 2px;
+    padding-bottom: 2px;
 }
 
 .password-visible {
@@ -189,16 +170,18 @@ Slider > Label {
 }
 
 .input-button {
-    border-left-color: rgb(52, 133, 153);
-    border-right-color: rgb(52, 133, 153);
-    border-top-color: rgb(52, 133, 153);
-    border-bottom-color: rgb(52, 133, 153);
+    border-left-color: rgb(73, 73, 75);
+    border-right-color: rgb(73, 73, 75);
+    border-top-color: rgb(73, 73, 75);
+    border-bottom-color: rgb(73, 73, 75);
     border-right-width: 1px;
     border-top-width: 1px;
     border-bottom-width: 1px;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-    background-color: rgb(240, 240, 240);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    background-color: rgb(63, 63, 66);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .input-button:hover {
@@ -234,4 +217,119 @@ Slider > Label {
 Toggle > Label {
     min-width: 0;
     padding-right: 5px;
+}
+
+* {
+    -unity-font: url('/Assets/Project/UI/Font/Decker.ttf');
+}
+
+.white-btn {
+    color: rgb(255, 255, 255);
+}
+
+.white-btn:hover {
+    color: rgb(247, 182, 87);
+}
+
+.orange-text {
+    color: rgb(247, 182, 87);
+}
+
+.grey-border {
+    border-left-color: rgb(63, 63, 63);
+    border-right-color: rgb(63, 63, 63);
+    border-top-color: rgb(63, 63, 63);
+    border-bottom-color: rgb(63, 63, 63);
+    border-top-width: 1px;
+}
+
+.btn-orange {
+    color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgb(247, 182, 87);
+    border-right-color: rgb(247, 182, 87);
+    border-top-color: rgb(247, 182, 87);
+    border-bottom-color: rgb(247, 182, 87);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.btn-orange:hover {
+    background-color: rgb(247, 182, 87);
+}
+
+.toggle-orange {
+}
+
+.toggle-orange > Label {
+    color: rgb(247, 182, 87);
+}
+
+.toggle-orange #unity-checkmark {
+    background-color: rgb(231, 0, 0);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(247, 182, 87);
+    border-right-color: rgb(247, 182, 87);
+    border-top-color: rgb(247, 182, 87);
+    border-bottom-color: rgb(247, 182, 87);
+}
+
+.min-size-label {
+}
+
+.min-size-label > Label {
+    min-width: 115px;
+}
+
+.orange-slider {
+}
+
+.orange-slider #unity-tracker {
+    background-color: rgb(38, 38, 38);
+}
+
+.orange-slider #unity-dragger {
+    background-color: rgb(230, 171, 84);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.choices-dropdown {
+    background-color: rgb(63, 63, 66);
+    border-left-color: rgb(102, 102, 102);
+    border-right-color: rgb(102, 102, 102);
+    border-top-color: rgb(102, 102, 102);
+    border-bottom-color: rgb(102, 102, 102);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    position: absolute;
+}
+
+.two-lignes-text-field {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.two-lignes-text-field > Label {
+    width: 100%;
+    height: 42px;
+}
+
+.two-lignes-text-field > #unity-text-input {
+    width: 100%;
+    height: 42px;
 }

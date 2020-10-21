@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:VisualElement>
-        <ui:Toggle label="Toggle" name="toggle-displayer" />
+    <ui:VisualElement style="height: 42px; justify-content: center;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:Toggle label="Toggle" name="toggle-displayer" value="false" class="toggle-orange medium-size-txt min-size-label" />
     </ui:VisualElement>
 </ui:UXML>

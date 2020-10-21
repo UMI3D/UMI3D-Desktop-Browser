@@ -17,6 +17,7 @@ limitations under the License.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public class DropdownElement : VisualElement
@@ -46,24 +47,11 @@ public class DropdownElement : VisualElement
 
         openChoiceButton = this.Q<VisualElement>("dropdown-open-choice");
         currentChoice = this.Q<Label>("dropdown-current-choice-label");
-
-        choicesDropdown = new VisualElement();
+        
+        choicesDropdown = this.Q<VisualElement>("dropdown-choices");
         choicesDropdown.style.position = Position.Absolute;
         choicesDropdown.style.display = DisplayStyle.None;
-        choicesDropdown.AddToClassList("choices-dropdown");
 
-        //TO REMOVE
-        choicesDropdown.style.backgroundColor = UnityEngine.Color.white;
-        choicesDropdown.style.borderRightWidth = 1;
-        choicesDropdown.style.borderLeftWidth = 1;
-        choicesDropdown.style.borderBottomWidth = 1;
-        choicesDropdown.style.borderTopWidth = 1;
-        choicesDropdown.style.borderRightColor = UnityEngine.Color.black;
-        choicesDropdown.style.borderLeftColor = UnityEngine.Color.black;
-        choicesDropdown.style.borderBottomColor = UnityEngine.Color.black;
-        choicesDropdown.style.borderTopColor = UnityEngine.Color.black;
-
-        choicesDropdown.style.display = DisplayStyle.None;
         currentChoice.RegisterCallback<MouseDownEvent>(e =>
         {
             CloseChoices(currentChoice.text, currentChoiceId);
@@ -95,6 +83,8 @@ public class DropdownElement : VisualElement
             for (int i = 0; i < options.Count; i++)
             {
                 var labelEntry = new Label { text = options[i] };
+                labelEntry.style.fontSize = 15;
+                labelEntry.style.color = new Color(.4f, .4f, .4f);
                 labelEntry.userData = i;
                 labelEntry.RegisterCallback<MouseDownEvent>(e => {
                     CloseChoices(options[(int) labelEntry.userData], (int)labelEntry.userData);

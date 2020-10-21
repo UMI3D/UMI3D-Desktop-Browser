@@ -1,7 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <ui:Template name="loading-screen" src="loading-screen.uxml" />
     <ui:Template name="password-screen" src="password-screen.uxml" />
-    <ui:Template name="libraries-screen" src="libraries-screen.uxml" />
     <ui:VisualElement name="cursor-screen" style="position: absolute; width: 100%; height: 100%; top: 0.8px; left: 0;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:VisualElement name="cursor-container" style="position: relative; width: 40px; height: 40px; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;">
@@ -11,8 +10,8 @@
     </ui:VisualElement>
     <ui:VisualElement name="body" style="height: 100%; width: 100%; display: flex;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-        <ui:VisualElement name="top" class="dark-grey1-bck" style="width: 100%; height: 40px; flex-direction: row; align-items: center;">
-            <ui:VisualElement name="top-right-menu" style="width: 33%; justify-content: center;">
+        <ui:VisualElement name="top" class="dark-grey1-bck" style="width: 100%; height: 40px; flex-direction: row;">
+            <ui:VisualElement name="top-right-menu" style="width: 50%; justify-content: center;">
                 <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/logo/logo_umi3d_consortium_white.png&apos;); width: 79px; height: 35px; -unity-background-scale-mode: scale-to-fit;" />
             </ui:VisualElement>
             <ui:VisualElement name="top-center-menu" style="flex-grow: 1; flex-direction: row; justify-content: center; height: 35px; display: flex;">
@@ -22,27 +21,38 @@
                     <ui:VisualElement name="top-tool-display-others" style="background-image: url(&apos;/Assets/Project/UI/Icons/display-others-on.png&apos;); width: 35px; height: 35px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="top-left-menu" style="flex-direction: row-reverse; width: 33%; flex-wrap: nowrap;">
-                <ui:Button name="close-window-btn" text="X" class="top-left-menu-btn" />
+            <ui:VisualElement name="top-left-menu" style="flex-direction: row-reverse; width: 50%; flex-wrap: nowrap; height: 100%;">
+                <ui:Button text="X" name="close-window-btn" class="top-left-menu-btn" style="color: rgb(255, 255, 255); font-size: 18px;" />
                 <ui:Button name="fullscreen-btn" class="top-left-menu-btn" style="background-image: url(&apos;/Assets/Project/UI/Icons/Windows/restore.png&apos;);" />
                 <ui:Button name="minimize-window-btn" class="top-left-menu-btn" style="background-image: url(&apos;/Assets/Project/UI/Icons/Windows/minimize.png&apos;);" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="main" style="width: 100%; flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-            <ui:VisualElement name="connection-menu" style="display: none; background-color: rgb(255, 255, 255); flex-grow: 1;">
-                <ui:VisualElement name="container" style="width: 70%; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;">
-                    <ui:Instance template="loading-screen" name="loading-screen" style="margin-bottom: 20px;" />
-                    <ui:Instance template="password-screen" name="password-screen" />
-                    <ui:Instance template="libraries-screen" name="libraries-screen" />
-                    <ui:VisualElement name="parameters-screen" />
+        <ui:VisualElement name="connection-menu" class="dark-grey2-bck" style="display: flex; flex-grow: 1;">
+            <ui:VisualElement style="flex-direction: row; flex-grow: 1;">
+                <ui:VisualElement name="right" style="flex-grow: 1;">
+                    <ui:Button text="&lt;" name="back-menu-btn" class="btn-orange" style="width: 80px; height: 80px; margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; font-size: 30px; display: flex;" />
+                    <ui:Button name="next-menu-btn" style="width: 80px; height: 0; background-color: rgba(93, 93, 93, 0); margin-left: auto; margin-right: auto; font-size: 30px; display: flex;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="container" style="width: 680px; height: 100%;">
+                    <ui:Instance template="loading-screen" name="loading-screen" style="display: flex; width: 100%; margin-top: 230px;" />
+                    <ui:Instance template="password-screen" name="password-screen" style="display: none; margin-top: auto; margin-bottom: auto;" />
+                    <ui:VisualElement name="parameters-screen" style="margin-top: auto; margin-bottom: auto; display: none;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="left" style="flex-grow: 1;">
+                    <ui:Button name="next-menu-btn" style="width: 80px; height: 0; background-color: rgba(93, 93, 93, 0); margin-left: auto; margin-right: auto; font-size: 30px; display: flex;" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="right-side-menu" style="height: 100%; flex-direction: row; display: flex;">
+            <ui:VisualElement name="footer" class="dark-grey1-bck grey-border" style="height: 90px;">
+                <ui:Label text="version x.x.x" name="version" style="position: absolute; bottom: 9px; right: 13px; color: rgb(63, 63, 63); font-size: 18px; display: flex;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="game-menu-container" style="width: 100%; flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
+            <ui:VisualElement name="right-side-menu" style="height: 100%; flex-direction: row; display: none; background-color: rgba(0, 0, 0, 0);">
                 <ui:VisualElement name="manipulation-container" style="position: absolute; bottom: 50px; right: 0; height: 60px; left: 0; flex-direction: row; justify-content: center;" />
                 <ui:VisualElement name="notification-container" style="height: 100%; position: absolute; left: 10px; flex-direction: column-reverse;" />
                 <ui:VisualElement name="event-container" style="height: 60%; position: absolute; flex-direction: column-reverse; right: 10px; display: flex; margin-right: 10px; bottom: 10px;" />
-                <ui:VisualElement name="viewport" style="flex-grow: 1;">
-                    <ui:VisualElement name="game-menu" style="flex-grow: 1;" />
+                <ui:VisualElement name="viewport" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                    <ui:VisualElement name="game-menu" style="flex-grow: 1; padding-left: 50px; padding-right: 50px; padding-top: 50px; padding-bottom: 50px;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="side-menu" class="dark-grey2-bck" style="width: 280px; padding-top: 148px; display: flex; left: 280px;">
                     <Style src="/Assets/Project/UI/UXML/main-style.uss" />
@@ -117,9 +127,9 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-        </ui:VisualElement>
-        <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 30px; justify-content: center;">
-            <ui:Label text="Escape : show/hide menu      T : mute/unmute" name="shortcuts" style="color: rgb(182, 182, 182); margin-left: 10px; font-size: 14px;" />
+            <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 30px; justify-content: center;">
+                <ui:Label text="Escape : show/hide menu      T : mute/unmute" name="shortcuts" style="color: rgb(182, 182, 182); margin-left: 10px; font-size: 14px;" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="circular-menu" style="position: absolute; width: 100%; height: 100%; display: none;">
