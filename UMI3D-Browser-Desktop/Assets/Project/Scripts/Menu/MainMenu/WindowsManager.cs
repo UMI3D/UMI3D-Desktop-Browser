@@ -24,6 +24,8 @@ public class WindowsManager : MonoBehaviour
 {
     #region Fields
 
+    public PanelRenderer panelRenderer;
+
     #region Fiels to make the title bar working like the windows one.
     [DllImport("user32.dll")]
     private static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
@@ -34,16 +36,19 @@ public class WindowsManager : MonoBehaviour
     [DllImport("user32.dll")]
     static extern bool IsZoomed(IntPtr hWnd);
 
-    public const int WM_NCLBUTTONDOWN = 0xA1;
-    public const int HT_CAPTION = 0x2;
-
-    [System.Runtime.InteropServices.DllImport("user32.dll")]
-    public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    [DllImport("User32.dll")]
     public static extern bool ReleaseCapture();
+    delegate void SendMessageDelegate(IntPtr hWnd, uint uMsg, UIntPtr dwData, IntPtr lResult);
+    [DllImport("user32.dll")]
+    static extern bool SendMessageCallback(IntPtr hWnd, int Msg, int wParam, int lParam, SendMessageDelegate lpCallBack, int dwData);
 
-    [System.Runtime.InteropServices.DllImport("user32.dll")]
-    public static extern bool SetCapture(IntPtr hWnd);
+    private const int WM_NCLBUTTONDOWN = 0xA1;
+    private const int WM_NCLBUTTONUP = 0x00A2;
+    private const int WM_LBUTTONUP = 0x0202;
+    private const int HT_CAPTION = 0x2;
+    private const int WM_SYSCOMMAND = 0x112;
+    private const int MOUSE_MOVE = 0xF012;
+
 
     [Header("Custom title bar")]
 
@@ -57,8 +62,6 @@ public class WindowsManager : MonoBehaviour
     public Texture2D maximizeTexture;
     public Texture2D restoreTexture;
 
-    public PanelRenderer panelRenderer;
-
     Button minimize;
     Button maximize;
 
@@ -66,7 +69,6 @@ public class WindowsManager : MonoBehaviour
 
     #region Fields to remove windows default title bar
 
-    #endregion
     const int SWP_HIDEWINDOW = 0x80; //hide window flag.
     const int SWP_SHOWWINDOW = 0x40; //show window flag.
     const int SWP_NOMOVE = 0x0002; //don't move the window flag.
@@ -76,9 +78,7 @@ public class WindowsManager : MonoBehaviour
     const int WS_BORDER = 0x00800000; //window with border
     const int WS_DLGFRAME = 0x00400000; //window with double border but no title
     const int WS_CAPTION = WS_BORDER | WS_DLGFRAME; //window with a title bar
-    const int WS_SYSMENU = 0x00080000;      //window with no borders etc.
-    const int WS_MAXIMIZEBOX = 0x00010000;
-    const int WS_MINIMIZEBOX = 0x00020000;  //window with minimizebox
+
 
     [DllImport("user32.dll")]
     static extern int FindWindow(string lpClassName, string lpWindowName);
@@ -115,6 +115,8 @@ public class WindowsManager : MonoBehaviour
     [Header("Remove default title bar")]
 
     [Tooltip("Hide default windows title bar ?")] [SerializeField] bool hideOnStart = false;
+
+    #endregion
 
     #endregion
 
@@ -164,10 +166,21 @@ public class WindowsManager : MonoBehaviour
                 ShowWindow(GetActiveWindow(), 9);
 
             ReleaseCapture();
-            SendMessage(GetActiveWindow(), WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            SendMessageCallback(hWnd, WM_SYSCOMMAND, MOUSE_MOVE, 0, DropCallBack, 0);
             
         });
+
     }
+
+    private void DropCallBack(IntPtr hWnd, uint uMsg, UIntPtr dwData, IntPtr lResult)
+    {
+        /*var window = GetActiveWindow();
+        SetForegroundWindow(window);
+        SetFocus(window);
+        /*SendMessage(window, WM_NCLBUTTONDOWN, 0, 0);
+        SendMessage(window, WM_LBUTTONUP, 0, 0);*/
+    }
+
 
     private void UpdateCustomTitleBar()
     {

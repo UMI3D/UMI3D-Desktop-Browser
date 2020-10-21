@@ -4299,12 +4299,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f5ab6d6d6e24f2499f0107614a6fbf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panelRenderer: {fileID: 1049023329}
   minimizeTagName: minimize-window-btn
   maximizeTagName: fullscreen-btn
   closeTagName: close-window-btn
   maximizeTexture: {fileID: 2800000, guid: 883663dc1a173014e9bf8d63fd919db5, type: 3}
   restoreTexture: {fileID: 2800000, guid: 428b394451fca374eb17c3e5418cbdcb, type: 3}
-  panelRenderer: {fileID: 1049023329}
   hideOnStart: 1
 --- !u!1 &1506572085
 GameObject:
