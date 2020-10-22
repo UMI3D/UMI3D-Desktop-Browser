@@ -84,7 +84,7 @@ public class DropdownElement : VisualElement
             {
                 var labelEntry = new Label { text = options[i] };
                 labelEntry.style.fontSize = 15;
-                labelEntry.style.color = new Color(.4f, .4f, .4f);
+                labelEntry.style.color = Color.white;
                 labelEntry.userData = i;
                 labelEntry.RegisterCallback<MouseDownEvent>(e => {
                     CloseChoices(options[(int) labelEntry.userData], (int)labelEntry.userData);

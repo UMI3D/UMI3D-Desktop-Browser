@@ -1,36 +1,38 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <ui:VisualElement name="url-screen" style="display: flex; height: 100%;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-        <ui:VisualElement style="flex-grow: 1; padding-top: 170px;">
-            <ui:VisualElement name="logo" style="height: 275px; background-image: url(&apos;/Assets/Project/logo/icon_consortium.png&apos;); -unity-background-scale-mode: scale-to-fit;" />
-            <ui:VisualElement name="inputs" style="flex-direction: row; justify-content: space-between; height: 42px;">
-                <ui:TextField picking-mode="Ignore" name="url-input" text="test.com" value="test.com" class="textfield-with-image-bck grey-text-field" style="-unity-text-align: upper-center; flex-grow: 1; height: 42px;" />
-                <ui:Button text="&#10;" name="url-enter-btn" class="input-button input-arrow-button" style="width: 42px; color: rgb(255, 255, 255); -unity-font-style: bold; height: 42px;" />
-            </ui:VisualElement>
-            <ui:VisualElement name="information" style="margin-top: 60px; flex-direction: row; display: none;">
-                <ui:VisualElement name="left" style="width: 50%; border-right-width: 2px; border-left-color: rgb(63, 63, 63); border-right-color: rgb(63, 63, 63); border-top-color: rgb(63, 63, 63); border-bottom-color: rgb(63, 63, 63);">
-                    <ui:Label text="Favorite environment" name="favorite-environment-label" style="color: rgb(255, 255, 255);" />
-                    <ui:VisualElement name="favorite-environment-list" style="margin-top: 25px; flex-direction: row; flex-wrap: wrap; flex-grow: 1;">
-                        <ui:VisualElement name="favorite-environment-entry" class="dark-grey1-bck" style="width: 45%; height: 45%; margin-right: 5%; margin-bottom: 5%;" />
-                        <ui:VisualElement name="favorite-environment-entry" class="dark-grey1-bck" style="width: 45%; height: 45%; margin-right: 5%; margin-bottom: 5%;" />
-                        <ui:VisualElement name="favorite-environment-entry" class="dark-grey1-bck" style="width: 45%; height: 45%; margin-right: 5%; margin-bottom: 5%;" />
-                        <ui:VisualElement name="favorite-environment-entry" class="dark-grey1-bck" style="width: 45%; height: 45%; margin-right: 5%; margin-bottom: 5%;" />
-                    </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 1; justify-content: center;">
+            <ui:VisualElement name="url-center">
+                <ui:VisualElement name="logo" style="height: 275px; background-image: url(&apos;/Assets/Project/logo/icon_consortium.png&apos;); -unity-background-scale-mode: scale-to-fit;" />
+                <ui:VisualElement name="inputs" style="flex-direction: row; justify-content: space-between; height: 42px;">
+                    <ui:TextField picking-mode="Ignore" name="url-input" text="test.com" value="test.com" class="textfield-with-image-bck grey-text-field" style="-unity-text-align: upper-center; flex-grow: 1; height: 42px;" />
+                    <ui:Button text="&#10;" name="url-enter-btn" class="input-button input-arrow-button" style="width: 42px; color: rgb(255, 255, 255); -unity-font-style: bold; height: 42px;" />
                 </ui:VisualElement>
-                <ui:VisualElement name="right" style="width: 50%; padding-left: 30px;">
-                    <ui:Label text="Schedule" name="schedule" style="color: rgb(255, 255, 255);" />
-                    <ui:VisualElement name="meeting-list" style="margin-top: 25px; flex-grow: 1;">
-                        <ui:VisualElement name="meeting-entry" class="dark-grey1-bck" style="margin-bottom: 14px; height: 66px;">
-                            <ui:Label text="No meetings have been scheduled" style="color: rgb(255, 255, 255); font-size: 10px; -unity-text-align: middle-center; height: 100%;" />
+                <ui:VisualElement name="information" style="margin-top: 60px; flex-direction: row; display: none;">
+                    <ui:VisualElement name="left" style="width: 50%; border-right-width: 2px; border-left-color: rgb(63, 63, 63); border-right-color: rgb(63, 63, 63); border-top-color: rgb(63, 63, 63); border-bottom-color: rgb(63, 63, 63);">
+                        <ui:Label text="Favorite environment" name="favorite-environment-label" style="color: rgb(255, 255, 255);" />
+                        <ui:VisualElement name="favorite-environment-list" style="margin-top: 25px; flex-direction: row; flex-wrap: wrap; flex-grow: 1;">
+                            <ui:VisualElement name="favorite-environment-entry" class="dark-grey1-bck" style="width: 45%; height: 45%; margin-right: 5%; margin-bottom: 5%;" />
+                            <ui:VisualElement name="favorite-environment-entry" class="dark-grey1-bck" style="width: 45%; height: 45%; margin-right: 5%; margin-bottom: 5%;" />
+                            <ui:VisualElement name="favorite-environment-entry" class="dark-grey1-bck" style="width: 45%; height: 45%; margin-right: 5%; margin-bottom: 5%;" />
+                            <ui:VisualElement name="favorite-environment-entry" class="dark-grey1-bck" style="width: 45%; height: 45%; margin-right: 5%; margin-bottom: 5%;" />
                         </ui:VisualElement>
-                        <ui:VisualElement name="meeting-entry" class="dark-grey1-bck" style="margin-bottom: 14px; height: 66px;">
-                            <ui:Label text="No meetings have been scheduled" style="color: rgb(255, 255, 255); font-size: 10px; -unity-text-align: middle-center; height: 100%;" />
-                        </ui:VisualElement>
-                        <ui:VisualElement name="meeting-entry" class="dark-grey1-bck" style="margin-bottom: 14px; height: 66px;">
-                            <ui:Label text="No meetings have been scheduled" style="color: rgb(255, 255, 255); font-size: 10px; -unity-text-align: middle-center; height: 100%;" />
-                        </ui:VisualElement>
-                        <ui:VisualElement name="meeting-entry" class="dark-grey1-bck" style="margin-bottom: 14px; height: 66px;">
-                            <ui:Label text="No meetings have been scheduled" style="color: rgb(255, 255, 255); font-size: 10px; -unity-text-align: middle-center; height: 100%;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="right" style="width: 50%; padding-left: 30px;">
+                        <ui:Label text="Schedule" name="schedule" style="color: rgb(255, 255, 255);" />
+                        <ui:VisualElement name="meeting-list" style="margin-top: 25px; flex-grow: 1;">
+                            <ui:VisualElement name="meeting-entry" class="dark-grey1-bck" style="margin-bottom: 14px; height: 66px;">
+                                <ui:Label text="No meetings have been scheduled" style="color: rgb(255, 255, 255); font-size: 10px; -unity-text-align: middle-center; height: 100%;" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="meeting-entry" class="dark-grey1-bck" style="margin-bottom: 14px; height: 66px;">
+                                <ui:Label text="No meetings have been scheduled" style="color: rgb(255, 255, 255); font-size: 10px; -unity-text-align: middle-center; height: 100%;" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="meeting-entry" class="dark-grey1-bck" style="margin-bottom: 14px; height: 66px;">
+                                <ui:Label text="No meetings have been scheduled" style="color: rgb(255, 255, 255); font-size: 10px; -unity-text-align: middle-center; height: 100%;" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="meeting-entry" class="dark-grey1-bck" style="margin-bottom: 14px; height: 66px;">
+                                <ui:Label text="No meetings have been scheduled" style="color: rgb(255, 255, 255); font-size: 10px; -unity-text-align: middle-center; height: 100%;" />
+                            </ui:VisualElement>
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>

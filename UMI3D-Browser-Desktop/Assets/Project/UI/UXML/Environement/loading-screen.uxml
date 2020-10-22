@@ -1,12 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:VisualElement name="loading-screen" class="grey-border" style="display: flex; padding-left: 38px; padding-right: 38px; padding-top: 0; padding-bottom: 0; height: 318px; border-left-width: 1px; border-right-width: 1px; border-top-width: 0;">
+    <ui:VisualElement name="VisualElement" style="flex-grow: 1; justify-content: center;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-        <ui:VisualElement name="loading-container" style="margin-top: auto; margin-bottom: auto;">
-            <ui:VisualElement name="loading-bar-container" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; width: 100%; height: 43px; border-left-color: rgb(247, 182, 87); border-right-color: rgb(247, 182, 87); border-top-color: rgb(247, 182, 87); border-bottom-color: rgb(247, 182, 87); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; background-color: rgba(255, 255, 255, 0); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
-                <ui:VisualElement name="loading-bar-progress" style="height: 100%; width: 45%; background-color: rgb(247, 182, 87); border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;" />
+        <ui:VisualElement name="loading-screen" class="grey-border" style="display: flex; padding-left: 38px; padding-right: 38px; padding-top: 0; padding-bottom: 0; height: 318px; border-left-width: 1px; border-right-width: 1px; border-top-width: 0;">
+            <ui:VisualElement name="loading-container" style="margin-top: auto; margin-bottom: auto;">
+                <ui:VisualElement name="loading-bar-container" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; width: 100%; height: 43px; border-left-color: rgb(247, 182, 87); border-right-color: rgb(247, 182, 87); border-top-color: rgb(247, 182, 87); border-bottom-color: rgb(247, 182, 87); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; background-color: rgba(255, 255, 255, 0); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
+                    <ui:VisualElement name="loading-bar-progress" style="height: 100%; width: 45%; background-color: rgb(247, 182, 87); border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;" />
+                </ui:VisualElement>
+                <ui:Label text="Loading" class="medium-size-txt white-txt" style="-unity-text-align: upper-center; margin-top: 22px;" />
+                <ui:VisualElement name="loader-container" style="margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;" />
             </ui:VisualElement>
-            <ui:Label text="Loading" class="medium-size-txt white-txt" style="-unity-text-align: upper-center; margin-top: 22px;" />
-            <ui:VisualElement name="loader-container" style="margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
