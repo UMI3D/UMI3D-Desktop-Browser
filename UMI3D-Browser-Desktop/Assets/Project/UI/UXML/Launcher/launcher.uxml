@@ -5,7 +5,7 @@
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:VisualElement name="top" class="dark-grey1-bck" style="width: 100%; flex-direction: row; height: 40px; min-height: 40px;">
             <ui:VisualElement name="top-right-menu" style="width: 50%; justify-content: center;">
-                <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/logo/logo_umi3d_consortium_white.png&apos;); width: 79px; height: 35px; -unity-background-scale-mode: scale-to-fit;" />
+                <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/UI/UI_connection/ico_top.png&apos;); height: 30px; -unity-background-scale-mode: scale-to-fit; width: 30px;" />
             </ui:VisualElement>
             <ui:VisualElement name="top-left-menu" style="flex-direction: row-reverse; width: 50%; flex-wrap: nowrap; height: 100%;">
                 <ui:Button text="X" name="close-window-btn" class="top-left-menu-btn" style="color: rgb(255, 255, 255); font-size: 18px;" />
