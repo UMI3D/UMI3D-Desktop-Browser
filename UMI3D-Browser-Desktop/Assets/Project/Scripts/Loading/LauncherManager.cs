@@ -164,32 +164,10 @@ public class LauncherManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Gets the login entered by te users and initiates the connection if there is no problem.
-    /// </summary>
-    /*private void Login()
-    {
-        string login = loginInput.value;
-        string password = passwordInput.value;
-
-        if (string.IsNullOrEmpty(login))
-        {
-            Debug.Log("<color=red> Connection error : The login can not be empty </color>");
-            loginInputError.text = "Login is empty.";
-        } else
-        {
-            currentConnectionData.login = login;
-            Debug.Log("<color=green> Connection info : " + currentConnectionData.ip + "</color>");
-            Connect();
-        }
-    }*/
-
-    /// <summary>
     /// Initiates the connection
     /// </summary>
     private void Connect()
     {
-        //loginPasswordScreen.style.display = DisplayStyle.None;
-
         //UMI3DCollaborationClientServer.Identity.login = currentConnectionData.login;
 
         StoreUserData(currentConnectionData);
@@ -257,8 +235,6 @@ public class LauncherManager : MonoBehaviour
         return new Data();
     }
 
-    private bool isLibraryCurrentRemoved = false;
-
     private void DisplayLibraries()
     {
         urlScreen.style.display = DisplayStyle.None;
@@ -287,8 +263,33 @@ public class LauncherManager : MonoBehaviour
         else
             librariesScreen.Q<Label>("libraries-title").text = "There are " + libs.Count + " libraries currently installed";
 
+        foreach (var app in libs)
+        {
+            foreach (var lib in app.Value)
+            {
+                var entry = libraryEntryTreeAsset.CloneTree();
+                entry.Q<Label>("library-name").text = lib.key;
 
+                entry.Q<Button>("library-unistall").clickable.clicked += () =>
+                {
+                    DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
+                    dialogue.Setup("Remove library", "Are your sure to unistal " + lib.key, "Unistall", "Cancel", (b) =>
+                    {
+                        if (b)
+                        {
+                            lib.applications.Remove(app.Key);
+                            UMI3DResourcesManager.RemoveLibrary(lib.key);
+                            DisplayLibraries();
+                        }
+                    },
+                    true);
+                    root.Add(dialogue);
+                };
+                librariesList.Add(entry);
+            }
+        }
 
+        /*
         foreach (var app in libs)
         {
             var entry = libraryEntryTreeAsset.CloneTree();
@@ -322,7 +323,7 @@ public class LauncherManager : MonoBehaviour
             };
 
             librariesList.Add(entry);
-        }
+        }*/
     }
 
     #endregion
