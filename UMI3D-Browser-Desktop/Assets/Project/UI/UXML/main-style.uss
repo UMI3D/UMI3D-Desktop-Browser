@@ -1,3 +1,7 @@
+* {
+    -unity-font: url('/Assets/Project/UI/Font/Decker.ttf');
+}
+
 Button {
     border-left-width: 0;
     border-right-width: 0;
@@ -27,6 +31,16 @@ TextField > Label {
     margin-right: 0;
 }
 
+Slider > Label {
+    min-width: 0;
+    padding-right: 10px;
+}
+
+Toggle > Label {
+    min-width: 0;
+    padding-right: 5px;
+}
+
 .grey-text-field > #unity-text-input {
     padding-left: 7px;
     height: 100%;
@@ -42,7 +56,7 @@ TextField > Label {
     border-right-color: rgb(73, 73, 75);
     border-top-color: rgb(73, 73, 75);
     border-bottom-color: rgb(73, 73, 75);
-    color: rgb(102, 102, 102);
+    color: rgb(255, 255, 255);
     background-color: rgb(63, 63, 66);
     margin-left: 0;
     margin-right: 0;
@@ -65,60 +79,6 @@ TextField > Label {
     -unity-font-style: normal;
     color: rgb(247, 182, 87);
     min-width: 0;
-}
-
-.white-label {
-}
-
-.white-label > Label {
-    color: white;
-}
-
-.dark-grey1-bck {
-    background-color: rgb(38, 38, 38);
-}
-
-.dark-grey2-bck {
-    background-color: rgb(50, 50, 50);
-}
-
-.top-left-menu-btn {
-    width: 40px;
-    height: 40px;
-    background-color: rgba(0, 0, 0, 0);
-    color: rgb(255, 255, 255);
-}
-
-.top-left-menu-btn:hover {
-    background-color: rgb(111, 111, 111);
-}
-
-.medium-size-txt {
-    font-size: 15px;
-}
-
-.textfield-label-medium-size {
-}
-
-.textfield-label-medium-size > Label {
-    width: 100px;
-}
-
-.border-radius {
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-}
-
-.list-entry {
-    height: 35px;
-    background-color: rgb(217, 241, 240);
-    border-left-color: rgb(52, 133, 153);
-    border-right-color: rgb(52, 133, 153);
-    border-top-color: rgb(52, 133, 153);
-    border-bottom-color: rgb(52, 133, 153);
-    border-bottom-width: 1px;
 }
 
 .orange-scroll-view {
@@ -147,6 +107,50 @@ TextField > Label {
     padding-bottom: 2px;
 }
 
+.white-label {
+}
+
+.white-label > Label {
+    color: white;
+}
+
+.dark-grey1-bck {
+    background-color: rgb(38, 38, 38);
+}
+
+.dark-grey2-bck {
+    background-color: rgb(50, 50, 50);
+}
+
+.medium-size-txt {
+    font-size: 15px;
+}
+
+.textfield-label-medium-size {
+}
+
+.textfield-label-medium-size > Label {
+    width: 100px;
+}
+
+.border-radius {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.top-left-menu-btn {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(255, 255, 255);
+}
+
+.top-left-menu-btn:hover {
+    background-color: rgb(111, 111, 111);
+}
+
 .password-visible {
     background-color: rgb(52, 133, 153);
 }
@@ -155,9 +159,14 @@ TextField > Label {
     background-color: rgb(169, 20, 46);
 }
 
-Slider > Label {
-    min-width: 0;
-    padding-right: 10px;
+.list-entry {
+    height: 35px;
+    background-color: rgb(217, 241, 240);
+    border-left-color: rgb(52, 133, 153);
+    border-right-color: rgb(52, 133, 153);
+    border-top-color: rgb(52, 133, 153);
+    border-bottom-color: rgb(52, 133, 153);
+    border-bottom-width: 1px;
 }
 
 .textfield-with-image-bck {
@@ -212,15 +221,6 @@ Slider > Label {
 
 .white-txt {
     color: rgb(255, 255, 255);
-}
-
-Toggle > Label {
-    min-width: 0;
-    padding-right: 5px;
-}
-
-* {
-    -unity-font: url('/Assets/Project/UI/Font/Decker.ttf');
 }
 
 .white-btn {
