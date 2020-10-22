@@ -2,15 +2,10 @@
     <ui:Template name="library-manager-entry" src="library-manager-entry.uxml" />
     <ui:VisualElement name="assets-librairies-required-screen" class="grey-border" style="display: flex; padding-left: 44px; padding-right: 44px; border-left-width: 2px; border-right-width: 2px; border-top-width: 0; border-bottom-width: 0; margin-bottom: 65px; margin-top: 140px;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-        <ui:Label text="X libraries are required to join the environement :" name="libraries-title" class="medium-size-txt orange-text dark-grey1-bck" style="-unity-font-style: normal; height: 65px; -unity-text-align: middle-left; padding-left: 16px; margin-bottom: 40px;" />
-        <ui:ScrollView name="libraries-list" show-vertical-scroller="true" class="grey-border orange-scroll-view" style="border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; height: 400px; max-height: 400px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; flex-grow: 1;">
-            <ui:Instance template="library-manager-entry" name="library-manager-entry" />
-            <ui:Instance template="library-manager-entry" name="library-manager-entry" />
-            <ui:Instance template="library-manager-entry" name="library-manager-entry" />
-            <ui:Instance template="library-manager-entry" name="library-manager-entry" />
-            <ui:Instance template="library-manager-entry" name="library-manager-entry" />
-            <ui:Instance template="library-manager-entry" name="library-manager-entry" />
-            <ui:Instance template="library-manager-entry" name="library-manager-entry" />
+        <ui:VisualElement name="librairies-title-container" style="height: 65px; margin-bottom: 40px; padding-right: 35px;">
+            <ui:Label text="X libraries are required to join the environement :" name="libraries-title" class="medium-size-txt orange-text dark-grey1-bck" style="-unity-font-style: normal; -unity-text-align: middle-left; padding-left: 16px; height: 100%;" />
+        </ui:VisualElement>
+        <ui:ScrollView name="libraries-list" show-vertical-scroller="true" class="grey-border orange-scroll-view scrollview-padding" style="border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; height: 400px; max-height: 400px; flex-grow: 1; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;">
             <ui:Instance template="library-manager-entry" name="library-manager-entry" />
         </ui:ScrollView>
         <ui:VisualElement style="height: 90px;" />

@@ -41,11 +41,6 @@ public class WindowsManager : MonoBehaviour
     delegate void SendMessageDelegate(IntPtr hWnd, uint uMsg, UIntPtr dwData, IntPtr lResult);
     [DllImport("user32.dll")]
     static extern bool SendMessageCallback(IntPtr hWnd, int Msg, int wParam, int lParam, SendMessageDelegate lpCallBack, int dwData);
-
-    private const int WM_NCLBUTTONDOWN = 0xA1;
-    private const int WM_NCLBUTTONUP = 0x00A2;
-    private const int WM_LBUTTONUP = 0x0202;
-    private const int HT_CAPTION = 0x2;
     private const int WM_SYSCOMMAND = 0x112;
     private const int MOUSE_MOVE = 0xF012;
 
@@ -59,8 +54,8 @@ public class WindowsManager : MonoBehaviour
     [SerializeField]
     string closeTagName = "close-window-btn";
 
-    public Texture2D maximizeTexture;
-    public Texture2D restoreTexture;
+    public string maximizeClassName = "maximize-btn";
+    public string restoreClassName = "restore-btn";
 
     Button minimize;
     Button maximize;
@@ -184,13 +179,14 @@ public class WindowsManager : MonoBehaviour
 
     private void UpdateCustomTitleBar()
     {
+        maximize.ClearClassList();
         if (IsZoomed(GetActiveWindow())) //Check if the window is maximised
         {
-            maximize.style.backgroundImage = new StyleBackground(restoreTexture);
+            maximize.AddToClassList(restoreClassName);
         }
         else
         {
-            maximize.style.backgroundImage = new StyleBackground(maximizeTexture);
+            maximize.AddToClassList(maximizeClassName);
         }
     }
 

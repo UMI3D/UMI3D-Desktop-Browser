@@ -30,11 +30,13 @@ public class DropdownElement : VisualElement
 
     int currentChoiceId = 0;
 
-    VisualElement openChoiceButton;
+    Button openChoiceButton;
     Label currentChoice;
     VisualElement choicesDropdown;
 
     List<string> options;
+
+    bool areChoicesVisible = false;
 
     public void SetLabel(string label)
     {
@@ -45,9 +47,9 @@ public class DropdownElement : VisualElement
     {
         this.RegisterCallback<FocusOutEvent>(e => choicesDropdown.RemoveFromHierarchy());
 
-        openChoiceButton = this.Q<VisualElement>("dropdown-open-choice");
+        openChoiceButton = this.Q<Button>("dropdown-open-choice");
         currentChoice = this.Q<Label>("dropdown-current-choice-label");
-        
+
         choicesDropdown = this.Q<VisualElement>("dropdown-choices");
         choicesDropdown.style.position = Position.Absolute;
         choicesDropdown.style.display = DisplayStyle.None;
@@ -57,21 +59,17 @@ public class DropdownElement : VisualElement
             CloseChoices(currentChoice.text, currentChoiceId);
         });
 
-        openChoiceButton.RegisterCallback<MouseDownEvent>((e) =>
+        openChoiceButton.clickable.clicked += () =>
         {
-            if (e.clickCount == 1)
+            areChoicesVisible = !areChoicesVisible;
+            if (areChoicesVisible)
+                ConnectionMenu.Instance.StartCoroutine(OpenDropdown());
+            else
             {
-                if (choicesDropdown.resolvedStyle.display == DisplayStyle.None)
-                {
-                    ConnectionMenu.Instance.StartCoroutine(OpenDropdown());
-                }
-                else
-                {
-                    choicesDropdown.style.display = DisplayStyle.None;
-                    choicesDropdown.RemoveFromHierarchy();
-                }
+                choicesDropdown.style.display = DisplayStyle.None;
+                choicesDropdown.RemoveFromHierarchy();
             }
-        });
+        };
     }
 
     public void SetOptions(List<string> options)

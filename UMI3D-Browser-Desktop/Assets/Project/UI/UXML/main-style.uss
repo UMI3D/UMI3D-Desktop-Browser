@@ -20,6 +20,7 @@ Button {
     padding-top: 0;
     padding-bottom: 0;
     -unity-font-style: bold;
+    background-color: rgb(0, 0, 0);
 }
 
 TextField > Label {
@@ -94,12 +95,41 @@ Toggle > Label {
     width: 7px;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .orange-scroll-view .unity-scroller #unity-slider {
     background-color: rgb(38, 38, 38);
-    padding-top: 2px;
-    padding-bottom: 2px;
+}
+
+.orange-scroll-view > Scroller #unity-low-button {
+    width: 100%;
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowUp_ENABLE.png');
+    position: absolute;
+}
+
+.orange-scroll-view > Scroller #unity-low-button:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowUP_HOVER.png');
+}
+
+.orange-scroll-view > Scroller #unity-low-button:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowUP_PRESS.png');
+}
+
+.orange-scroll-view > Scroller #unity-high-button {
+    width: 100%;
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_ENABLE.png');
+    position: absolute;
+    bottom: 0;
+}
+
+.orange-scroll-view > Scroller #unity-high-button:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_HOVER.png');
+}
+
+.orange-scroll-view > Scroller #unity-high-button:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_PRESS.png');
 }
 
 .white-label {
@@ -200,15 +230,27 @@ Toggle > Label {
     background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_PRESS.png');
 }
 
-.input-eye-button {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_ENABLE.png');
+.input-eye-button-on {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_show_ENABLE.png');
 }
 
-.input-eye-button:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_HOVER.png');
+.input-eye-button-on:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_show_HOVER.png');
 }
 
-.input-eye-button:active {
+.input-eye-button-on:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_show_PRESS.png');
+}
+
+.input-eye-button-off {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_hide_ENABLE.png');
+}
+
+.input-eye-button-off:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_hide_HOVER.png');
+}
+
+.input-eye-button-off:active {
     background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_PRESS.png');
 }
 
@@ -292,7 +334,15 @@ Toggle > Label {
 }
 
 .toggle-orange:checked #unity-checkmark {
-    background-image: url('/Assets/Project/UI/Icons/toggle-checked.png');
+    background-image: url('/Assets/Project/UI/UI_connection/checkbox_full_ENABLE.png');
+}
+
+.toggle-orange:hover #unity-checkmark {
+    background-image: url('/Assets/Project/UI/UI_connection/checkbox_full_HOVER.png');
+}
+
+.toggle-orange:active #unity-checkmark {
+    background-image: url('/Assets/Project/UI/UI_connection/checkbox_full_PRESS.png');
 }
 
 .min-size-label {
@@ -348,4 +398,129 @@ Toggle > Label {
 .two-lignes-text-field > #unity-text-input {
     width: 100%;
     height: 42px;
+}
+
+.btn-left-arrow {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_back_ENABLE.png');
+}
+
+.btn-left-arrow:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_back_HOVER.png');
+}
+
+.btn-left-arrow:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_back_PRESS.png');
+}
+
+.bin-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_delete_ENABLE.png');
+}
+
+.bin-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_delete_HOVER.png');
+}
+
+.bin-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_delete_ENABLE.png');
+}
+
+.minimize-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_reduce_ENABLE.png');
+}
+
+.minimize-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_reduce_HOVER.png');
+    border-left-color: rgb(102, 102, 102);
+    border-right-color: rgb(102, 102, 102);
+    border-top-color: rgb(102, 102, 102);
+    border-bottom-color: rgb(102, 102, 102);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.minimize-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_reduce_PRESS.png');
+}
+
+.close-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_close_ENABLE.png');
+}
+
+.close-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_close_HOVER.png');
+    border-left-color: rgb(102, 102, 102);
+    border-right-color: rgb(102, 102, 102);
+    border-top-color: rgb(102, 102, 102);
+    border-bottom-color: rgb(102, 102, 102);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.close-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_close_PRESS.png');
+}
+
+.restore-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_resize_ENABLE.png');
+}
+
+.restore-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_resize_HOVER.png');
+    border-left-color: rgb(102, 102, 102);
+    border-right-color: rgb(102, 102, 102);
+    border-top-color: rgb(102, 102, 102);
+    border-bottom-color: rgb(102, 102, 102);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.restore-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_resize_PRESS.png');
+}
+
+.maximize-btn {
+    background-image: url('/Assets/Project/UI/Icons/Windows/maximise_ENABLE.png');
+}
+
+.maximize-btn:active {
+    background-image: url('/Assets/Project/UI/Icons/Windows/maximise_PRESS.png');
+}
+
+.maximize-btn:hover {
+    border-left-color: rgb(102, 102, 102);
+    border-right-color: rgb(102, 102, 102);
+    border-top-color: rgb(102, 102, 102);
+    border-bottom-color: rgb(102, 102, 102);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.dropdown-btn {
+}
+
+.dropdown-btn > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_ENABLE.png');
+}
+
+.dropdown-btn:hover > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_HOVER.png');
+}
+
+.dropdown-btn:active > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_PRESS.png');
+}
+
+.scrollview-padding {
+}
+
+.scrollview-padding #unity-content-container {
+    padding-right: 22px;
 }

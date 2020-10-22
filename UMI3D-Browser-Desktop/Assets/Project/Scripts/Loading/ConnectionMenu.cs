@@ -122,6 +122,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         connectionScreen.style.display = DisplayStyle.Flex;
     }
 
+    bool isPasswordVisible = false;
     private void BindPasswordScreen()
     {
         passwordScreen = connectionScreen.Q<VisualElement>("password-screen");
@@ -134,11 +135,16 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         var passwordVisibleBtn = passwordScreen.Q<VisualElement>("password-visibility");
         passwordVisibleBtn.RegisterCallback<MouseDownEvent>(e =>
         {
-            passwordInput.isPasswordField = false;
-        });
-        passwordVisibleBtn.RegisterCallback<MouseUpEvent>(e =>
-        {
-            passwordInput.isPasswordField = true;
+            if (e.clickCount == 1)
+            {
+                passwordVisibleBtn.ClearClassList();
+                isPasswordVisible = !isPasswordVisible;
+                if (isPasswordVisible)
+                    passwordVisibleBtn.AddToClassList("input-eye-button-on");
+                else
+                    passwordVisibleBtn.AddToClassList("input-eye-button-off");
+                passwordInput.isPasswordField = !isPasswordVisible;
+            }
         });
     }
 
