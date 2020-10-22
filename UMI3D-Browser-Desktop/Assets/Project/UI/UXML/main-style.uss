@@ -31,11 +31,6 @@ TextField > Label {
     margin-right: 0;
 }
 
-Slider > Label {
-    min-width: 0;
-    padding-right: 10px;
-}
-
 Toggle > Label {
     min-width: 0;
     padding-right: 5px;
@@ -84,7 +79,7 @@ Toggle > Label {
 .orange-scroll-view {
 }
 
-.orange-scroll-view #unity-dragger {
+.orange-scroll-view .unity-scroller #unity-dragger {
     border-radius: 1px;
     border-width: 0;
     border-left-color: rgb(247, 182, 87);
@@ -101,7 +96,7 @@ Toggle > Label {
     margin-right: auto;
 }
 
-.orange-scroll-view #unity-slider {
+.orange-scroll-view .unity-scroller #unity-slider {
     background-color: rgb(38, 38, 38);
     padding-top: 2px;
     padding-bottom: 2px;
@@ -193,12 +188,28 @@ Toggle > Label {
     border-bottom-left-radius: 0;
 }
 
-.input-button:hover {
-    background-color: rgb(217, 209, 209);
+.input-arrow-button {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_ENABLE.png');
 }
 
-.input-search-button {
-    background-image: url('/Assets/Project/PrefabsAndResources/Menu/Connection/Icons/search-icon.png');
+.input-arrow-button:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_HOVER.png');
+}
+
+.input-arrow-button:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_PRESS.png');
+}
+
+.input-eye-button {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_ENABLE.png');
+}
+
+.input-eye-button:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_HOVER.png');
+}
+
+.input-eye-button:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_PRESS.png');
 }
 
 .manipulation-element {
@@ -268,7 +279,8 @@ Toggle > Label {
 }
 
 .toggle-orange #unity-checkmark {
-    background-color: rgb(231, 0, 0);
+    background-color: rgba(231, 0, 0, 0);
+    background-image: none;
     border-left-width: 1px;
     border-right-width: 1px;
     border-top-width: 1px;
@@ -277,6 +289,10 @@ Toggle > Label {
     border-right-color: rgb(247, 182, 87);
     border-top-color: rgb(247, 182, 87);
     border-bottom-color: rgb(247, 182, 87);
+}
+
+.toggle-orange:checked #unity-checkmark {
+    background-image: url('/Assets/Project/UI/Icons/toggle-checked.png');
 }
 
 .min-size-label {
