@@ -20,6 +20,7 @@ using BrowserDesktop.Menu;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.menu;
@@ -55,6 +56,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     public PanelRenderer panelRenderer;
 
+    private VisualElement gameMenuContainer;
+
     private VisualElement connectionScreen;
 
     private VisualElement passwordScreen;
@@ -62,14 +65,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     private TextField passwordInput;
     private Button connectBtn;
     private Button goBackButton;
-
-    private VisualElement assetsLibrariesScreen;
-    private Label assetsRequiredWarning;
-    private ScrollView assetsRequiredList;
-    [SerializeField]
-    private VisualTreeAsset libraryEntryTreeAsset;
-    private Button confirmDLLibrariesBtn;
-    private Button denyDLLibrariesBtn;
 
     private VisualElement parametersScreen;
 
@@ -102,7 +97,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         InitUI();
 
         UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
-        UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(Hide);
+        UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
     }
 
     #endregion
@@ -113,17 +108,18 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     {
         loader = new LoadingBar(panelRenderer.visualTree);
 
+        gameMenuContainer = panelRenderer.visualTree.Q<VisualElement>("game-menu-container");
         connectionScreen = panelRenderer.visualTree.Q<VisualElement>("connection-menu");
 
         topMenuTools = panelRenderer.visualTree.Q<VisualElement>("top-menu-tools");
         topMenuTools.style.display = DisplayStyle.None;
 
         BindPasswordScreen();
-        BindAssetsLibrariesRequiredScreen();
+        passwordScreen.style.display = DisplayStyle.None;
 
         parametersScreen = panelRenderer.visualTree.Q<VisualElement>("parameters-screen");
-
-        HideAllScreens();
+        gameMenuContainer.style.display = DisplayStyle.None;
+        connectionScreen.style.display = DisplayStyle.Flex;
     }
 
     private void BindPasswordScreen()
@@ -132,7 +128,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         passwordInput = passwordScreen.Q<TextField>("password-input");
         loginInput = passwordScreen.Q<TextField>("login-input");
         connectBtn = passwordScreen.Q<Button>("connect-btn");
-        goBackButton = passwordScreen.Q<Button>("go-back-btn");
+        goBackButton = panelRenderer.visualTree.Q<Button>("back-menu-btn");
         goBackButton.clickable.clicked += Leave;
 
         var passwordVisibleBtn = passwordScreen.Q<VisualElement>("password-visibility");
@@ -144,15 +140,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         {
             passwordInput.isPasswordField = true;
         });
-    }
-
-    private void BindAssetsLibrariesRequiredScreen()
-    {
-        assetsLibrariesScreen = connectionScreen.Q<VisualElement>("libraries-screen");
-        assetsRequiredWarning = assetsLibrariesScreen.Q<Label>("assets-required-warning");
-        assetsRequiredList = assetsLibrariesScreen.Q<ScrollView>("assets-required-list");
-        confirmDLLibrariesBtn = assetsLibrariesScreen.Q<Button>("confirm-libraries-btn");
-        denyDLLibrariesBtn = assetsLibrariesScreen.Q<Button>("cancel-libraries-btn");
     }
 
     #endregion
@@ -167,7 +154,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     {
         this.connectionData = connectionData;
 
-        connectionScreen.style.display = DisplayStyle.Flex;
         CircularMenu.Instance.HideMenu();
        
         loader.OnProgressChange(0);
@@ -187,21 +173,16 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         SceneManager.LoadScene(launcherScene, LoadSceneMode.Single);
     }
 
-    private void HideAllScreens()
-    {
-        passwordScreen.style.display = DisplayStyle.None;
-        assetsLibrariesScreen.style.display = DisplayStyle.None;
-    }
-
     private void HideLoadingScreen()
     {
         var loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
         loadingScreen.style.display = DisplayStyle.None;
     }
 
-    private void Hide()
+    private void OnEnvironmentLoaded()
     {
         connectionScreen.style.display = DisplayStyle.None;
+        gameMenuContainer.style.display = DisplayStyle.Flex;
         topMenuTools.style.display = DisplayStyle.Flex;
 
         CircularMenu.Instance.ShowMenu();
@@ -286,6 +267,27 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         if (ids.Count == 0)
         {
             callback.Invoke(true);
+        } else
+        {
+            CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
+
+            string title = (ids.Count == 1) ? "One assets library is required" : ids.Count + "assets libraries are required";
+
+            DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
+            dialogue.Setup(title, "Download libraries and connect to the server ?", "Accept", "Denied", (b) =>
+            {
+                callback.Invoke(b);
+                CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+            },
+            true);
+
+            panelRenderer.visualTree.Add(dialogue);
+        }
+
+
+        /*if (ids.Count == 0)
+        {
+            callback.Invoke(true);
         }
         else
         {
@@ -316,7 +318,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
             {
                 CloseAssetsLibrariesRequiredScreen(false, callback);
             };
-        }
+        }*/
     }
 
     /// <summary>
@@ -403,13 +405,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         result.Name = dto.name;
         //icon;
         return result;
-    }
-
-    private void CloseAssetsLibrariesRequiredScreen(bool b, Action<bool> callback)
-    {
-        callback.Invoke(b);
-        HideAllScreens();
-        CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
     }
 
     #endregion

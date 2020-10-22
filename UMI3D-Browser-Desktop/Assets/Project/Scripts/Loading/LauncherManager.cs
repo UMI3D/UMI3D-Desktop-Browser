@@ -49,17 +49,11 @@ public class LauncherManager : MonoBehaviour
     TextField urlInput;
     Button urlEnterBtn;
 
-    //Login password screen
-    /*VisualElement loginPasswordScreen;
-    TextField loginInput;
-    TextField passwordInput;
-    Button confirmLoginBtn;
-    Button cancelLoginBtn;
-    Label loginInputError;*/
 
     //Libraries
     VisualElement librariesScreen;
     ScrollView librariesList;
+    Button backMenuBnt;
 
     #endregion
 
@@ -126,7 +120,7 @@ public class LauncherManager : MonoBehaviour
         librariesScreen = root.Q<VisualElement>("libraries-manager-screen");
         librariesList = librariesScreen.Q<ScrollView>("libraries-list");
 
-        var backMenuBnt = librariesScreen.Q<Button>("back-menu-btn");
+        backMenuBnt = root.Q<Button>("back-menu-btn");
         backMenuBnt.clickable.clicked += ResetLauncher;
     }
 
@@ -218,24 +212,13 @@ public class LauncherManager : MonoBehaviour
     {
         currentConnectionData = GetUserData();
 
-        HideAllScreens();
+        librariesScreen.style.display = DisplayStyle.None;
         urlScreen.style.display = DisplayStyle.Flex;
+        backMenuBnt.style.display = DisplayStyle.None;
+
         previousStep = null;
         nextStep = SetDomain;
-
-        /*loginInput.value = currentConnectionData.login;
-        passwordInput.value = string.Empty;*/
-
         urlInput.value = currentConnectionData.ip;
-    }
-
-    private void HideAllScreens()
-    {
-        urlScreen.style.display = DisplayStyle.None;
-        urlScreen.Q<Label>("url-error").style.display = DisplayStyle.None;
-        /*loginPasswordScreen.style.display = DisplayStyle.None;
-        loginInputError.text = string.Empty;*/
-        librariesScreen.style.display = DisplayStyle.None;
     }
 
     /// <summary>
@@ -278,7 +261,8 @@ public class LauncherManager : MonoBehaviour
 
     private void DisplayLibraries()
     {
-        HideAllScreens();
+        urlScreen.style.display = DisplayStyle.None;
+        backMenuBnt.style.display = DisplayStyle.Flex;
         librariesScreen.style.display = DisplayStyle.Flex;
         nextStep = null;
         previousStep = ResetLauncher;
@@ -309,8 +293,6 @@ public class LauncherManager : MonoBehaviour
         {
             var entry = libraryEntryTreeAsset.CloneTree();
             entry.Q<Label>("library-name").text = app.Key;
-            var librariesInstalled = entry.Q<ScrollView>();
-            app.Value.ForEach(l => librariesInstalled.Add(new Label { text = l.key }));
 
             entry.Q<Button>("library-unistall").clickable.clicked += () =>
             {
@@ -333,7 +315,8 @@ public class LauncherManager : MonoBehaviour
                         DisplayLibraries();
                     }
                     isLibraryCurrentRemoved = false;
-                });
+                },
+                true);
 
                 root.Add(dialogue);
             };

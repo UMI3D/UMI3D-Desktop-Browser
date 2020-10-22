@@ -419,6 +419,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5317450853585186720, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
+      propertyPath: spaceBetweenElements
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7513129744976991190, guid: 50541f86f5f01194eb2b175264de3f46,
         type: 3}
       propertyPath: webcamOn
@@ -4726,12 +4731,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f5ab6d6d6e24f2499f0107614a6fbf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panelRenderer: {fileID: 87752526}
   minimizeTagName: minimize-window-btn
   maximizeTagName: fullscreen-btn
   closeTagName: close-window-btn
   maximizeTexture: {fileID: 2800000, guid: 883663dc1a173014e9bf8d63fd919db5, type: 3}
   restoreTexture: {fileID: 2800000, guid: 428b394451fca374eb17c3e5418cbdcb, type: 3}
-  panelRenderer: {fileID: 87752526}
   hideOnStart: 0
 --- !u!1 &1957946543
 GameObject:

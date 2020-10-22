@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-  <ui:VisualElement name="range-input-displayer" style="flex-direction: row; justify-content: flex-start; align-items: center;">
-    <Style src="Project/UI/UXML/main-style.uss" />
-    <ui:Slider picking-mode="Ignore" label="Slider" value="42" high-value="100" name="range-input-slider" style="flex-shrink: 1; flex-grow: 1;" />
-    <ui:TextField picking-mode="Ignore" name="range-input-value" style="width: 100px;" />
-  </ui:VisualElement>
+    <ui:VisualElement name="range-input-displayer" class="medium-size-txt min-size-label" style="flex-direction: row; justify-content: flex-start; align-items: center; height: 42px;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:Slider picking-mode="Ignore" label="Slider" value="42" high-value="100" name="range-input-slider" class="orange-slider toggle-orange min-size-label" style="flex-shrink: 1; flex-grow: 1;" />
+        <ui:TextField picking-mode="Ignore" name="range-input-value" class="medium-size-txt grey-text-field" style="width: 71px; height: 41px;" />
+    </ui:VisualElement>
 </ui:UXML>

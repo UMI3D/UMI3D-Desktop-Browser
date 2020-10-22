@@ -1,16 +1,18 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <ui:Template name="library-manager-entry" src="library-manager-entry.uxml" />
-    <ui:VisualElement name="assets-librairies-required-screen" style="display: flex;">
+    <ui:VisualElement name="assets-librairies-required-screen" class="grey-border" style="display: flex; padding-left: 44px; padding-right: 44px; border-left-width: 2px; border-right-width: 2px; border-top-width: 0; border-bottom-width: 0; margin-bottom: 65px; margin-top: 140px;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-        <ui:Label text="X libraries are required to join the environement :" name="libraries-title" class="medium-size-txt" style="color: rgb(52, 133, 153); -unity-font-style: normal;" />
-        <ui:VisualElement name="library-header" class="list-entry" style="border-left-color: rgb(52, 133, 153); border-right-color: rgb(52, 133, 153); border-top-color: rgb(52, 133, 153); border-bottom-color: rgb(52, 133, 153); justify-content: flex-start; border-bottom-width: 3px; flex-direction: row; align-items: center; margin-top: 20px; padding-right: 15px;">
-            <ui:Label text="Environment " name="library-env-name" style="-unity-text-align: middle-left; right: 0; height: 90%; width: 35%; justify-content: center; border-right-width: 1px; padding-left: 5px; font-size: 16px; border-left-color: rgb(52, 133, 153); border-right-color: rgb(52, 133, 153); border-top-color: rgb(52, 133, 153); border-bottom-color: rgb(52, 133, 153); -unity-font-style: bold;" />
-            <ui:Label text="Libraries installed" name="library-libraries" style="-unity-text-align: middle-left; right: 0; height: 90%; width: 35%; justify-content: center; border-right-width: 1px; padding-left: 5px; font-size: 16px; border-left-color: rgb(52, 133, 153); border-right-color: rgb(52, 133, 153); border-top-color: rgb(52, 133, 153); border-bottom-color: rgb(52, 133, 153); -unity-font-style: bold;" />
-            <ui:Label text="Action " name="library-status" style="-unity-text-align: middle-left; right: 0; height: 90%; justify-content: center; border-right-width: 1px; padding-left: 5px; font-size: 16px; -unity-font-style: bold; flex-grow: 1;" />
-        </ui:VisualElement>
-        <ui:ScrollView name="libraries-list" show-vertical-scroller="true" class="blue-scroll-view" style="border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; height: 400px; max-height: 400px;">
+        <ui:Label text="X libraries are required to join the environement :" name="libraries-title" class="medium-size-txt orange-text dark-grey1-bck" style="-unity-font-style: normal; height: 65px; -unity-text-align: middle-left; padding-left: 16px; margin-bottom: 40px;" />
+        <ui:ScrollView name="libraries-list" show-vertical-scroller="true" class="grey-border orange-scroll-view" style="border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; height: 400px; max-height: 400px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; flex-grow: 1;">
+            <ui:Instance template="library-manager-entry" name="library-manager-entry" />
+            <ui:Instance template="library-manager-entry" name="library-manager-entry" />
+            <ui:Instance template="library-manager-entry" name="library-manager-entry" />
+            <ui:Instance template="library-manager-entry" name="library-manager-entry" />
+            <ui:Instance template="library-manager-entry" name="library-manager-entry" />
+            <ui:Instance template="library-manager-entry" name="library-manager-entry" />
+            <ui:Instance template="library-manager-entry" name="library-manager-entry" />
             <ui:Instance template="library-manager-entry" name="library-manager-entry" />
         </ui:ScrollView>
-        <ui:Button text="Back to main menu" name="back-menu-btn" class="btn-blue-bck medium-size-txt border-radius" style="width: 215px; color: rgb(255, 255, 255); -unity-font-style: normal; height: 45px; top: 40px; margin-top: 61px;" />
+        <ui:VisualElement style="height: 90px;" />
     </ui:VisualElement>
 </ui:UXML>

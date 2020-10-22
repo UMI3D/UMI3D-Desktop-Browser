@@ -26,7 +26,7 @@ public class DialogueBoxElement : VisualElement
     public new class UxmlFactory : UxmlFactory<DialogueBoxElement, UxmlTraits> { }
     public new class UxmlTraits : VisualElement.UxmlTraits { }
 
-    public void Setup(string title, string message, string optionA, string optionB, Action<bool> choiceCallback) {
+    public void Setup(string title, string message, string optionA, string optionB, Action<bool> choiceCallback, bool marginForTitleBar = false) {
         this.style.position = Position.Absolute;
         
         this.Q<Label>("dialogue-box-title").text = title;
@@ -49,15 +49,10 @@ public class DialogueBoxElement : VisualElement
             choiceCallback.Invoke(false);
         };
 
-        UMI3DResourcesManager.Instance.StartCoroutine(SetPosition());
+        if (marginForTitleBar)
+        {
+            this.style.marginTop = 40;
+        }
     }
 
-
-    IEnumerator SetPosition()
-    {
-        //Coroutine required because when the VisualElement is instantiate, its worldBound and style.heigh/width are null.
-        yield return null;
-        style.top = Screen.height / 2 - resolvedStyle.height / 2;
-        style.left = Screen.width / 2 - resolvedStyle.width / 2;
-    }
 }

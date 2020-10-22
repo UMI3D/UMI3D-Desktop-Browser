@@ -21,6 +21,9 @@ namespace BrowserDesktop.Menu
 {
     public class ButtonInputDisplayerElement : AbstractButtonInputDisplayer, IDisplayerElement
     {
+        public VisualTreeAsset buttonTreeAsset;
+
+        VisualElement container;
         /// <summary>
         /// Button
         /// </summary>
@@ -30,38 +33,41 @@ namespace BrowserDesktop.Menu
         {
             base.Clear();
             button.clickable.clicked -= NotifyPress;
-            button.RemoveFromHierarchy();
+            container.RemoveFromHierarchy();
         }
 
         public override void Display(bool forceUpdate = false)
         {
             InitAndBindUI();
 
-            button.style.display = DisplayStyle.Flex;
+            container.style.display = DisplayStyle.Flex;
             button.clickable.clicked += NotifyPress;
         }
 
         public VisualElement GetUXMLContent()
         {
             InitAndBindUI();
-            return button;
+            return container;
         }
 
         public override void Hide()
         {
             button.clickable.clicked -= NotifyPress;
-            button.style.display = DisplayStyle.None;
+            container.style.display = DisplayStyle.None;
         }
 
         public void InitAndBindUI()
         {
-            if (button == null)
-                button = new Button();
+            if (container == null)
+            {
+                container = buttonTreeAsset.CloneTree();
+                button = container.Q<Button>();
+            }
         }
 
         private void OnDestroy()
         {
-            button?.RemoveFromHierarchy();
+            container?.RemoveFromHierarchy();
         }
     }
 }
