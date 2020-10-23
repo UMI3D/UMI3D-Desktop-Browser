@@ -23,6 +23,23 @@ using UnityEngine.UIElements;
 
 public class DialogueBoxElement : VisualElement
 {
+    //Return yes if  dialogue box is displayed
+    public static bool IsADialogueBoxDislayed
+    {
+        get
+        {
+            return currentDialogueBox != null;
+        }
+    }
+
+    public static void CloseDialogueBox(bool choice)
+    {
+        _CloseDialogueBox(choice, currentDialogueBox);
+    }
+
+    private static DialogueBoxElement currentDialogueBox;
+    private Action<bool> choiceCallback;
+
     public new class UxmlFactory : UxmlFactory<DialogueBoxElement, UxmlTraits> { }
     public new class UxmlTraits : VisualElement.UxmlTraits { }
 
@@ -38,21 +55,29 @@ public class DialogueBoxElement : VisualElement
         optionABtn.text = optionA;
         optionABtn.clickable.clicked += () =>
         {
-            this.RemoveFromHierarchy();
-            choiceCallback.Invoke(true);
+            _CloseDialogueBox(true, this);
         };
 
         optionBBtn.text = optionB;
         optionBBtn.clickable.clicked += () =>
         {
-            this.RemoveFromHierarchy();
-            choiceCallback.Invoke(false);
+            _CloseDialogueBox(false, this);
         };
 
         if (marginForTitleBar)
         {
             this.style.marginTop = 40;
         }
+
+        this.choiceCallback = choiceCallback;
+        currentDialogueBox = this;
+    }
+
+    private static void _CloseDialogueBox(bool choice, DialogueBoxElement dialogueBox)
+    {
+        dialogueBox.RemoveFromHierarchy();
+        dialogueBox.choiceCallback.Invoke(choice);
+        currentDialogueBox = null;
     }
 
 }

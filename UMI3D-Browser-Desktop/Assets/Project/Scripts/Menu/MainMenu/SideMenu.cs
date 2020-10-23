@@ -21,6 +21,7 @@ using umi3d.cdk.collaboration;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3d.common;
+using Unity.UIElements.Runtime;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -32,8 +33,9 @@ namespace BrowserDesktop.Menu
         #region Fields
 
         private bool isDisplayed = false;
-
         static public bool IsDisplayed { get { return Exists ? Instance.isDisplayed : false; } }
+
+        public PanelRenderer panelRenderer;
 
         [Header("Side menu general settings")]
         VisualElement sideMenuScreen;
@@ -96,7 +98,7 @@ namespace BrowserDesktop.Menu
 
         private void BindUI()
         {
-            VisualElement root = ConnectionMenu.Instance.panelRenderer.visualTree;
+            VisualElement root = panelRenderer.visualTree;
 
             BindSideMenu(root);
             BindSessionInfo(root);
@@ -157,7 +159,7 @@ namespace BrowserDesktop.Menu
                 });
 
                 //To remove 
-                var viewport = ConnectionMenu.Instance.panelRenderer.visualTree.Q<VisualElement>("game-menu");
+                var viewport = panelRenderer.visualTree.Q<VisualElement>("game-menu");
                 viewport.style.display = DisplayStyle.Flex;
                 CircularMenu.Instance.HideMenu();
             } else
@@ -174,7 +176,7 @@ namespace BrowserDesktop.Menu
                 });
 
                 //To remove 
-                var viewport = ConnectionMenu.Instance.panelRenderer.visualTree.Q<VisualElement>("game-menu");
+                var viewport = panelRenderer.visualTree.Q<VisualElement>("game-menu");
                 viewport.style.backgroundColor = new Color(0, 0, 0, 0);
                 viewport.style.display = DisplayStyle.None;
                 CircularMenu.Instance.ShowMenu();

@@ -338,7 +338,14 @@ Toggle > Label {
 }
 
 .toggle-orange:hover #unity-checkmark {
-    background-image: url('/Assets/Project/UI/UI_connection/checkbox_full_HOVER.png');
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(247, 182, 87);
+    border-right-color: rgb(247, 182, 87);
+    border-top-color: rgb(247, 182, 87);
+    border-bottom-color: rgb(247, 182, 87);
 }
 
 .toggle-orange:active #unity-checkmark {
@@ -371,17 +378,16 @@ Toggle > Label {
     border-bottom-width: 0;
 }
 
-.choices-dropdown {
-    background-color: rgb(63, 63, 66);
-    border-left-color: rgb(102, 102, 102);
-    border-right-color: rgb(102, 102, 102);
-    border-top-color: rgb(102, 102, 102);
-    border-bottom-color: rgb(102, 102, 102);
+.orange-slider #unity-dragger:hover {
+    background-color: rgba(0, 0, 0, 0);
     border-left-width: 1px;
     border-right-width: 1px;
     border-top-width: 1px;
     border-bottom-width: 1px;
-    position: absolute;
+    border-left-color: rgb(230, 171, 84);
+    border-right-color: rgb(230, 171, 84);
+    border-top-color: rgb(230, 171, 84);
+    border-bottom-color: rgb(230, 171, 84);
 }
 
 .two-lignes-text-field {
@@ -516,6 +522,23 @@ Toggle > Label {
 
 .dropdown-btn:active > VisualElement {
     background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_PRESS.png');
+}
+
+.choices-dropdown {
+    background-color: rgb(63, 63, 66);
+    border-left-color: rgb(102, 102, 102);
+    border-right-color: rgb(102, 102, 102);
+    border-top-color: rgb(102, 102, 102);
+    border-bottom-color: rgb(102, 102, 102);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    position: absolute;
+}
+
+.dropdown-choice {
+    background-color: red;
 }
 
 .scrollview-padding {

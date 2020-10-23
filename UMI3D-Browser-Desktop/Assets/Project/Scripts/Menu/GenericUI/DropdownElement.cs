@@ -81,6 +81,10 @@ public class DropdownElement : VisualElement
             for (int i = 0; i < options.Count; i++)
             {
                 var labelEntry = new Label { text = options[i] };
+
+                //Adding a class does not currently work
+                labelEntry.AddToClassList("dropdown-choice");
+
                 labelEntry.style.fontSize = 15;
                 labelEntry.style.color = Color.white;
                 labelEntry.userData = i;
@@ -113,7 +117,7 @@ public class DropdownElement : VisualElement
         choicesDropdown.style.display = DisplayStyle.Flex;
         choicesDropdown.style.top = currentChoice.worldBound.y + currentChoice.worldBound.height;
         choicesDropdown.style.left = currentChoice.worldBound.x;
-        choicesDropdown.style.width = currentChoice.worldBound.width;
+        choicesDropdown.style.width = currentChoice.worldBound.width + openChoiceButton.worldBound.width;
 
         choicesDropdown.BringToFront();
     }

@@ -149,10 +149,10 @@ MonoBehaviour:
   uxmlBackButtonTag: container-back-btn
   containerTreeAsset: {fileID: 9197481963319205126, guid: 753086ccf030f4440a9505452080efa3,
     type: 3}
-  radius: 80
+  radius: 150
   sameTimeDisplayable: 7
   currentFirstDisplayed: 0
-  offset: {x: 50, y: 75}
+  offset: {x: 75, y: 75}
   viewTagName: circular-menu-view
   nextButtonTagName: circular-menu-next
   previousButtonTagName: circular-menu-previous
@@ -204,7 +204,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   circularMenuContainer: {fileID: 438654465}
   menuDisplayManager: {fileID: 599804106}
-  camera: {fileID: 0}
   MenuColapsed:
     m_PersistentCalls:
       m_Calls: []
@@ -231,11 +230,11 @@ MonoBehaviour:
   DisplayerPrefab:
   - {fileID: 5906644497706679902, guid: 4d534428d281db34e86357da0077f345, type: 3}
   - {fileID: 3894871451392279681, guid: 98619b6ebc456e8408772604725d6dd8, type: 3}
-  - {fileID: 7011215360700242088, guid: 1080857116c9b3e44a64339c93896cfd, type: 3}
+  - {fileID: 7011215360700242088, guid: 1ff68d1c626a02e41875a44ddb362376, type: 3}
   - {fileID: 5718132712406883835, guid: 0146bc4d97a525e48b78d64ea53bbfda, type: 3}
   - {fileID: 8792817909080547734, guid: 39a2d956f7cd2a1419964e5a02685447, type: 3}
-  - {fileID: 1835442536045282207, guid: 7a2522d19cbc6274e872062111c94a27, type: 3}
-  - {fileID: 717908647631599470, guid: 89c4489b4247c6c4c808922d0d95ff73, type: 3}
+  - {fileID: 1835442536045282207, guid: c5aff2e6a96c5e4468c38f2323e632cd, type: 3}
+  - {fileID: 717908647631599470, guid: c97a3e68e31c395488d384a33d7e0571, type: 3}
   - {fileID: 1367903713704256018, guid: 0adea06dbd02e8a4fb406bc7fbd6f0ee, type: 3}
   - {fileID: 8319788261808056576, guid: df3c5f9e45338ce48adad5e8c4175f8d, type: 3}
   onDisplay:
@@ -315,6 +314,7 @@ MonoBehaviour:
   hoverCursor: {fileID: 21300000, guid: 87684a493ff09d7409d738c133ce3c6d, type: 3}
   followCursor: {fileID: 21300000, guid: 7ad7c876c8798db4d83cb5fed09a584a, type: 3}
   clickedCursor: {fileID: 21300000, guid: 7ad7c876c8798db4d83cb5fed09a584a, type: 3}
+  settingsCursor: {fileID: 21300000, guid: 18e8939ca20e8874a99a8c42e3fcbf68, type: 3}
 --- !u!1 &1060301966
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,6 +410,56 @@ MonoBehaviour:
   notifTreeAsset: {fileID: 9197481963319205126, guid: a3ff933b05757e349a31eb9346543182,
     type: 3}
   maxNotificationsDisplayed: 4
+--- !u!1 &1897058547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1897058548}
+  - component: {fileID: 1897058549}
+  m_Layer: 0
+  m_Name: WindowsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1897058548
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897058547}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4423324782737819675}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1897058549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897058547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f5ab6d6d6e24f2499f0107614a6fbf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelRenderer: {fileID: 4423324782737819674}
+  minimizeTagName: minimize-window-btn
+  maximizeTagName: fullscreen-btn
+  closeTagName: close-window-btn
+  maximizeClassName: maximize-btn
+  restoreClassName: restore-btn
+  hideOnStart: 0
 --- !u!114 &87752527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -571,9 +621,8 @@ MonoBehaviour:
   launcherScene: ConnectionMigrationUI
   dialogueBoxTreeAsset: {fileID: 9197481963319205126, guid: 952193403cd37744f9ac513022d96731,
     type: 3}
+  isDisplayed: 1
   panelRenderer: {fileID: 4423324782737819674}
-  libraryEntryTreeAsset: {fileID: 9197481963319205126, guid: 80adaadf17c472b40ac574730c7e8c7b,
-    type: 3}
 --- !u!1 &3791602535499513040
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,14 +667,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de6f5f7883bfe0e479b8d0d5145c66f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panelRenderer: {fileID: 4423324782737819674}
   toolBoxMenuDisplayManager: {fileID: 167294820}
   ToolboxMenu: {fileID: 11400000, guid: a1215c884fdd17846a33bbba9c8656b9, type: 2}
-  webcamOn: {fileID: 0}
-  webcamOff: {fileID: 0}
-  microOn: {fileID: 0}
-  microOff: {fileID: 0}
-  displayOn: {fileID: 0}
-  displayOff: {fileID: 0}
+  webcamOn: {fileID: 2800000, guid: c3f9c9027cb3d8f45a61839487b3751f, type: 3}
+  webcamOff: {fileID: 2800000, guid: 73b58cb57d9a44647b3d35c5a8cfa299, type: 3}
+  microOn: {fileID: 2800000, guid: 79cc3da5aab503745aca6f25ac1da2a8, type: 3}
+  microOff: {fileID: 2800000, guid: 60951e7cdbebd7a459e8535ddeebc194, type: 3}
+  displayOn: {fileID: 2800000, guid: aa127786b5eb0e44cb43d88ce69841df, type: 3}
+  displayOff: {fileID: 2800000, guid: 4654edb1dcbe6d9409b68aeb3f638d25, type: 3}
 --- !u!1 &4423324782737819672
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,6 +709,7 @@ Transform:
   - {fileID: 5303577233696426089}
   - {fileID: 3548115367119916315}
   - {fileID: 247069726507135199}
+  - {fileID: 1897058548}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1104,6 +1155,11 @@ PrefabInstance:
       propertyPath: panelRenderer
       value: 
       objectReference: {fileID: 4423324782737819674}
+    - target: {fileID: 5317450853189604428, guid: ccb1c12991d844b4abcde36b1b93b12f,
+        type: 3}
+      propertyPath: spaceBetweenElements
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7282581155576345719, guid: ccb1c12991d844b4abcde36b1b93b12f,
         type: 3}
       propertyPath: m_Name

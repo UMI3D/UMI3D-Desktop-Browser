@@ -52,6 +52,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private LoadingBar loader;
 
+    public bool isDisplayed = true;
+
     #region UI Fields
 
     public PanelRenderer panelRenderer;
@@ -67,6 +69,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     private Button goBackButton;
 
     private VisualElement parametersScreen;
+
+    VisualElement loadingScreen;
 
     private VisualElement topMenuTools;
 
@@ -94,10 +98,41 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void Start()
     {
+        previousStep = Leave;
+
         InitUI();
 
         UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
+    }
+
+    Action nextStep = null;
+    Action previousStep = null;
+
+    private void Update()
+    {
+        ManageInputs();   
+    }
+
+    private void ManageInputs()
+    {
+        if (!isDisplayed)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            if (DialogueBoxElement.IsADialogueBoxDislayed)
+                DialogueBoxElement.CloseDialogueBox(true);
+            else
+                nextStep?.Invoke();
+        }
+        else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
+        {
+            if (DialogueBoxElement.IsADialogueBoxDislayed)
+                DialogueBoxElement.CloseDialogueBox(false);
+            else
+                previousStep?.Invoke();
+        }
     }
 
     #endregion
@@ -106,10 +141,16 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void InitUI()
     {
-        loader = new LoadingBar(panelRenderer.visualTree);
+        VisualElement root = panelRenderer.visualTree;
 
-        gameMenuContainer = panelRenderer.visualTree.Q<VisualElement>("game-menu-container");
-        connectionScreen = panelRenderer.visualTree.Q<VisualElement>("connection-menu");
+        loader = new LoadingBar(root);
+
+        loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
+
+        gameMenuContainer = root.Q<VisualElement>("game-menu-container");
+        connectionScreen = root.Q<VisualElement>("connection-menu");
+
+        root.Q<Label>("version").text = umi3d.UMI3DVersion.version;
 
         topMenuTools = panelRenderer.visualTree.Q<VisualElement>("top-menu-tools");
         topMenuTools.style.display = DisplayStyle.None;
@@ -179,14 +220,11 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         SceneManager.LoadScene(launcherScene, LoadSceneMode.Single);
     }
 
-    private void HideLoadingScreen()
-    {
-        var loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
-        loadingScreen.style.display = DisplayStyle.None;
-    }
 
     private void OnEnvironmentLoaded()
     {
+        isDisplayed = false;
+
         connectionScreen.style.display = DisplayStyle.None;
         gameMenuContainer.style.display = DisplayStyle.Flex;
         topMenuTools.style.display = DisplayStyle.Flex;
@@ -257,11 +295,17 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         passwordScreen.style.display = DisplayStyle.Flex;
 
-        connectBtn.clickable.clicked += () => {
-            passwordScreen.style.display = DisplayStyle.None;
-            callback.Invoke(loginInput.value, passwordInput.value);
-            loadingScreen.style.display = DisplayStyle.Flex;
-        };
+        connectBtn.clickable.clicked += () => SendIdentity(callback);
+
+        nextStep = () => SendIdentity(callback);
+    }
+
+    private void SendIdentity(Action<string, string> callback)
+    {
+        passwordScreen.style.display = DisplayStyle.None;
+        callback.Invoke(loginInput.value, passwordInput.value);
+        loadingScreen.style.display = DisplayStyle.Flex;
+        nextStep = null;
     }
 
     /// <summary>
@@ -334,7 +378,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// <param name="callback"></param>
     void GetParameterDtos(FormDto form, Action<FormDto> callback)
     {
-        HideLoadingScreen();
+        loadingScreen.style.display = DisplayStyle.None;
 
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
 
@@ -354,10 +398,11 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 Menu.menu.RemoveAll();
                 callback.Invoke(form);
                 CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+                nextStep = null;
             };
             send.Subscribe(action);
             Menu.menu.Add(send);
-
+            nextStep = () => action(true);
             MenuDisplayManager.Display(true);
         }
     }

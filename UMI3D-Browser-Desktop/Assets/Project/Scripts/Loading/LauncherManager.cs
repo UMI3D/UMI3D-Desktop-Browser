@@ -130,13 +130,20 @@ public class LauncherManager : MonoBehaviour
 
     private void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            nextStep?.Invoke();
+            if (DialogueBoxElement.IsADialogueBoxDislayed)
+                DialogueBoxElement.CloseDialogueBox(true);
+            else
+                nextStep?.Invoke();
         }
         else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
         {
-            previousStep?.Invoke();
+            if (DialogueBoxElement.IsADialogueBoxDislayed)
+                DialogueBoxElement.CloseDialogueBox(false);
+            else
+                previousStep?.Invoke();
         }
     }
 
@@ -155,9 +162,7 @@ public class LauncherManager : MonoBehaviour
         {
             currentConnectionData.ip = url;
 
-            urlScreen.style.display = DisplayStyle.None;
-            //loginPasswordScreen.style.display = DisplayStyle.Flex;
-            //nextStep = Login;
+            urlScreen.style.display = DisplayStyle.None;;
             previousStep = ResetLauncher;
             Connect();
         }
