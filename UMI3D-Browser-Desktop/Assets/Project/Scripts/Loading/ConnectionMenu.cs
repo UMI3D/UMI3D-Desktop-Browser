@@ -114,6 +114,9 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         ManageInputs();   
     }
 
+    /// <summary>
+    /// Manages the Return and Escape inputs to navigate through the menu.
+    /// </summary>
     private void ManageInputs()
     {
         if (!isDisplayed)
@@ -221,6 +224,9 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     }
 
 
+    /// <summary>
+    /// Inits the UI the environment is loaded.
+    /// </summary>
     private void OnEnvironmentLoaded()
     {
         isDisplayed = false;
@@ -231,11 +237,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
         CircularMenu.Instance.ShowMenu();
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
-    }
-
-    public void DisplayParametersScreen(bool val)
-    {
-        parametersScreen.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;   
     }
 
     #endregion
@@ -300,6 +301,10 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         nextStep = () => SendIdentity(callback);
     }
 
+    /// <summary>
+    /// Sends the login/password to the server.
+    /// </summary>
+    /// <param name="callback"></param>
     private void SendIdentity(Action<string, string> callback)
     {
         passwordScreen.style.display = DisplayStyle.None;
@@ -379,6 +384,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     void GetParameterDtos(FormDto form, Action<FormDto> callback)
     {
         loadingScreen.style.display = DisplayStyle.None;
+        parametersScreen.style.display = DisplayStyle.Flex;
 
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
 
@@ -394,6 +400,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
             ButtonMenuItem send = new ButtonMenuItem() { Name = "Send", toggle = false };
             UnityAction<bool> action = (bool b) => {
+                parametersScreen.style.display = DisplayStyle.None;
                 MenuDisplayManager.Hide(true);
                 Menu.menu.RemoveAll();
                 callback.Invoke(form);

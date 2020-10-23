@@ -33,9 +33,9 @@
                     <ui:Button name="back-menu-btn" class="btn-orange btn-left-arrow" style="width: 80px; height: 80px; margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; display: flex;" />
                     <ui:Button name="next-menu-btn" style="width: 80px; height: 0; background-color: rgba(93, 93, 93, 0); margin-left: auto; margin-right: auto; font-size: 30px; display: flex;" />
                 </ui:VisualElement>
-                <ui:VisualElement name="container" style="width: 680px; height: 100%; flex-direction: column; flex-wrap: wrap; justify-content: center; padding-top: 40px; padding-bottom: 40px;">
-                    <ui:Instance template="loading-screen" name="loading-screen" style="display: flex; width: 100%; flex-direction: column;" />
-                    <ui:Instance template="password-screen" name="password-screen" style="display: none;" />
+                <ui:VisualElement name="container" style="width: 680px; height: 100%; flex-direction: column; flex-wrap: wrap; justify-content: center; padding-top: 40px; padding-bottom: 40px; align-items: center;">
+                    <ui:Instance template="loading-screen" name="loading-screen" style="display: none; width: 100%; flex-direction: column;" />
+                    <ui:Instance template="password-screen" name="password-screen" style="display: flex; width: 100%;" />
                     <ui:VisualElement name="parameters-screen" style="display: none; flex-grow: 1; justify-content: center;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="left" style="flex-grow: 1;">
