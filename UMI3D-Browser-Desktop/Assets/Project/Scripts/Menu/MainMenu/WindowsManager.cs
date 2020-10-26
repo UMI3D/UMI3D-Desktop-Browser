@@ -45,6 +45,30 @@ public class WindowsManager : MonoBehaviour
     private const int MOUSE_MOVE = 0xF012;
 
 
+  
+    [DllImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    static extern bool GetCursorPos(out POINT lpPoint);
+    public struct POINT
+    {
+        public int X;
+        public int Y;
+
+        public POINT(int x, int y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
+
+        public override string ToString()
+        {
+            return "Point (" + X + " ," + Y + ")";
+        }
+    }
+
+    [DllImport("user32.dll")]
+    static extern int GetSystemMetrics(int nIndex);
+
     [Header("Custom title bar")]
 
     [SerializeField]
@@ -68,6 +92,7 @@ public class WindowsManager : MonoBehaviour
     const int SWP_SHOWWINDOW = 0x40; //show window flag.
     const int SWP_NOMOVE = 0x0002; //don't move the window flag.
     const int SWP_NOSIZE = 0x0001; //don't resize the window flag.
+    const short SWP_NOZORDER = 0X4; //don't change z order
     const uint WS_SIZEBOX = 0x00040000;
     const int GWL_STYLE = -16;
     const int WS_BORDER = 0x00800000; //window with border
@@ -158,11 +183,25 @@ public class WindowsManager : MonoBehaviour
         topBar.RegisterCallback<MouseDownEvent>((e) =>
         {
             if (IsZoomed(GetActiveWindow())) //Check if the window is maximised
+            {
+                //1. Store "local" mousePosition before resizing
+                Vector2 offset = e.mousePosition;
+                //2. Resize
                 ShowWindow(GetActiveWindow(), 9);
+                //3. Get resizing rate
+                float rate = (float) Screen.width / (float) GetSystemMetrics(16);
 
-            ReleaseCapture();
-            SendMessageCallback(hWnd, WM_SYSCOMMAND, MOUSE_MOVE, 0, DropCallBack, 0);
+                //4. Set Position
+                POINT p;
+                if (GetCursorPos(out p))
+                {
+                    Vector2 topLeftHandCorner = new Vector2(p.X, p.Y) - offset * rate;
+                    SetWindowPos(hWnd, IntPtr.Zero, (short)topLeftHandCorner.x, (short) topLeftHandCorner.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+                }
+            }
             
+            ReleaseCapture();
+            SendMessageCallback(hWnd, WM_SYSCOMMAND, MOUSE_MOVE, 0, DropCallBack, 0); 
         });
 
     }

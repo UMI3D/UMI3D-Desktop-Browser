@@ -59,6 +59,7 @@ public class LauncherManager : MonoBehaviour
 
     #region Data
     public const string dataFile = "userData";
+    public const string favoriteDataFile = "favoriteUserData";
 
     [Serializable]
     public class Data
@@ -67,6 +68,8 @@ public class LauncherManager : MonoBehaviour
     }
 
     private Data currentConnectionData;
+
+    private List<Data> favoriteConnectionData = new List<Data>();
 
     [SerializeField]
     public string currentScene;
@@ -238,6 +241,40 @@ public class LauncherManager : MonoBehaviour
             return data;
         }
         return new Data();
+    }
+
+    /// <summary>
+    /// Stores the connection data about the favorite environments.
+    /// </summary>
+    void StoreFavoriteConnectionData()
+    {
+        string path = umi3d.common.Path.Combine(Application.persistentDataPath, favoriteDataFile);
+        FileStream file;
+        if (File.Exists(path)) file = File.OpenWrite(path);
+        else file = File.Create(path);
+
+        BinaryFormatter bf = new BinaryFormatter();
+        bf.Serialize(file, favoriteDataFile);
+        file.Close();
+    }
+
+    /// <summary>
+    /// get the connection data about the favorite environments.
+    /// </summary>
+    /// <returns></returns>
+    private List<Data> GetFavoriteConnectionData()
+    {
+        string path = umi3d.common.Path.Combine(Application.persistentDataPath, favoriteDataFile);
+        if (File.Exists(path))
+        {
+            FileStream file;
+            file = File.OpenRead(path);
+            BinaryFormatter bf = new BinaryFormatter();
+            List<Data> data = (List<Data>)bf.Deserialize(file);
+            file.Close();
+            return data;
+        }
+        return new List<Data>();
     }
 
     private void DisplayLibraries()
