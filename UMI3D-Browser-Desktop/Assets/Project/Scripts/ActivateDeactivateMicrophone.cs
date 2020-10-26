@@ -39,6 +39,6 @@ public class ActivateDeactivateMicrophone : Singleton<ActivateDeactivateMicropho
     {
         Microphone.IsOn = !Microphone.IsOn;
 
-        SideMenu.Instance.OnMicrophoneStatusChanged(Microphone.IsOn);
+        //TODO : SideMenu.Instance.OnMicrophoneStatusChanged(Microphone.IsOn);
     }
 }

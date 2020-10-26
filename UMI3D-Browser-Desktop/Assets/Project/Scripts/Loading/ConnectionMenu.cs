@@ -58,8 +58,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     public PanelRenderer panelRenderer;
 
-    private VisualElement gameMenuContainer;
-
     private VisualElement connectionScreen;
 
     private VisualElement passwordScreen;
@@ -71,8 +69,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     private VisualElement parametersScreen;
 
     VisualElement loadingScreen;
-
-    private VisualElement topMenuTools;
 
     #endregion
 
@@ -150,19 +146,14 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
         loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
 
-        gameMenuContainer = root.Q<VisualElement>("game-menu-container");
         connectionScreen = root.Q<VisualElement>("connection-menu");
 
         root.Q<Label>("version").text = umi3d.UMI3DVersion.version;
-
-        topMenuTools = panelRenderer.visualTree.Q<VisualElement>("top-menu-tools");
-        topMenuTools.style.display = DisplayStyle.None;
 
         BindPasswordScreen();
         passwordScreen.style.display = DisplayStyle.None;
 
         parametersScreen = panelRenderer.visualTree.Q<VisualElement>("parameters-screen");
-        gameMenuContainer.style.display = DisplayStyle.None;
         connectionScreen.style.display = DisplayStyle.Flex;
     }
 
@@ -232,8 +223,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         isDisplayed = false;
 
         connectionScreen.style.display = DisplayStyle.None;
-        gameMenuContainer.style.display = DisplayStyle.Flex;
-        topMenuTools.style.display = DisplayStyle.Flex;
 
         CircularMenu.Instance.ShowMenu();
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);

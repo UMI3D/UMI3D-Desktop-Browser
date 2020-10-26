@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <ui:VisualElement name="button-container">
-        <ui:Button text="Button" name="container-select-btn" style="display: none;" />
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:Button text="Hello" name="container-select-btn" class="dark-grey1-bck orange-text" style="display: flex; height: 20px;" />
         <ui:VisualElement name="container" />
     </ui:VisualElement>
 </ui:UXML>

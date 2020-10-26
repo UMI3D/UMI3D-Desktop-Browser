@@ -1,7 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <ui:Template name="loading-screen" src="loading-screen.uxml" />
     <ui:Template name="password-screen" src="password-screen.uxml" />
+    <ui:Template name="libraries-screen" src="libraries-screen.uxml" />
     <ui:VisualElement name="cursor-screen" style="position: absolute; width: 100%; height: 100%; top: 0.8px; left: 0;">
+        <Style src="/Assets/Project/UI/UXML/sessio-info.uss" />
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:VisualElement name="cursor-container" style="position: relative; width: 40px; height: 40px; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;">
             <ui:VisualElement name="cursor-center" class="cursor-follow" style="width: 10px; height: 10px; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;" />
@@ -9,33 +11,29 @@
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="body" style="height: 100%; width: 100%; display: flex;">
+        <Style src="/Assets/Project/UI/UXML/sessio-info.uss" />
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:VisualElement name="top" class="dark-grey1-bck" style="width: 100%; flex-direction: row; height: 40px; min-height: 40px; align-items: center;">
             <ui:VisualElement name="top-right-menu" style="width: 50%; justify-content: center;">
                 <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/UI/UI_connection/ico_top.png&apos;); height: 30px; -unity-background-scale-mode: scale-to-fit; width: 30px; margin-left: 5px;" />
             </ui:VisualElement>
-            <ui:VisualElement name="top-center-menu" style="flex-grow: 1; flex-direction: row; justify-content: center; height: 35px; display: flex;">
-                <ui:VisualElement name="top-menu-tools" style="flex-direction: row;">
-                    <ui:VisualElement name="top-tool-microphone" style="background-image: url(&apos;/Assets/Project/UI/Icons/micro-on.png&apos;); width: 35px; height: 35px;" />
-                    <ui:VisualElement name="top-tool-webcam" style="background-image: url(&apos;/Assets/Project/UI/Icons/webcam-on.png&apos;); width: 35px; height: 35px;" />
-                    <ui:VisualElement name="top-tool-display-others" style="background-image: url(&apos;/Assets/Project/UI/Icons/display-others-on.png&apos;); width: 35px; height: 35px;" />
-                </ui:VisualElement>
-            </ui:VisualElement>
+            <ui:VisualElement name="top-center-menu" style="flex-grow: 1; flex-direction: row; justify-content: center; height: 35px; display: flex;" />
             <ui:VisualElement name="top-left-menu" style="flex-direction: row-reverse; width: 50%; flex-wrap: nowrap; height: 100%;">
                 <ui:Button name="close-window-btn" class="close-btn" style="color: rgb(255, 255, 255); font-size: 18px; width: 32px;" />
                 <ui:Button name="fullscreen-btn" class="top-left-menu-btn restore-btn" style="width: 35px;" />
                 <ui:Button name="minimize-window-btn" class="top-left-menu-btn minimize-btn" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="connection-menu" style="display: flex; flex-grow: 1; background-image: url(&apos;/Assets/Project/UI/UI_connection/background-middle.png&apos;);">
+        <ui:VisualElement name="connection-menu" style="display: none; flex-grow: 1; background-image: url(&apos;/Assets/Project/UI/UI_connection/background-middle.png&apos;);">
             <ui:VisualElement style="flex-direction: row; flex-grow: 1;">
                 <ui:VisualElement name="right" style="flex-grow: 1;">
                     <ui:Button name="back-menu-btn" class="btn-orange btn-left-arrow" style="width: 80px; height: 80px; margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; display: flex;" />
                     <ui:Button name="next-menu-btn" style="width: 80px; height: 0; background-color: rgba(93, 93, 93, 0); margin-left: auto; margin-right: auto; font-size: 30px; display: flex;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="container" style="width: 680px; height: 100%; flex-direction: column; flex-wrap: wrap; justify-content: center; padding-top: 40px; padding-bottom: 40px; align-items: center;">
-                    <ui:Instance template="loading-screen" name="loading-screen" style="display: none; width: 100%; flex-direction: column;" />
-                    <ui:Instance template="password-screen" name="password-screen" style="display: flex; width: 100%;" />
+                    <ui:Instance template="loading-screen" name="loading-screen" style="width: 100%; display: flex;" />
+                    <ui:Instance template="password-screen" name="password-screen" style="display: none; width: 100%;" />
+                    <ui:Instance template="libraries-screen" name="libraries-screen" style="display: none; width: 100%;" />
                     <ui:VisualElement name="parameters-screen" style="display: none; flex-grow: 1; justify-content: center;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="left" style="flex-grow: 1;">
@@ -46,85 +44,28 @@
                 <ui:Label text="version x.x.x" name="version" style="position: absolute; bottom: 9px; right: 13px; color: rgb(63, 63, 63); font-size: 18px; display: flex;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="game-menu-container" style="width: 100%; flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
-            <ui:VisualElement name="right-side-menu" style="height: 100%; flex-direction: row; display: none; background-color: rgba(0, 0, 0, 0);">
-                <ui:VisualElement name="manipulation-container" style="position: absolute; bottom: 50px; right: 0; height: 60px; left: 0; flex-direction: row; justify-content: center;" />
-                <ui:VisualElement name="notification-container" style="height: 100%; position: absolute; left: 10px; flex-direction: column-reverse;" />
-                <ui:VisualElement name="event-container" style="height: 60%; position: absolute; flex-direction: column-reverse; right: 10px; display: flex; margin-right: 10px; bottom: 10px;" />
-                <ui:VisualElement name="viewport" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-                    <ui:VisualElement name="game-menu" style="flex-grow: 1; padding-left: 50px; padding-right: 50px; padding-top: 50px; padding-bottom: 50px;" />
+        <ui:VisualElement name="game-menu-container" style="width: 100%; background-color: rgba(0, 0, 0, 0); display: flex; height: 100%;">
+            <ui:VisualElement name="session-info" class="dark-grey3-bck grey-border" style="height: 52px; border-bottom-width: 1px; justify-content: center; width: 100%; flex-direction: row; align-items: center;">
+                <ui:VisualElement name="session-info-container" class="dark-grey1-bck" style="height: 37px; flex-direction: row;">
+                    <ui:Label text="Label" name="session-time" class="session-info-btn white-txt" style="-unity-text-align: middle-center;" />
+                    <ui:Button name="active-sound" class="session-info-btn grey-border session-info-btn-sound-on" style="height: 100%;" />
+                    <ui:Button name="active-avatar" class="session-info-btn grey-border session-info-btn-sound-on session-info-btn-active-avatar-on" style="height: 100%;" />
+                    <ui:Button name="mute-btn" class="session-info-btn grey-border session-info-btn-mute-on" style="height: 100%;" />
+                    <ui:Button name="hang-up-btn" class="session-info-btn grey-border session-info-btn-hang-up" style="height: 100%;" />
                 </ui:VisualElement>
-                <ui:VisualElement name="side-menu" class="dark-grey2-bck" style="width: 280px; padding-top: 148px; display: flex; left: 280px;">
-                    <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-                    <ui:VisualElement name="tool-inspector" style="flex-grow: 1;">
-                        <ui:VisualElement name="contacts" style="width: 100%; height: 100%; display: none;">
-                            <ui:Label text="Online" class="medium-size-txt" style="-unity-font-style: bold; color: rgb(154, 154, 154); border-left-color: rgb(41, 44, 48); border-right-color: rgb(41, 44, 48); border-top-color: rgb(41, 44, 48); border-bottom-color: rgb(41, 44, 48); border-bottom-width: 1px; margin-top: 10px; margin-right: 10px; margin-left: 10px; padding-bottom: 10px; margin-bottom: 10px;" />
-                            <ui:ListView focusable="True" name="contact-list" style="flex-grow: 1;">
-                                <ui:VisualElement name="contact-entry" style="flex-direction: row; height: 60px; margin-left: 20px;">
-                                    <ui:VisualElement name="contact-left" style="width: 60px; margin-left: 5px; margin-top: 5px;">
-                                        <ui:VisualElement name="contact-picture" style="width: 50px; height: 50px; border-top-left-radius: 50%; border-bottom-left-radius: 50%; border-top-right-radius: 50%; border-bottom-right-radius: 50%; background-color: rgb(197, 197, 197);" />
-                                    </ui:VisualElement>
-                                    <ui:VisualElement name="contact-right" style="padding-top: 5px;">
-                                        <ui:Label text="Marie Le Blanc" name="contact-name" style="color: rgb(255, 255, 255); -unity-font-style: bold; font-size: 14px;" />
-                                        <ui:Label text="Happiness Manager" name="contact-job" class="txt-blue" style="-unity-font-style: normal; font-size: 12px;" />
-                                        <ui:Label text="Strasbourg" name="contact-location" style="color: rgb(154, 154, 154); -unity-font-style: normal; font-size: 12px;" />
-                                    </ui:VisualElement>
-                                </ui:VisualElement>
-                                <ui:VisualElement name="contact-entry" style="flex-direction: row; height: 60px; margin-left: 20px;">
-                                    <ui:VisualElement name="contact-left" style="width: 60px; margin-left: 5px; margin-top: 5px;">
-                                        <ui:VisualElement name="contact-picture" style="width: 50px; height: 50px; border-top-left-radius: 50%; border-bottom-left-radius: 50%; border-top-right-radius: 50%; border-bottom-right-radius: 50%; background-color: rgb(197, 197, 197);" />
-                                    </ui:VisualElement>
-                                    <ui:VisualElement name="contact-right" style="padding-top: 5px;">
-                                        <ui:Label text="Raquel Almeida" name="contact-name" style="color: rgb(255, 255, 255); -unity-font-style: bold; font-size: 14px;" />
-                                        <ui:Label text="IT Consultant" name="contact-job" class="txt-blue" style="-unity-font-style: normal; font-size: 12px;" />
-                                        <ui:Label text="Lisbon" name="contact-location" style="color: rgb(154, 154, 154); -unity-font-style: normal; font-size: 12px;" />
-                                    </ui:VisualElement>
-                                </ui:VisualElement>
-                                <ui:VisualElement name="contact-entry" style="flex-direction: row; height: 60px; margin-left: 20px;">
-                                    <ui:VisualElement name="contact-left" style="width: 60px; margin-left: 5px; margin-top: 5px;">
-                                        <ui:VisualElement name="contact-picture" style="width: 50px; height: 50px; border-top-left-radius: 50%; border-bottom-left-radius: 50%; border-top-right-radius: 50%; border-bottom-right-radius: 50%; background-color: rgb(197, 197, 197);" />
-                                    </ui:VisualElement>
-                                    <ui:VisualElement name="contact-right" style="padding-top: 5px;">
-                                        <ui:Label text="Ricardo Sanchez" name="contact-name" style="color: rgb(255, 255, 255); -unity-font-style: bold; font-size: 14px;" />
-                                        <ui:Label text="Developer" name="contact-job" class="txt-blue" style="-unity-font-style: normal; font-size: 12px;" />
-                                        <ui:Label text="Madrid" name="contact-location" style="color: rgb(154, 154, 154); -unity-font-style: normal; font-size: 12px;" />
-                                    </ui:VisualElement>
-                                </ui:VisualElement>
-                                <ui:VisualElement name="contact-entry" style="flex-direction: row; height: 60px; margin-left: 20px;">
-                                    <ui:VisualElement name="contact-left" style="width: 60px; margin-left: 5px; margin-top: 5px;">
-                                        <ui:VisualElement name="contact-picture" style="width: 50px; height: 50px; border-top-left-radius: 50%; border-bottom-left-radius: 50%; border-top-right-radius: 50%; border-bottom-right-radius: 50%; background-color: rgb(197, 197, 197);" />
-                                    </ui:VisualElement>
-                                    <ui:VisualElement name="contact-right" style="padding-top: 5px;">
-                                        <ui:Label text="Jean Vercroz" name="contact-name" style="color: rgb(255, 255, 255); -unity-font-style: bold; font-size: 14px;" />
-                                        <ui:Label text="Product Owner" name="contact-job" class="txt-blue" style="-unity-font-style: normal; font-size: 12px;" />
-                                        <ui:Label text="Paris" name="contact-location" style="color: rgb(154, 154, 154); -unity-font-style: normal; font-size: 12px;" />
-                                    </ui:VisualElement>
-                                </ui:VisualElement>
-                            </ui:ListView>
-                        </ui:VisualElement>
-                        <ui:VisualElement name="side-menu-toolbox" style="width: 100%; height: 100%; display: flex;" />
-                    </ui:VisualElement>
-                    <ui:VisualElement name="tools" style="height: 50px; flex-direction: row;">
-                        <ui:Button name="tool-microphone" class="btn-dark-grey-bck" style="flex-grow: 1; background-image: url(&apos;/Assets/Project/UI/Icons/micro-on.png&apos;); width: 50px; height: 50px;" />
-                        <ui:Button name="tool-webcam" class="btn-dark-grey-bck" style="flex-grow: 1; width: 50px; height: 50px; background-image: url(&apos;/Assets/Project/UI/Icons/webcam-on.png&apos;);" />
-                        <ui:Button text="&#10;" name="tool-other-people" class="btn-dark-grey-bck" style="flex-grow: 1; width: 50px; height: 50px; background-image: url(&apos;/Assets/Project/UI/Icons/display-others-on.png&apos;);" />
-                        <ui:Button name="tool-contact" class="btn-dark-grey-bck" style="flex-grow: 1; width: 50px; height: 50px;" />
-                        <ui:Button name="tool-hang-up" class="btn-red-bck" style="flex-grow: 1; width: 50px; height: 50px; background-image: url(&apos;/Assets/Project/UI/Icons/hang-up.png&apos;);" />
-                    </ui:VisualElement>
-                    <ui:VisualElement name="session-info" class="dark-grey1-bck" style="width: 300px; height: 128px; margin-top: 20px; flex-direction: row; position: absolute; right: -20px;">
-                        <ui:VisualElement name="session-left" style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; flex-grow: 1;">
-                            <ui:Label text="My VR Session" name="sesion-title" class="medium-size-txt" style="-unity-font-style: bold; color: rgb(255, 255, 255);">
-                                <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-                            </ui:Label>
-                            <ui:Label text="4 Participants" name="session-participants" class="border-radius" style="background-color: rgb(169, 20, 46); color: rgb(255, 255, 255); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; width: 92px; margin-top: 10px;">
-                                <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-                            </ui:Label>
-                            <ui:Label text="04:39 pm" name="session-time" class="medium-size-txt" style="color: rgb(255, 255, 255); margin-top: 10px;">
-                                <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-                            </ui:Label>
-                        </ui:VisualElement>
-                        <ui:VisualElement name="session-right" style="background-image: url(&apos;/Assets/Project/logo/logo_umi3d_consortium_3d.png&apos;); width: 128px; height: 128px;" />
-                    </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="viewport" style="flex-grow: 1; width: 100%; height: 100%; flex-direction: row;">
+                <ui:VisualElement name="left-side-menu" style="width: 256px; height: 100%;">
+                    <ui:VisualElement name="left-side-menu-container" style="flex-grow: 1; display: none;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="game-view" style="flex-grow: 1;">
+                    <ui:VisualElement name="manipulation-container" style="position: absolute; bottom: 50px; right: 0; height: 60px; left: 0; flex-direction: row; justify-content: center;" />
+                    <ui:VisualElement name="event-container" style="height: 60%; position: absolute; flex-direction: column-reverse; right: 10px; display: flex; margin-right: 10px; bottom: 10px;" />
+                    <ui:VisualElement name="game-menu" style="flex-grow: 1; padding-left: 50px; padding-right: 50px; padding-top: 50px; padding-bottom: 50px; display: flex;" />
+                    <ui:VisualElement name="notification-container" style="height: 100%; position: absolute; left: 10px; flex-direction: column-reverse;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="right-side-menu" style="width: 256px; display: flex;">
+                    <ui:VisualElement name="right-side-menu-container" class="dark-grey2-bck" style="flex-grow: 1; left: 256px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 30px; justify-content: center;">
@@ -133,6 +74,7 @@
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="circular-menu" style="position: absolute; width: 100%; height: 100%; display: none;">
+        <Style src="/Assets/Project/UI/UXML/sessio-info.uss" />
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
     </ui:VisualElement>
 </ui:UXML>

@@ -132,6 +132,30 @@ Toggle > Label {
     background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_PRESS.png');
 }
 
+.vertical-scroll-view {
+}
+
+.vertical-scroll-view #unity-slider {
+    display: none;
+    height: 20px;
+}
+
+.vertical-scroll-view #unity-low-button {
+    position: absolute;
+    left: -18px;
+    top: -36px;
+    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_ENABLE.png');
+    height: 20px;
+}
+
+.vertical-scroll-view #unity-high-button {
+    position: absolute;
+    top: -36px;
+    right: -18px;
+    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_ENABLE.png');
+    height: 20px;
+}
+
 .white-label {
 }
 
@@ -145,6 +169,10 @@ Toggle > Label {
 
 .dark-grey2-bck {
     background-color: rgb(50, 50, 50);
+}
+
+.dark-grey3-bck {
+    background-color: rgb(56, 56, 56);
 }
 
 .medium-size-txt {
