@@ -229,6 +229,10 @@ public class WindowsManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Shows or hides the default windows borders to resize the window.
+    /// </summary>
+    /// <param name="value"></param>
     private void ShowWindowBorders(bool value)
     {
         if (Application.isEditor) return; //We don't want to hide the toolbar from our editor!
