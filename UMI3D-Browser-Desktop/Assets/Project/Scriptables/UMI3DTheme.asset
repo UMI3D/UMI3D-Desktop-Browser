@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21be303c7588d8846b728477cb04666d, type: 3}
   m_Name: UMI3DTheme
   m_EditorClassIdentifier: 
-  PrincipalColor: {r: 0.003921569, g: 0.18823531, b: 0.25490198, a: 1}
+  PrincipalColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   PrincipalTextColor: {r: 1, g: 1, b: 1, a: 1}
   SecondaryColor: {r: 1, g: 1, b: 1, a: 1}
   SecondaryTextColor: {r: 0.003921569, g: 0.18823531, b: 0.25490198, a: 1}
