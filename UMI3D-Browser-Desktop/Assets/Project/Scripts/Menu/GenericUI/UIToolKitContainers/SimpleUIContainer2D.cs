@@ -369,6 +369,7 @@ namespace BrowserDesktop.Menu
                     {
                         displayer.Hide();
                         (VirtualContainer as SimpleUIContainer2D)?.contentElement.Add(elt.GetUXMLContent());
+                        displayer.transform.SetParent((VirtualContainer as SimpleUIContainer2D)?.transform);
                     }
                     else
                     {
