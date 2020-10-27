@@ -52,7 +52,7 @@ MonoBehaviour:
   firstContainerInScene: 1
   containerSelector: {fileID: 167294819}
   DisplayerPrefab:
-  - {fileID: 5906644497706679902, guid: 4d534428d281db34e86357da0077f345, type: 3}
+  - {fileID: 5906644497706679902, guid: c132614e57ade184fb523f4cd97563e7, type: 3}
   - {fileID: 3894871451392279681, guid: 98619b6ebc456e8408772604725d6dd8, type: 3}
   - {fileID: 7011215360700242088, guid: 1ff68d1c626a02e41875a44ddb362376, type: 3}
   - {fileID: 5718132712406883835, guid: 0146bc4d97a525e48b78d64ea53bbfda, type: 3}
@@ -143,9 +143,11 @@ MonoBehaviour:
   parent: {fileID: 0}
   panelRenderer: {fileID: 4423324782737819674}
   spaceBetweenElements: 10
+  flexGrow: 0
   uxmlParentTag: circular-menu
   uxmlContentTag: circular-menu-container
   uxmlSelectButtonTag: container-select-btn
+  uxmlSelectIconTag: container-select-icon
   uxmlBackButtonTag: container-back-btn
   containerTreeAsset: {fileID: 9197481963319205126, guid: 753086ccf030f4440a9505452080efa3,
     type: 3}
@@ -315,6 +317,50 @@ MonoBehaviour:
   followCursor: {fileID: 21300000, guid: 7ad7c876c8798db4d83cb5fed09a584a, type: 3}
   clickedCursor: {fileID: 21300000, guid: 7ad7c876c8798db4d83cb5fed09a584a, type: 3}
   settingsCursor: {fileID: 21300000, guid: 18e8939ca20e8874a99a8c42e3fcbf68, type: 3}
+--- !u!1 &759972037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 759972038}
+  - component: {fileID: 759972039}
+  m_Layer: 0
+  m_Name: Footer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &759972038
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759972037}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4125827769369142610}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &759972039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759972037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b98ddf1baf0390243b391cf4eeca4a88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelRenderer: {fileID: 4423324782737819674}
 --- !u!1 &1060301966
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,10 +528,12 @@ MonoBehaviour:
   parallelNavigation: 0
   parent: {fileID: 0}
   panelRenderer: {fileID: 4423324782737819674}
-  spaceBetweenElements: 10
+  spaceBetweenElements: 0
+  flexGrow: 0
   uxmlParentTag: toolbox-menu
   uxmlContentTag: container
   uxmlSelectButtonTag: container-select-btn
+  uxmlSelectIconTag: container-select-icon
   uxmlBackButtonTag: 
   containerTreeAsset: {fileID: 9197481963319205126, guid: 5db79971805d1484cb78535ca0620f4b,
     type: 3}
@@ -753,7 +801,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uxml: {fileID: 9197481963319205126, guid: e05f706dee3f2424fa34a0d3ed8920d5, type: 3}
   unityStyleSheet: {fileID: 11400000, guid: d610daef742b54fdda82fd41508f7f2e, type: 2}
-  stylesheets: []
+  stylesheets:
+  - {fileID: 7433441132597879392, guid: 94673d93e91baf148996a51e40b938da, type: 3}
+  - {fileID: 7433441132597879392, guid: 6aec743efac111546bd7bd0f3814a1e9, type: 3}
   targetTexture: {fileID: 0}
   panelTransform: {fileID: 0}
   m_EnableLiveUpdate: 0
@@ -942,9 +992,11 @@ MonoBehaviour:
   parent: {fileID: 0}
   panelRenderer: {fileID: 4423324782737819674}
   spaceBetweenElements: 0
+  flexGrow: 0
   uxmlParentTag: interaction-menu
   uxmlContentTag: container-scrollview
   uxmlSelectButtonTag: container-select-btn
+  uxmlSelectIconTag: container-select-icon
   uxmlBackButtonTag: container-back-btn
   containerTreeAsset: {fileID: 9197481963319205126, guid: 68f1ef88c68ba304d95f5886bfabea10,
     type: 3}
@@ -1013,6 +1065,7 @@ Transform:
   m_Children:
   - {fileID: 6290354466891679249}
   - {fileID: 6434621989006267172}
+  - {fileID: 759972038}
   m_Father: {fileID: 4423324782737819675}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1297,7 +1350,7 @@ PrefabInstance:
     - target: {fileID: 5317450853189604428, guid: ccb1c12991d844b4abcde36b1b93b12f,
         type: 3}
       propertyPath: spaceBetweenElements
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5317450853189604428, guid: ccb1c12991d844b4abcde36b1b93b12f,
         type: 3}
@@ -1320,6 +1373,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9197481963319205126, guid: 68f1ef88c68ba304d95f5886bfabea10,
         type: 3}
+    - target: {fileID: 5317450853189604428, guid: ccb1c12991d844b4abcde36b1b93b12f,
+        type: 3}
+      propertyPath: flexGrow
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7282581155576345719, guid: ccb1c12991d844b4abcde36b1b93b12f,
         type: 3}
       propertyPath: m_Name

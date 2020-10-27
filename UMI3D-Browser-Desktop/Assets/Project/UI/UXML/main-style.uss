@@ -593,8 +593,16 @@ Toggle > Label {
 }
 
 .orange-hover:hover {
-    border-left-color: rgba(247, 182, 87, 255);
-    border-right-color: rgba(247, 182, 87, 255);
-    border-top-color: rgba(247, 182, 87, 255);
-    border-bottom-color: rgba(247, 182, 87, 255);
+    border-left-color: rgb(247, 182, 87);
+    border-right-color: rgb(247, 182, 87);
+    border-top-color: rgb(247, 182, 87);
+    border-bottom-color: rgb(247, 182, 87);
+}
+
+.error-txt {
+    color: rgb(179, 0, 0);
+}
+
+.warning-txt {
+    color: rgb(247, 182, 87);
 }

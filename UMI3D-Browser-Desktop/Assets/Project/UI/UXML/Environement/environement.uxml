@@ -24,8 +24,8 @@
                 <ui:Button name="minimize-window-btn" class="top-left-menu-btn minimize-btn" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="connection-menu" style="display: none; flex-grow: 1; background-image: url(&apos;/Assets/Project/UI/UI_connection/background-middle.png&apos;);">
-            <ui:VisualElement style="flex-direction: row; flex-grow: 1;">
+        <ui:VisualElement name="connection-menu" style="display: flex; flex-grow: 1;">
+            <ui:VisualElement style="flex-direction: row; flex-grow: 1; background-image: url(&apos;/Assets/Project/UI/UI_connection/background-middle.png&apos;);">
                 <ui:VisualElement name="right" style="flex-grow: 1;">
                     <ui:Button name="back-menu-btn" class="btn-orange btn-left-arrow" style="width: 80px; height: 80px; margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; display: flex;" />
                     <ui:Button name="next-menu-btn" style="width: 80px; height: 0; background-color: rgba(93, 93, 93, 0); margin-left: auto; margin-right: auto; font-size: 30px; display: flex;" />
@@ -44,7 +44,7 @@
                 <ui:Label text="version x.x.x" name="version" style="position: absolute; bottom: 9px; right: 13px; color: rgb(63, 63, 63); font-size: 18px; display: flex;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="game-menu-container" style="width: 100%; background-color: rgba(0, 0, 0, 0); display: flex; height: 100%;">
+        <ui:VisualElement name="game-menu-container" style="width: 100%; background-color: rgba(0, 0, 0, 0); display: none; height: 100%;">
             <ui:VisualElement name="session-info" class="dark-grey3-bck grey-border" style="height: 52px; border-bottom-width: 1px; justify-content: center; width: 100%; flex-direction: row; align-items: center;">
                 <ui:VisualElement name="session-info-container" class="dark-grey1-bck" style="height: 37px; flex-direction: row;">
                     <ui:Label text="Label" name="session-time" class="session-info-btn white-txt" style="-unity-text-align: middle-center;" />
@@ -71,8 +71,10 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 30px; justify-content: center;">
-                <ui:Label text="Escape : show/hide menu      T : mute/unmute" name="shortcuts" style="color: rgb(182, 182, 182); margin-left: 10px; font-size: 14px;" />
+            <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 30px; justify-content: center; flex-direction: row;">
+                <ui:Label text="Escape : show/hide menu      T : mute/unmute" name="shortcuts" style="color: rgb(182, 182, 182); margin-left: 10px; -unity-text-align: middle-left; width: 25%; margin-right: 10px;" />
+                <ui:Label text="Erreur" name="console-footer" class="grey-border" style="-unity-text-align: middle-left; padding-left: 10px; padding-right: 10px; border-right-width: 1px; border-left-width: 1px; width: 65%;" />
+                <ui:Label text="2.xx.xx.xx" name="version-footer" style="color: rgb(182, 182, 182); -unity-text-align: middle-right; width: 8%; margin-left: 10px; margin-right: 10px;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
