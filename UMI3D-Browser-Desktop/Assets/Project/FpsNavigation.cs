@@ -131,7 +131,7 @@ public class FpsNavigation : AbstractNavigation
             }
 
             MainMenu.Display(!MainMenu.IsDisplaying);
-            SideMenu.Display(!SideMenu.IsDisplayed);
+            SideMenu.Display(true, !SideMenu.IsDisplayed);
         }
 
         if (MainMenu.IsDisplaying || CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHiden)

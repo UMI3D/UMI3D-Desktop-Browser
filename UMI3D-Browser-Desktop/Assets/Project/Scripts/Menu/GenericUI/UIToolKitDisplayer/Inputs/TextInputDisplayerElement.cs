@@ -23,6 +23,8 @@ namespace BrowserDesktop.Menu
 {
     public class TextInputDisplayerElement : AbstractTextInputDisplayer, IDisplayerElement
     {
+        public static bool isTyping;
+
         public VisualTreeAsset textFieldTreeAsset;
 
         VisualElement textInputContainer;
@@ -106,6 +108,8 @@ namespace BrowserDesktop.Menu
             {
                 textInputContainer = textFieldTreeAsset.CloneTree();
                 textInput = textInputContainer.Q<TextField>();
+                textInput.RegisterCallback<FocusInEvent>((e) => { isTyping = true;});
+                textInput.RegisterCallback<FocusOutEvent>((e) => { isTyping = false;});
             }
         }
 

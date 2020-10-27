@@ -37,7 +37,6 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:Button text="Favorite" name="set-favorite-btn" style="color: rgba(255, 255, 255, 255); background-color: rgba(142, 142, 142, 255);" />
         </ui:VisualElement>
         <ui:Button text="Manage libraries" name="manage-library-btn" class="white-btn" style="background-color: rgba(93, 93, 93, 0); width: 150px; height: 35px; margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: auto; position: relative; right: 0; bottom: 20px;" />
     </ui:VisualElement>

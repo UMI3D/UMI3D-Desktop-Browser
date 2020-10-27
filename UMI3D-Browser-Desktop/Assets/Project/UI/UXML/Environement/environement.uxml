@@ -40,7 +40,7 @@
                     <ui:Button name="next-menu-btn" style="width: 80px; height: 0; background-color: rgba(93, 93, 93, 0); margin-left: auto; margin-right: auto; font-size: 30px; display: flex;" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="footer" class="dark-grey1-bck grey-border" style="height: 90px;">
+            <ui:VisualElement name="footer" class="dark-grey1-bck grey-border" style="height: 90px; min-height: 90px; max-height: 90px;">
                 <ui:Label text="version x.x.x" name="version" style="position: absolute; bottom: 9px; right: 13px; color: rgb(63, 63, 63); font-size: 18px; display: flex;" />
             </ui:VisualElement>
         </ui:VisualElement>
@@ -48,8 +48,8 @@
             <ui:VisualElement name="session-info" class="dark-grey3-bck grey-border" style="height: 52px; border-bottom-width: 1px; justify-content: center; width: 100%; flex-direction: row; align-items: center;">
                 <ui:VisualElement name="session-info-container" class="dark-grey1-bck" style="height: 37px; flex-direction: row;">
                     <ui:Label text="Label" name="session-time" class="session-info-btn white-txt" style="-unity-text-align: middle-center;" />
-                    <ui:Button name="active-sound" class="session-info-btn grey-border session-info-btn-sound-on" style="height: 100%;" />
-                    <ui:Button name="active-avatar" class="session-info-btn grey-border session-info-btn-sound-on session-info-btn-active-avatar-on" style="height: 100%;" />
+                    <ui:Button name="active-sound" class="session-info-btn grey-border session-info-btn-sound-on" style="height: 100%; display: none;" />
+                    <ui:Button name="active-avatar" class="session-info-btn grey-border session-info-btn-sound-on session-info-btn-active-avatar-on" style="height: 100%; display: none;" />
                     <ui:Button name="mute-btn" class="session-info-btn grey-border session-info-btn-mute-on" style="height: 100%;" />
                     <ui:Button name="hang-up-btn" class="session-info-btn grey-border session-info-btn-hang-up" style="height: 100%;" />
                 </ui:VisualElement>
@@ -65,7 +65,10 @@
                     <ui:VisualElement name="notification-container" style="height: 100%; position: absolute; left: 10px; flex-direction: column-reverse;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="right-side-menu" style="width: 256px; display: flex;">
-                    <ui:VisualElement name="right-side-menu-container" class="dark-grey2-bck" style="flex-grow: 1; left: 256px;" />
+                    <ui:VisualElement name="right-side-menu-container" class="dark-grey2-bck" style="flex-grow: 1; left: 256px;">
+                        <ui:VisualElement name="toolbox-menu" style="flex-grow: 1;" />
+                        <ui:VisualElement name="interaction-menu" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 30px; justify-content: center;">

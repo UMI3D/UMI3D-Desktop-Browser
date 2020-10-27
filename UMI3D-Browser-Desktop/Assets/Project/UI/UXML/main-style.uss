@@ -321,7 +321,6 @@ Toggle > Label {
     border-right-color: rgb(63, 63, 63);
     border-top-color: rgb(63, 63, 63);
     border-bottom-color: rgb(63, 63, 63);
-    border-top-width: 1px;
 }
 
 .btn-orange {
@@ -574,4 +573,18 @@ Toggle > Label {
 
 .scrollview-padding #unity-content-container {
     padding-right: 22px;
+}
+
+.slider-two-levels {
+}
+
+.text-field-mini {
+}
+
+.text-field-mini > Label {
+    height: 20px;
+}
+
+.text-field-mini > #unity-text-input {
+    height: 20px;
 }

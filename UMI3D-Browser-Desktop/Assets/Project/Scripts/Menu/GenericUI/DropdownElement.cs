@@ -38,13 +38,17 @@ public class DropdownElement : VisualElement
 
     bool areChoicesVisible = false;
 
+    bool isMini;
+
     public void SetLabel(string label)
     {
         this.Q<Label>("label").text = label;
     }
 
-    public void SetUp()
+    public void SetUp(bool isMini = false)
     {
+        this.isMini = isMini;
+
         this.RegisterCallback<FocusOutEvent>(e => choicesDropdown.RemoveFromHierarchy());
 
         openChoiceButton = this.Q<Button>("dropdown-open-choice");
@@ -82,13 +86,10 @@ public class DropdownElement : VisualElement
             {
                 var labelEntry = new Label { text = options[i] };
 
-                //Adding a class does not currently work
-                labelEntry.AddToClassList("dropdown-choice");
-
-                labelEntry.style.fontSize = 15;
+                labelEntry.style.fontSize = isMini ? 11 : 15;
                 labelEntry.style.color = Color.white;
                 labelEntry.userData = i;
-                labelEntry.style.height = 25;
+                labelEntry.style.height = isMini ? 20 : 25;
                 labelEntry.style.paddingLeft = 5;
                 labelEntry.style.unityTextAlign = TextAnchor.MiddleLeft; 
                 labelEntry.RegisterCallback<MouseDownEvent>(e => {

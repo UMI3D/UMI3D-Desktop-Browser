@@ -327,19 +327,33 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 87752527, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
-      propertyPath: panelRenderer
+    - target: {fileID: 167294820, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
+      propertyPath: DisplayerPrefab.Array.data[0]
       value: 
-      objectReference: {fileID: 87752526}
-    - target: {fileID: 167294819, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
-      propertyPath: containerPrefabs.Array.data[1]
-      value: 
-      objectReference: {fileID: 87752528}
+      objectReference: {fileID: 5906644497706679902, guid: c132614e57ade184fb523f4cd97563e7,
+        type: 3}
     - target: {fileID: 4423324782737819672, guid: 50541f86f5f01194eb2b175264de3f46,
         type: 3}
       propertyPath: m_Name
       value: UIManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4423324782737819674, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
+      propertyPath: stylesheets.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4423324782737819674, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
+      propertyPath: stylesheets.Array.data[0]
+      value: 
+      objectReference: {fileID: 7433441132597879392, guid: 94673d93e91baf148996a51e40b938da,
+        type: 3}
+    - target: {fileID: 4423324782737819674, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
+      propertyPath: stylesheets.Array.data[1]
+      value: 
+      objectReference: {fileID: 7433441132597879392, guid: 6aec743efac111546bd7bd0f3814a1e9,
+        type: 3}
     - target: {fileID: 4423324782737819675, guid: 50541f86f5f01194eb2b175264de3f46,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -397,42 +411,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5317450853681117898, guid: 50541f86f5f01194eb2b175264de3f46,
         type: 3}
-      propertyPath: uxmlParentTag
-      value: right-side-menu-container
+      propertyPath: spaceBetweenElements
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5317450853681117898, guid: 50541f86f5f01194eb2b175264de3f46,
-        type: 3}
-      propertyPath: containerTreeAsset
-      value: 
-      objectReference: {fileID: 9197481963319205126, guid: 68f1ef88c68ba304d95f5886bfabea10,
-        type: 3}
-    m_RemovedComponents:
-    - {fileID: 1994689718, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
---- !u!114 &87752526 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4423324782737819674, guid: 50541f86f5f01194eb2b175264de3f46,
-    type: 3}
-  m_PrefabInstance: {fileID: 87752525}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8302b9857102e44c8c26813e6008537, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &87752528 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 87752527, guid: 50541f86f5f01194eb2b175264de3f46,
-    type: 3}
-  m_PrefabInstance: {fileID: 87752525}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5adf77e1722a5646a62c1e3860ed1a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &133532551
 PrefabInstance:
   m_ObjectHideFlags: 0

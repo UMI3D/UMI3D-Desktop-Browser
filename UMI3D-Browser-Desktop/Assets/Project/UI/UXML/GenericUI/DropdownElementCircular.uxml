@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <DropdownElement focusable="true" class="grey-border" style="flex-direction: row; height: 50px; align-items: center; padding-left: 12px; padding-right: 12px; border-bottom-width: 1px;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:Label text="Label" name="label" class="orange-text" style="height: 100%; -unity-text-align: middle-left; margin-right: 5px;" />
+        <ui:Label text="Label" name="dropdown-current-choice-label" class="grey-border" style="flex-grow: 1; height: 20px; padding-left: 5px; padding-top: 0; padding-bottom: 0; -unity-text-align: middle-left; border-left-width: 1px; border-right-width: 0; border-top-width: 1px; border-bottom-width: 1px; background-color: rgb(63, 63, 66); color: rgb(255, 255, 255); border-left-color: rgb(102, 102, 102); border-right-color: rgb(102, 102, 102); border-top-color: rgb(102, 102, 102); border-bottom-color: rgb(102, 102, 102);" />
+        <ui:Button name="dropdown-open-choice" class="dropdown-btn-pressed dropdown-btn" style="width: 20px; height: 20px; background-color: rgb(63, 63, 66); border-left-color: rgb(102, 102, 102); border-right-color: rgb(102, 102, 102); border-top-color: rgb(102, 102, 102); border-bottom-color: rgb(102, 102, 102); border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; justify-content: center; align-items: center;">
+            <ui:VisualElement style="width: 20px; height: 14px;" />
+        </ui:Button>
+        <ui:VisualElement name="dropdown-choices" style="position: absolute; background-color: rgb(63, 63, 66); left: 196px; border-left-color: rgb(102, 102, 102); border-right-color: rgb(102, 102, 102); border-top-color: rgb(102, 102, 102); border-bottom-color: rgb(102, 102, 102); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px;" />
+    </DropdownElement>
+</ui:UXML>

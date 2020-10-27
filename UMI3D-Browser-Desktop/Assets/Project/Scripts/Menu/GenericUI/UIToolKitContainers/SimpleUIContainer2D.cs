@@ -30,7 +30,6 @@ namespace BrowserDesktop.Menu
 
         public PanelRenderer panelRenderer;
 
-        [Tooltip("UXML tage name of the select")]
         public int spaceBetweenElements = 10;
 
         [Tooltip("This container will be instantiated in this umxl tag")]

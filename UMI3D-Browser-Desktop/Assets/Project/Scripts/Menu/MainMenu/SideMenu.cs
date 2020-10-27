@@ -38,6 +38,8 @@ namespace BrowserDesktop.Menu
         [Header("Side menu general settings")]
 
         VisualElement rightSideMenuContainer;
+        VisualElement interactionMenu;
+        VisualElement toolBoxMenu;
 
         [Header("Toolbox menu")]
         public MenuDisplayManager toolBoxMenuDisplayManager;
@@ -73,17 +75,25 @@ namespace BrowserDesktop.Menu
         private void BindRightSideMenu(VisualElement root)
         {
             rightSideMenuContainer = root.Q<VisualElement>("right-side-menu-container");
+            interactionMenu = root.Q<VisualElement>("interaction-menu");
+            toolBoxMenu = root.Q<VisualElement>("toolbox-menu");
         }
 
         #endregion
 
         /// <summary>
-        /// Displays the side menu.
+        /// Displays the side menu. First argument allows users to display the interac
         /// </summary>
         /// <param name="display"></param>
-        static public void Display(bool display = true)
+        static public void Display(bool displayPauseMenu, bool display = true)
         {
-            if (Exists) Instance._Display(display);
+            if (Exists) Instance._Display(display); Instance.DisplayPauseMenu(displayPauseMenu);
+        }
+
+        void DisplayPauseMenu(bool val)
+        {
+            interactionMenu.style.display = val ? DisplayStyle.None : DisplayStyle.Flex;
+            toolBoxMenu.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         void _Display(bool display = true)
@@ -97,8 +107,7 @@ namespace BrowserDesktop.Menu
                     elt.style.left = val;
                 });
 
-                //To remove 
-                CircularMenu.Instance.HideMenu();
+
             } else
             {
                 toolBoxMenuDisplayManager.Hide(true);
@@ -107,12 +116,6 @@ namespace BrowserDesktop.Menu
                 {
                     elt.style.left = val;
                 });
-
-                //To remove 
-                var viewport = panelRenderer.visualTree.Q<VisualElement>("game-menu");
-                viewport.style.backgroundColor = new Color(0, 0, 0, 0);
-                viewport.style.display = DisplayStyle.None;
-                CircularMenu.Instance.ShowMenu();
             }
 
             isDisplayed = display;

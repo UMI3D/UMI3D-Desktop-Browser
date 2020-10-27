@@ -195,8 +195,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     {
         this.connectionData = connectionData;
 
-        CircularMenu.Instance.HideMenu();
-       
         loader.OnProgressChange(0);
         string url = "http://" + connectionData.ip + UMI3DNetworkingKeys.media;
         UMI3DCollaborationClientServer.GetMedia(url, GetMediaSucces, GetMediaFailed);
@@ -224,7 +222,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
         connectionScreen.style.display = DisplayStyle.None;
 
-        CircularMenu.Instance.ShowMenu();
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
     }
 

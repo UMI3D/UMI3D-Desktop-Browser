@@ -24,7 +24,7 @@ namespace BrowserDesktop.Menu
 {
     public class CircularMenu : umi3d.common.Singleton<CircularMenu>
     {
-        public CircularMenuContainer circularMenuContainer;
+        public SimpleUIContainer2D circularMenuContainer;
 
         public bool IsExpanded { get { return circularMenuContainer.isExpanded; } }
         public MenuDisplayManager menuDisplayManager;
@@ -59,6 +59,7 @@ namespace BrowserDesktop.Menu
                 if (circularMenuContainer.isExpanded)
                 {
                     menuDisplayManager.Back();
+                    SideMenu.Display(false, false);
                 }
                 else if (!IsEmpty())
                 {
@@ -100,6 +101,7 @@ namespace BrowserDesktop.Menu
         {
             if (true)
             {
+                SideMenu.Display(false, true);
                 if (!circularMenuContainer.isDisplayed)
                 {
                     circularMenuContainer.Display(true);
@@ -113,61 +115,11 @@ namespace BrowserDesktop.Menu
             }
         }
 
-        public void HideMenu()
-        {
-            circularMenuContainer.HideMenu();
-        }
-
-        public void ShowMenu()
-        {
-            circularMenuContainer.ShowMenu();
-        }
-
-        public void Display(Vector3 WorldPosition)
-        {
-            //TODO
-            //Follow(WorldPosition);
-            _Display();
-        }
-
-        public void Display(Vector2 WorldPosition)
-        {
-            //TODO
-            //Follow(WorldPosition);
-            _Display();
-        }
-
         public void Collapse()
         {
-            //circleMenuContainer?.Back();
             CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
             circularMenuContainer.Collapse();
             MenuColapsed.Invoke();
         }
-
-        /*public void Follow(Vector3 WorldPosition)
-        {
-            //TODO
-            //SetPosition(WorldPosition);
-        }*/
-
-        //public void Hide(bool clear)
-        //{
-        //    MenuDisplayManager.Hide(true);
-        //    CursorHandler.Movement = CursorHandler.CursorMovement.Center;
-        //    displaying = false;
-        //}
-
-        /*public void SetPosition(Vector3 WorldPosition)
-        {
-            //TODO
-            //setPosition((Vector2)Camera.WorldToScreenPoint(WorldPosition));
-        }
-
-        public void setPosition(Vector2 ScreenPosition)
-        {
-            PositionToFollow = ScreenPosition;
-            //RectTransform.position = ScreenPosition;
-        }*/
     }
 }

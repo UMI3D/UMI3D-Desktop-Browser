@@ -61,7 +61,7 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
         muteBtn = sessionInfo.Q<Button>("mute-btn");
         muteBtn.clickable.clicked += () =>
         {
-            throw new NotImplementedException("TODO : mute button");
+            ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
         };
 
         hangUpBtn = sessionInfo.Q<Button>("hang-up-btn");
@@ -91,5 +91,21 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
     private void _Display(bool val)
     {
         sessionInfo.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
+    public void OnMicrophoneStatusChanged(bool val)
+    {
+        if (val)
+        {
+            muteBtn.RemoveFromClassList("session-info-btn-mute-off");
+            muteBtn.AddToClassList("session-info-btn-mute-on");
+        }
+            
+        else
+        {
+            muteBtn.RemoveFromClassList("session-info-btn-mute-on");
+            muteBtn.AddToClassList("session-info-btn-mute-off");
+        }
+           
     }
 }

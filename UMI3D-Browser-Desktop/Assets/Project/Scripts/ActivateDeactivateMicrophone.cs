@@ -29,7 +29,7 @@ public class ActivateDeactivateMicrophone : Singleton<ActivateDeactivateMicropho
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ToggleMicrophone)))
+        if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ToggleMicrophone)) && !TextInputDisplayerElement.isTyping)
         {
             ToggleMicrophoneStatus();
         }
@@ -39,6 +39,6 @@ public class ActivateDeactivateMicrophone : Singleton<ActivateDeactivateMicropho
     {
         Microphone.IsOn = !Microphone.IsOn;
 
-        //TODO : SideMenu.Instance.OnMicrophoneStatusChanged(Microphone.IsOn);
+        SessionInformationMenu.Instance.OnMicrophoneStatusChanged(Microphone.IsOn);
     }
 }
