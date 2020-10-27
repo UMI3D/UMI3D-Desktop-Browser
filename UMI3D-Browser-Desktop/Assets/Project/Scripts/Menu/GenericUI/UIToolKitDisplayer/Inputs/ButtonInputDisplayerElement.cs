@@ -61,6 +61,7 @@ namespace BrowserDesktop.Menu
             if (container == null)
             {
                 container = buttonTreeAsset.CloneTree();
+                container.name = gameObject.name;
                 button = container.Q<Button>();
             }
         }

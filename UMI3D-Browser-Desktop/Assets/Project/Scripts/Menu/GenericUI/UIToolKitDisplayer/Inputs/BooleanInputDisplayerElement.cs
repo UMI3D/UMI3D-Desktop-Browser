@@ -73,6 +73,7 @@ namespace BrowserDesktop.Menu
             if (container == null)
             {
                 container = booleanInputVisualTreeAsset.CloneTree();
+                container.name = gameObject.name;
                 toggle = container.Q<Toggle>();
             }
         }

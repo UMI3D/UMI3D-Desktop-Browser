@@ -95,6 +95,7 @@ namespace BrowserDesktop.Menu
             if(containerElement == null)
             {
                 containerElement = containerTreeAsset.CloneTree();
+                containerElement.name = gameObject.name;
                 parentElement = panelRenderer.visualTree.Q<VisualElement>(uxmlParentTag);
                 parentElement.Add(containerElement);
 

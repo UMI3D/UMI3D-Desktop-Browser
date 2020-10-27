@@ -327,6 +327,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 87752527, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
+      propertyPath: spaceBetweenElements
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 167294820, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
       propertyPath: DisplayerPrefab.Array.data[0]
       value: 

@@ -107,6 +107,7 @@ namespace BrowserDesktop.Menu
             if (textInputContainer == null)
             {
                 textInputContainer = textFieldTreeAsset.CloneTree();
+                textInputContainer.name = gameObject.name;
                 textInput = textInputContainer.Q<TextField>();
                 textInput.RegisterCallback<FocusInEvent>((e) => { isTyping = true;});
                 textInput.RegisterCallback<FocusOutEvent>((e) => { isTyping = false;});

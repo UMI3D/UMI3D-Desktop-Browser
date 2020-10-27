@@ -154,6 +154,7 @@ namespace BrowserDesktop.Menu
             if (sliderContainer == null)
             {
                 sliderContainer = rangeInputVisualTreeAsset.CloneTree();
+                sliderContainer.name = gameObject.name;
                 sliderValue = sliderContainer.Q<TextField>();
                 slider = sliderContainer.Q<Slider>();
             }
