@@ -32,12 +32,16 @@ namespace BrowserDesktop.Menu
 
         public int spaceBetweenElements = 10;
 
+        public bool flexGrow = false;
+
         [Tooltip("This container will be instantiated in this umxl tag")]
         public string uxmlParentTag;
         [Tooltip("UXML name of the tag where the elements will be instanciated")]
         public string uxmlContentTag;
         [Tooltip("UXML tage name of the back button")]
         public string uxmlSelectButtonTag = "container-select-btn";
+        [Tooltip("UXML tage name of the select")]
+        public string uxmlSelectIconTag = "container-select-icon";
         [Tooltip("UXML tage name of the select")]
         public string uxmlBackButtonTag = "container-back-btn";
 
@@ -49,6 +53,7 @@ namespace BrowserDesktop.Menu
         protected VisualElement contentElement;
         private Button backButton;
         private Button selectButton;
+        private VisualElement selectIcon;
 
         #endregion
 
@@ -96,6 +101,7 @@ namespace BrowserDesktop.Menu
             {
                 containerElement = containerTreeAsset.CloneTree();
                 containerElement.name = gameObject.name;
+                if (flexGrow) containerElement.style.flexGrow = 1;
                 parentElement = panelRenderer.visualTree.Q<VisualElement>(uxmlParentTag);
                 parentElement.Add(containerElement);
 
@@ -107,6 +113,7 @@ namespace BrowserDesktop.Menu
         {
             contentElement = containerElement.Q<VisualElement>(uxmlContentTag);
             selectButton = containerElement.Q<Button>(uxmlSelectButtonTag);
+            selectIcon = containerElement.Q<VisualElement>(uxmlSelectIconTag);
             backButton = containerElement.Q<Button>(uxmlBackButtonTag);
             Debug.Assert(contentElement != null);
         }
@@ -155,6 +162,10 @@ namespace BrowserDesktop.Menu
             {
                 selectButton.clickable.clicked += Select;
                 selectButton.text = menu.Name;
+            }
+            if(selectIcon != null && menu.icon2D != null)
+            {
+                selectIcon.style.backgroundImage = menu.icon2D;
             }
 
             containerElement.style.display = DisplayStyle.Flex;

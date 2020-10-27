@@ -588,3 +588,13 @@ Toggle > Label {
 .text-field-mini > #unity-text-input {
     height: 20px;
 }
+
+.orange-hover {
+}
+
+.orange-hover:hover {
+    border-left-color: rgba(247, 182, 87, 255);
+    border-right-color: rgba(247, 182, 87, 255);
+    border-top-color: rgba(247, 182, 87, 255);
+    border-bottom-color: rgba(247, 182, 87, 255);
+}

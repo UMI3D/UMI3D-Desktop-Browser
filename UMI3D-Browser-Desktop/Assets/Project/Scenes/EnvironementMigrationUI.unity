@@ -418,6 +418,11 @@ PrefabInstance:
       propertyPath: spaceBetweenElements
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5317450853681117898, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
+      propertyPath: flexGrow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
 --- !u!1001 &133532551
