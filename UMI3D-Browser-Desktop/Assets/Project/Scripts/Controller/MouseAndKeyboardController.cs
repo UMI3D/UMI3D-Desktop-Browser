@@ -77,6 +77,10 @@ namespace BrowserDesktop.Controller
             public Vector3 worlDirection;
             public Vector3 cursorOffset;
 
+            public Vector3 lastPoint, lastNormal, lastDirection;
+
+
+
             public HoverState HoverState;
 
             public int saveDelay;
@@ -95,6 +99,9 @@ namespace BrowserDesktop.Controller
                     CurentHovered = null;
                     CurentHoveredTransform = null;
                     LastHoveredId = null;
+                    lastPoint = point;
+                    lastNormal = normal;
+                    lastDirection = direction;
                 }
             }
 
@@ -365,20 +372,20 @@ namespace BrowserDesktop.Controller
                             {
                                 InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                             }
-                            mouseData.OldHovered.HoverExit(boneDto.boneType,mouseData.LastHoveredId);
+                            mouseData.OldHovered.HoverExit(boneDto.boneType,mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
                             CircleMenu.Instance.Collapse();
                             mouseData.OldHovered = null;
                         }
                         mouseData.HoverState = HoverState.Hovering;
                         if (mouseData.CurentHovered.dto.interactions.Count > 0 && IsCompatibleWith(mouseData.CurentHovered))
                         {
-                            InteractionMapper.SelectTool(mouseData.CurentHovered.dto.id, this, reason);
+                            InteractionMapper.SelectTool(mouseData.CurentHovered.dto.id, this, mouseData.CurrentHoveredId, reason);
                             CursorHandler.State = CursorHandler.CursorState.Hover;
                             mouseData.HoverState = HoverState.AutoProjected;
                             CircleMenu.Instance.MenuColapsed.AddListener(CircleMenuColapsed);
                             mouseData.OldHovered = mouseData.CurentHovered;
                         }
-                        mouseData.CurentHovered.HoverEnter(boneDto.boneType,mouseData.CurrentHoveredId);
+                        mouseData.CurentHovered.HoverEnter(boneDto.boneType,mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
                     }
                     mouseData.CurentHovered.Hovered(boneDto.boneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
                 }
@@ -389,7 +396,7 @@ namespace BrowserDesktop.Controller
                         CircleMenu.Instance.MenuColapsed.RemoveListener(CircleMenuColapsed);
                         InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                     }
-                    mouseData.OldHovered.HoverExit(boneDto.boneType,mouseData.LastHoveredId);
+                    mouseData.OldHovered.HoverExit(boneDto.boneType,mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
                     CircleMenu.Instance.Collapse();
                     CursorHandler.State = CursorHandler.CursorState.Default;
                     mouseData.OldHovered = null;
@@ -683,9 +690,9 @@ namespace BrowserDesktop.Controller
             //catch { }
         }
 
-        public override void Project(AbstractTool tool, InteractionMappingReason reason)
+        public override void Project(AbstractTool tool, InteractionMappingReason reason, string hoveredObjectId)
         {
-            base.Project(tool, reason);
+            base.Project(tool, reason, hoveredObjectId);
             if (reason is RequestedByEnvironment)
                 mouseData.ForcePorjection = true;
         }

@@ -33,13 +33,14 @@ public class KeyMenuInput : AbstractUMI3DInput
     public string bone = BoneType.RightHand;
 
     string toolId;
+    string hoveredObjectId;
 
     protected BoneDto boneDto;
     bool risingEdgeEventSent;
 
     HoldableButtonMenuItem menuItem;
 
-    public override void Associate(AbstractInteractionDto interaction, string toolId)
+    public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
     {
         if (associatedInteraction != null)
         {
@@ -48,6 +49,7 @@ public class KeyMenuInput : AbstractUMI3DInput
 
         if (IsCompatibleWith(interaction))
         {
+            this.hoveredObjectId = hoveredObjectId;
             this.toolId = toolId;
             associatedInteraction = interaction as EventDto;
             menuItem = new HoldableButtonMenuItem
@@ -67,7 +69,7 @@ public class KeyMenuInput : AbstractUMI3DInput
         }
     }
 
-    public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId)
+    public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
     {
         throw new System.Exception("This input is can not be associated with a manipulation");
     }
@@ -112,7 +114,8 @@ public class KeyMenuInput : AbstractUMI3DInput
                     active = true,
                     boneType = boneDto.boneType,
                     id = associatedInteraction.id,
-                    toolId = this.toolId
+                    toolId = this.toolId,
+                    hoveredObjectId = hoveredObjectId
                 };
                 UMI3DClientServer.Send(eventdto, true);
                 risingEdgeEventSent = true;
@@ -123,7 +126,8 @@ public class KeyMenuInput : AbstractUMI3DInput
                 {
                     boneType = boneDto.boneType,
                     id = associatedInteraction.id,
-                    toolId = this.toolId
+                    toolId = this.toolId,
+                    hoveredObjectId = hoveredObjectId
                 };
                 UMI3DClientServer.Send(eventdto, true);
             }
@@ -140,7 +144,8 @@ public class KeyMenuInput : AbstractUMI3DInput
                         active = false,
                         boneType = boneDto.boneType,
                         id = associatedInteraction.id,
-                        toolId = this.toolId
+                        toolId = this.toolId,
+                        hoveredObjectId = hoveredObjectId
                     };
                     UMI3DClientServer.Send(eventdto, true);
                     risingEdgeEventSent = false;
