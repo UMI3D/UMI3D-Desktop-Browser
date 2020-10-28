@@ -212,7 +212,7 @@ public class LauncherManager : MonoBehaviour
             item.Q<Button>("delete-item").clickable.clicked += () =>
             {
                 DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-                dialogue.Setup("env.environmentName", "Delete this environment from favorites ?", "Yes", "No,", (b) =>
+                dialogue.Setup("env.environmentName", "Delete this environment from favorites ?", "Yes", "No", (b) =>
                 {
                     if (b)
                     {
