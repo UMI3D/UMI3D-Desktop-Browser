@@ -742,6 +742,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 498482121}
     m_Modifications:
+    - target: {fileID: 213421514673878977, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: left_shoulder
+      objectReference: {fileID: 0}
+    - target: {fileID: 352019804549705504, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: right_wrist
+      objectReference: {fileID: 0}
+    - target: {fileID: 356209261750646762, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: right_upper_arm
+      objectReference: {fileID: 0}
+    - target: {fileID: 683711034731164142, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: left_hand
+      objectReference: {fileID: 0}
+    - target: {fileID: 832942280269860656, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: left_upper_arm
+      objectReference: {fileID: 0}
+    - target: {fileID: 1155369700092383931, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: right_elbow
+      objectReference: {fileID: 0}
+    - target: {fileID: 1437818493466777447, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: root
+      objectReference: {fileID: 0}
     - target: {fileID: 1831923979722619466, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
         type: 3}
       propertyPath: Anchor
@@ -762,6 +797,21 @@ PrefabInstance:
       propertyPath: anchor
       value: 
       objectReference: {fileID: 447649451}
+    - target: {fileID: 3907901420569755167, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: right_hand
+      objectReference: {fileID: 0}
+    - target: {fileID: 4985635894584330515, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: torso
+      objectReference: {fileID: 0}
+    - target: {fileID: 5213636122908950670, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: right_forearm
+      objectReference: {fileID: 0}
     - target: {fileID: 5657911632462509561, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
@@ -826,6 +876,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Avatar
+      objectReference: {fileID: 0}
+    - target: {fileID: 5941439760635351536, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: left_wrist
+      objectReference: {fileID: 0}
+    - target: {fileID: 5962760486781766511, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: neck
+      objectReference: {fileID: 0}
+    - target: {fileID: 6840320267283632221, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: left_forearm
+      objectReference: {fileID: 0}
+    - target: {fileID: 7329730297051089320, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: left_elbow
+      objectReference: {fileID: 0}
+    - target: {fileID: 7897590526383452145, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: right_shoulder
+      objectReference: {fileID: 0}
+    - target: {fileID: 8924434447610709175, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: boneType
+      value: pelvis
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5657911632462509564, guid: 6f84028fdc2c0b849ae8ad244ba03b41, type: 3}
@@ -5483,8 +5563,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f56fda3ef2d041409bcc1b838fb3470, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: 0
-  samplerate: 44100
 --- !u!82 &2079147378
 AudioSource:
   m_ObjectHideFlags: 0
