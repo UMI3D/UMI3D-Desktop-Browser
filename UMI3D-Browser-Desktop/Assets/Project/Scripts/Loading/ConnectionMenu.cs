@@ -39,8 +39,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 {
     #region Fields
 
-    private LauncherManager.Data connectionData;
-    private LauncherManager.Data favoriteEnvironments;
+    private UserPreferencesManager.Data connectionData;
+    private UserPreferencesManager.Data favoriteEnvironments;
 
     public ClientPCIdentifier identifier;
 
@@ -194,7 +194,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// Uses the connection data to connect to te server.
     /// </summary>
     /// <param name="connectionData"></param>
-    public void Connect(LauncherManager.Data connectionData)
+    public void Connect(UserPreferencesManager.Data connectionData)
     {
         this.connectionData = connectionData;
 

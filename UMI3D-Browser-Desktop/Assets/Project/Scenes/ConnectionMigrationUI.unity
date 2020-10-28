@@ -2985,6 +2985,8 @@ MonoBehaviour:
     type: 3}
   dialogueBoxTreeAsset: {fileID: 9197481963319205126, guid: 952193403cd37744f9ac513022d96731,
     type: 3}
+  favoriteEnvItemTreeAsset: {fileID: 9197481963319205126, guid: 49ad8f079cfde1e448c820eeacea3337,
+    type: 3}
   currentScene: ConnectionMigrationUI
   sceneToLoad: EnvironementMigrationUI
 --- !u!1 &1104465894
@@ -3617,7 +3619,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.003921569, g: 0.18823531, b: 0.25490198, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -6137,7 +6139,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontColor: {r: 0.003921569, g: 0.18823531, b: 0.25490198, a: 1}
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="favorite-env-item" class="dark-grey1-bck orange-hover" style="width: 100px; height: 100px; align-items: center; justify-content: center; margin-left: 5px; margin-right: 5px;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:Button name="delete-item" style="background-image: url(&apos;/Assets/Project/UI/Icons/Windows/close.png&apos;); background-color: rgba(228, 228, 228, 0); width: 20px; height: 20px; position: absolute; top: 5px; right: 5px;" />
+        <ui:Label text="Label" name="favorite-env-item-name" class="white-txt" />
+    </ui:VisualElement>
+</ui:UXML>

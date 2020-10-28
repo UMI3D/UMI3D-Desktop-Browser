@@ -28,7 +28,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using umi3d.cdk;
 using BrowserDesktop.Controller;
-using System.Resources;
 
 public class LauncherManager : MonoBehaviour
 {
@@ -56,22 +55,18 @@ public class LauncherManager : MonoBehaviour
     ScrollView librariesList;
     Button backMenuBnt;
 
+    //Favorite env
+    ScrollView favoriteEnvScrollview;
+    public VisualTreeAsset favoriteEnvItemTreeAsset;
+
     #endregion
 
     #region Data
-    public const string dataFile = "userData";
-    public const string favoriteDataFile = "favoriteUserData";
 
-    [Serializable]
-    public class Data
-    {
-        public string environmentName;
-        public string ip;
-    }
 
-    private Data currentConnectionData;
+    private UserPreferencesManager.Data currentConnectionData;
 
-    private List<Data> favoriteConnectionData = new List<Data>();
+    private List<UserPreferencesManager.Data> favoriteConnectionData = new List<UserPreferencesManager.Data>();
 
     [SerializeField]
     public string currentScene;
@@ -118,6 +113,8 @@ public class LauncherManager : MonoBehaviour
         urlEnterBtn.clickable.clicked += SetDomain;
 
         urlScreen.Q<Button>("manage-library-btn").clickable.clicked += DisplayLibraries;
+
+        favoriteEnvScrollview = urlScreen.Q<ScrollView>();
     }
 
     private void BindLibrariesScreen()
@@ -178,10 +175,8 @@ public class LauncherManager : MonoBehaviour
     /// </summary>
     private void Connect()
     {
-        StoreUserData(currentConnectionData);
-
-        var isAlreadyAFavoriteData = (favoriteConnectionData.Find(d => d.ip == currentConnectionData.ip) != null);
-
+        UserPreferencesManager.StoreUserData(currentConnectionData);
+      
         StartCoroutine(WaitReady());
     }
 
@@ -198,9 +193,40 @@ public class LauncherManager : MonoBehaviour
 
     private void ResetLauncher()
     {
-        currentConnectionData = GetPreviousConnectionData();
-        favoriteConnectionData = GetFavoriteConnectionData();
+        currentConnectionData = UserPreferencesManager.GetPreviousConnectionData();
+        favoriteConnectionData = UserPreferencesManager.GetFavoriteConnectionData();
 
+        favoriteEnvScrollview.Clear();
+        foreach(var env in favoriteConnectionData)
+        {
+            var item = favoriteEnvItemTreeAsset.CloneTree();
+            item.Q<Label>().text = env.environmentName;
+            item.RegisterCallback<MouseDownEvent>(e =>
+            {
+                if (e.clickCount == 2)
+                {
+                    this.currentConnectionData.ip = env.ip;
+                    Connect();
+                }
+            });
+            item.Q<Button>("delete-item").clickable.clicked += () =>
+            {
+                DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
+                dialogue.Setup("env.environmentName", "Delete this environment from favorites ?", "Yes", "No,", (b) =>
+                {
+                    if (b)
+                    {
+                        favoriteConnectionData.Remove(favoriteConnectionData.Find(d => d.ip == env.ip));
+                        UserPreferencesManager.StoreFavoriteConnectionData(favoriteConnectionData);
+                        item.RemoveFromHierarchy();
+                    }
+                },
+                true);
+                root.Add(dialogue);
+            };
+
+            favoriteEnvScrollview.Add(item);
+        }
 
         librariesScreen.style.display = DisplayStyle.None;
         urlScreen.style.display = DisplayStyle.Flex;
@@ -209,62 +235,6 @@ public class LauncherManager : MonoBehaviour
         previousStep = null;
         nextStep = SetDomain;
         urlInput.value = currentConnectionData.ip;
-    }
-
-    /// <summary>
-    /// Write a previous userInfo data.
-    /// </summary>
-    /// <param name="data">DataFile to write.</param>
-    /// <param name="directory">Directory to write the file into.</param>
-    void StoreUserData(Data data)
-    {
-        string path = umi3d.common.Path.Combine(Application.persistentDataPath, dataFile);
-        FileStream file;
-        if (File.Exists(path)) file = File.OpenWrite(path);
-        else file = File.Create(path);
-
-        BinaryFormatter bf = new BinaryFormatter();
-        bf.Serialize(file, data);
-        file.Close();
-    }
-
-    /// <summary>
-    /// Read a userInfo data in a directory.
-    /// </summary>
-    /// <returns>A DataFile if the directory containe one, null otherwhise.</returns>
-    Data GetPreviousConnectionData()
-    {
-        string path = umi3d.common.Path.Combine(Application.persistentDataPath, dataFile);
-        if (File.Exists(path))
-        {
-            FileStream file;
-            file = File.OpenRead(path);
-            BinaryFormatter bf = new BinaryFormatter();
-            Data data = (Data)bf.Deserialize(file);
-            file.Close();
-            return data;
-        }
-        return new Data();
-    }
-
-
-    /// <summary>
-    /// get the connection data about the favorite environments.
-    /// </summary>
-    /// <returns></returns>
-    private List<Data> GetFavoriteConnectionData()
-    {
-        string path = umi3d.common.Path.Combine(Application.persistentDataPath, favoriteDataFile);
-        if (File.Exists(path))
-        {
-            FileStream file;
-            file = File.OpenRead(path);
-            BinaryFormatter bf = new BinaryFormatter();
-            List<Data> data = (List<Data>)bf.Deserialize(file);
-            file.Close();
-            return data;
-        }
-        return new List<Data>();
     }
 
     private void DisplayLibraries()

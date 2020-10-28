@@ -18,8 +18,8 @@
                 <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/UI/UI_connection/ico_top.png&apos;); height: 30px; -unity-background-scale-mode: scale-to-fit; width: 30px; margin-left: 5px;" />
             </ui:VisualElement>
             <ui:VisualElement name="top-center-menu" style="flex-grow: 1; flex-direction: row; justify-content: center; height: 35px; display: flex; align-items: center;">
-                <ui:Label name="environment-name" class="white-txt medium-size-txt" style="-unity-text-align: middle-left;" />
-                <ui:Button text="Button" name="is-favorite-btn" class="is-favorite" style="width: 30px; height: 30px;" />
+                <ui:Label name="environment-name" text="Test" class="white-txt medium-size-txt" style="-unity-text-align: middle-left;" />
+                <ui:Button name="is-favorite-btn" class="not-favorite" style="width: 60px; height: 60px; background-color: rgba(228, 228, 228, 0);" />
             </ui:VisualElement>
             <ui:VisualElement name="top-left-menu" style="flex-direction: row-reverse; width: 50%; flex-wrap: nowrap; height: 100%;">
                 <ui:Button name="close-window-btn" class="close-btn" style="color: rgb(255, 255, 255); font-size: 18px; width: 32px;" />

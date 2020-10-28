@@ -38,21 +38,24 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
     Label environmentName;
     Button isFavoriteBtn;
 
+    VisualElement topCenterMenu;
+
     bool isEnvironmentFavorite;
 
     DateTime startOfSession = new DateTime();
 
-    LauncherManager.Data currentData;
-    List<LauncherManager.Data> favorites;
+    UserPreferencesManager.Data currentData;
+    List<UserPreferencesManager.Data> favorites;
 
+    /// <summary>
+    /// Binds the UI
+    /// </summary>
     void Start()
     {
         var root = panelRenderer.visualTree;
 
-        UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
-        {
-            startOfSession = DateTime.Now;
-        });
+        topCenterMenu = root.Q<VisualElement>("top-center-menu");
+        topCenterMenu.style.display = DisplayStyle.None;
 
         sessionInfo = root.Q<VisualElement>("session-info");
         sessionTime = sessionInfo.Q<Label>("session-time");
@@ -91,28 +94,20 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
             }
             else
             {
-                favorites.Remove(currentData);
+                favorites.Remove(favorites.Find(d => d.ip == currentData.ip));
             }
+
             isFavoriteBtn.ToggleInClassList("not-favorite");
             isFavoriteBtn.ToggleInClassList("is-favorite");
 
-            StoreFavoriteConnectionData();
+            UserPreferencesManager.StoreFavoriteConnectionData(favorites);
         };
-    }
 
-    /// <summary>
-    /// Stores the connection data about the favorite environments.
-    /// </summary>
-    void StoreFavoriteConnectionData()
-    {
-        string path = umi3d.common.Path.Combine(Application.persistentDataPath, LauncherManager.favoriteDataFile);
-        FileStream file;
-        if (File.Exists(path)) file = File.OpenWrite(path);
-        else file = File.Create(path);
-
-        BinaryFormatter bf = new BinaryFormatter();
-        bf.Serialize(file, favorites);
-        file.Close();
+        UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
+        {
+            startOfSession = DateTime.Now;
+            topCenterMenu.style.display = DisplayStyle.Flex;
+        });
     }
 
     private void Update()
@@ -132,11 +127,19 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
         }
     }
 
+    /// <summary>
+    /// Displays or hide the session info bar.
+    /// </summary>
+    /// <param name="val"></param>
     private void _Display(bool val)
     {
         sessionInfo.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
+    /// <summary>
+    /// Event called when the status of the microphone changes.
+    /// </summary>
+    /// <param name="val"></param>
     public void OnMicrophoneStatusChanged(bool val)
     {
         if (val)
@@ -153,16 +156,23 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
            
     }
 
-    public void SetEnvironmentName(MediaDto media, LauncherManager.Data data)
+    /// <summary>
+    /// Initiates the custom title bar with the name of the environment.
+    /// </summary>
+    /// <param name="media"></param>
+    /// <param name="data"></param>
+    public void SetEnvironmentName(MediaDto media, UserPreferencesManager.Data data)
     {
         currentData = data;
 
         environmentName = panelRenderer.visualTree.Q<Label>("environment-name");
         environmentName.text = media.name;
 
-        favorites = GetFavoriteConnectionData();
+        favorites = UserPreferencesManager.GetFavoriteConnectionData();
 
-        isEnvironmentFavorite = favorites.Find(d => d.ip == media.httpUrl) != null;
+        isEnvironmentFavorite = favorites.Find(d => "http://" + d.ip == media.httpUrl) != null;
+
+        isFavoriteBtn.ClearClassList();
 
         if (isEnvironmentFavorite)
         {
@@ -173,18 +183,5 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
             isFavoriteBtn.AddToClassList("not-favorite");
         }
     }
-     private List<LauncherManager.Data> GetFavoriteConnectionData()
-    {
-        string path = umi3d.common.Path.Combine(Application.persistentDataPath, LauncherManager.favoriteDataFile);
-        if (File.Exists(path))
-        {
-            FileStream file;
-            file = File.OpenRead(path);
-            BinaryFormatter bf = new BinaryFormatter();
-            List<LauncherManager.Data> data = (List<LauncherManager.Data>)bf.Deserialize(file);
-            file.Close();
-            return data;
-        }
-        return new List<LauncherManager.Data>();
-    }
+     
 }
