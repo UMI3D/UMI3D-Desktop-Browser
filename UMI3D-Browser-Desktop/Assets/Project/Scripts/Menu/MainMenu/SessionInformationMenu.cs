@@ -15,6 +15,9 @@ limitations under the License.
 */
 
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using umi3d.cdk;
 using umi3d.common;
 using Unity.UIElements.Runtime;
@@ -32,8 +35,15 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
     Button activeAvatar;
     Button muteBtn;
     Button hangUpBtn;
+    Label environmentName;
+    Button isFavoriteBtn;
+
+    bool isEnvironmentFavorite;
 
     DateTime startOfSession = new DateTime();
+
+    LauncherManager.Data currentData;
+    List<LauncherManager.Data> favorites;
 
     void Start()
     {
@@ -69,6 +79,40 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
         {
             throw new NotImplementedException("TODO : hang up button");
         };
+
+        isFavoriteBtn = root.Q<Button>("is-favorite-btn");
+        isFavoriteBtn.clickable.clicked += () =>
+        {
+            isEnvironmentFavorite = !isEnvironmentFavorite;
+
+            if (isEnvironmentFavorite)
+            {
+                favorites.Add(currentData);
+            }
+            else
+            {
+                favorites.Remove(currentData);
+            }
+            isFavoriteBtn.ToggleInClassList("not-favorite");
+            isFavoriteBtn.ToggleInClassList("is-favorite");
+
+            StoreFavoriteConnectionData();
+        };
+    }
+
+    /// <summary>
+    /// Stores the connection data about the favorite environments.
+    /// </summary>
+    void StoreFavoriteConnectionData()
+    {
+        string path = umi3d.common.Path.Combine(Application.persistentDataPath, LauncherManager.favoriteDataFile);
+        FileStream file;
+        if (File.Exists(path)) file = File.OpenWrite(path);
+        else file = File.Create(path);
+
+        BinaryFormatter bf = new BinaryFormatter();
+        bf.Serialize(file, favorites);
+        file.Close();
     }
 
     private void Update()
@@ -107,5 +151,40 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
             muteBtn.AddToClassList("session-info-btn-mute-off");
         }
            
+    }
+
+    public void SetEnvironmentName(MediaDto media, LauncherManager.Data data)
+    {
+        currentData = data;
+
+        environmentName = panelRenderer.visualTree.Q<Label>("environment-name");
+        environmentName.text = media.name;
+
+        favorites = GetFavoriteConnectionData();
+
+        isEnvironmentFavorite = favorites.Find(d => d.ip == media.httpUrl) != null;
+
+        if (isEnvironmentFavorite)
+        {
+            isFavoriteBtn.AddToClassList("is-favorite");
+        }
+        else
+        {
+            isFavoriteBtn.AddToClassList("not-favorite");
+        }
+    }
+     private List<LauncherManager.Data> GetFavoriteConnectionData()
+    {
+        string path = umi3d.common.Path.Combine(Application.persistentDataPath, LauncherManager.favoriteDataFile);
+        if (File.Exists(path))
+        {
+            FileStream file;
+            file = File.OpenRead(path);
+            BinaryFormatter bf = new BinaryFormatter();
+            List<LauncherManager.Data> data = (List<LauncherManager.Data>)bf.Deserialize(file);
+            file.Close();
+            return data;
+        }
+        return new List<LauncherManager.Data>();
     }
 }

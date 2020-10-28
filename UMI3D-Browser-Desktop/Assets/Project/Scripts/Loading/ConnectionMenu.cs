@@ -20,7 +20,9 @@ using BrowserDesktop.Menu;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.menu;
@@ -38,6 +40,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     #region Fields
 
     private LauncherManager.Data connectionData;
+    private LauncherManager.Data favoriteEnvironments;
 
     public ClientPCIdentifier identifier;
 
@@ -244,6 +247,11 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void GetMediaSucces(MediaDto media)
     {
+        this.connectionData.environmentName = media.name;
+        this.panelRenderer.visualTree.Q<Label>("environment-name").text = media.name;
+
+        SessionInformationMenu.Instance.SetEnvironmentName(media, connectionData);
+
         UMI3DCollaborationClientServer.Connect();
     }
 
@@ -255,6 +263,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
             else Leave();
             MouseAndKeyboardController.CanProcess = true;
         };
+
         OnConnectionLost(callback);
     }
 
@@ -295,6 +304,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     {
         passwordScreen.style.display = DisplayStyle.None;
         callback.Invoke(loginInput.value, passwordInput.value);
+        UMI3DCollaborationClientServer.Identity.login = loginInput.value;
         loadingScreen.style.display = DisplayStyle.Flex;
         nextStep = null;
     }

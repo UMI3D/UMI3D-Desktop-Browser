@@ -28,6 +28,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using umi3d.cdk;
 using BrowserDesktop.Controller;
+using System.Resources;
 
 public class LauncherManager : MonoBehaviour
 {
@@ -64,6 +65,7 @@ public class LauncherManager : MonoBehaviour
     [Serializable]
     public class Data
     {
+        public string environmentName;
         public string ip;
     }
 
@@ -176,9 +178,9 @@ public class LauncherManager : MonoBehaviour
     /// </summary>
     private void Connect()
     {
-        //UMI3DCollaborationClientServer.Identity.login = currentConnectionData.login;
-
         StoreUserData(currentConnectionData);
+
+        var isAlreadyAFavoriteData = (favoriteConnectionData.Find(d => d.ip == currentConnectionData.ip) != null);
 
         StartCoroutine(WaitReady());
     }
@@ -196,7 +198,9 @@ public class LauncherManager : MonoBehaviour
 
     private void ResetLauncher()
     {
-        currentConnectionData = GetUserData();
+        currentConnectionData = GetPreviousConnectionData();
+        favoriteConnectionData = GetFavoriteConnectionData();
+
 
         librariesScreen.style.display = DisplayStyle.None;
         urlScreen.style.display = DisplayStyle.Flex;
@@ -228,7 +232,7 @@ public class LauncherManager : MonoBehaviour
     /// Read a userInfo data in a directory.
     /// </summary>
     /// <returns>A DataFile if the directory containe one, null otherwhise.</returns>
-    Data GetUserData()
+    Data GetPreviousConnectionData()
     {
         string path = umi3d.common.Path.Combine(Application.persistentDataPath, dataFile);
         if (File.Exists(path))
@@ -243,20 +247,6 @@ public class LauncherManager : MonoBehaviour
         return new Data();
     }
 
-    /// <summary>
-    /// Stores the connection data about the favorite environments.
-    /// </summary>
-    void StoreFavoriteConnectionData()
-    {
-        string path = umi3d.common.Path.Combine(Application.persistentDataPath, favoriteDataFile);
-        FileStream file;
-        if (File.Exists(path)) file = File.OpenWrite(path);
-        else file = File.Create(path);
-
-        BinaryFormatter bf = new BinaryFormatter();
-        bf.Serialize(file, favoriteDataFile);
-        file.Close();
-    }
 
     /// <summary>
     /// get the connection data about the favorite environments.
