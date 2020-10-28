@@ -7,7 +7,9 @@
                 <ui:VisualElement name="logo" style="height: 184px; background-image: url(&apos;/Assets/Project/UI/UI_connection/logo_page.png&apos;); -unity-background-scale-mode: scale-to-fit; margin-bottom: 86px;" />
                 <ui:VisualElement name="inputs" style="flex-direction: row; justify-content: space-between; height: 42px;">
                     <ui:TextField picking-mode="Ignore" name="url-input" text="test.com" value="test.com" class="textfield-with-image-bck grey-text-field" style="-unity-text-align: upper-center; flex-grow: 1; height: 42px;" />
-                    <ui:Button text="&#10;" name="url-enter-btn" class="input-button input-arrow-button" style="width: 42px; color: rgb(255, 255, 255); -unity-font-style: bold; height: 42px;" />
+                    <ui:Button text="&#10;" name="url-enter-btn" class="input-button input-arrow-button" style="width: 42px; color: rgb(255, 255, 255); -unity-font-style: bold; height: 42px; align-items: center; justify-content: center;">
+                        <ui:VisualElement style="width: 27px; height: 27px;" />
+                    </ui:Button>
                 </ui:VisualElement>
                 <ui:VisualElement name="information" style="margin-top: 60px; flex-direction: row; display: none;">
                     <ui:VisualElement name="left" style="width: 50%; border-right-width: 2px; border-left-color: rgb(63, 63, 63); border-right-color: rgb(63, 63, 63); border-top-color: rgb(63, 63, 63); border-bottom-color: rgb(63, 63, 63);">

@@ -245,14 +245,17 @@ Toggle > Label {
 }
 
 .input-arrow-button {
+}
+
+.input-arrow-button > VisualElement {
     background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_ENABLE.png');
 }
 
-.input-arrow-button:hover {
+.input-arrow-button:hover > VisualElement {
     background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_HOVER.png');
 }
 
-.input-arrow-button:active {
+.input-arrow-button:active > VisualElement {
     background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_PRESS.png');
 }
 
@@ -605,6 +608,23 @@ Toggle > Label {
     color: rgb(179, 0, 0);
 }
 
-.warning-txt {
-    color: rgb(247, 182, 87);
+.border-hover {
+}
+
+.border-hover:hover {
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.bck-grey2-hover {
+}
+
+.bck-grey2-hover:hover {
+    background-color: rgb(63, 63, 63);
+}
+
+.unity-base-text-field__input {
+    --unity-cursor-color: rgb(255, 255, 255);
 }

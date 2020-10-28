@@ -322,7 +322,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         {
             CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
 
-            string title = (ids.Count == 1) ? "One assets library is required" : ids.Count + "assets libraries are required";
+            string title = (ids.Count == 1) ? "One assets library is required" : ids.Count + " assets libraries are required";
 
             DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
             dialogue.Setup(title, "Download libraries and connect to the server ?", "Accept", "Denied", (b) =>

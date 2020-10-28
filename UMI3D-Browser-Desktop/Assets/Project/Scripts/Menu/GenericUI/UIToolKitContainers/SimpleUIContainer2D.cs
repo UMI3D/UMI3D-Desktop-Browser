@@ -121,7 +121,7 @@ namespace BrowserDesktop.Menu
         public override AbstractDisplayer this[int i] { get => containedDisplayers[i]; set { RemoveAt(i); Insert(value, i); } }
 
         void HideBackButton()
-        {
+        {   
             if (backButton != null)
                 backButton.style.display = DisplayStyle.None;
 

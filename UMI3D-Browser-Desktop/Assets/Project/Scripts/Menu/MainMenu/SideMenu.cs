@@ -77,6 +77,12 @@ namespace BrowserDesktop.Menu
             rightSideMenuContainer = root.Q<VisualElement>("right-side-menu-container");
             interactionMenu = root.Q<VisualElement>("interaction-menu");
             toolBoxMenu = root.Q<VisualElement>("toolbox-menu");
+
+            var backCircularMenu = root.Q<Button>("interaction-menu-back");
+            backCircularMenu.clickable.clicked += () =>
+            {
+                CircularMenu.Instance.CloseMenu();
+            };
         }
 
         #endregion

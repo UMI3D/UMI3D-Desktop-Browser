@@ -58,8 +58,7 @@ namespace BrowserDesktop.Menu
             {
                 if (circularMenuContainer.isExpanded)
                 {
-                    menuDisplayManager.Back();
-                    SideMenu.Display(false, false);
+                    CloseMenu();
                 }
                 else if (!IsEmpty())
                 {
@@ -73,6 +72,12 @@ namespace BrowserDesktop.Menu
             }
 
             ManageOptionCursor();
+        }
+
+        public void CloseMenu()
+        {
+            menuDisplayManager.Back();
+            SideMenu.Display(false, false);
         }
 
         void ManageOptionCursor()
