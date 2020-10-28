@@ -78,10 +78,7 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
         };
 
         hangUpBtn = sessionInfo.Q<Button>("hang-up-btn");
-        hangUpBtn.clickable.clicked += () =>
-        {
-            throw new NotImplementedException("TODO : hang up button");
-        };
+        hangUpBtn.clickable.clicked += ConnectionMenu.Instance.Leave;
 
         isFavoriteBtn = root.Q<Button>("is-favorite-btn");
         isFavoriteBtn.clickable.clicked += () =>
