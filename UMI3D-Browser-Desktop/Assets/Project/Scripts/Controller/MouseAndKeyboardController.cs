@@ -118,6 +118,7 @@ namespace BrowserDesktop.Controller
 
         List<KeyMenuInput> KeyMenuInputs = new List<KeyMenuInput>();
         List<FormInput> FormInputs = new List<FormInput>();
+        List<LinkInput> LinkInputs = new List<LinkInput>();
 
         /// <summary>
         /// Instantiated float parameter inputs.
@@ -574,6 +575,18 @@ namespace BrowserDesktop.Controller
                 inputMenu = this.gameObject.AddComponent<FormInput>();
                 inputMenu.bone = BoneType.RightHand;
                 FormInputs.Add(inputMenu);
+            }
+            return inputMenu;
+        }
+
+        public override AbstractUMI3DInput FindInput(LinkDto link, bool unused = true)
+        {
+            LinkInput inputMenu = LinkInputs.Find(i => i.IsAvailable() || !unused);
+            if (inputMenu == null)
+            {
+                inputMenu = this.gameObject.AddComponent<LinkInput>();
+                inputMenu.bone = BoneType.RightHand;
+                LinkInputs.Add(inputMenu);
             }
             return inputMenu;
         }

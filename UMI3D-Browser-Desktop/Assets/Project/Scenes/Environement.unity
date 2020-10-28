@@ -3175,8 +3175,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1202536834}
-  - component: {fileID: 1202536840}
   - component: {fileID: 1202536839}
+  - component: {fileID: 1202536840}
   - component: {fileID: 1202536838}
   - component: {fileID: 1202536837}
   - component: {fileID: 1202536836}
@@ -3221,7 +3221,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 18
-  bone: 1
+  bone: head
 --- !u!114 &1202536836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3241,7 +3241,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 17
-  bone: 1
+  bone: head
 --- !u!114 &1202536837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3261,7 +3261,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 16
-  bone: 1
+  bone: head
 --- !u!114 &1202536838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3281,7 +3281,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 15
-  bone: 1
+  bone: head
 --- !u!114 &1202536839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3301,7 +3301,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 14
-  bone: 1
+  bone: head
 --- !u!114 &1202536840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3320,8 +3320,8 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  activationButton: 13
-  bone: 1
+  activationButton: 15
+  bone: head
 --- !u!1001 &1202966576
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4916,7 +4916,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1800526323}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86ec99ed6053d4843a463e247c4e784d, type: 3}
+  m_Script: {fileID: 11500000, guid: e1511698e9348c3469511f24ce7aaac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onProgressChange:
@@ -4929,6 +4929,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   parameters: {fileID: 11400000, guid: afb9954a0c0f6a542b39a05baef01a97, type: 2}
+  UserList: []
 --- !u!4 &1800526325
 Transform:
   m_ObjectHideFlags: 0
@@ -5818,8 +5819,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f56fda3ef2d041409bcc1b838fb3470, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: 0
-  samplerate: 44100
 --- !u!82 &2079147378
 AudioSource:
   m_ObjectHideFlags: 0
