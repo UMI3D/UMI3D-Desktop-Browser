@@ -28,8 +28,10 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using umi3d.cdk;
 using BrowserDesktop.Controller;
+using System.Security.Cryptography;
+using umi3d.common;
 
-public class LauncherManager : MonoBehaviour
+public class LauncherManager : Singleton<LauncherManager>
 {
     #region Fields
 
@@ -56,8 +58,8 @@ public class LauncherManager : MonoBehaviour
     Button backMenuBnt;
 
     //Favorite env
-    ScrollView favoriteEnvScrollview;
     public VisualTreeAsset favoriteEnvItemTreeAsset;
+    SliderElement favoriteEnvironmentSlider;
 
     #endregion
 
@@ -114,7 +116,8 @@ public class LauncherManager : MonoBehaviour
 
         urlScreen.Q<Button>("manage-library-btn").clickable.clicked += DisplayLibraries;
 
-        favoriteEnvScrollview = urlScreen.Q<ScrollView>();
+        favoriteEnvironmentSlider = urlScreen.Q<SliderElement>();
+        favoriteEnvironmentSlider.SetUp();
     }
 
     private void BindLibrariesScreen()
@@ -196,8 +199,20 @@ public class LauncherManager : MonoBehaviour
         currentConnectionData = UserPreferencesManager.GetPreviousConnectionData();
         favoriteConnectionData = UserPreferencesManager.GetFavoriteConnectionData();
 
-        favoriteEnvScrollview.Clear();
-        foreach(var env in favoriteConnectionData)
+        DisplayFavoriteEnvironments();
+
+        librariesScreen.style.display = DisplayStyle.None;
+        urlScreen.style.display = DisplayStyle.Flex;
+        backMenuBnt.style.display = DisplayStyle.None;
+
+        previousStep = null;
+        nextStep = SetDomain;
+        urlInput.value = currentConnectionData.ip;
+    }
+
+    private void DisplayFavoriteEnvironments()
+    {
+        foreach (var env in favoriteConnectionData)
         {
             var item = favoriteEnvItemTreeAsset.CloneTree();
             item.Q<Label>().text = env.environmentName;
@@ -218,23 +233,14 @@ public class LauncherManager : MonoBehaviour
                     {
                         favoriteConnectionData.Remove(favoriteConnectionData.Find(d => d.ip == env.ip));
                         UserPreferencesManager.StoreFavoriteConnectionData(favoriteConnectionData);
-                        item.RemoveFromHierarchy();
+                        favoriteEnvironmentSlider.RemoveElement(item);
                     }
                 },
                 true);
                 root.Add(dialogue);
             };
-
-            favoriteEnvScrollview.Add(item);
+            favoriteEnvironmentSlider.AddElement(item);
         }
-
-        librariesScreen.style.display = DisplayStyle.None;
-        urlScreen.style.display = DisplayStyle.Flex;
-        backMenuBnt.style.display = DisplayStyle.None;
-
-        previousStep = null;
-        nextStep = SetDomain;
-        urlInput.value = currentConnectionData.ip;
     }
 
     private void DisplayLibraries()
