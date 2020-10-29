@@ -31,7 +31,7 @@ using BrowserDesktop.Controller;
 using System.Security.Cryptography;
 using umi3d.common;
 
-public class LauncherManager : Singleton<LauncherManager>
+public class LauncherManager : MonoBehaviour
 {
     #region Fields
 
@@ -116,8 +116,8 @@ public class LauncherManager : Singleton<LauncherManager>
 
         urlScreen.Q<Button>("manage-library-btn").clickable.clicked += DisplayLibraries;
 
-        favoriteEnvironmentSlider = urlScreen.Q<SliderElement>();
-        favoriteEnvironmentSlider.SetUp();
+        favoriteEnvironmentSlider = new SliderElement();
+        favoriteEnvironmentSlider.SetUp(urlScreen.Q<VisualElement>("slider"));
     }
 
     private void BindLibrariesScreen()
@@ -212,6 +212,7 @@ public class LauncherManager : Singleton<LauncherManager>
 
     private void DisplayFavoriteEnvironments()
     {
+        favoriteEnvironmentSlider.ClearItems();
         foreach (var env in favoriteConnectionData)
         {
             var item = favoriteEnvItemTreeAsset.CloneTree();

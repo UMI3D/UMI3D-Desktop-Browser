@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <SliderElement style="height: 100%;">
+  <ui:VisualElement name="slider" style="height: 100%;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:VisualElement name="slider-container" style="flex-direction: row; overflow: hidden; height: 100%;">
             <ui:VisualElement style="background-color: rgb(255, 211, 0); height: 100%; min-width: 300px; width: 400px;" />
@@ -9,5 +9,5 @@
             <ui:Button class="slider-circle-active" style="border-left-color: rgb(80, 80, 80); border-right-color: rgb(80, 80, 80); border-top-color: rgb(80, 80, 80); border-bottom-color: rgb(80, 80, 80);" />
             <ui:Button class="slider-circle-desactivate" style="border-left-color: rgb(80, 80, 80); border-right-color: rgb(80, 80, 80); border-top-color: rgb(80, 80, 80); border-bottom-color: rgb(80, 80, 80);" />
         </ui:VisualElement>
-    </SliderElement>
+    </ui:VisualElement>
 </ui:UXML>

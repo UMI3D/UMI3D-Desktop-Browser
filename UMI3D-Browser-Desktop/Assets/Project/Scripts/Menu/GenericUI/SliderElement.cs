@@ -17,14 +17,11 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using umi3d.cdk;
 using UnityEngine.UIElements;
 
-public class SliderElement : VisualElement
+public class SliderElement
 {
-    public new class UxmlFactory : UxmlFactory<SliderElement, UxmlTraits> { }
-    public new class UxmlTraits : VisualElement.UxmlTraits { }
-
-
     int itemsPerPage = 3;
 
     List<VisualElement> items;
@@ -36,12 +33,12 @@ public class SliderElement : VisualElement
 
     int currentPageDisplayed = 0;
 
-    public void SetUp()
+    public void SetUp(VisualElement root)
     {
         items = new List<VisualElement>();
 
-        this.container = this.Q<VisualElement>("slider-container");
-        this.circlesContainer = this.Q<VisualElement>("slider-circles");
+        this.container = root.Q<VisualElement>("slider-container");
+        this.circlesContainer = root.Q<VisualElement>("slider-circles");
 
         container.Clear();
         circlesContainer.Clear();
@@ -50,7 +47,7 @@ public class SliderElement : VisualElement
     public void AddElement(VisualElement item)
     {
         items.Add(item);
-        LauncherManager.Instance.StartCoroutine(DisplayItems());
+        UMI3DResourcesManager.Instance.StartCoroutine(DisplayItems());
     }
 
     public void RemoveElement(VisualElement item)
@@ -59,7 +56,12 @@ public class SliderElement : VisualElement
         {
             items.Remove(item);
         }
-        LauncherManager.Instance.StartCoroutine(DisplayItems());
+        UMI3DResourcesManager.Instance.StartCoroutine(DisplayItems());
+    }
+
+    public void ClearItems()
+    {
+        items.Clear();
     }
 
     public IEnumerator DisplayItems()
