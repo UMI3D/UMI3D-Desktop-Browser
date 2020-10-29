@@ -26,7 +26,7 @@ namespace BrowserDesktop.Interaction
     {
         bool active = false;
         ButtonMenuItem menuItem;
-
+        string hoveredObjectId;
         #region Instances List
 
         static List<ManipulationGroup> instances = new List<ManipulationGroup>();
@@ -226,7 +226,7 @@ namespace BrowserDesktop.Interaction
             return associatedInteraction;
         }
 
-        public override void Associate(AbstractInteractionDto interaction, string toolId)
+        public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
         {
             if (associatedInteraction != null)
             {
@@ -234,6 +234,7 @@ namespace BrowserDesktop.Interaction
             }
             if (IsCompatibleWith(interaction))
             {
+                this.hoveredObjectId = hoveredObjectId;
                 foreach (DofGroupOptionDto group in (interaction as ManipulationDto).dofSeparationOptions)
                 {
                     bool ok = true;
@@ -248,7 +249,7 @@ namespace BrowserDesktop.Interaction
                     if (!ok) continue;
                     foreach (DofGroupDto sep in group.separations)
                     {
-                        Associate(interaction as ManipulationDto, sep.dofs, toolId);
+                        Associate(interaction as ManipulationDto, sep.dofs, toolId, hoveredObjectId);
                     }
                     return;
                 }
@@ -259,14 +260,15 @@ namespace BrowserDesktop.Interaction
             }
         }
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
         {
             if ((associatedInteraction == null || associatedInteraction == manipulation) && dofGroups.Contains(dofs))
             {
                 associatedInteraction = manipulation;
+                this.hoveredObjectId = hoveredObjectId;
                 Add();
                 ManipulationInput input = ManipulationInputGenerator.Instanciate(controller, Inputs.Find((a) => (a.IsAvailable() || a.Locked)), dofs, ref manipulationInputs);
-                input.Associate(manipulation, dofs, toolId);
+                input.Associate(manipulation, dofs, toolId, hoveredObjectId);
                 Add(input);
             }
             else

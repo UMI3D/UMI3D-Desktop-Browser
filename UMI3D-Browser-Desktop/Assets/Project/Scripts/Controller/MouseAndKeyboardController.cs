@@ -77,6 +77,10 @@ namespace BrowserDesktop.Controller
             public Vector3 worlDirection;
             public Vector3 cursorOffset;
 
+            public Vector3 lastPoint, lastNormal, lastDirection;
+
+
+
             public HoverState HoverState;
 
             public int saveDelay;
@@ -95,6 +99,9 @@ namespace BrowserDesktop.Controller
                     CurentHovered = null;
                     CurentHoveredTransform = null;
                     LastHoveredId = null;
+                    lastPoint = point;
+                    lastNormal = normal;
+                    lastDirection = direction;
                 }
             }
 
@@ -183,7 +190,6 @@ namespace BrowserDesktop.Controller
             {
                 if (!CircularMenu.Instance.menuDisplayManager.menu.Contains(mouseData.ForceProjectionMenuItem))
                 {
-                    Debug.Log("POmme");
                     CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
                 }
                 else if (CircularMenu.Instance.menuDisplayManager.menu.Count == 1)
@@ -281,10 +287,10 @@ namespace BrowserDesktop.Controller
             }
         }
 
-        public void CircleMenuColapsed()
+        public void CircularMenuColapsed()
         {
             if (mouseData.CurentHovered == null) return;
-            // CircularMenu.Instance.MenuColapsed.RemoveListener(CircleMenuColapsed);
+            // CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
             CursorHandler.State = CursorHandler.CursorState.Hover;
             mouseData.saveDelay = 3;
         }
@@ -331,7 +337,6 @@ namespace BrowserDesktop.Controller
             }
             else
             {
-                //TODO
                 //CircularMenu.Instance.Follow(mouseData.centeredWorldPoint);
             }
         }
@@ -367,20 +372,20 @@ namespace BrowserDesktop.Controller
                             {
                                 InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                             }
-                            mouseData.OldHovered.HoverExit(boneDto.boneType,mouseData.LastHoveredId);
+                            mouseData.OldHovered.HoverExit(boneDto.boneType,mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
                             CircularMenu.Instance.Collapse();
                             mouseData.OldHovered = null;
                         }
                         mouseData.HoverState = HoverState.Hovering;
                         if (mouseData.CurentHovered.dto.interactions.Count > 0 && IsCompatibleWith(mouseData.CurentHovered))
                         {
-                            InteractionMapper.SelectTool(mouseData.CurentHovered.dto.id, this, reason);
+                            InteractionMapper.SelectTool(mouseData.CurentHovered.dto.id, this, mouseData.CurrentHoveredId, reason);
                             CursorHandler.State = CursorHandler.CursorState.Hover;
                             mouseData.HoverState = HoverState.AutoProjected;
-                            CircularMenu.Instance.MenuColapsed.AddListener(CircleMenuColapsed);
+                            CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
                             mouseData.OldHovered = mouseData.CurentHovered;
                         }
-                        mouseData.CurentHovered.HoverEnter(boneDto.boneType,mouseData.CurrentHoveredId);
+                        mouseData.CurentHovered.HoverEnter(boneDto.boneType,mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
                     }
                     mouseData.CurentHovered.Hovered(boneDto.boneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
                 }
@@ -388,10 +393,10 @@ namespace BrowserDesktop.Controller
                 {
                     if (mouseData.HoverState == HoverState.AutoProjected)
                     {
-                        CircularMenu.Instance.MenuColapsed.RemoveListener(CircleMenuColapsed);
+                        CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
                         InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                     }
-                    mouseData.OldHovered.HoverExit(boneDto.boneType,mouseData.LastHoveredId);
+                    mouseData.OldHovered.HoverExit(boneDto.boneType,mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
                     CircularMenu.Instance.Collapse();
                     CursorHandler.State = CursorHandler.CursorState.Default;
                     mouseData.OldHovered = null;
@@ -685,9 +690,9 @@ namespace BrowserDesktop.Controller
             //catch { }
         }
 
-        public override void Project(AbstractTool tool, InteractionMappingReason reason)
+        public override void Project(AbstractTool tool, InteractionMappingReason reason, string hoveredObjectId)
         {
-            base.Project(tool, reason);
+            base.Project(tool, reason, hoveredObjectId);
             if (reason is RequestedByEnvironment)
                 mouseData.ForcePorjection = true;
         }

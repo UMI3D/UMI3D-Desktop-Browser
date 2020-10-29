@@ -180,7 +180,7 @@ namespace BrowserDesktop.Interaction
             }
         }
 
-        public override void Associate(AbstractInteractionDto interaction, string toolId)
+        public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
         {
             if (associatedInteraction != null)
             {
@@ -196,7 +196,7 @@ namespace BrowserDesktop.Interaction
                     {
                         if (sep.dofs == DofGroup)
                         {
-                            Associate(interaction as ManipulationDto, sep.dofs, toolId);
+                            Associate(interaction as ManipulationDto, sep.dofs, toolId, hoveredObjectId);
                             return;
                         }
                     }
@@ -215,7 +215,7 @@ namespace BrowserDesktop.Interaction
         }
 
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
         {
             if (associatedInteraction != null)
             {

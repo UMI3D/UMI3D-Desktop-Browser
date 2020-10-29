@@ -161,7 +161,7 @@ public class InteractionMapper : AbstractInteractionMapper
     /// Be careful, this method could be called before the tool is added for async loading reasons
     /// </summary>
     /// <param name="dto">The tool to select</param>
-    public override bool SelectTool(string toolId, InteractionMappingReason reason = null)
+    public override bool SelectTool(string toolId, string hoveredObjectId, InteractionMappingReason reason = null)
     {
         AbstractTool tool = GetTool(toolId);
         if (tool == null)
@@ -187,7 +187,7 @@ public class InteractionMapper : AbstractInteractionMapper
                 }
             }
 
-            return SelectTool(tool.id, controller, reason);
+            return SelectTool(tool.id, controller, hoveredObjectId, reason);
         }
         else
         {
@@ -201,7 +201,7 @@ public class InteractionMapper : AbstractInteractionMapper
     /// </summary>
     /// <param name="tool">The tool to select</param>
     /// <param name="controller">Controller to project the tool on</param>
-    public bool SelectTool(string toolId, AbstractController controller, InteractionMappingReason reason = null)
+    public bool SelectTool(string toolId, AbstractController controller, string hoveredObjectId, InteractionMappingReason reason = null)
     {
         AbstractTool tool = GetTool(toolId);
         if (controller.IsCompatibleWith(tool))
@@ -214,7 +214,7 @@ public class InteractionMapper : AbstractInteractionMapper
             toolIdToController.Add(tool.id, controller);
             projectedTools.Add(tool.id, reason);
 
-            controller.Project(tool,reason);
+            controller.Project(tool,reason,hoveredObjectId);
 
             return true;
         }
@@ -229,12 +229,12 @@ public class InteractionMapper : AbstractInteractionMapper
     /// </summary>
     /// <param name="selected">The tool to be selected</param>
     /// <param name="released">The tool to be released</param>
-    public override bool SwitchTools(string select, string release, InteractionMappingReason reason = null)
+    public override bool SwitchTools(string select, string release, string hoveredObjectId, InteractionMappingReason reason = null)
     {
         ReleaseTool(release);
-        if (!SelectTool(select, reason))
+        if (!SelectTool(select, hoveredObjectId, reason))
         {
-            if (SelectTool(release))
+            if (SelectTool(release, hoveredObjectId))
                 return false;
             else
                 throw new Exception("Internal error");
@@ -326,7 +326,7 @@ public class InteractionMapper : AbstractInteractionMapper
             }
             else
             {
-                SelectTool(tool.id, new RequestedFromMenu());
+                SelectTool(tool.id,null, new RequestedFromMenu());
             }
         });
     }

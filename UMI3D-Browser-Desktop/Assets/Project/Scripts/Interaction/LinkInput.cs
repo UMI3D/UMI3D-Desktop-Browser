@@ -38,8 +38,9 @@ public class LinkInput : AbstractUMI3DInput
     bool risingEdgeEventSent;
 
     HoldableButtonMenuItem menuItem;
+    string hoveredObjectId;
 
-    public override void Associate(AbstractInteractionDto interaction, string toolId)
+    public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
     {
         if (associatedInteraction != null)
         {
@@ -48,6 +49,7 @@ public class LinkInput : AbstractUMI3DInput
 
         if (IsCompatibleWith(interaction))
         {
+            this.hoveredObjectId = hoveredObjectId;
             this.toolId = toolId;
             associatedInteraction = interaction as LinkDto;
             menuItem = new HoldableButtonMenuItem
@@ -67,7 +69,7 @@ public class LinkInput : AbstractUMI3DInput
         }
     }
 
-    public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId)
+    public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
     {
         throw new System.Exception("This input is can not be associated with a manipulation");
     }
@@ -113,6 +115,7 @@ public class LinkInput : AbstractUMI3DInput
                 boneType = boneDto.boneType,
                 id = associatedInteraction.id,
                 toolId = this.toolId,
+                hoveredObjectId = hoveredObjectId,
             };
             UMI3DClientServer.Send(formAnswer, true);
         }
