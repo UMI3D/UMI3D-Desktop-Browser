@@ -83,7 +83,7 @@ namespace BrowserDesktop.Interaction
                 this.toolId = toolId;
                 if (associatedInteraction.icon2D != null)
                 {
-                    Debug.Log("need to work on icon");
+                    Debug.Log("work on icon");
                     //HDResourceCache.Download(associatedInteraction.Icon2D, Texture2D =>
                     //{
                     //    if (EventDisplayer != null && associatedInteraction != null && Texture2D != null)
@@ -107,6 +107,11 @@ namespace BrowserDesktop.Interaction
                     //        EventDisplayer.Set(associatedInteraction.Name, InputLayoutManager.GetInputCode(activationButton).ToString(), null);
                     //    }
                     //});
+                    if (eventDisplayer != null)
+                    {
+                        eventDisplayer.Display(true);
+                        eventDisplayer.SetUp(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), null);
+                    }
                 }
                 else
                 {
@@ -208,7 +213,7 @@ namespace BrowserDesktop.Interaction
         public override void Dissociate()
         {
             ResetButton();
-            eventDisplayer?.Remove();
+            eventDisplayer?.Display(false);
             associatedInteraction = null;
         }
 

@@ -27,20 +27,20 @@ namespace BrowserDesktop.Menu
 
         public void SetUp(string label, string inputName, Sprite icon = null)
         {
-            this.Q<Label>("label").text = label;
-            if(icon != null)
+            TextField input = this.Q<TextField>("input");
+
+            input.label = label;
+            if (icon != null)
                 this.Q<VisualElement>("icon").style.backgroundImage = new StyleBackground(icon.texture);
-            this.Q<Label>("input").text = inputName;
+            else
+                this.Q<VisualElement>("icon").style.display = DisplayStyle.None;
+
+            input.value = inputName;
         }
 
         public void Display(bool display)
         {
             style.display = display ? DisplayStyle.Flex : DisplayStyle.None;
-        }
-
-        public void Remove()
-        {
-            RemoveFromHierarchy();
         }
     }
 }

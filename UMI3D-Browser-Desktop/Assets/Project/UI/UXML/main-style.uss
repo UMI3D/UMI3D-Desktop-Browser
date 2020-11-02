@@ -664,3 +664,13 @@ Toggle > Label {
     border-top-width: 1px;
     border-bottom-width: 1px;
 }
+
+.inline-textfield {
+}
+
+.label-margin {
+}
+
+.label-margin > Label {
+    margin-right: 10px;
+}

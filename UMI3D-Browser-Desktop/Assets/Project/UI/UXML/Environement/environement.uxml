@@ -27,7 +27,7 @@
                 <ui:Button name="minimize-window-btn" class="top-left-menu-btn minimize-btn" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="connection-menu" style="display: flex; flex-grow: 1;">
+        <ui:VisualElement name="connection-menu" style="display: none; flex-grow: 1;">
             <ui:VisualElement style="flex-direction: row; flex-grow: 1; background-image: url(&apos;/Assets/Project/UI/UI_connection/background-middle.png&apos;);">
                 <ui:VisualElement name="right" style="flex-grow: 1;">
                     <ui:Button name="back-menu-btn" class="btn-orange btn-left-arrow" style="width: 80px; height: 80px; margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; display: flex;" />
@@ -47,7 +47,7 @@
                 <ui:Label text="version x.x.x" name="version" style="position: absolute; bottom: 9px; right: 13px; color: rgb(63, 63, 63); font-size: 18px; display: flex;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="game-menu-container" style="width: 100%; background-color: rgba(0, 0, 0, 0); display: none; height: 100%;">
+        <ui:VisualElement name="game-menu-container" style="width: 100%; background-color: rgba(0, 0, 0, 0); display: flex; height: 100%;">
             <ui:VisualElement name="session-info" class="dark-grey3-bck grey-border" style="height: 52px; border-bottom-width: 1px; justify-content: center; width: 100%; flex-direction: row; align-items: center;">
                 <ui:VisualElement name="session-info-container" class="dark-grey1-bck" style="height: 37px; flex-direction: row;">
                     <ui:Label text="Label" name="session-time" class="session-info-btn white-txt" style="-unity-text-align: middle-center;" />
@@ -59,12 +59,12 @@
             </ui:VisualElement>
             <ui:VisualElement name="viewport" style="flex-grow: 1; width: 100%; height: 100%; flex-direction: row;">
                 <ui:VisualElement name="notification-container" style="height: 100%; position: absolute; left: 10px; flex-direction: column-reverse; flex-grow: 1;" />
+                <ui:VisualElement name="event-container" style="position: absolute; flex-direction: column-reverse; right: 0; display: flex; top: 10px;" />
                 <ui:VisualElement name="left-side-menu" style="width: 256px; height: 100%;">
                     <ui:VisualElement name="left-side-menu-container" style="flex-grow: 1; display: none;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="game-view" style="flex-grow: 1;">
                     <ui:VisualElement name="manipulation-container" style="position: absolute; bottom: 50px; right: 0; height: 60px; left: 0; flex-direction: row; justify-content: center;" />
-                    <ui:VisualElement name="event-container" style="height: 60%; position: absolute; flex-direction: column-reverse; right: 10px; display: flex; margin-right: 10px; bottom: 10px;" />
                     <ui:VisualElement name="game-menu" style="flex-grow: 1; padding-left: 50px; padding-right: 50px; padding-top: 50px; padding-bottom: 50px; display: flex;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="right-side-menu" style="width: 256px; display: flex;">
