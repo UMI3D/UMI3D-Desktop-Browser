@@ -46,6 +46,13 @@ namespace BrowserDesktop.Menu
             }
         }
 
+        public override void Hide()
+        {
+            base.Hide();
+            firstOpening = true;
+            subContent.style.display = DisplayStyle.None;
+        }
+
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
             InitAndBindUI();

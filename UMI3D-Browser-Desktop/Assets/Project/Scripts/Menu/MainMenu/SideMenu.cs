@@ -22,6 +22,7 @@ using umi3d.cdk.menu.view;
 using umi3d.common;
 using Unity.UIElements.Runtime;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
@@ -88,6 +89,15 @@ namespace BrowserDesktop.Menu
             {
                 _Display(false);
             };
+
+            root.Q<VisualElement>("game-menu").RegisterCallback<MouseDownEvent>(e =>
+            {
+                if ((e.clickCount == 1) && (isDisplayed))
+                {
+                    _Display(false);
+                    CircularMenu.Instance.CloseMenu();
+                }
+            });
         }
 
         #endregion
@@ -116,9 +126,8 @@ namespace BrowserDesktop.Menu
                 rightSideMenuContainer.experimental.animation.Start(rightSideMenuContainer.resolvedStyle.width,0, 100, (elt, val) =>
                 {
                     elt.style.left = val;
-                });
-
-
+                }).OnCompleted(()=> isDisplayed = display);
+                
             } else
             {
                 toolBoxMenuDisplayManager.Hide(true);
@@ -126,10 +135,9 @@ namespace BrowserDesktop.Menu
                 rightSideMenuContainer.experimental.animation.Start(0, rightSideMenuContainer.resolvedStyle.width, 100, (elt, val) =>
                 {
                     elt.style.left = val;
-                });
+                }).OnCompleted(() => isDisplayed = display); ;
             }
 
-            isDisplayed = display;
             CursorHandler.SetMovement(this, display ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
         }
 
