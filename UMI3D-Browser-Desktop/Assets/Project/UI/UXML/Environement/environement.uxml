@@ -69,7 +69,10 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="right-side-menu" style="width: 256px; display: flex;">
                     <ui:VisualElement name="right-side-menu-container" class="dark-grey2-bck" style="flex-grow: 1; left: 256px;">
-                        <ui:VisualElement name="toolbox-menu" style="flex-grow: 1;" />
+                        <ui:VisualElement name="toolbox-menu" style="flex-grow: 1; flex-direction: column-reverse;">
+                          <ui:Button name="toolbox-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px;">
+                          </ui:Button>
+                          </ui:VisualElement>
                         <ui:VisualElement name="interaction-menu">
                             <ui:VisualElement name="interaction-menu-container" style="flex-grow: 1;" />
                             <ui:Button name="interaction-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px;" />

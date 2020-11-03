@@ -142,16 +142,18 @@ Toggle > Label {
     position: absolute;
     left: -18px;
     top: -36px;
-    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_ENABLE.png');
-    height: 20px;
+    background-image: url('/Assets/Project/UI/UI_connection/left-arrow-horizontal-scrollview.png');
+    height: 15px;
+    width: 11px;
 }
 
 .vertical-scroll-view #unity-high-button {
     position: absolute;
     top: -36px;
     right: -18px;
-    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_ENABLE.png');
-    height: 20px;
+    background-image: url('/Assets/Project/UI/UI_connection/right-arrow-horizontal-scrollview.png');
+    height: 15px;
+    width: 11px;
 }
 
 .white-label {
@@ -673,4 +675,26 @@ Toggle > Label {
 
 .label-margin > Label {
     margin-right: 10px;
+}
+
+.btn-tool {
+}
+
+.btn-tool > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_tool_ENABLE.png');
+}
+
+.btn-tool:hover > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_tool_HOVER.png');
+}
+
+.btn-tool:active > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_tool_ACTIVE.png');
+}
+
+.btn-tool-selected {
+}
+
+.btn-tool-selected > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_tool_ACTIVE.png');
 }

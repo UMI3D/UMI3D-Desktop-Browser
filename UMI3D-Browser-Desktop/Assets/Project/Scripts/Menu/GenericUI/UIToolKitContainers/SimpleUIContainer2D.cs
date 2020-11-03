@@ -51,15 +51,15 @@ namespace BrowserDesktop.Menu
 
         protected VisualElement containerElement;
         protected VisualElement contentElement;
-        private Button backButton;
-        private Button selectButton;
+        protected Button backButton;
+        protected Button selectButton;
         private VisualElement selectIcon;
 
         #endregion
 
         #region Data Fields
 
-        private List<AbstractDisplayer> containedDisplayers = new List<AbstractDisplayer>();
+        protected List<AbstractDisplayer> containedDisplayers = new List<AbstractDisplayer>();
 
         private AbstractMenuDisplayContainer virtualContainer;
 
@@ -100,7 +100,7 @@ namespace BrowserDesktop.Menu
             if(containerElement == null)
             {
                 containerElement = containerTreeAsset.CloneTree();
-                containerElement.name = gameObject.name;
+                containerElement.name = menu.Name + " - " + gameObject.name;
                 if (flexGrow) containerElement.style.flexGrow = 1;
                 parentElement = panelRenderer.visualTree.Q<VisualElement>(uxmlParentTag);
                 parentElement.Add(containerElement);
@@ -120,7 +120,25 @@ namespace BrowserDesktop.Menu
 
         public override AbstractDisplayer this[int i] { get => containedDisplayers[i]; set { RemoveAt(i); Insert(value, i); } }
 
-        void HideBackButton()
+        protected AbstractMenuDisplayContainer GetRoot()
+        {
+            AbstractMenuDisplayContainer currParent = parent;
+
+            if (currParent == null)
+                return null;
+
+            while (true)
+            {
+                if (currParent.parent == null)
+                    break;
+                else
+                    currParent = currParent.parent;
+            }
+            
+            return currParent;
+        }
+
+        protected void HideBackButton()
         {   
             if (backButton != null)
                 backButton.style.display = DisplayStyle.None;
@@ -152,12 +170,11 @@ namespace BrowserDesktop.Menu
         public override void Display(bool forceUpdate = false)
         {
             InitAndBindUI();
-
+            
             if (isDisplayed && !forceUpdate)
             {
                 return;
             }
-
             if (selectButton != null)
             {
                 selectButton.clickable.clicked += Select;
@@ -238,11 +255,12 @@ namespace BrowserDesktop.Menu
 
             if (element is IDisplayerElement elt)
             {
-                var uxmlContent = elt.GetUXMLContent();
-                uxmlContent.style.marginBottom = uxmlContent.resolvedStyle.marginBottom + spaceBetweenElements;
-                contentElement.Add(elt.GetUXMLContent());
                 containedDisplayers.Add(element);
 
+                var uxmlContent = elt.GetUXMLContent();
+                uxmlContent.style.marginBottom = uxmlContent.resolvedStyle.marginBottom + spaceBetweenElements;
+
+                contentElement.Add(elt.GetUXMLContent());
                 element.transform.SetParent(this.transform, false);
 
                 if (updateDisplay)
@@ -273,12 +291,12 @@ namespace BrowserDesktop.Menu
         {
             if (element is IDisplayerElement elt)
             {
-                contentElement.Insert(index, elt.GetUXMLContent());
+                containedDisplayers.Add(element);
 
+                contentElement.Insert(index, elt.GetUXMLContent());
                 element.transform.SetParent(this.transform, false);
                 element.transform.SetSiblingIndex(index);
 
-                containedDisplayers.Add(element);
                 if (updateDisplay)
                     Display();
             }
@@ -329,7 +347,6 @@ namespace BrowserDesktop.Menu
             {
                 return;
             }
-            
             if (VirtualContainer != null && VirtualContainer != this)
             {
                 selectButton.text = menu.Name;
@@ -371,6 +388,7 @@ namespace BrowserDesktop.Menu
             {
                 return;
             }
+            
             if (VirtualContainer != null && VirtualContainer != this)
             {
                 selectButton.text = menu.Name;

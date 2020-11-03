@@ -83,6 +83,11 @@ namespace BrowserDesktop.Menu
             {
                 CircularMenu.Instance.CloseMenu();
             };
+
+            root.Q<Button>("toolbox-menu-back").clickable.clicked += () =>
+            {
+                _Display(false);
+            };
         }
 
         #endregion

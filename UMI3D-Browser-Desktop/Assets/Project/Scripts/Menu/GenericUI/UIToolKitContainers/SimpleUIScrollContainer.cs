@@ -21,7 +21,7 @@ namespace BrowserDesktop.Menu
 {
     public class SimpleUIScrollContainer : SimpleUIContainer2D
     {
-        ScrollView scrollView;
+        protected ScrollView scrollView;
 
         protected override void BindUI()
         {
