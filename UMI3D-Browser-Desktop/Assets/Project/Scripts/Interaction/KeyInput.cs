@@ -238,5 +238,10 @@ namespace BrowserDesktop.Interaction
         {
             return associatedInteraction == null && !Locked;
         }
+
+        public override void UpdateHoveredObjectId(string hoveredObjectId)
+        {
+            this.hoveredObjectId = hoveredObjectId;
+        }
     }
 }

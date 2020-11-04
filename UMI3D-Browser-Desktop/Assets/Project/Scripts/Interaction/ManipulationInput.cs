@@ -215,6 +215,7 @@ namespace BrowserDesktop.Interaction
             }
             if (dofs == DofGroup)
             {
+                this.hoveredObjectId = hoveredObjectId;
                 associatedInteraction = manipulation;
 
                 if (ManipulationDisplayer == null)
@@ -261,6 +262,9 @@ namespace BrowserDesktop.Interaction
             }
         }
 
+        string hoveredObjectId;
+        string GetCurrentHoveredObjectId() { return hoveredObjectId; }
+
         protected IEnumerator networkMessageSender()
         {
             while (true)
@@ -283,7 +287,8 @@ namespace BrowserDesktop.Interaction
                                 var pararmeterDto = new ManipulationRequestDto()
                                 {
                                     id =  associatedInteraction.id,
-                                    toolId = this.toolId
+                                    toolId = this.toolId,
+                                    hoveredObjectId = GetCurrentHoveredObjectId()
                                 };
                                 MapDistanceWithDof(distanceInFrame, ref pararmeterDto);
                                 UMI3DClientServer.Send(pararmeterDto, true);
@@ -411,6 +416,11 @@ namespace BrowserDesktop.Interaction
         public override bool IsAvailable()
         {
             return associatedInteraction == null && (activationButton.IsAvailable() || activationButton.Locked);
+        }
+
+        public override void UpdateHoveredObjectId(string hoveredObjectId)
+        {
+            this.hoveredObjectId = hoveredObjectId;
         }
     }
 }

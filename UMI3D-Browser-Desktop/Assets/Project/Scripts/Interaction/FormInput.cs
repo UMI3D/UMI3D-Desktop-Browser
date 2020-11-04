@@ -118,4 +118,9 @@ public class FormInput : AbstractUMI3DInput
             UMI3DClientServer.Send(formAnswer, true);
         }
     }
+
+    public override void UpdateHoveredObjectId(string hoveredObjectId)
+    {
+        this.hoveredObjectId = hoveredObjectId;
+    }
 }
