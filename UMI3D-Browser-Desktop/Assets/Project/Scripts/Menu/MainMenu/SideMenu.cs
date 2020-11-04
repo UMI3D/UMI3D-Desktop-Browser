@@ -16,6 +16,7 @@ limitations under the License.
 
 using BrowserDesktop.Cursor;
 using System;
+using System.Collections;
 using umi3d.cdk;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
@@ -92,7 +93,7 @@ namespace BrowserDesktop.Menu
 
             root.Q<VisualElement>("game-menu").RegisterCallback<MouseDownEvent>(e =>
             {
-                if ((e.clickCount == 1) && (isDisplayed))
+                if ((e.clickCount == 1) && (isDisplayed) && !wasOpenedLastFrame)
                 {
                     _Display(false);
                     CircularMenu.Instance.CloseMenu();
@@ -117,8 +118,10 @@ namespace BrowserDesktop.Menu
             toolBoxMenu.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
+        private bool wasOpenedLastFrame = false;
         void _Display(bool display = true)
         {
+            isDisplayed = display;
             if (display)
             {
                 toolBoxMenuDisplayManager.Display(true);
@@ -126,8 +129,8 @@ namespace BrowserDesktop.Menu
                 rightSideMenuContainer.experimental.animation.Start(rightSideMenuContainer.resolvedStyle.width,0, 100, (elt, val) =>
                 {
                     elt.style.left = val;
-                }).OnCompleted(()=> isDisplayed = display);
-                
+                });
+                StartCoroutine(ResetWasOpenedLastFrame());
             } else
             {
                 toolBoxMenuDisplayManager.Hide(true);
@@ -135,10 +138,17 @@ namespace BrowserDesktop.Menu
                 rightSideMenuContainer.experimental.animation.Start(0, rightSideMenuContainer.resolvedStyle.width, 100, (elt, val) =>
                 {
                     elt.style.left = val;
-                }).OnCompleted(() => isDisplayed = display); ;
+                });
             }
 
             CursorHandler.SetMovement(this, display ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
+        }
+
+        IEnumerator ResetWasOpenedLastFrame()
+        {
+            wasOpenedLastFrame = true;
+            yield return null;
+            wasOpenedLastFrame = false;
         }
 
         #endregion
