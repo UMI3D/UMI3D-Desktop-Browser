@@ -67,6 +67,7 @@
                     <ui:VisualElement name="event-container" style="flex-direction: column-reverse; display: flex;"/>
                     <ui:VisualElement name="space" class="dark-grey2-bck" style="height: 3px;"/>
                   </ui:VisualElement>
+                  <ui:VisualElement name="information-pop-up-parameters"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="left-side-menu" style="width: 256px; height: 100%;">
                     <ui:VisualElement name="left-side-menu-container" style="flex-grow: 1; display: none;" />

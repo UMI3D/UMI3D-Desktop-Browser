@@ -107,9 +107,22 @@ namespace BrowserDesktop.Menu
         /// Displays the side menu. First argument allows users to display the interac
         /// </summary>
         /// <param name="display"></param>
-        static public void Display(bool displayPauseMenu, bool display = true)
+        static public void Display(bool display, bool forceHideCloseMenu = false)
         {
-            if (Exists) Instance._Display(display); Instance.DisplayPauseMenu(displayPauseMenu);
+            if (Exists)
+            {
+                Instance._Display(display);
+                if (!CircularMenu.Instance.IsEmpty() || forceHideCloseMenu)
+                {
+                    Instance.DisplayPauseMenu(false);
+                    if(display)
+                        CircularMenu.Display(false);
+                    else
+                        CircularMenu.Instance.CloseMenu(false);
+                }  
+                else
+                    Instance.DisplayPauseMenu(true);
+            }
         }
 
         void DisplayPauseMenu(bool val)

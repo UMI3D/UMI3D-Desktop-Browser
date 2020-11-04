@@ -175,7 +175,7 @@ namespace BrowserDesktop.Interaction
         {
             SwicthManipulation(instances.FindIndex(a => a == this));
             if (CircularMenu.Exists)
-                CircularMenu.Instance.Collapse();
+                CircularMenu.Collapse();
         }
 
         #endregion

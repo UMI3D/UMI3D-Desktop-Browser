@@ -127,11 +127,11 @@ public class FpsNavigation : AbstractNavigation
         {
             if (CircularMenu.Exists && CircularMenu.Instance.IsExpanded)
             {
-                CircularMenu.Instance.Collapse();
+                CircularMenu.Instance._Collapse();
             }
 
             MainMenu.Display(!MainMenu.IsDisplaying);
-            SideMenu.Display(true, !SideMenu.IsDisplayed);
+            SideMenu.Display(!SideMenu.IsDisplayed);
         }
 
         if (MainMenu.IsDisplaying || CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHiden)

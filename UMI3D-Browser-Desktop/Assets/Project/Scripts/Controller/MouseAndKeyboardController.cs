@@ -206,7 +206,7 @@ namespace BrowserDesktop.Controller
             mouseData.CurentHovered = null;
             mouseData.CurentHoveredTransform = null;
             mouseData.OldHovered = null;
-            CircularMenu.Instance.Collapse();
+            CircularMenu.Collapse();
             mouseData.HoverState = HoverState.None;
         }
 
@@ -373,7 +373,7 @@ namespace BrowserDesktop.Controller
                                 InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                             }
                             mouseData.OldHovered.HoverExit(boneDto.boneType,mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
-                            CircularMenu.Instance.Collapse();
+                            CircularMenu.Collapse();
                             mouseData.OldHovered = null;
                         }
                         mouseData.HoverState = HoverState.Hovering;
@@ -397,7 +397,7 @@ namespace BrowserDesktop.Controller
                         InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                     }
                     mouseData.OldHovered.HoverExit(boneDto.boneType,mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
-                    CircularMenu.Instance.Collapse();
+                    CircularMenu.Collapse();
                     CursorHandler.State = CursorHandler.CursorState.Default;
                     mouseData.OldHovered = null;
                     mouseData.HoverState = HoverState.None;
