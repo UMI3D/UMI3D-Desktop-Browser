@@ -10,6 +10,7 @@
             <ui:VisualElement name="cursor-settings" style="position: absolute; width: 15px; height: 15px; right: 0; background-image: resource(&apos;/Asset/Project/PrefabsAndResourcesCursor/gears&apos;);" />
         </ui:VisualElement>
     </ui:VisualElement>
+  
     <ui:VisualElement name="body" style="height: 100%; width: 100%; display: flex;">
         <Style src="/Assets/Project/UI/UXML/sessio-info.uss" />
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
@@ -59,7 +60,14 @@
             </ui:VisualElement>
             <ui:VisualElement name="viewport" style="flex-grow: 1; width: 100%; height: 100%; flex-direction: row;">
                 <ui:VisualElement name="notification-container" style="height: 100%; position: absolute; left: 10px; flex-direction: column-reverse; flex-grow: 1;" />
-                <ui:VisualElement name="event-container" style="position: absolute; flex-direction: column-reverse; right: 0; display: flex; top: 10px;" />
+                <ui:VisualElement name="information-pop-up" style="position: absolute; top: 0; right: 0; width: 256px;">
+                  <ui:VisualElement name="information-pop-up-events">
+                    <ui:Label text="Tool controls" class="orange-text dark-grey1-bck" style="height: 20px; -unity-text-align: middle-left; padding-left: 5px;" />
+                    <ui:VisualElement name="space" class="dark-grey2-bck" style="height: 3px;" />
+                    <ui:VisualElement name="event-container" style="flex-direction: column-reverse; display: flex;"/>
+                    <ui:VisualElement name="space" class="dark-grey2-bck" style="height: 3px;"/>
+                  </ui:VisualElement>
+                </ui:VisualElement>
                 <ui:VisualElement name="left-side-menu" style="width: 256px; height: 100%;">
                     <ui:VisualElement name="left-side-menu-container" style="flex-grow: 1; display: none;" />
                 </ui:VisualElement>
@@ -70,9 +78,8 @@
                 <ui:VisualElement name="right-side-menu" style="width: 256px; display: flex;">
                     <ui:VisualElement name="right-side-menu-container" class="dark-grey2-bck" style="flex-grow: 1; left: 256px;">
                         <ui:VisualElement name="toolbox-menu" style="flex-grow: 1; flex-direction: column-reverse;">
-                          <ui:Button name="toolbox-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px;">
-                          </ui:Button>
-                          </ui:VisualElement>
+                            <ui:Button name="toolbox-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px;" />
+                        </ui:VisualElement>
                         <ui:VisualElement name="interaction-menu">
                             <ui:VisualElement name="interaction-menu-container" style="flex-grow: 1;" />
                             <ui:Button name="interaction-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px;" />

@@ -40,7 +40,15 @@ namespace BrowserDesktop.Menu
 
         public void Display(bool display)
         {
-            style.display = display ? DisplayStyle.Flex : DisplayStyle.None;
+            if (display)
+            {
+                style.display = DisplayStyle.Flex;
+                EventMenu.NbEventsDIsplayeds++;
+            } else
+            {
+                style.display = DisplayStyle.None;
+                EventMenu.NbEventsDIsplayeds--;
+            }
         }
     }
 }

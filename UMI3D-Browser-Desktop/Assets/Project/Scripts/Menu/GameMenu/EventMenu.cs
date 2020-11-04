@@ -27,13 +27,38 @@ namespace BrowserDesktop.Menu
         string containerTagName;
         VisualElement container;
 
+        VisualElement parentContainer;
+
         [SerializeField]
         VisualTreeAsset eventDisplayerTreeAsset;
+
+        private int nbEventsDisplayed;
+        public static int NbEventsDIsplayeds
+        {
+            get
+            {
+                if (Exists) return Instance.nbEventsDisplayed; else return 0;
+            } 
+            set
+            {
+                if (Exists)
+                {
+                    if (value >= 0)
+                        Instance.nbEventsDisplayed = value;
+
+                    if (Instance.nbEventsDisplayed == 0)
+                        Instance.parentContainer.style.display = DisplayStyle.None;
+                    else                              
+                        Instance.parentContainer.style.display = DisplayStyle.Flex;
+                }
+            }
+        }
 
         void Start()
         {
             Debug.Assert(panelRenderer.visualTree != null);
             container = panelRenderer.visualTree.Q<VisualElement>(containerTagName);
+            parentContainer = panelRenderer.visualTree.Q<VisualElement>("information-pop-up-events");
             Debug.Assert(container != null);
         }
 
