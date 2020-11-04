@@ -68,7 +68,7 @@
 }
 
 .is-favorite:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_favoriteON_PRESS.png');
+    background-image: url('/Assets/Project/UI/UI_connection/btn_favoriteON_HOVER.png');
 }
 
 .is-favorite:active {

@@ -1,14 +1,18 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-  <ui:Template name="loading-screen" src="loading-screen.uxml" />
-  <ui:Template name="password-screen" src="password-screen.uxml" />
-  <ui:Template name="libraries-screen" src="libraries-screen.uxml" />
+    <ui:Template name="loading-screen" src="loading-screen.uxml" />
+    <ui:Template name="password-screen" src="password-screen.uxml" />
+    <ui:Template name="libraries-screen" src="libraries-screen.uxml" />
     <ui:VisualElement name="cursor-screen" style="position: absolute; width: 100%; height: 100%; top: 0.8px; left: 0;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <Style src="/Assets/Project/UI/UXML/sessio-info.uss" />
         <ui:VisualElement name="cursor-container" style="position: relative; width: 40px; height: 40px; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;">
             <ui:VisualElement name="cursor-center" class="cursor-follow" style="width: 10px; height: 10px; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;" />
             <ui:VisualElement name="cursor-settings" style="position: absolute; width: 15px; height: 15px; right: 0; background-image: resource(&apos;/Asset/Project/PrefabsAndResourcesCursor/gears&apos;);" />
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="body" style="height: 100%; width: 100%; display: flex;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <Style src="/Assets/Project/UI/UXML/sessio-info.uss" />
         <ui:VisualElement name="top" class="dark-grey1-bck" style="width: 100%; flex-direction: row; height: 40px; min-height: 40px; align-items: center;">
             <ui:VisualElement name="top-right-menu" style="width: 50%; justify-content: center;">
                 <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/UI/UI_connection/ico_top.png&apos;); height: 30px; -unity-background-scale-mode: scale-to-fit; width: 30px; margin-left: 5px;" />
@@ -46,7 +50,7 @@
         <ui:VisualElement name="game-menu-container" style="width: 100%; background-color: rgba(0, 0, 0, 0); display: flex; height: 100%;">
             <ui:VisualElement name="session-info" class="dark-grey3-bck grey-border" style="height: 52px; border-bottom-width: 1px; justify-content: center; width: 100%; flex-direction: row; align-items: center;">
                 <ui:VisualElement name="session-info-container" class="dark-grey1-bck" style="height: 37px; flex-direction: row;">
-                    <ui:Label text="Label" name="session-time" class="session-info-btn white-txt" style="-unity-text-align: middle-center;" />
+                    <ui:Label text="Label" name="session-time" class="session-info-btn white-txt grey-border" style="-unity-text-align: middle-center;" />
                     <ui:Button name="active-sound" class="session-info-btn grey-border session-info-btn-sound-on" style="height: 100%; display: none;" />
                     <ui:Button name="active-avatar" class="session-info-btn grey-border session-info-btn-sound-on session-info-btn-active-avatar-on" style="height: 100%; display: none;" />
                     <ui:Button name="mute-btn" class="session-info-btn grey-border session-info-btn-mute-on" style="height: 100%;" />
@@ -90,5 +94,8 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="circular-menu" style="position: absolute; width: 100%; height: 100%; display: none;" />
+    <ui:VisualElement name="circular-menu" style="position: absolute; width: 100%; height: 100%; display: none;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <Style src="/Assets/Project/UI/UXML/sessio-info.uss" />
+    </ui:VisualElement>
 </ui:UXML>
