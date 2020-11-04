@@ -43,11 +43,11 @@ namespace BrowserDesktop.Menu
             if (display)
             {
                 style.display = DisplayStyle.Flex;
-                EventMenu.NbEventsDIsplayeds++;
+                EventMenu.NbEventsDIsplayed++;
             } else
             {
                 style.display = DisplayStyle.None;
-                EventMenu.NbEventsDIsplayeds--;
+                EventMenu.NbEventsDIsplayed--;
             }
         }
     }

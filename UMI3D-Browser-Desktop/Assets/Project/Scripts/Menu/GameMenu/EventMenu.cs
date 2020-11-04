@@ -33,7 +33,7 @@ namespace BrowserDesktop.Menu
         VisualTreeAsset eventDisplayerTreeAsset;
 
         private int nbEventsDisplayed;
-        public static int NbEventsDIsplayeds
+        public static int NbEventsDIsplayed
         {
             get
             {
@@ -45,11 +45,6 @@ namespace BrowserDesktop.Menu
                 {
                     if (value >= 0)
                         Instance.nbEventsDisplayed = value;
-
-                    if (Instance.nbEventsDisplayed == 0)
-                        Instance.parentContainer.style.display = DisplayStyle.None;
-                    else                              
-                        Instance.parentContainer.style.display = DisplayStyle.Flex;
                 }
             }
         }

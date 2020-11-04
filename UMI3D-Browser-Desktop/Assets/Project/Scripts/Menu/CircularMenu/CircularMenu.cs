@@ -16,8 +16,8 @@ limitations under the License.
 
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
+using System.Threading;
 using umi3d.cdk.menu.view;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -36,11 +36,15 @@ namespace BrowserDesktop.Menu
         public UnityEvent MenuExpand = new UnityEvent();
 
         int nbOfDisplayersLastFrame = 0;
-        bool isInformationPopUpDisplayed = false;
 
         public bool IsEmpty()
         {
             return circularMenuContainer.Count() == 0;
+        }
+
+        public int Count()
+        {
+            return circularMenuContainer.Count();
         }
 
         private void Start()
@@ -58,18 +62,11 @@ namespace BrowserDesktop.Menu
         {
             if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.LeaveContextualMenu)))
             {
-                _Collapse();
+                //_Collapse();
             }
             else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
             {
-                if (circularMenuContainer.isExpanded)
-                {
-                    CloseMenu();
-                }
-                else if (!IsEmpty())
-                {
-                    _Display();
-                }
+                SideMenu.Display(!SideMenu.IsExpanded, !SideMenu.IsExpanded);
             }
 
             if (circularMenuContainer.isDisplayed && circularMenuContainer.isExpanded && IsEmpty())
@@ -79,37 +76,10 @@ namespace BrowserDesktop.Menu
 
             ManageOptionCursor();
         }
-
-        /*void LateUpdate()
-        {
-            if (nbOfDisplayersLastFrame != circularMenuContainer.Count())
-            {
-                nbOfDisplayersLastFrame = circularMenuContainer.Count();
-
-                if (isInformationPopUpDisplayed && nbOfDisplayersLastFrame == 0)
-                {
-                    Debug.Log("Cacher");
-                    CloseMenu();
-                    ConnectionMenu.Instance.panelRenderer.visualTree.Q<VisualElement>("information-pop-up-parameters").Clear();
-                    isInformationPopUpDisplayed = false;
-                }
-                    
-                else if (!isInformationPopUpDisplayed && nbOfDisplayersLastFrame > 0)
-                {
-                    _Display();
-                    Debug.Log("Affcher"); isInformationPopUpDisplayed = true;
-                }
-                    
-            }
-
-            nbOfDisplayersLastFrame = circularMenuContainer.Count();
-        }*/
         
-        public void CloseMenu(bool updateSideMenu = true)
+        public void CloseMenu()
         {
             menuDisplayManager.Back();
-            if(updateSideMenu)
-                SideMenu.Display(false, false);
         }
 
         void ManageOptionCursor()
@@ -134,19 +104,10 @@ namespace BrowserDesktop.Menu
             }
         }
 
-        public static void Display(bool updateSideMenu = true)
-        {
-            if (Exists)
-                Instance._Display(updateSideMenu);
-        }
-
-
-        void _Display(bool updateSideMenu = true)
+        public void Display()
         {
             if (true)
             {
-                if (updateSideMenu)
-                    SideMenu.Display(true, true);
                 if (!circularMenuContainer.isDisplayed)
                 {
                     circularMenuContainer.Display(true);
@@ -155,7 +116,7 @@ namespace BrowserDesktop.Menu
                 {
                     circularMenuContainer.Expand();
                     MenuExpand.Invoke();
-                    CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
+                    //CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
                 }
             }
         }
@@ -168,7 +129,7 @@ namespace BrowserDesktop.Menu
 
         public void _Collapse()
         {
-            CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+            //CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);//
             circularMenuContainer.Collapse();
             MenuColapsed.Invoke();
         }

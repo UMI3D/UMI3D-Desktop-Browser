@@ -262,7 +262,7 @@ namespace BrowserDesktop.Controller
         }
 
 
-        private void FixedUpdate()
+        private void LateUpdate()
         {
             CursorHandler.Instance.ExitIndicator = mouseData.ForcePorjection;
             if (CanProcess)
@@ -299,7 +299,7 @@ namespace BrowserDesktop.Controller
         {
             if (!(
                         mouseData.HoverState == HoverState.AutoProjected
-                        && (CursorHandler.State == CursorHandler.CursorState.Clicked || CircularMenu.Exists && CircularMenu.Instance.IsExpanded)
+                        && (CursorHandler.State == CursorHandler.CursorState.Clicked || SideMenu.IsExpanded)
                ))
             {
                 mouseData.save();

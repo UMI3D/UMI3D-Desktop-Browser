@@ -17,6 +17,7 @@ limitations under the License.
 using BrowserDesktop.Cursor;
 using System;
 using System.Collections;
+using System.Security.Cryptography;
 using umi3d.cdk;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
@@ -28,12 +29,24 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
 {
+    /// <summary>
+    /// This class reprensents the right side menu and can be used to display two menus : 
+    ///     - the main menu (toolboxmenu)
+    ///     - the settings menu (composed by the events and interactions menu)
+    /// They can't be displayed at the same time (the settings menu takes priority if not empty)
+    /// 
+    /// The right side menu can be just displayed (when the settings menu is not empty but the view is still center)
+    /// or displayed and expanded (and consequently interactable because the view is free).
+    /// 
+    /// </summary>
     public class SideMenu : Singleton<SideMenu>
     {
         #region Fields
 
         private bool isDisplayed = false;
         static public bool IsDisplayed { get { return Exists ? Instance.isDisplayed : false; } }
+        private bool isExpanded = false;
+        static public bool IsExpanded { get { return Exists ? Instance.isExpanded : false; } }
 
         public PanelRenderer panelRenderer;
 
@@ -42,10 +55,13 @@ namespace BrowserDesktop.Menu
         VisualElement rightSideMenuContainer;
         VisualElement interactionMenu;
         VisualElement toolBoxMenu;
+        VisualElement eventsMenu;
 
         [Header("Toolbox menu")]
         public MenuDisplayManager toolBoxMenuDisplayManager;
         public MenuAsset ToolboxMenu;
+
+        Button backCircularMenu;
 
         #endregion
 
@@ -79,24 +95,24 @@ namespace BrowserDesktop.Menu
             rightSideMenuContainer = root.Q<VisualElement>("right-side-menu-container");
             interactionMenu = root.Q<VisualElement>("interaction-menu");
             toolBoxMenu = root.Q<VisualElement>("toolbox-menu");
+            eventsMenu = root.Q<VisualElement>("information-pop-up-events");
 
-            var backCircularMenu = root.Q<Button>("interaction-menu-back");
+            backCircularMenu = root.Q<Button>("interaction-menu-back");
             backCircularMenu.clickable.clicked += () =>
             {
-                CircularMenu.Instance.CloseMenu();
+                Display(false, false);
             };
 
             root.Q<Button>("toolbox-menu-back").clickable.clicked += () =>
             {
-                _Display(false);
+                Display(false, false);
             };
 
             root.Q<VisualElement>("game-menu").RegisterCallback<MouseDownEvent>(e =>
             {
-                if ((e.clickCount == 1) && (isDisplayed) && !wasOpenedLastFrame)
+                if ((e.clickCount == 1) && (isExpanded) && !wasExpandedLastFrame)
                 {
-                    _Display(false);
-                    CircularMenu.Instance.CloseMenu();
+                    Display(false, false);
                 }
             });
         }
@@ -104,36 +120,59 @@ namespace BrowserDesktop.Menu
         #endregion
 
         /// <summary>
-        /// Displays the side menu. First argument allows users to display the interac
+        /// Displays or not the right side menu. 
         /// </summary>
         /// <param name="display"></param>
-        static public void Display(bool display, bool forceHideCloseMenu = false)
+        /// <param name="display">expand the menu or not</param>
+        static public void Display(bool display, bool expand)
         {
             if (Exists)
             {
+                Instance.backCircularMenu.style.display = DisplayStyle.None;
+
                 Instance._Display(display);
-                if (!CircularMenu.Instance.IsEmpty() || forceHideCloseMenu)
+                Instance.Expand(expand);
+
+                CursorHandler.SetMovement(Instance, expand ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
+
+                if (!CircularMenu.Instance.IsEmpty() || EventMenu.NbEventsDIsplayed > 0)
                 {
                     Instance.DisplayPauseMenu(false);
-                    if(display)
-                        CircularMenu.Display(false);
-                    else
-                        CircularMenu.Instance.CloseMenu(false);
-                }  
+                }
                 else
+                {
                     Instance.DisplayPauseMenu(true);
+                }
+                    
             }
         }
 
         void DisplayPauseMenu(bool val)
         {
-            interactionMenu.style.display = val ? DisplayStyle.None : DisplayStyle.Flex;
-            toolBoxMenu.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
+            if (val)
+            {
+                toolBoxMenu.style.display =  DisplayStyle.Flex;
+                interactionMenu.style.display = DisplayStyle.None;
+                eventsMenu.style.display = DisplayStyle.None;
+                backCircularMenu.style.display = DisplayStyle.None;
+            } else
+            {
+                toolBoxMenu.style.display = DisplayStyle.None;
+                interactionMenu.style.display = CircularMenu.Instance.IsEmpty() ? DisplayStyle.None : DisplayStyle.Flex;
+                eventsMenu.style.display = EventMenu.NbEventsDIsplayed == 0 ? DisplayStyle.None : DisplayStyle.Flex;
+            }
+            
         }
 
-        private bool wasOpenedLastFrame = false;
+        /// <summary>
+        /// Displays or not the right side menu
+        /// </summary>
+        /// <param name="display"></param>
         void _Display(bool display = true)
         {
+            if (isDisplayed == display)
+                return;
+
             isDisplayed = display;
             if (display)
             {
@@ -143,7 +182,6 @@ namespace BrowserDesktop.Menu
                 {
                     elt.style.left = val;
                 });
-                StartCoroutine(ResetWasOpenedLastFrame());
             } else
             {
                 toolBoxMenuDisplayManager.Hide(true);
@@ -153,15 +191,67 @@ namespace BrowserDesktop.Menu
                     elt.style.left = val;
                 });
             }
-
-            CursorHandler.SetMovement(this, display ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
         }
 
-        IEnumerator ResetWasOpenedLastFrame()
+        private bool wasExpandedLastFrame = false;
+        void Expand(bool expand)
         {
-            wasOpenedLastFrame = true;
+            if (isExpanded == expand)
+                return;
+
+            isExpanded = expand;
+
+            if (expand)
+            {
+                backCircularMenu.style.display = DisplayStyle.Flex;
+                rightSideMenuContainer.experimental.animation.Start(0, 1, 500, (elt, val) =>
+                {
+                    elt.style.flexGrow = val;
+                });
+                StartCoroutine(ResetWasExpandedLastFrame());
+            } else
+            {
+                backCircularMenu.style.display = DisplayStyle.None;
+                rightSideMenuContainer.style.flexGrow = 0;
+            }
+        }
+       
+        IEnumerator ResetWasExpandedLastFrame()
+        {
+            wasExpandedLastFrame = true;
             yield return null;
-            wasOpenedLastFrame = false;
+            wasExpandedLastFrame = false;
+        }
+
+        /// <summary>
+        /// Manages the display of the menu as a popup when different elements with interactions are hovered.
+        /// </summary>
+        int nbOfCircularDisplayersLastFrame = 0;
+        int nbEventsDisplayedLastFrame = 0;
+        void LateUpdate()
+        {
+            int nbOfCircularDisplayers = CircularMenu.Instance.Count();
+            int nbEventsDisplayed = EventMenu.NbEventsDIsplayed;
+
+            if ((nbOfCircularDisplayersLastFrame != nbOfCircularDisplayers) || (nbEventsDisplayed != nbEventsDisplayedLastFrame))
+            {
+                if (IsDisplayed && !IsExpanded && (nbOfCircularDisplayers == 0 && nbEventsDisplayed == 0))
+                {
+                    CircularMenu.Instance.CloseMenu();
+                    Display(false, false);
+                }
+
+                else if (!IsDisplayed && (nbOfCircularDisplayers > 0 || nbEventsDisplayed > 0))
+                {
+                    if (nbOfCircularDisplayers > 0)
+                        CircularMenu.Instance.Display();
+                    Display(true, false);
+                }
+
+            }
+
+            nbOfCircularDisplayersLastFrame = nbOfCircularDisplayers;
+            nbEventsDisplayedLastFrame = nbEventsDisplayed;
         }
 
         #endregion

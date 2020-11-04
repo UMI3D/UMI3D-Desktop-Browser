@@ -1,19 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:Template name="loading-screen" src="loading-screen.uxml" />
-    <ui:Template name="password-screen" src="password-screen.uxml" />
-    <ui:Template name="libraries-screen" src="libraries-screen.uxml" />
+  <ui:Template name="loading-screen" src="loading-screen.uxml" />
+  <ui:Template name="password-screen" src="password-screen.uxml" />
+  <ui:Template name="libraries-screen" src="libraries-screen.uxml" />
     <ui:VisualElement name="cursor-screen" style="position: absolute; width: 100%; height: 100%; top: 0.8px; left: 0;">
-        <Style src="/Assets/Project/UI/UXML/sessio-info.uss" />
-        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:VisualElement name="cursor-container" style="position: relative; width: 40px; height: 40px; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;">
             <ui:VisualElement name="cursor-center" class="cursor-follow" style="width: 10px; height: 10px; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;" />
             <ui:VisualElement name="cursor-settings" style="position: absolute; width: 15px; height: 15px; right: 0; background-image: resource(&apos;/Asset/Project/PrefabsAndResourcesCursor/gears&apos;);" />
         </ui:VisualElement>
     </ui:VisualElement>
-  
     <ui:VisualElement name="body" style="height: 100%; width: 100%; display: flex;">
-        <Style src="/Assets/Project/UI/UXML/sessio-info.uss" />
-        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:VisualElement name="top" class="dark-grey1-bck" style="width: 100%; flex-direction: row; height: 40px; min-height: 40px; align-items: center;">
             <ui:VisualElement name="top-right-menu" style="width: 50%; justify-content: center;">
                 <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/UI/UI_connection/ico_top.png&apos;); height: 30px; -unity-background-scale-mode: scale-to-fit; width: 30px; margin-left: 5px;" />
@@ -61,13 +56,7 @@
             <ui:VisualElement name="viewport" style="flex-grow: 1; width: 100%; height: 100%; flex-direction: row;">
                 <ui:VisualElement name="notification-container" style="height: 100%; position: absolute; left: 10px; flex-direction: column-reverse; flex-grow: 1;" />
                 <ui:VisualElement name="information-pop-up" style="position: absolute; top: 0; right: 0; width: 256px;">
-                  <ui:VisualElement name="information-pop-up-events">
-                    <ui:Label text="Tool controls" class="orange-text dark-grey1-bck" style="height: 20px; -unity-text-align: middle-left; padding-left: 5px;" />
-                    <ui:VisualElement name="space" class="dark-grey2-bck" style="height: 3px;" />
-                    <ui:VisualElement name="event-container" style="flex-direction: column-reverse; display: flex;"/>
-                    <ui:VisualElement name="space" class="dark-grey2-bck" style="height: 3px;"/>
-                  </ui:VisualElement>
-                  <ui:VisualElement name="information-pop-up-parameters"/>
+                    <ui:VisualElement name="information-pop-up-parameters" />
                 </ui:VisualElement>
                 <ui:VisualElement name="left-side-menu" style="width: 256px; height: 100%;">
                     <ui:VisualElement name="left-side-menu-container" style="flex-grow: 1; display: none;" />
@@ -77,14 +66,20 @@
                     <ui:VisualElement name="game-menu" style="flex-grow: 1; padding-left: 50px; padding-right: 50px; padding-top: 50px; padding-bottom: 50px; display: flex;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="right-side-menu" style="width: 256px; display: flex;">
-                    <ui:VisualElement name="right-side-menu-container" class="dark-grey2-bck" style="flex-grow: 1; left: 256px;">
+                    <ui:VisualElement name="right-side-menu-container" class="dark-grey2-bck" style="left: 256px;">
                         <ui:VisualElement name="toolbox-menu" style="flex-grow: 1; flex-direction: column-reverse;">
                             <ui:Button name="toolbox-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px;" />
                         </ui:VisualElement>
-                        <ui:VisualElement name="interaction-menu">
-                            <ui:VisualElement name="interaction-menu-container" style="flex-grow: 1;" />
-                            <ui:Button name="interaction-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px;" />
+                        <ui:VisualElement name="information-pop-up-events">
+                            <ui:Label text="Tool controls" class="orange-text dark-grey1-bck" style="height: 20px; -unity-text-align: middle-left; padding-left: 5px;" />
+                            <ui:VisualElement name="space" class="dark-grey2-bck" style="height: 3px;" />
+                            <ui:VisualElement name="event-container" style="flex-direction: column-reverse; display: flex;" />
+                            <ui:VisualElement name="space" class="dark-grey2-bck" style="height: 3px;" />
                         </ui:VisualElement>
+                        <ui:VisualElement name="interaction-menu" style="flex-grow: 1;">
+                            <ui:VisualElement name="interaction-menu-container" style="flex-grow: 1;" />
+                        </ui:VisualElement>
+                        <ui:Button name="interaction-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
@@ -95,8 +90,5 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="circular-menu" style="position: absolute; width: 100%; height: 100%; display: none;">
-        <Style src="/Assets/Project/UI/UXML/sessio-info.uss" />
-        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-    </ui:VisualElement>
+    <ui:VisualElement name="circular-menu" style="position: absolute; width: 100%; height: 100%; display: none;" />
 </ui:UXML>
