@@ -77,7 +77,7 @@ public class SliderElement
         {
             VisualElement subContainer = new VisualElement();
             subContainer.style.flexDirection = FlexDirection.Row;
-            subContainer.style.justifyContent = Justify.SpaceBetween;
+            subContainer.style.justifyContent = Justify.SpaceAround;
             subContainer.style.width = container.resolvedStyle.width;
             subContainer.style.minWidth = container.resolvedStyle.width;
 
@@ -105,15 +105,21 @@ public class SliderElement
             subContainers.Add(subContainer);
         }
 
-        if (NbPagesDisplayed() == 1)
-            navigationCircles.First().style.display = DisplayStyle.None;
+        /*if (NbPagesDisplayed() == 1)
+            navigationCircles.First().style.display = DisplayStyle.None;*/
 
         MoveToPage(currentPageDisplayed);
     }
 
     private int NbPagesDisplayed()
     {
-        return ((int) (items.Count() / itemsPerPage)) + 1;
+        if (items.Count() % itemsPerPage == 0)
+        {
+            return (int)(items.Count() / itemsPerPage);
+        } else
+        {
+            return (int)(items.Count() / itemsPerPage) + 1;
+        }
     }
 
     private void MoveToPage(int pageToGo)
