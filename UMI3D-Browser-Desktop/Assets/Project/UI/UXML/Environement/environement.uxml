@@ -88,7 +88,10 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 30px; justify-content: center; flex-direction: row;">
-                <ui:Label text="Escape : show/hide menu      T : mute/unmute" name="shortcuts" style="color: rgb(182, 182, 182); margin-left: 10px; -unity-text-align: middle-left; width: 25%; margin-right: 10px;" />
+                <ui:VisualElement name="shortcuts" style="width: 25%; flex-direction: row;">
+                    <ui:Label text="Escape/Right click : open interaction menu" name="shortcuts-menu" style="color: rgb(182, 182, 182); -unity-text-align: middle-left; width: 250px;" />
+                    <ui:Label text="T : mute/unmute" name="shortcuts-mute" style="color: rgb(182, 182, 182); -unity-text-align: middle-left; margin-left: 10px;" />
+                </ui:VisualElement>
                 <ui:Label text="Erreur" name="console-footer" class="grey-border" style="-unity-text-align: middle-left; padding-left: 10px; padding-right: 10px; border-right-width: 1px; border-left-width: 1px; width: 65%;" />
                 <ui:Label text="2.xx.xx.xx" name="version-footer" style="color: rgb(182, 182, 182); -unity-text-align: middle-right; width: 8%; margin-left: 10px; margin-right: 10px;" />
             </ui:VisualElement>

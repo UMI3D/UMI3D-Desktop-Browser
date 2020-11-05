@@ -16,6 +16,7 @@ limitations under the License.
 
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.cdk;
 using umi3d.common;
 using Unity.UIElements.Runtime;
 using UnityEngine;
@@ -61,9 +62,60 @@ public class NotificationDisplayer : Singleton<NotificationDisplayer>
             var notifDto = notificationsToDisplay.Dequeue();
             NotificationElement notification = notifTreeAsset.CloneTree().Q<NotificationElement>();
             notification.Setup(notifDto.title, notifDto.content, (int)notifDto.duration * 1000, () => notificationCurrentlyDisplayed--);
+            
+            if(notifDto.icon2D != null)
+            {
+                Texture2D icon = LoadIcon2d(notifDto.icon2D);
+                Debug.Log("Icon " + (icon == null));
+            }
 
             notificationContainer.Insert(0, notification);
             notificationCurrentlyDisplayed++;
         }
+    }
+
+    Texture2D LoadIcon2d(ResourceDto dto)
+    {
+
+        if (dto.variants.Count == 0)
+            return null;
+
+        Texture2D res = null;
+        FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariante(dto.variants);
+
+        if (fileToLoad != null)
+        {
+            string url = fileToLoad.url;
+            string ext = fileToLoad.extension;
+            string authorization = fileToLoad.authorization;
+            IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(ext);
+
+            if (loader != null)
+            {
+                UMI3DResourcesManager.LoadFile(
+                    "",
+                    fileToLoad,
+                    loader.UrlToObject,
+                    loader.ObjectFromCache,
+                    (o) =>
+                    {
+                        res = o as Texture2D;
+                    },
+                    (string str) =>
+                    {
+                        Debug.LogWarning("Icon not loadable : " + url);
+                    },
+                    loader.DeleteObject
+                    );
+            }
+            else
+                Debug.LogWarning("No loader was found to load this icon " + url);
+        }
+        else
+        {
+            Debug.LogWarning("Impossible to load " + dto.ToString());
+        }
+
+        return res;
     }
 }

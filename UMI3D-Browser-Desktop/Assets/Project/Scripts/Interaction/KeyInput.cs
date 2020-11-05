@@ -98,24 +98,24 @@ namespace BrowserDesktop.Interaction
                         if (loader != null)
                         {
                             UMI3DResourcesManager.LoadFile(
-                                                        "",
-                                                        fileToLoad,
-                                                        loader.UrlToObject,
-                                                        loader.ObjectFromCache,
-                                                        (o) =>
-                                                        {
-                                                            var obj = o as Texture2D;
-                                                            if (obj == null)
-                                                                DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
-                                                            else 
-                                                                DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
-                                                        },
-                                                        (string str) =>
-                                                        {
-                                                            DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
-                                                        },
-                                                        loader.DeleteObject
-                                                        );
+                                "",
+                                fileToLoad,
+                                loader.UrlToObject,
+                                loader.ObjectFromCache,
+                                (o) =>
+                                {
+                                    var obj = o as Texture2D;
+                                    if (obj == null)
+                                        DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                                    else
+                                        DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
+                                },
+                                (string str) =>
+                                {
+                                    DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                                },
+                                loader.DeleteObject
+                                );
                         }
                         else
                             DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());

@@ -63,6 +63,8 @@ namespace BrowserDesktop.Menu
 
         Button backCircularMenu;
 
+        Label shortcutsMenu;
+
         #endregion
 
         #region Methods 
@@ -96,6 +98,7 @@ namespace BrowserDesktop.Menu
             interactionMenu = root.Q<VisualElement>("interaction-menu");
             toolBoxMenu = root.Q<VisualElement>("toolbox-menu");
             eventsMenu = root.Q<VisualElement>("information-pop-up-events");
+            shortcutsMenu = root.Q<Label>("shortcuts-menu");
 
             backCircularMenu = root.Q<Button>("interaction-menu-back");
             backCircularMenu.clickable.clicked += () =>
@@ -257,6 +260,20 @@ namespace BrowserDesktop.Menu
 
             nbOfCircularDisplayersLastFrame = nbOfCircularDisplayers;
             nbEventsDisplayedLastFrame = nbEventsDisplayed;
+
+            if (nbOfCircularDisplayersLastFrame == 0 && nbEventsDisplayedLastFrame == 0)
+            {
+                if (IsExpanded)
+                    shortcutsMenu.text = "Escape : close main menu";
+                else
+                    shortcutsMenu.text = "Escape : open main menu";
+            } else
+            {
+                if (IsExpanded)
+                    shortcutsMenu.text = "Escape/Right click : close interaction menu";
+                else
+                    shortcutsMenu.text = "Escape/Right click : open interaction menu";
+            }
         }
 
         #endregion
