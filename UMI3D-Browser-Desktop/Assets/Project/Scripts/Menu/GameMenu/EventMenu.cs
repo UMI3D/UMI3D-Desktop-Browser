@@ -67,5 +67,13 @@ namespace BrowserDesktop.Menu
             }
             return null;
         }
+
+        public static void Expand(bool val)
+        {
+            if (Exists)
+            {
+                Instance.parentContainer.style.flexGrow = val ? 1 : 0;
+            }
+        }
     }
 }

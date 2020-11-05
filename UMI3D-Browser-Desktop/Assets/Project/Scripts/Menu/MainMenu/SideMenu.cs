@@ -135,9 +135,14 @@ namespace BrowserDesktop.Menu
 
                 CursorHandler.SetMovement(Instance, expand ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
 
-                if (!CircularMenu.Instance.IsEmpty() || EventMenu.NbEventsDIsplayed > 0)
+                bool isCircularMenuEmpty = CircularMenu.Instance.IsEmpty();
+                if (!isCircularMenuEmpty || EventMenu.NbEventsDIsplayed > 0)
                 {
                     Instance.DisplayPauseMenu(false);
+                    if (expand && isCircularMenuEmpty)
+                        EventMenu.Expand(true);
+                    else
+                        EventMenu.Expand(false);
                 }
                 else
                 {
@@ -204,7 +209,7 @@ namespace BrowserDesktop.Menu
             if (expand)
             {
                 backCircularMenu.style.display = DisplayStyle.Flex;
-                rightSideMenuContainer.experimental.animation.Start(0, 1, 500, (elt, val) =>
+                rightSideMenuContainer.experimental.animation.Start(0, 1, 200, (elt, val) =>
                 {
                     elt.style.flexGrow = val;
                 });
