@@ -294,8 +294,6 @@ Toggle > Label {
     border-right-color: rgb(24, 24, 24);
     border-top-color: rgb(24, 24, 24);
     border-bottom-color: rgb(24, 24, 24);
-    margin-left: 5px;
-    margin-right: 5px;
 }
 
 .manipulation-element-active {

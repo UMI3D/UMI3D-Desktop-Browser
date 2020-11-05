@@ -42,11 +42,22 @@ namespace BrowserDesktop.Menu
 
         public void Display(bool display)
         {
-            style.display = display ? DisplayStyle.Flex : DisplayStyle.None;
+            if (display)
+            {
+                style.display = DisplayStyle.Flex;
+                ManipulationDisplayerManager.NbManipualtionsEventsDisplayed++;
+            } 
+            else
+            {
+                style.display = DisplayStyle.None;
+                ManipulationDisplayerManager.NbManipualtionsEventsDisplayed--;
+            }
+           
         }
 
         public void Remove()
-        {
+        { 
+            ManipulationDisplayerManager.NbManipualtionsEventsDisplayed--;
             RemoveFromHierarchy();
         }
     }

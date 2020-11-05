@@ -105,8 +105,10 @@ namespace BrowserDesktop.Interaction
                                                         (o) =>
                                                         {
                                                             var obj = o as Texture2D;
-                                                            if (obj == null) return;
-                                                            DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
+                                                            if (obj == null)
+                                                                DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                                                            else 
+                                                                DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
                                                         },
                                                         (string str) =>
                                                         {

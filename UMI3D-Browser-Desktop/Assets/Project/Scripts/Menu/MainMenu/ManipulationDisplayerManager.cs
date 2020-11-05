@@ -34,6 +34,30 @@ namespace BrowserDesktop.Menu
 
         VisualElement container;
 
+        [SerializeField]
+        private int manipualtionItemWidth = 90;
+
+        [SerializeField]
+        private int manipualtionItemSpaceBetween = 5;
+
+
+        static int nbManipualtionDisplayed = 0;
+        public static int NbManipualtionsEventsDisplayed
+        {
+            get
+            {
+                return nbManipualtionDisplayed;
+            } 
+            set
+            {
+                if (value >= 0)
+                {
+                    nbManipualtionDisplayed = value;
+                }
+            }
+        }
+
+
         private void Start()
         {
             Debug.Assert(manipualtionTreeAsset != null);
@@ -54,6 +78,23 @@ namespace BrowserDesktop.Menu
                 return manipulationElement;
             }
             return null;
+        }
+
+        void LateUpdate()
+        {
+            if (nbManipualtionDisplayed > 0 && container.resolvedStyle.display == DisplayStyle.None)
+            {
+                container.style.display = DisplayStyle.Flex;
+                container.style.width = manipualtionItemWidth * nbManipualtionDisplayed + (nbManipualtionDisplayed + 1) * manipualtionItemSpaceBetween;
+                container.style.paddingBottom = manipualtionItemSpaceBetween;
+                container.style.paddingTop = manipualtionItemSpaceBetween;
+                container.style.paddingRight = manipualtionItemSpaceBetween;
+                container.style.paddingLeft = manipualtionItemSpaceBetween;
+
+            } else if (nbManipualtionDisplayed == 0 && container.resolvedStyle.display == DisplayStyle.Flex)
+            {
+                container.style.display = DisplayStyle.None;
+            }
         }
     }
 }
