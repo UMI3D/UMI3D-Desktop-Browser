@@ -65,8 +65,8 @@
                 <ui:VisualElement name="left-side-menu" style="width: 256px; height: 100%;">
                     <ui:VisualElement name="left-side-menu-container" style="flex-grow: 1; display: none;" />
                 </ui:VisualElement>
-                <ui:VisualElement name="game-view" style="flex-grow: 1; flex-direction: column-reverse;">
-                    <ui:VisualElement name="manipulation-container" class="dark-grey2-bck" style="height: 100px; flex-direction: row; justify-content: center;" />
+                <ui:VisualElement name="game-view" style="flex-grow: 1; flex-direction: column-reverse; align-items: center;">
+                    <ui:VisualElement name="manipulation-container" class="dark-grey2-bck" style="height: 100px; flex-direction: row; justify-content: space-between;" />
                     <ui:VisualElement name="game-menu" style="flex-grow: 1; padding-left: 50px; padding-right: 50px; padding-top: 50px; padding-bottom: 50px; display: flex;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="right-side-menu" style="width: 256px; display: flex;">

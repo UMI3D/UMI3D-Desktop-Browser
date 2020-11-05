@@ -171,6 +171,14 @@ Toggle > Label {
     background-color: rgb(50, 50, 50);
 }
 
+.dark-grey3-bck-hover {
+}
+
+.dark-grey3-bck-hover:hover {
+    background-color: white;
+    color: rgb(38, 38, 38);
+}
+
 .dark-grey3-bck {
     background-color: rgb(56, 56, 56);
 }

@@ -87,11 +87,12 @@ public class DropdownElement : VisualElement
                 var labelEntry = new Label { text = options[i] };
 
                 labelEntry.style.fontSize = isMini ? 11 : 15;
-                labelEntry.style.color = Color.white;
                 labelEntry.userData = i;
                 labelEntry.style.height = isMini ? 20 : 25;
                 labelEntry.style.paddingLeft = 5;
-                labelEntry.style.unityTextAlign = TextAnchor.MiddleLeft; 
+                labelEntry.style.unityTextAlign = TextAnchor.MiddleLeft;
+                labelEntry.AddToClassList("dark-grey3-bck-hover");
+                labelEntry.AddToClassList("white-txt");
                 labelEntry.RegisterCallback<MouseDownEvent>(e => {
                     CloseChoices(options[(int) labelEntry.userData], (int)labelEntry.userData);
                 });
