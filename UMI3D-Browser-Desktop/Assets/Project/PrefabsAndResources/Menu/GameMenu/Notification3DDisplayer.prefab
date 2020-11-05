@@ -1002,8 +1002,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   X: 0
-  Y: 0
-  rotation: {x: 0, y: 0, z: 0, w: 0}
+  Y: 1
+  rotation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &8590027533144304369
 GameObject:
   m_ObjectHideFlags: 0

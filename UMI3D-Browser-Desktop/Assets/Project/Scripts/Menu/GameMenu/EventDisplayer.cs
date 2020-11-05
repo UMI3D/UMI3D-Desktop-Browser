@@ -25,13 +25,13 @@ namespace BrowserDesktop.Menu
         public new class UxmlTraits : VisualElement.UxmlTraits { }
 
 
-        public void SetUp(string label, string inputName, Sprite icon = null)
+        public void SetUp(string label, string inputName, Texture2D icon = null)
         {
             TextField input = this.Q<TextField>("input");
 
             input.label = label;
             if (icon != null)
-                this.Q<VisualElement>("icon").style.backgroundImage = new StyleBackground(icon.texture);
+                this.Q<VisualElement>("icon").style.backgroundImage = icon;
             else
                 this.Q<VisualElement>("icon").style.display = DisplayStyle.None;
 
