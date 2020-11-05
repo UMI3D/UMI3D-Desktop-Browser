@@ -274,6 +274,12 @@ namespace BrowserDesktop.Menu
             }
             item.Q<Label>().text = label;
             iconSelectionButton = item.Q<Button>();
+
+            if (menu.icon2D != null)
+            {
+                item.Q<VisualElement>("icon").style.backgroundImage = menu.icon2D;
+            }
+
             iconSelectionButton.clickable.clicked += Select;
         }
 
