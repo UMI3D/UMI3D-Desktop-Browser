@@ -289,5 +289,14 @@ namespace BrowserDesktop.Interaction
             manipulationInputs.Clear();
             associatedInteraction = null;
         }
+
+        public override void UpdateHoveredObjectId(string hoveredObjectId)
+        {
+            this.hoveredObjectId = hoveredObjectId;
+            foreach(var input in InputInstances[this])
+            {
+                input.UpdateHoveredObjectId(hoveredObjectId);
+            }
+        }
     }
 }

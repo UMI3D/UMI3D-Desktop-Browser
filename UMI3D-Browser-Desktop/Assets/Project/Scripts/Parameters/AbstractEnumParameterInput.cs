@@ -43,7 +43,7 @@ namespace BrowserDesktop.Parameters
                         id = currentInteraction.id,
                         toolId = toolId,
                         parameter = dto,
-                        hoveredObjectId = hoveredObjectId
+                        hoveredObjectId = GetCurrentHoveredObjectID()
                     };
                     UMI3DCollaborationClientServer.Send(pararmeterDto, true);
                 };

@@ -98,7 +98,7 @@ namespace BrowserDesktop.Controller
                     LastHoveredId = CurrentHoveredId;
                     CurentHovered = null;
                     CurentHoveredTransform = null;
-                    LastHoveredId = null;
+                    CurrentHoveredId = null;
                     lastPoint = point;
                     lastNormal = normal;
                     lastDirection = direction;
@@ -372,7 +372,7 @@ namespace BrowserDesktop.Controller
                             {
                                 InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                             }
-                            mouseData.OldHovered.HoverExit(boneDto.boneType,mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
+                            mouseData.OldHovered.HoverExit(boneDto.boneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
                             CircularMenu.Collapse();
                             mouseData.OldHovered = null;
                         }
@@ -385,8 +385,20 @@ namespace BrowserDesktop.Controller
                             CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
                             mouseData.OldHovered = mouseData.CurentHovered;
                         }
-                        mouseData.CurentHovered.HoverEnter(boneDto.boneType,mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
+                        mouseData.CurentHovered.HoverEnter(boneDto.boneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
                     }
+                    else
+                    {
+                        if (mouseData.LastHoveredId != null && mouseData.CurrentHoveredId != mouseData.LastHoveredId)
+                        {
+                            if (associatedInputs.ContainsKey(mouseData.CurentHovered.dto.id))
+                            {
+                                foreach (var input in associatedInputs[mouseData.CurentHovered.dto.id])
+                                    input.UpdateHoveredObjectId(mouseData.CurrentHoveredId);
+                            }
+                        }
+                    }
+
                     mouseData.CurentHovered.Hovered(boneDto.boneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
                 }
                 else if (mouseData.OldHovered != null)

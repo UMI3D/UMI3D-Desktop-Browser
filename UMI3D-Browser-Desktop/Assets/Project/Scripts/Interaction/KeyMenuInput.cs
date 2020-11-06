@@ -153,4 +153,9 @@ public class KeyMenuInput : AbstractUMI3DInput
             }
         }
     }
+
+    public override void UpdateHoveredObjectId(string hoveredObjectId)
+    {
+        this.hoveredObjectId = hoveredObjectId;
+    }
 }

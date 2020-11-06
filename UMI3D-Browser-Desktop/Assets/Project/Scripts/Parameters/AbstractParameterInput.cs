@@ -44,6 +44,11 @@ namespace BrowserDesktop.Parameters
         /// <see cref="Associate(AbstractInteractionDto)"/>
         protected UnityAction<ValueType> callback;
 
+        protected string hoveredObjectId { get; private set; }
+
+        protected string GetCurrentHoveredObjectID() { return hoveredObjectId; }
+
+
         public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
         {
             if (currentInteraction != null)
@@ -53,6 +58,7 @@ namespace BrowserDesktop.Parameters
 
             if (interaction is ParameterType)
             {
+                this.hoveredObjectId = hoveredObjectId;
                 menuItem = new InputMenuItem()
                 {
                     dto = interaction as ParameterType,
@@ -71,11 +77,11 @@ namespace BrowserDesktop.Parameters
                         id = currentInteraction.id,
                         toolId = toolId,
                         parameter = dto,
-                        hoveredObjectId = hoveredObjectId
+                        hoveredObjectId = GetCurrentHoveredObjectID()
                     };
                     UMI3DCollaborationClientServer.Send(pararmeterDto, true);
                 };
-                
+
                 menuItem.Subscribe(callback);
                 currentInteraction = interaction;
             }
@@ -117,6 +123,11 @@ namespace BrowserDesktop.Parameters
         private void OnDestroy()
         {
             Dissociate();
+        }
+
+        public override void UpdateHoveredObjectId(string hoveredObjectId)
+        {
+            this.hoveredObjectId = hoveredObjectId;
         }
     }
 }
