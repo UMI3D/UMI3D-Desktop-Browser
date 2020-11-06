@@ -235,7 +235,7 @@ public class WindowsManager : MonoBehaviour
     /// <param name="value"></param>
     private void ShowWindowBorders(bool value)
     {
-        if (Application.isEditor) return; //We don't want to hide the toolbar from our editor!
+        if (Application.isEditor) return; //Not to hide the editor toolbar!
 
         int style = GetWindowLong(hWnd, GWL_STYLE).ToInt32(); //gets current style
 
@@ -248,7 +248,19 @@ public class WindowsManager : MonoBehaviour
         {
             SetWindowLong(hWnd, GWL_STYLE, (uint)(style & ~(WS_CAPTION))); //removes caption and the sizebox from current style.
             SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW); //Make the window render above toolbar.
-            ShowWindow(GetActiveWindow(), 3);
+
+
+            // Seems useless but for now it's a trick to remove the titlebar without having to resize first the window
+            if (IsZoomed(GetActiveWindow()))//Check if the window is maximised
+            {    
+                ShowWindow(GetActiveWindow(), 9);
+                ShowWindow(GetActiveWindow(), 3);
+            }
+            else
+            {
+                ShowWindow(GetActiveWindow(), 3);
+                ShowWindow(GetActiveWindow(), 9);
+            }
         }
     }
 

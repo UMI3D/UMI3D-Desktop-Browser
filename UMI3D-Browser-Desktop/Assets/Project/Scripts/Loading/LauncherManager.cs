@@ -215,7 +215,7 @@ public class LauncherManager : MonoBehaviour
         favoriteEnvironmentSlider.ClearItems();
         foreach (var env in favoriteConnectionData)
         {
-            var item = favoriteEnvItemTreeAsset.CloneTree();
+            var item = favoriteEnvItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
             item.Q<Label>().text = env.environmentName;
             item.RegisterCallback<MouseDownEvent>(e =>
             {
