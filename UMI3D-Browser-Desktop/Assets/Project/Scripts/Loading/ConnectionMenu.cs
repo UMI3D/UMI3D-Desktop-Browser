@@ -173,8 +173,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         var passwordVisibleBtn = passwordScreen.Q<VisualElement>("password-visibility");
         passwordVisibleBtn.RegisterCallback<MouseDownEvent>(e =>
         {
-            if (e.clickCount == 1)
-            {
+
                 passwordVisibleBtn.ClearClassList();
                 isPasswordVisible = !isPasswordVisible;
                 if (isPasswordVisible)
@@ -182,7 +181,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 else
                     passwordVisibleBtn.AddToClassList("input-eye-button-off");
                 passwordInput.isPasswordField = !isPasswordVisible;
-            }
+
+                passwordInput.Focus();
         });
     }
 
