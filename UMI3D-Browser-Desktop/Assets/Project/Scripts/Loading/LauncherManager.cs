@@ -114,7 +114,9 @@ public class LauncherManager : MonoBehaviour
 
         urlEnterBtn.clickable.clicked += SetDomain;
 
-        urlScreen.Q<Button>("manage-library-btn").clickable.clicked += DisplayLibraries;
+        var manageLibraryBtn = urlScreen.Q<Button>("manage-library-btn");
+        manageLibraryBtn.clickable.clicked += DisplayLibraries;
+        manageLibraryBtn.transform.position -= new Vector3(75, 0, 0);
 
         favoriteEnvironmentSlider = new SliderElement();
         favoriteEnvironmentSlider.SetUp(urlScreen.Q<VisualElement>("slider"));
