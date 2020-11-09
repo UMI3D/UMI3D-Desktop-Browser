@@ -283,6 +283,7 @@ Toggle > Label {
 
 .input-eye-button-off {
     background-image: url('/Assets/Project/UI/UI_connection/btn_hide_ENABLE.png');
+    -unity-background-scale-mode: scale-and-crop;
 }
 
 .input-eye-button-off:hover {
