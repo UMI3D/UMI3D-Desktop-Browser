@@ -24,12 +24,14 @@ public class LoadingBar
     VisualElement loadingBarContainer;
     VisualElement loadingBarProgress;
     VisualElement loadingScreen;
+    Label loaderTxt;
 
     public LoadingBar(VisualElement root)
     {
         loadingBarProgress = root.Q<VisualElement>("loading-bar-progress");
         loadingBarContainer = root.Q<VisualElement>("loading-bar-container");
         loadingScreen = root.Q<VisualElement>("loading-screen");
+        loaderTxt = root.Q<Label>("loader-txt");
 
         UMI3DEnvironmentLoader.Instance.onProgressChange.AddListener(OnProgressChange);
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(Hide);
@@ -45,6 +47,14 @@ public class LoadingBar
         }
 
         loadingBarProgress.style.width = val * loadingBarContainer.resolvedStyle.width;
+
+        if (val == 0.0)
+            Debug.Log("Reset");
+    }
+
+    public void SetText(string text)
+    {
+        loaderTxt.text = text;
     }
 
     void Hide()

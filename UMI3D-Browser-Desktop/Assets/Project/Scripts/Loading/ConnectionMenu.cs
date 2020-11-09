@@ -147,6 +147,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         VisualElement root = panelRenderer.visualTree;
 
         loader = new LoadingBar(root);
+        loader.SetText("Connection");
 
         loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
 
@@ -317,6 +318,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         callback.Invoke(loginInput.value, passwordInput.value);
         UMI3DCollaborationClientServer.Identity.login = loginInput.value;
         loadingScreen.style.display = DisplayStyle.Flex;
+        loader.SetText("Loading");
         nextStep = null;
     }
 
@@ -326,6 +328,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// </summary>
     private void ShouldDownloadLibraries(List<string> ids, Action<bool> callback)
     {
+        loader.SetText("Loading environment"); // TODO change
         if (ids.Count == 0)
         {
             callback.Invoke(true);
