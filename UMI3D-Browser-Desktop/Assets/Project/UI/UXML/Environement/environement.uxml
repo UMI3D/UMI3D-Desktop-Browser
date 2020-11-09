@@ -86,9 +86,9 @@
                         <ui:Button name="interaction-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px; font-size: 13px;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="console" style="display: flex; position: absolute; width: 430px; height: 200px; bottom: 0; right: 0; background-color: rgba(38, 38, 38, 0.69); padding-top: 15px;">
+                <ui:VisualElement name="console" style="display: flex; position: absolute; width: 430px; height: 200px; bottom: 0; right: 0; background-color: rgba(50, 50, 50, 0.8); padding-top: 15px;">
                     <ui:Label text="Label" name="version" class="dark-grey1-bck grey-txt" style="height: 20px; -unity-text-align: middle-right; padding-right: 15px;" />
-                    <ui:ScrollView name="console-container" show-horizontal-scroller="false" show-vertical-scroller="false" style="flex-grow: 1; margin-left: 5px;" />
+                    <ui:ScrollView name="console-container" show-horizontal-scroller="false" show-vertical-scroller="false" class="orange-scroll-view" style="flex-grow: 1; margin-left: 5px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 30px; justify-content: center; flex-direction: row;">
