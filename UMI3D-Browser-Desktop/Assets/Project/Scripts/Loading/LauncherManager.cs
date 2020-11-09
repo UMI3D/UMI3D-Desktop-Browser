@@ -47,6 +47,7 @@ public class LauncherManager : MonoBehaviour
     private VisualElement root;
 
     //Domain screen
+    VisualElement umiLogo;
     VisualElement urlScreen;
     TextField urlInput;
     Button urlEnterBtn;
@@ -103,6 +104,8 @@ public class LauncherManager : MonoBehaviour
         root.Q<Label>("version").text = umi3d.UMI3DVersion.version;
         BindURLScreen();
         BindLibrariesScreen();
+
+        root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
     }
 
     private void BindURLScreen()
@@ -120,6 +123,8 @@ public class LauncherManager : MonoBehaviour
 
         favoriteEnvironmentSlider = new SliderElement();
         favoriteEnvironmentSlider.SetUp(urlScreen.Q<VisualElement>("slider"));
+
+        umiLogo = urlScreen.Q<VisualElement>("logo");
     }
 
     private void BindLibrariesScreen()
@@ -137,7 +142,6 @@ public class LauncherManager : MonoBehaviour
 
     private void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.Return))
         {
             if (DialogueBoxElement.IsADialogueBoxDislayed)
@@ -355,6 +359,16 @@ public class LauncherManager : MonoBehaviour
             size += DirSize(di);
         }
         return size;
+    }
+
+    //Resize some elements when the window is resized, to make the UI more responsive.
+    private void ResizeElements(GeometryChangedEvent e)
+    {
+        float height = e.newRect.height * 0.16f;
+        umiLogo.style.height = height;
+        umiLogo.style.minHeight = height;
+
+        umiLogo.style.marginBottom = e.newRect.height * 0.08f;
     }
 
     #endregion

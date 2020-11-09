@@ -63,6 +63,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private VisualElement connectionScreen;
 
+    private VisualElement logo;
     private VisualElement passwordScreen;
     private TextField loginInput;
     private TextField passwordInput;
@@ -158,12 +159,15 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
         parametersScreen = panelRenderer.visualTree.Q<VisualElement>("parameters-screen");
         connectionScreen.style.display = DisplayStyle.Flex;
+
+        root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
     }
 
     bool isPasswordVisible = false;
     private void BindPasswordScreen()
     {
         passwordScreen = connectionScreen.Q<VisualElement>("password-screen");
+        logo = connectionScreen.Q<VisualElement>("logo");
         passwordInput = passwordScreen.Q<TextField>("password-input");
         loginInput = passwordScreen.Q<TextField>("login-input");
         connectBtn = passwordScreen.Q<Button>("connect-btn");
@@ -184,6 +188,13 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
                 passwordInput.Focus();
         });
+    }
+
+    //Resize some elements when the window is resized, to make the UI more responsive.
+    private void ResizeElements(GeometryChangedEvent e)
+    {
+        logo.style.height = e.newRect.height * 0.16f;
+        logo.style.marginBottom = e.newRect.height * 0.08f;
     }
 
     #endregion

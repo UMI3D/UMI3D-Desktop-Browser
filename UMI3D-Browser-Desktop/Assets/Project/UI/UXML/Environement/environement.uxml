@@ -27,7 +27,7 @@
                 <ui:Button name="minimize-window-btn" class="top-left-menu-btn minimize-btn" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="connection-menu" style="display: none; flex-grow: 1;">
+        <ui:VisualElement name="connection-menu" style="display: flex; flex-grow: 1;">
             <ui:VisualElement style="flex-direction: row; flex-grow: 1; background-image: url(&apos;/Assets/Project/UI/UI_connection/background-middle.png&apos;);">
                 <ui:VisualElement name="right" style="flex-grow: 1;">
                     <ui:Button name="back-menu-btn" class="btn-orange btn-left-arrow" style="width: 80px; height: 80px; margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; display: flex;" />
@@ -47,7 +47,7 @@
                 <ui:Label text="version x.x.x" name="version" style="position: absolute; bottom: 9px; right: 13px; color: rgb(63, 63, 63); font-size: 18px; display: flex;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="game-menu-container" style="width: 100%; background-color: rgba(0, 0, 0, 0); display: flex; height: 100%;">
+        <ui:VisualElement name="game-menu-container" style="width: 100%; background-color: rgba(0, 0, 0, 0); display: none; height: 100%;">
             <ui:VisualElement name="session-info" class="dark-grey3-bck grey-border" style="height: 52px; border-bottom-width: 1px; justify-content: center; width: 100%; flex-direction: row; align-items: center;">
                 <ui:VisualElement name="session-info-container" class="dark-grey1-bck" style="height: 37px; flex-direction: row;">
                     <ui:Label text="Label" name="session-time" class="session-info-btn white-txt grey-border" style="-unity-text-align: middle-center;" />
