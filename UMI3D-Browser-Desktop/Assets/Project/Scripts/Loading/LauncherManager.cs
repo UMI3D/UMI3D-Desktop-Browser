@@ -267,19 +267,17 @@ public class LauncherManager : MonoBehaviour
                 }
         }
 
-        if (libs.Count == 0)
-            librariesScreen.Q<Label>("libraries-title").text = "There is currently no libraries installed";
-        else if (libs.Count == 1)
-            librariesScreen.Q<Label>("libraries-title").text = "There is one library currently installed";
-        else
-            librariesScreen.Q<Label>("libraries-title").text = "There are " + libs.Count + " libraries currently installed";
-
         foreach (var app in libs)
         {
             foreach (var lib in app.Value)
             {
                 var entry = libraryEntryTreeAsset.CloneTree();
                 entry.Q<Label>("library-name").text = lib.key;
+
+                DirectoryInfo dirInfo = new DirectoryInfo(lib.path);
+                double dirSize = DirSize(dirInfo) / Mathf.Pow(10, 6);
+                dirSize = Math.Round(dirSize, 2);
+                entry.Q<Label>("library-size").text = dirSize.ToString() + " mo"; ;
 
                 entry.Q<Button>("library-unistall").clickable.clicked += () =>
                 {
@@ -335,6 +333,29 @@ public class LauncherManager : MonoBehaviour
 
             librariesList.Add(entry);
         }*/
+    }
+
+    /// <summary>
+    /// Returns the size of a directory in bytes
+    /// </summary>
+    /// <param name="d"></param>
+    /// <returns></returns>
+    public long DirSize(DirectoryInfo d)
+    {
+        long size = 0;
+        // Add file sizes.
+        FileInfo[] fis = d.GetFiles();
+        foreach (FileInfo fi in fis)
+        {
+            size += fi.Length;
+        }
+        // Add subdirectory sizes.
+        DirectoryInfo[] dis = d.GetDirectories();
+        foreach (DirectoryInfo di in dis)
+        {
+            size += DirSize(di);
+        }
+        return size;
     }
 
     #endregion
