@@ -770,6 +770,11 @@ PrefabInstance:
       propertyPath: anchor
       value: 
       objectReference: {fileID: 447649451}
+    - target: {fileID: 3429991565157904829, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5657911632462509561, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
@@ -783,7 +788,7 @@ PrefabInstance:
     - target: {fileID: 5657911632511662692, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5657911632511662692, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
         type: 3}
@@ -871,12 +876,6 @@ Transform:
 --- !u!20 &447649456 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 5657911632462509561, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
-    type: 3}
-  m_PrefabInstance: {fileID: 447649450}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &447649457 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5657911633342141545, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
     type: 3}
   m_PrefabInstance: {fileID: 447649450}
   m_PrefabAsset: {fileID: 0}
@@ -1924,7 +1923,7 @@ MonoBehaviour:
   bone: 1
   Cursor: {fileID: 447649455}
   AvatarParent: {fileID: 447649451}
-  Head: {fileID: 447649457}
+  Head: {fileID: 0}
   distCursor: 1
   MaxDistCursorDelta: 0.3
   MinimumCursorDistance: 0.5
@@ -3685,6 +3684,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dee479a7b501484b8b1c8e522450361, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  encoderType: 0
   OnNewToken:
     m_PersistentCalls:
       m_Calls: []
