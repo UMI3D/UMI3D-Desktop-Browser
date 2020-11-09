@@ -47,9 +47,6 @@ public class LoadingBar
         }
 
         loadingBarProgress.style.width = val * loadingBarContainer.resolvedStyle.width;
-
-        if (val == 0.0)
-            Debug.Log("Reset");
     }
 
     public void SetText(string text)

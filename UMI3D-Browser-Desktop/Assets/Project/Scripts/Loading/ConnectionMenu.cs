@@ -91,6 +91,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         Debug.Assert(Menu != null);
         Debug.Assert(MenuDisplayManager != null);
 
+
+        identifier.GetLoginAction = GetLogin;
         identifier.GetIdentityAction = GetIdentity;
         identifier.ShouldDownloadLib = ShouldDownloadLibraries;
         identifier.GetParameters = GetParameterDtos;
@@ -293,19 +295,46 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     }
 
     /// <summary>
-    /// Asks users a login/password to join the environement.
+    /// Asks users a login to join the environement.
+    /// </summary>
+    private void GetLogin(Action<string> callback)
+    {
+        DisplayScreenToLogin();
+
+        AskPassword(false);
+        connectBtn.clickable.clicked += () => SendIdentity((login, password) => callback(login));
+
+        nextStep = () => SendIdentity((login, password) => callback(login));
+    }
+
+    /// <summary>
+    /// Asks users a login and password to join the environement.
     /// </summary>
     private void GetIdentity(Action<string, string> callback)
     {
-        var loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
-        loadingScreen.style.display = DisplayStyle.None;
+        DisplayScreenToLogin();
 
+        AskPassword(true);
+        connectBtn.clickable.clicked += () => SendIdentity(callback);
+        nextStep = () => SendIdentity(callback);
+    }
+
+    private void DisplayScreenToLogin()
+    {
+        loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
+        loadingScreen.style.display = DisplayStyle.None;
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         passwordScreen.style.display = DisplayStyle.Flex;
+    } 
 
-        connectBtn.clickable.clicked += () => SendIdentity(callback);
-
-        nextStep = () => SendIdentity(callback);
+    /// <summary>
+    /// Show or hide the form to set the password.
+    /// </summary>
+    /// <param name="val"></param>
+    private void AskPassword(bool val)
+    {
+        passwordScreen.Q<VisualElement>("password-container").style.display = val ? DisplayStyle.Flex: DisplayStyle.None;
+        passwordScreen.Q<Label>("password-label").style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
     /// <summary>
@@ -408,7 +437,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 Menu.menu.Add(GetInteractionItem(param));
             }
 
-            ButtonMenuItem send = new ButtonMenuItem() { Name = "Send", toggle = false };
+            ButtonMenuItem send = new ButtonMenuItem() { Name = "Join", toggle = false };
             UnityAction<bool> action = (bool b) => {
                 parametersScreen.style.display = DisplayStyle.None;
                 MenuDisplayManager.Hide(true);

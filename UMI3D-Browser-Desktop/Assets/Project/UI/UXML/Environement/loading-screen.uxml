@@ -6,7 +6,7 @@
                 <ui:VisualElement name="loading-bar-container" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; width: 100%; height: 43px; border-left-color: rgb(247, 182, 87); border-right-color: rgb(247, 182, 87); border-top-color: rgb(247, 182, 87); border-bottom-color: rgb(247, 182, 87); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; background-color: rgba(255, 255, 255, 0); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
                     <ui:VisualElement name="loading-bar-progress" style="height: 100%; width: 45%; background-color: rgb(247, 182, 87); border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;" />
                 </ui:VisualElement>
-                <ui:Label text="Loading" class="medium-size-txt white-txt" style="-unity-text-align: upper-center; margin-top: 22px;" />
+                <ui:Label text="Loading" name="loader-txt" class="medium-size-txt white-txt" style="-unity-text-align: upper-center; margin-top: 22px;" />
                 <ui:VisualElement name="loader-container" style="margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;" />
             </ui:VisualElement>
         </ui:VisualElement>
