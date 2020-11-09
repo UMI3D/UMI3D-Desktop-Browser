@@ -15,6 +15,7 @@ limitations under the License.
 */
 using BrowserDesktop.Controller;
 using BrowserDesktop.Menu;
+using System.Collections;
 using System.Linq;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
@@ -67,6 +68,12 @@ namespace BrowserDesktop.Interaction
 
         protected virtual void Start()
         {
+            StartCoroutine(InitEventDisplayer());
+        }
+
+        IEnumerator InitEventDisplayer()
+        {
+            yield return null;
             eventDisplayer = EventMenu.CreateDisplayer();
             eventDisplayer?.Display(false);
         }
