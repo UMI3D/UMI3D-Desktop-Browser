@@ -282,7 +282,7 @@ public class LauncherManager : MonoBehaviour
                 entry.Q<Button>("library-unistall").clickable.clicked += () =>
                 {
                     DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-                    dialogue.Setup("Remove library", "Are your sure to unistal " + lib.key, "Unistall", "Cancel", (b) =>
+                    dialogue.Setup("Are you sure ... ?", "This library is required for " + app.Key + " environment", "YES", "NO", (b) =>
                     {
                         if (b)
                         {
@@ -290,8 +290,7 @@ public class LauncherManager : MonoBehaviour
                             UMI3DResourcesManager.RemoveLibrary(lib.key);
                             DisplayLibraries();
                         }
-                    },
-                    true);
+                    });
                     root.Add(dialogue);
                 };
                 librariesList.Add(entry);
