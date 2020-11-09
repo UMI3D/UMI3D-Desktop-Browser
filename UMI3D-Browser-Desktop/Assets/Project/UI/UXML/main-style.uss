@@ -456,15 +456,15 @@ Toggle > Label {
 }
 
 .bin-btn {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_delete_ENABLE.png');
+    background-image: url('/Assets/Project/UI/UI_connection/btn_delete_ENABLE_1.png');
 }
 
 .bin-btn:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_delete_HOVER.png');
+    background-image: url('/Assets/Project/UI/UI_connection/btn_delete_HOVER_1.png');
 }
 
 .bin-btn:active {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_delete_ENABLE.png');
+    background-image: url('/Assets/Project/UI/UI_connection/btn_delete_ENABLE_1.png');
 }
 
 .minimize-btn {

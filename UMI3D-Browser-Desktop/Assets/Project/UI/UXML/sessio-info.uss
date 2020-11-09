@@ -7,59 +7,59 @@
 }
 
 .session-info-btn-sound-on {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_soundON_ENABLE.png');
+   
 }
 
 .session-info-btn-sound-on:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_soundON_HOVER.png');
+   
 }
 
 .session-info-btn-sound-off {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_soundOFF_ENABLE.png');
+    
 }
 
 .session-info-btn-sound-off:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_soundOFF_HOVER.png');
+    
 }
 
 .session-info-btn-active-avatar-on {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_avatarON_ENABLE.png');
+    
 }
 
 .session-info-btn-active-avatar-on:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_avatarON_HOVER.png');
+    
 }
 
 .session-info-btn-active-avatar-off {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_avatarOFF_ENABLE.png');
+    
 }
 
 .session-info-btn-active-avatar-off:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_avatarOFF_HOVER.png');
+   
 }
 
 .session-info-btn-mute-on {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_microON_ENABLE.png');
+    
 }
 
 .session-info-btn-mute-on:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_microON_HOVER.png');
+    
 }
 
 .session-info-btn-mute-off {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_microOFF_ENABLE.png');
+    
 }
 
 .session-info-btn-mute-off:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_microOFF_HOVER.png');
+    
 }
 
 .session-info-btn-hang-up {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_hangUP_ENABLE.png');
+    
 }
 
 .session-info-btn-hang-up:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_hangUP_HOVER.png');
+    
 }
 
 .is-favorite {
