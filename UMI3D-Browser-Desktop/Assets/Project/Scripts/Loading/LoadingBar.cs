@@ -33,6 +33,11 @@ public class LoadingBar
         loadingScreen = root.Q<VisualElement>("loading-screen");
         loaderTxt = root.Q<Label>("loader-txt");
 
+        Debug.Assert(loadingBarProgress != null);
+        Debug.Assert(loadingBarContainer != null);
+        Debug.Assert(loadingScreen != null);
+        Debug.Assert(loaderTxt != null);
+
         UMI3DEnvironmentLoader.Instance.onProgressChange.AddListener(OnProgressChange);
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(Hide);
         UMI3DResourcesManager.Instance.onProgressChange.AddListener(OnProgressChange);
@@ -57,7 +62,6 @@ public class LoadingBar
     void Hide()
     {
         Debug.Log("<color=green>Loading finished.</color>");
-
         loadingScreen.style.display = DisplayStyle.None;
         MouseAndKeyboardController.CanProcess = true;
     }

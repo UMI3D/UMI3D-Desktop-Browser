@@ -14,57 +14,88 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Collections;
 using Unity.UIElements.Runtime;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
 {
-
     public class Console : MonoBehaviour
     {
         public PanelRenderer panelRenderer;
 
-        Label consolePreview;
+        VisualElement console;
+        ScrollView consoleContainer;
+        Button openConsoleButton;
+
+        int consoleHeight;
+
+        bool isDisplayed = true;
 
         void Start()
         {
-            consolePreview = panelRenderer.visualTree.Q<Label>("console-footer");
-            consolePreview.text = "";
-
-            panelRenderer.visualTree.Q<Label>("version-footer").text = umi3d.UMI3DVersion.version;
+            var root = panelRenderer.visualTree;
+            openConsoleButton = root.Q<Button>("open-console-button");
+            openConsoleButton.clickable.clicked += () => DisplayConsole(!isDisplayed);
+            console = root.Q<VisualElement>("console");
+            console.Q<Label>("version").text = umi3d.UMI3DVersion.version;
+            consoleContainer = console.Q<ScrollView>("console-container");
 
             Application.logMessageReceived += HandleLog;
+
+            console.RegisterCallback<GeometryChangedEvent>(e =>
+            {
+                consoleHeight = (int)console.layout.height;
+            });
+
+            DisplayConsole(false);
         }
 
         void HandleLog(string logString, string stackTrace, LogType type)
         {
-            consolePreview.ClearClassList();
-            bool display = true;
-            
+            string buttonClassName = string.Empty;
+
+            Label log = new Label { text = "\u00B7 " + logString };
+
+            if (type != LogType.Warning)
+                consoleContainer.Add(log);
+
             switch (type)
             {
                 case LogType.Error:
-                    consolePreview.AddToClassList("error-txt");
+                    log.AddToClassList("error-txt");
+                    buttonClassName = "error-txt";
                     break;
                 case LogType.Assert:
-                    consolePreview.AddToClassList("error-txt");
+                    log.AddToClassList("error-txt");
+                    buttonClassName = "error-txt";
                     break;
                 case LogType.Warning:
-                    consolePreview.AddToClassList("warning-txt");
-                    display = false;
+                    log.AddToClassList("warning-txt");
+                    buttonClassName = "warning-txt";
                     break;
                 case LogType.Log:
-                    display = false;
+                    log.AddToClassList("grey-txt");
+                    buttonClassName = "grey-txt";
                     break;
                 case LogType.Exception:
-                    consolePreview.AddToClassList("error-txt");
+                    log.AddToClassList("error-txt");
+                    buttonClassName = "error-txt";
                     break;
                 default:
                     break;
             }
-            if(display)
-                consolePreview.text = logString;
+
+            openConsoleButton.ClearClassList();
+            openConsoleButton.AddToClassList(buttonClassName);
+
+        }
+    
+        void DisplayConsole(bool val)
+        {
+            isDisplayed = val;
+            console.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
         }
     }
 }

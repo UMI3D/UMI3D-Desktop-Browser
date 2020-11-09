@@ -72,10 +72,10 @@
                 <ui:VisualElement name="right-side-menu" style="width: 256px; display: flex;">
                     <ui:VisualElement name="right-side-menu-container" class="dark-grey2-bck grey-border" style="left: 256px; padding-top: 24px; border-top-width: 1px;">
                         <ui:VisualElement name="toolbox-menu" style="flex-grow: 1; flex-direction: column-reverse;">
-                            <ui:Button name="toolbox-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px;" />
+                            <ui:Button name="toolbox-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px; font-size: 13px;" />
                         </ui:VisualElement>
                         <ui:VisualElement name="information-pop-up-events">
-                            <ui:Label text="Tool controls" class="orange-text dark-grey1-bck" style="height: 20px; -unity-text-align: middle-left; padding-left: 5px;" />
+                            <ui:Label text="Tool controls" class="orange-text dark-grey1-bck" style="height: 20px; -unity-text-align: middle-left; padding-left: 5px; font-size: 13px;" />
                             <ui:VisualElement name="space" class="dark-grey2-bck" style="height: 3px;" />
                             <ui:VisualElement name="event-container" style="flex-direction: column-reverse; display: flex;" />
                             <ui:VisualElement name="space" class="dark-grey2-bck" style="height: 3px;" />
@@ -83,8 +83,12 @@
                         <ui:VisualElement name="interaction-menu" style="flex-grow: 1;">
                             <ui:VisualElement name="interaction-menu-container" style="flex-grow: 1;" />
                         </ui:VisualElement>
-                        <ui:Button name="interaction-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px;" />
+                        <ui:Button name="interaction-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px; font-size: 13px;" />
                     </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="console" style="display: flex; position: absolute; width: 430px; height: 200px; bottom: 0; right: 0; background-color: rgba(38, 38, 38, 0.69); padding-top: 15px;">
+                    <ui:Label text="Label" name="version" class="dark-grey1-bck grey-txt" style="height: 20px; -unity-text-align: middle-right; padding-right: 15px;" />
+                    <ui:ScrollView name="console-container" show-horizontal-scroller="false" show-vertical-scroller="false" style="flex-grow: 1; margin-left: 5px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 30px; justify-content: center; flex-direction: row;">
@@ -93,7 +97,7 @@
                     <ui:Label text="T : mute/unmute" name="shortcuts-mute" style="color: rgb(182, 182, 182); -unity-text-align: middle-left; margin-left: 10px;" />
                 </ui:VisualElement>
                 <ui:Label text="Erreur" name="console-footer" class="grey-border" style="-unity-text-align: middle-left; padding-left: 10px; padding-right: 10px; border-right-width: 1px; border-left-width: 1px; width: 65%;" />
-                <ui:Label text="2.xx.xx.xx" name="version-footer" style="color: rgb(182, 182, 182); -unity-text-align: middle-right; width: 8%; margin-left: 10px; margin-right: 10px;" />
+                <ui:Button text="Console" name="open-console-button" style="width: 8%;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

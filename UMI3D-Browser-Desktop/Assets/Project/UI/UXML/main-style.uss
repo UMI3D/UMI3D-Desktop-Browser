@@ -617,6 +617,14 @@ Toggle > Label {
     color: rgb(179, 0, 0);
 }
 
+.warning-txt {
+    color: rgb(247, 182, 87);
+}
+
+.grey-txt {
+    color: rgb(182, 182, 182);
+}
+
 .border-hover {
 }
 
