@@ -22,7 +22,7 @@ using UnityEngine.UIElements;
 
 public class SliderElement
 {
-    int itemsPerPage = 3;
+    int itemsPerPage = 4;
 
     List<VisualElement> items;
 

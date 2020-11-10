@@ -278,6 +278,16 @@ public class LauncherManager : MonoBehaviour
                 var entry = libraryEntryTreeAsset.CloneTree();
                 entry.Q<Label>("library-name").text = lib.key;
 
+                foreach (var appli in lib.applications)
+                {
+                    Label appliLabel = new Label { text = appli };
+                    appliLabel.AddToClassList("white-txt");
+                    appliLabel.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
+                    appliLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+                    appliLabel.style.paddingLeft = 16;
+                    entry.Q<VisualElement>("environments").Add(appliLabel);
+                }
+
                 DirectoryInfo dirInfo = new DirectoryInfo(lib.path);
                 double dirSize = DirSize(dirInfo) / Mathf.Pow(10, 6);
                 dirSize = Math.Round(dirSize, 2);

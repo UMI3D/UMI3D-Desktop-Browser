@@ -99,12 +99,17 @@ Toggle > Label {
 
 .orange-scroll-view .unity-scroller #unity-slider {
     background-color: rgb(38, 38, 38);
+    margin-top: 12px;
+    margin-bottom: 12px;
 }
 
 .orange-scroll-view > Scroller #unity-low-button {
-    width: 100%;
+    width: 12px;
     background-image: url('/Assets/Project/UI/UI_connection/btn_arrowUp_ENABLE.png');
     position: absolute;
+    height: 9px;
+    margin-left: 1px;
+    margin-right: 1px;
 }
 
 .orange-scroll-view > Scroller #unity-low-button:hover {
@@ -116,10 +121,13 @@ Toggle > Label {
 }
 
 .orange-scroll-view > Scroller #unity-high-button {
-    width: 100%;
+    width: 12px;
     background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_ENABLE.png');
     position: absolute;
     bottom: 0;
+    height: 9px;
+    margin-left: 1px;
+    margin-right: 1px;
 }
 
 .orange-scroll-view > Scroller #unity-high-button:hover {
@@ -128,6 +136,14 @@ Toggle > Label {
 
 .orange-scroll-view > Scroller #unity-high-button:active {
     background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_PRESS.png');
+}
+
+.orange-scroll-view .unity-disabled > #unity-low-button {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowUp_DISABLE.png');
+}
+
+.orange-scroll-view .unity-disabled > #unity-high-button {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_DISABLE.png');
 }
 
 .vertical-scroll-view {
