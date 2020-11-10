@@ -63,7 +63,7 @@ namespace BrowserDesktop.Menu
 
         Button backCircularMenu;
 
-        Label shortcutsMenu;
+        Label shortcutsRightClick;
 
         #endregion
 
@@ -90,6 +90,8 @@ namespace BrowserDesktop.Menu
             VisualElement root = panelRenderer.visualTree;
 
             BindRightSideMenu(root);
+            
+            shortcutsRightClick = root.Q<Label>("shortcuts-right-click");
         }
 
         private void BindRightSideMenu(VisualElement root)
@@ -98,7 +100,6 @@ namespace BrowserDesktop.Menu
             interactionMenu = root.Q<VisualElement>("interaction-menu");
             toolBoxMenu = root.Q<VisualElement>("toolbox-menu");
             eventsMenu = root.Q<VisualElement>("information-pop-up-events");
-            shortcutsMenu = root.Q<Label>("shortcuts-menu");
 
             backCircularMenu = root.Q<Button>("interaction-menu-back");
             backCircularMenu.clickable.clicked += () =>
@@ -264,15 +265,15 @@ namespace BrowserDesktop.Menu
             if (nbOfCircularDisplayersLastFrame == 0 && nbEventsDisplayedLastFrame == 0)
             {
                 if (IsExpanded)
-                    shortcutsMenu.text = "Escape : close main menu";
+                    shortcutsRightClick.text = "Right click : close main menu";
                 else
-                    shortcutsMenu.text = "Escape : open main menu";
+                    shortcutsRightClick.text = "Right click : open main menu";
             } else
             {
                 if (IsExpanded)
-                    shortcutsMenu.text = "Escape/Right click : close interaction menu";
+                    shortcutsRightClick.text = "Right click : close interaction menu";
                 else
-                    shortcutsMenu.text = "Escape/Right click : open interaction menu";
+                    shortcutsRightClick.text = "Right click : open interaction menu";
             }
         }
 

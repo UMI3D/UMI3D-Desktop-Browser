@@ -32,6 +32,7 @@ namespace BrowserMenu
         Button pauseMenuOpenBtn;
         Button openOptionMenuBtn;
         Button leaveEnvironmentBtn;
+        Label shortcutsMenu;
 
         [SerializeField]
         float pauseMenuHeight = 52;
@@ -42,7 +43,9 @@ namespace BrowserMenu
 
         void Start()
         {
-            var pauseMenu = panelRenderer.visualTree.Q<VisualElement>("pause-menu");
+            var root = panelRenderer.visualTree;
+            var pauseMenu = root.Q<VisualElement>("pause-menu");
+            shortcutsMenu = root.Q<Label>("shortcuts-menu");
             pauseMenuContainer = pauseMenu.Q<VisualElement>("pause-menu-container");
 
             openOptionMenuBtn = pauseMenu.Q<Button>("open-option-menu-btn");
@@ -90,6 +93,7 @@ namespace BrowserMenu
                     elt.style.height = val;
                 });
                 pauseMenuOpenBtn.style.marginTop = 0;
+                shortcutsMenu.text = "Escape : close pause menu";
             } else
             {
                 leaveEnvironmentBtn.style.display = DisplayStyle.None;
@@ -99,6 +103,7 @@ namespace BrowserMenu
                     elt.style.height = val;
                 });
                 pauseMenuOpenBtn.style.marginTop = 1;
+                shortcutsMenu.text = "Escape : open pause menu";
             }
         }
 
