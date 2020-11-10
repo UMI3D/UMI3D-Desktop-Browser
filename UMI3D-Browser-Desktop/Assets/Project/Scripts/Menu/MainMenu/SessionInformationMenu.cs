@@ -16,12 +16,9 @@ limitations under the License.
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using umi3d.cdk;
 using umi3d.common;
 using Unity.UIElements.Runtime;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 public class SessionInformationMenu : Singleton<SessionInformationMenu>
@@ -31,10 +28,7 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
     VisualElement sessionInfo;
 
     Label sessionTime;
-    Button activeSound;
-    Button activeAvatar;
-    Button muteBtn;
-    Button hangUpBtn;
+    Button microphoneBtn;
     Label environmentName;
     Button isFavoriteBtn;
 
@@ -59,26 +53,16 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
 
         sessionInfo = root.Q<VisualElement>("session-info");
         sessionTime = sessionInfo.Q<Label>("session-time");
-        activeSound = sessionInfo.Q<Button>("active-sound");
-        activeSound.clickable.clicked += () =>
-        {
-            throw new NotImplementedException("TODO : activeSound button");
-        };
 
-        activeAvatar = sessionInfo.Q<Button>("active-avatar");
-        activeAvatar.clickable.clicked += () =>
-        {
-            throw new NotImplementedException("TODO : activeAvatar button");
-        };
 
-        muteBtn = sessionInfo.Q<Button>("mute-btn");
-        muteBtn.clickable.clicked += () =>
+        microphoneBtn = sessionInfo.Q<Button>("microphone-btn");
+        microphoneBtn.clickable.clicked += () =>
         {
             ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
         };
 
-        hangUpBtn = sessionInfo.Q<Button>("hang-up-btn");
-        hangUpBtn.clickable.clicked += ConnectionMenu.Instance.Leave;
+        /*hangUpBtn = sessionInfo.Q<Button>("hang-up-btn");
+        hangUpBtn.clickable.clicked += ConnectionMenu.Instance.Leave;*/
 
         isFavoriteBtn = root.Q<Button>("is-favorite-btn");
         isFavoriteBtn.clickable.clicked += () =>
@@ -113,25 +97,6 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
         sessionTime.text = time.ToString("hh") + ":" + time.ToString("mm") + ":" + time.ToString("ss");
     }
 
-    public static void Display(bool val)
-    {
-        if (Exists)
-        {
-            Instance._Display(val);
-        } else
-        {
-            Debug.LogError("SessionInformationMenu does not exist in the scene");
-        }
-    }
-
-    /// <summary>
-    /// Displays or hide the session info bar.
-    /// </summary>
-    /// <param name="val"></param>
-    private void _Display(bool val)
-    {
-        sessionInfo.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
-    }
 
     /// <summary>
     /// Event called when the status of the microphone changes.
@@ -141,14 +106,14 @@ public class SessionInformationMenu : Singleton<SessionInformationMenu>
     {
         if (val)
         {
-            muteBtn.RemoveFromClassList("session-info-btn-mute-off");
-            muteBtn.AddToClassList("session-info-btn-mute-on");
+            microphoneBtn.RemoveFromClassList("btn-mic-off");
+            microphoneBtn.AddToClassList("btn-mic-on");
         }
             
         else
         {
-            muteBtn.RemoveFromClassList("session-info-btn-mute-on");
-            muteBtn.AddToClassList("session-info-btn-mute-off");
+            microphoneBtn.RemoveFromClassList("btn-mic-on");
+            microphoneBtn.AddToClassList("btn-mic-off");
         }
            
     }

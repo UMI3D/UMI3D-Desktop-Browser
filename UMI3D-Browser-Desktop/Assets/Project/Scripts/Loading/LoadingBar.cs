@@ -61,7 +61,6 @@ public class LoadingBar
 
     void Hide()
     {
-        Debug.Log("<color=green>Loading finished.</color>");
         loadingScreen.style.display = DisplayStyle.None;
         MouseAndKeyboardController.CanProcess = true;
     }

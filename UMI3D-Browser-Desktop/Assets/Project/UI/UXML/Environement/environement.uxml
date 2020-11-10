@@ -48,15 +48,6 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="game-menu-container" style="width: 100%; background-color: rgba(0, 0, 0, 0); display: flex; height: 100%;">
-            <ui:VisualElement name="session-info" class="dark-grey3-bck grey-border" style="height: 52px; border-bottom-width: 1px; justify-content: center; width: 100%; flex-direction: row; align-items: center;">
-                <ui:VisualElement name="session-info-container" class="dark-grey1-bck" style="height: 37px; flex-direction: row;">
-                    <ui:Label text="Label" name="session-time" class="session-info-btn white-txt grey-border" style="-unity-text-align: middle-center;" />
-                    <ui:Button name="active-sound" class="session-info-btn grey-border session-info-btn-sound-on" style="height: 100%; display: none;" />
-                    <ui:Button name="active-avatar" class="session-info-btn grey-border session-info-btn-sound-on session-info-btn-active-avatar-on" style="height: 100%; display: none;" />
-                    <ui:Button name="mute-btn" class="session-info-btn grey-border session-info-btn-mute-on" style="height: 100%;" />
-                    <ui:Button name="hang-up-btn" class="session-info-btn grey-border session-info-btn-hang-up" style="height: 100%;" />
-                </ui:VisualElement>
-            </ui:VisualElement>
             <ui:VisualElement name="viewport" style="flex-grow: 1; width: 100%; height: 100%; flex-direction: row;">
                 <ui:VisualElement name="notification-container" style="height: 100%; position: absolute; left: 10px; flex-direction: column-reverse; flex-grow: 1;" />
                 <ui:VisualElement name="information-pop-up" style="position: absolute; top: 0; right: 0; width: 256px;">
@@ -67,7 +58,7 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="game-view" style="flex-grow: 1; flex-direction: column-reverse; align-items: center;">
                     <ui:VisualElement name="manipulation-container" class="dark-grey2-bck" style="height: 100px; flex-direction: row; justify-content: space-between;" />
-                    <ui:VisualElement name="game-menu" style="flex-grow: 1; padding-left: 50px; padding-right: 50px; padding-top: 50px; padding-bottom: 50px; display: flex;" />
+                    <ui:VisualElement name="game-menu" style="flex-grow: 1; display: flex; width: 100%; height: 100%;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="right-side-menu" style="width: 256px; display: flex;">
                     <ui:VisualElement name="right-side-menu-container" class="dark-grey2-bck grey-border" style="left: 256px; padding-top: 24px; border-top-width: 1px;">
@@ -86,18 +77,28 @@
                         <ui:Button name="interaction-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px; font-size: 13px;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
+                <ui:VisualElement name="pause-menu" style="position: absolute; top: 0; width: 100%; align-items: center;">
+                    <ui:VisualElement name="pause-menu-container" class="dark-grey2-bck orange-border" style="width: 545px; height: 52px; border-bottom-width: 1px; flex-direction: row; align-items: center; justify-content: center;">
+                        <ui:Button name="open-option-menu-btn" class="btn-options" style="width: 110px; height: 34px; margin-right: 4px;" />
+                        <ui:Button name="leave-environment-btn" class="btn-leave" style="width: 110px; height: 34px; margin-left: 4px;" />
+                    </ui:VisualElement>
+                    <ui:Button name="pause-menu-open-btn" class="btn-open-pause-menu" style="width: 50px; height: 23px;" />
+                </ui:VisualElement>
                 <ui:VisualElement name="console" style="display: flex; position: absolute; width: 430px; height: 200px; bottom: 0; right: 0; background-color: rgba(50, 50, 50, 0.8); padding-top: 15px;">
                     <ui:Label text="Label" name="version" class="dark-grey1-bck grey-txt" style="height: 20px; -unity-text-align: middle-right; padding-right: 15px;" />
                     <ui:ScrollView name="console-container" show-horizontal-scroller="false" show-vertical-scroller="false" class="orange-scroll-view" style="flex-grow: 1; margin-left: 5px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 30px; justify-content: center; flex-direction: row;">
+            <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 32px; justify-content: center; flex-direction: row;">
                 <ui:VisualElement name="shortcuts" style="width: 25%; flex-direction: row;">
                     <ui:Label text="Escape/Right click : open interaction menu" name="shortcuts-menu" style="color: rgb(182, 182, 182); -unity-text-align: middle-left; width: 250px;" />
                     <ui:Label text="T : mute/unmute" name="shortcuts-mute" style="color: rgb(182, 182, 182); -unity-text-align: middle-left; margin-left: 10px;" />
                 </ui:VisualElement>
-                <ui:Label text="Erreur" name="console-footer" class="grey-border" style="-unity-text-align: middle-left; padding-left: 10px; padding-right: 10px; border-right-width: 1px; border-left-width: 1px; width: 65%;" />
-                <ui:Button text="Console" name="open-console-button" style="width: 8%;" />
+                <ui:VisualElement name="session-info" class="grey-border" style="width: 75%; flex-direction: row-reverse; border-top-width: 1px;">
+                    <ui:Button name="open-console-button" style="width: 30px; height: 30px;" />
+                    <ui:Label text="00:00:00" name="session-time" class="white-txt" style="-unity-text-align: middle-center; width: 80px;" />
+                    <ui:Button name="microphone-btn" class="btn-mute-on btn-mic-on" style="width: 30px; height: 30px;" />
+                </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

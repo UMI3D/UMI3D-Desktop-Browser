@@ -17,6 +17,7 @@ limitations under the License.
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
+using BrowserMenu;
 using umi3d.cdk;
 using umi3d.common;
 using UnityEngine;
@@ -129,10 +130,11 @@ public class FpsNavigation : AbstractNavigation
             {
                 CircularMenu.Instance._Collapse();
             }*/
-            SideMenu.Display(!SideMenu.IsExpanded, !SideMenu.IsExpanded);
+            //SideMenu.Display(!SideMenu.IsExpanded, !SideMenu.IsExpanded);
+            PauseMenu.ToggleDisplay();
         }
 
-        if (MainMenu.IsDisplaying || CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHiden)
+        if (SideMenu.IsDisplayed || CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHiden)
             return;
 
         if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.FreeHead; }

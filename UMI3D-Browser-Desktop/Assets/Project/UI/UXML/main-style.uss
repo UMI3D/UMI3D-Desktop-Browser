@@ -326,6 +326,13 @@ Toggle > Label {
     color: rgb(247, 182, 87);
 }
 
+.orange-border {
+    border-left-color: rgb(247, 182, 87);
+    border-right-color: rgb(247, 182, 87);
+    border-top-color: rgb(247, 182, 87);
+    border-bottom-color: rgb(247, 182, 87);
+}
+
 .grey-border {
     border-left-color: rgb(63, 63, 63);
     border-right-color: rgb(63, 63, 63);

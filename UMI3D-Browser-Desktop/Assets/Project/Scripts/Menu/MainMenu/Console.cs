@@ -61,41 +61,48 @@ namespace BrowserDesktop.Menu
             if (type != LogType.Warning)
                 consoleContainer.Add(log);
 
+            if (type == LogType.Log || type == LogType.Warning)
+                openConsoleButton.RemoveFromClassList("btn-notif-alert");
+            else
+                openConsoleButton.AddToClassList("btn-notif-alert");
+
+                
+
             switch (type)
             {
                 case LogType.Error:
                     log.AddToClassList("error-txt");
-                    buttonClassName = "error-txt";
                     break;
                 case LogType.Assert:
                     log.AddToClassList("error-txt");
-                    buttonClassName = "error-txt";
                     break;
                 case LogType.Warning:
                     log.AddToClassList("warning-txt");
-                    buttonClassName = "warning-txt";
                     break;
                 case LogType.Log:
                     log.AddToClassList("grey-txt");
-                    buttonClassName = "grey-txt";
                     break;
                 case LogType.Exception:
                     log.AddToClassList("error-txt");
-                    buttonClassName = "error-txt";
                     break;
                 default:
                     break;
             }
-
-            openConsoleButton.ClearClassList();
-            openConsoleButton.AddToClassList(buttonClassName);
-
         }
     
         void DisplayConsole(bool val)
         {
             isDisplayed = val;
             console.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
+            if (val)
+            {
+                openConsoleButton.AddToClassList("btn-notif-on");
+                openConsoleButton.RemoveFromClassList("btn-notif-off");
+            } else
+            {
+                openConsoleButton.AddToClassList("btn-notif-off");
+                openConsoleButton.RemoveFromClassList("btn-notif-on");
+            }
         }
     }
 }
