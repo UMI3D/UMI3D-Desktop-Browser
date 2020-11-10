@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using BrowserMenu;
 using System;
 using System.Runtime.InteropServices;
 using Unity.UIElements.Runtime;
@@ -176,7 +177,13 @@ public class WindowsManager : MonoBehaviour
         var close = panelRenderer.visualTree.Q<Button>(closeTagName);
         close.clickable.clicked += () =>
         {
-            Application.Quit();
+            DialogueBoxElement dialogueBox = PauseMenu.Instance.dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
+            dialogueBox.Setup("", "Are you sure ...?", "YES", "NO", (b) =>
+            {
+                if (b)
+                    Application.Quit();
+            });
+            panelRenderer.visualTree.Add(dialogueBox);
         };
 
         var topBar = panelRenderer.visualTree.Q<VisualElement>("top");

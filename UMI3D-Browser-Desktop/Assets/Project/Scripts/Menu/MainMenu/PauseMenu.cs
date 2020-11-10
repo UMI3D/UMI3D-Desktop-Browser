@@ -36,8 +36,7 @@ namespace BrowserMenu
         [SerializeField]
         float pauseMenuHeight = 52;
 
-        [SerializeField]
-        private VisualTreeAsset dialogueBoxTreeAsset;
+        public VisualTreeAsset dialogueBoxTreeAsset;
 
         bool isOpen;
 
@@ -80,7 +79,8 @@ namespace BrowserMenu
         void Display(bool value)
         {
             isOpen = value;
-            CursorHandler.SetMovement(SideMenu.Instance, value ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
+            CursorHandler.SetMovement(this, value ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
+
             if (value)
             {
                 leaveEnvironmentBtn.style.display = DisplayStyle.Flex;
