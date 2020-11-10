@@ -85,6 +85,8 @@ public class WindowsManager : MonoBehaviour
     Button minimize;
     Button maximize;
 
+    public VisualTreeAsset dialogueBoxTreeAsset;
+
     #endregion
 
     #region Fields to remove windows default title bar
@@ -177,7 +179,7 @@ public class WindowsManager : MonoBehaviour
         var close = panelRenderer.visualTree.Q<Button>(closeTagName);
         close.clickable.clicked += () =>
         {
-            DialogueBoxElement dialogueBox = PauseMenu.Instance.dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
+            DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
             dialogueBox.Setup("", "Are you sure ...?", "YES", "NO", (b) =>
             {
                 if (b)

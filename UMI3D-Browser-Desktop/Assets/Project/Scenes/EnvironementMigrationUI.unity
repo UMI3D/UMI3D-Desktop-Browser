@@ -327,6 +327,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1897058549, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
+      propertyPath: dialogueBoxTreeAsset
+      value: 
+      objectReference: {fileID: 9197481963319205126, guid: 952193403cd37744f9ac513022d96731,
+        type: 3}
+    - target: {fileID: 1897058549, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
+      propertyPath: hideOnStart
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4423324782737819672, guid: 50541f86f5f01194eb2b175264de3f46,
         type: 3}
       propertyPath: m_Name
@@ -887,12 +896,6 @@ Transform:
 --- !u!20 &447649456 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 5657911632462509561, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
-    type: 3}
-  m_PrefabInstance: {fileID: 447649450}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &447649457 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5657911633342141545, guid: 6f84028fdc2c0b849ae8ad244ba03b41,
     type: 3}
   m_PrefabInstance: {fileID: 447649450}
   m_PrefabAsset: {fileID: 0}
@@ -1944,7 +1947,7 @@ MonoBehaviour:
   bone: 1
   Cursor: {fileID: 447649455}
   AvatarParent: {fileID: 447649451}
-  Head: {fileID: 447649457}
+  Head: {fileID: 0}
   distCursor: 1
   MaxDistCursorDelta: 0.3
   MinimumCursorDistance: 0.5
