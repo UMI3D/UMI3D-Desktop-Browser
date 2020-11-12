@@ -23,7 +23,7 @@ namespace BrowserDesktop.Menu
     {
         public VisualTreeAsset dropdownTreeAsset;
 
-        public bool isInGame = false;
+        public string labelClassName;
 
         DropdownElement dropdown;
 
@@ -68,7 +68,7 @@ namespace BrowserDesktop.Menu
             if (dropdown == null)
             {
                 dropdown = dropdownTreeAsset.CloneTree().Q<DropdownElement>();
-                dropdown.SetUp(isInGame);
+                dropdown.SetUp(ConnectionMenu.Instance.panelRenderer, labelClassName);
             }
         }
 

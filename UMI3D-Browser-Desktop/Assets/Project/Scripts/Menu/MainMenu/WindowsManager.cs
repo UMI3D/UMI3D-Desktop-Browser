@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using BrowserMenu;
 using System;
 using System.Runtime.InteropServices;
 using Unity.UIElements.Runtime;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// This class removes the default Windows title bar and set up a custom one.
+/// </summary>
 public class WindowsManager : MonoBehaviour
 {
     #region Fields

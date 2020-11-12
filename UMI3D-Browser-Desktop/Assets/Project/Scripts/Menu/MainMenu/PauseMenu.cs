@@ -20,9 +20,8 @@ using Unity.UIElements.Runtime;
 using UnityEngine.UIElements;
 using UnityEngine;
 using BrowserDesktop.Cursor;
-using BrowserDesktop.Menu;
 
-namespace BrowserMenu
+namespace BrowserDesktop.Menu
 {
     public class PauseMenu : Singleton<PauseMenu>
     {
@@ -88,7 +87,7 @@ namespace BrowserMenu
             {
                 leaveEnvironmentBtn.style.display = DisplayStyle.Flex;
                 openOptionMenuBtn.style.display = DisplayStyle.Flex;
-                pauseMenuContainer.experimental.animation.Start(2, pauseMenuHeight, 100, (elt, val) =>
+                pauseMenuContainer.experimental.animation.Start(0, pauseMenuHeight, 100, (elt, val) =>
                 {
                     elt.style.height = val;
                 });
@@ -98,7 +97,7 @@ namespace BrowserMenu
             {
                 leaveEnvironmentBtn.style.display = DisplayStyle.None;
                 openOptionMenuBtn.style.display = DisplayStyle.None;
-                pauseMenuContainer.experimental.animation.Start(pauseMenuHeight, 2, 100, (elt, val) =>
+                pauseMenuContainer.experimental.animation.Start(pauseMenuHeight, 0, 100, (elt, val) =>
                 {
                     elt.style.height = val;
                 });

@@ -16,15 +16,17 @@ limitations under the License.
 
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
-using System.Threading;
 using umi3d.cdk.menu.view;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
-using UnityEngine.VFX;
 
 namespace BrowserDesktop.Menu
 {
+
+    /// <summary>
+    /// This class is reponsible for displaying the interaction menu.
+    /// (should be renamed because this menu is no longer a circular menu but a more traditionnal one displayed within the side menu)
+    /// </summary>
     public class CircularMenu : umi3d.common.Singleton<CircularMenu>
     {
         public SimpleUIContainer2D circularMenuContainer;
@@ -35,13 +37,19 @@ namespace BrowserDesktop.Menu
         public UnityEvent MenuColapsed = new UnityEvent();
         public UnityEvent MenuExpand = new UnityEvent();
 
-        int nbOfDisplayersLastFrame = 0;
-
+        /// <summary>
+        /// Returns true if does not contain any elements.
+        /// </summary>
+        /// <returns></returns>
         public bool IsEmpty()
         {
             return circularMenuContainer.Count() == 0;
         }
 
+        /// <summary>
+        /// Returns the number of elements contains by this menu.
+        /// </summary>
+        /// <returns></returns>
         public int Count()
         {
             return circularMenuContainer.Count();
@@ -54,8 +62,6 @@ namespace BrowserDesktop.Menu
 
             menuDisplayManager.firstButtonBackButtonPressed.AddListener(_Collapse);
             menuDisplayManager.Display(true);
-
-            nbOfDisplayersLastFrame = circularMenuContainer.Count();
         }
 
         public void Update()
@@ -116,7 +122,6 @@ namespace BrowserDesktop.Menu
                 {
                     circularMenuContainer.Expand();
                     MenuExpand.Invoke();
-                    //CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
                 }
             }
         }
@@ -129,7 +134,6 @@ namespace BrowserDesktop.Menu
 
         public void _Collapse()
         {
-            //CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);//
             circularMenuContainer.Collapse();
             MenuColapsed.Invoke();
         }

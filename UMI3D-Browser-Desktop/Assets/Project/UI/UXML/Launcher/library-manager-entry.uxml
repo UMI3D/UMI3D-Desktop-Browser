@@ -1,8 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Template name="DropdownElement-list-displayer" src="/Assets/Project/UI/UXML/GenericUI/DropdownElement-list-displayer.uxml" />
     <ui:VisualElement name="library-manager-entry" class="grey-border" style="justify-content: center; flex-direction: row; align-items: center; height: 65px; background-color: rgba(217, 241, 240, 0); border-bottom-width: 1px; border-top-width: 1px; border-left-width: 1px; border-right-width: 1px;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:Label text="Summer furniture pack" name="library-name" class="medium-size-txt white-txt" style="-unity-text-align: middle-left; right: 0; justify-content: center; padding-left: 16px; flex-grow: 1;" />
-        <ui:VisualElement name="environments" class="grey-border" style="width: 200px; height: 100%; border-left-width: 1px;" />
+        <ui:VisualElement name="environments" class="grey-border" style="width: 200px; height: 100%; border-left-width: 1px;">
+            <ui:Instance template="DropdownElement-list-displayer" name="DropdownElement-list-displayer" style="height: 100%;" />
+        </ui:VisualElement>
         <ui:Label text="100 mo" name="library-size" class="white-txt medium-size-txt grey-border" style="border-left-width: 1px; border-right-width: 1px; height: 100%; width: 100px; -unity-text-align: middle-center;" />
         <ui:Button name="library-unistall" class="bin-btn" style="color: rgb(255, 255, 255); width: 59px; flex-direction: row-reverse; height: 100%;" />
     </ui:VisualElement>

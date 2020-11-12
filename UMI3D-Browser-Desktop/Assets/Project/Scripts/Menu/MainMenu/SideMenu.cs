@@ -203,6 +203,11 @@ namespace BrowserDesktop.Menu
         }
 
         private bool wasExpandedLastFrame = false;
+        
+        /// <summary>
+        /// Expands or not the menu to make it use the full height of the screen. 
+        /// </summary>
+        /// <param name="expand"></param>
         void Expand(bool expand)
         {
             if (isExpanded == expand)

@@ -17,7 +17,6 @@ limitations under the License.
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
-using BrowserMenu;
 using umi3d.cdk;
 using umi3d.common;
 using UnityEngine;

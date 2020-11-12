@@ -17,18 +17,36 @@ limitations under the License.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.UIElements.Runtime;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class DropdownElement : VisualElement
 {
+    /// <summary>
+    /// The USS class which is used to display the label of the different choices.
+    /// </summary>
+    string labelClassName;
+
+    /// <summary>
+    /// To be recognized by UI Builder
+    /// </summary>
     public new class UxmlFactory : UxmlFactory<DropdownElement, UxmlTraits> { }
     public new class UxmlTraits : VisualElement.UxmlTraits { }
 
+    /// <summary>
+    /// Event sent teh value of this element changes.
+    /// </summary>
+    /// <param name="val"></param>
     public delegate void OnValueChangedDelegate(int val);
     public event OnValueChangedDelegate OnValueChanged;
 
     int currentChoiceId = 0;
+
+    /// <summary>
+    /// The choices of the dropown will be displayed at the root of the renderer.
+    /// </summary>
+    PanelRenderer panelRenderer;
 
     Button openChoiceButton;
     Label currentChoice;
@@ -38,16 +56,15 @@ public class DropdownElement : VisualElement
 
     bool areChoicesVisible = false;
 
-    bool isMini;
-
     public void SetLabel(string label)
     {
         this.Q<Label>("label").text = label;
     }
 
-    public void SetUp(bool isMini = false)
+    public void SetUp(PanelRenderer panelRenderer, string labelClassName)
     {
-        this.isMini = isMini;
+        this.panelRenderer = panelRenderer;
+        this.labelClassName = labelClassName;
 
         this.RegisterCallback<FocusOutEvent>(e => choicesDropdown.RemoveFromHierarchy());
 
@@ -66,8 +83,8 @@ public class DropdownElement : VisualElement
         openChoiceButton.clickable.clicked += () =>
         {
             areChoicesVisible = !areChoicesVisible;
-            if (areChoicesVisible)
-                ConnectionMenu.Instance.StartCoroutine(OpenDropdown());
+            if (areChoicesVisible && options.Count > 1)
+                umi3d.cdk.UMI3DResourcesManager.Instance.StartCoroutine(OpenDropdown());
             else
             {
                 choicesDropdown.style.display = DisplayStyle.None;
@@ -76,6 +93,13 @@ public class DropdownElement : VisualElement
         };
     }
 
+    /// <summary>
+    /// Add choices to the dropdown.
+    /// Pre-conditon : 
+    ///     - DropdownElement.Setup() must be called before using this method,
+    ///     - this contains a tag named "dropdown-open-choice" wich contains a child.
+    /// </summary>
+    /// <param name="options"></param>
     public void SetOptions(List<string> options)
     {
         if (options.Count > 0)
@@ -86,13 +110,10 @@ public class DropdownElement : VisualElement
             {
                 var labelEntry = new Label { text = options[i] };
 
-                labelEntry.style.fontSize = isMini ? 11 : 15;
                 labelEntry.userData = i;
-                labelEntry.style.height = isMini ? 20 : 25;
-                labelEntry.style.paddingLeft = 5;
-                labelEntry.style.unityTextAlign = TextAnchor.MiddleLeft;
                 labelEntry.AddToClassList("dark-grey3-bck-hover");
                 labelEntry.AddToClassList("white-txt");
+                labelEntry.AddToClassList(labelClassName);
                 labelEntry.RegisterCallback<MouseDownEvent>(e => {
                     CloseChoices(options[(int) labelEntry.userData], (int)labelEntry.userData);
                 });
@@ -104,6 +125,11 @@ public class DropdownElement : VisualElement
                     currentChoice.text = options[0];
                 }
             }
+
+            if (options.Count == 1)
+                this.Q<VisualElement>("dropdown-open-choice")[0].style.display = DisplayStyle.None;
+            else
+                this.Q<VisualElement>("dropdown-open-choice")[0].style.display = DisplayStyle.Flex;
         } else
         {
             throw new ArgumentException("Option list can not be empty");
@@ -115,7 +141,7 @@ public class DropdownElement : VisualElement
         yield return null;
         this.Focus();
 
-        ConnectionMenu.Instance.panelRenderer.visualTree.Add(choicesDropdown);
+        panelRenderer.visualTree.Add(choicesDropdown);
         choicesDropdown.style.display = DisplayStyle.Flex;
         choicesDropdown.style.top = currentChoice.worldBound.y + currentChoice.worldBound.height;
         choicesDropdown.style.left = currentChoice.worldBound.x;

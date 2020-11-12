@@ -48,4 +48,4 @@ MonoBehaviour:
       m_Calls: []
   dropdownTreeAsset: {fileID: 9197481963319205126, guid: f47f42fd87f9513469dc9b7fd49f93ff,
     type: 3}
-  isInGame: 1
+  labelClassName: dropdown-label-mini

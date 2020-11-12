@@ -554,7 +554,9 @@ MonoBehaviour:
   closeTagName: close-window-btn
   maximizeClassName: maximize-btn
   restoreClassName: restore-btn
-  hideOnStart: 0
+  dialogueBoxTreeAsset: {fileID: 9197481963319205126, guid: 952193403cd37744f9ac513022d96731,
+    type: 3}
+  hideOnStart: 1
 --- !u!114 &87752527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -759,6 +761,7 @@ MonoBehaviour:
   Menu: {fileID: 11400000, guid: e0ca03fe9e05d634a89f97e4be2f42b7, type: 2}
   MenuDisplayManager: {fileID: 2575462095453148189}
   launcherScene: ConnectionMigrationUI
+  currentScene: EnvironementMigrationUI
   dialogueBoxTreeAsset: {fileID: 9197481963319205126, guid: 952193403cd37744f9ac513022d96731,
     type: 3}
   isDisplayed: 1

@@ -35,17 +35,22 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// This class is reponsible for connecting users to environments. It implies asking for login/password or parameters if 
+/// necessary.
+/// </summary>
 public class ConnectionMenu : Singleton<ConnectionMenu>
 {
     #region Fields
 
     private UserPreferencesManager.Data connectionData;
-    private UserPreferencesManager.Data favoriteEnvironments;
 
     public ClientPCIdentifier identifier;
 
     public MenuAsset Menu;
     public MenuDisplayManager MenuDisplayManager;
+
+    public Camera cam;
 
     [SerializeField]
     private string launcherScene;
@@ -56,6 +61,10 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     private LoadingBar loader;
 
     public bool isDisplayed = true;
+    bool isPasswordVisible = false;
+
+    Action nextStep = null;
+    Action previousStep = null;
 
     #region UI Fields
 
@@ -107,9 +116,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
     }
-
-    Action nextStep = null;
-    Action previousStep = null;
 
     private void Update()
     {
@@ -166,7 +172,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
     }
 
-    bool isPasswordVisible = false;
     private void BindPasswordScreen()
     {
         passwordScreen = connectionScreen.Q<VisualElement>("password-screen");
@@ -193,7 +198,9 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         });
     }
 
-    //Resize some elements when the window is resized, to make the UI more responsive.
+    /// <summary>
+    /// Resize some elements when the window is resized, to make the UI more responsive.
+    /// </summary>
     private void ResizeElements(GeometryChangedEvent e)
     {
         logo.style.height = e.newRect.height * 0.16f;
@@ -218,18 +225,19 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     }
     
     /// <summary>
-    /// Clears the environement and goes back to the launcher.
+    /// Clears the environment and goes back to the launcher.
     /// </summary>
     public void Leave()
     {
+        cam.backgroundColor = new Color(0.196f, 0.196f, 0.196f);
+        cam.clearFlags = CameraClearFlags.SolidColor;
         UMI3DEnvironmentLoader.Clear();
         UMI3DResourcesManager.Instance.ClearCache();
         UMI3DCollaborationClientServer.Logout(() => { GameObject.Destroy(UMI3DClientServer.Instance.gameObject); }, null);
 
         SceneManager.LoadScene(launcherScene, LoadSceneMode.Single);
     }
-
-
+    
     /// <summary>
     /// Inits the UI the environment is loaded.
     /// </summary>
