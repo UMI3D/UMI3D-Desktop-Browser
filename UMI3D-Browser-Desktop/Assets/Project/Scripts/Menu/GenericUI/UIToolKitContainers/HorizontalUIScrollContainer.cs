@@ -51,6 +51,7 @@ namespace BrowserDesktop.Menu
             base.Hide();
             firstOpening = true;
             subContent.style.display = DisplayStyle.None;
+            iconSelectionButton?.RemoveFromClassList("btn-tool-selected");
         }
 
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
@@ -280,7 +281,15 @@ namespace BrowserDesktop.Menu
                 item.Q<VisualElement>("icon").style.backgroundImage = menu.icon2D;
             }
 
-            iconSelectionButton.clickable.clicked += Select;
+            iconSelectionButton.clickable.clicked += () =>
+            {
+                foreach (var child in parent)
+                {
+                    if (child != this)
+                        child.Hide();
+                }
+                Select();
+            };
         }
 
     }

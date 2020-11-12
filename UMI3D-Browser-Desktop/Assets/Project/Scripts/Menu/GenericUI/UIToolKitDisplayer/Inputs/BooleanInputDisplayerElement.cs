@@ -36,6 +36,9 @@ namespace BrowserDesktop.Menu
 
             container.style.display = DisplayStyle.Flex;
             toggle.value = GetValue();
+            if (!string.IsNullOrEmpty(menuItem.ToString()))
+                toggle.label = menuItem.ToString();
+
             toggle.RegisterValueChangedCallback(OnValueChanged);
         }
 

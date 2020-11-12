@@ -480,6 +480,7 @@ namespace BrowserDesktop.Menu
 
         public VisualElement GetUXMLContent()
         {
+            InitAndBindUI();
             return containerElement;
         }
 
