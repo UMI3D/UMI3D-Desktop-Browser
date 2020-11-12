@@ -24,18 +24,16 @@ using UnityEngine.SceneManagement;
 
 using BrowserDesktop.Cursor;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using umi3d.cdk;
 using BrowserDesktop.Controller;
-using System.Security.Cryptography;
-using umi3d.common;
 
 public class LauncherManager : MonoBehaviour
 {
     #region Fields
 
     #region UI Fields
+
     [SerializeField]
     private PanelRenderer panelRenderer;
 
@@ -46,14 +44,14 @@ public class LauncherManager : MonoBehaviour
 
     private VisualElement root;
 
-    //Domain screen
+    //SetDomain screen
     VisualElement umiLogo;
     VisualElement urlScreen;
     TextField urlInput;
     Button urlEnterBtn;
 
 
-    //Libraries
+    //Asset libraries screen
     VisualElement librariesScreen;
     ScrollView librariesList;
     Button backMenuBnt;
@@ -142,6 +140,14 @@ public class LauncherManager : MonoBehaviour
 
     private void Update()
     {
+        CheckShortcuts();
+    }
+
+    /// <summary>
+    /// Allows users to use escape and return keys to navigate through the launcher.
+    /// </summary>
+    private void CheckShortcuts()
+    {
         if (Input.GetKeyDown(KeyCode.Return))
         {
             if (DialogueBoxElement.IsADialogueBoxDislayed)
@@ -159,7 +165,7 @@ public class LauncherManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Gets the url and port written by the users and stores them.
+    /// Gets the url and port written by users and stores them.
     /// </summary>
     private void SetDomain()
     {
@@ -180,7 +186,7 @@ public class LauncherManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Initiates the connection
+    /// Initiates the connection to the server.
     /// </summary>
     private void Connect()
     {
@@ -189,6 +195,10 @@ public class LauncherManager : MonoBehaviour
         StartCoroutine(WaitReady());
     }
 
+    /// <summary>
+    /// Load the environment scene when it is ready.
+    /// </summary>
+    /// <returns></returns>
     IEnumerator WaitReady()
     {
         CursorHandler.Instance.Clear();
@@ -200,6 +210,9 @@ public class LauncherManager : MonoBehaviour
         SceneManager.UnloadSceneAsync(currentScene);
     }
 
+    /// <summary>
+    /// Reset the display of the launcher.
+    /// </summary>
     private void ResetLauncher()
     {
         currentConnectionData = UserPreferencesManager.GetPreviousConnectionData();
@@ -216,6 +229,9 @@ public class LauncherManager : MonoBehaviour
         urlInput.value = currentConnectionData.ip;
     }
 
+    /// <summary>
+    /// Displays the favorites environments stored on  users' computers.
+    /// </summary>
     private void DisplayFavoriteEnvironments()
     {
         favoriteEnvironmentSlider.ClearItems();
@@ -250,6 +266,9 @@ public class LauncherManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Displays the libraries install on users' computers and allows tehm to unistall these libs.
+    /// </summary>
     private void DisplayLibraries()
     {
         urlScreen.style.display = DisplayStyle.None;
@@ -275,24 +294,23 @@ public class LauncherManager : MonoBehaviour
         {
             foreach (var lib in app.Value)
             {
+                // 1. Diplay lib name
                 var entry = libraryEntryTreeAsset.CloneTree();
                 entry.Q<Label>("library-name").text = lib.key;
 
-                foreach (var appli in lib.applications)
-                {
-                    Label appliLabel = new Label { text = appli };
-                    appliLabel.AddToClassList("white-txt");
-                    appliLabel.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
-                    appliLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
-                    appliLabel.style.paddingLeft = 16;
-                    entry.Q<VisualElement>("environments").Add(appliLabel);
-                }
+                //2. Display environments which use this lib
+                var dropdown = entry.Q<DropdownElement>();
+                dropdown.SetUp(panelRenderer, "dropdown-label-medium");
+                dropdown.SetOptions(lib.applications);
 
+                //3. Display lib size
                 DirectoryInfo dirInfo = new DirectoryInfo(lib.path);
                 double dirSize = DirSize(dirInfo) / Mathf.Pow(10, 6);
                 dirSize = Math.Round(dirSize, 2);
                 entry.Q<Label>("library-size").text = dirSize.ToString() + " mo"; ;
 
+
+                //4.Bind the button to unistall this lib
                 entry.Q<Button>("library-unistall").clickable.clicked += () =>
                 {
                     DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
@@ -310,46 +328,10 @@ public class LauncherManager : MonoBehaviour
                 librariesList.Add(entry);
             }
         }
-
-        /*
-        foreach (var app in libs)
-        {
-            var entry = libraryEntryTreeAsset.CloneTree();
-            entry.Q<Label>("library-name").text = app.Key;
-
-            entry.Q<Button>("library-unistall").clickable.clicked += () =>
-            {
-                if (isLibraryCurrentRemoved)
-                    return;
-
-                isLibraryCurrentRemoved = true;
-
-                DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-                dialogue.Setup("Remove library", "Are your sure to unistall all libraries required for " + app.Key, "Unistall", "Cancel", (b) =>
-                {
-                    if (b)
-                    {
-                        foreach (var lib in app.Value)
-                        {
-                            lib.applications.Remove(app.Key);
-                            if (lib.applications.Count <= 0)
-                                UMI3DResourcesManager.RemoveLibrary(lib.key);
-                        }
-                        DisplayLibraries();
-                    }
-                    isLibraryCurrentRemoved = false;
-                },
-                true);
-
-                root.Add(dialogue);
-            };
-
-            librariesList.Add(entry);
-        }*/
     }
 
     /// <summary>
-    /// Returns the size of a directory in bytes
+    /// Returns the size of a directory in bytes.
     /// </summary>
     /// <param name="d"></param>
     /// <returns></returns>
@@ -371,7 +353,10 @@ public class LauncherManager : MonoBehaviour
         return size;
     }
 
-    //Resize some elements when the window is resized, to make the UI more responsive.
+    /// <summary>
+    /// Resize some elements when the window is resized, to make the UI more responsive.
+    /// </summary>
+    /// <param name="e"></param>
     private void ResizeElements(GeometryChangedEvent e)
     {
         float height = e.newRect.height * 0.16f;
