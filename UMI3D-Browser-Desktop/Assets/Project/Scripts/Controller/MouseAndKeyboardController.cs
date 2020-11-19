@@ -698,6 +698,7 @@ namespace BrowserDesktop.Controller
                 mouseData.ForcePorjection = false;
                 DeleteForceProjectionMenuItem();
             }
+            tool.onReleased(bone);
             //}
             //catch { }
         }
@@ -707,6 +708,7 @@ namespace BrowserDesktop.Controller
             base.Project(tool, reason, hoveredObjectId);
             if (reason is RequestedByEnvironment)
                 mouseData.ForcePorjection = true;
+            tool.onProjected(bone);
         }
     }
 }
