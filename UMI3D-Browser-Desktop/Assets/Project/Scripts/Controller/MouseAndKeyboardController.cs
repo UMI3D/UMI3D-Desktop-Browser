@@ -703,6 +703,7 @@ namespace BrowserDesktop.Controller
                 mouseData.ForcePorjection = false;
                 DeleteForceProjectionMenuItem();
             }
+            tool.onReleased(bone);
             //}
             //catch { }
         }
@@ -715,6 +716,7 @@ namespace BrowserDesktop.Controller
                 mouseData.ForcePorjection = true;
                 mouseData.ForcePorjectionReleasable = releasable;
             }
+            tool.onProjected(bone);
         }
     }
 }
