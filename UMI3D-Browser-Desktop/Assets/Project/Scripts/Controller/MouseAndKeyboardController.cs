@@ -59,6 +59,7 @@ namespace BrowserDesktop.Controller
         public struct MouseData
         {
             public bool ForcePorjection;
+            public bool ForcePorjectionReleasable;
             public HoldableButtonMenuItem ForceProjectionMenuItem;
 
             public Interactable OldHovered;
@@ -212,8 +213,11 @@ namespace BrowserDesktop.Controller
 
         void ForceProjectionMenuItem(bool pressed)
         {
-            DeleteForceProjectionMenuItem();
-            UnequipeForceProjection();
+            if (mouseData.ForcePorjectionReleasable)
+            {
+                DeleteForceProjectionMenuItem();
+                UnequipeForceProjection();
+            }
         }
 
         void DeleteForceProjectionMenuItem()
@@ -353,7 +357,8 @@ namespace BrowserDesktop.Controller
                     ||
                     Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
                 {
-                    UnequipeForceProjection();
+                    if(mouseData.ForcePorjectionReleasable)
+                        UnequipeForceProjection();
                 }
             }
             else
@@ -379,7 +384,7 @@ namespace BrowserDesktop.Controller
                         mouseData.HoverState = HoverState.Hovering;
                         if (mouseData.CurentHovered.dto.interactions.Count > 0 && IsCompatibleWith(mouseData.CurentHovered))
                         {
-                            InteractionMapper.SelectTool(mouseData.CurentHovered.dto.id, this, mouseData.CurrentHoveredId, reason);
+                            InteractionMapper.SelectTool(mouseData.CurentHovered.dto.id,true, this, mouseData.CurrentHoveredId, reason);
                             CursorHandler.State = CursorHandler.CursorState.Hover;
                             mouseData.HoverState = HoverState.AutoProjected;
                             CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
@@ -698,15 +703,20 @@ namespace BrowserDesktop.Controller
                 mouseData.ForcePorjection = false;
                 DeleteForceProjectionMenuItem();
             }
+            tool.onReleased(bone);
             //}
             //catch { }
         }
 
-        public override void Project(AbstractTool tool, InteractionMappingReason reason, string hoveredObjectId)
+        public override void Project(AbstractTool tool, bool releasable, InteractionMappingReason reason, string hoveredObjectId)
         {
-            base.Project(tool, reason, hoveredObjectId);
+            base.Project(tool, releasable, reason, hoveredObjectId); ;
             if (reason is RequestedByEnvironment)
+            {
                 mouseData.ForcePorjection = true;
+                mouseData.ForcePorjectionReleasable = releasable;
+            }
+            tool.onProjected(bone);
         }
     }
 }
