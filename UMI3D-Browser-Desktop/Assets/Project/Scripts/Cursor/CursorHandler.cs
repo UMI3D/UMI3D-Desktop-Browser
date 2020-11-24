@@ -116,7 +116,7 @@ namespace BrowserDesktop.Cursor
                 }
                 movementUpdated = false;
             }
-            bool newMenuState = ((!SideMenu.Exists || !SideMenu.IsDisplayed) && (cursorMovement == CursorMovement.Center || cursorMovement == CursorMovement.FreeHiden) );
+            bool newMenuState = ((!SideMenu.Exists || !SideMenu.IsExpanded) && (cursorMovement == CursorMovement.Center || cursorMovement == CursorMovement.FreeHiden) );
             if ((stateUpdated || LastMenuState != newMenuState) && CursorDisplayer.Exists)
             {
                 LastMenuState = newMenuState;
@@ -148,6 +148,7 @@ namespace BrowserDesktop.Cursor
 
             if (CursorDisplayer.Exists && CursorDisplayer.Instance.IsSettingsCursorDisplayed() != (LastMenuState && MenuIndicator))
                 CursorDisplayer.Instance.DisplaySettingsCursor(LastMenuState && MenuIndicator);
+                
 
             /*if (LeftClickOptionCursor.gameObject.activeSelf != (LastMenuState && MenuIndicator))
                 LeftClickOptionCursor.gameObject.SetActive(LastMenuState && MenuIndicator);*/

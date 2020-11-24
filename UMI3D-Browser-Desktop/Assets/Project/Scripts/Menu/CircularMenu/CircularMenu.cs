@@ -93,10 +93,9 @@ namespace BrowserDesktop.Menu
             if (CursorHandler.Exists)
             {
                 bool display = false;
-                if (!circularMenuContainer.isDisplayed || !circularMenuContainer.isExpanded)
-                {
+
+                if (!SideMenu.IsExpanded)
                     display = !IsEmpty();
-                }
 
                 CursorHandler.Instance.MenuIndicator = display;
             }
