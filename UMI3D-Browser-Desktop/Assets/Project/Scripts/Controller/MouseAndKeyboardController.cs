@@ -691,6 +691,8 @@ namespace BrowserDesktop.Controller
             //try
             //{
             base.Release(tool, reason);
+            if (reason is ToolNeedToBeUpdated && tool.interactions.Count > 0) return;
+
             if (mouseData.CurentHovered != null && mouseData.CurentHovered.dto.id == tool.id)
             {
                 mouseData.CurentHovered = null;
@@ -718,5 +720,11 @@ namespace BrowserDesktop.Controller
             }
             tool.onProjected(bone);
         }
+
+        protected override string GetCurrentHoveredId()
+        {
+            return mouseData.CurrentHoveredId;
+        }
+
     }
 }
