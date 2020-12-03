@@ -1053,12 +1053,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 498482120}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9fa6c918c68acbf47a9b906a4c79ba31, type: 3}
+  m_Script: {fileID: 11500000, guid: e23b1f9aea016c24893b78dae2088329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Controllers:
   - {fileID: 2096641628}
-  interactableLoadTimeout: 60
 --- !u!114 &498482125
 MonoBehaviour:
   m_ObjectHideFlags: 0
