@@ -9,7 +9,7 @@
         "com.gfi-innovaton.umi3d.cdk.user-capture": "2.0.0",
         "com.gfi-innovaton.umi3d.common.collaboration": "2.0.0"
       },
-      "hash": "7a8bbd3aae4d5aaa3a2fbf3d95ab8f64270ece7a"
+      "hash": "766123e7904386238285892d74c034159ad3608a"
     },
     "com.gfi-innovaton.umi3d.cdk.core": {
       "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/ClientDevelopmentKit/Core#BUG_1618_bugs_and_attributes",
@@ -18,7 +18,7 @@
       "dependencies": {
         "com.gfi-innovaton.umi3d.common.core": "2.0.0"
       },
-      "hash": "7a8bbd3aae4d5aaa3a2fbf3d95ab8f64270ece7a"
+      "hash": "766123e7904386238285892d74c034159ad3608a"
     },
     "com.gfi-innovaton.umi3d.cdk.interaction-system": {
       "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/ClientDevelopmentKit/InteractionSystem#BUG_1618_bugs_and_attributes",
@@ -28,7 +28,7 @@
         "com.gfi-innovaton.umi3d.cdk.core": "2.0.0",
         "com.gfi-innovaton.umi3d.common.interaction-system": "2.0.0"
       },
-      "hash": "7a8bbd3aae4d5aaa3a2fbf3d95ab8f64270ece7a"
+      "hash": "766123e7904386238285892d74c034159ad3608a"
     },
     "com.gfi-innovaton.umi3d.cdk.user-capture": {
       "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/ClientDevelopmentKit/UserCapture#BUG_1618_bugs_and_attributes",
@@ -38,7 +38,7 @@
         "com.gfi-innovaton.umi3d.cdk.core": "2.0.0",
         "com.gfi-innovaton.umi3d.common.user-capture": "2.0.0"
       },
-      "hash": "7a8bbd3aae4d5aaa3a2fbf3d95ab8f64270ece7a"
+      "hash": "766123e7904386238285892d74c034159ad3608a"
     },
     "com.gfi-innovaton.umi3d.common.collaboration": {
       "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Common/Collaboration#BUG_1618_bugs_and_attributes",
@@ -48,7 +48,7 @@
         "com.gfi-innovaton.umi3d.common.interaction-system": "2.0.0",
         "com.gfi-innovaton.umi3d.common.user-capture": "2.0.0"
       },
-      "hash": "7a8bbd3aae4d5aaa3a2fbf3d95ab8f64270ece7a"
+      "hash": "766123e7904386238285892d74c034159ad3608a"
     },
     "com.gfi-innovaton.umi3d.common.core": {
       "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Common/Core#BUG_1618_bugs_and_attributes",
@@ -57,7 +57,7 @@
       "dependencies": {
         "com.gfi-innovaton.umi3d.dependencies": "2.0.0"
       },
-      "hash": "7a8bbd3aae4d5aaa3a2fbf3d95ab8f64270ece7a"
+      "hash": "766123e7904386238285892d74c034159ad3608a"
     },
     "com.gfi-innovaton.umi3d.common.interaction-system": {
       "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Common/InteractionSystem#BUG_1618_bugs_and_attributes",
@@ -66,7 +66,7 @@
       "dependencies": {
         "com.gfi-innovaton.umi3d.common.core": "2.0.0"
       },
-      "hash": "7a8bbd3aae4d5aaa3a2fbf3d95ab8f64270ece7a"
+      "hash": "766123e7904386238285892d74c034159ad3608a"
     },
     "com.gfi-innovaton.umi3d.common.user-capture": {
       "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Common/UserCapture#BUG_1618_bugs_and_attributes",
@@ -75,14 +75,14 @@
       "dependencies": {
         "com.gfi-innovaton.umi3d.common.core": "2.0.0"
       },
-      "hash": "7a8bbd3aae4d5aaa3a2fbf3d95ab8f64270ece7a"
+      "hash": "766123e7904386238285892d74c034159ad3608a"
     },
     "com.gfi-innovaton.umi3d.dependencies": {
       "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Dependencies#BUG_1618_bugs_and_attributes",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "7a8bbd3aae4d5aaa3a2fbf3d95ab8f64270ece7a"
+      "hash": "766123e7904386238285892d74c034159ad3608a"
     },
     "com.unity.collab-proxy": {
       "version": "1.2.16",

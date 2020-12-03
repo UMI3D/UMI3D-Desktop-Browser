@@ -19,6 +19,7 @@ using System;
 using System.Collections;
 using System.Security.Cryptography;
 using umi3d.cdk;
+using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3d.common;
