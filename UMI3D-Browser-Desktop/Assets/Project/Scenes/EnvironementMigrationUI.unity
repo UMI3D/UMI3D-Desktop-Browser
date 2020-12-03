@@ -3570,7 +3570,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dee479a7b501484b8b1c8e522450361, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  encoderType: 0
   OnNewToken:
     m_PersistentCalls:
       m_Calls: []
@@ -4669,7 +4668,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1800526323}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86ec99ed6053d4843a463e247c4e784d, type: 3}
+  m_Script: {fileID: 11500000, guid: e1511698e9348c3469511f24ce7aaac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onProgressChange:
@@ -4682,6 +4681,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   parameters: {fileID: 11400000, guid: afb9954a0c0f6a542b39a05baef01a97, type: 2}
+  UserList: []
 --- !u!4 &1800526325
 Transform:
   m_ObjectHideFlags: 0
