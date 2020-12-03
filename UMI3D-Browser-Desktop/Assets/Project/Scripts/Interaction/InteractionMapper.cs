@@ -148,6 +148,7 @@ public class InteractionMapper : AbstractInteractionMapper
         {
             controller.Release(tool,reason);
             toolIdToController.Remove(tool.id);
+            tool.OnUpdated.RemoveAllListeners();
             projectedTools.Remove(tool.id);
         }
         else
@@ -213,7 +214,7 @@ public class InteractionMapper : AbstractInteractionMapper
 
             toolIdToController.Add(tool.id, controller);
             projectedTools.Add(tool.id, reason);
-
+            tool.OnUpdated.AddListener(() => UpdateTools(toolId,releasable,reason));
             controller.Project(tool,releasable,reason,hoveredObjectId);
 
             return true;
@@ -222,6 +223,26 @@ public class InteractionMapper : AbstractInteractionMapper
         {
             throw new System.Exception("This controller is not compatible with this tool");
         }
+    }
+
+    /// <summary>
+    /// Request a Tool to be replaced by another one.
+    /// </summary>
+    /// <param name="selected">The tool to be selected</param>
+    /// <param name="released">The tool to be released</param>
+    public override bool UpdateTools(string toolId, bool releasable, InteractionMappingReason reason = null)
+    {
+        if (toolIdToController.ContainsKey(toolId))
+        {
+            AbstractController controller = toolIdToController[toolId];
+            AbstractTool tool = GetTool(toolId);
+            if (tool.interactions.Count <= 0)
+                controller.Release(tool, new ToolNeedToBeUpdated());
+            else
+                controller.Update(tool, releasable, reason);
+            return true;
+        }
+        throw new System.Exception("no controller have this tool projected");
     }
 
     /// <summary>
