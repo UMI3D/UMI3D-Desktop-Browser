@@ -57,8 +57,8 @@ namespace BrowserDesktop.Parameters
 
                 menuItem.NotifyValueChange(stringEnum.value);
                 menuItem.Subscribe(callback);
-                if (CircleMenu.Exists)
-                    CircleMenu.Instance.MenuDisplayManager.menu.Add(menuItem);
+                if (CircularMenu.Exists)
+                    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
                 currentInteraction = interaction;
             }
             else

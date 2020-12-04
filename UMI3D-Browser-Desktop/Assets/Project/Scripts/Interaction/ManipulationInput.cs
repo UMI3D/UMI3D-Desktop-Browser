@@ -71,7 +71,8 @@ namespace BrowserDesktop.Interaction
 
         static public ManipulationInput CurrentManipulation { get { List<ManipulationInput> instances = ManipulationGroup.InputInstances[ManipulationGroup.CurrentManipulationGroup]; if (instances.Count > 0) return instances[currentInstance]; else return null; } }
 
-        bool Active { get => active; set { active = value; ManipulationDisplayer?.State(active); } }
+        //bool Active { get => active; set { active = value; ManipulationDisplayer?.State(active); } }
+        bool Active { get => active; set { active = value; manipulationDisplayer?.SetState(active); } }
 
         internal void Activate()
         {
@@ -144,23 +145,29 @@ namespace BrowserDesktop.Interaction
         bool active = false;
         bool manipulated = false;
 
-        ManipulationDisplayer ManipulationDisplayer;
+        //ManipulationDisplayer ManipulationDisplayer;
+        ManipulationElement manipulationDisplayer;
 
         string toolId;
 
         protected void Start()
         {
-            if (ManipulationDisplayer == null)
+            /*if (ManipulationDisplayer == null)
             {
                 ManipulationDisplayer = ManipulationMenu.CreateDisplayer();
                 ManipulationDisplayer.gameObject.SetActive(false);
+            }*/
+            if (manipulationDisplayer == null)
+            {
+                manipulationDisplayer = ManipulationDisplayerManager.CreateDisplayer();
+                manipulationDisplayer.Display(false);
             }
         }
 
         private void OnDestroy()
         {
-            if (ManipulationDisplayer != null) Destroy(ManipulationDisplayer.gameObject);
-            ManipulationDisplayer = null;
+            if (manipulationDisplayer != null) manipulationDisplayer.Remove();
+            manipulationDisplayer = null;
         }
 
         public override void Init(AbstractController controller)
@@ -203,7 +210,8 @@ namespace BrowserDesktop.Interaction
 
         public void DisplayDisplayer(bool display)
         {
-            ManipulationDisplayer?.gameObject.SetActive(display);
+            //ManipulationDisplayer?.gameObject.SetActive(display);
+            manipulationDisplayer?.Display(display);
         }
 
 
@@ -218,13 +226,21 @@ namespace BrowserDesktop.Interaction
                 this.hoveredObjectId = hoveredObjectId;
                 associatedInteraction = manipulation;
 
-                if (ManipulationDisplayer == null)
+                /*if (ManipulationDisplayer == null)
                 {
                     ManipulationDisplayer = ManipulationMenu.CreateDisplayer();
                 }
                 if (ManipulationDisplayer != null)
                 {
                     ManipulationDisplayer.Set(associatedInteraction.name, Icon);
+                }*/
+                if(manipulationDisplayer == null)
+                {
+                    manipulationDisplayer = ManipulationDisplayerManager.CreateDisplayer();
+                } 
+                if(manipulationDisplayer != null)
+                {
+                    manipulationDisplayer.SetUp(associatedInteraction.name, Icon);
                 }
 
                 StartCoroutine(SetFrameOFReference());
@@ -269,7 +285,7 @@ namespace BrowserDesktop.Interaction
         {
             while (true)
             {
-                if ((!CircleMenu.Exists || !CircleMenu.Instance.IsExpanded) && !MainMenu.IsDisplaying)
+                if ((!CircularMenu.Exists || !CircularMenu.Instance.IsExpanded) && !MainMenu.IsDisplaying)
                 {
                     if (Active && associatedInteraction != null && InputLayoutManager.GetInputCode(activationButton.activationButton) != KeyCode.None)
                     {
@@ -393,9 +409,12 @@ namespace BrowserDesktop.Interaction
                 StopCoroutine(messageSenderCoroutine);
                 messageSenderCoroutine = null;
             }
-            ManipulationDisplayer?.gameObject.SetActive(false);
+            /*ManipulationDisplayer?.gameObject.SetActive(false);
             if (ManipulationDisplayer != null) Destroy(ManipulationDisplayer.gameObject);
-            ManipulationDisplayer = null;
+            ManipulationDisplayer = null;*/
+            manipulationDisplayer?.Remove();
+            manipulationDisplayer = null;
+
             activationButton.Locked = false;
             associatedInteraction = null;
             onDesactivation.Invoke();

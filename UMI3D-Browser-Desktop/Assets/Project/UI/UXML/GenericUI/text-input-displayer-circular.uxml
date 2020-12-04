@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="VisualElement" class="grey-border" style="border-bottom-width: 1px; height: 50px; border-top-width: 0;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" text="filler text" name="generic-text-field" class="grey-text-field min-size-label two-lignes-text-field text-field-mini grey-border" style="align-items: center; margin-left: 12px; border-top-width: 0; margin-right: 12px;" />
+    </ui:VisualElement>
+</ui:UXML>

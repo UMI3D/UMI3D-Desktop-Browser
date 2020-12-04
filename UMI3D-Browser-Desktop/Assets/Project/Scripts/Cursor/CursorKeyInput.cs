@@ -65,7 +65,7 @@ namespace BrowserDesktop.Cursor
         {
             base.Update();
 
-            if (!CircleMenu.Exists || !CircleMenu.Instance.IsExpanded)
+            if (!CircularMenu.Exists || !CircularMenu.Instance.IsExpanded)
             {
                 distCursor += Input.mouseScrollDelta.y * Time.deltaTime * ScrollToDistSpeed;
                 if (distCursor < MinimumCursorDistance) distCursor = MinimumCursorDistance;

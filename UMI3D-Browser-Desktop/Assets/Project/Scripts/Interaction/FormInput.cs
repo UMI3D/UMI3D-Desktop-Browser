@@ -41,6 +41,7 @@ public class FormInput : AbstractUMI3DInput
 
     public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
     {
+        UnityEngine.Debug.Log("TEST " + interaction.name);
         if (associatedInteraction != null)
         {
             throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
@@ -57,9 +58,9 @@ public class FormInput : AbstractUMI3DInput
                 Holdable = false
             };
             menuItem.Subscribe(Pressed);
-            if (CircleMenu.Exists)
+            if (CircularMenu.Exists)
             {
-                CircleMenu.Instance.MenuDisplayManager.menu.Add(menuItem);
+                CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
             }
         }
         else
@@ -81,9 +82,9 @@ public class FormInput : AbstractUMI3DInput
     public override void Dissociate()
     {
         associatedInteraction = null;
-        if (CircleMenu.Exists && menuItem != null)
+        if (CircularMenu.Exists && menuItem != null)
         {
-            CircleMenu.Instance.MenuDisplayManager.menu.Remove(menuItem);
+            CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
         }
         menuItem.UnSubscribe(Pressed);
         menuItem = null;
