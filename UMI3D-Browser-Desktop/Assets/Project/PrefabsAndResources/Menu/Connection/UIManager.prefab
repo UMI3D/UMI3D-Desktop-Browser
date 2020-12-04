@@ -760,8 +760,8 @@ MonoBehaviour:
   identifier: {fileID: 11400000, guid: a3c89eef08c21e647a83ef6b16993957, type: 2}
   Menu: {fileID: 11400000, guid: e0ca03fe9e05d634a89f97e4be2f42b7, type: 2}
   MenuDisplayManager: {fileID: 2575462095453148189}
-  launcherScene: ConnectionMigrationUI
-  currentScene: EnvironementMigrationUI
+  cam: {fileID: 0}
+  launcherScene: Connection
   dialogueBoxTreeAsset: {fileID: 9197481963319205126, guid: 952193403cd37744f9ac513022d96731,
     type: 3}
   isDisplayed: 1
