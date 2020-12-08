@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9142532965640120773}
   - component: {fileID: 163827849195189317}
   m_Layer: 0
-  m_Name: left_shoulder
+  m_Name: left_elbow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

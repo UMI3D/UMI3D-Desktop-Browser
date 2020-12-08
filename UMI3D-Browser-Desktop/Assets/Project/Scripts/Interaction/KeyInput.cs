@@ -39,7 +39,8 @@ namespace BrowserDesktop.Interaction
         /// <summary>
         /// Avatar bone linked to this input.
         /// </summary>
-        public string bone = BoneType.RightHand;
+        [ConstStringEnum(typeof(BoneType))]
+        public string bone = BoneType.RightHand.ToString();
 
         protected BoneDto boneDto;
 
