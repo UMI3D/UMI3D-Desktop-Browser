@@ -263,8 +263,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         dialogueBox.Setup("Server error",
             error,
             "Leave",
-            "Also leave ?",
-            (b) => Leave());   
+            Leave);   
     }
 
     private void GetMediaSucces(MediaDto media)
