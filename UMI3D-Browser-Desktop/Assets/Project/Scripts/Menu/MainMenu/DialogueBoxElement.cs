@@ -43,14 +43,17 @@ public class DialogueBoxElement : VisualElement
     public new class UxmlFactory : UxmlFactory<DialogueBoxElement, UxmlTraits> { }
     public new class UxmlTraits : VisualElement.UxmlTraits { }
 
+    /// <summary>
+    /// Sets up the dialogue box for two choices.
+    /// </summary>
+    /// <param name="title"></param>
+    /// <param name="message"></param>
+    /// <param name="optionA"></param>
+    /// <param name="optionB"></param>
+    /// <param name="choiceCallback"></param>
+    /// <param name="marginForTitleBar"></param>
     public void Setup(string title, string message, string optionA, string optionB, Action<bool> choiceCallback, bool marginForTitleBar = false) {
-        this.style.position = Position.Absolute;
-        
-        this.Q<Label>("dialogue-box-title").text = title;
-        this.Q<Label>("dialogue-box-message").text = message;
-
-        Button optionABtn = this.Q<Button>("dialogue-box-btn1");
-        Button optionBBtn = this.Q<Button>("dialogue-box-btn2");
+        (Button optionABtn, Button optionBBtn) = Setup(title, message);
 
         optionABtn.text = optionA;
         optionABtn.clickable.clicked += () =>
@@ -71,6 +74,55 @@ public class DialogueBoxElement : VisualElement
 
         this.choiceCallback = choiceCallback;
         currentDialogueBox = this;
+    }
+
+    /// <summary>
+    /// Sets up the dialogue box for one choice.
+    /// </summary>
+    /// <param name="title"></param>
+    /// <param name="message"></param>
+    /// <param name="optionA"></param>
+    /// <param name="optionB"></param>
+    /// <param name="choiceCallback"></param>
+    /// <param name="marginForTitleBar"></param>
+    public void Setup(string title, string message, string optionA, Action choiceCallback, bool marginForTitleBar = false)
+    {
+        (Button optionABtn, Button optionBBtn) = Setup(title, message);
+
+        optionBBtn.style.display = DisplayStyle.None;
+
+        optionABtn.text = optionA;
+        optionABtn.clickable.clicked += () =>
+        {
+            _CloseDialogueBox(true, this);
+        };
+
+        if (marginForTitleBar)
+        {
+            this.style.marginTop = 40;
+        }
+
+        this.choiceCallback = (b) => choiceCallback();
+        currentDialogueBox = this;
+    }
+
+    /// <summary>
+    /// Sets ups elements which do not depends on the number of choices.
+    /// </summary>
+    /// <param name="title"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    private (Button, Button) Setup(string title, string message)
+    {
+        this.style.position = Position.Absolute;
+
+        this.Q<Label>("dialogue-box-title").text = title;
+        this.Q<Label>("dialogue-box-message").text = message;
+
+        Button optionABtn = this.Q<Button>("dialogue-box-btn1");
+        Button optionBBtn = this.Q<Button>("dialogue-box-btn2");
+
+        return (optionABtn, optionBBtn);
     }
 
     private static void _CloseDialogueBox(bool choice, DialogueBoxElement dialogueBox)

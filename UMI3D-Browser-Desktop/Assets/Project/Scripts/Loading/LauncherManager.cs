@@ -173,8 +173,8 @@ public class LauncherManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(url))
         {
-            urlScreen.Q<Label>("url-error").style.display = DisplayStyle.Flex;
-            urlScreen.Q<Label>("url-error").text = "The domain is empty.";
+            //urlScreen.Q<Label>("url-error").style.display = DisplayStyle.Flex;
+            //urlScreen.Q<Label>("url-error").text = "The domain is empty.";
         } else
         {
             currentConnectionData.ip = url;
@@ -250,7 +250,7 @@ public class LauncherManager : MonoBehaviour
             item.Q<Button>("delete-item").clickable.clicked += () =>
             {
                 DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-                dialogue.Setup("env.environmentName", "Delete this environment from favorites ?", "Yes", "No", (b) =>
+                dialogue.Setup(env.environmentName, "Delete this environment from favorites ?", "YES", "NO", (b) =>
                 {
                     if (b)
                     {
