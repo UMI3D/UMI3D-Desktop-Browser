@@ -17,20 +17,21 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk.menu;
+using umi3d.cdk.menu.interaction;
 using umi3d.cdk.menu.view;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
 {
-    public class MenuItemButtonDisplayerElement : AbstractDisplayer, IDisplayerElement
+    public class EventMenuItemDisplayerElement : AbstractDisplayer, IDisplayerElement
     {
         public VisualTreeAsset menuItemTreeAsset;
 
         /// <summary>
         /// Button menu item to display.
         /// </summary>
-        protected ButtonMenuItem menuItem;
+        protected EventMenuItem menuItem;
 
         /// <summary>
         /// Button
@@ -62,7 +63,7 @@ namespace BrowserDesktop.Menu
         /// Notify that the button has been pressed.
         /// </summary>
         public void NotifyPress()
-        {
+        { 
             menuItem?.NotifyValueChange(!menuItem.GetValue());
         }
 
@@ -75,9 +76,9 @@ namespace BrowserDesktop.Menu
         {
             //TODO
             //button = GetComponent<Button>();
-            if (item is ButtonMenuItem)
+            if (item is EventMenuItem)
             {
-                menuItem = item as ButtonMenuItem;
+                menuItem = item as EventMenuItem;
             }
             InitAndBindUI();
             button.text = item.Name;
@@ -85,7 +86,7 @@ namespace BrowserDesktop.Menu
 
         public override int IsSuitableFor(umi3d.cdk.menu.AbstractMenuItem menu)
         {
-            return (menu is ButtonMenuItem) ? 2 : (menu is MenuItem) ? 1 : 0;
+            return (menu is EventMenuItem) ? 2 : (menu is MenuItem) ? 1 : 0;
         }
 
         public VisualElement GetUXMLContent()

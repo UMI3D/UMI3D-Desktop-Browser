@@ -20,6 +20,7 @@ using BrowserDesktop.Parameters;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
+using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
 using UnityEngine;
@@ -48,7 +49,8 @@ namespace BrowserDesktop.Controller
         /// <summary>
         /// Avatar bone linked to this input.
         /// </summary>
-        public string bone = BoneType.RightHand;
+        [ConstStringEnum(typeof(BoneType))]
+        public string bone = BoneType.RightHand.ToString();
 
         protected BoneDto boneDto;
 
