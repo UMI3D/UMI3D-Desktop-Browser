@@ -24,13 +24,13 @@ namespace BrowserDesktop.Menu
         public PanelRenderer panelRenderer;
 
         [SerializeField]
-        string containerTagName;
+        string containerTagName = null;
         VisualElement container;
 
         VisualElement parentContainer;
 
         [SerializeField]
-        VisualTreeAsset eventDisplayerTreeAsset;
+        VisualTreeAsset eventDisplayerTreeAsset = null;
 
         private int nbEventsDisplayed;
         public static int NbEventsDIsplayed

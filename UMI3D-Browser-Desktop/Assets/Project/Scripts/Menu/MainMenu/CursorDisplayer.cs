@@ -26,16 +26,16 @@ public class CursorDisplayer : Singleton<CursorDisplayer>
 
     [Header("Class names")]
     [SerializeField]
-    Sprite defaultCursor;
+    Sprite defaultCursor = null;
     [SerializeField]
-    Sprite hoverCursor;
+    Sprite hoverCursor = null;
     [SerializeField]
-    Sprite followCursor;
+    Sprite followCursor = null;
     [SerializeField]
-    Sprite clickedCursor;
+    Sprite clickedCursor = null;
 
     [SerializeField]
-    Sprite settingsCursor;
+    Sprite settingsCursor = null;
 
     VisualElement cursorContainer;
     VisualElement cursorCenter;

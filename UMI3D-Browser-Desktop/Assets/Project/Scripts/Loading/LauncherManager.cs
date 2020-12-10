@@ -35,12 +35,12 @@ public class LauncherManager : MonoBehaviour
     #region UI Fields
 
     [SerializeField]
-    private PanelRenderer panelRenderer;
+    private PanelRenderer panelRenderer = null;
 
     [SerializeField]
-    private VisualTreeAsset libraryEntryTreeAsset;
+    private VisualTreeAsset libraryEntryTreeAsset = null;
     [SerializeField]
-    private VisualTreeAsset dialogueBoxTreeAsset;
+    private VisualTreeAsset dialogueBoxTreeAsset = null;
 
     private VisualElement root;
 

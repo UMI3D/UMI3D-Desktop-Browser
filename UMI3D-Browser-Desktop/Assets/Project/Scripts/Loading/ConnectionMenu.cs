@@ -53,10 +53,10 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     public Camera cam;
 
     [SerializeField]
-    private string launcherScene;
+    private string launcherScene = null;
 
     [SerializeField]
-    private VisualTreeAsset dialogueBoxTreeAsset;
+    private VisualTreeAsset dialogueBoxTreeAsset = null;
 
     private LoadingBar loader;
 

@@ -30,7 +30,7 @@ namespace BrowserDesktop.Menu
         public string activeClassName;
 
         [SerializeField]
-        private string containerTagName;
+        private string containerTagName = null;
 
         VisualElement container;
 

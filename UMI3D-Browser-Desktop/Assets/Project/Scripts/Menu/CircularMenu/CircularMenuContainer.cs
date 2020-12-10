@@ -29,12 +29,12 @@ namespace BrowserDesktop.Menu
         public int currentFirstDisplayed = 0;
 
         [Tooltip("Offset from the top left corner to the center of the menu")]
-        [SerializeField] Vector2 offset;
-        [SerializeField] string viewTagName;
-        VisualElement view;
-        [SerializeField] string nextButtonTagName;
+        [SerializeField] Vector2 offset = Vector2.zero;
+        [SerializeField] string viewTagName = null;
+        VisualElement view = null;
+        [SerializeField] string nextButtonTagName = null;
         Button nextButton;
-        [SerializeField] string previousButtonTagName;
+        [SerializeField] string previousButtonTagName = null;
         Button previousButton;
 
         int count;
