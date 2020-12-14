@@ -99,7 +99,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         Debug.Assert(identifier != null);
         Debug.Assert(Menu != null);
         Debug.Assert(MenuDisplayManager != null);
-
+        Debug.Assert(cam != null);
 
         identifier.GetLoginAction = GetLogin;
         identifier.GetIdentityAction = GetIdentity;
