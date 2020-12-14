@@ -177,7 +177,7 @@ public class LauncherManager : MonoBehaviour
             //urlScreen.Q<Label>("url-error").text = "The domain is empty.";
         } else
         {
-            currentConnectionData.ip = url;
+            currentConnectionData.ip = url.Trim();
 
             urlScreen.style.display = DisplayStyle.None;;
             previousStep = ResetLauncher;
