@@ -432,7 +432,6 @@ GameObject:
   - component: {fileID: 2150043796629940576}
   - component: {fileID: 2150043796629940577}
   - component: {fileID: 2150043796629940579}
-  - component: {fileID: 2150043796629940580}
   m_Layer: 0
   m_Name: viewpoint
   m_TagString: MainCamera
@@ -501,14 +500,6 @@ Camera:
   m_StereoSeparation: 0.022
 --- !u!124 &2150043796629940579
 Behaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2150043796629940581}
-  m_Enabled: 1
---- !u!81 &2150043796629940580
-AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
