@@ -71,7 +71,8 @@ namespace BrowserDesktop.Interaction
 
         static public ManipulationInput CurrentManipulation { get { List<ManipulationInput> instances = ManipulationGroup.InputInstances[ManipulationGroup.CurrentManipulationGroup]; if (instances.Count > 0) return instances[currentInstance]; else return null; } }
 
-        bool Active { get => active; set { active = value; ManipulationDisplayer?.State(active); } }
+        //bool Active { get => active; set { active = value; ManipulationDisplayer?.State(active); } }
+        bool Active { get => active; set { active = value; manipulationDisplayer?.SetState(active); } }
 
         internal void Activate()
         {
@@ -144,21 +145,29 @@ namespace BrowserDesktop.Interaction
         bool active = false;
         bool manipulated = false;
 
-        ManipulationDisplayer ManipulationDisplayer;
+        //ManipulationDisplayer ManipulationDisplayer;
+        ManipulationElement manipulationDisplayer;
+
+        string toolId;
 
         protected void Start()
         {
-            if (ManipulationDisplayer == null)
+            /*if (ManipulationDisplayer == null)
             {
                 ManipulationDisplayer = ManipulationMenu.CreateDisplayer();
                 ManipulationDisplayer.gameObject.SetActive(false);
+            }*/
+            if (manipulationDisplayer == null)
+            {
+                manipulationDisplayer = ManipulationDisplayerManager.CreateDisplayer();
+                manipulationDisplayer.Display(false);
             }
         }
 
         private void OnDestroy()
         {
-            if (ManipulationDisplayer != null) Destroy(ManipulationDisplayer.gameObject);
-            ManipulationDisplayer = null;
+            if (manipulationDisplayer != null) manipulationDisplayer.Remove();
+            manipulationDisplayer = null;
         }
 
         public override void Init(AbstractController controller)
@@ -171,7 +180,7 @@ namespace BrowserDesktop.Interaction
             }
         }
 
-        public override void Associate(AbstractInteractionDto interaction)
+        public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
         {
             if (associatedInteraction != null)
             {
@@ -180,13 +189,14 @@ namespace BrowserDesktop.Interaction
 
             if (IsCompatibleWith(interaction))
             {
+                this.toolId = toolId;
                 foreach (DofGroupOptionDto group in (interaction as ManipulationDto).dofSeparationOptions)
                 {
                     foreach (DofGroupDto sep in group.separations)
                     {
                         if (sep.dofs == DofGroup)
                         {
-                            Associate(interaction as ManipulationDto, sep.dofs);
+                            Associate(interaction as ManipulationDto, sep.dofs, toolId, hoveredObjectId);
                             return;
                         }
                     }
@@ -200,11 +210,12 @@ namespace BrowserDesktop.Interaction
 
         public void DisplayDisplayer(bool display)
         {
-            ManipulationDisplayer?.gameObject.SetActive(display);
+            //ManipulationDisplayer?.gameObject.SetActive(display);
+            manipulationDisplayer?.Display(display);
         }
 
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
         {
             if (associatedInteraction != null)
             {
@@ -212,15 +223,24 @@ namespace BrowserDesktop.Interaction
             }
             if (dofs == DofGroup)
             {
+                this.hoveredObjectId = hoveredObjectId;
                 associatedInteraction = manipulation;
 
-                if (ManipulationDisplayer == null)
+                /*if (ManipulationDisplayer == null)
                 {
                     ManipulationDisplayer = ManipulationMenu.CreateDisplayer();
                 }
                 if (ManipulationDisplayer != null)
                 {
                     ManipulationDisplayer.Set(associatedInteraction.name, Icon);
+                }*/
+                if(manipulationDisplayer == null)
+                {
+                    manipulationDisplayer = ManipulationDisplayerManager.CreateDisplayer();
+                } 
+                if(manipulationDisplayer != null)
+                {
+                    manipulationDisplayer.SetUp(associatedInteraction.name, Icon);
                 }
 
                 StartCoroutine(SetFrameOFReference());
@@ -258,11 +278,14 @@ namespace BrowserDesktop.Interaction
             }
         }
 
+        string hoveredObjectId;
+        string GetCurrentHoveredObjectId() { return hoveredObjectId; }
+
         protected IEnumerator networkMessageSender()
         {
             while (true)
             {
-                if ((!CircleMenu.Exists || !CircleMenu.Instance.IsExpanded) && !MainMenu.IsDisplaying)
+                if ((!CircularMenu.Exists || !CircularMenu.Instance.IsExpanded) && !MainMenu.IsDisplaying)
                 {
                     if (Active && associatedInteraction != null && InputLayoutManager.GetInputCode(activationButton.activationButton) != KeyCode.None)
                     {
@@ -279,7 +302,9 @@ namespace BrowserDesktop.Interaction
 
                                 var pararmeterDto = new ManipulationRequestDto()
                                 {
-                                    entityId =  associatedInteraction.id
+                                    id =  associatedInteraction.id,
+                                    toolId = this.toolId,
+                                    hoveredObjectId = GetCurrentHoveredObjectId()
                                 };
                                 MapDistanceWithDof(distanceInFrame, ref pararmeterDto);
                                 UMI3DClientServer.Send(pararmeterDto, true);
@@ -384,9 +409,12 @@ namespace BrowserDesktop.Interaction
                 StopCoroutine(messageSenderCoroutine);
                 messageSenderCoroutine = null;
             }
-            ManipulationDisplayer?.gameObject.SetActive(false);
+            /*ManipulationDisplayer?.gameObject.SetActive(false);
             if (ManipulationDisplayer != null) Destroy(ManipulationDisplayer.gameObject);
-            ManipulationDisplayer = null;
+            ManipulationDisplayer = null;*/
+            manipulationDisplayer?.Remove();
+            manipulationDisplayer = null;
+
             activationButton.Locked = false;
             associatedInteraction = null;
             onDesactivation.Invoke();
@@ -407,6 +435,11 @@ namespace BrowserDesktop.Interaction
         public override bool IsAvailable()
         {
             return associatedInteraction == null && (activationButton.IsAvailable() || activationButton.Locked);
+        }
+
+        public override void UpdateHoveredObjectId(string hoveredObjectId)
+        {
+            this.hoveredObjectId = hoveredObjectId;
         }
     }
 }

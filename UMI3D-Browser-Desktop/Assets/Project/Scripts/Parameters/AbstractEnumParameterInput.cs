@@ -23,7 +23,7 @@ namespace BrowserDesktop.Parameters
     public abstract class AbstractEnumParameterInput<InputMenuItem, ValueType> : AbstractParameterInput<InputMenuItem, EnumParameterDto<ValueType>, ValueType>
         where InputMenuItem : AbstractEnumInputMenuItem<ValueType>, new()
     {
-        public override void Associate(AbstractInteractionDto interaction)
+        public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
         {
             if (currentInteraction != null)
             {
@@ -40,8 +40,10 @@ namespace BrowserDesktop.Parameters
                     dto.value = newValue;
                     var pararmeterDto = new ParameterSettingRequestDto()
                     {
-                        entityId = currentInteraction.id,
+                        id = currentInteraction.id,
+                        toolId = toolId,
                         parameter = dto,
+                        hoveredObjectId = GetCurrentHoveredObjectID()
                     };
                     UMI3DCollaborationClientServer.Send(pararmeterDto, true);
                 };
@@ -50,13 +52,13 @@ namespace BrowserDesktop.Parameters
                 {
                     dto = stringEnum,
                     Name = interaction.name,
-                    options = stringEnum.PossibleValues
+                    options = stringEnum.possibleValues
                 };
 
                 menuItem.NotifyValueChange(stringEnum.value);
                 menuItem.Subscribe(callback);
-                if (CircleMenu.Exists)
-                    CircleMenu.Instance.MenuDisplayManager.menu.Add(menuItem);
+                if (CircularMenu.Exists)
+                    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
                 currentInteraction = interaction;
             }
             else

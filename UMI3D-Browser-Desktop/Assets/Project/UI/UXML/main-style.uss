@@ -1,0 +1,751 @@
+* {
+    -unity-font: url('/Assets/Project/UI/Font/Decker.ttf');
+}
+
+Button {
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+TextField > Label {
+    min-width: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-right: 0;
+}
+
+Toggle > Label {
+    min-width: 0;
+    padding-right: 5px;
+}
+
+.grey-text-field > #unity-text-input {
+    padding-left: 7px;
+    height: 100%;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(73, 73, 75);
+    border-right-color: rgb(73, 73, 75);
+    border-top-color: rgb(73, 73, 75);
+    border-bottom-color: rgb(73, 73, 75);
+    color: rgb(255, 255, 255);
+    background-color: rgb(63, 63, 66);
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.grey-text-field {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.grey-text-field > Label {
+    -unity-font-style: normal;
+    color: rgb(247, 182, 87);
+    min-width: 0;
+}
+
+.orange-scroll-view {
+}
+
+.orange-scroll-view .unity-scroller #unity-dragger {
+    border-radius: 1px;
+    border-width: 0;
+    border-left-color: rgb(247, 182, 87);
+    border-right-color: rgb(247, 182, 87);
+    border-top-color: rgb(247, 182, 87);
+    border-bottom-color: rgb(247, 182, 87);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    background-color: rgba(0, 0, 0, 0);
+    width: 7px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.orange-scroll-view .unity-scroller #unity-slider {
+    background-color: rgb(38, 38, 38);
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.orange-scroll-view > Scroller #unity-low-button {
+    width: 12px;
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowUp_ENABLE.png');
+    position: absolute;
+    height: 9px;
+    margin-left: 1px;
+    margin-right: 1px;
+}
+
+.orange-scroll-view > Scroller #unity-low-button:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowUP_HOVER.png');
+}
+
+.orange-scroll-view > Scroller #unity-low-button:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowUP_PRESS.png');
+}
+
+.orange-scroll-view > Scroller #unity-high-button {
+    width: 12px;
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_ENABLE.png');
+    position: absolute;
+    bottom: 0;
+    height: 9px;
+    margin-left: 1px;
+    margin-right: 1px;
+}
+
+.orange-scroll-view > Scroller #unity-high-button:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_HOVER.png');
+}
+
+.orange-scroll-view > Scroller #unity-high-button:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_PRESS.png');
+}
+
+.orange-scroll-view .unity-disabled > #unity-low-button {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowUp_DISABLE.png');
+}
+
+.orange-scroll-view .unity-disabled > #unity-high-button {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_DISABLE.png');
+}
+
+.vertical-scroll-view {
+}
+
+.vertical-scroll-view #unity-slider {
+    display: none;
+    height: 20px;
+}
+
+.vertical-scroll-view #unity-low-button {
+    position: absolute;
+    left: -18px;
+    top: -36px;
+    background-image: url('/Assets/Project/UI/UI_connection/left-arrow-horizontal-scrollview.png');
+    height: 15px;
+    width: 11px;
+}
+
+.vertical-scroll-view #unity-high-button {
+    position: absolute;
+    top: -36px;
+    right: -18px;
+    background-image: url('/Assets/Project/UI/UI_connection/right-arrow-horizontal-scrollview.png');
+    height: 15px;
+    width: 11px;
+}
+
+.white-label {
+}
+
+.white-label > Label {
+    color: white;
+}
+
+.dark-grey1-bck {
+    background-color: rgb(38, 38, 38);
+}
+
+.dark-grey2-bck {
+    background-color: rgb(50, 50, 50);
+}
+
+.dark-grey3-bck-hover {
+}
+
+.dark-grey3-bck-hover:hover {
+    background-color: white;
+    color: rgb(38, 38, 38);
+}
+
+.dark-grey3-bck {
+    background-color: rgb(56, 56, 56);
+}
+
+.medium-size-txt {
+    font-size: 15px;
+}
+
+.textfield-label-medium-size {
+}
+
+.textfield-label-medium-size > Label {
+    width: 100px;
+}
+
+.border-radius {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.top-left-menu-btn {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(255, 255, 255);
+}
+
+.top-left-menu-btn:hover {
+    background-color: rgb(111, 111, 111);
+}
+
+.password-visible {
+    background-color: rgb(52, 133, 153);
+}
+
+.password-invisible {
+    background-color: rgb(169, 20, 46);
+}
+
+.list-entry {
+    height: 35px;
+    background-color: rgb(217, 241, 240);
+    border-left-color: rgb(52, 133, 153);
+    border-right-color: rgb(52, 133, 153);
+    border-top-color: rgb(52, 133, 153);
+    border-bottom-color: rgb(52, 133, 153);
+    border-bottom-width: 1px;
+}
+
+.textfield-with-image-bck {
+}
+
+.textfield-with-image-bck > #unity-text-input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right-width: 0;
+}
+
+.input-button {
+    border-left-color: rgb(73, 73, 75);
+    border-right-color: rgb(73, 73, 75);
+    border-top-color: rgb(73, 73, 75);
+    border-bottom-color: rgb(73, 73, 75);
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    background-color: rgb(63, 63, 66);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.input-arrow-button {
+}
+
+.input-arrow-button > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_ENABLE.png');
+}
+
+.input-arrow-button:hover > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_HOVER.png');
+}
+
+.input-arrow-button:active > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_PRESS.png');
+}
+
+.input-eye-button-on {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_show_ENABLE.png');
+}
+
+.input-eye-button-on:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_show_HOVER.png');
+}
+
+.input-eye-button-on:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_show_PRESS.png');
+}
+
+.input-eye-button-off {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_hide_ENABLE.png');
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.input-eye-button-off:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_hide_HOVER.png');
+}
+
+.input-eye-button-off:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_goTO_PRESS.png');
+}
+
+.manipulation-element {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(24, 24, 24);
+    border-right-color: rgb(24, 24, 24);
+    border-top-color: rgb(24, 24, 24);
+    border-bottom-color: rgb(24, 24, 24);
+}
+
+.manipulation-element-active {
+    background-color: rgb(111, 108, 108);
+    color: rgb(31, 31, 31);
+}
+
+.white-txt {
+    color: rgb(255, 255, 255);
+}
+
+.white-btn {
+    color: rgb(255, 255, 255);
+}
+
+.white-btn:hover {
+    color: rgb(247, 182, 87);
+}
+
+.orange-text {
+    color: rgb(247, 182, 87);
+}
+
+.orange-border {
+    border-left-color: rgb(247, 182, 87);
+    border-right-color: rgb(247, 182, 87);
+    border-top-color: rgb(247, 182, 87);
+    border-bottom-color: rgb(247, 182, 87);
+}
+
+.grey-border {
+    border-left-color: rgb(63, 63, 63);
+    border-right-color: rgb(63, 63, 63);
+    border-top-color: rgb(63, 63, 63);
+    border-bottom-color: rgb(63, 63, 63);
+}
+
+.btn-orange {
+    color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgb(247, 182, 87);
+    border-right-color: rgb(247, 182, 87);
+    border-top-color: rgb(247, 182, 87);
+    border-bottom-color: rgb(247, 182, 87);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.btn-orange:hover {
+    background-color: rgb(247, 182, 87);
+}
+
+.toggle-orange {
+}
+
+.toggle-orange > Label {
+    color: rgb(247, 182, 87);
+}
+
+.toggle-orange #unity-checkmark {
+    background-color: rgba(231, 0, 0, 0);
+    background-image: none;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(247, 182, 87);
+    border-right-color: rgb(247, 182, 87);
+    border-top-color: rgb(247, 182, 87);
+    border-bottom-color: rgb(247, 182, 87);
+}
+
+.toggle-orange:checked #unity-checkmark {
+    background-image: url('/Assets/Project/UI/UI_connection/checkbox_full_ENABLE.png');
+}
+
+.toggle-orange:hover #unity-checkmark {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(247, 182, 87);
+    border-right-color: rgb(247, 182, 87);
+    border-top-color: rgb(247, 182, 87);
+    border-bottom-color: rgb(247, 182, 87);
+}
+
+.toggle-orange:active #unity-checkmark {
+    background-image: url('/Assets/Project/UI/UI_connection/checkbox_full_PRESS.png');
+}
+
+.min-size-label {
+}
+
+.min-size-label > Label {
+    min-width: 115px;
+}
+
+.orange-slider {
+}
+
+.orange-slider #unity-tracker {
+    background-color: rgb(38, 38, 38);
+}
+
+.orange-slider #unity-dragger {
+    background-color: rgb(230, 171, 84);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.orange-slider #unity-dragger:hover {
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(230, 171, 84);
+    border-right-color: rgb(230, 171, 84);
+    border-top-color: rgb(230, 171, 84);
+    border-bottom-color: rgb(230, 171, 84);
+}
+
+.two-lignes-text-field {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.two-lignes-text-field > Label {
+    width: 100%;
+    height: 42px;
+}
+
+.two-lignes-text-field > #unity-text-input {
+    width: 100%;
+    height: 42px;
+}
+
+.btn-left-arrow {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_back_ENABLE.png');
+}
+
+.btn-left-arrow:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_back_HOVER.png');
+}
+
+.btn-left-arrow:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_back_PRESS.png');
+}
+
+.bin-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_delete_ENABLE_1.png');
+}
+
+.bin-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_delete_HOVER_1.png');
+}
+
+.bin-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_delete_ENABLE_1.png');
+}
+
+.minimize-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_reduce_ENABLE.png');
+}
+
+.minimize-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_reduce_HOVER.png');
+    border-left-color: rgb(102, 102, 102);
+    border-right-color: rgb(102, 102, 102);
+    border-top-color: rgb(102, 102, 102);
+    border-bottom-color: rgb(102, 102, 102);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.minimize-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_reduce_PRESS.png');
+}
+
+.close-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_close_ENABLE.png');
+}
+
+.close-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_close_HOVER.png');
+    border-left-color: rgb(102, 102, 102);
+    border-right-color: rgb(102, 102, 102);
+    border-top-color: rgb(102, 102, 102);
+    border-bottom-color: rgb(102, 102, 102);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.close-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_close_PRESS.png');
+}
+
+.restore-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_resize_ENABLE.png');
+}
+
+.restore-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_resize_HOVER.png');
+    border-left-color: rgb(102, 102, 102);
+    border-right-color: rgb(102, 102, 102);
+    border-top-color: rgb(102, 102, 102);
+    border-bottom-color: rgb(102, 102, 102);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.restore-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_resize_PRESS.png');
+}
+
+.maximize-btn {
+    background-image: url('/Assets/Project/UI/Icons/Windows/maximise_ENABLE.png');
+}
+
+.maximize-btn:active {
+    background-image: url('/Assets/Project/UI/Icons/Windows/maximise_PRESS.png');
+}
+
+.maximize-btn:hover {
+    border-left-color: rgb(102, 102, 102);
+    border-right-color: rgb(102, 102, 102);
+    border-top-color: rgb(102, 102, 102);
+    border-bottom-color: rgb(102, 102, 102);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.dropdown-btn {
+}
+
+.dropdown-btn > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_ENABLE.png');
+}
+
+.dropdown-btn:hover > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_HOVER.png');
+}
+
+.dropdown-btn:active > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_arrowDown_PRESS.png');
+}
+
+.choices-dropdown {
+    background-color: rgb(63, 63, 66);
+    border-left-color: rgb(102, 102, 102);
+    border-right-color: rgb(102, 102, 102);
+    border-top-color: rgb(102, 102, 102);
+    border-bottom-color: rgb(102, 102, 102);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    position: absolute;
+}
+
+.dropdown-label-big {
+}
+
+.dropdown-label-medium {
+    font-size: 15px;
+    height: 40px;
+    padding-left: 5px;
+    -unity-text-align: middle-left;
+}
+
+.dropdown-label-mini {
+    font-size: 11px;
+    height: 20px;
+    padding-left: 5px;
+    -unity-text-align: middle-left;
+}
+
+.scrollview-padding {
+}
+
+.scrollview-padding #unity-content-container {
+    padding-right: 22px;
+}
+
+.slider-two-levels {
+}
+
+.text-field-mini {
+}
+
+.text-field-mini > Label {
+    height: 20px;
+}
+
+.text-field-mini > #unity-text-input {
+    height: 20px;
+}
+
+.orange-hover {
+}
+
+.orange-hover:hover {
+    border-left-color: rgb(247, 182, 87);
+    border-right-color: rgb(247, 182, 87);
+    border-top-color: rgb(247, 182, 87);
+    border-bottom-color: rgb(247, 182, 87);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.error-txt {
+    color: rgb(179, 0, 0);
+}
+
+.warning-txt {
+    color: rgb(247, 182, 87);
+}
+
+.grey-txt {
+    color: rgb(182, 182, 182);
+}
+
+.border-hover {
+}
+
+.border-hover:hover {
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.bck-grey2-hover {
+}
+
+.bck-grey2-hover:hover {
+    background-color: rgb(63, 63, 63);
+}
+
+.unity-base-text-field__input {
+    --unity-cursor-color: rgb(255, 255, 255);
+}
+
+.slider-circle-active {
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: rgb(247, 182, 87);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.slider-circle-desactivate {
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: rgb(63, 66, 66);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.inline-textfield {
+}
+
+.label-margin {
+}
+
+.label-margin > Label {
+    margin-right: 10px;
+}
+
+.btn-tool {
+}
+
+.btn-tool > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_tool_ENABLE.png');
+}
+
+.btn-tool:hover > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_tool_HOVER.png');
+}
+
+.btn-tool:active > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_tool_ACTIVE.png');
+}
+
+.btn-tool-selected {
+}
+
+.btn-tool-selected > VisualElement {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_tool_ACTIVE.png');
+}

@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <BrowserDesktop.Menu.EventDisplayer class="white-txt grey-border dark-grey2-bck" style="flex-direction: row; width: 256px; align-items: center; height: 20px; padding-left: 5px; padding-right: 5px;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" text="filler text" name="input" readonly="true" class="inline-textfield grey-text-field white-label label-margin" style="flex-grow: 1; align-items: center; justify-content: space-around; height: 17px; margin-right: 10px;" />
+        <ui:VisualElement name="icon" style="width: 17px; height: 17px; background-color: rgb(164, 164, 164);" />
+    </BrowserDesktop.Menu.EventDisplayer>
+</ui:UXML>

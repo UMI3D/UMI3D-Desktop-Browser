@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Button name="scrollview-item" class="btn-tool" style="width: 40px; justify-content: space-around; background-color: rgba(228, 228, 228, 0); align-items: center; margin-left: 8px; margin-right: 8px;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:VisualElement name="icon" class="dark-grey1-bck" style="width: 35px; height: 35px;" />
+        <ui:Label text="azerltdc" name="name" class="white-txt" style="font-size: 10px; -unity-text-align: upper-center;" />
+    </ui:Button>
+</ui:UXML>

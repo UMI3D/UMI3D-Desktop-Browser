@@ -13,21 +13,42 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using TMPro;
+
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
 {
-    public class EventDisplayer : ManipulationDisplayer
+    public class EventDisplayer : VisualElement
     {
-        [SerializeField]
-        TextMeshProUGUI input = null;
+        public new class UxmlFactory : UxmlFactory<EventDisplayer, UxmlTraits> { }
+        public new class UxmlTraits : VisualElement.UxmlTraits { }
 
-        public void Set(string label, string inputName, Sprite icon)
+
+        public void SetUp(string label, string inputName, Texture2D icon = null)
         {
-            Set(label, icon);
-            //State(true);
-            this.input.text = inputName;
+            TextField input = this.Q<TextField>("input");
+
+            input.label = label;
+            if (icon != null)
+                this.Q<VisualElement>("icon").style.backgroundImage = icon;
+            else
+                this.Q<VisualElement>("icon").style.display = DisplayStyle.None;
+
+            input.value = inputName;
+        }
+
+        public void Display(bool display)
+        {
+            if (display)
+            {
+                style.display = DisplayStyle.Flex;
+                EventMenu.NbEventsDIsplayed++;
+            } else
+            {
+                style.display = DisplayStyle.None;
+                EventMenu.NbEventsDIsplayed--;
+            }
         }
     }
 }

@@ -33,3 +33,5 @@ sysinfo.txt
 
 # Builds
 *.apk
+/UMI3D-Browser-Desktop/Assets/EXCLUDED.meta
+/UMI3D-Browser-Desktop/Assets/EXCLUDED

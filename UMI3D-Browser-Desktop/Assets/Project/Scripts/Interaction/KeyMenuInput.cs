@@ -32,12 +32,15 @@ public class KeyMenuInput : AbstractUMI3DInput
     /// </summary>
     public string bone = BoneType.RightHand;
 
+    string toolId;
+    string hoveredObjectId;
+
     protected BoneDto boneDto;
     bool risingEdgeEventSent;
 
     HoldableButtonMenuItem menuItem;
 
-    public override void Associate(AbstractInteractionDto interaction)
+    public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
     {
         if (associatedInteraction != null)
         {
@@ -46,6 +49,8 @@ public class KeyMenuInput : AbstractUMI3DInput
 
         if (IsCompatibleWith(interaction))
         {
+            this.hoveredObjectId = hoveredObjectId;
+            this.toolId = toolId;
             associatedInteraction = interaction as EventDto;
             menuItem = new HoldableButtonMenuItem
             {
@@ -53,9 +58,9 @@ public class KeyMenuInput : AbstractUMI3DInput
                 Holdable = associatedInteraction.hold
             };
             menuItem.Subscribe(Pressed);
-            if (CircleMenu.Exists)
+            if (CircularMenu.Exists)
             {
-                CircleMenu.Instance.MenuDisplayManager.menu.Add(menuItem);
+                CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
             }
         }
         else
@@ -64,7 +69,7 @@ public class KeyMenuInput : AbstractUMI3DInput
         }
     }
 
-    public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs)
+    public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
     {
         throw new System.Exception("This input is can not be associated with a manipulation");
     }
@@ -77,9 +82,9 @@ public class KeyMenuInput : AbstractUMI3DInput
     public override void Dissociate()
     {
         associatedInteraction = null;
-        if (CircleMenu.Exists && menuItem != null)
+        if (CircularMenu.Exists && menuItem != null)
         {
-            CircleMenu.Instance.MenuDisplayManager.menu.Remove(menuItem);
+            CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
         }
         menuItem.UnSubscribe(Pressed);
         menuItem = null;
@@ -108,7 +113,9 @@ public class KeyMenuInput : AbstractUMI3DInput
                 {
                     active = true,
                     boneType = boneDto.boneType,
-                    entityId = associatedInteraction.id
+                    id = associatedInteraction.id,
+                    toolId = this.toolId,
+                    hoveredObjectId = hoveredObjectId
                 };
                 UMI3DClientServer.Send(eventdto, true);
                 risingEdgeEventSent = true;
@@ -118,7 +125,9 @@ public class KeyMenuInput : AbstractUMI3DInput
                 var eventdto = new EventTriggeredDto
                 {
                     boneType = boneDto.boneType,
-                    entityId = associatedInteraction.id
+                    id = associatedInteraction.id,
+                    toolId = this.toolId,
+                    hoveredObjectId = hoveredObjectId
                 };
                 UMI3DClientServer.Send(eventdto, true);
             }
@@ -134,12 +143,19 @@ public class KeyMenuInput : AbstractUMI3DInput
                     {
                         active = false,
                         boneType = boneDto.boneType,
-                        entityId = associatedInteraction.id
+                        id = associatedInteraction.id,
+                        toolId = this.toolId,
+                        hoveredObjectId = hoveredObjectId
                     };
                     UMI3DClientServer.Send(eventdto, true);
                     risingEdgeEventSent = false;
                 }
             }
         }
+    }
+
+    public override void UpdateHoveredObjectId(string hoveredObjectId)
+    {
+        this.hoveredObjectId = hoveredObjectId;
     }
 }
