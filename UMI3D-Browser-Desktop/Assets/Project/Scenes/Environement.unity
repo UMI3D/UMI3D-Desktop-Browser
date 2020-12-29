@@ -5434,6 +5434,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f56fda3ef2d041409bcc1b838fb3470, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Microphone: {fileID: 2079147380}
+  frequency: 8000
+  sampleDuration: 100
+  sampleLength: 800
 --- !u!82 &2079147378
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5556,7 +5560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda69d6602aa3f44e99c0700f3af9310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsOn: 1
+  _IsMute: 1
 --- !u!81 &2079147381
 AudioListener:
   m_ObjectHideFlags: 0
@@ -5577,7 +5581,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7f88b449ad342340bda4e4ff6f43d01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Microphone: {fileID: 2079147380}
 --- !u!1 &2096641626
 GameObject:
   m_ObjectHideFlags: 0

@@ -23,8 +23,11 @@ using UnityEngine.UI;
 
 public class ActivateDeactivateMicrophone : Singleton<ActivateDeactivateMicrophone>
 {
-    public MicrophoneListener Microphone;
 
+    private void Start()
+    {
+        SessionInformationMenu.Instance.OnMicrophoneStatusChanged(!MicrophoneListener.IsMute);
+    }
 
     // Update is called once per frame
     void Update()
@@ -37,8 +40,8 @@ public class ActivateDeactivateMicrophone : Singleton<ActivateDeactivateMicropho
 
     public void ToggleMicrophoneStatus()
     {
-        Microphone.IsOn = !Microphone.IsOn;
+        MicrophoneListener.IsMute = !MicrophoneListener.IsMute;
 
-        SessionInformationMenu.Instance.OnMicrophoneStatusChanged(Microphone.IsOn);
+        SessionInformationMenu.Instance.OnMicrophoneStatusChanged(!MicrophoneListener.IsMute);
     }
 }
