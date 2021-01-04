@@ -50,9 +50,10 @@ namespace BrowserDesktop.Controller
         /// Avatar bone linked to this input.
         /// </summary>
         [ConstStringEnum(typeof(BoneType))]
-        public string bone = BoneType.RightHand.ToString();
+        public string interactionBoneType = BoneType.RightHand;
 
-        protected BoneDto boneDto;
+        [ConstStringEnum(typeof(BoneType))]
+        public string hoverBoneType = BoneType.Head;
 
         Dictionary<int, int> manipulationMap;
 
@@ -239,7 +240,7 @@ namespace BrowserDesktop.Controller
             {
                 KeyInputs.Add(input);
                 input.Init(this);
-                input.bone = BoneType.RightHand;
+                input.bone = interactionBoneType;
             }
 
             mouseData.ForceProjectionMenuItem = new HoldableButtonMenuItem
@@ -322,9 +323,12 @@ namespace BrowserDesktop.Controller
                         Interactable = hit.collider.gameObject.GetComponentInParent<InteractableContainer>();
                     if (Interactable != null)
                     {
+                        mouseData.CurrentHoveredId = UMI3DEnvironmentLoader.GetNodeID(hit.collider);
+
                         mouseData.CurentHovered = Interactable.Interactable;
                         mouseData.CurentHoveredTransform = Interactable.transform;
-                        mouseData.point = hit.transform.InverseTransformPoint(hit.point);
+
+                        mouseData.point = Interactable.transform.InverseTransformPoint(hit.point);
                         mouseData.worldPoint = hit.point;
                         if (Vector3.Distance(mouseData.worldPoint, hit.transform.position) < 0.1f) mouseData.centeredWorldPoint = hit.transform.position;
                         else mouseData.centeredWorldPoint = mouseData.worldPoint;
@@ -335,7 +339,6 @@ namespace BrowserDesktop.Controller
                         mouseData.direction = hit.transform.InverseTransformDirection(ray.direction);
                         mouseData.worlDirection = ray.direction;
 
-                        mouseData.CurrentHoveredId = UMI3DEnvironmentLoader.GetNodeID(hit.collider);
                         break;
                     }
                 }
@@ -365,10 +368,6 @@ namespace BrowserDesktop.Controller
             }
             else
             {
-                if (boneDto == null)
-                {
-                    boneDto = AvatarTempo.getBoneID();//UMI3DBrowserAvatar.Instance.avatar.boneList.Find(b => b.type == bone);
-                }
                 if (mouseData.CurentHovered != null)
                 {
                     if (mouseData.CurentHovered != mouseData.OldHovered)
@@ -379,7 +378,7 @@ namespace BrowserDesktop.Controller
                             {
                                 InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                             }
-                            mouseData.OldHovered.HoverExit(boneDto.boneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
+                            mouseData.OldHovered.HoverExit(hoverBoneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
                             CircularMenu.Collapse();
                             mouseData.OldHovered = null;
                         }
@@ -392,7 +391,7 @@ namespace BrowserDesktop.Controller
                             CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
                             mouseData.OldHovered = mouseData.CurentHovered;
                         }
-                        mouseData.CurentHovered.HoverEnter(boneDto.boneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
+                        mouseData.CurentHovered.HoverEnter(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
                     }
                     else
                     {
@@ -406,7 +405,7 @@ namespace BrowserDesktop.Controller
                         }
                     }
 
-                    mouseData.CurentHovered.Hovered(boneDto.boneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
+                    mouseData.CurentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
                 }
                 else if (mouseData.OldHovered != null)
                 {
@@ -415,7 +414,7 @@ namespace BrowserDesktop.Controller
                         CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
                         InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                     }
-                    mouseData.OldHovered.HoverExit(boneDto.boneType,mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
+                    mouseData.OldHovered.HoverExit(hoverBoneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
                     CircularMenu.Collapse();
                     CursorHandler.State = CursorHandler.CursorState.Default;
                     mouseData.OldHovered = null;
@@ -569,6 +568,7 @@ namespace BrowserDesktop.Controller
                     Debug.LogWarning("find manip input FAILED");
                     return null;
                 }
+                group.bone = interactionBoneType;
                 ManipulationInputs.Add(group);
             }
             return group;
@@ -583,7 +583,7 @@ namespace BrowserDesktop.Controller
                 if (inputMenu == null)
                 {
                     inputMenu = this.gameObject.AddComponent<KeyMenuInput>();
-                    inputMenu.bone = BoneType.RightHand;
+                    inputMenu.bone = interactionBoneType;
                     KeyMenuInputs.Add(inputMenu);
                 }
                 return inputMenu;
@@ -597,7 +597,7 @@ namespace BrowserDesktop.Controller
             if (inputMenu == null)
             {
                 inputMenu = this.gameObject.AddComponent<FormInput>();
-                inputMenu.bone = BoneType.RightHand;
+                inputMenu.bone = interactionBoneType;
                 FormInputs.Add(inputMenu);
             }
             return inputMenu;
@@ -609,7 +609,7 @@ namespace BrowserDesktop.Controller
             if (inputMenu == null)
             {
                 inputMenu = this.gameObject.AddComponent<LinkInput>();
-                inputMenu.bone = BoneType.RightHand;
+                inputMenu.bone = interactionBoneType;
                 LinkInputs.Add(inputMenu);
             }
             return inputMenu;
@@ -707,7 +707,7 @@ namespace BrowserDesktop.Controller
                 mouseData.ForcePorjection = false;
                 DeleteForceProjectionMenuItem();
             }
-            tool.onReleased(bone);
+            tool.onReleased(interactionBoneType);
             //}
             //catch { }
         }
@@ -720,7 +720,7 @@ namespace BrowserDesktop.Controller
                 mouseData.ForcePorjection = true;
                 mouseData.ForcePorjectionReleasable = releasable;
             }
-            tool.onProjected(bone);
+            tool.onProjected(interactionBoneType);
         }
 
         protected override string GetCurrentHoveredId()
