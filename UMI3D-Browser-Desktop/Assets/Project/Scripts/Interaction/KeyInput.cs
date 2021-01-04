@@ -40,9 +40,7 @@ namespace BrowserDesktop.Interaction
         /// Avatar bone linked to this input.
         /// </summary>
         [ConstStringEnum(typeof(BoneType))]
-        public string bone = BoneType.RightHand.ToString();
-
-        protected BoneDto boneDto;
+        public string bone = BoneType.None;
 
         /// <summary>
         /// Use lock if the Input is Used elsewhere;
@@ -179,8 +177,6 @@ namespace BrowserDesktop.Interaction
 
         protected virtual void Update()
         {
-            if (boneDto == null)
-                boneDto = AvatarTempo.getBoneID();
 
             if (LastFrameButton != InputLayoutManager.GetInputCode(activationButton))
             {
@@ -198,7 +194,7 @@ namespace BrowserDesktop.Interaction
                         var eventdto = new EventStateChangedDto
                         {
                             active = true,
-                            boneType = boneDto.boneType,
+                            boneType = bone,
                             id = associatedInteraction.id,
                             toolId = this.toolId,
                             hoveredObjectId = hoveredObjectId
@@ -210,7 +206,7 @@ namespace BrowserDesktop.Interaction
                     {
                         var eventdto = new EventTriggeredDto
                         {
-                            boneType = boneDto.boneType,
+                            boneType = bone,
                             id = associatedInteraction.id,
                             toolId = this.toolId,
                             hoveredObjectId = hoveredObjectId
@@ -229,7 +225,7 @@ namespace BrowserDesktop.Interaction
                             var eventdto = new EventStateChangedDto
                             {
                                 active = false,
-                                boneType = boneDto.boneType,
+                                boneType = bone,
                                 id = associatedInteraction.id,
                                 toolId = this.toolId,
                                 hoveredObjectId = hoveredObjectId
@@ -266,7 +262,7 @@ namespace BrowserDesktop.Interaction
                 var eventdto = new EventStateChangedDto
                 {
                     active = false,
-                    boneType = boneDto.boneType,
+                    boneType = bone,
                     id = associatedInteraction.id,
                     toolId = this.toolId,
                     hoveredObjectId = hoveredObjectId
