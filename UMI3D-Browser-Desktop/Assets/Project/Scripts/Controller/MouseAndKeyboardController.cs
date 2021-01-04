@@ -323,9 +323,12 @@ namespace BrowserDesktop.Controller
                         Interactable = hit.collider.gameObject.GetComponentInParent<InteractableContainer>();
                     if (Interactable != null)
                     {
+                        mouseData.CurrentHoveredId = UMI3DEnvironmentLoader.GetNodeID(hit.collider);
+
                         mouseData.CurentHovered = Interactable.Interactable;
                         mouseData.CurentHoveredTransform = Interactable.transform;
-                        mouseData.point = hit.transform.InverseTransformPoint(hit.point);
+
+                        mouseData.point = Interactable.transform.InverseTransformPoint(hit.point);
                         mouseData.worldPoint = hit.point;
                         if (Vector3.Distance(mouseData.worldPoint, hit.transform.position) < 0.1f) mouseData.centeredWorldPoint = hit.transform.position;
                         else mouseData.centeredWorldPoint = mouseData.worldPoint;
@@ -336,7 +339,6 @@ namespace BrowserDesktop.Controller
                         mouseData.direction = hit.transform.InverseTransformDirection(ray.direction);
                         mouseData.worlDirection = ray.direction;
 
-                        mouseData.CurrentHoveredId = UMI3DEnvironmentLoader.GetNodeID(hit.collider);
                         break;
                     }
                 }
