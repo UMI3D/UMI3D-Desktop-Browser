@@ -4583,7 +4583,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1511698e9348c3469511f24ce7aaac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseMaterial: {fileID: 2100000, guid: 002e4ea3d837a0d4887aaa9c0476d648, type: 2}
+  baseMaterial: {fileID: 2100000, guid: 7b15e0d9f27093d4ba530b4923bac4e6, type: 2}
   onProgressChange:
     m_PersistentCalls:
       m_Calls: []
@@ -5434,6 +5434,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f56fda3ef2d041409bcc1b838fb3470, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frequency: 8000
+  sampleLength: 800
+  sampleDuration: 100
 --- !u!82 &2079147378
 AudioSource:
   m_ObjectHideFlags: 0
