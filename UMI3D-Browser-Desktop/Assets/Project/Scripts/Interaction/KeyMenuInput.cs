@@ -35,7 +35,6 @@ public class KeyMenuInput : AbstractUMI3DInput
     string toolId;
     string hoveredObjectId;
 
-    protected BoneDto boneDto;
     bool risingEdgeEventSent;
 
     HoldableButtonMenuItem menuItem;
@@ -102,8 +101,6 @@ public class KeyMenuInput : AbstractUMI3DInput
 
     void Pressed(bool down)
     {
-        if (boneDto == null)
-            boneDto = AvatarTempo.getBoneID();
         if (down)
         {
             onInputDown.Invoke();
@@ -112,7 +109,7 @@ public class KeyMenuInput : AbstractUMI3DInput
                 var eventdto = new EventStateChangedDto
                 {
                     active = true,
-                    boneType = boneDto.boneType,
+                    boneType = bone,
                     id = associatedInteraction.id,
                     toolId = this.toolId,
                     hoveredObjectId = hoveredObjectId
@@ -124,7 +121,7 @@ public class KeyMenuInput : AbstractUMI3DInput
             {
                 var eventdto = new EventTriggeredDto
                 {
-                    boneType = boneDto.boneType,
+                    boneType = bone,
                     id = associatedInteraction.id,
                     toolId = this.toolId,
                     hoveredObjectId = hoveredObjectId
@@ -142,7 +139,7 @@ public class KeyMenuInput : AbstractUMI3DInput
                     var eventdto = new EventStateChangedDto
                     {
                         active = false,
-                        boneType = boneDto.boneType,
+                        boneType = bone,
                         id = associatedInteraction.id,
                         toolId = this.toolId,
                         hoveredObjectId = hoveredObjectId

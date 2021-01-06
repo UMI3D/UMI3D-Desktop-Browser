@@ -4614,7 +4614,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1511698e9348c3469511f24ce7aaac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseMaterial: {fileID: 2100000, guid: 002e4ea3d837a0d4887aaa9c0476d648, type: 2}
+  baseMaterial: {fileID: 2100000, guid: 7b15e0d9f27093d4ba530b4923bac4e6, type: 2}
   onProgressChange:
     m_PersistentCalls:
       m_Calls: []
@@ -5465,6 +5465,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f56fda3ef2d041409bcc1b838fb3470, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frequency: 8000
+  sampleLength: 800
+  sampleDuration: 100
 --- !u!82 &2079147378
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5587,7 +5590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda69d6602aa3f44e99c0700f3af9310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsOn: 1
+  _IsMute: 1
 --- !u!81 &2079147381
 AudioListener:
   m_ObjectHideFlags: 0
@@ -5608,7 +5611,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7f88b449ad342340bda4e4ff6f43d01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Microphone: {fileID: 2079147380}
 --- !u!1 &2096641626
 GameObject:
   m_ObjectHideFlags: 0
@@ -5663,4 +5665,5 @@ MonoBehaviour:
   dofGroups: 04000000050000000600000001000000020000000300000008000000090000000a000000
   ManipulationActionInput:
   - {fileID: 647256037}
-  bone: right_hand
+  interactionBoneType: head
+  hoverBoneType: head

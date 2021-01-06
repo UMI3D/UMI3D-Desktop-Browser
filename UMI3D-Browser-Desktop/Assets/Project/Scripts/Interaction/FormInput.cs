@@ -29,12 +29,10 @@ public class FormInput : AbstractUMI3DInput
     /// <summary>
     /// Avatar bone linked to this input.
     /// </summary>
-    public string bone = BoneType.RightHand;
+    public string bone = BoneType.None;
 
     string toolId;
     string hoveredObjectId;
-
-    protected BoneDto boneDto;
     bool risingEdgeEventSent;
 
     HoldableButtonMenuItem menuItem;
@@ -102,15 +100,13 @@ public class FormInput : AbstractUMI3DInput
 
     void Pressed(bool down)
     {
-        if (boneDto == null)
-            boneDto = AvatarTempo.getBoneID();
         if (down)
         {
             onInputDown.Invoke();
           
             var formAnswer = new FormAnswer
             {
-                boneType = boneDto.boneType,
+                boneType = bone,
                 id = associatedInteraction.id,
                 toolId = this.toolId,
                 form = associatedInteraction,

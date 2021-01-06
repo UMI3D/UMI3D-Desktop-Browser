@@ -104,9 +104,6 @@ namespace BrowserDesktop.Interaction
         /// </summary>
         public string bone;
 
-
-        protected BoneDto boneDto;
-
         /// <summary>
         /// Frame rate applied to message emission through network (high values can cause network flood).
         /// </summary>
@@ -302,6 +299,7 @@ namespace BrowserDesktop.Interaction
 
                                 var pararmeterDto = new ManipulationRequestDto()
                                 {
+                                    boneType = bone,
                                     id =  associatedInteraction.id,
                                     toolId = this.toolId,
                                     hoveredObjectId = GetCurrentHoveredObjectId()

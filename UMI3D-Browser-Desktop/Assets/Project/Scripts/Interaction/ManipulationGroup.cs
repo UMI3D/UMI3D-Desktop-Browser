@@ -17,8 +17,11 @@ using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
 using System.Collections.Generic;
 using umi3d.cdk.interaction;
+using umi3d.common;
 using umi3d.common.interaction;
+using umi3d.common.userCapture;
 using UnityEngine;
+using UnityEngine.XR;
 
 namespace BrowserDesktop.Interaction
 {
@@ -180,6 +183,8 @@ namespace BrowserDesktop.Interaction
 
         #endregion
 
+        [ConstStringEnum(typeof(BoneType))]
+        public string bone = BoneType.None;
 
         ManipulationInputButton button;
         List<ManipulationInput> manipulationInputs = new List<ManipulationInput>();
@@ -268,6 +273,7 @@ namespace BrowserDesktop.Interaction
                 this.hoveredObjectId = hoveredObjectId;
                 Add();
                 ManipulationInput input = ManipulationInputGenerator.Instanciate(controller, Inputs.Find((a) => (a.IsAvailable() || a.Locked)), dofs, ref manipulationInputs);
+                input.bone = bone;
                 input.Associate(manipulation, dofs, toolId, hoveredObjectId);
                 Add(input);
             }
