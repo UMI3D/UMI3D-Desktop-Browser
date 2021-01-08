@@ -101,7 +101,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         Debug.Assert(MenuDisplayManager != null);
         Debug.Assert(cam != null);
 
-        identifier.GetLoginAction = GetLogin;
+        identifier.GetPinAction = GetLogin;
         identifier.GetIdentityAction = GetIdentity;
         identifier.ShouldDownloadLib = ShouldDownloadLibraries;
         identifier.GetParameters = GetParameterDtos;
@@ -152,6 +152,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void InitUI()
     {
+
         VisualElement root = panelRenderer.visualTree;
 
         loader = new LoadingBar(root);
@@ -319,6 +320,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// </summary>
     private void GetIdentity(Action<string, string> callback)
     {
+        
         DisplayScreenToLogin();
 
         AskPassword(true);

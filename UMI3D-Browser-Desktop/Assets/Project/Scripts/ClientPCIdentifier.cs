@@ -18,34 +18,54 @@ using System;
 using System.Collections.Generic;
 using umi3d.cdk.collaboration;
 using umi3d.common.interaction;
+using BeardedManStudios.Forge.Networking;
 using UnityEngine;
+using umi3d.common.collaboration;
 
 [CreateAssetMenu(fileName = "ClientPCIdentifier", menuName = "UMI3D/Client PC Identifier")]
 public class ClientPCIdentifier : ClientIdentifierApi
 {
 
-    public Action<Action<string,string>> GetIdentityAction;
-    public Action<Action<string>> GetLoginAction;
-    public Action<List<string>,Action<bool>> ShouldDownloadLib;
-    public Action<FormDto,Action<FormDto>> GetParameters;
+    public Action<Action<string, string>> GetIdentityAction;
+    public Action<Action<string>> GetPinAction;
+    public Action<List<string>, Action<bool>> ShouldDownloadLib;
+    public Action<FormDto, Action<FormDto>> GetParameters;
+
+    string login, password;
 
     public override void GetParameterDtos(FormDto parameter, Action<FormDto> callback)
     {
         GetParameters.Invoke(parameter, callback);
     }
 
-    public override void ShouldDownloadLibraries(List<string> ids,Action<bool> callback)
+    public override void ShouldDownloadLibraries(List<string> ids, Action<bool> callback)
     {
-        ShouldDownloadLib.Invoke(ids,callback);
+        ShouldDownloadLib.Invoke(ids, callback);
     }
 
-    public override void GetIdentity(Action<string,string> callback)
+    public override void GetIdentity(Action<UMI3DAuthenticator> callback)
     {
-        GetIdentityAction.Invoke(callback);
+        GetIdentityAction((l, p) => { login = l; password = p; callback.Invoke(new UMI3DAuthenticator(GetPin, GetLoginPassword, GetIdentity)); });
+
     }
 
-    public override void GetIdentity(Action<string> callback)
+    void GetPin(Action<string> callback)
     {
-        GetLoginAction.Invoke(callback);
+        //if (GetPinAction != null)
+        //    GetPinAction(callback);
+        //else
+        callback?.Invoke(password);
+    }
+    void GetLoginPassword(Action<(string, string)> callback)
+    {
+        //if (GetIdentityAction != null)
+        //    GetIdentityAction((l,p)=>callback((l,p)));
+        //else
+        callback?.Invoke((login, password));
+    }
+
+    void GetIdentity(Action<IdentityDto> callback)
+    {
+        callback?.Invoke(UMI3DCollaborationClientServer.Identity);
     }
 }

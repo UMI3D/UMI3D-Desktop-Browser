@@ -305,7 +305,7 @@ namespace BrowserDesktop.Interaction
                                     hoveredObjectId = GetCurrentHoveredObjectId()
                                 };
                                 MapDistanceWithDof(distanceInFrame, ref pararmeterDto);
-                                UMI3DClientServer.Send(pararmeterDto, true);
+                                UMI3DClientServer.SendData(pararmeterDto, true);
                             }
                             else
                             {

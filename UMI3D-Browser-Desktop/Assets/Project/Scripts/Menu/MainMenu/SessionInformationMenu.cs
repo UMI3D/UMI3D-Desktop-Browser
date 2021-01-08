@@ -119,7 +119,7 @@ namespace BrowserDesktop.Menu
 
             favorites = UserPreferencesManager.GetFavoriteConnectionData();
 
-            isEnvironmentFavorite = favorites.Find(d => "http://" + d.ip == media.httpUrl) != null;
+            isEnvironmentFavorite = favorites.Find(d => "http://" + d.ip == media.connection.httpUrl) != null;
 
             isFavoriteBtn.ClearClassList();
 
