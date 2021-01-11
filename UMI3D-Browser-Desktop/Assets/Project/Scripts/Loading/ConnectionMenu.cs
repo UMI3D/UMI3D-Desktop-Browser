@@ -467,11 +467,11 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         {
             case BooleanParameterDto booleanParameterDto:
                 var b = new BooleanInputMenuItem() { dto = booleanParameterDto };
+                b.NotifyValueChange(booleanParameterDto.value);
                 b.Subscribe((x) =>
                 {
                     booleanParameterDto.value = x;
-                }
-                );
+                });
                 result = b;
                 break;
             case FloatRangeParameterDto floatRangeParameterDto:
@@ -479,26 +479,25 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 f.Subscribe((x) =>
                 {
                     floatRangeParameterDto.value = x;
-                }
-                );
+                });
                 result = f;
                 break;
             case EnumParameterDto<string> enumParameterDto:
                 var en = new DropDownInputMenuItem() { dto = enumParameterDto, options = enumParameterDto.possibleValues };
+                en.NotifyValueChange(enumParameterDto.value);
                 en.Subscribe((x) =>
                 {
                     enumParameterDto.value = x;
-                }
-                );
+                });
                 result = en;
                 break;
             case StringParameterDto stringParameterDto:
                 var s = new TextInputMenuItem() { dto = stringParameterDto };
+                s.NotifyValueChange(stringParameterDto.value);
                 s.Subscribe((x) =>
                 {
                     stringParameterDto.value = x;
-                }
-                );
+                });
                 result = s;
                 break;
             default:
