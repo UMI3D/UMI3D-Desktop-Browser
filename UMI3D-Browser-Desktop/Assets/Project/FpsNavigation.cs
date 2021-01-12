@@ -26,6 +26,7 @@ public class FpsNavigation : AbstractNavigation
     public Transform _viewpoint;
     public Transform head;
     public Transform Neck;
+    public Rigidbody neckRb;
     public Transform TorsoUpAnchor;
 
     bool isActive = false;
@@ -125,17 +126,15 @@ public class FpsNavigation : AbstractNavigation
             return;
         if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
         {
-            /*if (CircularMenu.Exists && CircularMenu.Instance.IsExpanded)
-            {
-                CircularMenu.Instance._Collapse();
-            }*/
-            //SideMenu.Display(!SideMenu.IsExpanded, !SideMenu.IsExpanded);
             PauseMenu.ToggleDisplay();
         }
 
         if (SideMenu.IsExpanded || CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHiden)
             return;
 
+        HandleView();
+
+        /*
         if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.FreeHead; }
         else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.Default; changeToDefault = true; }
         Vector2 Move = Vector2.zero;
@@ -167,11 +166,58 @@ public class FpsNavigation : AbstractNavigation
         Move *= Time.deltaTime;
 
 
-        HandleView();
+        
         Vector3 pos = Neck.rotation * new Vector3(Move.y, 0, Move.x);
         pos += Neck.transform.position;
         pos.y = height;
-        Neck.transform.position = pos;
+        Neck.transform.position = pos;*/
+    }
+
+    void FixedUpdate()
+    {
+        if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.FreeHead; }
+        else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.Default; changeToDefault = true; }
+        Vector2 Move = Vector2.zero;
+        float height = jumpData.heigth;
+        if (navigateTo)
+        {
+            var delta = destination - Neck.transform.position;
+            Move = delta.normalized;
+        }
+        else
+        {
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Forward))) { Move.x += 1; }
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Backward))) { Move.x -= 1; }
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))) { Move.y += 1; }
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Left))) { Move.y -= 1; }
+        }
+        switch (navigation)
+        {
+            case Navigation.Walking:
+                Walk(ref Move, ref height);
+                jumpData.heigth = height;
+                height += jumpData.deltaHeight;
+                break;
+            case Navigation.Flying:
+                Fly(ref Move, ref height);
+                jumpData.heigth = height;
+                break;
+        }
+        Move *= Time.fixedDeltaTime;
+
+        Vector3 pos = Vector3.zero;
+
+        if (neckRb.velocity.magnitude < .1f)
+        {
+           pos = Neck.rotation * new Vector3(Move.y, 0, Move.x);
+        }
+
+        pos += Neck.transform.position;
+        pos.y = height;
+        neckRb.MovePosition(pos);
+
+        if (Move == Vector2.zero)
+            neckRb.velocity = Vector3.zero;
     }
 
     void Walk(ref Vector2 Move, ref float height)
