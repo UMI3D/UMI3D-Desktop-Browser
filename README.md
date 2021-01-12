@@ -7,7 +7,7 @@ For more information about UMI3D, visit the [UMI3D Consortium's website](https:/
 
 ### Version And Documentation
 
-The Current UMI3D-SDK version is 2.1.
+The Current UMI3D-SDK version is 2.2.
 The documentation can be found [here](https://umi3d.github.io/UMI3D-SDK/index.html).
 
 * [The UMI3D SDK for Unity](https://github.com/UMI3D/UMI3D-SDK)
