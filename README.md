@@ -7,15 +7,15 @@ For more information about UMI3D, visit the [UMI3D Consortium's website](https:/
 
 ### Version And Documentation
 
-The Current UMI3D-SDK version is 2.0.
-The documentation can be found in the Documentation folder. open the ./Documentation/html/index file with a web browser.
+The Current UMI3D-SDK version is 2.1.
+The documentation can be found [here](https://umi3d.github.io/UMI3D-SDK/index.html).
 
-* [The UMI3D SDK for Unity](https://github.com/Gfi-Innovation/UMI3D-SDK)
-* [Server Samples Scenes](https://github.com/Gfi-Innovation/UMI3D-Samples)
-* [A UMI3D steam browser](url) (Coming soon)
+* [The UMI3D SDK for Unity](https://github.com/UMI3D/UMI3D-SDK)
+* [Server Samples Scenes](https://github.com/UMI3D/UMI3D-Samples)
+* A UMI3D steam browser (Coming soon)
 
 ## Getting Started
-* Launch a Server (Server sample scenes can be found [here](https://github.com/Gfi-Innovation/UMI3D-Samples))
+* Launch a Server (Server sample scenes can be found [here](https://github.com/UMI3D/UMI3D-Samples))
 * The Ip and HttpPort of the server can be found on the "UMI3DCollaborationServer" script (usualy on the "Server" node)
 * Launch the Browser Unity Project.
 * Launch the "Connection" Scene and fill up the Ip, the Port and a login.
