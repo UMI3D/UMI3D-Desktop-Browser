@@ -15,6 +15,7 @@ limitations under the License.
 */
 using BrowserDesktop.Menu;
 using umi3d.cdk;
+using umi3d.cdk.collaboration;
 using umi3d.cdk.interaction;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
@@ -113,7 +114,7 @@ public class LinkInput : AbstractUMI3DInput
                 toolId = this.toolId,
                 hoveredObjectId = hoveredObjectId,
             };
-            UMI3DClientServer.Send(formAnswer, true);
+            UMI3DClientServer.SendData(formAnswer, true);
         }
     }
 

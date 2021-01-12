@@ -15,6 +15,7 @@ limitations under the License.
 */
 using BrowserDesktop.Menu;
 using umi3d.cdk;
+using umi3d.cdk.collaboration;
 using umi3d.cdk.interaction;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
@@ -114,7 +115,7 @@ public class KeyMenuInput : AbstractUMI3DInput
                     toolId = this.toolId,
                     hoveredObjectId = hoveredObjectId
                 };
-                UMI3DClientServer.Send(eventdto, true);
+                UMI3DClientServer.SendData(eventdto, true);
                 risingEdgeEventSent = true;
             }
             else
@@ -126,7 +127,7 @@ public class KeyMenuInput : AbstractUMI3DInput
                     toolId = this.toolId,
                     hoveredObjectId = hoveredObjectId
                 };
-                UMI3DClientServer.Send(eventdto, true);
+                UMI3DClientServer.SendData(eventdto, true);
             }
         }
         else
@@ -144,7 +145,7 @@ public class KeyMenuInput : AbstractUMI3DInput
                         toolId = this.toolId,
                         hoveredObjectId = hoveredObjectId
                     };
-                    UMI3DClientServer.Send(eventdto, true);
+                    UMI3DClientServer.SendData(eventdto, true);
                     risingEdgeEventSent = false;
                 }
             }
