@@ -99,9 +99,9 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         Debug.Assert(identifier != null);
         Debug.Assert(Menu != null);
         Debug.Assert(MenuDisplayManager != null);
+        Debug.Assert(cam != null);
 
-
-        identifier.GetLoginAction = GetLogin;
+        identifier.GetPinAction = GetPassword;
         identifier.GetIdentityAction = GetIdentity;
         identifier.ShouldDownloadLib = ShouldDownloadLibraries;
         identifier.GetParameters = GetParameterDtos;
@@ -152,6 +152,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void InitUI()
     {
+
         VisualElement root = panelRenderer.visualTree;
 
         loader = new LoadingBar(root);
@@ -304,14 +305,14 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// <summary>
     /// Asks users a login to join the environement.
     /// </summary>
-    private void GetLogin(Action<string> callback)
+    private void GetPassword(Action<string> callback)
     {
         DisplayScreenToLogin();
 
-        AskPassword(false);
-        connectBtn.clickable.clicked += () => SendIdentity((login, password) => callback(login));
+        AskLogin(false);
+        connectBtn.clickable.clicked += () => SendIdentity((login, password) => callback(password));
 
-        nextStep = () => SendIdentity((login, password) => callback(login));
+        nextStep = () => SendIdentity((login, password) => callback(password));
     }
 
     /// <summary>
@@ -319,9 +320,10 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// </summary>
     private void GetIdentity(Action<string, string> callback)
     {
+        
         DisplayScreenToLogin();
 
-        AskPassword(true);
+        AskLogin(true);
         connectBtn.clickable.clicked += () => SendIdentity(callback);
         nextStep = () => SendIdentity(callback);
     }
@@ -335,12 +337,22 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     } 
 
     /// <summary>
+    /// Show or hide the form to set the login.
+    /// </summary>
+    /// <param name="val"></param>
+    private void AskLogin(bool val)
+    {
+        passwordScreen.Q<TextField>("login-input").style.display = val ? DisplayStyle.Flex: DisplayStyle.None;
+        passwordScreen.Q<Label>("login-label").style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
+    /// <summary>
     /// Show or hide the form to set the password.
     /// </summary>
     /// <param name="val"></param>
     private void AskPassword(bool val)
     {
-        passwordScreen.Q<VisualElement>("password-container").style.display = val ? DisplayStyle.Flex: DisplayStyle.None;
+        passwordScreen.Q<VisualElement>("password-container").style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
         passwordScreen.Q<Label>("password-label").style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
