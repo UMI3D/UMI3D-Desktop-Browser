@@ -15,33 +15,33 @@ limitations under the License.
 */
 
 using BrowserDesktop.Controller;
+using BrowserDesktop.Menu;
 using umi3d.cdk.collaboration;
+using umi3d.common;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ActivateDeactivateMicrophone : MonoBehaviour
+public class ActivateDeactivateMicrophone : Singleton<ActivateDeactivateMicrophone>
 {
-    public MicrophoneListener Microphone;
-    public Toggle toggle;
 
     private void Start()
     {
-        toggle.isOn = !Microphone.IsOn;
-        toggle.onValueChanged.AddListener(valueChange);
-    }
-
-    void valueChange(bool value)
-    {
-        Microphone.IsOn = !value;
+        SessionInformationMenu.Instance.OnMicrophoneStatusChanged(!MicrophoneListener.IsMute);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ToggleMicrophone)))
+        if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ToggleMicrophone)) && !TextInputDisplayerElement.isTyping)
         {
-            Microphone.IsOn = !Microphone.IsOn;
-            toggle.isOn = !Microphone.IsOn;
+            ToggleMicrophoneStatus();
         }
+    }
+
+    public void ToggleMicrophoneStatus()
+    {
+        MicrophoneListener.IsMute = !MicrophoneListener.IsMute;
+
+        SessionInformationMenu.Instance.OnMicrophoneStatusChanged(!MicrophoneListener.IsMute);
     }
 }

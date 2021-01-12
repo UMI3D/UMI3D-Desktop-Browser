@@ -65,14 +65,14 @@ namespace BrowserDesktop.Cursor
         {
             base.Update();
 
-            if (!CircleMenu.Exists || !CircleMenu.Instance.IsExpanded)
+            if (!CircularMenu.Exists || !CircularMenu.Instance.IsExpanded)
             {
                 distCursor += Input.mouseScrollDelta.y * Time.deltaTime * ScrollToDistSpeed;
                 if (distCursor < MinimumCursorDistance) distCursor = MinimumCursorDistance;
             }
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit[] hits = umi3d.Physics.RaycastAll(ray, constrainDistanceChange ? distCursor + MaxDistCursorDelta : 100);
+            RaycastHit[] hits = umi3d.common.Physics.RaycastAll(ray, constrainDistanceChange ? distCursor + MaxDistCursorDelta : 100);
 
             ignore = new List<Transform>();
             ignore.AddRange(AvatarParent.gameObject.GetComponentsInChildren<Transform>());

@@ -17,8 +17,11 @@ using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
 using System.Collections.Generic;
 using umi3d.cdk.interaction;
+using umi3d.common;
 using umi3d.common.interaction;
+using umi3d.common.userCapture;
 using UnityEngine;
+using UnityEngine.XR;
 
 namespace BrowserDesktop.Interaction
 {
@@ -26,7 +29,7 @@ namespace BrowserDesktop.Interaction
     {
         bool active = false;
         ButtonMenuItem menuItem;
-
+        string hoveredObjectId;
         #region Instances List
 
         static List<ManipulationGroup> instances = new List<ManipulationGroup>();
@@ -67,8 +70,8 @@ namespace BrowserDesktop.Interaction
         internal void Activate()
         {
             Active = true;
-            if (CircleMenu.Exists && menuItem != null)
-                CircleMenu.Instance.MenuDisplayManager.menu.Remove(menuItem);
+            if (CircularMenu.Exists && menuItem != null)
+                CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
             ManipulationInput.SelectFirst();
             foreach (ManipulationInput input in manipulationInputs)
             {
@@ -78,9 +81,9 @@ namespace BrowserDesktop.Interaction
         internal void Deactivate()
         {
             Active = false;
-            if (CircleMenu.Exists)
+            if (CircularMenu.Exists)
             {
-                CircleMenu.Instance.MenuDisplayManager.menu.Add(menuItem);
+                CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
             }
             foreach (ManipulationInput input in manipulationInputs)
             {
@@ -124,8 +127,8 @@ namespace BrowserDesktop.Interaction
                     currentInstance = 0;
                     CursorHandler.State = CursorHandler.CursorState.Hover;
                 }
-                if (CircleMenu.Exists && menuItem != null)
-                    CircleMenu.Instance.MenuDisplayManager.menu.Remove(menuItem);
+                if (CircularMenu.Exists && menuItem != null)
+                    CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
                 if (menuItem != null)
                 {
                     menuItem.UnSubscribe(Select);
@@ -174,12 +177,14 @@ namespace BrowserDesktop.Interaction
         void Select(bool state)
         {
             SwicthManipulation(instances.FindIndex(a => a == this));
-            if (CircleMenu.Exists)
-                CircleMenu.Instance.Collapse();
+            if (CircularMenu.Exists)
+                CircularMenu.Collapse();
         }
 
         #endregion
 
+        [ConstStringEnum(typeof(BoneType))]
+        public string bone = BoneType.None;
 
         ManipulationInputButton button;
         List<ManipulationInput> manipulationInputs = new List<ManipulationInput>();
@@ -226,7 +231,7 @@ namespace BrowserDesktop.Interaction
             return associatedInteraction;
         }
 
-        public override void Associate(AbstractInteractionDto interaction)
+        public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
         {
             if (associatedInteraction != null)
             {
@@ -234,6 +239,7 @@ namespace BrowserDesktop.Interaction
             }
             if (IsCompatibleWith(interaction))
             {
+                this.hoveredObjectId = hoveredObjectId;
                 foreach (DofGroupOptionDto group in (interaction as ManipulationDto).dofSeparationOptions)
                 {
                     bool ok = true;
@@ -248,7 +254,7 @@ namespace BrowserDesktop.Interaction
                     if (!ok) continue;
                     foreach (DofGroupDto sep in group.separations)
                     {
-                        Associate(interaction as ManipulationDto, sep.dofs);
+                        Associate(interaction as ManipulationDto, sep.dofs, toolId, hoveredObjectId);
                     }
                     return;
                 }
@@ -259,14 +265,16 @@ namespace BrowserDesktop.Interaction
             }
         }
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
         {
             if ((associatedInteraction == null || associatedInteraction == manipulation) && dofGroups.Contains(dofs))
             {
                 associatedInteraction = manipulation;
+                this.hoveredObjectId = hoveredObjectId;
                 Add();
                 ManipulationInput input = ManipulationInputGenerator.Instanciate(controller, Inputs.Find((a) => (a.IsAvailable() || a.Locked)), dofs, ref manipulationInputs);
-                input.Associate(manipulation, dofs);
+                input.bone = bone;
+                input.Associate(manipulation, dofs, toolId, hoveredObjectId);
                 Add(input);
             }
             else
@@ -286,6 +294,15 @@ namespace BrowserDesktop.Interaction
             Remove();
             manipulationInputs.Clear();
             associatedInteraction = null;
+        }
+
+        public override void UpdateHoveredObjectId(string hoveredObjectId)
+        {
+            this.hoveredObjectId = hoveredObjectId;
+            foreach(var input in InputInstances[this])
+            {
+                input.UpdateHoveredObjectId(hoveredObjectId);
+            }
         }
     }
 }

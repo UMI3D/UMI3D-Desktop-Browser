@@ -12,5 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdee4b080143795499fa1a13337fbdee, type: 3}
   m_Name: DefaultLoadingParameters
   m_EditorClassIdentifier: 
+  supportedformats:
+  - gltf
+  - obj
+  - fbx
+  - png
+  - jpg
+  - unity_standalone
+  maximumResolution: 0
   notificationLoader: {fileID: 11400000, guid: 8b56c463bf8836942a0a8be00815ca8a, type: 2}
   _skyboxMaterial: {fileID: 2100000, guid: dfb4cc00185bacc43b3d69539f922c99, type: 2}

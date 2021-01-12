@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace BrowserDesktop.Theme
 {
-    public class Theme : umi3d.PersistentSingleton<Theme>
+    public class Theme : umi3d.common.PersistentSingleton<Theme>
     {
         [SerializeField] ThemeInstance _Theme = null;
 

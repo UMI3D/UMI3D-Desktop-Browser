@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Menu;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace BrowserDesktop.Cursor
 {
-    public class CursorHandler : umi3d.PersistentSingleton<CursorHandler>
+    public class CursorHandler : umi3d.common.PersistentSingleton<CursorHandler>
     {
         //SpriteRenderer spriteRenderer;
         public Texture2D HintCursor;
@@ -30,7 +31,7 @@ namespace BrowserDesktop.Cursor
         public RectTransform LeftClickExitCursor;
         public RectTransform FollowCursor;
 
-        public enum CursorState { Default, Hover, Clicked }
+        public enum CursorState { Default, Hover, Clicked, FollowCursor }
         public enum CursorMovement { Free, Center, Confined, FreeHiden }
 
         public bool MenuIndicator = false;
@@ -90,6 +91,7 @@ namespace BrowserDesktop.Cursor
         private void Update()
         {
             transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            
             if (movementUpdated)
             {
                 switch (cursorMovement)
@@ -114,19 +116,50 @@ namespace BrowserDesktop.Cursor
                 }
                 movementUpdated = false;
             }
-            bool newMenuState = ((!MainMenu.Exists || !MainMenu.IsDisplaying) && (cursorMovement == CursorMovement.Center || cursorMovement == CursorMovement.FreeHiden) );
-            if (stateUpdated || LastMenuState != newMenuState)
+            bool newMenuState = ((!SideMenu.Exists || !SideMenu.IsExpanded) && (cursorMovement == CursorMovement.Center || cursorMovement == CursorMovement.FreeHiden) );
+            if ((stateUpdated || LastMenuState != newMenuState) && CursorDisplayer.Exists)
             {
                 LastMenuState = newMenuState;
-                if (CrossCursor.gameObject.activeSelf != (cursorMovement == CursorMovement.Center && state == CursorState.Default && LastMenuState)) CrossCursor.gameObject.SetActive(cursorMovement == CursorMovement.Center && state == CursorState.Default && LastMenuState);
-                if (CircleCursor.gameObject.activeSelf != (cursorMovement == CursorMovement.Center && state == CursorState.Hover && LastMenuState)) CircleCursor.gameObject.SetActive(cursorMovement == CursorMovement.Center && state == CursorState.Hover && LastMenuState);
-                if (ClickedCursor.gameObject.activeSelf != (cursorMovement == CursorMovement.Center && state == CursorState.Clicked && LastMenuState)) ClickedCursor.gameObject.SetActive(cursorMovement == CursorMovement.Center && state == CursorState.Clicked && LastMenuState);
-                if (FollowCursor.gameObject.activeSelf != (cursorMovement == CursorMovement.FreeHiden && LastMenuState)) FollowCursor.gameObject.SetActive(cursorMovement == CursorMovement.FreeHiden && LastMenuState);
+                if (LastMenuState)
+                {
+                    if (cursorMovement == CursorMovement.Center)
+                    {
+                        CursorDisplayer.Instance.DisplayCursor(true, state);
+					}
+                    else if (cursorMovement == CursorMovement.FreeHiden)
+                    {
+                        CursorDisplayer.Instance.DisplayCursor(true, CursorState.FollowCursor);
+                    }
+                }
+                /*if (CrossCursor.gameObject.activeSelf != (cursorMovement == CursorMovement.Center && state == CursorState.Default && LastMenuState))
+                    CrossCursor.gameObject.SetActive(cursorMovement == CursorMovement.Center && state == CursorState.Default && LastMenuState);
+                
+                if (CircleCursor.gameObject.activeSelf != (cursorMovement == CursorMovement.Center && state == CursorState.Hover && LastMenuState))
+                    CircleCursor.gameObject.SetActive(cursorMovement == CursorMovement.Center && state == CursorState.Hover && LastMenuState);
+                
+                if (ClickedCursor.gameObject.activeSelf != (cursorMovement == CursorMovement.Center && state == CursorState.Clicked && LastMenuState))
+                    ClickedCursor.gameObject.SetActive(cursorMovement == CursorMovement.Center && state == CursorState.Clicked && LastMenuState);
+
+                if (FollowCursor.gameObject.activeSelf != (cursorMovement == CursorMovement.FreeHiden && LastMenuState))
+                    FollowCursor.gameObject.SetActive(cursorMovement == CursorMovement.FreeHiden && LastMenuState);*/
+
                 stateUpdated = false;
             }
-            if (LeftClickOptionCursor.gameObject.activeSelf != (LastMenuState && MenuIndicator)) LeftClickOptionCursor.gameObject.SetActive(LastMenuState && MenuIndicator);
-            if (LeftClickExitCursor.gameObject.activeSelf != (LastMenuState && ExitIndicator)) LeftClickExitCursor.gameObject.SetActive(LastMenuState && ExitIndicator);
-            if (FollowCursor.gameObject.activeSelf) FollowCursor.position = Input.mousePosition - new Vector3(Screen.width/2,Screen.height/2,0);
+
+            if (CursorDisplayer.Exists && CursorDisplayer.Instance.IsSettingsCursorDisplayed() != (LastMenuState && MenuIndicator))
+                CursorDisplayer.Instance.DisplaySettingsCursor(LastMenuState && MenuIndicator);
+                
+
+            /*if (LeftClickOptionCursor.gameObject.activeSelf != (LastMenuState && MenuIndicator))
+                LeftClickOptionCursor.gameObject.SetActive(LastMenuState && MenuIndicator);*/
+
+            //TODO
+            /*if (LeftClickExitCursor.gameObject.activeSelf != (LastMenuState && ExitIndicator))
+                LeftClickExitCursor.gameObject.SetActive(LastMenuState && ExitIndicator);*/
+
+            /*if (FollowCursor.gameObject.activeSelf)
+                FollowCursor.position = Input.mousePosition - new Vector3(Screen.width/2,Screen.height/2,0);*/
+
         }
 
         protected override void OnDestroy()

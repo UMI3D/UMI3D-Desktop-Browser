@@ -21,7 +21,7 @@ using UnityEngine.Events;
 
 namespace BrowserDesktop.Menu
 {
-    public class CircleMenu : umi3d.Singleton<CircleMenu>
+    public class CircleMenu : umi3d.common.Singleton<CircleMenu>
     {
         public Transform Container;
         public int radius;

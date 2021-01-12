@@ -35,17 +35,20 @@ public class NotificationLoader : umi3d.cdk.NotificationLoader
             notif = notif3d;
             var Odto = dto as NotificationOnObjectDto;
             notif3d.Parent = UMI3DEnvironmentLoader.GetNode(Odto.objectId)?.gameObject.transform;
-            
+
+            notif.Title = dto.title;
+            notif.Content = dto.content;
+            notif.SetNotificationTime(dto.duration);
+
             loadIcon3d(dto.icon3D);
         }
         else
         {
             notif = Instantiate(notificationPrefab, NotificationContainer.Instance.transform);
+            NotificationDisplayer.Instance.DisplayNotification(dto);
         }
-        notif.Title = dto.title;
-        notif.Content = dto.content;
-        notif.SetNotificationTime(dto.duration);
-        loadIcon2d(dto.icon2D);
+
+        //LoadIcon2d(dto.icon2D);
         
         UMI3DEnvironmentLoader.RegisterNodeInstance(dto.id, dto,notif.gameObject);
     }
@@ -85,7 +88,6 @@ public class NotificationLoader : umi3d.cdk.NotificationLoader
         return true;
     }
 
-    void loadIcon2d(ResourceDto dto) { }
     void loadIcon3d(ResourceDto dto) { }
-
+    void loadIcon2d(ResourceDto dto) { }
 }

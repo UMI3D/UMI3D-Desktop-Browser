@@ -24,7 +24,8 @@ using UnityEngine;
 public class ClientPCIdentifier : ClientIdentifierApi
 {
 
-    public Action<Action<string>> GetPasswordAction;
+    public Action<Action<string,string>> GetIdentityAction;
+    public Action<Action<string>> GetLoginAction;
     public Action<List<string>,Action<bool>> ShouldDownloadLib;
     public Action<FormDto,Action<FormDto>> GetParameters;
 
@@ -38,8 +39,13 @@ public class ClientPCIdentifier : ClientIdentifierApi
         ShouldDownloadLib.Invoke(ids,callback);
     }
 
-    public override void GetPassword(Action<string> callback)
+    public override void GetIdentity(Action<string,string> callback)
     {
-        GetPasswordAction.Invoke(callback);
+        GetIdentityAction.Invoke(callback);
+    }
+
+    public override void GetIdentity(Action<string> callback)
+    {
+        GetLoginAction.Invoke(callback);
     }
 }

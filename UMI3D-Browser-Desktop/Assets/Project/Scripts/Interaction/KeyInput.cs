@@ -15,8 +15,12 @@ limitations under the License.
 */
 using BrowserDesktop.Controller;
 using BrowserDesktop.Menu;
+using System.Collections;
+using System.Linq;
+using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.interaction;
+using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
 using UnityEngine;
@@ -35,9 +39,8 @@ namespace BrowserDesktop.Interaction
         /// <summary>
         /// Avatar bone linked to this input.
         /// </summary>
-        public string bone = BoneType.RightHand;
-
-        protected BoneDto boneDto;
+        [ConstStringEnum(typeof(BoneType))]
+        public string bone = BoneType.None;
 
         /// <summary>
         /// Use lock if the Input is Used elsewhere;
@@ -56,16 +59,26 @@ namespace BrowserDesktop.Interaction
         /// </summary>
         protected bool risingEdgeEventSent = false;
 
-        EventDisplayer EventDisplayer;
+        EventDisplayer eventDisplayer;
+
+        string toolId;
+
+        string hoveredObjectId;
 
         protected virtual void Start()
         {
-            EventDisplayer = EventMenu.CreateDisplayer();
-            EventDisplayer.gameObject.SetActive(false);
+            StartCoroutine(InitEventDisplayer());
+        }
+
+        IEnumerator InitEventDisplayer()
+        {
+            yield return null;
+            eventDisplayer = EventMenu.CreateDisplayer();
+            eventDisplayer?.Display(false);
         }
 
 
-        public override void Associate(AbstractInteractionDto interaction)
+        public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
         {
             if (associatedInteraction != null)
             {
@@ -75,48 +88,77 @@ namespace BrowserDesktop.Interaction
             if (IsCompatibleWith(interaction))
             {
                 associatedInteraction = interaction as EventDto;
+                this.hoveredObjectId = hoveredObjectId;
+                this.toolId = toolId;
                 if (associatedInteraction.icon2D != null)
                 {
-                    Debug.Log("need to work on icon");
-                    //HDResourceCache.Download(associatedInteraction.Icon2D, Texture2D =>
-                    //{
-                    //    if (EventDisplayer != null && associatedInteraction != null && Texture2D != null)
-                    //    {
-                    //        EventDisplayer.gameObject.SetActive(true);
-                    //        EventDisplayer.Set(associatedInteraction.Name, InputLayoutManager.GetInputCode(activationButton).ToString(), Sprite.Create(Texture2D, new Rect(0.0f, 0.0f, Texture2D.width, Texture2D.height), new Vector2(0.5f, 0.5f), 100.0f));
-                    //    }
-                    //    //else
-                    //    //{
-                    //    //    EventDisplayer.gameObject.SetActive(true);
-                    //    //    EventDisplayer.Set(associatedInteraction.Name, InputLayoutManager.GetInputCode(activationButton).ToString(), null);
+                    FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariante(associatedInteraction.icon2D.variants);
 
-                    //    //    Destroy(Texture2D);
-                    //    //}
-                    //},
-                    //webrequest =>
-                    //{
-                    //    if (EventDisplayer != null && associatedInteraction != null)
-                    //    {
-                    //        EventDisplayer.gameObject.SetActive(true);
-                    //        EventDisplayer.Set(associatedInteraction.Name, InputLayoutManager.GetInputCode(activationButton).ToString(), null);
-                    //    }
-                    //});
-                }
-                else
-                {
-                    if (EventDisplayer != null)
+                    if (fileToLoad != null)
                     {
-                        EventDisplayer.gameObject.SetActive(true);
-                        EventDisplayer.Set(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), null);
+                        string url = fileToLoad.url;
+                        string ext = fileToLoad.extension;
+                        string authorization = fileToLoad.authorization;
+                        IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(ext);
+
+                        if (loader != null)
+                        {
+                            UMI3DResourcesManager.LoadFile(
+                                "",
+                                fileToLoad,
+                                loader.UrlToObject,
+                                loader.ObjectFromCache,
+                                (o) =>
+                                {
+                                    var obj = o as Texture2D;
+                                    if (obj == null)
+                                        DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                                    else
+                                        DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
+                                },
+                                (string str) =>
+                                {
+                                    DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                                },
+                                loader.DeleteObject
+                                );
+                        }
+                        else
+                            DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                    } else
+                    {
+                        DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                     }
                 }
 
-                //if ((!CircleMenu.Exist || !CircleMenu.Instance.IsExpanded) && Input.GetKey(InputLayoutManager.GetInputCode(activationButton)) && !Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)) && (associatedInteraction).Hold)
+                //HDResourceCache.Download(associatedInteraction.Icon2D, Texture2D =>
                 //{
-                //    onInputDown.Invoke();
-                //    UMI3DHttpClient.Interact(associatedInteraction.id, new object[2] { true, boneDto.id });
-                //    risingEdgeEventSent = true;
-                //}
+                //    if (EventDisplayer != null && associatedInteraction != null && Texture2D != null)
+                //    {
+                //        EventDisplayer.gameObject.SetActive(true);
+                //        EventDisplayer.Set(associatedInteraction.Name, InputLayoutManager.GetInputCode(activationButton).ToString(), Sprite.Create(Texture2D, new Rect(0.0f, 0.0f, Texture2D.width, Texture2D.height), new Vector2(0.5f, 0.5f), 100.0f));
+                //    }
+                //    //else
+                //    //{
+                //    //    EventDisplayer.gameObject.SetActive(true);
+                //    //    EventDisplayer.Set(associatedInteraction.Name, InputLayoutManager.GetInputCode(activationButton).ToString(), null);
+
+                //    //    Destroy(Texture2D);
+                //    //}
+                //},
+                //webrequest =>
+                //{
+                //    if (EventDisplayer != null && associatedInteraction != null)
+                //    {
+                //        EventDisplayer.gameObject.SetActive(true);
+                //        EventDisplayer.Set(associatedInteraction.Name, InputLayoutManager.GetInputCode(activationButton).ToString(), null);
+                //    }
+                //});
+                else
+                {
+                    Debug.Log("Pas d'icone pour " + InputLayoutManager.GetInputCode(activationButton).ToString());
+                    DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                }
             }
             else
             {
@@ -124,10 +166,17 @@ namespace BrowserDesktop.Interaction
             }
         }
 
+        private void DiplayDisplayer(string label, string inputName, Texture2D icon = null)
+        {
+            if (eventDisplayer != null)
+            {
+                eventDisplayer.Display(true);
+                eventDisplayer.SetUp(label, inputName, icon);
+            }
+        }
+
         protected virtual void Update()
         {
-            if (boneDto == null)
-                boneDto = AvatarTempo.getBoneID();
 
             if (LastFrameButton != InputLayoutManager.GetInputCode(activationButton))
             {
@@ -135,7 +184,7 @@ namespace BrowserDesktop.Interaction
                 LastFrameButton = InputLayoutManager.GetInputCode(activationButton);
             }
 
-            if (associatedInteraction != null && (!CircleMenu.Exists || !CircleMenu.Instance.IsExpanded))
+            if (associatedInteraction != null && (!CircularMenu.Exists || !CircularMenu.Instance.IsExpanded))
             {
                 if (Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)))
                 {
@@ -145,8 +194,10 @@ namespace BrowserDesktop.Interaction
                         var eventdto = new EventStateChangedDto
                         {
                             active = true,
-                            boneType = boneDto.boneType,
-                            entityId = associatedInteraction.id
+                            boneType = bone,
+                            id = associatedInteraction.id,
+                            toolId = this.toolId,
+                            hoveredObjectId = hoveredObjectId
                         };
                         UMI3DCollaborationClientServer.Send(eventdto, true);
                         risingEdgeEventSent = true;
@@ -155,8 +206,10 @@ namespace BrowserDesktop.Interaction
                     {
                         var eventdto = new EventTriggeredDto
                         {
-                            boneType = boneDto.boneType,
-                            entityId = associatedInteraction.id
+                            boneType = bone,
+                            id = associatedInteraction.id,
+                            toolId = this.toolId,
+                            hoveredObjectId = hoveredObjectId
                         };
                         UMI3DCollaborationClientServer.Send(eventdto, true);
                     }
@@ -172,8 +225,10 @@ namespace BrowserDesktop.Interaction
                             var eventdto = new EventStateChangedDto
                             {
                                 active = false,
-                                boneType = boneDto.boneType,
-                                entityId = associatedInteraction.id
+                                boneType = bone,
+                                id = associatedInteraction.id,
+                                toolId = this.toolId,
+                                hoveredObjectId = hoveredObjectId
                             };
                             UMI3DCollaborationClientServer.Send(eventdto, true);
                             risingEdgeEventSent = false;
@@ -183,7 +238,7 @@ namespace BrowserDesktop.Interaction
             }
         }
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
         {
             throw new System.NotImplementedException();
         }
@@ -196,7 +251,7 @@ namespace BrowserDesktop.Interaction
         public override void Dissociate()
         {
             ResetButton();
-            EventDisplayer?.gameObject.SetActive(false);
+            eventDisplayer?.Display(false);
             associatedInteraction = null;
         }
 
@@ -207,8 +262,10 @@ namespace BrowserDesktop.Interaction
                 var eventdto = new EventStateChangedDto
                 {
                     active = false,
-                    boneType = boneDto.boneType,
-                    entityId = associatedInteraction.id
+                    boneType = bone,
+                    id = associatedInteraction.id,
+                    toolId = this.toolId,
+                    hoveredObjectId = hoveredObjectId
                 };
                 UMI3DCollaborationClientServer.Send(eventdto, true);
             }
@@ -223,6 +280,11 @@ namespace BrowserDesktop.Interaction
         public override bool IsAvailable()
         {
             return associatedInteraction == null && !Locked;
+        }
+
+        public override void UpdateHoveredObjectId(string hoveredObjectId)
+        {
+            this.hoveredObjectId = hoveredObjectId;
         }
     }
 }

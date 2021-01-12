@@ -19,7 +19,7 @@ using UnityEngine.Events;
 
 namespace BrowserDesktop.Controller
 {
-    public class InputLayoutManager : umi3d.PersistentSingleton<InputLayoutManager>
+    public class InputLayoutManager : umi3d.common.PersistentSingleton<InputLayoutManager>
     {
         InputLayout CurrentLayout { get { return (inputLayouts != null && inputLayouts.Length > layoutId) ? inputLayouts[layoutId] : null; } }
         [SerializeField]

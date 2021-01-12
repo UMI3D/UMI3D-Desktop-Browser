@@ -44,9 +44,12 @@ namespace BrowserDesktop.Parameters
         /// <see cref="Associate(AbstractInteractionDto)"/>
         protected UnityAction<ValueType> callback;
 
+        protected string hoveredObjectId { get; private set; }
+
+        protected string GetCurrentHoveredObjectID() { return hoveredObjectId; }
 
 
-        public override void Associate(AbstractInteractionDto interaction)
+        public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
         {
             if (currentInteraction != null)
             {
@@ -55,13 +58,14 @@ namespace BrowserDesktop.Parameters
 
             if (interaction is ParameterType)
             {
+                this.hoveredObjectId = hoveredObjectId;
                 menuItem = new InputMenuItem()
                 {
                     dto = interaction as ParameterType,
                     Name = interaction.name
                 };
-                if (CircleMenu.Exists)
-                    CircleMenu.Instance.MenuDisplayManager.menu.Add(menuItem);
+                if (CircularMenu.Exists)
+                    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
 
                 menuItem.NotifyValueChange((interaction as ParameterType).value);
                 callback = x =>
@@ -70,12 +74,14 @@ namespace BrowserDesktop.Parameters
                     dto.value = x;
                     var pararmeterDto = new ParameterSettingRequestDto()
                     {
-                        entityId = currentInteraction.id,
+                        id = currentInteraction.id,
+                        toolId = toolId,
                         parameter = dto,
+                        hoveredObjectId = GetCurrentHoveredObjectID()
                     };
                     UMI3DCollaborationClientServer.Send(pararmeterDto, true);
                 };
-                
+
                 menuItem.Subscribe(callback);
                 currentInteraction = interaction;
             }
@@ -86,7 +92,7 @@ namespace BrowserDesktop.Parameters
         }
 
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
         {
             throw new System.Exception("Incompatible interaction");
         }
@@ -100,8 +106,8 @@ namespace BrowserDesktop.Parameters
         {
             currentInteraction = null;
             menuItem.UnSubscribe(callback);
-            if (CircleMenu.Exists)
-                CircleMenu.Instance?.MenuDisplayManager?.menu?.Remove(menuItem);
+            if (CircularMenu.Exists)
+                CircularMenu.Instance?.menuDisplayManager?.menu?.Remove(menuItem);
         }
 
         public override bool IsCompatibleWith(AbstractInteractionDto interaction)
@@ -117,6 +123,11 @@ namespace BrowserDesktop.Parameters
         private void OnDestroy()
         {
             Dissociate();
+        }
+
+        public override void UpdateHoveredObjectId(string hoveredObjectId)
+        {
+            this.hoveredObjectId = hoveredObjectId;
         }
     }
 }
