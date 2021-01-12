@@ -31,8 +31,6 @@ public class ClientPCIdentifier : ClientIdentifierApi
     public Action<List<string>, Action<bool>> ShouldDownloadLib;
     public Action<FormDto, Action<FormDto>> GetParameters;
 
-    string login, password;
-
     public override void GetParameterDtos(FormDto parameter, Action<FormDto> callback)
     {
         GetParameters.Invoke(parameter, callback);
@@ -45,23 +43,23 @@ public class ClientPCIdentifier : ClientIdentifierApi
 
     public override void GetIdentity(Action<UMI3DAuthenticator> callback)
     {
-        GetIdentityAction((l, p) => { login = l; password = p; callback.Invoke(new UMI3DAuthenticator(GetPin, GetLoginPassword, GetIdentity)); });
+         callback.Invoke(new UMI3DAuthenticator(GetPin, GetLoginPassword, GetIdentity));
 
     }
 
     void GetPin(Action<string> callback)
     {
-        //if (GetPinAction != null)
-        //    GetPinAction(callback);
-        //else
-        callback?.Invoke(password);
+        if (GetPinAction != null)
+            GetPinAction(callback);
+        else
+            callback?.Invoke(null);
     }
     void GetLoginPassword(Action<(string, string)> callback)
     {
-        //if (GetIdentityAction != null)
-        //    GetIdentityAction((l,p)=>callback((l,p)));
-        //else
-        callback?.Invoke((login, password));
+        if (GetIdentityAction != null)
+            GetIdentityAction((l, p) => callback((l, p)));
+        else
+            callback?.Invoke((null,null));
     }
 
     void GetIdentity(Action<IdentityDto> callback)
