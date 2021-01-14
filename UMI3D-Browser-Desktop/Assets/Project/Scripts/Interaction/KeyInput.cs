@@ -182,11 +182,12 @@ namespace BrowserDesktop.Interaction
                 LastFrameButton = InputLayoutManager.GetInputCode(activationButton);
             }
 
-            if (associatedInteraction != null && (!CircularMenu.Exists || !CircularMenu.Instance.IsExpanded))
+            if (associatedInteraction != null && (!SideMenu.Exists || !SideMenu.IsExpanded))
             {
                 if (Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)))
                 {
                     onInputDown.Invoke();
+                    
                     if ((associatedInteraction).hold)
                     {
                         var eventdto = new EventStateChangedDto

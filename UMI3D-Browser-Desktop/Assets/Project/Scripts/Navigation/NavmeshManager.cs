@@ -22,15 +22,25 @@ namespace BrowserDesktop.Navigation
     /// </summary>
     public class NavmeshManager : MonoBehaviour
     {
+        /// <summary>
+        /// Name of the layer where traversable objects will be set.
+        /// </summary>
+        public string traversableLayerName = "Traversable";
 
-        public string navMeshLayername = "Navmesh";
+        /// <summary>
+        /// Name of the lauer where non traversable objects will be set.
+        /// </summary>
+        public string nonTraversableLayerName = "NonTraversable";
 
-        private LayerMask layer;
+        private LayerMask traversableLayer;
+
+        private LayerMask nonTraversableLayer;
 
         void Start()
         {
-            layer = LayerMask.NameToLayer(navMeshLayername);
-            Debug.Assert(layer != default);
+            traversableLayer = LayerMask.NameToLayer(traversableLayerName);
+            nonTraversableLayer = LayerMask.NameToLayer(nonTraversableLayerName);
+            Debug.Assert(traversableLayer != default && nonTraversableLayer != default);
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(InitNavMesh);
         }
@@ -112,7 +122,17 @@ namespace BrowserDesktop.Navigation
                     } else
                     {
                         collider.isTrigger = false;
-                        collider.gameObject.layer = layer;
+                        collider.gameObject.layer = nonTraversableLayer;
+                    }
+                }
+            }else
+            {
+                Collider collider;
+                foreach (Renderer r in nodeInstance.renderers)
+                {
+                    if (r.TryGetComponent(out collider))
+                    {
+                        collider.gameObject.layer = traversableLayer;
                     }
                 }
             }
@@ -122,7 +142,7 @@ namespace BrowserDesktop.Navigation
         {
             obj.AddComponent<MeshCollider>();
 
-            obj.layer = layer;
+            obj.layer = nonTraversableLayer;
         }
     }
 }
