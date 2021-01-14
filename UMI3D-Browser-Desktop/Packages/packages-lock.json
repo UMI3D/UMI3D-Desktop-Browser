@@ -1,88 +1,88 @@
 {
   "dependencies": {
     "com.gfi-innovaton.umi3d.cdk.collaboration": {
-      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/ClientDevelopmentKit/Collaboration#2.1.b.210104",
+      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/ClientDevelopmentKit/Collaboration#2.2.b.210114",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.gfi-innovaton.umi3d.cdk.interaction-system": "2.1.0",
-        "com.gfi-innovaton.umi3d.cdk.user-capture": "2.1.0",
-        "com.gfi-innovaton.umi3d.common.collaboration": "2.1.0"
+        "com.gfi-innovaton.umi3d.cdk.interaction-system": "2.2.0",
+        "com.gfi-innovaton.umi3d.cdk.user-capture": "2.2.0",
+        "com.gfi-innovaton.umi3d.common.collaboration": "2.2.0"
       },
-      "hash": "11ea639b1bf8e1cef4aff8c5b5206d8aa98073b9"
+      "hash": "e515e7952b095b4e0d0cd5f5a66fcff6768c29f4"
     },
     "com.gfi-innovaton.umi3d.cdk.core": {
-      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/ClientDevelopmentKit/Core#2.1.b.210104",
+      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/ClientDevelopmentKit/Core#2.2.b.210114",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.gfi-innovaton.umi3d.common.core": "2.1.0"
+        "com.gfi-innovaton.umi3d.common.core": "2.2.0"
       },
-      "hash": "11ea639b1bf8e1cef4aff8c5b5206d8aa98073b9"
+      "hash": "e515e7952b095b4e0d0cd5f5a66fcff6768c29f4"
     },
     "com.gfi-innovaton.umi3d.cdk.interaction-system": {
-      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/ClientDevelopmentKit/InteractionSystem#2.1.b.210104",
+      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/ClientDevelopmentKit/InteractionSystem#2.2.b.210114",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.gfi-innovaton.umi3d.cdk.core": "2.1.0",
-        "com.gfi-innovaton.umi3d.common.interaction-system": "2.1.0"
+        "com.gfi-innovaton.umi3d.cdk.core": "2.2.0",
+        "com.gfi-innovaton.umi3d.common.interaction-system": "2.2.0"
       },
-      "hash": "11ea639b1bf8e1cef4aff8c5b5206d8aa98073b9"
+      "hash": "e515e7952b095b4e0d0cd5f5a66fcff6768c29f4"
     },
     "com.gfi-innovaton.umi3d.cdk.user-capture": {
-      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/ClientDevelopmentKit/UserCapture#2.1.b.210104",
+      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/ClientDevelopmentKit/UserCapture#2.2.b.210114",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.gfi-innovaton.umi3d.cdk.core": "2.1.0",
-        "com.gfi-innovaton.umi3d.common.user-capture": "2.1.0"
+        "com.gfi-innovaton.umi3d.cdk.core": "2.2.0",
+        "com.gfi-innovaton.umi3d.common.user-capture": "2.2.0"
       },
-      "hash": "11ea639b1bf8e1cef4aff8c5b5206d8aa98073b9"
+      "hash": "e515e7952b095b4e0d0cd5f5a66fcff6768c29f4"
     },
     "com.gfi-innovaton.umi3d.common.collaboration": {
-      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Common/Collaboration#2.1.b.210104",
+      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Common/Collaboration#2.2.b.210114",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.gfi-innovaton.umi3d.common.interaction-system": "2.1.0",
-        "com.gfi-innovaton.umi3d.common.user-capture": "2.1.0"
+        "com.gfi-innovaton.umi3d.common.interaction-system": "2.2.0",
+        "com.gfi-innovaton.umi3d.common.user-capture": "2.2.0"
       },
-      "hash": "11ea639b1bf8e1cef4aff8c5b5206d8aa98073b9"
+      "hash": "e515e7952b095b4e0d0cd5f5a66fcff6768c29f4"
     },
     "com.gfi-innovaton.umi3d.common.core": {
-      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Common/Core#2.1.b.210104",
+      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Common/Core#2.2.b.210114",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.gfi-innovaton.umi3d.dependencies": "2.1.0"
+        "com.gfi-innovaton.umi3d.dependencies": "2.2.0"
       },
-      "hash": "11ea639b1bf8e1cef4aff8c5b5206d8aa98073b9"
+      "hash": "e515e7952b095b4e0d0cd5f5a66fcff6768c29f4"
     },
     "com.gfi-innovaton.umi3d.common.interaction-system": {
-      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Common/InteractionSystem#2.1.b.210104",
+      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Common/InteractionSystem#2.2.b.210114",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.gfi-innovaton.umi3d.common.core": "2.1.0"
+        "com.gfi-innovaton.umi3d.common.core": "2.2.0"
       },
-      "hash": "11ea639b1bf8e1cef4aff8c5b5206d8aa98073b9"
+      "hash": "e515e7952b095b4e0d0cd5f5a66fcff6768c29f4"
     },
     "com.gfi-innovaton.umi3d.common.user-capture": {
-      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Common/UserCapture#2.1.b.210104",
+      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Common/UserCapture#2.2.b.210114",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.gfi-innovaton.umi3d.common.core": "2.1.0"
+        "com.gfi-innovaton.umi3d.common.core": "2.2.0"
       },
-      "hash": "11ea639b1bf8e1cef4aff8c5b5206d8aa98073b9"
+      "hash": "e515e7952b095b4e0d0cd5f5a66fcff6768c29f4"
     },
     "com.gfi-innovaton.umi3d.dependencies": {
-      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Dependencies#2.1.b.210104",
+      "version": "https://github.com/Gfi-Innovation/UMI3D-SDK.git?path=/UMI3D-SDK/Assets/Dependencies#2.2.b.210114",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "11ea639b1bf8e1cef4aff8c5b5206d8aa98073b9"
+      "hash": "e515e7952b095b4e0d0cd5f5a66fcff6768c29f4"
     },
     "com.unity.collab-proxy": {
       "version": "1.2.16",
