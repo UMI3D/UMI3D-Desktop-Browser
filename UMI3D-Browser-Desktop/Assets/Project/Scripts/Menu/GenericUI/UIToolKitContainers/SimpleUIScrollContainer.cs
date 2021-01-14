@@ -29,7 +29,7 @@ namespace BrowserDesktop.Menu
             scrollView = contentElement as ScrollView;
             if (scrollView == null)
             {
-                Debug.LogError("The content element must be a scrollview for this container");
+                Debug.LogWarning("The content element must be a scrollview for this container");
             }
         }
 

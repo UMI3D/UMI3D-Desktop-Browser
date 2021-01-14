@@ -42,7 +42,7 @@ namespace BrowserDesktop.Menu
             subContent.style.display = DisplayStyle.None;
             if (subContent == null)
             {
-                Debug.LogError("There is no UXML tag with the name " + uxmlSubContentTag + " to be uses as a subcontainer");
+                Debug.LogWarning("There is no UXML tag with the name " + uxmlSubContentTag + " to be uses as a subcontainer");
             }
         }
 
