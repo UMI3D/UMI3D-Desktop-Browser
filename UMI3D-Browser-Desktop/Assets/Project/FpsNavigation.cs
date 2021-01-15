@@ -48,6 +48,8 @@ public class FpsNavigation : AbstractNavigation
 
     Quaternion UserYRotation;
 
+    public float baseSpeed = 80;
+
     struct JumpData
     {
         public bool jumping;
@@ -205,19 +207,16 @@ public class FpsNavigation : AbstractNavigation
         }
         Move *= Time.fixedDeltaTime;
 
-        Vector3 pos = Vector3.zero;
 
-        if (neckRb.velocity.magnitude < .1f)
-        {
-           pos = Neck.rotation * new Vector3(Move.y, 0, Move.x);
-        }
-
-        pos += Neck.transform.position;
-        pos.y = height;
-        neckRb.MovePosition(pos);
-
+        Vector3 speed = Neck.rotation * new Vector3(Move.y, 0, Move.x) * baseSpeed;
+        
+        neckRb.velocity = speed;
+        
+     
         if (Move == Vector2.zero)
             neckRb.velocity = Vector3.zero;
+
+        Neck.position = new Vector3(neckRb.position.x, height, neckRb.position.z);
     }
 
     void Walk(ref Vector2 Move, ref float height)
