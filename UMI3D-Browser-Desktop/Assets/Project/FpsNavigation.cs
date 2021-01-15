@@ -94,6 +94,8 @@ public class FpsNavigation : AbstractNavigation
 
     public override void Teleport(TeleportDto data)
     {
+        neckRb.position = data.position;
+        neckRb.rotation = data.rotation;
         Neck.position = data.position;
         Neck.rotation = data.rotation;
     }
