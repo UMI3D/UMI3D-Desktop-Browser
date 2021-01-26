@@ -938,6 +938,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
   state: 0
   navigation: 0
+  baseSpeed: 80
 --- !u!114 &498482123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5098,7 +5099,7 @@ MonoBehaviour:
   onEnvironmentLoaded:
     m_PersistentCalls:
       m_Calls: []
-  parameters: {fileID: 11400000, guid: afb9954a0c0f6a542b39a05baef01a97, type: 2}
+  parameters: {fileID: 11400000, guid: b6c1e3aff73fa094ea6d7c9c53b776c0, type: 2}
   UserList: []
 --- !u!4 &1800526325
 Transform:
@@ -6064,6 +6065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda69d6602aa3f44e99c0700f3af9310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  muted: 0
 --- !u!81 &2079147381
 AudioListener:
   m_ObjectHideFlags: 0
