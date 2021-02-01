@@ -24,6 +24,8 @@ using UnityEngine;
 public class FpsNavigation : AbstractNavigation
 {
     public Transform _viewpoint;
+    public Transform _neckPivot;
+    public float maxAngle;
     public Transform head;
     public Transform Neck;
     public Rigidbody neckRb;
@@ -285,6 +287,7 @@ public class FpsNavigation : AbstractNavigation
             if (delta > data.YAngleRange.y) result.y = -data.YAngleRange.y + angleNeck.y;
         }
         _viewpoint.transform.rotation = Quaternion.Euler(result);
+        _neckPivot.transform.rotation = Quaternion.Euler(new Vector3(Mathf.Clamp(result.x, -maxAngle, maxAngle), result.y, result.z));
         head.transform.rotation = Quaternion.Euler(displayResult);
         UserYRotation = Quaternion.Euler(new Vector3(0, result.y, 0));
     }
