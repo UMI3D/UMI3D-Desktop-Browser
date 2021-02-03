@@ -938,6 +938,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
   state: 0
   navigation: 0
+  baseSpeed: 80
 --- !u!114 &498482123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3805,6 +3806,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 1591
+      objectReference: {fileID: 0}
+    - target: {fileID: 2150043796629940577, guid: 14fbdbc514a85554ab1542b97163b1c4,
+        type: 3}
+      propertyPath: m_AllowMSAA
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2150043796629940581, guid: 14fbdbc514a85554ab1542b97163b1c4,
         type: 3}
