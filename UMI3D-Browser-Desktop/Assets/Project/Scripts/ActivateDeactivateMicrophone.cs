@@ -19,13 +19,19 @@ using BrowserDesktop.Menu;
 using umi3d.cdk.collaboration;
 using umi3d.common;
 using UnityEngine;
-using UnityEngine.UI;
+using umi3d.cdk;
 
 public class ActivateDeactivateMicrophone : Singleton<ActivateDeactivateMicrophone>
 {
+    bool isEnvironmentLoaded = false;
 
     private void Start()
     {
+        UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => {
+            isEnvironmentLoaded = true;
+        });
+
+        MicrophoneListener.IsMute = true;
         SessionInformationMenu.Instance.OnMicrophoneStatusChanged(!MicrophoneListener.IsMute);
     }
 
@@ -40,6 +46,9 @@ public class ActivateDeactivateMicrophone : Singleton<ActivateDeactivateMicropho
 
     public void ToggleMicrophoneStatus()
     {
+        if (!isEnvironmentLoaded)
+            return;
+
         MicrophoneListener.IsMute = !MicrophoneListener.IsMute;
 
         SessionInformationMenu.Instance.OnMicrophoneStatusChanged(!MicrophoneListener.IsMute);
