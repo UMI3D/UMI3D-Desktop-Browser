@@ -212,6 +212,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     #region Actions
 
+    string url = null;
+
     /// <summary>
     /// Uses the connection data to connect to te server.
     /// </summary>
@@ -221,8 +223,9 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         this.connectionData = connectionData;
 
         loader.OnProgressChange(0);
-        string url = "http://" + connectionData.ip + UMI3DNetworkingKeys.media;
-        UMI3DCollaborationClientServer.GetMedia(url, GetMediaSucces, GetMediaFailed);
+        var curentUrl = "http://" + connectionData.ip + UMI3DNetworkingKeys.media;
+        url = curentUrl;
+        UMI3DCollaborationClientServer.GetMedia(url, GetMediaSucces, GetMediaFailed, (e) => url == curentUrl && e.count < 3);
     }
     
     /// <summary>
@@ -230,6 +233,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// </summary>
     public void Leave()
     {
+        url = null;
         cam.backgroundColor = new Color(0.196f, 0.196f, 0.196f);
         cam.clearFlags = CameraClearFlags.SolidColor;
         UMI3DEnvironmentLoader.Clear();
