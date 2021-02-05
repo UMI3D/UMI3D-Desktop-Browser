@@ -32,7 +32,6 @@ namespace BrowserDesktop.Menu
         public override void Clear()
         {
             base.Clear();
-            button.clickable.clicked -= NotifyPress;
             container.RemoveFromHierarchy();
         }
 
@@ -41,7 +40,6 @@ namespace BrowserDesktop.Menu
             InitAndBindUI();
 
             container.style.display = DisplayStyle.Flex;
-            button.clickable.clicked += NotifyPress;
         }
 
         public VisualElement GetUXMLContent()
@@ -52,7 +50,6 @@ namespace BrowserDesktop.Menu
 
         public override void Hide()
         {
-            button.clickable.clicked -= NotifyPress;
             container.style.display = DisplayStyle.None;
         }
 
@@ -63,6 +60,7 @@ namespace BrowserDesktop.Menu
                 container = buttonTreeAsset.CloneTree();
                 container.name = gameObject.name;
                 button = container.Q<Button>();
+                button.clickable.clicked += NotifyPress;
             }
         }
 

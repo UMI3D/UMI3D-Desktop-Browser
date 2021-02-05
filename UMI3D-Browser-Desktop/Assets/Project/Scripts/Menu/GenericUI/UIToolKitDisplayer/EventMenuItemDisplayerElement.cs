@@ -41,21 +41,17 @@ namespace BrowserDesktop.Menu
         public override void Clear()
         {
             base.Clear();
-            button.clickable.clicked += NotifyPress;
             button.RemoveFromHierarchy();
         }
 
         public override void Display(bool forceUpdate = false)
         {
             InitAndBindUI();
-
-            button.clickable.clicked += NotifyPress;
             button.style.display = DisplayStyle.Flex;
         }
 
         public override void Hide()
         {
-            button.clickable.clicked -= NotifyPress;
             button.style.display = DisplayStyle.None;
         }
 
@@ -63,7 +59,7 @@ namespace BrowserDesktop.Menu
         /// Notify that the button has been pressed.
         /// </summary>
         public void NotifyPress()
-        { 
+        {
             menuItem?.NotifyValueChange(!menuItem.GetValue());
         }
 
@@ -74,8 +70,6 @@ namespace BrowserDesktop.Menu
         /// <returns></returns>
         public override void SetMenuItem(AbstractMenuItem item)
         {
-            //TODO
-            //button = GetComponent<Button>();
             if (item is EventMenuItem)
             {
                 menuItem = item as EventMenuItem;
@@ -98,7 +92,10 @@ namespace BrowserDesktop.Menu
         public void InitAndBindUI()
         {   
             if (button == null)
+            {
                 button = menuItemTreeAsset.CloneTree().Q<Button>();
+                button.clickable.clicked += NotifyPress;
+            }
         }
 
         private void OnDestroy()
