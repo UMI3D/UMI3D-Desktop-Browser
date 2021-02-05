@@ -255,15 +255,15 @@ namespace BrowserDesktop.Menu
                     CircularMenu.Instance.CloseMenu();
                     Display(false, false);
                 }
-
-                else if (!IsDisplayed && (nbOfCircularDisplayers > 0 || nbEventsDisplayed > 0))
+                else if ((nbOfCircularDisplayers > 0 || nbEventsDisplayed > 0)
+                    && ((nbOfCircularDisplayers != nbOfCircularDisplayersLastFrame) || (nbEventsDisplayed != nbEventsDisplayedLastFrame)))
                 {
                     if (nbOfCircularDisplayers > 0)
                         CircularMenu.Instance.Display();
                     Display(true, false);
                 }
-
             }
+
 
             nbOfCircularDisplayersLastFrame = nbOfCircularDisplayers;
             nbEventsDisplayedLastFrame = nbEventsDisplayed;

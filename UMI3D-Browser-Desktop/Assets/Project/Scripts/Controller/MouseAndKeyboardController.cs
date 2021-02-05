@@ -194,7 +194,8 @@ namespace BrowserDesktop.Controller
             {
                 if (!CircularMenu.Instance.menuDisplayManager.menu.Contains(mouseData.ForceProjectionMenuItem))
                 {
-                    CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
+                    if (mouseData.ForcePorjectionReleasable)
+                        CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
                 }
                 else if (CircularMenu.Instance.menuDisplayManager.menu.Count == 1)
                 {
