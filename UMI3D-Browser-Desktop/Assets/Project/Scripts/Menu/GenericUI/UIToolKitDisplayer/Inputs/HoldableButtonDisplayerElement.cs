@@ -98,11 +98,13 @@ namespace BrowserDesktop.Menu
             {
                 button = holdableButtonTreeAsset.CloneTree().Q<Label>();
                 button.RegisterCallback<MouseDownEvent>((e) =>{ //Pointer down does not seem to work with UIToolKit 0.0.4-preview
-                    NotifyPressDown();
+                    if (e.clickCount == 1)
+                        NotifyPressDown();
                 });
                 button.RegisterCallback<PointerUpEvent>((e) =>
                 {
-                    NotifyPressUp();
+                    if (e.clickCount == 1)
+                        NotifyPressUp();
                 });
             }
         }
