@@ -181,6 +181,9 @@ public class FpsNavigation : AbstractNavigation
 
     void FixedUpdate()
     {
+        if (TextInputDisplayerElement.isTyping)
+            return;
+
         if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.FreeHead; }
         else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.Default; changeToDefault = true; }
         Vector2 Move = Vector2.zero;
@@ -197,6 +200,7 @@ public class FpsNavigation : AbstractNavigation
             if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))) { Move.y += 1; }
             if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Left))) { Move.y -= 1; }
         }
+
         switch (navigation)
         {
             case Navigation.Walking:
@@ -210,8 +214,6 @@ public class FpsNavigation : AbstractNavigation
                 break;
         }
         Move *= Time.fixedDeltaTime;
-
-
         Vector3 speed = Neck.rotation * new Vector3(Move.y, 0, Move.x) * baseSpeed;
         
         neckRb.velocity = speed;
