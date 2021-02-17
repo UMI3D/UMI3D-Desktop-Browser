@@ -113,6 +113,12 @@ namespace BrowserDesktop.Navigation
             }else if (!isTraversable)
             {
                 ChangeObjectAndChildrenLayer(obj, obstacleLayer);
+                foreach (var r in nodeInstance.renderers)
+                {
+                    NavMeshModifier modifier = r.gameObject.AddComponent<NavMeshModifier>();
+                    modifier.overrideArea = true;
+                    modifier.area = 1; // 1 = means not walkable.
+                }
             }
         }
 
