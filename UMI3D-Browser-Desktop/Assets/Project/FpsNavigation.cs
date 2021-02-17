@@ -123,14 +123,21 @@ public class FpsNavigation : AbstractNavigation
     {
         if (!isActive)
             return;
+
         if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
         {
             PauseMenu.ToggleDisplay();
         }
 
         if (SideMenu.IsExpanded || CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHiden)
+        {
+            Vector3 position = Neck.transform.position;
+            position.y = jumpData.heigth;
+            Neck.transform.position = position;
             return;
-
+        }
+            
+        
         if (TextInputDisplayerElement.isTyping)
             return;
 
