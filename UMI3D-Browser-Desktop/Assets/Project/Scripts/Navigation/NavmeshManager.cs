@@ -60,7 +60,6 @@ namespace BrowserDesktop.Navigation
                     InitModel(nodeInstance);
                 }
             }
-            Debug.Log("BUILD");
             surface.BuildNavMesh();
         }
 
