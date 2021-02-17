@@ -119,7 +119,7 @@ public class FpsNavigation : AbstractNavigation
         return jumpData.deltaHeight;
     }
 
-    private void LateUpdate()
+    private void Update()
     {
         if (!isActive)
             return;
