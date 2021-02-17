@@ -125,15 +125,13 @@ public class FpsNavigation : AbstractNavigation
             return;
         if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
         {
-            /*if (CircularMenu.Exists && CircularMenu.Instance.IsExpanded)
-            {
-                CircularMenu.Instance._Collapse();
-            }*/
-            //SideMenu.Display(!SideMenu.IsExpanded, !SideMenu.IsExpanded);
             PauseMenu.ToggleDisplay();
         }
 
         if (SideMenu.IsExpanded || CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHiden)
+            return;
+
+        if (TextInputDisplayerElement.isTyping)
             return;
 
         if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.FreeHead; }
