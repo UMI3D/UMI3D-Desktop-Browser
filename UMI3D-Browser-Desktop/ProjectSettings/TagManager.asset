@@ -14,8 +14,8 @@ TagManager:
   - 
   - 
   - Invisible
-  - Traversable
-  - NonTraversable
+  - Obstacle
+  - Navmesh
   - 
   - 
   - 
