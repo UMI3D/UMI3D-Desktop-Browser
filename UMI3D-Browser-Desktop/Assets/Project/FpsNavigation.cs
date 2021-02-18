@@ -28,7 +28,6 @@ public class FpsNavigation : AbstractNavigation
     public float maxAngle;
     public Transform head;
     public Transform Neck;
-    public Rigidbody neckRb;
     public Transform TorsoUpAnchor;
 
     bool isActive = false;
@@ -47,10 +46,6 @@ public class FpsNavigation : AbstractNavigation
 
     float MaxJumpVelocity;
     float MinJumpVelocity;
-
-    Quaternion UserYRotation;
-
-    public float baseSpeed = 80;
 
     struct JumpData
     {
@@ -96,8 +91,6 @@ public class FpsNavigation : AbstractNavigation
 
     public override void Teleport(TeleportDto data)
     {
-        neckRb.position = data.position;
-        neckRb.rotation = data.rotation;
         Neck.position = data.position;
         Neck.rotation = data.rotation;
     }
@@ -126,21 +119,28 @@ public class FpsNavigation : AbstractNavigation
         return jumpData.deltaHeight;
     }
 
-    private void LateUpdate()
+    private void Update()
     {
         if (!isActive)
             return;
+
         if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
         {
             PauseMenu.ToggleDisplay();
         }
 
         if (SideMenu.IsExpanded || CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHiden)
+        {
+            Vector3 position = Neck.transform.position;
+            position.y = jumpData.heigth;
+            Neck.transform.position = position;
+            return;
+        }
+            
+        
+        if (TextInputDisplayerElement.isTyping)
             return;
 
-        HandleView();
-
-        /*
         if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.FreeHead; }
         else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.Default; changeToDefault = true; }
         Vector2 Move = Vector2.zero;
@@ -172,57 +172,11 @@ public class FpsNavigation : AbstractNavigation
         Move *= Time.deltaTime;
 
 
-        
+        HandleView();
         Vector3 pos = Neck.rotation * new Vector3(Move.y, 0, Move.x);
         pos += Neck.transform.position;
         pos.y = height;
-        Neck.transform.position = pos;*/
-    }
-
-    void FixedUpdate()
-    {
-        if (TextInputDisplayerElement.isTyping)
-            return;
-
-        if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.FreeHead; }
-        else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.Default; changeToDefault = true; }
-        Vector2 Move = Vector2.zero;
-        float height = jumpData.heigth;
-        if (navigateTo)
-        {
-            var delta = destination - Neck.transform.position;
-            Move = delta.normalized;
-        }
-        else
-        {
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Forward))) { Move.x += 1; }
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Backward))) { Move.x -= 1; }
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))) { Move.y += 1; }
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Left))) { Move.y -= 1; }
-        }
-
-        switch (navigation)
-        {
-            case Navigation.Walking:
-                Walk(ref Move, ref height);
-                jumpData.heigth = height;
-                height += jumpData.deltaHeight;
-                break;
-            case Navigation.Flying:
-                Fly(ref Move, ref height);
-                jumpData.heigth = height;
-                break;
-        }
-        Move *= Time.fixedDeltaTime;
-        Vector3 speed = Neck.rotation * new Vector3(Move.y, 0, Move.x) * baseSpeed;
-        
-        neckRb.velocity = speed;
-        
-     
-        if (Move == Vector2.zero)
-            neckRb.velocity = Vector3.zero;
-
-        Neck.position = new Vector3(neckRb.position.x, height, neckRb.position.z);
+        Neck.transform.position = pos;
     }
 
     void Walk(ref Vector2 Move, ref float height)
@@ -291,7 +245,6 @@ public class FpsNavigation : AbstractNavigation
         _viewpoint.transform.rotation = Quaternion.Euler(result);
         _neckPivot.transform.rotation = Quaternion.Euler(new Vector3(Mathf.Clamp(result.x, -maxAngle, maxAngle), result.y, result.z));
         head.transform.rotation = Quaternion.Euler(displayResult);
-        UserYRotation = Quaternion.Euler(new Vector3(0, result.y, 0));
     }
 
     Vector3 NormalizeAngle(Vector3 angle)
