@@ -12,35 +12,38 @@ limitations under the License.
 using umi3d.cdk;
 using umi3d.common;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace BrowserDesktop.Navigation
 {
 
     /// <summary>
-    /// This class handles the navigation possibility. For now, this browser does not support a real navmesh, it only prevents users from passing
-    /// through objects which are set as "not traversable".
+    /// This class handles the navigation possibility. It is based on Unity navmesh.
     /// </summary>
     public class NavmeshManager : MonoBehaviour
     {
         /// <summary>
-        /// Name of the layer where traversable objects will be set.
+        /// Name of the layer where objects of the navmesh will be set.
         /// </summary>
-        public string traversableLayerName = "Traversable";
+        public string navmeshLayerName = "Navmesh";
 
         /// <summary>
-        /// Name of the lauer where non traversable objects will be set.
+        /// Name of the layerer where obstacles objects will be set.
         /// </summary>
-        public string nonTraversableLayerName = "NonTraversable";
+        public string obstacleLayerName = "Obstacle";
 
-        private LayerMask traversableLayer;
+        private LayerMask navmeshLayer;
 
-        private LayerMask nonTraversableLayer;
+        private LayerMask obstacleLayer;
+
+        public NavMeshSurface surface;
 
         void Start()
         {
-            traversableLayer = LayerMask.NameToLayer(traversableLayerName);
-            nonTraversableLayer = LayerMask.NameToLayer(nonTraversableLayerName);
-            Debug.Assert(traversableLayer != default && nonTraversableLayer != default);
+            navmeshLayer = LayerMask.NameToLayer(navmeshLayerName);
+            obstacleLayer = LayerMask.NameToLayer(obstacleLayerName);
+            Debug.Assert(navmeshLayer != default && obstacleLayerName != default);
+            Debug.Assert(surface);
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(InitNavMesh);
         }
@@ -57,6 +60,7 @@ namespace BrowserDesktop.Navigation
                     InitModel(nodeInstance);
                 }
             }
+            surface.BuildNavMesh();
         }
 
         /// <summary>
@@ -94,55 +98,34 @@ namespace BrowserDesktop.Navigation
         }
 
         /// <summary>
-        /// If a gameobject is not traversable, sets it up.
+        /// If a gameobject is not traversable or part of the navmesh, sets it up.
         /// </summary>
         /// <param name="nodeInstance"></param>
         /// <param name="dto"></param>
         private void SetUpGameObject(UMI3DNodeInstance nodeInstance, bool isPartOfNavmesh, bool isTraversable)
         {
-            if (!isTraversable)
+            GameObject obj = nodeInstance.gameObject;
+
+            if (isPartOfNavmesh)
             {
-                Collider collider;
-                foreach (Renderer r in nodeInstance.renderers)
-                {
-                    if (!r.TryGetComponent(out collider))
-                    {
-                        MeshFilter filter;
-                        if (r.TryGetComponent(out filter))
-                        {
-                            if (filter.sharedMesh != null && filter.sharedMesh.isReadable)
-                                AddCollider(r.gameObject);
-                            else
-                                Debug.LogWarning(nodeInstance.gameObject.name + " can't be used for the navemesh or to limit it because its mesh is not readable.");
-                        }
-                        else
-                        {
-                            AddCollider(r.gameObject);
-                        }
-                    } else
-                    {
-                        collider.isTrigger = false;
-                        collider.gameObject.layer = nonTraversableLayer;
-                    }
-                }
-            }else
+                ChangeObjectAndChildrenLayer(obj, navmeshLayer);
+            }else if (!isTraversable)
             {
-                Collider collider;
-                foreach (Renderer r in nodeInstance.renderers)
+                ChangeObjectAndChildrenLayer(obj, obstacleLayer);
+                foreach (var r in nodeInstance.renderers)
                 {
-                    if (r.TryGetComponent(out collider))
-                    {
-                        collider.gameObject.layer = traversableLayer;
-                    }
+                    NavMeshModifier modifier = r.gameObject.AddComponent<NavMeshModifier>();
+                    modifier.overrideArea = true;
+                    modifier.area = 1; // 1 = means not walkable.
                 }
             }
         }
 
-        void AddCollider(GameObject obj)
-        {
-            obj.AddComponent<MeshCollider>();
+        private void ChangeObjectAndChildrenLayer(GameObject parent, LayerMask mask){
+            parent.layer = mask;
 
-            obj.layer = nonTraversableLayer;
+            foreach(Transform t in parent.transform)
+                ChangeObjectAndChildrenLayer(t.gameObject, mask);
         }
     }
 }

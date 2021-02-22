@@ -2898,6 +2898,7 @@ GameObject:
   - component: {fileID: 1049023329}
   - component: {fileID: 1049023332}
   - component: {fileID: 1049023333}
+  - component: {fileID: 1049023334}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -3002,6 +3003,22 @@ MonoBehaviour:
     type: 3}
   currentScene: Connection
   sceneToLoad: Environement
+--- !u!114 &1049023334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1049023328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &1104465894
 GameObject:
   m_ObjectHideFlags: 0
