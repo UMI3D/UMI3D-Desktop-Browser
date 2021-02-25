@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.11480223, g: 0.11976789, b: 0.10575684, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -109,8 +109,8 @@ NavMeshSettings:
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
-    agentSlope: 45
-    agentClimb: 0.4
+    agentSlope: 50
+    agentClimb: 0.5
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
@@ -937,6 +937,7 @@ MonoBehaviour:
   head: {fileID: 936059040}
   Neck: {fileID: 936059037}
   TorsoUpAnchor: {fileID: 936059038}
+  agent: {fileID: 936059045}
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
   state: 0
   navigation: 0

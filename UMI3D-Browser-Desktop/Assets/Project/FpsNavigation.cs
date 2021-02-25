@@ -17,9 +17,12 @@ limitations under the License.
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
+using System.Collections;
 using umi3d.cdk;
 using umi3d.common;
 using UnityEngine;
+
+using UnityEngine.AI;
 
 public class FpsNavigation : AbstractNavigation
 {
@@ -29,6 +32,16 @@ public class FpsNavigation : AbstractNavigation
     public Transform head;
     public Transform Neck;
     public Transform TorsoUpAnchor;
+
+    /// <summary>
+    /// Agent to limit user's movements.
+    /// </summary>
+    public NavMeshAgent agent;
+
+    /// <summary>
+    /// Current ground height.
+    /// </summary>
+    private float baseHeight;
 
     bool isActive = false;
     public FpsScriptableAsset data;
@@ -91,9 +104,20 @@ public class FpsNavigation : AbstractNavigation
 
     public override void Teleport(TeleportDto data)
     {
+        agent.enabled = false;
         Neck.position = data.position;
         Neck.rotation = data.rotation;
+        baseHeight = data.position.Y;
+
+        StartCoroutine(ResetNavmeshAgent());
     }
+
+    IEnumerator ResetNavmeshAgent ()
+    {
+        yield return null;
+        agent.enabled = true;
+    } 
+
     #endregion
 
     float ComputeJump(bool jumping)
@@ -124,6 +148,14 @@ public class FpsNavigation : AbstractNavigation
         if (!isActive)
             return;
 
+        if (agent.isActiveAndEnabled && agent.isOnNavMesh)
+        {
+            NavMeshHit hit;
+            if(NavMesh.SamplePosition(agent.transform.position, out hit, .2f, NavMesh.AllAreas)){
+                baseHeight = hit.position.y;
+            }
+        }
+
         if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
         {
             PauseMenu.ToggleDisplay();
@@ -132,7 +164,7 @@ public class FpsNavigation : AbstractNavigation
         if (SideMenu.IsExpanded || CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHiden)
         {
             Vector3 position = Neck.transform.position;
-            position.y = jumpData.heigth;
+            position.y = jumpData.heigth + baseHeight;
             Neck.transform.position = position;
             return;
         }
@@ -175,7 +207,7 @@ public class FpsNavigation : AbstractNavigation
         HandleView();
         Vector3 pos = Neck.rotation * new Vector3(Move.y, 0, Move.x);
         pos += Neck.transform.position;
-        pos.y = height;
+        pos.y = height + baseHeight;
         Neck.transform.position = pos;
     }
 
