@@ -1527,7 +1527,7 @@ MonoBehaviour:
   viewpoint: {fileID: 6129258313615286699}
   viewpointBonetype: head
   sendTracking: 1
-  targetTrackingFPS: 30
+  targetTrackingFPS: 15
   skeletonParsedEvent:
     m_PersistentCalls:
       m_Calls: []
