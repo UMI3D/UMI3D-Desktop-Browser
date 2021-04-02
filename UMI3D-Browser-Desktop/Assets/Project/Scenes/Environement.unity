@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.11480223, g: 0.11976789, b: 0.10575684, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -109,8 +109,8 @@ NavMeshSettings:
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
-    agentSlope: 45
-    agentClimb: 0.4
+    agentSlope: 50
+    agentClimb: 0.5
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
@@ -937,6 +937,7 @@ MonoBehaviour:
   head: {fileID: 936059040}
   Neck: {fileID: 936059037}
   TorsoUpAnchor: {fileID: 936059038}
+  agent: {fileID: 936059045}
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
   state: 0
   navigation: 0
@@ -2517,6 +2518,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6667061672495794225, guid: 66b9156b7a96b16419021b5242679fba,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66b9156b7a96b16419021b5242679fba, type: 3}
 --- !u!4 &936059037 stripped
@@ -2589,6 +2595,26 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!1 &936059046 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6928954314426434968, guid: 66b9156b7a96b16419021b5242679fba,
+    type: 3}
+  m_PrefabInstance: {fileID: 936059036}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &936059047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936059046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boneType: center_feet
+  isTracked: 0
 --- !u!1 &996220521
 GameObject:
   m_ObjectHideFlags: 0
@@ -3485,10 +3511,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7653654c0c259034aa66e24fc5806b65, type: 3}
---- !u!224 &1202966577 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4641191731323736281, guid: 7653654c0c259034aa66e24fc5806b65,
-    type: 3}
+--- !u!4 &1202966577 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 1202966576}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1314498898
