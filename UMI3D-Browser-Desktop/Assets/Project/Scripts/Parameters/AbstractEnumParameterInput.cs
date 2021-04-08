@@ -45,7 +45,7 @@ namespace BrowserDesktop.Parameters
                         parameter = dto,
                         hoveredObjectId = GetCurrentHoveredObjectID()
                     };
-                    UMI3DCollaborationClientServer.Send(pararmeterDto, true);
+                    umi3d.cdk.UMI3DClientServer.SendData(pararmeterDto, true);
                 };
 
                 menuItem = new InputMenuItem()

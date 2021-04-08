@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Menu;
-using umi3d.cdk.collaboration;
 using umi3d.cdk.menu;
 using umi3d.common.interaction;
 
@@ -59,7 +58,7 @@ namespace BrowserDesktop.Parameters
                             parameter = dto,
                             hoveredObjectId = hoveredObjectId
                         };
-                        UMI3DCollaborationClientServer.Send(pararmeterDto, true);
+                        umi3d.cdk.UMI3DClientServer.SendData(pararmeterDto, true);
                     }
                 };
 

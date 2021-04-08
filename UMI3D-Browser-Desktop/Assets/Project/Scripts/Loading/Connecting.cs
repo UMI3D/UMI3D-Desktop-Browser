@@ -39,7 +39,7 @@ public class Connecting : Singleton<Connecting>
         base.Awake();
         passwordPannel.SetActive(false);
         identifier.GetIdentityAction = GetIdentifier;
-        identifier.GetLoginAction = GetLogin;
+        identifier.GetPinAction = GetLogin;
         identifier.ShouldDownloadLib = shouldDlLibraries;
         identifier.GetParameters = GetParameterDtos;
     }

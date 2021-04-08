@@ -194,7 +194,8 @@ namespace BrowserDesktop.Controller
             {
                 if (!CircularMenu.Instance.menuDisplayManager.menu.Contains(mouseData.ForceProjectionMenuItem))
                 {
-                    CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
+                    if (mouseData.ForcePorjectionReleasable)
+                        CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
                 }
                 else if (CircularMenu.Instance.menuDisplayManager.menu.Count == 1)
                 {
@@ -323,6 +324,9 @@ namespace BrowserDesktop.Controller
                         Interactable = hit.collider.gameObject.GetComponentInParent<InteractableContainer>();
                     if (Interactable != null)
                     {
+                        if (!Interactable.Interactable.Active)
+                            continue;
+
                         mouseData.CurrentHoveredId = UMI3DEnvironmentLoader.GetNodeID(hit.collider);
 
                         mouseData.CurentHovered = Interactable.Interactable;
@@ -333,10 +337,10 @@ namespace BrowserDesktop.Controller
                         if (Vector3.Distance(mouseData.worldPoint, hit.transform.position) < 0.1f) mouseData.centeredWorldPoint = hit.transform.position;
                         else mouseData.centeredWorldPoint = mouseData.worldPoint;
 
-                        mouseData.normal = hit.transform.InverseTransformDirection(hit.normal);
+                        mouseData.normal = Interactable.transform.InverseTransformDirection(hit.normal);
                         mouseData.worldNormal = hit.normal;
 
-                        mouseData.direction = hit.transform.InverseTransformDirection(ray.direction);
+                        mouseData.direction = Interactable.transform.InverseTransformDirection(ray.direction);
                         mouseData.worlDirection = ray.direction;
 
                         break;

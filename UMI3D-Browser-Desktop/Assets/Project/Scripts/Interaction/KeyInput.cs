@@ -16,9 +16,7 @@ limitations under the License.
 using BrowserDesktop.Controller;
 using BrowserDesktop.Menu;
 using System.Collections;
-using System.Linq;
 using umi3d.cdk;
-using umi3d.cdk.collaboration;
 using umi3d.cdk.interaction;
 using umi3d.common;
 using umi3d.common.interaction;
@@ -184,11 +182,12 @@ namespace BrowserDesktop.Interaction
                 LastFrameButton = InputLayoutManager.GetInputCode(activationButton);
             }
 
-            if (associatedInteraction != null && (!CircularMenu.Exists || !CircularMenu.Instance.IsExpanded))
+            if (associatedInteraction != null && (!SideMenu.Exists || !SideMenu.IsExpanded))
             {
                 if (Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)))
                 {
                     onInputDown.Invoke();
+                    
                     if ((associatedInteraction).hold)
                     {
                         var eventdto = new EventStateChangedDto
@@ -199,7 +198,7 @@ namespace BrowserDesktop.Interaction
                             toolId = this.toolId,
                             hoveredObjectId = hoveredObjectId
                         };
-                        UMI3DCollaborationClientServer.Send(eventdto, true);
+                        UMI3DClientServer.SendData(eventdto, true);
                         risingEdgeEventSent = true;
                     }
                     else
@@ -211,7 +210,7 @@ namespace BrowserDesktop.Interaction
                             toolId = this.toolId,
                             hoveredObjectId = hoveredObjectId
                         };
-                        UMI3DCollaborationClientServer.Send(eventdto, true);
+                        UMI3DClientServer.SendData(eventdto, true);
                     }
                 }
 
@@ -230,7 +229,7 @@ namespace BrowserDesktop.Interaction
                                 toolId = this.toolId,
                                 hoveredObjectId = hoveredObjectId
                             };
-                            UMI3DCollaborationClientServer.Send(eventdto, true);
+                            UMI3DClientServer.SendData(eventdto, true);
                             risingEdgeEventSent = false;
                         }
                     }
@@ -267,7 +266,7 @@ namespace BrowserDesktop.Interaction
                     toolId = this.toolId,
                     hoveredObjectId = hoveredObjectId
                 };
-                UMI3DCollaborationClientServer.Send(eventdto, true);
+                UMI3DClientServer.SendData(eventdto, true);
             }
             risingEdgeEventSent = false;
         }

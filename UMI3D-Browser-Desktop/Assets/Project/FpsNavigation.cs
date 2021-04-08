@@ -17,16 +17,31 @@ limitations under the License.
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
+using System.Collections;
 using umi3d.cdk;
 using umi3d.common;
 using UnityEngine;
 
+using UnityEngine.AI;
+
 public class FpsNavigation : AbstractNavigation
 {
     public Transform _viewpoint;
+    public Transform _neckPivot;
+    public float maxAngle;
     public Transform head;
     public Transform Neck;
     public Transform TorsoUpAnchor;
+
+    /// <summary>
+    /// Agent to limit user's movements.
+    /// </summary>
+    public NavMeshAgent agent;
+
+    /// <summary>
+    /// Current ground height.
+    /// </summary>
+    private float baseHeight;
 
     bool isActive = false;
     public FpsScriptableAsset data;
@@ -44,8 +59,6 @@ public class FpsNavigation : AbstractNavigation
 
     float MaxJumpVelocity;
     float MinJumpVelocity;
-
-    Quaternion UserYRotation;
 
     struct JumpData
     {
@@ -91,9 +104,20 @@ public class FpsNavigation : AbstractNavigation
 
     public override void Teleport(TeleportDto data)
     {
+        agent.enabled = false;
         Neck.position = data.position;
         Neck.rotation = data.rotation;
+        baseHeight = data.position.Y;
+
+        StartCoroutine(ResetNavmeshAgent());
     }
+
+    IEnumerator ResetNavmeshAgent ()
+    {
+        yield return null;
+        agent.enabled = true;
+    } 
+
     #endregion
 
     float ComputeJump(bool jumping)
@@ -119,21 +143,34 @@ public class FpsNavigation : AbstractNavigation
         return jumpData.deltaHeight;
     }
 
-    private void LateUpdate()
+    private void Update()
     {
         if (!isActive)
             return;
+
+        if (agent.isActiveAndEnabled && agent.isOnNavMesh)
+        {
+            NavMeshHit hit;
+            if(NavMesh.SamplePosition(agent.transform.position, out hit, .2f, NavMesh.AllAreas)){
+                baseHeight = hit.position.y;
+            }
+        }
+
         if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
         {
-            /*if (CircularMenu.Exists && CircularMenu.Instance.IsExpanded)
-            {
-                CircularMenu.Instance._Collapse();
-            }*/
-            //SideMenu.Display(!SideMenu.IsExpanded, !SideMenu.IsExpanded);
             PauseMenu.ToggleDisplay();
         }
 
         if (SideMenu.IsExpanded || CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHiden)
+        {
+            Vector3 position = Neck.transform.position;
+            position.y = jumpData.heigth + baseHeight;
+            Neck.transform.position = position;
+            return;
+        }
+            
+        
+        if (TextInputDisplayerElement.isTyping)
             return;
 
         if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.FreeHead; }
@@ -170,7 +207,7 @@ public class FpsNavigation : AbstractNavigation
         HandleView();
         Vector3 pos = Neck.rotation * new Vector3(Move.y, 0, Move.x);
         pos += Neck.transform.position;
-        pos.y = height;
+        pos.y = height + baseHeight;
         Neck.transform.position = pos;
     }
 
@@ -238,8 +275,8 @@ public class FpsNavigation : AbstractNavigation
             if (delta > data.YAngleRange.y) result.y = -data.YAngleRange.y + angleNeck.y;
         }
         _viewpoint.transform.rotation = Quaternion.Euler(result);
+        _neckPivot.transform.rotation = Quaternion.Euler(new Vector3(Mathf.Clamp(result.x, -maxAngle, maxAngle), result.y, result.z));
         head.transform.rotation = Quaternion.Euler(displayResult);
-        UserYRotation = Quaternion.Euler(new Vector3(0, result.y, 0));
     }
 
     Vector3 NormalizeAngle(Vector3 angle)
