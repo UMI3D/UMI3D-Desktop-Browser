@@ -310,7 +310,6 @@ namespace BrowserDesktop.Controller
 
         void MouseHandler()
         {
-            Debug.Log("isInputhold " + isInputHold);
             if (!(
                         mouseData.HoverState == HoverState.AutoProjected
                         && (CursorHandler.State == CursorHandler.CursorState.Clicked || SideMenu.IsExpanded || isInputHold)
