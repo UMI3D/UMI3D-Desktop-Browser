@@ -120,6 +120,11 @@ namespace BrowserDesktop.Controller
         public MouseData mouseData;
         public const float timeToHold = 0.1f;
 
+        /// <summary>
+        /// True if an Abstract Input is currently hold by a user.
+        /// </summary>
+        public static bool isInputHold = false;
+
         #endregion
 
         #region Inputs
@@ -307,7 +312,7 @@ namespace BrowserDesktop.Controller
         {
             if (!(
                         mouseData.HoverState == HoverState.AutoProjected
-                        && (CursorHandler.State == CursorHandler.CursorState.Clicked || SideMenu.IsExpanded)
+                        && (CursorHandler.State == CursorHandler.CursorState.Clicked || SideMenu.IsExpanded || isInputHold)
                ))
             {
                 mouseData.save();
