@@ -315,41 +315,68 @@ namespace BrowserDesktop.Controller
                         && (CursorHandler.State == CursorHandler.CursorState.Clicked || SideMenu.IsExpanded || isInputHold)
                ))
             {
+                Camera cam = Camera.main;
                 mouseData.save();
                 Vector3 screenPosition = Input.mousePosition;
-                Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+                Ray ray = new Ray(cam.transform.position, cam.transform.forward);
                 Debug.DrawRay(ray.origin, ray.direction.normalized * 100f, Color.red, 0, true);
                 RaycastHit[] hits = umi3d.common.Physics.RaycastAll(ray, 100f);
+
+                //1. Cast a ray to find all interactables
+                List<(RaycastHit, InteractableContainer)> interactables = new List<(RaycastHit, InteractableContainer)>();
                 foreach (RaycastHit hit in hits)
                 {
                     if (hit.collider.gameObject.GetComponentInParent<UMI3DEnvironmentLoader>() == null)
                         continue;
-                    var Interactable = hit.collider.gameObject.GetComponent<InteractableContainer>();
-                    if (Interactable == null)
-                        Interactable = hit.collider.gameObject.GetComponentInParent<InteractableContainer>();
-                    if (Interactable != null)
+                    var interactable = hit.collider.gameObject.GetComponent<InteractableContainer>();
+                    if (interactable == null)
+                        interactable = hit.collider.gameObject.GetComponentInParent<InteractableContainer>();
+                    if (interactable != null)
                     {
-                        if (!Interactable.Interactable.Active)
-                            continue;
-
-                        mouseData.CurrentHoveredId = UMI3DEnvironmentLoader.GetNodeID(hit.collider);
-
-                        mouseData.CurentHovered = Interactable.Interactable;
-                        mouseData.CurentHoveredTransform = Interactable.transform;
-
-                        mouseData.point = Interactable.transform.InverseTransformPoint(hit.point);
-                        mouseData.worldPoint = hit.point;
-                        if (Vector3.Distance(mouseData.worldPoint, hit.transform.position) < 0.1f) mouseData.centeredWorldPoint = hit.transform.position;
-                        else mouseData.centeredWorldPoint = mouseData.worldPoint;
-
-                        mouseData.normal = Interactable.transform.InverseTransformDirection(hit.normal);
-                        mouseData.worldNormal = hit.normal;
-
-                        mouseData.direction = Interactable.transform.InverseTransformDirection(ray.direction);
-                        mouseData.worlDirection = ray.direction;
-
-                        break;
+                        interactables.Add((hit, interactable));
                     }
+                }
+       
+                //2. Sort them by hasPriority and distance from user
+                interactables.Sort(delegate ((RaycastHit, InteractableContainer) x, (RaycastHit, InteractableContainer) y)
+                {
+                    if (x.Item2.Interactable.HasPriority && !y.Item2.Interactable.HasPriority) return -1;
+                    else if (!x.Item2.Interactable.HasPriority && y.Item2.Interactable.HasPriority) return 1;
+                    else
+                    {
+                        if (Vector3.Distance(cam.transform.position, x.Item1.point) >= Vector3.Distance(cam.transform.position, y.Item1.point))
+                            return 1;
+                        else
+                            return -1;
+                    }
+                });
+
+                foreach ((RaycastHit, InteractableContainer) entry in interactables)
+                {
+                    InteractableContainer interactableContainer = entry.Item2;
+                    Interactable interactable = interactableContainer.Interactable;
+                    RaycastHit hit = entry.Item1;
+
+                    if (!interactable.Active)
+                        continue;
+
+                    mouseData.CurrentHoveredId = UMI3DEnvironmentLoader.GetNodeID(hit.collider);
+
+                    mouseData.CurentHovered = interactable;
+                    mouseData.CurentHoveredTransform = interactableContainer.transform;
+
+                    mouseData.point = interactableContainer.transform.InverseTransformPoint(hit.point);
+                    mouseData.worldPoint = hit.point;
+                    if (Vector3.Distance(mouseData.worldPoint, hit.transform.position) < 0.1f) mouseData.centeredWorldPoint = hit.transform.position;
+                    else mouseData.centeredWorldPoint = mouseData.worldPoint;
+
+                    mouseData.normal = interactableContainer.transform.InverseTransformDirection(hit.normal);
+                    mouseData.worldNormal = hit.normal;
+
+                    mouseData.direction = interactableContainer.transform.InverseTransformDirection(ray.direction);
+                    mouseData.worlDirection = ray.direction;
+
+                    break;
                 }
                 Hover();
             }
