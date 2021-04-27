@@ -32,7 +32,7 @@ namespace BrowserDesktop.Controller
         static public bool CanProcess = false;
 
         //public UMI3DBrowserAvatar Avatar;
-        public Camera Camera;
+        public Transform CameraTransform;
 
         public InteractionMapper InteractionMapper;
 
@@ -315,10 +315,9 @@ namespace BrowserDesktop.Controller
                         && (CursorHandler.State == CursorHandler.CursorState.Clicked || SideMenu.IsExpanded || isInputHold)
                ))
             {
-                Camera cam = Camera.main;
                 mouseData.save();
                 Vector3 screenPosition = Input.mousePosition;
-                Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+                Ray ray = new Ray(CameraTransform.position, CameraTransform.forward);
                 Debug.DrawRay(ray.origin, ray.direction.normalized * 100f, Color.red, 0, true);
                 RaycastHit[] hits = umi3d.common.Physics.RaycastAll(ray, 100f);
 
@@ -344,7 +343,7 @@ namespace BrowserDesktop.Controller
                     else if (!x.Item2.Interactable.HasPriority && y.Item2.Interactable.HasPriority) return 1;
                     else
                     {
-                        if (Vector3.Distance(cam.transform.position, x.Item1.point) >= Vector3.Distance(cam.transform.position, y.Item1.point))
+                        if (Vector3.Distance(CameraTransform.position, x.Item1.point) >= Vector3.Distance(CameraTransform.position, y.Item1.point))
                             return 1;
                         else
                             return -1;
