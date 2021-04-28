@@ -45,7 +45,6 @@ namespace BrowserDesktop.Cursor
                 SwichOnDown = (CursorHandler.State == CursorHandler.CursorState.Hover);
                 if (SwichOnDown)
                 {
-                    MouseAndKeyboardController.isInputHold = true;
                     CursorHandler.State = CursorHandler.CursorState.Clicked;
                 }
                 lastObject = null;
@@ -55,7 +54,6 @@ namespace BrowserDesktop.Cursor
             {
                 if (SwichOnDown && CursorHandler.State == CursorHandler.CursorState.Clicked)
                 {
-                    MouseAndKeyboardController.isInputHold = false;
                     CursorHandler.State = CursorHandler.CursorState.Hover;
                 }
                    
