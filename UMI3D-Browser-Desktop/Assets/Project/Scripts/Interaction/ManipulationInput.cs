@@ -309,8 +309,13 @@ namespace BrowserDesktop.Interaction
                             }
                             else
                             {
+                                if (DoesPerformRotation())
+                                {
+                                    CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
+                                }
+
                                 manipulated = true;
-                                CursorHandler.SetMovement(this, CursorHandler.CursorMovement.FreeHiden); 
+                                
                                 StartPosition = frameOfReference.position;
                                 manipulationCursor.position = StartPosition;
                                 frameIndicator.gameObject.SetActive(true);
@@ -394,6 +399,13 @@ namespace BrowserDesktop.Interaction
             }
         }
 
+        bool DoesPerformRotation()
+        {
+            if (DofGroup == DofGroupEnum.RX || DofGroup == DofGroupEnum.RY || DofGroup == DofGroupEnum.RZ || DofGroup == DofGroupEnum.RX_RZ || DofGroup == DofGroupEnum.RX_RY || DofGroup == DofGroupEnum.RY_RZ || DofGroup == DofGroupEnum.RX_RY_RZ)
+                return true;
+            else
+                return false;
+        }
 
         public override AbstractInteractionDto CurrentInteraction()
         {
