@@ -61,8 +61,8 @@ namespace BrowserDesktop.Controller
 
         public struct MouseData
         {
-            public bool ForcePorjection;
-            public bool ForcePorjectionReleasable;
+            public bool ForceProjection;
+            public bool ForceProjectionReleasable;
             public HoldableButtonMenuItem ForceProjectionMenuItem;
 
             public Interactable OldHovered;
@@ -199,7 +199,7 @@ namespace BrowserDesktop.Controller
             {
                 if (!CircularMenu.Instance.menuDisplayManager.menu.Contains(mouseData.ForceProjectionMenuItem))
                 {
-                    if (mouseData.ForcePorjectionReleasable)
+                    if (mouseData.ForceProjectionReleasable)
                         CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
                 }
                 else if (CircularMenu.Instance.menuDisplayManager.menu.Count == 1)
@@ -212,7 +212,7 @@ namespace BrowserDesktop.Controller
         void UnequipeForceProjection()
         {
             InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
-            mouseData.ForcePorjection = false;
+            mouseData.ForceProjection = false;
             mouseData.CurentHovered = null;
             mouseData.CurentHoveredTransform = null;
             mouseData.OldHovered = null;
@@ -222,7 +222,7 @@ namespace BrowserDesktop.Controller
 
         void ForceProjectionMenuItem(bool pressed)
         {
-            if (mouseData.ForcePorjectionReleasable)
+            if (mouseData.ForceProjectionReleasable)
             {
                 DeleteForceProjectionMenuItem();
                 UnequipeForceProjection();
@@ -277,7 +277,7 @@ namespace BrowserDesktop.Controller
 
         private void LateUpdate()
         {
-            CursorHandler.Instance.ExitIndicator = mouseData.ForcePorjection;
+            CursorHandler.Instance.ExitIndicator = mouseData.ForceProjection;
             if (CanProcess)
             {
                 if (MainMenu.IsDisplaying)
@@ -387,7 +387,7 @@ namespace BrowserDesktop.Controller
 
         void Hover()
         {
-            if (mouseData.ForcePorjection)
+            if (mouseData.ForceProjection)
             {
                 if (CircularMenu.Exists && !CircularMenu.Instance.IsEmpty())
                 {
@@ -397,64 +397,74 @@ namespace BrowserDesktop.Controller
                     ||
                     Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
                 {
-                    if(mouseData.ForcePorjectionReleasable)
+                    if(mouseData.ForceProjectionReleasable)
                         UnequipeForceProjection();
                 }
             }
-            else
+
+            if (mouseData.CurentHovered != null)
             {
-                if (mouseData.CurentHovered != null)
+                if (mouseData.CurentHovered != mouseData.OldHovered)
                 {
-                    if (mouseData.CurentHovered != mouseData.OldHovered)
+                    if (mouseData.OldHovered != null)
                     {
-                        if (mouseData.OldHovered != null)
+                        if (!mouseData.ForceProjection)
                         {
                             if (mouseData.HoverState == HoverState.AutoProjected)
                             {
                                 InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                             }
-                            mouseData.OldHovered.HoverExit(hoverBoneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
                             CircularMenu.Collapse();
-                            mouseData.OldHovered = null;
                         }
-                        mouseData.HoverState = HoverState.Hovering;
-                        if (mouseData.CurentHovered.dto.interactions.Count > 0 && IsCompatibleWith(mouseData.CurentHovered))
-                        {
-                            InteractionMapper.SelectTool(mouseData.CurentHovered.dto.id,true, this, mouseData.CurrentHoveredId, reason);
-                            CursorHandler.State = CursorHandler.CursorState.Hover;
-                            mouseData.HoverState = HoverState.AutoProjected;
-                            CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
-                            mouseData.OldHovered = mouseData.CurentHovered;
-                        }
-                        mouseData.CurentHovered.HoverEnter(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
-                    }
-                    else
-                    {
-                        if (mouseData.LastHoveredId != null && mouseData.CurrentHoveredId != mouseData.LastHoveredId)
-                        {
-                            if (associatedInputs.ContainsKey(mouseData.CurentHovered.dto.id))
-                            {
-                                foreach (var input in associatedInputs[mouseData.CurentHovered.dto.id])
-                                    input.UpdateHoveredObjectId(mouseData.CurrentHoveredId);
-                            }
-                        }
+
+
+                        mouseData.OldHovered.HoverExit(hoverBoneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
+                        mouseData.OldHovered = null;
                     }
 
-                    mouseData.CurentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
+                    mouseData.HoverState = HoverState.Hovering;
+
+                    if (mouseData.CurentHovered.dto.interactions.Count > 0 && IsCompatibleWith(mouseData.CurentHovered) && !mouseData.ForceProjection)
+                    {
+                        InteractionMapper.SelectTool(mouseData.CurentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
+                        CursorHandler.State = CursorHandler.CursorState.Hover;
+                        mouseData.HoverState = HoverState.AutoProjected;
+                        CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
+                        mouseData.OldHovered = mouseData.CurentHovered;
+                    }
+
+                    mouseData.CurentHovered.HoverEnter(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
                 }
-                else if (mouseData.OldHovered != null)
+                else
+                {
+                    if (mouseData.LastHoveredId != null && mouseData.CurrentHoveredId != mouseData.LastHoveredId)
+                    {
+                        if (associatedInputs.ContainsKey(mouseData.CurentHovered.dto.id))
+                        {
+                            foreach (var input in associatedInputs[mouseData.CurentHovered.dto.id])
+                                input.UpdateHoveredObjectId(mouseData.CurrentHoveredId);
+                        }
+                    }
+                }
+
+                mouseData.CurentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
+            }
+            else if (mouseData.OldHovered != null)
+            {
+                if (!mouseData.ForceProjection)
                 {
                     if (mouseData.HoverState == HoverState.AutoProjected)
                     {
                         CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
                         InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                     }
-                    mouseData.OldHovered.HoverExit(hoverBoneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
                     CircularMenu.Collapse();
                     CursorHandler.State = CursorHandler.CursorState.Default;
-                    mouseData.OldHovered = null;
-                    mouseData.HoverState = HoverState.None;
                 }
+
+                mouseData.OldHovered.HoverExit(hoverBoneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
+                mouseData.OldHovered = null;
+                mouseData.HoverState = HoverState.None;
             }
         }
 
@@ -737,9 +747,9 @@ namespace BrowserDesktop.Controller
                 mouseData.HoverState = HoverState.None;
                 CursorHandler.State = CursorHandler.CursorState.Default;
             }
-            if (mouseData.ForcePorjection)
+            if (mouseData.ForceProjection)
             {
-                mouseData.ForcePorjection = false;
+                mouseData.ForceProjection = false;
                 DeleteForceProjectionMenuItem();
             }
             tool.onReleased(interactionBoneType);
@@ -752,8 +762,8 @@ namespace BrowserDesktop.Controller
             base.Project(tool, releasable, reason, hoveredObjectId); ;
             if (reason is RequestedByEnvironment)
             {
-                mouseData.ForcePorjection = true;
-                mouseData.ForcePorjectionReleasable = releasable;
+                mouseData.ForceProjection = true;
+                mouseData.ForceProjectionReleasable = releasable;
             }
             tool.onProjected(interactionBoneType);
         }
