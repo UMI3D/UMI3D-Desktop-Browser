@@ -105,19 +105,28 @@ namespace BrowserDesktop.Menu
             backCircularMenu = root.Q<Button>("interaction-menu-back");
             backCircularMenu.clickable.clicked += () =>
             {
-                Display(false, false);
+                if (CircularMenu.Instance.Count() > 0 || EventMenu.NbEventsDIsplayed > 0)
+                    Display(true, false);
+                else
+                    Display(false, false);
             };
 
             root.Q<Button>("toolbox-menu-back").clickable.clicked += () =>
             {
-                Display(false, false);
+                if (CircularMenu.Instance.Count() > 0 || EventMenu.NbEventsDIsplayed > 0)
+                    Display(true, false);
+                else
+                    Display(false, false);
             };
 
             root.Q<VisualElement>("game-menu").RegisterCallback<MouseDownEvent>(e =>
             {
                 if ((e.clickCount == 1) && (isExpanded) && !wasExpandedLastFrame)
                 {
-                    Display(false, false);
+                    if (CircularMenu.Instance.Count() > 0 || EventMenu.NbEventsDIsplayed > 0)
+                        Display(true, false);
+                    else
+                        Display(false, false);
                 }
             });
         }
