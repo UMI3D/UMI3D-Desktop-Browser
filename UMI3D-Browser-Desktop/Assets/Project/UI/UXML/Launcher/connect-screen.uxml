@@ -1,0 +1,38 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Template name="favorite-env-item" src="favorite-env-item.uxml" />
+    <ui:Template name="SliderElement" src="/Assets/Project/UI/UXML/CustomElement/SliderElement.uxml" />
+    <ui:VisualElement name="url-screen" style="display: flex; height: 100%; margin-left: 2px; margin-right: 2px;">
+        <ui:VisualElement style="flex-grow: 0; justify-content: flex-start; height: auto;">
+            <ui:VisualElement name="url-center" style="align-items: stretch; justify-content: center; height: auto;">
+                <ui:VisualElement name="logo" style="height: 90px; background-image: url(&apos;/Assets/Project/UI/UI_connection/logo_page.png&apos;); -unity-background-scale-mode: scale-to-fit; margin-bottom: 15px; margin-top: 20px;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="favorites-environement">
+                <ui:Label text="Favorite environments" class="white-txt medium-size-txt" style="margin-bottom: 15px;" />
+                <ui:ScrollView mode="Horizontal" name="favorites-environement-scrollview" style="height: 110px; width: 400px; margin-left: auto; margin-right: auto; margin-top: 25px; display: none;">
+                    <ui:Instance template="favorite-env-item" name="favorite-env-item" />
+                    <ui:Instance template="favorite-env-item" name="favorite-env-item" />
+                    <ui:Instance template="favorite-env-item" name="favorite-env-item" />
+                    <ui:Instance template="favorite-env-item" name="favorite-env-item" />
+                </ui:ScrollView>
+                <ui:Instance template="SliderElement" name="SliderElement" style="width: 290px; margin-left: auto; margin-right: auto; height: 200px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement style="height: auto; justify-content: flex-start; flex-direction: column; flex-grow: 0; align-items: stretch;">
+            <ui:Button text="Connect to a new server" name="newConnection" class="white-btn" style="background-color: rgba(93, 93, 93, 0); width: 100%; height: auto; margin-left: 0; margin-right: auto; margin-top: 20px; margin-bottom: 8px; position: relative; bottom: auto; left: 0; flex-direction: column; justify-content: flex-start; align-items: stretch; -unity-text-align: middle-left; font-size: 15px;" />
+            <ui:VisualElement name="inputs-url-container" style="flex-direction: column; justify-content: space-between; height: 70px; display: flex; overflow: visible; visibility: visible;">
+                <ui:VisualElement style="flex-direction: row; width: 100%; display: flex; visibility: visible; flex-grow: 0; height: auto;">
+                    <ui:TextField picking-mode="Ignore" name="url-input" text="test.com" value="test.com" class="textfield-with-image-bck grey-text-field" style="-unity-text-align: upper-center; flex-grow: 1; height: 42px; display: flex; font-size: 15px;" />
+                    <ui:Button text="&#10;" name="url-enter-btn" class="input-button input-arrow-button" style="width: 42px; color: rgb(255, 255, 255); -unity-font-style: bold; height: 42px; align-items: center; justify-content: center;">
+                        <ui:VisualElement style="width: 27px; height: 27px;" />
+                    </ui:Button>
+                </ui:VisualElement>
+                <ui:VisualElement style="visibility: visible; flex-direction: row;">
+                    <ui:Toggle label="Remember this server" name="toggleRemember" style="flex-direction: row-reverse; font-size: 15px; -unity-text-align: middle-left; margin-left: 30px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Button text="Manage libraries" name="manage-library-btn" class="white-btn" style="background-color: rgba(93, 93, 93, 0); width: 100%; height: auto; margin-left: auto; margin-right: auto; margin-top: 12px; margin-bottom: 8px; position: relative; bottom: auto; left: 0; -unity-text-align: middle-left; font-size: 15px;" />
+            <ui:Button text="advanced connection settings" name="advanced-connection-btn" class="white-btn" style="background-color: rgba(93, 93, 93, 0); width: 100%; height: auto; margin-left: auto; margin-right: auto; margin-top: 12px; margin-bottom: 8px; position: relative; bottom: auto; left: 0; -unity-text-align: middle-left; font-size: 15px;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="height: auto; justify-content: flex-start; flex-direction: column;" />
+    </ui:VisualElement>
+</ui:UXML>
