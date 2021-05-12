@@ -49,12 +49,18 @@ public class LauncherManager : MonoBehaviour
     VisualElement urlScreen;
     TextField urlInput;
     Button urlEnterBtn;
+    Button connectNewServBtn;
 
+    //Advanced Connection screen
+    VisualElement advancedConnectionScreen;
+    TextField PortInput;
+    TextField IpInput;
 
     //Asset libraries screen
     VisualElement librariesScreen;
     ScrollView librariesList;
     Button backMenuBnt;
+    Button nextMenuBnt;
 
     //Favorite env
     public VisualTreeAsset favoriteEnvItemTreeAsset;
@@ -64,6 +70,10 @@ public class LauncherManager : MonoBehaviour
 
     #region Data
 
+
+
+    private UserPreferencesManager.ServerData currentServerConnectionData;
+    private List<UserPreferencesManager.ServerData> favoriteServerConnectionData = new List<UserPreferencesManager.ServerData>();
 
     private UserPreferencesManager.Data currentConnectionData;
 
@@ -104,25 +114,46 @@ public class LauncherManager : MonoBehaviour
         BindLibrariesScreen();
 
         root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
+        advancedConnectionScreen = root.Q<VisualElement>("advancedConnectionScreen");
     }
 
     private void BindURLScreen()
     {
         urlScreen = root.Q<VisualElement>("url-screen");
+    /*
+        foreach (VisualElement item in urlScreen.Children())
+        {
+            Debug.Log(item.name + " " + item.GetType().ToString());
+            foreach (VisualElement child in item.Children())
+            {
+                Debug.Log( " -- " + child.name +" "+ child.GetType().ToString());
+            }
+        }*/
 
         urlInput = urlScreen.Q<TextField>("url-input");
         urlEnterBtn = urlScreen.Q<Button>("url-enter-btn");
 
+        IpInput = root.Q<TextField>("IpInput");
+        PortInput = root.Q<TextField>("PortInput");
+
+        //Debug.Log("urlEnterBtn : " + (urlEnterBtn != null));
+
         urlEnterBtn.clickable.clicked += SetDomain;
+
+        connectNewServBtn = urlScreen.Q<Button>("newConnection");
+        Debug.Log("connectNewServBtn : " + (connectNewServBtn != null));
+        connectNewServBtn.clickable.clicked += () => ToggleDisplayElement(urlScreen.Q<VisualElement>("inputs-url-container"));
 
         var manageLibraryBtn = urlScreen.Q<Button>("manage-library-btn");
         manageLibraryBtn.clickable.clicked += DisplayLibraries;
-        manageLibraryBtn.transform.position -= new Vector3(75, 0, 0);
+        //manageLibraryBtn.transform.position -= new Vector3(75, 0, 0);
 
         favoriteEnvironmentSlider = new SliderElement();
         favoriteEnvironmentSlider.SetUp(urlScreen.Q<VisualElement>("slider"));
 
         umiLogo = urlScreen.Q<VisualElement>("logo");
+
+        root.Q<Button>("advanced-connection-btn").clickable.clicked += BindAdvancedConnection;
     }
 
     private void BindLibrariesScreen()
@@ -131,7 +162,30 @@ public class LauncherManager : MonoBehaviour
         librariesList = librariesScreen.Q<ScrollView>("libraries-list");
 
         backMenuBnt = root.Q<Button>("back-menu-btn");
+        nextMenuBnt = root.Q<Button>("nextMenuBtn");
         backMenuBnt.clickable.clicked += ResetLauncher;
+        //nextMenuBnt.clickable.clicked += DirectConnect;
+
+    }
+
+    private void BindAdvancedConnection()
+    {
+        backMenuBnt = root.Q<Button>("back-menu-btn");
+        backMenuBnt.clickable.clicked += ResetLauncher;
+        nextMenuBnt = root.Q<Button>("nextMenuBtn"); 
+        nextMenuBnt.clickable.clicked += SetDomain;
+        backMenuBnt.style.display = DisplayStyle.Flex;
+        nextMenuBnt.style.display = DisplayStyle.Flex;
+        urlScreen.style.display = DisplayStyle.None;
+        advancedConnectionScreen.style.display = DisplayStyle.Flex;
+        var s = currentConnectionData.ip.Split(':');
+        IpInput.value = s[0];
+        if(s.Length > 1)
+        {
+            PortInput.value = s[1];
+        }
+
+
     }
 
     #endregion
@@ -141,6 +195,12 @@ public class LauncherManager : MonoBehaviour
     private void Update()
     {
         CheckShortcuts();
+    }
+
+    private void ToggleDisplayElement(VisualElement visualElement)
+    {
+        //Debug.Log("Toggle visual element");
+        visualElement.style.display = DisplayStyle.Flex == visualElement.style.display.value ? DisplayStyle.None : DisplayStyle.Flex;
     }
 
     /// <summary>
@@ -169,30 +229,56 @@ public class LauncherManager : MonoBehaviour
     /// </summary>
     private void SetDomain()
     {
-        string url = urlInput.value;
-
+        //string url = urlInput.value;
+        string url = IpInput.value.Trim() + ":" + PortInput.value.Trim(); 
         if (string.IsNullOrEmpty(url))
         {
             //urlScreen.Q<Label>("url-error").style.display = DisplayStyle.Flex;
             //urlScreen.Q<Label>("url-error").text = "The domain is empty.";
         } else
         {
-            currentConnectionData.ip = url.Trim();
+            currentConnectionData.ip = url;
 
-            urlScreen.style.display = DisplayStyle.None;;
+            urlScreen.style.display = DisplayStyle.None;
             previousStep = ResetLauncher;
-            Connect();
+            DirectConnect();
         }
     }
 
     /// <summary>
-    /// Initiates the connection to the server.
+    /// Initiates the connection to the environment.
     /// </summary>
-    private void Connect()
+    private void DirectConnect()
     {
+        //currentConnectionData.environmentName
         UserPreferencesManager.StoreUserData(currentConnectionData);
       
         StartCoroutine(WaitReady());
+    }
+
+
+    private void SetServer(string serverName)
+    {
+        serverName = serverName.Trim();
+        if (root.Q<Toggle>("toggleRemember").value)
+        {
+            if (currentServerConnectionData != null)
+                currentServerConnectionData.serverName = serverName;
+            else
+                currentServerConnectionData = new UserPreferencesManager.ServerData() { serverName = serverName };
+
+            UserPreferencesManager.AddRegisterdeServerData(currentServerConnectionData);
+        }
+    }
+
+    /// <summary>
+    /// Initiates the connection to the forge master server.
+    /// </summary>
+    private void Connect(string serverName) // TODO
+    {
+        
+        Debug.Log("Try to connect to : " + currentServerConnectionData.serverName);
+        //TODO
     }
 
     /// <summary>
@@ -216,35 +302,44 @@ public class LauncherManager : MonoBehaviour
     private void ResetLauncher()
     {
         currentConnectionData = UserPreferencesManager.GetPreviousConnectionData();
-        favoriteConnectionData = UserPreferencesManager.GetFavoriteConnectionData();
-
-        DisplayFavoriteEnvironments();
+        //favoriteConnectionData = UserPreferencesManager.GetFavoriteConnectionData();
+        favoriteServerConnectionData = UserPreferencesManager.GetRegisteredServerData();
+        //DisplayFavoriteEnvironments();
+        DisplayRegisteredServers();
+        currentServerConnectionData = UserPreferencesManager.GetPreviousServerData();
 
         librariesScreen.style.display = DisplayStyle.None;
         urlScreen.style.display = DisplayStyle.Flex;
+        //Debug.Log(backMenuBnt);
+        //Debug.Log(nextMenuBnt);
+
         backMenuBnt.style.display = DisplayStyle.None;
+        nextMenuBnt.style.display = DisplayStyle.None;
+        advancedConnectionScreen.style.display = DisplayStyle.None;
+
 
         previousStep = null;
         nextStep = SetDomain;
-        urlInput.value = currentConnectionData.ip;
+        urlInput.value = currentServerConnectionData.serverName;// currentConnectionData.ip;
     }
 
     /// <summary>
     /// Displays the favorites environments stored on  users' computers.
     /// </summary>
+    [System.Obsolete("use favorite server not favorite environment")]
     private void DisplayFavoriteEnvironments()
     {
         favoriteEnvironmentSlider.ClearItems();
         foreach (var env in favoriteConnectionData)
         {
             var item = favoriteEnvItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
-            item.Q<Label>().text = env.environmentName;
+            item.Q<Label>().text = string.IsNullOrEmpty(env.environmentName) ? env.ip : env.environmentName;
             item.RegisterCallback<MouseDownEvent>(e =>
             {
                 if (e.clickCount == 2)
                 {
                     this.currentConnectionData.ip = env.ip;
-                    Connect();
+                    DirectConnect(); 
                 }
             });
             item.Q<Button>("delete-item").clickable.clicked += () =>
@@ -266,6 +361,41 @@ public class LauncherManager : MonoBehaviour
         }
     }
 
+    private void DisplayRegisteredServers()
+    {
+        favoriteEnvironmentSlider.ClearItems();
+        foreach (UserPreferencesManager.ServerData env in favoriteServerConnectionData)
+        {
+            var item = favoriteEnvItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
+            item.Q<Label>().text = env.serverName;
+            item.RegisterCallback<MouseDownEvent>(e =>
+            {
+                if (e.clickCount == 2)
+                {
+                    this.currentServerConnectionData.serverName = env.serverName;
+                    //this.currentConnectionData.ip = env.ip;
+                    DirectConnect();// TODO
+                }
+            });
+            item.Q<Button>("delete-item").clickable.clicked += () =>
+            {
+                DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
+                dialogue.Setup(env.serverName, "Delete this server from registered ?", "YES", "NO", (b) =>
+                {
+                    if (b)
+                    {
+                        favoriteServerConnectionData.Remove(favoriteServerConnectionData.Find(d => d.serverName == env.serverName));
+                        UserPreferencesManager.StoreRegisteredServerData(favoriteServerConnectionData);
+                        favoriteEnvironmentSlider.RemoveElement(item);
+                    }
+                },
+                true);
+                root.Add(dialogue);
+            };
+            favoriteEnvironmentSlider.AddElement(item);
+        }
+    }
+
     /// <summary>
     /// Displays the libraries install on users' computers and allows tehm to unistall these libs.
     /// </summary>
@@ -273,6 +403,7 @@ public class LauncherManager : MonoBehaviour
     {
         urlScreen.style.display = DisplayStyle.None;
         backMenuBnt.style.display = DisplayStyle.Flex;
+        nextMenuBnt.style.display = DisplayStyle.None;
         librariesScreen.style.display = DisplayStyle.Flex;
         nextStep = null;
         previousStep = ResetLauncher;

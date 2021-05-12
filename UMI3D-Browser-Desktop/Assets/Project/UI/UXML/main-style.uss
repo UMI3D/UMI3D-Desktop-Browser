@@ -467,15 +467,15 @@ Toggle > Label {
 }
 
 .btn-left-arrow {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_back_ENABLE.png');
+    background-image: url('/Assets/Project/UI/UI_connection/btn_pagePREVIOUS_ENABLE.png');
 }
 
 .btn-left-arrow:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_back_HOVER.png');
+    background-image: url('/Assets/Project/UI/UI_connection/btn_pagePREVIOUS_HOVER.png');
 }
 
 .btn-left-arrow:active {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_back_PRESS.png');
+    background-image: url('/Assets/Project/UI/UI_connection/btn_pagePREVIOUS_PRESS.png');
 }
 
 .bin-btn {
