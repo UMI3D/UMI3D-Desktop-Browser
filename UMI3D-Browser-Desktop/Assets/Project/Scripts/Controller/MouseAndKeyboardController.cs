@@ -202,7 +202,7 @@ namespace BrowserDesktop.Controller
                     if (mouseData.ForceProjectionReleasable)
                         CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
                 }
-                else if (CircularMenu.Instance.menuDisplayManager.menu.Count == 1)
+                else if (CircularMenu.Instance.menuDisplayManager.menu.Count + EventMenu.NbEventsDIsplayed == 1)
                 {
                     DeleteForceProjectionMenuItem();
                 }
@@ -389,7 +389,7 @@ namespace BrowserDesktop.Controller
         {
             if (mouseData.ForceProjection)
             {
-                if (CircularMenu.Exists && !CircularMenu.Instance.IsEmpty())
+                if (CircularMenu.Exists && (!CircularMenu.Instance.IsEmpty() || EventMenu.NbEventsDIsplayed > 0))
                 {
                     CreateForceProjectionMenuItem();
                 }
@@ -735,6 +735,7 @@ namespace BrowserDesktop.Controller
 
         public override void Release(AbstractTool tool, InteractionMappingReason reason)
         {
+            Debug.Log("RELEASE");
             //try
             //{
             base.Release(tool, reason);
@@ -764,6 +765,7 @@ namespace BrowserDesktop.Controller
             {
                 mouseData.ForceProjection = true;
                 mouseData.ForceProjectionReleasable = releasable;
+                Debug.Log("TOOL " + tool.name + " " + releasable);
             }
             tool.onProjected(interactionBoneType);
         }
