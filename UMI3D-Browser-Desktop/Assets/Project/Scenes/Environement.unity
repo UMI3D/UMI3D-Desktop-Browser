@@ -5863,7 +5863,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectionMemory: {fileID: 498482125}
-  Camera: {fileID: 936059042}
+  CameraTransform: {fileID: 936059041}
   InteractionMapper: {fileID: 498482124}
   dofGroups: 04000000050000000600000001000000020000000300000008000000090000000a000000
   ManipulationActionInput:

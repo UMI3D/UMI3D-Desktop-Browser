@@ -200,6 +200,7 @@ namespace BrowserDesktop.Interaction
                         };
                         UMI3DClientServer.SendData(eventdto, true);
                         risingEdgeEventSent = true;
+                        MouseAndKeyboardController.isInputHold = true;
                     }
                     else
                     {
@@ -231,6 +232,7 @@ namespace BrowserDesktop.Interaction
                             };
                             UMI3DClientServer.SendData(eventdto, true);
                             risingEdgeEventSent = false;
+                            MouseAndKeyboardController.isInputHold = false;
                         }
                     }
                 }
@@ -267,6 +269,7 @@ namespace BrowserDesktop.Interaction
                     hoveredObjectId = hoveredObjectId
                 };
                 UMI3DClientServer.SendData(eventdto, true);
+                MouseAndKeyboardController.isInputHold = false;
             }
             risingEdgeEventSent = false;
         }
