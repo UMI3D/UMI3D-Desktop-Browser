@@ -53,10 +53,7 @@ namespace BrowserDesktop.Cursor
             onInputUp.AddListener(() =>
             {
                 if (SwichOnDown && CursorHandler.State == CursorHandler.CursorState.Clicked)
-                {
                     CursorHandler.State = CursorHandler.CursorState.Hover;
-                }
-                   
                 constrainDistanceChange = false;
                 //sdistCursor = 1;
             });

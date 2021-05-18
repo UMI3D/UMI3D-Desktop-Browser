@@ -25,7 +25,7 @@ namespace Microsoft.MixedReality.Toolkit.Editor
             JPG = 2
         }
 
-        private static readonly string[] textureExtensions = new string[] { "tga", "png", "jpg", "jpeg", "TGA", "PNG", "JPG", "JPEG" };
+        private static readonly string[] textureExtensions = new string[] { "tga", "png", "jpg" };
         private const float defaultUniformValue = -0.01f;
 
         private Texture2D metallicMap;

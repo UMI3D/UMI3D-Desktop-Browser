@@ -2180,13 +2180,9 @@ namespace GLTFast {
             if(!mimeType.StartsWith("image/")) return ImageFormat.Unknown;
             var sub = mimeType.Substring(6);
             switch(sub) {
-                case "jpg":
                 case "jpeg":
-                case "JPEG":
-                case "JPG":
                     return ImageFormat.Jpeg;
                 case "png":
-                case "PNG":
                     return ImageFormat.PNG;
                 case "ktx":
                 case "ktx2":
