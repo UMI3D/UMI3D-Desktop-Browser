@@ -735,7 +735,6 @@ namespace BrowserDesktop.Controller
 
         public override void Release(AbstractTool tool, InteractionMappingReason reason)
         {
-            Debug.Log("RELEASE");
             //try
             //{
             base.Release(tool, reason);
@@ -765,7 +764,6 @@ namespace BrowserDesktop.Controller
             {
                 mouseData.ForceProjection = true;
                 mouseData.ForceProjectionReleasable = releasable;
-                Debug.Log("TOOL " + tool.name + " " + releasable);
             }
             tool.onProjected(interactionBoneType);
         }
