@@ -16,24 +16,21 @@ limitations under the License.
 
 using System;
 
-namespace umi3d.common.userCapture
+namespace umi3d.common
 {
     /// <summary>
-    /// Class to describe a bone's 6-D pose in the frame of reference of a user.
+    /// Abstract class to describe an interpolation operation
     /// </summary>
-    [Serializable]
-    public class BoneDto : UMI3DDto
+    public class AbstractInterpolationPropertyDto : AbstractOperationDto
     {
         /// <summary>
-        /// Defines the type of the bone.
+        /// The unique identifier of the entity
         /// </summary>
-        public string boneType;
+        public string entityId;
 
-        public SerializableVector3 position;
-
-        public SerializableVector4 rotation;
-
-        public SerializableVector3 scale;
-
+        /// <summary>
+        /// The name of the interpolated property
+        /// </summary>
+        public string property;
     }
 }
