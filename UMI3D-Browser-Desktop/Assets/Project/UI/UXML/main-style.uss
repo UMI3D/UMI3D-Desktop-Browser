@@ -478,6 +478,18 @@ Toggle > Label {
     background-image: url('/Assets/Project/UI/UI_connection/btn_pagePREVIOUS_PRESS.png');
 }
 
+.btn-right-arrow {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_pageNEXT_ENABLE.png');
+}
+
+.btn-right-arrow:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_pageNEXT_HOVER.png');
+}
+
+.btn-right-arrow:active {
+    background-image: url('/Assets/Project/UI/UI_connection/btn_pageNEXT_PRESS.png');
+}
+
 .bin-btn {
     background-image: url('/Assets/Project/UI/UI_connection/btn_delete_ENABLE_1.png');
 }
