@@ -87,12 +87,17 @@ public class LauncherManager : MonoBehaviour
     Action nextStep = null;
     Action previousStep = null;
 
+    public LaucherOnMasterServer masterServer;
+
+
     #endregion
 
     #endregion
 
     void Start()
     {
+        masterServer = new LaucherOnMasterServer();
+
         Debug.Assert(panelRenderer != null);
         Debug.Assert(dialogueBoxTreeAsset != null);
         Debug.Assert(libraryEntryTreeAsset != null);
@@ -117,6 +122,8 @@ public class LauncherManager : MonoBehaviour
         advancedConnectionScreen = root.Q<VisualElement>("advancedConnectionScreen");
     }
 
+    
+
     private void BindURLScreen()
     {
         urlScreen = root.Q<VisualElement>("url-screen");
@@ -138,7 +145,7 @@ public class LauncherManager : MonoBehaviour
 
         //Debug.Log("urlEnterBtn : " + (urlEnterBtn != null));
 
-        urlEnterBtn.clickable.clicked += SetDomain;
+        urlEnterBtn.clickable.clicked += ()=> SetServer(urlInput.value);// SetDomain;
 
         connectNewServBtn = urlScreen.Q<Button>("newConnection");
         Debug.Log("connectNewServBtn : " + (connectNewServBtn != null));
@@ -269,15 +276,19 @@ public class LauncherManager : MonoBehaviour
 
             UserPreferencesManager.AddRegisterdeServerData(currentServerConnectionData);
         }
+        Connect(serverName);
     }
 
     /// <summary>
     /// Initiates the connection to the forge master server.
     /// </summary>
-    private void Connect(string serverName) // TODO
+    private void Connect(string serverName) 
     {
         
-        Debug.Log("Try to connect to : " + currentServerConnectionData.serverName);
+        Debug.Log("Try to connect to : " + serverName);
+        masterServer.ConnectToMasterServer(
+            () => masterServer.SendDataSession("test", (ser) => { Debug.Log(" update UI "); })
+            , serverName);
         //TODO
     }
 
