@@ -15,7 +15,6 @@ using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Frame;
 using BeardedManStudios.Forge.Networking.Unity;
 using System.Collections;
-using System.Linq;
 using umi3d.cdk.userCapture;
 using umi3d.common;
 using umi3d.common.collaboration;
@@ -30,7 +29,6 @@ namespace umi3d.cdk.collaboration
     public class UMI3DForgeClient : ForgeSocketBase
     {
         uint Me { get { return UMI3DCollaborationClientServer.UserDto.networkId; } }
-        bool useDto { get { return UMI3DCollaborationClientServer.useDto; } }
 
         UMI3DUser GetUserByNetWorkId(uint nid)
         {
@@ -221,23 +219,13 @@ namespace umi3d.cdk.collaboration
         public void SendVOIP(int length, byte[] sample)
         {
             if (client == null || client.Me == null) return;
-            Binary voice = null;
-            if (useDto)
+            var dto = new VoiceDto()
             {
-                var dto = new VoiceDto()
-                {
-                    data = sample.Take(length).ToArray(),
-                    senderId = Me
-                };
-                voice = new Binary(client.Time.Timestep, false, dto.ToBson(), Receivers.All, MessageGroupIds.VOIP, false);
-            }
-            else
-            {
-                var message = new byte[length + sizeof(uint)];
-                var pos = UMI3DNetworkingHelper.Write(Me, message, 0);
-                sample.CopyRangeTo(message, (int)pos, 0, length - 1);
-                voice = new Binary(client.Time.Timestep, false, message, Receivers.All, MessageGroupIds.VOIP, false);
-            }
+                length = length,
+                data = sample,
+                senderId = client.Me.NetworkId
+            };
+            Binary voice = new Binary(client.Time.Timestep, false, dto.ToBson(), Receivers.All, MessageGroupIds.VOIP, false);
             client.Send(voice);
         }
 
@@ -279,8 +267,7 @@ namespace umi3d.cdk.collaboration
         {
             if (UMI3DDto.FromBson(frame.StreamData.byteArr) is UserTrackingFrameDto trackingFrame)
             {
-                var user = GetUserByNetWorkId(player.NetworkId);
-                if (UMI3DClientUserTracking.Instance.embodimentDict.TryGetValue(user.id, out UserAvatar userAvatar))
+                if (UMI3DClientUserTracking.Instance.embodimentDict.TryGetValue(trackingFrame.userId, out UserAvatar userAvatar))
                     MainThreadManager.Run(() =>
                     {
                         if (client.Time.Timestep - frame.TimeStep < 500)
@@ -311,18 +298,15 @@ namespace umi3d.cdk.collaboration
 
         #region VoIP
 
-        
-
         /// <inheritdoc/>
         protected override void OnVoIPFrame(NetworkingPlayer player, Binary frame, NetWorker sender)
         {
-            VoiceDto dto = null;
-            if (useDto) dto = UMI3DDto.FromBson(frame.StreamData.byteArr) as VoiceDto;
-            var id = useDto ? dto.senderId : UMI3DNetworkingHelper.Read<uint>(frame.StreamData.byteArr, 0);
-            UMI3DUser source = GetUserByNetWorkId(id);
+            VoiceDto dto = UMI3DDto.FromBson(frame.StreamData.byteArr) as VoiceDto;
+            UMI3DUser source = GetUserByNetWorkId(dto.senderId);
             if (source != null)
-                AudioManager.Instance.Read(source.id, useDto ? dto.data : frame.StreamData.byteArr.Skip(sizeof(uint)).SkipLast().ToArray(), client.Time.Timestep);
+                AudioManager.Instance.Read(source.id, dto, client.Time.Timestep);
         }
+
 
 
         #endregion

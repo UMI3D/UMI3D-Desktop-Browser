@@ -37,11 +37,6 @@ namespace umi3d.cdk.interaction
 
         public bool NotifySubObject { get => dto?.notifySubObject ?? false; }
 
-        /// <summary>
-        /// Defines if this interactable has priority on browsers over other interactables with hasPriority false.
-        /// </summary>
-        public bool HasPriority { get => dto?.hasPriority ?? false; }
-
 
         ///<inheritdoc/>
         protected override AbstractToolDto abstractDto { get => dto; set => dto = value as InteractableDto; }

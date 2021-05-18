@@ -29,12 +29,15 @@ namespace umi3d.common.collaboration
         public FormDto parameters;
         public bool librariesUpdated = false;
 
-        public UserConnectionDto() : base()
+        public UserConnectionDto()
         {
         }
 
-        public UserConnectionDto(UserDto user) : base(user)
+        public UserConnectionDto(UserDto user)
         {
+            avatarId = user.avatarId;
+            id = user.id;
+            status = user.status;
         }
     }
 }

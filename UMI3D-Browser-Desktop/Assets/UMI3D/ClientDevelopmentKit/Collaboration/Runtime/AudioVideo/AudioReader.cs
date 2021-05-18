@@ -13,7 +13,6 @@ limitations under the License.
 
 using BeardedManStudios.Forge.Networking.Unity;
 using System;
-using System.Linq;
 using umi3d.common.collaboration;
 using UnityEngine;
 using UnityOpus;
@@ -32,10 +31,10 @@ namespace umi3d.cdk.collaboration
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="data"></param>
-        public void Read(byte[] data, ulong timestep)
+        /// <param name="dto"></param>
+        public void Read(VoiceDto dto, ulong timestep)
         {
-            MainThreadManager.Run(() => { OnEncoded(data, data.Length, timestep); });
+            MainThreadManager.Run(() => OnEncoded(dto.data, dto.length, timestep));
         }
 
         #region Read
