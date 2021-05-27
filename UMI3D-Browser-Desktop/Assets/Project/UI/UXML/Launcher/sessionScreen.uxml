@@ -2,8 +2,8 @@
     <ui:VisualElement name="sessionScreen" style="display: flex; height: 100%;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:VisualElement style="flex-grow: 1; justify-content: center;">
-            <ui:VisualElement style="align-items: stretch; justify-content: center; height: 78%;">
-                <ui:VisualElement name="logo" style="height: 170px; background-image: url(&apos;/Assets/Project/UI/UI_connection/logo_page.png&apos;); -unity-background-scale-mode: scale-to-fit; margin-bottom: 80px;" />
+            <ui:VisualElement name="VisualElement" style="align-items: stretch; justify-content: center; height: 78%;">
+                <ui:VisualElement name="logo" style="height: 250px; background-image: url(&apos;/Assets/Project/UI/UI_connection/logo_page.png&apos;); -unity-background-scale-mode: scale-to-fit; margin-bottom: 40px;" />
                 <ui:Label text="Connected to : " name="connectedText" class="white-txt" style="margin-bottom: 20px; font-size: 15px;" />
                 <ui:Label text="No connection" name="notConnectedText" class="white-txt" style="margin-bottom: 20px; font-size: 15px; display: none;" />
                 <ui:Label text="Session PIN:" class="white-txt" style="margin-bottom: 8px; font-size: 15px;" />
@@ -13,11 +13,11 @@
                         <ui:VisualElement style="width: 27px; height: 27px;" />
                     </ui:Button>
                 </ui:VisualElement>
-                <ui:VisualElement style="flex-direction: row; height: 75px; min-height: auto;">
+                <ui:VisualElement style="flex-direction: row; height: 123px; min-height: auto;">
                     <ui:Label text="Session name" class="white-txt" style="margin-bottom: 8px; font-size: 15px; width: 90%;" />
                     <ui:Label text="Users" class="white-txt" style="margin-bottom: 8px; font-size: 15px; width: 10%;" />
                 </ui:VisualElement>
-                <ui:ListView focusable="True" name="sessionsList" style="height: 100%; justify-content: flex-start;" />
+                <ui:ListView focusable="True" name="sessionsList" style="height: 600px; justify-content: flex-start;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
