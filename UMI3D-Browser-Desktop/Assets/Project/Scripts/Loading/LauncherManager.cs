@@ -275,6 +275,7 @@ public class LauncherManager : MonoBehaviour
     }
 
     private Action currentNextButtonAction = null;
+    private VisualElement selectedItem = null;
     private void SelectSession(VisualElement itemSelected, string ip, ushort port)
     {
         //TODO color the element
