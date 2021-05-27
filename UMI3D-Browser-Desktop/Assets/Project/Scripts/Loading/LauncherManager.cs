@@ -150,6 +150,7 @@ public class LauncherManager : MonoBehaviour
         //Debug.Log("urlEnterBtn : " + (urlEnterBtn != null));
 
         urlEnterBtn.clickable.clicked += ()=> SetServer(urlInput.value);// SetDomain;
+        nextStep = ()=> SetServer(urlInput.value);
 
         connectNewServBtn = urlScreen.Q<Button>("newConnection");
         Debug.Log("connectNewServBtn : " + (connectNewServBtn != null));
@@ -203,6 +204,7 @@ public class LauncherManager : MonoBehaviour
         {
             PortInput.value = s[1];
         }
+        nextStep = () => SetDomain();
     }
 
     public bool updateBindSession = false;
@@ -227,7 +229,7 @@ public class LauncherManager : MonoBehaviour
             ); 
             root.Q<Button>("pin-enter-btn").clickable.clicked += enterBtnAction;
         }
-        
+        nextStep = enterBtnAction;
 
     }
 
@@ -250,6 +252,23 @@ public class LauncherManager : MonoBehaviour
                     SelectSession(item, session.Address, session.Port);
                 }
             });
+
+            item.RegisterCallback<MouseEnterEvent>(e =>
+            {
+                foreach (var label in item.Q<VisualElement>("server-entry-btn").Children())
+                {
+                    label.AddToClassList("orange-text");
+                }
+            }
+            );
+            item.RegisterCallback<MouseLeaveEvent>(e =>
+            {
+                foreach (var label in item.Q<VisualElement>("server-entry-btn").Children())
+                {
+                    label.RemoveFromClassList("orange-text");
+                }
+            }
+           );
         }
         serverResponses.Clear();
 
@@ -380,7 +399,7 @@ public class LauncherManager : MonoBehaviour
             , serverName);
         var text = root.Q<Label>("connectedText");
         Debug.Log(text);
-        root.Q<Label>("connectedText").text = serverName;
+        root.Q<Label>("connectedText").text = "Connected to : " + serverName;
 
     }
 
