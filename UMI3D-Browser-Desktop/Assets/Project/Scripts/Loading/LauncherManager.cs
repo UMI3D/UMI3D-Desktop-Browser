@@ -27,6 +27,7 @@ using System.IO;
 using System.Collections.Generic;
 using umi3d.cdk;
 using BrowserDesktop.Controller;
+using BeardedManStudios.Forge.Networking;
 
 public class LauncherManager : MonoBehaviour
 {
@@ -41,6 +42,8 @@ public class LauncherManager : MonoBehaviour
     private VisualTreeAsset libraryEntryTreeAsset = null;
     [SerializeField]
     private VisualTreeAsset dialogueBoxTreeAsset = null;
+    [SerializeField]
+    private VisualTreeAsset sessionEntry = null;
 
     private VisualElement root;
 
@@ -125,13 +128,18 @@ public class LauncherManager : MonoBehaviour
         root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
         advancedConnectionScreen = root.Q<VisualElement>("advancedConnectionScreen");
         sessionScreen = root.Q<VisualElement>("sessionScreen");
+        backMenuBnt = root.Q<Button>("back-menu-btn");
+        backMenuBnt.clickable.clicked += ResetLauncher;
+
     }
 
-    
+
 
     private void BindURLScreen()
     {
         urlScreen = root.Q<VisualElement>("url-screen");
+        backMenuBnt = root.Q<Button>("back-menu-btn");
+        nextMenuBnt = root.Q<Button>("nextMenuBtn");
 
         urlInput = urlScreen.Q<TextField>("url-input");
         urlEnterBtn = urlScreen.Q<Button>("url-enter-btn");
@@ -164,9 +172,8 @@ public class LauncherManager : MonoBehaviour
         librariesScreen = root.Q<VisualElement>("libraries-manager-screen");
         librariesList = librariesScreen.Q<ScrollView>("libraries-list");
 
-        backMenuBnt = root.Q<Button>("back-menu-btn");
-        nextMenuBnt = root.Q<Button>("nextMenuBtn");
-        backMenuBnt.clickable.clicked += ResetLauncher;
+
+      //  backMenuBnt.clickable.clicked += ResetLauncher;
         //nextMenuBnt.clickable.clicked += DirectConnect;
 
     }
@@ -176,9 +183,15 @@ public class LauncherManager : MonoBehaviour
         urlScreen = root.Q<VisualElement>("url-screen");
 
         backMenuBnt = root.Q<Button>("back-menu-btn");
-        backMenuBnt.clickable.clicked += ResetLauncher;
+      //  backMenuBnt.clickable.clicked += ResetLauncher;
         nextMenuBnt = root.Q<Button>("nextMenuBtn"); 
-        nextMenuBnt.clickable.clicked += SetDomain;
+        Action nextAction = () => SetDomain();
+        if (currentNextButtonAction != null)
+        {
+            nextMenuBnt.clickable.clicked -= currentNextButtonAction;
+        }
+        nextMenuBnt.clickable.clicked += nextAction;
+        currentNextButtonAction = nextAction;
         backMenuBnt.style.display = DisplayStyle.Flex;
         nextMenuBnt.style.display = DisplayStyle.Flex;
         urlScreen.style.display = DisplayStyle.None;
@@ -193,33 +206,65 @@ public class LauncherManager : MonoBehaviour
     }
 
     public bool updateBindSession = false;
+    public bool updateResponse = false;
+    public List<MasterServerResponse.Server> serverResponses = new List<MasterServerResponse.Server>();
 
     private void BindSessionScreen()
     {
-        Debug.Log("Display sessions");
-           backMenuBnt = root.Q<Button>("back-menu-btn");
-           backMenuBnt.clickable.clicked += ResetLauncher;
-           nextMenuBnt = root.Q<Button>("nextMenuBtn");
-           nextMenuBnt.clickable.clicked += SetDomain;
-           Debug.Log("Display sessions 2");
-        Debug.Log(backMenuBnt);
-
+          nextMenuBnt = root.Q<Button>("nextMenuBtn");
+           //nextMenuBnt.clickable.clicked += () => SetDomain();
         backMenuBnt.style.display = DisplayStyle.Flex;
            nextMenuBnt.style.display = DisplayStyle.None;
-           Debug.Log("Display sessions 3");
-        Debug.Log(root);
-
         urlScreen = root.Q<VisualElement>("url-screen");
-        Debug.Log(urlScreen);
         urlScreen.style.display = DisplayStyle.None;
         advancedConnectionScreen.style.display = DisplayStyle.None;
         sessionScreen.style.display = DisplayStyle.Flex;
-        Debug.Log("Display sessions 4");
 
         root.Q<Button>("pin-enter-btn").clickable.clicked += () =>
-        masterServer.SendDataSession(sessionScreen.Q<TextField>("pinInput").value, (ser) => { Debug.Log(" update UI "); }
+        masterServer.SendDataSession(sessionScreen.Q<TextField>("pinInput").value, (ser) => { serverResponses.Add(ser); updateResponse = true; Debug.Log(" update UI "); }
         );
 
+    }
+
+    private void UpdateSessionList()
+    {
+        var sessionList = sessionScreen.Q<ListView>("sessionsList");
+        sessionList.Clear();
+        foreach (MasterServerResponse.Server session in serverResponses)
+        {
+            VisualElement item = sessionEntry.CloneTree().Q<VisualElement>("session-entry");
+            sessionList.Add(item);
+            Debug.Log(item);
+            item.Q<Label>("server-name").text = session.Name;
+            item.Q<Label>("users-count").text = session.PlayerCount.ToString();
+
+            item.RegisterCallback<MouseDownEvent>(e =>
+            {
+                if (e.clickCount == 1)
+                {
+                    SelectSession(item, session.Address, session.Port);
+                }
+            });
+        }
+        serverResponses.Clear();
+
+    }
+
+    private Action currentNextButtonAction = null;
+    private void SelectSession(VisualElement itemSelected, string ip, ushort port)
+    {
+        //TODO color the element
+        string ip_port = ip + ":" + port.ToString();
+        Action nextAction = () => SetDomain(ip_port);
+        if (currentNextButtonAction != null)
+        {
+            nextMenuBnt.clickable.clicked -= currentNextButtonAction;
+        }
+        nextMenuBnt.clickable.clicked += nextAction;
+        nextMenuBnt.style.display = DisplayStyle.Flex;
+        currentNextButtonAction = nextAction;
+        //this.currentConnectionData.ip = env.ip;
+        //DirectConnect();
     }
 
     #endregion
@@ -232,6 +277,11 @@ public class LauncherManager : MonoBehaviour
         {
             BindSessionScreen();
             updateBindSession = false;
+        }
+        if (updateResponse)
+        {
+            UpdateSessionList();
+            updateResponse = false;
         }
         CheckShortcuts();
     }
@@ -266,10 +316,11 @@ public class LauncherManager : MonoBehaviour
     /// <summary>
     /// Gets the url and port written by users and stores them.
     /// </summary>
-    private void SetDomain()
+    private void SetDomain(string ip_port = "")
     {
+        string url = string.IsNullOrEmpty(ip_port) ? IpInput.value.Trim() + ":" + PortInput.value.Trim() : ip_port;
         //string url = urlInput.value;
-        string url = IpInput.value.Trim() + ":" + PortInput.value.Trim(); 
+    
         if (string.IsNullOrEmpty(url))
         {
             //urlScreen.Q<Label>("url-error").style.display = DisplayStyle.Flex;
@@ -365,7 +416,7 @@ public class LauncherManager : MonoBehaviour
 
 
         previousStep = null;
-        nextStep = SetDomain;
+        nextStep = () => SetDomain();
         urlInput.value = currentServerConnectionData.serverName;// currentConnectionData.ip;
     }
 
