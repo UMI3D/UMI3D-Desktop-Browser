@@ -2,6 +2,7 @@
     <ui:Template name="favorite-env-item" src="favorite-env-item.uxml" />
     <ui:Template name="SliderElement" src="/Assets/Project/UI/UXML/CustomElement/SliderElement.uxml" />
     <ui:VisualElement name="url-screen" style="display: flex; height: 100%; margin-left: 2px; margin-right: 2px;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:VisualElement style="flex-grow: 0; justify-content: flex-start; height: auto;">
             <ui:VisualElement name="url-center" style="align-items: stretch; justify-content: center; height: auto;">
                 <ui:VisualElement name="logo" style="height: 90px; background-image: url(&apos;/Assets/Project/UI/UI_connection/logo_page.png&apos;); -unity-background-scale-mode: scale-to-fit; margin-bottom: 15px; margin-top: 20px;" />
