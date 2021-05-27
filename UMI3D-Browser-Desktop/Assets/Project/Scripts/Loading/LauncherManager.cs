@@ -208,6 +208,7 @@ public class LauncherManager : MonoBehaviour
     public bool updateBindSession = false;
     public bool updateResponse = false;
     public List<MasterServerResponse.Server> serverResponses = new List<MasterServerResponse.Server>();
+    private Action enterBtnAction = null;
 
     private void BindSessionScreen()
     {
@@ -220,9 +221,13 @@ public class LauncherManager : MonoBehaviour
         advancedConnectionScreen.style.display = DisplayStyle.None;
         sessionScreen.style.display = DisplayStyle.Flex;
 
-        root.Q<Button>("pin-enter-btn").clickable.clicked += () =>
-        masterServer.SendDataSession(sessionScreen.Q<TextField>("pinInput").value, (ser) => { serverResponses.Add(ser); updateResponse = true; Debug.Log(" update UI "); }
-        );
+        if (enterBtnAction == null)
+        {
+            enterBtnAction = () => masterServer.SendDataSession(sessionScreen.Q<TextField>("pinInput").value, (ser) => { serverResponses.Add(ser); updateResponse = true; Debug.Log(" update UI "); }
+            ); 
+            root.Q<Button>("pin-enter-btn").clickable.clicked += enterBtnAction;
+        }
+        
 
     }
 
@@ -373,8 +378,10 @@ public class LauncherManager : MonoBehaviour
             
            // () => masterServer.SendDataSession("test", (ser) => { Debug.Log(" update UI "); })
             , serverName);
+        var text = root.Q<Label>("connectedText");
+        Debug.Log(text);
+        root.Q<Label>("connectedText").text = serverName;
 
-        
     }
 
     /// <summary>
