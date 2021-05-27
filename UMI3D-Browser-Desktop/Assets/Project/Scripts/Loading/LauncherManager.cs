@@ -255,10 +255,12 @@ public class LauncherManager : MonoBehaviour
 
             item.RegisterCallback<MouseEnterEvent>(e =>
             {
-                foreach (var label in item.Q<VisualElement>("server-entry-btn").Children())
-                {
-                    label.AddToClassList("orange-text");
-                }
+                if (!item.ClassListContains("orange-background"))
+                    foreach (var label in item.Q<VisualElement>("server-entry-btn").Children())
+                    {
+
+                        label.AddToClassList("orange-text");
+                    }
             }
             );
             item.RegisterCallback<MouseLeaveEvent>(e =>
@@ -279,6 +281,16 @@ public class LauncherManager : MonoBehaviour
     private void SelectSession(VisualElement itemSelected, string ip, ushort port)
     {
         //TODO color the element
+        if(selectedItem != null)
+        {
+            selectedItem.RemoveFromClassList("orange-background");
+            selectedItem.RemoveFromClassList("black-txt");
+            foreach (var label in selectedItem.Q<VisualElement>("server-entry-btn").Children())
+            {
+                label.AddToClassList("orange.text");
+                label.RemoveFromClassList("black-txt");
+            }
+        }
         string ip_port = ip + ":" + port.ToString();
         Action nextAction = () => SetDomain(ip_port);
         if (currentNextButtonAction != null)
@@ -288,6 +300,16 @@ public class LauncherManager : MonoBehaviour
         nextMenuBnt.clickable.clicked += nextAction;
         nextMenuBnt.style.display = DisplayStyle.Flex;
         currentNextButtonAction = nextAction;
+
+        //Color
+        itemSelected.AddToClassList("orange-background");
+        itemSelected.AddToClassList("black-txt");
+        foreach (var label in itemSelected.Q<VisualElement>("server-entry-btn").Children())
+        {
+            label.RemoveFromClassList("orange.text");
+            label.AddToClassList("black-txt");
+        }
+        selectedItem = itemSelected;
         //this.currentConnectionData.ip = env.ip;
         //DirectConnect();
     }
