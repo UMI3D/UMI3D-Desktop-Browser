@@ -2,6 +2,7 @@
     <ui:Template name="libraries-manager-screen" src="libraries-manager-screen.uxml" />
     <ui:Template name="advancedConnectionScreen" src="advancedConnectionScreen.uxml" />
     <ui:Template name="connect-screen" src="connect-screen.uxml" />
+    <ui:Template name="sessionScreen" src="sessionScreen.uxml" />
     <ui:VisualElement name="body" style="height: 100%; width: 100%;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:VisualElement name="top" class="dark-grey1-bck" style="width: 100%; flex-direction: row; height: 40px; min-height: 40px;">
@@ -22,6 +23,7 @@
                 <ui:Instance template="libraries-manager-screen" name="libraries-manager-screen" style="display: none;" />
                 <ui:Instance template="advancedConnectionScreen" name="advancedConnectionScreen" style="display: none;" />
                 <ui:Instance template="connect-screen" name="connect-screen" />
+                <ui:Instance template="sessionScreen" name="sessionScreen" style="display: none;" />
             </ui:VisualElement>
             <ui:VisualElement style="flex-grow: 1;">
                 <ui:Button name="nextMenuBtn" class="btn-right-arrow" style="width: 80px; height: 80px; background-color: rgba(93, 93, 93, 0); margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; font-size: 30px; display: flex; align-items: flex-end; flex-wrap: nowrap; position: relative; right: 23px; left: auto;" />

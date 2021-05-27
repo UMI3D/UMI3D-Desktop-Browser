@@ -66,6 +66,10 @@ public class LauncherManager : MonoBehaviour
     public VisualTreeAsset favoriteEnvItemTreeAsset;
     SliderElement favoriteEnvironmentSlider;
 
+    //Session screen
+    VisualElement sessionScreen;
+
+
     #endregion
 
     #region Data
@@ -120,6 +124,7 @@ public class LauncherManager : MonoBehaviour
 
         root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
         advancedConnectionScreen = root.Q<VisualElement>("advancedConnectionScreen");
+        sessionScreen = root.Q<VisualElement>("sessionScreen");
     }
 
     
@@ -127,15 +132,6 @@ public class LauncherManager : MonoBehaviour
     private void BindURLScreen()
     {
         urlScreen = root.Q<VisualElement>("url-screen");
-    /*
-        foreach (VisualElement item in urlScreen.Children())
-        {
-            Debug.Log(item.name + " " + item.GetType().ToString());
-            foreach (VisualElement child in item.Children())
-            {
-                Debug.Log( " -- " + child.name +" "+ child.GetType().ToString());
-            }
-        }*/
 
         urlInput = urlScreen.Q<TextField>("url-input");
         urlEnterBtn = urlScreen.Q<Button>("url-enter-btn");
@@ -177,6 +173,8 @@ public class LauncherManager : MonoBehaviour
 
     private void BindAdvancedConnection()
     {
+        urlScreen = root.Q<VisualElement>("url-screen");
+
         backMenuBnt = root.Q<Button>("back-menu-btn");
         backMenuBnt.clickable.clicked += ResetLauncher;
         nextMenuBnt = root.Q<Button>("nextMenuBtn"); 
@@ -184,6 +182,7 @@ public class LauncherManager : MonoBehaviour
         backMenuBnt.style.display = DisplayStyle.Flex;
         nextMenuBnt.style.display = DisplayStyle.Flex;
         urlScreen.style.display = DisplayStyle.None;
+        sessionScreen.style.display = DisplayStyle.None;
         advancedConnectionScreen.style.display = DisplayStyle.Flex;
         var s = currentConnectionData.ip.Split(':');
         IpInput.value = s[0];
@@ -191,7 +190,35 @@ public class LauncherManager : MonoBehaviour
         {
             PortInput.value = s[1];
         }
+    }
 
+    public bool updateBindSession = false;
+
+    private void BindSessionScreen()
+    {
+        Debug.Log("Display sessions");
+           backMenuBnt = root.Q<Button>("back-menu-btn");
+           backMenuBnt.clickable.clicked += ResetLauncher;
+           nextMenuBnt = root.Q<Button>("nextMenuBtn");
+           nextMenuBnt.clickable.clicked += SetDomain;
+           Debug.Log("Display sessions 2");
+        Debug.Log(backMenuBnt);
+
+        backMenuBnt.style.display = DisplayStyle.Flex;
+           nextMenuBnt.style.display = DisplayStyle.None;
+           Debug.Log("Display sessions 3");
+        Debug.Log(root);
+
+        urlScreen = root.Q<VisualElement>("url-screen");
+        Debug.Log(urlScreen);
+        urlScreen.style.display = DisplayStyle.None;
+        advancedConnectionScreen.style.display = DisplayStyle.None;
+        sessionScreen.style.display = DisplayStyle.Flex;
+        Debug.Log("Display sessions 4");
+
+        root.Q<Button>("pin-enter-btn").clickable.clicked += () =>
+        masterServer.SendDataSession(sessionScreen.Q<TextField>("pinInput").value, (ser) => { Debug.Log(" update UI "); }
+        );
 
     }
 
@@ -201,6 +228,11 @@ public class LauncherManager : MonoBehaviour
 
     private void Update()
     {
+        if (updateBindSession)
+        {
+            BindSessionScreen();
+            updateBindSession = false;
+        }
         CheckShortcuts();
     }
 
@@ -286,10 +318,12 @@ public class LauncherManager : MonoBehaviour
     {
         
         Debug.Log("Try to connect to : " + serverName);
-        masterServer.ConnectToMasterServer(
-            () => masterServer.SendDataSession("test", (ser) => { Debug.Log(" update UI "); })
+        masterServer.ConnectToMasterServer(() => { updateBindSession = true; }
+            
+           // () => masterServer.SendDataSession("test", (ser) => { Debug.Log(" update UI "); })
             , serverName);
-        //TODO
+
+        
     }
 
     /// <summary>
@@ -327,6 +361,7 @@ public class LauncherManager : MonoBehaviour
         backMenuBnt.style.display = DisplayStyle.None;
         nextMenuBnt.style.display = DisplayStyle.None;
         advancedConnectionScreen.style.display = DisplayStyle.None;
+        sessionScreen.style.display = DisplayStyle.None;
 
 
         previousStep = null;
@@ -381,11 +416,12 @@ public class LauncherManager : MonoBehaviour
             item.Q<Label>().text = env.serverName;
             item.RegisterCallback<MouseDownEvent>(e =>
             {
-                if (e.clickCount == 2)
+                if (e.clickCount == 1)
                 {
                     this.currentServerConnectionData.serverName = env.serverName;
                     //this.currentConnectionData.ip = env.ip;
-                    DirectConnect();// TODO
+                    //DirectConnect();// TODO
+                    Connect(env.serverName);
                 }
             });
             item.Q<Button>("delete-item").clickable.clicked += () =>
