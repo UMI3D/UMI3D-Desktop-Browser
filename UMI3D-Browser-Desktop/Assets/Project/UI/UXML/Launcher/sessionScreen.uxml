@@ -6,7 +6,7 @@
             <ui:VisualElement style="align-items: stretch; justify-content: center; height: 78%;">
                 <ui:VisualElement name="logo" style="height: 170px; background-image: url(&apos;/Assets/Project/UI/UI_connection/logo_page.png&apos;); -unity-background-scale-mode: scale-to-fit; margin-bottom: 80px;" />
                 <ui:Label text="Connected to : " name="connectedText" class="white-txt" style="margin-bottom: 20px; font-size: 15px;" />
-                <ui:Label text="No connection" name="notConnectedText" class="white-txt" style="margin-bottom: 20px; font-size: 15px;" />
+                <ui:Label text="No connection" name="notConnectedText" class="white-txt" style="margin-bottom: 20px; font-size: 15px; display: none;" />
                 <ui:Label text="Session PIN:" class="white-txt" style="margin-bottom: 8px; font-size: 15px;" />
                 <ui:VisualElement name="sessionInput" style="flex-direction: row; justify-content: space-between; height: 60px; flex-grow: 0; font-size: 15px; flex-shrink: 0;">
                     <ui:TextField picking-mode="Ignore" name="pinInput" text="test.com" value="test.com" class="textfield-with-image-bck grey-text-field" style="-unity-text-align: upper-center; flex-grow: 1; height: 42px;" />

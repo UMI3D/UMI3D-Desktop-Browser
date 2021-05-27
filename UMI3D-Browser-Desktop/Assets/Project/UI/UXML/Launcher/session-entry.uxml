@@ -1,8 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:Template name="DropdownElement-list-displayer" src="/Assets/Project/UI/UXML/GenericUI/DropdownElement-list-displayer.uxml" />
     <ui:VisualElement name="session-entry" class="grey-border" style="justify-content: center; flex-direction: row; align-items: center; height: 40px; background-color: rgba(217, 241, 240, 0); border-bottom-width: 1px; border-top-width: 1px; border-left-width: 1px; border-right-width: 1px;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-        <ui:Button name="server-entry-btn" style="height: 40px; color: rgba(9, 9, 9, 0); background-color: rgba(228, 228, 228, 0); flex-direction: row; width: 100%;">
+        <ui:Button name="server-entry-btn" style="height: 40px; color: rgba(9, 9, 9, 0); background-color: rgba(228, 228, 228, 0); flex-direction: row; width: 100%; overflow: visible;">
             <ui:Label text="Server name" name="server-name" class="medium-size-txt white-txt" style="-unity-text-align: middle-left; right: 0; justify-content: center; padding-left: 16px; flex-grow: 1; width: 90%;" />
             <ui:Label text="0" name="users-count" class="white-txt medium-size-txt grey-border" style="border-left-width: 1px; border-right-width: 1px; height: 100%; width: 10%; -unity-text-align: middle-center;" />
         </ui:Button>
