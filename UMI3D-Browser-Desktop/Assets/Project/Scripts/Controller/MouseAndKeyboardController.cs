@@ -66,10 +66,10 @@ namespace BrowserDesktop.Controller
             public HoldableButtonMenuItem ForceProjectionMenuItem;
 
             public Interactable OldHovered;
-            public string LastHoveredId;
+            public ulong LastHoveredId;
             public Interactable CurentHovered;
             public Transform CurentHoveredTransform;
-            public string CurrentHoveredId;
+            public ulong CurrentHoveredId;
 
             public Vector3 point;
             public Vector3 worldPoint;
@@ -102,7 +102,7 @@ namespace BrowserDesktop.Controller
                     LastHoveredId = CurrentHoveredId;
                     CurentHovered = null;
                     CurentHoveredTransform = null;
-                    CurrentHoveredId = null;
+                    CurrentHoveredId = 0;
                     lastPoint = point;
                     lastNormal = normal;
                     lastDirection = direction;
@@ -757,7 +757,7 @@ namespace BrowserDesktop.Controller
             //catch { }
         }
 
-        public override void Project(AbstractTool tool, bool releasable, InteractionMappingReason reason, string hoveredObjectId)
+        public override void Project(AbstractTool tool, bool releasable, InteractionMappingReason reason, ulong hoveredObjectId)
         {
             base.Project(tool, releasable, reason, hoveredObjectId); ;
             if (reason is RequestedByEnvironment)
@@ -768,7 +768,7 @@ namespace BrowserDesktop.Controller
             tool.onProjected(interactionBoneType);
         }
 
-        protected override string GetCurrentHoveredId()
+        protected override ulong GetCurrentHoveredId()
         {
             return mouseData.CurrentHoveredId;
         }

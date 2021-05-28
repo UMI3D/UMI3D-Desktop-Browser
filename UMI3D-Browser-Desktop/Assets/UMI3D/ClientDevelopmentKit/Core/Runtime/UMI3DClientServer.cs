@@ -54,10 +54,17 @@ namespace umi3d.cdk
                 Instance._GetFile(url, callback, onError);
         }
 
-        protected virtual void _GetFile(string url, Action<byte[]> callback, Action<string> onError) { }
+        protected virtual void _GetFile(string url, Action<byte[]> callback, Action<string> onError) { onError.Invoke("GetFile Not Implemented"); }
 
+        static public void GetEntity(ulong id,Action<LoadEntityDto> callback, Action<string> onError)
+        {
+            if (Exists)
+                Instance._GetEntity(id,callback, onError);
+        }
 
-        public virtual string GetId() { return null; }
+        protected virtual void _GetEntity(ulong id,Action<LoadEntityDto> callback, Action<string> onError) { onError.Invoke("GetEntity Not Implemented"); }
+
+        public virtual ulong GetId() { return 0; }
 
         /// <summary>
         /// return time server in millisecond, use synchronised time in collaborative cases.

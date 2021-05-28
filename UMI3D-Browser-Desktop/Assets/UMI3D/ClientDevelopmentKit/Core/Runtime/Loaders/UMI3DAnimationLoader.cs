@@ -56,5 +56,20 @@ namespace umi3d.cdk
             return anim.SetUMI3DProperty(entity, property);
         }
 
+        static public bool SetUMI3DProperty(UMI3DEntityInstance entity, uint operationId, uint propertyKey, byte[] operation, int position, int length)
+        {
+            var anim = entity?.Object as UMI3DAbstractAnimation;
+            if (anim == null) return false;
+            return anim.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length);
+        }
+
+        static public bool ReadUMI3DProperty(ref object value, uint propertyKey, byte[] operation, int position, int length)
+        {
+            if (UMI3DAbstractAnimation.ReadUMI3DProperty(ref value, propertyKey, operation, position, length))
+                return true;
+
+            return UMI3DAbstractAnimation.ReadUMI3DProperty(ref value, propertyKey, operation, position, length);
+        }
+
     }
 }

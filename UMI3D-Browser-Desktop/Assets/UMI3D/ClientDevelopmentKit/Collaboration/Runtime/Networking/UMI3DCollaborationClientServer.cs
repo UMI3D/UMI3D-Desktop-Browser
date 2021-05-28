@@ -57,6 +57,7 @@ namespace umi3d.cdk.collaboration
             HttpClient = new HttpClient(this);
             connected = false;
             joinning = false;
+            UMI3DNetworkingHelper.AddModule(new UMI3DCollaborationNetworkingModule());
         }
 
         public void Init()
@@ -206,7 +207,7 @@ namespace umi3d.cdk.collaboration
                     }, (error) => { Debug.Log("error on get id :" + error); });
                     break;
                 case StatusType.READY:
-                    if (Identity.userId == null)
+                    if (Identity.userId == 0)
                         Instance.HttpClient.SendGetIdentity((user) =>
                         {
                             UserDto = user;
@@ -280,7 +281,7 @@ namespace umi3d.cdk.collaboration
                             }, (error) => { Debug.Log("error on get id :" + error); });
                             break;
                         case StatusType.READY:
-                            if (Identity.userId == null)
+                            if (Identity.userId == 0)
                                 Instance.HttpClient.SendGetIdentity((user) =>
                                 {
                                     UserDto = user;
@@ -398,8 +399,14 @@ namespace umi3d.cdk.collaboration
             HttpClient.SendGetPrivate(url, callback, onError);
         }
 
+        protected override void _GetEntity(ulong id,Action<LoadEntityDto> callback, Action<string> onError)
+        {
+            var dto = new EntityRequestDto() { entityId = id };
+            HttpClient.SendPostEntity(dto, callback, onError);
+        }
+
         ///<inheritdoc/>
-        public override string GetId() { return Identity.userId; }
+        public override ulong GetId() { return Identity.userId; }
 
         ///<inheritdoc/>
         public override ulong GetTime()

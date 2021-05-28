@@ -41,6 +41,40 @@ namespace umi3d.cdk
             }
         }
 
+        public static IEnumerator PerformTransaction(byte[] transaction, int pos, int length)
+        {
+            yield return new WaitForEndOfFrame();
+            int operationLength = -1;
+            int maxLength = transaction.Length;
+            int opIndex = -1;
+            for (int i = pos; i < operationLength || operationLength == -1;)
+            {
+                int nopIndex = UMI3DNetworkingHelper.Read<int>(transaction, ref i, ref length);
+                if (operationLength == -1)
+                {
+                    operationLength = opIndex = nopIndex;
+                    continue;
+                }
+
+                bool performed = false;
+                PerformOperation(transaction, opIndex, nopIndex - opIndex, () => performed = true);
+                if (performed != true)
+                    yield return new WaitUntil(() => performed);
+
+                opIndex = nopIndex;
+            }
+            {
+                bool performed = false;
+                //maxLength - 1 because we never want to read the last byte of the array which is added by forge
+                PerformOperation(transaction, opIndex, maxLength - 1 - opIndex, () => performed = true);
+                if (performed != true)
+                    yield return new WaitUntil(() => performed);
+            }
+        }
+
+
+
+
         static public void PerformOperation(AbstractOperationDto operation, Action performed)
         {
             if (performed == null) performed = () => { };
@@ -74,5 +108,52 @@ namespace umi3d.cdk
                     break;
             }
         }
+
+        static public void PerformOperation(byte[] operation, int position, int length, Action performed)
+        {
+            if (performed == null) performed = () => { };
+
+            var operationId = UMI3DNetworkingHelper.Read<uint>(operation,ref position, ref length);
+            switch (operationId)
+            {
+                case UMI3DOperationKeys.LoadEntity:
+                    UMI3DEnvironmentLoader.LoadEntity(operation,position,length,performed);
+                    break;
+                case UMI3DOperationKeys.DeleteEntity:
+                    {
+                        var entityId = UMI3DNetworkingHelper.Read<ulong>(operation, ref position, ref length);
+                        UMI3DEnvironmentLoader.DeleteEntity(entityId, performed);
+                        break;
+                    }
+                case UMI3DOperationKeys.MultiSetEntityProperty:
+                    UMI3DEnvironmentLoader.SetMultiEntity(operation, position, length);
+                    performed.Invoke();
+                    break;
+                case UMI3DOperationKeys.StartInterpolationProperty:
+                    UMI3DEnvironmentLoader.StartInterpolation(operation, position, length);
+                    performed.Invoke();
+                    break;
+                case UMI3DOperationKeys.StopInterpolationProperty:
+                    UMI3DEnvironmentLoader.StopInterpolation(operation, position, length);
+                    performed.Invoke();
+                    break;
+
+                default:
+                    if(UMI3DOperationKeys.SetEntityProperty <= operationId && operationId <= UMI3DOperationKeys.SetEntityMatrixProperty)
+                    {
+                        var entityId = UMI3DNetworkingHelper.Read<ulong>(operation, ref position, ref length);
+                        var propertyKey = UMI3DNetworkingHelper.Read<uint>(operation, ref position, ref length);
+                        UMI3DEnvironmentLoader.SetEntity(operationId,entityId, propertyKey, operation, position, length);
+                        performed.Invoke();
+                    }
+                    else
+                    {
+                        UMI3DEnvironmentLoader.Parameters.UnknownOperationHandler(operationId, operation, position, length, performed);
+                    }
+                    break;
+            }
+
+        }
+
     }
 }
