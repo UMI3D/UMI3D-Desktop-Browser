@@ -105,19 +105,28 @@ namespace BrowserDesktop.Menu
             backCircularMenu = root.Q<Button>("interaction-menu-back");
             backCircularMenu.clickable.clicked += () =>
             {
-                Display(false, false);
+                if (CircularMenu.Instance.Count() > 0 || EventMenu.NbEventsDIsplayed > 0)
+                    Display(true, false);
+                else
+                    Display(false, false);
             };
 
             root.Q<Button>("toolbox-menu-back").clickable.clicked += () =>
             {
-                Display(false, false);
+                if (CircularMenu.Instance.Count() > 0 || EventMenu.NbEventsDIsplayed > 0)
+                    Display(true, false);
+                else
+                    Display(false, false);
             };
 
             root.Q<VisualElement>("game-menu").RegisterCallback<MouseDownEvent>(e =>
             {
                 if ((e.clickCount == 1) && (isExpanded) && !wasExpandedLastFrame)
                 {
-                    Display(false, false);
+                    if (CircularMenu.Instance.Count() > 0 || EventMenu.NbEventsDIsplayed > 0)
+                        Display(true, false);
+                    else
+                        Display(false, false);
                 }
             });
         }
@@ -187,19 +196,19 @@ namespace BrowserDesktop.Menu
             if (display)
             {
                 toolBoxMenuDisplayManager.Display(true);
-
-                rightSideMenuContainer.experimental.animation.Start(rightSideMenuContainer.resolvedStyle.width,0, 100, (elt, val) =>
+                rightSideMenuContainer.style.left = 0;
+                /*rightSideMenuContainer.experimental.animation.Start(rightSideMenuContainer.resolvedStyle.width,0, 100, (elt, val) =>
                 {
                     elt.style.left = val;
-                });
+                });*/
             } else
             {
                 toolBoxMenuDisplayManager.Hide(true);
-
-                rightSideMenuContainer.experimental.animation.Start(0, rightSideMenuContainer.resolvedStyle.width, 100, (elt, val) =>
+                rightSideMenuContainer.style.left = rightSideMenuContainer.resolvedStyle.width;               
+                /*rightSideMenuContainer.experimental.animation.Start(0, rightSideMenuContainer.resolvedStyle.width, 100, (elt, val) =>
                 {
                     elt.style.left = val;
-                });
+                });*/
             }
         }
 
@@ -219,10 +228,12 @@ namespace BrowserDesktop.Menu
             if (expand)
             {
                 backCircularMenu.style.display = DisplayStyle.Flex;
-                rightSideMenuContainer.experimental.animation.Start(0, 1, 200, (elt, val) =>
+                rightSideMenuContainer.style.flexGrow = 1;
+
+                /*rightSideMenuContainer.experimental.animation.Start(0, 1, 200, (elt, val) =>
                 {
                     elt.style.flexGrow = val;
-                });
+                });*/
                 StartCoroutine(ResetWasExpandedLastFrame());
             } else
             {

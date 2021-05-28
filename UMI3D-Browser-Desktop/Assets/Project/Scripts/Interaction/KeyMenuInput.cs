@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using BrowserDesktop.Controller;
 using BrowserDesktop.Menu;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
@@ -117,6 +118,7 @@ public class KeyMenuInput : AbstractUMI3DInput
                 };
                 UMI3DClientServer.SendData(eventdto, true);
                 risingEdgeEventSent = true;
+                MouseAndKeyboardController.isInputHold = true;
             }
             else
             {
@@ -147,6 +149,7 @@ public class KeyMenuInput : AbstractUMI3DInput
                     };
                     UMI3DClientServer.SendData(eventdto, true);
                     risingEdgeEventSent = false;
+                    MouseAndKeyboardController.isInputHold = false;
                 }
             }
         }
