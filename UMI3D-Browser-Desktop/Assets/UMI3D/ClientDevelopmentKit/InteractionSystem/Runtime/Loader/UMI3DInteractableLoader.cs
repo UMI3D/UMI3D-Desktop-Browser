@@ -47,7 +47,7 @@ namespace umi3d.cdk.interaction
                     break;
                 case UMI3DPropertyKeys.InteractableNodeId:
                     RemoveInteractableOnNode(dto);
-                    dto.nodeId = (string)property.value;
+                    dto.nodeId = (ulong)property.value;
                     setInteractableOnNode(dto);
                     break;
                 case UMI3DPropertyKeys.InteractableHasPriority:
@@ -58,6 +58,58 @@ namespace umi3d.cdk.interaction
             }
             return true;
         }
+
+
+        public static bool SetUMI3DProperty(UMI3DEntityInstance entity, uint operationId, uint propertyKey, byte[] operation, int position, int length)
+        {
+            var dto = (entity?.dto as InteractableDto);
+            if (dto == null) return false;
+            if (UMI3DAbstractToolLoader.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length)) return true;
+            switch (propertyKey)
+            {
+                case UMI3DPropertyKeys.InteractableNotifyHoverPosition:
+                    dto.notifyHoverPosition = UMI3DNetworkingHelper.Read<bool>(operation,position, length);
+                    break;
+                case UMI3DPropertyKeys.InteractableNotifySubObject:
+                    dto.notifySubObject = UMI3DNetworkingHelper.Read<bool>(operation, position, length);
+                    break;
+                case UMI3DPropertyKeys.InteractableNodeId:
+                    RemoveInteractableOnNode(dto);
+                    dto.nodeId = UMI3DNetworkingHelper.Read<ulong>(operation, position, length);
+                    setInteractableOnNode(dto);
+                    break;
+                case UMI3DPropertyKeys.InteractableHasPriority:
+                    dto.hasPriority = UMI3DNetworkingHelper.Read<bool>(operation, position, length);
+                    break;
+                default:
+                    return false;
+            }
+            return true;
+        }
+
+        static public bool ReadUMI3DProperty(ref object value, uint propertyKey, byte[] operation, int position, int length)
+        {
+            if (UMI3DAbstractToolLoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length)) return true;
+            switch (propertyKey)
+            {
+                case UMI3DPropertyKeys.InteractableNotifyHoverPosition:
+                    value = UMI3DNetworkingHelper.Read<bool>(operation, position, length);
+                    break;
+                case UMI3DPropertyKeys.InteractableNotifySubObject:
+                    value = UMI3DNetworkingHelper.Read<bool>(operation, position, length);
+                    break;
+                case UMI3DPropertyKeys.InteractableNodeId:
+                    value = UMI3DNetworkingHelper.Read<ulong>(operation, position, length);
+                    break;
+                case UMI3DPropertyKeys.InteractableHasPriority:
+                    value = UMI3DNetworkingHelper.Read<bool>(operation, position, length);
+                    break;
+                default:
+                    return false;
+            }
+            return true;
+        }
+
 
         static void RemoveInteractableOnNode(InteractableDto dto)
         {

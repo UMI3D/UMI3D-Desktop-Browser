@@ -15,29 +15,43 @@ limitations under the License.
 */
 
 using System;
-using System.Collections.Generic;
 
 namespace umi3d.common.userCapture
 {
     /// <summary>
-    /// Abstract class to represent the root node of one user's representation.
+    /// Class to associate a bone to a node.
     /// </summary>
     [Serializable]
-    public class UMI3DAvatarNodeDto : UMI3DNodeDto
+    public class BoneBindingDto : UMI3DDto
     {
         /// <summary>
-        /// The unique identifier of the user.
+        /// An identifier defined by the designer.
         /// </summary>
-        public string userId;
+        public string bindingId;
 
         /// <summary>
-        /// A bool to enable or disable bindings
+        /// Optional rig name. If null, the whole object is binded to the bone.
         /// </summary>
-        public bool activeBindings;
+        public string rigName;
 
         /// <summary>
-        /// A list of bindings between the user's bones and their representations.
+        /// Define if the binding is currently active or overrided by the media.
         /// </summary>
-        public List<BoneBindingDto> bindings;
+        public bool active;
+
+        /// <summary>
+        /// The binded BoneType.
+        /// </summary>
+        public string boneType;
+
+        /// <summary>
+        /// The identifier of the 3D object.
+        /// </summary>
+        public ulong objectId;
+
+        public SerializableVector3 position;
+
+        public SerializableVector4 rotation;
+
     }
 }

@@ -15,25 +15,29 @@ limitations under the License.
 */
 
 using System;
+using System.Collections.Generic;
 
 namespace umi3d.common.userCapture
 {
     /// <summary>
-    /// Class to describe a bone's 6-D pose in the frame of reference of a user.
+    /// Abstract class to represent the root node of one user's representation.
     /// </summary>
     [Serializable]
-    public class BoneDto : UMI3DDto
+    public class UMI3DAvatarNodeDto : UMI3DNodeDto
     {
         /// <summary>
-        /// Defines the type of the bone.
+        /// The unique identifier of the user.
         /// </summary>
-        public string boneType;
+        public ulong userId;
 
-        public SerializableVector3 position;
+        /// <summary>
+        /// A bool to enable or disable bindings
+        /// </summary>
+        public bool activeBindings;
 
-        public SerializableVector4 rotation;
-
-        public SerializableVector3 scale;
-
+        /// <summary>
+        /// A list of bindings between the user's bones and their representations.
+        /// </summary>
+        public List<BoneBindingDto> bindings;
     }
 }

@@ -22,12 +22,24 @@ namespace umi3d.common
     /// Abstract class to represent any message sent by a UMI3D Browser.
     /// </summary>
     [Serializable]
-    public abstract class AbstractBrowserRequestDto : UMI3DDto
+    public abstract class AbstractBrowserRequestDto : UMI3DDto, IByte
     {
         /// <summary>
         /// Defines if the message have to be reliable.
         /// </summary>
         protected bool reliable = true;
 
+
+        protected abstract uint GetOperationId();
+        public virtual (int, Func<byte[], int, int>) ToByteArray(params object[] parameters)
+        {
+            int size = UMI3DNetworkingHelper.GetSize(GetOperationId());
+            Func<byte[], int, int> func = (b, i) =>
+            {
+                i += UMI3DNetworkingHelper.Write(GetOperationId(), b, i);
+                return size;
+            };
+            return (size, func);
+        }
     }
 }

@@ -145,7 +145,7 @@ namespace BrowserDesktop.Interaction
         //ManipulationDisplayer ManipulationDisplayer;
         ManipulationElement manipulationDisplayer;
 
-        string toolId;
+        ulong toolId;
 
         protected void Start()
         {
@@ -177,7 +177,7 @@ namespace BrowserDesktop.Interaction
             }
         }
 
-        public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
+        public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
             if (associatedInteraction != null)
             {
@@ -212,7 +212,7 @@ namespace BrowserDesktop.Interaction
         }
 
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
             if (associatedInteraction != null)
             {
@@ -275,8 +275,8 @@ namespace BrowserDesktop.Interaction
             }
         }
 
-        string hoveredObjectId;
-        string GetCurrentHoveredObjectId() { return hoveredObjectId; }
+        ulong hoveredObjectId;
+        ulong GetCurrentHoveredObjectId() { return hoveredObjectId; }
 
         protected IEnumerator networkMessageSender()
         {
@@ -447,7 +447,7 @@ namespace BrowserDesktop.Interaction
             return associatedInteraction == null && (activationButton.IsAvailable() || activationButton.Locked);
         }
 
-        public override void UpdateHoveredObjectId(string hoveredObjectId)
+        public override void UpdateHoveredObjectId(ulong hoveredObjectId)
         {
             this.hoveredObjectId = hoveredObjectId;
         }

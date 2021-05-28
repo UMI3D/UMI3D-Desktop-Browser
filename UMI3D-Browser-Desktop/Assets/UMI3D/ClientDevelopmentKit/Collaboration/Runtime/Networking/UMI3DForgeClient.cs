@@ -215,7 +215,15 @@ namespace umi3d.cdk.collaboration
 
         public void SendBrowserRequest(AbstractBrowserRequestDto dto, bool reliable)
         {
-            SendBinaryData((int)DataChannelTypes.Data, dto.ToBson(), reliable);
+            if (useDto)
+                SendBinaryData((int)DataChannelTypes.Data, dto.ToBson(), reliable);
+            else
+            {
+                var f = dto.ToByteArray();
+                var data = new byte[f.Item1];
+                f.Item2(data, 0);
+                SendBinaryData((int)DataChannelTypes.Data, data, reliable);
+            }
         }
 
         public void SendVOIP(int length, byte[] sample)
@@ -244,25 +252,52 @@ namespace umi3d.cdk.collaboration
         /// <inheritdoc/>
         protected override void OnDataFrame(NetworkingPlayer player, Binary frame, NetWorker sender)
         {
-
-            var dto = UMI3DDto.FromBson(frame.StreamData.byteArr);
-            MainThreadManager.Run(() =>
+            if (useDto)
             {
-                switch (dto)
+                var dto = UMI3DDto.FromBson(frame.StreamData.byteArr);
+                MainThreadManager.Run(() =>
                 {
-                    case TransactionDto transaction:
-                        StartCoroutine(UMI3DTransactionDispatcher.PerformTransaction(transaction));
+                    switch (dto)
+                    {
+                        case TransactionDto transaction:
+                            StartCoroutine(UMI3DTransactionDispatcher.PerformTransaction(transaction));
 
+                            break;
+                        case NavigateDto navigate:
+                            StartCoroutine(UMI3DNavigation.Navigate(navigate));
+
+                            break;
+                        default:
+                            Debug.Log($"Type not catch {dto.GetType()}");
+                            break;
+                    }
+                });
+            }
+            else
+            {
+                int length = frame.StreamData.byteArr.Length;
+                int position = 0;
+                var TransactionId = UMI3DNetworkingHelper.Read<uint>(frame.StreamData.byteArr, ref position, ref length);
+                switch (TransactionId)
+                {
+                    case UMI3DOperationKeys.Transaction:
+                        MainThreadManager.Run(() =>
+                        {
+                            StartCoroutine(UMI3DTransactionDispatcher.PerformTransaction(frame.StreamData.byteArr, position, length));
+                        });
                         break;
-                    case NavigateDto navigate:
-                        StartCoroutine(UMI3DNavigation.Navigate(navigate));
+                    case UMI3DOperationKeys.NavigationRequest:
+                        
 
                         break;
                     default:
-                        Debug.Log($"Type not catch {dto.GetType()}");
+                        MainThreadManager.Run(() =>
+                        {
+                            Debug.Log($"Type not catch {TransactionId}");
+                        });
                         break;
                 }
-            });
+            }
         }
 
         #endregion
@@ -318,10 +353,12 @@ namespace umi3d.cdk.collaboration
         {
             VoiceDto dto = null;
             if (useDto) dto = UMI3DDto.FromBson(frame.StreamData.byteArr) as VoiceDto;
-            var id = useDto ? dto.senderId : UMI3DNetworkingHelper.Read<uint>(frame.StreamData.byteArr, 0);
+            var position = 0;
+            var length = frame.StreamData.byteArr.Length;
+            var id = useDto ? dto.senderId : UMI3DNetworkingHelper.Read<uint>(frame.StreamData.byteArr, ref position,ref length);
             UMI3DUser source = GetUserByNetWorkId(id);
             if (source != null)
-                AudioManager.Instance.Read(source.id, useDto ? dto.data : frame.StreamData.byteArr.Skip(sizeof(uint)).SkipLast().ToArray(), client.Time.Timestep);
+                AudioManager.Instance.Read(source.id, useDto ? dto.data : frame.StreamData.byteArr.Skip(position).SkipLast().ToArray(), client.Time.Timestep);
         }
 
 

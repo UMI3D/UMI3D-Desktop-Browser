@@ -35,5 +35,15 @@ namespace umi3d.cdk
         {
             return false;
         }
+
+        public virtual bool SetUMI3DPorperty(UMI3DEntityInstance entity, uint operationId, uint propertyKey, byte[] operation, int position, int length)
+        {
+            return false;
+        }
+
+        public virtual bool ReadUMI3DProperty(ref object value, uint propertyKey, byte[] operation, int position, int length)
+        {
+            return false;
+        }
     }
 }

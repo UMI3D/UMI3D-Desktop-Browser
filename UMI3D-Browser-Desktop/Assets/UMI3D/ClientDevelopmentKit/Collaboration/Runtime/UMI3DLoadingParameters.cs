@@ -147,6 +147,73 @@ namespace umi3d.cdk
             return GlTFNodeLoader.SetUMI3DProperty(entity, property);
         }
 
+
+        public override bool SetUMI3DProperty(UMI3DEntityInstance entity, uint operationId, uint propertyKey, byte[] operation, int position, int length)
+        {
+            if (entity == null)
+                throw new Exception($"Entity should not be null");
+            if (EntityGroupLoader.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length))
+                return true;
+            if (UMI3DEnvironmentLoader.Exists && UMI3DEnvironmentLoader.Instance.sceneLoader.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length))
+                return true;
+            if (UMI3DAnimationLoader.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length))
+                return true;
+            if (PreloadedSceneLoader.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length))
+                return true;
+            if (UMI3DInteractableLoader.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length))
+                return true;
+            if (UMI3DToolLoader.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length))
+                return true;
+            if (UMI3DToolBoxLoader.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length))
+                return true;
+            if (notificationLoader != null && notificationLoader.SetUMI3DPorperty(entity, operationId, propertyKey, operation, position, length))
+                return true;
+            if (SubMeshLoader.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length))
+                return true;
+            if (meshLoader.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length))
+                return true;
+            if (UILoader.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length))
+                return true;
+            if (avatarLoader.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length))
+                return true;
+            if (nodeLoader.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length))
+                return true;
+            if (AnchorLoader != null && AnchorLoader.SetUMI3DPorperty(entity, operationId, propertyKey, operation, position, length))
+                return true;
+            return GlTFNodeLoader.SetUMI3DProperty(entity, operationId, propertyKey, operation, position, length);
+        }
+
+        public override bool ReadUMI3DProperty(ref object value, uint propertyKey, byte[] operation, int position, int length)
+        {
+            if (UMI3DEnvironmentLoader.Exists && UMI3DEnvironmentLoader.Instance.sceneLoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length))
+                return true;
+            if (UMI3DAnimationLoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length))
+                return true;
+            if (PreloadedSceneLoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length))
+                return true;
+            if (UMI3DInteractableLoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length))
+                return true;
+            if (UMI3DToolLoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length))
+                return true;
+            if (UMI3DToolBoxLoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length))
+                return true;
+            if (notificationLoader != null && notificationLoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length))
+                return true;
+            if (SubMeshLoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length))
+                return true;
+            if (meshLoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length))
+                return true;
+            if (UILoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length))
+                return true;
+            if (avatarLoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length))
+                return true;
+            if (nodeLoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length))
+                return true;
+            if (AnchorLoader != null && AnchorLoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length))
+                return true;
+            return GlTFNodeLoader.ReadUMI3DProperty(ref value, propertyKey, operation, position, length);
+        }
+
         ///<inheritdoc/>
         public override UMI3DLocalAssetDirectory ChooseVariant(AssetLibraryDto assetLibrary)
         {
@@ -313,11 +380,11 @@ namespace umi3d.cdk
             switch (operation)
             {
                 case SwitchToolDto switchTool:
-                    AbstractInteractionMapper.Instance.SwitchTools(switchTool.toolId, switchTool.replacedToolId, switchTool.releasable, null, new interaction.RequestedByEnvironment());
+                    AbstractInteractionMapper.Instance.SwitchTools(switchTool.toolId, switchTool.replacedToolId, switchTool.releasable, 0, new interaction.RequestedByEnvironment());
                     performed.Invoke();
                     break;
                 case ProjectToolDto projection:
-                    AbstractInteractionMapper.Instance.SelectTool(projection.toolId, projection.releasable, null, new interaction.RequestedByEnvironment());
+                    AbstractInteractionMapper.Instance.SelectTool(projection.toolId, projection.releasable, 0, new interaction.RequestedByEnvironment());
                     performed.Invoke();
                     break;
                 case ReleaseToolDto release:
@@ -330,6 +397,44 @@ namespace umi3d.cdk
                     break;
                 case SetStreamedBonesDto streamedBones:
                     UMI3DClientUserTracking.Instance.setStreamedBones(streamedBones.streamedBones);
+                    performed.Invoke();
+                    break;
+            }
+        }
+
+        public override void UnknownOperationHandler(uint operationId, byte[] operation, int position, int length, Action performed)
+        {
+            ulong id;
+            bool releasable;
+
+            switch (operationId)
+            {
+                case UMI3DOperationKeys.SwitchTool:
+                    id = UMI3DNetworkingHelper.Read<ulong>(operation, ref position, ref length);
+                    releasable = UMI3DNetworkingHelper.Read<bool>(operation, ref position, ref length);
+                    var oldid = UMI3DNetworkingHelper.Read<ulong>(operation, ref position, ref length);
+                    AbstractInteractionMapper.Instance.SwitchTools(id, oldid, releasable, 0, new interaction.RequestedByEnvironment());
+                    performed.Invoke();
+                    break;
+                case UMI3DOperationKeys.ProjectTool:
+                    id = UMI3DNetworkingHelper.Read<ulong>(operation, ref position, ref length);
+                    releasable = UMI3DNetworkingHelper.Read<bool>(operation, ref position, ref length);
+                    AbstractInteractionMapper.Instance.SelectTool(id, releasable, 0, new interaction.RequestedByEnvironment());
+                    performed.Invoke();
+                    break;
+                case UMI3DOperationKeys.ReleaseTool:
+                    id = UMI3DNetworkingHelper.Read<ulong>(operation, ref position, ref length);
+                    AbstractInteractionMapper.Instance.ReleaseTool(id, new interaction.RequestedByEnvironment());
+                    performed.Invoke();
+                    break;
+                case UMI3DOperationKeys.SetUTSTargetFPS:
+                    var target = UMI3DNetworkingHelper.Read<int>(operation, ref position, ref length);
+                    UMI3DClientUserTracking.Instance.setFPSTarget(target);
+                    performed.Invoke();
+                    break;
+                case UMI3DOperationKeys.SetStreamedBones:
+                    var streamedBones = UMI3DNetworkingHelper.ReadList<string>(operation, ref position, ref length);
+                    UMI3DClientUserTracking.Instance.setStreamedBones(streamedBones);
                     performed.Invoke();
                     break;
             }
