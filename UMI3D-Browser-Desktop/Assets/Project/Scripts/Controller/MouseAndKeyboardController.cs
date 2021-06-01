@@ -437,7 +437,7 @@ namespace BrowserDesktop.Controller
                 }
                 else
                 {
-                    if (mouseData.LastHoveredId != null && mouseData.CurrentHoveredId != mouseData.LastHoveredId)
+                    if (mouseData.LastHoveredId != 0 && mouseData.CurrentHoveredId != mouseData.LastHoveredId)
                     {
                         if (associatedInputs.ContainsKey(mouseData.CurentHovered.dto.id))
                         {
