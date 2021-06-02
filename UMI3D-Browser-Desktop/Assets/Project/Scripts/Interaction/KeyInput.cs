@@ -38,7 +38,7 @@ namespace BrowserDesktop.Interaction
         /// Avatar bone linked to this input.
         /// </summary>
         [ConstStringEnum(typeof(BoneType))]
-        public string bone = BoneType.None;
+        public uint bone = BoneType.None;
 
         /// <summary>
         /// Use lock if the Input is Used elsewhere;

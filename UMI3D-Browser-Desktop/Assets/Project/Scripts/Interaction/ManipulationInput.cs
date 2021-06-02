@@ -102,7 +102,7 @@ namespace BrowserDesktop.Interaction
         /// <summary>
         /// Avatar bone linked to this input.
         /// </summary>
-        public string bone;
+        public uint bone;
 
         /// <summary>
         /// Frame rate applied to message emission through network (high values can cause network flood).

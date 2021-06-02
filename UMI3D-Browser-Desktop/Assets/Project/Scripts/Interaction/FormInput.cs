@@ -30,7 +30,7 @@ public class FormInput : AbstractUMI3DInput
     /// <summary>
     /// Avatar bone linked to this input.
     /// </summary>
-    public string bone = BoneType.None;
+    public uint bone = BoneType.None;
 
     ulong toolId;
     ulong hoveredObjectId;
