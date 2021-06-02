@@ -50,10 +50,10 @@ namespace BrowserDesktop.Controller
         /// Avatar bone linked to this input.
         /// </summary>
         [ConstStringEnum(typeof(BoneType))]
-        public string interactionBoneType = BoneType.RightHand;
+        public uint interactionBoneType = BoneType.RightHand;
 
         [ConstStringEnum(typeof(BoneType))]
-        public string hoverBoneType = BoneType.Head;
+        public uint hoverBoneType = BoneType.Head;
 
         Dictionary<int, int> manipulationMap;
 
