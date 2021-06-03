@@ -785,7 +785,6 @@ namespace umi3d.cdk
             var idList = UMI3DNetworkingHelper.ReadList<ulong>(operation, ref position, ref length, (int)entityCount);
             var operationId = UMI3DNetworkingHelper.Read<uint>(operation, ref position, ref length);
             var propertyKey = UMI3DNetworkingHelper.Read<uint>(operation, ref position, ref length);
-
             foreach (ulong id in idList)
             {
                 try
@@ -799,7 +798,10 @@ namespace umi3d.cdk
                     {
                         if (SetUMI3DPorperty(node, operationId, propertyKey, operation, position, length)) break;
                         if (UMI3DEnvironmentLoader.Exists && UMI3DEnvironmentLoader.Instance.sceneLoader.SetUMI3DProperty(node, operationId, propertyKey, operation, position, length)) break;
-                        Parameters.SetUMI3DProperty(node, operationId, propertyKey, operation, position, length);
+                        if(!Parameters.SetUMI3DProperty(node, operationId, propertyKey, operation, position, length))
+                        {
+                            Debug.LogWarning($"A SetUMI3DProperty failed to match any loader {id} {operationId} {propertyKey} {operation.ToString<byte>()} {position} {length}");
+                        }
                     }
                 }
                 catch (Exception e)
