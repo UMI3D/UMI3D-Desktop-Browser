@@ -143,8 +143,7 @@ namespace umi3d.cdk
                     {
                         var entityId = UMI3DNetworkingHelper.Read<ulong>(operation, ref position, ref length);
                         var propertyKey = UMI3DNetworkingHelper.Read<uint>(operation, ref position, ref length);
-                        if (!UMI3DEnvironmentLoader.SetEntity(operationId, entityId, propertyKey, operation, position, length))
-                            Debug.LogWarning($"Could not perform SetEntity for {operationId} {entityId} {propertyKey} {operation.ToString<byte>()} {position} {length}");
+                        UMI3DEnvironmentLoader.SetEntity(operationId,entityId, propertyKey, operation, position, length);
                         performed.Invoke();
                     }
                     else
