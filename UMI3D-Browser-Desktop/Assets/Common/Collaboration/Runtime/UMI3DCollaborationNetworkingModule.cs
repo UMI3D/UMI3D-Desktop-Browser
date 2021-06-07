@@ -29,10 +29,13 @@ namespace umi3d.common.collaboration
                     size = sizeof(uint) + UMI3DNetworkingHelper.GetSize(param.value);
                     break;
                 case IntegerRangeParameterDto param:
-                    size = sizeof(uint) + UMI3DNetworkingHelper.GetSize(param.value) * 4;
+                    size = sizeof(uint) + UMI3DNetworkingHelper.GetSize(param.value)*4;
                     break;
                 case FloatRangeParameterDto param:
-                    size = sizeof(uint) + UMI3DNetworkingHelper.GetSize(param.value) * 4;
+                    size = sizeof(uint) + UMI3DNetworkingHelper.GetSize(param.value)*4;
+                    break;
+                case UMI3DRenderedNodeDto.MaterialOverrideDto material:
+                    size = sizeof(ulong) + sizeof(bool) + UMI3DNetworkingHelper.GetSizeArray(material.overridedMaterialsId);
                     break;
                 default:
                     size = 0;
@@ -145,6 +148,24 @@ namespace umi3d.common.collaboration
                 //    else
                 //        result = default(T);
                 //    return true;
+
+                case true when typeof(T) == typeof(UMI3DRenderedNodeDto.MaterialOverrideDto):
+                    var mat = new UMI3DRenderedNodeDto.MaterialOverrideDto();
+                    readable = UMI3DNetworkingHelper.TryRead<ulong>(array, ref position, ref length, out mat.newMaterialId);
+                    if (readable)
+                    {
+                        readable = UMI3DNetworkingHelper.TryRead<bool>(array, ref position, ref length, out mat.addMaterialIfNotExists);
+                        if (readable)
+                        {
+                            mat.overridedMaterialsId = UMI3DNetworkingHelper.ReadList<string>(array, ref position, ref length);
+                            result = (T)Convert.ChangeType(mat, typeof(T));
+                        }
+                        else
+                            result = default(T);
+                    }
+                    else
+                        result = default(T);
+                    return true;
                 default:
                     result = default(T);
                     readable = false;
@@ -152,56 +173,53 @@ namespace umi3d.common.collaboration
             }
         }
 
-        public override bool Write<T>(T value, byte[] array, int position, out int size)
+        public override bool Write<T>(T value, byte[] array, ref int position, out int size)
         {
             switch (value)
             {
                 case UserCameraPropertiesDto camera:
-                    size = sizeof(float) + sizeof(int) + UMI3DNetworkingHelper.GetSize(camera.projectionMatrix);
-                    position += UMI3DNetworkingHelper.Write(camera.scale, array, position);
-                    position += UMI3DNetworkingHelper.Write(camera.projectionMatrix, array, position);
-                    UMI3DNetworkingHelper.Write(camera.boneType, array, position);
+                    size = UMI3DNetworkingHelper.Write(camera.scale, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(camera.projectionMatrix, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(camera.boneType, array, ref position);
                     break;
                 case EnumParameterDto<string> param:
-                    size = sizeof(uint) + UMI3DNetworkingHelper.GetSize(param.value);
-                    position += UMI3DNetworkingHelper.Write(UMI3DParameterKeys.Enum, array, position);
-                    UMI3DNetworkingHelper.Write(param.value, array, position);
+                    size = UMI3DNetworkingHelper.Write(UMI3DParameterKeys.Enum, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(param.value, array, ref position);
                     break;
                 case BooleanParameterDto param:
-                    size = sizeof(uint) + UMI3DNetworkingHelper.GetSize(param.value);
-                    position += UMI3DNetworkingHelper.Write(UMI3DParameterKeys.Bool, array, position);
-                    UMI3DNetworkingHelper.Write(param.value, array, position);
+                    size = UMI3DNetworkingHelper.Write(UMI3DParameterKeys.Bool, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(param.value, array, ref position);
                     break;
                 case FloatParameterDto param:
-                    size = sizeof(uint) + UMI3DNetworkingHelper.GetSize(param.value);
-                    position += UMI3DNetworkingHelper.Write(UMI3DParameterKeys.Float, array, position);
-                    UMI3DNetworkingHelper.Write(param.value, array, position);
+                    size = UMI3DNetworkingHelper.Write(UMI3DParameterKeys.Float, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(param.value, array,ref position);
                     break;
                 case IntegerParameterDto param:
-                    size = sizeof(uint) + UMI3DNetworkingHelper.GetSize(param.value);
-                    position += UMI3DNetworkingHelper.Write(UMI3DParameterKeys.Int, array, position);
-                    UMI3DNetworkingHelper.Write(param.value, array, position);
+                    size = UMI3DNetworkingHelper.Write(UMI3DParameterKeys.Int, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(param.value, array, ref position);
                     break;
                 case StringParameterDto param:
-                    size = sizeof(uint) + UMI3DNetworkingHelper.GetSize(param.value);
-                    position += UMI3DNetworkingHelper.Write(UMI3DParameterKeys.String, array, position);
-                    UMI3DNetworkingHelper.Write(param.value, array, position);
+                    size = UMI3DNetworkingHelper.Write(UMI3DParameterKeys.String, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(param.value, array, ref position);
                     break;
                 case IntegerRangeParameterDto param:
-                    size = sizeof(uint) + UMI3DNetworkingHelper.GetSize(param.value) * 4;
-                    position += UMI3DNetworkingHelper.Write(UMI3DParameterKeys.IntRange, array, position);
-                    position += UMI3DNetworkingHelper.Write(param.value, array, position);
-                    position += UMI3DNetworkingHelper.Write(param.min, array, position);
-                    position += UMI3DNetworkingHelper.Write(param.max, array, position);
-                    UMI3DNetworkingHelper.Write(param.increment, array, position);
+                    size = UMI3DNetworkingHelper.Write(UMI3DParameterKeys.IntRange, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(param.value, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(param.min, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(param.max, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(param.increment, array, ref position);
                     break;
                 case FloatRangeParameterDto param:
-                    size = sizeof(uint) + UMI3DNetworkingHelper.GetSize(param.value) * 4;
-                    position += UMI3DNetworkingHelper.Write(UMI3DParameterKeys.FloatRange, array, position);
-                    position += UMI3DNetworkingHelper.Write(param.value, array, position);
-                    position += UMI3DNetworkingHelper.Write(param.min, array, position);
-                    position += UMI3DNetworkingHelper.Write(param.max, array, position);
-                    UMI3DNetworkingHelper.Write(param.increment, array, position);
+                    size = UMI3DNetworkingHelper.Write(UMI3DParameterKeys.FloatRange, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(param.value, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(param.min, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(param.max, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(param.increment, array, ref position);
+                    break;
+                case UMI3DRenderedNodeDto.MaterialOverrideDto material:
+                    size = UMI3DNetworkingHelper.Write(material.newMaterialId, array, ref position);
+                    size += UMI3DNetworkingHelper.Write(material.addMaterialIfNotExists, array, ref position);
+                    size += UMI3DNetworkingHelper.WriteArray(material.overridedMaterialsId, array, ref position);
                     break;
                 default:
                     size = 0;

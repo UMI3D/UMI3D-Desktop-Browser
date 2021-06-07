@@ -785,6 +785,7 @@ namespace umi3d.cdk
             var idList = UMI3DNetworkingHelper.ReadList<ulong>(operation, ref position, ref length, (int)entityCount);
             var operationId = UMI3DNetworkingHelper.Read<uint>(operation, ref position, ref length);
             var propertyKey = UMI3DNetworkingHelper.Read<uint>(operation, ref position, ref length);
+
             foreach (ulong id in idList)
             {
                 try
