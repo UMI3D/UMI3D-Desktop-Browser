@@ -575,7 +575,7 @@ namespace BrowserDesktop.Controller
             return group;
         }
 
-        public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true)
+        public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
         {
             KeyInput input = KeyInputs.Find(i => i.IsAvailable() || !unused);
             if (input == null)
