@@ -43,6 +43,7 @@ namespace umi3d.cdk
 
         static public void PerformOperation(AbstractOperationDto operation, Action performed)
         {
+            if (performed == null) performed = () => { };
             switch (operation)
             {
                 case LoadEntityDto load:
@@ -57,6 +58,14 @@ namespace umi3d.cdk
                     break;
                 case MultiSetEntityPropertyDto multiSet:
                     UMI3DEnvironmentLoader.SetMultiEntity(multiSet);
+                    performed.Invoke();
+                    break;
+                case StartInterpolationPropertyDto interpolationStart:
+                    UMI3DEnvironmentLoader.StartInterpolation(interpolationStart);
+                    performed.Invoke();
+                    break;
+                case StopInterpolationPropertyDto interpolationStop:
+                    UMI3DEnvironmentLoader.StopInterpolation(interpolationStop);
                     performed.Invoke();
                     break;
 
