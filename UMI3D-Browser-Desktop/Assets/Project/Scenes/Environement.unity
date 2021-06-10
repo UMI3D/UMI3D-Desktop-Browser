@@ -1408,10 +1408,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewpoint: {fileID: 6129258314299408695}
-  _neckPivot: {fileID: 5249229621059094114}
+  _neckPivot: {fileID: 506333542}
   maxAngle: 55
   head: {fileID: 1057207522}
-  Neck: {fileID: 6129258313713389227}
+  Body: {fileID: 1057207461}
+  Node: {fileID: 6129258313713389227}
   TorsoUpAnchor: {fileID: 1057207515}
   agent: {fileID: 936059045}
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
@@ -1430,7 +1431,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navigations:
-  - {fileID: 0}
+  - {fileID: 498482122}
 --- !u!114 &498482124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5039,7 +5040,7 @@ MonoBehaviour:
   OnConnectionLost:
     m_PersistentCalls:
       m_Calls: []
-  Identifier: {fileID: 0}
+  Identifier: {fileID: 11400000, guid: a3c89eef08c21e647a83ef6b16993957, type: 2}
 --- !u!4 &1318732803
 Transform:
   m_ObjectHideFlags: 0
@@ -8054,20 +8055,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boneType: none
   isTracked: 0
---- !u!114 &612391813676032936
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6129258313713389226}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boneType: None
-  isTracked: 0
 --- !u!4 &643296887986478917
 Transform:
   m_ObjectHideFlags: 0
@@ -10493,7 +10480,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6129258313713389227}
   - component: {fileID: 4670142053546128550}
-  - component: {fileID: 612391813676032936}
   - component: {fileID: 4810948489088070797}
   - component: {fileID: 936059045}
   m_Layer: 0
