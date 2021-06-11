@@ -24,6 +24,7 @@ using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace BrowserDesktop.Controller
 {
@@ -56,6 +57,17 @@ namespace BrowserDesktop.Controller
         public string hoverBoneType = BoneType.Head;
 
         Dictionary<int, int> manipulationMap;
+
+        public class HoverEvent : UnityEvent<string, Vector3> {};
+
+        [HideInInspector]
+        static public HoverEvent HoverEnter = new HoverEvent();
+
+        [HideInInspector]
+        static public HoverEvent HoverUpdate = new HoverEvent();
+
+        [HideInInspector]
+        static public UnityEvent HoverExit = new UnityEvent();
 
         #region Hover
 
@@ -620,7 +632,7 @@ namespace BrowserDesktop.Controller
             return group;
         }
 
-        public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true)
+        public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
         {
             KeyInput input = KeyInputs.Find(i => i.IsAvailable() || !unused);
             if (input == null)
