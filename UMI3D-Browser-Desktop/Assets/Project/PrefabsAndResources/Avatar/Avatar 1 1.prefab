@@ -1524,6 +1524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anchor: {fileID: 6129258314471845431}
+  skeletonContainer: {fileID: 6667061672495794225}
   viewpoint: {fileID: 6129258313615286699}
   viewpointBonetype: head
   sendTracking: 1

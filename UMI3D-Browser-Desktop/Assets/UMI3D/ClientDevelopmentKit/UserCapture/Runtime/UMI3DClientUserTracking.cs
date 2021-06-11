@@ -71,10 +71,9 @@ namespace umi3d.cdk.userCapture
 
         protected virtual void Start()
         {
-            streamedBonetypes = UMI3DClientUserTrackingBone.instances.Keys.ToList();
-            sendingCameraProperties.AddListener(() => StartCoroutine(DispatchCamera()));
-            sendingCameraProperties.Invoke();
-            startingSendingTracking.AddListener(() => { if (sendTracking) StartCoroutine(DispatchTracking()); });
+            cameraHasChanged.AddListener(() => StartCoroutine("DispatchCamera"));
+            cameraHasChanged.Invoke();
+            startingSendingTracking.AddListener(() => { if (sendTracking) StartCoroutine("DispatchTracking"); });
             startingSendingTracking.Invoke();
         }
 
