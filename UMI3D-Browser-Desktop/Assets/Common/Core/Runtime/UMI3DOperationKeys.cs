@@ -22,6 +22,7 @@ namespace umi3d.common
         public const uint LoadEntity = 2;
         public const uint DeleteEntity = 3;
         public const uint NavigationRequest = 4;
+        public const uint TeleportationRequest = 5;
 
         public const uint SetEntityProperty = 101;
         public const uint SetEntityDictionnaryProperty = 103;
@@ -43,7 +44,8 @@ namespace umi3d.common
         public const uint SetStreamedBones = 301;
         public const uint StartInterpolationProperty =302;
         public const uint StopInterpolationProperty = 303;
-
+        public const uint SetSendingCameraProperty = 304;
+        public const uint SetSendingTracking = 305;
 
         public const uint InteractionRequest = 10001;
         public const uint EventStateChanged = 10002;
