@@ -24,6 +24,7 @@ using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace BrowserDesktop.Controller
 {
@@ -56,6 +57,17 @@ namespace BrowserDesktop.Controller
         public string hoverBoneType = BoneType.Head;
 
         Dictionary<int, int> manipulationMap;
+
+        public class HoverEvent : UnityEvent<string, Vector3> {};
+
+        [HideInInspector]
+        static public HoverEvent HoverEnter = new HoverEvent();
+
+        [HideInInspector]
+        static public HoverEvent HoverUpdate = new HoverEvent();
+
+        [HideInInspector]
+        static public UnityEvent HoverExit = new UnityEvent();
 
         #region Hover
 
@@ -393,6 +405,7 @@ namespace BrowserDesktop.Controller
                             mouseData.OldHovered = mouseData.CurentHovered;
                         }
                         mouseData.CurentHovered.HoverEnter(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
+                        HoverEnter.Invoke(mouseData.CurrentHoveredId, mouseData.point);
                     }
                     else
                     {
@@ -407,6 +420,7 @@ namespace BrowserDesktop.Controller
                     }
 
                     mouseData.CurentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
+                    HoverUpdate.Invoke(mouseData.CurrentHoveredId, mouseData.point);
                 }
                 else if (mouseData.OldHovered != null)
                 {
@@ -416,6 +430,7 @@ namespace BrowserDesktop.Controller
                         InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                     }
                     mouseData.OldHovered.HoverExit(hoverBoneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
+                    HoverExit.Invoke();
                     CircularMenu.Collapse();
                     CursorHandler.State = CursorHandler.CursorState.Default;
                     mouseData.OldHovered = null;
