@@ -30,7 +30,6 @@ public class FpsNavigation : AbstractNavigation
     public Transform _neckPivot;
     public float maxAngle;
     public Transform head;
-    public Transform Body;
     public Transform Node;
     public Transform TorsoUpAnchor;
 
@@ -165,9 +164,9 @@ public class FpsNavigation : AbstractNavigation
 
         if (SideMenu.IsExpanded || CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHiden)
         {
-            Vector3 position = Vector3.zero;// Node.transform.position;
+            Vector3 position = Node.transform.position;
             position.y = jumpData.heigth + baseHeight;
-            Body.transform.localPosition = position;
+            Node.transform.localPosition = position;
             return;
         }
 
@@ -209,11 +208,8 @@ public class FpsNavigation : AbstractNavigation
         HandleView();
         Vector3 pos = Node.rotation * new Vector3(Move.y, 0, Move.x);
         pos += Node.transform.position;
+        pos.y = height + baseHeight;
         Node.transform.position = pos;
-
-        Vector3 bodyPose = Vector3.zero;
-        bodyPose.y = height + baseHeight;
-        Body.transform.localPosition = bodyPose;
     }
 
     void Walk(ref Vector2 Move, ref float height)
@@ -235,7 +231,7 @@ public class FpsNavigation : AbstractNavigation
         }
         bool Squatting = Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat));
         height = Mathf.Lerp(height, (Squatting) ? data.squatHeight : data.standHeight, data.squatSpeed == 0 ? 1000000 : Time.deltaTime / data.squatSpeed);
-        TorsoUpAnchor.localRotation = Quaternion.Euler((Squatting) ? data.squatTorsoAngle : 0, 0, 0);
+        //TorsoUpAnchor.localRotation = Quaternion.Euler((Squatting) ? data.squatTorsoAngle : 0, 0, 0);
         ComputeJump(Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Jump)));
     }
 
