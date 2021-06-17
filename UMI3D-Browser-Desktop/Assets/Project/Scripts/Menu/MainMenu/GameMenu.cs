@@ -19,12 +19,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using umi3d.common;
 using umi3d.cdk;
-using Unity.UIElements.Runtime;
 using UnityEngine.UIElements;
 
 public class GameMenu : Singleton<GameMenu>
 {
-    public PanelRenderer panelRenderer;
+    public UIDocument uiDocument;
 
     [SerializeField]
     string gameMenuTagName = "game-menu-container";
@@ -33,7 +32,7 @@ public class GameMenu : Singleton<GameMenu>
 
     void Start()
     {
-        gameMenu = panelRenderer.visualTree.Q<VisualElement>(gameMenuTagName);
+        gameMenu = uiDocument.rootVisualElement.Q<VisualElement>(gameMenuTagName);
         Display(false);
 
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
