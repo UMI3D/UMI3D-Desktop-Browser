@@ -449,7 +449,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         parametersScreen.style.display = DisplayStyle.Flex;
 
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
-
         if (form == null)
             callback.Invoke(form);
         else
@@ -468,6 +467,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 callback.Invoke(form);
                 CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
                 nextStep = null;
+
             };
             send.Subscribe(action);
             Menu.menu.Add(send);
@@ -515,6 +515,16 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                     stringParameterDto.value = x;
                 });
                 result = s;
+                break;
+            case LocalInfoRequestParameterDto localInfoRequestParameterDto:
+                LocalInfoRequestInputMenuItem localReq = new LocalInfoRequestInputMenuItem() { dto = localInfoRequestParameterDto };
+                localReq.NotifyValueChange(localInfoRequestParameterDto.value);
+                localReq.Subscribe((x) =>
+                {
+                    Debug.Log("try sub to local1 request");
+                }
+                );
+                result = localReq;
                 break;
             default:
                 result = new MenuItem();
