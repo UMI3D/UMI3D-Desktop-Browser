@@ -17,8 +17,6 @@ limitations under the License.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.UIElements.Runtime;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 public class DropdownElement : VisualElement
@@ -46,7 +44,7 @@ public class DropdownElement : VisualElement
     /// <summary>
     /// The choices of the dropown will be displayed at the root of the renderer.
     /// </summary>
-    PanelRenderer panelRenderer;
+    UIDocument uiDocument;
 
     Button openChoiceButton;
     Label currentChoice;
@@ -61,9 +59,9 @@ public class DropdownElement : VisualElement
         this.Q<Label>("label").text = label;
     }
 
-    public void SetUp(PanelRenderer panelRenderer, string labelClassName)
+    public void SetUp(UIDocument uiDocument, string labelClassName)
     {
-        this.panelRenderer = panelRenderer;
+        this.uiDocument = uiDocument;
         this.labelClassName = labelClassName;
 
         this.RegisterCallback<FocusOutEvent>(e => choicesDropdown.RemoveFromHierarchy());
@@ -141,7 +139,7 @@ public class DropdownElement : VisualElement
         yield return null;
         this.Focus();
 
-        panelRenderer.visualTree.Add(choicesDropdown);
+        uiDocument.rootVisualElement.Add(choicesDropdown);
         choicesDropdown.style.display = DisplayStyle.Flex;
         choicesDropdown.style.top = currentChoice.worldBound.y + currentChoice.worldBound.height;
         choicesDropdown.style.left = currentChoice.worldBound.x;
