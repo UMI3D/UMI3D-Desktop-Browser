@@ -139,7 +139,7 @@ public class DropdownElement : VisualElement
         yield return null;
         this.Focus();
 
-        uiDocument.rootVisualElement.Add(choicesDropdown);
+        uiDocument.rootVisualElement.Q<VisualElement>("root").Add(choicesDropdown);
         choicesDropdown.style.display = DisplayStyle.Flex;
         choicesDropdown.style.top = currentChoice.worldBound.y + currentChoice.worldBound.height;
         choicesDropdown.style.left = currentChoice.worldBound.x;
