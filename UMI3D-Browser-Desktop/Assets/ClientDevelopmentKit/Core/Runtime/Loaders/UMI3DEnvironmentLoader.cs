@@ -1113,6 +1113,9 @@ namespace umi3d.cdk
 
                 return true;
             }
+
+            Debug.LogWarning("Need to determine what happens when not in interpolation");
+
             return false;
         }
 
@@ -1238,22 +1241,22 @@ namespace umi3d.cdk
                 case int n:
                     measurement = new double[] { n };
                     if (kalmanEntity.regressed_value == null)
-                        kalmanEntity.regressed_value = new int();
+                        kalmanEntity.regressed_value = n;
                     break;
                 case float f:
                     measurement = new double[] { f };
                     if (kalmanEntity.regressed_value == null)
-                        kalmanEntity.regressed_value = new float();
+                        kalmanEntity.regressed_value = f;
                     break;
                 case SerializableVector2 v:
                     measurement = new double[] { v.X, v.Y };
                     if (kalmanEntity.regressed_value == null)
-                        kalmanEntity.regressed_value = new SerializableVector2();
+                        kalmanEntity.regressed_value = v;
                     break;
                 case SerializableVector3 v:
                     measurement = new double[] { v.X, v.Y, v.Z };
                     if (kalmanEntity.regressed_value == null)
-                        kalmanEntity.regressed_value = new SerializableVector3();
+                        kalmanEntity.regressed_value = v;
                     break;
                 case SerializableVector4 v:
                     if (kalmanEntity.property.Equals(UMI3DPropertyKeys.Rotation))
@@ -1272,13 +1275,13 @@ namespace umi3d.cdk
                     else
                         measurement = new double[] { v.X, v.Y, v.Z, v.W };
                     if (kalmanEntity.regressed_value == null)
-                        kalmanEntity.regressed_value = new SerializableVector4();
+                        kalmanEntity.regressed_value = v;
 
                     break;
                 case SerializableColor v:
                     measurement = new double[] { v.R, v.G, v.B, v.A };
                     if (kalmanEntity.regressed_value == null)
-                        kalmanEntity.regressed_value = new SerializableColor();
+                        kalmanEntity.regressed_value = v;
                     break;
                 default:
                     measurement = new double[0];
