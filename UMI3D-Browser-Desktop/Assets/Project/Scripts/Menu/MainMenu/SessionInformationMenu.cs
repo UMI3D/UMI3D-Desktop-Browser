@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.common;
-using Unity.UIElements.Runtime;
 using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
@@ -29,7 +28,7 @@ namespace BrowserDesktop.Menu
     /// </summary>
     public class SessionInformationMenu : Singleton<SessionInformationMenu>
     {
-        public PanelRenderer panelRenderer;
+        public UIDocument uiDocument;
 
         VisualElement sessionInfo;
 
@@ -52,7 +51,8 @@ namespace BrowserDesktop.Menu
         /// </summary>
         void Start()
         {
-            var root = panelRenderer.visualTree;
+            UnityEngine.Debug.Assert(uiDocument != null);
+            var root = uiDocument.rootVisualElement;
 
             topCenterMenu = root.Q<VisualElement>("top-center-menu");
             topCenterMenu.style.display = DisplayStyle.None;
@@ -114,7 +114,7 @@ namespace BrowserDesktop.Menu
         {
             currentData = data;
 
-            environmentName = panelRenderer.visualTree.Q<Label>("environment-name");
+            environmentName = uiDocument.rootVisualElement.Q<Label>("environment-name");
             environmentName.text = media.name;
 
             favorites = UserPreferencesManager.GetFavoriteConnectionData();
