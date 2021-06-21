@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FPSData
   m_EditorClassIdentifier: 
   XAngleRange: {x: -90, y: 90}
-  XDisplayAngleRange: {x: -60, y: 70}
+  XDisplayAngleRange: {x: -50, y: 50}
   YAngleRange: {x: -90, y: 90}
   forwardSpeed: {x: 1.5, y: 1, z: 5}
   lateralSpeed: {x: 1, y: 1, z: 3}
