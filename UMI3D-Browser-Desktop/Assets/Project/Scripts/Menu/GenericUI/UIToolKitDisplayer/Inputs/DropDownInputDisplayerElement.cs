@@ -68,7 +68,7 @@ namespace BrowserDesktop.Menu
             if (dropdown == null)
             {
                 dropdown = dropdownTreeAsset.CloneTree().Q<DropdownElement>();
-                dropdown.SetUp(ConnectionMenu.Instance.panelRenderer, labelClassName);
+                dropdown.SetUp(ConnectionMenu.Instance.uiDocument, labelClassName);
             }
         }
 
