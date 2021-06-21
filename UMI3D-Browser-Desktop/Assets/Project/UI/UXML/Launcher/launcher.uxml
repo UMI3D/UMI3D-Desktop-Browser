@@ -1,36 +1,38 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:Template name="libraries-manager-screen" src="libraries-manager-screen.uxml" />
     <ui:Template name="advancedConnectionScreen" src="advancedConnectionScreen.uxml" />
     <ui:Template name="connect-screen" src="connect-screen.uxml" />
     <ui:Template name="sessionScreen" src="sessionScreen.uxml" />
-    <ui:VisualElement name="body" style="height: 100%; width: 100%;">
-        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-        <ui:VisualElement name="top" class="dark-grey1-bck" style="width: 100%; flex-direction: row; height: 40px; min-height: 40px;">
-            <ui:VisualElement name="top-right-menu" style="width: 50%; justify-content: center;">
-                <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/UI/UI_connection/ico_top.png&apos;); height: 30px; -unity-background-scale-mode: scale-to-fit; width: 30px; margin-left: 5px;" />
+    <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+    <ui:VisualElement name="root" style="flex-grow: 1;">
+        <ui:VisualElement name="body" style="height: 100%; width: 100%;">
+            <ui:VisualElement name="top" class="dark-grey1-bck" style="width: 100%; flex-direction: row; height: 40px; min-height: 40px;">
+                <ui:VisualElement name="top-right-menu" style="width: 50%; justify-content: center;">
+                    <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/UI/UI_connection/ico_top.png&apos;); height: 30px; -unity-background-scale-mode: scale-to-fit; width: 30px; margin-left: 5px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="top-left-menu" style="flex-direction: row-reverse; width: 50%; flex-wrap: nowrap; height: 100%;">
+                    <ui:Button name="close-window-btn" class="close-btn" style="color: rgb(255, 255, 255); font-size: 18px; width: 32px;" />
+                    <ui:Button name="fullscreen-btn" class="top-left-menu-btn restore-btn" style="width: 35px;" />
+                    <ui:Button name="minimize-window-btn" class="top-left-menu-btn minimize-btn" />
+                </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="top-left-menu" style="flex-direction: row-reverse; width: 50%; flex-wrap: nowrap; height: 100%;">
-                <ui:Button name="close-window-btn" class="close-btn" style="color: rgb(255, 255, 255); font-size: 18px; width: 32px;" />
-                <ui:Button name="fullscreen-btn" class="top-left-menu-btn restore-btn" style="width: 35px;" />
-                <ui:Button name="minimize-window-btn" class="top-left-menu-btn minimize-btn" />
+            <ui:VisualElement name="main" style="width: 100%; flex-direction: row; flex-grow: 1; -unity-background-scale-mode: stretch-to-fill; background-image: url(&apos;/Assets/Project/UI/UI_connection/background-middle.png&apos;); display: flex;">
+                <ui:VisualElement style="flex-grow: 1;">
+                    <ui:Button text="&#10;" name="back-menu-btn" class="btn-left-arrow" style="width: 80px; height: 80px; margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; display: flex; background-color: rgba(228, 228, 228, 0);" />
+                </ui:VisualElement>
+                <ui:VisualElement name="container" class="medium-size-txt" style="width: 685px; margin-left: auto; margin-right: auto; justify-content: center;">
+                    <ui:Instance template="libraries-manager-screen" name="libraries-manager-screen" style="display: none;" />
+                    <ui:Instance template="advancedConnectionScreen" name="advancedConnectionScreen" style="display: none;" />
+                    <ui:Instance template="connect-screen" name="connect-screen" />
+                    <ui:Instance template="sessionScreen" name="sessionScreen" style="display: none;" />
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 1;">
+                    <ui:Button name="nextMenuBtn" class="btn-right-arrow" style="width: 80px; height: 80px; background-color: rgba(93, 93, 93, 0); margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; font-size: 30px; display: flex; align-items: flex-end; flex-wrap: nowrap; position: relative; right: 23px; left: auto;" />
+                </ui:VisualElement>
             </ui:VisualElement>
-        </ui:VisualElement>
-        <ui:VisualElement name="main" style="width: 100%; flex-direction: row; flex-grow: 1; -unity-background-scale-mode: stretch-to-fill; background-image: url(&apos;/Assets/Project/UI/UI_connection/background-middle.png&apos;); display: flex;">
-            <ui:VisualElement style="flex-grow: 1;">
-                <ui:Button text="&#10;" name="back-menu-btn" class="btn-left-arrow" style="width: 80px; height: 80px; margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; display: flex; background-color: rgba(228, 228, 228, 0);" />
+            <ui:VisualElement name="footer" class="dark-grey1-bck grey-border" style="height: 90px;">
+                <ui:Label text="version x.x.x" name="version" style="position: absolute; bottom: 9px; right: 13px; color: rgb(63, 63, 63); font-size: 18px; display: flex;" />
             </ui:VisualElement>
-            <ui:VisualElement name="container" class="medium-size-txt" style="width: 685px; margin-left: auto; margin-right: auto; justify-content: center;">
-                <ui:Instance template="libraries-manager-screen" name="libraries-manager-screen" style="display: none;" />
-                <ui:Instance template="advancedConnectionScreen" name="advancedConnectionScreen" style="display: none;" />
-                <ui:Instance template="connect-screen" name="connect-screen" />
-                <ui:Instance template="sessionScreen" name="sessionScreen" style="display: none;" />
-            </ui:VisualElement>
-            <ui:VisualElement style="flex-grow: 1;">
-                <ui:Button name="nextMenuBtn" class="btn-right-arrow" style="width: 80px; height: 80px; background-color: rgba(93, 93, 93, 0); margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; font-size: 30px; display: flex; align-items: flex-end; flex-wrap: nowrap; position: relative; right: 23px; left: auto;" />
-            </ui:VisualElement>
-        </ui:VisualElement>
-        <ui:VisualElement name="footer" class="dark-grey1-bck grey-border" style="height: 90px;">
-            <ui:Label text="version x.x.x" name="version" style="position: absolute; bottom: 9px; right: 13px; color: rgb(63, 63, 63); font-size: 18px; display: flex;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

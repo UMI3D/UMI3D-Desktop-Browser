@@ -18,7 +18,6 @@ using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.common;
-using Unity.UIElements.Runtime;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -27,7 +26,7 @@ using UnityEngine.UIElements;
 /// </summary>
 public class NotificationDisplayer : Singleton<NotificationDisplayer>
 {
-    public PanelRenderer panelRenderer;
+    public UIDocument uiDocument;
 
     public VisualTreeAsset notifTreeAsset;
 
@@ -41,10 +40,10 @@ public class NotificationDisplayer : Singleton<NotificationDisplayer>
 
     private void Start()
     {
-        Debug.Assert(panelRenderer != null);
+        Debug.Assert(uiDocument != null);
         Debug.Assert(notifTreeAsset != null);
 
-        notificationContainer = panelRenderer.visualTree.Q<VisualElement>("notification-container");
+        notificationContainer = uiDocument.rootVisualElement.Q<VisualElement>("notification-container");
 
         notificationsToDisplay = new Queue<NotificationDto>();
     }

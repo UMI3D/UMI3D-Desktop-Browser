@@ -1,6 +1,6 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="/Assets/Project/UI/UXML/main-style.uss" />
     <ui:VisualElement name="range-input-displayer" class="min-size-label grey-border" style="flex-direction: row; justify-content: flex-start; align-items: center; height: 50px; border-bottom-width: 1px;">
-        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:VisualElement style="flex-direction: row; width: 100%; align-items: flex-end;">
             <ui:Slider picking-mode="Ignore" label="Slider" value="42" high-value="100" name="range-input-slider" class="orange-slider toggle-orange min-size-label slider-two-levels" style="flex-shrink: 1; flex-direction: column; width: 100%; margin-left: 12px; margin-top: 0; margin-bottom: 0;" />
             <ui:TextField picking-mode="Ignore" name="range-input-value" class="grey-text-field" style="width: 50px; height: 20px; margin-right: 12px;" />
