@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using Unity.UIElements.Runtime;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -21,7 +20,7 @@ namespace BrowserDesktop.Menu
 {
     public class EventMenu : umi3d.common.Singleton<EventMenu>
     {
-        public PanelRenderer panelRenderer;
+        public UIDocument uiDocument;
 
         [SerializeField]
         string containerTagName = null;
@@ -51,9 +50,9 @@ namespace BrowserDesktop.Menu
 
         void Start()
         {
-            Debug.Assert(panelRenderer.visualTree != null);
-            container = panelRenderer.visualTree.Q<VisualElement>(containerTagName);
-            parentContainer = panelRenderer.visualTree.Q<VisualElement>("information-pop-up-events");
+            Debug.Assert(uiDocument != null);
+            container = uiDocument.rootVisualElement.Q<VisualElement>(containerTagName);
+            parentContainer = uiDocument.rootVisualElement.Q<VisualElement>("information-pop-up-events");
             Debug.Assert(container != null);
         }
 
