@@ -11,47 +11,60 @@ namespace umi3d.cdk.volumes
 	/// </summary>
 	public class VolumeTracker : MonoBehaviour
 	{
-		public List<VolumeCell> volumesToTrack = new List<VolumeCell>();
+		public List<VolumeSliceGroup> volumesToTrack = new List<VolumeSliceGroup>();
 		public float detectionFrameRate = 30;
 
 		private Coroutine trackingRoutine = null;
+		private List<UnityAction<string>> callbacksOnEnter = new List<UnityAction<string>>();
+		private List<UnityAction<string>> callbacksOnExit = new List<UnityAction<string>>();
+		private bool wasInsideOneVolumeLastFrame = false;
+		private string lastVolumeId;
 
 		protected virtual void Awake()
         {
+			wasInsideOneVolumeLastFrame = volumesToTrack.Exists(v => v.IsInside(this.transform.position));
 			trackingRoutine = StartCoroutine(Track());
         }
 
 		IEnumerator Track()
         {
             while (true)
-            {
-				yield return new WaitForSeconds(60f / detectionFrameRate);
+            {			
+				VolumeSliceGroup cell = volumesToTrack.Find(v => v.IsInside(this.transform.position));
+				bool inside = (cell != null);
 
-				foreach(VolumeCell cell in volumesToTrack)
-                {
+				if (inside && !wasInsideOneVolumeLastFrame)
+					foreach (var callback in callbacksOnEnter)
+						callback.Invoke(cell.id);
+				else if (!inside && wasInsideOneVolumeLastFrame)
+					foreach (var callback in callbacksOnExit)
+						callback.Invoke(lastVolumeId);
 
-                }
-            }
+				wasInsideOneVolumeLastFrame = inside;
+				lastVolumeId = cell?.id;
+
+				yield return new WaitForSeconds(1f / detectionFrameRate);
+			}
         }
 
-		public void SubscribeToVolumeEntrance(string volumeId, UnityAction callback)
+		public void SubscribeToVolumeEntrance(UnityAction<string> callback)
 		{
-			throw new System.NotImplementedException(); //todo
+			callbacksOnEnter.Add(callback);
 		}
 
-		public void SubscribeToVolumeExit(string volumeId, UnityAction callback)
+		public void SubscribeToVolumeExit(UnityAction<string> callback)
 		{
-			throw new System.NotImplementedException(); //todo
+			callbacksOnExit.Add(callback);
 		}
 
-		public void UnsubscribeToVolumeEntrance(string volumeId, UnityAction callback)
+		public void UnsubscribeToVolumeEntrance(UnityAction<string> callback)
 		{
-			throw new System.NotImplementedException(); //todo
+			callbacksOnEnter.Remove(callback);
 		}
 
-		public void UnsubscribeToVolumeExit(string volumeId, UnityAction callback)
+		public void UnsubscribeToVolumeExit(UnityAction<string> callback)
 		{
-			throw new System.NotImplementedException(); //todo
+			callbacksOnExit.Remove(callback);
 		}
 
 

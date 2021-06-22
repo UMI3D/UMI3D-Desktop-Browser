@@ -2615,6 +2615,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boneType: center_feet
   isTracked: 0
+--- !u!114 &936059048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936059046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bae21247314810c43afe1cae099542ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionFrameRate: 30
+--- !u!114 &936059049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936059046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f6fd48239064047adac24a16980323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tracker: {fileID: 936059048}
 --- !u!1 &996220521
 GameObject:
   m_ObjectHideFlags: 0

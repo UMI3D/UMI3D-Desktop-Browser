@@ -8,6 +8,6 @@ namespace umi3d.common.volume
 		/// <summary>
 		/// List of ths volume's slices.
 		/// </summary>
-		public List<VolumeSliceDto> slices;
+		public List<string> slicesIds;
 	}
 }

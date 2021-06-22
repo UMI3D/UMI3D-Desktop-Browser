@@ -154,6 +154,7 @@ namespace umi3d.common.volume
             return new Plane(planeNormal, planeCenter);
         }
 
+
         /// <summary>
         /// Find an ear in the polygon and return the first index of the 3 consecutives points composing the eat.
         /// </summary>
@@ -177,7 +178,9 @@ namespace umi3d.common.volume
                         }
                     }
                     if (!isThereAnyPointInsideThisTriangle)
+                    {
                         return i;
+                    }
                 }
             }
             throw new System.Exception("FindEar : Something went wrong !");
@@ -373,8 +376,8 @@ namespace umi3d.common.volume
 
 
                 //Convert lines 3D coordinates into 2D plane coordinates
-                Vector3 randomPointA = new Vector3(Random.Range(-1000, 1000), Random.Range(-1000, 1000), Random.Range(-1000, 1000));
-                Vector3 randomPointB = new Vector3(Random.Range(-1000, 1000), Random.Range(-1000, 1000), Random.Range(-1000, 1000));
+                Vector3 randomPointA = new Vector3(-100, 256, -350);
+                Vector3 randomPointB = new Vector3(-166, -46, 50);
                 Vector3 u = plane.ClosestPointOnPlane(randomPointA) - plane.distance * plane.normal;
                 Vector3 v = plane.ClosestPointOnPlane(randomPointB) - plane.distance * plane.normal;
 
@@ -397,13 +400,63 @@ namespace umi3d.common.volume
                 if (Mathf.Max(X1, X2) < Mathf.Min(X3, X4))
                     return false;
 
-                if (X1 == X2)
+                if (X1 == X2) // from is vertical (NOT TESTED YET ! --> not working yet ...)
                 {
-                    throw new System.NotImplementedException(); //todo
+                    if (X3 == X4) //lines are parallels
+                    {
+                        if (X1 != X3)
+                            return false;
+                        else
+                        {
+                            ///see : https://stackoverflow.com/questions/3269434/whats-the-most-efficient-way-to-test-two-integer-ranges-for-overlap
+                            float x1 = Mathf.Min(Y1, Y2);
+                            float x2 = Mathf.Max(Y1, Y2);
+                            float y1 = Mathf.Min(Y3, Y4);
+                            float y2 = Mathf.Max(Y3, Y4);
+                            return (x1 <= y2) && (y1 <= x2);
+                        }
+                    }
+                    else
+                    {
+                        //1- calculate the equation f(x) of the line "other".
+                        //2- evalute f(X1) and check if it is on the line "from".
+                        float f(float x)
+                        {
+                            return (Y4 - Y3) / (X4 - X3) * (x - X3) + Y3;
+                        }
+
+                        float fx1 = f(X1);
+                        return ((Mathf.Min(Y1, Y2) <= fx1) && (fx1 <= Mathf.Max(Y1, Y2)));                        
+                    }
                 }
-                else if (X3 == X4)
+                else if (X3 == X4) //same as above but for other.
                 {
-                    throw new System.NotImplementedException(); //todo
+                    if (X1 == X2) //lines are parallels
+                    {
+                        if (X1 != X3)
+                            return false;
+                        else
+                        {
+                            ///see : https://stackoverflow.com/questions/3269434/whats-the-most-efficient-way-to-test-two-integer-ranges-for-overlap
+                            float x1 = Mathf.Min(Y1, Y2);
+                            float x2 = Mathf.Max(Y1, Y2);
+                            float y1 = Mathf.Min(Y3, Y4);
+                            float y2 = Mathf.Max(Y3, Y4);
+                            return (x1 <= y2) && (y1 <= x2);
+                        }
+                    }
+                    else
+                    {
+                        //1- calculate the equation f(x) of the line "other".
+                        //2- evalute f(X1) and check if it is on the line "from".
+                        float f(float x)
+                        {
+                            return (Y2 - Y1) / (X2 - X1) * (x - X1) + Y1;
+                        }
+
+                        float fx3 = f(X3);
+                        return ((Mathf.Min(Y3, Y4) <= fx3) && (fx3 <= Mathf.Max(Y3, Y4)));
+                    }
                 }
                 else
                 {
@@ -477,8 +530,8 @@ namespace umi3d.common.volume
             plane.Set3Points(a, b, c);
 
             //Convert points 3D coordinates into 2D plane coordinates
-            Vector3 randomPointA = new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), Random.Range(-10, 10));
-            Vector3 randomPointB = new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), Random.Range(-10, 10));
+            Vector3 randomPointA = new Vector3(Random.Range(-1000f, -1f),   Random.Range(-1000f, -1f),  Random.Range(-1000f, -1f));  //Generates error every 10e7+ execution (not fixed)
+            Vector3 randomPointB = new Vector3(Random.Range(1f, 1000f),     Random.Range(1f, 1000f),    Random.Range(1f, 1000f));
             Vector3 u = plane.ClosestPointOnPlane(randomPointA) - plane.distance * plane.normal;
             Vector3 v = plane.ClosestPointOnPlane(randomPointB) - plane.distance * plane.normal;
 

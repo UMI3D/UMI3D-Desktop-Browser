@@ -12,25 +12,34 @@ namespace umi3d.cdk.volumes
             switch (dto)
             {
                 case PointDto pointDto:
-                    Point p = VolumeManager.Instance.CreatePoint(pointDto);
-                    UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, p, () => VolumeManager.Instance.DeletePoint(dto.id));
-                    finished.Invoke();
+                    VolumeManager.Instance.CreatePoint(pointDto, p =>
+                    {
+                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, p, () => VolumeManager.Instance.DeletePoint(dto.id));
+                        finished.Invoke();
+                    });                    
                     break;
 
                 case FaceDto faceDto:
-                    Face f = VolumeManager.Instance.CreateFace(faceDto);
-                    UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, f, () => VolumeManager.Instance.DeleteFace(dto.id));
-                    finished.Invoke();
+                    VolumeManager.Instance.CreateFace(faceDto, f =>
+                    {
+                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, f, () => VolumeManager.Instance.DeleteFace(dto.id));
+                        finished.Invoke();
+                    });                   
+                    break;
+
+                case VolumeSliceDto slice:
+                    VolumeManager.Instance.CreateVolumeSlice(slice, s =>
+                    {
+                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, s, () => VolumeManager.Instance.DeleteVolumeSlice(dto.id));
+                    });
                     break;
 
                 case VolumeDto volume:
-                    VolumeCell v = VolumeManager.Instance.CreateVolumeCell(volume);
-                    UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, v, () => VolumeManager.Instance.DeleteVolumeCell(dto.id));
-                    foreach(VolumeCell.Slice slice in v.GetSlices())
+                    VolumeManager.Instance.CreateVolumeCell(volume, v =>
                     {
-                        UMI3DEnvironmentLoader.RegisterEntityInstance(slice.id, slice.originalDto, slice);
-                    }
-                    finished.Invoke();
+                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, v, () => VolumeManager.Instance.DeleteVolumeCell(dto.id));
+                        finished.Invoke();
+                    });                    
                     break;
 
                 default:
@@ -56,11 +65,11 @@ namespace umi3d.cdk.volumes
                     if (face == null)
                         throw new Exception("Internal error : entity is not a face");
 
-                    face.SetPoints(property.value as List<int>);
+                    face.SetPoints(property.value as List<string>);
                     return true;
 
                 case UMI3DPropertyKeys.VolumeSlices:
-                    VolumeCell cell = entity.Object as VolumeCell;
+                    VolumeSliceGroup cell = entity.Object as VolumeSliceGroup;
                     if (cell == null)
                         throw new Exception("Internal error : entity is not a volume cell");
 
@@ -68,7 +77,7 @@ namespace umi3d.cdk.volumes
                     return true;
 
                 case UMI3DPropertyKeys.VolumeSlicePoints:
-                    VolumeCell.Slice slice = entity.Object as VolumeCell.Slice;
+                    VolumeSlice slice = entity.Object as VolumeSlice;
                     if (slice == null)
                         throw new Exception("Internal error : entity is not a volume slice");
 
@@ -76,7 +85,7 @@ namespace umi3d.cdk.volumes
                     return true;
 
                 case UMI3DPropertyKeys.VolumeSliceEdges:
-                    VolumeCell.Slice slice2 = entity.Object as VolumeCell.Slice;
+                    VolumeSlice slice2 = entity.Object as VolumeSlice;
                     if (slice2 == null)
                         throw new Exception("Internal error : entity is not a volume slice");
 
@@ -84,7 +93,7 @@ namespace umi3d.cdk.volumes
                     return true;
 
                 case UMI3DPropertyKeys.VolumeSliceFaces:
-                    VolumeCell.Slice slice3 = entity.Object as VolumeCell.Slice;
+                    VolumeSlice slice3 = entity.Object as VolumeSlice;
                     if (slice3 == null)
                         throw new Exception("Internal error : entity is not a volume slice");
 

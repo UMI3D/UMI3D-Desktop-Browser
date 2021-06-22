@@ -5,12 +5,14 @@ using umi3d.common.volume;
 
 namespace umi3d.cdk.volumes
 {
-	public class Point : AbstractVolumePart
+	public class Point
 	{
+        public string id { get; private set; }
         public Vector3 position { get; private set; }
 
     	public void Setup(PointDto dto)
         {
+            id = dto.id;
             position = dto.position;
         }
 

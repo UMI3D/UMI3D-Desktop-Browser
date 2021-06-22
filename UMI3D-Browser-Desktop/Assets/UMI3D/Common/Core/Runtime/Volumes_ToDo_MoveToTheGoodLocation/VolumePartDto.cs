@@ -1,7 +1,7 @@
 ﻿
 namespace umi3d.common.volume
 {
-	public class VolumePartDto : AbstractEntityDto
+	public class VolumePartDto : AbstractEntityDto, IEntity
 	{
     		
 	}

@@ -8,21 +8,46 @@ namespace umi3d.cdk.volumes
 	public class Face 
 	{
         public Point[] points { get => points_.ToArray(); }
+        public string id { get; private set; }
         private List<Point> points_;
 
         public void Setup(FaceDto dto)
         {
             points_ = dto.pointsIds.ConvertAll(id => VolumeManager.Instance.GetPoint(id));
+            id = dto.id;
         }
 
-        public void SetPoints(List<int> newPoints)
+        public void SetPoints(List<string> newPoints)
         {
-            throw new System.NotImplementedException(); //todo
+            if (newPoints == null)
+                throw new System.Exception("Internal error : points cannot be null");
+
+            points_ = newPoints.ConvertAll(id => UMI3DEnvironmentLoader.GetEntity(id).Object as Point);
         }
+
 
         public GeometryTools.Face3 ToFace3()
-        { 
-            throw new System.NotImplementedException(); //todo
+        {
+            GeometryTools.Face3 face3 = new GeometryTools.Face3()
+            {
+                points = this.points_.ConvertAll(p => p.position),
+                edges = new List<GeometryTools.Line3>()
+            };
+
+            for(int i=0; i<points_.Count - 1; i++)
+            {
+                face3.edges.Add(new GeometryTools.Line3()
+                {
+                    from = points_[i].position,
+                    to = points_[i + 1].position
+                });
+            }
+            face3.edges.Add(new GeometryTools.Line3()
+            {
+                from = points_[points_.Count - 1].position,
+                to = points_[0].position
+            });
+            return face3;
         }
 	}
 }
