@@ -5,7 +5,7 @@ using umi3d.common.volume;
 
 namespace umi3d.cdk.volumes
 {
-	public class VolumeSliceGroup 
+	public class VolumeSliceGroup : AbstractVolumeCell
 	{
         public string id { get; private set; }
         private List<VolumeSlice> slices = new List<VolumeSlice>();
@@ -13,7 +13,7 @@ namespace umi3d.cdk.volumes
         public void Setup(VolumeDto dto)
         {
             id = dto.id;
-            slices = VolumeManager.Instance.GetVolumeSlices();
+            slices = VolumeSliceGroupManager.Instance.GetVolumeSlices();
         }	
         
         public override bool IsInside(Vector3 point)
@@ -28,7 +28,7 @@ namespace umi3d.cdk.volumes
 
         public void SetSlices(List<VolumeSliceDto> newSlices)
         {
-            slices = newSlices.ConvertAll(dto => VolumeManager.Instance.GetVolumeSlice(dto.id));
+            slices = newSlices.ConvertAll(dto => VolumeSliceGroupManager.Instance.GetVolumeSlice(dto.id));
         }
 
         public VolumeSlice[] GetSlices() => slices.ToArray();

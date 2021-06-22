@@ -30,18 +30,18 @@ namespace umi3d.cdk.volumes
         {
             while (true)
             {			
-				VolumeSliceGroup cell = volumesToTrack.Find(v => v.IsInside(this.transform.position));
-				bool inside = (cell != null);
+				VolumeSliceGroup group = volumesToTrack.Find(v => v.IsInside(this.transform.position));
+				bool inside = (group != null);
 
 				if (inside && !wasInsideOneVolumeLastFrame)
 					foreach (var callback in callbacksOnEnter)
-						callback.Invoke(cell.id);
+						callback.Invoke(group.id);
 				else if (!inside && wasInsideOneVolumeLastFrame)
 					foreach (var callback in callbacksOnExit)
 						callback.Invoke(lastVolumeId);
 
 				wasInsideOneVolumeLastFrame = inside;
-				lastVolumeId = cell?.id;
+				lastVolumeId = group?.id;
 
 				yield return new WaitForSeconds(1f / detectionFrameRate);
 			}

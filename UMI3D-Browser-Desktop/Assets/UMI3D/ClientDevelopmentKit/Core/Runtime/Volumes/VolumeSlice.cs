@@ -18,9 +18,9 @@ namespace umi3d.cdk.volumes
         {
             this.originalDto = dto;
             this.id = dto.id;
-            this.points = dto.points.ConvertAll(pid => VolumeManager.Instance.GetPoint(pid));
+            this.points = dto.points.ConvertAll(pid => VolumeSliceGroupManager.Instance.GetPoint(pid));
             this.edges = dto.edges;
-            this.faces = dto.faces.ConvertAll(fid => VolumeManager.Instance.GetFace(fid));
+            this.faces = dto.faces.ConvertAll(fid => VolumeSliceGroupManager.Instance.GetFace(fid));
         }
 
         public bool isInside(Vector3 point)
@@ -69,7 +69,7 @@ namespace umi3d.cdk.volumes
 
         public void SetPoints(List<PointDto> newPoints)
         {
-            points = newPoints.ConvertAll(dto => VolumeManager.Instance.GetPoint(dto.id));
+            points = newPoints.ConvertAll(dto => VolumeSliceGroupManager.Instance.GetPoint(dto.id));
         }
         public void SetEdges(List<int> newEdges)
         {
@@ -77,7 +77,7 @@ namespace umi3d.cdk.volumes
         }
         public void SetFaces(List<FaceDto> newFaces)
         {
-            faces = newFaces.ConvertAll(dto => VolumeManager.Instance.GetFace(dto.id));
+            faces = newFaces.ConvertAll(dto => VolumeSliceGroupManager.Instance.GetFace(dto.id));
         }
         public List<Point> GetPoints()
         {

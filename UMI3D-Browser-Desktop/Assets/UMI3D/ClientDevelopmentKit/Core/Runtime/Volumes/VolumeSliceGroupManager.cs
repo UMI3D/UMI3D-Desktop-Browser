@@ -7,7 +7,7 @@ using umi3d.common;
 
 namespace umi3d.cdk.volumes
 {
-	public class VolumeManager : Singleton<VolumeManager>
+	public class VolumeSliceGroupManager : Singleton<VolumeSliceGroupManager>
 	{
         public static class PendingManager
         {
@@ -62,12 +62,12 @@ namespace umi3d.cdk.volumes
         private Dictionary<string, Point> points = new Dictionary<string, Point>();
         private Dictionary<string, Face> faces = new Dictionary<string, Face>();
         private Dictionary<string, VolumeSlice> volumeSlices = new Dictionary<string, VolumeSlice>();
-        private Dictionary<string, VolumeSliceGroup> volumeCells = new Dictionary<string, VolumeSliceGroup>();
+        private Dictionary<string, VolumeSliceGroup> volumeSliceGroups = new Dictionary<string, VolumeSliceGroup>();
 
         public List<Point> GetPoints() => new List<Point>(points.Values);
 		public List<Face> GetFaces() => new List<Face>(faces.Values);
         public List<VolumeSlice> GetVolumeSlices() => new List<VolumeSlice>(volumeSlices.Values);
-        public List<VolumeSliceGroup> GetVolumeCells() => new List<VolumeSliceGroup>(volumeCells.Values);
+        public List<VolumeSliceGroup> GetVolumeSliceGroups() => new List<VolumeSliceGroup>(volumeSliceGroups.Values);
 
 
         public bool PointExists(string id)
@@ -85,9 +85,9 @@ namespace umi3d.cdk.volumes
             return volumeSlices.ContainsKey(id);
         }
 
-        public bool VolumeCellExist(string id)
+        public bool VolumeSliceGroupExist(string id)
         {
-            return volumeCells.ContainsKey(id);
+            return volumeSliceGroups.ContainsKey(id);
         }
 
         public Point GetPoint(string id)
@@ -105,9 +105,9 @@ namespace umi3d.cdk.volumes
             return volumeSlices[id];
         }
 
-        public VolumeSliceGroup GetVolumeCell(string id)
+        public VolumeSliceGroup GetVolumeSliceGroup(string id)
         {
-            return volumeCells[id];
+            return volumeSliceGroups[id];
         }
 
         public void CreatePoint(PointDto dto, UnityAction<Point> finished)
@@ -150,7 +150,7 @@ namespace umi3d.cdk.volumes
         public void CreateVolumeSlice(VolumeSliceDto dto, UnityAction<VolumeSlice> finished)
         {
             if (VolumeSliceExists(dto.id))
-                throw new System.Exception("Volume cell already exists");
+                throw new System.Exception("Volume slice group already exists");
 
             UnityAction creation = () =>
             {
@@ -182,17 +182,17 @@ namespace umi3d.cdk.volumes
 
         }
 
-        public void CreateVolumeCell(VolumeDto dto, UnityAction<VolumeSliceGroup> finished)
+        public void CreateVolumeSliceGroup(VolumeDto dto, UnityAction<VolumeSliceGroup> finished)
         {
-            if (VolumeCellExist(dto.id))
-                throw new System.Exception("Volume cell already exists");
+            if (VolumeSliceGroupExist(dto.id))
+                throw new System.Exception("Volume slice group already exists");
 
             Debug.Log("Volume register");
             UnityAction creation = () =>
             {
                 VolumeSliceGroup volume = new VolumeSliceGroup();
                 volume.Setup(dto);
-                volumeCells.Add(dto.id, volume);
+                volumeSliceGroups.Add(dto.id, volume);
 
                 Debug.Log("Volume ceated");
                 finished(volume);
@@ -218,7 +218,7 @@ namespace umi3d.cdk.volumes
         public void DeletePoint(string id)
         {
             //delete every volume featuring the given point
-            foreach(var entry in volumeCells)
+            foreach(var entry in volumeSliceGroups)
             {
                 if (new List<VolumeSlice>(entry.Value.GetSlices()).Exists(s => s.GetPoints().Exists(p => p.id == id)))
                     UMI3DEnvironmentLoader.GetEntity(entry.Value.id).Delete();
@@ -230,7 +230,7 @@ namespace umi3d.cdk.volumes
         public void DeleteFace(string id)
         {
             //delete every volume featuring the given face
-            foreach (var entry in volumeCells)
+            foreach (var entry in volumeSliceGroups)
             {
                 if (new List<VolumeSlice>(entry.Value.GetSlices()).Exists(s => s.GetFaces().Exists(f => f.id == id)))
                     UMI3DEnvironmentLoader.GetEntity(entry.Value.id).Delete();
@@ -239,9 +239,9 @@ namespace umi3d.cdk.volumes
             faces.Remove(id);
         }
 
-        public void DeleteVolumeCell(string id)
+        public void DeleteVolumeSliceGroup(string id)
         {
-            volumeCells.Remove(id);
+            volumeSliceGroups.Remove(id);
         }
         public void DeleteVolumeSlice(string id)
         {
@@ -252,9 +252,9 @@ namespace umi3d.cdk.volumes
 
         public void OnDrawGizmos()
         {
-            foreach(var volumeCell in volumeCells)
+            foreach(var volumeSliceGroup in volumeSliceGroups)
             {
-                foreach(var slice in volumeCell.Value.GetSlices())
+                foreach(var slice in volumeSliceGroup.Value.GetSlices())
                 {
                     List<int> edges = slice.GetEdges();
                     List<Point> points = slice.GetPoints();

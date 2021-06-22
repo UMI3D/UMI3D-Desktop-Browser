@@ -27,6 +27,6 @@ public class VolumeTrackingTester : MonoBehaviour
 
     private void Update()
     {
-        tracker.volumesToTrack = VolumeManager.Instance.GetVolumeCells();
+        tracker.volumesToTrack = VolumeSliceGroupManager.Instance.GetVolumeSliceGroups();
     }
 }

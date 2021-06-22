@@ -13,7 +13,7 @@ namespace umi3d.cdk.volumes
 
         public void Setup(FaceDto dto)
         {
-            points_ = dto.pointsIds.ConvertAll(id => VolumeManager.Instance.GetPoint(id));
+            points_ = dto.pointsIds.ConvertAll(id => VolumeSliceGroupManager.Instance.GetPoint(id));
             id = dto.id;
         }
 
