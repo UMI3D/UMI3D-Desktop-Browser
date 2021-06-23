@@ -18,18 +18,13 @@ using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3d.common;
 using umi3d.common.interaction;
-using Unity.UIElements.Runtime;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -68,7 +63,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     #region UI Fields
 
-    public PanelRenderer panelRenderer;
+    public UIDocument uiDocument;
 
     private VisualElement connectionScreen;
 
@@ -94,7 +89,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     protected override void Awake()
     {
         base.Awake();
-        Debug.Assert(panelRenderer != null);
+        Debug.Assert(uiDocument != null);
         Debug.Assert(!string.IsNullOrEmpty(launcherScene));
         Debug.Assert(identifier != null);
         Debug.Assert(Menu != null);
@@ -112,6 +107,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         previousStep = Leave;
 
         InitUI();
+
 
         UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
@@ -152,13 +148,12 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void InitUI()
     {
-
-        VisualElement root = panelRenderer.visualTree;
+        VisualElement root = uiDocument.rootVisualElement;
 
         loader = new LoadingBar(root);
         loader.SetText("Connection");
 
-        loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
+        loadingScreen = root.Q<VisualElement>("loading-screen");
 
         connectionScreen = root.Q<VisualElement>("connection-menu");
 
@@ -167,7 +162,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         BindPasswordScreen();
         passwordScreen.style.display = DisplayStyle.None;
 
-        parametersScreen = panelRenderer.visualTree.Q<VisualElement>("parameters-screen");
+        parametersScreen = root.Q<VisualElement>("parameters-screen");
         connectionScreen.style.display = DisplayStyle.Flex;
 
         root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
@@ -180,7 +175,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         passwordInput = passwordScreen.Q<TextField>("password-input");
         loginInput = passwordScreen.Q<TextField>("login-input");
         connectBtn = passwordScreen.Q<Button>("connect-btn");
-        goBackButton = panelRenderer.visualTree.Q<Button>("back-menu-btn");
+        goBackButton = uiDocument.rootVisualElement.Q<Button>("back-menu-btn");
         goBackButton.clickable.clicked += Leave;
 
         var passwordVisibleBtn = passwordScreen.Q<VisualElement>("password-visibility");
@@ -263,7 +258,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     {
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         var dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        panelRenderer.visualTree.Add(dialogueBox);
+        uiDocument.rootVisualElement.Add(dialogueBox);
+
 
         dialogueBox.Setup("Server error",
             error,
@@ -274,7 +270,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     private void GetMediaSucces(MediaDto media)
     {
         this.connectionData.environmentName = media.name;
-        this.panelRenderer.visualTree.Q<Label>("environment-name").text = media.name;
+        this.uiDocument.rootVisualElement.Q<Label>("environment-name").text = media.name;
 
         SessionInformationMenu.Instance.SetEnvironmentName(media, connectionData);
 
@@ -297,7 +293,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     {
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         var dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        panelRenderer.visualTree.Add(dialogueBox);
+        uiDocument.rootVisualElement.Add(dialogueBox);
 
         dialogueBox.Setup("Connection to the server lost",
             "Leave to the connection menu or try again ?",
@@ -334,7 +330,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void DisplayScreenToLogin()
     {
-        loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
+        loadingScreen = uiDocument.rootVisualElement.Q<VisualElement>("loading-screen");
         loadingScreen.style.display = DisplayStyle.None;
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         passwordScreen.style.display = DisplayStyle.Flex;
@@ -398,44 +394,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
             },
             true);
 
-            panelRenderer.visualTree.Add(dialogue);
+            uiDocument.rootVisualElement.Add(dialogue);
         }
-
-
-        /*if (ids.Count == 0)
-        {
-            callback.Invoke(true);
-        }
-        else
-        {
-            HideLoadingScreen();
-
-            assetsLibrariesScreen.style.display = DisplayStyle.Flex;
-            if (ids.Count > 1)
-                assetsRequiredWarning.text = ids.Count + " libraries are required to join the environement :";
-            else
-                assetsRequiredWarning.text = "1 library is required to join the environement :";
-
-            assetsRequiredList.Clear();
-            foreach (string id in ids)
-            {
-                var library = libraryEntryTreeAsset.CloneTree();
-                library.Q<Label>("library-name").text = id;
-                library.Q<Label>("library-status").text = "Required";
-                assetsRequiredList.Add(library);
-            }
-
-            CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
-
-            confirmDLLibrariesBtn.clickable.clicked += () =>
-            {
-                CloseAssetsLibrariesRequiredScreen(true, callback);
-            };
-            denyDLLibrariesBtn.clickable.clicked += () =>
-            {
-                CloseAssetsLibrariesRequiredScreen(false, callback);
-            };
-        }*/
     }
 
     /// <summary>
