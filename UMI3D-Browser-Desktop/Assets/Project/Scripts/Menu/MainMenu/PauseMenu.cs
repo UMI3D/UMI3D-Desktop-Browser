@@ -16,7 +16,6 @@ limitations under the License.
 
 using umi3d.cdk;
 using umi3d.common;
-using Unity.UIElements.Runtime;
 using UnityEngine.UIElements;
 using UnityEngine;
 using BrowserDesktop.Cursor;
@@ -25,7 +24,7 @@ namespace BrowserDesktop.Menu
 {
     public class PauseMenu : Singleton<PauseMenu>
     {
-        public PanelRenderer panelRenderer;
+        public UIDocument uiDocument;
 
         VisualElement pauseMenuContainer;
         Button pauseMenuOpenBtn;
@@ -42,7 +41,8 @@ namespace BrowserDesktop.Menu
 
         void Start()
         {
-            var root = panelRenderer.visualTree;
+            Debug.Assert(uiDocument != null);
+            var root = uiDocument.rootVisualElement;
             var pauseMenu = root.Q<VisualElement>("pause-menu");
             shortcutsMenu = root.Q<Label>("shortcuts-menu");
             pauseMenuContainer = pauseMenu.Q<VisualElement>("pause-menu-container");
@@ -63,7 +63,7 @@ namespace BrowserDesktop.Menu
                         ConnectionMenu.Instance.Leave();
                 });
 
-                panelRenderer.visualTree.Add(dialogueBox);
+               uiDocument.rootVisualElement.Add(dialogueBox);
             };
 
             pauseMenuOpenBtn = pauseMenu.Q<Button>("pause-menu-open-btn");
