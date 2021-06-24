@@ -154,7 +154,6 @@ namespace umi3d.common.volume
             return new Plane(planeNormal, planeCenter);
         }
 
-
         /// <summary>
         /// Find an ear in the polygon and return the first index of the 3 consecutives points composing the eat.
         /// </summary>
@@ -178,9 +177,7 @@ namespace umi3d.common.volume
                         }
                     }
                     if (!isThereAnyPointInsideThisTriangle)
-                    {
                         return i;
-                    }
                 }
             }
             throw new System.Exception("FindEar : Something went wrong !");
@@ -376,8 +373,8 @@ namespace umi3d.common.volume
 
 
                 //Convert lines 3D coordinates into 2D plane coordinates
-                Vector3 randomPointA = new Vector3(-100, 256, -350);
-                Vector3 randomPointB = new Vector3(-166, -46, 50);
+                Vector3 randomPointA = new Vector3(Random.Range(-1000, 1000), Random.Range(-1000, 1000), Random.Range(-1000, 1000));
+                Vector3 randomPointB = new Vector3(Random.Range(-1000, 1000), Random.Range(-1000, 1000), Random.Range(-1000, 1000));
                 Vector3 u = plane.ClosestPointOnPlane(randomPointA) - plane.distance * plane.normal;
                 Vector3 v = plane.ClosestPointOnPlane(randomPointB) - plane.distance * plane.normal;
 
@@ -426,7 +423,7 @@ namespace umi3d.common.volume
                         }
 
                         float fx1 = f(X1);
-                        return ((Mathf.Min(Y1, Y2) <= fx1) && (fx1 <= Mathf.Max(Y1, Y2)));                        
+                        return ((Mathf.Min(Y1, Y2) <= fx1) && (fx1 <= Mathf.Max(Y1, Y2)));
                     }
                 }
                 else if (X3 == X4) //same as above but for other.
@@ -530,8 +527,8 @@ namespace umi3d.common.volume
             plane.Set3Points(a, b, c);
 
             //Convert points 3D coordinates into 2D plane coordinates
-            Vector3 randomPointA = new Vector3(Random.Range(-1000f, -1f),   Random.Range(-1000f, -1f),  Random.Range(-1000f, -1f));  //Generates error every 10e7+ execution (not fixed)
-            Vector3 randomPointB = new Vector3(Random.Range(1f, 1000f),     Random.Range(1f, 1000f),    Random.Range(1f, 1000f));
+            Vector3 randomPointA = new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), Random.Range(-10, 10));
+            Vector3 randomPointB = new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), Random.Range(-10, 10));
             Vector3 u = plane.ClosestPointOnPlane(randomPointA) - plane.distance * plane.normal;
             Vector3 v = plane.ClosestPointOnPlane(randomPointB) - plane.distance * plane.normal;
 
@@ -792,7 +789,7 @@ namespace umi3d.common.volume
         }
 
 
-        
+
 
     }
 }

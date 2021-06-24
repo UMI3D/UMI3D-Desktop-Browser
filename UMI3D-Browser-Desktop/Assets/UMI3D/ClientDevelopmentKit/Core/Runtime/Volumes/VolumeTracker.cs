@@ -11,7 +11,7 @@ namespace umi3d.cdk.volumes
 	/// </summary>
 	public class VolumeTracker : MonoBehaviour
 	{
-		public List<VolumeSliceGroup> volumesToTrack = new List<VolumeSliceGroup>();
+		public List<AbstractVolumeCell> volumesToTrack = new List<AbstractVolumeCell>();
 		public float detectionFrameRate = 30;
 
 		private Coroutine trackingRoutine = null;
@@ -29,19 +29,19 @@ namespace umi3d.cdk.volumes
 		IEnumerator Track()
         {
             while (true)
-            {			
-				VolumeSliceGroup group = volumesToTrack.Find(v => v.IsInside(this.transform.position));
-				bool inside = (group != null);
+            {
+				AbstractVolumeCell cell = volumesToTrack.Find(v => v.IsInside(this.transform.position));
+				bool inside = (cell != null);
 
 				if (inside && !wasInsideOneVolumeLastFrame)
 					foreach (var callback in callbacksOnEnter)
-						callback.Invoke(group.id);
+						callback.Invoke(cell.Id());
 				else if (!inside && wasInsideOneVolumeLastFrame)
 					foreach (var callback in callbacksOnExit)
 						callback.Invoke(lastVolumeId);
 
 				wasInsideOneVolumeLastFrame = inside;
-				lastVolumeId = group?.id;
+				lastVolumeId = cell?.Id();
 
 				yield return new WaitForSeconds(1f / detectionFrameRate);
 			}

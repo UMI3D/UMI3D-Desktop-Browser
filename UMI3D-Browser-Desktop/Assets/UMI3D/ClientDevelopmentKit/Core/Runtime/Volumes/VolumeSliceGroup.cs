@@ -7,14 +7,16 @@ namespace umi3d.cdk.volumes
 {
 	public class VolumeSliceGroup : AbstractVolumeCell
 	{
-        public string id { get; private set; }
+        private string id;
         private List<VolumeSlice> slices = new List<VolumeSlice>();
 
-        public void Setup(VolumeDto dto)
+        public void Setup(VolumeSlicesGroupDto dto)
         {
             id = dto.id;
             slices = VolumeSliceGroupManager.Instance.GetVolumeSlices();
-        }	
+        }
+
+        public override string Id() => id;
         
         public override bool IsInside(Vector3 point)
         {

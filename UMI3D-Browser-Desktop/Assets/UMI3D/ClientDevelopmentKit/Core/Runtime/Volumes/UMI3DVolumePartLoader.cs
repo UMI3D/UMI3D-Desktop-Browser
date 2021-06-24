@@ -7,7 +7,7 @@ namespace umi3d.cdk.volumes
 {
 	static public class UMI3DVolumePartLoader 
 	{
-        static public void ReadUMI3DExtension(VolumePartDto dto, Action finished, Action<string> failed)
+        static public void ReadUMI3DExtension(AbstractVolumeDescriptor dto, Action finished, Action<string> failed)
         {
             switch (dto)
             {
@@ -34,8 +34,8 @@ namespace umi3d.cdk.volumes
                     });
                     break;
 
-                case VolumeDto volume:
-                    VolumeSliceGroupManager.Instance.CreateVolumeSliceGroup(volume, v =>
+                case VolumeSlicesGroupDto group:
+                    VolumeSliceGroupManager.Instance.CreateVolumeSliceGroup(group, v =>
                     {
                         UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, v, () => VolumeSliceGroupManager.Instance.DeleteVolumeSliceGroup(dto.id));
                         finished.Invoke();

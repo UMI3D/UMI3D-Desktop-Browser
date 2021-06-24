@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using umi3d.common.volume;
@@ -182,7 +181,7 @@ namespace umi3d.cdk.volumes
 
         }
 
-        public void CreateVolumeSliceGroup(VolumeDto dto, UnityAction<VolumeSliceGroup> finished)
+        public void CreateVolumeSliceGroup(VolumeSlicesGroupDto dto, UnityAction<VolumeSliceGroup> finished)
         {
             if (VolumeSliceGroupExist(dto.id))
                 throw new System.Exception("Volume slice group already exists");
@@ -221,7 +220,7 @@ namespace umi3d.cdk.volumes
             foreach(var entry in volumeSliceGroups)
             {
                 if (new List<VolumeSlice>(entry.Value.GetSlices()).Exists(s => s.GetPoints().Exists(p => p.id == id)))
-                    UMI3DEnvironmentLoader.GetEntity(entry.Value.id).Delete();
+                    UMI3DEnvironmentLoader.GetEntity(entry.Value.Id()).Delete();
             }
 
             points.Remove(id);
@@ -233,7 +232,7 @@ namespace umi3d.cdk.volumes
             foreach (var entry in volumeSliceGroups)
             {
                 if (new List<VolumeSlice>(entry.Value.GetSlices()).Exists(s => s.GetFaces().Exists(f => f.id == id)))
-                    UMI3DEnvironmentLoader.GetEntity(entry.Value.id).Delete();
+                    UMI3DEnvironmentLoader.GetEntity(entry.Value.Id()).Delete();
             }
 
             faces.Remove(id);
@@ -254,15 +253,6 @@ namespace umi3d.cdk.volumes
         {
             foreach(var volumeSliceGroup in volumeSliceGroups)
             {
-                foreach(var slice in volumeSliceGroup.Value.GetSlices())
-                {
-                    List<int> edges = slice.GetEdges();
-                    List<Point> points = slice.GetPoints();
-                    for (int i=0; i< edges.Count - 1; i+=2)
-                    {
-                        Gizmos.DrawLine(points[edges[i]].position, points[edges[i + 1]].position);
-                    }
-                }
             }
         }
     }
