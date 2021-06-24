@@ -69,7 +69,6 @@ namespace umi3d.cdk
         /// <param name="id">unique id of the node.</param>
         /// <param name="dto">dto of the node.</param>
         /// <param name="instance">gameobject of the node.</param>
-        /// <param name="issubObject">id this node a sub object of an other node.</param>
         /// <returns></returns>
         public static UMI3DNodeInstance RegisterNodeInstance(ulong id, UMI3DDto dto, GameObject instance, Action delete = null)
         {
@@ -706,8 +705,9 @@ namespace umi3d.cdk
                 float now = Time.time;
                 Instance.entityFilters[entityId][propertyKey].measuresPerSecond = 1 / (now - Instance.entityFilters[entityId][propertyKey].lastMessageTime);
                 Instance.entityFilters[entityId][propertyKey].lastMessageTime = now;
-                Debug.Log("To Do Kalman");
-                //Instance.PropertyKalmanUpdate(Instance.entityFilters[entityId][propertyKey], dto.value);
+                object value = null;
+                ReadValueEntity(ref value, propertyKey, container);
+                Instance.PropertyKalmanUpdate(Instance.entityFilters[entityId][propertyKey], value);
                 return true;
             }
             else
@@ -1238,22 +1238,22 @@ namespace umi3d.cdk
                 case int n:
                     measurement = new double[] { n };
                     if (kalmanEntity.regressed_value == null)
-                        kalmanEntity.regressed_value = new int();
+                        kalmanEntity.regressed_value = n;
                     break;
                 case float f:
                     measurement = new double[] { f };
                     if (kalmanEntity.regressed_value == null)
-                        kalmanEntity.regressed_value = new float();
+                        kalmanEntity.regressed_value = f;
                     break;
                 case SerializableVector2 v:
                     measurement = new double[] { v.X, v.Y };
                     if (kalmanEntity.regressed_value == null)
-                        kalmanEntity.regressed_value = new SerializableVector2();
+                        kalmanEntity.regressed_value = v;
                     break;
                 case SerializableVector3 v:
                     measurement = new double[] { v.X, v.Y, v.Z };
                     if (kalmanEntity.regressed_value == null)
-                        kalmanEntity.regressed_value = new SerializableVector3();
+                        kalmanEntity.regressed_value = v;
                     break;
                 case SerializableVector4 v:
                     if (kalmanEntity.property.Equals(UMI3DPropertyKeys.Rotation))
@@ -1272,13 +1272,13 @@ namespace umi3d.cdk
                     else
                         measurement = new double[] { v.X, v.Y, v.Z, v.W };
                     if (kalmanEntity.regressed_value == null)
-                        kalmanEntity.regressed_value = new SerializableVector4();
+                        kalmanEntity.regressed_value = v;
 
                     break;
                 case SerializableColor v:
                     measurement = new double[] { v.R, v.G, v.B, v.A };
                     if (kalmanEntity.regressed_value == null)
-                        kalmanEntity.regressed_value = new SerializableColor();
+                        kalmanEntity.regressed_value = v;
                     break;
                 default:
                     measurement = new double[0];
