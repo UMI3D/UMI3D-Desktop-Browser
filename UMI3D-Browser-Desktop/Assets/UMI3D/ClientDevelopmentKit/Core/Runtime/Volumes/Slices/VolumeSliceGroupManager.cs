@@ -218,14 +218,11 @@ namespace umi3d.cdk.volumes
             if (VolumeSliceGroupExist(dto.id))
                 throw new System.Exception("Volume slice group already exists");
 
-            Debug.Log("Volume register");
             UnityAction creation = () =>
             {
                 VolumeSliceGroup volume = new VolumeSliceGroup();
                 volume.Setup(dto);
                 volumeSliceGroups.Add(dto.id, volume);
-
-                Debug.Log("Volume ceated");
                 finished(volume);
             };
 
