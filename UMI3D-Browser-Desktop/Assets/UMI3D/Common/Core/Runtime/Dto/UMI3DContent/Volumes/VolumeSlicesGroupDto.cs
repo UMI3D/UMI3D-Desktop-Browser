@@ -14,11 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using UnityEngine;
+using System.Collections.Generic;
 
-public abstract class AbstractVolumeCell 
+namespace umi3d.common.volume
 {
-    public abstract string Id();
-
-    public abstract bool IsInside(Vector3 point);
+	public class VolumeSlicesGroupDto : AbstractVolumeCellDto
+	{
+		/// <summary>
+		/// List of ths volume's slices.
+		/// </summary>
+		public List<string> slicesIds;
+	}
 }

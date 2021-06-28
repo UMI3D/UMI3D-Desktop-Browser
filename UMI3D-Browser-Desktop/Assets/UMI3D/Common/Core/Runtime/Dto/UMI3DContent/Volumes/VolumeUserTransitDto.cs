@@ -14,11 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using UnityEngine;
-
-public abstract class AbstractVolumeCell 
+namespace umi3d.common.volume
 {
-    public abstract string Id();
+    /// <summary>
+    /// Notify that a user entered/exits a volume.
+    /// </summary>
+    public class VolumeUserTransitDto : AbstractBrowserRequestDto
+    {
+        public string volumeId;
 
-    public abstract bool IsInside(Vector3 point);
+        /// <summary>
+        /// True if the user entered in the volume, false if the user exited the volume.
+        /// </summary>
+        public bool direction;
+    }
 }

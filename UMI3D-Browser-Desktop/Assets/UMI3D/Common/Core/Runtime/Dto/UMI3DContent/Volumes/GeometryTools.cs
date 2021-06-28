@@ -1,7 +1,21 @@
-﻿using System.Collections;
+﻿/*
+Copyright 2019 - 2021 Inetum
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 using System.Collections.Generic;
 using UnityEngine;
-
 
 namespace umi3d.common.volume
 {
@@ -373,15 +387,10 @@ namespace umi3d.common.volume
 
 
                 //Convert lines 3D coordinates into 2D plane coordinates
-                Vector3 u = Vector3.zero;
-                Vector3 v = Vector3.zero;
-                while ((u.magnitude == 0) || (v.magnitude == 0))
-                {
-                    Vector3 randomPointA = new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), Random.Range(-10f, 10f));
-                    Vector3 randomPointB = new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), Random.Range(-10f, 10f));
-                    u = plane.ClosestPointOnPlane(randomPointA) - plane.distance * plane.normal;
-                    v = plane.ClosestPointOnPlane(randomPointB) - plane.distance * plane.normal;
-                }
+                Vector3 randomPointA = new Vector3(Random.Range(-1000, 1000), Random.Range(-1000, 1000), Random.Range(-1000, 1000));
+                Vector3 randomPointB = new Vector3(Random.Range(-1000, 1000), Random.Range(-1000, 1000), Random.Range(-1000, 1000));
+                Vector3 u = plane.ClosestPointOnPlane(randomPointA) - plane.distance * plane.normal;
+                Vector3 v = plane.ClosestPointOnPlane(randomPointB) - plane.distance * plane.normal;
 
                 Vector2 from_ = new Vector2(Vector3.Dot(u, this.from), Vector3.Dot(v, this.from));
                 Vector2 to_ = new Vector2(Vector3.Dot(u, this.to), Vector3.Dot(v, this.to));
@@ -402,74 +411,13 @@ namespace umi3d.common.volume
                 if (Mathf.Max(X1, X2) < Mathf.Min(X3, X4))
                     return false;
 
-                if (X1 == X2) // from is vertical (NOT TESTED YET ! --> not working yet ...)
+                if (X1 == X2)
                 {
-                    if (X3 == X4) //lines are parallels
-                    {
-                        if (X1 != X3)
-                        {
-                            return false;
-                        }
-                        else
-                        {
-                            ///see : https://stackoverflow.com/questions/3269434/whats-the-most-efficient-way-to-test-two-integer-ranges-for-overlap
-                            float x1 = Mathf.Min(Y1, Y2);
-                            float x2 = Mathf.Max(Y1, Y2);
-                            float y1 = Mathf.Min(Y3, Y4);
-                            float y2 = Mathf.Max(Y3, Y4);
-                            return (x1 <= y2) && (y1 <= x2);
-                        }
-                    }
-                    else
-                    {
-                        //1- calculate the equation f(x) of the line "other".
-                        //2- evalute f(X1) and check if it is on the line "from".
-                        float f(float x)
-                        {
-                            return (Y4 - Y3) / (X4 - X3) * (x - X3) + Y3;
-                        }
-
-                        float fx1 = f(X1);
-                        return ((Mathf.Min(Y1, Y2) <= fx1) && (fx1 <= Mathf.Max(Y1, Y2)));
-                    }
+                    throw new System.NotImplementedException(); //todo
                 }
-                else if (X3 == X4) //same as above but for other.
+                else if (X3 == X4)
                 {
-                    X1 = otherFrom.x;
-                    Y1 = otherFrom.y;
-                    X2 = otherTo.x;
-                    Y2 = otherTo.y;
-                    X3 = from_.x;
-                    Y3 = from_.y;
-                    X4 = to_.x;
-                    Y4 = to_.y;
-
-                    if (X3 == X4) //lines are parallels
-                    {
-                        if (X1 != X3)
-                            return false;
-                        else
-                        {
-                            ///see : https://stackoverflow.com/questions/3269434/whats-the-most-efficient-way-to-test-two-integer-ranges-for-overlap
-                            float x1 = Mathf.Min(Y1, Y2);
-                            float x2 = Mathf.Max(Y1, Y2);
-                            float y1 = Mathf.Min(Y3, Y4);
-                            float y2 = Mathf.Max(Y3, Y4);
-                            return (x1 <= y2) && (y1 <= x2);
-                        }
-                    }
-                    else
-                    {
-                        //1- calculate the equation f(x) of the line "other".
-                        //2- evalute f(X1) and check if it is on the line "from".
-                        float f(float x)
-                        {
-                            return (Y4 - Y3) / (X4 - X3) * (x - X3) + Y3;
-                        }
-
-                        float fx1 = f(X1);
-                        return ((Mathf.Min(Y1, Y2) <= fx1) && (fx1 <= Mathf.Max(Y1, Y2)));
-                    }
+                    throw new System.NotImplementedException(); //todo
                 }
                 else
                 {
@@ -542,21 +490,16 @@ namespace umi3d.common.volume
             Plane plane = new Plane();
             plane.Set3Points(a, b, c);
 
-            //Convert points 3D coordinates into 2D plane coordinates            
-            Vector3 randomU = Vector3.zero;
-            Vector3 randomV = Vector3.zero;
-            while ((randomU.magnitude == 0) || (randomV.magnitude == 0))
-            {
-                Vector3 randomPointA = new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), Random.Range(-10f, 10f));
-                Vector3 randomPointB = new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), Random.Range(-10f, 10f));
-                randomU = plane.ClosestPointOnPlane(randomPointA) - plane.distance * plane.normal;
-                randomV = plane.ClosestPointOnPlane(randomPointB) - plane.distance * plane.normal;
-            }
+            //Convert points 3D coordinates into 2D plane coordinates
+            Vector3 randomPointA = new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), Random.Range(-10, 10));
+            Vector3 randomPointB = new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), Random.Range(-10, 10));
+            Vector3 u = plane.ClosestPointOnPlane(randomPointA) - plane.distance * plane.normal;
+            Vector3 v = plane.ClosestPointOnPlane(randomPointB) - plane.distance * plane.normal;
 
-            Vector2 target2D = new Vector2(Vector3.Dot(target, randomU), Vector3.Dot(target, randomV));
-            Vector2 a2D = new Vector2(Vector3.Dot(a, randomU), Vector3.Dot(a, randomV));
-            Vector2 b2D = new Vector2(Vector3.Dot(b, randomU), Vector3.Dot(b, randomV));
-            Vector2 c2D = new Vector2(Vector3.Dot(c, randomU), Vector3.Dot(c, randomV));
+            Vector2 target2D = new Vector2(Vector3.Dot(target, u), Vector3.Dot(target, v));
+            Vector2 a2D = new Vector2(Vector3.Dot(a, u), Vector3.Dot(a, v));
+            Vector2 b2D = new Vector2(Vector3.Dot(b, u), Vector3.Dot(b, v));
+            Vector2 c2D = new Vector2(Vector3.Dot(c, u), Vector3.Dot(c, v));
 
 
             //algorithm from https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
@@ -620,16 +563,8 @@ namespace umi3d.common.volume
         {
             Vector3 normal = GeometryTools.GetSurfaceNormal(new List<Vector3>(mesh.vertices));
             Plane uvplane = new Plane(normal, 0);
-
-            Vector3 randomU = Vector3.zero;
-            Vector3 randomV = Vector3.zero;
-            while ((randomU.magnitude == 0) || (randomV.magnitude == 0))
-            {
-                Vector3 randomPointA = new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), Random.Range(-10f, 10f));
-                Vector3 randomPointB = new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), Random.Range(-10f, 10f));
-                randomU = uvplane.ClosestPointOnPlane(randomPointA) - uvplane.distance * uvplane.normal;
-                randomV = uvplane.ClosestPointOnPlane(randomPointB) - uvplane.distance * uvplane.normal;
-            }
+            Vector3 randomU = uvplane.ClosestPointOnPlane(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)));
+            Vector3 randomV = uvplane.ClosestPointOnPlane(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)));
 
             List<Vector2> rawUV = new List<Vector2>();
             foreach (Vector3 vert in mesh.vertices)
@@ -818,7 +753,7 @@ namespace umi3d.common.volume
         }
 
 
-
+        
 
     }
 }

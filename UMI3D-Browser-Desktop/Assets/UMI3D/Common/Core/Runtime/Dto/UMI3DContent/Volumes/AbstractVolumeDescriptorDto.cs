@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using UnityEngine;
 
-public abstract class AbstractVolumeCell 
+namespace umi3d.common.volume
 {
-    public abstract string Id();
-
-    public abstract bool IsInside(Vector3 point);
+    public abstract class AbstractVolumeDescriptor : AbstractEntityDto, IEntity
+    {
+        
+    }
 }
