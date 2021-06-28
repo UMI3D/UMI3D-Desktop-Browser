@@ -15,14 +15,13 @@ limitations under the License.
 */
 using GLTFast.FakeSchema;
 using umi3d.common;
-using Unity.UIElements.Runtime;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static BrowserDesktop.Cursor.CursorHandler;
 
 public class CursorDisplayer : Singleton<CursorDisplayer>
 {
-    public PanelRenderer panelRenderer;
+    public UIDocument uiDocument;
 
     [Header("Class names")]
     [SerializeField]
@@ -43,8 +42,8 @@ public class CursorDisplayer : Singleton<CursorDisplayer>
 
     void Start()
     {
-        Debug.Assert(panelRenderer != null);
-        var root = panelRenderer.visualTree;
+        Debug.Assert(uiDocument != null);
+        var root = uiDocument.rootVisualElement;
 
         cursorContainer = root.Q<VisualElement>("cursor-container");
         cursorCenter = root.Q<VisualElement>("cursor-center");

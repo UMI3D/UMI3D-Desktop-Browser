@@ -24,6 +24,7 @@ using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace BrowserDesktop.Controller
 {
@@ -56,6 +57,17 @@ namespace BrowserDesktop.Controller
         public string hoverBoneType = BoneType.Head;
 
         Dictionary<int, int> manipulationMap;
+
+        public class HoverEvent : UnityEvent<string, Vector3> {};
+
+        [HideInInspector]
+        static public HoverEvent HoverEnter = new HoverEvent();
+
+        [HideInInspector]
+        static public HoverEvent HoverUpdate = new HoverEvent();
+
+        [HideInInspector]
+        static public UnityEvent HoverExit = new UnityEvent();
 
         #region Hover
 
@@ -202,7 +214,7 @@ namespace BrowserDesktop.Controller
                     if (mouseData.ForceProjectionReleasable)
                         CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
                 }
-                else if (CircularMenu.Instance.menuDisplayManager.menu.Count == 1)
+                else if (CircularMenu.Instance.menuDisplayManager.menu.Count + EventMenu.NbEventsDIsplayed == 1)
                 {
                     DeleteForceProjectionMenuItem();
                 }
@@ -312,7 +324,7 @@ namespace BrowserDesktop.Controller
         {
             if (!(
                         mouseData.HoverState == HoverState.AutoProjected
-                        && (CursorHandler.State == CursorHandler.CursorState.Clicked || SideMenu.IsExpanded || isInputHold)
+                        && (CursorHandler.State == CursorHandler.CursorState.Clicked || SideMenu.IsExpanded)
                ))
             {
                 mouseData.save();
@@ -389,7 +401,7 @@ namespace BrowserDesktop.Controller
         {
             if (mouseData.ForceProjection)
             {
-                if (CircularMenu.Exists && !CircularMenu.Instance.IsEmpty())
+                if (CircularMenu.Exists && (!CircularMenu.Instance.IsEmpty() || EventMenu.NbEventsDIsplayed > 0))
                 {
                     CreateForceProjectionMenuItem();
                 }
@@ -424,7 +436,7 @@ namespace BrowserDesktop.Controller
 
                     mouseData.HoverState = HoverState.Hovering;
 
-                    if (mouseData.CurentHovered.dto.interactions.Count > 0 && IsCompatibleWith(mouseData.CurentHovered) && !mouseData.ForceProjection)
+                    if (mouseData.CurentHovered.dto.interactions.Count > 0 && IsCompatibleWith(mouseData.CurentHovered) && !mouseData.ForceProjection && !isInputHold)
                     {
                         InteractionMapper.SelectTool(mouseData.CurentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
                         CursorHandler.State = CursorHandler.CursorState.Hover;
@@ -448,6 +460,7 @@ namespace BrowserDesktop.Controller
                 }
 
                 mouseData.CurentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
+                
             }
             else if (mouseData.OldHovered != null)
             {
@@ -619,7 +632,7 @@ namespace BrowserDesktop.Controller
             return group;
         }
 
-        public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true)
+        public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
         {
             KeyInput input = KeyInputs.Find(i => i.IsAvailable() || !unused);
             if (input == null)
