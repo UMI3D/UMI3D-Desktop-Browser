@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace umi3d.cdk.volumes
 {
-	static public class UMI3DVolumePartLoader 
+	static public class UMI3DVolumeLoader 
 	{
         static public void ReadUMI3DExtension(AbstractVolumeDescriptor dto, Action finished, Action<string> failed)
         {
@@ -31,6 +31,7 @@ namespace umi3d.cdk.volumes
                     VolumeSliceGroupManager.Instance.CreateVolumeSlice(slice, s =>
                     {
                         UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, s, () => VolumeSliceGroupManager.Instance.DeleteVolumeSlice(dto.id));
+                        finished.Invoke();
                     });
                     break;
 
@@ -40,6 +41,14 @@ namespace umi3d.cdk.volumes
                         UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, v, () => VolumeSliceGroupManager.Instance.DeleteVolumeSliceGroup(dto.id));
                         finished.Invoke();
                     });                    
+                    break;
+
+                case AbstractPrimitiveDto prim:
+                    VolumePrimitiveManager.Instance.CreatePrimitive(prim, p =>
+                    {
+                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, p, () => VolumePrimitiveManager.Instance.DeletePrimitive(dto.id));
+                        finished.Invoke();
+                    });
                     break;
 
                 default:

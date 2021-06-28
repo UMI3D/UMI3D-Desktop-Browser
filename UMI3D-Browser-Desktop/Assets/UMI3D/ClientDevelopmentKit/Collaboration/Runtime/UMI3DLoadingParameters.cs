@@ -81,7 +81,7 @@ namespace umi3d.cdk
                     UMI3DToolBoxLoader.ReadUMI3DExtension(t, node, finished, failed);
                     break;
                 case AbstractVolumeDescriptor v:
-                    UMI3DVolumePartLoader.ReadUMI3DExtension(v, callback, failed);
+                    UMI3DVolumeLoader.ReadUMI3DExtension(v, callback, failed);
                     break;
                 case ToolDto t:
                     UMI3DToolLoader.ReadUMI3DExtension(t);
@@ -134,7 +134,7 @@ namespace umi3d.cdk
                 return true;
             if (UMI3DToolBoxLoader.SetUMI3DProperty(entity, property))
                 return true;
-            if (UMI3DVolumePartLoader.SetUMI3DProperty(entity, property))
+            if (UMI3DVolumeLoader.SetUMI3DProperty(entity, property))
                 return true;
             if (notificationLoader != null && notificationLoader.SetUMI3DPorperty(entity, property))
                 return true;
