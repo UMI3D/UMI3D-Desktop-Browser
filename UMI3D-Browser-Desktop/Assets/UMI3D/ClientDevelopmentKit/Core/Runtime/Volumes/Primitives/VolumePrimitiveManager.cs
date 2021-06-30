@@ -44,6 +44,20 @@ namespace umi3d.cdk.volumes
                         }
                     };
                     primitives.Add(boxDto.id, box);
+                    finished.Invoke(box);
+                    break;
+                case CylinderDto cylinderDto:
+                    Cylinder c = new Cylinder()
+                    {
+                        id = cylinderDto.id,
+                        radius = cylinderDto.radius,
+                        height = cylinderDto.height,
+                        position = cylinderDto.center,
+                        rotation = cylinderDto.rotation,
+                        scale = cylinderDto.scale
+                    };
+                    primitives.Add(dto.id, c);
+                    finished.Invoke(c);
                     break;
                 default:
                     throw new System.Exception("Unknown primitive type !");
