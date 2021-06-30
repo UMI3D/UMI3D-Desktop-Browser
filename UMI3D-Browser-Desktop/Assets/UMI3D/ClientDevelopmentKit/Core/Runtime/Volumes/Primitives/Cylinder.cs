@@ -37,7 +37,7 @@ namespace umi3d.cdk.volumes
              * 3- check height
              */
 
-            Vector3 localCoordinate = //TODO CHECK THIS
+            Vector3 localCoordinate = 
                 Vector3.Scale(
                     new Vector3(
                         1f / scale.x,
