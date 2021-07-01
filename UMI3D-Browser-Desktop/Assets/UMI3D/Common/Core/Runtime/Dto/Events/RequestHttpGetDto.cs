@@ -14,25 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-
-namespace umi3d.common.userCapture
+namespace umi3d.common
 {
-    /// <summary>
-    /// A request to inform about the current pose of the user.
-    /// </summary>
-    [Serializable]
-    public class UserTrackingFrameDto : AbstractBrowserRequestDto
+    [System.Serializable]
+    public class RequestHttpGetDto : UMI3DDto
     {
-        public string userId;
+        /// <summary>
+        /// Local file id. Used in the http Get request. /!\ Warning : Contains only lower case letter or number 
+        /// </summary>
+        public string key;
 
-        public List<BoneDto> bones;
-
-        public SerializableVector3 position;
-
-        public SerializableVector4 rotation;
-
-        public float refreshFrequency;
+        public RequestHttpGetDto() : base() { }
     }
 }

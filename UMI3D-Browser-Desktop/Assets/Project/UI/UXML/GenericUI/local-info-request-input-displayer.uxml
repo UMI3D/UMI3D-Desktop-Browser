@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <ui:VisualElement style="height: auto; justify-content: center;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-        <ui:Label text="Server requests acces to local Data :" name="ServerRequest" class="white-txt" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 3px; margin-right: 3px; margin-top: 1px; margin-bottom: 3px; font-size: 15px; -unity-text-align: middle-left; flex-grow: 0; flex-shrink: 0; height: auto;" />
-        <ui:Label text="Label" name="localReason" class="white-txt" style="align-items: stretch; margin-left: 8px; margin-right: 1px; margin-top: 3px; margin-bottom: 3px; flex-shrink: 0; flex-grow: 0; white-space: nowrap; height: auto;" />
+        <ui:Label text="Server requests acces to local Data :" name="ServerRequest" class="white-txt" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 3px; margin-right: 3px; margin-top: 1px; margin-bottom: 3px; font-size: 15px; -unity-text-align: middle-left; flex-grow: 0; flex-shrink: 0; height: auto; white-space: normal;" />
+        <ui:Label text="Label" name="localReason" class="white-txt" style="align-items: stretch; margin-left: 8px; margin-right: 1px; margin-top: 3px; margin-bottom: 3px; flex-shrink: 0; flex-grow: 0; white-space: normal; height: auto;" />
         <ui:Toggle label="Read access" name="toggleReadAccess" value="false" class="toggle-orange medium-size-txt min-size-label" style="margin-left: 8px;" />
         <ui:Toggle label="Write access" name="toggleWriteAccess" value="false" class="toggle-orange medium-size-txt min-size-label" style="margin-left: 8px;" />
     </ui:VisualElement>
