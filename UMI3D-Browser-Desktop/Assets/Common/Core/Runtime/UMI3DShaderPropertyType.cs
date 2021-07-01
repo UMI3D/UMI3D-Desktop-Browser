@@ -16,19 +16,17 @@ limitations under the License.
 
 namespace umi3d.common
 {
-    static public class UMI3DObjectKeys
+
+    static public class UMI3DShaderPropertyType 
     {
         public const byte None = 0;
 
-
         public const byte Array = 1;
         public const byte List = 2;
-        public const byte CountArray = 3;
-        public const byte IndexesArray = 4;
 
-        public const byte Bool = 101;
+        public const byte Bool  = 101;
         public const byte Double = 102;
-        public const byte Float = 103;
+        public const byte Float = 105;
         public const byte Int = 104;
 
         public const byte Vector2 = 151;
@@ -36,6 +34,6 @@ namespace umi3d.common
         public const byte Vector4 = 153;
         public const byte Color = 154;
 
-        public const byte TextureDto = 201;
+        public const byte Texture = 201;
     }
 }
