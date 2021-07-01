@@ -40,7 +40,7 @@ namespace BrowserDesktop.Menu
         public override void Clear()
         {
             base.Clear();
-            button.clickable.clicked += NotifyPress;
+            button.clickable.clicked -= NotifyPress;
             button.RemoveFromHierarchy();
         }
 
@@ -48,7 +48,7 @@ namespace BrowserDesktop.Menu
         {
             InitAndBindUI();
 
-            button.clickable.clicked += NotifyPress;
+
             button.style.display = DisplayStyle.Flex;
         }
 
@@ -97,7 +97,10 @@ namespace BrowserDesktop.Menu
         public void InitAndBindUI()
         {   
             if (button == null)
+            {
                 button = menuItemTreeAsset.CloneTree().Q<Button>();
+                button.clickable.clicked += NotifyPress;
+            }
         }
 
         private void OnDestroy()

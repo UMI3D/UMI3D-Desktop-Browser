@@ -379,6 +379,8 @@ public class LauncherManager : MonoBehaviour
 
     private void SetServer(string serverName)
     {
+        if (String.IsNullOrEmpty(serverName))
+            return;
         serverName = serverName.Trim();
         if (root.Q<Toggle>("toggleRemember").value)
         {
