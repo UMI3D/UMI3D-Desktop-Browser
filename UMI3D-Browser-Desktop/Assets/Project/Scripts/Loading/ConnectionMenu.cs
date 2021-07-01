@@ -427,10 +427,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 callback.Invoke(form);
                 CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
                 nextStep = null;
-                foreach (var param in form.fields)
-                {
-                    Debug.Log(param.ToJson());
-                }
                 LocalInfoSender.CheckFormToUpdateAuthorizations(form);
             };
             send.Subscribe(action);
