@@ -11,11 +11,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
-using System;
+using UnityEngine;
 
 namespace umi3d.common
 {
@@ -48,7 +48,7 @@ namespace umi3d.common
         /// <param name="moduleList"></param>
         public static void AddModule(List<Umi3dNetworkingHelperModule> moduleList)
         {
-            foreach(var module in moduleList)
+            foreach (var module in moduleList)
                 modules.Add(module);
         }
 
@@ -89,7 +89,7 @@ namespace umi3d.common
                 case true when typeof(T) == typeof(char):
                     if (container.length >= sizeof(char))
                     {
-                        result = (T)Convert.ChangeType(BitConverter.ToChar(container.bytes,container.position), typeof(T));
+                        result = (T)Convert.ChangeType(BitConverter.ToChar(container.bytes, container.position), typeof(T));
                         container.position += sizeof(char);
                         container.length -= sizeof(char);
                         return true;
@@ -292,6 +292,10 @@ namespace umi3d.common
                         return true;
                     }
                     break;
+                case true when typeof(T) == typeof(UMI3DShaderPropertyDto):
+                    var shader = UMI3DShaderPropertyDto.FromByte(container);
+                    result = (T)Convert.ChangeType(shader, typeof(T));
+                    return true;
                 case true when typeof(T) == typeof(string):
                     result = default(T);
                     if (container.length == 0) return false;
@@ -342,6 +346,11 @@ namespace umi3d.common
             }
         }
 
+        public static Dictionary<T,K> ReadDictionary<T,K>(ByteContainer container)
+        {
+            return ReadList<KeyValuePair<T,K>>(container).ToDictionary();
+        }
+
         static List<T> ReadIndexesList<T>(ByteContainer container)
         {
             var result = new List<T>();
@@ -388,10 +397,19 @@ namespace umi3d.common
             return res;
         }
 
+        static public byte[] ReadByteArray(ByteContainer container)
+        {
+            byte type = UMI3DNetworkingHelper.Read<byte>(container);
+            int count = UMI3DNetworkingHelper.Read<int>(container);
+            var res = new byte[count];
+            container.bytes.CopyRangeTo(res, 0, container.position, container.position + count - 1);
+            return res;
+        }
+
         public static IEnumerable<ByteContainer> ReadIndexesList(ByteContainer container)
         {
             byte listType = UMI3DNetworkingHelper.Read<byte>(container);
-            if(listType != UMI3DObjectKeys.IndexesArray)
+            if (listType != UMI3DObjectKeys.IndexesArray)
                 yield break;
             int indexMaxPos = -1;
             int maxLength = container.bytes.Length;
@@ -416,55 +434,46 @@ namespace umi3d.common
             yield break;
         }
 
-        /*
-        public static Bytable WriteObject<T>(T value)
+        static Bytable GetType<T>(T value)
         {
             switch (value)
             {
-                case Array array:
-                    var bc = Write(UMI3DObjectKeys.Array);
-                    foreach (var e in array)
-                        bc += WriteObject(e);
-                    return bc;
-                case List<object> l:
-                    return Write(UMI3DObjectKeys.Array)
-                        + l.Select(e => WriteObject(e));
                 case bool b:
-                    return Write(UMI3DObjectKeys.Bool)
-                        + Write(b);
+                    return Write(UMI3DObjectKeys.Bool);
                 case double b:
-                    return Write(UMI3DObjectKeys.Double)
-                        + Write(b);
+                    return Write(UMI3DObjectKeys.Double);
                 case float b:
-                    return Write(UMI3DObjectKeys.Float)
-                        + Write(b);
+                    return Write(UMI3DObjectKeys.Float);
                 case int b:
-                    return Write(UMI3DObjectKeys.Int)
-                        + Write(b);
+                    return Write(UMI3DObjectKeys.Int);
                 case SerializableVector2 v:
                 case Vector2 b:
-                    return Write(UMI3DObjectKeys.Vector2)
-                        + Write(value);
+                    return Write(UMI3DObjectKeys.Vector2);
                 case SerializableVector3 v:
                 case Vector3 b:
-                    return Write(UMI3DObjectKeys.Vector3)
-                        + Write(value);
+                    return Write(UMI3DObjectKeys.Vector3);
                 case Quaternion q:
                 case SerializableVector4 v:
                 case Vector4 b:
-                    return Write(UMI3DObjectKeys.Vector4)
-                        + Write(value);
+                    return Write(UMI3DObjectKeys.Vector4);
                 case Color b:
-                    return Write(UMI3DObjectKeys.Color)
-                        + Write(b);
+                    return Write(UMI3DObjectKeys.Color);
                 case TextureDto b:
-                    return Write(UMI3DObjectKeys.TextureDto)
-                        + Write(b);
+                    return Write(UMI3DObjectKeys.TextureDto);
                 default:
                     return new Bytable();
             }
         }
-        */
+
+        public static Bytable Write<T>(IEnumerable<T> value)
+        {
+            return WriteCollection(value);
+        }
+
+        public static Bytable Write<T,K>(KeyValuePair<T,K> value)
+        {
+            return Write(value.Key) + Write(value.Value);
+        }
 
         public static Bytable Write<T>(T value)
         {
@@ -472,7 +481,7 @@ namespace umi3d.common
             Bytable bc;
             switch (value)
             {
-                case IByte b:
+                case IBytable b:
                     return b.ToBytableArray();
                 case char c:
                     f = (by, i, bs) =>
@@ -628,7 +637,7 @@ namespace umi3d.common
             throw new Exception($"Missing case [{typeof(T)}:{value} was not catched]");
         }
 
-        public static Bytable WriteArray<T>(IEnumerable<T> value)
+        public static Bytable WriteCollection<T>(IEnumerable<T> value)
         {
             Bytable b = Write(UMI3DObjectKeys.CountArray) + Write(value.Count());
             foreach (var v in value)
@@ -636,19 +645,39 @@ namespace umi3d.common
             return b;
         }
 
-        public static Bytable ListToBytable(IEnumerable<IByte> operations, params object[] parameters)
+        public static Bytable WriteCollection<T,K>(IEnumerable<KeyValuePair<T,K>> value)
         {
-            if (operations.Count() > 0)
+            Bytable b = Write(UMI3DObjectKeys.CountArray) + Write(value.Count());
+            foreach (var v in value)
+                b += Write(v);
+            return b;
+        }
+
+        public static Bytable WriteCollection(IEnumerable<byte> value)
+        {
+            var count = value.Count();
+            Bytable b = Write(UMI3DObjectKeys.CountArray) + Write(count);
+            Func<byte[], int, int, (int, int)> f = (by, i, bs) =>
             {
-                if (operations.First().IsCountable()) return ListToCountBytable(operations, parameters); 
-                else return ListToIndexesBytable(operations, parameters);
+                value.ToArray().CopyTo(by, i);
+                return (i + count, bs + count);
+            };
+            return b + new Bytable(count, f);
+        }
+
+        public static Bytable WriteIBytableCollection(IEnumerable<IBytable> ibytes, params object[] parameters)
+        {
+            if (ibytes.Count() > 0)
+            {
+                if (ibytes.First().IsCountable()) return ListToCountBytable(ibytes, parameters);
+                else return ListToIndexesBytable(ibytes, parameters);
             }
             Debug.LogWarning("Empty IEnumerable");
             return Write(UMI3DObjectKeys.CountArray)
                 + Write(0);
         }
 
-        static Bytable ListToIndexesBytable(IEnumerable<IByte> operations, params object[] parameters)
+        static Bytable ListToIndexesBytable(IEnumerable<IBytable> operations, params object[] parameters)
         {
             var ret = Write(UMI3DObjectKeys.IndexesArray);
 
@@ -663,7 +692,7 @@ namespace umi3d.common
                     .Select(o => o.ToBytableArray(parameters))
                     .Select(c =>
                     {
-                        Func<byte[], int, int, (int, int, int)> f1 = (byte[] by, int i, int j) => { var cr = c.function(by, i,0); return (cr.Item1, i, j); };
+                        Func<byte[], int, int, (int, int, int)> f1 = (byte[] by, int i, int j) => { var cr = c.function(by, i, 0); return (cr.Item1, i, j); };
                         return (c.size, f1);
                     })
                     .Aggregate((0, f3)
@@ -671,10 +700,10 @@ namespace umi3d.common
                     {
                         Func<byte[], int, int, (int, int, int)> f2 = (byte[] by, int i, int j) =>
                         {
-                            int i2,sj;
+                            int i2, sj;
                             (i2, i, j) = a.Item2(by, i, j);
                             (i2, i, j) = b.Item2(by, i, j);
-                            (j,sj) = UMI3DNetworkingHelper.Write(i).function(by,j,0);
+                            (j, sj) = UMI3DNetworkingHelper.Write(i).function(by, j, 0);
                             i = i2;
                             return (i2, i, j);
                         };
@@ -682,17 +711,17 @@ namespace umi3d.common
                     });
                 var length = size + func.Item1;
 
-                Func<byte[], int, int, (int, int)> f5 = (byte[] by, int i,int bs) =>
+                Func<byte[], int, int, (int, int)> f5 = (byte[] by, int i, int bs) =>
                 {
                     var couple = func.Item2(by, i + size, i);
-                    return (couple.Item1,couple.Item2);
+                    return (couple.Item1, couple.Item2);
                 };
                 return ret + new Bytable(length, f5);
             }
             return ret;
         }
 
-        static Bytable ListToCountBytable(IEnumerable<IByte> operations, params object[] parameters)
+        static Bytable ListToCountBytable(IEnumerable<IBytable> operations, params object[] parameters)
         {
             return Write(UMI3DObjectKeys.CountArray)
                 + Write(operations.Count())
@@ -700,7 +729,7 @@ namespace umi3d.common
         }
     }
 
-    public interface IByte
+    public interface IBytable
     {
         bool IsCountable();
         Bytable ToBytableArray(params object[] parameters);
@@ -764,7 +793,7 @@ namespace umi3d.common
 
             Func<byte[], int, int, (int, int)> f = (by, i, bs) =>
             {
-                (i,bs) = a.function(by, i, bs);
+                (i, bs) = a.function(by, i, bs);
                 return b.function(by, i, bs);
             };
             return new Bytable(a.size + b.size, f);
@@ -774,7 +803,7 @@ namespace umi3d.common
         {
             if (b == null || b.Count() == 0) return a;
             if (a == null) return b.Aggregate((c, d) => c + d);
-            
+
 
             var b2 = b.Aggregate((c, d) => c + d);
 
