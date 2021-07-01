@@ -467,7 +467,11 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 callback.Invoke(form);
                 CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
                 nextStep = null;
-
+                foreach (var param in form.fields)
+                {
+                    Debug.Log(param.ToJson());
+                }
+                LocalInfoSender.ChekFormToUpdateAuthorizations(form);
             };
             send.Subscribe(action);
             Menu.menu.Add(send);
@@ -521,7 +525,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 localReq.NotifyValueChange(localInfoRequestParameterDto.value);
                 localReq.Subscribe((x) =>
                 {
-                    Debug.Log("try sub to local1 request");
+                    localInfoRequestParameterDto.value = x;
                 }
                 );
                 result = localReq;

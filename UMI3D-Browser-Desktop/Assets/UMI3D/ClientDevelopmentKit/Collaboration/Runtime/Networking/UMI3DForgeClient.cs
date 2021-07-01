@@ -258,6 +258,15 @@ namespace umi3d.cdk.collaboration
                         StartCoroutine(UMI3DNavigation.Navigate(navigate));
 
                         break;
+
+                    case RequestHttpGetDto requestGet:
+                        UMI3DCollaborationClientServer.Instance.HttpClient.SendGetLocalInfo(
+                            requestGet.key,
+                            (bytes) => LocalInfoSender.SetLocalInfo(requestGet.key, bytes),
+                            (error) => { Debug.Log("error on get local info : " + requestGet.key); }
+                        );
+                                
+                        break;
                     default:
                         Debug.Log($"Type not catch {dto.GetType()}");
                         break;
@@ -283,7 +292,7 @@ namespace umi3d.cdk.collaboration
                     MainThreadManager.Run(() =>
                     {
                         if (client.Time.Timestep - frame.TimeStep < 500)
-                            StartCoroutine((userAvatar as UMI3DCollaborativeUserAvatar).UpdateBonePosition(trackingFrame, frame.TimeStep));
+                            StartCoroutine((userAvatar as UMI3DCollaborativeUserAvatar).UpdateAvatarPosition(trackingFrame, frame.TimeStep));
                     });
                 else
                     MainThreadManager.Run(() =>
