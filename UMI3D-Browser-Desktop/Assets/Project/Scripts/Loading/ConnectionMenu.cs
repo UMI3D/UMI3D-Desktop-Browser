@@ -431,7 +431,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 {
                     Debug.Log(param.ToJson());
                 }
-                LocalInfoSender.ChekFormToUpdateAuthorizations(form);
+                LocalInfoSender.CheckFormToUpdateAuthorizations(form);
             };
             send.Subscribe(action);
             Menu.menu.Add(send);

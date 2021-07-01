@@ -24,7 +24,7 @@ namespace BrowserDesktop.Menu
     /// <summary>
     /// Toggle displayer.
     /// </summary>
-    public class LocalInfoRequestInputDisplayerElement : AbstracLocalInfoRequestInputDisplayer, IDisplayerElement
+    public class LocalInfoRequestInputDisplayerElement : AbstractLocalInfoRequestInputDisplayer, IDisplayerElement
     {
         public VisualTreeAsset booleanInputVisualTreeAsset;
 
