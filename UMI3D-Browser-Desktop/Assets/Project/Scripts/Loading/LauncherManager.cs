@@ -16,9 +16,7 @@ limitations under the License.
 
 using System;
 using System.Collections;
-
 using UnityEngine;
-using Unity.UIElements.Runtime;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 
@@ -36,7 +34,7 @@ public class LauncherManager : MonoBehaviour
     #region UI Fields
 
     [SerializeField]
-    private PanelRenderer panelRenderer = null;
+    private UIDocument uiDocument = null;
 
     [SerializeField]
     private VisualTreeAsset libraryEntryTreeAsset = null;
@@ -105,10 +103,10 @@ public class LauncherManager : MonoBehaviour
     {
         masterServer = new LaucherOnMasterServer();
 
-        Debug.Assert(panelRenderer != null);
+        Debug.Assert(uiDocument != null);
         Debug.Assert(dialogueBoxTreeAsset != null);
         Debug.Assert(libraryEntryTreeAsset != null);
-        root = panelRenderer.visualTree;
+        root = uiDocument.rootVisualElement;
 
         InitUI();
    
@@ -130,10 +128,7 @@ public class LauncherManager : MonoBehaviour
         sessionScreen = root.Q<VisualElement>("sessionScreen");
         backMenuBnt = root.Q<Button>("back-menu-btn");
         backMenuBnt.clickable.clicked += ResetLauncher;
-
     }
-
-
 
     private void BindURLScreen()
     {
@@ -147,18 +142,14 @@ public class LauncherManager : MonoBehaviour
         IpInput = root.Q<TextField>("IpInput");
         PortInput = root.Q<TextField>("PortInput");
 
-        //Debug.Log("urlEnterBtn : " + (urlEnterBtn != null));
-
         urlEnterBtn.clickable.clicked += ()=> SetServer(urlInput.value);// SetDomain;
         nextStep = ()=> SetServer(urlInput.value);
 
         connectNewServBtn = urlScreen.Q<Button>("newConnection");
-        Debug.Log("connectNewServBtn : " + (connectNewServBtn != null));
         connectNewServBtn.clickable.clicked += () => ToggleDisplayElement(urlScreen.Q<VisualElement>("inputs-url-container"));
 
         var manageLibraryBtn = urlScreen.Q<Button>("manage-library-btn");
         manageLibraryBtn.clickable.clicked += DisplayLibraries;
-        //manageLibraryBtn.transform.position -= new Vector3(75, 0, 0);
 
         favoriteEnvironmentSlider = new SliderElement();
         favoriteEnvironmentSlider.SetUp(urlScreen.Q<VisualElement>("slider"));
@@ -172,11 +163,6 @@ public class LauncherManager : MonoBehaviour
     {
         librariesScreen = root.Q<VisualElement>("libraries-manager-screen");
         librariesList = librariesScreen.Q<ScrollView>("libraries-list");
-
-
-      //  backMenuBnt.clickable.clicked += ResetLauncher;
-        //nextMenuBnt.clickable.clicked += DirectConnect;
-
     }
 
     private void BindAdvancedConnection()
@@ -184,7 +170,6 @@ public class LauncherManager : MonoBehaviour
         urlScreen = root.Q<VisualElement>("url-screen");
 
         backMenuBnt = root.Q<Button>("back-menu-btn");
-      //  backMenuBnt.clickable.clicked += ResetLauncher;
         nextMenuBnt = root.Q<Button>("nextMenuBtn"); 
         Action nextAction = () => SetDomain();
         if (currentNextButtonAction != null)
@@ -214,10 +199,9 @@ public class LauncherManager : MonoBehaviour
 
     private void BindSessionScreen()
     {
-          nextMenuBnt = root.Q<Button>("nextMenuBtn");
-           //nextMenuBnt.clickable.clicked += () => SetDomain();
+        nextMenuBnt = root.Q<Button>("nextMenuBtn");
         backMenuBnt.style.display = DisplayStyle.Flex;
-           nextMenuBnt.style.display = DisplayStyle.None;
+        nextMenuBnt.style.display = DisplayStyle.None;
         urlScreen = root.Q<VisualElement>("url-screen");
         urlScreen.style.display = DisplayStyle.None;
         advancedConnectionScreen.style.display = DisplayStyle.None;
@@ -335,7 +319,6 @@ public class LauncherManager : MonoBehaviour
 
     private void ToggleDisplayElement(VisualElement visualElement)
     {
-        //Debug.Log("Toggle visual element");
         visualElement.style.display = DisplayStyle.Flex == visualElement.style.display.value ? DisplayStyle.None : DisplayStyle.Flex;
     }
 
@@ -455,8 +438,6 @@ public class LauncherManager : MonoBehaviour
 
         librariesScreen.style.display = DisplayStyle.None;
         urlScreen.style.display = DisplayStyle.Flex;
-        //Debug.Log(backMenuBnt);
-        //Debug.Log(nextMenuBnt);
 
         backMenuBnt.style.display = DisplayStyle.None;
         nextMenuBnt.style.display = DisplayStyle.None;
@@ -578,7 +559,7 @@ public class LauncherManager : MonoBehaviour
 
                 //2. Display environments which use this lib
                 var dropdown = entry.Q<DropdownElement>();
-                dropdown.SetUp(panelRenderer, "dropdown-label-medium");
+                dropdown.SetUp(uiDocument, "dropdown-label-medium");
                 dropdown.SetOptions(lib.applications);
 
                 //3. Display lib size

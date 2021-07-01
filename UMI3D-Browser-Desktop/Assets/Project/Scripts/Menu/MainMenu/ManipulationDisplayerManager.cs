@@ -16,7 +16,6 @@ limitations under the License.
 
 using System.Collections;
 using System.Collections.Generic;
-using Unity.UIElements.Runtime;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,7 +23,7 @@ namespace BrowserDesktop.Menu
 {
     public class ManipulationDisplayerManager : umi3d.common.Singleton<ManipulationDisplayerManager>
     {
-        public PanelRenderer panelRenderer;
+        public UIDocument uiDocument;
         public VisualTreeAsset manipualtionTreeAsset;
 
         public string activeClassName;
@@ -61,11 +60,11 @@ namespace BrowserDesktop.Menu
         private void Start()
         {
             Debug.Assert(manipualtionTreeAsset != null);
-            Debug.Assert(panelRenderer != null);
+            Debug.Assert(uiDocument != null);
             Debug.Assert(!string.IsNullOrEmpty(activeClassName));
             Debug.Assert(!string.IsNullOrEmpty(containerTagName));
 
-            container = panelRenderer.visualTree.Q<VisualElement>(containerTagName);
+            container = uiDocument.rootVisualElement.Q<VisualElement>(containerTagName);
         }
 
         public static ManipulationElement CreateDisplayer()

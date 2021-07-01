@@ -438,6 +438,11 @@ Toggle > Label {
     border-bottom-width: 0;
 }
 
+.orange-slider > VisualElement {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
 .orange-slider #unity-dragger:hover {
     background-color: rgba(0, 0, 0, 0);
     border-left-width: 1px;
@@ -771,8 +776,4 @@ Toggle > Label {
 
 .black-txt {
     color: rgb(0, 0, 0);
-}
-
-.orange-background {
-    background-color: rgb(247, 182, 87);
 }
