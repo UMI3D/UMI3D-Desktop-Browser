@@ -153,6 +153,15 @@ public class Connecting : Singleton<Connecting>
                 );
                 result = s;
                 break;
+            case LocalInfoRequestParameterDto localInfoRequestParameterDto:
+                LocalInfoRequestInputMenuItem localReq = new LocalInfoRequestInputMenuItem() { dto = localInfoRequestParameterDto };
+                localReq.Subscribe((x) =>
+                {
+                    localInfoRequestParameterDto.value = x;
+                }
+                );
+                result = localReq;
+                break;
             default:
                 result = new MenuItem();
                 result.Subscribe(() => Debug.Log("hellooo 2"));
