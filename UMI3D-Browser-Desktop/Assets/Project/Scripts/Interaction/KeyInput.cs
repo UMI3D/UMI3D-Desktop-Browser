@@ -37,7 +37,7 @@ namespace BrowserDesktop.Interaction
         /// <summary>
         /// Avatar bone linked to this input.
         /// </summary>
-        [ConstStringEnum(typeof(BoneType))]
+        [ConstEnum(typeof(BoneType), typeof(uint))]
         public uint bone = BoneType.None;
 
         /// <summary>

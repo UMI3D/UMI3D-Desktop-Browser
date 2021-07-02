@@ -183,7 +183,7 @@ namespace BrowserDesktop.Interaction
 
         #endregion
 
-        [ConstStringEnum(typeof(BoneType))]
+        [ConstEnum(typeof(BoneType), typeof(uint))]
         public uint bone = BoneType.None;
 
         ManipulationInputButton button;
