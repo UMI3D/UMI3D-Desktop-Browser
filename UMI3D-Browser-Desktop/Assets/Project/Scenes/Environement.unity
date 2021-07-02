@@ -580,7 +580,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &87752525
 PrefabInstance:
@@ -606,7 +606,7 @@ PrefabInstance:
     - target: {fileID: 4423324782737819675, guid: 50541f86f5f01194eb2b175264de3f46,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4423324782737819675, guid: 50541f86f5f01194eb2b175264de3f46,
         type: 3}
@@ -947,7 +947,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &270217728
 GameObject:
@@ -1397,6 +1397,7 @@ Transform:
   - {fileID: 2096641627}
   - {fileID: 6129258313713389227}
   - {fileID: 400683416}
+  - {fileID: 2119596087}
   - {fileID: 1699407651}
   m_Father: {fileID: 1800526325}
   m_RootOrder: 0
@@ -1413,13 +1414,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83761c411af74f04eb4787a5e97f291e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _viewpoint: {fileID: 2094843934}
-  _neckPivot: {fileID: 1495258310}
+  _viewpoint: {fileID: 2119596089}
+  _neckPivot: {fileID: 2119596088}
   maxAngle: 55
-  head: {fileID: 1057207522}
-  Node: {fileID: 6129258313713389227}
-  TorsoUpAnchor: {fileID: 1057207512}
-  agent: {fileID: 936059045}
+  head: {fileID: 2119596091}
+  Node: {fileID: 2119596087}
+  TorsoUpAnchor: {fileID: 2119596090}
+  agent: {fileID: 2119596092}
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
   state: 0
   navigation: 0
@@ -2283,10 +2284,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04ea2c73469f6f9418e531ec508266da, type: 3}
---- !u!224 &606332368 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4544772369814338216, guid: 04ea2c73469f6f9418e531ec508266da,
-    type: 3}
+--- !u!4 &606332368 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 606332367}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &647256035
@@ -2339,10 +2339,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 2
-  bone: Head
+  bone: 0
   Cursor: {fileID: 5249229619936490012}
   AvatarParent: {fileID: 6129258313713389227}
-  Head: {fileID: 0}
+  Head: {fileID: 2119596091}
   distCursor: 1
   MaxDistCursorDelta: 0.3
   MinimumCursorDistance: 0.5
@@ -2473,7 +2473,7 @@ RectTransform:
   - {fileID: 1789652171}
   - {fileID: 1659216881}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3690,7 +3690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Hand
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207487
 MonoBehaviour:
@@ -3704,7 +3704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right ForeArm
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207488
 MonoBehaviour:
@@ -3718,7 +3718,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Upper Arm
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207489
 MonoBehaviour:
@@ -3732,7 +3732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Shoulder
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207490
 MonoBehaviour:
@@ -3746,7 +3746,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Head
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207491
 MonoBehaviour:
@@ -3760,7 +3760,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Neck
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207492
 MonoBehaviour:
@@ -3788,7 +3788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Hand
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207494
 MonoBehaviour:
@@ -3802,7 +3802,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left ForeArm
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207495
 MonoBehaviour:
@@ -3816,7 +3816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Upper Arm
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207496
 MonoBehaviour:
@@ -3830,7 +3830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Shoulder
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207497
 MonoBehaviour:
@@ -3844,7 +3844,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Upper Chest
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207498
 MonoBehaviour:
@@ -3858,7 +3858,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Chest
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207499
 MonoBehaviour:
@@ -3872,7 +3872,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Spine
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207500
 MonoBehaviour:
@@ -3886,7 +3886,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Toe Base
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207501
 MonoBehaviour:
@@ -3900,7 +3900,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Ankle
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207502
 MonoBehaviour:
@@ -3914,7 +3914,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Knee
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207503
 MonoBehaviour:
@@ -3928,7 +3928,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Hip
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207504
 MonoBehaviour:
@@ -3942,7 +3942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Toe Base
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207505
 MonoBehaviour:
@@ -3956,7 +3956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Ankle
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207506
 MonoBehaviour:
@@ -3970,7 +3970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Knee
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207507
 MonoBehaviour:
@@ -3984,7 +3984,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Hip
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207508
 MonoBehaviour:
@@ -3998,7 +3998,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Hips
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207509
 MonoBehaviour:
@@ -4065,12 +4065,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!4 &1057207512 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1317251726330053751, guid: c95999b4e970d984db2324d70298aff0,
-    type: 3}
-  m_PrefabInstance: {fileID: 1057207460}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1057207513 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3096126437704836789, guid: c95999b4e970d984db2324d70298aff0,
@@ -4101,7 +4095,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Index Distal
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207517
 MonoBehaviour:
@@ -4115,7 +4109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Index Intermediate
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207518
 MonoBehaviour:
@@ -4129,7 +4123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Index Proximal
+  boneType: 0
   isTracked: 0
 --- !u!1 &1057207519 stripped
 GameObject:
@@ -4149,12 +4143,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1057207460}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1057207522 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5094996820673192304, guid: c95999b4e970d984db2324d70298aff0,
-    type: 3}
-  m_PrefabInstance: {fileID: 1057207460}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1057207523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4167,7 +4155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Middle Distal
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207524
 MonoBehaviour:
@@ -4181,7 +4169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Middle Intermediate
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207525
 MonoBehaviour:
@@ -4195,7 +4183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Middle Proximal
+  boneType: 0
   isTracked: 0
 --- !u!1 &1057207526 stripped
 GameObject:
@@ -4227,7 +4215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Little Distal
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207530
 MonoBehaviour:
@@ -4241,7 +4229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Little Intermediate
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207531
 MonoBehaviour:
@@ -4255,7 +4243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Little Proximal
+  boneType: 0
   isTracked: 0
 --- !u!1 &1057207532 stripped
 GameObject:
@@ -4305,7 +4293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Ring Distal
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207539
 MonoBehaviour:
@@ -4319,7 +4307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Ring Intermediate
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207540
 MonoBehaviour:
@@ -4333,7 +4321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Ring Proximal
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207541
 MonoBehaviour:
@@ -4347,7 +4335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Thumb Distal
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207542
 MonoBehaviour:
@@ -4361,7 +4349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Thumb Intermediate
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207543
 MonoBehaviour:
@@ -4375,7 +4363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Right Thumb Proximal
+  boneType: 0
   isTracked: 0
 --- !u!1 &1057207544 stripped
 GameObject:
@@ -4425,7 +4413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Index Distal
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207551
 MonoBehaviour:
@@ -4439,7 +4427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Index Intermediate
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207552
 MonoBehaviour:
@@ -4453,7 +4441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Index Proximal
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207553
 MonoBehaviour:
@@ -4467,7 +4455,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Middle Distal
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207554
 MonoBehaviour:
@@ -4481,7 +4469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Middle Intermediate
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207555
 MonoBehaviour:
@@ -4495,7 +4483,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Middle Proximal
+  boneType: 0
   isTracked: 0
 --- !u!1 &1057207556 stripped
 GameObject:
@@ -4545,7 +4533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Little Distal
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207563
 MonoBehaviour:
@@ -4559,7 +4547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Little Intermediate
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207564
 MonoBehaviour:
@@ -4573,7 +4561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Little Proximal
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207565
 MonoBehaviour:
@@ -4587,7 +4575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Ring Distal
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207566
 MonoBehaviour:
@@ -4601,7 +4589,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Ring Intermediate
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207567
 MonoBehaviour:
@@ -4615,7 +4603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Ring Proximal
+  boneType: 0
   isTracked: 0
 --- !u!1 &1057207568 stripped
 GameObject:
@@ -4647,7 +4635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Thumb Distal
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207572
 MonoBehaviour:
@@ -4661,7 +4649,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Thumb Intermediate
+  boneType: 0
   isTracked: 0
 --- !u!114 &1057207573
 MonoBehaviour:
@@ -4675,7 +4663,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: Left Thumb Proximal
+  boneType: 0
   isTracked: 0
 --- !u!1 &1092680892
 GameObject:
@@ -5048,7 +5036,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1188994924
 MonoBehaviour:
@@ -5149,7 +5137,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 18
-  bone: Head
+  bone: 3
 --- !u!114 &1202536836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5169,7 +5157,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 17
-  bone: Head
+  bone: 3
 --- !u!114 &1202536837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5189,7 +5177,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 16
-  bone: Head
+  bone: 3
 --- !u!114 &1202536838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5209,7 +5197,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 15
-  bone: Head
+  bone: 3
 --- !u!114 &1202536839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5229,7 +5217,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 14
-  bone: Head
+  bone: 3
 --- !u!114 &1202536840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5249,7 +5237,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   activationButton: 19
-  bone: Head
+  bone: 3
 --- !u!1001 &1202966576
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5454,21 +5442,7 @@ Transform:
   m_Father: {fileID: 1957946547}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1202966578
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1361883361}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1202966579 stripped
+--- !u!4 &1202966578 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 1202966576}
@@ -5687,22 +5661,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1361883361
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1202966578}
-  m_Layer: 0
-  m_Name: Recovery GameObject (1202966578)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1370384012
 GameObject:
   m_ObjectHideFlags: 0
@@ -6637,7 +6595,7 @@ Transform:
   - {fileID: 327637491}
   - {fileID: 683840924}
   m_Father: {fileID: 498482121}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1699407652
 MonoBehaviour:
@@ -7176,7 +7134,7 @@ Transform:
   m_Children:
   - {fileID: 498482121}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1879130312
 GameObject:
@@ -7318,7 +7276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: None
+  boneType: 0
   isTracked: 0
 --- !u!1 &1957946543
 GameObject:
@@ -7413,10 +7371,10 @@ RectTransform:
   m_Children:
   - {fileID: 559810340}
   - {fileID: 1314498899}
-  - {fileID: 1202966579}
+  - {fileID: 1202966578}
   - {fileID: 1202966577}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -8024,10 +7982,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b3e6968d89ff524cbf62f7be8827720, type: 3}
---- !u!224 &2074745902 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4438742154522217408, guid: 8b3e6968d89ff524cbf62f7be8827720,
-    type: 3}
+--- !u!4 &2074745902 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 2074745901}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2076874178
@@ -8247,7 +8204,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2079147380
 MonoBehaviour:
@@ -8726,13 +8683,123 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectionMemory: {fileID: 498482125}
-  CameraTransform: {fileID: 2094843934}
+  CameraTransform: {fileID: 2119596089}
   InteractionMapper: {fileID: 498482124}
   dofGroups: 04000000050000000600000001000000020000000300000008000000090000000a000000
   ManipulationActionInput:
   - {fileID: 647256037}
-  interactionBoneType: Head
-  hoverBoneType: Head
+  interactionBoneType: 3
+  hoverBoneType: 3
+--- !u!1001 &2119596086
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 498482121}
+    m_Modifications:
+    - target: {fileID: 7079216685592033180, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: viewpointBonetype
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499134510037716410, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499134510037716410, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499134510037716410, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499134510037716410, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499134510037716410, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499134510037716410, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499134510037716410, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499134510037716410, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499134510037716410, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499134510037716410, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499134510037716410, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499134510037716411, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_Name
+      value: Avatar 1 1 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d599db4b8e88c6246a10c7a44287b2d5, type: 3}
+--- !u!4 &2119596087 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8499134510037716410, guid: d599db4b8e88c6246a10c7a44287b2d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2119596086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2119596088 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2377199357187266519, guid: d599db4b8e88c6246a10c7a44287b2d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2119596086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2119596089 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2377199356570503951, guid: d599db4b8e88c6246a10c7a44287b2d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2119596086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2119596090 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3655325647420470210, guid: d599db4b8e88c6246a10c7a44287b2d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2119596086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2119596091 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7370302028105062085, guid: d599db4b8e88c6246a10c7a44287b2d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2119596086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!195 &2119596092 stripped
+NavMeshAgent:
+  m_CorrespondingSourceObject: {fileID: 2377199355413914548, guid: d599db4b8e88c6246a10c7a44287b2d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2119596086}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4670142053546128550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8760,7 +8827,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonContainer: {fileID: 1057207461}
   viewpoint: {fileID: 2094843934}
-  viewpointBonetype: None
+  viewpointBonetype: 0
   sendTracking: 1
   targetTrackingFPS: 15
   skeletonParsedEvent:
