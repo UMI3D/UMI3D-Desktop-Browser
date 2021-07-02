@@ -17,6 +17,7 @@ limitations under the License.
 using MrtkShader;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using umi3d.common;
 using UnityEngine;
 
@@ -136,9 +137,9 @@ namespace umi3d.cdk
             var node = entity as UMI3DNodeInstance;
             if (node == null)
             {
-                return SetUMI3DMaterialProperty(entity, operationId, propertyKey,container); ;
+                return SetUMI3DMaterialProperty(entity, operationId, propertyKey, container); ;
             }
-            if (base.SetUMI3DProperty(entity, operationId, propertyKey,container))
+            if (base.SetUMI3DProperty(entity, operationId, propertyKey, container))
                 return true;
             UMI3DSceneNodeDto dto = (node.dto as GlTFSceneDto)?.extensions?.umi3d as UMI3DSceneNodeDto;
             if (dto == null) return false;
@@ -167,9 +168,9 @@ namespace umi3d.cdk
 
         public override bool ReadUMI3DProperty(ref object value, uint propertyKey, ByteContainer container)
         {
-            if (ReadUMI3DMaterialProperty(ref value, propertyKey,container))
+            if (ReadUMI3DMaterialProperty(ref value, propertyKey, container))
                 return true;
-            if (base.ReadUMI3DProperty(ref value, propertyKey,container))
+            if (base.ReadUMI3DProperty(ref value, propertyKey, container))
                 return true;
             switch (propertyKey)
             {
@@ -332,21 +333,21 @@ namespace umi3d.cdk
                             //  string key = (string)p.key;
                             if (extension.shaderProperties.ContainsKey((string)p.key))
                             {
-                                extension.shaderProperties[(string)p.key] = p.value;
+                                extension.shaderProperties[(string)p.key] = ((UMI3DShaderPropertyDto)p.value).value;
                                 Debug.LogWarning("this key (" + p.key.ToString() + ") already exists. Update old value");
                             }
                             else
-                                extension.shaderProperties.Add((string)p.key, p.value);
+                                extension.shaderProperties.Add((string)p.key, ((UMI3DShaderPropertyDto)p.value).value);
                             break;
                         case SetEntityDictionaryRemovePropertyDto p:
                             extension.shaderProperties.Remove((string)p.key);
                             Debug.LogWarning("Warning a property is removed but it cannot be applied");
                             break;
                         case SetEntityDictionaryPropertyDto p:
-                            extension.shaderProperties[(string)p.key] = p.value;
+                            extension.shaderProperties[(string)p.key] = ((UMI3DShaderPropertyDto)p.value).value;
                             break;
                         case SetEntityPropertyDto p:
-                            extension.shaderProperties = (Dictionary<string, object>)p.value;
+                            extension.shaderProperties = ((Dictionary<string, UMI3DShaderPropertyDto>)p.value).Select(k => new KeyValuePair<string, object>(k.Key, k.Value.value)).ToDictionary();
                             break;
 
                         default:
@@ -408,7 +409,7 @@ namespace umi3d.cdk
 
                 case UMI3DPropertyKeys.NormalTexture:
                     var nt = UMI3DNetworkingHelper.Read<ScalableTextureDto>(container);
-                    AbstractUMI3DMaterialLoader.LoadTextureInMaterial(uMI3DMaterialDto.id,nt, MRTKShaderUtils.NormalMap, materialToModify);
+                    AbstractUMI3DMaterialLoader.LoadTextureInMaterial(uMI3DMaterialDto.id, nt, MRTKShaderUtils.NormalMap, materialToModify);
                     uMI3DMaterialDto.normalTexture = nt;
                     break;
 
@@ -488,30 +489,36 @@ namespace umi3d.cdk
                 case UMI3DPropertyKeys.ShaderProperties:
                     Debug.LogWarning("not totaly implemented");
                     var extension = glTFMaterialDto.extensions.umi3d;
+                    string key;
+                    object value;
                     //TODO
                     switch (operationId)
                     {
-                        //case UMI3DOperationKeys.SetEntityDictionnaryAddProperty:
-                        //    //  string key = (string)p.key;
-                        //    if (extension.shaderProperties.ContainsKey((string)p.key))
-                        //    {
-                        //        extension.shaderProperties[(string)p.key] = p.value;
-                        //        Debug.LogWarning("this key (" + p.key.ToString() + ") already exists. Update old value");
-                        //    }
-                        //    else
-                        //        extension.shaderProperties.Add((string)p.key, p.value);
-                        //    break;
-                        //case UMI3DOperationKeys.SetEntityDictionnaryRemoveProperty:
-                        //    extension.shaderProperties.Remove((string)p.key);
-                        //    Debug.LogWarning("Warning a property is removed but it cannot be applied");
-                        //    break;
-                        //case UMI3DOperationKeys.SetEntityDictionnaryProperty:
-                        //    extension.shaderProperties[(string)p.key] = p.value;
-                        //    break;
-                        //case UMI3DOperationKeys.SetEntityProperty:
-                        //    extension.shaderProperties = (Dictionary<string, object>)p.value;
-                        //    break;
-
+                        case UMI3DOperationKeys.SetEntityDictionnaryAddProperty:
+                            key = UMI3DNetworkingHelper.Read<string>(container);
+                            value = UMI3DNetworkingHelper.Read<UMI3DShaderPropertyDto>(container).value;
+                            Debug.Log($"Add value {key}:{value}[{value.GetType()}]");
+                            if (extension.shaderProperties.ContainsKey(key))
+                            {
+                                extension.shaderProperties[key] = value;
+                                Debug.LogWarning($"this key [{key}] already exists. Update old value");
+                            }
+                            else
+                                extension.shaderProperties.Add(key, value);
+                            break;
+                        case UMI3DOperationKeys.SetEntityDictionnaryRemoveProperty:
+                            key = UMI3DNetworkingHelper.Read<string>(container);
+                            extension.shaderProperties.Remove((string)key);
+                            Debug.LogWarning("Warning a property is removed but it cannot be applied");
+                            break;
+                        case UMI3DOperationKeys.SetEntityDictionnaryProperty:
+                            key = UMI3DNetworkingHelper.Read<string>(container);
+                            value = UMI3DNetworkingHelper.Read<UMI3DShaderPropertyDto>(container).value;
+                            extension.shaderProperties[key] = value;
+                            break;
+                        case UMI3DOperationKeys.SetEntityProperty:
+                            extension.shaderProperties = UMI3DNetworkingHelper.ReadDictionary<string, UMI3DShaderPropertyDto>(container).Select(k=> new KeyValuePair<string,object>(k.Key,k.Value.value)).ToDictionary();
+                            break;
                         default:
                             break;
                     }
@@ -553,7 +560,7 @@ namespace umi3d.cdk
         {
             if (entity != null && entity.Object is Material)
             {
-                return SwitchOnMaterialProperties(entity, operationId, propertyKey,container, (Material)entity.Object);
+                return SwitchOnMaterialProperties(entity, operationId, propertyKey, container, (Material)entity.Object);
             }
 
             if (entity != null && entity.Object is List<Material>)
@@ -562,7 +569,7 @@ namespace umi3d.cdk
                 foreach (Material item in (List<Material>)entity.Object)
                 {
 
-                    if (SwitchOnMaterialProperties(entity, operationId, propertyKey,container, item))
+                    if (SwitchOnMaterialProperties(entity, operationId, propertyKey, container, item))
                         res = true;
                 }
                 return res;
