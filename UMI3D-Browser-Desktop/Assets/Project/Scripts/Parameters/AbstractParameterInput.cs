@@ -43,12 +43,12 @@ namespace BrowserDesktop.Parameters
         /// <see cref="Associate(AbstractInteractionDto)"/>
         protected UnityAction<ValueType> callback;
 
-        protected string hoveredObjectId { get; private set; }
+        protected ulong hoveredObjectId { get; private set; }
 
-        protected string GetCurrentHoveredObjectID() { return hoveredObjectId; }
+        protected ulong GetCurrentHoveredObjectID() { return hoveredObjectId; }
 
 
-        public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
+        public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
             if (currentInteraction != null)
             {
@@ -91,7 +91,7 @@ namespace BrowserDesktop.Parameters
         }
 
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
             throw new System.Exception("Incompatible interaction");
         }
@@ -124,7 +124,7 @@ namespace BrowserDesktop.Parameters
             Dissociate();
         }
 
-        public override void UpdateHoveredObjectId(string hoveredObjectId)
+        public override void UpdateHoveredObjectId(ulong hoveredObjectId)
         {
             this.hoveredObjectId = hoveredObjectId;
         }
