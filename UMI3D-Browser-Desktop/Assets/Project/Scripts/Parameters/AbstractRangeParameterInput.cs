@@ -25,7 +25,7 @@ namespace BrowserDesktop.Parameters
     where ParameterType : AbstractRangeParameterDto<ValueType>
     {
 
-        public override void Associate(AbstractInteractionDto interaction, string toolId,string hoveredObjectId)
+        public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
             if (currentInteraction != null)
             {

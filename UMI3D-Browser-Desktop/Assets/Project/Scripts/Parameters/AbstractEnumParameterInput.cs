@@ -23,7 +23,7 @@ namespace BrowserDesktop.Parameters
     public abstract class AbstractEnumParameterInput<InputMenuItem, ValueType> : AbstractParameterInput<InputMenuItem, EnumParameterDto<ValueType>, ValueType>
         where InputMenuItem : AbstractEnumInputMenuItem<ValueType>, new()
     {
-        public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
+        public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
             if (currentInteraction != null)
             {

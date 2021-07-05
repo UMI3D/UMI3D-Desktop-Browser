@@ -64,7 +64,7 @@ public class NotificationDisplayer : Singleton<NotificationDisplayer>
             
             if(notifDto.icon2D != null)
             {
-                Texture2D icon = LoadIcon2d(notifDto.icon2D);
+                Texture2D icon = LoadIcon2d(notifDto.id,notifDto.icon2D);
                 Debug.Log("Icon " + (icon == null));
             }
 
@@ -73,7 +73,7 @@ public class NotificationDisplayer : Singleton<NotificationDisplayer>
         }
     }
 
-    Texture2D LoadIcon2d(ResourceDto dto)
+    Texture2D LoadIcon2d(ulong id, ResourceDto dto)
     {
 
         if (dto.variants.Count == 0)
@@ -92,7 +92,7 @@ public class NotificationDisplayer : Singleton<NotificationDisplayer>
             if (loader != null)
             {
                 UMI3DResourcesManager.LoadFile(
-                    "",
+                    id,
                     fileToLoad,
                     loader.UrlToObject,
                     loader.ObjectFromCache,
