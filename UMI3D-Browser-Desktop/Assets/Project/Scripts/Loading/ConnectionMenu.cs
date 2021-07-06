@@ -59,7 +59,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     bool isPasswordVisible = false;
 
     Action nextStep = null;
-    Action previousStep = null;
 
     #region UI Fields
 
@@ -104,8 +103,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void Start()
     {
-        previousStep = Leave;
-
         InitUI();
 
 
@@ -137,8 +134,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         {
             if (DialogueBoxElement.IsADialogueBoxDislayed)
                 DialogueBoxElement.CloseDialogueBox(false);
-            else
-                previousStep?.Invoke();
         }
     }
 
