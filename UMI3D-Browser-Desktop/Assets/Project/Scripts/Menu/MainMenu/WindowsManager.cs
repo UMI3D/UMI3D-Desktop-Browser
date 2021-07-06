@@ -88,6 +88,8 @@ public class WindowsManager : MonoBehaviour
 
     public VisualTreeAsset dialogueBoxTreeAsset;
 
+    static bool isWindowsCaptionRemoved = false;
+
     #endregion
 
     #region Fields to remove windows default title bar
@@ -152,7 +154,7 @@ public class WindowsManager : MonoBehaviour
         SetUpCustomTitleBar();
 
         hWnd = GetActiveWindow();
-        if (hideOnStart) ShowWindowBorders(false);
+        if (hideOnStart && !isWindowsCaptionRemoved) ShowWindowBorders(false);
     }
 
     void Update()
@@ -261,6 +263,7 @@ public class WindowsManager : MonoBehaviour
             SetWindowLong(hWnd, GWL_STYLE, (uint)(style & ~(WS_CAPTION))); //removes caption and the sizebox from current style.
             SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW); //Make the window render above toolbar.
 
+            isWindowsCaptionRemoved = true;
 
             // Seems useless but for now it's a trick to remove the titlebar without having to resize first the window
             if (IsZoomed(GetActiveWindow()))//Check if the window is maximised
