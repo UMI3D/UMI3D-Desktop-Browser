@@ -30,15 +30,15 @@ public class FormInput : AbstractUMI3DInput
     /// <summary>
     /// Avatar bone linked to this input.
     /// </summary>
-    public string bone = BoneType.None;
+    public uint bone = BoneType.None;
 
-    string toolId;
-    string hoveredObjectId;
+    ulong toolId;
+    ulong hoveredObjectId;
     bool risingEdgeEventSent;
 
     HoldableButtonMenuItem menuItem;
 
-    public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
+    public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
     {
         UnityEngine.Debug.Log("TEST " + interaction.name);
         if (associatedInteraction != null)
@@ -68,7 +68,7 @@ public class FormInput : AbstractUMI3DInput
         }
     }
 
-    public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
+    public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
     {
         throw new System.Exception("This input is can not be associated with a manipulation");
     }
@@ -117,7 +117,7 @@ public class FormInput : AbstractUMI3DInput
         }
     }
 
-    public override void UpdateHoveredObjectId(string hoveredObjectId)
+    public override void UpdateHoveredObjectId(ulong hoveredObjectId)
     {
         this.hoveredObjectId = hoveredObjectId;
     }

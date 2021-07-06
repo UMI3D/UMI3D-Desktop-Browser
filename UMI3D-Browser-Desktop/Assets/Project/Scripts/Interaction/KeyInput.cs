@@ -37,8 +37,8 @@ namespace BrowserDesktop.Interaction
         /// <summary>
         /// Avatar bone linked to this input.
         /// </summary>
-        [ConstStringEnum(typeof(BoneType))]
-        public string bone = BoneType.None;
+        [ConstEnum(typeof(BoneType), typeof(uint))]
+        public uint bone = BoneType.None;
 
         /// <summary>
         /// Use lock if the Input is Used elsewhere;
@@ -59,9 +59,9 @@ namespace BrowserDesktop.Interaction
 
         EventDisplayer eventDisplayer;
 
-        string toolId;
+        ulong toolId;
 
-        string hoveredObjectId;
+        ulong hoveredObjectId;
 
         protected virtual void Start()
         {
@@ -76,7 +76,7 @@ namespace BrowserDesktop.Interaction
         }
 
 
-        public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
+        public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
             if (associatedInteraction != null)
             {
@@ -102,7 +102,7 @@ namespace BrowserDesktop.Interaction
                         if (loader != null)
                         {
                             UMI3DResourcesManager.LoadFile(
-                                "",
+                                interaction.id,
                                 fileToLoad,
                                 loader.UrlToObject,
                                 loader.ObjectFromCache,
@@ -239,7 +239,7 @@ namespace BrowserDesktop.Interaction
             }
         }
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
             throw new System.NotImplementedException();
         }
@@ -284,7 +284,7 @@ namespace BrowserDesktop.Interaction
             return associatedInteraction == null && !Locked;
         }
 
-        public override void UpdateHoveredObjectId(string hoveredObjectId)
+        public override void UpdateHoveredObjectId(ulong hoveredObjectId)
         {
             this.hoveredObjectId = hoveredObjectId;
         }

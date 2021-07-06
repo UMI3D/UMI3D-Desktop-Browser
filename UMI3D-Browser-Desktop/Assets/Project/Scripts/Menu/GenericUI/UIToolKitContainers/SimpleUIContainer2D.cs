@@ -16,7 +16,6 @@ limitations under the License.
 
 using System.Collections.Generic;
 using umi3d.cdk.menu.view;
-using Unity.UIElements.Runtime;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -28,7 +27,7 @@ namespace BrowserDesktop.Menu
 
         #region UIFields
 
-        public PanelRenderer panelRenderer;
+        public UIDocument uiDocument;
 
         public int spaceBetweenElements = 10;
 
@@ -102,7 +101,7 @@ namespace BrowserDesktop.Menu
                 containerElement = containerTreeAsset.CloneTree();
                 containerElement.name = menu.Name + " - " + gameObject.name;
                 if (flexGrow) containerElement.style.flexGrow = 1;
-                parentElement = panelRenderer.visualTree.Q<VisualElement>(uxmlParentTag);
+                parentElement = uiDocument.rootVisualElement.Q<VisualElement>(uxmlParentTag);
                 parentElement.Add(containerElement);
 
                 BindUI();

@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="session-entry" class="grey-border" style="justify-content: center; flex-direction: row; align-items: center; height: 40px; border-bottom-width: 1px; border-top-width: 1px; border-left-width: 1px; border-right-width: 1px;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:VisualElement name="server-entry-btn" class="white-txt" style="flex-direction: row; height: 40px; background-color: rgba(0, 0, 0, 0); width: 100%;">
+            <ui:Label text="Server name" name="server-name" class="medium-size-txt white-txt" style="-unity-text-align: middle-left; right: 0; justify-content: center; padding-left: 16px; flex-grow: 1; width: 90%; background-color: rgba(0, 0, 0, 0);" />
+            <ui:Label text="0" name="users-count" class="medium-size-txt grey-border white-txt" style="border-left-width: 1px; border-right-width: 1px; height: 100%; width: 10%; -unity-text-align: middle-center; background-color: rgba(0, 0, 0, 0);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

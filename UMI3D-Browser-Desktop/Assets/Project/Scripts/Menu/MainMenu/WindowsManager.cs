@@ -16,7 +16,6 @@ limitations under the License.
 
 using System;
 using System.Runtime.InteropServices;
-using Unity.UIElements.Runtime;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -27,7 +26,7 @@ public class WindowsManager : MonoBehaviour
 {
     #region Fields
 
-    public PanelRenderer panelRenderer;
+    public UIDocument uiDocument;
 
     #region Fiels to make the title bar working like the windows one.
     [DllImport("user32.dll")]
@@ -149,6 +148,7 @@ public class WindowsManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Assert(uiDocument != null);
         SetUpCustomTitleBar();
 
         hWnd = GetActiveWindow();
@@ -162,13 +162,14 @@ public class WindowsManager : MonoBehaviour
 
     private void SetUpCustomTitleBar()
     {
-        minimize = panelRenderer.visualTree.Q<Button>(minimizeTagName);
+        VisualElement root = uiDocument.rootVisualElement;
+        minimize = root.Q<Button>(minimizeTagName);
         minimize.clickable.clicked += () =>
         {
             ShowWindow(GetActiveWindow(), 2);
         };
 
-        maximize = panelRenderer.visualTree.Q<Button>(maximizeTagName);
+        maximize = uiDocument.rootVisualElement.Q<Button>(maximizeTagName);
         maximize.clickable.clicked += () =>
         {
             if (IsZoomed(GetActiveWindow())) //Check if the window is maximised
@@ -178,7 +179,7 @@ public class WindowsManager : MonoBehaviour
 
         };
 
-        var close = panelRenderer.visualTree.Q<Button>(closeTagName);
+        var close = root.Q<Button>(closeTagName);
         close.clickable.clicked += () =>
         {
             DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
@@ -187,10 +188,10 @@ public class WindowsManager : MonoBehaviour
                 if (b)
                     Application.Quit();
             });
-            panelRenderer.visualTree.Add(dialogueBox);
+            root.Add(dialogueBox);
         };
 
-        var topBar = panelRenderer.visualTree.Q<VisualElement>("top");
+        var topBar = root.Q<VisualElement>("top");
         topBar.RegisterCallback<MouseDownEvent>((e) =>
         {
             if (IsZoomed(GetActiveWindow())) //Check if the window is maximised

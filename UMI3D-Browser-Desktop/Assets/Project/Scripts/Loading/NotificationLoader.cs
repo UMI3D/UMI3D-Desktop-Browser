@@ -80,7 +80,7 @@ public class NotificationLoader : umi3d.cdk.NotificationLoader
             case UMI3DPropertyKeys.NotificationObjectId:
                 var Odto = dto as NotificationOnObjectDto;
                 if (Odto == null) return false;
-                Odto.objectId = (string)property.value;
+                Odto.objectId = (ulong)(UInt64)property.value;
                 break;
             default:
                 return false;

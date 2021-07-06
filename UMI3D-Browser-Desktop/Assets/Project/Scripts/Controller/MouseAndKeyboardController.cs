@@ -24,6 +24,7 @@ using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace BrowserDesktop.Controller
 {
@@ -49,13 +50,24 @@ namespace BrowserDesktop.Controller
         /// <summary>
         /// Avatar bone linked to this input.
         /// </summary>
-        [ConstStringEnum(typeof(BoneType))]
-        public string interactionBoneType = BoneType.RightHand;
+        [ConstEnum(typeof(BoneType), typeof(uint))]
+        public uint interactionBoneType = BoneType.RightHand;
 
-        [ConstStringEnum(typeof(BoneType))]
-        public string hoverBoneType = BoneType.Head;
+        [ConstEnum(typeof(BoneType), typeof(uint))]
+        public uint hoverBoneType = BoneType.Head;
 
         Dictionary<int, int> manipulationMap;
+
+        public class HoverEvent : UnityEvent<string, Vector3> {};
+
+        [HideInInspector]
+        static public HoverEvent HoverEnter = new HoverEvent();
+
+        [HideInInspector]
+        static public HoverEvent HoverUpdate = new HoverEvent();
+
+        [HideInInspector]
+        static public UnityEvent HoverExit = new UnityEvent();
 
         #region Hover
 
@@ -66,10 +78,10 @@ namespace BrowserDesktop.Controller
             public HoldableButtonMenuItem ForceProjectionMenuItem;
 
             public Interactable OldHovered;
-            public string LastHoveredId;
+            public ulong LastHoveredId;
             public Interactable CurentHovered;
             public Transform CurentHoveredTransform;
-            public string CurrentHoveredId;
+            public ulong CurrentHoveredId;
 
             public Vector3 point;
             public Vector3 worldPoint;
@@ -102,7 +114,7 @@ namespace BrowserDesktop.Controller
                     LastHoveredId = CurrentHoveredId;
                     CurentHovered = null;
                     CurentHoveredTransform = null;
-                    CurrentHoveredId = null;
+                    CurrentHoveredId = 0;
                     lastPoint = point;
                     lastNormal = normal;
                     lastDirection = direction;
@@ -312,7 +324,7 @@ namespace BrowserDesktop.Controller
         {
             if (!(
                         mouseData.HoverState == HoverState.AutoProjected
-                        && (CursorHandler.State == CursorHandler.CursorState.Clicked || SideMenu.IsExpanded || isInputHold)
+                        && (CursorHandler.State == CursorHandler.CursorState.Clicked || SideMenu.IsExpanded)
                ))
             {
                 mouseData.save();
@@ -424,7 +436,7 @@ namespace BrowserDesktop.Controller
 
                     mouseData.HoverState = HoverState.Hovering;
 
-                    if (mouseData.CurentHovered.dto.interactions.Count > 0 && IsCompatibleWith(mouseData.CurentHovered) && !mouseData.ForceProjection)
+                    if (mouseData.CurentHovered.dto.interactions.Count > 0 && IsCompatibleWith(mouseData.CurentHovered) && !mouseData.ForceProjection && !isInputHold)
                     {
                         InteractionMapper.SelectTool(mouseData.CurentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
                         CursorHandler.State = CursorHandler.CursorState.Hover;
@@ -437,7 +449,7 @@ namespace BrowserDesktop.Controller
                 }
                 else
                 {
-                    if (mouseData.LastHoveredId != null && mouseData.CurrentHoveredId != mouseData.LastHoveredId)
+                    if (mouseData.LastHoveredId != 0 && mouseData.CurrentHoveredId != mouseData.LastHoveredId)
                     {
                         if (associatedInputs.ContainsKey(mouseData.CurentHovered.dto.id))
                         {
@@ -448,6 +460,7 @@ namespace BrowserDesktop.Controller
                 }
 
                 mouseData.CurentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
+                
             }
             else if (mouseData.OldHovered != null)
             {
@@ -619,7 +632,7 @@ namespace BrowserDesktop.Controller
             return group;
         }
 
-        public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true)
+        public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
         {
             KeyInput input = KeyInputs.Find(i => i.IsAvailable() || !unused);
             if (input == null)
@@ -757,7 +770,7 @@ namespace BrowserDesktop.Controller
             //catch { }
         }
 
-        public override void Project(AbstractTool tool, bool releasable, InteractionMappingReason reason, string hoveredObjectId)
+        public override void Project(AbstractTool tool, bool releasable, InteractionMappingReason reason, ulong hoveredObjectId)
         {
             base.Project(tool, releasable, reason, hoveredObjectId); ;
             if (reason is RequestedByEnvironment)
@@ -768,7 +781,7 @@ namespace BrowserDesktop.Controller
             tool.onProjected(interactionBoneType);
         }
 
-        protected override string GetCurrentHoveredId()
+        protected override ulong GetCurrentHoveredId()
         {
             return mouseData.CurrentHoveredId;
         }
