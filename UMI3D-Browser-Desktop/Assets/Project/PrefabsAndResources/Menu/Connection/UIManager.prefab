@@ -557,7 +557,7 @@ MonoBehaviour:
   restoreClassName: restore-btn
   dialogueBoxTreeAsset: {fileID: 9197481963319205126, guid: 952193403cd37744f9ac513022d96731,
     type: 3}
-  hideOnStart: 1
+  hideOnStart: 0
 --- !u!114 &3316399237951345772
 MonoBehaviour:
   m_ObjectHideFlags: 0
