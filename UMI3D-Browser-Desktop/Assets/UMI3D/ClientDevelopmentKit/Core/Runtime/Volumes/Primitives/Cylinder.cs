@@ -46,8 +46,6 @@ namespace umi3d.cdk.volumes
                     Quaternion.Inverse(rotation) * (point - position));
 
 
-            Debug.Log(localCoordinate);
-
             if (Vector3.ProjectOnPlane(localCoordinate, Vector3.up).magnitude > radius)
                 return false;
             else if ((localCoordinate.y < 0) || (localCoordinate.y > height))

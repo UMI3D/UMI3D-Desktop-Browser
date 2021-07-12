@@ -69,7 +69,14 @@ namespace umi3d.cdk.volumes
                         finished.Invoke();
                     });
                     break;
+                case OBJVolumeDto obj:
+                    ExternalVolumeDataManager.Instance.CreateOBJVolume(obj, objVolume =>
+                    {
+                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, objVolume, () => ExternalVolumeDataManager.Instance.DeleteOBJVolume(dto.id));
+                        finished.Invoke();
+                    });
 
+                    break;
                 default:
                     failed("Unknown dto type");
                     break;

@@ -72,11 +72,11 @@ public class VolumeInsideTester : MonoBehaviour
         if (subdiv.z <= 0)
             return;
 
-        for (int i=0; i<subdiv.x; i++)
+        for (int i=0; i< isInside.Count; i++)
         {
-            for (int j = 0; j < subdiv.y; j++)
+            for (int j = 0; j < isInside[i].Count; j++)
             {
-                for (int k = 0; k < subdiv.z; k++)
+                for (int k = 0; k < isInside[j].Count; k++)
                 {
                     if (isInside[i][j][k])
                     {

@@ -3095,9 +3095,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 1374988008}
   bounds:
-    m_Center: {x: 1.23, y: 0, z: 0}
-    m_Extent: {x: 10, y: 1.26, z: 10}
-  subdiv: {x: 8.1, y: 3.63, z: 12.41}
+    m_Center: {x: -5, y: 2.04, z: -5}
+    m_Extent: {x: 10, y: 2.05, z: 10}
+  subdiv: {x: 40, y: 20, z: 40}
   gizmosSize: 0.568
 --- !u!4 &1174752586
 Transform:
@@ -3106,7 +3106,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1174752584}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
