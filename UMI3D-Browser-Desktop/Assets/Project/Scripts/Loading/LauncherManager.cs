@@ -144,9 +144,13 @@ public class LauncherManager : MonoBehaviour
 
         urlEnterBtn.clickable.clicked += ()=> SetServer(urlInput.value);// SetDomain;
         nextStep = ()=> SetServer(urlInput.value);
+        urlScreen.Q<VisualElement>("icon-open").style.display = DisplayStyle.None;
 
         connectNewServBtn = urlScreen.Q<Button>("newConnection");
         connectNewServBtn.clickable.clicked += () => ToggleDisplayElement(urlScreen.Q<VisualElement>("inputs-url-container"));
+        connectNewServBtn.clickable.clicked += () => ToggleDisplayElement(urlScreen.Q<VisualElement>("icon-close"));
+        connectNewServBtn.clickable.clicked += () => ToggleDisplayElement(urlScreen.Q<VisualElement>("icon-open"));
+        //connectNewServBtn.clickable.clicked += () => urlScreen.Q<VisualElement>("newConnection").style.display = DisplayStyle.Flex;
 
         var manageLibraryBtn = urlScreen.Q<Button>("manage-library-btn");
         manageLibraryBtn.clickable.clicked += DisplayLibraries;
