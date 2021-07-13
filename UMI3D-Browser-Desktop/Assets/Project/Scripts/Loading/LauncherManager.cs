@@ -493,8 +493,10 @@ public class LauncherManager : MonoBehaviour
     private void DisplayRegisteredServers()
     {
         favoriteEnvironmentSlider.ClearItems();
+        bool isEmpty = true;
         foreach (UserPreferencesManager.ServerData env in favoriteServerConnectionData)
         {
+            isEmpty = false;
             var item = favoriteEnvItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
             item.Q<Label>().text = env.serverName;
             item.RegisterCallback<MouseDownEvent>(e =>
@@ -523,6 +525,10 @@ public class LauncherManager : MonoBehaviour
                 root.Add(dialogue);
             };
             favoriteEnvironmentSlider.AddElement(item);
+        }
+        if (isEmpty)
+        {
+            root.Q<VisualElement>("favorites-environement").style.display = DisplayStyle.None;
         }
     }
 
