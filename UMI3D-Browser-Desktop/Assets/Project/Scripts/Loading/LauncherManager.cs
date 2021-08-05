@@ -150,7 +150,6 @@ public class LauncherManager : MonoBehaviour
         connectNewServBtn.clickable.clicked += () => ToggleDisplayElement(urlScreen.Q<VisualElement>("inputs-url-container"));
         connectNewServBtn.clickable.clicked += () => ToggleDisplayElement(urlScreen.Q<VisualElement>("icon-close"));
         connectNewServBtn.clickable.clicked += () => ToggleDisplayElement(urlScreen.Q<VisualElement>("icon-open"));
-        //connectNewServBtn.clickable.clicked += () => urlScreen.Q<VisualElement>("newConnection").style.display = DisplayStyle.Flex;
 
         var manageLibraryBtn = urlScreen.Q<Button>("manage-library-btn");
         manageLibraryBtn.clickable.clicked += DisplayLibraries;
@@ -213,7 +212,7 @@ public class LauncherManager : MonoBehaviour
 
         if (enterBtnAction == null)
         {
-            enterBtnAction = () => masterServer.SendDataSession(sessionScreen.Q<TextField>("pinInput").value, (ser) => { serverResponses.Add(ser); updateResponse = true; Debug.Log(" update UI "); }
+            enterBtnAction = () => masterServer.SendDataSession(sessionScreen.Q<TextField>("pinInput").value, (ser) => { serverResponses.Add(ser); updateResponse = true; }
             ); 
             root.Q<Button>("pin-enter-btn").clickable.clicked += enterBtnAction;
         }
@@ -223,13 +222,12 @@ public class LauncherManager : MonoBehaviour
 
     private void UpdateSessionList()
     {
-        var sessionList = sessionScreen.Q<ListView>("sessionsList");
+        var sessionList = sessionScreen.Q<ScrollView>("sessionsList");
         sessionList.Clear();
         foreach (MasterServerResponse.Server session in serverResponses)
         {
             VisualElement item = sessionEntry.CloneTree().Q<VisualElement>("session-entry");
             sessionList.Add(item);
-            Debug.Log(item);
             item.Q<Label>("server-name").text = session.Name;
             item.Q<Label>("users-count").text = session.PlayerCount.ToString();
 
