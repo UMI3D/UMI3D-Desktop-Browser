@@ -17,7 +17,7 @@
                     <ui:Label text="Session name" class="white-txt" style="margin-bottom: 8px; font-size: 15px; width: 90%;" />
                     <ui:Label text="Users" class="white-txt" style="margin-bottom: 8px; font-size: 15px; width: 10%;" />
                 </ui:VisualElement>
-                <ui:ListView focusable="True" name="sessionsList" style="height: 600px; justify-content: flex-start;" />
+                <ui:ScrollView focusable="True" name="sessionsList" style="height: 600px; justify-content: flex-start;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
