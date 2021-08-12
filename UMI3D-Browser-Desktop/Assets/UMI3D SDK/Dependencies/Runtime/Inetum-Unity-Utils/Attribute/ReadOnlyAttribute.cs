@@ -14,16 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common
-{
-    [System.Serializable]
-    public class RequestHttpGetDto : UMI3DDto 
-    {
-        /// <summary>
-        /// Local file id. Used in the http Get request. /!\ Warning : Contains only lower case letter or number 
-        /// </summary>
-        public string key;
+using UnityEngine;
 
-        public RequestHttpGetDto() : base() { }
+namespace inetum.unityUtils
+{
+    public class ReadOnlyAttribute : PropertyAttribute
+    {
+    }
+
+    public class EditorReadOnlyAttribute : PropertyAttribute
+    {
     }
 }
