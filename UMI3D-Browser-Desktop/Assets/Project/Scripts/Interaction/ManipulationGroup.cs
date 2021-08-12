@@ -15,6 +15,7 @@ limitations under the License.
 */
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
+using inetum.unityUtils;
 using System.Collections.Generic;
 using umi3d.cdk.interaction;
 using umi3d.common;
