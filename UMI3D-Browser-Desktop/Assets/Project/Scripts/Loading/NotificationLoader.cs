@@ -53,11 +53,11 @@ public class NotificationLoader : umi3d.cdk.NotificationLoader
         UMI3DEnvironmentLoader.RegisterNodeInstance(dto.id, dto,notif.gameObject);
     }
 
-    public override bool SetUMI3DPorperty(UMI3DEntityInstance entity, SetEntityPropertyDto property)
+    public override bool SetUMI3DProperty(UMI3DEntityInstance entity, SetEntityPropertyDto property)
     {
         var node = entity as UMI3DNodeInstance;
         var notification = node?.gameObject?.GetComponent<Notification>();
-        if (notification == null) return base.SetUMI3DPorperty(entity, property);
+        if (notification == null) return base.SetUMI3DProperty(entity, property);
         var dto = entity.dto as NotificationDto;
         if (dto == null) return false;
         switch (property.property)
