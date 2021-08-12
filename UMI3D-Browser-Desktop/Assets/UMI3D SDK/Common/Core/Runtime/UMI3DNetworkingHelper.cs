@@ -16,6 +16,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using inetum.unityUtils;
 
 namespace umi3d.common
 {
@@ -801,6 +802,13 @@ namespace umi3d.common
             this.bytes = bytes;
             position = 0;
             length = bytes.Length;
+        }
+
+        public ByteContainer(ByteContainer container)
+        {
+            this.bytes = container.bytes;
+            position = container.position;
+            length = container.length;
         }
 
         public override string ToString()

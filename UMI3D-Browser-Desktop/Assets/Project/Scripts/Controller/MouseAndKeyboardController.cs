@@ -17,6 +17,7 @@ using BrowserDesktop.Cursor;
 using BrowserDesktop.Interaction;
 using BrowserDesktop.Menu;
 using BrowserDesktop.Parameters;
+using inetum.unityUtils;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
@@ -58,7 +59,7 @@ namespace BrowserDesktop.Controller
 
         Dictionary<int, int> manipulationMap;
 
-        public class HoverEvent : UnityEvent<string, Vector3> {};
+        public class HoverEvent : UnityEvent<ulong> { };
 
         [HideInInspector]
         static public HoverEvent HoverEnter = new HoverEvent();
@@ -67,7 +68,7 @@ namespace BrowserDesktop.Controller
         static public HoverEvent HoverUpdate = new HoverEvent();
 
         [HideInInspector]
-        static public UnityEvent HoverExit = new UnityEvent();
+        static public HoverEvent HoverExit = new HoverEvent();
 
         #region Hover
 
@@ -79,8 +80,8 @@ namespace BrowserDesktop.Controller
 
             public Interactable OldHovered;
             public ulong LastHoveredId;
-            public Interactable CurentHovered;
-            public Transform CurentHoveredTransform;
+            public Interactable CurrentHovered;
+            public Transform CurrentHoveredTransform;
             public ulong CurrentHoveredId;
 
             public Vector3 point;
@@ -110,10 +111,10 @@ namespace BrowserDesktop.Controller
                 else
                 {
                     if (saveDelay < 0) saveDelay = 0;
-                    OldHovered = CurentHovered;
+                    OldHovered = CurrentHovered;
                     LastHoveredId = CurrentHoveredId;
-                    CurentHovered = null;
-                    CurentHoveredTransform = null;
+                    CurrentHovered = null;
+                    CurrentHoveredTransform = null;
                     CurrentHoveredId = 0;
                     lastPoint = point;
                     lastNormal = normal;
@@ -225,8 +226,8 @@ namespace BrowserDesktop.Controller
         {
             InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
             mouseData.ForceProjection = false;
-            mouseData.CurentHovered = null;
-            mouseData.CurentHoveredTransform = null;
+            mouseData.CurrentHovered = null;
+            mouseData.CurrentHoveredTransform = null;
             mouseData.OldHovered = null;
             CircularMenu.Collapse();
             mouseData.HoverState = HoverState.None;
@@ -314,7 +315,7 @@ namespace BrowserDesktop.Controller
 
         public void CircularMenuColapsed()
         {
-            if (mouseData.CurentHovered == null) return;
+            if (mouseData.CurrentHovered == null) return;
             // CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
             CursorHandler.State = CursorHandler.CursorState.Hover;
             mouseData.saveDelay = 3;
@@ -373,8 +374,8 @@ namespace BrowserDesktop.Controller
 
                     mouseData.CurrentHoveredId = UMI3DEnvironmentLoader.GetNodeID(hit.collider);
 
-                    mouseData.CurentHovered = interactable;
-                    mouseData.CurentHoveredTransform = interactableContainer.transform;
+                    mouseData.CurrentHovered = interactable;
+                    mouseData.CurrentHoveredTransform = interactableContainer.transform;
 
                     mouseData.point = interactableContainer.transform.InverseTransformPoint(hit.point);
                     mouseData.worldPoint = hit.point;
@@ -414,9 +415,9 @@ namespace BrowserDesktop.Controller
                 }
             }
 
-            if (mouseData.CurentHovered != null)
+            if (mouseData.CurrentHovered != null)
             {
-                if (mouseData.CurentHovered != mouseData.OldHovered)
+                if (mouseData.CurrentHovered != mouseData.OldHovered)
                 {
                     if (mouseData.OldHovered != null)
                     {
@@ -431,36 +432,52 @@ namespace BrowserDesktop.Controller
 
 
                         mouseData.OldHovered.HoverExit(hoverBoneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
+
+                        if (mouseData.CurrentHovered.dto.HoverExitAnimationId != 0)
+                        {
+                            UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(mouseData.CurrentHovered.dto.HoverExitAnimationId);
+                            HoverExit.Invoke(mouseData.LastHoveredId);
+                            if (anim != null)
+                                anim.Start();
+                        }
+
                         mouseData.OldHovered = null;
                     }
 
                     mouseData.HoverState = HoverState.Hovering;
 
-                    if (mouseData.CurentHovered.dto.interactions.Count > 0 && IsCompatibleWith(mouseData.CurentHovered) && !mouseData.ForceProjection && !isInputHold)
+                    if (mouseData.CurrentHovered.dto.interactions.Count > 0 && IsCompatibleWith(mouseData.CurrentHovered) && !mouseData.ForceProjection && !isInputHold)
                     {
-                        InteractionMapper.SelectTool(mouseData.CurentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
+                        InteractionMapper.SelectTool(mouseData.CurrentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
                         CursorHandler.State = CursorHandler.CursorState.Hover;
                         mouseData.HoverState = HoverState.AutoProjected;
                         CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
-                        mouseData.OldHovered = mouseData.CurentHovered;
+                        mouseData.OldHovered = mouseData.CurrentHovered;
                     }
 
-                    mouseData.CurentHovered.HoverEnter(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
+                    mouseData.CurrentHovered.HoverEnter(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
+
+                    if (mouseData.CurrentHovered.dto.HoverEnterAnimationId != 0)
+                    {
+                        UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(mouseData.CurrentHovered.dto.HoverEnterAnimationId);
+                        HoverEnter.Invoke(mouseData.CurrentHoveredId);
+                        if (anim != null)
+                            anim.Start();
+                    }
                 }
                 else
                 {
                     if (mouseData.LastHoveredId != 0 && mouseData.CurrentHoveredId != mouseData.LastHoveredId)
                     {
-                        if (associatedInputs.ContainsKey(mouseData.CurentHovered.dto.id))
+                        if (associatedInputs.ContainsKey(mouseData.CurrentHovered.dto.id))
                         {
-                            foreach (var input in associatedInputs[mouseData.CurentHovered.dto.id])
+                            foreach (var input in associatedInputs[mouseData.CurrentHovered.dto.id])
                                 input.UpdateHoveredObjectId(mouseData.CurrentHoveredId);
                         }
                     }
                 }
 
-                mouseData.CurentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
-                
+                mouseData.CurrentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
             }
             else if (mouseData.OldHovered != null)
             {
@@ -476,6 +493,15 @@ namespace BrowserDesktop.Controller
                 }
 
                 mouseData.OldHovered.HoverExit(hoverBoneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
+
+                if (mouseData.OldHovered.dto.HoverExitAnimationId != 0)
+                {
+                    UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(mouseData.OldHovered.dto.HoverExitAnimationId);
+                    HoverExit.Invoke(mouseData.LastHoveredId);
+                    if (anim != null)
+                        anim.Start();
+                }
+
                 mouseData.OldHovered = null;
                 mouseData.HoverState = HoverState.None;
             }
@@ -753,10 +779,10 @@ namespace BrowserDesktop.Controller
             base.Release(tool, reason);
             if (reason is ToolNeedToBeUpdated && tool.interactions.Count > 0) return;
 
-            if (mouseData.CurentHovered != null && mouseData.CurentHovered.dto.id == tool.id)
+            if (mouseData.CurrentHovered != null && mouseData.CurrentHovered.dto.id == tool.id)
             {
-                mouseData.CurentHovered = null;
-                mouseData.CurentHoveredTransform = null;
+                mouseData.CurrentHovered = null;
+                mouseData.CurrentHoveredTransform = null;
                 mouseData.HoverState = HoverState.None;
                 CursorHandler.State = CursorHandler.CursorState.Default;
             }

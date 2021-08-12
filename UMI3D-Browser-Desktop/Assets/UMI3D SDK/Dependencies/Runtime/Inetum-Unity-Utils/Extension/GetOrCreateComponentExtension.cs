@@ -16,13 +16,21 @@ limitations under the License.
 
 using UnityEngine;
 
-namespace umi3d.common
+namespace inetum.unityUtils
 {
-    public class ReadOnlyAttribute : PropertyAttribute
+
+    public static class GetOrCreateComponentExtension
     {
+
+        public static A GetOrAddComponent<A>(this GameObject gameObject) where A : Component
+        {
+            var type = typeof(A);
+            var _comp = gameObject.GetComponent(type);
+            if (_comp == null)
+                _comp = gameObject.AddComponent(type);
+            return _comp as A;
+        }
+
     }
 
-    public class EditorReadOnlyAttribute : PropertyAttribute
-    {
-    }
 }
