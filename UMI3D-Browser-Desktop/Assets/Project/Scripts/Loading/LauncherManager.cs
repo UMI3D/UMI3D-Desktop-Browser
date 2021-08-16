@@ -197,6 +197,7 @@ public class LauncherManager : MonoBehaviour
 
     public bool updateBindSession = false;
     public bool updateResponse = false;
+    public bool updateInfo = false;
     public List<MasterServerResponse.Server> serverResponses = new List<MasterServerResponse.Server>();
     private Action enterBtnAction = null;
 
@@ -316,6 +317,11 @@ public class LauncherManager : MonoBehaviour
             UpdateSessionList();
             updateResponse = false;
         }
+        if (updateInfo)
+        {
+            UserPreferencesManager.StoreRegisteredServerData(favoriteServerConnectionData);
+            updateInfo = false;
+        }
         CheckShortcuts();
     }
 
@@ -379,37 +385,53 @@ public class LauncherManager : MonoBehaviour
     }
 
 
-    private void SetServer(string serverName)
+    private void SetServer(string serverUrl)
     {
-        if (String.IsNullOrEmpty(serverName))
+        if (String.IsNullOrEmpty(serverUrl))
             return;
-        serverName = serverName.Trim();
+        serverUrl = serverUrl.Trim();
         if (root.Q<Toggle>("toggleRemember").value)
         {
             if (currentServerConnectionData != null)
-                currentServerConnectionData.serverName = serverName;
+            {
+                currentServerConnectionData.serverUrl = serverUrl;
+                currentServerConnectionData.serverName = null;
+                currentServerConnectionData.serverIcon = null;
+            }
             else
-                currentServerConnectionData = new UserPreferencesManager.ServerData() { serverName = serverName };
-
+                currentServerConnectionData = new UserPreferencesManager.ServerData() { serverUrl = serverUrl };
+            favoriteServerConnectionData.Add(currentServerConnectionData);
             UserPreferencesManager.AddRegisterdeServerData(currentServerConnectionData);
+            Connect(currentServerConnectionData,true);
         }
-        Connect(serverName);
+        else
+            Connect(new UserPreferencesManager.ServerData() { serverUrl = serverUrl });
     }
 
     /// <summary>
     /// Initiates the connection to the forge master server.
     /// </summary>
-    private void Connect(string serverName) 
+    private void Connect(UserPreferencesManager.ServerData server, bool saveInfo = false) 
     {
         
-        Debug.Log("Try to connect to : " + serverName);
-        masterServer.ConnectToMasterServer(() => { updateBindSession = true; }
+        Debug.Log("Try to connect to : " + server.serverUrl);
+        masterServer.ConnectToMasterServer(() => {
+            masterServer.RequestInfo((name, icon) => {
+                if (saveInfo)
+                {
+                    server.serverName = name;
+                    server.serverIcon = icon;
+                    updateInfo = true;
+                }
+            });
+            updateBindSession = true;
+        }
             
            // () => masterServer.SendDataSession("test", (ser) => { Debug.Log(" update UI "); })
-            , serverName);
+            , server.serverUrl);
         var text = root.Q<Label>("connectedText");
         Debug.Log(text);
-        root.Q<Label>("connectedText").text = "Connected to : " + serverName;
+        root.Q<Label>("connectedText").text = "Connected to : " + server.serverUrl;
 
     }
 
@@ -500,15 +522,23 @@ public class LauncherManager : MonoBehaviour
         {
             isEmpty = false;
             var item = favoriteEnvItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
-            item.Q<Label>().text = env.serverName;
+            if (env.serverIcon != null) {
+                byte[] imageBytes = Convert.FromBase64String(env.serverIcon);
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(imageBytes);
+                item.style.backgroundImage = tex;
+             }
+            item.Q<Label>().text = env.serverName == null ? env.serverUrl : env.serverName;
             item.RegisterCallback<MouseDownEvent>(e =>
             {
                 if (e.clickCount == 1)
                 {
                     this.currentServerConnectionData.serverName = env.serverName;
+                    this.currentServerConnectionData.serverUrl = env.serverUrl;
+                    this.currentServerConnectionData.serverIcon = env.serverIcon;
                     //this.currentConnectionData.ip = env.ip;
                     //DirectConnect();// TODO
-                    Connect(env.serverName);
+                    Connect(env,true);
                 }
             });
             item.Q<Button>("delete-item").clickable.clicked += () =>

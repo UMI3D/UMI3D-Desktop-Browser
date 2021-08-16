@@ -33,6 +33,8 @@ public class UserPreferencesManager
     public class ServerData
     {
         public string serverName;
+        public string serverUrl;
+        public string serverIcon;
     }
 
     public const string registeredServer = "registeredServerData";
