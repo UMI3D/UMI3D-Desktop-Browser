@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Menu;
+using System.Linq;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.interaction;
@@ -105,15 +106,15 @@ public class FormInput : AbstractUMI3DInput
         {
             onInputDown.Invoke();
           
-            var formAnswer = new FormAnswer
+            var formAnswerDto = new FormAnswerDto
             {
                 boneType = bone,
                 id = associatedInteraction.id,
                 toolId = this.toolId,
-                form = associatedInteraction,
+                answers = associatedInteraction.fields.Select(a => new ParameterSettingRequestDto() { toolId = this.toolId, id = a.id, boneType = bone, hoveredObjectId = hoveredObjectId, parameter = a.GetValue() }).ToList(),
                 hoveredObjectId = hoveredObjectId
             };
-            UMI3DCollaborationClientServer.SendData(formAnswer, true);
+            UMI3DCollaborationClientServer.SendData(formAnswerDto, true);
         }
     }
 
