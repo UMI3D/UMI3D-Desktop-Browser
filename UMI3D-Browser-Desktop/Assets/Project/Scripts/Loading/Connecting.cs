@@ -1,7 +1,9 @@
 ﻿using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
+using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using umi3d;
 using umi3d.cdk;
@@ -68,20 +70,31 @@ public class Connecting : Singleton<Connecting>
         else DisplayAccept(ids.Count,callback);
     }
 
-    void GetParameterDtos(FormDto form,Action<FormDto> callback)
+    void GetParameterDtos(FormDto form,Action<FormAnswerDto> callback)
     {
         if(form == null)
-            callback.Invoke(form);
+            callback.Invoke(null);
         else
         {
             debugForm(form);
             Menu.menu.RemoveAll();
-            foreach(var param in form.fields)
+
+            var items = form.fields.Select(f => getInteractionItem(f));
+            foreach (var item in items)
             {
-                Menu.menu.Add(getInteractionItem(param));
+                Menu.menu.Add(item);
             }
             ButtonMenuItem send = new ButtonMenuItem() { Name = "Send", toggle = false };
-            UnityAction<bool> action = (bool b) => { MenuDisplayManager.Hide(true); Menu.menu.RemoveAll(); debugForm(form); callback.Invoke(form); CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center); };
+            UnityAction<bool> action = (bool b) => {
+                FormAnswerDto answer = new FormAnswerDto()
+                {
+                    boneType = 0,
+                    hoveredObjectId = 0,
+                    id = form.id,
+                    toolId = 0,
+                    answers = items.Where(i => i is AbstractInputMenuItem).Select(i => (i as AbstractInputMenuItem).GetParameter()).ToList(),
+                };
+                MenuDisplayManager.Hide(true); Menu.menu.RemoveAll(); debugForm(form); debugForm(answer); callback.Invoke(answer); CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center); };
             send.Subscribe(action);
             Menu.menu.Add(send);
             MenuDisplayManager.Display(true);
@@ -112,6 +125,11 @@ public class Connecting : Singleton<Connecting>
         //    }
         }
 
+    void debugForm(FormAnswerDto form)
+    {
+        form.answers.Select(a=>a.parameter.ToString()).Debug();
+    }
+
     static MenuItem getInteractionItem(AbstractInteractionDto dto)
     {
         MenuItem result = null;
@@ -124,6 +142,17 @@ public class Connecting : Singleton<Connecting>
                     booleanParameterDto.value = x;
                 }
                 );
+                b.GetParameterFunc = (x) =>
+                {
+                    var pararmeterDto = new ParameterSettingRequestDto()
+                    {
+                        toolId = dto.id,
+                        id = booleanParameterDto.id,
+                        parameter = x,
+                        hoveredObjectId = 0
+                    };
+                    return pararmeterDto;
+                };
                 result = b;
                 break;
             case FloatRangeParameterDto floatRangeParameterDto:
@@ -133,6 +162,17 @@ public class Connecting : Singleton<Connecting>
                     floatRangeParameterDto.value = x;
                 }
                 );
+                f.GetParameterFunc = (x) =>
+                {
+                    var pararmeterDto = new ParameterSettingRequestDto()
+                    {
+                        toolId = dto.id,
+                        id = floatRangeParameterDto.id,
+                        parameter = x,
+                        hoveredObjectId = 0
+                    };
+                    return pararmeterDto;
+                };
                 result = f;
                 break;
             case EnumParameterDto<string> enumParameterDto:
@@ -142,6 +182,17 @@ public class Connecting : Singleton<Connecting>
                     enumParameterDto.value = x;
                 }
                 );
+                en.GetParameterFunc = (x) =>
+                {
+                    var pararmeterDto = new ParameterSettingRequestDto()
+                    {
+                        toolId = dto.id,
+                        id = enumParameterDto.id,
+                        parameter = x,
+                        hoveredObjectId = 0
+                    };
+                    return pararmeterDto;
+                };
                 result = en;
                 break;
             case StringParameterDto stringParameterDto:
@@ -151,6 +202,17 @@ public class Connecting : Singleton<Connecting>
                     stringParameterDto.value = x;
                 }
                 );
+                s.GetParameterFunc = (x) =>
+                {
+                    var pararmeterDto = new ParameterSettingRequestDto()
+                    {
+                        toolId = dto.id,
+                        id = stringParameterDto.id,
+                        parameter = x,
+                        hoveredObjectId = 0
+                    };
+                    return pararmeterDto;
+                };
                 result = s;
                 break;
             case LocalInfoRequestParameterDto localInfoRequestParameterDto:
@@ -160,6 +222,7 @@ public class Connecting : Singleton<Connecting>
                     localInfoRequestParameterDto.value = x;
                 }
                 );
+
                 result = localReq;
                 break;
             default:
