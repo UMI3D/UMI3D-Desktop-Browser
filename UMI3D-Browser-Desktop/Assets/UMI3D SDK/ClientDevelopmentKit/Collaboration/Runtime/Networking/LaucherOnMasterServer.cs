@@ -74,28 +74,6 @@ public class LaucherOnMasterServer
 
     }
 
-    public void RequestInfo(Action<string,string> UIcallback)
-    {
-        try
-        {
-            // Create the get request with the desired filters
-            JSONNode sendData = JSONNode.Parse("{}");
-            JSONClass getData = new JSONClass();
-            sendData.Add("info", getData);
-
-            // Send the request to the server
-            client.textMessageReceived += (player, frame, sender) => { Debug.Log("Receive message from master server"); ReceiveMasterInfo(player, frame, sender, UIcallback); };
-            client.Send(BeardedManStudios.Forge.Networking.Frame.Text.CreateFromString(client.Time.Timestep, sendData.ToString(), true, Receivers.Server, MessageGroupIds.MASTER_SERVER_GET, true));
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning(e);
-            // If anything fails, then this client needs to be disconnected
-            client.Disconnect(true);
-            client = null;
-        }
-    }
-
     public void SendDataSession(string sessionId, Action<MasterServerResponse.Server> UIcallback)
     {
         try
@@ -137,6 +115,28 @@ public class LaucherOnMasterServer
 
         }
 
+    }
+
+    public void RequestInfo(Action<string, string> UIcallback)
+    {
+        try
+        {
+            // Create the get request with the desired filters
+            JSONNode sendData = JSONNode.Parse("{}");
+            JSONClass getData = new JSONClass();
+            sendData.Add("info", getData);
+
+            // Send the request to the server
+            client.textMessageReceived += (player, frame, sender) => { Debug.Log("Receive message from master server"); ReceiveMasterInfo(player, frame, sender, UIcallback); };
+            client.Send(BeardedManStudios.Forge.Networking.Frame.Text.CreateFromString(client.Time.Timestep, sendData.ToString(), true, Receivers.Server, MessageGroupIds.MASTER_SERVER_GET, true));
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning(e);
+            // If anything fails, then this client needs to be disconnected
+            client.Disconnect(true);
+            client = null;
+        }
     }
 
     private void ReceiveMasterDatas(NetworkingPlayer player, BeardedManStudios.Forge.Networking.Frame.Text frame, NetWorker sender, Action<MasterServerResponse.Server> UICallback)
@@ -182,10 +182,11 @@ public class LaucherOnMasterServer
                 client = null;
             }
         }
+
     }
 
 
-    private void ReceiveMasterInfo(NetworkingPlayer player, BeardedManStudios.Forge.Networking.Frame.Text frame, NetWorker sender, Action<string,string> UICallback)
+    private void ReceiveMasterInfo(NetworkingPlayer player, BeardedManStudios.Forge.Networking.Frame.Text frame, NetWorker sender, Action<string, string> UICallback)
     {
         Debug.Log("Receive datas from master server");
         try
