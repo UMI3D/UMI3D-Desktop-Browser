@@ -395,22 +395,33 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         }
     }
 
+
+    /// <summary>
+    /// Asks users some parameters when they join the environement.
+    /// </summary>
+    /// <param name="form"></param>
+    /// <param name="callback"></param>
     void GetParameterDtos(FormDto form, Action<FormAnswerDto> callback)
     {
+        loadingScreen.style.display = DisplayStyle.None;
+        parametersScreen.style.display = DisplayStyle.Flex;
+
+        CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
+
         if (form == null)
             callback.Invoke(null);
         else
         {
-            debugForm(form);
             Menu.menu.RemoveAll();
-
             var items = form.fields.Select(f => getInteractionItem(f));
             foreach (var item in items)
             {
                 Menu.menu.Add(item);
             }
-            ButtonMenuItem send = new ButtonMenuItem() { Name = "Send", toggle = false };
+
+            ButtonMenuItem send = new ButtonMenuItem() { Name = "Join", toggle = false };
             UnityAction<bool> action = (bool b) => {
+
                 FormAnswerDto answer = new FormAnswerDto()
                 {
                     boneType = 0,
@@ -419,36 +430,42 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                     toolId = 0,
                     answers = items.Where(i => i is AbstractInputMenuItem).Select(i => (i as AbstractInputMenuItem).GetParameter()).ToList(),
                 };
-                MenuDisplayManager.Hide(true); Menu.menu.RemoveAll(); debugForm(form); debugForm(answer); callback.Invoke(answer); CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+
+                parametersScreen.style.display = DisplayStyle.None;
+                MenuDisplayManager.Hide(true);
+                Menu.menu.RemoveAll();
+                callback.Invoke(answer);
+                CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+                nextStep = null;
             };
             send.Subscribe(action);
             Menu.menu.Add(send);
+            nextStep = () => action(true);
             MenuDisplayManager.Display(true);
-            CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         }
     }
 
     void debugForm(FormDto form)
     {
-        //foreach(var dto in form.interactions)
-        //    switch (dto)
-        //    {
-        //        case BooleanParameterDto booleanParameterDto:
-        //            Debug.Log(booleanParameterDto.value);
-        //            break;
-        //        case FloatRangeParameterDto floatRangeParameterDto:
-        //            Debug.Log(floatRangeParameterDto.value);
-        //            break;
-        //        case EnumParameterDto<string> enumParameterDto:
-        //            Debug.Log(enumParameterDto.value);
-        //            break;
-        //        case StringParameterDto stringParameterDto:
-        //            Debug.Log(stringParameterDto.value);
-        //            break;
-        //        default:
-        //            Debug.Log(dto);
-        //            break;
-        //    }
+        foreach (var dto in form.fields)
+            switch (dto)
+            {
+                case BooleanParameterDto booleanParameterDto:
+                    Debug.Log(booleanParameterDto.value);
+                    break;
+                case FloatRangeParameterDto floatRangeParameterDto:
+                    Debug.Log(floatRangeParameterDto.value);
+                    break;
+                case EnumParameterDto<string> enumParameterDto:
+                    Debug.Log(enumParameterDto.value);
+                    break;
+                case StringParameterDto stringParameterDto:
+                    Debug.Log(stringParameterDto.value);
+                    break;
+                default:
+                    Debug.Log(dto.GetValue());
+                    break;
+            }
     }
 
     void debugForm(FormAnswerDto form)
