@@ -33,7 +33,6 @@ public class ClientPCIdentifier : ClientIdentifierApi
 
     public override void GetParameterDtos(FormDto parameter, Action<FormAnswerDto> callback)
     {
-        Debug.Log("GetParameterDtos");
         GetParameters.Invoke(parameter, callback);
     }
 
