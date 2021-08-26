@@ -20,6 +20,6 @@ namespace umi3d.common.volume
 {
 	public class FaceDto : AbstractVolumeDescriptor
 	{
-		public List<string> pointsIds;
+		public List<ulong> pointsIds;
 	}
 }

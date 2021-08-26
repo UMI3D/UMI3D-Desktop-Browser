@@ -32,11 +32,11 @@ namespace umi3d.cdk.volumes
         /// </summary>
         public static class PendingManager
         {
-            private static Dictionary<List<string>, List<UnityAction>> pendingCallbacks = new Dictionary<List<string>, List<UnityAction>>();
+            private static Dictionary<List<ulong>, List<UnityAction>> pendingCallbacks = new Dictionary<List<ulong>, List<UnityAction>>();
 
-            public static void OnItemRecieved(string itemId)
+            public static void OnItemRecieved(ulong itemId)
             {
-                Dictionary<List<string>, List<UnityAction>> pendingCallbacksCopy = new Dictionary<List<string>, List<UnityAction>>();
+                Dictionary<List<ulong>, List<UnityAction>> pendingCallbacksCopy = new Dictionary<List<ulong>, List<UnityAction>>();
 
                 foreach (var pending in pendingCallbacks)
                 {
@@ -47,7 +47,6 @@ namespace umi3d.cdk.volumes
                         {
                             foreach(var callback in pending.Value)
                             {
-                                Debug.Log("PENDING CALL");
                                 callback.Invoke();
                             }
                         }
@@ -65,10 +64,8 @@ namespace umi3d.cdk.volumes
                 pendingCallbacks = pendingCallbacksCopy;
             }
 
-            public static void SubscribeToVolumeItemReception(List<string> itemsId, UnityAction callback)
+            public static void SubscribeToVolumeItemReception(List<ulong> itemsId, UnityAction callback)
             {
-
-                Debug.Log("PENDING LOG");
                 List<UnityAction> callbacks = new List<UnityAction>();
                 if (pendingCallbacks.TryGetValue(itemsId, out callbacks))
                 {
@@ -80,10 +77,10 @@ namespace umi3d.cdk.volumes
             }
         }
 
-        private Dictionary<string, Point> points = new Dictionary<string, Point>();
-        private Dictionary<string, Face> faces = new Dictionary<string, Face>();
-        private Dictionary<string, VolumeSlice> volumeSlices = new Dictionary<string, VolumeSlice>();
-        private Dictionary<string, VolumeSliceGroup> volumeSliceGroups = new Dictionary<string, VolumeSliceGroup>();
+        private Dictionary<ulong, Point> points = new Dictionary<ulong, Point>();
+        private Dictionary<ulong, Face> faces = new Dictionary<ulong, Face>();
+        private Dictionary<ulong, VolumeSlice> volumeSlices = new Dictionary<ulong, VolumeSlice>();
+        private Dictionary<ulong, VolumeSliceGroup> volumeSliceGroups = new Dictionary<ulong, VolumeSliceGroup>();
 
         public List<Point> GetPoints() => new List<Point>(points.Values);
 		public List<Face> GetFaces() => new List<Face>(faces.Values);
@@ -93,22 +90,22 @@ namespace umi3d.cdk.volumes
 
         #region Exists
 
-        public bool PointExists(string id)
+        public bool PointExists(ulong id)
         {
             return points.ContainsKey(id);
         }
 
-        public bool FaceExists(string id)
+        public bool FaceExists(ulong id)
         {
             return faces.ContainsKey(id);
         }
 
-        public bool VolumeSliceExists(string id)
+        public bool VolumeSliceExists(ulong id)
         {
             return volumeSlices.ContainsKey(id);
         }
 
-        public bool VolumeSliceGroupExist(string id)
+        public bool VolumeSliceGroupExist(ulong id)
         {
             return volumeSliceGroups.ContainsKey(id);
         }
@@ -117,22 +114,22 @@ namespace umi3d.cdk.volumes
 
         #region Create
 
-        public Point GetPoint(string id)
+        public Point GetPoint(ulong id)
         {
             return points[id];
         }
 
-        public Face GetFace(string id)
+        public Face GetFace(ulong id)
         {
             return faces[id];
         }
 
-        public VolumeSlice GetVolumeSlice(string id)
+        public VolumeSlice GetVolumeSlice(ulong id)
         {
             return volumeSlices[id];
         }
 
-        public VolumeSliceGroup GetVolumeSliceGroup(string id)
+        public VolumeSliceGroup GetVolumeSliceGroup(ulong id)
         {
             return volumeSliceGroups[id];
         }
@@ -166,8 +163,8 @@ namespace umi3d.cdk.volumes
                 finished(face);
             };
 
-            List<string> pointsNeeded = new List<string>(); 
-            foreach(string pointId in dto.pointsIds)
+            List<ulong> pointsNeeded = new List<ulong>(); 
+            foreach(ulong pointId in dto.pointsIds)
             {
                 if (!PointExists(pointId))
                     pointsNeeded.Add(pointId);
@@ -194,13 +191,13 @@ namespace umi3d.cdk.volumes
                 finished(slice);
             };
 
-            List<string> idsNeeded = new List<string>();
-            foreach (string pid in dto.points)
+            List<ulong> idsNeeded = new List<ulong>();
+            foreach (ulong pid in dto.points)
             {
                 if (!PointExists(pid))
                     idsNeeded.Add(pid);
             }
-            foreach (string fid in dto.faces)
+            foreach (ulong fid in dto.faces)
             {
                 if (!FaceExists(fid))
                     idsNeeded.Add(fid);
@@ -226,8 +223,8 @@ namespace umi3d.cdk.volumes
                 finished(volume);
             };
 
-            List<string> idsNeeded = new List<string>();
-            foreach(string slice in dto.slicesIds)
+            List<ulong> idsNeeded = new List<ulong>();
+            foreach(ulong slice in dto.slicesIds)
             {
                 if (!VolumeSliceExists(slice))
                     idsNeeded.Add(slice);
@@ -248,7 +245,7 @@ namespace umi3d.cdk.volumes
 
         #region Delete
 
-        public void DeletePoint(string id)
+        public void DeletePoint(ulong id)
         {
             //delete every volume featuring the given point
             foreach(var entry in volumeSliceGroups)
@@ -260,7 +257,7 @@ namespace umi3d.cdk.volumes
             points.Remove(id);
         }
 
-        public void DeleteFace(string id)
+        public void DeleteFace(ulong id)
         {
             //delete every volume featuring the given face
             foreach (var entry in volumeSliceGroups)
@@ -272,12 +269,12 @@ namespace umi3d.cdk.volumes
             faces.Remove(id);
         }
 
-        public void DeleteVolumeSliceGroup(string id)
+        public void DeleteVolumeSliceGroup(ulong id)
         {
             volumeSliceGroups.Remove(id);
         }
 
-        public void DeleteVolumeSlice(string id)
+        public void DeleteVolumeSlice(ulong id)
         {
             volumeSlices.Remove(id);
 

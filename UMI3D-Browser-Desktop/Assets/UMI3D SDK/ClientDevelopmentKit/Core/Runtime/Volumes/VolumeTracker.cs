@@ -30,10 +30,10 @@ namespace umi3d.cdk.volumes
 		public float detectionFrameRate = 30;
 
 		private Coroutine trackingRoutine = null;
-		private List<UnityAction<string>> callbacksOnEnter = new List<UnityAction<string>>();
-		private List<UnityAction<string>> callbacksOnExit = new List<UnityAction<string>>();
+		private List<UnityAction<ulong>> callbacksOnEnter = new List<UnityAction<ulong>>();
+		private List<UnityAction<ulong>> callbacksOnExit = new List<UnityAction<ulong>>();
 		private bool wasInsideOneVolumeLastFrame = false;
-		private string lastVolumeId;
+		private ulong? lastVolumeId;
 
 		protected virtual void Awake()
         {
@@ -58,7 +58,7 @@ namespace umi3d.cdk.volumes
 						callback.Invoke(cell.Id());
 				else if (!inside && wasInsideOneVolumeLastFrame)
 					foreach (var callback in callbacksOnExit)
-						callback.Invoke(lastVolumeId);
+						callback.Invoke(lastVolumeId.Value);
 
 				wasInsideOneVolumeLastFrame = inside;
 				lastVolumeId = cell?.Id();
@@ -67,22 +67,22 @@ namespace umi3d.cdk.volumes
 			}
         }
 
-		public void SubscribeToVolumeEntrance(UnityAction<string> callback)
+		public void SubscribeToVolumeEntrance(UnityAction<ulong> callback)
 		{
 			callbacksOnEnter.Add(callback);
 		}
 
-		public void SubscribeToVolumeExit(UnityAction<string> callback)
+		public void SubscribeToVolumeExit(UnityAction<ulong> callback)
 		{
 			callbacksOnExit.Add(callback);
 		}
 
-		public void UnsubscribeToVolumeEntrance(UnityAction<string> callback)
+		public void UnsubscribeToVolumeEntrance(UnityAction<ulong> callback)
 		{
 			callbacksOnEnter.Remove(callback);
 		}
 
-		public void UnsubscribeToVolumeExit(UnityAction<string> callback)
+		public void UnsubscribeToVolumeExit(UnityAction<ulong> callback)
 		{
 			callbacksOnExit.Remove(callback);
 		}

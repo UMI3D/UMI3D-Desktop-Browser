@@ -25,7 +25,7 @@ namespace umi3d.cdk.volumes
 	public class Face 
 	{
         public Point[] points { get => points_.ToArray(); }
-        public string id { get; private set; }
+        public ulong id { get; private set; }
         private List<Point> points_;
 
         public void Setup(FaceDto dto)
@@ -34,7 +34,7 @@ namespace umi3d.cdk.volumes
             id = dto.id;
         }
 
-        public void SetPoints(List<string> newPoints)
+        public void SetPoints(List<ulong> newPoints)
         {
             if (newPoints == null)
                 throw new System.Exception("Internal error : points cannot be null");

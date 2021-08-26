@@ -8,8 +8,8 @@ namespace umi3d.cdk.volumes
     {
         public List<Mesh> meshes;
 
-        public string id;
-        public override string Id() => id;
+        public ulong id;
+        public override ulong Id() => id;
 
 
         public override bool IsInside(Vector3 point)

@@ -52,7 +52,7 @@ namespace umi3d.cdk.volumes
             loader.UrlToObject(dto.objFile, ".obj", null, success, failed);
         }
 
-        public void DeleteOBJVolume(string id)
+        public void DeleteOBJVolume(ulong id)
         {
             throw new System.NotImplementedException(); //todo
         }

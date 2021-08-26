@@ -20,8 +20,8 @@ namespace umi3d.common.volume
 {
 	public class VolumeSliceDto : AbstractVolumeDescriptor
 	{
-		public List<string> points;
+		public List<ulong> points;
 		public List<int> edges;
-		public List<string> faces;
+		public List<ulong> faces;
 	}
 }

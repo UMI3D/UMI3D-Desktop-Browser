@@ -21,12 +21,12 @@ namespace umi3d.cdk.volumes
     /// </summary>
     public abstract class AbstractPrimitive : AbstractVolumeCell
     {
-        public string id = "";
-        public override string Id()
+        public ulong? id = null;
+        public override ulong Id()
         {
-            if (id.Equals(""))
+            if (id == null)
                 throw new System.Exception("Id should have been set on dto reception !");
-            return id;
+            return id.Value;
         }
 
         public abstract void Delete();

@@ -100,7 +100,7 @@ namespace umi3d.cdk.volumes
                     if (face == null)
                         throw new Exception("Internal error : entity is not a face");
 
-                    face.SetPoints(property.value as List<string>);
+                    face.SetPoints(property.value as List<ulong>);
                     return true;
 
                 case UMI3DPropertyKeys.VolumeSlices:

@@ -25,7 +25,7 @@ namespace umi3d.cdk.volumes
     /// </summary>
 	public class Point
 	{
-        public string id { get; private set; }
+        public ulong id { get; private set; }
         public Vector3 position { get; private set; }
 
     	public void Setup(PointDto dto)

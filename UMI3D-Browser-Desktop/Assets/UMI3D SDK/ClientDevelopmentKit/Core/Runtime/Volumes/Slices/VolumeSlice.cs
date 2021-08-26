@@ -27,7 +27,7 @@ namespace umi3d.cdk.volumes
     public class VolumeSlice 
     {
         public VolumeSliceDto originalDto;
-        public string id { get; private set; }
+        public ulong id { get; private set; }
         private List<Point> points;
         private List<int> edges;
         private List<Face> faces;

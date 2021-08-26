@@ -21,11 +21,16 @@ namespace umi3d.common.volume
     /// </summary>
     public class VolumeUserTransitDto : AbstractBrowserRequestDto
     {
-        public string volumeId;
+        public ulong volumeId;
 
         /// <summary>
         /// True if the user entered in the volume, false if the user exited the volume.
         /// </summary>
         public bool direction;
+
+        protected override uint GetOperationId()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

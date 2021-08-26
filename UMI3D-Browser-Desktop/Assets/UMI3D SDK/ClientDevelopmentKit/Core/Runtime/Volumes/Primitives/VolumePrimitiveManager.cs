@@ -27,7 +27,7 @@ namespace umi3d.cdk.volumes
     /// </summary>
     public class VolumePrimitiveManager : Singleton<VolumePrimitiveManager>
     {
-        public Dictionary<string, AbstractPrimitive> primitives = new Dictionary<string, AbstractPrimitive>();
+        public Dictionary<ulong, AbstractPrimitive> primitives = new Dictionary<ulong, AbstractPrimitive>();
 
         public void CreatePrimitive(AbstractPrimitiveDto dto, UnityAction<AbstractVolumeCell> finished)
         {
@@ -64,7 +64,7 @@ namespace umi3d.cdk.volumes
             }
         }
 
-        public void DeletePrimitive(string id)
+        public void DeletePrimitive(ulong id)
         {
             if (primitives.TryGetValue(id, out AbstractPrimitive prim))
             {
@@ -77,7 +77,7 @@ namespace umi3d.cdk.volumes
             }
         }
 
-        public AbstractPrimitive GetPrimitive(string id)
+        public AbstractPrimitive GetPrimitive(ulong id)
         {
             return primitives[id];
         }
