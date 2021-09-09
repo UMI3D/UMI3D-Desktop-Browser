@@ -144,6 +144,15 @@ public class Connecting : Singleton<Connecting>
                 );
                 result = en;
                 break;
+            case UploadFileParameterDto uploadParameterDto:
+                var u = new UploadInputMenuItem() { dto = uploadParameterDto, authorizedExtensions =uploadParameterDto.authorizedExtensions };
+                u.Subscribe((x) =>
+                {
+                    uploadParameterDto.value = x;
+                }
+                );
+                result = u;
+                break;
             case StringParameterDto stringParameterDto:
                 var s = new TextInputMenuItem() { dto = stringParameterDto };
                 s.Subscribe((x) =>

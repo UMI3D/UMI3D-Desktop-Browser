@@ -179,6 +179,12 @@ namespace BrowserDesktop.Controller
         protected List<StringParameterInput> stringParameterInputs = new List<StringParameterInput>();
 
         /// <summary>
+        /// Instantiated upload file parameter inputs.
+        /// </summary>
+        /// <see cref="FindInput(AbstractParameterDto, bool)"/>
+        protected List<UploadParameterInput> uploadParameterInputs = new List<UploadParameterInput>();
+
+        /// <summary>
         /// Instantiated string enum parameter inputs.
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
@@ -197,6 +203,7 @@ namespace BrowserDesktop.Controller
                 list.AddRange(floatRangeParameterInputs);
                 list.AddRange(intParameterInputs);
                 list.AddRange(boolParameterInputs);
+                list.AddRange(uploadParameterInputs);
                 list.AddRange(stringParameterInputs);
                 list.AddRange(stringEnumParameterInputs);
                 return list;
@@ -517,6 +524,8 @@ namespace BrowserDesktop.Controller
             intParameterInputs = new List<IntParameterInput>();
             boolParameterInputs.ForEach((a) => { Destroy(a); });
             boolParameterInputs = new List<BooleanParameterInput>();
+            uploadParameterInputs.ForEach((a) => { Destroy(a); });
+            uploadParameterInputs = new List<UploadParameterInput>();
             stringParameterInputs.ForEach((a) => { Destroy(a); });
             stringParameterInputs = new List<StringParameterInput>();
             stringEnumParameterInputs.ForEach((a) => { Destroy(a); });
@@ -729,6 +738,16 @@ namespace BrowserDesktop.Controller
                     stringParameterInputs.Add(stringInput);
                 }
                 return stringInput;
+            }
+            else if (param is UploadFileParameterDto)
+            {
+                UploadParameterInput uploadInput = uploadParameterInputs.Find(i => i.IsAvailable());
+                if (uploadInput == null)
+                {
+                    uploadInput = this.gameObject.AddComponent<UploadParameterInput>();
+                    uploadParameterInputs.Add(uploadInput);
+                }
+                return uploadInput;
             }
             else if (param is EnumParameterDto<string>)
             {
