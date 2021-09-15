@@ -115,7 +115,7 @@ namespace BrowserDesktop.Interaction
                                     else
                                         DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
                                 },
-                                (string str) =>
+                                (Umi3dExecption str) =>
                                 {
                                     DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                                 },

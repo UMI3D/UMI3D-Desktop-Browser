@@ -96,7 +96,7 @@ namespace AsImpL
             string url = absolutePath.Contains("//") ? absolutePath : "file:///" + absolutePath;
             yield return LoadOrDownloadText(url);
 
-            if (string.IsNullOrEmpty(loadedText))
+            if (objLoadingProgress.error || string.IsNullOrEmpty(loadedText))
             {
                 Debug.LogError("Failed to load: empty path. " + absolutePath + "   lt: " + loadedText);
                 // remove this progress to let complete the total loading process
@@ -640,8 +640,9 @@ namespace AsImpL
             UnityWebRequest uwr = UnityWebRequest.Get(url);
             yield return uwr.SendWebRequest();
 
-            if (uwr.isNetworkError || uwr.isHttpError)
+            if (uwr.result == UnityWebRequest.Result.ConnectionError || uwr.result == UnityWebRequest.Result.ProtocolError)
             {
+                objLoadingProgress.error = true;
                 if (notifyErrors)
                 {
                     Debug.LogError(uwr.error);
@@ -657,6 +658,7 @@ namespace AsImpL
             yield return www;
             if (www.error != null)
             {
+                objLoadingProgress.error = true;
                 if (notifyErrors)
                 {
                     Debug.LogError("Error loading " + url + "\n" + www.error);

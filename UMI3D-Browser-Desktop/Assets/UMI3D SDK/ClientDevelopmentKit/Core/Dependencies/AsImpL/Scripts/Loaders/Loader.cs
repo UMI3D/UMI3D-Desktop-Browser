@@ -52,6 +52,7 @@ namespace AsImpL
         protected List<MaterialData> materialData;
 
         protected SingleLoadingProgress objLoadingProgress = new SingleLoadingProgress();
+        public bool error { get => objLoadingProgress?.error ?? false; }
 
         protected Stats loadStats;
 
@@ -478,6 +479,7 @@ namespace AsImpL
 
         protected virtual void OnLoadFailed(string absolutePath)
         {
+            Debug.Log($"hello {absolutePath}");
             if (ModelError != null)
             {
                 ModelError(absolutePath);
