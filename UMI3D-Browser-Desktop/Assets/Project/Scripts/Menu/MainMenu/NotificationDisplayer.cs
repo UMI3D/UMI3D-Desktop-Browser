@@ -100,9 +100,9 @@ public class NotificationDisplayer : Singleton<NotificationDisplayer>
                     {
                         res = o as Texture2D;
                     },
-                    (string str) =>
+                    (Umi3dExecption error) =>
                     {
-                        Debug.LogWarning("Icon not loadable : " + url);
+                        Debug.LogWarning($"Icon not loadable : {url} [{error.errorCode}:{error.Message}]");
                     },
                     loader.DeleteObject
                     );
