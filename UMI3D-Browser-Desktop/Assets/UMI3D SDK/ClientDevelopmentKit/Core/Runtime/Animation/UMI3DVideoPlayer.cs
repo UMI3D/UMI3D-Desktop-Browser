@@ -35,6 +35,8 @@ namespace umi3d.cdk
             renderTexture = new RenderTexture(1920, 1080, 16, RenderTextureFormat.RGB565);
             renderTexture.Create();
             renderTexture.dimension = UnityEngine.Rendering.TextureDimension.Tex2D;
+            Debug.Log(renderTexture.isReadable);
+            Debug.Log("mat id : " + dto.materialId);
             mat = UMI3DEnvironmentLoader.GetEntity(dto.materialId).Object as Material;
             if (mat == null)
             {
@@ -95,6 +97,7 @@ namespace umi3d.cdk
         {
             while (!videoPlayer.isPrepared)
             {
+                //Debug.Log("wait video loading");
                 yield return new WaitForEndOfFrame();
             }
             ulong now = UMI3DClientServer.Instance.GetTime();
@@ -112,6 +115,7 @@ namespace umi3d.cdk
         {
             while (!videoPlayer.isPrepared)
             {
+                //Debug.Log("wait video loading");
                 yield return new WaitForEndOfFrame();
             }
             if (!dto.playing)
@@ -161,10 +165,12 @@ namespace umi3d.cdk
                 }
                 else
                 {
+                    Debug.Log("not prepared");
                     videoPlayer.Prepare();
                     MainThreadDispatcher.UnityMainThreadDispatcher.Instance().StartCoroutine(StartAfterLoading());
 
                 }
+                //    Debug.Log("start client video " + UMI3DClientServer.Instance.GetTime() + "  at : " + videoPlayer.frame);
             }
         }
 

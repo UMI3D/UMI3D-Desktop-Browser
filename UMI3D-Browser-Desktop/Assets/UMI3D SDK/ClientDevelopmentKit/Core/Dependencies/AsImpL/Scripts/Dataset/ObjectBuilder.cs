@@ -44,19 +44,6 @@ namespace AsImpL
         // maximum number of vertices that can be used for triangles
         private static int MAX_VERT_COUNT = (MAX_VERTICES_LIMIT_FOR_A_MESH - 2) / 3 * 3;
 
-        private IShaderSelector _shaderSelector;
-        public IShaderSelector ShaderSelector
-        {
-            get { return _shaderSelector ?? (_shaderSelector = new ShaderSelector()); }
-            set { _shaderSelector = value; }
-        }
-
-        private IMaterialFactory _materialFactory;
-        public IMaterialFactory MaterialFactory
-        {
-            get { return _materialFactory ?? (_materialFactory = new MaterialFactory()); }
-            set { _materialFactory = value; }
-        }
 
         /// <summary>
         /// Initialize the importing of materials
@@ -83,7 +70,7 @@ namespace AsImpL
                 {
                     //Debug.LogWarning("No material library defined. Using a default material.");
                 }
-                currMaterials.Add("default", MaterialFactory.Create(shaderName));
+                currMaterials.Add("default", new Material(Shader.Find(shaderName)));
             }
         }
 
@@ -675,8 +662,8 @@ namespace AsImpL
                 newMaterial = new Material(Shader.Find(shaderName));
             else
                 newMaterial = new Material(baseMaterial);
-            //Material newMaterial = MaterialFactory.Create(ShaderSelector.Select(md, useUnlit, mode)); // "Standard (Specular setup)"
-            //newMaterial.name = md.materialName;
+            //
+            newMaterial.name = md.materialName;
 
             float shinLog = Mathf.Log(md.shininess, 2);
             // get the metallic value from the shininess

@@ -87,6 +87,7 @@ namespace umi3d.cdk
             if (UMI3DEnvironmentLoader.GetNode(skinMeshEntityId) == null)
             {
                 maxDelay -= 0.3f;
+                Debug.Log(maxDelay);
                 yield return new WaitForSeconds(0.3f);
             }
 
@@ -94,6 +95,7 @@ namespace umi3d.cdk
             if (UMI3DEnvironmentLoader.GetNode(skinMeshEntityId).gameObject.GetComponentInChildren<SkinnedMeshRenderer>() == null)
             {
                 maxDelay -= 0.3f;
+                Debug.Log(maxDelay);
                 yield return new WaitForSeconds(0.3f);
             }
 

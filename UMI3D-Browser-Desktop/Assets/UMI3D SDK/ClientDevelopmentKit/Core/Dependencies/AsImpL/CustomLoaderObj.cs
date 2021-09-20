@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 public class CustomLoaderObj : LoaderObj
 {
 
+
     protected override IEnumerator LoadOrDownloadText(string url, bool notifyErrors = true)
     {
         loadedText = null;
@@ -21,7 +22,6 @@ public class CustomLoaderObj : LoaderObj
             {
                 //Debug.LogError(uwr.error);
             }
-            objLoadingProgress.error = true;
         }
         else
         {

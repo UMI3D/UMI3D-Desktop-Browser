@@ -47,12 +47,7 @@ namespace AsImpL
         protected static Dictionary<string, int> instanceCount = new Dictionary<string, int>();
 
         protected DataSet dataSet = new DataSet();
-        protected ObjectBuilder _objectBuilder;
-        public ObjectBuilder ObjectBuilder
-        {
-            get { return _objectBuilder ?? (_objectBuilder = new ObjectBuilder()); }
-            set { _objectBuilder = value; }
-        }
+        protected ObjectBuilder objectBuilder = new ObjectBuilder();
 
         protected List<MaterialData> materialData;
 
@@ -95,25 +90,6 @@ namespace AsImpL
                     buildOptions = new ImportOptions();
                 }
                 buildOptions.modelScaling = value;
-            }
-        }
-
-        private IFilesystem _filesystem = null;
-        public IFilesystem Filesystem
-        {
-            get
-            {
-                if (_filesystem == null)
-                {
-                    _filesystem = new FileFilesystem();
-                }
-
-                return _filesystem;
-            }
-
-            set
-            {
-                _filesystem = value;
             }
         }
 
@@ -376,18 +352,18 @@ namespace AsImpL
             objLoadingProgress.message = "Loading materials...";
             yield return null;
 #if UNITY_EDITOR
-            ObjectBuilder.alternativeTexPath = altTexPath;
+            objectBuilder.alternativeTexPath = altTexPath;
 #endif
-            ObjectBuilder.buildOptions = buildOptions;
+            objectBuilder.buildOptions = buildOptions;
             bool hasColors = dataSet.colorList.Count > 0;
             bool hasMaterials = materialData != null;
-            ObjectBuilder.InitBuildMaterials(materialData, hasColors);
+            objectBuilder.InitBuildMaterials(materialData, hasColors);
             float objInitPerc = objLoadingProgress.percentage;
             if (hasMaterials)
             {
-                while (ObjectBuilder.BuildMaterials(info, baseMaterial))
+                while (objectBuilder.BuildMaterials(info, baseMaterial))
                 {
-                    objLoadingProgress.percentage = objInitPerc + MATERIAL_PHASE_PERC * ObjectBuilder.NumImportedMaterials / materialData.Count;
+                    objLoadingProgress.percentage = objInitPerc + MATERIAL_PHASE_PERC * objectBuilder.NumImportedMaterials / materialData.Count;
                     yield return null;
                 }
                 loadStats.buildStats.materialsTime = Time.realtimeSinceStartup - prevTime;
@@ -405,8 +381,8 @@ namespace AsImpL
             OnCreated(newObj, absolutePath);
             ////newObj.transform.localScale = Vector3.one * Scaling;
             float initProgress = objLoadingProgress.percentage;
-            ObjectBuilder.StartBuildObjectAsync(dataSet, newObj);
-            while (ObjectBuilder.BuildObjectAsync(ref info))
+            objectBuilder.StartBuildObjectAsync(dataSet, newObj);
+            while (objectBuilder.BuildObjectAsync(ref info))
             {
                 objLoadingProgress.message = "Building scene objects... " + (info.objectsLoaded + info.groupsLoaded) + "/" + (dataSet.objectList.Count + info.numGroups);
                 objLoadingProgress.percentage = initProgress + BUILD_PHASE_PERC * (info.objectsLoaded / dataSet.objectList.Count + (float)info.groupsLoaded / info.numGroups);
@@ -503,6 +479,7 @@ namespace AsImpL
 
         protected virtual void OnLoadFailed(string absolutePath)
         {
+            Debug.Log($"hello {absolutePath}");
             if (ModelError != null)
             {
                 ModelError(absolutePath);
@@ -553,15 +530,34 @@ namespace AsImpL
         {
             loadedTexture = null;
             string texPath = GetTextureUrl(basePath, path);
-
-            var enumerable = Filesystem.DownloadTexture(texPath);
-
-            yield return enumerable;
-
-            if (enumerable.Current != null)
+#if UNITY_2018_3_OR_NEWER
+            using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(texPath))
             {
-                loadedTexture = (Texture2D)enumerable.Current;
+                yield return uwr.SendWebRequest();
+
+                if (uwr.isNetworkError || uwr.isHttpError)
+                {
+                    Debug.LogError(uwr.error);
+                }
+                else
+                {
+                    // Get downloaded asset bundle
+                    loadedTexture = DownloadHandlerTexture.GetContent(uwr);
+                }
             }
+#else
+            WWW loader = new WWW(texPath);
+            yield return loader;
+
+            if (loader.error != null)
+            {
+                Debug.LogError(loader.error);
+            }
+            else
+            {
+                loadedTexture = LoadTexture(loader);
+            }
+#endif
         }
 
 

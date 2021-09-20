@@ -86,6 +86,7 @@ namespace umi3d.cdk.interaction
             if (!filesToUpload.ContainsKey(fileId))
             {
                 Debug.LogWarning("Server asked client to upload a file without its request, or the client already upload the file");
+                //Debug.Log(fileId);
                 return null;
             }
             return System.IO.Path.GetFileName( filesToUpload[fileId]);
@@ -117,6 +118,7 @@ namespace umi3d.cdk.interaction
                             hoveredObjectId = 0
                         };
                         UMI3DClientServer.SendData(req, true);
+                        Debug.Log(UMI3DClientServer.Exists);
                     }
               
                 }
