@@ -552,15 +552,16 @@ namespace umi3d.cdk
                     };
                     Action<Umi3dExecption> error2 = (reason) =>
                     {
+                        Debug.LogWarning($"error {reason}");
                         foreach (var back in objectData.loadFailCallback)
                             back.Invoke(reason);
                     };
-                    StartCoroutine( urlToObjectWithPolicy(sucess2, error2, path, objectData.extension, objectData, null, urlToObject));
+                    urlToObjectWithPolicy(sucess2, error2, path, objectData.extension, objectData.authorization, null, urlToObject);
                 };
 
                 Action<Umi3dExecption> error = (reason) =>
                 {
-                    //Debug.LogWarning($"error {reason}");
+                    Debug.LogWarning($"error {reason}");
                     foreach (var back in objectData.loadFailCallback)
                         back.Invoke(reason);
                 };
@@ -569,22 +570,18 @@ namespace umi3d.cdk
             }
         }
 
-        IEnumerator urlToObjectWithPolicy(Action<object> succes, Action<Umi3dExecption> error, string path, string extension, ObjectData objectData, string bundlePath, Action<string, string, string, Action<object>, Action<Umi3dExecption>, string> urlToObject, Func<RequestFailedArgument, bool> ShouldTryAgain = null, int tryCount = 0)
+        void urlToObjectWithPolicy(Action<object> succes, Action<Umi3dExecption> error, string path, string extension, string authorization, string bundlePath, Action<string, string, string, Action<object>, Action<Umi3dExecption>, string> urlToObject, Func<RequestFailedArgument, bool> ShouldTryAgain = null, int tryCount = 0)
         {
             if(ShouldTryAgain == null)
                 ShouldTryAgain = DefaultShouldTryAgain;
-            if (tryCount > 0)
-                yield return new WaitForEndOfFrame();
-            DateTime date = DateTime.UtcNow;
             Action<Umi3dExecption> error2 = (reason) =>
             {
-                //Debug.Log($"here try again {reason.Message} [{reason.errorCode}] {tryCount}");
-                if (!UMI3DClientServer.Instance.TryAgainOnHttpFail(new RequestFailedArgument(reason.errorCode, () => StartCoroutine(urlToObjectWithPolicy(succes, error, path, extension, objectData, bundlePath, urlToObject, ShouldTryAgain, tryCount + 1)), tryCount, date, ShouldTryAgain)))
+                Debug.Log($"here try again {reason.Message} [{reason.errorCode}] {tryCount}");
+                DateTime date = DateTime.UtcNow;
+                if (!UMI3DClientServer.Instance.TryAgainOnHttpFail(new RequestFailedArgument(reason.errorCode, () => urlToObjectWithPolicy(succes, error, path, extension, authorization, bundlePath, urlToObject, ShouldTryAgain, tryCount + 1), tryCount, date, ShouldTryAgain)))
                     error?.Invoke(reason);
             };
-
-            urlToObject.Invoke(path, extension, objectData.authorization, succes, error2, bundlePath);
-            yield break;
+            urlToObject.Invoke(path, extension, authorization, succes, error2, bundlePath);
         }
 
         void _LoadFile(ulong id, FileDto file, Action<string, string, string, Action<object>, Action<Umi3dExecption>, string> urlToObject, Action<object, Action<object>, string> objectFromCache, Action<object> callback, Action<Umi3dExecption> failCallback, Action<object, string> deleteAction)
@@ -894,7 +891,7 @@ namespace umi3d.cdk
 
         static bool DefaultShouldTryAgain(RequestFailedArgument argument)
         {
-            return argument.GetRespondCode() == 401 && argument.count < 3;
+            return argument.count < 3;
         }
 
         static public void DownloadObject(UnityWebRequest www, Action callback, Action<Umi3dExecption> failCallback, Func<RequestFailedArgument, bool> shouldTryAgain = null)
@@ -905,7 +902,7 @@ namespace umi3d.cdk
         IEnumerator _DownloadObject(UnityWebRequest www, Action callback, Action<Umi3dExecption> failCallback, Func<RequestFailedArgument, bool> ShouldTryAgain, int tryCount = 0)
         {
             yield return www.SendWebRequest();
-            if (www.isNetworkError || www.isHttpError)
+            if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
             {
                 //DateTime date = DateTime.UtcNow;
                 //if (!UMI3DClientServer.Instance.TryAgainOnHttpFail(new RequestFailedArgument(www, () => StartCoroutine(_DownloadObject(www, callback, failCallback,ShouldTryAgain,tryCount + 1)), tryCount, date, ShouldTryAgain)))

@@ -45,6 +45,7 @@ namespace umi3d.cdk
 
         public UMI3DILoadingPolicy ShouldTryAgain(string failedMessage)
         {
+            Debug.Log($"try again {failedMessage} {trycount} {maxTrycount}");
             if(trycount < maxTrycount)
             {
                 trycount++;

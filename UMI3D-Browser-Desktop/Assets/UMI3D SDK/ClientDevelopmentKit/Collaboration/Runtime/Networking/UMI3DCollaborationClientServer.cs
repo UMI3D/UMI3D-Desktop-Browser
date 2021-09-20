@@ -189,14 +189,19 @@ namespace umi3d.cdk.collaboration
             bool newToken = argument.GetRespondCode() == 401 && (lastTokenUpdate - argument.date).TotalMilliseconds < 0;
             if (newToken)
             {
+                Debug.Log("wait for new token");
                 UnityAction a = () => newToken = true;
                 OnNewToken.AddListener(a);
                 yield return new WaitUntil(() => {
-                    bool tooLong = ((DateTime.UtcNow - argument.date).TotalMilliseconds > maxMillisecondToWait);
+                    DateTime date = DateTime.UtcNow;
+                    bool tooLong = ((date - argument.date).TotalMilliseconds > maxMillisecondToWait);
                     return newToken || tooLong;
                 });
                 OnNewToken.RemoveListener(a);
+                DateTime date = DateTime.UtcNow;
+                Debug.Log($"new token or toolong [{(date - argument.date).TotalMilliseconds}]");
             }
+            Debug.Log("try again !");
             argument.TryAgain();
         }
 
@@ -259,21 +264,16 @@ namespace umi3d.cdk.collaboration
         {
             if (Exists)
             {
+                //Debug.Log($"<color=magenta> new token { token}</color>");
                 lastTokenUpdate = DateTime.UtcNow;
                 Instance?.HttpClient?.SetToken(token);
                 BeardedManStudios.Forge.Networking.Unity.MainThreadManager.Run(() =>
                 {
-                    Instance?.StartCoroutine(Instance.OnNewTokenNextFrame());
+                    Debug.Log("received New token");
+                    Instance?.OnNewToken?.Invoke();
                 });
             }
         }
-
-        IEnumerator OnNewTokenNextFrame()
-        {
-            yield return new WaitForFixedUpdate();
-            OnNewToken?.Invoke();
-        }
-
 
         /// <summary>
         /// Send a BrowserRequestDto on a RTC
