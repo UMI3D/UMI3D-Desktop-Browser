@@ -79,6 +79,7 @@
                     <ui:VisualElement name="pause-menu" style="position: absolute; top: 0; width: 100%; align-items: center;">
                         <ui:VisualElement name="pause-menu-container" class="dark-grey2-bck orange-border" style="width: 545px; height: 52px; border-bottom-width: 1px; flex-direction: row; align-items: center; justify-content: center;">
                             <ui:Button name="open-option-menu-btn" class="btn-options" style="width: 110px; height: 34px; margin-right: 4px;" />
+                            <ui:Button name="microphone-btn" class="btn-mute-on btn-mic-on" style="width: 30px; height: 30px;" />
                             <ui:Button name="leave-environment-btn" class="btn-leave" style="width: 110px; height: 34px; margin-left: 4px;" />
                         </ui:VisualElement>
                         <ui:Button name="pause-menu-open-btn" class="btn-open-pause-menu" style="width: 50px; height: 23px;" />
@@ -97,7 +98,7 @@
                     <ui:VisualElement name="session-info" class="grey-border" style="width: 75%; flex-direction: row-reverse; border-top-width: 1px;">
                         <ui:Button name="open-console-button" style="width: 30px; height: 30px;" />
                         <ui:Label text="00:00:00" name="session-time" class="white-txt" style="-unity-text-align: middle-center; width: 80px;" />
-                        <ui:Button name="microphone-btn" class="btn-mute-on btn-mic-on" style="width: 30px; height: 30px;" />
+                        <ui:Label text="Label" display-tooltip-when-elided="true" name="participants-count" class="white-txt" style="-unity-text-align: middle-center; color: rgba(255, 255, 255, 255);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>

@@ -30,21 +30,37 @@ namespace BrowserDesktop.Menu
     {
         public UIDocument uiDocument;
 
-        VisualElement sessionInfo;
+        #region Top Bar
 
-        Label sessionTime;
-        Button microphoneBtn;
+        //Top Bar
+        VisualElement topCenterMenu;
         Label environmentName;
         Button isFavoriteBtn;
 
-        VisualElement topCenterMenu;
-
         bool isEnvironmentFavorite;
 
-        DateTime startOfSession = new DateTime();
+        #endregion
 
+        #region
+
+        //Main Menu
+        VisualElement applicationSettings;
+        Button microphoneBtn;
+
+        #endregion
+
+        #region Bottom Bar
+
+        //Bottom Bar
+        VisualElement sessionInfo;
+        Label sessionTime;
+        Label participantsCount;
+
+        DateTime startOfSession = new DateTime();
         UserPreferencesManager.Data currentData;
         List<UserPreferencesManager.Data> favorites;
+
+        #endregion
 
         /// <summary>
         /// Binds the UI
@@ -54,22 +70,30 @@ namespace BrowserDesktop.Menu
             UnityEngine.Debug.Assert(uiDocument != null);
             var root = uiDocument.rootVisualElement;
 
+            //Top Bar
             topCenterMenu = root.Q<VisualElement>("top-center-menu");
             topCenterMenu.style.display = DisplayStyle.None;
 
-            sessionInfo = root.Q<VisualElement>("session-info");
-            sessionTime = sessionInfo.Q<Label>("session-time");
+            isFavoriteBtn = root.Q<Button>("is-favorite-btn");
+            isFavoriteBtn.clickable.clicked += ToggleAddEnvironmentToFavorites;
 
-
-            microphoneBtn = sessionInfo.Q<Button>("microphone-btn");
+            //Main Menu
+            /*
+            applicationSettings = root.Q<VisualElement>("application-settings");
+            microphoneBtn = applicationSettings.Q<Button>("microphone-btn");
             microphoneBtn.clickable.clicked += () =>
             {
                 ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
             };
+            */
 
+            //Bottom Bar
+            sessionInfo = root.Q<VisualElement>("session-info");
+            sessionTime = sessionInfo.Q<Label>("session-time");
+            participantsCount = sessionInfo.Q<Label>("participants-count");
+            umi3d.cdk.collaboration.UMI3DUser.OnNewUser.AddListener(UpdateParticipantsCount);
+            umi3d.cdk.collaboration.UMI3DUser.OnRemoveUser.AddListener(UpdateParticipantsCount);
 
-            isFavoriteBtn = root.Q<Button>("is-favorite-btn");
-            isFavoriteBtn.clickable.clicked += ToggleAddEnvironmentToFavorites;
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
             {
@@ -156,6 +180,17 @@ namespace BrowserDesktop.Menu
             isFavoriteBtn.ToggleInClassList("is-favorite");
 
             UserPreferencesManager.StoreFavoriteConnectionData(favorites);
+        }
+
+        /// <summary>
+        /// Update the participants count when a user connect or disconnect to the environment
+        /// </summary>
+        /// <param name="user"></param>
+        public void UpdateParticipantsCount(umi3d.cdk.collaboration.UMI3DUser user)
+        {
+            int usersCount = umi3d.cdk.userCapture.UMI3DClientUserTracking.Instance.embodimentDict.Count;
+
+            participantsCount.text = usersCount < 2 ? usersCount + " participant" : usersCount + " participants";
         }
     }
 }
