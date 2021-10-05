@@ -60,9 +60,13 @@ namespace BrowserDesktop.Menu
                 consoleContainer.Add(log);
 
             if (type == LogType.Log || type == LogType.Warning)
+            {
                 openConsoleButton.RemoveFromClassList("btn-notif-alert");
+            }
             else
+            {
                 openConsoleButton.AddToClassList("btn-notif-alert");
+            }
 
                 
 
