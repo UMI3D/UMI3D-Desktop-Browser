@@ -91,8 +91,6 @@ namespace BrowserDesktop.Menu
             sessionInfo = root.Q<VisualElement>("session-info");
             sessionTime = sessionInfo.Q<Label>("session-time");
             participantsCount = sessionInfo.Q<Label>("participants-count");
-            //umi3d.cdk.collaboration.UMI3DUser.OnNewUser.AddListener(UpdateParticipantsCount);
-            //umi3d.cdk.collaboration.UMI3DUser.OnRemoveUser.AddListener(UpdateParticipantsCount);
             umi3d.cdk.collaboration.UMI3DCollaborationEnvironmentLoader.OnUpdateUserList.AddListener(UpdateParticipantsCount);
 
 
@@ -116,6 +114,7 @@ namespace BrowserDesktop.Menu
         /// <param name="val"></param>
         public void OnMicrophoneStatusChanged(bool val)
         {
+            /*
             if (val)
             {
                 microphoneBtn.RemoveFromClassList("btn-mic-off");
@@ -127,7 +126,7 @@ namespace BrowserDesktop.Menu
                 microphoneBtn.RemoveFromClassList("btn-mic-on");
                 microphoneBtn.AddToClassList("btn-mic-off");
             }
-
+            */
         }
 
         /// <summary>
