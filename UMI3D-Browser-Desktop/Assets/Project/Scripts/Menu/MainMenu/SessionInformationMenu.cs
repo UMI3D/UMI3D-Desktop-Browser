@@ -91,8 +91,9 @@ namespace BrowserDesktop.Menu
             sessionInfo = root.Q<VisualElement>("session-info");
             sessionTime = sessionInfo.Q<Label>("session-time");
             participantsCount = sessionInfo.Q<Label>("participants-count");
-            umi3d.cdk.collaboration.UMI3DUser.OnNewUser.AddListener(UpdateParticipantsCount);
-            umi3d.cdk.collaboration.UMI3DUser.OnRemoveUser.AddListener(UpdateParticipantsCount);
+            //umi3d.cdk.collaboration.UMI3DUser.OnNewUser.AddListener(UpdateParticipantsCount);
+            //umi3d.cdk.collaboration.UMI3DUser.OnRemoveUser.AddListener(UpdateParticipantsCount);
+            umi3d.cdk.collaboration.UMI3DCollaborationEnvironmentLoader.OnUpdateUserList.AddListener(UpdateParticipantsCount);
 
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
@@ -186,9 +187,9 @@ namespace BrowserDesktop.Menu
         /// Update the participants count when a user connect or disconnect to the environment
         /// </summary>
         /// <param name="user"></param>
-        public void UpdateParticipantsCount(umi3d.cdk.collaboration.UMI3DUser user)
+        public void UpdateParticipantsCount()
         {
-            int usersCount = umi3d.cdk.userCapture.UMI3DClientUserTracking.Instance.embodimentDict.Count;
+            int usersCount = umi3d.cdk.collaboration.UMI3DCollaborationEnvironmentLoader.Instance.UserList.Count;
 
             participantsCount.text = usersCount < 2 ? usersCount + " participant" : usersCount + " participants";
         }
