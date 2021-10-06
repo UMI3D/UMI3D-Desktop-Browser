@@ -47,6 +47,21 @@ namespace umi3d.cdk.collaboration
             }
         }
 
+        private void Start()
+        {
+            IsMute = IsMute;
+        }
+
+        public static void UpdateFrequency(int frequency) 
+        {
+            Instance.samplingFrequency = frequency;
+            if (Instance.reading)
+            {
+                Instance.StopRecording();
+                Instance.StartRecording();
+            }
+        }
+
         /// <summary>
         /// Starts to stream the input of the current Mic device
         /// </summary>
@@ -81,13 +96,14 @@ namespace umi3d.cdk.collaboration
         bool muted = false;
         bool reading = false;
 
-        const SamplingFrequency samplingFrequency = SamplingFrequency.Frequency_12000;
+        const SamplingFrequency initsamplingFrequency = SamplingFrequency.Frequency_12000;
+        int samplingFrequency = (int)initsamplingFrequency;
 
         const int lengthSeconds = 1;
 
         AudioClip clip;
         int head = 0;
-        float[] microphoneBuffer = new float[lengthSeconds * (int)samplingFrequency];
+        float[] microphoneBuffer = new float[lengthSeconds * (int)initsamplingFrequency];
 
 
         private Thread thread;
@@ -151,8 +167,9 @@ namespace umi3d.cdk.collaboration
 
         void OnEnable()
         {
+            var samp = (SamplingFrequency)samplingFrequency;
             encoder = new Encoder(
-                samplingFrequency,
+                samp,
                 NumChannels.Mono,
                 OpusApplication.Audio)
             {
