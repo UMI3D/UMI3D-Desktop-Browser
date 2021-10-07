@@ -30,7 +30,6 @@ namespace umi3d.cdk.collaboration
         public void UpdateFrequency(int frequency)
         {
             this.frequency = frequency;
-            Debug.Log($"update frequency in reader to {frequency} {decoder != null}");
             if (decoder != null)
             {
                 OnDisable();
