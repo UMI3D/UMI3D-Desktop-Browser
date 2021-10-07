@@ -55,10 +55,18 @@ namespace umi3d.cdk.collaboration
         public static void UpdateFrequency(int frequency) 
         {
             Instance.samplingFrequency = frequency;
+            Debug.Log($"update frequency to {frequency} [{Instance.reading}]");
             if (Instance.reading)
             {
+                Instance.OnDisable();
+                Instance.OnEnable();
                 Instance.StopRecording();
                 Instance.StartRecording();
+            }
+            else
+            {
+                Instance.OnDisable();
+                Instance.OnEnable();
             }
         }
 
@@ -68,7 +76,16 @@ namespace umi3d.cdk.collaboration
         void StartRecording()
         {
             reading = true;
-            clip = Microphone.Start(null, true, lengthSeconds, (int)samplingFrequency);
+
+            bitrate = 96000;
+            frameSize = samplingFrequency/100; //at least frequency/100
+            outputBufferSize = frameSize * sizeof(float); // at least frameSize * sizeof(float)
+            pcmQueue = new Queue<float>();
+            frameBuffer = new float[frameSize];
+            outputBuffer = new byte[outputBufferSize];
+            microphoneBuffer = new float[lengthSeconds * samplingFrequency];
+
+            clip = Microphone.Start(null, true, lengthSeconds, samplingFrequency);
             lock (pcmQueue)
                 pcmQueue.Clear();
             if (thread == null)
@@ -96,14 +113,13 @@ namespace umi3d.cdk.collaboration
         bool muted = false;
         bool reading = false;
 
-        const SamplingFrequency initsamplingFrequency = SamplingFrequency.Frequency_12000;
-        int samplingFrequency = (int)initsamplingFrequency;
+        int samplingFrequency = 12000;
 
         const int lengthSeconds = 1;
 
         AudioClip clip;
         int head = 0;
-        float[] microphoneBuffer = new float[lengthSeconds * (int)initsamplingFrequency];
+        float[] microphoneBuffer;
 
 
         private Thread thread;
@@ -156,14 +172,14 @@ namespace umi3d.cdk.collaboration
 
         #region Encoder
 
-        const int bitrate = 96000;
-        const int frameSize = 240; //at least frequency/100
-        const int outputBufferSize = frameSize * 4; // at least frameSize * sizeof(float)
+        int bitrate;
+        int frameSize; //at least frequency/100
+        int outputBufferSize; // at least frameSize * sizeof(float)
 
         Encoder encoder;
-        Queue<float> pcmQueue = new Queue<float>();
-        readonly float[] frameBuffer = new float[frameSize];
-        readonly byte[] outputBuffer = new byte[outputBufferSize];
+        Queue<float> pcmQueue;
+        float[] frameBuffer;
+        byte[] outputBuffer;
 
         void OnEnable()
         {
@@ -183,7 +199,7 @@ namespace umi3d.cdk.collaboration
         {
             encoder.Dispose();
             encoder = null;
-            pcmQueue.Clear();
+            pcmQueue?.Clear();
             reading = false;
         }
 
@@ -223,7 +239,6 @@ namespace umi3d.cdk.collaboration
             }
             thread = null;
         }
-
 
         #endregion
     }
