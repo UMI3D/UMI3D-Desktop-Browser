@@ -18,6 +18,7 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.Events;
 
 /// <summary>
 /// This class removes the default Windows title bar and set up a custom one.
@@ -27,6 +28,11 @@ public class WindowsManager : MonoBehaviour
     #region Fields
 
     public UIDocument uiDocument;
+
+    private bool wantsToQuit = false;
+
+    private bool isZoomed = false;
+    //private UnityEvent OnWindowResize;
 
     #region Fiels to make the title bar working like the windows one.
     [DllImport("user32.dll")]
@@ -83,6 +89,7 @@ public class WindowsManager : MonoBehaviour
     public string maximizeClassName = "maximize-btn";
     public string restoreClassName = "restore-btn";
 
+    VisualElement root;
     Button minimize;
     Button maximize;
 
@@ -154,17 +161,40 @@ public class WindowsManager : MonoBehaviour
         SetUpCustomTitleBar();
 
         hWnd = GetActiveWindow();
-        if (hideOnStart && !isWindowsCaptionRemoved) ShowWindowBorders(false);
+        isZoomed = IsZoomed(hWnd);
+        //if (hideOnStart && !isWindowsCaptionRemoved) ShowWindowBorders(false);
+
+        Application.wantsToQuit += WantsToQuit;
+    }
+
+    private bool WantsToQuit()
+    {
+        if (!wantsToQuit)
+            ShowDialogueBoxToQuit();
+        return wantsToQuit;
+    }
+
+    private void ShowDialogueBoxToQuit()
+    {
+        DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
+        dialogueBox.Setup("", "Are you sure ...?", "YES", "NO", (b) =>
+        {
+            wantsToQuit = b;
+            if (b)
+                Application.Quit();
+        });
+        root.Add(dialogueBox);
     }
 
     void Update()
     {
-        UpdateCustomTitleBar();
+        //UpdateCustomTitleBar();
+        CheckForWindowResizement();
     }
 
     private void SetUpCustomTitleBar()
     {
-        VisualElement root = uiDocument.rootVisualElement;
+        root = uiDocument.rootVisualElement;
         minimize = root.Q<Button>(minimizeTagName);
         minimize.clickable.clicked += () =>
         {
@@ -172,25 +202,40 @@ public class WindowsManager : MonoBehaviour
         };
 
         maximize = uiDocument.rootVisualElement.Q<Button>(maximizeTagName);
+        maximize.AddToClassList(restoreClassName);
         maximize.clickable.clicked += () =>
         {
+            /*
             if (IsZoomed(GetActiveWindow())) //Check if the window is maximised
+            {
                 ShowWindow(GetActiveWindow(), 9);
+                ShowWindowBorders(true);
+            }
             else
+            {
                 ShowWindow(GetActiveWindow(), 3);
-
+                ShowWindowBorders(false);
+            }
+            */
+            ShowWindow(GetActiveWindow(), 9);
         };
+
+        if (isZoomed)
+        {
+            minimize.visible = true;
+            maximize.visible = true;
+        }
+        else
+        {
+            minimize.visible = false;
+            maximize.visible = false;
+        }
 
         var close = root.Q<Button>(closeTagName);
         close.clickable.clicked += () =>
         {
-            DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-            dialogueBox.Setup("", "Are you sure ...?", "YES", "NO", (b) =>
-            {
-                if (b)
-                    Application.Quit();
-            });
-            root.Add(dialogueBox);
+            //This will raise the Application.WantsToQuit event and show a dialogue box.
+            Application.Quit();
         };
 
         var topBar = root.Q<VisualElement>("top");
@@ -247,6 +292,29 @@ public class WindowsManager : MonoBehaviour
         }
     }
 
+    private void CheckForWindowResizement()
+    {
+        if ((IsZoomed(GetActiveWindow()) && !isZoomed) ||
+            (!IsZoomed(GetActiveWindow()) && isZoomed)) //Check if the window is being resized
+        {
+            isZoomed = IsZoomed(GetActiveWindow());
+            //OnWindowResize.Invoke();
+
+            if (isZoomed) //The window is in fullscreen
+            {
+                maximize.visible = true;
+                minimize.visible = true;
+                ShowWindowBorders(false);
+            }
+            else
+            {
+                maximize.visible = false;
+                minimize.visible = false;
+                ShowWindowBorders(true);
+            }
+        }
+    }
+
     /// <summary>
     /// Shows or hides the default windows borders to resize the window.
     /// </summary>
@@ -269,6 +337,7 @@ public class WindowsManager : MonoBehaviour
 
             isWindowsCaptionRemoved = true;
 
+            /*
             // Seems useless but for now it's a trick to remove the titlebar without having to resize first the window
             if (IsZoomed(GetActiveWindow()))//Check if the window is maximised
             {    
@@ -280,6 +349,7 @@ public class WindowsManager : MonoBehaviour
                 ShowWindow(GetActiveWindow(), 3);
                 ShowWindow(GetActiveWindow(), 9);
             }
+            */
         }
     }
 
