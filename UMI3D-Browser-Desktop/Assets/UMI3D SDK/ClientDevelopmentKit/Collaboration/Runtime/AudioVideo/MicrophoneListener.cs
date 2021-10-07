@@ -52,7 +52,7 @@ namespace umi3d.cdk.collaboration
             IsMute = IsMute;
         }
 
-        public static void UpdateFrequency(int frequency) 
+        public static void UpdateFrequency(int frequency)
         {
             Instance.samplingFrequency = frequency;
             Debug.Log($"update frequency to {frequency} [{Instance.reading}]");
@@ -78,7 +78,7 @@ namespace umi3d.cdk.collaboration
             reading = true;
 
             bitrate = 96000;
-            frameSize = samplingFrequency/100; //at least frequency/100
+            frameSize = samplingFrequency / 100; //at least frequency/100
             outputBufferSize = frameSize * sizeof(float); // at least frameSize * sizeof(float)
             pcmQueue = new Queue<float>();
             frameBuffer = new float[frameSize];
