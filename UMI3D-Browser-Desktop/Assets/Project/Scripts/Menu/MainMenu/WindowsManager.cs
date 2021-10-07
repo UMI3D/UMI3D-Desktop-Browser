@@ -294,10 +294,10 @@ public class WindowsManager : MonoBehaviour
 
     private void CheckForWindowResizement()
     {
-        if ((IsZoomed(GetActiveWindow()) && !isZoomed) ||
-            (!IsZoomed(GetActiveWindow()) && isZoomed)) //Check if the window is being resized
+        if ((IsZoomed(hWnd) && !isZoomed) ||
+            (!IsZoomed(hWnd) && isZoomed)) //Check if the window is being resized
         {
-            isZoomed = IsZoomed(GetActiveWindow());
+            isZoomed = IsZoomed(hWnd);
             //OnWindowResize.Invoke();
 
             if (isZoomed) //The window is in fullscreen
