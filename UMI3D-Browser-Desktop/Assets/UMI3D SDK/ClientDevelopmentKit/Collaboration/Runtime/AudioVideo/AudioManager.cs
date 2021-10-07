@@ -83,10 +83,12 @@ namespace umi3d.cdk.collaboration
         {
             if (user.id == UMI3DCollaborationClientServer.UserDto.dto.id)
                 MicrophoneListener.UpdateFrequency(user.audioFrequency);
-            if (GlobalReader.ContainsKey(user.id))
-                GlobalReader[user.id].UpdateFrequency(user.audioFrequency);
-            if (SpacialReader.ContainsKey(user.id))
-                SpacialReader[user.id].UpdateFrequency(user.audioFrequency);
+            //if (GlobalReader.ContainsKey(user.id))
+            //    GlobalReader[user.id].UpdateFrequency(user.audioFrequency);
+            //if (SpacialReader.ContainsKey(user.id))
+            //    SpacialReader[user.id].UpdateFrequency(user.audioFrequency);
+            OnUserDisconected(user);
+            OnAudioChanged(user);
         }
 
         /// <summary>
