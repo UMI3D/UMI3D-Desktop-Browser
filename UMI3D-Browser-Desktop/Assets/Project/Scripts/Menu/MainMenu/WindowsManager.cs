@@ -236,10 +236,14 @@ public class WindowsManager : MonoBehaviour
         if (IsZoomed(GetActiveWindow())) //Check if the window is maximised
         {
             maximize.AddToClassList(restoreClassName);
+            maximize.visible = true;
+            minimize.visible = true;
         }
         else
         {
-            maximize.AddToClassList(maximizeClassName);
+            //maximize.AddToClassList(maximizeClassName);
+            maximize.visible = false;
+            minimize.visible = false;
         }
     }
 
