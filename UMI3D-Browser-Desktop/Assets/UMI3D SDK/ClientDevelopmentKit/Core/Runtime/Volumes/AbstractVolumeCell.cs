@@ -16,9 +16,14 @@ limitations under the License.
 
 using UnityEngine;
 
-public abstract class AbstractVolumeCell 
-{
-    public abstract ulong Id();
+namespace umi3d.cdk.volumes
+{ 
+    public abstract class AbstractVolumeCell
+    {
+        public abstract ulong Id();
 
-    public abstract bool IsInside(Vector3 point);
+        public abstract bool IsInside(Vector3 point);
+
+        public abstract Mesh GetBase();
+    }
 }

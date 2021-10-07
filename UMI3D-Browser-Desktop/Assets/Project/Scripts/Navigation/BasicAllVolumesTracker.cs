@@ -1,0 +1,33 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+using System.Linq;
+using umi3d.common;
+using umi3d.common.volume;
+
+namespace umi3d.cdk.volumes
+{
+    public class BasicAllVolumesTracker : MonoBehaviour
+    {
+        public float frameRate = 30;
+
+        protected virtual void Awake()
+        {
+            UnityAction<AbstractVolumeCell> addTracker = volume =>
+            {
+                VolumeTracker tracker = this.gameObject.AddComponent<VolumeTracker>();
+                tracker.detectionFrameRate = frameRate;
+                tracker.volumesToTrack = new List<AbstractVolumeCell>() { volume };
+                tracker.SubscribeToVolumeEntrance(  vid => UMI3DClientServer.SendData(new VolumeUserTransitDto() { direction = true,    volumeId = vid }, true));
+                tracker.SubscribeToVolumeExit(      vid => UMI3DClientServer.SendData(new VolumeUserTransitDto() { direction = false,   volumeId = vid }, true));
+                tracker.StartTracking();
+            };
+
+            VolumeSliceGroupManager.SubscribeToSliceGroupCreation(addTracker, true);
+            ExternalVolumeDataManager.SubscribeToExternalVolumeCreation(addTracker, true);
+            VolumePrimitiveManager.SubscribeToPrimitiveCreation(addTracker, true);
+        }
+
+    }
+}

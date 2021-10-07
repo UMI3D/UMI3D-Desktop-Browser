@@ -60,9 +60,9 @@ namespace umi3d.cdk
                                 newModel.SetParent(UMI3DResourcesManager.Instance.transform);
                                 callback.Invoke(newModel.gameObject);
                             }
-                            catch
+                            catch (Exception e)
                             {
-                                failCallback("Importing failed with : " + url);
+                                failCallback("Importing failed with : " + url + "\n"+e);
                             }
                             GameObject.Destroy(objImporter.gameObject, 1);
                         };
@@ -92,7 +92,7 @@ namespace umi3d.cdk
             };
         }
 
-        private Vector3 rotOffset = new Vector3(0, 180, 0);
+        private Vector3 rotOffset = new Vector3(0, 0, 0);
     }
 }
 

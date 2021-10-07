@@ -10,6 +10,7 @@ limitations under the License.
 */
 
 using umi3d.cdk;
+using umi3d.cdk.volumes;
 using umi3d.common;
 using UnityEngine;
 using UnityEngine.AI;
@@ -51,7 +52,7 @@ namespace BrowserDesktop.Navigation
         /// <summary>
         /// Once the environment is loaded, generates the navmesh.
         /// </summary>
-        private void InitNavMesh()
+        public void InitNavMesh()
         {
             foreach (var entity in UMI3DEnvironmentLoader.Entities())
             {
@@ -60,8 +61,46 @@ namespace BrowserDesktop.Navigation
                     InitModel(nodeInstance);
                 }
             }
+
+            VolumePrimitiveManager.SubscribeToPrimitiveCreation(c =>
+            {
+                AddNavigableVolume(c);
+                surface.BuildNavMesh(); //TODO we can do better here than reload the navmesh at each cell reception, especially on the initial reception of all cells.
+            },
+            true);
+
+            VolumeSliceGroupManager.SubscribeToSliceGroupCreation(c =>
+            {
+                AddNavigableVolume(c);
+                surface.BuildNavMesh(); //TODO we can do better here than reload the navmesh at each cell reception, especially on the initial reception of all cells.
+            },
+            true);
+
+            ExternalVolumeDataManager.SubscribeToExternalVolumeCreation(c =>
+            {
+                AddNavigableVolume(c);
+                surface.BuildNavMesh(); //TODO we can do better here than reload the navmesh at each cell reception, especially on the initial reception of all cells.
+            },
+            true);
+
             surface.BuildNavMesh();
         }
+
+        public void AddNavigableVolume(AbstractVolumeCell cell)
+        {
+            Mesh mesh = cell.GetBase();
+            GameObject surfaceGo = new GameObject("Surface for " + cell.GetType());
+            surfaceGo.transform.parent = surface.transform;
+            surfaceGo.transform.position = Vector3.zero;
+            surfaceGo.transform.rotation = Quaternion.identity;
+            surfaceGo.transform.localScale = Vector3.one;
+            surfaceGo.AddComponent<MeshFilter>().mesh = mesh;
+            surfaceGo.AddComponent<MeshRenderer>(); //<-- not ideal.
+
+            ChangeObjectAndChildrenLayer(surfaceGo, navmeshLayer);
+        }
+
+
 
         /// <summary>
         /// Inits navmesh according to the data stored by nodeInstance and its children.

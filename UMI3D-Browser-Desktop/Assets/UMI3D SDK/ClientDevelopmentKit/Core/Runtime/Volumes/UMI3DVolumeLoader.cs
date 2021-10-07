@@ -18,6 +18,7 @@ using umi3d.common.volume;
 using umi3d.common;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace umi3d.cdk.volumes
 {
@@ -31,41 +32,41 @@ namespace umi3d.cdk.volumes
             switch (dto)
             {
                 case PointDto pointDto:
-                    VolumeSliceGroupManager.Instance.CreatePoint(pointDto, p =>
+                    VolumeSliceGroupManager.CreatePoint(pointDto, p =>
                     {
-                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, p, () => VolumeSliceGroupManager.Instance.DeletePoint(dto.id));
+                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, p, () => VolumeSliceGroupManager.DeletePoint(dto.id));
                         finished.Invoke();
                     });                    
                     break;
 
                 case FaceDto faceDto:
-                    VolumeSliceGroupManager.Instance.CreateFace(faceDto, f =>
+                    VolumeSliceGroupManager.CreateFace(faceDto, f =>
                     {
-                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, f, () => VolumeSliceGroupManager.Instance.DeleteFace(dto.id));
+                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, f, () => VolumeSliceGroupManager.DeleteFace(dto.id));
                         finished.Invoke();
                     });                   
                     break;
 
                 case VolumeSliceDto slice:
-                    VolumeSliceGroupManager.Instance.CreateVolumeSlice(slice, s =>
+                    VolumeSliceGroupManager.CreateVolumeSlice(slice, s =>
                     {
-                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, s, () => VolumeSliceGroupManager.Instance.DeleteVolumeSlice(dto.id));
+                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, s, () => VolumeSliceGroupManager.DeleteVolumeSlice(dto.id));
                         finished.Invoke();
                     });
                     break;
 
                 case VolumeSlicesGroupDto group:
-                    VolumeSliceGroupManager.Instance.CreateVolumeSliceGroup(group, v =>
+                    VolumeSliceGroupManager.CreateVolumeSliceGroup(group, v =>
                     {
-                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, v, () => VolumeSliceGroupManager.Instance.DeleteVolumeSliceGroup(dto.id));
+                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, v, () => VolumeSliceGroupManager.DeleteVolumeSliceGroup(dto.id));
                         finished.Invoke();
                     });                    
                     break;
 
                 case AbstractPrimitiveDto prim:
-                    VolumePrimitiveManager.Instance.CreatePrimitive(prim, p =>
+                    VolumePrimitiveManager.CreatePrimitive(prim, p =>
                     {
-                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, p, () => VolumePrimitiveManager.Instance.DeletePrimitive(dto.id));
+                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, p, () => VolumePrimitiveManager.DeletePrimitive(dto.id));
                         finished.Invoke();
                     });
                     break;

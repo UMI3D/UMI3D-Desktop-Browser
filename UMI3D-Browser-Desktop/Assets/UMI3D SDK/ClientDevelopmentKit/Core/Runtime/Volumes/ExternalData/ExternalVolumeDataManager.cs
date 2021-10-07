@@ -27,29 +27,56 @@ namespace umi3d.cdk.volumes
 {
     public class ExternalVolumeDataManager : Singleton<ExternalVolumeDataManager>
     {
-        public Dictionary<string, AbstractVolumeCell> cells = new Dictionary<string, AbstractVolumeCell>();
+        private static Dictionary<string, AbstractVolumeCell> cells = new Dictionary<string, AbstractVolumeCell>();
 
+        private class ExternalVolumeEvent : UnityEvent<AbstractVolumeCell> { }
+        private static ExternalVolumeEvent onVolumeCreation = new ExternalVolumeEvent();
+
+        /// <summary>
+        /// Subscribe an action to a cell reception.
+        /// </summary>
+        /// <param name="catchUpWithPreviousCells">If true, the action will be called for each already received cells.</param>
+        public static void SubscribeToExternalVolumeCreation(UnityAction<AbstractVolumeCell> callback, bool catchUpWithPreviousCells)
+        {
+            onVolumeCreation.AddListener(callback);
+
+            if (catchUpWithPreviousCells)
+                foreach (AbstractVolumeCell cell in cells.Values)
+                    callback(cell);
+        }
+        public static void UnsubscribeToExternalVolumeCreation(UnityAction<AbstractVolumeCell> callback) => onVolumeCreation.RemoveListener(callback);
+       
         public void CreateOBJVolume(OBJVolumeDto dto, UnityAction<AbstractVolumeCell> finished)
         {
             ObjMeshDtoLoader loader = new ObjMeshDtoLoader();
 
             Action<object> success = obj =>
             {
+                GameObject sceneNode = UMI3DEnvironmentLoader.GetNode(dto.rootId).gameObject;
 
-                Debug.Log("OBJ succes");
                 OBJVolumeCell cell = new OBJVolumeCell()
                 {
                     id = dto.id,
                     meshes = (obj as GameObject).GetComponentsInChildren<MeshFilter>().ToList().ConvertAll(filter => filter.mesh)
                 };
+
+                Matrix4x4 m = Matrix4x4.TRS(sceneNode.transform.TransformPoint(dto.position), Quaternion.Inverse(sceneNode.transform.rotation) * dto.rotation, sceneNode.transform.InverseTransformVector(dto.scale));
+                foreach(Mesh mesh in cell.meshes)
+                {
+                    mesh.vertices = mesh.vertices.ToList().ConvertAll(v => Vector3.Scale(v, new Vector3(-1, 1, -1))).ToArray(); //asimpl right handed coordinate system dirty fix
+                    mesh.vertices = mesh.vertices.ToList().ConvertAll(v => m.MultiplyPoint(v)).ToArray(); //apply dto transform
+                }
+
+                onVolumeCreation.Invoke(cell);
+                finished.Invoke(cell);
             };
 
             Action<string> failed = s =>
             {
-                Debug.LogError("Failed to load obj file : " + s);
+                Debug.LogError("Failed to load obj file : " + s);   
             };
 
-            loader.UrlToObject(dto.objFile, ".obj", null, success, failed);
+            loader.UrlToObject(dto.objFile, ".obj", UMI3DClientServer.getAuthorization(), success, failed);
         }
 
         public void DeleteOBJVolume(ulong id)
@@ -57,5 +84,6 @@ namespace umi3d.cdk.volumes
             throw new System.NotImplementedException(); //todo
         }
 
+        public static List<AbstractVolumeCell> GetCells() => cells.Values.ToList();
     }
 }

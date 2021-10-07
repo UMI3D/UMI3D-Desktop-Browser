@@ -37,14 +37,31 @@ namespace umi3d.cdk.volumes
 
 		protected virtual void Awake()
         {
-			wasInsideOneVolumeLastFrame = volumesToTrack.Exists(v => v.IsInside(this.transform.position));
-			trackingRoutine = StartCoroutine(Track());
+			StartTracking();
         }
+
+		public void StartTracking()
+        {
+			if (trackingRoutine == null)
+			{
+				wasInsideOneVolumeLastFrame = volumesToTrack.Exists(v => v.IsInside(this.transform.position));
+				trackingRoutine = StartCoroutine(Track());
+			}
+		}
+
+		public void StopTracking()
+        {
+			if (trackingRoutine != null)
+			{
+				StopCoroutine(trackingRoutine);
+				trackingRoutine = null;
+			}
+		}
 
 		protected virtual void OnDestroy()
         {
-			StopCoroutine(trackingRoutine);
-        }
+			StopTracking();
+		}
 
 		IEnumerator Track()
         {
@@ -52,7 +69,6 @@ namespace umi3d.cdk.volumes
             {
 				AbstractVolumeCell cell = volumesToTrack.Find(v => v.IsInside(this.transform.position));
 				bool inside = (cell != null);
-
 				if (inside && !wasInsideOneVolumeLastFrame)
 					foreach (var callback in callbacksOnEnter)
 						callback.Invoke(cell.Id());
@@ -67,27 +83,36 @@ namespace umi3d.cdk.volumes
 			}
         }
 
+		/// <summary>
+		/// The ulong argument corresponds to the volume id.
+		/// </summary>
 		public void SubscribeToVolumeEntrance(UnityAction<ulong> callback)
 		{
 			callbacksOnEnter.Add(callback);
 		}
 
+		/// <summary>
+		/// The ulong argument corresponds to the volume id.
+		/// </summary>
 		public void SubscribeToVolumeExit(UnityAction<ulong> callback)
 		{
 			callbacksOnExit.Add(callback);
 		}
 
+		/// <summary>
+		/// The ulong argument corresponds to the volume id.
+		/// </summary>
 		public void UnsubscribeToVolumeEntrance(UnityAction<ulong> callback)
 		{
 			callbacksOnEnter.Remove(callback);
 		}
 
+		/// <summary>
+		/// The ulong argument corresponds to the volume id.
+		/// </summary>
 		public void UnsubscribeToVolumeExit(UnityAction<ulong> callback)
 		{
 			callbacksOnExit.Remove(callback);
 		}
-
-
-
 	}
 }

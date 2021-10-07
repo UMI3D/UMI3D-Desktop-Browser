@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using System.Collections.Generic;
+using System.Linq;
 using umi3d.common;
 using umi3d.common.volume;
 using UnityEngine;
@@ -27,9 +28,27 @@ namespace umi3d.cdk.volumes
     /// </summary>
     public class VolumePrimitiveManager : Singleton<VolumePrimitiveManager>
     {
-        public Dictionary<ulong, AbstractPrimitive> primitives = new Dictionary<ulong, AbstractPrimitive>();
+        private static Dictionary<ulong, AbstractPrimitive> primitives = new Dictionary<ulong, AbstractPrimitive>();
 
-        public void CreatePrimitive(AbstractPrimitiveDto dto, UnityAction<AbstractVolumeCell> finished)
+        private class PrimitiveEvent : UnityEvent<AbstractVolumeCell> { }
+        private static PrimitiveEvent onPrimitiveCreation = new PrimitiveEvent();
+
+        /// <summary>
+        /// Subscribe an action to a cell reception.
+        /// </summary>
+        /// <param name="catchUpWithPreviousCells">If true, the action will be called for each already received cells.</param>
+        public static void SubscribeToPrimitiveCreation(UnityAction<AbstractVolumeCell> callback, bool catchUpWithPreviousCells)
+        {
+            onPrimitiveCreation.AddListener(callback);
+
+            if (catchUpWithPreviousCells)
+                foreach (AbstractVolumeCell cell in primitives.Values)
+                    callback(cell);            
+        }
+        public static void UnsubscribeToPrimitiveCreation(UnityAction<AbstractVolumeCell> callback) => onPrimitiveCreation.RemoveListener(callback); 
+
+
+        public static void CreatePrimitive(AbstractPrimitiveDto dto, UnityAction<AbstractVolumeCell> finished)
         {
             switch (dto)
             {
@@ -44,6 +63,7 @@ namespace umi3d.cdk.volumes
                         }
                     };
                     primitives.Add(boxDto.id, box);
+                    onPrimitiveCreation.Invoke(box);
                     finished.Invoke(box);
                     break;
                 case CylinderDto cylinderDto:
@@ -57,6 +77,7 @@ namespace umi3d.cdk.volumes
                         scale = cylinderDto.scale
                     };
                     primitives.Add(dto.id, c);
+                    onPrimitiveCreation.Invoke(c);
                     finished.Invoke(c);
                     break;
                 default:
@@ -64,7 +85,7 @@ namespace umi3d.cdk.volumes
             }
         }
 
-        public void DeletePrimitive(ulong id)
+        public static void DeletePrimitive(ulong id)
         {
             if (primitives.TryGetValue(id, out AbstractPrimitive prim))
             {
@@ -77,14 +98,11 @@ namespace umi3d.cdk.volumes
             }
         }
 
-        public AbstractPrimitive GetPrimitive(ulong id)
+        public static AbstractPrimitive GetPrimitive(ulong id)
         {
             return primitives[id];
         }
 
-        public List<AbstractPrimitive> GetPrimitives()
-        {
-            return new List<AbstractPrimitive>(primitives.Values);
-        }
+        public static List<AbstractPrimitive> GetPrimitives() => primitives.Values.ToList();
     }
 }

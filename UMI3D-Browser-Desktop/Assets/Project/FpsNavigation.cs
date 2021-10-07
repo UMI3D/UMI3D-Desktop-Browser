@@ -175,41 +175,45 @@ public class FpsNavigation : AbstractNavigation
 
         if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.FreeHead; }
         else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.Default; changeToDefault = true; }
-        Vector2 Move = Vector2.zero;
+        Vector2 translation = Vector2.zero;
         float height = jumpData.heigth;
 
         if (navigateTo)
         {
             var delta = destination - Node.transform.position;
-            Move = delta.normalized;
+            translation = delta.normalized;
         }
         else
         {
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Forward))) { Move.x += 1; }
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Backward))) { Move.x -= 1; }
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))) { Move.y += 1; }
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Left))) { Move.y -= 1; }
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Forward))) { translation.x += 1; }
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Backward))) { translation.x -= 1; }
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))) { translation.y += 1; }
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Left))) { translation.y -= 1; }
         }
 
         switch (navigation)
         {
             case Navigation.Walking:
-                Walk(ref Move, ref height);
+                Walk(ref translation, ref height);
                 jumpData.heigth = height;
                 height += jumpData.deltaHeight;
                 break;
             case Navigation.Flying:
-                Fly(ref Move, ref height);
+                Fly(ref translation, ref height);
                 jumpData.heigth = height;
                 break;
         }
-        Move *= Time.deltaTime;
+        translation *= Time.deltaTime;
 
         HandleView();
-        Vector3 pos = Node.rotation * new Vector3(Move.y, 0, Move.x);
-        pos += Node.transform.position;
-        pos.y = height + baseHeight;
-        Node.transform.position = pos;
+        Vector3 futurePosition = Node.transform.position + Node.rotation * new Vector3(translation.y, 0, translation.x);
+
+        if (NavMesh.SamplePosition(futurePosition, out NavMeshHit hitNavmesh, height + 0.1f, NavMesh.AllAreas))
+        {
+            futurePosition = hitNavmesh.position + (height + baseHeight) * Vector3.up;
+            Node.transform.position = futurePosition;
+
+        }
     }
 
     void Walk(ref Vector2 Move, ref float height)

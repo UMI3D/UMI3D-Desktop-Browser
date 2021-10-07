@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Collections.Generic;
+using umi3d.common.volume;
 using UnityEngine;
 
 namespace umi3d.cdk.volumes
@@ -27,6 +29,39 @@ namespace umi3d.cdk.volumes
         public Vector3 scale;
 
         public override void Delete() { }
+
+        public override Mesh GetBase()
+        {
+            int subdiv = 128; //meh...
+
+            Mesh mesh = new Mesh();
+
+            List<Vector3> vertices = new List<Vector3>();
+            List<int> faces = new List<int>();
+
+            vertices.Add(this.position);
+            for (int i = 0; i < subdiv; i++)
+            {
+                vertices.Add(position + Vector3.Scale(scale, rotation * Quaternion.Euler(i * 360f / subdiv * Vector3.up) * Vector3.right * radius));
+            }
+            for (int i = 1; i < subdiv; i++)
+            {
+                faces.Add(0);
+                faces.Add(i);
+                faces.Add(i+1);
+            }
+            faces.Add(0);
+            faces.Add(subdiv);
+            faces.Add(1);
+
+            mesh.vertices = vertices.ToArray();
+            mesh.triangles = faces.ToArray();
+            mesh.RecalculateNormals();
+            mesh.RecalculateTangents();
+            mesh.RecalculateBounds();
+            mesh.OptimizeReorderVertexBuffer();
+            return mesh;
+        }
 
         public override bool IsInside(Vector3 point)
         {

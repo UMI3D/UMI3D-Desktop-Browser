@@ -17,6 +17,7 @@ limitations under the License.
 using System.Collections.Generic;
 using UnityEngine;
 using umi3d.common.volume;
+using System.Linq;
 
 namespace umi3d.cdk.volumes
 {
@@ -48,9 +49,14 @@ namespace umi3d.cdk.volumes
 
         public void SetSlices(List<VolumeSliceDto> newSlices)
         {
-            slices = newSlices.ConvertAll(dto => VolumeSliceGroupManager.Instance.GetVolumeSlice(dto.id));
+            slices = newSlices.ConvertAll(dto => VolumeSliceGroupManager.GetVolumeSlice(dto.id));
         }
 
         public VolumeSlice[] GetSlices() => slices.ToArray();
-	}
+
+        public override Mesh GetBase()
+        {
+            return GeometryTools.Merge(GetSlices().Select(slice => slice.GetBase()));
+        }
+    }
 }

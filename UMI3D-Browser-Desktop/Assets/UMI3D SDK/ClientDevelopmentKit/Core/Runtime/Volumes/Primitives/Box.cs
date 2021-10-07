@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace umi3d.cdk.volumes
 {
@@ -26,6 +28,26 @@ namespace umi3d.cdk.volumes
         public Bounds bounds;
 
         public override void Delete() { }
+
+        public override Mesh GetBase()
+        {
+            List<Vector3> verts = new List<Vector3>();
+            List<int> tris = new List<int>();
+
+            verts.Add(bounds.min);
+            verts.Add(bounds.min + bounds.size.x * Vector3.right);
+            verts.Add(bounds.min + bounds.size.x * Vector3.right + bounds.size.z * Vector3.forward);
+            verts.Add(bounds.min + bounds.size.z * Vector3.forward);
+
+            tris.Add(0);    tris.Add(2);    tris.Add(1);
+            tris.Add(0);    tris.Add(3);    tris.Add(2);           
+
+            Mesh base_ = new Mesh();
+            base_.vertices = verts.ToArray();
+            base_.triangles = tris.ToArray();
+            base_.RecalculateNormals();
+            return base_;
+        }
 
         public override bool IsInside(Vector3 point)
         {

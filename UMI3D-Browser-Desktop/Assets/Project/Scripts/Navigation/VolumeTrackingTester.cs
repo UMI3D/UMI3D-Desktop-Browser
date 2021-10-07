@@ -14,11 +14,13 @@ public class VolumeTrackingTester : MonoBehaviour
     {
         tracker.SubscribeToVolumeEntrance(id =>
         {
+            Debug.Log("INSIDE");
             UMI3DClientServer.SendData(new VolumeUserTransitDto() { direction = true, volumeId = id}, true);
         });
 
         tracker.SubscribeToVolumeExit(id =>
         {
+            Debug.Log("OUTSIDE");
             UMI3DClientServer.SendData(new VolumeUserTransitDto() { direction = false, volumeId = id }, true);
         });
     }
@@ -26,6 +28,6 @@ public class VolumeTrackingTester : MonoBehaviour
     private void Update()
     {
         tracker.volumesToTrack = VolumeSliceGroupManager.Instance.GetVolumeSliceGroups().ConvertAll(group => group as AbstractVolumeCell);
-        tracker.volumesToTrack.AddRange(VolumePrimitiveManager.Instance.GetPrimitives());
+        tracker.volumesToTrack.AddRange(VolumePrimitiveManager.GetPrimitives());
     }
 }
