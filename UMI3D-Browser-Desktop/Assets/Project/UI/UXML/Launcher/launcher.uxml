@@ -35,4 +35,5 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
+    <ui:Label text="Label" display-tooltip-when-elided="true" name="debug-label" class="white-label" style="color: rgba(255, 255, 255, 255); -unity-font-style: bold;" />
 </ui:UXML>

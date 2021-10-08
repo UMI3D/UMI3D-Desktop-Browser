@@ -28,11 +28,11 @@ public class WindowsManager : MonoBehaviour
     #region Fields
 
     public UIDocument uiDocument;
+    private Label debugLabel;
 
     private bool wantsToQuit = false;
 
     private bool isZoomed = false;
-    //private UnityEvent OnWindowResize;
 
     #region Fiels to make the title bar working like the windows one.
     [DllImport("user32.dll")]
@@ -95,7 +95,7 @@ public class WindowsManager : MonoBehaviour
 
     public VisualTreeAsset dialogueBoxTreeAsset;
 
-    static bool isWindowsCaptionRemoved = false;
+    //static bool isWindowsCaptionRemoved = false;
 
     #endregion
 
@@ -162,6 +162,7 @@ public class WindowsManager : MonoBehaviour
 
         hWnd = GetActiveWindow();
         isZoomed = IsZoomed(hWnd);
+        UpdateWindowWhenResize();
         //if (hideOnStart && !isWindowsCaptionRemoved) ShowWindowBorders(false);
 
         Application.wantsToQuit += WantsToQuit;
@@ -190,11 +191,13 @@ public class WindowsManager : MonoBehaviour
     {
         //UpdateCustomTitleBar();
         CheckForWindowResizement();
+        UpdateWindowWhenResize();
     }
 
     private void SetUpCustomTitleBar()
     {
         root = uiDocument.rootVisualElement;
+        debugLabel = root.Q<Label>("debug-label");
         minimize = root.Q<Button>(minimizeTagName);
         minimize.clickable.clicked += () =>
         {
@@ -218,6 +221,7 @@ public class WindowsManager : MonoBehaviour
             }
             */
             ShowWindow(GetActiveWindow(), 9);
+            //ShowWindowBorders(true);
         };
 
         if (isZoomed)
@@ -298,20 +302,25 @@ public class WindowsManager : MonoBehaviour
             (!IsZoomed(hWnd) && isZoomed)) //Check if the window is being resized
         {
             isZoomed = IsZoomed(hWnd);
-            //OnWindowResize.Invoke();
+            UpdateWindowWhenResize();
+        }
+    }
 
-            if (isZoomed) //The window is in fullscreen
-            {
-                maximize.visible = true;
-                minimize.visible = true;
-                ShowWindowBorders(false);
-            }
-            else
-            {
-                maximize.visible = false;
-                minimize.visible = false;
-                ShowWindowBorders(true);
-            }
+    private void UpdateWindowWhenResize()
+    {
+        if (isZoomed) //The window is in fullscreen
+        {
+            ShowWindowBorders(false);
+            maximize.visible = true;
+            minimize.visible = true;
+            debugLabel.text = "hide border";
+        }
+        else
+        {
+            debugLabel.text = "show border";
+            ShowWindowBorders(true);
+            maximize.visible = false;
+            minimize.visible = false;
         }
     }
 
@@ -325,7 +334,7 @@ public class WindowsManager : MonoBehaviour
 
         int style = GetWindowLong(hWnd, GWL_STYLE).ToInt32(); //gets current style
 
-        if (value)
+        if (value) //show border
         {
             SetWindowLong(hWnd, GWL_STYLE, (uint)(style | WS_CAPTION | WS_SIZEBOX)); //Adds caption and the sizebox back.
             SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW); //Make the window normal.
@@ -335,7 +344,7 @@ public class WindowsManager : MonoBehaviour
             SetWindowLong(hWnd, GWL_STYLE, (uint)(style & ~(WS_CAPTION))); //removes caption and the sizebox from current style.
             SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW); //Make the window render above toolbar.
 
-            isWindowsCaptionRemoved = true;
+            //isWindowsCaptionRemoved = true;
 
             /*
             // Seems useless but for now it's a trick to remove the titlebar without having to resize first the window
