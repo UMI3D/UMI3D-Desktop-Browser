@@ -86,7 +86,7 @@ namespace BrowserDesktop.Menu
             if (value)
             {
                 leaveEnvironmentBtn.style.display = DisplayStyle.Flex;
-                openOptionMenuBtn.style.display = DisplayStyle.Flex;
+                //openOptionMenuBtn.style.display = DisplayStyle.Flex;
                 pauseMenuContainer.experimental.animation.Start(0, pauseMenuHeight, 100, (elt, val) =>
                 {
                     elt.style.height = val;
@@ -96,7 +96,7 @@ namespace BrowserDesktop.Menu
             } else
             {
                 leaveEnvironmentBtn.style.display = DisplayStyle.None;
-                openOptionMenuBtn.style.display = DisplayStyle.None;
+                //openOptionMenuBtn.style.display = DisplayStyle.None;
                 pauseMenuContainer.experimental.animation.Start(pauseMenuHeight, 0, 100, (elt, val) =>
                 {
                     elt.style.height = val;
