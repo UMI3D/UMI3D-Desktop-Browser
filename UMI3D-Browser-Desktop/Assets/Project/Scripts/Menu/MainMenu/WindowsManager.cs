@@ -27,13 +27,12 @@ public class WindowsManager : MonoBehaviour
     #region Fields
 
     public UIDocument uiDocument;
-    private Label debugLabel;
+    //private Label debugLabel;
 
     private bool wantsToQuit = false;
 
     private bool isZoomed = false;
     private bool isFullScreen = false;
-    private bool altReturnShortcut = false;
     private int widthWindow = Screen.width / 2;
     private int heightWindow = Screen.height / 2;
 
@@ -97,8 +96,6 @@ public class WindowsManager : MonoBehaviour
     Button maximize;
 
     public VisualTreeAsset dialogueBoxTreeAsset;
-
-    //static bool isWindowsCaptionRemoved = false;
 
     #endregion
 
@@ -171,13 +168,16 @@ public class WindowsManager : MonoBehaviour
         Application.wantsToQuit += WantsToQuit;
     }
 
+    [ContextMenu("WantToQuit")]
     private bool WantsToQuit()
     {
+        Debug.LogError("Want to quit = " + wantsToQuit);
         if (!wantsToQuit)
             ShowDialogueBoxToQuit();
         return wantsToQuit;
     }
 
+    [ContextMenu("test")]
     private void ShowDialogueBoxToQuit()
     {
         DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
@@ -198,7 +198,7 @@ public class WindowsManager : MonoBehaviour
     private void SetUpCustomTitleBar()
     {
         root = uiDocument.rootVisualElement;
-        debugLabel = root.Q<Label>("debug-label");
+        //debugLabel = root.Q<Label>("debug-label");
         minimize = root.Q<Button>(minimizeTagName);
         minimize.clickable.clicked += () =>
         {
@@ -212,12 +212,14 @@ public class WindowsManager : MonoBehaviour
             SwitchFullScreen(false);
         };
 
+        /*
         var close = root.Q<Button>(closeTagName);
         close.clickable.clicked += () =>
         {
             //This will raise the Application.WantsToQuit event and show a dialogue box.
             Application.Quit();
         };
+        */
     }
 
     private void DropCallBack(IntPtr hWnd, uint uMsg, UIntPtr dwData, IntPtr lResult)
@@ -227,24 +229,6 @@ public class WindowsManager : MonoBehaviour
         SetFocus(window);
         /*SendMessage(window, WM_NCLBUTTONDOWN, 0, 0);
         SendMessage(window, WM_LBUTTONUP, 0, 0);*/
-    }
-
-
-    private void UpdateCustomTitleBar()
-    {
-        maximize.ClearClassList();
-        if (IsZoomed(GetActiveWindow())) //Check if the window is maximised
-        {
-            maximize.AddToClassList(restoreClassName);
-            maximize.visible = true;
-            minimize.visible = true;
-        }
-        else
-        {
-            //maximize.AddToClassList(maximizeClassName);
-            maximize.visible = false;
-            minimize.visible = false;
-        }
     }
 
     private void CheckForWindowResizement()
@@ -273,39 +257,14 @@ public class WindowsManager : MonoBehaviour
             }
         }
 
-        
-        /*
-        if (altReturnShortcut)
-        {
-            ShowWindow(hWnd, 9);
-            SwitchFullScreen(false);
-            altReturnShortcut = false;
-        }
-        if (isFullScreen && Input.GetKey(KeyCode.LeftAlt) && Input.GetKey(KeyCode.Return))
-        {
-            //altReturnShortcut = true;
-            SwitchFullScreen(true);
-            SwitchFullScreen(false);
-        }
-        */
-        
         if (!isFullScreen && !isZoomed)
         {
             widthWindow = Screen.width;
             heightWindow = Screen.height;
         }
+
         //debugLabel.text = "width = " + Screen.width + ", height = " + Screen.height;
-        debugLabel.text = "Zoomed = " + IsZoomed(hWnd) + ", fullscreen = " + Screen.fullScreen;
-        /*
-        if (Input.GetKey(KeyCode.Return))
-        {
-            debugLabel.text += ", enter = ok";
-        }
-        if (Input.GetKey(KeyCode.LeftAlt))
-        {
-            debugLabel.text += ", left alt = ok";
-        }
-        */
+        //debugLabel.text = "Zoomed = " + IsZoomed(hWnd) + ", fullscreen = " + Screen.fullScreen;
     }
 
     private void UpdateWindowWhenResize()
@@ -345,60 +304,6 @@ public class WindowsManager : MonoBehaviour
             maximize.visible = false;
             minimize.visible = false;
         }
-    }
-
-    /// <summary>
-    /// Shows or hides the default windows borders to resize the window.
-    /// </summary>
-    /// <param name="value"></param>
-    private void ShowWindowBorders(bool value)
-    {
-        if (Application.isEditor) return; //Not to hide the editor toolbar!
-
-        int style = GetWindowLong(hWnd, GWL_STYLE).ToInt32(); //gets current style
-
-        
-        if (value) //show border
-        {
-            SetWindowLong(hWnd, GWL_STYLE, (uint)(style | WS_CAPTION | WS_SIZEBOX)); //Adds caption and the sizebox back.
-            SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW); //Make the window normal.
-        }
-        else
-        {
-            SetWindowLong(hWnd, GWL_STYLE, (uint)(style & ~(WS_CAPTION))); //removes caption and the sizebox from current style.
-            SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW); //Make the window render above toolbar.
-
-            /*
-            isWindowsCaptionRemoved = true;
-
-            // Seems useless but for now it's a trick to remove the titlebar without having to resize first the window
-            if (IsZoomed(GetActiveWindow()))//Check if the window is maximised
-            {    
-                ShowWindow(GetActiveWindow(), 9);
-                ShowWindow(GetActiveWindow(), 3);
-            }
-            else
-            {
-                ShowWindow(GetActiveWindow(), 3);
-                ShowWindow(GetActiveWindow(), 9);
-            }
-            */
-        }
-        
-        
-        /*
-        if (value) //show border
-        {
-            SetWindowLong(hWnd, GWL_STYLE, (uint)(style | WS_CAPTION)); //Adds caption and the sizebox back.
-            SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, (short)Screen.width, (short)Screen.height, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW); //Make the window normal.
-        }
-        else
-        {
-            SetWindowLong(hWnd, GWL_STYLE, (uint)(style & ~(WS_CAPTION))); //removes caption and the sizebox from current style.
-            SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, (short)Screen.width, (short)Screen.height, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW); //Make the window render above toolbar.
-
-        }
-        */
     }
 
     #endregion
