@@ -33,6 +33,9 @@ public class WindowsManager : MonoBehaviour
 
     private bool isZoomed = false;
     private bool isFullScreen = false;
+    private bool altReturnShortcut = false;
+    private int widthWindow = Screen.width / 2;
+    private int heightWindow = Screen.height / 2;
 
     #region Fiels to make the title bar working like the windows one.
     [DllImport("user32.dll")]
@@ -162,8 +165,8 @@ public class WindowsManager : MonoBehaviour
 
         hWnd = GetActiveWindow();
         isZoomed = IsZoomed(hWnd);
+        isFullScreen = Screen.fullScreen;
         UpdateWindowWhenResize();
-        //if (hideOnStart && !isWindowsCaptionRemoved) ShowWindowBorders(false);
 
         Application.wantsToQuit += WantsToQuit;
     }
@@ -189,9 +192,7 @@ public class WindowsManager : MonoBehaviour
 
     void Update()
     {
-        //UpdateCustomTitleBar();
         CheckForWindowResizement();
-        //UpdateWindowWhenResize();
     }
 
     private void SetUpCustomTitleBar()
@@ -201,43 +202,15 @@ public class WindowsManager : MonoBehaviour
         minimize = root.Q<Button>(minimizeTagName);
         minimize.clickable.clicked += () =>
         {
-            ShowWindow(GetActiveWindow(), 2);
+            ShowWindow(hWnd, 2);
         };
 
         maximize = uiDocument.rootVisualElement.Q<Button>(maximizeTagName);
         maximize.AddToClassList(restoreClassName);
         maximize.clickable.clicked += () =>
         {
-            /*
-            if (IsZoomed(GetActiveWindow())) //Check if the window is maximised
-            {
-                ShowWindow(GetActiveWindow(), 9);
-                ShowWindowBorders(true);
-            }
-            else
-            {
-                ShowWindow(GetActiveWindow(), 3);
-                ShowWindowBorders(false);
-            }
-            */
-
-            //Screen.fullScreen = false;
-            Screen.SetResolution(Screen.width/2, Screen.height/2, false);
-            ShowWindow(GetActiveWindow(), 9);
+            SwitchFullScreen(false);
         };
-
-        /*
-        if (isZoomed)
-        {
-            minimize.visible = true;
-            maximize.visible = true;
-        }
-        else
-        {
-            minimize.visible = false;
-            maximize.visible = false;
-        }
-        */
 
         var close = root.Q<Button>(closeTagName);
         close.clickable.clicked += () =>
@@ -245,32 +218,6 @@ public class WindowsManager : MonoBehaviour
             //This will raise the Application.WantsToQuit event and show a dialogue box.
             Application.Quit();
         };
-
-        var topBar = root.Q<VisualElement>("top");
-        topBar.RegisterCallback<MouseDownEvent>((e) =>
-        {
-            if (IsZoomed(GetActiveWindow())) //Check if the window is maximised
-            {
-                //1. Store "local" mousePosition before resizing
-                Vector2 offset = e.mousePosition;
-                //2. Resize
-                ShowWindow(GetActiveWindow(), 9);
-                //3. Get resizing rate
-                float rate = (float) Screen.width / (float) GetSystemMetrics(16);
-
-                //4. Set Position
-                POINT p;
-                if (GetCursorPos(out p))
-                {
-                    Vector2 topLeftHandCorner = new Vector2(p.X, p.Y) - offset * rate;
-                    SetWindowPos(hWnd, IntPtr.Zero, (short)topLeftHandCorner.x, (short) topLeftHandCorner.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-                }
-            }
-            
-            ReleaseCapture();
-            SendMessageCallback(hWnd, WM_SYSCOMMAND, MOUSE_MOVE, 0, DropCallBack, 0); 
-        });
-
     }
 
     private void DropCallBack(IntPtr hWnd, uint uMsg, UIntPtr dwData, IntPtr lResult)
@@ -303,54 +250,98 @@ public class WindowsManager : MonoBehaviour
     private void CheckForWindowResizement()
     {
         if ((IsZoomed(hWnd) && !isZoomed) ||
-            (!IsZoomed(hWnd) && isZoomed)) //Check if the window is being resized
+            (!IsZoomed(hWnd) && isZoomed)) //Check if the window is being resized (zoomed or unzoomed)
         {
             isZoomed = IsZoomed(hWnd);
-            UpdateWindowWhenResize();
+            if (isZoomed)
+            {
+                SwitchFullScreen(true);
+            }
+        }
+        else //The window has been resized with a shortcut
+        {
+            if (Screen.fullScreen && !isFullScreen) //Check if the window is being resized without being zoomed
+            {
+                ShowWindow(hWnd, 3);
+                SwitchFullScreen(true);
+            }
+
+            else if (!Screen.fullScreen && isFullScreen)
+            {
+                //ShowWindow(hWnd, 9);
+                SwitchFullScreen(false);
+            }
         }
 
-        if ((Screen.fullScreen && !isFullScreen) ||
-            (!Screen.fullScreen && isFullScreen)) //Check if the window is being resized
+        
+        /*
+        if (altReturnShortcut)
         {
-            isFullScreen = Screen.fullScreen;
-            UpdateWindowWhenResize();
+            ShowWindow(hWnd, 9);
+            SwitchFullScreen(false);
+            altReturnShortcut = false;
         }
+        if (isFullScreen && Input.GetKey(KeyCode.LeftAlt) && Input.GetKey(KeyCode.Return))
+        {
+            //altReturnShortcut = true;
+            SwitchFullScreen(true);
+            SwitchFullScreen(false);
+        }
+        */
+        
+        if (!isFullScreen && !isZoomed)
+        {
+            widthWindow = Screen.width;
+            heightWindow = Screen.height;
+        }
+        //debugLabel.text = "width = " + Screen.width + ", height = " + Screen.height;
+        debugLabel.text = "Zoomed = " + IsZoomed(hWnd) + ", fullscreen = " + Screen.fullScreen;
+        /*
+        if (Input.GetKey(KeyCode.Return))
+        {
+            debugLabel.text += ", enter = ok";
+        }
+        if (Input.GetKey(KeyCode.LeftAlt))
+        {
+            debugLabel.text += ", left alt = ok";
+        }
+        */
     }
 
     private void UpdateWindowWhenResize()
     {
-        if (isZoomed) //The window is in fullscreen
+        if (isZoomed) //The window is in Zoomed
         {
-            //ShowWindowBorders(false);
-            //Screen.fullScreen = true;
-            //Screen.SetResolution(Screen.width, Screen.height, true);
             Screen.SetResolution(Screen.width, Screen.height, FullScreenMode.FullScreenWindow);
-            maximize.visible = true;
-            minimize.visible = true;
-            debugLabel.text = "Zoomed = " + isZoomed + ", fullscreen = " + Screen.fullScreen;
-        }
-        else
-        {
-            debugLabel.text = "Zoomed = " + isZoomed + ", fullscreen = " + Screen.fullScreen;
-            //ShowWindowBorders(true);
-            maximize.visible = false;
-            minimize.visible = false;
         }
 
         if (isFullScreen) //The window is in fullscreen
         {
-            //ShowWindowBorders(false);
-            //Screen.fullScreen = true;
-            //Screen.SetResolution(Screen.width, Screen.height, true);
+            //ShowWindow(hWnd, 3);
             //Screen.SetResolution(Screen.width, Screen.height, FullScreenMode.FullScreenWindow);
             maximize.visible = true;
             minimize.visible = true;
-            debugLabel.text = "Zoomed = " + isZoomed + ", fullscreen = " + Screen.fullScreen;
         }
         else
         {
-            debugLabel.text = "Zoomed = " + isZoomed + ", fullscreen = " + Screen.fullScreen;
-            //ShowWindowBorders(true);
+            maximize.visible = false;
+            minimize.visible = false;
+        }
+    }
+
+    private void SwitchFullScreen(bool value)
+    {
+        if (value)
+        {
+            Screen.SetResolution(Screen.width, Screen.height, FullScreenMode.FullScreenWindow);
+            isFullScreen = true;
+            maximize.visible = true;
+            minimize.visible = true;
+        }
+        else
+        {
+            Screen.SetResolution(widthWindow, heightWindow, false);
+            isFullScreen = false;
             maximize.visible = false;
             minimize.visible = false;
         }
