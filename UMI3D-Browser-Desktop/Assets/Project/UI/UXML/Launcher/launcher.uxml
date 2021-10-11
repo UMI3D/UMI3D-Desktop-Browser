@@ -5,7 +5,6 @@
     <ui:Template name="sessionScreen" src="sessionScreen.uxml" />
     <Style src="/Assets/Project/UI/UXML/main-style.uss" />
     <ui:VisualElement name="root" style="flex-grow: 1;">
-        <ui:Label text="Label" display-tooltip-when-elided="true" name="debug-label" class="white-label" style="color: rgb(255, 255, 255); -unity-font-style: bold;" />
         <ui:VisualElement name="body" style="height: 100%; width: 100%;">
             <ui:VisualElement name="top" class="dark-grey1-bck" style="width: 100%; flex-direction: row; height: 40px; min-height: 40px;">
                 <ui:VisualElement name="top-right-menu" style="width: 50%; justify-content: center;">
