@@ -15,4 +15,6 @@ MonoBehaviour:
   pointerTransform: {fileID: 0}
   corrective_k: 0.8
   coneAngle: 15
-  currentMode: 0
+  scoreMax: 70
+  scoreMin: -10
+  currentMode: 1

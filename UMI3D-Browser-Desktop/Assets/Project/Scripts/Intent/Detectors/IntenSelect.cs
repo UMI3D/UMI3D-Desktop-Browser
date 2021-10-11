@@ -31,9 +31,9 @@ namespace BrowserDesktop.Intent
         /// <summary>
         /// Cone angle in degrees, correspond to the half of the full angle at its apex
         /// </summary>
-        private enum IntentSelectMode { CONE_FROM_HAND, CONE_FROM_HEAD };
+        private enum IntenSelectMode { CONE_FROM_HAND, CONE_FROM_HEAD };
         [SerializeField]
-        private IntentSelectMode currentMode = IntentSelectMode.CONE_FROM_HAND;
+        private IntenSelectMode currentMode = IntenSelectMode.CONE_FROM_HEAD;
 
         /// <summary>
         /// Dictionnary where objects considered by the Intenselect algorithm are stored
@@ -45,7 +45,11 @@ namespace BrowserDesktop.Intent
         override public void InitDetector()
         {
             objectsToConsiderScoresDict = new Dictionary<UMI3DNodeInstance, float>();
-            pointerTransform = Camera.main.transform;
+
+            if (currentMode == IntenSelectMode.CONE_FROM_HEAD)
+                pointerTransform = Camera.main.transform;
+            else
+                throw new System.NotImplementedException(); 
         }
 
         override public void ResetDetector()

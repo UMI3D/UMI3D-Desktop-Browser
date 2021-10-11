@@ -9,7 +9,6 @@ namespace BrowserDesktop.Intent
         /// <summary>
         /// Transform associated with the pointing device
         /// </summary>
-        [SerializeField]
         protected Transform pointerTransform;
 
         /// <summary>
