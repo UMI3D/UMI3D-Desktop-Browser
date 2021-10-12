@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace BrowserDesktop.Intent
 {
+    /// <summary>
+    /// Abstract parent class for all intention of selection detectors
+    /// </summary>
     public abstract class AbstractSelectionIntentDetector : ScriptableObject
     {
         /// <summary>
@@ -22,6 +25,10 @@ namespace BrowserDesktop.Intent
         /// </summary>
         public abstract void ResetDetector();
 
+        /// <summary>
+        /// Predict the target of the user selection intention
+        /// </summary>
+        /// <returns>An interactable object or null</returns>
         public abstract UMI3DNodeInstance PredictTarget();
     }
 }
