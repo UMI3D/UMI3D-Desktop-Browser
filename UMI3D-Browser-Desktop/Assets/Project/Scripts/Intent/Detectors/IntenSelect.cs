@@ -28,6 +28,8 @@ namespace BrowserDesktop.Intent
         [SerializeField]
         private float scoreMin = -10;
 
+        private ConeZoneSelector coneSelector;
+
         /// <summary>
         /// Cone angle in degrees, correspond to the half of the full angle at its apex
         /// </summary>
@@ -49,7 +51,9 @@ namespace BrowserDesktop.Intent
             if (currentMode == IntenSelectMode.CONE_FROM_HEAD)
                 pointerTransform = Camera.main.transform;
             else
-                throw new System.NotImplementedException(); 
+                throw new System.NotImplementedException();
+
+            coneSelector = new ConeZoneSelector(pointerTransform, coneAngle);
         }
 
         override public void ResetDetector()
@@ -73,19 +77,13 @@ namespace BrowserDesktop.Intent
         /// <returns>The intended object or null</returns>
         override public UMI3DNodeInstance PredictTarget()
         {
-            var interactableObjectsInScene = new List<UMI3DNodeInstance>();
-            interactableObjectsInScene = (from e in UMI3DEnvironmentLoader.Entities()
-                                          where e is UMI3DNodeInstance && (e as UMI3DNodeInstance).renderers.Count>0
-                                          select (UMI3DNodeInstance)e).ToList(); //find interactable objects in scene
-
+            var interactableObjectsInScene = coneSelector.GetInteractableObjectInScene();
 
             foreach (var obj in interactableObjectsInScene)
             {
-                var vectorToObject = obj.transform.position - pointerTransform.position;
-
                 if (!objectsToConsiderScoresDict.ContainsKey(obj))
                 {
-                    if (Vector3.Dot(vectorToObject.normalized, pointerTransform.forward) > Mathf.Cos(coneAngle * Mathf.PI / 180)) // check whether the object is in the cone or not
+                    if (coneSelector.IsObjectInZone(obj)) 
                     {
                         objectsToConsiderScoresDict.Add(obj, 0);
                         objectsToConsiderScoresDict[obj] = ComputeScore(obj);
@@ -106,7 +104,6 @@ namespace BrowserDesktop.Intent
                                        select o).FirstOrDefault(); //find the object with the highest score
 
            return estimatedTargetPair.Key;
-
         }
 
 

@@ -42,4 +42,10 @@ public class ConeZoneSelector : AbstractZoneSelector
         this.attachedPoint = attachedPoint;
     }
 
+    public ConeZoneSelector(Transform attachedPoint, float angle)
+    {
+        this.attachedPoint = attachedPoint;
+        this.coneAngle = angle;
+    }
+
 }
