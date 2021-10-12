@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace BrowserDesktop.Intent
 {
+    /// <summary>
+    /// Implementation of the IntenSelect detector of intention, from de Haan et al. 2005
+    /// </summary>
     [CreateAssetMenu(fileName = "IntenSelectDetector", menuName = "UMI3D/Selection Intent Detector/IntenSelect ")]
     public class IntenSelect : AbstractSelectionIntentDetector
     {
@@ -21,13 +24,22 @@ namespace BrowserDesktop.Intent
         [SerializeField]
         private float coneAngle = 15;
 
+        /// <summary>
+        /// Maximum score before provoking a reset of the detector
+        /// </summary>
         [Header("Score boundaries")]
         [SerializeField]
         private float scoreMax = 70;
 
+        /// <summary>
+        /// Minimum score for an object to remain considered
+        /// </summary>
         [SerializeField]
         private float scoreMin = -10;
 
+        /// <summary>
+        /// Conic zone selector
+        /// </summary>
         private ConeZoneSelector coneSelector;
 
         /// <summary>
