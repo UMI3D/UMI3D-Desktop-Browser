@@ -29,7 +29,7 @@ public class WindowsManager : MonoBehaviour
     public UIDocument uiDocument;
     //private Label debugLabel;
 
-    private bool wantsToQuit = false;
+    //private bool wantsToQuit = false;
 
     private bool isZoomed = false;
     private bool isFullScreen = false;
@@ -171,7 +171,7 @@ public class WindowsManager : MonoBehaviour
     [ContextMenu("WantToQuit")]
     private bool WantsToQuit()
     {
-        Debug.LogError("Want to quit = " + wantsToQuit);
+        bool wantsToQuit = umi3d.common.QuittingManager.applicationIsQuitting;
         if (!wantsToQuit)
             ShowDialogueBoxToQuit();
         return wantsToQuit;
@@ -180,14 +180,23 @@ public class WindowsManager : MonoBehaviour
     [ContextMenu("test")]
     private void ShowDialogueBoxToQuit()
     {
+        Debug.LogError("Show dialogue box");
         DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
         dialogueBox.Setup("", "Are you sure ...?", "YES", "NO", (b) =>
         {
-            wantsToQuit = b;
+            umi3d.common.QuittingManager.applicationIsQuitting = b;
             if (b)
                 Application.Quit();
         });
         root.Add(dialogueBox);
+        dialogueBox.BringToFront();
+        Debug.LogError(dialogueBox.style.position);
+        Debug.LogError(dialogueBox.style.marginLeft);
+        Debug.LogError(dialogueBox.style.right);
+        Debug.LogError(dialogueBox.style.bottom);
+        Debug.LogError(dialogueBox.style.left);
+        //dialogueBox.style.position = Position.Absolute;
+        //dialogueBox.style.left = StyleLength
     }
 
     void Update()
@@ -198,7 +207,6 @@ public class WindowsManager : MonoBehaviour
     private void SetUpCustomTitleBar()
     {
         root = uiDocument.rootVisualElement;
-        //debugLabel = root.Q<Label>("debug-label");
         minimize = root.Q<Button>(minimizeTagName);
         minimize.clickable.clicked += () =>
         {

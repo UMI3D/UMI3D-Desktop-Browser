@@ -111,8 +111,6 @@ public class LauncherManager : MonoBehaviour
         InitUI();
    
         ResetLauncher();
-
-        root.Insert(0, new DialogueBoxElement());
     }
 
     #region UI Binding
