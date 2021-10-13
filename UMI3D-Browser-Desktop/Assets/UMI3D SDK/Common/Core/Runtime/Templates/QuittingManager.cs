@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,8 +26,7 @@ namespace umi3d.common
         /// <summary>
         /// Should be set to true when the application is quitting.
         /// </summary>
-        public static bool ApplicationIsQuitting
-        {
+        public static bool ApplicationIsQuitting { 
             get => applicationIsQuitting;
             set
             {
