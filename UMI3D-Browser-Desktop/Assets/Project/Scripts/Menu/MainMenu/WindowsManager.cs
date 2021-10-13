@@ -55,7 +55,6 @@ public class WindowsManager : MonoBehaviour
     [SerializeField]
     string maximizeTagName = "fullscreen-btn";
 
-    public string maximizeClassName = "maximize-btn";
     public string restoreClassName = "restore-btn";
 
     VisualElement root;
@@ -117,7 +116,6 @@ public class WindowsManager : MonoBehaviour
 
     #region Application Quit
 
-    [ContextMenu("WantToQuit")]
     private bool WantsToQuit()
     {
         bool wantsToQuit = umi3d.common.QuittingManager.ApplicationIsQuitting;
@@ -126,15 +124,11 @@ public class WindowsManager : MonoBehaviour
         return wantsToQuit;
     }
 
-    [ContextMenu("test")]
     private void ShowDialogueBoxToQuit()
     {
         DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        dialogueBox.Setup("", "Are you sure ...?", "YES", "NO", (b) =>
+        dialogueBox.Setup("Close application", "Are you sure ...?", "YES", "NO", (b) =>
         {
-            //TODO add a title to the dialogue box
-            //You are going to leave the environment
-            //You are going to close the environment
             umi3d.common.QuittingManager.ApplicationIsQuitting = b;
             if (b)
                 Application.Quit();
