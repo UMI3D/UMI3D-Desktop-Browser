@@ -184,7 +184,7 @@ public class LauncherManager : MonoBehaviour
         urlScreen.style.display = DisplayStyle.None;
         sessionScreen.style.display = DisplayStyle.None;
         advancedConnectionScreen.style.display = DisplayStyle.Flex;
-        var s = currentConnectionData.ip.Split(':');
+        var s = currentConnectionData?.ip?.Split(':') ?? new string[] { "localhost" };
         IpInput.value = s[0];
         if(s.Length > 1)
         {

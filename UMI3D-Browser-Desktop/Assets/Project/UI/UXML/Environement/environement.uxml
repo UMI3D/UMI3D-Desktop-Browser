@@ -18,7 +18,7 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="top-center-menu" style="flex-grow: 1; flex-direction: row; justify-content: center; height: 35px; display: flex; align-items: center;">
                     <ui:Label name="environment-name" text="Test" class="white-txt medium-size-txt" style="-unity-text-align: middle-left;" />
-                    <ui:Button name="is-favorite-btn" class="not-favorite" style="width: 60px; height: 60px; background-color: rgba(228, 228, 228, 0);" />
+                    <ui:Button name="is-favorite-btn" class="not-favorite" style="width: 60px; height: 60px; background-color: rgba(228, 228, 228, 0); display: none;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="top-right-menu" style="flex-direction: row-reverse; width: 50%; flex-wrap: nowrap; height: 100%;">
                     <ui:Button name="fullscreen-btn" class="top-left-menu-btn restore-btn" style="width: 35px;" />
@@ -76,8 +76,8 @@
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="pause-menu" style="position: absolute; top: 0; width: 100%; align-items: center;">
-                        <ui:VisualElement name="pause-menu-container" class="dark-grey2-bck orange-border" style="width: 545px; height: 52px; border-bottom-width: 1px; flex-direction: row; align-items: center; justify-content: center;">
-                            <ui:Button name="open-option-menu-btn" class="btn-options" style="width: 110px; height: 34px; margin-right: 4px;" />
+                        <ui:VisualElement name="pause-menu-container" class="dark-grey2-bck orange-border" style="width: 300px; height: 52px; border-bottom-width: 1px; flex-direction: row; align-items: center; justify-content: center;">
+                            <ui:Button name="open-option-menu-btn" class="btn-options" style="width: 110px; height: 34px; margin-right: 4px; display: none;" />
                             <ui:Button name="leave-environment-btn" class="btn-leave" style="width: 110px; height: 34px; margin-left: 4px;" />
                         </ui:VisualElement>
                         <ui:Button name="pause-menu-open-btn" class="btn-open-pause-menu" style="width: 50px; height: 23px;" />
