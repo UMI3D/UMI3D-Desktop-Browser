@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk;
+using umi3d.cdk.interaction;
 using UnityEngine;
 
 namespace BrowserDesktop.Intent
@@ -13,7 +14,7 @@ namespace BrowserDesktop.Intent
             throw new System.NotImplementedException();
         }
 
-        public override UMI3DNodeInstance PredictTarget()
+        public override InteractableContainer PredictTarget()
         {
             throw new System.NotImplementedException();
         }

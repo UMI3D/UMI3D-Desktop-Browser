@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using umi3d.cdk;
+using umi3d.cdk.interaction;
 using UnityEngine;
 
 namespace BrowserDesktop.Intent
@@ -29,7 +30,7 @@ namespace BrowserDesktop.Intent
         /// Predict the target of the user selection intention
         /// </summary>
         /// <returns>An interactable object or null</returns>
-        public abstract UMI3DNodeInstance PredictTarget();
+        public abstract InteractableContainer PredictTarget();
     }
 }
 

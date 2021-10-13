@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using umi3d.cdk;
 using UnityEngine;
 using System.Linq;
+using umi3d.cdk.interaction;
 
 namespace BrowserDesktop.Intent
 {
@@ -15,7 +16,7 @@ namespace BrowserDesktop.Intent
         /// Cone angle in degrees, correspond to the half of the full angle at its apex
         /// </summary>
         [SerializeField]
-        private float coneAngle = 15;
+        float coneAngle = 15;
 
         /// <summary>
         /// Origin and orientation of the cone's apex
@@ -23,22 +24,22 @@ namespace BrowserDesktop.Intent
         [SerializeField]
         public Transform attachedPoint;
 
-        public override bool IsObjectInZone(UMI3DNodeInstance obj)
+        public override bool IsObjectInZone(InteractableContainer obj)
         {
             var vectorToObject = obj.transform.position - attachedPoint.position;
 
             return Vector3.Dot(vectorToObject.normalized, attachedPoint.forward) > Mathf.Cos(coneAngle * Mathf.PI / 180);
         }
 
-        public override List<UMI3DNodeInstance> GetObjectsInZone()
+        public override List<InteractableContainer> GetObjectsInZone()
         {
             var objectsInZone = GetInteractableObjectInScene();
             return objectsInZone.Where(IsObjectInZone).ToList();
         }
 
-        public UMI3DNodeInstance GetClosestObjectToRay(List<UMI3DNodeInstance> objList)
+        public InteractableContainer GetClosestObjectToRay(List<InteractableContainer> objList)
         {
-            System.Func<UMI3DNodeInstance, float> distToRay = obj =>
+            System.Func<InteractableContainer, float> distToRay = obj =>
             {
                 var vectorToObject = obj.transform.position - attachedPoint.position;
                 return Vector3.Cross(vectorToObject.normalized, attachedPoint.forward).magnitude;

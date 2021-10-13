@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk;
+using umi3d.cdk.interaction;
 using UnityEngine;
 
 namespace BrowserDesktop.Intent
@@ -20,7 +21,7 @@ namespace BrowserDesktop.Intent
         [SerializeField]
         private Shader outlineShader;
 
-        private UMI3DNodeInstance lastPredictedObject = null;
+        private InteractableContainer lastPredictedObject = null;
 
         public AbstractSelectionIntentDetector detector;
 
@@ -36,7 +37,7 @@ namespace BrowserDesktop.Intent
         {
             if (initialized)
             {
-                UMI3DNodeInstance predictedTarget = detector.PredictTarget();
+                InteractableContainer predictedTarget = detector.PredictTarget();
                 if (predictedTarget != null && predictedTarget != lastPredictedObject)
                 {
                     if (lastPredictedObject != null)
@@ -50,26 +51,22 @@ namespace BrowserDesktop.Intent
 
         }
 
-        private void TriggerVisualCue(UMI3DNodeInstance predictedTarget)
+        private void TriggerVisualCue(InteractableContainer predictedTarget)
         {
-            foreach (var renderer in predictedTarget.renderers)
+            var renderer = predictedTarget.gameObject.GetComponentInChildren<Renderer>();
+            if (renderer != null && renderer.material != null)
             {
-                if (renderer.material != null)
-                {
-                    cachedShaders.Add(renderer, renderer.material.shader);
-                    renderer.material.shader = outlineShader;
-                }
+                cachedShaders.Add(renderer, renderer.material.shader);
+                renderer.material.shader = outlineShader;
             }
         }
 
-        private void ResetVisualCue(UMI3DNodeInstance lastPredictedTarget)
+        private void ResetVisualCue(InteractableContainer lastPredictedTarget)
         {
-            foreach (var renderer in lastPredictedTarget.renderers)
+            var renderer = lastPredictedTarget.gameObject.GetComponentInChildren<Renderer>();
+            if (renderer != null && renderer.material != null)
             {
-                if (renderer.material != null)
-                {
-                    renderer.material.shader = cachedShaders[renderer];
-                }
+                renderer.material.shader = cachedShaders[renderer];
             }
             cachedShaders.Clear();
         }

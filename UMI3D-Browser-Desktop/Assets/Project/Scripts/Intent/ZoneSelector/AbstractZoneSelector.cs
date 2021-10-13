@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using umi3d.cdk;
+using umi3d.cdk.interaction;
 using UnityEngine;
 
 namespace BrowserDesktop.Intent
@@ -15,12 +16,9 @@ namespace BrowserDesktop.Intent
         /// Get all the interactable object in the scene
         /// </summary>
         /// <returns></returns>
-        public List<UMI3DNodeInstance> GetInteractableObjectInScene()
+        public List<InteractableContainer> GetInteractableObjectInScene()
         {
-            var interactableObjectsInScene = new List<UMI3DNodeInstance>();
-            interactableObjectsInScene = (from e in UMI3DEnvironmentLoader.Entities()
-                                          where e is UMI3DNodeInstance && (e as UMI3DNodeInstance).renderers.Count > 0
-                                          select (UMI3DNodeInstance)e).ToList(); //find interactable objects in scene
+            var interactableObjectsInScene = Object.FindObjectsOfType<InteractableContainer>().ToList(); //find interactable objects in scene
             return interactableObjectsInScene;
         }
 
@@ -29,12 +27,12 @@ namespace BrowserDesktop.Intent
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public abstract bool IsObjectInZone(UMI3DNodeInstance obj);
+        public abstract bool IsObjectInZone(InteractableContainer obj);
 
         /// <summary>
         /// Get all objects within the zone defined by the zone selector
         /// </summary>
         /// <returns></returns>
-        public abstract List<UMI3DNodeInstance> GetObjectsInZone();
+        public abstract List<InteractableContainer> GetObjectsInZone();
     }
 }

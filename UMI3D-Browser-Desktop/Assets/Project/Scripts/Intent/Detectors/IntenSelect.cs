@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using umi3d.cdk;
 using UnityEngine;
 using System.Linq;
+using umi3d.cdk.interaction;
 
 namespace BrowserDesktop.Intent
 {
@@ -53,12 +54,12 @@ namespace BrowserDesktop.Intent
         /// Dictionnary where objects considered by the Intenselect algorithm are stored
         /// The key is the id of the object, the value is its score
         /// </summary>
-        private Dictionary<UMI3DNodeInstance, float> objectsToConsiderScoresDict;
+        private Dictionary<InteractableContainer, float> objectsToConsiderScoresDict;
 
 
         override public void InitDetector()
         {
-            objectsToConsiderScoresDict = new Dictionary<UMI3DNodeInstance, float>();
+            objectsToConsiderScoresDict = new Dictionary<InteractableContainer, float>();
 
             if (currentMode == IntenSelectMode.CONE_FROM_HEAD)
                 pointerTransform = Camera.main.transform;
@@ -77,7 +78,7 @@ namespace BrowserDesktop.Intent
         /// Clear the detector except for the passed object
         /// </summary>
         /// <param name="obj"></param>
-        private void ResetExceptOne(UMI3DNodeInstance obj)
+        private void ResetExceptOne(InteractableContainer obj)
         {
             ResetDetector();
             objectsToConsiderScoresDict.Add(obj, 0);
@@ -87,7 +88,7 @@ namespace BrowserDesktop.Intent
         /// Find the target of the use intention according to the IntentSelect algorithm 
         /// </summary>
         /// <returns>The intended object or null</returns>
-        override public UMI3DNodeInstance PredictTarget()
+        override public InteractableContainer PredictTarget()
         {
             var interactableObjectsInScene = coneSelector.GetInteractableObjectInScene();
 
@@ -124,7 +125,7 @@ namespace BrowserDesktop.Intent
         /// </summary>
         /// <param name="obj">Object</param>
         /// <returns>Object's score</returns>
-        private float ComputeScore(in UMI3DNodeInstance obj)
+        private float ComputeScore(in InteractableContainer obj)
         {
             var vectorToObject = obj.transform.position - pointerTransform.position;
 
