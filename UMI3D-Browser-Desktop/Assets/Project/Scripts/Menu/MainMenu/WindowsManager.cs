@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using System;
+using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -27,9 +28,6 @@ public class WindowsManager : MonoBehaviour
     #region Fields
 
     public UIDocument uiDocument;
-    //private Label debugLabel;
-
-    //private bool wantsToQuit = false;
 
     private bool isZoomed = false;
     private bool isFullScreen = false;
@@ -37,6 +35,7 @@ public class WindowsManager : MonoBehaviour
     private int heightWindow = Screen.height / 2;
 
     #region Fiels to make the title bar working like the windows one.
+
     [DllImport("user32.dll")]
     private static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
 
@@ -46,38 +45,8 @@ public class WindowsManager : MonoBehaviour
     [DllImport("user32.dll")]
     static extern bool IsZoomed(IntPtr hWnd);
 
-    [DllImport("User32.dll")]
-    public static extern bool ReleaseCapture();
-    delegate void SendMessageDelegate(IntPtr hWnd, uint uMsg, UIntPtr dwData, IntPtr lResult);
-    [DllImport("user32.dll")]
-    static extern bool SendMessageCallback(IntPtr hWnd, int Msg, int wParam, int lParam, SendMessageDelegate lpCallBack, int dwData);
-    private const int WM_SYSCOMMAND = 0x112;
-    private const int MOUSE_MOVE = 0xF012;
+    IntPtr hWnd;
 
-
-  
-    [DllImport("user32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    static extern bool GetCursorPos(out POINT lpPoint);
-    public struct POINT
-    {
-        public int X;
-        public int Y;
-
-        public POINT(int x, int y)
-        {
-            this.X = x;
-            this.Y = y;
-        }
-
-        public override string ToString()
-        {
-            return "Point (" + X + " ," + Y + ")";
-        }
-    }
-
-    [DllImport("user32.dll")]
-    static extern int GetSystemMetrics(int nIndex);
 
     [Header("Custom title bar")]
 
@@ -85,8 +54,6 @@ public class WindowsManager : MonoBehaviour
     string minimizeTagName = "minimize-window-btn";
     [SerializeField]
     string maximizeTagName = "fullscreen-btn";
-    [SerializeField]
-    string closeTagName = "close-window-btn";
 
     public string maximizeClassName = "maximize-btn";
     public string restoreClassName = "restore-btn";
@@ -99,61 +66,11 @@ public class WindowsManager : MonoBehaviour
 
     #endregion
 
-    #region Fields to remove windows default title bar
-
-    const int SWP_HIDEWINDOW = 0x80; //hide window flag.
-    const int SWP_SHOWWINDOW = 0x40; //show window flag.
-    const int SWP_NOMOVE = 0x0002; //don't move the window flag.
-    const int SWP_NOSIZE = 0x0001; //don't resize the window flag.
-    const short SWP_NOZORDER = 0X4; //don't change z order
-    const uint WS_SIZEBOX = 0x00040000;
-    const int GWL_STYLE = -16;
-    const int WS_BORDER = 0x00800000; //window with border
-    const int WS_DLGFRAME = 0x00400000; //window with double border but no title
-    const int WS_CAPTION = WS_BORDER | WS_DLGFRAME; //window with a title bar
-
-
-    [DllImport("user32.dll")]
-    static extern int FindWindow(string lpClassName, string lpWindowName);
-
-    [DllImport("user32.dll")]
-    static extern bool SetWindowPos(
-        System.IntPtr hWnd, // window handle
-        System.IntPtr hWndInsertAfter, // placement order of the window
-        short X, // x position
-        short Y, // y position
-        short cx, // width
-        short cy, // height
-        uint uFlags // window flags.
-    );
-
-    [DllImport("user32.dll")]
-    static extern System.IntPtr SetWindowLong(
-         System.IntPtr hWnd, // window handle
-         int nIndex,
-         uint dwNewLong
-    );
-
-    [DllImport("user32.dll")]
-    static extern System.IntPtr GetWindowLong(
-        IntPtr hWnd,
-        int nIndex
-    );
-
-    IntPtr hWnd;
-    IntPtr HWND_TOP = new System.IntPtr(0);
-    IntPtr HWND_TOPMOST = new System.IntPtr(-1);
-    IntPtr HWND_NOTOPMOST = new System.IntPtr(-2);
-
-    [Header("Remove default title bar")]
-
-    [Tooltip("Hide default windows title bar ?")] [SerializeField] bool hideOnStart = false;
-
-    #endregion
-
     #endregion
 
     #region Methods
+
+    #region LifeCycle monoBehaviour
 
     void Start()
     {
@@ -166,42 +83,7 @@ public class WindowsManager : MonoBehaviour
         UpdateWindowWhenResize();
 
         Application.wantsToQuit += WantsToQuit;
-    }
-
-    [ContextMenu("WantToQuit")]
-    private bool WantsToQuit()
-    {
-        bool wantsToQuit = umi3d.common.QuittingManager.applicationIsQuitting;
-        if (!wantsToQuit)
-            ShowDialogueBoxToQuit();
-        return wantsToQuit;
-    }
-
-    [ContextMenu("test")]
-    private void ShowDialogueBoxToQuit()
-    {
-        Debug.LogError("Show dialogue box");
-        DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        dialogueBox.Setup("", "Are you sure ...?", "YES", "NO", (b) =>
-        {
-            umi3d.common.QuittingManager.applicationIsQuitting = b;
-            if (b)
-                Application.Quit();
-        });
-        root.Add(dialogueBox);
-        dialogueBox.BringToFront();
-        Debug.LogError(dialogueBox.style.position);
-        Debug.LogError(dialogueBox.style.marginLeft);
-        Debug.LogError(dialogueBox.style.right);
-        Debug.LogError(dialogueBox.style.bottom);
-        Debug.LogError(dialogueBox.style.left);
-        //dialogueBox.style.position = Position.Absolute;
-        //dialogueBox.style.left = StyleLength
-    }
-
-    void Update()
-    {
-        CheckForWindowResizement();
+        umi3d.common.QuittingManager.ShouldWaitForApplicationToQuit = true;
     }
 
     private void SetUpCustomTitleBar()
@@ -219,25 +101,51 @@ public class WindowsManager : MonoBehaviour
         {
             SwitchFullScreen(false);
         };
-
-        /*
-        var close = root.Q<Button>(closeTagName);
-        close.clickable.clicked += () =>
-        {
-            //This will raise the Application.WantsToQuit event and show a dialogue box.
-            Application.Quit();
-        };
-        */
     }
 
-    private void DropCallBack(IntPtr hWnd, uint uMsg, UIntPtr dwData, IntPtr lResult)
+    private void OnDestroy()
     {
-        /*var window = GetActiveWindow();
-        SetForegroundWindow(window);
-        SetFocus(window);
-        /*SendMessage(window, WM_NCLBUTTONDOWN, 0, 0);
-        SendMessage(window, WM_LBUTTONUP, 0, 0);*/
+        Application.wantsToQuit -= WantsToQuit;
     }
+
+    void Update()
+    {
+        CheckForWindowResizement();
+    }
+
+    #endregion
+
+    #region Application Quit
+
+    [ContextMenu("WantToQuit")]
+    private bool WantsToQuit()
+    {
+        bool wantsToQuit = umi3d.common.QuittingManager.ApplicationIsQuitting;
+        if (!wantsToQuit)
+            ShowDialogueBoxToQuit();
+        return wantsToQuit;
+    }
+
+    [ContextMenu("test")]
+    private void ShowDialogueBoxToQuit()
+    {
+        DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
+        dialogueBox.Setup("", "Are you sure ...?", "YES", "NO", (b) =>
+        {
+            //TODO add a title to the dialogue box
+            //You are going to leave the environment
+            //You are going to close the environment
+            umi3d.common.QuittingManager.ApplicationIsQuitting = b;
+            if (b)
+                Application.Quit();
+        });
+        root.Add(dialogueBox);
+        dialogueBox.BringToFront();
+    }
+
+    #endregion
+
+    #region Window resizement
 
     private void CheckForWindowResizement()
     {
@@ -260,7 +168,6 @@ public class WindowsManager : MonoBehaviour
 
             else if (!Screen.fullScreen && isFullScreen)
             {
-                //ShowWindow(hWnd, 9);
                 SwitchFullScreen(false);
             }
         }
@@ -270,9 +177,6 @@ public class WindowsManager : MonoBehaviour
             widthWindow = Screen.width;
             heightWindow = Screen.height;
         }
-
-        //debugLabel.text = "width = " + Screen.width + ", height = " + Screen.height;
-        //debugLabel.text = "Zoomed = " + IsZoomed(hWnd) + ", fullscreen = " + Screen.fullScreen;
     }
 
     private void UpdateWindowWhenResize()
@@ -284,8 +188,6 @@ public class WindowsManager : MonoBehaviour
 
         if (isFullScreen) //The window is in fullscreen
         {
-            //ShowWindow(hWnd, 3);
-            //Screen.SetResolution(Screen.width, Screen.height, FullScreenMode.FullScreenWindow);
             maximize.visible = true;
             minimize.visible = true;
         }
@@ -313,6 +215,8 @@ public class WindowsManager : MonoBehaviour
             minimize.visible = false;
         }
     }
+
+    #endregion
 
     #endregion
 }
