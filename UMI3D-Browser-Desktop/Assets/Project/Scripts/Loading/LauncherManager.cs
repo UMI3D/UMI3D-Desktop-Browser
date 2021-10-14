@@ -45,12 +45,19 @@ public class LauncherManager : MonoBehaviour
 
     private VisualElement root;
 
+    //Element to be resized
+    VisualElement umiLogo; //UMI3D logo to be resized
+    private float height;
+
     //SetDomain screen
-    VisualElement umiLogo;
     VisualElement urlScreen;
     TextField urlInput;
     Button urlEnterBtn;
     Button connectNewServBtn;
+
+    //Session screen
+    VisualElement sessionScreen;
+    ScrollView sessionList;
 
     //Advanced Connection screen
     VisualElement advancedConnectionScreen;
@@ -63,37 +70,37 @@ public class LauncherManager : MonoBehaviour
     Button backMenuBnt;
     Button nextMenuBnt;
 
-    //Favorite env
-    public VisualTreeAsset favoriteEnvItemTreeAsset;
-    SliderElement favoriteEnvironmentSlider;
-
-    //Session screen
-    VisualElement sessionScreen;
-
+    //Servers slider
+    public VisualTreeAsset PreviousServerItemTreeAsset;
+    SliderElement serversSlider;
 
     #endregion
 
     #region Data
 
-
-
     private UserPreferencesManager.ServerData currentServerConnectionData;
-    private List<UserPreferencesManager.ServerData> favoriteServerConnectionData = new List<UserPreferencesManager.ServerData>();
+    private List<UserPreferencesManager.ServerData> serverConnectionData = new List<UserPreferencesManager.ServerData>();
 
     private UserPreferencesManager.Data currentConnectionData;
-
-    private List<UserPreferencesManager.Data> favoriteConnectionData = new List<UserPreferencesManager.Data>();
+    private List<UserPreferencesManager.Data> connectionData = new List<UserPreferencesManager.Data>();
 
     [SerializeField]
     public string currentScene;
     [SerializeField]
     public string sceneToLoad;
 
-    Action nextStep = null;
-    Action previousStep = null;
+    private Action nextStep = null;
+    private Action previousStep = null;
+    private Action currentNextButtonAction = null; //The action to be assigne to the nextMenuBtn
 
     public LaucherOnMasterServer masterServer;
 
+    //Session Screen
+    private VisualElement selectedItem = null; //The item selected by a click with the mouse
+    public bool ShouldDisplaySessionScreen = false;
+    public bool updateResponse = false;
+    public bool updateInfo = false;
+    public List<MasterServerResponse.Server> serverResponses = new List<MasterServerResponse.Server>();
 
     #endregion
 
@@ -113,116 +120,236 @@ public class LauncherManager : MonoBehaviour
         ResetLauncher();
     }
 
-    #region UI Binding
+    #region UI Binding and Displaying
 
     private void InitUI()
     {
         root.Q<Label>("version").text = umi3d.UMI3DVersion.version;
+
+        BindSharedUI();
+
         BindURLScreen();
+        BindSessionSreen();
+        BindAdvancedConnection();
         BindLibrariesScreen();
 
         root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
-        advancedConnectionScreen = root.Q<VisualElement>("advancedConnectionScreen");
+    }
+
+    #region Binding
+
+    /// <summary>
+    /// To bind UI shared among window
+    /// </summary>
+    private void BindSharedUI()
+    {
+        urlScreen = root.Q<VisualElement>("url-screen");
         sessionScreen = root.Q<VisualElement>("sessionScreen");
+        advancedConnectionScreen = root.Q<VisualElement>("advancedConnectionScreen");
+        librariesScreen = root.Q<VisualElement>("libraries-manager-screen");
+
         backMenuBnt = root.Q<Button>("back-menu-btn");
+        nextMenuBnt = root.Q<Button>("nextMenuBtn");
+
         backMenuBnt.clickable.clicked += ResetLauncher;
     }
 
     private void BindURLScreen()
     {
-        urlScreen = root.Q<VisualElement>("url-screen");
-        backMenuBnt = root.Q<Button>("back-menu-btn");
-        nextMenuBnt = root.Q<Button>("nextMenuBtn");
-
         urlInput = urlScreen.Q<TextField>("url-input");
         urlEnterBtn = urlScreen.Q<Button>("url-enter-btn");
 
-        IpInput = root.Q<TextField>("IpInput");
-        PortInput = root.Q<TextField>("PortInput");
-
         urlEnterBtn.clickable.clicked += ()=> SetServer(urlInput.value);// SetDomain;
         nextStep = ()=> SetServer(urlInput.value);
-        urlScreen.Q<VisualElement>("icon-open").style.display = DisplayStyle.None;
 
+        urlScreen.Q<VisualElement>("icon-open").style.display = DisplayStyle.None;
         connectNewServBtn = urlScreen.Q<Button>("newConnection");
         connectNewServBtn.clickable.clicked += () => ToggleDisplayElement(urlScreen.Q<VisualElement>("inputs-url-container"));
         connectNewServBtn.clickable.clicked += () => ToggleDisplayElement(urlScreen.Q<VisualElement>("icon-close"));
         connectNewServBtn.clickable.clicked += () => ToggleDisplayElement(urlScreen.Q<VisualElement>("icon-open"));
 
-        var manageLibraryBtn = urlScreen.Q<Button>("manage-library-btn");
-        manageLibraryBtn.clickable.clicked += DisplayLibraries;
+        urlScreen.Q<Button>("advanced-connection-btn").clickable.clicked += DisplayAdvancedConnection;
+        urlScreen.Q<Button>("manage-library-btn").clickable.clicked += DisplayLibraries;
 
-        favoriteEnvironmentSlider = new SliderElement();
-        favoriteEnvironmentSlider.SetUp(urlScreen.Q<VisualElement>("slider"));
+        serversSlider = new SliderElement();
+        serversSlider.SetUp(urlScreen.Q<VisualElement>("slider"));
+    }
 
-        umiLogo = urlScreen.Q<VisualElement>("logo");
-
-        root.Q<Button>("advanced-connection-btn").clickable.clicked += BindAdvancedConnection;
+    private void BindSessionSreen()
+    {
+        sessionList = sessionScreen.Q<ScrollView>("sessionsList");
+        sessionScreen.Q<Button>("pin-enter-btn").clickable.clicked += ()=> masterServer.SendDataSession(sessionScreen.Q<TextField>("pinInput").value,
+                                                                                                         (ser) => { serverResponses.Add(ser); 
+                                                                                                                    updateResponse = true; });
     }
 
     private void BindLibrariesScreen()
     {
-        librariesScreen = root.Q<VisualElement>("libraries-manager-screen");
         librariesList = librariesScreen.Q<ScrollView>("libraries-list");
     }
 
     private void BindAdvancedConnection()
     {
-        urlScreen = root.Q<VisualElement>("url-screen");
+        IpInput = advancedConnectionScreen.Q<TextField>("IpInput");
+        PortInput = advancedConnectionScreen.Q<TextField>("PortInput");
+    }
 
-        backMenuBnt = root.Q<Button>("back-menu-btn");
-        nextMenuBnt = root.Q<Button>("nextMenuBtn"); 
-        Action nextAction = () => SetDomain();
-        if (currentNextButtonAction != null)
-        {
-            nextMenuBnt.clickable.clicked -= currentNextButtonAction;
-        }
-        nextMenuBnt.clickable.clicked += nextAction;
-        currentNextButtonAction = nextAction;
+    #endregion
+
+    #region Display Screens
+
+    /// <summary>
+    /// Reset the display of the launcher. Display the url screen
+    /// </summary>
+    private void ResetLauncher()
+    {
+        umiLogo = urlScreen.Q<VisualElement>("logo");
+        ResizeLogo();
+
+        //Display and hide UI
+        backMenuBnt.style.display = DisplayStyle.None;
+        nextMenuBnt.style.display = DisplayStyle.None;
+        urlScreen.style.display = DisplayStyle.Flex;
+        sessionScreen.style.display = DisplayStyle.None;
+        advancedConnectionScreen.style.display = DisplayStyle.None;
+        librariesScreen.style.display = DisplayStyle.None;
+
+        currentConnectionData = UserPreferencesManager.GetPreviousConnectionData();
+        //favoriteConnectionData = UserPreferencesManager.GetFavoriteConnectionData();
+        serverConnectionData = UserPreferencesManager.GetRegisteredServerData();
+        //DisplayFavoriteEnvironments();
+        DisplayRegisteredServers();
+        currentServerConnectionData = UserPreferencesManager.GetPreviousServerData();
+
+        previousStep = null;
+        nextStep = ()=> SetDomain();
+        urlInput.value = currentServerConnectionData.serverName; // currentConnectionData.ip;
+    }
+
+    /// <summary>
+    /// Display the advanced connection screen and hide the other screens.
+    /// </summary>
+    private void DisplayAdvancedConnection()
+    {
+        umiLogo = advancedConnectionScreen.Q<VisualElement>("logo");
+        ResizeLogo();
+
+        //Display or hide UI
         backMenuBnt.style.display = DisplayStyle.Flex;
         nextMenuBnt.style.display = DisplayStyle.Flex;
         urlScreen.style.display = DisplayStyle.None;
         sessionScreen.style.display = DisplayStyle.None;
         advancedConnectionScreen.style.display = DisplayStyle.Flex;
+
+        //Update nextMenuBnt action and nextStep and previousStep
+        if (currentNextButtonAction != null)
+        {
+            nextMenuBnt.clickable.clicked -= currentNextButtonAction;
+        }
+        currentNextButtonAction = ()=> SetDomain();
+        nextMenuBnt.clickable.clicked += currentNextButtonAction;
+        nextStep = currentNextButtonAction;
+        previousStep = ResetLauncher;
+
+        //Update Ip and Port input
         var s = currentConnectionData?.ip?.Split(':') ?? new string[] { "localhost" };
         IpInput.value = s[0];
-        if(s.Length > 1)
+        if (s.Length > 1)
         {
             PortInput.value = s[1];
         }
-        nextStep = () => SetDomain();
     }
 
-    public bool updateBindSession = false;
-    public bool updateResponse = false;
-    public bool updateInfo = false;
-    public List<MasterServerResponse.Server> serverResponses = new List<MasterServerResponse.Server>();
-    private Action enterBtnAction = null;
-
-    private void BindSessionScreen()
+    /// <summary>
+    /// Displays the libraries install on users' computers and allows tehm to unistall these libs.
+    /// </summary>
+    private void DisplayLibraries()
     {
-        nextMenuBnt = root.Q<Button>("nextMenuBtn");
+        //Display and hide UI
         backMenuBnt.style.display = DisplayStyle.Flex;
         nextMenuBnt.style.display = DisplayStyle.None;
-        urlScreen = root.Q<VisualElement>("url-screen");
+        urlScreen.style.display = DisplayStyle.None;
+        librariesScreen.style.display = DisplayStyle.Flex;
+
+        nextStep = null;
+        previousStep = ResetLauncher;
+
+        librariesList.Clear();
+
+        Dictionary<string, List<UMI3DResourcesManager.DataFile>> libs = new Dictionary<string, List<UMI3DResourcesManager.DataFile>>();
+        foreach (var lib in UMI3DResourcesManager.Libraries)
+        {
+            if (lib.applications != null)
+                foreach (var app in lib.applications)
+                {
+                    if (!libs.ContainsKey(app)) libs[app] = new List<UMI3DResourcesManager.DataFile>();
+                    libs[app].Add(lib);
+                }
+        }
+
+        foreach (var app in libs)
+        {
+            foreach (var lib in app.Value)
+            {
+                // 1. Diplay lib name
+                var entry = libraryEntryTreeAsset.CloneTree();
+                entry.Q<Label>("library-name").text = lib.key;
+
+                //2. Display environments which use this lib
+                var dropdown = entry.Q<DropdownElement>();
+                dropdown.SetUp(uiDocument, "dropdown-label-medium");
+                dropdown.SetOptions(lib.applications);
+
+                //3. Display lib size
+                DirectoryInfo dirInfo = new DirectoryInfo(lib.path);
+                double dirSize = DirSize(dirInfo) / Mathf.Pow(10, 6);
+                dirSize = Math.Round(dirSize, 2);
+                entry.Q<Label>("library-size").text = dirSize.ToString() + " mo"; ;
+
+
+                //4.Bind the button to unistall this lib
+                entry.Q<Button>("library-unistall").clickable.clicked += () =>
+                {
+                    DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
+                    dialogue.Setup("Are you sure ... ?", "This library is required for " + app.Key + " environment", "YES", "NO", (b) =>
+                    {
+                        if (b)
+                        {
+                            lib.applications.Remove(app.Key);
+                            UMI3DResourcesManager.RemoveLibrary(lib.key);
+                            DisplayLibraries();
+                        }
+                    });
+                    root.Add(dialogue);
+                };
+                librariesList.Add(entry);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Display the sessions screen and hide the other screes.
+    /// </summary>
+    private void DisplaySessionScreen()
+    {
+        //Display or hide UI
+        backMenuBnt.style.display = DisplayStyle.Flex;
+        nextMenuBnt.style.display = DisplayStyle.None;
         urlScreen.style.display = DisplayStyle.None;
         advancedConnectionScreen.style.display = DisplayStyle.None;
         sessionScreen.style.display = DisplayStyle.Flex;
 
-        if (enterBtnAction == null)
-        {
-            enterBtnAction = () => masterServer.SendDataSession(sessionScreen.Q<TextField>("pinInput").value, (ser) => { serverResponses.Add(ser); updateResponse = true; }
-            ); 
-            root.Q<Button>("pin-enter-btn").clickable.clicked += enterBtnAction;
-        }
-        nextStep = enterBtnAction;
-
+        nextStep = ()=> masterServer.SendDataSession(sessionScreen.Q<TextField>("pinInput").value,
+                                                     (ser) => { serverResponses.Add(ser); 
+                                                                updateResponse = true; });
     }
+
+    #endregion
 
     private void UpdateSessionList()
     {
-        var sessionList = sessionScreen.Q<ScrollView>("sessionsList");
         sessionList.Clear();
+
         foreach (MasterServerResponse.Server session in serverResponses)
         {
             VisualElement item = sessionEntry.CloneTree().Q<VisualElement>("session-entry");
@@ -257,12 +384,10 @@ public class LauncherManager : MonoBehaviour
             }
            );
         }
+
         serverResponses.Clear();
-
     }
-
-    private Action currentNextButtonAction = null;
-    private VisualElement selectedItem = null;
+    
     private void SelectSession(VisualElement itemSelected, string ip, ushort port)
     {
         //TODO color the element
@@ -276,15 +401,17 @@ public class LauncherManager : MonoBehaviour
                 label.RemoveFromClassList("black-txt");
             }
         }
+
+        //Display and set nextMenuBnt action
         string ip_port = ip + ":" + port.ToString();
-        Action nextAction = () => SetDomain(ip_port);
         if (currentNextButtonAction != null)
         {
             nextMenuBnt.clickable.clicked -= currentNextButtonAction;
         }
-        nextMenuBnt.clickable.clicked += nextAction;
+        currentNextButtonAction = ()=> SetDomain(ip_port);
+        nextMenuBnt.clickable.clicked += currentNextButtonAction;
         nextMenuBnt.style.display = DisplayStyle.Flex;
-        currentNextButtonAction = nextAction;
+        
 
         //Color
         itemSelected.AddToClassList("orange-background");
@@ -305,10 +432,10 @@ public class LauncherManager : MonoBehaviour
 
     private void Update()
     {
-        if (updateBindSession)
+        if (ShouldDisplaySessionScreen)
         {
-            BindSessionScreen();
-            updateBindSession = false;
+            DisplaySessionScreen();
+            ShouldDisplaySessionScreen = false;
         }
         if (updateResponse)
         {
@@ -317,12 +444,17 @@ public class LauncherManager : MonoBehaviour
         }
         if (updateInfo)
         {
-            UserPreferencesManager.StoreRegisteredServerData(favoriteServerConnectionData);
+            UserPreferencesManager.StoreRegisteredServerData(serverConnectionData);
             updateInfo = false;
         }
+
         CheckShortcuts();
     }
 
+    /// <summary>
+    /// Toggle display element between DisplayStyle.Flex and DisplayStyle.None
+    /// </summary>
+    /// <param name="visualElement"></param>
     private void ToggleDisplayElement(VisualElement visualElement)
     {
         visualElement.style.display = DisplayStyle.Flex == visualElement.style.display.value ? DisplayStyle.None : DisplayStyle.Flex;
@@ -398,7 +530,7 @@ public class LauncherManager : MonoBehaviour
             }
             else
                 currentServerConnectionData = new UserPreferencesManager.ServerData() { serverUrl = serverUrl };
-            favoriteServerConnectionData.Add(currentServerConnectionData);
+            serverConnectionData.Add(currentServerConnectionData);
             UserPreferencesManager.AddRegisterdeServerData(currentServerConnectionData);
             Connect(currentServerConnectionData,true);
         }
@@ -422,7 +554,7 @@ public class LauncherManager : MonoBehaviour
                     updateInfo = true;
                 }
             });
-            updateBindSession = true;
+            ShouldDisplaySessionScreen = true;
         }
             
            // () => masterServer.SendDataSession("test", (ser) => { Debug.Log(" update UI "); })
@@ -449,41 +581,15 @@ public class LauncherManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Reset the display of the launcher.
-    /// </summary>
-    private void ResetLauncher()
-    {
-        currentConnectionData = UserPreferencesManager.GetPreviousConnectionData();
-        //favoriteConnectionData = UserPreferencesManager.GetFavoriteConnectionData();
-        favoriteServerConnectionData = UserPreferencesManager.GetRegisteredServerData();
-        //DisplayFavoriteEnvironments();
-        DisplayRegisteredServers();
-        currentServerConnectionData = UserPreferencesManager.GetPreviousServerData();
-
-        librariesScreen.style.display = DisplayStyle.None;
-        urlScreen.style.display = DisplayStyle.Flex;
-
-        backMenuBnt.style.display = DisplayStyle.None;
-        nextMenuBnt.style.display = DisplayStyle.None;
-        advancedConnectionScreen.style.display = DisplayStyle.None;
-        sessionScreen.style.display = DisplayStyle.None;
-
-
-        previousStep = null;
-        nextStep = () => SetDomain();
-        urlInput.value = currentServerConnectionData.serverName;// currentConnectionData.ip;
-    }
-
-    /// <summary>
     /// Displays the favorites environments stored on  users' computers.
     /// </summary>
     [System.Obsolete("use favorite server not favorite environment")]
     private void DisplayFavoriteEnvironments()
     {
-        favoriteEnvironmentSlider.ClearItems();
-        foreach (var env in favoriteConnectionData)
+        serversSlider.ClearItems();
+        foreach (var env in connectionData)
         {
-            var item = favoriteEnvItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
+            var item = PreviousServerItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
             item.Q<Label>().text = string.IsNullOrEmpty(env.environmentName) ? env.ip : env.environmentName;
             item.RegisterCallback<MouseDownEvent>(e =>
             {
@@ -500,26 +606,26 @@ public class LauncherManager : MonoBehaviour
                 {
                     if (b)
                     {
-                        favoriteConnectionData.Remove(favoriteConnectionData.Find(d => d.ip == env.ip));
-                        UserPreferencesManager.StoreFavoriteConnectionData(favoriteConnectionData);
-                        favoriteEnvironmentSlider.RemoveElement(item);
+                        connectionData.Remove(connectionData.Find(d => d.ip == env.ip));
+                        UserPreferencesManager.StoreFavoriteConnectionData(connectionData);
+                        serversSlider.RemoveElement(item);
                     }
                 },
                 true);
                 root.Add(dialogue);
             };
-            favoriteEnvironmentSlider.AddElement(item);
+            serversSlider.AddElement(item);
         }
     }
 
     private void DisplayRegisteredServers()
     {
-        favoriteEnvironmentSlider.ClearItems();
+        serversSlider.ClearItems();
         bool isEmpty = true;
-        foreach (UserPreferencesManager.ServerData env in favoriteServerConnectionData)
+        foreach (UserPreferencesManager.ServerData env in serverConnectionData)
         {
             isEmpty = false;
-            var item = favoriteEnvItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
+            var item = PreviousServerItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
             if (env.serverIcon != null) {
                 byte[] imageBytes = Convert.FromBase64String(env.serverIcon);
                 Texture2D tex = new Texture2D(2, 2);
@@ -546,84 +652,19 @@ public class LauncherManager : MonoBehaviour
                 {
                     if (b)
                     {
-                        favoriteServerConnectionData.Remove(favoriteServerConnectionData.Find(d => d.serverName == env.serverName));
-                        UserPreferencesManager.StoreRegisteredServerData(favoriteServerConnectionData);
-                        favoriteEnvironmentSlider.RemoveElement(item);
+                        serverConnectionData.Remove(serverConnectionData.Find(d => d.serverName == env.serverName));
+                        UserPreferencesManager.StoreRegisteredServerData(serverConnectionData);
+                        serversSlider.RemoveElement(item);
                     }
                 },
                 true);
                 root.Add(dialogue);
             };
-            favoriteEnvironmentSlider.AddElement(item);
+            serversSlider.AddElement(item);
         }
         if (isEmpty)
         {
-            root.Q<VisualElement>("favorites-environement").style.display = DisplayStyle.None;
-        }
-    }
-
-    /// <summary>
-    /// Displays the libraries install on users' computers and allows tehm to unistall these libs.
-    /// </summary>
-    private void DisplayLibraries()
-    {
-        urlScreen.style.display = DisplayStyle.None;
-        backMenuBnt.style.display = DisplayStyle.Flex;
-        nextMenuBnt.style.display = DisplayStyle.None;
-        librariesScreen.style.display = DisplayStyle.Flex;
-        nextStep = null;
-        previousStep = ResetLauncher;
-
-        librariesList.Clear();
-
-        Dictionary<string, List<UMI3DResourcesManager.DataFile>> libs = new Dictionary<string, List<UMI3DResourcesManager.DataFile>>();
-        foreach (var lib in UMI3DResourcesManager.Libraries)
-        {
-            if (lib.applications != null)
-                foreach (var app in lib.applications)
-                {
-                    if (!libs.ContainsKey(app)) libs[app] = new List<UMI3DResourcesManager.DataFile>();
-                    libs[app].Add(lib);
-                }
-        }
-
-        foreach (var app in libs)
-        {
-            foreach (var lib in app.Value)
-            {
-                // 1. Diplay lib name
-                var entry = libraryEntryTreeAsset.CloneTree();
-                entry.Q<Label>("library-name").text = lib.key;
-
-                //2. Display environments which use this lib
-                var dropdown = entry.Q<DropdownElement>();
-                dropdown.SetUp(uiDocument, "dropdown-label-medium");
-                dropdown.SetOptions(lib.applications);
-
-                //3. Display lib size
-                DirectoryInfo dirInfo = new DirectoryInfo(lib.path);
-                double dirSize = DirSize(dirInfo) / Mathf.Pow(10, 6);
-                dirSize = Math.Round(dirSize, 2);
-                entry.Q<Label>("library-size").text = dirSize.ToString() + " mo"; ;
-
-
-                //4.Bind the button to unistall this lib
-                entry.Q<Button>("library-unistall").clickable.clicked += () =>
-                {
-                    DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-                    dialogue.Setup("Are you sure ... ?", "This library is required for " + app.Key + " environment", "YES", "NO", (b) =>
-                    {
-                        if (b)
-                        {
-                            lib.applications.Remove(app.Key);
-                            UMI3DResourcesManager.RemoveLibrary(lib.key);
-                            DisplayLibraries();
-                        }
-                    });
-                    root.Add(dialogue);
-                };
-                librariesList.Add(entry);
-            }
+            root.Q<VisualElement>("previous-servers").style.display = DisplayStyle.None;
         }
     }
 
@@ -656,11 +697,16 @@ public class LauncherManager : MonoBehaviour
     /// <param name="e"></param>
     private void ResizeElements(GeometryChangedEvent e)
     {
-        float height = e.newRect.height * 0.16f;
+        height = e.newRect.height * 0.16f;
+        ResizeLogo();
+    }
+
+    private void ResizeLogo()
+    {
         umiLogo.style.height = height;
         umiLogo.style.minHeight = height;
 
-        umiLogo.style.marginBottom = e.newRect.height * 0.08f;
+        umiLogo.style.marginBottom = height * 0.08f;
     }
 
     #endregion

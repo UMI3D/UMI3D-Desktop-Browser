@@ -453,11 +453,11 @@ MonoBehaviour:
     type: 3}
   sessionEntry: {fileID: 9197481963319205126, guid: 6e99b674edcd47641a698e586fe64e60,
     type: 3}
-  favoriteEnvItemTreeAsset: {fileID: 9197481963319205126, guid: 49ad8f079cfde1e448c820eeacea3337,
+  PreviousServerItemTreeAsset: {fileID: 9197481963319205126, guid: 49ad8f079cfde1e448c820eeacea3337,
     type: 3}
   currentScene: Connection
   sceneToLoad: Environement
-  updateBindSession: 0
+  ShouldDisplaySessionScreen: 0
   updateResponse: 0
   updateInfo: 0
 --- !u!114 &1049023334
@@ -566,9 +566,6 @@ MonoBehaviour:
   uiDocument: {fileID: 1049023329}
   minimizeTagName: minimize-window-btn
   maximizeTagName: fullscreen-btn
-  closeTagName: close-window-btn
-  maximizeClassName: maximize-btn
   restoreClassName: restore-btn
   dialogueBoxTreeAsset: {fileID: 9197481963319205126, guid: 952193403cd37744f9ac513022d96731,
     type: 3}
-  hideOnStart: 1
