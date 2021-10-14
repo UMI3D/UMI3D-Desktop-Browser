@@ -59,7 +59,7 @@ namespace BrowserDesktop.Navigation
                 {
                     UMI3DDto dto = (nodeInstance.dto as GlTFNodeDto)?.extensions.umi3d;
 
-                    if (dto is UMI3DMeshNodeDto && !(dto is SubModelDto)) //subModels will be init with their associated UMI3DModel.
+                    if (dto is UMI3DMeshNodeDto && !(dto is SubModelDto)) //subModels will be initialized with their associated UMI3DModel.
                         InitModel(nodeInstance);
                 }
             }
