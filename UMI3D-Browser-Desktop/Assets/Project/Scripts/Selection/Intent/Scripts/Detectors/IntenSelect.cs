@@ -1,3 +1,15 @@
+/*
+Copyright 2019 - 2021 Inetum
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 using System.Collections.Generic;
 using umi3d.cdk;
 using UnityEngine;
@@ -9,7 +21,7 @@ namespace BrowserDesktop.Intent
     /// <summary>
     /// Implementation of the IntenSelect detector of intention, from de Haan et al. 2005
     /// </summary>
-    [CreateAssetMenu(fileName = "IntenSelectDetector", menuName = "UMI3D/Selection Intent Detector/IntenSelect ")]
+    [CreateAssetMenu(fileName = "IntenSelectDetector", menuName = "UMI3D/Selection/Intent Detector/IntenSelect ")]
     public class IntenSelect : AbstractSelectionIntentDetector
     {
         /// <summary>
@@ -41,7 +53,7 @@ namespace BrowserDesktop.Intent
         /// <summary>
         /// Conic zone selector
         /// </summary>
-        private ConeZoneSelector coneSelector;
+        private ConicZoneSelection coneSelector;
 
         /// <summary>
         /// Cone angle in degrees, correspond to the half of the full angle at its apex
@@ -66,7 +78,7 @@ namespace BrowserDesktop.Intent
             else
                 throw new System.NotImplementedException();
 
-            coneSelector = new ConeZoneSelector(pointerTransform, coneAngle);
+            coneSelector = new ConicZoneSelection(pointerTransform, coneAngle);
         }
 
         override public void ResetDetector()

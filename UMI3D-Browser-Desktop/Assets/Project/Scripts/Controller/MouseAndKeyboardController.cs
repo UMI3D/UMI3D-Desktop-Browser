@@ -329,6 +329,7 @@ namespace BrowserDesktop.Controller
                ))
             {
                 mouseData.save();
+                return; //Everything below is using the hover paradigm and therefore cannot be used with Intent Detection selection
                 Vector3 screenPosition = Input.mousePosition;
                 Ray ray = new Ray(CameraTransform.position, CameraTransform.forward);
                 Debug.DrawRay(ray.origin, ray.direction.normalized * 100f, Color.red, 0, true);
