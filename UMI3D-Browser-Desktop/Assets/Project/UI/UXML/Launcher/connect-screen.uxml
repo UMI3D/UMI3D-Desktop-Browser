@@ -7,9 +7,9 @@
             <ui:VisualElement name="url-center" style="align-items: stretch; justify-content: center; height: auto;">
                 <ui:VisualElement name="logo" style="height: 90px; background-image: url(&apos;/Assets/Project/UI/UI_connection/logo_page.png&apos;); -unity-background-scale-mode: scale-to-fit; margin-bottom: 15px; margin-top: 20px;" />
             </ui:VisualElement>
-            <ui:VisualElement name="favorites-environement" style="flex-shrink: 1;">
-                <ui:Label text="Favorite environments" class="white-txt medium-size-txt" style="margin-bottom: 15px;" />
-                <ui:ScrollView mode="Horizontal" name="favorites-environement-scrollview" style="height: 110px; width: 400px; margin-left: auto; margin-right: auto; margin-top: 25px; display: none;">
+            <ui:VisualElement name="previous-servers" style="flex-shrink: 1;">
+                <ui:Label text="Previous servers" class="white-txt medium-size-txt" style="margin-bottom: 15px;" />
+                <ui:ScrollView mode="Horizontal" name="previous-servers-scrollview" style="height: 110px; width: 400px; margin-left: auto; margin-right: auto; margin-top: 25px; display: none;">
                     <ui:Instance template="favorite-env-item" name="favorite-env-item" />
                     <ui:Instance template="favorite-env-item" name="favorite-env-item" />
                     <ui:Instance template="favorite-env-item" name="favorite-env-item" />
