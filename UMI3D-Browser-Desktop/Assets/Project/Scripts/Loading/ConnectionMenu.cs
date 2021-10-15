@@ -417,6 +417,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
             };
 
             Menu.menu.RemoveAll();
+            Menu.menu.Name = form.name;
+
             foreach (var param in form.fields)
             {
                 var c = GetInteractionItem(param);
