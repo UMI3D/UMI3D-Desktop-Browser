@@ -36,7 +36,7 @@ namespace umi3d.cdk
         }
 
         ///<inheritdoc/>
-        public override void UrlToObject(string url, string extension, string authorization, Action<object> callback, Action<string> failCallback, string pathIfObjectInBundle = "")
+        public override void UrlToObject(string url, string extension, string authorization, Action<object> callback, Action<Umi3dExecption> failCallback, string pathIfObjectInBundle = "")
         {
             GameObject createdObj = new GameObject();
 
@@ -48,23 +48,32 @@ namespace umi3d.cdk
                     {
                         objImporter.ImportModelAsync(System.IO.Path.GetFileNameWithoutExtension(url), url, createdObj.transform /*UMI3DResourcesManager.Instance.gameObject.transform*/, importOptions, m);
 
+                        bool failed = false;
 
+                        objImporter.ImportError += (s) => {
+                            failed = true;
+                            failCallback(new Umi3dExecption(401,$"Importing failed for : {url}")); };
 
                         objImporter.ImportingComplete += () =>
                         {
-                            try
+                            if (!failed)
                             {
-                                HideModelRecursively(createdObj);
+                                try
+                                {
+                                    HideModelRecursively(createdObj);
 
-                                Transform newModel = objImporter.transform.GetChild(0);
-                                newModel.SetParent(UMI3DResourcesManager.Instance.transform);
-                                callback.Invoke(newModel.gameObject);
+                                    Transform newModel = objImporter.transform.GetChild(0);
+                                    newModel.SetParent(UMI3DResourcesManager.Instance.transform);
+                                    callback.Invoke(newModel.gameObject);
+                                }
+                                catch (Exception e)
+                                {
+                                    failCallback(new Umi3dExecption(0, $"Importing completed but callback failed for : {url} {e}"));
+                                }
+                                GameObject.Destroy(objImporter.gameObject, 1);
                             }
-                            catch (Exception e)
-                            {
-                                failCallback("Importing failed with : " + url + "\n"+e);
-                            }
-                            GameObject.Destroy(objImporter.gameObject, 1);
+                            else
+                                failed = false;
                         };
 
                     }));
@@ -92,7 +101,7 @@ namespace umi3d.cdk
             };
         }
 
-        private Vector3 rotOffset = new Vector3(0, 0, 0);
+        private Vector3 rotOffset = new Vector3(0, 180, 0);
     }
 }
 

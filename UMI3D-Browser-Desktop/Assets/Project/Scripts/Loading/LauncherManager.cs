@@ -144,9 +144,12 @@ public class LauncherManager : MonoBehaviour
 
         urlEnterBtn.clickable.clicked += ()=> SetServer(urlInput.value);// SetDomain;
         nextStep = ()=> SetServer(urlInput.value);
+        urlScreen.Q<VisualElement>("icon-open").style.display = DisplayStyle.None;
 
         connectNewServBtn = urlScreen.Q<Button>("newConnection");
         connectNewServBtn.clickable.clicked += () => ToggleDisplayElement(urlScreen.Q<VisualElement>("inputs-url-container"));
+        connectNewServBtn.clickable.clicked += () => ToggleDisplayElement(urlScreen.Q<VisualElement>("icon-close"));
+        connectNewServBtn.clickable.clicked += () => ToggleDisplayElement(urlScreen.Q<VisualElement>("icon-open"));
 
         var manageLibraryBtn = urlScreen.Q<Button>("manage-library-btn");
         manageLibraryBtn.clickable.clicked += DisplayLibraries;
@@ -183,7 +186,7 @@ public class LauncherManager : MonoBehaviour
         urlScreen.style.display = DisplayStyle.None;
         sessionScreen.style.display = DisplayStyle.None;
         advancedConnectionScreen.style.display = DisplayStyle.Flex;
-        var s = currentConnectionData.ip.Split(':');
+        var s = currentConnectionData?.ip?.Split(':') ?? new string[] { "localhost" };
         IpInput.value = s[0];
         if(s.Length > 1)
         {
@@ -194,6 +197,7 @@ public class LauncherManager : MonoBehaviour
 
     public bool updateBindSession = false;
     public bool updateResponse = false;
+    public bool updateInfo = false;
     public List<MasterServerResponse.Server> serverResponses = new List<MasterServerResponse.Server>();
     private Action enterBtnAction = null;
 
@@ -209,7 +213,7 @@ public class LauncherManager : MonoBehaviour
 
         if (enterBtnAction == null)
         {
-            enterBtnAction = () => masterServer.SendDataSession(sessionScreen.Q<TextField>("pinInput").value, (ser) => { serverResponses.Add(ser); updateResponse = true; Debug.Log(" update UI "); }
+            enterBtnAction = () => masterServer.SendDataSession(sessionScreen.Q<TextField>("pinInput").value, (ser) => { serverResponses.Add(ser); updateResponse = true; }
             ); 
             root.Q<Button>("pin-enter-btn").clickable.clicked += enterBtnAction;
         }
@@ -219,13 +223,12 @@ public class LauncherManager : MonoBehaviour
 
     private void UpdateSessionList()
     {
-        var sessionList = sessionScreen.Q<ListView>("sessionsList");
+        var sessionList = sessionScreen.Q<ScrollView>("sessionsList");
         sessionList.Clear();
         foreach (MasterServerResponse.Server session in serverResponses)
         {
             VisualElement item = sessionEntry.CloneTree().Q<VisualElement>("session-entry");
             sessionList.Add(item);
-            Debug.Log(item);
             item.Q<Label>("server-name").text = session.Name;
             item.Q<Label>("users-count").text = session.PlayerCount.ToString();
 
@@ -314,6 +317,11 @@ public class LauncherManager : MonoBehaviour
             UpdateSessionList();
             updateResponse = false;
         }
+        if (updateInfo)
+        {
+            UserPreferencesManager.StoreRegisteredServerData(favoriteServerConnectionData);
+            updateInfo = false;
+        }
         CheckShortcuts();
     }
 
@@ -377,37 +385,53 @@ public class LauncherManager : MonoBehaviour
     }
 
 
-    private void SetServer(string serverName)
+    private void SetServer(string serverUrl)
     {
-        if (String.IsNullOrEmpty(serverName))
+        if (String.IsNullOrEmpty(serverUrl))
             return;
-        serverName = serverName.Trim();
+        serverUrl = serverUrl.Trim();
         if (root.Q<Toggle>("toggleRemember").value)
         {
             if (currentServerConnectionData != null)
-                currentServerConnectionData.serverName = serverName;
+            {
+                currentServerConnectionData.serverUrl = serverUrl;
+                currentServerConnectionData.serverName = null;
+                currentServerConnectionData.serverIcon = null;
+            }
             else
-                currentServerConnectionData = new UserPreferencesManager.ServerData() { serverName = serverName };
-
+                currentServerConnectionData = new UserPreferencesManager.ServerData() { serverUrl = serverUrl };
+            favoriteServerConnectionData.Add(currentServerConnectionData);
             UserPreferencesManager.AddRegisterdeServerData(currentServerConnectionData);
+            Connect(currentServerConnectionData,true);
         }
-        Connect(serverName);
+        else
+            Connect(new UserPreferencesManager.ServerData() { serverUrl = serverUrl });
     }
 
     /// <summary>
     /// Initiates the connection to the forge master server.
     /// </summary>
-    private void Connect(string serverName) 
+    private void Connect(UserPreferencesManager.ServerData server, bool saveInfo = false) 
     {
         
-        Debug.Log("Try to connect to : " + serverName);
-        masterServer.ConnectToMasterServer(() => { updateBindSession = true; }
+        Debug.Log("Try to connect to : " + server.serverUrl);
+        masterServer.ConnectToMasterServer(() => {
+            masterServer.RequestInfo((name, icon) => {
+                if (saveInfo)
+                {
+                    server.serverName = name;
+                    server.serverIcon = icon;
+                    updateInfo = true;
+                }
+            });
+            updateBindSession = true;
+        }
             
            // () => masterServer.SendDataSession("test", (ser) => { Debug.Log(" update UI "); })
-            , serverName);
+            , server.serverUrl);
         var text = root.Q<Label>("connectedText");
         Debug.Log(text);
-        root.Q<Label>("connectedText").text = "Connected to : " + serverName;
+        root.Q<Label>("connectedText").text = "Connected to : " + server.serverUrl;
 
     }
 
@@ -493,18 +517,28 @@ public class LauncherManager : MonoBehaviour
     private void DisplayRegisteredServers()
     {
         favoriteEnvironmentSlider.ClearItems();
+        bool isEmpty = true;
         foreach (UserPreferencesManager.ServerData env in favoriteServerConnectionData)
         {
+            isEmpty = false;
             var item = favoriteEnvItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
-            item.Q<Label>().text = env.serverName;
+            if (env.serverIcon != null) {
+                byte[] imageBytes = Convert.FromBase64String(env.serverIcon);
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(imageBytes);
+                item.style.backgroundImage = tex;
+             }
+            item.Q<Label>().text = env.serverName == null ? env.serverUrl : env.serverName;
             item.RegisterCallback<MouseDownEvent>(e =>
             {
                 if (e.clickCount == 1)
                 {
                     this.currentServerConnectionData.serverName = env.serverName;
+                    this.currentServerConnectionData.serverUrl = env.serverUrl;
+                    this.currentServerConnectionData.serverIcon = env.serverIcon;
                     //this.currentConnectionData.ip = env.ip;
                     //DirectConnect();// TODO
-                    Connect(env.serverName);
+                    Connect(env,true);
                 }
             });
             item.Q<Button>("delete-item").clickable.clicked += () =>
@@ -523,6 +557,10 @@ public class LauncherManager : MonoBehaviour
                 root.Add(dialogue);
             };
             favoriteEnvironmentSlider.AddElement(item);
+        }
+        if (isEmpty)
+        {
+            root.Q<VisualElement>("favorites-environement").style.display = DisplayStyle.None;
         }
     }
 

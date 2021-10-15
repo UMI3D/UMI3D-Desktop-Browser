@@ -60,7 +60,10 @@ namespace BrowserDesktop.Navigation
             {
                 if (entity is UMI3DNodeInstance nodeInstance)
                 {
-                    InitModel(nodeInstance);
+                    UMI3DDto dto = (nodeInstance.dto as GlTFNodeDto)?.extensions.umi3d;
+
+                    if (dto is UMI3DMeshNodeDto && !(dto is SubModelDto)) //subModels will be initialized with their associated UMI3DModel.
+                        InitModel(nodeInstance);
                 }
             }
 
@@ -191,9 +194,15 @@ namespace BrowserDesktop.Navigation
                 ChangeObjectAndChildrenLayer(obj, obstacleLayer);
                 foreach (var r in nodeInstance.renderers)
                 {
-                    NavMeshModifier modifier = r.gameObject.AddComponent<NavMeshModifier>();
-                    modifier.overrideArea = true;
-                    modifier.area = 1; // 1 = means not walkable.
+                    if (r.gameObject.GetComponent<NavMeshModifier>() == null)
+                    {
+                        NavMeshModifier modifier = r.gameObject.AddComponent<NavMeshModifier>();
+                        modifier.overrideArea = true;
+                        modifier.area = 1; // 1 = means not walkable.
+                    } else
+                    {
+                        Debug.LogWarning(r.gameObject.name + " tries to init its navmesh at least twice, this should not happen.");
+                    }
                 }
             }
         }

@@ -37,7 +37,9 @@ namespace BrowserDesktop.Menu
             InitAndBindUI();
 
             container.style.display = DisplayStyle.Flex;
-            (toggleRead.value, toggleWrite.value) = GetValue();
+            var value = GetValue();
+            toggleRead.value = value.read;
+            toggleWrite.value = value.write;
             /*   if (!string.IsNullOrEmpty(menuItem.ToString()))
                    //toggle.label = menuItem.ToString();
                    container.name = menuItem.ToString();*/
@@ -77,12 +79,12 @@ namespace BrowserDesktop.Menu
 
         private void OnReadValueChanged(ChangeEvent<bool> e)
         {
-            NotifyValueChange((e.newValue, toggleWrite.value));
+            NotifyValueChange(new LocalInfoRequestParameterValue(e.newValue, toggleWrite.value));
         }
 
         private void OnWriteValueChanged(ChangeEvent<bool> e)
         {
-            NotifyValueChange((toggleRead.value, e.newValue));
+            NotifyValueChange(new LocalInfoRequestParameterValue(toggleRead.value, e.newValue));
         }
 
         public void InitAndBindUI()

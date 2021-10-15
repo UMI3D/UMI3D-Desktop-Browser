@@ -1,12 +1,9 @@
 ﻿/*
 Copyright 2019 Gfi Informatique
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
     http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -112,7 +109,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void Update()
     {
-        ManageInputs();   
+        ManageInputs();
     }
 
     /// <summary>
@@ -177,15 +174,15 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         passwordVisibleBtn.RegisterCallback<MouseDownEvent>(e =>
         {
 
-                passwordVisibleBtn.ClearClassList();
-                isPasswordVisible = !isPasswordVisible;
-                if (isPasswordVisible)
-                    passwordVisibleBtn.AddToClassList("input-eye-button-on");
-                else
-                    passwordVisibleBtn.AddToClassList("input-eye-button-off");
-                passwordInput.isPasswordField = !isPasswordVisible;
+            passwordVisibleBtn.ClearClassList();
+            isPasswordVisible = !isPasswordVisible;
+            if (isPasswordVisible)
+                passwordVisibleBtn.AddToClassList("input-eye-button-on");
+            else
+                passwordVisibleBtn.AddToClassList("input-eye-button-off");
+            passwordInput.isPasswordField = !isPasswordVisible;
 
-                passwordInput.Focus();
+            passwordInput.Focus();
         });
     }
 
@@ -217,7 +214,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         url = curentUrl;
         UMI3DCollaborationClientServer.GetMedia(url, GetMediaSucces, GetMediaFailed, (e) => url == curentUrl && e.count < 3);
     }
-    
+
     /// <summary>
     /// Clears the environment and goes back to the launcher.
     /// </summary>
@@ -232,7 +229,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
         SceneManager.LoadScene(launcherScene, LoadSceneMode.Single);
     }
-    
+
     /// <summary>
     /// Inits the UI the environment is loaded.
     /// </summary>
@@ -259,7 +256,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         dialogueBox.Setup("Server error",
             error,
             "Leave",
-            Leave);   
+            Leave);
     }
 
     private void GetMediaSucces(MediaDto media)
@@ -315,7 +312,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// </summary>
     private void GetIdentity(Action<string, string> callback)
     {
-        
+
         DisplayScreenToLogin();
 
         AskLogin(true);
@@ -329,7 +326,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         loadingScreen.style.display = DisplayStyle.None;
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         passwordScreen.style.display = DisplayStyle.Flex;
-    } 
+    }
 
     /// <summary>
     /// Show or hide the form to set the login.
@@ -337,7 +334,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// <param name="val"></param>
     private void AskLogin(bool val)
     {
-        passwordScreen.Q<TextField>("login-input").style.display = val ? DisplayStyle.Flex: DisplayStyle.None;
+        passwordScreen.Q<TextField>("login-input").style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
         passwordScreen.Q<Label>("login-label").style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
@@ -375,7 +372,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         if (ids.Count == 0)
         {
             callback.Invoke(true);
-        } else
+        }
+        else
         {
             CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
 
@@ -398,20 +396,34 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// </summary>
     /// <param name="form"></param>
     /// <param name="callback"></param>
-    void GetParameterDtos(FormDto form, Action<FormDto> callback)
+    void GetParameterDtos(FormDto form, Action<FormAnswerDto> callback)
     {
         loadingScreen.style.display = DisplayStyle.None;
         parametersScreen.style.display = DisplayStyle.Flex;
 
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         if (form == null)
-            callback.Invoke(form);
+            callback.Invoke(null);
         else
         {
+
+            FormAnswerDto answer = new FormAnswerDto()
+            {
+                boneType = 0,
+                hoveredObjectId = 0,
+                id = form.id,
+                toolId = 0,
+                answers = new List<ParameterSettingRequestDto>()
+            };
+
             Menu.menu.RemoveAll();
+            Menu.menu.Name = form.name;
+
             foreach (var param in form.fields)
             {
-                Menu.menu.Add(GetInteractionItem(param));
+                var c = GetInteractionItem(param);
+                Menu.menu.Add(c.Item1);
+                answer.answers.Add(c.Item2);
             }
 
             ButtonMenuItem send = new ButtonMenuItem() { Name = "Join", toggle = false };
@@ -419,7 +431,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 parametersScreen.style.display = DisplayStyle.None;
                 MenuDisplayManager.Hide(true);
                 Menu.menu.RemoveAll();
-                callback.Invoke(form);
+                callback.Invoke(answer);
                 CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
                 nextStep = null;
                 LocalInfoSender.CheckFormToUpdateAuthorizations(form);
@@ -431,64 +443,105 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         }
     }
 
-    static MenuItem GetInteractionItem(AbstractInteractionDto dto)
+    static (MenuItem,ParameterSettingRequestDto) GetInteractionItem(AbstractInteractionDto dto)
     {
         MenuItem result = null;
+        ParameterSettingRequestDto requestDto = null;
         switch (dto)
         {
             case BooleanParameterDto booleanParameterDto:
                 var b = new BooleanInputMenuItem() { dto = booleanParameterDto };
                 b.NotifyValueChange(booleanParameterDto.value);
+                requestDto = new ParameterSettingRequestDto()
+                {
+                    toolId = dto.id,
+                    id = booleanParameterDto.id,
+                    parameter = booleanParameterDto.value,
+                    hoveredObjectId = 0
+                };
                 b.Subscribe((x) =>
                 {
                     booleanParameterDto.value = x;
+                    requestDto.parameter = x;
                 });
                 result = b;
                 break;
             case FloatRangeParameterDto floatRangeParameterDto:
                 var f = new FloatRangeInputMenuItem() { dto = floatRangeParameterDto, max = floatRangeParameterDto.max, min = floatRangeParameterDto.min, value = floatRangeParameterDto.value, increment = floatRangeParameterDto.increment };
+                requestDto = new ParameterSettingRequestDto()
+                {
+                    toolId = dto.id,
+                    id = floatRangeParameterDto.id,
+                    parameter = floatRangeParameterDto.value,
+                    hoveredObjectId = 0
+                };
                 f.Subscribe((x) =>
                 {
                     floatRangeParameterDto.value = x;
+                    requestDto.parameter = x;
                 });
                 result = f;
                 break;
             case EnumParameterDto<string> enumParameterDto:
                 var en = new DropDownInputMenuItem() { dto = enumParameterDto, options = enumParameterDto.possibleValues };
                 en.NotifyValueChange(enumParameterDto.value);
+                requestDto = new ParameterSettingRequestDto()
+                {
+                    toolId = dto.id,
+                    id = enumParameterDto.id,
+                    parameter = enumParameterDto.value,
+                    hoveredObjectId = 0
+                };
                 en.Subscribe((x) =>
                 {
                     enumParameterDto.value = x;
+                    requestDto.parameter = x;
                 });
                 result = en;
                 break;
             case StringParameterDto stringParameterDto:
                 var s = new TextInputMenuItem() { dto = stringParameterDto };
                 s.NotifyValueChange(stringParameterDto.value);
+                requestDto = new ParameterSettingRequestDto()
+                {
+                    toolId = dto.id,
+                    id = stringParameterDto.id,
+                    parameter = stringParameterDto.value,
+                    hoveredObjectId = 0
+                };
                 s.Subscribe((x) =>
                 {
                     stringParameterDto.value = x;
+                    requestDto.parameter = x;
                 });
                 result = s;
                 break;
             case LocalInfoRequestParameterDto localInfoRequestParameterDto:
                 LocalInfoRequestInputMenuItem localReq = new LocalInfoRequestInputMenuItem() { dto = localInfoRequestParameterDto };
                 localReq.NotifyValueChange(localInfoRequestParameterDto.value);
+                requestDto = new ParameterSettingRequestDto()
+                {
+                    toolId = dto.id,
+                    id = localInfoRequestParameterDto.id,
+                    parameter = localInfoRequestParameterDto.value,
+                    hoveredObjectId = 0
+                };
                 localReq.Subscribe((x) =>
                 {
                     localInfoRequestParameterDto.value = x;
+                    requestDto.parameter = x;
                 }
                 );
                 result = localReq;
                 break;
             default:
                 result = new MenuItem();
-                result.Subscribe(() => Debug.Log("hellooo 2"));
+                result.Subscribe(() => Debug.Log($"Missing case for {dto?.GetType()}"));
                 break;
         }
         result.Name = dto.name;
         //icon;
-        return result;
+        return (result,requestDto);
     }
 
     #endregion

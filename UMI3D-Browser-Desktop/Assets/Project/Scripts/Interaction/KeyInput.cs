@@ -15,6 +15,7 @@ limitations under the License.
 */
 using BrowserDesktop.Controller;
 using BrowserDesktop.Menu;
+using inetum.unityUtils;
 using System.Collections;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
@@ -114,7 +115,7 @@ namespace BrowserDesktop.Interaction
                                     else
                                         DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
                                 },
-                                (string str) =>
+                                (Umi3dExecption str) =>
                                 {
                                     DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                                 },
@@ -186,6 +187,14 @@ namespace BrowserDesktop.Interaction
             {
                 if (Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)))
                 {
+
+                    if (associatedInteraction.TriggerAnimationId != 0)
+                    {
+                        UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(associatedInteraction.TriggerAnimationId);
+                        if (anim != null)
+                            anim.Start();
+                    }
+
                     onInputDown.Invoke();
                     
                     if ((associatedInteraction).hold)
@@ -218,6 +227,14 @@ namespace BrowserDesktop.Interaction
                 if (Input.GetKeyUp(InputLayoutManager.GetInputCode(activationButton)))
                 {
                     onInputUp.Invoke();
+
+                    if (associatedInteraction.ReleaseAnimationId != 0)
+                    {
+                        UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(associatedInteraction.ReleaseAnimationId);
+                        if (anim != null)
+                            anim.Start();
+                    }
+
                     if ((associatedInteraction).hold)
                     {
                         if (risingEdgeEventSent)
