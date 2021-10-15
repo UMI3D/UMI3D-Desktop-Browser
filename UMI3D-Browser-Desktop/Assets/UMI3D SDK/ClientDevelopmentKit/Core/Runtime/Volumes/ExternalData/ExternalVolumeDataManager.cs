@@ -72,9 +72,9 @@ namespace umi3d.cdk.volumes
                 finished.Invoke(cell);
             };
 
-            Action<string> failed = s =>
+            Action<Umi3dExecption> failed = e =>
             {
-                Debug.LogError("Failed to load obj file : " + s);   
+                Debug.LogError("Failed to load obj file : " + e.Message);   
             };
 
             loader.UrlToObject(dto.objFile, ".obj", UMI3DClientServer.getAuthorization(), success, failed);
