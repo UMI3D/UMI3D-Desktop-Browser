@@ -70,9 +70,10 @@ public class LauncherManager : MonoBehaviour
     Button backMenuBnt;
     Button nextMenuBnt;
 
-    //Servers slider
-    public VisualTreeAsset PreviousServerItemTreeAsset;
-    SliderElement serversSlider;
+    //Saved Servers slider
+    [SerializeField]
+    private VisualTreeAsset SavedServerItemTreeAsset;
+    SliderElement savedServersSlider;
 
     #endregion
 
@@ -171,8 +172,8 @@ public class LauncherManager : MonoBehaviour
         urlScreen.Q<Button>("advanced-connection-btn").clickable.clicked += DisplayAdvancedConnection;
         urlScreen.Q<Button>("manage-library-btn").clickable.clicked += DisplayLibraries;
 
-        serversSlider = new SliderElement();
-        serversSlider.SetUp(urlScreen.Q<VisualElement>("slider"));
+        savedServersSlider = new SliderElement();
+        savedServersSlider.SetUp(urlScreen.Q<VisualElement>("slider"));
     }
 
     private void BindSessionSreen()
@@ -586,10 +587,10 @@ public class LauncherManager : MonoBehaviour
     [System.Obsolete("use favorite server not favorite environment")]
     private void DisplayFavoriteEnvironments()
     {
-        serversSlider.ClearItems();
+        savedServersSlider.ClearItems();
         foreach (var env in connectionData)
         {
-            var item = PreviousServerItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
+            var item = SavedServerItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
             item.Q<Label>().text = string.IsNullOrEmpty(env.environmentName) ? env.ip : env.environmentName;
             item.RegisterCallback<MouseDownEvent>(e =>
             {
@@ -608,24 +609,24 @@ public class LauncherManager : MonoBehaviour
                     {
                         connectionData.Remove(connectionData.Find(d => d.ip == env.ip));
                         UserPreferencesManager.StoreFavoriteConnectionData(connectionData);
-                        serversSlider.RemoveElement(item);
+                        savedServersSlider.RemoveElement(item);
                     }
                 },
                 true);
                 root.Add(dialogue);
             };
-            serversSlider.AddElement(item);
+            savedServersSlider.AddElement(item);
         }
     }
 
     private void DisplayRegisteredServers()
     {
-        serversSlider.ClearItems();
+        savedServersSlider.ClearItems();
         bool isEmpty = true;
         foreach (UserPreferencesManager.ServerData env in serverConnectionData)
         {
             isEmpty = false;
-            var item = PreviousServerItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
+            var item = SavedServerItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
             if (env.serverIcon != null) {
                 byte[] imageBytes = Convert.FromBase64String(env.serverIcon);
                 Texture2D tex = new Texture2D(2, 2);
@@ -654,17 +655,17 @@ public class LauncherManager : MonoBehaviour
                     {
                         serverConnectionData.Remove(serverConnectionData.Find(d => d.serverName == env.serverName));
                         UserPreferencesManager.StoreRegisteredServerData(serverConnectionData);
-                        serversSlider.RemoveElement(item);
+                        savedServersSlider.RemoveElement(item);
                     }
                 },
                 true);
                 root.Add(dialogue);
             };
-            serversSlider.AddElement(item);
+            savedServersSlider.AddElement(item);
         }
         if (isEmpty)
         {
-            root.Q<VisualElement>("previous-servers").style.display = DisplayStyle.None;
+            root.Q<VisualElement>("saved-servers").style.display = DisplayStyle.None;
         }
     }
 
