@@ -216,9 +216,7 @@ public class LauncherManager : MonoBehaviour
         librariesScreen.style.display = DisplayStyle.None;
 
         currentConnectionData = UserPreferencesManager.GetPreviousConnectionData();
-        //favoriteConnectionData = UserPreferencesManager.GetFavoriteConnectionData();
         serverConnectionData = UserPreferencesManager.GetRegisteredServerData();
-        //DisplayFavoriteEnvironments();
         DisplayRegisteredServers();
         currentServerConnectionData = UserPreferencesManager.GetPreviousServerData();
 
@@ -581,44 +579,6 @@ public class LauncherManager : MonoBehaviour
         SceneManager.UnloadSceneAsync(currentScene);
     }
 
-    /// <summary>
-    /// Displays the favorites environments stored on  users' computers.
-    /// </summary>
-    [System.Obsolete("use favorite server not favorite environment")]
-    private void DisplayFavoriteEnvironments()
-    {
-        savedServersSlider.ClearItems();
-        foreach (var env in connectionData)
-        {
-            var item = SavedServerItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
-            item.Q<Label>().text = string.IsNullOrEmpty(env.environmentName) ? env.ip : env.environmentName;
-            item.RegisterCallback<MouseDownEvent>(e =>
-            {
-                if (e.clickCount == 2)
-                {
-                    this.currentConnectionData.ip = env.ip;
-                    DirectConnect(); 
-                }
-            });
-            item.Q<Button>("delete-item").clickable.clicked += () =>
-            {
-                DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-                dialogue.Setup(env.environmentName, "Delete this environment from favorites ?", "YES", "NO", (b) =>
-                {
-                    if (b)
-                    {
-                        connectionData.Remove(connectionData.Find(d => d.ip == env.ip));
-                        UserPreferencesManager.StoreFavoriteConnectionData(connectionData);
-                        savedServersSlider.RemoveElement(item);
-                    }
-                },
-                true);
-                root.Add(dialogue);
-            };
-            savedServersSlider.AddElement(item);
-        }
-    }
-
     private void DisplayRegisteredServers()
     {
         savedServersSlider.ClearItems();
@@ -626,7 +586,7 @@ public class LauncherManager : MonoBehaviour
         foreach (UserPreferencesManager.ServerData env in serverConnectionData)
         {
             isEmpty = false;
-            var item = SavedServerItemTreeAsset.CloneTree().Q<VisualElement>("favorite-env-item");
+            var item = SavedServerItemTreeAsset.CloneTree().Q<VisualElement>("saved-server-item");
             if (env.serverIcon != null) {
                 byte[] imageBytes = Convert.FromBase64String(env.serverIcon);
                 Texture2D tex = new Texture2D(2, 2);

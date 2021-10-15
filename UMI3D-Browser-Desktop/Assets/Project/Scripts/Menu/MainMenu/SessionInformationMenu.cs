@@ -23,8 +23,8 @@ using UnityEngine.UIElements;
 namespace BrowserDesktop.Menu
 {
     /// <summary>
-    /// This class manages the UI elements which gives information about the current session such as : the name of the environment
-    /// (is it a favorite ?), is the microphone working, the session tim, etc.
+    /// This class manages the UI elements which gives information about the current session such as : the name of the environment,
+    /// is the microphone working, the session tim, etc.
     /// </summary>
     public class SessionInformationMenu : Singleton<SessionInformationMenu>
     {
@@ -35,16 +35,10 @@ namespace BrowserDesktop.Menu
         Label sessionTime;
         Button microphoneBtn;
         Label environmentName;
-        Button isFavoriteBtn;
 
         VisualElement topCenterMenu;
 
-        bool isEnvironmentFavorite;
-
         DateTime startOfSession = new DateTime();
-
-        UserPreferencesManager.Data currentData;
-        List<UserPreferencesManager.Data> favorites;
 
         /// <summary>
         /// Binds the UI
@@ -60,16 +54,11 @@ namespace BrowserDesktop.Menu
             sessionInfo = root.Q<VisualElement>("session-info");
             sessionTime = sessionInfo.Q<Label>("session-time");
 
-
             microphoneBtn = sessionInfo.Q<Button>("microphone-btn");
             microphoneBtn.clickable.clicked += () =>
             {
                 ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
             };
-
-
-            isFavoriteBtn = root.Q<Button>("is-favorite-btn");
-            isFavoriteBtn.clickable.clicked += ToggleAddEnvironmentToFavorites;
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
             {
@@ -112,50 +101,8 @@ namespace BrowserDesktop.Menu
         /// <param name="data"></param>
         public void SetEnvironmentName(MediaDto media, UserPreferencesManager.Data data)
         {
-            currentData = data;
-
             environmentName = uiDocument.rootVisualElement.Q<Label>("environment-name");
             environmentName.text = media.name;
-
-            favorites = UserPreferencesManager.GetFavoriteConnectionData();
-
-            isEnvironmentFavorite = favorites.Find(d => "http://" + d.ip == media.connection.httpUrl) != null;
-
-            isFavoriteBtn.ClearClassList();
-
-            if (isEnvironmentFavorite)
-            {
-                isFavoriteBtn.AddToClassList("is-favorite");
-            }
-            else
-            {
-                isFavoriteBtn.AddToClassList("not-favorite");
-            }
-        }
-
-        public void ToggleAddEnvironmentToFavorites()
-        {
-            isEnvironmentFavorite = !isEnvironmentFavorite;
-
-            NotificationDto notif = new NotificationDto { duration = 3, title = ""};
-
-            if (isEnvironmentFavorite)
-            {
-                favorites.Add(currentData);
-                notif.content = "Environment added to favorites";
-            }
-            else
-            {
-                favorites.Remove(favorites.Find(d => d.ip == currentData.ip));
-                notif.content = "Environment removed from favorites";
-            }
-
-            NotificationDisplayer.Instance.DisplayNotification(notif);
-
-            isFavoriteBtn.ToggleInClassList("not-favorite");
-            isFavoriteBtn.ToggleInClassList("is-favorite");
-
-            UserPreferencesManager.StoreFavoriteConnectionData(favorites);
         }
     }
 }
