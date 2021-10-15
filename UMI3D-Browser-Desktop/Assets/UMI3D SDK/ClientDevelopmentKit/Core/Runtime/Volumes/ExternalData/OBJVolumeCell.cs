@@ -12,15 +12,19 @@ namespace umi3d.cdk.volumes
 
         public ulong id;
 
-        public override Mesh GetBase()
+        public override void GetBase(System.Action<Mesh> onsuccess, float angleLimit)
         {
-            Debug.Log("WARNING ! you are using a never tested before feature (wild!)"); //still some bugs here ...
-            List<Mesh> bases = meshes.ConvertAll(m => GeometryTools.GetBase(m, 10, 0.01f));
-            return GeometryTools.ForceNormalUp(GeometryTools.Merge(bases));
+            List<Mesh> bases = meshes.ConvertAll(m => GeometryTools.GetBase(m, angleLimit, 0.01f));
+            onsuccess.Invoke(GeometryTools.ForceNormalUp(GeometryTools.Merge(bases)));
+        }
+
+        public override Mesh GetMesh()
+        {
+            return GeometryTools.Merge(meshes);
         }
 
         public override ulong Id() => id;
 
-        public override bool IsInside(Vector3 point) => meshes.Exists(mesh => GeometryTools.IsInside(mesh, point));
+        public override bool IsInside(Vector3 point, Space relativeTo) => meshes.Exists(mesh => GeometryTools.IsInside(mesh, point));
     }
 }

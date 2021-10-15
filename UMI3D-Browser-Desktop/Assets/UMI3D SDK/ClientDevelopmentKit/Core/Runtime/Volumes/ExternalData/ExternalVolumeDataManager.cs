@@ -52,7 +52,7 @@ namespace umi3d.cdk.volumes
 
             Action<object> success = obj =>
             {
-                GameObject sceneNode = UMI3DEnvironmentLoader.GetNode(dto.rootId).gameObject;
+                GameObject sceneNode = UMI3DEnvironmentLoader.GetNode(dto.rootNodeId).gameObject;
 
                 OBJVolumeCell cell = new OBJVolumeCell()
                 {
@@ -60,13 +60,14 @@ namespace umi3d.cdk.volumes
                     meshes = (obj as GameObject).GetComponentsInChildren<MeshFilter>().ToList().ConvertAll(filter => filter.mesh)
                 };
 
-                Matrix4x4 m = Matrix4x4.TRS(sceneNode.transform.TransformPoint(dto.position), Quaternion.Inverse(sceneNode.transform.rotation) * dto.rotation, sceneNode.transform.InverseTransformVector(dto.scale));
+                Matrix4x4 m = dto.rootNodeToLocalMatrix;
                 foreach(Mesh mesh in cell.meshes)
                 {
                     mesh.vertices = mesh.vertices.ToList().ConvertAll(v => Vector3.Scale(v, new Vector3(-1, 1, -1))).ToArray(); //asimpl right handed coordinate system dirty fix
                     mesh.vertices = mesh.vertices.ToList().ConvertAll(v => m.MultiplyPoint(v)).ToArray(); //apply dto transform
                 }
 
+                cell.isTraversable = dto.isTraversable;
                 onVolumeCreation.Invoke(cell);
                 finished.Invoke(cell);
             };

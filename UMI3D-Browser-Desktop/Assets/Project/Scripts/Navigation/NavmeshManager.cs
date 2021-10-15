@@ -9,6 +9,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.cdk.volumes;
 using umi3d.common;
@@ -38,6 +39,7 @@ namespace BrowserDesktop.Navigation
         private LayerMask obstacleLayer;
 
         public NavMeshSurface surface;
+        public Material invisibleMaterial;
 
         void Start()
         {
@@ -65,21 +67,18 @@ namespace BrowserDesktop.Navigation
             VolumePrimitiveManager.SubscribeToPrimitiveCreation(c =>
             {
                 AddNavigableVolume(c);
-                surface.BuildNavMesh(); //TODO we can do better here than reload the navmesh at each cell reception, especially on the initial reception of all cells.
             },
             true);
 
             VolumeSliceGroupManager.SubscribeToSliceGroupCreation(c =>
             {
                 AddNavigableVolume(c);
-                surface.BuildNavMesh(); //TODO we can do better here than reload the navmesh at each cell reception, especially on the initial reception of all cells.
             },
             true);
 
             ExternalVolumeDataManager.SubscribeToExternalVolumeCreation(c =>
             {
                 AddNavigableVolume(c);
-                surface.BuildNavMesh(); //TODO we can do better here than reload the navmesh at each cell reception, especially on the initial reception of all cells.
             },
             true);
 
@@ -88,19 +87,58 @@ namespace BrowserDesktop.Navigation
 
         public void AddNavigableVolume(AbstractVolumeCell cell)
         {
-            Mesh mesh = cell.GetBase();
-            GameObject surfaceGo = new GameObject("Surface for " + cell.GetType());
-            surfaceGo.transform.parent = surface.transform;
-            surfaceGo.transform.position = Vector3.zero;
-            surfaceGo.transform.rotation = Quaternion.identity;
-            surfaceGo.transform.localScale = Vector3.one;
-            surfaceGo.AddComponent<MeshFilter>().mesh = mesh;
-            surfaceGo.AddComponent<MeshRenderer>(); //<-- not ideal.
+            if (cell.isTraversable)
+            {
+                cellReceived++;
+                cell.GetBase(mesh =>
+                {
+                    GameObject surfaceGo = new GameObject("Surface for " + cell.GetType());
+                    surfaceGo.transform.parent = surface.transform;
+                    surfaceGo.transform.position = Vector3.zero;
+                    surfaceGo.transform.rotation = Quaternion.identity;
+                    surfaceGo.transform.localScale = Vector3.one;
+                    surfaceGo.AddComponent<MeshFilter>().mesh = mesh;
+                    surfaceGo.AddComponent<MeshRenderer>().material = invisibleMaterial; //<-- not ideal.
 
-            ChangeObjectAndChildrenLayer(surfaceGo, navmeshLayer);
+                    ChangeObjectAndChildrenLayer(surfaceGo, navmeshLayer);
+                    cellProcessed++;
+                }, surface.GetBuildSettings().agentSlope);
+            }
+            else
+            {
+                GameObject obstacle = new GameObject("obstacle for " + cell.GetType());
+                obstacle.transform.parent = surface.transform;
+                obstacle.transform.position = Vector3.zero;
+                obstacle.transform.rotation = Quaternion.identity;
+                obstacle.transform.localScale = Vector3.one;
+                obstacle.AddComponent<MeshFilter>().mesh = cell.GetMesh();
+                obstacle.AddComponent<MeshRenderer>().material = invisibleMaterial; //<-- not ideal.
+                ChangeObjectAndChildrenLayer(obstacle, obstacleLayer);
+            }
         }
 
 
+        int cellReceived = 0;
+        int cellProcessed = 0;
+        private void Update()
+        {
+            if (cellReceived > 0)
+            {
+                if (cellReceived == cellProcessed)
+                {
+                    cellProcessed = 0;
+                    cellReceived = 0;
+                    surface.BuildNavMesh();
+                }
+            }
+        }
+
+
+        [ContextMenu("ForceBuild")]
+        private void ForceBuild()
+        {
+            surface.BuildNavMesh();
+        }
 
         /// <summary>
         /// Inits navmesh according to the data stored by nodeInstance and its children.

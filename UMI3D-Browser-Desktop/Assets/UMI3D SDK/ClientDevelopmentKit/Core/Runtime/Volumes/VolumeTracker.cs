@@ -44,7 +44,7 @@ namespace umi3d.cdk.volumes
         {
 			if (trackingRoutine == null)
 			{
-				wasInsideOneVolumeLastFrame = volumesToTrack.Exists(v => v.IsInside(this.transform.position));
+				wasInsideOneVolumeLastFrame = volumesToTrack.Exists(v => v.IsInside(this.transform.position, Space.World));
 				trackingRoutine = StartCoroutine(Track());
 			}
 		}
@@ -67,7 +67,7 @@ namespace umi3d.cdk.volumes
         {
             while (true)
             {
-				AbstractVolumeCell cell = volumesToTrack.Find(v => v.IsInside(this.transform.position));
+				AbstractVolumeCell cell = volumesToTrack.Find(v => v.IsInside(this.transform.position, Space.World));
 				bool inside = (cell != null);
 				if (inside && !wasInsideOneVolumeLastFrame)
 					foreach (var callback in callbacksOnEnter)

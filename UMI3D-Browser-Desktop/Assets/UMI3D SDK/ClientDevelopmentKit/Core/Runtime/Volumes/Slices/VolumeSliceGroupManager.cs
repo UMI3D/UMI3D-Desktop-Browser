@@ -240,6 +240,7 @@ namespace umi3d.cdk.volumes
                 VolumeSliceGroup volume = new VolumeSliceGroup();
                 volume.Setup(dto);
                 volumeSliceGroups.Add(dto.id, volume);
+                volume.isTraversable = dto.isTraversable;
                 onSliceGroupCreation.Invoke(volume);
                 finished(volume);
             };

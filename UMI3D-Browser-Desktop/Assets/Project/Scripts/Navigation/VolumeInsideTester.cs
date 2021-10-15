@@ -56,7 +56,7 @@ public class VolumeInsideTester : MonoBehaviour
                                     k / ((float)subdiv.z - 1)
                                     )
                                 );
-                    isInside[i][j][k] = VolumePrimitiveManager.GetPrimitives().Exists(p => p.IsInside(pos));
+                    isInside[i][j][k] = VolumePrimitiveManager.GetPrimitives().Exists(p => p.IsInside(pos, Space.World));
                 }
             }
         }

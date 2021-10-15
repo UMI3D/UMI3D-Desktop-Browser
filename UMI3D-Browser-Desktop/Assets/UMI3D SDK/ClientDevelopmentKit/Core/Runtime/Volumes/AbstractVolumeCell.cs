@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using UnityEngine;
 
 namespace umi3d.cdk.volumes
@@ -22,8 +23,16 @@ namespace umi3d.cdk.volumes
     {
         public abstract ulong Id();
 
-        public abstract bool IsInside(Vector3 point);
+        public bool isTraversable = true;
 
-        public abstract Mesh GetBase();
+        /// <summary>
+        /// Check if a point is inside a cell.
+        /// </summary>
+        /// <returns></returns>
+        public abstract bool IsInside(Vector3 point, Space relativeTo);
+
+        public abstract void GetBase(Action<Mesh> onSuccess, float angleLimit);
+
+        public abstract Mesh GetMesh();
     }
 }

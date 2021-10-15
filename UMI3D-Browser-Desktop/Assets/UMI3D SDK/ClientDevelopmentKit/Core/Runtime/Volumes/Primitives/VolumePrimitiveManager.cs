@@ -50,6 +50,7 @@ namespace umi3d.cdk.volumes
 
         public static void CreatePrimitive(AbstractPrimitiveDto dto, UnityAction<AbstractVolumeCell> finished)
         {
+            Matrix4x4 localToWorldMatrix = Matrix4x4.Inverse(dto.rootNodeToLocalMatrix) * UMI3DEnvironmentLoader.GetNode(dto.rootNodeId).transform.localToWorldMatrix;
             switch (dto)
             {
                 case BoxDto boxDto:
@@ -60,9 +61,12 @@ namespace umi3d.cdk.volumes
                         {
                             center = boxDto.center,
                             size = boxDto.size
-                        }
+                        },
+                        localToWorld = localToWorldMatrix
+
                     };
                     primitives.Add(boxDto.id, box);
+                    box.isTraversable = dto.isTraversable;
                     onPrimitiveCreation.Invoke(box);
                     finished.Invoke(box);
                     break;
@@ -72,11 +76,12 @@ namespace umi3d.cdk.volumes
                         id = cylinderDto.id,
                         radius = cylinderDto.radius,
                         height = cylinderDto.height,
-                        position = cylinderDto.center,
-                        rotation = cylinderDto.rotation,
-                        scale = cylinderDto.scale
+                        position = localToWorldMatrix.MultiplyPoint(Vector3.zero),
+                        rotation = localToWorldMatrix.rotation,
+                        scale = localToWorldMatrix.lossyScale
                     };
                     primitives.Add(dto.id, c);
+                    c.isTraversable = dto.isTraversable;
                     onPrimitiveCreation.Invoke(c);
                     finished.Invoke(c);
                     break;

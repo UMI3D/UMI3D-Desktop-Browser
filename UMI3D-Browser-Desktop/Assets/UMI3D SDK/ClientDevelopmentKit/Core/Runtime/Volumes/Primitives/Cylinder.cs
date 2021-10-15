@@ -30,7 +30,7 @@ namespace umi3d.cdk.volumes
 
         public override void Delete() { }
 
-        public override Mesh GetBase()
+        public override void GetBase(System.Action<Mesh> onsuccess, float angleLimit)
         {
             int subdiv = 128; //meh...
 
@@ -60,10 +60,15 @@ namespace umi3d.cdk.volumes
             mesh.RecalculateTangents();
             mesh.RecalculateBounds();
             mesh.OptimizeReorderVertexBuffer();
-            return mesh;
+            onsuccess.Invoke(mesh);
         }
 
-        public override bool IsInside(Vector3 point)
+        public override Mesh GetMesh()
+        {
+            return GeometryTools.GetCylinder(position, rotation, scale, radius, height, 16 * ((int) radius + 1));
+        }
+
+        public override bool IsInside(Vector3 point, Space relativeTo)
         {
             /*
              * algorithm :
@@ -73,12 +78,14 @@ namespace umi3d.cdk.volumes
              */
 
             Vector3 localCoordinate = 
-                Vector3.Scale(
-                    new Vector3(
-                        1f / scale.x,
-                        1f / scale.y,
-                        1f / scale.z),
-                    Quaternion.Inverse(rotation) * (point - position));
+                relativeTo == Space.Self ? 
+                    point :
+                    Vector3.Scale(
+                        new Vector3(
+                            1f / scale.x,
+                            1f / scale.y,
+                            1f / scale.z),
+                        Quaternion.Inverse(rotation) * (point - position));
 
 
             if (Vector3.ProjectOnPlane(localCoordinate, Vector3.up).magnitude > radius)

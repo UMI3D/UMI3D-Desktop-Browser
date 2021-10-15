@@ -25,7 +25,7 @@ namespace umi3d.cdk.volumes
             };
 
             VolumeSliceGroupManager.SubscribeToSliceGroupCreation(addTracker, true);
-            ExternalVolumeDataManager.SubscribeToExternalVolumeCreation(addTracker, true);
+            //ExternalVolumeDataManager.SubscribeToExternalVolumeCreation(addTracker, true); TOO LONG
             VolumePrimitiveManager.SubscribeToPrimitiveCreation(addTracker, true);
         }
 

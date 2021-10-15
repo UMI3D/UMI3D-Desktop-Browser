@@ -210,7 +210,7 @@ public class FpsNavigation : AbstractNavigation
 
         if (NavMesh.SamplePosition(futurePosition, out NavMeshHit hitNavmesh, height + 0.1f, NavMesh.AllAreas))
         {
-            futurePosition = hitNavmesh.position + (height + baseHeight) * Vector3.up;
+            futurePosition = (height + baseHeight) * Vector3.up + hitNavmesh.position;
             Node.transform.position = futurePosition;
 
         }

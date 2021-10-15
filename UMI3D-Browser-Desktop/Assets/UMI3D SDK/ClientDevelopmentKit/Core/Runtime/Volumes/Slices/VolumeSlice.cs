@@ -132,9 +132,9 @@ namespace umi3d.cdk.volumes
             return mesh;
         }
 
-        public Mesh GetBase()
+        public Mesh GetBase(float angleLimit)
         {
-            return GeometryTools.ForceNormalUp(GeometryTools.GetBase(this.ToMesh()));
+            return GeometryTools.ForceNormalUp(GeometryTools.GetBase(this.ToMesh(), angleLimit, -1));
         }
     }
 }

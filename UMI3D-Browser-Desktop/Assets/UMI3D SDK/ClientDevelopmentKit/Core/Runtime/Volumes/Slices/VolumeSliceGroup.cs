@@ -37,7 +37,7 @@ namespace umi3d.cdk.volumes
 
         public override ulong Id() => id;
         
-        public override bool IsInside(Vector3 point)
+        public override bool IsInside(Vector3 point, Space relativeTo)
         {
             foreach(VolumeSlice s in slices)
             {
@@ -54,9 +54,14 @@ namespace umi3d.cdk.volumes
 
         public VolumeSlice[] GetSlices() => slices.ToArray();
 
-        public override Mesh GetBase()
+        public override void GetBase(System.Action<Mesh> onsuccess, float angleLimit)
         {
-            return GeometryTools.Merge(GetSlices().Select(slice => slice.GetBase()));
+            onsuccess.Invoke(GeometryTools.Merge(GetSlices().Select(slice => slice.GetBase(angleLimit))));
+        }
+
+        public override Mesh GetMesh()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

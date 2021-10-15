@@ -18,10 +18,9 @@ namespace umi3d.common.volume
 {
     public class OBJVolumeDto : AbstractVolumeCellDto
     {
+        /// <summary>
+        /// URL to downlod the obj from.
+        /// </summary>
         public string objFile;
-        public ulong rootId;
-        public SerializableVector3 position;
-        public SerializableVector4 rotation;
-        public SerializableVector3 scale;
     }
 }
