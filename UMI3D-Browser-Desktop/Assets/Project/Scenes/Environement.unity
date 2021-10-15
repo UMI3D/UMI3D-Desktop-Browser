@@ -1539,6 +1539,7 @@ MonoBehaviour:
   navmeshLayerName: Navmesh
   obstacleLayerName: Obstacle
   surface: {fileID: 1188994925}
+  invisibleMaterial: {fileID: 2100000, guid: a55d12f2bc58db340887ccff5aed0039, type: 2}
 --- !u!114 &1188994925
 MonoBehaviour:
   m_ObjectHideFlags: 0
