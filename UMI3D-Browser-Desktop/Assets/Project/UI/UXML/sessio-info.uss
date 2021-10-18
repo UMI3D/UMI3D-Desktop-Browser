@@ -55,60 +55,39 @@
 }
 
 .btn-notif-alert {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_notifAlerte_ENABLE.png');
+    background-image: url('/Assets/Project/UI/UI_connection/Notif_btn_icons/btn_notifAlerte_ENABLE.png');
 }
 
 .btn-notif-alert:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_notifAlerte_HOVER.png');
+    background-image: url('/Assets/Project/UI/UI_connection/Notif_btn_icons/btn_notifAlerte_HOVER.png');
 }
 
 .btn-notif-alert:active {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_notifAlerte_PRESS.png');
+    background-image: url('/Assets/Project/UI/UI_connection/Notif_btn_icons/btn_notifAlerte_PRESS.png');
 }
 
 .btn-notif-on {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_notifON_ENABLE.png');
+    background-image: url('/Assets/Project/UI/UI_connection/Notif_btn_icons/btn_notifON_ENABLE.png');
 }
 
 .btn-notif-on:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_notifON_HOVER.png');
+    background-image: url('/Assets/Project/UI/UI_connection/Notif_btn_icons/btn_notifON_HOVER.png');
 }
 
 .btn-notif-on:active {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_notifON_PRESS.png');
+    background-image: url('/Assets/Project/UI/UI_connection/Notif_btn_icons/btn_notifON_PRESS.png');
 }
 
 .btn-notif-off {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_notifOFF_ENABLE.png');
+    background-image: url('/Assets/Project/UI/UI_connection/Notif_btn_icons/btn_notifOFF_ENABLE.png');
 }
 
 .btn-notif-off:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_notifOFF_HOVER.png');
+    background-image: url('/Assets/Project/UI/UI_connection/Notif_btn_icons/btn_notifOFF_HOVER.png');
 }
 
 .btn-notif-off:active {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_notifOFF_PRESS.png');
-}
-
-.is-favorite {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_favoriteON_ENABLE.png');
-    background-color: rgba(0, 0, 0, 0);
-}
-
-.is-favorite:hover {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_favoriteON_HOVER.png');
-}
-
-.is-favorite:active {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_favoriteON_PRESS.png');
-}
-
-.not-favorite {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_favoriteOFF_ENABLE.png');
-}
-
-.not-favorite:active {
-    background-image: url('/Assets/Project/UI/UI_connection/btn_favoriteON_PRESS.png');
+    background-image: url('/Assets/Project/UI/UI_connection/Notif_btn_icons/btn_notifOFF_PRESS.png');
 }
 
 .btn-options {
