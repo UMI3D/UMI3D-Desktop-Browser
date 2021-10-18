@@ -23,8 +23,8 @@ using UnityEngine.UIElements;
 namespace BrowserDesktop.Menu
 {
     /// <summary>
-    /// This class manages the UI elements which gives information about the current session such as : the name of the environment
-    /// (is it a favorite ?), is the microphone working, the session tim, etc.
+    /// This class manages the UI elements which gives information about the current session such as : the name of the environment,
+    /// is the microphone working, the session tim, etc.
     /// </summary>
     public class SessionInformationMenu : Singleton<SessionInformationMenu>
     {
@@ -35,15 +35,12 @@ namespace BrowserDesktop.Menu
         //Top Bar
         VisualElement topCenterMenu;
         Label environmentName;
-        Button isFavoriteBtn;
-
-        bool isEnvironmentFavorite;
 
         #endregion
 
         #region
 
-        //Main Menu
+        //Main Menu Bar
         VisualElement applicationSettings;
         Button microphoneBtn;
 
@@ -73,9 +70,6 @@ namespace BrowserDesktop.Menu
             //Top Bar
             topCenterMenu = root.Q<VisualElement>("top-center-menu");
             topCenterMenu.style.display = DisplayStyle.None;
-
-            isFavoriteBtn = root.Q<Button>("is-favorite-btn");
-            isFavoriteBtn.clickable.clicked += ToggleAddEnvironmentToFavorites;
 
             //Main Menu
             /*
@@ -136,50 +130,8 @@ namespace BrowserDesktop.Menu
         /// <param name="data"></param>
         public void SetEnvironmentName(MediaDto media, UserPreferencesManager.Data data)
         {
-            currentData = data;
-
             environmentName = uiDocument.rootVisualElement.Q<Label>("environment-name");
             environmentName.text = media.name;
-
-            favorites = UserPreferencesManager.GetFavoriteConnectionData();
-
-            isEnvironmentFavorite = favorites.Find(d => "http://" + d.ip == media.connection.httpUrl) != null;
-
-            isFavoriteBtn.ClearClassList();
-
-            if (isEnvironmentFavorite)
-            {
-                isFavoriteBtn.AddToClassList("is-favorite");
-            }
-            else
-            {
-                isFavoriteBtn.AddToClassList("not-favorite");
-            }
-        }
-
-        public void ToggleAddEnvironmentToFavorites()
-        {
-            isEnvironmentFavorite = !isEnvironmentFavorite;
-
-            NotificationDto notif = new NotificationDto { duration = 3, title = ""};
-
-            if (isEnvironmentFavorite)
-            {
-                favorites.Add(currentData);
-                notif.content = "Environment added to favorites";
-            }
-            else
-            {
-                favorites.Remove(favorites.Find(d => d.ip == currentData.ip));
-                notif.content = "Environment removed from favorites";
-            }
-
-            NotificationDisplayer.Instance.DisplayNotification(notif);
-
-            isFavoriteBtn.ToggleInClassList("not-favorite");
-            isFavoriteBtn.ToggleInClassList("is-favorite");
-
-            UserPreferencesManager.StoreFavoriteConnectionData(favorites);
         }
 
         /// <summary>
