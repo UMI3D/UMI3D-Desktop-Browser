@@ -1,6 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <ui:Template name="SliderElement" src="/Assets/Project/UI/UXML/CustomElement/SliderElement.uxml" />
-    <ui:Template name="favorite-env-item" src="favorite-env-item.uxml" />
     <ui:VisualElement name="advancedConnectionScreen" style="display: flex; height: 100%;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:VisualElement style="flex-grow: 1; justify-content: center;">
