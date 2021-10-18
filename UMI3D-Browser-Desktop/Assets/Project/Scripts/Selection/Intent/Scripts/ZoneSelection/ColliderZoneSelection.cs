@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using umi3d.cdk.interaction;
 using UnityEngine;
 
-namespace BrowserDesktop.Intent
+namespace BrowserDesktop.Selection
 {
     public class ColliderSelection : AbstractZoneSelection
     {

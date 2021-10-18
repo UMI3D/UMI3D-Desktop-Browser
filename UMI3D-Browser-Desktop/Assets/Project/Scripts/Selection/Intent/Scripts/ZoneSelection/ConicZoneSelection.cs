@@ -17,12 +17,12 @@ using UnityEngine;
 using System.Linq;
 using umi3d.cdk.interaction;
 
-namespace BrowserDesktop.Intent
+namespace BrowserDesktop.Selection
 {
     /// <summary>
     /// A conic zone selector
     /// </summary>
-    public class ConicZoneSelection : AbstractZoneSelection
+    public class ConicZoneSelection : RayZoneSelection
     {
         /// <summary>
         /// Cone angle in degrees, correspond to the half of the full angle at its apex
@@ -30,17 +30,11 @@ namespace BrowserDesktop.Intent
         [SerializeField]
         float coneAngle = 15;
 
-        /// <summary>
-        /// Origin and orientation of the cone's apex
-        /// </summary>
-        [SerializeField]
-        public Transform attachedPoint;
-
         public override bool IsObjectInZone(InteractableContainer obj)
         {
-            var vectorToObject = obj.transform.position - attachedPoint.position;
+            var vectorToObject = obj.transform.position - originTransform.position;
 
-            return Vector3.Dot(vectorToObject.normalized, attachedPoint.forward) > Mathf.Cos(coneAngle * Mathf.PI / 180);
+            return Vector3.Dot(vectorToObject.normalized, originTransform.forward) > Mathf.Cos(coneAngle * Mathf.PI / 180);
         }
 
         public override List<InteractableContainer> GetObjectsInZone()
@@ -49,27 +43,14 @@ namespace BrowserDesktop.Intent
             return objectsInZone.Where(IsObjectInZone).ToList();
         }
 
-        public InteractableContainer GetClosestObjectToRay(List<InteractableContainer> objList)
+        public ConicZoneSelection(Transform originTransform)
         {
-            System.Func<InteractableContainer, float> distToRay = obj =>
-            {
-                var vectorToObject = obj.transform.position - attachedPoint.position;
-                return Vector3.Cross(vectorToObject.normalized, attachedPoint.forward).magnitude;
-            };
-
-            var minDistance = objList.Select(distToRay).Min();
-
-            return objList.Where(o => distToRay(o) == minDistance).FirstOrDefault();
+            this.originTransform = originTransform;
         }
 
-        public ConicZoneSelection(Transform attachedPoint)
+        public ConicZoneSelection(Transform originTransform, float angle)
         {
-            this.attachedPoint = attachedPoint;
-        }
-
-        public ConicZoneSelection(Transform attachedPoint, float angle)
-        {
-            this.attachedPoint = attachedPoint;
+            this.originTransform = originTransform;
             this.coneAngle = angle;
         }
 

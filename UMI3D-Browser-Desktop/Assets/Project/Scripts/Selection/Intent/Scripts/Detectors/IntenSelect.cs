@@ -16,12 +16,12 @@ using UnityEngine;
 using System.Linq;
 using umi3d.cdk.interaction;
 
-namespace BrowserDesktop.Intent
+namespace BrowserDesktop.Selection.Intent
 {
     /// <summary>
     /// Implementation of the IntenSelect detector of intention, from de Haan et al. 2005
     /// </summary>
-    [CreateAssetMenu(fileName = "IntenSelectDetector", menuName = "UMI3D/Selection/Intent Detector/IntenSelect ")]
+    [CreateAssetMenu(fileName = "IntenSelectDetector", menuName = "UMI3D/Selection/Intent Detector/IntenSelect")]
     public class IntenSelect : AbstractSelectionIntentDetector
     {
         /// <summary>
@@ -69,14 +69,14 @@ namespace BrowserDesktop.Intent
         private Dictionary<InteractableContainer, float> objectsToConsiderScoresDict;
 
 
-        override public void InitDetector()
+        override public void InitDetector(AbstractController controller)
         {
             objectsToConsiderScoresDict = new Dictionary<InteractableContainer, float>();
 
             if (currentMode == IntenSelectMode.CONE_FROM_HEAD)
-                pointerTransform = Camera.main.transform;
+                pointerTransform = Camera.main.transform; // could get the Mouse and Keyboard controller viewPoint ?
             else
-                throw new System.NotImplementedException();
+                pointerTransform = controller.transform;
 
             coneSelector = new ConicZoneSelection(pointerTransform, coneAngle);
         }

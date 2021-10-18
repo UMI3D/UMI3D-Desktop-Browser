@@ -17,7 +17,7 @@ using umi3d.cdk;
 using umi3d.cdk.interaction;
 using UnityEngine;
 
-namespace BrowserDesktop.Intent
+namespace BrowserDesktop.Selection
 {
     /// <summary>
     /// A Zone Selector to define a zone and select objects within

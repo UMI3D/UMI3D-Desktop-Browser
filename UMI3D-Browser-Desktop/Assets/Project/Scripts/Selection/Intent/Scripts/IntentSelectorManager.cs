@@ -16,7 +16,7 @@ using umi3d.cdk;
 using umi3d.cdk.interaction;
 using UnityEngine;
 
-namespace BrowserDesktop.Intent
+namespace BrowserDesktop.Selection.Intent
 {
     public class IntentSelectorManager : MonoBehaviour
     {

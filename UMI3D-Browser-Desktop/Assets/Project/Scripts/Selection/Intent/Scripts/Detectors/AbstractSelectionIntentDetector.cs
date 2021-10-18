@@ -15,7 +15,7 @@ using umi3d.cdk;
 using umi3d.cdk.interaction;
 using UnityEngine;
 
-namespace BrowserDesktop.Intent
+namespace BrowserDesktop.Selection.Intent
 {
     /// <summary>
     /// Abstract parent class for all intention of selection detectors
@@ -30,7 +30,7 @@ namespace BrowserDesktop.Intent
         /// <summary>
         /// Initialize the detector
         /// </summary>
-        public abstract void InitDetector();
+        public abstract void InitDetector(AbstractController controller);
 
         /// <summary>
         /// Reset parameters of the detector.
