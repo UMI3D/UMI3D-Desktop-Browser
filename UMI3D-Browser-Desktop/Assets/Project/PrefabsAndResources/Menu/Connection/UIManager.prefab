@@ -328,6 +328,7 @@ GameObject:
   m_Component:
   - component: {fileID: 759972038}
   - component: {fileID: 759972039}
+  - component: {fileID: 737743150693548703}
   m_Layer: 0
   m_Name: Footer
   m_TagString: Untagged
@@ -359,6 +360,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b98ddf1baf0390243b391cf4eeca4a88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiDocument: {fileID: 1750602239179936672}
+--- !u!114 &737743150693548703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759972037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c0d139d622e5f04c8b662fa0abdbced, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   uiDocument: {fileID: 1750602239179936672}
@@ -552,12 +566,9 @@ MonoBehaviour:
   uiDocument: {fileID: 1750602239179936672}
   minimizeTagName: minimize-window-btn
   maximizeTagName: fullscreen-btn
-  closeTagName: close-window-btn
-  maximizeClassName: maximize-btn
   restoreClassName: restore-btn
   dialogueBoxTreeAsset: {fileID: 9197481963319205126, guid: 952193403cd37744f9ac513022d96731,
     type: 3}
-  hideOnStart: 0
 --- !u!114 &3316399237951345772
 MonoBehaviour:
   m_ObjectHideFlags: 0

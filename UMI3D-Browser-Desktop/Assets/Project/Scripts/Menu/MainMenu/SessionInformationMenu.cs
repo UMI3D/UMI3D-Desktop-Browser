@@ -28,19 +28,20 @@ namespace BrowserDesktop.Menu
     /// </summary>
     public class SessionInformationMenu : Singleton<SessionInformationMenu>
     {
+        #region Fields
+
         public UIDocument uiDocument;
+        VisualElement root;
 
         #region Top Bar
 
-        //Top Bar
         VisualElement topCenterMenu;
         Label environmentName;
 
         #endregion
 
-        #region
+        #region Menu Bar
 
-        //Main Menu Bar
         VisualElement applicationSettings;
         Button microphoneBtn;
 
@@ -48,14 +49,13 @@ namespace BrowserDesktop.Menu
 
         #region Bottom Bar
 
-        //Bottom Bar
         VisualElement sessionInfo;
         Label sessionTime;
         Label participantsCount;
 
         DateTime startOfSession = new DateTime();
-        UserPreferencesManager.Data currentData;
-        List<UserPreferencesManager.Data> favorites;
+
+        #endregion
 
         #endregion
 
@@ -65,13 +65,13 @@ namespace BrowserDesktop.Menu
         void Start()
         {
             UnityEngine.Debug.Assert(uiDocument != null);
-            var root = uiDocument.rootVisualElement;
+            root = uiDocument.rootVisualElement;
 
             //Top Bar
             topCenterMenu = root.Q<VisualElement>("top-center-menu");
             topCenterMenu.style.display = DisplayStyle.None;
 
-            //Main Menu
+            //Menu Bar
             /*
             applicationSettings = root.Q<VisualElement>("application-settings");
             microphoneBtn = applicationSettings.Q<Button>("microphone-btn");
@@ -130,7 +130,7 @@ namespace BrowserDesktop.Menu
         /// <param name="data"></param>
         public void SetEnvironmentName(MediaDto media, UserPreferencesManager.Data data)
         {
-            environmentName = uiDocument.rootVisualElement.Q<Label>("environment-name");
+            environmentName = root.Q<Label>("environment-name");
             environmentName.text = media.name;
         }
 
