@@ -16,27 +16,39 @@ limitations under the License.
 
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.Events;
 
 namespace BrowserDesktop.Menu
 {
+    /// <summary>
+    /// This class manages the shortcut displayer 
+    /// </summary>
     public class Shortcuts : MonoBehaviour
     {
         public UIDocument uiDocument;
 
-        VisualElement shortcutArea;
-        VisualElement shortcutDisplayer;
+        [SerializeField]
+        private VisualTreeAsset shortcutTreeAsset;
+
+        VisualElement shortcutArea; //Where shortcut's button and labels are positions in the footer.
+        VisualElement shortcutDisplayer; //Where the shortcuts are displayed.
         Button openShortcutBtn;
 
-        bool isDisplayed = true; //is shortcutDisplayer visible
+        bool isDisplayed = true; //is shortcutDisplayer visible.
+
+        public static UnityEvent OnClearShortcut = new UnityEvent();
 
         void Start()
         {
+            Debug.Assert(uiDocument != null);
+            Debug.Assert(shortcutTreeAsset != null);
+
             var root = uiDocument.rootVisualElement;
             openShortcutBtn = root.Q<Button>("open-shortcuts-button");
             openShortcutBtn.clickable.clicked += ()=> DisplayShortcut(!isDisplayed);
             openShortcutBtn.AddToClassList("btn-shortcut");
 
-            DisplayShortcut(false); //Default: shortcut are hide
+            DisplayShortcut(false); //Default: shortcuts are hidden.
         }
 
         void Update()
@@ -44,22 +56,24 @@ namespace BrowserDesktop.Menu
 
         }
 
+        public void AddShortcut()
+        {
+            var shortcutElement = shortcutTreeAsset.CloneTree().Q<ShortcutElement>();
+            OnClearShortcut.AddListener(shortcutElement.RemoveShortcut);
+            //TODO
+        }
+
+        public void ClearShortcut()
+        {
+            //TODO
+            OnClearShortcut.Invoke();
+        }
+
         private void DisplayShortcut(bool val)
         {
             isDisplayed = val;
 
             //TODO display or hide shortcutDisplayer
-
-            /*if (val)
-            {
-                openShortcutBtn.AddToClassList("btn_shortcut_ENABLE");
-                openShortcutBtn.RemoveFromClassList("btn-notif-off");
-            }
-            else
-            {
-                openShortcutBtn.AddToClassList("btn-notif-off");
-                openShortcutBtn.RemoveFromClassList("btn_shortcut_ENABLE");
-            }*/
         }
     }
 }
