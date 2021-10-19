@@ -48,7 +48,7 @@ namespace BrowserDesktop.Menu
 
         VisualElement shortcutArea; //Where shortcut's button and labels are positions in the footer.
         VisualElement shortcutDisplayer; //Where the shortcuts are displayed.
-        ListView shortcutsListView; //ListView of shortcuts
+        ScrollView shortcutsScrollView; //ListView of shortcuts
         Button openShortcutBtn;
 
         #endregion
@@ -77,34 +77,49 @@ namespace BrowserDesktop.Menu
             openShortcutBtn.AddToClassList("btn-shortcut");
 
             shortcutDisplayer = root.Q<VisualElement>("shortcut-displayer");
-            shortcutsListView = shortcutDisplayer.Q<ListView>("shortcuts");
+            shortcutsScrollView = shortcutDisplayer.Q<ScrollView>("shortcuts");
 
             DisplayShortcut(false); //Default: shortcuts are hidden.
         }
 
         void Update()
         {
-
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                String[] test = { "t" };
+                AddShortcut("test", test);
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                String[] test = { "t", "s" };
+                AddShortcut("test2", test);
+            }
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                ClearShortcut();
+            }
         }
 
         /// <summary>
-        /// 
+        /// Add shortcuts to the shortcuts displayer.
         /// </summary>
-        /// <param name="shortcutName"></param>
-        /// <param name="shortcutskeys"></param>
+        /// <param name="shortcutName">What the shortcut do.</param>
+        /// <param name="shortcutskeys">Keys to press to trigger the shortcut.</param>
         public void AddShortcut(String shortcutName, string[] shortcutskeys)
         {
             var shortcutElement = shortcutTreeAsset.CloneTree().Q<ShortcutElement>();
             OnClearShortcut.AddListener(shortcutElement.RemoveShortcut);
 
-            Dictionary<String, String> shortcutsToAdd = new Dictionary<string, string>();
-            foreach (String shortcutKey in shortcutskeys)
+            //TODO increase the height of the shortcutDisplayer.
+
+            Sprite[] shortcutIcons = new Sprite[shortcutskeys.Length];
+            for (int i = 0; i < shortcutskeys.Length; ++i)
             {
-                shortcutsToAdd.Add(shortcutKey, GetShortcutIconName(shortcutKey));
+                shortcutIcons[i] = GetShortcutSprite(shortcutskeys[i]);
             }
 
-            shortcutElement.Setup(shortcutName, shortcutsToAdd);
-            shortcutsListView.Add(shortcutElement);
+            shortcutElement.Setup(shortcutName, shortcutIcons);
+            shortcutsScrollView.Add(shortcutElement);
         }
 
         /// <summary>
@@ -137,6 +152,23 @@ namespace BrowserDesktop.Menu
 
             Debug.LogError("Shortcut key not found: this should'n happen");
             return "";
+        }
+
+        /// <summary>
+        /// Get the sprite corresponding to the shortcut key.
+        /// </summary>
+        /// <param name="shortcutKey">one of the keys use in a shortcut.</param>
+        /// <returns></returns>
+        private Sprite GetShortcutSprite(string shortcutKey)
+        {
+            foreach (Shortcut shortcut in shortcuts)
+            {
+                if (shortcut.ShortcutKey == shortcutKey)
+                    return shortcut.ShortcutIcon;
+            }
+
+            Debug.LogError("Shortcut key not found: this shouln't happen");
+            return null;
         }
     }
 }

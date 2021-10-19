@@ -2,6 +2,7 @@
     <ui:Template name="loading-screen" src="loading-screen.uxml" />
     <ui:Template name="password-screen" src="password-screen.uxml" />
     <ui:Template name="libraries-screen" src="libraries-screen.uxml" />
+    <ui:Template name="ShortcutDisplayer" src="/Assets/Project/UI/UXML/CustomElement/ShortcutDisplayer.uxml" />
     <Style src="/Assets/Project/UI/UXML/main-style.uss" />
     <Style src="/Assets/Project/UI/UXML/sessio-info.uss" />
     <Style src="/Assets/Project/UI/UXML/shortcut.uss" />
@@ -52,7 +53,9 @@
                         <ui:VisualElement name="information-pop-up-parameters" />
                     </ui:VisualElement>
                     <ui:VisualElement name="left-side-menu" style="width: 256px; height: 100%;">
-                        <ui:VisualElement name="left-side-menu-container" style="flex-grow: 1; display: none;" />
+                        <ui:VisualElement name="left-side-menu-container" style="flex-grow: 1; display: flex; flex-direction: column-reverse;">
+                            <ui:Instance template="ShortcutDisplayer" name="ShortcutDisplayer" />
+                        </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="game-view" style="flex-grow: 1; flex-direction: column-reverse; align-items: center;">
                         <ui:VisualElement name="manipulation-container" class="dark-grey2-bck" style="height: 100px; flex-direction: row; justify-content: space-between;" />
