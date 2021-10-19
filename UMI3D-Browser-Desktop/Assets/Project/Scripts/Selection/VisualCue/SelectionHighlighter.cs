@@ -10,12 +10,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
 using System.Collections.Generic;
-using umi3d;
-using umi3d.cdk;
 using umi3d.cdk.interaction;
-using umi3d.common;
 using UnityEngine;
 
 namespace BrowserDesktop.Selection
