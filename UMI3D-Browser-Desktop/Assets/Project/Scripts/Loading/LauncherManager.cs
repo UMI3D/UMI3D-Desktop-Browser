@@ -122,7 +122,7 @@ public class LauncherManager : MonoBehaviour
         Debug.Assert(libraryEntryTreeAsset != null);
         root = uiDocument.rootVisualElement;
 
-        SetUpKeyboard();
+        SetUpKeyboardConfiguration();
 
         InitUI();
    
@@ -133,7 +133,7 @@ public class LauncherManager : MonoBehaviour
     /// Sets up the inputs according to the user's keyboard layout.
     /// For now, if the keyboard is a 'fr-FR', go for an azerty configuration otherwise a qwerty config.
     /// </summary>
-    void SetUpKeyboard()
+    void SetUpKeyboardConfiguration()
     {
         StringBuilder name = new StringBuilder(9);
 
