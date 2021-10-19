@@ -49,7 +49,10 @@ namespace BrowserDesktop.Selection.Intent
         [SerializeField]
         private float scoreMin = -10;
 
+<<<<<<< HEAD:UMI3D-Browser-Desktop/Assets/Project/Scripts/Selection/Intent/Scripts/Detectors/IntenSelect.cs
 
+=======
+>>>>>>> research_manual_KEP:UMI3D-Browser-Desktop/Assets/Project/Scripts/Intent/Detectors/IntenSelect.cs
         /// <summary>
         /// Selection mode
         /// </summary>
