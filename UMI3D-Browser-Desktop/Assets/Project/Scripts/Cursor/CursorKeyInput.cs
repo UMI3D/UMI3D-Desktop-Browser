@@ -79,7 +79,7 @@ namespace BrowserDesktop.Cursor
 
             ignore = new List<Transform>();
             ignore.AddRange(AvatarParent.gameObject.GetComponentsInChildren<Transform>());
-            lastObject = (controller as MouseAndKeyboardController)?.mouseData.CurrentHoveredTransform;
+            lastObject = null;//(controller as MouseAndKeyboardController)?.mouseData.CurrentHoveredTransform;
             if (lastObject != null)
                 ignore.AddRange(lastObject.gameObject.GetComponentsInChildren<Transform>());
             bool ok = false;

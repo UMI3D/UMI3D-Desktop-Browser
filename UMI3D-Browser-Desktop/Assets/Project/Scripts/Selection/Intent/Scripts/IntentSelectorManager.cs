@@ -26,9 +26,8 @@ namespace BrowserDesktop.Selection.Intent
         private IntentSelector intentSelector;
 
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
-            DontDestroyOnLoad(gameObject);
             StartCoroutine(waitForEnvironment());
         }
 

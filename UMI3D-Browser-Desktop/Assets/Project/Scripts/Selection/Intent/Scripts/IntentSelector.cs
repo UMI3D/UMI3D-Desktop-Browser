@@ -17,9 +17,11 @@ using umi3d.cdk.interaction;
 using umi3d.common;
 using umi3d.common.interaction;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace BrowserDesktop.Selection.Intent
 {
+
     public class IntentSelector : AbstractSelector
     {
         [SerializeField]
@@ -31,7 +33,15 @@ namespace BrowserDesktop.Selection.Intent
         [SerializeField]
         private SelectionHighlighter selectionHighlighter;
 
+        #region selectionCache
         private InteractableContainer lastSelectedInteractable;
+
+
+
+        public SelectionData selectionData;
+
+        #endregion
+
 
         public override void Activate(int id)
         {
@@ -47,6 +57,9 @@ namespace BrowserDesktop.Selection.Intent
 
         public override void Select()
         {
+            if (controller.Interacting)
+                return;
+
             InteractableContainer interactableToSelect = detector.PredictTarget();
 
             if( interactableToSelect != null
@@ -59,10 +72,10 @@ namespace BrowserDesktop.Selection.Intent
                     UnselectLastSelected();
                 
                 selectionHighlighter.ActivateSelectedVisualCue(interactableToSelect);
-                lastSelectedInteractable = interactableToSelect;
-
-                controller.Project(AbstractInteractionMapper.Instance.GetTool(lastSelectedInteractable.Interactable.dto.id), true,
+                controller.Project(AbstractInteractionMapper.Instance.GetTool(interactableToSelect.Interactable.dto.id), true,
                     new RequestedUsingSelector<IntentSelector>() { controller = this.controller }, interactableToSelect.Interactable.id);
+
+                lastSelectedInteractable = interactableToSelect;
             }
             else if (interactableToSelect == null && interactableToSelect != lastSelectedInteractable)
             {
@@ -77,8 +90,67 @@ namespace BrowserDesktop.Selection.Intent
 
             controller.Release(AbstractInteractionMapper.Instance.GetTool(lastSelectedInteractable.Interactable.dto.id),
                                 new RequestedUsingSelector<IntentSelector>());
+            selectionData.clear();
         }
 
+
     }
+
+    public struct SelectionData
+    {
+        public bool ForceProjection;
+        public bool ForceProjectionReleasable;
+
+        public HoldableButtonMenuItem ForceProjectionMenuItem;
+
+        public Interactable Selected;
+        public ulong SelectedId;
+
+        //public Interactable CurrentHovered;
+        //public Transform CurrentHoveredTransform;
+        //public ulong CurrentHoveredId;
+
+        //public Vector3 point;
+        //public Vector3 worldPoint;
+        //public Vector3 centeredWorldPoint;
+        //public Vector3 normal;
+
+        //public Vector3 worldNormal;
+        //public Vector3 direction;
+        //public Vector3 worlDirection;
+        //public Vector3 cursorOffset;
+
+        //public Vector3 lastPoint, lastNormal, lastDirection;
+
+        public SelectionState SelectionState;
+
+        public void clear()
+        {
+            ForceProjection = false;
+            ForceProjectionReleasable = false;
+            ForceProjectionMenuItem = null;
+            Selected = null;
+            SelectedId = default;
+            SelectionState = SelectionState.None;
+        }
+
+        //selectionData.CurrentHoveredId = UMI3DEnvironmentLoader.GetNodeID(hit.collider);
+
+        //            selectionData.CurrentHovered = interactable;
+        //            selectionData.CurrentHoveredTransform = interactableContainer.transform;
+
+        //            selectionData.point = interactableContainer.transform.InverseTransformPoint(hit.point);
+        //            selectionData.worldPoint = hit.point;
+        //            if (Vector3.Distance(selectionData.worldPoint, hit.transform.position) < 0.1f) selectionData.centeredWorldPoint = hit.transform.position;
+        //            else selectionData.centeredWorldPoint = selectionData.worldPoint;
+
+        //            selectionData.normal = interactableContainer.transform.InverseTransformDirection(hit.normal);
+        //            selectionData.worldNormal = hit.normal;
+
+        //            selectionData.direction = interactableContainer.transform.InverseTransformDirection(ray.direction);
+        //            selectionData.worlDirection = ray.direction;
+    }
+
+    public enum SelectionState { None, Selected, Manipulated }
 }
 
