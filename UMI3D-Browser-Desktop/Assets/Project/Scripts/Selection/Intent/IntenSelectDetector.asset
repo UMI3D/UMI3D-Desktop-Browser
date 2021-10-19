@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b61696cd984d149a995a8bd8c3df74, type: 3}
   m_Name: IntenSelectDetector
   m_EditorClassIdentifier: 
-  pointerTransform: {fileID: 0}
   corrective_k: 0.8
   coneAngle: 15
   scoreMax: 70

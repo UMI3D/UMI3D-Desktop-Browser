@@ -2292,6 +2292,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2096641627}
   - component: {fileID: 2096641628}
+  - component: {fileID: 2096641631}
+  - component: {fileID: 2096641629}
+  - component: {fileID: 2096641630}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -2331,6 +2334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectionMemory: {fileID: 498482125}
+  selector: {fileID: 2096641629}
   CameraTransform: {fileID: 2119596089}
   InteractionMapper: {fileID: 498482124}
   dofGroups: 04000000050000000600000001000000020000000300000008000000090000000a000000
@@ -2338,6 +2342,48 @@ MonoBehaviour:
   - {fileID: 647256037}
   interactionBoneType: 3
   hoverBoneType: 3
+--- !u!114 &2096641629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096641626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36a788f46b73e95449c3dd27fd874a6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deactivationRequesters: 
+  controller: {fileID: 2096641628}
+  detector: {fileID: 11400000, guid: 10cf073b1ed81604cb69a240c24e3ca1, type: 2}
+  selectionHighlighter: {fileID: 2096641630}
+--- !u!114 &2096641630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096641626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6df59e8d6bbe0c459c33f65f93e438d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineShader: {fileID: 4800000, guid: f8a7c73f138a6ac4993cd7828343e424, type: 3}
+--- !u!114 &2096641631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096641626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab7076ae5723dca46907a7d07fbef2b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  intentSelector: {fileID: 2096641629}
 --- !u!1001 &2119596086
 PrefabInstance:
   m_ObjectHideFlags: 0

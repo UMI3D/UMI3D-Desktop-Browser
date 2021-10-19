@@ -17,8 +17,10 @@ using BrowserDesktop.Cursor;
 using BrowserDesktop.Interaction;
 using BrowserDesktop.Menu;
 using BrowserDesktop.Parameters;
+using BrowserDesktop.Selection.Intent;
 using inetum.unityUtils;
 using System.Collections.Generic;
+using System.Linq;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
 using umi3d.common;
@@ -31,7 +33,18 @@ namespace BrowserDesktop.Controller
 {
     public class MouseAndKeyboardController : AbstractController
     {
+
+        #region properties
         static public bool CanProcess = false;
+
+        /// <summary>
+        /// True if an Abstract Input is currently hold by a user.
+        /// </summary>
+        public static bool isInputHold = false;
+
+        [SerializeField]
+        private IntentSelector selector;
+        private SelectionData selectionData;
 
         //public UMI3DBrowserAvatar Avatar;
         public Transform CameraTransform;
@@ -70,75 +83,10 @@ namespace BrowserDesktop.Controller
         [HideInInspector]
         static public HoverEvent HoverExit = new HoverEvent();
 
-        #region Hover
-
-        public struct MouseData
-        {
-            public bool ForceProjection;
-            public bool ForceProjectionReleasable;
-            public HoldableButtonMenuItem ForceProjectionMenuItem;
-
-            public Interactable OldHovered;
-            public ulong LastHoveredId;
-            public Interactable CurrentHovered;
-            public Transform CurrentHoveredTransform;
-            public ulong CurrentHoveredId;
-
-            public Vector3 point;
-            public Vector3 worldPoint;
-            public Vector3 centeredWorldPoint;
-            public Vector3 normal;
-            
-            public Vector3 worldNormal;
-            public Vector3 direction;
-            public Vector3 worlDirection;
-            public Vector3 cursorOffset;
-
-            public Vector3 lastPoint, lastNormal, lastDirection;
-
-
-
-            public HoverState HoverState;
-
-            public int saveDelay;
-
-            public void save()
-            {
-                if (saveDelay > 0)
-                {
-                    saveDelay--;
-                }
-                else
-                {
-                    if (saveDelay < 0) saveDelay = 0;
-                    OldHovered = CurrentHovered;
-                    LastHoveredId = CurrentHoveredId;
-                    CurrentHovered = null;
-                    CurrentHoveredTransform = null;
-                    CurrentHoveredId = 0;
-                    lastPoint = point;
-                    lastNormal = normal;
-                    lastDirection = direction;
-                }
-            }
-
-            public bool isDelaying()
-            {
-                return saveDelay > 0;
-            }
-        }
-        public enum HoverState { None, Hovering, AutoProjected }
-
-        [SerializeField]
-        public MouseData mouseData;
-        public const float timeToHold = 0.1f;
-
-        /// <summary>
-        /// True if an Abstract Input is currently hold by a user.
-        /// </summary>
-        public static bool isInputHold = false;
-
+        private const float manipulationInputUsageTimeout = 0.1f; //ms
+        private float timeSinceLastInput = 0; //ms
         #endregion
+
 
         #region Inputs
 
@@ -206,14 +154,15 @@ namespace BrowserDesktop.Controller
 
         #endregion
 
+        #region ForceProjectionMenuItem
         void CreateForceProjectionMenuItem()
         {
-            if (CircularMenu.Exists && mouseData.ForceProjectionMenuItem != null)
+            if (CircularMenu.Exists && selectionData.ForceProjectionMenuItem != null)
             {
-                if (!CircularMenu.Instance.menuDisplayManager.menu.Contains(mouseData.ForceProjectionMenuItem))
+                if (!CircularMenu.Instance.menuDisplayManager.menu.Contains(selectionData.ForceProjectionMenuItem))
                 {
-                    if (mouseData.ForceProjectionReleasable)
-                        CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
+                    if (selector.selectionData.ForceProjectionReleasable)
+                        CircularMenu.Instance.menuDisplayManager.menu.Add(selectionData.ForceProjectionMenuItem);
                 }
                 else if (CircularMenu.Instance.menuDisplayManager.menu.Count + EventMenu.NbEventsDIsplayed == 1)
                 {
@@ -222,37 +171,39 @@ namespace BrowserDesktop.Controller
             }
         }
 
-        void UnequipeForceProjection()
-        {
-            InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
-            mouseData.ForceProjection = false;
-            mouseData.CurrentHovered = null;
-            mouseData.CurrentHoveredTransform = null;
-            mouseData.OldHovered = null;
-            CircularMenu.Collapse();
-            mouseData.HoverState = HoverState.None;
-        }
-
         void ForceProjectionMenuItem(bool pressed)
         {
-            if (mouseData.ForceProjectionReleasable)
+            if (selectionData.ForceProjectionReleasable)
             {
                 DeleteForceProjectionMenuItem();
                 UnequipeForceProjection();
             }
         }
 
+        void UnequipeForceProjection()
+        {
+            InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
+            CircularMenu.Collapse();
+        }
+
         void DeleteForceProjectionMenuItem()
         {
-            if (mouseData.ForceProjectionMenuItem != null)
+            if (selectionData.ForceProjectionMenuItem != null)
             {
                 if (CircularMenu.Exists)
                 {
-                    CircularMenu.Instance.menuDisplayManager.menu.Remove(mouseData.ForceProjectionMenuItem);
+                    CircularMenu.Instance.menuDisplayManager.menu.Remove(selectionData.ForceProjectionMenuItem);
                 }
             }
         }
 
+        public void CircularMenuColapsed()
+        {
+            CursorHandler.State = CursorHandler.CursorState.Hover;
+        }
+        #endregion
+
+        #region monoBehaviour
         public void Awake()
         {
             foreach (KeyInput input in GetComponentsInChildren<KeyInput>())
@@ -262,14 +213,21 @@ namespace BrowserDesktop.Controller
                 input.bone = interactionBoneType;
             }
 
-            mouseData.ForceProjectionMenuItem = new HoldableButtonMenuItem
+            selectionData.ForceProjectionMenuItem = new HoldableButtonMenuItem
             {
                 Name = "Release",
                 Holdable = false
             };
-            mouseData.ForceProjectionMenuItem.Subscribe(ForceProjectionMenuItem);
+            selectionData.ForceProjectionMenuItem.Subscribe(ForceProjectionMenuItem);
 
-            mouseData.saveDelay = 0;
+            foreach (var input in inputs)
+            {
+                input.onInputUp.AddListener(new UnityAction(() => {
+                    if (associatedInputs[currentTool.id].Contains(input))
+                        timeSinceLastInput = 0;
+                }));
+            }
+
         }
 
         void InputDown(KeyInput input) { }
@@ -285,18 +243,18 @@ namespace BrowserDesktop.Controller
             {
                 navigationDirect--;
             }
+
         }
 
 
         private void LateUpdate()
         {
-            CursorHandler.Instance.ExitIndicator = mouseData.ForceProjection;
+            CursorHandler.Instance.ExitIndicator = selectionData.ForceProjection;
             if (CanProcess)
             {
                 if (MainMenu.IsDisplaying)
                 {
-                    mouseData.save();
-                    Hover();
+                    //Hover();
                 }
                 else
                 {
@@ -308,213 +266,142 @@ namespace BrowserDesktop.Controller
                             ManipulationInput.PreviousManipulation();
                         navigationDirect = 0;
                     }
-                    MouseHandler();
                 }
             }
+           if (timeSinceLastInput <= manipulationInputUsageTimeout)
+                timeSinceLastInput += Time.deltaTime;
         }
+        #endregion
 
-        public void CircularMenuColapsed()
-        {
-            if (mouseData.CurrentHovered == null) return;
-            // CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
-            CursorHandler.State = CursorHandler.CursorState.Hover;
-            mouseData.saveDelay = 3;
-        }
-
+        #region hover
         void MouseHandler()
         {
             if (!(
-                        mouseData.HoverState == HoverState.AutoProjected
+                        isInteracting()
                         && (CursorHandler.State == CursorHandler.CursorState.Clicked || SideMenu.IsExpanded)
                ))
             {
-                mouseData.save();
-                Vector3 screenPosition = Input.mousePosition;
-                Ray ray = new Ray(CameraTransform.position, CameraTransform.forward);
-                Debug.DrawRay(ray.origin, ray.direction.normalized * 100f, Color.red, 0, true);
-                RaycastHit[] hits = umi3d.common.Physics.RaycastAll(ray, 100f);
-
-                //1. Cast a ray to find all interactables
-                List<(RaycastHit, InteractableContainer)> interactables = new List<(RaycastHit, InteractableContainer)>();
-                foreach (RaycastHit hit in hits)
-                {
-                    if (hit.collider.gameObject.GetComponentInParent<UMI3DEnvironmentLoader>() == null)
-                        continue;
-                    var interactable = hit.collider.gameObject.GetComponent<InteractableContainer>();
-                    if (interactable == null)
-                        interactable = hit.collider.gameObject.GetComponentInParent<InteractableContainer>();
-                    if (interactable != null)
-                    {
-                        interactables.Add((hit, interactable));
-                    }
-                }
-       
-                //2. Sort them by hasPriority and distance from user
-                interactables.Sort(delegate ((RaycastHit, InteractableContainer) x, (RaycastHit, InteractableContainer) y)
-                {
-                    if (x.Item2.Interactable.HasPriority && !y.Item2.Interactable.HasPriority) return -1;
-                    else if (!x.Item2.Interactable.HasPriority && y.Item2.Interactable.HasPriority) return 1;
-                    else
-                    {
-                        if (Vector3.Distance(CameraTransform.position, x.Item1.point) >= Vector3.Distance(CameraTransform.position, y.Item1.point))
-                            return 1;
-                        else
-                            return -1;
-                    }
-                });
-
-                foreach ((RaycastHit, InteractableContainer) entry in interactables)
-                {
-                    InteractableContainer interactableContainer = entry.Item2;
-                    Interactable interactable = interactableContainer.Interactable;
-                    RaycastHit hit = entry.Item1;
-
-                    if (!interactable.Active)
-                        continue;
-
-                    mouseData.CurrentHoveredId = UMI3DEnvironmentLoader.GetNodeID(hit.collider);
-
-                    mouseData.CurrentHovered = interactable;
-                    mouseData.CurrentHoveredTransform = interactableContainer.transform;
-
-                    mouseData.point = interactableContainer.transform.InverseTransformPoint(hit.point);
-                    mouseData.worldPoint = hit.point;
-                    if (Vector3.Distance(mouseData.worldPoint, hit.transform.position) < 0.1f) mouseData.centeredWorldPoint = hit.transform.position;
-                    else mouseData.centeredWorldPoint = mouseData.worldPoint;
-
-                    mouseData.normal = interactableContainer.transform.InverseTransformDirection(hit.normal);
-                    mouseData.worldNormal = hit.normal;
-
-                    mouseData.direction = interactableContainer.transform.InverseTransformDirection(ray.direction);
-                    mouseData.worlDirection = ray.direction;
-
-                    break;
-                }
-                Hover();
+ 
+                return; //Everything below is using the hover paradigm and therefore cannot be used with Intent Detection selection
+                //Hover();
             }
             else
             {
-                //CircularMenu.Instance.Follow(mouseData.centeredWorldPoint);
+                //CircularMenu.Instance.Follow(selectionData.centeredWorldPoint);
             }
         }
 
-        void Hover()
-        {
-            if (mouseData.ForceProjection)
-            {
-                if (CircularMenu.Exists && (!CircularMenu.Instance.IsEmpty() || EventMenu.NbEventsDIsplayed > 0))
-                {
-                    CreateForceProjectionMenuItem();
-                }
-                else if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.LeaveContextualMenu))
-                    ||
-                    Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
-                {
-                    if(mouseData.ForceProjectionReleasable)
-                        UnequipeForceProjection();
-                }
-            }
+        //void Hover()
+        //{
+        //    if (selectionData.ForceProjection)
+        //    {
+        //        if (CircularMenu.Exists && (!CircularMenu.Instance.IsEmpty() || EventMenu.NbEventsDIsplayed > 0))
+        //        {
+        //            CreateForceProjectionMenuItem();
+        //        }
+        //        else if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.LeaveContextualMenu))
+        //            ||
+        //            Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
+        //        {
+        //            if(selectionData.ForceProjectionReleasable)
+        //                UnequipeForceProjection();
+        //        }
+        //    }
 
-            if (mouseData.CurrentHovered != null)
-            {
-                if (mouseData.CurrentHovered != mouseData.OldHovered)
-                {
-                    if (mouseData.OldHovered != null)
-                    {
-                        if (!mouseData.ForceProjection)
-                        {
-                            if (mouseData.HoverState == HoverState.AutoProjected)
-                            {
-                                InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
-                            }
-                            CircularMenu.Collapse();
-                        }
+        //    if (selectionData.CurrentHovered != null)
+        //    {
+        //        if (selectionData.CurrentHovered != selectionData.OldHovered)
+        //        {
+        //            if (selectionData.OldHovered != null)
+        //            {
+        //                if (!selectionData.ForceProjection)
+        //                {
+        //                    if (selectionData.SelectionState == SelectionState.Selected)
+        //                    {
+        //                        InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
+        //                    }
+        //                    CircularMenu.Collapse();
+        //                }
 
 
-                        mouseData.OldHovered.HoverExit(hoverBoneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
+        //                selectionData.OldHovered.HoverExit(hoverBoneType, selectionData.LastHoveredId, selectionData.lastPoint, selectionData.lastNormal, selectionData.lastDirection);
 
-                        if (mouseData.CurrentHovered.dto.HoverExitAnimationId != 0)
-                        {
-                            UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(mouseData.CurrentHovered.dto.HoverExitAnimationId);
-                            HoverExit.Invoke(mouseData.LastHoveredId);
-                            if (anim != null)
-                                anim.Start();
-                        }
+        //                if (selectionData.CurrentHovered.dto.HoverExitAnimationId != 0)
+        //                {
+        //                    UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(selectionData.CurrentHovered.dto.HoverExitAnimationId);
+        //                    HoverExit.Invoke(selectionData.LastHoveredId);
+        //                    if (anim != null)
+        //                        anim.Start();
+        //                }
 
-                        mouseData.OldHovered = null;
-                    }
+        //                selectionData.OldHovered = null;
+        //            }
 
-                    mouseData.HoverState = HoverState.Hovering;
+        //            selectionData.SelectionState = SelectionState.Hovering;
 
-                    if (mouseData.CurrentHovered.dto.interactions.Count > 0 && IsCompatibleWith(mouseData.CurrentHovered) && !mouseData.ForceProjection && !isInputHold)
-                    {
-                        InteractionMapper.SelectTool(mouseData.CurrentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
-                        CursorHandler.State = CursorHandler.CursorState.Hover;
-                        mouseData.HoverState = HoverState.AutoProjected;
-                        CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
-                        mouseData.OldHovered = mouseData.CurrentHovered;
-                    }
+        //            if (selectionData.CurrentHovered.dto.interactions.Count > 0 && IsCompatibleWith(selectionData.CurrentHovered) && !selectionData.ForceProjection && !isInputHold)
+        //            {
+        //                InteractionMapper.SelectTool(selectionData.CurrentHovered.dto.id, true, this, selectionData.CurrentHoveredId, reason);
+        //                CursorHandler.State = CursorHandler.CursorState.Hover;
+        //                selectionData.SelectionState = SelectionState.AutoProjected;
+        //                CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
+        //                selectionData.OldHovered = selectionData.CurrentHovered;
+        //            }
 
-                    mouseData.CurrentHovered.HoverEnter(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
+        //            selectionData.CurrentHovered.HoverEnter(hoverBoneType, selectionData.CurrentHoveredId, selectionData.point, selectionData.normal, selectionData.direction);
 
-                    if (mouseData.CurrentHovered.dto.HoverEnterAnimationId != 0)
-                    {
-                        UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(mouseData.CurrentHovered.dto.HoverEnterAnimationId);
-                        HoverEnter.Invoke(mouseData.CurrentHoveredId);
-                        if (anim != null)
-                            anim.Start();
-                    }
-                }
-                else
-                {
-                    if (mouseData.LastHoveredId != 0 && mouseData.CurrentHoveredId != mouseData.LastHoveredId)
-                    {
-                        if (associatedInputs.ContainsKey(mouseData.CurrentHovered.dto.id))
-                        {
-                            foreach (var input in associatedInputs[mouseData.CurrentHovered.dto.id])
-                                input.UpdateHoveredObjectId(mouseData.CurrentHoveredId);
-                        }
-                    }
-                }
+        //            if (selectionData.CurrentHovered.dto.HoverEnterAnimationId != 0)
+        //            {
+        //                UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(selectionData.CurrentHovered.dto.HoverEnterAnimationId);
+        //                HoverEnter.Invoke(selectionData.CurrentHoveredId);
+        //                if (anim != null)
+        //                    anim.Start();
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (selectionData.LastHoveredId != 0 && selectionData.CurrentHoveredId != selectionData.LastHoveredId)
+        //            {
+        //                if (associatedInputs.ContainsKey(selectionData.CurrentHovered.dto.id))
+        //                {
+        //                    foreach (var input in associatedInputs[selectionData.CurrentHovered.dto.id])
+        //                        input.UpdateHoveredObjectId(selectionData.CurrentHoveredId);
+        //                }
+        //            }
+        //        }
 
-                mouseData.CurrentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
-            }
-            else if (mouseData.OldHovered != null)
-            {
-                if (!mouseData.ForceProjection)
-                {
-                    if (mouseData.HoverState == HoverState.AutoProjected)
-                    {
-                        CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
-                        InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
-                    }
-                    CircularMenu.Collapse();
-                    CursorHandler.State = CursorHandler.CursorState.Default;
-                }
+        //        selectionData.CurrentHovered.Hovered(hoverBoneType, selectionData.CurrentHoveredId, selectionData.point, selectionData.normal, selectionData.direction);
+        //    }
+        //    else if (selectionData.OldHovered != null)
+        //    {
+        //        if (!selectionData.ForceProjection)
+        //        {
+        //            if (selectionData.SelectionState == SelectionState.AutoProjected)
+        //            {
+        //                CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
+        //                InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
+        //            }
+        //            CircularMenu.Collapse();
+        //            CursorHandler.State = CursorHandler.CursorState.Default;
+        //        }
 
-                mouseData.OldHovered.HoverExit(hoverBoneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
+        //        selectionData.OldHovered.HoverExit(hoverBoneType, selectionData.LastHoveredId, selectionData.lastPoint, selectionData.lastNormal, selectionData.lastDirection);
 
-                if (mouseData.OldHovered.dto.HoverExitAnimationId != 0)
-                {
-                    UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(mouseData.OldHovered.dto.HoverExitAnimationId);
-                    HoverExit.Invoke(mouseData.LastHoveredId);
-                    if (anim != null)
-                        anim.Start();
-                }
+        //        if (selectionData.OldHovered.dto.HoverExitAnimationId != 0)
+        //        {
+        //            UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(selectionData.OldHovered.dto.HoverExitAnimationId);
+        //            HoverExit.Invoke(selectionData.LastHoveredId);
+        //            if (anim != null)
+        //                anim.Start();
+        //        }
 
-                mouseData.OldHovered = null;
-                mouseData.HoverState = HoverState.None;
-            }
-        }
+        //        selectionData.OldHovered = null;
+        //        selectionData.SelectionState = SelectionState.None;
+        //    }
+        //}
+        #endregion
 
-        bool ShouldAutoProject(InteractableDto tool)
-        {
-            List<AbstractInteractionDto> manips = tool.interactions.FindAll(x => x is ManipulationDto);
-            List<AbstractInteractionDto> events = tool.interactions.FindAll(x => x is EventDto);
-            List<AbstractInteractionDto> parameters = tool.interactions.FindAll(x => x is AbstractParameterDto);
-            return (((parameters.Count == 0) && (events.Count <= 7) && (manips.Count == 0)));
-        }
-
+        #region clear
         public override void Clear()
         {
             foreach (ManipulationGroup input in ManipulationInputs)
@@ -548,6 +435,7 @@ namespace BrowserDesktop.Controller
             stringEnumParameterInputs.ForEach((a) => { Destroy(a); });
             stringEnumParameterInputs = new List<StringEnumParameterInput>();
         }
+        #endregion
 
         /// <summary>
         /// Create a menu to access each interactions of a tool separately.
@@ -558,6 +446,7 @@ namespace BrowserDesktop.Controller
             Debug.Log("oups");
         }
 
+        #region requirements
         /// <summary>
         /// Check if a tool can be projected on this controller.
         /// </summary>
@@ -608,10 +497,11 @@ namespace BrowserDesktop.Controller
             // return ((events.Count > 7 || manips.Count > 0) && (events.Count > 6 || manips.Count > 1));
             return (parameters.Count > 0);
         }
+        #endregion
 
         protected override bool isInteracting()
         {
-            throw new System.NotImplementedException();
+           return (currentTool != null) && (timeSinceLastInput <= manipulationInputUsageTimeout);
         }
 
         protected override bool isNavigating()
@@ -640,7 +530,7 @@ namespace BrowserDesktop.Controller
         }
 
 
-
+        #region findInput
         public override AbstractUMI3DInput FindInput(ManipulationDto manip, DofGroupDto dof, bool unused = true)
         {
             ManipulationGroup group = ManipulationInputs.Find(i => i.IsAvailableFor(manip));
@@ -772,28 +662,27 @@ namespace BrowserDesktop.Controller
             }
         }
 
+        #endregion
+
+        #region Tool : Projection & release
         public override void Release(AbstractTool tool, InteractionMappingReason reason)
         {
-            //try
-            //{
             base.Release(tool, reason);
             if (reason is ToolNeedToBeUpdated && tool.interactions.Count > 0) return;
 
-            if (mouseData.CurrentHovered != null && mouseData.CurrentHovered.dto.id == tool.id)
+            //if (selectionData.CurrentHovered != null && selectionData.CurrentHovered.dto.id == tool.id)
+            //{
+            //    selectionData.CurrentHovered = null;
+            //    selectionData.CurrentHoveredTransform = null;
+            //    selectionData.SelectionState = SelectionState.None;
+            //    CursorHandler.State = CursorHandler.CursorState.Default;
+            //}
+            if (selectionData.ForceProjection)
             {
-                mouseData.CurrentHovered = null;
-                mouseData.CurrentHoveredTransform = null;
-                mouseData.HoverState = HoverState.None;
-                CursorHandler.State = CursorHandler.CursorState.Default;
-            }
-            if (mouseData.ForceProjection)
-            {
-                mouseData.ForceProjection = false;
+                selectionData.ForceProjection = false;
                 DeleteForceProjectionMenuItem();
             }
             tool.onReleased(interactionBoneType);
-            //}
-            //catch { }
         }
 
         public override void Project(AbstractTool tool, bool releasable, InteractionMappingReason reason, ulong hoveredObjectId)
@@ -801,16 +690,16 @@ namespace BrowserDesktop.Controller
             base.Project(tool, releasable, reason, hoveredObjectId); ;
             if (reason is RequestedByEnvironment)
             {
-                mouseData.ForceProjection = true;
-                mouseData.ForceProjectionReleasable = releasable;
+                selectionData.ForceProjection = true;
+                selectionData.ForceProjectionReleasable = releasable;
             }
             tool.onProjected(interactionBoneType);
         }
 
         protected override ulong GetCurrentHoveredId()
         {
-            return mouseData.CurrentHoveredId;
+            return selectionData.SelectedId;
         }
-
+        #endregion
     }
 }
