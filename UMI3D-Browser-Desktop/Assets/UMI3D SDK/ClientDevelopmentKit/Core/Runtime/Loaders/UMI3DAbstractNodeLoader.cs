@@ -34,12 +34,12 @@ namespace umi3d.cdk
         /// <param name="node">gameObject on which the abstract node will be loaded.</param>
         /// <param name="finished">Finish callback.</param>
         /// <param name="failed">error callback.</param>
-        public virtual void ReadUMI3DExtension(UMI3DDto dto, GameObject node, Action finished, Action<Umi3dExcption> failed)
+        public virtual void ReadUMI3DExtension(UMI3DDto dto, GameObject node, Action finished, Action<Umi3dException> failed)
         {
             var nodeDto = dto as UMI3DAbstractNodeDto;
             if (node == null)
             {
-                failed.Invoke(new Umi3dExcption(0,"dto should be an  UMI3DAbstractNodeDto"));
+                failed.Invoke(new Umi3dException(0,"dto should be an  UMI3DAbstractNodeDto"));
                 return;
             }
             if (dto != null)
