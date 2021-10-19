@@ -32,9 +32,9 @@ namespace BrowserDesktop.Selection
 
         public override bool IsObjectInZone(InteractableContainer obj)
         {
-            var vectorToObject = obj.transform.position - originTransform.position;
+            var vectorToObject = obj.transform.position - origin;
 
-            return Vector3.Dot(vectorToObject.normalized, originTransform.forward) > Mathf.Cos(coneAngle * Mathf.PI / 180);
+            return Vector3.Dot(vectorToObject.normalized, direction) > Mathf.Cos(coneAngle * Mathf.PI / 180);
         }
 
         public override List<InteractableContainer> GetObjectsInZone()
@@ -43,15 +43,14 @@ namespace BrowserDesktop.Selection
             return objectsInZone.Where(IsObjectInZone).ToList();
         }
 
-        public ConicZoneSelection(Transform originTransform)
+        public ConicZoneSelection(Transform originTransform, float angle) : base(originTransform)
         {
-            this.originTransform = originTransform;
+            coneAngle = angle;
         }
 
-        public ConicZoneSelection(Transform originTransform, float angle)
+        public ConicZoneSelection(Vector3 origin, Vector3 direction, float angle) : base(origin, direction)
         {
-            this.originTransform = originTransform;
-            this.coneAngle = angle;
+            coneAngle = angle;
         }
 
     }

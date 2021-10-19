@@ -11,7 +11,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
-using umi3d.cdk;
 using UnityEngine;
 using System.Linq;
 using umi3d.cdk.interaction;
@@ -21,7 +20,6 @@ namespace BrowserDesktop.Selection.Intent
     /// <summary>
     /// Implementation of the IntenSelect detector of intention, from de Haan et al. 2005
     /// </summary>
-
     [CreateAssetMenu(fileName = "IntenSelectDetector", menuName = "UMI3D/Selection/Intent Detector/IntenSelect")]
     public class IntenSelect : AbstractSelectionIntentDetector
     {
@@ -52,13 +50,7 @@ namespace BrowserDesktop.Selection.Intent
         private float scoreMin = -10;
 
         /// <summary>
-        /// Conic zone selector
-        /// </summary>
-
-        private ConicZoneSelection coneSelector;
-
-        /// <summary>
-        /// Cone angle in degrees, correspond to the half of the full angle at its apex
+        /// Selection mode
         /// </summary>
         private enum IntenSelectMode { CONE_FROM_HAND, CONE_FROM_HEAD };
         [SerializeField]
@@ -79,8 +71,6 @@ namespace BrowserDesktop.Selection.Intent
                 pointerTransform = Camera.main.transform; // could get the Mouse and Keyboard controller viewPoint ?
             else
                 pointerTransform = controller.transform;
-
-            coneSelector = new ConicZoneSelection(pointerTransform, coneAngle);
         }
 
         override public void ResetDetector()
@@ -104,6 +94,8 @@ namespace BrowserDesktop.Selection.Intent
         /// <returns>The intended object or null</returns>
         override public InteractableContainer PredictTarget()
         {
+            var coneSelector = new ConicZoneSelection(pointerTransform.position, pointerTransform.forward, coneAngle);
+
             var interactableObjectsInScene = coneSelector.GetInteractableObjectInScene();
 
             foreach (var obj in interactableObjectsInScene)

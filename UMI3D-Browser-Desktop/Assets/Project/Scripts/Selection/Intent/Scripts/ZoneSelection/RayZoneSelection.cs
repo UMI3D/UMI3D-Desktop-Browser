@@ -11,10 +11,20 @@ namespace BrowserDesktop.Selection
         /// <summary>
         /// Origin and orientation of the ray
         /// </summary>
-        [SerializeField]
-        public Transform originTransform;
+        public Vector3 direction;
+        public Vector3 origin;
+   
+        public RayZoneSelection(Vector3 origin, Vector3 direction) 
+        {
+            this.origin = origin;
+            this.direction = direction;
+        }
 
-        public int maxDistance = 0;
+        public RayZoneSelection(Transform originTransform)
+        {
+            this.origin = originTransform.position;
+            this.direction = originTransform.forward;
+        }
 
         public override List<InteractableContainer> GetObjectsInZone()
         {
@@ -38,24 +48,35 @@ namespace BrowserDesktop.Selection
         /// <returns></returns>
         public RaycastHit[] GetRayCastHits()
         {
-            Ray ray = new Ray(originTransform.position, originTransform.forward);
-            Debug.DrawRay(ray.origin, ray.direction.normalized * 100f, Color.red, 0, true);
-            return umi3d.common.Physics.RaycastAll(ray.origin, ray.direction);
+            Debug.DrawRay(origin, direction.normalized * 100f, Color.red, 0, true);
+            return umi3d.common.Physics.RaycastAll(origin, direction);
         }
 
+        /// <summary>
+        /// Returns the closest object to the ray (minimal orthogonal projection)
+        /// </summary>
+        /// <param name="objList"></param>
+        /// <returns></returns>
         public InteractableContainer GetClosestObjectToRay(List<InteractableContainer> objList)
         {
+            if (objList.Count == 0)
+                return null;
+
             System.Func<InteractableContainer, float> distToRay = obj =>
             {
-                var vectorToObject = obj.transform.position - originTransform.position;
-                return Vector3.Cross(vectorToObject.normalized, originTransform.forward).magnitude;
+                var vectorToObject = obj.transform.position - origin;
+                return Vector3.Cross(vectorToObject.normalized, direction).magnitude;
             };
 
-            var minDistance = objList.Select(distToRay).Min();
+            var minDistance = objList.Select(distToRay)?.Min();
 
             return objList.Where(o => distToRay(o) == minDistance).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Returns objects that are along the ray with their RayCastHit object
+        /// </summary>
+        /// <returns></returns>
         public Dictionary<InteractableContainer, RaycastHit> GetObjectsAlongRayWithRayCastHits()
         {
             var rayCastHits = GetRayCastHits();
