@@ -49,16 +49,9 @@ namespace BrowserDesktop.Selection.Intent
         [SerializeField]
         private float scoreMin = -10;
 
-        /// <summary>
-<<<<<<< Updated upstream
-        /// Conic zone selector
-        /// </summary>
-        private ConicZoneSelection coneSelector;
 
         /// <summary>
-=======
->>>>>>> Stashed changes
-        /// Cone angle in degrees, correspond to the half of the full angle at its apex
+        /// Selection mode
         /// </summary>
         private enum IntenSelectMode { CONE_FROM_HAND, CONE_FROM_HEAD };
         [SerializeField]
