@@ -1,35 +1,65 @@
-using System.Collections;
+/*
+Copyright 2019 - 2021 Inetum
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 using System.Collections.Generic;
-using umi3d.cdk;
 using UnityEngine;
-using MathNet.Numerics.RootFinding;
 using MathNet.Numerics;
 using System.Linq;
 using umi3d.cdk.interaction;
 
 namespace BrowserDesktop.Selection.Intent
 {
-    [CreateAssetMenu(fileName = "RefinedKEPDetector", menuName = "UMI3D/Selection Intent Detector/Refined KEP")]
+    /// <summary>
+    /// Implementation of a selection intent detector using the refined version of Kinematic Endpoint Prediction extanded in 3D, 
+    /// from Lank et al. 2007 and Ruiz et al. 2009. The 3D extansion is an original work.
+    /// </summary>
+    [CreateAssetMenu(fileName = "RefinedKEPDetector", menuName = "UMI3D/Selection/Intent Detector/Refined KEP")]
     public class RefinedKEPDetector : AbstractSelectionIntentDetector
     {
         private LinkedList<double> angularDistanceData;
         private LinkedList<double> angularSpeedData;
         private LinkedList<Vector3> angularVectors;
 
+        private Vector3 initialDirection;
+
+        /// <summary>
+        /// under this value, the movement is considered as stable
+        /// </summary>
         [SerializeField]
         private double stabilityThreshold = 0.02;
 
+        /// <summary>
+        /// Precision of roots computation in the quadratic polynomial
+        /// </summary>
         [SerializeField]
         private double rootsPrecision = 0.0001;
 
+        /// <summary>
+        /// Minimal number of sample before an extrapolation could be made
+        /// </summary>
         [SerializeField]
         private int minimalNumberOfSamples = 20;
 
+        /// <summary>
+        /// Cone angle in degrees, correspond to the half of the full angle at its apex
+        /// </summary>
+        [SerializeField]
+        private float coneAngle = 15;
+
         private bool predictionReady = false;
 
-        private Vector3 lastRotation;
+        private InteractableContainer lastEstimated = null;
 
-        private ConicZoneSelection conicZoneSelection;
+        private Vector3 lastRotation;
 
         public override void InitDetector(AbstractController controller)
         {
@@ -40,9 +70,9 @@ namespace BrowserDesktop.Selection.Intent
 
             pointerTransform = Camera.main.transform;
 
-            conicZoneSelection = new ConicZoneSelection(pointerTransform);
-
             lastRotation = pointerTransform.rotation.eulerAngles;
+
+            initialDirection = pointerTransform.forward.normalized;
 
             predictionReady = false;
         }
@@ -52,14 +82,13 @@ namespace BrowserDesktop.Selection.Intent
             angularDistanceData.Clear();
             angularSpeedData.Clear();
             angularVectors.Clear();
+            initialDirection = pointerTransform.forward.normalized;
             predictionReady = false;
         }
 
         public override InteractableContainer PredictTarget()
         {
-
-            var angleVector = (pointerTransform.rotation.eulerAngles - lastRotation);
-            angleVector = new Vector3(angleVector.x % 360, angleVector.y % 360, angleVector.z % 360); //To change to center in [-180;180]
+            var angleVector = pointerTransform.rotation.eulerAngles - lastRotation;
             var angleDelta = angleVector.magnitude;
 
             if (angularDistanceData.Count >= minimalNumberOfSamples)
@@ -69,30 +98,42 @@ namespace BrowserDesktop.Selection.Intent
                     predictionReady = true;
             }
 
-            angularDistanceData.AddLast(angleDelta);
+            angularDistanceData.AddLast(angleDelta); //accumulating data for computation
             angularSpeedData.AddLast(angleDelta / Time.deltaTime);
             angularVectors.AddLast(angleVector);
 
             lastRotation = pointerTransform.rotation.eulerAngles;
-            lastRotation = new Vector3(lastRotation.x % 360, lastRotation.y % 360, lastRotation.z % 360);
+            lastRotation = new Vector3(lastRotation.x, lastRotation.y, lastRotation.z);
 
             if (predictionReady)
             {
-                Vector3 estimatedRay = estimateKinematicEndpoint();
-                conicZoneSelection.originTransform.forward = estimatedRay.normalized;
-                var estimatedObject = conicZoneSelection.GetClosestObjectToRay(conicZoneSelection.GetObjectsInZone());
-                ResetDetector();
-                return estimatedObject;
+                Vector3 estimatedDirection = estimateKinematicEndpoint();
+                var estimatedConicZone = new ConicZoneSelection(pointerTransform.position, estimatedDirection, coneAngle);
+                var objsInZone = estimatedConicZone.GetObjectsInZone();
+
+                if (objsInZone.Count == 0)
+                {
+                    lastEstimated = null;
+                    return null;
+                }
+                else
+                {
+                    var estimatedObject = estimatedConicZone.GetClosestObjectToRay(objsInZone);
+                    lastEstimated = estimatedObject;
+                    ResetDetector();
+                    return estimatedObject;
+                }
             }
             else
             {
-                return null;
+                return lastEstimated;
             }
-
-
         }
 
-
+        /// <summary>
+        /// Estimate the total angular distance that will be achieved
+        /// </summary>
+        /// <returns></returns>
         private double estimateAngularDistance()
         {
             var order = 4;
@@ -103,7 +144,7 @@ namespace BrowserDesktop.Selection.Intent
                                         where r.IsReal() && (r.Norm() > rootsPrecision)
                                         orderby r.Real
                                         ascending
-                                        select r.Real).First(); //finding the 2nd real root
+                                        select r.Real).FirstOrDefault(); //finding the 2nd real root
 
             return distanceEstimated;
         }
@@ -119,7 +160,8 @@ namespace BrowserDesktop.Selection.Intent
             var distance = estimateAngularDistance();
             var direction = angularVectors.Aggregate(new Vector3(0, 0, 0), (sum, next) => sum + next).normalized;
             var estimatedRotation = (float)distance * direction;
-            return pointerTransform.rotation.eulerAngles; //?
+            
+            return Quaternion.Euler(estimatedRotation) * initialDirection; //?
         }
 
 
