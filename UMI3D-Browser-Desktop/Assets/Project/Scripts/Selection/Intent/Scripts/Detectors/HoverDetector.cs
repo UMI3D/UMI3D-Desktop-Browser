@@ -20,17 +20,16 @@ namespace BrowserDesktop.Selection.Intent
     [CreateAssetMenu(fileName = "IntenSelectDetector", menuName = "UMI3D/Selection/Intent Detector/Hover")]
     public class HoverDetector : AbstractSelectionIntentDetector
     {
-        private RayZoneSelection raySelection;
 
         public override void InitDetector(AbstractController controller)
         {
             pointerTransform = Camera.main.transform; //?
-            raySelection = new RayZoneSelection();
-            raySelection.originTransform = pointerTransform;
         }
 
         public override InteractableContainer PredictTarget()
         {
+            var raySelection = new RayZoneSelection(pointerTransform.position, pointerTransform.forward);
+
             //1. Cast a ray to find all interactables
             var interactablesWithDistances = raySelection.GetObjectsAlongRayWithRayCastHits();
             var interactables = interactablesWithDistances.Keys.ToList();
