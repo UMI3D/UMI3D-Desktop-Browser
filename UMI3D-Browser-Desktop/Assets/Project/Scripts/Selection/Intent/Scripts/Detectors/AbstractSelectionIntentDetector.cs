@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using umi3d.cdk;
+using umi3d.cdk.interaction;
 using UnityEngine;
 
-namespace BrowserDesktop.Intent
+namespace BrowserDesktop.Selection.Intent
 {
     /// <summary>
     /// Abstract parent class for all intention of selection detectors
@@ -17,7 +18,7 @@ namespace BrowserDesktop.Intent
         /// <summary>
         /// Initialize the detector
         /// </summary>
-        public abstract void InitDetector();
+        public abstract void InitDetector(AbstractController controller);
 
         /// <summary>
         /// Reset parameters of the detector.
@@ -29,7 +30,7 @@ namespace BrowserDesktop.Intent
         /// Predict the target of the user selection intention
         /// </summary>
         /// <returns>An interactable object or null</returns>
-        public abstract UMI3DNodeInstance PredictTarget();
+        public abstract InteractableContainer PredictTarget();
     }
 }
 
