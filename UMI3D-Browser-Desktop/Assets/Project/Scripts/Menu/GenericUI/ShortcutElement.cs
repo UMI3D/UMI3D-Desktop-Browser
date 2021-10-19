@@ -15,18 +15,37 @@ limitations under the License.
 */
 
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public class ShortcutElement : VisualElement
 {
-    public static float IconsWidth;
+    public new class UxmlFactory : UxmlFactory<ShortcutElement, UxmlTraits> { }
+    public new class UxmlTraits : VisualElement.UxmlTraits { }
 
-    public void Setup(string shortcutName, Dictionary<string, string> shortcuts)
+    public static float IconsWidth = 0;
+
+    public void Setup(string shortcutName, Sprite[] shortcutIcons)
     {
         this.Q<Label>("shortcut-name").text = shortcutName;
-        VisualElement shortcutIcons = this.Q<VisualElement>("shortcut-icons");
+        VisualElement shortcutIcons_VE = this.Q<VisualElement>("shortcut-icons");
 
-        //var icon = 
+        for (int i = 0; i < shortcutIcons.Length; ++i)
+        {
+            if (i != 0 && i < shortcutIcons.Length)
+            {
+                var plus = new Label("+");
+                shortcutIcons_VE.Add(plus);
+            }
+
+            var icon = new VisualElement();
+            icon.style.width = 15;
+            icon.style.height = 15;
+            icon.style.backgroundColor = new StyleColor(new Color(0f, 0f, 0f, 0f));
+            icon.style.backgroundImage = new StyleBackground(shortcutIcons[i]);
+            Debug.Log("icons name = " + shortcutIcons[i].name);
+            shortcutIcons_VE.Add(icon);
+        }
     }
 
     public void RemoveShortcut()
