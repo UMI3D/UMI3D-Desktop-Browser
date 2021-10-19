@@ -17,6 +17,8 @@ limitations under the License.
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Events;
+using System.Collections.Generic;
+using System;
 
 namespace BrowserDesktop.Menu
 {
@@ -25,6 +27,20 @@ namespace BrowserDesktop.Menu
     /// </summary>
     public class Shortcuts : MonoBehaviour
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        [Serializable]
+        public struct Shortcut
+        {
+            public string ShortcutKey;
+            public Sprite ShortcutIcon;
+        }
+
+        #region Fields
+
+        #region UI
+
         public UIDocument uiDocument;
 
         [SerializeField]
@@ -32,11 +48,22 @@ namespace BrowserDesktop.Menu
 
         VisualElement shortcutArea; //Where shortcut's button and labels are positions in the footer.
         VisualElement shortcutDisplayer; //Where the shortcuts are displayed.
+        ListView shortcutsListView; //ListView of shortcuts
         Button openShortcutBtn;
 
-        bool isDisplayed = true; //is shortcutDisplayer visible.
+        #endregion
 
+        [SerializeField]
+        private String pathToShortcutsIcons;
+
+        [SerializeField]
+        private Shortcut[] shortcuts; //Shortcuts dictionary
+
+        bool isDisplayed = true; //is shortcutDisplayer visible.
+        
         public static UnityEvent OnClearShortcut = new UnityEvent();
+
+        #endregion
 
         void Start()
         {
@@ -44,9 +71,13 @@ namespace BrowserDesktop.Menu
             Debug.Assert(shortcutTreeAsset != null);
 
             var root = uiDocument.rootVisualElement;
+
             openShortcutBtn = root.Q<Button>("open-shortcuts-button");
             openShortcutBtn.clickable.clicked += ()=> DisplayShortcut(!isDisplayed);
             openShortcutBtn.AddToClassList("btn-shortcut");
+
+            shortcutDisplayer = root.Q<VisualElement>("shortcut-displayer");
+            shortcutsListView = shortcutDisplayer.Q<ListView>("shortcuts");
 
             DisplayShortcut(false); //Default: shortcuts are hidden.
         }
@@ -56,24 +87,56 @@ namespace BrowserDesktop.Menu
 
         }
 
-        public void AddShortcut()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="shortcutName"></param>
+        /// <param name="shortcutskeys"></param>
+        public void AddShortcut(String shortcutName, string[] shortcutskeys)
         {
             var shortcutElement = shortcutTreeAsset.CloneTree().Q<ShortcutElement>();
             OnClearShortcut.AddListener(shortcutElement.RemoveShortcut);
-            //TODO
+
+            Dictionary<String, String> shortcutsToAdd = new Dictionary<string, string>();
+            foreach (String shortcutKey in shortcutskeys)
+            {
+                shortcutsToAdd.Add(shortcutKey, GetShortcutIconName(shortcutKey));
+            }
+
+            shortcutElement.Setup(shortcutName, shortcutsToAdd);
+            shortcutsListView.Add(shortcutElement);
         }
 
+        /// <summary>
+        /// Remove all shortcuts from the shortcuts displayer.
+        /// </summary>
         public void ClearShortcut()
         {
-            //TODO
+            //TO Test
             OnClearShortcut.Invoke();
         }
 
+        /// <summary>
+        /// Show or hide shortcuts.
+        /// </summary>
+        /// <param name="val">if true: show shortcuts, else hide.</param>
         private void DisplayShortcut(bool val)
         {
             isDisplayed = val;
 
             //TODO display or hide shortcutDisplayer
+        }
+
+        private string GetShortcutIconName(string shortcutKey)
+        {
+            foreach (Shortcut shortcut in shortcuts)
+            {
+                if (shortcut.ShortcutKey == shortcutKey)
+                    return shortcut.ShortcutIcon.name;
+            }
+
+            Debug.LogError("Shortcut key not found: this should'n happen");
+            return "";
         }
     }
 }

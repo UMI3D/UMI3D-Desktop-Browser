@@ -376,6 +376,168 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiDocument: {fileID: 1750602239179936672}
+  shortcutTreeAsset: {fileID: 9197481963319205126, guid: d5c3a0f3c8830504cad6313ba6f5ca58,
+    type: 3}
+  pathToShortcutsIcons: Assets/Project/UI/UI_connection/Shortcut_icons/
+  shortcuts:
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 1
+    ShortcutIcon: {fileID: 21300000, guid: 6f218245fe237eb458c72781dab69675, type: 3}
+  - ShortcutName: 2
+    ShortcutIcon: {fileID: 21300000, guid: dcf0ba14faf845e49b3dac3c472fff1f, type: 3}
+  - ShortcutName: 3
+    ShortcutIcon: {fileID: 21300000, guid: 875fd6a0bde644646a3826d65c0afbad, type: 3}
+  - ShortcutName: 4
+    ShortcutIcon: {fileID: 21300000, guid: 06c67d403b88b6946b09ec9a4ddc4d9b, type: 3}
+  - ShortcutName: 5
+    ShortcutIcon: {fileID: 21300000, guid: 2300151c638a1f84ab71b68995009c41, type: 3}
+  - ShortcutName: 6
+    ShortcutIcon: {fileID: 21300000, guid: 71a14fdb38f6e6142a7e34ccb2e3877e, type: 3}
+  - ShortcutName: 7
+    ShortcutIcon: {fileID: 21300000, guid: 645e3c88e3aa40048b81cd839b520025, type: 3}
+  - ShortcutName: 8
+    ShortcutIcon: {fileID: 21300000, guid: 2fe3dcfa36841734197cc07fbcc0e743, type: 3}
+  - ShortcutName: 9
+    ShortcutIcon: {fileID: 21300000, guid: d084a5074839fe84c8048d71a167b4f7, type: 3}
+  - ShortcutName: a
+    ShortcutIcon: {fileID: 21300000, guid: 0f28121eb597cfe49a3b6582b1cbe8ae, type: 3}
+  - ShortcutName: b
+    ShortcutIcon: {fileID: 21300000, guid: 3600c977c02082a4fbae859ea8fadf62, type: 3}
+  - ShortcutName: c
+    ShortcutIcon: {fileID: 21300000, guid: 0b6cc1351d3a79d48b808772d128d8a3, type: 3}
+  - ShortcutName: d
+    ShortcutIcon: {fileID: 21300000, guid: 3d577fc1ef01ba04a88f13174d75ee95, type: 3}
+  - ShortcutName: e
+    ShortcutIcon: {fileID: 21300000, guid: d3bb89f43c698b14e9e21848def99328, type: 3}
+  - ShortcutName: f
+    ShortcutIcon: {fileID: 21300000, guid: 7bfc1606c4dd98f4da17bfec7672fd63, type: 3}
+  - ShortcutName: g
+    ShortcutIcon: {fileID: 21300000, guid: a3e4812dc30bd7044b0fcb590efbd37c, type: 3}
+  - ShortcutName: h
+    ShortcutIcon: {fileID: 21300000, guid: 8b6071f80c6d65a4c91cd370a9d8d785, type: 3}
+  - ShortcutName: i
+    ShortcutIcon: {fileID: 21300000, guid: 6eeead2f21d8c8d40b8751eabb7cc20a, type: 3}
+  - ShortcutName: j
+    ShortcutIcon: {fileID: 21300000, guid: aedb5f539183dd9408f8f0563c14652c, type: 3}
+  - ShortcutName: k
+    ShortcutIcon: {fileID: 21300000, guid: 7d2aace369790b64f9353f7a3ab6259c, type: 3}
+  - ShortcutName: l
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: m
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: n
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: o
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: p
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: q
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: r
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - ShortcutName: 0
+    ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
 --- !u!1 &1060301966
 GameObject:
   m_ObjectHideFlags: 0

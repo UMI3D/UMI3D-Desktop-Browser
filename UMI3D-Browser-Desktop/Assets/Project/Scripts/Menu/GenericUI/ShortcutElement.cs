@@ -14,11 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Collections.Generic;
 using UnityEngine.UIElements;
 
 public class ShortcutElement : VisualElement
 {
     public static float IconsWidth;
+
+    public void Setup(string shortcutName, Dictionary<string, string> shortcuts)
+    {
+        this.Q<Label>("shortcut-name").text = shortcutName;
+        VisualElement shortcutIcons = this.Q<VisualElement>("shortcut-icons");
+
+        //var icon = 
+    }
 
     public void RemoveShortcut()
     {
