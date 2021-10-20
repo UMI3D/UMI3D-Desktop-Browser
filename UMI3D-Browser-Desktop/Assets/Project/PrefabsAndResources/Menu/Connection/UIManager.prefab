@@ -378,6 +378,8 @@ MonoBehaviour:
   uiDocument: {fileID: 1750602239179936672}
   shortcutTreeAsset: {fileID: 9197481963319205126, guid: d5c3a0f3c8830504cad6313ba6f5ca58,
     type: 3}
+  shortcutIconTreeAsset: {fileID: 9197481963319205126, guid: 37de0f326e455d746a6e3028a70e1793,
+    type: 3}
   pathToShortcutsIcons: Assets/Project/UI/UI_connection/Shortcut_icons/
   shortcuts:
   - ShortcutKey: 0
