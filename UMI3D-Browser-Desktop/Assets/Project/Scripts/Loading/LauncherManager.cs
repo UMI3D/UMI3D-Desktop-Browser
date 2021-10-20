@@ -26,9 +26,15 @@ using System.Collections.Generic;
 using umi3d.cdk;
 using BrowserDesktop.Controller;
 using BeardedManStudios.Forge.Networking;
+using System.Runtime.InteropServices;
+using System.Text;
 
 public class LauncherManager : MonoBehaviour
 {
+    [DllImport("user32.dll")]
+    private static extern long GetKeyboardLayoutName(
+      StringBuilder pwszKLID);
+
     #region Fields
 
     #region UI Fields
@@ -116,9 +122,32 @@ public class LauncherManager : MonoBehaviour
         Debug.Assert(libraryEntryTreeAsset != null);
         root = uiDocument.rootVisualElement;
 
+        SetUpKeyboardConfiguration();
+
         InitUI();
    
         ResetLauncher();
+    }
+
+    /// <summary>
+    /// Sets up the inputs according to the user's keyboard layout.
+    /// For now, if the keyboard is a 'fr-FR', go for an azerty configuration otherwise a qwerty config.
+    /// </summary>
+    void SetUpKeyboardConfiguration()
+    {
+        StringBuilder name = new StringBuilder(9);
+
+        GetKeyboardLayoutName(name);
+
+        string str = name.ToString();
+        
+        if(str == InputLayoutManager.FR_Fr_KeyboardLayout || str == InputLayoutManager.FR_Be_KeyboardLayout)
+        {
+            InputLayoutManager.SetCurrentInputLayout("AzertyLayout");
+        } else
+        {
+            InputLayoutManager.SetCurrentInputLayout("QwertyLayout");
+        }
     }
 
     #region UI Binding and Displaying
