@@ -33,7 +33,7 @@ public class LauncherManager : MonoBehaviour
 {
     [DllImport("user32.dll")]
     private static extern long GetKeyboardLayoutName(
-      System.Text.StringBuilder pwszKLID);
+      StringBuilder pwszKLID);
 
     #region Fields
 
@@ -141,7 +141,7 @@ public class LauncherManager : MonoBehaviour
 
         string str = name.ToString();
         
-        if(str == "0000040C" || str == "0000080C") //fr-FR or fr-BE
+        if(str == InputLayoutManager.FR_Fr_KeyboardLayout || str == InputLayoutManager.FR_Be_KeyboardLayout)
         {
             InputLayoutManager.SetCurrentInputLayout("AzertyLayout");
         } else
