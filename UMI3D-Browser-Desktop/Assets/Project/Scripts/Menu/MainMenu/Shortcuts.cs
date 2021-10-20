@@ -56,12 +56,12 @@ namespace BrowserDesktop.Menu
         #endregion
 
         [SerializeField]
-        private String pathToShortcutsIcons;
-
-        [SerializeField]
         private Shortcut[] shortcuts; //Shortcuts dictionary
 
         bool isDisplayed = true; //is shortcutDisplayer visible.
+
+        private List<ShortcutElement> shortcutsDisplayedList = new List<ShortcutElement>();
+        private List<ShortcutElement> shortcutsWaitedList = new List<ShortcutElement>();
         
         public static UnityEvent OnClearShortcut = new UnityEvent();
 
@@ -87,12 +87,12 @@ namespace BrowserDesktop.Menu
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.T))
+            if (Input.GetKeyDown(KeyCode.K))
             {
                 String[] test = { "t" };
                 AddShortcut("test", test);
             }
-            if (Input.GetKeyDown(KeyCode.S))
+            if (Input.GetKeyDown(KeyCode.L))
             {
                 String[] test = { "t", "s" };
                 AddShortcut("test2", test);
@@ -110,8 +110,19 @@ namespace BrowserDesktop.Menu
         /// <param name="shortcutskeys">Keys to press to trigger the shortcut.</param>
         public void AddShortcut(String shortcutName, string[] shortcutskeys)
         {
-            var shortcutElement = shortcutTreeAsset.CloneTree().Q<ShortcutElement>();
-            OnClearShortcut.AddListener(shortcutElement.RemoveShortcut);
+            ShortcutElement shortcutElement;
+            if (shortcutsWaitedList.Count == 0)
+            {
+                shortcutElement = shortcutTreeAsset.CloneTree().Q<ShortcutElement>();
+                OnClearShortcut.AddListener(shortcutElement.RemoveShortcut);
+            }
+            else
+            {
+                shortcutElement = shortcutsWaitedList[shortcutsWaitedList.Count - 1];
+                shortcutsWaitedList.RemoveAt(shortcutsWaitedList.Count - 1);
+            }
+
+            shortcutsDisplayedList.Add(shortcutElement);
 
             //TODO increase the height of the shortcutDisplayer.
 
@@ -132,6 +143,8 @@ namespace BrowserDesktop.Menu
         {
             //TO Test
             OnClearShortcut.Invoke();
+            shortcutsWaitedList.AddRange(shortcutsWaitedList);
+            shortcutsDisplayedList.Clear();
         }
 
         /// <summary>
@@ -153,7 +166,7 @@ namespace BrowserDesktop.Menu
                     return shortcut.ShortcutIcon.name;
             }
 
-            Debug.LogError("Shortcut key not found: this should'n happen");
+            Debug.LogError("Shortcut key not found: this shouldn't happen");
             return "";
         }
 
