@@ -24,6 +24,10 @@ public class ShortcutIconElement : VisualElement
     public new class UxmlFactory : UxmlFactory<ShortcutIconElement, UxmlTraits> { }
     public new class UxmlTraits : VisualElement.UxmlTraits { }
 
+    /// <summary>
+    /// Set the size and the sprite of the icon.
+    /// </summary>
+    /// <param name="sprite">The sprite of the icon.</param>
     public void Setup(Sprite sprite)
     {
         float height = sprite.rect.height;
