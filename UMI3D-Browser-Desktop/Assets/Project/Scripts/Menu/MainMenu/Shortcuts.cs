@@ -45,6 +45,8 @@ namespace BrowserDesktop.Menu
 
         [SerializeField]
         private VisualTreeAsset shortcutTreeAsset;
+        [SerializeField]
+        private VisualTreeAsset shortcutIconTreeAsset;
 
         VisualElement shortcutArea; //Where shortcut's button and labels are positions in the footer.
         VisualElement shortcutDisplayer; //Where the shortcuts are displayed.
@@ -69,6 +71,7 @@ namespace BrowserDesktop.Menu
         {
             Debug.Assert(uiDocument != null);
             Debug.Assert(shortcutTreeAsset != null);
+            Debug.Assert(shortcutIconTreeAsset != null);
 
             var root = uiDocument.rootVisualElement;
 
@@ -118,7 +121,7 @@ namespace BrowserDesktop.Menu
                 shortcutIcons[i] = GetShortcutSprite(shortcutskeys[i]);
             }
 
-            shortcutElement.Setup(shortcutName, shortcutIcons);
+            shortcutElement.Setup(shortcutName, shortcutIcons, shortcutIconTreeAsset);
             shortcutsScrollView.Add(shortcutElement);
         }
 

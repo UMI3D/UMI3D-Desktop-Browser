@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -25,7 +24,7 @@ public class ShortcutElement : VisualElement
 
     public static float IconsWidth = 0;
 
-    public void Setup(string shortcutName, Sprite[] shortcutIcons)
+    public void Setup(string shortcutName, Sprite[] shortcutIcons, VisualTreeAsset shortcutIconTreeAsset)
     {
         this.Q<Label>("shortcut-name").text = shortcutName;
         VisualElement shortcutIcons_VE = this.Q<VisualElement>("shortcut-icons");
@@ -38,11 +37,12 @@ public class ShortcutElement : VisualElement
                 shortcutIcons_VE.Add(plus);
             }
 
-            var icon = new VisualElement();
-            icon.style.width = 15;
-            icon.style.height = 15;
-            icon.style.backgroundColor = new StyleColor(new Color(0f, 0f, 0f, 0f));
-            icon.style.backgroundImage = new StyleBackground(shortcutIcons[i]);
+            var icon = shortcutIconTreeAsset.CloneTree().Q<ShortcutIconElement>();
+            //icon.style.width = 15;
+            //icon.style.height = 15;
+            //icon.style.backgroundColor = new StyleColor(new Color(0f, 0f, 0f, 0f));
+            //icon.style.backgroundImage = new StyleBackground(shortcutIcons[i]);
+            icon.Setup(shortcutIcons[i]);
             Debug.Log("icons name = " + shortcutIcons[i].name);
             shortcutIcons_VE.Add(icon);
         }
