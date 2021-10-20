@@ -138,8 +138,10 @@ public class LauncherManager : MonoBehaviour
         StringBuilder name = new StringBuilder(9);
 
         GetKeyboardLayoutName(name);
+
+        string str = name.ToString();
         
-        if(name.ToString() == "0000040C") //fr-FR
+        if(str == "0000040C" || str == "0000080C") //fr-FR or fr-BE
         {
             InputLayoutManager.SetCurrentInputLayout("AzertyLayout");
         } else
