@@ -62,6 +62,8 @@ namespace BrowserDesktop.Menu
 
         private List<ShortcutElement> shortcutsDisplayedList = new List<ShortcutElement>();
         private List<ShortcutElement> shortcutsWaitedList = new List<ShortcutElement>();
+        public readonly List<ShortcutIconElement> shortcutIconsDisplayedList = new List<ShortcutIconElement>();
+        public readonly List<ShortcutIconElement> shortcutIconsWaitedList = new List<ShortcutIconElement>();
         
         public static UnityEvent OnClearShortcut = new UnityEvent();
 
@@ -97,18 +99,35 @@ namespace BrowserDesktop.Menu
                 String[] test = { "t", "s" };
                 AddShortcut("test2", test);
             }
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                String[] test0 = { "t", "s" };
+                String[] test1 = { "t" };
+                String[] test2 = { "t", "s", "d" };
+                String[] test3 = { "t", "s" };
+                AddShortcut("test3", test0);
+                AddShortcut("test3", test1);
+                AddShortcut("test3", test2);
+                AddShortcut("test3", test3);
+            }
             if (Input.GetKeyDown(KeyCode.C))
             {
                 ClearShortcut();
             }
         }
 
+        public void AddShortcuts()
+        {
+            //TODO Add shortcuts
+            //TODO Resize
+        }
+
         /// <summary>
-        /// Add shortcuts to the shortcuts displayer.
+        /// Add a shortcut to the shortcuts displayer.
         /// </summary>
         /// <param name="shortcutName">What the shortcut do.</param>
         /// <param name="shortcutskeys">Keys to press to trigger the shortcut.</param>
-        public void AddShortcut(String shortcutName, string[] shortcutskeys)
+        private void AddShortcut(String shortcutName, string[] shortcutskeys)
         {
             ShortcutElement shortcutElement;
             if (shortcutsWaitedList.Count == 0)
@@ -132,7 +151,7 @@ namespace BrowserDesktop.Menu
                 shortcutIcons[i] = GetShortcutSprite(shortcutskeys[i]);
             }
 
-            shortcutElement.Setup(shortcutName, shortcutIcons, shortcutIconTreeAsset);
+            shortcutElement.Setup(shortcutName, shortcutIcons, shortcutIconTreeAsset, this);
             shortcutsScrollView.Add(shortcutElement);
         }
 
@@ -143,7 +162,7 @@ namespace BrowserDesktop.Menu
         {
             //TO Test
             OnClearShortcut.Invoke();
-            shortcutsWaitedList.AddRange(shortcutsWaitedList);
+            //shortcutsWaitedList.AddRange(shortcutsDisplayedList);
             shortcutsDisplayedList.Clear();
         }
 
