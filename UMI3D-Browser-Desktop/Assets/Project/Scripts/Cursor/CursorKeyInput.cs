@@ -24,7 +24,7 @@ namespace BrowserDesktop.Cursor
     public class CursorKeyInput : KeyInput
     {
         // Start is called before the first frame update
-        private bool swichOnDown = false;
+        
         private bool constrainDistanceChange = false;
         public Transform Cursor;
         public Transform AvatarParent;
@@ -35,31 +35,22 @@ namespace BrowserDesktop.Cursor
         public float ScrollToDistSpeed = 20f;
         Transform lastObject;
 
-        public bool SwichOnDown { get => swichOnDown; protected set => swichOnDown = value; }
+       
 
         protected override void Start()
         {
             base.Start();
             onInputDown.AddListener(() =>
             {
-                SwichOnDown = (CursorHandler.State == CursorHandler.CursorState.Hover);
-                if (SwichOnDown)
-                {
-                    CursorHandler.State = CursorHandler.CursorState.Clicked;
-                }
                 lastObject = null;
                 constrainDistanceChange = true;
             });
             onInputUp.AddListener(() =>
             {
-                if (SwichOnDown && CursorHandler.State == CursorHandler.CursorState.Clicked)
-                {
-                    CursorHandler.State = CursorHandler.CursorState.Hover;
-                }
-                   
                 constrainDistanceChange = false;
                 //sdistCursor = 1;
             });
+
         }
 
         List<Transform> ignore;
