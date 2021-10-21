@@ -19,6 +19,7 @@ using UnityEngine.UIElements;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using System;
+using System.Collections;
 
 namespace BrowserDesktop.Menu
 {
@@ -62,10 +63,13 @@ namespace BrowserDesktop.Menu
 
         private List<ShortcutElement> shortcutsDisplayedList = new List<ShortcutElement>();
         private List<ShortcutElement> shortcutsWaitedList = new List<ShortcutElement>();
-        public readonly List<ShortcutIconElement> shortcutIconsDisplayedList = new List<ShortcutIconElement>();
-        public readonly List<ShortcutIconElement> shortcutIconsWaitedList = new List<ShortcutIconElement>();
+        public readonly List<ShortcutIconElement> ShortcutIconsDisplayedList = new List<ShortcutIconElement>();
+        public readonly List<ShortcutIconElement> ShortcutIconsWaitedList = new List<ShortcutIconElement>();
+        public readonly List<Label> ShortcutPlusLabelDisplayList = new List<Label>();
+        public readonly List<Label> ShortcutPlusLabelWaitedList = new List<Label>();
         
-        public static UnityEvent OnClearShortcut = new UnityEvent();
+        //public UnityEvent<Shortcuts> OnClearShortcut = new UnityEvent<Shortcuts>();
+        //public UnityEvent OnResizeIconsArea = new UnityEvent();
 
         #endregion
 
@@ -93,11 +97,15 @@ namespace BrowserDesktop.Menu
             {
                 String[] test = { "t" };
                 AddShortcut("test", test);
+                //OnResizeIconsArea.Invoke();
+                AddShortcuts();
             }
             if (Input.GetKeyDown(KeyCode.L))
             {
                 String[] test = { "t", "s" };
                 AddShortcut("test2", test);
+                //OnResizeIconsArea.Invoke();
+                AddShortcuts();
             }
             if (Input.GetKeyDown(KeyCode.M))
             {
@@ -105,10 +113,12 @@ namespace BrowserDesktop.Menu
                 String[] test1 = { "t" };
                 String[] test2 = { "t", "s", "d" };
                 String[] test3 = { "t", "s" };
-                AddShortcut("test3", test0);
-                AddShortcut("test3", test1);
-                AddShortcut("test3", test2);
-                AddShortcut("test3", test3);
+                AddShortcut("test", test0);
+                AddShortcut("test01", test1);
+                AddShortcut("test002", test2);
+                AddShortcut("test0003", test3);
+                //OnResizeIconsArea.Invoke();
+                AddShortcuts();
             }
             if (Input.GetKeyDown(KeyCode.C))
             {
@@ -116,39 +126,52 @@ namespace BrowserDesktop.Menu
             }
         }
 
+        private IEnumerator GetIconsAreaWidth()
+        {
+            yield return null;
+            shortcutsDisplayedList.ForEach((sE) => sE.GetIconsAreaWidth());
+        }
+
+        private IEnumerator ResizeIconsArea()
+        {
+            yield return GetIconsAreaWidth();
+            shortcutsDisplayedList.ForEach((sE) => sE.ResizeIconsArea());
+        }
+
+
         public void AddShortcuts()
         {
             //TODO Add shortcuts
             //TODO Resize
+            //OnResizeIconsArea.Invoke();
+            StartCoroutine(ResizeIconsArea());
         }
 
         /// <summary>
         /// Add a shortcut to the shortcuts displayer.
         /// </summary>
         /// <param name="shortcutName">What the shortcut do.</param>
-        /// <param name="shortcutskeys">Keys to press to trigger the shortcut.</param>
-        private void AddShortcut(String shortcutName, string[] shortcutskeys)
+        /// <param name="shortcutkeys">Keys to press to trigger the shortcut.</param>
+        private void AddShortcut(String shortcutName, string[] shortcutkeys)
         {
             ShortcutElement shortcutElement;
             if (shortcutsWaitedList.Count == 0)
             {
                 shortcutElement = shortcutTreeAsset.CloneTree().Q<ShortcutElement>();
-                OnClearShortcut.AddListener(shortcutElement.RemoveShortcut);
             }
             else
             {
                 shortcutElement = shortcutsWaitedList[shortcutsWaitedList.Count - 1];
                 shortcutsWaitedList.RemoveAt(shortcutsWaitedList.Count - 1);
             }
-
             shortcutsDisplayedList.Add(shortcutElement);
 
             //TODO increase the height of the shortcutDisplayer.
 
-            Sprite[] shortcutIcons = new Sprite[shortcutskeys.Length];
-            for (int i = 0; i < shortcutskeys.Length; ++i)
+            Sprite[] shortcutIcons = new Sprite[shortcutkeys.Length];
+            for (int i = 0; i < shortcutkeys.Length; ++i)
             {
-                shortcutIcons[i] = GetShortcutSprite(shortcutskeys[i]);
+                shortcutIcons[i] = GetShortcutSprite(shortcutkeys[i]);
             }
 
             shortcutElement.Setup(shortcutName, shortcutIcons, shortcutIconTreeAsset, this);
@@ -161,8 +184,19 @@ namespace BrowserDesktop.Menu
         public void ClearShortcut()
         {
             //TO Test
-            OnClearShortcut.Invoke();
-            //shortcutsWaitedList.AddRange(shortcutsDisplayedList);
+
+            Action<VisualElement> removeVEFromHierarchy = (vE) => vE.RemoveFromHierarchy();
+
+            ShortcutIconsDisplayedList.ForEach(removeVEFromHierarchy);
+            ShortcutIconsWaitedList.AddRange(ShortcutIconsDisplayedList);
+            ShortcutIconsDisplayedList.Clear();
+
+            ShortcutPlusLabelDisplayList.ForEach(removeVEFromHierarchy);
+            ShortcutPlusLabelWaitedList.AddRange(ShortcutPlusLabelDisplayList);
+            ShortcutPlusLabelDisplayList.Clear();
+
+            shortcutsDisplayedList.ForEach((sE)=> sE.RemoveShortcut(this));
+            shortcutsWaitedList.AddRange(shortcutsDisplayedList);
             shortcutsDisplayedList.Clear();
         }
 
@@ -175,18 +209,6 @@ namespace BrowserDesktop.Menu
             isDisplayed = val;
 
             //TODO display or hide shortcutDisplayer
-        }
-
-        private string GetShortcutIconName(string shortcutKey)
-        {
-            foreach (Shortcut shortcut in shortcuts)
-            {
-                if (shortcut.ShortcutKey == shortcutKey)
-                    return shortcut.ShortcutIcon.name;
-            }
-
-            Debug.LogError("Shortcut key not found: this shouldn't happen");
-            return "";
         }
 
         /// <summary>
