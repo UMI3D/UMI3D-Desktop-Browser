@@ -55,12 +55,10 @@ public class ShortcutElement : VisualElement
             else if (iconsWidth < value) //The icons area width has increased.
             {
                 iconsWidth = value;
-                Debug.Log("resizement in Icons width");
                 OnIconsAreaResizement.Invoke();
             }
             else //This icons area is smaller
             {
-                Debug.Log("resizement in Icons width");
                 OnIconsAreaResizement.Invoke();
             }
             
@@ -76,42 +74,63 @@ public class ShortcutElement : VisualElement
         OnIconsAreaResizement.AddListener(IconsAreaResizement);
     }
 
-    public void Setup(string shortcutName, Sprite[] shortcutIcons, VisualTreeAsset shortcutIconTreeAsset)
+    public void Setup(string shortcutName, Sprite[] shortcutIcons, VisualTreeAsset shortcutIconTreeAsset, BrowserDesktop.Menu.Shortcuts shortcutsClass)
     {
         isShortcutDisplay = true;
         ++ShortcutsCount;
 
-        this.Q<Label>("shortcut-name").text = shortcutName;
+        Label shortcutNameLabel = this.Q<Label>("shortcut-name");
+        shortcutNameLabel.text = shortcutName;
+        shortcutNameLabel.AddToClassList("label-shortcut");
+
         iconsArea_VE = this.Q<VisualElement>("shortcut-icons");
 
         for (int i = 0; i < shortcutIcons.Length; ++i)
         {
             if (i != 0 && i < shortcutIcons.Length)
             {
-                var plus = new Label("+");
+                Label plus = new Label("+");
+                plus.AddToClassList("label-shortcut");
+                plus.AddToClassList("label-shortcut-plus");
                 iconsArea_VE.Add(plus);
             }
 
-            var icon = shortcutIconTreeAsset.CloneTree().Q<ShortcutIconElement>();
+            //TODO add a pool for icon
+            ShortcutIconElement icon;
+            if (shortcutsClass.shortcutIconsWaitedList.Count == 0)
+            {
+                icon = shortcutIconTreeAsset.CloneTree().Q<ShortcutIconElement>();
+            }
+            else
+            {
+                icon = shortcutsClass.shortcutIconsWaitedList[shortcutsClass.shortcutIconsWaitedList.Count - 1];
+                shortcutsClass.shortcutIconsWaitedList.RemoveAt(shortcutsClass.shortcutIconsWaitedList.Count - 1);
+            }
             icon.Setup(shortcutIcons[i]);
-            //Debug.Log("icons name = " + shortcutIcons[i].name);
             iconsArea_VE.Add(icon);
         }
 
-        umi3d.cdk.UMI3DEnvironmentLoader.Instance.StartCoroutine(GetIconsAreaWidth());
+        shortcutsClass.StartCoroutine(GetIconsAreaWidth());
     }
 
     IEnumerator GetIconsAreaWidth()
     {
         yield return null;
+        var iconsArea_VE = this.Q<VisualElement>("shortcut-icons");
         IconsWidth = iconsArea_VE.resolvedStyle.width;
-        Debug.Log("icons width = " + IconsWidth);
-        Debug.Log("Icons area width = " + iconsArea_VE.resolvedStyle.width);
+        Debug.Log("icons width = " + IconsWidth + ", Icons area width = " + iconsArea_VE.resolvedStyle.width);
     }
 
     public void IconsAreaResizement()
     {
         //TODO
+        if (iconsArea_VE == null)
+        {
+            //var iconsArea_VE = this.Q<VisualElement>("shortcut-icons");
+            //Debug.Log("Test error ?");
+            return;
+        }
+        Debug.Log("icons width = " + IconsWidth + ", Icons area width = " + iconsArea_VE.resolvedStyle.width);
         iconsArea_VE.style.width = IconsWidth;
         Debug.Log("resizement");
     }
