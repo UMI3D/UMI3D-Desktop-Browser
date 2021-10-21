@@ -139,6 +139,7 @@ public class KeyMenuInput : AbstractUMI3DInput
             {
                 if (risingEdgeEventSent)
                 {
+                    UnityEngine.Debug.Log("Release");
                     var eventdto = new EventStateChangedDto
                     {
                         active = false,

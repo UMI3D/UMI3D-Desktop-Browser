@@ -400,6 +400,10 @@ namespace BrowserDesktop.Controller
 
         void Hover()
         {
+            if(mouseData.CurrentHoveredId != mouseData.LastHoveredId)
+                Debug.Log(mouseData.CurrentHoveredId);
+            if (mouseData.OldHovered != mouseData.CurrentHovered)
+                Debug.Log(mouseData.CurrentHoveredTransform?.name);
             if (mouseData.ForceProjection)
             {
                 if (CircularMenu.Exists && (!CircularMenu.Instance.IsEmpty() || EventMenu.NbEventsDIsplayed > 0))

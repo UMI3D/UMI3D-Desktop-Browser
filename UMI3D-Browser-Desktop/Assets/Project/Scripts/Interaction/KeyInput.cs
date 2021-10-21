@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Controller;
+using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
 using inetum.unityUtils;
 using System.Collections;
@@ -63,11 +64,31 @@ namespace BrowserDesktop.Interaction
         ulong toolId;
 
         ulong hoveredObjectId;
+        private bool swichOnDown = false;
+        public bool SwichOnDown { get => swichOnDown; protected set => swichOnDown = value; }
 
         protected virtual void Start()
         {
             StartCoroutine(InitEventDisplayer());
+            onInputDown.AddListener(() =>
+            {
+                SwichOnDown = (CursorHandler.State == CursorHandler.CursorState.Hover);
+                if (SwichOnDown)
+                {
+                    CursorHandler.State = CursorHandler.CursorState.Clicked;
+                }
+            });
+            onInputUp.AddListener(() =>
+            {
+                if (SwichOnDown && CursorHandler.State == CursorHandler.CursorState.Clicked)
+                {
+                    CursorHandler.State = CursorHandler.CursorState.Hover;
+                }
+            });
         }
+
+
+
 
         IEnumerator InitEventDisplayer()
         {
@@ -239,6 +260,7 @@ namespace BrowserDesktop.Interaction
                     {
                         if (risingEdgeEventSent)
                         {
+                            UnityEngine.Debug.Log("<color='purple''>Release</color>");
                             var eventdto = new EventStateChangedDto
                             {
                                 active = false,
