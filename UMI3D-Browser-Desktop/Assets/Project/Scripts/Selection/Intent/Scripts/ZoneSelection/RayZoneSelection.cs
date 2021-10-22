@@ -73,6 +73,33 @@ namespace BrowserDesktop.Selection
             return objList.Where(o => distToRay(o) == minDistance).FirstOrDefault();
         }
 
+        public InteractableContainer GetClosestObjectOnRay()
+        {
+            var interactablesWithDistances = GetObjectsAlongRayWithRayCastHits();
+            var interactables = interactablesWithDistances.Keys.ToList();
+            if (interactables.Count == 0)
+                return null;
+
+            var activeInteractables = interactables.Where(obj => (obj != null && obj.Interactable.Active)).DefaultIfEmpty();
+            if (activeInteractables == default)
+                return null;
+
+            //Sort them by hasPriority and distance from user
+            var activeInteractablesWithPriority = (from obj in activeInteractables
+                                                   where obj.Interactable.HasPriority
+                                                   select obj).ToList();
+            if (activeInteractablesWithPriority.Count > 0)
+                interactables = activeInteractablesWithPriority;
+
+            var minDist = (from obj in interactables
+                           select interactablesWithDistances[obj].distance).Min();
+
+            var closestActiveInteractable = (from obj in interactables
+                                             where interactablesWithDistances[obj].distance == minDist
+                                             select obj).FirstOrDefault();
+            return closestActiveInteractable;
+        }
+
         /// <summary>
         /// Returns objects that are along the ray with their RayCastHit object
         /// </summary>

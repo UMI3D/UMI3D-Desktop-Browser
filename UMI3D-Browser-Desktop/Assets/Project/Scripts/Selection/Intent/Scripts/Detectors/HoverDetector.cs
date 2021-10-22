@@ -30,35 +30,7 @@ namespace BrowserDesktop.Selection.Intent
         {
             var raySelection = new RayZoneSelection(pointerTransform.position, pointerTransform.forward);
 
-            //1. Cast a ray to find all interactables
-            var interactablesWithDistances = raySelection.GetObjectsAlongRayWithRayCastHits();
-            var interactables = interactablesWithDistances.Keys.ToList();
-            if (interactables.Count == 0)
-                return null;
-
-            var activeInteractables = interactables.Where(obj => (obj != null && obj.Interactable.Active)).DefaultIfEmpty();
-            if (activeInteractables == default)
-                return null;
-
-            //2. Sort them by hasPriority and distance from user
-            var activeInteractablesWithPriority = (from obj in activeInteractables
-                                                   where obj.Interactable.HasPriority
-                                                  select obj).ToList();
-            if (activeInteractablesWithPriority.Count > 0)
-                interactables = activeInteractablesWithPriority;
-
-            var minDist = (from obj in interactables
-                           select interactablesWithDistances[obj].distance).Min();
-
-            var closestActiveInteractable = (from obj in interactables
-                                             where interactablesWithDistances[obj].distance == minDist
-                                                select obj).FirstOrDefault();
-
-            //3. Save the data about the closest one
-            if (!closestActiveInteractable.Equals(default))
-            {
-                Interactable interactable = closestActiveInteractable.Interactable;
-            }
+            var closestActiveInteractable = raySelection.GetClosestObjectOnRay();
 
             return closestActiveInteractable;
         }

@@ -25,10 +25,24 @@ namespace BrowserDesktop.Selection.Intent
     [CreateAssetMenu(fileName = "RefinedKEPDetector", menuName = "UMI3D/Selection/Intent Detector/Refined KEP")]
     public class RefinedKEPDetector : AbstractSelectionIntentDetector
     {
-        private LinkedList<double> angularDistanceData;
-        private LinkedList<double> angularSpeedData;
-        private LinkedList<Vector3> angularVectors;
+        /// <summary>
+        /// Store angular movements amplitude, speed and associated rotation
+        /// </summary>
+        private class AngularDataSample
+        {
+            public double amplitude;
+            public double speed;
+            public Vector3 eulerRotation;
+        }
 
+        /// <summary>
+        /// Store accumulated angular data used to predict by regression
+        /// </summary>
+        private LinkedList<AngularDataSample> angularData;
+
+        /// <summary>
+        /// Initial direction of the pointer vector at the start of the prediction
+        /// </summary>
         private Vector3 initialDirection;
 
         /// <summary>
@@ -41,7 +55,13 @@ namespace BrowserDesktop.Selection.Intent
         /// Precision of roots computation in the quadratic polynomial
         /// </summary>
         [SerializeField]
-        private double rootsPrecision = 0.0001;
+        private double amplitudeMinimum = 0.1;
+
+        /// <summary>
+        /// Precentage of the movement that should be completed before making a prediction
+        /// </summary>
+        [SerializeField]
+        private float targetDistanceThreshold = 0.80f;
 
         /// <summary>
         /// Minimal number of sample before an extrapolation could be made
@@ -55,7 +75,7 @@ namespace BrowserDesktop.Selection.Intent
         [SerializeField]
         private float coneAngle = 15;
 
-        private bool predictionReady = false;
+        private bool estimationReady = false;
 
         private InteractableContainer lastEstimated = null;
 
@@ -63,10 +83,7 @@ namespace BrowserDesktop.Selection.Intent
 
         public override void InitDetector(AbstractController controller)
         {
-            angularDistanceData = new LinkedList<double>();
-            angularSpeedData = new LinkedList<double>();
-
-            angularVectors = new LinkedList<Vector3>();
+            angularData = new LinkedList<AngularDataSample>();
 
             pointerTransform = Camera.main.transform;
 
@@ -74,55 +91,66 @@ namespace BrowserDesktop.Selection.Intent
 
             initialDirection = pointerTransform.forward.normalized;
 
-            predictionReady = false;
+            estimationReady = false;
         }
 
         public override void ResetDetector()
         {
-            angularDistanceData.Clear();
-            angularSpeedData.Clear();
-            angularVectors.Clear();
+            angularData.Clear();
             initialDirection = pointerTransform.forward.normalized;
-            predictionReady = false;
+            estimationReady = false;
         }
 
         public override InteractableContainer PredictTarget()
         {
-            var angleVector = pointerTransform.rotation.eulerAngles - lastRotation;
-            var angleDelta = angleVector.magnitude;
+            var deltaRotation = pointerTransform.rotation.eulerAngles - lastRotation;
+            var deltaAngle = deltaRotation.magnitude;
 
-            if (angularDistanceData.Count >= minimalNumberOfSamples)
+            if (deltaAngle == 0 && angularData.Count > 1)
             {
-                var stability = angleDelta / angularDistanceData.Last.Value;
-                if (stability < stabilityThreshold) //if the mouvement is stable enough, can compute the prediction (Refined KEP, Ruiz 2009)
-                    predictionReady = true;
+                return GetClosestToRay(pointerTransform.forward);
             }
 
-            angularDistanceData.AddLast(angleDelta); //accumulating data for computation
-            angularSpeedData.AddLast(angleDelta / Time.deltaTime);
-            angularVectors.AddLast(angleVector);
+            if (angularData.Count >= minimalNumberOfSamples)
+            {
+                var lastAngleMovement = angularData.Last.Value.amplitude;
+                var stability = deltaAngle / lastAngleMovement;
+                if (stability < stabilityThreshold) //if the mouvement is stable enough, can compute the prediction (Refined KEP, Ruiz 2009)
+                    estimationReady = true;
+            }
+
+            var angularSample = new AngularDataSample();
+            angularSample.amplitude = deltaAngle;
+            angularSample.speed = deltaAngle / Time.deltaTime;
+            angularSample.eulerRotation = deltaRotation;
+            angularData.AddLast(angularSample); //accumulating data for computation
 
             lastRotation = pointerTransform.rotation.eulerAngles;
             lastRotation = new Vector3(lastRotation.x, lastRotation.y, lastRotation.z);
 
-            if (predictionReady)
+            if (estimationReady)
             {
-                Vector3 estimatedDirection = estimateKinematicEndpoint();
-                var estimatedConicZone = new ConicZoneSelection(pointerTransform.position, estimatedDirection, coneAngle);
-                var objsInZone = estimatedConicZone.GetObjectsInZone();
-
-                if (objsInZone.Count == 0)
+                var estimatedAmplitude = estimateKinematicEndpointAmplitude();
+                if (estimatedAmplitude == 0) // no strictly positive root found
                 {
-                    lastEstimated = null;
+                    estimationReady = false;
                     return null;
                 }
-                else
+                    
+                var currentMovementAmplitude = angularData.Select(x => x.amplitude).Sum();
+                if (currentMovementAmplitude / estimatedAmplitude < targetDistanceThreshold) //the precentage of the completed movement should be above the threshold, otherwise the prediction is inaccurate
                 {
-                    var estimatedObject = estimatedConicZone.GetClosestObjectToRay(objsInZone);
-                    lastEstimated = estimatedObject;
-                    ResetDetector();
-                    return estimatedObject;
+                    estimationReady = false;
+                    return null;
                 }
+
+                //Makes the hypothesis that it will be along the average rotation
+                var direction = angularData.Select(x => x.eulerRotation).Aggregate(new Vector3(0, 0, 0), (sum, next) => sum + next).normalized; 
+                var predictedRotation = (float)estimatedAmplitude * direction;
+
+                var predictedDirection = (Quaternion.Euler(predictedRotation) * initialDirection).normalized;
+                var predictedInteractable = GetClosestToRay(predictedDirection);
+                return predictedInteractable;
             }
             else
             {
@@ -130,38 +158,44 @@ namespace BrowserDesktop.Selection.Intent
             }
         }
 
-        /// <summary>
-        /// Estimate the total angular distance that will be achieved
-        /// </summary>
-        /// <returns></returns>
-        private double estimateAngularDistance()
+        private InteractableContainer GetClosestToRay(Vector3 estimatedDirection)
         {
-            var order = 4;
-            double[] polynomialCoeffs = Fit.Polynomial(angularDistanceData.ToArray(), angularSpeedData.ToArray(), order); //least squares fitting
-            var roots = FindRoots.Polynomial(polynomialCoeffs);
+            var estimatedConicZone = new ConicZoneSelection(pointerTransform.position, estimatedDirection, coneAngle);
+            var objsInZone = estimatedConicZone.GetObjectsInZone();
 
-            double distanceEstimated = (from r in roots
-                                        where r.IsReal() && (r.Norm() > rootsPrecision)
-                                        orderby r.Real
-                                        ascending
-                                        select r.Real).FirstOrDefault(); //finding the 2nd real root
-
-            return distanceEstimated;
+            if (objsInZone.Count == 0)
+            {
+                lastEstimated = null;
+                ResetDetector();
+                return null;
+            }
+            else
+            {
+                var estimatedObject = estimatedConicZone.GetClosestObjectToRay(objsInZone);
+                lastEstimated = estimatedObject;
+                ResetDetector();
+                return estimatedObject;
+            }
         }
-
 
         /// <summary>
         /// Estimate the endpoint using kinematics.
-        /// Makes the hypothesis that the endpoint would be along the average direction
+        /// Estimate the total angular distance that will be achieved
         /// </summary>
         /// <returns></returns>
-        private Vector3 estimateKinematicEndpoint()
+        private double estimateKinematicEndpointAmplitude()
         {
-            var distance = estimateAngularDistance();
-            var direction = angularVectors.Aggregate(new Vector3(0, 0, 0), (sum, next) => sum + next).normalized;
-            var estimatedRotation = (float)distance * direction;
-            
-            return Quaternion.Euler(estimatedRotation) * initialDirection; //?
+            var order = 4;
+            double[] polynomialCoeffs = Fit.Polynomial(angularData.Select(x=>x.amplitude).ToArray(), angularData.Select(x => x.speed).ToArray(), order); //least squares fitting
+            var roots = FindRoots.Polynomial(polynomialCoeffs);
+
+            double estimatedAmplitude = (from r in roots
+                                         where r.IsReal() && r.Real > amplitudeMinimum
+                                         orderby r.Real
+                                         ascending
+                                         select r.Real).FirstOrDefault(); //finding the 2nd real root which is strictly positive
+
+            return estimatedAmplitude;
         }
 
 
