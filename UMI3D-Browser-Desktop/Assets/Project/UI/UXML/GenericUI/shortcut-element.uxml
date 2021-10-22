@@ -1,10 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ShortcutElement style="flex-direction: row; margin-top: 5px; justify-content: center;">
+    <Style src="/Assets/Project/UI/UXML/shortcut.uss" />
+    <ShortcutElement style="flex-direction: row; margin-top: 0; justify-content: center; margin-bottom: 10px;">
         <ui:VisualElement name="shortcut-icons" style="flex-direction: row; background-color: rgba(255, 255, 255, 0); justify-content: flex-end; align-items: stretch;">
-            <ui:VisualElement name="icon" style="height: 15px; align-items: center; justify-content: center; flex-direction: row; display: none;">
-                <ui:VisualElement name="ctrl-icon" style="height: 17px; width: 28px; background-image: url(&apos;/Assets/Project/UI/UI_connection/Shortcut_icons/key_Ctrl.png&apos;); border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px;" />
-                <ui:VisualElement name="shift-icon" style="background-image: url(&apos;/Assets/Project/UI/UI_connection/Shortcut_icons/key_Shift.png&apos;); width: 32px; height: 17px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px;" />
-            </ui:VisualElement>
+            <ShortcutIconElement style="background-image: url(&apos;/Assets/Project/UI/UI_connection/Shortcut_icons/key_Shift.png&apos;); width: 37px; height: 20px; display: none;" />
+            <ui:Label text="+" display-tooltip-when-elided="true" class="label-shortcut label-shortcut-plus" style="display: none;" />
+            <ShortcutIconElement style="background-image: url(&apos;/Assets/Project/UI/UI_connection/Shortcut_icons/key_Shift.png&apos;); width: 37px; height: 20px; display: none;" />
+            <ui:Label text="+" display-tooltip-when-elided="true" class="label-shortcut label-shortcut-plus" style="display: none;" />
+            <ShortcutIconElement style="background-image: url(&apos;/Assets/Project/UI/UI_connection/Shortcut_icons/key_Shift.png&apos;); width: 37px; height: 20px; display: none;" />
         </ui:VisualElement>
         <ui:Label text="Label" display-tooltip-when-elided="true" name="shortcut-name" style="flex-direction: row; -unity-text-align: middle-left; margin-left: 10px;" />
     </ShortcutElement>

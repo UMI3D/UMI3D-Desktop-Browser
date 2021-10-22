@@ -380,7 +380,6 @@ MonoBehaviour:
     type: 3}
   shortcutIconTreeAsset: {fileID: 9197481963319205126, guid: 37de0f326e455d746a6e3028a70e1793,
     type: 3}
-  pathToShortcutsIcons: Assets/Project/UI/UI_connection/Shortcut_icons/
   shortcuts:
   - ShortcutKey: 0
     ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
@@ -540,6 +539,7 @@ MonoBehaviour:
     ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
   - ShortcutKey: 
     ShortcutIcon: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  shortcutsIcons: {fileID: 11400000, guid: 3576f5f11fbda2948a7580457c1a2b48, type: 2}
 --- !u!1 &1060301966
 GameObject:
   m_ObjectHideFlags: 0

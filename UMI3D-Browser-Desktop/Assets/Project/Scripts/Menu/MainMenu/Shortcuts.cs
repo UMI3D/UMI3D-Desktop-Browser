@@ -51,63 +51,80 @@ namespace BrowserDesktop.Menu
 
         VisualElement shortcutArea; //Where shortcut's button and labels are positions in the footer.
         VisualElement shortcutDisplayer; //Where the shortcuts are displayed.
-        ScrollView shortcutsScrollView; //ListView of shortcuts
-        Button openShortcutBtn;
+        ScrollView shortcuts_SV; //ScrollView of shortcuts
+        VisualElement shortcuts_VE;
+        //Button openShortcutBtn;
 
         #endregion
+
+        #region Data
 
         [SerializeField]
         private Shortcut[] shortcuts; //Shortcuts dictionary
 
+        [SerializeField]
+        private Icons_SO shortcutsIcons;
+
         bool isDisplayed = true; //is shortcutDisplayer visible.
 
+        //Object Pooling
         private List<ShortcutElement> shortcutsDisplayedList = new List<ShortcutElement>();
         private List<ShortcutElement> shortcutsWaitedList = new List<ShortcutElement>();
         public readonly List<ShortcutIconElement> ShortcutIconsDisplayedList = new List<ShortcutIconElement>();
         public readonly List<ShortcutIconElement> ShortcutIconsWaitedList = new List<ShortcutIconElement>();
         public readonly List<Label> ShortcutPlusLabelDisplayList = new List<Label>();
         public readonly List<Label> ShortcutPlusLabelWaitedList = new List<Label>();
-        
+
         //public UnityEvent<Shortcuts> OnClearShortcut = new UnityEvent<Shortcuts>();
         //public UnityEvent OnResizeIconsArea = new UnityEvent();
+
+        #endregion
 
         #endregion
 
         void Start()
         {
             Debug.Assert(uiDocument != null);
+            Debug.Assert(shortcutsIcons != null);
             Debug.Assert(shortcutTreeAsset != null);
             Debug.Assert(shortcutIconTreeAsset != null);
 
             var root = uiDocument.rootVisualElement;
 
-            openShortcutBtn = root.Q<Button>("open-shortcuts-button");
+            /*openShortcutBtn = root.Q<Button>("open-shortcuts-button");
             openShortcutBtn.clickable.clicked += ()=> DisplayShortcut(!isDisplayed);
-            openShortcutBtn.AddToClassList("btn-shortcut");
+            openShortcutBtn.AddToClassList("btn-shortcut");*/
 
             shortcutDisplayer = root.Q<VisualElement>("shortcut-displayer");
-            shortcutsScrollView = shortcutDisplayer.Q<ScrollView>("shortcuts");
+            shortcuts_SV = shortcutDisplayer.Q<ScrollView>("shortcuts");
 
             DisplayShortcut(false); //Default: shortcuts are hidden.
         }
 
         void Update()
         {
+            //To be improved.
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                DisplayShortcut(!isDisplayed);
+            }
+
+            //Debug
             if (Input.GetKeyDown(KeyCode.K))
             {
-                String[] test = { "t" };
+                String[] test = { "1" };
                 AddShortcut("test", test);
                 //OnResizeIconsArea.Invoke();
                 AddShortcuts();
             }
             if (Input.GetKeyDown(KeyCode.L))
             {
-                String[] test = { "t", "s" };
+                String[] test = { "ctrl", "1" };
                 AddShortcut("test2", test);
                 //OnResizeIconsArea.Invoke();
                 AddShortcuts();
             }
-            if (Input.GetKeyDown(KeyCode.M))
+            /*if (Input.GetKeyDown(KeyCode.M))
             {
                 String[] test0 = { "t", "s" };
                 String[] test1 = { "t" };
@@ -119,6 +136,12 @@ namespace BrowserDesktop.Menu
                 AddShortcut("test0003", test3);
                 //OnResizeIconsArea.Invoke();
                 AddShortcuts();
+            }*/
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                String[] test = { "shift", "shift", "shift" };
+                AddShortcut("test shift", test);
+                AddShortcuts();
             }
             if (Input.GetKeyDown(KeyCode.C))
             {
@@ -126,25 +149,33 @@ namespace BrowserDesktop.Menu
             }
         }
 
-        private IEnumerator GetIconsAreaWidth()
+        /// <summary>
+        /// Wait one frame and compute the max width of shortcuts.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator ComputeShortcutsWidth()
         {
             yield return null;
-            shortcutsDisplayedList.ForEach((sE) => sE.GetIconsAreaWidth());
+            shortcutsDisplayedList.ForEach((sE) => sE.ComputeShortcutWidth());
         }
 
-        private IEnumerator ResizeIconsArea()
+        private IEnumerator ResizeShortcutsWidth()
         {
-            yield return GetIconsAreaWidth();
-            shortcutsDisplayedList.ForEach((sE) => sE.ResizeIconsArea());
+            yield return ComputeShortcutsWidth();
+            shortcutsDisplayedList.ForEach((sE) => sE.ResizeShortcutWidth());
+            AnimeVisualElement(shortcuts_SV, 1f, true); //Display shortcuts when the resizement is done.
+            Debug.Log("Shortcut displayer = " + shortcutDisplayer.resolvedStyle.width);
         }
 
+        #region Add and Remove Shortcuts
 
         public void AddShortcuts()
         {
+            AnimeVisualElement(shortcuts_SV, 1f, false); //Hide shortcuts while they are added.
             //TODO Add shortcuts
             //TODO Resize
             //OnResizeIconsArea.Invoke();
-            StartCoroutine(ResizeIconsArea());
+            StartCoroutine(ResizeShortcutsWidth());
         }
 
         /// <summary>
@@ -155,6 +186,7 @@ namespace BrowserDesktop.Menu
         private void AddShortcut(String shortcutName, string[] shortcutkeys)
         {
             ShortcutElement shortcutElement;
+            //Object Pooling for ShortcutElement.
             if (shortcutsWaitedList.Count == 0)
             {
                 shortcutElement = shortcutTreeAsset.CloneTree().Q<ShortcutElement>();
@@ -166,16 +198,15 @@ namespace BrowserDesktop.Menu
             }
             shortcutsDisplayedList.Add(shortcutElement);
 
-            //TODO increase the height of the shortcutDisplayer.
-
             Sprite[] shortcutIcons = new Sprite[shortcutkeys.Length];
             for (int i = 0; i < shortcutkeys.Length; ++i)
             {
-                shortcutIcons[i] = GetShortcutSprite(shortcutkeys[i]);
+                shortcutIcons[i] = shortcutsIcons.GetSpriteFrom(shortcutkeys[i]);
+                    //GetShortcutSprite(shortcutkeys[i]);
             }
 
             shortcutElement.Setup(shortcutName, shortcutIcons, shortcutIconTreeAsset, this);
-            shortcutsScrollView.Add(shortcutElement);
+            shortcuts_SV.Add(shortcutElement);
         }
 
         /// <summary>
@@ -184,7 +215,6 @@ namespace BrowserDesktop.Menu
         public void ClearShortcut()
         {
             //TO Test
-
             Action<VisualElement> removeVEFromHierarchy = (vE) => vE.RemoveFromHierarchy();
 
             ShortcutIconsDisplayedList.ForEach(removeVEFromHierarchy);
@@ -200,15 +230,43 @@ namespace BrowserDesktop.Menu
             shortcutsDisplayedList.Clear();
         }
 
+        #endregion
+
         /// <summary>
         /// Show or hide shortcuts.
         /// </summary>
         /// <param name="val">if true: show shortcuts, else hide.</param>
-        private void DisplayShortcut(bool val)
+        private void DisplayShortcut(bool value)
         {
-            isDisplayed = val;
+            isDisplayed = value;
 
-            //TODO display or hide shortcutDisplayer
+            //Display or hide shortcutDisplayer with animation.
+            AnimeVisualElement(shortcutDisplayer, 1f, value);
+        }
+
+        /// <summary>
+        /// Anime the VisualElement.
+        /// </summary>
+        /// <param name="vE">the VisualElement to be animated.</param>
+        /// <param name="value">The animation will be trigger from 0 to this value when isShowing is true. Else, from this value to 0.</param>
+        /// <param name="isShowing">The VisualElement should be displayed if true.</param>
+        private void AnimeVisualElement(VisualElement vE, float value, bool isShowing)
+        {
+            Debug.LogWarning("Use of Unity experimental API. May not work in the future.");
+            if (isShowing)
+            {
+                vE.experimental.animation.Start(0, value, 100, (elt, val) =>
+                {
+                    elt.style.opacity = val;
+                });
+            }
+            else
+            {
+                vE.experimental.animation.Start(value, 0, 100, (elt, val) =>
+                {
+                    elt.style.opacity = val;
+                });
+            }
         }
 
         /// <summary>
@@ -218,14 +276,15 @@ namespace BrowserDesktop.Menu
         /// <returns></returns>
         private Sprite GetShortcutSprite(string shortcutKey)
         {
-            foreach (Shortcut shortcut in shortcuts)
+            /*foreach (Shortcut shortcut in shortcuts)
             {
                 if (shortcut.ShortcutKey == shortcutKey)
                     return shortcut.ShortcutIcon;
             }
 
             Debug.LogError("Shortcut key not found: this shouln't happen");
-            return null;
+            return null;*/
+            return shortcutsIcons.GetSpriteFrom(shortcutKey);
         }
     }
 }

@@ -125,37 +125,24 @@ public class ShortcutElement : VisualElement
             }
             shortcutsClass.ShortcutIconsDisplayedList.Add(icon);
 
-            Debug.Log("iconsListWait = " + shortcutsClass.ShortcutIconsWaitedList.Count + ", iconsListDisplay = " + shortcutsClass.ShortcutIconsDisplayedList.Count);
-            Debug.Log("plusListWait = " + shortcutsClass.ShortcutPlusLabelWaitedList.Count + ", plusListDisplay = " + shortcutsClass.ShortcutPlusLabelDisplayList.Count);
-
             icon.Setup(shortcutIcons[i]);
             iconsArea_VE.Add(icon);
         }
     }
 
-    public void GetIconsAreaWidth()
+    public void ComputeShortcutWidth()
     {
-        //iconsArea_VE = this.Q<VisualElement>("shortcut-icons");
-        //shortcutName_L = this.Q<Label>("shortcut-name");
-
         IconsAreaWidth = iconsArea_VE.resolvedStyle.width;
         ShortcutNameWidth = shortcutName_L.resolvedStyle.width;
 
         Debug.Log("icons width = " + IconsAreaWidth + ", Icons area width = " + iconsArea_VE.resolvedStyle.width);
     }
 
-    public void ResizeIconsArea()
+    public void ResizeShortcutWidth()
     {
-        /*if (iconsArea_VE == null)
-        {
-            //var iconsArea_VE = this.Q<VisualElement>("shortcut-icons");
-            //Debug.Log("Test error ?");
-            //return;
-            //yield break;
-        }*/
-
         iconsArea_VE.style.width = IconsAreaWidth;
-        shortcutName_L.style.width = shortcutNameWidth;
+        //shortcutName_L.style.width = shortcutNameWidth;
+        shortcutName_L.style.width = IconsAreaWidth;
 
         Debug.Log("resizement");
     }
@@ -172,8 +159,6 @@ public class ShortcutElement : VisualElement
 
             //shortcutsClass.OnResizeIconsArea.RemoveListener(ResizeIconsArea);
             this.RemoveFromHierarchy();
-            
-            Debug.Log("remove shortcut : " + shortcutsCount);
         }
     }
 }
