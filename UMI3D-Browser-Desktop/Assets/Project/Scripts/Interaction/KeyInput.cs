@@ -292,6 +292,7 @@ namespace BrowserDesktop.Interaction
 
         public override void Dissociate()
         {
+            if (Down) onInputUp.Invoke();
             ResetButton();
             eventDisplayer?.Display(false);
             associatedInteraction = null;

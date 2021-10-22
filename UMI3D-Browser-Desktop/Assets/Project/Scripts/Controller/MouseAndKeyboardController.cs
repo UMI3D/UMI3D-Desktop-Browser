@@ -455,7 +455,8 @@ namespace BrowserDesktop.Controller
                     if (mouseData.HoverState == HoverState.AutoProjected)
                     {
                         CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
-                        InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
+                        if(currentTool != null)
+                            InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                     }
                     CircularMenu.Collapse();
                     CursorHandler.State = CursorHandler.CursorState.Default;
