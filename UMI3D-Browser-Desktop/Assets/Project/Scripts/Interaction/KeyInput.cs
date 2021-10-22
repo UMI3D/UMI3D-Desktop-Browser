@@ -48,6 +48,7 @@ namespace BrowserDesktop.Interaction
         private int locked = 0;
         public bool Locked { get { return locked > 0; } set { if (value) locked++; else { locked--; if (locked < 0) locked = 0; } } }
 
+        public bool Down { get; protected set; }
 
         /// <summary>
         /// Associtated interaction (if any).
@@ -217,7 +218,8 @@ namespace BrowserDesktop.Interaction
                     }
 
                     onInputDown.Invoke();
-                    
+                    Down = true;
+
                     if ((associatedInteraction).hold)
                     {
                         var eventdto = new EventStateChangedDto
@@ -245,9 +247,10 @@ namespace BrowserDesktop.Interaction
                     }
                 }
 
-                if (Input.GetKeyUp(InputLayoutManager.GetInputCode(activationButton)))
+                if (Input.GetKeyUp(InputLayoutManager.GetInputCode(activationButton)) || Down && !Input.GetKey(InputLayoutManager.GetInputCode(activationButton)))
                 {
                     onInputUp.Invoke();
+                    Down = false;
 
                     if (associatedInteraction.ReleaseAnimationId != 0)
                     {
@@ -260,7 +263,6 @@ namespace BrowserDesktop.Interaction
                     {
                         if (risingEdgeEventSent)
                         {
-                            UnityEngine.Debug.Log("<color='purple''>Release</color>");
                             var eventdto = new EventStateChangedDto
                             {
                                 active = false,
