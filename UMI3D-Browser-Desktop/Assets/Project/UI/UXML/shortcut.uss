@@ -16,6 +16,6 @@ Label.label-shortcut {
 }
 
 Label.label-shortcut-plus {
-    margin-left: 2px;
-    margin-right: 2px;
+    margin-left: 3px;
+    margin-right: 3px;
 }

@@ -33,10 +33,14 @@ public class ShortcutIconElement : VisualElement
         float height = sprite.rect.height;
         float width = sprite.rect.width;
 
-        int iconWidthPX = (int) (width / height) * iconHeightPX;
+        Debug.Log("Sprite height = " + height + ", sprite width = " + width);
+
+        int iconWidthPX = (int) ((width / height) * (float) iconHeightPX);
 
         this.style.height = iconHeightPX;
         this.style.width = iconWidthPX;
+
+        Debug.Log("icon height = " + iconHeightPX + ", icon width = " + iconWidthPX);
 
         this.style.backgroundImage = new StyleBackground(sprite);
     }
