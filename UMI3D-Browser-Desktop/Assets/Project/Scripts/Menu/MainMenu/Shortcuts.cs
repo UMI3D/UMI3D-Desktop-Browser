@@ -28,16 +28,6 @@ namespace BrowserDesktop.Menu
     /// </summary>
     public class Shortcuts : MonoBehaviour
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        [Serializable]
-        public struct Shortcut
-        {
-            public string ShortcutKey;
-            public Sprite ShortcutIcon;
-        }
-
         #region Fields
 
         #region UI
@@ -51,21 +41,24 @@ namespace BrowserDesktop.Menu
 
         VisualElement shortcutArea; //Where shortcut's button and labels are positions in the footer.
         VisualElement shortcutDisplayer_VE; //Where the shortcuts are displayed.
-        ScrollView shortcuts_SV; //ScrollView of shortcuts
-        VisualElement shortcuts_VE;
-        //Button openShortcutBtn;
+        ScrollView shortcuts_SV; //ScrollView of shortcuts.
 
         #endregion
 
         #region Data
 
+        /// <summary>
+        /// Shortcuts Icons dictionary
+        /// </summary>
         [SerializeField]
-        private Shortcut[] shortcuts; //Shortcuts dictionary To be replace
+        private Icons_SO shortcutsIcons;
 
-        [SerializeField]
-        private Icons_SO shortcutsIcons; //Shortcuts Icons dictionary
+        private float shortcutDisplayerWidth = 350;
 
-        bool isDisplayed = true; //is shortcutDisplayer visible.
+        /// <summary>
+        /// True if the shortcutDisplayer is visible.
+        /// </summary>
+        private bool isDisplayed;
 
         //Object Pooling
         private List<ShortcutElement> shortcutsDisplayedList = new List<ShortcutElement>();
@@ -92,6 +85,8 @@ namespace BrowserDesktop.Menu
             shortcuts_SV = shortcutDisplayer_VE.Q<ScrollView>("shortcuts");
 
             DisplayShortcut(false); //Default: shortcuts are hidden.
+
+            shortcutDisplayer_VE.style.width = shortcutDisplayerWidth;
         }
 
         void Update()
@@ -131,7 +126,7 @@ namespace BrowserDesktop.Menu
             if (Input.GetKeyDown(KeyCode.J))
             {
                 String[] test = { "shift", "shift", "shift" };
-                AddShortcut("test shift", test);
+                AddShortcut("Test shift bla bla blabla bla bla test.", test);
                 AddShortcuts();
             }
             if (Input.GetKeyDown(KeyCode.C))
@@ -140,7 +135,7 @@ namespace BrowserDesktop.Menu
             }
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Wait one frame and compute the max width of shortcuts.
         /// </summary>
         /// <returns></returns>
@@ -158,19 +153,29 @@ namespace BrowserDesktop.Menu
         {
             yield return ComputeShortcutsWidth();
             shortcutsDisplayedList.ForEach((sE) => sE.ResizeShortcutWidth());
-            AnimeVisualElement(shortcuts_SV, 1f, true, (elt, val) => { elt.style.opacity = val; }); //Display shortcuts when the resizement is done.
+            AnimeVisualElement(shortcuts_SV, 1f, true, (elt, val) => 
+            { 
+                elt.style.opacity = val; 
+            }); //Display shortcuts when the resizement is done.
             Debug.Log("Shortcut displayer = " + shortcutDisplayer_VE.resolvedStyle.width);
-        }
+        }*/
 
         #region Add and Remove Shortcuts
 
         public void AddShortcuts()
         {
-            AnimeVisualElement(shortcuts_SV, 1f, false, (elt, val) => { elt.style.opacity = val; }); //Hide shortcuts while they are added.
+            AnimeVisualElement(shortcuts_SV, 1f, false, (elt, val)=> 
+            { 
+                elt.style.opacity = val; 
+            }); //Hide shortcuts while they are added.
+
             //TODO Add shortcuts
-            //TODO Resize
-            //OnResizeIconsArea.Invoke();
-            StartCoroutine(ResizeShortcutsWidth());
+            //StartCoroutine(ResizeShortcutsWidth());
+
+            AnimeVisualElement(shortcuts_SV, 1f, true, (elt, val)=>
+            {
+                elt.style.opacity = val;
+            }); //Display shortcuts when the resizement is done.
         }
 
         /// <summary>
@@ -197,7 +202,6 @@ namespace BrowserDesktop.Menu
             for (int i = 0; i < shortcutkeys.Length; ++i)
             {
                 shortcutIcons[i] = shortcutsIcons.GetSpriteFrom(shortcutkeys[i]);
-                    //GetShortcutSprite(shortcutkeys[i]);
             }
 
             shortcutElement.Setup(shortcutName, shortcutIcons, shortcutIconTreeAsset, this);
@@ -209,7 +213,6 @@ namespace BrowserDesktop.Menu
         /// </summary>
         public void ClearShortcut()
         {
-            //TO Test
             Action<VisualElement> removeVEFromHierarchy = (vE) => vE.RemoveFromHierarchy();
 
             ShortcutIconsDisplayedList.ForEach(removeVEFromHierarchy);
@@ -220,7 +223,7 @@ namespace BrowserDesktop.Menu
             ShortcutPlusLabelWaitedList.AddRange(ShortcutPlusLabelDisplayList);
             ShortcutPlusLabelDisplayList.Clear();
 
-            shortcutsDisplayedList.ForEach((sE)=> sE.RemoveShortcut(this));
+            shortcutsDisplayedList.ForEach((sE) => sE.RemoveShortcut());
             shortcutsWaitedList.AddRange(shortcutsDisplayedList);
             shortcutsDisplayedList.Clear();
         }
@@ -235,9 +238,10 @@ namespace BrowserDesktop.Menu
         {
             isDisplayed = value;
 
-            //Display or hide shortcutDisplayer with animation.
-            AnimeVisualElement(shortcutDisplayer_VE, 300f, value, 
-                                (elt, val) => { elt.style.right = 300f - val; });
+            AnimeVisualElement(shortcutDisplayer_VE, shortcutDisplayerWidth, value, (elt, val) =>
+            {
+                elt.style.right = shortcutDisplayerWidth - val;
+            }); //Display or hide shortcutDisplayer with animation.
         }
 
         /// <summary>
@@ -258,24 +262,6 @@ namespace BrowserDesktop.Menu
             {
                 vE.experimental.animation.Start(value, 0, 100, animation);
             }
-        }
-
-        /// <summary>
-        /// Get the sprite corresponding to the shortcut key.
-        /// </summary>
-        /// <param name="shortcutKey">one of the keys use in a shortcut.</param>
-        /// <returns></returns>
-        private Sprite GetShortcutSprite(string shortcutKey)
-        {
-            /*foreach (Shortcut shortcut in shortcuts)
-            {
-                if (shortcut.ShortcutKey == shortcutKey)
-                    return shortcut.ShortcutIcon;
-            }
-
-            Debug.LogError("Shortcut key not found: this shouln't happen");
-            return null;*/
-            return shortcutsIcons.GetSpriteFrom(shortcutKey);
         }
     }
 }
