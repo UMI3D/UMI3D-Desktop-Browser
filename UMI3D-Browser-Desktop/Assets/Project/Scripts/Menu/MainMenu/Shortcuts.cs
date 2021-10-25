@@ -50,7 +50,7 @@ namespace BrowserDesktop.Menu
         private VisualTreeAsset shortcutIconTreeAsset;
 
         VisualElement shortcutArea; //Where shortcut's button and labels are positions in the footer.
-        VisualElement shortcutDisplayer; //Where the shortcuts are displayed.
+        VisualElement shortcutDisplayer_VE; //Where the shortcuts are displayed.
         ScrollView shortcuts_SV; //ScrollView of shortcuts
         VisualElement shortcuts_VE;
         //Button openShortcutBtn;
@@ -60,10 +60,10 @@ namespace BrowserDesktop.Menu
         #region Data
 
         [SerializeField]
-        private Shortcut[] shortcuts; //Shortcuts dictionary
+        private Shortcut[] shortcuts; //Shortcuts dictionary To be replace
 
         [SerializeField]
-        private Icons_SO shortcutsIcons;
+        private Icons_SO shortcutsIcons; //Shortcuts Icons dictionary
 
         bool isDisplayed = true; //is shortcutDisplayer visible.
 
@@ -74,9 +74,6 @@ namespace BrowserDesktop.Menu
         public readonly List<ShortcutIconElement> ShortcutIconsWaitedList = new List<ShortcutIconElement>();
         public readonly List<Label> ShortcutPlusLabelDisplayList = new List<Label>();
         public readonly List<Label> ShortcutPlusLabelWaitedList = new List<Label>();
-
-        //public UnityEvent<Shortcuts> OnClearShortcut = new UnityEvent<Shortcuts>();
-        //public UnityEvent OnResizeIconsArea = new UnityEvent();
 
         #endregion
 
@@ -91,12 +88,8 @@ namespace BrowserDesktop.Menu
 
             var root = uiDocument.rootVisualElement;
 
-            /*openShortcutBtn = root.Q<Button>("open-shortcuts-button");
-            openShortcutBtn.clickable.clicked += ()=> DisplayShortcut(!isDisplayed);
-            openShortcutBtn.AddToClassList("btn-shortcut");*/
-
-            shortcutDisplayer = root.Q<VisualElement>("shortcut-displayer");
-            shortcuts_SV = shortcutDisplayer.Q<ScrollView>("shortcuts");
+            shortcutDisplayer_VE = root.Q<VisualElement>("shortcut-displayer");
+            shortcuts_SV = shortcutDisplayer_VE.Q<ScrollView>("shortcuts");
 
             DisplayShortcut(false); //Default: shortcuts are hidden.
         }
@@ -114,14 +107,12 @@ namespace BrowserDesktop.Menu
             {
                 String[] test = { "1" };
                 AddShortcut("test", test);
-                //OnResizeIconsArea.Invoke();
                 AddShortcuts();
             }
             if (Input.GetKeyDown(KeyCode.L))
             {
                 String[] test = { "ctrl", "1" };
                 AddShortcut("test2", test);
-                //OnResizeIconsArea.Invoke();
                 AddShortcuts();
             }
             /*if (Input.GetKeyDown(KeyCode.M))
@@ -159,19 +150,23 @@ namespace BrowserDesktop.Menu
             shortcutsDisplayedList.ForEach((sE) => sE.ComputeShortcutWidth());
         }
 
+        /// <summary>
+        /// Wait for ComputeShortcutsWidth() and resize shortcuts width.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator ResizeShortcutsWidth()
         {
             yield return ComputeShortcutsWidth();
             shortcutsDisplayedList.ForEach((sE) => sE.ResizeShortcutWidth());
-            AnimeVisualElement(shortcuts_SV, 1f, true); //Display shortcuts when the resizement is done.
-            Debug.Log("Shortcut displayer = " + shortcutDisplayer.resolvedStyle.width);
+            AnimeVisualElement(shortcuts_SV, 1f, true, (elt, val) => { elt.style.opacity = val; }); //Display shortcuts when the resizement is done.
+            Debug.Log("Shortcut displayer = " + shortcutDisplayer_VE.resolvedStyle.width);
         }
 
         #region Add and Remove Shortcuts
 
         public void AddShortcuts()
         {
-            AnimeVisualElement(shortcuts_SV, 1f, false); //Hide shortcuts while they are added.
+            AnimeVisualElement(shortcuts_SV, 1f, false, (elt, val) => { elt.style.opacity = val; }); //Hide shortcuts while they are added.
             //TODO Add shortcuts
             //TODO Resize
             //OnResizeIconsArea.Invoke();
@@ -241,7 +236,8 @@ namespace BrowserDesktop.Menu
             isDisplayed = value;
 
             //Display or hide shortcutDisplayer with animation.
-            AnimeVisualElement(shortcutDisplayer, 1f, value);
+            AnimeVisualElement(shortcutDisplayer_VE, 300f, value, 
+                                (elt, val) => { elt.style.right = 300f - val; });
         }
 
         /// <summary>
@@ -250,22 +246,17 @@ namespace BrowserDesktop.Menu
         /// <param name="vE">the VisualElement to be animated.</param>
         /// <param name="value">The animation will be trigger from 0 to this value when isShowing is true. Else, from this value to 0.</param>
         /// <param name="isShowing">The VisualElement should be displayed if true.</param>
-        private void AnimeVisualElement(VisualElement vE, float value, bool isShowing)
+        /// <param name="animation">The animation to be perform.</param>
+        private void AnimeVisualElement(VisualElement vE, float value, bool isShowing, Action<VisualElement, float> animation)
         {
             Debug.LogWarning("Use of Unity experimental API. May not work in the future.");
             if (isShowing)
             {
-                vE.experimental.animation.Start(0, value, 100, (elt, val) =>
-                {
-                    elt.style.opacity = val;
-                });
+                vE.experimental.animation.Start(0, value, 100, animation);
             }
             else
             {
-                vE.experimental.animation.Start(value, 0, 100, (elt, val) =>
-                {
-                    elt.style.opacity = val;
-                });
+                vE.experimental.animation.Start(value, 0, 100, animation);
             }
         }
 
