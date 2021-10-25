@@ -21,13 +21,18 @@ using UnityEngine.UIElements;
 
 public class ShortcutElement : VisualElement
 {
-    VisualElement iconsArea_VE;
-    Label shortcutName_L;
+    #region Fields
 
     public new class UxmlFactory : UxmlFactory<ShortcutElement, UxmlTraits> { }
     public new class UxmlTraits : VisualElement.UxmlTraits { }
 
+    VisualElement iconsArea_VE; //Where icons are displays.
+    Label shortcutName_L; //the shortcut's name.
+
     private static int shortcutsCount = 0;
+    /// <summary>
+    /// The number of shortcuts.
+    /// </summary>
     public static int ShortcutsCount
     {
         get => shortcutsCount;
@@ -38,12 +43,15 @@ public class ShortcutElement : VisualElement
                 shortcutsCount = value;
             }
 
-            if (shortcutsCount == 0)
-                IconsAreaWidth = 0;
+            /*if (shortcutsCount == 0)
+                IconsAreaWidth = 0;*/
         }
     }
 
-    private static float iconsAreaWidth = 0;
+    /*private static float iconsAreaWidth = 0;
+    /// <summary>
+    /// The maximum width in px of all the icons area.
+    /// </summary>
     public static float IconsAreaWidth
     {
         get => iconsAreaWidth;
@@ -61,6 +69,9 @@ public class ShortcutElement : VisualElement
     }
 
     private static float shortcutNameWidth = 0;
+    /// <summary>
+    /// The maximum width in px of all the shortcut's name label.
+    /// </summary>
     public static float ShortcutNameWidth
     {
         get => shortcutNameWidth;
@@ -75,10 +86,27 @@ public class ShortcutElement : VisualElement
                 shortcutNameWidth = value;
             }
         }
-    }
+    }*/
 
+    /// <summary>
+    /// True if this shortcutElement is displayed.
+    /// </summary>
     private bool isShortcutDisplay = false;
 
+    /// <summary>
+    /// The size of the icons area and the shortut's name label.
+    /// </summary>
+    private float maxIconsAreaWidth = 151;
+
+    #endregion
+
+    /// <summary>
+    /// Set the icons and name of this shortcut.
+    /// </summary>
+    /// <param name="shortcutName">The name of this shortcut.</param>
+    /// <param name="shortcutIcons">The icons (sprite) of this shortcut.</param>
+    /// <param name="shortcutIconTreeAsset">The template of shortcut icon.</param>
+    /// <param name="shortcutsClass">The instance of the Shortcuts class.</param>
     public void Setup(string shortcutName, Sprite[] shortcutIcons, VisualTreeAsset shortcutIconTreeAsset, BrowserDesktop.Menu.Shortcuts shortcutsClass)
     {
         isShortcutDisplay = true;
@@ -89,6 +117,9 @@ public class ShortcutElement : VisualElement
         shortcutName_L.AddToClassList("label-shortcut");
 
         iconsArea_VE = this.Q<VisualElement>("shortcut-icons");
+
+        iconsArea_VE.style.width = maxIconsAreaWidth;
+        shortcutName_L.style.width = maxIconsAreaWidth;
 
         for (int i = 0; i < shortcutIcons.Length; ++i)
         {
@@ -130,7 +161,7 @@ public class ShortcutElement : VisualElement
         }
     }
 
-    public void ComputeShortcutWidth()
+    /*public void ComputeShortcutWidth()
     {
         IconsAreaWidth = iconsArea_VE.resolvedStyle.width;
         ShortcutNameWidth = shortcutName_L.resolvedStyle.width;
@@ -141,23 +172,25 @@ public class ShortcutElement : VisualElement
     public void ResizeShortcutWidth()
     {
         iconsArea_VE.style.width = IconsAreaWidth;
-        //shortcutName_L.style.width = shortcutNameWidth;
         shortcutName_L.style.width = IconsAreaWidth;
 
         Debug.Log("resizement");
-    }
+    }*/
 
-    public void RemoveShortcut(BrowserDesktop.Menu.Shortcuts shortcutsClass)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="shortcutsClass"></param>
+    public void RemoveShortcut()
     {
         if (isShortcutDisplay)
         {
             isShortcutDisplay = false;
             --ShortcutsCount;
 
-            iconsArea_VE.style.width = StyleKeyword.Auto; //Unset the icons area width.
-            shortcutName_L.style.width = StyleKeyword.Auto; //Unset the shortcut name width.
+            /*iconsArea_VE.style.width = StyleKeyword.Auto; //Unset the icons area width.
+            shortcutName_L.style.width = StyleKeyword.Auto; //Unset the shortcut name width.*/
 
-            //shortcutsClass.OnResizeIconsArea.RemoveListener(ResizeIconsArea);
             this.RemoveFromHierarchy();
         }
     }

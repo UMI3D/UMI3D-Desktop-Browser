@@ -19,10 +19,13 @@ using UnityEngine.UIElements;
 
 public class ShortcutIconElement : VisualElement
 {
-    private int iconHeightPX = 20; //The icon height in px.
-
     public new class UxmlFactory : UxmlFactory<ShortcutIconElement, UxmlTraits> { }
     public new class UxmlTraits : VisualElement.UxmlTraits { }
+
+    /// <summary>
+    /// The icon height in px.
+    /// </summary>
+    private int iconHeightPX = 20;
 
     /// <summary>
     /// Set the size and the sprite of the icon.
@@ -33,14 +36,10 @@ public class ShortcutIconElement : VisualElement
         float height = sprite.rect.height;
         float width = sprite.rect.width;
 
-        Debug.Log("Sprite height = " + height + ", sprite width = " + width);
-
         int iconWidthPX = (int) ((width / height) * (float) iconHeightPX);
 
         this.style.height = iconHeightPX;
         this.style.width = iconWidthPX;
-
-        Debug.Log("icon height = " + iconHeightPX + ", icon width = " + iconWidthPX);
 
         this.style.backgroundImage = new StyleBackground(sprite);
     }
