@@ -51,7 +51,7 @@ namespace BrowserDesktop.Menu
         /// Shortcuts Icons dictionary
         /// </summary>
         [SerializeField]
-        private Icons_SO shortcutsIcons;
+        private Controller.KeyBindings_SO shortcutsIcons;
 
         private float shortcutDisplayerWidth = 350;
 

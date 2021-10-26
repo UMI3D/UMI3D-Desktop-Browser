@@ -13,240 +13,243 @@ MonoBehaviour:
   m_Name: KeyBindings
   m_EditorClassIdentifier: 
   icons:
-  - key: 0
-    keyCode: 256
+  - key_string: Keypad0
+    key_code: 256
     sprite: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
-  - key: 1
-    keyCode: 257
+  - key_string: Alpha0
+    key_code: 48
+    sprite: {fileID: 21300000, guid: bcb682856491ec542adbd0336b15771f, type: 3}
+  - key_string: Keypad1
+    key_code: 257
     sprite: {fileID: 21300000, guid: 6f218245fe237eb458c72781dab69675, type: 3}
-  - key: 2
-    keyCode: 258
+  - key_string: Alpha1
+    key_code: 49
+    sprite: {fileID: 21300000, guid: 6f218245fe237eb458c72781dab69675, type: 3}
+  - key_string: Keypad2
+    key_code: 258
     sprite: {fileID: 21300000, guid: dcf0ba14faf845e49b3dac3c472fff1f, type: 3}
-  - key: 3
-    keyCode: 0
+  - key_string: Alpha2
+    key_code: 50
+    sprite: {fileID: 21300000, guid: dcf0ba14faf845e49b3dac3c472fff1f, type: 3}
+  - key_string: Keypad3
+    key_code: 259
     sprite: {fileID: 21300000, guid: 875fd6a0bde644646a3826d65c0afbad, type: 3}
-  - key: 4
-    keyCode: 0
+  - key_string: alpha3
+    key_code: 51
+    sprite: {fileID: 21300000, guid: 875fd6a0bde644646a3826d65c0afbad, type: 3}
+  - key_string: Keypad4
+    key_code: 260
     sprite: {fileID: 21300000, guid: 06c67d403b88b6946b09ec9a4ddc4d9b, type: 3}
-  - key: 5
-    keyCode: 0
+  - key_string: alpha4
+    key_code: 52
+    sprite: {fileID: 21300000, guid: 06c67d403b88b6946b09ec9a4ddc4d9b, type: 3}
+  - key_string: Keypad5
+    key_code: 261
     sprite: {fileID: 21300000, guid: 2300151c638a1f84ab71b68995009c41, type: 3}
-  - key: 6
-    keyCode: 0
+  - key_string: alpha5
+    key_code: 53
+    sprite: {fileID: 21300000, guid: 2300151c638a1f84ab71b68995009c41, type: 3}
+  - key_string: Keypad6
+    key_code: 262
     sprite: {fileID: 21300000, guid: 71a14fdb38f6e6142a7e34ccb2e3877e, type: 3}
-  - key: 7
-    keyCode: 0
+  - key_string: alpha 6
+    key_code: 54
+    sprite: {fileID: 21300000, guid: 71a14fdb38f6e6142a7e34ccb2e3877e, type: 3}
+  - key_string: Keypad7
+    key_code: 263
     sprite: {fileID: 21300000, guid: 645e3c88e3aa40048b81cd839b520025, type: 3}
-  - key: 8
-    keyCode: 0
+  - key_string: alpha7
+    key_code: 55
+    sprite: {fileID: 21300000, guid: 645e3c88e3aa40048b81cd839b520025, type: 3}
+  - key_string: Keypad8
+    key_code: 264
     sprite: {fileID: 21300000, guid: 2fe3dcfa36841734197cc07fbcc0e743, type: 3}
-  - key: 9
-    keyCode: 0
+  - key_string: alpha8
+    key_code: 56
+    sprite: {fileID: 21300000, guid: 2fe3dcfa36841734197cc07fbcc0e743, type: 3}
+  - key_string: Keypad9
+    key_code: 265
     sprite: {fileID: 21300000, guid: d084a5074839fe84c8048d71a167b4f7, type: 3}
-  - key: shift
-    keyCode: 0
+  - key_string: alpha9
+    key_code: 57
+    sprite: {fileID: 21300000, guid: d084a5074839fe84c8048d71a167b4f7, type: 3}
+  - key_string: RightShift
+    key_code: 303
     sprite: {fileID: 21300000, guid: 184bcf2210ec9774cb6cf8010232bbc0, type: 3}
-  - key: ctrl
-    keyCode: 0
+  - key_string: LeftShift
+    key_code: 304
+    sprite: {fileID: 21300000, guid: 184bcf2210ec9774cb6cf8010232bbc0, type: 3}
+  - key_string: RightControl
+    key_code: 305
     sprite: {fileID: 21300000, guid: 2898c57c8f20abd4dbe6f64fef4904e5, type: 3}
-  - key: alt
-    keyCode: 0
+  - key_string: LeftControl
+    key_code: 306
+    sprite: {fileID: 21300000, guid: 2898c57c8f20abd4dbe6f64fef4904e5, type: 3}
+  - key_string: LeftAlt
+    key_code: 308
     sprite: {fileID: 21300000, guid: eee425a937634414fbc532fdee4fa9b3, type: 3}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
-    sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
-    sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
-    sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
-    sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
-    sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
-    sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
-    sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
-    sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
-    sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
-    sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
-    sprite: {fileID: 0}
-  - key: 
-    keyCode: 0
+  - key_string: 
+    key_code: 0
     sprite: {fileID: 0}
