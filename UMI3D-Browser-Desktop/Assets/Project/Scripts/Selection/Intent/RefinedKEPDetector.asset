@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RefinedKEPDetector
   m_EditorClassIdentifier: 
   stabilityThreshold: 0.02
-  amplitudeMinimum: 0.1
-  targetDistanceThreshold: 0.8
-  minimalNumberOfSamples: 30
-  coneAngle: 22.5
+  amplitudeMinimum: 0.5
+  targetDistanceThreshold: 0.75
+  minimalNumberOfSamples: 20
+  coneAngle: 15

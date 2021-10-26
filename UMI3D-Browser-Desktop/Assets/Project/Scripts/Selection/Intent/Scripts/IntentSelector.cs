@@ -10,18 +10,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
-using System.Collections.Generic;
-using umi3d.cdk;
 using umi3d.cdk.interaction;
-using umi3d.common;
-using umi3d.common.interaction;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace BrowserDesktop.Selection.Intent
 {
-
+    /// <summary>
+    /// Selector that uses an intent detector to predict targets
+    /// </summary>
     public class IntentSelector : AbstractSelector
     {
         [SerializeField]
@@ -35,8 +31,6 @@ namespace BrowserDesktop.Selection.Intent
 
         #region selectionCache
         private InteractableContainer lastSelectedInteractable;
-
-
 
         public SelectionData selectionData;
 
@@ -96,6 +90,9 @@ namespace BrowserDesktop.Selection.Intent
 
     }
 
+    /// <summary>
+    /// Data container for selection information at each frame
+    /// </summary>
     public struct SelectionData
     {
         public bool ForceProjection;

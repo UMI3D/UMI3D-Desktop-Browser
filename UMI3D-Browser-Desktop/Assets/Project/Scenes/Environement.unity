@@ -2356,7 +2356,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deactivationRequesters: 
   controller: {fileID: 2096641628}
-  detector: {fileID: 11400000, guid: 10cf073b1ed81604cb69a240c24e3ca1, type: 2}
+  detector: {fileID: 11400000, guid: 3be1ce5a28b96a94ea608046c7411dde, type: 2}
   selectionHighlighter: {fileID: 2096641630}
 --- !u!114 &2096641630
 MonoBehaviour:

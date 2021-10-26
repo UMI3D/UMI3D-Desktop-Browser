@@ -83,8 +83,8 @@ namespace BrowserDesktop.Controller
         [HideInInspector]
         static public HoverEvent HoverExit = new HoverEvent();
 
-        private const float manipulationInputUsageTimeout = 0.1f; //ms
-        private float timeSinceLastInput = 0; //ms
+        private const float manipulationInputUsageTimeout = 0.1f; //s
+        private float timeSinceLastInput = 0; //s
         #endregion
 
 
@@ -499,6 +499,7 @@ namespace BrowserDesktop.Controller
         }
         #endregion
 
+        #region status
         protected override bool isInteracting()
         {
            return (currentTool != null) && (timeSinceLastInput <= manipulationInputUsageTimeout);
@@ -508,6 +509,7 @@ namespace BrowserDesktop.Controller
         {
             throw new System.NotImplementedException();
         }
+        #endregion
 
         public override DofGroupOptionDto FindBest(DofGroupOptionDto[] options)
         {

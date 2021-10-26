@@ -16,6 +16,9 @@ using UnityEngine;
 
 namespace BrowserDesktop.Selection
 {
+    /// <summary>
+    /// Handles selection highlight with an outlining shader
+    /// </summary>
     public class SelectionHighlighter : AbstractVisualCueHandler
     {
         /// <summary>

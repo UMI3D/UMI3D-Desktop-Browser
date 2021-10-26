@@ -15,12 +15,13 @@ using UnityEngine;
 using MathNet.Numerics;
 using System.Linq;
 using umi3d.cdk.interaction;
+using Newtonsoft.Json;
 
 namespace BrowserDesktop.Selection.Intent
 {
     /// <summary>
     /// Implementation of a selection intent detector using the refined version of Kinematic Endpoint Prediction extanded in 3D, 
-    /// from Lank et al. 2007 and Ruiz et al. 2009. The 3D extansion is an original work.
+    /// from Lank et al. 2007 and Ruiz et al. 2009. The 3D expansion is an original work.
     /// </summary>
     [CreateAssetMenu(fileName = "RefinedKEPDetector", menuName = "UMI3D/Selection/Intent Detector/Refined KEP")]
     public class RefinedKEPDetector : AbstractSelectionIntentDetector
@@ -28,22 +29,17 @@ namespace BrowserDesktop.Selection.Intent
         /// <summary>
         /// Store angular movements amplitude, speed and associated rotation
         /// </summary>
-        private class AngularDataSample
+        private class RotationDataSample
         {
             public double amplitude;
             public double speed;
-            public Vector3 eulerRotation;
+            public Quaternion rotation;
         }
 
         /// <summary>
         /// Store accumulated angular data used to predict by regression
         /// </summary>
-        private LinkedList<AngularDataSample> angularData;
-
-        /// <summary>
-        /// Initial direction of the pointer vector at the start of the prediction
-        /// </summary>
-        private Vector3 initialDirection;
+        private LinkedList<RotationDataSample> rotationData;
 
         /// <summary>
         /// under this value, the movement is considered as stable
@@ -75,87 +71,120 @@ namespace BrowserDesktop.Selection.Intent
         [SerializeField]
         private float coneAngle = 15;
 
-        private bool estimationReady = false;
+        /// <summary>
+        /// Last predicted object. Makes it possible to select an object during more than one frame 
+        /// </summary>
+        private InteractableContainer lastPredicted = null;
 
-        private InteractableContainer lastEstimated = null;
+        /// <summary>
+        /// Last rotation state
+        /// </summary>
+        private Quaternion lastRotation;
 
-        private Vector3 lastRotation;
+        /// <summary>
+        /// Total amplitude of the current movement
+        /// </summary>
+        private double totalAmplitude;
 
         public override void InitDetector(AbstractController controller)
         {
-            angularData = new LinkedList<AngularDataSample>();
+            rotationData = new LinkedList<RotationDataSample>();
 
             pointerTransform = Camera.main.transform;
 
-            lastRotation = pointerTransform.rotation.eulerAngles;
-
-            initialDirection = pointerTransform.forward.normalized;
-
-            estimationReady = false;
+            lastRotation = pointerTransform.rotation;
+            totalAmplitude = 0;
         }
 
         public override void ResetDetector()
         {
-            angularData.Clear();
-            initialDirection = pointerTransform.forward.normalized;
-            estimationReady = false;
+            rotationData.Clear();
+            totalAmplitude = 0;
         }
 
         public override InteractableContainer PredictTarget()
         {
-            var deltaRotation = pointerTransform.rotation.eulerAngles - lastRotation;
-            var deltaAngle = deltaRotation.magnitude;
+            var estimationReady = false;
 
-            if (deltaAngle == 0 && angularData.Count > 1)
+            var newRotation = pointerTransform.rotation;
+            var deltaAngle = Quaternion.Angle(newRotation, lastRotation);
+            totalAmplitude += deltaAngle;
+
+            if (deltaAngle == 0 && rotationData.Count > 1 && rotationData.Last.Value.amplitude == 0) // case where the movement is stopped for at least two frames
             {
-                return GetClosestToRay(pointerTransform.forward);
+                InteractableContainer predictedInteractable = GetClosestToRay(pointerTransform.forward);
+                lastPredicted = predictedInteractable;
+                ResetDetector();
+                return lastPredicted;
             }
 
-            if (angularData.Count >= minimalNumberOfSamples)
+            if (rotationData.Count >= minimalNumberOfSamples)
             {
-                var lastAngleMovement = angularData.Last.Value.amplitude;
+                var lastAngleMovement = rotationData.Last.Value.amplitude;
                 var stability = deltaAngle / lastAngleMovement;
                 if (stability < stabilityThreshold) //if the mouvement is stable enough, can compute the prediction (Refined KEP, Ruiz 2009)
                     estimationReady = true;
             }
 
-            var angularSample = new AngularDataSample();
-            angularSample.amplitude = deltaAngle;
-            angularSample.speed = deltaAngle / Time.deltaTime;
-            angularSample.eulerRotation = deltaRotation;
-            angularData.AddLast(angularSample); //accumulating data for computation
+            var angularSample = new RotationDataSample()
+            {
+                amplitude = totalAmplitude,
+                speed = deltaAngle / Time.deltaTime,
+                rotation = newRotation
+            };
 
-            lastRotation = pointerTransform.rotation.eulerAngles;
-            lastRotation = new Vector3(lastRotation.x, lastRotation.y, lastRotation.z);
+            rotationData.AddLast(angularSample); //accumulating data for computation
+            lastRotation = new Quaternion(pointerTransform.rotation.x, pointerTransform.rotation.y, pointerTransform.rotation.z, pointerTransform.rotation.w);
 
             if (estimationReady)
             {
-                var estimatedAmplitude = estimateKinematicEndpointAmplitude();
+                var estimatedAmplitude = EstimateKinematicEndpointAmplitude();
                 if (estimatedAmplitude == 0) // no strictly positive root found
-                {
-                    estimationReady = false;
-                    return null;
-                }
-                    
-                var currentMovementAmplitude = angularData.Select(x => x.amplitude).Sum();
+                    return lastPredicted;
+
+                var currentMovementAmplitude = rotationData.Select(x => x.amplitude).Sum();
                 if (currentMovementAmplitude / estimatedAmplitude < targetDistanceThreshold) //the precentage of the completed movement should be above the threshold, otherwise the prediction is inaccurate
+                    return lastPredicted;
+
+                //Makes the hypothesis that it will be along the average rotation, with a linear increasing ponderation
+                var rotationDirection = new Vector3();
+                var last = new Vector3();
+
+                float dataNumber = rotationData.Count;
+                float weightStep = 2f / ((dataNumber - 1f) * dataNumber);
+                float weight = 0f; //linearily increasing weight
+                foreach (var d in rotationData.Skip(1))
                 {
-                    estimationReady = false;
-                    return null;
+                    weight += weightStep;
+                    rotationDirection += (d.rotation.eulerAngles - last).normalized * weight;
+                    last = d.rotation.eulerAngles;
                 }
+                rotationDirection = rotationDirection.normalized;
+ 
+                Quaternion predictedRotation = rotationData.First.Value.rotation * Quaternion.Euler((float)estimatedAmplitude * rotationDirection);
 
-                //Makes the hypothesis that it will be along the average rotation
-                var direction = angularData.Select(x => x.eulerRotation).Aggregate(new Vector3(0, 0, 0), (sum, next) => sum + next).normalized; 
-                var predictedRotation = (float)estimatedAmplitude * direction;
-
-                var predictedDirection = (Quaternion.Euler(predictedRotation) * initialDirection).normalized;
+                Vector3 predictedDirection = (predictedRotation * new Vector3(0,0,1)).normalized; //should be initialPosition
                 var predictedInteractable = GetClosestToRay(predictedDirection);
+                lastPredicted = predictedInteractable;
+
+                //save data
+                //ExportDataAsJSON(estimatedAmplitude, rotationDirection, predictedRotation);
+
+                ResetDetector();
+
+                //Draw debug rays
+                //Debug.DrawRay(pointerTransform.position, pointerTransform.forward, Color.gray, 3.0f, false);
+                //Debug.DrawRay(pointerTransform.position, predictedDirection, Color.red, 3.0f, false);
+                //if (predictedInteractable != null)
+                //    Debug.DrawLine(pointerTransform.position, predictedInteractable.transform.position, Color.blue, 3.0f, true);
+
                 return predictedInteractable;
             }
             else
             {
-                return lastEstimated;
+                return lastPredicted;
             }
+
         }
 
         private InteractableContainer GetClosestToRay(Vector3 estimatedDirection)
@@ -165,15 +194,11 @@ namespace BrowserDesktop.Selection.Intent
 
             if (objsInZone.Count == 0)
             {
-                lastEstimated = null;
-                ResetDetector();
                 return null;
             }
             else
             {
                 var estimatedObject = estimatedConicZone.GetClosestObjectToRay(objsInZone);
-                lastEstimated = estimatedObject;
-                ResetDetector();
                 return estimatedObject;
             }
         }
@@ -183,19 +208,67 @@ namespace BrowserDesktop.Selection.Intent
         /// Estimate the total angular distance that will be achieved
         /// </summary>
         /// <returns></returns>
-        private double estimateKinematicEndpointAmplitude()
+        private double EstimateKinematicEndpointAmplitude()
         {
             var order = 4;
-            double[] polynomialCoeffs = Fit.Polynomial(angularData.Select(x=>x.amplitude).ToArray(), angularData.Select(x => x.speed).ToArray(), order); //least squares fitting
-            var roots = FindRoots.Polynomial(polynomialCoeffs);
+            try
+            {
+                double[] polynomialCoeffs = Fit.Polynomial(rotationData.Select(x => x.amplitude).ToArray(), rotationData.Select(x => x.speed).ToArray(), order); //least squares fitting
+                var roots = FindRoots.Polynomial(polynomialCoeffs);
 
-            double estimatedAmplitude = (from r in roots
-                                         where r.IsReal() && r.Real > amplitudeMinimum
-                                         orderby r.Real
-                                         ascending
-                                         select r.Real).FirstOrDefault(); //finding the 2nd real root which is strictly positive
+                double estimatedAmplitude = (from r in roots
+                                             where r.IsReal() && r.Real > amplitudeMinimum
+                                             orderby r.Real
+                                             descending
+                                             select r.Real).FirstOrDefault(); //finding the 2nd real root which is strictly positive
 
-            return estimatedAmplitude;
+                return estimatedAmplitude;
+            }
+            catch (NonConvergenceException)
+            {
+                return default;
+            }
+            
+        }
+
+        /// <summary>
+        /// Debug function that exports data in JSON files
+        /// </summary>
+        /// <param name="estimatedAmplitude"></param>
+        /// <param name="rotationDirection"></param>
+        /// <param name="predictedRotation"></param>
+        private void ExportDataAsJSON(double estimatedAmplitude, Vector3 rotationDirection, Quaternion predictedRotation)
+        {
+            var path = @"D:\rotationDataKEP\";
+
+            var fileNameRotationData = "datarotation";
+            var number = System.IO.Directory.GetFiles(path).Where(f => f.StartsWith(path + fileNameRotationData)).Count();
+            using (System.IO.StreamWriter file = System.IO.File.CreateText(path + fileNameRotationData + number.ToString() + ".json"))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                //serialize object directly into file stream
+                serializer.Serialize(file, rotationData.Select(x => new {
+                    x.amplitude,
+                    x.speed,
+                    r_x = x.rotation.eulerAngles.x,
+                    r_y = x.rotation.eulerAngles.y
+                }).ToList());
+            }
+
+            var fileNameRotationEstimation = "estimation";
+            number = System.IO.Directory.GetFiles(path).Where(f => f.StartsWith(path + fileNameRotationEstimation)).Count();
+            using (System.IO.StreamWriter file = System.IO.File.CreateText(path + fileNameRotationEstimation + number.ToString() + ".json"))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                //serialize object directly into file stream
+                serializer.Serialize(file, new
+                {
+                    estimatedAmplitude,
+                    rotDir = rotationDirection.ToString(),
+                    rpred_x = predictedRotation.eulerAngles.x,
+                    rpred_y = predictedRotation.eulerAngles.y
+                });
+            }
         }
 
 
