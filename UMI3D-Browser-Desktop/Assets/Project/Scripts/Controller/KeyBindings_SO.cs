@@ -58,6 +58,15 @@ namespace BrowserDesktop.Controller
                 this.icon = icon;
             }
 
+            public KeyBinding(KeyCode key_code)
+            {
+                this.key_string = key_code.ToString();
+                this.key_code = key_code;
+                this.icon = null;
+            }
+
+            #region Scriptable setter
+
             public void GetKeyCodeFromString()
             {
                 if (!string.IsNullOrEmpty(Key_string))
@@ -89,11 +98,13 @@ namespace BrowserDesktop.Controller
                     }
                 }
             }
+
+            #endregion
         }
 
         [SerializeField]
-        private KeyBinding[] keyBindings;
-        public KeyBinding[] KeyBindings => this.keyBindings;
+        private System.Collections.Generic.List<KeyBinding> keyBindings = new System.Collections.Generic.List<KeyBinding>();
+        public System.Collections.Generic.List<KeyBinding> KeyBindings => this.keyBindings;
 
         public Sprite GetSpriteFrom(string key)
         {
@@ -119,6 +130,18 @@ namespace BrowserDesktop.Controller
             return null;
         }
 
+        private bool Contains(KeyCode key_code)
+        {
+            foreach (KeyBinding keyBinding in keyBindings)
+            {
+                if (keyBinding.Key_code == key_code)
+                    return true;
+            }
+            return false;
+        }
+
+        #region Scriptable setter
+
         private void GetKeyCodeFromString()
         {
             foreach (KeyBinding keyBinding in keyBindings)
@@ -142,6 +165,20 @@ namespace BrowserDesktop.Controller
                 keyBinding.SetKeyCodeAndStringFromSprite();
             }
         }
+
+        [ContextMenu("AddKeyCodeToList")]
+        private void AddKeyCodeToList()
+        {
+            foreach (KeyCode key_code in (KeyCode[]) System.Enum.GetValues(typeof(KeyCode)))
+            {
+                if (!Contains(key_code))
+                {
+                    keyBindings.Add(new KeyBinding(key_code));
+                }
+            }
+        }
+
+        #endregion
     }
 }
 
