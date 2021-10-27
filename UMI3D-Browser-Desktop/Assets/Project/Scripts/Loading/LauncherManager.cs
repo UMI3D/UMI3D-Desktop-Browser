@@ -111,7 +111,7 @@ public class LauncherManager : MonoBehaviour
     private Action nextStep = null;
     private Action previousStep = null;
     /// <summary>
-    /// The action to be assigne to the nextMenuBtn.
+    /// The action to be assigned to the nextMenuBtn.
     /// </summary>
     private Action currentNextButtonAction = null;
 
