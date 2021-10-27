@@ -183,7 +183,7 @@ namespace BrowserDesktop.Menu
         /// </summary>
         /// <param name="shortcutName">What the shortcut do.</param>
         /// <param name="shortcutkeys">Keys to press to trigger the shortcut.</param>
-        private void AddShortcut(String shortcutName, string[] shortcutkeys)
+        private void AddShortcut(string shortcutName, string[] shortcutkeys)
         {
             ShortcutElement shortcutElement;
             //Object Pooling for ShortcutElement.
