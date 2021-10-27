@@ -78,6 +78,7 @@ namespace BrowserDesktop.Controller
             public bool ForceProjectionReleasable;
             public HoldableButtonMenuItem ForceProjectionMenuItem;
 
+            public Interactable LastProjected;
             public Interactable OldHovered;
             public ulong LastHoveredId;
             public Interactable CurrentHovered;
@@ -296,6 +297,7 @@ namespace BrowserDesktop.Controller
                 if (MainMenu.IsDisplaying)
                 {
                     mouseData.save();
+                    UpdateTool();
                     Hover();
                 }
                 else
@@ -325,7 +327,7 @@ namespace BrowserDesktop.Controller
         {
             if (!(
                         mouseData.HoverState == HoverState.AutoProjected
-                        && (CursorHandler.State == CursorHandler.CursorState.Clicked || SideMenu.IsExpanded)
+                        && ( SideMenu.IsExpanded)
                ))
             {
                 mouseData.save();
@@ -390,6 +392,8 @@ namespace BrowserDesktop.Controller
 
                     break;
                 }
+                if(CursorHandler.State != CursorHandler.CursorState.Clicked)
+                    UpdateTool();
                 Hover();
             }
             else
@@ -398,7 +402,7 @@ namespace BrowserDesktop.Controller
             }
         }
 
-        void Hover()
+        private void UpdateTool()
         {
             if (mouseData.ForceProjection)
             {
@@ -410,16 +414,16 @@ namespace BrowserDesktop.Controller
                     ||
                     Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
                 {
-                    if(mouseData.ForceProjectionReleasable)
+                    if (mouseData.ForceProjectionReleasable)
                         UnequipeForceProjection();
                 }
             }
 
             if (mouseData.CurrentHovered != null)
             {
-                if (mouseData.CurrentHovered != mouseData.OldHovered)
+                if (mouseData.CurrentHovered != mouseData.LastProjected)
                 {
-                    if (mouseData.OldHovered != null)
+                    if (mouseData.LastProjected != null)
                     {
                         if (!mouseData.ForceProjection)
                         {
@@ -429,19 +433,7 @@ namespace BrowserDesktop.Controller
                             }
                             CircularMenu.Collapse();
                         }
-
-
-                        mouseData.OldHovered.HoverExit(hoverBoneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
-
-                        if (mouseData.CurrentHovered.dto.HoverExitAnimationId != 0)
-                        {
-                            UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(mouseData.CurrentHovered.dto.HoverExitAnimationId);
-                            HoverExit.Invoke(mouseData.LastHoveredId);
-                            if (anim != null)
-                                anim.Start();
-                        }
-
-                        mouseData.OldHovered = null;
+                        mouseData.LastProjected = null;
                     }
 
                     mouseData.HoverState = HoverState.Hovering;
@@ -452,7 +444,47 @@ namespace BrowserDesktop.Controller
                         CursorHandler.State = CursorHandler.CursorState.Hover;
                         mouseData.HoverState = HoverState.AutoProjected;
                         CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
-                        mouseData.OldHovered = mouseData.CurrentHovered;
+                        mouseData.LastProjected = mouseData.CurrentHovered;
+                    }
+                }
+            }
+            else if (mouseData.LastProjected != null)
+            {
+                if (!mouseData.ForceProjection)
+                {
+                    if (mouseData.HoverState == HoverState.AutoProjected)
+                    {
+                        CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
+                        if(currentTool != null)
+                            InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
+                    }
+                    CircularMenu.Collapse();
+                    CursorHandler.State = CursorHandler.CursorState.Default;
+                }
+
+                mouseData.LastProjected = null;
+                mouseData.HoverState = HoverState.None;
+            }
+        }
+
+        void Hover()
+        {
+            if (mouseData.CurrentHovered != null)
+            {
+                if (mouseData.CurrentHovered != mouseData.OldHovered)
+                {
+                    if (mouseData.OldHovered != null)
+                    {
+                        mouseData.OldHovered.HoverExit(hoverBoneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
+
+                        if (mouseData.CurrentHovered.dto.HoverExitAnimationId != 0)
+                        {
+                            UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(mouseData.CurrentHovered.dto.HoverExitAnimationId);
+                            HoverExit.Invoke(mouseData.LastHoveredId);
+                            if (anim != null)
+                                anim.Start();
+                        }
+                        mouseData.OldHovered = null;
                     }
 
                     mouseData.CurrentHovered.HoverEnter(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
@@ -476,21 +508,10 @@ namespace BrowserDesktop.Controller
                         }
                     }
                 }
-
                 mouseData.CurrentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
             }
             else if (mouseData.OldHovered != null)
             {
-                if (!mouseData.ForceProjection)
-                {
-                    if (mouseData.HoverState == HoverState.AutoProjected)
-                    {
-                        CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
-                        InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
-                    }
-                    CircularMenu.Collapse();
-                    CursorHandler.State = CursorHandler.CursorState.Default;
-                }
 
                 mouseData.OldHovered.HoverExit(hoverBoneType, mouseData.LastHoveredId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
 
@@ -501,9 +522,7 @@ namespace BrowserDesktop.Controller
                     if (anim != null)
                         anim.Start();
                 }
-
                 mouseData.OldHovered = null;
-                mouseData.HoverState = HoverState.None;
             }
         }
 
