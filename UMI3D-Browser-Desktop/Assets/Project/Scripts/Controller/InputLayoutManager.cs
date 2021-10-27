@@ -62,6 +62,7 @@ namespace BrowserDesktop.Controller
             Action4,
             Action5,
             Action6,
+            Actions
         }
 
         protected void Start()
