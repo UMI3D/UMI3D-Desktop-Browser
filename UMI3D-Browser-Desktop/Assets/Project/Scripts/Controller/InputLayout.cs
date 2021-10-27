@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BrowserDesktop.Controller
@@ -24,6 +25,7 @@ namespace BrowserDesktop.Controller
 
         #region Menu
 
+        [Header("Menu")]
         public KeyCode MainMenuToggle;
         public KeyCode ContextualMenuNavigationDirect;
 
@@ -32,9 +34,12 @@ namespace BrowserDesktop.Controller
         public KeyCode ContextualMenuNavigationBack;
 
         public KeyCode ToggleMicrophone;
+
         #endregion
+
         #region Navigation
 
+        [Header("Navigation")]
         public KeyCode Forward;
         public KeyCode Backward;
         public KeyCode Left;
@@ -46,14 +51,18 @@ namespace BrowserDesktop.Controller
         public KeyCode FreeView;
 
         #endregion
+
         #region Action Key
 
+        [Header("Actions Key")]
         public KeyCode Action1;
         public KeyCode Action2;
         public KeyCode Action3;
         public KeyCode Action4;
         public KeyCode Action5;
         public KeyCode Action6;
+
+        public List<KeyCode> Actions = new List<KeyCode>();
 
         #endregion
 
