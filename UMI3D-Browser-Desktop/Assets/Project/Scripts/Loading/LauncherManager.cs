@@ -208,7 +208,6 @@ public class LauncherManager : MonoBehaviour
         urlEnterBtn = urlScreen.Q<Button>("url-enter-btn");
 
         urlEnterBtn.clickable.clicked += ()=> SetServer(urlInput.value);// SetDomain;
-        //nextStep = ()=> SetServer(urlInput.value);
 
         urlScreen.Q<VisualElement>("icon-open").style.display = DisplayStyle.None;
         connectNewServBtn = urlScreen.Q<Button>("newConnection");
@@ -268,7 +267,6 @@ public class LauncherManager : MonoBehaviour
         currentServerConnectionData = UserPreferencesManager.GetPreviousServerData();
 
         previousStep = null;
-        //nextStep = ()=> SetDomain();
         nextStep = () => SetServer(urlInput.value);
         urlInput.value = currentServerConnectionData.serverName; // currentConnectionData.ip;
     }
