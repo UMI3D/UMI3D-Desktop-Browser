@@ -10,13 +10,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Linq;
-using umi3d.cdk.interaction;
 using UnityEngine;
 
 
-namespace BrowserDesktop.Selection.Intent
+namespace umi3d.cdk.interaction.selection.intent
 {
+    /// <summary>
+    /// Simple hover detector that performs a ray-cast
+    /// </summary>
     [CreateAssetMenu(fileName = "IntenSelectDetector", menuName = "UMI3D/Selection/Intent Detector/Hover")]
     public class HoverDetector : AbstractSelectionIntentDetector
     {

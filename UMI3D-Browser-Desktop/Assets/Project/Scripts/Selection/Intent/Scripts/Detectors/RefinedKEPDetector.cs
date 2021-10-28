@@ -14,10 +14,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using MathNet.Numerics;
 using System.Linq;
-using umi3d.cdk.interaction;
 using Newtonsoft.Json;
 
-namespace BrowserDesktop.Selection.Intent
+namespace umi3d.cdk.interaction.selection.intent
 {
     /// <summary>
     /// Implementation of a selection intent detector using the refined version of Kinematic Endpoint Prediction extanded in 3D, 

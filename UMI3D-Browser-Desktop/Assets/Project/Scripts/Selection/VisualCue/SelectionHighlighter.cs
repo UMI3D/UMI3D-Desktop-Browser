@@ -11,10 +11,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
-using umi3d.cdk.interaction;
 using UnityEngine;
 
-namespace BrowserDesktop.Selection
+namespace umi3d.cdk.interaction.selection
 {
     /// <summary>
     /// Handles selection highlight with an outlining shader

@@ -13,9 +13,8 @@ limitations under the License.
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using umi3d.cdk.interaction;
 
-namespace BrowserDesktop.Selection.Intent
+namespace umi3d.cdk.interaction.selection.intent
 {
     /// <summary>
     /// Implementation of the IntenSelect detector of intention, from de Haan et al. 2005

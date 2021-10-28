@@ -11,13 +11,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections;
-using System.Collections.Generic;
-using umi3d.cdk;
-using umi3d.cdk.interaction;
 using UnityEngine;
 
-namespace BrowserDesktop.Selection.Intent
+namespace umi3d.cdk.interaction.selection.intent
 {
+    /// <summary>
+    /// Unity object that should be attached on a UMI3D controller to enable selection intent prediction
+    /// </summary>
     public class IntentSelectorManager : MonoBehaviour
     {
         bool initialized = false;

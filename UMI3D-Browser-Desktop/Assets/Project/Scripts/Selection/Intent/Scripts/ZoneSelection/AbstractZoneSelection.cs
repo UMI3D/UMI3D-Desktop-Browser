@@ -10,14 +10,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using umi3d.cdk;
-using umi3d.cdk.interaction;
 using UnityEngine;
 
-namespace BrowserDesktop.Selection
+namespace umi3d.cdk.interaction.selection
 {
     /// <summary>
     /// A Zone Selector to define a zone and select objects within

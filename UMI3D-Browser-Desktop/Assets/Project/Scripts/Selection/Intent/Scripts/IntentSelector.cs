@@ -10,30 +10,37 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using umi3d.cdk.interaction;
 using UnityEngine;
 
-namespace BrowserDesktop.Selection.Intent
+namespace umi3d.cdk.interaction.selection.intent
 {
     /// <summary>
     /// Selector that uses an intent detector to predict targets
     /// </summary>
     public class IntentSelector : AbstractSelector
     {
+        /// <summary>
+        /// UMI3D controller
+        /// </summary>
         [SerializeField]
         private AbstractController controller;
 
+        /// <summary>
+        /// Selection intent detector
+        /// </summary>
         [SerializeField]
         private AbstractSelectionIntentDetector detector;
 
+        /// <summary>
+        /// Visual cue handler
+        /// </summary>
         [SerializeField]
-        private SelectionHighlighter selectionHighlighter;
+        private AbstractVisualCueHandler selectionVisualCueHandler;
 
         #region selectionCache
         private InteractableContainer lastSelectedInteractable;
 
         public SelectionData selectionData;
-
         #endregion
 
 
@@ -65,7 +72,7 @@ namespace BrowserDesktop.Selection.Intent
                 if (lastSelectedInteractable != null)
                     UnselectLastSelected();
                 
-                selectionHighlighter.ActivateSelectedVisualCue(interactableToSelect);
+                selectionVisualCueHandler.ActivateSelectedVisualCue(interactableToSelect);
                 controller.Project(AbstractInteractionMapper.Instance.GetTool(interactableToSelect.Interactable.dto.id), true,
                     new RequestedUsingSelector<IntentSelector>() { controller = this.controller }, interactableToSelect.Interactable.id);
 
@@ -80,7 +87,7 @@ namespace BrowserDesktop.Selection.Intent
 
         private void UnselectLastSelected()
         {
-            selectionHighlighter.DeactivateSelectedVisualCue(lastSelectedInteractable);
+            selectionVisualCueHandler.DeactivateSelectedVisualCue(lastSelectedInteractable);
 
             controller.Release(AbstractInteractionMapper.Instance.GetTool(lastSelectedInteractable.Interactable.dto.id),
                                 new RequestedUsingSelector<IntentSelector>());

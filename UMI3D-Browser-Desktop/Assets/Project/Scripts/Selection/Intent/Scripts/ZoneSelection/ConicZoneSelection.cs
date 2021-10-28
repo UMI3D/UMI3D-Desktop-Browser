@@ -10,17 +10,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
 using System.Collections.Generic;
-using umi3d.cdk;
 using UnityEngine;
 using System.Linq;
-using umi3d.cdk.interaction;
 
-namespace BrowserDesktop.Selection
+namespace umi3d.cdk.interaction.selection
 {
     /// <summary>
-    /// A conic zone selector
+    /// A conic zone selection helper
     /// </summary>
     public class ConicZoneSelection : RayZoneSelection
     {
