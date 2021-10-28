@@ -11,6 +11,7 @@
                     <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/UI/UI_connection/ico_top.png&apos;); height: 30px; -unity-background-scale-mode: scale-to-fit; width: 30px; margin-left: 5px;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="top-right-menu" style="flex-direction: row-reverse; width: 50%; flex-wrap: nowrap; height: 100%;">
+                    <ui:Button name="close-window-btn" class="close-btn top-left-menu-btn" style="width: 35px;" />
                     <ui:Button name="fullscreen-btn" class="top-left-menu-btn restore-btn" style="width: 35px;" />
                     <ui:Button name="minimize-window-btn" class="top-left-menu-btn minimize-btn" />
                 </ui:VisualElement>
