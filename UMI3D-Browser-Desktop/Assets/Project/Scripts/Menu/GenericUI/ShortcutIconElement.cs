@@ -42,5 +42,12 @@ public class ShortcutIconElement : VisualElement
         this.style.width = iconWidthPX;
 
         this.style.backgroundImage = new StyleBackground(sprite);
+        if (sprite.name.Length == 3)
+        {
+            this.style.borderBottomWidth = 0;
+            this.style.borderRightWidth = 0;
+            this.style.borderLeftWidth = 0;
+            this.style.borderTopWidth = 0;
+        }
     }
 }

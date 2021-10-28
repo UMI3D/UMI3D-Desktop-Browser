@@ -26,7 +26,7 @@ namespace BrowserDesktop.Menu
     /// <summary>
     /// This class manages the shortcut displayer 
     /// </summary>
-    public class Shortcuts : MonoBehaviour
+    public class Shortcuts : umi3d.common.Singleton<Shortcuts>
     {
         #region Fields
 
@@ -51,7 +51,7 @@ namespace BrowserDesktop.Menu
         /// Shortcuts Icons dictionary
         /// </summary>
         [SerializeField]
-        private Controller.KeyBindings_SO shortcutsIcons;
+        private Controller.KeyBindings_SO keyBindings;
 
         private float shortcutDisplayerWidth = 350;
 
@@ -75,7 +75,7 @@ namespace BrowserDesktop.Menu
         void Start()
         {
             Debug.Assert(uiDocument != null);
-            Debug.Assert(shortcutsIcons != null);
+            Debug.Assert(keyBindings != null);
             Debug.Assert(shortcutTreeAsset != null);
             Debug.Assert(shortcutIconTreeAsset != null);
 
@@ -183,7 +183,7 @@ namespace BrowserDesktop.Menu
         /// </summary>
         /// <param name="shortcutName">What the shortcut do.</param>
         /// <param name="shortcutkeys">Keys to press to trigger the shortcut.</param>
-        private void AddShortcut(string shortcutName, string[] shortcutkeys)
+        public void AddShortcut(string shortcutName, string[] shortcutkeys)
         {
             ShortcutElement shortcutElement;
             //Object Pooling for ShortcutElement.
@@ -201,7 +201,7 @@ namespace BrowserDesktop.Menu
             Sprite[] shortcutIcons = new Sprite[shortcutkeys.Length];
             for (int i = 0; i < shortcutkeys.Length; ++i)
             {
-                shortcutIcons[i] = shortcutsIcons.GetSpriteFrom(shortcutkeys[i]);
+                shortcutIcons[i] = keyBindings.GetSpriteFrom(shortcutkeys[i]);
             }
 
             shortcutElement.Setup(shortcutName, shortcutIcons, shortcutIconTreeAsset, this);
