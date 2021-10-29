@@ -22,6 +22,7 @@
                     <ui:Label name="environment-name" text="Test" class="white-txt medium-size-txt" style="-unity-text-align: middle-left;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="top-right-menu" style="flex-direction: row-reverse; width: 50%; flex-wrap: nowrap; height: 100%;">
+                    <ui:Button name="close-window-btn" class="top-left-menu-btn close-btn" style="width: 35px;" />
                     <ui:Button name="fullscreen-btn" class="top-left-menu-btn restore-btn" style="width: 35px;" />
                     <ui:Button name="minimize-window-btn" class="top-left-menu-btn minimize-btn" />
                 </ui:VisualElement>
