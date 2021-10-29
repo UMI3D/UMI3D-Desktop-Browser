@@ -25,7 +25,7 @@ public class ShortcutIconElement : VisualElement
     /// <summary>
     /// The icon height in px.
     /// </summary>
-    private int iconHeightPX = 20;
+    private int iconHeightPX = 25;
 
     /// <summary>
     /// Set the size and the sprite of the icon.

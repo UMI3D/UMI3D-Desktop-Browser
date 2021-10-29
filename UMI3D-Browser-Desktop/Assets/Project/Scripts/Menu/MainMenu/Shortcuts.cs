@@ -102,13 +102,13 @@ namespace BrowserDesktop.Menu
             {
                 String[] test = { "1" };
                 AddShortcut("test", test);
-                AddShortcuts();
+                //AddShortcuts();
             }
             if (Input.GetKeyDown(KeyCode.L))
             {
                 String[] test = { "ctrl", "1" };
                 AddShortcut("test2", test);
-                AddShortcuts();
+                //AddShortcuts();
             }
             /*if (Input.GetKeyDown(KeyCode.M))
             {
@@ -127,7 +127,7 @@ namespace BrowserDesktop.Menu
             {
                 String[] test = { "shift", "shift", "shift" };
                 AddShortcut("Test shift bla bla blabla bla bla test.", test);
-                AddShortcuts();
+                //AddShortcuts();
             }
             if (Input.GetKeyDown(KeyCode.C))
             {
@@ -135,7 +135,7 @@ namespace BrowserDesktop.Menu
             }
         }
 
-        /*/// <summary>
+        /// <summary>
         /// Wait one frame and compute the max width of shortcuts.
         /// </summary>
         /// <returns></returns>
@@ -153,16 +153,16 @@ namespace BrowserDesktop.Menu
         {
             yield return ComputeShortcutsWidth();
             shortcutsDisplayedList.ForEach((sE) => sE.ResizeShortcutWidth());
-            AnimeVisualElement(shortcuts_SV, 1f, true, (elt, val) => 
-            { 
-                elt.style.opacity = val; 
+            AnimeVisualElement(shortcuts_SV, 1f, true, (elt, val) =>
+            {
+                elt.style.opacity = val;
             }); //Display shortcuts when the resizement is done.
             Debug.Log("Shortcut displayer = " + shortcutDisplayer_VE.resolvedStyle.width);
-        }*/
+        }
 
         #region Add and Remove Shortcuts
 
-        public void AddShortcuts()
+        /*public void AddShortcuts()
         {
             AnimeVisualElement(shortcuts_SV, 1f, false, (elt, val)=> 
             { 
@@ -170,13 +170,13 @@ namespace BrowserDesktop.Menu
             }); //Hide shortcuts while they are added.
 
             //TODO Add shortcuts
-            //StartCoroutine(ResizeShortcutsWidth());
+            StartCoroutine(ResizeShortcutsWidth());
 
             AnimeVisualElement(shortcuts_SV, 1f, true, (elt, val)=>
             {
                 elt.style.opacity = val;
             }); //Display shortcuts when the resizement is done.
-        }
+        }*/
 
         /// <summary>
         /// Add a shortcut to the shortcuts displayer.
@@ -206,6 +206,8 @@ namespace BrowserDesktop.Menu
 
             shortcutElement.Setup(shortcutName, shortcutIcons, shortcutIconTreeAsset, this);
             shortcuts_SV.Add(shortcutElement);
+
+            StartCoroutine(ResizeShortcutsWidth());
         }
 
         /// <summary>
