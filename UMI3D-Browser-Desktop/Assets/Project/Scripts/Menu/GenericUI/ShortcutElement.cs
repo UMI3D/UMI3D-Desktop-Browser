@@ -43,12 +43,12 @@ public class ShortcutElement : VisualElement
                 shortcutsCount = value;
             }
 
-            /*if (shortcutsCount == 0)
-                IconsAreaWidth = 0;*/
+            if (shortcutsCount == 0)
+                IconsAreaWidth = 0;
         }
     }
 
-    /*private static float iconsAreaWidth = 0;
+    private static float iconsAreaWidth = 0;
     /// <summary>
     /// The maximum width in px of all the icons area.
     /// </summary>
@@ -86,7 +86,7 @@ public class ShortcutElement : VisualElement
                 shortcutNameWidth = value;
             }
         }
-    }*/
+    }
 
     /// <summary>
     /// True if this shortcutElement is displayed.
@@ -96,7 +96,7 @@ public class ShortcutElement : VisualElement
     /// <summary>
     /// The size of the icons area and the shortut's name label.
     /// </summary>
-    private float maxIconsAreaWidth = 151;
+    //private float maxIconsAreaWidth = 151;
 
     #endregion
 
@@ -118,8 +118,8 @@ public class ShortcutElement : VisualElement
 
         iconsArea_VE = this.Q<VisualElement>("shortcut-icons");
 
-        iconsArea_VE.style.width = maxIconsAreaWidth;
-        shortcutName_L.style.width = maxIconsAreaWidth;
+        /*iconsArea_VE.style.width = maxIconsAreaWidth;
+        shortcutName_L.style.width = maxIconsAreaWidth;*/
 
         for (int i = 0; i < shortcutIcons.Length; ++i)
         {
@@ -161,7 +161,7 @@ public class ShortcutElement : VisualElement
         }
     }
 
-    /*public void ComputeShortcutWidth()
+    public void ComputeShortcutWidth()
     {
         IconsAreaWidth = iconsArea_VE.resolvedStyle.width;
         ShortcutNameWidth = shortcutName_L.resolvedStyle.width;
@@ -172,10 +172,10 @@ public class ShortcutElement : VisualElement
     public void ResizeShortcutWidth()
     {
         iconsArea_VE.style.width = IconsAreaWidth;
-        shortcutName_L.style.width = IconsAreaWidth;
+        shortcutName_L.style.width = ShortcutNameWidth;
 
         Debug.Log("resizement");
-    }*/
+    }
 
     /// <summary>
     /// 
@@ -188,8 +188,8 @@ public class ShortcutElement : VisualElement
             isShortcutDisplay = false;
             --ShortcutsCount;
 
-            /*iconsArea_VE.style.width = StyleKeyword.Auto; //Unset the icons area width.
-            shortcutName_L.style.width = StyleKeyword.Auto; //Unset the shortcut name width.*/
+            iconsArea_VE.style.width = StyleKeyword.Auto; //Unset the icons area width.
+            shortcutName_L.style.width = StyleKeyword.Auto; //Unset the shortcut name width.
 
             this.RemoveFromHierarchy();
         }
