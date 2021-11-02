@@ -19,18 +19,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-
-namespace BrowserDesktop.UI.CustomElement
+namespace BrowserDesktop.UI.GenericElement
 {
-    public class MenuBarElement : VisualElement
+    public class ToolBoxGenericElement : VisualElement
     {
         /// <summary>
         /// To be recognized by UI Builder
         /// </summary>
-        public new class UxmlFactory : UxmlFactory<MenuBarElement, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<ToolBoxGenericElement, UxmlTraits> { }
         /// <summary>
         /// To be recognized by UI Builder
         /// </summary>
         public new class UxmlTraits : VisualElement.UxmlTraits { }
+
+        private Label toolboxName_L;
+        private VisualElement toolboxContainer_VE;
+
+        public void Setup(string toolboxName)
+        {
+            toolboxName_L = this.Q<Label>("toolbox-name");
+            toolboxContainer_VE = this.Q<VisualElement>("toolbox-container");
+
+            toolboxName_L.text = toolboxName;
+        }
+
+        public void AddTool(ToolboxButtonGenericElement tool)
+        {
+            toolboxContainer_VE.Add(tool);
+
+            //TODO resize container.
+        }
+        
     }
 }
