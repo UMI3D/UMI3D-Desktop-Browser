@@ -19,18 +19,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-
-namespace BrowserDesktop.UI.CustomElement
+namespace BrowserDesktop.UI.GenericElement
 {
-    public class MenuBarElement : VisualElement
+    public class ToolboxButtonGenericElement : VisualElement
     {
         /// <summary>
         /// To be recognized by UI Builder
         /// </summary>
-        public new class UxmlFactory : UxmlFactory<MenuBarElement, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<ToolboxButtonGenericElement, UxmlTraits> { }
         /// <summary>
         /// To be recognized by UI Builder
         /// </summary>
         public new class UxmlTraits : VisualElement.UxmlTraits { }
+
+        private Button button_B;
+        private Label buttonName_L;
+
+        public void Setup(Sprite buttonImage, string buttonName)
+        {
+            button_B = this.Q<Button>("toolbox-button");
+            buttonName_L = this.Q<Label>("toolbox-button-name");
+
+            button_B.style.backgroundImage = Background.FromSprite(buttonImage);
+            buttonName_L.text = buttonName;
+        }
+
     }
 }

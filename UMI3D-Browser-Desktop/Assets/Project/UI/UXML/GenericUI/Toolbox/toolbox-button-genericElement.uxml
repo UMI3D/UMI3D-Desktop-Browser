@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <BrowserDesktop.UI.GenericElement.ToolboxButtonGenericElement style="align-items: center; justify-content: center;">
+        <ui:Button text="&#10;" display-tooltip-when-elided="true" name="toolbox-buton" style="background-image: url(&apos;/Assets/Project/UI/UI_connection/menu_bar/btn_toolbox_ENABLE.png&apos;); align-items: center; justify-content: flex-end; -unity-text-align: middle-center; width: 30px; height: 30px;" />
+        <ui:Label text="Label kshdfosdhfsoidh" display-tooltip-when-elided="true" name="toolbox-button-name" style="align-items: center; justify-content: center; -unity-text-align: middle-left; color: rgba(255, 255, 255, 255); overflow: hidden; width: 45px;" />
+    </BrowserDesktop.UI.GenericElement.ToolboxButtonGenericElement>
+</ui:UXML>

@@ -1,9 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<engine:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:engine="UnityEngine.UIElements"
-    xmlns:editor="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
->
-    
-</engine:UXML>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="toolbox-genericElement" src="/Assets/Project/UI/UXML/GenericUI/Toolbox/toolbox-genericElement.uxml" />
+    <BrowserDesktop.UI.CustomElement.MenuBarElement style="height: 60px; background-color: rgb(63, 63, 66); flex-grow: 0; flex-direction: row; flex-shrink: 0; width: 100%;">
+        <ui:Instance template="toolbox-genericElement" name="toolbox-genericElement" />
+    </BrowserDesktop.UI.CustomElement.MenuBarElement>
+</ui:UXML>
