@@ -54,17 +54,10 @@ namespace umi3d.cdk.volumes
             switch (dto)
             {
                 case BoxDto boxDto:
-                    Box box = new Box()
-                    {
-                        id = boxDto.id,
-                        bounds = new Bounds()
-                        {
-                            center = boxDto.center,
-                            size = boxDto.size
-                        },
-                        localToWorld = localToWorldMatrix
+                    Box box = new Box() { id = boxDto.id };
+                    box.SetBounds(new Bounds() { center = boxDto.center, size = boxDto.size });
+                    box.SetLocalToWorldMatrix(localToWorldMatrix);
 
-                    };
                     primitives.Add(boxDto.id, box);
                     box.isTraversable = dto.isTraversable;
                     onPrimitiveCreation.Invoke(box);
@@ -74,12 +67,13 @@ namespace umi3d.cdk.volumes
                     Cylinder c = new Cylinder()
                     {
                         id = cylinderDto.id,
-                        radius = cylinderDto.radius,
-                        height = cylinderDto.height,
                         position = localToWorldMatrix.MultiplyPoint(Vector3.zero),
                         rotation = localToWorldMatrix.rotation,
                         scale = localToWorldMatrix.lossyScale
                     };
+                    c.SetRadius(cylinderDto.radius);
+                    c.SetHeight(cylinderDto.height);
+
                     primitives.Add(dto.id, c);
                     c.isTraversable = dto.isTraversable;
                     onPrimitiveCreation.Invoke(c);

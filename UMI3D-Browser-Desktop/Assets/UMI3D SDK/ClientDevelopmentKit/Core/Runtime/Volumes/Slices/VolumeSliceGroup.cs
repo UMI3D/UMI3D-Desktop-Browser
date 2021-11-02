@@ -63,5 +63,15 @@ namespace umi3d.cdk.volumes
         {
             throw new System.NotImplementedException();
         }
+
+        public override void SetTransform(Matrix4x4 transform)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void SetRootNode(ulong rootNodeId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

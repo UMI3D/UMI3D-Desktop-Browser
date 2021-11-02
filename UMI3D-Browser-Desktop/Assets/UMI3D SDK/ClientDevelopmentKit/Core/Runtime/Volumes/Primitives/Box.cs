@@ -29,8 +29,8 @@ namespace umi3d.cdk.volumes
         /// <summary>
         /// World to local matrix
         /// </summary>
-        public Matrix4x4 localToWorld;
-        public Bounds bounds;
+        public Matrix4x4 localToWorld { get; private set; }
+        public Bounds bounds { get; private set; }
 
         public override void Delete() { }
 
@@ -66,6 +66,28 @@ namespace umi3d.cdk.volumes
                 return bounds.Contains(point);
             else
                 return bounds.Contains(localToWorld.MultiplyPoint(point));
+        }
+
+        public void SetBounds(Bounds newBounds)
+        {
+            bounds = newBounds;
+            onUpdate.Invoke();
+        }
+
+        public void SetLocalToWorldMatrix(Matrix4x4 localToWorld)
+        {
+            this.localToWorld = localToWorld;
+            onUpdate.Invoke();
+        }
+
+        public override void SetRootNode(ulong rootNodeId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void SetTransform(Matrix4x4 transform)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

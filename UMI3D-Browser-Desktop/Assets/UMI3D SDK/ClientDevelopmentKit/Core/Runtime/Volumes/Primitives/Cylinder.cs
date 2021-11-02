@@ -22,8 +22,8 @@ namespace umi3d.cdk.volumes
 {
     public class Cylinder : AbstractPrimitive
     {
-        public float radius;
-        public float height;
+        public float radius { get; private set; }
+        public float height { get; private set; }
         public Vector3 position;
         public Quaternion rotation;
         public Vector3 scale;
@@ -94,6 +94,28 @@ namespace umi3d.cdk.volumes
                 return false;
             else
                 return true;
+        }
+
+        public void SetRadius(float newRadius)
+        {
+            radius = newRadius;
+            onUpdate.Invoke();
+        }
+
+        public void SetHeight(float newHeight)
+        {
+            height = newHeight;
+            onUpdate.Invoke();
+        }
+
+        public override void SetTransform(Matrix4x4 transform)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void SetRootNode(ulong rootNodeId)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

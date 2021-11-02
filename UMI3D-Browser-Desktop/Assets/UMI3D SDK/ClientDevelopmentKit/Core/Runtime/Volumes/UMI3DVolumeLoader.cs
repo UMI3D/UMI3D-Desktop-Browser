@@ -88,55 +88,39 @@ namespace umi3d.cdk.volumes
         {
             switch (property.property)
             {
-                case UMI3DPropertyKeys.PointPosition:
-                    Point point = entity.Object as Point;
-                    if (point == null)
-                        throw new Exception("Internal error : entity is not a point");
-
-                    point.SetPosition(property.value as SerializableVector3);
+                case UMI3DPropertyKeys.VolumeCell_RoodNodeId:
+                    var cell_1 = entity.Object as AbstractVolumeCell;
+                    cell_1.SetRootNode((ulong)property.value);
                     return true;
 
-                case UMI3DPropertyKeys.FacePointsIds:
-                    Face face = entity.Object as Face;
-                    if (face == null)
-                        throw new Exception("Internal error : entity is not a face");
-
-                    face.SetPoints(property.value as List<ulong>);
+                case UMI3DPropertyKeys.VolumeCell_RootNodeToLocalMatrix:
+                    var cell_2 = entity.Object as AbstractVolumeCell;
+                    cell_2.SetTransform((Matrix4x4)property.value);
                     return true;
 
-                case UMI3DPropertyKeys.VolumeSlices:
-                    VolumeSliceGroup group = entity.Object as VolumeSliceGroup;
-                    if (group == null)
-                        throw new Exception("Internal error : entity is not a volume slice group");
-
-                    group.SetSlices(property.value as List<VolumeSliceDto>);
+                case UMI3DPropertyKeys.VolumePrimitive_Box_Center:
+                    var box_1 = entity.Object as Box;
+                    Vector3 newCenter = (Vector3)property.value;
+                    Vector3 size = box_1.bounds.size;
+                    box_1.SetBounds(new Bounds(newCenter, size));
                     return true;
 
-                case UMI3DPropertyKeys.VolumeSlicePoints:
-                    VolumeSlice slice = entity.Object as VolumeSlice;
-                    if (slice == null)
-                        throw new Exception("Internal error : entity is not a volume slice");
-
-                    slice.SetPoints(property.value as List<PointDto>);
+                case UMI3DPropertyKeys.VolumePrimitive_Box_Size:
+                    var box_2 = entity.Object as Box;
+                    Vector3 center = box_2.bounds.center;
+                    Vector3 newsize = (Vector3)property.value;
+                    box_2.SetBounds(new Bounds(center, newsize));
                     return true;
 
-                case UMI3DPropertyKeys.VolumeSliceEdges:
-                    VolumeSlice slice2 = entity.Object as VolumeSlice;
-                    if (slice2 == null)
-                        throw new Exception("Internal error : entity is not a volume slice");
-
-                    slice2.SetEdges(property.value as List<int>);
+                case UMI3DPropertyKeys.VolumePrimitive_Cylinder_Height:
+                    var cyl_1 = entity.Object as Cylinder;
+                    cyl_1.SetHeight((float)property.value);
                     return true;
 
-                case UMI3DPropertyKeys.VolumeSliceFaces:
-                    VolumeSlice slice3 = entity.Object as VolumeSlice;
-                    if (slice3 == null)
-                        throw new Exception("Internal error : entity is not a volume slice");
-
-                    slice3.SetFaces(property.value as List<FaceDto>);
+                case UMI3DPropertyKeys.VolumePrimitive_Cylinder_Radius:
+                    var cyl_2 = entity.Object as Cylinder;
+                    cyl_2.SetRadius((float)property.value);
                     return true;
-
-                //TODO : Primitives
 
                 default:
                     return false;
