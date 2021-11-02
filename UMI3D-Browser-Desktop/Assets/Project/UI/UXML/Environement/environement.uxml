@@ -76,7 +76,7 @@
                             <ui:Button name="interaction-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px; font-size: 13px;" />
                         </ui:VisualElement>
                     </ui:VisualElement>
-                    <ui:Instance template="MenuBarElement" name="MenuBarElement" style="width: 100%; position: absolute;" />
+                    <ui:Instance template="MenuBarElement" name="menu-bar" style="width: 100%; position: absolute;" />
                     <ui:VisualElement name="pause-menu" style="position: absolute; top: 0; width: 100%; align-items: center; display: none;">
                         <ui:VisualElement name="pause-menu-container" class="dark-grey2-bck orange-border" style="width: 300px; height: 52px; border-bottom-width: 1px; flex-direction: row; align-items: center; justify-content: center; display: none;">
                             <ui:Button name="open-option-menu-btn" class="btn-options" style="width: 110px; height: 34px; margin-right: 4px; display: none;" />

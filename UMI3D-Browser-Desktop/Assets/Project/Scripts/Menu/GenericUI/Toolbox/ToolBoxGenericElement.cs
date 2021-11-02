@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,12 +22,12 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.GenericElement
 {
-    public class ToolBoxGenericElement : VisualElement
+    public class ToolboxGenericElement : VisualElement
     {
         /// <summary>
         /// To be recognized by UI Builder
         /// </summary>
-        public new class UxmlFactory : UxmlFactory<ToolBoxGenericElement, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<ToolboxGenericElement, UxmlTraits> { }
         /// <summary>
         /// To be recognized by UI Builder
         /// </summary>
@@ -48,6 +49,11 @@ namespace BrowserDesktop.UI.GenericElement
             toolboxContainer_VE.Add(tool);
 
             //TODO resize container.
+        }
+
+        public void AddTool(string toolName, Sprite toolIcon, Action toolAction)
+        {
+
         }
         
     }

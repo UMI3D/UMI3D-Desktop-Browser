@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,13 +36,44 @@ namespace BrowserDesktop.UI.GenericElement
         private Button button_B;
         private Label buttonName_L;
 
-        public void Setup(Sprite buttonImage, string buttonName)
+        private bool isOn = false;
+
+        public void Setup(string buttonName, Sprite buttonImage, Action buttonClicked)
         {
             button_B = this.Q<Button>("toolbox-button");
             buttonName_L = this.Q<Label>("toolbox-button-name");
 
-            button_B.style.backgroundImage = Background.FromSprite(buttonImage);
             buttonName_L.text = buttonName;
+            button_B.style.backgroundImage = Background.FromSprite(buttonImage);
+            button_B.clicked += buttonClicked;
+        }
+
+        public void Setup(string buttonName, string classNameOn, string classNameOffn, Action buttonClicked)
+        {
+            Setup(buttonName, buttonClicked);
+            button_B.clicked += () =>
+            {
+                isOn = !isOn;
+                if (isOn)
+                {
+                    this.AddToClassList("darkTheme-menuBar-");
+                }
+                else
+                {
+                    this.AddToClassList("darkTheme-menuBar-");
+                }
+                buttonClicked();
+            };
+
+        }
+
+        private void Setup(string buttonName, Action buttonClicked)
+        {
+            button_B = this.Q<Button>("toolbox-button");
+            buttonName_L = this.Q<Label>("toolbox-button-name");
+
+            buttonName_L.text = buttonName;
+            
         }
 
     }
