@@ -60,7 +60,7 @@ namespace BrowserDesktop.Menu.Environment
         private void SetupMenuBar()
         {
             openToolbox_TGE.Setup("");
-            settings_TGE.Setup("");
+            settings_TGE.Setup("test");
             leaveEnvironment_TGE.Setup("");
 
             ToolboxButtonGenericElement openToolboxButton_TBGE = toolboxButtonGenericElement_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
@@ -72,11 +72,11 @@ namespace BrowserDesktop.Menu.Environment
             //settings_TGE.AddTool(avatar_TBGE);
 
             ToolboxButtonGenericElement sound_TBGE = toolboxButtonGenericElement_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-            sound_TBGE.Setup("", "soundOn", "soundOff", true, () => { Debug.Log("TODO"); });
+            sound_TBGE.Setup("label test", "soundOn", "soundOff", true, () => { Debug.Log("TODO"); });
             //settings_TGE.AddTool(sound_TBGE);
 
             ToolboxButtonGenericElement mic_TBGE = toolboxButtonGenericElement_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-            mic_TBGE.Setup("", "micOn", "micOff", true, () => { Debug.Log("TODO"); });
+            mic_TBGE.Setup("label test", "micOn", "micOff", true, () => { Debug.Log("TODO"); });
             //settings_TGE.AddTool(mic_TBGE);
 
             settings_TGE.AddTools(new ToolboxButtonGenericElement[3] { avatar_TBGE, sound_TBGE, mic_TBGE });

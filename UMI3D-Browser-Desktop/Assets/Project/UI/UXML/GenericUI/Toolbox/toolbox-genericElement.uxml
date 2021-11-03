@@ -2,6 +2,7 @@
     <Style src="/Assets/Project/UI/UXML/menu-bar.uss" />
     <BrowserDesktop.UI.GenericElement.ToolboxGenericElement style="justify-content: center; width: auto; flex-direction: row;">
         <ui:VisualElement name="vertical-layout" style="justify-content: center;">
+            <ui:VisualElement name="vertical-spacer" style="height: 5px;" />
             <ui:Label text="Label" display-tooltip-when-elided="true" name="toolbox-name" style="color: rgb(255, 255, 255); -unity-text-align: middle-center;" />
             <ui:VisualElement name="vertical-spacer" style="height: 5px;" />
             <ui:VisualElement name="toolbox-container" style="flex-direction: row; flex-grow: 1; flex-shrink: 0; justify-content: space-around; align-items: center; width: 100%;" />
