@@ -201,6 +201,11 @@ PrefabInstance:
       propertyPath: parallelNavigation
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1559253697178214691, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3316399237951345772, guid: 50541f86f5f01194eb2b175264de3f46,
         type: 3}
       propertyPath: parallelNavigation

@@ -1,6 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="toolbox-genericElement" src="/Assets/Project/UI/UXML/GenericUI/Toolbox/toolbox-genericElement.uxml" />
-    <BrowserDesktop.UI.CustomElement.MenuBarElement style="height: 70px; background-color: rgb(63, 63, 66); flex-grow: 0; flex-direction: row; flex-shrink: 0; width: 100%;">
-        <ui:Instance template="toolbox-genericElement" name="toolbox-genericElement" />
+    <Style src="/Assets/Project/UI/UXML/menu-bar.uss" />
+    <BrowserDesktop.UI.CustomElement.MenuBarElement style="height: 70px; background-color: rgb(63, 63, 66); flex-grow: 0; flex-direction: row; flex-shrink: 0; width: 100%; justify-content: space-between;">
+        <ui:Instance template="toolbox-genericElement" name="toolbox-openBtn" />
+        <ui:VisualElement name="toolbox-pined-container" style="width: auto; flex-grow: 1; flex-shrink: 0;" />
+        <ui:VisualElement name="Environment-container" style="flex-direction: row;">
+            <ui:Instance template="toolbox-genericElement" name="environment-settings" />
+            <ui:Instance template="toolbox-genericElement" name="environment-leaveBtn" />
+        </ui:VisualElement>
     </BrowserDesktop.UI.CustomElement.MenuBarElement>
 </ui:UXML>
