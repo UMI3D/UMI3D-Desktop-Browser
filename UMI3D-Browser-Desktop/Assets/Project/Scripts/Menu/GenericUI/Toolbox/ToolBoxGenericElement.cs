@@ -44,6 +44,21 @@ namespace BrowserDesktop.UI.GenericElement
             toolboxName_L.text = toolboxName;
         }
 
+        public void AddTools(ToolboxButtonGenericElement[] tools)
+        {
+            for (int i = 0; i < tools.Length; ++i)
+            {
+                if (i > 0)
+                {
+                    VisualElement horizontalSpacer = new VisualElement();
+                    horizontalSpacer.style.width = 10;
+                    toolboxContainer_VE.Add(horizontalSpacer);
+                }
+
+                toolboxContainer_VE.Add(tools[i]);
+            }
+        }
+
         public void AddTool(ToolboxButtonGenericElement tool)
         {
             toolboxContainer_VE.Add(tool);

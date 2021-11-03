@@ -48,23 +48,34 @@ namespace BrowserDesktop.UI.GenericElement
             button_B.clicked += buttonClicked;
         }
 
-        public void Setup(string buttonName, string classNameOn, string classNameOffn, Action buttonClicked)
+        public void Setup(string buttonName, string classNameOn, string classNameOff, bool isOn, Action buttonClicked)
         {
             Setup(buttonName, buttonClicked);
+
+            SwitchClass(isOn, classNameOn, classNameOff);
+
             button_B.clicked += () =>
             {
-                isOn = !isOn;
-                if (isOn)
-                {
-                    this.AddToClassList("darkTheme-menuBar-");
-                }
-                else
-                {
-                    this.AddToClassList("darkTheme-menuBar-");
-                }
+                SwitchClass(!this.isOn, classNameOn, classNameOff);
                 buttonClicked();
             };
 
+        }
+
+        private void SwitchClass(bool value, string classNameOn, string classNameOff)
+        {
+            isOn = value;
+            string className = "darkTheme-menuBar-";
+            if (value)
+            {
+                className += classNameOn + "-btn";
+            }
+            else
+            {
+                className += classNameOff + "-btn";
+            }
+            button_B.ClearClassList();
+            button_B.AddToClassList(className);
         }
 
         private void Setup(string buttonName, Action buttonClicked)
@@ -73,7 +84,6 @@ namespace BrowserDesktop.UI.GenericElement
             buttonName_L = this.Q<Label>("toolbox-button-name");
 
             buttonName_L.text = buttonName;
-            
         }
 
     }

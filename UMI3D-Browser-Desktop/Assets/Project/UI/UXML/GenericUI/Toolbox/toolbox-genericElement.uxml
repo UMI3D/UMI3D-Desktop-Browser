@@ -1,11 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="toolbox-button-genericElement" src="toolbox-button-genericElement.uxml" />
-    <BrowserDesktop.UI.GenericElement.ToolBoxGenericElement style="flex-direction: column; justify-content: space-around; align-items: center; width: 112px;">
-        <ui:Label text="Label" display-tooltip-when-elided="true" name="toolbox-name" style="color: rgb(255, 255, 255);" />
-        <ui:VisualElement name="vertical-spacer" style="height: 5px;" />
-        <ui:VisualElement name="toolbox-container" style="flex-direction: row; flex-grow: 1; flex-shrink: 0; justify-content: space-around; align-items: center; width: 100%;">
-            <ui:Instance template="toolbox-button-genericElement" name="toolbox-button-genericElement" />
-            <ui:Instance template="toolbox-button-genericElement" name="toolbox-button-genericElement" />
+    <Style src="/Assets/Project/UI/UXML/menu-bar.uss" />
+    <BrowserDesktop.UI.GenericElement.ToolboxGenericElement style="justify-content: center; width: auto; flex-direction: row;">
+        <ui:VisualElement name="vertical-layout" style="justify-content: center;">
+            <ui:Label text="Label" display-tooltip-when-elided="true" name="toolbox-name" style="color: rgb(255, 255, 255); -unity-text-align: middle-center;" />
+            <ui:VisualElement name="vertical-spacer" style="height: 5px;" />
+            <ui:VisualElement name="toolbox-container" style="flex-direction: row; flex-grow: 1; flex-shrink: 0; justify-content: space-around; align-items: center; width: 100%;" />
         </ui:VisualElement>
-    </BrowserDesktop.UI.GenericElement.ToolBoxGenericElement>
+    </BrowserDesktop.UI.GenericElement.ToolboxGenericElement>
 </ui:UXML>

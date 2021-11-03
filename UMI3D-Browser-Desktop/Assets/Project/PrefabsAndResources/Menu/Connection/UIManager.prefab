@@ -522,6 +522,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiDocument: {fileID: 1750602239179936672}
+  toolboxGenericElement_VTA: {fileID: 9197481963319205126, guid: 05a082bde1c1a61409c5e339eae7b264,
+    type: 3}
+  toolboxButtonGenericElement_VTA: {fileID: 9197481963319205126, guid: 7aff484ff7596e64c93f5560bf628d74,
+    type: 3}
 --- !u!114 &4166057248525559016
 MonoBehaviour:
   m_ObjectHideFlags: 0
