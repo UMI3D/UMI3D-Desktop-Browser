@@ -33,11 +33,26 @@ namespace BrowserDesktop.UI.GenericElement
         /// </summary>
         public new class UxmlTraits : VisualElement.UxmlTraits { }
 
+        /// <summary>
+        /// Button with its icon.
+        /// </summary>
         private Button button_B;
+        /// <summary>
+        /// Button's label.
+        /// </summary>
         private Label buttonName_L;
 
+        /// <summary>
+        /// State of the button.
+        /// </summary>
         private bool isOn = false;
 
+        /// <summary>
+        /// Setup the button (label, icon and action).
+        /// </summary>
+        /// <param name="buttonName">Label of the button.</param>
+        /// <param name="buttonImage">Icon of the button.</param>
+        /// <param name="buttonClicked">Action when button is clicked.</param>
         public void Setup(string buttonName, Sprite buttonImage, Action buttonClicked)
         {
             button_B = this.Q<Button>("toolbox-button");
@@ -48,9 +63,17 @@ namespace BrowserDesktop.UI.GenericElement
             button_B.clicked += buttonClicked;
         }
 
+        /// <summary>
+        /// Setup the button (label, USS classes, initial state and action).
+        /// </summary>
+        /// <param name="buttonName">Label of the button.</param>
+        /// <param name="classNameOn">USS class when button is On.</param>
+        /// <param name="classNameOff">USS class when the button is Off.</param>
+        /// <param name="isOn">Initial state of the button (true when active, else false).</param>
+        /// <param name="buttonClicked">Action when button is clicked.</param>
         public void Setup(string buttonName, string classNameOn, string classNameOff, bool isOn, Action buttonClicked)
         {
-            Setup(buttonName, buttonClicked);
+            Setup(buttonName);
 
             SwitchClass(isOn, classNameOn, classNameOff);
 
@@ -62,6 +85,24 @@ namespace BrowserDesktop.UI.GenericElement
 
         }
 
+        /// <summary>
+        /// Setup the label of the button and bind the UI.
+        /// </summary>
+        /// <param name="buttonName">Label of the button.</param>
+        private void Setup(string buttonName)
+        {
+            button_B = this.Q<Button>("toolbox-button");
+            buttonName_L = this.Q<Label>("toolbox-button-name");
+
+            buttonName_L.text = buttonName;
+        }
+
+        /// <summary>
+        /// Switch between USS classes when button is on or off.
+        /// </summary>
+        /// <param name="value">True if the button should be on, false else.</param>
+        /// <param name="classNameOn">USS class when the button is On.</param>
+        /// <param name="classNameOff">USS class when the button is Off.</param>
         private void SwitchClass(bool value, string classNameOn, string classNameOff)
         {
             isOn = value;
@@ -78,12 +119,12 @@ namespace BrowserDesktop.UI.GenericElement
             button_B.AddToClassList(className);
         }
 
-        private void Setup(string buttonName, Action buttonClicked)
+        /// <summary>
+        /// Resize When user whant.
+        /// </summary>
+        public void OnResize()
         {
-            button_B = this.Q<Button>("toolbox-button");
-            buttonName_L = this.Q<Label>("toolbox-button-name");
-
-            buttonName_L.text = buttonName;
+            //TODO
         }
 
     }
