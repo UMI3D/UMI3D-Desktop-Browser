@@ -130,11 +130,12 @@ namespace BrowserDesktop.UI.GenericElement
         }
 
         /// <summary>
-        /// Resize When user whant.
+        /// Apply user preferences when needed.
         /// </summary>
-        public void OnResize()
+        public void OnApplyUserPreferences()
         {
             //TODO
+            UserPreferences.UserPreferences.FontPref.ApplyFont(buttonName_L, "");
         }
 
     }
