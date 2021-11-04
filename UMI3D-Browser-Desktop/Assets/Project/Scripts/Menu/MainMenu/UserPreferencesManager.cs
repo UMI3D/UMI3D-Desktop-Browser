@@ -109,6 +109,9 @@ public class UserPreferencesManager
     /// <returns>A ServerData if the directory containe one, null otherwhise.</returns>
     public static ServerData GetPreviousServerData()
     {
+        return GetData<ServerData>(previusServer);
+    }
+    /*{
         string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, previusServer);
         if (File.Exists(path))
         {
@@ -130,7 +133,7 @@ public class UserPreferencesManager
             return data;
         }
         return new ServerData();
-    }
+    }*/
 
     /// <summary>
     /// get the connection data about the favorite server.
@@ -138,6 +141,9 @@ public class UserPreferencesManager
     /// <returns></returns>
     public static List<ServerData> GetRegisteredServerData()
     {
+        return GetData<List<ServerData>>(registeredServer);
+    }
+    /*{
         string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, registeredServer);
         if (File.Exists(path))
         {
@@ -157,6 +163,34 @@ public class UserPreferencesManager
             return data;
         }
         return new List<ServerData>();
+    }*/
+
+    private static T GetData<T>(string dataType) where T: new()
+    {
+        string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, dataType);
+
+        if (File.Exists(path))
+        {
+            FileStream file;
+            file = File.OpenRead(path);
+
+            BinaryFormatter bf = new BinaryFormatter();
+            T data;
+
+            try
+            {
+                data = (T) bf.Deserialize(file);
+            }
+            catch
+            {
+                data = new T();
+            }
+
+            file.Close();
+            return data;
+        }
+
+        return new T();
     }
 
     /// <summary>

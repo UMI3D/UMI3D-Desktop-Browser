@@ -47,6 +47,16 @@ namespace BrowserDesktop.UI.GenericElement
         /// </summary>
         private bool isOn = false;
 
+        public ToolboxButtonGenericElement()
+        {
+            //TODO register for resize.
+        }
+
+        ~ToolboxButtonGenericElement()
+        {
+
+        }
+
         /// <summary>
         /// Setup the button (label, icon and action).
         /// </summary>

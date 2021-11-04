@@ -25,19 +25,29 @@ namespace BrowserDesktop.UserPreferences
     [CreateAssetMenu(fileName = "FontPreferences", menuName = "ScriptableObjects/UserPreferences/FontPreferences")]
     public class FontPreferences_SO : ScriptableObject
     {
+        /// <summary>
+        /// The text style to be applied to the label (Font, USS or Both).
+        /// </summary>
         [System.Serializable]
         public class TextFont
         {
-            //[Header("Label")]
+            private enum TextStyle
+            {
+                FONT,
+                USS,
+                FONT_AND_USS
+            }
+
+            
             [Tooltip("Name of the label.")]
             [SerializeField]
             private string labeName;
 
-            [Space]
+            [Header("Font")]
             [Tooltip("Font of the label (can be empty or null).")]
             [SerializeField]
             private Font labelFont;
-            [Tooltip("Style of the label (Normal, Bold, Italic, Bold and Italic).")]
+            [Tooltip("Font style of the label (Normal, Bold, Italic, Bold and Italic).")]
             [SerializeField]
             private FontStyle labelFontStyle;
             [Tooltip("Font size (From 6 to 24)")]
@@ -47,28 +57,52 @@ namespace BrowserDesktop.UserPreferences
             [Tooltip("Color of the label.")]
             [SerializeField]
             private Color labelColor;
+
+            [Header("USS")]
             [Tooltip("USS classes of the label (can be empty or null).")]
             [SerializeField]
             private string[] labelUSSClasses;
 
+            [Header("Style")]
+            [Tooltip("The text style to be applied to the label (Font, USS or Both).")]
+            [SerializeField]
+            private TextStyle textStyle;
 
+            /// <summary>
+            /// Set the label's font and USS classes.
+            /// </summary>
+            /// <param name="label">The label to be set.</param>
             public void SetLabel(Label label)
-            {
-                if (labelUSSClasses.Length != 0)
+            {   
+                switch (textStyle)
                 {
-                    label.ClearClassList();
-                    foreach (string labelClass in labelUSSClasses)
-                    {
-                        label.AddToClassList(labelClass);
-                    }
+                    case TextStyle.FONT:
+                        label.ClearClassList();
+                        label.style.unityFont = labelFont != null ? labelFont : label.resolvedStyle.unityFont;
+                        label.style.unityFontStyleAndWeight = labelFontStyle;
+                        label.style.fontSize = labelFontSize;
+                        break;
+                    case TextStyle.USS:
+                        Debug.Assert(labelUSSClasses.Length != 0, "USS classes empty for " + labeName + " text.");
+                        label.ClearClassList();
+                        foreach (string labelClass in labelUSSClasses)
+                        {
+                            label.AddToClassList(labelClass);
+                        }
+                        break;
+                    case TextStyle.FONT_AND_USS:
+                        Debug.Assert(labelUSSClasses.Length != 0, "USS classes empty for " + labeName + " text.");
+                        label.ClearClassList();
+                        foreach (string labelClass in labelUSSClasses)
+                        {
+                            label.AddToClassList(labelClass);
+                        }
+
+                        label.style.unityFont = labelFont != null ? labelFont : label.resolvedStyle.unityFont;
+                        label.style.unityFontStyleAndWeight = labelFontStyle;
+                        label.style.fontSize = labelFontSize;
+                        break;
                 }
-                else
-                {
-                    label.style.unityFont = labelFont != null ? labelFont : label.resolvedStyle.unityFont;
-                    label.style.unityFontStyleAndWeight = labelFontStyle;
-                    label.style.fontSize = labelFontSize;
-                }
-                //else if both ?
             }
         }
 
