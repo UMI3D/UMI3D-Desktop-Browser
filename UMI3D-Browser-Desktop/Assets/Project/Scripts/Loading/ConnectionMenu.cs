@@ -14,6 +14,7 @@ limitations under the License.
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
+using BrowserDesktop.UserPreferences;
 using System;
 using System.Collections.Generic;
 using umi3d.cdk;
@@ -35,7 +36,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 {
     #region Fields
 
-    private UserPreferencesManager.Data connectionData;
+    private ServerPreferences.Data connectionData;
 
     public ClientPCIdentifier identifier;
 
@@ -205,7 +206,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// Uses the connection data to connect to te server.
     /// </summary>
     /// <param name="connectionData"></param>
-    public void Connect(UserPreferencesManager.Data connectionData)
+    public void Connect(ServerPreferences.Data connectionData)
     {
         this.connectionData = connectionData;
 
@@ -264,7 +265,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         this.connectionData.environmentName = media.name;
         this.uiDocument.rootVisualElement.Q<Label>("environment-name").text = media.name;
 
-        SessionInformationMenu.Instance.SetEnvironmentName(media, connectionData);
+        SessionInformationMenu.Instance.SetEnvironmentName(media);
 
         UMI3DCollaborationClientServer.Connect();
     }

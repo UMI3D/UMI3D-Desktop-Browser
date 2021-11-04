@@ -98,8 +98,7 @@ namespace BrowserDesktop.Menu
         /// Initiates the custom title bar with the name of the environment.
         /// </summary>
         /// <param name="media"></param>
-        /// <param name="data"></param>
-        public void SetEnvironmentName(MediaDto media, UserPreferencesManager.Data data)
+        public void SetEnvironmentName(MediaDto media)
         {
             environmentName = uiDocument.rootVisualElement.Q<Label>("environment-name");
             environmentName.text = media.name;

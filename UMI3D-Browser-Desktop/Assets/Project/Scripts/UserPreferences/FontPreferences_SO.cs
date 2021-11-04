@@ -38,7 +38,6 @@ namespace BrowserDesktop.UserPreferences
                 FONT_AND_USS
             }
 
-            
             [Tooltip("Name of the label.")]
             [SerializeField]
             private string labeName;
@@ -119,6 +118,11 @@ namespace BrowserDesktop.UserPreferences
         [Space]
         [SerializeField]
         private TextFont[] labels;
+
+        public FontPreferences_SO(FontPreferences_SO font)
+        {
+            //TODO Copy properties.
+        }
 
     }
 }
