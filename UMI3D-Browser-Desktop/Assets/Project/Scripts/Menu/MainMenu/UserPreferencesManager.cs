@@ -38,9 +38,11 @@ public class UserPreferencesManager
     }
 
     public const string registeredServer = "registeredServerData";
-    public const string previusServer = "previusServerData";
+    public const string previousServer = "previusServerData";
     public const string dataFile = "userData";
     public const string favoriteDataFile = "favoriteUserData";
+
+    #region Store Data.
 
     /// <summary>
     /// Write a previous userInfo data.
@@ -49,42 +51,7 @@ public class UserPreferencesManager
     /// <param name="directory">Directory to write the file into.</param>
     public static void StoreUserData(Data data)
     {
-        string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, dataFile);
-        FileStream file;
-        if (File.Exists(path)) file = File.OpenWrite(path);
-        else file = File.Create(path);
-
-        BinaryFormatter bf = new BinaryFormatter();
-        bf.Serialize(file, data);
-        file.Close();
-    }
-
-    /// <summary>
-    /// Read a userInfo data in a directory.
-    /// </summary>
-    /// <returns>A DataFile if the directory containe one, null otherwhise.</returns>
-    public static Data GetPreviousConnectionData()
-    {
-        string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, dataFile);
-        if (File.Exists(path))
-        {
-            FileStream file;
-            file = File.OpenRead(path);
-            BinaryFormatter bf = new BinaryFormatter();
-
-            Data data;
-            try
-            {
-                data = (Data)bf.Deserialize(file);
-            } catch
-            {
-                data = new Data();
-            }
-           
-            file.Close();
-            return data;
-        }
-        return new Data();
+        StoreData<Data>(data, dataFile);
     }
 
     /// <summary>
@@ -93,14 +60,42 @@ public class UserPreferencesManager
     /// <param name="data">ServerData to write.</param>
     public static void StoreUserData(ServerData data)
     {
-        string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, previusServer);
+        StoreData<ServerData>(data, previousServer);
+    }
+
+    /// <summary>
+    /// Stores the connection data about the registered servers.
+    /// </summary>
+    public static void StoreRegisteredServerData(List<ServerData> favorites)
+    {
+        StoreData<List<ServerData>>(favorites, registeredServer);
+    }
+
+    private static void StoreData<T>(T data, string dataType)
+    {
+        string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, dataType);
+
         FileStream file;
         if (File.Exists(path)) file = File.OpenWrite(path);
         else file = File.Create(path);
 
         BinaryFormatter bf = new BinaryFormatter();
         bf.Serialize(file, data);
+
         file.Close();
+    }
+
+    #endregion
+
+    #region Getter for Server
+
+    /// <summary>
+    /// Read a userInfo data in a directory.
+    /// </summary>
+    /// <returns>A DataFile if the directory containe one, null otherwhise.</returns>
+    public static Data GetPreviousConnectionData()
+    {
+        return GetData<Data>(dataFile);
     }
 
     /// <summary>
@@ -109,31 +104,8 @@ public class UserPreferencesManager
     /// <returns>A ServerData if the directory containe one, null otherwhise.</returns>
     public static ServerData GetPreviousServerData()
     {
-        return GetData<ServerData>(previusServer);
+        return GetData<ServerData>(previousServer);
     }
-    /*{
-        string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, previusServer);
-        if (File.Exists(path))
-        {
-            FileStream file;
-            file = File.OpenRead(path);
-            BinaryFormatter bf = new BinaryFormatter();
-
-            ServerData data;
-            try
-            {
-                data = (ServerData)bf.Deserialize(file);
-            }
-            catch
-            {
-                data = new ServerData();
-            }
-
-            file.Close();
-            return data;
-        }
-        return new ServerData();
-    }*/
 
     /// <summary>
     /// get the connection data about the favorite server.
@@ -143,27 +115,6 @@ public class UserPreferencesManager
     {
         return GetData<List<ServerData>>(registeredServer);
     }
-    /*{
-        string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, registeredServer);
-        if (File.Exists(path))
-        {
-            FileStream file;
-            file = File.OpenRead(path);
-            BinaryFormatter bf = new BinaryFormatter();
-            List<ServerData> data;
-            try
-            {
-                data = (List<ServerData>)bf.Deserialize(file);
-            }
-            catch
-            {
-                data = new List<ServerData>();
-            }
-            file.Close();
-            return data;
-        }
-        return new List<ServerData>();
-    }*/
 
     private static T GetData<T>(string dataType) where T: new()
     {
@@ -193,20 +144,7 @@ public class UserPreferencesManager
         return new T();
     }
 
-    /// <summary>
-    /// Stores the connection data about the registered servers.
-    /// </summary>
-    public static void StoreRegisteredServerData(List<ServerData> favorites)
-    {
-        string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, registeredServer);
-        FileStream file;
-        if (File.Exists(path)) file = File.OpenWrite(path);
-        else file = File.Create(path);
-
-        BinaryFormatter bf = new BinaryFormatter();
-        bf.Serialize(file, favorites);
-        file.Close();
-    }
+    #endregion
 
     /// <summary>
     /// Stores the connection data about the registered servers.
