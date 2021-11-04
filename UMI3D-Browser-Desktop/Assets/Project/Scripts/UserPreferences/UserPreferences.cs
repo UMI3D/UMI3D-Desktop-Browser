@@ -25,6 +25,10 @@ namespace BrowserDesktop.UserPreferences
         [Tooltip("")]
         [SerializeField]
         private FontPreferences fontPref = new FontPreferences();
+        public static FontPreferences FontPref
+        {
+            get => Exists ? Instance.fontPref : null;
+        }
 
         /// <summary>
         /// Root of the path where preferences are stored.

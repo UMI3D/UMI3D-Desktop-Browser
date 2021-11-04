@@ -17,6 +17,7 @@ limitations under the License.
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UserPreferences
 {
@@ -25,6 +26,7 @@ namespace BrowserDesktop.UserPreferences
     {
         [Tooltip("")]
         [SerializeField]
+        //TODO add theme in path.
         private FontPreferences_SO defaultFontPref_SO;
         [Tooltip("")]
         [SerializeField]
@@ -90,6 +92,11 @@ namespace BrowserDesktop.UserPreferences
         private FontPreferences_SO CopyFont(FontPreferences_SO font)
         {
             return new FontPreferences_SO(font);
+        }
+
+        public void ApplyFont(Label label, string labelStyle)
+        {
+            //fontPref_SO.ApplyFont(label, labelStyle);
         }
     }
 }
