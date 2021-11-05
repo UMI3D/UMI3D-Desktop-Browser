@@ -72,22 +72,18 @@ namespace BrowserDesktop.UserPreferences
             /// Set the label's font and USS classes.
             /// </summary>
             /// <param name="label">The label to be set.</param>
-            public void SetLabel(Label label)
+            public void SetLabel(Label label, float globalFontSize, Font globalFont)
             {
-                //Debug.Log("Set label");
                 switch (textStyle)
                 {
                     case TextStyle.FONT:
+                        Debug.Assert(globalFont != null, "Global font is null");
                         label.ClearClassList();
-                        //label.style.unityFont = labelFont != null ? labelFont : Font;
-                        label.style.unityFont = new StyleFont(StyleKeyword.Auto);
+                        label.style.unityFont = (labelFont != null) ? labelFont : globalFont;
                         label.style.unityFontStyleAndWeight = labelFontStyle;
                         label.style.fontSize = labelFontSize;
-                        if (label.resolvedStyle.unityFont == null)
-                        {
-                            Debug.Log("Font null");
-                        }
-                        Debug.Log("fontStyle = " + label.resolvedStyle.unityFontStyleAndWeight + ", size = " + label.resolvedStyle.fontSize);
+                        label.style.color = labelColor;
+                        //Debug.Log("fontStyle = " + label.resolvedStyle.unityFontStyleAndWeight + ", size = " + label.resolvedStyle.fontSize);
                         break;
                     case TextStyle.USS:
                         Debug.Assert(labelUSSClasses.Length != 0, "USS classes empty for " + textFontName + " text.");
@@ -132,17 +128,25 @@ namespace BrowserDesktop.UserPreferences
             //TODO Copy properties.
         }
 
-        public void ApplyFont(Label label, string textFontName)
+        public IEnumerator ApplyFont(Label label, string textFontName)
         {
+            yield return null;
+
             foreach (TextFont textFont in textFonts)
             {
                 if (textFont.TextFontName == textFontName)
                 {
-                    textFont.SetLabel(label);
-                    return;
+                    textFont.SetLabel(label, globalFontSize, globalFont);
+                    yield break;
                 }
             }
             Debug.LogError("TextFontName = " + textFontName + " not recognized.");
+        }
+
+        [ContextMenu("Apply User Pref")]
+        private void ApplyUserPref()
+        {
+            UserPreferences.Instance.OnApplyUserPreferences.Invoke();
         }
 
     }

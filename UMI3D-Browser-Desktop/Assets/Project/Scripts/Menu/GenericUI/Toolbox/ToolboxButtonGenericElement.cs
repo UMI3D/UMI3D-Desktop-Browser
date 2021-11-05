@@ -95,6 +95,8 @@ namespace BrowserDesktop.UI.GenericElement
             };
 
             OnApplyUserPreferences();
+
+            //UserPreferences.UserPreferences.Instance.StartCoroutine(testFont());
         }
 
         /// <summary>
@@ -131,13 +133,26 @@ namespace BrowserDesktop.UI.GenericElement
             button_B.AddToClassList(className);
         }
 
+        IEnumerator testFont()
+        {
+            yield return null;
+            if (buttonName_L.resolvedStyle.unityFont == null)
+            {
+                Debug.Log("Font null");
+            }
+            else
+            {
+                Debug.Log("Font not null = " + buttonName_L.resolvedStyle.unityFont.ToString());
+            }
+        }
+
         /// <summary>
         /// Apply user preferences when needed.
         /// </summary>
         public void OnApplyUserPreferences()
         {
             //TODO
-            Debug.Log("test Apply pref : " + buttonName_L.text);
+            //Debug.Log("test Apply pref : " + buttonName_L.text);
             UserPreferences.UserPreferences.FontPref.ApplyFont(buttonName_L, "label");
         }
 
