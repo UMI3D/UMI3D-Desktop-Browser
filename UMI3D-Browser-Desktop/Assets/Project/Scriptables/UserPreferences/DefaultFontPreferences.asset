@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: DefaultFontPreferences
   m_EditorClassIdentifier: 
   globalFontSize: 1.275
-  globalFont: {fileID: 0}
+  globalFont: {fileID: 12800000, guid: fe65ffc0529064145a59e12f47be69a3, type: 3}
   textFonts:
   - textFontName: label
     labelFont: {fileID: 0}
     labelFontStyle: 0
-    labelFontSize: 15
-    labelColor: {r: 1, g: 1, b: 1, a: 0}
+    labelFontSize: 11
+    labelColor: {r: 1, g: 1, b: 1, a: 1}
     labelUSSClasses: []
     textStyle: 0

@@ -96,7 +96,7 @@ namespace BrowserDesktop.UserPreferences
 
         public void ApplyFont(Label label, string textFontName)
         {
-            fontPref_SO.ApplyFont(label, textFontName);
+            UserPreferences.Instance.StartCoroutine(fontPref_SO.ApplyFont(label, textFontName));
         }
 
     }
