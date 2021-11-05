@@ -399,6 +399,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 534da44b33258224dac997daed5aeb07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fontPref:
+    defaultFontPref_SO: {fileID: 11400000, guid: 8cd066ff2d9c8764f84da3650c9674cf,
+      type: 2}
+    fontPref_SO: {fileID: 11400000, guid: 8cd066ff2d9c8764f84da3650c9674cf, type: 2}
+  OnApplyUserPreferences:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &792364060
 Transform:
   m_ObjectHideFlags: 0

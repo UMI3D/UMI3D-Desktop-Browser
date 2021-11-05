@@ -17,11 +17,17 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace BrowserDesktop.UserPreferences
 {
     public class UserPreferences : umi3d.common.PersistentSingleton<UserPreferences>
     {
+        /// <summary>
+        /// Root of the path where preferences are stored.
+        /// </summary>
+        public const string UserPrefRootPath = "UserPreferences/";
+
         [Tooltip("")]
         [SerializeField]
         private FontPreferences fontPref = new FontPreferences();
@@ -30,10 +36,7 @@ namespace BrowserDesktop.UserPreferences
             get => Exists ? Instance.fontPref : null;
         }
 
-        /// <summary>
-        /// Root of the path where preferences are stored.
-        /// </summary>
-        public const string UserPrefRootPath = "UserPreferences/";
+        public UnityEvent OnApplyUserPreferences = new UnityEvent();
 
         protected override void Awake()
         {
@@ -52,6 +55,11 @@ namespace BrowserDesktop.UserPreferences
 
         }
 
+        [ContextMenu("Apply User Pref")]
+        private void ApplyUserPref()
+        {
+            OnApplyUserPreferences.Invoke();
+        }
 
     }
 }
