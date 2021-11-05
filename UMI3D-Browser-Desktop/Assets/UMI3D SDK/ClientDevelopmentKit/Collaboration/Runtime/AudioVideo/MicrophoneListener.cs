@@ -20,6 +20,10 @@ using System.Threading;
 using umi3d.common;
 using UnityEngine;
 using UnityOpus;
+using System.Linq;
+using System;
+using System.Collections;
+using MainThreadDispatcher;
 
 namespace umi3d.cdk.collaboration
 {
@@ -77,7 +81,6 @@ namespace umi3d.cdk.collaboration
         {
             reading = true;
 
-            bitrate = 96000;
             frameSize = samplingFrequency / 100; //at least frequency/100
             outputBufferSize = frameSize * sizeof(float); // at least frameSize * sizeof(float)
             pcmQueue = new Queue<float>();
@@ -85,7 +88,10 @@ namespace umi3d.cdk.collaboration
             outputBuffer = new byte[outputBufferSize];
             microphoneBuffer = new float[lengthSeconds * samplingFrequency];
 
-            clip = Microphone.Start(null, true, lengthSeconds, samplingFrequency);
+            if(!IsAValidDevices(microphoneLabel))
+                microphoneLabel = Microphone.devices[0];
+
+            clip = Microphone.Start(microphoneLabel, true, lengthSeconds, samplingFrequency);
             lock (pcmQueue)
                 pcmQueue.Clear();
             if (thread == null)
@@ -101,7 +107,7 @@ namespace umi3d.cdk.collaboration
         {
             reading = false;
             Destroy(clip);
-            Microphone.End(null);
+            Microphone.End(microphoneLabel);
         }
 
         #region ReadMicrophone
@@ -112,6 +118,8 @@ namespace umi3d.cdk.collaboration
         [SerializeField, EditorReadOnly]
         bool muted = false;
         bool reading = false;
+
+        public string microphoneLabel { get; private set; }
 
         int samplingFrequency = 12000;
 
@@ -124,6 +132,163 @@ namespace umi3d.cdk.collaboration
 
         private Thread thread;
         int sleepTimeMiliseconde = 5;
+
+        float db;
+        object dbLocker = new object();
+        float DB
+        {
+            get
+            {
+                lock (dbLocker)
+                    return db;
+            }
+            set
+            {
+                bool lowDB = false;
+                lock (dbLocker) {
+                    db = value;
+                    lowDB = db < minDbToSend;
+                }
+                if (lowDB)
+                    UnityMainThreadDispatcher.Instance().Enqueue(TurnMicOff());
+            }
+        }
+
+        float minDbToSend = -100;
+        bool shouldSend;
+        object shouldSendLocker = new object();
+        bool TurnMicOffRunning;
+        bool ShouldSend
+        {
+            get
+            {
+                var db = DB >= minDbToSend;
+                lock (shouldSendLocker)
+                {
+                    shouldSend |= db;
+                    return shouldSend;
+                }
+            }
+            set
+            {
+                lock (shouldSendLocker)
+                {
+                    shouldSend = value;
+                }
+            }
+        }
+
+        const float refValue = 0.1f; // RMS value for 0 dB
+
+        float timeToTurnOff = 1f;
+        IEnumerator TurnMicOff()
+        {
+            if (TurnMicOffRunning)
+                yield break;
+            TurnMicOffRunning = true;
+            var time = Time.time + timeToTurnOff;
+
+            while (DB < minDbToSend)
+            {
+                if (time <= Time.time)
+                {
+                    ShouldSend = false;
+                    TurnMicOffRunning = false;
+                    yield break;
+                }
+                yield return null;
+            }
+            ShouldSend = true;
+            TurnMicOffRunning = false;
+        }
+
+        public void ChangeMinDB(bool up)
+        {
+            if (up)
+                minDbToSend += 5;
+            else
+                minDbToSend -= 5;
+        }
+
+        public void ChangeBitrate(bool up)
+        {
+            if (up)
+                bitrate += 500;
+            else
+                bitrate -= 500;
+            encoder.Bitrate = bitrate;
+        }
+
+        public void ChangeTimeToTurnOff(bool up)
+        {
+            if (up)
+                timeToTurnOff += 0.5f;
+            else
+                timeToTurnOff -= 0.5f;
+        }
+
+        public string[] getDevices() => Microphone.devices;
+
+        public void NextDevices()
+        {
+            
+            var devices = getDevices();
+            var i = Array.IndexOf(devices, microphoneLabel) + 1;
+            Debug.Log(i);
+            if (i < 0 || i >= devices.Length)
+                i = 0;
+            Debug.Log(i);
+            Debug.Log(devices[i]);
+            setDevices(devices[i]);
+            Debug.Log(microphoneLabel);
+        }
+
+        public bool setDevices(string name)
+        {
+            if(IsAValidDevices(name))
+            {
+                if (reading)
+                {
+                    StopRecording();
+                    microphoneLabel = name;
+                    StartRecording();
+                }
+                else
+                    microphoneLabel = name;
+                return true;
+            }
+            return false;
+        }
+
+        public bool IsAValidDevices(string name)
+        {
+            if (name == null) return false;
+            return getDevices().Contains(name);
+        }
+
+        public List<string> GetInfo()
+        {
+            var infos = new List<string>();
+
+            if(reading)
+            {
+                infos.Add("Current Microphone : " + microphoneLabel);
+                infos.Add($" Sampling Frequency : { samplingFrequency} Hz");
+                infos.Add($" Bitrate : {bitrate} b/s" );
+                infos.Add($" Frame Size : {frameSize} float");
+                infos.Add($" Output Buffer Size : {outputBufferSize} bytes");
+                lock (pcmQueue)
+                    infos.Add(" PCM Queue : " + pcmQueue.Count.ToString());
+                infos.Add($" DB : {DB} [min:{minDbToSend} => send:{ShouldSend}] ");
+                infos.Add($" Time to turn off : {timeToTurnOff} s ");
+                infos.Add(" Microphone List : ");
+                getDevices().ForEach(a => infos.Add("    " + a));
+            }
+            else
+                infos.Add("Microphone is muted");
+
+            return infos;
+        }
 
         void Update()
         {
@@ -172,7 +337,7 @@ namespace umi3d.cdk.collaboration
 
         #region Encoder
 
-        int bitrate;
+        int bitrate = 96000;
         int frameSize; //at least frequency/100
         int outputBufferSize; // at least frameSize * sizeof(float)
 
@@ -220,26 +385,39 @@ namespace umi3d.cdk.collaboration
                 }
                 if (ok)
                 {
+                    float sum = 0;
                     lock (pcmQueue)
                     {
+                        
                         for (int i = 0; i < frameSize; i++)
                         {
-                            frameBuffer[i] = pcmQueue.Dequeue();
+                            var v = pcmQueue.Dequeue();
+                            frameBuffer[i] = v;
+                            sum += v * v;
+                            //if (peak < wavePeak)
+                            //    peak = wavePeak;
                         }
+                        //db = 20 * Mathf.Log10(Mathf.Abs(peak));
+
                     }
-                    var encodedLength = encoder.Encode(frameBuffer, outputBuffer);
-                    if (UMI3DCollaborationClientServer.Exists
-                        && UMI3DCollaborationClientServer.Instance?.ForgeClient != null
-                        && UMI3DCollaborationClientServer.UserDto.dto.status == StatusType.ACTIVE)
+                    var rmsValue = Mathf.Sqrt(sum / frameSize);
+                    DB = 20 * Mathf.Log10(rmsValue / refValue); // calculate dB
+
+                    if (ShouldSend) 
                     {
-                        UMI3DCollaborationClientServer.Instance.ForgeClient.SendVOIP(encodedLength, outputBuffer);
+                        var encodedLength = encoder.Encode(frameBuffer, outputBuffer);
+                        if (UMI3DCollaborationClientServer.Exists
+                            && UMI3DCollaborationClientServer.Instance?.ForgeClient != null
+                            && UMI3DCollaborationClientServer.UserDto.dto.status == StatusType.ACTIVE)
+                        {
+                            UMI3DCollaborationClientServer.Instance.ForgeClient.SendVOIP(encodedLength, outputBuffer);
+                        }
                     }
                 }
                 Thread.Sleep(sleepTimeMiliseconde);
             }
             thread = null;
         }
-
         #endregion
     }
 }

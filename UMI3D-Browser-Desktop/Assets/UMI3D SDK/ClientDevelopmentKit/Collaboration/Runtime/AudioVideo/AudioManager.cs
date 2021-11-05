@@ -17,6 +17,7 @@ limitations under the License.
 using inetum.unityUtils;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using umi3d.common;
 using UnityEngine;
 
@@ -32,8 +33,17 @@ namespace umi3d.cdk.collaboration
         Dictionary<ulong, AudioReader> SpacialReader = new Dictionary<ulong, AudioReader>();
         Dictionary<ulong, Coroutine> WaitCoroutine = new Dictionary<ulong, Coroutine>();
 
+        Dictionary<ulong, float> lastMessageTimeDelta;
+        Dictionary<ulong, float> lastMessageTime;
+        Dictionary<ulong, List<(float,float)>> MessageTime;
+
+
         private void Start()
         {
+            lastMessageTimeDelta = new Dictionary<ulong, float>();
+            lastMessageTime = new Dictionary<ulong, float>();
+            MessageTime = new Dictionary<ulong, List<(float, float)>>();
+
             UMI3DUser.OnNewUser.AddListener(OnAudioChanged);
             UMI3DUser.OnRemoveUser.AddListener(OnUserDisconected);
             UMI3DUser.OnUserAudioUpdated.AddListener(OnAudioChanged);
@@ -47,12 +57,36 @@ namespace umi3d.cdk.collaboration
         /// <param name="sample"> the voice dto</param>
         public void Read(ulong userId, byte[] sample, ulong timestep)
         {
+            MainThreadDispatcher.UnityMainThreadDispatcher.Instance().Enqueue(MarkTime(userId));
             if (SpacialReader.ContainsKey(userId))
                 SpacialReader[userId].Read(sample, timestep);
             else if (GlobalReader.ContainsKey(userId))
                 GlobalReader[userId].Read(sample, timestep);
         }
 
+        IEnumerator MarkTime(ulong userId)
+        {
+            var cur = Time.time;
+            if (!MessageTime.ContainsKey(userId))
+            {
+                MessageTime[userId] = new List<(float, float)>();
+                lastMessageTime[userId] = cur;
+                lastMessageTimeDelta[userId] = 0;
+                yield break;
+            }
+            MessageTime[userId].RemoveAll(e => e.Item1 < cur - 3);
+            var last = lastMessageTime[userId];
+            if (last > cur - 3)
+            {
+                var delta = cur - last;
+                MessageTime[userId].Add((cur, delta));
+                lastMessageTimeDelta[userId] = MessageTime[userId].Select(e => e.Item2).Aggregate((a, b) => a + b) / MessageTime[userId].Count;
+            }
+            else
+                lastMessageTimeDelta[userId] = 0;
+            lastMessageTime[userId] = cur;
+            yield break;
+        }
 
 
         /// <summary>
@@ -89,6 +123,19 @@ namespace umi3d.cdk.collaboration
                 SpacialReader[user.id].UpdateFrequency(user.audioFrequency);
         }
 
+        public List<string> GetInfo()
+        {
+            var infos = new List<string>();
+            infos.Add("Audio Reader : ");
+            infos.Add("     Global Reader : " + GlobalReader.Count);
+            GlobalReader.Keys.ForEach(e => infos.Add("       "+e.ToString()));
+            infos.Add("     Spatial Reader : " + SpacialReader.Count);
+            SpacialReader.Keys.ForEach(e => infos.Add("       " + e.ToString()));
+            infos.Add("     Average Last Message Delta (3s): ");
+            lastMessageTimeDelta.ForEach(e => infos.Add($"       {e.Key} : {e.Value}"));
+            return infos;
+        }
+
         /// <summary>
         /// Manage user update
         /// </summary>
@@ -100,10 +147,10 @@ namespace umi3d.cdk.collaboration
                 StopCoroutine(WaitCoroutine[user.id]);
                 WaitCoroutine.Remove(user.id);
             }
-            var audioPlayer = user.audioplayer;
+            var audioPlayer = user?.audioplayer?.audioSource?.gameObject;
             if (audioPlayer != null)
             {
-                var reader = audioPlayer.audioSource.gameObject.GetOrAddComponent<AudioReader>();
+                var reader = audioPlayer.GetOrAddComponent<AudioReader>();
                 SpacialReader[user.id] = reader;
                 if (GlobalReader.ContainsKey(user.id))
                 {
@@ -131,7 +178,7 @@ namespace umi3d.cdk.collaboration
 
         IEnumerator WaitForAudioCreation(UMI3DUser user)
         {
-            yield return new WaitUntil(() => user.audioplayer != null);
+            yield return new WaitUntil(() => user?.audioplayer?.audioSource?.gameObject != null);
             OnAudioChanged(user);
         }
     }
