@@ -38,9 +38,10 @@ namespace BrowserDesktop.UserPreferences
                 FONT_AND_USS
             }
 
-            [Tooltip("Name of the label.")]
+            [Tooltip("Name of the text style.")]
             [SerializeField]
-            private string labeName;
+            private string textFontName;
+            public string TextFontName => textFontName;
 
             [Header("Font")]
             [Tooltip("Font of the label (can be empty or null).")]
@@ -72,17 +73,24 @@ namespace BrowserDesktop.UserPreferences
             /// </summary>
             /// <param name="label">The label to be set.</param>
             public void SetLabel(Label label)
-            {   
+            {
+                //Debug.Log("Set label");
                 switch (textStyle)
                 {
                     case TextStyle.FONT:
                         label.ClearClassList();
-                        label.style.unityFont = labelFont != null ? labelFont : label.resolvedStyle.unityFont;
+                        //label.style.unityFont = labelFont != null ? labelFont : Font;
+                        label.style.unityFont = new StyleFont(StyleKeyword.Auto);
                         label.style.unityFontStyleAndWeight = labelFontStyle;
                         label.style.fontSize = labelFontSize;
+                        if (label.resolvedStyle.unityFont == null)
+                        {
+                            Debug.Log("Font null");
+                        }
+                        Debug.Log("fontStyle = " + label.resolvedStyle.unityFontStyleAndWeight + ", size = " + label.resolvedStyle.fontSize);
                         break;
                     case TextStyle.USS:
-                        Debug.Assert(labelUSSClasses.Length != 0, "USS classes empty for " + labeName + " text.");
+                        Debug.Assert(labelUSSClasses.Length != 0, "USS classes empty for " + textFontName + " text.");
                         label.ClearClassList();
                         foreach (string labelClass in labelUSSClasses)
                         {
@@ -90,7 +98,7 @@ namespace BrowserDesktop.UserPreferences
                         }
                         break;
                     case TextStyle.FONT_AND_USS:
-                        Debug.Assert(labelUSSClasses.Length != 0, "USS classes empty for " + labeName + " text.");
+                        Debug.Assert(labelUSSClasses.Length != 0, "USS classes empty for " + textFontName + " text.");
                         label.ClearClassList();
                         foreach (string labelClass in labelUSSClasses)
                         {
@@ -117,11 +125,24 @@ namespace BrowserDesktop.UserPreferences
         //title, subtitle, label, sublabe, body
         [Space]
         [SerializeField]
-        private TextFont[] labels;
+        private TextFont[] textFonts;
 
         public FontPreferences_SO(FontPreferences_SO font)
         {
             //TODO Copy properties.
+        }
+
+        public void ApplyFont(Label label, string textFontName)
+        {
+            foreach (TextFont textFont in textFonts)
+            {
+                if (textFont.TextFontName == textFontName)
+                {
+                    textFont.SetLabel(label);
+                    return;
+                }
+            }
+            Debug.LogError("TextFontName = " + textFontName + " not recognized.");
         }
 
     }

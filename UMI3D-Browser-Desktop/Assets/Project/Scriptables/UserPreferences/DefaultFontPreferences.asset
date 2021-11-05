@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalFontSize: 1.275
   globalFont: {fileID: 0}
-  labels:
-  - labeName: Title
+  textFonts:
+  - textFontName: label
     labelFont: {fileID: 0}
     labelFontStyle: 0
-    labelFontSize: 0
-    labelColor: {r: 0, g: 0, b: 0, a: 0}
+    labelFontSize: 15
+    labelColor: {r: 1, g: 1, b: 1, a: 0}
     labelUSSClasses: []
+    textStyle: 0

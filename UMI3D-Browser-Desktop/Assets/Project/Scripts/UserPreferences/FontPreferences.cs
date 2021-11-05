@@ -94,9 +94,10 @@ namespace BrowserDesktop.UserPreferences
             return new FontPreferences_SO(font);
         }
 
-        public void ApplyFont(Label label, string labelStyle)
+        public void ApplyFont(Label label, string textFontName)
         {
-            //fontPref_SO.ApplyFont(label, labelStyle);
+            fontPref_SO.ApplyFont(label, textFontName);
         }
+
     }
 }

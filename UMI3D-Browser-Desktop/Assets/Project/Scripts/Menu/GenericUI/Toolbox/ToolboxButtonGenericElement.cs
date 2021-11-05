@@ -49,12 +49,13 @@ namespace BrowserDesktop.UI.GenericElement
 
         public ToolboxButtonGenericElement()
         {
-            //TODO register for resize.
+            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
+            //OnApplyUserPreferences();
         }
 
         ~ToolboxButtonGenericElement()
         {
-
+            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
         }
 
         /// <summary>
@@ -65,12 +66,12 @@ namespace BrowserDesktop.UI.GenericElement
         /// <param name="buttonClicked">Action when button is clicked.</param>
         public void Setup(string buttonName, Sprite buttonImage, Action buttonClicked)
         {
-            button_B = this.Q<Button>("toolbox-button");
-            buttonName_L = this.Q<Label>("toolbox-button-name");
+            Setup(buttonName);
 
-            buttonName_L.text = buttonName;
             button_B.style.backgroundImage = Background.FromSprite(buttonImage);
             button_B.clicked += buttonClicked;
+
+            OnApplyUserPreferences();
         }
 
         /// <summary>
@@ -93,6 +94,7 @@ namespace BrowserDesktop.UI.GenericElement
                 buttonClicked();
             };
 
+            OnApplyUserPreferences();
         }
 
         /// <summary>
@@ -135,7 +137,8 @@ namespace BrowserDesktop.UI.GenericElement
         public void OnApplyUserPreferences()
         {
             //TODO
-            UserPreferences.UserPreferences.FontPref.ApplyFont(buttonName_L, "");
+            Debug.Log("test Apply pref : " + buttonName_L.text);
+            UserPreferences.UserPreferences.FontPref.ApplyFont(buttonName_L, "label");
         }
 
     }
