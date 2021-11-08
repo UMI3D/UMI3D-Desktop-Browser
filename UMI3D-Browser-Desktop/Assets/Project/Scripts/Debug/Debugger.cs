@@ -14,25 +14,25 @@ public class Debugger : umi3d.common.PersistentSingleton<Debugger>
             DisplayInfo = !DisplayInfo;
 
         if (Input.GetKeyDown(KeyCode.F2) && umi3d.cdk.collaboration.MicrophoneListener.Exists)
-            umi3d.cdk.collaboration.MicrophoneListener.Instance.NextDevices();
+            umi3d.cdk.collaboration.MicrophoneListener.NextDevices();
 
         if (Input.GetKeyDown(KeyCode.F3) && umi3d.cdk.collaboration.MicrophoneListener.Exists)
             if (!Input.GetKey(KeyCode.LeftShift))
-                umi3d.cdk.collaboration.MicrophoneListener.Instance.ChangeMinDB(true);
+                umi3d.cdk.collaboration.MicrophoneListener.ChangeMinDB(true);
             else
-                umi3d.cdk.collaboration.MicrophoneListener.Instance.ChangeMinDB(false);
+                umi3d.cdk.collaboration.MicrophoneListener.ChangeMinDB(false);
 
         if (Input.GetKeyDown(KeyCode.F4) && umi3d.cdk.collaboration.MicrophoneListener.Exists)
             if (!Input.GetKey(KeyCode.LeftShift))
-                umi3d.cdk.collaboration.MicrophoneListener.Instance.ChangeTimeToTurnOff(true);
+                umi3d.cdk.collaboration.MicrophoneListener.ChangeTimeToTurnOff(true);
             else
-                umi3d.cdk.collaboration.MicrophoneListener.Instance.ChangeTimeToTurnOff(false);
+                umi3d.cdk.collaboration.MicrophoneListener.ChangeTimeToTurnOff(false);
 
         if (Input.GetKeyDown(KeyCode.F5) && umi3d.cdk.collaboration.MicrophoneListener.Exists)
             if (!Input.GetKey(KeyCode.LeftShift))
-                umi3d.cdk.collaboration.MicrophoneListener.Instance.ChangeBitrate(true);
+                umi3d.cdk.collaboration.MicrophoneListener.ChangeBitrate(true);
             else
-                umi3d.cdk.collaboration.MicrophoneListener.Instance.ChangeBitrate(false);
+                umi3d.cdk.collaboration.MicrophoneListener.ChangeBitrate(false);
     }
 
 

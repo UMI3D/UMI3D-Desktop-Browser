@@ -35,8 +35,7 @@ namespace umi3d.cdk.collaboration
 
         Dictionary<ulong, float> lastMessageTimeDelta;
         Dictionary<ulong, float> lastMessageTime;
-        Dictionary<ulong, List<(float,float)>> MessageTime;
-
+        Dictionary<ulong, List<(float, float)>> MessageTime;
 
         private void Start()
         {
@@ -88,6 +87,18 @@ namespace umi3d.cdk.collaboration
             yield break;
         }
 
+        public List<string> GetInfo()
+        {
+            var infos = new List<string>();
+            infos.Add("Audio Reader : ");
+            infos.Add("     Global Reader : " + GlobalReader.Count);
+            GlobalReader.Keys.ForEach(e => infos.Add("       " + e.ToString()));
+            infos.Add("     Spatial Reader : " + SpacialReader.Count);
+            SpacialReader.Keys.ForEach(e => infos.Add("       " + e.ToString()));
+            infos.Add("     Average Last Message Delta (3s): ");
+            lastMessageTimeDelta.ForEach(e => infos.Add($"       {e.Key} : {e.Value}"));
+            return infos;
+        }
 
         /// <summary>
         /// MAnage user update
@@ -121,19 +132,6 @@ namespace umi3d.cdk.collaboration
                 GlobalReader[user.id].UpdateFrequency(user.audioFrequency);
             if (SpacialReader.ContainsKey(user.id))
                 SpacialReader[user.id].UpdateFrequency(user.audioFrequency);
-        }
-
-        public List<string> GetInfo()
-        {
-            var infos = new List<string>();
-            infos.Add("Audio Reader : ");
-            infos.Add("     Global Reader : " + GlobalReader.Count);
-            GlobalReader.Keys.ForEach(e => infos.Add("       "+e.ToString()));
-            infos.Add("     Spatial Reader : " + SpacialReader.Count);
-            SpacialReader.Keys.ForEach(e => infos.Add("       " + e.ToString()));
-            infos.Add("     Average Last Message Delta (3s): ");
-            lastMessageTimeDelta.ForEach(e => infos.Add($"       {e.Key} : {e.Value}"));
-            return infos;
         }
 
         /// <summary>
