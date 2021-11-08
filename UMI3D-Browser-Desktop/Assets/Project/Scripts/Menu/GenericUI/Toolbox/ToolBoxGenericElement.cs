@@ -36,6 +36,9 @@ namespace BrowserDesktop.UI.GenericElement
         private Label toolboxName_L;
         private VisualElement toolboxContainer_VE;
 
+        private List<ToolboxButtonGenericElement> tools_TBGEs = new List<ToolboxButtonGenericElement>();
+        private float labelToolsMaxWidth = 0f;
+
         public ToolboxGenericElement()
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
@@ -46,17 +49,29 @@ namespace BrowserDesktop.UI.GenericElement
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
         }
 
-        public void Setup(string toolboxName)
+        public void Setup(string toolboxName, ToolboxButtonGenericElement tool)
+        {
+            Setup(toolboxName);
+            AddTool(tool);
+            OnApplyUserPreferences();
+        }
+
+        public void Setup(string toolboxName, ToolboxButtonGenericElement[] tools)
+        {
+            Setup(toolboxName);
+            AddTools(tools);
+            OnApplyUserPreferences();
+        }
+
+        private void Setup(string toolboxName)
         {
             toolboxName_L = this.Q<Label>("toolbox-name");
             toolboxContainer_VE = this.Q<VisualElement>("toolbox-container");
 
             toolboxName_L.text = toolboxName;
-
-            OnApplyUserPreferences();
         }
 
-        public void AddTools(ToolboxButtonGenericElement[] tools)
+        private void AddTools(ToolboxButtonGenericElement[] tools)
         {
             for (int i = 0; i < tools.Length; ++i)
             {
@@ -67,20 +82,39 @@ namespace BrowserDesktop.UI.GenericElement
                     toolboxContainer_VE.Add(horizontalSpacer);
                 }
 
+                tools_TBGEs.Add(tools[i]);
                 toolboxContainer_VE.Add(tools[i]);
             }
         }
 
-        public void AddTool(ToolboxButtonGenericElement tool)
+        private void AddTool(ToolboxButtonGenericElement tool)
         {
             toolboxContainer_VE.Add(tool);
 
             //TODO resize container.
         }
 
-        public void AddTool(string toolName, Sprite toolIcon, Action toolAction)
+        private void AddTool(string toolName, Sprite toolIcon, Action toolAction)
         {
 
+        }
+
+        private IEnumerator ResizeLabelTools()
+        {
+            yield return null;
+            yield return null;
+            labelToolsMaxWidth = 0f;
+            foreach (ToolboxButtonGenericElement tool in tools_TBGEs)
+            {
+                if (labelToolsMaxWidth < tool.LabelWidth) labelToolsMaxWidth = tool.LabelWidth;
+                Debug.Log("Label width (bis) = " + tool.LabelWidth);
+                tool.TestWidth();
+            }
+            /*foreach (ToolboxButtonGenericElement tool in tools_TBGEs)
+            {
+                tool.LabelWidth = labelToolsMaxWidth;
+            }*/
+            Debug.Log("Max width = " + labelToolsMaxWidth);
         }
 
         /// <summary>
@@ -89,8 +123,8 @@ namespace BrowserDesktop.UI.GenericElement
         public void OnApplyUserPreferences()
         {
             //TODO
-            //Debug.Log("test Apply pref : " + toolboxName_L.text);
-            UserPreferences.UserPreferences.FontPref.ApplyFont(toolboxName_L, "label");
+            UserPreferences.UserPreferences.FontPref.ApplyFont(toolboxName_L, "sub-title");
+            UserPreferences.UserPreferences.Instance.StartCoroutine(ResizeLabelTools());
         }
 
     }

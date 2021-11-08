@@ -46,7 +46,7 @@ namespace BrowserDesktop.UI.GenericElement
 
         public void Setup()
         {
-            separator_VE = this.Q<Button>("separator");
+            separator_VE = this.Q<VisualElement>("separator");
 
             separator_VE.AddToClassList("darkTheme-menuBar-separator");
 
