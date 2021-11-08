@@ -103,5 +103,16 @@ namespace umi3d.cdk.volumes
         }
 
         public static List<AbstractPrimitive> GetPrimitives() => primitives.Values.ToList();
+
+        public void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            foreach(Box box in GetPrimitives().Where(p => p is Box))
+            {
+
+                Gizmos.matrix = box.localToWorld;
+                Gizmos.DrawWireCube(box.bounds.center, box.bounds.size);
+            }
+        }
     }
 }

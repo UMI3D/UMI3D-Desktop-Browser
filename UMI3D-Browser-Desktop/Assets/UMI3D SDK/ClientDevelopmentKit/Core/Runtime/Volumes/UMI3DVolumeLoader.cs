@@ -86,6 +86,7 @@ namespace umi3d.cdk.volumes
 
         static public bool SetUMI3DProperty(UMI3DEntityInstance entity, SetEntityPropertyDto property)
         {
+            Debug.Log("SetUMI3DProperty : " + property.property);
             switch (property.property)
             {
                 case UMI3DPropertyKeys.VolumeCell_RoodNodeId:
@@ -99,6 +100,8 @@ namespace umi3d.cdk.volumes
                     return true;
 
                 case UMI3DPropertyKeys.VolumePrimitive_Box_Center:
+
+                    Debug.Log("Box center update");
                     var box_1 = entity.Object as Box;
                     Vector3 newCenter = (Vector3)property.value;
                     Vector3 size = box_1.bounds.size;
