@@ -129,7 +129,6 @@ namespace umi3d.cdk.collaboration
         int head = 0;
         float[] microphoneBuffer;
 
-
         private Thread thread;
         int sleepTimeMiliseconde = 5;
 
