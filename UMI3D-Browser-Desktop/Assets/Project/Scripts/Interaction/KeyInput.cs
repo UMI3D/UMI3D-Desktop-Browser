@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Controller;
+using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
 using inetum.unityUtils;
 using System.Collections;
@@ -47,6 +48,7 @@ namespace BrowserDesktop.Interaction
         private int locked = 0;
         public bool Locked { get { return locked > 0; } set { if (value) locked++; else { locked--; if (locked < 0) locked = 0; } } }
 
+        public bool Down { get; protected set; }
 
         /// <summary>
         /// Associtated interaction (if any).
@@ -63,11 +65,31 @@ namespace BrowserDesktop.Interaction
         ulong toolId;
 
         ulong hoveredObjectId;
+        private bool swichOnDown = false;
+        public bool SwichOnDown { get => swichOnDown; protected set => swichOnDown = value; }
 
         protected virtual void Start()
         {
             StartCoroutine(InitEventDisplayer());
+            onInputDown.AddListener(() =>
+            {
+                SwichOnDown = (CursorHandler.State == CursorHandler.CursorState.Hover);
+                if (SwichOnDown)
+                {
+                    CursorHandler.State = CursorHandler.CursorState.Clicked;
+                }
+            });
+            onInputUp.AddListener(() =>
+            {
+                if (SwichOnDown && CursorHandler.State == CursorHandler.CursorState.Clicked)
+                {
+                    CursorHandler.State = CursorHandler.CursorState.Hover;
+                }
+            });
         }
+
+
+
 
         IEnumerator InitEventDisplayer()
         {
@@ -115,7 +137,7 @@ namespace BrowserDesktop.Interaction
                                     else
                                         DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
                                 },
-                                (Umi3dExecption str) =>
+                                (Umi3dException str) =>
                                 {
                                     DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                                 },
@@ -196,7 +218,8 @@ namespace BrowserDesktop.Interaction
                     }
 
                     onInputDown.Invoke();
-                    
+                    Down = true;
+
                     if ((associatedInteraction).hold)
                     {
                         var eventdto = new EventStateChangedDto
@@ -224,9 +247,10 @@ namespace BrowserDesktop.Interaction
                     }
                 }
 
-                if (Input.GetKeyUp(InputLayoutManager.GetInputCode(activationButton)))
+                if (Input.GetKeyUp(InputLayoutManager.GetInputCode(activationButton)) || Down && !Input.GetKey(InputLayoutManager.GetInputCode(activationButton)))
                 {
                     onInputUp.Invoke();
+                    Down = false;
 
                     if (associatedInteraction.ReleaseAnimationId != 0)
                     {
@@ -268,6 +292,7 @@ namespace BrowserDesktop.Interaction
 
         public override void Dissociate()
         {
+            if (Down) onInputUp.Invoke();
             ResetButton();
             eventDisplayer?.Display(false);
             associatedInteraction = null;
