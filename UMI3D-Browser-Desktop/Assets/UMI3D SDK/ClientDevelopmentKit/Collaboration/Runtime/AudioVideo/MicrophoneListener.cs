@@ -122,9 +122,9 @@ namespace umi3d.cdk.collaboration
             if (Exists) Instance._UpdateFrequency(frequency);
         }
 
-        public static void ChangeMinDB(bool up)
+        public static void ChangeThreshold(bool up)
         {
-            if (Exists) Instance._ChangeMinDB(up);
+            if (Exists) Instance._ChangeThreshold(up);
         }
 
         public static void ChangeBitrate(bool up)
@@ -401,7 +401,7 @@ namespace umi3d.cdk.collaboration
             TurnMicOffRunning = false;
         }
 
-        void _ChangeMinDB(bool up)
+        void _ChangeThreshold(bool up)
         {
             if (up)
                 NoiseThreshold += 0.05f;
@@ -415,7 +415,7 @@ namespace umi3d.cdk.collaboration
                 Bitrate += 500;
             else
                 Bitrate -= 500;
-            if(encoder != null)
+            if (encoder != null)
                 encoder.Bitrate = Bitrate;
         }
 
@@ -560,7 +560,6 @@ namespace umi3d.cdk.collaboration
                     float gain = Gain;
                     lock (pcmQueue)
                     {
-
                         for (int i = 0; i < frameSize; i++)
                         {
                             var v = pcmQueue.Dequeue() * gain;
