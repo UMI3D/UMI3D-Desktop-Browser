@@ -173,6 +173,7 @@ namespace umi3d.cdk.collaboration
                     infos.Add(" PCM Queue : " + pcmQueue.Count.ToString());
                 infos.Add($" RMS : {RMS} [min:{NoiseThreshold} => send:{ShouldSend}] ");
                 infos.Add($" DB : {DB}");
+                infos.Add($" Gain : {Gain}");
                 infos.Add($" Time to turn off : {TimeToTurnOff} s ");
 
             }
@@ -318,14 +319,9 @@ namespace umi3d.cdk.collaboration
             }
             private set
             {
-                bool lowrms = false;
-                var threshold = NoiseThreshold;
                 lock (RMSLocker)
-                {
                     rms = value;
-                    lowrms = rms < threshold;
-                }
-                if (lowrms)
+                if (IslowerThanThreshold)
                     UnityMainThreadDispatcher.Instance().Enqueue(TurnMicOff());
             }
         }
@@ -563,6 +559,8 @@ namespace umi3d.cdk.collaboration
                         for (int i = 0; i < frameSize; i++)
                         {
                             var v = pcmQueue.Dequeue() * gain;
+                            if (v > 1) v = 1;
+                            else if (v < -1) v = -1;
                             frameBuffer[i] = v;
                             sum += v * v;
                         }

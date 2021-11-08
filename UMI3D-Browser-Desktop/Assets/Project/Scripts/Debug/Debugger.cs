@@ -33,6 +33,12 @@ public class Debugger : umi3d.common.PersistentSingleton<Debugger>
                 umi3d.cdk.collaboration.MicrophoneListener.ChangeBitrate(true);
             else
                 umi3d.cdk.collaboration.MicrophoneListener.ChangeBitrate(false);
+
+        if (Input.GetKeyDown(KeyCode.F6) && umi3d.cdk.collaboration.MicrophoneListener.Exists)
+            if (!Input.GetKey(KeyCode.LeftShift))
+                umi3d.cdk.collaboration.MicrophoneListener.Gain += 0.1f;
+            else
+                umi3d.cdk.collaboration.MicrophoneListener.Gain -= 0.1f;
     }
 
 
@@ -59,7 +65,7 @@ public class Debugger : umi3d.common.PersistentSingleton<Debugger>
         var row = 1000;
 
         WriteLabel(new Rect(14, getLine(), row, 25), "Connected: " + umi3d.cdk.collaboration.UMI3DCollaborationClientServer.Connected());
-        WriteLabel(new Rect(14, getLine(), row, 25), "F2:Next Mic|F3:+ Noise Treshold [Shift:-]|F4: + time to turn mic off [Shift:-]| F5: + bitrate [Shift:-]");
+        WriteLabel(new Rect(14, getLine(), row, 25), "F2:Next Mic|F3:+ Noise Treshold [Shift:-]|F4: + time to turn mic off [Shift:-]| F5: + bitrate [Shift:-]| F6: + gain [Shift:-]");
         WriteLabel(new Rect(14, getLine(), row, 25), "----------");
         if (NetworkManager.Instance?.Networker != null)
         {
