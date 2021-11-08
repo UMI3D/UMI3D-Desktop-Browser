@@ -3,7 +3,7 @@
     <BrowserDesktop.UI.GenericElement.ToolboxButtonGenericElement style="align-items: center; justify-content: center;">
         <ui:Button text="&#10;" display-tooltip-when-elided="true" name="toolbox-button" style="align-items: center; justify-content: flex-end; -unity-text-align: middle-center; width: 30px; height: 30px;" />
         <ui:VisualElement name="vertical-spacer" style="height: 3px;" />
-        <ui:Label text="Label test" display-tooltip-when-elided="true" name="toolbox-button-name" style="align-items: center; justify-content: center; -unity-text-align: middle-left; color: rgb(255, 255, 255); overflow: hidden; width: 45px;" />
+        <ui:Label text="Label test" display-tooltip-when-elided="true" name="toolbox-button-name" style="align-items: center; justify-content: center; -unity-text-align: middle-left; color: rgb(255, 255, 255); overflow: hidden; width: 45px; white-space: nowrap;" />
         <ui:VisualElement name="vertical-spacer" style="height: 3px;" />
     </BrowserDesktop.UI.GenericElement.ToolboxButtonGenericElement>
 </ui:UXML>

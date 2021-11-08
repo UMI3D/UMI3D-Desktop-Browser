@@ -5,6 +5,7 @@
   <xs:import schemaLocation="UnityEditor.UIElements.Debugger.xsd" namespace="UnityEditor.UIElements.Debugger" />
   <xs:import schemaLocation="Unity.UI.Builder.xsd" namespace="Unity.UI.Builder" />
   <xs:include schemaLocation="GlobalNamespace.xsd" />
+  <xs:import schemaLocation="BrowserDesktop.UI.GenericElement.xsd" namespace="BrowserDesktop.UI.GenericElement" />
   <xs:import schemaLocation="BrowserDesktop.UI.CustomElement.xsd" namespace="BrowserDesktop.UI.CustomElement" />
   <xs:import schemaLocation="BrowserDesktop.Menu.xsd" namespace="BrowserDesktop.Menu" />
   <xs:import schemaLocation="UnityEditor.PackageManager.UI.xsd" namespace="UnityEditor.PackageManager.UI" />
