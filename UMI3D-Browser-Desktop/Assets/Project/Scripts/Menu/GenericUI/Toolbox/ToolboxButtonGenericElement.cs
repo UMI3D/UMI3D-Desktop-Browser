@@ -47,6 +47,12 @@ namespace BrowserDesktop.UI.GenericElement
         /// </summary>
         private bool isOn = false;
 
+        public float LabelWidth
+        {
+            get => buttonName_L.resolvedStyle.width;
+            set => buttonName_L.style.width = value;
+        }
+
         public ToolboxButtonGenericElement()
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
@@ -94,8 +100,6 @@ namespace BrowserDesktop.UI.GenericElement
             };
 
             OnApplyUserPreferences();
-
-            //UserPreferences.UserPreferences.Instance.StartCoroutine(testFont());
         }
 
         /// <summary>
@@ -145,14 +149,20 @@ namespace BrowserDesktop.UI.GenericElement
             }
         }
 
+        public void TestWidth()
+        {
+            Debug.Log("width = " + buttonName_L.resolvedStyle.width);
+        }
+
         /// <summary>
         /// Apply user preferences when needed.
         /// </summary>
         public void OnApplyUserPreferences()
         {
             //TODO
-            //Debug.Log("test Apply pref : " + buttonName_L.text);
+            buttonName_L.style.width = StyleKeyword.Auto;
             UserPreferences.UserPreferences.FontPref.ApplyFont(buttonName_L, "label");
+            //Debug.Log("Label width = " + LabelWidth);
         }
 
     }

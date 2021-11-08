@@ -40,53 +40,20 @@ namespace BrowserDesktop.Menu.Environment
         private ToolboxGenericElement openToolbox_TGE;
         private ToolboxGenericElement settings_TGE;
         private ToolboxGenericElement leaveEnvironment_TGE;
+        private UI.CustomElement.MenuBarElement menuBar;
 
         void Start()
         {
             Debug.Assert(uiDocument != null, "uiDocument null ref in MenuBar_UIController");
             Debug.Assert(toolboxGenericElement_VTA != null, "toolboxGenericElement_VTA null ref in MenuBar_UIController");
             Debug.Assert(toolboxButtonGenericElement_VTA != null, "toolboxButtonGenericElement_VTA null ref in MenuBar_UIController");
+            Debug.Assert(toolboxSeparatorGenericElement_VTA != null, "toolboxSeparatorGenericElement_VTA null ref in MenuBar_UIController");
 
-            UIBinding();
-            SetupMenuBar();
+            menuBar = uiDocument.rootVisualElement.Q<VisualElement>("menu-bar").Q<UI.CustomElement.MenuBarElement>();
+            menuBar.Setup(toolboxGenericElement_VTA, toolboxButtonGenericElement_VTA, toolboxSeparatorGenericElement_VTA);
         }
 
-        private void UIBinding()
-        {
-            var menuBar = uiDocument.rootVisualElement.Q<VisualElement>("menu-bar").Q<UI.CustomElement.MenuBarElement>();
-            openToolbox_TGE = menuBar.Q<VisualElement>("toolbox-openBtn").Q<ToolboxGenericElement>();
-            settings_TGE = menuBar.Q<VisualElement>("environment-settings").Q<ToolboxGenericElement>();
-            leaveEnvironment_TGE = menuBar.Q<VisualElement>("environment-leaveBtn").Q<ToolboxGenericElement>();
-        }
 
-        private void SetupMenuBar()
-        {
-            openToolbox_TGE.Setup("");
-            settings_TGE.Setup("test");
-            leaveEnvironment_TGE.Setup("");
-
-            ToolboxButtonGenericElement openToolboxButton_TBGE = toolboxButtonGenericElement_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-            openToolboxButton_TBGE.Setup("Toolbox", "toolbox", "toolbox", true, () => { Debug.Log("TODO"); });
-            openToolbox_TGE.AddTool(openToolboxButton_TBGE);
-
-            ToolboxButtonGenericElement avatar_TBGE = toolboxButtonGenericElement_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-            avatar_TBGE.Setup("", "avatarOn", "avatarOff", true, () => { Debug.Log("TODO"); });
-            //settings_TGE.AddTool(avatar_TBGE);
-
-            ToolboxButtonGenericElement sound_TBGE = toolboxButtonGenericElement_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-            sound_TBGE.Setup("label test", "soundOn", "soundOff", true, () => { Debug.Log("TODO"); });
-            //settings_TGE.AddTool(sound_TBGE);
-
-            ToolboxButtonGenericElement mic_TBGE = toolboxButtonGenericElement_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-            mic_TBGE.Setup("label test", "micOn", "micOff", true, () => { Debug.Log("TODO"); });
-            //settings_TGE.AddTool(mic_TBGE);
-
-            settings_TGE.AddTools(new ToolboxButtonGenericElement[3] { avatar_TBGE, sound_TBGE, mic_TBGE });
-
-            ToolboxButtonGenericElement leave_TBGE = toolboxButtonGenericElement_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-            leave_TBGE.Setup("", "leave", "leave", true, () => { Debug.Log("TODO"); });
-            leaveEnvironment_TGE.AddTool(leave_TBGE);
-        }
 
     }
 }

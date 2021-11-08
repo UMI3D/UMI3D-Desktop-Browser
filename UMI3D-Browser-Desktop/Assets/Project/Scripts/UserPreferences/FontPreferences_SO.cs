@@ -137,6 +137,7 @@ namespace BrowserDesktop.UserPreferences
                 if (textFont.TextFontName == textFontName)
                 {
                     textFont.SetLabel(label, globalFontSize, globalFont);
+                    Debug.Log("Text font name = " + textFontName);
                     yield break;
                 }
             }

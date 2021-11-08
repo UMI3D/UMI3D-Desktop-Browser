@@ -18,7 +18,14 @@ MonoBehaviour:
   - textFontName: label
     labelFont: {fileID: 0}
     labelFontStyle: 0
-    labelFontSize: 20
+    labelFontSize: 11
+    labelColor: {r: 1, g: 1, b: 1, a: 1}
+    labelUSSClasses: []
+    textStyle: 0
+  - textFontName: sub-title
+    labelFont: {fileID: 0}
+    labelFontStyle: 1
+    labelFontSize: 13
     labelColor: {r: 1, g: 1, b: 1, a: 1}
     labelUSSClasses: []
     textStyle: 0
