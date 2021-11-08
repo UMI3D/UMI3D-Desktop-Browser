@@ -18,9 +18,9 @@ public class Debugger : umi3d.common.PersistentSingleton<Debugger>
 
         if (Input.GetKeyDown(KeyCode.F3) && umi3d.cdk.collaboration.MicrophoneListener.Exists)
             if (!Input.GetKey(KeyCode.LeftShift))
-                umi3d.cdk.collaboration.MicrophoneListener.ChangeMinDB(true);
+                umi3d.cdk.collaboration.MicrophoneListener.ChangeThreshold(true);
             else
-                umi3d.cdk.collaboration.MicrophoneListener.ChangeMinDB(false);
+                umi3d.cdk.collaboration.MicrophoneListener.ChangeThreshold(false);
 
         if (Input.GetKeyDown(KeyCode.F4) && umi3d.cdk.collaboration.MicrophoneListener.Exists)
             if (!Input.GetKey(KeyCode.LeftShift))
