@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,65 +21,36 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.GenericElement
 {
-    public class ToolboxGenericElement : VisualElement
+    public class ToolboxSeparatorGenericElement : VisualElement
     {
         /// <summary>
         /// To be recognized by UI Builder
         /// </summary>
-        public new class UxmlFactory : UxmlFactory<ToolboxGenericElement, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<ToolboxSeparatorGenericElement, UxmlTraits> { }
         /// <summary>
         /// To be recognized by UI Builder
         /// </summary>
         public new class UxmlTraits : VisualElement.UxmlTraits { }
 
-        private Label toolboxName_L;
-        private VisualElement toolboxContainer_VE;
+        private VisualElement separator_VE;
 
-        public ToolboxGenericElement()
+        public ToolboxSeparatorGenericElement()
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
         }
 
-        ~ToolboxGenericElement()
+        ~ToolboxSeparatorGenericElement()
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
         }
 
-        public void Setup(string toolboxName)
+        public void Setup()
         {
-            toolboxName_L = this.Q<Label>("toolbox-name");
-            toolboxContainer_VE = this.Q<VisualElement>("toolbox-container");
+            separator_VE = this.Q<Button>("separator");
 
-            toolboxName_L.text = toolboxName;
+            separator_VE.AddToClassList("darkTheme-menuBar-separator");
 
             OnApplyUserPreferences();
-        }
-
-        public void AddTools(ToolboxButtonGenericElement[] tools)
-        {
-            for (int i = 0; i < tools.Length; ++i)
-            {
-                if (i > 0)
-                {
-                    VisualElement horizontalSpacer = new VisualElement();
-                    horizontalSpacer.style.width = 10;
-                    toolboxContainer_VE.Add(horizontalSpacer);
-                }
-
-                toolboxContainer_VE.Add(tools[i]);
-            }
-        }
-
-        public void AddTool(ToolboxButtonGenericElement tool)
-        {
-            toolboxContainer_VE.Add(tool);
-
-            //TODO resize container.
-        }
-
-        public void AddTool(string toolName, Sprite toolIcon, Action toolAction)
-        {
-
         }
 
         /// <summary>
@@ -88,10 +58,8 @@ namespace BrowserDesktop.UI.GenericElement
         /// </summary>
         public void OnApplyUserPreferences()
         {
-            //TODO
-            //Debug.Log("test Apply pref : " + toolboxName_L.text);
-            UserPreferences.UserPreferences.FontPref.ApplyFont(toolboxName_L, "label");
+            //TODO change theme
+            //separator_VE.AddToClassList("darkTheme-menuBar-separator");
         }
-
     }
 }

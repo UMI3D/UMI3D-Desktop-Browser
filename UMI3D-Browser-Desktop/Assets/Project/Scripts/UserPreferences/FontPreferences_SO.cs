@@ -25,12 +25,12 @@ namespace BrowserDesktop.UserPreferences
     [CreateAssetMenu(fileName = "FontPreferences", menuName = "ScriptableObjects/UserPreferences/FontPreferences")]
     public class FontPreferences_SO : ScriptableObject
     {
-        /// <summary>
-        /// The text style to be applied to the label (Font, USS or Both).
-        /// </summary>
         [System.Serializable]
-        public class TextFont
+        private class TextFont
         {
+            /// <summary>
+            /// The text style to be applied to the label (Font, USS or Both).
+            /// </summary>
             private enum TextStyle
             {
                 FONT,
@@ -38,7 +38,7 @@ namespace BrowserDesktop.UserPreferences
                 FONT_AND_USS
             }
 
-            [Tooltip("Name of the text style.")]
+            [Tooltip("Name of the text Font.")]
             [SerializeField]
             private string textFontName;
             public string TextFontName => textFontName;

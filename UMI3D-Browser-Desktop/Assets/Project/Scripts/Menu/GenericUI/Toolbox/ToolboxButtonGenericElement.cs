@@ -50,7 +50,6 @@ namespace BrowserDesktop.UI.GenericElement
         public ToolboxButtonGenericElement()
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
-            //OnApplyUserPreferences();
         }
 
         ~ToolboxButtonGenericElement()

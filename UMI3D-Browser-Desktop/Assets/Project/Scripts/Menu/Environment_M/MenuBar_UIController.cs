@@ -31,6 +31,8 @@ namespace BrowserDesktop.Menu.Environment
         private VisualTreeAsset toolboxGenericElement_VTA;
         [SerializeField]
         private VisualTreeAsset toolboxButtonGenericElement_VTA;
+        [SerializeField]
+        private VisualTreeAsset toolboxSeparatorGenericElement_VTA;
 
         /*[SerializeField]
         private */
