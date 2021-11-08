@@ -42,11 +42,17 @@ namespace umi3d.cdk.interaction.selection
         public override List<InteractableContainer> GetObjectsInZone()
         {
             var rayCastHits = GetRayCastHits();
-            var objectsOnRay = (from hit in rayCastHits
-                                where (hit.transform.GetComponent<InteractableContainer>() != null
-                                || hit.transform.GetComponentInParent<InteractableContainer>() != null)
-                                select hit.transform.GetComponent<InteractableContainer>() 
-                                        ?? hit.transform.GetComponentInParent<InteractableContainer>()).ToList();
+
+            var objectsOnRay = new List<InteractableContainer>();
+            foreach (var hit in rayCastHits)
+            {
+                var interContainer = hit.transform.GetComponent<InteractableContainer>();
+                if (interContainer == null)
+                    interContainer = hit.transform.GetComponentInParent<InteractableContainer>();
+                if (interContainer != null)
+                    objectsOnRay.Add(interContainer);
+            }
+            
             return objectsOnRay;
         }
 
@@ -83,7 +89,7 @@ namespace umi3d.cdk.interaction.selection
 
             var minDistance = objList.Select(distToRay)?.Min();
 
-            return objList.Where(o => distToRay(o) == minDistance).FirstOrDefault();
+            return objList.FirstOrDefault(o => distToRay(o) == minDistance);
         }
 
         public InteractableContainer GetClosestObjectOnRay()
@@ -107,9 +113,7 @@ namespace umi3d.cdk.interaction.selection
             var minDist = (from obj in interactables
                            select interactablesWithDistances[obj].distance).Min();
 
-            var closestActiveInteractable = (from obj in interactables
-                                             where interactablesWithDistances[obj].distance == minDist
-                                             select obj).FirstOrDefault();
+            var closestActiveInteractable = interactables.FirstOrDefault(obj => interactablesWithDistances[obj].distance == minDist);
             return closestActiveInteractable;
         }
 
@@ -120,11 +124,16 @@ namespace umi3d.cdk.interaction.selection
         public Dictionary<InteractableContainer, RaycastHit> GetObjectsAlongRayWithRayCastHits()
         {
             var rayCastHits = GetRayCastHits();
-            var objectsOnRay = (from hit in rayCastHits
-                                where (hit.transform.GetComponent<InteractableContainer>() != null
-                                || hit.transform.GetComponentInParent<InteractableContainer>() != null)
-                                select (hit.transform.GetComponent<InteractableContainer>()
-                                        ?? hit.transform.GetComponentInParent<InteractableContainer>(), hit)).ToDictionary(x=>x.Item1, x=>x.Item2);
+            var objectsOnRay = new Dictionary<InteractableContainer, RaycastHit>();
+            foreach (var hit in rayCastHits)
+            {
+                var interContainer = hit.transform.GetComponent<InteractableContainer>();
+                if (interContainer == null)
+                    interContainer = hit.transform.GetComponentInParent<InteractableContainer>();
+                if (interContainer != null)
+                    objectsOnRay.Add(interContainer, hit);
+            }
+
             return objectsOnRay;
         }
     }

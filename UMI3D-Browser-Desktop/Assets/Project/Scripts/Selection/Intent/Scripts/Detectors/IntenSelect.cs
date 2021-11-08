@@ -117,9 +117,8 @@ namespace umi3d.cdk.interaction.selection.intent
                 }
             }
 
-            var estimatedTargetPair = (from o in objectsToConsiderScoresDict
-                                       where o.Value == objectsToConsiderScoresDict.Values.Max()
-                                       select o).FirstOrDefault(); //find the object with the highest score
+            var maxScore = objectsToConsiderScoresDict.Values.Max();
+            var estimatedTargetPair = objectsToConsiderScoresDict.FirstOrDefault(o=> o.Value == maxScore); //find the object with the highest score
 
            return estimatedTargetPair.Key;
         }
