@@ -172,7 +172,7 @@ public class LauncherManager : MonoBehaviour
 
     private void InitUI()
     {
-        root.Q<Label>("version").text = umi3d.UMI3DVersion.version;
+        root.Q<Label>("version").text = BrowserDesktop.BrowserVersion.Version;
 
         BindSharedUI();
 
