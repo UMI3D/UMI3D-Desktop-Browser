@@ -50,10 +50,10 @@ public class WindowsManager : MonoBehaviour
 
     [Header("Custom title bar")]
 
-    [Tooltip("Tag name of the minimize button UXML element")]
+    [Tooltip("Tag name of the minimize window button UXML element")]
     [SerializeField]
     private readonly string minimizeTagName = "minimize-window-btn";
-    [Tooltip("Tag name of the maximize button UXML element")]
+    [Tooltip("Tag name of the maximize window button UXML element")]
     [SerializeField]
     private readonly string maximizeTagName = "fullscreen-btn";
     [Tooltip("Tag name of the close window button UXML element")]

@@ -38,12 +38,29 @@ namespace BrowserDesktop.UserPreferences
                 FONT_AND_USS
             }
 
+            private enum CaseStyle
+            {
+                NONE,
+                LOWER_CASE,
+                UPPER_CASE
+            }
+
+
             [Tooltip("Name of the text Font.")]
             [SerializeField]
             private string textFontName;
             public string TextFontName => textFontName;
 
-            [Header("Font")]
+            #region Font And USS
+
+            [Header("Font And USS")]
+
+            [Space]
+            [Tooltip("The text style to be applied to the label (Font, USS or Both).")]
+            [SerializeField]
+            private TextStyle textStyle;
+
+            [Space]
             [Tooltip("Font of the label (can be empty or null).")]
             [SerializeField]
             private Font labelFont;
@@ -58,62 +75,121 @@ namespace BrowserDesktop.UserPreferences
             [SerializeField]
             private Color labelColor;
 
-            [Header("USS")]
+            [Space]
             [Tooltip("USS classes of the label (can be empty or null).")]
             [SerializeField]
             private string[] labelUSSClasses;
 
-            [Header("Style")]
-            [Tooltip("The text style to be applied to the label (Font, USS or Both).")]
+            #endregion
+
+            private const int noMaxNumberOfCharacters = 101;
+
+            [Header("Format")]
+
+            [Space]
+            [Tooltip("")]
             [SerializeField]
-            private TextStyle textStyle;
+            private bool applyFormat = false;
+            [Tooltip("")]
+            [Range(1, noMaxNumberOfCharacters)]
+            [SerializeField]
+            private int maxNumberOfCharacters = 10;
+            [Tooltip("")]
+            [SerializeField]
+            private CaseStyle caseStyle = CaseStyle.NONE;
+            [Tooltip("")]
+            [SerializeField]
+            private bool resizeWidth;
 
             /// <summary>
             /// Set the label's font and USS classes.
             /// </summary>
             /// <param name="label">The label to be set.</param>
-            public void SetLabel(Label label, float globalFontSize, Font globalFont)
+            public void SetLabel(Label label, int zoom, Font globalFont)
             {
                 switch (textStyle)
                 {
                     case TextStyle.FONT:
                         Debug.Assert(globalFont != null, "Global font is null");
                         label.ClearClassList();
-                        label.style.unityFont = (labelFont != null) ? labelFont : globalFont;
-                        label.style.unityFontStyleAndWeight = labelFontStyle;
-                        label.style.fontSize = labelFontSize;
-                        label.style.color = labelColor;
-                        //Debug.Log("fontStyle = " + label.resolvedStyle.unityFontStyleAndWeight + ", size = " + label.resolvedStyle.fontSize);
+                        SetFont(label, zoom, globalFont);
                         break;
                     case TextStyle.USS:
                         Debug.Assert(labelUSSClasses.Length != 0, "USS classes empty for " + textFontName + " text.");
-                        label.ClearClassList();
-                        foreach (string labelClass in labelUSSClasses)
-                        {
-                            label.AddToClassList(labelClass);
-                        }
+                        SetUSS(label);
                         break;
                     case TextStyle.FONT_AND_USS:
                         Debug.Assert(labelUSSClasses.Length != 0, "USS classes empty for " + textFontName + " text.");
-                        label.ClearClassList();
-                        foreach (string labelClass in labelUSSClasses)
-                        {
-                            label.AddToClassList(labelClass);
-                        }
-
-                        label.style.unityFont = labelFont != null ? labelFont : label.resolvedStyle.unityFont;
-                        label.style.unityFontStyleAndWeight = labelFontStyle;
-                        label.style.fontSize = labelFontSize;
+                        SetUSS(label);
+                        SetFont(label, zoom, globalFont);
                         break;
+                }
+
+                if (applyFormat)
+                {
+                    if (maxNumberOfCharacters != noMaxNumberOfCharacters && label.text.Length > maxNumberOfCharacters)
+                    {
+                        string subString;
+                        if (maxNumberOfCharacters >= 6)
+                        {
+                            subString = label.text.Substring(0, maxNumberOfCharacters - 3);
+                            label.text = $"{subString}...";
+                        }
+                        else
+                        {
+                            subString = label.text.Substring(0, maxNumberOfCharacters);
+                            label.text = subString;
+                        }
+                    }
+
+                    switch (caseStyle)
+                    {
+                        case CaseStyle.LOWER_CASE:
+                            label.text = label.text.ToLowerInvariant();
+                            break;
+                        case CaseStyle.UPPER_CASE:
+                            label.text = label.text.ToUpperInvariant();
+                            break;
+                        case CaseStyle.NONE:
+                            break;
+                    }
+                    
+                    if (resizeWidth)
+                    {
+                        if (maxNumberOfCharacters == noMaxNumberOfCharacters) label.style.width = StyleKeyword.Auto;
+                        else label.style.width = (maxNumberOfCharacters / 2) * FontSizeAfterZoom(zoom);
+                    }
+                }
+            }
+
+            private void SetFont(Label label, int zoom, Font globalFont)
+            {
+                label.style.unityFont = (labelFont != null) ? labelFont: globalFont;
+                label.style.unityFontStyleAndWeight = labelFontStyle;
+                label.style.fontSize = FontSizeAfterZoom(zoom);
+                label.style.color = labelColor;
+            }
+
+            private float FontSizeAfterZoom(int zoom)
+            {
+                return labelFontSize * ((float)zoom / 100f);
+            }
+
+            private void SetUSS(Label label)
+            {
+                label.ClearClassList();
+                foreach (string labelClass in labelUSSClasses)
+                {
+                    label.AddToClassList(labelClass);
                 }
             }
         }
 
         [Header("Global Font")]
-        [Range(0f, 2f)]
-        [Tooltip("Font size coefficient")]
+        [Range(0, 200)]
+        [Tooltip("Zoom percentage")]
         [SerializeField]
-        private float globalFontSize;
+        private int zoomPercentage = 100;
         [Tooltip("")]
         [SerializeField]
         private Font globalFont;
@@ -136,8 +212,7 @@ namespace BrowserDesktop.UserPreferences
             {
                 if (textFont.TextFontName == textFontName)
                 {
-                    textFont.SetLabel(label, globalFontSize, globalFont);
-                    Debug.Log("Text font name = " + textFontName);
+                    textFont.SetLabel(label, zoomPercentage, globalFont);
                     yield break;
                 }
             }
