@@ -50,14 +50,15 @@ public class WindowsManager : MonoBehaviour
 
     [Header("Custom title bar")]
 
+    [Tooltip("Tag name of the minimize button UXML element")]
     [SerializeField]
-    string minimizeTagName = "minimize-window-btn";
+    private readonly string minimizeTagName = "minimize-window-btn";
+    [Tooltip("Tag name of the maximize button UXML element")]
     [SerializeField]
-    string maximizeTagName = "fullscreen-btn";
+    private readonly string maximizeTagName = "fullscreen-btn";
+    [Tooltip("Tag name of the close window button UXML element")]
     [SerializeField]
-    string closeTagName = "close-window-btn";
-
-    public string restoreClassName = "restore-btn";
+    private readonly string closeTagName = "close-window-btn";
 
     VisualElement root;
     Button minimize_B;
@@ -102,7 +103,6 @@ public class WindowsManager : MonoBehaviour
         };
 
         maximize_B = uiDocument.rootVisualElement.Q<Button>(maximizeTagName);
-        maximize_B.AddToClassList(restoreClassName);
         maximize_B.clickable.clicked += () =>
         {
             SwitchFullScreen(false);
@@ -137,7 +137,7 @@ public class WindowsManager : MonoBehaviour
     private bool WantsToQuit()
     {
         bool wantsToQuit = umi3d.common.QuittingManager.ApplicationIsQuitting;
-        if (!wantsToQuit)
+        if (!wantsToQuit && !DialogueBoxElement.IsADialogueBoxDislayed)
             ShowDialogueBoxToQuit();
         return wantsToQuit;
     }
@@ -155,7 +155,6 @@ public class WindowsManager : MonoBehaviour
                 Application.Quit();
         });
         root.Add(dialogueBox);
-        dialogueBox.BringToFront();
     }
 
     #endregion

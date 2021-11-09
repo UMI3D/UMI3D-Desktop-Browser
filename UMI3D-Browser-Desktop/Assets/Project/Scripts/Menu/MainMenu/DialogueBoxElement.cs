@@ -23,19 +23,10 @@ using UnityEngine.UIElements;
 
 public class DialogueBoxElement : VisualElement
 {
-    //Return yes if  dialogue box is displayed
-    public static bool IsADialogueBoxDislayed
-    {
-        get
-        {
-            return currentDialogueBox != null;
-        }
-    }
-
-    public static void CloseDialogueBox(bool choice)
-    {
-        _CloseDialogueBox(choice, currentDialogueBox);
-    }
+    /// <summary>
+    /// Return true if  dialogue box is displayed
+    /// </summary>
+    public static bool IsADialogueBoxDislayed => currentDialogueBox != null;
 
     private static DialogueBoxElement currentDialogueBox;
     private Action<bool> choiceCallback;
@@ -58,13 +49,15 @@ public class DialogueBoxElement : VisualElement
         optionABtn.text = optionA;
         optionABtn.clickable.clicked += () =>
         {
-            _CloseDialogueBox(true, this);
+            //_CloseDialogueBox(true, this);
+            CloseDialogueBox(true);
         };
 
         optionBBtn.text = optionB;
         optionBBtn.clickable.clicked += () =>
         {
-            _CloseDialogueBox(false, this);
+            //_CloseDialogueBox(false, this);
+            CloseDialogueBox(false);
         };
 
         if (marginForTitleBar)
@@ -72,7 +65,11 @@ public class DialogueBoxElement : VisualElement
             this.style.marginTop = 40;
         }
 
-        this.choiceCallback = choiceCallback;
+        this.choiceCallback = (b) =>
+        {
+            BrowserDesktop.Cursor.CursorHandler.UnSetMovement(this);
+            choiceCallback(b);
+        };
         currentDialogueBox = this;
     }
 
@@ -94,7 +91,8 @@ public class DialogueBoxElement : VisualElement
         optionABtn.text = optionA;
         optionABtn.clickable.clicked += () =>
         {
-            _CloseDialogueBox(true, this);
+            //_CloseDialogueBox(true, this);
+            CloseDialogueBox(true);
         };
 
         if (marginForTitleBar)
@@ -102,7 +100,11 @@ public class DialogueBoxElement : VisualElement
             this.style.marginTop = 40;
         }
 
-        this.choiceCallback = (b) => choiceCallback();
+        this.choiceCallback = (b) =>
+        {
+            BrowserDesktop.Cursor.CursorHandler.UnSetMovement(this);
+            choiceCallback();
+        };
         currentDialogueBox = this;
     }
 
@@ -114,6 +116,7 @@ public class DialogueBoxElement : VisualElement
     /// <returns></returns>
     private (Button, Button) Setup(string title, string message)
     {
+        BrowserDesktop.Cursor.CursorHandler.SetMovement(this, BrowserDesktop.Cursor.CursorHandler.CursorMovement.Free);
         this.style.position = Position.Absolute;
 
         this.Q<Label>("dialogue-box-title").text = title;
@@ -125,11 +128,19 @@ public class DialogueBoxElement : VisualElement
         return (optionABtn, optionBBtn);
     }
 
-    private static void _CloseDialogueBox(bool choice, DialogueBoxElement dialogueBox)
+    public static void CloseDialogueBox(bool choice)
+    {
+        //_CloseDialogueBox(choice, currentDialogueBox);
+        currentDialogueBox.RemoveFromHierarchy();
+        currentDialogueBox.choiceCallback.Invoke(choice);
+        currentDialogueBox = null;
+    }
+
+    /*private static void _CloseDialogueBox(bool choice, DialogueBoxElement dialogueBox)
     {
         dialogueBox.RemoveFromHierarchy();
         dialogueBox.choiceCallback.Invoke(choice);
         currentDialogueBox = null;
-    }
+    }*/
 
 }
