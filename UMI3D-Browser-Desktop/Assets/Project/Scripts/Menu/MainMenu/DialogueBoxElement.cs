@@ -49,14 +49,12 @@ public class DialogueBoxElement : VisualElement
         optionABtn.text = optionA;
         optionABtn.clickable.clicked += () =>
         {
-            //_CloseDialogueBox(true, this);
             CloseDialogueBox(true);
         };
 
         optionBBtn.text = optionB;
         optionBBtn.clickable.clicked += () =>
         {
-            //_CloseDialogueBox(false, this);
             CloseDialogueBox(false);
         };
 
@@ -91,7 +89,6 @@ public class DialogueBoxElement : VisualElement
         optionABtn.text = optionA;
         optionABtn.clickable.clicked += () =>
         {
-            //_CloseDialogueBox(true, this);
             CloseDialogueBox(true);
         };
 
@@ -130,17 +127,9 @@ public class DialogueBoxElement : VisualElement
 
     public static void CloseDialogueBox(bool choice)
     {
-        //_CloseDialogueBox(choice, currentDialogueBox);
         currentDialogueBox.RemoveFromHierarchy();
         currentDialogueBox.choiceCallback.Invoke(choice);
         currentDialogueBox = null;
     }
-
-    /*private static void _CloseDialogueBox(bool choice, DialogueBoxElement dialogueBox)
-    {
-        dialogueBox.RemoveFromHierarchy();
-        dialogueBox.choiceCallback.Invoke(choice);
-        currentDialogueBox = null;
-    }*/
 
 }
