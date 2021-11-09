@@ -149,7 +149,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
         connectionScreen = root.Q<VisualElement>("connection-menu");
 
-        root.Q<Label>("version").text = umi3d.UMI3DVersion.version;
+        root.Q<Label>("version").text = BrowserDesktop.BrowserVersion.Version;
 
         BindPasswordScreen();
         passwordScreen.style.display = DisplayStyle.None;
