@@ -70,6 +70,16 @@ namespace BrowserDesktop.Cursor
             Instance.MapToMovement();
         }
 
+        /// <summary>
+        /// Remove the Object from the map of movement.
+        /// </summary>
+        /// <param name="Object"></param>
+        public static void UnSetMovement(object Object)
+        {
+            Instance.MovementMap.Remove(Object);
+            Instance.MapToMovement();
+        }
+
         public CursorMode cursorMode = CursorMode.Auto;
         public Vector2 hotSpot = Vector2.zero;
 
