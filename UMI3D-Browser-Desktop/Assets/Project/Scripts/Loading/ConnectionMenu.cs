@@ -248,7 +248,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void GetMediaFailed(string error)
     {
-        CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         var dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
         uiDocument.rootVisualElement.Add(dialogueBox);
 
@@ -283,7 +282,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void OnConnectionLost(Action<bool> callback)
     {
-        CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         var dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
         uiDocument.rootVisualElement.Add(dialogueBox);
 
@@ -375,8 +373,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         }
         else
         {
-            CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
-
             string title = (ids.Count == 1) ? "One assets library is required" : ids.Count + " assets libraries are required";
 
             DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
