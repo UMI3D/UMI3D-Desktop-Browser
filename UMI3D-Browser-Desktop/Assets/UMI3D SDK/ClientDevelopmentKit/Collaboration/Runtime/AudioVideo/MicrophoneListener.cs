@@ -27,6 +27,11 @@ using MainThreadDispatcher;
 
 namespace umi3d.cdk.collaboration
 {
+    [Serializable]
+    public class MicrophoneEvent : UnityEngine.Events.UnityEvent<bool>
+    {
+    }
+
     [RequireComponent(typeof(AudioSource))]
     public class MicrophoneListener : Singleton<MicrophoneListener>
     {
@@ -45,6 +50,8 @@ namespace umi3d.cdk.collaboration
         #endregion
 
         #region static properties 
+
+        public static MicrophoneEvent OnSaturated { get => Exists ? Instance._OnSaturated : null; }
 
         /// <summary>
         /// Whether the microphone is running
@@ -78,14 +85,14 @@ namespace umi3d.cdk.collaboration
             get => Exists ? Instance._MinRMSToSend : -1;
             set
             {
-                if(Exists)
+                if (Exists)
                     Instance._MinRMSToSend = value;
             }
         }
 
         public static float TimeToTurnOff
         {
-            get => Exists ? Instance.timeToTurnOff : -1; 
+            get => Exists ? Instance.timeToTurnOff : -1;
             set
             {
                 if (Exists)
@@ -95,7 +102,7 @@ namespace umi3d.cdk.collaboration
 
         public static int Bitrate
         {
-            get => Exists ? Instance.bitrate : -1; 
+            get => Exists ? Instance.bitrate : -1;
             set
             {
                 if (Exists)
@@ -137,11 +144,11 @@ namespace umi3d.cdk.collaboration
             if (Exists) Instance._ChangeTimeToTurnOff(up);
         }
 
-        public static string[] getDevices() => Exists? Instance._getDevices() : null;
+        public static string[] getDevices() => Exists ? Instance._getDevices() : null;
 
         public static void NextDevices()
         {
-            if(Exists) Instance._NextDevices();
+            if (Exists) Instance._NextDevices();
         }
 
         public static bool SetDevices(string name)
@@ -155,6 +162,8 @@ namespace umi3d.cdk.collaboration
         }
 
         #endregion
+
+        public MicrophoneEvent _OnSaturated = new MicrophoneEvent();
 
         public List<string> GetInfo()
         {
@@ -253,9 +262,10 @@ namespace umi3d.cdk.collaboration
         object gainLocker = new object();
         float _Gain
         {
-            get {
-                lock(gainLocker)
-                    return _gain; 
+            get
+            {
+                lock (gainLocker)
+                    return _gain;
             }
             set
             {
@@ -268,8 +278,9 @@ namespace umi3d.cdk.collaboration
         bool reading = false;
         bool Reading
         {
-            get { 
-                lock(readingLocker)
+            get
+            {
+                lock (readingLocker)
                     return reading;
             }
             set
@@ -283,7 +294,7 @@ namespace umi3d.cdk.collaboration
 
         int samplingFrequency = 12000;
 
-        
+
 
         AudioClip clip;
         int head = 0;
@@ -326,18 +337,61 @@ namespace umi3d.cdk.collaboration
             }
         }
 
+        bool currentSaturated;
+        bool displayedSaturated;
+        object SaturatedLocker = new object();
+        object displayedSaturatedLocker = new object();
+
+        public bool DisplayedSaturated
+        {
+            get
+            {
+                lock (displayedSaturatedLocker)
+                    return displayedSaturated;
+            }
+            set
+            {
+                bool v;
+                lock (displayedSaturatedLocker)
+                    v = displayedSaturated;
+                if(v != value)
+                {
+                    lock (displayedSaturatedLocker)
+                        displayedSaturated = value;
+                    UnityMainThreadDispatcher.Instance().Enqueue(()=>_OnSaturated.Invoke(value));
+                }
+            }
+        }
+
+        public bool Saturated
+        {
+            get
+            {
+                lock (SaturatedLocker)
+                    return displayedSaturated;
+            }
+            private set
+            {
+                DisplayedSaturated |= value;
+                lock (SaturatedLocker)
+                    currentSaturated = value;
+                if (value)
+                    UnityMainThreadDispatcher.Instance().Enqueue(StaySaturated());
+            }
+        }
 
         object minRMSToSendLocker = new object();
         float _minRMSToSend = 0.1f;
         public float _MinRMSToSend
         {
-            get { 
-                lock(minRMSToSendLocker)
+            get
+            {
+                lock (minRMSToSendLocker)
                     return _minRMSToSend;
             }
             set
             {
-                lock(minRMSToSendLocker)
+                lock (minRMSToSendLocker)
                     _minRMSToSend = Mathf.Clamp01(value);
             }
         }
@@ -395,6 +449,31 @@ namespace umi3d.cdk.collaboration
             }
             ShouldSend = true;
             TurnMicOffRunning = false;
+        }
+
+        bool StaySaturatedRunning;
+        float timeStayingSaturated = 0.3f;
+        IEnumerator StaySaturated()
+        {
+            if (StaySaturatedRunning)
+                yield break;
+            StaySaturatedRunning = true;
+            DisplayedSaturated = true;
+            float time = 0;
+
+            do
+            {
+                if (currentSaturated)
+                {
+                    time = Time.time + timeStayingSaturated;
+                    currentSaturated = false;
+                }
+                yield return null;
+            }
+            while (time > Time.time);
+
+            DisplayedSaturated = false;
+            StaySaturatedRunning = false;
         }
 
         void _ChangeThreshold(bool up)
@@ -554,18 +633,29 @@ namespace umi3d.cdk.collaboration
                 {
                     float sum = 0;
                     float gain = Gain;
+                    bool saturated = false;
                     lock (pcmQueue)
                     {
                         for (int i = 0; i < frameSize; i++)
                         {
                             var v = pcmQueue.Dequeue() * gain;
-                            if (v > 1) v = 1;
-                            else if (v < -1) v = -1;
+                            if (v > 1)
+                            {
+                                v = 1;
+                                saturated = true;
+                            }
+                            else if (v < -1)
+                            {
+                                v = -1;
+                                saturated = true;
+                            }
+
                             frameBuffer[i] = v;
                             sum += v * v;
                         }
                     }
 
+                    Saturated = saturated;
                     RMS = Mathf.Sqrt(sum / frameSize);
                     DB = 20 * Mathf.Log10(RMS / refValue);
 
