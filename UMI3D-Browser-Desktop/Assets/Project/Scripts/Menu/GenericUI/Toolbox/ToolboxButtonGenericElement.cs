@@ -53,6 +53,8 @@ namespace BrowserDesktop.UI.GenericElement
             set => buttonName_L.style.width = value;
         }
 
+        public string LabelText => buttonName_L.text;
+
         public ToolboxButtonGenericElement()
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
@@ -136,24 +138,6 @@ namespace BrowserDesktop.UI.GenericElement
             button_B.AddToClassList(className);
         }
 
-        IEnumerator testFont()
-        {
-            yield return null;
-            if (buttonName_L.resolvedStyle.unityFont == null)
-            {
-                Debug.Log("Font null");
-            }
-            else
-            {
-                Debug.Log("Font not null = " + buttonName_L.resolvedStyle.unityFont.ToString());
-            }
-        }
-
-        public void TestWidth()
-        {
-            Debug.Log("width = " + buttonName_L.resolvedStyle.width);
-        }
-
         /// <summary>
         /// Apply user preferences when needed.
         /// </summary>
@@ -162,7 +146,6 @@ namespace BrowserDesktop.UI.GenericElement
             //TODO
             buttonName_L.style.width = StyleKeyword.Auto;
             UserPreferences.UserPreferences.FontPref.ApplyFont(buttonName_L, "label");
-            //Debug.Log("Label width = " + LabelWidth);
         }
 
     }

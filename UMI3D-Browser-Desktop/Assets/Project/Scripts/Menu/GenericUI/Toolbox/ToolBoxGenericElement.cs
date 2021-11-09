@@ -36,9 +36,6 @@ namespace BrowserDesktop.UI.GenericElement
         private Label toolboxName_L;
         private VisualElement toolboxContainer_VE;
 
-        private List<ToolboxButtonGenericElement> tools_TBGEs = new List<ToolboxButtonGenericElement>();
-        private float labelToolsMaxWidth = 0f;
-
         public ToolboxGenericElement()
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
@@ -82,7 +79,6 @@ namespace BrowserDesktop.UI.GenericElement
                     toolboxContainer_VE.Add(horizontalSpacer);
                 }
 
-                tools_TBGEs.Add(tools[i]);
                 toolboxContainer_VE.Add(tools[i]);
             }
         }
@@ -90,31 +86,11 @@ namespace BrowserDesktop.UI.GenericElement
         private void AddTool(ToolboxButtonGenericElement tool)
         {
             toolboxContainer_VE.Add(tool);
-
-            //TODO resize container.
         }
 
         private void AddTool(string toolName, Sprite toolIcon, Action toolAction)
         {
 
-        }
-
-        private IEnumerator ResizeLabelTools()
-        {
-            yield return null;
-            yield return null;
-            labelToolsMaxWidth = 0f;
-            foreach (ToolboxButtonGenericElement tool in tools_TBGEs)
-            {
-                if (labelToolsMaxWidth < tool.LabelWidth) labelToolsMaxWidth = tool.LabelWidth;
-                Debug.Log("Label width (bis) = " + tool.LabelWidth);
-                tool.TestWidth();
-            }
-            /*foreach (ToolboxButtonGenericElement tool in tools_TBGEs)
-            {
-                tool.LabelWidth = labelToolsMaxWidth;
-            }*/
-            Debug.Log("Max width = " + labelToolsMaxWidth);
         }
 
         /// <summary>
@@ -123,8 +99,7 @@ namespace BrowserDesktop.UI.GenericElement
         public void OnApplyUserPreferences()
         {
             //TODO
-            UserPreferences.UserPreferences.FontPref.ApplyFont(toolboxName_L, "sub-title");
-            UserPreferences.UserPreferences.Instance.StartCoroutine(ResizeLabelTools());
+            UserPreferences.UserPreferences.FontPref.ApplyFont(toolboxName_L, "sub-section");
         }
 
     }
