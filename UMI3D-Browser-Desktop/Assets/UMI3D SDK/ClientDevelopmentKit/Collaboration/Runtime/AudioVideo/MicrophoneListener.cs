@@ -381,7 +381,7 @@ namespace umi3d.cdk.collaboration
         }
 
         object minRMSToSendLocker = new object();
-        float _minRMSToSend = 0.1f;
+        float _minRMSToSend = 0f;
         public float _MinRMSToSend
         {
             get
