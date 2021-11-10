@@ -9,31 +9,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21b0b69cdb5945f48ba1cebd018b663d, type: 3}
-  m_Name: DefaultFontPreferences
+  m_Script: {fileID: 11500000, guid: ce087081769b65b4ba5a2f1239079e03, type: 3}
+  m_Name: Default-Dark-Text-Preferences
   m_EditorClassIdentifier: 
-  zoomPercentage: 100
   globalFont: {fileID: 12800000, guid: fe65ffc0529064145a59e12f47be69a3, type: 3}
-  textFonts:
-  - textFontName: label
+  textprefs:
+  - textPrefName: label
     textStyle: 0
     labelFont: {fileID: 0}
     labelFontStyle: 0
     labelFontSize: 11
-    labelColor: {r: 1, g: 1, b: 1, a: 1}
+    labelColor: {r: 1, g: 1, b: 1, a: 0}
     labelUSSClasses: []
     applyFormat: 1
     maxNumberOfCharacters: 10
     caseStyle: 0
     resizeWidth: 1
-  - textFontName: sub-section
+  - textPrefName: sub-section
     textStyle: 0
     labelFont: {fileID: 0}
-    labelFontStyle: 0
+    labelFontStyle: 1
     labelFontSize: 13
-    labelColor: {r: 1, g: 1, b: 1, a: 1}
+    labelColor: {r: 1, g: 1, b: 1, a: 0}
     labelUSSClasses: []
     applyFormat: 0
-    maxNumberOfCharacters: 1
+    maxNumberOfCharacters: 10
     caseStyle: 0
     resizeWidth: 0

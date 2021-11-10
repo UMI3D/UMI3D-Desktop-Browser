@@ -22,29 +22,17 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.GenericElement
 {
-    public class ToolboxGenericElement : VisualElement
+    public class ToolboxGenericElement : GenericAndCustomElement
     {
         /// <summary>
         /// To be recognized by UI Builder
         /// </summary>
         public new class UxmlFactory : UxmlFactory<ToolboxGenericElement, UxmlTraits> { }
-        /// <summary>
-        /// To be recognized by UI Builder
-        /// </summary>
-        public new class UxmlTraits : VisualElement.UxmlTraits { }
 
+        private string toolboxNameText;
         private Label toolboxName_L;
         private VisualElement toolboxContainer_VE;
 
-        public ToolboxGenericElement()
-        {
-            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
-        }
-
-        ~ToolboxGenericElement()
-        {
-            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
-        }
 
         public void Setup(string toolboxName, ToolboxButtonGenericElement tool)
         {
@@ -65,7 +53,8 @@ namespace BrowserDesktop.UI.GenericElement
             toolboxName_L = this.Q<Label>("toolbox-name");
             toolboxContainer_VE = this.Q<VisualElement>("toolbox-container");
 
-            toolboxName_L.text = toolboxName;
+            toolboxNameText = toolboxName;
+            //toolboxName_L.text = toolboxName;
         }
 
         private void AddTools(ToolboxButtonGenericElement[] tools)
@@ -96,10 +85,10 @@ namespace BrowserDesktop.UI.GenericElement
         /// <summary>
         /// Apply user preferences when needed.
         /// </summary>
-        public void OnApplyUserPreferences()
+        public override void OnApplyUserPreferences()
         {
             //TODO
-            UserPreferences.UserPreferences.FontPref.ApplyFont(toolboxName_L, "sub-section");
+            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(toolboxName_L, "sub-section", toolboxNameText);
         }
 
     }

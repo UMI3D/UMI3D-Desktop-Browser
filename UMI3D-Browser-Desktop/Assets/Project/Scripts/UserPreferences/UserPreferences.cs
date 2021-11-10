@@ -30,19 +30,22 @@ namespace BrowserDesktop.UserPreferences
 
         [Tooltip("")]
         [SerializeField]
-        private FontPreferences fontPref = new FontPreferences();
-        public static FontPreferences FontPref
-        {
-            get => Exists ? Instance.fontPref : null;
-        }
+        private GlobalPreferences_SO globalPreferences_SO;
+        public static GlobalPreferences_SO GlobalPref => (Exists) ? Instance.globalPreferences_SO : null;
 
+        [Tooltip("")]
+        [SerializeField]
+        private TextAndIconPreferences textAndIconPref = new TextAndIconPreferences();
+        public static TextAndIconPreferences TextAndIconPref => (Exists) ? Instance.textAndIconPref : null;
+
+        [HideInInspector]
         public UnityEvent OnApplyUserPreferences = new UnityEvent();
 
         protected override void Awake()
         {
             base.Awake();
 
-            fontPref.LoadFontPref();
+            textAndIconPref.Load();
         }
 
         void Start()

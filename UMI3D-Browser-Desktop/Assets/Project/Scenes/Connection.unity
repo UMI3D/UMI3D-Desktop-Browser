@@ -399,10 +399,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 534da44b33258224dac997daed5aeb07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fontPref:
-    defaultFontPref_SO: {fileID: 11400000, guid: 8cd066ff2d9c8764f84da3650c9674cf,
-      type: 2}
-    fontPref_SO: {fileID: 11400000, guid: 8cd066ff2d9c8764f84da3650c9674cf, type: 2}
+  globalPreferences_SO: {fileID: 11400000, guid: 3d3b4d310a2068f4784f013c7e51fb34,
+    type: 2}
+  textAndIconPref:
+    defaultsTextAndIcon_SO:
+    - name: 0
+      iconPref_SO: {fileID: 11400000, guid: f62292864b123044480b5b0a5a011b75, type: 2}
+      textPref_SO: {fileID: 11400000, guid: 8cd066ff2d9c8764f84da3650c9674cf, type: 2}
+    currentTextAndIcon_SO:
+      name: 0
+      iconPref_SO: {fileID: 0}
+      textPref_SO: {fileID: 0}
   OnApplyUserPreferences:
     m_PersistentCalls:
       m_Calls: []
@@ -614,9 +621,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiDocument: {fileID: 1049023329}
-  minimizeTagName: minimize-window-btn
-  maximizeTagName: fullscreen-btn
-  closeTagName: close-window-btn
-  restoreClassName: restore-btn
   dialogueBoxTreeAsset: {fileID: 9197481963319205126, guid: 952193403cd37744f9ac513022d96731,
     type: 3}

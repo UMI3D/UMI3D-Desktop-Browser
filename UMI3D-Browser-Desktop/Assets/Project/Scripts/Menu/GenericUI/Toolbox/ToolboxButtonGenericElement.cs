@@ -39,6 +39,7 @@ namespace BrowserDesktop.UI.GenericElement
 
         public string LabelText => buttonName_L.text;
 
+        private string buttonNameText;
         /// <summary>
         /// Button with its icon.
         /// </summary>
@@ -103,7 +104,7 @@ namespace BrowserDesktop.UI.GenericElement
             button_B = this.Q<Button>("toolbox-button");
             buttonName_L = this.Q<Label>("toolbox-button-name");
 
-            buttonName_L.text = buttonName;
+            buttonNameText = buttonName;
         }
 
         /// <summary>
@@ -135,7 +136,8 @@ namespace BrowserDesktop.UI.GenericElement
         {
             //TODO
             buttonName_L.style.width = StyleKeyword.Auto;
-            UserPreferences.UserPreferences.FontPref.ApplyFont(buttonName_L, "label");
+            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(buttonName_L, "label", buttonNameText);
+            //UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(button_B);
         }
 
     }
