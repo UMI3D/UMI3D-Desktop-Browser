@@ -355,11 +355,11 @@ namespace umi3d.cdk.collaboration
                 bool v;
                 lock (displayedSaturatedLocker)
                     v = displayedSaturated;
-                if(v != value)
+                if (v != value)
                 {
                     lock (displayedSaturatedLocker)
                         displayedSaturated = value;
-                    UnityMainThreadDispatcher.Instance().Enqueue(()=>_OnSaturated.Invoke(value));
+                    UnityMainThreadDispatcher.Instance().Enqueue(() => _OnSaturated.Invoke(value));
                 }
             }
         }
@@ -423,10 +423,10 @@ namespace umi3d.cdk.collaboration
             }
             private set
             {
-                bool ok; 
+                bool ok;
                 lock (shouldSendLocker)
                     ok = shouldSend;
-                if(ok != value)
+                if (ok != value)
                 {
                     lock (shouldSendLocker)
                         shouldSend = value;
