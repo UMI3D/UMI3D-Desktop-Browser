@@ -137,7 +137,7 @@ namespace BrowserDesktop.UI.GenericElement
             //TODO
             buttonName_L.style.width = StyleKeyword.Auto;
             UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(buttonName_L, "label", buttonNameText);
-            //UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(button_B);
+            UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(button_B, "square-button");
         }
 
     }

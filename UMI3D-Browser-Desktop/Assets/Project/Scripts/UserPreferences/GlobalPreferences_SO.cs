@@ -47,6 +47,7 @@ namespace BrowserDesktop.UserPreferences
                 else zoomPercentage = value;
             }
         }
+        public float ZoomCoef => (float)zoomPercentage / 100f;
 
         [Tooltip("TODO")]
         [SerializeField]
@@ -55,6 +56,12 @@ namespace BrowserDesktop.UserPreferences
         {
             get => currentTheme;
             set => currentTheme = value;
+        }
+
+        [ContextMenu("Apply User Pref")]
+        private void ApplyUserPref()
+        {
+            UserPreferences.Instance.OnApplyUserPreferences.Invoke();
         }
 
 

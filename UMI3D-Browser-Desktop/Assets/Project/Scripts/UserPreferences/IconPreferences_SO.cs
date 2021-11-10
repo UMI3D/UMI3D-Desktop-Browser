@@ -34,16 +34,51 @@ namespace BrowserDesktop.UserPreferences
             /// Name of this icon preference.
             /// </summary>
             public string IconPrefName => iconPrefName;
+            
+            [Space]
+            [Tooltip("Width of the icon when zoom is set to 100%.")]
+            [SerializeField]
+            private float width;
+            [Tooltip("height of the icon when zoom is set to 100%.")]
+            [SerializeField]
+            private float height;
 
             public void SetIcon(VisualElement icon)
             {
-
+                icon.style.width = width * UserPreferences.GlobalPref.ZoomCoef;
+                icon.style.height = height * UserPreferences.GlobalPref.ZoomCoef;
             }
         }
 
         [SerializeField]
         [Tooltip("List of icon preferences.")]
         private IconPref[] iconPrefs;
+
+        public IconPreferences_SO(IconPreferences_SO iconPreferences)
+        {
+            //TODO Copy properties.
+        }
+
+        public IEnumerator ApplyPref(VisualElement icon, string iconPrefName)
+        {
+            yield return null;
+
+            foreach (IconPref iconPref in iconPrefs)
+            {
+                if (iconPref.IconPrefName == iconPrefName)
+                {
+                    iconPref.SetIcon(icon);
+                    yield break;
+                }
+            }
+            Debug.LogError("IconPrefName = " + iconPrefName + " not recognized.");
+        }
+
+        [ContextMenu("Apply User Pref")]
+        private void ApplyUserPref()
+        {
+            UserPreferences.Instance.OnApplyUserPreferences.Invoke();
+        }
 
 
     }
