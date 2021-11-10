@@ -6,12 +6,8 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI
 {
-    public abstract class GenericAndCustomElement<T> : VisualElement where T : GenericAndCustomElement<T>, new()
+    public abstract class GenericAndCustomElement : VisualElement
     {
-        /// <summary>
-        /// To be recognized by UI Builder
-        /// </summary>
-        public new class UxmlFactory : UxmlFactory<T, UxmlTraits> { }
         /// <summary>
         /// To be recognized by UI Builder
         /// </summary>
@@ -30,9 +26,7 @@ namespace BrowserDesktop.UI
         /// <summary>
         /// Apply user preferences when needed.
         /// </summary>
-        public virtual void OnApplyUserPreferences()
-        {
-        }
+        public abstract void OnApplyUserPreferences();
 
 
     }

@@ -22,16 +22,22 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.GenericElement
 {
-    public class ToolboxButtonGenericElement : VisualElement
+    public class ToolboxButtonGenericElement : GenericAndCustomElement
     {
+        #region Fields
+
         /// <summary>
         /// To be recognized by UI Builder
         /// </summary>
         public new class UxmlFactory : UxmlFactory<ToolboxButtonGenericElement, UxmlTraits> { }
-        /// <summary>
-        /// To be recognized by UI Builder
-        /// </summary>
-        public new class UxmlTraits : VisualElement.UxmlTraits { }
+
+        public float LabelWidth
+        {
+            get => buttonName_L.resolvedStyle.width;
+            set => buttonName_L.style.width = value;
+        }
+
+        public string LabelText => buttonName_L.text;
 
         /// <summary>
         /// Button with its icon.
@@ -47,23 +53,7 @@ namespace BrowserDesktop.UI.GenericElement
         /// </summary>
         private bool isOn = false;
 
-        public float LabelWidth
-        {
-            get => buttonName_L.resolvedStyle.width;
-            set => buttonName_L.style.width = value;
-        }
-
-        public string LabelText => buttonName_L.text;
-
-        public ToolboxButtonGenericElement()
-        {
-            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
-        }
-
-        ~ToolboxButtonGenericElement()
-        {
-            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
-        }
+        #endregion
 
         /// <summary>
         /// Setup the button (label, icon and action).
@@ -141,7 +131,7 @@ namespace BrowserDesktop.UI.GenericElement
         /// <summary>
         /// Apply user preferences when needed.
         /// </summary>
-        public void OnApplyUserPreferences()
+        public override void OnApplyUserPreferences()
         {
             //TODO
             buttonName_L.style.width = StyleKeyword.Auto;
