@@ -52,7 +52,7 @@ namespace umi3d.cdk.collaboration
         #region static properties 
 
         public static MicrophoneEvent OnSaturated { get => Exists ? Instance._OnSaturated : null; }
-
+        public static MicrophoneEvent OnSendingData { get => Exists ? Instance._OnSending : null; }
         /// <summary>
         /// Whether the microphone is running
         /// </summary>
@@ -164,6 +164,7 @@ namespace umi3d.cdk.collaboration
         #endregion
 
         public MicrophoneEvent _OnSaturated = new MicrophoneEvent();
+        public MicrophoneEvent _OnSending = new MicrophoneEvent();
 
         public List<string> GetInfo()
         {
@@ -422,9 +423,14 @@ namespace umi3d.cdk.collaboration
             }
             private set
             {
+                bool ok; 
                 lock (shouldSendLocker)
+                    ok = shouldSend;
+                if(ok != value)
                 {
-                    shouldSend = value;
+                    lock (shouldSendLocker)
+                        shouldSend = value;
+                    UnityMainThreadDispatcher.Instance().Enqueue(() => _OnSending.Invoke(value));
                 }
             }
         }
