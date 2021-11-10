@@ -100,6 +100,7 @@ namespace umi3d.cdk.collaboration
             return infos;
         }
 
+
         /// <summary>
         /// MAnage user update
         /// </summary>
