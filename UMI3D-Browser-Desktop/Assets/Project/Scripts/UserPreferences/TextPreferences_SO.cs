@@ -174,7 +174,7 @@ namespace BrowserDesktop.UserPreferences
 
             private float FontSizeAfterZoom()
             {
-                return labelFontSize * ((float)UserPreferences.GlobalPref.Zoom / 100f);
+                return labelFontSize * UserPreferences.GlobalPref.ZoomCoef;
             }
 
             private void SetUSS(Label label)
@@ -202,19 +202,19 @@ namespace BrowserDesktop.UserPreferences
             //TODO Copy properties.
         }
 
-        public IEnumerator ApplyFont(Label label, string textFontName, string labelText = null)
+        public IEnumerator ApplyPref(Label label, string textPrefName, string labelText = null)
         {
             yield return null;
 
-            foreach (TextPref textFont in textprefs)
+            foreach (TextPref textpref in textprefs)
             {
-                if (textFont.TextPrefName == textFontName)
+                if (textpref.TextPrefName == textPrefName)
                 {
-                    textFont.SetLabel(label, (labelText != null) ? labelText : label.text, globalFont);
+                    textpref.SetLabel(label, (labelText != null) ? labelText : label.text, globalFont);
                     yield break;
                 }
             }
-            Debug.LogError("TextFontName = " + textFontName + " not recognized.");
+            Debug.LogError("TextPrefName = " + textPrefName + " not recognized.");
         }
 
         [ContextMenu("Apply User Pref")]

@@ -118,19 +118,19 @@ namespace BrowserDesktop.UserPreferences
 
         #endregion
 
-        private TextPreferences_SO CopyFont(TextPreferences_SO font)
+        /*private TextPreferences_SO CopyFont(TextPreferences_SO font)
         {
             return new TextPreferences_SO(font);
+        }*/
+
+        public void ApplyTextPref(Label label, string textPrefName, string labelText = null)
+        {
+            UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.TextPref_SO.ApplyPref(label, textPrefName, labelText));
         }
 
-        public void ApplyTextPref(Label label, string textFontName, string labelText = null)
+        public void ApplyIconPref(VisualElement icon, string iconPrefName)
         {
-            UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.TextPref_SO.ApplyFont(label, textFontName, labelText));
-        }
-
-        public void ApplyIconPref(VisualElement icon)
-        {
-            //UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.IconPref_SO.ApplyFont(icon));
+            UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.IconPref_SO.ApplyPref(icon, iconPrefName));
         }
 
     }
