@@ -471,6 +471,9 @@ GameObject:
   - component: {fileID: 1552991041}
   - component: {fileID: 617257373530281094}
   - component: {fileID: 4166057248525559016}
+  - component: {fileID: 4729729652233319832}
+  - component: {fileID: 1910305816978899221}
+  - component: {fileID: 1993043487556966663}
   m_Layer: 0
   m_Name: MenuBar
   m_TagString: Untagged
@@ -540,6 +543,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe09abce6be0a5a42a3cb26faa8911b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4729729652233319832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552991039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f50ed4bb4f738148b6f7e42b4eb7181, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1910305816978899221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552991039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7f88b449ad342340bda4e4ff6f43d01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1993043487556966663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552991039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00491f28cfe326f4698977ec80ba3c42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1897058547
 GameObject:
   m_ObjectHideFlags: 0
@@ -584,10 +623,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiDocument: {fileID: 1750602239179936672}
-  minimizeTagName: minimize-window-btn
-  maximizeTagName: fullscreen-btn
-  closeTagName: close-window-btn
-  restoreClassName: restore-btn
   dialogueBoxTreeAsset: {fileID: 9197481963319205126, guid: 952193403cd37744f9ac513022d96731,
     type: 3}
 --- !u!114 &3316399237951345772
