@@ -99,7 +99,7 @@ namespace BrowserDesktop.UI.CustomElement
                     if (b)
                         ConnectionMenu.Instance.Leave();
                 });
-                Menu.DialogueBox_UIController.Instance.AddToHierarchy(uiDocument);
+                Menu.DialogueBox_UIController.Instance.DisplayFrom(uiDocument);
             });
             leaveEnvironment_TGE.Setup("", leave_TBGE);
             rightLayout_VE.Add(leaveEnvironment_TGE);

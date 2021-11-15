@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections;
-using System.Collections.Generic;
+using BrowserDesktop.Controller;
+using BrowserDesktop.UI.CustomElement;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -29,6 +29,9 @@ namespace BrowserDesktop.Menu
 
         private DialogueBoxElement dialogueBox;
 
+        private bool isDisplayed = false;
+        public bool Displayed => isDisplayed;
+
         protected override void Awake()
         {
             base.Awake();
@@ -36,24 +39,40 @@ namespace BrowserDesktop.Menu
             dialogueBox = dialogueBox_VTA.CloneTree().Q<DialogueBoxElement>();
         }
 
-        public void Setup(string title, string message, string optionA, string optionB, System.Action<bool> choiceCallback, bool marginForTitleBar = false)
+        private void Update()
         {
-            if (DialogueBoxElement.IsADialogueBoxDislayed) return;
-            dialogueBox.Setup(title, message, optionA, optionB, choiceCallback, marginForTitleBar);
+            if (Input.GetKeyDown(KeyCode.Return) && isDisplayed) Close(true);
+            else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)) && isDisplayed) Close(false);
         }
 
-        public void Setup(string title, string message, string optionA, System.Action choiceCallback, bool marginForTitleBar = false)
+        public DialogueBox_UIController Setup(string title, string message, string optionA, string optionB, System.Action<bool> choiceCallback, bool marginForTitleBar = false)
         {
-            if (DialogueBoxElement.IsADialogueBoxDislayed) return;
-            dialogueBox.Setup(title, message, optionA, choiceCallback, marginForTitleBar);
+            if (!isDisplayed) dialogueBox.Setup(title, message, optionA, optionB, choiceCallback, marginForTitleBar);
+            return Instance;
         }
 
-        public void AddToHierarchy(UIDocument uiDocument)
+        public DialogueBox_UIController Setup(string title, string message, string optionA, System.Action choiceCallback, bool marginForTitleBar = false)
         {
-            if (!DialogueBoxElement.IsADialogueBoxDislayed) return;
+            if (!isDisplayed) dialogueBox.Setup(title, message, optionA, choiceCallback, marginForTitleBar);
+            return Instance;
+        }
+
+        public void DisplayFrom(UIDocument uiDocument)
+        {
+            if (isDisplayed) return;
+
+            isDisplayed = true;
             uiDocument.rootVisualElement.Add(dialogueBox);
         }
 
+        public void Close(bool val)
+        {
+            if (!isDisplayed) return;
 
+            isDisplayed = false;
+
+            dialogueBox.ChoiceCallback(val);
+            dialogueBox.RemoveFromHierarchy();
+        }
     }
 }

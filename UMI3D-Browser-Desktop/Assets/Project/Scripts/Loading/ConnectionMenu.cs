@@ -48,9 +48,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     [SerializeField]
     private string launcherScene = null;
 
-    [SerializeField]
-    private VisualTreeAsset dialogueBoxTreeAsset = null;
-
     private LoadingBar loader;
 
     public bool isDisplayed = true;
@@ -114,25 +111,12 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     }
 
     /// <summary>
-    /// Manages the Return and Escape inputs to navigate through the menu.
+    /// Manages the Return input to navigate through the menu.
     /// </summary>
     private void ManageInputs()
     {
-        if (!isDisplayed)
-            return;
-
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            if (DialogueBoxElement.IsADialogueBoxDislayed)
-                DialogueBoxElement.CloseDialogueBox(true);
-            else
-                nextStep?.Invoke();
-        }
-        else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
-        {
-            if (DialogueBoxElement.IsADialogueBoxDislayed)
-                DialogueBoxElement.CloseDialogueBox(false);
-        }
+        if (!isDisplayed || DialogueBox_UIController.Instance.Displayed) return;
+        else nextStep?.Invoke();
     }
 
     #endregion
@@ -249,14 +233,14 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void GetMediaFailed(string error)
     {
-        var dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        uiDocument.rootVisualElement.Add(dialogueBox);
-
-
-        dialogueBox.Setup("Server error",
-            error,
-            "Leave",
-            Leave);
+        DialogueBox_UIController.Instance.
+            Setup(
+                "Server error",
+                error,
+                "Leave",
+                Leave
+            ).
+            DisplayFrom(uiDocument);
     }
 
     private void GetMediaSucces(MediaDto media)
@@ -283,14 +267,15 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void OnConnectionLost(Action<bool> callback)
     {
-        var dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        uiDocument.rootVisualElement.Add(dialogueBox);
-
-        dialogueBox.Setup("Connection to the server lost",
-            "Leave to the connection menu or try again ?",
-            "Try again ?",
-            "Leave",
-            callback);
+        DialogueBox_UIController.Instance.
+            Setup(
+                "Connection to the server lost",
+                "Leave to the connection menu or try again ?",
+                "Try again ?",
+                "Leave",
+                callback
+            ).
+            DisplayFrom(uiDocument);
     }
 
     /// <summary>
@@ -376,15 +361,14 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         {
             string title = (ids.Count == 1) ? "One assets library is required" : ids.Count + " assets libraries are required";
 
-            DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-            dialogue.Setup(title, "Download libraries and connect to the server ?", "Accept", "Deny", (b) =>
+            DialogueBox_UIController.Instance.
+            Setup(title, "Download libraries and connect to the server ?", "Accept", "Deny", (b) =>
             {
                 callback.Invoke(b);
                 CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
             },
-            true);
-
-            uiDocument.rootVisualElement.Add(dialogue);
+            true).
+            DisplayFrom(uiDocument);
         }
     }
 

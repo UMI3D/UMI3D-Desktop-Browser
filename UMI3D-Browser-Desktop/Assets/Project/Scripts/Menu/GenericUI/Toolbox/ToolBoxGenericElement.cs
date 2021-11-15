@@ -54,7 +54,6 @@ namespace BrowserDesktop.UI.GenericElement
             toolboxContainer_VE = this.Q<VisualElement>("toolbox-container");
 
             toolboxNameText = toolboxName;
-            //toolboxName_L.text = toolboxName;
         }
 
         private void AddTools(ToolboxButtonGenericElement[] tools)
