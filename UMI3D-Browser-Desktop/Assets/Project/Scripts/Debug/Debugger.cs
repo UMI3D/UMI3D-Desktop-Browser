@@ -39,6 +39,8 @@ public class Debugger : umi3d.common.PersistentSingleton<Debugger>
                 umi3d.cdk.collaboration.MicrophoneListener.Gain += 0.1f;
             else
                 umi3d.cdk.collaboration.MicrophoneListener.Gain -= 0.1f;
+        if (Input.GetKeyDown(KeyCode.F7) && umi3d.cdk.collaboration.MicrophoneListener.Exists)
+            umi3d.cdk.collaboration.MicrophoneListener.LoopBack = !umi3d.cdk.collaboration.MicrophoneListener.LoopBack;
     }
 
 
