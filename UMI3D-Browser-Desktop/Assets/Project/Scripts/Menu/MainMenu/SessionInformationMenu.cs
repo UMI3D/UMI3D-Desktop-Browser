@@ -33,7 +33,7 @@ namespace BrowserDesktop.Menu
         VisualElement sessionInfo;
 
         Label sessionTime;
-        Button microphoneBtn;
+        //Button microphoneBtn;
         Label environmentName;
 
         VisualElement topCenterMenu;
@@ -54,11 +54,6 @@ namespace BrowserDesktop.Menu
             sessionInfo = root.Q<VisualElement>("session-info");
             sessionTime = sessionInfo.Q<Label>("session-time");
 
-            microphoneBtn = sessionInfo.Q<Button>("microphone-btn");
-            microphoneBtn.clickable.clicked += () =>
-            {
-                ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
-            };
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
             {
@@ -71,27 +66,6 @@ namespace BrowserDesktop.Menu
         {
             var time = DateTime.Now - startOfSession;
             sessionTime.text = time.ToString("hh") + ":" + time.ToString("mm") + ":" + time.ToString("ss");
-        }
-
-
-        /// <summary>
-        /// Event called when the status of the microphone changes.
-        /// </summary>
-        /// <param name="val"></param>
-        public void OnMicrophoneStatusChanged(bool val)
-        {
-            if (val)
-            {
-                microphoneBtn.RemoveFromClassList("btn-mic-off");
-                microphoneBtn.AddToClassList("btn-mic-on");
-            }
-
-            else
-            {
-                microphoneBtn.RemoveFromClassList("btn-mic-on");
-                microphoneBtn.AddToClassList("btn-mic-off");
-            }
-
         }
 
         /// <summary>

@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: GlobalPreferences
   m_EditorClassIdentifier: 
   zoomPercentage: 100
-  currentTheme: 
-  currentTextAndIconSource: 0
+  currentTheme: 0

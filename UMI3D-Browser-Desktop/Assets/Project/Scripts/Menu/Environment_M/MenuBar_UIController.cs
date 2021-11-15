@@ -34,23 +34,33 @@ namespace BrowserDesktop.Menu.Environment
         [SerializeField]
         private VisualTreeAsset toolboxSeparatorGenericElement_VTA;
 
-        /*[SerializeField]
-        private */
-
-        private ToolboxGenericElement openToolbox_TGE;
-        private ToolboxGenericElement settings_TGE;
-        private ToolboxGenericElement leaveEnvironment_TGE;
         private UI.CustomElement.MenuBarElement menuBar;
 
-        void Start()
+        protected override void Awake()
         {
+            base.Awake();
+
             Debug.Assert(uiDocument != null, "uiDocument null ref in MenuBar_UIController");
             Debug.Assert(toolboxGenericElement_VTA != null, "toolboxGenericElement_VTA null ref in MenuBar_UIController");
             Debug.Assert(toolboxButtonGenericElement_VTA != null, "toolboxButtonGenericElement_VTA null ref in MenuBar_UIController");
             Debug.Assert(toolboxSeparatorGenericElement_VTA != null, "toolboxSeparatorGenericElement_VTA null ref in MenuBar_UIController");
 
             menuBar = uiDocument.rootVisualElement.Q<VisualElement>("menu-bar").Q<UI.CustomElement.MenuBarElement>();
-            menuBar.Setup(toolboxGenericElement_VTA, toolboxButtonGenericElement_VTA, toolboxSeparatorGenericElement_VTA);
+            menuBar.Setup(toolboxGenericElement_VTA, toolboxButtonGenericElement_VTA, toolboxSeparatorGenericElement_VTA, uiDocument);
+        }
+
+        /*private void Start()
+        {
+            menuBar.Setup(toolboxGenericElement_VTA, toolboxButtonGenericElement_VTA, toolboxSeparatorGenericElement_VTA, uiDocument);
+        }*/
+
+        /// <summary>
+        /// Event called when the status of the microphone changes.
+        /// </summary>
+        /// <param name="val"></param>
+        public void OnMicrophoneStatusChanged(bool val)
+        {
+            menuBar.Mic_TBGE.SwitchClass(val);
         }
 
 

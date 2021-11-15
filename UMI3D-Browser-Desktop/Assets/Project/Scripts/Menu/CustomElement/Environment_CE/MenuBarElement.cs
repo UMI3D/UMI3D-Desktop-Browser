@@ -34,23 +34,24 @@ namespace BrowserDesktop.UI.CustomElement
         /// </summary>
         public new class UxmlTraits : VisualElement.UxmlTraits { }
 
-        private VisualElement horizontalLayout_VE;
         private VisualElement leftLayout_VE;
         private VisualElement centerLayout_VE;
         private VisualElement rightLayout_VE;
 
-        public void Setup(VisualTreeAsset toolboxGE_VTA, VisualTreeAsset toolboxButtonGE_VTA, VisualTreeAsset toolboxSeparatorGE_VTA)
+        private ToolboxButtonGenericElement sound_TBGE;
+        public ToolboxButtonGenericElement Sound_TBGE => sound_TBGE;
+        private ToolboxButtonGenericElement mic_TBGE;
+        public ToolboxButtonGenericElement Mic_TBGE => mic_TBGE;
+
+        public void Setup(VisualTreeAsset toolboxGE_VTA, VisualTreeAsset toolboxButtonGE_VTA, VisualTreeAsset toolboxSeparatorGE_VTA, UIDocument uiDocument)
         {
-            horizontalLayout_VE = this.Q<VisualElement>("Horizontal-layout");
             leftLayout_VE = this.Q<VisualElement>("Left-layout");
             centerLayout_VE = this.Q<VisualElement>("Center-layout");
             rightLayout_VE = this.Q<VisualElement>("Right-layout");
 
             #region Left layout
             //DONE add space
-            VisualElement spaceOpenButton = new VisualElement();
-            spaceOpenButton.style.width = 10;
-            leftLayout_VE.Add(spaceOpenButton);
+            AddSpacer(leftLayout_VE);
 
             ToolboxGenericElement openToolbox_TGE = toolboxGE_VTA.CloneTree().Q<ToolboxGenericElement>();
             ToolboxButtonGenericElement openToolboxButton_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
@@ -59,45 +60,65 @@ namespace BrowserDesktop.UI.CustomElement
             leftLayout_VE.Add(openToolbox_TGE);
 
             //DONE add separator
-            ToolboxSeparatorGenericElement separatorOpenToolboxButton = toolboxSeparatorGE_VTA.CloneTree().Q<ToolboxSeparatorGenericElement>();
-            separatorOpenToolboxButton.Setup();
-            leftLayout_VE.Add(separatorOpenToolboxButton);
+            AddSeparator(leftLayout_VE, toolboxSeparatorGE_VTA);
             #endregion
 
             //TODO add toolbox container
 
             #region Right layout
             //DONE add separator
-            ToolboxSeparatorGenericElement separatorSettings = toolboxSeparatorGE_VTA.CloneTree().Q<ToolboxSeparatorGenericElement>();
-            separatorSettings.Setup();
-            rightLayout_VE.Add(separatorSettings);
+            AddSeparator(rightLayout_VE, toolboxSeparatorGE_VTA);
 
             ToolboxGenericElement settings_TGE = toolboxGE_VTA.CloneTree().Q<ToolboxGenericElement>();
             ToolboxButtonGenericElement avatar_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
             avatar_TBGE.Setup("Screenshot", "avatarOn", "avatarOff", true, () => { Debug.Log("TODO"); });
-            ToolboxButtonGenericElement sound_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-            sound_TBGE.Setup("label test", "soundOn", "soundOff", true, () => { Debug.Log("TODO"); });
-            ToolboxButtonGenericElement mic_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-            mic_TBGE.Setup("labelTestAndTest", "micOn", "micOff", true, () => { Debug.Log("TODO"); });
+
+            sound_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
+            sound_TBGE.Setup("label test", "soundOn", "soundOff", true, () => { 
+                Debug.Log("TODO"); 
+            });
+
+            mic_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
+            mic_TBGE.Setup("labelTestAndTest", "micOn", "micOff", false, () => {
+                ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
+            });
+
             settings_TGE.Setup("test", new ToolboxButtonGenericElement[3] { avatar_TBGE, sound_TBGE, mic_TBGE });
             rightLayout_VE.Add(settings_TGE);
 
             //DONE add separator
-            ToolboxSeparatorGenericElement separatorLeaving = toolboxSeparatorGE_VTA.CloneTree().Q<ToolboxSeparatorGenericElement>();
-            separatorLeaving.Setup();
-            rightLayout_VE.Add(separatorLeaving);
+            AddSeparator(rightLayout_VE, toolboxSeparatorGE_VTA);
 
             ToolboxGenericElement leaveEnvironment_TGE = toolboxGE_VTA.CloneTree().Q<ToolboxGenericElement>();
             ToolboxButtonGenericElement leave_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-            leave_TBGE.Setup("", "leave", "leave", true, () => { Debug.Log("TODO"); });
+            leave_TBGE.Setup("", "leave", "leave", true, () => {
+                Menu.DialogueBox_UIController.Instance.Setup("Leave environment", "Are you sure ...?", "YES", "NO", (b) =>
+                {
+                    if (b)
+                        ConnectionMenu.Instance.Leave();
+                });
+                Menu.DialogueBox_UIController.Instance.AddToHierarchy(uiDocument);
+            });
             leaveEnvironment_TGE.Setup("", leave_TBGE);
             rightLayout_VE.Add(leaveEnvironment_TGE);
 
             //DONE add space
-            VisualElement spaceLeaveEnvironment = new VisualElement();
-            spaceLeaveEnvironment.style.width = 10;
-            rightLayout_VE.Add(spaceLeaveEnvironment);
+            AddSpacer(rightLayout_VE);
             #endregion
+        }
+
+        private void AddSpacer(VisualElement layoutContainer_VE)
+        {
+            VisualElement space = new VisualElement();
+            space.style.width = 10;
+            layoutContainer_VE.Add(space);
+        }
+
+        private void AddSeparator(VisualElement layoutContainer_VE, VisualTreeAsset toolboxSeparatorGE_VTA)
+        {
+            ToolboxSeparatorGenericElement separator = toolboxSeparatorGE_VTA.CloneTree().Q<ToolboxSeparatorGenericElement>();
+            separator.Setup();
+            layoutContainer_VE.Add(separator);
         }
 
         /// <summary>
