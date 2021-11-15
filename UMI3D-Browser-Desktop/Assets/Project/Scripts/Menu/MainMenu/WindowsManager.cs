@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using BrowserDesktop.Menu;
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
@@ -64,8 +65,6 @@ public class WindowsManager : MonoBehaviour
     Button minimize_B;
     Button maximize_B;
     Button close_B;
-
-    public VisualTreeAsset dialogueBoxTreeAsset;
 
     #endregion
 
@@ -137,7 +136,7 @@ public class WindowsManager : MonoBehaviour
     private bool WantsToQuit()
     {
         bool wantsToQuit = umi3d.common.QuittingManager.ApplicationIsQuitting;
-        if (!wantsToQuit && !DialogueBoxElement.IsADialogueBoxDislayed)
+        if (!wantsToQuit && !DialogueBox_UIController.Instance.Displayed)
             ShowDialogueBoxToQuit();
         return wantsToQuit;
     }
@@ -147,14 +146,14 @@ public class WindowsManager : MonoBehaviour
     /// </summary>
     private void ShowDialogueBoxToQuit()
     {
-        DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        dialogueBox.Setup("Close application", "Are you sure ...?", "YES", "NO", (b) =>
-        {
-            umi3d.common.QuittingManager.ApplicationIsQuitting = b;
-            if (b)
-                Application.Quit();
-        });
-        root.Add(dialogueBox);
+        DialogueBox_UIController.Instance.
+            Setup("Close application", "Are you sure ...?", "YES", "NO", (b) =>
+            {
+                umi3d.common.QuittingManager.ApplicationIsQuitting = b;
+                if (b)
+                    Application.Quit();
+            }).
+            DisplayFrom(uiDocument);
     }
 
     #endregion

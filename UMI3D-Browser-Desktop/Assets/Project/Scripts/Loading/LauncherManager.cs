@@ -29,6 +29,7 @@ using BeardedManStudios.Forge.Networking;
 using System.Runtime.InteropServices;
 using System.Text;
 using BrowserDesktop.UserPreferences;
+using BrowserDesktop.Menu;
 
 public class LauncherManager : MonoBehaviour
 {
@@ -45,8 +46,6 @@ public class LauncherManager : MonoBehaviour
 
     [SerializeField]
     private VisualTreeAsset libraryEntryTreeAsset = null;
-    [SerializeField]
-    private VisualTreeAsset dialogueBoxTreeAsset = null;
     [SerializeField]
     private VisualTreeAsset sessionEntry = null;
 
@@ -137,7 +136,6 @@ public class LauncherManager : MonoBehaviour
         masterServer = new LaucherOnMasterServer();
 
         Debug.Assert(uiDocument != null);
-        Debug.Assert(dialogueBoxTreeAsset != null);
         Debug.Assert(libraryEntryTreeAsset != null);
         root = uiDocument.rootVisualElement;
 
@@ -356,17 +354,17 @@ public class LauncherManager : MonoBehaviour
                 //4.Bind the button to unistall this lib
                 entry.Q<Button>("library-unistall").clickable.clicked += () =>
                 {
-                    DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-                    dialogue.Setup("Are you sure ... ?", "This library is required for " + app.Key + " environment", "YES", "NO", (b) =>
-                    {
-                        if (b)
+                    DialogueBox_UIController.Instance.
+                        Setup("Are you sure ... ?", "This library is required for " + app.Key + " environment", "YES", "NO", (b) =>
                         {
-                            lib.applications.Remove(app.Key);
-                            UMI3DResourcesManager.RemoveLibrary(lib.key);
-                            DisplayLibraries();
-                        }
-                    });
-                    root.Add(dialogue);
+                            if (b)
+                            {
+                                lib.applications.Remove(app.Key);
+                                UMI3DResourcesManager.RemoveLibrary(lib.key);
+                                DisplayLibraries();
+                            }
+                        }).
+                        DisplayFrom(uiDocument);
                 };
                 librariesList.Add(entry);
             }
@@ -511,20 +509,10 @@ public class LauncherManager : MonoBehaviour
     /// </summary>
     private void CheckShortcuts()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            if (DialogueBoxElement.IsADialogueBoxDislayed)
-                DialogueBoxElement.CloseDialogueBox(true);
-            else
-                nextStep?.Invoke();
-        }
-        else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
-        {
-            if (DialogueBoxElement.IsADialogueBoxDislayed)
-                DialogueBoxElement.CloseDialogueBox(false);
-            else
-                previousStep?.Invoke();
-        }
+        if (Input.GetKeyDown(KeyCode.Return) && !DialogueBox_UIController.Instance.Displayed)
+            nextStep?.Invoke();
+        else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)) && !DialogueBox_UIController.Instance.Displayed)
+            previousStep?.Invoke();
     }
 
     /// <summary>
@@ -655,18 +643,18 @@ public class LauncherManager : MonoBehaviour
             });
             item.Q<Button>("delete-item").clickable.clicked += () =>
             {
-                DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-                dialogue.Setup(env.serverName, "Delete this server from registered ?", "YES", "NO", (b) =>
-                {
-                    if (b)
+                DialogueBox_UIController.Instance.
+                    Setup(env.serverName, "Delete this server from registered ?", "YES", "NO", (b) =>
                     {
-                        serverConnectionData.Remove(serverConnectionData.Find(d => d.serverName == env.serverName));
-                        ServerPreferences.StoreRegisteredServerData(serverConnectionData);
-                        savedServersSlider.RemoveElement(item);
-                    }
-                },
-                true);
-                root.Add(dialogue);
+                        if (b)
+                        {
+                            serverConnectionData.Remove(serverConnectionData.Find(d => d.serverName == env.serverName));
+                            ServerPreferences.StoreRegisteredServerData(serverConnectionData);
+                            savedServersSlider.RemoveElement(item);
+                        }
+                    },
+                    true).
+                    DisplayFrom(uiDocument);
             };
             savedServersSlider.AddElement(item);
         }
