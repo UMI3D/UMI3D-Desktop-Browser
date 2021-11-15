@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Menu;
+using System.Linq;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.interaction;
@@ -30,15 +31,15 @@ public class FormInput : AbstractUMI3DInput
     /// <summary>
     /// Avatar bone linked to this input.
     /// </summary>
-    public string bone = BoneType.None;
+    public uint bone = BoneType.None;
 
-    string toolId;
-    string hoveredObjectId;
+    ulong toolId;
+    ulong hoveredObjectId;
     bool risingEdgeEventSent;
 
     HoldableButtonMenuItem menuItem;
 
-    public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
+    public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
     {
         UnityEngine.Debug.Log("TEST " + interaction.name);
         if (associatedInteraction != null)
@@ -68,7 +69,7 @@ public class FormInput : AbstractUMI3DInput
         }
     }
 
-    public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
+    public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
     {
         throw new System.Exception("This input is can not be associated with a manipulation");
     }
@@ -105,19 +106,19 @@ public class FormInput : AbstractUMI3DInput
         {
             onInputDown.Invoke();
           
-            var formAnswer = new FormAnswer
+            var formAnswerDto = new FormAnswerDto
             {
                 boneType = bone,
                 id = associatedInteraction.id,
                 toolId = this.toolId,
-                form = associatedInteraction,
+                answers = associatedInteraction.fields.Select(a => new ParameterSettingRequestDto() { toolId = this.toolId, id = a.id, boneType = bone, hoveredObjectId = hoveredObjectId, parameter = a.GetValue() }).ToList(),
                 hoveredObjectId = hoveredObjectId
             };
-            UMI3DCollaborationClientServer.SendData(formAnswer, true);
+            UMI3DCollaborationClientServer.SendData(formAnswerDto, true);
         }
     }
 
-    public override void UpdateHoveredObjectId(string hoveredObjectId)
+    public override void UpdateHoveredObjectId(ulong hoveredObjectId)
     {
         this.hoveredObjectId = hoveredObjectId;
     }

@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections;
-using Unity.UIElements.Runtime;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -23,7 +21,7 @@ namespace BrowserDesktop.Menu
 {
     public class Console : MonoBehaviour
     {
-        public PanelRenderer panelRenderer;
+        public UIDocument uiDocument;
 
         VisualElement console;
         ScrollView consoleContainer;
@@ -35,11 +33,11 @@ namespace BrowserDesktop.Menu
 
         void Start()
         {
-            var root = panelRenderer.visualTree;
+            var root = uiDocument.rootVisualElement;
             openConsoleButton = root.Q<Button>("open-console-button");
             openConsoleButton.clickable.clicked += () => DisplayConsole(!isDisplayed);
             console = root.Q<VisualElement>("console");
-            console.Q<Label>("version").text = umi3d.UMI3DVersion.version;
+            console.Q<Label>("version").text = BrowserDesktop.BrowserVersion.Version;
             consoleContainer = console.Q<ScrollView>("console-container");
 
             Application.logMessageReceived += HandleLog;

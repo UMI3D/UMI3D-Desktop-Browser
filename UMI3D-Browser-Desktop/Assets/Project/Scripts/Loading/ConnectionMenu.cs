@@ -1,12 +1,9 @@
 ﻿/*
 Copyright 2019 Gfi Informatique
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
     http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,18 +15,13 @@ using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3d.common;
 using umi3d.common.interaction;
-using Unity.UIElements.Runtime;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -64,11 +56,10 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     bool isPasswordVisible = false;
 
     Action nextStep = null;
-    Action previousStep = null;
 
     #region UI Fields
 
-    public PanelRenderer panelRenderer;
+    public UIDocument uiDocument;
 
     private VisualElement connectionScreen;
 
@@ -94,7 +85,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     protected override void Awake()
     {
         base.Awake();
-        Debug.Assert(panelRenderer != null);
+        Debug.Assert(uiDocument != null);
         Debug.Assert(!string.IsNullOrEmpty(launcherScene));
         Debug.Assert(identifier != null);
         Debug.Assert(Menu != null);
@@ -109,9 +100,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void Start()
     {
-        previousStep = Leave;
-
         InitUI();
+
 
         UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
@@ -119,7 +109,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void Update()
     {
-        ManageInputs();   
+        ManageInputs();
     }
 
     /// <summary>
@@ -141,8 +131,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         {
             if (DialogueBoxElement.IsADialogueBoxDislayed)
                 DialogueBoxElement.CloseDialogueBox(false);
-            else
-                previousStep?.Invoke();
         }
     }
 
@@ -152,22 +140,21 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void InitUI()
     {
-
-        VisualElement root = panelRenderer.visualTree;
+        VisualElement root = uiDocument.rootVisualElement;
 
         loader = new LoadingBar(root);
         loader.SetText("Connection");
 
-        loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
+        loadingScreen = root.Q<VisualElement>("loading-screen");
 
         connectionScreen = root.Q<VisualElement>("connection-menu");
 
-        root.Q<Label>("version").text = umi3d.UMI3DVersion.version;
+        root.Q<Label>("version").text = BrowserDesktop.BrowserVersion.Version;
 
         BindPasswordScreen();
         passwordScreen.style.display = DisplayStyle.None;
 
-        parametersScreen = panelRenderer.visualTree.Q<VisualElement>("parameters-screen");
+        parametersScreen = root.Q<VisualElement>("parameters-screen");
         connectionScreen.style.display = DisplayStyle.Flex;
 
         root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
@@ -180,22 +167,22 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         passwordInput = passwordScreen.Q<TextField>("password-input");
         loginInput = passwordScreen.Q<TextField>("login-input");
         connectBtn = passwordScreen.Q<Button>("connect-btn");
-        goBackButton = panelRenderer.visualTree.Q<Button>("back-menu-btn");
+        goBackButton = uiDocument.rootVisualElement.Q<Button>("back-menu-btn");
         goBackButton.clickable.clicked += Leave;
 
         var passwordVisibleBtn = passwordScreen.Q<VisualElement>("password-visibility");
         passwordVisibleBtn.RegisterCallback<MouseDownEvent>(e =>
         {
 
-                passwordVisibleBtn.ClearClassList();
-                isPasswordVisible = !isPasswordVisible;
-                if (isPasswordVisible)
-                    passwordVisibleBtn.AddToClassList("input-eye-button-on");
-                else
-                    passwordVisibleBtn.AddToClassList("input-eye-button-off");
-                passwordInput.isPasswordField = !isPasswordVisible;
+            passwordVisibleBtn.ClearClassList();
+            isPasswordVisible = !isPasswordVisible;
+            if (isPasswordVisible)
+                passwordVisibleBtn.AddToClassList("input-eye-button-on");
+            else
+                passwordVisibleBtn.AddToClassList("input-eye-button-off");
+            passwordInput.isPasswordField = !isPasswordVisible;
 
-                passwordInput.Focus();
+            passwordInput.Focus();
         });
     }
 
@@ -227,7 +214,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         url = curentUrl;
         UMI3DCollaborationClientServer.GetMedia(url, GetMediaSucces, GetMediaFailed, (e) => url == curentUrl && e.count < 3);
     }
-    
+
     /// <summary>
     /// Clears the environment and goes back to the launcher.
     /// </summary>
@@ -242,7 +229,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
         SceneManager.LoadScene(launcherScene, LoadSceneMode.Single);
     }
-    
+
     /// <summary>
     /// Inits the UI the environment is loaded.
     /// </summary>
@@ -261,20 +248,20 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void GetMediaFailed(string error)
     {
-        CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         var dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        panelRenderer.visualTree.Add(dialogueBox);
+        uiDocument.rootVisualElement.Add(dialogueBox);
+
 
         dialogueBox.Setup("Server error",
             error,
             "Leave",
-            Leave);   
+            Leave);
     }
 
     private void GetMediaSucces(MediaDto media)
     {
         this.connectionData.environmentName = media.name;
-        this.panelRenderer.visualTree.Q<Label>("environment-name").text = media.name;
+        this.uiDocument.rootVisualElement.Q<Label>("environment-name").text = media.name;
 
         SessionInformationMenu.Instance.SetEnvironmentName(media, connectionData);
 
@@ -295,9 +282,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void OnConnectionLost(Action<bool> callback)
     {
-        CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         var dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        panelRenderer.visualTree.Add(dialogueBox);
+        uiDocument.rootVisualElement.Add(dialogueBox);
 
         dialogueBox.Setup("Connection to the server lost",
             "Leave to the connection menu or try again ?",
@@ -324,7 +310,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// </summary>
     private void GetIdentity(Action<string, string> callback)
     {
-        
+
         DisplayScreenToLogin();
 
         AskLogin(true);
@@ -334,11 +320,11 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void DisplayScreenToLogin()
     {
-        loadingScreen = panelRenderer.visualTree.Q<VisualElement>("loading-screen");
+        loadingScreen = uiDocument.rootVisualElement.Q<VisualElement>("loading-screen");
         loadingScreen.style.display = DisplayStyle.None;
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
         passwordScreen.style.display = DisplayStyle.Flex;
-    } 
+    }
 
     /// <summary>
     /// Show or hide the form to set the login.
@@ -346,7 +332,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// <param name="val"></param>
     private void AskLogin(bool val)
     {
-        passwordScreen.Q<TextField>("login-input").style.display = val ? DisplayStyle.Flex: DisplayStyle.None;
+        passwordScreen.Q<TextField>("login-input").style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
         passwordScreen.Q<Label>("login-label").style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
@@ -384,58 +370,21 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         if (ids.Count == 0)
         {
             callback.Invoke(true);
-        } else
+        }
+        else
         {
-            CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
-
             string title = (ids.Count == 1) ? "One assets library is required" : ids.Count + " assets libraries are required";
 
             DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-            dialogue.Setup(title, "Download libraries and connect to the server ?", "Accept", "Denied", (b) =>
+            dialogue.Setup(title, "Download libraries and connect to the server ?", "Accept", "Deny", (b) =>
             {
                 callback.Invoke(b);
                 CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
             },
             true);
 
-            panelRenderer.visualTree.Add(dialogue);
+            uiDocument.rootVisualElement.Add(dialogue);
         }
-
-
-        /*if (ids.Count == 0)
-        {
-            callback.Invoke(true);
-        }
-        else
-        {
-            HideLoadingScreen();
-
-            assetsLibrariesScreen.style.display = DisplayStyle.Flex;
-            if (ids.Count > 1)
-                assetsRequiredWarning.text = ids.Count + " libraries are required to join the environement :";
-            else
-                assetsRequiredWarning.text = "1 library is required to join the environement :";
-
-            assetsRequiredList.Clear();
-            foreach (string id in ids)
-            {
-                var library = libraryEntryTreeAsset.CloneTree();
-                library.Q<Label>("library-name").text = id;
-                library.Q<Label>("library-status").text = "Required";
-                assetsRequiredList.Add(library);
-            }
-
-            CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
-
-            confirmDLLibrariesBtn.clickable.clicked += () =>
-            {
-                CloseAssetsLibrariesRequiredScreen(true, callback);
-            };
-            denyDLLibrariesBtn.clickable.clicked += () =>
-            {
-                CloseAssetsLibrariesRequiredScreen(false, callback);
-            };
-        }*/
     }
 
     /// <summary>
@@ -443,21 +392,34 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// </summary>
     /// <param name="form"></param>
     /// <param name="callback"></param>
-    void GetParameterDtos(FormDto form, Action<FormDto> callback)
+    void GetParameterDtos(FormDto form, Action<FormAnswerDto> callback)
     {
         loadingScreen.style.display = DisplayStyle.None;
         parametersScreen.style.display = DisplayStyle.Flex;
 
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
-
         if (form == null)
-            callback.Invoke(form);
+            callback.Invoke(null);
         else
         {
+
+            FormAnswerDto answer = new FormAnswerDto()
+            {
+                boneType = 0,
+                hoveredObjectId = 0,
+                id = form.id,
+                toolId = 0,
+                answers = new List<ParameterSettingRequestDto>()
+            };
+
             Menu.menu.RemoveAll();
+            Menu.menu.Name = form.name;
+
             foreach (var param in form.fields)
             {
-                Menu.menu.Add(GetInteractionItem(param));
+                var c = GetInteractionItem(param);
+                Menu.menu.Add(c.Item1);
+                answer.answers.Add(c.Item2);
             }
 
             ButtonMenuItem send = new ButtonMenuItem() { Name = "Join", toggle = false };
@@ -465,9 +427,10 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 parametersScreen.style.display = DisplayStyle.None;
                 MenuDisplayManager.Hide(true);
                 Menu.menu.RemoveAll();
-                callback.Invoke(form);
+                callback.Invoke(answer);
                 CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
                 nextStep = null;
+                LocalInfoSender.CheckFormToUpdateAuthorizations(form);
             };
             send.Subscribe(action);
             Menu.menu.Add(send);
@@ -476,54 +439,105 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         }
     }
 
-    static MenuItem GetInteractionItem(AbstractInteractionDto dto)
+    static (MenuItem,ParameterSettingRequestDto) GetInteractionItem(AbstractInteractionDto dto)
     {
         MenuItem result = null;
+        ParameterSettingRequestDto requestDto = null;
         switch (dto)
         {
             case BooleanParameterDto booleanParameterDto:
                 var b = new BooleanInputMenuItem() { dto = booleanParameterDto };
                 b.NotifyValueChange(booleanParameterDto.value);
+                requestDto = new ParameterSettingRequestDto()
+                {
+                    toolId = dto.id,
+                    id = booleanParameterDto.id,
+                    parameter = booleanParameterDto.value,
+                    hoveredObjectId = 0
+                };
                 b.Subscribe((x) =>
                 {
                     booleanParameterDto.value = x;
+                    requestDto.parameter = x;
                 });
                 result = b;
                 break;
             case FloatRangeParameterDto floatRangeParameterDto:
                 var f = new FloatRangeInputMenuItem() { dto = floatRangeParameterDto, max = floatRangeParameterDto.max, min = floatRangeParameterDto.min, value = floatRangeParameterDto.value, increment = floatRangeParameterDto.increment };
+                requestDto = new ParameterSettingRequestDto()
+                {
+                    toolId = dto.id,
+                    id = floatRangeParameterDto.id,
+                    parameter = floatRangeParameterDto.value,
+                    hoveredObjectId = 0
+                };
                 f.Subscribe((x) =>
                 {
                     floatRangeParameterDto.value = x;
+                    requestDto.parameter = x;
                 });
                 result = f;
                 break;
             case EnumParameterDto<string> enumParameterDto:
                 var en = new DropDownInputMenuItem() { dto = enumParameterDto, options = enumParameterDto.possibleValues };
                 en.NotifyValueChange(enumParameterDto.value);
+                requestDto = new ParameterSettingRequestDto()
+                {
+                    toolId = dto.id,
+                    id = enumParameterDto.id,
+                    parameter = enumParameterDto.value,
+                    hoveredObjectId = 0
+                };
                 en.Subscribe((x) =>
                 {
                     enumParameterDto.value = x;
+                    requestDto.parameter = x;
                 });
                 result = en;
                 break;
             case StringParameterDto stringParameterDto:
                 var s = new TextInputMenuItem() { dto = stringParameterDto };
                 s.NotifyValueChange(stringParameterDto.value);
+                requestDto = new ParameterSettingRequestDto()
+                {
+                    toolId = dto.id,
+                    id = stringParameterDto.id,
+                    parameter = stringParameterDto.value,
+                    hoveredObjectId = 0
+                };
                 s.Subscribe((x) =>
                 {
                     stringParameterDto.value = x;
+                    requestDto.parameter = x;
                 });
                 result = s;
                 break;
+            case LocalInfoRequestParameterDto localInfoRequestParameterDto:
+                LocalInfoRequestInputMenuItem localReq = new LocalInfoRequestInputMenuItem() { dto = localInfoRequestParameterDto };
+                localReq.NotifyValueChange(localInfoRequestParameterDto.value);
+                requestDto = new ParameterSettingRequestDto()
+                {
+                    toolId = dto.id,
+                    id = localInfoRequestParameterDto.id,
+                    parameter = localInfoRequestParameterDto.value,
+                    hoveredObjectId = 0
+                };
+                localReq.Subscribe((x) =>
+                {
+                    localInfoRequestParameterDto.value = x;
+                    requestDto.parameter = x;
+                }
+                );
+                result = localReq;
+                break;
             default:
                 result = new MenuItem();
-                result.Subscribe(() => Debug.Log("hellooo 2"));
+                result.Subscribe(() => Debug.Log($"Missing case for {dto?.GetType()}"));
                 break;
         }
         result.Name = dto.name;
         //icon;
-        return result;
+        return (result,requestDto);
     }
 
     #endregion

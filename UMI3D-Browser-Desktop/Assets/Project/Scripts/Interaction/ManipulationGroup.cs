@@ -15,6 +15,7 @@ limitations under the License.
 */
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
+using inetum.unityUtils;
 using System.Collections.Generic;
 using umi3d.cdk.interaction;
 using umi3d.common;
@@ -29,7 +30,7 @@ namespace BrowserDesktop.Interaction
     {
         bool active = false;
         ButtonMenuItem menuItem;
-        string hoveredObjectId;
+        ulong hoveredObjectId;
         #region Instances List
 
         static List<ManipulationGroup> instances = new List<ManipulationGroup>();
@@ -183,8 +184,8 @@ namespace BrowserDesktop.Interaction
 
         #endregion
 
-        [ConstStringEnum(typeof(BoneType))]
-        public string bone = BoneType.None;
+        [ConstEnum(typeof(BoneType), typeof(uint))]
+        public uint bone = BoneType.None;
 
         ManipulationInputButton button;
         List<ManipulationInput> manipulationInputs = new List<ManipulationInput>();
@@ -231,7 +232,7 @@ namespace BrowserDesktop.Interaction
             return associatedInteraction;
         }
 
-        public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
+        public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
             if (associatedInteraction != null)
             {
@@ -265,7 +266,7 @@ namespace BrowserDesktop.Interaction
             }
         }
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
             if ((associatedInteraction == null || associatedInteraction == manipulation) && dofGroups.Contains(dofs))
             {
@@ -296,7 +297,7 @@ namespace BrowserDesktop.Interaction
             associatedInteraction = null;
         }
 
-        public override void UpdateHoveredObjectId(string hoveredObjectId)
+        public override void UpdateHoveredObjectId(ulong hoveredObjectId)
         {
             this.hoveredObjectId = hoveredObjectId;
             foreach(var input in InputInstances[this])

@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="sessionScreen" style="display: flex; height: 100%;">
+        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+        <ui:VisualElement style="flex-grow: 1; justify-content: center;">
+            <ui:VisualElement name="VisualElement" style="align-items: stretch; justify-content: center; height: 78%;">
+                <ui:VisualElement name="logo" style="height: 250px; background-image: url(&apos;/Assets/Project/UI/UI_connection/logo_page.png&apos;); -unity-background-scale-mode: scale-to-fit; margin-bottom: 40px;" />
+                <ui:Label text="Connected to : " name="connectedText" class="white-txt" style="margin-bottom: 20px; font-size: 15px;" />
+                <ui:Label text="No connection" name="notConnectedText" class="white-txt" style="margin-bottom: 20px; font-size: 15px; display: none;" />
+                <ui:Label text="Session PIN:" class="white-txt" style="margin-bottom: 8px; font-size: 15px;" />
+                <ui:VisualElement name="sessionInput" style="flex-direction: row; justify-content: space-between; height: 60px; flex-grow: 0; font-size: 15px; flex-shrink: 0;">
+                    <ui:TextField picking-mode="Ignore" name="pinInput" text="pin" value="pin" class="textfield-with-image-bck grey-text-field" style="-unity-text-align: upper-center; flex-grow: 1; height: 42px;" />
+                    <ui:Button text="&#10;" name="pin-enter-btn" class="input-button input-arrow-button" style="width: 42px; color: rgb(255, 255, 255); -unity-font-style: bold; height: 42px; align-items: center; justify-content: center;">
+                        <ui:VisualElement style="width: 27px; height: 27px;" />
+                    </ui:Button>
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-direction: row; height: 123px; min-height: auto;">
+                    <ui:Label text="Session name" class="white-txt" style="margin-bottom: 8px; font-size: 15px; width: 90%;" />
+                    <ui:Label text="Users" class="white-txt" style="margin-bottom: 8px; font-size: 15px; width: 10%;" />
+                </ui:VisualElement>
+                <ui:ScrollView focusable="True" name="sessionsList" style="height: 600px; justify-content: flex-start;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

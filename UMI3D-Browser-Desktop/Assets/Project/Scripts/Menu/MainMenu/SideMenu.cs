@@ -23,7 +23,6 @@ using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3d.common;
-using Unity.UIElements.Runtime;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UIElements;
@@ -49,7 +48,7 @@ namespace BrowserDesktop.Menu
         private bool isExpanded = false;
         static public bool IsExpanded { get { return Exists ? Instance.isExpanded : false; } }
 
-        public PanelRenderer panelRenderer;
+        public UIDocument uiDocument;
 
         [Header("Side menu general settings")]
 
@@ -88,7 +87,8 @@ namespace BrowserDesktop.Menu
 
         private void BindUI()
         {
-            VisualElement root = panelRenderer.visualTree;
+            Debug.Assert(uiDocument != null);
+            VisualElement root = uiDocument.rootVisualElement;
 
             BindRightSideMenu(root);
             

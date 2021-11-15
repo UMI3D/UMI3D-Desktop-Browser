@@ -21,6 +21,11 @@ namespace BrowserDesktop.Controller
 {
     public class InputLayoutManager : umi3d.common.PersistentSingleton<InputLayoutManager>
     {
+
+        public static readonly string FR_Fr_KeyboardLayout = "0000040C";
+        public static readonly string FR_Be_KeyboardLayout = "0000080C";
+
+
         InputLayout CurrentLayout { get { return (inputLayouts != null && inputLayouts.Length > layoutId) ? inputLayouts[layoutId] : null; } }
         [SerializeField]
         InputLayout[] defaultInputLayout = null;

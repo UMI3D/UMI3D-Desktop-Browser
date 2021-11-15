@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Controller;
+using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
+using inetum.unityUtils;
 using System.Collections;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
@@ -37,8 +39,8 @@ namespace BrowserDesktop.Interaction
         /// <summary>
         /// Avatar bone linked to this input.
         /// </summary>
-        [ConstStringEnum(typeof(BoneType))]
-        public string bone = BoneType.None;
+        [ConstEnum(typeof(BoneType), typeof(uint))]
+        public uint bone = BoneType.None;
 
         /// <summary>
         /// Use lock if the Input is Used elsewhere;
@@ -46,6 +48,7 @@ namespace BrowserDesktop.Interaction
         private int locked = 0;
         public bool Locked { get { return locked > 0; } set { if (value) locked++; else { locked--; if (locked < 0) locked = 0; } } }
 
+        public bool Down { get; protected set; }
 
         /// <summary>
         /// Associtated interaction (if any).
@@ -59,14 +62,34 @@ namespace BrowserDesktop.Interaction
 
         EventDisplayer eventDisplayer;
 
-        string toolId;
+        ulong toolId;
 
-        string hoveredObjectId;
+        ulong hoveredObjectId;
+        private bool swichOnDown = false;
+        public bool SwichOnDown { get => swichOnDown; protected set => swichOnDown = value; }
 
         protected virtual void Start()
         {
             StartCoroutine(InitEventDisplayer());
+            onInputDown.AddListener(() =>
+            {
+                SwichOnDown = (CursorHandler.State == CursorHandler.CursorState.Hover);
+                if (SwichOnDown)
+                {
+                    CursorHandler.State = CursorHandler.CursorState.Clicked;
+                }
+            });
+            onInputUp.AddListener(() =>
+            {
+                if (SwichOnDown && CursorHandler.State == CursorHandler.CursorState.Clicked)
+                {
+                    CursorHandler.State = CursorHandler.CursorState.Hover;
+                }
+            });
         }
+
+
+
 
         IEnumerator InitEventDisplayer()
         {
@@ -76,7 +99,7 @@ namespace BrowserDesktop.Interaction
         }
 
 
-        public override void Associate(AbstractInteractionDto interaction, string toolId, string hoveredObjectId)
+        public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
             if (associatedInteraction != null)
             {
@@ -102,7 +125,7 @@ namespace BrowserDesktop.Interaction
                         if (loader != null)
                         {
                             UMI3DResourcesManager.LoadFile(
-                                "",
+                                interaction.id,
                                 fileToLoad,
                                 loader.UrlToObject,
                                 loader.ObjectFromCache,
@@ -114,7 +137,7 @@ namespace BrowserDesktop.Interaction
                                     else
                                         DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
                                 },
-                                (string str) =>
+                                (Umi3dException str) =>
                                 {
                                     DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                                 },
@@ -186,8 +209,17 @@ namespace BrowserDesktop.Interaction
             {
                 if (Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)))
                 {
+
+                    if (associatedInteraction.TriggerAnimationId != 0)
+                    {
+                        UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(associatedInteraction.TriggerAnimationId);
+                        if (anim != null)
+                            anim.Start();
+                    }
+
                     onInputDown.Invoke();
-                    
+                    Down = true;
+
                     if ((associatedInteraction).hold)
                     {
                         var eventdto = new EventStateChangedDto
@@ -214,9 +246,18 @@ namespace BrowserDesktop.Interaction
                     }
                 }
 
-                if (Input.GetKeyUp(InputLayoutManager.GetInputCode(activationButton)))
+                if (Input.GetKeyUp(InputLayoutManager.GetInputCode(activationButton)) || Down && !Input.GetKey(InputLayoutManager.GetInputCode(activationButton)))
                 {
                     onInputUp.Invoke();
+                    Down = false;
+
+                    if (associatedInteraction.ReleaseAnimationId != 0)
+                    {
+                        UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(associatedInteraction.ReleaseAnimationId);
+                        if (anim != null)
+                            anim.Start();
+                    }
+
                     if ((associatedInteraction).hold)
                     {
                         if (risingEdgeEventSent)
@@ -237,7 +278,7 @@ namespace BrowserDesktop.Interaction
             }
         }
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, string toolId, string hoveredObjectId)
+        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
             throw new System.NotImplementedException();
         }
@@ -249,6 +290,7 @@ namespace BrowserDesktop.Interaction
 
         public override void Dissociate()
         {
+            if (Down) onInputUp.Invoke();
             ResetButton();
             eventDisplayer?.Display(false);
             associatedInteraction = null;
@@ -281,7 +323,7 @@ namespace BrowserDesktop.Interaction
             return associatedInteraction == null && !Locked;
         }
 
-        public override void UpdateHoveredObjectId(string hoveredObjectId)
+        public override void UpdateHoveredObjectId(ulong hoveredObjectId)
         {
             this.hoveredObjectId = hoveredObjectId;
         }

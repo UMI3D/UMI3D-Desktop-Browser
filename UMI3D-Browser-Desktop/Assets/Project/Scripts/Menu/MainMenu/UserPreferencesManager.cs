@@ -29,6 +29,16 @@ public class UserPreferencesManager
         public string ip;
     }
 
+    [Serializable]
+    public class ServerData
+    {
+        public string serverName;
+        public string serverUrl;
+        public string serverIcon;
+    }
+
+    public const string registeredServer = "registeredServerData";
+    public const string previusServer = "previusServerData";
     public const string dataFile = "userData";
     public const string favoriteDataFile = "favoriteUserData";
 
@@ -39,7 +49,7 @@ public class UserPreferencesManager
     /// <param name="directory">Directory to write the file into.</param>
     public static void StoreUserData(Data data)
     {
-        string path = umi3d.common.Path.Combine(Application.persistentDataPath, dataFile);
+        string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, dataFile);
         FileStream file;
         if (File.Exists(path)) file = File.OpenWrite(path);
         else file = File.Create(path);
@@ -55,7 +65,7 @@ public class UserPreferencesManager
     /// <returns>A DataFile if the directory containe one, null otherwhise.</returns>
     public static Data GetPreviousConnectionData()
     {
-        string path = umi3d.common.Path.Combine(Application.persistentDataPath, dataFile);
+        string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, dataFile);
         if (File.Exists(path))
         {
             FileStream file;
@@ -78,37 +88,83 @@ public class UserPreferencesManager
     }
 
     /// <summary>
-    /// get the connection data about the favorite environments.
+    /// Write a previous userInfo data server.
     /// </summary>
-    /// <returns></returns>
-    public static List<Data> GetFavoriteConnectionData()
+    /// <param name="data">ServerData to write.</param>
+    public static void StoreUserData(ServerData data)
     {
-        string path = umi3d.common.Path.Combine(Application.persistentDataPath, favoriteDataFile);
+        string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, previusServer);
+        FileStream file;
+        if (File.Exists(path)) file = File.OpenWrite(path);
+        else file = File.Create(path);
+
+        BinaryFormatter bf = new BinaryFormatter();
+        bf.Serialize(file, data);
+        file.Close();
+    }
+
+    /// <summary>
+    /// Read a userInfo data in a directory.
+    /// </summary>
+    /// <returns>A ServerData if the directory containe one, null otherwhise.</returns>
+    public static ServerData GetPreviousServerData()
+    {
+        string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, previusServer);
         if (File.Exists(path))
         {
             FileStream file;
             file = File.OpenRead(path);
             BinaryFormatter bf = new BinaryFormatter();
-            List<Data> data;
+
+            ServerData data;
             try
             {
-                data = (List<Data>)bf.Deserialize(file);
-            } catch
+                data = (ServerData)bf.Deserialize(file);
+            }
+            catch
             {
-                data = new List<Data>();
+                data = new ServerData();
+            }
+
+            file.Close();
+            return data;
+        }
+        return new ServerData();
+    }
+
+    /// <summary>
+    /// get the connection data about the favorite server.
+    /// </summary>
+    /// <returns></returns>
+    public static List<ServerData> GetRegisteredServerData()
+    {
+        string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, registeredServer);
+        if (File.Exists(path))
+        {
+            FileStream file;
+            file = File.OpenRead(path);
+            BinaryFormatter bf = new BinaryFormatter();
+            List<ServerData> data;
+            try
+            {
+                data = (List<ServerData>)bf.Deserialize(file);
+            }
+            catch
+            {
+                data = new List<ServerData>();
             }
             file.Close();
             return data;
         }
-        return new List<Data>();
+        return new List<ServerData>();
     }
 
     /// <summary>
-    /// Stores the connection data about the favorite environments.
+    /// Stores the connection data about the registered servers.
     /// </summary>
-    public static void StoreFavoriteConnectionData(List<Data> favorites)
+    public static void StoreRegisteredServerData(List<ServerData> favorites)
     {
-        string path = umi3d.common.Path.Combine(Application.persistentDataPath, favoriteDataFile);
+        string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, registeredServer);
         FileStream file;
         if (File.Exists(path)) file = File.OpenWrite(path);
         else file = File.Create(path);
@@ -116,5 +172,15 @@ public class UserPreferencesManager
         BinaryFormatter bf = new BinaryFormatter();
         bf.Serialize(file, favorites);
         file.Close();
+    }
+
+    /// <summary>
+    /// Stores the connection data about the registered servers.
+    /// </summary>
+    public static void AddRegisterdeServerData(ServerData newFavorite)
+    {
+        var favorites = GetRegisteredServerData();
+        favorites.Add(newFavorite);
+        StoreRegisteredServerData(favorites);
     }
 }
