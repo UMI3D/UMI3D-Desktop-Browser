@@ -72,17 +72,7 @@ namespace BrowserDesktop.Menu
             }
             else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
             {
-                
-                if (!SideMenu.IsExpanded)
-                {
-                    SideMenu.Display(true, true);
-                } else
-                {
-                    if (CircularMenu.Instance.Count() > 0 || EventMenu.NbEventsDIsplayed > 0)
-                        SideMenu.Display(true, false);
-                    else
-                        SideMenu.Display(false, false);
-                }
+                SideMenu.Display(!SideMenu.IsExpanded, !SideMenu.IsExpanded);
             }
 
             if (circularMenuContainer.isDisplayed && circularMenuContainer.isExpanded && IsEmpty())
