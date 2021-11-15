@@ -74,6 +74,23 @@ namespace umi3d.cdk.collaboration
             }
         }
 
+        public static bool LoopBack
+        {
+            get => Exists ? Instance.loopback : false;
+            set
+            {
+                if (Exists && Instance.loopback != value)
+                {
+                    Instance.loopback = value;
+                    if (Instance.reading)
+                    {
+                        Instance._LoopBack();
+                    }
+                }
+            }
+        }
+
+
         public static string CurrentMicrophone
         {
             get => Exists ? Instance.microphoneLabel : "";
@@ -168,6 +185,7 @@ namespace umi3d.cdk.collaboration
 
         public MicrophoneEvent _OnSaturated = new MicrophoneEvent();
         public MicrophoneEvent _OnSending = new MicrophoneEvent();
+        private AudioSource audioSource;
 
         public List<string> GetInfo()
         {
@@ -199,6 +217,7 @@ namespace umi3d.cdk.collaboration
         private void Start()
         {
             IsMute = IsMute;
+            audioSource = GetComponent<AudioSource>();
         }
 
         private void _UpdateFrequency(int frequency)
@@ -236,6 +255,9 @@ namespace umi3d.cdk.collaboration
                 microphoneLabel = Microphone.devices[0];
 
             clip = Microphone.Start(microphoneLabel, true, lengthSeconds, samplingFrequency);
+
+            _LoopBack();
+
             lock (pcmQueue)
                 pcmQueue.Clear();
             if (thread == null)
@@ -254,6 +276,21 @@ namespace umi3d.cdk.collaboration
             Microphone.End(microphoneLabel);
         }
 
+        private void _LoopBack()
+        {
+            if (loopback)
+            {
+                audioSource.clip = clip;
+                audioSource.loop = true;
+                audioSource.Play();
+            }
+            else
+            {
+                audioSource.Stop();
+                audioSource.clip = null;
+            }
+        }
+
         #region ReadMicrophone
 
         /// <summary>
@@ -262,7 +299,7 @@ namespace umi3d.cdk.collaboration
         [SerializeField, EditorReadOnly]
         private bool muted = false;
         private float _gain = 1f;
-        private object gainLocker = new object();
+        private readonly object gainLocker = new object();
 
         private float _Gain
         {
@@ -278,7 +315,7 @@ namespace umi3d.cdk.collaboration
             }
         }
 
-        private object readingLocker = new object();
+        private readonly object readingLocker = new object();
         private bool reading = false;
 
         private bool Reading
@@ -302,9 +339,9 @@ namespace umi3d.cdk.collaboration
         private float[] microphoneBuffer;
 
         private Thread thread;
-        private int sleepTimeMiliseconde = 5;
+        private readonly int sleepTimeMiliseconde = 5;
         private float db;
-        private object dbLocker = new object();
+        private readonly object dbLocker = new object();
         public float DB
         {
             get
@@ -320,7 +357,7 @@ namespace umi3d.cdk.collaboration
         }
 
         private float rms;
-        private object RMSLocker = new object();
+        private readonly object RMSLocker = new object();
         public float RMS
         {
             get
@@ -339,8 +376,8 @@ namespace umi3d.cdk.collaboration
 
         private bool currentSaturated;
         private bool displayedSaturated;
-        private object SaturatedLocker = new object();
-        private object displayedSaturatedLocker = new object();
+        private readonly object SaturatedLocker = new object();
+        private readonly object displayedSaturatedLocker = new object();
 
         public bool DisplayedSaturated
         {
@@ -380,7 +417,7 @@ namespace umi3d.cdk.collaboration
             }
         }
 
-        private object minRMSToSendLocker = new object();
+        private readonly object minRMSToSendLocker = new object();
         private float _minRMSToSend = 0f;
         public float _MinRMSToSend
         {
@@ -407,12 +444,14 @@ namespace umi3d.cdk.collaboration
         }
 
         private bool shouldSend;
-        private object shouldSendLocker = new object();
+        private readonly object shouldSendLocker = new object();
         private bool TurnMicOffRunning;
         public bool ShouldSend
         {
             get
             {
+                if (loopback) return false;
+
                 bool highRMS = !IslowerThanThreshold;
                 lock (shouldSendLocker)
                 {
@@ -458,7 +497,7 @@ namespace umi3d.cdk.collaboration
         }
 
         private bool StaySaturatedRunning;
-        private float timeStayingSaturated = 0.3f;
+        private readonly float timeStayingSaturated = 0.3f;
 
         private IEnumerator StaySaturated()
         {
@@ -553,7 +592,7 @@ namespace umi3d.cdk.collaboration
         {
             if (!Reading) return;
 
-            int position = Microphone.GetPosition(null);
+            int position = Microphone.GetPosition(microphoneLabel);
             if (position < 0 || head == position)
             {
                 return;
@@ -595,6 +634,21 @@ namespace umi3d.cdk.collaboration
         #endregion
 
         #region Encoder
+        private readonly object loopbackLocker = new object();
+        private bool _loopback;
+        private bool loopback
+        {
+            get
+            {
+                lock (loopbackLocker)
+                    return _loopback;
+            }
+            set
+            {
+                lock (loopbackLocker)
+                    _loopback = value;
+            }
+        }
 
         private int bitrate = 96000;
         private int frameSize; //at least frequency/100
