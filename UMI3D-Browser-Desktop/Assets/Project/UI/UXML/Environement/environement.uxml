@@ -82,7 +82,7 @@
                             <ui:Button name="open-option-menu-btn" class="btn-options" style="width: 110px; height: 34px; margin-right: 4px; display: none;" />
                             <ui:Button name="leave-environment-btn" class="btn-leave" style="width: 110px; height: 34px; margin-left: 4px;" />
                         </ui:VisualElement>
-                        <ui:Button name="pause-menu-open-btn" class="btn-open-pause-menu" style="width: 50px; height: 23px; display: none;" />
+                        <ui:Button name="pause-menu-open-btn" class="btn-open-pause-menu" style="width: 50px; height: 23px; display: flex;" />
                     </ui:VisualElement>
                     <ui:VisualElement name="console" style="display: flex; position: absolute; width: 430px; height: 200px; bottom: 0; right: 0; background-color: rgba(50, 50, 50, 0.8); padding-top: 15px;">
                         <ui:Label text="Label" name="version" class="dark-grey1-bck grey-txt" style="height: 20px; -unity-text-align: middle-right; padding-right: 15px;" />

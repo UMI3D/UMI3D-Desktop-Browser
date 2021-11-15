@@ -15,24 +15,25 @@ limitations under the License.
 */
 
 
+using BrowserDesktop.UI;
 using System;
 using System.Collections;
 using umi3d.cdk;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class DialogueBoxElement : VisualElement
+public class DialogueBoxElement : GenericAndCustomElement
 {
+    public new class UxmlFactory : UxmlFactory<DialogueBoxElement, UxmlTraits> { }
+
     /// <summary>
-    /// Return true if  dialogue box is displayed
+    /// Return true if the dialogue box is displayed
     /// </summary>
     public static bool IsADialogueBoxDislayed => currentDialogueBox != null;
 
     private static DialogueBoxElement currentDialogueBox;
     private Action<bool> choiceCallback;
-
-    public new class UxmlFactory : UxmlFactory<DialogueBoxElement, UxmlTraits> { }
-    public new class UxmlTraits : VisualElement.UxmlTraits { }
+    
 
     /// <summary>
     /// Sets up the dialogue box for two choices.
@@ -69,6 +70,7 @@ public class DialogueBoxElement : VisualElement
             choiceCallback(b);
         };
         currentDialogueBox = this;
+        
     }
 
     /// <summary>
@@ -103,6 +105,7 @@ public class DialogueBoxElement : VisualElement
             choiceCallback();
         };
         currentDialogueBox = this;
+        
     }
 
     /// <summary>
@@ -127,9 +130,15 @@ public class DialogueBoxElement : VisualElement
 
     public static void CloseDialogueBox(bool choice)
     {
+
+        Debug.Log($"Dialogue box == null : {currentDialogueBox == null}");
         currentDialogueBox.RemoveFromHierarchy();
         currentDialogueBox.choiceCallback.Invoke(choice);
         currentDialogueBox = null;
     }
 
+    public override void OnApplyUserPreferences()
+    {
+        //throw new NotImplementedException();
+    }
 }

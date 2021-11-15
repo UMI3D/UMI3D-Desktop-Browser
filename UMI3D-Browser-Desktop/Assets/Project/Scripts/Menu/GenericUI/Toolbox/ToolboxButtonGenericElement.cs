@@ -53,6 +53,8 @@ namespace BrowserDesktop.UI.GenericElement
         /// State of the button.
         /// </summary>
         private bool isOn = false;
+        private string classOn;
+        private string classOff;
 
         #endregion
 
@@ -84,13 +86,11 @@ namespace BrowserDesktop.UI.GenericElement
         {
             Setup(buttonName);
 
-            SwitchClass(isOn, classNameOn, classNameOff);
+            this.classOn = classNameOn;
+            this.classOff = classNameOff;
+            SwitchClass(isOn);
 
-            button_B.clicked += () =>
-            {
-                SwitchClass(!this.isOn, classNameOn, classNameOff);
-                buttonClicked();
-            };
+            button_B.clicked += buttonClicked;
 
             OnApplyUserPreferences();
         }
@@ -111,19 +111,17 @@ namespace BrowserDesktop.UI.GenericElement
         /// Switch between USS classes when button is on or off.
         /// </summary>
         /// <param name="value">True if the button should be on, false else.</param>
-        /// <param name="classNameOn">USS class when the button is On.</param>
-        /// <param name="classNameOff">USS class when the button is Off.</param>
-        private void SwitchClass(bool value, string classNameOn, string classNameOff)
+        public void SwitchClass(bool value)
         {
             isOn = value;
             string className = "darkTheme-menuBar-";
             if (value)
             {
-                className += classNameOn + "-btn";
+                className += classOn + "-btn";
             }
             else
             {
-                className += classNameOff + "-btn";
+                className += classOff + "-btn";
             }
             button_B.ClearClassList();
             button_B.AddToClassList(className);

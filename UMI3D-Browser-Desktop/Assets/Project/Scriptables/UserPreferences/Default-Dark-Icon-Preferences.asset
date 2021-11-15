@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: Default-Dark-Icon-Preferences
   m_EditorClassIdentifier: 
   iconPrefs:
-  - iconPrefName: 
+  - iconPrefName: square-button
+    width: 30
+    height: 30

@@ -32,7 +32,7 @@ public class ActivateDeactivateMicrophone : Singleton<ActivateDeactivateMicropho
         });
 
         MicrophoneListener.IsMute = true;
-        SessionInformationMenu.Instance.OnMicrophoneStatusChanged(!MicrophoneListener.IsMute);
+        BrowserDesktop.Menu.Environment.MenuBar_UIController.Instance.OnMicrophoneStatusChanged(!MicrophoneListener.IsMute);
     }
 
     // Update is called once per frame
@@ -50,7 +50,6 @@ public class ActivateDeactivateMicrophone : Singleton<ActivateDeactivateMicropho
             return;
 
         MicrophoneListener.IsMute = !MicrophoneListener.IsMute;
-
-        SessionInformationMenu.Instance.OnMicrophoneStatusChanged(!MicrophoneListener.IsMute);
+        BrowserDesktop.Menu.Environment.MenuBar_UIController.Instance.OnMicrophoneStatusChanged(!MicrophoneListener.IsMute);
     }
 }
