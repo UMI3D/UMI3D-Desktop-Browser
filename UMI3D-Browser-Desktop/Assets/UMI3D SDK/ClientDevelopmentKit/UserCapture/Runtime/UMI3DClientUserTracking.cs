@@ -37,6 +37,7 @@ namespace umi3d.cdk.userCapture
 
         [SerializeField]
         protected bool sendTracking = true;
+        public bool SendTracking => sendTracking;
 
         [SerializeField]
         protected float targetTrackingFPS = 15;

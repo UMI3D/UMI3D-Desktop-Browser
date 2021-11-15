@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using BrowserDesktop.Menu.Environment.Settings;
 using BrowserDesktop.UI.GenericElement;
 using System.Collections;
 using System.Collections.Generic;
@@ -38,6 +39,8 @@ namespace BrowserDesktop.UI.CustomElement
         private VisualElement centerLayout_VE;
         private VisualElement rightLayout_VE;
 
+        private ToolboxButtonGenericElement avatar_TBGE;
+        public ToolboxButtonGenericElement Avatar_TBGE => avatar_TBGE;
         private ToolboxButtonGenericElement sound_TBGE;
         public ToolboxButtonGenericElement Sound_TBGE => sound_TBGE;
         private ToolboxButtonGenericElement mic_TBGE;
@@ -70,19 +73,18 @@ namespace BrowserDesktop.UI.CustomElement
             AddSeparator(rightLayout_VE, toolboxSeparatorGE_VTA);
 
             ToolboxGenericElement settings_TGE = toolboxGE_VTA.CloneTree().Q<ToolboxGenericElement>();
-            ToolboxButtonGenericElement avatar_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-            avatar_TBGE.Setup("Screenshot", "avatarOn", "avatarOff", true, () => { Debug.Log("TODO"); });
-
-            sound_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-            sound_TBGE.Setup("label test", "soundOn", "soundOff", true, () => { 
-                Debug.Log("TODO"); 
+            avatar_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
+            avatar_TBGE.Setup("Screenshot", "avatarOn", "avatarOff", true, () => {
+                ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();
             });
-
+            sound_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
+            sound_TBGE.Setup("label test", "soundOn", "soundOff", true, () => {
+                ActivateDeactivateAudio.Instance.ToggleAudioStatus();
+            });
             mic_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
             mic_TBGE.Setup("labelTestAndTest", "micOn", "micOff", false, () => {
                 ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
             });
-
             settings_TGE.Setup("test", new ToolboxButtonGenericElement[3] { avatar_TBGE, sound_TBGE, mic_TBGE });
             rightLayout_VE.Add(settings_TGE);
 

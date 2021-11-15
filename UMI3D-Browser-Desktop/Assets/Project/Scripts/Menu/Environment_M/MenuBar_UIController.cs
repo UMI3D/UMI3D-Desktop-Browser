@@ -49,11 +49,6 @@ namespace BrowserDesktop.Menu.Environment
             menuBar.Setup(toolboxGenericElement_VTA, toolboxButtonGenericElement_VTA, toolboxSeparatorGenericElement_VTA, uiDocument);
         }
 
-        /*private void Start()
-        {
-            menuBar.Setup(toolboxGenericElement_VTA, toolboxButtonGenericElement_VTA, toolboxSeparatorGenericElement_VTA, uiDocument);
-        }*/
-
         /// <summary>
         /// Event called when the status of the microphone changes.
         /// </summary>
@@ -61,6 +56,24 @@ namespace BrowserDesktop.Menu.Environment
         public void OnMicrophoneStatusChanged(bool val)
         {
             menuBar.Mic_TBGE.SwitchClass(val);
+        }
+
+        /// <summary>
+        /// Event called when the status of the audio changes.
+        /// </summary>
+        /// <param name="val"></param>
+        public void OnAudioStatusChanged(bool val)
+        {
+            menuBar.Sound_TBGE.SwitchClass(val);
+        }
+
+        /// <summary>
+        /// Event called when the status of the avatar tracking changes.
+        /// </summary>
+        /// <param name="val"></param>
+        public void OnAvatarTrackingChanged(bool val)
+        {
+            menuBar.Avatar_TBGE.SwitchClass(val);
         }
 
 
