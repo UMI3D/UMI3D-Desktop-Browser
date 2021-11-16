@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Interaction;
 using BrowserDesktop.Menu;
@@ -638,6 +639,8 @@ namespace BrowserDesktop.Controller
             throw new System.NotImplementedException();
         }
 
+        #region Find Input
+
         public override DofGroupOptionDto FindBest(DofGroupOptionDto[] options)
         {
 
@@ -657,8 +660,6 @@ namespace BrowserDesktop.Controller
 
             throw new System.NotImplementedException();
         }
-
-
 
         public override AbstractUMI3DInput FindInput(ManipulationDto manip, DofGroupDto dof, bool unused = true)
         {
@@ -682,114 +683,55 @@ namespace BrowserDesktop.Controller
             KeyInput input = KeyInputs.Find(i => i.IsAvailable() || !unused);
             if (input == null)
             {
-                KeyMenuInput inputMenu = KeyMenuInputs.Find(i => i.IsAvailable() || !unused);
-                if (inputMenu == null)
-                {
-                    inputMenu = this.gameObject.AddComponent<KeyMenuInput>();
-                    inputMenu.bone = interactionBoneType;
-                    KeyMenuInputs.Add(inputMenu);
-                }
-                return inputMenu;
+                return FindInput(KeyMenuInputs, i => i.IsAvailable() || !unused, this.gameObject);
             }
             return input;
         }
 
         public override AbstractUMI3DInput FindInput(FormDto form, bool unused = true)
         {
-            FormInput inputMenu = FormInputs.Find(i => i.IsAvailable() || !unused);
-            if (inputMenu == null)
-            {
-                inputMenu = this.gameObject.AddComponent<FormInput>();
-                inputMenu.bone = interactionBoneType;
-                FormInputs.Add(inputMenu);
-            }
-            return inputMenu;
+            return FindInput(FormInputs, i => i.IsAvailable() || !unused, this.gameObject);
         }
 
         public override AbstractUMI3DInput FindInput(LinkDto link, bool unused = true)
         {
-            LinkInput inputMenu = LinkInputs.Find(i => i.IsAvailable() || !unused);
-            if (inputMenu == null)
-            {
-                inputMenu = this.gameObject.AddComponent<LinkInput>();
-                inputMenu.bone = interactionBoneType;
-                LinkInputs.Add(inputMenu);
-            }
-            return inputMenu;
+            return FindInput(LinkInputs, i => i.IsAvailable() || !unused, this.gameObject);
         }
 
         public override AbstractUMI3DInput FindInput(AbstractParameterDto param, bool unused = true)
         {
-            if (param is FloatRangeParameterDto)
-            {
-                FloatRangeParameterInput floatRangeInput = floatRangeParameterInputs.Find(i => i.IsAvailable());
-                if (floatRangeInput == null)
-                {
-                    floatRangeInput = this.gameObject.AddComponent<FloatRangeParameterInput>();
-                    floatRangeParameterInputs.Add(floatRangeInput);
-                }
-                return floatRangeInput;
-            }
-            else if (param is FloatParameterDto)
-            {
-                FloatParameterInput floatInput = floatParameterInputs.Find(i => i.IsAvailable());
-                if (floatInput == null)
-                {
-                    floatInput = this.gameObject.AddComponent<FloatParameterInput>();
-                    floatParameterInputs.Add(floatInput);
-                }
-                return floatInput;
-            }
-            else if (param is IntegerParameterDto)
-            {
-                IntParameterInput intInput = intParameterInputs.Find(i => i.IsAvailable());
-                if (intInput == null)
-                {
-                    intInput = new IntParameterInput();
-                    intParameterInputs.Add(intInput);
-                }
-                return intInput;
-
-            }
-            else if (param is IntegerRangeParameterDto)
-            {
-                throw new System.NotImplementedException();
-            }
-            else if (param is BooleanParameterDto)
-            {
-                BooleanParameterInput boolInput = boolParameterInputs.Find(i => i.IsAvailable());
-                if (boolInput == null)
-                {
-                    boolInput = this.gameObject.AddComponent<BooleanParameterInput>();
-                    boolParameterInputs.Add(boolInput);
-                }
-                return boolInput;
-            }
-            else if (param is StringParameterDto)
-            {
-                StringParameterInput stringInput = stringParameterInputs.Find(i => i.IsAvailable());
-                if (stringInput == null)
-                {
-                    stringInput = this.gameObject.AddComponent<StringParameterInput>();
-                    stringParameterInputs.Add(stringInput);
-                }
-                return stringInput;
-            }
-            else if (param is EnumParameterDto<string>)
-            {
-                StringEnumParameterInput stringEnumInput = stringEnumParameterInputs.Find(i => i.IsAvailable());
-                if (stringEnumInput == null)
-                {
-                    stringEnumInput = this.gameObject.AddComponent<StringEnumParameterInput>();
-                    stringEnumParameterInputs.Add(stringEnumInput);
-                }
-                return stringEnumInput;
-            }
-            else
-            {
-                return null;
-            }
+            if (param is FloatRangeParameterDto) return FindInput(floatRangeParameterInputs, i => i.IsAvailable(), this.gameObject);
+            else if (param is FloatParameterDto) return FindInput(floatParameterInputs, i => i.IsAvailable(), this.gameObject);
+            else if (param is IntegerParameterDto) return FindInput(intParameterInputs, i => i.IsAvailable());
+            else if (param is IntegerRangeParameterDto) throw new System.NotImplementedException();
+            else if (param is BooleanParameterDto) return FindInput(boolParameterInputs, i => i.IsAvailable(), this.gameObject);
+            else if (param is StringParameterDto) return FindInput(stringParameterInputs, i => i.IsAvailable(), this.gameObject);
+            else if (param is EnumParameterDto<string>) return FindInput(stringEnumParameterInputs, i => i.IsAvailable(), this.gameObject);
+            else return null;
         }
+
+        private AbstractUMI3DInput FindInput<T>(List<T> inputs, System.Predicate<T> predicate, GameObject gO = null) where T : AbstractUMI3DInput, new()
+        {
+            T input = inputs.Find(predicate);
+            if (input == null)
+            {
+                AddInput(inputs, out input, gO);
+            }
+            return input;
+        }
+
+        private void AddInput<T>(List<T> inputs, out T input, GameObject gO) where T : AbstractUMI3DInput, new()
+        {
+            if (gO != null) input = gO.AddComponent<T>();
+            else input = new T();
+
+            if (input is KeyMenuInput) (input as KeyMenuInput).bone = interactionBoneType;
+            else if (input is FormInput) (input as FormInput).bone = interactionBoneType;
+            else if (input is LinkInput) (input as LinkInput).bone = interactionBoneType;
+            inputs.Add(input);
+        }
+
+        #endregion
 
         public override void Release(AbstractTool tool, InteractionMappingReason reason)
         {

@@ -2265,6 +2265,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda69d6602aa3f44e99c0700f3af9310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _OnSaturated:
+    m_PersistentCalls:
+      m_Calls: []
+  _OnSending:
+    m_PersistentCalls:
+      m_Calls: []
   muted: 0
 --- !u!81 &2079147381
 AudioListener:

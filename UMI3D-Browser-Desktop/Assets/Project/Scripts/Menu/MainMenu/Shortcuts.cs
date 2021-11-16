@@ -157,7 +157,7 @@ namespace BrowserDesktop.Menu
             {
                 elt.style.opacity = val;
             }); //Display shortcuts when the resizement is done.
-            Debug.Log("Shortcut displayer = " + shortcutDisplayer_VE.resolvedStyle.width);
+            //Debug.Log("Shortcut displayer = " + shortcutDisplayer_VE.resolvedStyle.width);
         }
 
         #region Add and Remove Shortcuts
