@@ -121,12 +121,13 @@ namespace BrowserDesktop.Menu
         {
             var time = DateTime.Now - startOfSession;
             sessionTime.text = time.ToString("hh") + ":" + time.ToString("mm") + ":" + time.ToString("ss");
-            if(umi3d.cdk.collaboration.MicrophoneListener.Exists)
+
+            /*if(umi3d.cdk.collaboration.MicrophoneListener.Exists)
                 if(displayMicrophoneSlider && GainSlider.DisplayedValue != umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS)
                 {
                     GainSlider.DisplayedValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS;
                     ThresholdSlider.DisplayedValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS;
-                }
+                }*/
         }
 
         void InitMicrophoneSlider(VisualElement root)
