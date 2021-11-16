@@ -28,6 +28,7 @@ using BrowserDesktop.Controller;
 using BeardedManStudios.Forge.Networking;
 using System.Runtime.InteropServices;
 using System.Text;
+using umi3d.cdk.collaboration;
 
 public class LauncherManager : MonoBehaviour
 {
@@ -172,7 +173,7 @@ public class LauncherManager : MonoBehaviour
 
     private void InitUI()
     {
-        root.Q<Label>("version").text = umi3d.UMI3DVersion.version;
+        root.Q<Label>("version").text = BrowserDesktop.BrowserVersion.Version;
 
         BindSharedUI();
 

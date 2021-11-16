@@ -37,7 +37,7 @@ namespace BrowserDesktop.Menu
             openConsoleButton = root.Q<Button>("open-console-button");
             openConsoleButton.clickable.clicked += () => DisplayConsole(!isDisplayed);
             console = root.Q<VisualElement>("console");
-            console.Q<Label>("version").text = umi3d.UMI3DVersion.version;
+            console.Q<Label>("version").text = BrowserDesktop.BrowserVersion.Version;
             consoleContainer = console.Q<ScrollView>("console-container");
 
             Application.logMessageReceived += HandleLog;
