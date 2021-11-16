@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using BrowserDesktop.Menu;
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
@@ -50,10 +51,10 @@ public class WindowsManager : MonoBehaviour
 
     [Header("Custom title bar")]
 
-    [Tooltip("Tag name of the minimize button UXML element")]
+    [Tooltip("Tag name of the minimize window button UXML element")]
     [SerializeField]
     private readonly string minimizeTagName = "minimize-window-btn";
-    [Tooltip("Tag name of the maximize button UXML element")]
+    [Tooltip("Tag name of the maximize window button UXML element")]
     [SerializeField]
     private readonly string maximizeTagName = "fullscreen-btn";
     [Tooltip("Tag name of the close window button UXML element")]
@@ -64,8 +65,6 @@ public class WindowsManager : MonoBehaviour
     Button minimize_B;
     Button maximize_B;
     Button close_B;
-
-    public VisualTreeAsset dialogueBoxTreeAsset;
 
     #endregion
 
@@ -137,7 +136,7 @@ public class WindowsManager : MonoBehaviour
     private bool WantsToQuit()
     {
         bool wantsToQuit = umi3d.common.QuittingManager.ApplicationIsQuitting;
-        if (!wantsToQuit && !DialogueBoxElement.IsADialogueBoxDislayed)
+        if (!wantsToQuit && !DialogueBox_UIController.Displayed)
             ShowDialogueBoxToQuit();
         return wantsToQuit;
     }
@@ -147,14 +146,14 @@ public class WindowsManager : MonoBehaviour
     /// </summary>
     private void ShowDialogueBoxToQuit()
     {
-        DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        dialogueBox.Setup("Close application", "Are you sure ...?", "YES", "NO", (b) =>
-        {
-            umi3d.common.QuittingManager.ApplicationIsQuitting = b;
-            if (b)
-                Application.Quit();
-        });
-        root.Add(dialogueBox);
+        DialogueBox_UIController.
+            Setup("Close application", "Are you sure ...?", "YES", "NO", (b) =>
+            {
+                umi3d.common.QuittingManager.ApplicationIsQuitting = b;
+                if (b)
+                    Application.Quit();
+            }).
+            DisplayFrom(uiDocument);
     }
 
     #endregion
