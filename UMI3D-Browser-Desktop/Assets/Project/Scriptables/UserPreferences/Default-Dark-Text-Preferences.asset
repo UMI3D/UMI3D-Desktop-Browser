@@ -55,6 +55,6 @@ MonoBehaviour:
     labelColor: {r: 1, g: 1, b: 1, a: 1}
     labelUSSClasses: []
     applyFormat: 1
-    maxNumberOfCharacters: 50
+    maxNumberOfCharacters: 100
     caseStyle: 0
     resizeWidth: 0

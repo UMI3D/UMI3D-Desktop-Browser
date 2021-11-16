@@ -30,6 +30,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using BrowserDesktop.UserPreferences;
 using BrowserDesktop.Menu;
+using umi3d.cdk.collaboration;
 
 public class LauncherManager : MonoBehaviour
 {

@@ -36,7 +36,7 @@ namespace BrowserDesktop.Menu
         VisualElement microphoneSetter;
 
         Label sessionTime;
-        //Button microphoneBtn;
+        Button microphoneBtn;
         Label environmentName;
 
         VisualElement topCenterMenu;
@@ -67,7 +67,7 @@ namespace BrowserDesktop.Menu
             microphoneBtn = sessionInfo.Q<Button>("microphone-btn");
             microphoneBtn.clickable.clicked += () =>
             {
-                ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
+                Environment.Settings.ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
             };
 
             DisplayConsole(false);
