@@ -30,7 +30,7 @@ namespace BrowserDesktop.Menu
         private DialogueBoxElement dialogueBox;
 
         private bool isDisplayed = false;
-        public bool Displayed => isDisplayed;
+        public static bool Displayed => Instance.isDisplayed;
 
         protected override void Awake()
         {
@@ -45,15 +45,15 @@ namespace BrowserDesktop.Menu
             else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)) && isDisplayed) Close(false);
         }
 
-        public DialogueBox_UIController Setup(string title, string message, string optionA, string optionB, System.Action<bool> choiceCallback, bool marginForTitleBar = false)
+        public static DialogueBox_UIController Setup(string title, string message, string optionA, string optionB, System.Action<bool> choiceCallback, bool marginForTitleBar = false)
         {
-            if (!isDisplayed) dialogueBox.Setup(title, message, optionA, optionB, choiceCallback, marginForTitleBar);
+            if (!Instance.isDisplayed) Instance.dialogueBox.Setup(title, message, optionA, optionB, choiceCallback, marginForTitleBar);
             return Instance;
         }
 
-        public DialogueBox_UIController Setup(string title, string message, string optionA, System.Action choiceCallback, bool marginForTitleBar = false)
+        public static DialogueBox_UIController Setup(string title, string message, string optionA, System.Action choiceCallback, bool marginForTitleBar = false)
         {
-            if (!isDisplayed) dialogueBox.Setup(title, message, optionA, choiceCallback, marginForTitleBar);
+            if (!Instance.isDisplayed) Instance.dialogueBox.Setup(title, message, optionA, choiceCallback, marginForTitleBar);
             return Instance;
         }
 
@@ -65,14 +65,14 @@ namespace BrowserDesktop.Menu
             uiDocument.rootVisualElement.Add(dialogueBox);
         }
 
-        public void Close(bool val)
+        public static void Close(bool val)
         {
-            if (!isDisplayed) return;
+            if (!Instance.isDisplayed) return;
 
-            isDisplayed = false;
+            Instance.isDisplayed = false;
 
-            dialogueBox.ChoiceCallback(val);
-            dialogueBox.RemoveFromHierarchy();
+            Instance.dialogueBox.ChoiceCallback(val);
+            Instance.dialogueBox.RemoveFromHierarchy();
         }
     }
 }

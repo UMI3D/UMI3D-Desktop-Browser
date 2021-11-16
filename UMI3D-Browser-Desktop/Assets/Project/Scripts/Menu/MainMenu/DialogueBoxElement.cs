@@ -24,18 +24,14 @@ namespace BrowserDesktop.UI.CustomElement
 {
     public class DialogueBoxElement : GenericAndCustomElement
     {
+        #region Fields
+
         public new class UxmlFactory : UxmlFactory<DialogueBoxElement, UxmlTraits> { }
 
-        /*/// <summary>
-        /// Return true if the dialogue box is displayed
-        /// </summary>
-        public static bool IsADialogueBoxDislayed => currentDialogueBox != null;*/
-
-        /*private bool isDisplayed = false;
-        public bool Displayed => isDisplayed;*/
-
-        //private static DialogueBoxElement currentDialogueBox;
         private Action<bool> choiceCallback;
+        /// <summary>
+        /// Action to be performed when the user interact with the dialogue box.
+        /// </summary>
         public Action<bool> ChoiceCallback => choiceCallback;
 
         /// <summary>
@@ -56,9 +52,20 @@ namespace BrowserDesktop.UI.CustomElement
         private Button optionB_B;
 
         /// <summary>
+        /// Text of the title
+        /// </summary>
+        private string titleText;
+        /// <summary>
+        /// Text of the message
+        /// </summary>
+        private string messageText;
+
+        /// <summary>
         /// True if this dialogue box has been initialized.
         /// </summary>
         private bool isInitialized = false;
+
+        #endregion
 
         /// <summary>
         /// Initialize the dialogue box the first time (UI binding and button settings).
@@ -80,14 +87,12 @@ namespace BrowserDesktop.UI.CustomElement
 
             optionA_B.clickable.clicked += () =>
             {
-                Menu.DialogueBox_UIController.Instance.Close(true);
+                Menu.DialogueBox_UIController.Close(true);
             };
             optionB_B.clickable.clicked += () =>
             {
-                Menu.DialogueBox_UIController.Instance.Close(false);
+                Menu.DialogueBox_UIController.Close(false);
             };
-
-            OnApplyUserPreferences();
         }
 
 
@@ -149,6 +154,7 @@ namespace BrowserDesktop.UI.CustomElement
                 choiceCallback();
             };
 
+            OnApplyUserPreferences();
         }
 
         /// <summary>
@@ -161,22 +167,14 @@ namespace BrowserDesktop.UI.CustomElement
         {
             Initialize();
 
-            title_L.text = title;
-            message_L.text = message;
+            titleText = title;
+            messageText = message;
         }
-
-        /*public static void CloseDialogueBox(bool choice)
-        {
-            currentDialogueBox.RemoveFromHierarchy();
-            currentDialogueBox.choiceCallback.Invoke(choice);
-            currentDialogueBox = null;
-        }*/
 
         public override void OnApplyUserPreferences()
         {
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(title_L, "title", title_L.text);
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(message_L, "message", message_L.text);
-            //throw new NotImplementedException();
+            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(title_L, "title", titleText);
+            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(message_L, "corps", messageText);
         }
     }
 }
