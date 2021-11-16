@@ -14,6 +14,7 @@ limitations under the License.
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
+using BrowserDesktop.UserPreferences;
 using System;
 using System.Collections.Generic;
 using umi3d.cdk;
@@ -35,7 +36,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 {
     #region Fields
 
-    private UserPreferencesManager.Data connectionData;
+    private ServerPreferences.Data connectionData;
 
     public ClientPCIdentifier identifier;
 
@@ -46,9 +47,6 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     [SerializeField]
     private string launcherScene = null;
-
-    [SerializeField]
-    private VisualTreeAsset dialogueBoxTreeAsset = null;
 
     private LoadingBar loader;
 
@@ -113,25 +111,12 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     }
 
     /// <summary>
-    /// Manages the Return and Escape inputs to navigate through the menu.
+    /// Manages the Return input to navigate through the menu.
     /// </summary>
     private void ManageInputs()
     {
-        if (!isDisplayed)
-            return;
-
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            if (DialogueBoxElement.IsADialogueBoxDislayed)
-                DialogueBoxElement.CloseDialogueBox(true);
-            else
-                nextStep?.Invoke();
-        }
-        else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
-        {
-            if (DialogueBoxElement.IsADialogueBoxDislayed)
-                DialogueBoxElement.CloseDialogueBox(false);
-        }
+        if (!isDisplayed || DialogueBox_UIController.Displayed) return;
+        else if (Input.GetKeyDown(KeyCode.Return)) nextStep?.Invoke();
     }
 
     #endregion
@@ -205,7 +190,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// Uses the connection data to connect to te server.
     /// </summary>
     /// <param name="connectionData"></param>
-    public void Connect(UserPreferencesManager.Data connectionData)
+    public void Connect(ServerPreferences.Data connectionData)
     {
         this.connectionData = connectionData;
 
@@ -248,14 +233,14 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void GetMediaFailed(string error)
     {
-        var dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        uiDocument.rootVisualElement.Add(dialogueBox);
-
-
-        dialogueBox.Setup("Server error",
-            error,
-            "Leave",
-            Leave);
+        DialogueBox_UIController.
+            Setup(
+                "Server error",
+                error,
+                "Leave",
+                Leave
+            ).
+            DisplayFrom(uiDocument);
     }
 
     private void GetMediaSucces(MediaDto media)
@@ -263,7 +248,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         this.connectionData.environmentName = media.name;
         this.uiDocument.rootVisualElement.Q<Label>("environment-name").text = media.name;
 
-        SessionInformationMenu.Instance.SetEnvironmentName(media, connectionData);
+        SessionInformationMenu.Instance.SetEnvironmentName(media);
 
         UMI3DCollaborationClientServer.Connect();
     }
@@ -282,14 +267,15 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void OnConnectionLost(Action<bool> callback)
     {
-        var dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        uiDocument.rootVisualElement.Add(dialogueBox);
-
-        dialogueBox.Setup("Connection to the server lost",
-            "Leave to the connection menu or try again ?",
-            "Try again ?",
-            "Leave",
-            callback);
+        DialogueBox_UIController.
+            Setup(
+                "Connection to the server lost",
+                "Leave to the connection menu or try again ?",
+                "Try again ?",
+                "Leave",
+                callback
+            ).
+            DisplayFrom(uiDocument);
     }
 
     /// <summary>
@@ -375,15 +361,14 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         {
             string title = (ids.Count == 1) ? "One assets library is required" : ids.Count + " assets libraries are required";
 
-            DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-            dialogue.Setup(title, "Download libraries and connect to the server ?", "Accept", "Deny", (b) =>
+            DialogueBox_UIController.
+            Setup(title, "Download libraries and connect to the server ?", "Accept", "Deny", (b) =>
             {
                 callback.Invoke(b);
                 CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
             },
-            true);
-
-            uiDocument.rootVisualElement.Add(dialogue);
+            true).
+            DisplayFrom(uiDocument);
         }
     }
 

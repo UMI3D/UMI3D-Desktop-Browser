@@ -14,122 +14,167 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 using System;
 using System.Collections;
 using umi3d.cdk;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class DialogueBoxElement : VisualElement
+namespace BrowserDesktop.UI.CustomElement
 {
-    /// <summary>
-    /// Return true if  dialogue box is displayed
-    /// </summary>
-    public static bool IsADialogueBoxDislayed => currentDialogueBox != null;
+    public class DialogueBoxElement : GenericAndCustomElement
+    {
+        #region Fields
 
-    private static DialogueBoxElement currentDialogueBox;
-    private Action<bool> choiceCallback;
+        public new class UxmlFactory : UxmlFactory<DialogueBoxElement, UxmlTraits> { }
 
-    public new class UxmlFactory : UxmlFactory<DialogueBoxElement, UxmlTraits> { }
-    public new class UxmlTraits : VisualElement.UxmlTraits { }
+        private Action<bool> choiceCallback;
+        /// <summary>
+        /// Action to be performed when the user interact with the dialogue box.
+        /// </summary>
+        public Action<bool> ChoiceCallback => choiceCallback;
 
-    /// <summary>
-    /// Sets up the dialogue box for two choices.
-    /// </summary>
-    /// <param name="title"></param>
-    /// <param name="message"></param>
-    /// <param name="optionA"></param>
-    /// <param name="optionB"></param>
-    /// <param name="choiceCallback"></param>
-    /// <param name="marginForTitleBar"></param>
-    public void Setup(string title, string message, string optionA, string optionB, Action<bool> choiceCallback, bool marginForTitleBar = false) {
-        (Button optionABtn, Button optionBBtn) = Setup(title, message);
+        /// <summary>
+        /// Title of this dialogue box.
+        /// </summary>
+        private Label title_L;
+        /// <summary>
+        /// Message of this dialogue box.
+        /// </summary>
+        private Label message_L;
+        /// <summary>
+        /// Button on the left.
+        /// </summary>
+        private Button optionA_B;
+        /// <summary>
+        /// Button on the right.
+        /// </summary>
+        private Button optionB_B;
 
-        optionABtn.text = optionA;
-        optionABtn.clickable.clicked += () =>
+        /// <summary>
+        /// Text of the title
+        /// </summary>
+        private string titleText;
+        /// <summary>
+        /// Text of the message
+        /// </summary>
+        private string messageText;
+
+        /// <summary>
+        /// True if this dialogue box has been initialized.
+        /// </summary>
+        private bool isInitialized = false;
+
+        #endregion
+
+        /// <summary>
+        /// Initialize the dialogue box the first time (UI binding and button settings).
+        /// </summary>
+        private void Initialize()
         {
-            CloseDialogueBox(true);
-        };
+            if (isInitialized) return;
+            
+            isInitialized = true;
 
-        optionBBtn.text = optionB;
-        optionBBtn.clickable.clicked += () =>
-        {
-            CloseDialogueBox(false);
-        };
+            Cursor.CursorHandler.SetMovement(this, BrowserDesktop.Cursor.CursorHandler.CursorMovement.Free);
+            this.style.position = Position.Absolute;
 
-        if (marginForTitleBar)
-        {
-            this.style.marginTop = 40;
+            title_L = this.Q<Label>("dialogue-box-title");
+            message_L = this.Q<Label>("dialogue-box-message");
+
+            optionA_B = this.Q<Button>("dialogue-box-btn1");
+            optionB_B = this.Q<Button>("dialogue-box-btn2");
+
+            optionA_B.clickable.clicked += () =>
+            {
+                Menu.DialogueBox_UIController.Close(true);
+            };
+            optionB_B.clickable.clicked += () =>
+            {
+                Menu.DialogueBox_UIController.Close(false);
+            };
         }
 
-        this.choiceCallback = (b) =>
+
+        /// <summary>
+        /// Sets up the dialogue box for two choices.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <param name="optionA"></param>
+        /// <param name="optionB"></param>
+        /// <param name="choiceCallback"></param>
+        /// <param name="marginForTitleBar"></param>
+        public void Setup(string title, string message, string optionA, string optionB, Action<bool> choiceCallback, bool marginForTitleBar = false)
         {
-            BrowserDesktop.Cursor.CursorHandler.UnSetMovement(this);
-            choiceCallback(b);
-        };
-        currentDialogueBox = this;
-    }
+            Setup(title, message);
 
-    /// <summary>
-    /// Sets up the dialogue box for one choice.
-    /// </summary>
-    /// <param name="title"></param>
-    /// <param name="message"></param>
-    /// <param name="optionA"></param>
-    /// <param name="optionB"></param>
-    /// <param name="choiceCallback"></param>
-    /// <param name="marginForTitleBar"></param>
-    public void Setup(string title, string message, string optionA, Action choiceCallback, bool marginForTitleBar = false)
-    {
-        (Button optionABtn, Button optionBBtn) = Setup(title, message);
+            optionB_B.style.display = DisplayStyle.Flex;
+            optionA_B.text = optionA;
+            optionB_B.text = optionB;
 
-        optionBBtn.style.display = DisplayStyle.None;
+            if (marginForTitleBar)
+            {
+                this.style.marginTop = 40;
+            }
 
-        optionABtn.text = optionA;
-        optionABtn.clickable.clicked += () =>
-        {
-            CloseDialogueBox(true);
-        };
+            this.choiceCallback = (b) =>
+            {
+                Cursor.CursorHandler.UnSetMovement(this);
+                choiceCallback(b);
+            };
 
-        if (marginForTitleBar)
-        {
-            this.style.marginTop = 40;
+            OnApplyUserPreferences();
         }
 
-        this.choiceCallback = (b) =>
+        /// <summary>
+        /// Sets up the dialogue box for one choice.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <param name="optionA"></param>
+        /// <param name="optionB"></param>
+        /// <param name="choiceCallback"></param>
+        /// <param name="marginForTitleBar"></param>
+        public void Setup(string title, string message, string optionA, Action choiceCallback, bool marginForTitleBar = false)
         {
-            BrowserDesktop.Cursor.CursorHandler.UnSetMovement(this);
-            choiceCallback();
-        };
-        currentDialogueBox = this;
+            Setup(title, message);
+
+            optionB_B.style.display = DisplayStyle.None;
+            optionA_B.text = optionA;
+
+            if (marginForTitleBar)
+            {
+                this.style.marginTop = 40;
+            }
+
+            this.choiceCallback = (b) =>
+            {
+                Cursor.CursorHandler.UnSetMovement(this);
+                choiceCallback();
+            };
+
+            OnApplyUserPreferences();
+        }
+
+        /// <summary>
+        /// Sets ups elements which do not depends on the number of choices.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        private void Setup(string title, string message)
+        {
+            Initialize();
+
+            titleText = title;
+            messageText = message;
+        }
+
+        public override void OnApplyUserPreferences()
+        {
+            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(title_L, "title", titleText);
+            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(message_L, "corps", messageText);
+        }
     }
-
-    /// <summary>
-    /// Sets ups elements which do not depends on the number of choices.
-    /// </summary>
-    /// <param name="title"></param>
-    /// <param name="message"></param>
-    /// <returns></returns>
-    private (Button, Button) Setup(string title, string message)
-    {
-        BrowserDesktop.Cursor.CursorHandler.SetMovement(this, BrowserDesktop.Cursor.CursorHandler.CursorMovement.Free);
-        this.style.position = Position.Absolute;
-
-        this.Q<Label>("dialogue-box-title").text = title;
-        this.Q<Label>("dialogue-box-message").text = message;
-
-        Button optionABtn = this.Q<Button>("dialogue-box-btn1");
-        Button optionBBtn = this.Q<Button>("dialogue-box-btn2");
-
-        return (optionABtn, optionBBtn);
-    }
-
-    public static void CloseDialogueBox(bool choice)
-    {
-        currentDialogueBox.RemoveFromHierarchy();
-        currentDialogueBox.choiceCallback.Invoke(choice);
-        currentDialogueBox = null;
-    }
-
 }

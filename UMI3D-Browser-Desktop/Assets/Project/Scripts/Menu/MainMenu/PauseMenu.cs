@@ -54,7 +54,7 @@ namespace BrowserDesktop.Menu
             };
 
             leaveEnvironmentBtn = pauseMenu.Q<Button>("leave-environment-btn");
-            leaveEnvironmentBtn.clickable.clicked += () =>
+            /*leaveEnvironmentBtn.clickable.clicked += () =>
             {
                 DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
                 dialogueBox.Setup("Leave environment", "Are you sure ...?", "YES", "NO", (b) =>
@@ -64,7 +64,7 @@ namespace BrowserDesktop.Menu
                 });
 
                uiDocument.rootVisualElement.Add(dialogueBox);
-            };
+            };*/
 
             pauseMenuOpenBtn = pauseMenu.Q<Button>("pause-menu-open-btn");
             pauseMenuOpenBtn.clickable.clicked += () =>

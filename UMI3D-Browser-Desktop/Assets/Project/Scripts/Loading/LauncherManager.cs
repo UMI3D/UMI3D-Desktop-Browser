@@ -28,6 +28,8 @@ using BrowserDesktop.Controller;
 using BeardedManStudios.Forge.Networking;
 using System.Runtime.InteropServices;
 using System.Text;
+using BrowserDesktop.UserPreferences;
+using BrowserDesktop.Menu;
 using umi3d.cdk.collaboration;
 
 public class LauncherManager : MonoBehaviour
@@ -45,8 +47,6 @@ public class LauncherManager : MonoBehaviour
 
     [SerializeField]
     private VisualTreeAsset libraryEntryTreeAsset = null;
-    [SerializeField]
-    private VisualTreeAsset dialogueBoxTreeAsset = null;
     [SerializeField]
     private VisualTreeAsset sessionEntry = null;
 
@@ -95,11 +95,11 @@ public class LauncherManager : MonoBehaviour
 
     #region Data
 
-    private UserPreferencesManager.ServerData currentServerConnectionData;
-    private List<UserPreferencesManager.ServerData> serverConnectionData = new List<UserPreferencesManager.ServerData>();
+    private ServerPreferences.ServerData currentServerConnectionData;
+    private List<ServerPreferences.ServerData> serverConnectionData = new List<ServerPreferences.ServerData>();
 
-    private UserPreferencesManager.Data currentConnectionData;
-    private List<UserPreferencesManager.Data> connectionData = new List<UserPreferencesManager.Data>();
+    private ServerPreferences.Data currentConnectionData;
+    private List<ServerPreferences.Data> connectionData = new List<ServerPreferences.Data>();
 
     [SerializeField]
     public string currentScene;
@@ -137,7 +137,6 @@ public class LauncherManager : MonoBehaviour
         masterServer = new LaucherOnMasterServer();
 
         Debug.Assert(uiDocument != null);
-        Debug.Assert(dialogueBoxTreeAsset != null);
         Debug.Assert(libraryEntryTreeAsset != null);
         root = uiDocument.rootVisualElement;
 
@@ -262,10 +261,10 @@ public class LauncherManager : MonoBehaviour
         advancedConnectionScreen.style.display = DisplayStyle.None;
         librariesScreen.style.display = DisplayStyle.None;
 
-        currentConnectionData = UserPreferencesManager.GetPreviousConnectionData();
-        serverConnectionData = UserPreferencesManager.GetRegisteredServerData();
+        currentConnectionData = ServerPreferences.GetPreviousConnectionData();
+        serverConnectionData = ServerPreferences.GetRegisteredServerData();
         DisplayRegisteredServers();
-        currentServerConnectionData = UserPreferencesManager.GetPreviousServerData();
+        currentServerConnectionData = ServerPreferences.GetPreviousServerData();
 
         previousStep = null;
         nextStep = () => SetServer(urlInput.value);
@@ -356,17 +355,17 @@ public class LauncherManager : MonoBehaviour
                 //4.Bind the button to unistall this lib
                 entry.Q<Button>("library-unistall").clickable.clicked += () =>
                 {
-                    DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-                    dialogue.Setup("Are you sure ... ?", "This library is required for " + app.Key + " environment", "YES", "NO", (b) =>
-                    {
-                        if (b)
+                    DialogueBox_UIController.
+                        Setup("Are you sure ... ?", "This library is required for " + app.Key + " environment", "YES", "NO", (b) =>
                         {
-                            lib.applications.Remove(app.Key);
-                            UMI3DResourcesManager.RemoveLibrary(lib.key);
-                            DisplayLibraries();
-                        }
-                    });
-                    root.Add(dialogue);
+                            if (b)
+                            {
+                                lib.applications.Remove(app.Key);
+                                UMI3DResourcesManager.RemoveLibrary(lib.key);
+                                DisplayLibraries();
+                            }
+                        }).
+                        DisplayFrom(uiDocument);
                 };
                 librariesList.Add(entry);
             }
@@ -490,7 +489,7 @@ public class LauncherManager : MonoBehaviour
         }
         if (updateInfo)
         {
-            UserPreferencesManager.StoreRegisteredServerData(serverConnectionData);
+            ServerPreferences.StoreRegisteredServerData(serverConnectionData);
             updateInfo = false;
         }
 
@@ -511,20 +510,10 @@ public class LauncherManager : MonoBehaviour
     /// </summary>
     private void CheckShortcuts()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            if (DialogueBoxElement.IsADialogueBoxDislayed)
-                DialogueBoxElement.CloseDialogueBox(true);
-            else
-                nextStep?.Invoke();
-        }
-        else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
-        {
-            if (DialogueBoxElement.IsADialogueBoxDislayed)
-                DialogueBoxElement.CloseDialogueBox(false);
-            else
-                previousStep?.Invoke();
-        }
+        if (Input.GetKeyDown(KeyCode.Return) && !DialogueBox_UIController.Displayed)
+            nextStep?.Invoke();
+        else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)) && !DialogueBox_UIController.Displayed)
+            previousStep?.Invoke();
     }
 
     /// <summary>
@@ -555,7 +544,7 @@ public class LauncherManager : MonoBehaviour
     private void DirectConnect()
     {
         //currentConnectionData.environmentName
-        UserPreferencesManager.StoreUserData(currentConnectionData);
+        ServerPreferences.StoreUserData(currentConnectionData);
       
         StartCoroutine(WaitReady());
     }
@@ -575,19 +564,19 @@ public class LauncherManager : MonoBehaviour
                 currentServerConnectionData.serverIcon = null;
             }
             else
-                currentServerConnectionData = new UserPreferencesManager.ServerData() { serverUrl = serverUrl };
+                currentServerConnectionData = new ServerPreferences.ServerData() { serverUrl = serverUrl };
             serverConnectionData.Add(currentServerConnectionData);
-            UserPreferencesManager.AddRegisterdeServerData(currentServerConnectionData);
+            ServerPreferences.AddRegisterdeServerData(currentServerConnectionData);
             Connect(currentServerConnectionData,true);
         }
         else
-            Connect(new UserPreferencesManager.ServerData() { serverUrl = serverUrl });
+            Connect(new ServerPreferences.ServerData() { serverUrl = serverUrl });
     }
 
     /// <summary>
     /// Initiates the connection to the forge master server.
     /// </summary>
-    private void Connect(UserPreferencesManager.ServerData server, bool saveInfo = false) 
+    private void Connect(ServerPreferences.ServerData server, bool saveInfo = false) 
     {
         
         Debug.Log("Try to connect to : " + server.serverUrl);
@@ -630,7 +619,7 @@ public class LauncherManager : MonoBehaviour
     {
         savedServersSlider.ClearItems();
         bool isEmpty = true;
-        foreach (UserPreferencesManager.ServerData env in serverConnectionData)
+        foreach (ServerPreferences.ServerData env in serverConnectionData)
         {
             isEmpty = false;
             var item = SavedServerItemTreeAsset.CloneTree().Q<VisualElement>("saved-server-item");
@@ -655,18 +644,18 @@ public class LauncherManager : MonoBehaviour
             });
             item.Q<Button>("delete-item").clickable.clicked += () =>
             {
-                DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-                dialogue.Setup(env.serverName, "Delete this server from registered ?", "YES", "NO", (b) =>
-                {
-                    if (b)
+                DialogueBox_UIController.
+                    Setup(env.serverName, "Delete this server from registered ?", "YES", "NO", (b) =>
                     {
-                        serverConnectionData.Remove(serverConnectionData.Find(d => d.serverName == env.serverName));
-                        UserPreferencesManager.StoreRegisteredServerData(serverConnectionData);
-                        savedServersSlider.RemoveElement(item);
-                    }
-                },
-                true);
-                root.Add(dialogue);
+                        if (b)
+                        {
+                            serverConnectionData.Remove(serverConnectionData.Find(d => d.serverName == env.serverName));
+                            ServerPreferences.StoreRegisteredServerData(serverConnectionData);
+                            savedServersSlider.RemoveElement(item);
+                        }
+                    },
+                    true).
+                    DisplayFrom(uiDocument);
             };
             savedServersSlider.AddElement(item);
         }
