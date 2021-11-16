@@ -1,0 +1,99 @@
+.darkTheme-menuBar-toolbox-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_toolbox_ENABLE.png');
+}
+
+.darkTheme-menuBar-toolbox-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_toolbox_HOVER.png');
+}
+
+.darkTheme-menuBar-toolbox-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_toolbox_PRESS.png');
+}
+
+.darkTheme-menuBar-avatarOn-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_avatarON_ENABLE.png');
+}
+
+.darkTheme-menuBar-avatarOn-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_avatarON_HOVER.png');
+}
+
+.darkTheme-menuBar-avatarOn-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_avatarON_PRESS.png');
+}
+
+.darkTheme-menuBar-avatarOff-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_avatarOFF_ENABLE.png');
+}
+
+.darkTheme-menuBar-avatarOff-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_avatarOFF_HOVER.png');
+}
+
+.darkTheme-menuBar-avatarOff-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_avatarOFF_PRESS.png');
+}
+
+.darkTheme-menuBar-soundOn-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_soundON_ENABLE.png');
+}
+
+.darkTheme-menuBar-soundOn-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_soundON_HOVER.png');
+}
+
+.darkTheme-menuBar-soundOn-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_soundON_PRESS.png');
+}
+
+.darkTheme-menuBar-soundOff-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_soundOFF_ENABLE.png');
+}
+
+.darkTheme-menuBar-soundOff-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_soundOFF_HOVER.png');
+}
+
+.darkTheme-menuBar-soundOff-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_soundOFF_PRESS.png');
+}
+
+.darkTheme-menuBar-micOn-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_micON_ENABLE.png');
+}
+
+.darkTheme-menuBar-micOn-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_micON_HOVER.png');
+}
+
+.darkTheme-menuBar-micOn-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_micON_PRESS.png');
+}
+
+.darkTheme-menuBar-micOff-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_micOFF_ENABLE.png');
+}
+
+.darkTheme-menuBar-micOff-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_micOFF_HOVER.png');
+}
+
+.darkTheme-menuBar-micOff-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_micOFF_PRESS.png');
+}
+
+.darkTheme-menuBar-leave-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_leave_ENABLE.png');
+}
+
+.darkTheme-menuBar-leave-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_leave_HOVER.png');
+}
+
+.darkTheme-menuBar-leave-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/btn_leave_PRESS.png');
+}
+
+.darkTheme-menuBar-separator {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/separateur.png');
+}

@@ -201,6 +201,11 @@ PrefabInstance:
       propertyPath: parallelNavigation
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1559253697178214691, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3316399237951345772, guid: 50541f86f5f01194eb2b175264de3f46,
         type: 3}
       propertyPath: parallelNavigation
@@ -2119,7 +2124,6 @@ GameObject:
   - component: {fileID: 2079147377}
   - component: {fileID: 2079147380}
   - component: {fileID: 2079147381}
-  - component: {fileID: 2079147382}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -2270,18 +2274,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2079147376}
   m_Enabled: 1
---- !u!114 &2079147382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2079147376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7f88b449ad342340bda4e4ff6f43d01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2096641626
 GameObject:
   m_ObjectHideFlags: 0
@@ -2358,6 +2350,11 @@ PrefabInstance:
     - target: {fileID: 2611582031206718739, guid: d599db4b8e88c6246a10c7a44287b2d5,
         type: 3}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7079216685592033180, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: sendTracking
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7079216685592033180, guid: d599db4b8e88c6246a10c7a44287b2d5,

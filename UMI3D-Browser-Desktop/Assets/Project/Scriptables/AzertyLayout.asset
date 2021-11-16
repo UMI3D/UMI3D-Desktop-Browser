@@ -18,7 +18,9 @@ MonoBehaviour:
   MainActionKey: 323
   LeaveContextualMenu: 325
   ContextualMenuNavigationBack: 324
-  ToggleMicrophone: 116
+  ToggleAudio: 121
+  ToggleAvatar: 116
+  ToggleMicrophone: 117
   Forward: 122
   Backward: 115
   Left: 113

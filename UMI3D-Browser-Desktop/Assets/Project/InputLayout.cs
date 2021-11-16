@@ -31,6 +31,8 @@ namespace BrowserDesktop.Controller
         public KeyCode LeaveContextualMenu;
         public KeyCode ContextualMenuNavigationBack;
 
+        public KeyCode ToggleAudio;
+        public KeyCode ToggleAvatar;
         public KeyCode ToggleMicrophone;
         #endregion
         #region Navigation
@@ -66,6 +68,8 @@ namespace BrowserDesktop.Controller
             MainActionKey = layout.MainActionKey;
             LeaveContextualMenu = layout.LeaveContextualMenu;
             ContextualMenuNavigationBack = layout.ContextualMenuNavigationBack;
+            ToggleAudio = layout.ToggleAudio;
+            ToggleAvatar = layout.ToggleAvatar;
             ToggleMicrophone = layout.ToggleMicrophone;
             Forward = layout.Forward;
             Backward = layout.Backward;
