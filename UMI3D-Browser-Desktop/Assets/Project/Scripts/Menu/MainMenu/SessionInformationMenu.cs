@@ -39,8 +39,6 @@ namespace BrowserDesktop.Menu
         VisualElement topCenterMenu;
         VisualElement microphoneSetter;
 
-        Label sessionTime;
-        Button microphoneBtn;
         Label environmentName;
 
         #endregion
