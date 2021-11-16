@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/Project/UI/UXML/menu-bar.uss" />
+    <BrowserDesktop.UI.GenericElement.ToolboxSeparatorGenericElement style="height: 100%; flex-direction: row; flex-grow: 0; flex-shrink: 1;">
+        <ui:VisualElement name="Vertical-layout" style="height: 100%; width: 100%; flex-shrink: 0; flex-grow: 1;">
+            <ui:VisualElement name="vertical-spacer" style="height: 20px;" />
+            <ui:VisualElement name="separator" style="width: 20px; height: 100%; -unity-background-scale-mode: scale-to-fit;" />
+            <ui:VisualElement name="vertical-spacer" style="height: 20px;" />
+        </ui:VisualElement>
+    </BrowserDesktop.UI.GenericElement.ToolboxSeparatorGenericElement>
+</ui:UXML>

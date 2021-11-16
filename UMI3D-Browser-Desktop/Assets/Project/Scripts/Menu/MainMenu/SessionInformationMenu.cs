@@ -67,7 +67,7 @@ namespace BrowserDesktop.Menu
             microphoneBtn = sessionInfo.Q<Button>("microphone-btn");
             microphoneBtn.clickable.clicked += () =>
             {
-                ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
+                Environment.Settings.ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
             };
 
             DisplayConsole(false);
@@ -149,31 +149,10 @@ namespace BrowserDesktop.Menu
         }
 
         /// <summary>
-        /// Event called when the status of the microphone changes.
-        /// </summary>
-        /// <param name="val"></param>
-        public void OnMicrophoneStatusChanged(bool val)
-        {
-            if (val)
-            {
-                microphoneBtn.RemoveFromClassList("btn-mic-off");
-                microphoneBtn.AddToClassList("btn-mic-on");
-            }
-
-            else
-            {
-                microphoneBtn.RemoveFromClassList("btn-mic-on");
-                microphoneBtn.AddToClassList("btn-mic-off");
-            }
-
-        }
-
-        /// <summary>
         /// Initiates the custom title bar with the name of the environment.
         /// </summary>
         /// <param name="media"></param>
-        /// <param name="data"></param>
-        public void SetEnvironmentName(MediaDto media, UserPreferencesManager.Data data)
+        public void SetEnvironmentName(MediaDto media)
         {
             environmentName = uiDocument.rootVisualElement.Q<Label>("environment-name");
             environmentName.text = media.name;

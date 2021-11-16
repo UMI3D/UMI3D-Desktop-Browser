@@ -47,6 +47,8 @@ namespace BrowserDesktop.Controller
             MainActionKey,
             LeaveContextualMenu,
             ContextualMenuNavigationBack,
+            ToggleAudio,
+            ToggleAvatar,
             ToggleMicrophone,
             Forward,
             Backward,
@@ -90,6 +92,10 @@ namespace BrowserDesktop.Controller
                         return Instance.CurrentLayout.LeaveContextualMenu;
                     case Input.ContextualMenuNavigationBack:
                         return Instance.CurrentLayout.ContextualMenuNavigationBack;
+                    case Input.ToggleAvatar:
+                        return Instance.CurrentLayout.ToggleAvatar;
+                    case Input.ToggleAudio:
+                        return Instance.CurrentLayout.ToggleAudio;
                     case Input.ToggleMicrophone:
                         return Instance.CurrentLayout.ToggleMicrophone;
                     case Input.Forward:
