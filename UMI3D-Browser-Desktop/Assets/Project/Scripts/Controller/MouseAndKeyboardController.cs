@@ -535,6 +535,8 @@ namespace BrowserDesktop.Controller
             return (((parameters.Count == 0) && (events.Count <= 7) && (manips.Count == 0)));
         }
 
+        #region Clear
+
         public override void Clear()
         {
             foreach (ManipulationGroup input in ManipulationInputs)
@@ -552,22 +554,22 @@ namespace BrowserDesktop.Controller
 
         public void ClearParameters()
         {
-            KeyMenuInputs.ForEach((a) => { Destroy(a); });
-            KeyMenuInputs = new List<KeyMenuInput>();
-
-            floatParameterInputs.ForEach((a) => { Destroy(a); });
-            floatParameterInputs = new List<FloatParameterInput>();
-            floatRangeParameterInputs.ForEach((a) => { Destroy(a); });
-            floatRangeParameterInputs = new List<FloatRangeParameterInput>();
-            intParameterInputs.ForEach((a) => { Destroy(a); });
-            intParameterInputs = new List<IntParameterInput>();
-            boolParameterInputs.ForEach((a) => { Destroy(a); });
-            boolParameterInputs = new List<BooleanParameterInput>();
-            stringParameterInputs.ForEach((a) => { Destroy(a); });
-            stringParameterInputs = new List<StringParameterInput>();
-            stringEnumParameterInputs.ForEach((a) => { Destroy(a); });
-            stringEnumParameterInputs = new List<StringEnumParameterInput>();
+            ClearInputs(ref KeyMenuInputs, (a) => { Destroy(a); });
+            ClearInputs(ref floatParameterInputs, (a) => { Destroy(a); });
+            ClearInputs(ref floatRangeParameterInputs, (a) => { Destroy(a); });
+            ClearInputs(ref intParameterInputs, (a) => { Destroy(a); });
+            ClearInputs(ref boolParameterInputs, (a) => { Destroy(a); });
+            ClearInputs(ref stringParameterInputs, (a) => { Destroy(a); });
+            ClearInputs(ref stringEnumParameterInputs, (a) => { Destroy(a); });
         }
+
+        private void ClearInputs<T>(ref List<T> inputs, System.Action<T> action) where T: AbstractUMI3DInput
+        {
+            inputs.ForEach(action);
+            inputs = new List<T>();
+        }
+
+        #endregion
 
         /// <summary>
         /// Create a menu to access each interactions of a tool separately.
