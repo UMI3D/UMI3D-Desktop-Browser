@@ -33,6 +33,7 @@ public class ShortcutIconElement : VisualElement
     /// <param name="sprite">The sprite of the icon.</param>
     public void Setup(Sprite sprite)
     {
+        if (sprite == null) return;
         float height = sprite.rect.height;
         float width = sprite.rect.width;
 

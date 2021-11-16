@@ -22,6 +22,7 @@ namespace BrowserDesktop.Menu
     {
         public UIDocument uiDocument;
 
+        //Event-container
         [SerializeField]
         string containerTagName = null;
         VisualElement container;

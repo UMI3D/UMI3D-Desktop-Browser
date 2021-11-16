@@ -166,7 +166,7 @@ public class ShortcutElement : VisualElement
         IconsAreaWidth = iconsArea_VE.resolvedStyle.width;
         ShortcutNameWidth = shortcutName_L.resolvedStyle.width;
 
-        Debug.Log("icons width = " + IconsAreaWidth + ", Icons area width = " + iconsArea_VE.resolvedStyle.width);
+        //Debug.Log("icons width = " + IconsAreaWidth + ", Icons area width = " + iconsArea_VE.resolvedStyle.width);
     }
 
     public void ResizeShortcutWidth()
@@ -174,7 +174,7 @@ public class ShortcutElement : VisualElement
         iconsArea_VE.style.width = IconsAreaWidth;
         shortcutName_L.style.width = ShortcutNameWidth;
 
-        Debug.Log("resizement");
+        //Debug.Log("resizement");
     }
 
     /// <summary>
