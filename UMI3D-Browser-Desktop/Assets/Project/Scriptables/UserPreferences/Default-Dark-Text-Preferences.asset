@@ -47,3 +47,14 @@ MonoBehaviour:
     maxNumberOfCharacters: 10
     caseStyle: 0
     resizeWidth: 0
+  - textPrefName: corps
+    textStyle: 0
+    labelFont: {fileID: 0}
+    labelFontStyle: 0
+    labelFontSize: 11
+    labelColor: {r: 1, g: 1, b: 1, a: 1}
+    labelUSSClasses: []
+    applyFormat: 1
+    maxNumberOfCharacters: 50
+    caseStyle: 0
+    resizeWidth: 0

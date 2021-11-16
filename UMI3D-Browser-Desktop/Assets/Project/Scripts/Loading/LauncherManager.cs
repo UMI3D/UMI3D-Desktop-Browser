@@ -354,7 +354,7 @@ public class LauncherManager : MonoBehaviour
                 //4.Bind the button to unistall this lib
                 entry.Q<Button>("library-unistall").clickable.clicked += () =>
                 {
-                    DialogueBox_UIController.Instance.
+                    DialogueBox_UIController.
                         Setup("Are you sure ... ?", "This library is required for " + app.Key + " environment", "YES", "NO", (b) =>
                         {
                             if (b)
@@ -509,9 +509,9 @@ public class LauncherManager : MonoBehaviour
     /// </summary>
     private void CheckShortcuts()
     {
-        if (Input.GetKeyDown(KeyCode.Return) && !DialogueBox_UIController.Instance.Displayed)
+        if (Input.GetKeyDown(KeyCode.Return) && !DialogueBox_UIController.Displayed)
             nextStep?.Invoke();
-        else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)) && !DialogueBox_UIController.Instance.Displayed)
+        else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)) && !DialogueBox_UIController.Displayed)
             previousStep?.Invoke();
     }
 
@@ -643,7 +643,7 @@ public class LauncherManager : MonoBehaviour
             });
             item.Q<Button>("delete-item").clickable.clicked += () =>
             {
-                DialogueBox_UIController.Instance.
+                DialogueBox_UIController.
                     Setup(env.serverName, "Delete this server from registered ?", "YES", "NO", (b) =>
                     {
                         if (b)

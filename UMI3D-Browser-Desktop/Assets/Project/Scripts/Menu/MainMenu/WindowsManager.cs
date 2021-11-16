@@ -136,7 +136,7 @@ public class WindowsManager : MonoBehaviour
     private bool WantsToQuit()
     {
         bool wantsToQuit = umi3d.common.QuittingManager.ApplicationIsQuitting;
-        if (!wantsToQuit && !DialogueBox_UIController.Instance.Displayed)
+        if (!wantsToQuit && !DialogueBox_UIController.Displayed)
             ShowDialogueBoxToQuit();
         return wantsToQuit;
     }
@@ -146,7 +146,7 @@ public class WindowsManager : MonoBehaviour
     /// </summary>
     private void ShowDialogueBoxToQuit()
     {
-        DialogueBox_UIController.Instance.
+        DialogueBox_UIController.
             Setup("Close application", "Are you sure ...?", "YES", "NO", (b) =>
             {
                 umi3d.common.QuittingManager.ApplicationIsQuitting = b;

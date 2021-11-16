@@ -115,8 +115,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
     /// </summary>
     private void ManageInputs()
     {
-        if (!isDisplayed || DialogueBox_UIController.Instance.Displayed) return;
-        else nextStep?.Invoke();
+        if (!isDisplayed || DialogueBox_UIController.Displayed) return;
+        else if (Input.GetKeyDown(KeyCode.Return)) nextStep?.Invoke();
     }
 
     #endregion
@@ -233,7 +233,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void GetMediaFailed(string error)
     {
-        DialogueBox_UIController.Instance.
+        DialogueBox_UIController.
             Setup(
                 "Server error",
                 error,
@@ -267,7 +267,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
 
     private void OnConnectionLost(Action<bool> callback)
     {
-        DialogueBox_UIController.Instance.
+        DialogueBox_UIController.
             Setup(
                 "Connection to the server lost",
                 "Leave to the connection menu or try again ?",
@@ -361,7 +361,7 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
         {
             string title = (ids.Count == 1) ? "One assets library is required" : ids.Count + " assets libraries are required";
 
-            DialogueBox_UIController.Instance.
+            DialogueBox_UIController.
             Setup(title, "Download libraries and connect to the server ?", "Accept", "Deny", (b) =>
             {
                 callback.Invoke(b);

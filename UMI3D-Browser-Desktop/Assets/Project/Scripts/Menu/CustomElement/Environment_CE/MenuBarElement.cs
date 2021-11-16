@@ -58,7 +58,12 @@ namespace BrowserDesktop.UI.CustomElement
 
             ToolboxGenericElement openToolbox_TGE = toolboxGE_VTA.CloneTree().Q<ToolboxGenericElement>();
             ToolboxButtonGenericElement openToolboxButton_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-            openToolboxButton_TBGE.Setup("Toolbox", "toolbox", "toolbox", true, () => { Debug.Log("TODO"); });
+            openToolboxButton_TBGE.Setup("Toolbox", "toolbox", "toolbox", true, () => 
+            {
+            Menu.DialogueBox_UIController.
+                Setup("TODO", "Not implemented yed", "Close", () => { }).
+                    DisplayFrom(uiDocument);
+            });
             openToolbox_TGE.Setup("", openToolboxButton_TBGE);
             leftLayout_VE.Add(openToolbox_TGE);
 
@@ -94,12 +99,13 @@ namespace BrowserDesktop.UI.CustomElement
             ToolboxGenericElement leaveEnvironment_TGE = toolboxGE_VTA.CloneTree().Q<ToolboxGenericElement>();
             ToolboxButtonGenericElement leave_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
             leave_TBGE.Setup("", "leave", "leave", true, () => {
-                Menu.DialogueBox_UIController.Instance.Setup("Leave environment", "Are you sure ...?", "YES", "NO", (b) =>
-                {
-                    if (b)
-                        ConnectionMenu.Instance.Leave();
-                });
-                Menu.DialogueBox_UIController.Instance.DisplayFrom(uiDocument);
+                Menu.DialogueBox_UIController.
+                    Setup("Leave environment", "Are you sure ...?", "YES", "NO", (b) =>
+                    {
+                        if (b)
+                            ConnectionMenu.Instance.Leave();
+                    }).
+                    DisplayFrom(uiDocument);
             });
             leaveEnvironment_TGE.Setup("", leave_TBGE);
             rightLayout_VE.Add(leaveEnvironment_TGE);
