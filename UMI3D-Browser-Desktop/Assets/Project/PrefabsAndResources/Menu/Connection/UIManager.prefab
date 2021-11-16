@@ -328,6 +328,7 @@ GameObject:
   m_Component:
   - component: {fileID: 759972038}
   - component: {fileID: 759972039}
+  - component: {fileID: 737743150693548703}
   m_Layer: 0
   m_Name: Footer
   m_TagString: Untagged
@@ -362,6 +363,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiDocument: {fileID: 1750602239179936672}
+--- !u!114 &737743150693548703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759972037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c0d139d622e5f04c8b662fa0abdbced, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiDocument: {fileID: 1750602239179936672}
+  shortcutTreeAsset: {fileID: 9197481963319205126, guid: d5c3a0f3c8830504cad6313ba6f5ca58,
+    type: 3}
+  shortcutIconTreeAsset: {fileID: 9197481963319205126, guid: 37de0f326e455d746a6e3028a70e1793,
+    type: 3}
+  keyBindings: {fileID: 11400000, guid: 3576f5f11fbda2948a7580457c1a2b48, type: 2}
 --- !u!1 &1060301966
 GameObject:
   m_ObjectHideFlags: 0
