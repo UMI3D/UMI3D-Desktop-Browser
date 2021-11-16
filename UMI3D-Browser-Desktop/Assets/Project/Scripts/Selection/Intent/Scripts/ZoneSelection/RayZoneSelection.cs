@@ -128,10 +128,22 @@ namespace umi3d.cdk.interaction.selection
             foreach (var hit in rayCastHits)
             {
                 var interContainer = hit.transform.GetComponent<InteractableContainer>();
-                if (interContainer == null)
+                if (interContainer == null) //looking for a componenent in parent
                     interContainer = hit.transform.GetComponentInParent<InteractableContainer>();
                 if (interContainer != null)
-                    objectsOnRay.Add(interContainer, hit);
+                {
+                    if (objectsOnRay.ContainsKey(interContainer))
+                    {
+                        if (objectsOnRay[interContainer].distance > hit.distance) //only consider the first hit if there are several
+                        {
+                            objectsOnRay[interContainer] = hit;
+                        }
+                    }
+                    else
+                    {
+                        objectsOnRay.Add(interContainer, hit);
+                    }
+                }    
             }
 
             return objectsOnRay;
