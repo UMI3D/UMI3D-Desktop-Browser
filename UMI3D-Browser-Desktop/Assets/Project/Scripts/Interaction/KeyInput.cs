@@ -148,6 +148,7 @@ namespace BrowserDesktop.Interaction
                             DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                     } else
                     {
+                        Debug.Log("display test = " + associatedInteraction.name);
                         DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                     }
                 }
@@ -189,11 +190,21 @@ namespace BrowserDesktop.Interaction
 
         private void DiplayDisplayer(string label, string inputName, Texture2D icon = null)
         {
+            //Debug.Log("displayer = " + label);
             if (eventDisplayer != null)
             {
                 eventDisplayer.Display(true);
                 eventDisplayer.SetUp(label, inputName, icon);
             }
+
+            //...
+
+            Shortcuts.Instance.AddShortcut(label, new string[1] { inputName });
+        }
+
+        private void DisplayDisplayer(string label, KeyCode key_code)
+        {
+
         }
 
         protected virtual void Update()
@@ -296,6 +307,7 @@ namespace BrowserDesktop.Interaction
             ResetButton();
             eventDisplayer?.Display(false);
             associatedInteraction = null;
+            Shortcuts.Instance.ClearShortcut();
         }
 
         void ResetButton()

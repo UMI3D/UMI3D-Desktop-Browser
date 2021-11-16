@@ -1,0 +1,21 @@
+.btn-shortcut {
+    background-image: url('/Assets/Project/UI/UI_connection/Shortcut_icons/btn_shortcut_ENABLE.png');
+}
+
+.btn-shortcut:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/Shortcut_icons/btn_shortcut_HOVER.png');
+}
+
+.btn-shortcut:active {
+    background-image: url('/Assets/Project/UI/UI_connection/Shortcut_icons/btn_shortcut_PRESS.png');
+}
+
+Label.label-shortcut {
+    color: white;
+    -unity-font-style: bold;
+}
+
+Label.label-shortcut-plus {
+    margin-left: 3px;
+    margin-right: 3px;
+}
