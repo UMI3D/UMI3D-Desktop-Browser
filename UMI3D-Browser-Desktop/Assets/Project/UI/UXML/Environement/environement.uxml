@@ -3,6 +3,7 @@
     <ui:Template name="password-screen" src="password-screen.uxml" />
     <ui:Template name="libraries-screen" src="libraries-screen.uxml" />
     <ui:Template name="ShortcutDisplayer" src="/Assets/Project/UI/UXML/CustomElement/ShortcutDisplayer.uxml" />
+    <ui:Template name="MicrophoneElement" src="/Assets/Project/UI/UXML/CustomElement/MicrophoneElement.uxml" />
     <Style src="/Assets/Project/UI/UXML/main-style.uss" />
     <Style src="/Assets/Project/UI/UXML/sessio-info.uss" />
     <Style src="/Assets/Project/UI/UXML/shortcut.uss" />
@@ -90,6 +91,10 @@
                     <ui:VisualElement name="console" style="display: flex; position: absolute; width: 430px; height: 200px; bottom: 0; right: 0; background-color: rgba(50, 50, 50, 0.8); padding-top: 15px;">
                         <ui:Label text="Label" name="version" class="dark-grey1-bck grey-txt" style="height: 20px; -unity-text-align: middle-right; padding-right: 15px;" />
                         <ui:ScrollView name="console-container" show-horizontal-scroller="false" show-vertical-scroller="false" class="orange-scroll-view" style="flex-grow: 1; margin-left: 5px;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="microphone-setter" style="display: flex; position: absolute; width: 430px; height: 71px; bottom: -5px; right: 108px; background-color: rgba(50, 50, 50, 0.8); padding-top: 15px;">
+                        <ui:Instance template="MicrophoneElement" name="threshold-bar" />
+                        <ui:Instance template="MicrophoneElement" name="gain-bar" style="overflow: hidden;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 32px; justify-content: center; flex-direction: row;">
