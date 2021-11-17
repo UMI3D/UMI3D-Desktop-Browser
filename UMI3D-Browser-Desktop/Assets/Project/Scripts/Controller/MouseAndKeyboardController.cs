@@ -44,8 +44,7 @@ namespace BrowserDesktop.Controller
         int navigationDirect = 0;
         [SerializeField]
         List<DofGroupEnum> dofGroups = new List<DofGroupEnum>();
-        [SerializeField]
-        List<CursorKeyInput> ManipulationActionInput = new List<CursorKeyInput>();
+        
 
         AutoProjectOnHover reason = new AutoProjectOnHover();
 
@@ -63,13 +62,11 @@ namespace BrowserDesktop.Controller
         public class HoverEvent : UnityEvent<ulong> { };
 
         [HideInInspector]
-        static public HoverEvent HoverEnter = new HoverEvent();
-
+        public static HoverEvent HoverEnter = new HoverEvent();
         [HideInInspector]
-        static public HoverEvent HoverUpdate = new HoverEvent();
-
+        public static HoverEvent HoverUpdate = new HoverEvent();
         [HideInInspector]
-        static public HoverEvent HoverExit = new HoverEvent();
+        public static HoverEvent HoverExit = new HoverEvent();
 
         #region Hover
 
@@ -144,6 +141,11 @@ namespace BrowserDesktop.Controller
 
         #region Inputs
 
+        #region Inputs Fields
+
+        [SerializeField]
+        List<CursorKeyInput> ManipulationActionInput = new List<CursorKeyInput>();
+
         List<ManipulationGroup> ManipulationInputs = new List<ManipulationGroup>();
         List<KeyInput> KeyInputs = new List<KeyInput>();
 
@@ -187,8 +189,6 @@ namespace BrowserDesktop.Controller
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
         protected List<StringEnumParameterInput> stringEnumParameterInputs = new List<StringEnumParameterInput>();
 
-
-
         public override List<AbstractUMI3DInput> inputs
         {
             get {
@@ -207,6 +207,143 @@ namespace BrowserDesktop.Controller
         }
 
         #endregion
+
+        #region Clear Menu and Inputs
+
+        public override void Clear()
+        {
+            foreach (ManipulationGroup input in ManipulationInputs)
+            {
+                if (!input.IsAvailable())
+                    input.Dissociate();
+            }
+            foreach (KeyInput input in KeyInputs)
+            {
+                if (!input.IsAvailable())
+                    input.Dissociate();
+            }
+            ClearParameters();
+        }
+
+        private void ClearParameters()
+        {
+            ClearInputs(ref KeyMenuInputs, (a) => { Destroy(a); });
+            ClearInputs(ref floatParameterInputs, (a) => { Destroy(a); });
+            ClearInputs(ref floatRangeParameterInputs, (a) => { Destroy(a); });
+            ClearInputs(ref intParameterInputs, (a) => { Destroy(a); });
+            ClearInputs(ref boolParameterInputs, (a) => { Destroy(a); });
+            ClearInputs(ref stringParameterInputs, (a) => { Destroy(a); });
+            ClearInputs(ref stringEnumParameterInputs, (a) => { Destroy(a); });
+        }
+
+        private void ClearInputs<T>(ref List<T> inputs, System.Action<T> action) where T : AbstractUMI3DInput
+        {
+            inputs.ForEach(action);
+            inputs = new List<T>();
+        }
+
+        #endregion
+
+        #region Find Input
+
+        public override DofGroupOptionDto FindBest(DofGroupOptionDto[] options)
+        {
+
+            foreach (var GroupOption in options)
+            {
+                bool ok = true;
+                foreach (DofGroupDto dof in GroupOption.separations)
+                {
+                    if (!dofGroups.Contains(dof.dofs))
+                    {
+                        ok = false;
+                        break;
+                    }
+                }
+                if (ok) return GroupOption;
+            }
+
+            throw new System.NotImplementedException();
+        }
+
+        public override AbstractUMI3DInput FindInput(ManipulationDto manip, DofGroupDto dof, bool unused = true)
+        {
+            ManipulationGroup group = ManipulationInputs.Find(i => i.IsAvailableFor(manip));
+            if (group == null)
+            {
+                group = ManipulationGroup.Instanciate(this, ManipulationActionInput, dofGroups, transform);
+                if (group == null)
+                {
+                    Debug.LogWarning("find manip input FAILED");
+                    return null;
+                }
+                group.bone = interactionBoneType;
+                ManipulationInputs.Add(group);
+            }
+            return group;
+        }
+
+        public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
+        {
+            KeyInput input = KeyInputs.Find(i => i.IsAvailable() || !unused);
+            if (input == null)
+            {
+                return FindInput(KeyMenuInputs, i => i.IsAvailable() || !unused, this.gameObject);
+            }
+            return input;
+        }
+
+        public override AbstractUMI3DInput FindInput(FormDto form, bool unused = true)
+        {
+            return FindInput(FormInputs, i => i.IsAvailable() || !unused, this.gameObject);
+        }
+
+        public override AbstractUMI3DInput FindInput(LinkDto link, bool unused = true)
+        {
+            return FindInput(LinkInputs, i => i.IsAvailable() || !unused, this.gameObject);
+        }
+
+        public override AbstractUMI3DInput FindInput(AbstractParameterDto param, bool unused = true)
+        {
+            if (param is FloatRangeParameterDto) return FindInput(floatRangeParameterInputs, i => i.IsAvailable(), this.gameObject);
+            else if (param is FloatParameterDto) return FindInput(floatParameterInputs, i => i.IsAvailable(), this.gameObject);
+            else if (param is IntegerParameterDto) return FindInput(intParameterInputs, i => i.IsAvailable());
+            else if (param is IntegerRangeParameterDto) throw new System.NotImplementedException();
+            else if (param is BooleanParameterDto) return FindInput(boolParameterInputs, i => i.IsAvailable(), this.gameObject);
+            else if (param is StringParameterDto) return FindInput(stringParameterInputs, i => i.IsAvailable(), this.gameObject);
+            else if (param is EnumParameterDto<string>) return FindInput(stringEnumParameterInputs, i => i.IsAvailable(), this.gameObject);
+            else return null;
+        }
+
+        private AbstractUMI3DInput FindInput<T>(List<T> inputs, System.Predicate<T> predicate, GameObject gO = null) where T : AbstractUMI3DInput, new()
+        {
+            T input = inputs.Find(predicate);
+            if (input == null)
+            {
+                AddInput(inputs, out input, gO);
+            }
+            return input;
+        }
+
+        private void AddInput<T>(List<T> inputs, out T input, GameObject gO) where T : AbstractUMI3DInput, new()
+        {
+            if (gO != null) input = gO.AddComponent<T>();
+            else input = new T();
+
+            if (input is KeyMenuInput) (input as KeyMenuInput).bone = interactionBoneType;
+            else if (input is FormInput) (input as FormInput).bone = interactionBoneType;
+            else if (input is LinkInput) (input as LinkInput).bone = interactionBoneType;
+            inputs.Add(input);
+        }
+
+        #endregion
+
+        void InputDown(KeyInput input) { }
+        void InputUp(KeyInput input) { }
+
+        #endregion
+
+        #region Force Projection (projection without hovering)
 
         void CreateForceProjectionMenuItem()
         {
@@ -255,6 +392,49 @@ namespace BrowserDesktop.Controller
             }
         }
 
+        #endregion
+
+        #region Projections
+
+        public override void Release(AbstractTool tool, InteractionMappingReason reason)
+        {
+            //try
+            //{
+            base.Release(tool, reason);
+            if (reason is ToolNeedToBeUpdated && tool.interactions.Count > 0) return;
+
+            if (mouseData.CurrentHovered != null && mouseData.CurrentHovered.dto.id == tool.id)
+            {
+                mouseData.CurrentHovered = null;
+                mouseData.CurrentHoveredTransform = null;
+                mouseData.HoverState = HoverState.None;
+                CursorHandler.State = CursorHandler.CursorState.Default;
+            }
+            if (mouseData.ForceProjection)
+            {
+                mouseData.ForceProjection = false;
+                DeleteForceProjectionMenuItem();
+            }
+            tool.onReleased(interactionBoneType);
+            //}
+            //catch { }
+        }
+
+        public override void Project(AbstractTool tool, bool releasable, InteractionMappingReason reason, ulong hoveredObjectId)
+        {
+            base.Project(tool, releasable, reason, hoveredObjectId); ;
+            if (reason is RequestedByEnvironment)
+            {
+                mouseData.ForceProjection = true;
+                mouseData.ForceProjectionReleasable = releasable;
+            }
+            tool.onProjected(interactionBoneType);
+        }
+
+        #endregion
+
+        #region Monobehaviour Life Cycle
+
         public void Awake()
         {
             foreach (KeyInput input in GetComponentsInChildren<KeyInput>())
@@ -274,9 +454,6 @@ namespace BrowserDesktop.Controller
             mouseData.saveDelay = 0;
         }
 
-        void InputDown(KeyInput input) { }
-        void InputUp(KeyInput input) { }
-
         private void Update()
         {
             if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationDirect)) || Input.mouseScrollDelta.y < 0)
@@ -288,7 +465,6 @@ namespace BrowserDesktop.Controller
                 navigationDirect--;
             }
         }
-
 
         private void LateUpdate()
         {
@@ -315,6 +491,8 @@ namespace BrowserDesktop.Controller
                 }
             }
         }
+
+        #endregion
 
         public void CircularMenuColapsed()
         {
@@ -535,41 +713,7 @@ namespace BrowserDesktop.Controller
             return (((parameters.Count == 0) && (events.Count <= 7) && (manips.Count == 0)));
         }
 
-        #region Clear
-
-        public override void Clear()
-        {
-            foreach (ManipulationGroup input in ManipulationInputs)
-            {
-                if (!input.IsAvailable())
-                    input.Dissociate();
-            }
-            foreach (KeyInput input in KeyInputs)
-            {
-                if (!input.IsAvailable())
-                    input.Dissociate();
-            }
-            ClearParameters();
-        }
-
-        public void ClearParameters()
-        {
-            ClearInputs(ref KeyMenuInputs, (a) => { Destroy(a); });
-            ClearInputs(ref floatParameterInputs, (a) => { Destroy(a); });
-            ClearInputs(ref floatRangeParameterInputs, (a) => { Destroy(a); });
-            ClearInputs(ref intParameterInputs, (a) => { Destroy(a); });
-            ClearInputs(ref boolParameterInputs, (a) => { Destroy(a); });
-            ClearInputs(ref stringParameterInputs, (a) => { Destroy(a); });
-            ClearInputs(ref stringEnumParameterInputs, (a) => { Destroy(a); });
-        }
-
-        private void ClearInputs<T>(ref List<T> inputs, System.Action<T> action) where T: AbstractUMI3DInput
-        {
-            inputs.ForEach(action);
-            inputs = new List<T>();
-        }
-
-        #endregion
+        
 
         /// <summary>
         /// Create a menu to access each interactions of a tool separately.
@@ -641,134 +785,7 @@ namespace BrowserDesktop.Controller
             throw new System.NotImplementedException();
         }
 
-        #region Find Input
-
-        public override DofGroupOptionDto FindBest(DofGroupOptionDto[] options)
-        {
-
-            foreach (var GroupOption in options)
-            {
-                bool ok = true;
-                foreach (DofGroupDto dof in GroupOption.separations)
-                {
-                    if (!dofGroups.Contains(dof.dofs))
-                    {
-                        ok = false;
-                        break;
-                    }
-                }
-                if (ok) return GroupOption;
-            }
-
-            throw new System.NotImplementedException();
-        }
-
-        public override AbstractUMI3DInput FindInput(ManipulationDto manip, DofGroupDto dof, bool unused = true)
-        {
-            ManipulationGroup group = ManipulationInputs.Find(i => i.IsAvailableFor(manip));
-            if (group == null)
-            {
-                group = ManipulationGroup.Instanciate(this, ManipulationActionInput, dofGroups, transform);
-                if (group == null)
-                {
-                    Debug.LogWarning("find manip input FAILED");
-                    return null;
-                }
-                group.bone = interactionBoneType;
-                ManipulationInputs.Add(group);
-            }
-            return group;
-        }
-
-        public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
-        {
-            KeyInput input = KeyInputs.Find(i => i.IsAvailable() || !unused);
-            if (input == null)
-            {
-                return FindInput(KeyMenuInputs, i => i.IsAvailable() || !unused, this.gameObject);
-            }
-            return input;
-        }
-
-        public override AbstractUMI3DInput FindInput(FormDto form, bool unused = true)
-        {
-            return FindInput(FormInputs, i => i.IsAvailable() || !unused, this.gameObject);
-        }
-
-        public override AbstractUMI3DInput FindInput(LinkDto link, bool unused = true)
-        {
-            return FindInput(LinkInputs, i => i.IsAvailable() || !unused, this.gameObject);
-        }
-
-        public override AbstractUMI3DInput FindInput(AbstractParameterDto param, bool unused = true)
-        {
-            if (param is FloatRangeParameterDto) return FindInput(floatRangeParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is FloatParameterDto) return FindInput(floatParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is IntegerParameterDto) return FindInput(intParameterInputs, i => i.IsAvailable());
-            else if (param is IntegerRangeParameterDto) throw new System.NotImplementedException();
-            else if (param is BooleanParameterDto) return FindInput(boolParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is StringParameterDto) return FindInput(stringParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is EnumParameterDto<string>) return FindInput(stringEnumParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else return null;
-        }
-
-        private AbstractUMI3DInput FindInput<T>(List<T> inputs, System.Predicate<T> predicate, GameObject gO = null) where T : AbstractUMI3DInput, new()
-        {
-            T input = inputs.Find(predicate);
-            if (input == null)
-            {
-                AddInput(inputs, out input, gO);
-            }
-            return input;
-        }
-
-        private void AddInput<T>(List<T> inputs, out T input, GameObject gO) where T : AbstractUMI3DInput, new()
-        {
-            if (gO != null) input = gO.AddComponent<T>();
-            else input = new T();
-
-            if (input is KeyMenuInput) (input as KeyMenuInput).bone = interactionBoneType;
-            else if (input is FormInput) (input as FormInput).bone = interactionBoneType;
-            else if (input is LinkInput) (input as LinkInput).bone = interactionBoneType;
-            inputs.Add(input);
-        }
-
-        #endregion
-
-        public override void Release(AbstractTool tool, InteractionMappingReason reason)
-        {
-            //try
-            //{
-            base.Release(tool, reason);
-            if (reason is ToolNeedToBeUpdated && tool.interactions.Count > 0) return;
-
-            if (mouseData.CurrentHovered != null && mouseData.CurrentHovered.dto.id == tool.id)
-            {
-                mouseData.CurrentHovered = null;
-                mouseData.CurrentHoveredTransform = null;
-                mouseData.HoverState = HoverState.None;
-                CursorHandler.State = CursorHandler.CursorState.Default;
-            }
-            if (mouseData.ForceProjection)
-            {
-                mouseData.ForceProjection = false;
-                DeleteForceProjectionMenuItem();
-            }
-            tool.onReleased(interactionBoneType);
-            //}
-            //catch { }
-        }
-
-        public override void Project(AbstractTool tool, bool releasable, InteractionMappingReason reason, ulong hoveredObjectId)
-        {
-            base.Project(tool, releasable, reason, hoveredObjectId); ;
-            if (reason is RequestedByEnvironment)
-            {
-                mouseData.ForceProjection = true;
-                mouseData.ForceProjectionReleasable = releasable;
-            }
-            tool.onProjected(interactionBoneType);
-        }
+        
 
         protected override ulong GetCurrentHoveredId()
         {
