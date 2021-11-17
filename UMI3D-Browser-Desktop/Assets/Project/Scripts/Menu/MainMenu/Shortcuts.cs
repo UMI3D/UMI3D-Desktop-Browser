@@ -34,8 +34,10 @@ namespace BrowserDesktop.Menu
 
         public UIDocument uiDocument;
 
+        [Tooltip("Visual Tree Asset of a shortcut.")]
         [SerializeField]
         private VisualTreeAsset shortcutTreeAsset;
+        [Tooltip("Visual Tree Asset of an icon of a shortcut.")]
         [SerializeField]
         private VisualTreeAsset shortcutIconTreeAsset;
 
@@ -47,9 +49,7 @@ namespace BrowserDesktop.Menu
 
         #region Data
 
-        /// <summary>
-        /// Shortcuts Icons dictionary
-        /// </summary>
+        [Tooltip("Shortcuts Icons dictionary.")]
         [SerializeField]
         private Controller.KeyBindings_SO keyBindings;
 
@@ -61,12 +61,12 @@ namespace BrowserDesktop.Menu
         private bool isDisplayed;
 
         //Object Pooling
-        private List<ShortcutElement> shortcutsDisplayedList = new List<ShortcutElement>();
-        private List<ShortcutElement> shortcutsWaitedList = new List<ShortcutElement>();
-        public readonly List<ShortcutIconElement> ShortcutIconsDisplayedList = new List<ShortcutIconElement>();
-        public readonly List<ShortcutIconElement> ShortcutIconsWaitedList = new List<ShortcutIconElement>();
-        public readonly List<Label> ShortcutPlusLabelDisplayList = new List<Label>();
-        public readonly List<Label> ShortcutPlusLabelWaitedList = new List<Label>();
+        private static List<ShortcutElement> shortcutsDisplayedList = new List<ShortcutElement>();
+        private static List<ShortcutElement> shortcutsWaitedList = new List<ShortcutElement>();
+        public static readonly List<ShortcutIconElement> ShortcutIconsDisplayedList = new List<ShortcutIconElement>();
+        public static readonly List<ShortcutIconElement> ShortcutIconsWaitedList = new List<ShortcutIconElement>();
+        public static readonly List<Label> ShortcutPlusLabelDisplayList = new List<Label>();
+        public static readonly List<Label> ShortcutPlusLabelWaitedList = new List<Label>();
 
         #endregion
 
@@ -188,9 +188,7 @@ namespace BrowserDesktop.Menu
             ShortcutElement shortcutElement;
             //Object Pooling for ShortcutElement.
             if (shortcutsWaitedList.Count == 0)
-            {
                 shortcutElement = shortcutTreeAsset.CloneTree().Q<ShortcutElement>();
-            }
             else
             {
                 shortcutElement = shortcutsWaitedList[shortcutsWaitedList.Count - 1];
@@ -200,11 +198,9 @@ namespace BrowserDesktop.Menu
 
             Sprite[] shortcutIcons = new Sprite[shortcutkeys.Length];
             for (int i = 0; i < shortcutkeys.Length; ++i)
-            {
                 shortcutIcons[i] = keyBindings.GetSpriteFrom(shortcutkeys[i]);
-            }
 
-            shortcutElement.Setup(shortcutName, shortcutIcons, shortcutIconTreeAsset, this);
+            shortcutElement.Setup(shortcutName, shortcutIcons, shortcutIconTreeAsset);
             shortcuts_SV.Add(shortcutElement);
 
             StartCoroutine(ResizeShortcutsWidth());
@@ -255,7 +251,7 @@ namespace BrowserDesktop.Menu
         /// <param name="animation">The animation to be perform.</param>
         private void AnimeVisualElement(VisualElement vE, float value, bool isShowing, Action<VisualElement, float> animation)
         {
-            Debug.LogWarning("Use of Unity experimental API. May not work in the future.");
+            Debug.LogWarning("Use of Unity experimental API. May not work in the future. (2021)");
             if (isShowing)
             {
                 vE.experimental.animation.Start(0, value, 100, animation);

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using BrowserDesktop.Menu;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -107,7 +108,7 @@ public class ShortcutElement : VisualElement
     /// <param name="shortcutIcons">The icons (sprite) of this shortcut.</param>
     /// <param name="shortcutIconTreeAsset">The template of shortcut icon.</param>
     /// <param name="shortcutsClass">The instance of the Shortcuts class.</param>
-    public void Setup(string shortcutName, Sprite[] shortcutIcons, VisualTreeAsset shortcutIconTreeAsset, BrowserDesktop.Menu.Shortcuts shortcutsClass)
+    public void Setup(string shortcutName, Sprite[] shortcutIcons, VisualTreeAsset shortcutIconTreeAsset)
     {
         isShortcutDisplay = true;
         ++ShortcutsCount;
@@ -127,16 +128,16 @@ public class ShortcutElement : VisualElement
             {
                 //Object Pooling for the plus label.
                 Label plus;
-                if (shortcutsClass.ShortcutPlusLabelWaitedList.Count == 0)
+                if (Shortcuts.ShortcutPlusLabelWaitedList.Count == 0)
                 {
                     plus = new Label("+");
                 }
                 else
                 {
-                    plus = shortcutsClass.ShortcutPlusLabelWaitedList[shortcutsClass.ShortcutPlusLabelWaitedList.Count - 1];
-                    shortcutsClass.ShortcutPlusLabelWaitedList.RemoveAt(shortcutsClass.ShortcutPlusLabelWaitedList.Count - 1);
+                    plus = Shortcuts.ShortcutPlusLabelWaitedList[Shortcuts.ShortcutPlusLabelWaitedList.Count - 1];
+                    Shortcuts.ShortcutPlusLabelWaitedList.RemoveAt(Shortcuts.ShortcutPlusLabelWaitedList.Count - 1);
                 }
-                shortcutsClass.ShortcutPlusLabelDisplayList.Add(plus);
+                Shortcuts.ShortcutPlusLabelDisplayList.Add(plus);
 
                 plus.AddToClassList("label-shortcut");
                 plus.AddToClassList("label-shortcut-plus");
@@ -145,16 +146,16 @@ public class ShortcutElement : VisualElement
 
             //Object Pooling for Icons.
             ShortcutIconElement icon;
-            if (shortcutsClass.ShortcutIconsWaitedList.Count == 0)
+            if (Shortcuts.ShortcutIconsWaitedList.Count == 0)
             {
                 icon = shortcutIconTreeAsset.CloneTree().Q<ShortcutIconElement>();
             }
             else
             {
-                icon = shortcutsClass.ShortcutIconsWaitedList[shortcutsClass.ShortcutIconsWaitedList.Count - 1];
-                shortcutsClass.ShortcutIconsWaitedList.RemoveAt(shortcutsClass.ShortcutIconsWaitedList.Count - 1);
+                icon = Shortcuts.ShortcutIconsWaitedList[Shortcuts.ShortcutIconsWaitedList.Count - 1];
+                Shortcuts.ShortcutIconsWaitedList.RemoveAt(Shortcuts.ShortcutIconsWaitedList.Count - 1);
             }
-            shortcutsClass.ShortcutIconsDisplayedList.Add(icon);
+            Shortcuts.ShortcutIconsDisplayedList.Add(icon);
 
             icon.Setup(shortcutIcons[i]);
             iconsArea_VE.Add(icon);
