@@ -166,9 +166,7 @@ namespace BrowserDesktop.Interaction
 
         private void StartAnim(ulong id)
         {
-            UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(id);
-            if (anim != null)
-                anim.Start();
+            UMI3DNodeAnimation.Get(id)?.Start();
         }
 
         #region Displayer
@@ -203,6 +201,8 @@ namespace BrowserDesktop.Interaction
 
         #endregion
 
+
+
         #region Associate and Dissociate
 
         public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
@@ -217,74 +217,44 @@ namespace BrowserDesktop.Interaction
                 associatedInteraction = interaction as EventDto;
                 this.hoveredObjectId = hoveredObjectId;
                 this.toolId = toolId;
-                if (associatedInteraction.icon2D != null)
+
+                FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariante(associatedInteraction.icon2D?.variants);
+
+                if (fileToLoad != null)
                 {
-                    FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariante(associatedInteraction.icon2D.variants);
+                    string url = fileToLoad.url;
+                    string ext = fileToLoad.extension;
+                    string authorization = fileToLoad.authorization;
+                    IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(ext);
 
-                    if (fileToLoad != null)
+                    if (loader != null)
                     {
-                        string url = fileToLoad.url;
-                        string ext = fileToLoad.extension;
-                        string authorization = fileToLoad.authorization;
-                        IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(ext);
-
-                        if (loader != null)
-                        {
-                            UMI3DResourcesManager.LoadFile(
-                                interaction.id,
-                                fileToLoad,
-                                loader.UrlToObject,
-                                loader.ObjectFromCache,
-                                (o) =>
-                                {
-                                    var obj = o as Texture2D;
-                                    if (obj == null)
-                                        DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
-                                    else
-                                        DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
-                                },
-                                (Umi3dException str) =>
-                                {
+                        UMI3DResourcesManager.LoadFile(
+                            interaction.id,
+                            fileToLoad,
+                            loader.UrlToObject,
+                            loader.ObjectFromCache,
+                            (o) =>
+                            {
+                                var obj = o as Texture2D;
+                                if (obj == null)
                                     DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
-                                },
-                                loader.DeleteObject
-                                );
-                        }
-                        else
-                            DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
-                    } else
-                    {
-                        Debug.Log("display test = " + associatedInteraction.name);
-                        DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                                else
+                                    DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
+                            },
+                            (Umi3dException str) =>
+                            {
+                                DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                            },
+                            loader.DeleteObject
+                            );
                     }
+                    else
+                        DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                 }
-
-                //HDResourceCache.Download(associatedInteraction.Icon2D, Texture2D =>
-                //{
-                //    if (EventDisplayer != null && associatedInteraction != null && Texture2D != null)
-                //    {
-                //        EventDisplayer.gameObject.SetActive(true);
-                //        EventDisplayer.Set(associatedInteraction.Name, InputLayoutManager.GetInputCode(activationButton).ToString(), Sprite.Create(Texture2D, new Rect(0.0f, 0.0f, Texture2D.width, Texture2D.height), new Vector2(0.5f, 0.5f), 100.0f));
-                //    }
-                //    //else
-                //    //{
-                //    //    EventDisplayer.gameObject.SetActive(true);
-                //    //    EventDisplayer.Set(associatedInteraction.Name, InputLayoutManager.GetInputCode(activationButton).ToString(), null);
-
-                //    //    Destroy(Texture2D);
-                //    //}
-                //},
-                //webrequest =>
-                //{
-                //    if (EventDisplayer != null && associatedInteraction != null)
-                //    {
-                //        EventDisplayer.gameObject.SetActive(true);
-                //        EventDisplayer.Set(associatedInteraction.Name, InputLayoutManager.GetInputCode(activationButton).ToString(), null);
-                //    }
-                //});
                 else
                 {
-                    Debug.Log("Pas d'icone pour " + InputLayoutManager.GetInputCode(activationButton).ToString());
+                    //Debug.Log("display test = " + associatedInteraction.name);
                     DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                 }
             }
@@ -301,19 +271,12 @@ namespace BrowserDesktop.Interaction
 
         public override void Dissociate()
         {
-            Debug.Log($"Dissociate KeyInput EventDisplayer");
+            //Debug.Log($"Dissociate KeyInput EventDisplayer");
             if (Down) onInputUp.Invoke();
             ResetButton();
             eventDisplayer?.Display(false);
             associatedInteraction = null;
             Shortcuts.Instance.ClearShortcut();
-        }
-
-        #endregion
-
-        public override AbstractInteractionDto CurrentInteraction()
-        {
-            return associatedInteraction;
         }
 
         void ResetButton()
@@ -323,6 +286,13 @@ namespace BrowserDesktop.Interaction
                 SetEventDTO<EventStateChangedDto>();
             }
             risingEdgeEventSent = false;
+        }
+
+        #endregion
+
+        public override AbstractInteractionDto CurrentInteraction()
+        {
+            return associatedInteraction;
         }
 
         public override bool IsCompatibleWith(AbstractInteractionDto interaction)
