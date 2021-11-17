@@ -36,17 +36,29 @@ namespace BrowserDesktop.UserPreferences
             public string IconPrefName => iconPrefName;
             
             [Space]
-            [Tooltip("Width of the icon when zoom is set to 100%.")]
+            [Tooltip("If true this icon width and height will be resized")]
+            [SerializeField]
+            private bool Resized;
+            [Tooltip("Width of the icon when zoom is set to 100%. If value <= 0 this will be set to Auto.")]
             [SerializeField]
             private float width;
-            [Tooltip("height of the icon when zoom is set to 100%.")]
+            [Tooltip("height of the icon when zoom is set to 100%. If value <= 0 this will be set to Auto.")]
             [SerializeField]
             private float height;
 
             public void SetIcon(VisualElement icon)
             {
-                icon.style.width = width * UserPreferences.GlobalPref.ZoomCoef;
-                icon.style.height = height * UserPreferences.GlobalPref.ZoomCoef;
+                if (Resized)
+                {
+                    if (width > 0f)
+                        icon.style.width = width * UserPreferences.GlobalPref.ZoomCoef;
+                    else
+                        icon.style.width = StyleKeyword.Auto;
+                    if (height > 0f)
+                        icon.style.height = height * UserPreferences.GlobalPref.ZoomCoef;
+                    else
+                        icon.style.height = StyleKeyword.Auto;
+                }
             }
         }
 
@@ -65,7 +77,7 @@ namespace BrowserDesktop.UserPreferences
 
             foreach (IconPref iconPref in iconPrefs)
             {
-                if (iconPref.IconPrefName == iconPrefName)
+                if (iconPref.IconPrefName.ToLowerInvariant() == iconPrefName.ToLowerInvariant())
                 {
                     iconPref.SetIcon(icon);
                     yield break;
