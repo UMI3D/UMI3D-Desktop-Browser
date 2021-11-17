@@ -20,6 +20,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System;
 using System.Collections;
+using BrowserDesktop.UI.GenericElement;
 
 namespace BrowserDesktop.Menu
 {
@@ -61,10 +62,10 @@ namespace BrowserDesktop.Menu
         private bool isDisplayed;
 
         //Object Pooling
-        private static List<ShortcutElement> shortcutsDisplayedList = new List<ShortcutElement>();
-        private static List<ShortcutElement> shortcutsWaitedList = new List<ShortcutElement>();
-        public static readonly List<ShortcutIconElement> ShortcutIconsDisplayedList = new List<ShortcutIconElement>();
-        public static readonly List<ShortcutIconElement> ShortcutIconsWaitedList = new List<ShortcutIconElement>();
+        private static List<ShortcutGenericElement> shortcutsDisplayedList = new List<ShortcutGenericElement>();
+        private static List<ShortcutGenericElement> shortcutsWaitedList = new List<ShortcutGenericElement>();
+        public static readonly List<ShortcutIcon_GE> ShortcutIconsDisplayedList = new List<ShortcutIcon_GE>();
+        public static readonly List<ShortcutIcon_GE> ShortcutIconsWaitedList = new List<ShortcutIcon_GE>();
         public static readonly List<Label> ShortcutPlusLabelDisplayList = new List<Label>();
         public static readonly List<Label> ShortcutPlusLabelWaitedList = new List<Label>();
 
@@ -185,10 +186,10 @@ namespace BrowserDesktop.Menu
         /// <param name="shortcutkeys">Keys to press to trigger the shortcut.</param>
         public void AddShortcut(string shortcutName, string[] shortcutkeys)
         {
-            ShortcutElement shortcutElement;
+            ShortcutGenericElement shortcutElement;
             //Object Pooling for ShortcutElement.
             if (shortcutsWaitedList.Count == 0)
-                shortcutElement = shortcutTreeAsset.CloneTree().Q<ShortcutElement>();
+                shortcutElement = shortcutTreeAsset.CloneTree().Q<ShortcutGenericElement>();
             else
             {
                 shortcutElement = shortcutsWaitedList[shortcutsWaitedList.Count - 1];
@@ -203,7 +204,7 @@ namespace BrowserDesktop.Menu
             shortcutElement.Setup(shortcutName, shortcutIcons, shortcutIconTreeAsset);
             shortcuts_SV.Add(shortcutElement);
 
-            StartCoroutine(ResizeShortcutsWidth());
+            //StartCoroutine(ResizeShortcutsWidth());
         }
 
         /// <summary>
