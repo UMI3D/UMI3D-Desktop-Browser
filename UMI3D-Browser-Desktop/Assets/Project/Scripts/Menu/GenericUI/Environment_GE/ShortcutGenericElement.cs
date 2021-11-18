@@ -143,8 +143,6 @@ namespace BrowserDesktop.UI.GenericElement
                     AddTo(iconsArea_VE);
             }
 
-            //OnApplyUserPreferences();
-
             return this;
         }
 

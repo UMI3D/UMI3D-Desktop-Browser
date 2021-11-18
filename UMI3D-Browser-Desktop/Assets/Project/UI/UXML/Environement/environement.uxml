@@ -50,8 +50,8 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="game-menu-container" style="width: 100%; background-color: rgba(0, 0, 0, 0); display: flex; height: 100%;">
-                <ui:Instance template="menu-bar-element" name="menu-bar" style="width: 100%;" />
-                <ui:VisualElement name="viewport" style="flex-grow: 1; width: 100%; height: 100%; flex-direction: row;">
+                <ui:Instance template="menu-bar-element" name="menu-bar" style="width: 100%; flex-grow: 1; flex-shrink: 0;" />
+                <ui:VisualElement name="viewport" style="flex-grow: 1; width: 100%; height: 100%; flex-direction: row; flex-shrink: 2;">
                     <ui:VisualElement name="notification-container" style="height: 100%; position: absolute; left: 10px; flex-direction: column-reverse; flex-grow: 1;" />
                     <ui:VisualElement name="information-pop-up" style="position: absolute; top: 0; right: 0; width: 256px;">
                         <ui:VisualElement name="information-pop-up-parameters" />
@@ -75,13 +75,6 @@
                             </ui:VisualElement>
                             <ui:Button name="interaction-menu-back" text="Back" class="dark-grey1-bck orange-text bck-grey2-hover grey-border" style="border-top-width: 1px; -unity-text-align: middle-left; padding-left: 10px; height: 20px; font-size: 13px;" />
                         </ui:VisualElement>
-                    </ui:VisualElement>
-                    <ui:VisualElement name="pause-menu" style="position: absolute; top: 0; width: 100%; align-items: center; display: none;">
-                        <ui:VisualElement name="pause-menu-container" class="dark-grey2-bck orange-border" style="width: 300px; height: 52px; border-bottom-width: 1px; flex-direction: row; align-items: center; justify-content: center; display: none;">
-                            <ui:Button name="open-option-menu-btn" class="btn-options" style="width: 110px; height: 34px; margin-right: 4px; display: none;" />
-                            <ui:Button name="leave-environment-btn" class="btn-leave" style="width: 110px; height: 34px; margin-left: 4px;" />
-                        </ui:VisualElement>
-                        <ui:Button name="pause-menu-open-btn" class="btn-open-pause-menu" style="width: 50px; height: 23px; display: flex;" />
                     </ui:VisualElement>
                     <ui:VisualElement name="console" style="display: flex; position: absolute; width: 430px; height: 200px; bottom: 0; right: 0; background-color: rgba(50, 50, 50, 0.8); padding-top: 15px;">
                         <ui:Label text="Label" name="version" class="dark-grey1-bck grey-txt" style="height: 20px; -unity-text-align: middle-right; padding-right: 15px;" />

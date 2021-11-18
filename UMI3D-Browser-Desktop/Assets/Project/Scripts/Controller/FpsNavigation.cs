@@ -159,7 +159,7 @@ public class FpsNavigation : AbstractNavigation
 
         if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
         {
-            PauseMenu.ToggleDisplay();
+            //PauseMenu.ToggleDisplay();
         }
 
         if (SideMenu.IsExpanded || CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHiden)
