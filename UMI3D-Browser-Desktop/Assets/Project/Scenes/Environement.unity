@@ -1582,12 +1582,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1202536834}
-  - component: {fileID: 1202536839}
-  - component: {fileID: 1202536838}
   - component: {fileID: 1202536837}
   - component: {fileID: 1202536836}
   - component: {fileID: 1202536835}
   - component: {fileID: 1202536840}
+  - component: {fileID: 1202536839}
+  - component: {fileID: 1202536838}
   m_Layer: 0
   m_Name: Actions
   m_TagString: Untagged
@@ -1687,8 +1687,8 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  activationButton: 15
-  bone: 3
+  activationButton: 21
+  bone: 0
 --- !u!114 &1202536839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1707,7 +1707,7 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  activationButton: 14
+  activationButton: 20
   bone: 3
 --- !u!114 &1202536840
 MonoBehaviour:

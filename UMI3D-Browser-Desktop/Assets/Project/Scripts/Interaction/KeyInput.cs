@@ -75,8 +75,6 @@ namespace BrowserDesktop.Interaction
 
         protected virtual void Start()
         {
-            StartCoroutine(InitEventDisplayer());
-
             onInputDown.AddListener(() =>
             {
                 SwichOnDown = (CursorHandler.State == CursorHandler.CursorState.Hover);
@@ -171,16 +169,16 @@ namespace BrowserDesktop.Interaction
 
         #region Displayer
 
-        EventDisplayer eventDisplayer;
+        /*EventDisplayer eventDisplayer;
 
         IEnumerator InitEventDisplayer()
         {
             yield return null;
             eventDisplayer = EventMenu.CreateDisplayer();
             eventDisplayer?.Display(false);
-        }
+        }*/
 
-        private void DiplayDisplayer(string label, string inputName, Texture2D icon = null)
+        /*private void DiplayDisplayer(string label, string inputName, Texture2D icon = null)
         {
             //Debug.Log("displayer = " + label);
             if (eventDisplayer != null)
@@ -188,15 +186,14 @@ namespace BrowserDesktop.Interaction
                 eventDisplayer.Display(true);
                 eventDisplayer.SetUp(label, inputName, icon);
             }
+        }*/
 
-            //...
 
-            Shortcuts.Instance.AddShortcut(label, new string[1] { inputName });
-        }
-
-        private void DisplayDisplayer(string label, KeyCode key_code)
+        private void DisplayInput(string label, string inputName, Texture2D icon = null)
         {
-
+            if (icon != null)
+                throw new System.Exception("Not implemented yet");
+            Shortcuts.Instance.AddShortcut(label, new string[1] { inputName });
         }
 
         #endregion
@@ -238,24 +235,24 @@ namespace BrowserDesktop.Interaction
                             {
                                 var obj = o as Texture2D;
                                 if (obj == null)
-                                    DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                                    DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                                 else
-                                    DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
+                                    DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
                             },
                             (Umi3dException str) =>
                             {
-                                DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                                DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                             },
                             loader.DeleteObject
                             );
                     }
                     else
-                        DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                        DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                 }
                 else
                 {
                     //Debug.Log("display test = " + associatedInteraction.name);
-                    DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                    DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                 }
             }
             else
@@ -274,7 +271,6 @@ namespace BrowserDesktop.Interaction
             //Debug.Log($"Dissociate KeyInput EventDisplayer");
             if (Down) onInputUp.Invoke();
             ResetButton();
-            eventDisplayer?.Display(false);
             associatedInteraction = null;
             Shortcuts.Instance.ClearShortcut();
         }
