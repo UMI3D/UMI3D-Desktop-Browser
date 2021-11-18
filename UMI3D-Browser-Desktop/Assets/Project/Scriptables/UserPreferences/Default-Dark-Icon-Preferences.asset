@@ -14,26 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iconPrefs:
   - iconPrefName: square-button
-    Resized: 1
+    ResizedWhenZoomed: 1
     width: 30
     height: 30
-  - iconPrefName: shortcut-square
-    Resized: 1
+  - iconPrefName: shortcut-key
+    ResizedWhenZoomed: 1
     width: -1
-    height: 25
+    height: -1
   - iconPrefName: shortcut-mouse
-    Resized: 1
-    width: 0
-    height: 25
-  - iconPrefName: shortcut-fn
-    Resized: 1
-    width: 0
-    height: 25
-  - iconPrefName: shortcut-ctrl
-    Resized: 1
-    width: 0
-    height: 25
-  - iconPrefName: shortcut-shift
-    Resized: 1
-    width: 0
-    height: 25
+    ResizedWhenZoomed: 1
+    width: -1
+    height: -1

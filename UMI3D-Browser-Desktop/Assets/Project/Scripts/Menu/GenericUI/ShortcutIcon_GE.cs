@@ -38,7 +38,8 @@ namespace BrowserDesktop.UI.GenericElement
         /// <summary>
         /// The icon height in px.
         /// </summary>
-        private int iconHeightPX = 25;
+        private float iconHeightPX = 25f;
+        private float iconWidthPX;
 
         /// <summary>
         /// Set the size and the sprite of the icon.
@@ -46,39 +47,35 @@ namespace BrowserDesktop.UI.GenericElement
         /// <param name="sprite">The sprite of the icon.</param>
         public void Setup(Sprite sprite)
         {
+
             if (sprite == null)
             {
+                this.style.backgroundImage = StyleKeyword.Auto;
+
                 iconType = IconType.SQUARE;
-                
+
+                iconWidthPX = iconHeightPX;
+
+                Debug.LogError($"Sprite missing");
             }
             else
             {
                 this.style.backgroundImage = new StyleBackground(sprite);
+
                 float width = sprite.rect.width;
-
-                /*float height = sprite.rect.height;
-                
-                int iconWidthPX = (int)((width / height) * (float)iconHeightPX);
-
-                this.style.height = iconHeightPX;
-                this.style.width = iconWidthPX;*/
+                float height = sprite.rect.height;
 
                 if (width <= 512f) iconType = IconType.SQUARE;
-                else if (width <= 548f) iconType = IconType.SQUARE;
+                else if (width <= 548f) iconType = IconType.MOUSE;
                 else if (width <= 721f) iconType = IconType.FN;
                 else if (width <= 845f) iconType = IconType.CTRL;
                 else if (width <= 952f) iconType = IconType.SHIFT;
+
+                iconWidthPX = (width / height) * iconHeightPX;
             }
-            /*float height = sprite.rect.height;
-            float width = sprite.rect.width;
 
-            int iconWidthPX = (int)((width / height) * (float)iconHeightPX);
 
-            this.style.height = iconHeightPX;
-            this.style.width = iconWidthPX;
-
-            this.style.backgroundImage = new StyleBackground(sprite);
-            if (sprite.name.Length == 3)
+            /*if (sprite.name.Length == 3)
             {
                 this.style.borderBottomWidth = 0;
                 this.style.borderRightWidth = 0;
@@ -91,7 +88,7 @@ namespace BrowserDesktop.UI.GenericElement
 
         public override void OnApplyUserPreferences()
         {
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(this, $"shortcut-{iconType}");
+            UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(this, (iconType == IconType.MOUSE) ? $"shortcut-{IconType.MOUSE}" : $"shortcut-KEY", iconWidthPX, iconHeightPX);
         }
     }
 }

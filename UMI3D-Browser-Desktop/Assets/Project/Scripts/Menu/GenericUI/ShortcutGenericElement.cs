@@ -109,9 +109,9 @@ namespace BrowserDesktop.UI.GenericElement
         /// </summary>
         /// <param name="shortcutName">The name of this shortcut.</param>
         /// <param name="shortcutIcons">The icons (sprite) of this shortcut.</param>
-        /// <param name="shortcutIconTreeAsset">The template of shortcut icon.</param>
+        /// <param name="shortcutIcon_VTA">The template of shortcut icon.</param>
         /// <param name="shortcutsClass">The instance of the Shortcuts class.</param>
-        public void Setup(string shortcutName, Sprite[] shortcutIcons, VisualTreeAsset shortcutIconTreeAsset)
+        public void Setup(string shortcutName, Sprite[] shortcutIcons, VisualTreeAsset shortcutIcon_VTA)
         {
             isShortcutDisplay = true;
             ++ShortcutsCount;
@@ -120,7 +120,7 @@ namespace BrowserDesktop.UI.GenericElement
             shortcutNameText = shortcutName;
             //shortcutName_L.AddToClassList("label-shortcut");
 
-            iconsArea_VE = this.Q<VisualElement>("shortcut-icons");
+            iconsArea_VE = this.Q<VisualElement>("Icons-layer");
 
             /*iconsArea_VE.style.width = maxIconsAreaWidth;
             shortcutName_L.style.width = maxIconsAreaWidth;*/
@@ -147,21 +147,11 @@ namespace BrowserDesktop.UI.GenericElement
                     iconsArea_VE.Add(plus);
                 }
 
-                //Object Pooling for Icons.
-                ShortcutIcon_GE icon;
-                if (Shortcuts.ShortcutIconsWaitedList.Count == 0)
-                {
-                    icon = shortcutIconTreeAsset.CloneTree().Q<ShortcutIcon_GE>();
-                }
-                else
-                {
-                    icon = Shortcuts.ShortcutIconsWaitedList[Shortcuts.ShortcutIconsWaitedList.Count - 1];
-                    Shortcuts.ShortcutIconsWaitedList.RemoveAt(Shortcuts.ShortcutIconsWaitedList.Count - 1);
-                }
-                Shortcuts.ShortcutIconsDisplayedList.Add(icon);
+                ShortcutIcon_GE icon_GE;
+                Shortcuts.ObjectPooling(out icon_GE, Shortcuts.ShortcutIconsDisplayedList, Shortcuts.ShortcutIconsWaitedList, shortcutIcon_VTA);
 
-                icon.Setup(shortcutIcons[i]);
-                iconsArea_VE.Add(icon);
+                icon_GE.Setup(shortcutIcons[i]);
+                iconsArea_VE.Add(icon_GE);
 
                 OnApplyUserPreferences();
             }
@@ -170,15 +160,15 @@ namespace BrowserDesktop.UI.GenericElement
         public void ComputeShortcutWidth()
         {
             IconsAreaWidth = iconsArea_VE.resolvedStyle.width;
-            ShortcutNameWidth = shortcutName_L.resolvedStyle.width;
+            //ShortcutNameWidth = shortcutName_L.resolvedStyle.width;
 
-            //Debug.Log("icons width = " + IconsAreaWidth + ", Icons area width = " + iconsArea_VE.resolvedStyle.width);
+            Debug.Log($"[{shortcutNameText}] icons max width = {IconsAreaWidth}, Icons layer width = {iconsArea_VE.resolvedStyle.width}");
         }
 
         public void ResizeShortcutWidth()
         {
             iconsArea_VE.style.width = IconsAreaWidth;
-            shortcutName_L.style.width = ShortcutNameWidth;
+            //shortcutName_L.style.width = ShortcutNameWidth;
 
             //Debug.Log("resizement");
         }
@@ -194,8 +184,8 @@ namespace BrowserDesktop.UI.GenericElement
                 isShortcutDisplay = false;
                 --ShortcutsCount;
 
-                /*iconsArea_VE.style.width = StyleKeyword.Auto; //Unset the icons area width.
-                shortcutName_L.style.width = StyleKeyword.Auto; //Unset the shortcut name width.*/
+                iconsArea_VE.style.width = StyleKeyword.Auto; //Unset the icons area width.
+                shortcutName_L.style.width = StyleKeyword.Auto; //Unset the shortcut name width.
 
                 this.RemoveFromHierarchy();
             }
@@ -203,6 +193,8 @@ namespace BrowserDesktop.UI.GenericElement
 
         public override void OnApplyUserPreferences()
         {
+            if (!isShortcutDisplay) return;
+
             UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(shortcutName_L, "label", shortcutNameText);
         }
     }
