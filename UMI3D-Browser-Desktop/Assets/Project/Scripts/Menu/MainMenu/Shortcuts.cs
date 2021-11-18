@@ -52,6 +52,10 @@ namespace BrowserDesktop.Menu
 
         #region Data
 
+        [Tooltip("Display shortcut at start.")]
+        [SerializeField]
+        private bool displayAtStart = false;
+
         [Tooltip("Shortcuts Icons dictionary.")]
         [SerializeField]
         private Controller.KeyBindings_SO keyBindings;
@@ -88,7 +92,7 @@ namespace BrowserDesktop.Menu
             shortcutDisplayer_VE = root.Q<VisualElement>("shortcut-displayer");
             shortcuts_SV = shortcutDisplayer_VE.Q<ScrollView>("shortcuts");
 
-            DisplayShortcut(false); //Default: shortcuts are hidden.
+            DisplayShortcut(displayAtStart); //Default: shortcuts are hidden.
 
             shortcutDisplayer_VE.style.width = shortcutDisplayerWidth;
         }

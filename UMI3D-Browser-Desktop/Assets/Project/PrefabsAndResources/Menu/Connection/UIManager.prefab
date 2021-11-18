@@ -328,7 +328,6 @@ GameObject:
   m_Component:
   - component: {fileID: 759972038}
   - component: {fileID: 759972039}
-  - component: {fileID: 737743150693548703}
   m_Layer: 0
   m_Name: Footer
   m_TagString: Untagged
@@ -363,26 +362,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiDocument: {fileID: 1750602239179936672}
---- !u!114 &737743150693548703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 759972037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c0d139d622e5f04c8b662fa0abdbced, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiDocument: {fileID: 1750602239179936672}
-  shortcut_ge_VTA: {fileID: 9197481963319205126, guid: d5c3a0f3c8830504cad6313ba6f5ca58,
-    type: 3}
-  shortcutIcon_ge_VTA: {fileID: 9197481963319205126, guid: 37de0f326e455d746a6e3028a70e1793,
-    type: 3}
-  label_ge_VTA: {fileID: 9197481963319205126, guid: a30a9323d0f5bfd4abae64785435fd1a,
-    type: 3}
-  keyBindings: {fileID: 11400000, guid: 3576f5f11fbda2948a7580457c1a2b48, type: 2}
 --- !u!1 &1060301966
 GameObject:
   m_ObjectHideFlags: 0
@@ -677,53 +656,6 @@ MonoBehaviour:
     type: 3}
   uxmlSubContentTag: subContent
   itemTreeAsset: {fileID: 9197481963319205126, guid: 3416d0ee065213440b08eaab6e5a22e5,
-    type: 3}
---- !u!1 &2129633370
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2129633371}
-  - component: {fileID: 2129633372}
-  m_Layer: 0
-  m_Name: EventMenu
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2129633371
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2129633370}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 6434621989006267172}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2129633372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2129633370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ab4574d2f5d2b847bedc064a859d487, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiDocument: {fileID: 1750602239179936672}
-  containerTagName: event-container
-  eventDisplayerTreeAsset: {fileID: 9197481963319205126, guid: 19b735abd3c47cc499dfa61add4beb62,
     type: 3}
 --- !u!1 &849513299733064850
 GameObject:
@@ -1183,6 +1115,58 @@ MonoBehaviour:
   uxmlBackButtonTag: container-back-btn
   containerTreeAsset: {fileID: 9197481963319205126, guid: 68f1ef88c68ba304d95f5886bfabea10,
     type: 3}
+--- !u!1 &7252629594555349891
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4992896594391853746}
+  - component: {fileID: 6182098825316415764}
+  m_Layer: 0
+  m_Name: Shortcuts
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4992896594391853746
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7252629594555349891}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6434621989006267172}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6182098825316415764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7252629594555349891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c0d139d622e5f04c8b662fa0abdbced, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiDocument: {fileID: 1750602239179936672}
+  shortcut_ge_VTA: {fileID: 9197481963319205126, guid: d5c3a0f3c8830504cad6313ba6f5ca58,
+    type: 3}
+  shortcutIcon_ge_VTA: {fileID: 9197481963319205126, guid: 37de0f326e455d746a6e3028a70e1793,
+    type: 3}
+  label_ge_VTA: {fileID: 9197481963319205126, guid: a30a9323d0f5bfd4abae64785435fd1a,
+    type: 3}
+  displayAtStart: 1
+  keyBindings: {fileID: 11400000, guid: 3576f5f11fbda2948a7580457c1a2b48, type: 2}
 --- !u!114 &412795265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1248,7 +1232,7 @@ Transform:
   - {fileID: 1471203230}
   - {fileID: 1060301967}
   - {fileID: 599804103}
-  - {fileID: 2129633371}
+  - {fileID: 4992896594391853746}
   m_Father: {fileID: 4125827769369142610}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1820,15 +1804,15 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2177661336355983756, guid: d0518535c3160a84390f27305bd7d091, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d0518535c3160a84390f27305bd7d091, type: 3}
---- !u!1 &1994689716 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2177661336355983758, guid: d0518535c3160a84390f27305bd7d091,
-    type: 3}
-  m_PrefabInstance: {fileID: 2177661337729850682}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1994689719 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2177661336355983757, guid: d0518535c3160a84390f27305bd7d091,
+    type: 3}
+  m_PrefabInstance: {fileID: 2177661337729850682}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1994689716 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2177661336355983758, guid: d0518535c3160a84390f27305bd7d091,
     type: 3}
   m_PrefabInstance: {fileID: 2177661337729850682}
   m_PrefabAsset: {fileID: 0}
