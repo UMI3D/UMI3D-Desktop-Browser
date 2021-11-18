@@ -173,6 +173,8 @@ namespace BrowserDesktop.UI.CustomElement
 
         public override void OnApplyUserPreferences()
         {
+            if (!Menu.DialogueBox_UIController.Displayed) return;
+
             UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(title_L, "title", titleText);
             UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(message_L, "corps", messageText);
         }

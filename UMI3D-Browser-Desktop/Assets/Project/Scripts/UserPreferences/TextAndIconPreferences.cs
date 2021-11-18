@@ -128,9 +128,9 @@ namespace BrowserDesktop.UserPreferences
             UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.TextPref_SO.ApplyPref(label, textPrefName, labelText));
         }
 
-        public void ApplyIconPref(VisualElement icon, string iconPrefName)
+        public void ApplyIconPref(VisualElement icon, string iconPrefName, float width = 0f, float height = 0f)
         {
-            UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.IconPref_SO.ApplyPref(icon, iconPrefName));
+            UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.IconPref_SO.ApplyPref(icon, iconPrefName, width, height));
         }
 
     }

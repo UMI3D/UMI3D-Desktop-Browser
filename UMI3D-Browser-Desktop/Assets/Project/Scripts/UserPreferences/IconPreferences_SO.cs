@@ -38,27 +38,28 @@ namespace BrowserDesktop.UserPreferences
             [Space]
             [Tooltip("If true this icon width and height will be resized")]
             [SerializeField]
-            private bool Resized;
-            [Tooltip("Width of the icon when zoom is set to 100%. If value <= 0 this will be set to Auto.")]
+            private bool ResizedWhenZoomed;
+            [Tooltip("Width of the icon when zoom is set to 100%. If value <= 0 this won't be taken.")]
             [SerializeField]
             private float width;
-            [Tooltip("height of the icon when zoom is set to 100%. If value <= 0 this will be set to Auto.")]
+            [Tooltip("height of the icon when zoom is set to 100%. If value <= 0 this won't be taken.")]
             [SerializeField]
             private float height;
 
-            public void SetIcon(VisualElement icon)
+            public void SetIcon(VisualElement icon, float width, float height)
             {
-                if (Resized)
-                {
-                    if (width > 0f)
-                        icon.style.width = width * UserPreferences.GlobalPref.ZoomCoef;
-                    else
-                        icon.style.width = StyleKeyword.Auto;
-                    if (height > 0f)
-                        icon.style.height = height * UserPreferences.GlobalPref.ZoomCoef;
-                    else
-                        icon.style.height = StyleKeyword.Auto;
-                }
+                if (this.width > 0f)
+                    icon.style.width = (ResizedWhenZoomed) ? this.width * UserPreferences.GlobalPref.ZoomCoef : this.width;
+                else if (width > 0f)
+                    icon.style.width = (ResizedWhenZoomed) ? width * UserPreferences.GlobalPref.ZoomCoef : width;
+                else
+                    throw new System.Exception($"Width not set in {this.iconPrefName}");
+                if (this.height > 0f)
+                    icon.style.height = (ResizedWhenZoomed) ? this.height * UserPreferences.GlobalPref.ZoomCoef : this.height;
+                else if (height > 0f)
+                    icon.style.height = (ResizedWhenZoomed) ? height * UserPreferences.GlobalPref.ZoomCoef : height;
+                else
+                    throw new System.Exception($"height not set in {this.iconPrefName}");
             }
         }
 
@@ -71,19 +72,20 @@ namespace BrowserDesktop.UserPreferences
             //TODO Copy properties.
         }
 
-        public IEnumerator ApplyPref(VisualElement icon, string iconPrefName)
+        public IEnumerator ApplyPref(VisualElement icon, string iconPrefName, float width, float height)
         {
-            yield return null;
+            //yield return null;
 
             foreach (IconPref iconPref in iconPrefs)
             {
                 if (iconPref.IconPrefName.ToLowerInvariant() == iconPrefName.ToLowerInvariant())
                 {
-                    iconPref.SetIcon(icon);
+                    iconPref.SetIcon(icon, width, height);
                     yield break;
                 }
             }
             Debug.LogError("IconPrefName = " + iconPrefName + " not recognized.");
+            yield return null;
         }
 
         [ContextMenu("Apply User Pref")]

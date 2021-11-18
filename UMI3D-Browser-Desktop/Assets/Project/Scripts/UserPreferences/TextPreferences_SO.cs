@@ -210,6 +210,7 @@ namespace BrowserDesktop.UserPreferences
             {
                 if (textpref.TextPrefName == textPrefName)
                 {
+                    if (label == null) Debug.Log($"Label null = {labelText}, textprefname = {textPrefName}");
                     textpref.SetLabel(label, (labelText != null) ? labelText : label.text, globalFont);
                     yield break;
                 }

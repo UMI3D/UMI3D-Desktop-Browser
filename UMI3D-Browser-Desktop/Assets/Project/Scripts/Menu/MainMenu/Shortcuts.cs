@@ -186,25 +186,17 @@ namespace BrowserDesktop.Menu
         /// <param name="shortcutkeys">Keys to press to trigger the shortcut.</param>
         public void AddShortcut(string shortcutName, string[] shortcutkeys)
         {
-            ShortcutGenericElement shortcutElement;
-            //Object Pooling for ShortcutElement.
-            if (shortcutsWaitedList.Count == 0)
-                shortcutElement = shortcutTreeAsset.CloneTree().Q<ShortcutGenericElement>();
-            else
-            {
-                shortcutElement = shortcutsWaitedList[shortcutsWaitedList.Count - 1];
-                shortcutsWaitedList.RemoveAt(shortcutsWaitedList.Count - 1);
-            }
-            shortcutsDisplayedList.Add(shortcutElement);
+            ShortcutGenericElement shortcut_GE;
+            ObjectPooling(out shortcut_GE, shortcutsDisplayedList, shortcutsWaitedList, shortcutTreeAsset);
 
             Sprite[] shortcutIcons = new Sprite[shortcutkeys.Length];
             for (int i = 0; i < shortcutkeys.Length; ++i)
                 shortcutIcons[i] = keyBindings.GetSpriteFrom(shortcutkeys[i]);
 
-            shortcutElement.Setup(shortcutName, shortcutIcons, shortcutIconTreeAsset);
-            shortcuts_SV.Add(shortcutElement);
+            shortcut_GE.Setup(shortcutName, shortcutIcons, shortcutIconTreeAsset);
+            shortcuts_SV.Add(shortcut_GE);
 
-            //StartCoroutine(ResizeShortcutsWidth());
+            StartCoroutine(ResizeShortcutsWidth());
         }
 
         /// <summary>
@@ -228,6 +220,18 @@ namespace BrowserDesktop.Menu
         }
 
         #endregion
+
+        public static void ObjectPooling<T>(out T vE, List<T> listDisplayed, List<T> listWaited, VisualTreeAsset visualTreeAsset) where T : VisualElement
+        {
+            if (listWaited.Count == 0)
+                vE = visualTreeAsset.CloneTree().Q<T>();
+            else
+            {
+                vE = listWaited[listWaited.Count - 1];
+                listWaited.RemoveAt(listWaited.Count - 1);
+            }
+            listDisplayed.Add(vE);
+        }
 
         /// <summary>
         /// Show or hide shortcuts.
@@ -254,13 +258,9 @@ namespace BrowserDesktop.Menu
         {
             Debug.LogWarning("Use of Unity experimental API. May not work in the future. (2021)");
             if (isShowing)
-            {
                 vE.experimental.animation.Start(0, value, 100, animation);
-            }
             else
-            {
                 vE.experimental.animation.Start(value, 0, 100, animation);
-            }
         }
     }
 }
