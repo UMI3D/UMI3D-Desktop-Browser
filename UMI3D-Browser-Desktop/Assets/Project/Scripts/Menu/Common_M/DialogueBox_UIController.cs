@@ -47,13 +47,17 @@ namespace BrowserDesktop.Menu
 
         public static DialogueBox_UIController Setup(string title, string message, string optionA, string optionB, System.Action<bool> choiceCallback, bool marginForTitleBar = false)
         {
-            if (!Instance.isDisplayed) Instance.dialogueBox.Setup(title, message, optionA, optionB, choiceCallback, marginForTitleBar);
+            if (!Instance.isDisplayed) 
+                Instance.dialogueBox.
+                    Setup(title, message, optionA, optionB, choiceCallback, marginForTitleBar);
             return Instance;
         }
 
         public static DialogueBox_UIController Setup(string title, string message, string optionA, System.Action choiceCallback, bool marginForTitleBar = false)
         {
-            if (!Instance.isDisplayed) Instance.dialogueBox.Setup(title, message, optionA, choiceCallback, marginForTitleBar);
+            if (!Instance.isDisplayed) 
+                Instance.dialogueBox.
+                    Setup(title, message, optionA, choiceCallback, marginForTitleBar);
             return Instance;
         }
 
@@ -62,7 +66,7 @@ namespace BrowserDesktop.Menu
             if (isDisplayed) return;
 
             isDisplayed = true;
-            uiDocument.rootVisualElement.Add(dialogueBox);
+            dialogueBox.AddTo(uiDocument.rootVisualElement);
         }
 
         public static void Close(bool val)

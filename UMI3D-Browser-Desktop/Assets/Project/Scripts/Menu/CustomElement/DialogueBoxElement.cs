@@ -115,8 +115,6 @@ namespace BrowserDesktop.UI.CustomElement
                 Cursor.CursorHandler.UnSetMovement(this);
                 choiceCallback(b);
             };
-
-            OnApplyUserPreferences();
         }
 
         /// <summary>
@@ -145,8 +143,6 @@ namespace BrowserDesktop.UI.CustomElement
                 Cursor.CursorHandler.UnSetMovement(this);
                 choiceCallback();
             };
-
-            OnApplyUserPreferences();
         }
 
         /// <summary>

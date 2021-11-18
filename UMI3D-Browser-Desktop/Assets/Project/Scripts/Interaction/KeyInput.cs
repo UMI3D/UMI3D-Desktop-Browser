@@ -167,38 +167,12 @@ namespace BrowserDesktop.Interaction
             UMI3DNodeAnimation.Get(id)?.Start();
         }
 
-        #region Displayer
-
-        /*EventDisplayer eventDisplayer;
-
-        IEnumerator InitEventDisplayer()
-        {
-            yield return null;
-            eventDisplayer = EventMenu.CreateDisplayer();
-            eventDisplayer?.Display(false);
-        }*/
-
-        /*private void DiplayDisplayer(string label, string inputName, Texture2D icon = null)
-        {
-            //Debug.Log("displayer = " + label);
-            if (eventDisplayer != null)
-            {
-                eventDisplayer.Display(true);
-                eventDisplayer.SetUp(label, inputName, icon);
-            }
-        }*/
-
-
         private void DisplayInput(string label, string inputName, Texture2D icon = null)
         {
             if (icon != null)
                 throw new System.Exception("Not implemented yet");
             Shortcuts.Instance.AddShortcut(label, new string[1] { inputName });
         }
-
-        #endregion
-
-
 
         #region Associate and Dissociate
 
@@ -251,7 +225,6 @@ namespace BrowserDesktop.Interaction
                 }
                 else
                 {
-                    //Debug.Log("display test = " + associatedInteraction.name);
                     DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                 }
             }
@@ -268,7 +241,6 @@ namespace BrowserDesktop.Interaction
 
         public override void Dissociate()
         {
-            //Debug.Log($"Dissociate KeyInput EventDisplayer");
             if (Down) onInputUp.Invoke();
             ResetButton();
             associatedInteraction = null;

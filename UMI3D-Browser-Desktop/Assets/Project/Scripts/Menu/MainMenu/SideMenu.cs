@@ -55,7 +55,6 @@ namespace BrowserDesktop.Menu
         VisualElement rightSideMenuContainer;
         VisualElement interactionMenu;
         VisualElement toolBoxMenu;
-        VisualElement eventsMenu;
 
         [Header("Toolbox menu")]
         public MenuDisplayManager toolBoxMenuDisplayManager;
@@ -100,7 +99,6 @@ namespace BrowserDesktop.Menu
             rightSideMenuContainer = root.Q<VisualElement>("right-side-menu-container");
             interactionMenu = root.Q<VisualElement>("interaction-menu");
             toolBoxMenu = root.Q<VisualElement>("toolbox-menu");
-            eventsMenu = root.Q<VisualElement>("information-pop-up-events");
 
             backCircularMenu = root.Q<Button>("interaction-menu-back");
             backCircularMenu.clickable.clicked += () =>
@@ -150,13 +148,9 @@ namespace BrowserDesktop.Menu
                 CursorHandler.SetMovement(Instance, expand ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
 
                 bool isCircularMenuEmpty = CircularMenu.Instance.IsEmpty();
-                if (!isCircularMenuEmpty || EventMenu.NbEventsDIsplayed > 0)
+                if (!isCircularMenuEmpty)
                 {
                     Instance.DisplayPauseMenu(false);
-                    if (expand && isCircularMenuEmpty)
-                        EventMenu.Expand(true);
-                    else
-                        EventMenu.Expand(false);
                 }
                 else
                 {
@@ -172,13 +166,11 @@ namespace BrowserDesktop.Menu
             {
                 toolBoxMenu.style.display =  DisplayStyle.Flex;
                 interactionMenu.style.display = DisplayStyle.None;
-                eventsMenu.style.display = DisplayStyle.None;
                 backCircularMenu.style.display = DisplayStyle.None;
             } else
             {
                 toolBoxMenu.style.display = DisplayStyle.None;
                 interactionMenu.style.display = CircularMenu.Instance.IsEmpty() ? DisplayStyle.None : DisplayStyle.Flex;
-                eventsMenu.style.display = EventMenu.NbEventsDIsplayed == 0 ? DisplayStyle.None : DisplayStyle.Flex;
             }
             
         }
