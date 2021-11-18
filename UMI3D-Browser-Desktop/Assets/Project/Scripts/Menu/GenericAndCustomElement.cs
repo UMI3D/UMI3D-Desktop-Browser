@@ -29,6 +29,15 @@ namespace BrowserDesktop.UI
         /// </summary>
         public new class UxmlTraits : VisualElement.UxmlTraits { }
 
+        /// <summary>
+        /// True if this UIElement has been initialized.
+        /// </summary>
+        protected bool initialized = false;
+        /// <summary>
+        /// True if this UIElement is displayed.
+        /// </summary>
+        protected bool displayed = false;
+
         public GenericAndCustomElement()
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
@@ -37,6 +46,32 @@ namespace BrowserDesktop.UI
         ~GenericAndCustomElement()
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
+        }
+
+        protected virtual void Initialize()
+        {
+            if (initialized) return;
+            else initialized = true;
+        }
+
+        /// <summary>
+        /// Add this UiElement as a child of [partent].
+        /// </summary>
+        /// <param name="parent">the parent of this UIElement.</param>
+        public virtual void AddTo(VisualElement parent)
+        {
+            displayed = true;
+            OnApplyUserPreferences();
+            parent.Add(this);
+        }
+
+        /// <summary>
+        /// Remove the UIElement from the hierarchy
+        /// </summary>
+        public virtual void Remove()
+        {
+            if (!displayed) return;
+            this.RemoveFromHierarchy();
         }
 
         /// <summary>

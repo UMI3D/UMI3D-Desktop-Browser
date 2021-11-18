@@ -2332,10 +2332,10 @@ MonoBehaviour:
   CameraTransform: {fileID: 2119596089}
   InteractionMapper: {fileID: 498482124}
   dofGroups: 04000000050000000600000001000000020000000300000008000000090000000a000000
-  ManipulationActionInput:
-  - {fileID: 647256037}
   interactionBoneType: 3
   hoverBoneType: 3
+  ManipulationActionInput:
+  - {fileID: 647256037}
 --- !u!1001 &2119596086
 PrefabInstance:
   m_ObjectHideFlags: 0

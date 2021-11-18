@@ -60,23 +60,16 @@ namespace BrowserDesktop.UI.CustomElement
         /// </summary>
         private string messageText;
 
-        /// <summary>
-        /// True if this dialogue box has been initialized.
-        /// </summary>
-        private bool isInitialized = false;
-
         #endregion
 
         /// <summary>
         /// Initialize the dialogue box the first time (UI binding and button settings).
         /// </summary>
-        private void Initialize()
+        protected override void Initialize()
         {
-            if (isInitialized) return;
-            
-            isInitialized = true;
+            base.Initialize();
 
-            Cursor.CursorHandler.SetMovement(this, BrowserDesktop.Cursor.CursorHandler.CursorMovement.Free);
+            Cursor.CursorHandler.SetMovement(this, Cursor.CursorHandler.CursorMovement.Free);
             this.style.position = Position.Absolute;
 
             title_L = this.Q<Label>("dialogue-box-title");
@@ -94,7 +87,6 @@ namespace BrowserDesktop.UI.CustomElement
                 Menu.DialogueBox_UIController.Close(false);
             };
         }
-
 
         /// <summary>
         /// Sets up the dialogue box for two choices.

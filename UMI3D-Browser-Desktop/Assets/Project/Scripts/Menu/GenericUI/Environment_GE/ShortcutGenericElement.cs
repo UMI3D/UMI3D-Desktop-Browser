@@ -93,16 +93,19 @@ namespace BrowserDesktop.UI.GenericElement
         }
 
         /// <summary>
-        /// True if this shortcutElement is displayed.
-        /// </summary>
-        private bool isShortcutDisplay = false;
-
-        /// <summary>
         /// The size of the icons area and the shortut's name label.
         /// </summary>
         //private float maxIconsAreaWidth = 151;
 
         #endregion
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            shortcutName_L = this.Q<Label>("shortcut-name");
+            iconsArea_VE = this.Q<VisualElement>("Icons-layer");
+        }
 
         /// <summary>
         /// Set the icons and name of this shortcut.
@@ -111,50 +114,38 @@ namespace BrowserDesktop.UI.GenericElement
         /// <param name="shortcutIcons">The icons (sprite) of this shortcut.</param>
         /// <param name="shortcutIcon_VTA">The template of shortcut icon.</param>
         /// <param name="shortcutsClass">The instance of the Shortcuts class.</param>
-        public void Setup(string shortcutName, Sprite[] shortcutIcons, VisualTreeAsset shortcutIcon_VTA)
+        public ShortcutGenericElement Setup(string shortcutName, Sprite[] shortcutIcons, VisualTreeAsset shortcutIcon_VTA, VisualTreeAsset label_VTA)
         {
-            isShortcutDisplay = true;
+            Initialize();
+
             ++ShortcutsCount;
 
-            shortcutName_L = this.Q<Label>("shortcut-name");
             shortcutNameText = shortcutName;
-            //shortcutName_L.AddToClassList("label-shortcut");
-
-            iconsArea_VE = this.Q<VisualElement>("Icons-layer");
-
-            /*iconsArea_VE.style.width = maxIconsAreaWidth;
-            shortcutName_L.style.width = maxIconsAreaWidth;*/
 
             for (int i = 0; i < shortcutIcons.Length; ++i)
             {
                 if (i != 0 && i < shortcutIcons.Length)
                 {
-                    //Object Pooling for the plus label.
-                    Label plus;
-                    if (Shortcuts.ShortcutPlusLabelWaitedList.Count == 0)
-                    {
-                        plus = new Label("+");
-                    }
-                    else
-                    {
-                        plus = Shortcuts.ShortcutPlusLabelWaitedList[Shortcuts.ShortcutPlusLabelWaitedList.Count - 1];
-                        Shortcuts.ShortcutPlusLabelWaitedList.RemoveAt(Shortcuts.ShortcutPlusLabelWaitedList.Count - 1);
-                    }
-                    Shortcuts.ShortcutPlusLabelDisplayList.Add(plus);
+                    Label_GE plus;
+                    Shortcuts.ObjectPooling(out plus, Shortcuts.ShortcutPlusLabelDisplayList, Shortcuts.ShortcutPlusLabelWaitedList, label_VTA);
+                    plus.
+                        Setup("+", "label").
+                        AddTo(iconsArea_VE);
 
-                    plus.AddToClassList("label-shortcut");
-                    plus.AddToClassList("label-shortcut-plus");
-                    iconsArea_VE.Add(plus);
+                    /*plus.AddToClassList("label-shortcut");
+                    plus.AddToClassList("label-shortcut-plus");*/
                 }
 
                 ShortcutIcon_GE icon_GE;
                 Shortcuts.ObjectPooling(out icon_GE, Shortcuts.ShortcutIconsDisplayedList, Shortcuts.ShortcutIconsWaitedList, shortcutIcon_VTA);
-
-                icon_GE.Setup(shortcutIcons[i]);
-                iconsArea_VE.Add(icon_GE);
-
-                OnApplyUserPreferences();
+                icon_GE.
+                    Setup(shortcutIcons[i]).
+                    AddTo(iconsArea_VE);
             }
+
+            //OnApplyUserPreferences();
+
+            return this;
         }
 
         public void ComputeShortcutWidth()
@@ -173,27 +164,20 @@ namespace BrowserDesktop.UI.GenericElement
             //Debug.Log("resizement");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="shortcutsClass"></param>
-        public void RemoveShortcut()
+        
+        public override void Remove()
         {
-            if (isShortcutDisplay)
-            {
-                isShortcutDisplay = false;
-                --ShortcutsCount;
+            base.Remove();
 
-                iconsArea_VE.style.width = StyleKeyword.Auto; //Unset the icons area width.
-                shortcutName_L.style.width = StyleKeyword.Auto; //Unset the shortcut name width.
+            --ShortcutsCount;
 
-                this.RemoveFromHierarchy();
-            }
+            iconsArea_VE.style.width = StyleKeyword.Auto; //Unset the icons area width.
+            shortcutName_L.style.width = StyleKeyword.Auto; //Unset the shortcut name width.
         }
 
         public override void OnApplyUserPreferences()
         {
-            if (!isShortcutDisplay) return;
+            if (!displayed) return;
 
             UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(shortcutName_L, "label", shortcutNameText);
         }
