@@ -45,7 +45,7 @@ namespace BrowserDesktop.UI.GenericElement
         /// Set the size and the sprite of the icon.
         /// </summary>
         /// <param name="sprite">The sprite of the icon.</param>
-        public void Setup(Sprite sprite)
+        public ShortcutIcon_GE Setup(Sprite sprite)
         {
 
             if (sprite == null)
@@ -83,13 +83,19 @@ namespace BrowserDesktop.UI.GenericElement
                 this.style.borderTopWidth = 0;
             }*/
 
-            OnApplyUserPreferences();
+            //OnApplyUserPreferences();
+
+            return this;
         }
 
         public override void OnApplyUserPreferences()
         {
+            if (!displayed) return;
+
             UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(this, (iconType == IconType.MOUSE) ? $"shortcut-{IconType.MOUSE}" : $"shortcut-KEY", iconWidthPX, iconHeightPX);
         }
+
+
     }
 }
 

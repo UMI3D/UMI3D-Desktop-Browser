@@ -37,12 +37,14 @@ namespace BrowserDesktop.Menu
 
         [Tooltip("Visual Tree Asset of a shortcut.")]
         [SerializeField]
-        private VisualTreeAsset shortcutTreeAsset;
+        private VisualTreeAsset shortcut_ge_VTA;
         [Tooltip("Visual Tree Asset of an icon of a shortcut.")]
         [SerializeField]
-        private VisualTreeAsset shortcutIconTreeAsset;
+        private VisualTreeAsset shortcutIcon_ge_VTA;
+        [Tooltip("Visual Tree Asset of a label.")]
+        [SerializeField]
+        private VisualTreeAsset label_ge_VTA;
 
-        VisualElement shortcutArea; //Where shortcut's button and labels are positions in the footer.
         VisualElement shortcutDisplayer_VE; //Where the shortcuts are displayed.
         ScrollView shortcuts_SV; //ScrollView of shortcuts.
 
@@ -66,8 +68,8 @@ namespace BrowserDesktop.Menu
         private static List<ShortcutGenericElement> shortcutsWaitedList = new List<ShortcutGenericElement>();
         public static readonly List<ShortcutIcon_GE> ShortcutIconsDisplayedList = new List<ShortcutIcon_GE>();
         public static readonly List<ShortcutIcon_GE> ShortcutIconsWaitedList = new List<ShortcutIcon_GE>();
-        public static readonly List<Label> ShortcutPlusLabelDisplayList = new List<Label>();
-        public static readonly List<Label> ShortcutPlusLabelWaitedList = new List<Label>();
+        public static readonly List<Label_GE> ShortcutPlusLabelDisplayList = new List<Label_GE>();
+        public static readonly List<Label_GE> ShortcutPlusLabelWaitedList = new List<Label_GE>();
 
         #endregion
 
@@ -77,8 +79,9 @@ namespace BrowserDesktop.Menu
         {
             Debug.Assert(uiDocument != null);
             Debug.Assert(keyBindings != null);
-            Debug.Assert(shortcutTreeAsset != null);
-            Debug.Assert(shortcutIconTreeAsset != null);
+            Debug.Assert(shortcut_ge_VTA != null);
+            Debug.Assert(shortcutIcon_ge_VTA != null);
+            Debug.Assert(label_ge_VTA != null);
 
             var root = uiDocument.rootVisualElement;
 
@@ -187,14 +190,15 @@ namespace BrowserDesktop.Menu
         public void AddShortcut(string shortcutName, string[] shortcutkeys)
         {
             ShortcutGenericElement shortcut_GE;
-            ObjectPooling(out shortcut_GE, shortcutsDisplayedList, shortcutsWaitedList, shortcutTreeAsset);
+            ObjectPooling(out shortcut_GE, shortcutsDisplayedList, shortcutsWaitedList, shortcut_ge_VTA);
 
             Sprite[] shortcutIcons = new Sprite[shortcutkeys.Length];
             for (int i = 0; i < shortcutkeys.Length; ++i)
                 shortcutIcons[i] = keyBindings.GetSpriteFrom(shortcutkeys[i]);
 
-            shortcut_GE.Setup(shortcutName, shortcutIcons, shortcutIconTreeAsset);
-            shortcuts_SV.Add(shortcut_GE);
+            shortcut_GE.
+                Setup(shortcutName, shortcutIcons, shortcutIcon_ge_VTA, label_ge_VTA).
+                AddTo(shortcuts_SV);
 
             StartCoroutine(ResizeShortcutsWidth());
         }
@@ -204,7 +208,7 @@ namespace BrowserDesktop.Menu
         /// </summary>
         public void ClearShortcut()
         {
-            Action<VisualElement> removeVEFromHierarchy = (vE) => vE.RemoveFromHierarchy();
+            Action<UI.GenericAndCustomElement> removeVEFromHierarchy = (vE) => vE.Remove();
 
             ShortcutIconsDisplayedList.ForEach(removeVEFromHierarchy);
             ShortcutIconsWaitedList.AddRange(ShortcutIconsDisplayedList);
@@ -214,7 +218,7 @@ namespace BrowserDesktop.Menu
             ShortcutPlusLabelWaitedList.AddRange(ShortcutPlusLabelDisplayList);
             ShortcutPlusLabelDisplayList.Clear();
 
-            shortcutsDisplayedList.ForEach((sE) => sE.RemoveShortcut());
+            shortcutsDisplayedList.ForEach(removeVEFromHierarchy);
             shortcutsWaitedList.AddRange(shortcutsDisplayedList);
             shortcutsDisplayedList.Clear();
         }
@@ -231,6 +235,18 @@ namespace BrowserDesktop.Menu
                 listWaited.RemoveAt(listWaited.Count - 1);
             }
             listDisplayed.Add(vE);
+        }
+
+        public static void ObjectPooling(out Label label_L, List<Label> listDisplayed, List<Label> listWaited, string text)
+        {
+            if (listWaited.Count == 0)
+                label_L = new Label(text);
+            else
+            {
+                label_L = listWaited[listWaited.Count - 1];
+                listWaited.RemoveAt(listWaited.Count - 1);
+            }
+            listDisplayed.Add(label_L);
         }
 
         /// <summary>
