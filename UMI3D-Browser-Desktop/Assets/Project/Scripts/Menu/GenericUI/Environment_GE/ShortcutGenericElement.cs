@@ -73,7 +73,7 @@ namespace BrowserDesktop.UI.GenericElement
             }
         }
 
-        private static float shortcutNameWidth = 0;
+        /*private static float shortcutNameWidth = 0;
         /// <summary>
         /// The maximum width in px of all the shortcut's name label.
         /// </summary>
@@ -96,7 +96,7 @@ namespace BrowserDesktop.UI.GenericElement
         /// <summary>
         /// The size of the icons area and the shortut's name label.
         /// </summary>
-        //private float maxIconsAreaWidth = 151;
+        //private float maxIconsAreaWidth = 151;*/
 
         #endregion
 
@@ -155,7 +155,7 @@ namespace BrowserDesktop.UI.GenericElement
         /// </summary>
         private void OnElementResized(GeometryChangedEvent e)
         {
-            Debug.Log($"[{shortcutNameText}] - height = {e.newRect.height}, width = {e.newRect.width}");
+            //Debug.Log($"[{shortcutNameText}] - height = {e.newRect.height}, width = {e.newRect.width}");
             IconsAreaWidth = e.newRect.width;
         }
 
@@ -163,8 +163,6 @@ namespace BrowserDesktop.UI.GenericElement
         {
             iconsLayout_VE.style.width = IconsAreaWidth;
             //shortcutName_L.style.width = ShortcutNameWidth;
-
-            //Debug.Log("resizement");
         }
 
         

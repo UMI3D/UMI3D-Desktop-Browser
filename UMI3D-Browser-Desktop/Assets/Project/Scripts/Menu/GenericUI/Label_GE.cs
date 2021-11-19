@@ -43,7 +43,7 @@ namespace BrowserDesktop.UI.GenericElement
             this.text = text;
             this.textPref = textPref;
 
-            OnApplyUserPreferences();
+            //OnApplyUserPreferences();
 
             return this;
         }

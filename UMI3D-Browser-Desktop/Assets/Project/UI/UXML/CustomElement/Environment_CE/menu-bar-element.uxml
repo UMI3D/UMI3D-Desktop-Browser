@@ -1,7 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="toolbox-genericElement" src="/Assets/Project/UI/UXML/GenericUI/Toolbox/toolbox-genericElement.uxml" />
     <Style src="/Assets/Project/UI/UXML/menu-bar.uss" />
-    <BrowserDesktop.UI.CustomElement.MenuBarElement style="height: auto; background-color: rgb(63, 63, 66); flex-grow: 0; flex-direction: column; flex-shrink: 0; width: 100%; justify-content: space-between; align-items: center;">
+    <BrowserDesktop.UI.CustomElement.MenuBarElement style="height: auto; background-color: rgb(63, 63, 66); flex-grow: 0; flex-shrink: 0; width: 100%; justify-content: space-between; align-items: center;">
         <ui:VisualElement name="Horizontal-layout" style="flex-direction: row; align-items: center; justify-content: space-between; width: 100%; flex-shrink: 0; flex-grow: 1; height: 100%;">
             <ui:VisualElement name="Left-layout" style="flex-direction: row; justify-content: center; align-items: center;" />
             <ui:VisualElement name="Center-layout" style="flex-grow: 1; flex-shrink: 0; flex-direction: row; align-items: center;" />

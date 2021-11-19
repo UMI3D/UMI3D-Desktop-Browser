@@ -60,6 +60,7 @@ namespace BrowserDesktop.UI
         /// <param name="parent">the parent of this UIElement.</param>
         public virtual void AddTo(VisualElement parent)
         {
+            if (!initialized) throw new System.Exception($"VisualElement Added without being setup.");
             displayed = true;
             OnApplyUserPreferences();
             parent.Add(this);

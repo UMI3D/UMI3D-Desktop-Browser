@@ -47,6 +47,7 @@ namespace BrowserDesktop.UI.GenericElement
         /// <param name="sprite">The sprite of the icon.</param>
         public ShortcutIcon_GE Setup(Sprite sprite)
         {
+            Initialize();
 
             if (sprite == null)
             {
