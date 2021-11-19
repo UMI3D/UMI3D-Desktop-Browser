@@ -25,6 +25,11 @@ MonoBehaviour:
     maxNumberOfCharacters: 20
     caseStyle: 0
     resizeWidth: 0
+    textFormat:
+      applyFormat: 1
+      maxNumberOfCharacters: 20
+      caseStyle: 0
+      resizeWidth: 0
   - textPrefName: label
     textStyle: 0
     labelFont: {fileID: 0}
@@ -36,6 +41,11 @@ MonoBehaviour:
     maxNumberOfCharacters: 10
     caseStyle: 0
     resizeWidth: 1
+    textFormat:
+      applyFormat: 1
+      maxNumberOfCharacters: 10
+      caseStyle: 0
+      resizeWidth: 1
   - textPrefName: sub-section
     textStyle: 0
     labelFont: {fileID: 0}
@@ -47,6 +57,11 @@ MonoBehaviour:
     maxNumberOfCharacters: 10
     caseStyle: 0
     resizeWidth: 0
+    textFormat:
+      applyFormat: 0
+      maxNumberOfCharacters: 10
+      caseStyle: 0
+      resizeWidth: 0
   - textPrefName: corps
     textStyle: 0
     labelFont: {fileID: 0}
@@ -58,3 +73,8 @@ MonoBehaviour:
     maxNumberOfCharacters: 100
     caseStyle: 0
     resizeWidth: 0
+    textFormat:
+      applyFormat: 1
+      maxNumberOfCharacters: 100
+      caseStyle: 0
+      resizeWidth: 0

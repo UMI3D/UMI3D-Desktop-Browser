@@ -61,9 +61,17 @@ namespace BrowserDesktop.UI
         public virtual void AddTo(VisualElement parent)
         {
             if (!initialized) throw new System.Exception($"VisualElement Added without being setup.");
+            ReadyToDisplay();
+            parent.Add(this);
+        }
+
+        /// <summary>
+        /// To be used in Custom Element that are already added to the UIDocument.
+        /// </summary>
+        protected virtual void ReadyToDisplay()
+        {
             displayed = true;
             OnApplyUserPreferences();
-            parent.Add(this);
         }
 
         /// <summary>

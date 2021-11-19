@@ -21,47 +21,59 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.GenericElement
 {
-    public class Label_GE : AbstractGenericAndCustomElement
+    public class Button_GE : AbstractGenericAndCustomElement
     {
-        public new class UxmlFactory : UxmlFactory<Label_GE, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<Button_GE, UxmlTraits> { }
 
-        private Label label_L;
+        private Button button_B;
         private string text;
         private string textPref;
-
-        private UserPreferences.TextPreferences_SO.TextPref.TextFormat textFormat;
+        private string iconClass;
+        private string iconPref;
 
         protected override void Initialize()
         {
             base.Initialize();
 
-            this.label_L = this.Q<Label>("label");
+            button_B = this.Q<Button>("button");
         }
 
-        public Label_GE Setup(string text, string textPref)
+        public Button_GE Setup()
         {
             Initialize();
 
-            this.text = text;
-            this.textPref = textPref;
-
-            //OnApplyUserPreferences();
+            this.text = "";
+            this.textPref = "";
+            this.iconClass = "";
+            this.iconPref = "";
 
             return this;
         }
 
-        public void Update(string text)
+        public Button_GE WithBackgroundImage(string iconClass, string iconPref)
+        {
+            this.iconClass = iconClass;
+            this.iconPref = iconPref;
+
+            return this;
+        }
+
+        public Button_GE WithText(string text, string textPref)
         {
             this.text = text;
-            textFormat.SetFormat(label_L, text);
+            this.textPref = textPref;
+            
+            return this;
         }
 
         public override void OnApplyUserPreferences()
         {
             if (!displayed) return;
 
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(label_L, textPref, text);
-            textFormat = UserPreferences.UserPreferences.TextAndIconPref.GetTextFormat(textPref);
+            if (!string.IsNullOrEmpty(textPref))
+                UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(button_B, textPref, text);
+            if (!string.IsNullOrEmpty(iconPref))
+                UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(button_B, iconPref, iconClass);
         }
     }
 }

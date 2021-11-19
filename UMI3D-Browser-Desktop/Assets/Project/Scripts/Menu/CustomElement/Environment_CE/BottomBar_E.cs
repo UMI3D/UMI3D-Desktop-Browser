@@ -25,9 +25,28 @@ namespace BrowserDesktop.UI.CustomElement
     {
         public new class UxmlFactory : UxmlFactory<BottomBar_E, UxmlTraits> { }
 
+        private VisualElement leftLayout_VE;
+        private VisualElement rightLayout_VE;
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            leftLayout_VE = this.Q<VisualElement>("left-layout");
+            rightLayout_VE = this.Q<VisualElement>("right-layout");
+        }
+
+        public BottomBar_E Setup()
+        {
+
+            ReadyToDisplay();
+
+            return this;
+        }
+
         public override void OnApplyUserPreferences()
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

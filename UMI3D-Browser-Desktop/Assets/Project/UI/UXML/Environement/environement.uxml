@@ -2,8 +2,8 @@
     <ui:Template name="loading-screen" src="loading-screen.uxml" />
     <ui:Template name="password-screen" src="password-screen.uxml" />
     <ui:Template name="libraries-screen" src="libraries-screen.uxml" />
-    <ui:Template name="ShortcutDisplayer" src="/Assets/Project/UI/UXML/CustomElement/ShortcutDisplayer.uxml" />
     <ui:Template name="menu-bar-element" src="/Assets/Project/UI/UXML/CustomElement/Environment_CE/menu-bar-element.uxml" />
+    <ui:Template name="ShortcutDisplayer" src="/Assets/Project/UI/UXML/CustomElement/ShortcutDisplayer.uxml" />
     <ui:Template name="MicrophoneElement" src="/Assets/Project/UI/UXML/CustomElement/MicrophoneElement.uxml" />
     <Style src="/Assets/Project/UI/UXML/main-style.uss" />
     <Style src="/Assets/Project/UI/UXML/sessio-info.uss" />
