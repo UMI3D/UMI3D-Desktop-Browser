@@ -187,33 +187,6 @@ namespace umi3d.cdk.collaboration
         public MicrophoneEvent _OnSending = new MicrophoneEvent();
         private AudioSource audioSource;
 
-        public List<string> GetInfo()
-        {
-            var infos = new List<string>();
-
-            infos.Add("Current Microphone : " + microphoneLabel);
-            infos.Add(" Microphone List : ");
-            getDevices().ForEach(a => infos.Add("    " + a));
-            if (reading)
-            {
-                infos.Add($" Sampling Frequency : { samplingFrequency} Hz");
-                infos.Add($" Bitrate : {Bitrate} b/s");
-                infos.Add($" Frame Size : {frameSize} float");
-                infos.Add($" Output Buffer Size : {outputBufferSize} bytes");
-                lock (pcmQueue)
-                    infos.Add(" PCM Queue : " + pcmQueue.Count.ToString());
-                infos.Add($" RMS : {RMS} [min:{NoiseThreshold} => send:{ShouldSend}] ");
-                infos.Add($" DB : {DB}");
-                infos.Add($" Gain : {Gain}");
-                infos.Add($" Time to turn off : {TimeToTurnOff} s ");
-
-            }
-            else
-                infos.Add("Microphone is muted");
-
-            return infos;
-        }
-
         private void Start()
         {
             IsMute = IsMute;

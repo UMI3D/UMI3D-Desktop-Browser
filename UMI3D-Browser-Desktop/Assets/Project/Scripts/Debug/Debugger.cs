@@ -78,10 +78,10 @@ public class Debugger : umi3d.common.PersistentSingleton<Debugger>
         if(umi3d.cdk.collaboration.UMI3DCollaborationClientServer.Exists)
             WriteLabel(new Rect(14, getLine(), row, 25), "Round Trip Latency (ms): " + umi3d.cdk.collaboration.UMI3DCollaborationClientServer.Instance.ForgeClient?.RoundTripLatency);
         WriteLabel(new Rect(14, getLine(), row, 25), "----------");
-        if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
-            umi3d.cdk.collaboration.MicrophoneListener.Instance.GetInfo().ForEach(e => WriteLabel(new Rect(14, getLine(), row, 25), e));
-        WriteLabel(new Rect(14, getLine(), row, 25), "----------");
-        if (umi3d.cdk.collaboration.AudioManager.Exists)
-            umi3d.cdk.collaboration.AudioManager.Instance.GetInfo().ForEach(e => WriteLabel(new Rect(14, getLine(), row, 25), e));
+        //if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+        //    umi3d.cdk.collaboration.MicrophoneListener.Instance.GetInfo().ForEach(e => WriteLabel(new Rect(14, getLine(), row, 25), e));
+        //WriteLabel(new Rect(14, getLine(), row, 25), "----------");
+        //if (umi3d.cdk.collaboration.AudioManager.Exists)
+        //    umi3d.cdk.collaboration.AudioManager.Instance.GetInfo().ForEach(e => WriteLabel(new Rect(14, getLine(), row, 25), e));
     }
 }
