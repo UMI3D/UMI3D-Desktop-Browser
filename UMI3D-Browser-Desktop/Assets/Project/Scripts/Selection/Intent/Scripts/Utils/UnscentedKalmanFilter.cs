@@ -23,12 +23,12 @@ namespace KalmanFilter
         /// <summary>
 		/// State estimation a priori
 		/// </summary>
-        protected Matrix<double> x_est_predicted;
+        protected Vector<double> x_est_predicted;
 
         /// <summary>
         /// State estimation a posteriori
         /// </summary>
-        protected Matrix<double> x_est;
+        protected Vector<double> x_est;
 
         /// <summary>
 		/// Covariance
@@ -59,6 +59,13 @@ namespace KalmanFilter
         /// True when a first guess has been provided
         /// </summary>
         protected bool isInitialized = false;
+
+        /// <summary>
+        /// Initialize the filter with the first guess of the state
+        /// </summary>
+        /// <param name="initialStateGuessed"></param>
+        /// <param name="initialCovariance"></param>
+        public abstract void Init(double[] initialStateGuessed, double[][] initialCovariance);
 
         /// <summary>
         /// Predict the next state of the system
@@ -117,12 +124,12 @@ namespace KalmanFilter
         /// <param name="stdMeasure"></param>
         /// <param name="modelProcess"></param>
         public KalmanFilter(int dimStates, double stdProcess, double stdMeasure, double[][] modelProcess)
-            : this(dimStates, dimStates, stdProcess, stdMeasure, modelProcess, Matrix.Build.SparseIdentity(dimStates, dimStates).ToRowArrays())
+            : this(dimStates, dimStates, stdProcess, stdMeasure, modelProcess, Matrix.Build.DenseIdentity(dimStates, dimStates).ToRowArrays())
         { }
 
-        public void Init(double[] estimateGuessed, double[][] covarianceInit)
+        public override void Init(double[] estimateGuessed, double[][] covarianceInit)
         {
-            x_est = Matrix.Build.Dense(1, L, estimateGuessed);
+            x_est = Vector.Build.Dense(estimateGuessed);
             P = Matrix.Build.DenseOfRowArrays(covarianceInit);
 
             isInitialized = true;
@@ -131,10 +138,10 @@ namespace KalmanFilter
         #region Predict
         public override double[] Predict()
         {
-            x_est_predicted = Fk.Multiply(x_est);
-            P = Fk.Multiply(P).Multiply(Fk.Transpose()) + Q; //estimation from the model
+            x_est_predicted = Fk * x_est;
+            P = Fk * P * Fk.Transpose() + Q; //estimation from the model
 
-            return x_est_predicted.ToColumnMajorArray();
+            return x_est_predicted.ToArray();
         }
 
         public double[] Predict(double[][] modelProcess)
@@ -153,15 +160,15 @@ namespace KalmanFilter
         #region Update
         public override double[] Update(double[] measure)
         {
-            var S = Hk.Multiply(P).Multiply(Hk.Transpose());
-            var K = P.Multiply(Hk.Transpose()).Multiply(S.Inverse()); // Kalman optimal gain
+            var S = Hk * P * Hk.Transpose();
+            var K = P * Hk.Transpose() * S.Inverse(); // Kalman optimal gain
 
-            var Z = Matrix.Build.DenseOfRowArrays(measure);
-            var deviation = Z.Subtract(Hk.Multiply(x_est_predicted));
+            var Z = Vector.Build.Dense(measure);
+            var deviation = Z - Hk * x_est_predicted;
 
             x_est = x_est_predicted.Add(K.Multiply(deviation)); //estimation update
 
-            return x_est.ToColumnMajorArray();
+            return x_est.ToArray();
         }
 
         public double[] Update(double[] measure, double[][] modelObservation)
@@ -225,7 +232,7 @@ namespace KalmanFilter
             /// <summary>
             /// propagated mean, y
             /// </summary>
-            public Matrix<double> mean;
+            public Vector<double> mean;
             /// <summary>
             /// propagated sigma vectors, Y
             /// </summary>
@@ -254,10 +261,17 @@ namespace KalmanFilter
             this.r = r;
         }
 
-        private void Init()
+        public void Init()
         {
-            x_est = q * Matrix.Build.Random(L, 1); //initial state with noise
-            P = Matrix.Build.Diagonal(L, L, 1); //initial state covraiance
+            var x_est = (q * Vector.Build.Random(L)).ToArray(); //initial state with noise
+            var P = Matrix.Build.Diagonal(L, L, 1).ToRowArrays(); //initial state covraiance
+            Init(x_est, P);
+        }
+
+        public override void Init(double[] initialStateGuessed, double[][] initialCovariance)
+        {
+            x_est = q * Vector.Build.Random(L); //initial state with noise
+            P = Matrix.Build.Diagonal(L, L, 1);
 
             Q = Matrix.Build.Diagonal(L, L, q * q); //covariance of process
             R = Matrix.Build.Dense(M, M, r * r); //covariance of measurement  
@@ -295,14 +309,13 @@ namespace KalmanFilter
             //a priori estimated state
             x_est = ut_F.mean;
 
-            return x_est.ToColumnMajorArray();
+            return x_est.ToArray();
         }
 
         public override double[] Update(double[] measurements)
         {
             // integating measures
-            var z = Matrix.Build.Dense(M, 1, 0);
-            z.SetColumn(0, measurements);
+            var z = Vector.Build.Dense(measurements);
 
             //unscented transformation of measurments
             UnscentedTransformResults ut_H = UnscentedTransform(ut_F.samplingPoints, Wm, Wc, M, R);
@@ -314,23 +327,23 @@ namespace KalmanFilter
             var z_est_apriori = ut_H.mean;
 
             //transformed cross-covariance
-            Matrix<double> Pxy = ut_F.deviations.Multiply(Matrix.Build.Diagonal(Wc.Row(0).ToArray())).Multiply(ut_H.deviations.Transpose());
+            Matrix<double> Pxy = ut_F.deviations * Matrix.Build.Diagonal(Wc.Row(0).ToArray()) * ut_H.deviations.Transpose();
 
             // Kalman gain matrix
-            Matrix<double> K = Pxy.Multiply(ut_H.covariance.Inverse());
+            Matrix<double> K = Pxy * ut_H.covariance.Inverse();
 
             //state update a posteriori
-            x_est = x_est_apriori.Add(K.Multiply(z.Subtract(z_est_apriori)));
+            x_est = x_est_apriori + K * (z - z_est_apriori);
 
             //covariance update a posteriori
             P = ut_F.covariance.Subtract(K.Multiply(Pxy.Transpose()));
 
-            return x_est.ToColumnMajorArray();
+            return x_est.ToArray();
         }
 
         public double[] getState()
         {
-            return x_est.ToColumnArrays()[0];
+            return x_est.ToArray();
         }
 
         public double[,] getCovariance()
@@ -351,21 +364,20 @@ namespace KalmanFilter
         private UnscentedTransformResults UnscentedTransform(Matrix<double> X, Matrix<double> Wm, Matrix<double> Wc, int n, Matrix<double> R)
         {
             int twoLPlusOne = X.ColumnCount;
-            Matrix<double> y = Matrix.Build.Dense(n, 1, 0);
+            Vector<double> y = Vector.Build.Dense(n);
             Matrix<double> Y = Matrix.Build.Dense(n, twoLPlusOne, 0);
 
-            Matrix<double> Xk;
+            Vector<double> Xk;
             for (int k = 0; k < twoLPlusOne; k++)
             {
-                Xk = X.SubMatrix(0, X.RowCount, k, 1);
-                Y.SetSubMatrix(0, Y.RowCount, k, 1, Xk); // HERE, where is f ?
-                y = y.Add(Y.SubMatrix(0, Y.RowCount, k, 1).Multiply(Wm[0, k]));
+                Xk = X.Column(k);
+                Y.SetSubMatrix(0, Y.RowCount, k, 1, Xk.ToColumnMatrix()); // HERE, where is f ?
+                y = y + Y.Column(k) * Wm[0, k];
             }
 
-            Matrix<double> Y1 = Y.Subtract(y.Multiply(Matrix.Build.Dense(1, twoLPlusOne, 1)));
-            Matrix<double> P = Y1.Multiply(Matrix.Build.Diagonal(Wc.Row(0).ToArray()));
-            P = P.Multiply(Y1.Transpose());
-            P = P.Add(R);
+            Matrix<double> Y1 = Y - y.ToColumnMatrix() * Matrix.Build.Dense(1, twoLPlusOne, 1);
+            Matrix<double> P = Y1 * Matrix.Build.Diagonal(Wc.Row(0).ToArray());
+            P = P * Y1.Transpose() + R;
 
             var output = new UnscentedTransformResults()
             {
@@ -384,28 +396,26 @@ namespace KalmanFilter
         /// <param name="P">covariance</param>
         /// <param name="c">coefficient sqrt(lambda+L)</param>
         /// <returns>Sigma points</returns>
-        private Matrix<double> GetSigmaPoints(Matrix<double> x, Matrix<double> P, double c)
+        private Matrix<double> GetSigmaPoints(Vector<double> x, Matrix<double> P, double c)
         {
             Matrix<double> sqrtP = P.Cholesky().Factor;
 
-            var A = sqrtP.Transpose().Multiply(c);
+            var A = sqrtP.Transpose() * c;
 
-            int L = x.RowCount;
+            int L = x.Count;
 
             Matrix<double> Y = Matrix.Build.Dense(L, L, 1);
             for (int j = 0; j < L; j++)
             {
-                Y.SetSubMatrix(0, L, j, 1, x);
+                Y.SetSubMatrix(0, L, j, 1, x.ToColumnMatrix());
             }
 
             Matrix<double> X = Matrix.Build.Dense(L, (2 * L + 1));
-            X.SetSubMatrix(0, L, 0, 1, x);
+            X.SetSubMatrix(0, L, 0, 1, x.ToColumnMatrix());
 
-            Matrix<double> Y_plus_A = Y.Add(A);
-            X.SetSubMatrix(0, L, 1, L, Y_plus_A);
+            X.SetSubMatrix(0, L, 1, L, Y + A);
 
-            Matrix<double> Y_minus_A = Y.Subtract(A);
-            X.SetSubMatrix(0, L, L + 1, L, Y_minus_A);
+            X.SetSubMatrix(0, L, L + 1, L, Y - A);
 
             return X;
         }
