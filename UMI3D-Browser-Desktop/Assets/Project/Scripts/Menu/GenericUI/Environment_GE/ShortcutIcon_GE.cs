@@ -19,7 +19,7 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.GenericElement
 {
-    public class ShortcutIcon_GE : GenericAndCustomElement
+    public class ShortcutIcon_GE : AbstractGenericAndCustomElement
     {
         public new class UxmlFactory : UxmlFactory<ShortcutIcon_GE, UxmlTraits> { }
 

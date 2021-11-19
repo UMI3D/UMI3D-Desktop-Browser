@@ -22,7 +22,7 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.GenericElement
 {
-    public class ToolboxGenericElement : GenericAndCustomElement
+    public class ToolboxGenericElement : AbstractGenericAndCustomElement
     {
         /// <summary>
         /// To be recognized by UI Builder

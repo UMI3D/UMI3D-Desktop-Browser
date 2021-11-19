@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.CustomElement
 {
-    public class BottomBar_E : GenericAndCustomElement
+    public class BottomBar_E : AbstractGenericAndCustomElement
     {
         public new class UxmlFactory : UxmlFactory<BottomBar_E, UxmlTraits> { }
 
