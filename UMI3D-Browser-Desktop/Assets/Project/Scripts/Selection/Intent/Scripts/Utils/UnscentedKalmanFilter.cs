@@ -16,7 +16,7 @@ namespace KalmanFilter
         private double alpha;
 
         /// <summary>
-        /// The ki.
+        /// Kappa factor, secondary parameter usually set to 0
         /// </summary>
         private double kappa;
 
@@ -50,6 +50,9 @@ namespace KalmanFilter
         /// </summary>
         private Func<Vector<double>, Vector<double>> h;
 
+        /// <summary>
+        /// Unscented transform of the process model
+        /// </summary>
         private UnscentedTransformResults ut_F;
 
         private class UnscentedTransformResults
