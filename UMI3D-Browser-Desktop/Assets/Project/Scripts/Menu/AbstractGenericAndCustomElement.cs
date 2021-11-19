@@ -22,7 +22,7 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI
 {
-    public abstract class GenericAndCustomElement : VisualElement
+    public abstract class AbstractGenericAndCustomElement : VisualElement
     {
         /// <summary>
         /// To be recognized by UI Builder
@@ -38,12 +38,12 @@ namespace BrowserDesktop.UI
         /// </summary>
         protected bool displayed = false;
 
-        public GenericAndCustomElement()
+        public AbstractGenericAndCustomElement()
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
         }
 
-        ~GenericAndCustomElement()
+        ~AbstractGenericAndCustomElement()
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
         }

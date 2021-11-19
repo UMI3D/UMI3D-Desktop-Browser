@@ -22,7 +22,7 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.GenericElement
 {
-    public class ShortcutGenericElement : GenericAndCustomElement
+    public class ShortcutGenericElement : AbstractGenericAndCustomElement
     {
         #region Fields
 

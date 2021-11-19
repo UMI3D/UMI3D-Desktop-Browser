@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.GenericElement
 {
-    public class Label_GE : GenericAndCustomElement
+    public class Label_GE : AbstractGenericAndCustomElement
     {
         public new class UxmlFactory : UxmlFactory<Label_GE, UxmlTraits> { }
 

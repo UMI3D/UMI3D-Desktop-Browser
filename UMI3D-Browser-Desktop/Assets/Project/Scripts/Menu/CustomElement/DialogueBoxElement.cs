@@ -22,7 +22,7 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.CustomElement
 {
-    public class DialogueBoxElement : GenericAndCustomElement
+    public class DialogueBoxElement : AbstractGenericAndCustomElement
     {
         #region Fields
 
