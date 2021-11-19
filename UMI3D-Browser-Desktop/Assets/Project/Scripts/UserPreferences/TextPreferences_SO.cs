@@ -204,8 +204,6 @@ namespace BrowserDesktop.UserPreferences
 
         public IEnumerator ApplyPref(Label label, string textPrefName, string labelText = null)
         {
-            yield return null;
-
             foreach (TextPref textpref in textprefs)
             {
                 if (textpref.TextPrefName == textPrefName)

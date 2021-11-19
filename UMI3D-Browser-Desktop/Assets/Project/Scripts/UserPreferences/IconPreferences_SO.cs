@@ -74,8 +74,6 @@ namespace BrowserDesktop.UserPreferences
 
         public IEnumerator ApplyPref(VisualElement icon, string iconPrefName, float width, float height)
         {
-            //yield return null;
-
             foreach (IconPref iconPref in iconPrefs)
             {
                 if (iconPref.IconPrefName.ToLowerInvariant() == iconPrefName.ToLowerInvariant())
@@ -85,7 +83,6 @@ namespace BrowserDesktop.UserPreferences
                 }
             }
             Debug.LogError("IconPrefName = " + iconPrefName + " not recognized.");
-            yield return null;
         }
 
         [ContextMenu("Apply User Pref")]

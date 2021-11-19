@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb1ac652951765344966c1d09783495b, type: 3}
   m_Name: GlobalPreferences
   m_EditorClassIdentifier: 
-  zoomPercentage: 123
+  zoomPercentage: 115
   currentTheme: 0

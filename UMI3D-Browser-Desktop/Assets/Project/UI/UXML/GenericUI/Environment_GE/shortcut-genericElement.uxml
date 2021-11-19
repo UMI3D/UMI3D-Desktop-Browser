@@ -2,7 +2,7 @@
     <Style src="/Assets/Project/UI/UXML/shortcut.uss" />
     <BrowserDesktop.UI.GenericElement.ShortcutGenericElement style="flex-direction: row; flex-shrink: 0; margin-bottom: 10px; padding-left: 1px; padding-right: 2px;">
         <ui:VisualElement name="spacer" style="justify-content: center; align-items: center; width: 20px;" />
-        <ui:VisualElement name="Icons-layer" style="flex-direction: row; background-color: rgba(255, 255, 255, 0); justify-content: flex-end; align-items: stretch; flex-shrink: 0;" />
+        <ui:VisualElement name="Icons-layout" style="flex-direction: row; background-color: rgba(255, 255, 255, 0); justify-content: flex-end; align-items: stretch; flex-shrink: 0;" />
         <ui:VisualElement name="spacer" style="justify-content: center; align-items: center; width: 20px;" />
         <ui:Label text="Label" display-tooltip-when-elided="true" name="shortcut-name" style="flex-direction: row; -unity-text-align: middle-left; justify-content: flex-start; overflow: hidden;" />
         <ui:VisualElement name="spacer" style="justify-content: center; align-items: center; width: 20px;" />
