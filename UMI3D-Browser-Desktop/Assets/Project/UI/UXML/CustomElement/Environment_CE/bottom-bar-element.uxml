@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <BrowserDesktop.UI.CustomElement.BottomBar_E style="flex-shrink: 0;">
-        <ui:VisualElement name="session-shortcuts-layout" style="flex-direction: row;" />
-        <ui:VisualElement name="session-info-layout" style="flex-direction: row-reverse;" />
+        <ui:VisualElement name="left-layout" style="flex-direction: row;" />
+        <ui:VisualElement name="right-layout" style="flex-direction: row-reverse;" />
     </BrowserDesktop.UI.CustomElement.BottomBar_E>
 </ui:UXML>

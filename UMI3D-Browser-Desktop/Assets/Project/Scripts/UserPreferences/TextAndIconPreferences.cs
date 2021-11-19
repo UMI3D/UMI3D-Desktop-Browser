@@ -123,14 +123,19 @@ namespace BrowserDesktop.UserPreferences
             return new TextPreferences_SO(font);
         }*/
 
-        public void ApplyTextPref(Label label, string textPrefName, string labelText = null)
+        public void ApplyTextPref(TextElement label, string textPrefName, string labelText = null)
         {
             UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.TextPref_SO.ApplyPref(label, textPrefName, labelText));
         }
 
-        public void ApplyIconPref(VisualElement icon, string iconPrefName, float width = 0f, float height = 0f)
+        public TextPreferences_SO.TextPref.TextFormat GetTextFormat(string textPrefName)
         {
-            UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.IconPref_SO.ApplyPref(icon, iconPrefName, width, height));
+            return currentTextAndIcon_SO.TextPref_SO.GetTextFormat(textPrefName);
+        }
+
+        public void ApplyIconPref(VisualElement icon, string iconPrefName, string iconClass = null, float width = 0f, float height = 0f)
+        {
+            UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.IconPref_SO.ApplyPref(icon, iconPrefName, iconClass, width, height));
         }
 
     }

@@ -26,7 +26,7 @@ namespace BrowserDesktop.UserPreferences
     public class TextPreferences_SO : ScriptableObject
     {
         [System.Serializable]
-        private class TextPref
+        public class TextPref
         {
             /// <summary>
             /// The text style to be applied to the label (Font, USS or Both).
@@ -43,6 +43,67 @@ namespace BrowserDesktop.UserPreferences
                 NONE,
                 LOWER_CASE,
                 UPPER_CASE
+            }
+
+            [System.Serializable]
+            public class TextFormat
+            {
+                private const int noMaxNumberOfCharacters = 101;
+
+                [Tooltip("")]
+                [SerializeField]
+                private bool applyFormat = false;
+                [Tooltip("")]
+                [Range(1, noMaxNumberOfCharacters)]
+                [SerializeField]
+                private int maxNumberOfCharacters = 10;
+                [Tooltip("")]
+                [SerializeField]
+                private CaseStyle caseStyle = CaseStyle.NONE;
+                [Tooltip("")]
+                [SerializeField]
+                private bool resizeWidth = false;
+
+                //private float fontSizeAfterZoom;
+                public float FontSizeAfterZoom { get; set; }
+
+                public void SetFormat(TextElement label, string labelText)
+                {
+                    if (applyFormat)
+                    {
+                        if (maxNumberOfCharacters != noMaxNumberOfCharacters && labelText.Length > maxNumberOfCharacters)
+                        {
+                            if (maxNumberOfCharacters >= 6)
+                            {
+                                labelText = $"{labelText.Substring(0, maxNumberOfCharacters - 3)}...";
+                            }
+                            else
+                            {
+                                labelText = labelText.Substring(0, maxNumberOfCharacters);
+                            }
+                        }
+
+                        switch (caseStyle)
+                        {
+                            case CaseStyle.LOWER_CASE:
+                                labelText = labelText.ToLowerInvariant();
+                                break;
+                            case CaseStyle.UPPER_CASE:
+                                labelText = labelText.ToUpperInvariant();
+                                break;
+                            case CaseStyle.NONE:
+                                break;
+                        }
+
+                        if (resizeWidth)
+                        {
+                            if (maxNumberOfCharacters == noMaxNumberOfCharacters) label.style.width = StyleKeyword.Auto;
+                            else label.style.width = (maxNumberOfCharacters / 2) * FontSizeAfterZoom;
+                        }
+
+                        label.text = labelText;
+                    }
+                }
             }
 
 
@@ -85,30 +146,17 @@ namespace BrowserDesktop.UserPreferences
 
             #endregion
 
-            private const int noMaxNumberOfCharacters = 101;
-
-            [Header("Format")]
-
             [Space]
-            [Tooltip("")]
             [SerializeField]
-            private bool applyFormat = false;
             [Tooltip("")]
-            [Range(1, noMaxNumberOfCharacters)]
-            [SerializeField]
-            private int maxNumberOfCharacters = 10;
-            [Tooltip("")]
-            [SerializeField]
-            private CaseStyle caseStyle = CaseStyle.NONE;
-            [Tooltip("")]
-            [SerializeField]
-            private bool resizeWidth = false;
+            private TextFormat textFormat;
+            public TextFormat Format => textFormat;
 
             /// <summary>
             /// Set the label's font and USS classes.
             /// </summary>
             /// <param name="label">The label to be set.</param>
-            public void SetLabel(Label label, string labelText, Font globalFont)
+            public void SetLabel(TextElement label, string labelText, Font globalFont)
             {
                 switch (textStyle)
                 {
@@ -128,43 +176,11 @@ namespace BrowserDesktop.UserPreferences
                         break;
                 }
 
-                if (applyFormat)
-                {
-                    if (maxNumberOfCharacters != noMaxNumberOfCharacters && labelText.Length > maxNumberOfCharacters)
-                    {
-                        if (maxNumberOfCharacters >= 6)
-                        {
-                            labelText = $"{labelText.Substring(0, maxNumberOfCharacters - 3)}...";
-                        }
-                        else
-                        {
-                            labelText = labelText.Substring(0, maxNumberOfCharacters);
-                        }
-                    }
-
-                    switch (caseStyle)
-                    {
-                        case CaseStyle.LOWER_CASE:
-                            labelText = labelText.ToLowerInvariant();
-                            break;
-                        case CaseStyle.UPPER_CASE:
-                            labelText = labelText.ToUpperInvariant();
-                            break;
-                        case CaseStyle.NONE:
-                            break;
-                    }
-                    
-                    if (resizeWidth)
-                    {
-                        if (maxNumberOfCharacters == noMaxNumberOfCharacters) label.style.width = StyleKeyword.Auto;
-                        else label.style.width = (maxNumberOfCharacters / 2) * FontSizeAfterZoom();
-                    }
-
-                    label.text = labelText;
-                }
+                textFormat.FontSizeAfterZoom = FontSizeAfterZoom();
+                textFormat.SetFormat(label, labelText);
             }
 
-            private void SetFont(Label label, Font globalFont)
+            private void SetFont(TextElement label, Font globalFont)
             {
                 label.style.unityFont = (labelFont != null) ? labelFont: globalFont;
                 label.style.unityFontStyleAndWeight = labelFontStyle;
@@ -177,7 +193,7 @@ namespace BrowserDesktop.UserPreferences
                 return labelFontSize * UserPreferences.GlobalPref.ZoomCoef;
             }
 
-            private void SetUSS(Label label)
+            private void SetUSS(TextElement label)
             {
                 label.ClearClassList();
                 foreach (string labelClass in labelUSSClasses)
@@ -202,7 +218,7 @@ namespace BrowserDesktop.UserPreferences
             //TODO Copy properties.
         }
 
-        public IEnumerator ApplyPref(Label label, string textPrefName, string labelText = null)
+        public IEnumerator ApplyPref(TextElement label, string textPrefName, string labelText = null)
         {
             foreach (TextPref textpref in textprefs)
             {
@@ -214,6 +230,18 @@ namespace BrowserDesktop.UserPreferences
                 }
             }
             Debug.LogError("TextPrefName = " + textPrefName + " not recognized.");
+        }
+
+        public TextPref.TextFormat GetTextFormat(string textPrefName)
+        {
+            foreach (TextPref textpref in textprefs)
+            {
+                if (textpref.TextPrefName == textPrefName)
+                {
+                    return textpref.Format;
+                }
+            }
+            throw new System.Exception($"TextPrefName = {textPrefName} not recognized.");
         }
 
         [ContextMenu("Apply User Pref")]

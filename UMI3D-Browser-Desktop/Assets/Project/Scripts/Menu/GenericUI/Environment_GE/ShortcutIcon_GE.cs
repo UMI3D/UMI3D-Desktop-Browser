@@ -84,8 +84,6 @@ namespace BrowserDesktop.UI.GenericElement
                 this.style.borderTopWidth = 0;
             }*/
 
-            //OnApplyUserPreferences();
-
             return this;
         }
 
@@ -93,7 +91,7 @@ namespace BrowserDesktop.UI.GenericElement
         {
             if (!displayed) return;
 
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(this, (iconType == IconType.MOUSE) ? $"shortcut-{IconType.MOUSE}" : $"shortcut-KEY", iconWidthPX, iconHeightPX);
+            UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(this, (iconType == IconType.MOUSE) ? $"shortcut-{IconType.MOUSE}" : $"shortcut-KEY", width: iconWidthPX, height: iconHeightPX);
         }
 
 

@@ -46,8 +46,12 @@ namespace BrowserDesktop.UserPreferences
             [SerializeField]
             private float height;
 
-            public void SetIcon(VisualElement icon, float width, float height)
+            public void SetIcon(VisualElement icon, string iconClass, float width, float height)
             {
+                icon.ClearClassList();
+                if (!string.IsNullOrEmpty(iconClass))
+                    icon.AddToClassList(iconClass);
+
                 if (this.width > 0f)
                     icon.style.width = (ResizedWhenZoomed) ? this.width * UserPreferences.GlobalPref.ZoomCoef : this.width;
                 else if (width > 0f)
@@ -72,13 +76,13 @@ namespace BrowserDesktop.UserPreferences
             //TODO Copy properties.
         }
 
-        public IEnumerator ApplyPref(VisualElement icon, string iconPrefName, float width, float height)
+        public IEnumerator ApplyPref(VisualElement icon, string iconPrefName, string iconClass, float width, float height)
         {
             foreach (IconPref iconPref in iconPrefs)
             {
                 if (iconPref.IconPrefName.ToLowerInvariant() == iconPrefName.ToLowerInvariant())
                 {
-                    iconPref.SetIcon(icon, width, height);
+                    iconPref.SetIcon(icon, iconClass, width, height);
                     yield break;
                 }
             }
