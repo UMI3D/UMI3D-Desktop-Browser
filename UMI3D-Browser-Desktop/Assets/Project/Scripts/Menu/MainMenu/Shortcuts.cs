@@ -68,12 +68,12 @@ namespace BrowserDesktop.Menu
         private bool isDisplayed;
 
         //Object Pooling
-        private static List<ShortcutGenericElement> shortcutsDisplayedList = new List<ShortcutGenericElement>();
-        private static List<ShortcutGenericElement> shortcutsWaitedList = new List<ShortcutGenericElement>();
-        public static readonly List<ShortcutIcon_GE> ShortcutIconsDisplayedList = new List<ShortcutIcon_GE>();
-        public static readonly List<ShortcutIcon_GE> ShortcutIconsWaitedList = new List<ShortcutIcon_GE>();
-        public static readonly List<Label_GE> ShortcutPlusLabelDisplayList = new List<Label_GE>();
-        public static readonly List<Label_GE> ShortcutPlusLabelWaitedList = new List<Label_GE>();
+        public static readonly List<ShortcutGenericElement> Shortcut_ge_DisplayedList = new List<ShortcutGenericElement>();
+        public static readonly List<ShortcutGenericElement> Shortcut_ge_WaitedList = new List<ShortcutGenericElement>();
+        public static readonly List<ShortcutIcon_GE> ShortcutIcon_ge_DisplayedList = new List<ShortcutIcon_GE>();
+        public static readonly List<ShortcutIcon_GE> ShortcutIcon_ge_WaitedList = new List<ShortcutIcon_GE>();
+        public static readonly List<Label_GE> ShortcutLabel_ge_DisplayedList = new List<Label_GE>();
+        public static readonly List<Label_GE> ShortcutLabel_ge_WaitedList = new List<Label_GE>();
 
         #endregion
 
@@ -143,31 +143,6 @@ namespace BrowserDesktop.Menu
             }
         }
 
-        /// <summary>
-        /// Wait one frame and compute the max width of shortcuts.
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator ComputeShortcutsWidth()
-        {
-            yield return null;
-            shortcutsDisplayedList.ForEach((sE) => sE.ComputeShortcutWidth());
-        }
-
-        /// <summary>
-        /// Wait for ComputeShortcutsWidth() and resize shortcuts width.
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator ResizeShortcutsWidth()
-        {
-            yield return ComputeShortcutsWidth();
-            shortcutsDisplayedList.ForEach((sE) => sE.ResizeShortcutWidth());
-            AnimeVisualElement(shortcuts_SV, 1f, true, (elt, val) =>
-            {
-                elt.style.opacity = val;
-            }); //Display shortcuts when the resizement is done.
-            //Debug.Log("Shortcut displayer = " + shortcutDisplayer_VE.resolvedStyle.width);
-        }
-
         #region Add and Remove Shortcuts
 
         /*public void AddShortcuts()
@@ -194,7 +169,7 @@ namespace BrowserDesktop.Menu
         public void AddShortcut(string shortcutName, string[] shortcutkeys)
         {
             ShortcutGenericElement shortcut_GE;
-            ObjectPooling(out shortcut_GE, shortcutsDisplayedList, shortcutsWaitedList, shortcut_ge_VTA);
+            ObjectPooling(out shortcut_GE, Shortcut_ge_DisplayedList, Shortcut_ge_WaitedList, shortcut_ge_VTA);
 
             Sprite[] shortcutIcons = new Sprite[shortcutkeys.Length];
             for (int i = 0; i < shortcutkeys.Length; ++i)
@@ -203,8 +178,6 @@ namespace BrowserDesktop.Menu
             shortcut_GE.
                 Setup(shortcutName, shortcutIcons, shortcutIcon_ge_VTA, label_ge_VTA).
                 AddTo(shortcuts_SV);
-
-            StartCoroutine(ResizeShortcutsWidth());
         }
 
         /// <summary>
@@ -214,17 +187,17 @@ namespace BrowserDesktop.Menu
         {
             Action<UI.GenericAndCustomElement> removeVEFromHierarchy = (vE) => vE.Remove();
 
-            ShortcutIconsDisplayedList.ForEach(removeVEFromHierarchy);
-            ShortcutIconsWaitedList.AddRange(ShortcutIconsDisplayedList);
-            ShortcutIconsDisplayedList.Clear();
+            ShortcutIcon_ge_DisplayedList.ForEach(removeVEFromHierarchy);
+            ShortcutIcon_ge_WaitedList.AddRange(ShortcutIcon_ge_DisplayedList);
+            ShortcutIcon_ge_DisplayedList.Clear();
 
-            ShortcutPlusLabelDisplayList.ForEach(removeVEFromHierarchy);
-            ShortcutPlusLabelWaitedList.AddRange(ShortcutPlusLabelDisplayList);
-            ShortcutPlusLabelDisplayList.Clear();
+            ShortcutLabel_ge_DisplayedList.ForEach(removeVEFromHierarchy);
+            ShortcutLabel_ge_WaitedList.AddRange(ShortcutLabel_ge_DisplayedList);
+            ShortcutLabel_ge_DisplayedList.Clear();
 
-            shortcutsDisplayedList.ForEach(removeVEFromHierarchy);
-            shortcutsWaitedList.AddRange(shortcutsDisplayedList);
-            shortcutsDisplayedList.Clear();
+            Shortcut_ge_DisplayedList.ForEach(removeVEFromHierarchy);
+            Shortcut_ge_WaitedList.AddRange(Shortcut_ge_DisplayedList);
+            Shortcut_ge_DisplayedList.Clear();
         }
 
         #endregion

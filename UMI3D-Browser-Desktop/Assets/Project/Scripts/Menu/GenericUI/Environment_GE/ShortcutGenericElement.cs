@@ -28,7 +28,7 @@ namespace BrowserDesktop.UI.GenericElement
 
         public new class UxmlFactory : UxmlFactory<ShortcutGenericElement, UxmlTraits> { }
 
-        VisualElement iconsArea_VE; //Where icons are displays.
+        VisualElement iconsLayout_VE; //Where icons are displays.
         Label shortcutName_L; //the shortcut's name.
 
         private string shortcutNameText;
@@ -68,6 +68,7 @@ namespace BrowserDesktop.UI.GenericElement
                 else if (iconsAreaWidth < value) //The icons area width has increased.
                 {
                     iconsAreaWidth = value;
+                    Shortcuts.Shortcut_ge_DisplayedList.ForEach((vE) => { vE.ResizeShortcutWidth(); });
                 }
             }
         }
@@ -104,7 +105,9 @@ namespace BrowserDesktop.UI.GenericElement
             base.Initialize();
 
             shortcutName_L = this.Q<Label>("shortcut-name");
-            iconsArea_VE = this.Q<VisualElement>("Icons-layer");
+            iconsLayout_VE = this.Q<VisualElement>("Icons-layout");
+
+            iconsLayout_VE.RegisterCallback<GeometryChangedEvent>(OnElementResized);
         }
 
         /// <summary>
@@ -127,36 +130,38 @@ namespace BrowserDesktop.UI.GenericElement
                 if (i != 0 && i < shortcutIcons.Length)
                 {
                     Label_GE plus;
-                    Shortcuts.ObjectPooling(out plus, Shortcuts.ShortcutPlusLabelDisplayList, Shortcuts.ShortcutPlusLabelWaitedList, label_VTA);
+                    Shortcuts.ObjectPooling(out plus, Shortcuts.ShortcutLabel_ge_DisplayedList, Shortcuts.ShortcutLabel_ge_WaitedList, label_VTA);
                     plus.
                         Setup("+", "label").
-                        AddTo(iconsArea_VE);
+                        AddTo(iconsLayout_VE);
 
                     /*plus.AddToClassList("label-shortcut");
                     plus.AddToClassList("label-shortcut-plus");*/
                 }
 
                 ShortcutIcon_GE icon_GE;
-                Shortcuts.ObjectPooling(out icon_GE, Shortcuts.ShortcutIconsDisplayedList, Shortcuts.ShortcutIconsWaitedList, shortcutIcon_VTA);
+                Shortcuts.ObjectPooling(out icon_GE, Shortcuts.ShortcutIcon_ge_DisplayedList, Shortcuts.ShortcutIcon_ge_WaitedList, shortcutIcon_VTA);
                 icon_GE.
                     Setup(shortcutIcons[i]).
-                    AddTo(iconsArea_VE);
+                    AddTo(iconsLayout_VE);
             }
 
             return this;
         }
 
-        public void ComputeShortcutWidth()
+        /// <summary>
+        /// Resize some elements when the window is resized, to make the UI more responsive.
+        /// To be use with [VisualElement.RegisterCallback-GeometryChangedEvent-(OnElementResized)].
+        /// </summary>
+        private void OnElementResized(GeometryChangedEvent e)
         {
-            IconsAreaWidth = iconsArea_VE.resolvedStyle.width;
-            //ShortcutNameWidth = shortcutName_L.resolvedStyle.width;
-
-            Debug.Log($"[{shortcutNameText}] icons max width = {IconsAreaWidth}, Icons layer width = {iconsArea_VE.resolvedStyle.width}");
+            Debug.Log($"[{shortcutNameText}] - height = {e.newRect.height}, width = {e.newRect.width}");
+            IconsAreaWidth = e.newRect.width;
         }
 
         public void ResizeShortcutWidth()
         {
-            iconsArea_VE.style.width = IconsAreaWidth;
+            iconsLayout_VE.style.width = IconsAreaWidth;
             //shortcutName_L.style.width = ShortcutNameWidth;
 
             //Debug.Log("resizement");
@@ -169,14 +174,15 @@ namespace BrowserDesktop.UI.GenericElement
 
             --ShortcutsCount;
 
-            iconsArea_VE.style.width = StyleKeyword.Auto; //Unset the icons area width.
-            shortcutName_L.style.width = StyleKeyword.Auto; //Unset the shortcut name width.
+            iconsLayout_VE.style.width = StyleKeyword.Auto; //Unset the icons area width.
+            //shortcutName_L.style.width = StyleKeyword.Auto; //Unset the shortcut name width.
         }
 
         public override void OnApplyUserPreferences()
         {
             if (!displayed) return;
 
+            iconsLayout_VE.style.width = StyleKeyword.Auto; //Unset the icons area width.
             UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(shortcutName_L, "label", shortcutNameText);
         }
     }
