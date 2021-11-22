@@ -16,9 +16,38 @@ limitations under the License.
 
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.cdk.menu;
 using UnityEngine;
 
 public class DummyMenuCreator : MonoBehaviour
 {
-    
+    public MenuAsset menuAsset;
+    public Texture2D icon;
+
+    [ContextMenu("FillMenuWithGarbage")]
+    public void FillMenuWithGarbage()
+    {
+        Menu rootImage = new Menu();
+        rootImage.Name = "image";
+
+        MenuItem screenShotMenuItem = new MenuItem()
+        {
+            Name = "screenshot",
+            icon2D = icon
+        };
+        MenuItem importMenuItem = new MenuItem()
+        {
+            Name = "import"
+        };
+        MenuItem galleryMenuItem = new MenuItem()
+        {
+            Name = "gallery"
+        };
+
+        rootImage.Add(screenShotMenuItem);
+        rootImage.Add(importMenuItem);
+        rootImage.Add(galleryMenuItem);
+
+        menuAsset.menu = rootImage;
+    }
 }
