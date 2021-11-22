@@ -61,9 +61,19 @@ public class AdaptHandPose : MonoBehaviour
     {
         if (currentHoverId != 0)
         {
-            Transform tr = (UMI3DEnvironmentLoader.GetEntity(currentHoverId) as UMI3DNodeInstance).transform;
-            RightFreeAnchor.LookAt(tr);
-            LeftFreeAnchor.LookAt(tr);
+            UMI3DNodeInstance node = (UMI3DEnvironmentLoader.GetEntity(currentHoverId) as UMI3DNodeInstance);
+            if (node != null && node.transform != null)
+            {
+                RightFreeAnchor.LookAt(node.transform);
+                LeftFreeAnchor.LookAt(node.transform);
+            }
+            else
+            {
+                currentHoverId = 0;
+                passiveHoverPose = null;
+                RightFreeAnchor.transform.localRotation = Quaternion.identity;
+                LeftFreeAnchor.transform.localRotation = Quaternion.identity;
+            }
         }
     }
 
@@ -73,7 +83,7 @@ public class AdaptHandPose : MonoBehaviour
 
         Transform relativeTransform = transform != null ? transform : RightFreeAnchor;
 
-        while (elapsedTime < 1)
+        while (relativeTransform != null)
         {
             elapsedTime = elapsedTime + Time.deltaTime;
 
@@ -88,6 +98,9 @@ public class AdaptHandPose : MonoBehaviour
 
             yield return null;
         }
+
+        currentPose = null;
+        IKControl.rightIkActive = false;
     }
 
     IEnumerator LerpLeftPhalanxQuaternion(float startTime, Transform transform = null)
@@ -96,7 +109,7 @@ public class AdaptHandPose : MonoBehaviour
 
         Transform relativeTransform = transform != null ? transform : LeftFreeAnchor;
 
-        while (elapsedTime < 1)
+        while (relativeTransform != null)
         {
             elapsedTime = elapsedTime + Time.deltaTime;
 
@@ -111,6 +124,9 @@ public class AdaptHandPose : MonoBehaviour
 
             yield return null;
         }
+
+        currentPose = null;
+        IKControl.leftIkActive = false;
     }
 
     public void SetupHandPose(UMI3DHandPoseDto dto)

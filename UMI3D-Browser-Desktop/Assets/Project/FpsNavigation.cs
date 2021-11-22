@@ -166,7 +166,7 @@ public class FpsNavigation : AbstractNavigation
         {
             Vector3 position = Node.transform.position;
             position.y = jumpData.heigth + baseHeight;
-            Node.transform.localPosition = position;
+            Node.transform.position = position;
             return;
         }
 

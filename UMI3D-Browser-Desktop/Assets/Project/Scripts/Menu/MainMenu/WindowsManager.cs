@@ -50,16 +50,20 @@ public class WindowsManager : MonoBehaviour
 
     [Header("Custom title bar")]
 
+    [Tooltip("Tag name of the minimize button UXML element")]
     [SerializeField]
-    string minimizeTagName = "minimize-window-btn";
+    private readonly string minimizeTagName = "minimize-window-btn";
+    [Tooltip("Tag name of the maximize button UXML element")]
     [SerializeField]
-    string maximizeTagName = "fullscreen-btn";
-
-    public string restoreClassName = "restore-btn";
+    private readonly string maximizeTagName = "fullscreen-btn";
+    [Tooltip("Tag name of the close window button UXML element")]
+    [SerializeField]
+    private readonly string closeTagName = "close-window-btn";
 
     VisualElement root;
-    Button minimize;
-    Button maximize;
+    Button minimize_B;
+    Button maximize_B;
+    Button close_B;
 
     public VisualTreeAsset dialogueBoxTreeAsset;
 
@@ -85,20 +89,30 @@ public class WindowsManager : MonoBehaviour
         umi3d.common.QuittingManager.ShouldWaitForApplicationToQuit = true;
     }
 
+    /// <summary>
+    /// Bind the UI of the title bar.
+    /// </summary>
     private void SetUpCustomTitleBar()
     {
         root = uiDocument.rootVisualElement;
-        minimize = root.Q<Button>(minimizeTagName);
-        minimize.clickable.clicked += () =>
+
+        minimize_B = root.Q<Button>(minimizeTagName);
+        minimize_B.clickable.clicked += () =>
         {
             ShowWindow(hWnd, 2);
         };
 
-        maximize = uiDocument.rootVisualElement.Q<Button>(maximizeTagName);
-        maximize.AddToClassList(restoreClassName);
-        maximize.clickable.clicked += () =>
+        maximize_B = uiDocument.rootVisualElement.Q<Button>(maximizeTagName);
+        maximize_B.clickable.clicked += () =>
         {
             SwitchFullScreen(false);
+        };
+
+        close_B = root.Q<Button>(closeTagName);
+        close_B.clickable.clicked += () =>
+        {
+            //This will raise the Application.WantsToQuit event and show a dialogue box.
+            Application.Quit();
         };
     }
 
@@ -116,14 +130,21 @@ public class WindowsManager : MonoBehaviour
 
     #region Application Quit
 
+    /// <summary>
+    /// Show dialogue box to quit when ApplicationIsQuitting is not ready to quit.
+    /// </summary>
+    /// <returns>True when ApplicationIsQuitting is ready to quit, else false.</returns>
     private bool WantsToQuit()
     {
         bool wantsToQuit = umi3d.common.QuittingManager.ApplicationIsQuitting;
-        if (!wantsToQuit)
+        if (!wantsToQuit && !DialogueBoxElement.IsADialogueBoxDislayed)
             ShowDialogueBoxToQuit();
         return wantsToQuit;
     }
 
+    /// <summary>
+    /// Show dialogue box to quit when the user whant to quit.
+    /// </summary>
     private void ShowDialogueBoxToQuit()
     {
         DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
@@ -134,13 +155,15 @@ public class WindowsManager : MonoBehaviour
                 Application.Quit();
         });
         root.Add(dialogueBox);
-        dialogueBox.BringToFront();
     }
 
     #endregion
 
     #region Window resizement
 
+    /// <summary>
+    /// Check if the widow is being zoomed or unzoomed, in fullscreen or not.
+    /// </summary>
     private void CheckForWindowResizement()
     {
         if ((IsZoomed(hWnd) && !isZoomed) ||
@@ -173,6 +196,9 @@ public class WindowsManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Show or hide resizement button and set resolution.
+    /// </summary>
     private void UpdateWindowWhenResize()
     {
         if (isZoomed) //The window is in Zoomed
@@ -182,31 +208,39 @@ public class WindowsManager : MonoBehaviour
 
         if (isFullScreen) //The window is in fullscreen
         {
-            maximize.visible = true;
-            minimize.visible = true;
+            maximize_B.visible = true;
+            minimize_B.visible = true;
+            close_B.visible = true;
         }
         else
         {
-            maximize.visible = false;
-            minimize.visible = false;
+            maximize_B.visible = false;
+            minimize_B.visible = false;
+            close_B.visible = false;
         }
     }
 
+    /// <summary>
+    /// Switch between fullscreen and window.
+    /// </summary>
+    /// <param name="value">Set fullscreen if true, else window.</param>
     private void SwitchFullScreen(bool value)
     {
         if (value)
         {
             Screen.SetResolution(Screen.width, Screen.height, FullScreenMode.FullScreenWindow);
             isFullScreen = true;
-            maximize.visible = true;
-            minimize.visible = true;
+            maximize_B.visible = true;
+            minimize_B.visible = true;
+            close_B.visible = true;
         }
         else
         {
             Screen.SetResolution(widthWindow, heightWindow, false);
             isFullScreen = false;
-            maximize.visible = false;
-            minimize.visible = false;
+            maximize_B.visible = false;
+            minimize_B.visible = false;
+            close_B.visible = false;
         }
     }
 

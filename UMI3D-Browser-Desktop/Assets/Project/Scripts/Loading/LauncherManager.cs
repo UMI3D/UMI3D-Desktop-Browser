@@ -28,6 +28,7 @@ using BrowserDesktop.Controller;
 using BeardedManStudios.Forge.Networking;
 using System.Runtime.InteropServices;
 using System.Text;
+using umi3d.cdk.collaboration;
 
 public class LauncherManager : MonoBehaviour
 {
@@ -52,13 +53,22 @@ public class LauncherManager : MonoBehaviour
     private VisualElement root;
 
     //Element to be resized
-    VisualElement umiLogo; //UMI3D logo to be resized
+    /// <summary>
+    /// UMI3D logo to be resized
+    /// </summary>
+    VisualElement umiLogo;
     private float height;
 
     //SetDomain screen
     VisualElement urlScreen;
     TextField urlInput;
+    /// <summary>
+    /// Arrow button to connect to the new server.
+    /// </summary>
     Button urlEnterBtn;
+    /// <summary>
+    /// Dropdown button to display or hide the new connexion url.
+    /// </summary>
     Button connectNewServBtn;
 
     //Session screen
@@ -96,14 +106,23 @@ public class LauncherManager : MonoBehaviour
     [SerializeField]
     public string sceneToLoad;
 
+    /// <summary>
+    /// The action trigger when the enter key is pressed.
+    /// </summary>
     private Action nextStep = null;
     private Action previousStep = null;
-    private Action currentNextButtonAction = null; //The action to be assigne to the nextMenuBtn
+    /// <summary>
+    /// The action to be assigned to the nextMenuBtn.
+    /// </summary>
+    private Action currentNextButtonAction = null;
 
     public LaucherOnMasterServer masterServer;
 
     //Session Screen
-    private VisualElement selectedItem = null; //The item selected by a click with the mouse
+    /// <summary>
+    /// The item selected by a click with the mouse.
+    /// </summary>
+    private VisualElement selectedItem = null;
     public bool ShouldDisplaySessionScreen = false;
     public bool updateResponse = false;
     public bool updateInfo = false;
@@ -154,7 +173,7 @@ public class LauncherManager : MonoBehaviour
 
     private void InitUI()
     {
-        root.Q<Label>("version").text = umi3d.UMI3DVersion.version;
+        root.Q<Label>("version").text = BrowserDesktop.BrowserVersion.Version;
 
         BindSharedUI();
 
@@ -169,7 +188,7 @@ public class LauncherManager : MonoBehaviour
     #region Binding
 
     /// <summary>
-    /// To bind UI shared among window
+    /// To bind UI shared among windows
     /// </summary>
     private void BindSharedUI()
     {
@@ -190,7 +209,6 @@ public class LauncherManager : MonoBehaviour
         urlEnterBtn = urlScreen.Q<Button>("url-enter-btn");
 
         urlEnterBtn.clickable.clicked += ()=> SetServer(urlInput.value);// SetDomain;
-        nextStep = ()=> SetServer(urlInput.value);
 
         urlScreen.Q<VisualElement>("icon-open").style.display = DisplayStyle.None;
         connectNewServBtn = urlScreen.Q<Button>("newConnection");
@@ -250,7 +268,7 @@ public class LauncherManager : MonoBehaviour
         currentServerConnectionData = UserPreferencesManager.GetPreviousServerData();
 
         previousStep = null;
-        nextStep = ()=> SetDomain();
+        nextStep = () => SetServer(urlInput.value);
         urlInput.value = currentServerConnectionData.serverName; // currentConnectionData.ip;
     }
 
