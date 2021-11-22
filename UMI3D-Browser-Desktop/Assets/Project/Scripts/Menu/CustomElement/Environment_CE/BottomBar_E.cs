@@ -36,7 +36,7 @@ namespace BrowserDesktop.UI.CustomElement
             rightLayout_VE = this.Q<VisualElement>("right-layout");
         }
 
-        public BottomBar_E Setup()
+        public BottomBar_E SetupAndDisplay()
         {
 
             ReadyToDisplay();

@@ -60,12 +60,13 @@ namespace BrowserDesktop.UI.CustomElement
             ToolboxButtonGenericElement openToolboxButton_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
             openToolboxButton_TBGE.Setup("Toolbox", "toolbox", "toolbox", true, () => 
             {
-            Menu.DialogueBox_UIController.
-                Setup("TODO", "Not implemented yed", "Close", () => { }).
+                Menu.DialogueBox_UIController.
+                    Setup("TODO", "Not implemented yed", "Close", () => { }).
                     DisplayFrom(uiDocument);
             });
-            openToolbox_TGE.Setup("", openToolboxButton_TBGE);
-            leftLayout_VE.Add(openToolbox_TGE);
+            openToolbox_TGE.
+                Setup("", openToolboxButton_TBGE).
+                AddTo(leftLayout_VE);
 
             //DONE add separator
             AddSeparator(leftLayout_VE, toolboxSeparatorGE_VTA);
@@ -90,8 +91,9 @@ namespace BrowserDesktop.UI.CustomElement
             mic_TBGE.Setup("labelTestAndTest", "micOn", "micOff", false, () => {
                 ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
             });
-            settings_TGE.Setup("test", new ToolboxButtonGenericElement[3] { avatar_TBGE, sound_TBGE, mic_TBGE });
-            rightLayout_VE.Add(settings_TGE);
+            settings_TGE.
+                Setup("test", new ToolboxButtonGenericElement[3] { avatar_TBGE, sound_TBGE, mic_TBGE }).
+                AddTo(rightLayout_VE);
 
             //DONE add separator
             AddSeparator(rightLayout_VE, toolboxSeparatorGE_VTA);
@@ -107,8 +109,9 @@ namespace BrowserDesktop.UI.CustomElement
                     }).
                     DisplayFrom(uiDocument);
             });
-            leaveEnvironment_TGE.Setup("", leave_TBGE);
-            rightLayout_VE.Add(leaveEnvironment_TGE);
+            leaveEnvironment_TGE.
+                Setup("", leave_TBGE).
+                AddTo(rightLayout_VE);
 
             //DONE add space
             AddSpacer(rightLayout_VE);
