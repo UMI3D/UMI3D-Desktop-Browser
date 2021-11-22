@@ -72,6 +72,24 @@ namespace BrowserDesktop.UI.GenericElement
         /// <param name="buttonName">Label of the button.</param>
         /// <param name="buttonImage">Icon of the button.</param>
         /// <param name="buttonClicked">Action when button is clicked.</param>
+        public void Setup(string buttonName, Texture2D buttonImage, Action buttonClicked)
+        {
+            Setup(buttonName);
+
+            if (buttonImage != null)
+                //button_B.style.backgroundImage = Background.FromSprite(Sprite.Create(buttonImage, new Rect(0.0f, 0.0f, buttonImage.width, buttonImage.height), new Vector2(0.5f, 0.5f), 100.0f));
+                button_B.style.backgroundImage = Background.FromTexture2D(buttonImage);
+            else
+                button_B.style.backgroundImage = StyleKeyword.Auto;
+                button_B.clicked += buttonClicked;
+        }
+
+        /// <summary>
+        /// Setup the button (label, icon and action).
+        /// </summary>
+        /// <param name="buttonName">Label of the button.</param>
+        /// <param name="buttonImage">Icon of the button.</param>
+        /// <param name="buttonClicked">Action when button is clicked.</param>
         public void Setup(string buttonName, Sprite buttonImage, Action buttonClicked)
         {
             Setup(buttonName);

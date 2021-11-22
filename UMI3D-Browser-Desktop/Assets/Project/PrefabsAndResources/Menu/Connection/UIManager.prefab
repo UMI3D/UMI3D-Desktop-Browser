@@ -469,10 +469,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1552991040}
   - component: {fileID: 617257373530281094}
-  - component: {fileID: 4166057248525559016}
   - component: {fileID: 4729729652233319832}
   - component: {fileID: 1910305816978899221}
   - component: {fileID: 1993043487556966663}
+  - component: {fileID: 4166057248525559016}
   m_Layer: 0
   m_Name: MenuBar
   m_TagString: Untagged
@@ -514,18 +514,6 @@ MonoBehaviour:
     type: 3}
   toolboxSeparatorGenericElement_VTA: {fileID: 9197481963319205126, guid: cafabf0676fde2042ae54a299ce15eb1,
     type: 3}
---- !u!114 &4166057248525559016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1552991039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe09abce6be0a5a42a3cb26faa8911b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4729729652233319832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -562,6 +550,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00491f28cfe326f4698977ec80ba3c42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4166057248525559016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552991039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe09abce6be0a5a42a3cb26faa8911b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuAsset: {fileID: 0}
+  icon: {fileID: 0}
 --- !u!1 &1897058547
 GameObject:
   m_ObjectHideFlags: 0

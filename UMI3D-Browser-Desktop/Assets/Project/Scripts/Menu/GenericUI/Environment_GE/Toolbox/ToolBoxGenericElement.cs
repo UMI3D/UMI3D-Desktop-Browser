@@ -33,6 +33,8 @@ namespace BrowserDesktop.UI.GenericElement
         private Label toolboxName_L;
         private VisualElement toolboxContainer_VE;
 
+        private List<ToolboxButtonGenericElement> buttons = new List<ToolboxButtonGenericElement>();
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -43,7 +45,7 @@ namespace BrowserDesktop.UI.GenericElement
         public ToolboxGenericElement Setup(string toolboxName, ToolboxButtonGenericElement tool)
         {
             Setup(toolboxName);
-            tool.AddTo(toolboxContainer_VE);
+            AddTool(tool);
             return this;
         }
 
@@ -54,7 +56,7 @@ namespace BrowserDesktop.UI.GenericElement
             return this;
         }
 
-        private void Setup(string toolboxName)
+        public void Setup(string toolboxName)
         {
             Initialize();
 
@@ -67,24 +69,34 @@ namespace BrowserDesktop.UI.GenericElement
             {
                 if (i > 0)
                 {
-                    VisualElement horizontalSpacer = new VisualElement();
-                    horizontalSpacer.style.width = 10;
-                    toolboxContainer_VE.Add(horizontalSpacer);
+                    AddSpacer();
                 }
 
                 tools[i].AddTo(toolboxContainer_VE);
+                buttons.Add(tools[i]);
             }
         }
 
-        /*private void AddTool(ToolboxButtonGenericElement tool)
+        private void AddSpacer()
         {
+            VisualElement horizontalSpacer = new VisualElement();
+            horizontalSpacer.style.width = 10;
+            toolboxContainer_VE.Add(horizontalSpacer);
+        }
+
+        public void AddTool(ToolboxButtonGenericElement tool)
+        {
+            if (buttons.Count > 0)
+                AddSpacer();
             tool.AddTo(toolboxContainer_VE);
-        }*/
+            buttons.Add(tool);
+        }
 
-        /*private void AddTool(string toolName, Sprite toolIcon, Action toolAction)
+        public override void Remove()
         {
-
-        }*/
+            base.Remove();
+            buttons.ForEach((tool) => { tool.Remove(); });
+        }
 
         /// <summary>
         /// Apply user preferences when needed.
