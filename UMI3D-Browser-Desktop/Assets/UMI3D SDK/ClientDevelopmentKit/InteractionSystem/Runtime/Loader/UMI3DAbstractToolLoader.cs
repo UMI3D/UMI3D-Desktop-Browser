@@ -24,8 +24,7 @@ namespace umi3d.cdk.interaction
     public static class UMI3DAbstractToolLoader
     {
 
-        public static bool 
-            SetUMI3DProperty(UMI3DEntityInstance entity, SetEntityPropertyDto property)
+        public static bool SetUMI3DProperty(UMI3DEntityInstance entity, SetEntityPropertyDto property)
         {
             var dto = (entity.dto as AbstractToolDto);
             if (dto == null) return false;
