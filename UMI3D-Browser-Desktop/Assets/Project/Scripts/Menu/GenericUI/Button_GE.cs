@@ -31,6 +31,14 @@ namespace BrowserDesktop.UI.GenericElement
         private string iconClass;
         private string iconPref;
 
+        /// <summary>
+        /// State of the button.
+        /// </summary>
+        private bool isOn = false;
+        private string classOn;
+        private string classOff;
+        private string currentClass;
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -64,6 +72,27 @@ namespace BrowserDesktop.UI.GenericElement
             this.textPref = textPref;
             
             return this;
+        }
+
+        /// <summary>
+        /// Switch between USS classes when button is on or off.
+        /// </summary>
+        /// <param name="value">True if the button should be on, false else.</param>
+        public void SwitchClass(bool value)
+        {
+            isOn = value;
+            string className = "darkTheme-menuBar-"; //TODO to be replace by theme checked.
+            if (value)
+            {
+                currentClass = className + classOn + "-btn";
+            }
+            else
+            {
+                currentClass = className + classOff + "-btn";
+            }
+            button_B.ClearClassList();
+            button_B.AddToClassList(currentClass);
+            //TODO to add iconPrefClass
         }
 
         public override void OnApplyUserPreferences()

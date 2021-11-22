@@ -33,25 +33,30 @@ namespace BrowserDesktop.UI.GenericElement
         private Label toolboxName_L;
         private VisualElement toolboxContainer_VE;
 
-
-        public void Setup(string toolboxName, ToolboxButtonGenericElement tool)
+        protected override void Initialize()
         {
-            Setup(toolboxName);
-            AddTool(tool);
-            OnApplyUserPreferences();
+            base.Initialize();
+            toolboxName_L = this.Q<Label>("toolbox-name");
+            toolboxContainer_VE = this.Q<VisualElement>("toolbox-container");
         }
 
-        public void Setup(string toolboxName, ToolboxButtonGenericElement[] tools)
+        public ToolboxGenericElement Setup(string toolboxName, ToolboxButtonGenericElement tool)
+        {
+            Setup(toolboxName);
+            tool.AddTo(toolboxContainer_VE);
+            return this;
+        }
+
+        public ToolboxGenericElement Setup(string toolboxName, ToolboxButtonGenericElement[] tools)
         {
             Setup(toolboxName);
             AddTools(tools);
-            OnApplyUserPreferences();
+            return this;
         }
 
         private void Setup(string toolboxName)
         {
-            toolboxName_L = this.Q<Label>("toolbox-name");
-            toolboxContainer_VE = this.Q<VisualElement>("toolbox-container");
+            Initialize();
 
             toolboxNameText = toolboxName;
         }
@@ -67,26 +72,27 @@ namespace BrowserDesktop.UI.GenericElement
                     toolboxContainer_VE.Add(horizontalSpacer);
                 }
 
-                toolboxContainer_VE.Add(tools[i]);
+                tools[i].AddTo(toolboxContainer_VE);
             }
         }
 
-        private void AddTool(ToolboxButtonGenericElement tool)
+        /*private void AddTool(ToolboxButtonGenericElement tool)
         {
-            toolboxContainer_VE.Add(tool);
-        }
+            tool.AddTo(toolboxContainer_VE);
+        }*/
 
-        private void AddTool(string toolName, Sprite toolIcon, Action toolAction)
+        /*private void AddTool(string toolName, Sprite toolIcon, Action toolAction)
         {
 
-        }
+        }*/
 
         /// <summary>
         /// Apply user preferences when needed.
         /// </summary>
         public override void OnApplyUserPreferences()
         {
-            //TODO
+            if (!displayed) return;
+
             UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(toolboxName_L, "sub-section", toolboxNameText);
         }
 

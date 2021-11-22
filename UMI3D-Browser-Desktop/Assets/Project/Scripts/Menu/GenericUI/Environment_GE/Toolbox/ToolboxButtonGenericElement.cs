@@ -55,8 +55,16 @@ namespace BrowserDesktop.UI.GenericElement
         private bool isOn = false;
         private string classOn;
         private string classOff;
+        private string currentClass;
 
         #endregion
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            button_B = this.Q<Button>("toolbox-button");
+            buttonName_L = this.Q<Label>("toolbox-button-name");
+        }
 
         /// <summary>
         /// Setup the button (label, icon and action).
@@ -70,8 +78,6 @@ namespace BrowserDesktop.UI.GenericElement
 
             button_B.style.backgroundImage = Background.FromSprite(buttonImage);
             button_B.clicked += buttonClicked;
-
-            OnApplyUserPreferences();
         }
 
         /// <summary>
@@ -91,8 +97,6 @@ namespace BrowserDesktop.UI.GenericElement
             SwitchClass(isOn);
 
             button_B.clicked += buttonClicked;
-
-            OnApplyUserPreferences();
         }
 
         /// <summary>
@@ -101,8 +105,7 @@ namespace BrowserDesktop.UI.GenericElement
         /// <param name="buttonName">Label of the button.</param>
         private void Setup(string buttonName)
         {
-            button_B = this.Q<Button>("toolbox-button");
-            buttonName_L = this.Q<Label>("toolbox-button-name");
+            Initialize();
 
             buttonNameText = buttonName;
         }
@@ -114,17 +117,17 @@ namespace BrowserDesktop.UI.GenericElement
         public void SwitchClass(bool value)
         {
             isOn = value;
-            string className = "darkTheme-menuBar-";
+            string className = "darkTheme-menuBar-"; //TODO to be replace by theme checked.
             if (value)
             {
-                className += classOn + "-btn";
+                currentClass = className + classOn + "-btn";
             }
             else
             {
-                className += classOff + "-btn";
+                currentClass = className + classOff + "-btn";
             }
             button_B.ClearClassList();
-            button_B.AddToClassList(className);
+            button_B.AddToClassList(currentClass);
         }
 
         /// <summary>
@@ -133,9 +136,12 @@ namespace BrowserDesktop.UI.GenericElement
         public override void OnApplyUserPreferences()
         {
             //TODO
+            if (!displayed)
+                return;
+
             buttonName_L.style.width = StyleKeyword.Auto;
             UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(buttonName_L, "label", buttonNameText);
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(button_B, "square-button");
+            UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(button_B, "square-button", iconClass: currentClass);
         }
 
     }
