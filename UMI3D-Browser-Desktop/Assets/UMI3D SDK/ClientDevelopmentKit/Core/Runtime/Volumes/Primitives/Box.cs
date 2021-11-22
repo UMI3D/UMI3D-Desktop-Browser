@@ -30,7 +30,11 @@ namespace umi3d.cdk.volumes
         /// World to local matrix
         /// </summary>
         public Matrix4x4 localToWorld { get; private set; }
+
         public Bounds bounds { get; private set; }
+
+
+        public ulong rootNodeId;
 
         public override void Delete() { }
 
@@ -79,16 +83,5 @@ namespace umi3d.cdk.volumes
             this.localToWorld = localToWorld;
             onUpdate.Invoke();
         }
-
-        public override void SetRootNode(ulong rootNodeId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void SetTransform(Matrix4x4 transform)
-        {
-            throw new System.NotImplementedException();
-        }
-
     }
 }

@@ -57,6 +57,7 @@ namespace umi3d.cdk.volumes
                     Box box = new Box() { id = boxDto.id };
                     box.SetBounds(new Bounds() { center = boxDto.center, size = boxDto.size });
                     box.SetLocalToWorldMatrix(localToWorldMatrix);
+                    box.rootNodeId = dto.rootNodeId;
 
                     primitives.Add(boxDto.id, box);
                     box.isTraversable = dto.isTraversable;
@@ -109,9 +110,14 @@ namespace umi3d.cdk.volumes
             Gizmos.color = Color.red;
             foreach(Box box in GetPrimitives().Where(p => p is Box))
             {
-
                 Gizmos.matrix = box.localToWorld;
                 Gizmos.DrawWireCube(box.bounds.center, box.bounds.size);
+            }
+
+            foreach(Cylinder cyl in GetPrimitives().Where(c => c is Cylinder))
+            {
+                Gizmos.matrix = cyl.localToWorld;
+                Gizmos.DrawWireMesh(GeometryTools.GetCylinder(Vector3.zero, Quaternion.identity, Vector3.one, cyl.radius, cyl.height));
             }
         }
     }

@@ -28,6 +28,11 @@ namespace umi3d.cdk.volumes
         public Quaternion rotation;
         public Vector3 scale;
 
+        /// <summary>
+        /// World to local matrix
+        /// </summary>
+        public Matrix4x4 localToWorld => Matrix4x4.TRS(position, rotation, scale);
+
         public override void Delete() { }
 
         public override void GetBase(System.Action<Mesh> onsuccess, float angleLimit)
@@ -106,16 +111,6 @@ namespace umi3d.cdk.volumes
         {
             height = newHeight;
             onUpdate.Invoke();
-        }
-
-        public override void SetTransform(Matrix4x4 transform)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void SetRootNode(ulong rootNodeId)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

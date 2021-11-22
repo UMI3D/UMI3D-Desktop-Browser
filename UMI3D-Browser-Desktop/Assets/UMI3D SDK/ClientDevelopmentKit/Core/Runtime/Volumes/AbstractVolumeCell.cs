@@ -36,18 +36,6 @@ namespace umi3d.cdk.volumes
 
         public abstract Mesh GetMesh();
 
-        /// <summary>
-        /// Set the cell transform relatively to the root node.
-        /// </summary>
-        /// <param name="transform"></param>
-        public abstract void SetTransform(Matrix4x4 transform);
-
-        /// <summary>
-        /// Set the root node which the cell is positioned relatively to.
-        /// </summary>
-        /// <param name="rootNodeId"></param>
-        public abstract void SetRootNode(ulong rootNodeId);
-
 
         protected UnityEvent onUpdate = new UnityEvent();
         protected void SubscribeToUpdate(UnityAction callback) => onUpdate.AddListener(callback);

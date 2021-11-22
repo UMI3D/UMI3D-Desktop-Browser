@@ -72,7 +72,7 @@ namespace umi3d.cdk.volumes
                 finished.Invoke(cell);
             };
 
-            Action<Umi3dExecption> failed = e =>
+            Action<Umi3dException> failed = e =>
             {
                 Debug.LogError("Failed to load obj file : " + e.Message);   
             };
