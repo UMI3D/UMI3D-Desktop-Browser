@@ -32,8 +32,17 @@ namespace umi3d.cdk.volumes
         /// <returns></returns>
         public abstract bool IsInside(Vector3 point, Space relativeTo);
 
+        /// <summary>
+        /// Return the base of the cell.
+        /// </summary>
+        /// <param name="onSuccess"></param>
+        /// <param name="angleLimit"></param>
         public abstract void GetBase(Action<Mesh> onSuccess, float angleLimit);
 
+        /// <summary>
+        /// Get a representation of the cell as a mesh.
+        /// </summary>
+        /// <returns></returns>
         public abstract Mesh GetMesh();
 
 
