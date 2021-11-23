@@ -27,9 +27,10 @@ public class DummyMenuCreator : MonoBehaviour
     [ContextMenu("FillMenuWithGarbage")]
     public void FillMenuWithGarbage()
     {
+        Menu container = new Menu();
+
         Menu rootImage = new Menu();
         rootImage.Name = "image";
-
         MenuItem screenShotMenuItem = new MenuItem()
         {
             Name = "screenshot",
@@ -48,6 +49,25 @@ public class DummyMenuCreator : MonoBehaviour
         rootImage.Add(importMenuItem);
         rootImage.Add(galleryMenuItem);
 
-        menuAsset.menu = rootImage;
+        Menu toolbox = new Menu();
+        toolbox.Name = "toolbox 1";
+        MenuItem tool1 = new MenuItem()
+        {
+            Name = "tool1",
+            icon2D = icon
+        };
+        MenuItem tool2 = new MenuItem()
+        {
+            Name = "tool2"
+        };
+
+        toolbox.Add(tool1);
+        toolbox.Add(tool2);
+
+        container.Add(rootImage);
+        container.Add(toolbox);
+
+
+        menuAsset.menu = container;
     }
 }
