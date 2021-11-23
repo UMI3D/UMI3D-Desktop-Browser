@@ -23,21 +23,28 @@ namespace BrowserDesktop.UI.GenericElement
 {
     public class Button_GE : AbstractGenericAndCustomElement
     {
+        /// <summary>
+        /// To be recognized by UI Builder
+        /// </summary>
         public new class UxmlFactory : UxmlFactory<Button_GE, UxmlTraits> { }
 
         private Button button_B;
+
         private string text;
         private string textPref;
-        private string iconClass;
-        private string iconPref;
 
         /// <summary>
         /// State of the button.
         /// </summary>
         private bool isOn = false;
+
         private string classOn;
         private string classOff;
+        private string iconPref;
         private string currentClass;
+        private string[] USSClassesIconPref;
+
+        private System.Action Onclicked;
 
         protected override void Initialize()
         {
@@ -46,22 +53,32 @@ namespace BrowserDesktop.UI.GenericElement
             button_B = this.Q<Button>("button");
         }
 
-        public Button_GE Setup()
+        public Button_GE Setup(bool isOn = true)
         {
             Initialize();
 
             this.text = "";
             this.textPref = "";
-            this.iconClass = "";
+
+            this.classOn = "";
+            this.classOff = "";
             this.iconPref = "";
+
+            this.isOn = isOn;
+
+            //Onclicked = 
+            //button_B.clicked +=
 
             return this;
         }
 
-        public Button_GE WithBackgroundImage(string iconClass, string iconPref)
+        public Button_GE WithBackgroundImage(string classOn, string classOff, string iconPref)
         {
-            this.iconClass = iconClass;
+            this.classOn = classOn;
+            this.classOff = classOff;
             this.iconPref = iconPref;
+
+            SwitchClass(this.isOn);
 
             return this;
         }
@@ -92,7 +109,15 @@ namespace BrowserDesktop.UI.GenericElement
             }
             button_B.ClearClassList();
             button_B.AddToClassList(currentClass);
-            //TODO to add iconPrefClass
+            foreach (string USSClass in USSClassesIconPref)
+                button_B.AddToClassList(USSClass);
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+
+            //button_B.clicked -=
         }
 
         public override void OnApplyUserPreferences()
@@ -102,7 +127,7 @@ namespace BrowserDesktop.UI.GenericElement
             if (!string.IsNullOrEmpty(textPref))
                 UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(button_B, textPref, text);
             if (!string.IsNullOrEmpty(iconPref))
-                UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(button_B, iconPref, iconClass);
+                UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(button_B, iconPref, currentClass);
         }
     }
 }
