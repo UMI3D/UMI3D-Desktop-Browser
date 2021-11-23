@@ -81,6 +81,8 @@ namespace BrowserDesktop.Menu.Displayer
                 menuItem = menu as MenuItem;
                 Debug.Log($"MenuItem name = {menu.Name}");
             }
+            if (menu is umi3d.cdk.menu.Menu)
+                Debug.Log($"MenuItem name = {menu.Name}");
 
             InitAndBindUI();
 

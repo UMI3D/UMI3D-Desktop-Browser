@@ -57,11 +57,20 @@ namespace BrowserDesktop.Menu
 
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
+            //Debug.Log($"Insert in container");
             InitAndBindUI();
 
             if (element is IDisplayerElement elt)
             {
                 containedDisplayers.Add(element);
+
+                if (elt is Displayer.ToolDisplayer tool)
+                {
+                    Debug.Log($"tool : [{tool.menu.Name}], in container : {menu.Name}");
+                    string elts = "";
+                    containedDisplayers.ForEach((elt) => { elts += $"[{elt?.menu?.Name}] - "; });
+                    Debug.Log($"elt int list = {elts}");
+                }
 
                 var uxmlContent = elt.GetUXMLContent();
                 uxmlContent.style.marginBottom = uxmlContent.resolvedStyle.marginBottom + spaceBetweenElements;
