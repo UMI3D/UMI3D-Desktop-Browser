@@ -97,3 +97,31 @@
 .darkTheme-menuBar-separator {
     background-image: url('/Assets/Project/UI/UI_connection/menu_bar/separateur.png');
 }
+
+.darkTheme-menuBar-next-disable-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/menu_next_DISABLE.png');
+}
+
+.darkTheme-menuBar-next-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/menu_next_ENABLE.png');
+}
+
+.darkTheme-menuBar-next-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/menu_next_HOVER.png');
+}
+
+.darkTheme-menuBar-next-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/menu_next_PRESS.png');
+}
+
+.darkTheme-menuBar-previous-disable-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/menu_previous_DISABLE.png');
+}
+
+.darkTheme-menuBar-previous-btn:hover {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/menu_previous_HOVER.png');
+}
+
+.darkTheme-menuBar-previous-btn:active {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/menu_previous_PRESS.png');
+}

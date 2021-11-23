@@ -77,7 +77,6 @@ namespace BrowserDesktop.UI.GenericElement
             Setup(buttonName);
 
             if (buttonImage != null)
-                //button_B.style.backgroundImage = Background.FromSprite(Sprite.Create(buttonImage, new Rect(0.0f, 0.0f, buttonImage.width, buttonImage.height), new Vector2(0.5f, 0.5f), 100.0f));
                 button_B.style.backgroundImage = Background.FromTexture2D(buttonImage);
             else
                 button_B.style.backgroundImage = StyleKeyword.Auto;
