@@ -31,7 +31,7 @@ namespace umi3d.cdk.interaction.selection.intent
 
         /// <summary>
         /// Reset parameters of the detector.
-        /// To be called after an object has be selected.
+        /// To be called after an object has been selected.
         /// </summary>
         public abstract void ResetDetector();
 

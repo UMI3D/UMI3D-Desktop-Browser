@@ -28,7 +28,7 @@ namespace umi3d.cdk.interaction.selection.intent
         /// <summary>
         /// Store angular movements amplitude, speed and associated rotation
         /// </summary>
-        private class RotationDataSample
+        protected class RotationDataSample
         {
             public double amplitude;
             public double speed;
@@ -38,52 +38,52 @@ namespace umi3d.cdk.interaction.selection.intent
         /// <summary>
         /// Store accumulated angular data used to predict by regression
         /// </summary>
-        private LinkedList<RotationDataSample> rotationData;
+        protected LinkedList<RotationDataSample> rotationData;
 
         /// <summary>
         /// under this value, the movement is considered as stable
         /// </summary>
         [SerializeField]
-        private double stabilityThreshold = 0.02;
+        protected double stabilityThreshold = 0.02;
 
         /// <summary>
         /// Precision of roots computation in the quadratic polynomial
         /// </summary>
         [SerializeField]
-        private double amplitudeMinimum = 0.1;
+        protected double amplitudeMinimum = 0.1;
 
         /// <summary>
         /// Precentage of the movement that should be completed before making a prediction
         /// </summary>
         [SerializeField]
-        private float targetDistanceThreshold = 0.80f;
+        protected float targetDistanceThreshold = 0.80f;
 
         /// <summary>
         /// Minimal number of sample before an extrapolation could be made
         /// </summary>
         [SerializeField]
-        private int minimalNumberOfSamples = 20;
+        protected int minimalNumberOfSamples = 20;
 
         /// <summary>
         /// Cone angle in degrees, correspond to the half of the full angle at its apex
         /// </summary>
         [SerializeField]
-        private float coneAngle = 15;
+        protected float coneAngle = 15;
 
         /// <summary>
         /// Last predicted object. Makes it possible to select an object during more than one frame 
         /// </summary>
-        private InteractableContainer lastPredicted = null;
+        protected InteractableContainer lastPredicted = null;
 
         /// <summary>
         /// Last rotation state
         /// </summary>
-        private Quaternion lastRotation;
+        protected Quaternion lastRotation;
 
         /// <summary>
         /// Total amplitude of the current movement
         /// </summary>
-        private double totalAmplitude;
+        protected double totalAmplitude;
 
         public override void InitDetector(AbstractController controller)
         {
@@ -109,7 +109,7 @@ namespace umi3d.cdk.interaction.selection.intent
             var deltaAngle = Quaternion.Angle(newRotation, lastRotation);
             totalAmplitude += deltaAngle;
 
-            if (deltaAngle == 0 && rotationData.Count > 1 && rotationData.Last.Value.amplitude == 0) // case where the movement is stopped for at least two frames
+            if (deltaAngle == 0 && rotationData.Count > 1 && rotationData.Last.Value.amplitude == 0) // case where the movement is stopped for at least two frames, stops the prediction
             {
                 InteractableContainer predictedInteractable = GetClosestToRay(pointerTransform.forward);
                 lastPredicted = predictedInteractable;
@@ -125,7 +125,7 @@ namespace umi3d.cdk.interaction.selection.intent
                     estimationReady = true;
             }
 
-            var angularSample = new RotationDataSample()
+            var angularSample = new RotationDataSample() //KEP data of the current state
             {
                 amplitude = totalAmplitude,
                 speed = deltaAngle / Time.deltaTime,
@@ -137,7 +137,7 @@ namespace umi3d.cdk.interaction.selection.intent
 
             if (estimationReady)
             {
-                var estimatedAmplitude = EstimateKinematicEndpointAmplitude();
+                var estimatedAmplitude = EstimateKinematicEndpointAmplitude(rotationData.Select(x=>x.amplitude), rotationData.Select(x=>x.speed));
                 if (estimatedAmplitude == 0) // no strictly positive root found
                     return lastPredicted;
 
@@ -145,20 +145,8 @@ namespace umi3d.cdk.interaction.selection.intent
                 if (currentMovementAmplitude / estimatedAmplitude < targetDistanceThreshold) //the precentage of the completed movement should be above the threshold, otherwise the prediction is inaccurate
                     return lastPredicted;
 
-                //Makes the hypothesis that it will be along the average rotation, with a linear increasing ponderation
-                var rotationDirection = new Vector3();
-                var last = new Vector3();
-
-                float dataNumber = rotationData.Count;
-                float weightStep = 2f / ((dataNumber - 1f) * dataNumber);
-                float weight = 0f; //linearily increasing weight
-                foreach (var d in rotationData.Skip(1))
-                {
-                    weight += weightStep;
-                    rotationDirection += (d.rotation.eulerAngles - last).normalized * weight;
-                    last = d.rotation.eulerAngles;
-                }
-                rotationDirection = rotationDirection.normalized;
+                //Makes the hypothesis that it will be along the average rotation, with a linear increasing weigth
+                var rotationDirection = GetWeightedAverageDirection(rotationData.Select(x => x.rotation.eulerAngles).ToList());
  
                 Quaternion predictedRotation = rotationData.First.Value.rotation * Quaternion.Euler((float)estimatedAmplitude * rotationDirection);
 
@@ -186,7 +174,7 @@ namespace umi3d.cdk.interaction.selection.intent
 
         }
 
-        private InteractableContainer GetClosestToRay(Vector3 estimatedDirection)
+        protected InteractableContainer GetClosestToRay(Vector3 estimatedDirection)
         {
             var estimatedConicZone = new ConicZoneSelection(pointerTransform.position, estimatedDirection, coneAngle);
             var objsInZone = estimatedConicZone.GetObjectsInZone();
@@ -203,16 +191,37 @@ namespace umi3d.cdk.interaction.selection.intent
         }
 
         /// <summary>
+        /// Compute an average vector with a linearily increasing ponderation
+        /// </summary>
+        /// <returns></returns>
+        protected Vector3 GetWeightedAverageDirection(List<Vector3> vector3s)
+        {
+            var rotationDirection = new Vector3();
+            var last = new Vector3();
+
+            float dataNumber = vector3s.Count;
+            float weightStep = 2f / ((dataNumber - 1f) * dataNumber);
+            float weight = 0f; //linearily increasing weight
+            foreach (var d in vector3s.Skip(1))
+            {
+                weight += weightStep;
+                rotationDirection += (d - last).normalized * weight;
+                last = d;
+            }
+            return rotationDirection.normalized;
+        }
+
+        /// <summary>
         /// Estimate the endpoint using kinematics.
         /// Estimate the total angular distance that will be achieved
         /// </summary>
         /// <returns></returns>
-        private double EstimateKinematicEndpointAmplitude()
+        protected double EstimateKinematicEndpointAmplitude(IEnumerable<double> amplitudeList, IEnumerable<double> speedList)
         {
             var order = 4;
             try
             {
-                double[] polynomialCoeffs = Fit.Polynomial(rotationData.Select(x => x.amplitude).ToArray(), rotationData.Select(x => x.speed).ToArray(), order); //least squares fitting
+                double[] polynomialCoeffs = Fit.Polynomial(amplitudeList.ToArray(), speedList.ToArray(), order); //least squares fitting
                 var roots = FindRoots.Polynomial(polynomialCoeffs);
 
                 double estimatedAmplitude = (from r in roots
@@ -236,7 +245,7 @@ namespace umi3d.cdk.interaction.selection.intent
         /// <param name="estimatedAmplitude"></param>
         /// <param name="rotationDirection"></param>
         /// <param name="predictedRotation"></param>
-        private void ExportDataAsJSON(double estimatedAmplitude, Vector3 rotationDirection, Quaternion predictedRotation)
+        protected virtual void ExportDataAsJSON(double estimatedAmplitude, Vector3 rotationDirection, Quaternion predictedRotation)
         {
             var path = @"D:\rotationDataKEP\";
 
