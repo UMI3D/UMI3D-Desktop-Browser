@@ -31,7 +31,12 @@ namespace BrowserDesktop.UI.CustomElement
 
         private Button_GE backward_BGE;
         private Button_GE forward_BGE;
-        private ScrollView toolbox_SV;
+        private ScrollView scrollView_SV;
+
+        private List<AbstractGenericAndCustomElement> elements = new List<AbstractGenericAndCustomElement>();
+        private AbstractGenericAndCustomElement currentElement;
+
+        private System.Action<VisualElement> addSeparator;
 
         protected override void Initialize()
         {
@@ -39,19 +44,44 @@ namespace BrowserDesktop.UI.CustomElement
 
             backward_BGE = this.Q<VisualElement>("backward-B").Q<Button_GE>();
             forward_BGE = this.Q<VisualElement>("forward-B").Q<Button_GE>();
-            toolbox_SV = this.Q<ScrollView>("toolbox-SV");
+            scrollView_SV = this.Q<ScrollView>("toolbox-SV");
         }
 
-        public void Setup()
+        public ToolboxMenuBarSV_E Setup(string buttonClass, string buttonIconPref, System.Action<VisualElement> addSeparator = null)
         {
             Initialize();
 
             backward_BGE.
-                Setup().
-                WithBackgroundImage("", "", "");
+                Setup(() =>
+                {
+                    scrollView_SV.ScrollTo(currentElement);
+                }).
+                WithBackgroundImage($"{buttonClass}-previous-btn", $"{buttonClass}-previous-disable-btn", buttonIconPref);
             forward_BGE.
-                Setup().
-                WithBackgroundImage("", "", ""); ;
+                Setup(() =>
+                {
+                    scrollView_SV.ScrollTo(currentElement);
+                }).
+                WithBackgroundImage($"{buttonClass}-next-btn", $"{buttonClass}-next-disable-btn", buttonIconPref);
+
+            this.addSeparator = addSeparator;
+
+            return this;
+        }
+
+        public void AddElement(AbstractGenericAndCustomElement element)
+        {
+            element.AddTo(scrollView_SV);
+            addSeparator?.Invoke(scrollView_SV);
+            elements.Add(element);
+        }
+
+        public void AddElements(IEnumerable<AbstractGenericAndCustomElement> elements)
+        {
+            foreach (AbstractGenericAndCustomElement elt in elements)
+            {
+                AddElement(elt);
+            }
         }
 
         public override void OnApplyUserPreferences()

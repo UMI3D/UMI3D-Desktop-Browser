@@ -42,9 +42,9 @@ namespace BrowserDesktop.UI.GenericElement
         private string classOff;
         private string iconPref;
         private string currentClass;
-        private string[] USSClassesIconPref;
+        private IEnumerable<string> USSClassesIconPref = new List<string>();
 
-        private System.Action Onclicked;
+        private System.Action OnClicked;
 
         protected override void Initialize()
         {
@@ -53,7 +53,7 @@ namespace BrowserDesktop.UI.GenericElement
             button_B = this.Q<Button>("button");
         }
 
-        public Button_GE Setup(bool isOn = true)
+        public Button_GE Setup(System.Action onClicked, bool isOn = true)
         {
             Initialize();
 
@@ -66,8 +66,8 @@ namespace BrowserDesktop.UI.GenericElement
 
             this.isOn = isOn;
 
-            //Onclicked = 
-            //button_B.clicked +=
+            OnClicked = onClicked;
+            button_B.clicked += OnClicked;
 
             return this;
         }
@@ -107,7 +107,14 @@ namespace BrowserDesktop.UI.GenericElement
             {
                 currentClass = className + classOff + "-btn";
             }
+            
+            
+        }
+
+        private void UpdateUssClasses()
+        {
             button_B.ClearClassList();
+
             button_B.AddToClassList(currentClass);
             foreach (string USSClass in USSClassesIconPref)
                 button_B.AddToClassList(USSClass);
@@ -117,7 +124,7 @@ namespace BrowserDesktop.UI.GenericElement
         {
             base.Remove();
 
-            //button_B.clicked -=
+            button_B.clicked -= OnClicked;
         }
 
         public override void OnApplyUserPreferences()
