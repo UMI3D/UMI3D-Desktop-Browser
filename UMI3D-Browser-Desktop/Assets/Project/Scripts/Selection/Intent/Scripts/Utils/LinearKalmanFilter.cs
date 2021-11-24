@@ -8,7 +8,7 @@ namespace KalmanFilter
     /// To use with linear models only
     /// Row majors matrices are expected
     /// </summary>
-    public class KalmanFilter : AbstractKalmanFilter
+    public class LinearKalmanFilter : AbstractKalmanFilter
     {
         /// <summary>
         /// State-transition model, also known as dynamic model
@@ -20,8 +20,8 @@ namespace KalmanFilter
         /// </summary>
         private Matrix<double> Hk;
 
-        public KalmanFilter(int dimStates, int dimObservation, double stdProcess, double stdMeasure, double[][] modelProcess, double[][] modelObservation)
-            : base(dimStates, dimObservation)
+        public LinearKalmanFilter(double stdProcess, double stdMeasure, double[][] modelProcess, double[][] modelObservation)
+            : base(modelProcess.Length, modelObservation.Length)
         {
             q = stdProcess;
             r = stdMeasure;
@@ -33,15 +33,37 @@ namespace KalmanFilter
             Hk = Matrix.Build.DenseOfRowArrays(modelObservation);
         }
 
+        public LinearKalmanFilter(double stdProcess, double stdMeasure, Matrix<double> modelProcess, Matrix<double> modelObservation)
+            : base(modelProcess.RowCount, modelObservation.RowCount)
+        {
+            q = stdProcess;
+            r = stdMeasure;
+
+            Q = Matrix.Build.Diagonal(L, L, q * q);
+            R = Matrix.Build.Diagonal(M, M, r * r);
+
+            Fk = modelProcess;
+            Hk = modelObservation;
+        }
+
         /// <summary>
-        /// Produce a Kalman filter with observation of the same dimension than the states and with an identity relationship
+        /// Produce a Kalman filter with observation of the same dimension than the states and with an identity observation model
         /// </summary>
-        /// <param name="dimStates"></param>
         /// <param name="stdProcess"></param>
         /// <param name="stdMeasure"></param>
         /// <param name="modelProcess"></param>
-        public KalmanFilter(int dimStates, double stdProcess, double stdMeasure, double[][] modelProcess)
-            : this(dimStates, dimStates, stdProcess, stdMeasure, modelProcess, Matrix.Build.DenseIdentity(dimStates, dimStates).ToRowArrays())
+        public LinearKalmanFilter(double stdProcess, double stdMeasure, double[][] modelProcess)
+            : this(stdProcess, stdMeasure, modelProcess, Matrix.Build.DenseIdentity(modelProcess.Length, modelProcess.Length).ToRowArrays())
+        { }
+
+        /// <summary>
+        /// Produce a Kalman filter with observation of the same dimension than the states and with an identity observation model
+        /// </summary>
+        /// <param name="stdProcess"></param>
+        /// <param name="stdMeasure"></param>
+        /// <param name="modelProcess"></param>
+        public LinearKalmanFilter(double stdProcess, double stdMeasure, Matrix<double> modelProcess)
+            : this(stdProcess, stdMeasure, modelProcess, Matrix.Build.DenseIdentity(modelProcess.RowCount, modelProcess.ColumnCount))
         { }
 
         #region Init

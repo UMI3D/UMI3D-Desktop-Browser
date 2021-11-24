@@ -105,10 +105,16 @@ namespace KalmanFilter
         /// <param name="initialCovariance"></param>
         public abstract void Init(double[] initialStateGuessed, double[][] initialCovariance);
 
+        public void InitWithGuessed(double[] initialStateGuessed)
+        {
+            var P = Matrix.Build.Diagonal(L, L, 1).ToRowArrays(); //initial state covraiance
+            Init(initialStateGuessed, P);
+        }
+
         /// <summary>
         /// Initialize the filter with a random guess perfectly known (i.e. cov = Id)
         /// </summary>
-        public void Init()
+        public void InitRandom()
         {
             var x_est = (q * Vector.Build.Random(L)).ToArray(); //initial state with noise
             var P = Matrix.Build.Diagonal(L, L, 1).ToRowArrays(); //initial state covraiance
