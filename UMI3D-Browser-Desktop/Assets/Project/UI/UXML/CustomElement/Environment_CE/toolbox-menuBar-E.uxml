@@ -2,10 +2,10 @@
     <ui:Template name="button_gE" src="/Assets/Project/UI/UXML/GenericUI/button_gE.uxml" />
     <Style src="/Assets/Project/UI/UXML/menu-bar.uss" />
     <BrowserDesktop.UI.CustomElement.ToolboxMenuBarSV_E style="flex-shrink: 0; width: 100%;">
-        <ui:VisualElement name="Toolbox-horizontal-layer" style="flex-direction: row; flex-shrink: 0; justify-content: space-between; align-items: center;">
-            <ui:Instance template="button_gE" name="backward-B" />
-            <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" mode="Horizontal" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" name="toolbox-SV" />
-            <ui:Instance template="button_gE" name="Forward-B" />
+        <ui:VisualElement name="Toolbox-horizontal-layer" style="flex-direction: row; flex-shrink: 0; justify-content: space-between; align-items: center; flex-grow: 1; height: 100%;">
+            <ui:Instance template="button_gE" name="backward-B" style="flex-shrink: 0;" />
+            <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" mode="Horizontal" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" name="toolbox-SV" style="flex-direction: row; flex-grow: 1; flex-shrink: 0; width: 0;" />
+            <ui:Instance template="button_gE" name="forward-B" style="flex-shrink: 0;" />
         </ui:VisualElement>
     </BrowserDesktop.UI.CustomElement.ToolboxMenuBarSV_E>
 </ui:UXML>

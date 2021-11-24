@@ -36,7 +36,7 @@ namespace BrowserDesktop.UI.CustomElement
         public new class UxmlTraits : VisualElement.UxmlTraits { }
 
         private VisualElement leftLayout_VE;
-        private VisualElement centerLayout_VE;
+        private ToolboxMenuBarSV_E centerLayout_VE;
         private VisualElement rightLayout_VE;
 
         private ToolboxButtonGenericElement avatar_TBGE;
@@ -49,7 +49,7 @@ namespace BrowserDesktop.UI.CustomElement
         public void Setup(VisualTreeAsset toolboxGE_VTA, VisualTreeAsset toolboxButtonGE_VTA, VisualTreeAsset toolboxSeparatorGE_VTA, UIDocument uiDocument)
         {
             leftLayout_VE = this.Q<VisualElement>("Left-layout");
-            centerLayout_VE = this.Q<VisualElement>("Center-layout");
+            centerLayout_VE = this.Q<VisualElement>("Center-layout").Q<ToolboxMenuBarSV_E>();
             rightLayout_VE = this.Q<VisualElement>("Right-layout");
 
             #region Left layout
@@ -73,6 +73,11 @@ namespace BrowserDesktop.UI.CustomElement
             #endregion
 
             //TODO add toolbox container
+            centerLayout_VE.
+                Setup("menuBar", "scrollView-btn", (vE) => 
+                { 
+                    AddSeparator(vE, toolboxSeparatorGE_VTA); 
+                });
 
             #region Right layout
             //DONE add separator
@@ -116,6 +121,26 @@ namespace BrowserDesktop.UI.CustomElement
             //DONE add space
             AddSpacer(rightLayout_VE);
             #endregion
+
+            ToolboxGenericElement image = toolboxGE_VTA.CloneTree().Q<ToolboxGenericElement>();
+            var screenshot_TBGE = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
+            screenshot_TBGE.Setup("Screenshot", "avatarOn", "avatarOff", true, () =>
+            {
+                ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();
+            });
+            var import = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
+            import.Setup("import", "soundOn", "soundOff", true, () =>
+            {
+                ActivateDeactivateAudio.Instance.ToggleAudioStatus();
+            });
+            var gallery = toolboxButtonGE_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
+            gallery.Setup("gallery", "micOn", "micOff", false, () =>
+            {
+                ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
+            });
+            image.
+                Setup("Image", new ToolboxButtonGenericElement[3] { screenshot_TBGE, import, gallery });
+            centerLayout_VE.AddElement(image);
         }
 
         private void AddSpacer(VisualElement layoutContainer_VE)
