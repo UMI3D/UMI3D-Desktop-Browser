@@ -105,6 +105,9 @@ namespace BrowserDesktop.Menu.Container
         {
             toolbox = toolbox_VTA.CloneTree().Q<ToolboxGenericElement>();
             toolbox.Setup(menu.Name);
+
+            //todo add to menu bar.
+            Environment.MenuBar_UIController.Instance.AddToolbox(toolbox);
         }
 
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)

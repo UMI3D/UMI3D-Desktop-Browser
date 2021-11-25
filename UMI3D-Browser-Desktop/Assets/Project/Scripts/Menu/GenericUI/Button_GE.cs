@@ -53,21 +53,26 @@ namespace BrowserDesktop.UI.GenericElement
             button_B = this.Q<Button>("button");
         }
 
-        public Button_GE Setup(System.Action onClicked, bool isOn = true)
+        public Button_GE Setup(System.Action onClicked, bool isOn = true, bool isReadyToDisplay = false)
         {
             Initialize();
 
             this.text = "";
             this.textPref = "";
+            //button_B.text = "";
 
             this.classOn = "";
             this.classOff = "";
+            this.currentClass = "";
             this.iconPref = "";
 
             this.isOn = isOn;
 
             OnClicked = onClicked;
             button_B.clicked += OnClicked;
+
+            if (isReadyToDisplay)
+                ReadyToDisplay();
 
             return this;
         }
@@ -87,7 +92,9 @@ namespace BrowserDesktop.UI.GenericElement
         {
             this.text = text;
             this.textPref = textPref;
-            
+
+            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(button_B, textPref, text);
+
             return this;
         }
 
@@ -98,7 +105,7 @@ namespace BrowserDesktop.UI.GenericElement
         public void SwitchClass(bool value)
         {
             isOn = value;
-            string className = "darkTheme-menuBar-"; //TODO to be replace by theme checked.
+            string className = "darkTheme-"; //TODO to be replace by theme checked.
             if (value)
             {
                 currentClass = className + classOn + "-btn";
@@ -107,18 +114,18 @@ namespace BrowserDesktop.UI.GenericElement
             {
                 currentClass = className + classOff + "-btn";
             }
-            
-            
+
+            UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(button_B, iconPref, currentClass);
         }
 
-        private void UpdateUssClasses()
-        {
-            button_B.ClearClassList();
+        //private void UpdateUSSClasses()
+        //{
+        //    button_B.ClearClassList();
 
-            button_B.AddToClassList(currentClass);
-            foreach (string USSClass in USSClassesIconPref)
-                button_B.AddToClassList(USSClass);
-        }
+        //    button_B.AddToClassList(currentClass);
+        //    foreach (string USSClass in USSClassesIconPref)
+        //        button_B.AddToClassList(USSClass);
+        //}
 
         public override void Remove()
         {
@@ -133,8 +140,13 @@ namespace BrowserDesktop.UI.GenericElement
 
             if (!string.IsNullOrEmpty(textPref))
                 UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(button_B, textPref, text);
+            else
+                button_B.text = "";
+
             if (!string.IsNullOrEmpty(iconPref))
                 UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(button_B, iconPref, currentClass);
+            else
+                button_B.ClearClassList();
         }
     }
 }

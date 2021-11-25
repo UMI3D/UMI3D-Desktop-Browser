@@ -38,14 +38,15 @@ namespace BrowserDesktop.UI.GenericElement
             this.label_L = this.Q<Label>("label");
         }
 
-        public Label_GE Setup(string text, string textPref)
+        public Label_GE Setup(string text, string textPref, bool isReadyToDisplay = false)
         {
             Initialize();
 
             this.text = text;
             this.textPref = textPref;
 
-            //OnApplyUserPreferences();
+            if (isReadyToDisplay)
+                ReadyToDisplay();
 
             return this;
         }

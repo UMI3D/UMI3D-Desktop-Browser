@@ -100,9 +100,8 @@ namespace BrowserDesktop.UserPreferences
                             if (maxNumberOfCharacters == noMaxNumberOfCharacters) label.style.width = StyleKeyword.Auto;
                             else label.style.width = (maxNumberOfCharacters / 2) * FontSizeAfterZoom;
                         }
-
-                        label.text = labelText;
                     }
+                    label.text = labelText;
                 }
             }
 

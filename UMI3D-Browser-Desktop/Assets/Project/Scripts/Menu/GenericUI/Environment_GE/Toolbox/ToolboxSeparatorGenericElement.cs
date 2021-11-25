@@ -21,45 +21,39 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.GenericElement
 {
-    public class ToolboxSeparatorGenericElement : VisualElement
+    public class ToolboxSeparatorGenericElement : AbstractGenericAndCustomElement
     {
         /// <summary>
         /// To be recognized by UI Builder
         /// </summary>
         public new class UxmlFactory : UxmlFactory<ToolboxSeparatorGenericElement, UxmlTraits> { }
-        /// <summary>
-        /// To be recognized by UI Builder
-        /// </summary>
-        public new class UxmlTraits : VisualElement.UxmlTraits { }
 
         private VisualElement separator_VE;
 
-        public ToolboxSeparatorGenericElement()
+        protected override void Initialize()
         {
-            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
-        }
+            base.Initialize();
 
-        ~ToolboxSeparatorGenericElement()
-        {
-            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
-        }
-
-        public void Setup()
-        {
             separator_VE = this.Q<VisualElement>("separator");
-
-            separator_VE.AddToClassList("darkTheme-menuBar-separator");
-
-            OnApplyUserPreferences();
         }
 
-        /// <summary>
-        /// Apply user preferences when needed.
-        /// </summary>
-        public void OnApplyUserPreferences()
+        public ToolboxSeparatorGenericElement Setup(bool isReadyToDisplay = false)
         {
-            //TODO change theme
+            Initialize();
+
             //separator_VE.AddToClassList("darkTheme-menuBar-separator");
+
+            if (isReadyToDisplay)
+                ReadyToDisplay();
+
+            return this;
+        }
+
+        public override void OnApplyUserPreferences()
+        {
+            if (!displayed) return;
+
+            UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(separator_VE, "separator");
         }
     }
 }
