@@ -79,16 +79,12 @@ namespace BrowserDesktop.Menu.Displayer
             if (menu is MenuItem)
             {
                 menuItem = menu as MenuItem;
-                Debug.Log($"MenuItem name = {menu.Name}");
             }
-            if (menu is umi3d.cdk.menu.Menu)
-                Debug.Log($"MenuItem name = {menu.Name}");
 
             InitAndBindUI();
 
             toolboxButton = toolboxButton_ge_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
             toolboxButton.Setup(menuItem.Name, menuItem.icon2D, () => { });
-            //this.toolboxButton.AddTool(toolboxButton);
         }
 
 

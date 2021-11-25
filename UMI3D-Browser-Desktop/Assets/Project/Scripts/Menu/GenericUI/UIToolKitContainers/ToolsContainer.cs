@@ -31,9 +31,15 @@ namespace BrowserDesktop.Menu.Container
         [Tooltip("Visual Tree Asset of a toolbox generic element.")]
         private VisualTreeAsset toolbox_VTA;
 
-        private List<AbstractDisplayer> toolDisplayers;
+        [SerializeField]
+        [Tooltip("True if this ToolsContainer is associated with the root of the menu Asset.")]
+        private bool isRootContainer = false;
+
+        private List<AbstractDisplayer> toolDisplayers = new List<AbstractDisplayer>();
 
         private ToolboxGenericElement toolbox;
+
+        private bool initialized = false;
 
         public override AbstractDisplayer this[int i] 
         {
@@ -103,21 +109,41 @@ namespace BrowserDesktop.Menu.Container
 
         public void InitAndBindUI()
         {
+            if (initialized) return;
+            else initialized = true;
+
+            if (isRootContainer) return;
+
             toolbox = toolbox_VTA.CloneTree().Q<ToolboxGenericElement>();
             toolbox.Setup(menu.Name);
-
-            //todo add to menu bar.
-            Environment.MenuBar_UIController.Instance.AddToolbox(toolbox);
         }
+
+        //public override void SetMenuItem(AbstractMenuItem menu)
+        //{
+        //    base.SetMenuItem(menu);
+        //    Debug.Log($"set menu in toolsContainer = {menu.Name}");
+        //}
 
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
+            InitAndBindUI();
+
             if (element is ToolDisplayer tool)
             {
+                Debug.Log($"ToolDisplayer = {tool.menu.Name} in {menu.Name}");
                 toolDisplayers.Add(tool);
+                if (isRootContainer) Debug.Log($"Is root container {menu.Name}");
                 toolbox.AddTool(tool.GetUXMLContent() as ToolboxButtonGenericElement);
             }
-            else
+            else if (element is ToolsContainer container)
+            {
+                Debug.Log($"ToolsContainer = {container.menu.Name} in {menu.Name}");
+                if (isRootContainer)
+                {
+                    toolDisplayers.Add(container);
+                    Environment.MenuBar_UIController.Instance.AddToolbox(container.GetUXMLContent() as ToolboxGenericElement);
+                }
+            } else
             {
                 throw new System.Exception($"This type of AbstractDisplayer is not supported yet in ToolsContainer.");
             }
@@ -128,11 +154,13 @@ namespace BrowserDesktop.Menu.Container
 
         public override void Insert(AbstractDisplayer element, int index, bool updateDisplay = true)
         {
+            InitAndBindUI();
             throw new System.NotImplementedException();
         }
 
         public override void InsertRange(IEnumerable<AbstractDisplayer> elements, bool updateDisplay = true)
         {
+            InitAndBindUI();
             foreach(AbstractDisplayer elt in elements) { Insert(elt, updateDisplay); }
         }
 
