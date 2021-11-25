@@ -105,7 +105,7 @@ namespace BrowserDesktop.UI.GenericElement
         /// <param name="classNameOff">USS class when the button is Off.</param>
         /// <param name="isOn">Initial state of the button (true when active, else false).</param>
         /// <param name="buttonClicked">Action when button is clicked.</param>
-        public void Setup(string buttonName, string classNameOn, string classNameOff, bool isOn, Action buttonClicked)
+        public ToolboxButtonGenericElement Setup(string buttonName, string classNameOn, string classNameOff, bool isOn, Action buttonClicked)
         {
             Setup(buttonName);
 
@@ -114,6 +114,8 @@ namespace BrowserDesktop.UI.GenericElement
             SwitchClass(isOn);
 
             button_B.clicked += buttonClicked;
+
+            return this;
         }
 
         /// <summary>
@@ -152,7 +154,6 @@ namespace BrowserDesktop.UI.GenericElement
         /// </summary>
         public override void OnApplyUserPreferences()
         {
-            //TODO
             if (!displayed)
                 return;
 

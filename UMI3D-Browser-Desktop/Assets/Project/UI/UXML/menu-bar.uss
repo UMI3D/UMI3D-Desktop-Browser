@@ -125,3 +125,7 @@
 .darkTheme-menuBar-previous-btn:active {
     background-image: url('/Assets/Project/UI/UI_connection/menu_bar/menu_previous_PRESS.png');
 }
+
+.darkTheme-menuBar-previous-btn {
+    background-image: url('/Assets/Project/UI/UI_connection/menu_bar/menu_previous_ENABLE.png');
+}

@@ -39,10 +39,10 @@ namespace BrowserDesktop.UserPreferences
             [Tooltip("If true this icon width and height will be resized")]
             [SerializeField]
             private bool ResizedWhenZoomed;
-            [Tooltip("Width of the icon when zoom is set to 100%. If value <= 0 this won't be taken.")]
+            [Tooltip("Width of the icon when zoom is set to 100%. If value < 0 the width will be set within the code ; if value == 0 there won't be any resizement.")]
             [SerializeField]
             private float width;
-            [Tooltip("height of the icon when zoom is set to 100%. If value <= 0 this won't be taken.")]
+            [Tooltip("height of the icon when zoom is set to 100%. If value < 0 the width will be set within the code ; if value == 0 there won't be any resizement.")]
             [SerializeField]
             private float height;
 
@@ -54,15 +54,15 @@ namespace BrowserDesktop.UserPreferences
 
                 if (this.width > 0f)
                     icon.style.width = (ResizedWhenZoomed) ? this.width * UserPreferences.GlobalPref.ZoomCoef : this.width;
-                else if (width > 0f)
+                else if (this.width < 0f && width > 0f)
                     icon.style.width = (ResizedWhenZoomed) ? width * UserPreferences.GlobalPref.ZoomCoef : width;
-                else
+                else if (this.width < 0f)
                     throw new System.Exception($"Width not set in {this.iconPrefName}");
                 if (this.height > 0f)
                     icon.style.height = (ResizedWhenZoomed) ? this.height * UserPreferences.GlobalPref.ZoomCoef : this.height;
-                else if (height > 0f)
+                else if (this.height < 0f && height > 0f)
                     icon.style.height = (ResizedWhenZoomed) ? height * UserPreferences.GlobalPref.ZoomCoef : height;
-                else
+                else if (this.height < 0f)
                     throw new System.Exception($"height not set in {this.iconPrefName}");
             }
         }

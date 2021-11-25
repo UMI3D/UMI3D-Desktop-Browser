@@ -25,3 +25,11 @@ MonoBehaviour:
     ResizedWhenZoomed: 1
     width: -1
     height: -1
+  - iconPrefName: scrollView-btn
+    ResizedWhenZoomed: 1
+    width: 10
+    height: 30
+  - iconPrefName: separator
+    ResizedWhenZoomed: 1
+    width: 0
+    height: 0

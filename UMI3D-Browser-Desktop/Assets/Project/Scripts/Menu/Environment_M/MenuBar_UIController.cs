@@ -49,6 +49,11 @@ namespace BrowserDesktop.Menu.Environment
             menuBar.Setup(toolboxGenericElement_VTA, toolboxButtonGenericElement_VTA, toolboxSeparatorGenericElement_VTA, uiDocument);
         }
 
+        public void AddToolbox(ToolboxGenericElement toolbox)
+        {
+            menuBar.ToolboxLayout.AddElement(toolbox);
+        }
+
         /// <summary>
         /// Event called when the status of the microphone changes.
         /// </summary>

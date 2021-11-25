@@ -38,6 +38,7 @@ namespace BrowserDesktop.UI.GenericElement
         protected override void Initialize()
         {
             base.Initialize();
+
             toolboxName_L = this.Q<Label>("toolbox-name");
             toolboxContainer_VE = this.Q<VisualElement>("toolbox-container");
         }
@@ -104,7 +105,7 @@ namespace BrowserDesktop.UI.GenericElement
         public override void OnApplyUserPreferences()
         {
             if (!displayed) return;
-
+            
             UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(toolboxName_L, "sub-section", toolboxNameText);
         }
 

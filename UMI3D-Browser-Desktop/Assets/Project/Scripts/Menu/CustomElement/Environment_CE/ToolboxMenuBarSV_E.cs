@@ -52,17 +52,22 @@ namespace BrowserDesktop.UI.CustomElement
             Initialize();
 
             backward_BGE.
-                Setup(() =>
+                Setup(isReadyToDisplay: true, onClicked: () =>
                 {
-                    scrollView_SV.ScrollTo(currentElement);
+                    //scrollView_SV.ScrollTo(currentElement);
                 }).
-                WithBackgroundImage($"{buttonClass}-previous-btn", $"{buttonClass}-previous-disable-btn", buttonIconPref);
+                WithBackgroundImage($"{buttonClass}-previous", $"{buttonClass}-previous-disable", buttonIconPref);
+
+            this.Q<VisualElement>("left-separator").Q<ToolboxSeparatorGenericElement>().Setup(true);
+
             forward_BGE.
-                Setup(() =>
+                Setup(isReadyToDisplay: true, onClicked: () =>
                 {
-                    scrollView_SV.ScrollTo(currentElement);
+                    //scrollView_SV.ScrollTo(currentElement);
                 }).
-                WithBackgroundImage($"{buttonClass}-next-btn", $"{buttonClass}-next-disable-btn", buttonIconPref);
+                WithBackgroundImage($"{buttonClass}-next", $"{buttonClass}-next-disable", buttonIconPref);
+
+            this.Q<VisualElement>("right-separator").Q<ToolboxSeparatorGenericElement>().Setup(true);
 
             this.addSeparator = addSeparator;
 
