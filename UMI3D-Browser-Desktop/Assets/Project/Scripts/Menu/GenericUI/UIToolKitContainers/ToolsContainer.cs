@@ -112,6 +112,7 @@ namespace BrowserDesktop.Menu.Container
             if (initialized) return;
             else initialized = true;
 
+            if (isRootContainer) Debug.Log($"game object name = {gameObject.name}");
             if (isRootContainer) return;
 
             toolbox = toolbox_VTA.CloneTree().Q<ToolboxGenericElement>();
@@ -132,14 +133,14 @@ namespace BrowserDesktop.Menu.Container
             {
                 Debug.Log($"ToolDisplayer = {tool.menu.Name} in {menu.Name}");
                 toolDisplayers.Add(tool);
-                if (isRootContainer) Debug.Log($"Is root container {menu.Name}");
                 toolbox.AddTool(tool.GetUXMLContent() as ToolboxButtonGenericElement);
             }
             else if (element is ToolsContainer container)
             {
-                Debug.Log($"ToolsContainer = {container.menu.Name} in {menu.Name}");
+                Debug.Log($"ToolsContainer = {container.menu.Name} in {menu.Name} for gameObject = {gameObject.name}");
                 if (isRootContainer)
                 {
+                    Debug.Log($"isRootContainer = {isRootContainer}");
                     toolDisplayers.Add(container);
                     Environment.MenuBar_UIController.Instance.AddToolbox(container.GetUXMLContent() as ToolboxGenericElement);
                 }
@@ -166,7 +167,7 @@ namespace BrowserDesktop.Menu.Container
 
         public override int IsSuitableFor(AbstractMenuItem menu)
         {
-            return (menu is umi3d.cdk.menu.Menu) ? 1 : 0;
+            return (isRootContainer) ? 2 : 1;
         }
 
         public override bool Remove(AbstractDisplayer element, bool updateDisplay = true)

@@ -285,11 +285,16 @@ PrefabInstance:
     - target: {fileID: 4540945144993042739, guid: 50541f86f5f01194eb2b175264de3f46,
         type: 3}
       propertyPath: containerPrefabs.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4540945144993042739, guid: 50541f86f5f01194eb2b175264de3f46,
         type: 3}
       propertyPath: containerPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 87752526}
+    - target: {fileID: 4540945144993042739, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
+      propertyPath: containerPrefabs.Array.data[1]
       value: 
       objectReference: {fileID: 1482859252209789155, guid: c58a0dfc943e01f469104d547c00ba06,
         type: 3}
@@ -322,12 +327,29 @@ PrefabInstance:
       objectReference: {fileID: 2119596094}
     - target: {fileID: 8904215950243120422, guid: 50541f86f5f01194eb2b175264de3f46,
         type: 3}
+      propertyPath: m_Name
+      value: Root Tools Container
+      objectReference: {fileID: 0}
+    - target: {fileID: 8904215950243120422, guid: 50541f86f5f01194eb2b175264de3f46,
+        type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 956151999038708382, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
+--- !u!114 &87752526 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5889043001834157584, guid: 50541f86f5f01194eb2b175264de3f46,
+    type: 3}
+  m_PrefabInstance: {fileID: 87752525}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb2cc79661ce3934aaa0d4e7037d8afa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &133532551
 PrefabInstance:
   m_ObjectHideFlags: 0
