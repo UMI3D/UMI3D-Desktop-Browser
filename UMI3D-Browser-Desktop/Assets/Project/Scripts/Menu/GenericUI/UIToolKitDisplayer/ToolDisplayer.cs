@@ -35,14 +35,25 @@ namespace BrowserDesktop.Menu.Displayer
 
         #region Abstract Displayer
 
+        /// <summary>
+        /// ToolDisplayer don't need to be displayed.
+        /// </summary>
+        /// <param name="forceUpdate"></param>
         public override void Display(bool forceUpdate = false)
         {
-            toolboxButton.style.display = DisplayStyle.Flex;
+            return;
+            //Debug.Log($"Tool [{menu.Name}] displays");
+            //toolboxButton.style.display = DisplayStyle.Flex;
         }
 
+        /// <summary>
+        /// ToolDisplayer don't need to be hiden.
+        /// </summary>
         public override void Hide()
         {
-            toolboxButton.style.display = DisplayStyle.None;
+            return;
+            //Debug.Log($"Tool [{menu.Name}] hides");
+            //toolboxButton.style.display = DisplayStyle.None;
         }
 
         public override void Clear()

@@ -23,12 +23,12 @@ public class DummyMenuCreator : MonoBehaviour
 {
     public MenuAsset menuAsset;
     public Texture2D icon;
+    public umi3d.cdk.menu.view.MenuDisplayManager MenuDisplay;
 
     [ContextMenu("FillMenuWithGarbage")]
     public void FillMenuWithGarbage()
     {
         Menu rootContainer = new Menu();
-        Debug.Log($"rootContainer = {rootContainer.Name}");
 
         Menu imageMenu = new Menu();
         imageMenu.Name = "image";
@@ -70,5 +70,7 @@ public class DummyMenuCreator : MonoBehaviour
 
 
         menuAsset.menu = rootContainer;
+
+        MenuDisplay.CreateDisplay();
     }
 }
