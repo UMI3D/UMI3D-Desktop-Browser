@@ -40,7 +40,7 @@ namespace BrowserDesktop.UI
 
         public AbstractGenericAndCustomElement()
         {
-            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
+            //UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
         }
 
         ~AbstractGenericAndCustomElement()
@@ -52,6 +52,8 @@ namespace BrowserDesktop.UI
         {
             if (initialized) return;
             else initialized = true;
+
+            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
         }
 
         /// <summary>
