@@ -128,7 +128,7 @@ namespace umi3d.cdk.menu.view
         /// Create the menu display, and display it.
         /// </summary>
         [ContextMenu("Display Create")]
-        private void CreateDisplay()
+        public void CreateDisplay()
         {
             if (isDisplaying || (menu == null))
                 return;
@@ -215,6 +215,7 @@ namespace umi3d.cdk.menu.view
         /// <returns></returns>
         private void recursivelyDisplayContainer(AbstractMenuDisplayContainer container, int depth)
         {
+            Debug.Log($"DisplayContainer [{container.menu.Name}] with depth = {depth} and displayDepth = {displayDepth}");
             if (depth > displayDepth)
             {
                 if (depth > displayDepth + 1)
@@ -256,7 +257,6 @@ namespace umi3d.cdk.menu.view
         /// <returns></returns>
         private AbstractMenuDisplayContainer recursivelyCreateDisplay(AbstractMenu menu, int depth)
         {
-            Debug.Log($"Recursive create display = {menu.Name} in depth = {depth}");
             AbstractMenuDisplayContainer container;
             if ((depth == 0) && firstContainerInScene)
                 container = containerSelector.ChooseContainer(menu, 0);
@@ -288,7 +288,7 @@ namespace umi3d.cdk.menu.view
         /// <returns></returns>
         private AbstractMenuDisplayContainer CreateSubMenu(AbstractMenuDisplayContainer container, AbstractMenu subMenu, int containerDepth)
         {
-            Debug.Log($"create sub menu {subMenu.Name} in depth = {containerDepth}");
+            Debug.Log($"create sub menu [{subMenu.Name}] in depth = {containerDepth}");
             if (!menuToDisplayer.ContainsKey(subMenu))
             {
                 AbstractMenuDisplayContainer subContainer = recursivelyCreateDisplay(subMenu, containerDepth + 1);
@@ -367,7 +367,6 @@ namespace umi3d.cdk.menu.view
         /// <param name="item"></param>
         private void CreateItem(AbstractMenuDisplayContainer container, AbstractMenuItem item)
         {
-            Debug.Log($"create Item {item.Name} in {container.menu.Name}");
             if (!itemToDisplayer.ContainsKey(item) || itemToDisplayer[item] == null)
             {
                 AbstractDisplayer disp = ChooseDisplayer(item);

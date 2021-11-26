@@ -34,12 +34,23 @@ namespace BrowserDesktop.Menu.Container
         [SerializeField]
         [Tooltip("True if this ToolsContainer is associated with the root of the menu Asset.")]
         private bool isRootContainer = false;
+        private bool isRootTools = false;
+        public bool IsRootTools
+        {
+            get => isRootTools;
+            set => isRootTools = value;
+        }
 
         private List<AbstractDisplayer> toolDisplayers = new List<AbstractDisplayer>();
 
         private ToolboxGenericElement toolbox;
 
         private bool initialized = false;
+
+        public ToolsContainer ExpandedContainer { get; set; }
+
+
+        #region ToolDisplayers list
 
         public override AbstractDisplayer this[int i] 
         {
@@ -52,11 +63,6 @@ namespace BrowserDesktop.Menu.Container
             set => toolDisplayers[i] = value; 
         }
 
-        public override void Collapse(bool forceUpdate = false)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override bool Contains(AbstractDisplayer element)
         {
             return toolDisplayers.Contains(element);
@@ -67,24 +73,66 @@ namespace BrowserDesktop.Menu.Container
             return toolDisplayers.Count;
         }
 
-        public override AbstractMenuDisplayContainer CurrentMenuDisplayContainer()
+        public override int GetIndexOf(AbstractDisplayer element)
         {
-            throw new System.NotImplementedException();
+            return toolDisplayers.IndexOf(element);
         }
+
+        protected override IEnumerable<AbstractDisplayer> GetDisplayers()
+        {
+            return toolDisplayers;
+        }
+
+        #endregion
+
+        #region Display, Hide and Expand, Collapse
 
         public override void Display(bool forceUpdate = false)
         {
-            if (isDisplayed)
-                return;
+            if (isDisplayed && !forceUpdate) return;
+            if (isRootContainer) return;
+
+            Debug.Log($"Tools display in [{menu.Name}]");
 
             toolbox.style.display = DisplayStyle.Flex;
-            toolDisplayers.ForEach((elt) => { elt.Display(); });
+
             isDisplayed = true;
+        }
+
+        public override void Hide()
+        {
+            if (!isDisplayed) return;
+            if (isRootContainer) return;
+
+            Debug.Log($"Tools hide in [{menu.Name}]");
+
+            toolbox.style.display = DisplayStyle.None;
+
+            isDisplayed = false;
+        }
+
+        public override void Collapse(bool forceUpdate = false)
+        {
+            if (!isExpanded) return;
+            if (isRootContainer) return;
+
+            Debug.Log($"Tools [{menu.Name}] collapse");
+            ExpandedContainer?.Collapse();
+            ExpandedContainer?.Hide();          
+            ExpandedContainer = null;
+
+            isExpanded = false;
         }
 
         public override void Expand(bool forceUpdate = false)
         {
-            throw new System.NotImplementedException();
+            if (isExpanded) return;
+            if (isRootContainer) return;
+
+            Debug.Log($"Tools [{menu.Name}] Expand");
+            ExpandedContainer?.Display();
+
+            isExpanded = true;
         }
 
         public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
@@ -92,19 +140,33 @@ namespace BrowserDesktop.Menu.Container
             throw new System.NotImplementedException();
         }
 
-        public override int GetIndexOf(AbstractDisplayer element)
+        public override AbstractMenuDisplayContainer CurrentMenuDisplayContainer()
         {
-            return toolDisplayers.IndexOf(element);
+            return ExpandedContainer;
         }
+
+        private void OnContainerExpanded(ToolsContainer subContainer)
+        {
+            if (ExpandedContainer != null && ExpandedContainer == subContainer)
+                return;
+            else if (ExpandedContainer == null && isRootTools)
+                (parent as ToolsContainer)?.ExpandedContainer?.Collapse();
+            else
+                Collapse();
+
+            ExpandedContainer = subContainer;
+            if (isRootTools)
+                (parent as ToolsContainer).ExpandedContainer = subContainer;
+            Expand();
+        }
+
+        #endregion
+
+
 
         public VisualElement GetUXMLContent()
         {
             return toolbox;
-        }
-
-        public override void Hide()
-        {
-            throw new System.NotImplementedException();
         }
 
         public void InitAndBindUI()
@@ -112,7 +174,6 @@ namespace BrowserDesktop.Menu.Container
             if (initialized) return;
             else initialized = true;
 
-            if (isRootContainer) Debug.Log($"game object name = {gameObject.name}");
             if (isRootContainer) return;
 
             toolbox = toolbox_VTA.CloneTree().Q<ToolboxGenericElement>();
@@ -131,17 +192,16 @@ namespace BrowserDesktop.Menu.Container
 
             if (element is ToolDisplayer tool)
             {
-                Debug.Log($"ToolDisplayer = {tool.menu.Name} in {menu.Name}");
+                Debug.Log($"Insert Tool [{tool.menu.Name}] in [{menu.Name}]");
                 toolDisplayers.Add(tool);
                 toolbox.AddTool(tool.GetUXMLContent() as ToolboxButtonGenericElement);
             }
             else if (element is ToolsContainer container)
             {
-                Debug.Log($"ToolsContainer = {container.menu.Name} in {menu.Name} for gameObject = {gameObject.name}");
+                Debug.Log($"Insert ToolsContainer [{container.menu.Name}] in [{menu.Name}] for gameObject [{gameObject.name}]");
+                toolDisplayers.Add(container);
                 if (isRootContainer)
                 {
-                    Debug.Log($"isRootContainer = {isRootContainer}");
-                    toolDisplayers.Add(container);
                     Environment.MenuBar_UIController.Instance.AddToolbox(container.GetUXMLContent() as ToolboxGenericElement);
                 }
             } else
@@ -177,6 +237,11 @@ namespace BrowserDesktop.Menu.Container
                 toolDisplayers.Remove(tool);
                 (tool.GetUXMLContent() as ToolboxButtonGenericElement).Remove();
             }
+            else if (element is ToolsContainer subContainer)
+            {
+                toolDisplayers.Remove(subContainer);
+                (subContainer.GetUXMLContent() as ToolboxGenericElement).Remove();
+            }
             else
             {
                 throw new System.Exception($"This type of AbstractDisplayer is not supported yet in ToolsContainer.");
@@ -202,9 +267,6 @@ namespace BrowserDesktop.Menu.Container
             throw new System.NotImplementedException();
         }
 
-        protected override IEnumerable<AbstractDisplayer> GetDisplayers()
-        {
-            return toolDisplayers;
-        }
+        
     }
 }
