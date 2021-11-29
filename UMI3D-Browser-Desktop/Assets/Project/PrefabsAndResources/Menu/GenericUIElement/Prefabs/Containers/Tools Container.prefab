@@ -54,3 +54,7 @@ MonoBehaviour:
   parent: {fileID: 0}
   toolbox_VTA: {fileID: 9197481963319205126, guid: 05a082bde1c1a61409c5e339eae7b264,
     type: 3}
+  toolboxButton_VTA: {fileID: 0}
+  toolDisplayerPrefab: {fileID: -5949939671915903110, guid: c968f9bf62744984f8503a8b73feb284,
+    type: 3}
+  isRootContainer: 0

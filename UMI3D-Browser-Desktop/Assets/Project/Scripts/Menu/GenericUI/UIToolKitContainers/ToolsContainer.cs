@@ -32,6 +32,10 @@ namespace BrowserDesktop.Menu.Container
         private VisualTreeAsset toolbox_VTA;
 
         [SerializeField]
+        [Tooltip("Visual Tree Asset of a toolboxButton generic element.")]
+        private ToolDisplayer toolDisplayerPrefab;
+
+        [SerializeField]
         [Tooltip("True if this ToolsContainer is associated with the root of the menu Asset.")]
         private bool isRootContainer = false;
         private bool isRootTools = false;
@@ -173,7 +177,6 @@ namespace BrowserDesktop.Menu.Container
         {
             if (initialized) return;
             else initialized = true;
-
             if (isRootContainer) return;
 
             toolbox = toolbox_VTA.CloneTree().Q<ToolboxGenericElement>();
@@ -186,28 +189,18 @@ namespace BrowserDesktop.Menu.Container
         //    Debug.Log($"set menu in toolsContainer = {menu.Name}");
         //}
 
+        #region Insert
+
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
             InitAndBindUI();
 
             if (element is ToolDisplayer tool)
-            {
-                Debug.Log($"Insert Tool [{tool.menu.Name}] in [{menu.Name}]");
-                toolDisplayers.Add(tool);
-                toolbox.AddTool(tool.GetUXMLContent() as ToolboxButtonGenericElement);
-            }
+                InsertToolDisplayer(tool);
             else if (element is ToolsContainer container)
-            {
-                Debug.Log($"Insert ToolsContainer [{container.menu.Name}] in [{menu.Name}] for gameObject [{gameObject.name}]");
-                toolDisplayers.Add(container);
-                if (isRootContainer)
-                {
-                    Environment.MenuBar_UIController.Instance.AddToolbox(container.GetUXMLContent() as ToolboxGenericElement);
-                }
-            } else
-            {
+                InsertSubContainer(container);
+            else
                 throw new System.Exception($"This type of AbstractDisplayer is not supported yet in ToolsContainer.");
-            }
 
             if (updateDisplay)
                 Display();
@@ -224,6 +217,54 @@ namespace BrowserDesktop.Menu.Container
             InitAndBindUI();
             foreach(AbstractDisplayer elt in elements) { Insert(elt, updateDisplay); }
         }
+
+        /// <summary>
+        /// - If this container is the root then insert the subContainer in the view.
+        /// - Else insert a new toolDisplayer that will display the subContainer when pressed.
+        /// </summary>
+        /// <param name="subContainer"></param>
+        private void InsertSubContainer(ToolsContainer subContainer)
+        {
+            Debug.Log($"Insert ToolsContainer [{subContainer.menu.Name}] in [{menu.Name}] for gameObject [{gameObject.name}]");
+            if (isRootContainer)
+            {
+                toolDisplayers.Add(subContainer);
+                Environment.MenuBar_UIController.Instance.AddToolbox(subContainer.GetUXMLContent() as ToolboxGenericElement);
+            }
+            else
+            {
+                ToolDisplayer toolDisplayer;
+                CreateAndSetupToolAsContainer(out toolDisplayer, subContainer);
+                InsertToolDisplayer(toolDisplayer);
+            }
+        }
+
+        /// <summary>
+        /// - Add tool in toolDisplayers list.
+        /// - Add tool in toolbox UI.
+        /// </summary>
+        /// <param name="tool"></param>
+        private void InsertToolDisplayer(ToolDisplayer tool)
+        {
+            Debug.Log($"Insert Tool [{tool.menu.Name}] in [{menu.Name}]");
+            toolDisplayers.Add(tool);
+            toolbox.AddTool(tool.GetUXMLContent() as ToolboxButtonGenericElement);
+        }
+
+        /// <summary>
+        /// - Instantiate ToolDisplayer.
+        /// - Setup ToolDisplayer menu and ButtonPressed action.
+        /// </summary>
+        /// <param name="tool"></param>
+        /// <param name="subContainer"></param>
+        private void CreateAndSetupToolAsContainer(out ToolDisplayer tool, ToolsContainer subContainer)
+        {
+            tool = Instantiate(toolDisplayerPrefab);
+            tool.SetMenuItem(subContainer.menu);
+            tool.OnButtonPressed = () => { OnContainerExpanded(subContainer); };
+        }
+
+        #endregion
 
         public override int IsSuitableFor(AbstractMenuItem menu)
         {

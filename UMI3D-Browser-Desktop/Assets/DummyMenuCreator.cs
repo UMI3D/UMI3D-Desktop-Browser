@@ -30,47 +30,66 @@ public class DummyMenuCreator : MonoBehaviour
     {
         Menu rootContainer = new Menu();
 
-        Menu imageMenu = new Menu();
-        imageMenu.Name = "image";
-        MenuItem screenShotMenuItem = new MenuItem()
-        {
-            Name = "screenshot",
-            icon2D = icon
-        };
-        MenuItem importMenuItem = new MenuItem()
-        {
-            Name = "import"
-        };
-        MenuItem galleryMenuItem = new MenuItem()
-        {
-            Name = "gallery"
-        };
+        Menu imageMenu;
+        CreateMenu(out imageMenu, "image");
+        rootContainer.Add(imageMenu);
 
+        MenuItem screenShotMenuItem;
+        CreateMenuItem(out screenShotMenuItem, "Screenshot", icon);
         imageMenu.Add(screenShotMenuItem);
+
+        MenuItem importMenuItem;
+        CreateMenuItem(out importMenuItem, "Import");
         imageMenu.Add(importMenuItem);
+
+        MenuItem galleryMenuItem;
+        CreateMenuItem(out galleryMenuItem, "Gallery");
         imageMenu.Add(galleryMenuItem);
 
-        Menu toolboxMenu = new Menu();
-        toolboxMenu.Name = "toolbox 1";
-        MenuItem tool1 = new MenuItem()
-        {
-            Name = "tool1",
-            icon2D = icon
-        };
-        MenuItem tool2 = new MenuItem()
-        {
-            Name = "tool2"
-        };
 
+
+        Menu toolboxMenu;
+        CreateMenu(out toolboxMenu, "Toolbox 1");
+        rootContainer.Add(toolboxMenu);
+
+        MenuItem tool1;
+        CreateMenuItem(out tool1, "Tool1");
         toolboxMenu.Add(tool1);
+
+        MenuItem tool2;
+        CreateMenuItem(out tool2, "Tool2");
         toolboxMenu.Add(tool2);
 
-        rootContainer.Add(imageMenu);
-        rootContainer.Add(toolboxMenu);
+
+
+        Menu toolboxMenu2;
+        CreateMenu(out toolboxMenu2, "Toolbox 2");
+        toolboxMenu.Add(toolboxMenu2);
+
+        MenuItem tool3;
+        CreateMenuItem(out tool3, "Tool 3");
+        toolboxMenu2.Add(tool3);
 
 
         menuAsset.menu = rootContainer;
 
         MenuDisplay.CreateDisplay();
+    }
+
+    private void CreateMenuItem(out MenuItem menuItem, string name, Texture2D icon = null)
+    {
+        menuItem = new MenuItem()
+        {
+            Name = name,
+            icon2D = icon
+        };
+    }
+
+    private void CreateMenu(out Menu menu, string name)
+    {
+        menu = new Menu()
+        {
+            Name = name
+        };
     }
 }

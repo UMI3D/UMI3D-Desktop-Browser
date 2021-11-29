@@ -29,9 +29,13 @@ namespace BrowserDesktop.Menu.Displayer
         [Tooltip("Visual Tree Asset of a toolbox button.")]
         private VisualTreeAsset toolboxButton_ge_VTA;
 
-        private MenuItem menuItem;
+        //private MenuItem menuItem;
 
         private ToolboxButtonGenericElement toolboxButton;
+
+        private bool initialized = false;
+
+        public System.Action OnButtonPressed = null;
 
         #region Abstract Displayer
 
@@ -60,6 +64,9 @@ namespace BrowserDesktop.Menu.Displayer
         {
             base.Clear();
             toolboxButton.Remove();
+            toolboxButton = null;
+
+            initialized = false;
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)
@@ -78,6 +85,9 @@ namespace BrowserDesktop.Menu.Displayer
 
         public void InitAndBindUI()
         {
+            if (initialized) return;
+            else initialized = true;
+
             toolboxButton = toolboxButton_ge_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
         }
 
@@ -87,15 +97,21 @@ namespace BrowserDesktop.Menu.Displayer
         {
             base.SetMenuItem(menu);
 
-            if (menu is MenuItem)
-            {
-                menuItem = menu as MenuItem;
-            }
+            //if (menu is MenuItem)
+            //{
+            //    menuItem = menu as MenuItem;
+            //}
 
             InitAndBindUI();
 
-            toolboxButton = toolboxButton_ge_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-            toolboxButton.Setup(menuItem.Name, menuItem.icon2D, () => { });
+            toolboxButton.Setup(menu.Name, menu.icon2D, () => 
+            { 
+                Debug.Log("<color=green>TODO: </color>" + $"Toolbox button pressed.");
+                if (OnButtonPressed == null)
+                    menu.Select();
+                else
+                    OnButtonPressed();
+            });
         }
 
 

@@ -51,7 +51,6 @@ namespace BrowserDesktop.Menu.Environment
 
         public void AddToolbox(ToolboxGenericElement toolbox)
         {
-            Debug.Log($"Add tool to box");
             menuBar.ToolboxLayout.AddElement(toolbox);
         }
 
