@@ -38,11 +38,6 @@ namespace BrowserDesktop.UI
         /// </summary>
         protected bool displayed = false;
 
-        public AbstractGenericAndCustomElement()
-        {
-            //UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
-        }
-
         ~AbstractGenericAndCustomElement()
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);

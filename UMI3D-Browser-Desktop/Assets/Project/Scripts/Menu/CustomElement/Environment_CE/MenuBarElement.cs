@@ -16,6 +16,7 @@ limitations under the License.
 
 using BrowserDesktop.Menu.Environment.Settings;
 using BrowserDesktop.UI.GenericElement;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,6 +44,8 @@ namespace BrowserDesktop.UI.CustomElement
         private ToolboxButtonGenericElement mic_TBGE;
         public ToolboxButtonGenericElement Mic_TBGE => mic_TBGE;
 
+        public VisualElement SubMenuLayout { get; private set; }
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -50,11 +53,50 @@ namespace BrowserDesktop.UI.CustomElement
             leftLayout_VE = this.Q<VisualElement>("Left-layout");
             centerLayout_VE = this.Q<VisualElement>("Center-layout").Q<ToolboxMenuBarSV_E>();
             rightLayout_VE = this.Q<VisualElement>("Right-layout");
+            SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
         }
 
         public void Setup(VisualTreeAsset toolboxGE_VTA, VisualTreeAsset toolboxButtonGE_VTA, VisualTreeAsset toolboxSeparatorGE_VTA, UIDocument uiDocument)
         {
             Initialize();
+
+            #region Test
+
+            var screenshot_TBGE = toolboxButtonGE_VTA.
+                CloneTree().
+                Q<ToolboxButtonGenericElement>().
+                Setup("Screenshot", "avatarOn", "avatarOff", true, () =>
+                {
+                    ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();
+                });
+            var import = toolboxButtonGE_VTA.
+                CloneTree().
+                Q<ToolboxButtonGenericElement>().
+                Setup("import", "soundOn", "soundOff", true, () =>
+                {
+
+                });
+            ToolboxGenericElement image = toolboxGE_VTA.
+                CloneTree().
+                Q<ToolboxGenericElement>().
+                Setup("Image", new ToolboxButtonGenericElement[2] { screenshot_TBGE, import });
+            //centerLayout_VE.AddElement(image);
+
+            var gallery = toolboxButtonGE_VTA.
+                CloneTree().
+                Q<ToolboxButtonGenericElement>().
+                Setup("gallery", "micOn", "micOff", false, () =>
+                {
+
+                });
+            ToolboxGenericElement test = toolboxGE_VTA.
+                CloneTree().
+                Q<ToolboxGenericElement>().
+                Setup("Test", gallery);
+            test.AddTo(SubMenuLayout);
+
+
+            #endregion
 
             #region Left layout
 
@@ -65,6 +107,7 @@ namespace BrowserDesktop.UI.CustomElement
                 Q<ToolboxButtonGenericElement>().
                 Setup("Toolbox", "toolbox", "toolbox", true, () => 
                 {
+                    Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPosition(test, image));
                     Menu.DialogueBox_UIController.
                         Setup("TODO", "Not implemented yed", "Close", () => { }).
                         DisplayFrom(uiDocument);
@@ -84,6 +127,9 @@ namespace BrowserDesktop.UI.CustomElement
                 { 
                     AddSeparator(vE, toolboxSeparatorGE_VTA); 
                 });
+
+            //Test
+            centerLayout_VE.AddElement(image);
 
             #region Right layout
 
@@ -143,40 +189,17 @@ namespace BrowserDesktop.UI.CustomElement
             #endregion
 
             ReadyToDisplay();
+        }
 
-            
-            //var screenshot_TBGE = toolboxButtonGE_VTA.
-            //    CloneTree().
-            //    Q<ToolboxButtonGenericElement>().
-            //    Setup("Screenshot", "avatarOn", "avatarOff", true, () =>
-            //    {
-            //        ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();
-            //    });
-            //var import = toolboxButtonGE_VTA.
-            //    CloneTree().
-            //    Q<ToolboxButtonGenericElement>().
-            //    Setup("import", "soundOn", "soundOff", true, () =>
-            //    {
-            //        ActivateDeactivateAudio.Instance.ToggleAudioStatus();
-            //    });
-            //ToolboxGenericElement image = toolboxGE_VTA.
-            //    CloneTree().
-            //    Q<ToolboxGenericElement>().
-            //    Setup("Image", new ToolboxButtonGenericElement[2] { screenshot_TBGE, import });
-            //centerLayout_VE.AddElement(image);
+        private IEnumerator LogWorldPosition(VisualElement test, VisualElement image)
+        {
+            yield return null;
 
-            //var gallery = toolboxButtonGE_VTA.
-            //    CloneTree().
-            //    Q<ToolboxButtonGenericElement>().
-            //    Setup("gallery", "micOn", "micOff", false, () =>
-            //    {
-            //        ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
-            //    });
-            //ToolboxGenericElement test = toolboxGE_VTA.
-            //    CloneTree().
-            //    Q<ToolboxGenericElement>().
-            //    Setup("Test",  gallery);
-            //centerLayout_VE.AddElement(test);
+            Debug.Log($"test x = {test.worldBound.x}");
+            Debug.Log($"image x = {image.worldBound.x}");
+            //test.style.left = image.ChangeCoordinatesTo(test, new Vector2(image.layout.x, test.layout.y)).x;
+
+            test.style.left = image.WorldToLocal(new Vector2(image.worldBound.x, 0f)).x;
         }
 
         private void AddSpacer(VisualElement layoutContainer_VE)
