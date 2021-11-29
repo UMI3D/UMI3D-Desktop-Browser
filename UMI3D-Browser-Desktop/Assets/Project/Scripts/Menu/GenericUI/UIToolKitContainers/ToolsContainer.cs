@@ -38,6 +38,7 @@ namespace BrowserDesktop.Menu.Container
         [SerializeField]
         [Tooltip("True if this ToolsContainer is associated with the root of the menu Asset.")]
         private bool isRootContainer = false;
+        [Tooltip("True if this ToolDisplayer is a tool that will be display just after the root container.")]
         private bool isRootTools = false;
         public bool IsRootTools
         {
@@ -51,7 +52,7 @@ namespace BrowserDesktop.Menu.Container
 
         private bool initialized = false;
 
-        public ToolsContainer ExpandedContainer { get; set; }
+        public ToolsContainer ExpandedSubContainer { get; set; }
 
 
         #region ToolDisplayers list
@@ -121,9 +122,9 @@ namespace BrowserDesktop.Menu.Container
             if (isRootContainer) return;
 
             Debug.Log($"Tools [{menu.Name}] collapse");
-            ExpandedContainer?.Collapse();
-            ExpandedContainer?.Hide();          
-            ExpandedContainer = null;
+            ExpandedSubContainer?.Collapse();
+            ExpandedSubContainer?.Hide();          
+            ExpandedSubContainer = null;
 
             isExpanded = false;
         }
@@ -134,7 +135,7 @@ namespace BrowserDesktop.Menu.Container
             if (isRootContainer) return;
 
             Debug.Log($"Tools [{menu.Name}] Expand");
-            ExpandedContainer?.Display();
+            ExpandedSubContainer?.Display();
 
             isExpanded = true;
         }
@@ -146,22 +147,56 @@ namespace BrowserDesktop.Menu.Container
 
         public override AbstractMenuDisplayContainer CurrentMenuDisplayContainer()
         {
-            return ExpandedContainer;
+            return ExpandedSubContainer;
         }
 
-        private void OnContainerExpanded(ToolsContainer subContainer)
+        /// <summary>
+        /// - Collapse expanded SubContainers.
+        /// - If the current ExpandedSubContainer is different of subContainer then set and Expand new subContainer.
+        /// </summary>
+        /// <param name="subContainer"></param>
+        private void OnExpandedButtonPressed(ToolsContainer subContainer)
         {
-            if (ExpandedContainer != null && ExpandedContainer == subContainer)
-                return;
-            else if (ExpandedContainer == null && isRootTools)
-                (parent as ToolsContainer)?.ExpandedContainer?.Collapse();
-            else
-                Collapse();
+            var expanded = ExpandedSubContainer;
 
-            ExpandedContainer = subContainer;
+            if (ExpandedSubContainer != null)
+                Collapse();
+            else
+                CollapseFromRoot();
+
+            if (expanded != subContainer)
+                SetExpandedSubContainerAndExpand(subContainer);
+        }
+
+        /// <summary>
+        /// - If this container is a root ToolsContainer then Collapse from the root.
+        /// </summary>
+        private void CollapseFromRoot()
+        {
             if (isRootTools)
-                (parent as ToolsContainer).ExpandedContainer = subContainer;
+                (parent as ToolsContainer)?.ExpandedSubContainer?.parent?.Collapse();
+        }
+
+        /// <summary>
+        /// - Set ExpandedSubContainer and root ExpandedSubContainer.
+        /// - Expand
+        /// </summary>
+        /// <param name="subContainer"></param>
+        private void SetExpandedSubContainerAndExpand(ToolsContainer subContainer)
+        {
+            ExpandedSubContainer = subContainer;
+            SetRootExpandedSubContainer(subContainer);
             Expand();
+        }
+
+        /// <summary>
+        /// - If this container is a root toolsContainer then set the root ExpandedSubContainer.
+        /// </summary>
+        /// <param name="subContainer"></param>
+        private void SetRootExpandedSubContainer(ToolsContainer subContainer)
+        {
+            if (isRootTools)
+                (parent as ToolsContainer).ExpandedSubContainer = subContainer;
         }
 
         #endregion
@@ -183,11 +218,6 @@ namespace BrowserDesktop.Menu.Container
             toolbox.Setup(menu.Name);
         }
 
-        //public override void SetMenuItem(AbstractMenuItem menu)
-        //{
-        //    base.SetMenuItem(menu);
-        //    Debug.Log($"set menu in toolsContainer = {menu.Name}");
-        //}
 
         #region Insert
 
@@ -227,21 +257,37 @@ namespace BrowserDesktop.Menu.Container
         {
             Debug.Log($"Insert ToolsContainer [{subContainer.menu.Name}] in [{menu.Name}] for gameObject [{gameObject.name}]");
             if (isRootContainer)
-            {
-                toolDisplayers.Add(subContainer);
-                Environment.MenuBar_UIController.Instance.AddToolbox(subContainer.GetUXMLContent() as ToolboxGenericElement);
-            }
+                InsertAndDisplayContainerInView(subContainer);
             else
-            {
-                ToolDisplayer toolDisplayer;
-                CreateAndSetupToolAsContainer(out toolDisplayer, subContainer);
-                InsertToolDisplayer(toolDisplayer);
-            }
+                CreateAndInsertContainerAsToolDisplayer(subContainer);
+        }
+
+        /// <summary>
+        /// - Add container in displayers list.
+        /// - Add Toolbox_ge in View.
+        /// </summary>
+        /// <param name="subContainer"></param>
+        private void InsertAndDisplayContainerInView(ToolsContainer subContainer)
+        {
+            toolDisplayers.Add(subContainer);
+            Environment.MenuBar_UIController.Instance.AddToolbox(subContainer.GetUXMLContent() as ToolboxGenericElement);
+        }
+
+        /// <summary>
+        /// - Create And Setup container as ToolDisplayer.
+        /// - Insert ToolDisplyer.
+        /// </summary>
+        /// <param name="subContainer"></param>
+        private void CreateAndInsertContainerAsToolDisplayer(ToolsContainer subContainer)
+        {
+            ToolDisplayer toolDisplayer;
+            CreateAndSetupContainerAsToolDisplayer(out toolDisplayer, subContainer);
+            InsertToolDisplayer(toolDisplayer);
         }
 
         /// <summary>
         /// - Add tool in toolDisplayers list.
-        /// - Add tool in toolbox UI.
+        /// - Add tool in toolbox_ge.
         /// </summary>
         /// <param name="tool"></param>
         private void InsertToolDisplayer(ToolDisplayer tool)
@@ -257,11 +303,11 @@ namespace BrowserDesktop.Menu.Container
         /// </summary>
         /// <param name="tool"></param>
         /// <param name="subContainer"></param>
-        private void CreateAndSetupToolAsContainer(out ToolDisplayer tool, ToolsContainer subContainer)
+        private void CreateAndSetupContainerAsToolDisplayer(out ToolDisplayer tool, ToolsContainer subContainer)
         {
             tool = Instantiate(toolDisplayerPrefab);
             tool.SetMenuItem(subContainer.menu);
-            tool.OnButtonPressed = () => { OnContainerExpanded(subContainer); };
+            tool.OnButtonPressed = () => { OnExpandedButtonPressed(subContainer); };
         }
 
         #endregion
