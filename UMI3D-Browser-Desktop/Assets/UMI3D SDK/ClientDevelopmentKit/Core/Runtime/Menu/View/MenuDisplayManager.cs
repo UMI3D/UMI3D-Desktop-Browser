@@ -215,7 +215,7 @@ namespace umi3d.cdk.menu.view
         /// <returns></returns>
         private void recursivelyDisplayContainer(AbstractMenuDisplayContainer container, int depth)
         {
-            Debug.Log($"DisplayContainer [{container.menu.Name}] with depth = {depth} and displayDepth = {displayDepth}");
+            //Debug.Log($"DisplayContainer [{container.menu.Name}] with depth = {depth} and displayDepth = {displayDepth}");
             if (depth > displayDepth)
             {
                 if (depth > displayDepth + 1)
@@ -288,7 +288,7 @@ namespace umi3d.cdk.menu.view
         /// <returns></returns>
         private AbstractMenuDisplayContainer CreateSubMenu(AbstractMenuDisplayContainer container, AbstractMenu subMenu, int containerDepth)
         {
-            Debug.Log($"create sub menu [{subMenu.Name}] in depth = {containerDepth}");
+            //Debug.Log($"create sub menu [{subMenu.Name}] in depth = {containerDepth}");
             if (!menuToDisplayer.ContainsKey(subMenu))
             {
                 AbstractMenuDisplayContainer subContainer = recursivelyCreateDisplay(subMenu, containerDepth + 1);

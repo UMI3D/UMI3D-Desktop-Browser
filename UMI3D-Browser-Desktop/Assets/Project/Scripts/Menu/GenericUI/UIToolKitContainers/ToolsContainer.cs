@@ -16,6 +16,7 @@ limitations under the License.
 
 using BrowserDesktop.Menu.Displayer;
 using BrowserDesktop.UI.GenericElement;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk.menu;
@@ -27,32 +28,31 @@ namespace BrowserDesktop.Menu.Container
 {
     public class ToolsContainer : AbstractMenuDisplayContainer, IDisplayerElement
     {
+        public ToolsContainer ExpandedSubContainer { get; set; } = null;
+
+        /// <summary>
+        /// True if this ToolsContainer will be display just after the root container.
+        /// </summary>
+        public bool IsRootToolsContainer { get; private set; } = false;
+
         [SerializeField]
         [Tooltip("Visual Tree Asset of a toolbox generic element.")]
         private VisualTreeAsset toolbox_VTA;
 
         [SerializeField]
-        [Tooltip("Visual Tree Asset of a toolboxButton generic element.")]
+        [Tooltip("ToolDisplayer Prefab.")]
         private ToolDisplayer toolDisplayerPrefab;
 
         [SerializeField]
         [Tooltip("True if this ToolsContainer is associated with the root of the menu Asset.")]
         private bool isRootContainer = false;
-        [Tooltip("True if this ToolDisplayer is a tool that will be display just after the root container.")]
-        private bool isRootTools = false;
-        public bool IsRootTools
-        {
-            get => isRootTools;
-            set => isRootTools = value;
-        }
+        
 
         private List<AbstractDisplayer> toolDisplayers = new List<AbstractDisplayer>();
 
         private ToolboxGenericElement toolbox;
 
         private bool initialized = false;
-
-        public ToolsContainer ExpandedSubContainer { get; set; }
 
 
         #region ToolDisplayers list
@@ -173,7 +173,7 @@ namespace BrowserDesktop.Menu.Container
         /// </summary>
         private void CollapseFromRoot()
         {
-            if (isRootTools)
+            if (IsRootToolsContainer)
                 (parent as ToolsContainer)?.ExpandedSubContainer?.parent?.Collapse();
         }
 
@@ -195,13 +195,11 @@ namespace BrowserDesktop.Menu.Container
         /// <param name="subContainer"></param>
         private void SetRootExpandedSubContainer(ToolsContainer subContainer)
         {
-            if (isRootTools)
+            if (IsRootToolsContainer)
                 (parent as ToolsContainer).ExpandedSubContainer = subContainer;
         }
 
         #endregion
-
-
 
         public VisualElement GetUXMLContent()
         {
@@ -218,6 +216,10 @@ namespace BrowserDesktop.Menu.Container
             toolbox.Setup(menu.Name);
         }
 
+        public override int IsSuitableFor(AbstractMenuItem menu)
+        {
+            return (isRootContainer) ? 2 : 1;
+        }
 
         #region Insert
 
@@ -255,9 +257,9 @@ namespace BrowserDesktop.Menu.Container
         /// <param name="subContainer"></param>
         private void InsertSubContainer(ToolsContainer subContainer)
         {
-            Debug.Log($"Insert ToolsContainer [{subContainer.menu.Name}] in [{menu.Name}] for gameObject [{gameObject.name}]");
+            //Debug.Log($"Insert ToolsContainer [{subContainer.menu.Name}] in [{menu.Name}] for gameObject [{gameObject.name}]");
             if (isRootContainer)
-                InsertAndDisplayContainerInView(subContainer);
+                InsertAndDisplayContainerInMenuBar(subContainer);
             else
                 CreateAndInsertContainerAsToolDisplayer(subContainer);
         }
@@ -267,9 +269,10 @@ namespace BrowserDesktop.Menu.Container
         /// - Add Toolbox_ge in View.
         /// </summary>
         /// <param name="subContainer"></param>
-        private void InsertAndDisplayContainerInView(ToolsContainer subContainer)
+        private void InsertAndDisplayContainerInMenuBar(ToolsContainer subContainer)
         {
             toolDisplayers.Add(subContainer);
+            subContainer.IsRootToolsContainer = true;
             Environment.MenuBar_UIController.Instance.AddToolbox(subContainer.GetUXMLContent() as ToolboxGenericElement);
         }
 
@@ -282,19 +285,13 @@ namespace BrowserDesktop.Menu.Container
         {
             ToolDisplayer toolDisplayer;
             CreateAndSetupContainerAsToolDisplayer(out toolDisplayer, subContainer);
+            InsertSubContainerInSubMenuBar();
             InsertToolDisplayer(toolDisplayer);
         }
 
-        /// <summary>
-        /// - Add tool in toolDisplayers list.
-        /// - Add tool in toolbox_ge.
-        /// </summary>
-        /// <param name="tool"></param>
-        private void InsertToolDisplayer(ToolDisplayer tool)
+        private void InsertSubContainerInSubMenuBar()
         {
-            Debug.Log($"Insert Tool [{tool.menu.Name}] in [{menu.Name}]");
-            toolDisplayers.Add(tool);
-            toolbox.AddTool(tool.GetUXMLContent() as ToolboxButtonGenericElement);
+            Debug.Log("<color=green>TODO: </color>" + $"InsertSubContainerInSubMenuBar()");
         }
 
         /// <summary>
@@ -310,12 +307,21 @@ namespace BrowserDesktop.Menu.Container
             tool.OnButtonPressed = () => { OnExpandedButtonPressed(subContainer); };
         }
 
+        /// <summary>
+        /// - Add tool in toolDisplayers list.
+        /// - Add tool in toolbox_ge.
+        /// </summary>
+        /// <param name="tool"></param>
+        private void InsertToolDisplayer(ToolDisplayer tool)
+        {
+            Debug.Log($"Insert Tool [{tool.menu.Name}] in [{menu.Name}]");
+            toolDisplayers.Add(tool);
+            toolbox.AddTool(tool.GetUXMLContent() as ToolboxButtonGenericElement);
+        }
+
         #endregion
 
-        public override int IsSuitableFor(AbstractMenuItem menu)
-        {
-            return (isRootContainer) ? 2 : 1;
-        }
+        #region Remove
 
         public override bool Remove(AbstractDisplayer element, bool updateDisplay = true)
         {
@@ -354,6 +360,7 @@ namespace BrowserDesktop.Menu.Container
             throw new System.NotImplementedException();
         }
 
-        
+        #endregion
+
     }
 }
