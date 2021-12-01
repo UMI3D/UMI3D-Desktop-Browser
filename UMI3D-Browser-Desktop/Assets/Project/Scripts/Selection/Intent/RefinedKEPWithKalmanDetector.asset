@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: RefinedKEPWithKalmanDetector
   m_EditorClassIdentifier: 
   stabilityThreshold: 0.02
-  amplitudeMinimum: 0.1
+  amplitudeMinimum: 0.01
   targetDistanceThreshold: 0.8
-  minimalNumberOfSamples: 20
-  coneAngle: 15
+  minimalNumberOfSamples: 15
+  coneAngle: 7.5
   movementNoiseStd: 0.001
-  observationNoiseStd: 0.001
+  observationNoiseStd: 1

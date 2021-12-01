@@ -30,9 +30,10 @@ namespace umi3d.cdk.interaction.selection.intent
         /// </summary>
         protected class RotationDataSample
         {
-            public double amplitude;
+            public double amplitudeTotal;
             public double speed;
             public Quaternion rotation;
+            public float deltaTime;
         }
 
         /// <summary>
@@ -85,6 +86,11 @@ namespace umi3d.cdk.interaction.selection.intent
         /// </summary>
         protected double totalAmplitude;
 
+        /// <summary>
+        /// Last estimation of the target amplitude
+        /// </summary>
+        protected double lastEstimatedFinalAmplitude = 0;
+
         public override void InitDetector(AbstractController controller)
         {
             rotationData = new LinkedList<RotationDataSample>();
@@ -103,13 +109,12 @@ namespace umi3d.cdk.interaction.selection.intent
 
         public override InteractableContainer PredictTarget()
         {
-            var estimationReady = false;
-
             var newRotation = pointerTransform.rotation;
             var deltaAngle = Quaternion.Angle(newRotation, lastRotation);
             totalAmplitude += deltaAngle;
 
-            if (deltaAngle == 0 && rotationData.Count > 1 && rotationData.Last.Value.amplitude == 0) // case where the movement is stopped for at least two frames, stops the prediction
+            // case where the movement is stopped for at least two frames, stops the prediction
+            if (deltaAngle == 0 && rotationData.Count > 1 && rotationData.Last.Value.speed == 0)
             {
                 InteractableContainer predictedInteractable = GetClosestToRay(pointerTransform.forward);
                 lastPredicted = predictedInteractable;
@@ -117,53 +122,55 @@ namespace umi3d.cdk.interaction.selection.intent
                 return lastPredicted;
             }
 
-            if (rotationData.Count >= minimalNumberOfSamples)
-            {
-                var lastAngleMovement = rotationData.Last.Value.amplitude;
-                var stability = deltaAngle / lastAngleMovement;
-                if (stability < stabilityThreshold) //if the mouvement is stable enough, can compute the prediction (Refined KEP, Ruiz 2009)
-                    estimationReady = true;
-            }
-
             var angularSample = new RotationDataSample() //KEP data of the current state
             {
-                amplitude = totalAmplitude,
+                amplitudeTotal = totalAmplitude,
                 speed = deltaAngle / Time.deltaTime,
-                rotation = newRotation
+                rotation = newRotation,
+                deltaTime = Time.deltaTime
             };
 
             rotationData.AddLast(angularSample); //accumulating data for computation
             lastRotation = new Quaternion(pointerTransform.rotation.x, pointerTransform.rotation.y, pointerTransform.rotation.z, pointerTransform.rotation.w);
 
-            if (estimationReady)
+            return KEPPredictor(rotationData.Select(x => x.amplitudeTotal), 
+                                rotationData.Select(x => x.speed), 
+                                rotationData.Count);
+        }
+
+        /// <summary>
+        /// If there is enough points, predict the target using an kinematic endpoint prediction
+        /// </summary>
+        /// <param name="amplitudePoints"></param>
+        /// <param name="speedPoints"></param>
+        /// <param name="numberOfPoints"></param>
+        /// <returns></returns>
+        protected InteractableContainer KEPPredictor(IEnumerable<double> amplitudePoints, IEnumerable<double> speedPoints, int numberOfPoints)
+        {
+            if (numberOfPoints >= minimalNumberOfSamples)
             {
-                var estimatedAmplitude = EstimateKinematicEndpointAmplitude(rotationData.Select(x=>x.amplitude), rotationData.Select(x=>x.speed));
-                if (estimatedAmplitude == 0) // no strictly positive root found
+                // Compute an estimation of the final amplitude
+                var estimatedFinalAmplitude = EstimateKinematicEndpointAmplitude(amplitudePoints, speedPoints);
+                if (estimatedFinalAmplitude == 0) // no strictly positive root found
                     return lastPredicted;
 
-                var currentMovementAmplitude = rotationData.Select(x => x.amplitude).Sum();
-                if (currentMovementAmplitude / estimatedAmplitude < targetDistanceThreshold) //the precentage of the completed movement should be above the threshold, otherwise the prediction is inaccurate
+                // First criterion : the precentage of the completed movement should be above the threshold, otherwise the prediction is inaccurate
+                var currentMovementAmplitude = amplitudePoints.Last();
+                if (currentMovementAmplitude / estimatedFinalAmplitude < targetDistanceThreshold)
                     return lastPredicted;
 
-                //Makes the hypothesis that it will be along the average rotation, with a linear increasing weigth
-                var rotationDirection = GetWeightedAverageDirection(rotationData.Select(x => x.rotation.eulerAngles).ToList());
- 
-                Quaternion predictedRotation = rotationData.First.Value.rotation * Quaternion.Euler((float)estimatedAmplitude * rotationDirection);
+                // Second criterion : the prediction should be stable enough, otherwise the prediction is inaccurate (Refined KEP, Ruiz 2009)
+                var stability = (estimatedFinalAmplitude - lastEstimatedFinalAmplitude) / estimatedFinalAmplitude;
+                if (stability < stabilityThreshold)
+                {
+                    lastEstimatedFinalAmplitude = estimatedFinalAmplitude;
+                    return lastPredicted;
+                }
 
-                Vector3 predictedDirection = (predictedRotation * new Vector3(0,0,1)).normalized; //should be initialPosition
-                var predictedInteractable = GetClosestToRay(predictedDirection);
+                var predictedInteractable = FindPredictedObject(estimatedFinalAmplitude);
                 lastPredicted = predictedInteractable;
 
-                //save data
-                //ExportDataAsJSON(estimatedAmplitude, rotationDirection, predictedRotation);
-
                 ResetDetector();
-
-                //Draw debug rays
-                //Debug.DrawRay(pointerTransform.position, pointerTransform.forward, Color.gray, 3.0f, false);
-                //Debug.DrawRay(pointerTransform.position, predictedDirection, Color.red, 3.0f, false);
-                //if (predictedInteractable != null)
-                //    Debug.DrawLine(pointerTransform.position, predictedInteractable.transform.position, Color.blue, 3.0f, true);
 
                 return predictedInteractable;
             }
@@ -171,7 +178,22 @@ namespace umi3d.cdk.interaction.selection.intent
             {
                 return lastPredicted;
             }
+        }
 
+        protected InteractableContainer FindPredictedObject(double estimatedFinalAmplitude)
+        {
+            //Makes the hypothesis that it will be along the average rotation, with a linear increasing weigth
+            var rotationAverageDirection = GetWeightedAverageDirection(rotationData.Select(x => x.rotation.eulerAngles).ToList());
+            var predictedRotation = rotationData.First.Value.rotation * Quaternion.Euler((float)estimatedFinalAmplitude * rotationAverageDirection);
+
+            //looking for pointed direction and interactable
+            var predictedDirection = (predictedRotation * new Vector3(0, 0, 1)).normalized;
+            //should be initialPosition
+
+            //save data
+            ExportDataAsJSON(estimatedFinalAmplitude, rotationAverageDirection, predictedRotation);
+
+            return GetClosestToRay(predictedDirection);
         }
 
         protected InteractableContainer GetClosestToRay(Vector3 estimatedDirection)
@@ -256,7 +278,7 @@ namespace umi3d.cdk.interaction.selection.intent
                 JsonSerializer serializer = new JsonSerializer();
                 //serialize object directly into file stream
                 serializer.Serialize(file, rotationData.Select(x => new {
-                    x.amplitude,
+                    x.amplitudeTotal,
                     x.speed,
                     r_x = x.rotation.eulerAngles.x,
                     r_y = x.rotation.eulerAngles.y

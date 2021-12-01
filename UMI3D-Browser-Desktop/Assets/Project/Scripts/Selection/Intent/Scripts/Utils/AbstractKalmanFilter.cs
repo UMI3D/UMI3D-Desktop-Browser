@@ -107,8 +107,8 @@ namespace KalmanFilter
 
         public void InitWithGuessed(double[] initialStateGuessed)
         {
-            var P = Matrix.Build.Diagonal(L, L, 1).ToRowArrays(); //initial state covraiance
-            Init(initialStateGuessed, P);
+            var covarianceInit = Matrix.Build.DenseIdentity(L, L).ToRowArrays(); //initial state covraiance
+            Init(initialStateGuessed, covarianceInit);
         }
 
         /// <summary>
@@ -117,8 +117,8 @@ namespace KalmanFilter
         public void InitRandom()
         {
             var x_est = (q * Vector.Build.Random(L)).ToArray(); //initial state with noise
-            var P = Matrix.Build.Diagonal(L, L, 1).ToRowArrays(); //initial state covraiance
-            Init(x_est, P);
+            var covarianceInit =  Matrix.Build.DenseIdentity(L, L).ToRowArrays(); //initial state covraiance
+            Init(x_est, covarianceInit);
         }
 
         /// <summary>
