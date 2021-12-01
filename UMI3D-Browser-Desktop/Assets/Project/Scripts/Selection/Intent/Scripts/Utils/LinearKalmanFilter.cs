@@ -108,7 +108,7 @@ namespace KalmanFilter
             if (filterStepState != FilterState.JustPredicted)
                 throw new Exception("Trying to update without a prediction");
 
-            var S = Hk * P_predicted * Hk.Transpose();
+            var S = Hk * P_predicted * Hk.Transpose() + R; //innovation covariance
             var K = P_predicted * Hk.Transpose() * S.Inverse(); // Kalman optimal gain
 
             var Z = Vector.Build.Dense(measure);
