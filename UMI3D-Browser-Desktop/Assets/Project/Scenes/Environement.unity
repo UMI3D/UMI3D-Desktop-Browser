@@ -947,6 +947,7 @@ MonoBehaviour:
   head: {fileID: 2119596091}
   Node: {fileID: 2119596087}
   TorsoUpAnchor: {fileID: 2119596090}
+  SkeletonContainer: {fileID: 2119596100}
   agent: {fileID: 2119596092}
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
   state: 0
@@ -2261,6 +2262,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda69d6602aa3f44e99c0700f3af9310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _OnSaturated:
+    m_PersistentCalls:
+      m_Calls: []
+  _OnSending:
+    m_PersistentCalls:
+      m_Calls: []
   muted: 0
 --- !u!81 &2079147381
 AudioListener:
@@ -2546,3 +2553,23 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2119596086}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2119596101 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6192453265960318139, guid: d599db4b8e88c6246a10c7a44287b2d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2119596086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2119596102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119596101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boneType: 57
+  isTracked: 0
