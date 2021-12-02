@@ -228,9 +228,9 @@ namespace BrowserDesktop.Menu.Container
             InitAndBindUI();
 
             if (element is ToolDisplayer tool)
-                InsertToolDisplayer(tool);
+                Insert(tool);
             else if (element is ToolsContainer container)
-                InsertSubContainer(container);
+                Insert(container);
             else
                 throw new System.Exception($"This type of AbstractDisplayer is not supported yet in ToolsContainer.");
 
@@ -255,7 +255,7 @@ namespace BrowserDesktop.Menu.Container
         /// - Else insert a new toolDisplayer that will display the subContainer when pressed.
         /// </summary>
         /// <param name="subContainer"></param>
-        private void InsertSubContainer(ToolsContainer subContainer)
+        private void Insert(ToolsContainer subContainer)
         {
             //Debug.Log($"Insert ToolsContainer [{subContainer.menu.Name}] in [{menu.Name}] for gameObject [{gameObject.name}]");
             if (isRootContainer)
@@ -286,7 +286,7 @@ namespace BrowserDesktop.Menu.Container
             ToolDisplayer toolDisplayer;
             CreateAndSetupContainerAsToolDisplayer(out toolDisplayer, subContainer);
             InsertSubContainerInSubMenuBar();
-            InsertToolDisplayer(toolDisplayer);
+            Insert(toolDisplayer);
         }
 
         private void InsertSubContainerInSubMenuBar()
@@ -312,7 +312,7 @@ namespace BrowserDesktop.Menu.Container
         /// - Add tool in toolbox_ge.
         /// </summary>
         /// <param name="tool"></param>
-        private void InsertToolDisplayer(ToolDisplayer tool)
+        private void Insert(ToolDisplayer tool)
         {
             Debug.Log($"Insert Tool [{tool.menu.Name}] in [{menu.Name}]");
             toolDisplayers.Add(tool);

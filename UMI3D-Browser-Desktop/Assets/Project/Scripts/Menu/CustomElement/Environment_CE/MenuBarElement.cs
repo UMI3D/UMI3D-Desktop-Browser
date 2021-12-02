@@ -46,6 +46,11 @@ namespace BrowserDesktop.UI.CustomElement
 
         public VisualElement SubMenuLayout { get; private set; }
 
+        private VisualTreeAsset toolboxGE_VTA;
+        private VisualTreeAsset toolboxButtonGE_VTA;
+        private VisualTreeAsset toolboxSeparatorGE_VTA;
+        private UIDocument uiDocument;
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -59,6 +64,11 @@ namespace BrowserDesktop.UI.CustomElement
         public void Setup(VisualTreeAsset toolboxGE_VTA, VisualTreeAsset toolboxButtonGE_VTA, VisualTreeAsset toolboxSeparatorGE_VTA, UIDocument uiDocument)
         {
             Initialize();
+
+            this.toolboxGE_VTA = toolboxGE_VTA;
+            this.toolboxButtonGE_VTA = toolboxButtonGE_VTA;
+            this.toolboxSeparatorGE_VTA = toolboxSeparatorGE_VTA;
+            this.uiDocument = uiDocument;
 
             #region Test
 
@@ -95,28 +105,21 @@ namespace BrowserDesktop.UI.CustomElement
                 Setup("Test", gallery);
             test.AddTo(SubMenuLayout);
 
-
             #endregion
 
             #region Left layout
 
             AddSpacer(leftLayout_VE);
-            
-            ToolboxButtonGenericElement openToolboxButton_TBGE = toolboxButtonGE_VTA.
-                CloneTree().
-                Q<ToolboxButtonGenericElement>().
-                Setup("Toolbox", "toolbox", "toolbox", true, () => 
-                {
-                    Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPosition(test, image));
-                    Menu.DialogueBox_UIController.
-                        Setup("TODO", "Not implemented yed", "Close", () => { }).
-                        DisplayFrom(uiDocument);
-                });
-            toolboxGE_VTA.
-                CloneTree().
-                Q<ToolboxGenericElement>().
-                Setup("", openToolboxButton_TBGE).
-                AddTo(leftLayout_VE);
+
+            ToolboxButtonGenericElement openToolboxButton_TBGE;
+            CloneAndSetup(out openToolboxButton_TBGE, "Toolbox", "toolbox", "toolbox", true, () =>
+            {
+                Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPosition(test, image));
+                Menu.DialogueBox_UIController.
+                    Setup("TODO", "Not implemented yed", "Close", () => { }).
+                    DisplayFrom(uiDocument);
+            });
+            CloneAndSetupToolbox("", openToolboxButton_TBGE, leftLayout_VE);
 
             AddSeparator(leftLayout_VE, toolboxSeparatorGE_VTA);
 
@@ -135,60 +138,87 @@ namespace BrowserDesktop.UI.CustomElement
 
             AddSeparator(rightLayout_VE, toolboxSeparatorGE_VTA);
 
-            avatar_TBGE = toolboxButtonGE_VTA.
-                CloneTree().
-                Q<ToolboxButtonGenericElement>().
-                Setup("Screenshot", "avatarOn", "avatarOff", true, () => 
-                {
-                    ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();
-                });
-            sound_TBGE = toolboxButtonGE_VTA.
-                CloneTree().
-                Q<ToolboxButtonGenericElement>().
-                Setup("label test", "soundOn", "soundOff", true, () => 
-                {
-                    ActivateDeactivateAudio.Instance.ToggleAudioStatus();
-                });
-            mic_TBGE = toolboxButtonGE_VTA.
-                CloneTree().
-                Q<ToolboxButtonGenericElement>().
-                Setup("labelTestAndTest", "micOn", "micOff", false, () => 
-                {
-                    ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
-                });
-            toolboxGE_VTA.
-                CloneTree().
-                Q<ToolboxGenericElement>().
-                Setup("test", new ToolboxButtonGenericElement[3] { avatar_TBGE, sound_TBGE, mic_TBGE }).
-                AddTo(rightLayout_VE);
+            CloneAndSetup(out avatar_TBGE, "Screenshot", "avatarOn", "avatarOff", true, () =>
+            {
+                ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();
+            });
+            CloneAndSetup(out sound_TBGE, "label test", "soundOn", "soundOff", true, () =>
+            {
+                ActivateDeactivateAudio.Instance.ToggleAudioStatus();
+            });
+            CloneAndSetup(out mic_TBGE, "labelTestAndTest", "micOn", "micOff", false, () =>
+            {
+                ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
+            });
+            CloneAndSetupToolbox("test", new ToolboxButtonGenericElement[3] { avatar_TBGE, sound_TBGE, mic_TBGE }, rightLayout_VE);
 
             AddSeparator(rightLayout_VE, toolboxSeparatorGE_VTA);
 
-            
-            ToolboxButtonGenericElement leave_TBGE = toolboxButtonGE_VTA.
-                CloneTree().
-                Q<ToolboxButtonGenericElement>().
-                Setup("", "leave", "leave", true, () => 
-                {
-                    Menu.DialogueBox_UIController.
-                        Setup("Leave environment", "Are you sure ...?", "YES", "NO", (b) =>
-                        {
-                            if (b)
-                                ConnectionMenu.Instance.Leave();
-                        }).
-                        DisplayFrom(uiDocument);
-                });
-            toolboxGE_VTA.
-                CloneTree().
-                Q<ToolboxGenericElement>().
-                Setup("", leave_TBGE).
-                AddTo(rightLayout_VE);
+            ToolboxButtonGenericElement leave_TBGE;
+            CloneAndSetup(out leave_TBGE, "", "leave", "leave", true, () =>
+            {
+                Menu.DialogueBox_UIController.
+                    Setup("Leave environment", "Are you sure ...?", "YES", "NO", (b) =>
+                    {
+                        if (b)
+                            ConnectionMenu.Instance.Leave();
+                    }).
+                    DisplayFrom(uiDocument);
+            });
+            CloneAndSetupToolbox("", leave_TBGE, rightLayout_VE);
 
             AddSpacer(rightLayout_VE);
 
             #endregion
 
             ReadyToDisplay();
+        }
+
+        /// <summary>
+        /// Clone and Setup the ToolboxButtonGE [tool].
+        /// </summary>
+        /// <param name="tool"></param>
+        /// <param name="withName"></param>
+        /// <param name="withClassOn"></param>
+        /// <param name="withClassOff"></param>
+        /// <param name="isOn"></param>
+        /// <param name="buttonClicked"></param>
+        private void CloneAndSetup(out ToolboxButtonGenericElement tool, string withName, string withClassOn, string withClassOff, bool isOn, Action buttonClicked)
+        {
+            tool = toolboxButtonGE_VTA.
+                CloneTree().
+                Q<ToolboxButtonGenericElement>().
+                Setup(withName, withClassOn, withClassOff, isOn, buttonClicked);
+        }
+
+        /// <summary>
+        /// Clone and Setup a toolboxGE.
+        /// </summary>
+        /// <param name="withName"></param>
+        /// <param name="withTool"></param>
+        /// <param name="withParent"></param>
+        private void CloneAndSetupToolbox(string withName, ToolboxButtonGenericElement withTool, VisualElement withParent)
+        {
+            toolboxGE_VTA.
+                CloneTree().
+                Q<ToolboxGenericElement>().
+                Setup(withName, withTool).
+                AddTo(withParent);
+        }
+
+        /// <summary>
+        /// Clone and Setup a toolboxGE.
+        /// </summary>
+        /// <param name="withName"></param>
+        /// <param name="withTools"></param>
+        /// <param name="withParent"></param>
+        private void CloneAndSetupToolbox(string withName, ToolboxButtonGenericElement[] withTools, VisualElement withParent)
+        {
+            toolboxGE_VTA.
+                CloneTree().
+                Q<ToolboxGenericElement>().
+                Setup(withName, withTools).
+                AddTo(withParent);
         }
 
         private IEnumerator LogWorldPosition(VisualElement test, VisualElement image)
