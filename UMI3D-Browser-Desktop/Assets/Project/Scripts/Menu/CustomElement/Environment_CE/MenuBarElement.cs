@@ -70,43 +70,6 @@ namespace BrowserDesktop.UI.CustomElement
             this.toolboxSeparatorGE_VTA = toolboxSeparatorGE_VTA;
             this.uiDocument = uiDocument;
 
-            #region Test
-
-            var screenshot_TBGE = toolboxButtonGE_VTA.
-                CloneTree().
-                Q<ToolboxButtonGenericElement>().
-                Setup("Screenshot", "avatarOn", "avatarOff", true, () =>
-                {
-                    ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();
-                });
-            var import = toolboxButtonGE_VTA.
-                CloneTree().
-                Q<ToolboxButtonGenericElement>().
-                Setup("import", "soundOn", "soundOff", true, () =>
-                {
-
-                });
-            ToolboxGenericElement image = toolboxGE_VTA.
-                CloneTree().
-                Q<ToolboxGenericElement>().
-                Setup("Image", new ToolboxButtonGenericElement[2] { screenshot_TBGE, import });
-            //centerLayout_VE.AddElement(image);
-
-            var gallery = toolboxButtonGE_VTA.
-                CloneTree().
-                Q<ToolboxButtonGenericElement>().
-                Setup("gallery", "micOn", "micOff", false, () =>
-                {
-
-                });
-            ToolboxGenericElement test = toolboxGE_VTA.
-                CloneTree().
-                Q<ToolboxGenericElement>().
-                Setup("Test", gallery);
-            test.AddTo(SubMenuLayout);
-
-            #endregion
-
             #region Left layout
 
             AddSpacer(leftLayout_VE);
@@ -114,7 +77,7 @@ namespace BrowserDesktop.UI.CustomElement
             ToolboxButtonGenericElement openToolboxButton_TBGE;
             CloneAndSetup(out openToolboxButton_TBGE, "Toolbox", "toolbox", "toolbox", true, () =>
             {
-                Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPosition(test, image));
+                //Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPositionCoroutine());
                 Menu.DialogueBox_UIController.
                     Setup("TODO", "Not implemented yed", "Close", () => { }).
                     DisplayFrom(uiDocument);
@@ -130,9 +93,6 @@ namespace BrowserDesktop.UI.CustomElement
                 { 
                     AddSeparator(vE, toolboxSeparatorGE_VTA); 
                 });
-
-            //Test
-            centerLayout_VE.AddElement(image);
 
             #region Right layout
 
@@ -171,8 +131,71 @@ namespace BrowserDesktop.UI.CustomElement
 
             #endregion
 
+            #region Test
+
+            //var screenshot_TBGE = toolboxButtonGE_VTA.
+            //    CloneTree().
+            //    Q<ToolboxButtonGenericElement>().
+            //    Setup("Screenshot", "avatarOn", "avatarOff", true, () =>
+            //    {
+            //        ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();
+            //    });
+            //var import = toolboxButtonGE_VTA.
+            //    CloneTree().
+            //    Q<ToolboxButtonGenericElement>().
+            //    Setup("import", "soundOn", "soundOff", true, () =>
+            //    {
+
+            //    });
+            //ToolboxGenericElement image = toolboxGE_VTA.
+            //    CloneTree().
+            //    Q<ToolboxGenericElement>().
+            //    Setup("Image", new ToolboxButtonGenericElement[2] { screenshot_TBGE, import });
+            //centerLayout_VE.AddElement(image);
+
+            //var gallery = toolboxButtonGE_VTA.
+            //    CloneTree().
+            //    Q<ToolboxButtonGenericElement>().
+            //    Setup("gallery", "micOn", "micOff", false, () =>
+            //    {
+
+            //    });
+            //ToolboxGenericElement test = toolboxGE_VTA.
+            //    CloneTree().
+            //    Q<ToolboxGenericElement>().
+            //    Setup("Test", gallery);
+            //test.AddTo(SubMenuLayout);
+
+            //logWorldPosition = () =>
+            //{
+            //    Debug.Log($"test x = {test.worldBound.x}");
+            //    Debug.Log($"image x = {image.worldBound.x}");
+            //    test.style.left = image.ChangeCoordinatesTo(test, new Vector2(image.layout.x, test.layout.y)).x;
+
+            //    //test.style.left = image.WorldToLocal(new Vector2(image.worldBound.x, 0f)).x;
+            //};
+
+            #endregion
+
             ReadyToDisplay();
         }
+
+        public void AddInSubMenu(ToolboxGenericElement tools, ToolboxGenericElement parent)
+        {
+            tools.AddTo(SubMenuLayout);
+            //tools.style.left = parent.ChangeCoordinatesTo(tools, new Vector2(parent.layout.x, parent.layout.y)).x;
+            logWorldPosition = () =>
+            {
+                Debug.Log($"tool x = {tools.worldBound.x}");
+                Debug.Log($"parent x = {parent.worldBound.x}");
+                tools.style.left = parent.ChangeCoordinatesTo(tools, new Vector2(parent.layout.x, parent.layout.y)).x;
+
+                //test.style.left = image.WorldToLocal(new Vector2(image.worldBound.x, 0f)).x;
+            };
+            Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPositionCoroutine());
+        }
+
+        #region Private Functions
 
         /// <summary>
         /// Clone and Setup the ToolboxButtonGE [tool].
@@ -221,16 +244,14 @@ namespace BrowserDesktop.UI.CustomElement
                 AddTo(withParent);
         }
 
-        private IEnumerator LogWorldPosition(VisualElement test, VisualElement image)
+        private IEnumerator LogWorldPositionCoroutine()
         {
             yield return null;
 
-            Debug.Log($"test x = {test.worldBound.x}");
-            Debug.Log($"image x = {image.worldBound.x}");
-            //test.style.left = image.ChangeCoordinatesTo(test, new Vector2(image.layout.x, test.layout.y)).x;
-
-            test.style.left = image.WorldToLocal(new Vector2(image.worldBound.x, 0f)).x;
+            logWorldPosition();
         }
+
+        private Action logWorldPosition;
 
         private void AddSpacer(VisualElement layoutContainer_VE)
         {
@@ -247,6 +268,8 @@ namespace BrowserDesktop.UI.CustomElement
                 Setup().
                 AddTo(layoutContainer_VE);
         }
+
+        #endregion
 
         public override void OnApplyUserPreferences()
         {
