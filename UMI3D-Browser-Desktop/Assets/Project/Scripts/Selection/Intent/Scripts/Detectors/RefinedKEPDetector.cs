@@ -105,6 +105,8 @@ namespace umi3d.cdk.interaction.selection.intent
         {
             rotationData.Clear();
             totalAmplitude = 0;
+            lastEstimatedFinalAmplitude = 0;
+            lastRotation = pointerTransform.rotation;
         }
 
         public override InteractableContainer PredictTarget()
@@ -133,9 +135,9 @@ namespace umi3d.cdk.interaction.selection.intent
             rotationData.AddLast(angularSample); //accumulating data for computation
             lastRotation = new Quaternion(pointerTransform.rotation.x, pointerTransform.rotation.y, pointerTransform.rotation.z, pointerTransform.rotation.w);
 
-            return KEPPredictor(rotationData.Select(x => x.amplitudeTotal), 
-                                rotationData.Select(x => x.speed), 
-                                rotationData.Count);
+            return GetObjectUsingRefinedKEP(rotationData.Select(x => x.amplitudeTotal), 
+                                           rotationData.Select(x => x.speed), 
+                                           rotationData.Count);
         }
 
         /// <summary>
@@ -145,46 +147,48 @@ namespace umi3d.cdk.interaction.selection.intent
         /// <param name="speedPoints"></param>
         /// <param name="numberOfPoints"></param>
         /// <returns></returns>
-        protected InteractableContainer KEPPredictor(IEnumerable<double> amplitudePoints, IEnumerable<double> speedPoints, int numberOfPoints)
+        protected InteractableContainer GetObjectUsingRefinedKEP(IEnumerable<double> amplitudePoints, IEnumerable<double> speedPoints, int numberOfPoints)
         {
-            if (numberOfPoints >= minimalNumberOfSamples)
+            // Therer should be enough point for a correct polynomial regression (deg 4 => min 5)
+            if (numberOfPoints < minimalNumberOfSamples)
+                return lastPredicted;
+
+            // Compute an estimation of the final amplitude
+            var estimatedFinalAmplitude = EstimateKinematicEndpointAmplitude(amplitudePoints, speedPoints);
+            if (estimatedFinalAmplitude == 0) // no strictly positive root found
+                return lastPredicted;
+
+            // First criterion : the precentage of the completed movement should be above the threshold, otherwise the prediction is inaccurate
+            var currentMovementAmplitude = amplitudePoints.Last();
+            if (currentMovementAmplitude / estimatedFinalAmplitude < targetDistanceThreshold)
+                return lastPredicted;
+
+            // Second criterion : the prediction should be stable enough, otherwise the prediction is inaccurate (Refined KEP, Ruiz 2009)
+            var instability = (estimatedFinalAmplitude - lastEstimatedFinalAmplitude) / estimatedFinalAmplitude;
+            if (instability >= stabilityThreshold)
             {
-                // Compute an estimation of the final amplitude
-                var estimatedFinalAmplitude = EstimateKinematicEndpointAmplitude(amplitudePoints, speedPoints);
-                if (estimatedFinalAmplitude == 0) // no strictly positive root found
-                    return lastPredicted;
-
-                // First criterion : the precentage of the completed movement should be above the threshold, otherwise the prediction is inaccurate
-                var currentMovementAmplitude = amplitudePoints.Last();
-                if (currentMovementAmplitude / estimatedFinalAmplitude < targetDistanceThreshold)
-                    return lastPredicted;
-
-                // Second criterion : the prediction should be stable enough, otherwise the prediction is inaccurate (Refined KEP, Ruiz 2009)
-                var stability = (estimatedFinalAmplitude - lastEstimatedFinalAmplitude) / estimatedFinalAmplitude;
-                if (stability < stabilityThreshold)
-                {
-                    lastEstimatedFinalAmplitude = estimatedFinalAmplitude;
-                    return lastPredicted;
-                }
-
-                var predictedInteractable = FindPredictedObject(estimatedFinalAmplitude);
-                lastPredicted = predictedInteractable;
-
-                ResetDetector();
-
-                return predictedInteractable;
-            }
-            else
-            {
+                lastEstimatedFinalAmplitude = estimatedFinalAmplitude;
                 return lastPredicted;
             }
+
+            var predictedInteractable = FindPredictedObject(estimatedFinalAmplitude, rotationData.Select(d=>d.rotation));
+            lastPredicted = predictedInteractable;
+
+            ResetDetector();
+
+            return predictedInteractable;
         }
 
-        protected InteractableContainer FindPredictedObject(double estimatedFinalAmplitude)
+        /// <summary>
+        /// Find object according to the rotations and the estimated final amplitude
+        /// </summary>
+        /// <param name="estimatedFinalAmplitude"></param>
+        /// <returns></returns>
+        protected InteractableContainer FindPredictedObject(double estimatedFinalAmplitude, IEnumerable<Quaternion> rotations)
         {
             //Makes the hypothesis that it will be along the average rotation, with a linear increasing weigth
-            var rotationAverageDirection = GetWeightedAverageDirection(rotationData.Select(x => x.rotation.eulerAngles).ToList());
-            var predictedRotation = rotationData.First.Value.rotation * Quaternion.Euler((float)estimatedFinalAmplitude * rotationAverageDirection);
+            var rotationAverageDirection = GetWeightedAverageDirection(rotations.Select(r => to180deg(r.eulerAngles)).ToList());
+            var predictedRotation = rotations.First() * Quaternion.Euler((float)estimatedFinalAmplitude * rotationAverageDirection);
 
             //looking for pointed direction and interactable
             var predictedDirection = (predictedRotation * new Vector3(0, 0, 1)).normalized;
@@ -196,6 +200,11 @@ namespace umi3d.cdk.interaction.selection.intent
             return GetClosestToRay(predictedDirection);
         }
 
+        /// <summary>
+        /// Retrieves the first object in the cone in the specified direction
+        /// </summary>
+        /// <param name="estimatedDirection"></param>
+        /// <returns></returns>
         protected InteractableContainer GetClosestToRay(Vector3 estimatedDirection)
         {
             var estimatedConicZone = new ConicZoneSelection(pointerTransform.position, estimatedDirection, coneAngle);
@@ -210,6 +219,12 @@ namespace umi3d.cdk.interaction.selection.intent
                 var estimatedObject = estimatedConicZone.GetClosestObjectToRay(objsInZone);
                 return estimatedObject;
             }
+        }
+
+        protected Vector3 to180deg(Vector3 vec)
+        {
+            static float to180(float x) => x % 360 > 180 ? x - 360 : x;
+            return new Vector3(to180(vec.x), to180(vec.y), to180(vec.z));
         }
 
         /// <summary>

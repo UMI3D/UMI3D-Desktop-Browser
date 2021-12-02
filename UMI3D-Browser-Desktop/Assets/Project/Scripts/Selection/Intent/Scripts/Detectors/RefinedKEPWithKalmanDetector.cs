@@ -1,4 +1,15 @@
-using System.Collections.Generic;
+/*
+Copyright 2019 - 2021 Inetum
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 using UnityEngine;
 using MathNet.Numerics.LinearAlgebra.Double;
 using System.Linq;
@@ -15,8 +26,6 @@ namespace umi3d.cdk.interaction.selection.intent
     public class RefinedKEPWithKalmanDetector : RefinedKEPDetector
     {
         protected LinearKalmanFilter kalmanFilter;
-
-        protected float predictionAmplitudeKalman = 0;
 
         protected class RotationDataSampleKalman : RotationDataSample
         {
@@ -66,7 +75,7 @@ namespace umi3d.cdk.interaction.selection.intent
 
             var kalmanFilter = new LinearKalmanFilter(movementNoiseStd, observationNoiseStd, processModelInit, observationModel);
 
-            kalmanFilter.InitWithGuessed(new double[5] { 0, 0, 0, 0, 0.1 });
+            kalmanFilter.InitWithGuessed(new double[5] { 0, 0, 0, 0, 0 });
 
             kalmanFilter.Predict();
 
@@ -76,28 +85,12 @@ namespace umi3d.cdk.interaction.selection.intent
 
         public override InteractableContainer PredictTarget()
         {
-            if (rotationData.Count == 0)
-            {
-                var initSample = new RotationDataSampleKalman() //KEP data of the starting state
-                {
-                    amplitudeTotal = 0,
-                    speed = 0,
-                    rotation = pointerTransform.rotation,
-                    deltaTime = Time.deltaTime,
-                    directionRotation = new Vector3(),
-                    estimatedAmplitudeKalman = 0,
-                    predictedAmplitudeKalman = (float)kalmanFilter.StateEstimationPredicted[0],
-                    estimatedSpeedKalman = 0
-                };
-                rotationData.AddLast(initSample);
-            }
-
             var newRotation = pointerTransform.rotation;
-            var deltaAngle = Quaternion.Angle(newRotation, lastRotation);
-            totalAmplitude += deltaAngle;
+            var deltaAmplitude = Quaternion.Angle(newRotation, lastRotation);
+            totalAmplitude += deltaAmplitude;
 
             // case where the movement is stopped for at least two frames, stops the prediction
-            if (deltaAngle == 0 && rotationData.Count > 1 && rotationData.Last.Value.speed == 0) 
+            if (deltaAmplitude == 0 && rotationData.Count > 1 && rotationData.Last.Value.speed == 0) 
             {
                 InteractableContainer predictedInteractable = GetClosestToRay(pointerTransform.forward);
                 lastPredicted = predictedInteractable;
@@ -106,22 +99,20 @@ namespace umi3d.cdk.interaction.selection.intent
             }
 
             //UPDATE FILTER
-            var measure = new double[] { totalAmplitude, deltaAngle / Time.deltaTime };
+            var measure = new double[] { totalAmplitude, deltaAmplitude / Time.deltaTime };
             var estimation = kalmanFilter.Update(measure);
-            var estimatedAmplitudeKalman = (float)estimation[0];
-            var estimatedSpeedKalman = (float)estimation[1];
 
             var rotationDirection = (rotationData.Last == null) ? new Vector3() : (to180deg(newRotation.eulerAngles) - to180deg(rotationData.Last.Value.rotation.eulerAngles)).normalized;
             var angularSample = new RotationDataSampleKalman() //KEP data of the current state
             {
                 amplitudeTotal = totalAmplitude,
-                speed = deltaAngle / Time.deltaTime,
+                speed = deltaAmplitude / Time.deltaTime,
                 rotation = newRotation,
                 deltaTime = Time.deltaTime,
                 directionRotation = rotationDirection,
-                estimatedAmplitudeKalman = estimatedAmplitudeKalman,
+                estimatedAmplitudeKalman = (float)estimation[0],
                 predictedAmplitudeKalman = (float)kalmanFilter.StateEstimationPredicted[0],
-                estimatedSpeedKalman = estimatedSpeedKalman
+                estimatedSpeedKalman = (float)estimation[1]
             };
 
             rotationData.AddLast(angularSample); //accumulating data for computation
@@ -131,11 +122,16 @@ namespace umi3d.cdk.interaction.selection.intent
             var processModel = GetProcessModel(Time.deltaTime); // assumption : next frame will be in duration dt
             var prediction = kalmanFilter.Predict(processModel);
 
-            return KEPPredictor(rotationData.Select(x => ((RotationDataSampleKalman)x).estimatedAmplitudeKalman), 
+            return GetObjectUsingRefinedKEP(rotationData.Select(x => ((RotationDataSampleKalman)x).estimatedAmplitudeKalman), 
                                 rotationData.Select(x => ((RotationDataSampleKalman)x).estimatedSpeedKalman), 
                                 rotationData.Count);
         }
 
+        /// <summary>
+        /// Retrieve the process model matrix according to the Meyer model (1988)
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
         private double[][] GetProcessModel(float dt)
         {
             var dt2 = dt * dt;
@@ -152,12 +148,6 @@ namespace umi3d.cdk.interaction.selection.intent
                 new double [5] { 0, 0,  0,  0,  1 }
             };
             return model;
-        }
-
-        protected Vector3 to180deg(Vector3 vec)
-        {
-            System.Func<float, float> to180 = x => x % 360 > 180 ? x - 360 : x;
-            return new Vector3(to180(vec.x), to180(vec.y), to180(vec.z));
         }
 
         /// <summary>
