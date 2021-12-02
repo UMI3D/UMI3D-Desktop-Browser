@@ -54,6 +54,13 @@ namespace BrowserDesktop.Menu.Environment
             menuBar.ToolboxLayout.AddElement(toolbox);
         }
 
+        public static void AddInSubMenu(ToolboxGenericElement subTools, ToolboxGenericElement parent)
+        {
+            Debug.Assert(Exists, "MenuBar_UIController does not Exists.");
+
+            Instance.menuBar.AddInSubMenu(subTools, parent);
+        }
+
         /// <summary>
         /// Event called when the status of the microphone changes.
         /// </summary>
