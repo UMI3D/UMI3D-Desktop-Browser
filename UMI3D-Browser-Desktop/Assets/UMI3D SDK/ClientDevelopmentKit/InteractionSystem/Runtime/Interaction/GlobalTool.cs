@@ -35,6 +35,7 @@ namespace umi3d.cdk.interaction
 
         public GlobalTool(AbstractToolDto abstractDto) : base(abstractDto) 
         {
+            UnityEngine.Debug.Log("id : " + abstractDto.id);
             instances.Add(abstractDto.id, this);
             abstractDto = dto;
         }
