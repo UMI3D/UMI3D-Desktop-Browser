@@ -80,7 +80,7 @@ public class NotificationDisplayer : Singleton<NotificationDisplayer>
             return null;
 
         Texture2D res = null;
-        FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariante(dto.variants);
+        FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariant(dto.variants);
 
         if (fileToLoad != null)
         {
