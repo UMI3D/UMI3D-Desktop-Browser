@@ -113,7 +113,7 @@ namespace BrowserDesktop.Interaction
                 this.toolId = toolId;
                 if (associatedInteraction.icon2D != null)
                 {
-                    FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariante(associatedInteraction.icon2D.variants);
+                    FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariant(associatedInteraction.icon2D.variants);
 
                     if (fileToLoad != null)
                     {

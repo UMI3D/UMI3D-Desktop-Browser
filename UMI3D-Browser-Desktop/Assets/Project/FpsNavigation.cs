@@ -32,6 +32,8 @@ public class FpsNavigation : AbstractNavigation
     public Transform head;
     public Transform Node;
     public Transform TorsoUpAnchor;
+    public Transform SkeletonContainer;
+
 
     /// <summary>
     /// Agent to limit user's movements.
@@ -162,11 +164,17 @@ public class FpsNavigation : AbstractNavigation
             PauseMenu.ToggleDisplay();
         }
 
+        float height = jumpData.heigth;
+
         if (SideMenu.IsExpanded || CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHiden)
         {
             Vector3 position = Node.transform.position;
-            position.y = jumpData.heigth + baseHeight;
-            Node.transform.position = position;
+
+            ComputeJump(false);
+
+            height += jumpData.deltaHeight;
+            position.y = height + baseHeight;
+            SkeletonContainer.transform.position = position;
             return;
         }
 
@@ -176,7 +184,6 @@ public class FpsNavigation : AbstractNavigation
         if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.FreeHead; }
         else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.Default; changeToDefault = true; }
         Vector2 Move = Vector2.zero;
-        float height = jumpData.heigth;
 
         if (navigateTo)
         {
@@ -209,7 +216,8 @@ public class FpsNavigation : AbstractNavigation
         Vector3 pos = Node.rotation * new Vector3(Move.y, 0, Move.x);
         pos += Node.transform.position;
         pos.y = height + baseHeight;
-        Node.transform.position = pos;
+        Node.transform.position = new Vector3(pos.x, baseHeight, pos.z);
+        SkeletonContainer.transform.position = pos;
     }
 
     void Walk(ref Vector2 Move, ref float height)
