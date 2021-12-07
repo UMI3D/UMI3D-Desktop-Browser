@@ -33,8 +33,9 @@ namespace umi3d.cdk.collaboration
     }
 
     [RequireComponent(typeof(AudioSource))]
-    public class MicrophoneListener : Singleton<MicrophoneListener>
+    public class MicrophoneListener : Singleton<MicrophoneListener>, ILoggable
     {
+
         #region const
 
         /// <summary>
@@ -187,37 +188,11 @@ namespace umi3d.cdk.collaboration
         public MicrophoneEvent _OnSending = new MicrophoneEvent();
         private AudioSource audioSource;
 
-        public List<string> GetInfo()
-        {
-            var infos = new List<string>();
-
-            infos.Add("Current Microphone : " + microphoneLabel);
-            infos.Add(" Microphone List : ");
-            getDevices().ForEach(a => infos.Add("    " + a));
-            if (reading)
-            {
-                infos.Add($" Sampling Frequency : { samplingFrequency} Hz");
-                infos.Add($" Bitrate : {Bitrate} b/s");
-                infos.Add($" Frame Size : {frameSize} float");
-                infos.Add($" Output Buffer Size : {outputBufferSize} bytes");
-                lock (pcmQueue)
-                    infos.Add(" PCM Queue : " + pcmQueue.Count.ToString());
-                infos.Add($" RMS : {RMS} [min:{NoiseThreshold} => send:{ShouldSend}] ");
-                infos.Add($" DB : {DB}");
-                infos.Add($" Gain : {Gain}");
-                infos.Add($" Time to turn off : {TimeToTurnOff} s ");
-
-            }
-            else
-                infos.Add("Microphone is muted");
-
-            return infos;
-        }
-
         private void Start()
         {
             IsMute = IsMute;
             audioSource = GetComponent<AudioSource>();
+            UMI3DLogger.Register(this);
         }
 
         private void _UpdateFrequency(int frequency)
@@ -740,6 +715,35 @@ namespace umi3d.cdk.collaboration
                 Thread.Sleep(sleepTimeMiliseconde);
             }
             thread = null;
+        }
+
+        const string LogName = "Microphone Listener";
+        string ILoggable.GetLogName()
+        {
+            return LogName;
+        }
+
+        List<DebugInfo> ILoggable.GetInfos()
+        {
+            return new List<DebugInfo>
+            {
+                new DebugInfo<string>("Current Microphone",()=>CurrentMicrophone),
+                new DebugInfo<string[]>("Microphones",getDevices(),(l)=>l.ToString<string>()),
+                new DebugInfo<int>("Sampling Frequency (Hz)",()=>samplingFrequency),
+                new DebugInfo<int>("Bitrate (b/s)",()=>Bitrate),
+                new DebugInfo<int>("Frame Size (float)",()=>frameSize),
+                new DebugInfo<int>("Output Buffer Size (bytes)",()=>outputBufferSize),
+                new DebugInfo<int>("PCM Queue Size",()=>
+                    {
+                        lock (pcmQueue)
+                            return pcmQueue.Count;
+                    }
+                ),
+                new DebugInfo<(float,float,bool)>("RMS",()=>(RMS,NoiseThreshold,ShouldSend),(t)=>$"{t.Item1}[>{t.Item2}=>{t.Item3}]"),
+                new DebugInfo<float>(" DB",()=>DB),
+                new DebugInfo<float>(" Gain",()=>Gain),
+                new DebugInfo<float>(" Time to turn off",()=>TimeToTurnOff),
+            };
         }
         #endregion
     }

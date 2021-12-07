@@ -14,13 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common.interaction
+namespace umi3d.common
 {
-    [System.Serializable]
-    public class ToolDto : AbstractToolDto, IEntity
+    /// <summary>
+    /// Dto for entity that has been requested but where not provided by the server
+    /// </summary>
+    public class MissingEntityDto : AbstractEntityDto, IEntity
     {
+        public MissingEntityDtoReason reason;
+    }
 
-        public ToolDto() : base() { }
-
+    public enum MissingEntityDtoReason
+    {
+        NotFound,
+        Unregistered,
+        ServerInternalError
     }
 }
