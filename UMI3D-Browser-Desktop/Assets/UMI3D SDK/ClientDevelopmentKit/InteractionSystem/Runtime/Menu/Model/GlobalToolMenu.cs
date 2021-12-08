@@ -22,7 +22,7 @@ using UnityEngine;
 
 namespace umi3d.cdk.menu.interaction
 {
-    public class GlobalToolMenu : MenuItem
+    public class GlobalToolMenu : Menu
     {
         public AbstractMenu parent;
 
@@ -44,6 +44,8 @@ namespace umi3d.cdk.menu.interaction
                     rawData => this.icon2D.LoadRawTextureData(rawData),
                     e => Debug.LogError(e));
             }
+
+            tool.interactions.ForEach(inter => this.Add(GlobalToolMenuManager.GetMenuForInteraction(inter, tool.id)));
 
             Subscribe(() =>
             {
