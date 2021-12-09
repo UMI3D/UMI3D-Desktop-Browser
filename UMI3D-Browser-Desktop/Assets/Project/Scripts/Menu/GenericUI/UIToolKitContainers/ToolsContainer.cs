@@ -78,8 +78,6 @@ namespace BrowserDesktop.Menu.Container
 
         }
 
-        //public ToolsContainer ExpandedSubContainer { get; set; } = null;
-
         private SubContainer subTools { get; set; } = new SubContainer();
 
         /// <summary>
