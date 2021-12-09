@@ -98,19 +98,19 @@ namespace BrowserDesktop.UI.CustomElement
 
             AddSeparator(rightLayout_VE, toolboxSeparatorGE_VTA);
 
-            CloneAndSetup(out avatar_TBGE, "Screenshot", "avatarOn", "avatarOff", true, () =>
+            CloneAndSetup(out avatar_TBGE, "", "avatarOn", "avatarOff", true, () =>
             {
                 ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();
             });
-            CloneAndSetup(out sound_TBGE, "label test", "soundOn", "soundOff", true, () =>
+            CloneAndSetup(out sound_TBGE, "", "soundOn", "soundOff", true, () =>
             {
                 ActivateDeactivateAudio.Instance.ToggleAudioStatus();
             });
-            CloneAndSetup(out mic_TBGE, "labelTestAndTest", "micOn", "micOff", false, () =>
+            CloneAndSetup(out mic_TBGE, "", "micOn", "micOff", false, () =>
             {
                 ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
             });
-            CloneAndSetupToolbox("test", new ToolboxButtonGenericElement[3] { avatar_TBGE, sound_TBGE, mic_TBGE }, rightLayout_VE);
+            CloneAndSetupToolbox("", new ToolboxButtonGenericElement[3] { avatar_TBGE, sound_TBGE, mic_TBGE }, rightLayout_VE);
 
             AddSeparator(rightLayout_VE, toolboxSeparatorGE_VTA);
 
