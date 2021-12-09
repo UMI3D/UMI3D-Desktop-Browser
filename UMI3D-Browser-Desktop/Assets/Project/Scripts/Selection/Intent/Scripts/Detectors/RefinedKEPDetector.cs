@@ -195,7 +195,7 @@ namespace umi3d.cdk.interaction.selection.intent
             //should be initialPosition
 
             //save data
-            ExportDataAsJSON(estimatedFinalAmplitude, rotationAverageDirection, predictedRotation);
+            //ExportDataAsJSON(estimatedFinalAmplitude, rotationAverageDirection, predictedRotation);
 
             return GetClosestToRay(predictedDirection);
         }
@@ -221,6 +221,11 @@ namespace umi3d.cdk.interaction.selection.intent
             }
         }
 
+        /// <summary>
+        /// Transform a rotation from [0;360[ to [-180;180[
+        /// </summary>
+        /// <param name="vec"></param>
+        /// <returns></returns>
         protected Vector3 to180deg(Vector3 vec)
         {
             static float to180(float x) => x % 360 > 180 ? x - 360 : x;
