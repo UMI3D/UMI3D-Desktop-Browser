@@ -69,16 +69,13 @@ namespace BrowserDesktop.Parameters
                 menuItem.NotifyValueChange((interaction as ParameterType).value);
                 callback = x =>
                 {
-                    var dto = menuItem.dto;
-                    dto.value = x;
-                    var pararmeterDto = new ParameterSettingRequestDto()
-                    {
-                        id = currentInteraction.id,
-                        toolId = toolId,
-                        parameter = dto,
-                        hoveredObjectId = GetCurrentHoveredObjectID()
-                    };
-                    umi3d.cdk.UMI3DClientServer.SendData(pararmeterDto, true);
+                    AbstractParameterDto<ValueType> menuItemDto = menuItem.dto;
+                    menuItemDto.value = x;
+
+                    ParameterSettingRequestDto requestDto = CreateRequestDto();
+                    WriteRequestDtoProperties(requestDto, menuItemDto, toolId);
+    
+                    umi3d.cdk.UMI3DClientServer.SendData(requestDto, true);
                 };
 
                 menuItem.Subscribe(callback);
@@ -88,6 +85,19 @@ namespace BrowserDesktop.Parameters
             {
                 throw new System.Exception("Incompatible interaction");
             }
+        }
+
+        protected virtual ParameterSettingRequestDto CreateRequestDto()
+        {
+            return new ParameterSettingRequestDto();
+        }
+
+        protected virtual void WriteRequestDtoProperties(ParameterSettingRequestDto dto, AbstractParameterDto menuItemDto, ulong toolId)
+        {
+            dto.id = currentInteraction.id;
+            dto.toolId = toolId;
+            dto.parameter = menuItemDto;
+            hoveredObjectId = GetCurrentHoveredObjectID();
         }
 
 

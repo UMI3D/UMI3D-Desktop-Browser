@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
+using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3d.common;
@@ -429,7 +430,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 parametersScreen.style.display = DisplayStyle.None;
                 MenuDisplayManager.Hide(true);
                 Menu.menu.RemoveAll();
-                callback.Invoke(answer);
+                FileUploader.CheckFormToUploadFile(form);
+                callback.Invoke(form);
                 CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
                 nextStep = null;
                 LocalInfoSender.CheckFormToUpdateAuthorizations(form);
@@ -496,6 +498,15 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                     requestDto.parameter = x;
                 });
                 result = en;
+                break;
+            case UploadFileParameterDto uploadParameterDto:
+                var u = new UploadInputMenuItem() { dto = uploadParameterDto, authorizedExtensions = uploadParameterDto.authorizedExtensions };
+                u.NotifyValueChange(uploadParameterDto.value);
+                u.Subscribe((x) =>
+                {
+                    uploadParameterDto.value = x;
+                });
+                result = u;
                 break;
             case StringParameterDto stringParameterDto:
                 var s = new TextInputMenuItem() { dto = stringParameterDto };
