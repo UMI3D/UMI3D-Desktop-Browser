@@ -16,7 +16,6 @@ limitations under the License.
 
 using BrowserDesktop.Menu.Displayer;
 using BrowserDesktop.UI.GenericElement;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk.menu;
@@ -80,31 +79,239 @@ namespace BrowserDesktop.Menu.Container
 
         private SubContainer subTools { get; set; } = new SubContainer();
 
-        /// <summary>
-        /// True if this ToolsContainer will be display just after the root container.
-        /// </summary>
-        public bool IsRootToolsContainer { get; private set; } = false;
+
+        #region Initialisation
+
+        public bool Initialized { get; private set; } = false;
+
+        public void InitAndBindUI()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        #endregion
+
+        #region toolboxesAndTools List
+
+        private List<AbstractDisplayer> toolboxesAndTools = new List<AbstractDisplayer>();
+
+        public override AbstractDisplayer this[int i]
+        {
+            get
+            {
+                if (i >= Count())
+                    throw new System.Exception("Tools container out of range.");
+                return toolboxesAndTools[i];
+            }
+            set
+            {
+                if (MatchType(value))
+                    toolboxesAndTools[i] = value;
+                else
+                    throw new System.Exception("Value has to be a ToolsContainer or a ToolDisplayer.");
+            }
+        }
+
+        public override bool Contains(AbstractDisplayer element)
+        {
+            if (MatchType(element))
+                return toolboxesAndTools.Contains(element);
+            Debug.LogWarning($"element has to be a ToolsContainer or a ToolDisplayer.");
+            return false;
+        }
+
+        public override int Count()
+        {
+            return toolboxesAndTools.Count;
+        }
+
+        public override int GetIndexOf(AbstractDisplayer element)
+        {
+            if (Contains(element))
+                return toolboxesAndTools.IndexOf(element);
+            else
+                throw new System.Exception("toolboxesAndTools doesn't containe element.");
+        }
+
+        #region Insert
+
+        public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
+        {
+            Insert(element, Count(), updateDisplay);
+        }
+
+        public override void Insert(AbstractDisplayer element, int index, bool updateDisplay = true)
+        {
+            if (!MatchType(element))
+                throw new System.Exception("element has to be a ToolsContainer or a ToolDisplayer.");
+            else
+            {
+                if (toolboxesAndTools.Contains(element))
+                    throw new System.Exception("toolboxesAndTools contains already this element");
+                else
+                    toolboxesAndTools.Insert(index, element);
+            }
+
+            if (updateDisplay)
+                UpdateDisplay();
+        }
+
+        public override void InsertRange(IEnumerable<AbstractDisplayer> elements, bool updateDisplay = true)
+        {
+            foreach (AbstractDisplayer element in elements)
+                Insert(element, updateDisplay);
+        }
+
+        #endregion
+
+        #region Remove
+
+        public override bool Remove(AbstractDisplayer element, bool updateDisplay = true)
+        {
+            if (MatchType(element))
+            {
+                if (toolboxesAndTools.Remove(element))
+                {
+                    if (updateDisplay)
+                    {
+                        UpdateDisplay();
+                    }
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+                throw new System.Exception("element has to be a ToolsContainer or a ToolDisplayer.");
+        }
+
+        public override int RemoveAll()
+        {
+            int count = 0;
+            for (int i = 0; i < Count(); ++i)
+            {
+                if (RemoveAt(i, true))
+                    ++count;
+            }
+            return count;
+        }
+
+        public override bool RemoveAt(int index, bool updateDisplay = true)
+        {
+            return Remove(this[index], updateDisplay);
+        }
+
+        #endregion
+
+        protected virtual bool MatchType(AbstractDisplayer element)
+        {
+            if (element is ToolsContainer || element is ToolDisplayer)
+                return true;
+            else
+                return false;
+        }
+
+        #endregion
+
+        #region Display, Hide, Collapse, Extand
 
         [SerializeField]
         [Tooltip("Visual Tree Asset of a toolbox generic element.")]
         private VisualTreeAsset toolbox_VTA;
 
         [SerializeField]
-        [Tooltip("ToolDisplayer Prefab.")]
-        private ToolDisplayer toolDisplayerPrefab;
-
-        [SerializeField]
-        [Tooltip("True if this ToolsContainer is associated with the root of the menu Asset.")]
-        private bool isRootContainer = false;
-        
-
-        private List<AbstractDisplayer> toolDisplayers = new List<AbstractDisplayer>();
+        [Tooltip("Visual Tree Asset of a toolbox button.")]
+        private VisualTreeAsset toolboxButton_ge_VTA;
 
         private ToolboxGenericElement toolbox;
 
-        private bool initialized = false;
+        #region Display and Hide
+        /// <summary>
+        /// Display the button that will be use to extand the container.
+        /// </summary>
+        /// <param name="forceUpdate"></param>
+        public override void Display(bool forceUpdate = false)
+        {
+            var toolButton = toolboxButton_ge_VTA.
+                CloneTree().
+                Q<ToolboxButtonGenericElement>().
+                Setup(menu.Name, menu.icon2D, Select);
+            (parent as ToolsContainer).
+                toolbox.
+                AddTool(toolButton);
+        }
+
+        public override void Hide()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void UpdateDisplay()
+        {
+            Debug.Log("<color=green>TODO: </color>" + $"UpdateDisplay");
+        }
+
+        #endregion
+
+        #region Collapse And Expand
+
+        public override void Collapse(bool forceUpdate = false)
+        {
+            toolbox.Remove();
+        }
+
+        /// <summary>
+        /// Display the toolbox.
+        /// </summary>
+        /// <param name="forceUpdate"></param>
+        public override void Expand(bool forceUpdate = false)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// No Use Here.
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="forceUpdate"></param>
+        public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
+        {
+        }
+
+        #endregion
+
+        #endregion
+
+        public override AbstractMenuDisplayContainer CurrentMenuDisplayContainer()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public VisualElement GetUXMLContent()
+        {
+            return toolbox;
+        }
+
+        
+
+        public override int IsSuitableFor(AbstractMenuItem menu)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override IEnumerable<AbstractDisplayer> GetDisplayers()
+        {
+            throw new System.NotImplementedException();
+        }
 
 
+
+
+
+
+
+        #region Old
+        /*
         #region ToolDisplayers list
 
         public override AbstractDisplayer this[int i] 
@@ -443,6 +650,8 @@ namespace BrowserDesktop.Menu.Container
             throw new System.NotImplementedException();
         }
 
+        #endregion
+        */
         #endregion
 
     }

@@ -147,67 +147,73 @@ namespace BrowserDesktop.Menu.Container
 
         #endregion
 
+        #region Display, Hide, Collapse and Expand
+
         private void UpdateDisplay()
         {
 
         }
 
+        /// <summary>
+        /// Display the button that will be use to extand the container.
+        /// </summary>
+        /// <param name="forceUpdate"></param>
         public override void Display(bool forceUpdate = false)
         {
-            toolboxes.ForEach((rootTools) => { rootTools.Display(forceUpdate); });
+            //toolboxes.ForEach((rootTools) => { rootTools.Display(forceUpdate); });
         }
 
         public override void Hide()
         {
-            toolboxes.ForEach((rootTools) => { rootTools.Hide(); });
+            //toolboxes.ForEach((rootTools) => { rootTools.Hide(); });
         }
 
-
+        /// <summary>
+        /// Not use here.
+        /// </summary>
+        /// <param name="forceUpdate"></param>
         public override void Collapse(bool forceUpdate = false)
         {
-            throw new System.NotImplementedException();
         }
+
+        /// <summary>
+        /// Display all Toolboxes in the view.
+        /// </summary>
+        /// <param name="forceUpdate"></param>
+        public override void Expand(bool forceUpdate = false)
+        {
+            toolboxes.ForEach((toolbox) => toolbox.Expand());
+        }
+
+        /// <summary>
+        /// Not use here.
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="forceUpdate"></param>
+        public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
+        {
+        }
+
+        #endregion
 
         public override AbstractMenuDisplayContainer CurrentMenuDisplayContainer()
         {
             throw new System.NotImplementedException();
         }
 
-        
-
-        public override void Expand(bool forceUpdate = false)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        
-
         public VisualElement GetUXMLContent()
         {
             throw new System.NotImplementedException();
         }
-
-        
 
         public void InitAndBindUI()
         {
             throw new System.NotImplementedException();
         }
 
-        
-
         public override int IsSuitableFor(AbstractMenuItem menu)
         {
             throw new System.NotImplementedException();
         }
-
-        
-
-        
     }
 }

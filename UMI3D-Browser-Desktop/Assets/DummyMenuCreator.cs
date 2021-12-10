@@ -73,7 +73,7 @@ public class DummyMenuCreator : MonoBehaviour
 
         menuAsset.menu = rootContainer;
 
-        MenuDisplay.CreateDisplay();
+        MenuDisplay.Display(true);
     }
 
     private void CreateMenuItem(out MenuItem menuItem, string name, Texture2D icon = null)

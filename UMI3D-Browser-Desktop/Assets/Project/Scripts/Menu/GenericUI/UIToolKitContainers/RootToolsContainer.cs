@@ -132,6 +132,12 @@ namespace BrowserDesktop.Menu.Container
 
         #endregion
 
+        #region Display, Hide, Collapse, Extand
+
+        [SerializeField]
+        [Tooltip("Visual Tree Asset of a toolbox generic element.")]
+        private VisualTreeAsset toolbox_VTA;
+
         public override void Display(bool forceUpdate = false)
         {
             throw new System.NotImplementedException();
@@ -146,7 +152,6 @@ namespace BrowserDesktop.Menu.Container
 
         public override void Collapse(bool forceUpdate = false)
         {
-            throw new System.NotImplementedException();
         }
 
         public override void Expand(bool forceUpdate = false)
@@ -154,10 +159,16 @@ namespace BrowserDesktop.Menu.Container
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// No Use Here.
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="forceUpdate"></param>
         public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
         {
-            throw new System.NotImplementedException();
         }
+
+        #endregion
 
         #endregion
 

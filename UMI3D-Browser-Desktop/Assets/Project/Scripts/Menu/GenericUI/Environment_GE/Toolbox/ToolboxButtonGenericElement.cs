@@ -72,7 +72,7 @@ namespace BrowserDesktop.UI.GenericElement
         /// <param name="buttonName">Label of the button.</param>
         /// <param name="buttonImage">Icon of the button.</param>
         /// <param name="buttonClicked">Action when button is clicked.</param>
-        public void Setup(string buttonName, Texture2D buttonImage, Action buttonClicked)
+        public ToolboxButtonGenericElement Setup(string buttonName, Texture2D buttonImage, Action buttonClicked)
         {
             Setup(buttonName);
 
@@ -81,6 +81,8 @@ namespace BrowserDesktop.UI.GenericElement
             else
                 button_B.style.backgroundImage = StyleKeyword.Auto;
                 button_B.clicked += buttonClicked;
+
+            return this;
         }
 
         /// <summary>
@@ -89,12 +91,14 @@ namespace BrowserDesktop.UI.GenericElement
         /// <param name="buttonName">Label of the button.</param>
         /// <param name="buttonImage">Icon of the button.</param>
         /// <param name="buttonClicked">Action when button is clicked.</param>
-        public void Setup(string buttonName, Sprite buttonImage, Action buttonClicked)
+        public ToolboxButtonGenericElement Setup(string buttonName, Sprite buttonImage, Action buttonClicked)
         {
             Setup(buttonName);
 
             button_B.style.backgroundImage = Background.FromSprite(buttonImage);
             button_B.clicked += buttonClicked;
+
+            return this;
         }
 
         /// <summary>
