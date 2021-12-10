@@ -49,15 +49,15 @@ namespace BrowserDesktop.Menu.Environment
             menuBar.Setup(toolboxGenericElement_VTA, toolboxButtonGenericElement_VTA, toolboxSeparatorGenericElement_VTA, uiDocument);
         }
 
-        public void AddToolbox(ToolboxGenericElement toolbox)
+        public static void AddInMenu(ToolboxGenericElement toolbox)
         {
-            menuBar.ToolboxLayout.AddElement(toolbox);
+            Debug.Assert(Exists, "MenuBar_UIController does not Exists.");
+            Instance.menuBar.ToolboxLayout.AddElement(toolbox);
         }
 
         public static void AddInSubMenu(ToolboxGenericElement subTools, ToolboxGenericElement parent)
         {
             Debug.Assert(Exists, "MenuBar_UIController does not Exists.");
-
             Instance.menuBar.AddInSubMenu(subTools, parent);
         }
 

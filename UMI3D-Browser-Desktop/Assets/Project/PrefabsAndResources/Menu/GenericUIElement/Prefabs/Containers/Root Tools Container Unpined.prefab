@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4520515546404707285
+--- !u!1 &4230335087086321612
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4566138528965497144}
-  - component: {fileID: 1482859252209789155}
+  - component: {fileID: 1276094914071007924}
+  - component: {fileID: 7574721420939732000}
   m_Layer: 0
-  m_Name: Tools Container
+  m_Name: Root Tools Container Unpined
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4566138528965497144
+--- !u!4 &1276094914071007924
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4520515546404707285}
+  m_GameObject: {fileID: 4230335087086321612}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,16 +31,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1482859252209789155
+--- !u!114 &7574721420939732000
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4520515546404707285}
+  m_GameObject: {fileID: 4230335087086321612}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb2cc79661ce3934aaa0d4e7037d8afa, type: 3}
+  m_Script: {fileID: 11500000, guid: 66a573132c732d24b8faa9b7e5fc5894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onClear:
@@ -54,7 +54,5 @@ MonoBehaviour:
   parent: {fileID: 0}
   toolbox_VTA: {fileID: 9197481963319205126, guid: 05a082bde1c1a61409c5e339eae7b264,
     type: 3}
-  toolboxButton_VTA: {fileID: 0}
-  toolDisplayerPrefab: {fileID: -5949939671915903110, guid: c968f9bf62744984f8503a8b73feb284,
+  toolboxButton_ge_VTA: {fileID: 9197481963319205126, guid: 7aff484ff7596e64c93f5560bf628d74,
     type: 3}
-  isRootContainer: 0
