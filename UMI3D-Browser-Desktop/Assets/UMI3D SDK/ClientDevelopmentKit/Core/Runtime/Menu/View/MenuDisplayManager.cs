@@ -128,7 +128,7 @@ namespace umi3d.cdk.menu.view
         /// Create the menu display, and display it.
         /// </summary>
         [ContextMenu("Display Create")]
-        public void CreateDisplay()
+        private void CreateDisplay()
         {
             if (isDisplaying || (menu == null))
                 return;
