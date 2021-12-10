@@ -66,6 +66,8 @@ namespace BrowserDesktop.UI.GenericElement
             buttonName_L = this.Q<Label>("toolbox-button-name");
         }
 
+        #region Setup
+
         /// <summary>
         /// Setup the button (label, icon and action).
         /// </summary>
@@ -133,6 +135,8 @@ namespace BrowserDesktop.UI.GenericElement
             buttonNameText = buttonName;
         }
 
+        #endregion
+
         /// <summary>
         /// Switch between USS classes when button is on or off.
         /// </summary>
@@ -158,7 +162,7 @@ namespace BrowserDesktop.UI.GenericElement
         /// </summary>
         public override void OnApplyUserPreferences()
         {
-            if (!displayed)
+            if (!Displayed)
                 return;
 
             buttonName_L.style.width = StyleKeyword.Auto;

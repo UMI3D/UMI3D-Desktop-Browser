@@ -91,7 +91,7 @@ namespace BrowserDesktop.UI.CustomElement
 
         public override void OnApplyUserPreferences()
         {
-            if (!displayed)
+            if (!Displayed)
                 return;
         }
     }

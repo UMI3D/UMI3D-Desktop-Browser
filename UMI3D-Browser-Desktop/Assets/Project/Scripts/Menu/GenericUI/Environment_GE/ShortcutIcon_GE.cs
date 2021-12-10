@@ -89,7 +89,7 @@ namespace BrowserDesktop.UI.GenericElement
 
         public override void OnApplyUserPreferences()
         {
-            if (!displayed) return;
+            if (!Displayed) return;
 
             UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(this, (iconType == IconType.MOUSE) ? $"shortcut-{IconType.MOUSE}" : $"shortcut-KEY", width: iconWidthPX, height: iconHeightPX);
         }

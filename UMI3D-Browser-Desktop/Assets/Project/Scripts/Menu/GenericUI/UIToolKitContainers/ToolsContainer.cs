@@ -27,6 +27,7 @@ namespace BrowserDesktop.Menu.Container
 {
     public class ToolsContainer : AbstractMenuDisplayContainer, IDisplayerElement
     {
+        /*
         struct SubContainer
         {
             public ToolsContainer Container { get; private set; }
@@ -78,18 +79,9 @@ namespace BrowserDesktop.Menu.Container
         }
 
         private SubContainer subTools { get; set; } = new SubContainer();
+        */
 
-
-        #region Initialisation
-
-        public bool Initialized { get; private set; } = false;
-
-        public void InitAndBindUI()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        #endregion
+        
 
         #region toolboxesAndTools List
 
@@ -116,7 +108,7 @@ namespace BrowserDesktop.Menu.Container
         {
             if (MatchType(element))
                 return toolboxesAndTools.Contains(element);
-            Debug.LogWarning($"element has to be a ToolsContainer or a ToolDisplayer.");
+            Debug.Log("<color=orange>Warn: </color>" + $"element has to be a ToolsContainer or a ToolDisplayer.");
             return false;
         }
 
@@ -173,9 +165,7 @@ namespace BrowserDesktop.Menu.Container
                 if (toolboxesAndTools.Remove(element))
                 {
                     if (updateDisplay)
-                    {
                         UpdateDisplay();
-                    }
                     return true;
                 }
                 else
@@ -224,15 +214,26 @@ namespace BrowserDesktop.Menu.Container
         private VisualTreeAsset toolboxButton_ge_VTA;
 
         private ToolboxGenericElement toolbox;
+        private ToolboxButtonGenericElement toolButton;
 
-        #region Display and Hide
+        #region Initialisation and Clear
+
         /// <summary>
-        /// Display the button that will be use to extand the container.
+        /// Is this tools container initialized.
         /// </summary>
-        /// <param name="forceUpdate"></param>
-        public override void Display(bool forceUpdate = false)
+        /// <return>True if [toolbox] is not null, else False.</return>
+        public bool Initialized => toolbox != null;
+
+        public void InitAndBindUI()
         {
-            var toolButton = toolboxButton_ge_VTA.
+            if (Initialized) return;
+
+            toolbox = toolbox_VTA.
+                CloneTree().
+                Q<ToolboxGenericElement>().
+                Setup(menu.Name);
+
+            toolButton = toolboxButton_ge_VTA.
                 CloneTree().
                 Q<ToolboxButtonGenericElement>().
                 Setup(menu.Name, menu.icon2D, Select);
@@ -241,14 +242,40 @@ namespace BrowserDesktop.Menu.Container
                 AddTool(toolButton);
         }
 
-        public override void Hide()
+        public override void Clear()
         {
-            throw new System.NotImplementedException();
+            base.Clear();
         }
 
-        private void UpdateDisplay()
+        #endregion
+
+        #region Display and Hide
+
+        /// <summary>
+        /// True if the tool button corresponding to this container is not null and displayed.
+        /// </summary>
+        public bool Displayed => toolButton != null && toolButton.Displayed;
+
+        /// <summary>
+        /// Display the button that will be use to extand the container.
+        /// </summary>
+        /// <param name="forceUpdate"></param>
+        public override void Display(bool forceUpdate = false)
         {
-            Debug.Log("<color=green>TODO: </color>" + $"UpdateDisplay");
+            Debug.Log("<color=green>TODO: </color>" + $"Display ToolsContainer");
+        }
+
+        public override void Hide()
+        {
+            Debug.Log("<color=green>TODO: </color>" + $"Hide ToolsContainer");
+        }
+
+        private void UpdateDisplay(AbstractDisplayer element)
+        {
+            if (Contains(element))
+                element.Display();
+            else
+                element.Clear();
         }
 
         #endregion

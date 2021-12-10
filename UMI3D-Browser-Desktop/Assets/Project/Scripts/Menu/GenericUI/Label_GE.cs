@@ -59,7 +59,7 @@ namespace BrowserDesktop.UI.GenericElement
 
         public override void OnApplyUserPreferences()
         {
-            if (!displayed) return;
+            if (!Displayed) return;
 
             UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(label_L, textPref, text);
             textFormat = UserPreferences.UserPreferences.TextAndIconPref.GetTextFormat(textPref);
