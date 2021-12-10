@@ -149,6 +149,13 @@ namespace BrowserDesktop.Menu.Container
 
         #region Display, Hide, Collapse and Expand
 
+        public void InitAndBindUI()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        #region Display and Hide
+
         private void UpdateDisplay()
         {
 
@@ -167,6 +174,10 @@ namespace BrowserDesktop.Menu.Container
         {
             //toolboxes.ForEach((rootTools) => { rootTools.Hide(); });
         }
+
+        #endregion
+
+        #region Collapse and Expand
 
         /// <summary>
         /// Not use here.
@@ -196,6 +207,8 @@ namespace BrowserDesktop.Menu.Container
 
         #endregion
 
+        #endregion
+
         public override AbstractMenuDisplayContainer CurrentMenuDisplayContainer()
         {
             throw new System.NotImplementedException();
@@ -206,10 +219,7 @@ namespace BrowserDesktop.Menu.Container
             throw new System.NotImplementedException();
         }
 
-        public void InitAndBindUI()
-        {
-            throw new System.NotImplementedException();
-        }
+        
 
         public override int IsSuitableFor(AbstractMenuItem menu)
         {

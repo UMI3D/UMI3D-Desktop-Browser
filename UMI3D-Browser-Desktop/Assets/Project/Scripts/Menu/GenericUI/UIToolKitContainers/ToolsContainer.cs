@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using BrowserDesktop.Menu.Displayer;
+using BrowserDesktop.Menu.Environment;
 using BrowserDesktop.UI.GenericElement;
 using System.Collections;
 using System.Collections.Generic;
@@ -81,11 +82,12 @@ namespace BrowserDesktop.Menu.Container
         private SubContainer subTools { get; set; } = new SubContainer();
         */
 
-        
+        [SerializeField]
+        protected bool pined = false;
 
         #region toolboxesAndTools List
 
-        private List<AbstractDisplayer> toolboxesAndTools = new List<AbstractDisplayer>();
+        protected List<AbstractDisplayer> toolboxesAndTools = new List<AbstractDisplayer>();
 
         public override AbstractDisplayer this[int i]
         {
@@ -125,6 +127,11 @@ namespace BrowserDesktop.Menu.Container
                 throw new System.Exception("toolboxesAndTools doesn't containe element.");
         }
 
+        protected override IEnumerable<AbstractDisplayer> GetDisplayers()
+        {
+            return toolboxesAndTools;
+        }
+
         #region Insert
 
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
@@ -145,7 +152,7 @@ namespace BrowserDesktop.Menu.Container
             }
 
             if (updateDisplay)
-                UpdateDisplay();
+                UpdateDisplay(element);
         }
 
         public override void InsertRange(IEnumerable<AbstractDisplayer> elements, bool updateDisplay = true)
@@ -165,7 +172,7 @@ namespace BrowserDesktop.Menu.Container
                 if (toolboxesAndTools.Remove(element))
                 {
                     if (updateDisplay)
-                        UpdateDisplay();
+                        UpdateDisplay(element);
                     return true;
                 }
                 else
@@ -207,14 +214,14 @@ namespace BrowserDesktop.Menu.Container
 
         [SerializeField]
         [Tooltip("Visual Tree Asset of a toolbox generic element.")]
-        private VisualTreeAsset toolbox_VTA;
+        protected VisualTreeAsset toolbox_VTA;
 
         [SerializeField]
         [Tooltip("Visual Tree Asset of a toolbox button.")]
-        private VisualTreeAsset toolboxButton_ge_VTA;
+        protected VisualTreeAsset toolboxButton_ge_VTA;
 
-        private ToolboxGenericElement toolbox;
-        private ToolboxButtonGenericElement toolButton;
+        protected ToolboxGenericElement toolbox;
+        protected ToolboxButtonGenericElement toolButton;
 
         #region Initialisation and Clear
 
@@ -223,6 +230,12 @@ namespace BrowserDesktop.Menu.Container
         /// </summary>
         /// <return>True if [toolbox] is not null, else False.</return>
         public bool Initialized => toolbox != null;
+
+        public override void SetMenuItem(AbstractMenuItem menu)
+        {
+            base.SetMenuItem(menu);
+            InitAndBindUI();
+        }
 
         public void InitAndBindUI()
         {
@@ -245,6 +258,7 @@ namespace BrowserDesktop.Menu.Container
         public override void Clear()
         {
             base.Clear();
+            Debug.Log("<color=green>TODO: </color>" + $"Clear ToolsContainer");
         }
 
         #endregion
@@ -273,7 +287,7 @@ namespace BrowserDesktop.Menu.Container
         private void UpdateDisplay(AbstractDisplayer element)
         {
             if (Contains(element))
-                element.Display();
+                element.Display(true);
             else
                 element.Clear();
         }
@@ -293,7 +307,10 @@ namespace BrowserDesktop.Menu.Container
         /// <param name="forceUpdate"></param>
         public override void Expand(bool forceUpdate = false)
         {
-            throw new System.NotImplementedException();
+            if (pined)
+                MenuBar_UIController.AddInSubMenu(toolbox, (parent as ToolsContainer).toolbox);
+            else
+                Debug.Log("<color=green>TODO: </color>" + $"Expand ToolsContainer in ToolboxesWindow");
         }
 
         /// <summary>
@@ -319,17 +336,12 @@ namespace BrowserDesktop.Menu.Container
             return toolbox;
         }
 
-        
-
         public override int IsSuitableFor(AbstractMenuItem menu)
         {
             throw new System.NotImplementedException();
         }
 
-        protected override IEnumerable<AbstractDisplayer> GetDisplayers()
-        {
-            throw new System.NotImplementedException();
-        }
+        
 
 
 
@@ -339,100 +351,8 @@ namespace BrowserDesktop.Menu.Container
 
         #region Old
         /*
-        #region ToolDisplayers list
 
-        public override AbstractDisplayer this[int i] 
-        {
-            get
-            {
-                if (toolDisplayers.Count <= i)
-                    throw new System.Exception("Toolbox container out of range.");
-                return toolDisplayers[i];
-            }
-            set => toolDisplayers[i] = value; 
-        }
-
-        public override bool Contains(AbstractDisplayer element)
-        {
-            return toolDisplayers.Contains(element);
-        }
-
-        public override int Count()
-        {
-            return toolDisplayers.Count;
-        }
-
-        public override int GetIndexOf(AbstractDisplayer element)
-        {
-            return toolDisplayers.IndexOf(element);
-        }
-
-        protected override IEnumerable<AbstractDisplayer> GetDisplayers()
-        {
-            return toolDisplayers;
-        }
-
-        #endregion
-
-        #region Display, Hide and Expand, Collapse
-
-        public override void Display(bool forceUpdate = false)
-        {
-            if (isDisplayed && !forceUpdate) return;
-            else isDisplayed = true;
-            if (isRootContainer) return;
-
-            Debug.Log($"Tools display in [{menu.Name}]");
-
-            toolbox.style.display = DisplayStyle.Flex;
-        }
-
-        public override void Hide()
-        {
-            if (!isDisplayed) return;
-            else isDisplayed = false;
-            if (isRootContainer) return;
-
-            Debug.Log($"Tools hide in [{menu.Name}]");
-
-            toolbox.style.display = DisplayStyle.None;
-        }
-
-        public override void Collapse(bool forceUpdate = false)
-        {
-            if (!isExpanded) return;
-            else isExpanded = false;
-            if (isRootContainer) return;
-
-            subTools.Collapse();
-
-            Debug.Log($"Tools [{menu.Name}] collapse");
-            //ExpandedSubContainer?.Collapse();
-            //ExpandedSubContainer?.Hide();
-            //RemoveFromSubMenu();
-            //ExpandedSubContainer = null;
-        }
-
-        public override void Expand(bool forceUpdate = false)
-        {
-            if (isExpanded) return;
-            else isExpanded = true;
-            if (isRootContainer) return;
-
-            Debug.Log($"Tools [{menu.Name}] Expand");
-            //ExpandedSubContainer?.Display();
-        }
-
-        public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override AbstractMenuDisplayContainer CurrentMenuDisplayContainer()
-        {
-            return subTools.Container;
-        }
-
+        
         #region Private Functions
 
         //private void RemoveFromSubMenu()

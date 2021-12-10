@@ -29,15 +29,53 @@ namespace BrowserDesktop.Menu.Displayer
         [Tooltip("Visual Tree Asset of a toolbox button.")]
         private VisualTreeAsset toolboxButton_ge_VTA;
 
-        //private MenuItem menuItem;
+        private ToolboxButtonGenericElement toolButton;
 
-        private ToolboxButtonGenericElement toolboxButton;
+        #region Init and Clear
 
-        private bool initialized = false;
+        private Container.ToolsContainer parent;
+        public Container.ToolsContainer Parent
+        {
+            get
+            {
+                if (parent == null)
+                    throw new System.Exception("Parent null in ToolDisplayer");
+                else
+                    return parent;
+            }
+            set => parent = value;
+        }
 
-        public System.Action OnButtonPressed = null;
+        public bool Initialized => toolButton != null;
 
-        #region Abstract Displayer
+        public override void SetMenuItem(AbstractMenuItem menu)
+        {
+            base.SetMenuItem(menu);
+            InitAndBindUI();
+        }
+
+        public void InitAndBindUI()
+        {
+            if (Initialized) return;
+            toolButton = toolboxButton_ge_VTA.
+                CloneTree().
+                Q<ToolboxButtonGenericElement>().
+                Setup(menu.Name, menu.icon2D, Select);
+            (Parent.
+                GetUXMLContent() as ToolboxGenericElement).
+                AddTool(toolButton);
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+            toolButton.Remove();
+            toolButton = null;
+        }
+
+        #endregion
+
+        #region Display and Hide
 
         /// <summary>
         /// ToolDisplayer don't need to be displayed.
@@ -45,9 +83,6 @@ namespace BrowserDesktop.Menu.Displayer
         /// <param name="forceUpdate"></param>
         public override void Display(bool forceUpdate = false)
         {
-            return;
-            //Debug.Log($"Tool [{menu.Name}] displays");
-            //toolboxButton.style.display = DisplayStyle.Flex;
         }
 
         /// <summary>
@@ -55,64 +90,21 @@ namespace BrowserDesktop.Menu.Displayer
         /// </summary>
         public override void Hide()
         {
-            return;
-            //Debug.Log($"Tool [{menu.Name}] hides");
-            //toolboxButton.style.display = DisplayStyle.None;
         }
 
-        public override void Clear()
-        {
-            base.Clear();
-            toolboxButton.Remove();
-            toolboxButton = null;
-
-            initialized = false;
-        }
+        #endregion
 
         public override int IsSuitableFor(AbstractMenuItem menu)
         {
             return 2; //(menu is EventMenuItem) ? 2 : (menu is MenuItem) ? 1 : 0;
         }
 
-        #endregion
-
-        #region IDisplayerElement
-
         public VisualElement GetUXMLContent()
         {
-            return toolboxButton;
+            return toolButton;
         }
 
-        public void InitAndBindUI()
-        {
-            if (initialized) return;
-            else initialized = true;
-
-            toolboxButton = toolboxButton_ge_VTA.CloneTree().Q<ToolboxButtonGenericElement>();
-        }
-
-        #endregion
-
-        public override void SetMenuItem(AbstractMenuItem menu)
-        {
-            base.SetMenuItem(menu);
-
-            //if (menu is MenuItem)
-            //{
-            //    menuItem = menu as MenuItem;
-            //}
-
-            InitAndBindUI();
-
-            toolboxButton.Setup(menu.Name, menu.icon2D, () => 
-            { 
-                Debug.Log("<color=green>TODO: </color>" + $"Toolbox button pressed.");
-                if (OnButtonPressed == null)
-                    menu.Select();
-                else
-                    OnButtonPressed();
-            });
-        }
+        
 
 
         /*/// <summary>
