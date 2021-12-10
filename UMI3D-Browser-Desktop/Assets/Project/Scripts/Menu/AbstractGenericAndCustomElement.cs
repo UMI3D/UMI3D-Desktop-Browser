@@ -36,7 +36,7 @@ namespace BrowserDesktop.UI
         /// <summary>
         /// True if this UIElement is displayed.
         /// </summary>
-        protected bool displayed = false;
+        public bool Displayed { get; protected set; } = false;
 
         ~AbstractGenericAndCustomElement()
         {
@@ -67,7 +67,7 @@ namespace BrowserDesktop.UI
         /// </summary>
         protected virtual void ReadyToDisplay()
         {
-            displayed = true;
+            Displayed = true;
             OnApplyUserPreferences();
         }
 
@@ -76,7 +76,7 @@ namespace BrowserDesktop.UI
         /// </summary>
         public virtual void Remove()
         {
-            if (!displayed) return;
+            if (!Displayed) return;
             this.RemoveFromHierarchy();
         }
 

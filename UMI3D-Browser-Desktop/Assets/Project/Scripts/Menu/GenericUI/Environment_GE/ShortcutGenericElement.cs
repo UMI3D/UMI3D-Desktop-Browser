@@ -178,7 +178,7 @@ namespace BrowserDesktop.UI.GenericElement
 
         public override void OnApplyUserPreferences()
         {
-            if (!displayed) return;
+            if (!Displayed) return;
 
             iconsLayout_VE.style.width = StyleKeyword.Auto; //Unset the icons area width.
             UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(shortcutName_L, "label", shortcutNameText);

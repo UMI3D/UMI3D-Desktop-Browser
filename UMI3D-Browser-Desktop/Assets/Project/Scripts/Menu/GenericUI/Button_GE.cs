@@ -136,7 +136,7 @@ namespace BrowserDesktop.UI.GenericElement
 
         public override void OnApplyUserPreferences()
         {
-            if (!displayed) return;
+            if (!Displayed) return;
 
             if (!string.IsNullOrEmpty(textPref))
                 UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(button_B, textPref, text);

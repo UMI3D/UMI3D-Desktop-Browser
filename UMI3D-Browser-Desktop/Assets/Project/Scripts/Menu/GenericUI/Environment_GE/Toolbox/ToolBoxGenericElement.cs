@@ -57,11 +57,13 @@ namespace BrowserDesktop.UI.GenericElement
             return this;
         }
 
-        public void Setup(string toolboxName)
+        public ToolboxGenericElement Setup(string toolboxName)
         {
             Initialize();
 
             toolboxNameText = toolboxName;
+
+            return this;
         }
 
         private void AddTools(ToolboxButtonGenericElement[] tools)
@@ -104,7 +106,7 @@ namespace BrowserDesktop.UI.GenericElement
         /// </summary>
         public override void OnApplyUserPreferences()
         {
-            if (!displayed) return;
+            if (!Displayed) return;
             
             UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(toolboxName_L, "sub-section", toolboxNameText);
         }
