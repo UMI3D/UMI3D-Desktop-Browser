@@ -82,7 +82,7 @@ public class DropdownElement : VisualElement
         {
             areChoicesVisible = !areChoicesVisible;
             if (areChoicesVisible && options.Count > 1)
-                umi3d.cdk.UMI3DResourcesManager.Instance.StartCoroutine(OpenDropdown());
+                umi3d.cdk.UMI3DResourcesManager.StartCoroutine(OpenDropdown());
             else
             {
                 choicesDropdown.style.display = DisplayStyle.None;

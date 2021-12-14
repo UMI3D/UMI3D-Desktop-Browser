@@ -138,8 +138,7 @@ public class MicrophoneSlider
 
         SetColors(colors);
 
-        if (umi3d.cdk.UMI3DClientServer.Exists)
-            umi3d.cdk.UMI3DClientServer.Instance.StartCoroutine(waitBeforeSettingMicrophone());
+        umi3d.cdk.UMI3DClientServer.StartCoroutine(waitBeforeSettingMicrophone());
     }
 
     IEnumerator waitBeforeSettingMicrophone() 
