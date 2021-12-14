@@ -263,7 +263,7 @@ namespace umi3d.common
                     Instance.logInfo = value;
                     if (value)
                     {
-                        Instance.StartCoroutine(Instance.LogCoroutine());
+                        StartCoroutine(Instance.LogCoroutine());
                     }
                 }
             }
@@ -296,12 +296,13 @@ namespace umi3d.common
         ThreadWritter infoWritter;
         ThreadWritter logWritter;
 
-        protected virtual void Start()
+        protected override void Awake()
         {
+            base.Awake();
+
             infoWritter = string.IsNullOrEmpty(LogInfoPath) ? null : new ThreadWritter(LogInfoPath);
             logWritter = string.IsNullOrEmpty(LogPath) ? null : new ThreadWritter(LogPath);
             StartCoroutine(LogCoroutine());
-
         }
 
         protected override void OnDestroy()
