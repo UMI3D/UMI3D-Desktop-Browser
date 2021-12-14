@@ -160,10 +160,11 @@ namespace umi3d.cdk.interaction.selection.intent
         {
 
             var path = @"D:\rotationDataKEP\kalman\";
-
             var fileNameRotationPrediction = "datarotationKalman";
             var number = System.IO.Directory.GetFiles(path).Where(f => f.StartsWith(path + fileNameRotationPrediction)).Count();
-            using (System.IO.StreamWriter file = System.IO.File.CreateText(path + fileNameRotationPrediction + number.ToString() + ".json"))
+            var filePath = path + fileNameRotationPrediction + number.ToString() + ".json";
+            
+            using (System.IO.StreamWriter file = System.IO.File.CreateText(filePath))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 //serialize object directly into file stream
@@ -182,6 +183,9 @@ namespace umi3d.cdk.interaction.selection.intent
                     time = ((RotationDataSampleKalman)d).deltaTime
                 }).ToList()); ;
             }
+
+            FileUploader.AddFileToUpload(filePath);
+           
 
         }
     }

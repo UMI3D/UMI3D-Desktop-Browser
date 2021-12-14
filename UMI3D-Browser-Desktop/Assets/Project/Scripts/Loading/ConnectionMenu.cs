@@ -430,8 +430,8 @@ public class ConnectionMenu : Singleton<ConnectionMenu>
                 parametersScreen.style.display = DisplayStyle.None;
                 MenuDisplayManager.Hide(true);
                 Menu.menu.RemoveAll();
-                FileUploader.CheckFormToUploadFile(form);
-                callback.Invoke(form);
+                //FileUploader.CheckFormToUploadFile(form);
+                callback.Invoke(answer);
                 CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
                 nextStep = null;
                 LocalInfoSender.CheckFormToUpdateAuthorizations(form);

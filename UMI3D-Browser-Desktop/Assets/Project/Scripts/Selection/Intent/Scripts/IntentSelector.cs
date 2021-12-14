@@ -10,6 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 using UnityEngine;
 
 namespace umi3d.cdk.interaction.selection.intent
@@ -23,7 +24,7 @@ namespace umi3d.cdk.interaction.selection.intent
         /// UMI3D controller
         /// </summary>
         [SerializeField]
-        private AbstractController controller;
+        public AbstractController controller;
 
         /// <summary>
         /// Selection intent detector
@@ -38,11 +39,12 @@ namespace umi3d.cdk.interaction.selection.intent
         private AbstractVisualCueHandler selectionVisualCueHandler;
 
         #region selectionCache
+
         private InteractableContainer lastSelectedInteractable;
 
         public SelectionData selectionData;
-        #endregion
 
+        #endregion selectionCache
 
         public override void Activate(int id)
         {
@@ -63,15 +65,15 @@ namespace umi3d.cdk.interaction.selection.intent
 
             InteractableContainer interactableToSelect = detector.PredictTarget();
 
-            if( interactableToSelect != null
+            if (interactableToSelect != null
                 && interactableToSelect != lastSelectedInteractable
-                && interactableToSelect.Interactable.dto.interactions != null 
+                && interactableToSelect.Interactable.dto.interactions != null
                 && interactableToSelect.Interactable.dto.interactions.Count > 0
                 && !InteractionMapper.Instance.IsToolSelected(interactableToSelect.Interactable.dto.id))
             {
                 if (lastSelectedInteractable != null)
                     UnselectLastSelected();
-                
+
                 selectionVisualCueHandler.ActivateSelectedVisualCue(interactableToSelect);
                 controller.Project(AbstractInteractionMapper.Instance.GetTool(interactableToSelect.Interactable.dto.id), true,
                     new RequestedUsingSelector<IntentSelector>() { controller = this.controller }, interactableToSelect.Interactable.id);
@@ -93,8 +95,6 @@ namespace umi3d.cdk.interaction.selection.intent
                                 new RequestedUsingSelector<IntentSelector>());
             selectionData.clear();
         }
-
-
     }
 
     /// <summary>
@@ -155,6 +155,6 @@ namespace umi3d.cdk.interaction.selection.intent
         //            selectionData.worlDirection = ray.direction;
     }
 
-    public enum SelectionState { None, Selected, Manipulated }
+    public enum SelectionState
+    { None, Selected, Manipulated }
 }
-

@@ -249,12 +249,18 @@ namespace umi3d.cdk.interaction
             toolboxMenu.Add(toolbox.sub);
         }
 
+        public static UploadFileParameterDto uploadFileParameterDto;
+
         /// <inheritdoc/>
         public override void CreateTool(Tool tool)
         {
             foreach (var interaction in tool.dto.interactions)
             {
                 interactionsIdToDto[interaction.id] = interaction;
+                if (interaction is UploadFileParameterDto)
+                {
+                    uploadFileParameterDto = interaction as UploadFileParameterDto;
+                }
             }
             tool.Menu.Subscribe(() =>
             {

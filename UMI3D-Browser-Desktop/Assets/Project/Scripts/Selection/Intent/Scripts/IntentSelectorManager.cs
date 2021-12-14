@@ -10,6 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 using System.Collections;
 using UnityEngine;
 
@@ -20,19 +21,19 @@ namespace umi3d.cdk.interaction.selection.intent
     /// </summary>
     public class IntentSelectorManager : MonoBehaviour
     {
-        bool initialized = false;
+        private bool initialized = false;
 
         [SerializeField]
-        private IntentSelector intentSelector;
+        public IntentSelector intentSelector;
 
         // Start is called before the first frame update
-        void Awake()
+        private void Awake()
         {
             StartCoroutine(waitForEnvironment());
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             if (initialized)
             {
@@ -40,11 +41,11 @@ namespace umi3d.cdk.interaction.selection.intent
             }
         }
 
-
-        IEnumerator waitForEnvironment()
+        public IEnumerator waitForEnvironment()
         {
             yield return new WaitUntil(() => { return UMI3DEnvironmentLoader.Exists; });
-            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => {
+            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
+            {
                 intentSelector.Activate(0); //0 does not have any sense here
                 initialized = true;
             });
