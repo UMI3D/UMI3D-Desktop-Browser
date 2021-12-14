@@ -10,6 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using System;
@@ -79,6 +80,7 @@ namespace KalmanFilter
         { }
 
         #region Init
+
         public override void Init(double[] estimateGuessed, double[][] covarianceInit)
         {
             x_est = Vector.Build.Dense(estimateGuessed);
@@ -86,9 +88,11 @@ namespace KalmanFilter
 
             filterStepState = FilterState.Initialized;
         }
-        #endregion
+
+        #endregion Init
 
         #region Predict
+
         public override double[] Predict()
         {
             if (!(filterStepState == FilterState.JustUpdated || filterStepState == FilterState.Initialized))
@@ -112,9 +116,11 @@ namespace KalmanFilter
             Fk = modelProcess;
             return Predict();
         }
-        #endregion
+
+        #endregion Predict
 
         #region Update
+
         public override double[] Update(double[] measure)
         {
             if (filterStepState != FilterState.JustPredicted)
@@ -137,7 +143,7 @@ namespace KalmanFilter
             Hk = Matrix.Build.DenseOfRowArrays(modelObservation);
             return Update(measure);
         }
-        #endregion
-    }
 
+        #endregion Update
+    }
 }

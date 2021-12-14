@@ -10,16 +10,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections.Generic;
-using UnityEngine;
+
 using MathNet.Numerics;
-using System.Linq;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace umi3d.cdk.interaction.selection.intent
 {
     /// <summary>
-    /// Implementation of a selection intent detector using the refined version of Kinematic Endpoint Prediction extanded in 3D, 
+    /// Implementation of a selection intent detector using the refined version of Kinematic Endpoint Prediction extanded in 3D,
     /// from Lank et al. 2007 and Ruiz et al. 2009. The 3D expansion is an original work.
     /// </summary>
     [CreateAssetMenu(fileName = "RefinedKEPDetector", menuName = "UMI3D/Selection/Intent Detector/Refined KEP")]
@@ -72,7 +73,7 @@ namespace umi3d.cdk.interaction.selection.intent
         protected float coneAngle = 15;
 
         /// <summary>
-        /// Last predicted object. Makes it possible to select an object during more than one frame 
+        /// Last predicted object. Makes it possible to select an object during more than one frame
         /// </summary>
         protected InteractableContainer lastPredicted = null;
 
@@ -135,8 +136,8 @@ namespace umi3d.cdk.interaction.selection.intent
             rotationData.AddLast(angularSample); //accumulating data for computation
             lastRotation = new Quaternion(pointerTransform.rotation.x, pointerTransform.rotation.y, pointerTransform.rotation.z, pointerTransform.rotation.w);
 
-            return GetObjectUsingRefinedKEP(rotationData.Select(x => x.amplitudeTotal), 
-                                           rotationData.Select(x => x.speed), 
+            return GetObjectUsingRefinedKEP(rotationData.Select(x => x.amplitudeTotal),
+                                           rotationData.Select(x => x.speed),
                                            rotationData.Count);
         }
 
@@ -171,7 +172,7 @@ namespace umi3d.cdk.interaction.selection.intent
                 return lastPredicted;
             }
 
-            var predictedInteractable = FindPredictedObject(estimatedFinalAmplitude, rotationData.Select(d=>d.rotation));
+            var predictedInteractable = FindPredictedObject(estimatedFinalAmplitude, rotationData.Select(d => d.rotation));
             lastPredicted = predictedInteractable;
 
             ResetDetector();
@@ -278,7 +279,6 @@ namespace umi3d.cdk.interaction.selection.intent
             {
                 return default;
             }
-            
         }
 
         /// <summary>
@@ -297,7 +297,8 @@ namespace umi3d.cdk.interaction.selection.intent
             {
                 JsonSerializer serializer = new JsonSerializer();
                 //serialize object directly into file stream
-                serializer.Serialize(file, rotationData.Select(x => new {
+                serializer.Serialize(file, rotationData.Select(x => new
+                {
                     x.amplitudeTotal,
                     x.speed,
                     r_x = x.rotation.eulerAngles.x,
@@ -320,7 +321,5 @@ namespace umi3d.cdk.interaction.selection.intent
                 });
             }
         }
-
-
     }
 }

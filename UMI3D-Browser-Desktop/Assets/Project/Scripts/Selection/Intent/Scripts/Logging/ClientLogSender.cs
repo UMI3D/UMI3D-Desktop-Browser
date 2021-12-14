@@ -10,6 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -47,6 +48,7 @@ namespace umi3d.cdk.interaction.selection.intent.log
             manager = FindObjectOfType<IntentSelectorManager>();
             StartCoroutine(waitForEnvironment());
         }
+
         public IEnumerator waitForEnvironment()
         {
             yield return new WaitUntil(() => { return UMI3DEnvironmentLoader.Exists; });
@@ -55,8 +57,8 @@ namespace umi3d.cdk.interaction.selection.intent.log
             {
                 ready = true;
             });
-            
         }
+
         private void LateUpdate()
         {
             if (!ready)
@@ -66,7 +68,7 @@ namespace umi3d.cdk.interaction.selection.intent.log
             cacheSize++;
             if (cacheSize > cacheSizeMax)
             {
-                var fileName = "clientData_" + DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH'-'mm'-'ss") + "_" + (Time.frameCount%1000).ToString();
+                var fileName = "clientData_" + DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH'-'mm'-'ss") + "_" + (Time.frameCount % 1000).ToString();
                 SendData(new ClientData() { tracking = trackingDataCache, scene = sceneDataCache }, fileName);
                 trackingDataCache.Clear();
                 sceneDataCache.Clear();
@@ -104,7 +106,6 @@ namespace umi3d.cdk.interaction.selection.intent.log
 
             return trackingData;
         }
-
 
         private List<TargetData> FetchSceneData()
         {

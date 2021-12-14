@@ -10,6 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -25,9 +26,10 @@ namespace umi3d.cdk.interaction.selection
         /// Origin and orientation of the ray
         /// </summary>
         public Vector3 direction;
+
         public Vector3 origin;
-   
-        public RayZoneSelection(Vector3 origin, Vector3 direction) 
+
+        public RayZoneSelection(Vector3 origin, Vector3 direction)
         {
             this.origin = origin;
             this.direction = direction;
@@ -52,7 +54,7 @@ namespace umi3d.cdk.interaction.selection
                 if (interContainer != null)
                     objectsOnRay.Add(interContainer);
             }
-            
+
             return objectsOnRay;
         }
 
@@ -143,7 +145,7 @@ namespace umi3d.cdk.interaction.selection
                     {
                         objectsOnRay.Add(interContainer, hit);
                     }
-                }    
+                }
             }
 
             return objectsOnRay;

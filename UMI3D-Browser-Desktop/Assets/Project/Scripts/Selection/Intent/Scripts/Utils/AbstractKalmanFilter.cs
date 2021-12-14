@@ -10,6 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 
@@ -51,12 +52,12 @@ namespace KalmanFilter
         protected Matrix<double> P;
 
         /// <summary>
-		/// Std of process 
+		/// Std of process
 		/// </summary>
         protected double q;
 
         /// <summary>
-		/// Std of measurement 
+		/// Std of measurement
 		/// </summary>
         protected double r;
 
@@ -66,7 +67,7 @@ namespace KalmanFilter
         protected Matrix<double> Q;
 
         /// <summary>
-		/// Covariance of measurement 
+		/// Covariance of measurement
 		/// </summary>
         protected Matrix<double> R;
 
@@ -82,9 +83,11 @@ namespace KalmanFilter
             JustPredicted,
             JustUpdated
         }
+
         protected FilterState filterStepState;
 
         #region Getters
+
         /// <summary>
         /// Covariance of the process last predicted
         /// </summary>
@@ -101,14 +104,15 @@ namespace KalmanFilter
         /// Next estimated state from last prediction
         /// </summary>
         public double[] StateEstimationPredicted
-        { get => x_est_predicted.ToArray();  }
+        { get => x_est_predicted.ToArray(); }
 
         /// <summary>
         /// Next estimated state from last prediction
         /// </summary>
         public double[] StateEstimation
         { get => x_est.ToArray(); }
-        #endregion
+
+        #endregion Getters
 
         /// <summary>
         /// Initialize the filter with the first guess of the state
@@ -129,7 +133,7 @@ namespace KalmanFilter
         public void InitRandom()
         {
             var x_est = (q * Vector.Build.Random(L)).ToArray(); //initial state with noise
-            var covarianceInit =  Matrix.Build.DenseIdentity(L, L).ToRowArrays(); //initial state covraiance
+            var covarianceInit = Matrix.Build.DenseIdentity(L, L).ToRowArrays(); //initial state covraiance
             Init(x_est, covarianceInit);
         }
 
@@ -154,6 +158,4 @@ namespace KalmanFilter
             filterStepState = FilterState.Unitialized;
         }
     }
-
 }
-

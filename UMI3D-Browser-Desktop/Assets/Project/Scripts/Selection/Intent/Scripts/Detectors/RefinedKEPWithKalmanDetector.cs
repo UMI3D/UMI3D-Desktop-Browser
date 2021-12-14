@@ -10,16 +10,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using UnityEngine;
-using MathNet.Numerics.LinearAlgebra.Double;
-using System.Linq;
-using Newtonsoft.Json;
+
 using KalmanFilter;
+using MathNet.Numerics.LinearAlgebra.Double;
+using Newtonsoft.Json;
+using System.Linq;
+using UnityEngine;
 
 namespace umi3d.cdk.interaction.selection.intent
 {
     /// <summary>
-    /// Implementation of a selection intent detector using the refined version of Kinematic Endpoint Prediction extanded in 3D, 
+    /// Implementation of a selection intent detector using the refined version of Kinematic Endpoint Prediction extanded in 3D,
     /// from Lank et al. 2007 and Ruiz et al. 2009. The 3D expansion is an original work.
     /// </summary>
     [CreateAssetMenu(fileName = "RefinedKEPWithKalmanDetector", menuName = "UMI3D/Selection/Intent Detector/Refined KEP + Kalman")]
@@ -82,7 +83,6 @@ namespace umi3d.cdk.interaction.selection.intent
             return kalmanFilter;
         }
 
-
         public override InteractableContainer PredictTarget()
         {
             var newRotation = pointerTransform.rotation;
@@ -90,7 +90,7 @@ namespace umi3d.cdk.interaction.selection.intent
             totalAmplitude += deltaAmplitude;
 
             // case where the movement is stopped for at least two frames, stops the prediction
-            if (deltaAmplitude == 0 && rotationData.Count > 1 && rotationData.Last.Value.speed == 0) 
+            if (deltaAmplitude == 0 && rotationData.Count > 1 && rotationData.Last.Value.speed == 0)
             {
                 InteractableContainer predictedInteractable = GetClosestToRay(pointerTransform.forward);
                 lastPredicted = predictedInteractable;
@@ -122,8 +122,8 @@ namespace umi3d.cdk.interaction.selection.intent
             var processModel = GetProcessModel(Time.deltaTime); // assumption : next frame will be in duration dt
             var prediction = kalmanFilter.Predict(processModel);
 
-            return GetObjectUsingRefinedKEP(rotationData.Select(x => ((RotationDataSampleKalman)x).estimatedAmplitudeKalman), 
-                                rotationData.Select(x => ((RotationDataSampleKalman)x).estimatedSpeedKalman), 
+            return GetObjectUsingRefinedKEP(rotationData.Select(x => ((RotationDataSampleKalman)x).estimatedAmplitudeKalman),
+                                rotationData.Select(x => ((RotationDataSampleKalman)x).estimatedSpeedKalman),
                                 rotationData.Count);
         }
 
@@ -158,12 +158,11 @@ namespace umi3d.cdk.interaction.selection.intent
         /// <param name="predictedRotation"></param>
         protected override void ExportDataAsJSON(double estimatedAmplitude, Vector3 rotationDirection, Quaternion predictedRotation)
         {
-
             var path = @"D:\rotationDataKEP\kalman\";
             var fileNameRotationPrediction = "datarotationKalman";
             var number = System.IO.Directory.GetFiles(path).Where(f => f.StartsWith(path + fileNameRotationPrediction)).Count();
             var filePath = path + fileNameRotationPrediction + number.ToString() + ".json";
-            
+
             using (System.IO.StreamWriter file = System.IO.File.CreateText(filePath))
             {
                 JsonSerializer serializer = new JsonSerializer();
@@ -185,10 +184,6 @@ namespace umi3d.cdk.interaction.selection.intent
             }
 
             FileUploader.AddFileToUpload(filePath);
-           
-
         }
     }
-
-    
 }

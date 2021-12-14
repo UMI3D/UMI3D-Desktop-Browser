@@ -10,6 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using System;
@@ -33,7 +34,7 @@ namespace KalmanFilter
         private double kappa;
 
         /// <summary>
-        /// The beta coefficient, characterize type of distribution (2 for normal one) 
+        /// The beta coefficient, characterize type of distribution (2 for normal one)
         /// </summary>
         private double beta;
 
@@ -73,16 +74,19 @@ namespace KalmanFilter
             /// propagated mean, y
             /// </summary>
             public Vector<double> mean;
+
             /// <summary>
             /// propagated sigma vectors, Y
             /// </summary>
             public List<Vector<double>> samplingPoints;
+
             /// <summary>
             /// covariance matrix, P
             /// </summary>
             public Matrix<double> covariance;
+
             /// <summary>
-            /// deviation around mean, (Y_k-y)_k 
+            /// deviation around mean, (Y_k-y)_k
             /// </summary>
             public Matrix<double> deviations;
         }
@@ -105,10 +109,11 @@ namespace KalmanFilter
         }
 
         #region Init
+
         public override void Init(double[] initialStateGuessed, double[][] initialCovariance)
         {
             Q = Matrix.Build.Diagonal(L, L, q * q); //covariance of process
-            R = Matrix.Build.Dense(M, M, r * r); //covariance of measurement  
+            R = Matrix.Build.Dense(M, M, r * r); //covariance of measurement
 
             // unscented transform parameters
             alpha = 1e-3d;
@@ -128,9 +133,11 @@ namespace KalmanFilter
 
             filterStepState = FilterState.Initialized;
         }
-        #endregion
+
+        #endregion Init
 
         #region Predict
+
         public override double[] Predict()
         {
             if (!(filterStepState == FilterState.JustUpdated || filterStepState == FilterState.Initialized))
@@ -160,9 +167,11 @@ namespace KalmanFilter
             f = x => Vector.Build.DenseOfArray(processModel(x.ToArray()));
             return Predict();
         }
-        #endregion
+
+        #endregion Predict
 
         #region Update
+
         public override double[] Update(double[] measurements)
         {
             if (filterStepState != FilterState.JustPredicted)
@@ -204,9 +213,11 @@ namespace KalmanFilter
             h = observationModel;
             return Update(measure);
         }
-        #endregion
+
+        #endregion Update
 
         #region UnscentedTransform
+
         /// <summary>
         /// Unscented Transformation
         /// </summary>
@@ -284,6 +295,7 @@ namespace KalmanFilter
 
             return sigmaPoints;
         }
-        #endregion
+
+        #endregion UnscentedTransform
     }
 }

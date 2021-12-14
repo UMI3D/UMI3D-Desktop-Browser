@@ -10,8 +10,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using UnityEngine;
 
+using UnityEngine;
 
 namespace umi3d.cdk.interaction.selection.intent
 {
@@ -21,7 +21,6 @@ namespace umi3d.cdk.interaction.selection.intent
     [CreateAssetMenu(fileName = "IntenSelectDetector", menuName = "UMI3D/Selection/Intent Detector/Hover")]
     public class HoverDetector : AbstractSelectionIntentDetector
     {
-
         public override void InitDetector(AbstractController controller)
         {
             pointerTransform = Camera.main.transform; //?
@@ -39,6 +38,5 @@ namespace umi3d.cdk.interaction.selection.intent
         public override void ResetDetector()
         {
         }
-
     }
 }
