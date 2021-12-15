@@ -10,9 +10,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
 namespace umi3d.cdk.interaction.selection.intent
 {
@@ -35,23 +36,35 @@ namespace umi3d.cdk.interaction.selection.intent
         [SerializeField]
         private float coneAngle = 15;
 
-        /// <summary>
-        /// Maximum score before provoking a reset of the detector
-        /// </summary>
-        [Header("Score boundaries")]
         [SerializeField]
-        private float scoreMax = 70;
+        private float stickinessCoeff = 0.5f;
+
+        [SerializeField]
+        private float snappinessCoeff = 0.5f;
 
         /// <summary>
-        /// Minimum score for an object to remain considered
+        /// Tolerance at the boundaries (epsilon)
         /// </summary>
         [SerializeField]
-        private float scoreMin = -10;
+        private float tolerance = 0.001f;
+
+        /// <summary>
+        /// Maximum value for the score
+        /// </summary>
+        private float boundary;
+
+        /// <summary>
+        /// If true, the algorithm is scaled to real time based on [Ortega 2013] suggestion
+        /// </summary>
+        [SerializeField]
+        private bool scaledTimeEnhancement = false;
 
         /// <summary>
         /// Selection mode
         /// </summary>
-        private enum IntenSelectMode { CONE_FROM_HAND, CONE_FROM_HEAD };
+        private enum IntenSelectMode
+        { CONE_FROM_HAND, CONE_FROM_HEAD };
+
         [SerializeField]
         private IntenSelectMode currentMode = IntenSelectMode.CONE_FROM_HEAD;
 
@@ -61,8 +74,7 @@ namespace umi3d.cdk.interaction.selection.intent
         /// </summary>
         private Dictionary<InteractableContainer, float> objectsToConsiderScoresDict;
 
-
-        override public void InitDetector(AbstractController controller)
+        public override void InitDetector(AbstractController controller)
         {
             objectsToConsiderScoresDict = new Dictionary<InteractableContainer, float>();
 
@@ -70,9 +82,10 @@ namespace umi3d.cdk.interaction.selection.intent
                 pointerTransform = Camera.main.transform; // could get the Mouse and Keyboard controller viewPoint ?
             else
                 pointerTransform = controller.transform;
+            boundary = snappinessCoeff / (1 - stickinessCoeff);
         }
 
-        override public void ResetDetector()
+        public override void ResetDetector()
         {
             objectsToConsiderScoresDict.Clear();
         }
@@ -88,10 +101,10 @@ namespace umi3d.cdk.interaction.selection.intent
         }
 
         /// <summary>
-        /// Find the target of the use intention according to the IntentSelect algorithm 
+        /// Find the target of the use intention according to the IntentSelect algorithm
         /// </summary>
         /// <returns>The intended object or null</returns>
-        override public InteractableContainer PredictTarget()
+        public override InteractableContainer PredictTarget()
         {
             var coneSelector = new ConicZoneSelection(pointerTransform.position, pointerTransform.forward, coneAngle);
 
@@ -101,7 +114,7 @@ namespace umi3d.cdk.interaction.selection.intent
             {
                 if (!objectsToConsiderScoresDict.ContainsKey(obj))
                 {
-                    if (coneSelector.IsObjectInZone(obj)) 
+                    if (coneSelector.IsObjectInZone(obj))
                     {
                         objectsToConsiderScoresDict.Add(obj, 0);
                         objectsToConsiderScoresDict[obj] = ComputeScore(obj);
@@ -109,20 +122,18 @@ namespace umi3d.cdk.interaction.selection.intent
                 }
                 else
                 {
-                    if (objectsToConsiderScoresDict[obj] <= scoreMin) //remove useless objects that are too far
+                    if (objectsToConsiderScoresDict[obj] <= -(boundary - tolerance)) //remove useless objects that are too far
                         objectsToConsiderScoresDict.Remove(obj);
-
                     else
                         objectsToConsiderScoresDict[obj] = ComputeScore(obj);
                 }
             }
 
             var maxScore = objectsToConsiderScoresDict.Values.Max();
-            var estimatedTargetPair = objectsToConsiderScoresDict.FirstOrDefault(o=> o.Value == maxScore); //find the object with the highest score
+            var estimatedTargetPair = objectsToConsiderScoresDict.FirstOrDefault(o => o.Value == maxScore); //find the object with the highest score
 
-           return estimatedTargetPair.Key;
+            return estimatedTargetPair.Key;
         }
-
 
         /// <summary>
         /// Compute the cumulative score according to the formula of IntentSelect
@@ -138,10 +149,12 @@ namespace umi3d.cdk.interaction.selection.intent
 
             if (dproj != 0)
             {
-                var correctedAngle = Mathf.Atan2(Mathf.Pow(dproj, corrective_k), dperp) * 180/Mathf.PI;
+                var correctedAngle = Mathf.Atan2(Mathf.Pow(dproj, corrective_k), dperp) * 180 / Mathf.PI;
                 var variation = 1 - (correctedAngle / coneAngle);
-                var newScore = objectsToConsiderScoresDict[obj] + variation;
-                if (newScore>scoreMax) //Avoid float overflow and give reactivity to the detector
+                if (scaledTimeEnhancement)
+                    variation *= Time.deltaTime;
+                var newScore = objectsToConsiderScoresDict[obj] * stickinessCoeff + variation * snappinessCoeff;
+                if (newScore > (boundary)) //Avoid float overflow and give reactivity to the detector
                 {
                     ResetExceptOne(obj);
                     return 1;
@@ -152,6 +165,5 @@ namespace umi3d.cdk.interaction.selection.intent
             else
                 return 0;
         }
-
     }
 }

@@ -16,4 +16,7 @@ MonoBehaviour:
   coneAngle: 15
   scoreMax: 70
   scoreMin: -10
+  stickinessCoeff: 0.3
+  snappinessCoeff: 0.7
+  scaledTimeEnhancement: 1
   currentMode: 1
