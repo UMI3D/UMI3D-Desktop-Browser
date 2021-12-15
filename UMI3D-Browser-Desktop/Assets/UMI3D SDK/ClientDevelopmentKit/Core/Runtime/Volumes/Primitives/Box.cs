@@ -36,8 +36,10 @@ namespace umi3d.cdk.volumes
 
         public ulong rootNodeId;
 
+        /// <inheritdoc/>
         public override void Delete() { }
 
+        /// <inheritdoc/>
         public override void GetBase(System.Action<Mesh> onsuccess, float angleLimit)
         {
             List<Vector3> verts = new List<Vector3>();
@@ -59,11 +61,13 @@ namespace umi3d.cdk.volumes
             onsuccess.Invoke(base_);
         }
 
+        /// <inheritdoc/>
         public override Mesh GetMesh()
         {
             return GeometryTools.GetBox(localToWorld, bounds);
         }
 
+        /// <inheritdoc/>
         public override bool IsInside(Vector3 point, Space relativeTo)
         {
             if (relativeTo == Space.Self)

@@ -20,6 +20,9 @@ using UnityEngine;
 
 namespace umi3d.cdk.volumes
 {
+    /// <summary>
+    /// Cylinder shaped primitive.
+    /// </summary>
     public class Cylinder : AbstractPrimitive
     {
         public float radius { get; private set; }
@@ -33,8 +36,10 @@ namespace umi3d.cdk.volumes
         /// </summary>
         public Matrix4x4 localToWorld => Matrix4x4.TRS(position, rotation, scale);
 
+        /// <inheritdoc/>
         public override void Delete() { }
 
+        /// <inheritdoc/>
         public override void GetBase(System.Action<Mesh> onsuccess, float angleLimit)
         {
             int subdiv = 128; //meh...
@@ -68,11 +73,13 @@ namespace umi3d.cdk.volumes
             onsuccess.Invoke(mesh);
         }
 
+        /// <inheritdoc/>
         public override Mesh GetMesh()
         {
             return GeometryTools.GetCylinder(position, rotation, scale, radius, height, 16 * ((int) radius + 1));
         }
 
+        /// <inheritdoc/>
         public override bool IsInside(Vector3 point, Space relativeTo)
         {
             /*

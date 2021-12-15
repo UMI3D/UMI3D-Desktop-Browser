@@ -20,6 +20,9 @@ using UnityEngine.Events;
 
 namespace umi3d.cdk.volumes
 { 
+    /// <summary>
+    /// Base class for volume cells.
+    /// </summary>
     public abstract class AbstractVolumeCell
     {
         public abstract ulong Id();

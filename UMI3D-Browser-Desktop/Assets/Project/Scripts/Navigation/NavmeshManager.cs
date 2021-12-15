@@ -73,12 +73,6 @@ namespace BrowserDesktop.Navigation
             },
             true);
 
-            VolumeSliceGroupManager.SubscribeToSliceGroupCreation(c =>
-            {
-                AddNavigableVolume(c);
-            },
-            true);
-
             ExternalVolumeDataManager.SubscribeToExternalVolumeCreation(c =>
             {
                 AddNavigableVolume(c);
