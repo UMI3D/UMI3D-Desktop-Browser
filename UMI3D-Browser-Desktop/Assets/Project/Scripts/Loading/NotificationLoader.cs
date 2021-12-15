@@ -50,7 +50,8 @@ public class NotificationLoader : umi3d.cdk.NotificationLoader
 
         //LoadIcon2d(dto.icon2D);
         
-        UMI3DEnvironmentLoader.RegisterNodeInstance(dto.id, dto,notif.gameObject);
+        UMI3DEnvironmentLoader.RegisterNodeInstance(dto.id, dto,notif.gameObject).NotifyLoaded();
+
     }
 
     public override bool SetUMI3DProperty(UMI3DEntityInstance entity, SetEntityPropertyDto property)
