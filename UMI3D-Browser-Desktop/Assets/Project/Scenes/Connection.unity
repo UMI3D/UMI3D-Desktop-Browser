@@ -428,8 +428,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d21ea716276c1d14cba8775a85338cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _logScope: 0
-  _logLevel: 0
+  _logScope: -1
+  _logLevel: 2
   logPath: 
   log: 0
   infoPath: 
