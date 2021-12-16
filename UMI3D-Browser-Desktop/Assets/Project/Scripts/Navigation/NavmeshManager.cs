@@ -41,6 +41,9 @@ namespace BrowserDesktop.Navigation
         public NavMeshSurface surface;
         public Material invisibleMaterial;
 
+        private Dictionary<ulong, GameObject> cellIdToGameobjects = new Dictionary<ulong, GameObject>();
+
+
         void Start()
         {
             navmeshLayer = LayerMask.NameToLayer(navmeshLayerName);
@@ -79,7 +82,24 @@ namespace BrowserDesktop.Navigation
             },
             true);
 
+            ExternalVolumeDataManager.SubscribeToExternalVolumeDelete(RemoveCell);
+            VolumePrimitiveManager.SubscribeToPrimitiveDelete(RemoveCell);
+
             surface.BuildNavMesh();
+        }
+
+        
+        public void RemoveCell(AbstractVolumeCell cell)
+        {
+            if (cellIdToGameobjects.ContainsKey(cell.Id()))
+            {
+                GameObject obj = cellIdToGameobjects[cell.Id()];
+                cellIdToGameobjects.Remove(cell.Id());
+                Destroy(obj);
+
+                cellReceived = 1;
+                cellProcessed = 1;
+            }
         }
 
         public void AddNavigableVolume(AbstractVolumeCell cell)
@@ -99,6 +119,7 @@ namespace BrowserDesktop.Navigation
 
                     ChangeObjectAndChildrenLayer(surfaceGo, navmeshLayer);
                     cellProcessed++;
+                    cellIdToGameobjects.Add(cell.Id(), surfaceGo);
                 }, surface.GetBuildSettings().agentSlope);
             }
             else
@@ -111,6 +132,7 @@ namespace BrowserDesktop.Navigation
                 obstacle.AddComponent<MeshFilter>().mesh = cell.GetMesh();
                 obstacle.AddComponent<MeshRenderer>().material = invisibleMaterial; //<-- not ideal.
                 ChangeObjectAndChildrenLayer(obstacle, obstacleLayer);
+                cellIdToGameobjects.Add(cell.Id(), obstacle);
             }
         }
 
