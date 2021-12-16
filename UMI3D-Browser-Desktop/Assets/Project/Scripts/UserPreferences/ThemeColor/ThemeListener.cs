@@ -16,7 +16,7 @@ limitations under the License.
 using System.Collections;
 using UnityEngine;
 
-namespace BrowserDesktop.Theme
+namespace BrowserDesktop.UserPreferences.Theme
 {
     public abstract class ThemeListener : MonoBehaviour
     {

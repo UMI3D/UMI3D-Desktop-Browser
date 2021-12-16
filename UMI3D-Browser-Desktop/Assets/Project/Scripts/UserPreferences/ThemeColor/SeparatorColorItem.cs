@@ -15,7 +15,7 @@ limitations under the License.
 */
 using UnityEngine.UI;
 
-namespace BrowserDesktop.Theme
+namespace BrowserDesktop.UserPreferences.Theme
 {
 
     public class SeparatorColorItem : ThemeListener

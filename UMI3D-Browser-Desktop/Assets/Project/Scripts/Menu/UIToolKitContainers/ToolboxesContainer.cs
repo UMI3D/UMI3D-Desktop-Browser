@@ -30,6 +30,9 @@ namespace BrowserDesktop.Menu.Container
 
         #region Toolboxes List
 
+        /// <summary>
+        /// Contains the toolboxes that will display at the root of the toolboxesMenu or the toolboxesWindow.
+        /// </summary>
         private List<RootToolsContainer> toolboxes = new List<RootToolsContainer>();
 
         public override AbstractDisplayer this[int i]
