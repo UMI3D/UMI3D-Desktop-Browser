@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using BrowserDesktop.Menu;
+//using BrowserDesktop.Menu;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -68,7 +68,7 @@ namespace BrowserDesktop.UI.GenericElement
                 else if (iconsAreaWidth < value) //The icons area width has increased.
                 {
                     iconsAreaWidth = value;
-                    Shortcuts.Shortcut_ge_DisplayedList.ForEach((vE) => { vE.ResizeShortcutWidth(); });
+                    //Shortcuts.Shortcut_ge_DisplayedList.ForEach((vE) => { vE.ResizeShortcutWidth(); });
                 }
             }
         }
@@ -130,20 +130,20 @@ namespace BrowserDesktop.UI.GenericElement
                 if (i != 0 && i < shortcutIcons.Length)
                 {
                     Label_GE plus;
-                    Shortcuts.ObjectPooling(out plus, Shortcuts.ShortcutLabel_ge_DisplayedList, Shortcuts.ShortcutLabel_ge_WaitedList, label_VTA);
-                    plus.
-                        Setup("+", "label").
-                        AddTo(iconsLayout_VE);
+                    //Shortcuts.ObjectPooling(out plus, Shortcuts.ShortcutLabel_ge_DisplayedList, Shortcuts.ShortcutLabel_ge_WaitedList, label_VTA);
+                    //plus.
+                    //    Setup("+", "label").
+                    //    AddTo(iconsLayout_VE);
 
                     /*plus.AddToClassList("label-shortcut");
                     plus.AddToClassList("label-shortcut-plus");*/
                 }
 
                 ShortcutIcon_GE icon_GE;
-                Shortcuts.ObjectPooling(out icon_GE, Shortcuts.ShortcutIcon_ge_DisplayedList, Shortcuts.ShortcutIcon_ge_WaitedList, shortcutIcon_VTA);
-                icon_GE.
-                    Setup(shortcutIcons[i]).
-                    AddTo(iconsLayout_VE);
+                //Shortcuts.ObjectPooling(out icon_GE, Shortcuts.ShortcutIcon_ge_DisplayedList, Shortcuts.ShortcutIcon_ge_WaitedList, shortcutIcon_VTA);
+                //icon_GE.
+                //    Setup(shortcutIcons[i]).
+                //    AddTo(iconsLayout_VE);
             }
 
             return this;

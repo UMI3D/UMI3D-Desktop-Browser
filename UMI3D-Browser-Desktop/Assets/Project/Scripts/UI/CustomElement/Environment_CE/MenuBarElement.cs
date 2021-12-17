@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using BrowserDesktop.Menu.Environment.Settings;
+//using BrowserDesktop.Menu.Environment.Settings;
 using BrowserDesktop.UI.GenericElement;
 using System;
 using System.Collections;
@@ -26,6 +26,13 @@ namespace BrowserDesktop.UI.CustomElement
 {
     public class MenuBarElement : AbstractGenericAndCustomElement
     {
+        public enum Layout
+        {
+            LEFT, CENTER, RIGHT
+        }
+
+        #region Fields
+
         /// <summary>
         /// To be recognized by UI Builder
         /// </summary>
@@ -36,19 +43,21 @@ namespace BrowserDesktop.UI.CustomElement
         public ToolboxMenuBarSV_E ToolboxLayout => centerLayout_VE;
         private VisualElement rightLayout_VE;
 
-        private ToolboxButtonGenericElement avatar_TBGE;
-        public ToolboxButtonGenericElement Avatar_TBGE => avatar_TBGE;
-        private ToolboxButtonGenericElement sound_TBGE;
-        public ToolboxButtonGenericElement Sound_TBGE => sound_TBGE;
-        private ToolboxButtonGenericElement mic_TBGE;
-        public ToolboxButtonGenericElement Mic_TBGE => mic_TBGE;
 
         public VisualElement SubMenuLayout { get; private set; }
 
-        private VisualTreeAsset toolboxGE_VTA;
-        private VisualTreeAsset toolboxButtonGE_VTA;
-        private VisualTreeAsset toolboxSeparatorGE_VTA;
-        private UIDocument uiDocument;
+
+        #endregion
+
+        #region Initialization
+
+        public MenuBarElement() : base()
+        {
+            //Flex
+            this.style.flexShrink = 0f;
+            //Size
+            this.style.width = Length.Percent(100f);
+        }
 
         protected override void Initialize()
         {
@@ -60,75 +69,49 @@ namespace BrowserDesktop.UI.CustomElement
             SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
         }
 
-        public void Setup(VisualTreeAsset toolboxGE_VTA, VisualTreeAsset toolboxButtonGE_VTA, VisualTreeAsset toolboxSeparatorGE_VTA, UIDocument uiDocument)
+        #endregion
+
+        public MenuBarElement Add(ToolboxGenericElement toolbox, Layout layout)
+        {
+            switch (layout)
+            {
+                case Layout.LEFT:
+                    toolbox.
+                        AddTo(leftLayout_VE);
+                    break;
+                case Layout.CENTER:
+                    throw new NotImplementedException();
+                case Layout.RIGHT:
+                    toolbox.
+                        AddTo(rightLayout_VE);
+                    break;
+            }
+            return this;
+        }
+        public MenuBarElement AddLeft(ToolboxGenericElement toolbox)
+        {
+            return Add(toolbox, Layout.LEFT);
+        }
+        public MenuBarElement AddCenter(ToolboxGenericElement toolbox)
+        {
+            return Add(toolbox, Layout.CENTER);
+        }
+        public MenuBarElement AddRight(ToolboxGenericElement toolbox)
+        {
+            return Add(toolbox, Layout.RIGHT);
+        }
+
+        public MenuBarElement Setup()
         {
             Initialize();
 
-            this.toolboxGE_VTA = toolboxGE_VTA;
-            this.toolboxButtonGE_VTA = toolboxButtonGE_VTA;
-            this.toolboxSeparatorGE_VTA = toolboxSeparatorGE_VTA;
-            this.uiDocument = uiDocument;
-
-            #region Left layout
-
-            AddSpacer(leftLayout_VE);
-
-            ToolboxButtonGenericElement openToolboxButton_TBGE;
-            CloneAndSetup(out openToolboxButton_TBGE, "Toolbox", "toolbox", "toolbox", true, () =>
-            {
-                //Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPositionCoroutine());
-                Menu.DialogueBox_UIController.
-                    Setup("TODO", "Not implemented yed", "Close", () => { }).
-                    DisplayFrom(uiDocument);
-            });
-            CloneAndSetupToolbox("", openToolboxButton_TBGE, leftLayout_VE);
-
-            AddSeparator(leftLayout_VE, toolboxSeparatorGE_VTA);
-
-            #endregion
 
             centerLayout_VE.
                 Setup("menuBar", "scrollView-btn", (vE) => 
                 { 
-                    AddSeparator(vE, toolboxSeparatorGE_VTA); 
+                    //AddSeparator(vE, toolboxSeparatorGE_VTA); 
                 });
 
-            #region Right layout
-
-            AddSeparator(rightLayout_VE, toolboxSeparatorGE_VTA);
-
-            CloneAndSetup(out avatar_TBGE, "", "avatarOn", "avatarOff", true, () =>
-            {
-                ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();
-            });
-            CloneAndSetup(out sound_TBGE, "", "soundOn", "soundOff", true, () =>
-            {
-                ActivateDeactivateAudio.Instance.ToggleAudioStatus();
-            });
-            CloneAndSetup(out mic_TBGE, "", "micOn", "micOff", false, () =>
-            {
-                ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
-            });
-            CloneAndSetupToolbox("", new ToolboxButtonGenericElement[3] { avatar_TBGE, sound_TBGE, mic_TBGE }, rightLayout_VE);
-
-            AddSeparator(rightLayout_VE, toolboxSeparatorGE_VTA);
-
-            ToolboxButtonGenericElement leave_TBGE;
-            CloneAndSetup(out leave_TBGE, "", "leave", "leave", true, () =>
-            {
-                Menu.DialogueBox_UIController.
-                    Setup("Leave environment", "Are you sure ...?", "YES", "NO", (b) =>
-                    {
-                        if (b)
-                            ConnectionMenu.Instance.Leave();
-                    }).
-                    DisplayFrom(uiDocument);
-            });
-            CloneAndSetupToolbox("", leave_TBGE, rightLayout_VE);
-
-            AddSpacer(rightLayout_VE);
-
-            #endregion
 
             #region Test
 
@@ -177,6 +160,8 @@ namespace BrowserDesktop.UI.CustomElement
             #endregion
 
             ReadyToDisplay();
+
+            return this;
         }
 
         public void AddInSubMenu(ToolboxGenericElement tools, ToolboxGenericElement parent)
@@ -191,57 +176,10 @@ namespace BrowserDesktop.UI.CustomElement
 
                 //test.style.left = image.WorldToLocal(new Vector2(image.worldBound.x, 0f)).x;
             };
-            Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPositionCoroutine());
+            //Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPositionCoroutine());
         }
 
         #region Private Functions
-
-        /// <summary>
-        /// Clone and Setup the ToolboxButtonGE [tool].
-        /// </summary>
-        /// <param name="tool"></param>
-        /// <param name="withName"></param>
-        /// <param name="withClassOn"></param>
-        /// <param name="withClassOff"></param>
-        /// <param name="isOn"></param>
-        /// <param name="buttonClicked"></param>
-        private void CloneAndSetup(out ToolboxButtonGenericElement tool, string withName, string withClassOn, string withClassOff, bool isOn, Action buttonClicked)
-        {
-            tool = toolboxButtonGE_VTA.
-                CloneTree().
-                Q<ToolboxButtonGenericElement>().
-                Setup(withName, withClassOn, withClassOff, isOn, buttonClicked);
-        }
-
-        /// <summary>
-        /// Clone and Setup a toolboxGE.
-        /// </summary>
-        /// <param name="withName"></param>
-        /// <param name="withTool"></param>
-        /// <param name="withParent"></param>
-        private void CloneAndSetupToolbox(string withName, ToolboxButtonGenericElement withTool, VisualElement withParent)
-        {
-            toolboxGE_VTA.
-                CloneTree().
-                Q<ToolboxGenericElement>().
-                Setup(withName, withTool).
-                AddTo(withParent);
-        }
-
-        /// <summary>
-        /// Clone and Setup a toolboxGE.
-        /// </summary>
-        /// <param name="withName"></param>
-        /// <param name="withTools"></param>
-        /// <param name="withParent"></param>
-        private void CloneAndSetupToolbox(string withName, ToolboxButtonGenericElement[] withTools, VisualElement withParent)
-        {
-            toolboxGE_VTA.
-                CloneTree().
-                Q<ToolboxGenericElement>().
-                Setup(withName, withTools).
-                AddTo(withParent);
-        }
 
         private IEnumerator LogWorldPositionCoroutine()
         {
@@ -252,6 +190,14 @@ namespace BrowserDesktop.UI.CustomElement
 
         private Action logWorldPosition;
 
+        public void AddSpacerToLeftLayout()
+        {
+            AddSpacer(leftLayout_VE);
+        }
+        public void AddSpacerToRightLayout()
+        {
+            AddSpacer(rightLayout_VE);
+        }
         private void AddSpacer(VisualElement layoutContainer_VE)
         {
             VisualElement space = new VisualElement();
@@ -259,6 +205,18 @@ namespace BrowserDesktop.UI.CustomElement
             layoutContainer_VE.Add(space);
         }
 
+        #region Separator
+
+        public void AddLeft(ToolboxSeparatorGenericElement separator)
+        {
+            separator.
+                AddTo(leftLayout_VE);
+        }
+        public void AddRight(ToolboxSeparatorGenericElement separator)
+        {
+            separator.
+                AddTo(rightLayout_VE);
+        }
         private void AddSeparator(VisualElement layoutContainer_VE, VisualTreeAsset toolboxSeparatorGE_VTA)
         {
             toolboxSeparatorGE_VTA.
@@ -267,6 +225,8 @@ namespace BrowserDesktop.UI.CustomElement
                 Setup().
                 AddTo(layoutContainer_VE);
         }
+
+        #endregion
 
         #endregion
 

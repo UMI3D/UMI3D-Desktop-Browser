@@ -35,6 +35,10 @@ namespace BrowserDesktop.UI
         /// </summary>
         public bool Displayed { get; protected set; } = false;
 
+        public AbstractGenericAndCustomElement() : base()
+        {
+        }
+
         ~AbstractGenericAndCustomElement()
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
@@ -74,6 +78,7 @@ namespace BrowserDesktop.UI
         public virtual void Remove()
         {
             if (!Displayed) return;
+            else Displayed = false;
             this.RemoveFromHierarchy();
         }
 
