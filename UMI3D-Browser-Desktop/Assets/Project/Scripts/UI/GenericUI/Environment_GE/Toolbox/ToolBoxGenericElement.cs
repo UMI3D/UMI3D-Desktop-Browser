@@ -87,12 +87,13 @@ namespace BrowserDesktop.UI.GenericElement
             toolboxContainer_VE.Add(horizontalSpacer);
         }
 
-        public void AddTool(ToolboxButtonGenericElement tool)
+        public ToolboxGenericElement AddTool(ToolboxButtonGenericElement tool)
         {
             if (buttons.Count > 0)
                 AddSpacer();
             tool.AddTo(toolboxContainer_VE);
             buttons.Add(tool);
+            return this;
         }
 
         public override void Remove()

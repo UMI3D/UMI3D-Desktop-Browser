@@ -23,31 +23,43 @@ namespace BrowserDesktop.Menu
 {
     public class DialogueBox_UIController : umi3d.common.PersistentSingleton<DialogueBox_UIController>
     {
-        [Tooltip("VisualTreeAsset of a dialogue box")]
         [SerializeField]
+        [Tooltip("VisualTreeAsset of a dialogue box")]
         private VisualTreeAsset dialogueBox_VTA;
 
+        /// <summary>
+        /// The one and only dialogue box to be displayed.
+        /// </summary>
         private DialogueBoxElement dialogueBox;
 
-        private bool isDisplayed = false;
-        public static bool Displayed => Instance.isDisplayed;
+        /// <summary>
+        /// True if the Dialogue box is visible.
+        /// </summary>
+        public static bool Displayed { get; private set; } = false;
 
         protected override void Awake()
         {
             base.Awake();
             Debug.Assert(dialogueBox_VTA != null, "Dialogue box VTA null in DialogueBox_UIController");
-            dialogueBox = dialogueBox_VTA.CloneTree().Q<DialogueBoxElement>();
+            dialogueBox = dialogueBox_VTA.
+                CloneTree().
+                Q<DialogueBoxElement>().
+                Init(
+                    Close,
+                    (o) => { Cursor.CursorHandler.SetMovement(o, Cursor.CursorHandler.CursorMovement.Free); },
+                    (o) => { Cursor.CursorHandler.UnSetMovement(o); }
+                );
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Return) && isDisplayed) Close(true);
-            else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)) && isDisplayed) Close(false);
+            if (Input.GetKeyDown(KeyCode.Return) && Displayed) Close(true);
+            else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)) && Displayed) Close(false);
         }
 
         public static DialogueBox_UIController Setup(string title, string message, string optionA, string optionB, System.Action<bool> choiceCallback, bool marginForTitleBar = false)
         {
-            if (!Instance.isDisplayed) 
+            if (!Displayed) 
                 Instance.dialogueBox.
                     Setup(title, message, optionA, optionB, choiceCallback, marginForTitleBar);
             return Instance;
@@ -55,7 +67,7 @@ namespace BrowserDesktop.Menu
 
         public static DialogueBox_UIController Setup(string title, string message, string optionA, System.Action choiceCallback, bool marginForTitleBar = false)
         {
-            if (!Instance.isDisplayed) 
+            if (!Displayed) 
                 Instance.dialogueBox.
                     Setup(title, message, optionA, choiceCallback, marginForTitleBar);
             return Instance;
@@ -63,20 +75,18 @@ namespace BrowserDesktop.Menu
 
         public void DisplayFrom(UIDocument uiDocument)
         {
-            if (isDisplayed) return;
-
-            isDisplayed = true;
+            if (Displayed) return;
+            else Displayed = true;
             dialogueBox.AddTo(uiDocument.rootVisualElement);
         }
 
         public static void Close(bool val)
         {
-            if (!Instance.isDisplayed) return;
-
-            Instance.isDisplayed = false;
+            if (!Displayed) return;
+            else Displayed = false;
 
             Instance.dialogueBox.ChoiceCallback(val);
-            Instance.dialogueBox.RemoveFromHierarchy();
+            Instance.dialogueBox.Remove();
         }
     }
 }

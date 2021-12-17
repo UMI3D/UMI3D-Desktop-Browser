@@ -17,7 +17,7 @@ limitations under the License.
 using System;
 using System.Collections;
 using umi3d.cdk;
-using UnityEngine;
+//using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.CustomElement
@@ -28,11 +28,13 @@ namespace BrowserDesktop.UI.CustomElement
 
         public new class UxmlFactory : UxmlFactory<DialogueBoxElement, UxmlTraits> { }
 
-        private Action<bool> choiceCallback;
         /// <summary>
         /// Action to be performed when the user interact with the dialogue box.
         /// </summary>
-        public Action<bool> ChoiceCallback => choiceCallback;
+        public Action<bool> ChoiceCallback { get; private set; }
+        private Action<bool> closeAction_UIController;
+        private Action<object> cursorSetMovementAction_UIController;
+        private Action<object> cursorUnsetMovementAction_UIController;
 
         /// <summary>
         /// Title of this dialogue box.
@@ -63,13 +65,27 @@ namespace BrowserDesktop.UI.CustomElement
         #endregion
 
         /// <summary>
+        /// Bind to UI controller.
+        /// </summary>
+        /// <param name="closeDialogueBoxAction"></param>
+        /// <param name="cursorSetMovementAction"></param>
+        /// <param name="cursorUnsetMovementAction"></param>
+        public DialogueBoxElement Init(Action<bool> closeDialogueBoxAction, Action<object> cursorSetMovementAction, Action<object> cursorUnsetMovementAction)
+        {
+            closeAction_UIController = closeDialogueBoxAction;
+            cursorSetMovementAction_UIController = cursorSetMovementAction;
+            cursorUnsetMovementAction_UIController = cursorUnsetMovementAction;
+            return this;
+        }
+
+        /// <summary>
         /// Initialize the dialogue box the first time (UI binding and button settings).
         /// </summary>
         protected override void Initialize()
         {
             base.Initialize();
 
-            Cursor.CursorHandler.SetMovement(this, Cursor.CursorHandler.CursorMovement.Free);
+            cursorSetMovementAction_UIController(this);
             this.style.position = Position.Absolute;
 
             title_L = this.Q<Label>("dialogue-box-title");
@@ -80,11 +96,11 @@ namespace BrowserDesktop.UI.CustomElement
 
             optionA_B.clickable.clicked += () =>
             {
-                Menu.DialogueBox_UIController.Close(true);
+                closeAction_UIController(true);
             };
             optionB_B.clickable.clicked += () =>
             {
-                Menu.DialogueBox_UIController.Close(false);
+                closeAction_UIController(false);
             };
         }
 
@@ -110,9 +126,9 @@ namespace BrowserDesktop.UI.CustomElement
                 this.style.marginTop = 40;
             }
 
-            this.choiceCallback = (b) =>
+            this.ChoiceCallback = (b) =>
             {
-                Cursor.CursorHandler.UnSetMovement(this);
+                cursorUnsetMovementAction_UIController(this);
                 choiceCallback(b);
             };
         }
@@ -138,9 +154,9 @@ namespace BrowserDesktop.UI.CustomElement
                 this.style.marginTop = 40;
             }
 
-            this.choiceCallback = (b) =>
+            this.ChoiceCallback = (b) =>
             {
-                Cursor.CursorHandler.UnSetMovement(this);
+                cursorUnsetMovementAction_UIController(this);
                 choiceCallback();
             };
         }
@@ -161,7 +177,7 @@ namespace BrowserDesktop.UI.CustomElement
 
         public override void OnApplyUserPreferences()
         {
-            if (!Menu.DialogueBox_UIController.Displayed) return;
+            if (!Displayed) return;
 
             UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(title_L, "title", titleText);
             UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(message_L, "corps", messageText);
