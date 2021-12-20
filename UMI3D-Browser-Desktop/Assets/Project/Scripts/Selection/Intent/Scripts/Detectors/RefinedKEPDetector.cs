@@ -13,6 +13,7 @@ limitations under the License.
 
 using MathNet.Numerics;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -165,7 +166,7 @@ namespace umi3d.cdk.interaction.selection.intent
                 return lastPredicted;
 
             // Second criterion : the prediction should be stable enough, otherwise the prediction is inaccurate (Refined KEP, Ruiz 2009)
-            var instability = (estimatedFinalAmplitude - lastEstimatedFinalAmplitude) / estimatedFinalAmplitude;
+            var instability = Math.Abs(estimatedFinalAmplitude - lastEstimatedFinalAmplitude) / estimatedFinalAmplitude;
             if (instability >= stabilityThreshold)
             {
                 lastEstimatedFinalAmplitude = estimatedFinalAmplitude;

@@ -17,5 +17,5 @@ MonoBehaviour:
   targetDistanceThreshold: 0.8
   minimalNumberOfSamples: 15
   coneAngle: 7.5
-  movementNoiseStd: 0.001
+  movementNoiseStd: 1
   observationNoiseStd: 1

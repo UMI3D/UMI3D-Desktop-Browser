@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   corrective_k: 0.8
   coneAngle: 15
-  scoreMax: 70
-  scoreMin: -10
   stickinessCoeff: 0.3
   snappinessCoeff: 0.7
-  scaledTimeEnhancement: 1
+  tolerance: 0.001
+  scaledTimeEnhancement: 0
   currentMode: 1

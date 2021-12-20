@@ -2357,7 +2357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deactivationRequesters: 
   controller: {fileID: 2096641628}
-  detector: {fileID: 11400000, guid: bba01cdd18b8f2345b4f98b14348e171, type: 2}
+  detector: {fileID: 11400000, guid: 10cf073b1ed81604cb69a240c24e3ca1, type: 2}
   selectionVisualCueHandler: {fileID: 2096641630}
 --- !u!114 &2096641630
 MonoBehaviour:
@@ -2392,7 +2392,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2096641626}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 828e969d081aa364e9017e615946e6bc, type: 3}
   m_Name: 
