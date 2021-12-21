@@ -14,9 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.UI.GenericElement;
+using DesktopBrowser.UI.GenericElement;
 using System;
 using umi3d.common;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace DesktopBrowser.UIControllers.Toolbox
 {
@@ -25,10 +27,75 @@ namespace DesktopBrowser.UIControllers.Toolbox
         [SerializeField]
         private GlobalUIController<ToolboxButtonGenericElement> controller = new GlobalUIController<ToolboxButtonGenericElement>();
 
+        [SerializeField]
+        private Sprite icon;
+
+        public static VisualTreeAsset Visual => Instance.controller.VisualTA;
+
         public static ToolboxButtonGenericElement CloneAndSetup(string name, string buttonClassOn, string buttonClassOff, bool isOn, Action buttonClicked)
         {
             return Instance.controller.CloneVisual().
                 Setup(name, buttonClassOn, buttonClassOff, isOn, buttonClicked);
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                ToolboxItem_E tool = new ToolboxItem_E(Visual)
+                {
+                    ItemName = "Toolbox",
+                    ItemClicked = () =>
+                    {
+                        Debug.Log("<color=green>TODO: </color>" + $"");
+                    }
+                }.SetIcon("toolbox", "toolbox");
+
+                ToolboxItem_E tool1 = new ToolboxItem_E(Visual)
+                {
+                    ItemName = "Avatar",
+                    ItemClicked = () =>
+                    {
+                        Debug.Log("<color=green>TODO: </color>" + $"");
+                    }
+                }.SetIcon("toolbox", "toolbox");
+
+                ToolboxItem_E tool2 = new ToolboxItem_E(Visual)
+                {
+                    ItemName = "",
+                    ItemClicked = () =>
+                    {
+                        Debug.Log("<color=green>TODO: </color>" + $"");
+                    }
+                }.SetIcon("toolbox", "toolbox");
+
+                ToolboxItem_E tool3 = new ToolboxItem_E(Visual)
+                {
+                    ItemName = "",
+                    ItemClicked = () =>
+                    {
+                        Debug.Log("<color=green>TODO: </color>" + $"");
+                    }
+                }.SetIcon("toolbox", "toolbox");
+
+                Toolbox_E toolbox = new Toolbox_E(Toolboxes_UIController.Visual, tool, tool1, tool2, tool3)
+                {
+                    toolboxName = "test"
+                };
+
+                toolbox.AddTo(controller.UIDoc.rootVisualElement);
+
+                //ToolboxItem_E tool = new ToolboxItem_E(Visual)
+                //{
+                //    ItemName = "Toolbox",
+                //    ItemClicked = () =>
+                //    {
+                //        Debug.Log("<color=green>TODO: </color>" + $"");
+                //    }
+                //}.SetIcon(icon);
+
+                //tool.AddTo(controller.UIDoc.rootVisualElement);
+            }
         }
     }
 

@@ -16,6 +16,7 @@ limitations under the License.
 
 //using BrowserDesktop.Menu.Environment.Settings;
 using BrowserDesktop.UI.GenericElement;
+using DesktopBrowser.UI.GenericElement;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -38,6 +39,8 @@ namespace BrowserDesktop.UI.CustomElement
         /// </summary>
         public new class UxmlFactory : UxmlFactory<MenuBarElement, UxmlTraits> { }
 
+        public float Space { get; set; } = 10f;
+
         private VisualElement leftLayout_VE;
         private ToolboxMenuBarSV_E centerLayout_VE;
         public ToolboxMenuBarSV_E ToolboxLayout => centerLayout_VE;
@@ -58,6 +61,8 @@ namespace BrowserDesktop.UI.CustomElement
             //Size
             this.style.width = Length.Percent(100f);
         }
+
+        public MenuBarElement(VisualTreeAsset visualTA): base(visualTA) { }
 
         protected override void Initialize()
         {
@@ -91,6 +96,11 @@ namespace BrowserDesktop.UI.CustomElement
         public MenuBarElement AddLeft(ToolboxGenericElement toolbox)
         {
             return Add(toolbox, Layout.LEFT);
+        }
+        public MenuBarElement AddLeft(Toolbox_E toolbox)
+        {
+            //return Add(toolbox, Layout.LEFT);
+            return this;
         }
         public MenuBarElement AddCenter(ToolboxGenericElement toolbox)
         {
@@ -201,7 +211,7 @@ namespace BrowserDesktop.UI.CustomElement
         private void AddSpacer(VisualElement layoutContainer_VE)
         {
             VisualElement space = new VisualElement();
-            space.style.width = 10;
+            space.style.width = Space;
             layoutContainer_VE.Add(space);
         }
 
@@ -216,14 +226,6 @@ namespace BrowserDesktop.UI.CustomElement
         {
             separator.
                 AddTo(rightLayout_VE);
-        }
-        private void AddSeparator(VisualElement layoutContainer_VE, VisualTreeAsset toolboxSeparatorGE_VTA)
-        {
-            toolboxSeparatorGE_VTA.
-                CloneTree().
-                Q<ToolboxSeparatorGenericElement>().
-                Setup().
-                AddTo(layoutContainer_VE);
         }
 
         #endregion

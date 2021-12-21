@@ -16,10 +16,12 @@ limitations under the License.
 
 using BrowserDesktop.UI.CustomElement;
 using BrowserDesktop.UI.GenericElement;
+using DesktopBrowser.UI.GenericElement;
 using DesktopBrowser.UIControllers;
 using DesktopBrowser.UIControllers.Toolbox;
 using umi3d.common;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu.Environment
 {
@@ -37,7 +39,7 @@ namespace BrowserDesktop.Menu.Environment
         {
             base.Awake();
             menuBar = controller.
-                BingVisual("menu-bar").
+                BindVisual("menu-bar").
                     Setup();
         }
 
@@ -45,25 +47,23 @@ namespace BrowserDesktop.Menu.Environment
         {
             #region Left Layout
 
-            menuBar.
-                AddSpacerToLeftLayout();
-            ToolboxButtonGenericElement toolbox = Tools_UIController.
-                CloneAndSetup(
-                "Toolbox",
-                "toolbox",
-                "toolbox",
-                true,
-                () =>
+            VisualTreeAsset ToolVisual = Tools_UIController.Visual;
+            VisualTreeAsset ToolboxVisual = Toolboxes_UIController.Visual;
+
+            menuBar.AddSpacerToLeftLayout();
+            ToolboxItem_E toolbox_tool = new ToolboxItem_E(ToolVisual)
+            {
+                ItemName = "Toolbox",
+                ItemClicked = () =>
                 {
-                    //DialogueBox_UIController.
-                    //    Setup("TODO", "Not implemented yet", "Close", () => { }).
-                    //    DisplayFrom(uiDocument);
-                });
-            menuBar.
-                AddLeft(
-                Toolboxes_UIController.
-                    CloneAndSetup("").
-                        AddTool(toolbox));
+                    Debug.Log("<color=green>TODO: </color>" + $"");
+                }
+            }.SetIcon("toolbox", "toolbox");
+            Toolbox_E toolbox_left = new Toolbox_E(ToolboxVisual, toolbox_tool)
+            {
+                toolboxName = ""
+            };
+            menuBar.AddLeft(toolbox_left);
             menuBar.
                 AddLeft(
                 Separator_UIController.

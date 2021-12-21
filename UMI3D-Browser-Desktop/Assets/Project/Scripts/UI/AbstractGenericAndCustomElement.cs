@@ -30,18 +30,34 @@ namespace BrowserDesktop.UI
         /// True if this UIElement has been initialized.
         /// </summary>
         protected bool initialized = false;
+        public bool Initiated { get; protected set; } = false;
         /// <summary>
         /// True if this UIElement is displayed.
         /// </summary>
         public bool Displayed { get; protected set; } = false;
 
-        public AbstractGenericAndCustomElement() : base()
+        public AbstractGenericAndCustomElement() : base() { }
+
+        public AbstractGenericAndCustomElement(VisualTreeAsset visualTA) : this()
         {
+            Init(visualTA);
         }
 
         ~AbstractGenericAndCustomElement()
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
+        }
+
+        /// <summary>
+        /// Clone and add the visualTreeAsset to this and Initialize.
+        /// </summary>
+        /// <param name="visualTA"></param>
+        public virtual void Init(VisualTreeAsset visualTA)
+        {
+            if (Initiated) return;
+            else Initiated = true;
+            this.Add(visualTA.CloneTree());
+            Initialize();
         }
 
         protected virtual void Initialize()
