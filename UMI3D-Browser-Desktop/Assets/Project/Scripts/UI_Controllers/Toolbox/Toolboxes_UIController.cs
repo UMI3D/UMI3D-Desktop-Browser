@@ -16,6 +16,7 @@ limitations under the License.
 using BrowserDesktop.UI.GenericElement;
 using umi3d.common;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace DesktopBrowser.UIControllers.Toolbox
 {
@@ -23,6 +24,8 @@ namespace DesktopBrowser.UIControllers.Toolbox
     {
         [SerializeField]
         private GlobalUIController<ToolboxGenericElement> controller = new GlobalUIController<ToolboxGenericElement>();
+
+        public static VisualTreeAsset Visual => Instance.controller.VisualTA;
 
         public static ToolboxGenericElement CloneAndSetup(string name)
         {

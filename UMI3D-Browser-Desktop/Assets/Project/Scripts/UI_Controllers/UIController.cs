@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using BrowserDesktop.UI;
 using umi3d.common;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -20,30 +21,64 @@ using UnityEngine.UIElements;
 namespace DesktopBrowser.UIControllers
 {
     [System.Serializable]
-    public struct GlobalUIController<VE>
-        where VE : VisualElement
+    public struct GlobalUIController<CE>
+        where CE : AbstractGenericAndCustomElement, new()
     {
         [SerializeField]
         [Tooltip("UIDocument where the custom element will be displayed.")]
         private UIDocument uiDocument;
+        public UIDocument UIDoc
+        {
+            get
+            {
+                Debug.Assert(uiDocument != null, "UIDocument null when Binding visual.");
+                return uiDocument;
+            }
+        }
 
         [SerializeField]
         [Tooltip("Visual tree asset of the custom UIElement (if any)")]
         private VisualTreeAsset visualTA;
-
-        public VE CloneVisual()
+        public VisualTreeAsset VisualTA
         {
-            Debug.Assert(visualTA != null, "Visual Tree Asset null when clonning.");
-            return visualTA.CloneTree().Q<VE>();
+            get
+            {
+                Debug.Assert(visualTA != null, "Visual Tree Asset null when clonning.");
+                return visualTA;
+            }
         }
 
-        public VE BingVisual(string name)
+        public CE CloneAndBind()
+        {
+            CE ce = new CE();
+            ce.Init(VisualTA);
+            return ce;
+        }
+
+        public CE CloneAndBind(string name)
+        {
+            VisualElement ve = UIDoc.
+                rootVisualElement.
+                    Q<VisualElement>(name);
+            Debug.Assert(ve != null, $"VisualElement not found [{name}].");
+            CE ce = CloneAndBind();
+            ve.Add(ce);
+            return ce;
+        }
+
+        public CE CloneVisual()
+        {
+            Debug.Assert(visualTA != null, "Visual Tree Asset null when clonning.");
+            return visualTA.CloneTree().Q<CE>();
+        }
+
+        public CE BindVisual(string name)
         {
             Debug.Assert(uiDocument != null, "UIDocument null when Binding visual.");
             return uiDocument.
                 rootVisualElement.
                     Q<VisualElement>(name).
-                    Q<VE>();
+                        Q<CE>();
         }
     }
 }
