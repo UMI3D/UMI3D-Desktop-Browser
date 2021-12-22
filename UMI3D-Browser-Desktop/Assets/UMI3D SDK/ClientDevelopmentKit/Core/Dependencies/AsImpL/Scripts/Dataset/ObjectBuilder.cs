@@ -830,6 +830,7 @@ namespace AsImpL
                 // TODO: customize normal map tag
                 if (md.bumpTexPath.Contains("_normal_map"))
                 {
+                    Debug.Log("Normal Map 1");
                     newMaterial.EnableKeyword("_NORMALMAP");
                     //newMaterial.SetFloat("_BumpScale", 0.25f); // lower the bump effect with the normal map
                     newMaterial.ApplyShaderProperty(MRTKShaderUtils.BumpScale, 0.25f);
@@ -845,6 +846,7 @@ namespace AsImpL
 #if UNITY_EDITOR
                     if (!string.IsNullOrEmpty(alternativeTexPath))
                     {
+                        Debug.Log("Normal Map 3");
                         string texAssetPath = AssetDatabase.GetAssetPath(md.bumpTex);
                         if (!string.IsNullOrEmpty(texAssetPath))
                         {
@@ -854,6 +856,8 @@ namespace AsImpL
                     else
 #endif
                     {
+                        Debug.Log("Normal Map 2");
+
                         //newMaterial.SetTexture("_BumpMap", normalMap);
                         newMaterial.ApplyShaderProperty(MRTKShaderUtils.NormalMap, normalMap);
 
