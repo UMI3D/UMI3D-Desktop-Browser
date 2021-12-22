@@ -75,41 +75,23 @@ namespace BrowserDesktop.UI.CustomElement
         }
 
         #endregion
-
-        public MenuBarElement Add(ToolboxGenericElement toolbox, Layout layout)
+        public MenuBarElement AddLeft(params AbstractGenericAndCustomElement[] ces)
         {
-            switch (layout)
+            foreach (AbstractGenericAndCustomElement ce in ces)
             {
-                case Layout.LEFT:
-                    toolbox.
-                        AddTo(leftLayout_VE);
-                    break;
-                case Layout.CENTER:
-                    throw new NotImplementedException();
-                case Layout.RIGHT:
-                    toolbox.
-                        AddTo(rightLayout_VE);
-                    break;
+                ce.AddTo(leftLayout_VE);
             }
             return this;
         }
-        public MenuBarElement AddLeft(ToolboxGenericElement toolbox)
+        public MenuBarElement AddRight(params AbstractGenericAndCustomElement[] ces)
         {
-            return Add(toolbox, Layout.LEFT);
-        }
-        public MenuBarElement AddLeft(Toolbox_E toolbox)
-        {
-            //return Add(toolbox, Layout.LEFT);
+            foreach(AbstractGenericAndCustomElement ce in ces)
+            {
+                ce.AddTo(rightLayout_VE);
+            }
             return this;
         }
-        public MenuBarElement AddCenter(ToolboxGenericElement toolbox)
-        {
-            return Add(toolbox, Layout.CENTER);
-        }
-        public MenuBarElement AddRight(ToolboxGenericElement toolbox)
-        {
-            return Add(toolbox, Layout.RIGHT);
-        }
+
 
         public MenuBarElement Setup()
         {
