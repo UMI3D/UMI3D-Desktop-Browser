@@ -36,11 +36,18 @@ namespace BrowserDesktop.UI
         /// </summary>
         public bool Displayed { get; protected set; } = false;
 
+        protected VisualElement root;
+
         public AbstractGenericAndCustomElement() : base() { }
 
         public AbstractGenericAndCustomElement(VisualTreeAsset visualTA) : this()
         {
             Init(visualTA);
+        }
+
+        public AbstractGenericAndCustomElement(VisualElement root) : this()
+        {
+            Init(root);
         }
 
         ~AbstractGenericAndCustomElement()
@@ -56,7 +63,16 @@ namespace BrowserDesktop.UI
         {
             if (Initiated) return;
             else Initiated = true;
-            this.Add(visualTA.CloneTree());
+            root = visualTA.CloneTree();
+            this.Add(root);
+            Initialize();
+        }
+
+        public virtual void Init(VisualElement root)
+        {
+            if (Initiated) return;
+            else Initiated = true;
+            this.root = root;
             Initialize();
         }
 

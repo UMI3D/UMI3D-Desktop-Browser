@@ -28,19 +28,19 @@ namespace DesktopBrowser.UI.GenericElement
     {
         #region Fields
 
-        public string ItemName { get; set; } = "";
+        /// <summary>
+        /// Button of this ToolboxItem.
+        /// </summary>
+        public Button_GE ItemButton { get; private set; } = null;
         public string ItemIconOn { get; protected set; } = "";
         public string ItemIconOff { get; protected set; } = "";
         public Action ItemClicked { get; set; } = () => { Debug.Log("<color=green>TODO: </color>" + $"ToolboxItem clicked not implemented"); };
 
         /// <summary>
-        /// Button of this ToolboxItem.
-        /// </summary>
-        private Button button;
-        /// <summary>
         /// Button's label (name of this item.
         /// </summary>
         private Label label;
+        public string ItemName { get; set; } = "";
 
         /// <summary>
         /// State of the button.
@@ -55,38 +55,35 @@ namespace DesktopBrowser.UI.GenericElement
         public ToolboxItem_E(VisualTreeAsset visualTA, bool isOn = true): base(visualTA) 
         {
             this.isOn = isOn;
-            button.clicked += () => { ItemClicked(); };
         }
 
         protected override void Initialize()
         {
             base.Initialize();
-            button = this.Q<Button>("toolboxItem-button");
-            label = this.Q<Label>("toolboxItem-label");
+            ItemButton = new Button_GE(root)
+            {
+                OnClicked = ItemClicked
+            };
+            label = root.Q<Label>("toolboxItem-label");
         }
 
         #region Setup
 
         public ToolboxItem_E SetIcon(string iconOn, string iconOff)
         {
-            this.ItemIconOn = iconOn;
-            this.ItemIconOff = iconOff;
-            SwitchClass(this.isOn);
+            ItemButton.SetIcon(iconOn, iconOff);
             return this;
         }
 
         public ToolboxItem_E SetIcon(Texture2D icon)
         {
-            if (icon != null)
-                button.style.backgroundImage = Background.FromTexture2D(icon);
-            else
-                button.style.backgroundImage = StyleKeyword.Auto;
+            ItemButton.SetIcon(icon);
             return this;
         }
 
         public ToolboxItem_E SetIcon(Sprite icon)
         {
-            button.style.backgroundImage = Background.FromSprite(icon);
+            ItemButton.SetIcon(icon);
             return this;
         }
 
@@ -110,8 +107,8 @@ namespace DesktopBrowser.UI.GenericElement
             {
                 currentClass = className + ItemIconOff + "-btn";
             }
-            button.ClearClassList();
-            button.AddToClassList(currentClass);
+            ItemButton.ClearClassList();
+            ItemButton.AddToClassList(currentClass);
         }
 
         /// <summary>
@@ -124,7 +121,7 @@ namespace DesktopBrowser.UI.GenericElement
 
             label.style.width = StyleKeyword.Auto;
             UserPreferences.TextAndIconPref.ApplyTextPref(label, "label", ItemName);
-            UserPreferences.TextAndIconPref.ApplyIconPref(button, "square-button", iconClass: currentClass);
+            UserPreferences.TextAndIconPref.ApplyIconPref(ItemButton, "square-button", iconClass: currentClass);
         }
     }
 }

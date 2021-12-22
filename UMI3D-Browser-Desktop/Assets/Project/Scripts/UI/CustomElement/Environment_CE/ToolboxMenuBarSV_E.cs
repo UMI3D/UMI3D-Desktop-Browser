@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using BrowserDesktop.UI.GenericElement;
+using DesktopBrowser.UI.GenericElement;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 

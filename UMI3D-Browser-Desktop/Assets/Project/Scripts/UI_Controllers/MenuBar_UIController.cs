@@ -31,9 +31,9 @@ namespace BrowserDesktop.Menu.Environment
         private GlobalUIController<MenuBarElement> controller = new GlobalUIController<MenuBarElement>();
 
         private MenuBarElement menuBar;
-        private ToolboxButtonGenericElement avatar;
-        private ToolboxButtonGenericElement sound;
-        private ToolboxButtonGenericElement mic;
+        private ToolboxItem_E avatar;
+        private ToolboxItem_E sound;
+        private ToolboxItem_E mic;
 
         protected override void Awake()
         {
@@ -45,13 +45,13 @@ namespace BrowserDesktop.Menu.Environment
 
         private void Start()
         {
-            #region Left Layout
-
             VisualTreeAsset ToolVisual = Tools_UIController.Visual;
             VisualTreeAsset ToolboxVisual = Toolboxes_UIController.Visual;
 
+            #region Left Layout
+
             menuBar.AddSpacerToLeftLayout();
-            ToolboxItem_E toolbox_tool = new ToolboxItem_E(ToolVisual)
+            ToolboxItem_E tool_toolbox = new ToolboxItem_E(ToolVisual)
             {
                 ItemName = "Toolbox",
                 ItemClicked = () =>
@@ -59,7 +59,7 @@ namespace BrowserDesktop.Menu.Environment
                     Debug.Log("<color=green>TODO: </color>" + $"");
                 }
             }.SetIcon("toolbox", "toolbox");
-            Toolbox_E toolbox_left = new Toolbox_E(ToolboxVisual, toolbox_tool)
+            Toolbox_E toolbox_left = new Toolbox_E(ToolboxVisual, tool_toolbox)
             {
                 toolboxName = ""
             };
@@ -77,45 +77,45 @@ namespace BrowserDesktop.Menu.Environment
                 AddRight(
                 Separator_UIController.
                     CloneAndSetup());
-            avatar = Tools_UIController.
-                CloneAndSetup(
-                "",
-                "avatarOn",
-                "avatarOff",
-                true,
-                () => { /*ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();*/ });
-            sound = Tools_UIController.
-                CloneAndSetup(
-                "",
-                "soundOn",
-                "soundOff",
-                true,
-                () => { /*ActivateDeactivateAudio.Instance.ToggleAudioStatus();*/ });
-            mic = Tools_UIController.
-                CloneAndSetup(
-                "",
-                "micOn",
-                "micOff",
-                false,
-                () => { /*ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();*/ });
-            menuBar.
-                AddRight(
-                Toolboxes_UIController.
-                    CloneAndSetup("").
-                        AddTool(avatar).
-                        AddTool(sound).
-                        AddTool(mic));
+            avatar = new ToolboxItem_E(ToolVisual)
+            {
+                ItemName = "",
+                ItemClicked = () =>
+                {
+                    /*ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();*/
+                }
+            }.SetIcon("avatarOn", "avatarOff");
+            sound = new ToolboxItem_E(ToolVisual)
+            {
+                ItemName = "",
+                ItemClicked = () =>
+                {
+                    /*ActivateDeactivateAudio.Instance.ToggleAudioStatus();*/
+                }
+            }.SetIcon("soundOn", "soundOff");
+            mic = new ToolboxItem_E(ToolVisual, false)
+            {
+                ItemName = "",
+                ItemClicked = () =>
+                {
+                    /*ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();*/
+                }
+            }.SetIcon("micOn", "micOff");
+            Toolbox_E toolbox_settings = new Toolbox_E(ToolboxVisual, avatar, sound, mic)
+            {
+                toolboxName = ""
+            };
+            menuBar.AddRight(toolbox_settings);
             menuBar.
                 AddRight(
                 Separator_UIController.
                     CloneAndSetup());
-            ToolboxButtonGenericElement leave = Tools_UIController.
-                CloneAndSetup(
-                "",
-                "leave",
-                "leave",
-                true,
-                () =>
+
+
+            ToolboxItem_E tool_leave = new ToolboxItem_E(ToolVisual)
+            {
+                ItemName = "",
+                ItemClicked = () =>
                 {
                     //Menu.DialogueBox_UIController.
                     //    Setup("Leave environment", "Are you sure ...?", "YES", "NO", (b) =>
@@ -124,14 +124,10 @@ namespace BrowserDesktop.Menu.Environment
                     //            ConnectionMenu.Instance.Leave();
                     //    }).
                     //    DisplayFrom(uiDocument);
-                });
-            menuBar.
-                AddRight(
-                Toolboxes_UIController.
-                    CloneAndSetup("").
-                        AddTool(leave));
-            menuBar.
-                AddSpacerToRightLayout();
+                }
+            }.SetIcon("leave", "leave");
+            menuBar.AddRight(tool_leave);
+            menuBar.AddSpacerToRightLayout();
 
             #endregion
         }
