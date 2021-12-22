@@ -49,13 +49,13 @@ namespace DesktopBrowser.UI.GenericElement
             itemsContainer = this.Q<VisualElement>("items-container");
         }
 
-        public Toolbox_E AddItems(params ToolboxItem_E[] items)
+        public Toolbox_E AddItems(params ToolboxItem_E[] toolItems)
         {
-            for (int i = 0; i < items.Length; ++i)
+            for (int i = 0; i < toolItems.Length; ++i)
             {
                 if (i > 0 || this.items.Count > 0) AddSpacer();
-                items[i].AddTo(itemsContainer);
-                this.items.Add(items[i]);
+                toolItems[i].AddTo(itemsContainer);
+                this.items.Add(toolItems[i]);
             }
             return this;
         }

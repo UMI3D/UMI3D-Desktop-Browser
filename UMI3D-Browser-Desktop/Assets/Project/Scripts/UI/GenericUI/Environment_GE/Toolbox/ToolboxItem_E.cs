@@ -32,8 +32,6 @@ namespace DesktopBrowser.UI.GenericElement
         /// Button of this ToolboxItem.
         /// </summary>
         public Button_GE ItemButton { get; private set; } = null;
-        public string ItemIconOn { get; protected set; } = "";
-        public string ItemIconOff { get; protected set; } = "";
         public Action ItemClicked { get; set; } = () => { Debug.Log("<color=green>TODO: </color>" + $"ToolboxItem clicked not implemented"); };
 
         /// <summary>
@@ -41,37 +39,27 @@ namespace DesktopBrowser.UI.GenericElement
         /// </summary>
         private Label label;
         public string ItemName { get; set; } = "";
-
-        /// <summary>
-        /// State of the button.
-        /// </summary>
-        private bool isOn = false;
         
-        
-        private string currentClass;
-
         #endregion
 
-        public ToolboxItem_E(VisualTreeAsset visualTA, bool isOn = true): base(visualTA) 
-        {
-            this.isOn = isOn;
-        }
+        public ToolboxItem_E(VisualTreeAsset visualTA): base(visualTA) { }
 
         protected override void Initialize()
         {
             base.Initialize();
             ItemButton = new Button_GE(root)
             {
-                OnClicked = ItemClicked
+                OnClicked = ItemClicked,
+                IconPref = "square-button"
             };
             label = root.Q<Label>("toolboxItem-label");
         }
 
         #region Setup
 
-        public ToolboxItem_E SetIcon(string iconOn, string iconOff)
+        public ToolboxItem_E SetIcon(string iconOn, string iconOff, bool isOn = false)
         {
-            ItemButton.SetIcon(iconOn, iconOff);
+            ItemButton.SetIcon(iconOn, iconOff, isOn);
             return this;
         }
 
@@ -90,28 +78,6 @@ namespace DesktopBrowser.UI.GenericElement
         #endregion
 
         /// <summary>
-        /// Switch between USS classes when button is on or off.
-        /// </summary>
-        /// <param name="value">True if the button should be on, false else.</param>
-        public void SwitchClass(bool value)
-        {
-            if (string.IsNullOrEmpty(ItemIconOn) || string.IsNullOrEmpty(ItemIconOff))
-                return;
-            isOn = value;
-            string className = "darkTheme-menuBar-"; //TODO to be replace by theme checked.
-            if (value)
-            {
-                currentClass = className + ItemIconOn + "-btn";
-            }
-            else
-            {
-                currentClass = className + ItemIconOff + "-btn";
-            }
-            ItemButton.ClearClassList();
-            ItemButton.AddToClassList(currentClass);
-        }
-
-        /// <summary>
         /// Apply user preferences when needed.
         /// </summary>
         public override void OnApplyUserPreferences()
@@ -121,7 +87,6 @@ namespace DesktopBrowser.UI.GenericElement
 
             label.style.width = StyleKeyword.Auto;
             UserPreferences.TextAndIconPref.ApplyTextPref(label, "label", ItemName);
-            UserPreferences.TextAndIconPref.ApplyIconPref(ItemButton, "square-button", iconClass: currentClass);
         }
     }
 }

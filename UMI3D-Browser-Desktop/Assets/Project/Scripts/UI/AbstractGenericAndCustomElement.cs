@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using UnityEngine;
 using UnityEngine.UIElements;
 
 
@@ -84,6 +85,11 @@ namespace BrowserDesktop.UI
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
         }
 
+        public virtual void Reset()
+        {
+            this.root = null;
+        }
+
         /// <summary>
         /// Add this UiElement as a child of [partent].
         /// </summary>
@@ -92,7 +98,8 @@ namespace BrowserDesktop.UI
         {
             if (!initialized) throw new System.Exception($"VisualElement Added without being setup.");
             ReadyToDisplay();
-            parent.Add(this);
+            //parent.Add(this);
+            parent.Add(root);
         }
 
         /// <summary>

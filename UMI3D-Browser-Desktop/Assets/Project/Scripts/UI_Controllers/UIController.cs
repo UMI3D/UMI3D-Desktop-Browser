@@ -14,16 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.UI;
+using System.Collections.Generic;
 using umi3d.common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace DesktopBrowser.UIControllers
 {
-    [System.Serializable]
-    public struct GlobalUIController<CE>
-        where CE : AbstractGenericAndCustomElement, new()
+    public class UIController : MonoBehaviour
     {
+        #region Fields
+
+        [SerializeField]
+        private string uIControllerName;
+
         [SerializeField]
         [Tooltip("UIDocument where the custom element will be displayed.")]
         private UIDocument uiDocument;
@@ -35,7 +39,6 @@ namespace DesktopBrowser.UIControllers
                 return uiDocument;
             }
         }
-
         [SerializeField]
         [Tooltip("Visual tree asset of the custom UIElement (if any)")]
         private VisualTreeAsset visualTA;
@@ -48,37 +51,26 @@ namespace DesktopBrowser.UIControllers
             }
         }
 
-        public CE CloneAndBind()
+        protected static Dictionary<string, UIController> uIControllers = new Dictionary<string, UIController>();
+
+        #endregion
+
+        private void Awake()
         {
-            CE ce = new CE();
-            ce.Init(VisualTA);
-            return ce;
+            Debug.Assert(!uIControllers.ContainsKey(tag));
+            Debug.Assert(!string.IsNullOrEmpty(uIControllerName));
+            uIControllers.Add(uIControllerName, this);
         }
 
-        public CE CloneAndBind(string name)
+        public static UIController GetUIController(string key)
         {
-            VisualElement ve = UIDoc.
-                rootVisualElement.
-                    Q<VisualElement>(name);
-            Debug.Assert(ve != null, $"VisualElement not found [{name}].");
-            CE ce = CloneAndBind();
-            ve.Add(ce);
-            return ce;
+            Debug.Assert(uIControllers.ContainsKey(key));
+            return uIControllers[key];
         }
 
-        public CE CloneVisual()
+        public VisualElement BindVisual(string name)
         {
-            Debug.Assert(visualTA != null, "Visual Tree Asset null when clonning.");
-            return visualTA.CloneTree().Q<CE>();
-        }
-
-        public CE BindVisual(string name)
-        {
-            Debug.Assert(uiDocument != null, "UIDocument null when Binding visual.");
-            return uiDocument.
-                rootVisualElement.
-                    Q<VisualElement>(name).
-                        Q<CE>();
+            return UIDoc.rootVisualElement.Q<VisualElement>(name);
         }
     }
 }

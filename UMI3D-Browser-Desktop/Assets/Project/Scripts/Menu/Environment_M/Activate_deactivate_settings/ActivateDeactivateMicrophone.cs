@@ -20,12 +20,14 @@ using umi3d.cdk.collaboration;
 using umi3d.common;
 using UnityEngine;
 using umi3d.cdk;
+using DesktopBrowser.UIControllers;
 
 namespace BrowserDesktop.Menu.Environment.Settings
 {
     public class ActivateDeactivateMicrophone : Singleton<ActivateDeactivateMicrophone>
     {
         bool isEnvironmentLoaded = false;
+        private MenuBar_UIController menuBar;
 
         private void Start()
         {
@@ -34,7 +36,8 @@ namespace BrowserDesktop.Menu.Environment.Settings
             });
 
             MicrophoneListener.IsMute = true;
-            MenuBar_UIController.Instance.OnMicrophoneStatusChanged(!MicrophoneListener.IsMute);
+            menuBar = UIController.GetUIController("menuBar") as MenuBar_UIController;
+            menuBar.OnMicrophoneStatusChanged(!MicrophoneListener.IsMute);
         }
 
         // Update is called once per frame
@@ -52,7 +55,7 @@ namespace BrowserDesktop.Menu.Environment.Settings
                 return;
 
             MicrophoneListener.IsMute = !MicrophoneListener.IsMute;
-            MenuBar_UIController.Instance.OnMicrophoneStatusChanged(!MicrophoneListener.IsMute);
+            menuBar.OnMicrophoneStatusChanged(!MicrophoneListener.IsMute);
         }
     }
 }

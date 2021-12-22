@@ -33,8 +33,6 @@ namespace DesktopBrowser.UI.GenericElement
         public string IconPref { get; set; } = "";
 
         public Action OnClicked { get; set; } = () => { Debug.Log("<color=green>TODO: </color>" + $"ToolboxItem clicked not implemented"); };
-
-
         /// <summary>
         /// State of the button.
         /// </summary>
@@ -48,29 +46,37 @@ namespace DesktopBrowser.UI.GenericElement
 
         
 
-        public Button_GE(VisualTreeAsset visualTA, bool isOn = false): base(visualTA)
-        {
-            this.IsOn = isOn;
-        }
+        public Button_GE(VisualTreeAsset visualTA): base(visualTA) { }
 
-        public Button_GE(VisualElement root, bool isOn = false): base(root)
-        {
-            this.IsOn = isOn;
-        }
+        public Button_GE(VisualElement root): base(root) { }
 
         protected override void Initialize()
         {
             base.Initialize();
             button_B = root.Q<Button>();
-            this.button_B.clicked += () => { this.OnClicked(); };
+            this.button_B.clicked += this.OnClicked;
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            Text = "";
+            TextPref = "";
+            IconClassOn = ""; 
+            IconClassOff = "";
+            IconPref = "";
+            OnClicked = () => { Debug.Log("<color=green>TODO: </color>" + $"ToolboxItem clicked not implemented"); }; 
+            IsOn = false;
+            button_B = null;
         }
 
         #region Set and Unset Icon
 
-        public Button_GE SetIcon(string iconOn, string iconOff)
+        public Button_GE SetIcon(string iconOn, string iconOff, bool isOn = false)
         {
             this.IconClassOn = iconOn;
             this.IconClassOff = iconOff;
+            this.IsOn = isOn;
             SwitchClass(this.IsOn);
             return this;
         }
@@ -100,6 +106,8 @@ namespace DesktopBrowser.UI.GenericElement
         }
 
         #endregion
+
+        #region To be deleted
 
         public Button_GE Setup(System.Action onClicked, bool isOn = true, bool isReadyToDisplay = false)
         {
@@ -146,21 +154,25 @@ namespace DesktopBrowser.UI.GenericElement
             return this;
         }
 
+        #endregion
+
         /// <summary>
         /// Switch between USS classes when button is on or off.
         /// </summary>
         /// <param name="value">True if the button should be on, false else.</param>
         public void SwitchClass(bool value)
         {
+            if (string.IsNullOrEmpty(IconClassOn) || string.IsNullOrEmpty(IconClassOff))
+                return;
             IsOn = value;
-            string className = "darkTheme-"; //TODO to be replace by theme checked.
+            string theme = "darkTheme"; //TODO to be replace by theme checked.
             if (value)
             {
-                currentClass = className + IconClassOn + "-btn";
+                currentClass = $"{theme}-{IconClassOn}-btn";
             }
             else
             {
-                currentClass = className + IconClassOff + "-btn";
+                currentClass = $"{theme}-{IconClassOff}-btn";
             }
 
             UserPreferences.TextAndIconPref.ApplyIconPref(button_B, IconPref, currentClass);

@@ -25,19 +25,12 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.CustomElement
 {
+    /// <summary>
+    /// A menuBar has 3 layout (left, center and right). The center layout is a scrollView.
+    /// </summary>
     public class MenuBarElement : AbstractGenericAndCustomElement
     {
-        public enum Layout
-        {
-            LEFT, CENTER, RIGHT
-        }
-
         #region Fields
-
-        /// <summary>
-        /// To be recognized by UI Builder
-        /// </summary>
-        public new class UxmlFactory : UxmlFactory<MenuBarElement, UxmlTraits> { }
 
         public float Space { get; set; } = 10f;
 
@@ -54,24 +47,25 @@ namespace BrowserDesktop.UI.CustomElement
 
         #region Initialization
 
-        public MenuBarElement() : base()
-        {
-            //Flex
-            this.style.flexShrink = 0f;
-            //Size
-            this.style.width = Length.Percent(100f);
-        }
+        //public MenuBarElement() : base()
+        //{
+        //    //Flex
+        //    this.style.flexShrink = 0f;
+        //    //Size
+        //    this.style.width = Length.Percent(100f);
+        //}
 
         public MenuBarElement(VisualTreeAsset visualTA): base(visualTA) { }
+        public MenuBarElement(VisualElement root): base(root) { }
 
         protected override void Initialize()
         {
             base.Initialize();
 
-            leftLayout_VE = this.Q<VisualElement>("Left-layout");
-            centerLayout_VE = this.Q<VisualElement>("Center-layout").Q<ToolboxMenuBarSV_E>();
-            rightLayout_VE = this.Q<VisualElement>("Right-layout");
-            SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
+            leftLayout_VE = root.Q<VisualElement>("Left-layout");
+            //centerLayout_VE = this.Q<VisualElement>("Center-layout").Q<ToolboxMenuBarSV_E>();
+            rightLayout_VE = root.Q<VisualElement>("Right-layout");
+            //SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
         }
 
         #endregion
@@ -92,18 +86,30 @@ namespace BrowserDesktop.UI.CustomElement
             return this;
         }
 
+        public void AddSpacerToLeftLayout()
+        {
+            AddSpacer(leftLayout_VE);
+        }
+        public void AddSpacerToRightLayout()
+        {
+            AddSpacer(rightLayout_VE);
+        }
+        private void AddSpacer(VisualElement layoutContainer_VE)
+        {
+            VisualElement space = new VisualElement();
+            space.style.width = Space;
+            layoutContainer_VE.Add(space);
+        }
+
 
         public MenuBarElement Setup()
         {
             Initialize();
-
-
             centerLayout_VE.
                 Setup("menuBar", "scrollView-btn", (vE) => 
                 { 
                     //AddSeparator(vE, toolboxSeparatorGE_VTA); 
                 });
-
 
             #region Test
 
@@ -150,9 +156,7 @@ namespace BrowserDesktop.UI.CustomElement
             //};
 
             #endregion
-
             ReadyToDisplay();
-
             return this;
         }
 
@@ -181,36 +185,6 @@ namespace BrowserDesktop.UI.CustomElement
         }
 
         private Action logWorldPosition;
-
-        public void AddSpacerToLeftLayout()
-        {
-            AddSpacer(leftLayout_VE);
-        }
-        public void AddSpacerToRightLayout()
-        {
-            AddSpacer(rightLayout_VE);
-        }
-        private void AddSpacer(VisualElement layoutContainer_VE)
-        {
-            VisualElement space = new VisualElement();
-            space.style.width = Space;
-            layoutContainer_VE.Add(space);
-        }
-
-        #region Separator
-
-        public void AddLeft(ToolboxSeparatorGenericElement separator)
-        {
-            separator.
-                AddTo(leftLayout_VE);
-        }
-        public void AddRight(ToolboxSeparatorGenericElement separator)
-        {
-            separator.
-                AddTo(rightLayout_VE);
-        }
-
-        #endregion
 
         #endregion
 

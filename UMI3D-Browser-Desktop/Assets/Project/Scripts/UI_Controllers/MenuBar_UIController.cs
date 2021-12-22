@@ -25,94 +25,77 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu.Environment
 {
-    public class MenuBar_UIController : Singleton<MenuBar_UIController>
+    public class MenuBar_UIController : UIController
     {
-        [SerializeField]
-        private GlobalUIController<MenuBarElement> controller = new GlobalUIController<MenuBarElement>();
-
         private MenuBarElement menuBar;
         private ToolboxItem_E avatar;
         private ToolboxItem_E sound;
         private ToolboxItem_E mic;
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
-            menuBar = controller.
-                BindVisual("menu-bar").
-                    Setup();
+            menuBar = new MenuBarElement(BindVisual("menu-bar-element"));
         }
 
         private void Start()
         {
-            VisualTreeAsset ToolVisual = Tools_UIController.Visual;
-            VisualTreeAsset ToolboxVisual = Toolboxes_UIController.Visual;
+            VisualTreeAsset toolVisual = GetUIController("toolboxItems").VisualTA;
+            VisualTreeAsset toolboxVisual = GetUIController("toolboxes").VisualTA;
+            VisualTreeAsset separatorVisual = GetUIController("toolboxSeparators").VisualTA;
 
             #region Left Layout
 
             menuBar.AddSpacerToLeftLayout();
-            ToolboxItem_E tool_toolbox = new ToolboxItem_E(ToolVisual)
+            ToolboxItem_E tool_toolbox = new ToolboxItem_E(toolVisual)
             {
                 ItemName = "Toolbox",
                 ItemClicked = () =>
                 {
                     Debug.Log("<color=green>TODO: </color>" + $"");
                 }
-            }.SetIcon("toolbox", "toolbox");
-            Toolbox_E toolbox_left = new Toolbox_E(ToolboxVisual, tool_toolbox)
+            }.SetIcon("menuBar-toolbox", "menuBar-toolbox", true);
+            Toolbox_E toolbox_left = new Toolbox_E(toolboxVisual, tool_toolbox)
             {
                 toolboxName = ""
             };
-            menuBar.AddLeft(toolbox_left);
-            menuBar.
-                AddLeft(
-                Separator_UIController.
-                    CloneAndSetup());
+            ToolboxSeparatorGenericElement separator_left = new ToolboxSeparatorGenericElement(separatorVisual);
+            menuBar.AddLeft(toolbox_left, separator_left);
 
             #endregion
 
             #region Right Layout
 
-            menuBar.
-                AddRight(
-                Separator_UIController.
-                    CloneAndSetup());
-            avatar = new ToolboxItem_E(ToolVisual)
+            ToolboxSeparatorGenericElement separator_right0 = new ToolboxSeparatorGenericElement(separatorVisual);
+            avatar = new ToolboxItem_E(toolVisual)
             {
                 ItemName = "",
                 ItemClicked = () =>
                 {
                     /*ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();*/
                 }
-            }.SetIcon("avatarOn", "avatarOff");
-            sound = new ToolboxItem_E(ToolVisual)
+            }.SetIcon("menuBar-avatarOn", "menuBar-avatarOff", true);
+            sound = new ToolboxItem_E(toolVisual)
             {
                 ItemName = "",
                 ItemClicked = () =>
                 {
                     /*ActivateDeactivateAudio.Instance.ToggleAudioStatus();*/
                 }
-            }.SetIcon("soundOn", "soundOff");
-            mic = new ToolboxItem_E(ToolVisual, false)
+            }.SetIcon("menuBar-soundOn", "menuBar-soundOff");
+            mic = new ToolboxItem_E(toolVisual)
             {
                 ItemName = "",
                 ItemClicked = () =>
                 {
                     /*ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();*/
                 }
-            }.SetIcon("micOn", "micOff");
-            Toolbox_E toolbox_settings = new Toolbox_E(ToolboxVisual, avatar, sound, mic)
+            }.SetIcon("menuBar-micOn", "menuBar-micOff");
+            Toolbox_E toolbox_settings = new Toolbox_E(toolboxVisual, avatar, sound, mic)
             {
                 toolboxName = ""
             };
-            menuBar.AddRight(toolbox_settings);
-            menuBar.
-                AddRight(
-                Separator_UIController.
-                    CloneAndSetup());
-
-
-            ToolboxItem_E tool_leave = new ToolboxItem_E(ToolVisual)
+            ToolboxSeparatorGenericElement separator_right1 = new ToolboxSeparatorGenericElement(separatorVisual);
+            ToolboxItem_E tool_leave = new ToolboxItem_E(toolVisual)
             {
                 ItemName = "",
                 ItemClicked = () =>
@@ -125,8 +108,12 @@ namespace BrowserDesktop.Menu.Environment
                     //    }).
                     //    DisplayFrom(uiDocument);
                 }
-            }.SetIcon("leave", "leave");
-            menuBar.AddRight(tool_leave);
+            }.SetIcon("menuBar-leave", "menuBar-leave", true);
+            Toolbox_E toolbox_leave = new Toolbox_E(toolboxVisual, tool_leave)
+            {
+                toolboxName = ""
+            };
+            menuBar.AddRight(separator_right0, toolbox_settings, separator_right1, toolbox_leave);
             menuBar.AddSpacerToRightLayout();
 
             #endregion
@@ -134,14 +121,12 @@ namespace BrowserDesktop.Menu.Environment
 
         public static void AddInMenu(ToolboxGenericElement toolbox)
         {
-            Debug.Assert(Exists, "MenuBar_UIController does not Exists.");
-            Instance.menuBar.ToolboxLayout.AddElement(toolbox);
+            //menuBar.ToolboxLayout.AddElement(toolbox);
         }
 
         public static void AddInSubMenu(ToolboxGenericElement subTools, ToolboxGenericElement parent)
         {
-            Debug.Assert(Exists, "MenuBar_UIController does not Exists.");
-            Instance.menuBar.AddInSubMenu(subTools, parent);
+            //Instance.menuBar.AddInSubMenu(subTools, parent);
         }
 
         /// <summary>
@@ -150,7 +135,7 @@ namespace BrowserDesktop.Menu.Environment
         /// <param name="val"></param>
         public void OnAvatarTrackingChanged(bool val)
         {
-            avatar.SwitchClass(val);
+            avatar.ItemButton.SwitchClass(val);
         }
         /// <summary>
         /// Event called when the status of the audio changes.
@@ -158,7 +143,7 @@ namespace BrowserDesktop.Menu.Environment
         /// <param name="val"></param>
         public void OnAudioStatusChanged(bool val)
         {
-            sound.SwitchClass(val);
+            sound.ItemButton.SwitchClass(val);
         }
         /// <summary>
         /// Event called when the status of the microphone changes.
@@ -166,7 +151,7 @@ namespace BrowserDesktop.Menu.Environment
         /// <param name="val"></param>
         public void OnMicrophoneStatusChanged(bool val)
         {
-            mic.SwitchClass(val);
+            mic.ItemButton.SwitchClass(val);
         }
 
 

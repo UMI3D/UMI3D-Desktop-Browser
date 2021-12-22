@@ -22,45 +22,39 @@ using UnityEngine.UIElements;
 
 namespace DesktopBrowser.UIControllers.Toolbox
 {
-    public sealed class Tools_UIController : Singleton<Tools_UIController>
+    public sealed class Tools_UIController : UIController
     {
-        [SerializeField]
-        private GlobalUIController<ToolboxButtonGenericElement> controller = new GlobalUIController<ToolboxButtonGenericElement>();
-
         [SerializeField]
         private Sprite icon;
 
-        public static VisualTreeAsset Visual => Instance.controller.VisualTA;
-
-        public static ToolboxButtonGenericElement CloneAndSetup(string name, string buttonClassOn, string buttonClassOff, bool isOn, Action buttonClicked)
+        public static ToolboxItem_E CloneAndSetup(string name, string buttonClassOn, string buttonClassOff, bool isOn, Action buttonClicked)
         {
-            return Instance.controller.CloneVisual().
-                Setup(name, buttonClassOn, buttonClassOff, isOn, buttonClicked);
+            throw new System.NotImplementedException();
         }
 
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.T))
             {
-                ToolboxItem_E tool = new ToolboxItem_E(Visual)
+                ToolboxItem_E tool = new ToolboxItem_E(VisualTA)
                 {
                     ItemName = "Toolbox",
                     ItemClicked = () =>
                     {
                         Debug.Log("<color=green>TODO: </color>" + $"");
                     }
-                }.SetIcon("toolbox", "toolbox");
+                }.SetIcon("menuBar-toolbox", "menuBar-toolbox");
 
-                ToolboxItem_E tool1 = new ToolboxItem_E(Visual)
+                ToolboxItem_E tool1 = new ToolboxItem_E(VisualTA)
                 {
                     ItemName = "Avatar",
                     ItemClicked = () =>
                     {
                         Debug.Log("<color=green>TODO: </color>" + $"");
                     }
-                }.SetIcon("toolbox", "toolbox");
+                }.SetIcon("menuBar-avatarOn", "menuBar-avatarOff");
 
-                ToolboxItem_E tool2 = new ToolboxItem_E(Visual)
+                ToolboxItem_E tool2 = new ToolboxItem_E(VisualTA)
                 {
                     ItemName = "",
                     ItemClicked = () =>
@@ -69,7 +63,7 @@ namespace DesktopBrowser.UIControllers.Toolbox
                     }
                 }.SetIcon("toolbox", "toolbox");
 
-                ToolboxItem_E tool3 = new ToolboxItem_E(Visual)
+                ToolboxItem_E tool3 = new ToolboxItem_E(VisualTA)
                 {
                     ItemName = "",
                     ItemClicked = () =>
@@ -78,12 +72,12 @@ namespace DesktopBrowser.UIControllers.Toolbox
                     }
                 }.SetIcon("toolbox", "toolbox");
 
-                Toolbox_E toolbox = new Toolbox_E(Toolboxes_UIController.Visual, tool, tool1, tool2, tool3)
+                Toolbox_E toolbox = new Toolbox_E(GetUIController("toolboxes").VisualTA, tool, tool1, tool2, tool3)
                 {
                     toolboxName = "test"
                 };
 
-                toolbox.AddTo(controller.UIDoc.rootVisualElement);
+                toolbox.AddTo(UIDoc.rootVisualElement);
 
                 //ToolboxItem_E tool = new ToolboxItem_E(Visual)
                 //{

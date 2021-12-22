@@ -23,12 +23,9 @@ namespace BrowserDesktop.UI.GenericElement
 {
     public class ToolboxSeparatorGenericElement : AbstractGenericAndCustomElement
     {
-        /// <summary>
-        /// To be recognized by UI Builder
-        /// </summary>
-        public new class UxmlFactory : UxmlFactory<ToolboxSeparatorGenericElement, UxmlTraits> { }
-
         private VisualElement separator_VE;
+
+        public ToolboxSeparatorGenericElement(VisualTreeAsset visualTA): base(visualTA) { }
 
         protected override void Initialize()
         {
