@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using BrowserDesktop.Controller;
+using DesktopBrowser.UIControllers;
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk.userCapture;
@@ -25,6 +26,7 @@ namespace BrowserDesktop.Menu.Environment.Settings
     public class ActivateDeactivateAvatarTracking : umi3d.common.Singleton<ActivateDeactivateAvatarTracking>
     {
         bool isEnvironmentLoaded = false;
+        private MenuBar_UIController menuBar;
 
         private void Start()
         {
@@ -32,7 +34,8 @@ namespace BrowserDesktop.Menu.Environment.Settings
                 isEnvironmentLoaded = true;
             });
 
-            MenuBar_UIController.Instance.OnAvatarTrackingChanged(UMI3DClientUserTracking.Instance.SendTracking);
+            menuBar = UIController.GetUIController("menuBar") as MenuBar_UIController;
+            menuBar.OnAvatarTrackingChanged(UMI3DClientUserTracking.Instance.SendTracking);
         }
 
         // Update is called once per frame
@@ -50,7 +53,7 @@ namespace BrowserDesktop.Menu.Environment.Settings
                 return;
 
             UMI3DClientUserTracking.Instance.setTrackingSending(!UMI3DClientUserTracking.Instance.SendTracking);
-            MenuBar_UIController.Instance.OnAvatarTrackingChanged(UMI3DClientUserTracking.Instance.SendTracking);
+            menuBar.OnAvatarTrackingChanged(UMI3DClientUserTracking.Instance.SendTracking);
         }
     }
 }

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using BrowserDesktop.Controller;
+using DesktopBrowser.UIControllers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,13 +28,16 @@ namespace BrowserDesktop.Menu.Environment.Settings
         bool isAudioOn = true;
         public bool AudioOn => isAudioOn;
 
+        private MenuBar_UIController menuBar;
+
         void Start()
         {
             umi3d.cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => {
                 isEnvironmentLoaded = true;
             });
 
-            MenuBar_UIController.Instance.OnAudioStatusChanged(isAudioOn);
+            menuBar = UIController.GetUIController("menuBar") as MenuBar_UIController;
+            menuBar.OnAudioStatusChanged(isAudioOn);
         }
 
         void Update()
@@ -53,7 +57,7 @@ namespace BrowserDesktop.Menu.Environment.Settings
             if (isAudioOn) AudioListener.volume = 1f;
             else AudioListener.volume = 0f;
 
-            MenuBar_UIController.Instance.OnAudioStatusChanged(isAudioOn);
+            menuBar.OnAudioStatusChanged(isAudioOn);
         }
     }
 }

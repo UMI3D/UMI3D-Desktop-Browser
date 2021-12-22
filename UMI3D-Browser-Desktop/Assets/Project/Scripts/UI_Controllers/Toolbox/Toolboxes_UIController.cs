@@ -20,17 +20,11 @@ using UnityEngine.UIElements;
 
 namespace DesktopBrowser.UIControllers.Toolbox
 {
-    public class Toolboxes_UIController : Singleton<Toolboxes_UIController>
+    public class Toolboxes_UIController : UIController
     {
-        [SerializeField]
-        private GlobalUIController<ToolboxGenericElement> controller = new GlobalUIController<ToolboxGenericElement>();
-
-        public static VisualTreeAsset Visual => Instance.controller.VisualTA;
-
         public static ToolboxGenericElement CloneAndSetup(string name)
         {
-            return Instance.controller.CloneVisual().
-                Setup(name);
+            throw new System.NotImplementedException();
         }
     }
 

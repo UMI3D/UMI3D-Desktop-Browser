@@ -135,6 +135,8 @@ GameObject:
   - component: {fileID: 187552572}
   - component: {fileID: 187552570}
   - component: {fileID: 187552573}
+  - component: {fileID: 187552575}
+  - component: {fileID: 187552574}
   m_Layer: 0
   m_Name: UIControllers
   m_TagString: Untagged
@@ -154,10 +156,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87b7eca47b43e884aaa7b7a11c6edff7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller:
-    uiDocument: {fileID: 187552572}
-    visualTA: {fileID: 9197481963319205126, guid: 100dd57d3e8012f47bf82d93169bfa81,
-      type: 3}
+  uIControllerName: toolboxItems
+  uiDocument: {fileID: 187552572}
+  visualTA: {fileID: 9197481963319205126, guid: 100dd57d3e8012f47bf82d93169bfa81,
+    type: 3}
   icon: {fileID: 21300000, guid: a08002c6e8cb16c42be0c1e90c16198d, type: 3}
 --- !u!4 &187552571
 Transform:
@@ -187,7 +189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 636f591de1291614291863d47344d9e3, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 1c90ea10a08812e4fa02e4bde03b9fdd,
+  sourceAsset: {fileID: 9197481963319205126, guid: e05f706dee3f2424fa34a0d3ed8920d5,
     type: 3}
   m_SortingOrder: 0
 --- !u!114 &187552573
@@ -202,10 +204,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4020a2d26b09c3d458152cab002ef713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller:
-    uiDocument: {fileID: 187552572}
-    visualTA: {fileID: 9197481963319205126, guid: 7323f8b5e40bf1d4eae9764997234aed,
-      type: 3}
+  uIControllerName: toolboxes
+  uiDocument: {fileID: 187552572}
+  visualTA: {fileID: 9197481963319205126, guid: 080998d64c518c7489eb7e456bd4b9d4,
+    type: 3}
+--- !u!114 &187552574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187552569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d21123c8b28f204496f4642aab18812, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uIControllerName: menuBar
+  uiDocument: {fileID: 187552572}
+  visualTA: {fileID: 0}
+--- !u!114 &187552575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187552569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67d69b46122a99a4ba5fa7d152ea119e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uIControllerName: toolboxSeparators
+  uiDocument: {fileID: 187552572}
+  visualTA: {fileID: 9197481963319205126, guid: cafabf0676fde2042ae54a299ce15eb1,
+    type: 3}
 --- !u!1 &887933554
 GameObject:
   m_ObjectHideFlags: 0

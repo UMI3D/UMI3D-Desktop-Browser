@@ -1,12 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="/Assets/Project/UI/UXML/menu-bar.uss" />
-    <BrowserDesktop.UI.GenericElement.ToolboxSeparatorGenericElement style="height: 100%; flex-direction: row; flex-shrink: 1;">
+    <ui:VisualElement name="toolboxSeparator" style="flex-direction: row; height: 100%;">
         <ui:VisualElement name="horizontal-spacer" style="width: 10px;" />
-        <ui:VisualElement name="Vertical-layout" style="height: 100%; width: auto; flex-shrink: 0; flex-grow: 0;">
+        <ui:VisualElement name="Vertical-layout" style="height: 100%; width: auto; flex-shrink: 0;">
             <ui:VisualElement name="vertical-spacer" style="height: 20px; flex-direction: column;" />
-            <ui:VisualElement name="separator" style="width: 1px; height: 100%; -unity-background-scale-mode: scale-to-fit; background-image: url(&apos;/Assets/Project/UI/UI_connection/menu_bar/separateur.png&apos;); background-color: rgba(255, 255, 255, 255);" />
+            <ui:VisualElement name="separator" style="width: 1px; height: 100%; -unity-background-scale-mode: scale-to-fit; background-image: url(&apos;/Assets/Project/UI/UI_connection/menu_bar/separateur.png&apos;); background-color: rgb(255, 255, 255);" />
             <ui:VisualElement name="vertical-spacer" style="height: 20px; flex-direction: column;" />
         </ui:VisualElement>
         <ui:VisualElement name="horizontal-spacer" style="width: 10px;" />
-    </BrowserDesktop.UI.GenericElement.ToolboxSeparatorGenericElement>
+    </ui:VisualElement>
 </ui:UXML>

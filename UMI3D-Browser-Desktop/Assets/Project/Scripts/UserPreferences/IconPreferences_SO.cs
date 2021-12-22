@@ -85,7 +85,7 @@ namespace BrowserDesktop.UserPreferences
                     yield break;
                 }
             }
-            Debug.LogError("IconPrefName = " + iconPrefName + " not recognized.");
+            Debug.LogError($"IconPrefName = [{iconPrefName}] not recognized.");
         }
 
         [ContextMenu("Apply User Pref")]
