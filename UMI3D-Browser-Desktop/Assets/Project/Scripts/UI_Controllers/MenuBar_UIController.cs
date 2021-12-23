@@ -71,7 +71,7 @@ namespace BrowserDesktop.Menu.Environment
                 ItemName = "",
                 ItemClicked = () =>
                 {
-                    /*ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();*/
+                    //ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();
                 }
             }.SetIcon("menuBar-avatarOn", "menuBar-avatarOff", true);
             sound = new ToolboxItem_E(toolVisual)
