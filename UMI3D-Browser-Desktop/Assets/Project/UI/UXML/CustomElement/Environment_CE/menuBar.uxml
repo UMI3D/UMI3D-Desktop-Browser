@@ -1,12 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="toolboxSrollView" src="toolboxSrollView.uxml" />
     <Style src="/Assets/Project/UI/UXML/menu-bar.uss" />
-    <ui:VisualElement name="menuBar" style="flex-shrink: 0; align-items: center; justify-content: space-between; width: 100%; background-color: rgba(63, 63, 63, 255);">
-        <ui:VisualElement name="Horizontal-layout" style="flex-direction: row; align-items: center; justify-content: space-between; width: 100%; flex-shrink: 0; flex-grow: 1; height: 100%;">
-            <ui:VisualElement name="Left-layout" style="flex-direction: row; justify-content: center; align-items: stretch;" />
-            <ui:Instance template="toolboxSrollView" name="toolbox-menuBar-E" />
-            <ui:VisualElement name="Right-layout" style="flex-direction: row; justify-content: center; align-items: stretch;" />
-        </ui:VisualElement>
+    <ui:VisualElement name="menuBar-layout" style="flex-direction: row; align-items: stretch; background-color: rgb(63, 63, 63);">
+        <ui:VisualElement name="Left-layout" style="flex-direction: row; justify-content: center; align-items: stretch;" />
+        <ui:Instance template="toolboxSrollView" name="toolboxScrollView" style="flex-grow: 1;" />
+        <ui:VisualElement name="Right-layout" style="flex-direction: row; justify-content: center; align-items: stretch;" />
     </ui:VisualElement>
     <ui:VisualElement name="subMenu-layout" style="width: 100%; flex-shrink: 0; align-items: center;" />
 </ui:UXML>

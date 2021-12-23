@@ -17,7 +17,6 @@ using BrowserDesktop.Controller;
 using BrowserDesktop.Menu;
 using DesktopBrowser.UIControllers;
 using System.Collections;
-using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.userCapture;
@@ -27,7 +26,7 @@ public interface ISetting
 {
     public bool EnvironmentLoaded { get; set; }
     public bool IsOn { get; }
-    public MenuBar_UIController menuBar { get; }
+    public MenuBar_UIController MenuBar { get; }
     public void Start();
     public void Update();
     public void Toggle();
@@ -37,11 +36,11 @@ public struct AudioSetting : ISetting
 {
     public bool EnvironmentLoaded { get; set; }
     public bool IsOn { get;  private set; }
-    public MenuBar_UIController menuBar { get; }
+    public MenuBar_UIController MenuBar { get; }
 
     public AudioSetting(MenuBar_UIController menuBar)
     {
-        this.menuBar = menuBar;
+        this.MenuBar = menuBar;
         EnvironmentLoaded = false;
         IsOn = true;
         Start();
@@ -49,8 +48,8 @@ public struct AudioSetting : ISetting
 
     public void Start()
     {
-        menuBar.ToggleAudio = Toggle;
-        menuBar.OnAudioStatusChanged(IsOn);
+        MenuBar.ToggleAudio = Toggle;
+        MenuBar.OnAudioStatusChanged(IsOn);
     }
 
     public void Toggle()
@@ -61,7 +60,7 @@ public struct AudioSetting : ISetting
         if (IsOn) AudioListener.volume = 1f;
         else AudioListener.volume = 0f;
 
-        menuBar.OnAudioStatusChanged(IsOn);
+        MenuBar.OnAudioStatusChanged(IsOn);
     }
 
     public void Update()
@@ -79,23 +78,26 @@ public struct AvatarSetting : ISetting
     public bool EnvironmentLoaded { get; set; }
     public bool IsOn 
     { 
-        get => UMI3DClientUserTracking.Instance.SendTracking; 
-        private set => UMI3DClientUserTracking.Instance.setTrackingSending(value);
+        get => (userTracking != null) ? userTracking.SendTracking : false;
+        private set => userTracking?.setTrackingSending(value);
     }
-    public MenuBar_UIController menuBar { get; }
+    public MenuBar_UIController MenuBar { get; }
 
-    public AvatarSetting(MenuBar_UIController menuBar)
+    private UMI3DClientUserTracking userTracking;
+
+    public AvatarSetting(MenuBar_UIController menuBar, UMI3DClientUserTracking userTracking)
     {
-        this.menuBar = menuBar;
+        this.MenuBar = menuBar;
+        this.userTracking = userTracking;
         EnvironmentLoaded = false;
-        //IsOn = true;
+        IsOn = true;
         Start();
     }
 
     public void Start()
     {
-        menuBar.ToggleAvatarTracking = Toggle;
-        menuBar.OnAvatarTrackingChanged(IsOn);
+        MenuBar.ToggleAvatarTracking = Toggle;
+        MenuBar.OnAvatarTrackingChanged(IsOn);
     }
 
     public void Toggle()
@@ -103,7 +105,7 @@ public struct AvatarSetting : ISetting
         if (!EnvironmentLoaded) return;
 
         IsOn = !IsOn;
-        menuBar.OnAvatarTrackingChanged(IsOn);
+        MenuBar.OnAvatarTrackingChanged(IsOn);
     }
 
     public void Update()
@@ -124,11 +126,11 @@ public struct MicSetting : ISetting
         get => !MicrophoneListener.IsMute; 
         private set => MicrophoneListener.IsMute = !value; 
     }
-    public MenuBar_UIController menuBar { get; }
+    public MenuBar_UIController MenuBar { get; }
 
     public MicSetting(MenuBar_UIController menuBar)
     {
-        this.menuBar = menuBar;
+        this.MenuBar = menuBar;
         EnvironmentLoaded = false;
         IsOn = false;
         Start();
@@ -136,8 +138,8 @@ public struct MicSetting : ISetting
 
     public void Start()
     {
-        menuBar.ToggleMic = Toggle;
-        menuBar.OnMicrophoneStatusChanged(IsOn);
+        MenuBar.ToggleMic = Toggle;
+        MenuBar.OnMicrophoneStatusChanged(IsOn);
     }
 
     public void Toggle()
@@ -145,7 +147,7 @@ public struct MicSetting : ISetting
         if (!EnvironmentLoaded) return;
 
         IsOn = !IsOn;
-        menuBar.OnMicrophoneStatusChanged(IsOn);
+        MenuBar.OnMicrophoneStatusChanged(IsOn);
     }
 
     public void Update()
@@ -160,11 +162,24 @@ public struct MicSetting : ISetting
 
 public sealed class EnvironmentSettings : MonoBehaviour
 {
+    [SerializeField]
+    private UMI3DEnvironmentLoader environmentLoader;
+    [SerializeField]
+    private UMI3DClientUserTracking userTracking;
+
     private AudioSetting audioSetting;
     private AvatarSetting avatarSetting;
     private MicSetting micSetting;
+
     private MenuBar_UIController menuBar;
+
     private bool initialized = false;
+
+    private void Awake()
+    {
+        Debug.Assert(environmentLoader != null, "environmentLoader null in EnvironmentSettings.");
+        Debug.Assert(userTracking != null, "userTracking null in EnvironmentSettings.");
+    }
 
     void Start()
     {
@@ -175,10 +190,10 @@ public sealed class EnvironmentSettings : MonoBehaviour
     private IEnumerator Initialize()
     {
         while (!menuBar.Initialized) yield return null;
-        avatarSetting = new AvatarSetting(menuBar);
+        avatarSetting = new AvatarSetting(menuBar, userTracking);
         audioSetting = new AudioSetting(menuBar);
         micSetting = new MicSetting(menuBar);
-        UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => {
+        environmentLoader?.onEnvironmentLoaded.AddListener(() => {
             audioSetting.EnvironmentLoaded = true;
             avatarSetting.EnvironmentLoaded = true;
             micSetting.EnvironmentLoaded = true;

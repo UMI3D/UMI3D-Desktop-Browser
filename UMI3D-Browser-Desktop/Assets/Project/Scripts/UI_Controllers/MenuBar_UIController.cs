@@ -14,13 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using BrowserDesktop.UI.CustomElement;
 using BrowserDesktop.UI.GenericElement;
+using DesktopBrowser.UI.CustomElement;
 using DesktopBrowser.UI.GenericElement;
-using DesktopBrowser.UIControllers;
-using DesktopBrowser.UIControllers.Toolbox;
 using System;
-using umi3d.common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -28,10 +25,12 @@ namespace DesktopBrowser.UIControllers
 {
     public class MenuBar_UIController : UIController
     {
-        private MenuBarElement menuBar;
+        private MenuBar_E menuBar;
         private ToolboxItem_E avatar;
         private ToolboxItem_E sound;
         private ToolboxItem_E mic;
+
+        private Action<VisualElement> addSeparator;
 
         public Action ToggleAvatarTracking;
         public Action ToggleAudio;
@@ -42,7 +41,10 @@ namespace DesktopBrowser.UIControllers
         protected override void Awake()
         {
             base.Awake();
-            menuBar = new MenuBarElement(BindVisual("menu-bar-element"));
+            menuBar = new MenuBar_E(BindVisual("menu-bar-element"))
+            {
+                AddSeparator = (ve) => { addSeparator(ve);  }
+            };
         }
 
         private void Start()
@@ -50,6 +52,8 @@ namespace DesktopBrowser.UIControllers
             VisualTreeAsset toolVisual = GetUIController("toolboxItems").VisualTA;
             VisualTreeAsset toolboxVisual = GetUIController("toolboxes").VisualTA;
             VisualTreeAsset separatorVisual = GetUIController("toolboxSeparators").VisualTA;
+
+            addSeparator = (ve) => { new ToolboxSeparatorGenericElement(separatorVisual).AddTo(ve); };
 
             #region Left Layout
 
@@ -79,7 +83,6 @@ namespace DesktopBrowser.UIControllers
                 ItemName = "",
                 ItemClicked = () =>
                 {
-                    //ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();
                     ToggleAvatarTracking();
                 }
             }.SetIcon("menuBar-avatarOn", "menuBar-avatarOff", true);
@@ -88,7 +91,6 @@ namespace DesktopBrowser.UIControllers
                 ItemName = "",
                 ItemClicked = () =>
                 {
-                    /*ActivateDeactivateAudio.Instance.ToggleAudioStatus();*/
                     ToggleAudio();
                 }
             }.SetIcon("menuBar-soundOn", "menuBar-soundOff");
@@ -97,7 +99,6 @@ namespace DesktopBrowser.UIControllers
                 ItemName = "",
                 ItemClicked = () =>
                 {
-                    /*ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();*/
                     ToggleMic();
                 }
             }.SetIcon("menuBar-micOn", "menuBar-micOff");

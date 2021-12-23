@@ -15,61 +15,57 @@ limitations under the License.
 */
 
 //using BrowserDesktop.Menu.Environment.Settings;
+using BrowserDesktop.UI;
 using BrowserDesktop.UI.GenericElement;
-using DesktopBrowser.UI.GenericElement;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 
-namespace BrowserDesktop.UI.CustomElement
+namespace DesktopBrowser.UI.CustomElement
 {
     /// <summary>
     /// A menuBar has 3 layout (left, center and right). The center layout is a scrollView.
     /// </summary>
-    public class MenuBarElement : AbstractGenericAndCustomElement
+    public class MenuBar_E : AbstractGenericAndCustomElement
     {
         #region Fields
 
         public float Space { get; set; } = 10f;
+        public Action<VisualElement> AddSeparator { get; set; } = (ve) => { Debug.Log("<color=green>TODO: </color>" + $"AddSeparator in MenuBarElement."); };
 
         private VisualElement leftLayout_VE;
-        private ToolboxMenuBarSV_E centerLayout_VE;
-        public ToolboxMenuBarSV_E ToolboxLayout => centerLayout_VE;
+        private ToolboxScrollView_E centerLayout_VE;
         private VisualElement rightLayout_VE;
 
-
         public VisualElement SubMenuLayout { get; private set; }
-
 
         #endregion
 
         #region Initialization
 
-        //public MenuBarElement() : base()
-        //{
-        //    //Flex
-        //    this.style.flexShrink = 0f;
-        //    //Size
-        //    this.style.width = Length.Percent(100f);
-        //}
-
-        public MenuBarElement(VisualTreeAsset visualTA): base(visualTA) { }
-        public MenuBarElement(VisualElement root): base(root) { }
+        public MenuBar_E(VisualTreeAsset visualTA): base(visualTA) { }
+        public MenuBar_E(VisualElement root): base(root) { }
 
         protected override void Initialize()
         {
             base.Initialize();
 
             leftLayout_VE = root.Q<VisualElement>("Left-layout");
-            //centerLayout_VE = this.Q<VisualElement>("Center-layout").Q<ToolboxMenuBarSV_E>();
+            centerLayout_VE = new ToolboxScrollView_E(root.Q("toolboxScrollView"))
+            {
+                AddSeparator = (ve) => { AddSeparator(ve); }
+            };
             rightLayout_VE = root.Q<VisualElement>("Right-layout");
             //SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
         }
 
         #endregion
-        public MenuBarElement AddLeft(params AbstractGenericAndCustomElement[] ces)
+
+        #region Add elements
+
+        public MenuBar_E AddLeft(params AbstractGenericAndCustomElement[] ces)
         {
             foreach (AbstractGenericAndCustomElement ce in ces)
             {
@@ -77,7 +73,7 @@ namespace BrowserDesktop.UI.CustomElement
             }
             return this;
         }
-        public MenuBarElement AddRight(params AbstractGenericAndCustomElement[] ces)
+        public MenuBar_E AddRight(params AbstractGenericAndCustomElement[] ces)
         {
             foreach(AbstractGenericAndCustomElement ce in ces)
             {
@@ -101,64 +97,9 @@ namespace BrowserDesktop.UI.CustomElement
             layoutContainer_VE.Add(space);
         }
 
+        #endregion
 
-        public MenuBarElement Setup()
-        {
-            Initialize();
-            centerLayout_VE.
-                Setup("menuBar", "scrollView-btn", (vE) => 
-                { 
-                    //AddSeparator(vE, toolboxSeparatorGE_VTA); 
-                });
-
-            #region Test
-
-            //var screenshot_TBGE = toolboxButtonGE_VTA.
-            //    CloneTree().
-            //    Q<ToolboxButtonGenericElement>().
-            //    Setup("Screenshot", "avatarOn", "avatarOff", true, () =>
-            //    {
-            //        ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();
-            //    });
-            //var import = toolboxButtonGE_VTA.
-            //    CloneTree().
-            //    Q<ToolboxButtonGenericElement>().
-            //    Setup("import", "soundOn", "soundOff", true, () =>
-            //    {
-
-            //    });
-            //ToolboxGenericElement image = toolboxGE_VTA.
-            //    CloneTree().
-            //    Q<ToolboxGenericElement>().
-            //    Setup("Image", new ToolboxButtonGenericElement[2] { screenshot_TBGE, import });
-            //centerLayout_VE.AddElement(image);
-
-            //var gallery = toolboxButtonGE_VTA.
-            //    CloneTree().
-            //    Q<ToolboxButtonGenericElement>().
-            //    Setup("gallery", "micOn", "micOff", false, () =>
-            //    {
-
-            //    });
-            //ToolboxGenericElement test = toolboxGE_VTA.
-            //    CloneTree().
-            //    Q<ToolboxGenericElement>().
-            //    Setup("Test", gallery);
-            //test.AddTo(SubMenuLayout);
-
-            //logWorldPosition = () =>
-            //{
-            //    Debug.Log($"test x = {test.worldBound.x}");
-            //    Debug.Log($"image x = {image.worldBound.x}");
-            //    test.style.left = image.ChangeCoordinatesTo(test, new Vector2(image.layout.x, test.layout.y)).x;
-
-            //    //test.style.left = image.WorldToLocal(new Vector2(image.worldBound.x, 0f)).x;
-            //};
-
-            #endregion
-            ReadyToDisplay();
-            return this;
-        }
+        #region Sub Menu
 
         public void AddInSubMenu(ToolboxGenericElement tools, ToolboxGenericElement parent)
         {
@@ -174,8 +115,6 @@ namespace BrowserDesktop.UI.CustomElement
             };
             //Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPositionCoroutine());
         }
-
-        #region Private Functions
 
         private IEnumerator LogWorldPositionCoroutine()
         {

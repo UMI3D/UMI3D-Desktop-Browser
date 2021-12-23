@@ -174,7 +174,7 @@ namespace DesktopBrowser.UI.GenericElement
             {
                 currentClass = $"{theme}-{IconClassOff}-btn";
             }
-
+            
             UserPreferences.TextAndIconPref.ApplyIconPref(button_B, IconPref, currentClass);
         }
 
