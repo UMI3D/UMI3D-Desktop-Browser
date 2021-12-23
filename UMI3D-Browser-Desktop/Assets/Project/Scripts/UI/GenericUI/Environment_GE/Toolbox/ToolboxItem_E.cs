@@ -49,7 +49,7 @@ namespace DesktopBrowser.UI.GenericElement
             base.Initialize();
             ItemButton = new Button_GE(root)
             {
-                OnClicked = ItemClicked,
+                OnClicked = () => { ItemClicked(); },
                 IconPref = "square-button"
             };
             label = root.Q<Label>("toolboxItem-label");

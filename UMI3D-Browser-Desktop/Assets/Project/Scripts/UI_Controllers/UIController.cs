@@ -55,7 +55,7 @@ namespace DesktopBrowser.UIControllers
 
         #endregion
 
-        private void Awake()
+        protected virtual void Awake()
         {
             Debug.Assert(!uIControllers.ContainsKey(tag));
             Debug.Assert(!string.IsNullOrEmpty(uIControllerName));

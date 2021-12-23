@@ -19,11 +19,12 @@ using BrowserDesktop.UI.GenericElement;
 using DesktopBrowser.UI.GenericElement;
 using DesktopBrowser.UIControllers;
 using DesktopBrowser.UIControllers.Toolbox;
+using System;
 using umi3d.common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BrowserDesktop.Menu.Environment
+namespace DesktopBrowser.UIControllers
 {
     public class MenuBar_UIController : UIController
     {
@@ -32,8 +33,15 @@ namespace BrowserDesktop.Menu.Environment
         private ToolboxItem_E sound;
         private ToolboxItem_E mic;
 
-        protected void Awake()
+        public Action ToggleAvatarTracking;
+        public Action ToggleAudio;
+        public Action ToggleMic;
+
+        public bool Initialized { get; private set; } = false;
+
+        protected override void Awake()
         {
+            base.Awake();
             menuBar = new MenuBarElement(BindVisual("menu-bar-element"));
         }
 
@@ -72,6 +80,7 @@ namespace BrowserDesktop.Menu.Environment
                 ItemClicked = () =>
                 {
                     //ActivateDeactivateAvatarTracking.Instance.ToggleTrackingStatus();
+                    ToggleAvatarTracking();
                 }
             }.SetIcon("menuBar-avatarOn", "menuBar-avatarOff", true);
             sound = new ToolboxItem_E(toolVisual)
@@ -80,6 +89,7 @@ namespace BrowserDesktop.Menu.Environment
                 ItemClicked = () =>
                 {
                     /*ActivateDeactivateAudio.Instance.ToggleAudioStatus();*/
+                    ToggleAudio();
                 }
             }.SetIcon("menuBar-soundOn", "menuBar-soundOff");
             mic = new ToolboxItem_E(toolVisual)
@@ -88,6 +98,7 @@ namespace BrowserDesktop.Menu.Environment
                 ItemClicked = () =>
                 {
                     /*ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();*/
+                    ToggleMic();
                 }
             }.SetIcon("menuBar-micOn", "menuBar-micOff");
             Toolbox_E toolbox_settings = new Toolbox_E(toolboxVisual, avatar, sound, mic)
@@ -117,6 +128,8 @@ namespace BrowserDesktop.Menu.Environment
             menuBar.AddSpacerToRightLayout();
 
             #endregion
+
+            Initialized = true;
         }
 
         public static void AddInMenu(ToolboxGenericElement toolbox)

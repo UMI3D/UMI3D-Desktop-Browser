@@ -54,7 +54,7 @@ namespace DesktopBrowser.UI.GenericElement
         {
             base.Initialize();
             button_B = root.Q<Button>();
-            this.button_B.clicked += this.OnClicked;
+            this.button_B.clicked += () => { this.OnClicked(); };
         }
 
         public override void Reset()
