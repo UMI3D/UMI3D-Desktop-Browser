@@ -38,7 +38,7 @@ namespace DesktopBrowser.UI.CustomElement
         private ScrollView scrollView;
 
         private List<AbstractGenericAndCustomElement> elements = new List<AbstractGenericAndCustomElement>();
-        private AbstractGenericAndCustomElement currentElement;
+        private int currentIndex = 0;
 
         public ToolboxScrollView_E(VisualElement root) : base(root) { }
 
@@ -46,21 +46,49 @@ namespace DesktopBrowser.UI.CustomElement
         {
             base.Initialize();
 
-            backward = new Button_GE(root.Q("backward"))
+            backward = new Button_GE(Root.Q("backward"))
             {
                 OnClicked = () => { },
                 IconPref = "scrollView-btn"
             }.SetIcon("menuBar-previous", "menuBar-previous-desable", true);
-            forward = new Button_GE(root.Q("forward"))
+            forward = new Button_GE(Root.Q("forward"))
             {
-                OnClicked = () => { },
+                OnClicked = () => { TestGoSecond(); },
                 IconPref = "scrollView-btn"
             }.SetIcon("menuBar-next", "menuBar-next-desable", true);
-            backwardLayout = root.Q<VisualElement>("horizontal-layout-backward");
-            forwardLayout = root.Q<VisualElement>("horizontal-layout-forward");
-            scrollView = root.Q<ScrollView>("scrollView");
+            backwardLayout = Root.Q<VisualElement>("horizontal-layout-backward");
+            forwardLayout = Root.Q<VisualElement>("horizontal-layout-forward");
+            scrollView = Root.Q<ScrollView>("scrollView");
 
             //DisplayButtons(false);
+        }
+
+        private void TestGoSecond()
+        {
+            Toolbox_E toolbox0 = elements[5] as Toolbox_E;
+            VisualElement toolboxRoot = toolbox0.Root;
+            Debug.Log($"toolbox name = [{toolbox0.toolboxName}]");
+
+            VisualElement contentContainer = scrollView.contentContainer;
+            Debug.Log($"content container childCount = [{contentContainer.childCount}]");
+            Debug.Assert(contentContainer.Contains(toolboxRoot));
+            scrollView.ScrollTo(toolboxRoot);
+
+            //VisualElement content = scrollView.Q("unity-content-container");
+            //Debug.Assert(content.Contains(toolbox0));
+
+            //VisualElement second = scrollView.ElementAt(1);
+            ////VisualElement second = scrollView.
+            //Debug.Log($"Test go second");
+            //if (second is Toolbox_E toolbox) 
+            //{
+            //    Debug.Log($"toolbox = [{toolbox.toolboxName}]");
+            //}
+            //if (second is Scroller scroller)
+            //{
+            //    Debug.Log("scroller");
+            //}
+            //scrollView.ScrollTo(toolbox0);
         }
 
         public void DisplayButtons(bool value)
@@ -83,7 +111,7 @@ namespace DesktopBrowser.UI.CustomElement
             {
                 toolbox.AddTo(scrollView);
                 AddSeparator?.Invoke(scrollView);
-                //todo add to elements
+                elements.Add(toolbox);
             }
         }
 
