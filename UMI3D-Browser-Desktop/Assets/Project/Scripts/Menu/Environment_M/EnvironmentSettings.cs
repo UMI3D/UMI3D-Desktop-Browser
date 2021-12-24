@@ -32,7 +32,7 @@ public interface ISetting
     public void Toggle();
 }
 
-public struct AudioSetting : ISetting
+public class AudioSetting : ISetting
 {
     public bool EnvironmentLoaded { get; set; }
     public bool IsOn { get;  private set; }
@@ -73,7 +73,7 @@ public struct AudioSetting : ISetting
     }
 }
 
-public struct AvatarSetting : ISetting
+public class AvatarSetting : ISetting
 {
     public bool EnvironmentLoaded { get; set; }
     public bool IsOn 
@@ -118,7 +118,7 @@ public struct AvatarSetting : ISetting
     }
 }
 
-public struct MicSetting : ISetting
+public class MicSetting : ISetting
 {
     public bool EnvironmentLoaded { get; set; }
     public bool IsOn 
@@ -170,19 +170,16 @@ public sealed class EnvironmentSettings : MonoBehaviour
     private AudioSetting audioSetting;
     private AvatarSetting avatarSetting;
     private MicSetting micSetting;
-
     private MenuBar_UIController menuBar;
 
     private bool initialized = false;
 
-    private void Awake()
-    {
-        Debug.Assert(environmentLoader != null, "environmentLoader null in EnvironmentSettings.");
-        Debug.Assert(userTracking != null, "userTracking null in EnvironmentSettings.");
-    }
-
     void Start()
     {
+        environmentLoader = UMI3DEnvironmentLoader.Exists ? UMI3DEnvironmentLoader.Instance : null;
+        userTracking = UMI3DClientUserTracking.Exists ? UMI3DClientUserTracking.Instance : null;
+        Debug.Assert(environmentLoader != null, "environmentLoader null in EnvironmentSettings.");
+        Debug.Assert(userTracking != null, "userTracking null in EnvironmentSettings.");
         menuBar = UIController.GetUIController("menuBar") as MenuBar_UIController;
         StartCoroutine(Initialize());
     }
@@ -194,19 +191,23 @@ public sealed class EnvironmentSettings : MonoBehaviour
         audioSetting = new AudioSetting(menuBar);
         micSetting = new MicSetting(menuBar);
         environmentLoader?.onEnvironmentLoaded.AddListener(() => {
-            audioSetting.EnvironmentLoaded = true;
-            avatarSetting.EnvironmentLoaded = true;
-            micSetting.EnvironmentLoaded = true;
+            OnEnvironmentLoaded();
         });
         initialized = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!initialized) return;
         avatarSetting.Update();
         audioSetting.Update();
         micSetting.Update();
+    }
+
+    public void OnEnvironmentLoaded()
+    {
+        audioSetting.EnvironmentLoaded = true;
+        avatarSetting.EnvironmentLoaded = true;
+        micSetting.EnvironmentLoaded = true;
     }
 }
