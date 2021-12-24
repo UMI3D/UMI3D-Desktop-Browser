@@ -53,7 +53,7 @@ namespace DesktopBrowser.UI.GenericElement
         protected override void Initialize()
         {
             base.Initialize();
-            button_B = root.Q<Button>();
+            button_B = Root.Q<Button>();
             this.button_B.clicked += () => { this.OnClicked(); };
         }
 

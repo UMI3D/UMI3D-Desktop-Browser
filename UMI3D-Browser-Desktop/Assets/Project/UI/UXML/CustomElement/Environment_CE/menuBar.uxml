@@ -3,7 +3,9 @@
     <Style src="/Assets/Project/UI/UXML/menu-bar.uss" />
     <ui:VisualElement name="menuBar-layout" style="align-items: stretch; background-color: rgb(63, 63, 63); width: 100%; flex-direction: row; justify-content: center;">
         <ui:VisualElement name="Left-layout" style="flex-direction: row; justify-content: center; align-items: stretch; flex-shrink: 0;" />
-        <ui:Instance template="toolboxSrollView" name="toolboxScrollView" style="flex-shrink: 0;" />
+        <ui:VisualElement name="center-layout" style="flex-grow: 1; height: 100%;">
+            <ui:Instance template="toolboxSrollView" name="toolboxScrollView" style="flex-shrink: 0; height: 100%;" />
+        </ui:VisualElement>
         <ui:VisualElement name="Right-layout" style="flex-direction: row; justify-content: center; align-items: stretch; flex-shrink: 0;" />
     </ui:VisualElement>
     <ui:VisualElement name="subMenu-layout" style="width: 100%; flex-shrink: 0; align-items: center;" />

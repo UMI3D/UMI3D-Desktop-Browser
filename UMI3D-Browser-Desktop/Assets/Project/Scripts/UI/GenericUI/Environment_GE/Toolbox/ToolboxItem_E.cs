@@ -47,12 +47,12 @@ namespace DesktopBrowser.UI.GenericElement
         protected override void Initialize()
         {
             base.Initialize();
-            ItemButton = new Button_GE(root)
+            ItemButton = new Button_GE(Root)
             {
                 OnClicked = () => { ItemClicked(); },
                 IconPref = "square-button"
             };
-            label = root.Q<Label>("toolboxItem-label");
+            label = Root.Q<Label>("toolboxItem-label");
         }
 
         #region Setup

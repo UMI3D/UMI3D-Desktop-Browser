@@ -37,7 +37,7 @@ namespace BrowserDesktop.UI
         /// </summary>
         public bool Displayed { get; protected set; } = false;
 
-        protected VisualElement root;
+        public VisualElement Root { get; protected set; } = null;
 
         public AbstractGenericAndCustomElement() : base() { }
 
@@ -64,8 +64,8 @@ namespace BrowserDesktop.UI
         {
             if (Initiated) return;
             else Initiated = true;
-            root = visualTA.CloneTree();
-            this.Add(root);
+            Root = visualTA.CloneTree();
+            this.Add(Root);
             Initialize();
         }
 
@@ -73,7 +73,7 @@ namespace BrowserDesktop.UI
         {
             if (Initiated) return;
             else Initiated = true;
-            this.root = root;
+            this.Root = root;
             Initialize();
         }
 
@@ -87,7 +87,7 @@ namespace BrowserDesktop.UI
 
         public virtual void Reset()
         {
-            this.root = null;
+            this.Root = null;
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace BrowserDesktop.UI
             if (!initialized) throw new System.Exception($"VisualElement Added without being setup.");
             ReadyToDisplay();
             //parent.Add(this);
-            parent.Add(root);
+            parent.Add(Root);
         }
 
         /// <summary>

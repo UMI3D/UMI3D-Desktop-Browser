@@ -52,12 +52,12 @@ namespace DesktopBrowser.UI.CustomElement
         {
             base.Initialize();
 
-            leftLayout_VE = root.Q<VisualElement>("Left-layout");
-            centerLayout_VE = new ToolboxScrollView_E(root.Q("toolboxScrollView"))
+            leftLayout_VE = Root.Q<VisualElement>("Left-layout");
+            centerLayout_VE = new ToolboxScrollView_E(Root.Q("toolboxScrollView"))
             {
                 AddSeparator = (ve) => { AddSeparator(ve); }
             };
-            rightLayout_VE = root.Q<VisualElement>("Right-layout");
+            rightLayout_VE = Root.Q<VisualElement>("Right-layout");
             //SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
         }
 
