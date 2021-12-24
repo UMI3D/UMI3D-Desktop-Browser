@@ -17,6 +17,7 @@ limitations under the License.
 //using BrowserDesktop.Menu.Environment.Settings;
 using BrowserDesktop.UI;
 using BrowserDesktop.UI.GenericElement;
+using DesktopBrowser.UI.GenericElement;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -38,7 +39,6 @@ namespace DesktopBrowser.UI.CustomElement
         private VisualElement leftLayout_VE;
         private ToolboxScrollView_E centerLayout_VE;
         private VisualElement rightLayout_VE;
-
         public VisualElement SubMenuLayout { get; private set; }
 
         #endregion
@@ -71,6 +71,11 @@ namespace DesktopBrowser.UI.CustomElement
             {
                 ce.AddTo(leftLayout_VE);
             }
+            return this;
+        }
+        public MenuBar_E AddCenter(params Toolbox_E[] toolboxes)
+        {
+            centerLayout_VE.AddToolboxes(toolboxes);
             return this;
         }
         public MenuBar_E AddRight(params AbstractGenericAndCustomElement[] ces)

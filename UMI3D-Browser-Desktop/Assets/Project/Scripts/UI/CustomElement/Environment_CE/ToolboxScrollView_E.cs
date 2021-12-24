@@ -40,8 +40,6 @@ namespace DesktopBrowser.UI.CustomElement
         private List<AbstractGenericAndCustomElement> elements = new List<AbstractGenericAndCustomElement>();
         private AbstractGenericAndCustomElement currentElement;
 
-        
-
         public ToolboxScrollView_E(VisualElement root) : base(root) { }
 
         protected override void Initialize()
@@ -76,6 +74,16 @@ namespace DesktopBrowser.UI.CustomElement
             {
                 backwardLayout.style.display = DisplayStyle.None;
                 forwardLayout.style.display = DisplayStyle.None;
+            }
+        }
+
+        public void AddToolboxes(params Toolbox_E[] toolboxes)
+        {
+            foreach (Toolbox_E toolbox in toolboxes)
+            {
+                toolbox.AddTo(scrollView);
+                AddSeparator?.Invoke(scrollView);
+                //todo add to elements
             }
         }
 

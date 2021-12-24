@@ -133,6 +133,13 @@ namespace DesktopBrowser.UIControllers
             Initialized = true;
         }
 
+        public void AddToolboxes(params Toolbox_E[] toolboxes)
+        {
+            menuBar.AddCenter(toolboxes);
+        }
+
+        #region To be deleted
+
         public static void AddInMenu(ToolboxGenericElement toolbox)
         {
             //menuBar.ToolboxLayout.AddElement(toolbox);
@@ -142,6 +149,8 @@ namespace DesktopBrowser.UIControllers
         {
             //Instance.menuBar.AddInSubMenu(subTools, parent);
         }
+
+        #endregion
 
         /// <summary>
         /// Event called when the status of the avatar tracking changes.

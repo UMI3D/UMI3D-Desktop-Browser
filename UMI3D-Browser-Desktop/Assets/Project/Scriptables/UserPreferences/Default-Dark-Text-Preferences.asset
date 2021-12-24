@@ -21,10 +21,6 @@ MonoBehaviour:
     labelFontSize: 15
     labelColor: {r: 1, g: 1, b: 1, a: 1}
     labelUSSClasses: []
-    applyFormat: 1
-    maxNumberOfCharacters: 20
-    caseStyle: 0
-    resizeWidth: 0
     textFormat:
       applyFormat: 1
       maxNumberOfCharacters: 20
@@ -37,10 +33,6 @@ MonoBehaviour:
     labelFontSize: 11
     labelColor: {r: 1, g: 1, b: 1, a: 1}
     labelUSSClasses: []
-    applyFormat: 1
-    maxNumberOfCharacters: 10
-    caseStyle: 0
-    resizeWidth: 1
     textFormat:
       applyFormat: 1
       maxNumberOfCharacters: 10
@@ -53,13 +45,9 @@ MonoBehaviour:
     labelFontSize: 13
     labelColor: {r: 1, g: 1, b: 1, a: 1}
     labelUSSClasses: []
-    applyFormat: 0
-    maxNumberOfCharacters: 10
-    caseStyle: 0
-    resizeWidth: 0
     textFormat:
-      applyFormat: 0
-      maxNumberOfCharacters: 10
+      applyFormat: 1
+      maxNumberOfCharacters: 15
       caseStyle: 0
       resizeWidth: 0
   - textPrefName: corps
@@ -69,10 +57,6 @@ MonoBehaviour:
     labelFontSize: 11
     labelColor: {r: 1, g: 1, b: 1, a: 1}
     labelUSSClasses: []
-    applyFormat: 1
-    maxNumberOfCharacters: 100
-    caseStyle: 0
-    resizeWidth: 0
     textFormat:
       applyFormat: 1
       maxNumberOfCharacters: 100
