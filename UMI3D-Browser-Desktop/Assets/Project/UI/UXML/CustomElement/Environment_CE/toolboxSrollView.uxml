@@ -2,13 +2,13 @@
     <ui:Template name="toolboxScrollViewButton" src="toolboxScrollViewButton.uxml" />
     <ui:Template name="toolboxSeparator" src="/Assets/Project/UI/UXML/GenericUI/Environment_GE/Toolbox/toolboxSeparator.uxml" />
     <Style src="/Assets/Project/UI/UXML/menu-bar.uss" />
-    <ui:VisualElement name="horizontal-layer" style="flex-direction: row; justify-content: space-between; align-items: stretch; height: 100%;">
-        <ui:VisualElement name="horizontal-layout-backward" style="flex-direction: row;">
+    <ui:VisualElement name="horizontal-layer" style="flex-direction: row; justify-content: space-between; align-items: stretch; height: 100%; width: 100%;">
+        <ui:VisualElement name="horizontal-layout-backward" style="flex-direction: row; flex-shrink: 0;">
             <ui:Instance template="toolboxScrollViewButton" name="backward" />
             <ui:Instance template="toolboxSeparator" name="toolboxSeparator" />
         </ui:VisualElement>
-        <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" mode="Horizontal" name="scrollView" style="width: 100%;" />
-        <ui:VisualElement name="horizontal-layout-forward" style="flex-direction: row;">
+        <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" mode="Horizontal" name="scrollView" style="flex-grow: 1; flex-wrap: wrap;" />
+        <ui:VisualElement name="horizontal-layout-forward" style="flex-direction: row; flex-shrink: 0;">
             <ui:Instance template="toolboxSeparator" name="toolboxSeparator" />
             <ui:Instance template="toolboxScrollViewButton" name="forward" />
         </ui:VisualElement>
