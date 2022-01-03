@@ -31,64 +31,83 @@ namespace DesktopBrowser.UI.CustomElement
     public partial class ToolboxScrollView_E
     {
         public Action<VisualElement> AddSeparator { get; set; } = (ve) => { Debug.Log("<color=green>TODO: </color>" + $"Add separator in ToolboxScrollView."); };
+        public float DeltaScroll { get; set; } = 50f;
 
         private Button_GE backward;
         private VisualElement backwardLayout;
+        private bool m_backwardLayoutDisplayed { get; set; } = false;
         private Button_GE forward;
         private VisualElement forwardLayout;
+        private bool m_forwardLayoutDisplayed { get; set; } = false;
         private ScrollView scrollView;
 
         private List<AbstractGenericAndCustomElement> elements = new List<AbstractGenericAndCustomElement>();
-        private int currentIndex = 0;
-        private float totalWidth = 0f;
+        //private int currentIndex = 0;
+
+        private float m_scrolledWidth { get; set; } = 0f;
 
         private float scrollableWidth
         {
             get { return scrollView.contentContainer.layout.width - scrollView.contentViewport.layout.width; }
         }
+        //private VisualElement scrollViewContentContainer
+        //{
+        //    get => scrollView.contentContainer;
+        //}
+
+        private enum ButtonType { BACKWARD, FORWARD }
     }
 
     public partial class ToolboxScrollView_E
     {
         public ToolboxScrollView_E(VisualElement root) : base(root) { }
 
-        private void TestGoSecond()
+        private void OnForwardPressed() => ButtonPressed(ButtonType.FORWARD);
+
+        private void OnBackwardPressed() => ButtonPressed(ButtonType.BACKWARD);
+
+        private void ButtonPressed(ButtonType buttonType)
         {
-            Toolbox_E toolboxTarget = elements[4] as Toolbox_E;
-            VisualElement toolboxRoot = toolboxTarget.Root;
-            Debug.Log($"toolbox name = [{toolboxTarget.toolboxName}]");
+            if (buttonType == ButtonType.BACKWARD && !m_forwardLayoutDisplayed) DisplaysForwardButton(true);
+            if (buttonType == ButtonType.FORWARD && !m_backwardLayoutDisplayed) DisplaysBackwardButton(true);
 
-            VisualElement contentContainer = scrollView.contentContainer;
-            Debug.Log($"content container childCount = [{contentContainer.childCount}]; offset = [{scrollView.scrollOffset}]");
-            Debug.Assert(contentContainer.Contains(toolboxRoot));
+            //m_scrolledWidth -= scrollViewContentContainer[currentIndex].layout.width;
+            //m_scrolledWidth -= scrollViewContentContainer[currentIndex - 1].layout.width;
 
-            //scrollView.ScrollTo(toolboxRoot);
+            m_scrolledWidth += (buttonType == ButtonType.BACKWARD) ? -DeltaScroll : DeltaScroll;
 
-            Toolbox_E toolbox0 = elements[0] as Toolbox_E;
-            scrollView.scrollOffset = new Vector2(toolbox0.resolvedStyle.width, 0f);
-            Debug.Log($"Scrolled; offset = [{scrollView.scrollOffset}], toolbox0 width = [{toolbox0.Root.layout.width}]");
+            if (buttonType == ButtonType.BACKWARD && m_scrolledWidth < 0f)
+            {
+                m_scrolledWidth = 0f;
+                DisplaysBackwardButton(false);
+            }
+            if (buttonType == ButtonType.FORWARD && m_scrolledWidth > scrollableWidth)
+            {
+                m_scrolledWidth = scrollableWidth;
+                DisplaysForwardButton(false);
+            }
 
-            //VisualElement content = scrollView.Q("unity-content-container");
-            //Debug.Assert(content.Contains(toolbox0));
+            scrollView.experimental.animation.Start(scrollView.scrollOffset.x, m_scrolledWidth, 500, (ve, value) => { scrollView.scrollOffset = new Vector2(value, 0f); });
 
-            //VisualElement second = scrollView.ElementAt(1);
-            ////VisualElement second = scrollView.
-            //Debug.Log($"Test go second");
-            //if (second is Toolbox_E toolbox) 
-            //{
-            //    Debug.Log($"toolbox = [{toolbox.toolboxName}]");
-            //}
-            //if (second is Scroller scroller)
-            //{
-            //    Debug.Log("scroller");
-            //}
-            //scrollView.ScrollTo(toolbox0);
+            //currentIndex += (buttonType == ButtonType.BACKWARD) ? -2 : 2;
         }
 
         public void DisplayButtons(bool value)
         {
-            backwardLayout.style.display = (value) ? DisplayStyle.Flex : DisplayStyle.None;
-            forwardLayout.style.display = (value) ? DisplayStyle.Flex : DisplayStyle.None;
+            DisplaysBackwardButton(value);
+            DisplaysForwardButton(value);
+        }
+        public void DisplaysForwardButton(bool value)
+        {
+            m_forwardLayoutDisplayed = value;
+            //forwardLayout.style.display = (value) ? DisplayStyle.Flex : DisplayStyle.None;
+            forwardLayout.style.visibility = (value) ? Visibility.Visible : Visibility.Hidden;
+        }
+        public void DisplaysBackwardButton(bool value)
+        {
+            m_backwardLayoutDisplayed = value;
+            //backwardLayout.style.display = (value) ? DisplayStyle.Flex : DisplayStyle.None;
+            backwardLayout.style.visibility = (value) ? Visibility.Visible : Visibility.Hidden;
         }
 
         public void AddToolboxes(params Toolbox_E[] toolboxes)
@@ -96,13 +115,10 @@ namespace DesktopBrowser.UI.CustomElement
             foreach (Toolbox_E toolbox in toolboxes)
             {
                 toolbox.AddTo(scrollView);
-                AddSeparator?.Invoke(scrollView);
+                AddSeparator.Invoke(scrollView);
                 elements.Add(toolbox);
                 totalWidth += toolbox.resolvedStyle.width;
             }
-
-            //Debug.Log($"scrollable width = [{scrollableWidth}]; contentContainer = [{scrollView.contentContainer.resolvedStyle.width}]; contentViewPort = [{scrollView.contentViewport.layout.width}]; total width = [{totalWidth}]");
-            //if (scrollableWidth > 0) DisplayButtons(true);
         }
 
         //public void AddElement(AbstractGenericAndCustomElement element)
@@ -122,7 +138,10 @@ namespace DesktopBrowser.UI.CustomElement
 
         private void OnGeometryChanged(GeometryChangedEvent evt)
         {
-            DisplayButtons((scrollableWidth > 0f) ? true : false);
+            m_scrolledWidth = scrollView.scrollOffset.x;
+
+            DisplaysBackwardButton((scrollableWidth > 0f && m_scrolledWidth != 0f) ? true : false);
+            DisplaysForwardButton((scrollableWidth > 0f && m_scrolledWidth != scrollableWidth) ? true : false);
         }
     }
 
@@ -134,12 +153,12 @@ namespace DesktopBrowser.UI.CustomElement
 
             backward = new Button_GE(Root.Q("backward"))
             {
-                OnClicked = () => { },
+                OnClicked = () => { OnBackwardPressed(); },
                 IconPref = "scrollView-btn"
             }.SetIcon("menuBar-previous", "menuBar-previous-desable", true);
             forward = new Button_GE(Root.Q("forward"))
             {
-                OnClicked = () => { TestGoSecond(); },
+                OnClicked = () => { OnForwardPressed(); },
                 IconPref = "scrollView-btn"
             }.SetIcon("menuBar-next", "menuBar-next-desable", true);
             backwardLayout = Root.Q<VisualElement>("horizontal-layout-backward");
