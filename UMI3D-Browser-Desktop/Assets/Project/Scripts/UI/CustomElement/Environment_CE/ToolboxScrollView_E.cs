@@ -27,7 +27,8 @@ namespace DesktopBrowser.UI.CustomElement
     /// <summary>
     /// A ToolboxScrollView has two buttons (previous and next) and a scrollView to contain toolboxes.
     /// </summary>
-    public class ToolboxScrollView_E : AbstractGenericAndCustomElement
+    /// 
+    public partial class ToolboxScrollView_E
     {
         public Action<VisualElement> AddSeparator { get; set; } = (ve) => { Debug.Log("<color=green>TODO: </color>" + $"Add separator in ToolboxScrollView."); };
 
@@ -39,40 +40,33 @@ namespace DesktopBrowser.UI.CustomElement
 
         private List<AbstractGenericAndCustomElement> elements = new List<AbstractGenericAndCustomElement>();
         private int currentIndex = 0;
+        private float totalWidth = 0f;
 
-        public ToolboxScrollView_E(VisualElement root) : base(root) { }
-
-        protected override void Initialize()
+        private float scrollableWidth
         {
-            base.Initialize();
-
-            backward = new Button_GE(Root.Q("backward"))
-            {
-                OnClicked = () => { },
-                IconPref = "scrollView-btn"
-            }.SetIcon("menuBar-previous", "menuBar-previous-desable", true);
-            forward = new Button_GE(Root.Q("forward"))
-            {
-                OnClicked = () => { TestGoSecond(); },
-                IconPref = "scrollView-btn"
-            }.SetIcon("menuBar-next", "menuBar-next-desable", true);
-            backwardLayout = Root.Q<VisualElement>("horizontal-layout-backward");
-            forwardLayout = Root.Q<VisualElement>("horizontal-layout-forward");
-            scrollView = Root.Q<ScrollView>("scrollView");
-
-            //DisplayButtons(false);
+            get { return scrollView.contentContainer.layout.width - scrollView.contentViewport.layout.width; }
         }
+    }
+
+    public partial class ToolboxScrollView_E
+    {
+        public ToolboxScrollView_E(VisualElement root) : base(root) { }
 
         private void TestGoSecond()
         {
-            Toolbox_E toolbox0 = elements[5] as Toolbox_E;
-            VisualElement toolboxRoot = toolbox0.Root;
-            Debug.Log($"toolbox name = [{toolbox0.toolboxName}]");
+            Toolbox_E toolboxTarget = elements[4] as Toolbox_E;
+            VisualElement toolboxRoot = toolboxTarget.Root;
+            Debug.Log($"toolbox name = [{toolboxTarget.toolboxName}]");
 
             VisualElement contentContainer = scrollView.contentContainer;
-            Debug.Log($"content container childCount = [{contentContainer.childCount}]");
+            Debug.Log($"content container childCount = [{contentContainer.childCount}]; offset = [{scrollView.scrollOffset}]");
             Debug.Assert(contentContainer.Contains(toolboxRoot));
-            scrollView.ScrollTo(toolboxRoot);
+
+            //scrollView.ScrollTo(toolboxRoot);
+
+            Toolbox_E toolbox0 = elements[0] as Toolbox_E;
+            scrollView.scrollOffset = new Vector2(toolbox0.resolvedStyle.width, 0f);
+            Debug.Log($"Scrolled; offset = [{scrollView.scrollOffset}], toolbox0 width = [{toolbox0.Root.layout.width}]");
 
             //VisualElement content = scrollView.Q("unity-content-container");
             //Debug.Assert(content.Contains(toolbox0));
@@ -93,16 +87,8 @@ namespace DesktopBrowser.UI.CustomElement
 
         public void DisplayButtons(bool value)
         {
-            if (value)
-            {
-                backwardLayout.style.display = DisplayStyle.Flex;
-                forwardLayout.style.display = DisplayStyle.Flex;
-            }
-            else
-            {
-                backwardLayout.style.display = DisplayStyle.None;
-                forwardLayout.style.display = DisplayStyle.None;
-            }
+            backwardLayout.style.display = (value) ? DisplayStyle.Flex : DisplayStyle.None;
+            forwardLayout.style.display = (value) ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         public void AddToolboxes(params Toolbox_E[] toolboxes)
@@ -112,22 +98,58 @@ namespace DesktopBrowser.UI.CustomElement
                 toolbox.AddTo(scrollView);
                 AddSeparator?.Invoke(scrollView);
                 elements.Add(toolbox);
+                totalWidth += toolbox.resolvedStyle.width;
             }
+
+            //Debug.Log($"scrollable width = [{scrollableWidth}]; contentContainer = [{scrollView.contentContainer.resolvedStyle.width}]; contentViewPort = [{scrollView.contentViewport.layout.width}]; total width = [{totalWidth}]");
+            //if (scrollableWidth > 0) DisplayButtons(true);
         }
 
-        public void AddElement(AbstractGenericAndCustomElement element)
-        {
-            element.AddTo(scrollView);
-            AddSeparator?.Invoke(scrollView);
-            elements.Add(element);
-        }
+        //public void AddElement(AbstractGenericAndCustomElement element)
+        //{
+        //    element.AddTo(scrollView);
+        //    AddSeparator?.Invoke(scrollView);
+        //    elements.Add(element);
+        //}
 
-        public void AddElements(IEnumerable<AbstractGenericAndCustomElement> elements)
+        //public void AddElements(IEnumerable<AbstractGenericAndCustomElement> elements)
+        //{
+        //    foreach (AbstractGenericAndCustomElement elt in elements)
+        //    {
+        //        AddElement(elt);
+        //    }
+        //}
+
+        private void OnGeometryChanged(GeometryChangedEvent evt)
         {
-            foreach (AbstractGenericAndCustomElement elt in elements)
+            DisplayButtons((scrollableWidth > 0f) ? true : false);
+        }
+    }
+
+    public partial class ToolboxScrollView_E : AbstractGenericAndCustomElement
+    {
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            backward = new Button_GE(Root.Q("backward"))
             {
-                AddElement(elt);
-            }
+                OnClicked = () => { },
+                IconPref = "scrollView-btn"
+            }.SetIcon("menuBar-previous", "menuBar-previous-desable", true);
+            forward = new Button_GE(Root.Q("forward"))
+            {
+                OnClicked = () => { TestGoSecond(); },
+                IconPref = "scrollView-btn"
+            }.SetIcon("menuBar-next", "menuBar-next-desable", true);
+            backwardLayout = Root.Q<VisualElement>("horizontal-layout-backward");
+            forwardLayout = Root.Q<VisualElement>("horizontal-layout-forward");
+            scrollView = Root.Q<ScrollView>("scrollView");
+
+            scrollView.contentContainer.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            scrollView.contentViewport.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+
+            DisplayButtons(false);
         }
 
         public override void OnApplyUserPreferences()

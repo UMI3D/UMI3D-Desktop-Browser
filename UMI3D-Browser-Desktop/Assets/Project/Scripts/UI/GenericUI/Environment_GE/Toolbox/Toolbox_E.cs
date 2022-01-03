@@ -22,10 +22,8 @@ using UnityEngine.UIElements;
 
 namespace DesktopBrowser.UI.GenericElement
 {
-    public class Toolbox_E : AbstractGenericAndCustomElement
+    public partial class Toolbox_E
     {
-        #region Fields
-
         public string toolboxName { get; set; }
         public float SpaceBetweenItems { get; set; } = 10f;
 
@@ -33,20 +31,13 @@ namespace DesktopBrowser.UI.GenericElement
         private VisualElement itemsContainer;
 
         private List<ToolboxItem_E> items = new List<ToolboxItem_E>();
+    }
 
-        #endregion
-
-        public Toolbox_E(VisualTreeAsset visualTA, params ToolboxItem_E[] items): base(visualTA) 
+    public partial class Toolbox_E
+    {
+        public Toolbox_E(VisualTreeAsset visualTA, params ToolboxItem_E[] items) : base(visualTA)
         {
             AddItems(items);
-        }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-
-            label = this.Q<Label>("toolbox-name");
-            itemsContainer = this.Q<VisualElement>("items-container");
         }
 
         public Toolbox_E AddItems(params ToolboxItem_E[] toolItems)
@@ -65,6 +56,17 @@ namespace DesktopBrowser.UI.GenericElement
             VisualElement horizontalSpacer = new VisualElement();
             horizontalSpacer.style.width = SpaceBetweenItems;
             itemsContainer.Add(horizontalSpacer);
+        }
+    }
+
+    public partial class Toolbox_E : AbstractGenericAndCustomElement
+    {
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            label = this.Q<Label>("toolbox-name");
+            itemsContainer = this.Q<VisualElement>("items-container");
         }
 
         public override void Remove()

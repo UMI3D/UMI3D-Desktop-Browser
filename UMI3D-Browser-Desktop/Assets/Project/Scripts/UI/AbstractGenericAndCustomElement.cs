@@ -20,13 +20,8 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI
 {
-    public abstract class AbstractGenericAndCustomElement : VisualElement
+    public abstract partial class AbstractGenericAndCustomElement
     {
-        /// <summary>
-        /// To be recognized by UI Builder
-        /// </summary>
-        public new class UxmlTraits : VisualElement.UxmlTraits { }
-
         /// <summary>
         /// True if this UIElement has been initialized.
         /// </summary>
@@ -38,7 +33,11 @@ namespace BrowserDesktop.UI
         public bool Displayed { get; protected set; } = false;
 
         public VisualElement Root { get; protected set; } = null;
+        public Rect RootLayout { get => Root.layout; }
+    }
 
+    public abstract partial class AbstractGenericAndCustomElement
+    {
         public AbstractGenericAndCustomElement() : base() { }
 
         public AbstractGenericAndCustomElement(VisualTreeAsset visualTA) : this()
@@ -125,7 +124,18 @@ namespace BrowserDesktop.UI
         /// Apply user preferences when needed.
         /// </summary>
         public abstract void OnApplyUserPreferences();
+    }
 
+    public abstract partial class AbstractGenericAndCustomElement : VisualElement
+    {
+        /// <summary>
+        /// To be recognized by UI Builder
+        /// </summary>
+        public new class UxmlTraits : VisualElement.UxmlTraits { }
 
+        /// <summary>
+        /// Get Root.layout
+        /// </summary>
+        public new Rect layout { get => RootLayout; }
     }
 }
