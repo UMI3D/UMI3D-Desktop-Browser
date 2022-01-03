@@ -32,6 +32,10 @@ namespace DesktopBrowser.UI.CustomElement
     {
         public Action<VisualElement> AddSeparator { get; set; } = (ve) => { Debug.Log("<color=green>TODO: </color>" + $"Add separator in ToolboxScrollView."); };
         public float DeltaScroll { get; set; } = 50f;
+        /// <summary>
+        /// Scroll animation time in ms.
+        /// </summary>
+        public int ScrollAnimationTime { get; set; } = 500;
 
         private Button_GE backward;
         private VisualElement backwardLayout;
@@ -87,7 +91,11 @@ namespace DesktopBrowser.UI.CustomElement
                 DisplaysForwardButton(false);
             }
 
-            scrollView.experimental.animation.Start(scrollView.scrollOffset.x, m_scrolledWidth, 500, (ve, value) => { scrollView.scrollOffset = new Vector2(value, 0f); });
+            scrollView.experimental.animation.Start
+                (scrollView.scrollOffset.x, 
+                m_scrolledWidth, 
+                ScrollAnimationTime, 
+                (ve, value) => { scrollView.scrollOffset = new Vector2(value, 0f); });
 
             //currentIndex += (buttonType == ButtonType.BACKWARD) ? -2 : 2;
         }
@@ -117,7 +125,6 @@ namespace DesktopBrowser.UI.CustomElement
                 toolbox.AddTo(scrollView);
                 AddSeparator.Invoke(scrollView);
                 elements.Add(toolbox);
-                totalWidth += toolbox.resolvedStyle.width;
             }
         }
 
