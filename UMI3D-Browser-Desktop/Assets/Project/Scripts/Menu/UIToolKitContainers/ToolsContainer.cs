@@ -28,60 +28,6 @@ namespace BrowserDesktop.Menu.Container
 {
     public class ToolsContainer : AbstractMenuDisplayContainer, IDisplayerElement
     {
-        /*
-        struct SubContainer
-        {
-            public ToolsContainer Container { get; private set; }
-
-            public void Register(ToolsContainer tools)
-            {
-                Debug.Assert(tools != null, "Tools null in SubContainer.Register()");
-                Container = tools;
-                if ((Container.parent as ToolsContainer).IsRootToolsContainer)
-                    (Container.parent.parent as ToolsContainer).subTools.Register(tools);
-            }
-
-            public void Unregister()
-            {
-                Container = null;
-            }
-
-            public bool Collapse()
-            {
-                if (Container == null)
-                    return false;
-
-                Container.subTools.Collapse();
-                GetToolbox()?.Remove();
-                Unregister();
-                return true;
-            }
-
-            public void Expand()
-            {
-                Environment.MenuBar_UIController.AddInSubMenu(GetToolbox(), GetParent());
-            }
-
-            public bool Equal(ToolsContainer container)
-            {
-                return this.Container == container;
-            }
-
-            private ToolboxGenericElement GetToolbox()
-            {
-                return (Container?.GetUXMLContent() as ToolboxGenericElement);
-            }
-
-            private ToolboxGenericElement GetParent()
-            {
-                return ((Container?.parent as ToolsContainer)?.GetUXMLContent() as ToolboxGenericElement);
-            }
-
-        }
-
-        private SubContainer subTools { get; set; } = new SubContainer();
-        */
-
         [SerializeField]
         protected bool pined = false;
 

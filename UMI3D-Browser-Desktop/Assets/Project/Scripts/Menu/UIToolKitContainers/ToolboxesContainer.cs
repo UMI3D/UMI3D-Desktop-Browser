@@ -25,9 +25,8 @@ namespace BrowserDesktop.Menu.Container
     /// <summary>
     /// A container of toolboxes. This is the root of all the toolboxes.
     /// </summary>
-    public class ToolboxesContainer : AbstractMenuDisplayContainer, IDisplayerElement
+    public partial class ToolboxesContainer : AbstractMenuDisplayContainer
     {
-
         #region Toolboxes List
 
         /// <summary>
@@ -152,11 +151,6 @@ namespace BrowserDesktop.Menu.Container
 
         #region Display, Hide, Collapse and Expand
 
-        public void InitAndBindUI()
-        {
-            throw new System.NotImplementedException();
-        }
-
         #region Display and Hide
 
         private void UpdateDisplay()
@@ -217,14 +211,20 @@ namespace BrowserDesktop.Menu.Container
             throw new System.NotImplementedException();
         }
 
+        public override int IsSuitableFor(AbstractMenuItem menu)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    public partial class ToolboxesContainer : IDisplayerElement
+    {
         public VisualElement GetUXMLContent()
         {
             throw new System.NotImplementedException();
         }
 
-        
-
-        public override int IsSuitableFor(AbstractMenuItem menu)
+        public void InitAndBindUI()
         {
             throw new System.NotImplementedException();
         }
