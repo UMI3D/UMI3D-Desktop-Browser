@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="window">
+        <ui:VisualElement name="topBar" style="flex-direction: row; justify-content: space-between;">
+            <ui:Button text="Button" display-tooltip-when-elided="true" />
+            <ui:Label text="Label" display-tooltip-when-elided="true" />
+            <ui:Button text="Button" display-tooltip-when-elided="true" />
+        </ui:VisualElement>
+        <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" />
+        <ui:VisualElement name="bottomBar" style="flex-direction: row; justify-content: space-between;">
+            <ui:VisualElement name="horizontalSpace" />
+            <ui:Button text="Button" display-tooltip-when-elided="true" />
+            <ui:VisualElement name="horizontalSpace" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
