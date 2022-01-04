@@ -123,6 +123,87 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &82661819
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 82661822}
+  - component: {fileID: 82661821}
+  - component: {fileID: 82661820}
+  - component: {fileID: 82661823}
+  m_Layer: 0
+  m_Name: UIControllers (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &82661820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82661819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67d69b46122a99a4ba5fa7d152ea119e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uIControllerName: toolboxSeparators
+  uiDocument: {fileID: 82661821}
+  visualTA: {fileID: 9197481963319205126, guid: cafabf0676fde2042ae54a299ce15eb1,
+    type: 3}
+--- !u!114 &82661821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82661819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21c074d86024caca2a0034ce4f53f73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 636f591de1291614291863d47344d9e3, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 1c90ea10a08812e4fa02e4bde03b9fdd,
+    type: 3}
+  m_SortingOrder: 0
+--- !u!4 &82661822
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82661819}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &82661823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82661819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec70ae7926e927e42aed551107ff348e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uIControllerName: toolboxWindow
+  uiDocument: {fileID: 82661821}
+  visualTA: {fileID: 0}
 --- !u!1 &187552569
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,7 +225,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &187552570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,6 +333,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43f63c367234dab43b9a0605f1155f5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  environmentLoader: {fileID: 0}
+  userTracking: {fileID: 0}
 --- !u!1 &887933554
 GameObject:
   m_ObjectHideFlags: 0

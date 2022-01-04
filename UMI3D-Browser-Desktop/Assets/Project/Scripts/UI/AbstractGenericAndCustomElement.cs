@@ -14,12 +14,48 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using DesktopBrowser.UI.CustomElement;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 
 namespace BrowserDesktop.UI
 {
+    public abstract partial class AbstractGenericAndCustomElement : ICustomElement
+    {
+        public VisualElement Root { get; protected set; } = null;
+        public bool AttachedToHierarchy { get; protected set; } = false;
+        public bool Displayed { get; protected set; } = false;
+        public DisplayStyle RootDisplayStyle
+        {
+            get => Root.resolvedStyle.display;
+            set => Root.style.display = value;
+        }
+        public Visibility RootVisibility
+        {
+            get => Root.resolvedStyle.visibility;
+            set => Root.style.visibility = value;
+        }
+
+        public virtual void AddTo(VisualElement parent)
+        {
+            if (!initialized) 
+                throw new System.Exception($"VisualElement Added without being Initialized.");
+            ReadyToDisplay();
+            //parent.Add(this);
+            parent.Add(Root);
+        }
+
+        
+        public virtual void Remove()
+        {
+            if (!Displayed) return;
+            else Displayed = false;
+            this.RemoveFromHierarchy();
+        }
+    }
+
     public abstract partial class AbstractGenericAndCustomElement
     {
         /// <summary>
@@ -30,9 +66,9 @@ namespace BrowserDesktop.UI
         /// <summary>
         /// True if this UIElement is displayed.
         /// </summary>
-        public bool Displayed { get; protected set; } = false;
+        
 
-        public VisualElement Root { get; protected set; } = null;
+        
         public Rect RootLayout { get => Root.layout; }
     }
 
@@ -59,7 +95,7 @@ namespace BrowserDesktop.UI
         /// Clone and add the visualTreeAsset to this and Initialize.
         /// </summary>
         /// <param name="visualTA"></param>
-        public virtual void Init(VisualTreeAsset visualTA)
+        public void Init(VisualTreeAsset visualTA)
         {
             if (Initiated) return;
             else Initiated = true;
@@ -68,7 +104,7 @@ namespace BrowserDesktop.UI
             Initialize();
         }
 
-        public virtual void Init(VisualElement root)
+        public void Init(VisualElement root)
         {
             if (Initiated) return;
             else Initiated = true;
@@ -89,17 +125,8 @@ namespace BrowserDesktop.UI
             this.Root = null;
         }
 
-        /// <summary>
-        /// Add this UiElement as a child of [partent].
-        /// </summary>
-        /// <param name="parent">the parent of this UIElement.</param>
-        public virtual void AddTo(VisualElement parent)
-        {
-            if (!initialized) throw new System.Exception($"VisualElement Added without being setup.");
-            ReadyToDisplay();
-            //parent.Add(this);
-            parent.Add(Root);
-        }
+        
+        
 
         /// <summary>
         /// To be used in Custom Element that are already added to the UIDocument.
@@ -110,15 +137,7 @@ namespace BrowserDesktop.UI
             OnApplyUserPreferences();
         }
 
-        /// <summary>
-        /// Remove the UIElement from the hierarchy
-        /// </summary>
-        public virtual void Remove()
-        {
-            if (!Displayed) return;
-            else Displayed = false;
-            this.RemoveFromHierarchy();
-        }
+        
 
         /// <summary>
         /// Apply user preferences when needed.

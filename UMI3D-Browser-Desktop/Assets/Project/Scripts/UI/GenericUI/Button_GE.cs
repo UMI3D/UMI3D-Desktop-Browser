@@ -15,6 +15,7 @@ limitations under the License.
 */
 using BrowserDesktop.UI;
 using BrowserDesktop.UserPreferences;
+using DesktopBrowser.UI.CustomElement;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,14 +24,21 @@ using UnityEngine.UIElements;
 
 namespace DesktopBrowser.UI.GenericElement
 {
-    public sealed class Button_GE : AbstractGenericAndCustomElement
+    public sealed partial class Button_GE
+    {
+        private ICustomisableElement m_icon;
+    }
+
+    public sealed partial class Button_GE : AbstractGenericAndCustomElement
     {
         public string Text { get; set; } = "";
         public string TextPref { get; set; } = "";
 
-        public string IconClassOn { get; private set; } = "";
-        public string IconClassOff { get; private set; } = "";
-        public string IconPref { get; set; } = "";
+        //public string IconClassOn { get; private set; } = "";
+        //public string IconClassOff { get; private set; } = "";
+        public string IconPref { get => m_icon.Key; set => m_icon.Key = value; }
+
+
 
         public Action OnClicked { get; set; } = () => { Debug.Log("<color=green>TODO: </color>" + $"ToolboxItem clicked not implemented"); };
         /// <summary>
@@ -55,6 +63,7 @@ namespace DesktopBrowser.UI.GenericElement
             base.Initialize();
             button_B = Root.Q<Button>();
             this.button_B.clicked += () => { this.OnClicked(); };
+            m_icon = new Icon_E(button_B);
         }
 
         public override void Reset()
@@ -62,9 +71,12 @@ namespace DesktopBrowser.UI.GenericElement
             base.Reset();
             Text = "";
             TextPref = "";
-            IconClassOn = ""; 
-            IconClassOff = "";
-            IconPref = "";
+
+            //IconClassOn = ""; 
+            //IconClassOff = "";
+            //IconPref = "";
+            m_icon.Reset();
+
             OnClicked = () => { Debug.Log("<color=green>TODO: </color>" + $"ToolboxItem clicked not implemented"); }; 
             IsOn = false;
             button_B = null;
@@ -74,8 +86,9 @@ namespace DesktopBrowser.UI.GenericElement
 
         public Button_GE SetIcon(string iconOn, string iconOff, bool isOn = false)
         {
-            this.IconClassOn = iconOn;
-            this.IconClassOff = iconOff;
+            //this.IconClassOn = iconOn;
+            //this.IconClassOff = iconOff;
+            m_icon.SetValues(iconOn, iconOff);
             this.IsOn = isOn;
             SwitchClass(this.IsOn);
             return this;
@@ -109,50 +122,50 @@ namespace DesktopBrowser.UI.GenericElement
 
         #region To be deleted
 
-        public Button_GE Setup(System.Action onClicked, bool isOn = true, bool isReadyToDisplay = false)
-        {
-            Initialize();
+        //public Button_GE Setup(System.Action onClicked, bool isOn = true, bool isReadyToDisplay = false)
+        //{
+        //    Initialize();
 
-            this.Text = "";
-            this.TextPref = "";
-            //button_B.text = "";
+        //    this.Text = "";
+        //    this.TextPref = "";
+        //    //button_B.text = "";
 
-            this.IconClassOn = "";
-            this.IconClassOff = "";
-            this.currentClass = "";
-            this.IconPref = "";
+        //    this.IconClassOn = "";
+        //    this.IconClassOff = "";
+        //    this.currentClass = "";
+        //    this.IconPref = "";
 
-            this.IsOn = isOn;
+        //    this.IsOn = isOn;
 
-            OnClicked = onClicked;
-            button_B.clicked += OnClicked;
+        //    OnClicked = onClicked;
+        //    button_B.clicked += OnClicked;
 
-            if (isReadyToDisplay)
-                ReadyToDisplay();
+        //    if (isReadyToDisplay)
+        //        ReadyToDisplay();
 
-            return this;
-        }
+        //    return this;
+        //}
 
-        public Button_GE WithBackgroundImage(string classOn, string classOff, string iconPref)
-        {
-            this.IconClassOn = classOn;
-            this.IconClassOff = classOff;
-            this.IconPref = iconPref;
+        //public Button_GE WithBackgroundImage(string classOn, string classOff, string iconPref)
+        //{
+        //    this.IconClassOn = classOn;
+        //    this.IconClassOff = classOff;
+        //    this.IconPref = iconPref;
 
-            SwitchClass(this.IsOn);
+        //    SwitchClass(this.IsOn);
 
-            return this;
-        }
+        //    return this;
+        //}
 
-        public Button_GE WithText(string text, string textPref)
-        {
-            this.Text = text;
-            this.TextPref = textPref;
+        //public Button_GE WithText(string text, string textPref)
+        //{
+        //    this.Text = text;
+        //    this.TextPref = textPref;
 
-            UserPreferences.TextAndIconPref.ApplyTextPref(button_B, textPref, text);
+        //    UserPreferences.TextAndIconPref.ApplyTextPref(button_B, textPref, text);
 
-            return this;
-        }
+        //    return this;
+        //}
 
         #endregion
 
@@ -162,20 +175,24 @@ namespace DesktopBrowser.UI.GenericElement
         /// <param name="value">True if the button should be on, false else.</param>
         public void SwitchClass(bool value)
         {
-            if (string.IsNullOrEmpty(IconClassOn) || string.IsNullOrEmpty(IconClassOff))
+            //if (string.IsNullOrEmpty(IconClassOn) || string.IsNullOrEmpty(IconClassOff))
+            //    return;
+            if (m_icon.IsEmpty)
                 return;
             IsOn = value;
             string theme = "darkTheme"; //TODO to be replace by theme checked.
             if (value)
             {
-                currentClass = $"{theme}-{IconClassOn}-btn";
+                //currentClass = $"{theme}-{IconClassOn}-btn";
+                m_icon.SwitchValue(0);
             }
             else
             {
-                currentClass = $"{theme}-{IconClassOff}-btn";
+                //currentClass = $"{theme}-{IconClassOff}-btn";
+                m_icon.SwitchValue(1);
             }
             
-            UserPreferences.TextAndIconPref.ApplyIconPref(button_B, IconPref, currentClass);
+            //UserPreferences.TextAndIconPref.ApplyIconPref(button_B, IconPref, currentClass);
         }
 
         //private void UpdateUSSClasses()
@@ -203,10 +220,10 @@ namespace DesktopBrowser.UI.GenericElement
             else
                 button_B.text = "";
 
-            if (!string.IsNullOrEmpty(IconPref))
-                UserPreferences.TextAndIconPref.ApplyIconPref(button_B, IconPref, currentClass);
-            else
-                button_B.ClearClassList();
+            //if (!string.IsNullOrEmpty(IconPref))
+            //    UserPreferences.TextAndIconPref.ApplyIconPref(button_B, IconPref, currentClass);
+            //else
+            //    button_B.ClearClassList();
         }
     }
 }
