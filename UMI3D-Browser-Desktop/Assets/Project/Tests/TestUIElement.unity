@@ -418,6 +418,164 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1400023403
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1400023405}
+  - component: {fileID: 1400023404}
+  m_Layer: 0
+  m_Name: TestStyle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1400023404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400023403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0492d8725ccbb774ab0eb7a07e315f4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  testStyle2:
+    UIDisplay:
+      m_display: 0
+      m_opacity: 0
+      m_visibility: 0
+    UIPosition:
+      m_bottom: 0
+      m_left: 0
+      m_position: 0
+      m_right: 0
+      m_top: 0
+    UISize:
+      m_height: 0
+      m_width: 0
+    UIMarginAndPadding:
+      m_marginBottom: 0
+      m_marginLeft: 0
+      m_marginRight: 0
+      m_marginTop: 0
+      m_paddingBottom: 0
+      m_paddingLeft: 0
+      m_paddingRight: 0
+      m_paddingTop: 0
+    UIText:
+      m_color: {r: 0, g: 0, b: 0, a: 0}
+      m_letterSpacing: 0
+      m_fontSize: 0
+      m_textOveflow: 0
+      m_unityFont: {fileID: 0}
+      m_unityFontStyleAndWeight: 0
+      m_unityParagraphSpacing: 0
+      m_unityTextAlign: 0
+      m_unityTextOverflowPosition: 0
+      m_unityTextOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+      m_unityTextOutlineWidth: 0
+      m_WhiteSpace: 0
+      m_wordSpacing: 0
+    UIBackground:
+      m_backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+      m_unityBackgroundImageTintColo: {r: 0, g: 0, b: 0, a: 0}
+      m_unitySliceBottom: 0
+      m_unitySliceLeft: 0
+      m_unitySliceRight: 0
+      m_unitySliceTop: 0
+    UIBorder:
+      m_borderBottomColor: {r: 0, g: 0, b: 0, a: 0}
+      m_borderBottomLeftRadius: 0
+      m_borderBottomRightRadius: 0
+      m_borderBottomWidth: 0
+      m_borderLeftColor: {r: 0, g: 0, b: 0, a: 0}
+      m_borderLeftWidth: 0
+      m_borderRightColo: {r: 0, g: 0, b: 0, a: 0}
+      m_borderRightWidth: 0
+      m_borderTopColor: {r: 0, g: 0, b: 0, a: 0}
+      m_borderTopLeftRadius: 0
+      m_borderTopRightRadius: 0
+      m_borderTopWidth: 0
+    m_alignContent: 0
+    m_alignItems: 0
+    m_alignSelf: 0
+    m_backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+    m_borderBottomColor: {r: 0, g: 0, b: 0, a: 0}
+    m_borderBottomLeftRadius: 0
+    m_borderBottomRightRadius: 0
+    m_borderBottomWidth: 0
+    m_borderLeftColor: {r: 0, g: 0, b: 0, a: 0}
+    m_borderLeftWidth: 0
+    m_borderRightColor: {r: 0, g: 0, b: 0, a: 0}
+    m_borderRightWidth: 0
+    m_borderTopColor: {r: 0, g: 0, b: 0, a: 0}
+    m_borderTopLeftRadius: 0
+    m_borderTopRightRadius: 0
+    m_borderTopWidth: 0
+    m_bottom: 0
+    m_color: {r: 0, g: 0, b: 0, a: 0}
+    m_display: 0
+    m_flexDirection: 0
+    m_flexGrow: 0
+    m_flexShrink: 0
+    m_flexWrap: 0
+    m_fontSize: 0
+    m_height: 0
+    m_justifyContent: 0
+    m_left: 0
+    m_letterSpacing: 0
+    m_marginBottom: 0
+    m_marginLeft: 0
+    m_marginRight: 0
+    m_marginTop: 0
+    m_opacity: 0
+    m_paddingBottom: 0
+    m_paddingLeft: 0
+    m_paddingRight: 0
+    m_paddingTop: 0
+    m_position: 0
+    m_right: 0
+    m_textOverflow: 0
+    m_top: 0
+    m_unityBackgroundImageTintColor: {r: 0, g: 0, b: 0, a: 0}
+    m_unityBackgroundScaleMode: 0
+    m_unityFont: {fileID: 0}
+    m_unityFontStyleAndWeight: 0
+    m_unityParagraphSpacing: 0
+    m_unitySliceBottom: 0
+    m_unitySliceLeft: 0
+    m_unitySliceRight: 0
+    m_unitySliceTop: 0
+    m_unityTextAlign: 0
+    m_unityTextOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+    m_unityTextOutlineWidth: 0
+    m_unityTextOverflowPosition: 0
+    m_visibility: 0
+    m_whiteSpace: 0
+    m_width: 0
+    m_wordSpacing: 0
+--- !u!4 &1400023405
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400023403}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.2238293, y: 1.4793797, z: 7.674744}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1414865125
 PrefabInstance:
   m_ObjectHideFlags: 0
