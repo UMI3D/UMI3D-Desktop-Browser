@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using BrowserDesktop.UserPreferences;
 using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.GenericElement
@@ -26,7 +27,7 @@ namespace BrowserDesktop.UI.GenericElement
         private string text;
         private string textPref;
 
-        private UserPreferences.TextPreferences_SO.TextPref.TextFormat textFormat;
+        private TextFormat textFormat;
 
         protected override void Initialize()
         {

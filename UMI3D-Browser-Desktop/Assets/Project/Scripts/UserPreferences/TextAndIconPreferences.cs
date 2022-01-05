@@ -128,7 +128,7 @@ namespace BrowserDesktop.UserPreferences
             UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.TextPref_SO.ApplyPref(label, textPrefName, labelText));
         }
 
-        public TextPreferences_SO.TextPref.TextFormat GetTextFormat(string textPrefName)
+        public TextFormat GetTextFormat(string textPrefName)
         {
             return currentTextAndIcon_SO.TextPref_SO.GetTextFormat(textPrefName);
         }

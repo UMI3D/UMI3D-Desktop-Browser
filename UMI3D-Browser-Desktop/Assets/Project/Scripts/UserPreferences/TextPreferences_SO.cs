@@ -37,72 +37,9 @@ namespace BrowserDesktop.UserPreferences
                 FONT_AND_USS
             }
 
-            private enum CaseStyle
-            {
-                NONE,
-                LOWER_CASE,
-                UPPER_CASE
-            }
+            
 
-            [System.Serializable]
-            public class TextFormat
-            {
-                private const int noMaxNumberOfCharacters = 101;
-
-                [Tooltip("")]
-                [SerializeField]
-                private bool applyFormat = false;
-                [Tooltip("")]
-                [Range(1, noMaxNumberOfCharacters)]
-                [SerializeField]
-                private int maxNumberOfCharacters = 10;
-                [Tooltip("")]
-                [SerializeField]
-                private CaseStyle caseStyle = CaseStyle.NONE;
-                [Tooltip("")]
-                [SerializeField]
-                private bool resizeWidth = false;
-
-                //private float fontSizeAfterZoom;
-                public float FontSizeAfterZoom { get; set; }
-
-                public void SetFormat(TextElement label, string labelText)
-                {
-                    if (applyFormat)
-                    {
-                        if (maxNumberOfCharacters != noMaxNumberOfCharacters && labelText.Length > maxNumberOfCharacters)
-                        {
-                            if (maxNumberOfCharacters >= 6)
-                            {
-                                labelText = $"{labelText.Substring(0, maxNumberOfCharacters - 3)}...";
-                            }
-                            else
-                            {
-                                labelText = labelText.Substring(0, maxNumberOfCharacters);
-                            }
-                        }
-
-                        switch (caseStyle)
-                        {
-                            case CaseStyle.LOWER_CASE:
-                                labelText = labelText.ToLowerInvariant();
-                                break;
-                            case CaseStyle.UPPER_CASE:
-                                labelText = labelText.ToUpperInvariant();
-                                break;
-                            case CaseStyle.NONE:
-                                break;
-                        }
-
-                        if (resizeWidth)
-                        {
-                            if (maxNumberOfCharacters == noMaxNumberOfCharacters) label.style.width = StyleKeyword.Auto;
-                            else label.style.width = (maxNumberOfCharacters / 2) * FontSizeAfterZoom;
-                        }
-                    }
-                    label.text = labelText;
-                }
-            }
+            
 
 
             [Tooltip("Name of the text Font.")]
@@ -230,7 +167,7 @@ namespace BrowserDesktop.UserPreferences
             Debug.LogError("TextPrefName = " + textPrefName + " not recognized.");
         }
 
-        public TextPref.TextFormat GetTextFormat(string textPrefName)
+        public TextFormat GetTextFormat(string textPrefName)
         {
             foreach (TextPref textpref in textprefs)
             {
