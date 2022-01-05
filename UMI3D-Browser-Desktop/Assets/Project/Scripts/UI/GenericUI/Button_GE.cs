@@ -184,12 +184,14 @@ namespace DesktopBrowser.UI.GenericElement
             if (value)
             {
                 //currentClass = $"{theme}-{IconClassOn}-btn";
-                m_icon.SwitchValue(0);
+                m_icon.DeselectLasCurrentValues();
+                m_icon.SelectCurrentValues(0);
             }
             else
             {
                 //currentClass = $"{theme}-{IconClassOff}-btn";
-                m_icon.SwitchValue(1);
+                m_icon.DeselectLasCurrentValues();
+                m_icon.SelectCurrentValues(1);
             }
             
             //UserPreferences.TextAndIconPref.ApplyIconPref(button_B, IconPref, currentClass);

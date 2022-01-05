@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using DesktopBrowser.UI.CustomElement;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -25,6 +26,7 @@ namespace BrowserDesktop.UI
     public abstract partial class AbstractGenericAndCustomElement : ICustomElement
     {
         public VisualElement Root { get; protected set; } = null;
+        public bool Initialized { get; protected set; } = false;
         public bool AttachedToHierarchy { get; protected set; } = false;
         public bool Displayed { get; protected set; } = false;
         public DisplayStyle RootDisplayStyle
@@ -37,96 +39,76 @@ namespace BrowserDesktop.UI
             get => Root.resolvedStyle.visibility;
             set => Root.style.visibility = value;
         }
-
-        public virtual void AddTo(VisualElement parent)
-        {
-            if (!initialized) 
-                throw new System.Exception($"VisualElement Added without being Initialized.");
-            ReadyToDisplay();
-            //parent.Add(this);
-            parent.Add(Root);
-        }
-
-        
-        public virtual void Remove()
-        {
-            if (!Displayed) return;
-            else Displayed = false;
-            this.RemoveFromHierarchy();
-        }
-    }
-
-    public abstract partial class AbstractGenericAndCustomElement
-    {
-        /// <summary>
-        /// True if this UIElement has been initialized.
-        /// </summary>
-        protected bool initialized = false;
-        public bool Initiated { get; protected set; } = false;
-        /// <summary>
-        /// True if this UIElement is displayed.
-        /// </summary>
-        
-
-        
         public Rect RootLayout { get => Root.layout; }
-    }
 
-    public abstract partial class AbstractGenericAndCustomElement
-    {
-        public AbstractGenericAndCustomElement() : base() { }
-
-        public AbstractGenericAndCustomElement(VisualTreeAsset visualTA) : this()
-        {
-            Init(visualTA);
-        }
-
-        public AbstractGenericAndCustomElement(VisualElement root) : this()
-        {
-            Init(root);
-        }
-
-        ~AbstractGenericAndCustomElement()
-        {
-            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
-        }
-
-        /// <summary>
-        /// Clone and add the visualTreeAsset to this and Initialize.
-        /// </summary>
-        /// <param name="visualTA"></param>
         public void Init(VisualTreeAsset visualTA)
         {
-            if (Initiated) return;
-            else Initiated = true;
+            if (Initialized) Reset();
+            else Initialized = true;
             Root = visualTA.CloneTree();
             this.Add(Root);
             Initialize();
         }
-
         public void Init(VisualElement root)
         {
-            if (Initiated) return;
-            else Initiated = true;
+            if (Initialized) Reset();
+            else Initialized = true;
             this.Root = root;
             Initialize();
         }
-
-        protected virtual void Initialize()
-        {
-            if (initialized) return;
-            else initialized = true;
-
-            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
-        }
-
         public virtual void Reset()
         {
             this.Root = null;
+            Initialized = false;
+        }
+        public virtual void AddTo(VisualElement parent)
+        {
+            if (!Initialized) 
+                throw new System.Exception($"VisualElement Added without being Initialized.");
+            //ReadyToDisplay();
+            //parent.Add(this);
+            if (parent == null)
+                throw new Exception($"Try to Add [{Root}] to a parent null.");
+            parent.Add(Root);
+            AttachedToHierarchy = true;
+        }
+        
+        public virtual void Remove()
+        {
+            //if (!Displayed) return;
+            //else Displayed = false;
+            this.RemoveFromHierarchy();
+            AttachedToHierarchy = false;
         }
 
-        
-        
+        //public abstract void GetUserPreferences();
+
+        public abstract void OnApplyUserPreferences();
+    }
+
+    public abstract partial class AbstractGenericAndCustomElement
+    {
+        public AbstractGenericAndCustomElement() : base() 
+        {
+            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
+        }
+        public AbstractGenericAndCustomElement(VisualTreeAsset visualTA) : this()
+        {
+            Init(visualTA);
+        }
+        public AbstractGenericAndCustomElement(VisualElement root) : this()
+        {
+            Init(root);
+        }
+        ~AbstractGenericAndCustomElement()
+        {
+            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
+        }
+    }
+
+    public abstract partial class AbstractGenericAndCustomElement
+    {
+        protected virtual void Initialize() { }
 
         /// <summary>
         /// To be used in Custom Element that are already added to the UIDocument.
@@ -136,13 +118,6 @@ namespace BrowserDesktop.UI
             Displayed = true;
             OnApplyUserPreferences();
         }
-
-        
-
-        /// <summary>
-        /// Apply user preferences when needed.
-        /// </summary>
-        public abstract void OnApplyUserPreferences();
     }
 
     public abstract partial class AbstractGenericAndCustomElement : VisualElement

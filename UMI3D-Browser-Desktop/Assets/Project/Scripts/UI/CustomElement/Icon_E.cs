@@ -12,7 +12,7 @@ namespace DesktopBrowser.UI.CustomElement
     {
         public string Key { get; set; }
         public IList<string> Values { get; private set; }
-        public string CurrentValue { get; set; }
+        public IList<string> CurrentValues { get; set; }
         public bool IsEmpty { get => Root == null || string.IsNullOrEmpty(Key) || IsValuesEmpty(); }
 
         public ICustomisableElement SetValues(params string[] values)
@@ -22,15 +22,37 @@ namespace DesktopBrowser.UI.CustomElement
             Values.Clear();
             for (int i = 0; i < values.Length; ++i)
                 Values.Add(values[i]);
+            OnApplyUserPreferences();
             return this;
         }
 
-        public void SwitchValue(int index)
+        public void SelectCurrentValues(params int[] indexes)
         {
-            if (index >= Values.Count)
-                throw new Exception("index out of range in SwitchValue from Icon_E.");
-            CurrentValue = Values[index];
+            for (int i = 0; i < indexes.Length; ++i)
+            {
+                int index = indexes[i];
+                if (index >= Values.Count)
+                    throw new Exception("index out of range in SwitchValue from Icon_E.");
+                CurrentValues.Add(Values[index]);
+            }
+            
             OnApplyUserPreferences();
+        }
+        public void DeselectCurrentValues(params string[] values)
+        {
+            for (int i = 0; i < values.Length; ++i)
+            {
+                string value = values[i];
+                CurrentValues.Remove(value);
+            }
+        }
+        public void DeselectAllCurrentValues()
+        {
+            CurrentValues.Clear();
+        }
+        public void DeselectLasCurrentValues()
+        {
+            CurrentValues.RemoveAt(CurrentValues.Count - 1);
         }
 
         public override void Reset()
@@ -44,6 +66,7 @@ namespace DesktopBrowser.UI.CustomElement
     public partial class Icon_E
     {
         public Icon_E(VisualElement root) : base(root) { }
+        //public Icon_E(vi)
 
         private bool IsValuesEmpty()
         {
@@ -64,7 +87,13 @@ namespace DesktopBrowser.UI.CustomElement
         {
             base.Initialize();
             Values = new List<String>();
-            ReadyToDisplay();
+            CurrentValues = new List<string>();
+            //ReadyToDisplay();
+        }
+
+        public  void GetUserPreferences()
+        {
+
         }
 
         public override void OnApplyUserPreferences()
@@ -72,7 +101,7 @@ namespace DesktopBrowser.UI.CustomElement
             if (IsEmpty)
                 return;
             string theme = "darkTheme"; //TODO to be replace by theme checked.
-            UserPreferences.TextAndIconPref.ApplyIconPref(Root, Key, $"{theme}-{CurrentValue}");
+            UserPreferences.TextAndIconPref.ApplyIconPref(Root, Key, $"{theme}-{CurrentValues[0]}");
         }
     }
 }
