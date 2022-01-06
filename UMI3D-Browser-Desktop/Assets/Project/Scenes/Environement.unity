@@ -1493,6 +1493,49 @@ MonoBehaviour:
   ProjectionResult: {fileID: 855883274}
   display: 1
   debug: 0
+--- !u!1 &1136140603
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1136140605}
+  - component: {fileID: 1136140604}
+  m_Layer: 0
+  m_Name: UMI3DAnimationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1136140604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136140603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 690f5549933105045a6558057e3fdf3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1136140605
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136140603}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.7187448, y: 0.017932236, z: 0.06961471}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1188994922
 GameObject:
   m_ObjectHideFlags: 0
@@ -1996,6 +2039,7 @@ MonoBehaviour:
   onEnvironmentLoaded:
     m_PersistentCalls:
       m_Calls: []
+  isEnvironmentLoaded: 0
   parameters: {fileID: 11400000, guid: b6c1e3aff73fa094ea6d7c9c53b776c0, type: 2}
   UserList: []
 --- !u!4 &1800526325
