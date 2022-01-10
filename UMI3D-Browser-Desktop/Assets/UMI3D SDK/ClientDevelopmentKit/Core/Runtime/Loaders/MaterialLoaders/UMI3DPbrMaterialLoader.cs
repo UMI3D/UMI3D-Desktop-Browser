@@ -84,7 +84,7 @@ namespace umi3d.cdk
                                 newMat.DisableKeyword("_ALPHATEST_ON");
                                 newMat.DisableKeyword("_ALPHABLEND_ON");
                                 newMat.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-                                newMat.renderQueue = 3000;
+                                newMat.renderQueue = 3001;
                             }
                             newMat.ApplyShaderProperty(MRTKShaderUtils.EmissiveColor, (Vector4)(Vector3)dto.emissiveFactor);
                             newMat.ApplyShaderProperty(MRTKShaderUtils.Metallic, dto.pbrMetallicRoughness.metallicFactor);
