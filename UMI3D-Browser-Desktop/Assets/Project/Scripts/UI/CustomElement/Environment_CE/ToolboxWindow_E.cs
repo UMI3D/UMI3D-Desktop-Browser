@@ -40,7 +40,7 @@ namespace DesktopBrowser.UI.CustomElement
             {
             }.InitFromSrollViewToProperties();
 
-            icon = new Icon_E(Root.Q("icon"))
+            icon = new Icon_E(Root.Q("icon"), null)
             {
                 Key = "square-button"
             }.SetValues("toolboxWindow-icon");

@@ -13,24 +13,28 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Browser.UICustomStyle
 {
-    [CreateAssetMenu(fileName ="NewCustomUIStyle", menuName = "Browser_SO/CustomUIStyle")]
-    public class CustomStyle_SO : ScriptableObject
+    [Serializable]
+    public struct CustomStyleImage : ICustomStyleValue<Sprite>
     {
         [SerializeField]
-        private string m_key = null;
-        public string Key { get; }
-        public UIDisplay UIDisplay = new UIDisplay();
-        public UIPosition UIPosition = new UIPosition();
-        public UISize UISize = new UISize();
-        public UIMarginAndPadding UIMarginAndPadding = new UIMarginAndPadding();
-        public UIText UIText = new UIText();
-        public UIBackground UIBackground = new UIBackground();
-        public UIBorder UIBorder = new UIBorder();
+        private CustomStyleKeyword m_keyword;
+        [SerializeField]
+        private Sprite m_value;
+
+        public CustomStyleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
+        public Sprite Value { get => m_value; set => m_value = value; }
+
+        public override string ToString()
+        {
+            return $"CustomStyle[Keyword=[{m_keyword}], Value=[{m_value}]";
+        }
     }
 }

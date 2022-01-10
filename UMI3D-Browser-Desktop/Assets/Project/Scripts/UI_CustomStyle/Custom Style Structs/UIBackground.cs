@@ -20,14 +20,27 @@ using UnityEngine.UIElements;
 namespace Browser.UICustomStyle
 {
     [Serializable]
-    public struct UIBackground : IUIBackground
+    public struct CustomBackground
     {
         [SerializeField]
-        private Color m_backgroundColor;
+        private CustomStyleColor m_color;
         [SerializeField]
-        private Background m_backgroundImage;
+        private CustomStyleImage m_image;
         [SerializeField]
-        private Color m_backgroundImageTintColo;
+        private CustomStyleColor m_imageTintColor;
+    }
+
+    [Serializable]
+    public struct UIBackground : IUIBackground
+    {
+        //[SerializeField]
+        //private CustomBackground[] m_backgrounds;
+        [SerializeField]
+        private CustomStyleBackground m_backgroundDefault;
+        [SerializeField]
+        private CustomStyleBackground m_backgroundMouseOver;
+        [SerializeField]
+        private CustomStyleBackground m_backgroundMousePressed;
         [SerializeField]
         private int m_sliceBottom;
         [SerializeField]
@@ -39,7 +52,7 @@ namespace Browser.UICustomStyle
 
         public Color BackgroundColor => throw new NotImplementedException();
 
-        public Background BackgroundImage => throw new NotImplementedException();
+        public CustomStyleImage BackgroundImage => throw new NotImplementedException();
 
         public Color UnityBackgroundImageTintColor => throw new NotImplementedException();
 

@@ -36,4 +36,17 @@ namespace Browser.UICustomStyle
         Px = 0,
         Percent = 1
     }
+
+    public enum CustomStyleTheme
+    {
+        Default
+    }
+
+    public enum CustomStyleBackgroundMode
+    {
+        MouseOut,
+        MouseOver,
+        MousePressed,
+
+    }
 }

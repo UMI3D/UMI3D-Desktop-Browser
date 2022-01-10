@@ -7,6 +7,7 @@ namespace DesktopBrowser.UI.CustomElement
 {
     public interface ICustomElement
     {
+        public string CustomStyleKey { get; }
         /// <summary>
         /// Visual root of this custom element.
         /// </summary>
@@ -34,12 +35,12 @@ namespace DesktopBrowser.UI.CustomElement
         /// Clone and add the visualTreeAsset to this and Initialize.
         /// </summary>
         /// <param name="visualTA"></param>
-        public void Init(VisualTreeAsset visualTA);
+        public void Init(VisualTreeAsset visualTA, string customStyleKey);
         /// <summary>
         /// Add root to this and Initialize.
         /// </summary>
         /// <param name="root"></param>
-        public void Init(VisualElement root);
+        public void Init(VisualElement root, string customStyleKey);
         /// <summary>
         /// Reset this.
         /// </summary>
@@ -53,6 +54,10 @@ namespace DesktopBrowser.UI.CustomElement
         /// Remove the UIElement from the hierarchy
         /// </summary>
         public void Remove();
+        /// <summary>
+        /// Get CustomStyle_SO to apply to this visual.
+        /// </summary>
+        public void GetCustomStyle();
         /// <summary>
         /// Apply user preferences when needed.
         /// </summary>

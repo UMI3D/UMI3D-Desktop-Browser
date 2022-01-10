@@ -22,7 +22,7 @@ namespace DesktopBrowser.UI.CustomElement
             Values.Clear();
             for (int i = 0; i < values.Length; ++i)
                 Values.Add(values[i]);
-            OnApplyUserPreferences();
+            //OnApplyUserPreferences();
             return this;
         }
 
@@ -65,8 +65,7 @@ namespace DesktopBrowser.UI.CustomElement
 
     public partial class Icon_E
     {
-        public Icon_E(VisualElement root) : base(root) { }
-        //public Icon_E(vi)
+        public Icon_E(VisualElement root, string customStyleKey) : base(root, customStyleKey) { }
 
         private bool IsValuesEmpty()
         {
@@ -86,22 +85,19 @@ namespace DesktopBrowser.UI.CustomElement
         protected override void Initialize()
         {
             base.Initialize();
-            Values = new List<String>();
+            Values = new List<string>();
             CurrentValues = new List<string>();
             //ReadyToDisplay();
-        }
-
-        public  void GetUserPreferences()
-        {
-
         }
 
         public override void OnApplyUserPreferences()
         {
             if (IsEmpty)
                 return;
-            string theme = "darkTheme"; //TODO to be replace by theme checked.
-            UserPreferences.TextAndIconPref.ApplyIconPref(Root, Key, $"{theme}-{CurrentValues[0]}");
+            //string theme = "darkTheme"; //TODO to be replace by theme checked.
+            //UserPreferences.TextAndIconPref.ApplyIconPref(Root, Key, $"{theme}-{CurrentValues[0]}");
+            //Root.style.width = m_customStyle.UISize.Width.;
+            ApplyCustomSize();
         }
     }
 }

@@ -1,12 +1,7 @@
 {
-    "name": "UserPreferences",
+    "name": "Browser-CustomStyle",
     "rootNamespace": "",
-    "references": [
-        "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "GUID:6e34c4b4c3202a14eb95e0a784041765",
-        "GUID:d0bf4ea2ef3a7c74e9160b8995fd902b",
-        "GUID:19c652f19f20898498285002c097cd77"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
