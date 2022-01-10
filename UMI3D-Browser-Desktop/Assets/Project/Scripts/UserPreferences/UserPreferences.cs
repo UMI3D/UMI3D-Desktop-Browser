@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Browser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace BrowserDesktop.UserPreferences
 {
-    public class UserPreferences : umi3d.common.PersistentSingleton<UserPreferences>
+    public partial class UserPreferences : umi3d.common.PersistentSingleton<UserPreferences>
     {
         /// <summary>
         /// Root of the path where preferences are stored.
@@ -46,21 +47,41 @@ namespace BrowserDesktop.UserPreferences
             textAndIconPref.Load();
         }
 
-        void Start()
-        {
-
-        }
-
-        void Update()
-        {
-
-        }
-
         [ContextMenu("Apply User Pref")]
         private void ApplyUserPref()
         {
             OnApplyUserPreferences.Invoke();
         }
 
+    }
+
+    public partial class UserPreferences
+    {
+        private UnityEvent m_themeUpdate = new UnityEvent();
+
+        public static void AddThemeUpdateListener(UnityAction call)
+        {
+            Instance.m_themeUpdate.AddListener(call);
+        }
+        public static void RemoveThemeUpdateListener(UnityAction call)
+        {
+            Instance.m_themeUpdate.RemoveListener(call);
+        }
+    }
+
+    public partial class UserPreferences
+    {
+        [SerializeField]
+        private CustomStyleDictionary_SO[] m_customStyleDictionaries;
+
+        public static CustomStyle_SO GetCustomStyle(string key)
+        {
+            foreach (CustomStyleDictionary_SO customStyleDictionary in Instance.m_customStyleDictionaries)
+            {
+                if (customStyleDictionary.Theme == CustomStyleTheme.Default)
+                    return customStyleDictionary.GetCustomStyle(key);
+            }
+            throw new System.Exception($"Theme not found in UserPreferences.");
+        }
     }
 }

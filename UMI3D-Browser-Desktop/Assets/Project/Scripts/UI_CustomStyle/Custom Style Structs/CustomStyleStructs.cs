@@ -22,17 +22,4 @@ using UnityEngine.UIElements;
 namespace Browser.UICustomStyle
 {
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
 }
-

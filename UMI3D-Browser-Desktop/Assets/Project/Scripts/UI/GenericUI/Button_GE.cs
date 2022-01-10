@@ -63,7 +63,7 @@ namespace DesktopBrowser.UI.GenericElement
             base.Initialize();
             button_B = Root.Q<Button>();
             this.button_B.clicked += () => { this.OnClicked(); };
-            m_icon = new Icon_E(button_B);
+            m_icon = new Icon_E(button_B, null);
         }
 
         public override void Reset()
@@ -221,11 +221,6 @@ namespace DesktopBrowser.UI.GenericElement
                 UserPreferences.TextAndIconPref.ApplyTextPref(button_B, TextPref, Text);
             else
                 button_B.text = "";
-
-            //if (!string.IsNullOrEmpty(IconPref))
-            //    UserPreferences.TextAndIconPref.ApplyIconPref(button_B, IconPref, currentClass);
-            //else
-            //    button_B.ClearClassList();
         }
     }
 }

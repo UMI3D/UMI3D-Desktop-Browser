@@ -15,7 +15,7 @@ MonoBehaviour:
   UIDisplay:
     m_opacity:
       m_keyword: 0
-      m_value: 0
+      m_value: 53
   UIPosition:
     m_position: 0
     m_bottom: 0
@@ -24,22 +24,28 @@ MonoBehaviour:
     m_top: 0
   UISize:
     m_height:
-      m_keyword: 5
-      m_value: 0
+      m_keyword: 0
+      m_valueMode: 0
+      m_value: 52
     m_width:
       m_keyword: 0
+      m_valueMode: 0
       m_value: 0
     m_maxHeight:
       m_keyword: 0
+      m_valueMode: 0
       m_value: 2.5
     m_maxWidth:
       m_keyword: 0
+      m_valueMode: 0
       m_value: 0
     m_minHeight:
       m_keyword: 0
+      m_valueMode: 0
       m_value: 0
     m_minWidth:
       m_keyword: 0
+      m_valueMode: 0
       m_value: 0
   UIMarginAndPadding:
     m_marginBottom: 0

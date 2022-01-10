@@ -84,7 +84,7 @@ namespace Browser.UICustomStyle
     public interface IUIBackground
     {
         public Color BackgroundColor { get; }
-        public Background BackgroundImage { get; }
+        public CustomStyleImage BackgroundImage { get; }
         public Color UnityBackgroundImageTintColor { get; }
         public ScaleMode UnityBackgroundScaleMode { get; }
         public int UnitySliceBottom { get; }

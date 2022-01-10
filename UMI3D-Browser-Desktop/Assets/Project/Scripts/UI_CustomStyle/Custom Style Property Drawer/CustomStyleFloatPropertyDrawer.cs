@@ -57,7 +57,7 @@ namespace Browser.UICustomStyle
 
 
     [CustomPropertyDrawer(typeof(CustomStylePXAndPercentFloat))]
-    public class CustomStyleFloatPxAndPercentPropertyDrawer : PropertyDrawer
+    public class CustomStylePxAndPercentFloatPropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
