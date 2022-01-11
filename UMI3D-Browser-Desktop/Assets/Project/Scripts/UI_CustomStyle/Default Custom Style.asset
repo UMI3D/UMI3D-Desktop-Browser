@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Default Custom Style
   m_EditorClassIdentifier: 
   m_theme: 0
-  m_customStyles: []
+  m_customStyles:
+  - {fileID: 11400000, guid: 688d06853d597d849a1538104190a81a, type: 2}

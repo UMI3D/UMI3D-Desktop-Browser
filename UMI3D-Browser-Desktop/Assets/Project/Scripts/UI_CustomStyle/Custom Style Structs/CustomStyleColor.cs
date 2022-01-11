@@ -27,14 +27,14 @@ namespace Browser.UICustomStyle
     }
 
     [Serializable]
-    public struct CustomStyleColor : ICustomStyleValue<Color>
+    public struct CustomStyleColor : ICustomStyleValue<CustomStyleSimpleKeyword, Color>
     {
         [SerializeField]
-        private CustomStyleKeyword m_keyword;
+        private CustomStyleSimpleKeyword m_keyword;
         [SerializeField]
         private Color m_value;
 
-        public CustomStyleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
+        public CustomStyleSimpleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
         public Color Value { get => m_value; set => m_value = value; }
 
         public override string ToString()

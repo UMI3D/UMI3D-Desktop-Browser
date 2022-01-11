@@ -29,6 +29,15 @@ namespace DesktopBrowser.UI.GenericElement
         private ICustomisableElement m_icon;
     }
 
+    public sealed partial class Button_GE
+    {
+        public Button_GE(VisualTreeAsset visualTA) : base(visualTA) { }
+
+        public Button_GE(VisualElement root) : base(root) { }
+
+        //public Button_GE(VisualElement root, string customStyleKey) : base(root, customStyleKey) { }
+    }
+
     public sealed partial class Button_GE : AbstractGenericAndCustomElement
     {
         public string Text { get; set; } = "";
@@ -54,16 +63,14 @@ namespace DesktopBrowser.UI.GenericElement
 
         
 
-        public Button_GE(VisualTreeAsset visualTA): base(visualTA) { }
-
-        public Button_GE(VisualElement root): base(root) { }
+        
 
         protected override void Initialize()
         {
             base.Initialize();
             button_B = Root.Q<Button>();
             this.button_B.clicked += () => { this.OnClicked(); };
-            m_icon = new Icon_E(button_B, null);
+            //m_icon = new Icon_E(button_B, null);
         }
 
         public override void Reset()
@@ -83,6 +90,11 @@ namespace DesktopBrowser.UI.GenericElement
         }
 
         #region Set and Unset Icon
+
+        public Button_GE SetIcon(string customStyleKey, string iconOnKey, string iconOffKey, bool isOn = false)
+        {
+            return this;
+        }
 
         public Button_GE SetIcon(string iconOn, string iconOff, bool isOn = false)
         {

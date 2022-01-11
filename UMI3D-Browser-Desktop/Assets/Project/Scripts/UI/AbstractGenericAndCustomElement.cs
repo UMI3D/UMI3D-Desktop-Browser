@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 using Browser.UICustomStyle;
 using DesktopBrowser.UI.CustomElement;
 using System;
@@ -27,6 +26,7 @@ namespace BrowserDesktop.UI
     public abstract partial class AbstractGenericAndCustomElement : ICustomElement
     {
         public string CustomStyleKey { get; protected set; } = null;
+        public string CustomStyleBackgroundKey { get; protected set; }
         public VisualElement Root { get; protected set; } = null;
         public bool Initialized { get; protected set; } = false;
         public bool AttachedToHierarchy { get; protected set; } = false;
@@ -43,23 +43,25 @@ namespace BrowserDesktop.UI
         }
         public Rect RootLayout { get => Root.layout; }
 
-        public void Init(VisualTreeAsset visualTA, string customStyleKey)
+        public void Init(VisualTreeAsset visualTA, string customStyleKey, string customStyleBackgroundKey = "")
         {
             if (Initialized) Reset();
             else Initialized = true;
-            Root = visualTA.CloneTree();
+            this.Root = visualTA.CloneTree();
             this.Add(Root);
-            CustomStyleKey = customStyleKey;
+            this.CustomStyleKey = customStyleKey;
+            this.CustomStyleBackgroundKey = customStyleBackgroundKey;
             GetCustomStyle();
             m_globalPref = UserPreferences.UserPreferences.GlobalPref;
             Initialize();
         }
-        public void Init(VisualElement root, string customStyleKey)
+        public void Init(VisualElement root, string customStyleKey, string customStyleBackgroundKey = "")
         {
             if (Initialized) Reset();
             else Initialized = true;
             this.Root = root;
-            CustomStyleKey = customStyleKey;
+            this.CustomStyleKey = customStyleKey;
+            this.CustomStyleBackgroundKey = customStyleBackgroundKey;
             GetCustomStyle();
             m_globalPref = UserPreferences.UserPreferences.GlobalPref;
             Initialize();
@@ -68,6 +70,11 @@ namespace BrowserDesktop.UI
         {
             this.Root = null;
             this.CustomStyleKey = null;
+            this.CustomStyleBackgroundKey = null;
+            UnregisterCallback<MouseOverEvent>(OnMouseOver);
+            UnregisterCallback<MouseOutEvent>(OnMouseOut);
+            UnregisterCallback<MouseDownEvent>(OnMouseDown);
+            UnregisterCallback<MouseUpEvent>(OnMouseUp);
             m_customStyle = null;
             Initialized = false;
         }
@@ -94,7 +101,7 @@ namespace BrowserDesktop.UI
         public virtual void GetCustomStyle() 
         {
             if (string.IsNullOrEmpty(CustomStyleKey))
-                throw new Exception("CustomStyleKey null or Empty");
+                return; //throw new Exception("CustomStyleKey null or Empty");
             m_customStyle = UserPreferences.UserPreferences.GetCustomStyle(CustomStyleKey);
         }
 
@@ -116,16 +123,17 @@ namespace BrowserDesktop.UI
         {
             Init(root, null);
         }
-        public AbstractGenericAndCustomElement(VisualTreeAsset visualTA, string customStyleKey) : this()
+        public AbstractGenericAndCustomElement(VisualTreeAsset visualTA, string customStyleKey, string customStyleBackgroundKey = "") : this()
         {
-            Init(visualTA, customStyleKey);
+            Init(visualTA, customStyleKey, customStyleBackgroundKey);
         }
-        public AbstractGenericAndCustomElement(VisualElement root, string customStyleKey) : this()
+        public AbstractGenericAndCustomElement(VisualElement root, string customStyleKey, string customStyleBackgroundKey = "") : this()
         {
-            Init(root, customStyleKey);
+            Init(root, customStyleKey, customStyleBackgroundKey);
         }
         ~AbstractGenericAndCustomElement()
         {
+            Reset();
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
             UserPreferences.UserPreferences.RemoveThemeUpdateListener(GetCustomStyle);
         }
@@ -133,7 +141,19 @@ namespace BrowserDesktop.UI
 
     public abstract partial class AbstractGenericAndCustomElement
     {
-        protected virtual void Initialize() { }
+        protected virtual void Initialize() 
+        {
+            RegisterCallback<MouseOverEvent>(OnMouseOver);
+            RegisterCallback<MouseOutEvent>(OnMouseOut);
+            RegisterCallback<MouseDownEvent>(OnMouseDown);
+            RegisterCallback<MouseUpEvent>(OnMouseUp);
+
+            if (m_customStyle != null)
+            {
+                ApplyCustomSize();
+                ApplyCustomBackgroundDefault();
+            }
+        }
 
         /// <summary>
         /// To be used in Custom Element that are already added to the UIDocument.
@@ -153,20 +173,51 @@ namespace BrowserDesktop.UI
         protected void ApplyCustomSize()
         {
             UISize uiSize = m_customStyle.UISize;
-            ApplyCustomStylePxAndPourcentageFloat(Root.style, uiSize.Height);
-            ApplyCustomStylePxAndPourcentageFloat(Root.style, uiSize.Width);
-            ApplyCustomStylePxAndPourcentageFloat(Root.style, uiSize.MinHeight);
-            ApplyCustomStylePxAndPourcentageFloat(Root.style, uiSize.MinWidth);
-            ApplyCustomStylePxAndPourcentageFloat(Root.style, uiSize.MaxHeight);
-            ApplyCustomStylePxAndPourcentageFloat(Root.style, uiSize.MaxWidth);
+            ApplyPxAndPourcentageFloatToVisual(Root.style, uiSize.Height);
+            ApplyPxAndPourcentageFloatToVisual(Root.style, uiSize.Width);
+            ApplyPxAndPourcentageFloatToVisual(Root.style, uiSize.MinHeight);
+            ApplyPxAndPourcentageFloatToVisual(Root.style, uiSize.MinWidth);
+            ApplyPxAndPourcentageFloatToVisual(Root.style, uiSize.MaxHeight);
+            ApplyPxAndPourcentageFloatToVisual(Root.style, uiSize.MaxWidth);
         }
 
-        protected virtual void OnMouseOver() { }
-        protected virtual void OnMouseOut() { }
-        protected virtual void OnMouseDown() { }
-        protected virtual void OnMouseUp() { }
+        protected void ApplyCustomBackgroundDefault()
+        {
+            UIBackground uIBackground = m_customStyle.UIBackground;
+            CustomBackgrounds customBackgrounds = uIBackground.GetCustomBackgrounds(CustomStyleBackgroundKey);
+            ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundDefault);
+        }
+        protected void ApplyCustomBackgroundMouseOver()
+        {
+            UIBackground uIBackground = m_customStyle.UIBackground;
+            CustomBackgrounds customBackgrounds = uIBackground.GetCustomBackgrounds(CustomStyleBackgroundKey);
+            ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundMouseOver);
+        }
+        protected void ApplyCustomBackgroundMousePressed()
+        {
+            UIBackground uIBackground = m_customStyle.UIBackground;
+            CustomBackgrounds customBackgrounds = uIBackground.GetCustomBackgrounds(CustomStyleBackgroundKey);
+            ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundMousePressed);
+        }
 
-        private void ApplyCustomStylePxAndPourcentageFloat(IStyle style, CustomStylePXAndPercentFloat customStyle)
+        protected virtual void OnMouseOver(MouseOverEvent e) 
+        {
+            ApplyCustomBackgroundMouseOver();
+        }
+        protected virtual void OnMouseOut(MouseOutEvent e) 
+        {
+            ApplyCustomBackgroundDefault();
+        }
+        protected virtual void OnMouseDown(MouseDownEvent e) 
+        {
+            ApplyCustomBackgroundMousePressed();
+        }
+        protected virtual void OnMouseUp(MouseUpEvent e) 
+        {
+            ApplyCustomBackgroundMouseOver();
+        }
+
+        protected virtual void ApplyPxAndPourcentageFloatToVisual(IStyle style, CustomStylePXAndPercentFloat customStyle)
         {
             switch (customStyle.Keyword)
             {
@@ -179,6 +230,56 @@ namespace BrowserDesktop.UI
                     break;
                 case CustomStyleKeyword.Const:
                     style.height = customStyle.Value;
+                    break;
+            }
+        }
+
+        protected virtual void ApplyBackgroundToVisual(IStyle style, CustomStyleBackground customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Variable:
+                    ApplyBackgroundColorToVisual(style, customStyle.Value.BackgroundColor);
+                    ApplyImageToVisual(style, customStyle.Value.BackgroundImage);
+                    ApplyImageTintColorToVisual(style, customStyle.Value.BackgroundImageTintColor);
+                    break;
+            }
+        }
+
+        protected virtual void ApplyBackgroundColorToVisual(IStyle style, CustomStyleColor customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Variable:
+                    style.backgroundColor = customStyle.Value;
+                    break;
+            }
+        }
+
+        protected virtual void ApplyImageTintColorToVisual(IStyle style, CustomStyleColor customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Variable:
+                    style.unityBackgroundImageTintColor = customStyle.Value;
+                    break;
+            }
+        }
+
+        protected virtual void ApplyImageToVisual(IStyle style, CustomStyleImage customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Variable:
+                    style.backgroundImage = customStyle.Value.texture;
                     break;
             }
         }

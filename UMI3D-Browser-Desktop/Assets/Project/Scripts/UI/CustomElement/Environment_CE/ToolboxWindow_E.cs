@@ -27,7 +27,7 @@ namespace DesktopBrowser.UI.CustomElement
             Root.style.display = DisplayStyle.None;
             Debug.Log($"display of icon = {(icon as VisualElement).resolvedStyle.display}");
         }
-        private ICustomisableElement icon;
+        private Icon_E icon;
     }
 
     public partial class ToolboxWindow_E : AbstractGenericAndCustomElement
@@ -40,27 +40,24 @@ namespace DesktopBrowser.UI.CustomElement
             {
             }.InitFromSrollViewToProperties();
 
-            icon = new Icon_E(Root.Q("icon"), null)
-            {
-                Key = "square-button"
-            }.SetValues("toolboxWindow-icon");
+            icon = new Icon_E(Root.Q("icon"), "square-radius");
 
-            new Button_GE(Root.Q("closeButton"))
-            {
-                OnClicked = () => { OnCloseButtonPressed(); },
-                IconPref = "square-button"
-            }.SetIcon("", "", true);
+            //new Button_GE(Root.Q("closeButton"))
+            //{
+            //    OnClicked = () => { OnCloseButtonPressed(); },
+            //    IconPref = "square-button"
+            //}.SetIcon("", "", true);
 
-            new Button_GE(Root.Q("unPinedButton"))
-            {
-                OnClicked = () => { UnPinedButtonPressed.Invoke(); },
-                IconPref = "square-button"
-            }.SetIcon("", "", true);
+            //new Button_GE(Root.Q("unPinedButton"))
+            //{
+            //    OnClicked = () => { UnPinedButtonPressed.Invoke(); },
+            //    IconPref = "square-button"
+            //}.SetIcon("", "", true);
         }
 
         public override void OnApplyUserPreferences()
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

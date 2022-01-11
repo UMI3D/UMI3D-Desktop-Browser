@@ -22,14 +22,14 @@ using UnityEngine.UIElements;
 namespace Browser.UICustomStyle
 {
     [Serializable]
-    public struct CustomStyleImage : ICustomStyleValue<Sprite>
+    public struct CustomStyleImage : ICustomStyleValue<CustomStyleSimpleKeyword, Sprite>
     {
         [SerializeField]
-        private CustomStyleKeyword m_keyword;
+        private CustomStyleSimpleKeyword m_keyword;
         [SerializeField]
         private Sprite m_value;
 
-        public CustomStyleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
+        public CustomStyleSimpleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
         public Sprite Value { get => m_value; set => m_value = value; }
 
         public override string ToString()

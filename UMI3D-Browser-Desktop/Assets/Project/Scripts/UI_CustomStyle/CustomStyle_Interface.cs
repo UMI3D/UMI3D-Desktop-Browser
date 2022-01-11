@@ -20,10 +20,10 @@ using UnityEngine.UIElements;
 
 namespace Browser.UICustomStyle
 {
-    public interface ICustomStyleValue<T>
+    public interface ICustomStyleValue<K,V>
     {
-        CustomStyleKeyword Keyword { get; set; }
-        T Value { get; set; }
+        public K Keyword { get; set; }
+        public V Value { get; set; }
     }
     public interface IUIDisplay
     {
@@ -81,16 +81,29 @@ namespace Browser.UICustomStyle
         public float WordSpacing { get; }
     }
 
+    public interface IBackground
+    {
+        public CustomStyleColor BackgroundColor { get; }
+        public CustomStyleImage BackgroundImage { get; }
+        public CustomStyleColor BackgroundImageTintColor { get; }
+    }
+
+    public interface IBackgrounds
+    {
+        public string Key { get; }
+        public CustomStyleBackground BackgroundDefault { get; }
+        public CustomStyleBackground BackgroundMouseOver { get; }
+        public CustomStyleBackground BackgroundMousePressed { get; }
+    }
+
     public interface IUIBackground
     {
-        public Color BackgroundColor { get; }
-        public CustomStyleImage BackgroundImage { get; }
-        public Color UnityBackgroundImageTintColor { get; }
+        public CustomBackgrounds GetCustomBackgrounds(string key);
         public ScaleMode UnityBackgroundScaleMode { get; }
-        public int UnitySliceBottom { get; }
-        public int UnitySliceLeft { get; }
-        public int UnitySliceRight { get; }
-        public int UnitySliceTop { get; }
+        public int SliceBottom { get; }
+        public int SliceLeft { get; }
+        public int SliceRight { get; }
+        public int SliceTop { get; }
     }
 
     public interface IUIBorder
