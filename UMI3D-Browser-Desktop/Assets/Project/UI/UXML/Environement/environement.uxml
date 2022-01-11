@@ -2,6 +2,7 @@
     <ui:Template name="loading-screen" src="loading-screen.uxml" />
     <ui:Template name="password-screen" src="password-screen.uxml" />
     <ui:Template name="libraries-screen" src="libraries-screen.uxml" />
+    <ui:Template name="MicrophoneElement" src="/Assets/Project/UI/UXML/CustomElement/MicrophoneElement.uxml" />
     <Style src="/Assets/Project/UI/UXML/main-style.uss" />
     <Style src="/Assets/Project/UI/UXML/sessio-info.uss" />
     <ui:VisualElement name="root" style="position: relative; flex-grow: 1;">
@@ -13,15 +14,14 @@
         </ui:VisualElement>
         <ui:VisualElement name="body" style="height: 100%; width: 100%; display: flex;">
             <ui:VisualElement name="top" class="dark-grey1-bck" style="width: 100%; flex-direction: row; height: 40px; min-height: 40px; align-items: center;">
-                <ui:VisualElement name="top-right-menu" style="width: 50%; justify-content: center;">
+                <ui:VisualElement name="top-left-menu" style="width: 50%; justify-content: center;">
                     <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/UI/UI_connection/ico_top.png&apos;); height: 30px; -unity-background-scale-mode: scale-to-fit; width: 30px; margin-left: 5px;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="top-center-menu" style="flex-grow: 1; flex-direction: row; justify-content: center; height: 35px; display: flex; align-items: center;">
                     <ui:Label name="environment-name" text="Test" class="white-txt medium-size-txt" style="-unity-text-align: middle-left;" />
-                    <ui:Button name="is-favorite-btn" class="not-favorite" style="width: 60px; height: 60px; background-color: rgba(228, 228, 228, 0);" />
                 </ui:VisualElement>
-                <ui:VisualElement name="top-left-menu" style="flex-direction: row-reverse; width: 50%; flex-wrap: nowrap; height: 100%;">
-                    <ui:Button name="close-window-btn" class="close-btn" style="color: rgb(255, 255, 255); font-size: 18px; width: 32px;" />
+                <ui:VisualElement name="top-right-menu" style="flex-direction: row-reverse; width: 50%; flex-wrap: nowrap; height: 100%;">
+                    <ui:Button name="close-window-btn" class="top-left-menu-btn close-btn" style="width: 35px;" />
                     <ui:Button name="fullscreen-btn" class="top-left-menu-btn restore-btn" style="width: 35px;" />
                     <ui:Button name="minimize-window-btn" class="top-left-menu-btn minimize-btn" />
                 </ui:VisualElement>
@@ -77,8 +77,8 @@
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="pause-menu" style="position: absolute; top: 0; width: 100%; align-items: center;">
-                        <ui:VisualElement name="pause-menu-container" class="dark-grey2-bck orange-border" style="width: 545px; height: 52px; border-bottom-width: 1px; flex-direction: row; align-items: center; justify-content: center;">
-                            <ui:Button name="open-option-menu-btn" class="btn-options" style="width: 110px; height: 34px; margin-right: 4px;" />
+                        <ui:VisualElement name="pause-menu-container" class="dark-grey2-bck orange-border" style="width: 300px; height: 52px; border-bottom-width: 1px; flex-direction: row; align-items: center; justify-content: center;">
+                            <ui:Button name="open-option-menu-btn" class="btn-options" style="width: 110px; height: 34px; margin-right: 4px; display: none;" />
                             <ui:Button name="leave-environment-btn" class="btn-leave" style="width: 110px; height: 34px; margin-left: 4px;" />
                         </ui:VisualElement>
                         <ui:Button name="pause-menu-open-btn" class="btn-open-pause-menu" style="width: 50px; height: 23px;" />
@@ -86,6 +86,10 @@
                     <ui:VisualElement name="console" style="display: flex; position: absolute; width: 430px; height: 200px; bottom: 0; right: 0; background-color: rgba(50, 50, 50, 0.8); padding-top: 15px;">
                         <ui:Label text="Label" name="version" class="dark-grey1-bck grey-txt" style="height: 20px; -unity-text-align: middle-right; padding-right: 15px;" />
                         <ui:ScrollView name="console-container" show-horizontal-scroller="false" show-vertical-scroller="false" class="orange-scroll-view" style="flex-grow: 1; margin-left: 5px;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="microphone-setter" style="display: flex; position: absolute; width: 430px; height: 71px; bottom: -5px; right: 108px; background-color: rgba(50, 50, 50, 0.8); padding-top: 15px;">
+                        <ui:Instance template="MicrophoneElement" name="threshold-bar" />
+                        <ui:Instance template="MicrophoneElement" name="gain-bar" style="overflow: hidden;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 32px; justify-content: center; flex-direction: row;">
