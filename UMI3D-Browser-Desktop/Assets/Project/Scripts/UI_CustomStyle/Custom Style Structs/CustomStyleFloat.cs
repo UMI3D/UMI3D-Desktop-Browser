@@ -90,6 +90,7 @@ namespace Browser.UICustomStyle
         private float m_value;
 
         public CustomStyleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
+        public CustomStyleValueMode ValueMode => m_valueMode;
         public float Value { get => m_value; set => m_value = value; }
 
         public override string ToString()

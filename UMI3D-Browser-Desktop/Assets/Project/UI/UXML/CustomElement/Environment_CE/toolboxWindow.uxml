@@ -3,7 +3,7 @@
     <ui:VisualElement name="windowOut" style="background-color: rgba(63, 63, 63, 0.31);">
         <ui:VisualElement name="windowIn" style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px;">
             <ui:VisualElement name="topBar" style="flex-direction: row; justify-content: space-between;">
-                <ui:VisualElement name="icon" class="darkTheme-toolboxWindow-icon" />
+                <ui:VisualElement name="icon" />
                 <ui:Label text="Label" display-tooltip-when-elided="true" />
                 <ui:Button text="Button" display-tooltip-when-elided="true" name="closeButton" />
             </ui:VisualElement>

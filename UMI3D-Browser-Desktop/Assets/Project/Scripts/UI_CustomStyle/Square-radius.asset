@@ -12,30 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
   m_Name: Square-radius
   m_EditorClassIdentifier: Assembly-CSharp:Browser.UICustomStyle:CustomStyle
-  m_key: 
-  UIDisplay:
+  m_key: square-radius
+  m_uIDisplay:
     m_opacity:
       m_keyword: 0
-      m_value: 53
-  UIPosition:
+      m_value: 0
+  m_uIPosition:
     m_position: 0
     m_bottom: 0
     m_left: 0
     m_right: 0
     m_top: 0
-  UISize:
+  m_uISize:
     m_height:
       m_keyword: 6
       m_valueMode: 0
-      m_value: 52
+      m_value: 30
     m_width:
-      m_keyword: 0
+      m_keyword: 6
       m_valueMode: 0
-      m_value: 0
+      m_value: 30
     m_maxHeight:
       m_keyword: 0
       m_valueMode: 0
-      m_value: 2.5
+      m_value: 0
     m_maxWidth:
       m_keyword: 0
       m_valueMode: 0
@@ -48,7 +48,7 @@ MonoBehaviour:
       m_keyword: 0
       m_valueMode: 0
       m_value: 0
-  UIMarginAndPadding:
+  m_uIMarginAndPadding:
     m_marginBottom: 0
     m_marginLeft: 0
     m_marginRight: 0
@@ -57,7 +57,7 @@ MonoBehaviour:
     m_paddingLeft: 0
     m_paddingRight: 0
     m_paddingTop: 0
-  UIText:
+  m_uIText:
     m_font: {fileID: 0}
     m_fontStyleAndWeight: 0
     m_fontSize: 0
@@ -71,20 +71,20 @@ MonoBehaviour:
     m_unityTextOutlineWidth: 0
     m_WhiteSpace: 0
     m_wordSpacing: 0
-  UIBackground:
+  m_uIBackground:
     m_backgrounds:
     - m_backgroundKey: 
       m_backgroundDefault:
         m_keyword: 6
         m_value:
           m_color:
-            m_keyword: 6
-            m_value: {r: 0.9339623, g: 0.22467959, b: 0.22467959, a: 0}
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 6
-            m_value: {fileID: 21300000, guid: 29ad9715b2347a04b84e864754352d12, type: 3}
+            m_value: {fileID: 21300000, guid: a137052b97bd0af4d82c1525974d2f57, type: 3}
           m_imageTintColor:
-            m_keyword: 6
+            m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_backgroundMouseOver:
         m_keyword: 0
@@ -114,7 +114,7 @@ MonoBehaviour:
     m_sliceLeft: 0
     m_sliceRight: 0
     m_sliceTop: 0
-  UIBorder:
+  m_uIBorder:
     m_borderBottomColor: {r: 0, g: 0, b: 0, a: 0}
     m_borderLeftColor: {r: 0, g: 0, b: 0, a: 0}
     m_borderRightColo: {r: 0, g: 0, b: 0, a: 0}

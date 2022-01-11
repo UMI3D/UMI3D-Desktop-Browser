@@ -7,10 +7,10 @@ VisualElement {
 
 .darkTheme-toolboxWindow-close-btn:active {
     background-image: url('/Assets/Project/UI/Icons/Windows/close.png');
-    background-color: rgba(247, 182, 88, 255);
+    background-color: rgb(247, 182, 88);
 }
 
 .darkTheme-toolboxWindow-close-btn:hover {
     background-image: url('/Assets/Project/UI/Icons/Windows/close.png');
-    background-color: rgba(255, 0, 0, 255);
+    background-color: rgb(255, 0, 0);
 }

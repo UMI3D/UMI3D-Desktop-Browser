@@ -60,12 +60,6 @@ namespace Browser.UICustomStyle
     [Serializable]
     public struct UIBackground : IUIBackground
     {
-        //[SerializeField]
-        //private CustomStyleBackground m_backgroundDefault;
-        //[SerializeField]
-        //private CustomStyleBackground m_backgroundMouseOver;
-        //[SerializeField]
-        //private CustomStyleBackground m_backgroundMousePressed;
         [SerializeField]
         private CustomBackgrounds[] m_backgrounds;
         [SerializeField]

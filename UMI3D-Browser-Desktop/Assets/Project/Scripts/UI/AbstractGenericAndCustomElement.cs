@@ -68,13 +68,13 @@ namespace BrowserDesktop.UI
         }
         public virtual void Reset()
         {
-            this.Root = null;
             this.CustomStyleKey = null;
             this.CustomStyleBackgroundKey = null;
-            UnregisterCallback<MouseOverEvent>(OnMouseOver);
-            UnregisterCallback<MouseOutEvent>(OnMouseOut);
-            UnregisterCallback<MouseDownEvent>(OnMouseDown);
-            UnregisterCallback<MouseUpEvent>(OnMouseUp);
+            Root.UnregisterCallback<MouseOverEvent>(OnMouseOver);
+            Root.UnregisterCallback<MouseOutEvent>(OnMouseOut);
+            Root.UnregisterCallback<MouseDownEvent>(OnMouseDown);
+            Root.UnregisterCallback<MouseUpEvent>(OnMouseUp);
+            this.Root = null;
             m_customStyle = null;
             Initialized = false;
         }
@@ -143,15 +143,16 @@ namespace BrowserDesktop.UI
     {
         protected virtual void Initialize() 
         {
-            RegisterCallback<MouseOverEvent>(OnMouseOver);
-            RegisterCallback<MouseOutEvent>(OnMouseOut);
-            RegisterCallback<MouseDownEvent>(OnMouseDown);
-            RegisterCallback<MouseUpEvent>(OnMouseUp);
+            Root.RegisterCallback<MouseOverEvent>(OnMouseOver);
+            Root.RegisterCallback<MouseOutEvent>(OnMouseOut);
+            Root.RegisterCallback<MouseDownEvent>(OnMouseDown);
+            Root.RegisterCallback<MouseUpEvent>(OnMouseUp);
+            //Root.RegisterCallback<MouseEnterEvent>(e => Debug.Log($"Mouse enter"));
 
             if (m_customStyle != null)
             {
                 ApplyCustomSize();
-                ApplyCustomBackgroundDefault();
+                ApplyCustomBackground(CustomStyleBackgroundMode.MouseOut);
             }
         }
 
@@ -172,66 +173,100 @@ namespace BrowserDesktop.UI
 
         protected void ApplyCustomSize()
         {
+            if (m_customStyle == null) return;
+
             UISize uiSize = m_customStyle.UISize;
-            ApplyPxAndPourcentageFloatToVisual(Root.style, uiSize.Height);
-            ApplyPxAndPourcentageFloatToVisual(Root.style, uiSize.Width);
-            ApplyPxAndPourcentageFloatToVisual(Root.style, uiSize.MinHeight);
-            ApplyPxAndPourcentageFloatToVisual(Root.style, uiSize.MinWidth);
-            ApplyPxAndPourcentageFloatToVisual(Root.style, uiSize.MaxHeight);
-            ApplyPxAndPourcentageFloatToVisual(Root.style, uiSize.MaxWidth);
+            StyleLength length = new StyleLength();
+            
+            length = GetPxAndPourcentageFloatLength(uiSize.Height);
+            Debug.Log($"StyleLength = [{length.keyword}, {length.value}]");
+            if (length.keyword != StyleKeyword.Null)
+                Root.style.height = length;
+            length = GetPxAndPourcentageFloatLength(uiSize.Width);
+            Debug.Log($"StyleLength = [{length.keyword}, {length.value}]");
+            if (length.keyword != StyleKeyword.Null)
+                Root.style.width = length;
+            length = GetPxAndPourcentageFloatLength(uiSize.MinHeight);
+            Debug.Log($"StyleLength = [{length.keyword}, {length.value}]");
+            if (length.keyword != StyleKeyword.Null)
+                Root.style.minHeight = length;
+            length = GetPxAndPourcentageFloatLength(uiSize.MinWidth);
+            Debug.Log($"StyleLength = [{length.keyword}, {length.value}]");
+            if (length.keyword != StyleKeyword.Null)
+                Root.style.minWidth = length;
+            length = GetPxAndPourcentageFloatLength(uiSize.MaxHeight);
+            Debug.Log($"StyleLength = [{length.keyword}, {length.value}]");
+            if (length.keyword != StyleKeyword.Null)
+                Root.style.maxHeight = length;
+            length = GetPxAndPourcentageFloatLength(uiSize.MaxWidth);
+            Debug.Log($"StyleLength = [{length.keyword}, {length.value}]");
+            if (length.keyword != StyleKeyword.Null)
+                Root.style.maxWidth = length;
+
+            //Root.style.ra
         }
 
-        protected void ApplyCustomBackgroundDefault()
+        protected void ApplyCustomBackground(CustomStyleBackgroundMode backgroundMode)
         {
+            if (m_customStyle == null) return;
             UIBackground uIBackground = m_customStyle.UIBackground;
             CustomBackgrounds customBackgrounds = uIBackground.GetCustomBackgrounds(CustomStyleBackgroundKey);
-            ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundDefault);
+            switch (backgroundMode)
+            {
+                case CustomStyleBackgroundMode.MouseOut:
+                    ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundDefault);
+                    break;
+                case CustomStyleBackgroundMode.MouseOver:
+                    ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundMouseOver);
+                    break;
+                case CustomStyleBackgroundMode.MousePressed:
+                    ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundMousePressed);
+                    break;
+            }
+
+            //Root.style.borderBottomLeftRadius = 10f;
         }
-        protected void ApplyCustomBackgroundMouseOver()
-        {
-            UIBackground uIBackground = m_customStyle.UIBackground;
-            CustomBackgrounds customBackgrounds = uIBackground.GetCustomBackgrounds(CustomStyleBackgroundKey);
-            ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundMouseOver);
-        }
-        protected void ApplyCustomBackgroundMousePressed()
-        {
-            UIBackground uIBackground = m_customStyle.UIBackground;
-            CustomBackgrounds customBackgrounds = uIBackground.GetCustomBackgrounds(CustomStyleBackgroundKey);
-            ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundMousePressed);
-        }
+
 
         protected virtual void OnMouseOver(MouseOverEvent e) 
         {
-            ApplyCustomBackgroundMouseOver();
+            ApplyCustomBackground(CustomStyleBackgroundMode.MouseOver);
         }
         protected virtual void OnMouseOut(MouseOutEvent e) 
         {
-            ApplyCustomBackgroundDefault();
+            ApplyCustomBackground(CustomStyleBackgroundMode.MouseOut);
         }
         protected virtual void OnMouseDown(MouseDownEvent e) 
         {
-            ApplyCustomBackgroundMousePressed();
+            ApplyCustomBackground(CustomStyleBackgroundMode.MousePressed);
         }
         protected virtual void OnMouseUp(MouseUpEvent e) 
         {
-            ApplyCustomBackgroundMouseOver();
+            ApplyCustomBackground(CustomStyleBackgroundMode.MouseOver);
         }
 
-        protected virtual void ApplyPxAndPourcentageFloatToVisual(IStyle style, CustomStylePXAndPercentFloat customStyle)
+        protected virtual StyleLength GetPxAndPourcentageFloatLength(CustomStylePXAndPercentFloat customStyle)
         {
+            StyleLength lenght = new StyleLength();
+            float floatLenght = -1;
             switch (customStyle.Keyword)
             {
                 case CustomStyleKeyword.VariableUndefined:
-                    break;
                 case CustomStyleKeyword.ConstUndefined:
+                    lenght.keyword = StyleKeyword.Null;
                     break;
                 case CustomStyleKeyword.Variable:
-                    style.height = customStyle.Value * m_globalPref.ZoomCoef;
+                    floatLenght = customStyle.Value * m_globalPref.ZoomCoef;
+                    lenght = floatLenght;
+                    lenght.keyword = StyleKeyword.Undefined;
                     break;
                 case CustomStyleKeyword.Const:
-                    style.height = customStyle.Value;
+                    floatLenght = customStyle.Value;
+                    lenght = (customStyle.ValueMode == CustomStyleValueMode.Px) ? floatLenght : Length.Percent(floatLenght);
+                    lenght.keyword = StyleKeyword.Undefined;
                     break;
             }
+            return lenght;
         }
 
         protected virtual void ApplyBackgroundToVisual(IStyle style, CustomStyleBackground customStyle)

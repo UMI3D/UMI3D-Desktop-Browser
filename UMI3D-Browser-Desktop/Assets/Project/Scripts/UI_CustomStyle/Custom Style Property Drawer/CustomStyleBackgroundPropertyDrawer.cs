@@ -13,12 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Browser.UICustomStyle
 {
@@ -77,89 +73,27 @@ namespace Browser.UICustomStyle
 
             float height = position.height / 3f - spaceBetweenLine;
             float heightDelta = height + spaceBetweenLine;
-            Rect colorRect = new Rect(position.x, position.y, position.width, height);
-            Rect imageRect = new Rect(position.x, position.y + heightDelta, position.width, height);
-            Rect imageTintColorRect = new Rect(position.x, position.y + 2f * heightDelta, position.width, height);
+            float labelWidth = 80f;
+
+            Rect colorRect = new Rect(position.x + labelWidth, position.y, position.width - labelWidth, height);
+            Rect colorLabelRect = new Rect(position.x, position.y, labelWidth, height);
+
+            Rect imageRect = new Rect(position.x + labelWidth, position.y + heightDelta, position.width - labelWidth, height);
+            Rect imageLabelRect = new Rect(position.x, position.y + heightDelta, labelWidth, height);
+
+            Rect imageTintColorRect = new Rect(position.x + labelWidth, position.y + 2f * heightDelta, position.width - labelWidth, height);
+            Rect imageTintColorLabelRect = new Rect(position.x, position.y + 2f * heightDelta, labelWidth, height);
 
             GUIContent colorLabel = new GUIContent();
 
-            EditorGUI.PropertyField(colorRect, color, new GUIContent("Color :"));
-            //EditorGUI.PropertyField()
-            EditorGUI.PropertyField(imageRect, image, new GUIContent("Image :"));
-            EditorGUI.PropertyField(imageTintColorRect, imageTintColor, new GUIContent("Image tint :"));
+            EditorGUI.LabelField(colorLabelRect, new GUIContent("Color :"));
+            EditorGUI.PropertyField(colorRect, color, GUIContent.none);
 
-            EditorGUI.EndProperty();
-        }
-    }
+            EditorGUI.LabelField(imageLabelRect, new GUIContent("Image :"));
+            EditorGUI.PropertyField(imageRect, image, GUIContent.none);
 
-    [CustomPropertyDrawer(typeof(CustomStyleImage))]
-    public class CustomStyleImagePropertyDrawer : PropertyDrawer
-    {
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            var keyword = property.FindPropertyRelative("m_keyword");
-            var value = property.FindPropertyRelative("m_value");
-            CustomStyleKeyword keywordValue = (CustomStyleKeyword)keyword.intValue;
-
-            EditorGUI.BeginProperty(position, label, property);
-
-            //position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-
-            float labelWidth = 80f;
-            Rect labelRect = new Rect(position.x, position.y, labelWidth, position.height);
-            Rect keywordRect;
-            Rect valueRect;
-            if (keywordValue != CustomStyleKeyword.VariableUndefined && keywordValue != CustomStyleKeyword.ConstUndefined)
-            {
-                float width = (position.width - labelWidth) / 2f - 4f;
-                keywordRect = new Rect(position.x + labelWidth + 2f, position.y, width, position.height);
-                valueRect = new Rect(position.x + labelWidth + width + 4f, position.y, width, position.height);
-            }
-            else
-            {
-                keywordRect = new Rect(position.x + labelWidth + 2f, position.y, position.width - labelWidth - 2f, position.height);
-                valueRect = new Rect();
-            }
-
-            EditorGUI.LabelField(labelRect, label);
-            EditorGUI.PropertyField(keywordRect, keyword, GUIContent.none);
-            EditorGUI.PropertyField(valueRect, value, GUIContent.none);
-
-
-            EditorGUI.EndProperty();
-        }
-    }
-
-    [CustomPropertyDrawer(typeof(CustomStyleColor))]
-    public class CustomStyleColorPropertyDrawer : PropertyDrawer
-    {
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            var keyword = property.FindPropertyRelative("m_keyword");
-            var value = property.FindPropertyRelative("m_value");
-            CustomStyleKeyword keywordValue = (CustomStyleKeyword)keyword.intValue;
-
-            EditorGUI.BeginProperty(position, label, property);
-
-            float labelWidth = 80f;
-            Rect labelRect = new Rect(position.x, position.y, labelWidth, position.height);
-            Rect keywordRect;
-            Rect valueRect;
-            if (keywordValue != CustomStyleKeyword.VariableUndefined && keywordValue != CustomStyleKeyword.ConstUndefined)
-            {
-                float width = (position.width - labelWidth) / 2f - 4f;
-                keywordRect = new Rect(position.x + labelWidth + 2f, position.y, width, position.height);
-                valueRect = new Rect(position.x + labelWidth + width + 4f, position.y, width, position.height);
-            }
-            else
-            {
-                keywordRect = new Rect(position.x + labelWidth + 2f, position.y, position.width - labelWidth - 2f, position.height);
-                valueRect = new Rect();
-            }
-
-            EditorGUI.LabelField(labelRect, label);
-            EditorGUI.PropertyField(keywordRect, keyword, GUIContent.none);
-            value.colorValue = EditorGUI.ColorField(valueRect, GUIContent.none, value.colorValue);
+            EditorGUI.LabelField(imageTintColorLabelRect, new GUIContent("Image tint :"));
+            EditorGUI.PropertyField(imageTintColorRect, imageTintColor, GUIContent.none);
 
             EditorGUI.EndProperty();
         }

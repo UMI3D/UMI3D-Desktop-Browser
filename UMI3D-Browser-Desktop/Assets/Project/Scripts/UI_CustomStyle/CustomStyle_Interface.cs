@@ -106,19 +106,31 @@ namespace Browser.UICustomStyle
         public int SliceTop { get; }
     }
 
-    public interface IUIBorder
+    public interface IBorderColor
     {
         public Color BorderBottomColor { get; }
+        public Color BorderLeftColor { get; }
+        public Color BorderRightColor { get; }
+        public Color BorderTopColor { get; }
+    }
+
+    public interface IBorderWidth
+    {
+        public float BorderBottomWidth { get; }
+        public float BorderLeftWidth { get; }
+        public float BorderRightWidth { get; }
+        public float BorderTopWidth { get; }
+    }
+
+    public interface IBorderRadius
+    {
         public float BorderBottomLeftRadius { get; }
         public float BorderBottomRightRadius { get; }
-        public float BorderBottomWidth { get; }
-        public Color BorderLeftColor { get; }
-        public float BorderLeftWidth { get; }
-        public Color BorderRightColo { get; }
-        public float BorderRightWidth { get; }
-        public Color BorderTopColor { get; }
         public float BorderTopLeftRadius { get; }
         public float BorderTopRightRadius { get; }
-        public float BorderTopWidth { get; }
+    }
+
+    public interface IUIBorder : IBorderColor, IBorderWidth, IBorderRadius
+    {
     }
 }

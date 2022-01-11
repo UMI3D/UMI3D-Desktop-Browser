@@ -61,31 +61,48 @@ namespace Browser.UICustomStyle
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            EditorGUI.BeginProperty(position, label, property);
-
-            position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-
             var keyword = property.FindPropertyRelative("m_keyword");
             var valueMode = property.FindPropertyRelative("m_valueMode");
             var value = property.FindPropertyRelative("m_value");
             CustomStyleKeyword keywordV = (CustomStyleKeyword)keyword.intValue;
             CustomStyleValueMode valueModeV = (CustomStyleValueMode)valueMode.intValue;
+
+            EditorGUI.BeginProperty(position, label, property);
+
+            position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+
             Rect keywordRect;
             Rect valueModeRect;
             Rect valueRect;
-            if (keywordV != CustomStyleKeyword.VariableUndefined && keywordV != CustomStyleKeyword.ConstUndefined)
+            float valueWidth = 0f;
+            float keywordAndModeWidth = 0f;
+            switch (keywordV)
             {
-                float valueWidth = position.width / 2 - 2;
-                float keywordAndModeWidth = valueWidth / 2 - 2;
-                keywordRect = new Rect(position.x, position.y, keywordAndModeWidth, position.height);
-                valueModeRect = new Rect(position.x + keywordAndModeWidth + 2, position.y, keywordAndModeWidth, position.height);
-                valueRect = new Rect(position.x + valueWidth + 4, position.y, valueWidth, position.height);
-            }
-            else
-            {
-                keywordRect = new Rect(position.x, position.y, position.width, position.height);
-                valueModeRect = new Rect();
-                valueRect = new Rect();
+                case CustomStyleKeyword.VariableUndefined:
+                case CustomStyleKeyword.ConstUndefined:
+                    keywordRect = new Rect(position.x, position.y, position.width, position.height);
+                    valueModeRect = new Rect();
+                    valueRect = new Rect();
+                    break;
+                case CustomStyleKeyword.Variable:
+                    valueWidth = position.width / 2f - 2f;
+                    keywordRect = new Rect(position.x, position.y, valueWidth, position.height);
+                    valueModeRect = new Rect();
+                    valueRect = new Rect(position.x + valueWidth + 4, position.y, valueWidth, position.height);
+                    valueModeV = CustomStyleValueMode.Px;
+                    break;
+                case CustomStyleKeyword.Const:
+                    valueWidth = position.width / 2f - 2f;
+                    keywordAndModeWidth = valueWidth / 2f - 2f;
+                    keywordRect = new Rect(position.x, position.y, keywordAndModeWidth, position.height);
+                    valueModeRect = new Rect(position.x + keywordAndModeWidth + 2, position.y, keywordAndModeWidth, position.height);
+                    valueRect = new Rect(position.x + valueWidth + 4, position.y, valueWidth, position.height);
+                    break;
+                default:
+                    keywordRect = new Rect();
+                    valueModeRect = new Rect();
+                    valueRect = new Rect();
+                    break;
             }
 
             EditorGUI.PropertyField(keywordRect, keyword, GUIContent.none);

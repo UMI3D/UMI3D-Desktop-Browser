@@ -20,19 +20,33 @@ using UnityEngine.UIElements;
 namespace Browser.UICustomStyle
 {
     [Serializable]
-    public struct UIBorder : IUIBorder
+    public struct BorderColor : IBorderColor
     {
-        [Header("Color")]
+        [SerializeField]
+        private Color m_globalColor;
         [SerializeField]
         private Color m_borderBottomColor;
         [SerializeField]
         private Color m_borderLeftColor;
         [SerializeField]
-        private Color m_borderRightColo;
+        private Color m_borderRightColor;
         [SerializeField]
         private Color m_borderTopColor;
 
-        [Header("Width")]
+        public Color BorderBottomColor => m_borderBottomColor;
+
+        public Color BorderLeftColor => m_borderLeftColor;
+
+        public Color BorderRightColor => m_borderRightColor;
+
+        public Color BorderTopColor => m_borderTopColor;
+    }
+
+    [Serializable]
+    public struct BorderWidth : IBorderWidth
+    {
+        [SerializeField]
+        private float m_globalWidth;
         [SerializeField]
         private float m_borderBottomWidth;
         [SerializeField]
@@ -42,7 +56,20 @@ namespace Browser.UICustomStyle
         [SerializeField]
         private float m_borderTopWidth;
 
-        [Header("Radius")]
+        public float BorderBottomWidth => m_borderBottomWidth;
+
+        public float BorderLeftWidth => m_borderLeftWidth;
+
+        public float BorderRightWidth => m_borderRightWidth;
+
+        public float BorderTopWidth => m_borderTopWidth;
+    }
+
+    [Serializable]
+    public struct BorderRadius : IBorderRadius
+    {
+        [SerializeField]
+        private float m_globalRadius;
         [SerializeField]
         private float m_borderBottomLeftRadius;
         [SerializeField]
@@ -52,9 +79,34 @@ namespace Browser.UICustomStyle
         [SerializeField]
         private float m_borderTopRightRadius;
 
+        public float BorderBottomLeftRadius => m_borderBottomLeftRadius;
+
+        public float BorderBottomRightRadius => m_borderBottomRightRadius;
+
+        public float BorderTopLeftRadius => m_borderTopLeftRadius;
+
+        public float BorderTopRightRadius => m_borderTopRightRadius;
+    }
+
+    [Serializable]
+    public struct UIBorder : IUIBorder
+    {
+        [Header("Color")]
+        [SerializeField]
+        private BorderColor m_borderColor;
+
+        [Header("Width")]
+        [SerializeField]
+        private BorderWidth m_borderWidth;
+
+        [Header("Radius")]
+        [SerializeField]
+        private BorderRadius m_borderRadius;
+        
 
 
-        public Color BorderBottomColor => throw new NotImplementedException();
+
+        public Color BorderBottomColor => m_borderColor.BorderBottomColor;
 
         public float BorderBottomLeftRadius => throw new NotImplementedException();
 
@@ -62,15 +114,15 @@ namespace Browser.UICustomStyle
 
         public float BorderBottomWidth => throw new NotImplementedException();
 
-        public Color BorderLeftColor => throw new NotImplementedException();
+        public Color BorderLeftColor => m_borderColor.BorderLeftColor;
 
         public float BorderLeftWidth => throw new NotImplementedException();
 
-        public Color BorderRightColo => throw new NotImplementedException();
+        public Color BorderRightColor => m_borderColor.BorderRightColor;
 
         public float BorderRightWidth => throw new NotImplementedException();
 
-        public Color BorderTopColor => throw new NotImplementedException();
+        public Color BorderTopColor => m_borderColor.BorderTopColor;
 
         public float BorderTopLeftRadius => throw new NotImplementedException();
 
