@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 namespace Browser.UICustomStyle
 {
     [Serializable]
-    public struct CustomBackground
+    public struct CustomBackground : IBackground
     {
         [SerializeField]
         private CustomStyleColor m_color;
@@ -28,19 +28,46 @@ namespace Browser.UICustomStyle
         private CustomStyleImage m_image;
         [SerializeField]
         private CustomStyleColor m_imageTintColor;
+
+        public CustomStyleColor BackgroundColor => m_color;
+
+        public CustomStyleImage BackgroundImage => m_image;
+
+        public CustomStyleColor BackgroundImageTintColor => m_imageTintColor;
     }
 
     [Serializable]
-    public struct UIBackground : IUIBackground
+    public struct CustomBackgrounds : IBackgrounds
     {
-        //[SerializeField]
-        //private CustomBackground[] m_backgrounds;
+        [SerializeField]
+        private string m_backgroundKey;
         [SerializeField]
         private CustomStyleBackground m_backgroundDefault;
         [SerializeField]
         private CustomStyleBackground m_backgroundMouseOver;
         [SerializeField]
         private CustomStyleBackground m_backgroundMousePressed;
+
+        public string Key => m_backgroundKey;
+
+        public CustomStyleBackground BackgroundDefault => m_backgroundDefault;
+
+        public CustomStyleBackground BackgroundMouseOver => m_backgroundMouseOver;
+
+        public CustomStyleBackground BackgroundMousePressed => m_backgroundMousePressed;
+    }
+
+    [Serializable]
+    public struct UIBackground : IUIBackground
+    {
+        //[SerializeField]
+        //private CustomStyleBackground m_backgroundDefault;
+        //[SerializeField]
+        //private CustomStyleBackground m_backgroundMouseOver;
+        //[SerializeField]
+        //private CustomStyleBackground m_backgroundMousePressed;
+        [SerializeField]
+        private CustomBackgrounds[] m_backgrounds;
         [SerializeField]
         private int m_sliceBottom;
         [SerializeField]
@@ -50,20 +77,24 @@ namespace Browser.UICustomStyle
         [SerializeField]
         private int m_sliceTop;
 
-        public Color BackgroundColor => throw new NotImplementedException();
-
-        public CustomStyleImage BackgroundImage => throw new NotImplementedException();
-
-        public Color UnityBackgroundImageTintColor => throw new NotImplementedException();
+        public CustomBackgrounds GetCustomBackgrounds(string key)
+        {
+            foreach (CustomBackgrounds customBackgrounds in m_backgrounds)
+            {
+                if (customBackgrounds.Key == key)
+                    return customBackgrounds;
+            }
+            throw new Exception("Key not found");
+        }
 
         public ScaleMode UnityBackgroundScaleMode => throw new NotImplementedException();
 
-        public int UnitySliceBottom => throw new NotImplementedException();
+        public int SliceBottom => throw new NotImplementedException();
 
-        public int UnitySliceLeft => throw new NotImplementedException();
+        public int SliceLeft => throw new NotImplementedException();
 
-        public int UnitySliceRight => throw new NotImplementedException();
+        public int SliceRight => throw new NotImplementedException();
 
-        public int UnitySliceTop => throw new NotImplementedException();
+        public int SliceTop => throw new NotImplementedException();
     }
 }

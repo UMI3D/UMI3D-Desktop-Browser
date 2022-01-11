@@ -8,6 +8,7 @@ namespace DesktopBrowser.UI.CustomElement
     public interface ICustomElement
     {
         public string CustomStyleKey { get; }
+        public string CustomStyleBackgroundKey { get; }
         /// <summary>
         /// Visual root of this custom element.
         /// </summary>
@@ -35,12 +36,12 @@ namespace DesktopBrowser.UI.CustomElement
         /// Clone and add the visualTreeAsset to this and Initialize.
         /// </summary>
         /// <param name="visualTA"></param>
-        public void Init(VisualTreeAsset visualTA, string customStyleKey);
+        public void Init(VisualTreeAsset visualTA, string customStyleKey, string customStyleBackgroundKey = "");
         /// <summary>
         /// Add root to this and Initialize.
         /// </summary>
         /// <param name="root"></param>
-        public void Init(VisualElement root, string customStyleKey);
+        public void Init(VisualElement root, string customStyleKey, string customStyleBackgroundKey = "");
         /// <summary>
         /// Reset this.
         /// </summary>

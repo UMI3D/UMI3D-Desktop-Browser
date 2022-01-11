@@ -30,6 +30,12 @@ namespace Browser.UICustomStyle
         Variable = 6,
         Const = 7,
     }
+
+    public enum CustomStyleSimpleKeyword
+    {
+        Undefined = 0,
+        Variable = 6
+    }
     
     public enum CustomStyleValueMode
     {

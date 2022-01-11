@@ -21,7 +21,7 @@ using UnityEngine;
 namespace Browser.UICustomStyle
 {
     [Serializable]
-    public struct CustomStyleFloat : ICustomStyleValue<float>
+    public struct CustomStyleFloat : ICustomStyleValue<CustomStyleKeyword, float>
     {
         public CustomStyleFloat(float v)
         {
@@ -65,7 +65,7 @@ namespace Browser.UICustomStyle
     }
 
     [Serializable]
-    public struct CustomStylePXAndPercentFloat : ICustomStyleValue<float>
+    public struct CustomStylePXAndPercentFloat : ICustomStyleValue<CustomStyleKeyword, float>
     {
         public CustomStylePXAndPercentFloat(float v) : this()
         {
@@ -99,7 +99,7 @@ namespace Browser.UICustomStyle
     }
 
     [Serializable]
-    public struct CustomStylePercentFloat : ICustomStyleValue<float>
+    public struct CustomStylePercentFloat : ICustomStyleValue<CustomStyleKeyword, float>
     {
         public CustomStylePercentFloat(float v) : this()
         {

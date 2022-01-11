@@ -38,14 +38,14 @@ namespace Browser.UICustomStyle
 
         public CustomStylePXAndPercentFloat MaxHeight => m_maxHeight;
 
-        public CustomStylePXAndPercentFloat MaxWidth => throw new NotImplementedException();
+        public CustomStylePXAndPercentFloat MaxWidth => m_maxWidth;
 
-        public CustomStylePXAndPercentFloat MinHeight => throw new NotImplementedException();
+        public CustomStylePXAndPercentFloat MinHeight => m_minHeight;
 
-        public CustomStylePXAndPercentFloat MinWidth => throw new NotImplementedException();
+        public CustomStylePXAndPercentFloat MinWidth => m_minWidth;
 
-        public CustomStylePXAndPercentFloat Height => throw new NotImplementedException();
+        public CustomStylePXAndPercentFloat Height => m_height;
 
-        public CustomStylePXAndPercentFloat Width => throw new NotImplementedException();
+        public CustomStylePXAndPercentFloat Width => m_width;
     }
 }

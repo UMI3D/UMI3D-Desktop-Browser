@@ -24,13 +24,28 @@ namespace Browser.UICustomStyle
     {
         [SerializeField]
         private string m_key = null;
-        public string Key { get; }
-        public UIDisplay UIDisplay = new UIDisplay();
-        public UIPosition UIPosition = new UIPosition();
-        public UISize UISize = new UISize();
-        public UIMarginAndPadding UIMarginAndPadding = new UIMarginAndPadding();
-        public UIText UIText = new UIText();
-        public UIBackground UIBackground = new UIBackground();
-        public UIBorder UIBorder = new UIBorder();
+        [SerializeField]
+        private UIDisplay m_uIDisplay = new UIDisplay();
+        [SerializeField]
+        private UIPosition m_uIPosition = new UIPosition();
+        [SerializeField]
+        private UISize m_uISize = new UISize();
+        [SerializeField]
+        private UIMarginAndPadding m_uIMarginAndPadding = new UIMarginAndPadding();
+        [SerializeField]
+        private UIText m_uIText = new UIText();
+        [SerializeField]
+        private UIBackground m_uIBackground = new UIBackground();
+        [SerializeField]
+        private UIBorder m_uIBorder = new UIBorder();
+
+        public string Key => m_key;
+        public UIDisplay UIDisplay => m_uIDisplay;
+        public UIPosition UIPosition => m_uIPosition;
+        public UISize UISize => m_uISize;
+        public UIMarginAndPadding UIMarginAndPadding => m_uIMarginAndPadding;
+        public UIText UIText => m_uIText;
+        public UIBackground UIBackground => m_uIBackground;
+        public UIBorder UIBorder => m_uIBorder;
     }
 }

@@ -45,7 +45,7 @@ namespace Browser.UICustomStyle
                 if (customStyle.Key == key)
                     return customStyle;
             }
-            throw new Exception($"Key not found in CustomStyleDictionary");
+            throw new Exception($"Key = [{key}] not found in CustomStyleDictionary");
         }
     }
 }
