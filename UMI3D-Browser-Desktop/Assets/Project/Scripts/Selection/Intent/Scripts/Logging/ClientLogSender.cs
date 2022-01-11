@@ -85,23 +85,27 @@ namespace umi3d.cdk.interaction.selection.intent.log
             var headPosition = head.position;
             var headRotation = head.rotation.eulerAngles;
 
+            float setToZeroIfTooSmall(float f)
+            {
+                return f >= 1e-6 ? f : 0;
+            }
             var trackingData = new TrackingData()
             {
-                t = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds(),
+                t = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds(),
 
-                p_x = pointerPosition.x,
-                p_y = pointerPosition.y,
-                p_z = pointerPosition.z,
-                p_r_x = pointerRotation.x,
-                p_r_y = pointerRotation.y,
-                p_r_z = pointerRotation.z,
+                p_x = setToZeroIfTooSmall(pointerPosition.x),
+                p_y = setToZeroIfTooSmall(pointerPosition.y),
+                p_z = setToZeroIfTooSmall(pointerPosition.z),
+                p_r_x = setToZeroIfTooSmall(pointerRotation.x),
+                p_r_y = setToZeroIfTooSmall(pointerRotation.y),
+                p_r_z = setToZeroIfTooSmall(pointerRotation.z),
 
-                h_x = headPosition.x,
-                h_y = headPosition.y,
-                h_z = headPosition.z,
-                h_r_x = headRotation.x,
-                h_r_y = headRotation.y,
-                h_r_z = headRotation.z,
+                h_x = setToZeroIfTooSmall(headPosition.x),
+                h_y = setToZeroIfTooSmall(headPosition.y),
+                h_z = setToZeroIfTooSmall(headPosition.z),
+                h_r_x = setToZeroIfTooSmall(headRotation.x),
+                h_r_y = setToZeroIfTooSmall(headRotation.y),
+                h_r_z = setToZeroIfTooSmall(headRotation.z)
             };
 
             return trackingData;
@@ -115,11 +119,11 @@ namespace umi3d.cdk.interaction.selection.intent.log
             for (int i = 0; i < objectParent.transform.childCount; i++)
             {
                 var child = objectParent.transform.GetChild(i);
-                if (child.name.EndsWith("(dynamic)"))
+                if (child.name.EndsWith("d"))
                 {
                     dynamicTargetsData.Add(new TargetData()
                     {
-                        n = child.name,
+                        n = int.Parse(child.name.Replace("d","")),
                         x = child.transform.position.x,
                         y = child.transform.position.y,
                         z = child.transform.position.z

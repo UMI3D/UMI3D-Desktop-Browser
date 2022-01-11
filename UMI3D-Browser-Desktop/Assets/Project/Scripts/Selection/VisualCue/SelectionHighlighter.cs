@@ -35,7 +35,7 @@ namespace umi3d.cdk.interaction.selection
         public override void ActivateSelectedVisualCue(InteractableContainer interactable)
         {
             var renderer = interactable.gameObject.GetComponentInChildren<Renderer>();
-            if (renderer != null && renderer.material != null)
+            if (renderer != null && renderer.material != null && !cachedShaders.ContainsKey(renderer))
             {
                 cachedShaders.Add(renderer, renderer.material.shader);
                 renderer.material.shader = outlineShader;

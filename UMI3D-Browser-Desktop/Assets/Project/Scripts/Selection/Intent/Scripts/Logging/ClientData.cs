@@ -10,7 +10,7 @@ namespace umi3d.cdk.interaction.selection.intent.log
 
     internal class TargetData
     {
-        public string n;
+        public int n; //target number
         public float x;
         public float y;
         public float z;
@@ -34,4 +34,5 @@ namespace umi3d.cdk.interaction.selection.intent.log
         public float h_r_y;
         public float h_r_z;
     }
+
 }
