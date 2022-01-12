@@ -158,7 +158,7 @@ namespace DesktopBrowser.UIControllers
         /// <param name="val"></param>
         public void OnAvatarTrackingChanged(bool val)
         {
-            avatar.ItemButton.SwitchClass(val);
+            avatar.ItemButton.Toggle(val);
         }
         /// <summary>
         /// Event called when the status of the audio changes.
@@ -166,7 +166,7 @@ namespace DesktopBrowser.UIControllers
         /// <param name="val"></param>
         public void OnAudioStatusChanged(bool val)
         {
-            sound.ItemButton.SwitchClass(val);
+            sound.ItemButton.Toggle(val);
         }
         /// <summary>
         /// Event called when the status of the microphone changes.
@@ -174,7 +174,7 @@ namespace DesktopBrowser.UIControllers
         /// <param name="val"></param>
         public void OnMicrophoneStatusChanged(bool val)
         {
-            mic.ItemButton.SwitchClass(val);
+            mic.ItemButton.Toggle(val);
         }
 
 

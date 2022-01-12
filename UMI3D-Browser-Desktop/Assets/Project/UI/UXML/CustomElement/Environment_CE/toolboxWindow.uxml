@@ -5,12 +5,11 @@
             <ui:VisualElement name="topBar" style="flex-direction: row; justify-content: space-between;">
                 <ui:VisualElement name="icon" />
                 <ui:Label text="Label" display-tooltip-when-elided="true" />
-                <ui:Button text="Button" display-tooltip-when-elided="true" name="closeButton" />
+                <ui:Button display-tooltip-when-elided="true" name="closeButton" />
             </ui:VisualElement>
             <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="scrollView" />
             <ui:VisualElement name="bottomBar" style="flex-direction: row; justify-content: center;">
-                <ui:Button text="Button" display-tooltip-when-elided="true" name="unPinedButton" />
-                <ui:Label text="Label" display-tooltip-when-elided="true" name="unPinedLabel" />
+                <ui:Button display-tooltip-when-elided="true" name="unpinnedButton" style="flex-grow: 1;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

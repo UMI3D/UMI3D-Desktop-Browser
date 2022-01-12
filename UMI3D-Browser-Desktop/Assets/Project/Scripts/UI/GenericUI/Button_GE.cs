@@ -26,7 +26,29 @@ namespace DesktopBrowser.UI.GenericElement
 {
     public sealed partial class Button_GE
     {
-        private ICustomisableElement m_icon;
+        public string Text { get; set; } = "";
+        public string TextPref { get; set; } = "";
+
+        //public string IconPref { get => m_icon.Key; set => m_icon.Key = value; }
+
+        public Action OnClicked { get; set; } = () => { Debug.Log("<color=green>TODO: </color>" + $"ToolboxItem clicked not implemented"); };
+        /// <summary>
+        /// State of the button.
+        /// </summary>
+        public bool IsOn { get; private set; } = false;
+    }
+
+    public sealed partial class Button_GE
+    {
+        private Icon_E m_icon;
+        private string m_iconOnKey = null;
+        private string m_iconOffKey = null;
+        
+
+        private Button button_B;
+
+        private string currentClass;
+        private IEnumerable<string> USSClassesIconPref = new List<string>();
     }
 
     public sealed partial class Button_GE
@@ -36,35 +58,25 @@ namespace DesktopBrowser.UI.GenericElement
         public Button_GE(VisualElement root) : base(root) { }
 
         //public Button_GE(VisualElement root, string customStyleKey) : base(root, customStyleKey) { }
+
+        public Button_GE SetIcon(string customStyleKey, string iconOnKey, string iconOffKey, bool isOn = false)
+        {
+            m_iconOnKey = iconOnKey;
+            m_iconOffKey = iconOffKey;
+            CustomStyleBackgroundKey = isOn ? m_iconOnKey : m_iconOffKey;
+            m_icon = new Icon_E(button_B, customStyleKey, CustomStyleBackgroundKey);
+            return this;
+        }
+
+        public void Toggle(bool value)
+        {
+            IsOn = value;
+            m_icon.ChangeBackground((IsOn) ? m_iconOnKey : m_iconOffKey);
+        }
     }
 
     public sealed partial class Button_GE : AbstractGenericAndCustomElement
     {
-        public string Text { get; set; } = "";
-        public string TextPref { get; set; } = "";
-
-        //public string IconClassOn { get; private set; } = "";
-        //public string IconClassOff { get; private set; } = "";
-        public string IconPref { get => m_icon.Key; set => m_icon.Key = value; }
-
-
-
-        public Action OnClicked { get; set; } = () => { Debug.Log("<color=green>TODO: </color>" + $"ToolboxItem clicked not implemented"); };
-        /// <summary>
-        /// State of the button.
-        /// </summary>
-        public bool IsOn { get; private set; } = false;
-
-        private Button button_B;
-
-        
-        private string currentClass;
-        private IEnumerable<string> USSClassesIconPref = new List<string>();
-
-        
-
-        
-
         protected override void Initialize()
         {
             base.Initialize();
@@ -79,9 +91,6 @@ namespace DesktopBrowser.UI.GenericElement
             Text = "";
             TextPref = "";
 
-            //IconClassOn = ""; 
-            //IconClassOff = "";
-            //IconPref = "";
             m_icon.Reset();
 
             OnClicked = () => { Debug.Log("<color=green>TODO: </color>" + $"ToolboxItem clicked not implemented"); }; 
@@ -91,20 +100,17 @@ namespace DesktopBrowser.UI.GenericElement
 
         #region Set and Unset Icon
 
-        public Button_GE SetIcon(string customStyleKey, string iconOnKey, string iconOffKey, bool isOn = false)
-        {
-            return this;
-        }
+        
 
-        public Button_GE SetIcon(string iconOn, string iconOff, bool isOn = false)
-        {
-            //this.IconClassOn = iconOn;
-            //this.IconClassOff = iconOff;
-            m_icon.SetValues(iconOn, iconOff);
-            this.IsOn = isOn;
-            SwitchClass(this.IsOn);
-            return this;
-        }
+        //public Button_GE SetIcon(string iconOn, string iconOff, bool isOn = false)
+        //{
+        //    //this.IconClassOn = iconOn;
+        //    //this.IconClassOff = iconOff;
+        //    m_icon.SetValues(iconOn, iconOff);
+        //    this.IsOn = isOn;
+        //    SwitchClass(this.IsOn);
+        //    return this;
+        //}
 
         public Button_GE SetIcon(Texture2D icon)
         {
@@ -181,42 +187,35 @@ namespace DesktopBrowser.UI.GenericElement
 
         #endregion
 
-        /// <summary>
-        /// Switch between USS classes when button is on or off.
-        /// </summary>
-        /// <param name="value">True if the button should be on, false else.</param>
-        public void SwitchClass(bool value)
-        {
-            //if (string.IsNullOrEmpty(IconClassOn) || string.IsNullOrEmpty(IconClassOff))
-            //    return;
-            if (m_icon.IsEmpty)
-                return;
-            IsOn = value;
-            string theme = "darkTheme"; //TODO to be replace by theme checked.
-            if (value)
-            {
-                //currentClass = $"{theme}-{IconClassOn}-btn";
-                m_icon.DeselectLasCurrentValues();
-                m_icon.SelectCurrentValues(0);
-            }
-            else
-            {
-                //currentClass = $"{theme}-{IconClassOff}-btn";
-                m_icon.DeselectLasCurrentValues();
-                m_icon.SelectCurrentValues(1);
-            }
-            
-            //UserPreferences.TextAndIconPref.ApplyIconPref(button_B, IconPref, currentClass);
-        }
-
-        //private void UpdateUSSClasses()
+        ///// <summary>
+        ///// Switch between USS classes when button is on or off.
+        ///// </summary>
+        ///// <param name="value">True if the button should be on, false else.</param>
+        //public void SwitchClass(bool value)
         //{
-        //    button_B.ClearClassList();
+        //    ////if (string.IsNullOrEmpty(IconClassOn) || string.IsNullOrEmpty(IconClassOff))
+        //    ////    return;
+        //    //if (m_icon.IsEmpty)
+        //    //    return;
+        //    //IsOn = value;
+        //    //string theme = "darkTheme"; //TODO to be replace by theme checked.
+        //    //if (value)
+        //    //{
+        //    //    //currentClass = $"{theme}-{IconClassOn}-btn";
+        //    //    m_icon.DeselectLasCurrentValues();
+        //    //    m_icon.SelectCurrentValues(0);
+        //    //}
+        //    //else
+        //    //{
+        //    //    //currentClass = $"{theme}-{IconClassOff}-btn";
+        //    //    m_icon.DeselectLasCurrentValues();
+        //    //    m_icon.SelectCurrentValues(1);
+        //    //}
 
-        //    button_B.AddToClassList(currentClass);
-        //    foreach (string USSClass in USSClassesIconPref)
-        //        button_B.AddToClassList(USSClass);
+        //    IsOn = value;
+
         //}
+
 
         public override void Remove()
         {

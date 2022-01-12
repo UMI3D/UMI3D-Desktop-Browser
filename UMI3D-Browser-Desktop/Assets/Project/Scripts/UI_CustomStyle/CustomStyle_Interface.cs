@@ -108,29 +108,32 @@ namespace Browser.UICustomStyle
 
     public interface IBorderColor
     {
-        public Color BorderBottomColor { get; }
-        public Color BorderLeftColor { get; }
-        public Color BorderRightColor { get; }
-        public Color BorderTopColor { get; }
+        public Color Bottom { get; }
+        public Color Left { get; }
+        public Color Right { get; }
+        public Color Top { get; }
     }
 
     public interface IBorderWidth
     {
-        public float BorderBottomWidth { get; }
-        public float BorderLeftWidth { get; }
-        public float BorderRightWidth { get; }
-        public float BorderTopWidth { get; }
+        public float Bottom { get; }
+        public float Left { get; }
+        public float Right { get; }
+        public float Top { get; }
     }
 
     public interface IBorderRadius
     {
-        public float BorderBottomLeftRadius { get; }
-        public float BorderBottomRightRadius { get; }
-        public float BorderTopLeftRadius { get; }
-        public float BorderTopRightRadius { get; }
+        public float BottomLeft { get; }
+        public float BottomRight { get; }
+        public float TopLeft { get; }
+        public float TopRight { get; }
     }
 
-    public interface IUIBorder : IBorderColor, IBorderWidth, IBorderRadius
+    public interface IUIBorder
     {
+        public CustomStyleBorderColor Color { get; }
+        public CustomStyleBorderWidth Width { get; }
+        public CustomStyleBorderRadius Radius { get; }
     }
 }
