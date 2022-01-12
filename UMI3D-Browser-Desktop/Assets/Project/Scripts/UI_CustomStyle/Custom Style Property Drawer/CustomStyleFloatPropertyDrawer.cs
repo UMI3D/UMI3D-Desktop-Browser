@@ -22,7 +22,7 @@ using UnityEngine.UIElements;
 
 namespace Browser.UICustomStyle
 {
-    [CustomPropertyDrawer(typeof(CustomStyleFloat))]
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleFloat))]
     public class CustomStyleFloatPropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -56,7 +56,7 @@ namespace Browser.UICustomStyle
     }
 
 
-    [CustomPropertyDrawer(typeof(CustomStylePXAndPercentFloat))]
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStylePXAndPercentFloat))]
     public class CustomStylePxAndPercentFloatPropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -121,7 +121,7 @@ namespace Browser.UICustomStyle
         }
     }
 
-    [CustomPropertyDrawer(typeof(CustomStylePercentFloat))]
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStylePercentFloat))]
     public class CustomStylePercentFloatPropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
