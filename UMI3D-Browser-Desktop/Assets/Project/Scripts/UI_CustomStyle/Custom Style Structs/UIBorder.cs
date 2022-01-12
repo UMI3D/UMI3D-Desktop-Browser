@@ -33,13 +33,13 @@ namespace Browser.UICustomStyle
         [SerializeField]
         private Color m_top;
 
-        public Color BorderBottomColor => m_bottom;
+        public Color Bottom => m_bottom;
 
-        public Color BorderLeftColor => m_left;
+        public Color Left => m_left;
 
-        public Color BorderRightColor => m_right;
+        public Color Right => m_right;
 
-        public Color BorderTopColor => m_top;
+        public Color Top => m_top;
     }
 
     [Serializable]
@@ -56,20 +56,20 @@ namespace Browser.UICustomStyle
         [SerializeField]
         private float m_top;
 
-        public float BorderBottomWidth => m_bottom;
+        public float Bottom => m_bottom;
 
-        public float BorderLeftWidth => m_left;
+        public float Left => m_left;
 
-        public float BorderRightWidth => m_right;
+        public float Right => m_right;
 
-        public float BorderTopWidth => m_top;
+        public float Top => m_top;
     }
 
     [Serializable]
     public struct BorderRadius : IBorderRadius
     {
         [SerializeField]
-        private CustomStyleFloat m_global;
+        private float m_global;
         [SerializeField]
         private float m_bottomLeft;
         [SerializeField]
@@ -79,13 +79,13 @@ namespace Browser.UICustomStyle
         [SerializeField]
         private float m_TopRight;
 
-        public float BorderBottomLeftRadius => m_bottomLeft;
+        public float BottomLeft => m_bottomLeft;
 
-        public float BorderBottomRightRadius => m_bottomRight;
+        public float BottomRight => m_bottomRight;
 
-        public float BorderTopLeftRadius => m_topLeft;
+        public float TopLeft => m_topLeft;
 
-        public float BorderTopRightRadius => m_TopRight;
+        public float TopRight => m_TopRight;
     }
 
     [Serializable]
@@ -93,36 +93,18 @@ namespace Browser.UICustomStyle
     {
         [Header("Color")]
         [SerializeField]
-        private BorderColor m_borderColor;
+        private CustomStyleBorderColor m_color;
         [Header("Width")]
         [SerializeField]
-        private BorderWidth m_borderWidth;
+        private CustomStyleBorderWidth m_width;
         [Header("Radius")]
         [SerializeField]
-        private BorderRadius m_borderRadius;
-        
-        public Color BorderBottomColor => m_borderColor.BorderBottomColor;
+        private CustomStyleBorderRadius m_radius;
 
-        public float BorderBottomLeftRadius => m_borderRadius.BorderBottomLeftRadius;
+        public CustomStyleBorderColor Color => m_color;
 
-        public float BorderBottomRightRadius => m_borderRadius.BorderBottomRightRadius;
+        public CustomStyleBorderWidth Width => m_width;
 
-        public float BorderBottomWidth => m_borderWidth.BorderBottomWidth;
-
-        public Color BorderLeftColor => m_borderColor.BorderLeftColor;
-
-        public float BorderLeftWidth => m_borderWidth.BorderLeftWidth;
-
-        public Color BorderRightColor => m_borderColor.BorderRightColor;
-
-        public float BorderRightWidth => m_borderWidth.BorderRightWidth;
-
-        public Color BorderTopColor => m_borderColor.BorderTopColor;
-
-        public float BorderTopLeftRadius => m_borderRadius.BorderTopLeftRadius;
-
-        public float BorderTopRightRadius => m_borderRadius.BorderTopRightRadius;
-
-        public float BorderTopWidth => m_borderWidth.BorderTopWidth;
+        public CustomStyleBorderRadius Radius => m_radius;
     }
 }

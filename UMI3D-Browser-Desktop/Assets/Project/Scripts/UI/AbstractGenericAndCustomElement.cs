@@ -153,6 +153,7 @@ namespace BrowserDesktop.UI
             {
                 ApplyCustomSize();
                 ApplyCustomBackground(CustomStyleBackgroundMode.MouseOut);
+                ApplyCustomBorder();
             }
         }
 
@@ -179,31 +180,23 @@ namespace BrowserDesktop.UI
             StyleLength length = new StyleLength();
             
             length = GetPxAndPourcentageFloatLength(uiSize.Height);
-            Debug.Log($"StyleLength = [{length.keyword}, {length.value}]");
             if (length.keyword != StyleKeyword.Null)
                 Root.style.height = length;
             length = GetPxAndPourcentageFloatLength(uiSize.Width);
-            Debug.Log($"StyleLength = [{length.keyword}, {length.value}]");
             if (length.keyword != StyleKeyword.Null)
                 Root.style.width = length;
             length = GetPxAndPourcentageFloatLength(uiSize.MinHeight);
-            Debug.Log($"StyleLength = [{length.keyword}, {length.value}]");
             if (length.keyword != StyleKeyword.Null)
                 Root.style.minHeight = length;
             length = GetPxAndPourcentageFloatLength(uiSize.MinWidth);
-            Debug.Log($"StyleLength = [{length.keyword}, {length.value}]");
             if (length.keyword != StyleKeyword.Null)
                 Root.style.minWidth = length;
             length = GetPxAndPourcentageFloatLength(uiSize.MaxHeight);
-            Debug.Log($"StyleLength = [{length.keyword}, {length.value}]");
             if (length.keyword != StyleKeyword.Null)
                 Root.style.maxHeight = length;
             length = GetPxAndPourcentageFloatLength(uiSize.MaxWidth);
-            Debug.Log($"StyleLength = [{length.keyword}, {length.value}]");
             if (length.keyword != StyleKeyword.Null)
                 Root.style.maxWidth = length;
-
-            //Root.style.ra
         }
 
         protected void ApplyCustomBackground(CustomStyleBackgroundMode backgroundMode)
@@ -223,8 +216,15 @@ namespace BrowserDesktop.UI
                     ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundMousePressed);
                     break;
             }
+        }
 
-            //Root.style.borderBottomLeftRadius = 10f;
+        protected void ApplyCustomBorder()
+        {
+            if (m_customStyle == null) return;
+            UIBorder uIBorder = m_customStyle.UIBorder;
+            ApplyBorderColorToVisual(Root.style, uIBorder.Color);
+            ApplyBorderWidthToVisual(Root.style, uIBorder.Width);
+            ApplyBorderRadiusToVisual(Root.style, uIBorder.Radius);
         }
 
 
@@ -315,6 +315,54 @@ namespace BrowserDesktop.UI
                     break;
                 case CustomStyleSimpleKeyword.Variable:
                     style.backgroundImage = customStyle.Value.texture;
+                    break;
+            }
+        }
+
+        protected virtual void ApplyBorderColorToVisual(IStyle style, CustomStyleBorderColor customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Variable:
+                    BorderColor borderColor = customStyle.Value;
+                    style.borderTopColor = borderColor.Top;
+                    style.borderLeftColor = borderColor.Left;
+                    style.borderRightColor = borderColor.Right;
+                    style.borderBottomColor = borderColor.Bottom;
+                    break;
+            }
+        }
+
+        protected virtual void ApplyBorderWidthToVisual(IStyle style, CustomStyleBorderWidth customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Variable:
+                    BorderWidth borderWidth = customStyle.Value;
+                    style.borderTopWidth = borderWidth.Top;
+                    style.borderLeftWidth = borderWidth.Left;
+                    style.borderRightWidth = borderWidth.Right;
+                    style.borderBottomWidth = borderWidth.Bottom;
+                    break;
+            }
+        }
+
+        protected virtual void ApplyBorderRadiusToVisual(IStyle style, CustomStyleBorderRadius customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Variable:
+                    BorderRadius borderRadius = customStyle.Value;
+                    style.borderTopLeftRadius = borderRadius.TopLeft;
+                    style.borderTopRightRadius = borderRadius.TopRight;
+                    style.borderBottomLeftRadius = borderRadius.BottomLeft;
+                    style.borderBottomRightRadius = borderRadius.BottomRight;
                     break;
             }
         }

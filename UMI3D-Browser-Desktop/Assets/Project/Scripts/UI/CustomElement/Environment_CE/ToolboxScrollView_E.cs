@@ -160,14 +160,12 @@ namespace DesktopBrowser.UI.CustomElement
 
             backward = new Button_GE(Root.Q("backward"))
             {
-                OnClicked = () => { OnBackwardPressed(); },
-                IconPref = "scrollView-btn"
-            }.SetIcon("menuBar-previous", "menuBar-previous-desable", true);
+                OnClicked = () => { OnBackwardPressed(); }
+            }.SetIcon("scrollView-btn", "menuBar-previous", "menuBar-previous-desable", true);
             forward = new Button_GE(Root.Q("forward"))
             {
-                OnClicked = () => { OnForwardPressed(); },
-                IconPref = "scrollView-btn"
-            }.SetIcon("menuBar-next", "menuBar-next-desable", true);
+                OnClicked = () => { OnForwardPressed(); }
+            }.SetIcon("scrollView-btn", "menuBar-next", "menuBar-next-desable", true);
             backwardLayout = Root.Q<VisualElement>("horizontal-layout-backward");
             forwardLayout = Root.Q<VisualElement>("horizontal-layout-forward");
             scrollView = Root.Q<ScrollView>("scrollView");
