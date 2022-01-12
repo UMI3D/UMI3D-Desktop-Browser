@@ -153,7 +153,7 @@ namespace umi3d.cdk.interaction.selection.intent.log
                 id = InteractionMapper.uploadFileParameterDto.id
             };
             UMI3DClientServer.SendData(req, true);
-            yield return null;
+            yield break;
         }
     }
 }
