@@ -18,7 +18,7 @@ using UnityEngine;
 
 namespace Browser.UICustomStyle
 {
-    [CustomPropertyDrawer(typeof(CustomStyleColor))]
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleColor))]
     public class CustomStyleColorPropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

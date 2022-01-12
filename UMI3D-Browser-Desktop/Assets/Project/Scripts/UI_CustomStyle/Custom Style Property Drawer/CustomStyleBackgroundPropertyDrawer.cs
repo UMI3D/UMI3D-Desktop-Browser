@@ -18,7 +18,7 @@ using UnityEngine;
 
 namespace Browser.UICustomStyle
 {
-    [CustomPropertyDrawer(typeof(CustomStyleBackground))]
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleBackground))]
     public class CustomStyleBackgroundPropertyDrawer : PropertyDrawer
     {
         private float spaceBetweenLine = 2f;
@@ -59,7 +59,7 @@ namespace Browser.UICustomStyle
         }
     }
 
-    [CustomPropertyDrawer(typeof(CustomBackground))]
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomBackground))]
     public class CustomBackgroundPropertyDrawer : PropertyDrawer
     {
         private float spaceBetweenLine = 2f;

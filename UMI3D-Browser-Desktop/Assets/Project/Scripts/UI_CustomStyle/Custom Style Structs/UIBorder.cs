@@ -23,69 +23,69 @@ namespace Browser.UICustomStyle
     public struct BorderColor : IBorderColor
     {
         [SerializeField]
-        private Color m_globalColor;
+        private Color m_global;
         [SerializeField]
-        private Color m_borderBottomColor;
+        private Color m_bottom;
         [SerializeField]
-        private Color m_borderLeftColor;
+        private Color m_left;
         [SerializeField]
-        private Color m_borderRightColor;
+        private Color m_right;
         [SerializeField]
-        private Color m_borderTopColor;
+        private Color m_top;
 
-        public Color BorderBottomColor => m_borderBottomColor;
+        public Color BorderBottomColor => m_bottom;
 
-        public Color BorderLeftColor => m_borderLeftColor;
+        public Color BorderLeftColor => m_left;
 
-        public Color BorderRightColor => m_borderRightColor;
+        public Color BorderRightColor => m_right;
 
-        public Color BorderTopColor => m_borderTopColor;
+        public Color BorderTopColor => m_top;
     }
 
     [Serializable]
     public struct BorderWidth : IBorderWidth
     {
         [SerializeField]
-        private float m_globalWidth;
+        private float m_global;
         [SerializeField]
-        private float m_borderBottomWidth;
+        private float m_bottom;
         [SerializeField]
-        private float m_borderLeftWidth;
+        private float m_left;
         [SerializeField]
-        private float m_borderRightWidth;
+        private float m_right;
         [SerializeField]
-        private float m_borderTopWidth;
+        private float m_top;
 
-        public float BorderBottomWidth => m_borderBottomWidth;
+        public float BorderBottomWidth => m_bottom;
 
-        public float BorderLeftWidth => m_borderLeftWidth;
+        public float BorderLeftWidth => m_left;
 
-        public float BorderRightWidth => m_borderRightWidth;
+        public float BorderRightWidth => m_right;
 
-        public float BorderTopWidth => m_borderTopWidth;
+        public float BorderTopWidth => m_top;
     }
 
     [Serializable]
     public struct BorderRadius : IBorderRadius
     {
         [SerializeField]
-        private float m_globalRadius;
+        private CustomStyleFloat m_global;
         [SerializeField]
-        private float m_borderBottomLeftRadius;
+        private float m_bottomLeft;
         [SerializeField]
-        private float m_borderBottomRightRadius;
+        private float m_bottomRight;
         [SerializeField]
-        private float m_borderTopLeftRadius;
+        private float m_topLeft;
         [SerializeField]
-        private float m_borderTopRightRadius;
+        private float m_TopRight;
 
-        public float BorderBottomLeftRadius => m_borderBottomLeftRadius;
+        public float BorderBottomLeftRadius => m_bottomLeft;
 
-        public float BorderBottomRightRadius => m_borderBottomRightRadius;
+        public float BorderBottomRightRadius => m_bottomRight;
 
-        public float BorderTopLeftRadius => m_borderTopLeftRadius;
+        public float BorderTopLeftRadius => m_topLeft;
 
-        public float BorderTopRightRadius => m_borderTopRightRadius;
+        public float BorderTopRightRadius => m_TopRight;
     }
 
     [Serializable]
@@ -94,40 +94,35 @@ namespace Browser.UICustomStyle
         [Header("Color")]
         [SerializeField]
         private BorderColor m_borderColor;
-
         [Header("Width")]
         [SerializeField]
         private BorderWidth m_borderWidth;
-
         [Header("Radius")]
         [SerializeField]
         private BorderRadius m_borderRadius;
         
-
-
-
         public Color BorderBottomColor => m_borderColor.BorderBottomColor;
 
-        public float BorderBottomLeftRadius => throw new NotImplementedException();
+        public float BorderBottomLeftRadius => m_borderRadius.BorderBottomLeftRadius;
 
-        public float BorderBottomRightRadius => throw new NotImplementedException();
+        public float BorderBottomRightRadius => m_borderRadius.BorderBottomRightRadius;
 
-        public float BorderBottomWidth => throw new NotImplementedException();
+        public float BorderBottomWidth => m_borderWidth.BorderBottomWidth;
 
         public Color BorderLeftColor => m_borderColor.BorderLeftColor;
 
-        public float BorderLeftWidth => throw new NotImplementedException();
+        public float BorderLeftWidth => m_borderWidth.BorderLeftWidth;
 
         public Color BorderRightColor => m_borderColor.BorderRightColor;
 
-        public float BorderRightWidth => throw new NotImplementedException();
+        public float BorderRightWidth => m_borderWidth.BorderRightWidth;
 
         public Color BorderTopColor => m_borderColor.BorderTopColor;
 
-        public float BorderTopLeftRadius => throw new NotImplementedException();
+        public float BorderTopLeftRadius => m_borderRadius.BorderTopLeftRadius;
 
-        public float BorderTopRightRadius => throw new NotImplementedException();
+        public float BorderTopRightRadius => m_borderRadius.BorderTopRightRadius;
 
-        public float BorderTopWidth => throw new NotImplementedException();
+        public float BorderTopWidth => m_borderWidth.BorderTopWidth;
     }
 }

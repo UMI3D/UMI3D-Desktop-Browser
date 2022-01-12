@@ -79,7 +79,7 @@ MonoBehaviour:
         m_value:
           m_color:
             m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
+            m_value: {r: 0.8773585, g: 0.2027857, b: 0.2027857, a: 0}
           m_image:
             m_keyword: 6
             m_value: {fileID: 21300000, guid: a137052b97bd0af4d82c1525974d2f57, type: 3}
@@ -115,15 +115,21 @@ MonoBehaviour:
     m_sliceRight: 0
     m_sliceTop: 0
   m_uIBorder:
-    m_borderBottomColor: {r: 0, g: 0, b: 0, a: 0}
-    m_borderLeftColor: {r: 0, g: 0, b: 0, a: 0}
-    m_borderRightColo: {r: 0, g: 0, b: 0, a: 0}
-    m_borderTopColor: {r: 0, g: 0, b: 0, a: 0}
-    m_borderBottomWidth: 0
-    m_borderLeftWidth: 0
-    m_borderRightWidth: 0
-    m_borderTopWidth: 0
-    m_borderBottomLeftRadius: 0
-    m_borderBottomRightRadius: 0
-    m_borderTopLeftRadius: 0
-    m_borderTopRightRadius: 0
+    m_borderColor:
+      m_globalColor: {r: 0, g: 0, b: 0, a: 0}
+      m_borderBottomColor: {r: 0, g: 0, b: 0, a: 0}
+      m_borderLeftColor: {r: 0, g: 0, b: 0, a: 0}
+      m_borderRightColor: {r: 0, g: 0, b: 0, a: 0}
+      m_borderTopColor: {r: 0, g: 0, b: 0, a: 0}
+    m_borderWidth:
+      m_globalWidth: 0
+      m_borderBottomWidth: 0
+      m_borderLeftWidth: 0
+      m_borderRightWidth: 0
+      m_borderTopWidth: 0
+    m_borderRadius:
+      m_globalRadius: 0
+      m_borderBottomLeftRadius: 0
+      m_borderBottomRightRadius: 0
+      m_borderTopLeftRadius: 0
+      m_borderTopRightRadius: 0
