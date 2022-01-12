@@ -23,5 +23,7 @@ namespace umi3d.cdk.interaction.selection
         public abstract void ActivateSelectedVisualCue(InteractableContainer interactable);
 
         public abstract void DeactivateSelectedVisualCue(InteractableContainer interactable);
+
+        public abstract void Clear();
     }
 }

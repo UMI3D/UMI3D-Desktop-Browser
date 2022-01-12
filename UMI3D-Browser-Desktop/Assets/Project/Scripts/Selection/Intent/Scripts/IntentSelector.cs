@@ -41,6 +41,8 @@ namespace umi3d.cdk.interaction.selection.intent
         #region selectionCache
 
         private InteractableContainer lastSelectedInteractable;
+        private AbstractTool lastProjectedTool;
+        
 
         public SelectionData selectionData;
 
@@ -71,28 +73,36 @@ namespace umi3d.cdk.interaction.selection.intent
                 && interactableToSelect.Interactable.dto.interactions.Count > 0
                 && !InteractionMapper.Instance.IsToolSelected(interactableToSelect.Interactable.dto.id))
             {
+                var interactionTool = AbstractInteractionMapper.Instance.GetTool(interactableToSelect.Interactable.dto.id);
+
                 if (lastSelectedInteractable != null)
-                    UnselectLastSelected();
-
+                    Unselect(lastSelectedInteractable);
+                else if (!controller.IsAvailableFor(interactionTool) && controller.IsCompatibleWith(interactionTool)) // happens when an object is destroyed but the tool is not released
+                {
+                    controller.Release(lastProjectedTool, new RequestedUsingSelector<IntentSelector>());
+                    selectionVisualCueHandler.Clear();
+                }
+                    
                 selectionVisualCueHandler.ActivateSelectedVisualCue(interactableToSelect);
-                controller.Project(AbstractInteractionMapper.Instance.GetTool(interactableToSelect.Interactable.dto.id), true,
+                controller.Project(interactionTool, true,
                     new RequestedUsingSelector<IntentSelector>() { controller = this.controller }, interactableToSelect.Interactable.id);
-
+                lastProjectedTool = interactionTool;
                 lastSelectedInteractable = interactableToSelect;
             }
             else if (interactableToSelect == null && interactableToSelect != lastSelectedInteractable)
             {
-                UnselectLastSelected();
+                if (!controller.IsAvailableFor(lastProjectedTool))
+                    Unselect(lastSelectedInteractable);
                 lastSelectedInteractable = null;
             }
         }
 
-        private void UnselectLastSelected()
+        private void Unselect(InteractableContainer interactableContainer)
         {
-            selectionVisualCueHandler.DeactivateSelectedVisualCue(lastSelectedInteractable);
+            controller.Release(AbstractInteractionMapper.Instance.GetTool(interactableContainer.Interactable.dto.id),
+                new RequestedUsingSelector<IntentSelector>());
+            selectionVisualCueHandler.DeactivateSelectedVisualCue(interactableContainer);
 
-            controller.Release(AbstractInteractionMapper.Instance.GetTool(lastSelectedInteractable.Interactable.dto.id),
-                                new RequestedUsingSelector<IntentSelector>());
             selectionData.clear();
         }
     }

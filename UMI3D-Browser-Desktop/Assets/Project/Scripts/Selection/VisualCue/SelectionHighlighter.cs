@@ -30,25 +30,38 @@ namespace umi3d.cdk.interaction.selection
         /// <summary>
         /// Stores shaders while the predicted object receives a glowing effect
         /// </summary>
-        private Dictionary<Renderer, Shader> cachedShaders = new Dictionary<Renderer, Shader>();
+        private Dictionary<int, Shader> cachedShaders = new Dictionary<int, Shader>();
 
         public override void ActivateSelectedVisualCue(InteractableContainer interactable)
         {
             var renderer = interactable.gameObject.GetComponentInChildren<Renderer>();
-            if (renderer != null && renderer.material != null && !cachedShaders.ContainsKey(renderer))
+            var id = interactable.GetInstanceID();
+            if (renderer != null 
+                && renderer.material != null 
+                && !cachedShaders.ContainsKey(id) 
+                && renderer.material.shader != outlineShader)
             {
-                cachedShaders.Add(renderer, renderer.material.shader);
+                cachedShaders.Add(id, renderer.material.shader);
                 renderer.material.shader = outlineShader;
             }
         }
 
         public override void DeactivateSelectedVisualCue(InteractableContainer interactable)
         {
-            var renderer = interactable.gameObject.GetComponentInChildren<Renderer>();
-            if (renderer != null && renderer.material != null)
+            if (interactable != null)
             {
-                renderer.material.shader = cachedShaders[renderer];
+                var renderer = interactable.gameObject.GetComponentInChildren<Renderer>();
+                var id = interactable.GetInstanceID();
+                if (renderer != null && renderer.material != null && cachedShaders.ContainsKey(id))
+                {
+                    renderer.material.shader = cachedShaders[id];
+                }
             }
+            Clear();
+        }
+
+        public override void Clear()
+        {
             cachedShaders.Clear();
         }
     }
