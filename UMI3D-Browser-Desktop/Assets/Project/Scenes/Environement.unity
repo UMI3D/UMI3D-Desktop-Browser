@@ -2261,6 +2261,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda69d6602aa3f44e99c0700f3af9310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _OnSaturated:
+    m_PersistentCalls:
+      m_Calls: []
+  _OnSending:
+    m_PersistentCalls:
+      m_Calls: []
   muted: 0
 --- !u!81 &2079147381
 AudioListener:
@@ -2397,7 +2403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 828e969d081aa364e9017e615946e6bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cacheSizeMax: 30
+  cacheSizeMax: 60
 --- !u!1001 &2119596086
 PrefabInstance:
   m_ObjectHideFlags: 0

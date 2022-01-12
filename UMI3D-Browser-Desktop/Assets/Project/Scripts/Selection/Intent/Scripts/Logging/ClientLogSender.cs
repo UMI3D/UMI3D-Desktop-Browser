@@ -69,7 +69,7 @@ namespace umi3d.cdk.interaction.selection.intent.log
             if (cacheSize > cacheSizeMax)
             {
                 var fileName = "clientData_" + DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH'-'mm'-'ss") + "_" + (Time.frameCount % 1000).ToString();
-                SendData(new ClientData() { tracking = trackingDataCache, scene = sceneDataCache }, fileName);
+                StartCoroutine(SendData(new ClientData() { tracking = trackingDataCache, scene = sceneDataCache }, fileName));
                 trackingDataCache.Clear();
                 sceneDataCache.Clear();
                 cacheSize = 0;
@@ -133,7 +133,7 @@ namespace umi3d.cdk.interaction.selection.intent.log
             return dynamicTargetsData;
         }
 
-        private void SendData(object data, string fileName)
+        private IEnumerator SendData(object data, string fileName)
         {
             var filePath = savePath + "/" + fileName + ".json";
 
@@ -153,6 +153,7 @@ namespace umi3d.cdk.interaction.selection.intent.log
                 id = InteractionMapper.uploadFileParameterDto.id
             };
             UMI3DClientServer.SendData(req, true);
+            yield return null;
         }
     }
 }
