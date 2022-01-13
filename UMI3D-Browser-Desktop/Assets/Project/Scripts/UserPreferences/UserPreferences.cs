@@ -83,7 +83,7 @@ namespace BrowserDesktop.UserPreferences
                 if (customStyleDictionary.Key == subKeys[0])
                     return customStyleDictionary.GetCustomStyle(key);
             }
-            throw new System.Exception($"Key not found in UserPreferences.");
+            throw new KeyNotFoundException(subKeys[0], "UserPreferences");
         }
     }
 }

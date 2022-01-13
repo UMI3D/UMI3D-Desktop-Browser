@@ -29,48 +29,31 @@ namespace DesktopBrowser.UI.CustomElement
     /// <summary>
     /// A menuBar has 3 layout (left, center and right). The center layout is a scrollView.
     /// </summary>
-    public class MenuBar_E : AbstractGenericAndCustomElement
+    /// 
+    public partial class MenuBar_E
     {
-        #region Fields
-
         public float Space { get; set; } = 10f;
         public Action<VisualElement> AddSeparator { get; set; } = (ve) => { Debug.Log("<color=green>TODO: </color>" + $"AddSeparator in MenuBarElement."); };
 
+        public VisualElement SubMenuLayout { get; private set; }
+
+        public MenuBar_E(VisualTreeAsset visualTA, string customStyleKey) : base(visualTA, customStyleKey) { }
+        public MenuBar_E(VisualElement root, string customStyleKey) : base(root, customStyleKey) { }
+    }
+
+    public partial class MenuBar_E
+    {
         private VisualElement leftLayout_VE;
         private ToolboxScrollView_E centerLayout_VE;
         private VisualElement rightLayout_VE;
-        public VisualElement SubMenuLayout { get; private set; }
+    }
 
-        #endregion
-
-        #region Initialization
-
-        public MenuBar_E(VisualTreeAsset visualTA): base(visualTA) { }
-        public MenuBar_E(VisualElement root): base(root) { }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-
-            leftLayout_VE = Root.Q<VisualElement>("Left-layout");
-            centerLayout_VE = new ToolboxScrollView_E(Root.Q("toolboxScrollView"))
-            {
-                AddSeparator = (ve) => { AddSeparator(ve); }
-            };
-            rightLayout_VE = Root.Q<VisualElement>("Right-layout");
-            //SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
-        }
-
-        #endregion
-
-        #region Add elements
-
+    public partial class MenuBar_E
+    {
         public MenuBar_E AddLeft(params AbstractGenericAndCustomElement[] ces)
         {
             foreach (AbstractGenericAndCustomElement ce in ces)
-            {
                 ce.AddTo(leftLayout_VE);
-            }
             return this;
         }
         public MenuBar_E AddCenter(params Toolbox_E[] toolboxes)
@@ -80,10 +63,8 @@ namespace DesktopBrowser.UI.CustomElement
         }
         public MenuBar_E AddRight(params AbstractGenericAndCustomElement[] ces)
         {
-            foreach(AbstractGenericAndCustomElement ce in ces)
-            {
+            foreach (AbstractGenericAndCustomElement ce in ces)
                 ce.AddTo(rightLayout_VE);
-            }
             return this;
         }
 
@@ -95,16 +76,6 @@ namespace DesktopBrowser.UI.CustomElement
         {
             AddSpacer(rightLayout_VE);
         }
-        private void AddSpacer(VisualElement layoutContainer_VE)
-        {
-            VisualElement space = new VisualElement();
-            space.style.width = Space;
-            layoutContainer_VE.Add(space);
-        }
-
-        #endregion
-
-        #region Sub Menu
 
         public void AddInSubMenu(ToolboxGenericElement tools, ToolboxGenericElement parent)
         {
@@ -120,6 +91,16 @@ namespace DesktopBrowser.UI.CustomElement
             };
             //Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPositionCoroutine());
         }
+    }
+
+    public partial class MenuBar_E
+    {
+        private void AddSpacer(VisualElement layoutContainer_VE)
+        {
+            VisualElement space = new VisualElement();
+            space.style.width = Space;
+            layoutContainer_VE.Add(space);
+        }
 
         private IEnumerator LogWorldPositionCoroutine()
         {
@@ -129,8 +110,22 @@ namespace DesktopBrowser.UI.CustomElement
         }
 
         private Action logWorldPosition;
+    }
 
-        #endregion
+    public partial class MenuBar_E : AbstractGenericAndCustomElement
+    {
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            leftLayout_VE = Root.Q<VisualElement>("Left-layout");
+            centerLayout_VE = new ToolboxScrollView_E(Root.Q("toolboxScrollView"))
+            {
+                AddSeparator = (ve) => { AddSeparator(ve); }
+            };
+            rightLayout_VE = Root.Q<VisualElement>("Right-layout");
+            //SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
+        }
 
         public override void OnApplyUserPreferences()
         {

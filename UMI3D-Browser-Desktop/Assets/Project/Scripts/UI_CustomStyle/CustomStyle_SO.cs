@@ -24,8 +24,6 @@ namespace Browser.UICustomStyle
     public class CustomStyle_SO : ScriptableObject
     {
         [SerializeField]
-        private string m_key = null;
-        [SerializeField]
         private UIDisplay m_uIDisplay = new UIDisplay();
         [SerializeField]
         private UIPosition m_uIPosition = new UIPosition();
@@ -40,7 +38,7 @@ namespace Browser.UICustomStyle
         [SerializeField]
         private UIBorder m_uIBorder = new UIBorder();
 
-        public string Key => m_key.ToLower();
+        public string Key => name.ToLower();
         public UIDisplay UIDisplay => m_uIDisplay;
         public UIPosition UIPosition => m_uIPosition;
         public UISize UISize => m_uISize;

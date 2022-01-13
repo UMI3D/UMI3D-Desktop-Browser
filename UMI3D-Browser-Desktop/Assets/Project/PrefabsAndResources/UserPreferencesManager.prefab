@@ -58,4 +58,5 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_customStyleDictionaries:
+  - {fileID: 11400000, guid: 3d243ffd05d57ae4d8d67871611b72cd, type: 2}
   - {fileID: 11400000, guid: 9575906bc2cab15438298f920130d2ca, type: 2}
