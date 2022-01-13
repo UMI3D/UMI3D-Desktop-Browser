@@ -25,13 +25,13 @@ MonoBehaviour:
     m_top: 0
   m_uISize:
     m_height:
-      m_keyword: 0
+      m_keyword: 6
       m_valueMode: 0
-      m_value: 0
+      m_value: 30
     m_width:
-      m_keyword: 0
+      m_keyword: 6
       m_valueMode: 0
-      m_value: 0
+      m_value: 228
     m_maxHeight:
       m_keyword: 0
       m_valueMode: 0

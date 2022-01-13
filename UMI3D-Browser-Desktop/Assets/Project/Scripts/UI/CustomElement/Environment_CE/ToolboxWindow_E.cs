@@ -38,7 +38,6 @@ namespace DesktopBrowser.UI.CustomElement
             //Collapse evrything
             //hide the window
             Root.style.display = DisplayStyle.None;
-            Debug.Log($"display of icon = {(icon as VisualElement).resolvedStyle.display}");
         }
         private Icon_E icon;
     }
@@ -58,12 +57,12 @@ namespace DesktopBrowser.UI.CustomElement
             new Button_GE(Root.Q("closeButton"))
             {
                 OnClicked = () => { OnCloseButtonPressed(); }
-            }.SetIcon("toolboxWindow-closeButton", "", "", true);
+            }.SetIcon("toolboxWindow-closeButton", "", "");
 
             new Button_GE(Root.Q("unpinnedButton"))
             {
                 OnClicked = () => { UnPinedButtonPressed.Invoke(); },
-            }.SetIcon("toolboxWindow-unpinnedButton", "", "", true);
+            }.SetIcon("toolboxWindow-unpinnedButton", "", "");
         }
 
         public override bool GetCustomStyle()

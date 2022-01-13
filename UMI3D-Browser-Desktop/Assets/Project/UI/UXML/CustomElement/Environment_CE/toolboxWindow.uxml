@@ -1,15 +1,17 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="/Assets/Project/UI/UXML/toolbox-window.uss" />
-    <ui:VisualElement name="windowOut" style="background-color: rgba(63, 63, 63, 0.31);">
-        <ui:VisualElement name="windowIn" style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px;">
-            <ui:VisualElement name="topBar" style="flex-direction: row; justify-content: space-between;">
+    <ui:VisualElement name="windowOut" style="align-items: stretch; flex-grow: 1;">
+        <ui:VisualElement name="windowIn" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; flex-grow: 1;">
+            <ui:VisualElement name="topBar" style="flex-direction: row; justify-content: space-between; flex-shrink: 0;">
                 <ui:VisualElement name="icon" />
                 <ui:Label text="Label" display-tooltip-when-elided="true" />
                 <ui:Button display-tooltip-when-elided="true" name="closeButton" />
             </ui:VisualElement>
-            <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="scrollView" />
-            <ui:VisualElement name="bottomBar" style="flex-direction: row; justify-content: center;">
-                <ui:Button display-tooltip-when-elided="true" name="unpinnedButton" style="flex-grow: 1;" />
+            <ui:VisualElement name="scrollViewContainer" style="flex-grow: 1;">
+                <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="scrollView" />
+            </ui:VisualElement>
+            <ui:VisualElement name="bottomBar" style="flex-direction: row; justify-content: center; flex-shrink: 0;">
+                <ui:Button display-tooltip-when-elided="true" name="unpinnedButton" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

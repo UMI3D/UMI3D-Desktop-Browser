@@ -68,7 +68,7 @@ namespace BrowserDesktop.UI
             this.CustomStyleBackgroundKey = null;
             Root.UnregisterCallback<MouseOverEvent>(OnMouseOver);
             Root.UnregisterCallback<MouseOutEvent>(OnMouseOut);
-            Root.UnregisterCallback<MouseDownEvent>(OnMouseDown);
+            Root.UnregisterCallback<MouseCaptureEvent>(OnMouseDown);
             Root.UnregisterCallback<MouseUpEvent>(OnMouseUp);
             this.Root = null;
             m_customStyle?.ApplyCustomStyle.RemoveListener(ApplyCustomStyle);
@@ -145,7 +145,7 @@ namespace BrowserDesktop.UI
         {
             Root.RegisterCallback<MouseOverEvent>(OnMouseOver);
             Root.RegisterCallback<MouseOutEvent>(OnMouseOut);
-            Root.RegisterCallback<MouseDownEvent>(OnMouseDown);
+            Root.RegisterCallback<MouseCaptureEvent>(OnMouseDown);
             Root.RegisterCallback<MouseUpEvent>(OnMouseUp);
 
             m_globalPref = UserPreferences.UserPreferences.GlobalPref;
@@ -170,6 +170,44 @@ namespace BrowserDesktop.UI
 
     public abstract partial class AbstractGenericAndCustomElement
     {
+        protected enum MousePressedState
+        {
+            Unpressed,
+            Pressed
+        }
+        protected enum MousePositionState
+        {
+            Out,
+            Over
+        }
+
+        protected (MousePressedState, MousePositionState) m_mouseState;
+
+        protected virtual void OnMouseOver(MouseOverEvent e)
+        {
+            m_mouseState = (m_mouseState.Item1, MousePositionState.Over);
+
+            ApplyCustomBackground(CustomStyleBackgroundMode.MouseOver);
+        }
+        protected virtual void OnMouseOut(MouseOutEvent e)
+        {
+            ApplyCustomBackground(CustomStyleBackgroundMode.MouseOut);
+        }
+        protected virtual void OnMouseDown(MouseCaptureEvent e)
+        {
+            Debug.Log($"Mouse button pressed");
+            ApplyCustomBackground(CustomStyleBackgroundMode.MousePressed);
+        }
+        protected virtual void OnMouseUp(MouseUpEvent e)
+        {
+            if (e.button != 0) return;
+            Debug.Log($"Mouse button up (button pressed = [{e.pressedButtons}], button = [{e.button}])");
+            ApplyCustomBackground(CustomStyleBackgroundMode.MouseOver);
+        }
+    }
+
+    public abstract partial class AbstractGenericAndCustomElement
+    {
         protected CustomStyleToUIElementApplicator m_customStyleToUIElement = new CustomStyleToUIElementApplicator();
         protected UserPreferences.GlobalPreferences_SO m_globalPref;
         protected CustomStyle_SO m_customStyle;
@@ -178,7 +216,6 @@ namespace BrowserDesktop.UI
         {
             if (m_customStyle != null)
             {
-                Debug.Log($"Apply custom style");
                 ApplyCustomSize();
                 ApplyCustomBackground(CustomStyleBackgroundMode.MouseOut);
                 ApplyCustomBorder();
@@ -212,6 +249,18 @@ namespace BrowserDesktop.UI
                 Root.style.maxWidth = length;
         }
 
+        protected void ApplyCustomBackground()
+        {
+            //switch (m_mouseState)
+            //{
+            //    case (MousePressedState.Unpressed, MousePositionState.Out):
+            //}
+            var result = m_mouseState switch
+            {
+                (MousePressedState.Unpressed, MousePositionState.Out) => CustomStyleBackgroundMode.MouseOut
+            };
+        }
+
         protected void ApplyCustomBackground(CustomStyleBackgroundMode backgroundMode)
         {
             if (m_customStyle == null) return;
@@ -238,24 +287,6 @@ namespace BrowserDesktop.UI
             m_customStyleToUIElement.ApplyBorderColorToVisual(Root.style, uIBorder.Color);
             m_customStyleToUIElement.ApplyBorderWidthToVisual(Root.style, uIBorder.Width);
             m_customStyleToUIElement.ApplyBorderRadiusToVisual(Root.style, uIBorder.Radius);
-        }
-
-
-        protected virtual void OnMouseOver(MouseOverEvent e) 
-        {
-            ApplyCustomBackground(CustomStyleBackgroundMode.MouseOver);
-        }
-        protected virtual void OnMouseOut(MouseOutEvent e) 
-        {
-            ApplyCustomBackground(CustomStyleBackgroundMode.MouseOut);
-        }
-        protected virtual void OnMouseDown(MouseDownEvent e) 
-        {
-            ApplyCustomBackground(CustomStyleBackgroundMode.MousePressed);
-        }
-        protected virtual void OnMouseUp(MouseUpEvent e) 
-        {
-            ApplyCustomBackground(CustomStyleBackgroundMode.MouseOver);
         }
     }
 

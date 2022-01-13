@@ -54,6 +54,5 @@ namespace Browser.UICustomStyle
         MouseOut,
         MouseOver,
         MousePressed,
-
     }
 }
