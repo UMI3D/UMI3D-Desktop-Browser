@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.UI;
+using BrowserDesktop.UserPreferences;
 using DesktopBrowser.UI.GenericElement;
 using UnityEngine;
 using UnityEngine.Events;
@@ -63,6 +64,12 @@ namespace DesktopBrowser.UI.CustomElement
             {
                 OnClicked = () => { UnPinedButtonPressed.Invoke(); },
             }.SetIcon("toolboxWindow-unpinnedButton", "", "", true);
+        }
+
+        public override bool GetCustomStyle()
+        {
+            m_customStyle = UserPreferences.GetCustomStyle("toolboxWindow-window");
+            return true;
         }
 
         public override void OnApplyUserPreferences()

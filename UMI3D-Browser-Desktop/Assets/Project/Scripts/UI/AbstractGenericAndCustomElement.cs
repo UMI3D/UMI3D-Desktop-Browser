@@ -51,8 +51,6 @@ namespace BrowserDesktop.UI
             this.Add(Root);
             this.CustomStyleKey = customStyleKey;
             this.CustomStyleBackgroundKey = customStyleBackgroundKey;
-            GetCustomStyle();
-            m_globalPref = UserPreferences.UserPreferences.GlobalPref;
             Initialize();
         }
         public void Init(VisualElement root, string customStyleKey, string customStyleBackgroundKey = "")
@@ -62,8 +60,6 @@ namespace BrowserDesktop.UI
             this.Root = root;
             this.CustomStyleKey = customStyleKey;
             this.CustomStyleBackgroundKey = customStyleBackgroundKey;
-            GetCustomStyle();
-            m_globalPref = UserPreferences.UserPreferences.GlobalPref;
             Initialize();
         }
         public virtual void Reset()
@@ -75,7 +71,10 @@ namespace BrowserDesktop.UI
             Root.UnregisterCallback<MouseDownEvent>(OnMouseDown);
             Root.UnregisterCallback<MouseUpEvent>(OnMouseUp);
             this.Root = null;
+            m_customStyle?.ApplyCustomStyle.RemoveListener(ApplyCustomStyle);
             m_customStyle = null;
+            m_globalPref.ApplyCustomStyle.RemoveListener(ApplyCustomStyle);
+            m_globalPref = null;
             Initialized = false;
         }
         public virtual void AddTo(VisualElement parent)
@@ -98,11 +97,12 @@ namespace BrowserDesktop.UI
             AttachedToHierarchy = false;
         }
 
-        public virtual void GetCustomStyle() 
+        public virtual bool GetCustomStyle() 
         {
             if (string.IsNullOrEmpty(CustomStyleKey))
-                return; //throw new Exception("CustomStyleKey null or Empty");
+                return false;
             m_customStyle = UserPreferences.UserPreferences.GetCustomStyle(CustomStyleKey);
+            return true;
         }
 
         public abstract void OnApplyUserPreferences();
@@ -113,7 +113,7 @@ namespace BrowserDesktop.UI
         public AbstractGenericAndCustomElement() : base() 
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
-            UserPreferences.UserPreferences.AddThemeUpdateListener(GetCustomStyle);
+            UserPreferences.UserPreferences.AddThemeUpdateListener(ApplyCustomStyle);
         }
         public AbstractGenericAndCustomElement(VisualTreeAsset visualTA) : this()
         {
@@ -135,14 +135,12 @@ namespace BrowserDesktop.UI
         {
             Reset();
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
-            UserPreferences.UserPreferences.RemoveThemeUpdateListener(GetCustomStyle);
+            UserPreferences.UserPreferences.RemoveThemeUpdateListener(ApplyCustomStyle);
         }
     }
 
     public abstract partial class AbstractGenericAndCustomElement
     {
-        protected CustomStyleToUIElementApplicator m_customStyleToUIElement = new CustomStyleToUIElementApplicator();
-
         protected virtual void Initialize() 
         {
             Root.RegisterCallback<MouseOverEvent>(OnMouseOver);
@@ -150,11 +148,13 @@ namespace BrowserDesktop.UI
             Root.RegisterCallback<MouseDownEvent>(OnMouseDown);
             Root.RegisterCallback<MouseUpEvent>(OnMouseUp);
 
-            if (m_customStyle != null)
+            m_globalPref = UserPreferences.UserPreferences.GlobalPref;
+            m_globalPref.ApplyCustomStyle.AddListener(ApplyCustomStyle);
+            if (GetCustomStyle())
             {
-                ApplyCustomSize();
-                ApplyCustomBackground(CustomStyleBackgroundMode.MouseOut);
-                ApplyCustomBorder();
+                m_customStyle.ApplyCustomStyle.AddListener(ApplyCustomStyle);
+                m_customStyle.ApplyCustomStyle.Invoke();
+                ApplyCustomStyle();
             }
         }
 
@@ -170,8 +170,20 @@ namespace BrowserDesktop.UI
 
     public abstract partial class AbstractGenericAndCustomElement
     {
+        protected CustomStyleToUIElementApplicator m_customStyleToUIElement = new CustomStyleToUIElementApplicator();
         protected UserPreferences.GlobalPreferences_SO m_globalPref;
         protected CustomStyle_SO m_customStyle;
+
+        protected void ApplyCustomStyle()
+        {
+            if (m_customStyle != null)
+            {
+                Debug.Log($"Apply custom style");
+                ApplyCustomSize();
+                ApplyCustomBackground(CustomStyleBackgroundMode.MouseOut);
+                ApplyCustomBorder();
+            }
+        }
 
         protected void ApplyCustomSize()
         {

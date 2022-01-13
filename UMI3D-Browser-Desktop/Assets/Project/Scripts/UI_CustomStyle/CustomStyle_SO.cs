@@ -16,6 +16,7 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Browser.UICustomStyle
 {
@@ -47,5 +48,11 @@ namespace Browser.UICustomStyle
         public UIText UIText => m_uIText;
         public UIBackground UIBackground => m_uIBackground;
         public UIBorder UIBorder => m_uIBorder;
+
+        [HideInInspector]
+        public UnityEvent ApplyCustomStyle = new UnityEvent();
+
+        [ContextMenu("Apply Custom Style")]
+        private void ApplyCustomStyleInInspector() => ApplyCustomStyle.Invoke();
     }
 }

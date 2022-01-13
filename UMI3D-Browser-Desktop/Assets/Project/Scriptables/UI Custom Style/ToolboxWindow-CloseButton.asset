@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
   m_Name: ToolboxWindow-CloseButton
   m_EditorClassIdentifier: 
-  m_key: toolboxWindow-closeButton
+  m_key: ToolboxWindow-CloseButton
   m_uIDisplay:
     m_opacity:
       m_keyword: 0
@@ -77,38 +77,41 @@ MonoBehaviour:
       m_backgroundsByThemes:
       - m_theme: 0
         m_backgroundDefault:
-          m_keyword: 0
+          m_keyword: 6
           m_value:
             m_color:
               m_keyword: 0
               m_value: {r: 0, g: 0, b: 0, a: 0}
             m_image:
-              m_keyword: 0
-              m_value: {fileID: 0}
+              m_keyword: 6
+              m_value: {fileID: 21300000, guid: 532ca2eaffece5a43a1d38d66adf1b05,
+                type: 3}
             m_imageTintColor:
               m_keyword: 0
               m_value: {r: 0, g: 0, b: 0, a: 0}
         m_backgroundMouseOver:
-          m_keyword: 0
+          m_keyword: 6
           m_value:
             m_color:
               m_keyword: 0
               m_value: {r: 0, g: 0, b: 0, a: 0}
             m_image:
-              m_keyword: 0
-              m_value: {fileID: 0}
+              m_keyword: 6
+              m_value: {fileID: 21300000, guid: 1b47ff309eb74744d902374cfb7ed862,
+                type: 3}
             m_imageTintColor:
               m_keyword: 0
               m_value: {r: 0, g: 0, b: 0, a: 0}
         m_backgroundMousePressed:
-          m_keyword: 0
+          m_keyword: 6
           m_value:
             m_color:
               m_keyword: 0
               m_value: {r: 0, g: 0, b: 0, a: 0}
             m_image:
-              m_keyword: 0
-              m_value: {fileID: 0}
+              m_keyword: 6
+              m_value: {fileID: 21300000, guid: 693ad54b4a96b8a4182f6551407b5135,
+                type: 3}
             m_imageTintColor:
               m_keyword: 0
               m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -141,3 +144,6 @@ MonoBehaviour:
         m_bottomRight: 0
         m_topLeft: 0
         m_TopRight: 0
+  ApplyCustomStyle:
+    m_PersistentCalls:
+      m_Calls: []
