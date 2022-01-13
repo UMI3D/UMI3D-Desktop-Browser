@@ -58,7 +58,8 @@ namespace DesktopBrowser.UI.CustomElement
         /// <summary>
         /// Get CustomStyle_SO to apply to this visual.
         /// </summary>
-        public void GetCustomStyle();
+        /// <returns>True if the customStyle has been retrieve, else false.</returns>
+        public bool GetCustomStyle();
         /// <summary>
         /// Apply user preferences when needed.
         /// </summary>

@@ -16,6 +16,7 @@ limitations under the License.
 
 using Browser.UICustomStyle;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace BrowserDesktop.UserPreferences
 {
@@ -65,6 +66,10 @@ namespace BrowserDesktop.UserPreferences
             UserPreferences.Instance.OnApplyUserPreferences.Invoke();
         }
 
+        [HideInInspector]
+        public UnityEvent ApplyCustomStyle = new UnityEvent();
 
+        [ContextMenu("Apply Custom Style")]
+        private void ApplyCustomStyleInInspector() => ApplyCustomStyle.Invoke();
     }
 }
