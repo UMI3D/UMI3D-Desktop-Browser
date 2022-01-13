@@ -15,9 +15,6 @@ limitations under the License.
 */
 using BrowserDesktop.UI;
 using DesktopBrowser.UI.GenericElement;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -55,17 +52,17 @@ namespace DesktopBrowser.UI.CustomElement
             {
             }.InitFromSrollViewToProperties();
 
-            icon = new Icon_E(Root.Q("icon"), "square-radius");
+            icon = new Icon_E(Root.Q("icon"), "toolboxWindow-icon");
 
             new Button_GE(Root.Q("closeButton"))
             {
                 OnClicked = () => { OnCloseButtonPressed(); }
-            }.SetIcon("closeButton-toolboxWindow","", "", true);
+            }.SetIcon("toolboxWindow-closeButton", "", "", true);
 
             new Button_GE(Root.Q("unpinnedButton"))
             {
                 OnClicked = () => { UnPinedButtonPressed.Invoke(); },
-            }.SetIcon("unpinnedButton-toolboxWindow", "", "", true);
+            }.SetIcon("toolboxWindow-unpinnedButton", "", "", true);
         }
 
         public override void OnApplyUserPreferences()

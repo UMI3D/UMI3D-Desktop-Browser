@@ -90,7 +90,7 @@ namespace Browser.UICustomStyle
 
     public interface IBackgrounds
     {
-        public string Key { get; }
+        //public string Key { get; }
         public CustomStyleBackground BackgroundDefault { get; }
         public CustomStyleBackground BackgroundMouseOver { get; }
         public CustomStyleBackground BackgroundMousePressed { get; }
@@ -98,7 +98,7 @@ namespace Browser.UICustomStyle
 
     public interface IUIBackground
     {
-        public CustomBackgrounds GetCustomBackgrounds(string key);
+        public BackgroundsByTheme GetCustomBackgrounds(string key, CustomStyleTheme theme);
         public ScaleMode UnityBackgroundScaleMode { get; }
         public int SliceBottom { get; }
         public int SliceLeft { get; }

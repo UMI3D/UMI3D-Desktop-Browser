@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Browser.UICustomStyle;
 using UnityEngine;
 
 namespace BrowserDesktop.UserPreferences
@@ -55,6 +56,8 @@ namespace BrowserDesktop.UserPreferences
             get => currentTheme;
             set => currentTheme = value;
         }
+
+        public CustomStyleTheme CustomStyleTheme { get; protected set; }
 
         [ContextMenu("Apply User Pref")]
         private void ApplyUserPref()

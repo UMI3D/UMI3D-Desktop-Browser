@@ -141,13 +141,14 @@ namespace BrowserDesktop.UI
 
     public abstract partial class AbstractGenericAndCustomElement
     {
+        protected CustomStyleToUIElementApplicator m_customStyleToUIElement = new CustomStyleToUIElementApplicator();
+
         protected virtual void Initialize() 
         {
             Root.RegisterCallback<MouseOverEvent>(OnMouseOver);
             Root.RegisterCallback<MouseOutEvent>(OnMouseOut);
             Root.RegisterCallback<MouseDownEvent>(OnMouseDown);
             Root.RegisterCallback<MouseUpEvent>(OnMouseUp);
-            //Root.RegisterCallback<MouseEnterEvent>(e => Debug.Log($"Mouse enter"));
 
             if (m_customStyle != null)
             {
@@ -179,22 +180,22 @@ namespace BrowserDesktop.UI
             UISize uiSize = m_customStyle.UISize;
             StyleLength length = new StyleLength();
             
-            length = GetPxAndPourcentageFloatLength(uiSize.Height);
+            length = m_customStyleToUIElement.GetPxAndPourcentageFloatLength(uiSize.Height, m_globalPref.ZoomCoef);
             if (length.keyword != StyleKeyword.Null)
                 Root.style.height = length;
-            length = GetPxAndPourcentageFloatLength(uiSize.Width);
+            length = m_customStyleToUIElement.GetPxAndPourcentageFloatLength(uiSize.Width, m_globalPref.ZoomCoef);
             if (length.keyword != StyleKeyword.Null)
                 Root.style.width = length;
-            length = GetPxAndPourcentageFloatLength(uiSize.MinHeight);
+            length = m_customStyleToUIElement.GetPxAndPourcentageFloatLength(uiSize.MinHeight, m_globalPref.ZoomCoef);
             if (length.keyword != StyleKeyword.Null)
                 Root.style.minHeight = length;
-            length = GetPxAndPourcentageFloatLength(uiSize.MinWidth);
+            length = m_customStyleToUIElement.GetPxAndPourcentageFloatLength(uiSize.MinWidth, m_globalPref.ZoomCoef);
             if (length.keyword != StyleKeyword.Null)
                 Root.style.minWidth = length;
-            length = GetPxAndPourcentageFloatLength(uiSize.MaxHeight);
+            length = m_customStyleToUIElement.GetPxAndPourcentageFloatLength(uiSize.MaxHeight, m_globalPref.ZoomCoef);
             if (length.keyword != StyleKeyword.Null)
                 Root.style.maxHeight = length;
-            length = GetPxAndPourcentageFloatLength(uiSize.MaxWidth);
+            length = m_customStyleToUIElement.GetPxAndPourcentageFloatLength(uiSize.MaxWidth, m_globalPref.ZoomCoef);
             if (length.keyword != StyleKeyword.Null)
                 Root.style.maxWidth = length;
         }
@@ -203,17 +204,17 @@ namespace BrowserDesktop.UI
         {
             if (m_customStyle == null) return;
             UIBackground uIBackground = m_customStyle.UIBackground;
-            CustomBackgrounds customBackgrounds = uIBackground.GetCustomBackgrounds(CustomStyleBackgroundKey);
+            BackgroundsByTheme customBackgrounds = uIBackground.GetCustomBackgrounds(CustomStyleBackgroundKey, m_globalPref.CustomStyleTheme);
             switch (backgroundMode)
             {
                 case CustomStyleBackgroundMode.MouseOut:
-                    ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundDefault);
+                    m_customStyleToUIElement.ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundDefault);
                     break;
                 case CustomStyleBackgroundMode.MouseOver:
-                    ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundMouseOver);
+                    m_customStyleToUIElement.ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundMouseOver);
                     break;
                 case CustomStyleBackgroundMode.MousePressed:
-                    ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundMousePressed);
+                    m_customStyleToUIElement.ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundMousePressed);
                     break;
             }
         }
@@ -222,9 +223,9 @@ namespace BrowserDesktop.UI
         {
             if (m_customStyle == null) return;
             UIBorder uIBorder = m_customStyle.UIBorder;
-            ApplyBorderColorToVisual(Root.style, uIBorder.Color);
-            ApplyBorderWidthToVisual(Root.style, uIBorder.Width);
-            ApplyBorderRadiusToVisual(Root.style, uIBorder.Radius);
+            m_customStyleToUIElement.ApplyBorderColorToVisual(Root.style, uIBorder.Color);
+            m_customStyleToUIElement.ApplyBorderWidthToVisual(Root.style, uIBorder.Width);
+            m_customStyleToUIElement.ApplyBorderRadiusToVisual(Root.style, uIBorder.Radius);
         }
 
 
@@ -243,128 +244,6 @@ namespace BrowserDesktop.UI
         protected virtual void OnMouseUp(MouseUpEvent e) 
         {
             ApplyCustomBackground(CustomStyleBackgroundMode.MouseOver);
-        }
-
-        protected virtual StyleLength GetPxAndPourcentageFloatLength(CustomStylePXAndPercentFloat customStyle)
-        {
-            StyleLength lenght = new StyleLength();
-            float floatLenght = -1;
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleKeyword.VariableUndefined:
-                case CustomStyleKeyword.ConstUndefined:
-                    lenght.keyword = StyleKeyword.Null;
-                    break;
-                case CustomStyleKeyword.Variable:
-                    floatLenght = customStyle.Value * m_globalPref.ZoomCoef;
-                    lenght = floatLenght;
-                    lenght.keyword = StyleKeyword.Undefined;
-                    break;
-                case CustomStyleKeyword.Const:
-                    floatLenght = customStyle.Value;
-                    lenght = (customStyle.ValueMode == CustomStyleValueMode.Px) ? floatLenght : Length.Percent(floatLenght);
-                    lenght.keyword = StyleKeyword.Undefined;
-                    break;
-            }
-            return lenght;
-        }
-
-        protected virtual void ApplyBackgroundToVisual(IStyle style, CustomStyleBackground customStyle)
-        {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleSimpleKeyword.Undefined:
-                    break;
-                case CustomStyleSimpleKeyword.Variable:
-                    ApplyBackgroundColorToVisual(style, customStyle.Value.BackgroundColor);
-                    ApplyImageToVisual(style, customStyle.Value.BackgroundImage);
-                    ApplyImageTintColorToVisual(style, customStyle.Value.BackgroundImageTintColor);
-                    break;
-            }
-        }
-
-        protected virtual void ApplyBackgroundColorToVisual(IStyle style, CustomStyleColor customStyle)
-        {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleSimpleKeyword.Undefined:
-                    break;
-                case CustomStyleSimpleKeyword.Variable:
-                    style.backgroundColor = customStyle.Value;
-                    break;
-            }
-        }
-
-        protected virtual void ApplyImageTintColorToVisual(IStyle style, CustomStyleColor customStyle)
-        {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleSimpleKeyword.Undefined:
-                    break;
-                case CustomStyleSimpleKeyword.Variable:
-                    style.unityBackgroundImageTintColor = customStyle.Value;
-                    break;
-            }
-        }
-
-        protected virtual void ApplyImageToVisual(IStyle style, CustomStyleImage customStyle)
-        {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleSimpleKeyword.Undefined:
-                    break;
-                case CustomStyleSimpleKeyword.Variable:
-                    style.backgroundImage = customStyle.Value.texture;
-                    break;
-            }
-        }
-
-        protected virtual void ApplyBorderColorToVisual(IStyle style, CustomStyleBorderColor customStyle)
-        {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleSimpleKeyword.Undefined:
-                    break;
-                case CustomStyleSimpleKeyword.Variable:
-                    BorderColor borderColor = customStyle.Value;
-                    style.borderTopColor = borderColor.Top;
-                    style.borderLeftColor = borderColor.Left;
-                    style.borderRightColor = borderColor.Right;
-                    style.borderBottomColor = borderColor.Bottom;
-                    break;
-            }
-        }
-
-        protected virtual void ApplyBorderWidthToVisual(IStyle style, CustomStyleBorderWidth customStyle)
-        {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleSimpleKeyword.Undefined:
-                    break;
-                case CustomStyleSimpleKeyword.Variable:
-                    BorderWidth borderWidth = customStyle.Value;
-                    style.borderTopWidth = borderWidth.Top;
-                    style.borderLeftWidth = borderWidth.Left;
-                    style.borderRightWidth = borderWidth.Right;
-                    style.borderBottomWidth = borderWidth.Bottom;
-                    break;
-            }
-        }
-
-        protected virtual void ApplyBorderRadiusToVisual(IStyle style, CustomStyleBorderRadius customStyle)
-        {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleSimpleKeyword.Undefined:
-                    break;
-                case CustomStyleSimpleKeyword.Variable:
-                    BorderRadius borderRadius = customStyle.Value;
-                    style.borderTopLeftRadius = borderRadius.TopLeft;
-                    style.borderTopRightRadius = borderRadius.TopRight;
-                    style.borderBottomLeftRadius = borderRadius.BottomLeft;
-                    style.borderBottomRightRadius = borderRadius.BottomRight;
-                    break;
-            }
         }
     }
 

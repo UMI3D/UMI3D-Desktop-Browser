@@ -76,12 +76,14 @@ namespace BrowserDesktop.UserPreferences
 
         public static CustomStyle_SO GetCustomStyle(string key)
         {
+            key = key.ToLower();
+            string[] subKeys = key.Split('-');
             foreach (CustomStyleDictionary_SO customStyleDictionary in Instance.m_customStyleDictionaries)
             {
-                if (customStyleDictionary.Theme == CustomStyleTheme.Default)
+                if (customStyleDictionary.Key == subKeys[0])
                     return customStyleDictionary.GetCustomStyle(key);
             }
-            throw new System.Exception($"Theme not found in UserPreferences.");
+            throw new System.Exception($"Key not found in UserPreferences.");
         }
     }
 }

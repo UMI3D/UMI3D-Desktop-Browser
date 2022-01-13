@@ -24,14 +24,14 @@ namespace Browser.UICustomStyle
     public partial class CustomStyleDictionary_SO : ScriptableObject
     {
         [SerializeField]
-        private CustomStyleTheme m_theme;
+        private string m_key;
         [SerializeField]
         private CustomStyle_SO[] m_customStyles;
     }
 
     public partial class CustomStyleDictionary_SO
     {
-        public CustomStyleTheme Theme { get => m_theme; }
+        public string Key { get => m_key.ToLower(); }
 
         /// <summary>
         /// Return the customStyle corresponding to the [key], if no key correspond throw Exception.

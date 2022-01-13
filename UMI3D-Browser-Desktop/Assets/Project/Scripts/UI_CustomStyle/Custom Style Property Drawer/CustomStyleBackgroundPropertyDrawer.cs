@@ -59,7 +59,7 @@ namespace Browser.UICustomStyle
         }
     }
 
-    [UnityEditor.CustomPropertyDrawer(typeof(CustomBackground))]
+    [UnityEditor.CustomPropertyDrawer(typeof(Background))]
     public class CustomBackgroundPropertyDrawer : PropertyDrawer
     {
         private float spaceBetweenLine = 2f;

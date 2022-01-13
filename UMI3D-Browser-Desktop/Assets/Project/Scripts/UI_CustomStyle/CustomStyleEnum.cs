@@ -45,7 +45,8 @@ namespace Browser.UICustomStyle
 
     public enum CustomStyleTheme
     {
-        Default
+        All = 0,
+        Default = 1
     }
 
     public enum CustomStyleBackgroundMode
