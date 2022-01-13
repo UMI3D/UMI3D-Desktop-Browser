@@ -39,7 +39,7 @@ namespace Browser.UICustomStyle
         [SerializeField]
         private UIBorder m_uIBorder = new UIBorder();
 
-        public string Key => m_key;
+        public string Key => m_key.ToLower();
         public UIDisplay UIDisplay => m_uIDisplay;
         public UIPosition UIPosition => m_uIPosition;
         public UISize UISize => m_uISize;

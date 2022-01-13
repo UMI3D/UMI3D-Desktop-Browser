@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 namespace Browser.UICustomStyle
 {
     [Serializable]
-    public struct CustomBackground : IBackground
+    public struct Background : IBackground
     {
         [SerializeField]
         private CustomStyleColor m_color;
@@ -37,10 +37,10 @@ namespace Browser.UICustomStyle
     }
 
     [Serializable]
-    public struct CustomBackgrounds : IBackgrounds
+    public struct BackgroundsByTheme : IBackgrounds
     {
         [SerializeField]
-        private string m_backgroundKey;
+        private CustomStyleTheme m_theme;
         [SerializeField]
         private CustomStyleBackground m_backgroundDefault;
         [SerializeField]
@@ -48,7 +48,7 @@ namespace Browser.UICustomStyle
         [SerializeField]
         private CustomStyleBackground m_backgroundMousePressed;
 
-        public string Key => m_backgroundKey;
+        public CustomStyleTheme Theme => m_theme;
 
         public CustomStyleBackground BackgroundDefault => m_backgroundDefault;
 
@@ -58,10 +58,30 @@ namespace Browser.UICustomStyle
     }
 
     [Serializable]
+    public struct BackgroundsByKey
+    {
+        [SerializeField]
+        private string m_backgroundKey;
+        [SerializeField]
+        private BackgroundsByTheme[] m_backgroundsByThemes;
+
+        public string Key => m_backgroundKey;
+        public BackgroundsByTheme GetBackgroundsByTheme(CustomStyleTheme theme)
+        {
+            foreach (BackgroundsByTheme backgroundsByThem in m_backgroundsByThemes)
+            {
+                if (backgroundsByThem.Theme == theme)
+                    return backgroundsByThem;
+            }
+            throw new Exception("Theme not found");
+        }
+    }
+
+    [Serializable]
     public struct UIBackground : IUIBackground
     {
         [SerializeField]
-        private CustomBackgrounds[] m_backgrounds;
+        private BackgroundsByKey[] m_backgrounds;
         [SerializeField]
         private int m_sliceBottom;
         [SerializeField]
@@ -71,12 +91,12 @@ namespace Browser.UICustomStyle
         [SerializeField]
         private int m_sliceTop;
 
-        public CustomBackgrounds GetCustomBackgrounds(string key)
+        public BackgroundsByTheme GetCustomBackgrounds(string key, CustomStyleTheme theme)
         {
-            foreach (CustomBackgrounds customBackgrounds in m_backgrounds)
+            foreach (BackgroundsByKey backgroundsByKey in m_backgrounds)
             {
-                if (customBackgrounds.Key == key)
-                    return customBackgrounds;
+                if (backgroundsByKey.Key == key)
+                    return backgroundsByKey.GetBackgroundsByTheme(theme);
             }
             throw new Exception("Key not found");
         }

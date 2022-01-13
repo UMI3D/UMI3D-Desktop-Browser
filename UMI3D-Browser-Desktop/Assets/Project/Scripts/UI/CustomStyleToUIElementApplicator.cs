@@ -1,0 +1,150 @@
+/*
+Copyright 2019 - 2021 Inetum
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+using Browser.UICustomStyle;
+using DesktopBrowser.UI.CustomElement;
+using System;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+
+namespace BrowserDesktop.UI
+{
+    public class CustomStyleToUIElementApplicator
+    {
+        public virtual StyleLength GetPxAndPourcentageFloatLength(CustomStylePXAndPercentFloat customStyle, float zoomCoef)
+        {
+            StyleLength lenght = new StyleLength();
+            float floatLenght = -1;
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleKeyword.VariableUndefined:
+                case CustomStyleKeyword.ConstUndefined:
+                    lenght.keyword = StyleKeyword.Null;
+                    break;
+                case CustomStyleKeyword.Variable:
+                    floatLenght = customStyle.Value * zoomCoef;
+                    lenght = floatLenght;
+                    lenght.keyword = StyleKeyword.Undefined;
+                    break;
+                case CustomStyleKeyword.Const:
+                    floatLenght = customStyle.Value;
+                    lenght = (customStyle.ValueMode == CustomStyleValueMode.Px) ? floatLenght : Length.Percent(floatLenght);
+                    lenght.keyword = StyleKeyword.Undefined;
+                    break;
+            }
+            return lenght;
+        }
+
+        public virtual void ApplyBackgroundToVisual(IStyle style, CustomStyleBackground customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Variable:
+                    ApplyBackgroundColorToVisual(style, customStyle.Value.BackgroundColor);
+                    ApplyImageToVisual(style, customStyle.Value.BackgroundImage);
+                    ApplyImageTintColorToVisual(style, customStyle.Value.BackgroundImageTintColor);
+                    break;
+            }
+        }
+
+        public virtual void ApplyBackgroundColorToVisual(IStyle style, CustomStyleColor customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Variable:
+                    style.backgroundColor = customStyle.Value;
+                    break;
+            }
+        }
+
+        public virtual void ApplyImageTintColorToVisual(IStyle style, CustomStyleColor customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Variable:
+                    style.unityBackgroundImageTintColor = customStyle.Value;
+                    break;
+            }
+        }
+
+        public virtual void ApplyImageToVisual(IStyle style, CustomStyleImage customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Variable:
+                    style.backgroundImage = customStyle.Value.texture;
+                    break;
+            }
+        }
+
+        public virtual void ApplyBorderColorToVisual(IStyle style, CustomStyleBorderColor customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Variable:
+                    BorderColor borderColor = customStyle.Value;
+                    style.borderTopColor = borderColor.Top;
+                    style.borderLeftColor = borderColor.Left;
+                    style.borderRightColor = borderColor.Right;
+                    style.borderBottomColor = borderColor.Bottom;
+                    break;
+            }
+        }
+
+        public virtual void ApplyBorderWidthToVisual(IStyle style, CustomStyleBorderWidth customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Variable:
+                    BorderWidth borderWidth = customStyle.Value;
+                    style.borderTopWidth = borderWidth.Top;
+                    style.borderLeftWidth = borderWidth.Left;
+                    style.borderRightWidth = borderWidth.Right;
+                    style.borderBottomWidth = borderWidth.Bottom;
+                    break;
+            }
+        }
+
+        public virtual void ApplyBorderRadiusToVisual(IStyle style, CustomStyleBorderRadius customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Variable:
+                    BorderRadius borderRadius = customStyle.Value;
+                    style.borderTopLeftRadius = borderRadius.TopLeft;
+                    style.borderTopRightRadius = borderRadius.TopRight;
+                    style.borderBottomLeftRadius = borderRadius.BottomLeft;
+                    style.borderBottomRightRadius = borderRadius.BottomRight;
+                    break;
+            }
+        }
+    }
+}

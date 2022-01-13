@@ -22,14 +22,14 @@ using UnityEngine.UIElements;
 namespace Browser.UICustomStyle
 {
     [Serializable]
-    public struct CustomStyleBackground : ICustomStyleValue<CustomStyleSimpleKeyword, CustomBackground>
+    public struct CustomStyleBackground : ICustomStyleValue<CustomStyleSimpleKeyword, Background>
     {
         [SerializeField]
         private CustomStyleSimpleKeyword m_keyword;
         [SerializeField]
-        private CustomBackground m_value;
+        private Background m_value;
 
         public CustomStyleSimpleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
-        public CustomBackground Value { get => m_value; set => m_value = value; }
+        public Background Value { get => m_value; set => m_value = value; }
     }
 }
