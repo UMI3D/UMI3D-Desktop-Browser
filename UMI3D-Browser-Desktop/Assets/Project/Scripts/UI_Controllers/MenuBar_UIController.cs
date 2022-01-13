@@ -41,7 +41,7 @@ namespace DesktopBrowser.UIControllers
         protected override void Awake()
         {
             base.Awake();
-            menuBar = new MenuBar_E(BindVisual("menu-bar-element"))
+            menuBar = new MenuBar_E(BindVisual("menu-bar-element"), "menuBar-menuBar")
             {
                 AddSeparator = (ve) => { addSeparator(ve);  }
             };

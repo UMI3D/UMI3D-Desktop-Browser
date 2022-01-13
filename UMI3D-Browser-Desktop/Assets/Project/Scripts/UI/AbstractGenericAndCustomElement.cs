@@ -99,10 +99,7 @@ namespace BrowserDesktop.UI
 
         public virtual bool GetCustomStyle() 
         {
-            if (string.IsNullOrEmpty(CustomStyleKey))
-                return false;
-            m_customStyle = UserPreferences.UserPreferences.GetCustomStyle(CustomStyleKey);
-            return true;
+            return GetCustomStyle(CustomStyleKey);
         }
 
         public abstract void OnApplyUserPreferences();
@@ -158,6 +155,14 @@ namespace BrowserDesktop.UI
             }
         }
 
+        protected bool GetCustomStyle(string key)
+        {
+            if (string.IsNullOrEmpty(key))
+                return false;
+            m_customStyle = UserPreferences.UserPreferences.GetCustomStyle(key);
+            return true;
+        }
+
         /// <summary>
         /// To be used in Custom Element that are already added to the UIDocument.
         /// </summary>
@@ -186,23 +191,25 @@ namespace BrowserDesktop.UI
         protected virtual void OnMouseOver(MouseOverEvent e)
         {
             m_mouseState = (m_mouseState.Item1, MousePositionState.Over);
-
-            ApplyCustomBackground(CustomStyleBackgroundMode.MouseOver);
+            ApplyCustomBackground();
         }
         protected virtual void OnMouseOut(MouseOutEvent e)
         {
-            ApplyCustomBackground(CustomStyleBackgroundMode.MouseOut);
+            m_mouseState = (m_mouseState.Item1, MousePositionState.Out);
+            ApplyCustomBackground();
         }
         protected virtual void OnMouseDown(MouseCaptureEvent e)
         {
             Debug.Log($"Mouse button pressed");
-            ApplyCustomBackground(CustomStyleBackgroundMode.MousePressed);
+            m_mouseState = (MousePressedState.Pressed, m_mouseState.Item2);
+            ApplyCustomBackground();
         }
         protected virtual void OnMouseUp(MouseUpEvent e)
         {
             if (e.button != 0) return;
+            m_mouseState = (MousePressedState.Unpressed, m_mouseState.Item2);
             Debug.Log($"Mouse button up (button pressed = [{e.pressedButtons}], button = [{e.button}])");
-            ApplyCustomBackground(CustomStyleBackgroundMode.MouseOver);
+            ApplyCustomBackground();
         }
     }
 
@@ -257,8 +264,11 @@ namespace BrowserDesktop.UI
             //}
             var result = m_mouseState switch
             {
-                (MousePressedState.Unpressed, MousePositionState.Out) => CustomStyleBackgroundMode.MouseOut
+                (MousePressedState.Unpressed, MousePositionState.Out) => CustomStyleBackgroundMode.MouseOut,
+                (MousePressedState.Unpressed, MousePositionState.Over) => CustomStyleBackgroundMode.MouseOver,
+                _ => CustomStyleBackgroundMode.MousePressed
             };
+            ApplyCustomBackground(result);
         }
 
         protected void ApplyCustomBackground(CustomStyleBackgroundMode backgroundMode)

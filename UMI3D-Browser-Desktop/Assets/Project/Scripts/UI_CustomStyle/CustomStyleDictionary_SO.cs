@@ -24,14 +24,12 @@ namespace Browser.UICustomStyle
     public partial class CustomStyleDictionary_SO : ScriptableObject
     {
         [SerializeField]
-        private string m_key;
-        [SerializeField]
         private CustomStyle_SO[] m_customStyles;
     }
 
     public partial class CustomStyleDictionary_SO
     {
-        public string Key { get => m_key.ToLower(); }
+        public string Key => name.ToLower();
 
         /// <summary>
         /// Return the customStyle corresponding to the [key], if no key correspond throw Exception.
@@ -40,12 +38,13 @@ namespace Browser.UICustomStyle
         /// <returns></returns>
         public CustomStyle_SO GetCustomStyle(string key)
         {
+            key = key.ToLower();
             foreach (CustomStyle_SO customStyle in m_customStyles)
             {
                 if (customStyle.Key == key)
                     return customStyle;
             }
-            throw new Exception($"Key = [{key}] not found in CustomStyleDictionary");
+            throw new KeyNotFoundException(key, name.ToLower());
         }
     }
 }

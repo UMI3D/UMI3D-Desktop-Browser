@@ -67,8 +67,7 @@ namespace DesktopBrowser.UI.CustomElement
 
         public override bool GetCustomStyle()
         {
-            m_customStyle = UserPreferences.GetCustomStyle("toolboxWindow-window");
-            return true;
+            return GetCustomStyle("toolboxWindow-window");
         }
 
         public override void OnApplyUserPreferences()
