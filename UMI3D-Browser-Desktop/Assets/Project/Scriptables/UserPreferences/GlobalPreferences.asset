@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   zoomPercentage: 100
   currentTheme: 0
+  ApplyCustomStyle:
+    m_PersistentCalls:
+      m_Calls: []
