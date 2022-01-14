@@ -16,7 +16,7 @@ limitations under the License.
 using Browser.UICustomStyle;
 using DesktopBrowser.UI.CustomElement;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -46,7 +46,7 @@ namespace BrowserDesktop.UI
         public void Init(VisualTreeAsset visualTA, string customStyleKey, string customStyleBackgroundKey = "")
         {
             if (Initialized) Reset();
-            else Initialized = true;
+            Initialized = true;
             this.Root = visualTA.CloneTree();
             this.Add(Root);
             this.CustomStyleKey = customStyleKey;
@@ -56,17 +56,17 @@ namespace BrowserDesktop.UI
         public void Init(VisualElement root, string customStyleKey, string customStyleBackgroundKey = "")
         {
             if (Initialized) Reset();
-            else Initialized = true;
+            Initialized = true;
             this.Root = root;
             this.CustomStyleKey = customStyleKey;
             this.CustomStyleBackgroundKey = customStyleBackgroundKey;
             Initialize();
         }
-        public void Init(VisualElement parent, VisualTreeAsset visualTA, string customStyleKey, string customStyleBackgroundKey = "")
+        public void Init(VisualElement parent, string resourcePath, string customStyleKey, string customStyleBackgroundKey = "")
         {
             if (Initialized) Reset();
-            else Initialized = true;
-            this.Root = visualTA.CloneTree();
+            Initialized = true;
+            this.Root = GetVisualRoot(resourcePath);
             AddTo(parent);
             this.CustomStyleKey = customStyleKey;
             this.CustomStyleBackgroundKey = customStyleBackgroundKey;
@@ -140,9 +140,7 @@ namespace BrowserDesktop.UI
         }
         public AbstractGenericAndCustomElement(VisualElement parent, string resourcePath, string customStyleKey, string customStyleBackgroundKey = "") : this()
         {
-            VisualTreeAsset visualTA = Resources.Load<VisualTreeAsset>(resourcePath);
-            Debug.Assert(visualTA != null, $"[{resourcePath}] return a null visual tree asset");
-            Init(parent, visualTA, customStyleKey, customStyleBackgroundKey);
+            Init(parent, resourcePath, customStyleKey, customStyleBackgroundKey);
         }
         ~AbstractGenericAndCustomElement()
         {
@@ -169,6 +167,16 @@ namespace BrowserDesktop.UI
                 m_customStyle.ApplyCustomStyle.Invoke();
                 ApplyCustomStyle();
             }
+        }
+
+        protected virtual VisualElement GetVisualRoot(string resourcePath)
+        {
+            VisualTreeAsset visualTA = Resources.Load<VisualTreeAsset>(resourcePath);
+            Debug.Assert(visualTA != null, $"[{resourcePath}] return a null visual tree asset");
+            Debug.Assert(visualTA.CloneTree().childCount == 1, $"[{resourcePath}] must have a single visual as root.");
+            IEnumerator<VisualElement> iterator = visualTA.CloneTree().Children().GetEnumerator();
+            iterator.MoveNext();
+            return iterator.Current;
         }
 
         protected bool GetCustomStyle(string key)
@@ -240,7 +248,7 @@ namespace BrowserDesktop.UI
             if (m_customStyle != null)
             {
                 ApplyCustomSize();
-                ApplyCustomBackground(CustomStyleBackgroundMode.MouseOut);
+                ApplyCustomBackground(Root.style, CustomStyleBackgroundMode.MouseOut);
                 ApplyCustomBorder();
             }
         }
@@ -284,10 +292,10 @@ namespace BrowserDesktop.UI
                 (MousePressedState.Unpressed, MousePositionState.Over) => CustomStyleBackgroundMode.MouseOver,
                 _ => CustomStyleBackgroundMode.MousePressed
             };
-            ApplyCustomBackground(result);
+            ApplyCustomBackground(Root.style, result);
         }
 
-        protected void ApplyCustomBackground(CustomStyleBackgroundMode backgroundMode)
+        protected void ApplyCustomBackground(IStyle style, CustomStyleBackgroundMode backgroundMode)
         {
             if (m_customStyle == null) return;
             UIBackground uIBackground = m_customStyle.UIBackground;
@@ -295,13 +303,13 @@ namespace BrowserDesktop.UI
             switch (backgroundMode)
             {
                 case CustomStyleBackgroundMode.MouseOut:
-                    m_customStyleToUIElement.ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundDefault);
+                    m_customStyleToUIElement.ApplyBackgroundToVisual(style, customBackgrounds.BackgroundDefault);
                     break;
                 case CustomStyleBackgroundMode.MouseOver:
-                    m_customStyleToUIElement.ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundMouseOver);
+                    m_customStyleToUIElement.ApplyBackgroundToVisual(style, customBackgrounds.BackgroundMouseOver);
                     break;
                 case CustomStyleBackgroundMode.MousePressed:
-                    m_customStyleToUIElement.ApplyBackgroundToVisual(Root.style, customBackgrounds.BackgroundMousePressed);
+                    m_customStyleToUIElement.ApplyBackgroundToVisual(style, customBackgrounds.BackgroundMousePressed);
                     break;
             }
         }
