@@ -82,6 +82,7 @@ namespace DesktopBrowser.UI.GenericElement
             base.Initialize();
             button_B = Root.Q<Button>();
             this.button_B.clicked += () => { this.OnClicked(); };
+            //button_B.clickable.clickedWithEventInfo += (e) => { OnMouseDown(e); };
             //m_icon = new Icon_E(button_B, null);
         }
 

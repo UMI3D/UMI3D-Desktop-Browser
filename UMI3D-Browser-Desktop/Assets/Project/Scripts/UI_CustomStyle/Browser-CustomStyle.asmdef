@@ -1,7 +1,9 @@
 {
     "name": "Browser-CustomStyle",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:5fbb2baaf1156684da2a9bdc3527d001"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

@@ -11,7 +11,7 @@ public class ToolboxesWindow_UIController : UIController
     // Start is called before the first frame update
     void Start()
     {
-        toolboxWindow = new ToolboxWindow_E(BindVisual("toolboxWindow"));
+        toolboxWindow = new ToolboxWindow_E(UIDoc.rootVisualElement);
     }
 
     // Update is called once per frame

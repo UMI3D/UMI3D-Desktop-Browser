@@ -98,7 +98,7 @@ namespace Browser.UICustomStyle
                 if (backgroundsByKey.Key == key)
                     return backgroundsByKey.GetBackgroundsByTheme(theme);
             }
-            throw new Exception("Key not found");
+            throw new KeyNotFoundException(key, "UIBackground");
         }
 
         public ScaleMode UnityBackgroundScaleMode => throw new NotImplementedException();
