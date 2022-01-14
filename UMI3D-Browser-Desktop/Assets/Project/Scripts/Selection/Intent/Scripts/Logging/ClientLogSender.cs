@@ -134,7 +134,7 @@ namespace umi3d.cdk.interaction.selection.intent.log
         private async void SendDataAsync(ClientData data, string fileName)
         {
             var filePath = savePath + "/" + fileName + ".json";
-            await WriteDataAsync(data, filePath);
+            await WriteDataTask(data, filePath);
 
             data.Clear();
 
@@ -149,7 +149,7 @@ namespace umi3d.cdk.interaction.selection.intent.log
             UMI3DClientServer.SendData(req, true);
         }
 
-        private Task WriteDataAsync(ClientData data, string filePath)
+        private Task WriteDataTask(ClientData data, string filePath)
         {
             return Task.Run(
                 delegate
