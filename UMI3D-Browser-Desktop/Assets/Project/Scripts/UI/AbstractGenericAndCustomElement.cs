@@ -62,6 +62,16 @@ namespace BrowserDesktop.UI
             this.CustomStyleBackgroundKey = customStyleBackgroundKey;
             Initialize();
         }
+        public void Init(VisualElement parent, VisualTreeAsset visualTA, string customStyleKey, string customStyleBackgroundKey = "")
+        {
+            if (Initialized) Reset();
+            else Initialized = true;
+            this.Root = visualTA.CloneTree();
+            AddTo(parent);
+            this.CustomStyleKey = customStyleKey;
+            this.CustomStyleBackgroundKey = customStyleBackgroundKey;
+            Initialize();
+        }
         public virtual void Reset()
         {
             this.CustomStyleKey = null;
@@ -127,6 +137,12 @@ namespace BrowserDesktop.UI
         public AbstractGenericAndCustomElement(VisualElement root, string customStyleKey, string customStyleBackgroundKey = "") : this()
         {
             Init(root, customStyleKey, customStyleBackgroundKey);
+        }
+        public AbstractGenericAndCustomElement(VisualElement parent, string resourcePath, string customStyleKey, string customStyleBackgroundKey = "") : this()
+        {
+            VisualTreeAsset visualTA = Resources.Load<VisualTreeAsset>(resourcePath);
+            Debug.Assert(visualTA != null, $"[{resourcePath}] return a null visual tree asset");
+            Init(parent, visualTA, customStyleKey, customStyleBackgroundKey);
         }
         ~AbstractGenericAndCustomElement()
         {

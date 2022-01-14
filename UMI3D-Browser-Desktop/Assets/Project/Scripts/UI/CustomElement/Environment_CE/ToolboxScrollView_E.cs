@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Gfi Informatique
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 using BrowserDesktop.UI;
 using BrowserDesktop.UI.GenericElement;
 using DesktopBrowser.UI.GenericElement;
@@ -36,7 +35,10 @@ namespace DesktopBrowser.UI.CustomElement
         /// Scroll animation time in ms.
         /// </summary>
         public int ScrollAnimationTime { get; set; } = 500;
+    }
 
+    public partial class ToolboxScrollView_E
+    {
         private Button_GE backward;
         private VisualElement backwardLayout;
         private bool m_backwardLayoutDisplayed { get; set; } = false;
@@ -66,39 +68,7 @@ namespace DesktopBrowser.UI.CustomElement
     {
         public ToolboxScrollView_E(VisualElement root) : base(root) { }
 
-        private void OnForwardPressed() => ButtonPressed(ButtonType.FORWARD);
-
-        private void OnBackwardPressed() => ButtonPressed(ButtonType.BACKWARD);
-
-        private void ButtonPressed(ButtonType buttonType)
-        {
-            if (buttonType == ButtonType.BACKWARD && !m_forwardLayoutDisplayed) DisplaysForwardButton(true);
-            if (buttonType == ButtonType.FORWARD && !m_backwardLayoutDisplayed) DisplaysBackwardButton(true);
-
-            //m_scrolledWidth -= scrollViewContentContainer[currentIndex].layout.width;
-            //m_scrolledWidth -= scrollViewContentContainer[currentIndex - 1].layout.width;
-
-            m_scrolledWidth += (buttonType == ButtonType.BACKWARD) ? -DeltaScroll : DeltaScroll;
-
-            if (buttonType == ButtonType.BACKWARD && m_scrolledWidth < 0f)
-            {
-                m_scrolledWidth = 0f;
-                DisplaysBackwardButton(false);
-            }
-            if (buttonType == ButtonType.FORWARD && m_scrolledWidth > scrollableWidth)
-            {
-                m_scrolledWidth = scrollableWidth;
-                DisplaysForwardButton(false);
-            }
-
-            scrollView.experimental.animation.Start
-                (scrollView.scrollOffset.x, 
-                m_scrolledWidth, 
-                ScrollAnimationTime, 
-                (ve, value) => { scrollView.scrollOffset = new Vector2(value, 0f); });
-
-            //currentIndex += (buttonType == ButtonType.BACKWARD) ? -2 : 2;
-        }
+        
 
         public void DisplayButtons(bool value)
         {
@@ -143,6 +113,45 @@ namespace DesktopBrowser.UI.CustomElement
         //    }
         //}
 
+        
+    }
+
+    public partial class ToolboxScrollView_E
+    {
+        private void OnForwardPressed() => ButtonPressed(ButtonType.FORWARD);
+
+        private void OnBackwardPressed() => ButtonPressed(ButtonType.BACKWARD);
+
+        private void ButtonPressed(ButtonType buttonType)
+        {
+            if (buttonType == ButtonType.BACKWARD && !m_forwardLayoutDisplayed) DisplaysForwardButton(true);
+            if (buttonType == ButtonType.FORWARD && !m_backwardLayoutDisplayed) DisplaysBackwardButton(true);
+
+            //m_scrolledWidth -= scrollViewContentContainer[currentIndex].layout.width;
+            //m_scrolledWidth -= scrollViewContentContainer[currentIndex - 1].layout.width;
+
+            m_scrolledWidth += (buttonType == ButtonType.BACKWARD) ? -DeltaScroll : DeltaScroll;
+
+            if (buttonType == ButtonType.BACKWARD && m_scrolledWidth < 0f)
+            {
+                m_scrolledWidth = 0f;
+                DisplaysBackwardButton(false);
+            }
+            if (buttonType == ButtonType.FORWARD && m_scrolledWidth > scrollableWidth)
+            {
+                m_scrolledWidth = scrollableWidth;
+                DisplaysForwardButton(false);
+            }
+
+            scrollView.experimental.animation.Start
+                (scrollView.scrollOffset.x,
+                m_scrolledWidth,
+                ScrollAnimationTime,
+                (ve, value) => { scrollView.scrollOffset = new Vector2(value, 0f); });
+
+            //currentIndex += (buttonType == ButtonType.BACKWARD) ? -2 : 2;
+        }
+
         private void OnGeometryChanged(GeometryChangedEvent evt)
         {
             m_scrolledWidth = scrollView.scrollOffset.x;
@@ -168,6 +177,11 @@ namespace DesktopBrowser.UI.CustomElement
             }.SetIcon("scrollView-btn", "menuBar-next", "menuBar-next-desable", true);
             backwardLayout = Root.Q<VisualElement>("horizontal-layout-backward");
             forwardLayout = Root.Q<VisualElement>("horizontal-layout-forward");
+
+            //new AbstractScrollView_E(Root.Q<ScrollView>("scrollView"), null)
+            //    .InitFromSrollViewToProperties();
+
+
             scrollView = Root.Q<ScrollView>("scrollView");
 
             scrollView.contentContainer.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);

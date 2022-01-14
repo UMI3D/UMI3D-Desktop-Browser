@@ -70,7 +70,8 @@ namespace DesktopBrowser.UIControllers
 
         public VisualElement BindVisual(string name)
         {
-            return UIDoc.rootVisualElement.Q<VisualElement>(name);
+            VisualElement result = UIDoc.rootVisualElement.Q<VisualElement>(name);
+            return (result != null) ? result : throw new System.Exception($"[{name}] not found in scene.");
         }
     }
 }

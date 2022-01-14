@@ -66,18 +66,20 @@ namespace DesktopBrowser.UI.CustomElement
         public void OnApplyUserPreferences();
     }
 
-    public interface ICustomisableElement
-    {
-        public string Key { get; set; }
-        public IList<string> Values { get; }
-        public IList<string> CurrentValues { get; set; }
-        public bool IsEmpty { get; }
 
-        public ICustomisableElement SetValues(params string[] values);
-        public void SelectCurrentValues(params int[] indexes);
-        public void DeselectCurrentValues(params string[] values);
-        public void DeselectAllCurrentValues();
-        public void DeselectLasCurrentValues();
-        public void Reset();
-    }
+
+    //public interface ICustomisableElement
+    //{
+    //    public string Key { get; set; }
+    //    public IList<string> Values { get; }
+    //    public IList<string> CurrentValues { get; set; }
+    //    public bool IsEmpty { get; }
+
+    //    public ICustomisableElement SetValues(params string[] values);
+    //    public void SelectCurrentValues(params int[] indexes);
+    //    public void DeselectCurrentValues(params string[] values);
+    //    public void DeselectAllCurrentValues();
+    //    public void DeselectLasCurrentValues();
+    //    public void Reset();
+    //}
 }

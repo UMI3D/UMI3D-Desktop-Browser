@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.UI;
-using BrowserDesktop.UserPreferences;
 using DesktopBrowser.UI.GenericElement;
-using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
@@ -31,7 +29,7 @@ namespace DesktopBrowser.UI.CustomElement
 
     public partial class ToolboxWindow_E
     {
-        public ToolboxWindow_E(VisualElement root) : base(root) { }
+        public ToolboxWindow_E(VisualElement parent) : base(parent, "UI/UXML/ToolboxWindow/ToolboxWindow", null, "") { }
 
         private void OnCloseButtonPressed()
         {
@@ -39,7 +37,6 @@ namespace DesktopBrowser.UI.CustomElement
             //hide the window
             Root.style.display = DisplayStyle.None;
         }
-        private Icon_E icon;
     }
 
     public partial class ToolboxWindow_E : AbstractGenericAndCustomElement
@@ -48,16 +45,16 @@ namespace DesktopBrowser.UI.CustomElement
         {
             base.Initialize();
 
-            scrollViewData = new AbstractScrollView_E(Root.Q("scrollView"))
-            {
-            }.InitFromSrollViewToProperties();
-
-            icon = new Icon_E(Root.Q("icon"), "toolboxWindow-icon");
-
+            new Icon_E(Root.Q("icon"), "toolboxWindow-icon");
+            //TODO Add label.
             new Button_GE(Root.Q("closeButton"))
             {
                 OnClicked = () => { OnCloseButtonPressed(); }
             }.SetIcon("toolboxWindow-closeButton", "", "");
+
+            scrollViewData = new AbstractScrollView_E(Root.Q("scrollViewContainer"), "UI/UXML/ToolboxWindow/ToolboxWindow-ScrollView", null)
+            {
+            }.InitFromSrollViewToProperties();
 
             new Button_GE(Root.Q("unpinnedButton"))
             {
