@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using umi3d.common.interaction;
 using UnityEngine;
 
@@ -25,13 +26,12 @@ namespace umi3d.cdk.interaction.selection.intent.log
         [SerializeField]
         private int cacheSizeMax = 20;
 
-        private int cacheSize = 0;
+        private int cacheSize => clientDataCache.tracking.Count;
 
         private string savePath;
 
-        private List<TrackingData> trackingDataCache = new List<TrackingData>();
-
-        private List<List<TargetData>> sceneDataCache = new List<List<TargetData>>();
+        private ClientData clientDataCache = new ClientData();
+        private ClientData clientDataSendingCache = new ClientData();
 
         private IntentSelectorManager manager;
 
@@ -63,16 +63,14 @@ namespace umi3d.cdk.interaction.selection.intent.log
         {
             if (!ready)
                 return;
-            trackingDataCache.Add(FetchTrackingData());
-            sceneDataCache.Add(FetchSceneData());
-            cacheSize++;
+            clientDataCache.tracking.Add(FetchTrackingData());
+            clientDataCache.scene.Add(FetchSceneData());
             if (cacheSize > cacheSizeMax)
             {
                 var fileName = "clientData_" + DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH'-'mm'-'ss") + "_" + (Time.frameCount % 1000).ToString();
-                StartCoroutine(SendData(new ClientData() { tracking = trackingDataCache, scene = sceneDataCache }, fileName));
-                trackingDataCache.Clear();
-                sceneDataCache.Clear();
-                cacheSize = 0;
+                clientDataSendingCache = clientDataCache;
+                clientDataCache = new ClientData();
+                SendDataAsync(clientDataSendingCache, fileName);
             }
         }
 
@@ -133,16 +131,12 @@ namespace umi3d.cdk.interaction.selection.intent.log
             return dynamicTargetsData;
         }
 
-        private IEnumerator SendData(object data, string fileName)
+        private async void SendDataAsync(ClientData data, string fileName)
         {
             var filePath = savePath + "/" + fileName + ".json";
+            await WriteDataAsync(data, filePath);
 
-            using (System.IO.StreamWriter file = System.IO.File.CreateText(filePath))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                //serialize object directly into file stream
-                serializer.Serialize(file, data);
-            }
+            data.Clear();
 
             var id = FileUploader.AddFileToUpload(filePath);
             InteractionMapper.uploadFileParameterDto.value = filePath;
@@ -153,7 +147,18 @@ namespace umi3d.cdk.interaction.selection.intent.log
                 id = InteractionMapper.uploadFileParameterDto.id
             };
             UMI3DClientServer.SendData(req, true);
-            yield break;
+        }
+
+        private Task WriteDataAsync(ClientData data, string filePath)
+        {
+            return Task.Run(
+                delegate
+                {
+                    using System.IO.StreamWriter file = System.IO.File.CreateText(filePath);
+                    JsonSerializer serializer = new JsonSerializer();
+                    //serialize object directly into file stream
+                    serializer.Serialize(file, data);
+                });
         }
     }
 }

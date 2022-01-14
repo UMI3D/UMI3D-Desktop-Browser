@@ -6,6 +6,18 @@ namespace umi3d.cdk.interaction.selection.intent.log
     {
         public List<List<TargetData>> scene;
         public List<TrackingData> tracking;
+
+        public ClientData()
+        {
+            scene = new List<List<TargetData>>();
+            tracking = new List<TrackingData>();
+        }
+
+        public void Clear()
+        {
+            scene.Clear();
+            tracking.Clear();
+        }
     }
 
     internal class TargetData
