@@ -52,9 +52,14 @@ namespace DesktopBrowser.UI.CustomElement
                 OnClicked = () => { OnCloseButtonPressed(); }
             }.SetIcon("toolboxWindow-closeButton", "", "");
 
-            scrollViewData = new AbstractScrollView_E(Root.Q("scrollViewContainer"), "UI/UXML/ToolboxWindow/ToolboxWindow-ScrollView", null)
+            //scrollViewData = new AbstractScrollView_E(Root.Q("scrollViewContainer"), "UI/UXML/ToolboxWindow/ToolboxWindow-ScrollView", null)
+            //{
+            //}.InitFromSrollViewToProperties();
+            scrollViewData = new AbstractScrollView_E(Root.Q("scrollViewContainer"), null)
             {
-            }.InitFromSrollViewToProperties();
+            }
+            .SetVerticalDraggerContainerStyle("ToolboxWindow-ScrollView", "DraggerContainer")
+            .SetVerticalDraggerStyle("ToolboxWindow-ScrollView", "Dragger");
 
             new Button_GE(Root.Q("unpinnedButton"))
             {

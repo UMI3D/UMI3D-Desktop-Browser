@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb19be9c3a315f241b5712e7b2134361, type: 3}
   m_Name: ToolboxWindow
   m_EditorClassIdentifier: 
-  m_key: toolboxWindow
   m_customStyles:
   - {fileID: 11400000, guid: b633aca6572e1fb48893afb3c4458d27, type: 2}
   - {fileID: 11400000, guid: 688d06853d597d849a1538104190a81a, type: 2}
   - {fileID: 11400000, guid: c508f553a0bbc4542b422ea75f4ac14c, type: 2}
   - {fileID: 11400000, guid: da39f0ee80f462b4f9cbe7db22270574, type: 2}
+  - {fileID: 11400000, guid: 93fca87522ae6494cac49fe11af802a8, type: 2}
