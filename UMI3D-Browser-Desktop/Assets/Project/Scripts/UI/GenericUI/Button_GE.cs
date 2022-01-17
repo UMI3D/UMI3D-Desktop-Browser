@@ -24,12 +24,13 @@ using UnityEngine.UIElements;
 
 namespace DesktopBrowser.UI.GenericElement
 {
-    public sealed partial class Button_GE
+    /// <summary>
+    /// A button is a clickable area. It can have an icon or/and a label.
+    /// </summary>
+    public partial class Button_GE
     {
         public string Text { get; set; } = "";
         public string TextPref { get; set; } = "";
-
-        //public string IconPref { get => m_icon.Key; set => m_icon.Key = value; }
 
         public Action OnClicked { get; set; } = () => { Debug.Log("<color=green>TODO: </color>" + $"ToolboxItem clicked not implemented"); };
         /// <summary>
@@ -38,52 +39,53 @@ namespace DesktopBrowser.UI.GenericElement
         public bool IsOn { get; private set; } = false;
     }
 
-    public sealed partial class Button_GE
+    public partial class Button_GE
     {
+        private Button m_button;
         private Icon_E m_icon;
+        //private Label_E m_label;
         private string m_iconOnKey = null;
         private string m_iconOffKey = null;
-        
-
-        private Button button_B;
-
-        private string currentClass;
-        private IEnumerable<string> USSClassesIconPref = new List<string>();
     }
 
-    public sealed partial class Button_GE
+    public partial class Button_GE
     {
         public Button_GE(VisualTreeAsset visualTA) : base(visualTA) { }
-
         public Button_GE(VisualElement root) : base(root) { }
 
         //public Button_GE(VisualElement root, string customStyleKey) : base(root, customStyleKey) { }
 
-        public Button_GE SetIcon(string customStyleKey, string iconOnKey, string iconOffKey, bool isOn = false)
+        public Button_GE SetIcon(VisualElement icon, string customStyleKey, string iconOnKey, string iconOffKey, bool isOn = false)
         {
+            Debug.Assert(icon != null, "visual element null");
             m_iconOnKey = iconOnKey;
             m_iconOffKey = iconOffKey;
             CustomStyleBackgroundKey = isOn ? m_iconOnKey : m_iconOffKey;
-            m_icon = new Icon_E(button_B, customStyleKey, CustomStyleBackgroundKey);
+            m_icon = new Icon_E(icon, customStyleKey, CustomStyleBackgroundKey);
+            return this;
+        }
+
+        public Button_GE SetLabel(VisualElement label, string customStyleKey)
+        {
+            Debug.Assert(label != null, "visual element null");
             return this;
         }
 
         public void Toggle(bool value)
         {
             IsOn = value;
-            m_icon.ChangeBackground((IsOn) ? m_iconOnKey : m_iconOffKey);
+            m_icon?.ChangeBackground((IsOn) ? m_iconOnKey : m_iconOffKey);
+            //TODO m_label?.change
         }
     }
 
-    public sealed partial class Button_GE : AbstractGenericAndCustomElement
+    public partial class Button_GE : AbstractGenericAndCustomElement
     {
         protected override void Initialize()
         {
             base.Initialize();
-            button_B = Root.Q<Button>();
-            this.button_B.clicked += () => { this.OnClicked(); };
-            //button_B.clickable.clickedWithEventInfo += (e) => { OnMouseDown(e); };
-            //m_icon = new Icon_E(button_B, null);
+            m_button = Root.Q<Button>();
+            this.m_button.clicked += () => { this.OnClicked(); };
         }
 
         public override void Reset()
@@ -96,133 +98,42 @@ namespace DesktopBrowser.UI.GenericElement
 
             OnClicked = () => { Debug.Log("<color=green>TODO: </color>" + $"ToolboxItem clicked not implemented"); }; 
             IsOn = false;
-            button_B = null;
+            m_button = null;
         }
 
         #region Set and Unset Icon
 
-        
-
-        //public Button_GE SetIcon(string iconOn, string iconOff, bool isOn = false)
-        //{
-        //    //this.IconClassOn = iconOn;
-        //    //this.IconClassOff = iconOff;
-        //    m_icon.SetValues(iconOn, iconOff);
-        //    this.IsOn = isOn;
-        //    SwitchClass(this.IsOn);
-        //    return this;
-        //}
-
         public Button_GE SetIcon(Texture2D icon)
         {
             if (icon != null)
-                button_B.style.backgroundImage = Background.FromTexture2D(icon);
+                m_button.style.backgroundImage = Background.FromTexture2D(icon);
             else
-                button_B.style.backgroundImage = StyleKeyword.Auto;
+                m_button.style.backgroundImage = StyleKeyword.Auto;
             return this;
         }
 
         public Button_GE SetIcon(Sprite icon)
         {
             if (icon != null)
-                button_B.style.backgroundImage = Background.FromSprite(icon);
+                m_button.style.backgroundImage = Background.FromSprite(icon);
             else
-                button_B.style.backgroundImage = StyleKeyword.Auto;
+                m_button.style.backgroundImage = StyleKeyword.Auto;
             return this;
         }
 
         public Button_GE UnSetIcon()
         {
-            button_B.style.backgroundImage = StyleKeyword.Auto;
+            m_button.style.backgroundImage = StyleKeyword.Auto;
             return this;
         }
 
         #endregion
 
-        #region To be deleted
-
-        //public Button_GE Setup(System.Action onClicked, bool isOn = true, bool isReadyToDisplay = false)
-        //{
-        //    Initialize();
-
-        //    this.Text = "";
-        //    this.TextPref = "";
-        //    //button_B.text = "";
-
-        //    this.IconClassOn = "";
-        //    this.IconClassOff = "";
-        //    this.currentClass = "";
-        //    this.IconPref = "";
-
-        //    this.IsOn = isOn;
-
-        //    OnClicked = onClicked;
-        //    button_B.clicked += OnClicked;
-
-        //    if (isReadyToDisplay)
-        //        ReadyToDisplay();
-
-        //    return this;
-        //}
-
-        //public Button_GE WithBackgroundImage(string classOn, string classOff, string iconPref)
-        //{
-        //    this.IconClassOn = classOn;
-        //    this.IconClassOff = classOff;
-        //    this.IconPref = iconPref;
-
-        //    SwitchClass(this.IsOn);
-
-        //    return this;
-        //}
-
-        //public Button_GE WithText(string text, string textPref)
-        //{
-        //    this.Text = text;
-        //    this.TextPref = textPref;
-
-        //    UserPreferences.TextAndIconPref.ApplyTextPref(button_B, textPref, text);
-
-        //    return this;
-        //}
-
-        #endregion
-
-        ///// <summary>
-        ///// Switch between USS classes when button is on or off.
-        ///// </summary>
-        ///// <param name="value">True if the button should be on, false else.</param>
-        //public void SwitchClass(bool value)
-        //{
-        //    ////if (string.IsNullOrEmpty(IconClassOn) || string.IsNullOrEmpty(IconClassOff))
-        //    ////    return;
-        //    //if (m_icon.IsEmpty)
-        //    //    return;
-        //    //IsOn = value;
-        //    //string theme = "darkTheme"; //TODO to be replace by theme checked.
-        //    //if (value)
-        //    //{
-        //    //    //currentClass = $"{theme}-{IconClassOn}-btn";
-        //    //    m_icon.DeselectLasCurrentValues();
-        //    //    m_icon.SelectCurrentValues(0);
-        //    //}
-        //    //else
-        //    //{
-        //    //    //currentClass = $"{theme}-{IconClassOff}-btn";
-        //    //    m_icon.DeselectLasCurrentValues();
-        //    //    m_icon.SelectCurrentValues(1);
-        //    //}
-
-        //    IsOn = value;
-
-        //}
-
 
         public override void Remove()
         {
             base.Remove();
-
-            button_B.clicked -= OnClicked;
+            m_button.clicked -= OnClicked;
         }
 
         public override void OnApplyUserPreferences()
@@ -230,9 +141,9 @@ namespace DesktopBrowser.UI.GenericElement
             if (!Displayed) return;
 
             if (!string.IsNullOrEmpty(TextPref))
-                UserPreferences.TextAndIconPref.ApplyTextPref(button_B, TextPref, Text);
+                UserPreferences.TextAndIconPref.ApplyTextPref(m_button, TextPref, Text);
             else
-                button_B.text = "";
+                m_button.text = "";
         }
     }
 }

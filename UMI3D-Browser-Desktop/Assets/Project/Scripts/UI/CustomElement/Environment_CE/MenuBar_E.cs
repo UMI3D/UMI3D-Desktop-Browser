@@ -27,18 +27,13 @@ using UnityEngine.UIElements;
 namespace DesktopBrowser.UI.CustomElement
 {
     /// <summary>
-    /// A menuBar has 3 layout (left, center and right). The center layout is a scrollView.
+    /// A menuBar has 3 layout (Tools area, Application settings area and Leave button area).
     /// </summary>
-    /// 
     public partial class MenuBar_E
     {
         public float Space { get; set; } = 10f;
         public Action<VisualElement> AddSeparator { get; set; } = (ve) => { Debug.Log("<color=green>TODO: </color>" + $"AddSeparator in MenuBarElement."); };
-
         public VisualElement SubMenuLayout { get; private set; }
-
-        public MenuBar_E(VisualTreeAsset visualTA, string customStyleKey) : base(visualTA, customStyleKey) { }
-        public MenuBar_E(VisualElement root, string customStyleKey) : base(root, customStyleKey) { }
     }
 
     public partial class MenuBar_E
@@ -50,6 +45,9 @@ namespace DesktopBrowser.UI.CustomElement
 
     public partial class MenuBar_E
     {
+        public MenuBar_E(VisualTreeAsset visualTA, string customStyleKey) : base(visualTA, customStyleKey) { }
+        public MenuBar_E(VisualElement root, string customStyleKey) : base(root, customStyleKey) { }
+
         public MenuBar_E AddLeft(params AbstractGenericAndCustomElement[] ces)
         {
             foreach (AbstractGenericAndCustomElement ce in ces)

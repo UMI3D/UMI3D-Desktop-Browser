@@ -41,9 +41,6 @@ namespace DesktopBrowser.UI.CustomElement
         public UnityEvent VerticalForwardButtonPressed { get; }
         public UnityEvent HorizontalBackwardButtonPressed { get; }
         public UnityEvent HorizontalForwardButtonPressed { get; }
-
-        public IScrollable InitFromPropertiesToScrollView();
-        public IScrollable InitFromSrollViewToProperties();
     }
 
     public partial class AbstractScrollView_E : IScrollable
@@ -58,17 +55,6 @@ namespace DesktopBrowser.UI.CustomElement
         public UnityEvent HorizontalBackwardButtonPressed { get; protected set; } = new UnityEvent();
         public UnityEvent HorizontalForwardButtonPressed { get; protected set; } = new UnityEvent();
 
-        
-        public IScrollable InitFromPropertiesToScrollView()
-        {
-            throw new System.NotImplementedException();
-        }
-        public IScrollable InitFromSrollViewToProperties()
-        {
-            //m_scrollView.
-            
-            return this;
-        }
     }
 
     public partial class AbstractScrollView_E
@@ -107,6 +93,7 @@ namespace DesktopBrowser.UI.CustomElement
         {
             //new Icon_E(m_verticalScroller, customStyleKey, null);
             new Icon_E(m_verticalScroller, customStyleKey, customStyleBackgroundKey);
+            m_verticalScroller.style.opacity = 1f;
             //new Icon_E(m_verticalSlider, customStyleKey, customStyleBackgroundKey);
             return this;
         }
