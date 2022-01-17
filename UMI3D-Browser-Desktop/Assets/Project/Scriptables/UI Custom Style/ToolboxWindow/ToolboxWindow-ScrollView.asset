@@ -28,9 +28,9 @@ MonoBehaviour:
       m_valueMode: 0
       m_value: 0
     m_width:
-      m_keyword: 0
+      m_keyword: 6
       m_valueMode: 0
-      m_value: 0
+      m_value: 18
     m_maxHeight:
       m_keyword: 0
       m_valueMode: 0

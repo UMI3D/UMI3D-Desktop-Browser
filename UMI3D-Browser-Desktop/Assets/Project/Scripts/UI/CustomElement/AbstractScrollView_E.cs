@@ -105,8 +105,9 @@ namespace DesktopBrowser.UI.CustomElement
         }
         public AbstractScrollView_E SetVerticalDraggerContainerStyle(string customStyleKey, string customStyleBackgroundKey = "")
         {
-            new Icon_E(m_verticalScroller, customStyleKey, null);
-            new Icon_E(m_verticalSlider, customStyleKey, customStyleBackgroundKey);
+            //new Icon_E(m_verticalScroller, customStyleKey, null);
+            new Icon_E(m_verticalScroller, customStyleKey, customStyleBackgroundKey);
+            //new Icon_E(m_verticalSlider, customStyleKey, customStyleBackgroundKey);
             return this;
         }
         public AbstractScrollView_E SetHorizontalDraggerContainerStyle(string customStyleKey, string customStyleBackgroundKey = "")
