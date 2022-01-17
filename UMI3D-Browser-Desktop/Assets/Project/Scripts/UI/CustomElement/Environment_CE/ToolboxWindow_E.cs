@@ -50,7 +50,7 @@ namespace DesktopBrowser.UI.CustomElement
             new Button_GE(Root.Q("closeButton"))
             {
                 OnClicked = () => { OnCloseButtonPressed(); }
-            }.SetIcon("toolboxWindow-closeButton", "", "");
+            }.SetIcon(Root.Q("closeButton"),"toolboxWindow-closeButton", "", "");
 
             //scrollViewData = new AbstractScrollView_E(Root.Q("scrollViewContainer"), "UI/UXML/ToolboxWindow/ToolboxWindow-ScrollView", null)
             //{
@@ -64,7 +64,7 @@ namespace DesktopBrowser.UI.CustomElement
             new Button_GE(Root.Q("unpinnedButton"))
             {
                 OnClicked = () => { UnPinedButtonPressed.Invoke(); },
-            }.SetIcon("toolboxWindow-unpinnedButton", "", "");
+            }.SetIcon(Root.Q("unpinnedButton"),"toolboxWindow-unpinnedButton", "", "");
         }
 
         public override bool GetCustomStyle()

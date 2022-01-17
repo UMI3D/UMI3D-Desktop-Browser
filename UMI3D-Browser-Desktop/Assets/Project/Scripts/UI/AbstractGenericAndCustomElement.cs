@@ -282,10 +282,6 @@ namespace BrowserDesktop.UI
 
         protected void ApplyCustomBackground()
         {
-            //switch (m_mouseState)
-            //{
-            //    case (MousePressedState.Unpressed, MousePositionState.Out):
-            //}
             var result = m_mouseState switch
             {
                 (MousePressedState.Unpressed, MousePositionState.Out) => CustomStyleBackgroundMode.MouseOut,

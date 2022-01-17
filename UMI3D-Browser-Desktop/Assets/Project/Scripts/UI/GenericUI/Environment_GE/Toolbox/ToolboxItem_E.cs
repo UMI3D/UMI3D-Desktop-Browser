@@ -58,7 +58,7 @@ namespace DesktopBrowser.UI.GenericElement
 
         public ToolboxItem_E SetIcon(string iconOn, string iconOff, bool isOn = false)
         {
-            ItemButton.SetIcon("square-button", iconOn, iconOff, isOn);
+            //ItemButton.SetIcon("square-button", iconOn, iconOff, isOn);
             return this;
         }
 
