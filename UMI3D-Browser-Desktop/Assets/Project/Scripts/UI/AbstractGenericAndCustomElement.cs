@@ -112,7 +112,7 @@ namespace BrowserDesktop.UI
             return GetCustomStyle(CustomStyleKey);
         }
 
-        public abstract void OnApplyUserPreferences();
+        public virtual void OnApplyUserPreferences() { }
     }
 
     public abstract partial class AbstractGenericAndCustomElement
@@ -278,6 +278,11 @@ namespace BrowserDesktop.UI
             length = m_customStyleToUIElement.GetPxAndPourcentageFloatLength(uiSize.MaxWidth, m_globalPref.ZoomCoef);
             if (length.keyword != StyleKeyword.Null)
                 Root.style.maxWidth = length;
+        }
+
+        protected void ApplyCustomText()
+        {
+            
         }
 
         protected void ApplyCustomBackground()

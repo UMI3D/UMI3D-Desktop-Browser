@@ -22,9 +22,13 @@ using UnityEngine.UIElements;
 namespace DesktopBrowser.UI.GenericElement
 {
     /// <summary>
-    /// A ToolboxItem has a button and a label.
+    /// A ToolboxItem is a button which has an Icon and a Label.
     /// </summary>
-    public class ToolboxItem_E : AbstractGenericAndCustomElement
+    public partial class ToolboxItem_E
+    {
+
+    }
+    public partial class ToolboxItem_E : AbstractGenericAndCustomElement
     {
         #region Fields
 

@@ -14,27 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.UI;
+using BrowserDesktop.UserPreferences;
+using DesktopBrowser.UI.CustomElement;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace DesktopBrowser.UI.CustomElement
+namespace DesktopBrowser.UI.GenericElement
 {
-    public partial class Icon_E
+    public partial class Label_E
     {
-        public Icon_E(VisualElement root, string customStyleKey, string customStyleBackgroundKey = "") : 
-            base(root, customStyleKey, customStyleBackgroundKey) { }
+        
+    }
 
-        public void ChangeBackground(string customStyleBackgroundKey)
+    public partial class Label_E
+    {
+        private TextElement m_label;
+    }
+
+    public partial class Label_E
+    {
+        public Label_E(VisualElement root, string customStyleKey = null, string customStyleBackgroundKey = "") : base(root, customStyleKey, customStyleBackgroundKey)
         {
-            CustomStyleBackgroundKey = customStyleBackgroundKey;
+
         }
     }
 
-    public partial class Icon_E : AbstractGenericAndCustomElement
+    public partial class Label_E : AbstractGenericAndCustomElement
     {
-
         protected override void Initialize()
         {
             base.Initialize();
+            m_label = this.Root.Q<TextElement>();
         }
     }
 }
