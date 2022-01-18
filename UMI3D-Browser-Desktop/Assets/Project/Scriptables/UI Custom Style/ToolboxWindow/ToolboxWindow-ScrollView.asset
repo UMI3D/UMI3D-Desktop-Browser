@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_uIDisplay:
     m_opacity:
-      m_keyword: 0
-      m_value: 0
+      m_keyword: 7
+      m_value: 100
   m_uIPosition:
     m_position: 0
     m_bottom: 0
@@ -158,13 +158,13 @@ MonoBehaviour:
     m_color:
       m_keyword: 0
       m_value:
-        m_global: {r: 0, g: 0, b: 0, a: 0}
-        m_bottom: {r: 0, g: 0, b: 0, a: 0}
-        m_left: {r: 0, g: 0, b: 0, a: 0}
-        m_right: {r: 0, g: 0, b: 0, a: 0}
-        m_top: {r: 0, g: 0, b: 0, a: 0}
+        m_global: {r: 0, g: 0, b: 0, a: 1}
+        m_bottom: {r: 0, g: 0, b: 0, a: 1}
+        m_left: {r: 0, g: 0, b: 0, a: 1}
+        m_right: {r: 0, g: 0, b: 0, a: 1}
+        m_top: {r: 0, g: 0, b: 0, a: 1}
     m_width:
-      m_keyword: 0
+      m_keyword: 6
       m_value:
         m_global: 0
         m_bottom: 0
@@ -172,13 +172,13 @@ MonoBehaviour:
         m_right: 0
         m_top: 0
     m_radius:
-      m_keyword: 0
+      m_keyword: 6
       m_value:
-        m_global: 0
-        m_bottomLeft: 0
-        m_bottomRight: 0
-        m_topLeft: 0
-        m_TopRight: 0
+        m_global: 4
+        m_bottomLeft: 4
+        m_bottomRight: 4
+        m_topLeft: 4
+        m_TopRight: 4
   ApplyCustomStyle:
     m_PersistentCalls:
       m_Calls: []

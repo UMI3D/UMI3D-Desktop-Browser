@@ -13,12 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Browser.UICustomStyle
 {
@@ -30,6 +26,7 @@ namespace Browser.UICustomStyle
             EditorGUI.BeginProperty(position, label, property);
 
             position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+            --EditorGUI.indentLevel;
 
             var keyword = property.FindPropertyRelative("m_keyword");
             var value = property.FindPropertyRelative("m_value");
@@ -70,6 +67,7 @@ namespace Browser.UICustomStyle
             EditorGUI.BeginProperty(position, label, property);
 
             position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+            --EditorGUI.indentLevel;
 
             Rect keywordRect;
             Rect valueModeRect;
@@ -129,6 +127,7 @@ namespace Browser.UICustomStyle
             EditorGUI.BeginProperty(position, label, property);
 
             position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+            --EditorGUI.indentLevel;
 
             var keyword = property.FindPropertyRelative("m_keyword");
             var value = property.FindPropertyRelative("m_value");

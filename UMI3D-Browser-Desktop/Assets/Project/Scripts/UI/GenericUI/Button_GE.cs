@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Gfi Informatique
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ namespace DesktopBrowser.UI.GenericElement
     {
         private Button m_button;
         private Icon_E m_icon;
-        //private Label_E m_label;
+        private Label_E m_label;
         private string m_iconOnKey = null;
         private string m_iconOffKey = null;
     }
@@ -51,9 +51,9 @@ namespace DesktopBrowser.UI.GenericElement
     public partial class Button_GE
     {
         public Button_GE(VisualTreeAsset visualTA) : base(visualTA) { }
-        public Button_GE(VisualElement root) : base(root) { }
+        //public Button_GE(VisualElement root) : base(root) { }
 
-        //public Button_GE(VisualElement root, string customStyleKey) : base(root, customStyleKey) { }
+        public Button_GE(VisualElement root, string customStyleKey = null) : base(root, customStyleKey) { }
 
         public Button_GE SetIcon(VisualElement icon, string customStyleKey, string iconOnKey, string iconOffKey, bool isOn = false)
         {
@@ -65,7 +65,7 @@ namespace DesktopBrowser.UI.GenericElement
             return this;
         }
 
-        public Button_GE SetLabel(VisualElement label, string customStyleKey)
+        public Button_GE SetLabel(TextElement label, string customStyleKey)
         {
             Debug.Assert(label != null, "visual element null");
             return this;

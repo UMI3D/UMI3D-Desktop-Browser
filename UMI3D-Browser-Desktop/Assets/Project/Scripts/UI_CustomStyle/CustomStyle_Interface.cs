@@ -66,16 +66,16 @@ namespace Browser.UICustomStyle
         public Color Color { get; }
         public float LetterSpacing { get; }
         public float FontSize { get; }
-        public TextOverflow TextOverflow { get; }
+        //public TextOverflow TextOverflow { get; }
         public Font UnityFont { get; }
-        public FontDefinition UnityFontDefinition { get; }
+        //public FontDefinition UnityFontDefinition { get; }
         public FontStyle UnityFontStyleAndWeight { get; }
         public float UnityParagraphSpacing { get; }
         public TextAnchor UnityTextAlign { get; }
-        public TextOverflowPosition UnityTextOverflowPosition { get; }
+        //public TextOverflowPosition UnityTextOverflowPosition { get; }
         public Color UnityTextOutlineColor { get; }
         public float UnityTextOutlineWidth { get; }
-        public WhiteSpace WhiteSpace { get; }
+        //public WhiteSpace WhiteSpace { get; }
         public float WordSpacing { get; }
     }
 

@@ -15,14 +15,14 @@ limitations under the License.
 */
 using System;
 using UnityEngine;
-using UnityEngine.UIElements;
+//using UnityEngine.UIElements;
 
 namespace Browser.UICustomStyle
 {
     [Serializable]
     public struct UIText : IUIText
     {
-        //[Header("Font")]
+        [Header("Font")]
         [SerializeField]
         private Font m_font;
         //[SerializeField]
@@ -34,42 +34,38 @@ namespace Browser.UICustomStyle
         [SerializeField]
         private Color m_color;
 
-        [Space()]
+        [Header("Format")]
         [SerializeField]
-        private float m_letterSpacing;
+        private CustomStyleFloat m_letterSpacing;
+        [SerializeField]
+        private CustomStyleFloat m_wordSpacing;
+        [SerializeField]
+        private CustomStyleFloat m_paragraphSpacing;
+        [SerializeField]
+        private TextAnchor m_textAlign;
+        [SerializeField]
+        private CustomStyleColor m_textOutlineColor;
+        [SerializeField]
+        private CustomStyleFloat m_textOutlineWidth;
 
-        [SerializeField]
-        private TextOverflow m_textOveflow;
-
-
-
-        [SerializeField]
-        private float m_unityParagraphSpacing;
-        [SerializeField]
-        private TextAnchor m_unityTextAlign;
-        [SerializeField]
-        private TextOverflowPosition m_unityTextOverflowPosition;
-        [SerializeField]
-        private Color m_unityTextOutlineColor;
-        [SerializeField]
-        private float m_unityTextOutlineWidth;
-        [SerializeField]
-        private WhiteSpace m_WhiteSpace;
-        [SerializeField]
-        private float m_wordSpacing;
-
-
+        //[SerializeField]
+        //private TextOverflow m_textOveflow;//
+        //[SerializeField]
+        //private TextOverflowPosition m_unityTextOverflowPosition;//
+        //[SerializeField]
+        //private WhiteSpace m_WhiteSpace;//
+        
         public Color Color => throw new NotImplementedException();
 
         public float LetterSpacing => throw new NotImplementedException();
 
         public float FontSize => throw new NotImplementedException();
 
-        public TextOverflow TextOverflow => throw new NotImplementedException();
+        //public TextOverflow TextOverflow => throw new NotImplementedException();
 
         public Font UnityFont => throw new NotImplementedException();
 
-        public FontDefinition UnityFontDefinition => throw new NotImplementedException();
+        //public FontDefinition UnityFontDefinition => throw new NotImplementedException();
 
         public FontStyle UnityFontStyleAndWeight => throw new NotImplementedException();
 
@@ -77,13 +73,13 @@ namespace Browser.UICustomStyle
 
         public TextAnchor UnityTextAlign => throw new NotImplementedException();
 
-        public TextOverflowPosition UnityTextOverflowPosition => throw new NotImplementedException();
+        //public TextOverflowPosition UnityTextOverflowPosition => throw new NotImplementedException();
 
         public Color UnityTextOutlineColor => throw new NotImplementedException();
 
         public float UnityTextOutlineWidth => throw new NotImplementedException();
 
-        public WhiteSpace WhiteSpace => throw new NotImplementedException();
+        //public WhiteSpace WhiteSpace => throw new NotImplementedException();
 
         public float WordSpacing => throw new NotImplementedException();
     }

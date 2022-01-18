@@ -15,7 +15,6 @@ limitations under the License.
 */
 using System;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Browser.UICustomStyle
 {
