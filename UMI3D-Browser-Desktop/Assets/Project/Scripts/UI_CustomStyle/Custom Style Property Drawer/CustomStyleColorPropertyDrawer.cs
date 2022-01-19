@@ -16,7 +16,7 @@ limitations under the License.
 using UnityEditor;
 using UnityEngine;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleColor))]
     public class CustomStyleColorPropertyDrawer : PropertyDrawer
@@ -31,7 +31,7 @@ namespace Browser.UICustomStyle
 
             Rect keywordRect;
             Rect valueRect;
-            if (keywordValue != CustomStyleKeyword.VariableUndefined && keywordValue != CustomStyleKeyword.ConstUndefined)
+            if (!keywordValue.IsDefaultOrUndefined())
             {
                 float width = (position.width) / 2f - 4f;
                 keywordRect = new Rect(position.x, position.y, width, position.height);

@@ -38,7 +38,7 @@ namespace DesktopBrowser.UI.GenericElement
     {
         public Label_E(VisualElement root, string customStyleKey = null, string customStyleBackgroundKey = "") : base(root, customStyleKey, customStyleBackgroundKey)
         {
-
+            //m_label.style
         }
     }
 

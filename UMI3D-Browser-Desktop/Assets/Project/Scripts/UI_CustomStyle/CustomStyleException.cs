@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     public class KeyNotFoundException : Exception
     {

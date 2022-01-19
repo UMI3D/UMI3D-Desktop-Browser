@@ -16,7 +16,7 @@ limitations under the License.
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     public interface ICustomStyleValue<K,V>
     {
@@ -41,24 +41,26 @@ namespace Browser.UICustomStyle
 
     public interface IUISize
     {
-        public CustomStylePXAndPercentFloat MaxHeight { get; }
-        public CustomStylePXAndPercentFloat MaxWidth { get; }
-        public CustomStylePXAndPercentFloat MinHeight { get; }
-        public CustomStylePXAndPercentFloat MinWidth { get; }
-        public CustomStylePXAndPercentFloat Height { get; }
-        public CustomStylePXAndPercentFloat Width { get; }
+        public CustomStyleSize MaxHeight { get; }
+        public CustomStyleSize MaxWidth { get; }
+        public CustomStyleSize MinHeight { get; }
+        public CustomStyleSize MinWidth { get; }
+        public CustomStyleSize Height { get; }
+        public CustomStyleSize Width { get; }
+    }
+
+    public interface ICrossPosition<T>
+    {
+        public T Bottom { get; }
+        public T Left { get; }
+        public T Right { get; }
+        public T Top { get; }
     }
 
     public interface IUIMarginAndPadding
     {
-        public float MarginBottom { get; }
-        public float MarginLeft { get; }
-        public float MarginRight { get; }
-        public float MarginTop { get; }
-        public float PaddingBottom { get; }
-        public float PaddingLeft { get; }
-        public float PaddingRight { get; }
-        public float PaddingTop { get; }
+        //public FloatCrossPosition Margin { get; }
+        //public FloatCrossPosition Padding { get; }
     }
 
     public interface IUIText
@@ -96,28 +98,13 @@ namespace Browser.UICustomStyle
 
     public interface IUIBackground
     {
-        public BackgroundsByTheme GetCustomBackgrounds(string key, CustomStyleTheme theme);
+        //public BackgroundsByTheme GetCustomBackgrounds(string key, CustomStyleTheme theme);
+        public BackgroundsByTheme GetBackgroundsByTheme(CustomStyleTheme theme);
         public ScaleMode UnityBackgroundScaleMode { get; }
         public int SliceBottom { get; }
         public int SliceLeft { get; }
         public int SliceRight { get; }
         public int SliceTop { get; }
-    }
-
-    public interface IBorderColor
-    {
-        public Color Bottom { get; }
-        public Color Left { get; }
-        public Color Right { get; }
-        public Color Top { get; }
-    }
-
-    public interface IBorderWidth
-    {
-        public float Bottom { get; }
-        public float Left { get; }
-        public float Right { get; }
-        public float Top { get; }
     }
 
     public interface IBorderRadius
@@ -130,8 +117,8 @@ namespace Browser.UICustomStyle
 
     public interface IUIBorder
     {
-        public CustomStyleBorderColor Color { get; }
-        public CustomStyleBorderWidth Width { get; }
+        public CustomStyleColorCrossPosition Color { get; }
+        public CustomStyleFloatCrossPosition Width { get; }
         public CustomStyleBorderRadius Radius { get; }
     }
 }

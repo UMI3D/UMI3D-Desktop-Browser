@@ -16,7 +16,7 @@ limitations under the License.
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     [CreateAssetMenu(fileName ="NewCustomUIStyle", menuName = "Browser_SO/CustomUIStyle")]
     public class CustomStyle_SO : ScriptableObject

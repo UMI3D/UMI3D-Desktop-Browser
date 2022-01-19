@@ -16,7 +16,7 @@ limitations under the License.
 using UnityEditor;
 using UnityEngine;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleFloat))]
     public class CustomStyleFloatPropertyDrawer : PropertyDrawer
@@ -33,7 +33,7 @@ namespace Browser.UICustomStyle
             CustomStyleKeyword keywordValue = (CustomStyleKeyword)keyword.intValue;
             Rect keywordRect;
             Rect valueRect;
-            if (keywordValue != CustomStyleKeyword.VariableUndefined && keywordValue != CustomStyleKeyword.ConstUndefined)
+            if (!keywordValue.IsDefaultOrUndefined())
             {
                 float width = position.width / 2 - 2;
                 keywordRect = new Rect(position.x, position.y, width, position.height);
@@ -53,7 +53,7 @@ namespace Browser.UICustomStyle
     }
 
 
-    [UnityEditor.CustomPropertyDrawer(typeof(CustomStylePXAndPercentFloat))]
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleSize))]
     public class CustomStylePxAndPercentFloatPropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -62,7 +62,7 @@ namespace Browser.UICustomStyle
             var valueMode = property.FindPropertyRelative("m_valueMode");
             var value = property.FindPropertyRelative("m_value");
             CustomStyleKeyword keywordV = (CustomStyleKeyword)keyword.intValue;
-            CustomStyleValueMode valueModeV = (CustomStyleValueMode)valueMode.intValue;
+            CustomStyleSizeMode valueModeV = (CustomStyleSizeMode)valueMode.intValue;
 
             EditorGUI.BeginProperty(position, label, property);
 
@@ -76,20 +76,20 @@ namespace Browser.UICustomStyle
             float keywordAndModeWidth = 0f;
             switch (keywordV)
             {
-                case CustomStyleKeyword.VariableUndefined:
-                case CustomStyleKeyword.ConstUndefined:
+                case CustomStyleKeyword.Default:
+                case CustomStyleKeyword.Undefined:
                     keywordRect = new Rect(position.x, position.y, position.width, position.height);
                     valueModeRect = new Rect();
                     valueRect = new Rect();
                     break;
-                case CustomStyleKeyword.Variable:
+                case CustomStyleKeyword.CustomResizable:
                     valueWidth = position.width / 2f - 2f;
                     keywordRect = new Rect(position.x, position.y, valueWidth, position.height);
                     valueModeRect = new Rect();
                     valueRect = new Rect(position.x + valueWidth + 4, position.y, valueWidth, position.height);
-                    valueModeV = CustomStyleValueMode.Px;
+                    valueModeV = CustomStyleSizeMode.Px;
                     break;
-                case CustomStyleKeyword.Const:
+                case CustomStyleKeyword.CustomUnresizabe:
                     valueWidth = position.width / 2f - 2f;
                     keywordAndModeWidth = valueWidth / 2f - 2f;
                     keywordRect = new Rect(position.x, position.y, keywordAndModeWidth, position.height);
@@ -107,7 +107,7 @@ namespace Browser.UICustomStyle
             EditorGUI.PropertyField(valueModeRect, valueMode, GUIContent.none);
             switch (valueModeV)
             {
-                case CustomStyleValueMode.Percent:
+                case CustomStyleSizeMode.Percent:
                     EditorGUI.Slider(valueRect, value, 0f, 100f, GUIContent.none);
                     break;
                 default:
@@ -131,10 +131,10 @@ namespace Browser.UICustomStyle
 
             var keyword = property.FindPropertyRelative("m_keyword");
             var value = property.FindPropertyRelative("m_value");
-            CustomStyleKeyword keywordV = (CustomStyleKeyword)keyword.intValue;
+            CustomStyleKeyword keywordValue = (CustomStyleKeyword)keyword.intValue;
             Rect keywordRect;
             Rect valueRect;
-            if (keywordV != CustomStyleKeyword.VariableUndefined && keywordV != CustomStyleKeyword.ConstUndefined)
+            if (!keywordValue.IsDefaultOrUndefined())
             {
                 float valueWidth = position.width / 2 - 2;
                 keywordRect = new Rect(position.x, position.y, valueWidth, position.height);

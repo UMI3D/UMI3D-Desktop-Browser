@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2022 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,31 +13,173 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     public enum CustomStyleKeyword
     {
-        VariableUndefined = 0,
         //Null = 1,
         //Auto = 2,
         //None = 3,
         //Initial = 4,
-        ConstUndefined = 5,
-        Variable = 6,
-        Const = 7,
+
+        /// <summary>
+        /// No style will be applied.
+        /// </summary>
+        Undefined = 0,
+        /// <summary>
+        /// Default style.
+        /// </summary>
+        Default = 1,
+        /// <summary>
+        /// Apply a custom style.
+        /// </summary>
+        Custom = 2,
+
+        /// <summary>
+        /// Apply a custom resizable style.
+        /// </summary>
+        CustomResizable = 10,
+        /// <summary>
+        /// Apply a custom unresizable style.
+        /// </summary>
+        CustomUnresizabe = 11,
+
+        /// <summary>
+        /// Primary color.
+        /// </summary>
+        Primary = 20,
+        /// <summary>
+        /// Secondary color.
+        /// </summary>
+        Secondary = 21,
+        /// <summary>
+        /// Tertiary color.
+        /// </summary>
+        Tertiary = 22,
+
+        /// <summary>
+        /// Apply a title style.
+        /// </summary>
+        Title = 30,
+        /// <summary>
+        /// Apply a subtitle style.
+        /// </summary>
+        Subtitle = 31,
+        /// <summary>
+        /// Apply a body style.
+        /// </summary>
+        Body = 32,
+        /// <summary>
+        /// Apply a foot-note style.
+        /// </summary>
+        FootNote = 33,
+    }
+
+    public static class CustomStyleKeywordMethods
+    {
+        public static bool IsDefaultOrUndefined(this CustomStyleKeyword keyword)
+        {
+            return keyword == CustomStyleKeyword.Default || keyword == CustomStyleKeyword.Undefined;
+        }
     }
 
     public enum CustomStyleSimpleKeyword
     {
+        /// <summary>
+        /// No style will be applied.
+        /// </summary>
         Undefined = 0,
-        Variable = 6
+        /// <summary>
+        /// Default style.
+        /// </summary>
+        Default = 1,
+        /// <summary>
+        /// Apply a custom style.
+        /// </summary>
+        Custom = 2,
+    }
+
+    public enum CustomStyleSizeKeyword
+    {
+        /// <summary>
+        /// No style will be applied.
+        /// </summary>
+        Undefined = 0,
+        /// <summary>
+        /// Default style.
+        /// </summary>
+        Default = 1,
+        /// <summary>
+        /// Apply a custom resizable style.
+        /// </summary>
+        CustomResizable = 10,
+        /// <summary>
+        /// Apply a custom unresizable style.
+        /// </summary>
+        CustomUnresizabe = 11,
+    }
+
+    public enum CustomStyleColorKeyword
+    {
+        /// <summary>
+        /// No style will be applied.
+        /// </summary>
+        Undefined = 0,
+        /// <summary>
+        /// Default style.
+        /// </summary>
+        Default = 1,
+        /// <summary>
+        /// Apply a custom style.
+        /// </summary>
+        Custom = 2,
+        /// <summary>
+        /// Primary color.
+        /// </summary>
+        Primary = 20,
+        /// <summary>
+        /// Secondary color.
+        /// </summary>
+        Secondary = 21,
+        /// <summary>
+        /// Tertiary color.
+        /// </summary>
+        Tertiary = 22,
+    }
+
+    public enum CustomStyleTextKeyword
+    {
+        /// <summary>
+        /// No style will be applied.
+        /// </summary>
+        Undefined = 0,
+        /// <summary>
+        /// Default style.
+        /// </summary>
+        Default = 1,
+        /// <summary>
+        /// Apply a custom style.
+        /// </summary>
+        Custom = 2,
+        /// <summary>
+        /// Apply a title style.
+        /// </summary>
+        Title = 30,
+        /// <summary>
+        /// Apply a subtitle style.
+        /// </summary>
+        Subtitle = 31,
+        /// <summary>
+        /// Apply a body style.
+        /// </summary>
+        Body = 32,
+        /// <summary>
+        /// Apply a foot-note style.
+        /// </summary>
+        FootNote = 33
     }
     
-    public enum CustomStyleValueMode
+    public enum CustomStyleSizeMode
     {
         Px = 0,
         Percent = 1

@@ -16,7 +16,7 @@ limitations under the License.
 using System;
 using UnityEngine;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
     public struct UIDisplay : IUIDisplay

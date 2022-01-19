@@ -14,12 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
     public struct CustomStyleBackground : ICustomStyleValue<CustomStyleSimpleKeyword, Background>

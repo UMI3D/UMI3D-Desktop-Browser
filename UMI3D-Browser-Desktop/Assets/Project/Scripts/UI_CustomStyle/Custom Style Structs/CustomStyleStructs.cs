@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2022 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     
 }
