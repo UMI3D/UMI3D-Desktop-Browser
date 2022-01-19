@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2022 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,20 +16,25 @@ limitations under the License.
 using UnityEditor;
 using UnityEngine;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     public class CustomPropertyDrawer : PropertyDrawer
     {
         protected float m_lineHeight { get; } = EditorGUIUtility.singleLineHeight;
         protected float m_spaceBetweenLine { get; } = EditorGUIUtility.standardVerticalSpacing;
         protected float m_deltaLineHeight => m_lineHeight + m_spaceBetweenLine;
-        protected float m_labelWidth => EditorGUIUtility.labelWidth;
+        protected virtual float m_labelWidth => EditorGUIUtility.labelWidth;
         protected float m_deltaLabelWidth => m_labelWidth + m_spaceBetweenLine;
         protected virtual int m_numberOfLine => 0;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return (base.GetPropertyHeight(property, label) + m_spaceBetweenLine) * (float)m_numberOfLine - m_spaceBetweenLine;
+            return (base.GetPropertyHeight(property, label) + m_spaceBetweenLine) * (float)GetNumberOfLine(property) - m_spaceBetweenLine;
+        }
+
+        public virtual int GetNumberOfLine(SerializedProperty property)
+        {
+            return m_numberOfLine;
         }
 
         protected virtual Rect CurrentLineRect(Rect currentPosition, float indent = 0f)

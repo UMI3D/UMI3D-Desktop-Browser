@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
   m_Name: ToolboxWindow-Icon
   m_EditorClassIdentifier: Assembly-CSharp:Browser.UICustomStyle:CustomStyle
-  m_key: ToolboxWindow-Icon
   m_uIDisplay:
     m_opacity:
       m_keyword: 0
@@ -62,15 +61,22 @@ MonoBehaviour:
     m_fontStyleAndWeight: 0
     m_fontSize: 0
     m_color: {r: 0, g: 0, b: 0, a: 0}
-    m_letterSpacing: 0
-    m_textOveflow: 0
-    m_unityParagraphSpacing: 0
-    m_unityTextAlign: 0
-    m_unityTextOverflowPosition: 0
-    m_unityTextOutlineColor: {r: 0, g: 0, b: 0, a: 0}
-    m_unityTextOutlineWidth: 0
-    m_WhiteSpace: 0
-    m_wordSpacing: 0
+    m_letterSpacing:
+      m_keyword: 0
+      m_value: 0
+    m_wordSpacing:
+      m_keyword: 0
+      m_value: 0
+    m_paragraphSpacing:
+      m_keyword: 0
+      m_value: 0
+    m_textAlign: 0
+    m_textOutlineColor:
+      m_keyword: 0
+      m_value: {r: 0, g: 0, b: 0, a: 0}
+    m_textOutlineWidth:
+      m_keyword: 0
+      m_value: 0
   m_uIBackground:
     m_backgrounds:
     - m_backgroundKey: 
@@ -137,11 +143,11 @@ MonoBehaviour:
     m_radius:
       m_keyword: 6
       m_value:
-        m_global: 7
-        m_bottomLeft: 7
-        m_bottomRight: 7
-        m_topLeft: 7
-        m_TopRight: 7
+        m_global: 6
+        m_bottomLeft: 6
+        m_bottomRight: 6
+        m_topLeft: 6
+        m_TopRight: 6
   ApplyCustomStyle:
     m_PersistentCalls:
       m_Calls: []

@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2022 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,83 +14,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
-    public struct CustomStyleFloat : ICustomStyleValue<CustomStyleKeyword, float>
+    public struct CustomStyleFloat : ICustomStyleValue<CustomStyleSimpleKeyword, float>
     {
-        public CustomStyleFloat(float v)
-        {
-            m_value = v;
-            m_keyword = CustomStyleKeyword.Variable;
-        }
-        public CustomStyleFloat(CustomStyleKeyword keyword)
-        {
-            m_keyword = keyword;
-            m_value = 0f;
-        }
-        public CustomStyleFloat(CustomStyleKeyword keyword, float v)
-        {
-            m_keyword = keyword;
-            m_value = v;
-        }
-
         [SerializeField]
-        private CustomStyleKeyword m_keyword;
+        private CustomStyleSimpleKeyword m_keyword;
         [SerializeField]
         private float m_value;
 
-        public CustomStyleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
+        public CustomStyleSimpleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
         public float Value { get => m_value; set => m_value = value; }
 
         public override string ToString()
         {
             return $"CustomStyleFloat[Keyword=[{m_keyword}], Value=[{m_value}]";
         }
-
-        //public bool Equals(StyleFloat other);
-        //public override bool Equals(object obj);
-        //public override int GetHashCode();
-        //public override string ToString();
-
-        //public static bool operator ==(StyleFloat lhs, StyleFloat rhs);
-        //public static bool operator !=(StyleFloat lhs, StyleFloat rhs);
-
-        //public static implicit operator StyleFloat(StyleKeyword keyword);
-        //public static implicit operator StyleFloat(float v);
     }
 
     [Serializable]
-    public struct CustomStylePXAndPercentFloat : ICustomStyleValue<CustomStyleKeyword, float>
+    public struct CustomStyleSize : ICustomStyleValue<CustomStyleSizeKeyword, float>
     {
-        public CustomStylePXAndPercentFloat(float v) : this()
-        {
-            m_value = v;
-            m_keyword = CustomStyleKeyword.Variable;
-        }
-        public CustomStylePXAndPercentFloat(CustomStyleKeyword keyword) : this()
-        {
-            m_keyword = keyword;
-        }
-        public CustomStylePXAndPercentFloat(CustomStyleKeyword keyword, float v) : this()
-        {
-            m_keyword = keyword;
-            m_value = v;
-        }
-
         [SerializeField]
-        private CustomStyleKeyword m_keyword;
+        private CustomStyleSizeKeyword m_keyword;
         [SerializeField]
-        private CustomStyleValueMode m_valueMode;
+        private CustomStyleSizeMode m_valueMode;
         [SerializeField]
         private float m_value;
 
-        public CustomStyleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
-        public CustomStyleValueMode ValueMode => m_valueMode;
+        public CustomStyleSizeKeyword Keyword { get => m_keyword; set => m_keyword = value; }
+        public CustomStyleSizeMode ValueMode => m_valueMode;
         public float Value { get => m_value; set => m_value = value; }
 
         public override string ToString()
@@ -100,29 +56,14 @@ namespace Browser.UICustomStyle
     }
 
     [Serializable]
-    public struct CustomStylePercentFloat : ICustomStyleValue<CustomStyleKeyword, float>
+    public struct CustomStylePercentFloat : ICustomStyleValue<CustomStyleSimpleKeyword, float>
     {
-        public CustomStylePercentFloat(float v) : this()
-        {
-            m_value = v;
-            m_keyword = CustomStyleKeyword.Variable;
-        }
-        public CustomStylePercentFloat(CustomStyleKeyword keyword) : this()
-        {
-            m_keyword = keyword;
-        }
-        public CustomStylePercentFloat(CustomStyleKeyword keyword, float v) : this()
-        {
-            m_keyword = keyword;
-            m_value = v;
-        }
-
         [SerializeField]
-        private CustomStyleKeyword m_keyword;
+        private CustomStyleSimpleKeyword m_keyword;
         [SerializeField]
         private float m_value;
 
-        public CustomStyleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
+        public CustomStyleSimpleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
         public float Value { get => m_value; set => m_value = value; }
 
         public override string ToString()

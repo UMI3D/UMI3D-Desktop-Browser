@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using Browser.UICustomStyle;
+using umi3DBrowser.UICustomStyle;
 using DesktopBrowser.UI.CustomElement;
 using System;
 using System.Collections.Generic;
@@ -300,7 +300,7 @@ namespace BrowserDesktop.UI
         {
             if (m_customStyle == null) return;
             UIBackground uIBackground = m_customStyle.UIBackground;
-            BackgroundsByTheme customBackgrounds = uIBackground.GetCustomBackgrounds(CustomStyleBackgroundKey, m_globalPref.CustomStyleTheme);
+            BackgroundsByTheme customBackgrounds = uIBackground.GetBackgroundsByTheme(m_globalPref.CustomStyleTheme);
             switch (backgroundMode)
             {
                 case CustomStyleBackgroundMode.MouseOut:

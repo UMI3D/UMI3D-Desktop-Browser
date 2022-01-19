@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2022 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,21 +16,16 @@ limitations under the License.
 using UnityEditor;
 using UnityEngine;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleBackground))]
-    public class CustomStyleBackgroundPropertyDrawer : PropertyDrawer
+    public class CustomStyleBackgroundPropertyDrawer : CustomPropertyDrawer
     {
-        private float spaceBetweenLine = 2f;
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        public override int GetNumberOfLine(SerializedProperty property)
         {
             var keyword = property.FindPropertyRelative("m_keyword");
             CustomStyleKeyword keywordValue = (CustomStyleKeyword)keyword.intValue;
-            
-            if (keywordValue != CustomStyleKeyword.VariableUndefined && keywordValue != CustomStyleKeyword.ConstUndefined)
-                return (base.GetPropertyHeight(property, label) + spaceBetweenLine) * 4f - spaceBetweenLine;
-            else
-                return base.GetPropertyHeight(property, label);
+            return !keywordValue.IsDefaultOrUndefined() ? 4 : 1;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -41,28 +36,27 @@ namespace Browser.UICustomStyle
 
             EditorGUI.BeginProperty(position, label, property);
 
+            label.text = label.text.Substring(11);
             position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+            --EditorGUI.indentLevel;
 
-            float heightDelta = (position.height + spaceBetweenLine) / 4f;
-            float height = (keywordValue == CustomStyleKeyword.VariableUndefined || keywordValue == CustomStyleKeyword.ConstUndefined) ? position.height : heightDelta - spaceBetweenLine;
-            Rect keywordRect = new Rect(position.x, position.y, position.width, height);
-            Rect valueRect;
-            if (keywordValue != CustomStyleKeyword.VariableUndefined && keywordValue != CustomStyleKeyword.ConstUndefined)
-                valueRect = new Rect(position.x, position.y + heightDelta, position.width, position.height - heightDelta);
-            else
-                valueRect = new Rect();
+            Rect keywordRect = CurrentLineRect(position);
+            Rect valueRect = NextLineRect(keywordRect);
 
             EditorGUI.PropertyField(keywordRect, keyword, GUIContent.none);
-            EditorGUI.PropertyField(valueRect, value, GUIContent.none);
+            if (!keywordValue.IsDefaultOrUndefined())
+                EditorGUI.PropertyField(valueRect, value, GUIContent.none);
 
             EditorGUI.EndProperty();
         }
     }
 
     [UnityEditor.CustomPropertyDrawer(typeof(Background))]
-    public class CustomBackgroundPropertyDrawer : PropertyDrawer
+    public class CustomBackgroundPropertyDrawer : CustomPropertyDrawer
     {
-        private float spaceBetweenLine = 2f;
+        protected override int m_numberOfLine => 3;
+        protected override float m_labelWidth => 80f;
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var color = property.FindPropertyRelative("m_color");
@@ -71,20 +65,14 @@ namespace Browser.UICustomStyle
 
             EditorGUI.BeginProperty(position, label, property);
 
-            float height = position.height / 3f - spaceBetweenLine;
-            float heightDelta = height + spaceBetweenLine;
-            float labelWidth = 80f;
+            Rect colorRect = CurrentLineRect(position, m_deltaLabelWidth);
+            Rect colorLabelRect = new Rect(colorRect.x - m_deltaLabelWidth, colorRect.y, m_labelWidth, colorRect.height);
 
-            Rect colorRect = new Rect(position.x + labelWidth, position.y, position.width - labelWidth, height);
-            Rect colorLabelRect = new Rect(position.x, position.y, labelWidth, height);
+            Rect imageRect = NextLineRect(colorRect);
+            Rect imageLabelRect = NextLineRect(colorLabelRect);
 
-            Rect imageRect = new Rect(position.x + labelWidth, position.y + heightDelta, position.width - labelWidth, height);
-            Rect imageLabelRect = new Rect(position.x, position.y + heightDelta, labelWidth, height);
-
-            Rect imageTintColorRect = new Rect(position.x + labelWidth, position.y + 2f * heightDelta, position.width - labelWidth, height);
-            Rect imageTintColorLabelRect = new Rect(position.x, position.y + 2f * heightDelta, labelWidth, height);
-
-            GUIContent colorLabel = new GUIContent();
+            Rect imageTintColorRect = NextLineRect(imageRect);
+            Rect imageTintColorLabelRect = NextLineRect(imageLabelRect);
 
             EditorGUI.LabelField(colorLabelRect, new GUIContent("Color :"));
             EditorGUI.PropertyField(colorRect, color, GUIContent.none);

@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2022 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,53 +16,9 @@ limitations under the License.
 using System;
 using UnityEngine;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
-    [Serializable]
-    public struct BorderColor : IBorderColor
-    {
-        [SerializeField]
-        private Color m_global;
-        [SerializeField]
-        private Color m_bottom;
-        [SerializeField]
-        private Color m_left;
-        [SerializeField]
-        private Color m_right;
-        [SerializeField]
-        private Color m_top;
-
-        public Color Bottom => m_bottom;
-
-        public Color Left => m_left;
-
-        public Color Right => m_right;
-
-        public Color Top => m_top;
-    }
-
-    [Serializable]
-    public struct BorderWidth : IBorderWidth
-    {
-        [SerializeField]
-        private float m_global;
-        [SerializeField]
-        private float m_bottom;
-        [SerializeField]
-        private float m_left;
-        [SerializeField]
-        private float m_right;
-        [SerializeField]
-        private float m_top;
-
-        public float Bottom => m_bottom;
-
-        public float Left => m_left;
-
-        public float Right => m_right;
-
-        public float Top => m_top;
-    }
+    
 
     [Serializable]
     public struct BorderRadius : IBorderRadius
@@ -92,17 +48,17 @@ namespace Browser.UICustomStyle
     {
         [Header("Color")]
         [SerializeField]
-        private CustomStyleBorderColor m_color;
+        private CustomStyleColorCrossPosition m_color;
         [Header("Width")]
         [SerializeField]
-        private CustomStyleBorderWidth m_width;
+        private CustomStyleFloatCrossPosition m_width;
         [Header("Radius")]
         [SerializeField]
         private CustomStyleBorderRadius m_radius;
 
-        public CustomStyleBorderColor Color => m_color;
+        public CustomStyleColorCrossPosition Color => m_color;
 
-        public CustomStyleBorderWidth Width => m_width;
+        public CustomStyleFloatCrossPosition Width => m_width;
 
         public CustomStyleBorderRadius Radius => m_radius;
     }

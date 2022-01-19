@@ -13,36 +13,30 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using Browser.UICustomStyle;
-using DesktopBrowser.UI.CustomElement;
-using System;
-using System.Collections;
-using UnityEngine;
+using umi3DBrowser.UICustomStyle;
 using UnityEngine.UIElements;
-
 
 namespace BrowserDesktop.UI
 {
     public class CustomStyleToUIElementApplicator
     {
-        public virtual StyleLength GetPxAndPourcentageFloatLength(CustomStylePXAndPercentFloat customStyle, float zoomCoef)
+        public virtual StyleLength GetPxAndPourcentageFloatLength(CustomStyleSize customStyle, float zoomCoef)
         {
             StyleLength lenght = new StyleLength();
             float floatLenght = -1;
             switch (customStyle.Keyword)
             {
-                case CustomStyleKeyword.VariableUndefined:
-                case CustomStyleKeyword.ConstUndefined:
+                case CustomStyleSizeKeyword.Default:
                     lenght.keyword = StyleKeyword.Null;
                     break;
-                case CustomStyleKeyword.Variable:
+                case CustomStyleSizeKeyword.CustomResizable:
                     floatLenght = customStyle.Value * zoomCoef;
                     lenght = floatLenght;
                     lenght.keyword = StyleKeyword.Undefined;
                     break;
-                case CustomStyleKeyword.Const:
+                case CustomStyleSizeKeyword.CustomUnresizabe:
                     floatLenght = customStyle.Value;
-                    lenght = (customStyle.ValueMode == CustomStyleValueMode.Px) ? floatLenght : Length.Percent(floatLenght);
+                    lenght = (customStyle.ValueMode == CustomStyleSizeMode.Px) ? floatLenght : Length.Percent(floatLenght);
                     lenght.keyword = StyleKeyword.Undefined;
                     break;
             }
@@ -55,7 +49,7 @@ namespace BrowserDesktop.UI
             {
                 case CustomStyleSimpleKeyword.Undefined:
                     break;
-                case CustomStyleSimpleKeyword.Variable:
+                case CustomStyleSimpleKeyword.Custom:
                     ApplyBackgroundColorToVisual(style, customStyle.Value.BackgroundColor);
                     ApplyImageToVisual(style, customStyle.Value.BackgroundImage);
                     ApplyImageTintColorToVisual(style, customStyle.Value.BackgroundImageTintColor);
@@ -69,7 +63,7 @@ namespace BrowserDesktop.UI
             {
                 case CustomStyleSimpleKeyword.Undefined:
                     break;
-                case CustomStyleSimpleKeyword.Variable:
+                case CustomStyleSimpleKeyword.Custom:
                     style.backgroundColor = customStyle.Value;
                     break;
             }
@@ -81,7 +75,7 @@ namespace BrowserDesktop.UI
             {
                 case CustomStyleSimpleKeyword.Undefined:
                     break;
-                case CustomStyleSimpleKeyword.Variable:
+                case CustomStyleSimpleKeyword.Custom:
                     style.unityBackgroundImageTintColor = customStyle.Value;
                     break;
             }
@@ -93,20 +87,20 @@ namespace BrowserDesktop.UI
             {
                 case CustomStyleSimpleKeyword.Undefined:
                     break;
-                case CustomStyleSimpleKeyword.Variable:
+                case CustomStyleSimpleKeyword.Custom:
                     style.backgroundImage = customStyle.Value.texture;
                     break;
             }
         }
 
-        public virtual void ApplyBorderColorToVisual(IStyle style, CustomStyleBorderColor customStyle)
+        public virtual void ApplyBorderColorToVisual(IStyle style, CustomStyleColorCrossPosition customStyle)
         {
             switch (customStyle.Keyword)
             {
                 case CustomStyleSimpleKeyword.Undefined:
                     break;
-                case CustomStyleSimpleKeyword.Variable:
-                    BorderColor borderColor = customStyle.Value;
+                case CustomStyleSimpleKeyword.Custom:
+                    ColorCrossPosition borderColor = customStyle.Value;
                     style.borderTopColor = borderColor.Top;
                     style.borderLeftColor = borderColor.Left;
                     style.borderRightColor = borderColor.Right;
@@ -115,14 +109,14 @@ namespace BrowserDesktop.UI
             }
         }
 
-        public virtual void ApplyBorderWidthToVisual(IStyle style, CustomStyleBorderWidth customStyle)
+        public virtual void ApplyBorderWidthToVisual(IStyle style, CustomStyleFloatCrossPosition customStyle)
         {
             switch (customStyle.Keyword)
             {
                 case CustomStyleSimpleKeyword.Undefined:
                     break;
-                case CustomStyleSimpleKeyword.Variable:
-                    BorderWidth borderWidth = customStyle.Value;
+                case CustomStyleSimpleKeyword.Custom:
+                    FloatCrossPosition borderWidth = customStyle.Value;
                     style.borderTopWidth = borderWidth.Top;
                     style.borderLeftWidth = borderWidth.Left;
                     style.borderRightWidth = borderWidth.Right;
@@ -137,7 +131,7 @@ namespace BrowserDesktop.UI
             {
                 case CustomStyleSimpleKeyword.Undefined:
                     break;
-                case CustomStyleSimpleKeyword.Variable:
+                case CustomStyleSimpleKeyword.Custom:
                     BorderRadius borderRadius = customStyle.Value;
                     style.borderTopLeftRadius = borderRadius.TopLeft;
                     style.borderTopRightRadius = borderRadius.TopRight;

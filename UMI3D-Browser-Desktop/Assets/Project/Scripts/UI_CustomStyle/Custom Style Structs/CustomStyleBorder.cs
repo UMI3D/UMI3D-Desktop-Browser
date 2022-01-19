@@ -19,32 +19,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
-    [Serializable]
-    public struct CustomStyleBorderColor : ICustomStyleValue<CustomStyleSimpleKeyword, BorderColor>
-    {
-        [SerializeField]
-        private CustomStyleSimpleKeyword m_keyword;
-        [SerializeField]
-        private BorderColor m_value;
-
-        public CustomStyleSimpleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
-        public BorderColor Value { get => m_value; set => m_value = value; }
-    }
-
-    [Serializable]
-    public struct CustomStyleBorderWidth : ICustomStyleValue<CustomStyleSimpleKeyword, BorderWidth>
-    {
-        [SerializeField]
-        private CustomStyleSimpleKeyword m_keyword;
-        [SerializeField]
-        private BorderWidth m_value;
-
-        public CustomStyleSimpleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
-        public BorderWidth Value { get => m_value; set => m_value = value; }
-    }
-
     [Serializable]
     public struct CustomStyleBorderRadius : ICustomStyleValue<CustomStyleSimpleKeyword, BorderRadius>
     {

@@ -16,45 +16,20 @@ limitations under the License.
 using System;
 using UnityEngine;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
     public struct UIMarginAndPadding : IUIMarginAndPadding
     {
         [Header("Margin")]
         [SerializeField]
-        private float m_marginBottom;
-        [SerializeField]
-        private float m_marginLeft;
-        [SerializeField]
-        private float m_marginRight;
-        [SerializeField]
-        private float m_marginTop;
+        private FloatCrossPosition m_margin;
 
         [Header("Padding")]
         [SerializeField]
-        private float m_paddingBottom;
-        [SerializeField]
-        private float m_paddingLeft;
-        [SerializeField]
-        private float m_paddingRight;
-        [SerializeField]
-        private float m_paddingTop;
+        private FloatCrossPosition m_padding;
 
-        public float MarginBottom => throw new NotImplementedException();
-
-        public float MarginLeft => throw new NotImplementedException();
-
-        public float MarginRight => throw new NotImplementedException();
-
-        public float MarginTop => throw new NotImplementedException();
-
-        public float PaddingBottom => throw new NotImplementedException();
-
-        public float PaddingLeft => throw new NotImplementedException();
-
-        public float PaddingRight => throw new NotImplementedException();
-
-        public float PaddingTop => throw new NotImplementedException();
+        public FloatCrossPosition Margin => m_margin;
+        public FloatCrossPosition Padding => m_padding;
     }
 }

@@ -16,7 +16,7 @@ limitations under the License.
 using System;
 using UnityEngine;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
     public struct Background : IBackground
@@ -57,30 +57,10 @@ namespace Browser.UICustomStyle
     }
 
     [Serializable]
-    public struct BackgroundsByKey
-    {
-        [SerializeField]
-        private string m_backgroundKey;
-        [SerializeField]
-        private BackgroundsByTheme[] m_backgroundsByThemes;
-
-        public string Key => m_backgroundKey;
-        public BackgroundsByTheme GetBackgroundsByTheme(CustomStyleTheme theme)
-        {
-            foreach (BackgroundsByTheme backgroundsByThem in m_backgroundsByThemes)
-            {
-                if (backgroundsByThem.Theme == theme)
-                    return backgroundsByThem;
-            }
-            throw new Exception("Theme not found");
-        }
-    }
-
-    [Serializable]
     public struct UIBackground : IUIBackground
     {
         [SerializeField]
-        private BackgroundsByKey[] m_backgrounds;
+        private BackgroundsByTheme[] m_backgrounds;
         [SerializeField]
         private int m_sliceBottom;
         [SerializeField]
@@ -90,14 +70,14 @@ namespace Browser.UICustomStyle
         [SerializeField]
         private int m_sliceTop;
 
-        public BackgroundsByTheme GetCustomBackgrounds(string key, CustomStyleTheme theme)
+        public BackgroundsByTheme GetBackgroundsByTheme(CustomStyleTheme theme)
         {
-            foreach (BackgroundsByKey backgroundsByKey in m_backgrounds)
+            foreach (BackgroundsByTheme backgroundsByThem in m_backgrounds)
             {
-                if (backgroundsByKey.Key == key)
-                    return backgroundsByKey.GetBackgroundsByTheme(theme);
+                if (backgroundsByThem.Theme == theme)
+                    return backgroundsByThem;
             }
-            throw new KeyNotFoundException(key, "UIBackground");
+            throw new Exception("Theme not found");
         }
 
         public ScaleMode UnityBackgroundScaleMode => throw new NotImplementedException();

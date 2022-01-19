@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2022 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,27 +14,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
-    public struct CustomStyleImage : ICustomStyleValue<CustomStyleSimpleKeyword, Sprite>
+    public struct FloatCrossPosition : ICrossPosition<float>
+    {
+        [SerializeField]
+        private float m_global;
+        [SerializeField]
+        private float m_bottom;
+        [SerializeField]
+        private float m_left;
+        [SerializeField]
+        private float m_right;
+        [SerializeField]
+        private float m_top;
+
+        public float Bottom => m_bottom;
+
+        public float Left => m_left;
+
+        public float Right => m_right;
+
+        public float Top => m_top;
+    }
+
+    [Serializable]
+    public struct CustomStyleFloatCrossPosition : ICustomStyleValue<CustomStyleSimpleKeyword, FloatCrossPosition>
     {
         [SerializeField]
         private CustomStyleSimpleKeyword m_keyword;
         [SerializeField]
-        private Sprite m_value;
+        private FloatCrossPosition m_value;
 
         public CustomStyleSimpleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
-        public Sprite Value { get => m_value; set => m_value = value; }
-
-        public override string ToString()
-        {
-            return $"CustomStyle[Keyword=[{m_keyword}], Value=[{m_value}]";
-        }
+        public FloatCrossPosition Value { get => m_value; set => m_value = value; }
     }
 }

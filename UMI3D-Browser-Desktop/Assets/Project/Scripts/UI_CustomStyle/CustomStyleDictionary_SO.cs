@@ -18,7 +18,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     [CreateAssetMenu(fileName = "NewCustomUIStyleDictionary", menuName = "Browser_SO/CustomUIStyleDictionary")]
     public partial class CustomStyleDictionary_SO : ScriptableObject

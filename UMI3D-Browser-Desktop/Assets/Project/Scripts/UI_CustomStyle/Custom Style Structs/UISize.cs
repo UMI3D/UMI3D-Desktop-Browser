@@ -16,35 +16,35 @@ limitations under the License.
 using System;
 using UnityEngine;
 
-namespace Browser.UICustomStyle
+namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
     public struct UISize : IUISize
     {
         [SerializeField]
-        private CustomStylePXAndPercentFloat m_height;
+        private CustomStyleSize m_height;
         [SerializeField]
-        private CustomStylePXAndPercentFloat m_width;
+        private CustomStyleSize m_width;
         [SerializeField]
-        private CustomStylePXAndPercentFloat m_maxHeight;
+        private CustomStyleSize m_maxHeight;
         [SerializeField]
-        private CustomStylePXAndPercentFloat m_maxWidth;
+        private CustomStyleSize m_maxWidth;
         [SerializeField]
-        private CustomStylePXAndPercentFloat m_minHeight;
+        private CustomStyleSize m_minHeight;
         [SerializeField]
-        private CustomStylePXAndPercentFloat m_minWidth;
+        private CustomStyleSize m_minWidth;
 
 
-        public CustomStylePXAndPercentFloat MaxHeight => m_maxHeight;
+        public CustomStyleSize MaxHeight => m_maxHeight;
 
-        public CustomStylePXAndPercentFloat MaxWidth => m_maxWidth;
+        public CustomStyleSize MaxWidth => m_maxWidth;
 
-        public CustomStylePXAndPercentFloat MinHeight => m_minHeight;
+        public CustomStyleSize MinHeight => m_minHeight;
 
-        public CustomStylePXAndPercentFloat MinWidth => m_minWidth;
+        public CustomStyleSize MinWidth => m_minWidth;
 
-        public CustomStylePXAndPercentFloat Height => m_height;
+        public CustomStyleSize Height => m_height;
 
-        public CustomStylePXAndPercentFloat Width => m_width;
+        public CustomStyleSize Width => m_width;
     }
 }
