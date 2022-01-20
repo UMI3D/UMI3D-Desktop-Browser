@@ -34,17 +34,11 @@ namespace umi3DBrowser.UICustomStyle
         [SerializeField]
         private CustomStyleSize m_minWidth;
 
-
         public CustomStyleSize MaxHeight => m_maxHeight;
-
         public CustomStyleSize MaxWidth => m_maxWidth;
-
         public CustomStyleSize MinHeight => m_minHeight;
-
         public CustomStyleSize MinWidth => m_minWidth;
-
         public CustomStyleSize Height => m_height;
-
         public CustomStyleSize Width => m_width;
     }
 }

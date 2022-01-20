@@ -16,12 +16,6 @@ MonoBehaviour:
     m_opacity:
       m_keyword: 0
       m_value: 0
-  m_uIPosition:
-    m_position: 0
-    m_bottom: 0
-    m_left: 0
-    m_right: 0
-    m_top: 0
   m_uISize:
     m_height:
       m_keyword: 6
@@ -48,14 +42,22 @@ MonoBehaviour:
       m_valueMode: 0
       m_value: 0
   m_uIMarginAndPadding:
-    m_marginBottom: 0
-    m_marginLeft: 0
-    m_marginRight: 0
-    m_marginTop: 0
-    m_paddingBottom: 0
-    m_paddingLeft: 0
-    m_paddingRight: 0
-    m_paddingTop: 0
+    m_margin:
+      m_keyword: 0
+      m_value:
+        m_global: 0
+        m_bottom: 0
+        m_left: 0
+        m_right: 0
+        m_top: 0
+    m_padding:
+      m_keyword: 0
+      m_value:
+        m_global: 0
+        m_bottom: 0
+        m_left: 0
+        m_right: 0
+        m_top: 0
   m_uIText:
     m_font: {fileID: 0}
     m_fontStyleAndWeight: 0
@@ -72,60 +74,62 @@ MonoBehaviour:
       m_value: 0
     m_textAlign: 0
     m_textOutlineColor:
-      m_keyword: 0
+      m_keyword: 2
       m_value: {r: 0, g: 0, b: 0, a: 0}
     m_textOutlineWidth:
       m_keyword: 0
       m_value: 0
   m_uIBackground:
     m_backgrounds:
-    - m_backgroundKey: 
-      m_backgroundsByThemes:
-      - m_theme: 0
-        m_backgroundDefault:
-          m_keyword: 6
-          m_value:
-            m_color:
-              m_keyword: 0
-              m_value: {r: 0, g: 0, b: 0, a: 0}
-            m_image:
-              m_keyword: 6
-              m_value: {fileID: 21300000, guid: 4387a4c7a3dd6134fa2b95a0344d5f87,
-                type: 3}
-            m_imageTintColor:
-              m_keyword: 0
-              m_value: {r: 0, g: 0, b: 0, a: 0}
-        m_backgroundMouseOver:
-          m_keyword: 0
-          m_value:
-            m_color:
-              m_keyword: 0
-              m_value: {r: 0, g: 0, b: 0, a: 0}
-            m_image:
-              m_keyword: 0
-              m_value: {fileID: 0}
-            m_imageTintColor:
-              m_keyword: 0
-              m_value: {r: 0, g: 0, b: 0, a: 0}
-        m_backgroundMousePressed:
-          m_keyword: 0
-          m_value:
-            m_color:
-              m_keyword: 0
-              m_value: {r: 0, g: 0, b: 0, a: 0}
-            m_image:
-              m_keyword: 0
-              m_value: {fileID: 0}
-            m_imageTintColor:
-              m_keyword: 0
-              m_value: {r: 0, g: 0, b: 0, a: 0}
-    m_sliceBottom: 0
-    m_sliceLeft: 0
-    m_sliceRight: 0
-    m_sliceTop: 0
+    - m_key: 
+      m_theme: 0
+      m_backgroundDefault:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 0
+            m_value: {fileID: 0}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_backgroundMouseOver:
+        m_keyword: 0
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 0
+            m_value: {fileID: 0}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_backgroundMousePressed:
+        m_keyword: 0
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 0
+            m_value: {fileID: 0}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+    m_slice:
+      m_keyword: 0
+      m_value:
+        m_global: 0
+        m_bottom: 0
+        m_left: 0
+        m_right: 0
+        m_top: 0
   m_uIBorder:
     m_color:
-      m_keyword: 0
+      m_keyword: 2
       m_value:
         m_global: {r: 0, g: 0, b: 0, a: 0}
         m_bottom: {r: 0, g: 0, b: 0, a: 0}
@@ -141,7 +145,7 @@ MonoBehaviour:
         m_right: 0
         m_top: 0
     m_radius:
-      m_keyword: 6
+      m_keyword: 2
       m_value:
         m_global: 6
         m_bottomLeft: 6

@@ -44,7 +44,7 @@ namespace umi3DBrowser.UICustomStyle
         [SerializeField]
         private TextAnchor m_textAlign;
         [SerializeField]
-        private CustomStyleColor m_textOutlineColor;
+        private CustomStyleValue<CustomStyleColorKeyword, Color> m_textOutlineColor;
         [SerializeField]
         private CustomStyleFloat m_textOutlineWidth;
 

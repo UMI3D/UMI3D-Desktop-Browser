@@ -18,48 +18,21 @@ using UnityEngine;
 
 namespace umi3DBrowser.UICustomStyle
 {
-    
-
-    [Serializable]
-    public struct BorderRadius : IBorderRadius
-    {
-        [SerializeField]
-        private float m_global;
-        [SerializeField]
-        private float m_bottomLeft;
-        [SerializeField]
-        private float m_bottomRight;
-        [SerializeField]
-        private float m_topLeft;
-        [SerializeField]
-        private float m_TopRight;
-
-        public float BottomLeft => m_bottomLeft;
-
-        public float BottomRight => m_bottomRight;
-
-        public float TopLeft => m_topLeft;
-
-        public float TopRight => m_TopRight;
-    }
-
     [Serializable]
     public struct UIBorder : IUIBorder
     {
         [Header("Color")]
         [SerializeField]
-        private CustomStyleColorCrossPosition m_color;
+        private CustomStyleCrossPosition<CustomStyleColorKeyword, Color> m_color;
         [Header("Width")]
         [SerializeField]
-        private CustomStyleFloatCrossPosition m_width;
+        private CustomStyleCrossPosition<CustomStyleSizeKeyword, float> m_width;
         [Header("Radius")]
         [SerializeField]
-        private CustomStyleBorderRadius m_radius;
+        private CustomStyleSquarePosition<CustomStyleSimpleKeyword, float> m_radius;
 
-        public CustomStyleColorCrossPosition Color => m_color;
-
-        public CustomStyleFloatCrossPosition Width => m_width;
-
-        public CustomStyleBorderRadius Radius => m_radius;
+        public CustomStyleCrossPosition<CustomStyleColorKeyword, Color> Color => m_color;
+        public CustomStyleCrossPosition<CustomStyleSizeKeyword, float> Width => m_width;
+        public CustomStyleSquarePosition<CustomStyleSimpleKeyword, float> Radius => m_radius;
     }
 }
