@@ -18,36 +18,5 @@ using UnityEngine;
 
 namespace umi3DBrowser.UICustomStyle
 {
-    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleImage))]
-    public class CustomStyleImagePropertyDrawer : PropertyDrawer
-    {
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            var keyword = property.FindPropertyRelative("m_keyword");
-            var value = property.FindPropertyRelative("m_value");
-            CustomStyleKeyword keywordValue = (CustomStyleKeyword)keyword.intValue;
-
-            EditorGUI.BeginProperty(position, label, property);
-
-            Rect keywordRect;
-            Rect valueRect;
-            if (!keywordValue.IsDefaultOrUndefined())
-            {
-                float width = (position.width) / 2f - 4f;
-                keywordRect = new Rect(position.x, position.y, width, position.height);
-                valueRect = new Rect(position.x + width + 2f, position.y, width, position.height);
-            }
-            else
-            {
-                keywordRect = new Rect(position.x, position.y, position.width, position.height);
-                valueRect = new Rect();
-            }
-
-            EditorGUI.PropertyField(keywordRect, keyword, GUIContent.none);
-            EditorGUI.PropertyField(valueRect, value, GUIContent.none);
-
-
-            EditorGUI.EndProperty();
-        }
-    }
+    
 }

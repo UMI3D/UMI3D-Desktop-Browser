@@ -23,13 +23,13 @@ namespace umi3DBrowser.UICustomStyle
     {
         [Header("Margin")]
         [SerializeField]
-        private FloatCrossPosition m_margin;
+        private CustomStyleCrossPosition<CustomStyleSizeKeyword, float> m_margin;
 
         [Header("Padding")]
         [SerializeField]
-        private FloatCrossPosition m_padding;
+        private CustomStyleCrossPosition<CustomStyleSizeKeyword, float> m_padding;
 
-        public FloatCrossPosition Margin => m_margin;
-        public FloatCrossPosition Padding => m_padding;
+        public CustomStyleCrossPosition<CustomStyleSizeKeyword, float> Margin => m_margin;
+        public CustomStyleCrossPosition<CustomStyleSizeKeyword, float> Padding => m_padding;
     }
 }

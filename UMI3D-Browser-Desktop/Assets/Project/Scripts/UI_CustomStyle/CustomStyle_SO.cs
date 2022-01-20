@@ -23,8 +23,8 @@ namespace umi3DBrowser.UICustomStyle
     {
         [SerializeField]
         private UIDisplay m_uIDisplay = new UIDisplay();
-        [SerializeField]
-        private UIPosition m_uIPosition = new UIPosition();
+        //[SerializeField]
+        //private UIPosition m_uIPosition = new UIPosition();
         [SerializeField]
         private UISize m_uISize = new UISize();
         [SerializeField]
@@ -38,7 +38,7 @@ namespace umi3DBrowser.UICustomStyle
 
         public string Key => name.ToLower();
         public UIDisplay UIDisplay => m_uIDisplay;
-        public UIPosition UIPosition => m_uIPosition;
+        //public UIPosition UIPosition => m_uIPosition;
         public UISize UISize => m_uISize;
         public UIMarginAndPadding UIMarginAndPadding => m_uIMarginAndPadding;
         public UIText UIText => m_uIText;

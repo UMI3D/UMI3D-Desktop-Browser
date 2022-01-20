@@ -19,40 +19,26 @@ using UnityEngine;
 namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
-    public struct Background : IBackground
+    public struct Backgrounds : IBackgrounds
     {
         [SerializeField]
-        private CustomStyleColor m_color;
-        [SerializeField]
-        private CustomStyleImage m_image;
-        [SerializeField]
-        private CustomStyleColor m_imageTintColor;
-
-        public CustomStyleColor BackgroundColor => m_color;
-
-        public CustomStyleImage BackgroundImage => m_image;
-
-        public CustomStyleColor BackgroundImageTintColor => m_imageTintColor;
-    }
-
-    [Serializable]
-    public struct BackgroundsByTheme : IBackgrounds
-    {
+        private string m_key;
         [SerializeField]
         private CustomStyleTheme m_theme;
+        [Header("Default")]
         [SerializeField]
         private CustomStyleBackground m_backgroundDefault;
+        [Header("Mouse Over")]
         [SerializeField]
         private CustomStyleBackground m_backgroundMouseOver;
+        [Header("Mouse Pressed")]
         [SerializeField]
         private CustomStyleBackground m_backgroundMousePressed;
 
+        public string Key => m_key;
         public CustomStyleTheme Theme => m_theme;
-
         public CustomStyleBackground BackgroundDefault => m_backgroundDefault;
-
         public CustomStyleBackground BackgroundMouseOver => m_backgroundMouseOver;
-
         public CustomStyleBackground BackgroundMousePressed => m_backgroundMousePressed;
     }
 
@@ -60,19 +46,11 @@ namespace umi3DBrowser.UICustomStyle
     public struct UIBackground : IUIBackground
     {
         [SerializeField]
-        private BackgroundsByTheme[] m_backgrounds;
-        [SerializeField]
-        private int m_sliceBottom;
-        [SerializeField]
-        private int m_sliceLeft;
-        [SerializeField]
-        private int m_sliceRight;
-        [SerializeField]
-        private int m_sliceTop;
+        private Backgrounds[] m_backgrounds;
 
-        public BackgroundsByTheme GetBackgroundsByTheme(CustomStyleTheme theme)
+        public Backgrounds GetBackgroundsByTheme(CustomStyleTheme theme)
         {
-            foreach (BackgroundsByTheme backgroundsByThem in m_backgrounds)
+            foreach (Backgrounds backgroundsByThem in m_backgrounds)
             {
                 if (backgroundsByThem.Theme == theme)
                     return backgroundsByThem;
@@ -81,13 +59,5 @@ namespace umi3DBrowser.UICustomStyle
         }
 
         public ScaleMode UnityBackgroundScaleMode => throw new NotImplementedException();
-
-        public int SliceBottom => throw new NotImplementedException();
-
-        public int SliceLeft => throw new NotImplementedException();
-
-        public int SliceRight => throw new NotImplementedException();
-
-        public int SliceTop => throw new NotImplementedException();
     }
 }

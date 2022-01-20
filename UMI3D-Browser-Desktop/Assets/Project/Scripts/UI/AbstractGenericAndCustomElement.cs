@@ -300,7 +300,7 @@ namespace BrowserDesktop.UI
         {
             if (m_customStyle == null) return;
             UIBackground uIBackground = m_customStyle.UIBackground;
-            BackgroundsByTheme customBackgrounds = uIBackground.GetBackgroundsByTheme(m_globalPref.CustomStyleTheme);
+            Backgrounds customBackgrounds = uIBackground.GetBackgroundsByTheme(m_globalPref.CustomStyleTheme);
             switch (backgroundMode)
             {
                 case CustomStyleBackgroundMode.MouseOut:

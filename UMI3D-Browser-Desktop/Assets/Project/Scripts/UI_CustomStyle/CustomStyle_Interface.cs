@@ -56,6 +56,13 @@ namespace umi3DBrowser.UICustomStyle
         public T Right { get; }
         public T Top { get; }
     }
+    public interface ISquarePosition<T>
+    {
+        public T BottomLeft { get; }
+        public T BottomRight { get; }
+        public T TopLeft { get; }
+        public T TopRight { get; }
+    }
 
     public interface IUIMarginAndPadding
     {
@@ -83,14 +90,14 @@ namespace umi3DBrowser.UICustomStyle
 
     public interface IBackground
     {
-        public CustomStyleColor BackgroundColor { get; }
-        public CustomStyleImage BackgroundImage { get; }
-        public CustomStyleColor BackgroundImageTintColor { get; }
+        public CustomStyleValue<CustomStyleColorKeyword, Color> BackgroundColor { get; }
+        public CustomStyleValue<CustomStyleSimpleKeyword, Sprite> BackgroundImage { get; }
+        public CustomStyleValue<CustomStyleColorKeyword, Color> BackgroundImageTintColor { get; }
     }
 
     public interface IBackgrounds
     {
-        //public string Key { get; }
+        public string Key { get; }
         public CustomStyleBackground BackgroundDefault { get; }
         public CustomStyleBackground BackgroundMouseOver { get; }
         public CustomStyleBackground BackgroundMousePressed { get; }
@@ -98,27 +105,14 @@ namespace umi3DBrowser.UICustomStyle
 
     public interface IUIBackground
     {
-        //public BackgroundsByTheme GetCustomBackgrounds(string key, CustomStyleTheme theme);
-        public BackgroundsByTheme GetBackgroundsByTheme(CustomStyleTheme theme);
+        public Backgrounds GetBackgroundsByTheme(CustomStyleTheme theme);
         public ScaleMode UnityBackgroundScaleMode { get; }
-        public int SliceBottom { get; }
-        public int SliceLeft { get; }
-        public int SliceRight { get; }
-        public int SliceTop { get; }
-    }
-
-    public interface IBorderRadius
-    {
-        public float BottomLeft { get; }
-        public float BottomRight { get; }
-        public float TopLeft { get; }
-        public float TopRight { get; }
     }
 
     public interface IUIBorder
     {
-        public CustomStyleColorCrossPosition Color { get; }
-        public CustomStyleFloatCrossPosition Width { get; }
-        public CustomStyleBorderRadius Radius { get; }
+        public CustomStyleCrossPosition<CustomStyleColorKeyword, Color> Color { get; }
+        public CustomStyleCrossPosition<CustomStyleSizeKeyword, float> Width { get; }
+        public CustomStyleSquarePosition<CustomStyleSimpleKeyword, float> Radius { get; }
     }
 }

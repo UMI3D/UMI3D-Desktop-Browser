@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using umi3DBrowser.UICustomStyle;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI
@@ -57,31 +58,31 @@ namespace BrowserDesktop.UI
             }
         }
 
-        public virtual void ApplyBackgroundColorToVisual(IStyle style, CustomStyleColor customStyle)
+        public virtual void ApplyBackgroundColorToVisual(IStyle style, CustomStyleValue<CustomStyleColorKeyword, Color> customStyle)
         {
             switch (customStyle.Keyword)
             {
-                case CustomStyleSimpleKeyword.Undefined:
+                case CustomStyleColorKeyword.Undefined:
                     break;
-                case CustomStyleSimpleKeyword.Custom:
+                case CustomStyleColorKeyword.Custom:
                     style.backgroundColor = customStyle.Value;
                     break;
             }
         }
 
-        public virtual void ApplyImageTintColorToVisual(IStyle style, CustomStyleColor customStyle)
+        public virtual void ApplyImageTintColorToVisual(IStyle style, CustomStyleValue<CustomStyleColorKeyword, Color> customStyle)
         {
             switch (customStyle.Keyword)
             {
-                case CustomStyleSimpleKeyword.Undefined:
+                case CustomStyleColorKeyword.Undefined:
                     break;
-                case CustomStyleSimpleKeyword.Custom:
+                case CustomStyleColorKeyword.Custom:
                     style.unityBackgroundImageTintColor = customStyle.Value;
                     break;
             }
         }
 
-        public virtual void ApplyImageToVisual(IStyle style, CustomStyleImage customStyle)
+        public virtual void ApplyImageToVisual(IStyle style, CustomStyleValue<CustomStyleSimpleKeyword, Sprite> customStyle)
         {
             switch (customStyle.Keyword)
             {
@@ -93,14 +94,14 @@ namespace BrowserDesktop.UI
             }
         }
 
-        public virtual void ApplyBorderColorToVisual(IStyle style, CustomStyleColorCrossPosition customStyle)
+        public virtual void ApplyBorderColorToVisual(IStyle style, CustomStyleCrossPosition<CustomStyleColorKeyword, Color> customStyle)
         {
             switch (customStyle.Keyword)
             {
-                case CustomStyleSimpleKeyword.Undefined:
+                case CustomStyleColorKeyword.Undefined:
                     break;
-                case CustomStyleSimpleKeyword.Custom:
-                    ColorCrossPosition borderColor = customStyle.Value;
+                case CustomStyleColorKeyword.Custom:
+                    CrossPosition<Color> borderColor = customStyle.Value;
                     style.borderTopColor = borderColor.Top;
                     style.borderLeftColor = borderColor.Left;
                     style.borderRightColor = borderColor.Right;
@@ -109,14 +110,14 @@ namespace BrowserDesktop.UI
             }
         }
 
-        public virtual void ApplyBorderWidthToVisual(IStyle style, CustomStyleFloatCrossPosition customStyle)
+        public virtual void ApplyBorderWidthToVisual(IStyle style, CustomStyleCrossPosition<CustomStyleSizeKeyword, float> customStyle)
         {
             switch (customStyle.Keyword)
             {
-                case CustomStyleSimpleKeyword.Undefined:
+                case CustomStyleSizeKeyword.Undefined:
                     break;
-                case CustomStyleSimpleKeyword.Custom:
-                    FloatCrossPosition borderWidth = customStyle.Value;
+                case CustomStyleSizeKeyword.CustomUnresizabe:
+                    CrossPosition<float> borderWidth = customStyle.Value;
                     style.borderTopWidth = borderWidth.Top;
                     style.borderLeftWidth = borderWidth.Left;
                     style.borderRightWidth = borderWidth.Right;
@@ -125,14 +126,14 @@ namespace BrowserDesktop.UI
             }
         }
 
-        public virtual void ApplyBorderRadiusToVisual(IStyle style, CustomStyleBorderRadius customStyle)
+        public virtual void ApplyBorderRadiusToVisual(IStyle style, CustomStyleSquarePosition<CustomStyleSimpleKeyword, float> customStyle)
         {
             switch (customStyle.Keyword)
             {
                 case CustomStyleSimpleKeyword.Undefined:
                     break;
                 case CustomStyleSimpleKeyword.Custom:
-                    BorderRadius borderRadius = customStyle.Value;
+                    SquarePosition<float> borderRadius = customStyle.Value;
                     style.borderTopLeftRadius = borderRadius.TopLeft;
                     style.borderTopRightRadius = borderRadius.TopRight;
                     style.borderBottomLeftRadius = borderRadius.BottomLeft;
