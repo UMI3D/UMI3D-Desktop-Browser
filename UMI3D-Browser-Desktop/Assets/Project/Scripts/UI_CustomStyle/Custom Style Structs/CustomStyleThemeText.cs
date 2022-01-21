@@ -20,73 +20,83 @@ using UnityEngine;
 namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
-    public struct Background : IBackground
+    public struct ThemeText
     {
+        [SerializeField]
+        private Font m_font;
+        [SerializeField]
+        private FontStyle m_fontStyleAndWeight;
         [SerializeField]
         private CustomStyleValue<CustomStyleColorKeyword, Color> m_color;
         [SerializeField]
-        private CustomStyleValue<CustomStyleSimpleKeyword, Sprite> m_image;
+        private CustomStyleValue<CustomStyleColorKeyword, Color> m_outlineColor;
         [SerializeField]
-        private CustomStyleValue<CustomStyleColorKeyword, Color> m_imageTintColor;
-
-        public CustomStyleValue<CustomStyleColorKeyword, Color> BackgroundColor => m_color;
-        public CustomStyleValue<CustomStyleSimpleKeyword, Sprite> BackgroundImage => m_image;
-        public CustomStyleValue<CustomStyleColorKeyword, Color> BackgroundImageTintColor => m_imageTintColor;
+        private CustomStyleValue<CustomStyleSimpleKeyword, float> m_outlineWidth;
     }
 
-    [UnityEditor.CustomPropertyDrawer(typeof(Background))]
-    public class BackgroundPropertyDrawer : CustomPropertyDrawer
+    [UnityEditor.CustomPropertyDrawer(typeof(ThemeText))]
+    public class ThemeTextPropertyDrawer : CustomPropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
 
+            var font = property.FindPropertyRelative("m_font");
+            var fontStyle = property.FindPropertyRelative("m_fontStyleAndWeight");
             var color = property.FindPropertyRelative("m_color");
-            var image = property.FindPropertyRelative("m_image");
-            var imageTintColor = property.FindPropertyRelative("m_imageTintColor");
+            var outlineColor = property.FindPropertyRelative("m_outlineColor");
+            var outlineWidth = property.FindPropertyRelative("m_outlineWidth");
 
-            Rect colorLineRect = CurrentLineRect(position, m_deltaLabelWidth);
-            Rect imageLineRect = NextLineRect(colorLineRect);
-            Rect tintLineRect = NextLineRect(imageLineRect);
+            Rect fontLineRect = CurrentLineRect(position, m_deltaLabelWidth);
+            Rect fontStyleLineRect = NextLineRect(fontLineRect);
+            Rect colorLineRect = NextLineRect(fontStyleLineRect);
+            Rect outlineColorLineRect = NextLineRect(colorLineRect);
+            Rect outlineWidthLineRect = NextLineRect(outlineColorLineRect);
 
-            Rect colorLabelRect = new Rect(colorLineRect.x - m_deltaLabelWidth, colorLineRect.y, m_labelWidth, colorLineRect.height);
-            Rect imageLabelRect = NextLineRect(colorLabelRect);
-            Rect imageTintColorLabelRect = NextLineRect(imageLabelRect);
+            Rect fontLabelRect = new Rect(fontLineRect.x - m_deltaLabelWidth, fontLineRect.y, m_labelWidth, fontLineRect.height);
+            Rect fontStyleLabelRect = NextLineRect(fontLabelRect);
+            Rect colorLabelRect = NextLineRect(fontStyleLabelRect);
+            Rect outlineColorLabelRect = NextLineRect(colorLabelRect);
+            Rect outlineWidthLabelRect = NextLineRect(outlineColorLabelRect);
 
             EditorGUI.indentLevel += 2;
+            EditorGUI.LabelField(fontLabelRect, new GUIContent("Font :"));
+            EditorGUI.LabelField(fontStyleLabelRect, new GUIContent("Font Style :"));
             EditorGUI.LabelField(colorLabelRect, new GUIContent("Color :"));
-            EditorGUI.LabelField(imageLabelRect, new GUIContent("Image :"));
-            EditorGUI.LabelField(imageTintColorLabelRect, new GUIContent("Image tint :"));
+            EditorGUI.LabelField(outlineColorLabelRect, new GUIContent("Outline Color :"));
+            EditorGUI.LabelField(outlineWidthLabelRect, new GUIContent("Outline Width :"));
             EditorGUI.indentLevel -= 2;
 
+            EditorGUI.PropertyField(fontLineRect, font, GUIContent.none);
+            EditorGUI.PropertyField(fontStyleLineRect, fontStyle, GUIContent.none);
             EditorGUI.PropertyField(colorLineRect, color, GUIContent.none);
-            EditorGUI.PropertyField(imageLineRect, image, GUIContent.none);
-            EditorGUI.PropertyField(tintLineRect, imageTintColor, GUIContent.none);
+            EditorGUI.PropertyField(outlineColorLineRect, outlineColor, GUIContent.none);
+            EditorGUI.PropertyField(outlineWidthLineRect, outlineWidth, GUIContent.none);
 
             EditorGUI.EndProperty();
         }
     }
 
     [Serializable]
-    public struct CustomStyleBackground : ICustomStyleValue<CustomStyleSimpleKeyword, Background>
+    public struct CustomStyleThemeText : ICustomStyleValue<CustomStyleSimpleKeyword, ThemeText>
     {
         [SerializeField]
         private CustomStyleSimpleKeyword m_keyword;
         [SerializeField]
-        private Background m_value;
+        private ThemeText m_value;
 
         public CustomStyleSimpleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
-        public Background Value { get => m_value; set => m_value = value; }
+        public ThemeText Value { get => m_value; set => m_value = value; }
     }
 
-    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleBackground))]
-    public class CustomStyleBackgroundPropertyDrawer : CustomPropertyDrawer
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleThemeText))]
+    public class CustomStyleThemeTextPropertyDrawer : CustomPropertyDrawer
     {
         public override int GetNumberOfLine(SerializedProperty property)
         {
             var keyword = property.FindPropertyRelative("m_keyword");
             CustomStyleKeyword keywordValue = (CustomStyleKeyword)keyword.intValue;
-            return !keywordValue.IsDefaultOrUndefined() ? 3 : 0;
+            return !keywordValue.IsDefaultOrUndefined() ? 5 : 0;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

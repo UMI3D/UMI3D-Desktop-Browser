@@ -75,7 +75,7 @@ MonoBehaviour:
     m_textAlign: 0
     m_textOutlineColor:
       m_keyword: 2
-      m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_value: {r: 0.5849056, g: 0.21244211, b: 0.21244211, a: 0}
     m_textOutlineWidth:
       m_keyword: 0
       m_value: 0
@@ -87,8 +87,8 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
+            m_keyword: 2
+            m_value: {r: 0.4245283, g: 0.23028658, b: 0.23028658, a: 0}
           m_image:
             m_keyword: 0
             m_value: {fileID: 0}
@@ -119,14 +119,6 @@ MonoBehaviour:
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
-    m_slice:
-      m_keyword: 0
-      m_value:
-        m_global: 0
-        m_bottom: 0
-        m_left: 0
-        m_right: 0
-        m_top: 0
   m_uIBorder:
     m_color:
       m_keyword: 2
