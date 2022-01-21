@@ -20,7 +20,7 @@ using UnityEngine;
 namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
-    public struct ThemeText
+    public struct TextStyle
     {
         [SerializeField]
         private Font m_font;
@@ -34,7 +34,7 @@ namespace umi3DBrowser.UICustomStyle
         private CustomStyleValue<CustomStyleSimpleKeyword, float> m_outlineWidth;
     }
 
-    [UnityEditor.CustomPropertyDrawer(typeof(ThemeText))]
+    [UnityEditor.CustomPropertyDrawer(typeof(TextStyle))]
     public class ThemeTextPropertyDrawer : CustomPropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -78,18 +78,18 @@ namespace umi3DBrowser.UICustomStyle
     }
 
     [Serializable]
-    public struct CustomStyleThemeText : ICustomStyleValue<CustomStyleSimpleKeyword, ThemeText>
+    public struct CustomStyleTextStyle : ICustomStyleValue<CustomStyleSimpleKeyword, TextStyle>
     {
         [SerializeField]
         private CustomStyleSimpleKeyword m_keyword;
         [SerializeField]
-        private ThemeText m_value;
+        private TextStyle m_value;
 
         public CustomStyleSimpleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
-        public ThemeText Value { get => m_value; set => m_value = value; }
+        public TextStyle Value { get => m_value; set => m_value = value; }
     }
 
-    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleThemeText))]
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleTextStyle))]
     public class CustomStyleThemeTextPropertyDrawer : CustomPropertyDrawer
     {
         public override int GetNumberOfLine(SerializedProperty property)

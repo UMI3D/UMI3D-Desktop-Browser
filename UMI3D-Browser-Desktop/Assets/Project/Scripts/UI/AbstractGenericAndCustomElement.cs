@@ -216,17 +216,20 @@ namespace BrowserDesktop.UI
         {
             m_mouseState = (m_mouseState.Item1, MousePositionState.Over);
             ApplyCustomBackground();
+            ApplyCustomBorder();
         }
         protected virtual void OnMouseOut(MouseOutEvent e)
         {
             m_mouseState = (m_mouseState.Item1, MousePositionState.Out);
             ApplyCustomBackground();
+            ApplyCustomBorder();
         }
         protected virtual void OnMouseDown(MouseCaptureEvent e)
         {
             Debug.Log($"Mouse button pressed");
             m_mouseState = (MousePressedState.Pressed, m_mouseState.Item2);
             ApplyCustomBackground();
+            ApplyCustomBorder();
         }
         protected virtual void OnMouseUp(MouseUpEvent e)
         {
@@ -234,6 +237,7 @@ namespace BrowserDesktop.UI
             m_mouseState = (MousePressedState.Unpressed, m_mouseState.Item2);
             Debug.Log($"Mouse button up (button pressed = [{e.pressedButtons}], button = [{e.button}])");
             ApplyCustomBackground();
+            ApplyCustomBorder();
         }
     }
 
@@ -248,8 +252,8 @@ namespace BrowserDesktop.UI
             if (m_customStyle != null)
             {
                 ApplyCustomSize();
-                ApplyCustomBackground(Root.style, CustomStyleBackgroundMode.MouseOut);
-                ApplyCustomBorder();
+                ApplyCustomMarginAndPadding();
+                ApplyStyle(Root.style, MouseBehaviour.MouseOut);
             }
         }
 
@@ -280,48 +284,102 @@ namespace BrowserDesktop.UI
                 Root.style.maxWidth = length;
         }
 
+        private void ApplyCustomMarginAndPadding()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected void ApplyStyle(IStyle style, MouseBehaviour mouseBehaviour)
+        {
+            ApplyCustomText(style, mouseBehaviour);
+            ApplyCustomBackground(style, mouseBehaviour);
+            ApplyCustomBorder(style, mouseBehaviour);
+        }
+
         protected void ApplyCustomText()
         {
-            
+            var result = m_mouseState switch
+            {
+                (MousePressedState.Unpressed, MousePositionState.Out) => MouseBehaviour.MouseOut,
+                (MousePressedState.Unpressed, MousePositionState.Over) => MouseBehaviour.MouseOver,
+                _ => MouseBehaviour.MousePressed
+            };
+            ApplyCustomText(Root.style, result);
+        }
+        protected void ApplyCustomText(IStyle style, MouseBehaviour mouseBehaviour)
+        {
+            if (m_customStyle == null) return;
+            UITextStyle textStyle = m_customStyle.GetTextStyle(null, CustomStyleBackgroundKey);
+            switch (mouseBehaviour)
+            {
+                case MouseBehaviour.MouseOut:
+                    m_customStyleToUIElement.ApplyTextStyleToVisual(style, textStyle.Default);
+                    break;
+                case MouseBehaviour.MouseOver:
+                    m_customStyleToUIElement.ApplyTextStyleToVisual(style, textStyle.MouseOver);
+                    break;
+                case MouseBehaviour.MousePressed:
+                    m_customStyleToUIElement.ApplyTextStyleToVisual(style, textStyle.MousePressed);
+                    break;
+            }
         }
 
         protected void ApplyCustomBackground()
         {
             var result = m_mouseState switch
             {
-                (MousePressedState.Unpressed, MousePositionState.Out) => CustomStyleBackgroundMode.MouseOut,
-                (MousePressedState.Unpressed, MousePositionState.Over) => CustomStyleBackgroundMode.MouseOver,
-                _ => CustomStyleBackgroundMode.MousePressed
+                (MousePressedState.Unpressed, MousePositionState.Out) => MouseBehaviour.MouseOut,
+                (MousePressedState.Unpressed, MousePositionState.Over) => MouseBehaviour.MouseOver,
+                _ => MouseBehaviour.MousePressed
             };
             ApplyCustomBackground(Root.style, result);
         }
 
-        protected void ApplyCustomBackground(IStyle style, CustomStyleBackgroundMode backgroundMode)
+        protected void ApplyCustomBackground(IStyle style, MouseBehaviour mouseBehaviour)
         {
             if (m_customStyle == null) return;
-            //UIBackground uIBackground = m_customStyle.UIBackground;
-            //Backgrounds customBackgrounds = uIBackground.GetBackgroundsByTheme(m_globalPref.CustomStyleTheme);
-            //switch (backgroundMode)
-            //{
-            //    case CustomStyleBackgroundMode.MouseOut:
-            //        m_customStyleToUIElement.ApplyBackgroundToVisual(style, customBackgrounds.BackgroundDefault);
-            //        break;
-            //    case CustomStyleBackgroundMode.MouseOver:
-            //        m_customStyleToUIElement.ApplyBackgroundToVisual(style, customBackgrounds.BackgroundMouseOver);
-            //        break;
-            //    case CustomStyleBackgroundMode.MousePressed:
-            //        m_customStyleToUIElement.ApplyBackgroundToVisual(style, customBackgrounds.BackgroundMousePressed);
-            //        break;
-            //}
+            UIBackground background = m_customStyle.GetBackground(null, CustomStyleBackgroundKey);
+            switch (mouseBehaviour)
+            {
+                case MouseBehaviour.MouseOut:
+                    m_customStyleToUIElement.ApplyBackgroundToVisual(style, background.Default);
+                    break;
+                case MouseBehaviour.MouseOver:
+                    m_customStyleToUIElement.ApplyBackgroundToVisual(style, background.MouseOver);
+                    break;
+                case MouseBehaviour.MousePressed:
+                    m_customStyleToUIElement.ApplyBackgroundToVisual(style, background.MousePressed);
+                    break;
+            }
         }
 
         protected void ApplyCustomBorder()
         {
+            var result = m_mouseState switch
+            {
+                (MousePressedState.Unpressed, MousePositionState.Out) => MouseBehaviour.MouseOut,
+                (MousePressedState.Unpressed, MousePositionState.Over) => MouseBehaviour.MouseOver,
+                _ => MouseBehaviour.MousePressed
+            };
+            ApplyCustomBorder(Root.style, result);
+        }
+
+        protected void ApplyCustomBorder(IStyle style, MouseBehaviour mouseBehaviour)
+        {
             if (m_customStyle == null) return;
-            //UIBorder uIBorder = m_customStyle.UIBorder;
-            //m_customStyleToUIElement.ApplyBorderColorToVisual(Root.style, uIBorder.Color);
-            //m_customStyleToUIElement.ApplyBorderWidthToVisual(Root.style, uIBorder.Width);
-            //m_customStyleToUIElement.ApplyBorderRadiusToVisual(Root.style, uIBorder.Radius);
+            UIBorder border = m_customStyle.GetBorder(null, CustomStyleBackgroundKey);
+            switch (mouseBehaviour)
+            {
+                case MouseBehaviour.MouseOut:
+                    m_customStyleToUIElement.ApplyBorderToVisual(style, border.Default);
+                    break;
+                case MouseBehaviour.MouseOver:
+                    m_customStyleToUIElement.ApplyBorderToVisual(style, border.MouseOver);
+                    break;
+                case MouseBehaviour.MousePressed:
+                    m_customStyleToUIElement.ApplyBorderToVisual(style, border.MousePressed);
+                    break;
+            }
         }
     }
 

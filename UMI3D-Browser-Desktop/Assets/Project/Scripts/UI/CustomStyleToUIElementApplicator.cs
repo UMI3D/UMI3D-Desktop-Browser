@@ -27,8 +27,11 @@ namespace BrowserDesktop.UI
             float floatLenght = -1;
             switch (customStyle.Keyword)
             {
-                case CustomStyleSizeKeyword.Default:
+                case CustomStyleSizeKeyword.Undefined:
                     lenght.keyword = StyleKeyword.Null;
+                    break;
+                case CustomStyleSizeKeyword.Default:
+                    lenght.keyword = StyleKeyword.Auto;
                     break;
                 case CustomStyleSizeKeyword.CustomResizable:
                     floatLenght = customStyle.Value * zoomCoef;
@@ -44,11 +47,29 @@ namespace BrowserDesktop.UI
             return lenght;
         }
 
+        public virtual void ApplyTextStyleToVisual(IStyle style, CustomStyleTextStyle customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Default:
+                    throw new System.NotImplementedException();
+                    break;
+                case CustomStyleSimpleKeyword.Custom:
+                    throw new System.NotImplementedException();
+                    break;
+            }
+        }
+
         public virtual void ApplyBackgroundToVisual(IStyle style, CustomStyleBackground customStyle)
         {
             switch (customStyle.Keyword)
             {
                 case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Default:
+                    throw new System.NotImplementedException();
                     break;
                 case CustomStyleSimpleKeyword.Custom:
                     ApplyBackgroundColorToVisual(style, customStyle.Value.BackgroundColor);
@@ -64,8 +85,20 @@ namespace BrowserDesktop.UI
             {
                 case CustomStyleColorKeyword.Undefined:
                     break;
+                case CustomStyleColorKeyword.Default:
+                    throw new System.NotImplementedException();
+                    break;
                 case CustomStyleColorKeyword.Custom:
                     style.backgroundColor = customStyle.Value;
+                    break;
+                case CustomStyleColorKeyword.Primary:
+                    throw new System.NotImplementedException();
+                    break;
+                case CustomStyleColorKeyword.Secondary:
+                    throw new System.NotImplementedException();
+                    break;
+                case CustomStyleColorKeyword.Tertiary:
+                    throw new System.NotImplementedException();
                     break;
             }
         }
@@ -76,8 +109,20 @@ namespace BrowserDesktop.UI
             {
                 case CustomStyleColorKeyword.Undefined:
                     break;
+                case CustomStyleColorKeyword.Default:
+                    throw new System.NotImplementedException();
+                    break;
                 case CustomStyleColorKeyword.Custom:
                     style.unityBackgroundImageTintColor = customStyle.Value;
+                    break;
+                case CustomStyleColorKeyword.Primary:
+                    throw new System.NotImplementedException();
+                    break;
+                case CustomStyleColorKeyword.Secondary:
+                    throw new System.NotImplementedException();
+                    break;
+                case CustomStyleColorKeyword.Tertiary:
+                    throw new System.NotImplementedException();
                     break;
             }
         }
@@ -88,8 +133,28 @@ namespace BrowserDesktop.UI
             {
                 case CustomStyleSimpleKeyword.Undefined:
                     break;
+                case CustomStyleSimpleKeyword.Default:
+                    throw new System.NotImplementedException();
+                    break;
                 case CustomStyleSimpleKeyword.Custom:
                     style.backgroundImage = customStyle.Value.texture;
+                    break;
+            }
+        }
+
+        public virtual void ApplyBorderToVisual(IStyle style, CustomStyleBorder customStyle)
+        {
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Default:
+                    throw new System.NotImplementedException();
+                    break;
+                case CustomStyleSimpleKeyword.Custom:
+                    ApplyBorderColorToVisual(style, customStyle.Value.Color);
+                    ApplyBorderWidthToVisual(style, customStyle.Value.Width);
+                    ApplyBorderRadiusToVisual(style, customStyle.Value.Radius);
                     break;
             }
         }
@@ -100,12 +165,24 @@ namespace BrowserDesktop.UI
             {
                 case CustomStyleColorKeyword.Undefined:
                     break;
+                case CustomStyleColorKeyword.Default:
+                    throw new System.NotImplementedException();
+                    break;
                 case CustomStyleColorKeyword.Custom:
                     CrossPosition<Color> borderColor = customStyle.Value;
                     style.borderTopColor = borderColor.Top;
                     style.borderLeftColor = borderColor.Left;
                     style.borderRightColor = borderColor.Right;
                     style.borderBottomColor = borderColor.Bottom;
+                    break;
+                case CustomStyleColorKeyword.Primary:
+                    throw new System.NotImplementedException();
+                    break;
+                case CustomStyleColorKeyword.Secondary:
+                    throw new System.NotImplementedException();
+                    break;
+                case CustomStyleColorKeyword.Tertiary:
+                    throw new System.NotImplementedException();
                     break;
             }
         }
@@ -116,12 +193,17 @@ namespace BrowserDesktop.UI
             {
                 case CustomStyleSizeKeyword.Undefined:
                     break;
+                case CustomStyleSizeKeyword.Default:
+                    break;
                 case CustomStyleSizeKeyword.CustomUnresizabe:
                     CrossPosition<float> borderWidth = customStyle.Value;
                     style.borderTopWidth = borderWidth.Top;
                     style.borderLeftWidth = borderWidth.Left;
                     style.borderRightWidth = borderWidth.Right;
                     style.borderBottomWidth = borderWidth.Bottom;
+                    break;
+                case CustomStyleSizeKeyword.CustomResizable:
+                    throw new System.NotImplementedException();
                     break;
             }
         }
@@ -131,6 +213,9 @@ namespace BrowserDesktop.UI
             switch (customStyle.Keyword)
             {
                 case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Default:
+                    throw new System.NotImplementedException();
                     break;
                 case CustomStyleSimpleKeyword.Custom:
                     SquarePosition<float> borderRadius = customStyle.Value;

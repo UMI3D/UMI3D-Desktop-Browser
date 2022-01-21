@@ -36,18 +36,23 @@ namespace umi3DBrowser.UICustomStyle
     }
 
     [Serializable]
-    public struct UIThemeText
+    public struct UITextStyle : ICustomisableByMouseBehaviour<CustomStyleTextStyle>
     {
         [SerializeField]
         private string m_key;
         [Header("Default")]
         [SerializeField]
-        private CustomStyleThemeText m_default;
+        private CustomStyleTextStyle m_default;
         [Header("Mouse Over")]
         [SerializeField]
-        private CustomStyleThemeText m_mouseOver;
+        private CustomStyleTextStyle m_mouseOver;
         [Header("Mouse Pressed")]
         [SerializeField]
-        private CustomStyleThemeText m_mousePressed;
+        private CustomStyleTextStyle m_mousePressed;
+
+        public string Key => m_key;
+        public CustomStyleTextStyle Default => m_default;
+        public CustomStyleTextStyle MouseOver => m_mouseOver;
+        public CustomStyleTextStyle MousePressed => m_mousePressed;
     }
 }

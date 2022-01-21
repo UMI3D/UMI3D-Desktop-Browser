@@ -19,7 +19,7 @@ using UnityEngine;
 namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
-    public struct UIBorder : IUIBorder
+    public struct UIBorder : ICustomisableByMouseBehaviour<CustomStyleBorder>
     {
         [SerializeField]
         private string m_key;
@@ -34,5 +34,8 @@ namespace umi3DBrowser.UICustomStyle
         private CustomStyleBorder m_mousePressed;
 
         public string Key => m_key;
+        public CustomStyleBorder Default => m_default;
+        public CustomStyleBorder MouseOver => m_mouseOver;
+        public CustomStyleBorder MousePressed => m_mousePressed;
     }
 }

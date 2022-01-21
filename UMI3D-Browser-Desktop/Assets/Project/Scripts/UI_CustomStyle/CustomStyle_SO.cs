@@ -23,54 +23,110 @@ namespace umi3DBrowser.UICustomStyle
     public struct UIThemeStyle
     {
         [SerializeField]
-        private string m_theme;
+        private Theme_SO m_theme;
         [SerializeField]
-        private UIThemeText[] m_uIText;
+        private UITextStyle[] m_textStyle;
         [SerializeField]
-        private UIBackground[] m_uIBackground;
+        private UIBackground[] m_background;
         [SerializeField]
-        private UIBorder[] m_uIBorder;
+        private UIBorder[] m_border;
+
+        public Theme_SO Theme => m_theme;
+        public UITextStyle GetTextStyle(string key)
+        {
+            key = key.ToLower();
+            string[] subKeys = key.Split('-');
+            foreach (UITextStyle themeText in m_textStyle)
+            {
+                if (themeText.Key == subKeys[0])
+                    return themeText;
+            }
+            throw new KeyNotFoundException(subKeys[0], "UIThemeStyle");
+        }
+        public UIBackground GetBackground(string key)
+        {
+            key = key.ToLower();
+            string[] subKeys = key.Split('-');
+            foreach (UIBackground background in m_background)
+            {
+                if (background.Key == subKeys[0])
+                    return background;
+            }
+            throw new KeyNotFoundException(subKeys[0], "UIThemeStyle");
+        }
+        public UIBorder GetBorder(string key)
+        {
+            key = key.ToLower();
+            string[] subKeys = key.Split('-');
+            foreach (UIBorder border in m_border)
+            {
+                if (border.Key == subKeys[0])
+                    return border;
+            }
+            throw new KeyNotFoundException(subKeys[0], "UIThemeStyle");
+        }
     }
 
     [CreateAssetMenu(fileName ="NewCustomUIStyle", menuName = "Browser_SO/CustomUIStyle")]
-    public class CustomStyle_SO : ScriptableObject
+    public partial class CustomStyle_SO : ScriptableObject
     {
-        [Header("Formatting Style")]
-        [SerializeField]
-        private UIDisplay m_uIDisplay = new UIDisplay();
-        //[SerializeField]
-        //private UIPosition m_uIPosition = new UIPosition();
-        [SerializeField]
-        private UISize m_uISize = new UISize();
-        [SerializeField]
-        private UIMarginAndPadding m_uIMarginAndPadding = new UIMarginAndPadding();
-        [SerializeField]
-        private UIFormattingText m_formattingText = new UIFormattingText();
-
-        [Space()]
-        [SerializeField]
-        private UIThemeStyle[] m_themeStyle;
-
-        public string Key => name.ToLower();
-        public UIDisplay UIDisplay => m_uIDisplay;
-        //public UIPosition UIPosition => m_uIPosition;
-        public UISize UISize => m_uISize;
-        public UIMarginAndPadding UIMarginAndPadding => m_uIMarginAndPadding;
-
-        public UIBackground GetBackgroundsByKey(string key)
-        {
-            throw new Exception("Theme not found");
-        }
-
-        public UIBorder GetBorderByKey(string key)
-        {
-            throw new System.NotImplementedException();
-        }
-
         [HideInInspector]
         public UnityEvent ApplyCustomStyle = new UnityEvent();
 
+        [Header("Formatting Style")]
+        [SerializeField]
+        private UIDisplay m_display = new UIDisplay();
+        //[SerializeField]
+        //private UIPosition m_uIPosition = new UIPosition();
+        [SerializeField]
+        private UISize m_size = new UISize();
+        [SerializeField]
+        private UIMarginAndPadding m_marginAndPadding = new UIMarginAndPadding();
+        [SerializeField]
+        private UIFormattingText m_textFormat = new UIFormattingText();
+        [Space()]
+        [SerializeField]
+        private UIThemeStyle[] m_themeStyles;
+
         [ContextMenu("Apply Custom Style")]
         private void ApplyCustomStyleInInspector() => ApplyCustomStyle.Invoke();
+    }
+
+    public partial class CustomStyle_SO
+    {
+        public string Key => name.ToLower();
+        public UIDisplay UIDisplay => m_display;
+        //public UIPosition UIPosition => m_uIPosition;
+        public UISize UISize => m_size;
+        public UIMarginAndPadding UIMarginAndPadding => m_marginAndPadding;
+
+        public UITextStyle GetTextStyle(Theme_SO theme, string key)
+        {
+            foreach (UIThemeStyle themeStyle in m_themeStyles)
+            {
+                if (themeStyle.Theme == theme)
+                    return themeStyle.GetTextStyle(key);
+            }
+            throw new ThemeNotFoundException(theme, this.name);
+        }
+        public UIBackground GetBackground(Theme_SO theme, string key)
+        {
+            foreach (UIThemeStyle themeStyle in m_themeStyles)
+            {
+                if (themeStyle.Theme == theme)
+                    return themeStyle.GetBackground(key);
+            }
+            throw new ThemeNotFoundException(theme, this.name);
+        }
+
+        public UIBorder GetBorder(Theme_SO theme, string key)
+        {
+            foreach (UIThemeStyle themeStyle in m_themeStyles)
+            {
+                if (themeStyle.Theme == theme)
+                    return themeStyle.GetBorder(key);
+            }
+            throw new ThemeNotFoundException(theme, this.name);
+        }
     }
 }

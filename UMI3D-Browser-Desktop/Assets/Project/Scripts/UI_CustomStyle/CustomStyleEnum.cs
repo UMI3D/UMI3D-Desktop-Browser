@@ -191,7 +191,7 @@ namespace umi3DBrowser.UICustomStyle
         Default = 1
     }
 
-    public enum CustomStyleBackgroundMode
+    public enum MouseBehaviour
     {
         MouseOut,
         MouseOver,
