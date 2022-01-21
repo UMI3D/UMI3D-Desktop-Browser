@@ -95,22 +95,22 @@ namespace umi3DBrowser.UICustomStyle
         public CustomStyleValue<CustomStyleColorKeyword, Color> BackgroundImageTintColor { get; }
     }
 
-    public interface IBackgrounds
+    public interface ICustomisableByMouseBehaviour<T>
     {
         public string Key { get; }
-        public CustomStyleBackground BackgroundDefault { get; }
-        public CustomStyleBackground BackgroundMouseOver { get; }
-        public CustomStyleBackground BackgroundMousePressed { get; }
+        public T Default { get; }
+        public T MouseOver { get; }
+        public T MousePressed { get; }
     }
 
     public interface IUIBackground
     {
         //public Backgrounds GetBackgroundsByTheme(CustomStyleTheme theme);
         public string Key { get; }
-        public CustomStyleBackground BackgroundDefault { get; }
-        public CustomStyleBackground BackgroundMouseOver { get; }
-        public CustomStyleBackground BackgroundMousePressed { get; }
-        public ScaleMode UnityBackgroundScaleMode { get; }
+        //public CustomStyleBackground Default { get; }
+        //public CustomStyleBackground MouseOver { get; }
+        //public CustomStyleBackground MousePressed { get; }
+        //public ScaleMode UnityBackgroundScaleMode { get; }
     }
 
     public interface IUIBorder

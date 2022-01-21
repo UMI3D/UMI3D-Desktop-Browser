@@ -37,4 +37,21 @@ namespace umi3DBrowser.UICustomStyle
 
         public string Key => m_key;
     }
+
+    public class ThemeNotFoundException : Exception
+    {
+        private string m_theme;
+
+        public ThemeNotFoundException(Theme_SO theme) : base($"[{theme.name}] not found.")
+        {
+            this.m_theme = theme.name;
+        }
+
+        public ThemeNotFoundException(Theme_SO theme, string keyUsingObject) : base($"[{theme.name}] not found in [{keyUsingObject}].")
+        {
+            this.m_theme = theme.name;
+        }
+
+        public string Theme => m_theme;
+    }
 }

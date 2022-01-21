@@ -19,7 +19,7 @@ using UnityEngine;
 namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
-    public struct UIBackground : IUIBackground
+    public struct UIBackground : ICustomisableByMouseBehaviour<CustomStyleBackground>
     {
         [SerializeField]
         private string m_key;
@@ -34,10 +34,10 @@ namespace umi3DBrowser.UICustomStyle
         private CustomStyleBackground m_mousePressed;
 
         public string Key => m_key;
-        public CustomStyleBackground BackgroundDefault => m_default;
-        public CustomStyleBackground BackgroundMouseOver => m_mouseOver;
-        public CustomStyleBackground BackgroundMousePressed => m_mousePressed;
+        public CustomStyleBackground Default => m_default;
+        public CustomStyleBackground MouseOver => m_mouseOver;
+        public CustomStyleBackground MousePressed => m_mousePressed;
 
-        public ScaleMode UnityBackgroundScaleMode => throw new NotImplementedException();
+        //public ScaleMode UnityBackgroundScaleMode => throw new NotImplementedException();
     }
 }
