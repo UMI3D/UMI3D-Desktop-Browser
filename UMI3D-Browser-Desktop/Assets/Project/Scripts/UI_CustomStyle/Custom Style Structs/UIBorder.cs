@@ -21,18 +21,18 @@ namespace umi3DBrowser.UICustomStyle
     [Serializable]
     public struct UIBorder : IUIBorder
     {
-        [Header("Color")]
         [SerializeField]
-        private CustomStyleCrossPosition<CustomStyleColorKeyword, Color> m_color;
-        [Header("Width")]
+        private string m_key;
+        [Header("Default")]
         [SerializeField]
-        private CustomStyleCrossPosition<CustomStyleSizeKeyword, float> m_width;
-        [Header("Radius")]
+        private CustomStyleBorder m_default;
+        [Header("Mouse Over")]
         [SerializeField]
-        private CustomStyleSquarePosition<CustomStyleSimpleKeyword, float> m_radius;
+        private CustomStyleBorder m_mouseOver;
+        [Header("Mouse Pressed")]
+        [SerializeField]
+        private CustomStyleBorder m_mousePressed;
 
-        public CustomStyleCrossPosition<CustomStyleColorKeyword, Color> Color => m_color;
-        public CustomStyleCrossPosition<CustomStyleSizeKeyword, float> Width => m_width;
-        public CustomStyleSquarePosition<CustomStyleSimpleKeyword, float> Radius => m_radius;
+        public string Key => m_key;
     }
 }

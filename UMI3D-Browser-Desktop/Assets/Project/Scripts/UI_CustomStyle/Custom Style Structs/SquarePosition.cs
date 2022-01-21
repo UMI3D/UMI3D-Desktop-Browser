@@ -132,17 +132,11 @@ namespace umi3DBrowser.UICustomStyle
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleSquarePosition<CustomStyleSimpleKeyword, float>))]
     public class CustomStyleValue3LinesPropertyDrawer : CustomPropertyDrawer
     {
-        protected override int m_numberOfLine => 3;
-
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        public override int GetNumberOfLine(SerializedProperty property)
         {
             var keyword = property.FindPropertyRelative("m_keyword");
             CustomStyleKeyword keywordValue = (CustomStyleKeyword)keyword.intValue;
-
-            if (!keywordValue.IsDefaultOrUndefined())
-                return base.GetPropertyHeight(property, label);
-            else
-                return 0f;
+            return !keywordValue.IsDefaultOrUndefined() ? 3 : 0;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -160,6 +154,7 @@ namespace umi3DBrowser.UICustomStyle
             EditorGUI.PropertyField(keywordRect, keyword, GUIContent.none);
             if (!keywordValue.IsDefaultOrUndefined())
                 EditorGUI.PropertyField(valueRect, value, GUIContent.none);
+            ++EditorGUI.indentLevel;
 
             EditorGUI.EndProperty();
         }

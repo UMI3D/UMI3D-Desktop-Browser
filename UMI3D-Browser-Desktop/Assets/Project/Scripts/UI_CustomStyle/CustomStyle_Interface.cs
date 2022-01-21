@@ -105,14 +105,18 @@ namespace umi3DBrowser.UICustomStyle
 
     public interface IUIBackground
     {
-        public Backgrounds GetBackgroundsByTheme(CustomStyleTheme theme);
+        //public Backgrounds GetBackgroundsByTheme(CustomStyleTheme theme);
+        public string Key { get; }
+        public CustomStyleBackground BackgroundDefault { get; }
+        public CustomStyleBackground BackgroundMouseOver { get; }
+        public CustomStyleBackground BackgroundMousePressed { get; }
         public ScaleMode UnityBackgroundScaleMode { get; }
     }
 
     public interface IUIBorder
     {
-        public CustomStyleCrossPosition<CustomStyleColorKeyword, Color> Color { get; }
-        public CustomStyleCrossPosition<CustomStyleSizeKeyword, float> Width { get; }
-        public CustomStyleSquarePosition<CustomStyleSimpleKeyword, float> Radius { get; }
+        //public CustomStyleCrossPosition<CustomStyleColorKeyword, Color> Color { get; }
+        //public CustomStyleCrossPosition<CustomStyleSizeKeyword, float> Width { get; }
+        //public CustomStyleSquarePosition<CustomStyleSimpleKeyword, float> Radius { get; }
     }
 }

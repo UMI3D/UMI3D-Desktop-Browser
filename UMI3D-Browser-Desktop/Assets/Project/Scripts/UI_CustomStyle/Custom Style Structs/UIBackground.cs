@@ -19,44 +19,24 @@ using UnityEngine;
 namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
-    public struct Backgrounds : IBackgrounds
-    {
-        [SerializeField]
-        private string m_key;
-        [SerializeField]
-        private CustomStyleTheme m_theme;
-        [Header("Default")]
-        [SerializeField]
-        private CustomStyleBackground m_backgroundDefault;
-        [Header("Mouse Over")]
-        [SerializeField]
-        private CustomStyleBackground m_backgroundMouseOver;
-        [Header("Mouse Pressed")]
-        [SerializeField]
-        private CustomStyleBackground m_backgroundMousePressed;
-
-        public string Key => m_key;
-        public CustomStyleTheme Theme => m_theme;
-        public CustomStyleBackground BackgroundDefault => m_backgroundDefault;
-        public CustomStyleBackground BackgroundMouseOver => m_backgroundMouseOver;
-        public CustomStyleBackground BackgroundMousePressed => m_backgroundMousePressed;
-    }
-
-    [Serializable]
     public struct UIBackground : IUIBackground
     {
         [SerializeField]
-        private Backgrounds[] m_backgrounds;
+        private string m_key;
+        [Header("Default")]
+        [SerializeField]
+        private CustomStyleBackground m_default;
+        [Header("Mouse Over")]
+        [SerializeField]
+        private CustomStyleBackground m_mouseOver;
+        [Header("Mouse Pressed")]
+        [SerializeField]
+        private CustomStyleBackground m_mousePressed;
 
-        public Backgrounds GetBackgroundsByTheme(CustomStyleTheme theme)
-        {
-            foreach (Backgrounds backgroundsByThem in m_backgrounds)
-            {
-                if (backgroundsByThem.Theme == theme)
-                    return backgroundsByThem;
-            }
-            throw new Exception("Theme not found");
-        }
+        public string Key => m_key;
+        public CustomStyleBackground BackgroundDefault => m_default;
+        public CustomStyleBackground BackgroundMouseOver => m_mouseOver;
+        public CustomStyleBackground BackgroundMousePressed => m_mousePressed;
 
         public ScaleMode UnityBackgroundScaleMode => throw new NotImplementedException();
     }

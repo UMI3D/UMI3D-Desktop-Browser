@@ -39,10 +39,13 @@ namespace umi3DBrowser.UICustomStyle
         }
     }
 
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSimpleKeyword, float>))]
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleColorKeyword, Color>))]
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSimpleKeyword, Sprite>))]
     public class CustomStyleImagePropertyDrawer : CustomPropertyDrawer
     {
+        protected override int m_numberOfLine => 1;
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
@@ -51,11 +54,17 @@ namespace umi3DBrowser.UICustomStyle
             var value = property.FindPropertyRelative("m_value");
             CustomStyleKeyword keywordValue = (CustomStyleKeyword)keyword.intValue;
 
+            if (label != GUIContent.none)
+            {
+                position = EditorGUI.PrefixLabel(position, label);
+                --EditorGUI.indentLevel;
+            }
+            
             Rect keywordRect;
             Rect valueRect;
             if (!keywordValue.IsDefaultOrUndefined())
             {
-                float width = (position.width) / 2f - 4f;
+                float width = (position.width) / 2f - m_spaceBetweenLine;
                 keywordRect = new Rect(position.x, position.y, width, position.height);
                 valueRect = new Rect(position.x + width + 2f, position.y, width, position.height);
             }

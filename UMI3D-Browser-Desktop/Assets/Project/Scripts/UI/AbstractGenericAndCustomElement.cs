@@ -299,29 +299,29 @@ namespace BrowserDesktop.UI
         protected void ApplyCustomBackground(IStyle style, CustomStyleBackgroundMode backgroundMode)
         {
             if (m_customStyle == null) return;
-            UIBackground uIBackground = m_customStyle.UIBackground;
-            Backgrounds customBackgrounds = uIBackground.GetBackgroundsByTheme(m_globalPref.CustomStyleTheme);
-            switch (backgroundMode)
-            {
-                case CustomStyleBackgroundMode.MouseOut:
-                    m_customStyleToUIElement.ApplyBackgroundToVisual(style, customBackgrounds.BackgroundDefault);
-                    break;
-                case CustomStyleBackgroundMode.MouseOver:
-                    m_customStyleToUIElement.ApplyBackgroundToVisual(style, customBackgrounds.BackgroundMouseOver);
-                    break;
-                case CustomStyleBackgroundMode.MousePressed:
-                    m_customStyleToUIElement.ApplyBackgroundToVisual(style, customBackgrounds.BackgroundMousePressed);
-                    break;
-            }
+            //UIBackground uIBackground = m_customStyle.UIBackground;
+            //Backgrounds customBackgrounds = uIBackground.GetBackgroundsByTheme(m_globalPref.CustomStyleTheme);
+            //switch (backgroundMode)
+            //{
+            //    case CustomStyleBackgroundMode.MouseOut:
+            //        m_customStyleToUIElement.ApplyBackgroundToVisual(style, customBackgrounds.BackgroundDefault);
+            //        break;
+            //    case CustomStyleBackgroundMode.MouseOver:
+            //        m_customStyleToUIElement.ApplyBackgroundToVisual(style, customBackgrounds.BackgroundMouseOver);
+            //        break;
+            //    case CustomStyleBackgroundMode.MousePressed:
+            //        m_customStyleToUIElement.ApplyBackgroundToVisual(style, customBackgrounds.BackgroundMousePressed);
+            //        break;
+            //}
         }
 
         protected void ApplyCustomBorder()
         {
             if (m_customStyle == null) return;
-            UIBorder uIBorder = m_customStyle.UIBorder;
-            m_customStyleToUIElement.ApplyBorderColorToVisual(Root.style, uIBorder.Color);
-            m_customStyleToUIElement.ApplyBorderWidthToVisual(Root.style, uIBorder.Width);
-            m_customStyleToUIElement.ApplyBorderRadiusToVisual(Root.style, uIBorder.Radius);
+            //UIBorder uIBorder = m_customStyle.UIBorder;
+            //m_customStyleToUIElement.ApplyBorderColorToVisual(Root.style, uIBorder.Color);
+            //m_customStyleToUIElement.ApplyBorderWidthToVisual(Root.style, uIBorder.Width);
+            //m_customStyleToUIElement.ApplyBorderRadiusToVisual(Root.style, uIBorder.Radius);
         }
     }
 

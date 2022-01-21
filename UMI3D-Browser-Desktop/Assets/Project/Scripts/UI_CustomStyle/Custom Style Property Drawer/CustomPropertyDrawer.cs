@@ -45,6 +45,10 @@ namespace umi3DBrowser.UICustomStyle
         {
             return new Rect(currentPosition.x + indent, currentPosition.y + m_deltaLineHeight, currentPosition.width - indent, m_lineHeight);
         }
+        protected virtual Rect LineRect(Rect currentPosition, int lineNumbe, float indent = 0f)
+        {
+            return new Rect(currentPosition.x + indent, currentPosition.y + m_deltaLineHeight * lineNumbe, currentPosition.width - indent, m_lineHeight);
+        }
         protected virtual Rect PreviousLineRect(Rect currentPosition, float indent = 0f)
         {
             return new Rect(currentPosition.x + indent, currentPosition.y - m_deltaLineHeight, currentPosition.width - indent, m_lineHeight);

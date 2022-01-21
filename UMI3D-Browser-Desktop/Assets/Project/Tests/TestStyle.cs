@@ -20,7 +20,7 @@ public class TestStyle : MonoBehaviour
         public UIPosition UIPosition = new UIPosition();
         public UISize UISize = new UISize();
         public UIMarginAndPadding UIMarginAndPadding = new UIMarginAndPadding();
-        public UIText UIText = new UIText();
+        //public UIText UIText = new UIText();
         public UIBackground UIBackground = new UIBackground();
         public UIBorder UIBorder = new UIBorder();
 

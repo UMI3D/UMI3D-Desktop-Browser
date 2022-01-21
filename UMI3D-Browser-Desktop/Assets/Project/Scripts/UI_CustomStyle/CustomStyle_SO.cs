@@ -13,14 +13,29 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace umi3DBrowser.UICustomStyle
 {
+    [Serializable]
+    public struct UIThemeStyle
+    {
+        [SerializeField]
+        private string m_theme;
+        [SerializeField]
+        private UIThemeText[] m_uIText;
+        [SerializeField]
+        private UIBackground[] m_uIBackground;
+        [SerializeField]
+        private UIBorder[] m_uIBorder;
+    }
+
     [CreateAssetMenu(fileName ="NewCustomUIStyle", menuName = "Browser_SO/CustomUIStyle")]
     public class CustomStyle_SO : ScriptableObject
     {
+        [Header("Formatting Style")]
         [SerializeField]
         private UIDisplay m_uIDisplay = new UIDisplay();
         //[SerializeField]
@@ -30,20 +45,27 @@ namespace umi3DBrowser.UICustomStyle
         [SerializeField]
         private UIMarginAndPadding m_uIMarginAndPadding = new UIMarginAndPadding();
         [SerializeField]
-        private UIText m_uIText = new UIText();
+        private UIFormattingText m_formattingText = new UIFormattingText();
+
+        [Space()]
         [SerializeField]
-        private UIBackground m_uIBackground = new UIBackground();
-        [SerializeField]
-        private UIBorder m_uIBorder = new UIBorder();
+        private UIThemeStyle[] m_themeStyle;
 
         public string Key => name.ToLower();
         public UIDisplay UIDisplay => m_uIDisplay;
         //public UIPosition UIPosition => m_uIPosition;
         public UISize UISize => m_uISize;
         public UIMarginAndPadding UIMarginAndPadding => m_uIMarginAndPadding;
-        public UIText UIText => m_uIText;
-        public UIBackground UIBackground => m_uIBackground;
-        public UIBorder UIBorder => m_uIBorder;
+
+        public UIBackground GetBackgroundsByKey(string key)
+        {
+            throw new Exception("Theme not found");
+        }
+
+        public UIBorder GetBorderByKey(string key)
+        {
+            throw new System.NotImplementedException();
+        }
 
         [HideInInspector]
         public UnityEvent ApplyCustomStyle = new UnityEvent();

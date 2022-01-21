@@ -20,21 +20,10 @@ using UnityEngine;
 namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
-    public struct UIText : IUIText
+    public struct UIFormattingText
     {
-        [Header("Font")]
         [SerializeField]
-        private Font m_font;
-        //[SerializeField]
-        //private FontDefinition m_unityFontDefinition;
-        [SerializeField]
-        private FontStyle m_fontStyleAndWeight;
-        [SerializeField]
-        private float m_fontSize;
-        [SerializeField]
-        private Color m_color;
-
-        [Header("Format")]
+        private CustomStyleSize m_fontSize;
         [SerializeField]
         private CustomStyleFloat m_letterSpacing;
         [SerializeField]
@@ -43,44 +32,22 @@ namespace umi3DBrowser.UICustomStyle
         private CustomStyleFloat m_paragraphSpacing;
         [SerializeField]
         private TextAnchor m_textAlign;
-        [SerializeField]
-        private CustomStyleValue<CustomStyleColorKeyword, Color> m_textOutlineColor;
-        [SerializeField]
-        private CustomStyleFloat m_textOutlineWidth;
-
-        //[SerializeField]
-        //private TextOverflow m_textOveflow;//
-        //[SerializeField]
-        //private TextOverflowPosition m_unityTextOverflowPosition;//
-        //[SerializeField]
-        //private WhiteSpace m_WhiteSpace;//
         
-        public Color Color => throw new NotImplementedException();
+    }
 
-        public float LetterSpacing => throw new NotImplementedException();
-
-        public float FontSize => throw new NotImplementedException();
-
-        //public TextOverflow TextOverflow => throw new NotImplementedException();
-
-        public Font UnityFont => throw new NotImplementedException();
-
-        //public FontDefinition UnityFontDefinition => throw new NotImplementedException();
-
-        public FontStyle UnityFontStyleAndWeight => throw new NotImplementedException();
-
-        public float UnityParagraphSpacing => throw new NotImplementedException();
-
-        public TextAnchor UnityTextAlign => throw new NotImplementedException();
-
-        //public TextOverflowPosition UnityTextOverflowPosition => throw new NotImplementedException();
-
-        public Color UnityTextOutlineColor => throw new NotImplementedException();
-
-        public float UnityTextOutlineWidth => throw new NotImplementedException();
-
-        //public WhiteSpace WhiteSpace => throw new NotImplementedException();
-
-        public float WordSpacing => throw new NotImplementedException();
+    [Serializable]
+    public struct UIThemeText
+    {
+        [SerializeField]
+        private string m_key;
+        [Header("Default")]
+        [SerializeField]
+        private CustomStyleThemeText m_default;
+        [Header("Mouse Over")]
+        [SerializeField]
+        private CustomStyleThemeText m_mouseOver;
+        [Header("Mouse Pressed")]
+        [SerializeField]
+        private CustomStyleThemeText m_mousePressed;
     }
 }
