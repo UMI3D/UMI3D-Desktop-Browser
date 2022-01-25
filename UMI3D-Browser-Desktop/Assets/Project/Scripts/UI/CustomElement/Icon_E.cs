@@ -20,8 +20,8 @@ namespace DesktopBrowser.UI.CustomElement
 {
     public partial class Icon_E
     {
-        public Icon_E(VisualElement root, string customStyleKey, string customStyleBackgroundKey = "") : 
-            base(root, customStyleKey, customStyleBackgroundKey) { }
+        public Icon_E(VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys = null) : 
+            base(visual, styleResourcePath, formatAndStyleKeys) { }
 
         public void ChangeBackground(string customStyleBackgroundKey)
         {
@@ -29,7 +29,7 @@ namespace DesktopBrowser.UI.CustomElement
         }
     }
 
-    public partial class Icon_E : AbstractGenericAndCustomElement
+    public partial class Icon_E : Visual_E
     {
 
         protected override void Initialize()

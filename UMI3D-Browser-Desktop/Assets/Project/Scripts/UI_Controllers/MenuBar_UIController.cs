@@ -41,7 +41,7 @@ namespace DesktopBrowser.UIControllers
         protected override void Awake()
         {
             base.Awake();
-            menuBar = new MenuBar_E(BindVisual("menu-bar-element"), "menuBar-menuBar")
+            menuBar = new MenuBar_E(BindVisual("menu-bar-element"), "menuBar-menuBar", null)
             {
                 AddSeparator = (ve) => { addSeparator(ve);  }
             };
@@ -53,80 +53,80 @@ namespace DesktopBrowser.UIControllers
             VisualTreeAsset toolboxVisual = GetUIController("toolboxes").VisualTA;
             VisualTreeAsset separatorVisual = GetUIController("toolboxSeparators").VisualTA;
 
-            addSeparator = (ve) => { new ToolboxSeparatorGenericElement(separatorVisual).AddTo(ve); };
+            //addSeparator = (ve) => { new ToolboxSeparatorGenericElement(separatorVisual).AddTo(ve); };
 
             #region Left Layout
 
-            menuBar.AddSpacerToLeftLayout();
-            ToolboxItem_E tool_toolbox = new ToolboxItem_E(toolVisual)
-            {
-                ItemName = "Toolbox",
-                ItemClicked = () =>
-                {
-                    Debug.Log("<color=green>TODO: </color>" + $"");
-                }
-            }.SetIcon("menuBar-toolbox", "menuBar-toolbox", true);
-            Toolbox_E toolbox_left = new Toolbox_E(toolboxVisual, tool_toolbox)
-            {
-                toolboxName = ""
-            };
-            ToolboxSeparatorGenericElement separator_left = new ToolboxSeparatorGenericElement(separatorVisual);
-            menuBar.AddLeft(toolbox_left, separator_left);
+            //menuBar.AddSpacerToLeftLayout();
+            //ToolboxItem_E tool_toolbox = new ToolboxItem_E(toolVisual)
+            //{
+            //    ItemName = "Toolbox",
+            //    ItemClicked = () =>
+            //    {
+            //        Debug.Log("<color=green>TODO: </color>" + $"");
+            //    }
+            //}.SetIcon("menuBar-toolbox", "menuBar-toolbox", true);
+            //Toolbox_E toolbox_left = new Toolbox_E(toolboxVisual, tool_toolbox)
+            //{
+            //    toolboxName = ""
+            //};
+            //ToolboxSeparatorGenericElement separator_left = new ToolboxSeparatorGenericElement(separatorVisual);
+            //menuBar.AddLeft(toolbox_left, separator_left);
 
             #endregion
 
             #region Right Layout
 
-            ToolboxSeparatorGenericElement separator_right0 = new ToolboxSeparatorGenericElement(separatorVisual);
-            avatar = new ToolboxItem_E(toolVisual)
-            {
-                ItemName = "",
-                ItemClicked = () =>
-                {
-                    ToggleAvatarTracking();
-                }
-            }.SetIcon("menuBar-avatarOn", "menuBar-avatarOff", true);
-            sound = new ToolboxItem_E(toolVisual)
-            {
-                ItemName = "",
-                ItemClicked = () =>
-                {
-                    ToggleAudio();
-                }
-            }.SetIcon("menuBar-soundOn", "menuBar-soundOff");
-            mic = new ToolboxItem_E(toolVisual)
-            {
-                ItemName = "",
-                ItemClicked = () =>
-                {
-                    ToggleMic();
-                }
-            }.SetIcon("menuBar-micOn", "menuBar-micOff");
-            Toolbox_E toolbox_settings = new Toolbox_E(toolboxVisual, avatar, sound, mic)
-            {
-                toolboxName = ""
-            };
-            ToolboxSeparatorGenericElement separator_right1 = new ToolboxSeparatorGenericElement(separatorVisual);
-            ToolboxItem_E tool_leave = new ToolboxItem_E(toolVisual)
-            {
-                ItemName = "",
-                ItemClicked = () =>
-                {
-                    //Menu.DialogueBox_UIController.
-                    //    Setup("Leave environment", "Are you sure ...?", "YES", "NO", (b) =>
-                    //    {
-                    //        if (b)
-                    //            ConnectionMenu.Instance.Leave();
-                    //    }).
-                    //    DisplayFrom(uiDocument);
-                }
-            }.SetIcon("menuBar-leave", "menuBar-leave", true);
-            Toolbox_E toolbox_leave = new Toolbox_E(toolboxVisual, tool_leave)
-            {
-                toolboxName = ""
-            };
-            menuBar.AddRight(separator_right0, toolbox_settings, separator_right1, toolbox_leave);
-            menuBar.AddSpacerToRightLayout();
+            //ToolboxSeparatorGenericElement separator_right0 = new ToolboxSeparatorGenericElement(separatorVisual);
+            //avatar = new ToolboxItem_E(toolVisual)
+            //{
+            //    ItemName = "",
+            //    ItemClicked = () =>
+            //    {
+            //        ToggleAvatarTracking();
+            //    }
+            //}.SetIcon("menuBar-avatarOn", "menuBar-avatarOff", true);
+            //sound = new ToolboxItem_E(toolVisual)
+            //{
+            //    ItemName = "",
+            //    ItemClicked = () =>
+            //    {
+            //        ToggleAudio();
+            //    }
+            //}.SetIcon("menuBar-soundOn", "menuBar-soundOff");
+            //mic = new ToolboxItem_E(toolVisual)
+            //{
+            //    ItemName = "",
+            //    ItemClicked = () =>
+            //    {
+            //        ToggleMic();
+            //    }
+            //}.SetIcon("menuBar-micOn", "menuBar-micOff");
+            //Toolbox_E toolbox_settings = new Toolbox_E(toolboxVisual, avatar, sound, mic)
+            //{
+            //    toolboxName = ""
+            //};
+            //ToolboxSeparatorGenericElement separator_right1 = new ToolboxSeparatorGenericElement(separatorVisual);
+            //ToolboxItem_E tool_leave = new ToolboxItem_E(toolVisual)
+            //{
+            //    ItemName = "",
+            //    ItemClicked = () =>
+            //    {
+            //        //Menu.DialogueBox_UIController.
+            //        //    Setup("Leave environment", "Are you sure ...?", "YES", "NO", (b) =>
+            //        //    {
+            //        //        if (b)
+            //        //            ConnectionMenu.Instance.Leave();
+            //        //    }).
+            //        //    DisplayFrom(uiDocument);
+            //    }
+            //}.SetIcon("menuBar-leave", "menuBar-leave", true);
+            //Toolbox_E toolbox_leave = new Toolbox_E(toolboxVisual, tool_leave)
+            //{
+            //    toolboxName = ""
+            //};
+            //menuBar.AddRight(separator_right0, toolbox_settings, separator_right1, toolbox_leave);
+            //menuBar.AddSpacerToRightLayout();
 
             #endregion
 

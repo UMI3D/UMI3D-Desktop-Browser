@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.GenericElement
 {
-    public class ToolboxButtonGenericElement : AbstractGenericAndCustomElement
+    public class ToolboxButtonGenericElement : Visual_E
     {
         #region Fields
 

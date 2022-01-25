@@ -45,12 +45,13 @@ namespace DesktopBrowser.UI.CustomElement
 
     public partial class MenuBar_E
     {
-        public MenuBar_E(VisualTreeAsset visualTA, string customStyleKey) : base(visualTA, customStyleKey) { }
-        public MenuBar_E(VisualElement root, string customStyleKey) : base(root, customStyleKey) { }
+        //public MenuBar_E(VisualTreeAsset visualTA, string customStyleKey) : base(visualTA, customStyleKey) { }
+        public MenuBar_E(VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : 
+            base(visual, styleResourcePath, formatAndStyleKeys) { }
 
-        public MenuBar_E AddLeft(params AbstractGenericAndCustomElement[] ces)
+        public MenuBar_E AddLeft(params Visual_E[] ces)
         {
-            foreach (AbstractGenericAndCustomElement ce in ces)
+            foreach (Visual_E ce in ces)
                 ce.AddTo(leftLayout_VE);
             return this;
         }
@@ -59,9 +60,9 @@ namespace DesktopBrowser.UI.CustomElement
             centerLayout_VE.AddToolboxes(toolboxes);
             return this;
         }
-        public MenuBar_E AddRight(params AbstractGenericAndCustomElement[] ces)
+        public MenuBar_E AddRight(params Visual_E[] ces)
         {
-            foreach (AbstractGenericAndCustomElement ce in ces)
+            foreach (Visual_E ce in ces)
                 ce.AddTo(rightLayout_VE);
             return this;
         }
@@ -110,7 +111,7 @@ namespace DesktopBrowser.UI.CustomElement
         private Action logWorldPosition;
     }
 
-    public partial class MenuBar_E : AbstractGenericAndCustomElement
+    public partial class MenuBar_E : Visual_E
     {
         protected override void Initialize()
         {

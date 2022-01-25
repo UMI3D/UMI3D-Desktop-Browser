@@ -43,7 +43,7 @@ namespace DesktopBrowser.UI.CustomElement
         public UnityEvent HorizontalForwardButtonPressed { get; }
     }
 
-    public partial class AbstractScrollView_E : IScrollable
+    public partial class ScrollView_E : IScrollable
     {
         public ScrollDirection scrollDirection { get; set; } = ScrollDirection.Vertical;
         public float DeltaScroll { get; set; } = 50f;
@@ -57,7 +57,7 @@ namespace DesktopBrowser.UI.CustomElement
 
     }
 
-    public partial class AbstractScrollView_E
+    public partial class ScrollView_E
     {
         protected ScrollView m_scrollView { get; set; } = null;
         protected Scroller m_verticalScroller { get; set; } = null;
@@ -74,65 +74,63 @@ namespace DesktopBrowser.UI.CustomElement
         protected VisualElement m_forwardHorizontalButtonLayout { get; set; } = null;
     }
 
-    public partial class AbstractScrollView_E
+    public partial class ScrollView_E
     {
-        public AbstractScrollView_E() : base() { }
-        public AbstractScrollView_E(VisualElement root, string customStyleKey) : base(root, customStyleKey)
-        {
-            //ScrollView = Root.Q<ScrollView>();
-        }
-        public AbstractScrollView_E(VisualElement parent, string resourcePath, string customStyleKey, string customStyleBackgroundKey = "") : base(parent, resourcePath, customStyleKey, customStyleBackgroundKey) { }
+        public ScrollView_E(VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : 
+            base(visual, styleResourcePath, formatAndStyleKeys) { }
+        public ScrollView_E(VisualElement parent, string resourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : 
+            base(parent, resourcePath, styleResourcePath, formatAndStyleKeys) { }
 
-        public AbstractScrollView_E SetDraggerContainerStyle(string customStyleKey, string customStyleBackgroundKey = "")
+        public ScrollView_E SetDraggerContainerStyle(string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys)
         {
-            new Icon_E(m_verticalSlider, customStyleKey, customStyleBackgroundKey);
-            new Icon_E(m_horizontalSlider, customStyleKey, customStyleBackgroundKey);
+            new Visual_E(m_verticalSlider, styleResourcePath, formatAndStyleKeys);
+            new Visual_E(m_horizontalSlider, styleResourcePath, formatAndStyleKeys);
             return this;
         }
-        public AbstractScrollView_E SetVerticalDraggerContainerStyle(string customStyleKey, string customStyleBackgroundKey = "")
+        public ScrollView_E SetVerticalDraggerContainerStyle(string customStyleKey, FormatAndStyleKeys formatAndStyleKeys)
         {
             //new Icon_E(m_verticalScroller, customStyleKey, null);
-            new Icon_E(m_verticalScroller, customStyleKey, customStyleBackgroundKey);
+            new Visual_E(m_verticalScroller, customStyleKey, formatAndStyleKeys);
             m_verticalScroller.style.opacity = 1f;
             //new Icon_E(m_verticalSlider, customStyleKey, customStyleBackgroundKey);
             return this;
         }
-        public AbstractScrollView_E SetHorizontalDraggerContainerStyle(string customStyleKey, string customStyleBackgroundKey = "")
+        public ScrollView_E SetHorizontalDraggerContainerStyle(string customStyleKey, FormatAndStyleKeys formatAndStyleKeys)
         {
-            new Icon_E(m_horizontalDraggerContainer, customStyleKey, customStyleBackgroundKey);
+            new Visual_E(m_horizontalDraggerContainer, customStyleKey, formatAndStyleKeys);
             return this;
         }
 
-        public AbstractScrollView_E SetDraggerStyle(string customStyleKey, string customStyleBackgroundKey = "")
+        public ScrollView_E SetDraggerStyle(string customStyleKey, FormatAndStyleKeys formatAndStyleKeys)
         {
-            new Icon_E(m_verticalDragger, customStyleKey, customStyleBackgroundKey);
-            new Icon_E(m_horizontalDragger, customStyleKey, customStyleBackgroundKey);
+            new Visual_E(m_verticalDragger, customStyleKey, formatAndStyleKeys);
+            new Visual_E(m_horizontalDragger, customStyleKey, formatAndStyleKeys);
             return this;
         }
-        public AbstractScrollView_E SetVerticalDraggerStyle(string customStyleKey, string customStyleBackgroundKey = "")
+        public ScrollView_E SetVerticalDraggerStyle(string customStyleKey, FormatAndStyleKeys formatAndStyleKeys)
         {
-            new Icon_E(m_verticalDragger, customStyleKey, customStyleBackgroundKey);
+            new Visual_E(m_verticalDragger, customStyleKey, formatAndStyleKeys);
             return this;
         }
-        public AbstractScrollView_E SetHorizontalDraggerStyle(string customStyleKey, string customStyleBackgroundKey = "")
+        public ScrollView_E SetHorizontalDraggerStyle(string customStyleKey, FormatAndStyleKeys formatAndStyleKeys)
         {
-            new Icon_E(m_horizontalDragger, customStyleKey, customStyleBackgroundKey);
+            new Visual_E(m_horizontalDragger, customStyleKey, formatAndStyleKeys);
             return this;
         }
 
-        public AbstractScrollView_E SetButtonStyle()
+        public ScrollView_E SetButtonStyle()
         {
             return this;
         }
 
     }
 
-    public partial class AbstractScrollView_E
+    public partial class ScrollView_E
     {
         //protected virtual Ini
     }
 
-    public partial class AbstractScrollView_E : AbstractGenericAndCustomElement
+    public partial class ScrollView_E : Visual_E
     {
         protected override void Initialize()
         {

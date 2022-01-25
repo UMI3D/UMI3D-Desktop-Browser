@@ -23,7 +23,7 @@ using UnityEngine.Events;
 
 namespace BrowserDesktop.UI
 {
-    public abstract partial class AbstractGenericAndCustomElement : ICustomElement
+    public partial class Visual_E : ICustomElement
     {
         public VisualElement Root { get; protected set; } = null;
         public bool Initialized { get; protected set; } = false;
@@ -40,39 +40,9 @@ namespace BrowserDesktop.UI
             set => Root.style.visibility = value;
         }
         public Rect RootLayout { get => Root.layout; }
-
-        public void Init(VisualTreeAsset visualTA, string customStyleKey, string customStyleBackgroundKey = "")
-        {
-            if (Initialized) Reset();
-            Initialized = true;
-            this.Root = visualTA.CloneTree();
-            this.Add(Root);
-            this.m_rootStyleSOKey = customStyleKey;
-            //this.m_rootBackgroundStyleKey = customStyleBackgroundKey;
-            Initialize();
-        }
-        public void Init(VisualElement root, string customStyleKey, string customStyleBackgroundKey = "")
-        {
-            if (Initialized) Reset();
-            Initialized = true;
-            this.Root = root;
-            this.m_rootStyleSOKey = customStyleKey;
-            //this.m_rootBackgroundStyleKey = customStyleBackgroundKey;
-            Initialize();
-        }
-        public void Init(VisualElement parent, string resourcePath, string customStyleKey, string customStyleBackgroundKey = "")
-        {
-            if (Initialized) Reset();
-            Initialized = true;
-            this.Root = GetVisualRoot(resourcePath);
-            AddTo(parent);
-            this.m_rootStyleSOKey = customStyleKey;
-            //this.m_rootBackgroundStyleKey = customStyleBackgroundKey;
-            Initialize();
-        }
         public virtual void Reset()
         {
-            this.m_rootStyleSOKey = null;
+            //this.m_rootStyleSOKey = null;
             //this.m_rootBackgroundStyleKey = null;
             Root.UnregisterCallback<MouseOverEvent>(OnMouseOver);
             Root.UnregisterCallback<MouseOutEvent>(OnMouseOut);
@@ -80,7 +50,7 @@ namespace BrowserDesktop.UI
             Root.UnregisterCallback<MouseUpEvent>(OnMouseUp);
             this.Root = null;
             //m_rootCustomStyleSO?.AppliesFormatAndStyle.RemoveListener(formatAndStyleMethodsDictionary[Root.style]);
-            m_rootCustomStyleSO = null;
+            //m_rootCustomStyleSO = null;
             m_globalPref.ApplyCustomStyle.RemoveListener(ApplyAllFormatAndStyle);
             m_globalPref = null;
             Initialized = false;
@@ -89,8 +59,6 @@ namespace BrowserDesktop.UI
         {
             if (!Initialized) 
                 throw new System.Exception($"VisualElement Added without being Initialized.");
-            //ReadyToDisplay();
-            //parent.Add(this);
             if (parent == null)
                 throw new Exception($"Try to Add [{Root}] to a parent null.");
             parent.Add(Root);
@@ -105,84 +73,101 @@ namespace BrowserDesktop.UI
             AttachedToHierarchy = false;
         }
 
-        public virtual bool GetCustomStyle() 
-        {
-            return GetCustomStyle(m_rootStyleSOKey);
-        }
+
+
+
+
 
         public virtual void OnApplyUserPreferences() { }
     }
 
-    public abstract partial class AbstractGenericAndCustomElement
+    public partial class Visual_E
     {
-        public AbstractGenericAndCustomElement() : base() 
+        public Visual_E() : base() { }
+        public Visual_E(VisualElement visual) : this()
         {
-            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
-            //UserPreferences.UserPreferences.AddThemeUpdateListener(ApplyCustomStyle);
+            if (visual == null) throw new NullReferenceException($"visual is null");
+            Init(null, visual, null, null);
         }
-        public AbstractGenericAndCustomElement(VisualTreeAsset visualTA) : this()
+        public Visual_E(VisualElement parent, VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : this()
         {
-            Init(visualTA, null);
+            if (parent == null) throw new NullReferenceException($"parent is null");
+            if (visual == null) throw new NullReferenceException($"visual is null");
+            CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
+            Init(parent, visual, style_SO, formatAndStyleKeys);
         }
-        public AbstractGenericAndCustomElement(VisualElement root) : this()
+        public Visual_E(VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : this()
         {
-            Init(root, null);
+            if (visual == null) throw new NullReferenceException($"visual is null");
+            CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
+            Init(null, visual, style_SO, formatAndStyleKeys);
         }
-        public AbstractGenericAndCustomElement(VisualTreeAsset visualTA, string customStyleKey, string customStyleBackgroundKey = "") : this()
+        public Visual_E(string visualResourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : this()
         {
-            Init(visualTA, customStyleKey, customStyleBackgroundKey);
+            VisualElement visual = GetVisualRoot(visualResourcePath);
+            CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
+            Init(null, visual, style_SO, formatAndStyleKeys);
         }
-        public AbstractGenericAndCustomElement(VisualElement root, string customStyleKey, string customStyleBackgroundKey = "") : this()
+        public Visual_E(VisualElement parent, string visualResourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : this()
         {
-            Init(root, customStyleKey, customStyleBackgroundKey);
+            if (parent == null) throw new NullReferenceException($"parent is null");
+            VisualElement visual = GetVisualRoot(visualResourcePath);
+            CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
+            Init(parent, visual, style_SO, formatAndStyleKeys);
         }
-        public AbstractGenericAndCustomElement(VisualElement parent, string resourcePath, string customStyleKey, string customStyleBackgroundKey = "") : this()
+        public Visual_E(VisualElement parent, VisualElement visual, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys) : this()
         {
-            Init(parent, resourcePath, customStyleKey, customStyleBackgroundKey);
+            if (parent == null) throw new NullReferenceException($"parent is null");
+            if (visual == null) throw new NullReferenceException($"visual is null");
+            Init(parent, visual, style_SO, formatAndStyleKeys);
         }
-        ~AbstractGenericAndCustomElement()
+        ~Visual_E()
         {
             Reset();
-            UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
+            //UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
             //UserPreferences.UserPreferences.RemoveThemeUpdateListener(ApplyCustomStyle);
         }
     }
 
-    public abstract partial class AbstractGenericAndCustomElement
+    public partial class Visual_E
     {
+        protected void Init(VisualElement parent, VisualElement visual, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys)
+        {
+            if (Initialized) Reset();
+            Initialized = true;
+            this.Root = visual;
+            AddVisualStyle(Root, style_SO, formatAndStyleKeys);
+            if (parent != null) AddTo(parent);
+            Initialize();
+        }
+
         protected virtual void Initialize() 
         {
             Root.RegisterCallback<MouseOverEvent>(OnMouseOver);
             Root.RegisterCallback<MouseOutEvent>(OnMouseOut);
             Root.RegisterCallback<MouseCaptureEvent>(OnMouseDown);
             Root.RegisterCallback<MouseUpEvent>(OnMouseUp);
-            //formatAndStyleMethodsDictionary.Add(Root.style, () => { ApplyCustomStyle(m_rootCustomStyleSO, m_rootTextFormatKey, m_rootTextStyleKey, m_rootBackgroundStyleKey, m_rootBorderStyleKey, Root.style, m_mouseBehaviourFromState); });
 
             m_globalPref = UserPreferences.UserPreferences.GlobalPref;
             m_globalPref.ApplyCustomStyle.AddListener(ApplyAllFormatAndStyle);
-            if (GetCustomStyle())
-            {
-                //m_rootCustomStyleSO.AppliesFormatAndStyle.AddListener(formatAndStyleMethodsDictionary[Root.style]);
-                m_rootCustomStyleSO.AppliesFormatAndStyle.Invoke();
-            }
         }
 
         protected virtual VisualElement GetVisualRoot(string resourcePath)
         {
             VisualTreeAsset visualTA = Resources.Load<VisualTreeAsset>(resourcePath);
-            Debug.Assert(visualTA != null, $"[{resourcePath}] return a null visual tree asset");
+            Debug.Assert(visualTA != null, $"[{resourcePath}] return a null visual tree asset.");
             Debug.Assert(visualTA.CloneTree().childCount == 1, $"[{resourcePath}] must have a single visual as root.");
             IEnumerator<VisualElement> iterator = visualTA.CloneTree().Children().GetEnumerator();
             iterator.MoveNext();
             return iterator.Current;
         }
 
-        protected bool GetCustomStyle(string key)
+        protected CustomStyle_SO GetStyleSO(string resourcePath)
         {
-            if (string.IsNullOrEmpty(key))
-                return false;
-            m_rootCustomStyleSO = UserPreferences.UserPreferences.GetCustomStyle(key);
-            return true;
+            if (string.IsNullOrEmpty(resourcePath)) return null;
+            CustomStyle_SO style_SO = Resources.Load<CustomStyle_SO>(resourcePath);
+            Debug.Assert(style_SO != null, $"[{resourcePath}] return a null CustomStyle_SO.");
+            return style_SO;
         }
 
         /// <summary>
@@ -195,7 +180,7 @@ namespace BrowserDesktop.UI
         }
     }
 
-    public abstract partial class AbstractGenericAndCustomElement
+    public partial class Visual_E
     {
         protected enum MousePressedState
         {
@@ -247,18 +232,12 @@ namespace BrowserDesktop.UI
         }
     }
 
-    public abstract partial class AbstractGenericAndCustomElement
+    public partial class Visual_E
     {
         protected UIElementStyleApplicator m_uIElementStyleApplicator = new UIElementStyleApplicator();
         protected UserPreferences.GlobalPreferences_SO m_globalPref;
-        protected CustomStyle_SO m_rootCustomStyleSO { get; set; } = null;
-        protected string m_rootStyleSOKey { get; set; } = null;
-        //protected string m_rootTextFormatKey { get; set; } = null;
-        //protected string m_rootTextStyleKey { get; set; } = null;
-        //protected string m_rootBackgroundStyleKey { get; set; } = null;
-        //protected string m_rootBorderStyleKey { get; set; } = null;
 
-        protected class FormatAndStyleKeys
+        public class FormatAndStyleKeys
         {
             public string TextFormatKey { get; set; }
             public string TextStyleKey { get; set; }
@@ -269,23 +248,13 @@ namespace BrowserDesktop.UI
         protected List<VisualElement> m_visuals;
         protected Dictionary<VisualElement, (CustomStyle_SO, FormatAndStyleKeys, UnityAction)> m_visualStyles;
 
-        //protected Dictionary<IStyle, UnityAction> formatAndStyleMethodsDictionary;
-
-        protected void RegisterStyleEvent()
-        {
-            //foreach (VisualElement visual in m_visuals)
-            //{
-            //    var style = m_visualStyles[visual];
-            //    for
-            //}
-        }
-
         protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys)
         {
             if (m_visuals.Contains(visual)) return;
+            m_visuals.Add(visual);
             UnityAction action = () => 
             { 
-                ApplyCustomStyle(style_SO, formatAndStyleKeys, visual.style, m_mouseBehaviourFromState); 
+                ApplyFormatAndStyle(style_SO, formatAndStyleKeys, visual.style, m_mouseBehaviourFromState); 
             };
             m_visualStyles.Add(visual, (style_SO, formatAndStyleKeys, action));
             style_SO.AppliesFormatAndStyle.AddListener(action);
@@ -297,10 +266,11 @@ namespace BrowserDesktop.UI
             ApplyAllStyle();
         }
 
-        protected void ApplyCustomStyle(CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, MouseBehaviour mouseBehaviour)
+        protected void ApplyFormatAndStyle(CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, MouseBehaviour mouseBehaviour)
         {
-            ApplyFormat(style_SO, formatAndStyleKeys.TextFormatKey, style);
-            ApplyStyle(style_SO, formatAndStyleKeys.TextStyleKey, formatAndStyleKeys.BackgroundStyleKey, formatAndStyleKeys.BorderStyleKey, style, mouseBehaviour);
+            if (style_SO == null) return;
+            ApplyFormat(style_SO, formatAndStyleKeys, style);
+            ApplyStyle(style_SO, formatAndStyleKeys, style, mouseBehaviour);
         }
 
         #region Format of the element
@@ -310,15 +280,15 @@ namespace BrowserDesktop.UI
             foreach (VisualElement visual in m_visuals)
             {
                 var style = m_visualStyles[visual];
-                ApplyFormat(style.Item1, style.Item2.TextFormatKey, visual.style);
+                ApplyFormat(style.Item1, style.Item2, visual.style);
             }
         }
 
-        protected void ApplyFormat(CustomStyle_SO style_SO, string textFormatKey, IStyle style)
+        protected void ApplyFormat(CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style)
         {
             ApplySize(style_SO, style);
             ApplyMarginAndPadding(style_SO, style);
-            ApplyTextFormat(style_SO, textFormatKey, style);
+            ApplyTextFormat(style_SO, formatAndStyleKeys.TextFormatKey, style);
         }
 
         protected void ApplySize(CustomStyle_SO style_SO, IStyle style)
@@ -366,15 +336,16 @@ namespace BrowserDesktop.UI
             foreach (VisualElement visual in m_visuals)
             {
                 var style = m_visualStyles[visual];
-                ApplyStyle(style.Item1, style.Item2.TextStyleKey, style.Item2.BackgroundStyleKey, style.Item2.BorderStyleKey, visual.style, m_mouseBehaviourFromState);
+                ApplyStyle(style.Item1, style.Item2, visual.style, m_mouseBehaviourFromState);
             }
         }
 
-        protected void ApplyStyle(CustomStyle_SO styleSO, string textStyleKey, string backgroundStyleKey, string borderStyleKey, IStyle style, MouseBehaviour mouseBehaviour)
+        protected void ApplyStyle(CustomStyle_SO styleSO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, MouseBehaviour mouseBehaviour)
         {
-            ApplyTextStyle(styleSO, textStyleKey, style, mouseBehaviour);
-            ApplyBackgroundStyle(styleSO, backgroundStyleKey, style, mouseBehaviour);
-            ApplyBorderStyle(styleSO, borderStyleKey, style, mouseBehaviour);
+            if (styleSO == null || formatAndStyleKeys == null) return;
+            ApplyTextStyle(styleSO, formatAndStyleKeys.TextStyleKey, style, mouseBehaviour);
+            ApplyBackgroundStyle(styleSO, formatAndStyleKeys.BackgroundStyleKey, style, mouseBehaviour);
+            ApplyBorderStyle(styleSO, formatAndStyleKeys.BorderStyleKey, style, mouseBehaviour);
         }
 
         protected void ApplyTextStyle(CustomStyle_SO style_SO, string styleKey, IStyle style, MouseBehaviour mouseBehaviour)
@@ -434,7 +405,7 @@ namespace BrowserDesktop.UI
         #endregion
     }
 
-    public abstract partial class AbstractGenericAndCustomElement : VisualElement
+    public partial class Visual_E : VisualElement
     {
         /// <summary>
         /// To be recognized by UI Builder

@@ -28,7 +28,7 @@ namespace DesktopBrowser.UI.GenericElement
     {
 
     }
-    public partial class ToolboxItem_E : AbstractGenericAndCustomElement
+    public partial class ToolboxItem_E : Visual_E
     {
         #region Fields
 
@@ -46,15 +46,15 @@ namespace DesktopBrowser.UI.GenericElement
         
         #endregion
 
-        public ToolboxItem_E(VisualTreeAsset visualTA): base(visualTA) { }
+        //public ToolboxItem_E(VisualTreeAsset visualTA): base(visualTA) { }
 
         protected override void Initialize()
         {
             base.Initialize();
-            ItemButton = new Button_GE(Root)
-            {
-                OnClicked = () => { ItemClicked(); }
-            };
+            //ItemButton = new Button_GE(Root)
+            //{
+            //    OnClicked = () => { ItemClicked(); }
+            //};
             label = Root.Q<Label>("toolboxItem-label");
         }
 
