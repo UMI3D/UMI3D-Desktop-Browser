@@ -19,7 +19,7 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI
 {
-    public class CustomStyleToUIElementApplicator
+    public class UIElementStyleApplicator
     {
         public virtual StyleLength GetPxAndPourcentageFloatLength(CustomStyleSize customStyle, float zoomCoef)
         {
@@ -47,7 +47,7 @@ namespace BrowserDesktop.UI
             return lenght;
         }
 
-        public virtual void ApplyTextStyleToVisual(IStyle style, CustomStyleTextStyle customStyle)
+        public virtual void AppliesTextStyle(IStyle style, CustomStyleTextStyle customStyle)
         {
             switch (customStyle.Keyword)
             {
@@ -62,7 +62,7 @@ namespace BrowserDesktop.UI
             }
         }
 
-        public virtual void ApplyBackgroundToVisual(IStyle style, CustomStyleBackground customStyle)
+        public virtual void AppliesBackground(IStyle style, CustomStyleBackground customStyle)
         {
             switch (customStyle.Keyword)
             {
@@ -142,7 +142,7 @@ namespace BrowserDesktop.UI
             }
         }
 
-        public virtual void ApplyBorderToVisual(IStyle style, CustomStyleBorder customStyle)
+        public virtual void AppliesBorder(IStyle style, CustomStyleBorder customStyle)
         {
             switch (customStyle.Keyword)
             {

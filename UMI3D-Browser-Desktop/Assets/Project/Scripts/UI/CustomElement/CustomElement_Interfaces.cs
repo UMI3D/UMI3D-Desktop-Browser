@@ -7,8 +7,8 @@ namespace DesktopBrowser.UI.CustomElement
 {
     public interface ICustomElement
     {
-        public string CustomStyleKey { get; }
-        public string CustomStyleBackgroundKey { get; }
+        //public string RootStyleSOKey { get; }
+        //public string CustomStyleBackgroundKey { get; }
         /// <summary>
         /// Visual root of this custom element.
         /// </summary>

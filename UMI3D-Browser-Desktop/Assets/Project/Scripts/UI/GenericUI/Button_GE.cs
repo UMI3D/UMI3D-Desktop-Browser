@@ -60,8 +60,8 @@ namespace DesktopBrowser.UI.GenericElement
             Debug.Assert(icon != null, "visual element null");
             m_iconOnKey = iconOnKey;
             m_iconOffKey = iconOffKey;
-            CustomStyleBackgroundKey = isOn ? m_iconOnKey : m_iconOffKey;
-            m_icon = new Icon_E(icon, customStyleKey, CustomStyleBackgroundKey);
+            //m_rootBackgroundStyleKey = isOn ? m_iconOnKey : m_iconOffKey;
+            //m_icon = new Icon_E(icon, customStyleKey, m_rootBackgroundStyleKey);
             return this;
         }
 
