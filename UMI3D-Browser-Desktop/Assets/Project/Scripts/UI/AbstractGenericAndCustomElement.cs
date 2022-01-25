@@ -19,14 +19,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-
+using UnityEngine.Events;
 
 namespace BrowserDesktop.UI
 {
     public abstract partial class AbstractGenericAndCustomElement : ICustomElement
     {
-        public string CustomStyleKey { get; protected set; } = null;
-        public string CustomStyleBackgroundKey { get; protected set; }
         public VisualElement Root { get; protected set; } = null;
         public bool Initialized { get; protected set; } = false;
         public bool AttachedToHierarchy { get; protected set; } = false;
@@ -49,8 +47,8 @@ namespace BrowserDesktop.UI
             Initialized = true;
             this.Root = visualTA.CloneTree();
             this.Add(Root);
-            this.CustomStyleKey = customStyleKey;
-            this.CustomStyleBackgroundKey = customStyleBackgroundKey;
+            this.m_rootStyleSOKey = customStyleKey;
+            //this.m_rootBackgroundStyleKey = customStyleBackgroundKey;
             Initialize();
         }
         public void Init(VisualElement root, string customStyleKey, string customStyleBackgroundKey = "")
@@ -58,8 +56,8 @@ namespace BrowserDesktop.UI
             if (Initialized) Reset();
             Initialized = true;
             this.Root = root;
-            this.CustomStyleKey = customStyleKey;
-            this.CustomStyleBackgroundKey = customStyleBackgroundKey;
+            this.m_rootStyleSOKey = customStyleKey;
+            //this.m_rootBackgroundStyleKey = customStyleBackgroundKey;
             Initialize();
         }
         public void Init(VisualElement parent, string resourcePath, string customStyleKey, string customStyleBackgroundKey = "")
@@ -68,22 +66,22 @@ namespace BrowserDesktop.UI
             Initialized = true;
             this.Root = GetVisualRoot(resourcePath);
             AddTo(parent);
-            this.CustomStyleKey = customStyleKey;
-            this.CustomStyleBackgroundKey = customStyleBackgroundKey;
+            this.m_rootStyleSOKey = customStyleKey;
+            //this.m_rootBackgroundStyleKey = customStyleBackgroundKey;
             Initialize();
         }
         public virtual void Reset()
         {
-            this.CustomStyleKey = null;
-            this.CustomStyleBackgroundKey = null;
+            this.m_rootStyleSOKey = null;
+            //this.m_rootBackgroundStyleKey = null;
             Root.UnregisterCallback<MouseOverEvent>(OnMouseOver);
             Root.UnregisterCallback<MouseOutEvent>(OnMouseOut);
             Root.UnregisterCallback<MouseCaptureEvent>(OnMouseDown);
             Root.UnregisterCallback<MouseUpEvent>(OnMouseUp);
             this.Root = null;
-            m_customStyle?.ApplyCustomStyle.RemoveListener(ApplyCustomStyle);
-            m_customStyle = null;
-            m_globalPref.ApplyCustomStyle.RemoveListener(ApplyCustomStyle);
+            //m_rootCustomStyleSO?.AppliesFormatAndStyle.RemoveListener(formatAndStyleMethodsDictionary[Root.style]);
+            m_rootCustomStyleSO = null;
+            m_globalPref.ApplyCustomStyle.RemoveListener(ApplyAllFormatAndStyle);
             m_globalPref = null;
             Initialized = false;
         }
@@ -109,7 +107,7 @@ namespace BrowserDesktop.UI
 
         public virtual bool GetCustomStyle() 
         {
-            return GetCustomStyle(CustomStyleKey);
+            return GetCustomStyle(m_rootStyleSOKey);
         }
 
         public virtual void OnApplyUserPreferences() { }
@@ -120,7 +118,7 @@ namespace BrowserDesktop.UI
         public AbstractGenericAndCustomElement() : base() 
         {
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.AddListener(OnApplyUserPreferences);
-            UserPreferences.UserPreferences.AddThemeUpdateListener(ApplyCustomStyle);
+            //UserPreferences.UserPreferences.AddThemeUpdateListener(ApplyCustomStyle);
         }
         public AbstractGenericAndCustomElement(VisualTreeAsset visualTA) : this()
         {
@@ -146,7 +144,7 @@ namespace BrowserDesktop.UI
         {
             Reset();
             UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
-            UserPreferences.UserPreferences.RemoveThemeUpdateListener(ApplyCustomStyle);
+            //UserPreferences.UserPreferences.RemoveThemeUpdateListener(ApplyCustomStyle);
         }
     }
 
@@ -158,14 +156,14 @@ namespace BrowserDesktop.UI
             Root.RegisterCallback<MouseOutEvent>(OnMouseOut);
             Root.RegisterCallback<MouseCaptureEvent>(OnMouseDown);
             Root.RegisterCallback<MouseUpEvent>(OnMouseUp);
+            //formatAndStyleMethodsDictionary.Add(Root.style, () => { ApplyCustomStyle(m_rootCustomStyleSO, m_rootTextFormatKey, m_rootTextStyleKey, m_rootBackgroundStyleKey, m_rootBorderStyleKey, Root.style, m_mouseBehaviourFromState); });
 
             m_globalPref = UserPreferences.UserPreferences.GlobalPref;
-            m_globalPref.ApplyCustomStyle.AddListener(ApplyCustomStyle);
+            m_globalPref.ApplyCustomStyle.AddListener(ApplyAllFormatAndStyle);
             if (GetCustomStyle())
             {
-                m_customStyle.ApplyCustomStyle.AddListener(ApplyCustomStyle);
-                m_customStyle.ApplyCustomStyle.Invoke();
-                ApplyCustomStyle();
+                //m_rootCustomStyleSO.AppliesFormatAndStyle.AddListener(formatAndStyleMethodsDictionary[Root.style]);
+                m_rootCustomStyleSO.AppliesFormatAndStyle.Invoke();
             }
         }
 
@@ -183,7 +181,7 @@ namespace BrowserDesktop.UI
         {
             if (string.IsNullOrEmpty(key))
                 return false;
-            m_customStyle = UserPreferences.UserPreferences.GetCustomStyle(key);
+            m_rootCustomStyleSO = UserPreferences.UserPreferences.GetCustomStyle(key);
             return true;
         }
 
@@ -210,177 +208,230 @@ namespace BrowserDesktop.UI
             Over
         }
 
-        protected (MousePressedState, MousePositionState) m_mouseState;
+        protected (MousePressedState, MousePositionState) m_mouseState { get; set; }
+        protected MouseBehaviour m_mouseBehaviourFromState
+        {
+            get
+            {
+                return m_mouseState switch
+                {
+                    (MousePressedState.Unpressed, MousePositionState.Out) => MouseBehaviour.MouseOut,
+                    (MousePressedState.Unpressed, MousePositionState.Over) => MouseBehaviour.MouseOver,
+                    _ => MouseBehaviour.MousePressed
+                };
+            }
+        }
 
         protected virtual void OnMouseOver(MouseOverEvent e)
         {
             m_mouseState = (m_mouseState.Item1, MousePositionState.Over);
-            ApplyCustomBackground();
-            ApplyCustomBorder();
+            ApplyAllStyle();
         }
         protected virtual void OnMouseOut(MouseOutEvent e)
         {
             m_mouseState = (m_mouseState.Item1, MousePositionState.Out);
-            ApplyCustomBackground();
-            ApplyCustomBorder();
+            ApplyAllStyle();
         }
         protected virtual void OnMouseDown(MouseCaptureEvent e)
         {
             Debug.Log($"Mouse button pressed");
             m_mouseState = (MousePressedState.Pressed, m_mouseState.Item2);
-            ApplyCustomBackground();
-            ApplyCustomBorder();
+            ApplyAllStyle();
         }
         protected virtual void OnMouseUp(MouseUpEvent e)
         {
             if (e.button != 0) return;
             m_mouseState = (MousePressedState.Unpressed, m_mouseState.Item2);
             Debug.Log($"Mouse button up (button pressed = [{e.pressedButtons}], button = [{e.button}])");
-            ApplyCustomBackground();
-            ApplyCustomBorder();
+            ApplyAllStyle();
         }
     }
 
     public abstract partial class AbstractGenericAndCustomElement
     {
-        protected CustomStyleToUIElementApplicator m_customStyleToUIElement = new CustomStyleToUIElementApplicator();
+        protected UIElementStyleApplicator m_uIElementStyleApplicator = new UIElementStyleApplicator();
         protected UserPreferences.GlobalPreferences_SO m_globalPref;
-        protected CustomStyle_SO m_customStyle;
+        protected CustomStyle_SO m_rootCustomStyleSO { get; set; } = null;
+        protected string m_rootStyleSOKey { get; set; } = null;
+        //protected string m_rootTextFormatKey { get; set; } = null;
+        //protected string m_rootTextStyleKey { get; set; } = null;
+        //protected string m_rootBackgroundStyleKey { get; set; } = null;
+        //protected string m_rootBorderStyleKey { get; set; } = null;
 
-        protected void ApplyCustomStyle()
+        protected class FormatAndStyleKeys
         {
-            if (m_customStyle != null)
+            public string TextFormatKey { get; set; }
+            public string TextStyleKey { get; set; }
+            public string BackgroundStyleKey { get; set; }
+            public string BorderStyleKey { get; set; }
+        }
+
+        protected List<VisualElement> m_visuals;
+        protected Dictionary<VisualElement, (CustomStyle_SO, FormatAndStyleKeys, UnityAction)> m_visualStyles;
+
+        //protected Dictionary<IStyle, UnityAction> formatAndStyleMethodsDictionary;
+
+        protected void RegisterStyleEvent()
+        {
+            //foreach (VisualElement visual in m_visuals)
+            //{
+            //    var style = m_visualStyles[visual];
+            //    for
+            //}
+        }
+
+        protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys)
+        {
+            if (m_visuals.Contains(visual)) return;
+            UnityAction action = () => 
+            { 
+                ApplyCustomStyle(style_SO, formatAndStyleKeys, visual.style, m_mouseBehaviourFromState); 
+            };
+            m_visualStyles.Add(visual, (style_SO, formatAndStyleKeys, action));
+            style_SO.AppliesFormatAndStyle.AddListener(action);
+        }
+
+        public virtual void ApplyAllFormatAndStyle()
+        {
+            ApplyAllFormat();
+            ApplyAllStyle();
+        }
+
+        protected void ApplyCustomStyle(CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, MouseBehaviour mouseBehaviour)
+        {
+            ApplyFormat(style_SO, formatAndStyleKeys.TextFormatKey, style);
+            ApplyStyle(style_SO, formatAndStyleKeys.TextStyleKey, formatAndStyleKeys.BackgroundStyleKey, formatAndStyleKeys.BorderStyleKey, style, mouseBehaviour);
+        }
+
+        #region Format of the element
+
+        protected void ApplyAllFormat()
+        {
+            foreach (VisualElement visual in m_visuals)
             {
-                ApplyCustomSize();
-                ApplyCustomMarginAndPadding();
-                ApplyStyle(Root.style, MouseBehaviour.MouseOut);
+                var style = m_visualStyles[visual];
+                ApplyFormat(style.Item1, style.Item2.TextFormatKey, visual.style);
             }
         }
 
-        protected void ApplyCustomSize()
+        protected void ApplyFormat(CustomStyle_SO style_SO, string textFormatKey, IStyle style)
         {
-            if (m_customStyle == null) return;
-
-            UISize uiSize = m_customStyle.UISize;
-            StyleLength length = new StyleLength();
-            
-            length = m_customStyleToUIElement.GetPxAndPourcentageFloatLength(uiSize.Height, m_globalPref.ZoomCoef);
-            if (length.keyword != StyleKeyword.Null)
-                Root.style.height = length;
-            length = m_customStyleToUIElement.GetPxAndPourcentageFloatLength(uiSize.Width, m_globalPref.ZoomCoef);
-            if (length.keyword != StyleKeyword.Null)
-                Root.style.width = length;
-            length = m_customStyleToUIElement.GetPxAndPourcentageFloatLength(uiSize.MinHeight, m_globalPref.ZoomCoef);
-            if (length.keyword != StyleKeyword.Null)
-                Root.style.minHeight = length;
-            length = m_customStyleToUIElement.GetPxAndPourcentageFloatLength(uiSize.MinWidth, m_globalPref.ZoomCoef);
-            if (length.keyword != StyleKeyword.Null)
-                Root.style.minWidth = length;
-            length = m_customStyleToUIElement.GetPxAndPourcentageFloatLength(uiSize.MaxHeight, m_globalPref.ZoomCoef);
-            if (length.keyword != StyleKeyword.Null)
-                Root.style.maxHeight = length;
-            length = m_customStyleToUIElement.GetPxAndPourcentageFloatLength(uiSize.MaxWidth, m_globalPref.ZoomCoef);
-            if (length.keyword != StyleKeyword.Null)
-                Root.style.maxWidth = length;
+            ApplySize(style_SO, style);
+            ApplyMarginAndPadding(style_SO, style);
+            ApplyTextFormat(style_SO, textFormatKey, style);
         }
 
-        private void ApplyCustomMarginAndPadding()
+        protected void ApplySize(CustomStyle_SO style_SO, IStyle style)
+        {
+            if (style_SO == null) return;
+            UISize uiSize = style_SO.UISize;
+            StyleLength length = new StyleLength();
+            
+            length = m_uIElementStyleApplicator.GetPxAndPourcentageFloatLength(uiSize.Height, m_globalPref.ZoomCoef);
+            if (length.keyword != StyleKeyword.Null)
+                style.height = length;
+            length = m_uIElementStyleApplicator.GetPxAndPourcentageFloatLength(uiSize.Width, m_globalPref.ZoomCoef);
+            if (length.keyword != StyleKeyword.Null)
+                style.width = length;
+            length = m_uIElementStyleApplicator.GetPxAndPourcentageFloatLength(uiSize.MinHeight, m_globalPref.ZoomCoef);
+            if (length.keyword != StyleKeyword.Null)
+                style.minHeight = length;
+            length = m_uIElementStyleApplicator.GetPxAndPourcentageFloatLength(uiSize.MinWidth, m_globalPref.ZoomCoef);
+            if (length.keyword != StyleKeyword.Null)
+                style.minWidth = length;
+            length = m_uIElementStyleApplicator.GetPxAndPourcentageFloatLength(uiSize.MaxHeight, m_globalPref.ZoomCoef);
+            if (length.keyword != StyleKeyword.Null)
+                style.maxHeight = length;
+            length = m_uIElementStyleApplicator.GetPxAndPourcentageFloatLength(uiSize.MaxWidth, m_globalPref.ZoomCoef);
+            if (length.keyword != StyleKeyword.Null)
+                style.maxWidth = length;
+        }
+
+        protected void ApplyMarginAndPadding(CustomStyle_SO style_SO, IStyle style)
         {
             throw new NotImplementedException();
         }
 
-        protected void ApplyStyle(IStyle style, MouseBehaviour mouseBehaviour)
+        protected void ApplyTextFormat(CustomStyle_SO style_SO, string formatKey, IStyle style)
         {
-            ApplyCustomText(style, mouseBehaviour);
-            ApplyCustomBackground(style, mouseBehaviour);
-            ApplyCustomBorder(style, mouseBehaviour);
+            throw new System.NotImplementedException();
         }
 
-        protected void ApplyCustomText()
+        #endregion
+
+        #region Theme style of the element
+
+        protected void ApplyAllStyle()
         {
-            var result = m_mouseState switch
+            foreach (VisualElement visual in m_visuals)
             {
-                (MousePressedState.Unpressed, MousePositionState.Out) => MouseBehaviour.MouseOut,
-                (MousePressedState.Unpressed, MousePositionState.Over) => MouseBehaviour.MouseOver,
-                _ => MouseBehaviour.MousePressed
-            };
-            ApplyCustomText(Root.style, result);
+                var style = m_visualStyles[visual];
+                ApplyStyle(style.Item1, style.Item2.TextStyleKey, style.Item2.BackgroundStyleKey, style.Item2.BorderStyleKey, visual.style, m_mouseBehaviourFromState);
+            }
         }
-        protected void ApplyCustomText(IStyle style, MouseBehaviour mouseBehaviour)
+
+        protected void ApplyStyle(CustomStyle_SO styleSO, string textStyleKey, string backgroundStyleKey, string borderStyleKey, IStyle style, MouseBehaviour mouseBehaviour)
         {
-            if (m_customStyle == null) return;
-            UITextStyle textStyle = m_customStyle.GetTextStyle(null, CustomStyleBackgroundKey);
+            ApplyTextStyle(styleSO, textStyleKey, style, mouseBehaviour);
+            ApplyBackgroundStyle(styleSO, backgroundStyleKey, style, mouseBehaviour);
+            ApplyBorderStyle(styleSO, borderStyleKey, style, mouseBehaviour);
+        }
+
+        protected void ApplyTextStyle(CustomStyle_SO style_SO, string styleKey, IStyle style, MouseBehaviour mouseBehaviour)
+        {
+            if (style_SO == null || styleKey == null) return;
+            UITextStyle textStyle = style_SO.GetTextStyle(null, styleKey);
             switch (mouseBehaviour)
             {
                 case MouseBehaviour.MouseOut:
-                    m_customStyleToUIElement.ApplyTextStyleToVisual(style, textStyle.Default);
+                    m_uIElementStyleApplicator.AppliesTextStyle(style, textStyle.Default);
                     break;
                 case MouseBehaviour.MouseOver:
-                    m_customStyleToUIElement.ApplyTextStyleToVisual(style, textStyle.MouseOver);
+                    m_uIElementStyleApplicator.AppliesTextStyle(style, textStyle.MouseOver);
                     break;
                 case MouseBehaviour.MousePressed:
-                    m_customStyleToUIElement.ApplyTextStyleToVisual(style, textStyle.MousePressed);
+                    m_uIElementStyleApplicator.AppliesTextStyle(style, textStyle.MousePressed);
                     break;
             }
         }
 
-        protected void ApplyCustomBackground()
+        protected void ApplyBackgroundStyle(CustomStyle_SO style_SO, string styleKey, IStyle style, MouseBehaviour mouseBehaviour)
         {
-            var result = m_mouseState switch
-            {
-                (MousePressedState.Unpressed, MousePositionState.Out) => MouseBehaviour.MouseOut,
-                (MousePressedState.Unpressed, MousePositionState.Over) => MouseBehaviour.MouseOver,
-                _ => MouseBehaviour.MousePressed
-            };
-            ApplyCustomBackground(Root.style, result);
-        }
-
-        protected void ApplyCustomBackground(IStyle style, MouseBehaviour mouseBehaviour)
-        {
-            if (m_customStyle == null) return;
-            UIBackground background = m_customStyle.GetBackground(null, CustomStyleBackgroundKey);
+            if (style_SO == null) return;
+            UIBackground background = style_SO.GetBackground(null, styleKey);
             switch (mouseBehaviour)
             {
                 case MouseBehaviour.MouseOut:
-                    m_customStyleToUIElement.ApplyBackgroundToVisual(style, background.Default);
+                    m_uIElementStyleApplicator.AppliesBackground(style, background.Default);
                     break;
                 case MouseBehaviour.MouseOver:
-                    m_customStyleToUIElement.ApplyBackgroundToVisual(style, background.MouseOver);
+                    m_uIElementStyleApplicator.AppliesBackground(style, background.MouseOver);
                     break;
                 case MouseBehaviour.MousePressed:
-                    m_customStyleToUIElement.ApplyBackgroundToVisual(style, background.MousePressed);
+                    m_uIElementStyleApplicator.AppliesBackground(style, background.MousePressed);
                     break;
             }
         }
 
-        protected void ApplyCustomBorder()
+        protected void ApplyBorderStyle(CustomStyle_SO style_SO, string styleKey, IStyle style, MouseBehaviour mouseBehaviour)
         {
-            var result = m_mouseState switch
-            {
-                (MousePressedState.Unpressed, MousePositionState.Out) => MouseBehaviour.MouseOut,
-                (MousePressedState.Unpressed, MousePositionState.Over) => MouseBehaviour.MouseOver,
-                _ => MouseBehaviour.MousePressed
-            };
-            ApplyCustomBorder(Root.style, result);
-        }
-
-        protected void ApplyCustomBorder(IStyle style, MouseBehaviour mouseBehaviour)
-        {
-            if (m_customStyle == null) return;
-            UIBorder border = m_customStyle.GetBorder(null, CustomStyleBackgroundKey);
+            if (style_SO == null) return;
+            UIBorder border = style_SO.GetBorder(null, styleKey);
             switch (mouseBehaviour)
             {
                 case MouseBehaviour.MouseOut:
-                    m_customStyleToUIElement.ApplyBorderToVisual(style, border.Default);
+                    m_uIElementStyleApplicator.AppliesBorder(style, border.Default);
                     break;
                 case MouseBehaviour.MouseOver:
-                    m_customStyleToUIElement.ApplyBorderToVisual(style, border.MouseOver);
+                    m_uIElementStyleApplicator.AppliesBorder(style, border.MouseOver);
                     break;
                 case MouseBehaviour.MousePressed:
-                    m_customStyleToUIElement.ApplyBorderToVisual(style, border.MousePressed);
+                    m_uIElementStyleApplicator.AppliesBorder(style, border.MousePressed);
                     break;
             }
         }
+
+        #endregion
     }
 
     public abstract partial class AbstractGenericAndCustomElement : VisualElement

@@ -71,7 +71,7 @@ namespace umi3DBrowser.UICustomStyle
     public partial class CustomStyle_SO : ScriptableObject
     {
         [HideInInspector]
-        public UnityEvent ApplyCustomStyle = new UnityEvent();
+        public UnityEvent AppliesFormatAndStyle = new UnityEvent();
 
         [Header("Formatting Style")]
         [SerializeField]
@@ -89,7 +89,7 @@ namespace umi3DBrowser.UICustomStyle
         private UIThemeStyle[] m_themeStyles;
 
         [ContextMenu("Apply Custom Style")]
-        private void ApplyCustomStyleInInspector() => ApplyCustomStyle.Invoke();
+        private void ApplyCustomStyleInInspector() => AppliesFormatAndStyle.Invoke();
     }
 
     public partial class CustomStyle_SO

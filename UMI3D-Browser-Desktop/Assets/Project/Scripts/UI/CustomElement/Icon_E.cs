@@ -25,7 +25,7 @@ namespace DesktopBrowser.UI.CustomElement
 
         public void ChangeBackground(string customStyleBackgroundKey)
         {
-            CustomStyleBackgroundKey = customStyleBackgroundKey;
+            //m_rootBackgroundStyleKey = customStyleBackgroundKey;
         }
     }
 
