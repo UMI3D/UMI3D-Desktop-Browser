@@ -34,30 +34,36 @@ namespace umi3d.cdk.interaction.selection
 
         public override void ActivateSelectedVisualCue(InteractableContainer interactable)
         {
-            var renderer = interactable.gameObject.GetComponentInChildren<Renderer>();
-            var id = interactable.GetInstanceID();
-            if (renderer != null 
-                && renderer.material != null 
-                && !cachedShaders.ContainsKey(id) 
-                && renderer.material.shader != outlineShader)
+            if (enabled)
             {
-                cachedShaders.Add(id, renderer.material.shader);
-                renderer.material.shader = outlineShader;
+                var renderer = interactable.gameObject.GetComponentInChildren<Renderer>();
+                var id = interactable.GetInstanceID();
+                if (renderer != null
+                    && renderer.material != null
+                    && !cachedShaders.ContainsKey(id)
+                    && renderer.material.shader != outlineShader)
+                {
+                    cachedShaders.Add(id, renderer.material.shader);
+                    renderer.material.shader = outlineShader;
+                }
             }
         }
 
         public override void DeactivateSelectedVisualCue(InteractableContainer interactable)
         {
-            if (interactable != null)
+            if (enabled)
             {
-                var renderer = interactable.gameObject.GetComponentInChildren<Renderer>();
-                var id = interactable.GetInstanceID();
-                if (renderer != null && renderer.material != null && cachedShaders.ContainsKey(id))
+                if (interactable != null)
                 {
-                    renderer.material.shader = cachedShaders[id];
+                    var renderer = interactable.gameObject.GetComponentInChildren<Renderer>();
+                    var id = interactable.GetInstanceID();
+                    if (renderer != null && renderer.material != null && cachedShaders.ContainsKey(id))
+                    {
+                        renderer.material.shader = cachedShaders[id];
+                    }
                 }
+                Clear();
             }
-            Clear();
         }
 
         public override void Clear()

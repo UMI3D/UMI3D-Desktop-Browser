@@ -20,6 +20,8 @@ namespace umi3d.cdk.interaction.selection
     /// </summary>
     public abstract class AbstractVisualCueHandler : MonoBehaviour
     {
+        public bool enabled = true;
+
         public abstract void ActivateSelectedVisualCue(InteractableContainer interactable);
 
         public abstract void DeactivateSelectedVisualCue(InteractableContainer interactable);

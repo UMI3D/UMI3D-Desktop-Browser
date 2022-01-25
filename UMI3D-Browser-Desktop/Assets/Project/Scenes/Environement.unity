@@ -2377,6 +2377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6df59e8d6bbe0c459c33f65f93e438d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enabled: 0
   outlineShader: {fileID: 4800000, guid: f8a7c73f138a6ac4993cd7828343e424, type: 3}
 --- !u!114 &2096641631
 MonoBehaviour:
