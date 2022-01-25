@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using umi3d.common.interaction;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace umi3d.cdk.interaction.selection.intent.log
 {
@@ -34,6 +35,8 @@ namespace umi3d.cdk.interaction.selection.intent.log
         private ClientData clientDataSendingCache = new ClientData();
 
         private IntentSelectorManager manager;
+        private GameObject logSupervisor;
+        private Text logParameterContainer;
 
         private bool ready = false;
 
@@ -56,18 +59,20 @@ namespace umi3d.cdk.interaction.selection.intent.log
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
             {
                 ready = true;
+                logSupervisor = GameObject.Find("Log Supervisor"); // SCENE SPECIFIC
+                logParameterContainer = logSupervisor.GetComponentInChildren<Text>();
             });
         }
 
         private void LateUpdate()
         {
-            if (!ready)
+            if (!ready || logParameterContainer.text != "1")
                 return;
             clientDataCache.tracking.Add(FetchTrackingData());
             clientDataCache.scene.Add(FetchSceneData());
             if (cacheSize > cacheSizeMax)
             {
-                var fileName = "clientData_" + DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH'-'mm'-'ss") + "_" + (Time.frameCount % 1000).ToString();
+                var fileName = "clientData_" + DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH'-'mm'-'ss.fff") + "_" + (Time.frameCount % 1000).ToString();
                 clientDataSendingCache = clientDataCache;
                 clientDataCache = new ClientData();
                 SendDataAsync(clientDataSendingCache, fileName);
@@ -83,27 +88,27 @@ namespace umi3d.cdk.interaction.selection.intent.log
             var headPosition = head.position;
             var headRotation = head.rotation.eulerAngles;
 
-            float setToZeroIfTooSmall(float f)
+            double Round(float f)
             {
-                return f >= 1e-6 ? f : 0;
+                return f >= 1e-4 ? Math.Round(f, 4) : 0;
             }
             var trackingData = new TrackingData()
             {
                 t = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds(),
 
-                p_x = setToZeroIfTooSmall(pointerPosition.x),
-                p_y = setToZeroIfTooSmall(pointerPosition.y),
-                p_z = setToZeroIfTooSmall(pointerPosition.z),
-                p_r_x = setToZeroIfTooSmall(pointerRotation.x),
-                p_r_y = setToZeroIfTooSmall(pointerRotation.y),
-                p_r_z = setToZeroIfTooSmall(pointerRotation.z),
+                p_x = Round(pointerPosition.x),
+                p_y = Round(pointerPosition.y),
+                p_z = Round(pointerPosition.z),
+                p_r_x = Round(pointerRotation.x),
+                p_r_y = Round(pointerRotation.y),
+                p_r_z = Round(pointerRotation.z),
 
-                h_x = setToZeroIfTooSmall(headPosition.x),
-                h_y = setToZeroIfTooSmall(headPosition.y),
-                h_z = setToZeroIfTooSmall(headPosition.z),
-                h_r_x = setToZeroIfTooSmall(headRotation.x),
-                h_r_y = setToZeroIfTooSmall(headRotation.y),
-                h_r_z = setToZeroIfTooSmall(headRotation.z)
+                h_x = Round(headPosition.x),
+                h_y = Round(headPosition.y),
+                h_z = Round(headPosition.z),
+                h_r_x = Round(headRotation.x),
+                h_r_y = Round(headRotation.y),
+                h_r_z = Round(headRotation.z)
             };
 
             return trackingData;
@@ -133,6 +138,11 @@ namespace umi3d.cdk.interaction.selection.intent.log
 
         private async void SendDataAsync(ClientData data, string fileName)
         {
+            if (InteractionMapper.uploadFileParameterDto is null)
+            {
+                Debug.Log("Not sending logs. DTM not started in log mode");
+                return;
+            }
             var filePath = savePath + "/" + fileName + ".json";
             await WriteDataTask(data, filePath);
 

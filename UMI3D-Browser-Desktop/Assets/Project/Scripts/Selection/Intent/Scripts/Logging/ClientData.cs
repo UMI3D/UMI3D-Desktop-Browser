@@ -23,28 +23,28 @@ namespace umi3d.cdk.interaction.selection.intent.log
     internal class TargetData
     {
         public int n; //target number
-        public float x;
-        public float y;
-        public float z;
+        public double x;
+        public double y;
+        public double z;
     }
 
     internal class TrackingData
     {
         public long t;
 
-        public float p_x;
-        public float p_y;
-        public float p_z;
-        public float p_r_x;
-        public float p_r_y;
-        public float p_r_z;
+        public double p_x;
+        public double p_y;
+        public double p_z;
+        public double p_r_x;
+        public double p_r_y;
+        public double p_r_z;
 
-        public float h_x;
-        public float h_y;
-        public float h_z;
-        public float h_r_x;
-        public float h_r_y;
-        public float h_r_z;
+        public double h_x;
+        public double h_y;
+        public double h_z;
+        public double h_r_x;
+        public double h_r_y;
+        public double h_r_z;
     }
 
 }
