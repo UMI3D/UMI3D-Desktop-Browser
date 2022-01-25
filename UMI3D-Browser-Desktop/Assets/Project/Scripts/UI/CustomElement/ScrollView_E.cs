@@ -14,9 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.UI;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
@@ -55,6 +52,10 @@ namespace DesktopBrowser.UI.CustomElement
         public UnityEvent HorizontalBackwardButtonPressed { get; protected set; } = new UnityEvent();
         public UnityEvent HorizontalForwardButtonPressed { get; protected set; } = new UnityEvent();
 
+        public void Adds(params VisualElement[] items)
+        {
+
+        }
     }
 
     public partial class ScrollView_E
@@ -78,8 +79,10 @@ namespace DesktopBrowser.UI.CustomElement
     {
         public ScrollView_E(VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : 
             base(visual, styleResourcePath, formatAndStyleKeys) { }
-        public ScrollView_E(VisualElement parent, string resourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : 
-            base(parent, resourcePath, styleResourcePath, formatAndStyleKeys) { }
+        public ScrollView_E(string visualResourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) :
+            base(visualResourcePath, styleResourcePath, formatAndStyleKeys) { }
+        public ScrollView_E(VisualElement parent, string visualResourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : 
+            base(parent, visualResourcePath, styleResourcePath, formatAndStyleKeys) { }
 
         public ScrollView_E SetDraggerContainerStyle(string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys)
         {
@@ -144,10 +147,6 @@ namespace DesktopBrowser.UI.CustomElement
             //m_horizontalDraggerContainer = m_horizontalSlide.Q("unity-drag-container");
             m_verticalDragger = m_verticalSlider.Q("unity-dragger");
             m_horizontalDragger = m_horizontalSlider.Q("unity-dragger");
-        }
-        public override void OnApplyUserPreferences()
-        {
-            //throw new System.NotImplementedException();
         }
     }
 }

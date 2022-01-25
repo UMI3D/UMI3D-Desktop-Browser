@@ -260,6 +260,18 @@ namespace BrowserDesktop.UI
             style_SO.AppliesFormatAndStyle.AddListener(action);
         }
 
+        protected void UpdateVisualStyle(VisualElement visual, FormatAndStyleKeys newFormatAndStyleKeys)
+        {
+            if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
+            if (newFormatAndStyleKeys == null) throw new NullReferenceException("FormatAnStyleKeys is null.");
+            var (style_SO, formatAndStyleKeys, action) = m_visualStyles[visual];
+            formatAndStyleKeys.TextFormatKey = newFormatAndStyleKeys.TextFormatKey;
+            formatAndStyleKeys.TextStyleKey = newFormatAndStyleKeys.TextStyleKey;
+            formatAndStyleKeys.BackgroundStyleKey = newFormatAndStyleKeys.BackgroundStyleKey;
+            formatAndStyleKeys.BorderStyleKey = newFormatAndStyleKeys.BorderStyleKey;
+            ApplyFormatAndStyle(style_SO, formatAndStyleKeys, visual.style, m_mouseBehaviourFromState);
+        }
+
         public virtual void ApplyAllFormatAndStyle()
         {
             ApplyAllFormat();

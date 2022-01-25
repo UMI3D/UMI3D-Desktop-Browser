@@ -24,72 +24,48 @@ namespace DesktopBrowser.UI.GenericElement
     /// <summary>
     /// A ToolboxItem is a button which has an Icon and a Label.
     /// </summary>
-    public partial class ToolboxItem_E
+    public partial class ToolboxItem_E : Button_GE
     {
 
-    }
-    public partial class ToolboxItem_E : Visual_E
-    {
-        #region Fields
-
-        /// <summary>
-        /// Button of this ToolboxItem.
-        /// </summary>
-        public Button_GE ItemButton { get; private set; } = null;
-        public Action ItemClicked { get; set; } = () => { Debug.Log("<color=green>TODO: </color>" + $"ToolboxItem clicked not implemented"); };
-
-        /// <summary>
-        /// Button's label (name of this item.
-        /// </summary>
-        private Label label;
-        public string ItemName { get; set; } = "";
-        
-        #endregion
-
-        //public ToolboxItem_E(VisualTreeAsset visualTA): base(visualTA) { }
-
-        protected override void Initialize()
+        public ToolboxItem_E(string iconStyleResourcePath, FormatAndStyleKeys iconOnKeys, FormatAndStyleKeys iconOffKeys, string labelStyleResourcePath, FormatAndStyleKeys labelOnKeys, FormatAndStyleKeys labelOffKeys) : 
+            base("UXML/Toolbox/ToolboxItem", null, null) 
         {
-            base.Initialize();
-            //ItemButton = new Button_GE(Root)
-            //{
-            //    OnClicked = () => { ItemClicked(); }
-            //};
-            label = Root.Q<Label>("toolboxItem-label");
+            SetIcon(Root.Q<VisualElement>("icon"), iconStyleResourcePath, iconOnKeys, iconOffKeys);
+            SetLabel(Root.Q<Label>("label"), labelStyleResourcePath, labelOnKeys, labelOffKeys);
         }
 
         #region Setup
 
-        public ToolboxItem_E SetIcon(string iconOn, string iconOff, bool isOn = false)
-        {
-            //ItemButton.SetIcon("square-button", iconOn, iconOff, isOn);
-            return this;
-        }
+        //public ToolboxItem_E SetIcon(string iconOn, string iconOff, bool isOn = false)
+        //{
+        //    //ItemButton.SetIcon("square-button", iconOn, iconOff, isOn);
+        //    return this;
+        //}
 
-        public ToolboxItem_E SetIcon(Texture2D icon)
-        {
-            ItemButton.SetIcon(icon);
-            return this;
-        }
+        //public ToolboxItem_E SetIcon(Texture2D icon)
+        //{
+        //    //ItemButton.SetIcon(icon);
+        //    return this;
+        //}
 
-        public ToolboxItem_E SetIcon(Sprite icon)
-        {
-            ItemButton.SetIcon(icon);
-            return this;
-        }
+        //public ToolboxItem_E SetIcon(Sprite icon)
+        //{
+        //    //ItemButton.SetIcon(icon);
+        //    return this;
+        //}
 
         #endregion
 
-        /// <summary>
-        /// Apply user preferences when needed.
-        /// </summary>
-        public override void OnApplyUserPreferences()
-        {
-            if (!Displayed)
-                return;
+        ///// <summary>
+        ///// Apply user preferences when needed.
+        ///// </summary>
+        //public override void OnApplyUserPreferences()
+        //{
+        //    if (!Displayed)
+        //        return;
 
-            label.style.width = StyleKeyword.Auto;
-            UserPreferences.TextAndIconPref.ApplyTextPref(label, "label", ItemName);
-        }
+        //    label.style.width = StyleKeyword.Auto;
+        //    UserPreferences.TextAndIconPref.ApplyTextPref(label, "label", ItemName);
+        //}
     }
 }

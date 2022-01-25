@@ -14,11 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.UI;
-using BrowserDesktop.UserPreferences;
-using DesktopBrowser.UI.CustomElement;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using umi3DBrowser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -29,9 +26,6 @@ namespace DesktopBrowser.UI.GenericElement
     /// </summary>
     public partial class Button_GE
     {
-        public string Text { get; set; } = "";
-        public string TextPref { get; set; } = "";
-
         public Action OnClicked { get; set; } = () => { Debug.Log("<color=green>TODO: </color>" + $"ToolboxItem clicked not implemented"); };
         /// <summary>
         /// State of the button.
@@ -41,41 +35,55 @@ namespace DesktopBrowser.UI.GenericElement
 
     public partial class Button_GE
     {
-        private Button m_button;
-        private Icon_E m_icon;
-        private Label_E m_label;
-        private string m_iconOnKey = null;
-        private string m_iconOffKey = null;
+        private Button m_button = null;
+        private VisualElement m_icon = null;
+        private VisualElement m_label = null;
+        private FormatAndStyleKeys m_iconOnKey = null;
+        private FormatAndStyleKeys m_iconOffKey = null;
+        private FormatAndStyleKeys m_currentIconKey = null;
+        private FormatAndStyleKeys m_labelOnKey = null;
+        private FormatAndStyleKeys m_labelOffKey = null;
+        private FormatAndStyleKeys m_currentLabelKey = null;
     }
 
     public partial class Button_GE
     {
-        //public Button_GE(VisualTreeAsset visualTA) : base(visualTA) { }
-        //public Button_GE(VisualElement root) : base(root) { }
+        public Button_GE(VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : 
+            base(visual, styleResourcePath, formatAndStyleKeys) { }
+        public Button_GE(string visualResourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) :
+            base(visualResourcePath, styleResourcePath, formatAndStyleKeys) { }
 
-        //public Button_GE(VisualElement root, string customStyleKey = null) : base(root, customStyleKey) { }
-
-        public Button_GE SetIcon(VisualElement icon, string customStyleKey, string iconOnKey, string iconOffKey, bool isOn = false)
+        public Button_GE SetIcon(VisualElement icon, string styleResourcePath, FormatAndStyleKeys iconOnKey, FormatAndStyleKeys iconOffKey, bool isOn = false)
         {
-            Debug.Assert(icon != null, "visual element null");
+            CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
+            if (style_SO == null || iconOnKey == null || iconOffKey == null) throw new NullReferenceException($"CustomStyle_SO or iconStyleKeys is null.");
             m_iconOnKey = iconOnKey;
             m_iconOffKey = iconOffKey;
-            //m_rootBackgroundStyleKey = isOn ? m_iconOnKey : m_iconOffKey;
-            //m_icon = new Icon_E(icon, customStyleKey, m_rootBackgroundStyleKey);
+            m_currentIconKey = isOn ? m_iconOnKey : m_iconOffKey;
+            AddVisualStyle(icon, style_SO, m_currentIconKey);
+            m_icon = icon;
             return this;
         }
 
-        public Button_GE SetLabel(TextElement label, string customStyleKey)
+        public Button_GE SetLabel(VisualElement label, string styleResourcePath, FormatAndStyleKeys labelOnKey, FormatAndStyleKeys labelOffKey, bool isOn = false)
         {
-            Debug.Assert(label != null, "visual element null");
+            CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
+            if (style_SO == null || labelOnKey == null || labelOffKey == null) throw new NullReferenceException($"CustomStyle_SO or iconStyleKeys is null.");
+            m_labelOnKey = labelOnKey;
+            m_labelOffKey = labelOffKey;
+            m_currentLabelKey = isOn ? m_iconOnKey : m_iconOffKey;
+            AddVisualStyle(label, style_SO, m_currentLabelKey);
+            m_label = label;
             return this;
         }
 
         public void Toggle(bool value)
         {
             IsOn = value;
-            m_icon?.ChangeBackground((IsOn) ? m_iconOnKey : m_iconOffKey);
-            //TODO m_label?.change
+            if (m_icon != null)
+                UpdateVisualStyle(m_icon, (IsOn) ? m_iconOnKey : m_iconOffKey);
+            if (m_label != null)
+                UpdateVisualStyle(m_label, (IsOn) ? m_labelOnKey : m_labelOffKey);
         }
     }
 
@@ -91,41 +99,38 @@ namespace DesktopBrowser.UI.GenericElement
         public override void Reset()
         {
             base.Reset();
-            Text = "";
-            TextPref = "";
-
-            m_icon.Reset();
-
             OnClicked = () => { Debug.Log("<color=green>TODO: </color>" + $"ToolboxItem clicked not implemented"); }; 
             IsOn = false;
             m_button = null;
-        }
+            m_icon = null;
+            m_label = null;
+    }
 
         #region Set and Unset Icon
 
-        public Button_GE SetIcon(Texture2D icon)
-        {
-            if (icon != null)
-                m_button.style.backgroundImage = Background.FromTexture2D(icon);
-            else
-                m_button.style.backgroundImage = StyleKeyword.Auto;
-            return this;
-        }
+        //public Button_GE SetIcon(Texture2D icon)
+        //{
+        //    if (icon != null)
+        //        m_button.style.backgroundImage = Background.FromTexture2D(icon);
+        //    else
+        //        m_button.style.backgroundImage = StyleKeyword.Auto;
+        //    return this;
+        //}
 
-        public Button_GE SetIcon(Sprite icon)
-        {
-            if (icon != null)
-                m_button.style.backgroundImage = Background.FromSprite(icon);
-            else
-                m_button.style.backgroundImage = StyleKeyword.Auto;
-            return this;
-        }
+        //public Button_GE SetIcon(Sprite icon)
+        //{
+        //    if (icon != null)
+        //        m_button.style.backgroundImage = Background.FromSprite(icon);
+        //    else
+        //        m_button.style.backgroundImage = StyleKeyword.Auto;
+        //    return this;
+        //}
 
-        public Button_GE UnSetIcon()
-        {
-            m_button.style.backgroundImage = StyleKeyword.Auto;
-            return this;
-        }
+        //public Button_GE UnSetIcon()
+        //{
+        //    m_button.style.backgroundImage = StyleKeyword.Auto;
+        //    return this;
+        //}
 
         #endregion
 
@@ -134,16 +139,6 @@ namespace DesktopBrowser.UI.GenericElement
         {
             base.Remove();
             m_button.clicked -= OnClicked;
-        }
-
-        public override void OnApplyUserPreferences()
-        {
-            if (!Displayed) return;
-
-            if (!string.IsNullOrEmpty(TextPref))
-                UserPreferences.TextAndIconPref.ApplyTextPref(m_button, TextPref, Text);
-            else
-                m_button.text = "";
         }
     }
 }

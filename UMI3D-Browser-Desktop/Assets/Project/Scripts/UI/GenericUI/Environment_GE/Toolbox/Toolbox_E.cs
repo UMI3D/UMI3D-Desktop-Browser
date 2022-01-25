@@ -13,11 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using BrowserDesktop.UI;
-using BrowserDesktop.UserPreferences;
-using System.Collections;
+using DesktopBrowser.UI.CustomElement;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace DesktopBrowser.UI.GenericElement
@@ -27,46 +24,45 @@ namespace DesktopBrowser.UI.GenericElement
         public string toolboxName { get; set; }
         public float SpaceBetweenItems { get; set; } = 10f;
 
-        private Label label;
-        private VisualElement itemsContainer;
-
         private List<ToolboxItem_E> items = new List<ToolboxItem_E>();
     }
 
     public partial class Toolbox_E
     {
-        //public Toolbox_E(VisualTreeAsset visualTA, params ToolboxItem_E[] items) : base(visualTA)
-        //{
-        //    AddItems(items);
-        //}
+        public Toolbox_E(string visualResourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys, string toolboxName, params ToolboxItem_E[] items) : 
+            base(visualResourcePath, styleResourcePath, formatAndStyleKeys)
+        {
+            //Update toolbox name.
+            AddItems(items);
+        }
 
         public Toolbox_E AddItems(params ToolboxItem_E[] toolItems)
         {
-            for (int i = 0; i < toolItems.Length; ++i)
-            {
-                if (i > 0 || this.items.Count > 0) AddSpacer();
-                toolItems[i].AddTo(itemsContainer);
-                this.items.Add(toolItems[i]);
-            }
+            //for (int i = 0; i < toolItems.Length; ++i)
+            //{
+            //    if (i > 0 || this.items.Count > 0) AddSpacer();
+            //    toolItems[i].AddTo(itemsContainer);
+            //    this.items.Add(toolItems[i]);
+            //}
             return this;
         }
 
-        private void AddSpacer()
-        {
-            VisualElement horizontalSpacer = new VisualElement();
-            horizontalSpacer.style.width = SpaceBetweenItems;
-            itemsContainer.Add(horizontalSpacer);
-        }
+        //private void AddSpacer()
+        //{
+        //    VisualElement horizontalSpacer = new VisualElement();
+        //    horizontalSpacer.style.width = SpaceBetweenItems;
+        //    itemsContainer.Add(horizontalSpacer);
+        //}
     }
 
-    public partial class Toolbox_E : Visual_E
+    public partial class Toolbox_E : ScrollView_E
     {
         protected override void Initialize()
         {
             base.Initialize();
 
-            label = this.Q<Label>("toolbox-name");
-            itemsContainer = this.Q<VisualElement>("items-container");
+            //label = this.Q<Label>("toolbox-name");
+            //itemsContainer = this.Q<VisualElement>("items-container");
         }
 
         public override void Remove()
@@ -75,15 +71,15 @@ namespace DesktopBrowser.UI.GenericElement
             items.ForEach((tool) => { tool.Remove(); });
         }
 
-        /// <summary>
-        /// Apply user preferences when needed.
-        /// </summary>
-        public override void OnApplyUserPreferences()
-        {
-            if (!Displayed) return;
+        ///// <summary>
+        ///// Apply user preferences when needed.
+        ///// </summary>
+        //public override void OnApplyUserPreferences()
+        //{
+        //    if (!Displayed) return;
 
-            UserPreferences.TextAndIconPref.ApplyTextPref(label, "sub-section", toolboxName);
-        }
+        //    UserPreferences.TextAndIconPref.ApplyTextPref(label, "sub-section", toolboxName);
+        //}
     }
 }
 
