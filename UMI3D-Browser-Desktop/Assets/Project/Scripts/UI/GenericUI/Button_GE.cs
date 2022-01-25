@@ -50,10 +50,10 @@ namespace DesktopBrowser.UI.GenericElement
 
     public partial class Button_GE
     {
-        public Button_GE(VisualTreeAsset visualTA) : base(visualTA) { }
+        //public Button_GE(VisualTreeAsset visualTA) : base(visualTA) { }
         //public Button_GE(VisualElement root) : base(root) { }
 
-        public Button_GE(VisualElement root, string customStyleKey = null) : base(root, customStyleKey) { }
+        //public Button_GE(VisualElement root, string customStyleKey = null) : base(root, customStyleKey) { }
 
         public Button_GE SetIcon(VisualElement icon, string customStyleKey, string iconOnKey, string iconOffKey, bool isOn = false)
         {
@@ -79,7 +79,7 @@ namespace DesktopBrowser.UI.GenericElement
         }
     }
 
-    public partial class Button_GE : AbstractGenericAndCustomElement
+    public partial class Button_GE : Visual_E
     {
         protected override void Initialize()
         {

@@ -47,7 +47,7 @@ namespace DesktopBrowser.UI.CustomElement
         private bool m_forwardLayoutDisplayed { get; set; } = false;
         private ScrollView scrollView;
 
-        private List<AbstractGenericAndCustomElement> elements = new List<AbstractGenericAndCustomElement>();
+        private List<Visual_E> elements = new List<Visual_E>();
         //private int currentIndex = 0;
 
         private float m_scrolledWidth { get; set; } = 0f;
@@ -161,20 +161,20 @@ namespace DesktopBrowser.UI.CustomElement
         }
     }
 
-    public partial class ToolboxScrollView_E : AbstractGenericAndCustomElement
+    public partial class ToolboxScrollView_E : Visual_E
     {
         protected override void Initialize()
         {
             base.Initialize();
 
-            backward = new Button_GE(Root.Q("backward"))
-            {
-                OnClicked = () => { OnBackwardPressed(); }
-            }.SetIcon(Root.Q("backward"),"scrollView-btn", "menuBar-previous", "menuBar-previous-desable", true);
-            forward = new Button_GE(Root.Q("forward"))
-            {
-                OnClicked = () => { OnForwardPressed(); }
-            }.SetIcon(Root.Q("forward"),"scrollView-btn", "menuBar-next", "menuBar-next-desable", true);
+            //backward = new Button_GE(Root.Q("backward"))
+            //{
+            //    OnClicked = () => { OnBackwardPressed(); }
+            //}.SetIcon(Root.Q("backward"),"scrollView-btn", "menuBar-previous", "menuBar-previous-desable", true);
+            //forward = new Button_GE(Root.Q("forward"))
+            //{
+            //    OnClicked = () => { OnForwardPressed(); }
+            //}.SetIcon(Root.Q("forward"),"scrollView-btn", "menuBar-next", "menuBar-next-desable", true);
             backwardLayout = Root.Q<VisualElement>("horizontal-layout-backward");
             forwardLayout = Root.Q<VisualElement>("horizontal-layout-forward");
 

@@ -36,13 +36,14 @@ namespace DesktopBrowser.UI.GenericElement
 
     public partial class Label_E
     {
-        public Label_E(VisualElement root, string customStyleKey = null, string customStyleBackgroundKey = "") : base(root, customStyleKey, customStyleBackgroundKey)
+        public Label_E(VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : 
+            base(visual, styleResourcePath, formatAndStyleKeys)
         {
             //m_label.style
         }
     }
 
-    public partial class Label_E : AbstractGenericAndCustomElement
+    public partial class Label_E : Visual_E
     {
         protected override void Initialize()
         {

@@ -35,10 +35,10 @@ namespace DesktopBrowser.UI.GenericElement
 
     public partial class Toolbox_E
     {
-        public Toolbox_E(VisualTreeAsset visualTA, params ToolboxItem_E[] items) : base(visualTA)
-        {
-            AddItems(items);
-        }
+        //public Toolbox_E(VisualTreeAsset visualTA, params ToolboxItem_E[] items) : base(visualTA)
+        //{
+        //    AddItems(items);
+        //}
 
         public Toolbox_E AddItems(params ToolboxItem_E[] toolItems)
         {
@@ -59,7 +59,7 @@ namespace DesktopBrowser.UI.GenericElement
         }
     }
 
-    public partial class Toolbox_E : AbstractGenericAndCustomElement
+    public partial class Toolbox_E : Visual_E
     {
         protected override void Initialize()
         {

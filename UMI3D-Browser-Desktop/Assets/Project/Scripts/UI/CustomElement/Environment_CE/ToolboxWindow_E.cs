@@ -29,7 +29,11 @@ namespace DesktopBrowser.UI.CustomElement
 
     public partial class ToolboxWindow_E
     {
-        public ToolboxWindow_E(VisualElement parent) : base(parent, "UI/UXML/ToolboxWindow/ToolboxWindow", null, "") { }
+        public ToolboxWindow_E(VisualElement parent) : 
+            base(parent, 
+                "UI/UXML/ToolboxWindow/ToolboxWindow", 
+                "UI/StyleSO/ToolboxWindow/toolboxWindow-window", 
+                new FormatAndStyleKeys()) { }
 
         private void OnCloseButtonPressed()
         {
@@ -39,7 +43,7 @@ namespace DesktopBrowser.UI.CustomElement
         }
     }
 
-    public partial class ToolboxWindow_E : AbstractGenericAndCustomElement
+    public partial class ToolboxWindow_E : Visual_E
     {
         protected override void Initialize()
         {
@@ -47,29 +51,24 @@ namespace DesktopBrowser.UI.CustomElement
 
             new Icon_E(Root.Q("icon"), "toolboxWindow-icon");
             //TODO Add label.
-            new Button_GE(Root.Q("closeButton"))
-            {
-                OnClicked = () => { OnCloseButtonPressed(); }
-            }.SetIcon(Root.Q("closeButton"),"toolboxWindow-closeButton", "", "");
+            //new Button_GE(Root.Q("closeButton"))
+            //{
+            //    OnClicked = () => { OnCloseButtonPressed(); }
+            //}.SetIcon(Root.Q("closeButton"),"toolboxWindow-closeButton", "", "");
 
             //scrollViewData = new AbstractScrollView_E(Root.Q("scrollViewContainer"), "UI/UXML/ToolboxWindow/ToolboxWindow-ScrollView", null)
             //{
             //}.InitFromSrollViewToProperties();
-            scrollViewData = new AbstractScrollView_E(Root.Q("scrollViewContainer"), null)
+            scrollViewData = new ScrollView_E(Root.Q("scrollViewContainer"), null, null)
             {
-            }
-            .SetVerticalDraggerContainerStyle("ToolboxWindow-ScrollView", "DraggerContainer")
-            .SetVerticalDraggerStyle("ToolboxWindow-ScrollView", "Dragger");
+            };
+            //.SetVerticalDraggerContainerStyle("ToolboxWindow-ScrollView", "DraggerContainer")
+            //.SetVerticalDraggerStyle("ToolboxWindow-ScrollView", "Dragger");
 
-            new Button_GE(Root.Q("unpinnedButton"))
-            {
-                OnClicked = () => { UnPinedButtonPressed.Invoke(); },
-            }.SetIcon(Root.Q("unpinnedButton"),"toolboxWindow-unpinnedButton", "", "");
-        }
-
-        public override bool GetCustomStyle()
-        {
-            return GetCustomStyle("toolboxWindow-window");
+            //new Button_GE(Root.Q("unpinnedButton"))
+            //{
+            //    OnClicked = () => { UnPinedButtonPressed.Invoke(); },
+            //}.SetIcon(Root.Q("unpinnedButton"),"toolboxWindow-unpinnedButton", "", "");
         }
 
         public override void OnApplyUserPreferences()

@@ -185,7 +185,7 @@ namespace BrowserDesktop.Menu
         /// </summary>
         public void ClearShortcut()
         {
-            Action<UI.AbstractGenericAndCustomElement> removeVEFromHierarchy = (vE) => vE.Remove();
+            Action<UI.Visual_E> removeVEFromHierarchy = (vE) => vE.Remove();
 
             ShortcutIcon_ge_DisplayedList.ForEach(removeVEFromHierarchy);
             ShortcutIcon_ge_WaitedList.AddRange(ShortcutIcon_ge_DisplayedList);

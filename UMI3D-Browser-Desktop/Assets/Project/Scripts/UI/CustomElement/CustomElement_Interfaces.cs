@@ -32,16 +32,16 @@ namespace DesktopBrowser.UI.CustomElement
         /// </summary>
         public Rect RootLayout { get; }
 
-        /// <summary>
-        /// Clone and add the visualTreeAsset to this and Initialize.
-        /// </summary>
-        /// <param name="visualTA"></param>
-        public void Init(VisualTreeAsset visualTA, string customStyleKey, string customStyleBackgroundKey = "");
-        /// <summary>
-        /// Add root to this and Initialize.
-        /// </summary>
-        /// <param name="root"></param>
-        public void Init(VisualElement root, string customStyleKey, string customStyleBackgroundKey = "");
+        ///// <summary>
+        ///// Clone and add the visualTreeAsset to this and Initialize.
+        ///// </summary>
+        ///// <param name="visualTA"></param>
+        //public void Init(VisualTreeAsset visualTA, string customStyleKey, string customStyleBackgroundKey = "");
+        ///// <summary>
+        ///// Add root to this and Initialize.
+        ///// </summary>
+        ///// <param name="root"></param>
+        //public void Init(VisualElement root, string customStyleKey, string customStyleBackgroundKey = "");
         /// <summary>
         /// Reset this.
         /// </summary>
@@ -55,11 +55,11 @@ namespace DesktopBrowser.UI.CustomElement
         /// Remove the UIElement from the hierarchy
         /// </summary>
         public void Remove();
-        /// <summary>
-        /// Get CustomStyle_SO to apply to this visual.
-        /// </summary>
-        /// <returns>True if the customStyle has been retrieve, else false.</returns>
-        public bool GetCustomStyle();
+        ///// <summary>
+        ///// Get CustomStyle_SO to apply to this visual.
+        ///// </summary>
+        ///// <returns>True if the customStyle has been retrieve, else false.</returns>
+        //public bool GetCustomStyle();
         /// <summary>
         /// Apply user preferences when needed.
         /// </summary>

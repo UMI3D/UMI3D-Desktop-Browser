@@ -21,11 +21,11 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.UI.GenericElement
 {
-    public class ToolboxSeparatorGenericElement : AbstractGenericAndCustomElement
+    public class ToolboxSeparatorGenericElement : Visual_E
     {
         private VisualElement separator_VE;
 
-        public ToolboxSeparatorGenericElement(VisualTreeAsset visualTA): base(visualTA) { }
+        //public ToolboxSeparatorGenericElement(string visualResourcePath, ) : base(visualResourcePath) { }
 
         protected override void Initialize()
         {
