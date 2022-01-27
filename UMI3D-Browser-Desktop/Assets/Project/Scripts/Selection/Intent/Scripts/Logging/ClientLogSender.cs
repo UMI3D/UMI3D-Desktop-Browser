@@ -138,11 +138,6 @@ namespace umi3d.cdk.interaction.selection.intent.log
 
         private async void SendDataAsync(ClientData data, string fileName)
         {
-            if (InteractionMapper.uploadFileParameterDto is null)
-            {
-                Debug.Log("Not sending logs. DTM not started in log mode");
-                return;
-            }
             var filePath = savePath + "/" + fileName + ".json";
             await WriteDataTask(data, filePath);
 

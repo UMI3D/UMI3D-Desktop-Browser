@@ -34,7 +34,7 @@ namespace umi3d.cdk.interaction.selection
 
         public override void ActivateSelectedVisualCue(InteractableContainer interactable)
         {
-            if (enabled)
+            if (running)
             {
                 var renderer = interactable.gameObject.GetComponentInChildren<Renderer>();
                 var id = interactable.GetInstanceID();
@@ -51,7 +51,7 @@ namespace umi3d.cdk.interaction.selection
 
         public override void DeactivateSelectedVisualCue(InteractableContainer interactable)
         {
-            if (enabled)
+            if (running)
             {
                 if (interactable != null)
                 {
