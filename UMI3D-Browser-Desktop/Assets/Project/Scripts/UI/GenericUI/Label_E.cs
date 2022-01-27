@@ -14,12 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.UI;
-using BrowserDesktop.UserPreferences;
-using DesktopBrowser.UI.CustomElement;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using umi3DBrowser.UICustomStyle;
 using UnityEngine.UIElements;
 
 namespace DesktopBrowser.UI.GenericElement
@@ -31,7 +26,8 @@ namespace DesktopBrowser.UI.GenericElement
 
     public partial class Label_E
     {
-        private TextElement m_label;
+        //private TextElement m_label;
+        protected string m_text { get; set; }
     }
 
     public partial class Label_E
@@ -48,7 +44,8 @@ namespace DesktopBrowser.UI.GenericElement
         protected override void Initialize()
         {
             base.Initialize();
-            m_label = this.Root.Q<TextElement>();
         }
+
+        
     }
 }

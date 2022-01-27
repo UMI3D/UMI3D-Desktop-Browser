@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using BrowserDesktop.UI;
 using DesktopBrowser.UI.CustomElement;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
@@ -21,38 +22,46 @@ namespace DesktopBrowser.UI.GenericElement
 {
     public partial class Toolbox_E
     {
-        public string toolboxName { get; set; }
-        public float SpaceBetweenItems { get; set; } = 10f;
-
-        private List<ToolboxItem_E> items = new List<ToolboxItem_E>();
+        
     }
 
     public partial class Toolbox_E
     {
-        public Toolbox_E(string visualResourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys, string toolboxName, params ToolboxItem_E[] items) : 
-            base(visualResourcePath, styleResourcePath, formatAndStyleKeys)
+        private Visual_E m_toolboxName { get;  set; } = null;
+    }
+
+    public partial class Toolbox_E
+    {
+        public Toolbox_E(string toolboxName, bool isScrollable, params ToolboxItem_E[] items) : 
+            base("UI/UXML/Toolbox/ToolboxItem", 
+                "UI/Style/Toolbox/Toolbox", 
+                new FormatAndStyleKeys(null, null, "", null))
         {
-            //Update toolbox name.
-            AddItems(items);
+            m_toolboxName = new Visual_E(Root.Q<Label>(), 
+                "UI/Style/Toolbox/ToolboxName",
+                new FormatAndStyleKeys(toolboxName, "", "", ""));
+            Adds(items);
+            if (isScrollable)
+            {
+
+            }
+            else
+            {
+
+            }
         }
 
-        public Toolbox_E AddItems(params ToolboxItem_E[] toolItems)
-        {
-            //for (int i = 0; i < toolItems.Length; ++i)
-            //{
-            //    if (i > 0 || this.items.Count > 0) AddSpacer();
-            //    toolItems[i].AddTo(itemsContainer);
-            //    this.items.Add(toolItems[i]);
-            //}
-            return this;
-        }
-
-        //private void AddSpacer()
+        //public Toolbox_E AddItems(params ToolboxItem_E[] toolItems)
         //{
-        //    VisualElement horizontalSpacer = new VisualElement();
-        //    horizontalSpacer.style.width = SpaceBetweenItems;
-        //    itemsContainer.Add(horizontalSpacer);
+        //    for (int i = 0; i < toolItems.Length; ++i)
+        //    {
+        //        if (i > 0 || this.items.Count > 0) AddSpacer();
+        //        toolItems[i].AddTo(itemsContainer);
+        //        this.items.Add(toolItems[i]);
+        //    }
+        //    return this;
         //}
+
     }
 
     public partial class Toolbox_E : ScrollView_E
@@ -64,22 +73,6 @@ namespace DesktopBrowser.UI.GenericElement
             //label = this.Q<Label>("toolbox-name");
             //itemsContainer = this.Q<VisualElement>("items-container");
         }
-
-        public override void Remove()
-        {
-            base.Remove();
-            items.ForEach((tool) => { tool.Remove(); });
-        }
-
-        ///// <summary>
-        ///// Apply user preferences when needed.
-        ///// </summary>
-        //public override void OnApplyUserPreferences()
-        //{
-        //    if (!Displayed) return;
-
-        //    UserPreferences.TextAndIconPref.ApplyTextPref(label, "sub-section", toolboxName);
-        //}
     }
 }
 

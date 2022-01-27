@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.UI;
+using System;
+using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
@@ -38,6 +40,7 @@ namespace DesktopBrowser.UI.CustomElement
         public UnityEvent VerticalForwardButtonPressed { get; }
         public UnityEvent HorizontalBackwardButtonPressed { get; }
         public UnityEvent HorizontalForwardButtonPressed { get; }
+        public float SpaceBetweenItems { get; set; }
     }
 
     public partial class ScrollView_E : IScrollable
@@ -51,10 +54,15 @@ namespace DesktopBrowser.UI.CustomElement
         public UnityEvent VerticalForwardButtonPressed { get; protected set; } = new UnityEvent();
         public UnityEvent HorizontalBackwardButtonPressed { get; protected set; } = new UnityEvent();
         public UnityEvent HorizontalForwardButtonPressed { get; protected set; } = new UnityEvent();
+        public float SpaceBetweenItems { get; set; } = 10f;
 
-        public void Adds(params VisualElement[] items)
+        public virtual void Adds(params Visual_E[] items)
         {
-
+            foreach (Visual_E item in items)
+            {
+                m_items.Add(item);
+                item.AddTo(m_scrollView);
+            }
         }
     }
 
@@ -73,6 +81,7 @@ namespace DesktopBrowser.UI.CustomElement
         protected VisualElement m_backwardHorizontalButtonLayout { get; set; } = null;
         protected VisualElement m_forwardVerticalButtonLayout { get; set; } = null;
         protected VisualElement m_forwardHorizontalButtonLayout { get; set; } = null;
+        protected List<Visual_E> m_items { get; set; } = null;
     }
 
     public partial class ScrollView_E
@@ -125,12 +134,18 @@ namespace DesktopBrowser.UI.CustomElement
         {
             return this;
         }
-
     }
 
     public partial class ScrollView_E
     {
-        //protected virtual Ini
+        protected void AddSpace(Action<IStyle> applySpace)
+        {
+            VisualElement space = new VisualElement();
+            applySpace(space.style);
+            m_scrollView.Add(space);
+        }
+        protected void AddVerticalSpace() => AddSpace((style) => style.height = SpaceBetweenItems);
+        protected void AddHorizontalSpace() => AddSpace((style) => style.width = SpaceBetweenItems);
     }
 
     public partial class ScrollView_E : Visual_E
@@ -147,6 +162,12 @@ namespace DesktopBrowser.UI.CustomElement
             //m_horizontalDraggerContainer = m_horizontalSlide.Q("unity-drag-container");
             m_verticalDragger = m_verticalSlider.Q("unity-dragger");
             m_horizontalDragger = m_horizontalSlider.Q("unity-dragger");
+            m_items = new List<Visual_E>();
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
         }
     }
 }

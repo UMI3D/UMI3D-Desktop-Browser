@@ -42,15 +42,11 @@ namespace BrowserDesktop.UI
         public Rect RootLayout { get => Root.layout; }
         public virtual void Reset()
         {
-            //this.m_rootStyleSOKey = null;
-            //this.m_rootBackgroundStyleKey = null;
             Root.UnregisterCallback<MouseOverEvent>(OnMouseOver);
             Root.UnregisterCallback<MouseOutEvent>(OnMouseOut);
             Root.UnregisterCallback<MouseCaptureEvent>(OnMouseDown);
             Root.UnregisterCallback<MouseUpEvent>(OnMouseUp);
             this.Root = null;
-            //m_rootCustomStyleSO?.AppliesFormatAndStyle.RemoveListener(formatAndStyleMethodsDictionary[Root.style]);
-            //m_rootCustomStyleSO = null;
             m_globalPref.ApplyCustomStyle.RemoveListener(ApplyAllFormatAndStyle);
             m_globalPref = null;
             Initialized = false;
@@ -239,10 +235,19 @@ namespace BrowserDesktop.UI
 
         public class FormatAndStyleKeys
         {
-            public string TextFormatKey { get; set; }
-            public string TextStyleKey { get; set; }
-            public string BackgroundStyleKey { get; set; }
-            public string BorderStyleKey { get; set; }
+            public string Text { get; set; } = null;
+            public string TextStyleKey { get; set; } = null;
+            public string BackgroundStyleKey { get; set; } = null;
+            public string BorderStyleKey { get; set; } = null;
+
+            public FormatAndStyleKeys() { }
+            public FormatAndStyleKeys(string text, string textStyle, string backgroundStyle, string borderStyle)
+            {
+                Text = text;
+                TextStyleKey = textStyle;
+                BackgroundStyleKey = backgroundStyle;
+                BorderStyleKey = borderStyle;
+            }
         }
 
         protected List<VisualElement> m_visuals;
@@ -265,7 +270,7 @@ namespace BrowserDesktop.UI
             if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
             if (newFormatAndStyleKeys == null) throw new NullReferenceException("FormatAnStyleKeys is null.");
             var (style_SO, formatAndStyleKeys, action) = m_visualStyles[visual];
-            formatAndStyleKeys.TextFormatKey = newFormatAndStyleKeys.TextFormatKey;
+            formatAndStyleKeys.Text = newFormatAndStyleKeys.Text;
             formatAndStyleKeys.TextStyleKey = newFormatAndStyleKeys.TextStyleKey;
             formatAndStyleKeys.BackgroundStyleKey = newFormatAndStyleKeys.BackgroundStyleKey;
             formatAndStyleKeys.BorderStyleKey = newFormatAndStyleKeys.BorderStyleKey;
@@ -300,7 +305,7 @@ namespace BrowserDesktop.UI
         {
             ApplySize(style_SO, style);
             ApplyMarginAndPadding(style_SO, style);
-            ApplyTextFormat(style_SO, formatAndStyleKeys.TextFormatKey, style);
+            ApplyTextFormat(style_SO, formatAndStyleKeys.Text, style);
         }
 
         protected void ApplySize(CustomStyle_SO style_SO, IStyle style)
@@ -334,7 +339,7 @@ namespace BrowserDesktop.UI
             throw new NotImplementedException();
         }
 
-        protected void ApplyTextFormat(CustomStyle_SO style_SO, string formatKey, IStyle style)
+        protected void ApplyTextFormat(CustomStyle_SO style_SO, string text, IStyle style)
         {
             throw new System.NotImplementedException();
         }
