@@ -26,12 +26,14 @@ namespace DesktopBrowser.UI.GenericElement
     /// </summary>
     public partial class ToolboxItem_E : Button_GE
     {
-
-        public ToolboxItem_E(string iconStyleResourcePath, FormatAndStyleKeys iconOnKeys, FormatAndStyleKeys iconOffKeys, string labelStyleResourcePath, FormatAndStyleKeys labelOnKeys, FormatAndStyleKeys labelOffKeys) : 
-            base("UXML/Toolbox/ToolboxItem", null, null) 
+        public ToolboxItem_E(FormatAndStyleKeys iconOnKeys, FormatAndStyleKeys iconOffKeys, string itemName) : 
+            base("UI/UXML/Toolbox/ToolboxItem", null, null) 
         {
-            SetIcon(Root.Q<VisualElement>("icon"), iconStyleResourcePath, iconOnKeys, iconOffKeys);
-            SetLabel(Root.Q<Label>("label"), labelStyleResourcePath, labelOnKeys, labelOffKeys);
+            SetIcon(Root.Q<VisualElement>("icon"), "UI/Style/Toolbox/ToolboxItemIcon", iconOnKeys, iconOffKeys);
+            SetLabel(Root.Q<Label>("label"), 
+                "UI/Style/Toolbox/ToolboxItemLabel", 
+                new FormatAndStyleKeys(itemName, "", "", ""),
+                new FormatAndStyleKeys(itemName, "", "", ""));
         }
 
         #region Setup
@@ -55,17 +57,5 @@ namespace DesktopBrowser.UI.GenericElement
         //}
 
         #endregion
-
-        ///// <summary>
-        ///// Apply user preferences when needed.
-        ///// </summary>
-        //public override void OnApplyUserPreferences()
-        //{
-        //    if (!Displayed)
-        //        return;
-
-        //    label.style.width = StyleKeyword.Auto;
-        //    UserPreferences.TextAndIconPref.ApplyTextPref(label, "label", ItemName);
-        //}
     }
 }

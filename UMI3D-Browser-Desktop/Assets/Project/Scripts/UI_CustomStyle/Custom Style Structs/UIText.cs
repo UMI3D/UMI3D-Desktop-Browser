@@ -31,6 +31,8 @@ namespace umi3DBrowser.UICustomStyle
         [SerializeField]
         private CustomStyleFloat m_paragraphSpacing;
         [SerializeField]
+        private CustomStyleFloat m_numberOfVisibleCharacter;
+        [SerializeField]
         private TextAnchor m_textAlign;
         
     }
