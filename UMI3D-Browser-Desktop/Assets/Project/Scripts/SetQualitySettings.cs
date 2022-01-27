@@ -22,6 +22,6 @@ public class SetQualitySettings : MonoBehaviour
 {
     void Start()
     {
-        Application.targetFrameRate = 90;
+        Application.targetFrameRate = 60;
     }
 }
