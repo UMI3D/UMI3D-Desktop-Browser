@@ -17,7 +17,7 @@ using umi3DBrowser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BrowserDesktop.UI
+namespace umi3dDesktopBrowser.uI.viewController
 {
     public class UIElementStyleApplicator
     {

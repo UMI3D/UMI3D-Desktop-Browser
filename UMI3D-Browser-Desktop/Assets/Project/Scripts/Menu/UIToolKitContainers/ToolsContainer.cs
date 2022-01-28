@@ -15,12 +15,11 @@ limitations under the License.
 */
 
 using BrowserDesktop.Menu.Displayer;
-using BrowserDesktop.UI.GenericElement;
 using DesktopBrowser.UIControllers;
-using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
+using umi3dDesktopBrowser.uI.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
 

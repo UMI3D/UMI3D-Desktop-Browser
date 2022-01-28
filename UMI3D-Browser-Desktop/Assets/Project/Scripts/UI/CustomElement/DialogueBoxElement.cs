@@ -15,12 +15,9 @@ limitations under the License.
 */
 
 using System;
-using System.Collections;
-using umi3d.cdk;
-//using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BrowserDesktop.UI.CustomElement
+namespace umi3dDesktopBrowser.uI.viewController
 {
     public class DialogueBoxElement : Visual_E
     {
@@ -175,12 +172,12 @@ namespace BrowserDesktop.UI.CustomElement
             messageText = message;
         }
 
-        public override void OnApplyUserPreferences()
-        {
-            if (!Displayed) return;
+        //public override void OnApplyUserPreferences()
+        //{
+        //    if (!Displayed) return;
 
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(title_L, "title", titleText);
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(message_L, "corps", messageText);
-        }
+        //    UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(title_L, "title", titleText);
+        //    UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(message_L, "corps", messageText);
+        //}
     }
 }

@@ -13,15 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using BrowserDesktop.UI;
-using BrowserDesktop.UI.GenericElement;
-using DesktopBrowser.UI.GenericElement;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace DesktopBrowser.UI.CustomElement
+namespace umi3dDesktopBrowser.uI.viewController
 {
     /// <summary>
     /// A ToolboxScrollView has two buttons (previous and next) and a scrollView to contain toolboxes.

@@ -14,13 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
+using System.Collections.Generic;
+using umi3dDesktopBrowser.uI.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEngine.Events;
-using System.Collections.Generic;
-using System;
-using System.Collections;
-using BrowserDesktop.UI.GenericElement;
 
 namespace BrowserDesktop.Menu
 {
@@ -185,7 +183,7 @@ namespace BrowserDesktop.Menu
         /// </summary>
         public void ClearShortcut()
         {
-            Action<UI.Visual_E> removeVEFromHierarchy = (vE) => vE.Remove();
+            Action<Visual_E> removeVEFromHierarchy = (vE) => vE.Remove();
 
             ShortcutIcon_ge_DisplayedList.ForEach(removeVEFromHierarchy);
             ShortcutIcon_ge_WaitedList.AddRange(ShortcutIcon_ge_DisplayedList);

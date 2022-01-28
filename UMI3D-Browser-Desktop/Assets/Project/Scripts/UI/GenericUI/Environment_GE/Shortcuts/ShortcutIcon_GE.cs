@@ -17,7 +17,7 @@ limitations under the License.
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BrowserDesktop.UI.GenericElement
+namespace umi3dDesktopBrowser.uI.viewController
 {
     public class ShortcutIcon_GE : Visual_E
     {
@@ -87,12 +87,12 @@ namespace BrowserDesktop.UI.GenericElement
             return this;
         }
 
-        public override void OnApplyUserPreferences()
-        {
-            if (!Displayed) return;
+        //public override void OnApplyUserPreferences()
+        //{
+        //    if (!Displayed) return;
 
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(this, (iconType == IconType.MOUSE) ? $"shortcut-{IconType.MOUSE}" : $"shortcut-KEY", width: iconWidthPX, height: iconHeightPX);
-        }
+        //    UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(this, (iconType == IconType.MOUSE) ? $"shortcut-{IconType.MOUSE}" : $"shortcut-KEY", width: iconWidthPX, height: iconHeightPX);
+        //}
 
 
     }

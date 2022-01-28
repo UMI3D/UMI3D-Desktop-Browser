@@ -20,7 +20,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
-namespace BrowserDesktop.UI.GenericElement
+namespace umi3dDesktopBrowser.uI.viewController
 {
     public class ShortcutGenericElement : Visual_E
     {
@@ -176,12 +176,12 @@ namespace BrowserDesktop.UI.GenericElement
             //shortcutName_L.style.width = StyleKeyword.Auto; //Unset the shortcut name width.
         }
 
-        public override void OnApplyUserPreferences()
-        {
-            if (!Displayed) return;
+        //public override void OnApplyUserPreferences()
+        //{
+        //    if (!Displayed) return;
 
-            iconsLayout_VE.style.width = StyleKeyword.Auto; //Unset the icons area width.
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(shortcutName_L, "label", shortcutNameText);
-        }
+        //    iconsLayout_VE.style.width = StyleKeyword.Auto; //Unset the icons area width.
+        //    UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(shortcutName_L, "label", shortcutNameText);
+        //}
     }
 }

@@ -16,7 +16,7 @@ limitations under the License.
 
 using UnityEngine.UIElements;
 
-namespace BrowserDesktop.UI.CustomElement
+namespace umi3dDesktopBrowser.uI.viewController
 {
     public class BottomBar_E : Visual_E
     {

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 using BrowserDesktop.Controller;
-using BrowserDesktop.UI.CustomElement;
+using umi3dDesktopBrowser.uI.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
 

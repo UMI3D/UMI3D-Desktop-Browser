@@ -13,13 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using BrowserDesktop.UI;
 using System;
 using umi3DBrowser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace DesktopBrowser.UI.GenericElement
+namespace umi3dDesktopBrowser.uI.viewController
 {
     /// <summary>
     /// A button is a clickable area. It can have an icon or/and a label.

@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using umi3DBrowser.UICustomStyle;
-using DesktopBrowser.UI.CustomElement;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Events;
+using BrowserDesktop.UserPreferences;
 
-namespace BrowserDesktop.UI
+namespace umi3dDesktopBrowser.uI.viewController
 {
     public partial class Visual_E : ICustomElement
     {
@@ -51,7 +51,7 @@ namespace BrowserDesktop.UI
         public virtual void AddTo(VisualElement parent)
         {
             if (!Initialized) 
-                throw new System.Exception($"VisualElement Added without being Initialized.");
+                throw new Exception($"VisualElement Added without being Initialized.");
             if (parent == null)
                 throw new Exception($"Try to Add [{Root}] to a parent null.");
             parent.Add(Root);
@@ -136,7 +136,7 @@ namespace BrowserDesktop.UI
 
         protected virtual void Initialize() 
         {
-            m_globalPref = UserPreferences.UserPreferences.GlobalPref;
+            m_globalPref = UserPreferences.GlobalPref;
             m_globalPref.ApplyCustomStyle.AddListener(ApplyAllFormatAndStyle);
         }
 
@@ -217,7 +217,7 @@ namespace BrowserDesktop.UI
     public partial class Visual_E
     {
         protected UIElementStyleApplicator m_uIElementStyleApplicator = new UIElementStyleApplicator();
-        protected UserPreferences.GlobalPreferences_SO m_globalPref;
+        protected GlobalPreferences_SO m_globalPref;
 
         public class FormatAndStyleKeys
         {
