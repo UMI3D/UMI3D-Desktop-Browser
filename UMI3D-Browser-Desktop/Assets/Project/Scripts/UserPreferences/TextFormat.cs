@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BrowserDesktop.UserPreferences
+namespace BrowserDesktop.preferences
 {
     [System.Serializable]
     public partial class TextFormat

@@ -18,7 +18,7 @@ using umi3DBrowser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace BrowserDesktop.UserPreferences
+namespace BrowserDesktop.preferences
 {
     public partial class UserPreferences : umi3d.common.PersistentSingleton<UserPreferences>
     {
@@ -45,45 +45,6 @@ namespace BrowserDesktop.UserPreferences
             base.Awake();
 
             textAndIconPref.Load();
-        }
-
-        [ContextMenu("Apply User Pref")]
-        private void ApplyUserPref()
-        {
-            OnApplyUserPreferences.Invoke();
-        }
-
-    }
-
-    public partial class UserPreferences
-    {
-        private UnityEvent m_themeUpdate = new UnityEvent();
-
-        public static void AddThemeUpdateListener(UnityAction call)
-        {
-            Instance.m_themeUpdate.AddListener(call);
-        }
-        public static void RemoveThemeUpdateListener(UnityAction call)
-        {
-            Instance.m_themeUpdate.RemoveListener(call);
-        }
-    }
-
-    public partial class UserPreferences
-    {
-        [SerializeField]
-        private CustomStyleDictionary_SO[] m_customStyleDictionaries;
-
-        public static CustomStyle_SO GetCustomStyle(string key)
-        {
-            key = key.ToLower();
-            string[] subKeys = key.Split('-');
-            foreach (CustomStyleDictionary_SO customStyleDictionary in Instance.m_customStyleDictionaries)
-            {
-                if (customStyleDictionary.Key == subKeys[0])
-                    return customStyleDictionary.GetCustomStyle(key);
-            }
-            throw new KeyNotFoundException(subKeys[0], "UserPreferences");
         }
     }
 }

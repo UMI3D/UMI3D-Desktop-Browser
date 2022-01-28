@@ -18,7 +18,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BrowserDesktop.UserPreferences
+namespace BrowserDesktop.preferences
 {
     [CreateAssetMenu(fileName = "IconPreferences", menuName = "ScriptableObjects/UserPreferences/IconPreferences")]
     public class IconPreferences_SO : ScriptableObject

@@ -13,18 +13,23 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using BrowserDesktop.preferences;
 using umi3DBrowser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.uI.viewController
 {
-    public class UIElementStyleApplicator
+    public  partial class UIElementStyleApplicator
+    {
+        protected GlobalPreferences_SO m_globalPref;
+    }
+
+    public partial class UIElementStyleApplicator
     {
         public virtual StyleLength GetPxAndPourcentageFloatLength(CustomStyleSize customStyle, float zoomCoef)
         {
             StyleLength lenght = new StyleLength();
-            float floatLenght = -1;
             switch (customStyle.Keyword)
             {
                 case CustomStyleSizeKeyword.Undefined:
@@ -34,12 +39,11 @@ namespace umi3dDesktopBrowser.uI.viewController
                     lenght.keyword = StyleKeyword.Auto;
                     break;
                 case CustomStyleSizeKeyword.CustomResizable:
-                    floatLenght = customStyle.Value * zoomCoef;
-                    lenght = floatLenght;
+                    lenght = customStyle.Value * zoomCoef;
                     lenght.keyword = StyleKeyword.Undefined;
                     break;
                 case CustomStyleSizeKeyword.CustomUnresizabe:
-                    floatLenght = customStyle.Value;
+                    float floatLenght = customStyle.Value;
                     lenght = (customStyle.ValueMode == CustomStyleSizeMode.Px) ? floatLenght : Length.Percent(floatLenght);
                     lenght.keyword = StyleKeyword.Undefined;
                     break;

@@ -15,7 +15,7 @@ limitations under the License.
 */
 using UnityEngine;
 
-namespace BrowserDesktop.UserPreferences.Theme
+namespace BrowserDesktop.preferences.Theme
 {
     [CreateAssetMenu(fileName = "Theme", menuName = "UMI3D/Theme", order = 2)]
     public class ThemeInstance : ScriptableObject

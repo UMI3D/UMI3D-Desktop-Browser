@@ -15,7 +15,7 @@ limitations under the License.
 */
 using UnityEngine;
 
-namespace BrowserDesktop.UserPreferences.Theme
+namespace BrowserDesktop.preferences.Theme
 {
     public class Theme : umi3d.common.PersistentSingleton<Theme>
     {

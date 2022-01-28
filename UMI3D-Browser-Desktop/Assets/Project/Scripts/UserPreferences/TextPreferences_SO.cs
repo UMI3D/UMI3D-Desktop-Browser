@@ -19,7 +19,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BrowserDesktop.UserPreferences
+namespace BrowserDesktop.preferences
 {
     [CreateAssetMenu(fileName = "TextPreferences", menuName = "ScriptableObjects/UserPreferences/TextPreferences")]
     public class TextPreferences_SO : ScriptableObject

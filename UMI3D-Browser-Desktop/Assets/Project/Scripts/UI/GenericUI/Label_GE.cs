@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using BrowserDesktop.UserPreferences;
+using BrowserDesktop.preferences;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.uI.viewController

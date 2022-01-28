@@ -18,7 +18,7 @@ using umi3DBrowser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace BrowserDesktop.UserPreferences
+namespace BrowserDesktop.preferences
 {
     [CreateAssetMenu(fileName = "GlobalPreferences", menuName = "ScriptableObjects/UserPreferences/GlobalPreferences")]
     public class GlobalPreferences_SO : ScriptableObject
