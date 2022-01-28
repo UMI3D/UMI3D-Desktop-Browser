@@ -48,6 +48,8 @@ namespace DesktopBrowser.UI.GenericElement
 
     public partial class Button_GE
     {
+        public Button_GE(VisualElement visual) :
+            base(visual, null, null) { }
         public Button_GE(VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : 
             base(visual, styleResourcePath, formatAndStyleKeys) { }
         public Button_GE(string visualResourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) :
@@ -60,7 +62,7 @@ namespace DesktopBrowser.UI.GenericElement
             m_iconOnKey = iconOnKey;
             m_iconOffKey = iconOffKey;
             m_currentIconKey = isOn ? m_iconOnKey : m_iconOffKey;
-            AddVisualStyle(icon, style_SO, m_currentIconKey);
+            AddVisualStyle(icon, style_SO, m_currentIconKey, false);
             m_icon = icon;
             return this;
         }
@@ -72,7 +74,7 @@ namespace DesktopBrowser.UI.GenericElement
             m_labelOnKey = labelOnKey;
             m_labelOffKey = labelOffKey;
             m_currentLabelKey = isOn ? m_iconOnKey : m_iconOffKey;
-            AddVisualStyle(label, style_SO, m_currentLabelKey);
+            AddVisualStyle(label, style_SO, m_currentLabelKey, false);
             m_label = label;
             return this;
         }
