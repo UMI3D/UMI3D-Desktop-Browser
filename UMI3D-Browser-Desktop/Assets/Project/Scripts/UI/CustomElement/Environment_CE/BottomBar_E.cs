@@ -40,10 +40,5 @@ namespace umi3dDesktopBrowser.uI.viewController
 
             return this;
         }
-
-        public override void OnApplyUserPreferences()
-        {
-            
-        }
     }
 }

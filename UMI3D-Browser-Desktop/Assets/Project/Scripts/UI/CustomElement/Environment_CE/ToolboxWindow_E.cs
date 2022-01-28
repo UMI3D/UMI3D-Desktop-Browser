@@ -32,7 +32,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             base(parent, 
                 "UI/UXML/ToolboxWindow/ToolboxWindow", 
                 $"{m_partialStylePath}/toolboxWindow-window", 
-                new FormatAndStyleKeys()) { }
+                new StyleKeys()) { }
     }
 
     public partial class ToolboxWindow_E
@@ -53,31 +53,31 @@ namespace umi3dDesktopBrowser.uI.viewController
 
             AddVisualStyle(Root.Q("icon"), 
                 $"{m_partialStylePath}/Icon", 
-                new FormatAndStyleKeys(null, null, "", null));
+                new StyleKeys(null, null, "", null));
             AddVisualStyle(Root.Q<Label>("windowName"), 
                 $"{m_partialStylePath}/WindowName", 
-                new FormatAndStyleKeys("Toolbox", "", "", null));
+                new StyleKeys("Toolbox", "", "", null));
             new Button_GE(Root.Q("closeButton"), $"{m_partialStylePath}/closeButton", null)
             {
                 OnClicked = () => { OnCloseButtonPressed(); }
             }.SetIcon(Root.Q("closeButton"), 
             $"{m_partialStylePath}/closeButton", 
-            new FormatAndStyleKeys(null, null, "", null), 
-            new FormatAndStyleKeys(null, null, "", null));
+            new StyleKeys(null, null, "", null), 
+            new StyleKeys(null, null, "", null));
 
             m_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"), null, null)
                 .SetVerticalDraggerContainerStyle($"{m_partialStylePath}/DraggerContainer", 
-                new FormatAndStyleKeys(null, null, "", null))
+                new StyleKeys(null, null, "", null))
                 .SetVerticalDraggerStyle($"{m_partialStylePath}/Dragger",
-                new FormatAndStyleKeys(null, null, "", null));
+                new StyleKeys(null, null, "", null));
 
             new Button_GE(Root.Q("unpinnedButton"), $"{m_partialStylePath}/UnpinnedButton", null)
             {
                 OnClicked = () => { UnPinedButtonPressed.Invoke(); },
             }.SetIcon(Root.Q("unpinnedButton"),
             $"{m_partialStylePath}/UnpinnedButton", 
-            new FormatAndStyleKeys(null, null, "", null),
-            new FormatAndStyleKeys(null, null, "", null));
+            new StyleKeys(null, null, "", null),
+            new StyleKeys(null, null, "", null));
         }
     }
 }

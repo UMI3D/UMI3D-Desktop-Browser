@@ -22,14 +22,30 @@ namespace umi3dDesktopBrowser.uI.viewController
     /// </summary>
     public partial class ToolboxItem_E : Button_GE
     {
-        public ToolboxItem_E(FormatAndStyleKeys iconOnKeys, FormatAndStyleKeys iconOffKeys, string itemName) : 
-            base("UI/UXML/Toolbox/ToolboxItem", null, null) 
+        private const string m_partialStylePath = "UI/Style/Toolbox";
+    }
+
+    public partial class ToolboxItem_E : Button_GE
+    {
+        public ToolboxItem_E(StyleKeys iconKeys, string itemName) :
+            base("UI/UXML/Toolbox/toolboxItem", null, null)
         {
-            SetIcon(Root.Q<VisualElement>("icon"), "UI/Style/Toolbox/ToolboxItemIcon", iconOnKeys, iconOffKeys);
-            SetLabel(Root.Q<Label>("label"), 
-                "UI/Style/Toolbox/ToolboxItemLabel", 
-                new FormatAndStyleKeys(itemName, "", "", ""),
-                new FormatAndStyleKeys(itemName, "", "", ""));
+            SetIcon(Root.Q<VisualElement>("icon"), 
+                $"{m_partialStylePath}/ToolboxItemIcon", 
+                iconKeys);
+            SetLabel(Root.Q<Label>("label"),
+                $"{m_partialStylePath}/ToolboxItemLabel",
+                new StyleKeys(itemName, "", "", ""),
+                new StyleKeys(itemName, "", "", ""));
+        }
+        public ToolboxItem_E(StyleKeys iconOnKeys, StyleKeys iconOffKeys, string itemName) : 
+            base("UI/UXML/Toolbox/toolboxItem", null, null) 
+        {
+            SetIcon(Root.Q<VisualElement>("icon"), $"{m_partialStylePath}/ToolboxItemIcon", iconOnKeys, iconOffKeys);
+            SetLabel(Root.Q<Label>("label"),
+                $"{m_partialStylePath}/ToolboxItemLabel", 
+                new StyleKeys(itemName, "", "", ""),
+                new StyleKeys(itemName, "", "", ""));
         }
 
         #region Setup

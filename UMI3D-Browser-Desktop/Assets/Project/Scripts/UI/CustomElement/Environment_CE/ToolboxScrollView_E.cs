@@ -186,11 +186,5 @@ namespace umi3dDesktopBrowser.uI.viewController
 
             DisplayButtons(false);
         }
-
-        public override void OnApplyUserPreferences()
-        {
-            if (!Displayed)
-                return;
-        }
     }
 }
