@@ -1,14 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
+/*
+Copyright 2019 - 2021 Inetum
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace DesktopBrowser.UI.CustomElement
+namespace umi3dDesktopBrowser.uI.viewController
 {
     public interface ICustomElement
     {
-        //public string RootStyleSOKey { get; }
-        //public string CustomStyleBackgroundKey { get; }
         /// <summary>
         /// Visual root of this custom element.
         /// </summary>
@@ -31,17 +42,6 @@ namespace DesktopBrowser.UI.CustomElement
         /// Layout of this visual.
         /// </summary>
         public Rect RootLayout { get; }
-
-        ///// <summary>
-        ///// Clone and add the visualTreeAsset to this and Initialize.
-        ///// </summary>
-        ///// <param name="visualTA"></param>
-        //public void Init(VisualTreeAsset visualTA, string customStyleKey, string customStyleBackgroundKey = "");
-        ///// <summary>
-        ///// Add root to this and Initialize.
-        ///// </summary>
-        ///// <param name="root"></param>
-        //public void Init(VisualElement root, string customStyleKey, string customStyleBackgroundKey = "");
         /// <summary>
         /// Reset this.
         /// </summary>
@@ -55,15 +55,6 @@ namespace DesktopBrowser.UI.CustomElement
         /// Remove the UIElement from the hierarchy
         /// </summary>
         public void Remove();
-        ///// <summary>
-        ///// Get CustomStyle_SO to apply to this visual.
-        ///// </summary>
-        ///// <returns>True if the customStyle has been retrieve, else false.</returns>
-        //public bool GetCustomStyle();
-        /// <summary>
-        /// Apply user preferences when needed.
-        /// </summary>
-        public void OnApplyUserPreferences();
     }
 
 

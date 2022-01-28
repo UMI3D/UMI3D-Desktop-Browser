@@ -18,7 +18,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BrowserDesktop.UI.GenericElement
+namespace umi3dDesktopBrowser.uI.viewController
 {
     public class ToolboxButtonGenericElement : Visual_E
     {
@@ -155,18 +155,18 @@ namespace BrowserDesktop.UI.GenericElement
             button_B.AddToClassList(currentClass);
         }
 
-        /// <summary>
-        /// Apply user preferences when needed.
-        /// </summary>
-        public override void OnApplyUserPreferences()
-        {
-            if (!Displayed)
-                return;
+        ///// <summary>
+        ///// Apply user preferences when needed.
+        ///// </summary>
+        //public override void OnApplyUserPreferences()
+        //{
+        //    if (!Displayed)
+        //        return;
 
-            buttonName_L.style.width = StyleKeyword.Auto;
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(buttonName_L, "label", buttonNameText);
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(button_B, "square-button", iconClass: currentClass);
-        }
+        //    buttonName_L.style.width = StyleKeyword.Auto;
+        //    UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(buttonName_L, "label", buttonNameText);
+        //    UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(button_B, "square-button", iconClass: currentClass);
+        //}
 
     }
 }

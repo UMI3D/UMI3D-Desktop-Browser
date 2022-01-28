@@ -17,7 +17,7 @@ limitations under the License.
 using BrowserDesktop.UserPreferences;
 using UnityEngine.UIElements;
 
-namespace BrowserDesktop.UI.GenericElement
+namespace umi3dDesktopBrowser.uI.viewController
 {
     public class Label_GE : Visual_E
     {
@@ -55,12 +55,12 @@ namespace BrowserDesktop.UI.GenericElement
             textFormat.SetFormat(label_L, text);
         }
 
-        public override void OnApplyUserPreferences()
-        {
-            if (!Displayed) return;
+        //public override void OnApplyUserPreferences()
+        //{
+        //    if (!Displayed) return;
 
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(label_L, textPref, text);
-            textFormat = UserPreferences.UserPreferences.TextAndIconPref.GetTextFormat(textPref);
-        }
+        //    UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(label_L, textPref, text);
+        //    textFormat = UserPreferences.UserPreferences.TextAndIconPref.GetTextFormat(textPref);
+        //}
     }
 }

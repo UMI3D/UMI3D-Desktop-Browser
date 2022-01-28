@@ -13,21 +13,22 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using BrowserDesktop.UI.GenericElement;
-using umi3d.common;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace DesktopBrowser.UIControllers.Toolbox
+public class TestUI : MonoBehaviour
 {
-    public class Toolboxes_UIController : UIController
+    public UIDocument UIDoc;
+
+    // Start is called before the first frame update
+    void Start()
     {
-        public static ToolboxGenericElement CloneAndSetup(string name)
-        {
-            throw new System.NotImplementedException();
-        }
+        //new ToolboxItem_E(new Form)
     }
 
-    
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
 }
-

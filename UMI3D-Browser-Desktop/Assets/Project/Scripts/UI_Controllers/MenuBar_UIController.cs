@@ -14,11 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using BrowserDesktop.UI.GenericElement;
-using DesktopBrowser.UI.CustomElement;
-using DesktopBrowser.UI.GenericElement;
 using System;
-using UnityEngine;
+using umi3dDesktopBrowser.uI.viewController;
 using UnityEngine.UIElements;
 
 namespace DesktopBrowser.UIControllers

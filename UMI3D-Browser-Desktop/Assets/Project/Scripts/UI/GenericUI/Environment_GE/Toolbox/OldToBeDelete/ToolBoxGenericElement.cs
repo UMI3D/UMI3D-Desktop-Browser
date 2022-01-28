@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BrowserDesktop.UI.GenericElement
+namespace umi3dDesktopBrowser.uI.viewController
 {
     public class ToolboxGenericElement : Visual_E
     {
@@ -102,15 +102,15 @@ namespace BrowserDesktop.UI.GenericElement
             buttons.ForEach((tool) => { tool.Remove(); });
         }
 
-        /// <summary>
-        /// Apply user preferences when needed.
-        /// </summary>
-        public override void OnApplyUserPreferences()
-        {
-            if (!Displayed) return;
+        ///// <summary>
+        ///// Apply user preferences when needed.
+        ///// </summary>
+        //public override void OnApplyUserPreferences()
+        //{
+        //    if (!Displayed) return;
             
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(toolboxName_L, "sub-section", toolboxNameText);
-        }
+        //    UserPreferences.UserPreferences.TextAndIconPref.ApplyTextPref(toolboxName_L, "sub-section", toolboxNameText);
+        //}
 
     }
 }

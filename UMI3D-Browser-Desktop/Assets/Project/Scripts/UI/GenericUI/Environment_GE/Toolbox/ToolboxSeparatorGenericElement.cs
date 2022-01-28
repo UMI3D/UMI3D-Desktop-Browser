@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BrowserDesktop.UI.GenericElement
+namespace umi3dDesktopBrowser.uI.viewController
 {
     public class ToolboxSeparatorGenericElement : Visual_E
     {
@@ -46,11 +46,11 @@ namespace BrowserDesktop.UI.GenericElement
             return this;
         }
 
-        public override void OnApplyUserPreferences()
-        {
-            if (!Displayed) return;
+        //public override void OnApplyUserPreferences()
+        //{
+        //    if (!Displayed) return;
 
-            UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(separator_VE, "separator");
-        }
+        //    UserPreferences.UserPreferences.TextAndIconPref.ApplyIconPref(separator_VE, "separator");
+        //}
     }
 }

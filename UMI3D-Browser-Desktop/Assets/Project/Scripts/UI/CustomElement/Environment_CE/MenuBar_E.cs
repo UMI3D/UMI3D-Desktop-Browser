@@ -15,16 +15,13 @@ limitations under the License.
 */
 
 //using BrowserDesktop.Menu.Environment.Settings;
-using BrowserDesktop.UI;
-using BrowserDesktop.UI.GenericElement;
-using DesktopBrowser.UI.GenericElement;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 
-namespace DesktopBrowser.UI.CustomElement
+namespace umi3dDesktopBrowser.uI.viewController
 {
     /// <summary>
     /// A menuBar has 3 layout (Tools area, Application settings area and Leave button area).
