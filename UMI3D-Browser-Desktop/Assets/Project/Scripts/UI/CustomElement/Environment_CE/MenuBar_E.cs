@@ -43,7 +43,7 @@ namespace umi3dDesktopBrowser.uI.viewController
     public partial class MenuBar_E
     {
         //public MenuBar_E(VisualTreeAsset visualTA, string customStyleKey) : base(visualTA, customStyleKey) { }
-        public MenuBar_E(VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : 
+        public MenuBar_E(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys) : 
             base(visual, styleResourcePath, formatAndStyleKeys) { }
 
         public MenuBar_E AddLeft(params Visual_E[] ces)
@@ -121,12 +121,6 @@ namespace umi3dDesktopBrowser.uI.viewController
             };
             rightLayout_VE = Root.Q<VisualElement>("Right-layout");
             //SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
-        }
-
-        public override void OnApplyUserPreferences()
-        {
-            if (!Displayed)
-                return;
         }
     }
 }

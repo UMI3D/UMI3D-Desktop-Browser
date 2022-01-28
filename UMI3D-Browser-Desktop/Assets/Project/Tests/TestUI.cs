@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using umi3dDesktopBrowser.uI.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -20,13 +21,12 @@ public class TestUI : MonoBehaviour
 {
     public UIDocument UIDoc;
 
-    // Start is called before the first frame update
     void Start()
     {
-        //new ToolboxItem_E(new Form)
+        var item = new ToolboxItem_E(new StyleKeys( "Toolbox", null), "Toolbox");
+        item.AddTo(UIDoc.rootVisualElement);
     }
 
-    // Update is called once per frame
     void Update()
     {
         

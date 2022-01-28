@@ -65,13 +65,6 @@ namespace umi3dDesktopBrowser.uI.viewController
             this.RemoveFromHierarchy();
             AttachedToHierarchy = false;
         }
-
-
-
-
-
-
-        public virtual void OnApplyUserPreferences() { }
     }
 
     public partial class Visual_E
@@ -82,33 +75,33 @@ namespace umi3dDesktopBrowser.uI.viewController
             if (visual == null) throw new NullReferenceException($"visual is null");
             Init(null, visual, null, null);
         }
-        public Visual_E(VisualElement parent, VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : this()
+        public Visual_E(VisualElement parent, VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys) : this()
         {
             if (parent == null) throw new NullReferenceException($"parent is null");
             if (visual == null) throw new NullReferenceException($"visual is null");
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             Init(parent, visual, style_SO, formatAndStyleKeys);
         }
-        public Visual_E(VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : this()
+        public Visual_E(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys) : this()
         {
             if (visual == null) throw new NullReferenceException($"visual is null");
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             Init(null, visual, style_SO, formatAndStyleKeys);
         }
-        public Visual_E(string visualResourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : this()
+        public Visual_E(string visualResourcePath, string styleResourcePath, StyleKeys formatAndStyleKeys) : this()
         {
             VisualElement visual = GetVisualRoot(visualResourcePath);
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             Init(null, visual, style_SO, formatAndStyleKeys);
         }
-        public Visual_E(VisualElement parent, string visualResourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : this()
+        public Visual_E(VisualElement parent, string visualResourcePath, string styleResourcePath, StyleKeys formatAndStyleKeys) : this()
         {
             if (parent == null) throw new NullReferenceException($"parent is null");
             VisualElement visual = GetVisualRoot(visualResourcePath);
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             Init(parent, visual, style_SO, formatAndStyleKeys);
         }
-        public Visual_E(VisualElement parent, VisualElement visual, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys) : this()
+        public Visual_E(VisualElement parent, VisualElement visual, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys) : this()
         {
             if (parent == null) throw new NullReferenceException($"parent is null");
             if (visual == null) throw new NullReferenceException($"visual is null");
@@ -124,10 +117,12 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class Visual_E
     {
-        protected void Init(VisualElement parent, VisualElement visual, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys)
+        protected void Init(VisualElement parent, VisualElement visual, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys)
         {
             if (Initialized) Reset();
             Initialized = true;
+            m_visuals = new List<VisualElement>();
+            m_visualStyles = new Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, UnityAction, EventCallback<MouseOverEvent>, EventCallback<MouseOutEvent>, EventCallback<MouseCaptureEvent>, EventCallback<MouseUpEvent>)>();
             this.Root = visual;
             AddVisualStyle(Root, style_SO, formatAndStyleKeys);
             if (parent != null) AddTo(parent);
@@ -164,53 +159,6 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected virtual void ReadyToDisplay()
         {
             Displayed = true;
-            OnApplyUserPreferences();
-        }
-    }
-
-    public partial class Visual_E
-    {
-        protected enum MousePressedState
-        {
-            Unpressed,
-            Pressed
-        }
-        protected enum MousePositionState
-        {
-            Out,
-            Over
-        }
-
-        protected (MousePressedState, MousePositionState) m_mouseState { get; set; }
-        protected MouseBehaviour m_mouseBehaviourFromState
-        {
-            get
-            {
-                return m_mouseState switch
-                {
-                    (MousePressedState.Unpressed, MousePositionState.Out) => MouseBehaviour.MouseOut,
-                    (MousePressedState.Unpressed, MousePositionState.Over) => MouseBehaviour.MouseOver,
-                    _ => MouseBehaviour.MousePressed
-                };
-            }
-        }
-
-        protected virtual void OnMouseOver(MouseOverEvent e, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
-            => MouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Over), style_SO, formatAndStyleKeys, style, stopPropagation);
-        protected virtual void OnMouseOut(MouseOutEvent e, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
-            => MouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Out), style_SO, formatAndStyleKeys, style, stopPropagation);
-        protected virtual void OnMouseDown(MouseCaptureEvent e, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
-            => MouseBehaviourChanged(e, (MousePressedState.Pressed, m_mouseState.Item2), style_SO, formatAndStyleKeys, style, stopPropagation);
-        protected virtual void OnMouseUp(MouseUpEvent e, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
-        {
-            if (e.button != 0) return;
-            MouseBehaviourChanged(e, (MousePressedState.Unpressed, m_mouseState.Item2), style_SO, formatAndStyleKeys, style, stopPropagation);
-        }
-        protected void MouseBehaviourChanged(EventBase e, (MousePressedState, MousePositionState) mouseState, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
-        {
-            m_mouseState = mouseState;
-            ApplyStyle(style_SO, formatAndStyleKeys, style, m_mouseBehaviourFromState);
-            if (stopPropagation) e.StopPropagation();
         }
     }
 
@@ -219,86 +167,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected UIElementStyleApplicator m_uIElementStyleApplicator = new UIElementStyleApplicator();
         protected GlobalPreferences_SO m_globalPref;
 
-        public class FormatAndStyleKeys
-        {
-            public string Text { get; set; } = null;
-            public string TextStyleKey { get; set; } = null;
-            public string BackgroundStyleKey { get; set; } = null;
-            public string BorderStyleKey { get; set; } = null;
-
-            public FormatAndStyleKeys() { }
-            public FormatAndStyleKeys(string text, string textStyle, string backgroundStyle, string borderStyle)
-            {
-                Text = text;
-                TextStyleKey = textStyle;
-                BackgroundStyleKey = backgroundStyle;
-                BorderStyleKey = borderStyle;
-            }
-        }
-
-        protected List<VisualElement> m_visuals;
-        protected Dictionary<VisualElement, (CustomStyle_SO, FormatAndStyleKeys, UnityAction, EventCallback<MouseOverEvent>, EventCallback<MouseOutEvent>, EventCallback<MouseCaptureEvent>, EventCallback<MouseUpEvent>)> m_visualStyles;
-
-        protected void AddVisualStyle(VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys, bool stopPropagation = true)
-            => AddVisualStyle(visual, GetStyleSO(styleResourcePath), formatAndStyleKeys, stopPropagation);
-        protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, bool stopPropagation = true)
-        {
-            if (m_visuals.Contains(visual)) return;
-            m_visuals.Add(visual);
-            UnityAction ApplyFormatAndStyleAction = () => 
-            { 
-                ApplyFormatAndStyle(style_SO, formatAndStyleKeys, visual.style, m_mouseBehaviourFromState); 
-            };
-            EventCallback<MouseOverEvent> mouseOver = (e) =>
-            {
-                OnMouseOver(e, style_SO, formatAndStyleKeys, visual.style, stopPropagation);
-            };
-            EventCallback<MouseOutEvent> mouseOut = (e) =>
-            {
-                OnMouseOut(e, style_SO, formatAndStyleKeys, visual.style, stopPropagation);
-            };
-            EventCallback<MouseCaptureEvent> mouseDown = (e) =>
-            {
-                OnMouseDown(e, style_SO, formatAndStyleKeys, visual.style, stopPropagation);
-            };
-            EventCallback<MouseUpEvent> mouseUp = (e) =>
-            {
-                OnMouseUp(e, style_SO, formatAndStyleKeys, visual.style, stopPropagation);
-            };
-            style_SO.AppliesFormatAndStyle.AddListener(ApplyFormatAndStyleAction);
-            visual.RegisterCallback(mouseOver);
-            visual.RegisterCallback(mouseOut);
-            visual.RegisterCallback(mouseDown);
-            visual.RegisterCallback(mouseUp);
-            m_visualStyles.Add(visual, (style_SO, formatAndStyleKeys, ApplyFormatAndStyleAction, mouseOver, mouseOut, mouseDown, mouseUp));
-        }
-
-        protected void UpdateVisualStyle(VisualElement visual, FormatAndStyleKeys newFormatAndStyleKeys)
-        {
-            if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
-            if (newFormatAndStyleKeys == null) throw new NullReferenceException("FormatAnStyleKeys is null.");
-            var (style_SO, formatAndStyleKeys, _, _, _, _, _) = m_visualStyles[visual];
-            formatAndStyleKeys.Text = newFormatAndStyleKeys.Text;
-            formatAndStyleKeys.TextStyleKey = newFormatAndStyleKeys.TextStyleKey;
-            formatAndStyleKeys.BackgroundStyleKey = newFormatAndStyleKeys.BackgroundStyleKey;
-            formatAndStyleKeys.BorderStyleKey = newFormatAndStyleKeys.BorderStyleKey;
-            ApplyFormatAndStyle(style_SO, formatAndStyleKeys, visual.style, m_mouseBehaviourFromState);
-        }
-
-        protected void ResetAllVisualStyle()
-        {
-            foreach (VisualElement visual in m_visuals)
-            {
-                var (style, _, ApplyFormatAndStyleAction, mouseOver, mouseOut, mouseDown, mouseUp) = m_visualStyles[visual];
-                style.AppliesFormatAndStyle.RemoveListener(ApplyFormatAndStyleAction);
-                visual.UnregisterCallback(mouseOver);
-                visual.UnregisterCallback(mouseOut);
-                visual.UnregisterCallback(mouseDown);
-                visual.UnregisterCallback(mouseUp);
-            }
-            m_visuals.Clear();
-            m_visualStyles.Clear();
-        }
+        
 
         public virtual void ApplyAllFormatAndStyle()
         {
@@ -306,7 +175,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             ApplyAllStyle();
         }
 
-        protected void ApplyFormatAndStyle(CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, MouseBehaviour mouseBehaviour)
+        protected void ApplyFormatAndStyle(CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, IStyle style, MouseBehaviour mouseBehaviour)
         {
             if (style_SO == null) return;
             ApplyFormat(style_SO, formatAndStyleKeys, style);
@@ -324,7 +193,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             }
         }
 
-        protected void ApplyFormat(CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style)
+        protected void ApplyFormat(CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, IStyle style)
         {
             ApplySize(style_SO, style);
             ApplyMarginAndPadding(style_SO, style);
@@ -380,7 +249,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             }
         }
 
-        protected void ApplyStyle(CustomStyle_SO styleSO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, MouseBehaviour mouseBehaviour)
+        protected void ApplyStyle(CustomStyle_SO styleSO, StyleKeys formatAndStyleKeys, IStyle style, MouseBehaviour mouseBehaviour)
         {
             if (styleSO == null || formatAndStyleKeys == null) return;
             ApplyTextStyle(styleSO, formatAndStyleKeys.TextStyleKey, style, mouseBehaviour);

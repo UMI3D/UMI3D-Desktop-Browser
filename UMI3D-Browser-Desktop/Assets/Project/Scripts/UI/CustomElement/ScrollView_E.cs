@@ -85,20 +85,20 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class ScrollView_E
     {
-        public ScrollView_E(VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : 
+        public ScrollView_E(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys) : 
             base(visual, styleResourcePath, formatAndStyleKeys) { }
-        public ScrollView_E(string visualResourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) :
+        public ScrollView_E(string visualResourcePath, string styleResourcePath, StyleKeys formatAndStyleKeys) :
             base(visualResourcePath, styleResourcePath, formatAndStyleKeys) { }
-        public ScrollView_E(VisualElement parent, string visualResourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : 
+        public ScrollView_E(VisualElement parent, string visualResourcePath, string styleResourcePath, StyleKeys formatAndStyleKeys) : 
             base(parent, visualResourcePath, styleResourcePath, formatAndStyleKeys) { }
 
-        public ScrollView_E SetDraggerContainerStyle(string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys)
+        public ScrollView_E SetDraggerContainerStyle(string styleResourcePath, StyleKeys formatAndStyleKeys)
         {
             new Visual_E(m_verticalSlider, styleResourcePath, formatAndStyleKeys);
             new Visual_E(m_horizontalSlider, styleResourcePath, formatAndStyleKeys);
             return this;
         }
-        public ScrollView_E SetVerticalDraggerContainerStyle(string customStyleKey, FormatAndStyleKeys formatAndStyleKeys)
+        public ScrollView_E SetVerticalDraggerContainerStyle(string customStyleKey, StyleKeys formatAndStyleKeys)
         {
             //new Icon_E(m_verticalScroller, customStyleKey, null);
             new Visual_E(m_verticalScroller, customStyleKey, formatAndStyleKeys);
@@ -106,24 +106,24 @@ namespace umi3dDesktopBrowser.uI.viewController
             //new Icon_E(m_verticalSlider, customStyleKey, customStyleBackgroundKey);
             return this;
         }
-        public ScrollView_E SetHorizontalDraggerContainerStyle(string customStyleKey, FormatAndStyleKeys formatAndStyleKeys)
+        public ScrollView_E SetHorizontalDraggerContainerStyle(string customStyleKey, StyleKeys formatAndStyleKeys)
         {
             new Visual_E(m_horizontalDraggerContainer, customStyleKey, formatAndStyleKeys);
             return this;
         }
 
-        public ScrollView_E SetDraggerStyle(string customStyleKey, FormatAndStyleKeys formatAndStyleKeys)
+        public ScrollView_E SetDraggerStyle(string customStyleKey, StyleKeys formatAndStyleKeys)
         {
             new Visual_E(m_verticalDragger, customStyleKey, formatAndStyleKeys);
             new Visual_E(m_horizontalDragger, customStyleKey, formatAndStyleKeys);
             return this;
         }
-        public ScrollView_E SetVerticalDraggerStyle(string customStyleKey, FormatAndStyleKeys formatAndStyleKeys)
+        public ScrollView_E SetVerticalDraggerStyle(string customStyleKey, StyleKeys formatAndStyleKeys)
         {
             new Visual_E(m_verticalDragger, customStyleKey, formatAndStyleKeys);
             return this;
         }
-        public ScrollView_E SetHorizontalDraggerStyle(string customStyleKey, FormatAndStyleKeys formatAndStyleKeys)
+        public ScrollView_E SetHorizontalDraggerStyle(string customStyleKey, StyleKeys formatAndStyleKeys)
         {
             new Visual_E(m_horizontalDragger, customStyleKey, formatAndStyleKeys);
             return this;

@@ -37,27 +37,28 @@ namespace umi3dDesktopBrowser.uI.viewController
         private Button m_button = null;
         private VisualElement m_icon = null;
         private VisualElement m_label = null;
-        private FormatAndStyleKeys m_iconOnKey = null;
-        private FormatAndStyleKeys m_iconOffKey = null;
-        private FormatAndStyleKeys m_currentIconKey = null;
-        private FormatAndStyleKeys m_labelOnKey = null;
-        private FormatAndStyleKeys m_labelOffKey = null;
-        private FormatAndStyleKeys m_currentLabelKey = null;
+        private StyleKeys m_iconOnKey = null;
+        private StyleKeys m_iconOffKey = null;
+        private StyleKeys m_currentIconKey = null;
+        private StyleKeys m_labelOnKey = null;
+        private StyleKeys m_labelOffKey = null;
+        private StyleKeys m_currentLabelKey = null;
     }
 
     public partial class Button_GE
     {
         public Button_GE(VisualElement visual) :
             base(visual, null, null) { }
-        public Button_GE(VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) : 
+        public Button_GE(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys) : 
             base(visual, styleResourcePath, formatAndStyleKeys) { }
-        public Button_GE(string visualResourcePath, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys) :
+        public Button_GE(string visualResourcePath, string styleResourcePath, StyleKeys formatAndStyleKeys) :
             base(visualResourcePath, styleResourcePath, formatAndStyleKeys) { }
 
-        public Button_GE SetIcon(VisualElement icon, string styleResourcePath, FormatAndStyleKeys iconOnKey, FormatAndStyleKeys iconOffKey, bool isOn = false)
+        public Button_GE SetIcon(VisualElement icon, string styleResourcePath, StyleKeys iconOnKey, StyleKeys iconOffKey, bool isOn = false)
         {
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             if (style_SO == null || iconOnKey == null || iconOffKey == null) throw new NullReferenceException($"CustomStyle_SO or iconStyleKeys is null.");
+            IsOn = isOn;
             m_iconOnKey = iconOnKey;
             m_iconOffKey = iconOffKey;
             m_currentIconKey = isOn ? m_iconOnKey : m_iconOffKey;
@@ -65,8 +66,20 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_icon = icon;
             return this;
         }
+        public Button_GE SetIcon(VisualElement icon, string styleResourcePath, StyleKeys iconKey)
+        {
+            CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
+            if (style_SO == null || iconKey == null) throw new NullReferenceException($"CustomStyle_SO or iconStyleKeys is null.");
+            IsOn = true;
+            m_iconOnKey = iconKey;
+            m_iconOffKey = null;
+            m_currentIconKey = m_iconOnKey;
+            AddVisualStyle(icon, style_SO, m_currentIconKey, false);
+            m_icon = icon;
+            return this;
+        }
 
-        public Button_GE SetLabel(VisualElement label, string styleResourcePath, FormatAndStyleKeys labelOnKey, FormatAndStyleKeys labelOffKey, bool isOn = false)
+        public Button_GE SetLabel(VisualElement label, string styleResourcePath, StyleKeys labelOnKey, StyleKeys labelOffKey, bool isOn = false)
         {
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             if (style_SO == null || labelOnKey == null || labelOffKey == null) throw new NullReferenceException($"CustomStyle_SO or iconStyleKeys is null.");
