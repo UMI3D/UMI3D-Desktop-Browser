@@ -16,7 +16,7 @@ limitations under the License.
 using TMPro;
 using UnityEngine.UI;
 
-namespace BrowserDesktop.UserPreferences.Theme
+namespace BrowserDesktop.preferences.Theme
 {
 
     public class PrincipalColorItem : ThemeListener

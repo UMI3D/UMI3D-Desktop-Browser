@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Events;
-using BrowserDesktop.UserPreferences;
+using BrowserDesktop.preferences;
 
 namespace umi3dDesktopBrowser.uI.viewController
 {
@@ -258,55 +258,28 @@ namespace umi3dDesktopBrowser.uI.viewController
         }
 
         protected void ApplyTextStyle(CustomStyle_SO style_SO, string styleKey, IStyle style, MouseBehaviour mouseBehaviour)
-        {
-            if (style_SO == null || styleKey == null) return;
-            UITextStyle textStyle = style_SO.GetTextStyle(null, styleKey);
-            switch (mouseBehaviour)
-            {
-                case MouseBehaviour.MouseOut:
-                    m_uIElementStyleApplicator.AppliesTextStyle(style, textStyle.Default);
-                    break;
-                case MouseBehaviour.MouseOver:
-                    m_uIElementStyleApplicator.AppliesTextStyle(style, textStyle.MouseOver);
-                    break;
-                case MouseBehaviour.MousePressed:
-                    m_uIElementStyleApplicator.AppliesTextStyle(style, textStyle.MousePressed);
-                    break;
-            }
-        }
+            => ApplyAtomStyle(style_SO, style, mouseBehaviour, () => style_SO.GetTextStyle(null, styleKey), m_uIElementStyleApplicator.AppliesTextStyle);
 
         protected void ApplyBackgroundStyle(CustomStyle_SO style_SO, string styleKey, IStyle style, MouseBehaviour mouseBehaviour)
-        {
-            if (style_SO == null) return;
-            UIBackground background = style_SO.GetBackground(null, styleKey);
-            switch (mouseBehaviour)
-            {
-                case MouseBehaviour.MouseOut:
-                    m_uIElementStyleApplicator.AppliesBackground(style, background.Default);
-                    break;
-                case MouseBehaviour.MouseOver:
-                    m_uIElementStyleApplicator.AppliesBackground(style, background.MouseOver);
-                    break;
-                case MouseBehaviour.MousePressed:
-                    m_uIElementStyleApplicator.AppliesBackground(style, background.MousePressed);
-                    break;
-            }
-        }
+            => ApplyAtomStyle(style_SO, style, mouseBehaviour, () => style_SO.GetBackground(null, styleKey), m_uIElementStyleApplicator.AppliesBackground);
 
         protected void ApplyBorderStyle(CustomStyle_SO style_SO, string styleKey, IStyle style, MouseBehaviour mouseBehaviour)
+            => ApplyAtomStyle(style_SO, style, mouseBehaviour, () => style_SO.GetBorder(null, styleKey), m_uIElementStyleApplicator.AppliesBorder);
+
+        protected void ApplyAtomStyle<T>(CustomStyle_SO style_SO, IStyle style, MouseBehaviour mouseBehaviour, Func<ICustomisableByMouseBehaviour<T>> getUIStyle, Action<IStyle, T> styleApplicator)
         {
             if (style_SO == null) return;
-            UIBorder border = style_SO.GetBorder(null, styleKey);
+            ICustomisableByMouseBehaviour<T> uiStyle = getUIStyle();
             switch (mouseBehaviour)
             {
                 case MouseBehaviour.MouseOut:
-                    m_uIElementStyleApplicator.AppliesBorder(style, border.Default);
+                    styleApplicator(style, uiStyle.Default);
                     break;
                 case MouseBehaviour.MouseOver:
-                    m_uIElementStyleApplicator.AppliesBorder(style, border.MouseOver);
+                    styleApplicator(style, uiStyle.MouseOver);
                     break;
                 case MouseBehaviour.MousePressed:
-                    m_uIElementStyleApplicator.AppliesBorder(style, border.MousePressed);
+                    styleApplicator(style, uiStyle.MousePressed);
                     break;
             }
         }

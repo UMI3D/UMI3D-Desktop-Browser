@@ -100,31 +100,19 @@ namespace umi3DBrowser.UICustomStyle
         public UISize UISize => m_size;
         public UIMarginAndPadding UIMarginAndPadding => m_marginAndPadding;
 
-        public UITextStyle GetTextStyle(Theme_SO theme, string key)
+        public ICustomisableByMouseBehaviour<CustomStyleTextStyle> GetTextStyle(Theme_SO theme, string key)
+            => GetStyle(theme, (themeStyle) => themeStyle.GetTextStyle(key));
+        public ICustomisableByMouseBehaviour<CustomStyleBackground> GetBackground(Theme_SO theme, string key)
+            => GetStyle(theme, (themeStyle) => themeStyle.GetBackground(key));
+        public ICustomisableByMouseBehaviour<CustomStyleBorder> GetBorder(Theme_SO theme, string key)
+            => GetStyle(theme, (themeStyle) => themeStyle.GetBorder(key));
+        
+        protected ICustomisableByMouseBehaviour<T> GetStyle<T>(Theme_SO theme, Func<UIThemeStyle, ICustomisableByMouseBehaviour<T>> styleGetter)
         {
             foreach (UIThemeStyle themeStyle in m_themeStyles)
             {
                 if (themeStyle.Theme == theme)
-                    return themeStyle.GetTextStyle(key);
-            }
-            throw new ThemeNotFoundException(theme, this.name);
-        }
-        public UIBackground GetBackground(Theme_SO theme, string key)
-        {
-            foreach (UIThemeStyle themeStyle in m_themeStyles)
-            {
-                if (themeStyle.Theme == theme)
-                    return themeStyle.GetBackground(key);
-            }
-            throw new ThemeNotFoundException(theme, this.name);
-        }
-
-        public UIBorder GetBorder(Theme_SO theme, string key)
-        {
-            foreach (UIThemeStyle themeStyle in m_themeStyles)
-            {
-                if (themeStyle.Theme == theme)
-                    return themeStyle.GetBorder(key);
+                    return styleGetter(themeStyle);
             }
             throw new ThemeNotFoundException(theme, this.name);
         }
