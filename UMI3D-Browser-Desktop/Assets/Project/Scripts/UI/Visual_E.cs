@@ -42,10 +42,7 @@ namespace BrowserDesktop.UI
         public Rect RootLayout { get => Root.layout; }
         public virtual void Reset()
         {
-            Root.UnregisterCallback<MouseOverEvent>(OnMouseOver);
-            Root.UnregisterCallback<MouseOutEvent>(OnMouseOut);
-            Root.UnregisterCallback<MouseCaptureEvent>(OnMouseDown);
-            Root.UnregisterCallback<MouseUpEvent>(OnMouseUp);
+            ResetAllVisualStyle();
             this.Root = null;
             m_globalPref.ApplyCustomStyle.RemoveListener(ApplyAllFormatAndStyle);
             m_globalPref = null;
@@ -139,11 +136,6 @@ namespace BrowserDesktop.UI
 
         protected virtual void Initialize() 
         {
-            Root.RegisterCallback<MouseOverEvent>(OnMouseOver);
-            Root.RegisterCallback<MouseOutEvent>(OnMouseOut);
-            Root.RegisterCallback<MouseCaptureEvent>(OnMouseDown);
-            Root.RegisterCallback<MouseUpEvent>(OnMouseUp);
-
             m_globalPref = UserPreferences.UserPreferences.GlobalPref;
             m_globalPref.ApplyCustomStyle.AddListener(ApplyAllFormatAndStyle);
         }
@@ -203,28 +195,22 @@ namespace BrowserDesktop.UI
             }
         }
 
-        protected virtual void OnMouseOver(MouseOverEvent e)
-        {
-            m_mouseState = (m_mouseState.Item1, MousePositionState.Over);
-            ApplyAllStyle();
-        }
-        protected virtual void OnMouseOut(MouseOutEvent e)
-        {
-            m_mouseState = (m_mouseState.Item1, MousePositionState.Out);
-            ApplyAllStyle();
-        }
-        protected virtual void OnMouseDown(MouseCaptureEvent e)
-        {
-            Debug.Log($"Mouse button pressed");
-            m_mouseState = (MousePressedState.Pressed, m_mouseState.Item2);
-            ApplyAllStyle();
-        }
-        protected virtual void OnMouseUp(MouseUpEvent e)
+        protected virtual void OnMouseOver(MouseOverEvent e, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
+            => MouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Over), style_SO, formatAndStyleKeys, style, stopPropagation);
+        protected virtual void OnMouseOut(MouseOutEvent e, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
+            => MouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Out), style_SO, formatAndStyleKeys, style, stopPropagation);
+        protected virtual void OnMouseDown(MouseCaptureEvent e, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
+            => MouseBehaviourChanged(e, (MousePressedState.Pressed, m_mouseState.Item2), style_SO, formatAndStyleKeys, style, stopPropagation);
+        protected virtual void OnMouseUp(MouseUpEvent e, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
         {
             if (e.button != 0) return;
-            m_mouseState = (MousePressedState.Unpressed, m_mouseState.Item2);
-            Debug.Log($"Mouse button up (button pressed = [{e.pressedButtons}], button = [{e.button}])");
-            ApplyAllStyle();
+            MouseBehaviourChanged(e, (MousePressedState.Unpressed, m_mouseState.Item2), style_SO, formatAndStyleKeys, style, stopPropagation);
+        }
+        protected void MouseBehaviourChanged(EventBase e, (MousePressedState, MousePositionState) mouseState, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
+        {
+            m_mouseState = mouseState;
+            ApplyStyle(style_SO, formatAndStyleKeys, style, m_mouseBehaviourFromState);
+            if (stopPropagation) e.StopPropagation();
         }
     }
 
@@ -251,30 +237,67 @@ namespace BrowserDesktop.UI
         }
 
         protected List<VisualElement> m_visuals;
-        protected Dictionary<VisualElement, (CustomStyle_SO, FormatAndStyleKeys, UnityAction)> m_visualStyles;
+        protected Dictionary<VisualElement, (CustomStyle_SO, FormatAndStyleKeys, UnityAction, EventCallback<MouseOverEvent>, EventCallback<MouseOutEvent>, EventCallback<MouseCaptureEvent>, EventCallback<MouseUpEvent>)> m_visualStyles;
 
-        protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys)
+        protected void AddVisualStyle(VisualElement visual, string styleResourcePath, FormatAndStyleKeys formatAndStyleKeys, bool stopPropagation = true)
+            => AddVisualStyle(visual, GetStyleSO(styleResourcePath), formatAndStyleKeys, stopPropagation);
+        protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, FormatAndStyleKeys formatAndStyleKeys, bool stopPropagation = true)
         {
             if (m_visuals.Contains(visual)) return;
             m_visuals.Add(visual);
-            UnityAction action = () => 
+            UnityAction ApplyFormatAndStyleAction = () => 
             { 
                 ApplyFormatAndStyle(style_SO, formatAndStyleKeys, visual.style, m_mouseBehaviourFromState); 
             };
-            m_visualStyles.Add(visual, (style_SO, formatAndStyleKeys, action));
-            style_SO.AppliesFormatAndStyle.AddListener(action);
+            EventCallback<MouseOverEvent> mouseOver = (e) =>
+            {
+                OnMouseOver(e, style_SO, formatAndStyleKeys, visual.style, stopPropagation);
+            };
+            EventCallback<MouseOutEvent> mouseOut = (e) =>
+            {
+                OnMouseOut(e, style_SO, formatAndStyleKeys, visual.style, stopPropagation);
+            };
+            EventCallback<MouseCaptureEvent> mouseDown = (e) =>
+            {
+                OnMouseDown(e, style_SO, formatAndStyleKeys, visual.style, stopPropagation);
+            };
+            EventCallback<MouseUpEvent> mouseUp = (e) =>
+            {
+                OnMouseUp(e, style_SO, formatAndStyleKeys, visual.style, stopPropagation);
+            };
+            style_SO.AppliesFormatAndStyle.AddListener(ApplyFormatAndStyleAction);
+            visual.RegisterCallback(mouseOver);
+            visual.RegisterCallback(mouseOut);
+            visual.RegisterCallback(mouseDown);
+            visual.RegisterCallback(mouseUp);
+            m_visualStyles.Add(visual, (style_SO, formatAndStyleKeys, ApplyFormatAndStyleAction, mouseOver, mouseOut, mouseDown, mouseUp));
         }
 
         protected void UpdateVisualStyle(VisualElement visual, FormatAndStyleKeys newFormatAndStyleKeys)
         {
             if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
             if (newFormatAndStyleKeys == null) throw new NullReferenceException("FormatAnStyleKeys is null.");
-            var (style_SO, formatAndStyleKeys, action) = m_visualStyles[visual];
+            var (style_SO, formatAndStyleKeys, _, _, _, _, _) = m_visualStyles[visual];
             formatAndStyleKeys.Text = newFormatAndStyleKeys.Text;
             formatAndStyleKeys.TextStyleKey = newFormatAndStyleKeys.TextStyleKey;
             formatAndStyleKeys.BackgroundStyleKey = newFormatAndStyleKeys.BackgroundStyleKey;
             formatAndStyleKeys.BorderStyleKey = newFormatAndStyleKeys.BorderStyleKey;
             ApplyFormatAndStyle(style_SO, formatAndStyleKeys, visual.style, m_mouseBehaviourFromState);
+        }
+
+        protected void ResetAllVisualStyle()
+        {
+            foreach (VisualElement visual in m_visuals)
+            {
+                var (style, _, ApplyFormatAndStyleAction, mouseOver, mouseOut, mouseDown, mouseUp) = m_visualStyles[visual];
+                style.AppliesFormatAndStyle.RemoveListener(ApplyFormatAndStyleAction);
+                visual.UnregisterCallback(mouseOver);
+                visual.UnregisterCallback(mouseOut);
+                visual.UnregisterCallback(mouseDown);
+                visual.UnregisterCallback(mouseUp);
+            }
+            m_visuals.Clear();
+            m_visualStyles.Clear();
         }
 
         public virtual void ApplyAllFormatAndStyle()

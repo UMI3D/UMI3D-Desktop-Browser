@@ -24,7 +24,8 @@ namespace DesktopBrowser.UI.CustomElement
     {
         public UnityEvent UnPinedButtonPressed { get; set; }
 
-        private IScrollable scrollViewData;
+        private const string m_partialStylePath = "UI/Style/ToolboxWindow";
+        private ScrollView_E m_scrollView;
     }
 
     public partial class ToolboxWindow_E
@@ -32,9 +33,12 @@ namespace DesktopBrowser.UI.CustomElement
         public ToolboxWindow_E(VisualElement parent) : 
             base(parent, 
                 "UI/UXML/ToolboxWindow/ToolboxWindow", 
-                "UI/StyleSO/ToolboxWindow/toolboxWindow-window", 
+                $"{m_partialStylePath}/toolboxWindow-window", 
                 new FormatAndStyleKeys()) { }
+    }
 
+    public partial class ToolboxWindow_E
+    {
         private void OnCloseButtonPressed()
         {
             //Collapse evrything
@@ -49,31 +53,33 @@ namespace DesktopBrowser.UI.CustomElement
         {
             base.Initialize();
 
-            new Icon_E(Root.Q("icon"), "toolboxWindow-icon");
-            //TODO Add label.
-            //new Button_GE(Root.Q("closeButton"))
-            //{
-            //    OnClicked = () => { OnCloseButtonPressed(); }
-            //}.SetIcon(Root.Q("closeButton"),"toolboxWindow-closeButton", "", "");
-
-            //scrollViewData = new AbstractScrollView_E(Root.Q("scrollViewContainer"), "UI/UXML/ToolboxWindow/ToolboxWindow-ScrollView", null)
-            //{
-            //}.InitFromSrollViewToProperties();
-            scrollViewData = new ScrollView_E(Root.Q("scrollViewContainer"), null, null)
+            AddVisualStyle(Root.Q("icon"), 
+                $"{m_partialStylePath}/Icon", 
+                new FormatAndStyleKeys(null, null, "", null));
+            AddVisualStyle(Root.Q<Label>("windowName"), 
+                $"{m_partialStylePath}/WindowName", 
+                new FormatAndStyleKeys("Toolbox", "", "", null));
+            new Button_GE(Root.Q("closeButton"), $"{m_partialStylePath}/closeButton", null)
             {
-            };
-            //.SetVerticalDraggerContainerStyle("ToolboxWindow-ScrollView", "DraggerContainer")
-            //.SetVerticalDraggerStyle("ToolboxWindow-ScrollView", "Dragger");
+                OnClicked = () => { OnCloseButtonPressed(); }
+            }.SetIcon(Root.Q("closeButton"), 
+            $"{m_partialStylePath}/closeButton", 
+            new FormatAndStyleKeys(null, null, "", null), 
+            new FormatAndStyleKeys(null, null, "", null));
 
-            //new Button_GE(Root.Q("unpinnedButton"))
-            //{
-            //    OnClicked = () => { UnPinedButtonPressed.Invoke(); },
-            //}.SetIcon(Root.Q("unpinnedButton"),"toolboxWindow-unpinnedButton", "", "");
-        }
+            m_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"), null, null)
+                .SetVerticalDraggerContainerStyle($"{m_partialStylePath}/DraggerContainer", 
+                new FormatAndStyleKeys(null, null, "", null))
+                .SetVerticalDraggerStyle($"{m_partialStylePath}/Dragger",
+                new FormatAndStyleKeys(null, null, "", null));
 
-        public override void OnApplyUserPreferences()
-        {
-            
+            new Button_GE(Root.Q("unpinnedButton"), $"{m_partialStylePath}/UnpinnedButton", null)
+            {
+                OnClicked = () => { UnPinedButtonPressed.Invoke(); },
+            }.SetIcon(Root.Q("unpinnedButton"),
+            $"{m_partialStylePath}/UnpinnedButton", 
+            new FormatAndStyleKeys(null, null, "", null),
+            new FormatAndStyleKeys(null, null, "", null));
         }
     }
 }
