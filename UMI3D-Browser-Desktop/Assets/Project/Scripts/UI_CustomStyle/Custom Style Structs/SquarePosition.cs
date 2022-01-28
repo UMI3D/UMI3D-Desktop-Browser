@@ -129,7 +129,7 @@ namespace umi3DBrowser.UICustomStyle
         public SquarePosition<T> Value { get => m_value; set => m_value = value; }
     }
 
-    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleSquarePosition<CustomStyleSimpleKeyword, float>))]
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleSquarePosition<CustomStyleSizeKeyword, float>))]
     public class CustomStyleValue3LinesPropertyDrawer : CustomPropertyDrawer
     {
         public override int GetNumberOfLine(SerializedProperty property)

@@ -27,11 +27,11 @@ namespace umi3DBrowser.UICustomStyle
         [SerializeField]
         private CustomStyleCrossPosition<CustomStyleSizeKeyword, float> m_width;
         [SerializeField]
-        private CustomStyleSquarePosition<CustomStyleSimpleKeyword, float> m_radius;
+        private CustomStyleSquarePosition<CustomStyleSizeKeyword, float> m_radius;
 
         public CustomStyleCrossPosition<CustomStyleColorKeyword, Color> Color => m_color;
         public CustomStyleCrossPosition<CustomStyleSizeKeyword, float> Width => m_width;
-        public CustomStyleSquarePosition<CustomStyleSimpleKeyword, float> Radius => m_radius;
+        public CustomStyleSquarePosition<CustomStyleSizeKeyword, float> Radius => m_radius;
     }
 
     [UnityEditor.CustomPropertyDrawer(typeof(Border))]
