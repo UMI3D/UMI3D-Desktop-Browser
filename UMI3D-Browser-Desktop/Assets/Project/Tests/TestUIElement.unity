@@ -542,12 +542,12 @@ GameObject:
   - component: {fileID: 1976280916}
   - component: {fileID: 1976280915}
   m_Layer: 0
-  m_Name: Slice test
+  m_Name: gameViewTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1976280915
 MonoBehaviour:
   m_ObjectHideFlags: 0
