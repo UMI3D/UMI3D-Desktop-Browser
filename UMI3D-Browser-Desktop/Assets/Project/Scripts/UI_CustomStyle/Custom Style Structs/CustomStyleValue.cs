@@ -14,11 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace umi3DBrowser.UICustomStyle
 {
@@ -39,6 +36,8 @@ namespace umi3DBrowser.UICustomStyle
         }
     }
 
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSimpleKeyword, int>))]
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSizeKeyword, int>))]
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSimpleKeyword, float>))]
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleColorKeyword, Color>))]
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSimpleKeyword, Sprite>))]
@@ -62,11 +61,11 @@ namespace umi3DBrowser.UICustomStyle
             
             Rect keywordRect;
             Rect valueRect;
-            if (!keywordValue.IsDefaultOrUndefined())
+            if (keywordValue.IsCustom())
             {
-                float width = (position.width) / 2f - m_spaceBetweenLine;
+                float width = (position.width - m_horizontalSpaceBetweenItem) / 2f;
                 keywordRect = new Rect(position.x, position.y, width, position.height);
-                valueRect = new Rect(position.x + width + 2f, position.y, width, position.height);
+                valueRect = new Rect(position.x + width + m_horizontalSpaceBetweenItem, position.y, width, position.height);
             }
             else
             {

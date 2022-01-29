@@ -96,7 +96,7 @@ namespace umi3DBrowser.UICustomStyle
         {
             var keyword = property.FindPropertyRelative("m_keyword");
             CustomStyleKeyword keywordValue = (CustomStyleKeyword)keyword.intValue;
-            return !keywordValue.IsDefaultOrUndefined() ? 5 : 0;
+            return keywordValue.IsCustom() ? 5 : 0;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -116,7 +116,7 @@ namespace umi3DBrowser.UICustomStyle
 
             --EditorGUI.indentLevel;
             EditorGUI.PropertyField(keywordRect, keyword, GUIContent.none);
-            if (!keywordValue.IsDefaultOrUndefined())
+            if (keywordValue.IsCustom())
                 EditorGUI.PropertyField(valueRect, value, GUIContent.none);
 
             EditorGUI.EndProperty();

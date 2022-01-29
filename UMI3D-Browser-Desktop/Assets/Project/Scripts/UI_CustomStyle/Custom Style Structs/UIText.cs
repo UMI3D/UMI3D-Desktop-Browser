@@ -23,15 +23,15 @@ namespace umi3DBrowser.UICustomStyle
     public struct UIFormattingText
     {
         [SerializeField]
-        private CustomStyleSize m_fontSize;
+        private CustomStyleValue<CustomStyleSizeKeyword, int> m_fontSize;
         [SerializeField]
-        private CustomStyleFloat m_letterSpacing;
+        private CustomStyleValue<CustomStyleSimpleKeyword, float> m_letterSpacing;
         [SerializeField]
-        private CustomStyleFloat m_wordSpacing;
+        private CustomStyleValue<CustomStyleSimpleKeyword, float> m_wordSpacing;
         [SerializeField]
-        private CustomStyleFloat m_paragraphSpacing;
+        private CustomStyleValue<CustomStyleSimpleKeyword, float> m_paragraphSpacing;
         [SerializeField]
-        private CustomStyleFloat m_numberOfVisibleCharacter;
+        private CustomStyleValue<CustomStyleSimpleKeyword, int> m_numberOfVisibleCharacter;
         [SerializeField]
         private TextAnchor m_textAlign;
         

@@ -66,7 +66,7 @@ namespace umi3DBrowser.UICustomStyle
             Rect line2Rect = NextLineRect(line1Rect);
             Rect line3Rect = NextLineRect(line2Rect);
 
-            float width = line1Rect.width / 2f - m_spaceBetweenLine;
+            float width = (line1Rect.width - m_horizontalSpaceBetweenItem) / 2f;
 
             Rect line0LabelRect = new Rect(m_line0Rect.x - m_deltaLabelWidth, m_line0Rect.y, m_labelWidth, m_line0Rect.height);
 
@@ -75,7 +75,7 @@ namespace umi3DBrowser.UICustomStyle
 
             Rect line2LabelRect = new Rect(line2Rect.x - m_deltaLabelWidth, line2Rect.y, m_labelWidth, line2Rect.height);
             m_leftRect = new Rect(line2Rect.x, line2Rect.y, width, line2Rect.height);
-            m_rightRect = new Rect(line2Rect.x + width + m_spaceBetweenLine, line2Rect.y, width, line2Rect.height);
+            m_rightRect = new Rect(line2Rect.x + width + m_horizontalSpaceBetweenItem, line2Rect.y, width, line2Rect.height);
 
             Rect line3LabelRect = new Rect(line3Rect.x - m_deltaLabelWidth, line3Rect.y, m_labelWidth, line3Rect.height);
             m_bottomRect = new Rect(line3Rect.x + (line3Rect.width - width) / 2f, line3Rect.y, width, line3Rect.height);
@@ -171,7 +171,7 @@ namespace umi3DBrowser.UICustomStyle
         {
             var keyword = property.FindPropertyRelative("m_keyword");
             CustomStyleKeyword keywordValue = (CustomStyleKeyword)keyword.intValue;
-            return !keywordValue.IsDefaultOrUndefined() ? 4 : 0;
+            return keywordValue.IsCustom() ? 4 : 0;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -187,7 +187,7 @@ namespace umi3DBrowser.UICustomStyle
 
             --EditorGUI.indentLevel;
             EditorGUI.PropertyField(keywordRect, keyword, GUIContent.none);
-            if (!keywordValue.IsDefaultOrUndefined())
+            if (keywordValue.IsCustom())
                 EditorGUI.PropertyField(valueRect, value, GUIContent.none);
             ++EditorGUI.indentLevel;
 

@@ -50,8 +50,8 @@ namespace umi3DBrowser.UICustomStyle
             CustomStyleKeyword radiusKeyword = (CustomStyleKeyword)radius.FindPropertyRelative("m_keyword").intValue;
 
             Rect colorLabelRect = CurrentLineRect(position);
-            Rect widthLabelRect = colorKeyword.IsDefaultOrUndefined() ? NextLineRect(colorLabelRect) : LineRect(colorLabelRect, 5);
-            Rect radiusLabelRect = widthKeyword.IsDefaultOrUndefined() ? NextLineRect(widthLabelRect) : LineRect(widthLabelRect, 5);
+            Rect widthLabelRect = !colorKeyword.IsCustom() ? NextLineRect(colorLabelRect) : LineRect(colorLabelRect, 5);
+            Rect radiusLabelRect = !widthKeyword.IsCustom() ? NextLineRect(widthLabelRect) : LineRect(widthLabelRect, 5);
 
             Rect colorLineRect = NextLineRect(colorLabelRect);
             Rect widthLineRect = NextLineRect(widthLabelRect);
@@ -102,14 +102,14 @@ namespace umi3DBrowser.UICustomStyle
                 .FindPropertyRelative("m_keyword")
                 .intValue;
             int nbOfLine = 0;
-            if (!colorKeyword.IsDefaultOrUndefined())
+            if (colorKeyword.IsCustom())
                 ++nbOfLine;
-            if (!widthKeyword.IsDefaultOrUndefined())
+            if (widthKeyword.IsCustom())
                 ++nbOfLine;
-            if (!radiusKeyword.IsDefaultOrUndefined())
+            if (radiusKeyword.IsCustom())
                 ++nbOfLine;
 
-            return !keywordValue.IsDefaultOrUndefined() ? 3 + nbOfLine * 4 : 0;
+            return keywordValue.IsCustom() ? 3 + nbOfLine * 4 : 0;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -125,7 +125,7 @@ namespace umi3DBrowser.UICustomStyle
 
             --EditorGUI.indentLevel;
             EditorGUI.PropertyField(keywordRect, keyword, GUIContent.none);
-            if (!keywordValue.IsDefaultOrUndefined())
+            if (keywordValue.IsCustom())
                 EditorGUI.PropertyField(valueRect, value, GUIContent.none);
 
             EditorGUI.EndProperty();
