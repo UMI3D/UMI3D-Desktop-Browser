@@ -246,8 +246,11 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             if (style_SO == null) return;
             UITextFormat textFormat = style_SO.TextFormat;
-            textFormat.FontSize
-            m_uIElementStyleApplicator.AppliesSize
+            m_uIElementStyleApplicator.AppliesSize(textFormat.FontSize, style.fontSize, (length) => style.fontSize = length);
+            m_uIElementStyleApplicator.AppliesSize(textFormat.LetterSpacing, style.letterSpacing, (length) => style.letterSpacing = length);
+            m_uIElementStyleApplicator.AppliesSize(textFormat.WordSpacing, style.wordSpacing, (length) => style.wordSpacing = length);
+            m_uIElementStyleApplicator.AppliesSize(textFormat.ParagraphSpacing, style.unityParagraphSpacing, (length) => style.unityParagraphSpacing = length);
+            Debug.Log("<color=green>TODO: </color>" + $"");
         }
 
         #endregion
