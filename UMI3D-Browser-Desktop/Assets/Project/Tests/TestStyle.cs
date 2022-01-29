@@ -190,7 +190,7 @@ public class TestStyle : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T))
         {
             //Debug.Log($"max height = [{testStyle2.UISize.MaxHeight.ToString()}]");
-            Debug.Log($"max height = [{CustomStyle.UISize.MaxHeight.ToString()}]");
+            Debug.Log($"max height = [{CustomStyle.Size.MaxHeight.ToString()}]");
         }
     }
 }

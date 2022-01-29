@@ -83,7 +83,7 @@ namespace umi3DBrowser.UICustomStyle
         [SerializeField]
         private UIMarginAndPadding m_marginAndPadding = new UIMarginAndPadding();
         [SerializeField]
-        private UIFormattingText m_textFormat = new UIFormattingText();
+        private UITextFormat m_textFormat = new UITextFormat();
         [Space()]
         [SerializeField]
         private UIThemeStyle[] m_themeStyles;
@@ -95,10 +95,11 @@ namespace umi3DBrowser.UICustomStyle
     public partial class CustomStyle_SO
     {
         public string Key => name.ToLower();
-        public UIDisplay UIDisplay => m_display;
+        public UIDisplay Display => m_display;
         //public UIPosition UIPosition => m_uIPosition;
-        public UISize UISize => m_size;
-        public UIMarginAndPadding UIMarginAndPadding => m_marginAndPadding;
+        public UISize Size => m_size;
+        public UIMarginAndPadding MarginAndPadding => m_marginAndPadding;
+        public UITextFormat TextFormat => m_textFormat;
 
         public ICustomisableByMouseBehaviour<CustomStyleTextStyle> GetTextStyle(Theme_SO theme, string key)
             => GetStyle(theme, (themeStyle) => themeStyle.GetTextStyle(key));
