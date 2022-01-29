@@ -77,10 +77,12 @@ namespace umi3DBrowser.UICustomStyle
 
     public static class CustomStyleKeywordMethods
     {
-        public static bool IsDefaultOrUndefined(this CustomStyleKeyword keyword)
-        {
-            return keyword == CustomStyleKeyword.Default || keyword == CustomStyleKeyword.Undefined;
-        }
+        //public static bool IsDefaultOrUndefined(this CustomStyleKeyword keyword)
+        //{
+        //    return keyword == CustomStyleKeyword.Default || keyword == CustomStyleKeyword.Undefined;
+        //}
+        public static bool IsCustom(this CustomStyleKeyword keyword)
+            => keyword == CustomStyleKeyword.Custom || keyword == CustomStyleKeyword.CustomResizable || keyword == CustomStyleKeyword.CustomUnresizabe;
     }
 
     public enum CustomStyleSimpleKeyword

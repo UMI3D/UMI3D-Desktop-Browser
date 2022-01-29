@@ -71,12 +71,12 @@ namespace umi3DBrowser.UICustomStyle
             Rect line1LabelRect = new Rect(line1Rect.x - m_deltaLabelWidth, line1Rect.y, m_labelWidth, line1Rect.height);
             Rect line2LabelRect = new Rect(line2Rect.x - m_deltaLabelWidth, line2Rect.y, m_labelWidth, line2Rect.height);
 
-            float width = line1Rect.width / 2f - m_spaceBetweenLine;
+            float width = (line1Rect.width - m_horizontalSpaceBetweenItem) / 2f;
 
             m_topLeftRect = new Rect(line1Rect.x, line1Rect.y, width, line1Rect.height);
-            m_topRightRect = new Rect(line1Rect.x + width + m_spaceBetweenLine, line1Rect.y, width, line1Rect.height);
+            m_topRightRect = new Rect(line1Rect.x + width + m_horizontalSpaceBetweenItem, line1Rect.y, width, line1Rect.height);
             m_bottomLeftRect = new Rect(line2Rect.x, line2Rect.y, width, line2Rect.height);
-            m_bottomRightRect = new Rect(line2Rect.x + width + m_spaceBetweenLine, line2Rect.y, width, line2Rect.height);
+            m_bottomRightRect = new Rect(line2Rect.x + width + m_horizontalSpaceBetweenItem, line2Rect.y, width, line2Rect.height);
 
             EditorGUI.indentLevel += 2;
             EditorGUI.LabelField(line0LabelRect, new GUIContent("Global :"));
@@ -136,7 +136,7 @@ namespace umi3DBrowser.UICustomStyle
         {
             var keyword = property.FindPropertyRelative("m_keyword");
             CustomStyleKeyword keywordValue = (CustomStyleKeyword)keyword.intValue;
-            return !keywordValue.IsDefaultOrUndefined() ? 3 : 0;
+            return keywordValue.IsCustom() ? 3 : 0;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -152,7 +152,7 @@ namespace umi3DBrowser.UICustomStyle
 
             --EditorGUI.indentLevel;
             EditorGUI.PropertyField(keywordRect, keyword, GUIContent.none);
-            if (!keywordValue.IsDefaultOrUndefined())
+            if (keywordValue.IsCustom())
                 EditorGUI.PropertyField(valueRect, value, GUIContent.none);
             ++EditorGUI.indentLevel;
 

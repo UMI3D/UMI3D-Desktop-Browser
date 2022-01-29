@@ -20,16 +20,17 @@ namespace umi3DBrowser.UICustomStyle
 {
     public class CustomPropertyDrawer : PropertyDrawer
     {
-        protected float m_lineHeight { get; } = EditorGUIUtility.singleLineHeight;
-        protected float m_spaceBetweenLine { get; } = EditorGUIUtility.standardVerticalSpacing;
-        protected float m_deltaLineHeight => m_lineHeight + m_spaceBetweenLine;
+        protected float m_lineHeight => EditorGUIUtility.singleLineHeight;
+        protected float m_verticalSpaceBetweenItem => EditorGUIUtility.standardVerticalSpacing;
+        protected float m_horizontalSpaceBetweenItem => 2f * m_verticalSpaceBetweenItem;
+        protected float m_deltaLineHeight => m_lineHeight + m_verticalSpaceBetweenItem;
         protected virtual float m_labelWidth => EditorGUIUtility.labelWidth;
-        protected float m_deltaLabelWidth => m_labelWidth + m_spaceBetweenLine;
-        protected virtual int m_numberOfLine => 0;
+        protected float m_deltaLabelWidth => m_labelWidth + m_horizontalSpaceBetweenItem;
+        protected virtual int m_numberOfLine => 1;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return (base.GetPropertyHeight(property, label) + m_spaceBetweenLine) * (float)GetNumberOfLine(property) - m_spaceBetweenLine;
+            return (base.GetPropertyHeight(property, label) + m_verticalSpaceBetweenItem) * (float)GetNumberOfLine(property) - m_verticalSpaceBetweenItem;
         }
 
         public virtual int GetNumberOfLine(SerializedProperty property)
