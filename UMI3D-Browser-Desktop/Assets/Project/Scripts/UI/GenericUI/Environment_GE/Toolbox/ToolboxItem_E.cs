@@ -41,7 +41,10 @@ namespace umi3dDesktopBrowser.uI.viewController
         public ToolboxItem_E(StyleKeys iconOnKeys, StyleKeys iconOffKeys, string itemName) : 
             base("UI/UXML/Toolbox/toolboxItem", null, null) 
         {
-            SetIcon(Root.Q<VisualElement>("icon"), $"{m_partialStylePath}/ToolboxItemIcon", iconOnKeys, iconOffKeys);
+            SetIcon(Root.Q<VisualElement>("icon"), 
+                $"{m_partialStylePath}/ToolboxItemIcon", 
+                iconOnKeys, 
+                iconOffKeys);
             SetLabel(Root.Q<Label>("label"),
                 $"{m_partialStylePath}/ToolboxItemLabel", 
                 new StyleKeys(itemName, "", "", ""),

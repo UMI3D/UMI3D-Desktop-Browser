@@ -50,4 +50,16 @@ namespace umi3DBrowser.UICustomStyle
 
         public string Theme => m_theme;
     }
+
+    public class ListEmptyException : Exception
+    {
+        private string listName;
+
+        public ListEmptyException(string list, string styleSO) : base($"[{list}] empty in [{styleSO}].")
+        {
+            this.listName = list;
+        }
+
+        public string ListName => listName;
+    }
 }

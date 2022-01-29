@@ -60,6 +60,7 @@ namespace umi3dDesktopBrowser.uI.viewController
                 };
                 style_SO.AppliesFormatAndStyle.AddListener(ApplyFormatAndStyleAction);
                 m_visualStyles.Add(visual, (style_SO, formatAndStyleKeys, ApplyFormatAndStyleAction, mouseOver, mouseOut, mouseDown, mouseUp));
+                ApplyFormatAndStyleAction.Invoke();
             }
             else
             {
