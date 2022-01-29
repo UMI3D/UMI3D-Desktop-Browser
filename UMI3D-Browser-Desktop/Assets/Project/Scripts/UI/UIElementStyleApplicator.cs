@@ -39,6 +39,24 @@ namespace umi3dDesktopBrowser.uI.viewController
             applyLength(length);
         }
 
+        public virtual void AppliesSize(CustomStyleValue<CustomStyleSizeKeyword, int> customStyle, StyleLength initialLength, Action<StyleLength> applyLength)
+        {
+            StyleLength length = GetLength(customStyle.Keyword,
+                initialLength,
+                () => customStyle.Value * m_globalPref.ZoomCoef,
+                () => customStyle.Value);
+            applyLength(length);
+        }
+
+        public virtual void AppliesSize(CustomStyleValue<CustomStyleSizeKeyword, float> customStyle, StyleLength initialLength, Action<StyleLength> applyLength)
+        {
+            StyleLength length = GetLength(customStyle.Keyword,
+                initialLength,
+                () => customStyle.Value * m_globalPref.ZoomCoef,
+                () => customStyle.Value);
+            applyLength(length);
+        }
+
         public virtual void AppliesMarginAndPadding(CustomStyleCrossPosition<CustomStyleSizeKeyword, float> customStyle, StyleLength initialBottomLength, StyleLength initialLeftLength, StyleLength initialRightLength, StyleLength initialTopLength, Action<StyleLength, StyleLength, StyleLength, StyleLength> applyLength)
         {
             StyleLength bottomLength = GetLength(customStyle.Keyword,
@@ -60,7 +78,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             applyLength(bottomLength, leftLength, rightLength, topLength);
         }
 
-        public virtual void AppliesTextFormat(CustomStyleSize customStyle, StyleLength initialLength, Action<StyleLength> applyLength)
+        public virtual void AppliesTextFormat(CustomStyleValue<CustomStyleSizeKeyword, int> fontCustomStyle, StyleLength initialLength, Action<StyleLength> applyLength)
         {
 
         }
