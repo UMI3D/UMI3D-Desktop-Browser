@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.preferences;
+using System;
 using umi3DBrowser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -27,29 +28,69 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class UIElementStyleApplicator
     {
-        public virtual StyleLength GetPxAndPourcentageFloatLength(CustomStyleSize customStyle, float zoomCoef)
+        #region Format
+
+        public virtual void AppliesSize(CustomStyleSize customStyle, StyleLength initialLength, Action<StyleLength> applyLength)
+        {
+            StyleLength length = GetLength(customStyle.Keyword, 
+                initialLength, 
+                () => customStyle.Value * m_globalPref.ZoomCoef, 
+                () => (customStyle.ValueMode == CustomStyleSizeMode.Px) ? customStyle.Value : Length.Percent(customStyle.Value));
+            applyLength(length);
+        }
+
+        public virtual void AppliesMarginAndPadding(CustomStyleCrossPosition<CustomStyleSizeKeyword, float> customStyle, StyleLength initialBottomLength, StyleLength initialLeftLength, StyleLength initialRightLength, StyleLength initialTopLength, Action<StyleLength, StyleLength, StyleLength, StyleLength> applyLength)
+        {
+            StyleLength bottomLength = GetLength(customStyle.Keyword,
+                initialBottomLength,
+                () => customStyle.Value.Bottom * m_globalPref.ZoomCoef,
+                () => customStyle.Value.Bottom);
+            StyleLength leftLength = GetLength(customStyle.Keyword,
+                initialLeftLength,
+                () => customStyle.Value.Left * m_globalPref.ZoomCoef,
+                () => customStyle.Value.Left);
+            StyleLength rightLength = GetLength(customStyle.Keyword,
+                initialRightLength,
+                () => customStyle.Value.Right * m_globalPref.ZoomCoef,
+                () => customStyle.Value.Right);
+            StyleLength topLength = GetLength(customStyle.Keyword,
+                initialTopLength,
+                () => customStyle.Value.Top * m_globalPref.ZoomCoef,
+                () => customStyle.Value.Top);
+            applyLength(bottomLength, leftLength, rightLength, topLength);
+        }
+
+        public virtual void AppliesTextFormat(CustomStyleSize customStyle, StyleLength initialLength, Action<StyleLength> applyLength)
+        {
+
+        }
+
+        public virtual StyleLength GetLength(CustomStyleSizeKeyword keyword, StyleLength initialLength, Func<float> resizableValue, Func<Length> unresizableValue)
         {
             StyleLength lenght = new StyleLength();
-            switch (customStyle.Keyword)
+            switch (keyword)
             {
                 case CustomStyleSizeKeyword.Undefined:
-                    lenght.keyword = StyleKeyword.Null;
+                    lenght = initialLength;
                     break;
                 case CustomStyleSizeKeyword.Default:
                     lenght.keyword = StyleKeyword.Auto;
                     break;
                 case CustomStyleSizeKeyword.CustomResizable:
-                    lenght = customStyle.Value * zoomCoef;
+                    lenght.value = resizableValue();
                     lenght.keyword = StyleKeyword.Undefined;
                     break;
                 case CustomStyleSizeKeyword.CustomUnresizabe:
-                    float floatLenght = customStyle.Value;
-                    lenght = (customStyle.ValueMode == CustomStyleSizeMode.Px) ? floatLenght : Length.Percent(floatLenght);
+                    lenght.value = unresizableValue();
                     lenght.keyword = StyleKeyword.Undefined;
                     break;
             }
             return lenght;
         }
+
+        
+
+        #endregion
 
         #region Style
 

@@ -37,10 +37,13 @@ namespace umi3DBrowser.UICustomStyle
     }
 
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSimpleKeyword, int>))]
-    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSizeKeyword, int>))]
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSimpleKeyword, float>))]
-    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleColorKeyword, Color>))]
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSimpleKeyword, Sprite>))]
+
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleColorKeyword, Color>))]
+
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSizeKeyword, int>))]
+    [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSizeKeyword, float>))]
     public class CustomStyleImagePropertyDrawer : CustomPropertyDrawer
     {
         protected override int m_numberOfLine => 1;

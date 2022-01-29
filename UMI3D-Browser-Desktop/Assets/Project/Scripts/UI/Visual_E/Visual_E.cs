@@ -203,37 +203,51 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected void ApplySize(CustomStyle_SO style_SO, IStyle style)
         {
             if (style_SO == null) return;
-            UISize uiSize = style_SO.UISize;
-            StyleLength length = new StyleLength();
-            
-            length = m_uIElementStyleApplicator.GetPxAndPourcentageFloatLength(uiSize.Height, m_globalPref.ZoomCoef);
-            if (length.keyword != StyleKeyword.Null)
-                style.height = length;
-            length = m_uIElementStyleApplicator.GetPxAndPourcentageFloatLength(uiSize.Width, m_globalPref.ZoomCoef);
-            if (length.keyword != StyleKeyword.Null)
-                style.width = length;
-            length = m_uIElementStyleApplicator.GetPxAndPourcentageFloatLength(uiSize.MinHeight, m_globalPref.ZoomCoef);
-            if (length.keyword != StyleKeyword.Null)
-                style.minHeight = length;
-            length = m_uIElementStyleApplicator.GetPxAndPourcentageFloatLength(uiSize.MinWidth, m_globalPref.ZoomCoef);
-            if (length.keyword != StyleKeyword.Null)
-                style.minWidth = length;
-            length = m_uIElementStyleApplicator.GetPxAndPourcentageFloatLength(uiSize.MaxHeight, m_globalPref.ZoomCoef);
-            if (length.keyword != StyleKeyword.Null)
-                style.maxHeight = length;
-            length = m_uIElementStyleApplicator.GetPxAndPourcentageFloatLength(uiSize.MaxWidth, m_globalPref.ZoomCoef);
-            if (length.keyword != StyleKeyword.Null)
-                style.maxWidth = length;
+            UISize uiSize = style_SO.Size;
+            m_uIElementStyleApplicator.AppliesSize(uiSize.Height, style.height, (length) => style.height = length);
+            m_uIElementStyleApplicator.AppliesSize(uiSize.Width, style.width, (length) => style.width = length);
+            m_uIElementStyleApplicator.AppliesSize(uiSize.MinHeight, style.minHeight, (length) => style.minHeight = length);
+            m_uIElementStyleApplicator.AppliesSize(uiSize.MinWidth, style.minWidth, (length) => style.minWidth = length);
+            m_uIElementStyleApplicator.AppliesSize(uiSize.MaxHeight, style.maxHeight, (length) => style.maxHeight = length);
+            m_uIElementStyleApplicator.AppliesSize(uiSize.MaxWidth, style.maxWidth, (length) => style.maxWidth = length);
         }
 
         protected void ApplyMarginAndPadding(CustomStyle_SO style_SO, IStyle style)
         {
-            throw new NotImplementedException();
+            if (style_SO == null) return;
+            UIMarginAndPadding marginAndPadding = style_SO.MarginAndPadding;
+            m_uIElementStyleApplicator.AppliesMarginAndPadding(marginAndPadding.Margin, 
+                style.marginBottom, 
+                style.marginLeft, 
+                style.marginRight, 
+                style.marginTop, 
+                (bottom, left, right, top) => 
+                {
+                    style.marginBottom = bottom;
+                    style.marginLeft = left;
+                    style.marginRight = right;
+                    style.marginTop = top;
+                });
+            m_uIElementStyleApplicator.AppliesMarginAndPadding(marginAndPadding.Padding,
+                style.paddingBottom,
+                style.paddingLeft,
+                style.paddingRight,
+                style.paddingTop,
+                (bottom, left, right, top) =>
+                {
+                    style.paddingBottom = bottom;
+                    style.paddingLeft = left;
+                    style.paddingRight = right;
+                    style.paddingTop = top;
+                });
         }
 
         protected void ApplyTextFormat(CustomStyle_SO style_SO, string text, IStyle style)
         {
-            throw new System.NotImplementedException();
+            if (style_SO == null) return;
+            UITextFormat textFormat = style_SO.TextFormat;
+            textFormat.FontSize
+            m_uIElementStyleApplicator.AppliesSize
         }
 
         #endregion
@@ -258,17 +272,16 @@ namespace umi3dDesktopBrowser.uI.viewController
         }
 
         protected void ApplyTextStyle(CustomStyle_SO style_SO, string styleKey, IStyle style, MouseBehaviour mouseBehaviour)
-            => ApplyAtomStyle(style_SO, style, mouseBehaviour, () => style_SO.GetTextStyle(null, styleKey), m_uIElementStyleApplicator.AppliesTextStyle);
+            => ApplyAtomStyle(style, mouseBehaviour, () => style_SO.GetTextStyle(null, styleKey), m_uIElementStyleApplicator.AppliesTextStyle);
 
         protected void ApplyBackgroundStyle(CustomStyle_SO style_SO, string styleKey, IStyle style, MouseBehaviour mouseBehaviour)
-            => ApplyAtomStyle(style_SO, style, mouseBehaviour, () => style_SO.GetBackground(null, styleKey), m_uIElementStyleApplicator.AppliesBackground);
+            => ApplyAtomStyle(style, mouseBehaviour, () => style_SO.GetBackground(null, styleKey), m_uIElementStyleApplicator.AppliesBackground);
 
         protected void ApplyBorderStyle(CustomStyle_SO style_SO, string styleKey, IStyle style, MouseBehaviour mouseBehaviour)
-            => ApplyAtomStyle(style_SO, style, mouseBehaviour, () => style_SO.GetBorder(null, styleKey), m_uIElementStyleApplicator.AppliesBorder);
+            => ApplyAtomStyle(style, mouseBehaviour, () => style_SO.GetBorder(null, styleKey), m_uIElementStyleApplicator.AppliesBorder);
 
-        protected void ApplyAtomStyle<T>(CustomStyle_SO style_SO, IStyle style, MouseBehaviour mouseBehaviour, Func<ICustomisableByMouseBehaviour<T>> getUIStyle, Action<IStyle, T> styleApplicator)
+        protected void ApplyAtomStyle<T>(IStyle style, MouseBehaviour mouseBehaviour, Func<ICustomisableByMouseBehaviour<T>> getUIStyle, Action<IStyle, T> styleApplicator)
         {
-            if (style_SO == null) return;
             ICustomisableByMouseBehaviour<T> uiStyle = getUIStyle();
             switch (mouseBehaviour)
             {

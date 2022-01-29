@@ -20,21 +20,27 @@ using UnityEngine;
 namespace umi3DBrowser.UICustomStyle
 {
     [Serializable]
-    public struct UIFormattingText
+    public struct UITextFormat
     {
         [SerializeField]
         private CustomStyleValue<CustomStyleSizeKeyword, int> m_fontSize;
         [SerializeField]
-        private CustomStyleValue<CustomStyleSimpleKeyword, float> m_letterSpacing;
+        private CustomStyleValue<CustomStyleSizeKeyword, float> m_letterSpacing;
         [SerializeField]
-        private CustomStyleValue<CustomStyleSimpleKeyword, float> m_wordSpacing;
+        private CustomStyleValue<CustomStyleSizeKeyword, float> m_wordSpacing;
         [SerializeField]
-        private CustomStyleValue<CustomStyleSimpleKeyword, float> m_paragraphSpacing;
+        private CustomStyleValue<CustomStyleSizeKeyword, float> m_paragraphSpacing;
         [SerializeField]
         private CustomStyleValue<CustomStyleSimpleKeyword, int> m_numberOfVisibleCharacter;
         [SerializeField]
         private TextAnchor m_textAlign;
-        
+
+        public CustomStyleValue<CustomStyleSizeKeyword, int> FontSize => m_fontSize;
+        public CustomStyleValue<CustomStyleSizeKeyword, float> LetterSpacing => m_letterSpacing;
+        public CustomStyleValue<CustomStyleSizeKeyword, float> WordSpacing => m_wordSpacing;
+        public CustomStyleValue<CustomStyleSizeKeyword, float> ParagraphSpacing => m_paragraphSpacing;
+        public CustomStyleValue<CustomStyleSimpleKeyword, int> NumberOfVisibleCharacter => m_numberOfVisibleCharacter;
+        public TextAnchor TextAlign => m_textAlign;
     }
 
     [Serializable]
