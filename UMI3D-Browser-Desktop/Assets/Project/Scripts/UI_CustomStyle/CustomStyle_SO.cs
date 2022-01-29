@@ -109,11 +109,13 @@ namespace umi3DBrowser.UICustomStyle
         
         protected ICustomisableByMouseBehaviour<T> GetStyle<T>(Theme_SO theme, Func<UIThemeStyle, ICustomisableByMouseBehaviour<T>> styleGetter)
         {
+            if (m_themeStyles.Length == 0) throw new ListEmptyException("themeStyle", name);
             foreach (UIThemeStyle themeStyle in m_themeStyles)
             {
                 if (themeStyle.Theme == theme)
                     return styleGetter(themeStyle);
             }
+            if (m_themeStyles[0].Theme == null) return styleGetter(m_themeStyles[0]);
             throw new ThemeNotFoundException(theme, this.name);
         }
     }

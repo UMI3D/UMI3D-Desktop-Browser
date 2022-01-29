@@ -22,6 +22,11 @@ namespace umi3DBrowser.UICustomStyle
     [CreateAssetMenu(fileName = "NewTheme", menuName = "Browser_SO/Theme")]
     public partial class Theme_SO : ScriptableObject
     {
-
+        [SerializeField]
+        private Color m_primary;
+        [SerializeField]
+        private Color m_secondary;
+        [SerializeField]
+        private Color m_tertiary;
     }
 }

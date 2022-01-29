@@ -252,9 +252,9 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected void ApplyStyle(CustomStyle_SO styleSO, StyleKeys formatAndStyleKeys, IStyle style, MouseBehaviour mouseBehaviour)
         {
             if (styleSO == null || formatAndStyleKeys == null) return;
-            ApplyTextStyle(styleSO, formatAndStyleKeys.TextStyleKey, style, mouseBehaviour);
-            ApplyBackgroundStyle(styleSO, formatAndStyleKeys.BackgroundStyleKey, style, mouseBehaviour);
-            ApplyBorderStyle(styleSO, formatAndStyleKeys.BorderStyleKey, style, mouseBehaviour);
+            if (formatAndStyleKeys.TextStyleKey != null) ApplyTextStyle(styleSO, formatAndStyleKeys.TextStyleKey, style, mouseBehaviour);
+            if (formatAndStyleKeys.BackgroundStyleKey != null) ApplyBackgroundStyle(styleSO, formatAndStyleKeys.BackgroundStyleKey, style, mouseBehaviour);
+            if (formatAndStyleKeys.BorderStyleKey != null) ApplyBorderStyle(styleSO, formatAndStyleKeys.BorderStyleKey, style, mouseBehaviour);
         }
 
         protected void ApplyTextStyle(CustomStyle_SO style_SO, string styleKey, IStyle style, MouseBehaviour mouseBehaviour)
