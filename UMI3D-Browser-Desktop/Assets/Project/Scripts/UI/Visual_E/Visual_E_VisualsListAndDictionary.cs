@@ -56,7 +56,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             {
                 UnityAction ApplyFormatAndStyleAction = () =>
                 {
-                    ApplyFormatAndStyle(style_SO, formatAndStyleKeys, visual.style, m_mouseBehaviourFromState);
+                    ApplyFormatAndStyle(style_SO, formatAndStyleKeys, visual, m_mouseBehaviourFromState);
                 };
                 style_SO.AppliesFormatAndStyle.AddListener(ApplyFormatAndStyleAction);
                 m_visualStyles.Add(visual, (style_SO, formatAndStyleKeys, ApplyFormatAndStyleAction, mouseOver, mouseOut, mouseDown, mouseUp));
@@ -78,7 +78,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             formatAndStyleKeys.TextStyleKey = newFormatAndStyleKeys.TextStyleKey;
             formatAndStyleKeys.BackgroundStyleKey = newFormatAndStyleKeys.BackgroundStyleKey;
             formatAndStyleKeys.BorderStyleKey = newFormatAndStyleKeys.BorderStyleKey;
-            ApplyFormatAndStyle(style_SO, formatAndStyleKeys, visual.style, m_mouseBehaviourFromState);
+            ApplyFormatAndStyle(style_SO, formatAndStyleKeys, visual, m_mouseBehaviourFromState);
         }
 
         protected void ResetAllVisualStyle()
