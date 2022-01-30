@@ -27,7 +27,7 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class ToolboxItem_E : Button_GE
     {
-        public ToolboxItem_E(StyleKeys iconKeys, string itemName) :
+        public ToolboxItem_E(StyleKeys iconKeys, StyleKeys labelKeys) :
             base("UI/UXML/Toolbox/toolboxItem", null, null)
         {
             SetIcon(Root.Q<VisualElement>("icon"), 
@@ -35,11 +35,10 @@ namespace umi3dDesktopBrowser.uI.viewController
                 iconKeys);
             SetLabel(Root.Q<Label>("label"),
                 $"{m_partialStylePath}/ToolboxItemLabel",
-                new StyleKeys(itemName, "", "", ""),
-                new StyleKeys(itemName, "", "", ""));
+                labelKeys);
         }
-        public ToolboxItem_E(StyleKeys iconOnKeys, StyleKeys iconOffKeys, string itemName) : 
-            base("UI/UXML/Toolbox/toolboxItem", null, null) 
+        public ToolboxItem_E(StyleKeys iconOnKeys, StyleKeys iconOffKeys, StyleKeys labelOnKeys, StyleKeys labelOffKeys, bool isOn = false) : 
+            base("UI/UXML/Toolbox/toolboxItem", null, null, isOn) 
         {
             SetIcon(Root.Q<VisualElement>("icon"), 
                 $"{m_partialStylePath}/ToolboxItemIcon", 
@@ -47,8 +46,8 @@ namespace umi3dDesktopBrowser.uI.viewController
                 iconOffKeys);
             SetLabel(Root.Q<Label>("label"),
                 $"{m_partialStylePath}/ToolboxItemLabel", 
-                new StyleKeys(itemName, "", "", ""),
-                new StyleKeys(itemName, "", "", ""));
+                labelOnKeys,
+                labelOffKeys);
         }
 
         #region Setup

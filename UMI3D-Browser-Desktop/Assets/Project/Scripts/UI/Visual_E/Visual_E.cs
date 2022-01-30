@@ -175,11 +175,11 @@ namespace umi3dDesktopBrowser.uI.viewController
             ApplyAllStyle();
         }
 
-        protected void ApplyFormatAndStyle(CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, IStyle style, MouseBehaviour mouseBehaviour)
+        protected void ApplyFormatAndStyle(CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, VisualElement visual, MouseBehaviour mouseBehaviour)
         {
             if (style_SO == null) return;
-            ApplyFormat(style_SO, formatAndStyleKeys, style);
-            ApplyStyle(style_SO, formatAndStyleKeys, style, mouseBehaviour);
+            ApplyFormat(style_SO, formatAndStyleKeys, visual);
+            ApplyStyle(style_SO, formatAndStyleKeys, visual.style, mouseBehaviour);
         }
 
         #region Format of the element
@@ -189,15 +189,16 @@ namespace umi3dDesktopBrowser.uI.viewController
             foreach (VisualElement visual in m_visuals)
             {
                 var style = m_visualStyles[visual];
-                ApplyFormat(style.Item1, style.Item2, visual.style);
+                ApplyFormat(style.Item1, style.Item2, visual);
             }
         }
 
-        protected void ApplyFormat(CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, IStyle style)
+        protected void ApplyFormat(CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, VisualElement visual)
         {
-            ApplySize(style_SO, style);
-            ApplyMarginAndPadding(style_SO, style);
-            ApplyTextFormat(style_SO, formatAndStyleKeys.Text, style);
+            ApplySize(style_SO, visual.style);
+            ApplyMarginAndPadding(style_SO, visual.style);
+            if (visual is TextElement textE)
+                ApplyTextFormat(style_SO, formatAndStyleKeys?.Text, textE);
         }
 
         protected void ApplySize(CustomStyle_SO style_SO, IStyle style)
@@ -242,7 +243,7 @@ namespace umi3dDesktopBrowser.uI.viewController
                 });
         }
 
-        protected void ApplyTextFormat(CustomStyle_SO style_SO, string text, IStyle style)
+        protected void ApplyTextFormat(CustomStyle_SO style_SO, string text, TextElement textE)
         {
             if (style_SO == null) return;
             UITextFormat textFormat = style_SO.TextFormat;
@@ -250,7 +251,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_uIElementStyleApplicator.AppliesSize(textFormat.LetterSpacing, style.letterSpacing, (length) => style.letterSpacing = length);
             m_uIElementStyleApplicator.AppliesSize(textFormat.WordSpacing, style.wordSpacing, (length) => style.wordSpacing = length);
             m_uIElementStyleApplicator.AppliesSize(textFormat.ParagraphSpacing, style.unityParagraphSpacing, (length) => style.unityParagraphSpacing = length);
-            Debug.Log("<color=green>TODO: </color>" + $"");
+            m_uIElementStyleApplicator.AppliesTextFormat(textFormat.NumberOfVisibleCharacter, textFormat.TextAlign, text, textE);
         }
 
         #endregion

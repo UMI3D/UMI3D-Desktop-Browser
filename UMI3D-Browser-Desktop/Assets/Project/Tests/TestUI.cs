@@ -23,7 +23,8 @@ public class TestUI : MonoBehaviour
 
     void Start()
     {
-        var item = new ToolboxItem_E(new StyleKeys( "Toolbox", null), "Toolbox");
+        var item = new ToolboxItem_E(new StyleKeys( "Toolbox", null), 
+            new StyleKeys("Toolbox", null, null, null));
         item.AddTo(UIDoc.rootVisualElement);
     }
 

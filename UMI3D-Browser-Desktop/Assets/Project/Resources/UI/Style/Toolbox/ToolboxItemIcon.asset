@@ -64,7 +64,6 @@ MonoBehaviour:
   m_textFormat:
     m_fontSize:
       m_keyword: 0
-      m_valueMode: 0
       m_value: 0
     m_letterSpacing:
       m_keyword: 0
@@ -79,4 +78,45 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_textAlign: 0
-  m_themeStyles: []
+  m_themeStyles:
+  - m_theme: {fileID: 0}
+    m_textStyle: []
+    m_background:
+    - m_key: toolbox
+      m_default:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 2
+            m_value: {r: 0, g: 0, b: 0, a: 1}
+          m_image:
+            m_keyword: 0
+            m_value: {fileID: 0}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_mouseOver:
+        m_keyword: 0
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 0
+            m_value: {fileID: 0}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_mousePressed:
+        m_keyword: 0
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 0
+            m_value: {fileID: 0}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+    m_border: []

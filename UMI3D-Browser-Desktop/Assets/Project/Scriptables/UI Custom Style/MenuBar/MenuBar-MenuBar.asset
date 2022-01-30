@@ -12,18 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
   m_Name: MenuBar-MenuBar
   m_EditorClassIdentifier: 
-  m_key: MenuBar-MenuBar
-  m_uIDisplay:
+  AppliesFormatAndStyle:
+    m_PersistentCalls:
+      m_Calls: []
+  m_display:
     m_opacity:
       m_keyword: 0
       m_value: 0
-  m_uIPosition:
-    m_position: 0
-    m_bottom: 0
-    m_left: 0
-    m_right: 0
-    m_top: 0
-  m_uISize:
+  m_size:
     m_height:
       m_keyword: 0
       m_valueMode: 0
@@ -48,84 +44,8 @@ MonoBehaviour:
       m_keyword: 0
       m_valueMode: 0
       m_value: 0
-  m_uIMarginAndPadding:
-    m_marginBottom: 0
-    m_marginLeft: 0
-    m_marginRight: 0
-    m_marginTop: 0
-    m_paddingBottom: 0
-    m_paddingLeft: 0
-    m_paddingRight: 0
-    m_paddingTop: 0
-  m_uIText:
-    m_font: {fileID: 0}
-    m_fontStyleAndWeight: 0
-    m_fontSize: 0
-    m_color: {r: 0, g: 0, b: 0, a: 0}
-    m_letterSpacing: 0
-    m_textOveflow: 0
-    m_unityParagraphSpacing: 0
-    m_unityTextAlign: 0
-    m_unityTextOverflowPosition: 0
-    m_unityTextOutlineColor: {r: 0, g: 0, b: 0, a: 0}
-    m_unityTextOutlineWidth: 0
-    m_WhiteSpace: 0
-    m_wordSpacing: 0
-  m_uIBackground:
-    m_backgrounds:
-    - m_backgroundKey: 
-      m_backgroundsByThemes:
-      - m_theme: 0
-        m_backgroundDefault:
-          m_keyword: 6
-          m_value:
-            m_color:
-              m_keyword: 6
-              m_value: {r: 0.24705884, g: 0.24705884, b: 0.25882354, a: 1}
-            m_image:
-              m_keyword: 0
-              m_value: {fileID: 0}
-            m_imageTintColor:
-              m_keyword: 0
-              m_value: {r: 0, g: 0, b: 0, a: 0}
-        m_backgroundMouseOver:
-          m_keyword: 0
-          m_value:
-            m_color:
-              m_keyword: 0
-              m_value: {r: 0, g: 0, b: 0, a: 0}
-            m_image:
-              m_keyword: 0
-              m_value: {fileID: 0}
-            m_imageTintColor:
-              m_keyword: 0
-              m_value: {r: 0, g: 0, b: 0, a: 0}
-        m_backgroundMousePressed:
-          m_keyword: 0
-          m_value:
-            m_color:
-              m_keyword: 0
-              m_value: {r: 0, g: 0, b: 0, a: 0}
-            m_image:
-              m_keyword: 0
-              m_value: {fileID: 0}
-            m_imageTintColor:
-              m_keyword: 0
-              m_value: {r: 0, g: 0, b: 0, a: 0}
-    m_sliceBottom: 0
-    m_sliceLeft: 0
-    m_sliceRight: 0
-    m_sliceTop: 0
-  m_uIBorder:
-    m_color:
-      m_keyword: 0
-      m_value:
-        m_global: {r: 0, g: 0, b: 0, a: 0}
-        m_bottom: {r: 0, g: 0, b: 0, a: 0}
-        m_left: {r: 0, g: 0, b: 0, a: 0}
-        m_right: {r: 0, g: 0, b: 0, a: 0}
-        m_top: {r: 0, g: 0, b: 0, a: 0}
-    m_width:
+  m_marginAndPadding:
+    m_margin:
       m_keyword: 0
       m_value:
         m_global: 0
@@ -133,14 +53,29 @@ MonoBehaviour:
         m_left: 0
         m_right: 0
         m_top: 0
-    m_radius:
+    m_padding:
       m_keyword: 0
       m_value:
         m_global: 0
-        m_bottomLeft: 0
-        m_bottomRight: 0
-        m_topLeft: 0
-        m_TopRight: 0
-  ApplyCustomStyle:
-    m_PersistentCalls:
-      m_Calls: []
+        m_bottom: 0
+        m_left: 0
+        m_right: 0
+        m_top: 0
+  m_textFormat:
+    m_fontSize:
+      m_keyword: 0
+      m_value: 0
+    m_letterSpacing:
+      m_keyword: 0
+      m_value: 0
+    m_wordSpacing:
+      m_keyword: 0
+      m_value: 0
+    m_paragraphSpacing:
+      m_keyword: 0
+      m_value: 0
+    m_numberOfVisibleCharacter:
+      m_keyword: 0
+      m_value: 0
+    m_textAlign: 0
+  m_themeStyles: []

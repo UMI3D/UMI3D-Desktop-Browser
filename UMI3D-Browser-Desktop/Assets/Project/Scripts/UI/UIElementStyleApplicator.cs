@@ -78,9 +78,23 @@ namespace umi3dDesktopBrowser.uI.viewController
             applyLength(bottomLength, leftLength, rightLength, topLength);
         }
 
-        public virtual void AppliesTextFormat(CustomStyleValue<CustomStyleSizeKeyword, int> fontCustomStyle, StyleLength initialLength, Action<StyleLength> applyLength)
+        public virtual void AppliesTextFormat(CustomStyleValue<CustomStyleSimpleKeyword, int> customStyle, TextAnchor textAlign, string text, TextElement textE)
         {
-
+            switch (customStyle.Keyword)
+            {
+                case CustomStyleSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleSimpleKeyword.Default:
+                    break;
+                case CustomStyleSimpleKeyword.Custom:
+                    int value = customStyle.Value;
+                    if (value >= text.Length) break;
+                    Debug.Log($"text null = [{text == null}]; text length = [{text?.Length}]");
+                    text = (value >= 6) ? $"{text.Substring(0, value - 3)}..." : text.Substring(0, value);
+                    break;
+            }
+            textE.text = text;
+            textE.style.unityTextAlign = textAlign;
         }
 
         public virtual StyleLength GetLength(CustomStyleSizeKeyword keyword, StyleLength initialLength, Func<float> resizableValue, Func<Length> unresizableValue)
@@ -92,7 +106,7 @@ namespace umi3dDesktopBrowser.uI.viewController
                     lenght = initialLength;
                     break;
                 case CustomStyleSizeKeyword.Default:
-                    lenght.keyword = StyleKeyword.Auto;
+                    lenght.keyword = StyleKeyword.Null;
                     break;
                 case CustomStyleSizeKeyword.CustomResizable:
                     lenght.value = resizableValue();
