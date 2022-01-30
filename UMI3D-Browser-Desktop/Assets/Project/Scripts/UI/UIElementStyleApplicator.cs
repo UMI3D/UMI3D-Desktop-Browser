@@ -130,12 +130,9 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             switch (customStyle.Keyword)
             {
-                case CustomStyleSimpleKeyword.Undefined:
+                case CustomStyleExtraSimpleKeyword.Undefined:
                     break;
-                case CustomStyleSimpleKeyword.Default:
-                    throw new System.NotImplementedException();
-                    break;
-                case CustomStyleSimpleKeyword.Custom:
+                case CustomStyleExtraSimpleKeyword.Custom:
                     throw new System.NotImplementedException();
                     break;
             }
@@ -145,12 +142,9 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             switch (customStyle.Keyword)
             {
-                case CustomStyleSimpleKeyword.Undefined:
+                case CustomStyleExtraSimpleKeyword.Undefined:
                     break;
-                case CustomStyleSimpleKeyword.Default:
-                    throw new System.NotImplementedException();
-                    break;
-                case CustomStyleSimpleKeyword.Custom:
+                case CustomStyleExtraSimpleKeyword.Custom:
                     AppliesBackgroundColor(style, customStyle.Value.BackgroundColor);
                     AppliesImage(style, customStyle.Value.BackgroundImage);
                     AppliesImageColor(style, customStyle.Value.BackgroundImageTintColor);
@@ -162,12 +156,9 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             switch (customStyle.Keyword)
             {
-                case CustomStyleSimpleKeyword.Undefined:
+                case CustomStyleExtraSimpleKeyword.Undefined:
                     break;
-                case CustomStyleSimpleKeyword.Default:
-                    throw new System.NotImplementedException();
-                    break;
-                case CustomStyleSimpleKeyword.Custom:
+                case CustomStyleExtraSimpleKeyword.Custom:
                     AppliesBorderColor(style, customStyle.Value.Color);
                     AppliesBorderWidth(style, customStyle.Value.Width);
                     AppliesBorderRadius(style, customStyle.Value.Radius);
@@ -180,102 +171,80 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class UIElementStyleApplicator
     {
-        #region Background
-
-        protected virtual void AppliesBackgroundColor(IStyle style, CustomStyleValue<CustomStyleColorKeyword, Color> customStyle)
+        protected virtual void AppliesSimple(CustomStyleSimpleKeyword simpleKeyword, Action defaultAction, Action customAction)
         {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleColorKeyword.Undefined:
-                    break;
-                case CustomStyleColorKeyword.Default:
-                    throw new System.NotImplementedException();
-                    break;
-                case CustomStyleColorKeyword.Custom:
-                    style.backgroundColor = customStyle.Value;
-                    break;
-                case CustomStyleColorKeyword.Primary:
-                    throw new System.NotImplementedException();
-                    break;
-                case CustomStyleColorKeyword.Secondary:
-                    throw new System.NotImplementedException();
-                    break;
-                case CustomStyleColorKeyword.Tertiary:
-                    throw new System.NotImplementedException();
-                    break;
-            }
-        }
-
-        protected virtual void AppliesImageColor(IStyle style, CustomStyleValue<CustomStyleColorKeyword, Color> customStyle)
-        {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleColorKeyword.Undefined:
-                    break;
-                case CustomStyleColorKeyword.Default:
-                    throw new System.NotImplementedException();
-                    break;
-                case CustomStyleColorKeyword.Custom:
-                    style.unityBackgroundImageTintColor = customStyle.Value;
-                    break;
-                case CustomStyleColorKeyword.Primary:
-                    throw new System.NotImplementedException();
-                    break;
-                case CustomStyleColorKeyword.Secondary:
-                    throw new System.NotImplementedException();
-                    break;
-                case CustomStyleColorKeyword.Tertiary:
-                    throw new System.NotImplementedException();
-                    break;
-            }
-        }
-
-        protected virtual void AppliesImage(IStyle style, CustomStyleValue<CustomStyleSimpleKeyword, Sprite> customStyle)
-        {
-            switch (customStyle.Keyword)
+            switch (simpleKeyword)
             {
                 case CustomStyleSimpleKeyword.Undefined:
                     break;
                 case CustomStyleSimpleKeyword.Default:
-                    throw new System.NotImplementedException();
+                    defaultAction();
                     break;
                 case CustomStyleSimpleKeyword.Custom:
-                    style.backgroundImage = customStyle.Value.texture;
+                    customAction();
                     break;
             }
         }
+
+        protected virtual void AppliesColor(CustomStyleColorKeyword colorKeyword, Action defaultAction, Action customAction, Action<Color> themeAction)
+        {
+            switch (colorKeyword)
+            {
+                case CustomStyleColorKeyword.Undefined:
+                    break;
+                case CustomStyleColorKeyword.Default:
+                    defaultAction();
+                    break;
+                case CustomStyleColorKeyword.Custom:
+                    customAction();
+                    break;
+                case CustomStyleColorKeyword.Primary:
+                    themeAction(Color.red);
+                    break;
+                case CustomStyleColorKeyword.Secondary:
+                    themeAction(Color.red);
+                    break;
+                case CustomStyleColorKeyword.Tertiary:
+                    themeAction(Color.red);
+                    break;
+            }
+        }
+
+        #region Background
+
+        protected virtual void AppliesBackgroundColor(IStyle style, CustomStyleValue<CustomStyleColorKeyword, Color> customStyle)
+            => AppliesColor(customStyle.Keyword,
+                () => throw new System.NotImplementedException(),
+                () => style.backgroundColor = customStyle.Value,
+                (color) => { throw new System.NotImplementedException(); });
+
+        protected virtual void AppliesImageColor(IStyle style, CustomStyleValue<CustomStyleColorKeyword, Color> customStyle)
+            => AppliesColor(customStyle.Keyword,
+                () => throw new System.NotImplementedException(),
+                () => style.unityBackgroundImageTintColor = customStyle.Value,
+                (color) => { throw new System.NotImplementedException(); });
+
+        protected virtual void AppliesImage(IStyle style, CustomStyleValue<CustomStyleSimpleKeyword, Sprite> customStyle)
+            => AppliesSimple(customStyle.Keyword,
+                () => { throw new System.NotImplementedException(); },
+                () => style.backgroundImage = customStyle.Value.texture);
 
         #endregion
 
         #region Border
 
         protected virtual void AppliesBorderColor(IStyle style, CustomStyleCrossPosition<CustomStyleColorKeyword, Color> customStyle)
-        {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleColorKeyword.Undefined:
-                    break;
-                case CustomStyleColorKeyword.Default:
-                    throw new System.NotImplementedException();
-                    break;
-                case CustomStyleColorKeyword.Custom:
+            => AppliesColor(customStyle.Keyword,
+                () => throw new System.NotImplementedException(),
+                () =>
+                {
                     CrossPosition<Color> borderColor = customStyle.Value;
                     style.borderTopColor = borderColor.Top;
                     style.borderLeftColor = borderColor.Left;
                     style.borderRightColor = borderColor.Right;
                     style.borderBottomColor = borderColor.Bottom;
-                    break;
-                case CustomStyleColorKeyword.Primary:
-                    throw new System.NotImplementedException();
-                    break;
-                case CustomStyleColorKeyword.Secondary:
-                    throw new System.NotImplementedException();
-                    break;
-                case CustomStyleColorKeyword.Tertiary:
-                    throw new System.NotImplementedException();
-                    break;
-            }
-        }
+                },
+                (color) => { });
 
         protected virtual void AppliesBorderWidth(IStyle style, CustomStyleCrossPosition<CustomStyleSizeKeyword, float> customStyle)
         {

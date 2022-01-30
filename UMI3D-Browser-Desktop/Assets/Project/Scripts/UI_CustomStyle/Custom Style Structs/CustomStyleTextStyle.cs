@@ -78,14 +78,14 @@ namespace umi3DBrowser.UICustomStyle
     }
 
     [Serializable]
-    public struct CustomStyleTextStyle : ICustomStyleValue<CustomStyleSimpleKeyword, TextStyle>
+    public struct CustomStyleTextStyle : ICustomStyleValue<CustomStyleExtraSimpleKeyword, TextStyle>
     {
         [SerializeField]
-        private CustomStyleSimpleKeyword m_keyword;
+        private CustomStyleExtraSimpleKeyword m_keyword;
         [SerializeField]
         private TextStyle m_value;
 
-        public CustomStyleSimpleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
+        public CustomStyleExtraSimpleKeyword Keyword { get => m_keyword; set => m_keyword = value; }
         public TextStyle Value { get => m_value; set => m_value = value; }
     }
 

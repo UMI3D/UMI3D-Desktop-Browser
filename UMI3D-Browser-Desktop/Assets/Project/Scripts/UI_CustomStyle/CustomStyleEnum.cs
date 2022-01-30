@@ -85,6 +85,18 @@ namespace umi3DBrowser.UICustomStyle
             => keyword == CustomStyleKeyword.Custom || keyword == CustomStyleKeyword.CustomResizable || keyword == CustomStyleKeyword.CustomUnresizabe;
     }
 
+    public enum CustomStyleExtraSimpleKeyword
+    {
+        /// <summary>
+        /// No style will be applied.
+        /// </summary>
+        Undefined = 0,
+        /// <summary>
+        /// Apply a custom style.
+        /// </summary>
+        Custom = 2,
+    }
+
     public enum CustomStyleSimpleKeyword
     {
         /// <summary>
