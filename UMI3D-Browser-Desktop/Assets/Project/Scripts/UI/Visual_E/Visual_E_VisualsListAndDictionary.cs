@@ -28,7 +28,7 @@ namespace umi3dDesktopBrowser.uI.viewController
 
         protected void AddVisualStyle(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys, bool stopPropagation = true)
             => AddVisualStyle(visual, GetStyleSO(styleResourcePath), formatAndStyleKeys, stopPropagation);
-        protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, bool stopPropagation = true)
+        protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, bool stopPropagation = true, params VisualElement[] otherVisualTriggers)
         {
             if (m_visuals.Contains(visual)) return;
             m_visuals.Add(visual);
@@ -52,6 +52,14 @@ namespace umi3dDesktopBrowser.uI.viewController
             visual.RegisterCallback(mouseOut);
             visual.RegisterCallback(mouseDown);
             visual.RegisterCallback(mouseUp);
+            foreach (VisualElement otherVisual in otherVisualTriggers)
+            {
+                if (otherVisual == null) break;
+                otherVisual.RegisterCallback(mouseOver);
+                otherVisual.RegisterCallback(mouseOut);
+                otherVisual.RegisterCallback(mouseDown);
+                otherVisual.RegisterCallback(mouseUp);
+            }
             if (style_SO != null)
             {
                 UnityAction ApplyFormatAndStyleAction = () =>

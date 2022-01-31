@@ -121,6 +121,9 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             if (Initialized) Reset();
             Initialized = true;
+            m_globalPref = GetGlobalPrefSO();
+            m_globalPref.ApplyCustomStyle.AddListener(ApplyAllFormatAndStyle);
+            m_uIElementStyleApplicator = new UIElementStyleApplicator(m_globalPref);
             m_visuals = new List<VisualElement>();
             m_visualStyles = new Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, UnityAction, EventCallback<MouseOverEvent>, EventCallback<MouseOutEvent>, EventCallback<MouseCaptureEvent>, EventCallback<MouseUpEvent>)>();
             this.Root = visual;
@@ -131,8 +134,8 @@ namespace umi3dDesktopBrowser.uI.viewController
 
         protected virtual void Initialize() 
         {
-            m_globalPref = UserPreferences.GlobalPref;
-            m_globalPref.ApplyCustomStyle.AddListener(ApplyAllFormatAndStyle);
+            
+            
         }
 
         protected virtual VisualElement GetVisualRoot(string resourcePath)
@@ -153,6 +156,13 @@ namespace umi3dDesktopBrowser.uI.viewController
             return style_SO;
         }
 
+        protected GlobalPreferences_SO GetGlobalPrefSO()
+        {
+            GlobalPreferences_SO globalPreferences = Resources.Load<GlobalPreferences_SO>("Preferences/GlobalPreferences");
+            if (globalPreferences == null) throw new NullReferenceException("Global pref null");
+            return globalPreferences;
+        }
+
         /// <summary>
         /// To be used in Custom Element that are already added to the UIDocument.
         /// </summary>
@@ -164,10 +174,8 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class Visual_E
     {
-        protected UIElementStyleApplicator m_uIElementStyleApplicator = new UIElementStyleApplicator();
+        protected UIElementStyleApplicator m_uIElementStyleApplicator;
         protected GlobalPreferences_SO m_globalPref;
-
-        
 
         public virtual void ApplyAllFormatAndStyle()
         {
@@ -247,10 +255,10 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             if (style_SO == null) return;
             UITextFormat textFormat = style_SO.TextFormat;
-            m_uIElementStyleApplicator.AppliesSize(textFormat.FontSize, style.fontSize, (length) => style.fontSize = length);
-            m_uIElementStyleApplicator.AppliesSize(textFormat.LetterSpacing, style.letterSpacing, (length) => style.letterSpacing = length);
-            m_uIElementStyleApplicator.AppliesSize(textFormat.WordSpacing, style.wordSpacing, (length) => style.wordSpacing = length);
-            m_uIElementStyleApplicator.AppliesSize(textFormat.ParagraphSpacing, style.unityParagraphSpacing, (length) => style.unityParagraphSpacing = length);
+            m_uIElementStyleApplicator.AppliesFontSize(textE.style, textFormat.FontSize);
+            m_uIElementStyleApplicator.AppliesSize(textFormat.LetterSpacing, textE.style.letterSpacing, (length) => style.letterSpacing = length);
+            m_uIElementStyleApplicator.AppliesSize(textFormat.WordSpacing, textE.style.wordSpacing, (length) => style.wordSpacing = length);
+            m_uIElementStyleApplicator.AppliesSize(textFormat.ParagraphSpacing, textE.style.unityParagraphSpacing, (length) => style.unityParagraphSpacing = length);
             m_uIElementStyleApplicator.AppliesTextFormat(textFormat.NumberOfVisibleCharacter, textFormat.TextAlign, text, textE);
         }
 
