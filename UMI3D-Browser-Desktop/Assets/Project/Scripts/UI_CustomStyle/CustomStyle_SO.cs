@@ -35,13 +35,13 @@ namespace umi3DBrowser.UICustomStyle
         public UITextStyle GetTextStyle(string key)
         {
             key = key.ToLower();
-            string[] subKeys = key.Split('-');
+            //string[] subKeys = key.Split('-');
             foreach (UITextStyle themeText in m_textStyle)
             {
-                if (themeText.Key == subKeys[0])
+                if (themeText.Key == key)
                     return themeText;
             }
-            throw new KeyNotFoundException(subKeys[0], "UIThemeStyle");
+            throw new KeyNotFoundException(key, "UIThemeStyle");
         }
         public UIBackground GetBackground(string key)
         {

@@ -30,13 +30,13 @@ namespace umi3dDesktopBrowser.uI.viewController
     public partial class Toolbox_E
     {
         public Toolbox_E(string toolboxName, bool isScrollable, params ToolboxItem_E[] items) : 
-            base("UI/UXML/Toolbox/ToolboxItem", 
+            base("UI/UXML/Toolbox/Toolbox1", 
                 "UI/Style/Toolbox/Toolbox", 
                 new StyleKeys( "", null))
         {
-            m_toolboxName = new Visual_E(Root.Q<Label>(), 
-                "UI/Style/Toolbox/ToolboxName",
-                new StyleKeys(toolboxName, "", "", ""));
+            AddVisualStyle(Root.Q<Label>(), 
+                "UI/Style/Toolbox/ToolboxName", 
+                new StyleKeys(toolboxName, "", null, null));
             Adds(items);
             if (isScrollable)
             {

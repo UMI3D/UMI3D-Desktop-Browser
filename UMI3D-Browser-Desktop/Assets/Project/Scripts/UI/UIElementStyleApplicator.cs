@@ -28,6 +28,14 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class UIElementStyleApplicator
     {
+        public UIElementStyleApplicator(GlobalPreferences_SO globalPref)
+        {
+            m_globalPref = globalPref;
+        }
+    }
+
+    public partial class UIElementStyleApplicator
+    {
         #region Format
 
         public virtual void AppliesSize(CustomStyleSize customStyle, StyleLength initialLength, Action<StyleLength> applyLength)
@@ -39,14 +47,11 @@ namespace umi3dDesktopBrowser.uI.viewController
             applyLength(length);
         }
 
-        public virtual void AppliesSize(CustomStyleValue<CustomStyleSizeKeyword, int> customStyle, StyleLength initialLength, Action<StyleLength> applyLength)
-        {
-            StyleLength length = GetLength(customStyle.Keyword,
-                initialLength,
-                () => customStyle.Value * m_globalPref.ZoomCoef,
-                () => customStyle.Value);
-            applyLength(length);
-        }
+        public virtual void AppliesFontSize(IStyle style, CustomStyleValue<CustomStyleSizeKeyword, int> customStyle)
+            => AppliesLength(customStyle.Keyword,
+                () => style.fontSize = 12,
+                () => style.fontSize = customStyle.Value * m_globalPref.ZoomCoef,
+                () => style.fontSize = customStyle.Value);
 
         public virtual void AppliesSize(CustomStyleValue<CustomStyleSizeKeyword, float> customStyle, StyleLength initialLength, Action<StyleLength> applyLength)
         {
@@ -85,6 +90,7 @@ namespace umi3dDesktopBrowser.uI.viewController
                 case CustomStyleSimpleKeyword.Undefined:
                     break;
                 case CustomStyleSimpleKeyword.Default:
+                    throw new System.NotImplementedException();
                     break;
                 case CustomStyleSimpleKeyword.Custom:
                     int value = customStyle.Value;

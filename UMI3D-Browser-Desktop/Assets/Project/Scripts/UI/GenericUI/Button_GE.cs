@@ -70,7 +70,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_iconOnKey = iconOnKey;
             m_iconOffKey = iconOffKey;
             m_currentIconKey = IsOn ? m_iconOnKey : m_iconOffKey;
-            AddVisualStyle(icon, style_SO, m_currentIconKey, false);
+            AddVisualStyle(icon, style_SO, m_currentIconKey, false, m_button);
             m_icon = icon;
             return this;
         }
@@ -82,8 +82,8 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_iconOnKey = iconKey;
             m_iconOffKey = null;
             m_currentIconKey = m_iconOnKey;
-            AddVisualStyle(icon, style_SO, m_currentIconKey, false);
             m_icon = icon;
+            AddVisualStyle(icon, style_SO, m_currentIconKey, false, m_button);
             return this;
         }
 
@@ -96,8 +96,8 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_currentLabelKey = IsOn ? m_labelOnKey : m_labelOffKey;
             if (m_currentLabelKey.Text == null) Debug.Log($"text null in button");
             else Debug.Log($"text = [{m_currentLabelKey.Text}]");
-            AddVisualStyle(label, style_SO, m_currentLabelKey, false);
             m_label = label;
+            AddVisualStyle(label, style_SO, m_currentLabelKey, false, m_button);
             return this;
         }
 
