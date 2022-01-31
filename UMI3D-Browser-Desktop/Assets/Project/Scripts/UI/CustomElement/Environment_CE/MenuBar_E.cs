@@ -29,7 +29,7 @@ namespace umi3dDesktopBrowser.uI.viewController
     public partial class MenuBar_E
     {
         public float Space { get; set; } = 10f;
-        public Action<VisualElement> AddSeparator { get; set; } = (ve) => { Debug.Log("<color=green>TODO: </color>" + $"AddSeparator in MenuBarElement."); };
+        //public Action<VisualElement> AddSeparator { get; set; } = (ve) => { Debug.Log("<color=green>TODO: </color>" + $"AddSeparator in MenuBarElement."); };
         public VisualElement SubMenuLayout { get; private set; }
     }
 
@@ -42,9 +42,10 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class MenuBar_E
     {
-        //public MenuBar_E(VisualTreeAsset visualTA, string customStyleKey) : base(visualTA, customStyleKey) { }
-        public MenuBar_E(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys) : 
-            base(visual, styleResourcePath, formatAndStyleKeys) { }
+        public MenuBar_E() : 
+            base("UI/UXML/MenuBar/menuBar1", 
+                "UI/Style/MenuBar/MenuBar", 
+                new StyleKeys("", null)) { }
 
         public MenuBar_E AddLeft(params Visual_E[] ces)
         {
@@ -110,6 +111,12 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class MenuBar_E : Visual_E
     {
+        protected ToolboxItem_E m_toolboxButton;
+        protected ToolboxItem_E m_avatar;
+        protected ToolboxItem_E m_sound;
+        protected ToolboxItem_E m_mic;
+        protected ToolboxItem_E m_leave;
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -121,6 +128,34 @@ namespace umi3dDesktopBrowser.uI.viewController
             };
             rightLayout_VE = Root.Q<VisualElement>("Right-layout");
             //SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
+
+            m_toolboxButton = new ToolboxItem_E("Toolbox", "Toolbox");
+            new Toolbox_E("", false, m_toolboxButton)    
+                .AddTo(leftLayout_VE);
+
+            AddSeparator(leftLayout_VE);
+
+            //Scroll view
+
+            AddSeparator(rightLayout_VE);
+
+            m_avatar = new ToolboxItem_E("AvatarOn", "AvatarOff", "");
+            m_sound = new ToolboxItem_E("SoundOn", "SoundOff", "");
+            m_mic = new ToolboxItem_E("MicOn", "MicOff", "");
+            new Toolbox_E("", false, m_avatar, m_sound, m_mic)    
+                .AddTo(rightLayout_VE);
+
+            AddSeparator(rightLayout_VE);
+
+            m_leave = new ToolboxItem_E("Leave", "");
+            new Toolbox_E("", false, m_leave)
+                .AddTo(rightLayout_VE);
+        }
+
+        protected void AddSeparator(VisualElement layout)
+        {
+            new Visual_E(new VisualElement(), "UI/Style/MenuBar/Separator", new StyleKeys("", null))
+                .AddTo(layout);
         }
     }
 }

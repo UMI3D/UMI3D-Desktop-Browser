@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="MenuBar-ToolboxScrollView" src="MenuBar-ToolboxScrollView.uxml" />
+    <Style src="/Assets/Project/UI/UXML/menu-bar.uss" />
+    <ui:VisualElement name="menuBar-layout" style="align-items: stretch; background-color: rgb(63, 63, 63); width: 100%; flex-direction: row; justify-content: center;">
+        <ui:VisualElement name="Left-layout" style="flex-direction: row; justify-content: center; align-items: center; flex-shrink: 0;" />
+        <ui:VisualElement name="center-layout" style="flex-grow: 1; height: 100%;">
+            <ui:Instance template="MenuBar-ToolboxScrollView" name="toolboxScrollView" style="flex-shrink: 0; height: 100%;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Right-layout" style="flex-direction: row; justify-content: center; align-items: center; flex-shrink: 0;" />
+    </ui:VisualElement>
+</ui:UXML>
