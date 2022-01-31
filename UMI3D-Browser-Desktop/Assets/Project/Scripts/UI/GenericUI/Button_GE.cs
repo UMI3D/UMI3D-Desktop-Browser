@@ -94,8 +94,6 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_labelOnKey = labelOnKey;
             m_labelOffKey = labelOffKey;
             m_currentLabelKey = IsOn ? m_labelOnKey : m_labelOffKey;
-            if (m_currentLabelKey.Text == null) Debug.Log($"text null in button");
-            else Debug.Log($"text = [{m_currentLabelKey.Text}]");
             m_label = label;
             AddVisualStyle(label, style_SO, m_currentLabelKey, false, m_button);
             return this;
@@ -109,8 +107,6 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_labelOnKey = labelKey;
             m_labelOffKey = null;
             m_currentLabelKey = m_labelOnKey;
-            if (m_currentLabelKey.Text == null) Debug.Log($"text null in button");
-            else Debug.Log($"text = [{m_currentLabelKey.Text}]");
             AddVisualStyle(label, style_SO, m_currentLabelKey, false);
             m_label = label;
             return this;

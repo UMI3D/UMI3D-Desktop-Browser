@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GlobalPreferences
   m_EditorClassIdentifier: 
   zoomPercentage: 100
-  currentTheme: 0
+  currentTheme: {fileID: 11400000, guid: 0814560b5c82c444bb1360aab7f70309, type: 2}
   ApplyCustomStyle:
     m_PersistentCalls:
       m_Calls: []

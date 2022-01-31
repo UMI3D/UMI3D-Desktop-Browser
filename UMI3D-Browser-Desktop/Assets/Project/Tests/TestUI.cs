@@ -35,7 +35,9 @@ public class TestUI : MonoBehaviour
         var toolbox = new Toolbox_E("test", true, item, item1, item2, item3, item4, item5);
         //toolbox.AddTo(UIDoc.rootVisualElement);
 
-        new MenuBar_E().AddTo(UIDoc.rootVisualElement);
+        MenuBar_E
+            .Instance
+            .AddTo(UIDoc.rootVisualElement);
     }
 
     void Update()
