@@ -134,7 +134,6 @@ GameObject:
   - component: {fileID: 82661822}
   - component: {fileID: 82661821}
   - component: {fileID: 82661820}
-  - component: {fileID: 82661823}
   m_Layer: 0
   m_Name: UIControllers (1)
   m_TagString: Untagged
@@ -189,21 +188,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &82661823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 82661819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec70ae7926e927e42aed551107ff348e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uIControllerName: toolboxWindow
-  uiDocument: {fileID: 82661821}
-  visualTA: {fileID: 0}
 --- !u!1 &187552569
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,7 +199,6 @@ GameObject:
   - component: {fileID: 187552571}
   - component: {fileID: 187552572}
   - component: {fileID: 187552570}
-  - component: {fileID: 187552573}
   - component: {fileID: 187552575}
   - component: {fileID: 187552574}
   - component: {fileID: 187552576}
@@ -274,22 +257,6 @@ MonoBehaviour:
   sourceAsset: {fileID: 9197481963319205126, guid: e05f706dee3f2424fa34a0d3ed8920d5,
     type: 3}
   m_SortingOrder: 0
---- !u!114 &187552573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 187552569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4020a2d26b09c3d458152cab002ef713, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uIControllerName: toolboxes
-  uiDocument: {fileID: 187552572}
-  visualTA: {fileID: 9197481963319205126, guid: 080998d64c518c7489eb7e456bd4b9d4,
-    type: 3}
 --- !u!114 &187552574
 MonoBehaviour:
   m_ObjectHideFlags: 0

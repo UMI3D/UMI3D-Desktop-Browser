@@ -69,7 +69,7 @@ namespace umi3dDesktopBrowser.uI.viewController
 
         public void AddToolbox(params Toolbox_E[] toolboxes)
         {
-
+            m_scrollView.Adds(toolboxes);
         }
 
         public MenuBar_E AddCenter(params Toolbox_E[] toolboxes)
@@ -114,10 +114,6 @@ namespace umi3dDesktopBrowser.uI.viewController
             base.Initialize();
 
             leftLayout_VE = Root.Q<VisualElement>("Left-layout");
-            //centerLayout_VE = new ToolboxScrollView_E(Root.Q("toolboxScrollView"))
-            //{
-            //    AddSeparator = (ve) => { AddSeparator(ve); }
-            //};
             centerLayout_VE = Root.Q<VisualElement>("Center-layout");
             rightLayout_VE = Root.Q<VisualElement>("Right-layout");
             //SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
@@ -129,7 +125,10 @@ namespace umi3dDesktopBrowser.uI.viewController
             AddSeparator(leftLayout_VE);
 
             //Scroll view
-            m_scrollView = new ScrollView_E(centerLayout_VE, "UI/UXML/MenuBar/toolboxesScrollView", null, null);
+            m_scrollView = new ScrollView_E(centerLayout_VE, "UI/UXML/MenuBar/toolboxesScrollView", null, null)
+            {
+                AddSeparator = AddSeparator
+            };
             m_scrollView.SetHorizontalBackwardButtonStyle(m_scrollView.Root.Q("backwardButton"), 
                 "UI/Style/MenuBar/ScrollView_Button", 
                 new StyleKeys("backward", null));
@@ -160,12 +159,13 @@ namespace umi3dDesktopBrowser.uI.viewController
                 .AddTo(rightLayout_VE);
         }
 
-        protected void AddSeparator(VisualElement layout)
+        protected Visual_E AddSeparator(VisualElement layout)
         {
-            new Visual_E(new VisualElement(), 
-                "UI/Style/MenuBar/Separator", 
-                new StyleKeys("", null))
-                .AddTo(layout);
+            Visual_E separator = new Visual_E(new VisualElement(),
+                "UI/Style/MenuBar/Separator",
+                new StyleKeys("", null));
+            separator.AddTo(layout);
+            return separator;
         }
     }
 }
