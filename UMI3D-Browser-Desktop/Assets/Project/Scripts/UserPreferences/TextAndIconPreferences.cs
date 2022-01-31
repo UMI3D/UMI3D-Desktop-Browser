@@ -33,10 +33,10 @@ namespace BrowserDesktop.preferences
         [System.Serializable]
         public class TextAndIconSO
         {
-            [Tooltip("")]
-            [SerializeField]
-            private GlobalPreferences_SO.Theme name;
-            public GlobalPreferences_SO.Theme Name => name;
+            //[Tooltip("")]
+            //[SerializeField]
+            //private GlobalPreferences_SO.Theme name;
+            //public GlobalPreferences_SO.Theme Name => name;
             [Tooltip("")]
             [SerializeField]
             private IconPreferences_SO iconPref_SO;
@@ -94,11 +94,11 @@ namespace BrowserDesktop.preferences
         {
             foreach (TextAndIconSO pref in defaultsTextAndIcon_SO)
             {
-                if (pref.Name == UserPreferences.GlobalPref.CurrentTheme)
-                {
-                    currentTextAndIcon_SO = pref;
-                    return;
-                }
+                //if (pref.Name == UserPreferences.GlobalPref.CurrentTheme)
+                //{
+                //    currentTextAndIcon_SO = pref;
+                //    return;
+                //}
             }
         }
 
