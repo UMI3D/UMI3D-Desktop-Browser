@@ -199,12 +199,6 @@ namespace umi3DBrowser.UICustomStyle
         Percent = 1
     }
 
-    public enum CustomStyleTheme
-    {
-        All = 0,
-        Default = 1
-    }
-
     public enum MouseBehaviour
     {
         MouseOut,

@@ -23,14 +23,6 @@ namespace BrowserDesktop.preferences
     [CreateAssetMenu(fileName = "GlobalPreferences", menuName = "ScriptableObjects/UserPreferences/GlobalPreferences")]
     public class GlobalPreferences_SO : ScriptableObject
     {
-        //To be move in a theme class.
-        public enum Theme
-        {
-            //Add here other theme.
-            Dark,
-            User
-        }
-
         private const int minZoom = 20;
         private const int maxZoom = 200;
 
@@ -51,19 +43,11 @@ namespace BrowserDesktop.preferences
 
         [Tooltip("TODO")]
         [SerializeField]
-        private Theme currentTheme = Theme.Dark;
-        public Theme CurrentTheme
+        private Theme_SO currentTheme;
+        public Theme_SO CurrentTheme
         {
             get => currentTheme;
             set => currentTheme = value;
-        }
-
-        public CustomStyleTheme CustomStyleTheme { get; protected set; }
-
-        [ContextMenu("Apply User Pref")]
-        private void ApplyUserPref()
-        {
-            UserPreferences.Instance.OnApplyUserPreferences.Invoke();
         }
 
         [HideInInspector]

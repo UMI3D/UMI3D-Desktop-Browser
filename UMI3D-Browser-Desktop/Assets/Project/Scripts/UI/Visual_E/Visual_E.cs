@@ -284,13 +284,13 @@ namespace umi3dDesktopBrowser.uI.viewController
         }
 
         protected void ApplyTextStyle(CustomStyle_SO style_SO, string styleKey, IStyle style, MouseBehaviour mouseBehaviour)
-            => ApplyAtomStyle(style, mouseBehaviour, () => style_SO.GetTextStyle(null, styleKey), m_uIElementStyleApplicator.AppliesTextStyle);
+            => ApplyAtomStyle(style, mouseBehaviour, () => style_SO.GetTextStyle(m_globalPref.CurrentTheme, styleKey), m_uIElementStyleApplicator.AppliesTextStyle);
 
         protected void ApplyBackgroundStyle(CustomStyle_SO style_SO, string styleKey, IStyle style, MouseBehaviour mouseBehaviour)
-            => ApplyAtomStyle(style, mouseBehaviour, () => style_SO.GetBackground(null, styleKey), m_uIElementStyleApplicator.AppliesBackground);
+            => ApplyAtomStyle(style, mouseBehaviour, () => style_SO.GetBackground(m_globalPref.CurrentTheme, styleKey), m_uIElementStyleApplicator.AppliesBackground);
 
         protected void ApplyBorderStyle(CustomStyle_SO style_SO, string styleKey, IStyle style, MouseBehaviour mouseBehaviour)
-            => ApplyAtomStyle(style, mouseBehaviour, () => style_SO.GetBorder(null, styleKey), m_uIElementStyleApplicator.AppliesBorder);
+            => ApplyAtomStyle(style, mouseBehaviour, () => style_SO.GetBorder(m_globalPref.CurrentTheme, styleKey), m_uIElementStyleApplicator.AppliesBorder);
 
         protected void ApplyAtomStyle<T>(IStyle style, MouseBehaviour mouseBehaviour, Func<ICustomisableByMouseBehaviour<T>> getUIStyle, Action<IStyle, T> styleApplicator)
         {
