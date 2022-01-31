@@ -48,11 +48,11 @@ MonoBehaviour:
     m_margin:
       m_keyword: 0
       m_value:
-        m_global: 0
-        m_bottom: 0
-        m_left: 0
-        m_right: 0
-        m_top: 0
+        m_global: 20
+        m_bottom: 20
+        m_left: 20
+        m_right: 20
+        m_top: 20
     m_padding:
       m_keyword: 0
       m_value:
@@ -64,8 +64,7 @@ MonoBehaviour:
   m_textFormat:
     m_fontSize:
       m_keyword: 0
-      m_valueMode: 0
-      m_value: 0
+      m_value: 14
     m_letterSpacing:
       m_keyword: 0
       m_value: 0
@@ -77,6 +76,172 @@ MonoBehaviour:
       m_value: 0
     m_numberOfVisibleCharacter:
       m_keyword: 0
-      m_value: 0
+      m_value: 6
     m_textAlign: 0
-  m_themeStyles: []
+  m_themeStyles:
+  - m_theme: {fileID: 0}
+    m_textStyle:
+    - m_key: 
+      m_default:
+        m_keyword: 2
+        m_value:
+          m_font: {fileID: 0}
+          m_fontStyleAndWeight: 0
+          m_color:
+            m_keyword: 0
+            m_value: {r: 1, g: 1, b: 1, a: 1}
+          m_outlineColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_outlineWidth:
+            m_keyword: 0
+            m_value: 0
+      m_mouseOver:
+        m_keyword: 2
+        m_value:
+          m_font: {fileID: 0}
+          m_fontStyleAndWeight: 0
+          m_color:
+            m_keyword: 2
+            m_value: {r: 1, g: 0.9764151, b: 0.9764151, a: 1}
+          m_outlineColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_outlineWidth:
+            m_keyword: 0
+            m_value: 0
+      m_mousePressed:
+        m_keyword: 0
+        m_value:
+          m_font: {fileID: 0}
+          m_fontStyleAndWeight: 0
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_outlineColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_outlineWidth:
+            m_keyword: 0
+            m_value: 0
+    m_background:
+    - m_key: 
+      m_default:
+        m_keyword: 0
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 0
+            m_value: {fileID: 0}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_mouseOver:
+        m_keyword: 0
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 0
+            m_value: {fileID: 0}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_mousePressed:
+        m_keyword: 0
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 0
+            m_value: {fileID: 0}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+    m_border:
+    - m_key: 
+      m_default:
+        m_keyword: 0
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value:
+              m_global: {r: 0, g: 0, b: 0, a: 0}
+              m_bottom: {r: 0, g: 0, b: 0, a: 0}
+              m_left: {r: 0, g: 0, b: 0, a: 0}
+              m_right: {r: 0, g: 0, b: 0, a: 0}
+              m_top: {r: 0, g: 0, b: 0, a: 0}
+          m_width:
+            m_keyword: 0
+            m_value:
+              m_global: 0
+              m_bottom: 0
+              m_left: 0
+              m_right: 0
+              m_top: 0
+          m_radius:
+            m_keyword: 0
+            m_value:
+              m_global: 0
+              m_bottomLeft: 0
+              m_bottomRight: 0
+              m_topLeft: 0
+              m_TopRight: 0
+      m_mouseOver:
+        m_keyword: 0
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value:
+              m_global: {r: 0, g: 0, b: 0, a: 0}
+              m_bottom: {r: 0, g: 0, b: 0, a: 0}
+              m_left: {r: 0, g: 0, b: 0, a: 0}
+              m_right: {r: 0, g: 0, b: 0, a: 0}
+              m_top: {r: 0, g: 0, b: 0, a: 0}
+          m_width:
+            m_keyword: 0
+            m_value:
+              m_global: 0
+              m_bottom: 0
+              m_left: 0
+              m_right: 0
+              m_top: 0
+          m_radius:
+            m_keyword: 0
+            m_value:
+              m_global: 0
+              m_bottomLeft: 0
+              m_bottomRight: 0
+              m_topLeft: 0
+              m_TopRight: 0
+      m_mousePressed:
+        m_keyword: 0
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value:
+              m_global: {r: 0, g: 0, b: 0, a: 0}
+              m_bottom: {r: 0, g: 0, b: 0, a: 0}
+              m_left: {r: 0, g: 0, b: 0, a: 0}
+              m_right: {r: 0, g: 0, b: 0, a: 0}
+              m_top: {r: 0, g: 0, b: 0, a: 0}
+          m_width:
+            m_keyword: 0
+            m_value:
+              m_global: 0
+              m_bottom: 0
+              m_left: 0
+              m_right: 0
+              m_top: 0
+          m_radius:
+            m_keyword: 0
+            m_value:
+              m_global: 0
+              m_bottomLeft: 0
+              m_bottomRight: 0
+              m_topLeft: 0
+              m_TopRight: 0

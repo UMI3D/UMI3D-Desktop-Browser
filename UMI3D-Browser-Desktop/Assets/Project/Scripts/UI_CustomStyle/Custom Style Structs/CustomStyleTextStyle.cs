@@ -32,6 +32,12 @@ namespace umi3DBrowser.UICustomStyle
         private CustomStyleValue<CustomStyleColorKeyword, Color> m_outlineColor;
         [SerializeField]
         private CustomStyleValue<CustomStyleSimpleKeyword, float> m_outlineWidth;
+
+        public Font Font => m_font;
+        public FontStyle FontStyle => m_fontStyleAndWeight;
+        public CustomStyleValue<CustomStyleColorKeyword, Color> Color => m_color;
+        public CustomStyleValue<CustomStyleColorKeyword, Color> OutlineColor => m_outlineColor;
+        public CustomStyleValue<CustomStyleSimpleKeyword, float> OutlineWidth => m_outlineWidth;
     }
 
     [UnityEditor.CustomPropertyDrawer(typeof(TextStyle))]

@@ -97,7 +97,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             textE.style.unityTextAlign = textAlign;
         }
 
-        public virtual StyleLength GetLength(CustomStyleSizeKeyword keyword, StyleLength initialLength, Func<float> resizableValue, Func<Length> unresizableValue)
+        protected virtual StyleLength GetLength(CustomStyleSizeKeyword keyword, StyleLength initialLength, Func<float> resizableValue, Func<Length> unresizableValue)
         {
             StyleLength lenght = new StyleLength();
             switch (keyword)
@@ -120,58 +120,57 @@ namespace umi3dDesktopBrowser.uI.viewController
             return lenght;
         }
 
-        
-
         #endregion
 
         #region Style
 
         public virtual void AppliesTextStyle(IStyle style, CustomStyleTextStyle customStyle)
-        {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleExtraSimpleKeyword.Undefined:
-                    break;
-                case CustomStyleExtraSimpleKeyword.Custom:
-                    throw new System.NotImplementedException();
-                    break;
-            }
-        }
+            => AppliesMouseBehaviourStyle(customStyle.Keyword,
+                () =>
+                {
+                    AppliesTextStyleColor(style, customStyle.Value.Color);
+                    AppliesOutlineTextStyleColor(style, customStyle.Value.OutlineColor);
+                    //TODO Outline width;
+                });
 
         public virtual void AppliesBackground(IStyle style, CustomStyleBackground customStyle)
-        {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleExtraSimpleKeyword.Undefined:
-                    break;
-                case CustomStyleExtraSimpleKeyword.Custom:
+            => AppliesMouseBehaviourStyle(customStyle.Keyword,
+                () =>
+                {
                     AppliesBackgroundColor(style, customStyle.Value.BackgroundColor);
                     AppliesImage(style, customStyle.Value.BackgroundImage);
                     AppliesImageColor(style, customStyle.Value.BackgroundImageTintColor);
-                    break;
-            }
-        }
+                });
 
         public virtual void AppliesBorder(IStyle style, CustomStyleBorder customStyle)
-        {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleExtraSimpleKeyword.Undefined:
-                    break;
-                case CustomStyleExtraSimpleKeyword.Custom:
+            => AppliesMouseBehaviourStyle(customStyle.Keyword,
+                () =>
+                {
                     AppliesBorderColor(style, customStyle.Value.Color);
                     AppliesBorderWidth(style, customStyle.Value.Width);
                     AppliesBorderRadius(style, customStyle.Value.Radius);
-                    break;
-            }
-        }
+                });
+
+        
 
         #endregion
     }
 
     public partial class UIElementStyleApplicator
     {
-        protected virtual void AppliesSimple(CustomStyleSimpleKeyword simpleKeyword, Action defaultAction, Action customAction)
+        protected void AppliesMouseBehaviourStyle(CustomStyleExtraSimpleKeyword keyword, Action customAction)
+        {
+            switch (keyword)
+            {
+                case CustomStyleExtraSimpleKeyword.Undefined:
+                    break;
+                case CustomStyleExtraSimpleKeyword.Custom:
+                    customAction();
+                    break;
+            }
+        }
+
+        protected void AppliesSimple(CustomStyleSimpleKeyword simpleKeyword, Action defaultAction, Action customAction)
         {
             switch (simpleKeyword)
             {
@@ -186,7 +185,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             }
         }
 
-        protected virtual void AppliesColor(CustomStyleColorKeyword colorKeyword, Action defaultAction, Action customAction, Action<Color> themeAction)
+        protected void AppliesColor(CustomStyleColorKeyword colorKeyword, Action defaultAction, Action customAction, Action<Color> themeAction)
         {
             switch (colorKeyword)
             {
@@ -210,23 +209,63 @@ namespace umi3dDesktopBrowser.uI.viewController
             }
         }
 
+        protected void AppliesLength(CustomStyleSizeKeyword lengthKeyword, Action defaultAction, Action resizableAction, Action unresizableAction)
+        {
+            switch (lengthKeyword)
+            {
+                case CustomStyleSizeKeyword.Undefined:
+                    break;
+                case CustomStyleSizeKeyword.Default:
+                    defaultAction();
+                    break;
+                case CustomStyleSizeKeyword.CustomResizable:
+                    resizableAction();
+                    break;
+                case CustomStyleSizeKeyword.CustomUnresizabe:
+                    unresizableAction();
+                    break;
+            }
+        }
+
+        #region Text
+
+        protected virtual void AppliesTextStyleColor(IStyle style, CustomStyleValue<CustomStyleColorKeyword, Color> customStyle)
+            => AppliesColor(customStyle.Keyword,
+                () => style.color = StyleKeyword.Null,
+                () => style.color = customStyle.Value,
+                (color) => { throw new System.NotImplementedException(); });
+
+        protected virtual void AppliesOutlineTextStyleColor(IStyle style, CustomStyleValue<CustomStyleColorKeyword, Color> customStyle)
+            => AppliesColor(customStyle.Keyword,
+                () => style.unityTextOutlineColor = StyleKeyword.Null,
+                () => style.unityTextOutlineColor = customStyle.Value,
+                (color) => { throw new System.NotImplementedException(); });
+
+        //protected virtual void AppliesOutlineTextStyleWidth(IStyle style, CustomStyleValue<CustomStyleSimpleKeyword, float> customStyle)
+        //    => AppliesLength(customStyle.Keyword,
+        //        () => style.unityTextOutlineWidth = StyleKeyword.Null,
+        //        () => style.unityTextOutlineWidth = customStyle.Value * m_globalPref.ZoomCoef,
+        //        () => style.unityTextOutlineWidth = customStyle.Value);
+
+        #endregion
+
         #region Background
 
         protected virtual void AppliesBackgroundColor(IStyle style, CustomStyleValue<CustomStyleColorKeyword, Color> customStyle)
             => AppliesColor(customStyle.Keyword,
-                () => throw new System.NotImplementedException(),
+                () => style.backgroundColor = StyleKeyword.Null,
                 () => style.backgroundColor = customStyle.Value,
                 (color) => { throw new System.NotImplementedException(); });
 
         protected virtual void AppliesImageColor(IStyle style, CustomStyleValue<CustomStyleColorKeyword, Color> customStyle)
             => AppliesColor(customStyle.Keyword,
-                () => throw new System.NotImplementedException(),
+                () => style.unityBackgroundImageTintColor = StyleKeyword.Null,
                 () => style.unityBackgroundImageTintColor = customStyle.Value,
                 (color) => { throw new System.NotImplementedException(); });
 
         protected virtual void AppliesImage(IStyle style, CustomStyleValue<CustomStyleSimpleKeyword, Sprite> customStyle)
             => AppliesSimple(customStyle.Keyword,
-                () => { throw new System.NotImplementedException(); },
+                () => style.backgroundImage = StyleKeyword.Null,
                 () => style.backgroundImage = customStyle.Value.texture);
 
         #endregion
@@ -235,7 +274,13 @@ namespace umi3dDesktopBrowser.uI.viewController
 
         protected virtual void AppliesBorderColor(IStyle style, CustomStyleCrossPosition<CustomStyleColorKeyword, Color> customStyle)
             => AppliesColor(customStyle.Keyword,
-                () => throw new System.NotImplementedException(),
+                () =>
+                {
+                    style.borderTopColor = StyleKeyword.Null;
+                    style.borderLeftColor = StyleKeyword.Null;
+                    style.borderRightColor = StyleKeyword.Null;
+                    style.borderBottomColor = StyleKeyword.Null;
+                },
                 () =>
                 {
                     CrossPosition<Color> borderColor = customStyle.Value;
@@ -247,50 +292,56 @@ namespace umi3dDesktopBrowser.uI.viewController
                 (color) => { });
 
         protected virtual void AppliesBorderWidth(IStyle style, CustomStyleCrossPosition<CustomStyleSizeKeyword, float> customStyle)
-        {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleSizeKeyword.Undefined:
-                    break;
-                case CustomStyleSizeKeyword.Default:
-                    break;
-                case CustomStyleSizeKeyword.CustomUnresizabe:
+            => AppliesLength(customStyle.Keyword,
+                () =>
+                {
+                    style.borderTopWidth = StyleKeyword.Null;
+                    style.borderLeftWidth = StyleKeyword.Null;
+                    style.borderRightWidth = StyleKeyword.Null;
+                    style.borderBottomWidth = StyleKeyword.Null;
+                },
+                () =>
+                {
+                    CrossPosition<float> borderWidth = customStyle.Value;
+                    style.borderTopWidth = borderWidth.Top * m_globalPref.ZoomCoef;
+                    style.borderLeftWidth = borderWidth.Left * m_globalPref.ZoomCoef;
+                    style.borderRightWidth = borderWidth.Right * m_globalPref.ZoomCoef;
+                    style.borderBottomWidth = borderWidth.Bottom * m_globalPref.ZoomCoef;
+                },
+                () =>
+                {
                     CrossPosition<float> borderWidth = customStyle.Value;
                     style.borderTopWidth = borderWidth.Top;
                     style.borderLeftWidth = borderWidth.Left;
                     style.borderRightWidth = borderWidth.Right;
                     style.borderBottomWidth = borderWidth.Bottom;
-                    break;
-                case CustomStyleSizeKeyword.CustomResizable:
-                    throw new System.NotImplementedException();
-                    break;
-            }
-        }
+                });
 
         protected virtual void AppliesBorderRadius(IStyle style, CustomStyleSquarePosition<CustomStyleSizeKeyword, float> customStyle)
-        {
-            switch (customStyle.Keyword)
-            {
-                case CustomStyleSizeKeyword.Undefined:
-                    break;
-                case CustomStyleSizeKeyword.Default:
-                    style.borderTopLeftRadius = 0f;
-                    style.borderTopRightRadius = 0f;
-                    style.borderBottomLeftRadius = 0f;
-                    style.borderBottomRightRadius = 0f;
-                    break;
-                case CustomStyleSizeKeyword.CustomUnresizabe:
+            => AppliesLength(customStyle.Keyword,
+                () =>
+                {
+                    style.borderTopLeftRadius = StyleKeyword.Null;
+                    style.borderTopRightRadius = StyleKeyword.Null;
+                    style.borderBottomLeftRadius = StyleKeyword.Null;
+                    style.borderBottomRightRadius = StyleKeyword.Null;
+                },
+                () =>
+                {
+                    SquarePosition<float> borderRadius = customStyle.Value;
+                    style.borderTopLeftRadius = borderRadius.TopLeft * m_globalPref.ZoomCoef;
+                    style.borderTopRightRadius = borderRadius.TopRight * m_globalPref.ZoomCoef;
+                    style.borderBottomLeftRadius = borderRadius.BottomLeft * m_globalPref.ZoomCoef;
+                    style.borderBottomRightRadius = borderRadius.BottomRight * m_globalPref.ZoomCoef;
+                },
+                () =>
+                {
                     SquarePosition<float> borderRadius = customStyle.Value;
                     style.borderTopLeftRadius = borderRadius.TopLeft;
                     style.borderTopRightRadius = borderRadius.TopRight;
                     style.borderBottomLeftRadius = borderRadius.BottomLeft;
                     style.borderBottomRightRadius = borderRadius.BottomRight;
-                    break;
-                case CustomStyleSizeKeyword.CustomResizable:
-                    throw new System.NotImplementedException();
-                    break;
-            }
-        }
+                });
 
         #endregion
     }
