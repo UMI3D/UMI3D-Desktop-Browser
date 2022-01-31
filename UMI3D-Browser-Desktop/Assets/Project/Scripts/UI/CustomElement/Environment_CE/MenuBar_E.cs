@@ -31,48 +31,53 @@ namespace umi3dDesktopBrowser.uI.viewController
         public float Space { get; set; } = 10f;
         //public Action<VisualElement> AddSeparator { get; set; } = (ve) => { Debug.Log("<color=green>TODO: </color>" + $"AddSeparator in MenuBarElement."); };
         public VisualElement SubMenuLayout { get; private set; }
+        public static MenuBar_E Instance
+        {
+            get
+            {
+                if (m_instance == null)
+                {
+                    m_instance = new MenuBar_E();
+                }
+                return m_instance;
+            }
+        }
     }
 
     public partial class MenuBar_E
     {
+        protected ToolboxItem_E m_toolboxButton;
+        protected ToolboxItem_E m_avatar;
+        protected ToolboxItem_E m_sound;
+        protected ToolboxItem_E m_mic;
+        protected ToolboxItem_E m_leave;
+        protected ScrollView_E m_scrollView { get; set; }
+
+        private static MenuBar_E m_instance;
         private VisualElement leftLayout_VE;
-        private ToolboxScrollView_E centerLayout_VE;
+        private VisualElement centerLayout_VE;
         private VisualElement rightLayout_VE;
     }
 
     public partial class MenuBar_E
     {
-        public MenuBar_E() : 
+        private MenuBar_E() : 
             base("UI/UXML/MenuBar/menuBar1", 
                 "UI/Style/MenuBar/MenuBar", 
                 new StyleKeys("", null)) { }
 
-        public MenuBar_E AddLeft(params Visual_E[] ces)
+
+        public void AddToolbox(params Toolbox_E[] toolboxes)
         {
-            foreach (Visual_E ce in ces)
-                ce.AddTo(leftLayout_VE);
-            return this;
+
         }
+
         public MenuBar_E AddCenter(params Toolbox_E[] toolboxes)
         {
-            centerLayout_VE.AddToolboxes(toolboxes);
-            return this;
-        }
-        public MenuBar_E AddRight(params Visual_E[] ces)
-        {
-            foreach (Visual_E ce in ces)
-                ce.AddTo(rightLayout_VE);
+            //centerLayout_VE.AddToolboxes(toolboxes);
             return this;
         }
 
-        public void AddSpacerToLeftLayout()
-        {
-            AddSpacer(leftLayout_VE);
-        }
-        public void AddSpacerToRightLayout()
-        {
-            AddSpacer(rightLayout_VE);
-        }
 
         public void AddInSubMenu(ToolboxGenericElement tools, ToolboxGenericElement parent)
         {
@@ -92,13 +97,6 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class MenuBar_E
     {
-        private void AddSpacer(VisualElement layoutContainer_VE)
-        {
-            VisualElement space = new VisualElement();
-            space.style.width = Space;
-            layoutContainer_VE.Add(space);
-        }
-
         private IEnumerator LogWorldPositionCoroutine()
         {
             yield return null;
@@ -111,21 +109,16 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class MenuBar_E : Visual_E
     {
-        protected ToolboxItem_E m_toolboxButton;
-        protected ToolboxItem_E m_avatar;
-        protected ToolboxItem_E m_sound;
-        protected ToolboxItem_E m_mic;
-        protected ToolboxItem_E m_leave;
-
         protected override void Initialize()
         {
             base.Initialize();
 
             leftLayout_VE = Root.Q<VisualElement>("Left-layout");
-            centerLayout_VE = new ToolboxScrollView_E(Root.Q("toolboxScrollView"))
-            {
-                AddSeparator = (ve) => { AddSeparator(ve); }
-            };
+            //centerLayout_VE = new ToolboxScrollView_E(Root.Q("toolboxScrollView"))
+            //{
+            //    AddSeparator = (ve) => { AddSeparator(ve); }
+            //};
+            centerLayout_VE = Root.Q<VisualElement>("Center-layout");
             rightLayout_VE = Root.Q<VisualElement>("Right-layout");
             //SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
 
@@ -136,6 +129,21 @@ namespace umi3dDesktopBrowser.uI.viewController
             AddSeparator(leftLayout_VE);
 
             //Scroll view
+            m_scrollView = new ScrollView_E(centerLayout_VE, "UI/UXML/MenuBar/toolboxesScrollView", null, null);
+            m_scrollView.SetHorizontalBackwardButtonStyle(m_scrollView.Root.Q("backwardButton"), 
+                "UI/Style/MenuBar/ScrollView_Button", 
+                new StyleKeys("backward", null));
+            m_scrollView.SetHorizontalForwarddButtonStyle(m_scrollView.Root.Q("forwardButton"), 
+                "UI/Style/MenuBar/ScrollView_Button", 
+                new StyleKeys("forward", null));
+            AddVisualStyle(m_scrollView.Root.Q("backward").Q("separator"), 
+                "UI/Style/MenuBar/Separator", 
+                new StyleKeys("", 
+                null));
+            AddVisualStyle(m_scrollView.Root.Q("forward").Q("separator"), 
+                "UI/Style/MenuBar/Separator", 
+                new StyleKeys("", 
+                null));
 
             AddSeparator(rightLayout_VE);
 
@@ -154,7 +162,9 @@ namespace umi3dDesktopBrowser.uI.viewController
 
         protected void AddSeparator(VisualElement layout)
         {
-            new Visual_E(new VisualElement(), "UI/Style/MenuBar/Separator", new StyleKeys("", null))
+            new Visual_E(new VisualElement(), 
+                "UI/Style/MenuBar/Separator", 
+                new StyleKeys("", null))
                 .AddTo(layout);
         }
     }

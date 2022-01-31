@@ -1,16 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="MenuBar-ToolboxScrollView-Button" src="MenuBar-ToolboxScrollView-Button.uxml" />
     <Style src="/Assets/Project/UI/UXML/menu-bar.uss" />
-    <ui:VisualElement name="horizontal-layer" style="flex-direction: row; justify-content: space-between; align-items: stretch; height: 100%; width: 100%;">
-        <ui:VisualElement name="horizontal-layout-backward" style="flex-direction: row; flex-shrink: 0;">
-            <ui:Instance template="MenuBar-ToolboxScrollView-Button" name="backward" style="display: none;" />
-            <ui:VisualElement name="backwardButton" />
+    <ui:VisualElement name="horizontal-layer" style="flex-direction: row; justify-content: space-between; align-items: center; height: 100%; width: 100%;">
+        <ui:VisualElement name="backward" style="flex-direction: row; flex-shrink: 0;">
+            <ui:VisualElement name="backwardButton" style="justify-content: center;" />
             <ui:VisualElement name="separator" />
         </ui:VisualElement>
         <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" mode="Horizontal" name="scrollView" horizontal-scroller-visibility="Hidden" style="flex-grow: 1; flex-wrap: wrap;" />
-        <ui:VisualElement name="horizontal-layout-forward" style="flex-direction: row; flex-shrink: 0;">
+        <ui:VisualElement name="forward" style="flex-direction: row; flex-shrink: 0;">
             <ui:VisualElement name="separator" />
-            <ui:Instance template="MenuBar-ToolboxScrollView-Button" name="forward" />
+            <ui:VisualElement name="forwardButton" style="justify-content: center;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

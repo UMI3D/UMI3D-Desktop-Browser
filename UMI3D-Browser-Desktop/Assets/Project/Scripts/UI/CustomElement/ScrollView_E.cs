@@ -76,11 +76,18 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected VisualElement m_horizontalDraggerContainer { get; set; } = null;
         protected VisualElement m_verticalDragger { get; set; } = null;
         protected VisualElement m_horizontalDragger { get; set; } = null;
+        protected VisualElement m_backwardVerticalButton { get; set; } = null;
+        protected VisualElement m_backwardHorizontalButton { get; set; } = null;
+        protected VisualElement m_forwardVerticalButton { get; set; } = null;
+        protected VisualElement m_forwardHorizontalButton { get; set; } = null;
+
         protected VisualElement m_backwardVerticalButtonLayout { get; set; } = null;
         protected VisualElement m_backwardHorizontalButtonLayout { get; set; } = null;
         protected VisualElement m_forwardVerticalButtonLayout { get; set; } = null;
         protected VisualElement m_forwardHorizontalButtonLayout { get; set; } = null;
         protected List<Visual_E> m_items { get; set; } = null;
+
+        protected VisualElement m_horizontalBackwardButtonContainer { get; set; } = null;
     }
 
     public partial class ScrollView_E
@@ -128,11 +135,36 @@ namespace umi3dDesktopBrowser.uI.viewController
             new Visual_E(m_horizontalDragger, customStyleKey, formatAndStyleKeys);
             return this;
         }
-
-        public ScrollView_E SetButtonStyle()
+        public ScrollView_E SetVerticalBackwardButtonStyle(VisualElement buttonContainer, string styleResourceKey, StyleKeys styleKeys)
         {
+            if (buttonContainer == null) throw new NullReferenceException("Button container null");
+            buttonContainer.Add(m_backwardVerticalButton);
+            AddVisualStyle(m_backwardVerticalButton, styleResourceKey, styleKeys);
             return this;
         }
+        public ScrollView_E SetVerticalForwardButtonStyle(VisualElement buttonContainer, string styleResourceKey, StyleKeys styleKeys)
+        {
+            if (buttonContainer == null) throw new NullReferenceException("Button container null");
+            buttonContainer.Add(m_forwardVerticalButton);
+            AddVisualStyle(m_forwardVerticalButton, styleResourceKey, styleKeys);
+            return this;
+        }
+        public ScrollView_E SetHorizontalBackwardButtonStyle(VisualElement buttonContainer, string styleResourceKey, StyleKeys styleKeys)
+        {
+            if (buttonContainer == null) throw new NullReferenceException("Button container null");
+            buttonContainer.Add(m_backwardHorizontalButton);
+            AddVisualStyle(m_backwardHorizontalButton, styleResourceKey, styleKeys);
+            return this;
+        }
+        public ScrollView_E SetHorizontalForwarddButtonStyle(VisualElement buttonContainer, string styleResourceKey, StyleKeys styleKeys)
+        {
+            if (buttonContainer == null) throw new NullReferenceException("Button container null");
+            buttonContainer.Add(m_forwardHorizontalButton);
+            AddVisualStyle(m_forwardHorizontalButton, styleResourceKey, styleKeys);
+            return this;
+        }
+
+        
     }
 
     public partial class ScrollView_E
@@ -161,6 +193,12 @@ namespace umi3dDesktopBrowser.uI.viewController
             //m_horizontalDraggerContainer = m_horizontalSlide.Q("unity-drag-container");
             m_verticalDragger = m_verticalSlider.Q("unity-dragger");
             m_horizontalDragger = m_horizontalSlider.Q("unity-dragger");
+
+            m_backwardVerticalButton = m_verticalScroller.Q<RepeatButton>("unity-low-button");
+            m_forwardVerticalButton = m_verticalScroller.Q<RepeatButton>("unity-high-button");
+            m_backwardHorizontalButton = m_horizontalScroller.Q<RepeatButton>("unity-low-button");
+            m_forwardHorizontalButton = m_horizontalScroller.Q<RepeatButton>("unity-high-button");
+
             m_items = new List<Visual_E>();
         }
 

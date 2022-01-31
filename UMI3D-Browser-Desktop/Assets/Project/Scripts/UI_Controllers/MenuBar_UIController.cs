@@ -50,7 +50,6 @@ namespace DesktopBrowser.UIControllers
             VisualTreeAsset toolboxVisual = GetUIController("toolboxes").VisualTA;
             VisualTreeAsset separatorVisual = GetUIController("toolboxSeparators").VisualTA;
 
-            //addSeparator = (ve) => { new ToolboxSeparatorGenericElement(separatorVisual).AddTo(ve); };
 
             #region Left Layout
 
