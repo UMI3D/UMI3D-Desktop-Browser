@@ -54,12 +54,16 @@ namespace umi3dDesktopBrowser.uI.viewController
         public UnityEvent HorizontalBackwardButtonPressed { get; protected set; } = new UnityEvent();
         public UnityEvent HorizontalForwardButtonPressed { get; protected set; } = new UnityEvent();
         public float SpaceBetweenItems { get; set; } = 10f;
+        public Func<VisualElement, Visual_E> AddSeparator { get; set; } = null;
 
         public virtual void Adds(params Visual_E[] items)
         {
             foreach (Visual_E item in items)
             {
-                m_items.Add(item);
+                Visual_E separator = null;
+                if (m_items.Count > 0 && AddSeparator != null)
+                    separator = AddSeparator(m_scrollView);
+                m_items.Add((item, separator));
                 item.AddTo(m_scrollView);
             }
         }
@@ -85,7 +89,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected VisualElement m_backwardHorizontalButtonLayout { get; set; } = null;
         protected VisualElement m_forwardVerticalButtonLayout { get; set; } = null;
         protected VisualElement m_forwardHorizontalButtonLayout { get; set; } = null;
-        protected List<Visual_E> m_items { get; set; } = null;
+        protected List<(Visual_E, Visual_E)> m_items { get; set; } = null;
 
         protected VisualElement m_horizontalBackwardButtonContainer { get; set; } = null;
     }
@@ -199,7 +203,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_backwardHorizontalButton = m_horizontalScroller.Q<RepeatButton>("unity-low-button");
             m_forwardHorizontalButton = m_horizontalScroller.Q<RepeatButton>("unity-high-button");
 
-            m_items = new List<Visual_E>();
+            m_items = new List<(Visual_E, Visual_E)>();
         }
 
         public override void Reset()
