@@ -72,6 +72,7 @@ namespace umi3dDesktopBrowser.uI.viewController
     public partial class ScrollView_E
     {
         protected ScrollView m_scrollView { get; set; } = null;
+
         protected Scroller m_verticalScroller { get; set; } = null;
         protected Scroller m_horizontalScroller { get; set; } = null;
         protected Slider m_verticalSlider { get; set; } = null;
@@ -80,6 +81,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected VisualElement m_horizontalDraggerContainer { get; set; } = null;
         protected VisualElement m_verticalDragger { get; set; } = null;
         protected VisualElement m_horizontalDragger { get; set; } = null;
+
         protected VisualElement m_backwardVerticalButton { get; set; } = null;
         protected VisualElement m_backwardHorizontalButton { get; set; } = null;
         protected VisualElement m_forwardVerticalButton { get; set; } = null;
@@ -89,9 +91,10 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected VisualElement m_backwardHorizontalButtonLayout { get; set; } = null;
         protected VisualElement m_forwardVerticalButtonLayout { get; set; } = null;
         protected VisualElement m_forwardHorizontalButtonLayout { get; set; } = null;
+
         protected List<(Visual_E, Visual_E)> m_items { get; set; } = null;
 
-        protected VisualElement m_horizontalBackwardButtonContainer { get; set; } = null;
+        
     }
 
     public partial class ScrollView_E
@@ -139,48 +142,67 @@ namespace umi3dDesktopBrowser.uI.viewController
             new Visual_E(m_horizontalDragger, customStyleKey, formatAndStyleKeys);
             return this;
         }
-        public ScrollView_E SetVerticalBackwardButtonStyle(VisualElement buttonContainer, string styleResourceKey, StyleKeys styleKeys)
-        {
-            if (buttonContainer == null) throw new NullReferenceException("Button container null");
-            buttonContainer.Add(m_backwardVerticalButton);
-            AddVisualStyle(m_backwardVerticalButton, styleResourceKey, styleKeys);
-            return this;
-        }
-        public ScrollView_E SetVerticalForwardButtonStyle(VisualElement buttonContainer, string styleResourceKey, StyleKeys styleKeys)
-        {
-            if (buttonContainer == null) throw new NullReferenceException("Button container null");
-            buttonContainer.Add(m_forwardVerticalButton);
-            AddVisualStyle(m_forwardVerticalButton, styleResourceKey, styleKeys);
-            return this;
-        }
-        public ScrollView_E SetHorizontalBackwardButtonStyle(VisualElement buttonContainer, string styleResourceKey, StyleKeys styleKeys)
-        {
-            if (buttonContainer == null) throw new NullReferenceException("Button container null");
-            buttonContainer.Add(m_backwardHorizontalButton);
-            AddVisualStyle(m_backwardHorizontalButton, styleResourceKey, styleKeys);
-            return this;
-        }
-        public ScrollView_E SetHorizontalForwarddButtonStyle(VisualElement buttonContainer, string styleResourceKey, StyleKeys styleKeys)
-        {
-            if (buttonContainer == null) throw new NullReferenceException("Button container null");
-            buttonContainer.Add(m_forwardHorizontalButton);
-            AddVisualStyle(m_forwardHorizontalButton, styleResourceKey, styleKeys);
-            return this;
-        }
-
-        
+        public ScrollView_E SetVerticalBackwardButtonStyle(VisualElement buttonContainer, VisualElement buttonLayout, string styleResourceKey, StyleKeys styleKeys)
+            => SetButton(m_backwardVerticalButton, 
+                buttonContainer, 
+                () => m_backwardVerticalButtonLayout = buttonLayout, 
+                styleResourceKey, 
+                styleKeys);
+        public ScrollView_E SetVerticalForwardButtonStyle(VisualElement buttonContainer, VisualElement buttonLayout, string styleResourceKey, StyleKeys styleKeys)
+            => SetButton(m_forwardVerticalButton, 
+                buttonContainer, 
+                () => m_forwardVerticalButtonLayout = buttonLayout, 
+                styleResourceKey, 
+                styleKeys);
+        public ScrollView_E SetHorizontalBackwardButtonStyle(VisualElement buttonContainer, VisualElement buttonLayout, string styleResourceKey, StyleKeys styleKeys)
+            => SetButton(m_backwardHorizontalButton, 
+                buttonContainer, 
+                () => m_backwardHorizontalButtonLayout = buttonLayout, 
+                styleResourceKey, 
+                styleKeys);
+        public ScrollView_E SetHorizontalForwarddButtonStyle(VisualElement buttonContainer, VisualElement buttonLayout, string styleResourceKey, StyleKeys styleKeys)
+            => SetButton(m_forwardHorizontalButton, 
+                buttonContainer, 
+                () => m_forwardHorizontalButtonLayout = buttonLayout,
+                styleResourceKey, 
+                styleKeys);
     }
 
     public partial class ScrollView_E
     {
-        protected void AddSpace(Action<IStyle> applySpace)
+        //protected void AddSpace(Action<IStyle> applySpace)
+        //{
+        //    VisualElement space = new VisualElement();
+        //    applySpace(space.style);
+        //    m_scrollView.Add(space);
+        //}
+        //protected void AddVerticalSpace() => AddSpace((style) => style.height = SpaceBetweenItems);
+        //protected void AddHorizontalSpace() => AddSpace((style) => style.width = SpaceBetweenItems);
+
+        protected ScrollView_E SetButton(VisualElement button, VisualElement buttonContainer, Action bindButtonLayout, string styleResourceKey, StyleKeys styleKeys)
         {
-            VisualElement space = new VisualElement();
-            applySpace(space.style);
-            m_scrollView.Add(space);
+            if (buttonContainer == null) throw new NullReferenceException("Button container null");
+            buttonContainer.Add(button);
+            AddVisualStyle(button, styleResourceKey, styleKeys);
+            bindButtonLayout();
+            return this;
         }
-        protected void AddVerticalSpace() => AddSpace((style) => style.height = SpaceBetweenItems);
-        protected void AddHorizontalSpace() => AddSpace((style) => style.width = SpaceBetweenItems);
+
+        protected void OnGeometryChanged(GeometryChangedEvent e)
+        {
+            VerticalSliderValueChanged(m_verticalSlider.value);
+            HorizontalSliderValueChanged(m_horizontalSlider.value);
+        }
+        
+        protected void SliderValueChanged(float value, Slider slider, VisualElement backwardButton, VisualElement forwardButton)
+        {
+            if (backwardButton != null) backwardButton.visible = (value > slider.lowValue) ? true : false;
+            if (forwardButton != null) forwardButton.visible = (value < slider.highValue) ? true : false;
+        }
+        protected void VerticalSliderValueChanged(float value)
+            => SliderValueChanged(value, m_verticalSlider, m_backwardVerticalButtonLayout, m_forwardVerticalButtonLayout);
+        protected void HorizontalSliderValueChanged(float value)
+            => SliderValueChanged(value, m_horizontalSlider, m_backwardHorizontalButtonLayout, m_forwardHorizontalButtonLayout);
     }
 
     public partial class ScrollView_E : Visual_E
@@ -198,10 +220,15 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_verticalDragger = m_verticalSlider.Q("unity-dragger");
             m_horizontalDragger = m_horizontalSlider.Q("unity-dragger");
 
-            m_backwardVerticalButton = m_verticalScroller.Q<RepeatButton>("unity-low-button");
-            m_forwardVerticalButton = m_verticalScroller.Q<RepeatButton>("unity-high-button");
-            m_backwardHorizontalButton = m_horizontalScroller.Q<RepeatButton>("unity-low-button");
-            m_forwardHorizontalButton = m_horizontalScroller.Q<RepeatButton>("unity-high-button");
+            m_backwardVerticalButton = m_verticalScroller.lowButton;
+            m_forwardVerticalButton = m_verticalScroller.highButton;
+            m_backwardHorizontalButton = m_horizontalScroller.lowButton;
+            m_forwardHorizontalButton = m_horizontalScroller.highButton;
+
+            m_scrollView.contentContainer.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            m_scrollView.contentViewport.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            m_verticalScroller.valueChanged += VerticalSliderValueChanged;
+            m_horizontalScroller.valueChanged += HorizontalSliderValueChanged;
 
             m_items = new List<(Visual_E, Visual_E)>();
         }
@@ -209,6 +236,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         public override void Reset()
         {
             base.Reset();
+            throw new System.NotImplementedException();
         }
     }
 }

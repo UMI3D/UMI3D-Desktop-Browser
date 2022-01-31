@@ -129,10 +129,12 @@ namespace umi3dDesktopBrowser.uI.viewController
             {
                 AddSeparator = AddSeparator
             };
-            m_scrollView.SetHorizontalBackwardButtonStyle(m_scrollView.Root.Q("backwardButton"), 
+            m_scrollView.SetHorizontalBackwardButtonStyle(m_scrollView.Root.Q("backwardButton"),
+                m_scrollView.Root.Q("backward"),
                 "UI/Style/MenuBar/ScrollView_Button", 
                 new StyleKeys("backward", null));
-            m_scrollView.SetHorizontalForwarddButtonStyle(m_scrollView.Root.Q("forwardButton"), 
+            m_scrollView.SetHorizontalForwarddButtonStyle(m_scrollView.Root.Q("forwardButton"),
+                m_scrollView.Root.Q("forward"),
                 "UI/Style/MenuBar/ScrollView_Button", 
                 new StyleKeys("forward", null));
             AddVisualStyle(m_scrollView.Root.Q("backward").Q("separator"), 
