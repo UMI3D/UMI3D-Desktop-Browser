@@ -23,23 +23,19 @@ public class TestUI : MonoBehaviour
 
     void Start()
     {
-        var item = new ToolboxItem_E(new StyleKeys( "Toolbox", null), 
-            new StyleKeys("Toolbox", "", null, null));
-        item.AddTo(UIDoc.rootVisualElement);
+        var item = new ToolboxItem_E("Toolbox", "Toolbox" );
+        //item.AddTo(UIDoc.rootVisualElement);
 
-        var item1 = new ToolboxItem_E(new StyleKeys("Toolbox", null),
-            new StyleKeys("Toolbox", "", null, null));
-        var item2 = new ToolboxItem_E(new StyleKeys("Toolbox", null),
-            new StyleKeys("Toolbox", "", null, null));
-        var item3 = new ToolboxItem_E(new StyleKeys("Toolbox", null),
-            new StyleKeys("Toolbox", "", null, null));
-        var item4 = new ToolboxItem_E(new StyleKeys("Toolbox", null),
-            new StyleKeys("Toolbox", "", null, null));
-        var item5 = new ToolboxItem_E(new StyleKeys("Toolbox", null),
-            new StyleKeys("Toolbox", "", null, null));
+        var item1 = new ToolboxItem_E("Toolbox", "Toolbox");
+        var item2 = new ToolboxItem_E("Toolbox", "Toolbox");
+        var item3 = new ToolboxItem_E("Toolbox", "Toolbox");
+        var item4 = new ToolboxItem_E("Toolbox", "Toolbox");
+        var item5 = new ToolboxItem_E("Toolbox", "Toolbox");
 
         var toolbox = new Toolbox_E("test", true, item, item1, item2, item3, item4, item5);
-        toolbox.AddTo(UIDoc.rootVisualElement);
+        //toolbox.AddTo(UIDoc.rootVisualElement);
+
+        new MenuBar_E().AddTo(UIDoc.rootVisualElement);
     }
 
     void Update()

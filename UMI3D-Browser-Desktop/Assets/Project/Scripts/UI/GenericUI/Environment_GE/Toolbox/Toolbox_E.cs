@@ -30,7 +30,7 @@ namespace umi3dDesktopBrowser.uI.viewController
     public partial class Toolbox_E
     {
         public Toolbox_E(string toolboxName, bool isScrollable, params ToolboxItem_E[] items) : 
-            base("UI/UXML/Toolbox/Toolbox1", 
+            base("UI/UXML/Toolbox/Toolbox", 
                 "UI/Style/Toolbox/Toolbox", 
                 new StyleKeys( "", null))
         {

@@ -38,7 +38,7 @@ namespace umi3DBrowser.UICustomStyle
             //string[] subKeys = key.Split('-');
             foreach (UITextStyle themeText in m_textStyle)
             {
-                if (themeText.Key == key)
+                if (themeText.Key.ToLower() == key)
                     return themeText;
             }
             throw new KeyNotFoundException(key, "UIThemeStyle");
@@ -46,24 +46,24 @@ namespace umi3DBrowser.UICustomStyle
         public UIBackground GetBackground(string key)
         {
             key = key.ToLower();
-            string[] subKeys = key.Split('-');
+            //string[] subKeys = key.Split('-');
             foreach (UIBackground background in m_background)
             {
-                if (background.Key == subKeys[0])
+                if (background.Key.ToLower() == key)
                     return background;
             }
-            throw new KeyNotFoundException(subKeys[0], "UIThemeStyle");
+            throw new KeyNotFoundException(key, "UIThemeStyle");
         }
         public UIBorder GetBorder(string key)
         {
             key = key.ToLower();
-            string[] subKeys = key.Split('-');
+            //string[] subKeys = key.Split('-');
             foreach (UIBorder border in m_border)
             {
-                if (border.Key == subKeys[0])
+                if (border.Key.ToLower() == key)
                     return border;
             }
-            throw new KeyNotFoundException(subKeys[0], "UIThemeStyle");
+            throw new KeyNotFoundException(key, "UIThemeStyle");
         }
     }
 

@@ -46,10 +46,10 @@ MonoBehaviour:
       m_value: 0
   m_marginAndPadding:
     m_margin:
-      m_keyword: 0
+      m_keyword: 11
       m_value:
         m_global: 0
-        m_bottom: 0
+        m_bottom: 3
         m_left: 0
         m_right: 0
         m_top: 0
