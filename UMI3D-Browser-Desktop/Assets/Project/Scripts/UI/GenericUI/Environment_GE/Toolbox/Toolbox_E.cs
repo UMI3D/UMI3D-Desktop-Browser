@@ -37,6 +37,21 @@ namespace umi3dDesktopBrowser.uI.viewController
             AddVisualStyle(Root.Q<Label>(), 
                 "UI/Style/Toolbox/ToolboxName", 
                 new StyleKeys(toolboxName, "", null, null));
+            var backward = Root.Q("backward");
+            var forward = Root.Q("forward");
+            SetHorizontalBackwardButtonStyle(backward.Q("backwardButton"),
+                backward,
+                "UI/Style/Toolbox/Toolbox_ScrollViewButton",
+                new StyleKeys("backward", null));
+            SetHorizontalForwarddButtonStyle(forward.Q("forwardButton"),
+                forward,
+                "UI/Style/Toolbox/Toolbox_ScrollViewButton",
+                new StyleKeys("forward", null));
+            if (isInMenuBar)
+            {
+                backward.style.display = DisplayStyle.None;
+                forward.style.display = DisplayStyle.None;
+            }
             Adds(items);
         }
 

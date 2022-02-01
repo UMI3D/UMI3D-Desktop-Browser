@@ -21,13 +21,13 @@ MonoBehaviour:
       m_value: 0
   m_size:
     m_height:
-      m_keyword: 0
-      m_valueMode: 0
-      m_value: 0
+      m_keyword: 11
+      m_valueMode: 1
+      m_value: 100
     m_width:
-      m_keyword: 0
+      m_keyword: 10
       m_valueMode: 0
-      m_value: 0
+      m_value: 30
     m_maxHeight:
       m_keyword: 0
       m_valueMode: 0
@@ -46,7 +46,7 @@ MonoBehaviour:
       m_value: 0
   m_marginAndPadding:
     m_margin:
-      m_keyword: 0
+      m_keyword: 11
       m_value:
         m_global: 0
         m_bottom: 0
@@ -78,4 +78,170 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_textAlign: 0
-  m_themeStyles: []
+  m_themeStyles:
+  - m_theme: {fileID: 0}
+    m_textStyle: []
+    m_background:
+    - m_key: PinnedEnable
+      m_default:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: -8651160650787409836, guid: d36bd143c83da424ba8eff34c123ea54,
+              type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_mouseOver:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: -1717481766539218145, guid: f2c33038eef152746badeaf5a34011c3,
+              type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_mousePressed:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: -1011162752776673693, guid: 4b71712b293e6754a8aeddce22fb128c,
+              type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+    - m_key: PinnedActive
+      m_default:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: -8651160650787409836, guid: d36bd143c83da424ba8eff34c123ea54,
+              type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_mouseOver:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: -1717481766539218145, guid: f2c33038eef152746badeaf5a34011c3,
+              type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_mousePressed:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: -8651160650787409836, guid: d36bd143c83da424ba8eff34c123ea54,
+              type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+    m_border:
+    - m_key: 
+      m_default:
+        m_keyword: 0
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value:
+              m_global: {r: 0, g: 0, b: 0, a: 0}
+              m_bottom: {r: 0, g: 0, b: 0, a: 0}
+              m_left: {r: 0, g: 0, b: 0, a: 0}
+              m_right: {r: 0, g: 0, b: 0, a: 0}
+              m_top: {r: 0, g: 0, b: 0, a: 0}
+          m_width:
+            m_keyword: 0
+            m_value:
+              m_global: 0
+              m_bottom: 0
+              m_left: 0
+              m_right: 0
+              m_top: 0
+          m_radius:
+            m_keyword: 0
+            m_value:
+              m_global: 0
+              m_bottomLeft: 0
+              m_bottomRight: 0
+              m_topLeft: 0
+              m_TopRight: 0
+      m_mouseOver:
+        m_keyword: 0
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value:
+              m_global: {r: 0, g: 0, b: 0, a: 0}
+              m_bottom: {r: 0, g: 0, b: 0, a: 0}
+              m_left: {r: 0, g: 0, b: 0, a: 0}
+              m_right: {r: 0, g: 0, b: 0, a: 0}
+              m_top: {r: 0, g: 0, b: 0, a: 0}
+          m_width:
+            m_keyword: 0
+            m_value:
+              m_global: 0
+              m_bottom: 0
+              m_left: 0
+              m_right: 0
+              m_top: 0
+          m_radius:
+            m_keyword: 0
+            m_value:
+              m_global: 0
+              m_bottomLeft: 0
+              m_bottomRight: 0
+              m_topLeft: 0
+              m_TopRight: 0
+      m_mousePressed:
+        m_keyword: 0
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value:
+              m_global: {r: 0, g: 0, b: 0, a: 0}
+              m_bottom: {r: 0, g: 0, b: 0, a: 0}
+              m_left: {r: 0, g: 0, b: 0, a: 0}
+              m_right: {r: 0, g: 0, b: 0, a: 0}
+              m_top: {r: 0, g: 0, b: 0, a: 0}
+          m_width:
+            m_keyword: 0
+            m_value:
+              m_global: 0
+              m_bottom: 0
+              m_left: 0
+              m_right: 0
+              m_top: 0
+          m_radius:
+            m_keyword: 0
+            m_value:
+              m_global: 0
+              m_bottomLeft: 0
+              m_bottomRight: 0
+              m_topLeft: 0
+              m_TopRight: 0
