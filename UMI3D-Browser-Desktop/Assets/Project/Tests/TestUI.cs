@@ -39,9 +39,13 @@ public class TestUI : MonoBehaviour
 
         MenuBar_E
             .Instance
-            .AddTo(UIDoc.rootVisualElement);
+            .AddTo(UIDoc.rootVisualElement.Q("top"));
 
         MenuBar_E.Instance.AddToolbox(toolbox0, toolbox1, toolbox2);
+
+        ToolboxWindow_E
+            .Instance
+            .AddTo(UIDoc.rootVisualElement.Q("mainView"));
     }
 
     void Update()

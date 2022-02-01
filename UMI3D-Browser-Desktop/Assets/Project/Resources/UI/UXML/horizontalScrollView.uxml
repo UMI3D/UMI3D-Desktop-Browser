@@ -1,5 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="/Assets/Project/UI/UXML/menu-bar.uss" />
     <ui:VisualElement name="horizontal-layer" style="flex-direction: row; justify-content: space-between; align-items: center; height: 100%; width: 100%;">
         <ui:VisualElement name="backward" style="flex-direction: row; flex-shrink: 0;">
             <ui:VisualElement name="backwardButton" style="justify-content: center;" />

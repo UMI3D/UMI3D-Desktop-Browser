@@ -22,30 +22,35 @@ namespace umi3dDesktopBrowser.uI.viewController
     /// </summary>
     public partial class ToolboxItem_E : Button_GE
     {
-        private const string m_partialStylePath = "UI/Style/Toolbox";
+        private const string m_partialStylePath = "UI/Style";
     }
 
     public partial class ToolboxItem_E : Button_GE
     {
-        public ToolboxItem_E(string iconKey, string itemName) :
-            base("UI/UXML/Toolbox/toolboxItem", $"{m_partialStylePath}/ToolboxItem", null)
+        public ToolboxItem_E(string iconKey, string itemName, bool isInMenuBar = true) :
+            base("UI/UXML/Toolbox/toolboxItem", 
+                (isInMenuBar) ? $"{m_partialStylePath}/MenuBar/MenuBar_ToolboxItem" : $"{m_partialStylePath}/ToolboxWindow/ToolboxWindow_ToolboxItem", 
+                null)
         {
             SetIcon(Root.Q<VisualElement>("icon"), 
-                $"{m_partialStylePath}/ToolboxItem_Icon", 
+                $"{m_partialStylePath}/Toolbox/ToolboxItem_Icon", 
                 new StyleKeys(iconKey, null));
             SetLabel(Root.Q<Label>("label"),
-                $"{m_partialStylePath}/ToolboxItem_Label",
+                $"{m_partialStylePath}/Toolbox/ToolboxItem_Label",
                 new StyleKeys(itemName, "", null, null));
         }
         public ToolboxItem_E(string iconOnKey, string iconOffKey, string itemName, bool isOn = false) : 
-            base("UI/UXML/Toolbox/toolboxItem", $"{m_partialStylePath}/ToolboxItem", null, isOn) 
+            base("UI/UXML/Toolbox/toolboxItem", 
+                $"{m_partialStylePath}/MenuBar/MenuBar_ToolboxItem", 
+                null, 
+                isOn) 
         {
             SetIcon(Root.Q<VisualElement>("icon"), 
-                $"{m_partialStylePath}/ToolboxItem_Icon", 
+                $"{m_partialStylePath}/Toolbox/ToolboxItem_Icon", 
                 new StyleKeys(iconOnKey, null), 
                 new StyleKeys(iconOffKey, null));
             SetLabel(Root.Q<Label>("label"),
-                $"{m_partialStylePath}/ToolboxItem_Label", 
+                $"{m_partialStylePath}/Toolbox/ToolboxItem_Label", 
                 new StyleKeys(itemName, "", null, null));
         }
 

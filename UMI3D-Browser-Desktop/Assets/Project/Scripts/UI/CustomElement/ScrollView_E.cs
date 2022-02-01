@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
@@ -62,16 +63,16 @@ namespace umi3dDesktopBrowser.uI.viewController
             {
                 Visual_E separator = null;
                 if (m_items.Count > 0 && AddSeparator != null)
-                    separator = AddSeparator(m_scrollView);
+                    separator = AddSeparator(Scroll_View);
                 m_items.Add((item, separator));
-                item.AddTo(m_scrollView);
+                item.AddTo(Scroll_View);
             }
         }
     }
 
     public partial class ScrollView_E
     {
-        protected ScrollView m_scrollView { get; set; } = null;
+        public ScrollView Scroll_View { get; private set; } = null;
 
         protected Scroller m_verticalScroller { get; set; } = null;
         protected Scroller m_horizontalScroller { get; set; } = null;
@@ -114,9 +115,12 @@ namespace umi3dDesktopBrowser.uI.viewController
         }
         public ScrollView_E SetVerticalDraggerContainerStyle(string customStyleKey, StyleKeys formatAndStyleKeys)
         {
+            //m_verticalDraggerContainer.ClearClassList();
             //new Icon_E(m_verticalScroller, customStyleKey, null);
             new Visual_E(m_verticalScroller, customStyleKey, formatAndStyleKeys);
             m_verticalScroller.style.opacity = 1f;
+            m_verticalScroller.style.alignItems = Align.Center;
+            //m_verticalScroller.style.bac
             //new Icon_E(m_verticalSlider, customStyleKey, customStyleBackgroundKey);
             return this;
         }
@@ -134,6 +138,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         }
         public ScrollView_E SetVerticalDraggerStyle(string customStyleKey, StyleKeys formatAndStyleKeys)
         {
+            m_verticalDragger.ClearClassList();
             new Visual_E(m_verticalDragger, customStyleKey, formatAndStyleKeys);
             return this;
         }
@@ -198,6 +203,9 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             if (backwardButton != null) backwardButton.visible = (value > slider.lowValue) ? true : false;
             if (forwardButton != null) forwardButton.visible = (value < slider.highValue) ? true : false;
+            //Debug.Log($"value = [{value}]; low = [{slider.lowValue}]; high = [{slider.highValue}]");
+            //if (backwardButton != null) backwardButton.style.display = (value > slider.lowValue) ? DisplayStyle.Flex : DisplayStyle.None;
+            //if (forwardButton != null) forwardButton.style.display = (value < slider.highValue) ? DisplayStyle.Flex : DisplayStyle.None;
         }
         protected void VerticalSliderValueChanged(float value)
             => SliderValueChanged(value, m_verticalSlider, m_backwardVerticalButtonLayout, m_forwardVerticalButtonLayout);
@@ -210,13 +218,18 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected override void Initialize()
         {
             base.Initialize();
-            m_scrollView = Root.Q<ScrollView>();
-            m_verticalScroller = m_scrollView.verticalScroller;
-            m_horizontalScroller = m_scrollView.horizontalScroller;
+            Scroll_View = Root.Q<ScrollView>();
+            m_verticalScroller = Scroll_View.verticalScroller;
+            m_horizontalScroller = Scroll_View.horizontalScroller;
             m_verticalSlider = m_verticalScroller.slider;
             m_horizontalSlider = m_horizontalScroller.slider;
+
             //m_verticalDraggerContainer = m_verticalSlider.Q("unity-drag-container");
-            //m_horizontalDraggerContainer = m_horizontalSlide.Q("unity-drag-container");
+            //m_horizontalDraggerContainer = m_horizontalSlider.Q("unity-drag-container");
+
+            m_verticalDraggerContainer = m_verticalSlider.Q("unity-tracker");
+            m_horizontalDraggerContainer = m_horizontalSlider.Q("unity-tracker");
+
             m_verticalDragger = m_verticalSlider.Q("unity-dragger");
             m_horizontalDragger = m_horizontalSlider.Q("unity-dragger");
 
@@ -225,8 +238,8 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_backwardHorizontalButton = m_horizontalScroller.lowButton;
             m_forwardHorizontalButton = m_horizontalScroller.highButton;
 
-            m_scrollView.contentContainer.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
-            m_scrollView.contentViewport.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            Scroll_View.contentContainer.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            Scroll_View.contentViewport.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             m_verticalScroller.valueChanged += VerticalSliderValueChanged;
             m_horizontalScroller.valueChanged += HorizontalSliderValueChanged;
 

@@ -30,6 +30,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             => AddVisualStyle(visual, GetStyleSO(styleResourcePath), formatAndStyleKeys, stopPropagation);
         protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, bool stopPropagation = true, params VisualElement[] otherVisualTriggers)
         {
+            if (visual == null) throw new NullReferenceException("visual is null");
             if (m_visuals.Contains(visual)) return;
             m_visuals.Add(visual);
             EventCallback<MouseOverEvent> mouseOver = (e) =>
