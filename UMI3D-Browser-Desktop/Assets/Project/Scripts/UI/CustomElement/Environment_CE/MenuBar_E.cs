@@ -62,7 +62,7 @@ namespace umi3dDesktopBrowser.uI.viewController
     public partial class MenuBar_E
     {
         private MenuBar_E() : 
-            base("UI/UXML/MenuBar/menuBar1", 
+            base("UI/UXML/MenuBar/menuBar", 
                 "UI/Style/MenuBar/MenuBar", 
                 new StyleKeys("", null)) { }
 
@@ -125,7 +125,10 @@ namespace umi3dDesktopBrowser.uI.viewController
             AddSeparator(leftLayout_VE);
 
             //Scroll view
-            m_scrollView = new ScrollView_E(centerLayout_VE, "UI/UXML/MenuBar/toolboxesScrollView", null, null)
+            m_scrollView = new ScrollView_E(centerLayout_VE, 
+                "UI/UXML/horizontalScrollView", 
+                null, 
+                null)
             {
                 AddSeparator = AddSeparator
             };

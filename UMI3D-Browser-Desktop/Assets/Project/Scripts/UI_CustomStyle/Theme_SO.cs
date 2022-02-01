@@ -28,5 +28,9 @@ namespace umi3DBrowser.UICustomStyle
         private Color m_secondary;
         [SerializeField]
         private Color m_tertiary;
+
+        public Color Primary => m_primary;
+        public Color Secondary => m_secondary;
+        public Color Tertiary => m_tertiary;
     }
 }

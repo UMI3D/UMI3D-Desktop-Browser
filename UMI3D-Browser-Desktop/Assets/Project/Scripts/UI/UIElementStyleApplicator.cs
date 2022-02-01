@@ -204,13 +204,13 @@ namespace umi3dDesktopBrowser.uI.viewController
                     customAction();
                     break;
                 case CustomStyleColorKeyword.Primary:
-                    themeAction(Color.red);
+                    themeAction(m_globalPref.CurrentTheme.Primary);
                     break;
                 case CustomStyleColorKeyword.Secondary:
-                    themeAction(Color.red);
+                    themeAction(m_globalPref.CurrentTheme.Secondary);
                     break;
                 case CustomStyleColorKeyword.Tertiary:
-                    themeAction(Color.red);
+                    themeAction(m_globalPref.CurrentTheme.Tertiary);
                     break;
             }
         }
@@ -239,13 +239,13 @@ namespace umi3dDesktopBrowser.uI.viewController
             => AppliesColor(customStyle.Keyword,
                 () => style.color = StyleKeyword.Null,
                 () => style.color = customStyle.Value,
-                (color) => { throw new System.NotImplementedException(); });
+                (color) => style.color = color);
 
         protected virtual void AppliesOutlineTextStyleColor(IStyle style, CustomStyleValue<CustomStyleColorKeyword, Color> customStyle)
             => AppliesColor(customStyle.Keyword,
                 () => style.unityTextOutlineColor = StyleKeyword.Null,
                 () => style.unityTextOutlineColor = customStyle.Value,
-                (color) => { throw new System.NotImplementedException(); });
+                (color) => { style.unityTextOutlineColor = color; });
 
         //protected virtual void AppliesOutlineTextStyleWidth(IStyle style, CustomStyleValue<CustomStyleSimpleKeyword, float> customStyle)
         //    => AppliesLength(customStyle.Keyword,
@@ -261,13 +261,13 @@ namespace umi3dDesktopBrowser.uI.viewController
             => AppliesColor(customStyle.Keyword,
                 () => style.backgroundColor = StyleKeyword.Null,
                 () => style.backgroundColor = customStyle.Value,
-                (color) => { throw new System.NotImplementedException(); });
+                (color) => style.backgroundColor = color);
 
         protected virtual void AppliesImageColor(IStyle style, CustomStyleValue<CustomStyleColorKeyword, Color> customStyle)
             => AppliesColor(customStyle.Keyword,
                 () => style.unityBackgroundImageTintColor = StyleKeyword.Null,
                 () => style.unityBackgroundImageTintColor = customStyle.Value,
-                (color) => { throw new System.NotImplementedException(); });
+                (color) => style.unityBackgroundImageTintColor = color);
 
         protected virtual void AppliesImage(IStyle style, CustomStyleValue<CustomStyleSimpleKeyword, Sprite> customStyle)
             => AppliesSimple(customStyle.Keyword,

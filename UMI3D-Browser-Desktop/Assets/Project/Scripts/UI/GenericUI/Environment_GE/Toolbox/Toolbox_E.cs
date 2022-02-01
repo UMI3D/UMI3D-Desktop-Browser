@@ -65,6 +65,8 @@ namespace umi3dDesktopBrowser.uI.viewController
     {
         protected override void Initialize()
         {
+            VisualElement scrollView = GetVisualRoot("UI/UXML/horizontalScrollView");
+            Root.Q("scrollViewContainer").Add(scrollView);
             base.Initialize();
 
             //label = this.Q<Label>("toolbox-name");
