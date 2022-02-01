@@ -29,23 +29,15 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class Toolbox_E
     {
-        public Toolbox_E(string toolboxName, bool isScrollable, params ToolboxItem_E[] items) : 
+        public Toolbox_E(string toolboxName, bool isInMenuBar = true, params ToolboxItem_E[] items) : 
             base("UI/UXML/Toolbox/Toolbox", 
-                "UI/Style/Toolbox/Toolbox", 
-                new StyleKeys( "", null))
+                (isInMenuBar) ? "UI/Style/MenuBar/MenuBar_Toolbox" : "UI/Style/ToolboxWindow/ToolboxWindow_Toolbox", 
+                new StyleKeys( "", ""))
         {
             AddVisualStyle(Root.Q<Label>(), 
                 "UI/Style/Toolbox/ToolboxName", 
                 new StyleKeys(toolboxName, "", null, null));
             Adds(items);
-            if (isScrollable)
-            {
-
-            }
-            else
-            {
-
-            }
         }
 
         //public Toolbox_E AddItems(params ToolboxItem_E[] toolItems)

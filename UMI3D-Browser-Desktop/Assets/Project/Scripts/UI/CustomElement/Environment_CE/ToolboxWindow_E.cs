@@ -36,6 +36,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         private const string m_partialStylePath = "UI/Style/ToolboxWindow";
         private static ToolboxWindow_E m_instance;
         private ScrollView_E m_scrollView;
+        private bool m_isDisplayed { get; set; } = false;
     }
 
     public partial class ToolboxWindow_E
@@ -48,6 +49,11 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class ToolboxWindow_E
     {
+        public void Display()
+        {
+            Root.style.display = DisplayStyle.Flex;
+        }
+
         private void OnCloseButtonPressed()
         {
             //Collapse evrything
@@ -82,7 +88,7 @@ namespace umi3dDesktopBrowser.uI.viewController
                 new StyleKeys("", null))
                 .SetVerticalDraggerStyle($"{m_partialStylePath}/ToolboxWindow_Dragger",
                 new StyleKeys("", ""));
-            m_scrollView.Scroll_View.style.alignItems = Align.Center;
+            //m_scrollView.Scroll_View.style.alignItems = Align.Center;
 
             new Button_GE(Root.Q("unpinnedButton"),
                 $"{m_partialStylePath}/ToolboxWindow_UnpinnedButton",
@@ -96,36 +102,36 @@ namespace umi3dDesktopBrowser.uI.viewController
 
             var tool = new ToolboxItem_E("toolbox", "test", false);
             var tool1 = new ToolboxItem_E("toolbox", "test", false);
-            var toolbox = new Toolbox_E("Test", true, tool, tool1);
+            var toolbox = new Toolbox_E("Test", false, tool, tool1);
 
             var tool2 = new ToolboxItem_E("toolbox", "test", false);
             var tool3 = new ToolboxItem_E("toolbox", "test", false);
             var tool4 = new ToolboxItem_E("toolbox", "test", false);
-            var toolbox1 = new Toolbox_E("Test", true, tool2, tool3);
+            var toolbox1 = new Toolbox_E("Test", false, tool2, tool3);
 
             var tool5 = new ToolboxItem_E("toolbox", "test", false);
             var tool6 = new ToolboxItem_E("toolbox", "test", false);
             var tool7 = new ToolboxItem_E("toolbox", "test", false);
             var tool8 = new ToolboxItem_E("toolbox", "test", false);
-            var toolbox2 = new Toolbox_E("Test", true, tool5, tool6, tool7, tool8);
+            var toolbox2 = new Toolbox_E("Test", false, tool5, tool6, tool7, tool8);
 
             var tool9 = new ToolboxItem_E("toolbox", "test", false);
-            var toolbox3 = new Toolbox_E("Test", true, tool9);
+            var toolbox3 = new Toolbox_E("Test", false, tool9);
 
             var tool10 = new ToolboxItem_E("toolbox", "test", false);
-            var toolbox4 = new Toolbox_E("Test", true, tool10);
+            var toolbox4 = new Toolbox_E("Test", false, tool10);
 
             var tool11 = new ToolboxItem_E("toolbox", "test", false);
-            var toolbox5 = new Toolbox_E("Test", true, tool11);
+            var toolbox5 = new Toolbox_E("Test", false, tool11);
 
             var tool12 = new ToolboxItem_E("toolbox", "test", false);
-            var toolbox6 = new Toolbox_E("Test", true, tool12);
+            var toolbox6 = new Toolbox_E("Test", false, tool12);
 
             var tool13 = new ToolboxItem_E("toolbox", "test", false);
-            var toolbox7 = new Toolbox_E("Test", true, tool13);
+            var toolbox7 = new Toolbox_E("Test", false, tool13);
 
             var tool14 = new ToolboxItem_E("toolbox", "test", false);
-            var toolbox8 = new Toolbox_E("Test", true, tool14);
+            var toolbox8 = new Toolbox_E("Test", false, tool14);
 
             m_scrollView.Adds(toolbox, toolbox1, toolbox2, toolbox3, toolbox4, toolbox5, toolbox6, toolbox7, toolbox8);
         }

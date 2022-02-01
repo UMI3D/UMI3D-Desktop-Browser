@@ -118,8 +118,11 @@ namespace umi3dDesktopBrowser.uI.viewController
             rightLayout_VE = Root.Q<VisualElement>("Right-layout");
             //SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
 
-            m_toolboxButton = new ToolboxItem_E("Toolbox", "Toolbox");
-            new Toolbox_E("", false, m_toolboxButton)    
+            m_toolboxButton = new ToolboxItem_E("Toolbox", "Toolbox")
+            {
+                OnClicked = () => ToolboxWindow_E.Instance.Display()
+            };
+            new Toolbox_E("", true, m_toolboxButton)    
                 .AddTo(leftLayout_VE);
 
             AddSeparator(leftLayout_VE);
@@ -154,13 +157,13 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_avatar = new ToolboxItem_E("AvatarOn", "AvatarOff", "");
             m_sound = new ToolboxItem_E("SoundOn", "SoundOff", "");
             m_mic = new ToolboxItem_E("MicOn", "MicOff", "");
-            new Toolbox_E("", false, m_avatar, m_sound, m_mic)    
+            new Toolbox_E("", true, m_avatar, m_sound, m_mic)    
                 .AddTo(rightLayout_VE);
 
             AddSeparator(rightLayout_VE);
 
             m_leave = new ToolboxItem_E("Leave", "");
-            new Toolbox_E("", false, m_leave)
+            new Toolbox_E("", true, m_leave)
                 .AddTo(rightLayout_VE);
         }
 
