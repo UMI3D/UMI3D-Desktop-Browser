@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb1ac652951765344966c1d09783495b, type: 3}
-  m_Name: GlobalPreferences
+  m_Script: {fileID: 11500000, guid: f2ca89593c0bc634d8fcd1d48a5a2489, type: 3}
+  m_Name: Christmas
   m_EditorClassIdentifier: 
-  zoomPercentage: 119
-  currentTheme: {fileID: 11400000, guid: 0814560b5c82c444bb1360aab7f70309, type: 2}
-  ApplyCustomStyle:
-    m_PersistentCalls:
-      m_Calls: []
+  m_primary: {r: 0.59260416, g: 0.6509434, b: 0.59404474, a: 1}
+  m_secondary: {r: 0.7924528, g: 0.2953008, b: 0.2953008, a: 1}
+  m_tertiary: {r: 0.15566038, g: 0.6226415, b: 0.15845671, a: 1}
