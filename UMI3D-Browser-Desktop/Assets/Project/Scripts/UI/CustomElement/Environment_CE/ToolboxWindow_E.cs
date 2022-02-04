@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
@@ -145,6 +146,10 @@ namespace umi3dDesktopBrowser.uI.viewController
 
             //m_scrollView.Adds(toolbox, toolbox1, toolbox2, toolbox3, toolbox4, toolbox5, toolbox6, toolbox7, toolbox8);
             m_scrollView.Adds(item, item1, item2, item3, item4, item5, item6, item7, item8);
+
+            PopUpManipulator manipulator = new PopUpManipulator();
+            UnregisterVisualCallback(Root);
+            Root.AddManipulator(manipulator);
         }
     }
 }
