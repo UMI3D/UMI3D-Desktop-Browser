@@ -75,7 +75,6 @@ namespace umi3dDesktopBrowser.uI.viewController
             {
                 m_visualStyles.Add(visual, (null, null, null, mouseOver, mouseOut, mouseDown, mouseUp));
             }
-
         }
 
         protected void UpdateVisualStyle(VisualElement visual, StyleKeys newFormatAndStyleKeys)
@@ -88,6 +87,16 @@ namespace umi3dDesktopBrowser.uI.viewController
             formatAndStyleKeys.BackgroundStyleKey = newFormatAndStyleKeys.BackgroundStyleKey;
             formatAndStyleKeys.BorderStyleKey = newFormatAndStyleKeys.BorderStyleKey;
             ApplyFormatAndStyle(style_SO, formatAndStyleKeys, visual, m_mouseBehaviourFromState);
+        }
+
+        protected void UnregisterVisualCallback(VisualElement visual)
+        {
+            if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
+            var (_, _, _, mouseOver, mouseOut, mouseDown, mouseUp) = m_visualStyles[visual];
+            visual.UnregisterCallback(mouseOver);
+            visual.UnregisterCallback(mouseOut);
+            visual.UnregisterCallback(mouseDown);
+            visual.UnregisterCallback(mouseUp);
         }
 
         protected void ResetAllVisualStyle()
