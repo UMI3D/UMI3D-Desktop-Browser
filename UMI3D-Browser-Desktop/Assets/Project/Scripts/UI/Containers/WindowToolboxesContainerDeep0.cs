@@ -18,15 +18,21 @@ using System.Linq;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3dDesktopBrowser.uI.viewController;
+using UnityEngine;
 
 namespace umi3dDesktopBrowser.uI.Container
 {
-    public partial class WindowToolboxesContainerRoot
+    public partial class WindowToolboxesContainerDeep0
     {
-
+        private ToolboxWindowItem_E m_windowItem = new ToolboxWindowItem_E();
     }
 
-    public partial class WindowToolboxesContainerRoot : AbstractToolboxesContainer
+    public partial class WindowToolboxesContainerDeep0
+    {
+        public ToolboxWindowItem_E WindowItem => m_windowItem;
+    }
+
+    public partial class WindowToolboxesContainerDeep0 : AbstractToolboxesContainer
     {
         /// <summary>
         /// <inheritdoc/>
@@ -35,7 +41,8 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void Display(bool forceUpdate = false)
         {
             base.Display(forceUpdate);
-            MenuBar_E.Instance.DisplayToolboxButton(true);
+            m_windowItem.Toolbox.SetToolboxName(menu.Name);
+            Expand(forceUpdate);
         }
 
         /// <summary>
@@ -44,7 +51,7 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void Hide()
         {
             base.Hide();
-            MenuBar_E.Instance.DisplayToolboxButton(false);
+            Collapse(true);
         }
 
         /// <summary>
@@ -54,7 +61,7 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void Collapse(bool forceUpdate = false)
         {
             base.Collapse(forceUpdate);
-            ToolboxWindow_E.Instance.Hide();
+            m_windowItem.Hide();
         }
 
         /// <summary>
@@ -65,7 +72,7 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
         {
             base.ExpandAs(container, forceUpdate);
-            ToolboxWindow_E.Instance.Display();
+            m_windowItem.Display();
         }
 
         /// <summary>
@@ -75,12 +82,12 @@ namespace umi3dDesktopBrowser.uI.Container
         /// <param name="updateDisplay"></param>
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
-            if (element! is WindowToolboxesContainerDeep0) throw new System.Exception("Displayer unknown");
             base.Insert(element, updateDisplay);
-            if (element is WindowToolboxesContainerDeep0 containerDeep0)
+            if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
-                ToolboxWindow_E.Instance.Adds(containerDeep0.WindowItem);
-            } 
+                m_windowItem.Adds(containerDeep1.Item);
+                m_windowItem.Container.Add(containerDeep1.ItemChildrenContainer);
+            }
         }
 
         /// <summary>
@@ -92,6 +99,7 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void Insert(AbstractDisplayer element, int index, bool updateDisplay = true)
         {
             base.Insert(element, index, updateDisplay);
+            Debug.Log("<color=green>TODO: </color>" + $"");
         }
     }
 }

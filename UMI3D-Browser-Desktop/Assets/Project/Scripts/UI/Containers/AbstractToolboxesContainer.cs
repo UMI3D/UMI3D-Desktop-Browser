@@ -37,8 +37,6 @@ namespace umi3dDesktopBrowser.uI.Container
 
     public partial class AbstractToolboxesContainer : AbstractMenuDisplayContainer
     {
-        #region Methods
-
         protected virtual void Awake()
         {
             virtualContainer = this;
@@ -176,7 +174,6 @@ namespace umi3dDesktopBrowser.uI.Container
             }
 
             element.transform.SetParent(this.transform);
-            //element.transform.localPosition = Vector3.zero;
 
             currentDisplayers.Add(element);
 
@@ -319,8 +316,5 @@ namespace umi3dDesktopBrowser.uI.Container
 
             return res;
         }
-
-
-        #endregion
     }
 }
