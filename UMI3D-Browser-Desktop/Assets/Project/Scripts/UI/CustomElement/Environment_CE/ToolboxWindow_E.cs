@@ -55,12 +55,13 @@ namespace umi3dDesktopBrowser.uI.viewController
             Root.style.display = DisplayStyle.Flex;
         }
 
-        private void OnCloseButtonPressed()
+        public void Hide()
         {
-            //Collapse evrything
-            //hide the window
             Root.style.display = DisplayStyle.None;
         }
+
+        private void OnCloseButtonPressed()
+            => Hide();
     }
 
     public partial class ToolboxWindow_E : Visual_E

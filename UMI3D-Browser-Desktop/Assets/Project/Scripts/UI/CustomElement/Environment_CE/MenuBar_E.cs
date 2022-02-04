@@ -28,8 +28,6 @@ namespace umi3dDesktopBrowser.uI.viewController
     /// </summary>
     public partial class MenuBar_E
     {
-        public float Space { get; set; } = 10f;
-        //public Action<VisualElement> AddSeparator { get; set; } = (ve) => { Debug.Log("<color=green>TODO: </color>" + $"AddSeparator in MenuBarElement."); };
         public VisualElement SubMenuLayout { get; private set; }
         public static MenuBar_E Instance
         {
@@ -61,6 +59,13 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class MenuBar_E
     {
+        public void DisplayToolboxButton(bool value)
+        {
+            m_toolboxButton.style.display = (value) ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+
+
         private MenuBar_E() : 
             base("UI/UXML/MenuBar/menuBar", 
                 "UI/Style/MenuBar/MenuBar", 
