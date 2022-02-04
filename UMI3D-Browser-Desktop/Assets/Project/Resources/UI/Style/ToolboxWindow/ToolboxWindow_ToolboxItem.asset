@@ -50,8 +50,8 @@ MonoBehaviour:
       m_value:
         m_global: 0
         m_bottom: 0
-        m_left: 10
-        m_right: 10
+        m_left: 20
+        m_right: 20
         m_top: 0
     m_padding:
       m_keyword: 0
