@@ -17,8 +17,33 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.uI.viewController
 {
-    public class ToolboxWindowItem_E : Button_GE
+    public partial class ToolboxWindowItem_E
     {
+        public VisualElement Container => m_container;
+        public Toolbox_E Toolbox => m_toolbox;
+
+        private VisualElement m_container;
+        private Toolbox_E m_toolbox;
+    }
+
+    public partial class ToolboxWindowItem_E : Button_GE
+    {
+        public ToolboxWindowItem_E() :
+            base("UI/UXML/ToolboxWindow/toolboxWindow_Item",
+                null,
+                null)
+        {
+            SetIcon(Root.Q("pinButton"),
+                "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButton",
+                new StyleKeys("PinnedActive", ""),
+                new StyleKeys("PinnedEnable", ""));
+            m_container = Root.Q("toolboxContainer");
+            AddVisualStyle(m_container,
+                "UI/Style/ToolboxWindow/ToolboxWindow_Item_ToolboxContainer",
+                new StyleKeys(null, ""));
+            m_toolbox = new Toolbox_E(false);
+            m_toolbox.AddTo(m_container);
+        }
         public ToolboxWindowItem_E(Toolbox_E toolbox) :
             base("UI/UXML/ToolboxWindow/toolboxWindow_Item", 
                 null, 
@@ -33,6 +58,21 @@ namespace umi3dDesktopBrowser.uI.viewController
                 "UI/Style/ToolboxWindow/ToolboxWindow_Item_ToolboxContainer", 
                 new StyleKeys(null, ""));
             toolbox.AddTo(container);
+        }
+
+        public void Adds(params Visual_E[] items)
+        {
+            m_toolbox.Adds(items);
+        }
+
+        public void Display()
+        {
+            Root.style.display = DisplayStyle.Flex;
+        }
+
+        public void Hide()
+        {
+            Root.style.display = DisplayStyle.None;
         }
     }
 }

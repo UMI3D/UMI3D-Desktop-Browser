@@ -18,15 +18,41 @@ using System.Linq;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3dDesktopBrowser.uI.viewController;
+using UnityEngine;
 
 namespace umi3dDesktopBrowser.uI.Container
 {
-    public partial class WindowToolboxesContainerRoot
+    public partial class WindowToolboxesContainerDeep1
     {
+        private ToolboxItem_E m_item = new ToolboxItem_E(false);
+        private Toolbox_E m_itemChildrenContainer = new Toolbox_E(false);
 
+        private void Start()
+        {
+            m_item.Hide();
+            m_itemChildrenContainer.Hide();
+        }
+
+        private WindowToolboxesContainerDeep0 FindContainerDeep0()
+        {
+            var virtualParent = parent;
+            while(virtualParent.parent != null)
+            {
+                virtualParent = virtualParent.parent;
+                if (virtualParent is WindowToolboxesContainerDeep0)
+                    return virtualParent as WindowToolboxesContainerDeep0;
+            }
+            throw new System.Exception("No parent is a WindowToolboxContainerDeep0");
+        }
     }
 
-    public partial class WindowToolboxesContainerRoot : AbstractToolboxesContainer
+    public partial class WindowToolboxesContainerDeep1
+    {
+        public ToolboxItem_E Item => m_item;
+        public Toolbox_E ItemChildrenContainer => m_itemChildrenContainer;
+    }
+
+    public partial class WindowToolboxesContainerDeep1 : AbstractToolboxesContainer
     {
         /// <summary>
         /// <inheritdoc/>
@@ -35,7 +61,9 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void Display(bool forceUpdate = false)
         {
             base.Display(forceUpdate);
-            MenuBar_E.Instance.DisplayToolboxButton(true);
+            m_item.SetIcon(menu.icon2D);
+            m_item.SetLabel(menu.Name);
+            m_item.Display();
         }
 
         /// <summary>
@@ -44,7 +72,7 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void Hide()
         {
             base.Hide();
-            MenuBar_E.Instance.DisplayToolboxButton(false);
+            m_item.Hide();
         }
 
         /// <summary>
@@ -54,7 +82,7 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void Collapse(bool forceUpdate = false)
         {
             base.Collapse(forceUpdate);
-            ToolboxWindow_E.Instance.Hide();
+            m_itemChildrenContainer.Hide();
         }
 
         /// <summary>
@@ -65,7 +93,7 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
         {
             base.ExpandAs(container, forceUpdate);
-            ToolboxWindow_E.Instance.Display();
+            m_itemChildrenContainer.Display();
         }
 
         /// <summary>
@@ -75,12 +103,13 @@ namespace umi3dDesktopBrowser.uI.Container
         /// <param name="updateDisplay"></param>
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
-            if (element! is WindowToolboxesContainerDeep0) throw new System.Exception("Displayer unknown");
             base.Insert(element, updateDisplay);
-            if (element is WindowToolboxesContainerDeep0 containerDeep0)
+            if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
-                ToolboxWindow_E.Instance.Adds(containerDeep0.WindowItem);
-            } 
+                m_itemChildrenContainer.Adds(containerDeep1.Item);
+                var containerDeep0 = FindContainerDeep0();
+                containerDeep0.WindowItem.Container.Add(containerDeep1.ItemChildrenContainer);
+            }
         }
 
         /// <summary>
@@ -92,6 +121,7 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void Insert(AbstractDisplayer element, int index, bool updateDisplay = true)
         {
             base.Insert(element, index, updateDisplay);
+            Debug.Log("<color=green>TODO: </color>" + $"");
         }
     }
 }

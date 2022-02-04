@@ -50,6 +50,14 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class ToolboxWindow_E
     {
+        public void Adds(params Visual_E[] items)
+        {
+            m_scrollView.Adds(items);
+        }
+    }
+
+    public partial class ToolboxWindow_E
+    {
         public void Display()
         {
             Root.style.display = DisplayStyle.Flex;

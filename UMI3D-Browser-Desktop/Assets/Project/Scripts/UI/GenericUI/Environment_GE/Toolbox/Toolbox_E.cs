@@ -24,19 +24,23 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class Toolbox_E
     {
-        private Visual_E m_toolboxName { get;  set; } = null;
+        private VisualElement m_toolboxName { get;  set; } = null;
     }
 
     public partial class Toolbox_E
     {
+        public Toolbox_E(bool isInMenuBar = true) :
+            this(null, isInMenuBar) { }
         public Toolbox_E(string toolboxName, bool isInMenuBar = true, params ToolboxItem_E[] items) : 
             base("UI/UXML/Toolbox/Toolbox", 
                 (isInMenuBar) ? "UI/Style/MenuBar/MenuBar_Toolbox" : "UI/Style/ToolboxWindow/ToolboxWindow_Toolbox", 
                 new StyleKeys( "", ""))
         {
-            AddVisualStyle(Root.Q<Label>(), 
+            AddVisualStyle(m_toolboxName, 
                 "UI/Style/Toolbox/ToolboxName", 
                 new StyleKeys(toolboxName, "", null, null));
+            if (toolboxName == null) m_toolboxName.style.display = DisplayStyle.None;
+
             var backward = Root.Q("backward");
             var forward = Root.Q("forward");
             SetHorizontalBackwardButtonStyle(backward.Q("backwardButton"),
@@ -52,20 +56,30 @@ namespace umi3dDesktopBrowser.uI.viewController
                 backward.style.display = DisplayStyle.None;
                 forward.style.display = DisplayStyle.None;
             }
-            Adds(items);
+
+            if (items.Length > 0)
+                Adds(items);
         }
 
-        //public Toolbox_E AddItems(params ToolboxItem_E[] toolItems)
-        //{
-        //    for (int i = 0; i < toolItems.Length; ++i)
-        //    {
-        //        if (i > 0 || this.items.Count > 0) AddSpacer();
-        //        toolItems[i].AddTo(itemsContainer);
-        //        this.items.Add(toolItems[i]);
-        //    }
-        //    return this;
-        //}
+        public void SetToolboxName(string text)
+        {
+            if (text == null) Root.Q<Label>().style.display = DisplayStyle.None;
+            else Root.Q<Label>().style.display = DisplayStyle.Flex;
+            UpdateVisualStyle(m_toolboxName, new StyleKeys(text, "", null, null));
+        }
+    }
 
+    public partial class Toolbox_E
+    {
+        public void Display()
+        {
+            Root.style.display = DisplayStyle.Flex;
+        }
+
+        public void Hide()
+        {
+            Root.style.display = DisplayStyle.None;
+        }
     }
 
     public partial class Toolbox_E : ScrollView_E
@@ -75,9 +89,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             VisualElement scrollView = GetVisualRoot("UI/UXML/horizontalScrollView");
             Root.Q("scrollViewContainer").Add(scrollView);
             base.Initialize();
-
-            //label = this.Q<Label>("toolbox-name");
-            //itemsContainer = this.Q<VisualElement>("items-container");
+            m_toolboxName = Root.Q<Label>();
         }
     }
 }
