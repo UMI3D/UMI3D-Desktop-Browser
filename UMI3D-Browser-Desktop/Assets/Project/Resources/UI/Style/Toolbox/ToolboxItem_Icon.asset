@@ -378,4 +378,41 @@ MonoBehaviour:
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
+    - m_key: placeholder
+      m_default:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 1, g: 1, b: 1, a: 1}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 4a96544a880000c47831813b4998ea25, type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_mouseOver:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 1, g: 0, b: 0, a: 1}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: f8685badc6ea64c448a286907fbe1caa, type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_mousePressed:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: c6b729459c35507498e9925b1fb7f3f6, type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
     m_border: []
