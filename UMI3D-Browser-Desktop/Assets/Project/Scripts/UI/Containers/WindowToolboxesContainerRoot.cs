@@ -18,6 +18,7 @@ using System.Linq;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3dDesktopBrowser.uI.viewController;
+using UnityEngine;
 
 namespace umi3dDesktopBrowser.uI.Container
 {
@@ -75,7 +76,6 @@ namespace umi3dDesktopBrowser.uI.Container
         /// <param name="updateDisplay"></param>
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
-            if (element! is WindowToolboxesContainerDeep0) throw new System.Exception("Displayer unknown");
             base.Insert(element, updateDisplay);
             if (element is WindowToolboxesContainerDeep0 containerDeep0)
             {

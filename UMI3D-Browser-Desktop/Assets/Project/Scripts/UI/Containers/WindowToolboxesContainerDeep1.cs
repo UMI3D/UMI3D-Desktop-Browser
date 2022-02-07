@@ -27,17 +27,22 @@ namespace umi3dDesktopBrowser.uI.Container
         private ToolboxItem_E m_item;
         private Toolbox_E m_itemChildrenContainer;
 
-        private void Start()
+        protected override void Awake()
         {
+            base.Awake();
             m_item = new ToolboxItem_E(false);
             m_itemChildrenContainer = new Toolbox_E(false);
+        }
+
+        private void Start()
+        {
             m_item.Hide();
             m_itemChildrenContainer.Hide();
         }
 
         private WindowToolboxesContainerDeep0 FindContainerDeep0()
         {
-            var virtualParent = parent;
+            AbstractMenuDisplayContainer virtualParent = this;
             while(virtualParent.parent != null)
             {
                 virtualParent = virtualParent.parent;
@@ -109,8 +114,6 @@ namespace umi3dDesktopBrowser.uI.Container
             if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
                 m_itemChildrenContainer.Adds(containerDeep1.Item);
-                var containerDeep0 = FindContainerDeep0();
-                containerDeep0.WindowItem.Container.Add(containerDeep1.ItemChildrenContainer);
             }
         }
 

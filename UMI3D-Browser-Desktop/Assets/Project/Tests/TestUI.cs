@@ -49,7 +49,26 @@ public class TestUI : MonoBehaviour
             .Instance
             .AddTo(UIDoc.rootVisualElement.Q("mainView"));
 
+        ///FAKE DATA
 
+        Menu rootContainer = new Menu();
+
+        Menu toolboxMenu = new Menu { Name = "Toolbox 1" };
+        rootContainer.Add(toolboxMenu);
+
+        Menu subToolBox = new Menu { Name = "SubToolBox" };
+        toolboxMenu.Add(subToolBox);
+
+        Menu tool3 = new Menu { Name = "Fraise" };
+        toolboxMenu.Add(tool3);
+
+        Menu charcuterieToolBox = new Menu { Name = "Charcuterie Toolbox" };
+        tool3.Add(charcuterieToolBox);
+
+        Menu toolboxMenu2 = new Menu { Name = "Toolbox 2" };
+        rootContainer.Add(toolboxMenu2);
+
+        DisplayManager.menuAsset.menu = rootContainer;
     }
 
     [ContextMenu("Open player menu")]

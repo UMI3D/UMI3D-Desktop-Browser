@@ -26,8 +26,9 @@ namespace umi3dDesktopBrowser.uI.Container
     {
         private ToolboxWindowItem_E m_windowItem;
 
-        private void Start()
+        protected override void Awake()
         {
+            base.Awake();
             m_windowItem = new ToolboxWindowItem_E();
         }
     }
@@ -92,6 +93,20 @@ namespace umi3dDesktopBrowser.uI.Container
             {
                 m_windowItem.Adds(containerDeep1.Item);
                 m_windowItem.Container.Add(containerDeep1.ItemChildrenContainer);
+
+                AddChildrenToContainer(containerDeep1);
+            }
+        }
+
+        private void AddChildrenToContainer(WindowToolboxesContainerDeep1 containerDeep1)
+        {
+            foreach (AbstractDisplayer displayer in containerDeep1)
+            {
+                if (displayer is WindowToolboxesContainerDeep1 containerDeep1Child)
+                {
+                    m_windowItem.Container.Add(containerDeep1Child.ItemChildrenContainer);
+                    AddChildrenToContainer(containerDeep1Child);
+                }
             }
         }
 
