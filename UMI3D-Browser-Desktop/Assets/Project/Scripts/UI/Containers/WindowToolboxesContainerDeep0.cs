@@ -24,7 +24,12 @@ namespace umi3dDesktopBrowser.uI.Container
 {
     public partial class WindowToolboxesContainerDeep0
     {
-        private ToolboxWindowItem_E m_windowItem = new ToolboxWindowItem_E();
+        private ToolboxWindowItem_E m_windowItem;
+
+        private void Start()
+        {
+            m_windowItem = new ToolboxWindowItem_E();
+        }
     }
 
     public partial class WindowToolboxesContainerDeep0
@@ -41,7 +46,7 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void Display(bool forceUpdate = false)
         {
             base.Display(forceUpdate);
-            m_windowItem.Toolbox.SetToolboxName(menu.Name);
+            WindowItem.Toolbox.SetToolboxName(menu.Name);
             Expand(forceUpdate);
         }
 
