@@ -24,11 +24,13 @@ namespace umi3dDesktopBrowser.uI.Container
 {
     public partial class WindowToolboxesContainerDeep1
     {
-        private ToolboxItem_E m_item = new ToolboxItem_E(false);
-        private Toolbox_E m_itemChildrenContainer = new Toolbox_E(false);
+        private ToolboxItem_E m_item;
+        private Toolbox_E m_itemChildrenContainer;
 
         private void Start()
         {
+            m_item = new ToolboxItem_E(false);
+            m_itemChildrenContainer = new Toolbox_E(false);
             m_item.Hide();
             m_itemChildrenContainer.Hide();
         }
