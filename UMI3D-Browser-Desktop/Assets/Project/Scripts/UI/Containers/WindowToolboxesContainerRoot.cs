@@ -35,6 +35,7 @@ namespace umi3dDesktopBrowser.uI.Container
         /// <param name="forceUpdate"></param>
         public override void Display(bool forceUpdate = false)
         {
+            if (isDisplayed) return;
             base.Display(forceUpdate);
             MenuBar_E.Instance.DisplayToolboxButton(true);
         }
@@ -44,6 +45,7 @@ namespace umi3dDesktopBrowser.uI.Container
         /// </summary>
         public override void Hide()
         {
+            if (!isDisplayed) return;
             base.Hide();
             MenuBar_E.Instance.DisplayToolboxButton(false);
         }
@@ -65,6 +67,7 @@ namespace umi3dDesktopBrowser.uI.Container
         /// <param name="forceUpdate"></param>
         public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
         {
+            Debug.Log($"expand as in container deep root");
             base.ExpandAs(container, forceUpdate);
             ToolboxWindow_E.Instance.Display();
         }

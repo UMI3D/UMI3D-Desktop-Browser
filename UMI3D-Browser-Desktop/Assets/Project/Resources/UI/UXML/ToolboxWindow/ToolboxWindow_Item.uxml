@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="toolboxWindow_Item" style="flex-direction: row;">
         <ui:Button text="Button" display-tooltip-when-elided="true" name="pinButton" />
-        <ui:VisualElement name="toolboxContainer" />
+        <ui:VisualElement name="toolboxesContainer" />
     </ui:VisualElement>
 </ui:UXML>

@@ -95,7 +95,6 @@ namespace umi3dDesktopBrowser.uI.viewController
                 case CustomStyleSimpleKeyword.Custom:
                     int value = customStyle.Value;
                     if (value >= text.Length) break;
-                    Debug.Log($"text null = [{text == null}]; text length = [{text?.Length}]");
                     text = (value >= 6) ? $"{text.Substring(0, value - 3)}..." : text.Substring(0, value);
                     break;
             }

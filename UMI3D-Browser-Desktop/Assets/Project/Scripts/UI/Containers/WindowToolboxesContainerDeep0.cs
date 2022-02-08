@@ -24,18 +24,22 @@ namespace umi3dDesktopBrowser.uI.Container
 {
     public partial class WindowToolboxesContainerDeep0
     {
-        private ToolboxWindowItem_E m_windowItem;
-
         protected override void Awake()
         {
             base.Awake();
-            m_windowItem = new ToolboxWindowItem_E();
+            WindowItem = new ToolboxWindowItem_E();
+        }
+
+        public override void SetMenuItem(AbstractMenuItem menu)
+        {
+            base.SetMenuItem(menu);
+            WindowItem.FirstToolbox.SetToolboxName(menu.Name);
         }
     }
 
     public partial class WindowToolboxesContainerDeep0
     {
-        public ToolboxWindowItem_E WindowItem => m_windowItem;
+        public ToolboxWindowItem_E WindowItem { get; private set; } = null;
     }
 
     public partial class WindowToolboxesContainerDeep0 : AbstractToolboxesContainer
@@ -46,9 +50,9 @@ namespace umi3dDesktopBrowser.uI.Container
         /// <param name="forceUpdate"></param>
         public override void Display(bool forceUpdate = false)
         {
-            base.Display(forceUpdate);
-            WindowItem.Toolbox.SetToolboxName(menu.Name);
-            Expand(forceUpdate);
+            //if (isDisplayed) return;
+            //base.Display(forceUpdate);
+            //Expand(forceUpdate);
         }
 
         /// <summary>
@@ -56,8 +60,9 @@ namespace umi3dDesktopBrowser.uI.Container
         /// </summary>
         public override void Hide()
         {
-            base.Hide();
-            Collapse(true);
+            //if (!isDisplayed) return;
+            //base.Hide();
+            //Collapse(true);
         }
 
         /// <summary>
@@ -67,7 +72,7 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void Collapse(bool forceUpdate = false)
         {
             base.Collapse(forceUpdate);
-            m_windowItem.Hide();
+            WindowItem.Hide();
         }
 
         /// <summary>
@@ -77,8 +82,9 @@ namespace umi3dDesktopBrowser.uI.Container
         /// <param name="forceUpdate"></param>
         public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
         {
+            Debug.Log($"expand as in container deep 0");
             base.ExpandAs(container, forceUpdate);
-            m_windowItem.Display();
+            WindowItem.Display();
         }
 
         /// <summary>
@@ -91,8 +97,9 @@ namespace umi3dDesktopBrowser.uI.Container
             base.Insert(element, updateDisplay);
             if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
-                m_windowItem.Adds(containerDeep1.Item);
-                m_windowItem.Container.Add(containerDeep1.ItemChildrenContainer);
+                WindowItem.Adds(containerDeep1.Item);
+                //WindowItem.ToolboxesContainer.Add(containerDeep1.ItemChildrenContainer);
+                containerDeep1.ItemChildrenContainer.AddTo(WindowItem.ToolboxesContainer);
 
                 AddChildrenToContainer(containerDeep1);
             }
@@ -104,7 +111,8 @@ namespace umi3dDesktopBrowser.uI.Container
             {
                 if (displayer is WindowToolboxesContainerDeep1 containerDeep1Child)
                 {
-                    m_windowItem.Container.Add(containerDeep1Child.ItemChildrenContainer);
+                    //WindowItem.ToolboxesContainer.Add(containerDeep1Child.ItemChildrenContainer);
+                    containerDeep1Child.ItemChildrenContainer.AddTo(WindowItem.ToolboxesContainer);
                     AddChildrenToContainer(containerDeep1Child);
                 }
             }

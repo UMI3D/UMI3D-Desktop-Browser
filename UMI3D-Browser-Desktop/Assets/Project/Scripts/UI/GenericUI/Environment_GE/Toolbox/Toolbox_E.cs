@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.uI.viewController
@@ -24,7 +25,7 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class Toolbox_E
     {
-        private VisualElement m_toolboxName { get;  set; } = null;
+        public Label ToolboxName { get;  private set; } = null;
     }
 
     public partial class Toolbox_E
@@ -36,10 +37,10 @@ namespace umi3dDesktopBrowser.uI.viewController
                 (isInMenuBar) ? "UI/Style/MenuBar/MenuBar_Toolbox" : "UI/Style/ToolboxWindow/ToolboxWindow_Toolbox", 
                 new StyleKeys( "", ""))
         {
-            AddVisualStyle(m_toolboxName, 
+            AddVisualStyle(ToolboxName, 
                 "UI/Style/Toolbox/ToolboxName", 
                 new StyleKeys(toolboxName, "", null, null));
-            if (toolboxName == null) m_toolboxName.style.display = DisplayStyle.None;
+            if (toolboxName == null) ToolboxName.style.display = DisplayStyle.None;
 
             var backward = Root.Q("backward");
             var forward = Root.Q("forward");
@@ -63,22 +64,9 @@ namespace umi3dDesktopBrowser.uI.viewController
 
         public void SetToolboxName(string text)
         {
-            if (text == null) Root.Q<Label>().style.display = DisplayStyle.None;
-            else Root.Q<Label>().style.display = DisplayStyle.Flex;
-            UpdateVisualStyle(m_toolboxName, new StyleKeys(text, "", null, null));
-        }
-    }
-
-    public partial class Toolbox_E
-    {
-        public void Display()
-        {
-            Root.style.display = DisplayStyle.Flex;
-        }
-
-        public void Hide()
-        {
-            Root.style.display = DisplayStyle.None;
+            if (text == null) ToolboxName.style.display = DisplayStyle.None;
+            else ToolboxName.style.display = DisplayStyle.Flex;
+            UpdateVisualKeys(ToolboxName, new StyleKeys(text, "", null, null));
         }
     }
 
@@ -89,7 +77,19 @@ namespace umi3dDesktopBrowser.uI.viewController
             VisualElement scrollView = GetVisualRoot("UI/UXML/horizontalScrollView");
             Root.Q("scrollViewContainer").Add(scrollView);
             base.Initialize();
-            m_toolboxName = Root.Q<Label>();
+            ToolboxName = Root.Q<Label>();
+        }
+
+        public override void Display()
+        {
+            base.Display();
+            Debug.Log($"Display toolbox [{ToolboxName.text}]");
+        }
+
+        public override void Hide()
+        {
+            base.Hide();
+            Debug.Log($"Hide toolbox [{ToolboxName.text}]");
         }
     }
 }

@@ -58,16 +58,6 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class ToolboxWindow_E
     {
-        public void Display()
-        {
-            Root.style.display = DisplayStyle.Flex;
-        }
-
-        public void Hide()
-        {
-            Root.style.display = DisplayStyle.None;
-        }
-
         private void OnCloseButtonPressed()
             => Hide();
     }
@@ -155,9 +145,8 @@ namespace umi3dDesktopBrowser.uI.viewController
 
             //m_scrollView.Adds(item, item1, item2, item3, item4, item5, item6, item7, item8);
 
-            PopUpManipulator manipulator = new PopUpManipulator();
-            UnregisterVisualCallback(Root);
-            Root.AddManipulator(manipulator);
+
+            UpdateVisualManipulator(Root, new PopUpManipulator(true));
         }
     }
 }
