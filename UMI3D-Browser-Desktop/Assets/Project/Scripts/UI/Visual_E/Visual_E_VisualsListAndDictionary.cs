@@ -24,91 +24,63 @@ namespace umi3dDesktopBrowser.uI.viewController
     public partial class Visual_E
     {
         protected List<VisualElement> m_visuals;
-        protected Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, UnityAction, EventCallback<MouseOverEvent>, EventCallback<MouseOutEvent>, EventCallback<MouseCaptureEvent>, EventCallback<MouseUpEvent>)> m_visualStyles;
+        protected Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)> m_visualStyles;
 
         protected void AddVisualStyle(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys, bool stopPropagation = true)
             => AddVisualStyle(visual, GetStyleSO(styleResourcePath), formatAndStyleKeys, stopPropagation);
-        protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, bool stopPropagation = true, params VisualElement[] otherVisualTriggers)
+        protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys, bool stopPropagation = true, params VisualElement[] otherVisualTriggers)
         {
             if (visual == null) throw new NullReferenceException("visual is null");
-            if (m_visuals.Contains(visual)) return;
-            m_visuals.Add(visual);
-            EventCallback<MouseOverEvent> mouseOver = (e) =>
+
+            if (m_visuals.Contains(visual))
             {
-                OnMouseOver(e, style_SO, formatAndStyleKeys, visual.style, stopPropagation);
-            };
-            EventCallback<MouseOutEvent> mouseOut = (e) =>
-            {
-                OnMouseOut(e, style_SO, formatAndStyleKeys, visual.style, stopPropagation);
-            };
-            EventCallback<MouseCaptureEvent> mouseDown = (e) =>
-            {
-                OnMouseDown(e, style_SO, formatAndStyleKeys, visual.style, stopPropagation);
-            };
-            EventCallback<MouseUpEvent> mouseUp = (e) =>
-            {
-                OnMouseUp(e, style_SO, formatAndStyleKeys, visual.style, stopPropagation);
-            };
-            visual.RegisterCallback(mouseOver);
-            visual.RegisterCallback(mouseOut);
-            visual.RegisterCallback(mouseDown);
-            visual.RegisterCallback(mouseUp);
-            foreach (VisualElement otherVisual in otherVisualTriggers)
-            {
-                if (otherVisual == null) break;
-                otherVisual.RegisterCallback(mouseOver);
-                otherVisual.RegisterCallback(mouseOut);
-                otherVisual.RegisterCallback(mouseDown);
-                otherVisual.RegisterCallback(mouseUp);
-            }
-            if (style_SO != null)
-            {
-                UnityAction ApplyFormatAndStyleAction = () =>
-                {
-                    ApplyFormatAndStyle(style_SO, formatAndStyleKeys, visual, m_mouseBehaviourFromState);
-                };
-                style_SO.AppliesFormatAndStyle.AddListener(ApplyFormatAndStyleAction);
-                m_visualStyles.Add(visual, (style_SO, formatAndStyleKeys, ApplyFormatAndStyleAction, mouseOver, mouseOut, mouseDown, mouseUp));
-                ApplyFormatAndStyleAction.Invoke();
+                var (oldStyle, oldKeys, manipulator) = m_visualStyles[visual];
+                manipulator.Set(style_SO, keys);
+
+                m_visualStyles[visual] = (style_SO, keys, manipulator);
+                manipulator.AppliesFormatAndStyle();
             }
             else
             {
-                m_visualStyles.Add(visual, (null, null, null, mouseOver, mouseOut, mouseDown, mouseUp));
+                m_visuals.Add(visual);
+
+                var manipulator = new VisualManipulator(style_SO, keys, stopPropagation, ApplyFormat, ApplyStyle);
+                visual.AddManipulator(manipulator);
+
+                m_visualStyles.Add(visual, (style_SO, keys, manipulator));
+                manipulator.AppliesFormatAndStyle();
             }
         }
 
-        protected void UpdateVisualStyle(VisualElement visual, StyleKeys newFormatAndStyleKeys)
+        protected void UpdateVisualKeys(VisualElement visual, StyleKeys newKeys)
         {
             if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
-            if (newFormatAndStyleKeys == null) throw new NullReferenceException("FormatAnStyleKeys is null.");
-            var (style_SO, formatAndStyleKeys, _, _, _, _, _) = m_visualStyles[visual];
-            formatAndStyleKeys.Text = newFormatAndStyleKeys.Text;
-            formatAndStyleKeys.TextStyleKey = newFormatAndStyleKeys.TextStyleKey;
-            formatAndStyleKeys.BackgroundStyleKey = newFormatAndStyleKeys.BackgroundStyleKey;
-            formatAndStyleKeys.BorderStyleKey = newFormatAndStyleKeys.BorderStyleKey;
-            ApplyFormatAndStyle(style_SO, formatAndStyleKeys, visual, m_mouseBehaviourFromState);
+            if (newKeys == null) throw new NullReferenceException("FormatAnStyleKeys is null.");
+            var (_, keys, manipulator) = m_visualStyles[visual];
+            keys.Text = newKeys.Text;
+            keys.TextStyleKey = newKeys.TextStyleKey;
+            keys.BackgroundStyleKey = newKeys.BackgroundStyleKey;
+            keys.BorderStyleKey = newKeys.BorderStyleKey;
+            manipulator.AppliesFormatAndStyle();
         }
 
-        protected void UnregisterVisualCallback(VisualElement visual)
+        protected void UpdateVisualManipulator(VisualElement visual, VisualManipulator newManipulator)
         {
             if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
-            var (_, _, _, mouseOver, mouseOut, mouseDown, mouseUp) = m_visualStyles[visual];
-            visual.UnregisterCallback(mouseOver);
-            visual.UnregisterCallback(mouseOut);
-            visual.UnregisterCallback(mouseDown);
-            visual.UnregisterCallback(mouseUp);
+            if (newManipulator == null) throw new NullReferenceException("Manipulator null");
+            var (styleSO, keys, oldManipulator) = m_visualStyles[visual];
+            visual.RemoveManipulator(oldManipulator);
+            newManipulator.Set(styleSO, keys, ApplyFormat, ApplyStyle);
+            visual.AddManipulator(newManipulator);
+            m_visualStyles[visual] = (styleSO, keys, newManipulator);
         }
 
         protected void ResetAllVisualStyle()
         {
             foreach (VisualElement visual in m_visuals)
             {
-                var (style, _, ApplyFormatAndStyleAction, mouseOver, mouseOut, mouseDown, mouseUp) = m_visualStyles[visual];
-                style.AppliesFormatAndStyle.RemoveListener(ApplyFormatAndStyleAction);
-                visual.UnregisterCallback(mouseOver);
-                visual.UnregisterCallback(mouseOut);
-                visual.UnregisterCallback(mouseDown);
-                visual.UnregisterCallback(mouseUp);
+                var (_, _, manipulator) = m_visualStyles[visual];
+                visual.RemoveManipulator(manipulator);
             }
             m_visuals.Clear();
             m_visualStyles.Clear();

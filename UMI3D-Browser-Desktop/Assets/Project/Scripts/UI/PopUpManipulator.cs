@@ -21,20 +21,18 @@ namespace umi3dDesktopBrowser.uI.viewController
     /// <summary>
     /// This class provides a class for a manipulator which enables users to move <see cref="AbstractPopUp"/>.
     /// </summary>
-    public class PopUpManipulator : MouseManipulator
+    public partial class PopUpManipulator
     {
-        #region Init
-
         protected Vector2 start;
         protected bool active = false;
 
-        public PopUpManipulator()
-        {
-            activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
-        }
+        public PopUpManipulator(bool stopPropagation) :
+            base(null, null, stopPropagation, null, null)
+        { }
+    }
 
-        #endregion
-
+    public partial class PopUpManipulator : VisualManipulator
+    {
         #region Registrations
 
         /// <summary>
@@ -59,8 +57,6 @@ namespace umi3dDesktopBrowser.uI.viewController
 
         #endregion
 
-        #region OnMouseDown
-
         protected virtual void OnMouseDown(MouseDownEvent e)
         {
             if (active)
@@ -77,10 +73,6 @@ namespace umi3dDesktopBrowser.uI.viewController
                 e.StopPropagation();
             }
         }
-
-        #endregion
-
-        #region OnMouseMove
 
         /// <summary>
         /// Makes the VisualElement follow user's mouse position.
@@ -102,18 +94,13 @@ namespace umi3dDesktopBrowser.uI.viewController
             e.StopPropagation();
         }
 
-        #endregion
-
-
-
-        #region OnMouseUp
-
         /// <summary>
         /// Releases the VisualElement currently dragged.
         /// </summary>
         /// <param name="e"></param>
-        protected virtual void OnMouseUp(MouseUpEvent e)
+        protected override void OnMouseUp(MouseUpEvent e)
         {
+            base.OnMouseUp(e);
             if (!active || !target.HasMouseCapture() || !CanStopManipulation(e))
                 return;
 
@@ -121,7 +108,5 @@ namespace umi3dDesktopBrowser.uI.viewController
             target.ReleaseMouse();
             e.StopPropagation();
         }
-
-        #endregion
     }
 }

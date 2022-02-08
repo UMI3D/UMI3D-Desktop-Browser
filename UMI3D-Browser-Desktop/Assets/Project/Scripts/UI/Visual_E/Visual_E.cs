@@ -40,6 +40,14 @@ namespace umi3dDesktopBrowser.uI.viewController
             set => Root.style.visibility = value;
         }
         public Rect RootLayout { get => Root.layout; }
+        public virtual void Display()
+        {
+            Root.style.display = DisplayStyle.Flex;
+        }
+        public virtual void Hide()
+        {
+            Root.style.display = DisplayStyle.None;
+        }
         public virtual void Reset()
         {
             ResetAllVisualStyle();
@@ -57,7 +65,6 @@ namespace umi3dDesktopBrowser.uI.viewController
             parent.Add(Root);
             AttachedToHierarchy = true;
         }
-        
         public virtual void Remove()
         {
             //if (!Displayed) return;
@@ -125,7 +132,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_globalPref.ApplyCustomStyle.AddListener(ApplyAllFormatAndStyle);
             m_uIElementStyleApplicator = new UIElementStyleApplicator(m_globalPref);
             m_visuals = new List<VisualElement>();
-            m_visualStyles = new Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, UnityAction, EventCallback<MouseOverEvent>, EventCallback<MouseOutEvent>, EventCallback<MouseCaptureEvent>, EventCallback<MouseUpEvent>)>();
+            m_visualStyles = new Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)>();
             this.Root = visual;
             AddVisualStyle(Root, style_SO, formatAndStyleKeys);
             if (parent != null) AddTo(parent);
@@ -181,13 +188,6 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             ApplyAllFormat();
             ApplyAllStyle();
-        }
-
-        protected void ApplyFormatAndStyle(CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, VisualElement visual, MouseBehaviour mouseBehaviour)
-        {
-            if (style_SO == null) return;
-            ApplyFormat(style_SO, formatAndStyleKeys, visual);
-            ApplyStyle(style_SO, formatAndStyleKeys, visual.style, mouseBehaviour);
         }
 
         #region Format of the element
@@ -270,8 +270,8 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             foreach (VisualElement visual in m_visuals)
             {
-                var style = m_visualStyles[visual];
-                ApplyStyle(style.Item1, style.Item2, visual.style, m_mouseBehaviourFromState);
+                var (_, _, manipulator) = m_visualStyles[visual];
+                manipulator.AppliesStyle();
             }
         }
 

@@ -24,6 +24,9 @@ namespace umi3dDesktopBrowser.uI.viewController
     public partial class ToolboxItem_E : Button_GE
     {
         private const string m_partialStylePath = "UI/Style";
+
+        private VisualElement m_icon = null;
+        private Label m_label = null;
     }
 
     public partial class ToolboxItem_E : Button_GE
@@ -34,10 +37,10 @@ namespace umi3dDesktopBrowser.uI.viewController
                  : $"{m_partialStylePath}/ToolboxWindow/ToolboxWindow_ToolboxItem",
                 null)
         {
-            SetIcon(Root.Q<VisualElement>("icon"),
+            SetIcon(m_icon,
                 $"{m_partialStylePath}/Toolbox/ToolboxItem_Icon",
                 new StyleKeys("placeholder", null));
-            SetLabel(Root.Q<Label>("label"),
+            SetLabel(m_label,
                 $"{m_partialStylePath}/Toolbox/ToolboxItem_Label",
                 new StyleKeys("", "", null, null));
         }
@@ -47,10 +50,10 @@ namespace umi3dDesktopBrowser.uI.viewController
                 : $"{m_partialStylePath}/ToolboxWindow/ToolboxWindow_ToolboxItem", 
                 null)
         {
-            SetIcon(Root.Q<VisualElement>("icon"), 
+            SetIcon(m_icon, 
                 $"{m_partialStylePath}/Toolbox/ToolboxItem_Icon", 
                 new StyleKeys(iconKey, null));
-            SetLabel(Root.Q<Label>("label"),
+            SetLabel(m_label,
                 $"{m_partialStylePath}/Toolbox/ToolboxItem_Label",
                 new StyleKeys(itemName, "", null, null));
         }
@@ -60,36 +63,24 @@ namespace umi3dDesktopBrowser.uI.viewController
                 null, 
                 isOn) 
         {
-            SetIcon(Root.Q<VisualElement>("icon"), 
+            SetIcon(m_icon, 
                 $"{m_partialStylePath}/Toolbox/ToolboxItem_Icon", 
                 new StyleKeys(iconOnKey, null), 
                 new StyleKeys(iconOffKey, null));
-            SetLabel(Root.Q<Label>("label"),
+            SetLabel(m_label,
                 $"{m_partialStylePath}/Toolbox/ToolboxItem_Label", 
                 new StyleKeys(itemName, "", null, null));
         }
 
-        public void Display()
-        {
-            Root.style.display = DisplayStyle.Flex;
-        }
-
-        public void Hide()
-        {
-            Root.style.display = DisplayStyle.None;
-        }
-
         public void SetIcon(Texture2D icon)
         {
-            VisualElement visual = Root.Q<VisualElement>("icon");
-            UpdateVisualStyle(visual, new StyleKeys(null, null));
-            visual.style.backgroundImage = icon;
+            UpdateVisualKeys(m_icon, new StyleKeys(null, null));
+            m_icon.style.backgroundImage = icon;
         }
 
         public void SetLabel(string text)
         {
-            VisualElement visual = Root.Q<Label>("label");
-            UpdateVisualStyle(visual, new StyleKeys(text, "", null, null));
+            UpdateVisualKeys(m_label, new StyleKeys(text, "", null, null));
         }
 
         #region Setup
@@ -107,5 +98,27 @@ namespace umi3dDesktopBrowser.uI.viewController
         //}
 
         #endregion
+    }
+    
+    public partial class ToolboxItem_E
+    {
+        protected override void Initialize()
+        {
+            base.Initialize();
+            m_icon = Root.Q<VisualElement>("icon");
+            m_label = Root.Q<Label>("label");
+        }
+
+        public override void Display()
+        {
+            Debug.Log($"display toolbox item [{m_label.text}]");
+            Root.style.display = DisplayStyle.Flex;
+        }
+
+        public override void Hide()
+        {
+            Debug.Log($"Hide toolbox item [{m_label.text}]");
+            Root.style.display = DisplayStyle.None;
+        }
     }
 }

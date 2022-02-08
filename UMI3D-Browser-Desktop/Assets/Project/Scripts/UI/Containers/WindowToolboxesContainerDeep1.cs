@@ -24,39 +24,41 @@ namespace umi3dDesktopBrowser.uI.Container
 {
     public partial class WindowToolboxesContainerDeep1
     {
-        private ToolboxItem_E m_item;
-        private Toolbox_E m_itemChildrenContainer;
-
         protected override void Awake()
         {
             base.Awake();
-            m_item = new ToolboxItem_E(false);
-            m_itemChildrenContainer = new Toolbox_E(false);
-        }
-
-        private void Start()
-        {
-            m_item.Hide();
-            m_itemChildrenContainer.Hide();
-        }
-
-        private WindowToolboxesContainerDeep0 FindContainerDeep0()
-        {
-            AbstractMenuDisplayContainer virtualParent = this;
-            while(virtualParent.parent != null)
+            Item = new ToolboxItem_E(false)
             {
-                virtualParent = virtualParent.parent;
-                if (virtualParent is WindowToolboxesContainerDeep0)
-                    return virtualParent as WindowToolboxesContainerDeep0;
-            }
-            throw new System.Exception("No parent is a WindowToolboxContainerDeep0");
+                OnClicked = () => Select()
+            };
+            ItemChildrenContainer = new Toolbox_E(false);
         }
+
+        public override void SetMenuItem(AbstractMenuItem menu)
+        {
+            base.SetMenuItem(menu);
+            Item.SetIcon(menu.icon2D);
+            Item.SetLabel(menu.Name);
+            ItemChildrenContainer.SetToolboxName(menu.Name);
+        }
+
+        //private WindowToolboxesContainerDeep0 FindContainerDeep0()
+        //{
+        //    AbstractMenuDisplayContainer virtualParent = this;
+        //    while(virtualParent.parent != null)
+        //    {
+        //        virtualParent = virtualParent.parent;
+        //        if (virtualParent is WindowToolboxesContainerDeep0)
+        //            return virtualParent as WindowToolboxesContainerDeep0;
+        //    }
+        //    throw new System.Exception("No parent is a WindowToolboxContainerDeep0");
+        //}
     }
 
     public partial class WindowToolboxesContainerDeep1
     {
-        public ToolboxItem_E Item => m_item;
-        public Toolbox_E ItemChildrenContainer => m_itemChildrenContainer;
+        public ToolboxItem_E Item { get; private set; } = null;
+        public Toolbox_E ItemChildrenContainer { get; private set; } = null;
     }
 
     public partial class WindowToolboxesContainerDeep1 : AbstractToolboxesContainer
@@ -67,10 +69,9 @@ namespace umi3dDesktopBrowser.uI.Container
         /// <param name="forceUpdate"></param>
         public override void Display(bool forceUpdate = false)
         {
+            if (isDisplayed) return;
             base.Display(forceUpdate);
-            m_item.SetIcon(menu.icon2D);
-            m_item.SetLabel(menu.Name);
-            m_item.Display();
+            Item.Display();
         }
 
         /// <summary>
@@ -78,8 +79,9 @@ namespace umi3dDesktopBrowser.uI.Container
         /// </summary>
         public override void Hide()
         {
+            if (!isDisplayed) return;
             base.Hide();
-            m_item.Hide();
+            Item.Hide();
         }
 
         /// <summary>
@@ -89,7 +91,7 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void Collapse(bool forceUpdate = false)
         {
             base.Collapse(forceUpdate);
-            m_itemChildrenContainer.Hide();
+            ItemChildrenContainer.Hide();
         }
 
         /// <summary>
@@ -100,7 +102,7 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
         {
             base.ExpandAs(container, forceUpdate);
-            m_itemChildrenContainer.Display();
+            ItemChildrenContainer.Display();
         }
 
         /// <summary>
@@ -113,7 +115,7 @@ namespace umi3dDesktopBrowser.uI.Container
             base.Insert(element, updateDisplay);
             if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
-                m_itemChildrenContainer.Adds(containerDeep1.Item);
+                ItemChildrenContainer.Adds(containerDeep1.Item);
             }
         }
 

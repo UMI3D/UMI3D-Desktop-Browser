@@ -53,22 +53,29 @@ public class TestUI : MonoBehaviour
 
         Menu rootContainer = new Menu();
 
-        Menu toolboxMenu = new Menu { Name = "Toolbox 1" };
-        rootContainer.Add(toolboxMenu);
+        Menu boxOne = new Menu { Name = "Toolbox 1" };
+        rootContainer.Add(boxOne);
 
-        Menu subToolBox = new Menu { Name = "SubToolBox" };
-        toolboxMenu.Add(subToolBox);
+        Menu subBoxOneOne = new Menu { Name = "ASubToolBox1.1" };
+        boxOne.Add(subBoxOneOne);
 
-        Menu tool3 = new Menu { Name = "Fraise" };
-        toolboxMenu.Add(tool3);
+        Menu subBoxOneTwo = new Menu { Name = "Fraise1.2" };
+        boxOne.Add(subBoxOneTwo);
 
-        Menu charcuterieToolBox = new Menu { Name = "Charcuterie Toolbox" };
-        tool3.Add(charcuterieToolBox);
+        Menu subBoxOneTwoOne = new Menu { Name = "Char Toolbox1.2.1" };
+        subBoxOneTwo.Add(subBoxOneTwoOne);
 
-        Menu toolboxMenu2 = new Menu { Name = "Toolbox 2" };
-        rootContainer.Add(toolboxMenu2);
+
+
+        Menu boxTwo = new Menu { Name = "Toolbox 2" };
+        rootContainer.Add(boxTwo);
+
+        Menu subBoxTwoOne = new Menu { Name = "BSubToolBox2.1" };
+        boxTwo.Add(subBoxTwoOne);
 
         DisplayManager.menuAsset.menu = rootContainer;
+
+        Open();
     }
 
     [ContextMenu("Open player menu")]

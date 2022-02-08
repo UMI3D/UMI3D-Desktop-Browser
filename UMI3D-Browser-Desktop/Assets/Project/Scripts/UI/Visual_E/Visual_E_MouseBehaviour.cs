@@ -20,47 +20,47 @@ namespace umi3dDesktopBrowser.uI.viewController
 {
     public partial class Visual_E
     {
-        protected enum MousePressedState
-        {
-            Unpressed,
-            Pressed
-        }
-        protected enum MousePositionState
-        {
-            Out,
-            Over
-        }
+        //protected enum MousePressedState
+        //{
+        //    Unpressed,
+        //    Pressed
+        //}
+        //protected enum MousePositionState
+        //{
+        //    Out,
+        //    Over
+        //}
 
-        protected (MousePressedState, MousePositionState) m_mouseState { get; set; }
-        protected MouseBehaviour m_mouseBehaviourFromState
-        {
-            get
-            {
-                return m_mouseState switch
-                {
-                    (MousePressedState.Unpressed, MousePositionState.Out) => MouseBehaviour.MouseOut,
-                    (MousePressedState.Unpressed, MousePositionState.Over) => MouseBehaviour.MouseOver,
-                    _ => MouseBehaviour.MousePressed
-                };
-            }
-        }
+        //protected (MousePressedState, MousePositionState) m_mouseState { get; set; }
+        //protected MouseBehaviour m_mouseBehaviourFromState
+        //{
+        //    get
+        //    {
+        //        return m_mouseState switch
+        //        {
+        //            (MousePressedState.Unpressed, MousePositionState.Out) => MouseBehaviour.MouseOut,
+        //            (MousePressedState.Unpressed, MousePositionState.Over) => MouseBehaviour.MouseOver,
+        //            _ => MouseBehaviour.MousePressed
+        //        };
+        //    }
+        //}
 
-        protected virtual void OnMouseOver(MouseOverEvent e, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
-            => MouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Over), style_SO, formatAndStyleKeys, style, stopPropagation);
-        protected virtual void OnMouseOut(MouseOutEvent e, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
-            => MouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Out), style_SO, formatAndStyleKeys, style, stopPropagation);
-        protected virtual void OnMouseDown(MouseCaptureEvent e, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
-            => MouseBehaviourChanged(e, (MousePressedState.Pressed, m_mouseState.Item2), style_SO, formatAndStyleKeys, style, stopPropagation);
-        protected virtual void OnMouseUp(MouseUpEvent e, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
-        {
-            if (e.button != 0) return;
-            MouseBehaviourChanged(e, (MousePressedState.Unpressed, m_mouseState.Item2), style_SO, formatAndStyleKeys, style, stopPropagation);
-        }
-        protected void MouseBehaviourChanged(EventBase e, (MousePressedState, MousePositionState) mouseState, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
-        {
-            m_mouseState = mouseState;
-            ApplyStyle(style_SO, formatAndStyleKeys, style, m_mouseBehaviourFromState);
-            if (stopPropagation) e.StopPropagation();
-        }
+        //protected virtual void OnMouseOver(MouseOverEvent e, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
+        //    => MouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Over), style_SO, formatAndStyleKeys, style, stopPropagation);
+        //protected virtual void OnMouseOut(MouseOutEvent e, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
+        //    => MouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Out), style_SO, formatAndStyleKeys, style, stopPropagation);
+        //protected virtual void OnMouseDown(MouseCaptureEvent e, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
+        //    => MouseBehaviourChanged(e, (MousePressedState.Pressed, m_mouseState.Item2), style_SO, formatAndStyleKeys, style, stopPropagation);
+        //protected virtual void OnMouseUp(MouseUpEvent e, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
+        //{
+        //    if (e.button != 0) return;
+        //    MouseBehaviourChanged(e, (MousePressedState.Unpressed, m_mouseState.Item2), style_SO, formatAndStyleKeys, style, stopPropagation);
+        //}
+        //protected void MouseBehaviourChanged(EventBase e, (MousePressedState, MousePositionState) mouseState, CustomStyle_SO style_SO, StyleKeys formatAndStyleKeys, IStyle style, bool stopPropagation)
+        //{
+        //    m_mouseState = mouseState;
+        //    ApplyStyle(style_SO, formatAndStyleKeys, style, m_mouseBehaviourFromState);
+        //    if (stopPropagation) e.StopPropagation();
+        //}
     }
 }
