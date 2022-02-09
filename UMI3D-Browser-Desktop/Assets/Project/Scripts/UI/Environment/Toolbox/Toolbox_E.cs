@@ -20,11 +20,6 @@ namespace umi3dDesktopBrowser.uI.viewController
 {
     public partial class Toolbox_E
     {
-        
-    }
-
-    public partial class Toolbox_E
-    {
         public Label ToolboxName { get;  private set; } = null;
     }
 
