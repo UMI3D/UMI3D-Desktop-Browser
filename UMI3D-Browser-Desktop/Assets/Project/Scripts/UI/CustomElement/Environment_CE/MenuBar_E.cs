@@ -84,20 +84,20 @@ namespace umi3dDesktopBrowser.uI.viewController
         }
 
 
-        public void AddInSubMenu(ToolboxGenericElement tools, ToolboxGenericElement parent)
-        {
-            tools.AddTo(SubMenuLayout);
-            //tools.style.left = parent.ChangeCoordinatesTo(tools, new Vector2(parent.layout.x, parent.layout.y)).x;
-            logWorldPosition = () =>
-            {
-                Debug.Log($"tool x = {tools.worldBound.x}");
-                Debug.Log($"parent x = {parent.worldBound.x}");
-                tools.style.left = parent.ChangeCoordinatesTo(tools, new Vector2(parent.layout.x, parent.layout.y)).x;
+        //public void AddInSubMenu(ToolboxGenericElement tools, ToolboxGenericElement parent)
+        //{
+        //    tools.AddTo(SubMenuLayout);
+        //    //tools.style.left = parent.ChangeCoordinatesTo(tools, new Vector2(parent.layout.x, parent.layout.y)).x;
+        //    logWorldPosition = () =>
+        //    {
+        //        Debug.Log($"tool x = {tools.worldBound.x}");
+        //        Debug.Log($"parent x = {parent.worldBound.x}");
+        //        tools.style.left = parent.ChangeCoordinatesTo(tools, new Vector2(parent.layout.x, parent.layout.y)).x;
 
-                //test.style.left = image.WorldToLocal(new Vector2(image.worldBound.x, 0f)).x;
-            };
-            //Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPositionCoroutine());
-        }
+        //        //test.style.left = image.WorldToLocal(new Vector2(image.worldBound.x, 0f)).x;
+        //    };
+        //    //Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPositionCoroutine());
+        //}
     }
 
     public partial class MenuBar_E
