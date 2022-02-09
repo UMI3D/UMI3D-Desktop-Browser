@@ -77,8 +77,8 @@ public class TestUI : MonoBehaviour
         Menu subBoxTwoOne = new Menu { Name = "BSubToolBox2.1" };
         boxTwo.Add(subBoxTwoOne);
 
-        MenuItem item1 = new MenuItem { Name = "item1" };
-        subBoxTwoOne.Add(item1);
+        //MenuItem item1 = new MenuItem { Name = "item1" };
+        //subBoxTwoOne.Add(item1);
 
         DisplayManager.menuAsset.menu = rootContainer;
 
