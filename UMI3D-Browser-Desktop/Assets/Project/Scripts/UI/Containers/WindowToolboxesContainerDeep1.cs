@@ -44,7 +44,8 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);
-            Item.SetIcon(menu.icon2D);
+            if (menu.icon2D != null)
+                Item.SetIcon(menu.icon2D);
             Item.SetLabel(menu.Name);
             ItemChildrenContainer.SetToolboxName(menu.Name);
         }
