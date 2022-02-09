@@ -109,16 +109,16 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_label = Root.Q<Label>("label");
         }
 
-        public override void Display()
-        {
-            Debug.Log($"display toolbox item [{m_label.text}]");
-            Root.style.display = DisplayStyle.Flex;
-        }
+        //public override void Display()
+        //{
+        //    Debug.Log($"display toolbox item [{m_label.text}]");
+        //    Root.style.display = DisplayStyle.Flex;
+        //}
 
-        public override void Hide()
-        {
-            Debug.Log($"Hide toolbox item [{m_label.text}]");
-            Root.style.display = DisplayStyle.None;
-        }
+        //public override void Hide()
+        //{
+        //    Debug.Log($"Hide toolbox item [{m_label.text}]");
+        //    Root.style.display = DisplayStyle.None;
+        //}
     }
 }

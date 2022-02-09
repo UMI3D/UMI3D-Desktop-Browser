@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
+using UnityEngine;
 
 namespace umi3dDesktopBrowser.uI.Container
 {
@@ -40,6 +41,23 @@ namespace umi3dDesktopBrowser.uI.Container
         protected virtual void Awake()
         {
             virtualContainer = this;
+        }
+
+        protected virtual void OnEnable()
+        {
+            //Debug.Log($"enable [{this.name}]");
+        }
+
+        protected virtual void OnDisable()
+        {
+            //Debug.Log($"disable [{this.name}]");
+            Collapse();
+        }
+
+        public override void SetMenuItem(AbstractMenuItem menu)
+        {
+            base.SetMenuItem(menu);
+            this.name = menu.Name + "-" + GetType().ToString().Split('.').Last();
         }
 
         public override AbstractDisplayer this[int i] { get => currentDisplayers[i]; set => currentDisplayers[i] = value; }
@@ -92,9 +110,20 @@ namespace umi3dDesktopBrowser.uI.Container
         {
             this.gameObject.SetActive(true);
 
-            this.name = menu.Name + "-" + GetType().ToString().Split('.').Last();
-
             isDisplayed = true;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public override void Hide()
+        {
+            isDisplayed = false;
+            foreach (AbstractDisplayer disp in virtualContainer)
+            {
+                disp.Hide();
+            }
+            this.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -146,19 +175,6 @@ namespace umi3dDesktopBrowser.uI.Container
         public override int GetIndexOf(AbstractDisplayer element)
         {
             return currentDisplayers.IndexOf(element);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public override void Hide()
-        {
-            isDisplayed = false;
-            foreach (AbstractDisplayer disp in virtualContainer)
-            {
-                disp.Hide();
-            }
-            this.gameObject.SetActive(false);
         }
 
         /// <summary>

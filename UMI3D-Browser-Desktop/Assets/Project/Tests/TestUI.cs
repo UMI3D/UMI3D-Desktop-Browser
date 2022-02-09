@@ -53,17 +53,21 @@ public class TestUI : MonoBehaviour
 
         Menu rootContainer = new Menu();
 
-        Menu boxOne = new Menu { Name = "Toolbox 1" };
+        Menu boxOne = new Menu { Name = "Toolbox1" };
         rootContainer.Add(boxOne);
 
-        Menu subBoxOneOne = new Menu { Name = "ASubToolBox1.1" };
+        Menu subBoxOneOne = new Menu { Name = "Poire1.1" };
         boxOne.Add(subBoxOneOne);
-
         Menu subBoxOneTwo = new Menu { Name = "Fraise1.2" };
         boxOne.Add(subBoxOneTwo);
 
-        Menu subBoxOneTwoOne = new Menu { Name = "Char Toolbox1.2.1" };
+        Menu subBoxOneTwoOne = new Menu { Name = "Chat1.2.1" };
         subBoxOneTwo.Add(subBoxOneTwoOne);
+        Menu subBoxOneTwoTwo = new Menu { Name = "Chien1.2.2" };
+        subBoxOneTwo.Add(subBoxOneTwoTwo);
+
+        Menu subBoxOneTwoTwoOne = new Menu { Name = "Mac1.2.2.1" };
+        subBoxOneTwoTwo.Add(subBoxOneTwoTwoOne);
 
 
 

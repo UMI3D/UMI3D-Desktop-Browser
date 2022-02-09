@@ -24,6 +24,12 @@ namespace umi3dDesktopBrowser.uI.Container
 {
     public partial class WindowToolboxesContainerDeep1
     {
+        public ToolboxItem_E Item { get; private set; } = null;
+        public Toolbox_E ItemChildrenContainer { get; private set; } = null;
+    }
+
+    public partial class WindowToolboxesContainerDeep1
+    {
         protected override void Awake()
         {
             base.Awake();
@@ -32,6 +38,7 @@ namespace umi3dDesktopBrowser.uI.Container
                 OnClicked = () => Select()
             };
             ItemChildrenContainer = new Toolbox_E(false);
+            isDisplayed = true;
         }
 
         public override void SetMenuItem(AbstractMenuItem menu)
@@ -40,6 +47,25 @@ namespace umi3dDesktopBrowser.uI.Container
             Item.SetIcon(menu.icon2D);
             Item.SetLabel(menu.Name);
             ItemChildrenContainer.SetToolboxName(menu.Name);
+        }
+
+        public override void Select()
+        {
+            base.Select();
+            if (parent is WindowToolboxesContainerDeep0 containerDeep0)
+            {
+                if (!containerDeep0.IsChildrenExpand)
+                {
+                    containerDeep0.IsChildrenExpand = true;
+                    foreach (AbstractDisplayer sibling in containerDeep0.parent)
+                    {
+                        if (sibling != this.parent && sibling is WindowToolboxesContainerDeep0 siblingDeep0)
+                        {
+                            siblingDeep0.Collapse();
+                        }
+                    }
+                }
+            }
         }
 
         //private WindowToolboxesContainerDeep0 FindContainerDeep0()
@@ -53,12 +79,6 @@ namespace umi3dDesktopBrowser.uI.Container
         //    }
         //    throw new System.Exception("No parent is a WindowToolboxContainerDeep0");
         //}
-    }
-
-    public partial class WindowToolboxesContainerDeep1
-    {
-        public ToolboxItem_E Item { get; private set; } = null;
-        public Toolbox_E ItemChildrenContainer { get; private set; } = null;
     }
 
     public partial class WindowToolboxesContainerDeep1 : AbstractToolboxesContainer

@@ -80,17 +80,17 @@ namespace umi3dDesktopBrowser.uI.viewController
             ToolboxName = Root.Q<Label>();
         }
 
-        public override void Display()
-        {
-            base.Display();
-            Debug.Log($"Display toolbox [{ToolboxName.text}]");
-        }
+        //public override void Display()
+        //{
+        //    base.Display();
+        //    Debug.Log($"Display toolbox [{ToolboxName.text}]");
+        //}
 
-        public override void Hide()
-        {
-            base.Hide();
-            Debug.Log($"Hide toolbox [{ToolboxName.text}]");
-        }
+        //public override void Hide()
+        //{
+        //    base.Hide();
+        //    Debug.Log($"Hide toolbox [{ToolboxName.text}]");
+        //}
     }
 }
 
