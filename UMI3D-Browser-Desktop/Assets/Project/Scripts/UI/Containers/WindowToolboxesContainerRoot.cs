@@ -24,7 +24,7 @@ namespace umi3dDesktopBrowser.uI.Container
 {
     public partial class WindowToolboxesContainerRoot
     {
-
+        
     }
 
     public partial class WindowToolboxesContainerRoot : AbstractToolboxesContainer
@@ -67,7 +67,6 @@ namespace umi3dDesktopBrowser.uI.Container
         /// <param name="forceUpdate"></param>
         public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
         {
-            Debug.Log($"expand as in container deep root");
             base.ExpandAs(container, forceUpdate);
             ToolboxWindow_E.Instance.Display();
         }

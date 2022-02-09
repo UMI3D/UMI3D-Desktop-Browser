@@ -78,11 +78,11 @@ namespace umi3dDesktopBrowser.uI.viewController
             ToolboxesContainer = Root.Q("toolboxesContainer");
         }
 
-        public override void Display()
-        {
-            base.Display();
-            Debug.Log($"Display window item [{FirstToolbox.ToolboxName.text}]");
-        }
+        //public override void Display()
+        //{
+        //    base.Display();
+        //    Debug.Log($"Display window item [{FirstToolbox.ToolboxName.text}]");
+        //}
     }
 }
 
