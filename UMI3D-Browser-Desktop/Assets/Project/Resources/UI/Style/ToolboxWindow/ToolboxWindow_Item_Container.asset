@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
-  m_Name: ToolboxWindow_ToolboxItem
+  m_Name: ToolboxWindow_Item_Container
   m_EditorClassIdentifier: 
   AppliesFormatAndStyle:
     m_PersistentCalls:
@@ -46,20 +46,20 @@ MonoBehaviour:
       m_value: 0
   m_marginAndPadding:
     m_margin:
-      m_keyword: 11
+      m_keyword: 0
       m_value:
         m_global: 0
         m_bottom: 0
-        m_left: 20
-        m_right: 20
+        m_left: 0
+        m_right: 0
         m_top: 0
     m_padding:
       m_keyword: 0
       m_value:
         m_global: 0
         m_bottom: 0
-        m_left: 20
-        m_right: 20
+        m_left: 0
+        m_right: 0
         m_top: 0
   m_textFormat:
     m_fontSize:

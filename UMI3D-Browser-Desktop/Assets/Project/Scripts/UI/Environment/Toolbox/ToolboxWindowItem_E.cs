@@ -21,7 +21,15 @@ namespace umi3dDesktopBrowser.uI.viewController
     public partial class ToolboxWindowItem_E
     {
         public Button_GE PinnButton { get; private set; } = null;
+        private VisualElement m_pin { get; set; } = null;
+        private string m_pinStyle { get; set; } = null;
+
+        private VisualElement m_containers { get; set; } = null;
+        private string m_conainerStyle { get; set; } = null;
+
         public VisualElement ToolboxesContainer { get; private set; } = null;
+        private string m_toolboxesContainerStyle { get; set; } = null;
+
         public Toolbox_E FirstToolbox { get; private set; } = null;
     }
 
@@ -32,26 +40,10 @@ namespace umi3dDesktopBrowser.uI.viewController
                 null,
                 null)
         {
-            AddVisualStyle(ToolboxesContainer,
-                "UI/Style/ToolboxWindow/ToolboxWindow_Item_ToolboxContainer",
-                new StyleKeys(null, ""));
+            
             FirstToolbox = new Toolbox_E(false);
             FirstToolbox.AddTo(ToolboxesContainer);
         }
-        //public ToolboxWindowItem_E(Toolbox_E toolbox) :
-        //    base("UI/UXML/ToolboxWindow/toolboxWindow_Item", 
-        //        null, 
-        //        null)
-        //{
-        //    SetIcon(PinnButton, 
-        //        "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButton",
-        //        new StyleKeys("PinnedActive", ""),
-        //        new StyleKeys("PinnedEnable", ""));
-        //    AddVisualStyle(ToolboxesContainer, 
-        //        "UI/Style/ToolboxWindow/ToolboxWindow_Item_ToolboxContainer", 
-        //        new StyleKeys(null, ""));
-        //    toolbox.AddTo(ToolboxesContainer);
-        //}
 
         public void Pin()
         {
@@ -69,13 +61,23 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected override void Initialize()
         {
             base.Initialize();
-            PinnButton = new Button_GE(Root.Q<Button>("pinButton"));
-            PinnButton
-                .SetIcon(PinnButton.Root,
-                "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButton",
+            m_pin = Root.Q<Button>("pinButton");
+            m_pinStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButton";
+            PinnButton = new Button_GE(m_pin);
+            PinnButton.SetIcon(m_pin,
+                m_pinStyle,
                 new StyleKeys("PinnedActive", ""),
                 new StyleKeys("PinnedEnable", ""));
+
+            m_containers = Root.Q("containers");
+            m_conainerStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_Container";
+            AddVisualStyle(m_containers, m_conainerStyle, null);
+
             ToolboxesContainer = Root.Q("toolboxesContainer");
+            m_toolboxesContainerStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_ToolboxesContainer";
+            AddVisualStyle(ToolboxesContainer,
+                m_toolboxesContainerStyle,
+                new StyleKeys(null, ""));
         }
 
         //public override void Display()
