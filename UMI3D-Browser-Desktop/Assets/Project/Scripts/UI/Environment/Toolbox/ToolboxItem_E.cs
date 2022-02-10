@@ -21,55 +21,49 @@ namespace umi3dDesktopBrowser.uI.viewController
     /// <summary>
     /// A ToolboxItem is a button which has an Icon and a Label.
     /// </summary>
-    public partial class ToolboxItem_E : Button_GE
+    public partial class ToolboxItem_E
     {
         private const string m_partialStylePath = "UI/Style";
+        private const string m_uxmlPath = "UI/UXML/Toolbox/toolboxItem";
+        private const string m_menuBarStyle = "UI/Style/MenuBar/MenuBar_ToolboxItem";
+        private const string m_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_ToolboxItem";
 
         private VisualElement m_icon = null;
         private Label m_label = null;
     }
 
-    public partial class ToolboxItem_E : Button_GE
+    public partial class ToolboxItem_E : ButtonWithLabel_E
     {
-        public ToolboxItem_E(bool isInMenuBar = true) :
-             base("UI/UXML/Toolbox/toolboxItem",
-                (isInMenuBar) ? $"{m_partialStylePath}/MenuBar/MenuBar_ToolboxItem" 
-                 : $"{m_partialStylePath}/ToolboxWindow/ToolboxWindow_ToolboxItem",
-                null)
-        {
-            SetIcon(m_icon,
-                $"{m_partialStylePath}/Toolbox/ToolboxItem_Icon",
-                new StyleKeys("placeholder", null));
-            SetLabel(m_label,
-                $"{m_partialStylePath}/Toolbox/ToolboxItem_Label",
-                new StyleKeys("", "", null, null));
-        }
+        public ToolboxItem_E(bool isTool = true, bool isInMenuBar = true) :
+            this((isTool) ? "placeholderToolActive" : "placeholderToolboxActive", (isTool) ? "placeholderToolEnable" : "placeholderToolboxEnable", "", false, isInMenuBar)
+        { }
+
         public ToolboxItem_E(string iconKey, string itemName, bool isInMenuBar = true) :
-            base("UI/UXML/Toolbox/toolboxItem", 
-                (isInMenuBar) ? $"{m_partialStylePath}/MenuBar/MenuBar_ToolboxItem" 
-                : $"{m_partialStylePath}/ToolboxWindow/ToolboxWindow_ToolboxItem", 
-                null)
+            base(m_uxmlPath, (isInMenuBar) ? m_menuBarStyle : m_windowStyle, null)
         {
-            SetIcon(m_icon, 
-                $"{m_partialStylePath}/Toolbox/ToolboxItem_Icon", 
-                new StyleKeys(iconKey, null));
-            SetLabel(m_label,
-                $"{m_partialStylePath}/Toolbox/ToolboxItem_Label",
-                new StyleKeys(itemName, "", null, null));
+            string buttonStyle = $"{m_partialStylePath}/Toolbox/ToolboxItem_Icon";
+            StyleKeys buttonKeys = new StyleKeys(iconKey, null);
+            SetButton(buttonStyle, buttonKeys, null);
+
+            string labelStyle = $"{m_partialStylePath}/Toolbox/ToolboxItem_Label";
+            StyleKeys labelKeys = new StyleKeys(itemName, "", null, null);
+            SetLabel(labelStyle, labelKeys);
         }
         public ToolboxItem_E(string iconOnKey, string iconOffKey, string itemName, bool isOn = false) : 
-            base("UI/UXML/Toolbox/toolboxItem", 
-                $"{m_partialStylePath}/MenuBar/MenuBar_ToolboxItem", 
-                null, 
-                isOn) 
+            this(iconOnKey, iconOffKey, itemName, isOn, true)
+        { }
+
+        private ToolboxItem_E(string iconOnKey, string iconOffKey, string itemName, bool isOn = false, bool isInMenuBar = true) :
+            base(m_uxmlPath, (isInMenuBar) ? m_menuBarStyle : m_windowStyle, null)
         {
-            SetIcon(m_icon, 
-                $"{m_partialStylePath}/Toolbox/ToolboxItem_Icon", 
-                new StyleKeys(iconOnKey, null), 
-                new StyleKeys(iconOffKey, null));
-            SetLabel(m_label,
-                $"{m_partialStylePath}/Toolbox/ToolboxItem_Label", 
-                new StyleKeys(itemName, "", null, null));
+            string buttonStyle = $"{m_partialStylePath}/Toolbox/ToolboxItem_Icon";
+            StyleKeys buttonOnKeys = new StyleKeys(iconOnKey, null);
+            StyleKeys buttonOffKeys = new StyleKeys(iconOffKey, null);
+            SetButton(buttonStyle, buttonOnKeys, buttonOffKeys, isOn, null);
+
+            string labelStyle = $"{m_partialStylePath}/Toolbox/ToolboxItem_Label";
+            StyleKeys labelKeys = new StyleKeys(itemName, "", null, null);
+            SetLabel(labelStyle, labelKeys);
         }
 
         public void SetIcon(Texture2D icon)

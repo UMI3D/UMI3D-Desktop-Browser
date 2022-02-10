@@ -388,7 +388,8 @@ MonoBehaviour:
   displayDepth: 1
   firstContainerInScene: 1
   containerSelector: {fileID: 1721974262}
-  DisplayerPrefab: []
+  DisplayerPrefab:
+  - {fileID: -5307635460168655369, guid: 60efad2a58dba62469e585e689a07d57, type: 3}
   onDisplay:
     m_PersistentCalls:
       m_Calls: []

@@ -74,14 +74,14 @@ namespace umi3dDesktopBrowser.uI.viewController
             AddVisualStyle(Root.Q<Label>("windowName"), 
                 $"{m_partialStylePath}/ToolboxWindow_Name", 
                 new StyleKeys("Toolbox", "", "", ""));
-            new Button_GE(Root.Q("closeButton"), 
-                $"{m_partialStylePath}/ToolboxWindow_closeButton", 
-                new StyleKeys("", ""))
+
+            Button closeButton = Root.Q<Button>("closeButton");
+            string closeButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_closeButton";
+            StyleKeys closeButtonKeys = new StyleKeys("", "");
+            new Button_E(closeButton, closeButtonStyle, closeButtonKeys)
             {
                 OnClicked = () => { OnCloseButtonPressed(); }
-            }.SetIcon(Root.Q("closeButton"), 
-            $"{m_partialStylePath}/ToolboxWindow_closeButton", 
-            new StyleKeys("", null));
+            };
 
             m_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"), null, null)
                 .SetVerticalDraggerContainerStyle($"{m_partialStylePath}/ToolboxWindow_DraggerContainer", 
@@ -90,12 +90,16 @@ namespace umi3dDesktopBrowser.uI.viewController
                 new StyleKeys("", ""));
             //m_scrollView.Scroll_View.style.alignItems = Align.Center;
 
-            new Button_GE(Root.Q("unpinnedButton"),
-                $"{m_partialStylePath}/ToolboxWindow_UnpinnedButton",
-                new StyleKeys("", null))
+
+            Button unpinnedButton = Root.Q<Button>("unpinnedButton");
+            string unpinnedButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_UnpinnedButton";
+            StyleKeys unpinnedButtonKeys = new StyleKeys("", null);
+            new Button_E(unpinnedButton, unpinnedButtonStyle, unpinnedButtonKeys)
             {
                 OnClicked = () => { UnPinedButtonPressed.Invoke(); },
             };
+
+
             //.SetIcon(Root.Q("unpinnedButton"),
             //$"{m_partialStylePath}/ToolboxWindow_UnpinnedButton",
             //new StyleKeys("", null));

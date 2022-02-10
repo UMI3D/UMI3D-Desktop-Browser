@@ -26,8 +26,6 @@ namespace umi3dDesktopBrowser.uI.viewController
     {
         #region Fields
 
-        public new class UxmlFactory : UxmlFactory<ShortcutGenericElement, UxmlTraits> { }
-
         VisualElement iconsLayout_VE; //Where icons are displays.
         Label shortcutName_L; //the shortcut's name.
 
@@ -104,8 +102,8 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             base.Initialize();
 
-            shortcutName_L = this.Q<Label>("shortcut-name");
-            iconsLayout_VE = this.Q<VisualElement>("Icons-layout");
+            //shortcutName_L = this.Q<Label>("shortcut-name");
+            //iconsLayout_VE = this.Q<VisualElement>("Icons-layout");
 
             iconsLayout_VE.RegisterCallback<GeometryChangedEvent>(OnElementResized);
         }
@@ -129,7 +127,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             {
                 if (i != 0 && i < shortcutIcons.Length)
                 {
-                    Label_GE plus;
+                    //Label_GE plus;
                     //Shortcuts.ObjectPooling(out plus, Shortcuts.ShortcutLabel_ge_DisplayedList, Shortcuts.ShortcutLabel_ge_WaitedList, label_VTA);
                     //plus.
                     //    Setup("+", "label").

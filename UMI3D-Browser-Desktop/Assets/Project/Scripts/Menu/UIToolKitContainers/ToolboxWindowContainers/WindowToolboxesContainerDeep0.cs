@@ -13,21 +13,37 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections.Generic;
-using System.Linq;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3dDesktopBrowser.uI.viewController;
 using UnityEngine;
 
-namespace umi3dDesktopBrowser.uI.Container
+namespace umi3d.desktopBrowser.menu.Container
 {
-    public partial class WindowToolboxesContainerRoot
+    public partial class WindowToolboxesContainerDeep0
     {
-        
+        public bool IsChildrenExpand { get; set; } = false;
+        public ToolboxWindowItem_E WindowItem { get; private set; } = null;
     }
 
-    public partial class WindowToolboxesContainerRoot : AbstractToolboxesContainer
+    public partial class WindowToolboxesContainerDeep0
+    {
+        protected override void Awake()
+        {
+            base.Awake();
+            WindowItem = new ToolboxWindowItem_E();
+            isDisplayed = true;
+            isExpanded = true;
+        }
+
+        public override void SetMenuItem(AbstractMenuItem menu)
+        {
+            base.SetMenuItem(menu);
+            WindowItem.SetFirstToolboxName(menu.Name);
+        }
+    }
+
+    public partial class WindowToolboxesContainerDeep0 : AbstractToolboxesContainer
     {
         /// <summary>
         /// <inheritdoc/>
@@ -35,9 +51,7 @@ namespace umi3dDesktopBrowser.uI.Container
         /// <param name="forceUpdate"></param>
         public override void Display(bool forceUpdate = false)
         {
-            if (isDisplayed) return;
-            base.Display(forceUpdate);
-            MenuBar_E.Instance.DisplayToolboxButton(true);
+            WindowItem.Display();
         }
 
         /// <summary>
@@ -45,9 +59,9 @@ namespace umi3dDesktopBrowser.uI.Container
         /// </summary>
         public override void Hide()
         {
-            if (!isDisplayed) return;
-            base.Hide();
-            MenuBar_E.Instance.DisplayToolboxButton(false);
+            //if (!isDisplayed) return;
+            //base.Hide();
+            //Collapse(true);
         }
 
         /// <summary>
@@ -56,8 +70,11 @@ namespace umi3dDesktopBrowser.uI.Container
         /// <param name="forceUpdate"></param>
         public override void Collapse(bool forceUpdate = false)
         {
-            base.Collapse(forceUpdate);
-            ToolboxWindow_E.Instance.Hide();
+            foreach (AbstractDisplayer child in currentDisplayers)
+            {
+                ((WindowToolboxesContainerDeep1)child).Collapse();
+            }
+            IsChildrenExpand = false;
         }
 
         /// <summary>
@@ -67,8 +84,8 @@ namespace umi3dDesktopBrowser.uI.Container
         /// <param name="forceUpdate"></param>
         public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
         {
-            base.ExpandAs(container, forceUpdate);
-            ToolboxWindow_E.Instance.Display();
+            //base.ExpandAs(container, forceUpdate);
+            //WindowItem.Display();
         }
 
         /// <summary>
@@ -79,10 +96,27 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
             base.Insert(element, updateDisplay);
-            if (element is WindowToolboxesContainerDeep0 containerDeep0)
+            if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
-                ToolboxWindow_E.Instance.Adds(containerDeep0.WindowItem);
-            } 
+                WindowItem.AddsToolboxItemInFirstToolbox(containerDeep1.Item);
+                WindowItem.AddsToolbox(containerDeep1.Toolbox);
+                WindowItem.AddsDisplayersContainer(containerDeep1.DisplayerContainer);
+
+                AddChildrenToContainer(containerDeep1);
+            }
+        }
+
+        private void AddChildrenToContainer(WindowToolboxesContainerDeep1 containerDeep1)
+        {
+            foreach (AbstractDisplayer displayer in containerDeep1)
+            {
+                if (displayer is WindowToolboxesContainerDeep1 containerDeep1Child)
+                {
+                    WindowItem.AddsToolbox(containerDeep1Child.Toolbox);
+                    WindowItem.AddsToolbox(containerDeep1Child.Toolbox);
+                    AddChildrenToContainer(containerDeep1Child);
+                }
+            }
         }
 
         /// <summary>
@@ -94,6 +128,7 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void Insert(AbstractDisplayer element, int index, bool updateDisplay = true)
         {
             base.Insert(element, index, updateDisplay);
+            Debug.Log("<color=green>TODO: </color>" + $"");
         }
     }
 }

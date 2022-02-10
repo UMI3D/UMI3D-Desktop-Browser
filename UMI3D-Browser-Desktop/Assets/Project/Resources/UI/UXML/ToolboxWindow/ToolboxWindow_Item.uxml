@@ -3,7 +3,7 @@
         <ui:Button display-tooltip-when-elided="true" name="pinButton" />
         <ui:VisualElement name="containers" style="align-items: flex-end;">
             <ui:VisualElement name="toolboxesContainer" />
-            <ui:VisualElement name="displayerContainer" />
+            <ui:VisualElement name="displayersContainer" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

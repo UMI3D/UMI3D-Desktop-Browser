@@ -19,7 +19,7 @@ using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using UnityEngine;
 
-namespace umi3dDesktopBrowser.uI.Container
+namespace umi3d.desktopBrowser.menu.Container
 {
     public partial class AbstractToolboxesContainer
     {

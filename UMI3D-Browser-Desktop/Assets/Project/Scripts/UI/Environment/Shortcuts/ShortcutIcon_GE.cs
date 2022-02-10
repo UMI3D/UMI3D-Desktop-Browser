@@ -21,8 +21,6 @@ namespace umi3dDesktopBrowser.uI.viewController
 {
     public class ShortcutIcon_GE : Visual_E
     {
-        public new class UxmlFactory : UxmlFactory<ShortcutIcon_GE, UxmlTraits> { }
-
         private enum IconType
         {
             //H: 512px
@@ -51,7 +49,7 @@ namespace umi3dDesktopBrowser.uI.viewController
 
             if (sprite == null)
             {
-                this.style.backgroundImage = StyleKeyword.Auto;
+                //this.style.backgroundImage = StyleKeyword.Auto;
 
                 iconType = IconType.SQUARE;
 
@@ -61,7 +59,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             }
             else
             {
-                this.style.backgroundImage = new StyleBackground(sprite);
+                //this.style.backgroundImage = new StyleBackground(sprite);
 
                 float width = sprite.rect.width;
                 float height = sprite.rect.height;

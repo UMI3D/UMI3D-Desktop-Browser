@@ -13,19 +13,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections.Generic;
-using System.Linq;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
+using umi3d.DesktopBrowser.menu.Displayer;
 using umi3dDesktopBrowser.uI.viewController;
 using UnityEngine;
 
-namespace umi3dDesktopBrowser.uI.Container
+namespace umi3d.desktopBrowser.menu.Container
 {
     public partial class WindowToolboxesContainerDeep1
     {
         public ToolboxItem_E Item { get; private set; } = null;
-        public Toolbox_E ItemChildrenContainer { get; private set; } = null;
+        public Toolbox_E Toolbox { get; private set; } = null;
+        public DisplayerContainer_E DisplayerContainer { get; private set; } = null;
+
+        private bool m_isATool { get; set; } = false;
     }
 
     public partial class WindowToolboxesContainerDeep1
@@ -37,7 +39,8 @@ namespace umi3dDesktopBrowser.uI.Container
             {
                 OnClicked = () => Select()
             };
-            ItemChildrenContainer = new Toolbox_E(false);
+            Toolbox = new Toolbox_E(false);
+            DisplayerContainer = new DisplayerContainer_E();
             isDisplayed = true;
         }
 
@@ -47,7 +50,7 @@ namespace umi3dDesktopBrowser.uI.Container
             if (menu.icon2D != null)
                 Item.SetIcon(menu.icon2D);
             Item.SetLabel(menu.Name);
-            ItemChildrenContainer.SetToolboxName(menu.Name);
+            Toolbox.SetToolboxName(menu.Name);
         }
 
         public override void Select()
@@ -112,7 +115,8 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void Collapse(bool forceUpdate = false)
         {
             base.Collapse(forceUpdate);
-            ItemChildrenContainer.Hide();
+            Toolbox.Hide();
+            DisplayerContainer.Hide();
         }
 
         /// <summary>
@@ -123,7 +127,9 @@ namespace umi3dDesktopBrowser.uI.Container
         public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
         {
             base.ExpandAs(container, forceUpdate);
-            ItemChildrenContainer.Display();
+            if (m_isATool) DisplayerContainer.Display();
+            else Toolbox.Display();
+
         }
 
         /// <summary>
@@ -136,7 +142,13 @@ namespace umi3dDesktopBrowser.uI.Container
             base.Insert(element, updateDisplay);
             if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
-                ItemChildrenContainer.Adds(containerDeep1.Item);
+                m_isATool = false;
+                Toolbox.Adds(containerDeep1.Item);
+            }
+            if (element is AbstractWindowInputDisplayer displayer)
+            {
+                m_isATool = true;
+                DisplayerContainer.Adds(displayer.Displayer);
             }
         }
 
