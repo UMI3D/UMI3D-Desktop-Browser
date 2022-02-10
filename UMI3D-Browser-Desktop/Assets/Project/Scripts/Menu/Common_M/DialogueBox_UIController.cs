@@ -77,7 +77,7 @@ namespace BrowserDesktop.Menu
         {
             if (Displayed) return;
             else Displayed = true;
-            dialogueBox.AddTo(uiDocument.rootVisualElement);
+            //dialogueBox.InsertRootTo(uiDocument.rootVisualElement);
         }
 
         public static void Close(bool val)
@@ -86,7 +86,7 @@ namespace BrowserDesktop.Menu
             else Displayed = false;
 
             Instance.dialogueBox.ChoiceCallback(val);
-            Instance.dialogueBox.Remove();
+            //Instance.dialogueBox.Remove();
         }
     }
 }

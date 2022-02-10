@@ -61,7 +61,8 @@ namespace umi3dDesktopBrowser.uI.viewController
     {
         public void DisplayToolboxButton(bool value)
         {
-            m_toolboxButton.style.display = (value) ? DisplayStyle.Flex : DisplayStyle.None;
+            if (value) m_toolboxButton.Display();
+            else m_toolboxButton.Hide();
         }
 
 
@@ -128,7 +129,7 @@ namespace umi3dDesktopBrowser.uI.viewController
                 OnClicked = () => ToolboxWindow_E.Instance.Display()
             };
             new Toolbox_E("", true, m_toolboxButton)    
-                .AddTo(leftLayout_VE);
+                .InsertRootTo(leftLayout_VE);
 
             AddSeparator(leftLayout_VE);
 
@@ -163,13 +164,13 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_sound = new ToolboxItem_E("SoundOn", "SoundOff", "");
             m_mic = new ToolboxItem_E("MicOn", "MicOff", "");
             new Toolbox_E("", true, m_avatar, m_sound, m_mic)    
-                .AddTo(rightLayout_VE);
+                .InsertRootTo(rightLayout_VE);
 
             AddSeparator(rightLayout_VE);
 
             m_leave = new ToolboxItem_E("Leave", "");
             new Toolbox_E("", true, m_leave)
-                .AddTo(rightLayout_VE);
+                .InsertRootTo(rightLayout_VE);
         }
 
         protected Visual_E AddSeparator(VisualElement layout)
@@ -177,7 +178,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             Visual_E separator = new Visual_E(new VisualElement(),
                 "UI/Style/MenuBar/Separator",
                 new StyleKeys("", null));
-            separator.AddTo(layout);
+            separator.InsertRootTo(layout);
             return separator;
         }
     }

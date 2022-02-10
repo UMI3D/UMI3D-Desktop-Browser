@@ -70,8 +70,8 @@ namespace BrowserDesktop.Menu
         public static readonly List<ShortcutGenericElement> Shortcut_ge_WaitedList = new List<ShortcutGenericElement>();
         public static readonly List<ShortcutIcon_GE> ShortcutIcon_ge_DisplayedList = new List<ShortcutIcon_GE>();
         public static readonly List<ShortcutIcon_GE> ShortcutIcon_ge_WaitedList = new List<ShortcutIcon_GE>();
-        public static readonly List<Label_GE> ShortcutLabel_ge_DisplayedList = new List<Label_GE>();
-        public static readonly List<Label_GE> ShortcutLabel_ge_WaitedList = new List<Label_GE>();
+        //public static readonly List<Label_GE> ShortcutLabel_ge_DisplayedList = new List<Label_GE>();
+        //public static readonly List<Label_GE> ShortcutLabel_ge_WaitedList = new List<Label_GE>();
 
         #endregion
 
@@ -167,15 +167,15 @@ namespace BrowserDesktop.Menu
         public void AddShortcut(string shortcutName, string[] shortcutkeys)
         {
             ShortcutGenericElement shortcut_GE;
-            ObjectPooling(out shortcut_GE, Shortcut_ge_DisplayedList, Shortcut_ge_WaitedList, shortcut_ge_VTA);
+            //ObjectPooling(out shortcut_GE, Shortcut_ge_DisplayedList, Shortcut_ge_WaitedList, shortcut_ge_VTA);
 
             Sprite[] shortcutIcons = new Sprite[shortcutkeys.Length];
             for (int i = 0; i < shortcutkeys.Length; ++i)
                 shortcutIcons[i] = keyBindings.GetSpriteFrom(shortcutkeys[i]);
 
-            shortcut_GE.
-                Setup(shortcutName, shortcutIcons, shortcutIcon_ge_VTA, label_ge_VTA).
-                AddTo(shortcuts_SV);
+            //shortcut_GE.
+            //    Setup(shortcutName, shortcutIcons, shortcutIcon_ge_VTA, label_ge_VTA).
+            //    InsertRootTo(shortcuts_SV);
         }
 
         /// <summary>
@@ -189,9 +189,9 @@ namespace BrowserDesktop.Menu
             ShortcutIcon_ge_WaitedList.AddRange(ShortcutIcon_ge_DisplayedList);
             ShortcutIcon_ge_DisplayedList.Clear();
 
-            ShortcutLabel_ge_DisplayedList.ForEach(removeVEFromHierarchy);
-            ShortcutLabel_ge_WaitedList.AddRange(ShortcutLabel_ge_DisplayedList);
-            ShortcutLabel_ge_DisplayedList.Clear();
+            //ShortcutLabel_ge_DisplayedList.ForEach(removeVEFromHierarchy);
+            //ShortcutLabel_ge_WaitedList.AddRange(ShortcutLabel_ge_DisplayedList);
+            //ShortcutLabel_ge_DisplayedList.Clear();
 
             Shortcut_ge_DisplayedList.ForEach(removeVEFromHierarchy);
             Shortcut_ge_WaitedList.AddRange(Shortcut_ge_DisplayedList);

@@ -56,7 +56,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_globalPref = null;
             Initialized = false;
         }
-        public virtual void AddTo(VisualElement parent)
+        public virtual void InsertRootTo(VisualElement parent)
         {
             if (!Initialized) 
                 throw new Exception($"VisualElement Added without being Initialized.");
@@ -67,9 +67,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         }
         public virtual void Remove()
         {
-            //if (!Displayed) return;
-            //else Displayed = false;
-            this.RemoveFromHierarchy();
+            Root.RemoveFromHierarchy();
             AttachedToHierarchy = false;
         }
     }
@@ -135,7 +133,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_visualStyles = new Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)>();
             this.Root = visual;
             AddVisualStyle(Root, style_SO, formatAndStyleKeys);
-            if (parent != null) AddTo(parent);
+            if (parent != null) InsertRootTo(parent);
             Initialize();
         }
 
@@ -168,14 +166,6 @@ namespace umi3dDesktopBrowser.uI.viewController
             GlobalPreferences_SO globalPreferences = Resources.Load<GlobalPreferences_SO>("Preferences/GlobalPreferences");
             if (globalPreferences == null) throw new NullReferenceException("Global pref null");
             return globalPreferences;
-        }
-
-        /// <summary>
-        /// To be used in Custom Element that are already added to the UIDocument.
-        /// </summary>
-        protected virtual void ReadyToDisplay()
-        {
-            Displayed = true;
         }
     }
 
@@ -256,10 +246,21 @@ namespace umi3dDesktopBrowser.uI.viewController
             if (style_SO == null) return;
             UITextFormat textFormat = style_SO.TextFormat;
             m_uIElementStyleApplicator.AppliesFontSize(textE.style, textFormat.FontSize);
-            m_uIElementStyleApplicator.AppliesSize(textFormat.LetterSpacing, textE.style.letterSpacing, (length) => style.letterSpacing = length);
-            m_uIElementStyleApplicator.AppliesSize(textFormat.WordSpacing, textE.style.wordSpacing, (length) => style.wordSpacing = length);
-            m_uIElementStyleApplicator.AppliesSize(textFormat.ParagraphSpacing, textE.style.unityParagraphSpacing, (length) => style.unityParagraphSpacing = length);
-            m_uIElementStyleApplicator.AppliesTextFormat(textFormat.NumberOfVisibleCharacter, textFormat.TextAlign, text, textE);
+            m_uIElementStyleApplicator
+                .AppliesSize(textFormat.LetterSpacing, 
+                textE.style.letterSpacing, 
+                (length) => textE.style.letterSpacing = length);
+            m_uIElementStyleApplicator
+                .AppliesSize(textFormat.WordSpacing, 
+                textE.style.wordSpacing, 
+                (length) => textE.style.wordSpacing = length);
+            m_uIElementStyleApplicator
+                .AppliesSize(textFormat.ParagraphSpacing, 
+                textE.style.unityParagraphSpacing, 
+                (length) => textE.style.unityParagraphSpacing = length);
+            m_uIElementStyleApplicator
+                .AppliesTextFormat(textFormat.NumberOfVisibleCharacter, 
+                textFormat.TextAlign, text, textE);
         }
 
         #endregion
@@ -310,18 +311,5 @@ namespace umi3dDesktopBrowser.uI.viewController
         }
 
         #endregion
-    }
-
-    public partial class Visual_E : VisualElement
-    {
-        /// <summary>
-        /// To be recognized by UI Builder
-        /// </summary>
-        public new class UxmlTraits : VisualElement.UxmlTraits { }
-
-        /// <summary>
-        /// Get Root.layout
-        /// </summary>
-        public new Rect layout { get => RootLayout; }
     }
 }

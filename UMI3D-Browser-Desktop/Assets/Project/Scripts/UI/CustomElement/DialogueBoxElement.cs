@@ -19,11 +19,10 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.uI.viewController
 {
-    public class DialogueBoxElement : Visual_E
+    public class DialogueBoxElement : VisualElement
     {
         #region Fields
 
-        public new class UxmlFactory : UxmlFactory<DialogueBoxElement, UxmlTraits> { }
 
         /// <summary>
         /// Action to be performed when the user interact with the dialogue box.
@@ -78,18 +77,17 @@ namespace umi3dDesktopBrowser.uI.viewController
         /// <summary>
         /// Initialize the dialogue box the first time (UI binding and button settings).
         /// </summary>
-        protected override void Initialize()
+        protected  void Initialize()
         {
-            base.Initialize();
 
             cursorSetMovementAction_UIController(this);
-            this.style.position = Position.Absolute;
+            //this.style.position = Position.Absolute;
 
-            title_L = this.Q<Label>("dialogue-box-title");
-            message_L = this.Q<Label>("dialogue-box-message");
+            //title_L = this.Q<Label>("dialogue-box-title");
+            //message_L = this.Q<Label>("dialogue-box-message");
 
-            optionA_B = this.Q<Button>("dialogue-box-btn1");
-            optionB_B = this.Q<Button>("dialogue-box-btn2");
+            //optionA_B = this.Q<Button>("dialogue-box-btn1");
+            //optionB_B = this.Q<Button>("dialogue-box-btn2");
 
             optionA_B.clickable.clicked += () =>
             {
@@ -120,7 +118,7 @@ namespace umi3dDesktopBrowser.uI.viewController
 
             if (marginForTitleBar)
             {
-                this.style.marginTop = 40;
+                //this.style.marginTop = 40;
             }
 
             this.ChoiceCallback = (b) =>
@@ -148,7 +146,7 @@ namespace umi3dDesktopBrowser.uI.viewController
 
             if (marginForTitleBar)
             {
-                this.style.marginTop = 40;
+                //this.style.marginTop = 40;
             }
 
             this.ChoiceCallback = (b) =>

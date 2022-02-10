@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -50,27 +51,27 @@ namespace umi3dDesktopBrowser.uI.viewController
         /// Add this UiElement as a child of [partent].
         /// </summary>
         /// <param name="parent">the parent of this UIElement.</param>
-        public void AddTo(VisualElement parent);
+        public void InsertRootTo(VisualElement parent);
         /// <summary>
         /// Remove the UIElement from the hierarchy
         /// </summary>
         public void Remove();
     }
 
-
-
-    //public interface ICustomisableElement
-    //{
-    //    public string Key { get; set; }
-    //    public IList<string> Values { get; }
-    //    public IList<string> CurrentValues { get; set; }
-    //    public bool IsEmpty { get; }
-
-    //    public ICustomisableElement SetValues(params string[] values);
-    //    public void SelectCurrentValues(params int[] indexes);
-    //    public void DeselectCurrentValues(params string[] values);
-    //    public void DeselectAllCurrentValues();
-    //    public void DeselectLasCurrentValues();
-    //    public void Reset();
-    //}
+    public interface IClickableElement
+    {
+        /// <summary>
+        /// Action to perform when the element is clicked.
+        /// </summary>
+        public Action OnClicked { get; set; }
+        /// <summary>
+        /// State of the button.
+        /// </summary>
+        public bool IsOn { get; }
+        /// <summary>
+        /// Change the staate of the clickable element.
+        /// </summary>
+        /// <param name="value"></param>
+        public void Toggle(bool value);
+    }
 }

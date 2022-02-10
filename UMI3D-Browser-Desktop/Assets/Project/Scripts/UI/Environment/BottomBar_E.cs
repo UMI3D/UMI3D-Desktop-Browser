@@ -20,8 +20,6 @@ namespace umi3dDesktopBrowser.uI.viewController
 {
     public class BottomBar_E : Visual_E
     {
-        public new class UxmlFactory : UxmlFactory<BottomBar_E, UxmlTraits> { }
-
         private VisualElement leftLayout_VE;
         private VisualElement rightLayout_VE;
 
@@ -29,16 +27,9 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             base.Initialize();
 
-            leftLayout_VE = this.Q<VisualElement>("left-layout");
-            rightLayout_VE = this.Q<VisualElement>("right-layout");
+            //leftLayout_VE = this.Q<VisualElement>("left-layout");
+            //rightLayout_VE = this.Q<VisualElement>("right-layout");
         }
 
-        public BottomBar_E SetupAndDisplay()
-        {
-
-            ReadyToDisplay();
-
-            return this;
-        }
     }
 }
