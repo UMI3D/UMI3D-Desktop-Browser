@@ -84,6 +84,12 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_applyStyle = applyStyle;
         }
 
+        public void UpdatesKeys(StyleKeys newKeys)
+        {
+            m_keys = newKeys;
+            AppliesFormatAndStyle();
+        }
+
         public void AppliesStyle()
             => m_applyStyle(m_styleSO, m_keys, target.style, m_mouseBehaviourFromState);
 

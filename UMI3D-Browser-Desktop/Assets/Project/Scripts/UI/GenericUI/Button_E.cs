@@ -33,7 +33,8 @@ namespace umi3dDesktopBrowser.uI.viewController
         public virtual void Toggle(bool value)
         {
             IsOn = value;
-            UpdateVisualKeys(Root, (IsOn) ? m_onKeys : m_offKeys);
+            m_currentKeys = (IsOn) ? m_onKeys : m_offKeys;
+            UpdateVisualKeys(Root, m_currentKeys);
         }
     }
 
@@ -67,6 +68,14 @@ namespace umi3dDesktopBrowser.uI.viewController
         public Button_E(string styleResourcePath, StyleKeys keys) :
             this(new Button(), styleResourcePath, keys)
         { }
+
+        public void UpdatesStyle(StyleKeys onKeys, StyleKeys offKeys, bool isOn)
+        {
+            m_onKeys = onKeys;
+            m_offKeys = offKeys;
+            m_currentKeys = (isOn) ? m_onKeys : m_offKeys;
+            UpdateVisualKeys(m_button, m_currentKeys);
+        }
     }
 
     public partial class Button_E : Visual_E

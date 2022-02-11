@@ -56,12 +56,9 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
             if (newKeys == null) throw new NullReferenceException("FormatAnStyleKeys is null.");
-            var (_, keys, manipulator) = m_visualStyles[visual];
-            keys.Text = newKeys.Text;
-            keys.TextStyleKey = newKeys.TextStyleKey;
-            keys.BackgroundStyleKey = newKeys.BackgroundStyleKey;
-            keys.BorderStyleKey = newKeys.BorderStyleKey;
-            manipulator.AppliesFormatAndStyle();
+            var (styleSO, _, manipulator) = m_visualStyles[visual];
+            manipulator.UpdatesKeys(newKeys);
+            m_visualStyles[visual] = (styleSO, newKeys, manipulator);
         }
 
         protected void UpdateVisualManipulator(VisualElement visual, VisualManipulator newManipulator)
