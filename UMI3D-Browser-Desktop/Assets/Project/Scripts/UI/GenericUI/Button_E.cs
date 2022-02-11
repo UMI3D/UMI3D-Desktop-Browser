@@ -69,6 +69,8 @@ namespace umi3dDesktopBrowser.uI.viewController
             this(new Button(), styleResourcePath, keys)
         { }
 
+        public void UpdatesStyle(StyleKeys newKeys)
+            => UpdatesStyle(newKeys, null, true);
         public void UpdatesStyle(StyleKeys onKeys, StyleKeys offKeys, bool isOn)
         {
             m_onKeys = onKeys;

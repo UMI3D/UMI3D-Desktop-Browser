@@ -26,25 +26,25 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             get
             {
-                return m_buttonE.OnClicked;
+                return ButtonE.OnClicked;
             }
             set
             {
-                m_buttonE.OnClicked = value;
+                ButtonE.OnClicked = value;
             }
         }
 
-        public bool IsOn => m_buttonE.IsOn;
+        public bool IsOn => ButtonE.IsOn;
 
         public virtual void Toggle(bool value)
         {
-            m_buttonE.Toggle(value);
+            ButtonE.Toggle(value);
         }
     }
 
     public partial class ButtonWithLabel_E
     {
-        protected Button_E m_buttonE { get; set; } = null;
+        public Button_E ButtonE { get; set; } = null;
 
         protected Button m_button { get; set; } = null;
         protected Label m_label { get; set; } = null;
@@ -58,15 +58,18 @@ namespace umi3dDesktopBrowser.uI.viewController
                 keys)
         { }
 
+        public virtual void SetButton(Button_E buttonE)
+        {
+            ButtonE = buttonE;
+        }
         public virtual void SetButton(string styleResourcePath, StyleKeys keys, Action buttonClicked)
             => SetButton(styleResourcePath, keys, null, true, buttonClicked);
-
         public virtual void SetButton(string styleResourcePath, StyleKeys onKey, StyleKeys offKey, bool isOn, Action buttonClicked)
         {
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             if (style_SO == null || onKey == null) 
                 throw new NullReferenceException($"CustomStyle_SO or StyleKeys is null.");
-            m_buttonE = new Button_E(m_button, styleResourcePath, onKey, offKey, isOn)
+            ButtonE = new Button_E(m_button, styleResourcePath, onKey, offKey, isOn)
             {
                 OnClicked = buttonClicked
             };
