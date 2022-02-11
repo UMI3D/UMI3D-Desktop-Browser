@@ -83,12 +83,12 @@ MonoBehaviour:
     m_textStyle:
     - m_key: 
       m_default:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_font: {fileID: 0}
           m_fontStyleAndWeight: 0
           m_color:
-            m_keyword: 0
+            m_keyword: 22
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_outlineColor:
             m_keyword: 0

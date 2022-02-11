@@ -23,58 +23,61 @@ namespace umi3dDesktopBrowser.uI.viewController
     /// </summary>
     public partial class ToolboxItem_E
     {
+        public string ItemName { get; private set; } = null;
+
         private const string m_partialStylePath = "UI/Style";
         private const string m_uxmlPath = "UI/UXML/Toolbox/toolboxItem";
         private const string m_menuBarStyle = "UI/Style/MenuBar/MenuBar_ToolboxItem";
         private const string m_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_ToolboxItem";
-
-        private VisualElement m_icon = null;
-        private Label m_label = null;
     }
 
     public partial class ToolboxItem_E : ButtonWithLabel_E
     {
-        public ToolboxItem_E(bool isTool = true, bool isInMenuBar = true) :
-            this((isTool) ? "placeholderToolActive" : "placeholderToolboxActive", (isTool) ? "placeholderToolEnable" : "placeholderToolboxEnable", "", false, isInMenuBar)
+        public ToolboxItem_E(bool isInMenuBar = true) :
+            this("placeholderToolboxActive", "placeholderToolboxEnable", "", false, isInMenuBar)
         { }
-
         public ToolboxItem_E(string iconKey, string itemName, bool isInMenuBar = true) :
-            base(m_uxmlPath, (isInMenuBar) ? m_menuBarStyle : m_windowStyle, null)
-        {
-            string buttonStyle = $"{m_partialStylePath}/Toolbox/ToolboxItem_Icon";
-            StyleKeys buttonKeys = new StyleKeys(iconKey, null);
-            SetButton(buttonStyle, buttonKeys, null);
-
-            string labelStyle = $"{m_partialStylePath}/Toolbox/ToolboxItem_Label";
-            StyleKeys labelKeys = new StyleKeys(itemName, "", null, null);
-            SetLabel(labelStyle, labelKeys);
-        }
+            this(iconKey, null, itemName, true, isInMenuBar)
+        { }
         public ToolboxItem_E(string iconOnKey, string iconOffKey, string itemName, bool isOn = false) : 
             this(iconOnKey, iconOffKey, itemName, isOn, true)
         { }
-
         private ToolboxItem_E(string iconOnKey, string iconOffKey, string itemName, bool isOn = false, bool isInMenuBar = true) :
             base(m_uxmlPath, (isInMenuBar) ? m_menuBarStyle : m_windowStyle, null)
         {
             string buttonStyle = $"{m_partialStylePath}/Toolbox/ToolboxItem_Icon";
             StyleKeys buttonOnKeys = new StyleKeys(iconOnKey, null);
-            StyleKeys buttonOffKeys = new StyleKeys(iconOffKey, null);
-            SetButton(buttonStyle, buttonOnKeys, buttonOffKeys, isOn, null);
+            if (iconOffKey != null)
+            {
+                StyleKeys buttonOffKeys = new StyleKeys(iconOffKey, null);
+                SetButton(buttonStyle, buttonOnKeys, buttonOffKeys, isOn, null);
+            }
+            else
+                SetButton(buttonStyle, buttonOnKeys, null);
 
+            ItemName = itemName;
             string labelStyle = $"{m_partialStylePath}/Toolbox/ToolboxItem_Label";
-            StyleKeys labelKeys = new StyleKeys(itemName, "", null, null);
+            StyleKeys labelKeys = new StyleKeys(ItemName, "", null, null);
             SetLabel(labelStyle, labelKeys);
         }
 
         public void SetIcon(Texture2D icon)
         {
-            UpdateVisualKeys(m_icon, new StyleKeys(null, null));
-            m_icon.style.backgroundImage = icon;
+            UpdateVisualKeys(m_button, new StyleKeys(null, null));
+            m_button.style.backgroundImage = icon;
         }
 
-        public void SetLabel(string text)
+        public void SetLabel(string itemName)
         {
-            UpdateVisualKeys(m_label, new StyleKeys(text, "", null, null));
+            ItemName = itemName;
+            UpdateVisualKeys(m_label, new StyleKeys(ItemName, "", null, null));
+        }
+
+        public void SetItemStatus(bool isTool)
+        {
+            StyleKeys onKeys = new StyleKeys((isTool) ? "placeholderToolActive" : "placeholderToolboxActive", null);
+            StyleKeys offKeys = new StyleKeys((isTool) ? "placeholderToolEnable" : "placeholderToolboxEnable", null);
+            m_buttonE.UpdatesStyle(onKeys, offKeys, IsOn);
         }
 
         #region Setup
@@ -99,8 +102,6 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected override void Initialize()
         {
             base.Initialize();
-            m_icon = Root.Q<VisualElement>("icon");
-            m_label = Root.Q<Label>("label");
         }
 
         //public override void Display()

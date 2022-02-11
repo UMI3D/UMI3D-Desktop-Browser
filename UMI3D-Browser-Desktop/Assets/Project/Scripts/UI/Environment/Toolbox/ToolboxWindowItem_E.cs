@@ -20,7 +20,7 @@ namespace umi3dDesktopBrowser.uI.viewController
 {
     public partial class ToolboxWindowItem_E
     {
-        public Button_GE PinnButton { get; private set; } = null;
+        public Button_E PinnButton { get; private set; } = null;
         
         public Toolbox_E FirstToolbox { get; private set; } = null;
     }
@@ -78,8 +78,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             string pinStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButton";
             StyleKeys pinActiveKeys = new StyleKeys("PinnedActive", "");
             StyleKeys pinEnableKeys = new StyleKeys("PinnedEnable", "");
-            PinnButton = new Button_GE(pin);
-            PinnButton.SetIcon(pin, pinStyle, pinActiveKeys, pinEnableKeys);
+            PinnButton = new Button_E(pin, pinStyle, pinActiveKeys, pinEnableKeys);
 
             VisualElement containers = Root.Q("containers");
             string conainerStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_Container";

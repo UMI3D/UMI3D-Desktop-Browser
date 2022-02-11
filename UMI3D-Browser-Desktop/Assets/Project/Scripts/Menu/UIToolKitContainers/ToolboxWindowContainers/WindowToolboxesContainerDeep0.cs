@@ -99,8 +99,14 @@ namespace umi3d.desktopBrowser.menu.Container
             if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
                 WindowItem.AddsToolboxItemInFirstToolbox(containerDeep1.Item);
-                WindowItem.AddsToolbox(containerDeep1.Toolbox);
-                WindowItem.AddsDisplayersContainer(containerDeep1.DisplayerContainer);
+                if (containerDeep1.IsTool)
+                {
+                    WindowItem.AddsDisplayersContainer(containerDeep1.DisplayerContainer);
+                    containerDeep1.Item.SetItemStatus(true);
+                }
+                else
+                    WindowItem.AddsToolbox(containerDeep1.Toolbox);
+                
 
                 AddChildrenToContainer(containerDeep1);
             }
@@ -112,8 +118,13 @@ namespace umi3d.desktopBrowser.menu.Container
             {
                 if (displayer is WindowToolboxesContainerDeep1 containerDeep1Child)
                 {
-                    WindowItem.AddsToolbox(containerDeep1Child.Toolbox);
-                    WindowItem.AddsToolbox(containerDeep1Child.Toolbox);
+                    if (containerDeep1Child.IsTool)
+                    {
+                        WindowItem.AddsDisplayersContainer(containerDeep1Child.DisplayerContainer);
+                        containerDeep1Child.Item.SetItemStatus(true);
+                    }
+                    else
+                        WindowItem.AddsToolbox(containerDeep1Child.Toolbox);
                     AddChildrenToContainer(containerDeep1Child);
                 }
             }
