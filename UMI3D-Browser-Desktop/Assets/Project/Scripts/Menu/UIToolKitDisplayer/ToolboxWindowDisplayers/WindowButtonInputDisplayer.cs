@@ -16,9 +16,7 @@ limitations under the License.
 using BrowserDesktop.Menu;
 using System;
 using umi3d.cdk.menu;
-using umi3d.cdk.menu.view;
 using umi3dDesktopBrowser.uI.viewController;
-using UnityEngine.UIElements;
 
 namespace umi3d.DesktopBrowser.menu.Displayer
 {
