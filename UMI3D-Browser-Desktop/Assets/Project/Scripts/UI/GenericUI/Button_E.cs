@@ -49,6 +49,15 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class Button_E
     {
+        public Button_E(string styleResourcePath, StyleKeys keys) :
+            this(new Button(), styleResourcePath, keys)
+        { }
+        public Button_E(Button button, string styleResourcePath, StyleKeys keys) :
+            this(button, styleResourcePath, keys, null, true)
+        { }
+        public Button_E(string styleResourcePath, StyleKeys onKeys, StyleKeys offKeys, bool isOn = false) :
+            this(new Button(), styleResourcePath, onKeys, offKeys, isOn)
+        { }
         public Button_E(Button button, string styleResourcePath, StyleKeys onKeys, StyleKeys offKeys, bool isOn = false) :
             base(button, styleResourcePath, (isOn) ? onKeys : offKeys)
         {
@@ -59,15 +68,6 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_currentKeys = (isOn) ? onKeys : offKeys;
             m_button.clicked += m_clicked;
         }
-        public Button_E(string styleResourcePath, StyleKeys onKeys, StyleKeys offKeys, bool isOn = false) :
-            this(new Button(), styleResourcePath, onKeys, offKeys, isOn)
-        { }
-        public Button_E(Button button, string styleResourcePath, StyleKeys keys) :
-            this(button, styleResourcePath, keys, null, true)
-        { }
-        public Button_E(string styleResourcePath, StyleKeys keys) :
-            this(new Button(), styleResourcePath, keys)
-        { }
 
         public void UpdatesStyle(StyleKeys newKeys)
             => UpdatesStyle(newKeys, null, true);

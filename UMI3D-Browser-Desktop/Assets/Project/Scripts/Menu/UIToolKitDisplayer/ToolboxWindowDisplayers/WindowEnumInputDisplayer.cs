@@ -15,6 +15,7 @@ limitations under the License.
 */
 using BrowserDesktop.Menu;
 using System;
+using System.Collections.Generic;
 using umi3d.cdk.menu;
 using umi3dDesktopBrowser.uI.viewController;
 using UnityEngine.UIElements;
@@ -23,7 +24,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
 {
     public partial class WindowEnumInputDisplayer
     {
-        private ButtonWithLabel_E m_displayer { get; set; } = null;
+        private DropdownWithLabel_E m_displayer { get; set; } = null;
         private Dropdown_E m_dropdown 
         {
             get
@@ -34,6 +35,8 @@ namespace umi3d.DesktopBrowser.menu.Displayer
                     return null;
             }
         }
+        private List<string> m_options => ((DropDownInputMenuItem) menu).options;
+        private string m_currentValue => ((DropDownInputMenuItem)menu).GetValue();
     }
 
     public partial class WindowEnumInputDisplayer : IDisplayerElement
@@ -42,12 +45,14 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         {
             base.InitAndBindUI();
             string UXMLPath = "UI/UXML/Displayers/buttonInputDisplayer";
-            m_displayer = new ButtonWithLabel_E(UXMLPath, null, null);
+            m_displayer = new DropdownWithLabel_E(UXMLPath, null, null);
 
             string dropdownStyle = "UI/Style/Displayers/DropdownInput";
             StyleKeys dropdownKeys = new StyleKeys(null, "", "", "");
-            Dropdown_E dropdown = new Dropdown_E(dropdownStyle, dropdownKeys);
-            m_displayer.SetButton(dropdown);
+            m_displayer.SetButton(dropdownStyle, dropdownKeys, null);
+
+            //Dropdown_E dropdown = new Dropdown_E(dropdownStyle, dropdownKeys);
+            //m_displayer.SetButton(dropdown);
 
             string labelStylePath = "UI/Style/Displayers/ButtonInputLabel";
             StyleKeys labelKeys = new StyleKeys("Enum", "", "", null);
@@ -62,24 +67,28 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);
+            InitAndBindUI();
             if (menu is DropDownInputMenuItem dropdownMenu)
             {
+                m_dropdown.SetsOptions(dropdownMenu.options);
+                m_dropdown.SetDefaultValue(dropdownMenu.GetValue());
+                m_dropdown.OnValueChanged = dropdownMenu.NotifyValueChange;
                 //m_dropdown = () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); };
             }
             else
                 throw new System.Exception("MenuItem must be a ButtonInput");
-            InitAndBindUI();
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)
         {
-            return (menu is ButtonMenuItem) ? 2 : 0;
+            return (menu is DropDownInputMenuItem) ? 2 : 0;
         }
 
         public override void Clear()
         {
             base.Clear();
-            //m_button.Reset();
+            m_dropdown.Reset();
+            m_displayer.Reset();
         }
     }
 }

@@ -24,6 +24,8 @@ namespace umi3dDesktopBrowser.uI.viewController
 {
     public partial class Dropdown_E
     {
+        public Action<string> OnValueChanged { get; set; } = null;
+
         protected Button_E m_enumField { get; set; } = null;
         protected List<string> m_items { get; set; } = null;
         protected string m_currentValue { get; set; } = null;
@@ -46,9 +48,18 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_items = items;
         }
 
+        public void SetMenu(string styleResourcePath, StyleKeys keys)
+        {
+
+        }
+
         public void AddItem(string item)
         {
             m_items.Add(item);
+        }
+        public void SetsOptions(List<string> options)
+        {
+            m_items = options;
         }
 
         public void SetDefaultValue(int index)
@@ -84,6 +95,7 @@ namespace umi3dDesktopBrowser.uI.viewController
                 m_currentKeys.BackgroundStyleKey, 
                 m_currentKeys.BorderStyleKey);
             UpdatesStyle(newKeys);
+            OnValueChanged?.Invoke(item);
         }
     }
 
@@ -92,13 +104,11 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected override void Initialize()
         {
             base.Initialize();
-            m_clicked += ShowMenu;
-        }
-
-        public override void Reset()
-        {
-            base.Reset();
-            m_clicked -= ShowMenu;
+            m_clicked = () =>
+            {
+                OnClicked();
+                ShowMenu();
+            };
         }
     }
 }

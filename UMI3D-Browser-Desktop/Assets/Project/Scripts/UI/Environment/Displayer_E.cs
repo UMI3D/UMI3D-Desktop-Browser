@@ -33,7 +33,9 @@ namespace umi3dDesktopBrowser.uI.viewController
     public partial class Displayer_E
     {
         public Displayer_E() : 
-            base("UI/UXML/Displayers/displayer", null, null) { }
+            base("UI/UXML/Displayers/displayer", 
+                "UI/Style/Displayers/Displayer", 
+                null) { }
 
         public void AddDisplayer(VisualElement displayer)
         {
