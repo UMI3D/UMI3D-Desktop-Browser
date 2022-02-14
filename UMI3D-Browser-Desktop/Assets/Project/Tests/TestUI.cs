@@ -47,57 +47,20 @@ public class TestUI : MonoBehaviour
             .Instance
             .InsertRootTo(UIDoc.rootVisualElement.Q("top"));
 
-        //ToolboxWindow_E
-        //    .Instance
-        //    .InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
-
-        //var enumf = new Enum_E("UI/UXML/Displayers/enumInputDisplayer", null, null, TextAlignment.Center);
-        //enumf.InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
-
-        //var enumField = new EnumField(TextAlignment.Center);
-        //UIDoc.rootVisualElement.Q("mainView").Add(enumField);
-
-        //var list = new List<string>() { "test", "un", "deux" };
-        //var dropDown = new DropdownField(list, 0);
-        //UIDoc.rootVisualElement.Q("mainView").Add(dropDown);
-
-        //var toolbarMenu = new ToolbarMenu();
-        //UIDoc.rootVisualElement.Q("mainView").Add(toolbarMenu);
+        ToolboxWindow_E
+            .Instance
+            .InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
 
 
-
-        //var dropDownMenu = new DropdownMenu();
-
-
-
-        //var genericDropDownMenu = new GenericDropdownMenu();
-        //UIDoc.rootVisualElement.Q("mainView").Add(genericDropDownMenu);
-
-
-        //var popUpField = new PopupField<TextAlignment>();
-        //UIDoc.rootVisualElement.Q("mainView").Add(popUpField);
-
-
-
-        //var button = new Button_E(null, null);
-        //button.OnClicked = () => {
-        //    var genericDDM = new GenericDropdownMenu();
-        //    genericDDM.AddItem("item 1", true, null);
-        //    genericDDM.AddItem("item 2", true, null);
-        //    genericDDM.AddItem("item 3", true, null);
-        //    genericDDM.contentContainer.style.backgroundColor = Color.black;
-        //    genericDDM.DropDown(button.Root.worldBound, button.Root, false); 
-        //};
-        //UIDoc.rootVisualElement.Q("mainView").Add(button.Root);
-        string dropdownStyle = "UI/Style/Displayers/DropdownInput";
-        StyleKeys dropdownKeys = new StyleKeys(null, "", "", "");
-        var dropdown = new Dropdown_E(dropdownStyle, dropdownKeys);
-        dropdown.AddItem("test");
-        dropdown.AddItem("un");
-        dropdown.AddItem("deux");
-        dropdown.AddItem("trois");
-        dropdown.SetDefaultValue("un");
-        dropdown.InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
+        //string dropdownStyle = "UI/Style/Displayers/DropdownInput";
+        //StyleKeys dropdownKeys = new StyleKeys(null, "", "", "");
+        //var dropdown = new Dropdown_E(dropdownStyle, dropdownKeys);
+        //dropdown.AddItem("test");
+        //dropdown.AddItem("un");
+        //dropdown.AddItem("deux");
+        //dropdown.AddItem("trois");
+        //dropdown.SetDefaultValue("un");
+        //dropdown.InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
 
         ///FAKE DATA
 
@@ -129,6 +92,9 @@ public class TestUI : MonoBehaviour
 
         MenuItem item1 = new ButtonMenuItem { Name = "item1" };
         subBoxTwoOne.Add(item1);
+        DropDownInputMenuItem item2 = new DropDownInputMenuItem { Name = "item1", options = new List<string>() { "un", "deux", "trois"} };
+        item2.NotifyValueChange("un");
+        subBoxTwoOne.Add(item2);
 
         DisplayManager.menuAsset.menu = rootContainer;
 
