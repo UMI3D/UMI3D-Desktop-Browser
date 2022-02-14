@@ -25,16 +25,16 @@ namespace umi3d.DesktopBrowser.menu.Displayer
     public partial class WindowEnumInputDisplayer
     {
         private DropdownWithLabel_E m_displayer { get; set; } = null;
-        private Dropdown_E m_dropdown 
-        {
-            get
-            {
-                if (m_displayer != null)
-                    return m_displayer.ButtonE as Dropdown_E;
-                else
-                    return null;
-            }
-        }
+        //private Dropdown_E m_dropdown 
+        //{
+        //    get
+        //    {
+        //        if (m_displayer != null)
+        //            return m_displayer.ButtonE as Dropdown_E;
+        //        else
+        //            return null;
+        //    }
+        //}
         private List<string> m_options => ((DropDownInputMenuItem) menu).options;
         private string m_currentValue => ((DropDownInputMenuItem)menu).GetValue();
     }
@@ -50,9 +50,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             string dropdownStyle = "UI/Style/Displayers/DropdownInput";
             StyleKeys dropdownKeys = new StyleKeys(null, "", "", "");
             m_displayer.SetButton(dropdownStyle, dropdownKeys, null);
-
-            //Dropdown_E dropdown = new Dropdown_E(dropdownStyle, dropdownKeys);
-            //m_displayer.SetButton(dropdown);
+            //m_displayer.setM
 
             string labelStylePath = "UI/Style/Displayers/ButtonInputLabel";
             StyleKeys labelKeys = new StyleKeys("Enum", "", "", null);
@@ -70,9 +68,9 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             InitAndBindUI();
             if (menu is DropDownInputMenuItem dropdownMenu)
             {
-                m_dropdown.SetsOptions(dropdownMenu.options);
-                m_dropdown.SetDefaultValue(dropdownMenu.GetValue());
-                m_dropdown.OnValueChanged = dropdownMenu.NotifyValueChange;
+                m_displayer.Element.SetsOptions(dropdownMenu.options);
+                m_displayer.Element.SetDefaultValue(dropdownMenu.GetValue());
+                m_displayer.Element.OnValueChanged = dropdownMenu.NotifyValueChange;
                 //m_dropdown = () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); };
             }
             else
@@ -87,7 +85,6 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         public override void Clear()
         {
             base.Clear();
-            m_dropdown.Reset();
             m_displayer.Reset();
         }
     }
