@@ -104,9 +104,10 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected override void Initialize()
         {
             base.Initialize();
+            OnClicked = null;
             m_clicked = () =>
             {
-                OnClicked();
+                OnClicked?.Invoke();
                 ShowMenu();
             };
         }

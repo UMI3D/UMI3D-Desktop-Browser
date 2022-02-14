@@ -22,18 +22,30 @@ namespace umi3dDesktopBrowser.uI.viewController
 {
     public partial class DropdownWithLabel_E
     {
+        public override Dropdown_E Element { get; protected set; } = null;
+
+        
+    }
+
+    public partial class DropdownWithLabel_E
+    {
         public DropdownWithLabel_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
             base(visualResourcePath,
                 styleResourcePath,
                 keys)
         { }
+
+        public void SetMenu(string styleResourcePath, StyleKeys keys)
+        {
+            
+        }
     }
 
-    public partial class DropdownWithLabel_E : ButtonWithLabel_E
+    public partial class DropdownWithLabel_E : ClickableWithLabel_E<Dropdown_E>
     {
-        protected override Button_E CreateButtonE(string styleResourcePath, StyleKeys onKey, StyleKeys offKey, bool isOn, Action buttonClicked)
+        public override void SetButton(string styleResourcePath, StyleKeys keys, Action buttonClicked)
         {
-            return new Dropdown_E(m_button, styleResourcePath, onKey);
+            Element = new Dropdown_E(m_button, styleResourcePath, keys);
         }
     }
 }
