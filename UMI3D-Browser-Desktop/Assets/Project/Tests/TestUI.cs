@@ -90,9 +90,9 @@ public class TestUI : MonoBehaviour
         Menu subBoxTwoOne = new Menu { Name = "BSubToolBox2.1" };
         boxTwo.Add(subBoxTwoOne);
 
-        MenuItem item1 = new ButtonMenuItem { Name = "item1" };
+        MenuItem item1 = new ButtonMenuItem { Name = "Button Item1" };
         subBoxTwoOne.Add(item1);
-        DropDownInputMenuItem item2 = new DropDownInputMenuItem { Name = "item1", options = new List<string>() { "un", "deux", "trois"} };
+        DropDownInputMenuItem item2 = new DropDownInputMenuItem { Name = "Enum Item2", options = new List<string>() { "un", "deux", "trois"} };
         item2.NotifyValueChange("un");
         subBoxTwoOne.Add(item2);
 

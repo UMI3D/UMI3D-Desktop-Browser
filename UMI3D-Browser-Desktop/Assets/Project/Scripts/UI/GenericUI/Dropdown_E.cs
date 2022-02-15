@@ -29,6 +29,14 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected Button_E m_enumField { get; set; } = null;
         protected List<string> m_items { get; set; } = null;
         protected string m_currentValue { get; set; } = null;
+        protected CustomStyle_SO m_menuStyle { get; set; } = null;
+        protected StyleKeys m_menuKeys { get; set; } = null;
+        protected string m_menuItemStyle { get; set; } = null;
+        protected StyleKeys m_menuItemKeys { get; set; } = null;
+        protected string m_menuCheckmarkStyle { get; set; } = null;
+        protected StyleKeys m_menuCheckmarkKeys { get; set; } = null;
+        protected string m_menuLabelStyle { get; set; } = null;
+        protected StyleKeys m_menuLabelKeys { get; set; } = null;
     }
 
     public partial class Dropdown_E
@@ -48,9 +56,25 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_items = items;
         }
 
-        public void SetMenu(string styleResourcePath, StyleKeys keys)
+        public void SetMenuStyle(string styleResourcePath, StyleKeys keys)
         {
-
+            m_menuStyle = GetStyleSO(styleResourcePath);
+            m_menuKeys = keys;
+        }
+        public void SetMenuItemStyle(string styleResourcePath, StyleKeys keys)
+        {
+            m_menuItemStyle = styleResourcePath;
+            m_menuItemKeys = keys;
+        }
+        public void SetCheckmark(string styleResourcePath, StyleKeys keys)
+        {
+            m_menuCheckmarkStyle = styleResourcePath;
+            m_menuCheckmarkKeys = keys;
+        }
+        public void SetLabel(string styleResourcePath, StyleKeys keys)
+        {
+            m_menuLabelStyle = styleResourcePath;
+            m_menuLabelKeys = keys;
         }
 
         public void AddItem(string item)
@@ -82,8 +106,24 @@ namespace umi3dDesktopBrowser.uI.viewController
                 bool isSelected = item == m_currentValue;
                 menu.AddItem(item, isSelected, () => SelectItem(item));
             }
-            Debug.Log($"world bound = [{Root.worldBound}]; layout = [{Root.layout}]; local bound = [{Root.localBound}]");
-            menu.contentContainer.style.backgroundColor = Color.black;
+            if (m_menuStyle != null)
+            {
+                ApplyFormat(m_menuStyle, m_menuKeys, menu.contentContainer);
+                ApplyStyle(m_menuStyle, m_menuKeys, menu.contentContainer.style, MouseBehaviour.MouseOut);
+            }
+            foreach (VisualElement row in menu.contentContainer.Children())
+            {
+                var item = new DropdownItem_E(row, m_menuItemStyle, m_menuItemKeys);
+                item.SetCheckmark(m_menuCheckmarkStyle, m_menuCheckmarkKeys);
+                if (m_menuLabelKeys == null)
+                    return;
+                var itemKey = new StyleKeys(row.Q<Label>().text, 
+                    m_menuLabelKeys.TextStyleKey, 
+                    m_menuLabelKeys.BackgroundStyleKey, 
+                    m_menuLabelKeys.BorderStyleKey);
+                item.SetLabel(m_menuLabelStyle, itemKey);
+            }
+            
             menu.DropDown(Root.worldBound, Root, true);
         }
 

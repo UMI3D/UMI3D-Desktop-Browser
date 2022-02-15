@@ -22,8 +22,8 @@ namespace umi3d.DesktopBrowser.menu.Displayer
 {
     public partial class WindowButtonInputDisplayer
     {
-        private ButtonWithLabel_E m_button { get; set; } = null;
-        private Action m_buttonClicked { get; set; } = null;
+        private ButtonWithLabel_E m_displayerElement { get; set; } = null;
+        //private Action m_buttonClicked { get; set; } = null;
     }
 
     public partial class WindowButtonInputDisplayer : IDisplayerElement
@@ -32,17 +32,13 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         {
             base.InitAndBindUI();
             string UXMLPath = "UI/UXML/Displayers/buttonInputDisplayer";
-            m_button = new ButtonWithLabel_E(UXMLPath, null, null);
+            m_displayerElement = new ButtonWithLabel_E(UXMLPath, null, null);
 
             string buttonStylePath = "UI/Style/Displayers/ButtonInput";
             StyleKeys buttonKeys = new StyleKeys(menu.Name, "", "", null);
-            m_button.SetButton(buttonStylePath, buttonKeys, m_buttonClicked);
+            m_displayerElement.SetButton(buttonStylePath, buttonKeys, null);
 
-            string labelStylePath = "UI/Style/Displayers/ButtonInputLabel";
-            StyleKeys labelKeys = new StyleKeys("Button", "", "", null);
-            m_button.SetLabel(labelStylePath, labelKeys);
-
-            Displayer.AddDisplayer(m_button.Root);
+            Displayer.AddDisplayer(m_displayerElement.Root);
         }
     }
 
@@ -51,13 +47,18 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);
+            InitAndBindUI();
             if (menu is ButtonMenuItem buttonMenu)
             {
-                m_buttonClicked = () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); };
+                m_displayerElement.OnClicked = () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); };
+
+                string labelStylePath = "UI/Style/Displayers/ButtonInputLabel";
+                StyleKeys labelKeys = new StyleKeys(buttonMenu.ToString(), "", "", null);
+                m_displayerElement.SetLabel(labelStylePath, labelKeys);
             }
             else
                 throw new System.Exception("MenuItem must be a ButtonInput");
-            InitAndBindUI();
+            
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)
@@ -68,7 +69,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         public override void Clear()
         {
             base.Clear();
-            m_button.Reset();
+            m_displayerElement.Reset();
         }
     }
 }
