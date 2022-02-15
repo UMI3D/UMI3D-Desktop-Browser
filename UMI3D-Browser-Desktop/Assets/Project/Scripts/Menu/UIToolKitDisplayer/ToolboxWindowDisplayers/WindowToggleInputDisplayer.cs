@@ -20,12 +20,12 @@ using umi3dDesktopBrowser.uI.viewController;
 
 namespace umi3d.DesktopBrowser.menu.Displayer
 {
-    public partial class WindowButtonInputDisplayer
+    public partial class WindowToggleInputDisplayer
     {
         private ButtonWithLabel_E m_displayerElement { get; set; } = null;
     }
 
-    public partial class WindowButtonInputDisplayer : IDisplayerElement
+    public partial class WindowToggleInputDisplayer : IDisplayerElement
     {
         public override void InitAndBindUI()
         {
@@ -33,35 +33,41 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             string UXMLPath = "UI/UXML/Displayers/buttonInputDisplayer";
             m_displayerElement = new ButtonWithLabel_E(UXMLPath, null, null);
 
-            string buttonStylePath = "UI/Style/Displayers/InputButton";
-            StyleKeys buttonKeys = new StyleKeys(menu.Name, "", "", null);
-            m_displayerElement.SetButton(buttonStylePath, buttonKeys, null);
-
             Displayer.AddDisplayer(m_displayerElement.Root);
         }
     }
 
-    public partial class WindowButtonInputDisplayer : AbstractWindowInputDisplayer
+    public partial class WindowToggleInputDisplayer : AbstractWindowInputDisplayer
     {
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);
             InitAndBindUI();
-            if (menu is ButtonMenuItem buttonMenu)
+            if (menu is BooleanInputMenuItem toggleMenu)
             {
-                m_displayerElement.OnClicked = () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); };
+                string toggleStylePath = "UI/Style/Displayers/InputToggle";
+                StyleKeys toggleOnKeys = new StyleKeys("toggleOn", null);
+                StyleKeys toggleOffKeys = new StyleKeys("toggleOff", null);
+                m_displayerElement.SetButton(toggleStylePath, toggleOnKeys, toggleOffKeys, toggleMenu.GetValue(), null);
+
+                m_displayerElement.OnClicked = () => 
+                {
+                    bool newValue = !m_displayerElement.IsOn;
+                    m_displayerElement.Toggle(newValue);
+                    toggleMenu.NotifyValueChange(newValue);
+                };
 
                 string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-                StyleKeys labelKeys = new StyleKeys(buttonMenu.ToString(), "", "", null);
+                StyleKeys labelKeys = new StyleKeys(toggleMenu.ToString(), "", "", null);
                 m_displayerElement.SetLabel(labelStylePath, labelKeys);
             }
             else
-                throw new System.Exception("MenuItem must be a ButtonMenuItem");
+                throw new System.Exception("MenuItem must be a BooleanInputMenuItem");
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)
         {
-            return (menu is ButtonMenuItem) ? 2 : 0;
+            return (menu is BooleanInputMenuItem) ? 2 : 0;
         }
 
         public override void Clear()
