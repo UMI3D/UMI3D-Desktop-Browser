@@ -54,13 +54,13 @@ MonoBehaviour:
         m_right: 0
         m_top: 0
     m_padding:
-      m_keyword: 0
+      m_keyword: 11
       m_value:
-        m_global: 0
-        m_bottom: 0
-        m_left: 0
-        m_right: 0
-        m_top: 0
+        m_global: 3
+        m_bottom: 1
+        m_left: 4
+        m_right: 4
+        m_top: 1
   m_textFormat:
     m_fontSize:
       m_keyword: 0
@@ -75,7 +75,54 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_numberOfVisibleCharacter:
-      m_keyword: 0
-      m_value: 0
+      m_keyword: 2
+      m_value: 10
     m_textAlign: 0
-  m_themeStyles: []
+  m_themeStyles:
+  - m_theme: {fileID: 0}
+    m_textStyle:
+    - m_key: 
+      m_default:
+        m_keyword: 2
+        m_value:
+          m_font: {fileID: 0}
+          m_fontStyleAndWeight: 0
+          m_color:
+            m_keyword: 2
+            m_value: {r: 1, g: 1, b: 1, a: 1}
+          m_outlineColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_outlineWidth:
+            m_keyword: 0
+            m_value: 0
+      m_mouseOver:
+        m_keyword: 2
+        m_value:
+          m_font: {fileID: 0}
+          m_fontStyleAndWeight: 0
+          m_color:
+            m_keyword: 22
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_outlineColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_outlineWidth:
+            m_keyword: 0
+            m_value: 0
+      m_mousePressed:
+        m_keyword: 2
+        m_value:
+          m_font: {fileID: 0}
+          m_fontStyleAndWeight: 0
+          m_color:
+            m_keyword: 22
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_outlineColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_outlineWidth:
+            m_keyword: 0
+            m_value: 0
+    m_background: []
+    m_border: []

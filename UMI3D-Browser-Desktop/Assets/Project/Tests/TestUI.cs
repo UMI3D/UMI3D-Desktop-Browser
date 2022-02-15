@@ -51,6 +51,8 @@ public class TestUI : MonoBehaviour
             .Instance
             .InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
 
+        //var toggle = new Toggle();
+        //UIDoc.rootVisualElement.Add(toggle);
 
         //string dropdownStyle = "UI/Style/Displayers/DropdownInput";
         //StyleKeys dropdownKeys = new StyleKeys(null, "", "", "");
@@ -95,6 +97,8 @@ public class TestUI : MonoBehaviour
         DropDownInputMenuItem item2 = new DropDownInputMenuItem { Name = "Enum Item2", options = new List<string>() { "un", "deux", "trois"} };
         item2.NotifyValueChange("un");
         subBoxTwoOne.Add(item2);
+        MenuItem item3 = new BooleanInputMenuItem { Name = "Toggle Item3" };
+        subBoxTwoOne.Add(item3);
 
         DisplayManager.menuAsset.menu = rootContainer;
 

@@ -37,7 +37,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             string UXMLPath = "UI/UXML/Displayers/buttonInputDisplayer";
             m_displayerElement = new DropdownWithLabel_E(UXMLPath, null, null);
 
-            string dropdownStyle = "UI/Style/Displayers/DropdownInput";
+            string dropdownStyle = "UI/Style/Displayers/InputDropdown";
             StyleKeys dropdownKeys = new StyleKeys(null, "", "", "");
             m_displayerElement.SetButton(dropdownStyle, dropdownKeys, null);
             string dropdownMenuStyle = "UI/Style/Displayers/DropdownMenu";
@@ -63,12 +63,12 @@ namespace umi3d.DesktopBrowser.menu.Displayer
                 m_displayerElement.Element.SetDefaultValue(dropdownMenu.GetValue());
                 m_displayerElement.Element.OnValueChanged = dropdownMenu.NotifyValueChange;
 
-                string labelStylePath = "UI/Style/Displayers/ButtonInputLabel";
+                string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
                 StyleKeys labelKeys = new StyleKeys(dropdownMenu.ToString(), "", "", null);
                 m_displayerElement.SetLabel(labelStylePath, labelKeys);
             }
             else
-                throw new System.Exception("MenuItem must be a ButtonInput");
+                throw new System.Exception("MenuItem must be a DropDownInputMenuItem");
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)

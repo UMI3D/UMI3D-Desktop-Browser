@@ -23,8 +23,6 @@ namespace umi3dDesktopBrowser.uI.viewController
     public partial class DropdownWithLabel_E
     {
         public override Dropdown_E Element { get; protected set; } = null;
-
-        
     }
 
     public partial class DropdownWithLabel_E
