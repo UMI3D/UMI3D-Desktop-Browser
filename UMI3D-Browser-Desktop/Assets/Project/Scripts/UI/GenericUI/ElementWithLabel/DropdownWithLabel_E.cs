@@ -35,10 +35,12 @@ namespace umi3dDesktopBrowser.uI.viewController
                 keys)
         { }
 
-        public void SetMenu(string styleResourcePath, StyleKeys keys)
-        {
-            
-        }
+        public void SetMenuStyle(string styleResourcePath, StyleKeys keys)
+            => Element.SetMenuStyle(styleResourcePath, keys);
+        public void SetMenuItemCheckmark(string styleResourcePath, StyleKeys keys)
+            => Element.SetCheckmark(styleResourcePath, keys);
+        public void SetMenuItemLabel(string styleResourcePath, StyleKeys keys)
+            => Element.SetLabel(styleResourcePath, keys);
     }
 
     public partial class DropdownWithLabel_E : ClickableWithLabel_E<Dropdown_E>

@@ -24,17 +24,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
 {
     public partial class WindowEnumInputDisplayer
     {
-        private DropdownWithLabel_E m_displayer { get; set; } = null;
-        //private Dropdown_E m_dropdown 
-        //{
-        //    get
-        //    {
-        //        if (m_displayer != null)
-        //            return m_displayer.ButtonE as Dropdown_E;
-        //        else
-        //            return null;
-        //    }
-        //}
+        private DropdownWithLabel_E m_displayerElement { get; set; } = null;
         private List<string> m_options => ((DropDownInputMenuItem) menu).options;
         private string m_currentValue => ((DropDownInputMenuItem)menu).GetValue();
     }
@@ -45,18 +35,19 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         {
             base.InitAndBindUI();
             string UXMLPath = "UI/UXML/Displayers/buttonInputDisplayer";
-            m_displayer = new DropdownWithLabel_E(UXMLPath, null, null);
+            m_displayerElement = new DropdownWithLabel_E(UXMLPath, null, null);
 
             string dropdownStyle = "UI/Style/Displayers/DropdownInput";
             StyleKeys dropdownKeys = new StyleKeys(null, "", "", "");
-            m_displayer.SetButton(dropdownStyle, dropdownKeys, null);
-            //m_displayer.setM
+            m_displayerElement.SetButton(dropdownStyle, dropdownKeys, null);
+            string dropdownMenuStyle = "UI/Style/Displayers/DropdownMenu";
+            StyleKeys dropdownMenuKeys = new StyleKeys("", null);
+            m_displayerElement.SetMenuStyle(dropdownMenuStyle, dropdownMenuKeys);
+            string dropdownMenuLabelStyle = "UI/Style/Displayers/DropdownMenuItemLabel";
+            StyleKeys dropdownMenuLabelKeys = new StyleKeys(null,"",null, null);
+            m_displayerElement.SetMenuItemLabel(dropdownMenuLabelStyle, dropdownMenuLabelKeys);
 
-            string labelStylePath = "UI/Style/Displayers/ButtonInputLabel";
-            StyleKeys labelKeys = new StyleKeys("Enum", "", "", null);
-            m_displayer.SetLabel(labelStylePath, labelKeys);
-
-            Displayer.AddDisplayer(m_displayer.Root);
+            Displayer.AddDisplayer(m_displayerElement.Root);
         }
     }
 
@@ -68,10 +59,13 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             InitAndBindUI();
             if (menu is DropDownInputMenuItem dropdownMenu)
             {
-                m_displayer.Element.SetsOptions(dropdownMenu.options);
-                m_displayer.Element.SetDefaultValue(dropdownMenu.GetValue());
-                m_displayer.Element.OnValueChanged = dropdownMenu.NotifyValueChange;
-                //m_dropdown = () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); };
+                m_displayerElement.Element.SetsOptions(dropdownMenu.options);
+                m_displayerElement.Element.SetDefaultValue(dropdownMenu.GetValue());
+                m_displayerElement.Element.OnValueChanged = dropdownMenu.NotifyValueChange;
+
+                string labelStylePath = "UI/Style/Displayers/ButtonInputLabel";
+                StyleKeys labelKeys = new StyleKeys(dropdownMenu.ToString(), "", "", null);
+                m_displayerElement.SetLabel(labelStylePath, labelKeys);
             }
             else
                 throw new System.Exception("MenuItem must be a ButtonInput");
@@ -85,7 +79,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         public override void Clear()
         {
             base.Clear();
-            m_displayer.Reset();
+            m_displayerElement.Reset();
         }
     }
 }
