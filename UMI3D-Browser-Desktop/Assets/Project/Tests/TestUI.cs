@@ -47,22 +47,13 @@ public class TestUI : MonoBehaviour
             .Instance
             .InsertRootTo(UIDoc.rootVisualElement.Q("top"));
 
-        ToolboxWindow_E
-            .Instance
-            .InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
+        //ToolboxWindow_E
+        //    .Instance
+        //    .InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
 
-        //var toggle = new Toggle();
-        //UIDoc.rootVisualElement.Add(toggle);
+        var slider = new Slider(0f, 100f, SliderDirection.Vertical);
+        UIDoc.rootVisualElement.Add(slider);
 
-        //string dropdownStyle = "UI/Style/Displayers/DropdownInput";
-        //StyleKeys dropdownKeys = new StyleKeys(null, "", "", "");
-        //var dropdown = new Dropdown_E(dropdownStyle, dropdownKeys);
-        //dropdown.AddItem("test");
-        //dropdown.AddItem("un");
-        //dropdown.AddItem("deux");
-        //dropdown.AddItem("trois");
-        //dropdown.SetDefaultValue("un");
-        //dropdown.InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
 
         ///FAKE DATA
 
