@@ -25,27 +25,55 @@ namespace umi3dDesktopBrowser.uI.viewController
 {
     public partial class Slider_E
     {
-        
+        protected Slider m_slider => (Slider)Root;
+        protected VisualElement m_tracker { get; set; } = null;
+        protected VisualElement m_draggerBorder { get; set; } = null;
+        protected VisualElement m_dragger { get; set; } = null;
     }
 
     public partial class Slider_E
     {
-        public void SetDragger()
+        public Slider_E() :
+            this(null, null)
+        { }
+        public Slider_E(string styleResourcePath, StyleKeys keys) :
+            this(new Slider(), styleResourcePath, keys)
+        { }
+        public Slider_E(Slider slider, string styleResourcePath, StyleKeys keys) :
+            this(slider, styleResourcePath, keys, 0f, 0f, 0f)
+        { }
+        public Slider_E(Slider slider, string styleResourcePath, StyleKeys keys, float start, float end, float initialValue, SliderDirection direction = SliderDirection.Horizontal,  float pageSize = 0f) :
+            base(slider, styleResourcePath, keys)
         {
-
+            SetSlider(start, end, initialValue, direction, pageSize);
         }
+
+        public void SetSlider(float start, float end, float initialValue, SliderDirection direction = SliderDirection.Horizontal, float pageSize = 0f)
+        {
+            m_slider.lowValue = start;
+            m_slider.highValue = end;
+            m_slider.value = initialValue;
+            m_slider.direction = direction;
+            m_slider.pageSize = pageSize;
+        }
+
+        public void SetDragger(string styleResourcePath, StyleKeys keys)
+            => AddVisualStyle(m_dragger, styleResourcePath, keys);
         public void SetDraggerBorder()
         {
-
+            Debug.Log("<color=green>TODO: </color>" + $"not imp.");
         }
-        public void SetTracker()
-        {
-
-        }
+        public void SetTracker(string styleResourcePath, StyleKeys keys)
+            => AddVisualStyle(m_tracker, styleResourcePath, keys);
     }
 
-    public partial class Slider_E : Visual_E
+    public partial class Slider_E : AbstractBaseField_E<float>
     {
-        
+        protected override void Initialize()
+        {
+            base.Initialize();
+            m_tracker = Root.Q("unity-tracker");
+            m_dragger = Root.Q("unity-dragger");
+        }
     }
 }

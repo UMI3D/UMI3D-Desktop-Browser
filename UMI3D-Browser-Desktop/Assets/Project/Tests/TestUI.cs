@@ -47,12 +47,15 @@ public class TestUI : MonoBehaviour
             .Instance
             .InsertRootTo(UIDoc.rootVisualElement.Q("top"));
 
-        //ToolboxWindow_E
-        //    .Instance
-        //    .InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
+        ToolboxWindow_E
+            .Instance
+            .InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
 
-        var slider = new Slider(0f, 100f, SliderDirection.Vertical);
-        UIDoc.rootVisualElement.Add(slider);
+        //var slider = new Slider(0f, 100f, SliderDirection.Horizontal, 50f);
+        //UIDoc.rootVisualElement.Add(slider);
+
+        //var floatField = new FloatField();
+        //UIDoc.rootVisualElement.Add(floatField);
 
 
         ///FAKE DATA
@@ -90,6 +93,8 @@ public class TestUI : MonoBehaviour
         subBoxTwoOne.Add(item2);
         MenuItem item3 = new BooleanInputMenuItem { Name = "Toggle Item3" };
         subBoxTwoOne.Add(item3);
+        MenuItem item4 = new FloatRangeInputMenuItem { Name = "Slider Item4", min = 0f, max = 50f, value = 0f };
+        subBoxTwoOne.Add(item4);
 
         DisplayManager.menuAsset.menu = rootContainer;
 
