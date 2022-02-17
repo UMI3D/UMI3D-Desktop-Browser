@@ -160,37 +160,10 @@ public class TestStyle : MonoBehaviour
         
 
 
-        //public Align alignContent => throw new NotImplementedException();
-        //public Align alignSelf => throw new NotImplementedException();
-
-        //public Align alignItems => throw new NotImplementedException();
-        //public Justify justifyContent => throw new NotImplementedException();
-
-
-
-
-        //public StyleFloat flexBasis => throw new NotImplementedException();
-
-        //public FlexDirection flexDirection => throw new NotImplementedException();
-
-        //public float flexGrow => throw new NotImplementedException();
-
-        //public float flexShrink => throw new NotImplementedException();
-
-        //public Wrap flexWrap => throw new NotImplementedException();
-
     }
 
 
 
     public CustomStyle_SO CustomStyle;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            //Debug.Log($"max height = [{testStyle2.UISize.MaxHeight.ToString()}]");
-            Debug.Log($"max height = [{CustomStyle.Size.MaxHeight.ToString()}]");
-        }
-    }
 }

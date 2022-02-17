@@ -46,6 +46,9 @@ namespace umi3dDesktopBrowser.uI.viewController
             base(visual, styleResourcePath, keys)
         { }
 
+        public void RiseOnValueChanged(T previous, T newValue)
+            => OnValueChanged(previous, newValue);
+
         protected virtual void OnValueChandedEvent(ChangeEvent<T> e)
             => OnValueChanged(e.previousValue, e.newValue);
     }
