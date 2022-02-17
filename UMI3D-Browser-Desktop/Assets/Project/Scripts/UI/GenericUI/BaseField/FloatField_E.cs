@@ -41,9 +41,5 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class FloatField_E : AbstractBaseField_E<float>
     {
-        protected override void Initialize()
-        {
-            base.Initialize();
-        }
     }
 }
