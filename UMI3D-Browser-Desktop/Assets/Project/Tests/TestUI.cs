@@ -51,11 +51,8 @@ public class TestUI : MonoBehaviour
             .Instance
             .InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
 
-        //var slider = new Slider(0f, 100f, SliderDirection.Horizontal, 50f);
-        //UIDoc.rootVisualElement.Add(slider);
-
-        //var floatField = new FloatField();
-        //UIDoc.rootVisualElement.Add(floatField);
+        //var textField = new TextField();
+        //UIDoc.rootVisualElement.Add(textField);
 
 
         ///FAKE DATA
@@ -95,6 +92,8 @@ public class TestUI : MonoBehaviour
         subBoxTwoOne.Add(item3);
         MenuItem item4 = new FloatRangeInputMenuItem { Name = "Slider Item4", min = 0f, max = 50f, value = 0f };
         subBoxTwoOne.Add(item4);
+        MenuItem item5 = new TextInputMenuItem { Name = "Text Item5"};
+        subBoxTwoOne.Add(item5);
 
         DisplayManager.menuAsset.menu = rootContainer;
 

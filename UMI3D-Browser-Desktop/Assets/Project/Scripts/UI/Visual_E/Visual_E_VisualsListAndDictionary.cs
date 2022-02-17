@@ -60,6 +60,13 @@ namespace umi3dDesktopBrowser.uI.viewController
             manipulator.UpdatesKeys(newKeys);
             m_visualStyles[visual] = (styleSO, newKeys, manipulator);
         }
+        public void UpdateVisualText(VisualElement visual, string newText)
+        {
+            if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
+            var (_, keys, manipulator) = m_visualStyles[visual];
+            keys.Text = newText;
+            manipulator.AppliesStyle();
+        }
 
         protected void UpdateVisualManipulator(VisualElement visual, VisualManipulator newManipulator)
         {
