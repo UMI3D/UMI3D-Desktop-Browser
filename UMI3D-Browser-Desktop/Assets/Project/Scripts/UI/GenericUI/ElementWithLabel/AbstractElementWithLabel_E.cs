@@ -30,6 +30,7 @@ namespace umi3dDesktopBrowser.uI.viewController
     public abstract partial class AbstractElementWithLabel_E<E>
     {
         protected Label m_label { get; set; } = null;
+        public Label_E Label { get; protected set; } = null;
     }
 
     public abstract partial class AbstractElementWithLabel_E<E>
@@ -39,7 +40,13 @@ namespace umi3dDesktopBrowser.uI.viewController
         { }
 
         public virtual void SetLabel(string styleResourcePath, StyleKeys keys)
-            => AddVisualStyle(m_label, styleResourcePath, keys);
+        {
+            if (Label == null)
+                Label = new Label_E(m_label, styleResourcePath, keys);
+            else
+                throw new System.NotImplementedException();
+        }
+            //=> AddVisualStyle(m_label, styleResourcePath, keys);
     }
 
     public abstract partial class AbstractElementWithLabel_E<E> : Visual_E
@@ -53,7 +60,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         public override void Reset()
         {
             base.Reset();
-            m_label = null;
+            Label.Reset();
         }
     }
 }

@@ -37,8 +37,9 @@ namespace umi3dDesktopBrowser.uI.viewController
     public partial class UIElementStyleApplicator
     {
         #region Format
-
-        public virtual void AppliesSize(CustomStyleSize customStyle, StyleLength initialLength, Action<StyleLength> applyLength)
+        public virtual void ApplySize(CustomStyleSize customStyle, Action<StyleLength> applyLength)
+            => ApplySize(customStyle, new StyleLength(StyleKeyword.Initial), applyLength);
+        public virtual void ApplySize(CustomStyleSize customStyle, StyleLength initialLength, Action<StyleLength> applyLength)
         {
             StyleLength length = GetLength(customStyle.Keyword, 
                 initialLength, 
@@ -47,13 +48,37 @@ namespace umi3dDesktopBrowser.uI.viewController
             applyLength(length);
         }
 
-        public virtual void AppliesFontSize(IStyle style, CustomStyleValue<CustomStyleSizeKeyword, int> customStyle)
-            => AppliesLength(customStyle.Keyword,
-                () => style.fontSize = 12,
-                () => style.fontSize = customStyle.Value * m_globalPref.ZoomCoef,
-                () => style.fontSize = customStyle.Value);
+        public virtual void ApplySize(CustomStyleCrossPosition<CustomStyleSizeKeyword, float> customStyle, Action<StyleLength, StyleLength, StyleLength, StyleLength> applyLength)
+            => ApplySize(customStyle,
+                new StyleLength(StyleKeyword.Initial),
+                new StyleLength(StyleKeyword.Initial),
+                new StyleLength(StyleKeyword.Initial),
+                new StyleLength(StyleKeyword.Initial),
+                applyLength);
+        public virtual void ApplySize(CustomStyleCrossPosition<CustomStyleSizeKeyword, float> customStyle, StyleLength initialBottom, StyleLength initialLeft, StyleLength initialRight, StyleLength initialTop, Action<StyleLength, StyleLength, StyleLength, StyleLength> applyLength)
+        {
+            StyleLength bottom = GetLength(customStyle.Keyword,
+                initialBottom,
+                () => customStyle.Value.Bottom * m_globalPref.ZoomCoef,
+                () => customStyle.Value.Bottom);
+            StyleLength left = GetLength(customStyle.Keyword,
+                initialLeft,
+                () => customStyle.Value.Left * m_globalPref.ZoomCoef,
+                () => customStyle.Value.Left);
+            StyleLength right = GetLength(customStyle.Keyword,
+                initialRight,
+                () => customStyle.Value.Right * m_globalPref.ZoomCoef,
+                () => customStyle.Value.Right);
+            StyleLength top = GetLength(customStyle.Keyword,
+                initialTop,
+                () => customStyle.Value.Top * m_globalPref.ZoomCoef,
+                () => customStyle.Value.Top);
+            applyLength(bottom, left, right, top);
+        }
 
-        public virtual void AppliesSize(CustomStyleValue<CustomStyleSizeKeyword, float> customStyle, StyleLength initialLength, Action<StyleLength> applyLength)
+        public virtual void ApplySize(CustomStyleValue<CustomStyleSizeKeyword, float> customStyle, Action<StyleLength> applyLength)
+            => ApplySize(customStyle, new StyleLength(StyleKeyword.Initial), applyLength);
+        public virtual void ApplySize(CustomStyleValue<CustomStyleSizeKeyword, float> customStyle, StyleLength initialLength, Action<StyleLength> applyLength)
         {
             StyleLength length = GetLength(customStyle.Keyword,
                 initialLength,
@@ -62,28 +87,13 @@ namespace umi3dDesktopBrowser.uI.viewController
             applyLength(length);
         }
 
-        public virtual void AppliesMarginAndPadding(CustomStyleCrossPosition<CustomStyleSizeKeyword, float> customStyle, StyleLength initialBottomLength, StyleLength initialLeftLength, StyleLength initialRightLength, StyleLength initialTopLength, Action<StyleLength, StyleLength, StyleLength, StyleLength> applyLength)
-        {
-            StyleLength bottomLength = GetLength(customStyle.Keyword,
-                initialBottomLength,
-                () => customStyle.Value.Bottom * m_globalPref.ZoomCoef,
-                () => customStyle.Value.Bottom);
-            StyleLength leftLength = GetLength(customStyle.Keyword,
-                initialLeftLength,
-                () => customStyle.Value.Left * m_globalPref.ZoomCoef,
-                () => customStyle.Value.Left);
-            StyleLength rightLength = GetLength(customStyle.Keyword,
-                initialRightLength,
-                () => customStyle.Value.Right * m_globalPref.ZoomCoef,
-                () => customStyle.Value.Right);
-            StyleLength topLength = GetLength(customStyle.Keyword,
-                initialTopLength,
-                () => customStyle.Value.Top * m_globalPref.ZoomCoef,
-                () => customStyle.Value.Top);
-            applyLength(bottomLength, leftLength, rightLength, topLength);
-        }
+        public virtual void ApplyFontSize(CustomStyleValue<CustomStyleSizeKeyword, int> customStyle, IStyle style)
+            => AppliesLength(customStyle.Keyword,
+                () => style.fontSize = 12,
+                () => style.fontSize = customStyle.Value * m_globalPref.ZoomCoef,
+                () => style.fontSize = customStyle.Value);
 
-        public virtual void AppliesTextFormat(CustomStyleValue<CustomStyleSimpleKeyword, int> customStyle, TextAnchor textAlign, string text, TextElement textE)
+        public virtual string GetTextAfterFormatting(CustomStyleValue<CustomStyleSimpleKeyword, int> customStyle, string text)
         {
             switch (customStyle.Keyword)
             {
@@ -98,33 +108,8 @@ namespace umi3dDesktopBrowser.uI.viewController
                     text = (value >= 6) ? $"{text.Substring(0, value - 3)}..." : text.Substring(0, value);
                     break;
             }
-            textE.text = text;
-            textE.style.unityTextAlign = textAlign;
+            return text;
         }
-
-        protected virtual StyleLength GetLength(CustomStyleSizeKeyword keyword, StyleLength initialLength, Func<float> resizableValue, Func<Length> unresizableValue)
-        {
-            StyleLength lenght = new StyleLength();
-            switch (keyword)
-            {
-                case CustomStyleSizeKeyword.Undefined:
-                    lenght = initialLength;
-                    break;
-                case CustomStyleSizeKeyword.Default:
-                    lenght.keyword = StyleKeyword.Null;
-                    break;
-                case CustomStyleSizeKeyword.CustomResizable:
-                    lenght.value = resizableValue();
-                    lenght.keyword = StyleKeyword.Undefined;
-                    break;
-                case CustomStyleSizeKeyword.CustomUnresizabe:
-                    lenght.value = unresizableValue();
-                    lenght.keyword = StyleKeyword.Undefined;
-                    break;
-            }
-            return lenght;
-        }
-
         #endregion
 
         #region Style
@@ -133,6 +118,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             => AppliesMouseBehaviourStyle(customStyle.Keyword,
                 () =>
                 {
+                    //TODO Font style (bold, italic...)
                     AppliesTextStyleColor(style, customStyle.Value.Color);
                     AppliesOutlineTextStyleColor(style, customStyle.Value.OutlineColor);
                     //TODO Outline width;
@@ -163,6 +149,29 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class UIElementStyleApplicator
     {
+        protected virtual StyleLength GetLength(CustomStyleSizeKeyword keyword, StyleLength initialLength, Func<float> resizableValue, Func<Length> unresizableValue)
+        {
+            StyleLength lenght = new StyleLength();
+            switch (keyword)
+            {
+                case CustomStyleSizeKeyword.Undefined:
+                    lenght = initialLength;
+                    break;
+                case CustomStyleSizeKeyword.Default:
+                    lenght.keyword = StyleKeyword.Null;
+                    break;
+                case CustomStyleSizeKeyword.CustomResizable:
+                    lenght.value = resizableValue();
+                    lenght.keyword = StyleKeyword.Undefined;
+                    break;
+                case CustomStyleSizeKeyword.CustomUnresizabe:
+                    lenght.value = unresizableValue();
+                    lenght.keyword = StyleKeyword.Undefined;
+                    break;
+            }
+            return lenght;
+        }
+
         protected void AppliesMouseBehaviourStyle(CustomStyleExtraSimpleKeyword keyword, Action customAction)
         {
             switch (keyword)

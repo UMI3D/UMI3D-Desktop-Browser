@@ -68,12 +68,13 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             base.Initialize();
 
-            AddVisualStyle(Root.Q("icon"), 
-                $"{m_partialStylePath}/ToolboxWindow_Icon", 
-                new StyleKeys("", ""));
-            AddVisualStyle(Root.Q<Label>("windowName"), 
-                $"{m_partialStylePath}/ToolboxWindow_Name", 
-                new StyleKeys("Toolbox", "", "", ""));
+            string iconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Icon";
+            StyleKeys iconKeys = new StyleKeys(null, "", "");
+            AddVisualStyle(Root.Q("icon"), iconStyle, iconKeys);
+
+            string windowNameStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Name";
+            StyleKeys windowNameKeys = new StyleKeys("", "", "");
+            new Label_E(Root.Q<Label>("windowName"), windowNameStyle, windowNameKeys);
 
             Button closeButton = Root.Q<Button>("closeButton");
             string closeButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_closeButton";
@@ -98,57 +99,6 @@ namespace umi3dDesktopBrowser.uI.viewController
             {
                 OnClicked = () => { UnPinedButtonPressed.Invoke(); },
             };
-
-
-            //.SetIcon(Root.Q("unpinnedButton"),
-            //$"{m_partialStylePath}/ToolboxWindow_UnpinnedButton",
-            //new StyleKeys("", null));
-
-            //var tool = new ToolboxItem_E("toolbox", "test", false);
-            //var tool1 = new ToolboxItem_E("toolbox", "test", false);
-            //var toolbox = new Toolbox_E("Test", false, tool, tool1);
-            //var item = new ToolboxWindowItem_E(toolbox);
-
-
-            //var tool2 = new ToolboxItem_E("toolbox", "test", false);
-            //var tool3 = new ToolboxItem_E("toolbox", "test", false);
-            //var tool4 = new ToolboxItem_E("toolbox", "test", false);
-            //var toolbox1 = new Toolbox_E("Test", false, tool2, tool3);
-            //var item1 = new ToolboxWindowItem_E(toolbox1);
-
-            //var tool5 = new ToolboxItem_E("toolbox", "test", false);
-            //var tool6 = new ToolboxItem_E("toolbox", "test", false);
-            //var tool7 = new ToolboxItem_E("toolbox", "test", false);
-            //var tool8 = new ToolboxItem_E("toolbox", "test", false);
-            //var toolbox2 = new Toolbox_E("Test", false, tool5, tool6, tool7, tool8);
-            //var item2 = new ToolboxWindowItem_E(toolbox2);
-
-            //var tool9 = new ToolboxItem_E("toolbox", "test", false);
-            //var toolbox3 = new Toolbox_E("Test", false, tool9);
-            //var item3 = new ToolboxWindowItem_E(toolbox3);
-
-            //var tool10 = new ToolboxItem_E("toolbox", "test", false);
-            //var toolbox4 = new Toolbox_E("Test", false, tool10);
-            //var item4 = new ToolboxWindowItem_E(toolbox4);
-
-            //var tool11 = new ToolboxItem_E("toolbox", "test", false);
-            //var toolbox5 = new Toolbox_E("Test", false, tool11);
-            //var item5 = new ToolboxWindowItem_E(toolbox5);
-
-            //var tool12 = new ToolboxItem_E("toolbox", "test", false);
-            //var toolbox6 = new Toolbox_E("Test", false, tool12);
-            //var item6 = new ToolboxWindowItem_E(toolbox6);
-
-            //var tool13 = new ToolboxItem_E("toolbox", "test", false);
-            //var toolbox7 = new Toolbox_E("Test", false, tool13);
-            //var item7 = new ToolboxWindowItem_E(toolbox7);
-
-            //var tool14 = new ToolboxItem_E("toolbox", "test", false);
-            //var toolbox8 = new Toolbox_E("Test", false, tool14);
-            //var item8 = new ToolboxWindowItem_E(toolbox8);
-
-            //m_scrollView.Adds(item, item1, item2, item3, item4, item5, item6, item7, item8);
-
 
             UpdateVisualManipulator(Root, new PopUpManipulator(true));
         }

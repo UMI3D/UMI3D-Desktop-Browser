@@ -20,7 +20,9 @@ namespace umi3dDesktopBrowser.uI.viewController
 {
     public partial class Toolbox_E
     {
-        public Label ToolboxName { get;  private set; } = null;
+        public Label_E ToolboxName { get; protected set; } = null;
+
+        protected Label m_name { get; private set; } = null;
     }
 
     public partial class Toolbox_E
@@ -32,10 +34,10 @@ namespace umi3dDesktopBrowser.uI.viewController
                 (isInMenuBar) ? "UI/Style/MenuBar/MenuBar_Toolbox" : "UI/Style/ToolboxWindow/ToolboxWindow_Toolbox", 
                 new StyleKeys( "", ""))
         {
-            AddVisualStyle(ToolboxName, 
-                "UI/Style/Toolbox/ToolboxName", 
-                new StyleKeys(toolboxName, "", null, null));
-            if (toolboxName == null) ToolboxName.style.display = DisplayStyle.None;
+            string nameStyle = "UI/Style/Toolbox/ToolboxName";
+            StyleKeys nameKeys = new StyleKeys("", null, null);
+            ToolboxName = new Label_E(m_name, nameStyle, nameKeys);
+            SetToolboxName(toolboxName);
 
             var backward = Root.Q("backward");
             var forward = Root.Q("forward");
@@ -59,9 +61,9 @@ namespace umi3dDesktopBrowser.uI.viewController
 
         public void SetToolboxName(string text)
         {
-            if (text == null) ToolboxName.style.display = DisplayStyle.None;
-            else ToolboxName.style.display = DisplayStyle.Flex;
-            UpdateVisualKeys(ToolboxName, new StyleKeys(text, "", null, null));
+            if (text == null) m_name.style.display = DisplayStyle.None;
+            else m_name.style.display = DisplayStyle.Flex;
+            ToolboxName.value = text;
         }
     }
 
@@ -72,7 +74,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             VisualElement scrollView = GetVisualRoot("UI/UXML/horizontalScrollView");
             Root.Q("scrollViewContainer").Add(scrollView);
             base.Initialize();
-            ToolboxName = Root.Q<Label>();
+            m_name = Root.Q<Label>();
         }
 
         //public override void Display()

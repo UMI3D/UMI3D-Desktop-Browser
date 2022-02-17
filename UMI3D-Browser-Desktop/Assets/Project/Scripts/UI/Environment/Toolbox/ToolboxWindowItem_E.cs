@@ -49,7 +49,7 @@ namespace umi3dDesktopBrowser.uI.viewController
 
         public void SetFirstToolboxName(string name)
         {
-            FirstToolbox.SetToolboxName(name);
+            FirstToolbox.SetToolboxName(name ?? "");
         }
 
         public void AddsToolboxItemInFirstToolbox(params Visual_E[] items)

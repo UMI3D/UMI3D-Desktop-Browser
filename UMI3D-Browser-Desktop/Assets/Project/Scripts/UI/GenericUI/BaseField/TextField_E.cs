@@ -49,58 +49,68 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_textField.maskChar = maskChar;
         }
 
-        protected void ApplyTextFormat(CustomStyle_SO style_SO)
-        {
-            if (style_SO == null) return;
-            UITextFormat textFormat = style_SO.TextFormat;
-            m_uIElementStyleApplicator.AppliesFontSize(m_textInput.style, textFormat.FontSize);
-            m_uIElementStyleApplicator
-                .AppliesSize(textFormat.LetterSpacing,
-                m_textInput.style.letterSpacing,
-                (length) => m_textInput.style.letterSpacing = length);
-            m_uIElementStyleApplicator
-                .AppliesSize(textFormat.WordSpacing,
-                m_textInput.style.wordSpacing,
-                (length) => m_textInput.style.wordSpacing = length);
-            m_uIElementStyleApplicator
-                .AppliesSize(textFormat.ParagraphSpacing,
-                m_textInput.style.unityParagraphSpacing,
-                (length) => m_textInput.style.unityParagraphSpacing = length);
+        //protected void ApplyTextFormat(CustomStyle_SO style_SO)
+        //{
+        //    if (style_SO == null) return;
+        //    UITextFormat textFormat = style_SO.TextFormat;
+        //    m_styleApplicator.AppliesFontSize(m_textInput.style, textFormat.FontSize);
+        //    m_styleApplicator
+        //        .AppliesSize(textFormat.LetterSpacing,
+        //        m_textInput.style.letterSpacing,
+        //        (length) => m_textInput.style.letterSpacing = length);
+        //    m_styleApplicator
+        //        .AppliesSize(textFormat.WordSpacing,
+        //        m_textInput.style.wordSpacing,
+        //        (length) => m_textInput.style.wordSpacing = length);
+        //    m_styleApplicator
+        //        .AppliesSize(textFormat.ParagraphSpacing,
+        //        m_textInput.style.unityParagraphSpacing,
+        //        (length) => m_textInput.style.unityParagraphSpacing = length);
 
-            switch (textFormat.NumberOfVisibleCharacter.Keyword)
-            {
-                case CustomStyleSimpleKeyword.Undefined:
-                    break;
-                case CustomStyleSimpleKeyword.Default:
-                    m_textField.maxLength = -1;
-                    break;
-                case CustomStyleSimpleKeyword.Custom:
-                    m_textField.maxLength = textFormat.NumberOfVisibleCharacter.Value;
-                    break;
-            }
-        }
+        //    switch (textFormat.NumberOfVisibleCharacter.Keyword)
+        //    {
+        //        case CustomStyleSimpleKeyword.Undefined:
+        //            break;
+        //        case CustomStyleSimpleKeyword.Default:
+        //            m_textField.maxLength = -1;
+        //            break;
+        //        case CustomStyleSimpleKeyword.Custom:
+        //            m_textField.maxLength = textFormat.NumberOfVisibleCharacter.Value;
+        //            break;
+        //    }
+        //}
     }
 
     public partial class TextField_E : AbstractBaseField_E<string>
     {
-        protected override void ApplyFormat(CustomStyle_SO style_SO, StyleKeys keys, VisualElement visual)
-        {
-            ApplySize(style_SO, visual.style);
-            ApplyMarginAndPadding(style_SO, visual.style);
-            ApplyTextFormat(style_SO);
-        }
-        protected override void ApplyStyle(CustomStyle_SO styleSO, StyleKeys keys, IStyle style, MouseBehaviour mouseBehaviour)
-        {
-            if (styleSO == null || keys == null) return;
-            if (keys.TextStyleKey != null) ApplyTextStyle(styleSO, keys.TextStyleKey, m_textInput.style, mouseBehaviour);
-            if (keys.BackgroundStyleKey != null) ApplyBackgroundStyle(styleSO, keys.BackgroundStyleKey, style, mouseBehaviour);
-            if (keys.BorderStyleKey != null) ApplyBorderStyle(styleSO, keys.BorderStyleKey, style, mouseBehaviour);
-        }
+        //protected override void ApplyFormat(CustomStyle_SO style_SO, StyleKeys keys, VisualElement visual)
+        //{
+        //    ApplySize(style_SO, visual.style);
+        //    ApplyMarginAndPadding(style_SO, visual.style);
+        //    //ApplyTextFormat(style_SO);
+        //}
+        //protected override void ApplyStyle(CustomStyle_SO styleSO, StyleKeys keys, IStyle style, MouseBehaviour mouseBehaviour)
+        //{
+        //    if (styleSO == null || keys == null) return;
+        //    if (keys.TextStyleKey != null) ApplyTextStyle(styleSO, keys.TextStyleKey, m_textInput.style, mouseBehaviour);
+        //    if (keys.BackgroundStyleKey != null) ApplyBackgroundStyle(styleSO, keys.BackgroundStyleKey, style, mouseBehaviour);
+        //    if (keys.BorderStyleKey != null) ApplyBorderStyle(styleSO, keys.BorderStyleKey, style, mouseBehaviour);
+        //}
 
-        protected override void OnValueChandedEvent(ChangeEvent<string> e)
-        {
-            base.OnValueChandedEvent(e);
-            UpdateVisualText(m_field, e.newValue);
+        public override string value 
+        { 
+            get => base.value; 
+            set
+            {
+                if (value == m_textField.value)
+                    return;
+                var previousValue = m_textField.value;
+                var (styleSO, _, _) = m_visualStyles[m_textField];
+                var newValue = m_styleApplicator.GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, value);
+                m_textField.value = newValue;
+                //OnValueChanged?.Invoke(previousValue, newValue);
+                Debug.Log($"value changed = [{newValue}]");
+            }
         }
 
         protected override void Initialize()

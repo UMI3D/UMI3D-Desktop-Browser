@@ -17,22 +17,19 @@ namespace umi3dDesktopBrowser.uI.viewController
 {
     public class StyleKeys
     {
-        public string Text { get; set; } = null;
         public string TextStyleKey { get; set; } = null;
         public string BackgroundStyleKey { get; set; } = null;
         public string BorderStyleKey { get; set; } = null;
 
         public StyleKeys() { }
-        public StyleKeys(string text, string textStyle, string backgroundStyle, string borderStyle)
+        public StyleKeys(string textStyle, string backgroundStyle, string borderStyle)
         {
-            Text = text;
             TextStyleKey = textStyle;
             BackgroundStyleKey = backgroundStyle;
             BorderStyleKey = borderStyle;
         }
         public StyleKeys(string backgroundStyle, string borderStyle)
         {
-            Text = null;
             TextStyleKey = null;
             BackgroundStyleKey = backgroundStyle;
             BorderStyleKey = borderStyle;

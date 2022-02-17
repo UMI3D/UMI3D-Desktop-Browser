@@ -55,22 +55,16 @@ namespace umi3dDesktopBrowser.uI.viewController
             else
                 SetButton(buttonStyle, buttonOnKeys, null);
 
-            ItemName = itemName;
             string labelStyle = $"{m_partialStylePath}/Toolbox/ToolboxItem_Label";
-            StyleKeys labelKeys = new StyleKeys(ItemName, "", null, null);
+            StyleKeys labelKeys = new StyleKeys("", null, null);
             SetLabel(labelStyle, labelKeys);
+            Label.value = itemName;
         }
 
         public void SetIcon(Texture2D icon)
         {
             UpdateVisualKeys(m_button, new StyleKeys(null, null));
             m_button.style.backgroundImage = icon;
-        }
-
-        public void SetLabel(string itemName)
-        {
-            ItemName = itemName;
-            UpdateVisualKeys(m_label, new StyleKeys(ItemName, "", null, null));
         }
 
         public void SetItemStatus(bool isTool)

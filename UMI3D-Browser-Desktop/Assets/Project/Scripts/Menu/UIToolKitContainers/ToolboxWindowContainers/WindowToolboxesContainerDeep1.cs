@@ -49,8 +49,8 @@ namespace umi3d.desktopBrowser.menu.Container
             base.SetMenuItem(menu);
             if (menu.icon2D != null)
                 Item.SetIcon(menu.icon2D);
-            Item.SetLabel(menu.Name);
-            Toolbox.SetToolboxName(menu.Name);
+            Item.Label.value = menu.Name;
+            Toolbox.SetToolboxName(menu.Name ?? "");
         }
 
         public override void Select()
