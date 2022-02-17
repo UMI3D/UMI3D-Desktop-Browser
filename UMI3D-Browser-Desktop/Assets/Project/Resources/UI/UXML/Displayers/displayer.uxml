@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="displayer">
-        <ui:VisualElement name="input" />
+        <ui:VisualElement name="input" style="justify-content: center;" />
         <ui:VisualElement name="separator" />
     </ui:VisualElement>
 </ui:UXML>

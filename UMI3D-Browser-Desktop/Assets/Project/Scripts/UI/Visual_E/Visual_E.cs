@@ -128,7 +128,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             Initialized = true;
             m_globalPref = GetGlobalPrefSO();
             m_globalPref.ApplyCustomStyle.AddListener(ApplyAllFormatAndStyle);
-            m_uIElementStyleApplicator = new UIElementStyleApplicator(m_globalPref);
+            m_styleApplicator = new UIElementStyleApplicator(m_globalPref);
             m_visuals = new List<VisualElement>();
             m_visualStyles = new Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)>();
             this.Root = visual;

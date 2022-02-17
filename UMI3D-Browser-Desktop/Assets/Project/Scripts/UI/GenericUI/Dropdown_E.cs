@@ -66,12 +66,12 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_menuItemStyle = styleResourcePath;
             m_menuItemKeys = keys;
         }
-        public void SetCheckmark(string styleResourcePath, StyleKeys keys)
+        public void SetMenuCheckmark(string styleResourcePath, StyleKeys keys)
         {
             m_menuCheckmarkStyle = styleResourcePath;
             m_menuCheckmarkKeys = keys;
         }
-        public void SetLabel(string styleResourcePath, StyleKeys keys)
+        public void SetMenuLabel(string styleResourcePath, StyleKeys keys)
         {
             m_menuLabelStyle = styleResourcePath;
             m_menuLabelKeys = keys;
@@ -117,24 +117,15 @@ namespace umi3dDesktopBrowser.uI.viewController
                 item.SetCheckmark(m_menuCheckmarkStyle, m_menuCheckmarkKeys);
                 if (m_menuLabelKeys == null)
                     return;
-                var itemKey = new StyleKeys(row.Q<Label>().text, 
-                    m_menuLabelKeys.TextStyleKey, 
-                    m_menuLabelKeys.BackgroundStyleKey, 
-                    m_menuLabelKeys.BorderStyleKey);
-                item.SetLabel(m_menuLabelStyle, itemKey);
+                item.SetLabel(m_menuLabelStyle, m_menuLabelKeys);
             }
-            
             menu.DropDown(Root.worldBound, Root, true);
         }
 
         protected void SelectItem(string item)
         {
             m_currentValue = item;
-            StyleKeys newKeys = new StyleKeys(item, 
-                m_currentKeys.TextStyleKey, 
-                m_currentKeys.BackgroundStyleKey, 
-                m_currentKeys.BorderStyleKey);
-            UpdatesStyle(newKeys);
+            Text = item;
             OnValueChanged?.Invoke(item);
         }
     }
@@ -145,11 +136,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             base.Initialize();
             OnClicked = null;
-            m_clicked = () =>
-            {
-                OnClicked?.Invoke();
-                ShowMenu();
-            };
+            m_button.clicked += ShowMenu;
         }
     }
 }

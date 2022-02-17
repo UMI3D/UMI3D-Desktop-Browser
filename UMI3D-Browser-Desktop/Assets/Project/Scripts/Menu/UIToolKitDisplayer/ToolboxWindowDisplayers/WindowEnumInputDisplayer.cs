@@ -38,13 +38,13 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             m_displayerElement = new DropdownWithLabel_E(UXMLPath, null, null);
 
             string dropdownStyle = "UI/Style/Displayers/InputDropdown";
-            StyleKeys dropdownKeys = new StyleKeys(null, "", "", "");
+            StyleKeys dropdownKeys = new StyleKeys("", "", "");
             m_displayerElement.SetButton(dropdownStyle, dropdownKeys, null);
             string dropdownMenuStyle = "UI/Style/Displayers/DropdownMenu";
-            StyleKeys dropdownMenuKeys = new StyleKeys("", null);
+            StyleKeys dropdownMenuKeys = new StyleKeys(null, "", null);
             m_displayerElement.SetMenuStyle(dropdownMenuStyle, dropdownMenuKeys);
             string dropdownMenuLabelStyle = "UI/Style/Displayers/DropdownMenuItemLabel";
-            StyleKeys dropdownMenuLabelKeys = new StyleKeys(null,"",null, null);
+            StyleKeys dropdownMenuLabelKeys = new StyleKeys("", null, null);
             m_displayerElement.SetMenuItemLabel(dropdownMenuLabelStyle, dropdownMenuLabelKeys);
 
             Displayer.AddDisplayer(m_displayerElement.Root);
@@ -64,8 +64,9 @@ namespace umi3d.DesktopBrowser.menu.Displayer
                 m_displayerElement.Element.OnValueChanged = dropdownMenu.NotifyValueChange;
 
                 string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-                StyleKeys labelKeys = new StyleKeys(dropdownMenu.ToString(), "", "", null);
+                StyleKeys labelKeys = new StyleKeys("", "", null);
                 m_displayerElement.SetLabel(labelStylePath, labelKeys);
+                m_displayerElement.Label.value = dropdownMenu.ToString();
             }
             else
                 throw new System.Exception("MenuItem must be a DropDownInputMenuItem");

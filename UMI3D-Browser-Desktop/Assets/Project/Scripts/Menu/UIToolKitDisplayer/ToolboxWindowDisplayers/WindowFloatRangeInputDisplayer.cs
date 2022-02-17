@@ -54,8 +54,9 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             if (menu is FloatRangeInputMenuItem floatRangeMenu)
             {
                 string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-                StyleKeys labelKeys = new StyleKeys(floatRangeMenu.ToString(), "", "", null);
+                StyleKeys labelKeys = new StyleKeys("", "", null);
                 m_displayerElement.SetLabel(labelStylePath, labelKeys);
+                m_displayerElement.Label.value = floatRangeMenu.ToString();
 
                 m_displayerElement.Element.SetSlider(floatRangeMenu.min, floatRangeMenu.max, floatRangeMenu.value);
                 m_displayerElement.Element.OnValueChanged += (_, newValue) 

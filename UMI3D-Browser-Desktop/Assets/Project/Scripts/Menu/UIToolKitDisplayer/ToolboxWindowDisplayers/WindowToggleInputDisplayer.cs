@@ -49,6 +49,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
                 StyleKeys toggleOnKeys = new StyleKeys("toggleOn", null);
                 StyleKeys toggleOffKeys = new StyleKeys("toggleOff", null);
                 m_displayerElement.SetButton(toggleStylePath, toggleOnKeys, toggleOffKeys, toggleMenu.GetValue(), null);
+                m_displayerElement.Element.Text = null;
 
                 m_displayerElement.OnClicked = () => 
                 {
@@ -58,8 +59,9 @@ namespace umi3d.DesktopBrowser.menu.Displayer
                 };
 
                 string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-                StyleKeys labelKeys = new StyleKeys(toggleMenu.ToString(), "", "", null);
+                StyleKeys labelKeys = new StyleKeys("", "", null);
                 m_displayerElement.SetLabel(labelStylePath, labelKeys);
+                m_displayerElement.Label.value = toggleMenu.ToString();
             }
             else
                 throw new System.Exception("MenuItem must be a BooleanInputMenuItem");

@@ -40,7 +40,20 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class Button_E
     {
-        protected Button m_button { get; set; } = null;
+        public string Text
+        {
+            get => m_button.text;
+            set
+            {
+                if (value == m_button.text)
+                    return;
+                var (styleSO, _, _) = m_visualStyles[m_button];
+                var newValue = m_styleApplicator.GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, value);
+                m_button.text = newValue;
+            }
+        }
+
+        protected Button m_button => (Button)Root;
         protected Action m_clicked { get; set; } = null;
         protected StyleKeys m_onKeys { get; set; } = null;
         protected StyleKeys m_offKeys { get; set; } = null;
@@ -61,12 +74,10 @@ namespace umi3dDesktopBrowser.uI.viewController
         public Button_E(Button button, string styleResourcePath, StyleKeys onKeys, StyleKeys offKeys, bool isOn = false) :
             base(button, styleResourcePath, (isOn) ? onKeys : offKeys)
         {
-            m_button = button;
             IsOn = isOn;
             m_onKeys = onKeys;
             m_offKeys = offKeys;
-            m_currentKeys = (isOn) ? onKeys : offKeys;
-            m_button.clicked += m_clicked;
+            m_currentKeys = (isOn) ? onKeys : offKeys;   
         }
 
         public void UpdatesStyle(StyleKeys newKeys)
@@ -85,7 +96,8 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected override void Initialize()
         {
             base.Initialize();
-            m_clicked = () => OnClicked();
+            m_clicked = () => OnClicked?.Invoke();
+            m_button.clicked += m_clicked;
         }
 
         public override void Reset()

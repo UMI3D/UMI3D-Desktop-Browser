@@ -21,14 +21,20 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.uI.viewController
 {
-    public abstract partial class AbstractBaseField_E<T>
+    public abstract partial class AbstractBaseField_E<T> : INotifyValueChanged<T>
     {
-        public T Value
+        public virtual T value
         {
             get => m_field.value;
             set => m_field.value = value;
         }
 
+        public virtual void SetValueWithoutNotify(T newValue)
+            => m_field.SetValueWithoutNotify(newValue);
+    }
+
+    public abstract partial class AbstractBaseField_E<T>
+    {
         public event Action<T, T> OnValueChanged;
 
         protected BaseField<T> m_field => (BaseField<T>)Root;
@@ -39,9 +45,6 @@ namespace umi3dDesktopBrowser.uI.viewController
         public AbstractBaseField_E(BaseField<T> visual, string styleResourcePath, StyleKeys keys) :
             base(visual, styleResourcePath, keys)
         { }
-
-        public void SetValueWithoutNotify(T newValue)
-            => m_field.SetValueWithoutNotify(newValue);
 
         protected virtual void OnValueChandedEvent(ChangeEvent<T> e)
             => OnValueChanged(e.previousValue, e.newValue);

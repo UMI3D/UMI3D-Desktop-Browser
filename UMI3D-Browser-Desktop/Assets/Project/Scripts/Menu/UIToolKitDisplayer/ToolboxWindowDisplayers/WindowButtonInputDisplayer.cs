@@ -34,8 +34,9 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             m_displayerElement = new ButtonWithLabel_E(UXMLPath, null, null);
 
             string buttonStylePath = "UI/Style/Displayers/InputButton";
-            StyleKeys buttonKeys = new StyleKeys(menu.Name, "", "", null);
+            StyleKeys buttonKeys = new StyleKeys("", "", null);
             m_displayerElement.SetButton(buttonStylePath, buttonKeys, null);
+            m_displayerElement.Element.Text = menu.Name;
 
             Displayer.AddDisplayer(m_displayerElement.Root);
         }
@@ -52,8 +53,9 @@ namespace umi3d.DesktopBrowser.menu.Displayer
                 m_displayerElement.OnClicked = () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); };
 
                 string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-                StyleKeys labelKeys = new StyleKeys(buttonMenu.ToString(), "", "", null);
+                StyleKeys labelKeys = new StyleKeys("", "", null);
                 m_displayerElement.SetLabel(labelStylePath, labelKeys);
+                m_displayerElement.Label.value = buttonMenu.ToString();
             }
             else
                 throw new System.Exception("MenuItem must be a ButtonMenuItem");

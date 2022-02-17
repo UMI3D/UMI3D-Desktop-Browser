@@ -49,7 +49,9 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             base.Initialize();
             m_input = Root.Q("input");
-            //AddVisualStyle(m_input, )
+            string inputStyle = "UI/Style/Displayers/Displayer_Input";
+            AddVisualStyle(m_input, inputStyle, null);
+
             m_separator = Root.Q("separator");
             string separatorStyle = "UI/Style/Displayers/DisplayerSeparator";
             StyleKeys separatorKeys = new StyleKeys("", null);
