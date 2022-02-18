@@ -14,9 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using umi3DBrowser.UICustomStyle;
-using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.uI.viewController
 {
@@ -27,6 +24,9 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class ButtonWithLabel_E
     {
+        public ButtonWithLabel_E(string visualResourcePath) :
+            this(visualResourcePath, null, null)
+        { }
         public ButtonWithLabel_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
             base(visualResourcePath, styleResourcePath, keys)
         { }
@@ -43,6 +43,5 @@ namespace umi3dDesktopBrowser.uI.viewController
     }
 
     public partial class ButtonWithLabel_E : ClickableWithLabel_E<Button_E>
-    {
-    }
+    { }
 }

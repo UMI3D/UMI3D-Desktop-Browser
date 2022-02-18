@@ -23,6 +23,11 @@ namespace umi3dDesktopBrowser.uI.viewController
         public Label_E ToolboxName { get; protected set; } = null;
 
         protected Label m_name { get; private set; } = null;
+
+        private static string m_toolboxResourcePath => "UI/UXML/Toolbox/Toolbox";
+        private static string m_toolboxMenuStyle => "UI/Style/MenuBar/MenuBar_Toolbox";
+        private static string m_toolboxWindowStyle => "UI/Style/ToolboxWindow/ToolboxWindow_Toolbox";
+        private static StyleKeys m_toolboxKeys => new StyleKeys(null, "", "");
     }
 
     public partial class Toolbox_E
@@ -30,9 +35,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         public Toolbox_E(bool isInMenuBar = true) :
             this(null, isInMenuBar) { }
         public Toolbox_E(string toolboxName, bool isInMenuBar = true, params ToolboxItem_E[] items) : 
-            base("UI/UXML/Toolbox/Toolbox", 
-                (isInMenuBar) ? "UI/Style/MenuBar/MenuBar_Toolbox" : "UI/Style/ToolboxWindow/ToolboxWindow_Toolbox", 
-                new StyleKeys(null, "", ""))
+            base(m_toolboxResourcePath, (isInMenuBar) ? m_toolboxMenuStyle : m_toolboxWindowStyle, m_toolboxKeys)
         {
             string nameStyle = "UI/Style/Toolbox/ToolboxName";
             StyleKeys nameKeys = new StyleKeys("", null, null);
@@ -77,18 +80,6 @@ namespace umi3dDesktopBrowser.uI.viewController
             base.Initialize();
             m_name = Root.Q<Label>();
         }
-
-        //public override void Display()
-        //{
-        //    base.Display();
-        //    Debug.Log($"Display toolbox [{ToolboxName.text}]");
-        //}
-
-        //public override void Hide()
-        //{
-        //    base.Hide();
-        //    Debug.Log($"Hide toolbox [{ToolboxName.text}]");
-        //}
     }
 }
 
