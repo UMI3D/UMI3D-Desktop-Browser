@@ -13,33 +13,38 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using umi3DBrowser.UICustomStyle;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEngine.Events;
-using BrowserDesktop.preferences;
 
 namespace umi3dDesktopBrowser.uI.viewController
 {
-    public partial class DisplayerContainer_E
+    public partial class Displayerbox_E
     {
-        public DisplayerContainer_E() :
-            base(new VisualElement(), 
-                "UI/Style/Displayers/DisplayerContainer", 
-                new StyleKeys(null, "", ""))
+        private static VisualElement m_displayerbox
+        {
+            get
+            {
+                var displayerbox = new VisualElement();
+                displayerbox.name = "displayerbox";
+                return displayerbox;
+            }
+        }
+        private static string m_displayerboxStyle = "UI/Style/Displayers/Displayerbox";
+        private static StyleKeys m_displayerboxKeys = new StyleKeys(null, "", "");
+    }
+
+    public partial class Displayerbox_E
+    {
+        public Displayerbox_E() :
+            base(m_displayerbox, m_displayerboxStyle, m_displayerboxKeys)
         { }
 
-        public void Adds(params Displayer_E[] displayers)
+        public void Add(params Displayer_E[] displayers)
         {
             foreach (Displayer_E displayer in displayers)
                 Root.Add(displayer.Root);
         }
     }
 
-    public partial class DisplayerContainer_E : Visual_E
-    {
-        
-    }
+    public partial class Displayerbox_E : Visual_E
+    { }
 }

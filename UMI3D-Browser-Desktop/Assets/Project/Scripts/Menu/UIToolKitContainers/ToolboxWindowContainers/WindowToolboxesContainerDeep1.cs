@@ -25,7 +25,7 @@ namespace umi3d.desktopBrowser.menu.Container
     {
         public ToolboxItem_E Item { get; private set; } = null;
         public Toolbox_E Toolbox { get; private set; } = null;
-        public DisplayerContainer_E DisplayerContainer { get; private set; } = null;
+        public Displayerbox_E Displayerbox { get; private set; } = null;
 
         public bool IsTool { get; private set; } = false;
     }
@@ -40,7 +40,7 @@ namespace umi3d.desktopBrowser.menu.Container
                 OnClicked = () => Select()
             };
             Toolbox = new Toolbox_E(false);
-            DisplayerContainer = new DisplayerContainer_E();
+            Displayerbox = new Displayerbox_E();
             isDisplayed = true;
         }
 
@@ -116,7 +116,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.Collapse(forceUpdate);
             Toolbox.Hide();
-            DisplayerContainer.Hide();
+            Displayerbox.Hide();
             Item.Toggle(false);
         }
 
@@ -128,7 +128,7 @@ namespace umi3d.desktopBrowser.menu.Container
         public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
         {
             base.ExpandAs(container, forceUpdate);
-            if (IsTool) DisplayerContainer.Display();
+            if (IsTool) Displayerbox.Display();
             else Toolbox.Display();
             Item.Toggle(true);
         }
@@ -149,7 +149,7 @@ namespace umi3d.desktopBrowser.menu.Container
             if (element is AbstractWindowInputDisplayer displayer)
             {
                 IsTool = true;
-                DisplayerContainer.Adds(displayer.Displayer);
+                Displayerbox.Add(displayer.Displayer);
             }
         }
 

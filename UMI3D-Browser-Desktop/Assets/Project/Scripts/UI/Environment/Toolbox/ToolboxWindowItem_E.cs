@@ -37,10 +37,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             base("UI/UXML/ToolboxWindow/toolboxWindow_Item",
                 null,
                 null)
-        {
-            
-            
-        }
+        { }
 
         public void Pin()
         {
@@ -52,19 +49,19 @@ namespace umi3dDesktopBrowser.uI.viewController
             FirstToolbox.SetToolboxName(name ?? "");
         }
 
-        public void AddsToolboxItemInFirstToolbox(params Visual_E[] items)
+        public void AddToolboxItemInFirstToolbox(params Visual_E[] items)
         {
             FirstToolbox.Adds(items);
         }
 
-        public void AddsToolbox(Toolbox_E toolbox)
+        public void AddToolbox(Toolbox_E toolbox)
         {
             m_toolboxesContainer.Add(toolbox.Root);
         }
 
-        public void AddsDisplayersContainer(DisplayerContainer_E displayerContainer)
+        public void AddDisplayerbox(Displayerbox_E displayerbox)
         {
-            m_displayersContainer.Add(displayerContainer.Root);
+            m_displayersContainer.Add(displayerbox.Root);
         }
     }
 
@@ -95,14 +92,8 @@ namespace umi3dDesktopBrowser.uI.viewController
             AddVisualStyle(m_displayersContainer, displayersContainerStyle, null);
 
             FirstToolbox = new Toolbox_E(false);
-            AddsToolbox(FirstToolbox);
+            AddToolbox(FirstToolbox);
         }
-
-        //public override void Display()
-        //{
-        //    base.Display();
-        //    Debug.Log($"Display window item [{FirstToolbox.ToolboxName.text}]");
-        //}
     }
 }
 
