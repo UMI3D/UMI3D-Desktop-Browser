@@ -87,11 +87,11 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 22
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 2
-            m_value: {fileID: 21300000, guid: 532ca2eaffece5a43a1d38d66adf1b05, type: 3}
+            m_value: {fileID: 21300000, guid: 675ce11ae2117cf4fb0cf3cfa86ff2eb, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}

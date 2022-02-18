@@ -13,11 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System;
-using System.Collections.Generic;
-using umi3DBrowser.UICustomStyle;
-using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.uI.viewController
@@ -46,7 +41,6 @@ namespace umi3dDesktopBrowser.uI.viewController
             else
                 throw new System.NotImplementedException();
         }
-            //=> AddVisualStyle(m_label, styleResourcePath, keys);
     }
 
     public abstract partial class AbstractElementWithLabel_E<E> : Visual_E

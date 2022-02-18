@@ -23,12 +23,9 @@ namespace umi3dDesktopBrowser.uI.viewController
     /// </summary>
     public partial class ToolboxItem_E
     {
-        public string ItemName { get; private set; } = null;
-
-        private const string m_partialStylePath = "UI/Style";
-        private const string m_uxmlPath = "UI/UXML/Toolbox/toolboxItem";
-        private const string m_menuBarStyle = "UI/Style/MenuBar/MenuBar_ToolboxItem";
-        private const string m_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_ToolboxItem";
+        private static string m_uxmlPath => "UI/UXML/Toolbox/toolboxItem";
+        private static string m_menuBarStyle => "UI/Style/MenuBar/MenuBar_ToolboxItem";
+        private static string m_windowStyle => "UI/Style/ToolboxWindow/ToolboxWindow_ToolboxItem";
     }
 
     public partial class ToolboxItem_E : ButtonWithLabel_E
@@ -45,7 +42,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         private ToolboxItem_E(string iconOnKey, string iconOffKey, string itemName, bool isOn = false, bool isInMenuBar = true) :
             base(m_uxmlPath, (isInMenuBar) ? m_menuBarStyle : m_windowStyle, null)
         {
-            string buttonStyle = $"{m_partialStylePath}/Toolbox/ToolboxItem_Icon";
+            string buttonStyle = "UI/Style/Toolbox/ToolboxItem_Icon";
             StyleKeys buttonOnKeys = new StyleKeys(null, iconOnKey, null);
             if (iconOffKey != null)
             {
@@ -55,7 +52,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             else
                 SetButton(buttonStyle, buttonOnKeys, null);
 
-            string labelStyle = $"{m_partialStylePath}/Toolbox/ToolboxItem_Label";
+            string labelStyle = "UI/Style/Toolbox/ToolboxItem_Label";
             StyleKeys labelKeys = new StyleKeys("", null, null);
             SetLabel(labelStyle, labelKeys);
             Label.value = itemName;
@@ -67,47 +64,18 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_button.style.backgroundImage = icon;
         }
 
+        /// <summary>
+        /// A ToolboxItem can be a toolbox or a tool. This item will be set has tool if [isTool] is set to true, else toolbox.
+        /// </summary>
+        /// <param name="isTool"></param>
         public void SetItemStatus(bool isTool)
         {
             StyleKeys onKeys = new StyleKeys(null, (isTool) ? "placeholderToolActive" : "placeholderToolboxActive", null);
             StyleKeys offKeys = new StyleKeys(null, (isTool) ? "placeholderToolEnable" : "placeholderToolboxEnable", null);
             Element.UpdatesStyle(onKeys, offKeys, IsOn);
         }
-
-        #region Setup
-
-        //public ToolboxItem_E SetIcon(string iconOn, string iconOff, bool isOn = false)
-        //{
-        //    //ItemButton.SetIcon("square-button", iconOn, iconOff, isOn);
-        //    return this;
-        //}
-
-        //public ToolboxItem_E SetIcon(Sprite icon)
-        //{
-        //    //ItemButton.SetIcon(icon);
-        //    return this;
-        //}
-
-        #endregion
     }
     
     public partial class ToolboxItem_E
-    {
-        protected override void Initialize()
-        {
-            base.Initialize();
-        }
-
-        //public override void Display()
-        //{
-        //    Debug.Log($"display toolbox item [{m_label.text}]");
-        //    Root.style.display = DisplayStyle.Flex;
-        //}
-
-        //public override void Hide()
-        //{
-        //    Debug.Log($"Hide toolbox item [{m_label.text}]");
-        //    Root.style.display = DisplayStyle.None;
-        //}
-    }
+    { }
 }

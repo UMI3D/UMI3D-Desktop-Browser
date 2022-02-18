@@ -18,7 +18,7 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.uI.viewController
 {
-    public partial class ClickableWithLabel_E<B> : IClickableElement where B : IClickableElement
+    public abstract partial class AbstractClickableWithIcon_E<B> : IClickableElement where B : IClickableElement
     {
         public Action OnClicked
         {
@@ -32,26 +32,25 @@ namespace umi3dDesktopBrowser.uI.viewController
             => Element.Toggle(value);
     }
 
-    public partial class ClickableWithLabel_E<B>
-    {
-        public override B Element { get; protected set; }
-    }
-
-    public partial class ClickableWithLabel_E<B>
+    public abstract partial class AbstractClickableWithIcon_E<B>
     {
         protected Button m_button { get; set; } = null;
     }
 
-    public abstract partial class ClickableWithLabel_E<B>
+    public abstract partial class AbstractClickableWithIcon_E<B>
     {
-        public ClickableWithLabel_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
+        public AbstractClickableWithIcon_E(VisualElement visual, string styleResourcePath, StyleKeys keys) :
+            base(visual, styleResourcePath, keys)
+        { }
+        public AbstractClickableWithIcon_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
             base(visualResourcePath, styleResourcePath, keys)
         { }
 
-        public abstract void SetButton(string styleResourcePath, StyleKeys keys, Action buttonClicked);
+        public abstract void SetButton(string styleResourcePath, StyleKeys keys, Action buttonClicked = null);
+        public abstract void SetButton(string styleResourcePath, StyleKeys onKey, StyleKeys offKey, bool isOn, Action buttonClicked = null);
     }
 
-    public partial class ClickableWithLabel_E<B> : AbstractElementWithLabel_E<B>
+    public abstract partial class AbstractClickableWithIcon_E<B> : AbstractElementWithIcon_E<B>
     {
         protected override void Initialize()
         {

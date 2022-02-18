@@ -20,7 +20,7 @@ namespace umi3dDesktopBrowser.uI.viewController
 {
     public partial class ToolboxWindowItem_E
     {
-        public Button_E PinnButton { get; private set; } = null;
+        public ButtonWithIcon_E PinnButton { get; private set; } = null;
         
         public Toolbox_E FirstToolbox { get; private set; } = null;
     }
@@ -41,7 +41,7 @@ namespace umi3dDesktopBrowser.uI.viewController
 
         public void Pin()
         {
-            throw new System.NotImplementedException();
+            Debug.Log("<color=green>TODO: </color>" + $"Pin");
         }
 
         public void SetFirstToolboxName(string name)
@@ -72,10 +72,14 @@ namespace umi3dDesktopBrowser.uI.viewController
             base.Initialize();
 
             Button pin = Root.Q<Button>("pinButton");
-            string pinStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButton";
-            StyleKeys pinActiveKeys = new StyleKeys(null, "PinnedActive", "");
-            StyleKeys pinEnableKeys = new StyleKeys(null, "PinnedEnable", "");
-            PinnButton = new Button_E(pin, pinStyle, pinActiveKeys, pinEnableKeys);
+            PinnButton = new ButtonWithIcon_E(pin);
+            string pinButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButton";
+            StyleKeys pinActiveKeys = new StyleKeys(null, "PinnedActive", "PinnedActive");
+            StyleKeys pinEnableKeys = new StyleKeys(null, "PinnedEnable", "PinnedEnable");
+            PinnButton.SetButton(pinButtonStyle, pinActiveKeys, pinEnableKeys, false, Pin);
+            string pinIconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButtonIcon";
+            StyleKeys pinIconKeys = new StyleKeys(null, "", null);
+            PinnButton.SetIcon(pinIconStyle, pinIconKeys);
 
             VisualElement containers = Root.Q("containers");
             string conainerStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_Container";

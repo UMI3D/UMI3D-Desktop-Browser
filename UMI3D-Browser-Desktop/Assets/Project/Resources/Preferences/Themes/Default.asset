@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2ca89593c0bc634d8fcd1d48a5a2489, type: 3}
   m_Name: Default
   m_EditorClassIdentifier: 
-  m_primary: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 1}
+  m_primary: {r: 0.24705882, g: 0.24705882, b: 0.25882354, a: 1}
   m_secondary: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 1}
   m_tertiary: {r: 0.9686275, g: 0.7137255, b: 0.34117648, a: 1}
