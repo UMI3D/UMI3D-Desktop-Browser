@@ -26,8 +26,8 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected Vector2 start;
         protected bool active = false;
 
-        public PopUpManipulator(bool stopPropagation) :
-            base(null, null, stopPropagation, null, null)
+        public PopUpManipulator(VisualElement visualTarget, bool stopPropagation) :
+            base(visualTarget, null, null, stopPropagation, null, null)
         { }
     }
 

@@ -80,6 +80,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             string pinIconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButtonIcon";
             StyleKeys pinIconKeys = new StyleKeys(null, "", null);
             PinnButton.SetIcon(pinIconStyle, pinIconKeys);
+            PinnButton.Test();
 
             VisualElement containers = Root.Q("containers");
             string conainerStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_Container";

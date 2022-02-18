@@ -65,6 +65,13 @@ namespace umi3dDesktopBrowser.uI.viewController
                 OnClicked = buttonClicked
             };
         }
+
+        public void Test()
+        {
+            var manipulatorIcon = Icon.GetVisualManipulator(m_icon);
+            var manipulatorButton = Element.GetVisualManipulator(m_button);
+            manipulatorIcon.OnMouseBehaviourChanged += manipulatorButton.ApplyStyle;
+        }
     }
 
     public partial class ButtonWithIcon_E : AbstractClickableWithIcon_E<Button_E>

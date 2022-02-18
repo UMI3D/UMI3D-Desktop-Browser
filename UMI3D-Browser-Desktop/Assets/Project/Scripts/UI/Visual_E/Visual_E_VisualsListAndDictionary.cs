@@ -26,6 +26,11 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected List<VisualElement> m_visuals;
         protected Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)> m_visualStyles;
 
+        public VisualManipulator GetVisualManipulator(VisualElement visual)
+        {
+            return m_visualStyles[visual].Item3;
+        }
+
         protected void AddVisualStyle(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys, bool stopPropagation = true)
             => AddVisualStyle(visual, GetStyleSO(styleResourcePath), formatAndStyleKeys, stopPropagation);
         protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys, bool stopPropagation = true, params VisualElement[] otherVisualTriggers)
@@ -44,7 +49,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             {
                 m_visuals.Add(visual);
 
-                var manipulator = new VisualManipulator(style_SO, keys, stopPropagation, ApplyFormat, ApplyStyle);
+                var manipulator = new VisualManipulator(visual, style_SO, keys, stopPropagation, ApplyFormat, ApplyStyle);
                 visual.AddManipulator(manipulator);
 
                 m_visualStyles.Add(visual, (style_SO, keys, manipulator));
