@@ -46,10 +46,10 @@ namespace umi3dDesktopBrowser.uI.viewController
             base(m_uxmlPath, (isInMenuBar) ? m_menuBarStyle : m_windowStyle, null)
         {
             string buttonStyle = $"{m_partialStylePath}/Toolbox/ToolboxItem_Icon";
-            StyleKeys buttonOnKeys = new StyleKeys(iconOnKey, null);
+            StyleKeys buttonOnKeys = new StyleKeys(null, iconOnKey, null);
             if (iconOffKey != null)
             {
-                StyleKeys buttonOffKeys = new StyleKeys(iconOffKey, null);
+                StyleKeys buttonOffKeys = new StyleKeys(null, iconOffKey, null);
                 SetButton(buttonStyle, buttonOnKeys, buttonOffKeys, isOn, null);
             }
             else
@@ -63,14 +63,14 @@ namespace umi3dDesktopBrowser.uI.viewController
 
         public void SetIcon(Texture2D icon)
         {
-            UpdateVisualKeys(m_button, new StyleKeys(null, null));
+            UpdateVisualKeys(m_button, null);
             m_button.style.backgroundImage = icon;
         }
 
         public void SetItemStatus(bool isTool)
         {
-            StyleKeys onKeys = new StyleKeys((isTool) ? "placeholderToolActive" : "placeholderToolboxActive", null);
-            StyleKeys offKeys = new StyleKeys((isTool) ? "placeholderToolEnable" : "placeholderToolboxEnable", null);
+            StyleKeys onKeys = new StyleKeys(null, (isTool) ? "placeholderToolActive" : "placeholderToolboxActive", null);
+            StyleKeys offKeys = new StyleKeys(null, (isTool) ? "placeholderToolEnable" : "placeholderToolboxEnable", null);
             Element.UpdatesStyle(onKeys, offKeys, IsOn);
         }
 

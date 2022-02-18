@@ -28,7 +28,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         public DisplayerContainer_E() :
             base(new VisualElement(), 
                 "UI/Style/Displayers/DisplayerContainer", 
-                new StyleKeys("", ""))
+                new StyleKeys(null, "", ""))
         { }
 
         public void Adds(params Displayer_E[] displayers)

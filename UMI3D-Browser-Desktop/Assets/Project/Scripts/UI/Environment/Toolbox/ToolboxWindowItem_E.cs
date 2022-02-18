@@ -76,8 +76,8 @@ namespace umi3dDesktopBrowser.uI.viewController
 
             Button pin = Root.Q<Button>("pinButton");
             string pinStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButton";
-            StyleKeys pinActiveKeys = new StyleKeys("PinnedActive", "");
-            StyleKeys pinEnableKeys = new StyleKeys("PinnedEnable", "");
+            StyleKeys pinActiveKeys = new StyleKeys(null, "PinnedActive", "");
+            StyleKeys pinEnableKeys = new StyleKeys(null, "PinnedEnable", "");
             PinnButton = new Button_E(pin, pinStyle, pinActiveKeys, pinEnableKeys);
 
             VisualElement containers = Root.Q("containers");

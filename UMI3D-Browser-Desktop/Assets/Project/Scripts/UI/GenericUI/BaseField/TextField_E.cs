@@ -49,22 +49,32 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_textField.maskChar = maskChar;
         }
 
+        public void SetTextInputStyle(string styleResourcePath, StyleKeys keys)
+        {
+            AddVisualStyle(m_textInput, styleResourcePath, keys);
+        }
+
         protected void ApplyTextFieldFormat(string newValue)
         {
-            var (styleSO, _, _) = m_visualStyles[m_textField];
+            if (!m_visuals.Contains(m_textInput))
+            {
+                m_textField.value = newValue;
+                return;
+            }
+            var (styleSO, _, _) = m_visualStyles[m_textInput];
             m_textField.value = m_styleApplicator.GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, newValue);
         }
     }
 
     public partial class TextField_E : AbstractBaseField_E<string>
     {
-        protected override void ApplyStyle(CustomStyle_SO styleSO, StyleKeys keys, IStyle style, MouseBehaviour mouseBehaviour)
-        {
-            if (styleSO == null || keys == null) return;
-            if (keys.TextStyleKey != null && m_textInput != null) ApplyTextStyle(styleSO, keys.TextStyleKey, m_textInput.style, mouseBehaviour);
-            if (keys.BackgroundStyleKey != null) ApplyBackgroundStyle(styleSO, keys.BackgroundStyleKey, style, mouseBehaviour);
-            if (keys.BorderStyleKey != null) ApplyBorderStyle(styleSO, keys.BorderStyleKey, style, mouseBehaviour);
-        }
+        //protected override void ApplyStyle(CustomStyle_SO styleSO, StyleKeys keys, IStyle style, MouseBehaviour mouseBehaviour)
+        //{
+        //    if (styleSO == null || keys == null) return;
+        //    if (keys.TextStyleKey != null && m_textInput != null) ApplyTextStyle(styleSO, keys.TextStyleKey, m_textInput.style, mouseBehaviour);
+        //    if (keys.BackgroundStyleKey != null) ApplyBackgroundStyle(styleSO, keys.BackgroundStyleKey, style, mouseBehaviour);
+        //    if (keys.BorderStyleKey != null) ApplyBorderStyle(styleSO, keys.BorderStyleKey, style, mouseBehaviour);
+        //}
 
         public override string value
         { 
@@ -83,7 +93,6 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             base.Initialize();
             m_textInput = Root.Q("unity-text-input");
-            if (m_textInput == null) throw new Exception("Null input.");
             OnValueChanged += (_, newV) => ApplyTextFieldFormat(newV);
         }
     }

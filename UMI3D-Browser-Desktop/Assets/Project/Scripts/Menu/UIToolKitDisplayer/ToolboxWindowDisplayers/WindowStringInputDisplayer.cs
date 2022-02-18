@@ -34,8 +34,12 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             m_displayerElement = new TextFieldWithLabel_E(UXMLPath);
 
             string textFieldStylePath = "UI/Style/Displayers/InputTextField";
-            StyleKeys textFieldKeys = new StyleKeys("", "", null);
+            StyleKeys textFieldKeys = new StyleKeys(null, "", null);
             m_displayerElement.SetTextField(textFieldStylePath, textFieldKeys);
+
+            string textInputStyle = "UI/Style/Displayers/InputTextField_Input";
+            StyleKeys textInputKeys = new StyleKeys("", null, null);
+            m_displayerElement.Element.SetTextInputStyle(textInputStyle, textInputKeys);
 
             Displayer.AddDisplayer(m_displayerElement.Root);
         }

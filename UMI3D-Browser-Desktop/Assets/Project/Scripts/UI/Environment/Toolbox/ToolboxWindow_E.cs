@@ -45,7 +45,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         private ToolboxWindow_E() : 
             base("UI/UXML/ToolboxWindow/toolboxWindow", 
                 $"{m_partialStylePath}/ToolboxWindow_window", 
-                new StyleKeys("", null)) { }
+                new StyleKeys(null, "", null)) { }
     }
 
     public partial class ToolboxWindow_E
@@ -78,7 +78,7 @@ namespace umi3dDesktopBrowser.uI.viewController
 
             Button closeButton = Root.Q<Button>("closeButton");
             string closeButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_closeButton";
-            StyleKeys closeButtonKeys = new StyleKeys("", "");
+            StyleKeys closeButtonKeys = new StyleKeys(null, "", "");
             new Button_E(closeButton, closeButtonStyle, closeButtonKeys)
             {
                 OnClicked = () => { OnCloseButtonPressed(); }
@@ -86,15 +86,15 @@ namespace umi3dDesktopBrowser.uI.viewController
 
             m_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"), null, null)
                 .SetVerticalDraggerContainerStyle($"{m_partialStylePath}/ToolboxWindow_DraggerContainer", 
-                new StyleKeys("", null))
+                new StyleKeys(null, "", null))
                 .SetVerticalDraggerStyle($"{m_partialStylePath}/ToolboxWindow_Dragger",
-                new StyleKeys("", ""));
+                new StyleKeys(null, "", ""));
             //m_scrollView.Scroll_View.style.alignItems = Align.Center;
 
 
             Button unpinnedButton = Root.Q<Button>("unpinnedButton");
             string unpinnedButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_UnpinnedButton";
-            StyleKeys unpinnedButtonKeys = new StyleKeys("", null);
+            StyleKeys unpinnedButtonKeys = new StyleKeys(null, "", null);
             new Button_E(unpinnedButton, unpinnedButtonStyle, unpinnedButtonKeys)
             {
                 OnClicked = () => { UnPinedButtonPressed.Invoke(); },

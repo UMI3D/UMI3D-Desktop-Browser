@@ -55,7 +55,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected void UpdateVisualKeys(VisualElement visual, StyleKeys newKeys)
         {
             if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
-            if (newKeys == null) throw new NullReferenceException("FormatAnStyleKeys is null.");
+            //if (newKeys == null) throw new NullReferenceException("FormatAnStyleKeys is null.");
             var (styleSO, _, manipulator) = m_visualStyles[visual];
             manipulator.UpdatesKeys(newKeys);
             m_visualStyles[visual] = (styleSO, newKeys, manipulator);
