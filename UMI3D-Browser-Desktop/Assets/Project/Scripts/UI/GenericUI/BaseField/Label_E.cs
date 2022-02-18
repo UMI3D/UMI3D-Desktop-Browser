@@ -30,11 +30,11 @@ namespace umi3dDesktopBrowser.uI.viewController
             {
                 if (value == m_label.text)
                     return;
+                m_rawValue = value;
                 var previousValue = m_label.text;
                 var (styleSO, _, _) = m_visualStyles[m_label];
-                var newValue = m_styleApplicator.GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, value);
-                m_label.text = newValue;
-                OnValueChanged?.Invoke(previousValue, newValue);
+                m_label.text = m_styleApplicator.GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, value);
+                OnValueChanged?.Invoke(previousValue, m_label.text);
             }
         }
 
@@ -49,6 +49,7 @@ namespace umi3dDesktopBrowser.uI.viewController
         public event Action<string, string> OnValueChanged;
 
         protected Label m_label => (Label)Root;
+        protected string m_rawValue { get; set; } = null;
     }
 
     public partial class Label_E
@@ -70,9 +71,10 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class Label_E : Visual_E
     {
-        protected override void Initialize()
+        protected override void ApplyStyle(CustomStyle_SO styleSO, StyleKeys keys, IStyle style, MouseBehaviour mouseBehaviour)
         {
-            base.Initialize();
+            base.ApplyStyle(styleSO, keys, style, mouseBehaviour);
+            value = m_rawValue;
         }
 
     }

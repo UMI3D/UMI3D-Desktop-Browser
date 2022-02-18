@@ -47,12 +47,14 @@ namespace umi3dDesktopBrowser.uI.viewController
             {
                 if (value == m_button.text)
                     return;
+                m_rawText = value;
                 var (styleSO, _, _) = m_visualStyles[m_button];
                 var newValue = m_styleApplicator.GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, value);
                 m_button.text = newValue;
             }
         }
 
+        protected string m_rawText { get; set; } = null;
         protected Button m_button => (Button)Root;
         protected Action m_clicked { get; set; } = null;
         protected StyleKeys m_onKeys { get; set; } = null;
@@ -108,6 +110,12 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_onKeys = null;
             m_offKeys = null;
             m_currentKeys = null;
-    }
+        }
+
+        protected override void ApplyStyle(CustomStyle_SO styleSO, StyleKeys keys, IStyle style, MouseBehaviour mouseBehaviour)
+        {
+            base.ApplyStyle(styleSO, keys, style, mouseBehaviour);
+            Text = m_rawText;
+        }
     }
 }
