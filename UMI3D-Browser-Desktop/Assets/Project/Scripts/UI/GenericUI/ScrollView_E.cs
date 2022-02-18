@@ -100,12 +100,21 @@ namespace umi3dDesktopBrowser.uI.viewController
 
     public partial class ScrollView_E
     {
-        public ScrollView_E(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys) : 
-            base(visual, styleResourcePath, formatAndStyleKeys) { }
-        public ScrollView_E(string visualResourcePath, string styleResourcePath, StyleKeys formatAndStyleKeys) :
-            base(visualResourcePath, styleResourcePath, formatAndStyleKeys) { }
-        public ScrollView_E(VisualElement parent, string visualResourcePath, string styleResourcePath, StyleKeys formatAndStyleKeys) : 
-            base(parent, visualResourcePath, styleResourcePath, formatAndStyleKeys) { }
+        public ScrollView_E(VisualElement visual) :
+            this(visual, null, null)
+        { }
+        public ScrollView_E(VisualElement visual, string styleResourcePath, StyleKeys keys) : 
+            base(visual, styleResourcePath, keys) 
+        { }
+        public ScrollView_E(string visualResourcePath) :
+            this(visualResourcePath, null, null)
+        { }
+        public ScrollView_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
+            base(visualResourcePath, styleResourcePath, keys) 
+        { }
+        public ScrollView_E(VisualElement parent, string visualResourcePath, string styleResourcePath, StyleKeys keys) : 
+            base(parent, visualResourcePath, styleResourcePath, keys) 
+        { }
 
         public ScrollView_E SetDraggerContainerStyle(string styleResourcePath, StyleKeys formatAndStyleKeys)
         {

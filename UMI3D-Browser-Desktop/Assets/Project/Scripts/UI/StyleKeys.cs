@@ -28,11 +28,11 @@ namespace umi3dDesktopBrowser.uI.viewController
             BackgroundStyleKey = backgroundStyle;
             BorderStyleKey = borderStyle;
         }
-        public StyleKeys(string backgroundStyle, string borderStyle)
-        {
-            TextStyleKey = null;
-            BackgroundStyleKey = backgroundStyle;
-            BorderStyleKey = borderStyle;
-        }
+        //public StyleKeys(string backgroundStyle, string borderStyle)
+        //{
+        //    TextStyleKey = null;
+        //    BackgroundStyleKey = backgroundStyle;
+        //    BorderStyleKey = borderStyle;
+        //}
     }
 }

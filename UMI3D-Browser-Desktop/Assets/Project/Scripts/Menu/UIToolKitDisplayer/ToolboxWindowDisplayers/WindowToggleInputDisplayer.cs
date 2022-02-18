@@ -46,8 +46,8 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             if (menu is BooleanInputMenuItem toggleMenu)
             {
                 string toggleStylePath = "UI/Style/Displayers/InputToggle";
-                StyleKeys toggleOnKeys = new StyleKeys("toggleOn", null);
-                StyleKeys toggleOffKeys = new StyleKeys("toggleOff", null);
+                StyleKeys toggleOnKeys = new StyleKeys(null, "toggleOn", null);
+                StyleKeys toggleOffKeys = new StyleKeys(null, "toggleOff", null);
                 m_displayerElement.SetButton(toggleStylePath, toggleOnKeys, toggleOffKeys, toggleMenu.GetValue(), null);
                 m_displayerElement.Element.Text = null;
 

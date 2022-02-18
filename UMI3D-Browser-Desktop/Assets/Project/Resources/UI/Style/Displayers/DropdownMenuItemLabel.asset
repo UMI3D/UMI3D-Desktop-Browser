@@ -57,10 +57,10 @@ MonoBehaviour:
       m_keyword: 11
       m_value:
         m_global: 3
-        m_bottom: 1
-        m_left: 4
-        m_right: 4
-        m_top: 1
+        m_bottom: 2
+        m_left: 5
+        m_right: 5
+        m_top: 2
   m_textFormat:
     m_fontSize:
       m_keyword: 0

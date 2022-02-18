@@ -32,27 +32,28 @@ namespace umi3dDesktopBrowser.uI.viewController
         public Toolbox_E(string toolboxName, bool isInMenuBar = true, params ToolboxItem_E[] items) : 
             base("UI/UXML/Toolbox/Toolbox", 
                 (isInMenuBar) ? "UI/Style/MenuBar/MenuBar_Toolbox" : "UI/Style/ToolboxWindow/ToolboxWindow_Toolbox", 
-                new StyleKeys( "", ""))
+                new StyleKeys(null, "", ""))
         {
             string nameStyle = "UI/Style/Toolbox/ToolboxName";
             StyleKeys nameKeys = new StyleKeys("", null, null);
             ToolboxName = new Label_E(m_name, nameStyle, nameKeys);
             SetToolboxName(toolboxName);
 
-            var backward = Root.Q("backward");
-            var forward = Root.Q("forward");
-            SetHorizontalBackwardButtonStyle(backward.Q("backwardButton"),
-                backward,
-                "UI/Style/Toolbox/Toolbox_ScrollViewButton",
-                new StyleKeys("backward", null));
-            SetHorizontalForwarddButtonStyle(forward.Q("forwardButton"),
-                forward,
-                "UI/Style/Toolbox/Toolbox_ScrollViewButton",
-                new StyleKeys("forward", null));
+            var backwardLayout = Root.Q("backward");
+            var backwardContainer = backwardLayout.Q("backwardButton");
+            string buttonStyle = "UI/Style/Toolbox/Toolbox_ScrollViewButton";
+            StyleKeys backwardKeys = new StyleKeys(null, "backward", null);
+            SetHorizontalBackwardButtonStyle(backwardContainer, backwardLayout, buttonStyle, backwardKeys);
+
+            var forwardLayout = Root.Q("forward");
+            var forwardContainer = forwardLayout.Q("forwardButton");
+            StyleKeys forwardKeys = new StyleKeys(null, "forward", null);
+            SetHorizontalForwarddButtonStyle(forwardContainer, forwardLayout, buttonStyle, forwardKeys);
+
             if (isInMenuBar)
             {
-                backward.style.display = DisplayStyle.None;
-                forward.style.display = DisplayStyle.None;
+                backwardLayout.style.display = DisplayStyle.None;
+                forwardLayout.style.display = DisplayStyle.None;
             }
 
             if (items.Length > 0)
