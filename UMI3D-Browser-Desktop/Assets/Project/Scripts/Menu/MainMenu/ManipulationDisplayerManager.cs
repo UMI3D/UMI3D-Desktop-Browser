@@ -14,14 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections;
-using System.Collections.Generic;
+using inetum.unityUtils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
 {
-    public class ManipulationDisplayerManager : umi3d.common.Singleton<ManipulationDisplayerManager>
+    public class ManipulationDisplayerManager : SingleBehaviour<ManipulationDisplayerManager>
     {
         public UIDocument uiDocument;
         public VisualTreeAsset manipualtionTreeAsset;

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections;
+using inetum.unityUtils;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.common;
@@ -24,7 +24,7 @@ using UnityEngine.UIElements;
 /// <summary>
 /// Manages the display of 2D notification.
 /// </summary>
-public class NotificationDisplayer : Singleton<NotificationDisplayer>
+public class NotificationDisplayer : SingleBehaviour<NotificationDisplayer>
 {
     public UIDocument uiDocument;
 
