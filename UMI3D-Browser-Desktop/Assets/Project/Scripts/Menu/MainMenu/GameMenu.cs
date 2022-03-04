@@ -14,14 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using umi3d.common;
+using inetum.unityUtils;
 using umi3d.cdk;
+using UnityEngine;
 using UnityEngine.UIElements;
 
-public class GameMenu : Singleton<GameMenu>
+public class GameMenu : SingleBehaviour<GameMenu>
 {
     public UIDocument uiDocument;
 

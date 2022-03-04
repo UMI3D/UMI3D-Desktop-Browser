@@ -13,12 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
 {
-    public class EventMenu : umi3d.common.Singleton<EventMenu>
+    public class EventMenu : SingleBehaviour<EventMenu>
     {
         public UIDocument uiDocument;
 

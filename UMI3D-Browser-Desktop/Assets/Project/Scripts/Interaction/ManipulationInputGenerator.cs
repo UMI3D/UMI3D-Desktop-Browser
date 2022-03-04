@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Cursor;
+using inetum.unityUtils;
 using System.Collections.Generic;
 using umi3d.cdk.interaction;
 using umi3d.common.interaction;
@@ -21,7 +22,7 @@ using UnityEngine;
 
 namespace BrowserDesktop.Interaction
 {
-    public class ManipulationInputGenerator : umi3d.common.Singleton<ManipulationInputGenerator>
+    public class ManipulationInputGenerator : SingleBehaviour<ManipulationInputGenerator>
     {
         
         public float strength;

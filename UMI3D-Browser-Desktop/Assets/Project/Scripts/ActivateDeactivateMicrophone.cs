@@ -16,12 +16,12 @@ limitations under the License.
 
 using BrowserDesktop.Controller;
 using BrowserDesktop.Menu;
-using umi3d.cdk.collaboration;
-using umi3d.common;
-using UnityEngine;
+using inetum.unityUtils;
 using umi3d.cdk;
+using umi3d.cdk.collaboration;
+using UnityEngine;
 
-public class ActivateDeactivateMicrophone : Singleton<ActivateDeactivateMicrophone>
+public class ActivateDeactivateMicrophone : SingleBehaviour<ActivateDeactivateMicrophone>
 {
     bool isEnvironmentLoaded = false;
 

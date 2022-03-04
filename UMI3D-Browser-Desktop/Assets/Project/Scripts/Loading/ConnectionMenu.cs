@@ -14,6 +14,7 @@ limitations under the License.
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
+using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
 using umi3d.cdk;
@@ -31,7 +32,7 @@ using UnityEngine.UIElements;
 /// This class is reponsible for connecting users to environments. It implies asking for login/password or parameters if 
 /// necessary.
 /// </summary>
-public class ConnectionMenu : Singleton<ConnectionMenu>
+public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 {
     #region Fields
 
