@@ -12,7 +12,9 @@ limitations under the License.
 */
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace umi3d.cdk.interaction.selection.intent
 {
@@ -32,11 +34,20 @@ namespace umi3d.cdk.interaction.selection.intent
             StartCoroutine(waitForEnvironment());
         }
 
+
+
         // Update is called once per frame
         private void Update()
         {
             if (initialized)
             {
+                if (!(methodTextContainer?.text is null) && methodTextContainer?.text != currentMethod)
+                {
+                    currentMethod = methodTextContainer?.text;
+                    intentSelector.Deactivate(0);
+                    intentSelector.detector = detectors[int.Parse(currentMethod)];
+                    intentSelector.Activate(0);
+                }
                 intentSelector.Select();
             }
         }
@@ -48,7 +59,18 @@ namespace umi3d.cdk.interaction.selection.intent
             {
                 intentSelector.Activate(0); //0 does not have any sense here
                 initialized = true;
+
+                methodSupervisor = GameObject.Find("Method Indicator"); // SCENE SPECIFIC
+                methodTextContainer = methodSupervisor.GetComponentInChildren<Text>();
             });
         }
+
+        private GameObject methodSupervisor;
+        private Text methodTextContainer;
+        private string currentMethod = "0";
+
+        public List<AbstractSelectionIntentDetector> detectors;
+
+
     }
 }

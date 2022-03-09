@@ -2301,7 +2301,6 @@ GameObject:
   - component: {fileID: 2096641631}
   - component: {fileID: 2096641629}
   - component: {fileID: 2096641630}
-  - component: {fileID: 2096641632}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -2377,7 +2376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6df59e8d6bbe0c459c33f65f93e438d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enabled: 0
+  running: 1
   outlineShader: {fileID: 4800000, guid: f8a7c73f138a6ac4993cd7828343e424, type: 3}
 --- !u!114 &2096641631
 MonoBehaviour:
@@ -2392,19 +2391,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   intentSelector: {fileID: 2096641629}
---- !u!114 &2096641632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2096641626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 828e969d081aa364e9017e615946e6bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cacheSizeMax: 60
+  methodSupervisor: {fileID: 0}
+  detectors:
+  - {fileID: 11400000, guid: 3be1ce5a28b96a94ea608046c7411dde, type: 2}
+  - {fileID: 11400000, guid: 6dce8b7bfe7d3914793773e08c1bd605, type: 2}
+  - {fileID: 11400000, guid: 10cf073b1ed81604cb69a240c24e3ca1, type: 2}
+  - {fileID: 11400000, guid: bba01cdd18b8f2345b4f98b14348e171, type: 2}
+  - {fileID: 11400000, guid: 07f62b965ce0c924280bbe8651fcd602, type: 2}
 --- !u!1001 &2119596086
 PrefabInstance:
   m_ObjectHideFlags: 0

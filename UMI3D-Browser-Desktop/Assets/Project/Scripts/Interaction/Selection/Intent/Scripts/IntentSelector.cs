@@ -11,7 +11,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace umi3d.cdk.interaction.selection.intent
 {
@@ -30,7 +32,7 @@ namespace umi3d.cdk.interaction.selection.intent
         /// Selection intent detector
         /// </summary>
         [SerializeField]
-        private AbstractSelectionIntentDetector detector;
+        public AbstractSelectionIntentDetector detector;
 
         /// <summary>
         /// Visual cue handler
@@ -105,7 +107,11 @@ namespace umi3d.cdk.interaction.selection.intent
 
             selectionData.clear();
         }
+
+
     }
+
+    
 
     /// <summary>
     /// Data container for selection information at each frame
