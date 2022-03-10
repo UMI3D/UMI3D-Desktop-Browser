@@ -77,7 +77,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_iconOnKey = iconOnKey;
             m_iconOffKey = iconOffKey;
             m_currentIconKey = IsOn ? m_iconOnKey : m_iconOffKey;
-            AddVisualStyle(m_icon, style_SO, m_currentIconKey, false);
+            AddVisualStyle(m_icon, style_SO, m_currentIconKey, null, false);
             return this;
         }
 
@@ -95,7 +95,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             m_labelOnKey = labelOnKey;
             m_labelOffKey = labelOffKey;
             m_currentLabelKey = IsOn ? m_labelOnKey : m_labelOffKey;
-            AddVisualStyle(m_label, style_SO, m_currentLabelKey, false);
+            AddVisualStyle(m_label, style_SO, m_currentLabelKey, null, false);
             return this;
         }
 
