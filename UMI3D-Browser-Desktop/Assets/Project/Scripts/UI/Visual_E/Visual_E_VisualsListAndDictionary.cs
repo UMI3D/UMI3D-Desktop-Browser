@@ -27,21 +27,23 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)> m_visualStyles;
 
         public VisualManipulator GetVisualManipulator(VisualElement visual)
-        {
-            return m_visualStyles[visual].Item3;
-        }
+            => m_visualStyles[visual].Item3;
 
-        protected void AddVisualStyle(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys, bool stopPropagation = true)
-            => AddVisualStyle(visual, GetStyleSO(styleResourcePath), formatAndStyleKeys, stopPropagation);
-        protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys, bool stopPropagation = true, params VisualElement[] otherVisualTriggers)
+        public void UpdateVisualManipulator(VisualManipulator newManipulator)
+            => UpdateVisualManipulator(Root, newManipulator);
+
+        protected void AddVisualStyle(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys, VisualManipulator manipulator = null, bool stopPropagation = true)
+            => AddVisualStyle(visual, GetStyleSO(styleResourcePath), formatAndStyleKeys, manipulator, stopPropagation);
+        protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys, VisualManipulator manipulator = null, bool stopPropagation = true)
         {
             if (visual == null) throw new NullReferenceException("visual is null");
 
             if (m_visuals.Contains(visual))
             {
-                var (oldStyle, oldKeys, manipulator) = m_visualStyles[visual];
+                var (oldStyle, oldKeys, oldManipulator) = m_visualStyles[visual];
+                if (manipulator == null)
+                    manipulator = oldManipulator;
                 manipulator.Set(style_SO, keys);
-
                 m_visualStyles[visual] = (style_SO, keys, manipulator);
                 manipulator.AppliesFormatAndStyle();
             }
@@ -49,7 +51,10 @@ namespace umi3dDesktopBrowser.uI.viewController
             {
                 m_visuals.Add(visual);
 
-                var manipulator = new VisualManipulator(visual, style_SO, keys, stopPropagation, ApplyFormat, ApplyStyle);
+                if (manipulator == null)
+                    manipulator = new VisualManipulator(visual, style_SO, keys, stopPropagation, ApplyFormat, ApplyStyle);
+                else
+                    manipulator.Set(style_SO, keys, ApplyFormat, ApplyStyle);
                 visual.AddManipulator(manipulator);
 
                 m_visualStyles.Add(visual, (style_SO, keys, manipulator));

@@ -68,14 +68,19 @@ namespace umi3dDesktopBrowser.uI.viewController
         {
             base.Initialize();
 
+            PopUpManipulator popupManipulator()
+                => new PopUpManipulator(Root);
+
             string iconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Icon";
             StyleKeys iconKeys = new StyleKeys(null, "", "");
-            AddVisualStyle(Root.Q("icon"), iconStyle, iconKeys);
+            VisualElement icon = Root.Q("icon");
+            AddVisualStyle(icon, iconStyle, iconKeys, popupManipulator());
 
             string windowNameStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Name";
             StyleKeys windowNameKeys = new StyleKeys("", "", "");
             var label = new Label_E(Root.Q<Label>("windowName"), windowNameStyle, windowNameKeys);
             label.value = "Toolbox";
+            label.UpdateVisualManipulator(popupManipulator());
 
             Button closeButton = Root.Q<Button>("closeButton");
             string closeButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_closeButton";
@@ -100,8 +105,6 @@ namespace umi3dDesktopBrowser.uI.viewController
             {
                 OnClicked = () => { UnPinedButtonPressed.Invoke(); },
             };
-
-            UpdateVisualManipulator(Root, new PopUpManipulator(label.Root, true));
         }
     }
 }

@@ -25,10 +25,11 @@ namespace umi3dDesktopBrowser.uI.viewController
     {
         protected Vector2 start;
         protected bool active = false;
+        protected VisualElement m_popup;
 
-        public PopUpManipulator(VisualElement visualTarget, bool stopPropagation) :
+        public PopUpManipulator(VisualElement visualTarget, bool stopPropagation = true) :
             base(visualTarget, null, null, stopPropagation, null, null)
-        { }
+        { m_popup = visualTarget; }
     }
 
     public partial class PopUpManipulator : VisualManipulator
@@ -85,11 +86,11 @@ namespace umi3dDesktopBrowser.uI.viewController
 
             Vector2 diff = e.localMousePosition - start;
 
-            float heightDivTwo = -target.layout.height / 2;
-            float widthDivTwo = -target.layout.width / 2;
+            float heightDivTwo = -m_popup.layout.height / 2;
+            float widthDivTwo = -m_popup.layout.width / 2;
 
-            target.style.top = Mathf.Clamp(target.layout.y + diff.y, heightDivTwo, Screen.height + heightDivTwo);
-            target.style.left = Mathf.Clamp(target.layout.x + diff.x, widthDivTwo, Screen.width + widthDivTwo);
+            m_popup.style.top = Mathf.Clamp(m_popup.layout.y + diff.y, heightDivTwo, Screen.height + heightDivTwo);
+            m_popup.style.left = Mathf.Clamp(m_popup.layout.x + diff.x, widthDivTwo, Screen.width + widthDivTwo);
 
             e.StopPropagation();
         }

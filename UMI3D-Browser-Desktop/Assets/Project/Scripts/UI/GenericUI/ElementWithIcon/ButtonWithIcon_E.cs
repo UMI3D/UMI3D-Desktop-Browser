@@ -66,7 +66,7 @@ namespace umi3dDesktopBrowser.uI.viewController
             };
         }
 
-        public void Test()
+        public void ApplyButtonStyleWithIcon()
         {
             var manipulatorIcon = Icon.GetVisualManipulator(m_icon);
             var manipulatorButton = Element.GetVisualManipulator(m_button);
