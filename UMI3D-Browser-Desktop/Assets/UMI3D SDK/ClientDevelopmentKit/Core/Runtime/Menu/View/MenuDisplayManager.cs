@@ -215,7 +215,6 @@ namespace umi3d.cdk.menu.view
         /// <returns></returns>
         private void recursivelyDisplayContainer(AbstractMenuDisplayContainer container, int depth)
         {
-            //Debug.Log($"DisplayContainer [{container.menu.Name}] with depth = {depth} and displayDepth = {displayDepth}");
             if (depth > displayDepth)
             {
                 if (depth > displayDepth + 1)
@@ -262,7 +261,7 @@ namespace umi3d.cdk.menu.view
                 container = containerSelector.ChooseContainer(menu, 0);
             else
                 container = Instantiate(containerSelector.ChooseContainer(menu, depth), this.transform);
-            
+
             container.SetMenuItem(menu);
             containers.Add(container);
 
@@ -288,12 +287,11 @@ namespace umi3d.cdk.menu.view
         /// <returns></returns>
         private AbstractMenuDisplayContainer CreateSubMenu(AbstractMenuDisplayContainer container, AbstractMenu subMenu, int containerDepth)
         {
-            //Debug.Log($"create sub menu [{subMenu.Name}] in depth = {containerDepth}");
             if (!menuToDisplayer.ContainsKey(subMenu))
             {
                 AbstractMenuDisplayContainer subContainer = recursivelyCreateDisplay(subMenu, containerDepth + 1);
 
-                //subContainer.SetMenuItem(subMenu);
+                subContainer.SetMenuItem(subMenu);
                 subContainer.parent = container;
                 SetMenuAction(container, subMenu, subContainer, containerDepth + 1);
                 if (subMenu.navigable)

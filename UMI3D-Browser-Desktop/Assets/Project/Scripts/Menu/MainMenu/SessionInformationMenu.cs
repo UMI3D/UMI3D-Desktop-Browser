@@ -100,7 +100,7 @@ namespace BrowserDesktop.Menu
             sessionInfo = root.Q<VisualElement>("session-info");
             sessionTime = sessionInfo.Q<Label>("session-time");
             participantsCount = sessionInfo.Q<Label>("participants-count");
-            umi3d.cdk.collaboration.UMI3DCollaborationEnvironmentLoader.OnUpdateUserList.AddListener(UpdateParticipantsCount);
+            umi3d.cdk.collaboration.UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += UpdateParticipantsCount;
 
 
             /*DisplayConsole(false);

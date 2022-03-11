@@ -189,7 +189,7 @@ namespace BrowserDesktop.Interaction
                 this.hoveredObjectId = hoveredObjectId;
                 this.toolId = toolId;
 
-                FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariante(associatedInteraction.icon2D?.variants);
+                FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariant(associatedInteraction.icon2D?.variants);
 
                 if (fileToLoad != null)
                 {
