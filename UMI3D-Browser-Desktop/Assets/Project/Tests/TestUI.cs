@@ -17,9 +17,9 @@ using System.Collections.Generic;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3dDesktopBrowser.ui.viewController;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using BrowserDesktop.Cursor;
 
 public class TestUI : MonoBehaviour
 {
@@ -30,30 +30,27 @@ public class TestUI : MonoBehaviour
     {
         Close();
 
-        //var item = new ToolboxItem_E("Toolbox", "Toolbox" );
-
-        //var item1 = new ToolboxItem_E("Toolbox", "Toolbox");
-        //var item2 = new ToolboxItem_E("Toolbox", "Toolbox");
-        //var item3 = new ToolboxItem_E("Toolbox", "Toolbox");
-        //var item4 = new ToolboxItem_E("Toolbox", "Toolbox");
-        //var item5 = new ToolboxItem_E("Toolbox", "Toolbox");
-
-        //var toolbox0 = new Toolbox_E("test", true, item, item1);
-        //var toolbox1 = new Toolbox_E("test1", true, item2, item3, item4);
-        //var toolbox2 = new Toolbox_E("test2", true, item5);
-        //MenuBar_E.Instance.AddToolbox(toolbox0, toolbox1, toolbox2);
+        var mainView = UIDoc.rootVisualElement.Q("mainView");
 
         MenuBar_E
             .Instance
             .InsertRootTo(UIDoc.rootVisualElement.Q("top"));
 
-        ToolboxWindow_E
+        //ToolboxWindow_E
+        //    .Instance
+        //    .InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
+        var message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel ullamcorper lectus. Donec tincidunt purus sit amet elit pretium imperdiet. Proin a tempor dui, ac luctus orci. Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.";
+        DialogueBox_E
+            .SetCursorMovementActions
+            (
+                    (o) => { CursorHandler.SetMovement(o, CursorHandler.CursorMovement.Free); },
+                    (o) => { CursorHandler.UnSetMovement(o); }
+            );
+        DialogueBox_E
+            .Setup("Test", message, "optionA", "optionB", (val) => { Debug.Log($"pressed [{val}]"); });
+        DialogueBox_E
             .Instance
-            .InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
-
-        //var textField = new TextField();
-        //UIDoc.rootVisualElement.Add(textField);
-
+            .InsertRootTo(mainView);
 
         ///FAKE DATA
 

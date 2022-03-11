@@ -20,7 +20,7 @@ namespace umi3dDesktopBrowser.ui
 {
     public partial class GameMenu
     {
-        private void InitMenuBar()
+        private void InitMenus()
         {
             MenuBar_E
             .Instance
@@ -29,6 +29,8 @@ namespace umi3dDesktopBrowser.ui
             ToolboxWindow_E
             .Instance
             .InsertRootTo(m_viewport);
+
+            //Todo Add footer.
         }
     }
 }
