@@ -18,7 +18,7 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
 {
-    public class EventMenu : umi3d.common.Singleton<EventMenu>
+    public class EventMenu : umi3d.common.SingleBehaviour<EventMenu>
     {
         public UIDocument uiDocument;
 

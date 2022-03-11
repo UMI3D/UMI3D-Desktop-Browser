@@ -24,7 +24,7 @@ using UnityEngine.UIElements;
 /// <summary>
 /// Manages the display of 2D notification.
 /// </summary>
-public class NotificationDisplayer : Singleton<NotificationDisplayer>
+public class NotificationDisplayer : SingleBehaviour<NotificationDisplayer>
 {
     public UIDocument uiDocument;
 

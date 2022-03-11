@@ -19,7 +19,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static BrowserDesktop.Cursor.CursorHandler;
 
-public class CursorDisplayer : Singleton<CursorDisplayer>
+public class CursorDisplayer : SingleBehaviour<CursorDisplayer>
 {
     public UIDocument uiDocument;
 

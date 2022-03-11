@@ -16,7 +16,7 @@ limitations under the License.
 
 using umi3d.common;
 
-public class NotificationContainer : Singleton<NotificationContainer>
+public class NotificationContainer : SingleBehaviour<NotificationContainer>
 {
 
 }

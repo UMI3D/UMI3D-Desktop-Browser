@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using inetum.unityUtils;
 using UnityEngine;
 
-public class Debugger : umi3d.common.PersistentSingleton<Debugger>
+public class Debugger : umi3d.common.PersistentBehaviour<Debugger>
 {
     public bool DisplayInfo = false;
 

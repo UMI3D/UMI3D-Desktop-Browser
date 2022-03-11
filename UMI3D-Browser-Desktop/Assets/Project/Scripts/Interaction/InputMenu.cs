@@ -17,7 +17,7 @@ using umi3d.common;
 
 namespace BrowserDesktop.Interaction
 {
-    public class InputMenu : Singleton<InputMenu>
+    public class InputMenu : SingleBehaviour<InputMenu>
     {
     }
 }

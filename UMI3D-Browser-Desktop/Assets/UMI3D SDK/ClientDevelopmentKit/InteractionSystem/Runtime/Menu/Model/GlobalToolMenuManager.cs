@@ -24,7 +24,7 @@ using umi3d.common.interaction;
 
 namespace umi3d.cdk.interaction
 {
-    public class GlobalToolMenuManager : Singleton<GlobalToolMenuManager>
+    public class GlobalToolMenuManager : SingleBehaviour<GlobalToolMenuManager>
     {
         public MenuAsset menuAsset;
 

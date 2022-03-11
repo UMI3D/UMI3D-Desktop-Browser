@@ -39,7 +39,7 @@ namespace BrowserDesktop.Menu
     /// or displayed and expanded (and consequently interactable because the view is free).
     /// 
     /// </summary>
-    public class SideMenu : Singleton<SideMenu>
+    public class SideMenu : SingleBehaviour<SideMenu>
     {
         #region Fields
 

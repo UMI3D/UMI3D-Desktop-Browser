@@ -18,13 +18,10 @@ using UnityEngine;
 
 namespace umi3d.common
 {
-    public class Singleton<T> : QuittingManager where T : Singleton<T>
+    public class PersistentBehaviour<T> : QuittingManager where T : PersistentBehaviour<T>
     {
         const DebugScope scope = DebugScope.Common | DebugScope.Core;
 
-        /// <summary>
-        /// static reference to the only instance of <typeparamref name="T"/>
-        /// </summary>
         private static T instance;
 
         /// <summary>
@@ -33,18 +30,20 @@ namespace umi3d.common
         public static bool Exists => !ApplicationIsQuitting && instance != null;
 
         /// <summary>
-        /// static reference to the only instance of <typeparamref name="T"/>.
-        /// This will instanciate an instance if null.
+        /// static rteference to the only instance of <typeparamref name="T"/>
         /// </summary>
         public static T Instance
         {
             get
             {
                 if (ApplicationIsQuitting)
+                {
                     return null;
+                }
                 if (instance == null)
                 {
                     instance = FindObjectOfType<T>();
+
                     if (instance == null)
                     {
                         var g = GameObject.Find(typeof(T).Name);
@@ -78,12 +77,16 @@ namespace umi3d.common
         {
             if (instance != null && instance != this)
             {
-                UMI3DLogger.LogError("There is already a Singleton<" + typeof(T) + "> , instance on " + gameObject.name + " will be exterminated",scope);
+                if (instance.gameObject.name == gameObject.name)
+                    UMI3DLogger.LogWarning("There is already a Singleton<" + typeof(T) + "> , instance on " + gameObject.name + " will be exterminated. This could occur after reloaded a scene with a PersistentSingleton in it",scope);
+                else
+                    UMI3DLogger.LogError("There is already a Singleton<" + typeof(T) + "> , instance on " + gameObject.name + " will be exterminated.",scope);
                 Destroy(this);
             }
             else
             {
                 instance = this as T;
+                DontDestroyOnLoad(this);
             }
         }
 

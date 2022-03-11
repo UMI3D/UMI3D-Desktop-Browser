@@ -16,7 +16,7 @@ limitations under the License.
 
 namespace BrowserDesktop
 {
-    public class ActionIconManager : umi3d.common.Singleton<ActionIconManager>
+    public class ActionIconManager : umi3d.common.SingleBehaviour<ActionIconManager>
     {
         public ActionIconInstance ActionIconInstance;
 

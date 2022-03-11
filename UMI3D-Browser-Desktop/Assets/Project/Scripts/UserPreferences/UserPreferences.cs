@@ -20,7 +20,7 @@ using UnityEngine.Events;
 
 namespace BrowserDesktop.preferences
 {
-    public partial class UserPreferences : umi3d.common.PersistentSingleton<UserPreferences>
+    public partial class UserPreferences : umi3d.common.PersistentBehaviour<UserPreferences>
     {
         /// <summary>
         /// Root of the path where preferences are stored.

@@ -24,7 +24,7 @@ using umi3d.cdk.interaction;
 
 namespace BrowserDesktop.Menu
 {
-    public class MainMenu : Singleton<MainMenu>
+    public class MainMenu : SingleBehaviour<MainMenu>
     {
         bool display;
         static public bool IsDisplaying { get { return Exists ? Instance.display : false; } }

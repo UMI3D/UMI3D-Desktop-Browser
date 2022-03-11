@@ -21,7 +21,7 @@ using UnityEngine;
 
 namespace BrowserDesktop.Interaction
 {
-    public class ManipulationInputGenerator : umi3d.common.Singleton<ManipulationInputGenerator>
+    public class ManipulationInputGenerator : umi3d.common.SingleBehaviour<ManipulationInputGenerator>
     {
         
         public float strength;
