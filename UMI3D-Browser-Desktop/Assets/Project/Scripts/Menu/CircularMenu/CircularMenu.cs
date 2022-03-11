@@ -27,7 +27,7 @@ namespace BrowserDesktop.Menu
     /// This class is reponsible for displaying the interaction menu.
     /// (should be renamed because this menu is no longer a circular menu but a more traditionnal one displayed within the side menu)
     /// </summary>
-    public class CircularMenu : umi3d.common.Singleton<CircularMenu>
+    public class CircularMenu : umi3d.common.SingleBehaviour<CircularMenu>
     {
         public SimpleUIContainer2D circularMenuContainer;
 

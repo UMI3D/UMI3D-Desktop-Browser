@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
 {
-    public class DialogueBox_UIController : umi3d.common.PersistentSingleton<DialogueBox_UIController>
+    public class DialogueBox_UIController : umi3d.common.PersistentBehaviour<DialogueBox_UIController>
     {
         [SerializeField]
         [Tooltip("VisualTreeAsset of a dialogue box")]

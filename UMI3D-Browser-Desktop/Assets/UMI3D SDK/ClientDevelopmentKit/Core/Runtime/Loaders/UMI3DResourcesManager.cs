@@ -31,7 +31,7 @@ using Path = inetum.unityUtils.Path;
 
 namespace umi3d.cdk
 {
-    public class UMI3DResourcesManager : PersistentSingleton<UMI3DResourcesManager>
+    public class UMI3DResourcesManager : PersistentBehaviour<UMI3DResourcesManager>
     {
         const DebugScope scope = DebugScope.CDK | DebugScope.Core | DebugScope.Loading;
 

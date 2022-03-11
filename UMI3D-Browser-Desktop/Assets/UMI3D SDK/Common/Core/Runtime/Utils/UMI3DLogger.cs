@@ -58,7 +58,7 @@ namespace umi3d.common
         Editor = 1 << 29
     }
 
-    public class UMI3DLogger : PersistentSingleton<UMI3DLogger>
+    public class UMI3DLogger : PersistentBehaviour<UMI3DLogger>
     {
         #region logging
         [SerializeField]

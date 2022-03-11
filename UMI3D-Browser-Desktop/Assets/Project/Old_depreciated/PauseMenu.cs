@@ -22,7 +22,7 @@ using BrowserDesktop.Cursor;
 
 namespace BrowserDesktop.Menu
 {
-    public class PauseMenu : Singleton<PauseMenu>
+    public class PauseMenu : SingleBehaviour<PauseMenu>
     {
         public UIDocument uiDocument;
 

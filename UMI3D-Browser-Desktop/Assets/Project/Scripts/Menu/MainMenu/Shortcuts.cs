@@ -25,7 +25,7 @@ namespace BrowserDesktop.Menu
     /// <summary>
     /// This class manages the shortcut displayer 
     /// </summary>
-    public class Shortcuts : umi3d.common.Singleton<Shortcuts>
+    public class Shortcuts : umi3d.common.SingleBehaviour<Shortcuts>
     {
         #region Fields
 

@@ -18,7 +18,7 @@ using UnityEngine;
 
 namespace umi3d.common.graphics
 {
-    public abstract class UMI3DAbstractPostProcessing : common.Singleton<UMI3DAbstractPostProcessing>
+    public abstract class UMI3DAbstractPostProcessing : common.SingleBehaviour<UMI3DAbstractPostProcessing>
     {
         /// <summary>
         /// Get the main camera.

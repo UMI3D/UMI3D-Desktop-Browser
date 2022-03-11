@@ -27,7 +27,7 @@ namespace BrowserDesktop.Menu
     /// This class manages the UI elements which gives information about the current session such as : 
     /// the name of the environment, is the microphone working, the session tim, etc.
     /// </summary>
-    public class SessionInformationMenu : Singleton<SessionInformationMenu>
+    public class SessionInformationMenu : SingleBehaviour<SessionInformationMenu>
     {
         #region Fields
 

@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace BrowserDesktop.Menu
 {
-    public class ManipulationMenu : umi3d.common.Singleton<ManipulationMenu>
+    public class ManipulationMenu : umi3d.common.SingleBehaviour<ManipulationMenu>
     {
         [SerializeField]
         GameObject ManipulationDisplayerPrefab = null;

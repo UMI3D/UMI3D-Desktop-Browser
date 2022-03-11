@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
 {
-    public class ManipulationDisplayerManager : umi3d.common.Singleton<ManipulationDisplayerManager>
+    public class ManipulationDisplayerManager : umi3d.common.SingleBehaviour<ManipulationDisplayerManager>
     {
         public UIDocument uiDocument;
         public VisualTreeAsset manipualtionTreeAsset;

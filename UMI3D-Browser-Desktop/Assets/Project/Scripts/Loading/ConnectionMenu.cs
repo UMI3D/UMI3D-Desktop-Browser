@@ -33,7 +33,7 @@ using UnityEngine.UIElements;
 /// This class is reponsible for connecting users to environments. It implies asking for login/password or parameters if 
 /// necessary.
 /// </summary>
-public class ConnectionMenu : Singleton<ConnectionMenu>
+public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 {
     #region Fields
 
