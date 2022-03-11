@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
 using umi3dDesktopBrowser.ui.viewController;
@@ -25,7 +26,7 @@ namespace BrowserDesktop.Menu
     /// <summary>
     /// This class manages the shortcut displayer 
     /// </summary>
-    public class Shortcuts : umi3d.common.SingleBehaviour<Shortcuts>
+    public class Shortcuts : SingleBehaviour<Shortcuts>
     {
         #region Fields
 

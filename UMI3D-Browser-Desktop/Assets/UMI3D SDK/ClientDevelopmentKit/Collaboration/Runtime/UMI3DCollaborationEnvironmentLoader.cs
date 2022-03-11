@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using umi3d.common;
 using umi3d.common.collaboration;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace umi3d.cdk.collaboration
 {
@@ -28,7 +28,7 @@ namespace umi3d.cdk.collaboration
         public static new UMI3DCollaborationEnvironmentLoader Instance { get => UMI3DEnvironmentLoader.Instance as UMI3DCollaborationEnvironmentLoader; set => UMI3DEnvironmentLoader.Instance = value; }
 
         public List<UMI3DUser> UserList;
-        static public UnityEvent OnUpdateUserList = new UnityEvent();
+        public static event Action OnUpdateUserList;
 
         ///<inheritdoc/>
         public override void ReadUMI3DExtension(GlTFEnvironmentDto _dto, GameObject node)

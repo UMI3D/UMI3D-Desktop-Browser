@@ -55,7 +55,7 @@ namespace umi3d.cdk.menu.view
         /// State If the current displayer is compatible with a menuItem 
         /// </summary>
         /// <param name="menu">Menu To test</param>
-        /// <returns>1 to infinity if compatible and 0 if not. The displayer with the Higher score will be chosed.</returns>
+        /// <returns>1 to infinity if compatible and 0 if not</returns>
         public abstract int IsSuitableFor(AbstractMenuItem menu);
 
 

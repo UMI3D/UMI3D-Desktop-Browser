@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using inetum.unityUtils;
 using umi3DBrowser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace BrowserDesktop.preferences
 {
-    public partial class UserPreferences : umi3d.common.PersistentBehaviour<UserPreferences>
+    public partial class UserPreferences : PersistentSingleBehaviour<UserPreferences>
     {
         /// <summary>
         /// Root of the path where preferences are stored.

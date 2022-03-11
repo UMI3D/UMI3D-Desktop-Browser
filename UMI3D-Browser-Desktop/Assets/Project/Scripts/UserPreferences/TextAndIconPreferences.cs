@@ -125,7 +125,7 @@ namespace BrowserDesktop.preferences
 
         public void ApplyTextPref(TextElement label, string textPrefName, string labelText = null)
         {
-            UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.TextPref_SO.ApplyPref(label, textPrefName, labelText));
+            //UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.TextPref_SO.ApplyPref(label, textPrefName, labelText));
         }
 
         public TextFormat GetTextFormat(string textPrefName)
@@ -135,7 +135,7 @@ namespace BrowserDesktop.preferences
 
         public void ApplyIconPref(VisualElement icon, string iconPrefName, string iconClass = null, float width = 0f, float height = 0f)
         {
-            UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.IconPref_SO.ApplyPref(icon, iconPrefName, iconClass, width, height));
+            //UserPreferences.Instance.StartCoroutine(currentTextAndIcon_SO.IconPref_SO.ApplyPref(icon, iconPrefName, iconClass, width, height));
         }
 
     }
