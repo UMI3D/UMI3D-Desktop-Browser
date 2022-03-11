@@ -2362,7 +2362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deactivationRequesters: 
   controller: {fileID: 2096641628}
-  detector: {fileID: 11400000, guid: 6dce8b7bfe7d3914793773e08c1bd605, type: 2}
+  detector: {fileID: 11400000, guid: 07f62b965ce0c924280bbe8651fcd602, type: 2}
   selectionVisualCueHandler: {fileID: 2096641630}
 --- !u!114 &2096641630
 MonoBehaviour:
@@ -2391,7 +2391,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   intentSelector: {fileID: 2096641629}
-  methodSupervisor: {fileID: 0}
   detectors:
   - {fileID: 11400000, guid: 3be1ce5a28b96a94ea608046c7411dde, type: 2}
   - {fileID: 11400000, guid: 6dce8b7bfe7d3914793773e08c1bd605, type: 2}
