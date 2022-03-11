@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Controller;
+using BrowserDesktop.Cursor;
+using System.Collections;
 using umi3d.cdk;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -25,6 +27,8 @@ public class LoadingBar
     VisualElement loadingBarProgress;
     VisualElement loadingScreen;
     Label loaderTxt;
+
+    float value = 0;
 
     public LoadingBar(VisualElement root)
     {
@@ -38,9 +42,17 @@ public class LoadingBar
         Debug.Assert(loadingScreen != null);
         Debug.Assert(loaderTxt != null);
 
+        loadingBarProgress.style.width = 0;
+        loadingScreen.style.display = DisplayStyle.Flex;
+        loadingScreen.style.display = DisplayStyle.None;
+
+        value = 0;
+        MainThreadDispatcher.UnityMainThreadDispatcher.Instance().Enqueue(SetValueNextFrame());
+
         UMI3DEnvironmentLoader.Instance.onProgressChange.AddListener(OnProgressChange);
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(Hide);
         UMI3DResourcesManager.Instance.onProgressChange.AddListener(OnProgressChange);
+
     }
 
     public void OnProgressChange(float val)
@@ -48,10 +60,19 @@ public class LoadingBar
         if ((loadingScreen.style.display == DisplayStyle.None) && val < 1f)
         {
             loadingScreen.style.display = DisplayStyle.Flex;
+            CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
             MouseAndKeyboardController.CanProcess = false;
+            
         }
-
+        if (val > 1) val = 1;
+        value = val;
         loadingBarProgress.style.width = val * loadingBarContainer.resolvedStyle.width;
+    }
+
+    IEnumerator SetValueNextFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        OnProgressChange(value);
     }
 
     public void SetText(string text)
@@ -62,6 +83,7 @@ public class LoadingBar
     void Hide()
     {
         loadingScreen.style.display = DisplayStyle.None;
+        CursorHandler.UnSetMovement(this);
         MouseAndKeyboardController.CanProcess = true;
     }
 

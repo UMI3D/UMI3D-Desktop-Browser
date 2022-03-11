@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using inetum.unityUtils;
 using BrowserDesktop.Menu;
 using System;
-using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -85,7 +85,7 @@ public class WindowsManager : MonoBehaviour
         UpdateWindowWhenResize();
 
         Application.wantsToQuit += WantsToQuit;
-        umi3d.common.QuittingManager.ShouldWaitForApplicationToQuit = true;
+        QuittingManager.ShouldWaitForApplicationToQuit = true;
     }
 
     /// <summary>
@@ -135,7 +135,7 @@ public class WindowsManager : MonoBehaviour
     /// <returns>True when ApplicationIsQuitting is ready to quit, else false.</returns>
     private bool WantsToQuit()
     {
-        bool wantsToQuit = umi3d.common.QuittingManager.ApplicationIsQuitting;
+        bool wantsToQuit = QuittingManager.ApplicationIsQuitting;
         if (!wantsToQuit && !DialogueBox_UIController.Displayed)
             ShowDialogueBoxToQuit();
         return wantsToQuit;
@@ -149,7 +149,7 @@ public class WindowsManager : MonoBehaviour
         DialogueBox_UIController.
             Setup("Close application", "Are you sure ...?", "YES", "NO", (b) =>
             {
-                umi3d.common.QuittingManager.ApplicationIsQuitting = b;
+                QuittingManager.ApplicationIsQuitting = b;
                 if (b)
                     Application.Quit();
             }).
