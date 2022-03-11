@@ -15,7 +15,7 @@ limitations under the License.
 */
 using System;
 
-namespace umi3dDesktopBrowser.uI.viewController
+namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class ButtonWithLabel_E
     {

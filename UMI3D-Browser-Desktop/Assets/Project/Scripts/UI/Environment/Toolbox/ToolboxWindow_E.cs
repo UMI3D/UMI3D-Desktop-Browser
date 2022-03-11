@@ -17,7 +17,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.uI.viewController
+namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class ToolboxWindow_E
     {

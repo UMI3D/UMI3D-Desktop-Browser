@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Gfi Informatique
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,21 +13,22 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-//using BrowserDesktop.Menu.Environment.Settings;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-
-namespace umi3dDesktopBrowser.uI.viewController
+namespace umi3dDesktopBrowser.ui.viewController
 {
     /// <summary>
     /// A menuBar has 3 layout (Tools area, Application settings area and Leave button area).
     /// </summary>
     public partial class MenuBar_E
     {
+        public ToolboxItem_E Avatar => m_avatar;
+        public ToolboxItem_E Sound => m_sound;
+        public ToolboxItem_E Mic => m_mic;
+
         public VisualElement SubMenuLayout { get; private set; }
         public static MenuBar_E Instance
         {
@@ -51,11 +52,11 @@ namespace umi3dDesktopBrowser.uI.viewController
         protected ToolboxItem_E m_leave;
         protected ScrollView_E m_scrollView { get; set; }
 
-        private static MenuBar_E m_instance;
         private VisualElement leftLayout_VE;
         private VisualElement centerLayout_VE;
         private VisualElement rightLayout_VE;
 
+        private static MenuBar_E m_instance;
         private static string m_menuUXML => "UI/UXML/MenuBar/menuBar";
         private static string m_menuStyle => "UI/Style/MenuBar/MenuBar";
         private static StyleKeys m_menuKeys => new StyleKeys(null, "", null);

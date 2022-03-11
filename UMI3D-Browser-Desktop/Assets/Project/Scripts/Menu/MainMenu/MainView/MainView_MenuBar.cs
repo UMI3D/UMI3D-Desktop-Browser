@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Gfi Informatique
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,23 +13,22 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
+using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.ui.viewController
+namespace umi3dDesktopBrowser.ui
 {
-    public class BottomBar_E : Visual_E
+    public partial class GameMenu
     {
-        private VisualElement leftLayout_VE;
-        private VisualElement rightLayout_VE;
-
-        protected override void Initialize()
+        private void InitMenuBar()
         {
-            base.Initialize();
+            MenuBar_E
+            .Instance
+            .InsertRootTo(m_mainView);
 
-            //leftLayout_VE = this.Q<VisualElement>("left-layout");
-            //rightLayout_VE = this.Q<VisualElement>("right-layout");
+            ToolboxWindow_E
+            .Instance
+            .InsertRootTo(m_viewport);
         }
-
     }
 }

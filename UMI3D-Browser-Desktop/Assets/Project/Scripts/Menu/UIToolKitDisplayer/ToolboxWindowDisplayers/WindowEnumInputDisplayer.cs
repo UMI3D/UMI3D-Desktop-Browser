@@ -17,7 +17,7 @@ using BrowserDesktop.Menu;
 using System;
 using System.Collections.Generic;
 using umi3d.cdk.menu;
-using umi3dDesktopBrowser.uI.viewController;
+using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine.UIElements;
 
 namespace umi3d.DesktopBrowser.menu.Displayer

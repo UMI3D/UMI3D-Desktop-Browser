@@ -18,7 +18,7 @@ using umi3DBrowser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.uI.viewController
+namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Button_E : IClickableElement
     {
