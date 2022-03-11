@@ -36,7 +36,7 @@ namespace umi3dDesktopBrowser.ui
         void Start()
         {
             BindUI();
-            InitMenuBar();
+            InitMenus();
             Display(false);
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
@@ -51,7 +51,11 @@ namespace umi3dDesktopBrowser.ui
             m_viewport = m_uiDoc.rootVisualElement.Q("viewport");
         }
 
-        void Display(bool val)
+        /// <summary>
+        /// Displays Main view if true, else hides.
+        /// </summary>
+        /// <param name="val"></param>
+        public void Display(bool val)
         {
             m_mainView.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
         }

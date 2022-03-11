@@ -303,7 +303,13 @@ namespace umi3dDesktopBrowser.ui.viewController
                     style.borderRightColor = borderColor.Right;
                     style.borderBottomColor = borderColor.Bottom;
                 },
-                (color) => { });
+                (color) => 
+                {
+                    style.borderTopColor = color;
+                    style.borderLeftColor = color;
+                    style.borderRightColor = color;
+                    style.borderBottomColor = color;
+                });
 
         protected virtual void AppliesBorderWidth(IStyle style, CustomStyleCrossPosition<CustomStyleSizeKeyword, float> customStyle)
             => AppliesLength(customStyle.Keyword,
