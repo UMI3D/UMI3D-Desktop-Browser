@@ -15,16 +15,13 @@ limitations under the License.
 */
 
 using BrowserDesktop.Cursor;
-using System;
+using inetum.unityUtils;
 using System.Collections;
-using System.Security.Cryptography;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
-using umi3d.common;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu

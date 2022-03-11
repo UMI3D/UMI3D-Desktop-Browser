@@ -13,13 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace BrowserDesktop.Controller
 {
-    public class InputLayoutManager : umi3d.common.PersistentBehaviour<InputLayoutManager>
+    public class InputLayoutManager : PersistentSingleBehaviour<InputLayoutManager>
     {
 
         public static readonly string FR_Fr_KeyboardLayout = "0000040C";
@@ -178,7 +179,7 @@ namespace BrowserDesktop.Controller
 
         void LoadLayout()
         {
-            string filePath = Path.Combine(Application.streamingAssetsPath, LayoutsFileName);
+            string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, LayoutsFileName);
 
             if (File.Exists(filePath))
             {
@@ -216,7 +217,7 @@ namespace BrowserDesktop.Controller
                 loadedInputLayout = inputs;
             }
 
-            string filePath = Path.Combine(Application.streamingAssetsPath, LayoutsFileName);
+            string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, LayoutsFileName);
             string dataAsJson = JsonUtility.ToJson(loadedInputLayout);
             File.WriteAllText(filePath, dataAsJson);
 

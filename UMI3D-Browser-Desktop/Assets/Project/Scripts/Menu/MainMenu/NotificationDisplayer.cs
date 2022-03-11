@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections;
+using inetum.unityUtils;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.common;
@@ -80,7 +80,7 @@ public class NotificationDisplayer : SingleBehaviour<NotificationDisplayer>
             return null;
 
         Texture2D res = null;
-        FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariante(dto.variants);
+        FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariant(dto.variants);
 
         if (fileToLoad != null)
         {

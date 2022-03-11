@@ -16,6 +16,7 @@ limitations under the License.
 
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
+using inetum.unityUtils;
 using umi3d.cdk.menu.view;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,7 +28,7 @@ namespace BrowserDesktop.Menu
     /// This class is reponsible for displaying the interaction menu.
     /// (should be renamed because this menu is no longer a circular menu but a more traditionnal one displayed within the side menu)
     /// </summary>
-    public class CircularMenu : umi3d.common.SingleBehaviour<CircularMenu>
+    public class CircularMenu : SingleBehaviour<CircularMenu>
     {
         public SimpleUIContainer2D circularMenuContainer;
 

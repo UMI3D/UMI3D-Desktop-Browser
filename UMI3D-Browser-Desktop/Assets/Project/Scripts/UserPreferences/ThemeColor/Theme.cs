@@ -13,11 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
 using UnityEngine;
 
 namespace BrowserDesktop.preferences.Theme
 {
-    public class Theme : umi3d.common.PersistentBehaviour<Theme>
+    public class Theme : PersistentSingleBehaviour<Theme>
     {
         [SerializeField] ThemeInstance _Theme = null;
 

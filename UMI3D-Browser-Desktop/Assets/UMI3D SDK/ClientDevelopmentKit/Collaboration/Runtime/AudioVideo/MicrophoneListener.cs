@@ -717,7 +717,7 @@ namespace umi3d.cdk.collaboration
             thread = null;
         }
 
-        const string LogName = "Microphone Listener";
+        private const string LogName = "Microphone Listener";
         string ILoggable.GetLogName()
         {
             return LogName;
@@ -735,8 +735,10 @@ namespace umi3d.cdk.collaboration
                 new DebugInfo<int>("Output Buffer Size (bytes)",()=>outputBufferSize),
                 new DebugInfo<int>("PCM Queue Size",()=>
                     {
-                        lock (pcmQueue)
-                            return pcmQueue.Count;
+                        if(pcmQueue != null)
+                            lock (pcmQueue)
+                                return pcmQueue.Count;
+                        return 0;
                     }
                 ),
                 new DebugInfo<(float,float,bool)>("RMS",()=>(RMS,NoiseThreshold,ShouldSend),(t)=>$"{t.Item1}[>{t.Item2}=>{t.Item3}]"),

@@ -47,7 +47,7 @@ public class SliderElement
     public void AddElement(VisualElement item)
     {
         items.Add(item);
-        UMI3DResourcesManager.Instance.StartCoroutine(DisplayItems());
+        UMI3DResourcesManager.StartCoroutine(DisplayItems());
     }
 
     public void RemoveElement(VisualElement item)
@@ -56,7 +56,7 @@ public class SliderElement
         {
             items.Remove(item);
         }
-        UMI3DResourcesManager.Instance.StartCoroutine(DisplayItems());
+        UMI3DResourcesManager.StartCoroutine(DisplayItems());
     }
 
     public void ClearItems()
