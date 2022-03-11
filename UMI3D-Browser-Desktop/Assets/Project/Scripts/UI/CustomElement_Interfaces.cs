@@ -17,7 +17,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.uI.viewController
+namespace umi3dDesktopBrowser.ui.viewController
 {
     public interface ICustomElement
     {

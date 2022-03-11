@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using umi3d.cdk.menu.view;
-using umi3dDesktopBrowser.uI.viewController;
+using umi3dDesktopBrowser.ui.viewController;
 
 namespace umi3d.desktopBrowser.menu.Container
 {

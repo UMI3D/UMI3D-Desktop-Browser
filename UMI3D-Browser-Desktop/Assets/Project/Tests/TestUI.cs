@@ -16,7 +16,7 @@ limitations under the License.
 using System.Collections.Generic;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
-using umi3dDesktopBrowser.uI.viewController;
+using umi3dDesktopBrowser.ui.viewController;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;

@@ -16,7 +16,7 @@ limitations under the License.
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.uI.viewController
+namespace umi3dDesktopBrowser.ui.viewController
 {
     /// <summary>
     /// This class provides a class for a manipulator which enables users to move <see cref="AbstractPopUp"/>.

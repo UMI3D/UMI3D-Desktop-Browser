@@ -16,7 +16,7 @@ limitations under the License.
 
 using System;
 using System.Collections.Generic;
-using umi3dDesktopBrowser.uI.viewController;
+using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
 

@@ -17,7 +17,7 @@ limitations under the License.
 using System;
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.uI.viewController
+namespace umi3dDesktopBrowser.ui.viewController
 {
     public class DialogueBoxElement : VisualElement
     {

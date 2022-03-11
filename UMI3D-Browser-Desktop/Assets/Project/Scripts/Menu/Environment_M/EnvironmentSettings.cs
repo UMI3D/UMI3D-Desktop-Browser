@@ -15,18 +15,18 @@ limitations under the License.
 */
 using BrowserDesktop.Controller;
 using BrowserDesktop.Menu;
-using DesktopBrowser.UIControllers;
+using System;
 using System.Collections;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.userCapture;
+using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 
 public interface ISetting
 {
-    public bool EnvironmentLoaded { get; set; }
     public bool IsOn { get; }
-    public MenuBar_UIController MenuBar { get; }
+    Action<bool> m_statusChanged { get; }
     public void Start();
     public void Update();
     public void Toggle();
@@ -34,33 +34,26 @@ public interface ISetting
 
 public class AudioSetting : ISetting
 {
-    public bool EnvironmentLoaded { get; set; }
     public bool IsOn { get;  private set; }
-    public MenuBar_UIController MenuBar { get; }
+    public Action<bool> m_statusChanged { get; private set; }
 
-    public AudioSetting(MenuBar_UIController menuBar)
+    public AudioSetting()
     {
-        this.MenuBar = menuBar;
-        EnvironmentLoaded = false;
         IsOn = true;
+        m_statusChanged = MenuBar_E.Instance.Sound.Toggle;
         Start();
     }
 
     public void Start()
-    {
-        MenuBar.ToggleAudio = Toggle;
-        MenuBar.OnAudioStatusChanged(IsOn);
-    }
+        => m_statusChanged(IsOn);
 
     public void Toggle()
     {
-        if (!EnvironmentLoaded) return;
-
         IsOn = !IsOn;
         if (IsOn) AudioListener.volume = 1f;
         else AudioListener.volume = 0f;
 
-        MenuBar.OnAudioStatusChanged(IsOn);
+        m_statusChanged(IsOn);
     }
 
     public void Update()
@@ -75,37 +68,29 @@ public class AudioSetting : ISetting
 
 public class AvatarSetting : ISetting
 {
-    public bool EnvironmentLoaded { get; set; }
     public bool IsOn 
     { 
         get => (userTracking != null) ? userTracking.SendTracking : false;
         private set => userTracking?.setTrackingSending(value);
     }
-    public MenuBar_UIController MenuBar { get; }
+    public Action<bool> m_statusChanged { get; private set; }
 
-    private UMI3DClientUserTracking userTracking;
+    private UMI3DClientUserTracking userTracking => UMI3DClientUserTracking.Instance;
 
-    public AvatarSetting(MenuBar_UIController menuBar, UMI3DClientUserTracking userTracking)
+    public AvatarSetting()
     {
-        this.MenuBar = menuBar;
-        this.userTracking = userTracking;
-        EnvironmentLoaded = false;
         IsOn = true;
+        m_statusChanged = MenuBar_E.Instance.Avatar.Toggle;
         Start();
     }
 
     public void Start()
-    {
-        MenuBar.ToggleAvatarTracking = Toggle;
-        MenuBar.OnAvatarTrackingChanged(IsOn);
-    }
+        => m_statusChanged(IsOn);
 
     public void Toggle()
     {
-        if (!EnvironmentLoaded) return;
-
         IsOn = !IsOn;
-        MenuBar.OnAvatarTrackingChanged(IsOn);
+        m_statusChanged(IsOn);
     }
 
     public void Update()
@@ -120,34 +105,27 @@ public class AvatarSetting : ISetting
 
 public class MicSetting : ISetting
 {
-    public bool EnvironmentLoaded { get; set; }
     public bool IsOn 
     { 
         get => !MicrophoneListener.IsMute; 
         private set => MicrophoneListener.IsMute = !value; 
     }
-    public MenuBar_UIController MenuBar { get; }
+    public Action<bool> m_statusChanged { get; private set; }
 
-    public MicSetting(MenuBar_UIController menuBar)
+    public MicSetting()
     {
-        this.MenuBar = menuBar;
-        EnvironmentLoaded = false;
         IsOn = false;
+        m_statusChanged = MenuBar_E.Instance.Mic.Toggle;
         Start();
     }
 
     public void Start()
-    {
-        MenuBar.ToggleMic = Toggle;
-        MenuBar.OnMicrophoneStatusChanged(IsOn);
-    }
+        => m_statusChanged(IsOn);
 
     public void Toggle()
     {
-        if (!EnvironmentLoaded) return;
-
         IsOn = !IsOn;
-        MenuBar.OnMicrophoneStatusChanged(IsOn);
+        m_statusChanged(IsOn);
     }
 
     public void Update()
@@ -162,52 +140,38 @@ public class MicSetting : ISetting
 
 public sealed class EnvironmentSettings : MonoBehaviour
 {
-    [SerializeField]
-    private UMI3DEnvironmentLoader environmentLoader;
-    [SerializeField]
-    private UMI3DClientUserTracking userTracking;
+    private UMI3DEnvironmentLoader m_environmentLoader => UMI3DEnvironmentLoader.Instance;
 
+    private bool m_environmentLoaded { get; set; } = false;
     private AudioSetting audioSetting;
     private AvatarSetting avatarSetting;
     private MicSetting micSetting;
-    private MenuBar_UIController menuBar;
 
     private bool initialized = false;
 
     void Start()
     {
-        environmentLoader = UMI3DEnvironmentLoader.Exists ? UMI3DEnvironmentLoader.Instance : null;
-        userTracking = UMI3DClientUserTracking.Exists ? UMI3DClientUserTracking.Instance : null;
-        Debug.Assert(environmentLoader != null, "environmentLoader null in EnvironmentSettings.");
-        Debug.Assert(userTracking != null, "userTracking null in EnvironmentSettings.");
-        menuBar = UIController.GetUIController("menuBar") as MenuBar_UIController;
         StartCoroutine(Initialize());
     }
 
     private IEnumerator Initialize()
     {
-        while (!menuBar.Initialized) yield return null;
-        avatarSetting = new AvatarSetting(menuBar, userTracking);
-        audioSetting = new AudioSetting(menuBar);
-        micSetting = new MicSetting(menuBar);
-        environmentLoader?.onEnvironmentLoaded.AddListener(() => {
-            OnEnvironmentLoaded();
+        //while (!menuBar.Initialized) yield return null;
+        avatarSetting = new AvatarSetting();
+        audioSetting = new AudioSetting();
+        micSetting = new MicSetting();
+        m_environmentLoader.onEnvironmentLoaded.AddListener(() => {
+            m_environmentLoaded = true;
         });
         initialized = true;
+        yield return null;
     }
 
     void Update()
     {
-        if (!initialized) return;
+        if (!m_environmentLoaded || !initialized) return;
         avatarSetting.Update();
         audioSetting.Update();
         micSetting.Update();
-    }
-
-    public void OnEnvironmentLoaded()
-    {
-        audioSetting.EnvironmentLoaded = true;
-        avatarSetting.EnvironmentLoaded = true;
-        micSetting.EnvironmentLoaded = true;
     }
 }

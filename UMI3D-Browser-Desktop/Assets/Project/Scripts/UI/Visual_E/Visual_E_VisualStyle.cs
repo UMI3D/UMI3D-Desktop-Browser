@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 using UnityEngine.Events;
 using BrowserDesktop.preferences;
 
-namespace umi3dDesktopBrowser.uI.viewController
+namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Visual_E
     {

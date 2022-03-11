@@ -16,7 +16,7 @@ limitations under the License.
 using System;
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.uI.viewController
+namespace umi3dDesktopBrowser.ui.viewController
 {
     public abstract partial class AbstractClickableWithIcon_E<B> : IClickableElement where B : IClickableElement
     {

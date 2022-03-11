@@ -19,7 +19,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.uI.viewController
+namespace umi3dDesktopBrowser.ui.viewController
 {
     public enum ScrollDirection { Vertical, Horizontal, HorizontalAndVertical }
     public enum ScrollBarDirection { VERTICAL, HORIZONTAL, BOTH, NONE }

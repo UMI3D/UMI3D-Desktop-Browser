@@ -15,7 +15,7 @@ limitations under the License.
 */
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.uI.viewController
+namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Displayerbox_E
     {

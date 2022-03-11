@@ -16,7 +16,7 @@ limitations under the License.
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.uI.viewController
+namespace umi3dDesktopBrowser.ui.viewController
 {
     /// <summary>
     /// A ToolboxItem is a button which has an Icon and a Label.

@@ -18,7 +18,7 @@ using umi3DBrowser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.uI.viewController
+namespace umi3dDesktopBrowser.ui.viewController
 {
     /// <summary>
     /// A button is a clickable area. It can have an icon or/and a label.
