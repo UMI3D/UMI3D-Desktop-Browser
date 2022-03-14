@@ -36,6 +36,11 @@ namespace umi3d.desktopBrowser.menu.Container
             isExpanded = true;
         }
 
+        private void OnDestroy()
+        {
+            WindowItem.Remove();
+        }
+
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);

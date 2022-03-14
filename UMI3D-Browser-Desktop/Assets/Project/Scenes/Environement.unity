@@ -1980,7 +1980,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d34830aaa33864448b2c1cb13f2f82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuAsset: {fileID: 11400000, guid: 8bda66c4d57a19a48ac07ae721ad0846, type: 2}
+  menuAsset: {fileID: 11400000, guid: a1215c884fdd17846a33bbba9c8656b9, type: 2}
 --- !u!1001 &1649652679
 PrefabInstance:
   m_ObjectHideFlags: 0
