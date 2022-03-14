@@ -65,42 +65,32 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="forceUpdate"></param>
-        public override void Collapse(bool forceUpdate = false)
-        {
-            foreach (AbstractDisplayer disp in currentDisplayers)
-            {
-                disp.Hide();
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>
         public override bool Contains(AbstractDisplayer element)
-        {
-            return currentDisplayers.Contains(element);
-        }
+            => currentDisplayers.Contains(element);
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public override int Count()
-        {
-            return currentDisplayers.Count;
-        }
+            => currentDisplayers.Count;
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
         public override AbstractMenuDisplayContainer CurrentMenuDisplayContainer()
-        {
-            return virtualContainer;
-        }
+            => virtualContainer;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public override int GetIndexOf(AbstractDisplayer element)
+            => currentDisplayers.IndexOf(element);
 
         /// <summary>
         /// <inheritdoc/>
@@ -108,9 +98,10 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <param name="forceUpdate"></param>
         public override void Display(bool forceUpdate = false)
         {
-            this.gameObject.SetActive(true);
-
+            if (isDisplayed && !forceUpdate)
+                return;
             isDisplayed = true;
+            DisplayImp();
         }
 
         /// <summary>
@@ -118,12 +109,22 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         public override void Hide()
         {
+            if (!isDisplayed)
+                return;
             isDisplayed = false;
-            foreach (AbstractDisplayer disp in virtualContainer)
-            {
-                disp.Hide();
-            }
-            this.gameObject.SetActive(false);
+            HideImp();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="forceUpdate"></param>
+        public override void Collapse(bool forceUpdate = false)
+        {
+            if (!isExpanded && !forceUpdate)
+                return;
+            isExpanded = false;
+            CollapseImp();
         }
 
         /// <summary>
@@ -131,9 +132,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         /// <param name="forceUpdate"></param>
         public override void Expand(bool forceUpdate = false)
-        {
-            ExpandAs(this, forceUpdate);
-        }
+            => ExpandAs(this, forceUpdate);
 
         /// <summary>
         /// <inheritdoc/>
@@ -143,38 +142,9 @@ namespace umi3d.desktopBrowser.menu.Container
         public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
         {
             if (isExpanded && !forceUpdate)
-            {
                 return;
-            }
-            this.gameObject.SetActive(true);
-
-            if (virtualContainer != null && virtualContainer != container)
-            {
-                foreach (AbstractDisplayer displayer in virtualContainer)
-                {
-                    displayer.Hide();
-                }
-            }
-
-            virtualContainer = container as AbstractToolboxesContainer;
-
-            foreach (AbstractDisplayer disp in virtualContainer)
-            {
-                disp.Display();
-                //disp.transform.SetParent(this.transform);
-            }
-
             isExpanded = true;
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
-        public override int GetIndexOf(AbstractDisplayer element)
-        {
-            return currentDisplayers.IndexOf(element);
+            ExpandAsImp(container);
         }
 
         /// <summary>
@@ -240,9 +210,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <param name="menu"></param>
         /// <returns></returns>
         public override int IsSuitableFor(AbstractMenuItem menu)
-        {
-            return 0;
-        }
+            => 0;
 
         /// <summary>
         /// <inheritdoc/>
@@ -294,9 +262,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         /// <returns></returns>
         protected override IEnumerable<AbstractDisplayer> GetDisplayers()
-        {
-            return currentDisplayers;
-        }
+            => currentDisplayers;
 
         public override void Clear()
         {
@@ -332,6 +298,41 @@ namespace umi3d.desktopBrowser.menu.Container
             }
 
             return res;
+        }
+    }
+
+    public partial class AbstractToolboxesContainer
+    {
+        protected virtual void CollapseImp()
+        {
+            foreach (AbstractDisplayer disp in currentDisplayers)
+                disp.Hide();
+        }
+
+        protected virtual void ExpandAsImp(AbstractMenuDisplayContainer container)
+        {
+            this.gameObject.SetActive(true);
+
+            if (virtualContainer != null && virtualContainer != container)
+                foreach (AbstractDisplayer displayer in virtualContainer)
+                    displayer.Hide();
+
+            virtualContainer = container as AbstractToolboxesContainer;
+
+            foreach (AbstractDisplayer disp in virtualContainer)
+                disp.Display();
+        }
+
+        protected virtual void DisplayImp()
+        {
+            gameObject.SetActive(true);
+        }
+
+        protected virtual void HideImp()
+        {
+            foreach (AbstractDisplayer disp in virtualContainer)
+                disp.Hide();
+            this.gameObject.SetActive(false);
         }
     }
 }

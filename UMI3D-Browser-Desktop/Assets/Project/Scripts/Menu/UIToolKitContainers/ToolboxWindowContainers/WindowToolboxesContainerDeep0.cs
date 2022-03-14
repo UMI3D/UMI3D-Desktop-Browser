@@ -28,6 +28,14 @@ namespace umi3d.desktopBrowser.menu.Container
 
     public partial class WindowToolboxesContainerDeep0
     {
+        private void OnDestroy()
+        {
+            WindowItem.Remove();
+        }
+    }
+
+    public partial class WindowToolboxesContainerDeep0 : AbstractToolboxesContainer
+    {
         protected override void Awake()
         {
             base.Awake();
@@ -36,62 +44,48 @@ namespace umi3d.desktopBrowser.menu.Container
             isExpanded = true;
         }
 
-        private void OnDestroy()
-        {
-            WindowItem.Remove();
-        }
-
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);
             WindowItem.SetFirstToolboxName(menu.Name);
         }
-    }
 
-    public partial class WindowToolboxesContainerDeep0 : AbstractToolboxesContainer
-    {
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="forceUpdate"></param>
-        public override void Display(bool forceUpdate = false)
+        protected override void DisplayImp()
         {
+            base.DisplayImp();
             WindowItem.Display();
         }
 
         /// <summary>
-        /// <inheritdoc/>
+        /// ContainerDeep0 are never hidden.
         /// </summary>
         public override void Hide()
-        {
-            //if (!isDisplayed) return;
-            //base.Hide();
-            //Collapse(true);
-        }
+        { }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="forceUpdate"></param>
-        public override void Collapse(bool forceUpdate = false)
+        protected override void CollapseImp()
         {
+            base.CollapseImp();
             foreach (AbstractDisplayer child in currentDisplayers)
-            {
-                ((WindowToolboxesContainerDeep1)child).Collapse();
-            }
+                if (child is WindowToolboxesContainerDeep1 containerDeep1)
+                    containerDeep1.Collapse();
             IsChildrenExpand = false;
         }
 
         /// <summary>
-        /// <inheritdoc/>
+        /// Container Deep 0 are always expanded.
         /// </summary>
         /// <param name="container"></param>
         /// <param name="forceUpdate"></param>
         public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
-        {
-            //base.ExpandAs(container, forceUpdate);
-            //WindowItem.Display();
-        }
+        { }
 
         /// <summary>
         /// <inheritdoc/>

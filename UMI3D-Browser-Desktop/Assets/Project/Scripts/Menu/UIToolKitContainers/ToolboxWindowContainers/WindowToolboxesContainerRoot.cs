@@ -18,41 +18,34 @@ using umi3dDesktopBrowser.ui.viewController;
 
 namespace umi3d.desktopBrowser.menu.Container
 {
-    public partial class WindowToolboxesContainerRoot
-    {
-        
-    }
-
     public partial class WindowToolboxesContainerRoot : AbstractToolboxesContainer
     {
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="forceUpdate"></param>
-        public override void Display(bool forceUpdate = false)
+        protected override void DisplayImp()
         {
-            if (isDisplayed) return;
-            base.Display(forceUpdate);
+            base.Display();
             MenuBar_E.Instance.DisplayToolboxButton(true);
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public override void Hide()
+        protected override void HideImp()
         {
-            if (!isDisplayed) return;
-            base.Hide();
             MenuBar_E.Instance.DisplayToolboxButton(false);
+            base.HideImp();
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="forceUpdate"></param>
-        public override void Collapse(bool forceUpdate = false)
+        protected override void CollapseImp()
         {
-            base.Collapse(forceUpdate);
+            base.Collapse();
             ToolboxWindow_E.Instance.Hide();
         }
 
@@ -61,9 +54,9 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         /// <param name="container"></param>
         /// <param name="forceUpdate"></param>
-        public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
+        protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
         {
-            base.ExpandAs(container, forceUpdate);
+            base.ExpandAs(container);
             ToolboxWindow_E.Instance.Display();
         }
 
