@@ -20,6 +20,8 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UIElements;
+using umi3dDesktopBrowser.ui.viewController;
+using BrowserDesktop.Cursor;
 
 /// <summary>
 /// This class removes the default Windows title bar and set up a custom one.
@@ -86,6 +88,12 @@ public class WindowsManager : MonoBehaviour
 
         Application.wantsToQuit += WantsToQuit;
         QuittingManager.ShouldWaitForApplicationToQuit = true;
+        DialogueBox_E
+            .SetCursorMovementActions
+            (
+                    (o) => { CursorHandler.SetMovement(o, CursorHandler.CursorMovement.Free); },
+                    (o) => { CursorHandler.UnSetMovement(o); }
+            );
     }
 
     /// <summary>
@@ -136,7 +144,7 @@ public class WindowsManager : MonoBehaviour
     private bool WantsToQuit()
     {
         bool wantsToQuit = QuittingManager.ApplicationIsQuitting;
-        if (!wantsToQuit && !DialogueBox_UIController.Displayed)
+        if (!wantsToQuit && !DialogueBox_E.Instance.Displayed)
             ShowDialogueBoxToQuit();
         return wantsToQuit;
     }
@@ -146,14 +154,20 @@ public class WindowsManager : MonoBehaviour
     /// </summary>
     private void ShowDialogueBoxToQuit()
     {
-        DialogueBox_UIController.
-            Setup("Close application", "Are you sure ...?", "YES", "NO", (b) =>
+        DialogueBox_E.
+            Setup(
+            "Close application", 
+            "Are you sure ...?", 
+            "YES", 
+            "NO",
+            (b) =>
             {
                 QuittingManager.ApplicationIsQuitting = b;
                 if (b)
                     Application.Quit();
-            }).
-            DisplayFrom(uiDocument);
+            },
+            uiDocument
+            );
     }
 
     #endregion

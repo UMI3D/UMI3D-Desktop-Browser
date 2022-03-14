@@ -16,6 +16,7 @@ limitations under the License.
 using BrowserDesktop.Menu;
 using umi3d.cdk.menu;
 using umi3d.common.interaction;
+using UnityEngine;
 
 namespace BrowserDesktop.Parameters
 {
@@ -64,8 +65,9 @@ namespace BrowserDesktop.Parameters
 
                 menuItem.NotifyValueChange(param.value);
                 menuItem.Subscribe(callback);
-                if (CircularMenu.Exists)
-                    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
+                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+                //if (CircularMenu.Exists)
+                //    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
                 currentInteraction = interaction;
             }
             else

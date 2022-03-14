@@ -41,6 +41,7 @@ public class AudioSetting : ISetting
     {
         IsOn = true;
         m_statusChanged = MenuBar_E.Instance.Sound.Toggle;
+        MenuBar_E.Instance.Sound.OnClicked = Toggle;
         Start();
     }
 
@@ -81,6 +82,7 @@ public class AvatarSetting : ISetting
     {
         IsOn = true;
         m_statusChanged = MenuBar_E.Instance.Avatar.Toggle;
+        MenuBar_E.Instance.Avatar.OnClicked = Toggle;
         Start();
     }
 
@@ -116,6 +118,7 @@ public class MicSetting : ISetting
     {
         IsOn = false;
         m_statusChanged = MenuBar_E.Instance.Mic.Toggle;
+        MenuBar_E.Instance.Mic.OnClicked = Toggle;
         Start();
     }
 
@@ -151,12 +154,7 @@ public sealed class EnvironmentSettings : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(Initialize());
-    }
-
-    private IEnumerator Initialize()
-    {
-        //while (!menuBar.Initialized) yield return null;
+        //StartCoroutine(Initialize());
         avatarSetting = new AvatarSetting();
         audioSetting = new AudioSetting();
         micSetting = new MicSetting();
@@ -164,6 +162,12 @@ public sealed class EnvironmentSettings : MonoBehaviour
             m_environmentLoaded = true;
         });
         initialized = true;
+    }
+
+    private IEnumerator Initialize()
+    {
+        //while (!MenuBar_E.Instance.Initialized) yield return null;
+        
         yield return null;
     }
 

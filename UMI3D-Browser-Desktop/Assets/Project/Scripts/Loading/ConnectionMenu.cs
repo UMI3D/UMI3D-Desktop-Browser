@@ -25,6 +25,7 @@ using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3d.common;
 using umi3d.common.interaction;
+using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -117,7 +118,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     /// </summary>
     private void ManageInputs()
     {
-        if (!isDisplayed || DialogueBox_UIController.Displayed) return;
+        if (!isDisplayed || DialogueBox_E.Instance.Displayed) return;
         else if (Input.GetKeyDown(KeyCode.Return)) nextStep?.Invoke();
     }
 
@@ -235,14 +236,14 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
     private void GetMediaFailed(string error)
     {
-        DialogueBox_UIController.
+        DialogueBox_E.
             Setup(
                 "Server error",
                 error,
                 "Leave",
-                Leave
-            ).
-            DisplayFrom(uiDocument);
+                Leave,
+                uiDocument
+            );
     }
 
     private void GetMediaSucces(MediaDto media)
@@ -269,15 +270,15 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
     private void OnConnectionLost(Action<bool> callback)
     {
-        DialogueBox_UIController.
+        DialogueBox_E.
             Setup(
                 "Connection to the server lost",
                 "Leave to the connection menu or try again ?",
                 "Try again ?",
                 "Leave",
-                callback
-            ).
-            DisplayFrom(uiDocument);
+                callback,
+                uiDocument
+            );
     }
 
     /// <summary>
@@ -363,14 +364,19 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         {
             string title = (ids.Count == 1) ? "One assets library is required" : ids.Count + " assets libraries are required";
 
-            DialogueBox_UIController.
-            Setup(title, "Download libraries and connect to the server ?", "Accept", "Deny", (b) =>
-            {
-                callback.Invoke(b);
-                CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
-            },
-            true).
-            DisplayFrom(uiDocument);
+            DialogueBox_E.
+            Setup(
+                title, 
+                "Download libraries and connect to the server ?", 
+                "Accept", 
+                "Deny", 
+                (b) =>
+                {
+                    callback.Invoke(b);
+                    CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+                },
+                uiDocument
+                );
         }
     }
 

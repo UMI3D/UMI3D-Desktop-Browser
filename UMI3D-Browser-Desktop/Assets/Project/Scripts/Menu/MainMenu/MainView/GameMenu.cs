@@ -13,7 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using BrowserDesktop.Controller;
+using BrowserDesktop.Cursor;
 using umi3d.cdk;
+using umi3d.cdk.menu.view;
 using umi3d.common;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -27,8 +30,14 @@ namespace umi3dDesktopBrowser.ui
         [SerializeField]
         string gameMenuTagName = "game-menu-container";
 
+        [SerializeField]
+        private MenuDisplayManager m_toolboxWindowDM;
+
         private VisualElement m_mainView;
         private VisualElement m_viewport;
+
+        private bool m_isCursorMovementFree 
+            => CursorHandler.Movement == CursorHandler.CursorMovement.Free;
     }
 
     public partial class GameMenu : MonoBehaviour
@@ -49,6 +58,15 @@ namespace umi3dDesktopBrowser.ui
         {
             m_mainView = m_uiDoc.rootVisualElement.Q(gameMenuTagName);
             m_viewport = m_uiDoc.rootVisualElement.Q("viewport");
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
+            {
+                //CursorHandler.SetMovement(this, expand ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
+                CursorHandler.SetMovement(this, (m_isCursorMovementFree) ? CursorHandler.CursorMovement.Center : CursorHandler.CursorMovement.Free);
+            }
         }
 
         /// <summary>

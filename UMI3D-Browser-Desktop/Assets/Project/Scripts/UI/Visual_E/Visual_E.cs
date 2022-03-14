@@ -56,6 +56,15 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_globalPref = null;
             Initialized = false;
         }
+        public virtual void InsertRootAtTo(int index, VisualElement parent)
+        {
+            if (!Initialized)
+                throw new Exception($"VisualElement Added without being Initialized.");
+            if (parent == null)
+                throw new Exception($"Try to Add [{Root}] to a parent null.");
+            parent.Insert(index, Root);
+            AttachedToHierarchy = true;
+        }
         public virtual void InsertRootTo(VisualElement parent)
         {
             if (!Initialized) 

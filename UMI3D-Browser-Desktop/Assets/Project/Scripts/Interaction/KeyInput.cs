@@ -171,7 +171,8 @@ namespace BrowserDesktop.Interaction
         {
             if (icon != null)
                 throw new System.Exception("Not implemented yet");
-            Shortcuts.Instance.AddShortcut(label, new string[1] { inputName });
+            Debug.Log("<color=green>TODO: </color>" + $"Shortcuts");
+            //Shortcuts.Instance.AddShortcut(label, new string[1] { inputName });
         }
 
         #region Associate and Dissociate
@@ -244,7 +245,8 @@ namespace BrowserDesktop.Interaction
             if (Down) onInputUp.Invoke();
             ResetButton();
             associatedInteraction = null;
-            Shortcuts.Instance.ClearShortcut();
+            Debug.Log("<color=green>TODO: </color>" + $"Shortcuts");
+            //Shortcuts.Instance.ClearShortcut();
         }
 
         void ResetButton()
