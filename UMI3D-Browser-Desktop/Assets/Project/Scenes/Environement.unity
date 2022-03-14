@@ -2362,7 +2362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deactivationRequesters: 
   controller: {fileID: 2096641628}
-  detector: {fileID: 11400000, guid: 07f62b965ce0c924280bbe8651fcd602, type: 2}
+  detector: {fileID: 11400000, guid: 6dce8b7bfe7d3914793773e08c1bd605, type: 2}
   selectionVisualCueHandler: {fileID: 2096641630}
 --- !u!114 &2096641630
 MonoBehaviour:
@@ -2396,7 +2396,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6dce8b7bfe7d3914793773e08c1bd605, type: 2}
   - {fileID: 11400000, guid: 10cf073b1ed81604cb69a240c24e3ca1, type: 2}
   - {fileID: 11400000, guid: bba01cdd18b8f2345b4f98b14348e171, type: 2}
-  - {fileID: 11400000, guid: 07f62b965ce0c924280bbe8651fcd602, type: 2}
+  - {fileID: 11400000, guid: a0ea50df3a99b204b93017f83825cb25, type: 2}
 --- !u!1001 &2119596086
 PrefabInstance:
   m_ObjectHideFlags: 0
