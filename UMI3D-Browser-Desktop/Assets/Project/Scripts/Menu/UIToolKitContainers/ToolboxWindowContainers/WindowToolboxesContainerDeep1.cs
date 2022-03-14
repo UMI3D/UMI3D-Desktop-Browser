@@ -44,6 +44,13 @@ namespace umi3d.desktopBrowser.menu.Container
             isDisplayed = true;
         }
 
+        private void OnDestroy()
+        {
+            Item.Remove();
+            Toolbox.Remove();
+            Displayerbox.Remove();
+        }
+
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);

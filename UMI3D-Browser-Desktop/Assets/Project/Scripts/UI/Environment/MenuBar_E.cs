@@ -128,10 +128,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             rightLayout_VE = Root.Q<VisualElement>("Right-layout");
             //SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
 
-            m_toolboxButton = new ToolboxItem_E("Toolbox", "Toolbox")
-            {
-                OnClicked = () => ToolboxWindow_E.Instance.Display()
-            };
+            m_toolboxButton = new ToolboxItem_E("Toolbox", "Toolbox");
             new Toolbox_E("", true, m_toolboxButton)    
                 .InsertRootTo(leftLayout_VE);
 

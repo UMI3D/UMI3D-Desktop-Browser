@@ -257,6 +257,7 @@ namespace umi3d.desktopBrowser.menu.Container
                 Display(true);
 
             element.transform.SetParent(this.transform);
+            Debug.Log($"remove [{element.name}]");
 
             return r;
         }
