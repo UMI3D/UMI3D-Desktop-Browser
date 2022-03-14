@@ -32,6 +32,32 @@ namespace umi3d.desktopBrowser.menu.Container
 
     public partial class WindowToolboxesContainerDeep1
     {
+        
+
+        private void OnDestroy()
+        {
+            Item.Remove();
+            Toolbox.Remove();
+            Displayerbox.Remove();
+        }
+
+        
+
+        //private WindowToolboxesContainerDeep0 FindContainerDeep0()
+        //{
+        //    AbstractMenuDisplayContainer virtualParent = this;
+        //    while(virtualParent.parent != null)
+        //    {
+        //        virtualParent = virtualParent.parent;
+        //        if (virtualParent is WindowToolboxesContainerDeep0)
+        //            return virtualParent as WindowToolboxesContainerDeep0;
+        //    }
+        //    throw new System.Exception("No parent is a WindowToolboxContainerDeep0");
+        //}
+    }
+
+    public partial class WindowToolboxesContainerDeep1 : AbstractToolboxesContainer
+    {
         protected override void Awake()
         {
             base.Awake();
@@ -42,13 +68,6 @@ namespace umi3d.desktopBrowser.menu.Container
             Toolbox = new Toolbox_E(false);
             Displayerbox = new Displayerbox_E();
             isDisplayed = true;
-        }
-
-        private void OnDestroy()
-        {
-            Item.Remove();
-            Toolbox.Remove();
-            Displayerbox.Remove();
         }
 
         public override void SetMenuItem(AbstractMenuItem menu)
@@ -79,49 +98,35 @@ namespace umi3d.desktopBrowser.menu.Container
             }
         }
 
-        //private WindowToolboxesContainerDeep0 FindContainerDeep0()
-        //{
-        //    AbstractMenuDisplayContainer virtualParent = this;
-        //    while(virtualParent.parent != null)
-        //    {
-        //        virtualParent = virtualParent.parent;
-        //        if (virtualParent is WindowToolboxesContainerDeep0)
-        //            return virtualParent as WindowToolboxesContainerDeep0;
-        //    }
-        //    throw new System.Exception("No parent is a WindowToolboxContainerDeep0");
-        //}
-    }
-
-    public partial class WindowToolboxesContainerDeep1 : AbstractToolboxesContainer
-    {
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="forceUpdate"></param>
-        public override void Display(bool forceUpdate = false)
+        protected override void DisplayImp()
         {
-            if (isDisplayed) return;
-            base.Display(forceUpdate);
+            base.DisplayImp();
             Item.Display();
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public override void Hide()
+        protected override void HideImp()
         {
-            if (!isDisplayed) return;
-            base.Hide();
             Item.Hide();
+            base.Hide();
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="forceUpdate"></param>
-        public override void Collapse(bool forceUpdate = false)
+        protected override void CollapseImp()
         {
-            base.Collapse(forceUpdate);
+            base.CollapseImp();
+            foreach (AbstractDisplayer child in currentDisplayers)
+                if (child is WindowToolboxesContainerDeep1 containerDeep1)
+                    containerDeep1.Collapse();
             Toolbox.Hide();
             Displayerbox.Hide();
             Item.Toggle(false);
@@ -132,9 +137,9 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         /// <param name="container"></param>
         /// <param name="forceUpdate"></param>
-        public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
+        protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
         {
-            base.ExpandAs(container, forceUpdate);
+            base.ExpandAsImp(container);
             if (IsTool) Displayerbox.Display();
             else Toolbox.Display();
             Item.Toggle(true);
