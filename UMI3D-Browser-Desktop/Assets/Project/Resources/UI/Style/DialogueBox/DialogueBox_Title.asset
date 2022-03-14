@@ -64,7 +64,7 @@ MonoBehaviour:
   m_textFormat:
     m_fontSize:
       m_keyword: 10
-      m_value: 14
+      m_value: 16
     m_letterSpacing:
       m_keyword: 0
       m_value: 0

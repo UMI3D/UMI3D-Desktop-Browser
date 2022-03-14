@@ -140,7 +140,7 @@ namespace umi3dDesktopBrowser.ui.viewController
     public partial class DialogueBox_E : Visual_E
     {
         private DialogueBox_E() :
-            base(m_uxml, m_style, m_keys)
+            base(m_uxml, null, null)
         { }
 
         private static void Create()
@@ -152,6 +152,9 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected override void Initialize()
         {
             base.Initialize();
+
+            VisualElement dialogueBox = Root.Q("dialogueBox");
+            AddVisualStyle(dialogueBox, m_style, m_keys, new PopUpManipulator(dialogueBox));
 
             Label title = Root.Q<Label>("title");
             string titleStyle = "UI/Style/DialogueBox/DialogueBox_title";
@@ -175,7 +178,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             Button choiceB = Root.Q<Button>("choiceB");
             m_choiceB = new Button_E(choiceB, choiceStyle, choiceKeys);
 
-            UpdateVisualManipulator(new PopUpManipulator(Root));
+            //UpdateVisualManipulator(new PopUpManipulator(dialogueBox));
         }
     }
 }

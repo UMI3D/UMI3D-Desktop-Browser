@@ -76,8 +76,8 @@ MonoBehaviour:
       m_value: 0
     m_numberOfVisibleCharacter:
       m_keyword: 2
-      m_value: 100
-    m_textAlign: 0
+      m_value: 200
+    m_textAlign: 4
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle:
