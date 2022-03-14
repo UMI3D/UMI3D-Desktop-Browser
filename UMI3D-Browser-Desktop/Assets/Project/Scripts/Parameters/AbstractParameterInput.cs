@@ -17,6 +17,7 @@ using BrowserDesktop.Menu;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.common.interaction;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace BrowserDesktop.Parameters
@@ -63,8 +64,9 @@ namespace BrowserDesktop.Parameters
                     dto = interaction as ParameterType,
                     Name = interaction.name
                 };
-                if (CircularMenu.Exists)
-                    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
+                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+                //if (CircularMenu.Exists)
+                //    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
 
                 menuItem.NotifyValueChange((interaction as ParameterType).value);
                 callback = x =>
@@ -105,8 +107,9 @@ namespace BrowserDesktop.Parameters
         {
             currentInteraction = null;
             menuItem.UnSubscribe(callback);
-            if (CircularMenu.Exists)
-                CircularMenu.Instance?.menuDisplayManager?.menu?.Remove(menuItem);
+            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+            //if (CircularMenu.Exists)
+            //    CircularMenu.Instance?.menuDisplayManager?.menu?.Remove(menuItem);
         }
 
         public override bool IsCompatibleWith(AbstractInteractionDto interaction)

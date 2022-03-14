@@ -80,11 +80,11 @@ namespace BrowserDesktop.Menu
 
         void Start()
         {
-            Debug.Assert(uiDocument != null);
-            Debug.Assert(keyBindings != null);
-            Debug.Assert(shortcut_ge_VTA != null);
-            Debug.Assert(shortcutIcon_ge_VTA != null);
-            Debug.Assert(label_ge_VTA != null);
+            //Debug.Assert(uiDocument != null);
+            //Debug.Assert(keyBindings != null);
+            //Debug.Assert(shortcut_ge_VTA != null);
+            //Debug.Assert(shortcutIcon_ge_VTA != null);
+            //Debug.Assert(label_ge_VTA != null);
 
             var root = uiDocument.rootVisualElement;
 

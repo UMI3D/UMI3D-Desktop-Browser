@@ -26,9 +26,23 @@ namespace umi3dDesktopBrowser.ui
             .Instance
             .InsertRootTo(m_mainView);
 
+            MenuBar_E.Instance.ToolboxButton.OnClicked = () =>
+            {
+                ToolboxWindow_E
+                .Instance
+                .Display();
+
+                m_toolboxWindowDM.Hide(true);
+                m_toolboxWindowDM.Display(true);
+            };
+
             ToolboxWindow_E
             .Instance
             .InsertRootTo(m_viewport);
+
+            ToolboxWindow_E
+                .Instance
+                .Hide();
 
             //Todo Add footer.
         }

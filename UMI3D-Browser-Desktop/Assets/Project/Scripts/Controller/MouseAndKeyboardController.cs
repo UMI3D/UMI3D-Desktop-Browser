@@ -347,18 +347,19 @@ namespace BrowserDesktop.Controller
 
         void CreateForceProjectionMenuItem()
         {
-            if (CircularMenu.Exists && mouseData.ForceProjectionMenuItem != null)
-            {
-                if (!CircularMenu.Instance.menuDisplayManager.menu.Contains(mouseData.ForceProjectionMenuItem))
-                {
-                    if (mouseData.ForceProjectionReleasable)
-                        CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
-                }
-                else if (CircularMenu.Instance.menuDisplayManager.menu.Count + EventMenu.NbEventsDIsplayed == 1)
-                {
-                    DeleteForceProjectionMenuItem();
-                }
-            }
+            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+            //if (CircularMenu.Exists && mouseData.ForceProjectionMenuItem != null)
+            //{
+            //    if (!CircularMenu.Instance.menuDisplayManager.menu.Contains(mouseData.ForceProjectionMenuItem))
+            //    {
+            //        if (mouseData.ForceProjectionReleasable)
+            //            CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
+            //    }
+            //    else if (CircularMenu.Instance.menuDisplayManager.menu.Count + EventMenu.NbEventsDIsplayed == 1)
+            //    {
+            //        DeleteForceProjectionMenuItem();
+            //    }
+            //}
         }
 
         void UnequipeForceProjection()
@@ -368,7 +369,8 @@ namespace BrowserDesktop.Controller
             mouseData.CurrentHovered = null;
             mouseData.CurrentHoveredTransform = null;
             mouseData.OldHovered = null;
-            CircularMenu.Collapse();
+            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+            //CircularMenu.Collapse();
             mouseData.HoverState = HoverState.None;
         }
 
@@ -385,10 +387,11 @@ namespace BrowserDesktop.Controller
         {
             if (mouseData.ForceProjectionMenuItem != null)
             {
-                if (CircularMenu.Exists)
-                {
-                    CircularMenu.Instance.menuDisplayManager.menu.Remove(mouseData.ForceProjectionMenuItem);
-                }
+                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+                //if (CircularMenu.Exists)
+                //{
+                //    CircularMenu.Instance.menuDisplayManager.menu.Remove(mouseData.ForceProjectionMenuItem);
+                //}
             }
         }
 
@@ -585,11 +588,12 @@ namespace BrowserDesktop.Controller
         {
             if (mouseData.ForceProjection)
             {
-                if (CircularMenu.Exists && (!CircularMenu.Instance.IsEmpty() || EventMenu.NbEventsDIsplayed > 0))
-                {
-                    CreateForceProjectionMenuItem();
-                }
-                else if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.LeaveContextualMenu))
+                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+                //if (CircularMenu.Exists && (!CircularMenu.Instance.IsEmpty() || EventMenu.NbEventsDIsplayed > 0))
+                //{
+                //    CreateForceProjectionMenuItem();
+                //}
+                if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.LeaveContextualMenu))
                     ||
                     Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
                 {
@@ -610,7 +614,8 @@ namespace BrowserDesktop.Controller
                             {
                                 InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                             }
-                            CircularMenu.Collapse();
+                            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+                            //CircularMenu.Collapse();
                         }
                         mouseData.LastProjected = null;
                     }
@@ -622,7 +627,8 @@ namespace BrowserDesktop.Controller
                         InteractionMapper.SelectTool(mouseData.CurrentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
                         CursorHandler.State = CursorHandler.CursorState.Hover;
                         mouseData.HoverState = HoverState.AutoProjected;
-                        CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
+                        Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+                        //CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
                         mouseData.LastProjected = mouseData.CurrentHovered;
                     }
                 }
@@ -633,11 +639,12 @@ namespace BrowserDesktop.Controller
                 {
                     if (mouseData.HoverState == HoverState.AutoProjected)
                     {
-                        CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
-                        if(currentTool != null)
+                        Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+                        //CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
+                        if (currentTool != null)
                             InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                     }
-                    CircularMenu.Collapse();
+                    //CircularMenu.Collapse();
                     CursorHandler.State = CursorHandler.CursorState.Default;
                 }
 

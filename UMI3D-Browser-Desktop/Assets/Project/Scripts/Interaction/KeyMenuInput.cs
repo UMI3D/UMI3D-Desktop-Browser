@@ -20,6 +20,7 @@ using umi3d.cdk.collaboration;
 using umi3d.cdk.interaction;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
+using UnityEngine;
 
 [System.Serializable]
 public class KeyMenuInput : AbstractUMI3DInput
@@ -59,10 +60,11 @@ public class KeyMenuInput : AbstractUMI3DInput
                 Holdable = associatedInteraction.hold
             };
             menuItem.Subscribe(Pressed);
-            if (CircularMenu.Exists)
-            {
-                CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
-            }
+            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+            //if (CircularMenu.Exists)
+            //{
+            //    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
+            //}
         }
         else
         {
@@ -83,10 +85,11 @@ public class KeyMenuInput : AbstractUMI3DInput
     public override void Dissociate()
     {
         associatedInteraction = null;
-        if (CircularMenu.Exists && menuItem != null)
-        {
-            CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
-        }
+        Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+        //if (CircularMenu.Exists && menuItem != null)
+        //{
+        //    CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
+        //}
         menuItem.UnSubscribe(Pressed);
         menuItem = null;
     }

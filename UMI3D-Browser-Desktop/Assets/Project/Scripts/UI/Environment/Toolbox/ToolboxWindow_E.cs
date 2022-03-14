@@ -42,14 +42,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class ToolboxWindow_E
     {
-        private ToolboxWindow_E() : 
-            base("UI/UXML/ToolboxWindow/toolboxWindow", 
-                $"{m_partialStylePath}/ToolboxWindow_window", 
-                new StyleKeys(null, "", null)) { }
-    }
-
-    public partial class ToolboxWindow_E
-    {
         public void Adds(params Visual_E[] items)
         {
             m_scrollView.Adds(items);
@@ -64,6 +56,12 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class ToolboxWindow_E : Visual_E
     {
+        private ToolboxWindow_E() :
+            base("UI/UXML/ToolboxWindow/toolboxWindow",
+                $"{m_partialStylePath}/ToolboxWindow_window",
+                new StyleKeys(null, "", null))
+        { }
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -105,6 +103,12 @@ namespace umi3dDesktopBrowser.ui.viewController
             {
                 OnClicked = () => { UnPinedButtonPressed.Invoke(); },
             };
+        }
+
+        public override void Display()
+        {
+            base.Display();
+
         }
     }
 }

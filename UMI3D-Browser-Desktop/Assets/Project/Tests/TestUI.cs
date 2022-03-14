@@ -36,20 +36,21 @@ public class TestUI : MonoBehaviour
             .Instance
             .InsertRootTo(UIDoc.rootVisualElement.Q("top"));
 
-        //ToolboxWindow_E
-        //    .Instance
-        //    .InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
-        var message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel ullamcorper lectus. Donec tincidunt purus sit amet elit pretium imperdiet. Proin a tempor dui, ac luctus orci. Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.";
-        DialogueBox_E
-            .SetCursorMovementActions
-            (
-                    (o) => { CursorHandler.SetMovement(o, CursorHandler.CursorMovement.Free); },
-                    (o) => { CursorHandler.UnSetMovement(o); }
-            );
-        DialogueBox_E
-            .Setup("Test", message, "optionA", "optionB", (val) => { Debug.Log($"pressed [{val}]"); });
-        DialogueBox_E
-            .DisplayFrom(UIDoc);
+        ToolboxWindow_E
+            .Instance
+            .InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
+
+        //var message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel ullamcorper lectus. Donec tincidunt purus sit amet elit pretium imperdiet. Proin a tempor dui, ac luctus orci. Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.";
+        //DialogueBox_E
+        //    .SetCursorMovementActions
+        //    (
+        //            (o) => { CursorHandler.SetMovement(o, CursorHandler.CursorMovement.Free); },
+        //            (o) => { CursorHandler.UnSetMovement(o); }
+        //    );
+        //DialogueBox_E
+        //    .Setup("Test", message, "optionA", "optionB", (val) => { Debug.Log($"pressed [{val}]"); });
+        //DialogueBox_E
+        //    .DisplayFrom(UIDoc);
 
         ///FAKE DATA
 

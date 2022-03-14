@@ -57,10 +57,11 @@ public class LinkInput : AbstractUMI3DInput
                 Holdable = false
             };
             menuItem.Subscribe(Pressed);
-            if (CircularMenu.Exists)
-            {
-                CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
-            }
+            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+            //if (CircularMenu.Exists)
+            //{
+            //    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
+            //}
         }
         else
         {
@@ -81,10 +82,11 @@ public class LinkInput : AbstractUMI3DInput
     public override void Dissociate()
     {
         associatedInteraction = null;
-        if (CircularMenu.Exists && menuItem != null)
-        {
-            CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
-        }
+        Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+        //if (CircularMenu.Exists && menuItem != null)
+        //{
+        //    CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
+        //}
         menuItem.UnSubscribe(Pressed);
         menuItem = null;
     }

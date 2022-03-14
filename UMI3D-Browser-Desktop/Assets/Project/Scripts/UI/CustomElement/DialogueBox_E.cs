@@ -31,6 +31,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             }
         }
 
+        protected static VisualElement m_dialogueBox { get; set; } = null;
         protected static Label_E m_title { get; set; } = null;
         protected static Label_E m_message { get; set; } = null;
         protected static VisualElement m_choiceBox { get; set; } = null;
@@ -56,6 +57,21 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         /// <summary>
+        /// Sets up the dialogue box for two choices. And displayed it at the root of the [uiDocument].
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <param name="optionA"></param>
+        /// <param name="optionB"></param>
+        /// <param name="choiceCallback"></param>
+        /// <param name="uiDoc"></param>
+        public static void Setup(string title, string message, string optionA, string optionB, Action<bool> choiceCallback, UIDocument uiDoc)
+        {
+            Setup(title, message, optionA, optionB, choiceCallback);
+            DisplayFrom(uiDoc);
+        }
+
+        /// <summary>
         /// Sets up the dialogue box for two choices.
         /// </summary>
         /// <param name="title"></param>
@@ -78,6 +94,20 @@ namespace umi3dDesktopBrowser.ui.viewController
                 choiceCallback(b);
                 Instance.Remove();
             };
+        }
+
+        /// <summary>
+        /// Sets up the dialogue box for one choice. And displayed it at the root of the [uiDocument].
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <param name="optionA"></param>
+        /// <param name="choiceCallback"></param>
+        /// <param name="uiDoc"></param>
+        public static void Setup(string title, string message, string optionA, Action choiceCallback, UIDocument uiDoc)
+        {
+            Setup(title, message, optionA, choiceCallback);
+            DisplayFrom(uiDoc);
         }
 
         /// <summary>
@@ -134,6 +164,9 @@ namespace umi3dDesktopBrowser.ui.viewController
             if (Instance.Displayed) return;
             else Instance.Displayed = true;
             Instance.InsertRootTo(uiDocument.rootVisualElement);
+            //Debug.Log($"width = [{m_dialogueBox.resolvedStyle.width}]; height = [{m_dialogueBox.resolvedStyle.height}]");
+            m_dialogueBox.style.top = Screen.height / 2f;
+            m_dialogueBox.style.left = Screen.width / 2f;
         }
     }
 
@@ -153,8 +186,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            VisualElement dialogueBox = Root.Q("dialogueBox");
-            AddVisualStyle(dialogueBox, m_style, m_keys, new PopUpManipulator(dialogueBox));
+            m_dialogueBox = Root.Q("dialogueBox");
+            AddVisualStyle(m_dialogueBox, m_style, m_keys, new PopUpManipulator(m_dialogueBox));
 
             Label title = Root.Q<Label>("title");
             string titleStyle = "UI/Style/DialogueBox/DialogueBox_title";
@@ -177,8 +210,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_choiceA = new Button_E(choiceA, choiceStyle, choiceKeys);
             Button choiceB = Root.Q<Button>("choiceB");
             m_choiceB = new Button_E(choiceB, choiceStyle, choiceKeys);
-
-            //UpdateVisualManipulator(new PopUpManipulator(dialogueBox));
         }
     }
 }

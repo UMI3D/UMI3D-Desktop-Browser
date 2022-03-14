@@ -25,6 +25,7 @@ namespace umi3dDesktopBrowser.ui.viewController
     /// </summary>
     public partial class MenuBar_E
     {
+        public ToolboxItem_E ToolboxButton => m_toolboxButton;
         public ToolboxItem_E Avatar => m_avatar;
         public ToolboxItem_E Sound => m_sound;
         public ToolboxItem_E Mic => m_mic;
@@ -183,6 +184,16 @@ namespace umi3dDesktopBrowser.ui.viewController
             Visual_E separator = new Visual_E(new VisualElement(), m_separatorStyle, m_separatorKeys);
             separator.InsertRootTo(layout);
             return separator;
+        }
+
+        public override void InsertRootTo(VisualElement parent)
+        {
+            if (!Initialized)
+                throw new Exception($"VisualElement Added without being Initialized.");
+            if (parent == null)
+                throw new Exception($"Try to Add [{Root}] to a parent null.");
+            parent.Insert(0, Root);
+            AttachedToHierarchy = true;
         }
     }
 }
