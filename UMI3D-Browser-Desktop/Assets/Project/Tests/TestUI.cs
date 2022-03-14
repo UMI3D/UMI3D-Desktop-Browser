@@ -49,8 +49,7 @@ public class TestUI : MonoBehaviour
         DialogueBox_E
             .Setup("Test", message, "optionA", "optionB", (val) => { Debug.Log($"pressed [{val}]"); });
         DialogueBox_E
-            .Instance
-            .InsertRootTo(mainView);
+            .DisplayFrom(UIDoc);
 
         ///FAKE DATA
 

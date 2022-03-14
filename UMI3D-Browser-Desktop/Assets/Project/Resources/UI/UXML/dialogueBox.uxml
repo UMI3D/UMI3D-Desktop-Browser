@@ -1,10 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="dialogueBox" style="align-items: center;">
-        <ui:Label text="Label" name="title" />
-        <ui:Label text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel ullamcorper lectus. Donec tincidunt purus sit amet elit pretium imperdiet. Proin a tempor dui, ac luctus orci." name="message" style="white-space: normal;" />
-        <ui:VisualElement name="choiceBox" style="flex-direction: row; justify-content: space-around;">
-            <ui:Button text="Leave" name="choiceA" />
-            <ui:Button text="Also Leave" name="choiceB" />
+    <ui:VisualElement name="background" style="width: 100%; height: 100%;">
+        <ui:VisualElement name="dialogueBox" style="align-items: center;">
+            <ui:Label text="Label" name="title" />
+            <ui:Label text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel ullamcorper lectus. Donec tincidunt purus sit amet elit pretium imperdiet. Proin a tempor dui, ac luctus orci." name="message" style="white-space: normal;" />
+            <ui:VisualElement name="choiceBox" style="flex-direction: row; justify-content: space-around;">
+                <ui:Button text="Leave" name="choiceA" />
+                <ui:Button text="Also Leave" name="choiceB" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
