@@ -23,6 +23,19 @@ namespace umi3d.desktopBrowser.menu.Container
     public partial class PinnedToolboxContainerDeep0
     {
         public Toolbox_E Toolbox { get; private set; } = null;
+        public ToolboxItem_E Item { get; private set; } = null;
+        public Displayerbox_E Displayerbox { get; private set; } = null;
+        public bool IsTool { get; private set; } = false;
+    }
+
+    public partial class PinnedToolboxContainerDeep0
+    {
+        private void OnDestroy()
+        {
+            Toolbox.Remove();
+            Item.Remove();
+            Displayerbox.Remove();
+        }
     }
 
     public partial class PinnedToolboxContainerDeep0 : AbstractToolboxesContainer
@@ -31,11 +44,12 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.Awake();
             Toolbox = new Toolbox_E();
-        }
-
-        private void OnDestroy()
-        {
-            Toolbox.Remove();
+            Item = new ToolboxItem_E()
+            {
+                OnClicked = () => Select()
+            };
+            Item.SetItemStatus(true);
+            Displayerbox = new Displayerbox_E();
         }
 
         public override void SetMenuItem(AbstractMenuItem menu)
@@ -44,10 +58,67 @@ namespace umi3d.desktopBrowser.menu.Container
             Toolbox.SetToolboxName(menu.Name);
         }
 
-        public override void Display(bool forceUpdate = false)
+        protected override void DisplayImp()
         {
-            base.Display(forceUpdate);
-
+            base.DisplayImp();
+            Toolbox.Display();
         }
+
+        public override void Hide()
+        { }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        protected override void CollapseImp()
+        {
+            base.CollapseImp();
+            foreach (AbstractDisplayer child in currentDisplayers)
+                if (child is WindowToolboxesContainerDeep1 containerDeep1)
+                    containerDeep1.Collapse();
+            Displayerbox.Hide();
+            Item.Toggle(false);
+            //IsChildrenExpand = false;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="container"></param>
+        protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
+        {
+            base.ExpandAsImp(container);
+            if (IsTool) Displayerbox.Display();
+            Item.Toggle(true);
+        }
+
+        ///// <summary>
+        ///// <inheritdoc/>
+        ///// </summary>
+        ///// <param name="element"></param>
+        ///// <param name="updateDisplay"></param>
+        //public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
+        //{
+        //    base.Insert(element, updateDisplay);
+        //    if (element is WindowToolboxesContainerDeep1 containerDeep1)
+        //    {
+        //        IsTool = false;
+        //        Toolbox.Adds(containerDeep1.Item);
+        //        if (containerDeep1.IsTool)
+        //            WindowItem.AddDisplayerbox(containerDeep1.Displayerbox);
+        //        else
+        //            WindowItem.AddToolbox(containerDeep1.Toolbox);
+
+        //        AddChildrenToContainer(containerDeep1);
+        //    }
+        //    else if (element is AbstractWindowInputDisplayer displayer)
+        //    {
+        //        IsTool = true;
+        //        //Add a tool icon in the Firsttoolbox.
+        //        WindowItem.AddToolboxItemInFirstToolbox(Item);
+        //        //Add the displayer in the displayerbox.
+        //        Displayerbox.Add(displayer.Displayer);
+        //    }
+        //}
     }
 }

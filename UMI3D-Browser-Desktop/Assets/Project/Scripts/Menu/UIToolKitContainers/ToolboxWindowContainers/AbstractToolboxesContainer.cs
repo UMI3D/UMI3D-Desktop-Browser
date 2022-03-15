@@ -155,14 +155,9 @@ namespace umi3d.desktopBrowser.menu.Container
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
             if (element is AbstractMenuDisplayContainer menuContainer)
-            {
                 menuContainer.parent = this;
-            }
-
             element.transform.SetParent(this.transform);
-
             currentDisplayers.Add(element);
-
             element.Hide();
             if (updateDisplay)
                 Display(true);

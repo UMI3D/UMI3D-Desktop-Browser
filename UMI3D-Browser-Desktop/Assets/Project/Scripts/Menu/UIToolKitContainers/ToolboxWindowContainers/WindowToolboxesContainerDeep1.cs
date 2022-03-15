@@ -156,11 +156,13 @@ namespace umi3d.desktopBrowser.menu.Container
             if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
                 IsTool = false;
+                Item.SetItemStatus(false);
                 Toolbox.Adds(containerDeep1.Item);
             }
             if (element is AbstractWindowInputDisplayer displayer)
             {
                 IsTool = true;
+                Item.SetItemStatus(true);
                 Displayerbox.Add(displayer.Displayer);
             }
         }

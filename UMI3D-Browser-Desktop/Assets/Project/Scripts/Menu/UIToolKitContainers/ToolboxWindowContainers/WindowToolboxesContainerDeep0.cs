@@ -15,6 +15,7 @@ limitations under the License.
 */
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
+using umi3d.DesktopBrowser.menu.Displayer;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 
@@ -24,6 +25,9 @@ namespace umi3d.desktopBrowser.menu.Container
     {
         public bool IsChildrenExpand { get; set; } = false;
         public ToolboxWindowItem_E WindowItem { get; private set; } = null;
+        public ToolboxItem_E Item { get; private set; } = null;
+        public Displayerbox_E Displayerbox { get; private set; } = null;
+        public bool IsTool { get; private set; } = false;
     }
 
     public partial class WindowToolboxesContainerDeep0
@@ -31,6 +35,8 @@ namespace umi3d.desktopBrowser.menu.Container
         private void OnDestroy()
         {
             WindowItem.Remove();
+            Item.Remove();
+            Displayerbox.Remove();
         }
     }
 
@@ -40,10 +46,20 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.Awake();
             WindowItem = new ToolboxWindowItem_E();
+            Item = new ToolboxItem_E(false)
+            {
+                OnClicked = () => Select()
+            };
+            Item.SetItemStatus(true);
+            Displayerbox = new Displayerbox_E();
             isDisplayed = true;
             isExpanded = true;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="menu"></param>
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);
@@ -53,7 +69,6 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="forceUpdate"></param>
         protected override void DisplayImp()
         {
             base.DisplayImp();
@@ -69,23 +84,27 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="forceUpdate"></param>
         protected override void CollapseImp()
         {
             base.CollapseImp();
             foreach (AbstractDisplayer child in currentDisplayers)
                 if (child is WindowToolboxesContainerDeep1 containerDeep1)
                     containerDeep1.Collapse();
+            Displayerbox.Hide();
+            Item.Toggle(false);
             IsChildrenExpand = false;
         }
 
         /// <summary>
-        /// Container Deep 0 are always expanded.
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="container"></param>
-        /// <param name="forceUpdate"></param>
-        public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
-        { }
+        protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
+        {
+            base.ExpandAsImp(container);
+            if (IsTool) Displayerbox.Display();
+            Item.Toggle(true);
+        }
 
         /// <summary>
         /// <inheritdoc/>
@@ -97,17 +116,22 @@ namespace umi3d.desktopBrowser.menu.Container
             base.Insert(element, updateDisplay);
             if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
+                IsTool = false;
                 WindowItem.AddToolboxItemInFirstToolbox(containerDeep1.Item);
                 if (containerDeep1.IsTool)
-                {
                     WindowItem.AddDisplayerbox(containerDeep1.Displayerbox);
-                    containerDeep1.Item.SetItemStatus(true);
-                }
                 else
                     WindowItem.AddToolbox(containerDeep1.Toolbox);
                 
-
                 AddChildrenToContainer(containerDeep1);
+            }
+            else if (element is AbstractWindowInputDisplayer displayer)
+            {
+                IsTool = true;
+                //Add a tool icon in the Firsttoolbox.
+                WindowItem.AddToolboxItemInFirstToolbox(Item);
+                //Add the displayer in the displayerbox.
+                Displayerbox.Add(displayer.Displayer);
             }
         }
 
