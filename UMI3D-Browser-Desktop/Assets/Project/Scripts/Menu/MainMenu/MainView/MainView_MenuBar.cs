@@ -13,7 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using umi3d.cdk.menu;
 using umi3dDesktopBrowser.ui.viewController;
+using UnityEngine;
 
 namespace umi3dDesktopBrowser.ui
 {
@@ -21,19 +23,8 @@ namespace umi3dDesktopBrowser.ui
     {
         private void InitMenus()
         {
-            MenuBar_E
-            .Instance
-            .InsertRootTo(m_mainView);
-
-            MenuBar_E.Instance.ToolboxButton.OnClicked = () =>
-            {
-                ToolboxWindow_E
-                .Instance
-                .Display();
-
-                m_toolboxWindowDM.Hide(true);
-                m_toolboxWindowDM.Display(true);
-            };
+            InitMenuBar();
+            
 
             ToolboxWindow_E
             .Instance
@@ -44,6 +35,30 @@ namespace umi3dDesktopBrowser.ui
                 .Hide();
 
             //Todo Add footer.
+        }
+
+        private void InitMenuBar()
+        {
+            MenuBar_E.Instance.InsertRootTo(m_mainView);
+
+            MenuBar_E.Instance.ToolboxButton.OnClicked = () =>
+            {
+                ToolboxWindow_E.Instance.Display();
+                m_windowToolboxesDM.Hide(true);
+                m_windowToolboxesDM.Display(true);
+            };
+
+            m_viewport.Insert(0, MenuBar_E.Instance.SubMenuLayout);
+
+            MenuBar_E.Instance.OnPinned += Pin;
+        }
+
+        private void Pin(Menu menu)
+        {
+            if (menu == null) Debug.Log($"menu null");
+            menu.OnDestroy.RemoveAllListeners();
+            m_pinnedToolboxesDM.menu.Add(menu);
+            m_pinnedToolboxesDM.Display(true);
         }
     }
 }

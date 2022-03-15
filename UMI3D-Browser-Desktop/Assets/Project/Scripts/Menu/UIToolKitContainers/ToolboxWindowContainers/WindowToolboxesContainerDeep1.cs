@@ -26,7 +26,6 @@ namespace umi3d.desktopBrowser.menu.Container
         public ToolboxItem_E Item { get; private set; } = null;
         public Toolbox_E Toolbox { get; private set; } = null;
         public Displayerbox_E Displayerbox { get; private set; } = null;
-
         public bool IsTool { get; private set; } = false;
     }
 
@@ -115,14 +114,12 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             Toolbox.Hide();
             Displayerbox.Hide();
-            //Item.Hide();
             base.Hide();
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="forceUpdate"></param>
         protected override void CollapseImp()
         {
             base.CollapseImp();
@@ -136,7 +133,6 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <inheritdoc/>
         /// </summary>
         /// <param name="container"></param>
-        /// <param name="forceUpdate"></param>
         protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
         {
             base.ExpandAsImp(container);

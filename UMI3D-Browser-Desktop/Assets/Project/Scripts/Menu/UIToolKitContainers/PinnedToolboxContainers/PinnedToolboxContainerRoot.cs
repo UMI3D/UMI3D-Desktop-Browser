@@ -28,6 +28,8 @@ namespace umi3d.desktopBrowser.menu.Container
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
             base.Insert(element, updateDisplay);
+            if (element is PinnedToolboxContainerDeep0 containerDeep0)
+                MenuBar_E.Instance.AddToolboxDeep0(containerDeep0.Toolbox);
         }
     }
 }

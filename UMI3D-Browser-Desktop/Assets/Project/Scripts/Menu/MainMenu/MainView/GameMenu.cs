@@ -30,8 +30,13 @@ namespace umi3dDesktopBrowser.ui
         [SerializeField]
         string gameMenuTagName = "game-menu-container";
 
+        [Header("Toolboxes")]
         [SerializeField]
-        private MenuDisplayManager m_toolboxWindowDM;
+        [Tooltip("window Toolboxes Displayer manager.")]
+        private MenuDisplayManager m_windowToolboxesDM;
+        [SerializeField]
+        [Tooltip("Pinned Toolboxes Displayer manager.")]
+        private MenuDisplayManager m_pinnedToolboxesDM;
 
         private VisualElement m_mainView;
         private VisualElement m_viewport;

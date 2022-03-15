@@ -778,7 +778,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_uiDoc: {fileID: 1750602239179936672}
   gameMenuTagName: game-menu-container
-  m_toolboxWindowDM: {fileID: 1289266674641547170}
+  m_windowToolboxesDM: {fileID: 1289266674641547170}
+  m_pinnedToolboxesDM: {fileID: 5622295467200969099}
 --- !u!114 &4820613813600277437
 MonoBehaviour:
   m_ObjectHideFlags: 0

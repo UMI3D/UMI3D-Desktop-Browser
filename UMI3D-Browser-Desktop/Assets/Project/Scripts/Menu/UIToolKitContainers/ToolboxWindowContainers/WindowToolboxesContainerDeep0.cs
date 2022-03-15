@@ -38,6 +38,9 @@ namespace umi3d.desktopBrowser.menu.Container
             Item.Remove();
             Displayerbox.Remove();
         }
+
+        private void Pin()
+            => MenuBar_E.Instance.Pin((Menu)menu);
     }
 
     public partial class WindowToolboxesContainerDeep0 : AbstractToolboxesContainer
@@ -65,6 +68,7 @@ namespace umi3d.desktopBrowser.menu.Container
             base.SetMenuItem(menu);
             WindowItem.SetFirstToolboxName(menu.Name);
             WindowItem.AddDisplayerbox(Displayerbox);
+            WindowItem.OnPinned += Pin;
         }
 
         /// <summary>
@@ -72,7 +76,6 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void DisplayImp()
         {
-            Debug.Log($"display deep 0");
             base.DisplayImp();
             WindowItem.Display();
         }
@@ -82,8 +85,8 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void HideImp()
         {
-            Debug.Log($"hide deep 0");
             Displayerbox.Hide();
+            base.HideImp();
         }
 
         /// <summary>
@@ -91,7 +94,6 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void CollapseImp()
         {
-            Debug.Log($"collapse deep0");
             base.CollapseImp();
             foreach (AbstractDisplayer child in currentDisplayers)
                 if (child is WindowToolboxesContainerDeep1 containerDeep1)
@@ -107,7 +109,6 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <param name="container"></param>
         protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
         {
-            Debug.Log($"expand deep 0");
             base.ExpandAsImp(container);
             if (IsTool) Displayerbox.Display();
             Item.Toggle(true);
