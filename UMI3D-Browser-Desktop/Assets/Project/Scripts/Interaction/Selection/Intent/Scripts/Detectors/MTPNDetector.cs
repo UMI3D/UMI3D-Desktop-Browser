@@ -141,108 +141,96 @@ namespace umi3d.cdk.interaction.selection.intent
         /// <returns></returns>
         private int CompareObjects(float[] feature)
         {
-            if (feature[3] <= 1.4395645107510814E-4)
+            if (feature[2] <= 4.973718533009118E-4)
             {
-                if (feature[2] <= -0.00262006612894758)
+                if (feature[3] <= -0.0023118710596225257)
                 {
-                    if (feature[3] <= -0.0022023703821017777)
+                    if (feature[2] <= -0.002988800688725473)
                         return -1;
                     else
-                            {
-                        if (feature[0] <= 0.0478250080549951)
+                    {
+                        if (feature[0] <= -0.14119193918713224)
                             return -1;
                         else
-                                {
-                            if (feature[1] <= 0.04532322050516094)
+                        {
+                            if (feature[1] <= -0.12557882347029997)
                                 return 1;
                             else
                                 return -1;
                         }
-                            
                     }
-     
-                }  
+                }
                 else
-                 {
-                    if (feature[0] <= -0.15961954817763155)
+                {
+                    if (feature[3] <= 0.024323209161872278)
                     {
-                        if (feature[2] <= 6.883602620619902E-4)
-                            return -1;
-                        else
+                        if (feature[0] <= -0.14119193918713224)
                         {
-                            if (feature[3] <= -0.02330557261909291)
-                                return -1;
+                            if (feature[2] <= -0.17720795195807057)
+                                return 1;
                             else
-                                 return 1;
+                                return -1;
                         }
-                    }                        
+                        else
+                            return -1;
+                    }
                     else
                     {
-                        if (feature[3] <= -0.01848263256722222)
+                        if (feature[3] <= 0.061983054807170535)
                         {
-                            if (feature[1] <= -0.033002669643082135)
+                            if (feature[1] <= -0.04422799087212639)
                                 return 1;
                             else
                                 return -1;
-                        }  
-                        else
-                        {
-                            if (feature[2] <= 6.883602620619902E-4)
-                                return -1;
-                            else
-                                 return 1;
                         }
+                        else
+                            return 1;
                     }
                 }
             }
             else
             {
-                if (feature[2] <= 6.883602620619902E-4)
+                if (feature[3] <= -0.005922002279673415)
                 {
-                    if (feature[3] <= 0.020315570338809995)
+                    if (feature[3] <= -0.023020067980302476)
                     {
-                        if (feature[3] <= 0.007286334604668854)
+                        if (feature[1] <= -0.2029187073083194)
                         {
-                            if (feature[2] <= -0.00262006612894758)
+                            if (feature[3] <= -0.07258327266316932)
                                 return -1;
                             else
                                 return 1;
-                        }  
-                         else
-                        {
-                            if (feature[1] <= 0.0014620632896426965)
-                                return 1;
-                            else
-                                return -1;
                         }
-                    }   
+                        else
+                            return -1;
+                    }
                     else
                     {
-                        if (feature[1] <= 0.19862340409613483)
+                        if (feature[1] <= 0.001785052001300397)
                             return 1;
                         else
                         {
-                            if (feature[2] <= -0.011814406936309543)
+                            if (feature[0] <= 0.1395119419737276)
                                 return -1;
                             else
                                 return 1;
                         }
                     }
-                }            
+                }
                 else
                 {
-                    if (feature[0] <= 0.020766204761791907)
+                    if (feature[3] <= 0.003289207692248044)
                     {
-                        if (feature[3] <= 0.0030278145379347135)
+                        if (feature[0] <= 0.1603802827038439)
+                            return 1;
+                        else
                         {
-                            if (feature[1] <= -0.05246889000393101)
+                            if (feature[2] <= 0.1852532455226355)
                                 return 1;
                             else
                                 return -1;
-                        }    
-                         else
-                          return 1;
-                    }   
+                        }
+                    }
                     else
                         return 1;
                 }
