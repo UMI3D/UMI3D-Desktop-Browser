@@ -141,103 +141,110 @@ namespace umi3d.cdk.interaction.selection.intent
         /// <returns></returns>
         private int CompareObjects(float[] feature)
         {
-            if (feature[3] <= -0.0019931975142316455)
+            if (feature[3] <= 1.4395645107510814E-4)
             {
-                if (feature[2] <= 4.2312420158603685E-4)
-                    return 1;
-                else
+                if (feature[2] <= -0.00262006612894758)
                 {
-                    if (feature[3] <= -0.01896078112969268)
-                    {
-                        if (feature[1] <= -0.028072910098152454)
-                        {
-                            if (feature[0] <= -0.15080890420271978)
+                    if (feature[3] <= -0.0022023703821017777)
+                        return -1;
+                    else
+                            {
+                        if (feature[0] <= 0.0478250080549951)
+                            return -1;
+                        else
+                                {
+                            if (feature[1] <= 0.04532322050516094)
                                 return 1;
                             else
                                 return -1;
                         }
+                            
+                    }
+     
+                }  
+                else
+                 {
+                    if (feature[0] <= -0.15961954817763155)
+                    {
+                        if (feature[2] <= 6.883602620619902E-4)
+                            return -1;
                         else
                         {
-                            if (feature[0] <= 0.13777636734541898)
-                                return 1;
-                            else
+                            if (feature[3] <= -0.02330557261909291)
                                 return -1;
+                            else
+                                 return 1;
                         }
-                    }
+                    }                        
                     else
                     {
-                        if (feature[1] <= -0.011579635216671587)
+                        if (feature[3] <= -0.01848263256722222)
                         {
-                            if (feature[0] <= -0.2042484242116857)
+                            if (feature[1] <= -0.033002669643082135)
                                 return 1;
                             else
                                 return -1;
-                        }
+                        }  
                         else
                         {
-                            if (feature[0] <= 0.13777636734541898)
-                                return 1;
-                            else
+                            if (feature[2] <= 6.883602620619902E-4)
                                 return -1;
+                            else
+                                 return 1;
                         }
                     }
                 }
             }
             else
             {
-                if (feature[2] <= 4.2312420158603685E-4)
+                if (feature[2] <= 6.883602620619902E-4)
                 {
-                    if (feature[3] <= 0.01963253242251423)
+                    if (feature[3] <= 0.020315570338809995)
                     {
-                        if (feature[1] <= 0.05107840691938208)
+                        if (feature[3] <= 0.007286334604668854)
                         {
-                            if (feature[0] <= 0.04838124871984331)
+                            if (feature[2] <= -0.00262006612894758)
+                                return -1;
+                            else
+                                return 1;
+                        }  
+                         else
+                        {
+                            if (feature[1] <= 0.0014620632896426965)
                                 return 1;
                             else
                                 return -1;
                         }
-                        else
-                            return 1;
-                    }
+                    }   
                     else
                     {
-                        if (feature[1] <= 0.01816171979706572)
-                        {
-                            if (feature[0] <= -0.15080890420271978)
-                                return 1;
-                            else
-                                return -1;
-                        }
+                        if (feature[1] <= 0.19862340409613483)
+                            return 1;
                         else
                         {
-                            if (feature[3] <= 0.04899867953088333)
-                                return 1;
-                            else
+                            if (feature[2] <= -0.011814406936309543)
                                 return -1;
+                            else
+                                return 1;
                         }
                     }
-                }
+                }            
                 else
                 {
-                    if (feature[3] <= 0.0030540098215025412)
+                    if (feature[0] <= 0.020766204761791907)
                     {
-                        if (feature[0] <= -0.04094894384828929)
+                        if (feature[3] <= 0.0030278145379347135)
                         {
-                            if (feature[1] <= -0.050159928764532645)
-                                return -1;
-                            else
+                            if (feature[1] <= -0.05246889000393101)
                                 return 1;
-                        }
-                        else
-                        {
-                            if (feature[2] <= 0.1799722493269018)
-                                return -1;
                             else
-                                return 1;
-                        }
-                    }
+                                return -1;
+                        }    
+                         else
+                          return 1;
+                    }   
                     else
-                        return -1;
+                        return 1;
                 }
             }
         }
