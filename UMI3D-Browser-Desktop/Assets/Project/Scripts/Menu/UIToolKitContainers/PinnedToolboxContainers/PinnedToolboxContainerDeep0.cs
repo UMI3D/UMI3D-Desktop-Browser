@@ -102,14 +102,14 @@ namespace umi3d.desktopBrowser.menu.Container
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
             base.Insert(element, updateDisplay);
-            if (element is WindowToolboxesContainerDeep1 containerDeep1)
+            if (element is PinnedToolboxContainerDeep1 containerDeep1)
             {
                 IsTool = false;
                 Toolbox.Adds(containerDeep1.Item);
                 if (containerDeep1.IsTool)
                     ToolboxPinnedWindow_E.Instance.Adds(containerDeep1.Displayerbox);
-                //else
-                    //WindowItem.AddToolbox(containerDeep1.Toolbox);
+                else
+                    MenuBar_E.Instance.AddToolboxDeep1Plus(containerDeep1.Toolbox);
 
                 //AddChildrenToContainer(containerDeep1);
             }

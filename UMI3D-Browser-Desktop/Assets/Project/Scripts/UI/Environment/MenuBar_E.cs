@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System;
 using System.Collections;
+using umi3d.cdk.menu;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -25,12 +26,12 @@ namespace umi3dDesktopBrowser.ui.viewController
     /// </summary>
     public partial class MenuBar_E
     {
-        public ToolboxItem_E ToolboxButton => m_toolboxButton;
-        public ToolboxItem_E Avatar => m_avatar;
-        public ToolboxItem_E Sound => m_sound;
-        public ToolboxItem_E Mic => m_mic;
+        public ToolboxItem_E ToolboxButton { get; private set; } = null;
+        public ToolboxItem_E Avatar { get; private set; } = null;
+        public ToolboxItem_E Sound { get; private set; } = null;
+        public ToolboxItem_E Mic { get; private set; } = null;
+        public VisualElement SubMenuLayout { get; private set; } = null;
 
-        public VisualElement SubMenuLayout { get; private set; }
         public static MenuBar_E Instance
         {
             get
@@ -42,14 +43,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 return m_instance;
             }
         }
-    }
 
-    public partial class MenuBar_E
-    {
-        protected ToolboxItem_E m_toolboxButton;
-        protected ToolboxItem_E m_avatar;
-        protected ToolboxItem_E m_sound;
-        protected ToolboxItem_E m_mic;
         protected ToolboxItem_E m_leave;
         protected ScrollView_E m_scrollView { get; set; }
 
@@ -67,58 +61,60 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class MenuBar_E
     {
+        public event Action<Menu> OnPinned;
+
+        public void Pin(Menu menu)
+            => OnPinned?.Invoke(menu);
+
         public void DisplayToolboxButton(bool value)
         {
-            if (value) m_toolboxButton.Display();
-            else m_toolboxButton.Hide();
+            if (value) ToolboxButton.Display();
+            else ToolboxButton.Hide();
         }
 
-        private MenuBar_E() : 
-            base(m_menuUXML, m_menuStyle, m_menuKeys) { }
+        public void DisplaySubMenu(bool value)
+            => SubMenuLayout.style.display = (value) ? DisplayStyle.Flex : DisplayStyle.None;
+
+        /// <summary>
+        /// Add [toolboxes] in the menu bar's scroll view.
+        /// </summary>
+        /// <param name="toolboxes"></param>
+        public void AddToolboxDeep0(params Toolbox_E[] toolboxes)
+            => m_scrollView.Adds(toolboxes);
 
 
-        public void AddToolbox(params Toolbox_E[] toolboxes)
+        public void AddToolboxDeep1Plus(Toolbox_E toolbox)
         {
-            m_scrollView.Adds(toolboxes);
+            toolbox.InsertRootTo(SubMenuLayout);
+
+            //tools.style.left = parent.ChangeCoordinatesTo(tools, new Vector2(parent.layout.x, parent.layout.y)).x;
+            //logWorldPosition = () =>
+            //{
+            //    Debug.Log($"tool x = {tools.worldBound.x}");
+            //    Debug.Log($"parent x = {parent.worldBound.x}");
+            //    tools.style.left = parent.ChangeCoordinatesTo(tools, new Vector2(parent.layout.x, parent.layout.y)).x;
+
+            //    //test.style.left = image.WorldToLocal(new Vector2(image.worldBound.x, 0f)).x;
+            //};
+            //Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPositionCoroutine());
         }
 
-        public MenuBar_E AddCenter(params Toolbox_E[] toolboxes)
-        {
-            //centerLayout_VE.AddToolboxes(toolboxes);
-            return this;
-        }
-
-
-        //public void AddInSubMenu(ToolboxGenericElement tools, ToolboxGenericElement parent)
+        //private IEnumerator LogWorldPositionCoroutine()
         //{
-        //    tools.AddTo(SubMenuLayout);
-        //    //tools.style.left = parent.ChangeCoordinatesTo(tools, new Vector2(parent.layout.x, parent.layout.y)).x;
-        //    logWorldPosition = () =>
-        //    {
-        //        Debug.Log($"tool x = {tools.worldBound.x}");
-        //        Debug.Log($"parent x = {parent.worldBound.x}");
-        //        tools.style.left = parent.ChangeCoordinatesTo(tools, new Vector2(parent.layout.x, parent.layout.y)).x;
+        //    yield return null;
 
-        //        //test.style.left = image.WorldToLocal(new Vector2(image.worldBound.x, 0f)).x;
-        //    };
-        //    //Menu.Environment.MenuBar_UIController.Instance.StartCoroutine(LogWorldPositionCoroutine());
+        //    logWorldPosition();
         //}
-    }
 
-    public partial class MenuBar_E
-    {
-        private IEnumerator LogWorldPositionCoroutine()
-        {
-            yield return null;
-
-            logWorldPosition();
-        }
-
-        private Action logWorldPosition;
+        //private Action logWorldPosition;
     }
 
     public partial class MenuBar_E : Visual_E
     {
+        private MenuBar_E() :
+            base(m_menuUXML, m_menuStyle, m_menuKeys)
+        { }
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -126,10 +122,15 @@ namespace umi3dDesktopBrowser.ui.viewController
             leftLayout_VE = Root.Q<VisualElement>("Left-layout");
             centerLayout_VE = Root.Q<VisualElement>("Center-layout");
             rightLayout_VE = Root.Q<VisualElement>("Right-layout");
-            //SubMenuLayout = this.parent.Q<VisualElement>("sub-menu-layout");
 
-            m_toolboxButton = new ToolboxItem_E("Toolbox", "Toolbox");
-            new Toolbox_E("", true, m_toolboxButton)    
+            SubMenuLayout = new VisualElement();
+            SubMenuLayout.name = "subMenuLayout";
+            SubMenuLayout.style.position = Position.Absolute;
+            SubMenuLayout.style.width = Length.Percent(100f);
+            SubMenuLayout.style.height = Length.Percent(100f);
+
+            ToolboxButton = new ToolboxItem_E("Toolbox", "Toolbox");
+            new Toolbox_E("", true, ToolboxButton)    
                 .InsertRootTo(leftLayout_VE);
 
             AddSeparator(leftLayout_VE);
@@ -163,10 +164,10 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             AddSeparator(rightLayout_VE);
 
-            m_avatar = new ToolboxItem_E("AvatarOn", "AvatarOff", "");
-            m_sound = new ToolboxItem_E("SoundOn", "SoundOff", "");
-            m_mic = new ToolboxItem_E("MicOn", "MicOff", "");
-            new Toolbox_E("", true, m_avatar, m_sound, m_mic)    
+            Avatar = new ToolboxItem_E("AvatarOn", "AvatarOff", "");
+            Sound = new ToolboxItem_E("SoundOn", "SoundOff", "");
+            Mic = new ToolboxItem_E("MicOn", "MicOff", "");
+            new Toolbox_E("", true, Avatar, Sound, Mic)    
                 .InsertRootTo(rightLayout_VE);
 
             AddSeparator(rightLayout_VE);

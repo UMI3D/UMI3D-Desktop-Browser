@@ -24,10 +24,8 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="forceUpdate"></param>
         protected override void DisplayImp()
         {
-            Debug.Log($"display root");
             base.DisplayImp();
             MenuBar_E.Instance.DisplayToolboxButton(true);
         }
@@ -37,7 +35,6 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void HideImp()
         {
-            Debug.Log($"hide root");
             MenuBar_E.Instance.DisplayToolboxButton(false);
             base.HideImp();
         }
@@ -45,7 +42,6 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="forceUpdate"></param>
         protected override void CollapseImp()
         {
             base.CollapseImp();
@@ -56,7 +52,6 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <inheritdoc/>
         /// </summary>
         /// <param name="container"></param>
-        /// <param name="forceUpdate"></param>
         protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
         {
             base.ExpandAsImp(container);

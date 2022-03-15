@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -20,18 +21,34 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class ToolboxWindowItem_E
     {
-        public ButtonWithIcon_E PinnButton { get; private set; } = null;
-        
-        public Toolbox_E FirstToolbox { get; private set; } = null;
-    }
+        public event Action OnPinned;
 
-    public partial class ToolboxWindowItem_E
-    {
+        public ButtonWithIcon_E PinnButton { get; private set; } = null;
+        public Toolbox_E FirstToolbox { get; private set; } = null;
+
         private VisualElement m_toolboxesContainer { get; set; } = null;
         private VisualElement m_displayersContainer { get; set; } = null;
     }
 
     public partial class ToolboxWindowItem_E
+    {
+        public void Pin()
+            => OnPinned?.Invoke();
+
+        public void SetFirstToolboxName(string name)
+            => FirstToolbox.SetToolboxName(name ?? "");
+
+        public void AddToolboxItemInFirstToolbox(params Visual_E[] items)
+            => FirstToolbox.Adds(items);
+
+        public void AddToolbox(Toolbox_E toolbox)
+            => m_toolboxesContainer.Add(toolbox.Root);
+
+        public void AddDisplayerbox(Displayerbox_E displayerbox)
+            => m_displayersContainer.Add(displayerbox.Root);
+    }
+
+    public partial class ToolboxWindowItem_E : Visual_E
     {
         public ToolboxWindowItem_E() :
             base("UI/UXML/ToolboxWindow/toolboxWindow_Item",
@@ -39,34 +56,6 @@ namespace umi3dDesktopBrowser.ui.viewController
                 null)
         { }
 
-        public void Pin()
-        {
-            Debug.Log("<color=green>TODO: </color>" + $"Pin");
-        }
-
-        public void SetFirstToolboxName(string name)
-        {
-            FirstToolbox.SetToolboxName(name ?? "");
-        }
-
-        public void AddToolboxItemInFirstToolbox(params Visual_E[] items)
-        {
-            FirstToolbox.Adds(items);
-        }
-
-        public void AddToolbox(Toolbox_E toolbox)
-        {
-            m_toolboxesContainer.Add(toolbox.Root);
-        }
-
-        public void AddDisplayerbox(Displayerbox_E displayerbox)
-        {
-            m_displayersContainer.Add(displayerbox.Root);
-        }
-    }
-
-    public partial class ToolboxWindowItem_E : Visual_E
-    {
         protected override void Initialize()
         {
             base.Initialize();
@@ -98,6 +87,12 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             FirstToolbox = new Toolbox_E(false);
             AddToolbox(FirstToolbox);
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            OnPinned = null;
         }
     }
 }
