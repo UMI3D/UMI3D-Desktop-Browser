@@ -64,6 +64,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.SetMenuItem(menu);
             WindowItem.SetFirstToolboxName(menu.Name);
+            WindowItem.AddDisplayerbox(Displayerbox);
         }
 
         /// <summary>
@@ -71,6 +72,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void DisplayImp()
         {
+            Debug.Log($"display deep 0");
             base.DisplayImp();
             WindowItem.Display();
         }
@@ -78,14 +80,18 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <summary>
         /// ContainerDeep0 are never hidden.
         /// </summary>
-        public override void Hide()
-        { }
+        protected override void HideImp()
+        {
+            Debug.Log($"hide deep 0");
+            Displayerbox.Hide();
+        }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         protected override void CollapseImp()
         {
+            Debug.Log($"collapse deep0");
             base.CollapseImp();
             foreach (AbstractDisplayer child in currentDisplayers)
                 if (child is WindowToolboxesContainerDeep1 containerDeep1)
@@ -101,6 +107,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <param name="container"></param>
         protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
         {
+            Debug.Log($"expand deep 0");
             base.ExpandAsImp(container);
             if (IsTool) Displayerbox.Display();
             Item.Toggle(true);
@@ -128,9 +135,7 @@ namespace umi3d.desktopBrowser.menu.Container
             else if (element is AbstractWindowInputDisplayer displayer)
             {
                 IsTool = true;
-                //Add a tool icon in the Firsttoolbox.
                 WindowItem.AddToolboxItemInFirstToolbox(Item);
-                //Add the displayer in the displayerbox.
                 Displayerbox.Add(displayer.Displayer);
             }
         }

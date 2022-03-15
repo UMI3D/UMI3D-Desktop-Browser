@@ -15,6 +15,7 @@ limitations under the License.
 */
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
+using umi3d.DesktopBrowser.menu.Displayer;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 
@@ -56,6 +57,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.SetMenuItem(menu);
             Toolbox.SetToolboxName(menu.Name);
+            ToolboxPinnedWindow_E.Instance.Adds(Displayerbox);
         }
 
         protected override void DisplayImp()
@@ -92,33 +94,31 @@ namespace umi3d.desktopBrowser.menu.Container
             Item.Toggle(true);
         }
 
-        ///// <summary>
-        ///// <inheritdoc/>
-        ///// </summary>
-        ///// <param name="element"></param>
-        ///// <param name="updateDisplay"></param>
-        //public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
-        //{
-        //    base.Insert(element, updateDisplay);
-        //    if (element is WindowToolboxesContainerDeep1 containerDeep1)
-        //    {
-        //        IsTool = false;
-        //        Toolbox.Adds(containerDeep1.Item);
-        //        if (containerDeep1.IsTool)
-        //            WindowItem.AddDisplayerbox(containerDeep1.Displayerbox);
-        //        else
-        //            WindowItem.AddToolbox(containerDeep1.Toolbox);
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="updateDisplay"></param>
+        public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
+        {
+            base.Insert(element, updateDisplay);
+            if (element is WindowToolboxesContainerDeep1 containerDeep1)
+            {
+                IsTool = false;
+                Toolbox.Adds(containerDeep1.Item);
+                if (containerDeep1.IsTool)
+                    ToolboxPinnedWindow_E.Instance.Adds(containerDeep1.Displayerbox);
+                //else
+                    //WindowItem.AddToolbox(containerDeep1.Toolbox);
 
-        //        AddChildrenToContainer(containerDeep1);
-        //    }
-        //    else if (element is AbstractWindowInputDisplayer displayer)
-        //    {
-        //        IsTool = true;
-        //        //Add a tool icon in the Firsttoolbox.
-        //        WindowItem.AddToolboxItemInFirstToolbox(Item);
-        //        //Add the displayer in the displayerbox.
-        //        Displayerbox.Add(displayer.Displayer);
-        //    }
-        //}
+                //AddChildrenToContainer(containerDeep1);
+            }
+            else if (element is AbstractWindowInputDisplayer displayer)
+            {
+                IsTool = true;
+                Toolbox.Adds(Item);
+                Displayerbox.Add(displayer.Displayer);
+            }
+        }
     }
 }

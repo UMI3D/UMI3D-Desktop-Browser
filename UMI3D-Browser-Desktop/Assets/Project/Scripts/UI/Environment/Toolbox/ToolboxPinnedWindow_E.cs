@@ -19,30 +19,29 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
-    public partial class ToolboxWindow_E
+    public partial class ToolboxPinnedWindow_E
     {
-        public static ToolboxWindow_E Instance
+        public static ToolboxPinnedWindow_E Instance
         {
             get
             {
                 if (m_instance == null)
                 {
-                    m_instance = new ToolboxWindow_E();
+                    m_instance = new ToolboxPinnedWindow_E();
                 }
                 return m_instance;
             }
         }
-        public UnityEvent UnPinedButtonPressed { get; private set; } = new UnityEvent();
 
-        private static string m_windowUXML = "UI/UXML/ToolboxWindow/toolboxWindow";
-        private static string m_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_window";
+        private static string m_windowUXML = "UI/UXML/ToolboxPinnedWindow/ToolboxPinnedWindow";
+        private static string m_windowStyle = "UI/Style/ToolboxPinnedWindow/ToolboxPinnedWindow_window";
         private static StyleKeys m_windowKeys = new StyleKeys(null, "", null);
-        private static ToolboxWindow_E m_instance;
+        private static ToolboxPinnedWindow_E m_instance;
     }
 
-    public partial class ToolboxWindow_E : WindowWithScrollView_E
+    public partial class ToolboxPinnedWindow_E : WindowWithScrollView_E
     {
-        private ToolboxWindow_E() :
+        private ToolboxPinnedWindow_E() :
             base(m_windowUXML, m_windowStyle, m_windowKeys)
         { }
 
@@ -50,7 +49,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            string iconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Icon";
+            string iconStyle = "UI/Style/ToolboxPinnedWindow/ToolboxPinnedWindow_Icon";
             StyleKeys iconKeys = new StyleKeys(null, "", "");
             SetIcon(iconStyle, iconKeys);
 
@@ -67,14 +66,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             string dStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Dragger";
             StyleKeys dKeys = new StyleKeys(null, "", "");
             SetVerticalScrollView(null, null, dcStyle, dcKeys, dStyle, dKeys);
-
-            Button unpinnedButton = Root.Q<Button>("unpinnedButton");
-            string unpinnedButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_UnpinnedButton";
-            StyleKeys unpinnedButtonKeys = new StyleKeys(null, "", null);
-            new Button_E(unpinnedButton, unpinnedButtonStyle, unpinnedButtonKeys)
-            {
-                OnClicked = () => { UnPinedButtonPressed.Invoke(); },
-            };
         }
     }
 }

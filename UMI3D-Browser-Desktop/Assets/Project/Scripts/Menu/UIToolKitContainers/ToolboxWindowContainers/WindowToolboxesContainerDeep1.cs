@@ -113,7 +113,9 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void HideImp()
         {
-            Item.Hide();
+            Toolbox.Hide();
+            Displayerbox.Hide();
+            //Item.Hide();
             base.Hide();
         }
 
@@ -127,8 +129,6 @@ namespace umi3d.desktopBrowser.menu.Container
             foreach (AbstractDisplayer child in currentDisplayers)
                 if (child is WindowToolboxesContainerDeep1 containerDeep1)
                     containerDeep1.Collapse();
-            Toolbox.Hide();
-            Displayerbox.Hide();
             Item.Toggle(false);
         }
 

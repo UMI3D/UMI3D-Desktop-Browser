@@ -15,6 +15,7 @@ limitations under the License.
 */
 using umi3d.cdk.menu.view;
 using umi3dDesktopBrowser.ui.viewController;
+using UnityEngine;
 
 namespace umi3d.desktopBrowser.menu.Container
 {
@@ -26,7 +27,8 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <param name="forceUpdate"></param>
         protected override void DisplayImp()
         {
-            base.Display();
+            Debug.Log($"display root");
+            base.DisplayImp();
             MenuBar_E.Instance.DisplayToolboxButton(true);
         }
 
@@ -35,6 +37,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void HideImp()
         {
+            Debug.Log($"hide root");
             MenuBar_E.Instance.DisplayToolboxButton(false);
             base.HideImp();
         }
@@ -45,7 +48,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <param name="forceUpdate"></param>
         protected override void CollapseImp()
         {
-            base.Collapse();
+            base.CollapseImp();
             ToolboxWindow_E.Instance.Hide();
         }
 
@@ -56,7 +59,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <param name="forceUpdate"></param>
         protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
         {
-            base.ExpandAs(container);
+            base.ExpandAsImp(container);
             ToolboxWindow_E.Instance.Display();
         }
 
