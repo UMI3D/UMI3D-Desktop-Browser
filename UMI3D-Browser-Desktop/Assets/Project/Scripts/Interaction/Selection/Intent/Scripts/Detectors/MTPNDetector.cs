@@ -63,8 +63,8 @@ namespace umi3d.cdk.interaction.selection.intent
 
                     float deltaDistPointer = (distObjPointer_i - distObjPointer_j) / (distObjPointer_i + distObjPointer_j);
                     float deltaDistHead = (distObjHead_i - distObjHead_j) / (distObjHead_i + distObjHead_j);
-                    float deltaDotPointer = (dotPointer_i - dotPointer_j) / (dotPointer_i + dotPointer_j);
-                    float deltaDotHead = (dotHead_i - dotHead_j) / (dotHead_i + dotHead_j);
+                    float deltaDotPointer = (dotPointer_i - dotPointer_j) / (Mathf.Abs(dotPointer_i) + Mathf.Abs(dotPointer_j));
+                    float deltaDotHead = (dotHead_i - dotHead_j) / (Mathf.Abs(dotHead_i) + Mathf.Abs(dotHead_j));
 
                     float[] obj1VsObj2Metrics = new float[4] { deltaDistPointer, deltaDistHead, deltaDotPointer, deltaDotHead };
 
@@ -141,34 +141,41 @@ namespace umi3d.cdk.interaction.selection.intent
         /// <returns></returns>
         private int CompareObjects(float[] feature)
         {
-            if (feature[3] <= -0.0025450674019402977)
+            if (feature[3] <= -0.0019931975142316455)
             {
-                if (feature[2] <= 7.408833018398592E-4)
+                if (feature[2] <= 4.2312420158603685E-4)
                     return 1;
                 else
                 {
-                    if (feature[3] <= -0.020021664396318098)
+                    if (feature[3] <= -0.01896078112969268)
                     {
-                        if (feature[2] <= 0.10092115841796978)
-                            return 1;
-                        else
-                            if (feature[0] <= 0.15480301707930913)
-                            return -1;
-                        else
-                            return 1;
-                    }
-                    else
-                    {
-                        if (feature[1] <= -0.01104516809311298)
+                        if (feature[1] <= -0.028072910098152454)
                         {
-                            if (feature[0] <= -0.2052921944952896)
+                            if (feature[0] <= -0.15080890420271978)
                                 return 1;
                             else
                                 return -1;
                         }
                         else
                         {
-                            if (feature[0] <= 0.13713481780255293)
+                            if (feature[0] <= 0.13777636734541898)
+                                return 1;
+                            else
+                                return -1;
+                        }
+                    }
+                    else
+                    {
+                        if (feature[1] <= -0.011579635216671587)
+                        {
+                            if (feature[0] <= -0.2042484242116857)
+                                return 1;
+                            else
+                                return -1;
+                        }
+                        else
+                        {
+                            if (feature[0] <= 0.13777636734541898)
                                 return 1;
                             else
                                 return -1;
@@ -178,44 +185,56 @@ namespace umi3d.cdk.interaction.selection.intent
             }
             else
             {
-                if (feature[2] <= 7.408833018398592E-4)
+                if (feature[2] <= 4.2312420158603685E-4)
                 {
-                    if (feature[3] <= 0.01975389898082204)
+                    if (feature[3] <= 0.01963253242251423)
                     {
-                        if (feature[1] <= 0.05134989073560836)
-                            if (feature[0] <= 0.048187132453235915)
+                        if (feature[1] <= 0.05107840691938208)
+                        {
+                            if (feature[0] <= 0.04838124871984331)
                                 return 1;
                             else
                                 return -1;
+                        }
                         else
                             return 1;
                     }
                     else
                     {
-                        if (feature[2] <= -0.09848143369526666)
+                        if (feature[1] <= 0.01816171979706572)
                         {
-                            if (feature[0] <= -0.15357659194215778)
-                                return -1;
-                            else
+                            if (feature[0] <= -0.15080890420271978)
                                 return 1;
+                            else
+                                return -1;
                         }
                         else
-                            return -1;
+                        {
+                            if (feature[3] <= 0.04899867953088333)
+                                return 1;
+                            else
+                                return -1;
+                        }
                     }
                 }
                 else
                 {
-                    if (feature[3] <= 0.002477775456729103)
+                    if (feature[3] <= 0.0030540098215025412)
                     {
-                        if (feature[0] <= -0.04112576167669935)
+                        if (feature[0] <= -0.04094894384828929)
                         {
-                            if (feature[1] <= -0.050005076025131726)
+                            if (feature[1] <= -0.050159928764532645)
                                 return -1;
                             else
                                 return 1;
                         }
                         else
-                            return -1;
+                        {
+                            if (feature[2] <= 0.1799722493269018)
+                                return -1;
+                            else
+                                return 1;
+                        }
                     }
                     else
                         return -1;
