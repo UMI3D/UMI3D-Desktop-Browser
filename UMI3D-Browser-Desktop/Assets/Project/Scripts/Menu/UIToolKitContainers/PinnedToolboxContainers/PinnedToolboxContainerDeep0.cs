@@ -76,7 +76,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.CollapseImp();
             foreach (AbstractDisplayer child in currentDisplayers)
-                if (child is WindowToolboxesContainerDeep1 containerDeep1)
+                if (child is PinnedToolboxContainerDeep1 containerDeep1)
                     containerDeep1.Collapse();
             Displayerbox.Hide();
             Item.Toggle(false);
@@ -92,6 +92,7 @@ namespace umi3d.desktopBrowser.menu.Container
             base.ExpandAsImp(container);
             if (IsTool) Displayerbox.Display();
             Item.Toggle(true);
+            Debug.Log($"expand in Deep 0");
         }
 
         /// <summary>

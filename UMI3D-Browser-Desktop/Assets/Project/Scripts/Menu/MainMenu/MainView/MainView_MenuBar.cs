@@ -50,15 +50,24 @@ namespace umi3dDesktopBrowser.ui
 
             m_viewport.Insert(0, MenuBar_E.Instance.SubMenuLayout);
 
-            MenuBar_E.Instance.OnPinned += Pin;
+            MenuBar_E.Instance.OnPinnedUnpinned += PinUnpin;
+            m_pinnedToolboxesDM.Display(false);
         }
 
-        private void Pin(Menu menu)
+        private void PinUnpin(bool value, Menu menu)
         {
-            if (menu == null) Debug.Log($"menu null");
-            menu.OnDestroy.RemoveAllListeners();
-            m_pinnedToolboxesDM.menu.Add(menu);
-            m_pinnedToolboxesDM.Display(true);
+            if (value)
+            {
+                Debug.Log($"pin");
+                m_pinnedToolboxesDM.menu.Add(menu);
+            }
+            else
+            {
+                Debug.Log($"unpin");
+                m_pinnedToolboxesDM.menu.RemoveWithoutNotify(menu);
+                
+            }
+            //m_pinnedToolboxesDM.Display(true);
         }
     }
 }

@@ -61,10 +61,10 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class MenuBar_E
     {
-        public event Action<Menu> OnPinned;
+        public event Action<bool, Menu> OnPinnedUnpinned;
 
-        public void Pin(Menu menu)
-            => OnPinned?.Invoke(menu);
+        public void PinUnpin(bool value, Menu menu)
+            => OnPinnedUnpinned?.Invoke(value, menu);
 
         public void DisplayToolboxButton(bool value)
         {
