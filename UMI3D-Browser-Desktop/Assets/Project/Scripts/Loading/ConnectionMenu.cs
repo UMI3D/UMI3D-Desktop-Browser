@@ -428,7 +428,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
             send.Subscribe(action);
             Menu.menu.Add(send);
             nextStep = () => action(true);
-            MenuDisplayManager.Display(true);
+            MenuDisplayManager.CreateMenuAndDisplay(true, false);
         }
     }
 

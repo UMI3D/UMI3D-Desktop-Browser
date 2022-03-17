@@ -37,5 +37,14 @@ namespace umi3d.desktopBrowser.menu.Container
             if (element is PinnedToolboxContainerDeep0 containerDeep0)
                 MenuBar_E.Instance.AddToolboxDeep0(containerDeep0.Toolbox);
         }
+
+        public override bool Remove(AbstractDisplayer element, bool updateDisplay = true)
+        {
+            if (!base.Remove(element, updateDisplay))
+                return false;
+            if (element is PinnedToolboxContainerDeep0 containerDeep0)
+                MenuBar_E.Instance.RemoveToolboxDeep0(containerDeep0.Toolbox);
+            return true;
+        }
     }
 }
