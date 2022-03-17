@@ -134,7 +134,7 @@ namespace BrowserDesktop.Menu
                 CursorHandler.SetMovement(this, display ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
                 if (display)
                 {
-                    menuDisplay.Display(true);
+                    menuDisplay.CreateMenuAndDisplay(true, true);
                     optionWindow.gameObject.SetActive(false);
                 }
                 else menuDisplay.Hide(true);

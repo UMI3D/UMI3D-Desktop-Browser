@@ -24,15 +24,8 @@ namespace umi3dDesktopBrowser.ui
         private void InitMenus()
         {
             InitMenuBar();
-            
 
-            ToolboxWindow_E
-            .Instance
-            .InsertRootTo(m_viewport);
-
-            ToolboxWindow_E
-                .Instance
-                .Hide();
+            InitWindowToolboxes();
 
             //Todo Add footer.
         }
@@ -43,15 +36,21 @@ namespace umi3dDesktopBrowser.ui
 
             MenuBar_E.Instance.ToolboxButton.OnClicked = () =>
             {
-                ToolboxWindow_E.Instance.Display();
-                m_windowToolboxesDM.Hide(true);
                 m_windowToolboxesDM.Display(true);
             };
 
             m_viewport.Insert(0, MenuBar_E.Instance.SubMenuLayout);
 
             MenuBar_E.Instance.OnPinnedUnpinned += PinUnpin;
-            m_pinnedToolboxesDM.Display(false);
+            m_pinnedToolboxesDM.CreateMenuAndDisplay(false, false);
+        }
+
+        private void InitWindowToolboxes()
+        {
+            ToolboxWindow_E.Instance.InsertRootTo(m_viewport);
+            ToolboxWindow_E.Instance.OnCloseButtonPressed += () => m_windowToolboxesDM.Collapse(false);
+            m_windowToolboxesDM.CreateMenuAndDisplay(false, false);
+            m_windowToolboxesDM.Collapse(false);
         }
 
         private void PinUnpin(bool value, Menu menu)
@@ -64,7 +63,7 @@ namespace umi3dDesktopBrowser.ui
             else
             {
                 Debug.Log($"unpin");
-                m_pinnedToolboxesDM.menu.RemoveWithoutNotify(menu);
+                m_pinnedToolboxesDM.menu.Remove(menu);
                 
             }
             //m_pinnedToolboxesDM.Display(true);

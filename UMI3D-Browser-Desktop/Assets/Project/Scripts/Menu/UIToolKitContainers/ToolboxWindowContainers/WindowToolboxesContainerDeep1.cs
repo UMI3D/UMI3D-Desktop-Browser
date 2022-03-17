@@ -148,18 +148,15 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <param name="updateDisplay"></param>
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
-            Debug.Log("<color=green>TODO: </color>" + $"insert from Deep1 [{menu.Name}] with [{element.menu.Name}]");
             base.Insert(element, updateDisplay);
             if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
-                Debug.Log("<color=green>TODO: </color>" + $"insert container from Deep1 [{menu.Name}] with [{element.menu.Name}]");
                 IsTool = false;
                 Item.SetItemStatus(false);
                 Toolbox.Adds(containerDeep1.Item);
             }
             if (element is AbstractWindowInputDisplayer displayer)
             {
-                Debug.Log("<color=green>TODO: </color>" + $"insert displayer from Deep1 [{menu.Name}] with [{element.menu.Name}]");
                 IsTool = true;
                 Item.SetItemStatus(true);
                 Displayerbox.Add(displayer.Displayer);

@@ -41,7 +41,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public void Add(params Displayer_E[] displayers)
         {
-            Debug.Log($"add displayer in displayer box");
             foreach (Displayer_E displayer in displayers)
                 Root.Add(displayer.Root);
         }

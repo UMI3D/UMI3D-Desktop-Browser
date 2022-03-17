@@ -46,6 +46,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.CollapseImp();
             ToolboxWindow_E.Instance.Hide();
+            Debug.Log($"collapse root");
         }
 
         /// <summary>

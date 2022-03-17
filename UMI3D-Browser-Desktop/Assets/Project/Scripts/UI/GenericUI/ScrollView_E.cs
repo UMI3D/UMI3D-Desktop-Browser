@@ -64,9 +64,25 @@ namespace umi3dDesktopBrowser.ui.viewController
                 Visual_E separator = null;
                 if (m_items.Count > 0 && AddSeparator != null)
                     separator = AddSeparator(Scroll_View);
-                m_items.Add((item, separator));
+                m_items.Add(item, separator);
                 item.InsertRootTo(Scroll_View);
             }
+        }
+
+        public virtual void InsertAt(Visual_E item, int index)
+        {
+            Debug.Log("<color=green>TODO: </color>" + $"insert at");
+        }
+
+        public virtual void Remove(Visual_E item)
+        {
+            //if (!m_items.ContainsKey(item))
+            //    return;
+            if (!m_items.TryGetValue(item, out Visual_E separator))
+                return;
+            separator?.Remove();
+            item.Remove();
+            m_items.Remove(item);
         }
     }
 
@@ -93,9 +109,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected VisualElement m_forwardVerticalButtonLayout { get; set; } = null;
         protected VisualElement m_forwardHorizontalButtonLayout { get; set; } = null;
 
-        protected List<(Visual_E, Visual_E)> m_items { get; set; } = null;
-
-        
+        protected Dictionary<Visual_E, Visual_E> m_items { get; set; } = null;
     }
 
     public partial class ScrollView_E
@@ -252,7 +266,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_verticalScroller.valueChanged += VerticalSliderValueChanged;
             m_horizontalScroller.valueChanged += HorizontalSliderValueChanged;
 
-            m_items = new List<(Visual_E, Visual_E)>();
+            m_items = new Dictionary<Visual_E, Visual_E>();
         }
 
         public override void Reset()

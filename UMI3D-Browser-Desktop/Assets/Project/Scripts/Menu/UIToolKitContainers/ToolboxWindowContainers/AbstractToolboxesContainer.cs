@@ -95,6 +95,14 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        /// <param name="menu"></param>
+        /// <returns></returns>
+        public override int IsSuitableFor(AbstractMenuItem menu)
+            => 0;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         /// <param name="forceUpdate"></param>
         public override void Display(bool forceUpdate = false)
         {
@@ -202,27 +210,21 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="menu"></param>
-        /// <returns></returns>
-        public override int IsSuitableFor(AbstractMenuItem menu)
-            => 0;
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         /// <param name="element"></param>
         /// <param name="updateDisplay"></param>
         /// <returns></returns>
         public override bool Remove(AbstractDisplayer element, bool updateDisplay = true)
         {
-            bool r = currentDisplayers.Remove(element);
+            if (!currentDisplayers.Remove(element))
+                return false;
+
             if (updateDisplay)
                 Display(true);
 
-            element.transform.SetParent(this.transform);
+            //element.transform.SetParent(this.transform);
             Debug.Log($"remove [{element.name}]");
 
-            return r;
+            return true;
         }
 
         /// <summary>

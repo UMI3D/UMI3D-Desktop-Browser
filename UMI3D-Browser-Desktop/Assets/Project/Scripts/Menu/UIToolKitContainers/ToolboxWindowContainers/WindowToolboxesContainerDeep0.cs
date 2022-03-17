@@ -124,14 +124,10 @@ namespace umi3d.desktopBrowser.menu.Container
             base.Insert(element, updateDisplay);
             if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
-                Debug.Log($"insert deep 1 [{containerDeep1.menu.Name}] in deep 0 [{menu.Name}]");
                 IsTool = false;
                 WindowItem.AddToolboxItemInFirstToolbox(containerDeep1.Item);
                 if (containerDeep1.IsTool)
-                {
-                    Debug.Log($"insert container deep 1 has tool [{containerDeep1.menu.Name}]");
-                    WindowItem.AddDisplayerbox(containerDeep1.Displayerbox); 
-                }
+                    WindowItem.AddDisplayerbox(containerDeep1.Displayerbox);
                 else
                     WindowItem.AddToolbox(containerDeep1.Toolbox);
                 
