@@ -33,8 +33,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             }
         }
 
-        private static string m_windowUXML = "UI/UXML/ToolboxPinnedWindow/ToolboxPinnedWindow";
-        private static string m_windowStyle = "UI/Style/ToolboxPinnedWindow/ToolboxPinnedWindow_window";
+        private static string m_windowUXML = "UI/UXML/ToolboxWindow/pinnedToolboxWindow";
+        private static string m_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_window";
         private static StyleKeys m_windowKeys = new StyleKeys(null, "", null);
         private static ToolboxPinnedWindow_E m_instance;
     }
@@ -49,7 +49,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            string iconStyle = "UI/Style/ToolboxPinnedWindow/ToolboxPinnedWindow_Icon";
+            string iconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Icon";
             StyleKeys iconKeys = new StyleKeys(null, "", "");
             SetIcon(iconStyle, iconKeys);
 

@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
@@ -40,6 +41,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public void Add(params Displayer_E[] displayers)
         {
+            Debug.Log($"add displayer in displayer box");
             foreach (Displayer_E displayer in displayers)
                 Root.Add(displayer.Root);
         }

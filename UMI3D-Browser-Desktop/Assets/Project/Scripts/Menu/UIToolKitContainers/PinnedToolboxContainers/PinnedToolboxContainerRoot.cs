@@ -15,11 +15,17 @@ limitations under the License.
 */
 using umi3d.cdk.menu.view;
 using umi3dDesktopBrowser.ui.viewController;
+using UnityEngine;
 
 namespace umi3d.desktopBrowser.menu.Container
 {
     public class PinnedToolboxContainerRoot : AbstractToolboxesContainer
     {
+        protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
+        {
+            base.ExpandAsImp(container);
+        }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

@@ -17,6 +17,7 @@ using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3d.DesktopBrowser.menu.Displayer;
 using umi3dDesktopBrowser.ui.viewController;
+using UnityEngine;
 
 namespace umi3d.desktopBrowser.menu.Container
 {
@@ -88,7 +89,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.CollapseImp();
             foreach (AbstractDisplayer child in currentDisplayers)
-                if (child is WindowToolboxesContainerDeep1 containerDeep1)
+                if (child is PinnedToolboxContainerDeep1 containerDeep1)
                     containerDeep1.Collapse();
             Item.Toggle(false);
         }
@@ -104,6 +105,7 @@ namespace umi3d.desktopBrowser.menu.Container
             if (IsTool) Displayerbox.Display();
             else Toolbox.Display();
             Item.Toggle(true);
+            Debug.Log($"expand in Deep 1");
         }
 
         /// <summary>
