@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using inetum.unityUtils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace BrowserDesktop.Menu
     /// This class manages the UI elements which gives information about the current session such as : the name of the environment,
     /// is the microphone working, the session tim, etc.
     /// </summary>
-    public class SessionInformationMenu : Singleton<SessionInformationMenu>
+    public class SessionInformationMenu : SingleBehaviour<SessionInformationMenu>
     {
         public UIDocument uiDocument;
 

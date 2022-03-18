@@ -15,16 +15,16 @@ limitations under the License.
 */
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
-using umi3d.common;
+using inetum.unityUtils;
+using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using UnityEngine;
 using UnityEngine.UI;
-using umi3d.cdk.interaction;
 
 namespace BrowserDesktop.Menu
 {
-    public class MainMenu : Singleton<MainMenu>
+    public class MainMenu : SingleBehaviour<MainMenu>
     {
         bool display;
         static public bool IsDisplaying { get { return Exists ? Instance.display : false; } }
