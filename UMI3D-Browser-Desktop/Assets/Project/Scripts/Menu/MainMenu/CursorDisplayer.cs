@@ -13,13 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using GLTFast.FakeSchema;
-using umi3d.common;
+using inetum.unityUtils;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static BrowserDesktop.Cursor.CursorHandler;
 
-public class CursorDisplayer : Singleton<CursorDisplayer>
+public class CursorDisplayer : SingleBehaviour<CursorDisplayer>
 {
     public UIDocument uiDocument;
 
