@@ -78,24 +78,24 @@ namespace umi3d.desktopBrowser.menu.Container
             Toolbox.SetToolboxName(menu.Name ?? "");
         }
 
-        public override void Select()
-        {
-            base.Select();
-            if (parent is WindowToolboxesContainerDeep0 containerDeep0)
-            {
-                if (!containerDeep0.IsChildrenExpand)
-                {
-                    containerDeep0.IsChildrenExpand = true;
-                    foreach (AbstractDisplayer sibling in containerDeep0.parent)
-                    {
-                        if (sibling != this.parent && sibling is WindowToolboxesContainerDeep0 siblingDeep0)
-                        {
-                            siblingDeep0.Collapse();
-                        }
-                    }
-                }
-            }
-        }
+        //public override void Select()
+        //{
+        //    base.Select();
+        //    if (parent is WindowToolboxesContainerDeep0 containerDeep0)
+        //    {
+        //        if (!containerDeep0.IsChildrenExpand)
+        //        {
+        //            containerDeep0.IsChildrenExpand = true;
+        //            foreach (AbstractDisplayer sibling in containerDeep0.parent)
+        //            {
+        //                if (sibling != this.parent && sibling is WindowToolboxesContainerDeep0 siblingDeep0)
+        //                {
+        //                    siblingDeep0.Collapse();
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// <inheritdoc/>
@@ -112,8 +112,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void HideImp()
         {
-            Toolbox.Hide();
-            Displayerbox.Hide();
+            Item.Hide();
             base.Hide();
         }
 
@@ -126,6 +125,8 @@ namespace umi3d.desktopBrowser.menu.Container
             foreach (AbstractDisplayer child in currentDisplayers)
                 if (child is WindowToolboxesContainerDeep1 containerDeep1)
                     containerDeep1.Collapse();
+            Toolbox.Hide();
+            Displayerbox.Hide();
             Item.Toggle(false);
         }
 

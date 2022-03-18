@@ -23,7 +23,6 @@ namespace umi3d.desktopBrowser.menu.Container
 {
     public partial class WindowToolboxesContainerDeep0
     {
-        public bool IsChildrenExpand { get; set; } = false;
         public ToolboxWindowItem_E WindowItem { get; private set; } = null;
         public ToolboxItem_E Item { get; private set; } = null;
         public Displayerbox_E Displayerbox { get; private set; } = null;
@@ -35,8 +34,8 @@ namespace umi3d.desktopBrowser.menu.Container
         private void OnDestroy()
         {
             WindowItem.Remove();
-            Item.Remove();
-            Displayerbox.Remove();
+            Item?.Remove();
+            Displayerbox?.Remove();
         }
 
         private void PinUnpin(bool value)
@@ -49,14 +48,20 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.Awake();
             WindowItem = new ToolboxWindowItem_E();
+            
+            isDisplayed = true;
+            isExpanded = true;
+        }
+
+        private void SetContainerAsTool()
+        {
             Item = new ToolboxItem_E(false)
             {
                 OnClicked = () => Select()
             };
             Item.SetItemStatus(true);
             Displayerbox = new Displayerbox_E();
-            isDisplayed = true;
-            isExpanded = true;
+            WindowItem.AddDisplayerbox(Displayerbox);
         }
 
         /// <summary>
@@ -67,7 +72,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.SetMenuItem(menu);
             WindowItem.SetFirstToolboxName(menu.Name);
-            WindowItem.AddDisplayerbox(Displayerbox);
+            
             WindowItem.OnPinnedUnpinned += PinUnpin;
         }
 
@@ -85,7 +90,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void HideImp()
         {
-            Displayerbox.Hide();
+            WindowItem.Hide();
             base.HideImp();
         }
 
@@ -98,9 +103,11 @@ namespace umi3d.desktopBrowser.menu.Container
             foreach (AbstractDisplayer child in currentDisplayers)
                 if (child is WindowToolboxesContainerDeep1 containerDeep1)
                     containerDeep1.Collapse();
-            Displayerbox.Hide();
-            Item.Toggle(false);
-            IsChildrenExpand = false;
+            if (IsTool)
+            {
+                Displayerbox.Hide();
+                Item.Toggle(false);
+            }
         }
 
         /// <summary>
@@ -110,8 +117,11 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
         {
             base.ExpandAsImp(container);
-            if (IsTool) Displayerbox.Display();
-            Item.Toggle(true);
+            if (IsTool)
+            {
+                Displayerbox.Display();
+                Item.Toggle(true); 
+            }
         }
 
         /// <summary>
@@ -135,7 +145,11 @@ namespace umi3d.desktopBrowser.menu.Container
             }
             else if (element is AbstractWindowInputDisplayer displayer)
             {
-                IsTool = true;
+                if (!IsTool)
+                {
+                    SetContainerAsTool();
+                    IsTool = true;
+                }
                 WindowItem.AddToolboxItemInFirstToolbox(Item);
                 Displayerbox.Add(displayer.Displayer);
             }
@@ -148,10 +162,7 @@ namespace umi3d.desktopBrowser.menu.Container
                 if (displayer is WindowToolboxesContainerDeep1 containerDeep1Child)
                 {
                     if (containerDeep1Child.IsTool)
-                    {
                         WindowItem.AddDisplayerbox(containerDeep1Child.Displayerbox);
-                        containerDeep1Child.Item.SetItemStatus(true);
-                    }
                     else
                         WindowItem.AddToolbox(containerDeep1Child.Toolbox);
                     AddChildrenToContainer(containerDeep1Child);

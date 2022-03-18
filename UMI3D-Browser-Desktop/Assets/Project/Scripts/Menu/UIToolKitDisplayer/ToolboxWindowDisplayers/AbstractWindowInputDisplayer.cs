@@ -50,12 +50,14 @@ namespace umi3d.DesktopBrowser.menu.Displayer
 
         public override void Display(bool forceUpdate = false)
         {
+            gameObject.SetActive(true);
             Displayer.Display();
         }
 
         public override void Hide()
         {
             Displayer.Hide();
+            gameObject.SetActive(false);
         }
 
         public override void Clear()
