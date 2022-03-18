@@ -24,6 +24,10 @@ namespace umi3d.cdk.menu.view
         public MenuAsset menuAsset;
         [SerializeField]
         private bool m_displayedOnStart = false;
+        [SerializeField]
+        private bool m_collapseOnStart = false;
+        [SerializeField]
+        private bool m_displayWhenAddNewItem = false;
         /// <summary>
         /// Should call the Hide function when the Back function is called on root.
         /// </summary>
@@ -479,6 +483,10 @@ namespace umi3d.cdk.menu.view
                     CreateSubMenu(currentSubContainer, subSubMenu, containerDepth + 1);
                 else
                     CreateItem(currentSubContainer, subSubMenuItem);
+                if (m_displayWhenAddNewItem)
+                    Display(true);
+                else
+                    Collapse(true);
             };
             subMenu.onAbstractMenuItemAdded.AddListener(onItemAdded);
 
@@ -587,7 +595,11 @@ namespace umi3d.cdk.menu.view
         private void Start()
         {
             if (m_displayedOnStart)
+            {
                 CreateMenuAndDisplay();
+                if (m_collapseOnStart)
+                    Collapse();
+            }
         }
 
         /// <summary>

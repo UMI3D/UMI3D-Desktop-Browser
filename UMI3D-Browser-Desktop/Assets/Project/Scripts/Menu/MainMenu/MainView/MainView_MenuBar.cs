@@ -26,7 +26,9 @@ namespace umi3dDesktopBrowser.ui
         {
             InitMenuBar();
 
-            InitWindowToolboxes();
+            InitToolboxWindow();
+
+            InitToolboxPinnedWindow();
 
             //Todo Add footer.
         }
@@ -40,21 +42,21 @@ namespace umi3dDesktopBrowser.ui
                 m_windowToolboxesDM.CreateMenuAndDisplay(true, false);
             };
 
-            m_viewport.Insert(0, MenuBar_E.Instance.SubMenuLayout);
+            m_viewport.Add(MenuBar_E.Instance.SubMenuLayout);
 
             MenuBar_E.Instance.OnPinnedUnpinned += PinUnpin;
-            //m_pinnedToolboxesDM.CreateMenuAndDisplay(false, false);
         }
 
-        private void InitWindowToolboxes()
+        private void InitToolboxWindow()
         {
             ToolboxWindow_E.Instance.InsertRootTo(m_viewport);
             ToolboxWindow_E.Instance.OnCloseButtonPressed += () => m_windowToolboxesDM.Collapse(false);
-            //UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => {
+        }
 
-            //});
-            m_windowToolboxesDM.CreateMenuAndDisplay(true, false);
-            m_windowToolboxesDM.Collapse(false);
+        private void InitToolboxPinnedWindow()
+        {
+            ToolboxPinnedWindow_E.Instance.InsertRootTo(m_viewport);
+            ToolboxPinnedWindow_E.Instance.OnCloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(false);
         }
 
         private void PinUnpin(bool value, Menu menu)
@@ -70,7 +72,6 @@ namespace umi3dDesktopBrowser.ui
                 m_pinnedToolboxesDM.menu.Remove(menu);
                 
             }
-            //m_pinnedToolboxesDM.Display(true);
         }
     }
 }

@@ -21,11 +21,6 @@ namespace umi3d.desktopBrowser.menu.Container
 {
     public partial class WindowToolboxesContainerRoot : AbstractToolboxesContainer
     {
-        protected override void SetContainerAsTool()
-        {
-            throw new System.NotImplementedException();
-        }
-
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -49,8 +44,13 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void CollapseImp()
         {
-            base.CollapseImp();
+            foreach (AbstractDisplayer child in currentDisplayers)
+            {
+                if (child is WindowToolboxesContainerDeep0 containerDeep0)
+                    containerDeep0.Collapse();
+            }
             ToolboxWindow_E.Instance.Hide();
+            base.CollapseImp();
         }
 
         /// <summary>

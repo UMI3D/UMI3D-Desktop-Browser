@@ -21,9 +21,15 @@ namespace umi3d.desktopBrowser.menu.Container
 {
     public class PinnedToolboxContainerRoot : AbstractToolboxesContainer
     {
-        protected override void SetContainerAsTool()
+        protected override void CollapseImp()
         {
-            throw new System.NotImplementedException();
+            foreach (AbstractDisplayer child in currentDisplayers)
+            {
+                if (child is PinnedToolboxContainerDeep0 containerDeep0)
+                    containerDeep0.Collapse();
+            }
+            ToolboxPinnedWindow_E.Instance.Hide();
+            base.CollapseImp();
         }
 
         protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
