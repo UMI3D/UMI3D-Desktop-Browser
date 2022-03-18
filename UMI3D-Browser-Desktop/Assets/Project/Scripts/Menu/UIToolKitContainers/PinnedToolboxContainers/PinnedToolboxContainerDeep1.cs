@@ -23,17 +23,17 @@ namespace umi3d.desktopBrowser.menu.Container
 {
     public partial class PinnedToolboxContainerDeep1
     {
-        public ToolboxItem_E Item { get; private set; } = null;
+        //public ToolboxItem_E Item { get; private set; } = null;
         public Toolbox_E Toolbox { get; private set; } = null;
-        public Displayerbox_E Displayerbox { get; private set; } = null;
-        public bool IsTool { get; private set; } = false;
+        //public Displayerbox_E Displayerbox { get; private set; } = null;
+        //public bool IsTool { get; private set; } = false;
     }
 
     public partial class PinnedToolboxContainerDeep1
     {
         private void OnDestroy()
         {
-            Item.Remove();
+            ToolboxItem.Remove();
             Toolbox.Remove();
             Displayerbox.Remove();
         }
@@ -44,7 +44,7 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void Awake()
         {
             base.Awake();
-            Item = new ToolboxItem_E(false)
+            ToolboxItem = new ToolboxItem_E(false)
             {
                 OnClicked = () => Select()
             };
@@ -53,12 +53,17 @@ namespace umi3d.desktopBrowser.menu.Container
             isDisplayed = true;
         }
 
+        protected override void SetContainerAsTool()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);
             if (menu.icon2D != null)
-                Item.SetIcon(menu.icon2D);
-            Item.Label.value = menu.Name;
+                ToolboxItem.SetIcon(menu.icon2D);
+            ToolboxItem.Label.value = menu.Name;
             Toolbox.SetToolboxName(menu.Name ?? "");
         }
 
@@ -69,7 +74,7 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void DisplayImp()
         {
             base.DisplayImp();
-            Item.Display();
+            ToolboxItem.Display();
         }
 
         /// <summary>
@@ -91,7 +96,7 @@ namespace umi3d.desktopBrowser.menu.Container
             foreach (AbstractDisplayer child in currentDisplayers)
                 if (child is PinnedToolboxContainerDeep1 containerDeep1)
                     containerDeep1.Collapse();
-            Item.Toggle(false);
+            ToolboxItem.Toggle(false);
         }
 
         /// <summary>
@@ -104,7 +109,7 @@ namespace umi3d.desktopBrowser.menu.Container
             base.ExpandAsImp(container);
             if (IsTool) Displayerbox.Display();
             else Toolbox.Display();
-            Item.Toggle(true);
+            ToolboxItem.Toggle(true);
             Debug.Log($"expand in Deep 1");
         }
 
@@ -119,13 +124,13 @@ namespace umi3d.desktopBrowser.menu.Container
             if (element is PinnedToolboxContainerDeep1 containerDeep1)
             {
                 IsTool = false;
-                Item.SetItemStatus(false);
-                Toolbox.Adds(containerDeep1.Item);
+                ToolboxItem.SetItemStatus(false);
+                Toolbox.Adds(containerDeep1.ToolboxItem);
             }
             if (element is AbstractWindowInputDisplayer displayer)
             {
                 IsTool = true;
-                Item.SetItemStatus(true);
+                ToolboxItem.SetItemStatus(true);
                 Displayerbox.Add(displayer.Displayer);
             }
         }

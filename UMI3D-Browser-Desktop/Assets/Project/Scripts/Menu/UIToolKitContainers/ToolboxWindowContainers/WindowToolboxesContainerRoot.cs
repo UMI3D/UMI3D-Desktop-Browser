@@ -21,6 +21,11 @@ namespace umi3d.desktopBrowser.menu.Container
 {
     public partial class WindowToolboxesContainerRoot : AbstractToolboxesContainer
     {
+        protected override void SetContainerAsTool()
+        {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

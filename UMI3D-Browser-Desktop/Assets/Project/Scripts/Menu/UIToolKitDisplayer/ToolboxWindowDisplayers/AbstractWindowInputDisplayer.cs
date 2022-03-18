@@ -30,24 +30,14 @@ namespace umi3d.DesktopBrowser.menu.Displayer
     public partial class AbstractWindowInputDisplayer : IDisplayerElement
     {
         public VisualElement GetUXMLContent()
-        {
-            return Displayer.Root;
-        }
+            => Displayer.Root;
 
         public virtual void InitAndBindUI()
-        {
-            Displayer = new Displayer_E();
-        }
+            => Displayer = new Displayer_E();
     }
 
     public partial class AbstractWindowInputDisplayer : AbstractDisplayer
     {
-        public override void SetMenuItem(AbstractMenuItem menu)
-        {
-            base.SetMenuItem(menu);
-
-        }
-
         public override void Display(bool forceUpdate = false)
         {
             gameObject.SetActive(true);

@@ -21,6 +21,11 @@ namespace umi3d.desktopBrowser.menu.Container
 {
     public class PinnedToolboxContainerRoot : AbstractToolboxesContainer
     {
+        protected override void SetContainerAsTool()
+        {
+            throw new System.NotImplementedException();
+        }
+
         protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
         {
             base.ExpandAsImp(container);

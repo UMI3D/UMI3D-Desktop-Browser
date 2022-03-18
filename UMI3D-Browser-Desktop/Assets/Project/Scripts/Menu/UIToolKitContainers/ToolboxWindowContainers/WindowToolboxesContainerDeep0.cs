@@ -24,9 +24,6 @@ namespace umi3d.desktopBrowser.menu.Container
     public partial class WindowToolboxesContainerDeep0
     {
         public ToolboxWindowItem_E WindowItem { get; private set; } = null;
-        public ToolboxItem_E Item { get; private set; } = null;
-        public Displayerbox_E Displayerbox { get; private set; } = null;
-        public bool IsTool { get; private set; } = false;
     }
 
     public partial class WindowToolboxesContainerDeep0
@@ -34,7 +31,7 @@ namespace umi3d.desktopBrowser.menu.Container
         private void OnDestroy()
         {
             WindowItem.Remove();
-            Item?.Remove();
+            ToolboxItem?.Remove();
             Displayerbox?.Remove();
         }
 
@@ -53,13 +50,13 @@ namespace umi3d.desktopBrowser.menu.Container
             isExpanded = true;
         }
 
-        private void SetContainerAsTool()
+        protected override void SetContainerAsTool()
         {
-            Item = new ToolboxItem_E(false)
+            ToolboxItem = new ToolboxItem_E(false)
             {
                 OnClicked = () => Select()
             };
-            Item.SetItemStatus(true);
+            ToolboxItem.SetItemStatus(true);
             Displayerbox = new Displayerbox_E();
             WindowItem.AddDisplayerbox(Displayerbox);
         }
@@ -99,14 +96,13 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void CollapseImp()
         {
-            base.CollapseImp();
             foreach (AbstractDisplayer child in currentDisplayers)
                 if (child is WindowToolboxesContainerDeep1 containerDeep1)
                     containerDeep1.Collapse();
             if (IsTool)
             {
                 Displayerbox.Hide();
-                Item.Toggle(false);
+                ToolboxItem.Toggle(false);
             }
         }
 
@@ -120,7 +116,7 @@ namespace umi3d.desktopBrowser.menu.Container
             if (IsTool)
             {
                 Displayerbox.Display();
-                Item.Toggle(true); 
+                ToolboxItem.Toggle(true); 
             }
         }
 
@@ -135,7 +131,7 @@ namespace umi3d.desktopBrowser.menu.Container
             if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
                 IsTool = false;
-                WindowItem.AddToolboxItemInFirstToolbox(containerDeep1.Item);
+                WindowItem.AddToolboxItemInFirstToolbox(containerDeep1.ToolboxItem);
                 if (containerDeep1.IsTool)
                     WindowItem.AddDisplayerbox(containerDeep1.Displayerbox);
                 else
@@ -150,7 +146,7 @@ namespace umi3d.desktopBrowser.menu.Container
                     SetContainerAsTool();
                     IsTool = true;
                 }
-                WindowItem.AddToolboxItemInFirstToolbox(Item);
+                WindowItem.AddToolboxItemInFirstToolbox(ToolboxItem);
                 Displayerbox.Add(displayer.Displayer);
             }
         }

@@ -286,7 +286,6 @@ namespace umi3d.cdk.menu.view
             AbstractMenuDisplayContainer precDisplayer = displayer.parent;
             if (precDisplayer == null)
             {
-                Debug.Log($"pomme");
                 lastMenuContainerUnderNavigation = displayer;
                 displayer.Display();
                 displayer.Collapse();
@@ -297,7 +296,6 @@ namespace umi3d.cdk.menu.view
             AbstractMenuDisplayContainer currentDisplayer;
             if (displayer.generationOffsetOnExpand >= 0)
             {
-                Debug.Log($"poire");
                 AbstractMenuDisplayContainer VirtualDisplayer = displayer;
                 int offset = displayer.generationOffsetOnExpand;
                 while (offset > -1 && VirtualDisplayer.parent != null)
@@ -325,23 +323,25 @@ namespace umi3d.cdk.menu.view
 
             if (currentDisplayer == displayer)
             {
-                if (!precDisplayer.parallelNavigation)
-                {
-                    Debug.Log($"displayer = [{displayer.menu.Name}]");
-                    foreach (AbstractDisplayer sibling in precDisplayer)
-                    {
-                        Debug.Log($"sibling = [{sibling.menu.Name}]");
-                        if (sibling is AbstractMenuDisplayContainer siblingContainter && siblingContainter != displayer)
-                        {
-                            Debug.Log($"collapse sibling [{siblingContainter.menu.Name}]");
-                            siblingContainter.Collapse(true);
-                        }
-                    }
-                }
+                CollapseSiblings(precDisplayer, displayer);
                 displayer.Expand(true);
             }
             else
                 currentDisplayer.ExpandAs(displayer, true);
+        }
+
+        private void CollapseSiblings(AbstractMenuDisplayContainer precContainre, AbstractMenuDisplayContainer container)
+        {
+            if (precContainre == null || precContainre.parallelNavigation)
+                return;
+
+            foreach (AbstractDisplayer sibling in precContainre)
+            {
+                if (!(sibling is AbstractMenuDisplayContainer siblingContainter) || siblingContainter == container)
+                    continue;
+                siblingContainter.Collapse(true);
+            }
+            CollapseSiblings(precContainre.parent, precContainre);
         }
 
         /// <summary>
