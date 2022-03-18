@@ -62,9 +62,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)
-        {
-            return (menu is ButtonMenuItem) ? 2 : 0;
-        }
+            => (menu is ButtonMenuItem) ? 2 : 0;
 
         public override void Clear()
         {
