@@ -1,10 +1,8 @@
 using BeardedManStudios.Forge.Networking.Unity;
-using System.Collections;
-using System.Collections.Generic;
 using inetum.unityUtils;
 using UnityEngine;
 
-public class Debugger : umi3d.common.PersistentSingleton<Debugger>
+public class Debugger : PersistentSingleBehaviour<Debugger>
 {
     public bool DisplayInfo = false;
 

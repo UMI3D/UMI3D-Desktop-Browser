@@ -14,9 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using inetum.unityUtils;
+
 namespace BrowserDesktop
 {
-    public class ActionIconManager : umi3d.common.Singleton<ActionIconManager>
+    public class ActionIconManager : SingleBehaviour<ActionIconManager>
     {
         public ActionIconInstance ActionIconInstance;
 
