@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
+using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 
 namespace umi3d.desktopBrowser.menu.Container
@@ -34,6 +35,15 @@ namespace umi3d.desktopBrowser.menu.Container
         protected List<AbstractDisplayer> currentDisplayers = new List<AbstractDisplayer>();
 
         protected AbstractToolboxesContainer virtualContainer = null;
+
+        public ToolboxItem_E ToolboxItem { get; protected set; } = null;
+        public Displayerbox_E Displayerbox { get; protected set; } = null;
+        public bool IsTool { get; protected set; } = false;
+    }
+
+    public abstract partial class AbstractToolboxesContainer
+    {
+        protected abstract void SetContainerAsTool();
     }
 
     public partial class AbstractToolboxesContainer : AbstractMenuDisplayContainer
