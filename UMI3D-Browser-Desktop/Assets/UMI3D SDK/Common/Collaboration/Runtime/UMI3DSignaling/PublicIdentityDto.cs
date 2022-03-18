@@ -22,11 +22,9 @@ namespace umi3d.common.collaboration
     /// Abstract class to describe an operation
     /// </summary>
     [Serializable]
-    public class IdentityDto : PublicIdentityDto
+    public class PublicIdentityDto : UMI3DDto
     {
-        public string localToken;
-        public string headerToken;
-        public string key;
-        public List<LibrariesDto> libraries;
+        public ulong userId = 0;
+        public string login = null;
     }
 }

@@ -14,37 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common
+using System.Collections.Generic;
+
+namespace umi3d.common.interaction
 {
     /// <summary>
-    /// Data Tranfert Object for UMI3D media
+    /// 
     /// </summary>
     [System.Serializable]
-    public class MediaDto : UMI3DDto
+    public class ConnectionFormDto : FormDto
     {
         /// <summary>
-        /// Name of the media.
+        /// An id used during the connection 
         /// </summary>
-        public string name;
+        public string temporaryUserId;
 
-        /// <summary>
-        /// The interaction's icon 2D. 
-        /// </summary>
-        public ResourceDto icon2D;
-
-        /// <summary>
-        /// The interaction's icon 3D. 
-        /// </summary>
-        public ResourceDto icon3D;
-
-        public string versionMajor;
-        public string versionMinor;
-        public string versionStatus;
-        public string versionDate;
-
-        public string url;
-
-        public MediaDto() : base() { }
-
+        public ConnectionFormDto() : base() { }
     }
 }
