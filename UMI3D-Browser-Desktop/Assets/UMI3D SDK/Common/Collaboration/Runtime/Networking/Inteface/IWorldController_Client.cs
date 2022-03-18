@@ -13,20 +13,20 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System;
-using System.Collections.Generic;
 
-namespace umi3d.common.collaboration
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using umi3d.common.collaboration;
+using System;
+using umi3d.common;
+using System.Threading.Tasks;
+
+public interface IWorldController_Client
 {
-    /// <summary>
-    /// Abstract class to describe an operation
-    /// </summary>
-    [Serializable]
-    public class IdentityDto : PublicIdentityDto
-    {
-        public string localToken;
-        public string headerToken;
-        public string key;
-        public List<LibrariesDto> libraries;
-    }
+    Task<UMI3DDto> Connect(ConnectionDto connectionDto);
+
+    Task<PrivateIdentityDto> RenewCredential(string globalTocken);
+
+    Task Pong(IClient client);
 }

@@ -25,20 +25,26 @@ namespace umi3d.cdk
         /// <summary>
         /// Environment connected to.
         /// </summary>
-        protected MediaDto environment;
-
+        protected MediaDto _media;
+        /// <summary>
+        /// Environment connected to.
+        /// </summary>
+        virtual protected ForgeConnectionDto connectionDto { get; }
         /// <summary>
         /// Environment connected to.
         /// </summary>
         public static MediaDto Media
         {
-            get => Exists ? Instance.environment : null;
-            set
-            {
-                if (Exists)
-                    Instance.environment = value;
-            }
+            get => Exists ? Instance._media : null;
         }
+        /// <summary>
+        /// Environment connected to.
+        /// </summary>
+        public static ForgeConnectionDto Environement
+        {
+            get => Exists ? Instance.connectionDto : null;
+        }
+
 
         public static string getAuthorization()
         {
