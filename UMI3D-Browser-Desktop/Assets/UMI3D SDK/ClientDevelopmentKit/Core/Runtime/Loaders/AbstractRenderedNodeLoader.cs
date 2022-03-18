@@ -27,7 +27,7 @@ namespace umi3d.cdk
 {
     public class AbstractRenderedNodeLoader : UMI3DNodeLoader
     {
-        const DebugScope scope = DebugScope.CDK | DebugScope.Core | DebugScope.Loading;
+        private const DebugScope scope = DebugScope.CDK | DebugScope.Core | DebugScope.Loading;
 
         ///<inheritdoc/>
         public override bool SetUMI3DProperty(UMI3DEntityInstance entity, SetEntityPropertyDto property)
@@ -520,7 +520,7 @@ namespace umi3d.cdk
             {
                 foreach (string matKey in listToOverride)
                 {
-                    OverrideMaterial(newMatId, node, newMat, (s) => s.Equals(matKey) || (s.Equals(matKey + " (Instance)")), matEntity, shaderProperties, addIfNotExists);
+                    OverrideMaterial(newMatId, node, newMat, (s) => s.Equals(matKey) || (s.Equals(matKey + " (Instance)") || (matKey.Equals(s + " (Instance)"))), matEntity, shaderProperties, addIfNotExists);
                 }
             }
 

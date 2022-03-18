@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Menu;
-using System.Collections;
+using inetum.unityUtils;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace BrowserDesktop.Cursor
 {
-    public class CursorHandler : umi3d.common.PersistentSingleton<CursorHandler>
+    public class CursorHandler : PersistentSingleBehaviour<CursorHandler>
     {
         //SpriteRenderer spriteRenderer;
         public Texture2D HintCursor;

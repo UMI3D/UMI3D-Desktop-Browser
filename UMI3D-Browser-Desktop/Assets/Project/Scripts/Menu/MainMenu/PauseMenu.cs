@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d.cdk;
-using umi3d.common;
-using UnityEngine.UIElements;
-using UnityEngine;
 using BrowserDesktop.Cursor;
+using inetum.unityUtils;
+using umi3d.cdk;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
 {
-    public class PauseMenu : Singleton<PauseMenu>
+    public class PauseMenu : SingleBehaviour<PauseMenu>
     {
         public UIDocument uiDocument;
 
