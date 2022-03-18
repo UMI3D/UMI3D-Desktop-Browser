@@ -45,13 +45,14 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.Awake();
             WindowItem = new ToolboxWindowItem_E();
-            
-            isDisplayed = true;
-            isExpanded = true;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected override void SetContainerAsTool()
         {
+            base.SetContainerAsTool();
             ToolboxItem = new ToolboxItem_E(false)
             {
                 OnClicked = () => Select()
@@ -69,7 +70,6 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.SetMenuItem(menu);
             WindowItem.SetFirstToolboxName(menu.Name);
-            
             WindowItem.OnPinnedUnpinned += PinUnpin;
         }
 
@@ -97,9 +97,11 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void CollapseImp()
         {
             foreach (AbstractDisplayer child in currentDisplayers)
+            {
                 if (child is WindowToolboxesContainerDeep1 containerDeep1)
                     containerDeep1.Collapse();
-            if (IsTool)
+            }
+            if (ToolType == ItemType.Tool)
             {
                 Displayerbox.Hide();
                 ToolboxItem.Toggle(false);
@@ -113,7 +115,7 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
         {
             base.ExpandAsImp(container);
-            if (IsTool)
+            if (ToolType == ItemType.Tool)
             {
                 Displayerbox.Display();
                 ToolboxItem.Toggle(true); 
@@ -130,22 +132,29 @@ namespace umi3d.desktopBrowser.menu.Container
             base.Insert(element, updateDisplay);
             if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
-                IsTool = false;
+                if (ToolType != ItemType.Toolbox)
+                    SetContainerAsToolbox();
                 WindowItem.AddToolboxItemInFirstToolbox(containerDeep1.ToolboxItem);
-                if (containerDeep1.IsTool)
-                    WindowItem.AddDisplayerbox(containerDeep1.Displayerbox);
-                else
-                    WindowItem.AddToolbox(containerDeep1.Toolbox);
-                
+                switch (containerDeep1.ToolType)
+                {
+                    case ItemType.Undefine:
+                        break;
+                    case ItemType.Tool:
+                        WindowItem.AddDisplayerbox(containerDeep1.Displayerbox);
+                        break;
+                    case ItemType.Toolbox:
+                        WindowItem.AddToolbox(containerDeep1.Toolbox);
+                        break;
+                    default:
+                        break;
+                }
+
                 AddChildrenToContainer(containerDeep1);
             }
             else if (element is AbstractWindowInputDisplayer displayer)
             {
-                if (!IsTool)
-                {
+                if (ToolType != ItemType.Tool)
                     SetContainerAsTool();
-                    IsTool = true;
-                }
                 WindowItem.AddToolboxItemInFirstToolbox(ToolboxItem);
                 Displayerbox.Add(displayer.Displayer);
             }
@@ -157,10 +166,19 @@ namespace umi3d.desktopBrowser.menu.Container
             {
                 if (displayer is WindowToolboxesContainerDeep1 containerDeep1Child)
                 {
-                    if (containerDeep1Child.IsTool)
-                        WindowItem.AddDisplayerbox(containerDeep1Child.Displayerbox);
-                    else
-                        WindowItem.AddToolbox(containerDeep1Child.Toolbox);
+                    switch (containerDeep1Child.ToolType)
+                    {
+                        case ItemType.Undefine:
+                            break;
+                        case ItemType.Tool:
+                            WindowItem.AddDisplayerbox(containerDeep1Child.Displayerbox);
+                            break;
+                        case ItemType.Toolbox:
+                            WindowItem.AddToolbox(containerDeep1Child.Toolbox);
+                            break;
+                        default:
+                            break;
+                    }
                     AddChildrenToContainer(containerDeep1Child);
                 }
             }

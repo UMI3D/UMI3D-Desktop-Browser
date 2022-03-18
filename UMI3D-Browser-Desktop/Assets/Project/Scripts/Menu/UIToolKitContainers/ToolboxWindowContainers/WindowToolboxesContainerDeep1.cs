@@ -23,11 +23,6 @@ namespace umi3d.desktopBrowser.menu.Container
 {
     public partial class WindowToolboxesContainerDeep1
     {
-        public Toolbox_E Toolbox { get; private set; } = null;
-    }
-
-    public partial class WindowToolboxesContainerDeep1
-    {
         private void OnDestroy()
         {
             ToolboxItem.Remove();
@@ -57,15 +52,20 @@ namespace umi3d.desktopBrowser.menu.Container
             {
                 OnClicked = () => Select()
             };
+            SetContainerAsToolbox();
+        }
+
+        protected override void SetContainerAsToolbox()
+        {
+            base.SetContainerAsToolbox();
             Toolbox = new Toolbox_E(false);
-            isDisplayed = true;
         }
 
         protected override void SetContainerAsTool()
         {
+            base.SetContainerAsTool();
             ToolboxItem.SetItemStatus(true);
             Displayerbox = new Displayerbox_E();
-            IsTool = true;
         }
 
         public override void SetMenuItem(AbstractMenuItem menu)
@@ -103,10 +103,23 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.CollapseImp();
             foreach (AbstractDisplayer child in currentDisplayers)
+            {
                 if (child is WindowToolboxesContainerDeep1 containerDeep1)
-                    containerDeep1.Collapse();
-            if (IsTool) Displayerbox.Hide();
-            else Toolbox.Hide();        
+                    containerDeep1.Collapse(); 
+            }
+            switch (ToolType)
+            {
+                case ItemType.Undefine:
+                    break;
+                case ItemType.Tool:
+                    Displayerbox.Hide();
+                    break;
+                case ItemType.Toolbox:
+                    Toolbox.Hide();
+                    break;
+                default:
+                    break;
+            }
             ToolboxItem.Toggle(false);
         }
 
@@ -117,8 +130,19 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
         {
             base.ExpandAsImp(container);
-            if (IsTool) Displayerbox.Display();
-            else Toolbox.Display();
+            switch (ToolType)
+            {
+                case ItemType.Undefine:
+                    break;
+                case ItemType.Tool:
+                    Displayerbox.Display();
+                    break;
+                case ItemType.Toolbox:
+                    Toolbox.Display();
+                    break;
+                default:
+                    break;
+            }
             ToolboxItem.Toggle(true);
         }
 
@@ -132,13 +156,14 @@ namespace umi3d.desktopBrowser.menu.Container
             base.Insert(element, updateDisplay);
             if (element is WindowToolboxesContainerDeep1 containerDeep1)
             {
-                IsTool = false;
+                if (ToolType != ItemType.Toolbox)
+                    SetContainerAsToolbox();
                 ToolboxItem.SetItemStatus(false);
                 Toolbox.Adds(containerDeep1.ToolboxItem);
             }
             if (element is AbstractWindowInputDisplayer displayer)
             {
-                if (!IsTool)
+                if (ToolType != ItemType.Tool)
                     SetContainerAsTool();
                 Displayerbox.Add(displayer.Displayer);
             }

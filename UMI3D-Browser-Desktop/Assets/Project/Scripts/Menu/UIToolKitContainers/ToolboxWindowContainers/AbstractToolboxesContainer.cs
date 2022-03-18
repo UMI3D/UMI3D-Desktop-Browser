@@ -24,6 +24,8 @@ namespace umi3d.desktopBrowser.menu.Container
 {
     public partial class AbstractToolboxesContainer
     {
+        public enum ItemType { Undefine, Tool, Toolbox }
+
         /// <summary>
         /// Number of <see cref="AbstractDisplayer"/> maximum displayed at the same time.
         /// </summary>
@@ -37,13 +39,17 @@ namespace umi3d.desktopBrowser.menu.Container
         protected AbstractToolboxesContainer virtualContainer = null;
 
         public ToolboxItem_E ToolboxItem { get; protected set; } = null;
+        public Toolbox_E Toolbox { get; protected set; } = null;
         public Displayerbox_E Displayerbox { get; protected set; } = null;
-        public bool IsTool { get; protected set; } = false;
+        public ItemType ToolType { get; protected set; } = ItemType.Undefine;
     }
 
     public abstract partial class AbstractToolboxesContainer
     {
-        protected abstract void SetContainerAsTool();
+        protected virtual void SetContainerAsToolbox()
+            => ToolType = ItemType.Toolbox;
+        protected virtual void SetContainerAsTool()
+            => ToolType = ItemType.Tool;
     }
 
     public partial class AbstractToolboxesContainer : AbstractMenuDisplayContainer

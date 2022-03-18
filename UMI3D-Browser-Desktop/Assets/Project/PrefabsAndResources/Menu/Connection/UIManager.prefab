@@ -325,6 +325,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuAsset: {fileID: 11400000, guid: a84eab8642c4ac64da88d6d83b512b6f, type: 2}
   m_displayedOnStart: 1
+  m_collapseOnStart: 1
+  m_displayWhenAddNewItem: 1
   hideOnBack: 0
   displayDepth: 1
   firstContainerInScene: 1
@@ -574,7 +576,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuAsset: {fileID: 11400000, guid: a1215c884fdd17846a33bbba9c8656b9, type: 2}
-  m_displayedOnStart: 0
+  m_displayedOnStart: 1
+  m_collapseOnStart: 1
+  m_displayWhenAddNewItem: 0
   hideOnBack: 0
   displayDepth: 1
   firstContainerInScene: 1
@@ -846,6 +850,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuAsset: {fileID: 11400000, guid: e0ca03fe9e05d634a89f97e4be2f42b7, type: 2}
   m_displayedOnStart: 0
+  m_collapseOnStart: 0
+  m_displayWhenAddNewItem: 0
   hideOnBack: 0
   displayDepth: 1
   firstContainerInScene: 1
