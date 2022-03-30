@@ -111,7 +111,7 @@ namespace umi3d.cdk.collaboration
         /// <param name="onError">Action to be call when the request fail.</param>
         public void SendPostUpdateIdentity(Action callback, Action<string> onError, Func<RequestFailedArgument, bool> shouldTryAgain = null)
         {
-            UMI3DLogger.Log($"Send PostUpdateIdentity", scope | DebugScope.Connection);
+            UMI3DLogger.Log($"Send PostUpdateIdentity { UMI3DCollaborationClientServer.UserDto.dto.status}", scope | DebugScope.Connection);
             Action<UnityWebRequest> action = (uwr) =>
             {
                 UMI3DLogger.Log($"Received PostUpdateIdentity", scope | DebugScope.Connection);
