@@ -17,6 +17,7 @@ using BrowserDesktop.Menu;
 using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.menu;
@@ -93,8 +94,6 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         Debug.Assert(MenuDisplayManager != null);
         Debug.Assert(cam != null);
 
-        identifier.GetPinAction = GetPassword;
-        identifier.GetIdentityAction = GetIdentity;
         identifier.ShouldDownloadLib = ShouldDownloadLibraries;
         identifier.GetParameters = GetParameterDtos;
     }
@@ -226,7 +225,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         cam.clearFlags = CameraClearFlags.SolidColor;
         UMI3DEnvironmentLoader.Clear();
         UMI3DResourcesManager.Instance.ClearCache();
-        UMI3DCollaborationClientServer.Logout(() => { GameObject.Destroy(UMI3DClientServer.Instance.gameObject); }, null);
+        UMI3DCollaborationClientServer.EnvironmentLogout(() => { GameObject.Destroy(UMI3DClientServer.Instance.gameObject); }, null);
 
         SceneManager.LoadScene(launcherScene, LoadSceneMode.Single);
     }
@@ -242,6 +241,19 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
     }
+
+    private void Display()
+    {
+        isDisplayed = true;
+
+        connectionScreen.style.display = DisplayStyle.Flex;
+
+        CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
+
+
+        GameMenu.Instance.Display(false);
+    }
+
 
     #endregion
 
@@ -266,7 +278,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
         SessionInformationMenu.Instance.SetEnvironmentName(media, connectionData);
 
-        UMI3DCollaborationClientServer.Connect();
+        UMI3DCollaborationClientServer.Connect(media);
     }
 
     private void OnConnectionLost()
@@ -293,31 +305,31 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
             callback);
     }
 
-    /// <summary>
-    /// Asks users a login to join the environement.
-    /// </summary>
-    private void GetPassword(Action<string> callback)
-    {
-        DisplayScreenToLogin();
+    ///// <summary>
+    ///// Asks users a login to join the environement.
+    ///// </summary>
+    //private void GetPassword(Action<string> callback)
+    //{
+    //    DisplayScreenToLogin();
 
-        AskLogin(false);
-        connectBtn.clickable.clicked += () => SendIdentity((login, password) => callback(password));
+    //    AskLogin(false);
+    //    connectBtn.clickable.clicked += () => SendIdentity((login, password) => callback(password));
 
-        nextStep = () => SendIdentity((login, password) => callback(password));
-    }
+    //    nextStep = () => SendIdentity((login, password) => callback(password));
+    //}
 
-    /// <summary>
-    /// Asks users a login and password to join the environement.
-    /// </summary>
-    private void GetIdentity(Action<string, string> callback)
-    {
+    ///// <summary>
+    ///// Asks users a login and password to join the environement.
+    ///// </summary>
+    //private void GetIdentity(Action<string, string> callback)
+    //{
 
-        DisplayScreenToLogin();
+    //    DisplayScreenToLogin();
 
-        AskLogin(true);
-        connectBtn.clickable.clicked += () => SendIdentity(callback);
-        nextStep = () => SendIdentity(callback);
-    }
+    //    AskLogin(true);
+    //    connectBtn.clickable.clicked += () => SendIdentity(callback);
+    //    nextStep = () => SendIdentity(callback);
+    //}
 
     private void DisplayScreenToLogin()
     {
@@ -347,19 +359,19 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         passwordScreen.Q<Label>("password-label").style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
-    /// <summary>
-    /// Sends the login/password to the server.
-    /// </summary>
-    /// <param name="callback"></param>
-    private void SendIdentity(Action<string, string> callback)
-    {
-        passwordScreen.style.display = DisplayStyle.None;
-        callback.Invoke(loginInput.value, passwordInput.value);
-        UMI3DCollaborationClientServer.Identity.login = loginInput.value;
-        loadingScreen.style.display = DisplayStyle.Flex;
-        loader.SetText("Loading");
-        nextStep = null;
-    }
+    ///// <summary>
+    ///// Sends the login/password to the server.
+    ///// </summary>
+    ///// <param name="callback"></param>
+    //private void SendIdentity(Action<string, string> callback)
+    //{
+    //    passwordScreen.style.display = DisplayStyle.None;
+    //    callback.Invoke(loginInput.value, passwordInput.value);
+    //    UMI3DCollaborationClientServer.Identity.login = loginInput.value;
+    //    loadingScreen.style.display = DisplayStyle.Flex;
+    //    loader.SetText("Loading");
+    //    nextStep = null;
+    //}
 
     /// <summary>
     /// Checks if users need to download libraries to join the environement.
@@ -367,6 +379,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     /// </summary>
     private void ShouldDownloadLibraries(List<string> ids, Action<bool> callback)
     {
+        Display();
         loader.SetText("Loading environment"); // TODO change
         if (ids.Count == 0)
         {
@@ -395,6 +408,8 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     /// <param name="callback"></param>
     void GetParameterDtos(FormDto form, Action<FormAnswerDto> callback)
     {
+        Display();
+        Debug.Log($"GetParameterDtos {form?.fields?.Select(s => s.name).ToString<string>()}");
         loadingScreen.style.display = DisplayStyle.None;
         parametersScreen.style.display = DisplayStyle.Flex;
 

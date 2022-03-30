@@ -39,7 +39,7 @@ public class GameMenu : SingleBehaviour<GameMenu>
         });
     }
 
-    void Display(bool val)
+    public void Display(bool val)
     {
         gameMenu.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
     }
