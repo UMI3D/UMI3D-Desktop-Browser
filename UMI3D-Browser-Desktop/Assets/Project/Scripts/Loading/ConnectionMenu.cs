@@ -102,7 +102,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     {
         InitUI();
 
-
+        UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(OnRedirection);
         UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
     }
@@ -205,14 +205,21 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     /// Uses the connection data to connect to te server.
     /// </summary>
     /// <param name="connectionData"></param>
-    public void Connect(UserPreferencesManager.Data connectionData)
+    public async void Connect(UserPreferencesManager.Data connectionData)
     {
         this.connectionData = connectionData;
 
         loader.OnProgressChange(0);
         var curentUrl = "http://" + connectionData.ip + UMI3DNetworkingKeys.media;
         url = curentUrl;
-        UMI3DCollaborationClientServer.GetMedia(url, GetMediaSucces, GetMediaFailed, (e) => url == curentUrl && e.count < 3);
+        try
+        {
+            GetMediaSucces( await UMI3DCollaborationClientServer.GetMedia(url,(e) => url == curentUrl && e.count < 3));
+        }
+        catch(Exception e)
+        {
+            GetMediaFailed(e.Message);
+        }
     }
 
     /// <summary>
@@ -240,6 +247,11 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         connectionScreen.style.display = DisplayStyle.None;
 
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+    }
+
+    private void OnRedirection()
+    {
+        Display();
     }
 
     private void Display()
@@ -440,6 +452,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
             ButtonMenuItem send = new ButtonMenuItem() { Name = "Join", toggle = false };
             UnityAction<bool> action = (bool b) => {
+                Debug.Log("Return form A");
                 parametersScreen.style.display = DisplayStyle.None;
                 MenuDisplayManager.Hide(true);
                 Menu.menu.RemoveAll();
@@ -447,10 +460,12 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
                 CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
                 nextStep = null;
                 LocalInfoSender.CheckFormToUpdateAuthorizations(form);
+                Debug.Log("Return form");
             };
             send.Subscribe(action);
             Menu.menu.Add(send);
             nextStep = () => action(true);
+            Debug.Log("display form");
             MenuDisplayManager.Display(true);
         }
     }

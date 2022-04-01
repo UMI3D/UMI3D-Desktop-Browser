@@ -325,10 +325,18 @@ namespace BrowserDesktop.Controller
 
         void MouseHandler()
         {
+            if (ConnectionMenu.Instance.isDisplayed)
+            {
+                mouseData.save();
+                Hover();
+                return;
+            }
+            
             if (!(
                         mouseData.HoverState == HoverState.AutoProjected
-                        && ( SideMenu.IsExpanded)
-               ))
+                        && (SideMenu.IsExpanded)
+               )
+               )
             {
                 mouseData.save();
                 Vector3 screenPosition = Input.mousePosition;

@@ -319,15 +319,18 @@ namespace umi3d.cdk
         /// <returns></returns>
         public IEnumerator Load(GlTFEnvironmentDto dto, Action onSuccess, Action<string> onError)
         {
+            Debug.Log("Load");
             onProgressChange.Invoke(0.1f);
             isEnvironmentLoaded = false;
 
             environment = dto;
             RegisterEntityInstance(UMI3DGlobalID.EnvironementId, dto, null).NotifyLoaded();
             nodesToInstantiate = dto.scenes.Count;
+            Debug.Log($"Load A {dto.scenes.Count}");
+            Debug.Log($"Load B {nodesToInstantiate}");
             foreach (GlTFSceneDto sce in dto.scenes)
                 nodesToInstantiate += sce.nodes.Count;
-
+            Debug.Log($"Load C {nodesToInstantiate}");
             //
             // Load resources
             //
@@ -379,6 +382,7 @@ namespace umi3d.cdk
             {
                 onFinish();
             }
+            Debug.Log("End Load");
         }
 
         #endregion
@@ -538,12 +542,16 @@ namespace umi3d.cdk
                         LoadEntity(item, performed2);
                 }
             };
-            Action<string> error = (s) =>
+
+            try
             {
-                UMI3DLogger.LogError(s, scope);
+                UMI3DClientServer.GetEntity(ids, callback);
+            }
+            catch(Exception e)
+            {
+                UMI3DLogger.LogError(e.Message, scope);
                 performed2.Invoke();
-            };
-            UMI3DClientServer.GetEntity(ids, callback, error);
+            }
         }
 
         /// <summary>
@@ -589,6 +597,7 @@ namespace umi3d.cdk
         /// </summary>
         public static void Clear()
         {
+            Debug.Log("clear");
             Instance.entityFilters.Clear();
 
             foreach (ulong entity in Instance.entities.ToList().Select(p => { return p.Key; }))
@@ -596,8 +605,25 @@ namespace umi3d.cdk
                 DeleteEntity(entity, null);
             }
             UMI3DResourcesManager.Instance.ClearCache();
+
+            Instance.entities.Clear();
+            Instance.entitywaited.Clear();
+            Instance.entityToBeLoaded.Clear();
+            Instance.entityFailedToBeLoaded.Clear();
+
             Instance.isEnvironmentLoaded = false;
-        }
+
+            Instance.environment = null;
+            Instance.nodesToInstantiate = 0;
+            Instance.instantiatedNodes = 0;
+            Instance.resourcesToLoad = 0;
+            Instance.loadedResources = 0;
+
+            Instance.started = false;
+            Instance.downloaded = false;
+            Instance.loaded = false;
+
+    }
 
         /// <summary>
         /// Load environment.

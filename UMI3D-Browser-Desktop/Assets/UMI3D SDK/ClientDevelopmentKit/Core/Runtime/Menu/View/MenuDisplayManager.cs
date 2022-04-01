@@ -163,13 +163,11 @@ namespace umi3d.cdk.menu.view
         /// <param name="update">Should the display be updated (in case of changes in menu)</param>
         public void Display(bool update)
         {
-            Debug.Log("Display");
             if (menu == null || menu.Count == 0)
                 return;
-            Debug.Log("Display 2");
+
             if (update || !isDisplaying)
             {
-                Debug.Log("Display 3");
                 if (isDisplaying)
                 {
                     AbstractMenuItem last = lastMenuContainerUnderNavigation.menu;

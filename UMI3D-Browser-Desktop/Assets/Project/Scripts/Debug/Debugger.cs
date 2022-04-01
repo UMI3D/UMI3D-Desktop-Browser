@@ -74,7 +74,7 @@ public class Debugger : PersistentSingleBehaviour<Debugger>
             WriteLabel(new Rect(14, getLine(), row, 25), $"Bandwidth Out: {NetworkManager.Instance.Networker.BandwidthOut} bytes");
         }
         if(umi3d.cdk.collaboration.UMI3DCollaborationClientServer.Exists)
-            WriteLabel(new Rect(14, getLine(), row, 25), "Round Trip Latency (ms): " + umi3d.cdk.collaboration.UMI3DCollaborationClientServer.Instance.ForgeClient?.RoundTripLatency);
+            WriteLabel(new Rect(14, getLine(), row, 25), "Round Trip Latency (ms): " + umi3d.cdk.UMI3DClientServer.Instance.GetRoundTripLAtency());
         WriteLabel(new Rect(14, getLine(), row, 25), "----------");
         //if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
         //    umi3d.cdk.collaboration.MicrophoneListener.Instance.GetInfo().ForEach(e => WriteLabel(new Rect(14, getLine(), row, 25), e));
