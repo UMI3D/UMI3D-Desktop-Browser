@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
-  m_Name: Displayerbox
+  m_Name: MenuBar_ToolboxPinned
   m_EditorClassIdentifier: 
   AppliesFormatAndStyle:
     m_PersistentCalls:
@@ -25,9 +25,9 @@ MonoBehaviour:
       m_valueMode: 0
       m_value: 0
     m_width:
-      m_keyword: 10
+      m_keyword: 0
       m_valueMode: 0
-      m_value: 250
+      m_value: 0
     m_maxHeight:
       m_keyword: 0
       m_valueMode: 0
@@ -46,21 +46,21 @@ MonoBehaviour:
       m_value: 0
   m_marginAndPadding:
     m_margin:
-      m_keyword: 11
+      m_keyword: 1
       m_value:
         m_global: 0
-        m_bottom: 6
-        m_left: 5
-        m_right: 5
+        m_bottom: 0
+        m_left: 0
+        m_right: 0
         m_top: 0
     m_padding:
       m_keyword: 11
       m_value:
-        m_global: 10
-        m_bottom: 10
-        m_left: 10
-        m_right: 10
-        m_top: 10
+        m_global: 0
+        m_bottom: 5
+        m_left: 0
+        m_right: 0
+        m_top: 0
   m_textFormat:
     m_fontSize:
       m_keyword: 0
@@ -87,8 +87,8 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 21
-            m_value: {r: 0, g: 0, b: 0, a: 0}
+            m_keyword: 20
+            m_value: {r: 0, g: 0, b: 0, a: 1}
           m_image:
             m_keyword: 0
             m_value: {fileID: 0}
@@ -122,7 +122,7 @@ MonoBehaviour:
     m_border:
     - m_key: 
       m_default:
-        m_keyword: 2
+        m_keyword: 0
         m_value:
           m_color:
             m_keyword: 0
@@ -141,13 +141,13 @@ MonoBehaviour:
               m_right: 0
               m_top: 0
           m_radius:
-            m_keyword: 10
+            m_keyword: 0
             m_value:
-              m_global: 3
-              m_bottomLeft: 3
-              m_bottomRight: 3
-              m_topLeft: 3
-              m_TopRight: 3
+              m_global: 0
+              m_bottomLeft: 0
+              m_bottomRight: 0
+              m_topLeft: 0
+              m_TopRight: 0
       m_mouseOver:
         m_keyword: 0
         m_value:

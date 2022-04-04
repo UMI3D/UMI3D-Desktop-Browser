@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using umi3d.cdk.menu;
@@ -22,7 +23,7 @@ using UnityEngine;
 
 namespace umi3d.desktopBrowser.menu.Container
 {
-    public partial class AbstractToolboxesContainer
+    public abstract partial class AbstractToolboxesContainer
     {
         public enum ItemType { Undefine, Tool, Toolbox }
 
@@ -42,17 +43,25 @@ namespace umi3d.desktopBrowser.menu.Container
         public Toolbox_E Toolbox { get; protected set; } = null;
         public Displayerbox_E Displayerbox { get; protected set; } = null;
         public ItemType ToolType { get; protected set; } = ItemType.Undefine;
+        public Action<AbstractToolboxesContainer> OnItemTypeChanged;
     }
 
     public abstract partial class AbstractToolboxesContainer
     {
         protected virtual void SetContainerAsToolbox()
-            => ToolType = ItemType.Toolbox;
+        {
+            ToolType = ItemType.Toolbox;
+            OnItemTypeChanged?.Invoke(this);
+        }
         protected virtual void SetContainerAsTool()
-            => ToolType = ItemType.Tool;
+        {
+            ToolType = ItemType.Tool;
+            OnItemTypeChanged?.Invoke(this);
+        }
+        protected abstract void ItemTypeChanged(AbstractToolboxesContainer item);
     }
 
-    public partial class AbstractToolboxesContainer : AbstractMenuDisplayContainer
+    public abstract partial class AbstractToolboxesContainer : AbstractMenuDisplayContainer
     {
         protected virtual void Awake()
         {
@@ -178,11 +187,16 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <param name="updateDisplay"></param>
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
-            if (element is AbstractMenuDisplayContainer menuContainer)
+            if (element is AbstractToolboxesContainer menuContainer)
+            {
                 menuContainer.parent = this;
+                menuContainer.OnItemAdded = ItemAdded;
+                menuContainer.OnItemTypeChanged = ItemTypeChanged;
+            }
             element.transform.SetParent(this.transform);
             currentDisplayers.Add(element);
             element.Hide();
+            
             if (updateDisplay)
                 Display(true);
         }
@@ -196,9 +210,7 @@ namespace umi3d.desktopBrowser.menu.Container
         public override void Insert(AbstractDisplayer element, int index, bool updateDisplay = true)
         {
             if (element is AbstractMenuDisplayContainer menuContainer)
-            {
                 menuContainer.parent = this;
-            }
 
             element.transform.SetParent(this.transform);
             element.transform.SetSiblingIndex(index);
@@ -233,7 +245,12 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             if (!currentDisplayers.Remove(element))
                 return false;
-
+            if (element is AbstractToolboxesContainer menuContainer)
+            {
+                menuContainer.parent = null;
+                menuContainer.OnItemAdded = null;
+                menuContainer.OnItemTypeChanged = null;
+            }
             if (updateDisplay)
                 Display(true);
 

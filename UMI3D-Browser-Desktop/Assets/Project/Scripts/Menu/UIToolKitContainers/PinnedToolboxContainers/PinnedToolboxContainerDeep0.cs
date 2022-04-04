@@ -36,7 +36,7 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void Awake()
         {
             base.Awake();
-            Toolbox = new Toolbox_E();
+            Toolbox = new Toolbox_E(ToolboxType.Pinned);
         }
 
         /// <summary>
@@ -44,18 +44,19 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void SetContainerAsTool()
         {
-            base.SetContainerAsTool();
             ToolboxItem = new ToolboxItem_E()
             {
                 OnClicked = () =>
                 {
                     Select();
+                    ToolboxPinnedWindow_E.Instance.SetTopBarName(menu.Name);
                     ToolboxPinnedWindow_E.Instance.Display();
                 }
             };
             ToolboxItem.SetItemStatus(true);
-            Displayerbox = new Displayerbox_E();
+            Displayerbox = new Displayerbox_E(DisplayerboxType.ParametersPopup);
             ToolboxPinnedWindow_E.Instance.Adds(Displayerbox);
+            base.SetContainerAsTool();
         }
 
         /// <summary>
@@ -90,6 +91,7 @@ namespace umi3d.desktopBrowser.menu.Container
             if (ToolType == ItemType.Tool)
             {
                 Displayerbox.Hide();
+                Debug.Log($"collapse deep 0 toogle false");
                 ToolboxItem.Toggle(false);
             }
         }
@@ -134,8 +136,6 @@ namespace umi3d.desktopBrowser.menu.Container
                     default:
                         break;
                 }
-
-                AddChildrenToContainer(containerDeep1);
             }
             else if (element is AbstractWindowInputDisplayer displayer)
             {
@@ -146,27 +146,25 @@ namespace umi3d.desktopBrowser.menu.Container
             }
         }
 
-        private void AddChildrenToContainer(PinnedToolboxContainerDeep1 containerDeep1)
-        {
-            foreach (AbstractDisplayer displayer in containerDeep1)
-            {
-                if (displayer is PinnedToolboxContainerDeep1 containerDeep1Child)
-                {
-                    switch (containerDeep1Child.ToolType)
-                    {
-                        case ItemType.Undefine:
-                            break;
-                        case ItemType.Tool:
-                            ToolboxPinnedWindow_E.Instance.Adds(containerDeep1Child.Displayerbox);
-                            break;
-                        case ItemType.Toolbox:
-                            MenuBar_E.Instance.AddToolboxDeep1Plus(containerDeep1Child.Toolbox);
-                            break;
-                        default:
-                            break;
-                    }
+        protected override void ItemAdded(AbstractDisplayer displayer)
+        { }
 
-                    AddChildrenToContainer(containerDeep1Child);
+        protected override void ItemTypeChanged(AbstractToolboxesContainer item)
+        {
+            if (item is PinnedToolboxContainerDeep1 containerDeep1Child)
+            {
+                switch (containerDeep1Child.ToolType)
+                {
+                    case ItemType.Undefine:
+                        break;
+                    case ItemType.Tool:
+                        ToolboxPinnedWindow_E.Instance.Adds(containerDeep1Child.Displayerbox);
+                        break;
+                    case ItemType.Toolbox:
+                        MenuBar_E.Instance.AddToolboxDeep1Plus(containerDeep1Child.Toolbox);
+                        break;
+                    default:
+                        break;
                 }
             }
         }

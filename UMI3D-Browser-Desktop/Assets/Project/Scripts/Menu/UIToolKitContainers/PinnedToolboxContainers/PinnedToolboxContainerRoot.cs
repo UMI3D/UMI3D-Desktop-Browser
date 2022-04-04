@@ -15,7 +15,6 @@ limitations under the License.
 */
 using umi3d.cdk.menu.view;
 using umi3dDesktopBrowser.ui.viewController;
-using UnityEngine;
 
 namespace umi3d.desktopBrowser.menu.Container
 {
@@ -57,5 +56,11 @@ namespace umi3d.desktopBrowser.menu.Container
                 MenuBar_E.Instance.RemoveToolboxDeep0(containerDeep0.Toolbox);
             return true;
         }
+
+        protected override void ItemAdded(AbstractDisplayer displayer)
+        { }
+
+        protected override void ItemTypeChanged(AbstractToolboxesContainer item)
+        { }
     }
 }

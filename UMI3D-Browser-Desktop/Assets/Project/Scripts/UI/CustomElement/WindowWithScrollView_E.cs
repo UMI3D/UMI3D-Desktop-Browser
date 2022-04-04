@@ -26,6 +26,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected ScrollView_E m_scrollView { get; set; } = null;
         protected Label_E m_label { get; set; } = null;
+        protected ButtonWithIcon_E m_closeButton { get; set; } = null;
     }
 
     public partial class WindowWithScrollView_E
@@ -58,10 +59,15 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             Button closeButton = Root.Q<Button>("closeButton");
             OnCloseButtonPressed += Hide;
-            new Button_E(closeButton, styleResourcePath, keys)
-            {
-                OnClicked = () => { OnCloseButtonPressed(); }
-            };
+            if (m_closeButton == null)
+                m_closeButton = new ButtonWithIcon_E(closeButton);
+            m_closeButton.SetButton(styleResourcePath, keys, () => OnCloseButtonPressed());
+        }
+        public void SetCloseButton(string butttonStyleResourcePath, StyleKeys buttonKeys, string iconStyleResourcePath, StyleKeys iconKeys)
+        {
+            SetCloseButton(butttonStyleResourcePath, buttonKeys);
+            m_closeButton.SetIcon(iconStyleResourcePath, iconKeys);
+            m_closeButton.ApplyButtonStyleWithIcon();
         }
 
         public void SetVerticalScrollView(string svStyle, StyleKeys svKeys, string dcStyle, StyleKeys dcKeys, string dStyle, StyleKeys dKeys)

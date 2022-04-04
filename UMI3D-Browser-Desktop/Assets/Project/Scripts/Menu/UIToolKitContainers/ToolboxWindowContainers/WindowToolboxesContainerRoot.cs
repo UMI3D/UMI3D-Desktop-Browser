@@ -15,7 +15,6 @@ limitations under the License.
 */
 using umi3d.cdk.menu.view;
 using umi3dDesktopBrowser.ui.viewController;
-using UnityEngine;
 
 namespace umi3d.desktopBrowser.menu.Container
 {
@@ -85,5 +84,11 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.Insert(element, index, updateDisplay);
         }
+
+        protected override void ItemAdded(AbstractDisplayer displayer)
+        { }
+
+        protected override void ItemTypeChanged(AbstractToolboxesContainer item)
+        { }
     }
 }
