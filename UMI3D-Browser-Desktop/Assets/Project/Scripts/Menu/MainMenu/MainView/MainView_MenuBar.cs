@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using umi3d.cdk;
 using umi3d.cdk.menu;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
@@ -39,7 +38,7 @@ namespace umi3dDesktopBrowser.ui
 
             MenuBar_E.Instance.ToolboxButton.OnClicked = () =>
             {
-                m_windowToolboxesDM.CreateMenuAndDisplay(true, false);
+                m_windowToolboxesDM.Display(true);
             };
 
             m_viewport.Add(MenuBar_E.Instance.SubMenuLayout);
@@ -50,13 +49,13 @@ namespace umi3dDesktopBrowser.ui
         private void InitToolboxWindow()
         {
             ToolboxWindow_E.Instance.InsertRootTo(m_viewport);
-            ToolboxWindow_E.Instance.OnCloseButtonPressed += () => m_windowToolboxesDM.Collapse(false);
+            ToolboxWindow_E.Instance.OnCloseButtonPressed += () => m_windowToolboxesDM.Collapse(true);
         }
 
         private void InitToolboxPinnedWindow()
         {
             ToolboxPinnedWindow_E.Instance.InsertRootTo(m_viewport);
-            ToolboxPinnedWindow_E.Instance.OnCloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(false);
+            ToolboxPinnedWindow_E.Instance.OnCloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(true);
         }
 
         private void PinUnpin(bool value, Menu menu)

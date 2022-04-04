@@ -284,6 +284,7 @@ namespace umi3d.cdk.menu.view
         /// <param name="submenu"></param>
         public void Navigate(AbstractMenu submenu)
         {
+            //Debug.Log($"last menu = [{lastMenuContainerUnderNavigation.menu.Name}]");
             if (!menuToDisplayer.TryGetValue(submenu, out AbstractMenuDisplayContainer displayer))
                 throw new System.Exception("Internal error : no displayer found for this menu");
 
@@ -321,7 +322,6 @@ namespace umi3d.cdk.menu.view
                 Navigate(precCurrentDisplayer.menu as AbstractMenu);
 
             lastMenuContainerUnderNavigation = displayer;
-
             currentDisplayer.Display();
             currentDisplayer.Collapse();
 
@@ -421,17 +421,17 @@ namespace umi3d.cdk.menu.view
             containers.Add(subContainer);
             menuToDisplayer.Add(subMenu, subContainer);
 
-            foreach (AbstractMenu sub in subMenu.GetSubMenu())
-                CreateSubMenu(subContainer, sub, containerDepth + 1);
-            foreach (AbstractMenuItem item in subMenu.GetMenuItems())
-                CreateItem(subContainer, item);
-
             if (container != null)
             {
                 subContainer.parent = container;
                 subContainer.backButtonPressed.AddListener(() => Navigate(container.menu as AbstractMenu));
                 container.Insert(subContainer, false);
             }
+
+            foreach (AbstractMenu sub in subMenu.GetSubMenu())
+                CreateSubMenu(subContainer, sub, containerDepth + 1);
+            foreach (AbstractMenuItem item in subMenu.GetMenuItems())
+                CreateItem(subContainer, item);
 
             SetMenuAction(container, subMenu, subContainer, containerDepth);
             if (subMenu.navigable)

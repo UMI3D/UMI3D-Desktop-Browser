@@ -18,6 +18,7 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
+    public enum DisplayerboxType { ToolboxesPopup, ParametersPopup }
     public partial class Displayerbox_E
     {
         private static VisualElement m_displayerbox
@@ -29,14 +30,27 @@ namespace umi3dDesktopBrowser.ui.viewController
                 return displayerbox;
             }
         }
-        private static string m_displayerboxStyle = "UI/Style/Displayers/Displayerbox";
+        private static string m_displayerboxToolboxStyle = "UI/Style/Displayers/ToolboxDisplayerbox";
+        private static string m_displayerboxParameterStyle = "UI/Style/Displayers/ParameterDisplayerbox";
         private static StyleKeys m_displayerboxKeys = new StyleKeys(null, "", "");
+        private static string GetDisplayerboxType(DisplayerboxType type)
+        {
+            switch (type)
+            {
+                case DisplayerboxType.ToolboxesPopup:
+                    return m_displayerboxToolboxStyle;
+                case DisplayerboxType.ParametersPopup:
+                    return m_displayerboxParameterStyle;
+                default:
+                    throw new System.Exception();
+            }
+        }
     }
 
     public partial class Displayerbox_E
     {
-        public Displayerbox_E() :
-            base(m_displayerbox, m_displayerboxStyle, m_displayerboxKeys)
+        public Displayerbox_E(DisplayerboxType type) :
+            base(m_displayerbox, GetDisplayerboxType(type), m_displayerboxKeys)
         { }
 
         public void Add(params Displayer_E[] displayers)

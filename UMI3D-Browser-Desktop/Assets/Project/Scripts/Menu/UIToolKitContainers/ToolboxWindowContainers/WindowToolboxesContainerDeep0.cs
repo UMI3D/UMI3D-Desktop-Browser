@@ -52,14 +52,14 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void SetContainerAsTool()
         {
-            base.SetContainerAsTool();
             ToolboxItem = new ToolboxItem_E(false)
             {
                 OnClicked = () => Select()
             };
             ToolboxItem.SetItemStatus(true);
-            Displayerbox = new Displayerbox_E();
+            Displayerbox = new Displayerbox_E(DisplayerboxType.ToolboxesPopup);
             WindowItem.AddDisplayerbox(Displayerbox);
+            base.SetContainerAsTool();
         }
 
         /// <summary>
@@ -148,8 +148,6 @@ namespace umi3d.desktopBrowser.menu.Container
                     default:
                         break;
                 }
-
-                AddChildrenToContainer(containerDeep1);
             }
             else if (element is AbstractWindowInputDisplayer displayer)
             {
@@ -157,30 +155,6 @@ namespace umi3d.desktopBrowser.menu.Container
                     SetContainerAsTool();
                 WindowItem.AddToolboxItemInFirstToolbox(ToolboxItem);
                 Displayerbox.Add(displayer.Displayer);
-            }
-        }
-
-        private void AddChildrenToContainer(WindowToolboxesContainerDeep1 containerDeep1)
-        {
-            foreach (AbstractDisplayer displayer in containerDeep1)
-            {
-                if (displayer is WindowToolboxesContainerDeep1 containerDeep1Child)
-                {
-                    switch (containerDeep1Child.ToolType)
-                    {
-                        case ItemType.Undefine:
-                            break;
-                        case ItemType.Tool:
-                            WindowItem.AddDisplayerbox(containerDeep1Child.Displayerbox);
-                            break;
-                        case ItemType.Toolbox:
-                            WindowItem.AddToolbox(containerDeep1Child.Toolbox);
-                            break;
-                        default:
-                            break;
-                    }
-                    AddChildrenToContainer(containerDeep1Child);
-                }
             }
         }
 
@@ -194,6 +168,29 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.Insert(element, index, updateDisplay);
             Debug.Log("<color=green>TODO: </color>" + $"");
+        }
+
+        protected override void ItemAdded(AbstractDisplayer displayer)
+        { }
+
+        protected override void ItemTypeChanged(AbstractToolboxesContainer item)
+        {
+            if (item is WindowToolboxesContainerDeep1 containerDeep1Child)
+            {
+                switch (containerDeep1Child.ToolType)
+                {
+                    case ItemType.Undefine:
+                        break;
+                    case ItemType.Tool:
+                        WindowItem.AddDisplayerbox(containerDeep1Child.Displayerbox);
+                        break;
+                    case ItemType.Toolbox:
+                        WindowItem.AddToolbox(containerDeep1Child.Toolbox);
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 }

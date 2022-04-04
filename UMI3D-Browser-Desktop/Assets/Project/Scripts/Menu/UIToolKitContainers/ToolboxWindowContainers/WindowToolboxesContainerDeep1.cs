@@ -26,21 +26,9 @@ namespace umi3d.desktopBrowser.menu.Container
         private void OnDestroy()
         {
             ToolboxItem.Remove();
-            Toolbox.Remove();
+            Toolbox?.Remove();
             Displayerbox?.Remove();
         }
-
-        //private WindowToolboxesContainerDeep0 FindContainerDeep0()
-        //{
-        //    AbstractMenuDisplayContainer virtualParent = this;
-        //    while(virtualParent.parent != null)
-        //    {
-        //        virtualParent = virtualParent.parent;
-        //        if (virtualParent is WindowToolboxesContainerDeep0)
-        //            return virtualParent as WindowToolboxesContainerDeep0;
-        //    }
-        //    throw new System.Exception("No parent is a WindowToolboxContainerDeep0");
-        //}
     }
 
     public partial class WindowToolboxesContainerDeep1 : AbstractToolboxesContainer
@@ -52,20 +40,21 @@ namespace umi3d.desktopBrowser.menu.Container
             {
                 OnClicked = () => Select()
             };
-            SetContainerAsToolbox();
         }
 
         protected override void SetContainerAsToolbox()
         {
+            ToolboxItem.SetItemStatus(false);
+            Toolbox = new Toolbox_E(ToolboxType.Popup);
+            Toolbox.SetToolboxName(menu.Name ?? "");
             base.SetContainerAsToolbox();
-            Toolbox = new Toolbox_E(false);
         }
 
         protected override void SetContainerAsTool()
         {
-            base.SetContainerAsTool();
             ToolboxItem.SetItemStatus(true);
-            Displayerbox = new Displayerbox_E();
+            Displayerbox = new Displayerbox_E(DisplayerboxType.ToolboxesPopup);
+            base.SetContainerAsTool();
         }
 
         public override void SetMenuItem(AbstractMenuItem menu)
@@ -74,7 +63,6 @@ namespace umi3d.desktopBrowser.menu.Container
             if (menu.icon2D != null)
                 ToolboxItem.SetIcon(menu.icon2D);
             ToolboxItem.Label.value = menu.Name;
-            Toolbox.SetToolboxName(menu.Name ?? "");
         }
 
         /// <summary>
@@ -158,7 +146,6 @@ namespace umi3d.desktopBrowser.menu.Container
             {
                 if (ToolType != ItemType.Toolbox)
                     SetContainerAsToolbox();
-                ToolboxItem.SetItemStatus(false);
                 Toolbox.Adds(containerDeep1.ToolboxItem);
             }
             if (element is AbstractWindowInputDisplayer displayer)
@@ -167,6 +154,7 @@ namespace umi3d.desktopBrowser.menu.Container
                     SetContainerAsTool();
                 Displayerbox.Add(displayer.Displayer);
             }
+            ItemAdded(element);
         }
 
         /// <summary>
@@ -180,5 +168,11 @@ namespace umi3d.desktopBrowser.menu.Container
             base.Insert(element, index, updateDisplay);
             Debug.Log("<color=green>TODO: </color>" + $"");
         }
+
+        protected override void ItemAdded(AbstractDisplayer item)
+        { }
+
+        protected override void ItemTypeChanged(AbstractToolboxesContainer item)
+            => OnItemTypeChanged?.Invoke(item);
     }
 }

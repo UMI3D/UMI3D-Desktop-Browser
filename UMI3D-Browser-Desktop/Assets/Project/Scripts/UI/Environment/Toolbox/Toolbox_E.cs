@@ -18,6 +18,7 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
+    public enum ToolboxType { Pinned, SubPinned, Popup }
     public partial class Toolbox_E
     {
         public Label_E ToolboxName { get; protected set; } = null;
@@ -25,17 +26,32 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected Label m_name { get; private set; } = null;
 
         private static string m_toolboxResourcePath => "UI/UXML/Toolbox/Toolbox";
-        private static string m_toolboxMenuStyle => "UI/Style/MenuBar/MenuBar_Toolbox";
-        private static string m_toolboxWindowStyle => "UI/Style/ToolboxWindow/ToolboxWindow_Toolbox";
+        private static string m_toolboxPinnedStyle => "UI/Style/MenuBar/MenuBar_ToolboxPinned";
+        private static string m_toolboxSubPinnedStyle => "UI/Style/MenuBar/MenuBar_ToolboxSubPinned";
+        private static string m_toolboxPopupStyle => "UI/Style/ToolboxWindow/ToolboxWindow_Toolbox";
         private static StyleKeys m_toolboxKeys => new StyleKeys(null, "", "");
+        private static string GetToolboxType(ToolboxType type)
+        {
+            switch (type)
+            {
+                case ToolboxType.Pinned:
+                    return m_toolboxPinnedStyle;
+                case ToolboxType.SubPinned:
+                    return m_toolboxSubPinnedStyle;
+                case ToolboxType.Popup:
+                    return m_toolboxPopupStyle;
+                default:
+                    throw new System.Exception();
+            }
+        }
     }
 
     public partial class Toolbox_E
     {
-        public Toolbox_E(bool isInMenuBar = true) :
-            this(null, isInMenuBar) { }
-        public Toolbox_E(string toolboxName, bool isInMenuBar = true, params ToolboxItem_E[] items) : 
-            base(m_toolboxResourcePath, (isInMenuBar) ? m_toolboxMenuStyle : m_toolboxWindowStyle, m_toolboxKeys)
+        public Toolbox_E(ToolboxType type = ToolboxType.Pinned) :
+            this(null, type) { }
+        public Toolbox_E(string toolboxName, ToolboxType type = ToolboxType.Pinned, params ToolboxItem_E[] items) : 
+            base(m_toolboxResourcePath, GetToolboxType(type), m_toolboxKeys)
         {
             string nameStyle = "UI/Style/Toolbox/ToolboxName";
             StyleKeys nameKeys = new StyleKeys("", null, null);
@@ -53,7 +69,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             StyleKeys forwardKeys = new StyleKeys(null, "forward", null);
             SetHorizontalForwarddButtonStyle(forwardContainer, forwardLayout, buttonStyle, forwardKeys);
 
-            if (isInMenuBar)
+            if (type == ToolboxType.Pinned)
             {
                 backwardLayout.style.display = DisplayStyle.None;
                 forwardLayout.style.display = DisplayStyle.None;

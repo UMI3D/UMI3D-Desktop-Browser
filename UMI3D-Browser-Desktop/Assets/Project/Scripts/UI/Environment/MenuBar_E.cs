@@ -133,7 +133,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             SubMenuLayout.style.height = Length.Percent(100f);
 
             ToolboxButton = new ToolboxItem_E("Toolbox", "Toolbox");
-            new Toolbox_E("", true, ToolboxButton)    
+            new Toolbox_E("", ToolboxType.Pinned, ToolboxButton)    
                 .InsertRootTo(leftLayout_VE);
 
             AddSeparator(leftLayout_VE);
@@ -170,13 +170,13 @@ namespace umi3dDesktopBrowser.ui.viewController
             Avatar = new ToolboxItem_E("AvatarOn", "AvatarOff", "");
             Sound = new ToolboxItem_E("SoundOn", "SoundOff", "");
             Mic = new ToolboxItem_E("MicOn", "MicOff", "");
-            new Toolbox_E("", true, Avatar, Sound, Mic)    
+            new Toolbox_E("", ToolboxType.Pinned, Avatar, Sound, Mic)    
                 .InsertRootTo(rightLayout_VE);
 
             AddSeparator(rightLayout_VE);
 
             m_leave = new ToolboxItem_E("Leave", "");
-            new Toolbox_E("", true, m_leave)
+            new Toolbox_E("", ToolboxType.Pinned, m_leave)
                 .InsertRootTo(rightLayout_VE);
         }
 

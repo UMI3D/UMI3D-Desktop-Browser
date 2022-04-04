@@ -64,6 +64,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 Visual_E separator = null;
                 if (m_items.Count > 0 && AddSeparator != null)
                     separator = AddSeparator(Scroll_View);
+                Debug.Log($"add");
                 m_items.Add(item, separator);
                 item.InsertRootTo(Scroll_View);
             }

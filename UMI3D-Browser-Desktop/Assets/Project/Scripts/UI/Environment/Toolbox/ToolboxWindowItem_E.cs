@@ -89,7 +89,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             //StyleKeys displayersContainerKeys = new StyleKeys(null, "");
             AddVisualStyle(m_displayersContainer, displayersContainerStyle, null);
 
-            FirstToolbox = new Toolbox_E(false);
+            FirstToolbox = new Toolbox_E(ToolboxType.Popup);
             AddToolbox(FirstToolbox);
         }
 

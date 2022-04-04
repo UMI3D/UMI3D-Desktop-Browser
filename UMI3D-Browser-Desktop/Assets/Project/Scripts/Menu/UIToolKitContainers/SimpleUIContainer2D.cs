@@ -488,6 +488,11 @@ namespace BrowserDesktop.Menu
             containerElement?.RemoveFromHierarchy();
         }
 
+        protected override void ItemAdded(AbstractDisplayer displayer)
+        {
+            throw new System.NotImplementedException();
+        }
+
         #endregion
     }
 }
