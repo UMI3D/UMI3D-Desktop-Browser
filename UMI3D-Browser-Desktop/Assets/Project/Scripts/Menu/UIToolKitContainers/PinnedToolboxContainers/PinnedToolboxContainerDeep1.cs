@@ -33,7 +33,6 @@ namespace umi3d.desktopBrowser.menu.Container
 
     public partial class PinnedToolboxContainerDeep1 : AbstractToolboxesContainer
     {
-
         protected override void Awake()
         {
             base.Awake();
@@ -69,7 +68,7 @@ namespace umi3d.desktopBrowser.menu.Container
             if (menu.icon2D != null)
                 ToolboxItem.SetIcon(menu.icon2D);
             ToolboxItem.Label.value = menu.Name;
-            Toolbox.SetToolboxName(menu.Name ?? "");
+            Toolbox?.SetToolboxName(menu.Name ?? "");
         }
 
         /// <summary>

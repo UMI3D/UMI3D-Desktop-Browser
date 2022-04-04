@@ -384,6 +384,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuAsset: {fileID: 11400000, guid: 902c43368555d6d49a121364927adbc4, type: 2}
+  m_displayedOnStart: 1
+  m_collapseOnStart: 1
+  m_displayWhenAddNewItem: 0
   hideOnBack: 0
   displayDepth: 1
   firstContainerInScene: 1
