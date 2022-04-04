@@ -80,8 +80,6 @@ namespace umi3d.cdk.collaboration
             lastTokenUpdate = default;
             HttpClient = new HttpClient(this);
             needToGetFirstConnectionInfo = true;
-
-            Debug.Log(worldControllerClient.Identity.localToken);
         }
 
         public bool Connect() 
@@ -120,10 +118,8 @@ namespace umi3d.cdk.collaboration
             }
             await Task.Yield();
 
-            Debug.LogError("ARF");
-
             isConnecting = false;
-            Connect();
+            isConnected = false;
         }
 
         public async Task<bool> Logout()
