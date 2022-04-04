@@ -102,7 +102,6 @@ namespace umi3d.cdk.collaboration
         /// <param name="authenticator"></param>
         public void Join(IUserAuthenticator authenticator = null)
         {
-            Debug.Log("Join");
             client = new UDPClient();
 
             if (authenticator != null)
@@ -136,7 +135,7 @@ namespace umi3d.cdk.collaboration
             {
                 mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
             }
-            Debug.Log("init");
+
             mgr.Initialize(client, masterServerHost, masterServerPort, null);
         }
 
@@ -145,7 +144,6 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         public void Stop()
         {
-            Debug.LogWarning("Stop");
             if (client != null) client.Disconnect(true);
             client = null;
             if (NetworkManager.Instance?.Networker != null)
@@ -177,7 +175,6 @@ namespace umi3d.cdk.collaboration
         /// <param name="sender"></param>
         private void AcceptedByServer(NetWorker sender)
         {
-            Debug.Log("Accepted by server");
         }
 
         /// <summary>

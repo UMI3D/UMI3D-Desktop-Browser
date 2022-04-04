@@ -326,11 +326,8 @@ namespace umi3d.cdk
             environment = dto;
             RegisterEntityInstance(UMI3DGlobalID.EnvironementId, dto, null).NotifyLoaded();
             nodesToInstantiate = dto.scenes.Count;
-            Debug.Log($"Load A {dto.scenes.Count}");
-            Debug.Log($"Load B {nodesToInstantiate}");
             foreach (GlTFSceneDto sce in dto.scenes)
                 nodesToInstantiate += sce.nodes.Count;
-            Debug.Log($"Load C {nodesToInstantiate}");
             //
             // Load resources
             //
@@ -597,7 +594,6 @@ namespace umi3d.cdk
         /// </summary>
         public static void Clear()
         {
-            Debug.Log("clear");
             Instance.entityFilters.Clear();
 
             foreach (ulong entity in Instance.entities.ToList().Select(p => { return p.Key; }))

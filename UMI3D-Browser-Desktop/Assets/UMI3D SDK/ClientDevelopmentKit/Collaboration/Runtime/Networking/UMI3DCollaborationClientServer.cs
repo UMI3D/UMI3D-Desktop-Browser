@@ -120,7 +120,6 @@ namespace umi3d.cdk.collaboration
                 media = dto,
                 gate = null
             });
-
         }
 
         public static async void Logout()
@@ -156,7 +155,6 @@ namespace umi3d.cdk.collaboration
         {
             if (environmentClient == client)
             {
-                Debug.LogWarning("Connection Lost");
                 UMI3DCollaborationClientServer.EnvironmentLogout(null, null);
 
                 OnConnectionLost.Invoke();
