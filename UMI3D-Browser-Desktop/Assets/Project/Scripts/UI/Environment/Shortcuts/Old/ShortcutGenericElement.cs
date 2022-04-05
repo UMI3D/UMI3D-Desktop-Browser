@@ -102,9 +102,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            //shortcutName_L = this.Q<Label>("shortcut-name");
-            //iconsLayout_VE = this.Q<VisualElement>("Icons-layout");
-
             iconsLayout_VE.RegisterCallback<GeometryChangedEvent>(OnElementResized);
         }
 

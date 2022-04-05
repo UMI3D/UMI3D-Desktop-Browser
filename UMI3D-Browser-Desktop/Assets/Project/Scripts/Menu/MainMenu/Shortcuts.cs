@@ -80,30 +80,18 @@ namespace BrowserDesktop.Menu
 
         void Start()
         {
-            //Debug.Assert(uiDocument != null);
-            //Debug.Assert(keyBindings != null);
-            //Debug.Assert(shortcut_ge_VTA != null);
-            //Debug.Assert(shortcutIcon_ge_VTA != null);
-            //Debug.Assert(label_ge_VTA != null);
 
             var root = uiDocument.rootVisualElement;
 
             shortcutDisplayer_VE = root.Q<VisualElement>("shortcut-displayer");
             shortcuts_SV = shortcutDisplayer_VE.Q<ScrollView>("shortcuts");
 
-            DisplayShortcut(displayAtStart); //Default: shortcuts are hidden.
 
             shortcutDisplayer_VE.style.width = shortcutDisplayerWidth;
         }
 
         void Update()
         {
-            //To be improved.
-            if (Input.GetKeyDown(KeyCode.F1))
-            {
-                DisplayShortcut(!isDisplayed);
-            }
-
             //Debug
             if (Input.GetKeyDown(KeyCode.K))
             {
@@ -143,23 +131,6 @@ namespace BrowserDesktop.Menu
         }
 
         #region Add and Remove Shortcuts
-
-        /*public void AddShortcuts()
-        {
-            AnimeVisualElement(shortcuts_SV, 1f, false, (elt, val)=> 
-            { 
-                elt.style.opacity = val; 
-            }); //Hide shortcuts while they are added.
-
-            //TODO Add shortcuts
-            StartCoroutine(ResizeShortcutsWidth());
-
-            AnimeVisualElement(shortcuts_SV, 1f, true, (elt, val)=>
-            {
-                elt.style.opacity = val;
-            }); //Display shortcuts when the resizement is done.
-        }*/
-
         /// <summary>
         /// Add a shortcut to the shortcuts displayer.
         /// </summary>
@@ -201,6 +172,7 @@ namespace BrowserDesktop.Menu
 
         #endregion
 
+        #region OP
         public static void ObjectPooling<T>(out T vE, List<T> listDisplayed, List<T> listWaited, VisualTreeAsset visualTreeAsset) where T : VisualElement
         {
             if (listWaited.Count == 0)
@@ -224,35 +196,6 @@ namespace BrowserDesktop.Menu
             }
             listDisplayed.Add(label_L);
         }
-
-        /// <summary>
-        /// Show or hide shortcuts.
-        /// </summary>
-        /// <param name="val">if true: show shortcuts, else hide.</param>
-        private void DisplayShortcut(bool value)
-        {
-            isDisplayed = value;
-
-            AnimeVisualElement(shortcutDisplayer_VE, shortcutDisplayerWidth, value, (elt, val) =>
-            {
-                elt.style.right = shortcutDisplayerWidth - val;
-            }); //Display or hide shortcutDisplayer with animation.
-        }
-
-        /// <summary>
-        /// Anime the VisualElement.
-        /// </summary>
-        /// <param name="vE">the VisualElement to be animated.</param>
-        /// <param name="value">The animation will be trigger from 0 to this value when isShowing is true. Else, from this value to 0.</param>
-        /// <param name="isShowing">The VisualElement should be displayed if true.</param>
-        /// <param name="animation">The animation to be perform.</param>
-        private void AnimeVisualElement(VisualElement vE, float value, bool isShowing, Action<VisualElement, float> animation)
-        {
-            Debug.LogWarning("Use of Unity experimental API. May not work in the future. (2021)");
-            if (isShowing)
-                vE.experimental.animation.Start(0, value, 100, animation);
-            else
-                vE.experimental.animation.Start(value, 0, 100, animation);
-        }
+        #endregion
     }
 }
