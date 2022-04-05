@@ -103,9 +103,18 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     {
         InitUI();
 
-
         UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
+        MenuBar_E.Instance.LeaveButton.OnClicked = () =>
+        {
+            string title = "Leave environment";
+            string message = "Are you sure ...?";
+            DialogueBox_E.Setup(title, message, "YES", "NO", (b) =>
+            {
+                if (b)
+                    Leave();
+            }, uiDocument);
+        };
     }
 
     private void Update()

@@ -42,6 +42,9 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static Action<object> m_cursorSetMovement { get; set; } = null;
         private static Action<object> m_cursorUnsetMovement { get; set; } = null;
 
+        protected static float m_width { get; set; } = default;
+        protected static float m_height { get; set; } = default;
+        protected static bool m_shouldCenter { get; set; } = false;
         private static DialogueBox_E m_instance;
         private static string m_uxml => "UI/UXML/dialogueBox";
         private static string m_style => "UI/Style/DialogueBox/DialogueBox";
@@ -164,9 +167,23 @@ namespace umi3dDesktopBrowser.ui.viewController
             if (Instance.Displayed) return;
             else Instance.Displayed = true;
             Instance.InsertRootTo(uiDocument.rootVisualElement);
-            //Debug.Log($"width = [{m_dialogueBox.resolvedStyle.width}]; height = [{m_dialogueBox.resolvedStyle.height}]");
-            m_dialogueBox.style.top = Screen.height / 2f;
-            m_dialogueBox.style.left = Screen.width / 2f;
+            Center();
+            m_shouldCenter = true;
+        }
+
+        protected void OnSizeChanged(GeometryChangedEvent e)
+        {
+            m_width = e.newRect.width;
+            m_height = e.newRect.height;
+            if (m_shouldCenter)
+                Center();
+        }
+
+        protected static void Center()
+        {
+            m_dialogueBox.style.top = Screen.height / 2f - m_height / 2f;
+            m_dialogueBox.style.left = Screen.width / 2f - m_width / 2f;
+            m_shouldCenter = false;
         }
     }
 
@@ -210,6 +227,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_choiceA = new Button_E(choiceA, choiceStyle, choiceKeys);
             Button choiceB = Root.Q<Button>("choiceB");
             m_choiceB = new Button_E(choiceB, choiceStyle, choiceKeys);
+
+            m_dialogueBox.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
         }
     }
 }

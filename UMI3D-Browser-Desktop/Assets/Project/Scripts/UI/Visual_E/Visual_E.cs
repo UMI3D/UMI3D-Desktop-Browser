@@ -78,6 +78,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             Root.RemoveFromHierarchy();
             AttachedToHierarchy = false;
+            Displayed = false;
         }
     }
 
