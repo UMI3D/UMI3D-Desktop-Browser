@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using UnityEditor.UIElements;
+//using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,7 +22,8 @@ namespace umi3dDesktopBrowser.ui.viewController
     public partial class SliderWithLabelAndField_E
     {
         public FloatField_E Field { get; protected set; } = null;
-        protected FloatField m_floatField { get; set; } = null;
+        //protected FloatField m_floatField { get; set; } = null;
+        protected TextField m_floatField { get; set; } = null;
     }
 
     public partial class SliderWithLabelAndField_E
@@ -40,7 +41,15 @@ namespace umi3dDesktopBrowser.ui.viewController
                 Field = new FloatField_E(m_floatField, styleResourcePath, keys);
             else
                 throw new System.NotImplementedException();
-            Field.OnValueChanged += (_, newValue) => RefreshSlider(newValue);
+            Field.OnValueChanged += (_, newValue) =>
+            {
+                //To be changed when floatField will be use in runtime.
+                if (float.TryParse(newValue, out float f))
+                {
+                    Debug.Log($"on value changed field, new value = [{newValue}]; f = [{f}]");
+                    RefreshSlider(f);
+                }
+            };
         }
 
         public float Clamp(float value)
@@ -57,7 +66,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected void RefreshField(float newValue)
         {
             if (Field == null) return;
-            Field.SetValueWithoutNotify(newValue);
+            Debug.Log($"refresh field, newvalue = [{newValue}];]");
+            Field.SetValueWithoutNotify(newValue.ToString());
         }
     }
 
@@ -66,7 +76,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected override void Initialize()
         {
             base.Initialize();
-            m_floatField = Root.Q<FloatField>();
+            //m_floatField = Root.Q<FloatField>();
+            m_floatField = Root.Q<TextField>();
         }
 
         public override void SetSlider(string styleResourcePath, StyleKeys keys)

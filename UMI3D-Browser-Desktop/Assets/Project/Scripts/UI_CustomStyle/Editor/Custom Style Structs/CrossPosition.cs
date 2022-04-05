@@ -39,6 +39,7 @@ namespace umi3DBrowser.UICustomStyle
         public T Top => m_top;
     }
 
+#if UNITY_EDITOR
     public abstract class AbstractCrossPositionPropertyDrawer : CustomPropertyDrawer
     {
         protected SerializedProperty m_global;
@@ -149,6 +150,7 @@ namespace umi3DBrowser.UICustomStyle
             EditorGUI.EndProperty();
         }
     }
+#endif
 
     [Serializable]
     public struct CustomStyleCrossPosition<K,T> : ICustomStyleValue<K, CrossPosition<T>>
@@ -162,6 +164,7 @@ namespace umi3DBrowser.UICustomStyle
         public CrossPosition<T> Value { get => m_value; set => m_value = value; }
     }
 
+#if UNITY_EDITOR
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleCrossPosition<CustomStyleColorKeyword, Color>))]
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleCrossPosition<CustomStyleSimpleKeyword, float>))]
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleCrossPosition<CustomStyleSizeKeyword, float>))]
@@ -194,4 +197,5 @@ namespace umi3DBrowser.UICustomStyle
             EditorGUI.EndProperty();
         }
     }
+#endif
 }

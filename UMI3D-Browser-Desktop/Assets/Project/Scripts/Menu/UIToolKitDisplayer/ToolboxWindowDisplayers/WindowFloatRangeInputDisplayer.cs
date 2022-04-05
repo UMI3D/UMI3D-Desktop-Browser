@@ -14,10 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Menu;
-using System;
 using umi3d.cdk.menu;
 using umi3dDesktopBrowser.ui.viewController;
-using UnityEngine;
 
 namespace umi3d.DesktopBrowser.menu.Displayer
 {
@@ -62,7 +60,12 @@ namespace umi3d.DesktopBrowser.menu.Displayer
                 m_displayerElement.Element.OnValueChanged += (_, newValue) 
                     => floatRangeMenu.NotifyValueChange(m_displayerElement.Clamp(newValue));
                 m_displayerElement.Field.OnValueChanged += (_, newValue)
-                    => floatRangeMenu.NotifyValueChange(m_displayerElement.Clamp(newValue));
+                    =>
+                {
+                    //To be changed when floatField will be use in runtime.
+                    if (float.TryParse(newValue, out float f))
+                        floatRangeMenu.NotifyValueChange(m_displayerElement.Clamp(f));
+                };
             }
             else
                 throw new System.Exception("MenuItem must be a FloatRangeInputMenuItem");

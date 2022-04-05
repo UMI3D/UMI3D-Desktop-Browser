@@ -40,6 +40,7 @@ namespace umi3DBrowser.UICustomStyle
         public CustomStyleValue<CustomStyleSimpleKeyword, float> OutlineWidth => m_outlineWidth;
     }
 
+#if UNITY_EDITOR
     [UnityEditor.CustomPropertyDrawer(typeof(TextStyle))]
     public class ThemeTextPropertyDrawer : CustomPropertyDrawer
     {
@@ -82,6 +83,7 @@ namespace umi3DBrowser.UICustomStyle
             EditorGUI.EndProperty();
         }
     }
+#endif
 
     [Serializable]
     public struct CustomStyleTextStyle : ICustomStyleValue<CustomStyleExtraSimpleKeyword, TextStyle>
@@ -95,6 +97,7 @@ namespace umi3DBrowser.UICustomStyle
         public TextStyle Value { get => m_value; set => m_value = value; }
     }
 
+#if UNITY_EDITOR
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleTextStyle))]
     public class CustomStyleThemeTextPropertyDrawer : CustomPropertyDrawer
     {
@@ -128,4 +131,5 @@ namespace umi3DBrowser.UICustomStyle
             EditorGUI.EndProperty();
         }
     }
+#endif
 }

@@ -34,6 +34,7 @@ namespace umi3DBrowser.UICustomStyle
         public CustomStyleValue<CustomStyleColorKeyword, Color> BackgroundImageTintColor => m_imageTintColor;
     }
 
+#if UNITY_EDITOR
     [UnityEditor.CustomPropertyDrawer(typeof(Background))]
     public class BackgroundPropertyDrawer : CustomPropertyDrawer
     {
@@ -66,6 +67,7 @@ namespace umi3DBrowser.UICustomStyle
             EditorGUI.EndProperty();
         }
     }
+#endif
 
     [Serializable]
     public struct CustomStyleBackground : ICustomStyleValue<CustomStyleExtraSimpleKeyword, Background>
@@ -79,6 +81,7 @@ namespace umi3DBrowser.UICustomStyle
         public Background Value { get => m_value; set => m_value = value; }
     }
 
+#if UNITY_EDITOR
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleBackground))]
     public class CustomStyleBackgroundPropertyDrawer : CustomPropertyDrawer
     {
@@ -112,4 +115,5 @@ namespace umi3DBrowser.UICustomStyle
             EditorGUI.EndProperty();
         }
     }
+#endif
 }
