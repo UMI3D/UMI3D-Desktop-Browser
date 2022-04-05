@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -32,7 +33,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 return m_instance;
             }
         }
-        public UnityEvent UnPinedButtonPressed { get; private set; } = new UnityEvent();
+        public static event Action UnPinedButtonPressed;
 
         private static string m_windowUXML = "UI/UXML/ToolboxWindow/toolboxWindow";
         private static string m_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_window";
@@ -75,7 +76,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             StyleKeys unpinnedButtonKeys = new StyleKeys(null, "", null);
             new Button_E(unpinnedButton, unpinnedButtonStyle, unpinnedButtonKeys)
             {
-                OnClicked = () => { UnPinedButtonPressed.Invoke(); },
+                OnClicked = () => { UnPinedButtonPressed?.Invoke(); },
             };
         }
     }

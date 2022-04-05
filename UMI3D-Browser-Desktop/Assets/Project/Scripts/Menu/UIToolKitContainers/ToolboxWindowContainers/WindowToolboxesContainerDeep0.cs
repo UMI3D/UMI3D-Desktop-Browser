@@ -33,6 +33,7 @@ namespace umi3d.desktopBrowser.menu.Container
             WindowItem.Remove();
             ToolboxItem?.Remove();
             Displayerbox?.Remove();
+            ToolboxWindow_E.UnPinedButtonPressed -= () => WindowItem.PinUnpin(false);
         }
 
         private void PinUnpin(bool value)
@@ -45,6 +46,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.Awake();
             WindowItem = new ToolboxWindowItem_E();
+            ToolboxWindow_E.UnPinedButtonPressed += () => WindowItem.PinUnpin(false);
         }
 
         /// <summary>
