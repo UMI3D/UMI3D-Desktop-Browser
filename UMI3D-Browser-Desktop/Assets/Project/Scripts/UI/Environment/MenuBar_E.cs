@@ -178,18 +178,6 @@ namespace umi3dDesktopBrowser.ui.viewController
                 .InsertRootTo(rightLayout_VE);
         }
 
-        /*leaveEnvironmentBtn.clickable.clicked += () =>
-            {
-                DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-                dialogueBox.Setup("Leave environment", "Are you sure ...?", "YES", "NO", (b) =>
-                {
-                    if (b)
-                        ConnectionMenu.Instance.Leave();
-                });
-
-               uiDocument.rootVisualElement.Add(dialogueBox);
-            };*/
-
         protected Visual_E AddSeparator(VisualElement layout)
         {
             Visual_E separator = new Visual_E(new VisualElement(), m_separatorStyle, m_separatorKeys);

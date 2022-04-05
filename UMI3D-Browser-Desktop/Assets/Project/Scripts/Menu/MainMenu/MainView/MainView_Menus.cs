@@ -21,14 +21,14 @@ namespace umi3dDesktopBrowser.ui
 {
     public partial class GameMenu
     {
+        #region Init Menus
+
         private void InitMenus()
         {
             InitMenuBar();
-
             InitToolboxWindow();
-
             InitToolboxPinnedWindow();
-
+            InitShortcut();
             //Todo Add footer.
         }
 
@@ -43,7 +43,13 @@ namespace umi3dDesktopBrowser.ui
 
             m_viewport.Add(MenuBar_E.Instance.SubMenuLayout);
 
-            MenuBar_E.Instance.OnPinnedUnpinned += PinUnpin;
+            MenuBar_E.Instance.OnPinnedUnpinned += (value, menu) =>
+            {
+                if (value)
+                    m_pinnedToolboxesDM.menu.Add(menu);
+                else
+                    m_pinnedToolboxesDM.menu.Remove(menu);
+            };
         }
 
         private void InitToolboxWindow()
@@ -58,19 +64,31 @@ namespace umi3dDesktopBrowser.ui
             ToolboxPinnedWindow_E.Instance.OnCloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(true);
         }
 
-        private void PinUnpin(bool value, Menu menu)
+        private void InitShortcut()
         {
-            if (value)
-            {
-                Debug.Log($"pin");
-                m_pinnedToolboxesDM.menu.Add(menu);
-            }
+            Shortcutbox_E.Instance.InsertRootTo(m_leftSideMenuDownUp);
+
+            if (m_showShortcutOnStart)
+                Shortcutbox_E.ShouldDisplay = true;
             else
-            {
-                Debug.Log($"unpin");
-                m_pinnedToolboxesDM.menu.Remove(menu);
-                
-            }
+                Shortcutbox_E.ShouldHide = true;
         }
+
+        #endregion
+
+        #region Input Menus
+
+        private void InputMenus()
+        {
+            InputShortcut();
+        }
+
+        private void InputShortcut()
+        {
+            if (Input.GetKeyDown(KeyCode.F1))
+                Shortcutbox_E.Instance.DisplayOrHide();
+        }
+
+        #endregion
     }
 }

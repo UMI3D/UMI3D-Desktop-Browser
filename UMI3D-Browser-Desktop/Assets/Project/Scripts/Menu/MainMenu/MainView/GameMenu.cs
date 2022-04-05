@@ -18,6 +18,7 @@ using BrowserDesktop.Cursor;
 using umi3d.cdk;
 using umi3d.cdk.menu.view;
 using umi3d.common;
+using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -38,8 +39,15 @@ namespace umi3dDesktopBrowser.ui
         [Tooltip("Pinned Toolboxes Displayer manager.")]
         private MenuDisplayManager m_pinnedToolboxesDM;
 
-        private VisualElement m_mainView;
-        private VisualElement m_viewport;
+        [Header("Shortcuts")]
+        [SerializeField]
+        private bool m_showShortcutOnStart = false;
+
+        private VisualElement m_root => m_uiDoc.rootVisualElement;
+        private VisualElement m_mainView { get; set; } = null;
+        private VisualElement m_viewport { get; set; } = null;
+        private VisualElement m_leftSideMenu { get; set; } = null;
+        private VisualElement m_leftSideMenuDownUp { get; set; } = null;
 
         private bool m_isCursorMovementFree 
             => CursorHandler.Movement == CursorHandler.CursorMovement.Free;
@@ -61,8 +69,10 @@ namespace umi3dDesktopBrowser.ui
 
         private void BindUI()
         {
-            m_mainView = m_uiDoc.rootVisualElement.Q(gameMenuTagName);
-            m_viewport = m_uiDoc.rootVisualElement.Q("viewport");
+            m_mainView = m_root.Q(gameMenuTagName);
+            m_viewport = m_root.Q("viewport");
+            m_leftSideMenu = m_root.Q("left-side-menu");
+            m_leftSideMenuDownUp = m_root.Q("leftSideDownUp");
         }
 
         private void Update()
@@ -72,6 +82,8 @@ namespace umi3dDesktopBrowser.ui
                 //CursorHandler.SetMovement(this, expand ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
                 CursorHandler.SetMovement(this, (m_isCursorMovementFree) ? CursorHandler.CursorMovement.Center : CursorHandler.CursorMovement.Free);
             }
+
+            InputMenus();
         }
 
         /// <summary>
