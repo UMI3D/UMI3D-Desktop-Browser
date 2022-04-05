@@ -35,6 +35,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         private void PinUnpin()
         {
             var willBePinned = !PinButton.IsOn;
+            PinUnpin(willBePinned);
+        }
+        public void PinUnpin(bool willBePinned)
+        {
             OnPinnedUnpinned?.Invoke(willBePinned);
             PinButton.Toggle(willBePinned);
         }
