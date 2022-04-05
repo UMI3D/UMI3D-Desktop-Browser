@@ -66,6 +66,7 @@ namespace umi3d.desktopBrowser.menu.Container
         protected virtual void Awake()
         {
             virtualContainer = this;
+            isExpanded = true;
         }
 
         protected virtual void OnEnable()
