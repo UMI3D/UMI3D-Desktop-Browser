@@ -30,6 +30,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public ToolboxItem_E Avatar { get; private set; } = null;
         public ToolboxItem_E Sound { get; private set; } = null;
         public ToolboxItem_E Mic { get; private set; } = null;
+        public ToolboxItem_E LeaveButton { get; private set; } = null;
         public VisualElement SubMenuLayout { get; private set; } = null;
 
         public static MenuBar_E Instance
@@ -44,7 +45,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             }
         }
 
-        protected ToolboxItem_E m_leave;
         protected ScrollView_E m_scrollView { get; set; }
 
         private VisualElement leftLayout_VE;
@@ -175,10 +175,22 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             AddSeparator(rightLayout_VE);
 
-            m_leave = new ToolboxItem_E("Leave", "");
-            new Toolbox_E("", ToolboxType.Pinned, m_leave)
+            LeaveButton = new ToolboxItem_E("Leave", "");
+            new Toolbox_E("", ToolboxType.Pinned, LeaveButton)
                 .InsertRootTo(rightLayout_VE);
         }
+
+        /*leaveEnvironmentBtn.clickable.clicked += () =>
+            {
+                DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
+                dialogueBox.Setup("Leave environment", "Are you sure ...?", "YES", "NO", (b) =>
+                {
+                    if (b)
+                        ConnectionMenu.Instance.Leave();
+                });
+
+               uiDocument.rootVisualElement.Add(dialogueBox);
+            };*/
 
         protected Visual_E AddSeparator(VisualElement layout)
         {
