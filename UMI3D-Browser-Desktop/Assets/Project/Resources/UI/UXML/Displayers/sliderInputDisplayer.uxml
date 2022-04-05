@@ -3,7 +3,7 @@
         <ui:Label text="Label" display-tooltip-when-elided="true" />
         <ui:VisualElement style="flex-direction: row;">
             <ui:Slider picking-mode="Ignore" />
-            <uie:FloatField />
+            <ui:TextField picking-mode="Ignore" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

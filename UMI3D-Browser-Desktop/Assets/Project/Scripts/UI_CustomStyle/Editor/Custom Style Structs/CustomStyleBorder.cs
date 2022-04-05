@@ -34,6 +34,7 @@ namespace umi3DBrowser.UICustomStyle
         public CustomStyleSquarePosition<CustomStyleSizeKeyword, float> Radius => m_radius;
     }
 
+#if UNITY_EDITOR
     [UnityEditor.CustomPropertyDrawer(typeof(Border))]
     public class BorderPropertyDrawer : CustomPropertyDrawer
     {
@@ -69,6 +70,7 @@ namespace umi3DBrowser.UICustomStyle
             EditorGUI.EndProperty();
         }
     }
+#endif
 
     [Serializable]
     public struct CustomStyleBorder : ICustomStyleValue<CustomStyleExtraSimpleKeyword, Border>
@@ -82,6 +84,7 @@ namespace umi3DBrowser.UICustomStyle
         public Border Value { get => m_value; set => m_value = value; }
     }
 
+#if UNITY_EDITOR
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleBorder))]
     public class CustomStyleBorderPropertyDrawer : CustomPropertyDrawer
     {
@@ -131,4 +134,5 @@ namespace umi3DBrowser.UICustomStyle
             EditorGUI.EndProperty();
         }
     }
+#endif
 }

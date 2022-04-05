@@ -13,17 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System;
-using umi3DBrowser.UICustomStyle;
-using UnityEditor.UIElements;
-using UnityEngine;
+//using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class FloatField_E
     {
-        protected FloatField m_floatField => (FloatField)Root;
+        //protected FloatField m_floatField => (FloatField)Root;
+        protected TextField m_floatField => (TextField)Root;
     }
 
     public partial class FloatField_E
@@ -32,14 +30,33 @@ namespace umi3dDesktopBrowser.ui.viewController
             this(null, null)
         { }
         public FloatField_E(string styleResourcePath, StyleKeys keys) :
-            this(new FloatField(), styleResourcePath, keys)
+            this(new TextField(), styleResourcePath, keys)
         { }
-        public FloatField_E(FloatField floatField, string styleResourcePath, StyleKeys keys) :
+        public FloatField_E(TextField floatField, string styleResourcePath, StyleKeys keys) :
             base(floatField, styleResourcePath, keys)
         { }
     }
 
-    public partial class FloatField_E : AbstractBaseField_E<float>
+    public partial class FloatField_E : AbstractBaseField_E<string>
     {
+        #region To be changed when floatField will be use in runtime
+        public override string value 
+        {
+            get => m_field.value;
+            set
+            {
+                if (float.TryParse(value, out float f))
+                {
+                    m_field.value = value;
+                }
+            }
+        }
+
+        public override void SetValueWithoutNotify(string newValue)
+        {
+            if (float.TryParse(newValue, out float f))
+                base.SetValueWithoutNotify(newValue);
+        }
+        #endregion
     }
 }

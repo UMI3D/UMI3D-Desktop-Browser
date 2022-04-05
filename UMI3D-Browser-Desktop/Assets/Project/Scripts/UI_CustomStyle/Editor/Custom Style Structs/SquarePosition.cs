@@ -39,6 +39,7 @@ namespace umi3DBrowser.UICustomStyle
         public T TopRight => m_TopRight;
     }
 
+#if UNITY_EDITOR
     public abstract class AbstractSquarePositionPropertyDrawer : CustomPropertyDrawer
     {
         //protected override int m_numberOfLine => 3;
@@ -116,6 +117,7 @@ namespace umi3DBrowser.UICustomStyle
             EditorGUI.EndProperty();
         }
     }
+#endif
 
     [Serializable]
     public struct CustomStyleSquarePosition<K,T> : ICustomStyleValue<K, SquarePosition<T>>
@@ -129,6 +131,7 @@ namespace umi3DBrowser.UICustomStyle
         public SquarePosition<T> Value { get => m_value; set => m_value = value; }
     }
 
+#if UNITY_EDITOR
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleSquarePosition<CustomStyleSizeKeyword, float>))]
     public class CustomStyleValue3LinesPropertyDrawer : CustomPropertyDrawer
     {
@@ -159,4 +162,5 @@ namespace umi3DBrowser.UICustomStyle
             EditorGUI.EndProperty();
         }
     }
+#endif
 }

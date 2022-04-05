@@ -39,6 +39,7 @@ namespace umi3DBrowser.UICustomStyle
         }
     }
 
+#if UNITY_EDITOR
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleSize))]
     public class CustomStyleSizePropertyDrawer : CustomPropertyDrawer
     {
@@ -101,6 +102,7 @@ namespace umi3DBrowser.UICustomStyle
             EditorGUI.EndProperty();
         }
     }
+#endif
 
     [Serializable]
     public struct CustomStylePercentFloat : ICustomStyleValue<CustomStyleSimpleKeyword, float>
@@ -119,6 +121,7 @@ namespace umi3DBrowser.UICustomStyle
         }
     }
 
+#if UNITY_EDITOR
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStylePercentFloat))]
     public class CustomStylePercentFloatPropertyDrawer : CustomPropertyDrawer
     {
@@ -152,5 +155,6 @@ namespace umi3DBrowser.UICustomStyle
             EditorGUI.EndProperty();
         }
     }
+#endif
 }
 

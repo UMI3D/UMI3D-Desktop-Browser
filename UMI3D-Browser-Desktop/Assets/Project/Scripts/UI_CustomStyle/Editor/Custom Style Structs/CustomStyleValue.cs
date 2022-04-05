@@ -36,6 +36,7 @@ namespace umi3DBrowser.UICustomStyle
         }
     }
 
+#if UNITY_EDITOR
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSimpleKeyword, int>))]
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSimpleKeyword, float>))]
     [UnityEditor.CustomPropertyDrawer(typeof(CustomStyleValue<CustomStyleSimpleKeyword, Sprite>))]
@@ -82,4 +83,5 @@ namespace umi3DBrowser.UICustomStyle
             EditorGUI.EndProperty();
         }
     }
+#endif
 }
