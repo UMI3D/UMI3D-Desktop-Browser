@@ -328,7 +328,7 @@ MonoBehaviour:
   m_collapseOnStart: 1
   m_displayWhenAddNewItem: 1
   hideOnBack: 0
-  displayDepth: 1
+  displayDepth: 0
   firstContainerInScene: 1
   containerSelector: {fileID: 4540945144993042739}
   DisplayerPrefab:
@@ -580,7 +580,7 @@ MonoBehaviour:
   m_collapseOnStart: 1
   m_displayWhenAddNewItem: 0
   hideOnBack: 0
-  displayDepth: 1
+  displayDepth: 0
   firstContainerInScene: 1
   containerSelector: {fileID: 690838958752902995}
   DisplayerPrefab:

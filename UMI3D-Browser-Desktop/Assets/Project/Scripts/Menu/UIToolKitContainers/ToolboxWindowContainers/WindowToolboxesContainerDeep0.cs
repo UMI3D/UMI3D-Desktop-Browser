@@ -96,6 +96,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void CollapseImp()
         {
+            Debug.Log($"collapse deep 0");
             foreach (AbstractDisplayer child in currentDisplayers)
             {
                 if (child is WindowToolboxesContainerDeep1 containerDeep1)
@@ -103,6 +104,7 @@ namespace umi3d.desktopBrowser.menu.Container
             }
             if (ToolType == ItemType.Tool)
             {
+                Debug.Log($"collapse deep 0 tool");
                 Displayerbox.Hide();
                 ToolboxItem.Toggle(false);
             }
@@ -117,6 +119,7 @@ namespace umi3d.desktopBrowser.menu.Container
             base.ExpandAsImp(container);
             if (ToolType == ItemType.Tool)
             {
+                Debug.Log($"expand deep 0 tool");
                 Displayerbox.Display();
                 ToolboxItem.Toggle(true); 
             }
