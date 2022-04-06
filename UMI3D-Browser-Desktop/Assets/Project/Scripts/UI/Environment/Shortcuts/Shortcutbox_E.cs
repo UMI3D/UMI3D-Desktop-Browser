@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using umi3d.cdk.menu;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -38,6 +39,9 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected static ScrollView_E m_shortcuts { get; set; } = null;
         protected static float m_width { get; set; } = default;
+        protected static List<Shortcut_E> m_shortcutsDisplayed;
+        protected static List<Shortcut_E> m_shortcutsWaited;
+        //protected Controller.KeyBindings_SO keyBindings;
 
         private static Shortcutbox_E m_instance;
         private static string m_shortcutboxUXML => "UI/UXML/Shortcuts/shortcutbox";
@@ -61,7 +65,12 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public void AddShortcut(string title, params string[] keys)
         {
+            Shortcut_E shortcut;
+            ObjectPooling(out shortcut, m_shortcutsDisplayed, m_shortcutsWaited);
 
+            //Sprite[] shortcutIcons = new Sprite[keys.Length];
+            //for (int i = 0; i < keys.Length; ++i)
+            //    shortcutIcons[i] = keyBindings.GetSpriteFrom(keys[i]);
         }
 
         public void RemoveShortcut()
@@ -101,17 +110,17 @@ namespace umi3dDesktopBrowser.ui.viewController
                 vE.experimental.animation.Start(value, 0, 100, animation);
         }
 
-        //private void ObjectPooling<T>(out T vE, List<T> listDisplayed, List<T> listWaited, VisualTreeAsset visualTreeAsset) where T : VisualElement
-        //{
-        //    if (listWaited.Count == 0)
-        //        vE = visualTreeAsset.CloneTree().Q<T>();
-        //    else
-        //    {
-        //        vE = listWaited[listWaited.Count - 1];
-        //        listWaited.RemoveAt(listWaited.Count - 1);
-        //    }
-        //    listDisplayed.Add(vE);
-        //}
+        private void ObjectPooling<T>(out T vE, List<T> listDisplayed, List<T> listWaited) where T : new()
+        {
+            if (listWaited.Count == 0)
+                vE = new T();
+            else
+            {
+                vE = listWaited[listWaited.Count - 1];
+                listWaited.RemoveAt(listWaited.Count - 1);
+            }
+            listDisplayed.Add(vE);
+        }
     }
 
     public partial class Shortcutbox_E : Visual_E
@@ -129,6 +138,9 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_shortcuts = new ScrollView_E(scrollView);
 
             Root.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
+
+            m_shortcutsDisplayed = new List<Shortcut_E>();
+            m_shortcutsWaited = new List<Shortcut_E>();
         }
 
         public override void Display()
