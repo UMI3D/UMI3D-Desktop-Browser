@@ -105,6 +105,11 @@ namespace umi3dDesktopBrowser.ui.viewController
             iconsLayout_VE.RegisterCallback<GeometryChangedEvent>(OnElementResized);
         }
 
+        public ShortcutGenericElement() : base(new VisualElement())
+        {
+
+        }
+
         /// <summary>
         /// Set the icons and name of this shortcut.
         /// </summary>

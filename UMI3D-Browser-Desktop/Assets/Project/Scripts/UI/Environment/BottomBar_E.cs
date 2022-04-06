@@ -23,6 +23,11 @@ namespace umi3dDesktopBrowser.ui.viewController
         private VisualElement leftLayout_VE;
         private VisualElement rightLayout_VE;
 
+        public BottomBar_E() : base(new VisualElement())
+        {
+
+        }
+
         protected override void Initialize()
         {
             base.Initialize();

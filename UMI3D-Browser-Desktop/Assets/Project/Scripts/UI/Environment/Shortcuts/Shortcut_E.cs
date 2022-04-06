@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using umi3d.cdk.menu;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -25,9 +26,16 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected VisualElement m_iconbox { get; set; } = null;
         protected Label_E m_title { get; set; } = null;
 
+        protected List<Label_E> m_plusDisplayed;
+        protected static List<Label_E> m_plusWaited;
+        protected List<ShortcutIcon_E> m_iconsDisplayed;
+        protected static List<ShortcutIcon_E> m_iconsWaited;
+
         private static string m_shortcutUXML = "UI/UXML/Shortcuts/shortcut";
         private static string m_shortcutStyle = "UI/Style/Shortcuts/Shortcut";
         private static StyleKeys m_shortcutKeys = new StyleKeys();
+        private static string m_plusStyle = "UI/Style/Shortcuts/Shortcut_Plus";
+        private static StyleKeys m_plusKeys = new StyleKeys("", null, null);
     }
 
     public partial class Shortcut_E
@@ -38,7 +46,26 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public void Setup(string title, params Sprite[] icons)
         {
+            m_title.value = title;
+            Debug.Log($"title = [{title}]");
 
+            for (int i = 0; i < icons.Length; ++i)
+            {
+                if (i != 0 && i < icons.Length)
+                {
+                    Label_E plus;
+                    ObjectPooling(out plus, m_plusDisplayed, m_plusWaited, () => 
+                    {
+                        return new Label_E(m_plusStyle, m_plusKeys, "+");
+                    });
+                    plus.InsertRootTo(m_iconbox);
+                }
+
+                ShortcutIcon_E icon;
+                ObjectPooling(out icon, m_iconsDisplayed, m_iconsWaited, () => new ShortcutIcon_E());
+                icon.Setup(icons[i]);
+                icon.InsertRootTo(m_iconbox);
+            }
         }
     }
 
@@ -52,6 +79,35 @@ namespace umi3dDesktopBrowser.ui.viewController
             string titleStyle = "UI/Style/Shortcuts/Shortcut_Title";
             StyleKeys titleKeys = new StyleKeys();
             m_title = new Label_E(title, titleStyle, titleKeys);
+
+            m_iconbox = Root.Q("iconbox");
+
+            m_plusDisplayed = new List<Label_E>();
+            m_plusWaited = new List<Label_E>();
+            m_iconsDisplayed = new List<ShortcutIcon_E>();
+            m_iconsWaited = new List<ShortcutIcon_E>();
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            //reset TODO
+
+            Action<Visual_E> removeVEFromHierarchy = (vE) =>
+            {
+                vE.Remove();
+            };
+
+            m_iconsDisplayed.ForEach(removeVEFromHierarchy);
+            m_iconsWaited.AddRange(m_iconsDisplayed);
+            m_iconsDisplayed.Clear();
+
+            m_plusDisplayed.ForEach(removeVEFromHierarchy);
+            m_plusWaited.AddRange(m_plusDisplayed);
+            m_plusDisplayed.Clear();
+
+            Debug.Log($"icon displayed = [{m_iconsDisplayed.Count}]; plus displayed = [{m_plusDisplayed.Count}]");
+            Debug.Log($"icon wait = [{m_iconsWaited.Count}]; plus wait = [{m_plusWaited.Count}]");
         }
     }
 }

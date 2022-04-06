@@ -54,14 +54,15 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class Label_E
     {
-        public Label_E(string text = "") :
+        public Label_E() :
+            this("")
+        { }
+        public Label_E(string text) :
             this(null, null, text)
         { }
-
         public Label_E(string styleResourcePath, StyleKeys keys, string text = "") :
             this(new Label(), styleResourcePath, keys, text)
         { }
-
         public Label_E(Label label, string styleResourcePath, StyleKeys keys, string text = "") :
             base(label, styleResourcePath, keys)
         {
