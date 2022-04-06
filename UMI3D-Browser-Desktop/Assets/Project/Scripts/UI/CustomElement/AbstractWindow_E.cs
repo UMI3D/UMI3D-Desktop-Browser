@@ -14,26 +14,59 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
     public abstract partial class AbstractWindow_E
     {
-        
-    }
+        public event Action OnCloseButtonPressed;
 
-    public abstract partial class AbstractWindow_E
-    {
-        public AbstractWindow_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
-            base(visualResourcePath, styleResourcePath, keys)
-        { }
+        protected Label_E m_label { get; set; } = null;
+        protected ButtonWithIcon_E m_closeButton { get; set; } = null;
     }
 
     public abstract partial class AbstractWindow_E : Visual_E
     {
+        public AbstractWindow_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
+            base(visualResourcePath, styleResourcePath, keys)
+        { }
 
+        public void SetIcon(string styleResourcePath, StyleKeys keys)
+        {
+            VisualElement icon = Root.Q("icon");
+            AddVisualStyle(icon, styleResourcePath, keys, PopupManipulator());
+        }
+
+        public void SetTopBar(string name, string styleResourcePath, StyleKeys keys)
+        {
+            m_label = new Label_E(Root.Q<Label>("windowName"), styleResourcePath, keys);
+            m_label.value = name;
+            m_label.UpdateVisualManipulator(PopupManipulator());
+        }
+
+        public void SetTopBarName(string name)
+        {
+            if (m_label != null)
+                m_label.value = name;
+        }
+
+        public void SetCloseButton(string styleResourcePath, StyleKeys keys)
+        {
+            Button closeButton = Root.Q<Button>("closeButton");
+            OnCloseButtonPressed += Hide;
+            if (m_closeButton == null)
+                m_closeButton = new ButtonWithIcon_E(closeButton);
+            m_closeButton.SetButton(styleResourcePath, keys, () => OnCloseButtonPressed());
+        }
+        public void SetCloseButton(string butttonStyleResourcePath, StyleKeys buttonKeys, string iconStyleResourcePath, StyleKeys iconKeys)
+        {
+            SetCloseButton(butttonStyleResourcePath, buttonKeys);
+            m_closeButton.SetIcon(iconStyleResourcePath, iconKeys);
+            m_closeButton.ApplyButtonStyleWithIcon();
+        }
+
+        protected PopUpManipulator PopupManipulator()
+                => new PopUpManipulator(Root);
     }
 }
