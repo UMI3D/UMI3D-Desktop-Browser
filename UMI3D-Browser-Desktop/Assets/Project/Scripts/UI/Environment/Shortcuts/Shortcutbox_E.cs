@@ -70,8 +70,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="keys">the keys to press</param>
         public void AddShortcut(string title, params string[] keys)
         {
-            Shortcut_E shortcut;
-            ObjectPooling(out shortcut, m_shortcutsDisplayed, m_shortcutsWaited, () => new Shortcut_E());
+            ObjectPooling(out Shortcut_E shortcut, m_shortcutsDisplayed, m_shortcutsWaited, () => new Shortcut_E());
 
             Sprite[] shortcutIcons = new Sprite[keys.Length];
             for (int i = 0; i < keys.Length; ++i)

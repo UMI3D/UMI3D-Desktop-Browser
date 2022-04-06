@@ -59,10 +59,12 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class MenuBar_E
     {
+        #region Pin Unpin
         public event Action<bool, Menu> OnPinnedUnpinned;
 
         public void PinUnpin(bool value, Menu menu)
             => OnPinnedUnpinned?.Invoke(value, menu);
+        #endregion
 
         public void DisplayToolboxButton(bool value)
         {
@@ -108,6 +110,11 @@ namespace umi3dDesktopBrowser.ui.viewController
         //}
 
         //private Action logWorldPosition;
+
+        public event Action OnSubMenuMouseDownEvent;
+
+        private void OnSubMenuMouseDown(MouseDownEvent e)
+            => OnSubMenuMouseDownEvent?.Invoke();
     }
 
     public partial class MenuBar_E : Visual_E
@@ -124,11 +131,16 @@ namespace umi3dDesktopBrowser.ui.viewController
             centerLayout_VE = Root.Q<VisualElement>("Center-layout");
             rightLayout_VE = Root.Q<VisualElement>("Right-layout");
 
+            #region Sub menu layout
+
             SubMenuLayout = new VisualElement();
             SubMenuLayout.name = "subMenuLayout";
             SubMenuLayout.style.position = Position.Absolute;
             SubMenuLayout.style.width = Length.Percent(100f);
             SubMenuLayout.style.height = Length.Percent(100f);
+            SubMenuLayout.RegisterCallback<MouseDownEvent>(OnSubMenuMouseDown);
+
+            #endregion
 
             ToolboxButton = new ToolboxItem_E("Toolbox", "Toolbox");
             new Toolbox_E("", ToolboxType.Pinned, ToolboxButton)    

@@ -25,9 +25,9 @@ MonoBehaviour:
       m_valueMode: 0
       m_value: 0
     m_width:
-      m_keyword: 0
+      m_keyword: 10
       m_valueMode: 0
-      m_value: 0
+      m_value: 250
     m_maxHeight:
       m_keyword: 0
       m_valueMode: 0
@@ -84,10 +84,10 @@ MonoBehaviour:
     m_background:
     - m_key: 
       m_default:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 21
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 0

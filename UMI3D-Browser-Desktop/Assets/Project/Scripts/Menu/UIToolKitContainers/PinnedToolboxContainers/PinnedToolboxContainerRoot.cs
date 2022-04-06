@@ -20,6 +20,11 @@ namespace umi3d.desktopBrowser.menu.Container
 {
     public class PinnedToolboxContainerRoot : AbstractToolboxesContainer
     {
+        private void Start()
+        {
+            MenuBar_E.Instance.OnSubMenuMouseDownEvent += CollapseImp;
+        }
+
         protected override void CollapseImp()
         {
             foreach (AbstractDisplayer child in currentDisplayers)
@@ -28,6 +33,7 @@ namespace umi3d.desktopBrowser.menu.Container
                     containerDeep0.Collapse();
             }
             ToolboxPinnedWindow_E.Instance.Hide();
+            MenuBar_E.Instance.DisplaySubMenu(false);
             base.CollapseImp();
         }
 

@@ -94,6 +94,7 @@ namespace umi3d.desktopBrowser.menu.Container
                 Debug.Log($"collapse deep 0 toogle false");
                 ToolboxItem.Toggle(false);
             }
+            //if (parent is PinnedToolboxContainerRoot pinnedParent)
         }
 
         /// <summary>
@@ -108,6 +109,7 @@ namespace umi3d.desktopBrowser.menu.Container
                 Displayerbox.Display();
                 ToolboxItem.Toggle(true);
             }
+            MenuBar_E.Instance.DisplaySubMenu(true);
         }
 
         /// <summary>
