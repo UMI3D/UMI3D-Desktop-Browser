@@ -13,61 +13,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System;
-using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class WindowWithScrollView_E
     {
-        public event Action OnCloseButtonPressed;
-
         protected ScrollView_E m_scrollView { get; set; } = null;
-        protected Label_E m_label { get; set; } = null;
-        protected ButtonWithIcon_E m_closeButton { get; set; } = null;
     }
 
-    public partial class WindowWithScrollView_E
+    public partial class WindowWithScrollView_E : AbstractWindow_E
     {
+        public WindowWithScrollView_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
+            base(visualResourcePath, styleResourcePath, keys)
+        { }
+
         public void Adds(params Visual_E[] items)
         {
             m_scrollView.Adds(items);
-        }
-
-        public void SetIcon(string styleResourcePath, StyleKeys keys)
-        {
-            VisualElement icon = Root.Q("icon");
-            AddVisualStyle(icon, styleResourcePath, keys, PopupManipulator());
-        }
-
-        public void SetTopBar(string name, string styleResourcePath, StyleKeys keys)
-        {
-            m_label = new Label_E(Root.Q<Label>("windowName"), styleResourcePath, keys);
-            m_label.value = name;
-            m_label.UpdateVisualManipulator(PopupManipulator());
-        }
-
-        public void SetTopBarName(string name)
-        {
-            if (m_label != null) 
-                m_label.value = name;
-        }
-
-        public void SetCloseButton(string styleResourcePath, StyleKeys keys)
-        {
-            Button closeButton = Root.Q<Button>("closeButton");
-            OnCloseButtonPressed += Hide;
-            if (m_closeButton == null)
-                m_closeButton = new ButtonWithIcon_E(closeButton);
-            m_closeButton.SetButton(styleResourcePath, keys, () => OnCloseButtonPressed());
-        }
-        public void SetCloseButton(string butttonStyleResourcePath, StyleKeys buttonKeys, string iconStyleResourcePath, StyleKeys iconKeys)
-        {
-            SetCloseButton(butttonStyleResourcePath, buttonKeys);
-            m_closeButton.SetIcon(iconStyleResourcePath, iconKeys);
-            m_closeButton.ApplyButtonStyleWithIcon();
         }
 
         public void SetVerticalScrollView(string svStyle, StyleKeys svKeys, string dcStyle, StyleKeys dcKeys, string dStyle, StyleKeys dKeys)
@@ -76,15 +39,5 @@ namespace umi3dDesktopBrowser.ui.viewController
                 .SetVerticalDraggerContainerStyle(dcStyle, dcKeys)
                 .SetVerticalDraggerStyle(dStyle, dKeys);
         }
-
-        protected PopUpManipulator PopupManipulator()
-                => new PopUpManipulator(Root);
-    }
-
-    public partial class WindowWithScrollView_E : Visual_E
-    {
-        public WindowWithScrollView_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
-            base(visualResourcePath, styleResourcePath, keys)
-        { }
     }
 }
