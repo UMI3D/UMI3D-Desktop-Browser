@@ -47,22 +47,19 @@ namespace umi3dDesktopBrowser.ui.viewController
         public void Setup(string title, params Sprite[] icons)
         {
             m_title.value = title;
-            Debug.Log($"title = [{title}]");
 
             for (int i = 0; i < icons.Length; ++i)
             {
                 if (i != 0 && i < icons.Length)
                 {
-                    Label_E plus;
-                    ObjectPooling(out plus, m_plusDisplayed, m_plusWaited, () => 
+                    ObjectPooling(out Label_E plus, m_plusDisplayed, m_plusWaited, () =>
                     {
                         return new Label_E(m_plusStyle, m_plusKeys, "+");
                     });
                     plus.InsertRootTo(m_iconbox);
                 }
 
-                ShortcutIcon_E icon;
-                ObjectPooling(out icon, m_iconsDisplayed, m_iconsWaited, () => new ShortcutIcon_E());
+                ObjectPooling(out ShortcutIcon_E icon, m_iconsDisplayed, m_iconsWaited, () => new ShortcutIcon_E());
                 icon.Setup(icons[i]);
                 icon.InsertRootTo(m_iconbox);
             }
@@ -77,10 +74,13 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             var title = Root.Q<Label>("title");
             string titleStyle = "UI/Style/Shortcuts/Shortcut_Title";
-            StyleKeys titleKeys = new StyleKeys();
+            StyleKeys titleKeys = new StyleKeys("", null, null);
             m_title = new Label_E(title, titleStyle, titleKeys);
 
             m_iconbox = Root.Q("iconbox");
+            string iconboxStyle = "UI/Style/Shortcuts/Shortcut_Iconbox";
+            StyleKeys iconboxKeys = new StyleKeys();
+            new Visual_E(m_iconbox, iconboxStyle, iconboxKeys);
 
             m_plusDisplayed = new List<Label_E>();
             m_plusWaited = new List<Label_E>();
@@ -105,9 +105,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_plusDisplayed.ForEach(removeVEFromHierarchy);
             m_plusWaited.AddRange(m_plusDisplayed);
             m_plusDisplayed.Clear();
-
-            Debug.Log($"icon displayed = [{m_iconsDisplayed.Count}]; plus displayed = [{m_plusDisplayed.Count}]");
-            Debug.Log($"icon wait = [{m_iconsWaited.Count}]; plus wait = [{m_plusWaited.Count}]");
         }
     }
 }
