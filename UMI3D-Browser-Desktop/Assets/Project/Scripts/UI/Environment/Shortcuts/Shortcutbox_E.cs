@@ -15,7 +15,7 @@ limitations under the License.
 */
 using System;
 using System.Collections.Generic;
-using umi3d.cdk.menu;
+using umi3dDesktopBrowser.ui.Controller;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -41,7 +41,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected static float m_width { get; set; } = default;
         protected static List<Shortcut_E> m_shortcutsDisplayed;
         protected static List<Shortcut_E> m_shortcutsWaited;
-        //protected Controller.KeyBindings_SO keyBindings;
+        protected static KeyBindings_SO m_keyBindings;
 
         private static Shortcutbox_E m_instance;
         private static string m_shortcutboxUXML => "UI/UXML/Shortcuts/shortcutbox";
@@ -63,14 +63,22 @@ namespace umi3dDesktopBrowser.ui.viewController
                 Display();
         }
 
+        /// <summary>
+        /// Add a shortcut to the shortcutbox.
+        /// </summary>
+        /// <param name="title">Title of this shortcut</param>
+        /// <param name="keys">the keys to press</param>
         public void AddShortcut(string title, params string[] keys)
         {
             Shortcut_E shortcut;
-            ObjectPooling(out shortcut, m_shortcutsDisplayed, m_shortcutsWaited);
+            ObjectPooling(out shortcut, m_shortcutsDisplayed, m_shortcutsWaited, () => new Shortcut_E());
 
-            //Sprite[] shortcutIcons = new Sprite[keys.Length];
-            //for (int i = 0; i < keys.Length; ++i)
-            //    shortcutIcons[i] = keyBindings.GetSpriteFrom(keys[i]);
+            Sprite[] shortcutIcons = new Sprite[keys.Length];
+            for (int i = 0; i < keys.Length; ++i)
+                shortcutIcons[i] = m_keyBindings.GetSpriteFrom(keys[i]);
+
+            shortcut.Setup(title, shortcutIcons);
+            m_shortcuts.Adds(shortcut);
         }
 
         public void RemoveShortcut()
@@ -78,9 +86,19 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         }
 
+        /// <summary>
+        /// Remove all shortcuts from the shortcutbox.
+        /// </summary>
         public void ClearShortcut()
         {
+            Action<Visual_E> removeVEFromHierarchy = (vE) =>
+            {
+                m_shortcuts.Remove(vE);
+            };
 
+            m_shortcutsDisplayed.ForEach(removeVEFromHierarchy);
+            m_shortcutsWaited.AddRange(m_shortcutsDisplayed);
+            m_shortcutsDisplayed.Clear();
         }
 
         private void OnSizeChanged(GeometryChangedEvent e)
@@ -110,17 +128,17 @@ namespace umi3dDesktopBrowser.ui.viewController
                 vE.experimental.animation.Start(value, 0, 100, animation);
         }
 
-        private void ObjectPooling<T>(out T vE, List<T> listDisplayed, List<T> listWaited) where T : new()
-        {
-            if (listWaited.Count == 0)
-                vE = new T();
-            else
-            {
-                vE = listWaited[listWaited.Count - 1];
-                listWaited.RemoveAt(listWaited.Count - 1);
-            }
-            listDisplayed.Add(vE);
-        }
+        //private void ObjectPooling<T>(out T vE, List<T> listDisplayed, List<T> listWaited) where T : new()
+        //{
+        //    if (listWaited.Count == 0)
+        //        vE = new T();
+        //    else
+        //    {
+        //        vE = listWaited[listWaited.Count - 1];
+        //        listWaited.RemoveAt(listWaited.Count - 1);
+        //    }
+        //    listDisplayed.Add(vE);
+        //}
     }
 
     public partial class Shortcutbox_E : Visual_E
@@ -131,7 +149,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             var title = Root.Q<Label>("title");
             string titleStyle = "UI/Style/Shortcuts/Shortcutbox_Title";
-            StyleKeys titleKeys = new StyleKeys();
+            StyleKeys titleKeys = new StyleKeys("", "", null);
             new Label_E(title, titleStyle, titleKeys, "Shortcuts");
 
             var scrollView = Root.Q<ScrollView>();
@@ -141,6 +159,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             m_shortcutsDisplayed = new List<Shortcut_E>();
             m_shortcutsWaited = new List<Shortcut_E>();
+            m_keyBindings = Resources.Load<KeyBindings_SO>("KeyBindings");
         }
 
         public override void Display()

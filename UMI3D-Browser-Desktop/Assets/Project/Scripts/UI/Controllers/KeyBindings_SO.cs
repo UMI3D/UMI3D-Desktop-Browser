@@ -16,7 +16,7 @@ limitations under the License.
 
 using UnityEngine;
 
-namespace BrowserDesktop.Controller
+namespace umi3dDesktopBrowser.ui.Controller
 {
     [CreateAssetMenu(fileName = "keyBindings", menuName = "ScriptableObjects/KeyBindings")]
     public class KeyBindings_SO : ScriptableObject

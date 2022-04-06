@@ -21,6 +21,11 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public class ShortcutIcon_GE : Visual_E
     {
+        public ShortcutIcon_GE() : base (new VisualElement())
+        {
+
+        }
+
         private enum IconType
         {
             //H: 512px

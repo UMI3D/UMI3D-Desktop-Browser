@@ -24,6 +24,7 @@ using umi3d.cdk.interaction;
 using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
+using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 
 namespace BrowserDesktop.Interaction
@@ -171,8 +172,8 @@ namespace BrowserDesktop.Interaction
         {
             if (icon != null)
                 throw new System.Exception("Not implemented yet");
-            Debug.Log("<color=green>TODO: </color>" + $"Shortcuts");
-            //Shortcuts.Instance.AddShortcut(label, new string[1] { inputName });
+            Debug.Log("<color=green>TODO: </color>" + $"Shortcuts add = [{label}]");
+            Shortcutbox_E.Instance.AddShortcut(label, inputName);
         }
 
         #region Associate and Dissociate
@@ -245,8 +246,8 @@ namespace BrowserDesktop.Interaction
             if (Down) onInputUp.Invoke();
             ResetButton();
             associatedInteraction = null;
-            Debug.Log("<color=green>TODO: </color>" + $"Shortcuts");
-            //Shortcuts.Instance.ClearShortcut();
+            Debug.Log("<color=green>TODO: </color>" + $"Shortcuts clear");
+            Shortcutbox_E.Instance.ClearShortcut();
         }
 
         void ResetButton()

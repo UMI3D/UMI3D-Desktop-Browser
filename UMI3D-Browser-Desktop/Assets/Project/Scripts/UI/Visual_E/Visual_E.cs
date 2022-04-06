@@ -84,39 +84,38 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class Visual_E
     {
-        public Visual_E() : base() { }
-        public Visual_E(VisualElement visual) : this()
+        public Visual_E(VisualElement visual)
         {
             if (visual == null) throw new NullReferenceException($"visual is null");
             Init(null, visual, null, null);
         }
-        public Visual_E(VisualElement parent, VisualElement visual, string styleResourcePath, StyleKeys keys) : this()
+        public Visual_E(VisualElement parent, VisualElement visual, string styleResourcePath, StyleKeys keys)
         {
             if (parent == null) throw new NullReferenceException($"parent is null");
             if (visual == null) throw new NullReferenceException($"visual is null");
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             Init(parent, visual, style_SO, keys);
         }
-        public Visual_E(VisualElement visual, string styleResourcePath, StyleKeys keys) : this()
+        public Visual_E(VisualElement visual, string styleResourcePath, StyleKeys keys)
         {
             if (visual == null) throw new NullReferenceException($"visual is null");
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             Init(null, visual, style_SO, keys);
         }
-        public Visual_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) : this()
+        public Visual_E(string visualResourcePath, string styleResourcePath, StyleKeys keys)
         {
             VisualElement visual = GetVisualRoot(visualResourcePath);
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             Init(null, visual, style_SO, keys);
         }
-        public Visual_E(VisualElement parent, string visualResourcePath, string styleResourcePath, StyleKeys keys) : this()
+        public Visual_E(VisualElement parent, string visualResourcePath, string styleResourcePath, StyleKeys keys)
         {
             if (parent == null) throw new NullReferenceException($"parent is null");
             VisualElement visual = GetVisualRoot(visualResourcePath);
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             Init(parent, visual, style_SO, keys);
         }
-        public Visual_E(VisualElement parent, VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys) : this()
+        public Visual_E(VisualElement parent, VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys)
         {
             if (parent == null) throw new NullReferenceException($"parent is null");
             if (visual == null) throw new NullReferenceException($"visual is null");
@@ -148,10 +147,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         protected virtual void Initialize() 
-        {
-            
-            
-        }
+        { }
 
         protected virtual VisualElement GetVisualRoot(string resourcePath)
         {
@@ -176,6 +172,18 @@ namespace umi3dDesktopBrowser.ui.viewController
             GlobalPreferences_SO globalPreferences = Resources.Load<GlobalPreferences_SO>("Preferences/GlobalPreferences");
             if (globalPreferences == null) throw new NullReferenceException("Global pref null");
             return globalPreferences;
+        }
+
+        protected virtual void ObjectPooling<T>(out T vE, List<T> listDisplayed, List<T> listWaited, Func<T> init)
+        {
+            if (listWaited.Count == 0)
+                vE = init();
+            else
+            {
+                vE = listWaited[listWaited.Count - 1];
+                listWaited.RemoveAt(listWaited.Count - 1);
+            }
+            listDisplayed.Add(vE);
         }
     }
 }

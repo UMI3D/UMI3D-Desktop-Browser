@@ -17,6 +17,7 @@ limitations under the License.
 using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
+using umi3dDesktopBrowser.ui.Controller;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -51,14 +52,6 @@ namespace BrowserDesktop.Menu
 
         #region Data
 
-        [Tooltip("Display shortcut at start.")]
-        [SerializeField]
-        private bool displayAtStart = false;
-
-        [Tooltip("Shortcuts Icons dictionary.")]
-        [SerializeField]
-        private Controller.KeyBindings_SO keyBindings;
-
         private float shortcutDisplayerWidth = 350;
 
         /// <summary>
@@ -80,76 +73,55 @@ namespace BrowserDesktop.Menu
 
         void Start()
         {
-
             var root = uiDocument.rootVisualElement;
 
             shortcutDisplayer_VE = root.Q<VisualElement>("shortcut-displayer");
             shortcuts_SV = shortcutDisplayer_VE.Q<ScrollView>("shortcuts");
 
-
             shortcutDisplayer_VE.style.width = shortcutDisplayerWidth;
         }
 
-        void Update()
-        {
-            //Debug
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                String[] test = { "1" };
-                AddShortcut("test", test);
-                //AddShortcuts();
-            }
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                String[] test = { "ctrl", "1" };
-                AddShortcut("test2", test);
-                //AddShortcuts();
-            }
-            /*if (Input.GetKeyDown(KeyCode.M))
-            {
-                String[] test0 = { "t", "s" };
-                String[] test1 = { "t" };
-                String[] test2 = { "t", "s", "d" };
-                String[] test3 = { "t", "s" };
-                AddShortcut("test", test0);
-                AddShortcut("test01", test1);
-                AddShortcut("test002", test2);
-                AddShortcut("test0003", test3);
-                //OnResizeIconsArea.Invoke();
-                AddShortcuts();
-            }*/
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                String[] test = { "shift", "shift", "shift" };
-                AddShortcut("Test shift bla bla blabla bla bla test.", test);
-                //AddShortcuts();
-            }
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                ClearShortcut();
-            }
-        }
+        //void Update()
+        //{
+        //    //Debug
+        //    if (Input.GetKeyDown(KeyCode.K))
+        //    {
+        //        String[] test = { "1" };
+        //        AddShortcut("test", test);
+        //        //AddShortcuts();
+        //    }
+        //    if (Input.GetKeyDown(KeyCode.L))
+        //    {
+        //        String[] test = { "ctrl", "1" };
+        //        AddShortcut("test2", test);
+        //        //AddShortcuts();
+        //    }
+        //    /*if (Input.GetKeyDown(KeyCode.M))
+        //    {
+        //        String[] test0 = { "t", "s" };
+        //        String[] test1 = { "t" };
+        //        String[] test2 = { "t", "s", "d" };
+        //        String[] test3 = { "t", "s" };
+        //        AddShortcut("test", test0);
+        //        AddShortcut("test01", test1);
+        //        AddShortcut("test002", test2);
+        //        AddShortcut("test0003", test3);
+        //        //OnResizeIconsArea.Invoke();
+        //        AddShortcuts();
+        //    }*/
+        //    if (Input.GetKeyDown(KeyCode.J))
+        //    {
+        //        String[] test = { "shift", "shift", "shift" };
+        //        AddShortcut("Test shift bla bla blabla bla bla test.", test);
+        //    }
+        //    if (Input.GetKeyDown(KeyCode.C))
+        //    {
+        //        ClearShortcut();
+        //    }
+        //}
 
         #region Add and Remove Shortcuts
-        /// <summary>
-        /// Add a shortcut to the shortcuts displayer.
-        /// </summary>
-        /// <param name="shortcutName">What the shortcut do.</param>
-        /// <param name="shortcutkeys">Keys to press to trigger the shortcut.</param>
-        public void AddShortcut(string shortcutName, string[] shortcutkeys)
-        {
-            ShortcutGenericElement shortcut_GE;
-            //ObjectPooling(out shortcut_GE, Shortcut_ge_DisplayedList, Shortcut_ge_WaitedList, shortcut_ge_VTA);
-
-            Sprite[] shortcutIcons = new Sprite[shortcutkeys.Length];
-            for (int i = 0; i < shortcutkeys.Length; ++i)
-                shortcutIcons[i] = keyBindings.GetSpriteFrom(shortcutkeys[i]);
-
-            //shortcut_GE.
-            //    Setup(shortcutName, shortcutIcons, shortcutIcon_ge_VTA, label_ge_VTA).
-            //    InsertRootTo(shortcuts_SV);
-        }
-
+        
         /// <summary>
         /// Remove all shortcuts from the shortcuts displayer.
         /// </summary>
