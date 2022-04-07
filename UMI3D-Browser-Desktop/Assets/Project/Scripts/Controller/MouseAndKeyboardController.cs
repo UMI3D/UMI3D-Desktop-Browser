@@ -738,8 +738,7 @@ namespace BrowserDesktop.Controller
         /// <returns></returns>
         public override bool IsCompatibleWith(AbstractTool tool)
         {
-            List<AbstractInteractionDto> interactions = tool.interactions;
-            List<AbstractInteractionDto> manips = interactions.FindAll(x => x is ManipulationDto);
+            List<AbstractInteractionDto> manips = tool.interactions.FindAll(x => x is ManipulationDto);
             foreach (var man in manips)
             {
                 var man2 = man as ManipulationDto;

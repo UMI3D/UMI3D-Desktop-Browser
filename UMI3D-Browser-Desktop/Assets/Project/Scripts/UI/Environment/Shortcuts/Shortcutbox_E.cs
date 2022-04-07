@@ -126,18 +126,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             else
                 vE.experimental.animation.Start(value, 0, 100, animation);
         }
-
-        //private void ObjectPooling<T>(out T vE, List<T> listDisplayed, List<T> listWaited) where T : new()
-        //{
-        //    if (listWaited.Count == 0)
-        //        vE = new T();
-        //    else
-        //    {
-        //        vE = listWaited[listWaited.Count - 1];
-        //        listWaited.RemoveAt(listWaited.Count - 1);
-        //    }
-        //    listDisplayed.Add(vE);
-        //}
     }
 
     public partial class Shortcutbox_E : Visual_E
@@ -169,6 +157,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             });
             Displayed = true;
             ShouldDisplay = false;
+            OnDisplayedTrigger(true);
         }
 
         public override void Hide()
@@ -179,6 +168,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             });
             Displayed = false;
             ShouldHide = false;
+            OnDisplayedTrigger(false);
         }
     }
 }

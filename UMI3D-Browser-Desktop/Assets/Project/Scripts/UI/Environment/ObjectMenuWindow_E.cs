@@ -35,7 +35,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         private static ObjectMenuWindow_E m_instance;
-        private static string m_windowUXML = "UI/UXML/ToolboxWindow/toolboxWindow";
+        private static string m_windowUXML = "UI/UXML/ToolboxWindow/pinnedToolboxWindow";
         private static string m_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_window";
         private static StyleKeys m_windowKeys = new StyleKeys(null, "", null);
     }
@@ -49,6 +49,27 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class ObjectMenuWindow_E : WindowWithScrollView_E
     {
+        protected override void Initialize()
+        {
+            base.Initialize();
 
+            StyleKeys iconKeys = new StyleKeys(null, "objectMenu", "");
+            SetIcon(m_iconStyle, iconKeys);
+
+            StyleKeys windowNameKeys = new StyleKeys("", "", "");
+            SetTopBar("Object Menu", m_windowNameStyle, windowNameKeys);
+
+            StyleKeys closeButtonBGKeys = new StyleKeys(null, "", "");
+            StyleKeys closeButtonIconKeys = new StyleKeys(null, "", null);
+            SetCloseButton(m_closeButtonBGStyle, closeButtonBGKeys, m_closeButtonIconStyle, closeButtonIconKeys);
+
+            string dcStyle = "UI/Style/ToolboxWindow/ToolboxWindow_DraggerContainer";
+            StyleKeys dcKeys = new StyleKeys(null, "", null);
+            string dStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Dragger";
+            StyleKeys dKeys = new StyleKeys(null, "", "");
+            SetVerticalScrollView(null, null, dcStyle, dcKeys, dStyle, dKeys);
+
+            Root.name = "objectMenuWindow";
+        }
     }
 }

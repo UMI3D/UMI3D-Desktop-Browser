@@ -13,6 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
+using umi3d.cdk;
+using umi3d.cdk.collaboration;
 using umi3d.cdk.menu;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
@@ -21,6 +24,8 @@ namespace umi3dDesktopBrowser.ui
 {
     public partial class GameMenu
     {
+        private DateTime m_startOfSession = new DateTime();
+
         #region Init Menus
 
         private void InitMenus()
@@ -29,7 +34,7 @@ namespace umi3dDesktopBrowser.ui
             InitToolboxWindow();
             InitToolboxPinnedWindow();
             InitShortcut();
-            //Todo Add footer.
+            InitBottomBar();
         }
 
         private void InitMenuBar()
@@ -74,19 +79,52 @@ namespace umi3dDesktopBrowser.ui
                 Shortcutbox_E.ShouldHide = true;
         }
 
+        private void InitBottomBar()
+        {
+            BottomBar_E.Instance.InsertRootTo(m_mainView);
+            Shortcutbox_E.Instance.OnDisplayedEvent += BottomBar_E.Instance.OpenCloseShortcut;
+
+            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => m_startOfSession = DateTime.Now);
+            UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += () => {
+                int usersCount = UMI3DCollaborationEnvironmentLoader.Instance.UserList.Count;
+                BottomBar_E.Instance.ParticipantCount.value = (usersCount < 2) ? $"{usersCount} participant" : $"{usersCount} participants";
+            };
+        }
+
         #endregion
 
         #region Input Menus
 
         private void InputMenus()
         {
+            InputMenuBar();
             InputShortcut();
+        }
+
+        private void InputMenuBar()
+        {
+            //TODO show when right click
         }
 
         private void InputShortcut()
         {
             if (Input.GetKeyDown(KeyCode.F1))
                 Shortcutbox_E.Instance.DisplayOrHide();
+        }
+
+        #endregion
+
+        #region Update Menus
+
+        private void UpdateMenus()
+        {
+            UpdateBottomBar();
+        }
+
+        private void UpdateBottomBar()
+        {
+            var time = DateTime.Now - m_startOfSession;
+            BottomBar_E.Instance.Timer.value = time.ToString("hh") + ":" + time.ToString("mm") + ":" + time.ToString("ss");
         }
 
         #endregion

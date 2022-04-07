@@ -44,25 +44,12 @@ namespace BrowserDesktop.Menu
 
         #endregion
 
-        #region Menu Bar
-
-        VisualElement applicationSettings;
-        Button microphoneBtn;
-
-        #endregion
-
         #region Bottom Bar
-
-        VisualElement sessionInfo;
-        Label sessionTime;
-        Label participantsCount;
 
         MicrophoneSlider GainSlider;
         MicrophoneSlider ThresholdSlider;
 
         bool displayMicrophoneSlider = true;
-
-        DateTime startOfSession = new DateTime();
 
         #endregion
 
@@ -80,27 +67,8 @@ namespace BrowserDesktop.Menu
             topCenterMenu = root.Q<VisualElement>("top-center-menu");
             topCenterMenu.style.display = DisplayStyle.None;
 
-            //Menu Bar
-            /*
-            applicationSettings = root.Q<VisualElement>("application-settings");
-            microphoneBtn = applicationSettings.Q<Button>("microphone-btn");
-            sessionInfo = root.Q<VisualElement>("session-info");
-            sessionTime = sessionInfo.Q<Label>("session-time");
-
-            microphoneSetter = root.Q<VisualElement>("microphone-setter");
-
-            microphoneBtn = sessionInfo.Q<Button>("microphone-btn");
-            microphoneBtn.clickable.clicked += () =>
-            {
-                Environment.Settings.ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
-            };
-            */
 
             //Bottom Bar
-            sessionInfo = root.Q<VisualElement>("session-info");
-            sessionTime = sessionInfo.Q<Label>("session-time");
-            participantsCount = sessionInfo.Q<Label>("participants-count");
-            umi3d.cdk.collaboration.UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += UpdateParticipantsCount;
 
 
             /*DisplayConsole(false);
@@ -113,16 +81,12 @@ namespace BrowserDesktop.Menu
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
             {
-                startOfSession = DateTime.Now;
                 topCenterMenu.style.display = DisplayStyle.Flex;
             });
         }
 
         private void Update()
         {
-            var time = DateTime.Now - startOfSession;
-            sessionTime.text = time.ToString("hh") + ":" + time.ToString("mm") + ":" + time.ToString("ss");
-
             /*if(umi3d.cdk.collaboration.MicrophoneListener.Exists)
                 if(displayMicrophoneSlider && GainSlider.DisplayedValue != umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS)
                 {
@@ -190,17 +154,6 @@ namespace BrowserDesktop.Menu
         {
             environmentName = root.Q<Label>("environment-name");
             environmentName.text = media.name;
-        }
-
-        /// <summary>
-        /// Update the participants count when a user connect or disconnect to the environment
-        /// </summary>
-        /// <param name="user"></param>
-        public void UpdateParticipantsCount()
-        {
-            int usersCount = umi3d.cdk.collaboration.UMI3DCollaborationEnvironmentLoader.Instance.UserList.Count;
-
-            participantsCount.text = usersCount < 2 ? usersCount + " participant" : usersCount + " participants";
         }
 
         /*bool isDisplayed = false;

@@ -24,6 +24,11 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected Label_E m_label { get; set; } = null;
         protected ButtonWithIcon_E m_closeButton { get; set; } = null;
+
+        protected virtual string m_iconStyle => "UI/Style/Windows/Window_Icon";
+        protected virtual string m_windowNameStyle => "UI/Style/Windows/Window_Name";
+        protected virtual string m_closeButtonBGStyle => "UI/Style/Windows/Window_CloseButtonBackground";
+        protected virtual string m_closeButtonIconStyle => "UI/Style/Windows/Window_CloseButtonIcon";
     }
 
     public abstract partial class AbstractWindow_E : Visual_E

@@ -50,8 +50,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         private VisualElement rightLayout_VE;
 
         private static MenuBar_E m_instance;
-        private static string m_menuUXML => "UI/UXML/MenuBar/menuBar";
-        private static string m_menuStyle => "UI/Style/MenuBar/MenuBar";
+        private static string m_menuUXML => "UI/UXML/Menus/menuBar";
+        private static string m_menuStyle => "UI/Style/Menus/Menus";
         private static StyleKeys m_menuKeys => new StyleKeys(null, "", null);
         private static string m_separatorStyle => "UI/Style/MenuBar/Separator";
         private static StyleKeys m_separatorKeys => new StyleKeys(null, "", null);

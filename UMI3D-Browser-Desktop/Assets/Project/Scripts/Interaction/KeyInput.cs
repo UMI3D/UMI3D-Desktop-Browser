@@ -172,7 +172,6 @@ namespace BrowserDesktop.Interaction
         {
             if (icon != null)
                 throw new System.Exception("Not implemented yet");
-            Debug.Log("<color=green>TODO: </color>" + $"Shortcuts add = [{label}]");
             Shortcutbox_E.Instance.AddShortcut(label, inputName);
         }
 
@@ -246,7 +245,6 @@ namespace BrowserDesktop.Interaction
             if (Down) onInputUp.Invoke();
             ResetButton();
             associatedInteraction = null;
-            Debug.Log("<color=green>TODO: </color>" + $"Shortcuts clear");
             Shortcutbox_E.Instance.ClearShortcut();
         }
 

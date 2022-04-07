@@ -84,6 +84,7 @@ namespace umi3dDesktopBrowser.ui
             }
 
             InputMenus();
+            UpdateMenus();
         }
 
         /// <summary>

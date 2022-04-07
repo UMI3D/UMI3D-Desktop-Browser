@@ -69,7 +69,7 @@
                         <ui:Instance template="MicrophoneElement" name="gain-bar" style="overflow: hidden;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 32px; justify-content: center; flex-direction: row;">
+                <ui:VisualElement name="footer" class="dark-grey1-bck" style="height: 32px; justify-content: center; flex-direction: row; display: none;">
                     <ui:VisualElement name="shortcuts" style="width: 25%; flex-direction: row;">
                         <ui:Label text="Escape : open pause menu" name="shortcuts-menu" style="color: rgb(182, 182, 182); -unity-text-align: middle-left; width: 175px; white-space: nowrap; margin-left: 10px;" />
                         <ui:Label text="Right click : open interaction menu" name="shortcuts-right-click" style="color: rgb(182, 182, 182); -unity-text-align: middle-left; width: 200px;" />

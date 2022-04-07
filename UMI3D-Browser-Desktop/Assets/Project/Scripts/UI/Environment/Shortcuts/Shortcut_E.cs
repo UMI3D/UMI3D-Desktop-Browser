@@ -91,7 +91,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         public override void Remove()
         {
             base.Remove();
-            //reset TODO
 
             Action<Visual_E> removeVEFromHierarchy = (vE) =>
             {
