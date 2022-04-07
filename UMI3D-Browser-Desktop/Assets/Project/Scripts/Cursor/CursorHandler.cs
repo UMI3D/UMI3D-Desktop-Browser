@@ -126,7 +126,7 @@ namespace BrowserDesktop.Cursor
                 }
                 movementUpdated = false;
             }
-            bool newMenuState = ((!SideMenu.Exists || !SideMenu.IsExpanded) && (cursorMovement == CursorMovement.Center || cursorMovement == CursorMovement.FreeHiden) );
+            bool newMenuState = cursorMovement == CursorMovement.Center || cursorMovement == CursorMovement.FreeHiden;
             if ((stateUpdated || LastMenuState != newMenuState) && CursorDisplayer.Exists)
             {
                 LastMenuState = newMenuState;

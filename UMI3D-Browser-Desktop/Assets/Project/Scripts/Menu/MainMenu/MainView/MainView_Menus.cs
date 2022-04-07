@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using BrowserDesktop;
 using System;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
@@ -34,6 +35,7 @@ namespace umi3dDesktopBrowser.ui
             InitToolboxWindow();
             InitToolboxPinnedWindow();
             InitShortcut();
+            InitConsole();
             InitBottomBar();
         }
 
@@ -79,10 +81,24 @@ namespace umi3dDesktopBrowser.ui
                 Shortcutbox_E.ShouldHide = true;
         }
 
+        private void InitConsole()
+        {
+            Console_E.Instance.InsertRootTo(m_viewport);
+            Console_E.Version.value = BrowserVersion.Version;
+
+            if (m_showConsoleOnStart)
+                Console_E.ShouldDisplay = true;
+            else
+                Console_E.ShouldHide = true;
+        }
+
         private void InitBottomBar()
         {
             BottomBar_E.Instance.InsertRootTo(m_mainView);
+            BottomBar_E.Instance.Notification.OnClicked = Console_E.Instance.DisplayOrHide;
             Shortcutbox_E.Instance.OnDisplayedEvent += BottomBar_E.Instance.OpenCloseShortcut;
+            Console_E.Instance.OnDisplayedEvent += BottomBar_E.Instance.UpdateOnOffNotificationIcon;
+            Console_E.Instance.NewLogAdded += BottomBar_E.Instance.UpdateAlertNotificationIcon;
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => m_startOfSession = DateTime.Now);
             UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += () => {

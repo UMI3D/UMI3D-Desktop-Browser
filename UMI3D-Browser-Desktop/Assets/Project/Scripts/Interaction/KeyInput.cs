@@ -101,7 +101,7 @@ namespace BrowserDesktop.Interaction
                 LastFrameButton = InputLayoutManager.GetInputCode(activationButton);
             }
 
-            if (associatedInteraction != null && (!SideMenu.Exists || !SideMenu.IsExpanded))
+            if (associatedInteraction != null)
             {
                 if (Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)))
                 {

@@ -29,6 +29,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         public VisualManipulator GetVisualManipulator(VisualElement visual)
             => m_visualStyles[visual].Item3;
 
+        /// <summary>
+        /// Update the manipulator of the root visualElement.
+        /// </summary>
+        /// <param name="newManipulator"></param>
         public void UpdateVisualManipulator(VisualManipulator newManipulator)
             => UpdateVisualManipulator(Root, newManipulator);
 

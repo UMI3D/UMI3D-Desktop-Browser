@@ -71,20 +71,6 @@ namespace BrowserDesktop.Menu
             {
                 //_Collapse();
             }
-            else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
-            {
-                
-                if (!SideMenu.IsExpanded)
-                {
-                    SideMenu.Display(true, true);
-                } else
-                {
-                    if (CircularMenu.Instance.Count() > 0 || EventMenu.NbEventsDIsplayed > 0)
-                        SideMenu.Display(true, false);
-                    else
-                        SideMenu.Display(false, false);
-                }
-            }
 
             if (circularMenuContainer.isDisplayed && circularMenuContainer.isExpanded && IsEmpty())
             {
@@ -105,8 +91,8 @@ namespace BrowserDesktop.Menu
             {
                 bool display = false;
 
-                if (!SideMenu.IsExpanded)
-                    display = !IsEmpty();
+                //if (!SideMenu.IsExpanded)
+                //    display = !IsEmpty();
 
                 CursorHandler.Instance.MenuIndicator = display;
             }
