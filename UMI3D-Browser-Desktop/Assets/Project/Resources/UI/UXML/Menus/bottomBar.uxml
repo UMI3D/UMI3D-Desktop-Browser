@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="bottomBar" style="flex-direction: row; justify-content: space-between; flex-shrink: 0;">
+        <ui:VisualElement name="instructionArea" style="flex-direction: row;">
+            <ui:Label text="Label" display-tooltip-when-elided="true" name="menuShortcut" />
+            <ui:Label text="Label" display-tooltip-when-elided="true" name="shortcutShortcut" />
+        </ui:VisualElement>
+        <ui:VisualElement name="sessionInformations" style="flex-direction: row-reverse;">
+            <ui:Button display-tooltip-when-elided="true" name="notification" />
+            <ui:Label text="Label" display-tooltip-when-elided="true" name="timer" />
+            <ui:Label text="Label" display-tooltip-when-elided="true" name="participantCount" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

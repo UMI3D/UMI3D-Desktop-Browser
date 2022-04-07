@@ -49,19 +49,16 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            string iconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Icon";
             StyleKeys iconKeys = new StyleKeys(null, "paramettersWindow", "");
-            SetIcon(iconStyle, iconKeys);
+            SetIcon(m_iconStyle, iconKeys);
 
-            string windowNameStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Name";
             StyleKeys windowNameKeys = new StyleKeys("", "", "");
-            SetTopBar("Toolbox", windowNameStyle, windowNameKeys);
+            SetTopBar("Toolbox", m_windowNameStyle, windowNameKeys);
 
-            string closeButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_CloseButton";
-            StyleKeys closeButtonKeys = new StyleKeys(null, "", "");
-            string closeButtonIconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_CloseButtonIcon";
+            
+            StyleKeys closeButtonBGKeys = new StyleKeys(null, "", "");
             StyleKeys closeButtonIconKeys = new StyleKeys(null, "", null);
-            SetCloseButton(closeButtonStyle, closeButtonKeys, closeButtonIconStyle, closeButtonIconKeys);
+            SetCloseButton(m_closeButtonBGStyle, closeButtonBGKeys, m_closeButtonIconStyle, closeButtonIconKeys);
 
             //string svStyle = "UI/Style/ToolboxWindow/parameterWindow_scrollView";
             //StyleKeys svKeys = new StyleKeys(null, "", null);
@@ -70,6 +67,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             string dStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Dragger";
             StyleKeys dKeys = new StyleKeys(null, "", "");
             SetVerticalScrollView(null, null, dcStyle, dcKeys, dStyle, dKeys);
+
+            Root.name = "toolParameterWindow";
         }
     }
 }

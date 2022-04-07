@@ -25,12 +25,34 @@ public class TestUI : MonoBehaviour
 {
     public UIDocument UIDoc;
     public MenuDisplayManager DisplayManager;
+    private VisualElement mainView;
 
     void Start()
     {
-        Close();
+        mainView = UIDoc.rootVisualElement.Q("mainView");
 
-        var mainView = UIDoc.rootVisualElement.Q("mainView");
+        ObjectMenuWindow_E
+            .Instance
+            .InsertRootTo(mainView);
+    }
+
+    [ContextMenu("Open player menu")]
+    public void Open()
+    {
+        DisplayManager.Display(true);
+    }
+
+    /// <summary>
+    /// Closes the menu with all pinned items.
+    /// </summary>
+    public void Close()
+    {
+        DisplayManager.Hide(true);
+    }
+
+    private void StartToolboxTest()
+    {
+        Close();
 
         MenuBar_E
             .Instance
@@ -42,17 +64,6 @@ public class TestUI : MonoBehaviour
             .Instance
             .InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
 
-        //var message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel ullamcorper lectus. Donec tincidunt purus sit amet elit pretium imperdiet. Proin a tempor dui, ac luctus orci. Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.Proin a tempor dui, ac luctus orci.";
-        //DialogueBox_E
-        //    .SetCursorMovementActions
-        //    (
-        //            (o) => { CursorHandler.SetMovement(o, CursorHandler.CursorMovement.Free); },
-        //            (o) => { CursorHandler.UnSetMovement(o); }
-        //    );
-        //DialogueBox_E
-        //    .Setup("Test", message, "optionA", "optionB", (val) => { Debug.Log($"pressed [{val}]"); });
-        //DialogueBox_E
-        //    .DisplayFrom(UIDoc);
 
         ///FAKE DATA
 
@@ -74,8 +85,6 @@ public class TestUI : MonoBehaviour
         Menu subBoxOneTwoTwoOne = new Menu { Name = "Mac1.2.2.1" };
         subBoxOneTwoTwo.Add(subBoxOneTwoTwoOne);
 
-
-
         Menu boxTwo = new Menu { Name = "Toolbox 2" };
         rootContainer.Add(boxTwo);
 
@@ -84,32 +93,18 @@ public class TestUI : MonoBehaviour
 
         MenuItem item1 = new ButtonMenuItem { Name = "Button Item1" };
         subBoxTwoOne.Add(item1);
-        DropDownInputMenuItem item2 = new DropDownInputMenuItem { Name = "Enum Item2", options = new List<string>() { "un", "deux", "trois"} };
+        DropDownInputMenuItem item2 = new DropDownInputMenuItem { Name = "Enum Item2", options = new List<string>() { "un", "deux", "trois" } };
         item2.NotifyValueChange("un");
         subBoxTwoOne.Add(item2);
         MenuItem item3 = new BooleanInputMenuItem { Name = "Toggle Item3" };
         subBoxTwoOne.Add(item3);
         MenuItem item4 = new FloatRangeInputMenuItem { Name = "Slider Item4", min = 0f, max = 50f, value = 0f };
         subBoxTwoOne.Add(item4);
-        MenuItem item5 = new TextInputMenuItem { Name = "Text Item5"};
+        MenuItem item5 = new TextInputMenuItem { Name = "Text Item5" };
         subBoxTwoOne.Add(item5);
 
         DisplayManager.menuAsset.menu = rootContainer;
 
         Open();
-    }
-
-    [ContextMenu("Open player menu")]
-    public void Open()
-    {
-        DisplayManager.Display(true);
-    }
-
-    /// <summary>
-    /// Closes the menu with all pinned items.
-    /// </summary>
-    public void Close()
-    {
-        DisplayManager.Hide(true);
     }
 }

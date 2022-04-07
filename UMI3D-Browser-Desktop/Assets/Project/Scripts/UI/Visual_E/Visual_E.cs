@@ -29,6 +29,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public bool Initialized { get; protected set; } = false;
         public bool AttachedToHierarchy { get; protected set; } = false;
         public bool Displayed { get; protected set; } = false;
+        public event Action<bool> OnDisplayedEvent;
         public DisplayStyle RootDisplayStyle
         {
             get => Root.resolvedStyle.display;
@@ -43,10 +44,12 @@ namespace umi3dDesktopBrowser.ui.viewController
         public virtual void Display()
         {
             Root.style.display = DisplayStyle.Flex;
+            OnDisplayedEvent?.Invoke(true);
         }
         public virtual void Hide()
         {
             Root.style.display = DisplayStyle.None;
+            OnDisplayedEvent?.Invoke(false);
         }
         public virtual void Reset()
         {
@@ -149,6 +152,9 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected virtual void Initialize() 
         { }
 
+        protected void OnDisplayedTrigger(bool value)
+            => OnDisplayedEvent?.Invoke(value);
+
         protected virtual VisualElement GetVisualRoot(string resourcePath)
         {
             VisualTreeAsset visualTA = Resources.Load<VisualTreeAsset>(resourcePath);
@@ -161,7 +167,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected CustomStyle_SO GetStyleSO(string resourcePath)
         {
-            if (string.IsNullOrEmpty(resourcePath)) return null;
+            if (resourcePath == "") throw new Exception("resourcePath empty");
+            if (resourcePath == null) return null;
             CustomStyle_SO style_SO = Resources.Load<CustomStyle_SO>(resourcePath);
             Debug.Assert(style_SO != null, $"[{resourcePath}] return a null CustomStyle_SO.");
             return style_SO;

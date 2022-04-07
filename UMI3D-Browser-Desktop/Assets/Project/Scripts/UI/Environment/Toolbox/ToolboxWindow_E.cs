@@ -51,19 +51,15 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            string iconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Icon";
             StyleKeys iconKeys = new StyleKeys(null, "toolboxesWindow", "");
-            SetIcon(iconStyle, iconKeys);
+            SetIcon(m_iconStyle, iconKeys);
 
-            string windowNameStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Name";
             StyleKeys windowNameKeys = new StyleKeys("", "", "");
-            SetTopBar("Toolbox", windowNameStyle, windowNameKeys);
+            SetTopBar("Toolbox", m_windowNameStyle, windowNameKeys);
 
-            string closeButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_CloseButton";
-            StyleKeys closeButtonKeys = new StyleKeys(null, "", "");
-            string closeButtonIconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_CloseButtonIcon";
+            StyleKeys closeButtonBGKeys = new StyleKeys(null, "", "");
             StyleKeys closeButtonIconKeys = new StyleKeys(null, "", null);
-            SetCloseButton(closeButtonStyle, closeButtonKeys, closeButtonIconStyle, closeButtonIconKeys);
+            SetCloseButton(m_closeButtonBGStyle, closeButtonBGKeys, m_closeButtonIconStyle, closeButtonIconKeys);
 
             string dcStyle = "UI/Style/ToolboxWindow/ToolboxWindow_DraggerContainer";
             StyleKeys dcKeys = new StyleKeys(null, "", null);
