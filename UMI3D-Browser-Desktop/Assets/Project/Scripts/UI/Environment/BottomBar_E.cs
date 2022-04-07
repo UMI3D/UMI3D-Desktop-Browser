@@ -44,12 +44,20 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static string m_menuUXML => "UI/UXML/Menus/bottomBar";
         private static string m_menuStyle => "UI/Style/Menus/Menus";
         private static StyleKeys m_menuKeys => new StyleKeys(null, "", null);
+        private StyleKeys m_notificationOffKeys = new StyleKeys(null, "off", null);
+        private StyleKeys m_notificationOnKeys = new StyleKeys(null, "on", null);
+        private StyleKeys m_notificationAlertKeys = new StyleKeys(null, "alert", null);
     }
 
     public partial class BottomBar_E
     {
         public void OpenCloseShortcut(bool value)
             => ShortcutShortcut.value = (value) ? "F1 - Close Shortcut" : "F1 - Open Shortcut";
+
+        public void UpdateOnOffNotificationIcon(bool value)
+            => Notification.UpdatesStyle((value) ? m_notificationOnKeys : m_notificationOffKeys);
+        public void UpdateAlertNotificationIcon()
+            => Notification.UpdatesStyle(m_notificationAlertKeys);
     }
 
     public partial class BottomBar_E : Visual_E
@@ -62,26 +70,23 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
             
-            string labelsStyle = "UI/Style/Toolbox/ToolboxName";
+            string leftLabelsStyle = "UI/Style/BottomBar/BottomBar_LeftLabel";
+            string rightLabelsStyle = "UI/Style/BottomBar/BottomBar_rightLabel";
             StyleKeys labelsKeys = new StyleKeys("", null, null);
 
             var menuShortcut = Root.Q<Label>("menuShortcut");
-            Debug.Log($"menuShortcut null == [{menuShortcut == null}]");
-            MenuShortcut = new Label_E(menuShortcut, labelsStyle, labelsKeys, "Right Click - Open Menu");
-
+            MenuShortcut = new Label_E(menuShortcut, leftLabelsStyle, labelsKeys, "Right Click - Open Menu");
             var shortcutShortcut = Root.Q<Label>("shortcutShortcut");
-            ShortcutShortcut = new Label_E(shortcutShortcut, labelsStyle, labelsKeys, "F1 - Open Shortcut");
+            ShortcutShortcut = new Label_E(shortcutShortcut, leftLabelsStyle, labelsKeys, "F1 - Open Shortcut");
 
             var timer = Root.Q<Label>("timer");
-            Timer = new Label_E(timer, labelsStyle, labelsKeys, "00:00:00");
-
-            var participantCount = Root.Q<Label>("menuShortcut");
-            ParticipantCount = new Label_E(participantCount, labelsStyle, labelsKeys);
+            Timer = new Label_E(timer, rightLabelsStyle, labelsKeys, "00:00:00");
+            var participantCount = Root.Q<Label>("participantCount");
+            ParticipantCount = new Label_E(participantCount, rightLabelsStyle, labelsKeys);
 
             var notification = Root.Q<Button>("notification");
             string notificationStyle = "UI/Style/BottomBar/Notification";
-            StyleKeys notificationKeys = new StyleKeys(null, "", null);
-            Notification = new Button_E(notification, notificationStyle, notificationKeys);
+            Notification = new Button_E(notification, notificationStyle, m_notificationOffKeys);
         }
 
     }

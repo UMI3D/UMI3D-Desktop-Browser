@@ -43,6 +43,10 @@ namespace umi3dDesktopBrowser.ui
         [SerializeField]
         private bool m_showShortcutOnStart = false;
 
+        [Header("Console")]
+        [SerializeField]
+        private bool m_showConsoleOnStart = false;
+
         private VisualElement m_root => m_uiDoc.rootVisualElement;
         private VisualElement m_mainView { get; set; } = null;
         private VisualElement m_viewport { get; set; } = null;

@@ -21,38 +21,41 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
-    public partial class Shortcutbox_E
+    public partial class Console_E
     {
-        public static Shortcutbox_E Instance
+        public static Console_E Instance
         {
             get
             {
                 if (m_instance == null)
-                    m_instance = new Shortcutbox_E();
+                    m_instance = new Console_E();
                 return m_instance;
             }
         }
+
+        public event Action NewLogAdded;
+        public static Label_E Version { get; private set; } = null;
         public static bool ShouldDisplay { get; set; } = false;
         public static bool ShouldHide { get; set; } = false;
 
-        protected static ScrollView_E m_shortcuts { get; set; } = null;
+        protected static ScrollView_E m_logs { get; set; } = null;
         protected static float m_width { get; set; } = default;
-        protected static List<Shortcut_E> m_shortcutsDisplayed;
-        protected static List<Shortcut_E> m_shortcutsWaited;
-        protected static KeyBindings_SO m_keyBindings;
+        protected static List<Label_E> m_logDisplayed;
+        protected static List<Label_E> m_logWaited;
 
-        private static Shortcutbox_E m_instance;
-        private static string m_shortcutboxUXML => "UI/UXML/Shortcuts/shortcutbox";
-        private static string m_shortcutboxStyle => "UI/Style/Shortcuts/Shortcutbox";
-        private static StyleKeys m_shortcutboxKeys => new StyleKeys(null, "", null);
+        private static Console_E m_instance;
+        private static string m_consoleUXML = "UI/UXML/console";
+        private static string m_consoleStyle = "UI/Style/Console/Console";
+        private static StyleKeys m_consoleKeys = new StyleKeys(null, "", null);
+        private static string m_logStyle = "UI/Style/Console/Console_Log";
+        private static StyleKeys m_logKeys = new StyleKeys("log", null, null);
+        private static StyleKeys m_assertKeys = new StyleKeys("assert", null, null);
+        private static StyleKeys m_errorKeys = new StyleKeys("error", null, null);
+        private static StyleKeys m_exceptionKeys = new StyleKeys("exception", null, null);
     }
 
-    public partial class Shortcutbox_E
+    public partial class Console_E
     {
-        private Shortcutbox_E() :
-            base(m_shortcutboxUXML, m_shortcutboxStyle, m_shortcutboxKeys)
-        { }
-
         public void DisplayOrHide()
         {
             if (Displayed)
@@ -61,41 +64,46 @@ namespace umi3dDesktopBrowser.ui.viewController
                 Display();
         }
 
-        /// <summary>
-        /// Add a shortcut to the shortcutbox.
-        /// </summary>
-        /// <param name="title">Title of this shortcut</param>
-        /// <param name="keys">the keys to press</param>
-        public void AddShortcut(string title, params string[] keys)
+        public void AddLog()
         {
-            ObjectPooling(out Shortcut_E shortcut, m_shortcutsDisplayed, m_shortcutsWaited, () => new Shortcut_E());
-
-            Sprite[] shortcutIcons = new Sprite[keys.Length];
-            for (int i = 0; i < keys.Length; ++i)
-                shortcutIcons[i] = m_keyBindings.GetSpriteFrom(keys[i]);
-
-            shortcut.Setup(title, shortcutIcons);
-            m_shortcuts.Adds(shortcut);
+            //TODO
         }
 
-        public void RemoveShortcut()
+        public void ClearLog()
         {
-
+            //TODO
         }
 
-        /// <summary>
-        /// Remove all shortcuts from the shortcutbox.
-        /// </summary>
-        public void ClearShortcut()
+        private void HandleLog(string logString, string stackTrace, LogType type)
         {
-            Action<Visual_E> removeVEFromHierarchy = (vE) =>
+            if (type == LogType.Warning)
+                return;
+
+            ObjectPooling(out Label_E log, m_logDisplayed, m_logWaited, () => new Label_E(m_logStyle, null));
+            m_logs.Adds(log);
+            NewLogAdded?.Invoke();
+            log.value = logString;
+
+            switch (type)
             {
-                m_shortcuts.Remove(vE);
-            };
-
-            m_shortcutsDisplayed.ForEach(removeVEFromHierarchy);
-            m_shortcutsWaited.AddRange(m_shortcutsDisplayed);
-            m_shortcutsDisplayed.Clear();
+                case LogType.Error:
+                    log.UpdateLabelKeys(m_logKeys);
+                    break;
+                case LogType.Assert:
+                    log.UpdateLabelKeys(m_assertKeys);
+                    break;
+                case LogType.Warning:
+                    log.UpdateLabelKeys(m_logKeys);
+                    break;
+                case LogType.Log:
+                    log.UpdateLabelKeys(m_logKeys);
+                    break;
+                case LogType.Exception:
+                    log.UpdateLabelKeys(m_exceptionKeys);
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void OnSizeChanged(GeometryChangedEvent e)
@@ -119,39 +127,44 @@ namespace umi3dDesktopBrowser.ui.viewController
         private void AnimeVisualElement(VisualElement vE, float value, bool isShowing, Action<VisualElement, float> animation)
         {
             Debug.LogWarning("Use of Unity experimental API. May not work in the future. (2021)");
-            if (isShowing)
-                vE.experimental.animation.Start(0, value, 100, animation);
+            if (!isShowing)
+                vE.experimental.animation.Start(0, -value, 100, animation);
             else
-                vE.experimental.animation.Start(value, 0, 100, animation);
+                vE.experimental.animation.Start(-value, 0, 100, animation);
         }
     }
 
-    public partial class Shortcutbox_E : Visual_E
+    public partial class Console_E : Visual_E
     {
+        private Console_E() :
+            base(m_consoleUXML, m_consoleStyle, m_consoleKeys)
+        { }
+
         protected override void Initialize()
         {
             base.Initialize();
 
             var title = Root.Q<Label>("title");
-            string titleStyle = "UI/Style/Shortcuts/Shortcutbox_Title";
+            string titleStyle = "UI/Style/Console/Console_Version";
             StyleKeys titleKeys = new StyleKeys("", "", null);
-            new Label_E(title, titleStyle, titleKeys, "Shortcuts");
+            Version = new Label_E(title, titleStyle, titleKeys);
 
             var scrollView = Root.Q<ScrollView>();
-            m_shortcuts = new ScrollView_E(scrollView);
+            m_logs = new ScrollView_E(scrollView);
 
             Root.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
 
-            m_shortcutsDisplayed = new List<Shortcut_E>();
-            m_shortcutsWaited = new List<Shortcut_E>();
-            m_keyBindings = Resources.Load<KeyBindings_SO>("KeyBindings");
+            m_logDisplayed = new List<Label_E>();
+            m_logWaited = new List<Label_E>();
+
+            Application.logMessageReceived += HandleLog;
         }
 
         public override void Display()
         {
             AnimeVisualElement(Root, m_width, true, (elt, val) =>
             {
-                elt.style.right = m_width - val;
+                elt.style.right = val;
             });
             Displayed = true;
             ShouldDisplay = false;
@@ -162,7 +175,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             AnimeVisualElement(Root, m_width, false, (elt, val) =>
             {
-                elt.style.right = m_width - val;
+                elt.style.right = val;
             });
             Displayed = false;
             ShouldHide = false;
