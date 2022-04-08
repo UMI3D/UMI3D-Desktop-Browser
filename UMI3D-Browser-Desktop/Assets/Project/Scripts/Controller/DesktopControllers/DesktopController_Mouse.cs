@@ -14,16 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Cursor;
-using BrowserDesktop.Interaction;
-using BrowserDesktop.Menu;
-using BrowserDesktop.Parameters;
-using inetum.unityUtils;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
-using umi3d.common;
-using umi3d.common.interaction;
-using umi3d.common.userCapture;
 using UnityEngine;
 using UnityEngine.Events;
 

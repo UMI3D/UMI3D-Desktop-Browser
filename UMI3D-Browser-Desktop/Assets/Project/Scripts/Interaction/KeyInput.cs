@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 Gfi Informatique
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,12 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
-using BrowserDesktop.Menu;
 using inetum.unityUtils;
-using System.Collections;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
 using umi3d.common;
@@ -80,16 +77,12 @@ namespace BrowserDesktop.Interaction
             {
                 SwichOnDown = (CursorHandler.State == CursorHandler.CursorState.Hover);
                 if (SwichOnDown)
-                {
                     CursorHandler.State = CursorHandler.CursorState.Clicked;
-                }
             });
             onInputUp.AddListener(() =>
             {
                 if (SwichOnDown && CursorHandler.State == CursorHandler.CursorState.Clicked)
-                {
                     CursorHandler.State = CursorHandler.CursorState.Hover;
-                }
             });
         }
 
@@ -148,7 +141,7 @@ namespace BrowserDesktop.Interaction
                 };
                 UMI3DClientServer.SendData(eventdto, true);
                 risingEdgeEventSent = val;
-                MouseAndKeyboardController.isInputHold = val;
+                MouseAndKeyboardController.IsInputHold = val;
             }
             else if (typeof(T).IsAssignableFrom(typeof(EventTriggeredDto)))
             {

@@ -21,6 +21,7 @@ using inetum.unityUtils;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
+using umi3d.cdk.menu.view;
 using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
@@ -31,40 +32,27 @@ namespace BrowserDesktop.Controller
 {
     public partial class MouseAndKeyboardController
     {
-        static public bool CanProcess = false;
-
         public Transform CameraTransform;
-
         public InteractionMapper InteractionMapper;
-
-        int navigationDirect = 0;
         [SerializeField]
-        List<DofGroupEnum> dofGroups = new List<DofGroupEnum>();
+        private MenuDisplayManager m_displayManager;
 
-        AutoProjectOnHover reason = new AutoProjectOnHover();
+        [Header("Degrees Of Freedom")]
+        [SerializeField]
+        private List<DofGroupEnum> dofGroups = new List<DofGroupEnum>();
 
+        [Header("Bone Type")]
         /// <summary>
         /// Avatar bone linked to this input.
         /// </summary>
         [ConstEnum(typeof(BoneType), typeof(uint))]
         public uint interactionBoneType = BoneType.RightHand;
-
         [ConstEnum(typeof(BoneType), typeof(uint))]
         public uint hoverBoneType = BoneType.Head;
 
-        #region Hover
-
-        /// <summary>
-        /// True if an Abstract Input is currently hold by a user.
-        /// </summary>
-        public static bool isInputHold = false;
-
-        #endregion
-
-        #region Inputs
-
         #region Inputs Fields
 
+        [Header("Input Action")]
         [SerializeField]
         List<CursorKeyInput> ManipulationActionInput = new List<CursorKeyInput>();
 
@@ -111,41 +99,22 @@ namespace BrowserDesktop.Controller
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
         protected List<StringEnumParameterInput> stringEnumParameterInputs = new List<StringEnumParameterInput>();
 
-        public override List<AbstractUMI3DInput> inputs
-        {
-            get {
-                List<AbstractUMI3DInput> list = new List<AbstractUMI3DInput>();
-                list.AddRange(ManipulationInputs);
-                list.AddRange(KeyInputs);
-                list.AddRange(KeyMenuInputs);
-                list.AddRange(floatParameterInputs);
-                list.AddRange(floatRangeParameterInputs);
-                list.AddRange(intParameterInputs);
-                list.AddRange(boolParameterInputs);
-                list.AddRange(stringParameterInputs);
-                list.AddRange(stringEnumParameterInputs);
-                return list;
-            }
-        }
-
         #endregion
 
-        #region Clear Menu and Inputs
+        public static bool CanProcess = false;
+        /// <summary>
+        /// True if an Abstract Input is currently hold by a user.
+        /// </summary>
+        public static bool IsInputHold = false;
 
-        public override void Clear()
-        {
-            foreach (ManipulationGroup input in ManipulationInputs)
-            {
-                if (!input.IsAvailable())
-                    input.Dissociate();
-            }
-            foreach (KeyInput input in KeyInputs)
-            {
-                if (!input.IsAvailable())
-                    input.Dissociate();
-            }
-            ClearParameters();
-        }
+        private int m_navigationDirect = 0;
+        private AutoProjectOnHover reason = new AutoProjectOnHover();
+    }
+
+
+    public partial class MouseAndKeyboardController
+    {
+        #region Inputs
 
         private void ClearParameters()
         {
@@ -164,86 +133,11 @@ namespace BrowserDesktop.Controller
             inputs = new List<T>();
         }
 
-        #endregion
-
-        #region Find Input
-
-        public override DofGroupOptionDto FindBest(DofGroupOptionDto[] options)
-        {
-
-            foreach (var GroupOption in options)
-            {
-                bool ok = true;
-                foreach (DofGroupDto dof in GroupOption.separations)
-                {
-                    if (!dofGroups.Contains(dof.dofs))
-                    {
-                        ok = false;
-                        break;
-                    }
-                }
-                if (ok) return GroupOption;
-            }
-
-            throw new System.NotImplementedException();
-        }
-
-        public override AbstractUMI3DInput FindInput(ManipulationDto manip, DofGroupDto dof, bool unused = true)
-        {
-            ManipulationGroup group = ManipulationInputs.Find(i => i.IsAvailableFor(manip));
-            if (group == null)
-            {
-                group = ManipulationGroup.Instanciate(this, ManipulationActionInput, dofGroups, transform);
-                if (group == null)
-                {
-                    Debug.LogWarning("find manip input FAILED");
-                    return null;
-                }
-                group.bone = interactionBoneType;
-                ManipulationInputs.Add(group);
-            }
-            return group;
-        }
-
-        public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
-        {
-            KeyInput input = KeyInputs.Find(i => i.IsAvailable() || !unused);
-            if (input == null)
-            {
-                return FindInput(KeyMenuInputs, i => i.IsAvailable() || !unused, this.gameObject);
-            }
-            return input;
-        }
-
-        public override AbstractUMI3DInput FindInput(FormDto form, bool unused = true)
-        {
-            return FindInput(FormInputs, i => i.IsAvailable() || !unused, this.gameObject);
-        }
-
-        public override AbstractUMI3DInput FindInput(LinkDto link, bool unused = true)
-        {
-            return FindInput(LinkInputs, i => i.IsAvailable() || !unused, this.gameObject);
-        }
-
-        public override AbstractUMI3DInput FindInput(AbstractParameterDto param, bool unused = true)
-        {
-            if (param is FloatRangeParameterDto) return FindInput(floatRangeParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is FloatParameterDto) return FindInput(floatParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is IntegerParameterDto) return FindInput(intParameterInputs, i => i.IsAvailable());
-            else if (param is IntegerRangeParameterDto) throw new System.NotImplementedException();
-            else if (param is BooleanParameterDto) return FindInput(boolParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is StringParameterDto) return FindInput(stringParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is EnumParameterDto<string>) return FindInput(stringEnumParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else return null;
-        }
-
         private AbstractUMI3DInput FindInput<T>(List<T> inputs, System.Predicate<T> predicate, GameObject gO = null) where T : AbstractUMI3DInput, new()
         {
             T input = inputs.Find(predicate);
             if (input == null)
-            {
                 AddInput(inputs, out input, gO);
-            }
             return input;
         }
 
@@ -252,13 +146,15 @@ namespace BrowserDesktop.Controller
             if (gO != null) input = gO.AddComponent<T>();
             else input = new T();
 
-            if (input is KeyMenuInput) (input as KeyMenuInput).bone = interactionBoneType;
-            else if (input is FormInput) (input as FormInput).bone = interactionBoneType;
-            else if (input is LinkInput) (input as LinkInput).bone = interactionBoneType;
+            if (input is KeyMenuInput keyMenuInput)
+            {
+                keyMenuInput.Menu = m_displayManager?.menu;
+                keyMenuInput.bone = interactionBoneType;
+            }
+            else if (input is FormInput formInput) formInput.bone = interactionBoneType;
+            else if (input is LinkInput linkInput) linkInput.bone = interactionBoneType;
             inputs.Add(input);
         }
-
-        #endregion
 
         void InputDown(KeyInput input) { }
         void InputUp(KeyInput input) { }
@@ -291,8 +187,8 @@ namespace BrowserDesktop.Controller
             mouseData.CurrentHovered = null;
             mouseData.CurrentHoveredTransform = null;
             mouseData.OldHovered = null;
-            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
-            //CircularMenu.Collapse();
+            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu UnequipedForceProjection");
+            m_displayManager?.Collapse(true); //CircularMenu.Collapse();
             mouseData.HoverState = HoverState.None;
         }
 
@@ -310,15 +206,14 @@ namespace BrowserDesktop.Controller
             if (mouseData.ForceProjectionMenuItem == null)
                 return;
 
-            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu DeleteForceProjectionMenuItem");
+            m_displayManager?.menu.Remove(mouseData.ForceProjectionMenuItem);
             //if (CircularMenu.Exists)
             //    CircularMenu.Instance.menuDisplayManager.menu.Remove(mouseData.ForceProjectionMenuItem);
 
         }
 
         #endregion
-
-        
 
         public void CircularMenuColapsed()
         {
@@ -332,11 +227,9 @@ namespace BrowserDesktop.Controller
         {
             if (mouseData.ForceProjection)
             {
-                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu UpdateTool [mouseData.ForceProjection]");
                 //if (CircularMenu.Exists && (!CircularMenu.Instance.IsEmpty() || EventMenu.NbEventsDIsplayed > 0))
-                //{
                 //    CreateForceProjectionMenuItem();
-                //}
                 if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.LeaveContextualMenu))
                     ||
                     Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
@@ -346,51 +239,75 @@ namespace BrowserDesktop.Controller
                 }
             }
 
+            UpdateToolForForceProjection();
+            UpdateToolForNonForceProjection();
+        }
+
+        private void UpdateToolForForceProjection ()
+        {
+            if (!mouseData.ForceProjection)
+                return;
+
             if (mouseData.CurrentHovered != null)
             {
-                if (mouseData.CurrentHovered != mouseData.LastProjected)
+                if (mouseData.CurrentHovered == mouseData.LastProjected)
+                    return;
+
+                mouseData.HoverState = HoverState.Hovering;
+            }
+            else if (mouseData.LastProjected != null)
+                mouseData.HoverState = HoverState.None;
+
+            mouseData.LastProjected = null;
+        }
+
+        private void UpdateToolForNonForceProjection()
+        {
+            if (mouseData.ForceProjection)
+                return;
+
+            if (mouseData.CurrentHovered != null)
+            {
+                if (mouseData.CurrentHovered == mouseData.LastProjected)
+                    return;
+
+                if (mouseData.LastProjected != null)
                 {
-                    if (mouseData.LastProjected != null)
-                    {
-                        if (!mouseData.ForceProjection)
-                        {
-                            if (mouseData.HoverState == HoverState.AutoProjected)
-                            {
-                                InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
-                            }
-                            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
-                            //CircularMenu.Collapse();
-                        }
-                        mouseData.LastProjected = null;
-                    }
+                    if (mouseData.HoverState == HoverState.AutoProjected)
+                        InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
+                    Debug.Log("<color=green>TODO: </color>" + $"CircularMenu UpdateTool [!mouseData.ForceProjection]");
+                    //CircularMenu.Collapse();
 
-                    mouseData.HoverState = HoverState.Hovering;
+                    mouseData.LastProjected = null;
+                }
 
-                    if (mouseData.CurrentHovered.dto.interactions.Count > 0 && IsCompatibleWith(mouseData.CurrentHovered) && !mouseData.ForceProjection && !isInputHold)
-                    {
-                        InteractionMapper.SelectTool(mouseData.CurrentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
-                        CursorHandler.State = CursorHandler.CursorState.Hover;
-                        mouseData.HoverState = HoverState.AutoProjected;
-                        Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
-                        //CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
-                        mouseData.LastProjected = mouseData.CurrentHovered;
-                    }
+                mouseData.HoverState = HoverState.Hovering;
+
+                if (mouseData.CurrentHovered.dto.interactions.Count > 0 
+                    && 
+                    IsCompatibleWith(mouseData.CurrentHovered) 
+                    && 
+                    !IsInputHold)
+                {
+                    InteractionMapper.SelectTool(mouseData.CurrentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
+                    CursorHandler.State = CursorHandler.CursorState.Hover;
+                    mouseData.HoverState = HoverState.AutoProjected;
+                    Debug.Log("<color=green>TODO: </color>" + $"CircularMenu UpdateTool []");
+                    //CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
+                    mouseData.LastProjected = mouseData.CurrentHovered;
                 }
             }
             else if (mouseData.LastProjected != null)
             {
-                if (!mouseData.ForceProjection)
+                if (mouseData.HoverState == HoverState.AutoProjected)
                 {
-                    if (mouseData.HoverState == HoverState.AutoProjected)
-                    {
-                        Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
-                        //CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
-                        if (currentTool != null)
-                            InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
-                    }
-                    //CircularMenu.Collapse();
-                    CursorHandler.State = CursorHandler.CursorState.Default;
+                    Debug.Log("<color=green>TODO: </color>" + $"CircularMenu UpdateTool [AutoProjected]");
+                    //CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
+                    if (currentTool != null)
+                        InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
                 }
+                //CircularMenu.Collapse();
+                CursorHandler.State = CursorHandler.CursorState.Default;
 
                 mouseData.LastProjected = null;
                 mouseData.HoverState = HoverState.None;
