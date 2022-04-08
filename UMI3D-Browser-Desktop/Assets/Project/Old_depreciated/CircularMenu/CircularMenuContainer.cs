@@ -54,9 +54,9 @@ namespace BrowserDesktop.Menu
         }
 
 
-        public override void Collapse(bool forceUpdate = false)
+        protected override void CollapseImp()
         {
-            base.Collapse(forceUpdate);
+            base.CollapseImp();
             view.style.display = DisplayStyle.None;
         }
 
@@ -78,17 +78,17 @@ namespace BrowserDesktop.Menu
             parentElement.style.display = DisplayStyle.None;
         }
 
-        public override void Expand(bool forceUpdate = false)
+        protected override void ExpandImp()
         {
-            base.Expand(forceUpdate);
+            base.ExpandImp();
             currentFirstDisplayed = 0;
             OrganiseChildren();
             view.style.display = DisplayStyle.Flex;
         }
 
-        public override void ExpandAs(AbstractMenuDisplayContainer Container, bool forceUpdate = false)
+        protected override void ExpandAsImp(AbstractMenuDisplayContainer Container)
         {
-            base.ExpandAs(Container, forceUpdate);
+            base.ExpandAsImp(Container);
             OrganiseChildren();
         }
 

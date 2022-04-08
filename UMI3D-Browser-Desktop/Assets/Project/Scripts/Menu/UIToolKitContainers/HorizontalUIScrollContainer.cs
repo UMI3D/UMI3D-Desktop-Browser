@@ -107,16 +107,10 @@ namespace BrowserDesktop.Menu
             }
         }
 
-        public override void Expand(bool forceUpdate = false)
+        protected override void ExpandImp()
         {
             if (!isDisplayed)
-            {
-                Display(forceUpdate);
-            }
-            if (isExpanded && !forceUpdate)
-            {
-                return;
-            }
+                Display();
 
             if (parent is HorizontalUIScrollContainer horizontalContainer)
             {
@@ -171,14 +165,14 @@ namespace BrowserDesktop.Menu
             isExpanded = true;
         }
 
-        public override void Collapse(bool forceUpdate = false)
+        protected override void CollapseImp()
         {
             scrollView.style.display = DisplayStyle.None;
 
-            if (!isExpanded && !forceUpdate)
-            {
-                return;
-            }
+            //if (!isExpanded && !forceUpdate)
+            //{
+            //    return;
+            //}
 
             if (VirtualContainer != null && VirtualContainer != this)
             {
@@ -219,12 +213,8 @@ namespace BrowserDesktop.Menu
             isExpanded = false;
         }
 
-        public override void ExpandAs(AbstractMenuDisplayContainer Container, bool forceUpdate = false)
+        protected override void ExpandAsImp(AbstractMenuDisplayContainer Container)
         {
-            if (isExpanded && !forceUpdate)
-            {
-                return;
-            }
             scrollView.style.display = DisplayStyle.Flex;
             
             if (VirtualContainer != null && VirtualContainer != Container)
