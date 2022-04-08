@@ -507,7 +507,8 @@ namespace BrowserDesktop.Controller
 
         void MouseHandler()
         {
-            if (mouseData.HoverState != HoverState.AutoProjected)
+            //if (mouseData.HoverState != HoverState.AutoProjected)
+            if (true)
             {
                 mouseData.save();
                 Vector3 screenPosition = Input.mousePosition;
