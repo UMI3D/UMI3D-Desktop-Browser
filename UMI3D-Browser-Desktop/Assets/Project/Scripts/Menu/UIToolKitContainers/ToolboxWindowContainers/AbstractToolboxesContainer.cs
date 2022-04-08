@@ -149,37 +149,6 @@ namespace umi3d.desktopBrowser.menu.Container
             HideImp();
         }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="forceUpdate"></param>
-        public override void Collapse(bool forceUpdate = false)
-        {
-            if (!isExpanded && !forceUpdate)
-                return;
-            isExpanded = false;
-            CollapseImp();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="forceUpdate"></param>
-        public override void Expand(bool forceUpdate = false)
-            => ExpandAs(this, forceUpdate);
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="forceUpdate"></param>
-        public override void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
-        {
-            if (isExpanded && !forceUpdate)
-                return;
-            isExpanded = true;
-            ExpandAsImp(container);
-        }
 
         /// <summary>
         /// <inheritdoc/>
@@ -255,9 +224,6 @@ namespace umi3d.desktopBrowser.menu.Container
             if (updateDisplay)
                 Display(true);
 
-            //element.transform.SetParent(this.transform);
-            Debug.Log($"remove [{element.name}]");
-
             return true;
         }
 
@@ -300,47 +266,27 @@ namespace umi3d.desktopBrowser.menu.Container
             base.Clear();
             currentDisplayers.Clear();
         }
-
-        /// <summary>
-        /// Finds the <see cref="AbstractMenuDisplayContainer"/> root of the menu.
-        /// </summary>
-        /// <returns></returns>
-        public AbstractMenuDisplayContainer FindRoot()
-        {
-            var tmp = parent;
-
-            while (tmp?.parent != null)
-            {
-                tmp = tmp.parent;
-            }
-
-            return tmp;
-        }
-
-        public int GetDepth()
-        {
-            var tmp = parent;
-            int res = 0;
-
-            while (tmp != null)
-            {
-                tmp = tmp.parent;
-                res++;
-            }
-
-            return res;
-        }
     }
 
     public partial class AbstractToolboxesContainer
     {
-        protected virtual void CollapseImp()
+        protected override void CollapseImp()
         {
             foreach (AbstractDisplayer disp in currentDisplayers)
                 disp.Hide();
         }
 
-        protected virtual void ExpandAsImp(AbstractMenuDisplayContainer container)
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        protected override void ExpandImp()
+            => ExpandAs(this);
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="container"></param>
+        protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
         {
             this.gameObject.SetActive(true);
 

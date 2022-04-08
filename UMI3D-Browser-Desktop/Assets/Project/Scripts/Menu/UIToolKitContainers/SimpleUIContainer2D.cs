@@ -336,16 +336,10 @@ namespace BrowserDesktop.Menu
             return Remove(containedDisplayers?[index], updateDisplay);
         }
 
-        public override void Expand(bool forceUpdate = false)
+        protected override void ExpandImp()
         {
             if (!isDisplayed)
-            {
-                Display(forceUpdate);
-            }
-            if (isExpanded && !forceUpdate)
-            {
-                return;
-            }
+                Display();
             if (VirtualContainer != null && VirtualContainer != this)
             {
                 selectButton.text = menu.Name;
@@ -367,7 +361,7 @@ namespace BrowserDesktop.Menu
 
             VirtualContainer = this;
 
-            if(selectButton != null)
+            if (selectButton != null)
                 selectButton.clickable.clicked -= Select;
 
             foreach (AbstractDisplayer displayer in this)
@@ -381,13 +375,8 @@ namespace BrowserDesktop.Menu
             isExpanded = true;
         }
 
-        public override void Collapse(bool forceUpdate = false)
-        {
-            if (!isExpanded && !forceUpdate)
-            {
-                return;
-            }
-            
+        protected override void CollapseImp()
+        {   
             if (VirtualContainer != null && VirtualContainer != this)
             {
                 selectButton.text = menu.Name;
@@ -422,12 +411,8 @@ namespace BrowserDesktop.Menu
             isExpanded = false;
         }
 
-        public override void ExpandAs(AbstractMenuDisplayContainer Container, bool forceUpdate = false)
+        protected override void ExpandAsImp(AbstractMenuDisplayContainer Container)
         {
-            if (isExpanded && !forceUpdate)
-            {
-                return;
-            }
             if (VirtualContainer != null && VirtualContainer != Container)
             {
                 if (backButton != null)
