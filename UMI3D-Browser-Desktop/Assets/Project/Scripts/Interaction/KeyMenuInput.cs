@@ -62,9 +62,7 @@ public class KeyMenuInput : AbstractUMI3DInput
             menuItem.Subscribe(Pressed);
             Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
             //if (CircularMenu.Exists)
-            //{
             //    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
-            //}
         }
         else
         {
@@ -87,9 +85,7 @@ public class KeyMenuInput : AbstractUMI3DInput
         associatedInteraction = null;
         Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
         //if (CircularMenu.Exists && menuItem != null)
-        //{
         //    CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
-        //}
         menuItem.UnSubscribe(Pressed);
         menuItem = null;
     }
