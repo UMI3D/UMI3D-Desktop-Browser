@@ -31,13 +31,16 @@ namespace umi3dDesktopBrowser.ui
         [SerializeField]
         string gameMenuTagName = "game-menu-container";
 
-        [Header("Toolboxes")]
+        [Header("Menu Displayer")]
         [SerializeField]
         [Tooltip("window Toolboxes Displayer manager.")]
         private MenuDisplayManager m_windowToolboxesDM;
         [SerializeField]
         [Tooltip("Pinned Toolboxes Displayer manager.")]
         private MenuDisplayManager m_pinnedToolboxesDM;
+        [SerializeField]
+        [Tooltip("Object Menu Displayer manager.")]
+        private MenuDisplayManager m_objectMenuDM;
 
         [Header("Shortcuts")]
         [SerializeField]
@@ -53,8 +56,7 @@ namespace umi3dDesktopBrowser.ui
         private VisualElement m_leftSideMenu { get; set; } = null;
         private VisualElement m_leftSideMenuDownUp { get; set; } = null;
 
-        private bool m_isCursorMovementFree 
-            => CursorHandler.Movement == CursorHandler.CursorMovement.Free;
+        
     }
 
     public partial class GameMenu : MonoBehaviour
@@ -81,12 +83,6 @@ namespace umi3dDesktopBrowser.ui
 
         private void Update()
         {
-            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
-            {
-                //CursorHandler.SetMovement(this, expand ? CursorHandler.CursorMovement.Free : CursorHandler.CursorMovement.Center);
-                CursorHandler.SetMovement(this, (m_isCursorMovementFree) ? CursorHandler.CursorMovement.Center : CursorHandler.CursorMovement.Free);
-            }
-
             InputMenus();
             UpdateMenus();
         }

@@ -93,8 +93,8 @@ namespace BrowserDesktop.Interaction
                 ResetButton();
                 LastFrameButton = InputLayoutManager.GetInputCode(activationButton);
             }
-
-            if (associatedInteraction != null)
+            
+            if (associatedInteraction != null && !MouseAndKeyboardController.IsFreeAndHovering)
             {
                 if (Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)))
                 {

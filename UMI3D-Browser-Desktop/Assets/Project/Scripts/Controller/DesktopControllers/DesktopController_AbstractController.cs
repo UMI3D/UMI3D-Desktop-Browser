@@ -15,17 +15,10 @@ limitations under the License.
 */
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Interaction;
-using BrowserDesktop.Menu;
-using BrowserDesktop.Parameters;
-using inetum.unityUtils;
 using System.Collections.Generic;
-using umi3d.cdk;
 using umi3d.cdk.interaction;
-using umi3d.common;
 using umi3d.common.interaction;
-using umi3d.common.userCapture;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace BrowserDesktop.Controller
 {
@@ -75,6 +68,24 @@ namespace BrowserDesktop.Controller
 
         private void Update()
         {
+            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
+            {
+                if (m_isCursorMovementFree)
+                {
+                    CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+                    IsFreeAndHovering = false;
+                }
+                else
+                {
+                    CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
+                    if (mouseData.HoverState != HoverState.None && m_objectMenu.menu.Count > 0)
+                    {
+                        m_objectMenu.Expand(true);
+                        IsFreeAndHovering = true;
+                    }
+                }
+            }
+
             if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationDirect)) || Input.mouseScrollDelta.y < 0)
             {
                 m_navigationDirect++;
@@ -91,21 +102,12 @@ namespace BrowserDesktop.Controller
             if (!CanProcess)
                 return;
 
-            if (MainMenu.IsDisplaying)
-            {
-                mouseData.Save();
-                UpdateTool();
-                Hover();
-            }
-            else
-            {
-                if (m_navigationDirect > 0)
-                    ManipulationInput.NextManipulation();
-                else if (m_navigationDirect < 0)
-                    ManipulationInput.PreviousManipulation();
-                m_navigationDirect = 0;
-                MouseHandler();
-            }
+            if (m_navigationDirect > 0)
+                ManipulationInput.NextManipulation();
+            else if (m_navigationDirect < 0)
+                ManipulationInput.PreviousManipulation();
+            m_navigationDirect = 0;
+            MouseHandler();
         }
 
         #endregion
