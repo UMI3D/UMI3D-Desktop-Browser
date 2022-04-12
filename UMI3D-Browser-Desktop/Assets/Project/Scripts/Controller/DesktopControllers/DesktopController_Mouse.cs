@@ -24,7 +24,12 @@ namespace BrowserDesktop.Controller
 {
     public partial class MouseAndKeyboardController
     {
-        public enum HoverState { None, Hovering, AutoProjected }
+        public enum HoverState 
+        { 
+            None, //No hovering 
+            Hovering, //Mouse is hovering an object
+            AutoProjected //The projection is auto.
+        }
 
         public struct MouseData
         {
@@ -81,9 +86,13 @@ namespace BrowserDesktop.Controller
 
         public MouseData mouseData;
 
+        public static bool IsFreeAndHovering = false;
         public static HoverEvent HoverEnter = new HoverEvent();
         public static HoverEvent HoverUpdate = new HoverEvent();
         public static HoverEvent HoverExit = new HoverEvent();
+
+        private bool m_isCursorMovementFree
+            => CursorHandler.Movement == CursorHandler.CursorMovement.Free;
     }
 
     public partial class MouseAndKeyboardController
@@ -149,10 +158,14 @@ namespace BrowserDesktop.Controller
 
                 break;
             }
+
             if (CursorHandler.State != CursorHandler.CursorState.Clicked)
                 UpdateTool();
+
             Hover();
         }
+
+        #region Hover
 
         private void Hover()
         {
@@ -222,5 +235,7 @@ namespace BrowserDesktop.Controller
                     anim.Start();
             }
         }
+
+        #endregion
     }
 }

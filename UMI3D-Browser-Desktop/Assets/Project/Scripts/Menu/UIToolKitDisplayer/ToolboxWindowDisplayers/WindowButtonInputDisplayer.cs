@@ -49,20 +49,24 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             base.SetMenuItem(menu);
             InitAndBindUI();
             if (menu is ButtonMenuItem buttonMenu)
-            {
                 m_displayerElement.OnClicked = () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); };
-
-                string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-                StyleKeys labelKeys = new StyleKeys("", "", null);
-                m_displayerElement.SetLabel(labelStylePath, labelKeys);
-                m_displayerElement.Label.value = buttonMenu.ToString();
+            else if (menu is HoldableButtonMenuItem holdableButtonMenu)
+            {
+                m_displayerElement.OnClicked = null;
+                m_displayerElement.Element.ClickedDown = () => holdableButtonMenu.NotifyValueChange(true);
+                m_displayerElement.Element.ClickedUp = () => holdableButtonMenu.NotifyValueChange(false);
             }
             else
-                throw new System.Exception("MenuItem must be a ButtonMenuItem");
+                throw new System.Exception("MenuItem must be a ButtonMenuItem or a HoldableButtonMenuItem");
+
+            string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
+            StyleKeys labelKeys = new StyleKeys("", "", null);
+            m_displayerElement.SetLabel(labelStylePath, labelKeys);
+            m_displayerElement.Label.value = menu.ToString();
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)
-            => (menu is ButtonMenuItem) ? 2 : 0;
+            => (menu is ButtonMenuItem || menu is HoldableButtonMenuItem) ? 2 : 0;
 
         public override void Clear()
         {

@@ -317,6 +317,18 @@ PrefabInstance:
     - {fileID: 7271587232207304709, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
     - {fileID: 2034370936674212179, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 50541f86f5f01194eb2b175264de3f46, type: 3}
+--- !u!114 &87752526 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4653506232776602386, guid: 50541f86f5f01194eb2b175264de3f46,
+    type: 3}
+  m_PrefabInstance: {fileID: 87752525}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 302751d2934e0024782140895b91035e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &87752527 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5622295467200969099, guid: 50541f86f5f01194eb2b175264de3f46,
@@ -2471,6 +2483,7 @@ MonoBehaviour:
   projectionMemory: {fileID: 498482125}
   CameraTransform: {fileID: 2119596089}
   InteractionMapper: {fileID: 498482124}
+  m_objectMenu: {fileID: 87752526}
   dofGroups: 04000000050000000600000001000000020000000300000008000000090000000a000000
   interactionBoneType: 3
   hoverBoneType: 3

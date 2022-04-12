@@ -83,7 +83,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void CollapseImp()
         {
-            foreach (AbstractDisplayer child in currentDisplayers)
+            foreach (AbstractDisplayer child in m_currentDisplayers)
             {
                 if (child is PinnedToolboxContainerDeep1 containerDeep1)
                     containerDeep1.Collapse();
@@ -94,7 +94,6 @@ namespace umi3d.desktopBrowser.menu.Container
                 Debug.Log($"collapse deep 0 toogle false");
                 ToolboxItem.Toggle(false);
             }
-            //if (parent is PinnedToolboxContainerRoot pinnedParent)
         }
 
         /// <summary>

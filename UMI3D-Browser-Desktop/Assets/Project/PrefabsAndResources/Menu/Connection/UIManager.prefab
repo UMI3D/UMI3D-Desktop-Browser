@@ -283,6 +283,7 @@ MonoBehaviour:
   m_displayedOnStart: 1
   m_collapseOnStart: 1
   m_displayWhenAddNewItem: 1
+  m_collapseWhenAddNewItem: 0
   hideOnBack: 0
   displayDepth: 0
   firstContainerInScene: 1
@@ -489,6 +490,7 @@ MonoBehaviour:
   m_displayedOnStart: 1
   m_collapseOnStart: 1
   m_displayWhenAddNewItem: 0
+  m_collapseWhenAddNewItem: 0
   hideOnBack: 0
   displayDepth: 0
   firstContainerInScene: 1
@@ -539,6 +541,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2172164412665128433}
+  - component: {fileID: 4653506232776602386}
+  - component: {fileID: 2598122752229520900}
+  - component: {fileID: 6454502802659051218}
   m_Layer: 0
   m_Name: ObjectMenu
   m_TagString: Untagged
@@ -560,6 +565,79 @@ Transform:
   m_Father: {fileID: 4125827769369142610}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4653506232776602386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7373697875077965792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 302751d2934e0024782140895b91035e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuAsset: {fileID: 11400000, guid: 2b52c22a630b82f4a945a83a7a0f495b, type: 2}
+  m_displayedOnStart: 1
+  m_collapseOnStart: 1
+  m_displayWhenAddNewItem: 0
+  m_collapseWhenAddNewItem: 0
+  hideOnBack: 0
+  displayDepth: 1
+  firstContainerInScene: 1
+  containerSelector: {fileID: 2598122752229520900}
+  DisplayerPrefab:
+  - {fileID: -5307635460168655369, guid: 60efad2a58dba62469e585e689a07d57, type: 3}
+  onDisplay:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
+  onDestroy:
+    m_PersistentCalls:
+      m_Calls: []
+  firstButtonBackButtonPressed:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2598122752229520900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7373697875077965792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c880075ebb2094db6994b72e19e785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containerPrefabs:
+  - {fileID: 6454502802659051218}
+  exceptions:
+    keys: []
+    values: []
+--- !u!114 &6454502802659051218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7373697875077965792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7faefecabc9de454ca791af5af8d00e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onClear:
+    m_PersistentCalls:
+      m_Calls: []
+  backButtonPressed:
+    m_PersistentCalls:
+      m_Calls: []
+  generationOffsetOnExpand: -1
+  parallelNavigation: 0
+  parent: {fileID: 0}
 --- !u!1 &8300082944233256797
 GameObject:
   m_ObjectHideFlags: 0
@@ -676,6 +754,7 @@ MonoBehaviour:
   gameMenuTagName: game-menu-container
   m_windowToolboxesDM: {fileID: 1289266674641547170}
   m_pinnedToolboxesDM: {fileID: 5622295467200969099}
+  m_objectMenuDM: {fileID: 4653506232776602386}
   m_showShortcutOnStart: 0
   m_showConsoleOnStart: 0
 --- !u!114 &4820613813600277437
@@ -740,6 +819,7 @@ MonoBehaviour:
   m_displayedOnStart: 0
   m_collapseOnStart: 0
   m_displayWhenAddNewItem: 0
+  m_collapseWhenAddNewItem: 0
   hideOnBack: 0
   displayDepth: 1
   firstContainerInScene: 1

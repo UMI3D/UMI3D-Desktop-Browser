@@ -60,15 +60,10 @@ public class KeyMenuInput : AbstractUMI3DInput
                 Holdable = associatedInteraction.hold
             };
             m_menuItem.Subscribe(Pressed);
-            Debug.Log("<color=green>TODO: </color>" + $"[KeyInput] CircularMenu Associate");
             Menu?.Add(m_menuItem);
-            //if (CircularMenu.Exists)
-            //    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
         }
         else
-        {
             throw new System.Exception("Trying to associate an uncompatible interaction !");
-        }
     }
 
     public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
@@ -84,11 +79,8 @@ public class KeyMenuInput : AbstractUMI3DInput
     public override void Dissociate()
     {
         associatedInteraction = null;
-        Debug.Log("<color=green>TODO: </color>" + $"[KeyMenuInput] CircularMenu Dissociate");
         if (m_menuItem != null)
             Menu?.Remove(m_menuItem);
-        //if (CircularMenu.Exists && menuItem != null)
-        //    CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
         m_menuItem.UnSubscribe(Pressed);
         m_menuItem = null;
     }

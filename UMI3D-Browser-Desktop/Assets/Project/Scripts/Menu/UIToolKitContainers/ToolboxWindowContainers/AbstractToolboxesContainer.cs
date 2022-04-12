@@ -27,18 +27,6 @@ namespace umi3d.desktopBrowser.menu.Container
     {
         public enum ItemType { Undefine, Tool, Toolbox }
 
-        /// <summary>
-        /// Number of <see cref="AbstractDisplayer"/> maximum displayed at the same time.
-        /// </summary>
-        public int maxElementsDisplayed = 4;
-
-        /// <summary>
-        /// Current <see cref="AbstractDisplayer"/> displayed by the container;
-        /// </summary>
-        protected List<AbstractDisplayer> currentDisplayers = new List<AbstractDisplayer>();
-
-        protected AbstractToolboxesContainer virtualContainer = null;
-
         public ToolboxItem_E ToolboxItem { get; protected set; } = null;
         public Toolbox_E Toolbox { get; protected set; } = null;
         public Displayerbox_E Displayerbox { get; protected set; } = null;
@@ -48,6 +36,15 @@ namespace umi3d.desktopBrowser.menu.Container
 
     public abstract partial class AbstractToolboxesContainer
     {
+        protected virtual void Awake()
+        {
+            m_virtualContainer = this;
+            isExpanded = false;
+        }
+        protected virtual void OnDisable()
+        {
+            Collapse();
+        }
         protected virtual void SetContainerAsToolbox()
         {
             ToolType = ItemType.Toolbox;
@@ -61,94 +58,13 @@ namespace umi3d.desktopBrowser.menu.Container
         protected abstract void ItemTypeChanged(AbstractToolboxesContainer item);
     }
 
-    public abstract partial class AbstractToolboxesContainer : AbstractMenuDisplayContainer
+    public abstract partial class AbstractToolboxesContainer : Abstract2DContainer
     {
-        protected virtual void Awake()
-        {
-            virtualContainer = this;
-            isExpanded = true;
-        }
-
-        protected virtual void OnEnable()
-        {
-            //Debug.Log($"enable [{this.name}]");
-        }
-
-        protected virtual void OnDisable()
-        {
-            //Debug.Log($"disable [{this.name}]");
-            Collapse();
-        }
-
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);
             this.name = menu.Name + "-" + GetType().ToString().Split('.').Last();
         }
-
-        public override AbstractDisplayer this[int i] { get => currentDisplayers[i]; set => currentDisplayers[i] = value; }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
-        public override bool Contains(AbstractDisplayer element)
-            => currentDisplayers.Contains(element);
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <returns></returns>
-        public override int Count()
-            => currentDisplayers.Count;
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <returns></returns>
-        public override AbstractMenuDisplayContainer CurrentMenuDisplayContainer()
-            => virtualContainer;
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
-        public override int GetIndexOf(AbstractDisplayer element)
-            => currentDisplayers.IndexOf(element);
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="menu"></param>
-        /// <returns></returns>
-        public override int IsSuitableFor(AbstractMenuItem menu)
-            => 0;
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="forceUpdate"></param>
-        public override void Display(bool forceUpdate = false)
-        {
-            if (isDisplayed && !forceUpdate)
-                return;
-            isDisplayed = true;
-            DisplayImp();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public override void Hide()
-        {
-            if (!isDisplayed)
-                return;
-            isDisplayed = false;
-            HideImp();
-        }
-
 
         /// <summary>
         /// <inheritdoc/>
@@ -163,12 +79,7 @@ namespace umi3d.desktopBrowser.menu.Container
                 menuContainer.OnItemAdded = ItemAdded;
                 menuContainer.OnItemTypeChanged = ItemTypeChanged;
             }
-            element.transform.SetParent(this.transform);
-            currentDisplayers.Add(element);
-            element.Hide();
-            
-            if (updateDisplay)
-                Display(true);
+            base.Insert(element, updateDisplay);
         }
 
         /// <summary>
@@ -185,22 +96,8 @@ namespace umi3d.desktopBrowser.menu.Container
             element.transform.SetParent(this.transform);
             element.transform.SetSiblingIndex(index);
 
-            currentDisplayers.Insert(index, element);
+            m_currentDisplayers.Insert(index, element);
             element.Hide();
-            if (updateDisplay)
-                Display(true);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="elements"></param>
-        /// <param name="updateDisplay"></param>
-        public override void InsertRange(IEnumerable<AbstractDisplayer> elements, bool updateDisplay = true)
-        {
-            foreach (AbstractDisplayer e in elements)
-                Insert(e, false);
-
             if (updateDisplay)
                 Display(true);
         }
@@ -213,7 +110,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <returns></returns>
         public override bool Remove(AbstractDisplayer element, bool updateDisplay = true)
         {
-            if (!currentDisplayers.Remove(element))
+            if (!m_currentDisplayers.Remove(element))
                 return false;
             if (element is AbstractToolboxesContainer menuContainer)
             {
@@ -225,94 +122,6 @@ namespace umi3d.desktopBrowser.menu.Container
                 Display(true);
 
             return true;
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <returns></returns>
-        public override int RemoveAll()
-        {
-            int c = Count();
-            foreach (AbstractDisplayer d in new List<AbstractDisplayer>(currentDisplayers))
-                Remove(d, false);
-
-            return c;
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="updateDisplay"></param>
-        /// <returns></returns>
-        public override bool RemoveAt(int index, bool updateDisplay = true)
-        {
-            if ((index < 0) || (index >= Count()))
-                return false;
-
-            return Remove(currentDisplayers[index], updateDisplay);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <returns></returns>
-        protected override IEnumerable<AbstractDisplayer> GetDisplayers()
-            => currentDisplayers;
-
-        public override void Clear()
-        {
-            base.Clear();
-            currentDisplayers.Clear();
-        }
-    }
-
-    public partial class AbstractToolboxesContainer
-    {
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        protected override void CollapseImp()
-        {
-            foreach (AbstractDisplayer disp in currentDisplayers)
-                disp.Hide();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        protected override void ExpandImp()
-            => ExpandAs(this);
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="container"></param>
-        protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
-        {
-            this.gameObject.SetActive(true);
-
-            if (virtualContainer != null && virtualContainer != container)
-                foreach (AbstractDisplayer displayer in virtualContainer)
-                    displayer.Hide();
-
-            virtualContainer = container as AbstractToolboxesContainer;
-
-            foreach (AbstractDisplayer disp in virtualContainer)
-                disp.Display();
-        }
-
-        protected virtual void DisplayImp()
-        {
-            gameObject.SetActive(true);
-        }
-
-        protected virtual void HideImp()
-        {
-            foreach (AbstractDisplayer disp in virtualContainer)
-                disp.Hide();
-            this.gameObject.SetActive(false);
         }
     }
 }

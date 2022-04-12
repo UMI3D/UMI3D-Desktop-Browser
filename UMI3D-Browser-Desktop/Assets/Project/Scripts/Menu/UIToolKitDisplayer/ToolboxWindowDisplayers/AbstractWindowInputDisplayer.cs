@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Menu;
-using System;
-using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine.UIElements;
@@ -25,6 +23,11 @@ namespace umi3d.DesktopBrowser.menu.Displayer
     public abstract partial class AbstractWindowInputDisplayer
     {
         public Displayer_E Displayer { get; protected set; } = null;
+
+        private void OnDestroy()
+        {
+            Displayer.Remove();
+        }
     }
 
     public partial class AbstractWindowInputDisplayer : IDisplayerElement

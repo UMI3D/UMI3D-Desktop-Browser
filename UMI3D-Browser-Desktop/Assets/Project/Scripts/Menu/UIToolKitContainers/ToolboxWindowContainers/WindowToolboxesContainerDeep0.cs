@@ -98,7 +98,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void CollapseImp()
         {
-            foreach (AbstractDisplayer child in currentDisplayers)
+            foreach (AbstractDisplayer child in m_currentDisplayers)
             {
                 if (child is WindowToolboxesContainerDeep1 containerDeep1)
                     containerDeep1.Collapse();

@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
+using umi3d.DesktopBrowser.menu.Displayer;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 
@@ -25,6 +26,77 @@ namespace umi3d.desktopBrowser.menu.Container
 {
     public partial class ObjectMenuContainer
     {
+        public Displayerbox_E Displayerbox { get; protected set; } = null;
+    }
 
+    public partial class ObjectMenuContainer : Abstract2DContainer
+    {
+        private void Awake()
+        {
+            Displayerbox = new Displayerbox_E(DisplayerboxType.ParametersPopup);
+            ObjectMenuWindow_E.Instance.Adds(Displayerbox);
+        }
+
+        protected override void CollapseImp()
+        {
+            Debug.Log($"collapse");
+            ObjectMenuWindow_E.Instance.Hide();
+            base.CollapseImp();
+        }
+
+        protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
+        {
+            base.ExpandAsImp(container);
+            ObjectMenuWindow_E.Instance.Display();
+        }
+
+        public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
+        {
+            base.Insert(element, updateDisplay);
+            element.Display();
+            if (element is AbstractWindowInputDisplayer displayer)
+                Displayerbox.Add(displayer.Displayer);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="index"></param>
+        /// <param name="updateDisplay"></param>
+        public override void Insert(AbstractDisplayer element, int index, bool updateDisplay = true)
+        {
+            if (element is AbstractMenuDisplayContainer menuContainer)
+                menuContainer.parent = this;
+
+            element.transform.SetParent(this.transform);
+            element.transform.SetSiblingIndex(index);
+
+            m_currentDisplayers.Insert(index, element);
+            element.Hide();
+            if (updateDisplay)
+                Display(true);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="updateDisplay"></param>
+        /// <returns></returns>
+        public override bool Remove(AbstractDisplayer element, bool updateDisplay = true)
+        {
+            if (!m_currentDisplayers.Remove(element))
+                return false;
+            if (updateDisplay)
+                Display(true);
+
+            return true;
+        }
+
+        protected override void ItemAdded(AbstractDisplayer displayer)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

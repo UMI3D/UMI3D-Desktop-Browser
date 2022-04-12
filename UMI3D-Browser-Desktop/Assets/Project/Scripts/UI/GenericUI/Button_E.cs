@@ -24,6 +24,8 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         public Action OnClicked { get; set; } = () 
             => { Debug.Log("<color=green>TODO: </color>" + $"Button_E clicked not implemented"); };
+        public Action ClickedDown { get; set; }
+        public Action ClickedUp { get; set; }
 
         /// <summary>
         /// State of the button.
@@ -93,6 +95,34 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
     }
 
+    public partial class HoldableButtonManipulator : MouseManipulator
+    {
+        public Action ClickedDown { get; set; }
+        public Action ClickedUp { get; set; }
+
+        public HoldableButtonManipulator()
+        {
+            activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
+        }
+
+        protected override void RegisterCallbacksOnTarget()
+        {
+            target.RegisterCallback<MouseCaptureEvent>(OnClickedDown);
+            target.RegisterCallback<PointerUpEvent>(OnClickedUp);
+        }
+
+        protected override void UnregisterCallbacksFromTarget()
+        {
+            target.UnregisterCallback<MouseCaptureEvent>(OnClickedDown);
+            target.UnregisterCallback<PointerUpEvent>(OnClickedUp);
+        }
+
+        protected virtual void OnClickedDown(MouseCaptureEvent e)
+            => ClickedDown?.Invoke();
+        protected virtual void OnClickedUp(PointerUpEvent e)
+            => ClickedUp?.Invoke();
+    }
+
     public partial class Button_E : Visual_E
     {
         protected override void Initialize()
@@ -100,6 +130,10 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Initialize();
             m_clicked = () => OnClicked?.Invoke();
             m_button.clicked += m_clicked;
+            var holdableManipulator = new HoldableButtonManipulator();
+            holdableManipulator.ClickedDown = () => ClickedDown?.Invoke();
+            holdableManipulator.ClickedUp = () => ClickedUp?.Invoke();
+            m_button.AddManipulator(holdableManipulator);
         }
 
         public override void Reset()
@@ -110,6 +144,9 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_onKeys = null;
             m_offKeys = null;
             m_currentKeys = null;
+            
+            ClickedDown = null;
+            ClickedUp = null;
         }
 
         protected override void ApplyStyle(CustomStyle_SO styleSO, StyleKeys keys, IStyle style, MouseBehaviour mouseBehaviour)

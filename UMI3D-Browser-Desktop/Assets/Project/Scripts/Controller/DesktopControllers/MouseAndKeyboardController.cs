@@ -15,18 +15,15 @@ limitations under the License.
 */
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Interaction;
-using BrowserDesktop.Menu;
 using BrowserDesktop.Parameters;
 using inetum.unityUtils;
 using System.Collections.Generic;
-using umi3d.cdk;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu.view;
-using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
+using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace BrowserDesktop.Controller
 {
@@ -35,7 +32,7 @@ namespace BrowserDesktop.Controller
         public Transform CameraTransform;
         public InteractionMapper InteractionMapper;
         [SerializeField]
-        private MenuDisplayManager m_displayManager;
+        private MenuDisplayManager m_objectMenu;
 
         [Header("Degrees Of Freedom")]
         [SerializeField]
@@ -148,7 +145,7 @@ namespace BrowserDesktop.Controller
 
             if (input is KeyMenuInput keyMenuInput)
             {
-                keyMenuInput.Menu = m_displayManager?.menu;
+                keyMenuInput.Menu = m_objectMenu?.menu;
                 keyMenuInput.bone = interactionBoneType;
             }
             else if (input is FormInput formInput) formInput.bone = interactionBoneType;
@@ -166,18 +163,18 @@ namespace BrowserDesktop.Controller
         void CreateForceProjectionMenuItem()
         {
             Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
-            //if (CircularMenu.Exists && mouseData.ForceProjectionMenuItem != null)
-            //{
-            //    if (!CircularMenu.Instance.menuDisplayManager.menu.Contains(mouseData.ForceProjectionMenuItem))
-            //    {
-            //        if (mouseData.ForceProjectionReleasable)
-            //            CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
-            //    }
-            //    else if (CircularMenu.Instance.menuDisplayManager.menu.Count + EventMenu.NbEventsDIsplayed == 1)
-            //    {
-            //        DeleteForceProjectionMenuItem();
-            //    }
-            //}
+            if (/*CircularMenu.Exists &&*/ mouseData.ForceProjectionMenuItem != null)
+            {
+                //if (!CircularMenu.Instance.menuDisplayManager.menu.Contains(mouseData.ForceProjectionMenuItem))
+                //{
+                //    if (mouseData.ForceProjectionReleasable)
+                //        CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
+                //}
+                //else if (CircularMenu.Instance.menuDisplayManager.menu.Count + EventMenu.NbEventsDIsplayed == 1)
+                //{
+                //    DeleteForceProjectionMenuItem();
+                //}
+            }
         }
 
         void UnequipeForceProjection()
@@ -188,7 +185,7 @@ namespace BrowserDesktop.Controller
             mouseData.CurrentHoveredTransform = null;
             mouseData.OldHovered = null;
             Debug.Log("<color=green>TODO: </color>" + $"CircularMenu UnequipedForceProjection");
-            m_displayManager?.Collapse(true); //CircularMenu.Collapse();
+            m_objectMenu?.Collapse(true); //CircularMenu.Collapse();
             mouseData.HoverState = HoverState.None;
         }
 
@@ -206,11 +203,7 @@ namespace BrowserDesktop.Controller
             if (mouseData.ForceProjectionMenuItem == null)
                 return;
 
-            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu DeleteForceProjectionMenuItem");
-            m_displayManager?.menu.Remove(mouseData.ForceProjectionMenuItem);
-            //if (CircularMenu.Exists)
-            //    CircularMenu.Instance.menuDisplayManager.menu.Remove(mouseData.ForceProjectionMenuItem);
-
+            m_objectMenu?.menu.Remove(mouseData.ForceProjectionMenuItem);
         }
 
         #endregion
@@ -222,6 +215,8 @@ namespace BrowserDesktop.Controller
             CursorHandler.State = CursorHandler.CursorState.Hover;
             mouseData.saveDelay = 3;
         }
+
+        #region Update Tool
 
         private void UpdateTool()
         {
@@ -272,16 +267,10 @@ namespace BrowserDesktop.Controller
                     return;
 
                 if (mouseData.LastProjected != null)
-                {
-                    if (mouseData.HoverState == HoverState.AutoProjected)
-                        InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
-                    Debug.Log("<color=green>TODO: </color>" + $"CircularMenu UpdateTool [!mouseData.ForceProjection]");
-                    //CircularMenu.Collapse();
-
-                    mouseData.LastProjected = null;
-                }
+                    ReleaseAutoProjection();
 
                 mouseData.HoverState = HoverState.Hovering;
+                CursorHandler.State = CursorHandler.CursorState.Hover;
 
                 if (mouseData.CurrentHovered.dto.interactions.Count > 0 
                     && 
@@ -289,45 +278,54 @@ namespace BrowserDesktop.Controller
                     && 
                     !IsInputHold)
                 {
-                    InteractionMapper.SelectTool(mouseData.CurrentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
-                    CursorHandler.State = CursorHandler.CursorState.Hover;
-                    mouseData.HoverState = HoverState.AutoProjected;
-                    Debug.Log("<color=green>TODO: </color>" + $"CircularMenu UpdateTool []");
+                    SetAutoProjection();
+
+                    //Debug.Log("<color=green>TODO: </color>" + $"CircularMenu UpdateTool []");
+                    //m_objectMenu.Expand(false);
                     //CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
-                    mouseData.LastProjected = mouseData.CurrentHovered;
                 }
             }
             else if (mouseData.LastProjected != null)
-            {
-                if (mouseData.HoverState == HoverState.AutoProjected)
-                {
-                    Debug.Log("<color=green>TODO: </color>" + $"CircularMenu UpdateTool [AutoProjected]");
-                    //CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
-                    if (currentTool != null)
-                        InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
-                }
-                //CircularMenu.Collapse();
-                CursorHandler.State = CursorHandler.CursorState.Default;
-
-                mouseData.LastProjected = null;
-                mouseData.HoverState = HoverState.None;
-            }
+                ReleaseAutoProjection();
         }
 
-        bool ShouldAutoProject(InteractableDto tool)
+        #endregion
+
+        #region Auto Projection
+
+        private void SetAutoProjection()
         {
-            List<AbstractInteractionDto> manips = tool.interactions.FindAll(x => x is ManipulationDto);
-            List<AbstractInteractionDto> events = tool.interactions.FindAll(x => x is EventDto);
-            List<AbstractInteractionDto> parameters = tool.interactions.FindAll(x => x is AbstractParameterDto);
-            return (((parameters.Count == 0) && (events.Count <= 7) && (manips.Count == 0)));
+            InteractionMapper.SelectTool(mouseData.CurrentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
+            mouseData.HoverState = HoverState.AutoProjected;
+            CursorHandler.State = CursorHandler.CursorState.Hover;
+            mouseData.LastProjected = mouseData.CurrentHovered;
         }
 
-        public bool RequiresParametersMenu(AbstractTool tool)
+        private void ReleaseAutoProjection()
         {
-            List<AbstractInteractionDto> interactions = tool.interactions;
-            List<AbstractInteractionDto> parameters = interactions.FindAll(x => x is AbstractParameterDto);
-            // return ((events.Count > 7 || manips.Count > 0) && (events.Count > 6 || manips.Count > 1));
-            return (parameters.Count > 0);
+            if (mouseData.HoverState == HoverState.AutoProjected && currentTool != null)
+                InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
+            mouseData.HoverState = HoverState.None;
+            CursorHandler.State = CursorHandler.CursorState.Default;
+            mouseData.LastProjected = null;
         }
+
+        #endregion
+
+        //bool ShouldAutoProject(InteractableDto tool)
+        //{
+        //    List<AbstractInteractionDto> manips = tool.interactions.FindAll(x => x is ManipulationDto);
+        //    List<AbstractInteractionDto> events = tool.interactions.FindAll(x => x is EventDto);
+        //    List<AbstractInteractionDto> parameters = tool.interactions.FindAll(x => x is AbstractParameterDto);
+        //    return (((parameters.Count == 0) && (events.Count <= 7) && (manips.Count == 0)));
+        //}
+
+        //public bool RequiresParametersMenu(AbstractTool tool)
+        //{
+        //    List<AbstractInteractionDto> interactions = tool.interactions;
+        //    List<AbstractInteractionDto> parameters = interactions.FindAll(x => x is AbstractParameterDto);
+        //    // return ((events.Count > 7 || manips.Count > 0) && (events.Count > 6 || manips.Count > 1));
+        //    return (parameters.Count > 0);
+        //}
     }
 }

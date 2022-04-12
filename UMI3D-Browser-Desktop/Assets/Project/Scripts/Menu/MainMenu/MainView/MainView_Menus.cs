@@ -34,6 +34,7 @@ namespace umi3dDesktopBrowser.ui
             InitMenuBar();
             InitToolboxWindow();
             InitToolboxPinnedWindow();
+            InitObjectMenuWindow();
             InitShortcut();
             InitConsole();
             InitBottomBar();
@@ -69,6 +70,12 @@ namespace umi3dDesktopBrowser.ui
         {
             ToolboxPinnedWindow_E.Instance.InsertRootTo(m_viewport);
             ToolboxPinnedWindow_E.Instance.OnCloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(true);
+        }
+
+        private void InitObjectMenuWindow()
+        {
+            ObjectMenuWindow_E.Instance.InsertRootTo(m_viewport);
+            ObjectMenuWindow_E.Instance.OnCloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(true);
         }
 
         private void InitShortcut()

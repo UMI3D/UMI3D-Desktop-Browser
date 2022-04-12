@@ -58,6 +58,11 @@ namespace umi3dDesktopBrowser.ui.viewController
             foreach (Displayer_E displayer in displayers)
                 Root.Add(displayer.Root);
         }
+
+        public void Clear()
+        {
+
+        }
     }
 
     public partial class Displayerbox_E : Visual_E
