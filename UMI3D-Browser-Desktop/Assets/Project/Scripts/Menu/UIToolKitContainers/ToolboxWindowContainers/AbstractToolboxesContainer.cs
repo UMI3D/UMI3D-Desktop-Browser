@@ -270,6 +270,9 @@ namespace umi3d.desktopBrowser.menu.Container
 
     public partial class AbstractToolboxesContainer
     {
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected override void CollapseImp()
         {
             foreach (AbstractDisplayer disp in currentDisplayers)
