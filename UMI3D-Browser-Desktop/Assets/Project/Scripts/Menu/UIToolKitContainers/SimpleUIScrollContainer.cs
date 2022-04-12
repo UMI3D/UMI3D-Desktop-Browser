@@ -33,22 +33,22 @@ namespace BrowserDesktop.Menu
             }
         }
 
-        protected override void ExpandImp()
+        public override void Expand(bool forceUpdate = false)
         {
             scrollView.style.display = DisplayStyle.Flex;
-            base.ExpandImp();
+            base.Expand(forceUpdate);
         }
 
-        protected override void CollapseImp()
+        public override void Collapse(bool forceUpdate = false)
         {
             scrollView.style.display = DisplayStyle.None;
-            base.CollapseImp();
+            base.Collapse(forceUpdate);
         }
 
-        protected override void ExpandAsImp(umi3d.cdk.menu.view.AbstractMenuDisplayContainer Container)
+        public override void ExpandAs(umi3d.cdk.menu.view.AbstractMenuDisplayContainer Container, bool forceUpdate = false)
         {
             scrollView.style.display = DisplayStyle.Flex;
-            base.ExpandAsImp(Container);
+            base.ExpandAs(Container, forceUpdate);
         }
     }
 }

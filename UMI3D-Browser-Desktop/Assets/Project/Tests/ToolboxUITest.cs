@@ -19,9 +19,8 @@ using umi3d.cdk.menu.view;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
-using BrowserDesktop.Cursor;
 
-public class TestUI : MonoBehaviour
+public class ToolboxUITest : MonoBehaviour
 {
     public UIDocument UIDoc;
     public MenuDisplayManager DisplayManager;

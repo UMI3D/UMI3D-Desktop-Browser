@@ -67,7 +67,7 @@ namespace umi3d.cdk.menu.view
         /// Expands and displays child
         /// </summary>
         /// <param name="forceUpdate"></param>
-        public void Expand(bool forceUpdate = false)
+        public virtual void Expand(bool forceUpdate = false)
         {
             if (isExpanded && !forceUpdate)
                 return;
@@ -80,7 +80,7 @@ namespace umi3d.cdk.menu.view
         /// </summary>
         /// <param name="container"></param>
         /// <param name="forceUpdate"></param>
-        public void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
+        public virtual void ExpandAs(AbstractMenuDisplayContainer container, bool forceUpdate = false)
         {
             if (container.isExpanded && !forceUpdate)
                 return;
@@ -92,7 +92,7 @@ namespace umi3d.cdk.menu.view
         /// Collapses and hide children without destroying
         /// </summary>
         /// <param name="forceUpdate"></param>
-        public void Collapse(bool forceUpdate = false)
+        public virtual void Collapse(bool forceUpdate = false)
         {
             if (!isExpanded && !forceUpdate)
                 return;
@@ -108,12 +108,6 @@ namespace umi3d.cdk.menu.view
         #region navigation Implementation
 
         /// <summary>
-        /// Implementation of the Collapse methode.
-        /// <see cref="Collapse(bool)"/>
-        /// </summary>
-        protected abstract void CollapseImp();
-
-        /// <summary>
         /// Implementation of the Expand methode.
         /// <see cref="Expand"/>
         /// </summary>
@@ -125,6 +119,12 @@ namespace umi3d.cdk.menu.view
         /// </summary>
         /// <param name="container"></param>
         protected abstract void ExpandAsImp(AbstractMenuDisplayContainer container);
+
+        /// <summary>
+        /// Implementation of the Collapse methode.
+        /// <see cref="Collapse(bool)"/>
+        /// </summary>
+        protected abstract void CollapseImp();
 
         #endregion
 

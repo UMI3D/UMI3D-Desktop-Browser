@@ -71,12 +71,12 @@ namespace BrowserDesktop.Menu
                 virtualContainer = value;
 
                 bool display = virtualContainer?.parent != null;
-              
+
                 if (backButton != null && (backButton.resolvedStyle.display == DisplayStyle.Flex) != display)
                 {
                     backButton.style.display = display ? DisplayStyle.Flex : DisplayStyle.None;
                 }
-                if (display && backButton!= null)
+                if (display && backButton != null)
                 {
                     backButton.clickable.clicked += virtualContainer.backButtonPressed.Invoke;
                 }
@@ -96,7 +96,7 @@ namespace BrowserDesktop.Menu
 
         public void InitAndBindUI()
         {
-            if(containerElement == null)
+            if (containerElement == null)
             {
                 containerElement = containerTreeAsset.CloneTree();
                 containerElement.name = menu.Name + " - " + gameObject.name;
@@ -133,12 +133,12 @@ namespace BrowserDesktop.Menu
                 else
                     currParent = currParent.parent;
             }
-            
+
             return currParent;
         }
 
         protected void HideBackButton()
-        {   
+        {
             if (backButton != null)
                 backButton.style.display = DisplayStyle.None;
 
@@ -169,7 +169,7 @@ namespace BrowserDesktop.Menu
         public override void Display(bool forceUpdate = false)
         {
             InitAndBindUI();
-            
+
             if (isDisplayed && !forceUpdate)
             {
                 return;
@@ -179,7 +179,7 @@ namespace BrowserDesktop.Menu
                 selectButton.clickable.clicked += Select;
                 selectButton.text = menu.Name;
             }
-            if(selectIcon != null && menu.icon2D != null)
+            if (selectIcon != null && menu.icon2D != null)
             {
                 selectIcon.style.backgroundImage = menu.icon2D;
             }
@@ -187,7 +187,7 @@ namespace BrowserDesktop.Menu
             containerElement.style.display = DisplayStyle.Flex;
 
             if (VirtualContainer != null) VirtualContainer = this;
-            
+
             foreach (AbstractDisplayer disp in containedDisplayers)
             {
                 if (disp is IDisplayerElement)
@@ -336,10 +336,16 @@ namespace BrowserDesktop.Menu
             return Remove(containedDisplayers?[index], updateDisplay);
         }
 
-        protected override void ExpandImp()
+        public override void Expand(bool forceUpdate = false)
         {
             if (!isDisplayed)
-                Display();
+            {
+                Display(forceUpdate);
+            }
+            if (isExpanded && !forceUpdate)
+            {
+                return;
+            }
             if (VirtualContainer != null && VirtualContainer != this)
             {
                 selectButton.text = menu.Name;
@@ -375,8 +381,13 @@ namespace BrowserDesktop.Menu
             isExpanded = true;
         }
 
-        protected override void CollapseImp()
-        {   
+        public override void Collapse(bool forceUpdate = false)
+        {
+            if (!isExpanded && !forceUpdate)
+            {
+                return;
+            }
+
             if (VirtualContainer != null && VirtualContainer != this)
             {
                 selectButton.text = menu.Name;
@@ -411,8 +422,12 @@ namespace BrowserDesktop.Menu
             isExpanded = false;
         }
 
-        protected override void ExpandAsImp(AbstractMenuDisplayContainer Container)
+        public override void ExpandAs(AbstractMenuDisplayContainer Container, bool forceUpdate = false)
         {
+            if (isExpanded && !forceUpdate)
+            {
+                return;
+            }
             if (VirtualContainer != null && VirtualContainer != Container)
             {
                 if (backButton != null)
@@ -474,6 +489,21 @@ namespace BrowserDesktop.Menu
         }
 
         protected override void ItemAdded(AbstractDisplayer displayer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void ExpandImp()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void CollapseImp()
         {
             throw new System.NotImplementedException();
         }
