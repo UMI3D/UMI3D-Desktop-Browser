@@ -233,7 +233,7 @@ namespace BrowserDesktop.Controller
         /// <param name="hoveredObjectId"></param>
         public override void Project(AbstractTool tool, bool releasable, InteractionMappingReason reason, ulong hoveredObjectId)
         {
-            base.Project(tool, releasable, reason, hoveredObjectId); ;
+            base.Project(tool, releasable, reason, hoveredObjectId);
             if (reason is RequestedByEnvironment)
             {
                 mouseData.ForceProjection = true;

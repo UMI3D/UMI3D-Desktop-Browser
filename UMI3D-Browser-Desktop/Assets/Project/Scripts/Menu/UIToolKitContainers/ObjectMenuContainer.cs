@@ -39,7 +39,6 @@ namespace umi3d.desktopBrowser.menu.Container
 
         protected override void CollapseImp()
         {
-            Debug.Log($"collapse");
             ObjectMenuWindow_E.Instance.Hide();
             base.CollapseImp();
         }
