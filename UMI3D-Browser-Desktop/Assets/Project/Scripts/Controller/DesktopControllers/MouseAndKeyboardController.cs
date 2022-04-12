@@ -132,6 +132,7 @@ namespace BrowserDesktop.Controller
 
         private AbstractUMI3DInput FindInput<T>(List<T> inputs, System.Predicate<T> predicate, GameObject gO = null) where T : AbstractUMI3DInput, new()
         {
+            Debug.Log($"find");
             T input = inputs.Find(predicate);
             if (input == null)
                 AddInput(inputs, out input, gO);
@@ -150,6 +151,7 @@ namespace BrowserDesktop.Controller
             }
             else if (input is FormInput formInput) formInput.bone = interactionBoneType;
             else if (input is LinkInput linkInput) linkInput.bone = interactionBoneType;
+            //else if (input is AbstractParameterInput )
             inputs.Add(input);
         }
 
@@ -185,7 +187,7 @@ namespace BrowserDesktop.Controller
             mouseData.CurrentHoveredTransform = null;
             mouseData.OldHovered = null;
             Debug.Log("<color=green>TODO: </color>" + $"CircularMenu UnequipedForceProjection");
-            m_objectMenu?.Collapse(true); //CircularMenu.Collapse();
+            //m_objectMenu?.Collapse(true); //CircularMenu.Collapse();
             mouseData.HoverState = HoverState.None;
         }
 
@@ -207,14 +209,6 @@ namespace BrowserDesktop.Controller
         }
 
         #endregion
-
-        public void CircularMenuColapsed()
-        {
-            if (mouseData.CurrentHovered == null) return;
-            // CircularMenu.Instance.MenuColapsed.RemoveListener(CircularMenuColapsed);
-            CursorHandler.State = CursorHandler.CursorState.Hover;
-            mouseData.saveDelay = 3;
-        }
 
         #region Update Tool
 
@@ -272,18 +266,10 @@ namespace BrowserDesktop.Controller
                 mouseData.HoverState = HoverState.Hovering;
                 CursorHandler.State = CursorHandler.CursorState.Hover;
 
-                if (mouseData.CurrentHovered.dto.interactions.Count > 0 
-                    && 
-                    IsCompatibleWith(mouseData.CurrentHovered) 
-                    && 
-                    !IsInputHold)
-                {
+                bool isInteractionsEmpty = mouseData.CurrentHovered.dto.interactions.Count == 0;
+                bool isCompatible = IsCompatibleWith(mouseData.CurrentHovered);
+                if (!isInteractionsEmpty && isCompatible && !IsInputHold)
                     SetAutoProjection();
-
-                    //Debug.Log("<color=green>TODO: </color>" + $"CircularMenu UpdateTool []");
-                    //m_objectMenu.Expand(false);
-                    //CircularMenu.Instance.MenuColapsed.AddListener(CircularMenuColapsed);
-                }
             }
             else if (mouseData.LastProjected != null)
                 ReleaseAutoProjection();

@@ -31,7 +31,7 @@ namespace BrowserDesktop.Parameters
         /// Associated menu item.
         /// </summary>
         public InputMenuItem menuItem;
-
+        public AbstractMenu Menu;
 
         /// <summary>
         /// Interaction currently associated to this input.
@@ -65,8 +65,7 @@ namespace BrowserDesktop.Parameters
                     Name = interaction.name
                 };
                 Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
-                //if (CircularMenu.Exists)
-                //    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
+                Menu?.Add(menuItem);
 
                 menuItem.NotifyValueChange((interaction as ParameterType).value);
                 callback = x =>
@@ -108,8 +107,7 @@ namespace BrowserDesktop.Parameters
             currentInteraction = null;
             menuItem.UnSubscribe(callback);
             Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
-            //if (CircularMenu.Exists)
-            //    CircularMenu.Instance?.menuDisplayManager?.menu?.Remove(menuItem);
+            Menu?.Remove(menuItem);
         }
 
         public override bool IsCompatibleWith(AbstractInteractionDto interaction)
