@@ -71,7 +71,7 @@ namespace BrowserDesktop.Interaction
         internal void Activate()
         {
             Active = true;
-            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu [Manipulation Group]");
             //if (CircularMenu.Exists && menuItem != null)
             //    CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
             ManipulationInput.SelectFirst();
@@ -83,7 +83,7 @@ namespace BrowserDesktop.Interaction
         internal void Deactivate()
         {
             Active = false;
-            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu [Manipulation Groupe]");
             //if (CircularMenu.Exists)
             //{
             //    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);

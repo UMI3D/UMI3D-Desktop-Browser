@@ -56,12 +56,12 @@ namespace BrowserDesktop.Controller
                 input.bone = interactionBoneType;
             }
 
-            mouseData.ForceProjectionMenuItem = new HoldableButtonMenuItem
+            mouseData.ForceProjectionReleasableButton = new HoldableButtonMenuItem
             {
                 Name = "Release",
                 Holdable = false
             };
-            mouseData.ForceProjectionMenuItem.Subscribe(ForceProjectionMenuItem);
+            mouseData.ForceProjectionReleasableButton.Subscribe(ReleaseForceProjection);
 
             mouseData.saveDelay = 0;
         }
@@ -78,7 +78,7 @@ namespace BrowserDesktop.Controller
                 else
                 {
                     CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
-                    if (mouseData.HoverState != HoverState.None && m_objectMenu.menu.Count > 0)
+                    if (m_objectMenu.menu.Count > 0)
                     {
                         m_objectMenu.Expand(true);
                         IsFreeAndHovering = true;
@@ -217,7 +217,7 @@ namespace BrowserDesktop.Controller
             if (mouseData.ForceProjection)
             {
                 mouseData.ForceProjection = false;
-                DeleteForceProjectionMenuItem();
+                RemoveForceProjectionReleaseButton();
             }
             tool.onReleased(interactionBoneType);
             //}

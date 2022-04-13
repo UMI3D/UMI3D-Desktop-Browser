@@ -80,10 +80,6 @@ namespace BrowserDesktop.Menu
             ManageOptionCursor();
         }
         
-        public void CloseMenu()
-        {
-            menuDisplayManager.Back();
-        }
 
         void ManageOptionCursor()
         {
@@ -98,13 +94,6 @@ namespace BrowserDesktop.Menu
             }
         }
 
-        public static void Setup(CircularMenuContainer circularMenuContainer)
-        {
-            if (Exists)
-            {
-                Instance.circularMenuContainer = circularMenuContainer;
-            }
-        }
 
         public void Display()
         {
@@ -122,11 +111,6 @@ namespace BrowserDesktop.Menu
             }
         }
 
-        public static void Collapse()
-        {
-            if (Exists)
-                Instance._Collapse();
-        }
 
         public void _Collapse()
         {

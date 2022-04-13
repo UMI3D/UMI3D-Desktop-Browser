@@ -91,7 +91,6 @@ namespace umi3d.desktopBrowser.menu.Container
             if (ToolType == ItemType.Tool)
             {
                 Displayerbox.Hide();
-                Debug.Log($"collapse deep 0 toogle false");
                 ToolboxItem.Toggle(false);
             }
         }
