@@ -147,6 +147,7 @@ namespace BrowserDesktop.Controller
                 group.bone = interactionBoneType;
                 ManipulationInputs.Add(group);
             }
+            group.Menu = m_objectMenu.menu;
             return group;
         }
 
@@ -202,8 +203,6 @@ namespace BrowserDesktop.Controller
         /// <param name="reason"></param>
         public override void Release(AbstractTool tool, InteractionMappingReason reason)
         {
-            //try
-            //{
             base.Release(tool, reason);
             if (reason is ToolNeedToBeUpdated && tool.interactions.Count > 0) return;
 
@@ -220,8 +219,6 @@ namespace BrowserDesktop.Controller
                 RemoveForceProjectionReleaseButton();
             }
             tool.onReleased(interactionBoneType);
-            //}
-            //catch { }
         }
 
         /// <summary>

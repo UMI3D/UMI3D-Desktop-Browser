@@ -72,22 +72,18 @@ namespace BrowserDesktop.Interaction
         {
             Active = true;
             Debug.Log("<color=green>TODO: </color>" + $"CircularMenu [Manipulation Group]");
-            //if (CircularMenu.Exists && menuItem != null)
-            //    CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
+            //if (menuItem != null)
+            //    Menu?.Remove(menuItem);
             ManipulationInput.SelectFirst();
             foreach (ManipulationInput input in manipulationInputs)
-            {
                 input.DisplayDisplayer(true);
-            }
         }
         internal void Deactivate()
         {
             Active = false;
             Debug.Log("<color=green>TODO: </color>" + $"CircularMenu [Manipulation Groupe]");
-            //if (CircularMenu.Exists)
-            //{
-            //    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
-            //}
+            //if (menuItem != null)
+            //    Menu?.Add(menuItem);
             foreach (ManipulationInput input in manipulationInputs)
             {
                 input.DisplayDisplayer(false);
@@ -130,9 +126,9 @@ namespace BrowserDesktop.Interaction
                     currentInstance = 0;
                     CursorHandler.State = CursorHandler.CursorState.Hover;
                 }
-                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
-                //if (CircularMenu.Exists && menuItem != null)
-                //    CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
+                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu [Manipulation Groupe]");
+                //if (menuItem != null)
+                //    Menu?.Remove(menuItem);
                 if (menuItem != null)
                 {
                     menuItem.UnSubscribe(Select);
