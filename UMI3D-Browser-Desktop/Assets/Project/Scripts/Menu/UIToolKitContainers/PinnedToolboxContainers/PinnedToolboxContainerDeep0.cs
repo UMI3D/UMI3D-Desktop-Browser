@@ -86,13 +86,14 @@ namespace umi3d.desktopBrowser.menu.Container
             foreach (AbstractDisplayer child in m_currentDisplayers)
             {
                 if (child is PinnedToolboxContainerDeep1 containerDeep1)
-                    containerDeep1.Collapse();
+                    containerDeep1.Collapse(true);
             }
             if (ToolType == ItemType.Tool)
             {
                 Displayerbox.Hide();
                 ToolboxItem.Toggle(false);
             }
+            base.CollapseImp();
         }
 
         /// <summary>

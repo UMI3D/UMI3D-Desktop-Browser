@@ -76,7 +76,7 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void DisplayImp()
         {
             base.DisplayImp();
-            ToolboxItem.Display();
+            //ToolboxItem.Display();
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void HideImp()
         {
-            ToolboxItem.Hide();
+            //ToolboxItem.Hide();
             base.Hide();
         }
 

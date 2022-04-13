@@ -35,9 +35,9 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public void SetVerticalScrollView(string svStyle, StyleKeys svKeys, string dcStyle, StyleKeys dcKeys, string dStyle, StyleKeys dKeys)
         {
-            m_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"), svStyle, svKeys)
-                .SetVerticalDraggerContainerStyle(dcStyle, dcKeys)
-                .SetVerticalDraggerStyle(dStyle, dKeys);
+            m_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"), svStyle, svKeys);
+            m_scrollView.SetVerticalDraggerContainerStyle(dcStyle, dcKeys);
+            m_scrollView.SetVerticalDraggerStyle(dStyle, dKeys);
         }
     }
 }

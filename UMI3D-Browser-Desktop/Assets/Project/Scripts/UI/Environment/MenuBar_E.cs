@@ -153,7 +153,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             string scrollViewUXML = "UI/UXML/horizontalScrollView";
             m_scrollView = new ScrollView_E(scrollViewUXML)
             {
-                AddSeparator = AddSeparator
+                CreateSeparator = CreateSeparator
             };
             m_scrollView.InsertRootTo(centerLayout_VE);
 
@@ -190,12 +190,10 @@ namespace umi3dDesktopBrowser.ui.viewController
                 .InsertRootTo(rightLayout_VE);
         }
 
-        protected Visual_E AddSeparator(VisualElement layout)
-        {
-            Visual_E separator = new Visual_E(new VisualElement(), m_separatorStyle, m_separatorKeys);
-            separator.InsertRootTo(layout);
-            return separator;
-        }
+        protected void AddSeparator(VisualElement layout)
+            => CreateSeparator().InsertRootTo(layout);
+        protected Visual_E CreateSeparator()
+            => new Visual_E(new VisualElement(), m_separatorStyle, m_separatorKeys);
 
         public override void InsertRootTo(VisualElement parent)
         {
