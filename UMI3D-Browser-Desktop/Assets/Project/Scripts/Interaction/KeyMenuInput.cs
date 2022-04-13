@@ -35,7 +35,6 @@ public class KeyMenuInput : AbstractUMI3DInput
     /// Avatar bone linked to this input.
     /// </summary>
     public uint bone = BoneType.RightHand;
-    public AbstractMenu Menu;
 
     ulong toolId;
     ulong hoveredObjectId;

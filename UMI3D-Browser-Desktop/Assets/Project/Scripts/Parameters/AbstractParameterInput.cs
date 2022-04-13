@@ -31,7 +31,6 @@ namespace BrowserDesktop.Parameters
         /// Associated menu item.
         /// </summary>
         public InputMenuItem menuItem;
-        public AbstractMenu Menu;
 
         /// <summary>
         /// Interaction currently associated to this input.
@@ -52,9 +51,7 @@ namespace BrowserDesktop.Parameters
         public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
             if (currentInteraction != null)
-            {
                 throw new System.Exception("This input is already associated to another interaction (" + currentInteraction + ")");
-            }
 
             if (interaction is ParameterType)
             {
@@ -64,9 +61,7 @@ namespace BrowserDesktop.Parameters
                     dto = interaction as ParameterType,
                     Name = interaction.name
                 };
-                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
-                Menu?.Add(menuItem);
-
+                
                 menuItem.NotifyValueChange((interaction as ParameterType).value);
                 callback = x =>
                 {
@@ -84,6 +79,7 @@ namespace BrowserDesktop.Parameters
 
                 menuItem.Subscribe(callback);
                 currentInteraction = interaction;
+                Menu?.Add(menuItem);
             }
             else
             {
@@ -106,7 +102,6 @@ namespace BrowserDesktop.Parameters
         {
             currentInteraction = null;
             menuItem.UnSubscribe(callback);
-            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
             Menu?.Remove(menuItem);
         }
 

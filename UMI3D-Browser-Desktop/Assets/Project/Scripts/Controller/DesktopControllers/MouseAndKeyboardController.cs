@@ -132,7 +132,6 @@ namespace BrowserDesktop.Controller
 
         private AbstractUMI3DInput FindInput<T>(List<T> inputs, System.Predicate<T> predicate, GameObject gO = null) where T : AbstractUMI3DInput, new()
         {
-            Debug.Log($"find");
             T input = inputs.Find(predicate);
             if (input == null)
                 AddInput(inputs, out input, gO);
@@ -145,13 +144,11 @@ namespace BrowserDesktop.Controller
             else input = new T();
 
             if (input is KeyMenuInput keyMenuInput)
-            {
-                keyMenuInput.Menu = m_objectMenu?.menu;
                 keyMenuInput.bone = interactionBoneType;
-            }
             else if (input is FormInput formInput) formInput.bone = interactionBoneType;
             else if (input is LinkInput linkInput) linkInput.bone = interactionBoneType;
-            //else if (input is AbstractParameterInput )
+
+            input.Menu = m_objectMenu?.menu;
             inputs.Add(input);
         }
 
