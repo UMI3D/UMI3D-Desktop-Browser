@@ -58,8 +58,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
                 m_displayerElement.SetLabel(labelStylePath, labelKeys);
                 m_displayerElement.Label.value = textMenu.ToString();
 
-                m_displayerElement.Element.value = "test";
-
+                m_displayerElement.Element.value = textMenu.GetValue();
                 m_displayerElement.Element.OnValueChanged += (_, newValue) =>
                 {
                     textMenu.NotifyValueChange(newValue);

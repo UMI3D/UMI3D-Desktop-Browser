@@ -65,8 +65,7 @@ namespace BrowserDesktop.Parameters
 
                 menuItem.NotifyValueChange(param.value);
                 menuItem.Subscribe(callback);
-                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
-                Menu.Add(menuItem);
+                Menu?.Add(menuItem);
                 currentInteraction = interaction;
             }
             else
