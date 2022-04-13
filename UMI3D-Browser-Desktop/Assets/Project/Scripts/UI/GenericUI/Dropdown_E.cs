@@ -16,6 +16,7 @@ limitations under the License.
 using System;
 using System.Collections.Generic;
 using umi3DBrowser.UICustomStyle;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
@@ -118,6 +119,16 @@ namespace umi3dDesktopBrowser.ui.viewController
                 item.SetLabel(m_menuLabelStyle, m_menuLabelKeys);
             }
             menu.DropDown(Root.worldBound, Root, true);
+            MakeDropDownAbsolute(menu);
+        }
+
+        protected void MakeDropDownAbsolute(GenericDropdownMenu menu)
+        {
+            var parent = menu.contentContainer.parent;
+            for (int i = 0; i < 3; ++i)
+                parent = parent.parent;
+
+            parent.style.position = Position.Absolute;
         }
 
         protected void SelectItem(string item)
