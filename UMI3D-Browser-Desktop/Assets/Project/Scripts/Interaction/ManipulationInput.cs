@@ -282,7 +282,7 @@ namespace BrowserDesktop.Interaction
         {
             while (true)
             {
-                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu et MainMenu");
+                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu et MainMenu [Manipulation Input]");
                 //if (/*(!CircularMenu.Exists || !CircularMenu.Instance.IsExpanded) &&*/ !MainMenu.IsDisplaying)
                 if (true)
                 {

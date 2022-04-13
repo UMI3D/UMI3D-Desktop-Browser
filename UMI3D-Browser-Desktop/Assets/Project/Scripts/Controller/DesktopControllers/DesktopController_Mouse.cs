@@ -35,7 +35,7 @@ namespace BrowserDesktop.Controller
         {
             public bool ForceProjection;
             public bool ForceProjectionReleasable;
-            public HoldableButtonMenuItem ForceProjectionMenuItem;
+            public HoldableButtonMenuItem ForceProjectionReleasableButton;
 
             public Interactable LastProjected;
             public Interactable OldHovered;

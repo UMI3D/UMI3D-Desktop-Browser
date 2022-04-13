@@ -57,16 +57,10 @@ public class LinkInput : AbstractUMI3DInput
                 Holdable = false
             };
             menuItem.Subscribe(Pressed);
-            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
-            //if (CircularMenu.Exists)
-            //{
-            //    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
-            //}
+            Menu?.Add(menuItem);
         }
         else
-        {
             throw new System.Exception("Trying to associate an uncompatible interaction !");
-        }
     }
 
     public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
@@ -82,11 +76,7 @@ public class LinkInput : AbstractUMI3DInput
     public override void Dissociate()
     {
         associatedInteraction = null;
-        Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
-        //if (CircularMenu.Exists && menuItem != null)
-        //{
-        //    CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
-        //}
+        Menu?.Remove(menuItem);
         menuItem.UnSubscribe(Pressed);
         menuItem = null;
     }

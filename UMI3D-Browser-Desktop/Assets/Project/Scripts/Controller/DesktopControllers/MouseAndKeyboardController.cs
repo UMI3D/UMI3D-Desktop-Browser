@@ -143,8 +143,7 @@ namespace BrowserDesktop.Controller
             if (gO != null) input = gO.AddComponent<T>();
             else input = new T();
 
-            if (input is KeyMenuInput keyMenuInput)
-                keyMenuInput.bone = interactionBoneType;
+            if (input is KeyMenuInput keyMenuInput) keyMenuInput.bone = interactionBoneType;
             else if (input is FormInput formInput) formInput.bone = interactionBoneType;
             else if (input is LinkInput linkInput) linkInput.bone = interactionBoneType;
 
@@ -152,57 +151,44 @@ namespace BrowserDesktop.Controller
             inputs.Add(input);
         }
 
-        void InputDown(KeyInput input) { }
-        void InputUp(KeyInput input) { }
-
         #endregion
 
         #region Force Projection (projection without hovering)
 
-        void CreateForceProjectionMenuItem()
+        private void AddForceProjectionReleaseButton()
         {
-            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
-            if (/*CircularMenu.Exists &&*/ mouseData.ForceProjectionMenuItem != null)
-            {
-                //if (!CircularMenu.Instance.menuDisplayManager.menu.Contains(mouseData.ForceProjectionMenuItem))
-                //{
-                //    if (mouseData.ForceProjectionReleasable)
-                //        CircularMenu.Instance.menuDisplayManager.menu.Add(mouseData.ForceProjectionMenuItem);
-                //}
-                //else if (CircularMenu.Instance.menuDisplayManager.menu.Count + EventMenu.NbEventsDIsplayed == 1)
-                //{
-                //    DeleteForceProjectionMenuItem();
-                //}
-            }
+            if (mouseData.ForceProjectionReleasableButton == null || !mouseData.ForceProjectionReleasable)
+                return;
+
+            if (!m_objectMenu.menu.Contains(mouseData.ForceProjectionReleasableButton))
+                m_objectMenu?.menu.Add(mouseData.ForceProjectionReleasableButton);
         }
 
-        void UnequipeForceProjection()
+        private void ReleaseForceProjection(bool _)
+        {
+            if (!mouseData.ForceProjectionReleasable)
+                return;
+
+            RemoveForceProjectionReleaseButton();
+            UnequipeForceProjection();
+        }
+
+        private void RemoveForceProjectionReleaseButton()
+        {
+            if (mouseData.ForceProjectionReleasableButton == null)
+                return;
+
+            m_objectMenu?.menu.Remove(mouseData.ForceProjectionReleasableButton);
+        }
+
+        private void UnequipeForceProjection()
         {
             InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
             mouseData.ForceProjection = false;
             mouseData.CurrentHovered = null;
             mouseData.CurrentHoveredTransform = null;
             mouseData.OldHovered = null;
-            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu UnequipedForceProjection");
-            //m_objectMenu?.Collapse(true); //CircularMenu.Collapse();
             mouseData.HoverState = HoverState.None;
-        }
-
-        void ForceProjectionMenuItem(bool pressed)
-        {
-            if (!mouseData.ForceProjectionReleasable)
-                return;
-
-            DeleteForceProjectionMenuItem();
-            UnequipeForceProjection();
-        }
-
-        void DeleteForceProjectionMenuItem()
-        {
-            if (mouseData.ForceProjectionMenuItem == null)
-                return;
-
-            m_objectMenu?.menu.Remove(mouseData.ForceProjectionMenuItem);
         }
 
         #endregion
@@ -211,18 +197,11 @@ namespace BrowserDesktop.Controller
 
         private void UpdateTool()
         {
-            if (mouseData.ForceProjection)
+            if (mouseData.ForceProjection && mouseData.ForceProjectionReleasable)
             {
-                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu UpdateTool [mouseData.ForceProjection]");
-                //if (CircularMenu.Exists && (!CircularMenu.Instance.IsEmpty() || EventMenu.NbEventsDIsplayed > 0))
-                //    CreateForceProjectionMenuItem();
-                if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.LeaveContextualMenu))
-                    ||
-                    Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
-                {
-                    if (mouseData.ForceProjectionReleasable)
-                        UnequipeForceProjection();
-                }
+                AddForceProjectionReleaseButton();
+                if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.LeaveContextualMenu)))
+                    UnequipeForceProjection();
             }
 
             UpdateToolForForceProjection();
