@@ -176,7 +176,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected virtual void Initialize() 
         {
-            if (IsInitialized) Reset();
+            if (IsInitialized) return;
             IsInitialized = true;
         }
 
