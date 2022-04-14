@@ -23,66 +23,25 @@ using BrowserDesktop.preferences;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
-    public partial class Visual_E : ICustomElement
+    public partial class Visual_E
     {
+        /// <summary>
+        /// Visual root of this custom element.
+        /// </summary>
         public VisualElement Root { get; protected set; } = null;
-        public bool Initialized { get; protected set; } = false;
-        public bool AttachedToHierarchy { get; protected set; } = false;
-        public bool Displayed { get; protected set; } = false;
-        public event Action<bool> OnDisplayedEvent;
-        public DisplayStyle RootDisplayStyle
-        {
-            get => Root.resolvedStyle.display;
-            set => Root.style.display = value;
-        }
-        public Visibility RootVisibility
-        {
-            get => Root.resolvedStyle.visibility;
-            set => Root.style.visibility = value;
-        }
-        public Rect RootLayout { get => Root.layout; }
-        public virtual void Display()
-        {
-            Root.style.display = DisplayStyle.Flex;
-            OnDisplayedEvent?.Invoke(true);
-        }
-        public virtual void Hide()
-        {
-            Root.style.display = DisplayStyle.None;
-            OnDisplayedEvent?.Invoke(false);
-        }
-        public virtual void Reset()
-        {
-            ResetAllVisualStyle();
-            this.Root = null;
-            m_globalPref.ApplyCustomStyle.RemoveListener(ApplyAllFormatAndStyle);
-            m_globalPref = null;
-            Initialized = false;
-        }
-        public virtual void InsertRootAtTo(int index, VisualElement parent)
-        {
-            if (!Initialized)
-                throw new Exception($"VisualElement Added without being Initialized.");
-            if (parent == null)
-                throw new Exception($"Try to Add [{Root}] to a parent null.");
-            parent.Insert(index, Root);
-            AttachedToHierarchy = true;
-        }
-        public virtual void InsertRootTo(VisualElement parent)
-        {
-            if (!Initialized) 
-                throw new Exception($"VisualElement Added without being Initialized.");
-            if (parent == null)
-                throw new Exception($"Try to Add [{Root}] to a parent null.");
-            parent.Add(Root);
-            AttachedToHierarchy = true;
-        }
-        public virtual void Remove()
-        {
-            Root.RemoveFromHierarchy();
-            AttachedToHierarchy = false;
-            Displayed = false;
-        }
+        /// <summary>
+        /// True if this has been instantiated.
+        /// </summary>
+        public bool IsInstantiated { get; protected set; } = false;
+        /// <summary>
+        /// True if this has been initialized.
+        /// </summary>
+        public bool IsInitialized { get; protected set; } = false;
+        /// <summary>
+        /// True if this visual is displayed.
+        /// </summary>
+        public bool IsDisplaying { get; protected set; } = false;
+        public event Action<bool> DisplayedOrHidden;
     }
 
     public partial class Visual_E
@@ -126,9 +85,72 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
         ~Visual_E()
         {
+            Destroy();
+        }
+
+        public virtual void Display()
+        {
+            Root.style.display = DisplayStyle.Flex;
+            IsDisplaying = true;
+            DisplayedOrHidden?.Invoke(true);
+        }
+        public virtual void Hide()
+        {
+            Root.style.display = DisplayStyle.None;
+            IsDisplaying = false;
+            DisplayedOrHidden?.Invoke(false);
+        }
+        /// <summary>
+        /// Reset at default (should be abled to set the properties againe).
+        /// </summary>
+        public virtual void Reset()
+        {
+            Remove();
+        }
+        /// <summary>
+        /// Prepare for destruction.
+        /// </summary>
+        public virtual void Destroy()
+        {
             Reset();
-            //UserPreferences.UserPreferences.Instance.OnApplyUserPreferences.RemoveListener(OnApplyUserPreferences);
-            //UserPreferences.UserPreferences.RemoveThemeUpdateListener(ApplyCustomStyle);
+            ResetAllVisualStyle();
+            this.Root = null;
+            m_globalPref.ApplyCustomStyle.RemoveListener(ApplyAllFormatAndStyle);
+            m_globalPref = null;
+            IsInstantiated = false;
+        }
+        /// <summary>
+        /// Add the Root VisualElement as a child of [partent] at the position [index].
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="parent"></param>
+        public virtual void InsertRootAtTo(int index, VisualElement parent)
+        {
+            if (!IsInstantiated)
+                throw new Exception($"VisualElement Added without being Initialized.");
+            if (parent == null)
+                throw new Exception($"Try to Add [{Root}] to a parent null.");
+            parent.Insert(index, Root);
+        }
+        /// <summary>
+        /// Add the Root VisualElement as a child of [partent].
+        /// </summary>
+        /// <param name="parent"></param>
+        public virtual void InsertRootTo(VisualElement parent)
+        {
+            if (!IsInstantiated)
+                throw new Exception($"VisualElement Added without being Initialized.");
+            if (parent == null)
+                throw new Exception($"Try to Add [{Root}] to a parent null.");
+            parent.Add(Root);
+        }
+        /// <summary>
+        /// Remove the Root VisualElement from the hierarchy.
+        /// </summary>
+        public virtual void Remove()
+        {
+            Root.RemoveFromHierarchy();
+            IsDisplaying = false;
         }
     }
 
@@ -136,25 +158,38 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         protected void Init(VisualElement parent, VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys)
         {
-            if (Initialized) Reset();
-            Initialized = true;
             m_globalPref = GetGlobalPrefSO();
             m_globalPref.ApplyCustomStyle.AddListener(ApplyAllFormatAndStyle);
             m_styleApplicator = new UIElementStyleApplicator(m_globalPref);
+
             m_visuals = new List<VisualElement>();
             m_visualStyles = new Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)>();
+
             this.Root = visual;
             AddVisualStyle(Root, style_SO, keys);
-            if (parent != null) InsertRootTo(parent);
+            
             Initialize();
+            IsInstantiated = true;
+
+            if (parent != null) InsertRootTo(parent);
         }
 
         protected virtual void Initialize() 
-        { }
+        {
+            if (IsInitialized) Reset();
+            IsInitialized = true;
+        }
 
-        protected void OnDisplayedTrigger(bool value)
-            => OnDisplayedEvent?.Invoke(value);
+        protected void OnDisplayedOrHiddenTrigger(bool value)
+            => DisplayedOrHidden?.Invoke(value);
 
+        #region Get Resources
+
+        /// <summary>
+        /// Get the VisualTreeAsset from [resourcePath] and return the first child of the new VisualElement.
+        /// </summary>
+        /// <param name="resourcePath"></param>
+        /// <returns></returns>
         protected virtual VisualElement GetVisualRoot(string resourcePath)
         {
             VisualTreeAsset visualTA = Resources.Load<VisualTreeAsset>(resourcePath);
@@ -165,6 +200,11 @@ namespace umi3dDesktopBrowser.ui.viewController
             return iterator.Current;
         }
 
+        /// <summary>
+        /// Get the CustomStyle_SO and return it.
+        /// </summary>
+        /// <param name="resourcePath"></param>
+        /// <returns></returns>
         protected CustomStyle_SO GetStyleSO(string resourcePath)
         {
             if (resourcePath == "") throw new Exception("resourcePath empty");
@@ -174,12 +214,18 @@ namespace umi3dDesktopBrowser.ui.viewController
             return style_SO;
         }
 
+        /// <summary>
+        /// Get the GlobalPreferences_SO and return it.
+        /// </summary>
+        /// <returns></returns>
         protected GlobalPreferences_SO GetGlobalPrefSO()
         {
             GlobalPreferences_SO globalPreferences = Resources.Load<GlobalPreferences_SO>("Preferences/GlobalPreferences");
             if (globalPreferences == null) throw new NullReferenceException("Global pref null");
             return globalPreferences;
         }
+
+        #endregion
 
         protected virtual void ObjectPooling<T>(out T vE, List<T> listDisplayed, List<T> listWaited, Func<T> init)
         {

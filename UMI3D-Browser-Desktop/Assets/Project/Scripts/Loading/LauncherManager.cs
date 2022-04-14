@@ -517,9 +517,9 @@ public class LauncherManager : MonoBehaviour
     /// </summary>
     private void CheckShortcuts()
     {
-        if (Input.GetKeyDown(KeyCode.Return) && !DialogueBox_E.Instance.Displayed)
+        if (Input.GetKeyDown(KeyCode.Return) && !DialogueBox_E.Instance.IsDisplaying)
             nextStep?.Invoke();
-        else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)) && !DialogueBox_E.Instance.Displayed)
+        else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)) && !DialogueBox_E.Instance.IsDisplaying)
             previousStep?.Invoke();
     }
 

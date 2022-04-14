@@ -144,7 +144,7 @@ public class WindowsManager : MonoBehaviour
     private bool WantsToQuit()
     {
         bool wantsToQuit = QuittingManager.ApplicationIsQuitting;
-        if (!wantsToQuit && !DialogueBox_E.Instance.Displayed)
+        if (!wantsToQuit && !DialogueBox_E.Instance.IsDisplaying)
             ShowDialogueBoxToQuit();
         return wantsToQuit;
     }

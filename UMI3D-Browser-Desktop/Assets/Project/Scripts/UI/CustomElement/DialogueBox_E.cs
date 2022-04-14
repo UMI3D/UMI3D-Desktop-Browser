@@ -164,8 +164,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public static void DisplayFrom(UIDocument uiDocument)
         {
-            if (Instance.Displayed) return;
-            else Instance.Displayed = true;
+            if (Instance.IsDisplaying) return;
+            else Instance.IsDisplaying = true;
             Instance.InsertRootTo(uiDocument.rootVisualElement);
             Center();
             m_shouldCenter = true;

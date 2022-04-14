@@ -81,30 +81,20 @@ namespace umi3dDesktopBrowser.ui
         private void InitShortcut()
         {
             Shortcutbox_E.Instance.InsertRootTo(m_leftSideMenuDownUp);
-
-            if (m_showShortcutOnStart)
-                Shortcutbox_E.ShouldDisplay = true;
-            else
-                Shortcutbox_E.ShouldHide = true;
         }
 
         private void InitConsole()
         {
             Console_E.Instance.InsertRootTo(m_viewport);
             Console_E.Version.value = BrowserVersion.Version;
-
-            if (m_showConsoleOnStart)
-                Console_E.ShouldDisplay = true;
-            else
-                Console_E.ShouldHide = true;
         }
 
         private void InitBottomBar()
         {
             BottomBar_E.Instance.InsertRootTo(m_mainView);
             BottomBar_E.Instance.Notification.OnClicked = Console_E.Instance.DisplayOrHide;
-            Shortcutbox_E.Instance.OnDisplayedEvent += BottomBar_E.Instance.OpenCloseShortcut;
-            Console_E.Instance.OnDisplayedEvent += BottomBar_E.Instance.UpdateOnOffNotificationIcon;
+            Shortcutbox_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseShortcut;
+            Console_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.UpdateOnOffNotificationIcon;
             Console_E.Instance.NewLogAdded += BottomBar_E.Instance.UpdateAlertNotificationIcon;
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => m_startOfSession = DateTime.Now);
@@ -115,6 +105,19 @@ namespace umi3dDesktopBrowser.ui
         }
 
         #endregion
+
+        private void DisplayMenus()
+        {
+            if (m_showShortcutOnStart)
+                Shortcutbox_E.Instance.Display();
+            else
+                Shortcutbox_E.Instance.Hide();
+
+            if (m_showConsoleOnStart)
+                Console_E.Instance.Display();
+            else
+                Console_E.Instance.Hide();
+        }
 
         #region Input Menus
 

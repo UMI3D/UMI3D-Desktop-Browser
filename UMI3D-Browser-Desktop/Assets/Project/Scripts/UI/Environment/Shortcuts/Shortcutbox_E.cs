@@ -55,7 +55,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public void DisplayOrHide()
         {
-            if (Displayed)
+            if (IsDisplaying)
                 Hide();
             else
                 Display();
@@ -149,24 +149,34 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void Display()
         {
+            if (m_width <= 0f)
+            {
+                ShouldDisplay = true;
+                return;
+            }
             AnimeVisualElement(Root, m_width, true, (elt, val) =>
             {
                 elt.style.right = m_width - val;
             });
-            Displayed = true;
+            IsDisplaying = true;
             ShouldDisplay = false;
-            OnDisplayedTrigger(true);
+            OnDisplayedOrHiddenTrigger(true);
         }
 
         public override void Hide()
         {
+            if (m_width <= 0f)
+            {
+                ShouldHide = true;
+                return;
+            }
             AnimeVisualElement(Root, m_width, false, (elt, val) =>
             {
                 elt.style.right = m_width - val;
             });
-            Displayed = false;
+            IsDisplaying = false;
             ShouldHide = false;
-            OnDisplayedTrigger(false);
+            OnDisplayedOrHiddenTrigger(false);
         }
     }
 }

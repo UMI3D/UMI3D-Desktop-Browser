@@ -13,12 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using BrowserDesktop.Controller;
-using BrowserDesktop.Cursor;
 using umi3d.cdk;
 using umi3d.cdk.menu.view;
-using umi3d.common;
-using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -94,6 +90,8 @@ namespace umi3dDesktopBrowser.ui
         public void Display(bool val)
         {
             m_mainView.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
+            if (val)
+                DisplayMenus();
         }
     }
 }
