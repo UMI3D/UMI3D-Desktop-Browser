@@ -85,6 +85,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         public void RemoveToolboxDeep0(Toolbox_E toolbox)
             => m_scrollView.Remove(toolbox);
 
+        public void ClearPinnedToolboxes()
+            => m_scrollView.Clear();
 
         public void AddToolboxDeep1Plus(Toolbox_E toolbox)
         {
