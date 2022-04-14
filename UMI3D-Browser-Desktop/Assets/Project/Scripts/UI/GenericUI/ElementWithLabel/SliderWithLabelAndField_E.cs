@@ -41,14 +41,13 @@ namespace umi3dDesktopBrowser.ui.viewController
                 Field = new FloatField_E(m_floatField, styleResourcePath, keys);
             else
                 throw new System.NotImplementedException();
-            Field.OnValueChanged += (_, newValue) =>
+            Field.OnValueChanged += (oldValue, newValue) =>
             {
                 //To be changed when floatField will be use in runtime.
-                if (float.TryParse(newValue, out float f))
-                {
-                    Debug.Log($"on value changed field, new value = [{newValue}]; f = [{f}]");
+                if (FloatField_E.TryConvertToFloat(newValue, out float f))
                     RefreshSlider(f);
-                }
+                else
+                    RefreshField(oldValue);
             };
         }
 
@@ -66,8 +65,12 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected void RefreshField(float newValue)
         {
             if (Field == null) return;
-            Debug.Log($"refresh field, newvalue = [{newValue}];]");
             Field.SetValueWithoutNotify(newValue.ToString());
+        }
+        protected void RefreshField(string newValue)
+        {
+            if (Field == null) return;
+            Field.SetValueWithoutNotify(newValue);
         }
     }
 
@@ -78,6 +81,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Initialize();
             //m_floatField = Root.Q<FloatField>();
             m_floatField = Root.Q<TextField>();
+            m_floatField.isDelayed = true;
         }
 
         public override void SetSlider(string styleResourcePath, StyleKeys keys)

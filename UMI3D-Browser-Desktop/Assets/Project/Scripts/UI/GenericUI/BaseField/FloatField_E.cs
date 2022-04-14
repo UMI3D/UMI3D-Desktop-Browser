@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 //using UnityEditor.UIElements;
+using System.Globalization;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
@@ -56,6 +58,12 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             if (float.TryParse(newValue, out float f))
                 base.SetValueWithoutNotify(newValue);
+        }
+
+        public static bool TryConvertToFloat(string stringValue, out float floatValue)
+        {
+            CultureInfo provider = new CultureInfo("en-US");
+            return float.TryParse(stringValue, System.Globalization.NumberStyles.Float, provider, out floatValue);
         }
         #endregion
     }
