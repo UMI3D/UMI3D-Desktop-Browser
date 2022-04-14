@@ -71,6 +71,7 @@ namespace umi3d.cdk.collaboration
 
         public UnityEvent OnNewToken = new UnityEvent();
         public UnityEvent OnConnectionLost = new UnityEvent();
+        public static event Action LoggedOut;
 
         public ClientIdentifierApi Identifier;
         private static bool connected = false;
@@ -158,6 +159,7 @@ namespace umi3d.cdk.collaboration
                 {
                     UMI3DLogger.Log("Logout ok", scope | DebugScope.Connection);
                     ForgeClient.Stop();
+                    LoggedOut?.Invoke();
                     Start();
                     success?.Invoke();
                     Identity = new IdentityDto();
@@ -182,7 +184,7 @@ namespace umi3d.cdk.collaboration
         public void ConnectionLost()
         {
             UMI3DLogger.LogWarning("Connection Lost", scope | DebugScope.Connection);
-            UMI3DCollaborationClientServer.Logout(null, null);
+            Logout(null, null);
 
             OnConnectionLost.Invoke();
         }

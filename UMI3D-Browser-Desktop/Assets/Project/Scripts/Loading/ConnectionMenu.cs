@@ -127,7 +127,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     /// </summary>
     private void ManageInputs()
     {
-        if (!isDisplayed || DialogueBox_E.Instance.Displayed) return;
+        if (!isDisplayed || DialogueBox_E.Instance.IsDisplaying) return;
         else if (Input.GetKeyDown(KeyCode.Return)) nextStep?.Invoke();
     }
 
@@ -222,7 +222,10 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         cam.clearFlags = CameraClearFlags.SolidColor;
         UMI3DEnvironmentLoader.Clear();
         UMI3DResourcesManager.Instance.ClearCache();
-        UMI3DCollaborationClientServer.Logout(() => { GameObject.Destroy(UMI3DClientServer.Instance.gameObject); }, null);
+        UMI3DCollaborationClientServer.Logout(() => 
+        { 
+            GameObject.Destroy(UMI3DClientServer.Instance.gameObject);
+        }, null);
 
         SceneManager.LoadScene(launcherScene, LoadSceneMode.Single);
     }

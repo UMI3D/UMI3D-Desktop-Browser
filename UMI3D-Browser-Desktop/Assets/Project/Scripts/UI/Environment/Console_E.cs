@@ -58,7 +58,7 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         public void DisplayOrHide()
         {
-            if (Displayed)
+            if (IsDisplaying)
                 Hide();
             else
                 Display();
@@ -136,9 +136,37 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class Console_E : Visual_E
     {
-        private Console_E() :
-            base(m_consoleUXML, m_consoleStyle, m_consoleKeys)
-        { }
+        public override void Display()
+        {
+            if (m_width <= 0f)
+            {
+                ShouldDisplay = true;
+                return;
+            }
+            AnimeVisualElement(Root, m_width, true, (elt, val) =>
+            {
+                elt.style.right = val;
+            });
+            IsDisplaying = true;
+            ShouldDisplay = false;
+            OnDisplayedOrHiddenTrigger(true);
+        }
+
+        public override void Hide()
+        {
+            if (m_width <= 0f)
+            {
+                ShouldHide = true;
+                return;
+            }
+            AnimeVisualElement(Root, m_width, false, (elt, val) =>
+            {
+                elt.style.right = val;
+            });
+            IsDisplaying = false;
+            ShouldHide = false;
+            OnDisplayedOrHiddenTrigger(false);
+        }
 
         protected override void Initialize()
         {
@@ -160,26 +188,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             Application.logMessageReceived += HandleLog;
         }
 
-        public override void Display()
-        {
-            AnimeVisualElement(Root, m_width, true, (elt, val) =>
-            {
-                elt.style.right = val;
-            });
-            Displayed = true;
-            ShouldDisplay = false;
-            OnDisplayedTrigger(true);
-        }
-
-        public override void Hide()
-        {
-            AnimeVisualElement(Root, m_width, false, (elt, val) =>
-            {
-                elt.style.right = val;
-            });
-            Displayed = false;
-            ShouldHide = false;
-            OnDisplayedTrigger(false);
-        }
+        private Console_E() :
+            base(m_consoleUXML, m_consoleStyle, m_consoleKeys)
+        { }
     }
 }

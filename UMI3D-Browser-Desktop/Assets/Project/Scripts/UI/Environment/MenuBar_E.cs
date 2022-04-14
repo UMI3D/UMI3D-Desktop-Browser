@@ -196,13 +196,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             => new Visual_E(new VisualElement(), m_separatorStyle, m_separatorKeys);
 
         public override void InsertRootTo(VisualElement parent)
-        {
-            if (!Initialized)
-                throw new Exception($"VisualElement Added without being Initialized.");
-            if (parent == null)
-                throw new Exception($"Try to Add [{Root}] to a parent null.");
-            parent.Insert(0, Root);
-            AttachedToHierarchy = true;
-        }
+            => InsertRootAtTo(0, parent);
     }
 }
