@@ -16,6 +16,7 @@ limitations under the License.
 using BrowserDesktop.Menu;
 using umi3d.cdk.menu;
 using umi3dDesktopBrowser.ui.viewController;
+using UnityEngine;
 
 namespace umi3d.DesktopBrowser.menu.Displayer
 {
@@ -57,13 +58,14 @@ namespace umi3d.DesktopBrowser.menu.Displayer
                 m_displayerElement.Label.value = floatRangeMenu.ToString();
 
                 m_displayerElement.Element.SetSlider(floatRangeMenu.min, floatRangeMenu.max, floatRangeMenu.value);
+                m_displayerElement.Field.SetValueWithoutNotify(floatRangeMenu.value.ToString());
                 m_displayerElement.Element.OnValueChanged += (_, newValue) 
                     => floatRangeMenu.NotifyValueChange(m_displayerElement.Clamp(newValue));
                 m_displayerElement.Field.OnValueChanged += (_, newValue)
                     =>
                 {
                     //To be changed when floatField will be use in runtime.
-                    if (float.TryParse(newValue, out float f))
+                    if (FloatField_E.TryConvertToFloat(newValue, out float f))
                         floatRangeMenu.NotifyValueChange(m_displayerElement.Clamp(f));
                 };
             }

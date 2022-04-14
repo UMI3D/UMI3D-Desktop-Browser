@@ -43,7 +43,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected VisualElement m_forwardVerticalButtonLayout { get; set; } = null;
         protected VisualElement m_forwardHorizontalButtonLayout { get; set; } = null;
 
-        protected Dictionary<Visual_E, Visual_E> m_items { get; set; } = null;
         protected List<Visual_E> m_elements { get; set; } = null;
         protected List<Visual_E> m_separatorsDisplayed { get; set; } = null;
         protected List<Visual_E> m_separatorsWaited { get; set; } = null;
@@ -69,14 +68,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public virtual void Adds(params Visual_E[] items)
         {
-            //foreach (Visual_E item in items)
-            //{
-            //    Visual_E separator = null;
-            //    if (m_items.Count > 0 && AddSeparator != null)
-            //        separator = AddSeparator(Scroll_View);
-            //    m_items.Add(item, separator);
-            //    item.InsertRootTo(Scroll_View);
-            //}
             foreach (Visual_E item in items)
             {
                 m_elements.Add(item);
@@ -92,12 +83,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public virtual void Remove(Visual_E item)
         {
-            //if (!m_items.TryGetValue(item, out Visual_E separator))
-            //    return;
-            //separator?.Remove();
-            //item.Remove();
-            //m_items.Remove(item);
-
             if (!m_elements.Contains(item))
                 return;
 
@@ -249,7 +234,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_verticalScroller.valueChanged += VerticalSliderValueChanged;
             m_horizontalScroller.valueChanged += HorizontalSliderValueChanged;
 
-            m_items = new Dictionary<Visual_E, Visual_E>();
             m_elements = new List<Visual_E>();
             m_separatorsDisplayed = new List<Visual_E>();
             m_separatorsWaited = new List<Visual_E>();

@@ -74,19 +74,13 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         /// <param name="forceUpdate"></param>
         protected override void DisplayImp()
-        {
-            base.DisplayImp();
-            //ToolboxItem.Display();
-        }
+            => base.DisplayImp();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         protected override void HideImp()
-        {
-            //ToolboxItem.Hide();
-            base.Hide();
-        }
+            => base.Hide();
 
         /// <summary>
         /// <inheritdoc/>
