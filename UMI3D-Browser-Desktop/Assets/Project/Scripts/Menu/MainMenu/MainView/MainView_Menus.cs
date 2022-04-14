@@ -38,6 +38,8 @@ namespace umi3dDesktopBrowser.ui
             InitShortcut();
             InitConsole();
             InitBottomBar();
+
+            UMI3DCollaborationClientServer.LoggedOut += ResetMenus;
         }
 
         private void InitMenuBar()
@@ -105,6 +107,11 @@ namespace umi3dDesktopBrowser.ui
         }
 
         #endregion
+
+        private void ResetMenus()
+        {
+            MenuBar_E.Instance.ClearPinnedToolboxes();
+        }
 
         private void DisplayMenus()
         {
