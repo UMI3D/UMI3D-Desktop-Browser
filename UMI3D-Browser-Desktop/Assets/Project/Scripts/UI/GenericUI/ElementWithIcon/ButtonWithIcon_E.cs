@@ -70,7 +70,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             var manipulatorIcon = Icon.GetVisualManipulator(m_icon);
             var manipulatorButton = Element.GetVisualManipulator(m_button);
-            manipulatorIcon.OnMouseBehaviourChanged += manipulatorButton.ApplyStyle;
+            manipulatorIcon.MouseBehaviourChanged += manipulatorButton.ApplyStyle;
         }
     }
 

@@ -36,7 +36,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             IsOn = value;
             m_currentKeys = (IsOn) ? m_onKeys : m_offKeys;
-            UpdateVisualKeys(Root, m_currentKeys);
+            UpdateKeys(Root, m_currentKeys);
         }
     }
 
@@ -91,7 +91,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_onKeys = onKeys;
             m_offKeys = offKeys;
             m_currentKeys = (isOn) ? m_onKeys : m_offKeys;
-            UpdateVisualKeys(m_button, m_currentKeys);
+            UpdateKeys(m_button, m_currentKeys);
         }
     }
 

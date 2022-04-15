@@ -23,6 +23,9 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Visual_E
     {
+        /// <summary>
+        /// List of all the VisualElements that this Visual_E manage.
+        /// </summary>
         protected List<VisualElement> m_visuals;
         protected Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)> m_visualStyles;
 
@@ -34,7 +37,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         /// <param name="newManipulator"></param>
         public void UpdateVisualManipulator(VisualManipulator newManipulator)
-            => UpdateVisualManipulator(Root, newManipulator);
+            => UpdateManipulator(Root, newManipulator);
 
         protected void AddVisualStyle(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys, VisualManipulator manipulator = null, bool stopPropagation = true)
             => AddVisualStyle(visual, GetStyleSO(styleResourcePath), formatAndStyleKeys, manipulator, stopPropagation);
@@ -42,48 +45,96 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             if (visual == null) throw new NullReferenceException("visual is null");
 
-            if (m_visuals.Contains(visual))
-            {
-                var (oldStyle, oldKeys, oldManipulator) = m_visualStyles[visual];
-                if (manipulator == null)
-                    manipulator = oldManipulator;
-                manipulator.Set(style_SO, keys);
-                m_visualStyles[visual] = (style_SO, keys, manipulator);
-                manipulator.AppliesFormatAndStyle();
-            }
-            else
+            if (!m_visuals.Contains(visual))
             {
                 m_visuals.Add(visual);
 
                 if (manipulator == null)
-                    manipulator = new VisualManipulator(visual, style_SO, keys, stopPropagation, ApplyFormat, ApplyStyle);
-                else
-                    manipulator.Set(style_SO, keys, ApplyFormat, ApplyStyle);
+                    manipulator = new VisualManipulator(stopPropagation);
+                
+                SetManipulator(manipulator, style_SO, keys);
                 visual.AddManipulator(manipulator);
 
                 m_visualStyles.Add(visual, (style_SO, keys, manipulator));
-                manipulator.AppliesFormatAndStyle();
+                manipulator.ApplyFormatAndStyle();
             }
+            else
+                UpdateStyleAndKeysAndManipulator(visual, style_SO, keys, manipulator);
         }
 
-        protected void UpdateVisualKeys(VisualElement visual, StyleKeys newKeys)
+        protected void UpdateStyleAndKeysAndManipulator(VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys, VisualManipulator manipulator = null)
         {
             if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
-            //if (newKeys == null) throw new NullReferenceException("FormatAnStyleKeys is null.");
+
+            var (_, _, oldManipulator) = m_visualStyles[visual];
+            if (manipulator == null)
+            {
+                manipulator = oldManipulator;
+                manipulator.Set(style_SO, keys);
+            }
+            else
+            {
+                oldManipulator.Reset();
+                SetManipulator(manipulator, style_SO, keys);
+            }
+            m_visualStyles[visual] = (style_SO, keys, manipulator);
+            manipulator.ApplyFormatAndStyle();
+        }
+
+        /// <summary>
+        /// Update Visual Style.
+        /// </summary>
+        /// <param name="visual"></param>
+        /// <param name="styleResourcePath"></param>
+        protected void UpdateStyle(VisualElement visual, string styleResourcePath)
+            => UpdateStyle(visual, GetStyleSO(styleResourcePath));
+        /// <summary>
+        /// Update Visual Style.
+        /// </summary>
+        /// <param name="visual"></param>
+        /// <param name="style_SO"></param>
+        protected void UpdateStyle(VisualElement visual, CustomStyle_SO style_SO)
+        {
+            if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
+            var (_, keys, manipulator) = m_visualStyles[visual];
+            manipulator.UpdateStyle(style_SO);
+            m_visualStyles[visual] = (style_SO, keys, manipulator);
+        }
+
+        /// <summary>
+        /// Update visual style keys.
+        /// </summary>
+        /// <param name="visual"></param>
+        /// <param name="newKeys"></param>
+        protected void UpdateKeys(VisualElement visual, StyleKeys newKeys)
+        {
+            if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
             var (styleSO, _, manipulator) = m_visualStyles[visual];
-            manipulator.UpdatesKeys(newKeys);
+            manipulator.UpdateKeys(newKeys);
             m_visualStyles[visual] = (styleSO, newKeys, manipulator);
         }
 
-        protected void UpdateVisualManipulator(VisualElement visual, VisualManipulator newManipulator)
+        /// <summary>
+        /// Remove current manipulator and add [newManipulator]
+        /// </summary>
+        /// <param name="visual"></param>
+        /// <param name="newManipulator"></param>
+        protected void UpdateManipulator(VisualElement visual, VisualManipulator newManipulator)
         {
             if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
             if (newManipulator == null) throw new NullReferenceException("Manipulator null");
             var (styleSO, keys, oldManipulator) = m_visualStyles[visual];
             visual.RemoveManipulator(oldManipulator);
-            newManipulator.Set(styleSO, keys, ApplyFormat, ApplyStyle);
+            SetManipulator(newManipulator, styleSO, keys);
             visual.AddManipulator(newManipulator);
             m_visualStyles[visual] = (styleSO, keys, newManipulator);
+        }
+
+        protected void SetManipulator(VisualManipulator manipulator, CustomStyle_SO style_SO, StyleKeys keys)
+        {
+            manipulator.Set(style_SO, keys);
+            manipulator.ApplyingFormat += ApplyFormat;
+            manipulator.ApplyingStyle += ApplyStyle;
         }
 
         protected void ResetAllVisualStyle()

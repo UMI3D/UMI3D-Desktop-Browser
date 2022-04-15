@@ -38,11 +38,11 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             Root.style.backgroundImage = new StyleBackground(sprite);
             float width = sprite.rect.width;
-            if (width <= 512f) AddVisualStyle(Root, m_squareStyle, m_keys);
-            else if (width <= 548f) AddVisualStyle(Root, m_mouseStyle, m_keys);
-            else if (width <= 721f) AddVisualStyle(Root, m_fnStyle, m_keys);
-            else if (width <= 845f) AddVisualStyle(Root, m_ctrlStyle, m_keys);
-            else if (width <= 952f) AddVisualStyle(Root, m_shiftStyle, m_keys);
+            if (width <= 512f) UpdateStyle(Root, m_squareStyle);
+            else if (width <= 548f) UpdateStyle(Root, m_mouseStyle);
+            else if (width <= 721f) UpdateStyle(Root, m_fnStyle);
+            else if (width <= 845f) UpdateStyle(Root, m_ctrlStyle);
+            else if (width <= 952f) UpdateStyle(Root, m_shiftStyle);
         }
     }
 

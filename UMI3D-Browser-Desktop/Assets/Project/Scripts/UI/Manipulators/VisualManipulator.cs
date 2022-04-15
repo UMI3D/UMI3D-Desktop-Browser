@@ -25,15 +25,23 @@ namespace umi3dDesktopBrowser.ui.viewController
     /// </summary>
     public partial class VisualManipulator
     {
-        public event Action<MouseBehaviour> OnMouseBehaviourChanged;
+        /// <summary>
+        /// Event raised when the behaviour of the mouse (over, out, down, up) changed.
+        /// </summary>
+        public event Action<MouseBehaviour> MouseBehaviourChanged;
+        /// <summary>
+        /// Event raised when the customStyle'format will be applied on the target.
+        /// </summary>
+        public event Action<CustomStyle_SO, StyleKeys, VisualElement> ApplyingFormat;
+        /// <summary>
+        /// Event raised when the customStyle'style will be applied on the target.
+        /// </summary>
+        public event Action<CustomStyle_SO, StyleKeys, IStyle, MouseBehaviour> ApplyingStyle;
 
-        //protected VisualElement m_visual { get; set; } = null;
         protected CustomStyle_SO m_styleSO { get; set; } = null;
         protected StyleKeys m_keys { get; set; } = null;
         protected bool m_stopPropagation { get; set; } = false;
-        protected Action<CustomStyle_SO, StyleKeys, VisualElement> m_applyFormat { get; set; } = null;
-        protected Action<CustomStyle_SO, StyleKeys, IStyle, MouseBehaviour> m_applyStyle { get; set; } = null;
-
+        
         #region Mouse
 
         protected enum MousePressedState
@@ -66,43 +74,61 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class VisualManipulator
     {
-        public VisualManipulator(VisualElement visualTarget, CustomStyle_SO style_SO, StyleKeys keys, bool stopPropagation, Action<CustomStyle_SO, StyleKeys, VisualElement> applyFormat, Action<CustomStyle_SO, StyleKeys, IStyle, MouseBehaviour> applyStyle)
+        public VisualManipulator () : 
+            this(true) 
+        { }
+        public VisualManipulator(bool stopPropagation) : 
+            this(new ManipulatorActivationFilter { button = MouseButton.LeftMouse }, stopPropagation)
+        { }
+        public VisualManipulator(ManipulatorActivationFilter activationFilter, bool stopPropagation)
         {
-            //m_visual = visualTarget;
-            activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
-            Set(style_SO, keys, applyFormat, applyStyle);
+            activators.Add(activationFilter);
             m_stopPropagation = stopPropagation;
         }
-
+        
+        /// <summary>
+        /// Bind custom style ans keys.
+        /// </summary>
+        /// <param name="style_SO"></param>
+        /// <param name="keys"></param>
         public void Set(CustomStyle_SO style_SO, StyleKeys keys)
         {
-            m_styleSO?.AppliesFormatAndStyle.RemoveListener(AppliesFormatAndStyle);
+            m_styleSO?.AppliesFormatAndStyle.RemoveListener(ApplyFormatAndStyle);
             m_styleSO = style_SO;
             m_keys = keys;
-            m_styleSO?.AppliesFormatAndStyle.AddListener(AppliesFormatAndStyle);
-        }
-        public void Set(CustomStyle_SO style_SO, StyleKeys keys, Action<CustomStyle_SO, StyleKeys, VisualElement> applyFormat, Action<CustomStyle_SO, StyleKeys, IStyle, MouseBehaviour> applyStyle)
-        {
-            Set(style_SO, keys);
-            m_applyFormat = applyFormat;
-            m_applyStyle = applyStyle;
+            m_styleSO?.AppliesFormatAndStyle.AddListener(ApplyFormatAndStyle);
         }
 
-        public void UpdatesKeys(StyleKeys newKeys)
+        /// <summary>
+        /// Reset Manipulator, Unset events.
+        /// </summary>
+        public virtual void Reset()
+        {
+            MouseBehaviourChanged = null;
+            ApplyingFormat = null;
+            ApplyingStyle = null;
+        }
+
+        public void UpdateStyle(CustomStyle_SO style_SO)
+        {
+            m_styleSO = style_SO;
+            ApplyFormatAndStyle();
+        }
+        public void UpdateKeys(StyleKeys newKeys)
         {
             m_keys = newKeys;
-            AppliesFormatAndStyle();
+            ApplyFormatAndStyle();
         }
 
-        public void AppliesStyle()
-            => m_applyStyle(m_styleSO, m_keys, target.style, m_mouseBehaviourFromState);
+        public void ApplyStyle()
+            => ApplyingStyle?.Invoke(m_styleSO, m_keys, target.style, m_mouseBehaviourFromState);
         public void ApplyStyle(MouseBehaviour mouseBehaviour)
-            => m_applyStyle(m_styleSO, m_keys, target.style, mouseBehaviour);
+            => ApplyingStyle?.Invoke(m_styleSO, m_keys, target.style, mouseBehaviour);
 
-        public void AppliesFormatAndStyle()
+        public void ApplyFormatAndStyle()
         {
-            m_applyFormat(m_styleSO, m_keys, target);
-            m_applyStyle(m_styleSO, m_keys, target.style, m_mouseBehaviourFromState);
+            ApplyingFormat?.Invoke(m_styleSO, m_keys, target);
+            ApplyingStyle?.Invoke(m_styleSO, m_keys, target.style, m_mouseBehaviourFromState);
         }
     }
 
@@ -120,7 +146,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             target.RegisterCallback<MouseCaptureEvent>(OnMouseCapture);
             target.RegisterCallback<MouseUpEvent>(OnMouseUp);
 
-            m_styleSO?.AppliesFormatAndStyle.AddListener(AppliesFormatAndStyle);
+            m_styleSO?.AppliesFormatAndStyle.AddListener(ApplyFormatAndStyle);
         }
 
         /// <summary>
@@ -133,29 +159,31 @@ namespace umi3dDesktopBrowser.ui.viewController
             target.UnregisterCallback<MouseCaptureEvent>(OnMouseCapture);
             target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
 
-            m_styleSO?.AppliesFormatAndStyle.RemoveListener(AppliesFormatAndStyle);
+            m_styleSO?.AppliesFormatAndStyle.RemoveListener(ApplyFormatAndStyle);
+
+            Reset();
         }
 
         #endregion
 
         protected virtual void OnMouseOver(MouseOverEvent e)
-            => MouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Over), target.style);
+            => OnMouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Over), target.style);
 
         protected virtual void OnMouseOut(MouseOutEvent e)
-            => MouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Out), target.style);
+            => OnMouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Out), target.style);
 
         protected virtual void OnMouseCapture(MouseCaptureEvent e)
-            => MouseBehaviourChanged(e, (MousePressedState.Pressed, m_mouseState.Item2), target.style);
+            => OnMouseBehaviourChanged(e, (MousePressedState.Pressed, m_mouseState.Item2), target.style);
 
         protected virtual void OnMouseUp(MouseUpEvent e)
-            => MouseBehaviourChanged(e, (MousePressedState.Unpressed, m_mouseState.Item2), target.style);
+            => OnMouseBehaviourChanged(e, (MousePressedState.Unpressed, m_mouseState.Item2), target.style);
 
-        protected void MouseBehaviourChanged(EventBase e, (MousePressedState, MousePositionState) mouseState, IStyle style)
+        protected void OnMouseBehaviourChanged(EventBase e, (MousePressedState, MousePositionState) mouseState, IStyle style)
         {
             m_mouseState = mouseState;
-            m_applyStyle(m_styleSO, m_keys, style, m_mouseBehaviourFromState);
+            ApplyingStyle?.Invoke(m_styleSO, m_keys, style, m_mouseBehaviourFromState);
             if (m_stopPropagation) e.StopPropagation();
-            OnMouseBehaviourChanged?.Invoke(m_mouseBehaviourFromState);
+            MouseBehaviourChanged?.Invoke(m_mouseBehaviourFromState);
         }
     }
 }
