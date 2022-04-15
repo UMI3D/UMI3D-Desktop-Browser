@@ -90,14 +90,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_elements.Remove(item);
             UpdateSeparator();
         }
-        public virtual void Clear()
-        {
-            m_elements.ForEach((elt) => elt.Remove());
-            m_elements.Clear();
-            m_separatorsDisplayed.ForEach((separator) => separator.Remove());
-            m_separatorsDisplayed.Clear();
-            m_separatorsWaited.Clear();
-        }
 
         protected virtual void UpdateSeparator()
         {
@@ -115,7 +107,6 @@ namespace umi3dDesktopBrowser.ui.viewController
                 ObjectPooling(out Visual_E separator, m_separatorsDisplayed, m_separatorsWaited, CreateSeparator);
                 separator.InsertRootAtTo(eltIndex, Scroll_View);
             };
-            Debug.Log($"elts count = [{m_elements.Count}]");
             m_elements.ForEach(addSeparators);
         }
 
@@ -250,7 +241,11 @@ namespace umi3dDesktopBrowser.ui.viewController
         public override void Reset()
         {
             base.Reset();
-            throw new System.NotImplementedException();
+            m_elements.ForEach((elt) => elt.Remove());
+            m_elements.Clear();
+            m_separatorsDisplayed.ForEach((separator) => separator.Remove());
+            m_separatorsDisplayed.Clear();
+            m_separatorsWaited.Clear();
         }
     }
 }

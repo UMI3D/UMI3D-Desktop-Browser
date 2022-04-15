@@ -139,7 +139,8 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     {
         VisualElement root = uiDocument.rootVisualElement;
 
-        loader = new LoadingBar(root);
+        loader = LoadingBar.Instance;
+        loader.Setup(root);
         loader.SetText("Connection");
 
         loadingScreen = root.Q<VisualElement>("loading-screen");
@@ -225,6 +226,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         UMI3DCollaborationClientServer.Logout(() => 
         { 
             GameObject.Destroy(UMI3DClientServer.Instance.gameObject);
+            //CursorHandler.Instance.Clear();
         }, null);
 
         SceneManager.LoadScene(launcherScene, LoadSceneMode.Single);

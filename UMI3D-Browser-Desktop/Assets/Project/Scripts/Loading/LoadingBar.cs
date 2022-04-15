@@ -15,12 +15,13 @@ limitations under the License.
 */
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
+using inetum.unityUtils;
 using System.Collections;
 using umi3d.cdk;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class LoadingBar
+public class LoadingBar : Singleton<LoadingBar>
 {
     VisualElement root;
     VisualElement loadingBarContainer;
@@ -30,7 +31,10 @@ public class LoadingBar
 
     float value = 0;
 
-    public LoadingBar(VisualElement root)
+    public LoadingBar() : base()
+    {}
+
+    public void Setup(VisualElement root)
     {
         loadingBarProgress = root.Q<VisualElement>("loading-bar-progress");
         loadingBarContainer = root.Q<VisualElement>("loading-bar-container");
@@ -64,7 +68,11 @@ public class LoadingBar
             MouseAndKeyboardController.CanProcess = false;
             
         }
-        if (val > 1) val = 1;
+        if (val > 1)
+        {
+            val = 1;
+            Hide();
+        }
         value = val;
         loadingBarProgress.style.width = val * loadingBarContainer.resolvedStyle.width;
     }

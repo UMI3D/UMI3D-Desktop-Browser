@@ -71,6 +71,7 @@ namespace umi3d.cdk.collaboration
 
         public UnityEvent OnNewToken = new UnityEvent();
         public UnityEvent OnConnectionLost = new UnityEvent();
+        public static event Action LoggingOut;
         public static event Action LoggedOut;
 
         public ClientIdentifierApi Identifier;
@@ -155,6 +156,7 @@ namespace umi3d.cdk.collaboration
             UMI3DLogger.Log("Logout", scope | DebugScope.Connection);
             if (Connected())
             {
+                LoggingOut?.Invoke();
                 HttpClient.SendPostLogout(() =>
                 {
                     UMI3DLogger.Log("Logout ok", scope | DebugScope.Connection);

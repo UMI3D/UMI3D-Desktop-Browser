@@ -88,12 +88,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         public void ClearShortcut()
         {
-            Action<Visual_E> removeVEFromHierarchy = (vE) =>
-            {
-                m_shortcuts.Remove(vE);
-            };
-
-            m_shortcutsDisplayed.ForEach(removeVEFromHierarchy);
+            m_shortcutsDisplayed.ForEach((shortcut) => m_shortcuts.Remove(shortcut));
             m_shortcutsWaited.AddRange(m_shortcutsDisplayed);
             m_shortcutsDisplayed.Clear();
         }
@@ -128,23 +123,12 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class Shortcutbox_E : Visual_E
     {
-        protected override void Initialize()
+        public override void Reset()
         {
-            base.Initialize();
-
-            var title = Root.Q<Label>("title");
-            string titleStyle = "UI/Style/Shortcuts/Shortcutbox_Title";
-            StyleKeys titleKeys = new StyleKeys("", "", null);
-            new Label_E(title, titleStyle, titleKeys, "Shortcuts");
-
-            var scrollView = Root.Q<ScrollView>();
-            m_shortcuts = new ScrollView_E(scrollView);
-
-            Root.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
-
-            m_shortcutsDisplayed = new List<Shortcut_E>();
-            m_shortcutsWaited = new List<Shortcut_E>();
-            m_keyBindings = Resources.Load<KeyBindings_SO>("KeyBindings");
+            base.Reset();
+            m_shortcutsDisplayed.ForEach((shortcut) => m_shortcuts.Remove(shortcut));
+            m_shortcutsWaited.Clear();
+            m_shortcutsDisplayed.Clear();
         }
 
         public override void Display()
@@ -177,6 +161,25 @@ namespace umi3dDesktopBrowser.ui.viewController
             IsDisplaying = false;
             ShouldHide = false;
             OnDisplayedOrHiddenTrigger(false);
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            var title = Root.Q<Label>("title");
+            string titleStyle = "UI/Style/Shortcuts/Shortcutbox_Title";
+            StyleKeys titleKeys = new StyleKeys("", "", null);
+            new Label_E(title, titleStyle, titleKeys, "Shortcuts");
+
+            var scrollView = Root.Q<ScrollView>();
+            m_shortcuts = new ScrollView_E(scrollView);
+
+            Root.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
+
+            m_shortcutsDisplayed = new List<Shortcut_E>();
+            m_shortcutsWaited = new List<Shortcut_E>();
+            m_keyBindings = Resources.Load<KeyBindings_SO>("KeyBindings");
         }
     }
 }

@@ -85,9 +85,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         public void RemoveToolboxDeep0(Toolbox_E toolbox)
             => m_scrollView.Remove(toolbox);
 
-        public void ClearPinnedToolboxes()
-            => m_scrollView.Clear();
-
         public void AddToolboxDeep1Plus(Toolbox_E toolbox)
         {
             toolbox.InsertRootTo(SubMenuLayout);
@@ -121,9 +118,14 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class MenuBar_E : Visual_E
     {
-        private MenuBar_E() :
-            base(m_menuUXML, m_menuStyle, m_menuKeys)
-        { }
+        public override void Reset()
+        {
+            base.Reset();
+            m_scrollView.Reset();
+        }
+
+        public override void InsertRootTo(VisualElement parent)
+            => InsertRootAtTo(0, parent);
 
         protected override void Initialize()
         {
@@ -145,7 +147,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             #endregion
 
             ToolboxButton = new ToolboxItem_E("Toolbox", "Toolbox");
-            new Toolbox_E("", ToolboxType.Pinned, ToolboxButton)    
+            new Toolbox_E("", ToolboxType.Pinned, ToolboxButton)
                 .InsertRootTo(leftLayout_VE);
 
             AddSeparator(leftLayout_VE);
@@ -182,7 +184,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             Avatar = new ToolboxItem_E("AvatarOn", "AvatarOff", "");
             Sound = new ToolboxItem_E("SoundOn", "SoundOff", "");
             Mic = new ToolboxItem_E("MicOn", "MicOff", "");
-            new Toolbox_E("", ToolboxType.Pinned, Avatar, Sound, Mic)    
+            new Toolbox_E("", ToolboxType.Pinned, Avatar, Sound, Mic)
                 .InsertRootTo(rightLayout_VE);
 
             AddSeparator(rightLayout_VE);
@@ -197,7 +199,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected Visual_E CreateSeparator()
             => new Visual_E(new VisualElement(), m_separatorStyle, m_separatorKeys);
 
-        public override void InsertRootTo(VisualElement parent)
-            => InsertRootAtTo(0, parent);
+        private MenuBar_E() :
+            base(m_menuUXML, m_menuStyle, m_menuKeys)
+        { }
     }
 }
