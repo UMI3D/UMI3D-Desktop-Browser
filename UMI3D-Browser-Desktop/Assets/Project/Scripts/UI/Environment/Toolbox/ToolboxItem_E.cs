@@ -60,7 +60,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public void SetIcon(Texture2D icon)
         {
-            UpdateVisualKeys(m_button, null);
+            UpdateKeys(m_button, null);
             m_button.style.backgroundImage = icon;
         }
 

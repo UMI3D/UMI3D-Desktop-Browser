@@ -112,7 +112,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             foreach (VisualElement visual in m_visuals)
             {
                 var (_, _, manipulator) = m_visualStyles[visual];
-                manipulator.AppliesStyle();
+                manipulator.ApplyStyle();
             }
         }
 

@@ -73,7 +73,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         public void UpdateLabelKeys(StyleKeys keys)
-            => UpdateVisualKeys(m_label, keys);
+            => UpdateKeys(m_label, keys);
     }
 
     public partial class Label_E : Visual_E

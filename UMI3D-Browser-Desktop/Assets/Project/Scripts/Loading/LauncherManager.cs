@@ -613,7 +613,6 @@ public class LauncherManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator WaitReady()
     {
-        //CursorHandler.Instance.Clear();
         SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Additive);
 
         while (!ConnectionMenu.Exists)

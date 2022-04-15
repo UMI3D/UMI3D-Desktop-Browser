@@ -71,7 +71,13 @@ namespace umi3d.cdk.collaboration
 
         public UnityEvent OnNewToken = new UnityEvent();
         public UnityEvent OnConnectionLost = new UnityEvent();
+        /// <summary>
+        /// Event raised when the user will log out.
+        /// </summary>
         public static event Action LoggingOut;
+        /// <summary>
+        /// Event raised when the user has logged out.
+        /// </summary>
         public static event Action LoggedOut;
 
         public ClientIdentifierApi Identifier;

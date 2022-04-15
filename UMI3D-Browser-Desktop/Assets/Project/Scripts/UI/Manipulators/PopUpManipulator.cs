@@ -26,14 +26,14 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected Vector2 start;
         protected bool active = false;
         protected VisualElement m_popup;
-
-        public PopUpManipulator(VisualElement visualTarget, bool stopPropagation = true) :
-            base(visualTarget, null, null, stopPropagation, null, null)
-        { m_popup = visualTarget; }
     }
 
     public partial class PopUpManipulator : VisualManipulator
     {
+        public PopUpManipulator(VisualElement visualTarget, bool stopPropagation = true) :
+            base(stopPropagation)
+        { m_popup = visualTarget; }
+
         #region Registrations
 
         /// <summary>
