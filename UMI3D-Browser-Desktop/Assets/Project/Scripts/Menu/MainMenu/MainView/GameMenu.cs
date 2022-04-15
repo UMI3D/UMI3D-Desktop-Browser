@@ -24,8 +24,6 @@ namespace umi3dDesktopBrowser.ui
     {
         [SerializeField]
         private UIDocument m_uiDoc;
-        [SerializeField]
-        string gameMenuTagName = "game-menu-container";
 
         [Header("Menu Displayer")]
         [SerializeField]
@@ -71,7 +69,7 @@ namespace umi3dDesktopBrowser.ui
 
         private void BindUI()
         {
-            m_mainView = m_root.Q(gameMenuTagName);
+            m_mainView = m_root.Q("game-menu-container");
             m_viewport = m_root.Q("viewport");
             m_leftSideMenu = m_root.Q("left-side-menu");
             m_leftSideMenuDownUp = m_root.Q("leftSideDownUp");

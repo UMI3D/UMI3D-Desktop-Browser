@@ -72,7 +72,7 @@ namespace BrowserDesktop.Controller
             {
                 if (m_isCursorMovementFree)
                 {
-                    CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+                    CursorHandler.UnSetMovement(this);
                     IsFreeAndHovering = false;
                 }
                 else

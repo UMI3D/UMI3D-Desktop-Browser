@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 Gfi Informatique
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,13 +16,16 @@ limitations under the License.
 using BrowserDesktop.Menu;
 using inetum.unityUtils;
 using System.Collections.Generic;
+using umi3d.cdk.collaboration;
 using UnityEngine;
 
 namespace BrowserDesktop.Cursor
 {
-    public class CursorHandler : PersistentSingleBehaviour<CursorHandler>
+    public partial class CursorHandler
     {
-        //SpriteRenderer spriteRenderer;
+        public enum CursorState { Default, Hover, Clicked, FollowCursor }
+        public enum CursorMovement { Free, Center, Confined, FreeHidden }
+
         public Texture2D HintCursor;
         public RectTransform CrossCursor;
         public RectTransform CircleCursor;
@@ -30,66 +33,58 @@ namespace BrowserDesktop.Cursor
         public RectTransform LeftClickOptionCursor;
         public RectTransform LeftClickExitCursor;
         public RectTransform FollowCursor;
-
-        public enum CursorState { Default, Hover, Clicked, FollowCursor }
-        public enum CursorMovement { Free, Center, Confined, FreeHiden }
-
         public bool MenuIndicator = false;
         public bool ExitIndicator = false;
+        public CursorMode cursorMode = CursorMode.Auto;
+        public Vector2 hotSpot = Vector2.zero;
+        [SerializeField]
+        private bool LastMenuState = false;
 
-
-        Dictionary<object, CursorMovement> MovementMap = new Dictionary<object, CursorMovement>();
-
-        void MapToMovement()
-        {
-            CursorMovement movement = CursorMovement.FreeHiden;
-            if (MovementMap.Count == 0) movement = CursorMovement.Free;
-            else
-            foreach(var move in MovementMap.Values)
-            {
-                if (move < movement)
-                {
-                    movement = move;
-                    if (movement == CursorMovement.Free) break;
-                }
-            }
-            if (movement != cursorMovement) { movementUpdated = true; cursorMovement = movement; }
+        public static CursorState State 
+        { 
+            get => Exists ? Instance.state : CursorState.Default;
+            set 
+            { 
+                if (Exists && Instance.state != value)
+                    Instance.state = value; Instance.stateUpdated = true;
+            } 
         }
+        public static CursorMovement Movement => Exists ? Instance.cursorMovement : CursorMovement.Free;
+
+        private Dictionary<object, CursorMovement> MovementMap = new Dictionary<object, CursorMovement>();
+        private CursorState state;
+        private CursorMovement cursorMovement;
+        private bool stateUpdated = true;
+        private bool movementUpdated = true;
+
+        private bool m_isMovementCenterOrFreeHidden => cursorMovement == CursorMovement.Center || cursorMovement == CursorMovement.FreeHidden;
+    }
 
 
-        CursorState state;
-        CursorMovement cursorMovement;
-        bool stateUpdated = true;
-        bool movementUpdated = true;
-        public static CursorState State { get { return Exists ? Instance.state : CursorState.Default; } set { if (Exists && Instance.state != value) { Instance.state = value; Instance.stateUpdated = true; } } }
-        public static CursorMovement Movement { get { return Exists ? Instance.cursorMovement : CursorMovement.Free; } }
-
+    public partial class CursorHandler : SingleBehaviour<CursorHandler>
+    {
+        /// <summary>
+        /// Add the Object to the map of movement.
+        /// </summary>
+        /// <param name="Object"></param>
+        /// <param name="movement"></param>
         public static void SetMovement(object Object, CursorMovement movement)
         {
+            if (!Exists)
+                return;
             Instance.MovementMap[Object] = movement;
             Instance.MapToMovement();
         }
-
         /// <summary>
         /// Remove the Object from the map of movement.
         /// </summary>
         /// <param name="Object"></param>
         public static void UnSetMovement(object Object)
         {
+            if (!Exists)
+                return;
             Instance.MovementMap.Remove(Object);
             Instance.MapToMovement();
-        }
-
-        public CursorMode cursorMode = CursorMode.Auto;
-        public Vector2 hotSpot = Vector2.zero;
-
-        [SerializeField]
-        bool LastMenuState = false;
-
-        private void Start()
-        {
-            stateUpdated = true;
-            movementUpdated = true;
         }
 
         public void Clear()
@@ -97,85 +92,89 @@ namespace BrowserDesktop.Cursor
             MovementMap.Clear();
         }
 
-
-        private void Update()
+        private void MapToMovement()
         {
-            transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            
-            if (movementUpdated)
+            CursorMovement movement = CursorMovement.FreeHidden;
+            if (MovementMap.Count > 0) 
             {
-                switch (cursorMovement)
+                foreach (var move in MovementMap.Values)
                 {
-                    case CursorMovement.Center:
-                        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-                        UnityEngine.Cursor.visible = false;
-                        //State = CursorState.Default;
-                        break;
-                    case CursorMovement.Free:
-                        UnityEngine.Cursor.lockState = CursorLockMode.None;
-                        UnityEngine.Cursor.visible = true;
-                        break;
-                    case CursorMovement.FreeHiden:
-                        UnityEngine.Cursor.lockState = CursorLockMode.None;
-                        UnityEngine.Cursor.visible = false;
-                        break;
-                    case CursorMovement.Confined:
-                        UnityEngine.Cursor.lockState = CursorLockMode.Confined;
-                        UnityEngine.Cursor.visible = true;
-                        break;
+                    if (move >= movement) continue;
+                    movement = move;
+                    if (movement == CursorMovement.Free) break;
                 }
-                movementUpdated = false;
             }
-            bool newMenuState = cursorMovement == CursorMovement.Center || cursorMovement == CursorMovement.FreeHiden;
-            if ((stateUpdated || LastMenuState != newMenuState) && CursorDisplayer.Exists)
-            {
-                LastMenuState = newMenuState;
-                if (LastMenuState)
-                {
-                    if (cursorMovement == CursorMovement.Center)
-                    {
-                        CursorDisplayer.Instance.DisplayCursor(true, state);
-					}
-                    else if (cursorMovement == CursorMovement.FreeHiden)
-                    {
-                        CursorDisplayer.Instance.DisplayCursor(true, CursorState.FollowCursor);
-                    }
-                }
-                /*if (CrossCursor.gameObject.activeSelf != (cursorMovement == CursorMovement.Center && state == CursorState.Default && LastMenuState))
-                    CrossCursor.gameObject.SetActive(cursorMovement == CursorMovement.Center && state == CursorState.Default && LastMenuState);
-                
-                if (CircleCursor.gameObject.activeSelf != (cursorMovement == CursorMovement.Center && state == CursorState.Hover && LastMenuState))
-                    CircleCursor.gameObject.SetActive(cursorMovement == CursorMovement.Center && state == CursorState.Hover && LastMenuState);
-                
-                if (ClickedCursor.gameObject.activeSelf != (cursorMovement == CursorMovement.Center && state == CursorState.Clicked && LastMenuState))
-                    ClickedCursor.gameObject.SetActive(cursorMovement == CursorMovement.Center && state == CursorState.Clicked && LastMenuState);
+            else 
+                movement = CursorMovement.Free;
 
-                if (FollowCursor.gameObject.activeSelf != (cursorMovement == CursorMovement.FreeHiden && LastMenuState))
-                    FollowCursor.gameObject.SetActive(cursorMovement == CursorMovement.FreeHiden && LastMenuState);*/
+            if (movement == cursorMovement) return;
+            movementUpdated = true; 
+            cursorMovement = movement;
+        }
 
-                stateUpdated = false;
-            }
-
-            if (CursorDisplayer.Exists && CursorDisplayer.Instance.IsSettingsCursorDisplayed() != (LastMenuState && MenuIndicator))
-                CursorDisplayer.Instance.DisplaySettingsCursor(LastMenuState && MenuIndicator);
-                
-
-            /*if (LeftClickOptionCursor.gameObject.activeSelf != (LastMenuState && MenuIndicator))
-                LeftClickOptionCursor.gameObject.SetActive(LastMenuState && MenuIndicator);*/
-
-            //TODO
-            /*if (LeftClickExitCursor.gameObject.activeSelf != (LastMenuState && ExitIndicator))
-                LeftClickExitCursor.gameObject.SetActive(LastMenuState && ExitIndicator);*/
-
-            /*if (FollowCursor.gameObject.activeSelf)
-                FollowCursor.position = Input.mousePosition - new Vector3(Screen.width/2,Screen.height/2,0);*/
-
+        private void Start()
+        {
+            LastMenuState = false;
+            stateUpdated = true;
+            movementUpdated = true;
+            UMI3DCollaborationClientServer.LoggingOut += Clear;
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            UMI3DCollaborationClientServer.LoggingOut -= Clear;
             Destroy(gameObject);
+        }
+
+        private void Update()
+        {
+            transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            UpdateUnityCursor();
+            
+            if ((stateUpdated || LastMenuState != m_isMovementCenterOrFreeHidden) && CursorDisplayer.Exists)
+            {
+                LastMenuState = m_isMovementCenterOrFreeHidden;
+                if (LastMenuState)
+                {
+                    if (cursorMovement == CursorMovement.Center)
+                        CursorDisplayer.Instance.DisplayCursor(true, state);
+                    else if (cursorMovement == CursorMovement.FreeHidden)
+                        CursorDisplayer.Instance.DisplayCursor(true, CursorState.FollowCursor);
+                }
+                stateUpdated = false;
+            }
+
+            if (CursorDisplayer.Exists && CursorDisplayer.Instance.IsSettingsCursorDisplayed() != (LastMenuState && MenuIndicator))
+                CursorDisplayer.Instance.DisplaySettingsCursor(LastMenuState && MenuIndicator);
+        }
+
+        private void UpdateUnityCursor()
+        {
+            if (!movementUpdated)
+                return;
+
+            switch (cursorMovement)
+            {
+                case CursorMovement.Center:
+                    UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+                    UnityEngine.Cursor.visible = false;
+                    break;
+                case CursorMovement.Free:
+                    UnityEngine.Cursor.lockState = CursorLockMode.None;
+                    UnityEngine.Cursor.visible = true;
+                    break;
+                case CursorMovement.FreeHidden:
+                    UnityEngine.Cursor.lockState = CursorLockMode.None;
+                    UnityEngine.Cursor.visible = false;
+                    break;
+                case CursorMovement.Confined:
+                    UnityEngine.Cursor.lockState = CursorLockMode.Confined;
+                    UnityEngine.Cursor.visible = true;
+                    break;
+            }
+            movementUpdated = false;
         }
     }
 }

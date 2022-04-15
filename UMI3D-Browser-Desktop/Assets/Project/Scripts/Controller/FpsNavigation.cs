@@ -166,7 +166,7 @@ public class FpsNavigation : AbstractNavigation
 
         float height = jumpData.heigth;
 
-        if (CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHiden)
+        if (CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHidden)
         {
             Vector3 position = Node.transform.position;
 

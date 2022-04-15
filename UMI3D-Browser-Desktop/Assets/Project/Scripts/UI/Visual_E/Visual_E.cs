@@ -104,9 +104,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// Reset at default (should be abled to set the properties againe).
         /// </summary>
         public virtual void Reset()
-        {
-            Remove();
-        }
+        { }
         /// <summary>
         /// Prepare for destruction.
         /// </summary>
