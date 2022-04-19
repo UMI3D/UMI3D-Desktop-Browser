@@ -121,17 +121,6 @@ namespace umi3d.cdk.menu
         }
 
         ///<inheritdoc/>
-        public override bool Contains(AbstractMenuItem abstractMenuItem)
-        {
-            if (abstractMenuItem is MenuItem menuItem)
-                return MenuItems.Contains(menuItem);
-            else if (abstractMenuItem is Menu menu)
-                return SubMenu.Contains(menu);
-            else
-                return false;
-        }
-
-        ///<inheritdoc/>
         public override int Count => MenuItems.Count + SubMenu.Count;
 
         ///<inheritdoc/>

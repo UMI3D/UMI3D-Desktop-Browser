@@ -52,9 +52,9 @@ namespace umi3d.cdk.interaction
 
                 ToolboxDto dto = tool.dto as ToolboxDto;
 
-                if (!tool.isInsideToolbox)
+                if (tool.isInsideToolbox)
                 {
-                    if (toolboxIdToMenu.ContainsKey(tool.parent.id))
+                    if (tool.parent != null && toolboxIdToMenu.ContainsKey(tool.parent.id))
                     {
                         ToolboxMenu parentMenu = (toolboxIdToMenu[tool.parent.id] as ToolboxMenu);
                         parentMenu.Add(tbmenu);
@@ -77,7 +77,7 @@ namespace umi3d.cdk.interaction
                 foreach(AbstractMenuItem menu in menuToStoreInMenuAsset.ToList())
                 {
                     GlobalToolMenu gtm = menu as GlobalToolMenu;
-                    if ((gtm != null) && (tool.parent.id == dto.id))
+                    if ((gtm != null) && tool.parent != null && (tool.parent.id == dto.id))
                     {
                         tbmenu.Add(gtm);
                         gtm.parent = tbmenu;
@@ -85,7 +85,7 @@ namespace umi3d.cdk.interaction
                     }
 
                     ToolboxMenu tbm = menu as ToolboxMenu;
-                    if ((tbm != null) && (tool.parent.id == dto.id))
+                    if ((tbm != null) && tool.parent != null && (tool.parent.id == dto.id))
                     {
                         tbmenu.Add(tbm);
                         tbm.parent = tbmenu;
@@ -100,7 +100,7 @@ namespace umi3d.cdk.interaction
                 GlobalToolDto dto = tool.dto as GlobalToolDto;
                 if (tool.isInsideToolbox)
                 {
-                    if (toolboxIdToMenu.ContainsKey(tool.parent.id))
+                    if (tool.parent != null && toolboxIdToMenu.ContainsKey(tool.parent.id))
                     {
                         ToolboxMenu parentMenu = toolboxIdToMenu[tool.parent.id] as ToolboxMenu;
                         parentMenu.Add(menu);
