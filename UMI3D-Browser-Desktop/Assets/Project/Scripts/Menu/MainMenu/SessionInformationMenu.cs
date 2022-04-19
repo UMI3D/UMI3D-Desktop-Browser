@@ -20,6 +20,7 @@ using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.common;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
@@ -70,14 +71,9 @@ namespace BrowserDesktop.Menu
 
             //Bottom Bar
 
-
-            /*DisplayConsole(false);
-            microphoneBtn.RegisterCallback<MouseDownEvent>(e => { 
-                if(e.pressedButtons == 2)
-                    DisplayConsole(!isDisplayed);
-            });
-
-            InitMicrophoneSlider(microphoneSetter);*/
+            microphoneSetter = root.Q<VisualElement>("microphone-setter");
+            HideMicrophoneSettingsPopUp();
+            InitMicrophoneSlider(microphoneSetter);
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
             {
@@ -87,15 +83,35 @@ namespace BrowserDesktop.Menu
 
         private void Update()
         {
-            /*if(umi3d.cdk.collaboration.MicrophoneListener.Exists)
-                if(displayMicrophoneSlider && GainSlider.DisplayedValue != umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS)
+            if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+                if (displayMicrophoneSlider && GainSlider.DisplayedValue != umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS)
                 {
                     GainSlider.DisplayedValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS;
                     ThresholdSlider.DisplayedValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS;
-                }*/
+                }
+
+            if (Input.GetKeyDown(KeyCode.F8))
+            {
+                if (microphoneSetter.resolvedStyle.display == DisplayStyle.Flex)
+                    HideMicrophoneSettingsPopUp();
+                else
+                    DisplayMicrophoneSettingsPopUp();
+            }
         }
 
-        /*void InitMicrophoneSlider(VisualElement root)
+        private void HideMicrophoneSettingsPopUp()
+        {
+            microphoneSetter.style.display = DisplayStyle.None;
+        }
+
+        private void DisplayMicrophoneSettingsPopUp()
+        {
+            GainSlider.Value = GToP(umi3d.cdk.collaboration.MicrophoneListener.Gain);
+
+            microphoneSetter.style.display = DisplayStyle.Flex;
+        }
+
+        void InitMicrophoneSlider(VisualElement root)
         {
             var okColors = new MicrophoneSliderColor(0.5f, new UnityEngine.Color(0f, 1f, 0f));
             var saturatedColors = new MicrophoneSliderColor(0.9f, new UnityEngine.Color(1f, 0f, 0f));
@@ -116,8 +132,7 @@ namespace BrowserDesktop.Menu
                     ThresholdSlider.RefreshColor();
                 });
 
-
-            *//*GainSlider = new MicrophoneSlider(root.Q<VisualElement>("gain-bar"),"Gain",
+            GainSlider = new MicrophoneSlider(root.Q<VisualElement>("gain-bar"),"Gain",
                 (i) => { float r; return (float.TryParse(i, out r), GToP(r)); },
                 (f) => { return (PToG(f)).ToString(); },
                 GToP(umi3d.cdk.collaboration.MicrophoneListener.Gain), 0f, 0f, 1f, 0.01f, colors);
@@ -134,8 +149,8 @@ namespace BrowserDesktop.Menu
             {
                 okColors.Startvalue = v;
                 umi3d.cdk.collaboration.MicrophoneListener.NoiseThreshold = v;
-            });*//*
-        }*/
+            });
+        }
 
         float GToP(float f)
         {
