@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 Gfi Informatique
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,14 +15,13 @@ limitations under the License.
 */
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
-using BrowserDesktop.Menu;
 using inetum.unityUtils;
-using System.Collections;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
 using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
+using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 
 namespace BrowserDesktop.Interaction
@@ -30,6 +29,8 @@ namespace BrowserDesktop.Interaction
     [System.Serializable]
     public class KeyInput : AbstractUMI3DInput
     {
+        #region Fields
+
         /// <summary>
         /// Button to activate this input.
         /// </summary>
@@ -60,44 +61,114 @@ namespace BrowserDesktop.Interaction
         /// </summary>
         protected bool risingEdgeEventSent = false;
 
-        EventDisplayer eventDisplayer;
-
         ulong toolId;
 
         ulong hoveredObjectId;
         private bool swichOnDown = false;
         public bool SwichOnDown { get => swichOnDown; protected set => swichOnDown = value; }
 
+        #endregion
+
+        #region Monobehaviour Life Cycle
+
         protected virtual void Start()
         {
-            StartCoroutine(InitEventDisplayer());
             onInputDown.AddListener(() =>
             {
                 SwichOnDown = (CursorHandler.State == CursorHandler.CursorState.Hover);
                 if (SwichOnDown)
-                {
                     CursorHandler.State = CursorHandler.CursorState.Clicked;
-                }
             });
             onInputUp.AddListener(() =>
             {
                 if (SwichOnDown && CursorHandler.State == CursorHandler.CursorState.Clicked)
-                {
                     CursorHandler.State = CursorHandler.CursorState.Hover;
-                }
             });
         }
 
-
-
-
-        IEnumerator InitEventDisplayer()
+        protected virtual void Update()
         {
-            yield return null;
-            eventDisplayer = EventMenu.CreateDisplayer();
-            eventDisplayer?.Display(false);
+            if (LastFrameButton != InputLayoutManager.GetInputCode(activationButton))
+            {
+                ResetButton();
+                LastFrameButton = InputLayoutManager.GetInputCode(activationButton);
+            }
+            
+            if (associatedInteraction != null && !MouseAndKeyboardController.IsFreeAndHovering)
+            {
+                if (Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)))
+                {
+
+                    if (associatedInteraction.TriggerAnimationId != 0)
+                        StartAnim(associatedInteraction.TriggerAnimationId);
+
+                    onInputDown.Invoke();
+                    Down = true;
+
+                    if ((associatedInteraction).hold)
+                        SetEventDTO<EventStateChangedDto>(true);
+                    else
+                        SetEventDTO<EventTriggeredDto>();
+                }
+
+                if (Input.GetKeyUp(InputLayoutManager.GetInputCode(activationButton)) || Down && !Input.GetKey(InputLayoutManager.GetInputCode(activationButton)))
+                {
+                    onInputUp.Invoke();
+                    Down = false;
+
+                    if (associatedInteraction.ReleaseAnimationId != 0)
+                        StartAnim(associatedInteraction.ReleaseAnimationId);
+
+                    if ((associatedInteraction).hold && risingEdgeEventSent)
+                        SetEventDTO<EventStateChangedDto>();
+                }
+            }
         }
 
+        #endregion
+
+        private void SetEventDTO<T>(bool val = false) where T : InteractionRequestDto, new()
+        {
+            if (typeof(T).IsAssignableFrom(typeof(EventStateChangedDto)))
+            {
+                EventStateChangedDto eventdto = new EventStateChangedDto
+                {
+                    active = val,
+                    boneType = bone,
+                    id = associatedInteraction.id,
+                    toolId = this.toolId,
+                    hoveredObjectId = hoveredObjectId
+                };
+                UMI3DClientServer.SendData(eventdto, true);
+                risingEdgeEventSent = val;
+                MouseAndKeyboardController.IsInputHold = val;
+            }
+            else if (typeof(T).IsAssignableFrom(typeof(EventTriggeredDto)))
+            {
+                EventTriggeredDto eventdto = new EventTriggeredDto
+                {
+                    boneType = bone,
+                    id = associatedInteraction.id,
+                    toolId = this.toolId,
+                    hoveredObjectId = hoveredObjectId
+                };
+                UMI3DClientServer.SendData(eventdto, true);
+            }
+        }
+
+        private void StartAnim(ulong id)
+        {
+            UMI3DNodeAnimation.Get(id)?.Start();
+        }
+
+        private void DisplayInput(string label, string inputName, Texture2D icon = null)
+        {
+            if (icon != null)
+                throw new System.Exception("Not implemented yet");
+            Shortcutbox_E.Instance.AddShortcut(label, inputName);
+        }
+
+        #region Associate and Dissociate
 
         public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
@@ -111,74 +182,44 @@ namespace BrowserDesktop.Interaction
                 associatedInteraction = interaction as EventDto;
                 this.hoveredObjectId = hoveredObjectId;
                 this.toolId = toolId;
-                if (associatedInteraction.icon2D != null)
+
+                FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariant(associatedInteraction.icon2D?.variants);
+
+                if (fileToLoad != null)
                 {
-                    FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariant(associatedInteraction.icon2D.variants);
+                    string url = fileToLoad.url;
+                    string ext = fileToLoad.extension;
+                    string authorization = fileToLoad.authorization;
+                    IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(ext);
 
-                    if (fileToLoad != null)
+                    if (loader != null)
                     {
-                        string url = fileToLoad.url;
-                        string ext = fileToLoad.extension;
-                        string authorization = fileToLoad.authorization;
-                        IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(ext);
-
-                        if (loader != null)
-                        {
-                            UMI3DResourcesManager.LoadFile(
-                                interaction.id,
-                                fileToLoad,
-                                loader.UrlToObject,
-                                loader.ObjectFromCache,
-                                (o) =>
-                                {
-                                    var obj = o as Texture2D;
-                                    if (obj == null)
-                                        DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
-                                    else
-                                        DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
-                                },
-                                (Umi3dException str) =>
-                                {
-                                    DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
-                                },
-                                loader.DeleteObject
-                                );
-                        }
-                        else
-                            DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
-                    } else
-                    {
-                        DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                        UMI3DResourcesManager.LoadFile(
+                            interaction.id,
+                            fileToLoad,
+                            loader.UrlToObject,
+                            loader.ObjectFromCache,
+                            (o) =>
+                            {
+                                var obj = o as Texture2D;
+                                if (obj == null)
+                                    DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                                else
+                                    DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
+                            },
+                            (Umi3dException str) =>
+                            {
+                                DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                            },
+                            loader.DeleteObject
+                            );
                     }
+                    else
+                        DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                 }
-
-                //HDResourceCache.Download(associatedInteraction.Icon2D, Texture2D =>
-                //{
-                //    if (EventDisplayer != null && associatedInteraction != null && Texture2D != null)
-                //    {
-                //        EventDisplayer.gameObject.SetActive(true);
-                //        EventDisplayer.Set(associatedInteraction.Name, InputLayoutManager.GetInputCode(activationButton).ToString(), Sprite.Create(Texture2D, new Rect(0.0f, 0.0f, Texture2D.width, Texture2D.height), new Vector2(0.5f, 0.5f), 100.0f));
-                //    }
-                //    //else
-                //    //{
-                //    //    EventDisplayer.gameObject.SetActive(true);
-                //    //    EventDisplayer.Set(associatedInteraction.Name, InputLayoutManager.GetInputCode(activationButton).ToString(), null);
-
-                //    //    Destroy(Texture2D);
-                //    //}
-                //},
-                //webrequest =>
-                //{
-                //    if (EventDisplayer != null && associatedInteraction != null)
-                //    {
-                //        EventDisplayer.gameObject.SetActive(true);
-                //        EventDisplayer.Set(associatedInteraction.Name, InputLayoutManager.GetInputCode(activationButton).ToString(), null);
-                //    }
-                //});
                 else
                 {
-                    Debug.Log("Pas d'icone pour " + InputLayoutManager.GetInputCode(activationButton).ToString());
-                    DiplayDisplayer(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                    DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
                 }
             }
             else
@@ -187,133 +228,33 @@ namespace BrowserDesktop.Interaction
             }
         }
 
-        private void DiplayDisplayer(string label, string inputName, Texture2D icon = null)
-        {
-            if (eventDisplayer != null)
-            {
-                eventDisplayer.Display(true);
-                eventDisplayer.SetUp(label, inputName, icon);
-            }
-        }
-
-        protected virtual void Update()
-        {
-
-            if (LastFrameButton != InputLayoutManager.GetInputCode(activationButton))
-            {
-                ResetButton();
-                LastFrameButton = InputLayoutManager.GetInputCode(activationButton);
-            }
-
-            if (associatedInteraction != null && (!SideMenu.Exists || !SideMenu.IsExpanded))
-            {
-                if (Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)))
-                {
-
-                    if (associatedInteraction.TriggerAnimationId != 0)
-                    {
-                        UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(associatedInteraction.TriggerAnimationId);
-                        if (anim != null)
-                            anim.Start();
-                    }
-
-                    onInputDown.Invoke();
-                    Down = true;
-
-                    if ((associatedInteraction).hold)
-                    {
-                        var eventdto = new EventStateChangedDto
-                        {
-                            active = true,
-                            boneType = bone,
-                            id = associatedInteraction.id,
-                            toolId = this.toolId,
-                            hoveredObjectId = hoveredObjectId
-                        };
-                        UMI3DClientServer.SendData(eventdto, true);
-                        risingEdgeEventSent = true;
-                        MouseAndKeyboardController.isInputHold = true;
-                    }
-                    else
-                    {
-                        var eventdto = new EventTriggeredDto
-                        {
-                            boneType = bone,
-                            id = associatedInteraction.id,
-                            toolId = this.toolId,
-                            hoveredObjectId = hoveredObjectId
-                        };
-                        UMI3DClientServer.SendData(eventdto, true);
-                    }
-                }
-
-                if (Input.GetKeyUp(InputLayoutManager.GetInputCode(activationButton)) || Down && !Input.GetKey(InputLayoutManager.GetInputCode(activationButton)))
-                {
-                    onInputUp.Invoke();
-                    Down = false;
-
-                    if (associatedInteraction.ReleaseAnimationId != 0)
-                    {
-                        UMI3DNodeAnimation anim = UMI3DNodeAnimation.Get(associatedInteraction.ReleaseAnimationId);
-                        if (anim != null)
-                            anim.Start();
-                    }
-
-                    if ((associatedInteraction).hold)
-                    {
-                        if (risingEdgeEventSent)
-                        {
-                            var eventdto = new EventStateChangedDto
-                            {
-                                active = false,
-                                boneType = bone,
-                                id = associatedInteraction.id,
-                                toolId = this.toolId,
-                                hoveredObjectId = hoveredObjectId
-                            };
-                            UMI3DClientServer.SendData(eventdto, true);
-                            risingEdgeEventSent = false;
-                            MouseAndKeyboardController.isInputHold = false;
-                        }
-                    }
-                }
-            }
-        }
-
         public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
             throw new System.NotImplementedException();
-        }
-
-        public override AbstractInteractionDto CurrentInteraction()
-        {
-            return associatedInteraction;
         }
 
         public override void Dissociate()
         {
             if (Down) onInputUp.Invoke();
             ResetButton();
-            eventDisplayer?.Display(false);
             associatedInteraction = null;
+            Shortcutbox_E.Instance.ClearShortcut();
         }
 
         void ResetButton()
         {
             if (associatedInteraction != null && (associatedInteraction).hold && risingEdgeEventSent)
             {
-                var eventdto = new EventStateChangedDto
-                {
-                    active = false,
-                    boneType = bone,
-                    id = associatedInteraction.id,
-                    toolId = this.toolId,
-                    hoveredObjectId = hoveredObjectId
-                };
-                UMI3DClientServer.SendData(eventdto, true);
-                MouseAndKeyboardController.isInputHold = false;
+                SetEventDTO<EventStateChangedDto>();
             }
             risingEdgeEventSent = false;
+        }
+
+        #endregion
+
+        public override AbstractInteractionDto CurrentInteraction()
+        {
+            return associatedInteraction;
         }
 
         public override bool IsCompatibleWith(AbstractInteractionDto interaction)

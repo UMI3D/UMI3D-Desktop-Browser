@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Scroller-Background">
+        <ui:VisualElement name="Scroller-Forground" />
+        <ui:Scroller high-value="100" direction="Vertical" value="42" />
+    </ui:VisualElement>
+</ui:UXML>

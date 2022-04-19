@@ -14,15 +14,18 @@ limitations under the License.
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
+using BrowserDesktop.preferences;
 using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
+using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3d.common;
 using umi3d.common.interaction;
+using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -36,7 +39,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 {
     #region Fields
 
-    private UserPreferencesManager.Data connectionData;
+    private ServerPreferences.Data connectionData;
 
     public ClientPCIdentifier identifier;
 
@@ -47,9 +50,6 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
     [SerializeField]
     private string launcherScene = null;
-
-    [SerializeField]
-    private VisualTreeAsset dialogueBoxTreeAsset = null;
 
     private LoadingBar loader;
 
@@ -103,9 +103,18 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     {
         InitUI();
 
-
         UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
+        MenuBar_E.Instance.LeaveButton.OnClicked = () =>
+        {
+            string title = "Leave environment";
+            string message = "Are you sure ...?";
+            DialogueBox_E.Setup(title, message, "YES", "NO", (b) =>
+            {
+                if (b)
+                    Leave();
+            }, uiDocument);
+        };
     }
 
     private void Update()
@@ -114,25 +123,12 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     }
 
     /// <summary>
-    /// Manages the Return and Escape inputs to navigate through the menu.
+    /// Manages the Return input to navigate through the menu.
     /// </summary>
     private void ManageInputs()
     {
-        if (!isDisplayed)
-            return;
-
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            if (DialogueBoxElement.IsADialogueBoxDislayed)
-                DialogueBoxElement.CloseDialogueBox(true);
-            else
-                nextStep?.Invoke();
-        }
-        else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
-        {
-            if (DialogueBoxElement.IsADialogueBoxDislayed)
-                DialogueBoxElement.CloseDialogueBox(false);
-        }
+        if (!isDisplayed || DialogueBox_E.Instance.IsDisplaying) return;
+        else if (Input.GetKeyDown(KeyCode.Return)) nextStep?.Invoke();
     }
 
     #endregion
@@ -143,7 +139,8 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     {
         VisualElement root = uiDocument.rootVisualElement;
 
-        loader = new LoadingBar(root);
+        loader = LoadingBar.Instance;
+        loader.Setup(root);
         loader.SetText("Connection");
 
         loadingScreen = root.Q<VisualElement>("loading-screen");
@@ -206,7 +203,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     /// Uses the connection data to connect to te server.
     /// </summary>
     /// <param name="connectionData"></param>
-    public void Connect(UserPreferencesManager.Data connectionData)
+    public void Connect(ServerPreferences.Data connectionData)
     {
         this.connectionData = connectionData;
 
@@ -226,7 +223,11 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         cam.clearFlags = CameraClearFlags.SolidColor;
         UMI3DEnvironmentLoader.Clear();
         UMI3DResourcesManager.Instance.ClearCache();
-        UMI3DCollaborationClientServer.Logout(() => { GameObject.Destroy(UMI3DClientServer.Instance.gameObject); }, null);
+        UMI3DCollaborationClientServer.Logout(() => 
+        { 
+            GameObject.Destroy(UMI3DClientServer.Instance.gameObject);
+            //CursorHandler.Instance.Clear();
+        }, null);
 
         SceneManager.LoadScene(launcherScene, LoadSceneMode.Single);
     }
@@ -249,14 +250,14 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
     private void GetMediaFailed(string error)
     {
-        var dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        uiDocument.rootVisualElement.Add(dialogueBox);
-
-
-        dialogueBox.Setup("Server error",
-            error,
-            "Leave",
-            Leave);
+        DialogueBox_E.
+            Setup(
+                "Server error",
+                error,
+                "Leave",
+                Leave,
+                uiDocument
+            );
     }
 
     private void GetMediaSucces(MediaDto media)
@@ -264,7 +265,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         this.connectionData.environmentName = media.name;
         this.uiDocument.rootVisualElement.Q<Label>("environment-name").text = media.name;
 
-        SessionInformationMenu.Instance.SetEnvironmentName(media, connectionData);
+        SessionInformationMenu.Instance.SetEnvironmentName(media);
 
         UMI3DCollaborationClientServer.Connect();
     }
@@ -283,14 +284,15 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
     private void OnConnectionLost(Action<bool> callback)
     {
-        var dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        uiDocument.rootVisualElement.Add(dialogueBox);
-
-        dialogueBox.Setup("Connection to the server lost",
-            "Leave to the connection menu or try again ?",
-            "Try again ?",
-            "Leave",
-            callback);
+        DialogueBox_E.
+            Setup(
+                "Connection to the server lost",
+                "Leave to the connection menu or try again ?",
+                "Try again ?",
+                "Leave",
+                callback,
+                uiDocument
+            );
     }
 
     /// <summary>
@@ -376,15 +378,19 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         {
             string title = (ids.Count == 1) ? "One assets library is required" : ids.Count + " assets libraries are required";
 
-            DialogueBoxElement dialogue = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-            dialogue.Setup(title, "Download libraries and connect to the server ?", "Accept", "Deny", (b) =>
-            {
-                callback.Invoke(b);
-                CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
-            },
-            true);
-
-            uiDocument.rootVisualElement.Add(dialogue);
+            DialogueBox_E.
+            Setup(
+                title, 
+                "Download libraries and connect to the server ?", 
+                "Accept", 
+                "Deny", 
+                (b) =>
+                {
+                    callback.Invoke(b);
+                    CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+                },
+                uiDocument
+                );
         }
     }
 
@@ -418,7 +424,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
             foreach (var param in form.fields)
             {
-                var c = GetInteractionItem(param);
+                var c = GlobalToolMenuManager.GetInteractionItem(param);
                 Menu.menu.Add(c.Item1);
                 answer.answers.Add(c.Item2);
             }
@@ -436,110 +442,11 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
             send.Subscribe(action);
             Menu.menu.Add(send);
             nextStep = () => action(true);
-            MenuDisplayManager.Display(true);
+            MenuDisplayManager.CreateMenuAndDisplay(true, false);
         }
     }
 
-    static (MenuItem,ParameterSettingRequestDto) GetInteractionItem(AbstractInteractionDto dto)
-    {
-        MenuItem result = null;
-        ParameterSettingRequestDto requestDto = null;
-        switch (dto)
-        {
-            case BooleanParameterDto booleanParameterDto:
-                var b = new BooleanInputMenuItem() { dto = booleanParameterDto };
-                b.NotifyValueChange(booleanParameterDto.value);
-                requestDto = new ParameterSettingRequestDto()
-                {
-                    toolId = dto.id,
-                    id = booleanParameterDto.id,
-                    parameter = booleanParameterDto.value,
-                    hoveredObjectId = 0
-                };
-                b.Subscribe((x) =>
-                {
-                    booleanParameterDto.value = x;
-                    requestDto.parameter = x;
-                });
-                result = b;
-                break;
-            case FloatRangeParameterDto floatRangeParameterDto:
-                var f = new FloatRangeInputMenuItem() { dto = floatRangeParameterDto, max = floatRangeParameterDto.max, min = floatRangeParameterDto.min, value = floatRangeParameterDto.value, increment = floatRangeParameterDto.increment };
-                requestDto = new ParameterSettingRequestDto()
-                {
-                    toolId = dto.id,
-                    id = floatRangeParameterDto.id,
-                    parameter = floatRangeParameterDto.value,
-                    hoveredObjectId = 0
-                };
-                f.Subscribe((x) =>
-                {
-                    floatRangeParameterDto.value = x;
-                    requestDto.parameter = x;
-                });
-                result = f;
-                break;
-            case EnumParameterDto<string> enumParameterDto:
-                var en = new DropDownInputMenuItem() { dto = enumParameterDto, options = enumParameterDto.possibleValues };
-                en.NotifyValueChange(enumParameterDto.value);
-                requestDto = new ParameterSettingRequestDto()
-                {
-                    toolId = dto.id,
-                    id = enumParameterDto.id,
-                    parameter = enumParameterDto.value,
-                    hoveredObjectId = 0
-                };
-                en.Subscribe((x) =>
-                {
-                    enumParameterDto.value = x;
-                    requestDto.parameter = x;
-                });
-                result = en;
-                break;
-            case StringParameterDto stringParameterDto:
-                var s = new TextInputMenuItem() { dto = stringParameterDto };
-                s.NotifyValueChange(stringParameterDto.value);
-                requestDto = new ParameterSettingRequestDto()
-                {
-                    toolId = dto.id,
-                    id = stringParameterDto.id,
-                    parameter = stringParameterDto.value,
-                    hoveredObjectId = 0
-                };
-                s.Subscribe((x) =>
-                {
-                    stringParameterDto.value = x;
-                    requestDto.parameter = x;
-                });
-                result = s;
-                break;
-            case LocalInfoRequestParameterDto localInfoRequestParameterDto:
-                LocalInfoRequestInputMenuItem localReq = new LocalInfoRequestInputMenuItem() { dto = localInfoRequestParameterDto };
-                localReq.NotifyValueChange(localInfoRequestParameterDto.value);
-                requestDto = new ParameterSettingRequestDto()
-                {
-                    toolId = dto.id,
-                    id = localInfoRequestParameterDto.id,
-                    parameter = localInfoRequestParameterDto.value,
-                    hoveredObjectId = 0
-                };
-                localReq.Subscribe((x) =>
-                {
-                    localInfoRequestParameterDto.value = x;
-                    requestDto.parameter = x;
-                }
-                );
-                result = localReq;
-                break;
-            default:
-                result = new MenuItem();
-                result.Subscribe(() => Debug.Log($"Missing case for {dto?.GetType()}"));
-                break;
-        }
-        result.Name = dto.name;
-        //icon;
-        return (result,requestDto);
-    }
+    
 
     #endregion
 

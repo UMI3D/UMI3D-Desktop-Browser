@@ -17,6 +17,7 @@ using BrowserDesktop.Menu;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.common.interaction;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace BrowserDesktop.Parameters
@@ -30,7 +31,6 @@ namespace BrowserDesktop.Parameters
         /// Associated menu item.
         /// </summary>
         public InputMenuItem menuItem;
-
 
         /// <summary>
         /// Interaction currently associated to this input.
@@ -51,9 +51,7 @@ namespace BrowserDesktop.Parameters
         public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
             if (currentInteraction != null)
-            {
                 throw new System.Exception("This input is already associated to another interaction (" + currentInteraction + ")");
-            }
 
             if (interaction is ParameterType)
             {
@@ -63,9 +61,7 @@ namespace BrowserDesktop.Parameters
                     dto = interaction as ParameterType,
                     Name = interaction.name
                 };
-                if (CircularMenu.Exists)
-                    CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
-
+                
                 menuItem.NotifyValueChange((interaction as ParameterType).value);
                 callback = x =>
                 {
@@ -83,6 +79,7 @@ namespace BrowserDesktop.Parameters
 
                 menuItem.Subscribe(callback);
                 currentInteraction = interaction;
+                Menu?.Add(menuItem);
             }
             else
             {
@@ -105,8 +102,7 @@ namespace BrowserDesktop.Parameters
         {
             currentInteraction = null;
             menuItem.UnSubscribe(callback);
-            if (CircularMenu.Exists)
-                CircularMenu.Instance?.menuDisplayManager?.menu?.Remove(menuItem);
+            Menu?.Remove(menuItem);
         }
 
         public override bool IsCompatibleWith(AbstractInteractionDto interaction)
