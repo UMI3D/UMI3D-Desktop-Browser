@@ -1,3 +1,4 @@
+using BrowserDesktop.Menu;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -200,9 +201,21 @@ public class MicrophoneSlider
     void SetValue()
     {
         float percent = Min != Max ? (Value - Min) / (Max - Min) : 1f;
-        cursor.style.left = percent*cursor.parent.layout.width;
+
+        if (cursor.parent.layout.width != 0)
+            cursor.style.left = percent * cursor.parent.layout.width;
+        else
+            SessionInformationMenu.StartCoroutine(WaitToUpdate(percent));
+
         input.value = ValueToInput?.Invoke(value) ?? "0";
         RefreshColor();
+    }
+
+    IEnumerator WaitToUpdate(float percent)
+    {
+        yield return null;
+
+        cursor.style.left = percent * cursor.parent.layout.width;
     }
 
     void SetDisplayedValue()
