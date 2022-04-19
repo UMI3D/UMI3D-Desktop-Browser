@@ -188,6 +188,8 @@ namespace BrowserDesktop.Controller
                     foreach (var input in associatedInputs[mouseData.CurrentHovered.dto.id])
                         input.UpdateHoveredObjectId(mouseData.CurrentHoveredId);
                 }
+
+                mouseData.CurrentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
             }
         }
 
