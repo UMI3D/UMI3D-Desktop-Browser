@@ -8,7 +8,7 @@ public class Debugger : PersistentSingleBehaviour<Debugger>
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F1))
+        if (Input.GetKeyDown(KeyCode.F8))
             DisplayInfo = !DisplayInfo;
 
         if (Input.GetKeyDown(KeyCode.F2) && umi3d.cdk.collaboration.MicrophoneListener.Exists)

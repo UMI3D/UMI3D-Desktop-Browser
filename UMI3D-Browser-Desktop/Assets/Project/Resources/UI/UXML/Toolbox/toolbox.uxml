@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="toolbox" style="justify-content: center;">
+        <ui:Label text="Label" display-tooltip-when-elided="true" name="toolbox-name" style="-unity-text-align: middle-center;" />
+        <ui:VisualElement name="scrollViewContainer" style="flex-grow: 1;" />
+    </ui:VisualElement>
+</ui:UXML>

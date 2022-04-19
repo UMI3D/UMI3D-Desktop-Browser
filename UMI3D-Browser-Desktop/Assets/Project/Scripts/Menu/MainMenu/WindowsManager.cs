@@ -15,10 +15,13 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using BrowserDesktop.Menu;
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UIElements;
+using umi3dDesktopBrowser.ui.viewController;
+using BrowserDesktop.Cursor;
 
 /// <summary>
 /// This class removes the default Windows title bar and set up a custom one.
@@ -50,10 +53,10 @@ public class WindowsManager : MonoBehaviour
 
     [Header("Custom title bar")]
 
-    [Tooltip("Tag name of the minimize button UXML element")]
+    [Tooltip("Tag name of the minimize window button UXML element")]
     [SerializeField]
     private readonly string minimizeTagName = "minimize-window-btn";
-    [Tooltip("Tag name of the maximize button UXML element")]
+    [Tooltip("Tag name of the maximize window button UXML element")]
     [SerializeField]
     private readonly string maximizeTagName = "fullscreen-btn";
     [Tooltip("Tag name of the close window button UXML element")]
@@ -64,8 +67,6 @@ public class WindowsManager : MonoBehaviour
     Button minimize_B;
     Button maximize_B;
     Button close_B;
-
-    public VisualTreeAsset dialogueBoxTreeAsset;
 
     #endregion
 
@@ -87,6 +88,12 @@ public class WindowsManager : MonoBehaviour
 
         Application.wantsToQuit += WantsToQuit;
         QuittingManager.ShouldWaitForApplicationToQuit = true;
+        DialogueBox_E
+            .SetCursorMovementActions
+            (
+                    (o) => { CursorHandler.SetMovement(o, CursorHandler.CursorMovement.Free); },
+                    (o) => { CursorHandler.UnSetMovement(o); }
+            );
     }
 
     /// <summary>
@@ -137,7 +144,7 @@ public class WindowsManager : MonoBehaviour
     private bool WantsToQuit()
     {
         bool wantsToQuit = QuittingManager.ApplicationIsQuitting;
-        if (!wantsToQuit && !DialogueBoxElement.IsADialogueBoxDislayed)
+        if (!wantsToQuit && !DialogueBox_E.Instance.IsDisplaying)
             ShowDialogueBoxToQuit();
         return wantsToQuit;
     }
@@ -147,14 +154,20 @@ public class WindowsManager : MonoBehaviour
     /// </summary>
     private void ShowDialogueBoxToQuit()
     {
-        DialogueBoxElement dialogueBox = dialogueBoxTreeAsset.CloneTree().Q<DialogueBoxElement>();
-        dialogueBox.Setup("Close application", "Are you sure ...?", "YES", "NO", (b) =>
-        {
-            QuittingManager.ApplicationIsQuitting = b;
-            if (b)
-                Application.Quit();
-        });
-        root.Add(dialogueBox);
+        DialogueBox_E.
+            Setup(
+            "Close application", 
+            "Are you sure ...?", 
+            "YES", 
+            "NO",
+            (b) =>
+            {
+                QuittingManager.ApplicationIsQuitting = b;
+                if (b)
+                    Application.Quit();
+            },
+            uiDocument
+            );
     }
 
     #endregion
