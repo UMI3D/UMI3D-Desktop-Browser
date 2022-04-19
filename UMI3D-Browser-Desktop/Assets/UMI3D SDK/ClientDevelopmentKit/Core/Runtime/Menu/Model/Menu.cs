@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace umi3d.cdk.menu
 {
@@ -146,7 +145,7 @@ namespace umi3d.cdk.menu
         public override IEnumerable<AbstractMenu> GetSubMenu()
             => SubMenu;
 
-
+        
 
         ///<inheritdoc/>
         public override string ToString()

@@ -196,6 +196,7 @@ namespace umi3d.cdk.collaboration
                             ouser.Destroy();
                         dto.userList = UMI3DNetworkingHelper.ReadList<UserDto>(container);
                         UserList = dto.userList.Select(u => new UMI3DUser(u)).ToList();
+                        OnUpdateUserList?.Invoke();
                         break;
                     }
             }
