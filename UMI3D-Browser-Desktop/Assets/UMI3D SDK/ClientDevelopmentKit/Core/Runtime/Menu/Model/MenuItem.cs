@@ -21,6 +21,8 @@ namespace umi3d.cdk.menu
     {
         ///<inheritdoc/>
         public override string ToString()
-            => Name;
+        {
+            return Name;
+        }
     }
 }

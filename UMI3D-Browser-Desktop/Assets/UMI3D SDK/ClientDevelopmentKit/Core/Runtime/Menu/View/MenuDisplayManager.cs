@@ -110,7 +110,7 @@ namespace umi3d.cdk.menu.view
             if (IsMenuCreated && !update)
                 return;
             IsMenuCreated = true;
-            
+
             Clear();
             m_root = CreateSubMenu(null, menu, 0);
             m_root.backButtonPressed.AddListener(firstButtonBackButtonPressed.Invoke);
