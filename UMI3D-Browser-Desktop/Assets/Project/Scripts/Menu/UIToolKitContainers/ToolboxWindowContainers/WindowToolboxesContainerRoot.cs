@@ -84,11 +84,5 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.Insert(element, index, updateDisplay);
         }
-
-        protected override void ItemAdded(AbstractDisplayer displayer)
-        { }
-
-        protected override void ItemTypeChanged(AbstractToolboxesContainer item)
-        { }
     }
 }

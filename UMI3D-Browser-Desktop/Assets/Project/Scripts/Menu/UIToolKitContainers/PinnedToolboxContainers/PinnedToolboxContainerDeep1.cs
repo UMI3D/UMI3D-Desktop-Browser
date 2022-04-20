@@ -39,6 +39,9 @@ namespace umi3d.desktopBrowser.menu.Container
             ToolboxItem = new ToolboxItem_E(false);
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected override void SetContainerAsToolbox()
         {
             ToolboxItem.OnClicked = () => Select();
@@ -48,6 +51,9 @@ namespace umi3d.desktopBrowser.menu.Container
             base.SetContainerAsToolbox();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected override void SetContainerAsTool()
         {
             ToolboxItem.OnClicked = () =>
@@ -61,6 +67,10 @@ namespace umi3d.desktopBrowser.menu.Container
             base.SetContainerAsTool();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="menu"></param>
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);
@@ -153,12 +163,22 @@ namespace umi3d.desktopBrowser.menu.Container
                     SetContainerAsTool();
                 Displayerbox.Add(displayer.Displayer);
             }
+            FindDeep0AndAddBoxToPinnedWindows();
         }
 
-        protected override void ItemAdded(AbstractDisplayer displayer)
-        { }
+        /// <summary>
+        /// Recursively search for container deep 0 and add box to pinned windows.
+        /// </summary>
+        private void FindDeep0AndAddBoxToPinnedWindows()
+        {
+            var parent = this.parent;
+            while (parent != null && !(parent is PinnedToolboxContainerDeep0))
+                parent = parent.parent;
 
-        protected override void ItemTypeChanged(AbstractToolboxesContainer item)
-            => OnItemTypeChanged?.Invoke(item);
+            if (parent == null)
+                throw new System.Exception("Parent null, not WindowToolboxesContainerDeep0");
+
+            (parent as PinnedToolboxContainerDeep0).AddBoxToPinnedWindows(this);
+        }
     }
 }
