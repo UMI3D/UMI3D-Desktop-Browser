@@ -68,7 +68,9 @@ namespace BrowserDesktop.Controller
 
         private void Update()
         {
-            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
+            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)) 
+                ||
+                Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
             {
                 if (m_isCursorMovementFree)
                 {

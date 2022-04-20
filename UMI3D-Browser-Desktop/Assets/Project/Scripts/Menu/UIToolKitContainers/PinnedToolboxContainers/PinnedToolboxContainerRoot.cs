@@ -25,6 +25,9 @@ namespace umi3d.desktopBrowser.menu.Container
             MenuBar_E.Instance.OnSubMenuMouseDownEvent += CollapseImp;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected override void CollapseImp()
         {
             foreach (AbstractDisplayer child in m_currentDisplayers)
@@ -37,6 +40,10 @@ namespace umi3d.desktopBrowser.menu.Container
             base.CollapseImp();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="container"></param>
         protected override void ExpandAsImp(AbstractMenuDisplayContainer container)
         {
             base.ExpandAsImp(container);
@@ -54,6 +61,12 @@ namespace umi3d.desktopBrowser.menu.Container
                 MenuBar_E.Instance.AddToolboxDeep0(containerDeep0.Toolbox);
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="updateDisplay"></param>
+        /// <returns></returns>
         public override bool Remove(AbstractDisplayer element, bool updateDisplay = true)
         {
             if (!base.Remove(element, updateDisplay))
@@ -62,11 +75,5 @@ namespace umi3d.desktopBrowser.menu.Container
                 MenuBar_E.Instance.RemoveToolboxDeep0(containerDeep0.Toolbox);
             return true;
         }
-
-        protected override void ItemAdded(AbstractDisplayer displayer)
-        { }
-
-        protected override void ItemTypeChanged(AbstractToolboxesContainer item)
-        { }
     }
 }

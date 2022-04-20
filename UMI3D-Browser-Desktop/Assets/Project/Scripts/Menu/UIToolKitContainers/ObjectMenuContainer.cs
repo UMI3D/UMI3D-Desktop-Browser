@@ -92,10 +92,5 @@ namespace umi3d.desktopBrowser.menu.Container
 
             return true;
         }
-
-        protected override void ItemAdded(AbstractDisplayer displayer)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

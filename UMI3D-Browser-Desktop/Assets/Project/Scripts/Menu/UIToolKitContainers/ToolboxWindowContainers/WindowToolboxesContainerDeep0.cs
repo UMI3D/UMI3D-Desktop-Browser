@@ -36,6 +36,10 @@ namespace umi3d.desktopBrowser.menu.Container
             ToolboxWindow_E.UnPinedButtonPressed -= () => WindowItem.PinUnpin(false);
         }
 
+        /// <summary>
+        /// Pin (if true) or unpin this container.
+        /// </summary>
+        /// <param name="value"></param>
         private void PinUnpin(bool value)
             => MenuBar_E.Instance.PinUnpin(value, (Menu)menu);
     }
@@ -137,19 +141,7 @@ namespace umi3d.desktopBrowser.menu.Container
                 if (ToolType != ItemType.Toolbox)
                     SetContainerAsToolbox();
                 WindowItem.AddToolboxItemInFirstToolbox(containerDeep1.ToolboxItem);
-                switch (containerDeep1.ToolType)
-                {
-                    case ItemType.Undefine:
-                        break;
-                    case ItemType.Tool:
-                        WindowItem.AddDisplayerbox(containerDeep1.Displayerbox);
-                        break;
-                    case ItemType.Toolbox:
-                        WindowItem.AddToolbox(containerDeep1.Toolbox);
-                        break;
-                    default:
-                        break;
-                }
+                AddBoxToWindowItem(containerDeep1);
             }
             else if (element is AbstractWindowInputDisplayer displayer)
             {
@@ -172,26 +164,26 @@ namespace umi3d.desktopBrowser.menu.Container
             Debug.Log("<color=green>TODO: </color>" + $"");
         }
 
-        protected override void ItemAdded(AbstractDisplayer displayer)
-        { }
-
-        protected override void ItemTypeChanged(AbstractToolboxesContainer item)
+        /// <summary>
+        /// Add displayerbox or toolbox from [item] to this container windowItem.
+        /// </summary>
+        /// <param name="item"></param>
+        public void AddBoxToWindowItem(AbstractToolboxesContainer item)
         {
-            if (item is WindowToolboxesContainerDeep1 containerDeep1Child)
+            if (!(item is WindowToolboxesContainerDeep1 containerDeep1))
+                return;
+            switch (containerDeep1.ToolType)
             {
-                switch (containerDeep1Child.ToolType)
-                {
-                    case ItemType.Undefine:
-                        break;
-                    case ItemType.Tool:
-                        WindowItem.AddDisplayerbox(containerDeep1Child.Displayerbox);
-                        break;
-                    case ItemType.Toolbox:
-                        WindowItem.AddToolbox(containerDeep1Child.Toolbox);
-                        break;
-                    default:
-                        break;
-                }
+                case ItemType.Undefine:
+                    break;
+                case ItemType.Tool:
+                    WindowItem.AddDisplayerbox(containerDeep1.Displayerbox);
+                    break;
+                case ItemType.Toolbox:
+                    WindowItem.AddToolbox(containerDeep1.Toolbox);
+                    break;
+                default:
+                    break;
             }
         }
     }

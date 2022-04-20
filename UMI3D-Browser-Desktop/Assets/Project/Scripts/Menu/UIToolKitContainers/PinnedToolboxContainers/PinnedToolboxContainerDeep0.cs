@@ -75,6 +75,9 @@ namespace umi3d.desktopBrowser.menu.Container
             Toolbox.Display();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void Hide()
         { }
 
@@ -124,19 +127,7 @@ namespace umi3d.desktopBrowser.menu.Container
                 if (ToolType != ItemType.Toolbox)
                     SetContainerAsToolbox();
                 Toolbox.Adds(containerDeep1.ToolboxItem);
-                switch (containerDeep1.ToolType)
-                {
-                    case ItemType.Undefine:
-                        break;
-                    case ItemType.Tool:
-                        ToolboxPinnedWindow_E.Instance.Adds(containerDeep1.Displayerbox);
-                        break;
-                    case ItemType.Toolbox:
-                        MenuBar_E.Instance.AddToolboxDeep1Plus(containerDeep1.Toolbox);
-                        break;
-                    default:
-                        break;
-                }
+                AddBoxToPinnedWindows(containerDeep1);
             }
             else if (element is AbstractWindowInputDisplayer displayer)
             {
@@ -147,26 +138,26 @@ namespace umi3d.desktopBrowser.menu.Container
             }
         }
 
-        protected override void ItemAdded(AbstractDisplayer displayer)
-        { }
-
-        protected override void ItemTypeChanged(AbstractToolboxesContainer item)
+        /// <summary>
+        /// Add displayerbox or toolbox from [item] to this container pinnedToolboxWindows.
+        /// </summary>
+        /// <param name="item"></param>
+        public void AddBoxToPinnedWindows(AbstractToolboxesContainer item)
         {
-            if (item is PinnedToolboxContainerDeep1 containerDeep1Child)
+            if (!(item is PinnedToolboxContainerDeep1 containerDeep1))
+                return;
+            switch (containerDeep1.ToolType)
             {
-                switch (containerDeep1Child.ToolType)
-                {
-                    case ItemType.Undefine:
-                        break;
-                    case ItemType.Tool:
-                        ToolboxPinnedWindow_E.Instance.Adds(containerDeep1Child.Displayerbox);
-                        break;
-                    case ItemType.Toolbox:
-                        MenuBar_E.Instance.AddToolboxDeep1Plus(containerDeep1Child.Toolbox);
-                        break;
-                    default:
-                        break;
-                }
+                case ItemType.Undefine:
+                    break;
+                case ItemType.Tool:
+                    ToolboxPinnedWindow_E.Instance.Adds(containerDeep1.Displayerbox);
+                    break;
+                case ItemType.Toolbox:
+                    MenuBar_E.Instance.AddToolboxDeep1Plus(containerDeep1.Toolbox);
+                    break;
+                default:
+                    break;
             }
         }
     }
