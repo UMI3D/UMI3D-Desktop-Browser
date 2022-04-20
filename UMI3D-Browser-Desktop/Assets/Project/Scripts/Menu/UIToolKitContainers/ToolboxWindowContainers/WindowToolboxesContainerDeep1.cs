@@ -42,6 +42,9 @@ namespace umi3d.desktopBrowser.menu.Container
             };
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected override void SetContainerAsToolbox()
         {
             ToolboxItem.SetItemStatus(false);
@@ -50,6 +53,9 @@ namespace umi3d.desktopBrowser.menu.Container
             base.SetContainerAsToolbox();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected override void SetContainerAsTool()
         {
             ToolboxItem.SetItemStatus(true);
@@ -57,6 +63,10 @@ namespace umi3d.desktopBrowser.menu.Container
             base.SetContainerAsTool();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="menu"></param>
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);
@@ -68,7 +78,6 @@ namespace umi3d.desktopBrowser.menu.Container
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="forceUpdate"></param>
         protected override void DisplayImp()
             => base.DisplayImp();
 
@@ -148,7 +157,7 @@ namespace umi3d.desktopBrowser.menu.Container
                     SetContainerAsTool();
                 Displayerbox.Add(displayer.Displayer);
             }
-            ItemAdded(element);
+            FindDeep0AndAddBoxToWindowItem();
         }
 
         /// <summary>
@@ -163,10 +172,16 @@ namespace umi3d.desktopBrowser.menu.Container
             Debug.Log("<color=green>TODO: </color>" + $"");
         }
 
-        protected override void ItemAdded(AbstractDisplayer item)
-        { }
+        private void FindDeep0AndAddBoxToWindowItem()
+        {
+            var parent = this.parent;
+            while (parent != null && !(parent is WindowToolboxesContainerDeep0))
+                parent = parent.parent;
 
-        protected override void ItemTypeChanged(AbstractToolboxesContainer item)
-            => OnItemTypeChanged?.Invoke(item);
+            if (parent == null)
+                throw new System.Exception("Parent null, not WindowToolboxesContainerDeep0");
+
+            (parent as WindowToolboxesContainerDeep0).AddBoxToWindowItem(this);
+        }
     }
 }
