@@ -31,7 +31,6 @@ namespace umi3d.desktopBrowser.menu.Container
         public Toolbox_E Toolbox { get; protected set; } = null;
         public Displayerbox_E Displayerbox { get; protected set; } = null;
         public ItemType ToolType { get; protected set; } = ItemType.Undefine;
-        public Action<AbstractToolboxesContainer> OnItemTypeChanged;
     }
 
     public abstract partial class AbstractToolboxesContainer
@@ -45,21 +44,24 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             Collapse();
         }
+        /// <summary>
+        /// Set the container as a toolbox.
+        /// </summary>
         protected virtual void SetContainerAsToolbox()
-        {
-            ToolType = ItemType.Toolbox;
-            OnItemTypeChanged?.Invoke(this);
-        }
+            => ToolType = ItemType.Toolbox;
+        /// <summary>
+        /// Set the container as a tool.
+        /// </summary>
         protected virtual void SetContainerAsTool()
-        {
-            ToolType = ItemType.Tool;
-            OnItemTypeChanged?.Invoke(this);
-        }
-        protected abstract void ItemTypeChanged(AbstractToolboxesContainer item);
+            => ToolType = ItemType.Tool;
     }
 
     public abstract partial class AbstractToolboxesContainer : Abstract2DContainer
     {
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="menu"></param>
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);
@@ -74,11 +76,7 @@ namespace umi3d.desktopBrowser.menu.Container
         public override void Insert(AbstractDisplayer element, bool updateDisplay = true)
         {
             if (element is AbstractToolboxesContainer menuContainer)
-            {
                 menuContainer.parent = this;
-                menuContainer.OnItemAdded = ItemAdded;
-                menuContainer.OnItemTypeChanged = ItemTypeChanged;
-            }
             base.Insert(element, updateDisplay);
         }
 
@@ -113,11 +111,7 @@ namespace umi3d.desktopBrowser.menu.Container
             if (!m_currentDisplayers.Remove(element))
                 return false;
             if (element is AbstractToolboxesContainer menuContainer)
-            {
                 menuContainer.parent = null;
-                menuContainer.OnItemAdded = null;
-                menuContainer.OnItemTypeChanged = null;
-            }
             if (updateDisplay)
                 Display(true);
 
