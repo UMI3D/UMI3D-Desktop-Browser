@@ -14,7 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common
+namespace umi3d.common.interaction
 {
-    public enum StatusType { NONE, REGISTERED, CREATED, READY, MISSING, AWAY, ACTIVE }
+    /// <summary>
+    /// String parameter dto.
+    /// </summary>
+    [System.Serializable]
+    public class PasswordParameterDto : StringParameterDto
+    {
+        public PasswordParameterDto() : base() { }
+    }
 }
