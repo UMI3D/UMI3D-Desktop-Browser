@@ -72,10 +72,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         #endregion
 
         public void DisplayToolboxButton(bool value)
-        {
-            if (value) ToolboxButton.Display();
-            else ToolboxButton.Hide();
-        }
+            => leftLayout_VE.style.display = (value) ? DisplayStyle.Flex : DisplayStyle.None;
 
         public void DisplaySubMenu(bool value)
             => SubMenuLayout.style.display = (value) ? DisplayStyle.Flex : DisplayStyle.None;
@@ -258,6 +255,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 .InsertRootTo(rightLayout_VE);
 
             Root.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
+            DisplayToolboxButton(false);
         }
 
         protected void AddSeparator(VisualElement layout)

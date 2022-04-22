@@ -66,6 +66,8 @@ namespace umi3dDesktopBrowser.ui
         {
             ToolboxWindow_E.Instance.InsertRootTo(m_viewport);
             ToolboxWindow_E.Instance.OnCloseButtonPressed += () => m_windowToolboxesDM.Collapse(true);
+            m_windowToolboxesDM.menu.onContentChange.AddListener(() 
+                => MenuBar_E.Instance.DisplayToolboxButton(m_windowToolboxesDM.menu.Count > 0));
         }
 
         private void InitToolboxPinnedWindow()
