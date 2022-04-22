@@ -49,10 +49,10 @@ MonoBehaviour:
       m_keyword: 11
       m_value:
         m_global: 0
-        m_bottom: 10
+        m_bottom: 5
         m_left: 0
         m_right: 0
-        m_top: 0
+        m_top: 5
     m_padding:
       m_keyword: 0
       m_value:
