@@ -94,6 +94,8 @@ namespace umi3dDesktopBrowser.ui
         private void InitBottomBar()
         {
             BottomBar_E.Instance.InsertRootTo(m_mainView);
+
+            MenuBar_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseMenuBar;
             BottomBar_E.Instance.Notification.OnClicked = Console_E.Instance.DisplayOrHide;
             Shortcutbox_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseShortcut;
             Console_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.UpdateOnOffNotificationIcon;
@@ -116,6 +118,11 @@ namespace umi3dDesktopBrowser.ui
 
         private void DisplayMenus()
         {
+            if (m_showMenuBarOnStart)
+                MenuBar_E.Instance.Display();
+            else
+                MenuBar_E.Instance.Hide();
+
             if (m_showShortcutOnStart)
                 Shortcutbox_E.Instance.Display();
             else
