@@ -46,6 +46,7 @@ namespace umi3d.cdk
             yield return new WaitForEndOfFrame();
             foreach (ByteContainer c in UMI3DNetworkingHelper.ReadIndexesList(container))
             {
+                Debug.Log($"PerfomTransaction c = [{c}]");
                 bool performed = false;
                 PerformOperation(c, () => performed = true);
                 if (performed != true)
@@ -101,23 +102,28 @@ namespace umi3d.cdk
             switch (operationId)
             {
                 case UMI3DOperationKeys.LoadEntity:
+                    Debug.Log($"load Entity");
                     UMI3DEnvironmentLoader.LoadEntity(container, performed);
                     break;
                 case UMI3DOperationKeys.DeleteEntity:
                     {
+                        Debug.Log($"delete Entity");
                         ulong entityId = UMI3DNetworkingHelper.Read<ulong>(container);
                         UMI3DEnvironmentLoader.DeleteEntity(entityId, performed);
                         break;
                     }
                 case UMI3DOperationKeys.MultiSetEntityProperty:
+                    Debug.Log($"multiset Entity");
                     UMI3DEnvironmentLoader.SetMultiEntity(container);
                     performed.Invoke();
                     break;
                 case UMI3DOperationKeys.StartInterpolationProperty:
+                    Debug.Log($"start interpolation Entity");
                     UMI3DEnvironmentLoader.StartInterpolation(container);
                     performed.Invoke();
                     break;
                 case UMI3DOperationKeys.StopInterpolationProperty:
+                    Debug.Log($"stopp interp Entity");
                     UMI3DEnvironmentLoader.StopInterpolation(container);
                     performed.Invoke();
                     break;
@@ -125,6 +131,7 @@ namespace umi3d.cdk
                 default:
                     if (UMI3DOperationKeys.SetEntityProperty <= operationId && operationId <= UMI3DOperationKeys.SetEntityMatrixProperty)
                     {
+                        Debug.Log($"pomme");
                         ulong entityId = UMI3DNetworkingHelper.Read<ulong>(container);
                         uint propertyKey = UMI3DNetworkingHelper.Read<uint>(container);
                         UMI3DEnvironmentLoader.SetEntity(operationId, entityId, propertyKey, container);
@@ -132,6 +139,7 @@ namespace umi3d.cdk
                     }
                     else
                     {
+                        Debug.Log($"fraise");
                         UMI3DEnvironmentLoader.Parameters.UnknownOperationHandler(operationId, container, performed);
                     }
                     break;
