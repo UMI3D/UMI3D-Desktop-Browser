@@ -36,6 +36,10 @@ namespace umi3dDesktopBrowser.ui
         [Tooltip("Object Menu Displayer manager.")]
         private MenuDisplayManager m_objectMenuDM;
 
+        [Header("Menu Bar")]
+        [SerializeField]
+        private bool m_showMenuBarOnStart = false;
+
         [Header("Shortcuts")]
         [SerializeField]
         private bool m_showShortcutOnStart = false;

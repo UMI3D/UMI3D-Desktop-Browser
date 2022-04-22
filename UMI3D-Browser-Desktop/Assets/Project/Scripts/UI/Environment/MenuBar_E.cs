@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System;
 using umi3d.cdk.menu;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
@@ -43,6 +44,9 @@ namespace umi3dDesktopBrowser.ui.viewController
             }
         }
 
+        public static bool ShouldDisplay { get; set; } = false;
+        public static bool ShouldHide { get; set; } = false;
+
         protected ScrollView_E m_scrollView { get; set; }
 
         private VisualElement leftLayout_VE;
@@ -55,6 +59,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static StyleKeys m_menuKeys => new StyleKeys(null, "", null);
         private static string m_separatorStyle => "UI/Style/MenuBar/Separator";
         private static StyleKeys m_separatorKeys => new StyleKeys(null, "", null);
+        private static float m_height { get; set; } = 0f;
     }
 
     public partial class MenuBar_E
@@ -114,6 +119,33 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         private void OnSubMenuMouseDown(MouseDownEvent e)
             => OnSubMenuMouseDownEvent?.Invoke();
+
+        private void OnSizeChanged(GeometryChangedEvent e)
+        {
+            if (e.oldRect.width != e.newRect.width)
+                m_height = e.newRect.height;
+
+            if (ShouldDisplay)
+                Display();
+            if (ShouldHide)
+                Hide();
+        }
+
+        /// <summary>
+        /// Anime the VisualElement.
+        /// </summary>
+        /// <param name="vE">the VisualElement to be animated.</param>
+        /// <param name="value">The animation will be trigger from 0 to this value when isShowing is true. Else, from this value to 0.</param>
+        /// <param name="isShowing">The VisualElement should be displayed if true.</param>
+        /// <param name="animation">The animation to be perform.</param>
+        private void AnimeVisualElement(VisualElement vE, float value, bool isShowing, Action<VisualElement, float> animation)
+        {
+            Debug.LogWarning("Use of Unity experimental API. May not work in the future. (2021)");
+            if (isShowing)
+                vE.experimental.animation.Start(-value, 0, 100, animation);
+            else
+                vE.experimental.animation.Start(0, -value, 100, animation);
+        }
     }
 
     public partial class MenuBar_E : Visual_E
@@ -126,6 +158,38 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void InsertRootTo(VisualElement parent)
             => InsertRootAtTo(0, parent);
+
+        public override void Display()
+        {
+            if (m_height <= 0f)
+            {
+                ShouldDisplay = true;
+                return;
+            }
+            AnimeVisualElement(Root, m_height, true, (elt, val) =>
+            {
+                elt.style.top = val;
+            });
+            IsDisplaying = true;
+            ShouldDisplay = false;
+            OnDisplayedOrHiddenTrigger(true);
+        }
+
+        public override void Hide()
+        {
+            if (m_height <= 0f)
+            {
+                ShouldHide = true;
+                return;
+            }
+            AnimeVisualElement(Root, m_height, false, (elt, val) =>
+            {
+                elt.style.top = val;
+            });
+            IsDisplaying = false;
+            ShouldHide = false;
+            OnDisplayedOrHiddenTrigger(false);
+        }
 
         protected override void Initialize()
         {
@@ -192,6 +256,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             LeaveButton = new ToolboxItem_E("Leave", "");
             new Toolbox_E("", ToolboxType.Pinned, LeaveButton)
                 .InsertRootTo(rightLayout_VE);
+
+            Root.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
         }
 
         protected void AddSeparator(VisualElement layout)
