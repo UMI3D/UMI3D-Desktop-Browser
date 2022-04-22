@@ -27,9 +27,9 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             get
             {
-                if (m_instance == null)
-                    m_instance = new Console_E();
-                return m_instance;
+                if (s_instance == null)
+                    s_instance = new Console_E();
+                return s_instance;
             }
         }
 
@@ -38,26 +38,29 @@ namespace umi3dDesktopBrowser.ui.viewController
         public static bool ShouldDisplay { get; set; } = false;
         public static bool ShouldHide { get; set; } = false;
 
-        protected static ScrollView_E m_logs { get; set; } = null;
-        protected static float m_width { get; set; } = default;
-        protected static List<Label_E> m_logDisplayed;
-        protected static List<Label_E> m_logWaited;
+        protected static ScrollView_E s_logs { get; set; } = null;
+        protected static ScrollView_E s_details { get; set; } = null;
+        protected static float s_width { get; set; } = default;
+        protected static List<Label_E> s_logDisplayed;
+        protected static List<Label_E> s_logWaited;
+        protected static Dictionary<Label_E, (string, string, string, LogType)> s_logsMap;
 
-        private static Console_E m_instance;
-        private static string m_consoleUXML = "UI/UXML/console";
-        private static string m_consoleStyle = "UI/Style/Console/Console";
-        private static StyleKeys m_consoleKeys = new StyleKeys(null, "", null);
-        private static string m_logStyle = "UI/Style/Console/Console_Log";
-        private static StyleKeys m_logKeys = new StyleKeys("log", null, null);
-        private static StyleKeys m_assertKeys = new StyleKeys("assert", null, null);
+        private static Console_E s_instance;
+        private static string s_consoleUXML = "UI/UXML/console";
+        private static string s_consoleStyle = "UI/Style/Console/Console";
+        private static StyleKeys s_consoleKeys = new StyleKeys(null, "", null);
+        private static string s_logStyle = "UI/Style/Console/Console_Log";
+        private static StyleKeys s_logKeys = new StyleKeys("log", null, null);
+        private static StyleKeys s_assertKeys = new StyleKeys("assert", null, null);
         private static StyleKeys m_errorKeys = new StyleKeys("error", null, null);
-        private static StyleKeys m_exceptionKeys = new StyleKeys("exception", null, null);
+        private static StyleKeys s_exceptionKeys = new StyleKeys("exception", null, null);
     }
 
     public partial class Console_E
     {
         public void DisplayOrHide()
         {
+            Debug.Log($"Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.");
             if (IsDisplaying)
                 Hide();
             else
@@ -79,37 +82,39 @@ namespace umi3dDesktopBrowser.ui.viewController
             if (type == LogType.Warning)
                 return;
 
-            ObjectPooling(out Label_E log, m_logDisplayed, m_logWaited, () => new Label_E(m_logStyle, null));
-            m_logs.Adds(log);
-            NewLogAdded?.Invoke();
-            log.value = logString;
-
+            ObjectPooling(out Label_E log, s_logDisplayed, s_logWaited, () => new Label_E(s_logStyle, null));
+            s_logs.Adds(log);
+            
+            string time = DateTime.Now.ToLongTimeString();
+            log.value = $"[{time}] {logString}";
             switch (type)
             {
                 case LogType.Error:
-                    log.UpdateLabelKeys(m_logKeys);
+                    log.UpdateLabelKeys(s_logKeys);
                     break;
                 case LogType.Assert:
-                    log.UpdateLabelKeys(m_assertKeys);
+                    log.UpdateLabelKeys(s_assertKeys);
                     break;
                 case LogType.Warning:
-                    log.UpdateLabelKeys(m_logKeys);
+                    log.UpdateLabelKeys(s_logKeys);
                     break;
                 case LogType.Log:
-                    log.UpdateLabelKeys(m_logKeys);
+                    log.UpdateLabelKeys(s_logKeys);
                     break;
                 case LogType.Exception:
-                    log.UpdateLabelKeys(m_exceptionKeys);
+                    log.UpdateLabelKeys(s_exceptionKeys);
                     break;
                 default:
                     break;
             }
+            s_logsMap.Add(log, (time, logString, stackTrace, type));
+            NewLogAdded?.Invoke();
         }
 
         private void OnSizeChanged(GeometryChangedEvent e)
         {
             if (e.oldRect.width != e.newRect.width)
-                m_width = e.newRect.width;
+                s_width = e.newRect.width;
 
             if (ShouldDisplay)
                 Display();
@@ -138,12 +143,12 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         public override void Display()
         {
-            if (m_width <= 0f)
+            if (s_width <= 0f)
             {
                 ShouldDisplay = true;
                 return;
             }
-            AnimeVisualElement(Root, m_width, true, (elt, val) =>
+            AnimeVisualElement(Root, s_width, true, (elt, val) =>
             {
                 elt.style.right = val;
             });
@@ -154,12 +159,12 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void Hide()
         {
-            if (m_width <= 0f)
+            if (s_width <= 0f)
             {
                 ShouldHide = true;
                 return;
             }
-            AnimeVisualElement(Root, m_width, false, (elt, val) =>
+            AnimeVisualElement(Root, s_width, false, (elt, val) =>
             {
                 elt.style.right = val;
             });
@@ -177,19 +182,25 @@ namespace umi3dDesktopBrowser.ui.viewController
             StyleKeys titleKeys = new StyleKeys("", "", null);
             Version = new Label_E(title, titleStyle, titleKeys);
 
-            var scrollView = Root.Q<ScrollView>();
-            m_logs = new ScrollView_E(scrollView);
+            var logs = Root.Q<ScrollView>("logs");
+            s_logs = new ScrollView_E(logs);
+
+            var details = Root.Q<ScrollView>("details");
+            string detailsStyle = "UI/Style/Console/Console_Details";
+            StyleKeys detailsKeys = null;
+            s_details = new ScrollView_E(details, detailsStyle, detailsKeys);
 
             Root.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
 
-            m_logDisplayed = new List<Label_E>();
-            m_logWaited = new List<Label_E>();
+            s_logDisplayed = new List<Label_E>();
+            s_logWaited = new List<Label_E>();
+            s_logsMap = new Dictionary<Label_E, (string, string, string, LogType)>();
 
             Application.logMessageReceived += HandleLog;
         }
 
         private Console_E() :
-            base(m_consoleUXML, m_consoleStyle, m_consoleKeys)
+            base(s_consoleUXML, s_consoleStyle, s_consoleKeys)
         { }
     }
 }
