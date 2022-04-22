@@ -79,8 +79,6 @@ public class CursorDisplayer : SingleBehaviour<CursorDisplayer>
         cursorSettings.style.display = display ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
-    public bool IsSettingsCursorDisplayed()
-    {
-        return cursorSettings.resolvedStyle.display == DisplayStyle.Flex;
-    }
+    public bool IsSettingsCursorDisplayed
+        => cursorSettings.resolvedStyle.display == DisplayStyle.Flex;
 }

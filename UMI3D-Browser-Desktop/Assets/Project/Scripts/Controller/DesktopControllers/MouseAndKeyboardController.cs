@@ -159,7 +159,7 @@ namespace BrowserDesktop.Controller
         {
             if (mouseData.ForceProjectionReleasableButton == null || !mouseData.ForceProjectionReleasable)
                 return;
-
+            Debug.Log($"add forceProjection Release button");
             if (!m_objectMenu.menu.Contains(mouseData.ForceProjectionReleasableButton))
                 m_objectMenu?.menu.Add(mouseData.ForceProjectionReleasableButton);
         }
@@ -238,9 +238,6 @@ namespace BrowserDesktop.Controller
 
                 if (mouseData.LastProjected != null)
                     ReleaseAutoProjection();
-
-                mouseData.HoverState = HoverState.Hovering;
-                CursorHandler.State = CursorHandler.CursorState.Hover;
 
                 bool isInteractionsEmpty = mouseData.CurrentHovered.dto.interactions.Count == 0;
                 bool isCompatible = IsCompatibleWith(mouseData.CurrentHovered);
