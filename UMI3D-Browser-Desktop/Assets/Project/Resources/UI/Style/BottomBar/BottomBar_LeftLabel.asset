@@ -27,7 +27,7 @@ MonoBehaviour:
     m_width:
       m_keyword: 11
       m_valueMode: 0
-      m_value: 200
+      m_value: 250
     m_maxHeight:
       m_keyword: 0
       m_valueMode: 0
@@ -46,7 +46,7 @@ MonoBehaviour:
       m_value: 0
   m_marginAndPadding:
     m_margin:
-      m_keyword: 1
+      m_keyword: 0
       m_value:
         m_global: 0
         m_bottom: 0
@@ -78,6 +78,7 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_textAlign: 3
+    m_textWrapping: 0
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle:
