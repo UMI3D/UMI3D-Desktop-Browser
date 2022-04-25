@@ -98,9 +98,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_styleApplicator.ApplySize(textFormat.ParagraphSpacing,
                 (length) => textE.style.unityParagraphSpacing = length);
             textE.style.unityTextAlign = textFormat.TextAlign;
-
-            //m_styleApplicator.AppliesTextFormat(textFormat.NumberOfVisibleCharacter,
-            //    textFormat.TextAlign, text, textE);
+            textE.style.whiteSpace = textFormat.TextWrapping;
         }
 
         #endregion

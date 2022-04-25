@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
-  m_Name: BottomBar_LeftLabel
+  m_Name: Console_Details
   m_EditorClassIdentifier: 
   AppliesFormatAndStyle:
     m_PersistentCalls:
@@ -21,13 +21,13 @@ MonoBehaviour:
       m_value: 0
   m_size:
     m_height:
+      m_keyword: 10
+      m_valueMode: 0
+      m_value: 100
+    m_width:
       m_keyword: 0
       m_valueMode: 0
       m_value: 0
-    m_width:
-      m_keyword: 11
-      m_valueMode: 0
-      m_value: 250
     m_maxHeight:
       m_keyword: 0
       m_valueMode: 0
@@ -50,21 +50,21 @@ MonoBehaviour:
       m_value:
         m_global: 0
         m_bottom: 0
-        m_left: 2
-        m_right: 2
+        m_left: 0
+        m_right: 0
         m_top: 0
     m_padding:
-      m_keyword: 11
+      m_keyword: 0
       m_value:
-        m_global: 5
-        m_bottom: 5
-        m_left: 10
-        m_right: 10
-        m_top: 5
+        m_global: 0
+        m_bottom: 0
+        m_left: 0
+        m_right: 0
+        m_top: 0
   m_textFormat:
     m_fontSize:
-      m_keyword: 10
-      m_value: 13
+      m_keyword: 0
+      m_value: 0
     m_letterSpacing:
       m_keyword: 0
       m_value: 0
@@ -77,53 +77,47 @@ MonoBehaviour:
     m_numberOfVisibleCharacter:
       m_keyword: 0
       m_value: 0
-    m_textAlign: 3
+    m_textAlign: 0
     m_textWrapping: 0
   m_themeStyles:
   - m_theme: {fileID: 0}
-    m_textStyle:
+    m_textStyle: []
+    m_background:
     - m_key: 
       m_default:
         m_keyword: 2
         m_value:
-          m_font: {fileID: 0}
-          m_fontStyleAndWeight: 0
           m_color:
-            m_keyword: 2
-            m_value: {r: 1, g: 1, b: 1, a: 1}
-          m_outlineColor:
+            m_keyword: 20
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 0
+            m_value: {fileID: 0}
+          m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_outlineWidth:
-            m_keyword: 0
-            m_value: 0
       m_mouseOver:
         m_keyword: 0
         m_value:
-          m_font: {fileID: 0}
-          m_fontStyleAndWeight: 0
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_outlineColor:
+          m_image:
+            m_keyword: 0
+            m_value: {fileID: 0}
+          m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_outlineWidth:
-            m_keyword: 0
-            m_value: 0
       m_mousePressed:
         m_keyword: 0
         m_value:
-          m_font: {fileID: 0}
-          m_fontStyleAndWeight: 0
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_outlineColor:
+          m_image:
+            m_keyword: 0
+            m_value: {fileID: 0}
+          m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_outlineWidth:
-            m_keyword: 0
-            m_value: 0
-    m_background: []
     m_border: []
