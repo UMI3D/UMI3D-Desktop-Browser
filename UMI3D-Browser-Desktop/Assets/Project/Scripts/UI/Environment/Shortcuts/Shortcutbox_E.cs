@@ -75,7 +75,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 shortcutIcons[i] = m_keyBindings.GetSpriteFrom(keys[i]);
 
             shortcut.Setup(title, shortcutIcons);
-            m_shortcuts.Adds(shortcut);
+            m_shortcuts.Add(shortcut);
         }
 
         public void RemoveShortcut()
