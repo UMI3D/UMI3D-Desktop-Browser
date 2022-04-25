@@ -126,14 +126,14 @@ namespace umi3d.desktopBrowser.menu.Container
             {
                 if (ToolType != ItemType.Toolbox)
                     SetContainerAsToolbox();
-                Toolbox.Adds(containerDeep1.ToolboxItem);
+                Toolbox.Add(containerDeep1.ToolboxItem);
                 AddBoxToPinnedWindows(containerDeep1);
             }
             else if (element is AbstractWindowInputDisplayer displayer)
             {
                 if (ToolType != ItemType.Tool)
                     SetContainerAsTool();
-                Toolbox.Adds(ToolboxItem);
+                Toolbox.Add(ToolboxItem);
                 Displayerbox.Add(displayer.Displayer);
             }
         }

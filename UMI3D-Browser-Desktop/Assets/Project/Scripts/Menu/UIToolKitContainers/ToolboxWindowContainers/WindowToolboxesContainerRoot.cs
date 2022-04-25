@@ -26,7 +26,6 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void DisplayImp()
         {
             base.DisplayImp();
-            MenuBar_E.Instance.DisplayToolboxButton(true);
         }
 
         /// <summary>
@@ -34,7 +33,6 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void HideImp()
         {
-            MenuBar_E.Instance.DisplayToolboxButton(false);
             base.HideImp();
         }
 
