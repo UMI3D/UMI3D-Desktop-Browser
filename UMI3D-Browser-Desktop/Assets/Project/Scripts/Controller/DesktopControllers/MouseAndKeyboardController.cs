@@ -159,7 +159,6 @@ namespace BrowserDesktop.Controller
         {
             if (mouseData.ForceProjectionReleasableButton == null || !mouseData.ForceProjectionReleasable)
                 return;
-            Debug.Log($"add forceProjection Release button");
             if (!m_objectMenu.menu.Contains(mouseData.ForceProjectionReleasableButton))
                 m_objectMenu?.menu.Add(mouseData.ForceProjectionReleasableButton);
         }
