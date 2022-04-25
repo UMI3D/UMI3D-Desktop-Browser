@@ -66,7 +66,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             base(parent, visualResourcePath, styleResourcePath, keys) 
         { }
 
-        public virtual void Adds(params Visual_E[] items)
+        public virtual void Add(params Visual_E[] items)
         {
             foreach (Visual_E item in items)
             {
@@ -88,6 +88,16 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             item.Remove();
             m_elements.Remove(item);
+            UpdateSeparator();
+        }
+
+        /// <summary>
+        /// Clear the scrollview.
+        /// </summary>
+        public virtual void Clear()
+        {
+            m_elements.ForEach((elt) => elt.Remove());
+            m_elements.Clear();
             UpdateSeparator();
         }
 
@@ -241,10 +251,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public override void Reset()
         {
             base.Reset();
-            m_elements.ForEach((elt) => elt.Remove());
-            m_elements.Clear();
-            m_separatorsDisplayed.ForEach((separator) => separator.Remove());
-            m_separatorsDisplayed.Clear();
+            Clear();
             m_separatorsWaited.Clear();
         }
     }

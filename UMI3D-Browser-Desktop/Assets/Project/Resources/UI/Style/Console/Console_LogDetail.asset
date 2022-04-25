@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
-  m_Name: Console_Log
+  m_Name: Console_LogDetail
   m_EditorClassIdentifier: 
   AppliesFormatAndStyle:
     m_PersistentCalls:
@@ -75,9 +75,10 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_numberOfVisibleCharacter:
-      m_keyword: 2
-      m_value: 65
+      m_keyword: 0
+      m_value: 0
     m_textAlign: 0
+    m_textWrapping: 0
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle:
