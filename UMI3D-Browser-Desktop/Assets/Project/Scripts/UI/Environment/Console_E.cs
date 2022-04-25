@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System;
 using System.Collections.Generic;
+using umi3DBrowser.UICustomStyle;
 using umi3dDesktopBrowser.ui.Controller;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -43,6 +44,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected static float s_width { get; set; } = default;
         protected static List<Label_E> s_logDisplayed;
         protected static List<Label_E> s_logWaited;
+        protected static List<Label_E> s_logDetailDisplayed;
+        protected static List<Label_E> s_logDetailWaited;
         protected static Dictionary<Label_E, (string, string, string, LogType)> s_logsMap;
 
         private static Console_E s_instance;
@@ -54,6 +57,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static StyleKeys s_assertKeys = new StyleKeys("assert", null, null);
         private static StyleKeys m_errorKeys = new StyleKeys("error", null, null);
         private static StyleKeys s_exceptionKeys = new StyleKeys("exception", null, null);
+        private static string s_logDetailStyle = "UI/Style/Console/Console_LogDetail";
     }
 
     public partial class Console_E
@@ -82,11 +86,23 @@ namespace umi3dDesktopBrowser.ui.viewController
             if (type == LogType.Warning)
                 return;
 
-            ObjectPooling(out Label_E log, s_logDisplayed, s_logWaited, () => new Label_E(s_logStyle, null));
-            s_logs.Adds(log);
+            SetLogLabel(out Label_E log, s_logDisplayed, s_logWaited, s_logStyle, type);
+            
+            VisualManipulator manipulator = log.GetVisualManipulator(log.Root);
+            manipulator.MouseBehaviourChanged += (behaviour) 
+                => OnLogSelected(behaviour, log);
             
             string time = DateTime.Now.ToLongTimeString();
             log.value = $"[{time}] {logString}";
+
+            s_logs.Add(log);
+            s_logsMap.Add(log, (time, logString, stackTrace, type));
+            NewLogAdded?.Invoke();
+        }
+
+        private void SetLogLabel(out Label_E log, List<Label_E> displayed, List<Label_E> waited, string style, LogType type)
+        {
+            ObjectPooling(out log, displayed, waited, () => new Label_E(style, null));
             switch (type)
             {
                 case LogType.Error:
@@ -107,8 +123,6 @@ namespace umi3dDesktopBrowser.ui.viewController
                 default:
                     break;
             }
-            s_logsMap.Add(log, (time, logString, stackTrace, type));
-            NewLogAdded?.Invoke();
         }
 
         private void OnSizeChanged(GeometryChangedEvent e)
@@ -120,6 +134,28 @@ namespace umi3dDesktopBrowser.ui.viewController
                 Display();
             if (ShouldHide)
                 Hide();
+        }
+
+        private void OnLogSelected(MouseBehaviour behaviour, Label_E logSource)
+        {
+            if (behaviour != MouseBehaviour.MousePressed)
+                return;
+            s_details.Clear();
+
+            var (_, logString, stackTrace, type) = s_logsMap[logSource];
+
+            SetLogLabel(out Label_E log, s_logDetailDisplayed, s_logDetailWaited, s_logDetailStyle, type);
+            log.value = logString;
+
+            s_details.Add(log);
+
+            string[] traces = stackTrace.Split('\n');
+            foreach (string trace in traces)
+            {
+                SetLogLabel(out Label_E logTrace, s_logDetailDisplayed, s_logDetailWaited, s_logDetailStyle, LogType.Log);
+                logTrace.value = trace;
+                s_details.Add(logTrace);
+            }
         }
 
         /// <summary>
@@ -187,13 +223,15 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             var details = Root.Q<ScrollView>("details");
             string detailsStyle = "UI/Style/Console/Console_Details";
-            StyleKeys detailsKeys = null;
+            StyleKeys detailsKeys = new StyleKeys(null, "", null);
             s_details = new ScrollView_E(details, detailsStyle, detailsKeys);
 
             Root.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
 
             s_logDisplayed = new List<Label_E>();
             s_logWaited = new List<Label_E>();
+            s_logDetailDisplayed = new List<Label_E>();
+            s_logDetailWaited = new List<Label_E>();
             s_logsMap = new Dictionary<Label_E, (string, string, string, LogType)>();
 
             Application.logMessageReceived += HandleLog;
