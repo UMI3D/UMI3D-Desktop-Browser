@@ -51,6 +51,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class BottomBar_E
     {
+        public void OpenCloseMenuBar(bool value)
+            => MenuShortcut.value = (value) ? "Right Click / Escape - Close Menu" : "Right Click / Escape - Open Menu";
         public void OpenCloseShortcut(bool value)
             => ShortcutShortcut.value = (value) ? "F1 - Close Shortcut" : "F1 - Open Shortcut";
 

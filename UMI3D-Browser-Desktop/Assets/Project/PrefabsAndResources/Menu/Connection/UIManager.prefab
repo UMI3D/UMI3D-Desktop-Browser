@@ -758,7 +758,7 @@ MonoBehaviour:
   m_windowToolboxesDM: {fileID: 1289266674641547170}
   m_pinnedToolboxesDM: {fileID: 5622295467200969099}
   m_objectMenuDM: {fileID: 4653506232776602386}
-  m_showShortcutOnStart: 0
+  m_showShortcutOnStart: 1
   m_showConsoleOnStart: 0
 --- !u!114 &4820613813600277437
 MonoBehaviour:
