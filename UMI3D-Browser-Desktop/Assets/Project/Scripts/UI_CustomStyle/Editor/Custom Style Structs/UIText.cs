@@ -15,7 +15,7 @@ limitations under the License.
 */
 using System;
 using UnityEngine;
-//using UnityEngine.UIElements;
+using UnityEngine.UIElements;
 
 namespace umi3DBrowser.UICustomStyle
 {
@@ -34,6 +34,8 @@ namespace umi3DBrowser.UICustomStyle
         private CustomStyleValue<CustomStyleSimpleKeyword, int> m_numberOfVisibleCharacter;
         [SerializeField]
         private TextAnchor m_textAlign;
+        [SerializeField]
+        private WhiteSpace m_textWrapping;
 
         public CustomStyleValue<CustomStyleSizeKeyword, int> FontSize => m_fontSize;
         public CustomStyleValue<CustomStyleSizeKeyword, float> LetterSpacing => m_letterSpacing;
@@ -41,6 +43,7 @@ namespace umi3DBrowser.UICustomStyle
         public CustomStyleValue<CustomStyleSizeKeyword, float> ParagraphSpacing => m_paragraphSpacing;
         public CustomStyleValue<CustomStyleSimpleKeyword, int> NumberOfVisibleCharacter => m_numberOfVisibleCharacter;
         public TextAnchor TextAlign => m_textAlign;
+        public WhiteSpace TextWrapping => m_textWrapping;
     }
 
     [Serializable]
