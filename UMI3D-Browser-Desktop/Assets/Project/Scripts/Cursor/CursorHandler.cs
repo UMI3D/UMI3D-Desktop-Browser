@@ -151,8 +151,8 @@ namespace BrowserDesktop.Cursor
         {
             transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            if (CursorDisplayer.Exists && CursorDisplayer.Instance.IsSettingsCursorDisplayed != (LastMenuState))
-                CursorDisplayer.Instance.DisplaySettingsCursor(LastMenuState);
+            //if (CursorDisplayer.Exists && CursorDisplayer.Instance.IsSettingsCursorDisplayed != (LastMenuState))
+            //    CursorDisplayer.Instance.DisplaySettingsCursor(LastMenuState);
         }
 
         #endregion
