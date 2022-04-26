@@ -78,6 +78,7 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_textAlign: 4
+    m_textWrapping: 0
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle:
@@ -97,13 +98,13 @@ MonoBehaviour:
             m_keyword: 0
             m_value: 0
       m_mouseOver:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_font: {fileID: 0}
           m_fontStyleAndWeight: 0
           m_color:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
+            m_keyword: 20
+            m_value: {r: 0, g: 0, b: 0, a: 1}
           m_outlineColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -111,13 +112,13 @@ MonoBehaviour:
             m_keyword: 0
             m_value: 0
       m_mousePressed:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_font: {fileID: 0}
           m_fontStyleAndWeight: 0
           m_color:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
+            m_keyword: 2
+            m_value: {r: 1, g: 1, b: 1, a: 1}
           m_outlineColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -139,10 +140,10 @@ MonoBehaviour:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_mouseOver:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 22
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 0
@@ -151,10 +152,10 @@ MonoBehaviour:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_mousePressed:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 21
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 0
@@ -192,16 +193,16 @@ MonoBehaviour:
               m_topLeft: 0
               m_TopRight: 0
       m_mouseOver:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 22
             m_value:
-              m_global: {r: 0, g: 0, b: 0, a: 0}
-              m_bottom: {r: 0, g: 0, b: 0, a: 0}
-              m_left: {r: 0, g: 0, b: 0, a: 0}
-              m_right: {r: 0, g: 0, b: 0, a: 0}
-              m_top: {r: 0, g: 0, b: 0, a: 0}
+              m_global: {r: 1, g: 1, b: 1, a: 1}
+              m_bottom: {r: 1, g: 1, b: 1, a: 1}
+              m_left: {r: 1, g: 1, b: 1, a: 1}
+              m_right: {r: 1, g: 1, b: 1, a: 1}
+              m_top: {r: 1, g: 1, b: 1, a: 1}
           m_width:
             m_keyword: 0
             m_value:
@@ -219,16 +220,16 @@ MonoBehaviour:
               m_topLeft: 0
               m_TopRight: 0
       m_mousePressed:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 2
             m_value:
-              m_global: {r: 0, g: 0, b: 0, a: 0}
-              m_bottom: {r: 0, g: 0, b: 0, a: 0}
-              m_left: {r: 0, g: 0, b: 0, a: 0}
-              m_right: {r: 0, g: 0, b: 0, a: 0}
-              m_top: {r: 0, g: 0, b: 0, a: 0}
+              m_global: {r: 1, g: 1, b: 1, a: 1}
+              m_bottom: {r: 1, g: 1, b: 1, a: 1}
+              m_left: {r: 1, g: 1, b: 1, a: 1}
+              m_right: {r: 1, g: 1, b: 1, a: 1}
+              m_top: {r: 1, g: 1, b: 1, a: 1}
           m_width:
             m_keyword: 0
             m_value:
