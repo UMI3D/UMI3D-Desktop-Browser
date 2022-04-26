@@ -77,11 +77,9 @@ public class CursorDisplayer : SingleBehaviour<CursorDisplayer>
 
     public static void DisplaySettingsCursor(bool display)
     {
-        Debug.Log($"display1 = [{display}]");
         if (!Exists)
             return;
         Instance.cursorSettings.style.display = display ? DisplayStyle.Flex : DisplayStyle.None;
-        Debug.Log($"display2 = [{display}]");
     }
 
     public bool IsSettingsCursorDisplayed
