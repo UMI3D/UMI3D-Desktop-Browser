@@ -27,36 +27,36 @@ namespace umi3dDesktopBrowser.ui.viewController
             get
             {
                 Create();
-                return m_instance;
+                return s_instance;
             }
         }
 
-        protected static VisualElement m_dialogueBox { get; set; } = null;
-        protected static Label_E m_title { get; set; } = null;
-        protected static Label_E m_message { get; set; } = null;
-        protected static VisualElement m_choiceBox { get; set; } = null;
-        protected static Button_E m_choiceA { get; set; } = null;
-        protected static Button_E m_choiceB { get; set; } = null;
+        protected static VisualElement s_dialogueBox { get; set; } = null;
+        protected static Label_E s_title { get; set; } = null;
+        protected static Label_E s_message { get; set; } = null;
+        protected static VisualElement s_choiceBox { get; set; } = null;
+        protected static Button_E s_choiceA { get; set; } = null;
+        protected static Button_E s_choiceB { get; set; } = null;
 
         public static Action<bool> ChoiceCallback { get; private set; }
-        private static Action<object> m_cursorSetMovement { get; set; } = null;
-        private static Action<object> m_cursorUnsetMovement { get; set; } = null;
+        private static Action<object> s_cursorSetMovement { get; set; } = null;
+        private static Action<object> s_cursorUnsetMovement { get; set; } = null;
 
-        protected static float m_width { get; set; } = default;
-        protected static float m_height { get; set; } = default;
-        protected static bool m_shouldCenter { get; set; } = false;
-        private static DialogueBox_E m_instance;
-        private static string m_uxml => "UI/UXML/dialogueBox";
-        private static string m_style => "UI/Style/DialogueBox/DialogueBox";
-        private static StyleKeys m_keys => new StyleKeys(null, "", "");
+        protected static float s_width { get; set; } = default;
+        protected static float s_height { get; set; } = default;
+        protected static bool s_shouldCenter { get; set; } = false;
+        private static DialogueBox_E s_instance;
+        private static string s_uxml => "UI/UXML/dialogueBox";
+        private static string s_style => "UI/Style/DialogueBox/DialogueBox";
+        private static StyleKeys s_keys => new StyleKeys(null, "", "");
     }
 
     public partial class DialogueBox_E
     {
         public static void SetCursorMovementActions(Action<object> cursorSetMovement, Action<object> cursorUnsetMovement)
         {
-            m_cursorSetMovement = cursorSetMovement;
-            m_cursorUnsetMovement = cursorUnsetMovement;
+            s_cursorSetMovement = cursorSetMovement;
+            s_cursorUnsetMovement = cursorUnsetMovement;
         }
 
         /// <summary>
@@ -87,13 +87,13 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             Setup(title, message);
 
-            m_choiceB.Display();
-            m_choiceA.Text = optionA;
-            m_choiceB.Text = optionB;
+            s_choiceB.Display();
+            s_choiceA.Text = optionA;
+            s_choiceB.Text = optionB;
 
             ChoiceCallback = (b) =>
             {
-                m_cursorUnsetMovement(Instance);
+                s_cursorUnsetMovement(Instance);
                 choiceCallback(b);
                 Instance.Remove();
             };
@@ -126,12 +126,12 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             Setup(title, message);
 
-            m_choiceB.Hide();
-            m_choiceA.Text = optionA;
+            s_choiceB.Hide();
+            s_choiceA.Text = optionA;
 
             ChoiceCallback = (b) =>
             {
-                m_cursorUnsetMovement(Instance);
+                s_cursorUnsetMovement(Instance);
                 choiceCallback();
                 Instance.Remove();
             };
@@ -147,19 +147,21 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             Create();
 
-            m_cursorSetMovement(Instance);
+            ResetButtonStyle();
+            s_cursorSetMovement(Instance);
 
-            m_choiceA.OnClicked = () =>
+            s_choiceA.OnClicked = () =>
             {
                 ChoiceCallback(true);
             };
-            m_choiceB.OnClicked = () =>
+            s_choiceB.OnClicked = () =>
             {
+                
                 ChoiceCallback(false);
             };
 
-            m_title.value = title;
-            m_message.value = message;
+            s_title.value = title;
+            s_message.value = message;
         }
 
         public static void DisplayFrom(UIDocument uiDocument)
@@ -168,53 +170,62 @@ namespace umi3dDesktopBrowser.ui.viewController
             else Instance.IsDisplaying = true;
             Instance.InsertRootTo(uiDocument.rootVisualElement);
             Center();
-            m_shouldCenter = true;
+            s_shouldCenter = true;
         }
 
         protected void OnSizeChanged(GeometryChangedEvent e)
         {
-            m_width = e.newRect.width;
-            m_height = e.newRect.height;
-            if (m_shouldCenter)
+            s_width = e.newRect.width;
+            s_height = e.newRect.height;
+            if (s_shouldCenter)
                 Center();
         }
 
         protected static void Center()
         {
-            m_dialogueBox.style.top = Screen.height / 2f - m_height / 2f;
-            m_dialogueBox.style.left = Screen.width / 2f - m_width / 2f;
-            m_shouldCenter = false;
+            s_dialogueBox.style.top = Screen.height / 2f - s_height / 2f;
+            s_dialogueBox.style.left = Screen.width / 2f - s_width / 2f;
+            s_shouldCenter = false;
+        }
+
+        protected static void ResetButtonStyle()
+        {
+            VisualManipulator choiceAManip = s_choiceA.GetVisualManipulator(s_choiceA.Root);
+            VisualManipulator choicBAManip = s_choiceB.GetVisualManipulator(s_choiceB.Root);
+
+            choiceAManip.ApplyStyle(MouseBehaviour.MouseOut);
+            choicBAManip.ApplyStyle(MouseBehaviour.MouseOut);
         }
     }
 
     public partial class DialogueBox_E : Visual_E
     {
         private DialogueBox_E() :
-            base(m_uxml, null, null)
+            base(s_uxml, null, null)
         { }
 
         private static void Create()
         {
-            if (m_instance == null)
-                m_instance = new DialogueBox_E();
+            if (s_instance == null)
+                s_instance = new DialogueBox_E();
         }
 
         protected override void Initialize()
         {
             base.Initialize();
 
-            m_dialogueBox = Root.Q("dialogueBox");
-            AddVisualStyle(m_dialogueBox, m_style, m_keys, new PopUpManipulator(m_dialogueBox));
+            s_dialogueBox = Root.Q("dialogueBox");
+            AddVisualStyle(s_dialogueBox, s_style, s_keys, new PopUpManipulator(s_dialogueBox));
 
             Label title = Root.Q<Label>("title");
             string titleStyle = "UI/Style/DialogueBox/DialogueBox_title";
             StyleKeys titleKeys = new StyleKeys("", null, null);
-            m_title = new Label_E(title, titleStyle, titleKeys);
+            s_title = new Label_E(title, titleStyle, titleKeys);
 
             Label message = Root.Q<Label>("message");
             string messageStyle = "UI/Style/DialogueBox/DialogueBox_message";
             StyleKeys messageKeys = new StyleKeys("", null, "");
-            m_message = new Label_E(message, messageStyle, messageKeys);
+            s_message = new Label_E(message, messageStyle, messageKeys);
 
             VisualElement choiceBox = Root.Q("choiceBox");
             string choiceBoxStyle = "UI/Style/DialogueBox/DialogueBox_choiceBox";
@@ -224,11 +235,11 @@ namespace umi3dDesktopBrowser.ui.viewController
             string choiceStyle = "UI/Style/DialogueBox/DialogueBox_Choice";
             StyleKeys choiceKeys = new StyleKeys("", "", "");
             Button choiceA = Root.Q<Button>("choiceA");
-            m_choiceA = new Button_E(choiceA, choiceStyle, choiceKeys);
+            s_choiceA = new Button_E(choiceA, choiceStyle, choiceKeys);
             Button choiceB = Root.Q<Button>("choiceB");
-            m_choiceB = new Button_E(choiceB, choiceStyle, choiceKeys);
+            s_choiceB = new Button_E(choiceB, choiceStyle, choiceKeys);
 
-            m_dialogueBox.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
+            s_dialogueBox.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
         }
     }
 }
