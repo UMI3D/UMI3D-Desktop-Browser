@@ -68,19 +68,19 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="keys">the keys to press</param>
         public void AddShortcut(string title, params string[] keys)
         {
-            ObjectPooling(out Shortcut_E shortcut, m_shortcutsDisplayed, m_shortcutsWaited, () => new Shortcut_E());
-
-            Sprite[] shortcutIcons = new Sprite[keys.Length];
-            for (int i = 0; i < keys.Length; ++i)
-                shortcutIcons[i] = m_keyBindings.GetSpriteFrom(keys[i]);
-
-            shortcut.Setup(title, shortcutIcons);
+            CreateShortcut(out Shortcut_E shortcut, title, keys);
             m_shortcuts.Add(shortcut);
         }
 
-        public void RemoveShortcut()
+        public void AddShortcutAt(int index, string title, params string[] keys)
         {
+            CreateShortcut(out Shortcut_E shortcut, title, keys);
+            m_shortcuts.InsertAt(index, shortcut);
+        }
 
+        public void RemoveShortcut(int index)
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>
@@ -91,6 +91,17 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_shortcutsDisplayed.ForEach((shortcut) => m_shortcuts.Remove(shortcut));
             m_shortcutsWaited.AddRange(m_shortcutsDisplayed);
             m_shortcutsDisplayed.Clear();
+        }
+
+        private void CreateShortcut(out Shortcut_E shortcut, string title, params string[] keys)
+        {
+            ObjectPooling(out shortcut, m_shortcutsDisplayed, m_shortcutsWaited, () => new Shortcut_E());
+
+            Sprite[] shortcutIcons = new Sprite[keys.Length];
+            for (int i = 0; i < keys.Length; ++i)
+                shortcutIcons[i] = m_keyBindings.GetSpriteFrom(keys[i]);
+
+            shortcut.Setup(title, shortcutIcons);
         }
 
         private void OnSizeChanged(GeometryChangedEvent e)
