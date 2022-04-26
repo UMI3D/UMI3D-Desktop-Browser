@@ -65,6 +65,7 @@ namespace BrowserDesktop.Controller
             mouseData.ForceProjectionReleasableButton.Subscribe(ReleaseForceProjection);
 
             mouseData.saveDelay = 0;
+            m_objectMenu?.menu.onContentChange.AddListener(OnMenuObjectContentChange);
         }
 
         private void Update()
@@ -103,7 +104,6 @@ namespace BrowserDesktop.Controller
 
         private void LateUpdate()
         {
-            CursorHandler.Instance.ExitIndicator = mouseData.ForceProjection;
             if (!CanProcess)
                 return;
 
@@ -152,7 +152,7 @@ namespace BrowserDesktop.Controller
                 group.bone = interactionBoneType;
                 ManipulationInputs.Add(group);
             }
-            group.Menu = m_objectMenu.menu;
+            group.Menu = m_objectMenu?.menu;
             return group;
         }
 
