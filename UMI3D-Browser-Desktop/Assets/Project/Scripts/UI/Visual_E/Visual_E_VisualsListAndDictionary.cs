@@ -29,6 +29,11 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected List<VisualElement> m_visuals;
         protected Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)> m_visualStyles;
 
+        /// <summary>
+        /// Return the VisualManipulator of the [visual] (is Root or child of Root).
+        /// </summary>
+        /// <param name="visual"></param>
+        /// <returns></returns>
         public VisualManipulator GetVisualManipulator(VisualElement visual)
             => m_visualStyles[visual].Item3;
 

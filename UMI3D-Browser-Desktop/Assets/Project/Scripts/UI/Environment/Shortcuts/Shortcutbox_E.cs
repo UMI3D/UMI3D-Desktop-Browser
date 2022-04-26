@@ -75,7 +75,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 shortcutIcons[i] = m_keyBindings.GetSpriteFrom(keys[i]);
 
             shortcut.Setup(title, shortcutIcons);
-            m_shortcuts.Adds(shortcut);
+            m_shortcuts.Add(shortcut);
         }
 
         public void RemoveShortcut()
@@ -171,6 +171,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             string titleStyle = "UI/Style/Shortcuts/Shortcutbox_Title";
             StyleKeys titleKeys = new StyleKeys("", "", null);
             new Label_E(title, titleStyle, titleKeys, "Shortcuts");
+            title.style.display = DisplayStyle.None;
 
             var scrollView = Root.Q<ScrollView>();
             m_shortcuts = new ScrollView_E(scrollView);

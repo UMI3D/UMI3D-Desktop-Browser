@@ -128,6 +128,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected override void Initialize()
         {
             base.Initialize();
+            UpdateManipulator(Root, new ButtonManipulator());
             m_clicked = () => OnClicked?.Invoke();
             m_button.clicked += m_clicked;
             var holdableManipulator = new HoldableButtonManipulator();

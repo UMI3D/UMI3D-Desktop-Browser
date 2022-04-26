@@ -30,7 +30,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public void Adds(params Visual_E[] items)
         {
-            m_scrollView.Adds(items);
+            m_scrollView.Add(items);
         }
 
         public void SetVerticalScrollView(string svStyle, StyleKeys svKeys, string dcStyle, StyleKeys dcKeys, string dStyle, StyleKeys dKeys)
