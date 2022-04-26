@@ -48,6 +48,7 @@ public class CursorDisplayer : SingleBehaviour<CursorDisplayer>
         cursorCenter = root.Q<VisualElement>("cursor-center");
         cursorSettings = root.Q<VisualElement>("cursor-settings");
         cursorSettings.style.backgroundImage = new StyleBackground(settingsCursor.texture);
+        DisplaySettingsCursor(false);
     }
 
     public void DisplayCursor(bool display, CursorState state)
@@ -74,13 +75,15 @@ public class CursorDisplayer : SingleBehaviour<CursorDisplayer>
 		}
 	}
 
-    public void DisplaySettingsCursor(bool display)
+    public static void DisplaySettingsCursor(bool display)
     {
-        cursorSettings.style.display = display ? DisplayStyle.Flex : DisplayStyle.None;
+        Debug.Log($"display1 = [{display}]");
+        if (!Exists)
+            return;
+        Instance.cursorSettings.style.display = display ? DisplayStyle.Flex : DisplayStyle.None;
+        Debug.Log($"display2 = [{display}]");
     }
 
-    public bool IsSettingsCursorDisplayed()
-    {
-        return cursorSettings.resolvedStyle.display == DisplayStyle.Flex;
-    }
+    public bool IsSettingsCursorDisplayed
+        => cursorSettings.resolvedStyle.display == DisplayStyle.Flex;
 }
