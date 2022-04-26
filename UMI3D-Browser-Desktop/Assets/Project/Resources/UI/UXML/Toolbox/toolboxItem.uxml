@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="toolboxItem" style="align-items: center;">
+        <ui:Button display-tooltip-when-elided="true" name="icon" />
+        <ui:Label text="Label test" display-tooltip-when-elided="true" name="label" style="align-items: center; justify-content: center; -unity-text-align: middle-center; color: rgb(255, 255, 255); overflow: hidden; width: auto; white-space: nowrap; min-width: 40px;" />
+    </ui:VisualElement>
+</ui:UXML>

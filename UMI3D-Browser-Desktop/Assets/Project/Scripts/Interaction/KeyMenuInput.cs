@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 Gfi Informatique
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,17 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Controller;
-using BrowserDesktop.Menu;
 using umi3d.cdk;
-using umi3d.cdk.collaboration;
 using umi3d.cdk.interaction;
+using umi3d.cdk.menu;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
+using UnityEngine;
 
+/// <summary>
+/// Class to associate an action with a button.
+/// </summary>
 [System.Serializable]
 public class KeyMenuInput : AbstractUMI3DInput
 {
-
     /// <summary>
     /// Associtated interaction (if any).
     /// </summary>
@@ -39,35 +41,28 @@ public class KeyMenuInput : AbstractUMI3DInput
 
     bool risingEdgeEventSent;
 
-    HoldableButtonMenuItem menuItem;
+    private HoldableButtonMenuItem m_menuItem;
 
     public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
     {
         if (associatedInteraction != null)
-        {
             throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
-        }
 
         if (IsCompatibleWith(interaction))
         {
             this.hoveredObjectId = hoveredObjectId;
             this.toolId = toolId;
             associatedInteraction = interaction as EventDto;
-            menuItem = new HoldableButtonMenuItem
+            m_menuItem = new HoldableButtonMenuItem
             {
                 Name = associatedInteraction.name,
                 Holdable = associatedInteraction.hold
             };
-            menuItem.Subscribe(Pressed);
-            if (CircularMenu.Exists)
-            {
-                CircularMenu.Instance.menuDisplayManager.menu.Add(menuItem);
-            }
+            m_menuItem.Subscribe(Pressed);
+            Menu?.Add(m_menuItem);
         }
         else
-        {
             throw new System.Exception("Trying to associate an uncompatible interaction !");
-        }
     }
 
     public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
@@ -83,12 +78,10 @@ public class KeyMenuInput : AbstractUMI3DInput
     public override void Dissociate()
     {
         associatedInteraction = null;
-        if (CircularMenu.Exists && menuItem != null)
-        {
-            CircularMenu.Instance.menuDisplayManager.menu.Remove(menuItem);
-        }
-        menuItem.UnSubscribe(Pressed);
-        menuItem = null;
+        if (m_menuItem != null)
+            Menu?.Remove(m_menuItem);
+        m_menuItem.UnSubscribe(Pressed);
+        m_menuItem = null;
     }
 
     public override bool IsAvailable()
@@ -118,7 +111,7 @@ public class KeyMenuInput : AbstractUMI3DInput
                 };
                 UMI3DClientServer.SendData(eventdto, true);
                 risingEdgeEventSent = true;
-                MouseAndKeyboardController.isInputHold = true;
+                MouseAndKeyboardController.IsInputHold = true;
             }
             else
             {
@@ -149,7 +142,7 @@ public class KeyMenuInput : AbstractUMI3DInput
                     };
                     UMI3DClientServer.SendData(eventdto, true);
                     risingEdgeEventSent = false;
-                    MouseAndKeyboardController.isInputHold = false;
+                    MouseAndKeyboardController.IsInputHold = false;
                 }
             }
         }

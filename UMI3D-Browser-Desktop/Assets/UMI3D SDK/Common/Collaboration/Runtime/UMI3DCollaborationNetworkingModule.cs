@@ -67,8 +67,11 @@ namespace umi3d.common.collaboration
                     uint boneType;
                     ulong objectId;
                     bool syncPosition;
+                    bool syncRotation;
+                    bool freezeWorldScale;
                     SerializableVector3 offsetPosition;
                     SerializableVector4 offsetRotation;
+                    SerializableVector3 offsetScale;
                     if (UMI3DNetworkingHelper.TryRead(container, out bindingId)
                         && UMI3DNetworkingHelper.TryRead(container, out rigName)
                         && UMI3DNetworkingHelper.TryRead(container, out active)
@@ -76,7 +79,10 @@ namespace umi3d.common.collaboration
                         && UMI3DNetworkingHelper.TryRead(container, out objectId)
                         && UMI3DNetworkingHelper.TryRead(container, out offsetPosition)
                         && UMI3DNetworkingHelper.TryRead(container, out offsetRotation)
-                        && UMI3DNetworkingHelper.TryRead(container, out syncPosition))
+                        && UMI3DNetworkingHelper.TryRead(container, out offsetScale)
+                        && UMI3DNetworkingHelper.TryRead(container, out syncPosition)
+                        && UMI3DNetworkingHelper.TryRead(container, out syncRotation)
+                        && UMI3DNetworkingHelper.TryRead(container, out freezeWorldScale))
                     {
                         var bone = new BoneBindingDto()
                         {
@@ -87,7 +93,10 @@ namespace umi3d.common.collaboration
                             objectId = objectId,
                             offsetPosition = offsetPosition,
                             offsetRotation = offsetRotation,
-                            syncPosition = syncPosition
+                            offsetScale = offsetScale,
+                            syncPosition = syncPosition,
+                            syncRotation = syncRotation,
+                            freezeWorldScale = freezeWorldScale
                         };
                         result = (T)Convert.ChangeType(bone, typeof(T));
                         readable = true;
@@ -333,7 +342,6 @@ namespace umi3d.common.collaboration
 
         public override bool Write<T>(T value, out Bytable bytable)
         {
-            UnityEngine.Debug.Log($"Hello {typeof(T)}");
             switch (value)
             {
                 case LocalInfoRequestParameterValue localInfovalue:
@@ -439,7 +447,6 @@ namespace umi3d.common.collaboration
                         bytable = UMI3DNetworkingHelper.WriteCollection(new System.Collections.Generic.List<FileDto>());
                         return true;
                     }
-                    UnityEngine.Debug.Log($"No {typeof(T)} {typeof(T) == typeof(ResourceDto)}");
                     bytable = null;
                     return false;
             }

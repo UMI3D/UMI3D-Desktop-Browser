@@ -610,7 +610,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainCamera: {fileID: 2377199356570503985}
-  m_Volume: {fileID: 0}
+  m_Volume: {fileID: 3464317912480805684}
   m_Vignette: {fileID: 0}
   m_Bloom: {fileID: 0}
 --- !u!114 &3464317912480805684

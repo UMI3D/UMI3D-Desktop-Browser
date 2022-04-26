@@ -20,34 +20,41 @@ using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.common;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu
 {
     /// <summary>
-    /// This class manages the UI elements which gives information about the current session such as : the name of the environment,
-    /// is the microphone working, the session tim, etc.
+    /// This class manages the UI elements which gives information about the current session such as : 
+    /// the name of the environment, is the microphone working, the session tim, etc.
     /// </summary>
     public class SessionInformationMenu : SingleBehaviour<SessionInformationMenu>
     {
+        #region Fields
+
         public UIDocument uiDocument;
+        VisualElement root;
 
-        VisualElement sessionInfo;
-
-        VisualElement microphoneSetter;
-
-        Label sessionTime;
-        Button microphoneBtn;
-        Label environmentName;
+        #region Top Bar
 
         VisualElement topCenterMenu;
+        VisualElement microphoneSetter;
+
+        Label environmentName;
+
+        #endregion
+
+        #region Bottom Bar
 
         MicrophoneSlider GainSlider;
         MicrophoneSlider ThresholdSlider;
 
         bool displayMicrophoneSlider = true;
 
-        DateTime startOfSession = new DateTime();
+        #endregion
+
+        #endregion
 
         /// <summary>
         /// Binds the UI
@@ -55,47 +62,53 @@ namespace BrowserDesktop.Menu
         void Start()
         {
             UnityEngine.Debug.Assert(uiDocument != null);
-            var root = uiDocument.rootVisualElement;
+            root = uiDocument.rootVisualElement;
 
+            //Top Bar
             topCenterMenu = root.Q<VisualElement>("top-center-menu");
             topCenterMenu.style.display = DisplayStyle.None;
 
-            sessionInfo = root.Q<VisualElement>("session-info");
-            sessionTime = sessionInfo.Q<Label>("session-time");
+
+            //Bottom Bar
 
             microphoneSetter = root.Q<VisualElement>("microphone-setter");
-
-            microphoneBtn = sessionInfo.Q<Button>("microphone-btn");
-            microphoneBtn.clickable.clicked += () =>
-            {
-                ActivateDeactivateMicrophone.Instance.ToggleMicrophoneStatus();
-            };
-
-            DisplayConsole(false);
-            microphoneBtn.RegisterCallback<MouseDownEvent>(e => { 
-                if(e.pressedButtons == 2)
-                    DisplayConsole(!isDisplayed);
-            });
-
+            HideMicrophoneSettingsPopUp();
             InitMicrophoneSlider(microphoneSetter);
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
             {
-                startOfSession = DateTime.Now;
                 topCenterMenu.style.display = DisplayStyle.Flex;
             });
         }
 
         private void Update()
         {
-            var time = DateTime.Now - startOfSession;
-            sessionTime.text = time.ToString("hh") + ":" + time.ToString("mm") + ":" + time.ToString("ss");
-            if(umi3d.cdk.collaboration.MicrophoneListener.Exists)
-                if(displayMicrophoneSlider && GainSlider.DisplayedValue != umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS)
+            if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+                if (displayMicrophoneSlider && GainSlider.DisplayedValue != umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS)
                 {
                     GainSlider.DisplayedValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS;
                     ThresholdSlider.DisplayedValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS;
                 }
+
+            if (Input.GetKeyDown(KeyCode.F8))
+            {
+                if (microphoneSetter.resolvedStyle.display == DisplayStyle.Flex)
+                    HideMicrophoneSettingsPopUp();
+                else
+                    DisplayMicrophoneSettingsPopUp();
+            }
+        }
+
+        private void HideMicrophoneSettingsPopUp()
+        {
+            microphoneSetter.style.display = DisplayStyle.None;
+        }
+
+        private void DisplayMicrophoneSettingsPopUp()
+        {
+            GainSlider.Value = GToP(umi3d.cdk.collaboration.MicrophoneListener.Gain);
+
+            microphoneSetter.style.display = DisplayStyle.Flex;
         }
 
         void InitMicrophoneSlider(VisualElement root)
@@ -118,7 +131,6 @@ namespace BrowserDesktop.Menu
                     GainSlider.RefreshColor();
                     ThresholdSlider.RefreshColor();
                 });
-
 
             GainSlider = new MicrophoneSlider(root.Q<VisualElement>("gain-bar"),"Gain",
                 (i) => { float r; return (float.TryParse(i, out r), GToP(r)); },
@@ -150,51 +162,30 @@ namespace BrowserDesktop.Menu
         }
 
         /// <summary>
-        /// Event called when the status of the microphone changes.
-        /// </summary>
-        /// <param name="val"></param>
-        public void OnMicrophoneStatusChanged(bool val)
-        {
-            if (val)
-            {
-                microphoneBtn.RemoveFromClassList("btn-mic-off");
-                microphoneBtn.AddToClassList("btn-mic-on");
-            }
-
-            else
-            {
-                microphoneBtn.RemoveFromClassList("btn-mic-on");
-                microphoneBtn.AddToClassList("btn-mic-off");
-            }
-
-        }
-
-        /// <summary>
         /// Initiates the custom title bar with the name of the environment.
         /// </summary>
         /// <param name="media"></param>
-        /// <param name="data"></param>
-        public void SetEnvironmentName(MediaDto media, UserPreferencesManager.Data data)
+        public void SetEnvironmentName(MediaDto media)
         {
-            environmentName = uiDocument.rootVisualElement.Q<Label>("environment-name");
+            environmentName = root.Q<Label>("environment-name");
             environmentName.text = media.name;
         }
 
-        bool isDisplayed = false;
+        /*bool isDisplayed = false;
         void DisplayConsole(bool val)
         {
             isDisplayed = val;
             microphoneSetter.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
             if (val)
                 MainThreadDispatcher.UnityMainThreadDispatcher.Instance().Enqueue(SetValues());
-        }
+        }*/
 
-        IEnumerator SetValues()
+        /*IEnumerator SetValues()
         {
             yield return null;
             GainSlider.Value = GToP(umi3d.cdk.collaboration.MicrophoneListener.Gain);
             ThresholdSlider.Value = umi3d.cdk.collaboration.MicrophoneListener.NoiseThreshold;
-        }
+        }*/
 
     }
 }
