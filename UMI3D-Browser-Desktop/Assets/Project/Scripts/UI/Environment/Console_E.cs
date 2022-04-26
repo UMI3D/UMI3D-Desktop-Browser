@@ -42,6 +42,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected static ScrollView_E s_logs { get; set; } = null;
         protected static ScrollView_E s_details { get; set; } = null;
         protected static float s_width { get; set; } = default;
+        protected static Label_E s_lastSelectedLog { get; set; } = null;
         protected static List<Label_E> s_logDisplayed;
         protected static List<Label_E> s_logWaited;
         protected static List<Label_E> s_logDetailDisplayed;
@@ -53,10 +54,13 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static string s_consoleStyle = "UI/Style/Console/Console";
         private static StyleKeys s_consoleKeys = new StyleKeys(null, "", null);
         private static string s_logStyle = "UI/Style/Console/Console_Log";
-        private static StyleKeys s_logKeys = new StyleKeys("log", null, null);
-        private static StyleKeys s_assertKeys = new StyleKeys("assert", null, null);
-        private static StyleKeys m_errorKeys = new StyleKeys("error", null, null);
-        private static StyleKeys s_exceptionKeys = new StyleKeys("exception", null, null);
+        private static StyleKeys s_logKeys = new StyleKeys("log", null, "unselected");
+        private static StyleKeys s_logKeysSelected = new StyleKeys("log", null, "selected");
+        private static StyleKeys s_assertKeys = new StyleKeys("assert", null, "unselected");
+        private static StyleKeys s_assertKeysSelected = new StyleKeys("assert", null, "selected");
+        private static StyleKeys m_errorKeys = new StyleKeys("error", null, "unselected");
+        private static StyleKeys s_exceptionKeys = new StyleKeys("exception", null, "unselected");
+        private static StyleKeys s_exceptionKeysSelected = new StyleKeys("exception", null, "selected");
         private static string s_logDetailStyle = "UI/Style/Console/Console_LogDetail";
     }
 
@@ -102,26 +106,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         private void SetLogLabel(out Label_E log, List<Label_E> displayed, List<Label_E> waited, string style, LogType type)
         {
             ObjectPooling(out log, displayed, waited, () => new Label_E(style, null));
-            switch (type)
-            {
-                case LogType.Error:
-                    log.UpdateLabelKeys(s_logKeys);
-                    break;
-                case LogType.Assert:
-                    log.UpdateLabelKeys(s_assertKeys);
-                    break;
-                case LogType.Warning:
-                    log.UpdateLabelKeys(s_logKeys);
-                    break;
-                case LogType.Log:
-                    log.UpdateLabelKeys(s_logKeys);
-                    break;
-                case LogType.Exception:
-                    log.UpdateLabelKeys(s_exceptionKeys);
-                    break;
-                default:
-                    break;
-            }
+            UpdateLogStyle(log, type, false);
         }
 
         private void OnSizeChanged(GeometryChangedEvent e)
@@ -139,9 +124,12 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             if (behaviour != MouseBehaviour.MousePressed)
                 return;
+            
             s_details.Clear();
-
             var (_, logString, stackTrace, type) = s_logsMap[logSource];
+            UpdateLogStyle(s_lastSelectedLog, type, false);
+            s_lastSelectedLog = logSource;
+            UpdateLogStyle(s_lastSelectedLog, type, true);
 
             SetLogLabel(out Label_E log, s_logDetailDisplayed, s_logDetailWaited, s_logDetailStyle, type);
             log.value = logString;
@@ -154,6 +142,33 @@ namespace umi3dDesktopBrowser.ui.viewController
                 SetLogLabel(out Label_E logTrace, s_logDetailDisplayed, s_logDetailWaited, s_logDetailStyle, LogType.Log);
                 logTrace.value = trace;
                 s_details.Add(logTrace);
+            }
+        }
+
+        private void UpdateLogStyle(Label_E log, LogType type, bool isSelected)
+        {
+            if (log == null)
+                return;
+
+            switch (type)
+            {
+                case LogType.Error:
+                    log.UpdateLabelKeys((isSelected) ? s_logKeysSelected : s_logKeys);
+                    break;
+                case LogType.Assert:
+                    log.UpdateLabelKeys((isSelected) ? s_assertKeysSelected : s_assertKeys);
+                    break;
+                case LogType.Warning:
+                    log.UpdateLabelKeys((isSelected) ? s_logKeysSelected : s_logKeys);
+                    break;
+                case LogType.Log:
+                    log.UpdateLabelKeys((isSelected) ? s_logKeysSelected : s_logKeys);
+                    break;
+                case LogType.Exception:
+                    log.UpdateLabelKeys((isSelected) ? s_exceptionKeysSelected : s_exceptionKeys);
+                    break;
+                default:
+                    break;
             }
         }
 
