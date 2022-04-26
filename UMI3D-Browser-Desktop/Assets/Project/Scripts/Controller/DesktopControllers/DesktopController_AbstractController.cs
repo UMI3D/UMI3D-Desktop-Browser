@@ -65,6 +65,7 @@ namespace BrowserDesktop.Controller
             mouseData.ForceProjectionReleasableButton.Subscribe(ReleaseForceProjection);
 
             mouseData.saveDelay = 0;
+            m_objectMenu?.menu.onContentChange.AddListener(OnMenuObjectContentChange);
         }
 
         private void Update()

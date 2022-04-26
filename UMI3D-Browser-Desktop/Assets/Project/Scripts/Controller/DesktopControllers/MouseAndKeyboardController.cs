@@ -270,6 +270,14 @@ namespace BrowserDesktop.Controller
 
         #endregion
 
+        private void OnMenuObjectContentChange()
+        {
+            if (m_objectMenu?.menu.Count > 0)
+                CursorDisplayer.DisplaySettingsCursor(true);
+            else
+                CursorDisplayer.DisplaySettingsCursor(false);
+        }
+
         //bool ShouldAutoProject(InteractableDto tool)
         //{
         //    List<AbstractInteractionDto> manips = tool.interactions.FindAll(x => x is ManipulationDto);
