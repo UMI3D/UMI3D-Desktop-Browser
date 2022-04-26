@@ -106,6 +106,7 @@ namespace BrowserDesktop.Controller
 
         private int m_navigationDirect = 0;
         private AutoProjectOnHover reason = new AutoProjectOnHover();
+        private static bool s_isRightClickAdded { get; set; } = false;
     }
 
 
@@ -273,9 +274,15 @@ namespace BrowserDesktop.Controller
         private void OnMenuObjectContentChange()
         {
             if (m_objectMenu?.menu.Count > 0)
+            {
                 CursorDisplayer.DisplaySettingsCursor(true);
+                if (!s_isRightClickAdded)
+                    Shortcutbox_E.Instance.AddShortcut("open Object menu", "Mouse1");
+            }
             else
+            {
                 CursorDisplayer.DisplaySettingsCursor(false);
+            }
         }
 
         //bool ShouldAutoProject(InteractableDto tool)
