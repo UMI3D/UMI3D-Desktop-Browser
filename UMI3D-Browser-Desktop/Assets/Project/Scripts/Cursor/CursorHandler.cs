@@ -131,9 +131,6 @@ namespace BrowserDesktop.Cursor
 
         private void Start()
         {
-            LastMenuState = false;
-            stateUpdated = true;
-            movementUpdated = true;
             if (UMI3DCollaborationClientServer.Exists)
                 UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.AddListener(Clear);
         }
