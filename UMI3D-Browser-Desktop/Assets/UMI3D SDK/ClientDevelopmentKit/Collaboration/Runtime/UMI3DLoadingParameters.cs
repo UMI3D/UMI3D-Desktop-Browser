@@ -445,7 +445,6 @@ namespace umi3d.cdk
             switch (operationId)
             {
                 case UMI3DOperationKeys.SwitchTool:
-                    Debug.Log($"switch tool");
                     id = UMI3DNetworkingHelper.Read<ulong>(container);
                     ulong oldid = UMI3DNetworkingHelper.Read<ulong>(container);
                     releasable = UMI3DNetworkingHelper.Read<bool>(container);
@@ -453,14 +452,12 @@ namespace umi3d.cdk
                     performed.Invoke();
                     break;
                 case UMI3DOperationKeys.ProjectTool:
-                    Debug.Log($"Project tool");
                     id = UMI3DNetworkingHelper.Read<ulong>(container);
                     releasable = UMI3DNetworkingHelper.Read<bool>(container);
                     AbstractInteractionMapper.Instance.SelectTool(id, releasable, 0, new interaction.RequestedByEnvironment());
                     performed.Invoke();
                     break;
                 case UMI3DOperationKeys.ReleaseTool:
-                    Debug.Log($"Release tool");
                     id = UMI3DNetworkingHelper.Read<ulong>(container);
                     AbstractInteractionMapper.Instance.ReleaseTool(id, new interaction.RequestedByEnvironment());
                     performed.Invoke();
