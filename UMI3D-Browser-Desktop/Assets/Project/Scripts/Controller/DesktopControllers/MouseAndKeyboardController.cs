@@ -159,7 +159,6 @@ namespace BrowserDesktop.Controller
         {
             if (mouseData.ForceProjectionReleasableButton == null || !mouseData.ForceProjectionReleasable)
                 return;
-
             if (!m_objectMenu.menu.Contains(mouseData.ForceProjectionReleasableButton))
                 m_objectMenu?.menu.Add(mouseData.ForceProjectionReleasableButton);
         }
@@ -239,9 +238,6 @@ namespace BrowserDesktop.Controller
                 if (mouseData.LastProjected != null)
                     ReleaseAutoProjection();
 
-                mouseData.HoverState = HoverState.Hovering;
-                CursorHandler.State = CursorHandler.CursorState.Hover;
-
                 bool isInteractionsEmpty = mouseData.CurrentHovered.dto.interactions.Count == 0;
                 bool isCompatible = IsCompatibleWith(mouseData.CurrentHovered);
                 if (!isInteractionsEmpty && isCompatible && !IsInputHold)
@@ -273,6 +269,14 @@ namespace BrowserDesktop.Controller
         }
 
         #endregion
+
+        private void OnMenuObjectContentChange()
+        {
+            if (m_objectMenu?.menu.Count > 0)
+                CursorDisplayer.DisplaySettingsCursor(true);
+            else
+                CursorDisplayer.DisplaySettingsCursor(false);
+        }
 
         //bool ShouldAutoProject(InteractableDto tool)
         //{
