@@ -27,9 +27,6 @@ namespace BrowserDesktop.Cursor
         public enum CursorState { Default, Hover, Clicked, FollowCursor }
         public enum CursorMovement { Free, Center, Confined, FreeHidden }
 
-        [SerializeField]
-        private bool LastMenuState = false;
-
         public static CursorState State 
         { 
             get => Exists ? s_state : CursorState.Default;
@@ -134,7 +131,6 @@ namespace BrowserDesktop.Cursor
 
         private void Start()
         {
-            LastMenuState = false;
             UMI3DCollaborationClientServer.LoggingOut += Clear;
         }
 
@@ -150,9 +146,6 @@ namespace BrowserDesktop.Cursor
         private void Update()
         {
             transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            //if (CursorDisplayer.Exists && CursorDisplayer.Instance.IsSettingsCursorDisplayed != (LastMenuState))
-            //    CursorDisplayer.Instance.DisplaySettingsCursor(LastMenuState);
         }
 
         #endregion
@@ -184,11 +177,6 @@ namespace BrowserDesktop.Cursor
         {
             if (!CursorDisplayer.Exists || !m_isMovementCenterOrFreeHidden)
                 return;
-
-            //LastMenuState = m_isMovementCenterOrFreeHidden;
-
-            //if (!LastMenuState)
-            //    return;
 
             if (Movement == CursorMovement.Center)
                 CursorDisplayer.Instance.DisplayCursor(true, State);
