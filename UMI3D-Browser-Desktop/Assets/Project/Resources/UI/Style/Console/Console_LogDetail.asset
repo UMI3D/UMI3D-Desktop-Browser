@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
-  m_Name: Console_Log
+  m_Name: Console_LogDetail
   m_EditorClassIdentifier: 
   AppliesFormatAndStyle:
     m_PersistentCalls:
@@ -75,8 +75,8 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_numberOfVisibleCharacter:
-      m_keyword: 2
-      m_value: 65
+      m_keyword: 0
+      m_value: 0
     m_textAlign: 0
     m_textWrapping: 0
   m_themeStyles:
@@ -127,13 +127,13 @@ MonoBehaviour:
             m_value: 0
     - m_key: assert
       m_default:
-        m_keyword: 2
+        m_keyword: 0
         m_value:
           m_font: {fileID: 0}
           m_fontStyleAndWeight: 0
           m_color:
-            m_keyword: 2
-            m_value: {r: 1, g: 0.39189184, b: 0.042452812, a: 1}
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
           m_outlineColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -213,13 +213,13 @@ MonoBehaviour:
             m_value: 0
     - m_key: exception
       m_default:
-        m_keyword: 2
+        m_keyword: 0
         m_value:
           m_font: {fileID: 0}
           m_fontStyleAndWeight: 0
           m_color:
-            m_keyword: 2
-            m_value: {r: 1, g: 0.18396229, b: 0.18396229, a: 1}
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
           m_outlineColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -258,10 +258,10 @@ MonoBehaviour:
     m_border:
     - m_key: unselected
       m_default:
-        m_keyword: 2
+        m_keyword: 0
         m_value:
           m_color:
-            m_keyword: 1
+            m_keyword: 0
             m_value:
               m_global: {r: 0, g: 0, b: 0, a: 0}
               m_bottom: {r: 0, g: 0, b: 0, a: 0}
@@ -269,13 +269,13 @@ MonoBehaviour:
               m_right: {r: 0, g: 0, b: 0, a: 0}
               m_top: {r: 0, g: 0, b: 0, a: 0}
           m_width:
-            m_keyword: 1
+            m_keyword: 0
             m_value:
-              m_global: 1
-              m_bottom: 1
-              m_left: 1
-              m_right: 1
-              m_top: 1
+              m_global: 0
+              m_bottom: 0
+              m_left: 0
+              m_right: 0
+              m_top: 0
           m_radius:
             m_keyword: 0
             m_value:
@@ -303,88 +303,6 @@ MonoBehaviour:
               m_left: 0
               m_right: 0
               m_top: 0
-          m_radius:
-            m_keyword: 0
-            m_value:
-              m_global: 0
-              m_bottomLeft: 0
-              m_bottomRight: 0
-              m_topLeft: 0
-              m_TopRight: 0
-      m_mousePressed:
-        m_keyword: 0
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value:
-              m_global: {r: 0, g: 0, b: 0, a: 0}
-              m_bottom: {r: 0, g: 0, b: 0, a: 0}
-              m_left: {r: 0, g: 0, b: 0, a: 0}
-              m_right: {r: 0, g: 0, b: 0, a: 0}
-              m_top: {r: 0, g: 0, b: 0, a: 0}
-          m_width:
-            m_keyword: 0
-            m_value:
-              m_global: 0
-              m_bottom: 0
-              m_left: 0
-              m_right: 0
-              m_top: 0
-          m_radius:
-            m_keyword: 0
-            m_value:
-              m_global: 0
-              m_bottomLeft: 0
-              m_bottomRight: 0
-              m_topLeft: 0
-              m_TopRight: 0
-    - m_key: selected
-      m_default:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 2
-            m_value:
-              m_global: {r: 1, g: 1, b: 1, a: 1}
-              m_bottom: {r: 1, g: 1, b: 1, a: 1}
-              m_left: {r: 1, g: 1, b: 1, a: 1}
-              m_right: {r: 1, g: 1, b: 1, a: 1}
-              m_top: {r: 1, g: 1, b: 1, a: 1}
-          m_width:
-            m_keyword: 11
-            m_value:
-              m_global: 1
-              m_bottom: 1
-              m_left: 1
-              m_right: 1
-              m_top: 1
-          m_radius:
-            m_keyword: 0
-            m_value:
-              m_global: 0
-              m_bottomLeft: 0
-              m_bottomRight: 0
-              m_topLeft: 0
-              m_TopRight: 0
-      m_mouseOver:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 2
-            m_value:
-              m_global: {r: 1, g: 1, b: 1, a: 1}
-              m_bottom: {r: 1, g: 1, b: 1, a: 1}
-              m_left: {r: 1, g: 1, b: 1, a: 1}
-              m_right: {r: 1, g: 1, b: 1, a: 1}
-              m_top: {r: 1, g: 1, b: 1, a: 1}
-          m_width:
-            m_keyword: 11
-            m_value:
-              m_global: 1
-              m_bottom: 1
-              m_left: 1
-              m_right: 1
-              m_top: 1
           m_radius:
             m_keyword: 0
             m_value:

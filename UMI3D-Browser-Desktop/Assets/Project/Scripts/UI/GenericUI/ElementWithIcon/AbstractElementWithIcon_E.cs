@@ -43,6 +43,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 Icon = new Visual_E(m_icon, styleResourcePath, keys);
             else
                 throw new System.NotImplementedException();
+            Icon.GetVisualManipulator(m_icon).StopPropagation = false;
         }
     }
 

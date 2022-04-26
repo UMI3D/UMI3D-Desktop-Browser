@@ -155,7 +155,7 @@ namespace umi3d.desktopBrowser.menu.Container
             {
                 if (ToolType != ItemType.Toolbox)
                     SetContainerAsToolbox();
-                Toolbox.Adds(containerDeep1.ToolboxItem);
+                Toolbox.Add(containerDeep1.ToolboxItem);
             }
             if (element is AbstractWindowInputDisplayer displayer)
             {
