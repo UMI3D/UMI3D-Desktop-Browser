@@ -282,7 +282,9 @@ namespace BrowserDesktop.Interaction
         {
             while (true)
             {
-                if ((!CircularMenu.Exists || !CircularMenu.Instance.IsExpanded) && !MainMenu.IsDisplaying)
+                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu et MainMenu [Manipulation Input]");
+                //if (/*(!CircularMenu.Exists || !CircularMenu.Instance.IsExpanded) &&*/ !MainMenu.IsDisplaying)
+                if (true)
                 {
                     if (Active && associatedInteraction != null && InputLayoutManager.GetInputCode(activationButton.activationButton) != KeyCode.None)
                     {
