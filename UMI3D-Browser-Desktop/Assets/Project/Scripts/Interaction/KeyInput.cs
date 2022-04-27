@@ -238,7 +238,7 @@ namespace BrowserDesktop.Interaction
             if (Down) onInputUp.Invoke();
             ResetButton();
             associatedInteraction = null;
-            Shortcutbox_E.Instance.ClearShortcut();
+            Shortcutbox_E.Instance.ClearShortcutExceptRightClick();
         }
 
         void ResetButton()
