@@ -37,7 +37,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             Element = new Button_E(m_button, styleResourcePath, onKey, offKey, isOn)
             {
-                OnClicked = buttonClicked
+                Clicked = buttonClicked
             };
         }
     }

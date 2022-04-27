@@ -72,7 +72,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             StyleKeys onKeys = new StyleKeys(null, (isTool) ? "placeholderToolActive" : "placeholderToolboxActive", null);
             StyleKeys offKeys = new StyleKeys(null, (isTool) ? "placeholderToolEnable" : "placeholderToolboxEnable", null);
-            Element.UpdatesStyle(onKeys, offKeys, IsOn);
+            Element.AddStateKeys(Element, onKeys, offKeys);
+            Element.Toggle(IsOn);
         }
     }
     

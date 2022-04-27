@@ -38,7 +38,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected static Button_E s_choiceA { get; set; } = null;
         protected static Button_E s_choiceB { get; set; } = null;
 
-        public static Action<bool> ChoiceCallback { get; private set; }
+        public static event Action<bool> ChoiceMade;
         private static Action<object> s_cursorSetMovement { get; set; } = null;
         private static Action<object> s_cursorUnsetMovement { get; set; } = null;
 
@@ -91,10 +91,10 @@ namespace umi3dDesktopBrowser.ui.viewController
             s_choiceA.Text = optionA;
             s_choiceB.Text = optionB;
 
-            ChoiceCallback = (b) =>
+            ChoiceMade += (choice) =>
             {
                 s_cursorUnsetMovement(Instance);
-                choiceCallback(b);
+                choiceCallback(choice);
                 Instance.Remove();
             };
         }
@@ -129,7 +129,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             s_choiceB.Hide();
             s_choiceA.Text = optionA;
 
-            ChoiceCallback = (b) =>
+            ChoiceMade += (_) =>
             {
                 s_cursorUnsetMovement(Instance);
                 choiceCallback();
@@ -147,17 +147,17 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             Create();
 
-            ResetButtonStyle();
+            ResetButtons();
             s_cursorSetMovement(Instance);
 
-            s_choiceA.OnClicked = () =>
+            s_choiceA.Clicked += () =>
             {
-                ChoiceCallback(true);
+                ChoiceMade(true);
             };
-            s_choiceB.OnClicked = () =>
+            s_choiceB.Clicked += () =>
             {
                 
-                ChoiceCallback(false);
+                ChoiceMade(false);
             };
 
             s_title.value = title;
@@ -188,8 +188,11 @@ namespace umi3dDesktopBrowser.ui.viewController
             s_shouldCenter = false;
         }
 
-        protected static void ResetButtonStyle()
+        protected static void ResetButtons()
         {
+            ChoiceMade = null;
+            s_choiceA.ResetClickedEvent();
+            s_choiceB.ResetClickedEvent();
             VisualManipulator choiceAManip = s_choiceA.GetVisualManipulator(s_choiceA.Root);
             VisualManipulator choicBAManip = s_choiceB.GetVisualManipulator(s_choiceB.Root);
 

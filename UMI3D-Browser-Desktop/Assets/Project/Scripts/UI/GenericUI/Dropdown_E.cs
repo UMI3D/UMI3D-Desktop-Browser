@@ -23,9 +23,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Dropdown_E
     {
-        public Action<string> OnValueChanged { get; set; } = null;
+        public Action<string> ValueChanged { get; set; } = null;
 
-        protected Button_E m_enumField { get; set; } = null;
         protected List<string> m_items { get; set; } = null;
         protected string m_currentValue { get; set; } = null;
         protected CustomStyle_SO m_menuStyle { get; set; } = null;
@@ -80,7 +79,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             m_items.Add(item);
         }
-        public void SetsOptions(List<string> options)
+        public void SetOptions(List<string> options)
         {
             m_items = options;
         }
@@ -93,10 +92,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 throw new Exception($"items doesn't contain [{value}]");
             SelectItem(value);
         }
-    }
 
-    public partial class Dropdown_E
-    {
         protected void ShowMenu()
         {
             var menu = new GenericDropdownMenu();
@@ -135,7 +131,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             m_currentValue = item;
             Text = item;
-            OnValueChanged?.Invoke(item);
+            ValueChanged?.Invoke(item);
         }
     }
 
@@ -144,8 +140,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected override void Initialize()
         {
             base.Initialize();
-            OnClicked = null;
-            m_button.clicked += ShowMenu;
+            Clicked += ShowMenu;
         }
     }
 }

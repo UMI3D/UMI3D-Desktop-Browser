@@ -23,7 +23,7 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         public event Action<bool> OnPinnedUnpinned;
 
-        public ButtonWithIcon_E PinButton { get; private set; } = null;
+        public Button_E PinButton { get; private set; } = null;
         public Toolbox_E FirstToolbox { get; private set; } = null;
 
         private VisualElement m_toolboxesContainer { get; set; } = null;
@@ -69,15 +69,16 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Initialize();
 
             Button pin = Root.Q<Button>("pinButton");
-            PinButton = new ButtonWithIcon_E(pin);
+            PinButton = new Button_E(pin);
+            PinButton.Clicked += PinUnpin;
             string pinButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButton";
             StyleKeys pinActiveKeys = new StyleKeys(null, "PinnedActive", "PinnedActive");
             StyleKeys pinEnableKeys = new StyleKeys(null, "PinnedEnable", "PinnedEnable");
-            PinButton.SetButton(pinButtonStyle, pinActiveKeys, pinEnableKeys, false, PinUnpin);
+            PinButton.AddStateKeys(PinButton, pinButtonStyle, pinActiveKeys, pinEnableKeys);
             string pinIconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButtonIcon";
             StyleKeys pinIconKeys = new StyleKeys(null, "", null);
             PinButton.SetIcon(pinIconStyle, pinIconKeys);
-            PinButton.ApplyButtonStyleWithIcon();
+            PinButton.LinkMouseBehaviourChanged(PinButton.Icon, PinButton.Button);
 
             VisualElement containers = Root.Q("containers");
             string conainerStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_Container";

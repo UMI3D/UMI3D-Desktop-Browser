@@ -46,7 +46,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             ToolboxItem = new ToolboxItem_E()
             {
-                OnClicked = () =>
+                Clicked = () =>
                 {
                     Select();
                     ToolboxPinnedWindow_E.Instance.SetTopBarName(menu.Name);

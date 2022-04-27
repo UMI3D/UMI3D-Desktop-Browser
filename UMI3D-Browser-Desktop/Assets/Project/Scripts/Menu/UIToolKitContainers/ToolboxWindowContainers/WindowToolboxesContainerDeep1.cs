@@ -38,7 +38,7 @@ namespace umi3d.desktopBrowser.menu.Container
             base.Awake();
             ToolboxItem = new ToolboxItem_E(false)
             {
-                OnClicked = () => Select()
+                Clicked = () => Select()
             };
         }
 

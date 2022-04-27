@@ -72,7 +72,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             StyleKeys unpinnedButtonKeys = new StyleKeys(null, "", null);
             new Button_E(unpinnedButton, unpinnedButtonStyle, unpinnedButtonKeys)
             {
-                OnClicked = () => { UnPinedButtonPressed?.Invoke(); },
+                Clicked = () => { UnPinedButtonPressed?.Invoke(); },
             };
         }
     }

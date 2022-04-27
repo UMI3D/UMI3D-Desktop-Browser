@@ -57,9 +57,9 @@ namespace umi3dDesktopBrowser.ui.viewController
             => ShortcutShortcut.value = (value) ? "F1 - Close Shortcut" : "F1 - Open Shortcut";
 
         public void UpdateOnOffNotificationIcon(bool value)
-            => Notification.UpdatesStyle((value) ? m_notificationOnKeys : m_notificationOffKeys);
+            => Notification.UpdateButtonKeys((value) ? m_notificationOnKeys : m_notificationOffKeys);
         public void UpdateAlertNotificationIcon()
-            => Notification.UpdatesStyle(m_notificationAlertKeys);
+            => Notification.UpdateButtonKeys(m_notificationAlertKeys);
     }
 
     public partial class BottomBar_E : Visual_E

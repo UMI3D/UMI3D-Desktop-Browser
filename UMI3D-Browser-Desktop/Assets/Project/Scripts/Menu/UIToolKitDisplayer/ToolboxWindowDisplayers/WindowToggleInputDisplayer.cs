@@ -52,7 +52,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
                 m_displayerElement.SetButton(toggleStylePath, toggleOnKeys, toggleOffKeys, toggleMenu.GetValue(), null);
                 m_displayerElement.Element.Text = null;
 
-                m_displayerElement.OnClicked = () => 
+                m_displayerElement.Clicked = () => 
                 {
                     bool newValue = !m_displayerElement.IsOn;
                     m_displayerElement.Toggle(newValue);
