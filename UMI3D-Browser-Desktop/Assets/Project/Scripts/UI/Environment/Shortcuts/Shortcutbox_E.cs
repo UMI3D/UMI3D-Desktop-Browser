@@ -209,8 +209,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             var title = Root.Q<Label>("title");
             string titleStyle = "UI/Style/Shortcuts/Shortcutbox_Title";
             StyleKeys titleKeys = new StyleKeys("", "", null);
-            new Label_E(title, titleStyle, titleKeys, "Shortcuts");
-            title.style.display = DisplayStyle.None;
+            new Label_E(title, titleStyle, titleKeys, "Actions");
 
             var scrollView = Root.Q<ScrollView>();
             s_shortcuts = new ScrollView_E(scrollView);

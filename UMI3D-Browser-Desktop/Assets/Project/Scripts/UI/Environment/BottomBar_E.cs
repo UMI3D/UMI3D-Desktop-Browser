@@ -54,7 +54,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public void OpenCloseMenuBar(bool value)
             => MenuShortcut.value = (value) ? "Right Click / Escape - Close Menu" : "Right Click / Escape - Open Menu";
         public void OpenCloseShortcut(bool value)
-            => ShortcutShortcut.value = (value) ? "F1 - Close Shortcut" : "F1 - Open Shortcut";
+            => ShortcutShortcut.value = (value) ? "F1 - Close Actions Shortcuts" : "F1 - Open Actions Shortcuts";
 
         public void UpdateOnOffNotificationIcon(bool value)
             => Notification.UpdatesStyle((value) ? m_notificationOnKeys : m_notificationOffKeys);
@@ -79,7 +79,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             var menuShortcut = Root.Q<Label>("menuShortcut");
             MenuShortcut = new Label_E(menuShortcut, leftLabelsStyle, labelsKeys, "Right Click - Open Menu");
             var shortcutShortcut = Root.Q<Label>("shortcutShortcut");
-            ShortcutShortcut = new Label_E(shortcutShortcut, leftLabelsStyle, labelsKeys, "F1 - Open Shortcut");
+            ShortcutShortcut = new Label_E(shortcutShortcut, leftLabelsStyle, labelsKeys, "F1 - Open Actions Shortcuts");
 
             var timer = Root.Q<Label>("timer");
             Timer = new Label_E(timer, rightLabelsStyle, labelsKeys, "00:00:00");
