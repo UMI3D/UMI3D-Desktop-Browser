@@ -60,7 +60,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             ToolboxItem = new ToolboxItem_E(false)
             {
-                OnClicked = () => Select()
+                Clicked = () => Select()
             };
             ToolboxItem.SetItemStatus(true);
             Displayerbox = new Displayerbox_E(DisplayerboxType.ToolboxesPopup);

@@ -57,7 +57,7 @@ public class ToolboxUITest : MonoBehaviour
             .Instance
             .InsertRootTo(UIDoc.rootVisualElement.Q("top"));
 
-        MenuBar_E.Instance.ToolboxButton.OnClicked += () => DisplayManager.CreateMenuAndDisplay(true, false);
+        MenuBar_E.Instance.ToolboxButton.Clicked += () => DisplayManager.CreateMenuAndDisplay(true, false);
 
         ToolboxWindow_E
             .Instance

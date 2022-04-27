@@ -20,10 +20,10 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class ClickableWithLabel_E<B> : IClickableElement where B : IClickableElement
     {
-        public Action OnClicked
+        public Action Clicked
         {
-            get => Element.OnClicked;
-            set => Element.OnClicked = value;
+            get => Element.Clicked;
+            set => Element.Clicked = value;
         }
 
         public bool IsOn => Element.IsOn;

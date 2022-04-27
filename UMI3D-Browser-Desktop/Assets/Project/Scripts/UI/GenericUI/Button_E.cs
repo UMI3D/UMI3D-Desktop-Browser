@@ -14,32 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using umi3DBrowser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
-    public partial class Button_E : IClickableElement
-    {
-        public Action OnClicked { get; set; } = () 
-            => { Debug.Log("<color=green>TODO: </color>" + $"Button_E clicked not implemented"); };
-        public Action ClickedDown { get; set; }
-        public Action ClickedUp { get; set; }
-
-        /// <summary>
-        /// State of the button.
-        /// </summary>
-        public bool IsOn { get; protected set; } = false;
-
-        public virtual void Toggle(bool value)
-        {
-            IsOn = value;
-            m_currentKeys = (IsOn) ? m_onKeys : m_offKeys;
-            UpdateKeys(Root, m_currentKeys);
-        }
-    }
-
     public partial class Button_E
     {
         public string Text
@@ -58,14 +39,13 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected string m_rawText { get; set; } = null;
         protected Button m_button => (Button)Root;
-        protected Action m_clicked { get; set; } = null;
-        protected StyleKeys m_onKeys { get; set; } = null;
-        protected StyleKeys m_offKeys { get; set; } = null;
-        protected StyleKeys m_currentKeys { get; set; } = null;
     }
 
     public partial class Button_E
     {
+        public Button_E(Button button) :
+            this(button, null, null)
+        { }
         public Button_E(string styleResourcePath, StyleKeys keys) :
             this(new Button(), styleResourcePath, keys)
         { }
@@ -79,48 +59,122 @@ namespace umi3dDesktopBrowser.ui.viewController
             base(button, styleResourcePath, (isOn) ? onKeys : offKeys)
         {
             IsOn = isOn;
-            m_onKeys = onKeys;
-            m_offKeys = offKeys;
-            m_currentKeys = (isOn) ? onKeys : offKeys;   
-        }
-
-        public void UpdatesStyle(StyleKeys newKeys)
-            => UpdatesStyle(newKeys, null, true);
-        public void UpdatesStyle(StyleKeys onKeys, StyleKeys offKeys, bool isOn)
-        {
-            m_onKeys = onKeys;
-            m_offKeys = offKeys;
-            m_currentKeys = (isOn) ? m_onKeys : m_offKeys;
-            UpdateKeys(m_button, m_currentKeys);
+            AddStateKeys(Button, styleResourcePath, onKeys, offKeys);
         }
     }
 
-    public partial class HoldableButtonManipulator : MouseManipulator
+    public partial class Button_E : IStateCustomisableElement
     {
-        public Action ClickedDown { get; set; }
-        public Action ClickedUp { get; set; }
+        public bool IsOn { get; protected set; } = false;
+        public Dictionary<Visual_E, (StyleKeys, StyleKeys)> StateKeys { get; protected set; } = null;
+        public Dictionary<Visual_E, StyleKeys> CurrentKeys { get; protected set; } = null;
 
-        public HoldableButtonManipulator()
+        public virtual void Toggle(bool value)
         {
-            activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
-        }
+            IsOn = value;
 
-        protected override void RegisterCallbacksOnTarget()
+            foreach (Visual_E visual in CurrentKeys.Keys)
+            {
+                StyleKeys current = (IsOn) ? StateKeys[visual].Item1 : StateKeys[visual].Item2;
+                visual.UpdateRootKeys(current);
+                CurrentKeys[visual] = current;
+            }
+        }
+        public void AddStateKeys(Visual_E visual, string styleResourcePath, StyleKeys on, StyleKeys off)
         {
-            target.RegisterCallback<MouseCaptureEvent>(OnClickedDown);
-            target.RegisterCallback<PointerUpEvent>(OnClickedUp);
+            if (visual == null)
+                throw new NullReferenceException("Visual null when trying to add state keys");
+            if (on == null || off == null)
+                throw new NullReferenceException("Keys null when trying to add state keys");
+            StateKeys.Add(visual, (on, off));
+            visual.UpdateRootStyleAndKeysAndManipulator(styleResourcePath, (IsOn) ? on : off);
         }
+    }
 
-        protected override void UnregisterCallbacksFromTarget()
-        {
-            target.UnregisterCallback<MouseCaptureEvent>(OnClickedDown);
-            target.UnregisterCallback<PointerUpEvent>(OnClickedUp);
-        }
+    public partial class Button_E : IHoldableElement
+    {
+        public event Action ClickedDown;
+        public event Action ClickedUp;
+        public bool IsPressed { get; protected set; }
 
-        protected virtual void OnClickedDown(MouseCaptureEvent e)
+        private HoldableButtonManipulator m_holdableManipulator { get; set; } = null;
+
+        public void OnClickedDown()
             => ClickedDown?.Invoke();
-        protected virtual void OnClickedUp(PointerUpEvent e)
-            => ClickedUp?.Invoke();
+        public void OnClickedUp()
+            => ClickedUp.Invoke();
+        public void SetHoldableButton()
+        {
+            m_holdableManipulator = new HoldableButtonManipulator();
+            m_holdableManipulator.ClickedDown = OnClickedDown;
+            m_holdableManipulator.ClickedUp = OnClickedUp;
+            m_button.AddManipulator(m_holdableManipulator);
+            ClickedDown += () => IsPressed = true;
+            ClickedUp += () => IsPressed = false;
+        }
+        public void UnSetHoldableButton()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    public partial class Button_E : IButtonCustomisableElement
+    {
+        public event Action Clicked;
+        public Button_E Button => this;
+
+        public void ResetClickedEvent()
+            => Clicked = null;
+        public void OnClicked()
+            => Clicked?.Invoke();
+        public void SetButton(string styleResourcePath, StyleKeys keys, Action clicked = null)
+            => throw new Exception("You shouldn't use this method here (see UpdateButton methods)");
+        public void SetButton(VisualElement button, string styleResourcePath, StyleKeys keys, Action clicked = null)
+            => throw new Exception("You shouldn't use this method here (see UpdateButton methods)");
+        public void UpdateButtonStyle(string styleResourcePath, StyleKeys keys)
+            => UpdateRootStyleAndKeysAndManipulator(styleResourcePath, keys);
+        public void UpdateButtonKeys(StyleKeys keys)
+            => UpdateRootKeys(keys);
+    }
+
+    public partial class Button_E : IIconCustomisableElement
+    {
+        public Visual_E Icon { get; protected set; } = null;
+
+        public void AddIcon(VisualElement parent)
+            => AddIcon(parent, null, null);
+        public void AddIcon(VisualElement parent, string styleResourcePath, StyleKeys keys)
+        {
+            if (Icon != null)
+                throw new Exception("Icon of the button is already affected");
+
+            Icon = new Visual_E(parent, new VisualElement(), styleResourcePath, keys);
+        }
+        public void SetIcon(string styleResourcePath, StyleKeys keys)
+            => SetIcon(Root.Q<VisualElement>(), styleResourcePath, keys);
+        public void SetIcon(VisualElement icon, string styleResourcePath, StyleKeys keys)
+        {
+            if (Icon != null)
+                throw new Exception("Icon of the button is already affected");
+            if (icon == null)
+                throw new NullReferenceException("Icon null when trying to setup");
+
+            Icon = new Visual_E(Root, icon, styleResourcePath, keys);
+        }
+        public void UpdateIconStyle(string styleResourcePath, StyleKeys keys)
+        {
+            if (Icon == null)
+                throw new NullReferenceException("Icon null when trying to update");
+
+            Icon.UpdateRootStyleAndKeysAndManipulator(styleResourcePath, keys);
+        }
+        public void UpdateIconKeys(StyleKeys keys)
+        {
+            if (Icon == null)
+                throw new NullReferenceException("Icon null when trying to update");
+
+            Icon.UpdateRootKeys(keys);
+        }
     }
 
     public partial class Button_E : Visual_E
@@ -129,22 +183,14 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
             UpdateManipulator(Root, new ButtonManipulator());
-            m_clicked = () => OnClicked?.Invoke();
-            m_button.clicked += m_clicked;
-            var holdableManipulator = new HoldableButtonManipulator();
-            holdableManipulator.ClickedDown = () => ClickedDown?.Invoke();
-            holdableManipulator.ClickedUp = () => ClickedUp?.Invoke();
-            m_button.AddManipulator(holdableManipulator);
+            m_button.clicked += OnClicked;
         }
 
         public override void Reset()
         {
             base.Reset();
-            m_button.clicked -= m_clicked;
-            m_clicked = null;
-            m_onKeys = null;
-            m_offKeys = null;
-            m_currentKeys = null;
+            m_button.clicked -= OnClicked;
+            CurrentKeys = null;
             
             ClickedDown = null;
             ClickedUp = null;

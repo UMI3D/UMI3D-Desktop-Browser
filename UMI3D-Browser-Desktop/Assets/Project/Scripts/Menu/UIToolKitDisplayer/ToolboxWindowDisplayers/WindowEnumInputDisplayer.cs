@@ -24,7 +24,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
 {
     public partial class WindowEnumInputDisplayer
     {
-        private DropdownWithLabel_E m_displayerElement { get; set; } = null;
+        private Visual_E m_displayerElement { get; set; } = null;
         private List<string> m_options => ((DropDownInputMenuItem) menu).options;
         private string m_currentValue => ((DropDownInputMenuItem)menu).GetValue();
     }
@@ -59,9 +59,9 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             InitAndBindUI();
             if (menu is DropDownInputMenuItem dropdownMenu)
             {
-                m_displayerElement.Element.SetsOptions(dropdownMenu.options);
+                m_displayerElement.Element.SetOptions(dropdownMenu.options);
                 m_displayerElement.Element.SetDefaultValue(dropdownMenu.GetValue());
-                m_displayerElement.Element.OnValueChanged = dropdownMenu.NotifyValueChange;
+                m_displayerElement.Element.ValueChanged = dropdownMenu.NotifyValueChange;
 
                 string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
                 StyleKeys labelKeys = new StyleKeys("", "", null);

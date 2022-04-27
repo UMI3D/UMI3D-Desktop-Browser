@@ -46,7 +46,7 @@ namespace umi3dDesktopBrowser.ui
         {
             MenuBar_E.Instance.InsertRootTo(m_mainView);
 
-            MenuBar_E.Instance.ToolboxButton.OnClicked = () =>
+            MenuBar_E.Instance.ToolboxButton.Clicked = () =>
             {
                 m_windowToolboxesDM.Display(true);
             };
@@ -65,7 +65,7 @@ namespace umi3dDesktopBrowser.ui
         private void InitToolboxWindow()
         {
             ToolboxWindow_E.Instance.InsertRootTo(m_viewport);
-            ToolboxWindow_E.Instance.OnCloseButtonPressed += () => m_windowToolboxesDM.Collapse(true);
+            ToolboxWindow_E.Instance.CloseButtonPressed += () => m_windowToolboxesDM.Collapse(true);
             m_windowToolboxesDM.menu.onContentChange.AddListener(() 
                 => MenuBar_E.Instance.DisplayToolboxButton(m_windowToolboxesDM.menu.Count > 0));
         }
@@ -73,13 +73,13 @@ namespace umi3dDesktopBrowser.ui
         private void InitToolboxPinnedWindow()
         {
             ToolboxPinnedWindow_E.Instance.InsertRootTo(m_viewport);
-            ToolboxPinnedWindow_E.Instance.OnCloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(true);
+            ToolboxPinnedWindow_E.Instance.CloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(true);
         }
 
         private void InitObjectMenuWindow()
         {
             ObjectMenuWindow_E.Instance.InsertRootTo(m_viewport);
-            ObjectMenuWindow_E.Instance.OnCloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(true);
+            ObjectMenuWindow_E.Instance.CloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(true);
         }
 
         private void InitShortcut()
@@ -98,7 +98,7 @@ namespace umi3dDesktopBrowser.ui
             BottomBar_E.Instance.InsertRootTo(m_mainView);
 
             MenuBar_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseMenuBar;
-            BottomBar_E.Instance.Notification.OnClicked = Console_E.Instance.DisplayOrHide;
+            BottomBar_E.Instance.Notification.Clicked = Console_E.Instance.DisplayOrHide;
             Shortcutbox_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseShortcut;
             Console_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.UpdateOnOffNotificationIcon;
             Console_E.Instance.NewLogAdded += BottomBar_E.Instance.UpdateAlertNotificationIcon;

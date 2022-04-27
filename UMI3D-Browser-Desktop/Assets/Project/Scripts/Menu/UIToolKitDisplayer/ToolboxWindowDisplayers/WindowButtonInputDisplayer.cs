@@ -49,10 +49,10 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             base.SetMenuItem(menu);
             InitAndBindUI();
             if (menu is ButtonMenuItem buttonMenu)
-                m_displayerElement.OnClicked = () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); };
+                m_displayerElement.Clicked = () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); };
             else if (menu is HoldableButtonMenuItem holdableButtonMenu)
             {
-                m_displayerElement.OnClicked = null;
+                m_displayerElement.Clicked = null;
                 m_displayerElement.Element.ClickedDown = () => holdableButtonMenu.NotifyValueChange(true);
                 m_displayerElement.Element.ClickedUp = () => holdableButtonMenu.NotifyValueChange(false);
             }
