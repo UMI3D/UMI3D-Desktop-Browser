@@ -27,30 +27,34 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             get
             {
-                if (m_instance == null)
-                    m_instance = new Shortcutbox_E();
-                return m_instance;
+                if (s_instance == null)
+                    s_instance = new Shortcutbox_E();
+                return s_instance;
             }
         }
         public static bool ShouldDisplay { get; set; } = false;
         public static bool ShouldHide { get; set; } = false;
 
-        protected static ScrollView_E m_shortcuts { get; set; } = null;
+        protected static ScrollView_E s_shortcuts { get; set; } = null;
         protected static float m_width { get; set; } = default;
-        protected static List<Shortcut_E> m_shortcutsDisplayed;
-        protected static List<Shortcut_E> m_shortcutsWaited;
-        protected static KeyBindings_SO m_keyBindings;
+        protected static List<Shortcut_E> s_shortcutsDisplayed;
+        protected static List<Shortcut_E> s_shortcutsWaited;
+        protected static KeyBindings_SO s_keyBindings;
 
-        private static Shortcutbox_E m_instance;
-        private static string m_shortcutboxUXML => "UI/UXML/Shortcuts/shortcutbox";
-        private static string m_shortcutboxStyle => "UI/Style/Shortcuts/Shortcutbox";
-        private static StyleKeys m_shortcutboxKeys => new StyleKeys(null, "", null);
+        private static Shortcutbox_E s_instance;
+        private static string s_shortcutboxUXML => "UI/UXML/Shortcuts/shortcutbox";
+        private static string s_shortcutboxStyle => "UI/Style/Shortcuts/Shortcutbox";
+        private static StyleKeys s_shortcutboxKeys => new StyleKeys(null, "", null);
+
+        private static bool s_isRightClickShortcutAdded { get; set; } = false;
+        private static Shortcut_E s_rightClickShortcut;
+        private static string s_rightClickTitle { get; set; } = null;
     }
 
     public partial class Shortcutbox_E
     {
         private Shortcutbox_E() :
-            base(m_shortcutboxUXML, m_shortcutboxStyle, m_shortcutboxKeys)
+            base(s_shortcutboxUXML, s_shortcutboxStyle, s_shortcutboxKeys)
         { }
 
         public void DisplayOrHide()
@@ -69,13 +73,30 @@ namespace umi3dDesktopBrowser.ui.viewController
         public void AddShortcut(string title, params string[] keys)
         {
             CreateShortcut(out Shortcut_E shortcut, title, keys);
-            m_shortcuts.Add(shortcut);
+            s_shortcuts.Add(shortcut);
         }
 
         public void AddShortcutAt(int index, string title, params string[] keys)
         {
             CreateShortcut(out Shortcut_E shortcut, title, keys);
-            m_shortcuts.InsertAt(index, shortcut);
+            s_shortcuts.InsertAt(index, shortcut);
+        }
+
+        public void AddRightClickShortcut(string title)
+        {
+            s_rightClickTitle = title;
+            CreateShortcut(out s_rightClickShortcut, title, "Mouse1");
+            s_shortcuts.InsertAt(0, s_rightClickShortcut);
+            s_isRightClickShortcutAdded = true;
+        }
+
+        public void RemoveRightClickShortcut()
+        {
+            s_isRightClickShortcutAdded = false;
+            s_rightClickTitle = null;
+            s_shortcuts.Remove(s_rightClickShortcut);
+            s_shortcutsWaited.Add(s_rightClickShortcut);
+            s_shortcutsDisplayed.Remove(s_rightClickShortcut);
         }
 
         public void RemoveShortcut(int index)
@@ -88,18 +109,25 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         public void ClearShortcut()
         {
-            m_shortcutsDisplayed.ForEach((shortcut) => m_shortcuts.Remove(shortcut));
-            m_shortcutsWaited.AddRange(m_shortcutsDisplayed);
-            m_shortcutsDisplayed.Clear();
+            s_shortcutsDisplayed.ForEach((shortcut) => s_shortcuts.Remove(shortcut));
+            s_shortcutsWaited.AddRange(s_shortcutsDisplayed);
+            s_shortcutsDisplayed.Clear();
+        }
+
+        public void ClearShortcutExceptRightClick()
+        {
+            ClearShortcut();
+            if (s_isRightClickShortcutAdded)
+                AddRightClickShortcut(s_rightClickTitle);
         }
 
         private void CreateShortcut(out Shortcut_E shortcut, string title, params string[] keys)
         {
-            ObjectPooling(out shortcut, m_shortcutsDisplayed, m_shortcutsWaited, () => new Shortcut_E());
+            ObjectPooling(out shortcut, s_shortcutsDisplayed, s_shortcutsWaited, () => new Shortcut_E());
 
             Sprite[] shortcutIcons = new Sprite[keys.Length];
             for (int i = 0; i < keys.Length; ++i)
-                shortcutIcons[i] = m_keyBindings.GetSpriteFrom(keys[i]);
+                shortcutIcons[i] = s_keyBindings.GetSpriteFrom(keys[i]);
 
             shortcut.Setup(title, shortcutIcons);
         }
@@ -137,9 +165,9 @@ namespace umi3dDesktopBrowser.ui.viewController
         public override void Reset()
         {
             base.Reset();
-            m_shortcutsDisplayed.ForEach((shortcut) => m_shortcuts.Remove(shortcut));
-            m_shortcutsWaited.Clear();
-            m_shortcutsDisplayed.Clear();
+            s_shortcutsDisplayed.ForEach((shortcut) => s_shortcuts.Remove(shortcut));
+            s_shortcutsWaited.Clear();
+            s_shortcutsDisplayed.Clear();
         }
 
         public override void Display()
@@ -185,13 +213,13 @@ namespace umi3dDesktopBrowser.ui.viewController
             title.style.display = DisplayStyle.None;
 
             var scrollView = Root.Q<ScrollView>();
-            m_shortcuts = new ScrollView_E(scrollView);
+            s_shortcuts = new ScrollView_E(scrollView);
 
             Root.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
 
-            m_shortcutsDisplayed = new List<Shortcut_E>();
-            m_shortcutsWaited = new List<Shortcut_E>();
-            m_keyBindings = Resources.Load<KeyBindings_SO>("KeyBindings");
+            s_shortcutsDisplayed = new List<Shortcut_E>();
+            s_shortcutsWaited = new List<Shortcut_E>();
+            s_keyBindings = Resources.Load<KeyBindings_SO>("KeyBindings");
         }
     }
 }

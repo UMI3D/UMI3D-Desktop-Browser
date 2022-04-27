@@ -277,10 +277,18 @@ namespace BrowserDesktop.Controller
             {
                 CursorDisplayer.DisplaySettingsCursor(true);
                 if (!s_isRightClickAdded)
-                    Shortcutbox_E.Instance.AddShortcut("open Object menu", "Mouse1");
+                {
+                    Shortcutbox_E.Instance.AddRightClickShortcut("Object menu");
+                    s_isRightClickAdded = true;
+                }
             }
             else
             {
+                if (s_isRightClickAdded)
+                {
+                    Shortcutbox_E.Instance.RemoveRightClickShortcut();
+                    s_isRightClickAdded = false;
+                }
                 CursorDisplayer.DisplaySettingsCursor(false);
             }
         }
