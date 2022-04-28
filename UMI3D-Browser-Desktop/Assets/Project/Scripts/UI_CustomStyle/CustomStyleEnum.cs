@@ -51,7 +51,7 @@ namespace umi3DBrowser.UICustomStyle
         /// <summary>
         /// Secondary color.
         /// </summary>
-        Secondary = 21,
+        BGSecondary = 21,
         /// <summary>
         /// Tertiary color.
         /// </summary>
@@ -134,7 +134,7 @@ namespace umi3DBrowser.UICustomStyle
         /// <summary>
         /// Secondary color.
         /// </summary>
-        Secondary = 21,
+        BGSecondary = 21,
         /// <summary>
         /// Tertiary color.
         /// </summary>
