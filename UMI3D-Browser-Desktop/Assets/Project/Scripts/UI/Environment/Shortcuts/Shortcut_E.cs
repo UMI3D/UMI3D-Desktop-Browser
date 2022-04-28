@@ -88,13 +88,13 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_iconsWaited = new List<ShortcutIcon_E>();
         }
 
-        public override void Remove()
+        public override void RemoveRootFromHierarchy()
         {
-            base.Remove();
+            base.RemoveRootFromHierarchy();
 
             Action<Visual_E> removeVEFromHierarchy = (vE) =>
             {
-                vE.Remove();
+                vE.RemoveRootFromHierarchy();
             };
 
             m_iconsDisplayed.ForEach(removeVEFromHierarchy);

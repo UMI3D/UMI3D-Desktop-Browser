@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using System.Collections.Generic;
 using umi3DBrowser.UICustomStyle;
-using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController

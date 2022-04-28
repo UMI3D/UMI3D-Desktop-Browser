@@ -95,7 +95,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             {
                 s_cursorUnsetMovement(Instance);
                 choiceCallback(choice);
-                Instance.Remove();
+                Instance.RemoveRootFromHierarchy();
             };
         }
 
@@ -133,7 +133,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             {
                 s_cursorUnsetMovement(Instance);
                 choiceCallback();
-                Instance.Remove();
+                Instance.RemoveRootFromHierarchy();
             };
         }
 
