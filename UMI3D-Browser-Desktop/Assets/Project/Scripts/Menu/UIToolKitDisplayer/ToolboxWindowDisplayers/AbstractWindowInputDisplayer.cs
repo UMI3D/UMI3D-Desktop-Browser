@@ -26,7 +26,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
 
         private void OnDestroy()
         {
-            Displayer.Remove();
+            Displayer.RemoveRootFromHierarchy();
         }
     }
 

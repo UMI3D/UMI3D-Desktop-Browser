@@ -25,9 +25,9 @@ namespace umi3d.desktopBrowser.menu.Container
     {
         private void OnDestroy()
         {
-            ToolboxItem?.Remove();
-            Toolbox?.Remove();
-            Displayerbox?.Remove();
+            ToolboxItem?.RemoveRootFromHierarchy();
+            Toolbox?.RemoveRootFromHierarchy();
+            Displayerbox?.RemoveRootFromHierarchy();
         }
     }
 

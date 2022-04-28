@@ -86,7 +86,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             if (!m_elements.Contains(item))
                 return;
 
-            item.Remove();
+            item.RemoveRootFromHierarchy();
             m_elements.Remove(item);
             UpdateSeparator();
         }
@@ -96,7 +96,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         public virtual void Clear()
         {
-            m_elements.ForEach((elt) => elt.Remove());
+            m_elements.ForEach((elt) => elt.RemoveRootFromHierarchy());
             m_elements.Clear();
             UpdateSeparator();
         }
@@ -106,7 +106,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             if (CreateSeparator == null)
                 return;
 
-            m_separatorsDisplayed.ForEach((separator) => separator.Remove());
+            m_separatorsDisplayed.ForEach((separator) => separator.RemoveRootFromHierarchy());
             m_separatorsWaited.AddRange(m_separatorsDisplayed);
             m_separatorsDisplayed.Clear();
 

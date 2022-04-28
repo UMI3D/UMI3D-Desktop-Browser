@@ -26,6 +26,10 @@ namespace umi3dDesktopBrowser.ui.viewController
     public partial class Visual_E
     {
         /// <summary>
+        /// Name of the view.
+        /// </summary>
+        public string Name { get; set; } = null;
+        /// <summary>
         /// Visual root of this custom element.
         /// </summary>
         public VisualElement Root { get; protected set; } = null;
@@ -50,6 +54,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// Maps the visualElements with their styles and VisualManipulator.
         /// </summary>
         protected Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)> m_visualStylesMap;
+        protected List<Visual_E> m_views;
     }
 
     public partial class Visual_E
@@ -159,10 +164,34 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <summary>
         /// Remove the Root VisualElement from the hierarchy.
         /// </summary>
-        public virtual void Remove()
+        public virtual void RemoveRootFromHierarchy()
         {
             Root.RemoveFromHierarchy();
             IsDisplaying = false;
+        }
+        public virtual void Add(Visual_E child)
+        {
+
+        }
+        public virtual void Insert(int index, Visual_E child)
+        {
+
+        }
+        public virtual V Q<V>(string name = null) where V : Visual_E
+        {
+            bool matchName(Visual_E view) 
+                => (name == null || (name != null && view.Name == name));
+            
+            Visual_E result;
+            m_views.ForEach(delegate (Visual_E view)
+            {
+                if (view is V && matchName(view))
+                {
+                    result = view;
+                    return;
+                }
+            });
+            return null;
         }
 
         #endregion
@@ -176,6 +205,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_styleApplicator = new UIElementStyleApplicator(m_globalPref);
 
             m_visualStylesMap = new Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)>();
+            m_views = new List<Visual_E>();
 
             this.Root = visual;
             AddVisualStyle(Root, style_SO, keys);

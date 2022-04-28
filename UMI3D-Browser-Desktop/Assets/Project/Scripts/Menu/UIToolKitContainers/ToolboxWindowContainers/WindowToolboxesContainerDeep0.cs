@@ -30,9 +30,9 @@ namespace umi3d.desktopBrowser.menu.Container
     {
         private void OnDestroy()
         {
-            WindowItem.Remove();
-            ToolboxItem?.Remove();
-            Displayerbox?.Remove();
+            WindowItem.RemoveRootFromHierarchy();
+            ToolboxItem?.RemoveRootFromHierarchy();
+            Displayerbox?.RemoveRootFromHierarchy();
             ToolboxWindow_E.UnPinedButtonPressed -= () => WindowItem.PinUnpin(false);
         }
 
