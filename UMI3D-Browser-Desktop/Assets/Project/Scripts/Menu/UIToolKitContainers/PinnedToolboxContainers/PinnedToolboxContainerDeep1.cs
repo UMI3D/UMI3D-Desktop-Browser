@@ -44,7 +44,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void SetContainerAsToolbox()
         {
-            ToolboxItem.Clicked = () => Select();
+            ToolboxItem.Clicked += Select;
             ToolboxItem.SetItemStatus(false);
             Toolbox = new Toolbox_E(ToolboxType.SubPinned);
             Toolbox?.SetToolboxName(menu.Name ?? "");
@@ -56,7 +56,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void SetContainerAsTool()
         {
-            ToolboxItem.Clicked = () =>
+            ToolboxItem.Clicked += () =>
             {
                 Select();
                 ToolboxPinnedWindow_E.Instance.SetTopBarName(menu.Name);

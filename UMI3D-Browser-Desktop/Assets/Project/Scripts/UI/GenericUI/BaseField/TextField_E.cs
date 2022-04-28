@@ -56,7 +56,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected void ApplyTextFieldFormat(string newValue)
         {
-            if (!m_visuals.Contains(m_textInput))
+            if (!m_visualStylesMap.ContainsKey(m_textInput))
             {
                 m_textField.value = newValue;
                 return;

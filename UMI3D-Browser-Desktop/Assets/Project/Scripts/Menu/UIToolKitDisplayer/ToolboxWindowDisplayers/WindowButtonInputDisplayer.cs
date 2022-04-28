@@ -17,12 +17,13 @@ using BrowserDesktop.Menu;
 using System;
 using umi3d.cdk.menu;
 using umi3dDesktopBrowser.ui.viewController;
+using UnityEngine.UIElements;
 
 namespace umi3d.DesktopBrowser.menu.Displayer
 {
     public partial class WindowButtonInputDisplayer
     {
-        private ButtonWithLabel_E m_displayerElement { get; set; } = null;
+        private Button_E m_button { get; set; } = null;
     }
 
     public partial class WindowButtonInputDisplayer : IDisplayerElement
@@ -31,14 +32,15 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         {
             base.InitAndBindUI();
             string UXMLPath = "UI/UXML/Displayers/buttonInputDisplayer";
-            m_displayerElement = new ButtonWithLabel_E(UXMLPath);
+            m_input = new Visual_E(UXMLPath, null, null);
 
-            string buttonStylePath = "UI/Style/Displayers/InputButton";
-            StyleKeys buttonKeys = new StyleKeys("", "", null);
-            m_displayerElement.SetButton(buttonStylePath, buttonKeys, null);
-            m_displayerElement.Element.Text = menu.Name;
-
-            Displayer.AddDisplayer(m_displayerElement.Root);
+            string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
+            StyleKeys labelKeys = new StyleKeys("", "", null);
+            m_label = new Label_E(m_input.Root.Q<Label>(), labelStylePath, labelKeys);
+            m_label.value = menu.Name;
+            m_input.Add(m_label);
+            
+            Displayer.AddDisplayer(m_input.Root);
         }
     }
 
@@ -49,29 +51,51 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             base.SetMenuItem(menu);
             InitAndBindUI();
             if (menu is ButtonMenuItem buttonMenu)
-                m_displayerElement.Clicked = () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); };
+            {
+                string buttonStylePath = "UI/Style/Displayers/InputButton";
+                StyleKeys buttonKeys = new StyleKeys("", "", null);
+                m_button = new Button_E(m_input.Root.Q<Button>(), buttonStylePath, buttonKeys);
+                m_button.Text = menu.Name;
+                m_input.Add(m_button);
+
+                m_button.Clicked += () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); }; 
+            }
             else if (menu is HoldableButtonMenuItem holdableButtonMenu)
             {
-                m_displayerElement.Clicked = null;
-                m_displayerElement.Element.ClickedDown = () => holdableButtonMenu.NotifyValueChange(true);
-                m_displayerElement.Element.ClickedUp = () => holdableButtonMenu.NotifyValueChange(false);
+                string buttonStylePath = "UI/Style/Displayers/InputButton";
+                StyleKeys buttonKeys = new StyleKeys("", "", null);
+                m_button = new Button_E(m_input.Root.Q<Button>(), buttonStylePath, buttonKeys);
+                m_button.Text = menu.Name;
+                m_input.Add(m_button);
+
+                m_button.ClickedDown += () => holdableButtonMenu.NotifyValueChange(true);
+                m_button.ClickedUp += () => holdableButtonMenu.NotifyValueChange(false);
+            }
+            else if (menu is BooleanInputMenuItem toggleMenu)
+            {
+                string toggleStylePath = "UI/Style/Displayers/InputToggle";
+                StyleKeys toggleOnKeys = new StyleKeys(null, "toggleOn", null);
+                StyleKeys toggleOffKeys = new StyleKeys(null, "toggleOff", null);
+                m_button = new Button_E(m_input.Root.Q<Button>(), toggleStylePath, toggleOnKeys, toggleOffKeys, toggleMenu.GetValue());
+                m_button.Text = null;
+
+                m_button.Clicked += () =>
+                {
+                    bool newValue = !m_button.IsOn;
+                    m_button.Toggle(newValue);
+                    toggleMenu.NotifyValueChange(newValue);
+                };
             }
             else
                 throw new System.Exception("MenuItem must be a ButtonMenuItem or a HoldableButtonMenuItem");
-
-            string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-            StyleKeys labelKeys = new StyleKeys("", "", null);
-            m_displayerElement.SetLabel(labelStylePath, labelKeys);
-            m_displayerElement.Label.value = menu.ToString();
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)
-            => (menu is ButtonMenuItem || menu is HoldableButtonMenuItem) ? 2 : 0;
+            => (menu is ButtonMenuItem || menu is HoldableButtonMenuItem || menu is BooleanInputMenuItem) ? 2 : 0;
 
         public override void Clear()
         {
             base.Clear();
-            m_displayerElement.Reset();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace umi3d.desktopBrowser.menu.Container
             WindowItem.RemoveRootFromHierarchy();
             ToolboxItem?.RemoveRootFromHierarchy();
             Displayerbox?.RemoveRootFromHierarchy();
-            ToolboxWindow_E.UnPinedButtonPressed -= () => WindowItem.PinUnpin(false);
+            ToolboxWindow_E.UnpinnedPressed -= () => WindowItem.PinUnpin(false);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.Awake();
             WindowItem = new ToolboxWindowItem_E();
-            ToolboxWindow_E.UnPinedButtonPressed += () => WindowItem.PinUnpin(false);
+            ToolboxWindow_E.UnpinnedPressed += () => WindowItem.PinUnpin(false);
         }
 
         /// <summary>
@@ -58,10 +58,8 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void SetContainerAsTool()
         {
-            ToolboxItem = new ToolboxItem_E(false)
-            {
-                Clicked = () => Select()
-            };
+            ToolboxItem = new ToolboxItem_E(false);
+            ToolboxItem.Clicked += Select;
             ToolboxItem.SetItemStatus(true);
             Displayerbox = new Displayerbox_E(DisplayerboxType.ToolboxesPopup);
             WindowItem.AddDisplayerbox(Displayerbox);

@@ -46,7 +46,7 @@ namespace umi3dDesktopBrowser.ui
         {
             MenuBar_E.Instance.InsertRootTo(m_mainView);
 
-            MenuBar_E.Instance.ToolboxButton.Clicked = () =>
+            MenuBar_E.Instance.ToolboxButton.Clicked += () =>
             {
                 m_windowToolboxesDM.Display(true);
             };
@@ -98,7 +98,7 @@ namespace umi3dDesktopBrowser.ui
             BottomBar_E.Instance.InsertRootTo(m_mainView);
 
             MenuBar_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseMenuBar;
-            BottomBar_E.Instance.Notification.Clicked = Console_E.Instance.DisplayOrHide;
+            BottomBar_E.Instance.Notification.Clicked += Console_E.Instance.DisplayOrHide;
             Shortcutbox_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseShortcut;
             Console_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.UpdateOnOffNotificationIcon;
             Console_E.Instance.NewLogAdded += BottomBar_E.Instance.UpdateAlertNotificationIcon;

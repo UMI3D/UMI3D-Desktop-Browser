@@ -33,12 +33,15 @@ namespace umi3dDesktopBrowser.ui.viewController
                 return m_instance;
             }
         }
-        public static event Action UnPinedButtonPressed;
+        public static event Action UnpinnedPressed;
 
         private static string m_windowUXML = "UI/UXML/ToolboxWindow/toolboxWindow";
         private static string m_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_window";
         private static StyleKeys m_windowKeys = new StyleKeys(null, "", null);
         private static ToolboxWindow_E m_instance;
+
+        public static void OnUnpinnedPressed()
+            => UnpinnedPressed?.Invoke();
     }
 
     public partial class ToolboxWindow_E : WindowWithScrollView_E
@@ -70,10 +73,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             Button unpinnedButton = Root.Q<Button>("unpinnedButton");
             string unpinnedButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_UnpinnedButton";
             StyleKeys unpinnedButtonKeys = new StyleKeys(null, "", null);
-            new Button_E(unpinnedButton, unpinnedButtonStyle, unpinnedButtonKeys)
-            {
-                Clicked = () => { UnPinedButtonPressed?.Invoke(); },
-            };
+            Button_E unpinned = new Button_E(unpinnedButton, unpinnedButtonStyle, unpinnedButtonKeys);
+            unpinned.Clicked += OnUnpinnedPressed;
         }
     }
 }

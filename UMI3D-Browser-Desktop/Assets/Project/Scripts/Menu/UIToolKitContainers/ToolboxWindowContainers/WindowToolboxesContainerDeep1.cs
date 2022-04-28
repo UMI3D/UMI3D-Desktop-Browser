@@ -36,10 +36,8 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void Awake()
         {
             base.Awake();
-            ToolboxItem = new ToolboxItem_E(false)
-            {
-                Clicked = () => Select()
-            };
+            ToolboxItem = new ToolboxItem_E(false);
+            ToolboxItem.Clicked += Select;
         }
 
         /// <summary>
