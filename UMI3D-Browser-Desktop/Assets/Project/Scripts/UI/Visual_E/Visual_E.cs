@@ -38,14 +38,24 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         public bool IsInitialized { get; protected set; } = false;
         /// <summary>
-        /// True if this visual is displayed.
+        /// True if this view is displayed.
         /// </summary>
         public bool IsDisplaying { get; protected set; } = false;
+        /// <summary>
+        /// Event raised when the view is displayed (true) or hide (false);
+        /// </summary>
         public event Action<bool> DisplayedOrHidden;
+
+        /// <summary>
+        /// Maps the visualElements with their styles and VisualManipulator.
+        /// </summary>
+        protected Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)> m_visualStylesMap;
     }
 
     public partial class Visual_E
     {
+        #region Constructors and Destructor
+        
         public Visual_E(VisualElement visual)
         {
             if (visual == null) throw new NullReferenceException($"visual is null");
@@ -87,6 +97,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             Destroy();
         }
+
+        #endregion
+
+        #region Public methods
 
         public virtual void Display()
         {
@@ -150,29 +164,29 @@ namespace umi3dDesktopBrowser.ui.viewController
             Root.RemoveFromHierarchy();
             IsDisplaying = false;
         }
-    }
 
-    public partial class Visual_E
-    {
+        #endregion
+
+        #region Protected methods
+
         protected void Init(VisualElement parent, VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys)
         {
             m_globalPref = GetGlobalPrefSO();
             m_globalPref.ApplyCustomStyle.AddListener(ApplyAllFormatAndStyle);
             m_styleApplicator = new UIElementStyleApplicator(m_globalPref);
 
-            m_visuals = new List<VisualElement>();
-            m_visualStyles = new Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)>();
+            m_visualStylesMap = new Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)>();
 
             this.Root = visual;
             AddVisualStyle(Root, style_SO, keys);
-            
+
             Initialize();
             IsInstantiated = true;
 
             if (parent != null) InsertRootTo(parent);
         }
 
-        protected virtual void Initialize() 
+        protected virtual void Initialize()
         {
             if (IsInitialized) return;
             IsInitialized = true;
@@ -236,5 +250,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             }
             listDisplayed.Add(vE);
         }
+
+        #endregion
     }
 }

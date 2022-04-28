@@ -31,7 +31,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 if (value == m_button.text)
                     return;
                 m_rawText = value;
-                var (styleSO, _, _) = m_visualStyles[m_button];
+                var (styleSO, _, _) = m_visualStylesMap[m_button];
                 var newValue = m_styleApplicator.GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, value);
                 m_button.text = newValue;
             }

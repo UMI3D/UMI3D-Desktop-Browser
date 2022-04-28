@@ -40,7 +40,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             foreach (VisualElement visual in m_visuals)
             {
-                var style = m_visualStyles[visual];
+                var style = m_visualStylesMap[visual];
                 ApplyFormat(style.Item1, style.Item2, visual);
             }
         }
@@ -109,7 +109,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             foreach (VisualElement visual in m_visuals)
             {
-                var (_, _, manipulator) = m_visualStyles[visual];
+                var (_, _, manipulator) = m_visualStylesMap[visual];
                 manipulator.ApplyStyle();
             }
         }

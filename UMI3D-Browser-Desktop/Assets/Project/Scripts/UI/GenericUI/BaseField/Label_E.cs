@@ -32,7 +32,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                     return;
                 m_rawValue = value;
                 var previousValue = m_label.text;
-                var (styleSO, _, _) = m_visualStyles[m_label];
+                var (styleSO, _, _) = m_visualStylesMap[m_label];
                 if (styleSO == null)
                     m_label.text = value;
                 else
