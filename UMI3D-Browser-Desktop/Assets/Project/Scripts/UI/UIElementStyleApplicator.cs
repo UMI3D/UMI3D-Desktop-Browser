@@ -214,7 +214,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 case CustomStyleColorKeyword.Primary:
                     themeAction(m_globalPref.CurrentTheme.Primary);
                     break;
-                case CustomStyleColorKeyword.Secondary:
+                case CustomStyleColorKeyword.BGSecondary:
                     themeAction(m_globalPref.CurrentTheme.Secondary);
                     break;
                 case CustomStyleColorKeyword.Tertiary:
