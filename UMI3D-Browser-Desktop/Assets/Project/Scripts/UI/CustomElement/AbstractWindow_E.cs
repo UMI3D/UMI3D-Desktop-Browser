@@ -72,7 +72,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             SetCloseButton(butttonStyleResourcePath, buttonKeys);
             m_closeButton.SetIcon(iconStyleResourcePath, iconKeys);
-            m_closeButton.LinkMouseBehaviourChanged(m_closeButton.Icon, m_closeButton.Button);
+            m_closeButton.LinkMouseBehaviourChanged(m_closeButton.Icon, m_closeButton.Button, false);
         }
 
         protected PopUpManipulator PopupManipulator()

@@ -101,6 +101,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             Label = new Label_E(Root.Q<Label>(), labelStyle, labelKeys);
             
             Button = new Button_E(Root.Q<Button>());
+            Button.Clicked += OnClicked;
         }
     }
 }
