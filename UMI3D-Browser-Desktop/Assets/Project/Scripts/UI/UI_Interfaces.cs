@@ -72,7 +72,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         public bool IsOn { get; }
         public Dictionary<Visual_E, (StyleKeys, StyleKeys)> StateKeys { get; }
-        public Dictionary<Visual_E, StyleKeys> CurrentKeys { get; }
 
         /// <summary>
         /// Change the state of the element.

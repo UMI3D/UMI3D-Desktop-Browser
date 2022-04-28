@@ -13,14 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3d.DesktopBrowser.menu.Displayer;
 using umi3dDesktopBrowser.ui.viewController;
-using UnityEngine;
 
 namespace umi3d.desktopBrowser.menu.Container
 {

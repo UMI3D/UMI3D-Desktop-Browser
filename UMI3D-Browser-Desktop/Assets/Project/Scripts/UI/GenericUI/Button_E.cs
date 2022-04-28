@@ -32,7 +32,9 @@ namespace umi3dDesktopBrowser.ui.viewController
                     return;
                 m_rawText = value;
                 var (styleSO, _, _) = m_visualStylesMap[m_button];
-                var newValue = m_styleApplicator.GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, value);
+                string newValue = m_rawText;
+                if (styleSO != null)
+                    newValue = m_styleApplicator.GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, value);
                 m_button.text = newValue;
             }
         }
@@ -67,27 +69,26 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         public bool IsOn { get; protected set; } = false;
         public Dictionary<Visual_E, (StyleKeys, StyleKeys)> StateKeys { get; protected set; } = null;
-        public Dictionary<Visual_E, StyleKeys> CurrentKeys { get; protected set; } = null;
 
         public virtual void Toggle(bool value)
         {
             IsOn = value;
 
-            foreach (Visual_E visual in CurrentKeys.Keys)
+            foreach (Visual_E visual in StateKeys.Keys)
             {
                 StyleKeys current = (IsOn) ? StateKeys[visual].Item1 : StateKeys[visual].Item2;
                 visual.UpdateRootKeys(current);
-                CurrentKeys[visual] = current;
             }
         }
-        public void AddStateKeys(Visual_E visual, string styleResourcePath, StyleKeys on, StyleKeys off)
+        public void AddStateKeys(Visual_E view, string styleResourcePath, StyleKeys on, StyleKeys off)
         {
-            if (visual == null)
+            if (view == null)
                 throw new NullReferenceException("Visual null when trying to add state keys");
-            if (on == null || off == null)
-                throw new NullReferenceException("Keys null when trying to add state keys");
-            StateKeys.Add(visual, (on, off));
-            visual.UpdateRootStyleAndKeysAndManipulator(styleResourcePath, (IsOn) ? on : off);
+            if (StateKeys.ContainsKey(view))
+                StateKeys[view] = (on, off);
+            else
+                StateKeys.Add(view, (on, off));
+            view.UpdateRootStyleAndKeysAndManipulator(styleResourcePath, (IsOn) ? on : off);
         }
     }
 
@@ -128,7 +129,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         public void OnClicked()
             => Clicked?.Invoke();
         public void SetButton(string styleResourcePath, StyleKeys keys, Action clicked = null)
-            => throw new Exception("You shouldn't use this method here (see UpdateButton methods)");
+        {
+            UpdateButtonStyle(styleResourcePath, keys);
+            Clicked += clicked;
+        }
         public void SetButton(VisualElement button, string styleResourcePath, StyleKeys keys, Action clicked = null)
             => throw new Exception("You shouldn't use this method here (see UpdateButton methods)");
         public void UpdateButtonStyle(string styleResourcePath, StyleKeys keys)
@@ -151,7 +155,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             Icon = new Visual_E(parent, new VisualElement(), styleResourcePath, keys);
         }
         public void SetIcon(string styleResourcePath, StyleKeys keys)
-            => SetIcon(Root.Q<VisualElement>(), styleResourcePath, keys);
+            => SetIcon(Root.Q<VisualElement>("icon"), styleResourcePath, keys);
         public void SetIcon(VisualElement icon, string styleResourcePath, StyleKeys keys)
         {
             if (Icon != null)
@@ -184,13 +188,13 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Initialize();
             UpdateManipulator(Root, new ButtonManipulator());
             m_button.clicked += OnClicked;
+            StateKeys = new Dictionary<Visual_E, (StyleKeys, StyleKeys)>();
         }
 
         public override void Reset()
         {
             base.Reset();
             m_button.clicked -= OnClicked;
-            CurrentKeys = null;
             
             ClickedDown = null;
             ClickedUp = null;
