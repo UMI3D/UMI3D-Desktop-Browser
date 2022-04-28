@@ -61,7 +61,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 m_textField.value = newValue;
                 return;
             }
-            var (styleSO, _, _) = m_visualStyles[m_textInput];
+            var (styleSO, _, _) = m_visualStylesMap[m_textInput];
             m_textField.value = m_styleApplicator.GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, newValue);
         }
     }

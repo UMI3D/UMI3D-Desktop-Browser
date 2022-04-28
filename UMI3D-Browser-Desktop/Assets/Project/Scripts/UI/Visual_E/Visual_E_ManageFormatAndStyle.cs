@@ -23,6 +23,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Visual_E
     {
+        #region Public methods
+
         #region Manage Root format and style
 
         /// <summary>
@@ -81,7 +83,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="visual"></param>
         /// <returns></returns>
         public VisualManipulator GetVisualManipulator(VisualElement visual)
-            => m_visualStyles[visual].Item3;
+            => m_visualStylesMap[visual].Item3;
         /// <summary>
         /// Link the mouse behaviour style changement from [sender] to [receiver].
         /// </summary>
@@ -93,6 +95,44 @@ namespace umi3dDesktopBrowser.ui.viewController
             var receiverManipulator = receiver.GetRootManipulator();
             senderManipulator.MouseBehaviourChanged += receiverManipulator.ApplyStyle;
         }
+
+        #endregion
+
+        #region Protected Methods
+
+        #region Add and Reset Visual Style
+
+        protected void AddVisualStyle(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys, VisualManipulator manipulator = null, bool stopPropagation = true)
+            => AddVisualStyle(visual, GetStyleSO(styleResourcePath), formatAndStyleKeys, manipulator, stopPropagation);
+        protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys, VisualManipulator manipulator = null, bool stopPropagation = true)
+        {
+            if (visual == null) throw new NullReferenceException("visual is null");
+
+            if (!m_visualStylesMap.ContainsKey(visual))
+            {
+                if (manipulator == null)
+                    manipulator = new VisualManipulator(stopPropagation);
+
+                SetManipulator(manipulator, style_SO, keys);
+                visual.AddManipulator(manipulator);
+
+                m_visualStylesMap.Add(visual, (style_SO, keys, manipulator));
+                manipulator.ApplyFormatAndStyle();
+            }
+            else
+                UpdateStyleAndKeysAndManipulator(visual, style_SO, keys, manipulator);
+        }
+        protected void ResetAllVisualStyle()
+        {
+            foreach (VisualElement visual in m_visualStylesMap.Keys)
+            {
+                var (_, _, manipulator) = m_visualStylesMap[visual];
+                visual.RemoveManipulator(manipulator);
+            }
+            m_visualStylesMap.Clear();
+        }
+
+        #endregion
 
         #region Update
 
@@ -114,9 +154,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="manipulator"></param>
         protected void UpdateStyleAndKeysAndManipulator(VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys, VisualManipulator manipulator = null)
         {
-            if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
+            if (!m_visualStylesMap.ContainsKey(visual)) 
+                throw new Exception($"Visual [{visual}] unknown wanted to be updated.");
 
-            var (_, _, oldManipulator) = m_visualStyles[visual];
+            var (_, _, oldManipulator) = m_visualStylesMap[visual];
             if (manipulator == null)
             {
                 manipulator = oldManipulator;
@@ -127,7 +168,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 oldManipulator.Reset();
                 SetManipulator(manipulator, style_SO, keys);
             }
-            m_visualStyles[visual] = (style_SO, keys, manipulator);
+            m_visualStylesMap[visual] = (style_SO, keys, manipulator);
             manipulator.ApplyFormatAndStyle();
         }
 
@@ -145,10 +186,11 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="style_SO"></param>
         protected void UpdateStyle(VisualElement visual, CustomStyle_SO style_SO)
         {
-            if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
-            var (_, keys, manipulator) = m_visualStyles[visual];
+            if (!m_visualStylesMap.ContainsKey(visual))
+                throw new Exception($"Visual [{visual}] unknown wanted to be updated.");
+            var (_, keys, manipulator) = m_visualStylesMap[visual];
             manipulator.UpdateStyle(style_SO);
-            m_visualStyles[visual] = (style_SO, keys, manipulator);
+            m_visualStylesMap[visual] = (style_SO, keys, manipulator);
         }
 
         /// <summary>
@@ -158,10 +200,11 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="newKeys"></param>
         protected void UpdateKeys(VisualElement visual, StyleKeys newKeys)
         {
-            if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
-            var (styleSO, _, manipulator) = m_visualStyles[visual];
+            if (!m_visualStylesMap.ContainsKey(visual))
+                throw new Exception($"Visual [{visual}] unknown wanted to be updated.");
+            var (styleSO, _, manipulator) = m_visualStylesMap[visual];
             manipulator.UpdateKeys(newKeys);
-            m_visualStyles[visual] = (styleSO, newKeys, manipulator);
+            m_visualStylesMap[visual] = (styleSO, newKeys, manipulator);
         }
 
         /// <summary>
@@ -171,13 +214,14 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="newManipulator"></param>
         protected void UpdateManipulator(VisualElement visual, VisualManipulator newManipulator)
         {
-            if (!m_visuals.Contains(visual)) throw new Exception($"Visual unknown [{visual}] wanted to be updated.");
+            if (!m_visualStylesMap.ContainsKey(visual))
+                throw new Exception($"Visual [{visual}] unknown wanted to be updated.");
             if (newManipulator == null) throw new NullReferenceException("Manipulator null");
-            var (styleSO, keys, oldManipulator) = m_visualStyles[visual];
+            var (styleSO, keys, oldManipulator) = m_visualStylesMap[visual];
             visual.RemoveManipulator(oldManipulator);
             SetManipulator(newManipulator, styleSO, keys);
             visual.AddManipulator(newManipulator);
-            m_visualStyles[visual] = (styleSO, keys, newManipulator);
+            m_visualStylesMap[visual] = (styleSO, keys, newManipulator);
         }
 
         #endregion
@@ -188,5 +232,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             manipulator.ApplyingFormat += ApplyFormat;
             manipulator.ApplyingStyle += ApplyStyle;
         }
+
+        #endregion
     }
 }
