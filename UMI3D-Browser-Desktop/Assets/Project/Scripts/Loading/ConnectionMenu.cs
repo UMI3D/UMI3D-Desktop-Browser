@@ -105,7 +105,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
         UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
-        MenuBar_E.Instance.LeaveButton.Clicked = () =>
+        MenuBar_E.Instance.LeaveButton.Clicked += () =>
         {
             string title = "Leave environment";
             string message = "Are you sure ...?";

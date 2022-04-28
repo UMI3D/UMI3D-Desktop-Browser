@@ -171,27 +171,45 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
         public virtual void Add(Visual_E child)
         {
-
+            if (m_views.Contains(child))
+                return;
+            m_views.Add(child);
         }
         public virtual void Insert(int index, Visual_E child)
         {
-
+            if (m_views.Contains(child))
+                return;
+            m_views.Insert(index, child);
+        }
+        public virtual void Remove(Visual_E view)
+            => m_views.Remove(view);
+        public virtual bool ContainsInHierarchy(Visual_E view)
+        {
+            bool result = m_views.Contains(view);
+            if (!result)
+                m_views.ForEach(delegate (Visual_E view)
+                {
+                    if (result)
+                        return;
+                    result = view.ContainsInHierarchy(view);
+                });
+            return result;
         }
         public virtual V Q<V>(string name = null) where V : Visual_E
         {
             bool matchName(Visual_E view) 
                 => (name == null || (name != null && view.Name == name));
             
-            Visual_E result;
+            V resultHorizontal = null;
+            V resultVertical = null;
             m_views.ForEach(delegate (Visual_E view)
             {
-                if (view is V && matchName(view))
-                {
-                    result = view;
-                    return;
-                }
+                if (view is V v && matchName(v) && resultHorizontal == null)
+                    resultHorizontal = v;
+                if (resultHorizontal == null && resultVertical == null)
+                    resultVertical = view.Q<V>(name);
             });
-            return null;
+            return (resultHorizontal != null) ? resultHorizontal : resultVertical;
         }
 
         #endregion

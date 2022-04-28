@@ -13,13 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using umi3DBrowser.UICustomStyle;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEngine.Events;
 using BrowserDesktop.preferences;
+using System;
+using umi3DBrowser.UICustomStyle;
+using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
@@ -38,7 +35,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected void ApplyAllFormat()
         {
-            foreach (VisualElement visual in m_visuals)
+            foreach (VisualElement visual in m_visualStylesMap.Keys)
             {
                 var style = m_visualStylesMap[visual];
                 ApplyFormat(style.Item1, style.Item2, visual);
@@ -107,7 +104,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected void ApplyAllStyle()
         {
-            foreach (VisualElement visual in m_visuals)
+            foreach (VisualElement visual in m_visualStylesMap.Keys)
             {
                 var (_, _, manipulator) = m_visualStylesMap[visual];
                 manipulator.ApplyStyle();

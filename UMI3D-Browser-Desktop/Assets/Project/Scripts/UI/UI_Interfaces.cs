@@ -22,19 +22,19 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public interface IClickableElement
     {
-
-    }
-
-    public interface IButtonCustomisableElement
-    {
         /// <summary>
         /// event performed when the element is clicked.
         /// </summary>
         public event Action Clicked;
-        public Button_E Button { get; }
 
         public void ResetClickedEvent();
         public void OnClicked();
+    }
+
+    public interface IButtonCustomisableElement : IClickableElement
+    {
+        public Button_E Button { get; }
+
         public void SetButton(string styleResourcePath, StyleKeys keys, Action clicked = null);
         public void SetButton(VisualElement button, string styleResourcePath, StyleKeys keys, Action clicked = null);
         public void UpdateButtonStyle(string styleResourcePath, StyleKeys keys);
