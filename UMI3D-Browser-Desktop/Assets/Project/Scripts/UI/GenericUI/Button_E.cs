@@ -188,6 +188,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Initialize();
             UpdateManipulator(Root, new ButtonManipulator());
             m_button.clicked += OnClicked;
+            SetHoldableButton();
             StateKeys = new Dictionary<Visual_E, (StyleKeys, StyleKeys)>();
         }
 
@@ -195,7 +196,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Reset();
             m_button.clicked -= OnClicked;
-            
+
+            Clicked = null;
             ClickedDown = null;
             ClickedUp = null;
         }
