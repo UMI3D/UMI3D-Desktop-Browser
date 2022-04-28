@@ -68,6 +68,12 @@ namespace umi3dDesktopBrowser.ui.viewController
             base(m_menuUXML, m_menuStyle, m_menuKeys)
         { }
 
+        public override void Reset()
+        {
+            base.Reset();
+            Notification.ResetClickedEvent();
+        }
+
         protected override void Initialize()
         {
             base.Initialize();
