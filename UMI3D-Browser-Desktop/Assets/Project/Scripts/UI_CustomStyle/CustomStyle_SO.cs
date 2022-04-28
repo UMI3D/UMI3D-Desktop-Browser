@@ -35,7 +35,6 @@ namespace umi3DBrowser.UICustomStyle
         public UITextStyle GetTextStyle(string key)
         {
             key = key.ToLower();
-            //string[] subKeys = key.Split('-');
             foreach (UITextStyle themeText in m_textStyle)
             {
                 if (themeText.Key.ToLower() == key)
@@ -46,7 +45,6 @@ namespace umi3DBrowser.UICustomStyle
         public UIBackground GetBackground(string key)
         {
             key = key.ToLower();
-            //string[] subKeys = key.Split('-');
             foreach (UIBackground background in m_background)
             {
                 if (background.Key.ToLower() == key)
@@ -57,7 +55,6 @@ namespace umi3DBrowser.UICustomStyle
         public UIBorder GetBorder(string key)
         {
             key = key.ToLower();
-            //string[] subKeys = key.Split('-');
             foreach (UIBorder border in m_border)
             {
                 if (border.Key.ToLower() == key)
