@@ -57,30 +57,10 @@ namespace umi3DBrowser.UICustomStyle
         /// </summary>
         Tertiary = 22,
 
-        /// <summary>
-        /// Apply a title style.
-        /// </summary>
-        Title = 30,
-        /// <summary>
-        /// Apply a subtitle style.
-        /// </summary>
-        Subtitle = 31,
-        /// <summary>
-        /// Apply a body style.
-        /// </summary>
-        Body = 32,
-        /// <summary>
-        /// Apply a foot-note style.
-        /// </summary>
-        FootNote = 33,
     }
 
     public static class CustomStyleKeywordMethods
     {
-        //public static bool IsDefaultOrUndefined(this CustomStyleKeyword keyword)
-        //{
-        //    return keyword == CustomStyleKeyword.Default || keyword == CustomStyleKeyword.Undefined;
-        //}
         public static bool IsCustom(this CustomStyleKeyword keyword)
             => keyword == CustomStyleKeyword.Custom || keyword == CustomStyleKeyword.CustomResizable || keyword == CustomStyleKeyword.CustomUnresizabe;
     }
@@ -159,38 +139,6 @@ namespace umi3DBrowser.UICustomStyle
         /// Tertiary color.
         /// </summary>
         Tertiary = 22,
-    }
-
-    public enum CustomStyleTextKeyword
-    {
-        /// <summary>
-        /// No style will be applied.
-        /// </summary>
-        Undefined = 0,
-        /// <summary>
-        /// Default style.
-        /// </summary>
-        Default = 1,
-        /// <summary>
-        /// Apply a custom style.
-        /// </summary>
-        Custom = 2,
-        /// <summary>
-        /// Apply a title style.
-        /// </summary>
-        Title = 30,
-        /// <summary>
-        /// Apply a subtitle style.
-        /// </summary>
-        Subtitle = 31,
-        /// <summary>
-        /// Apply a body style.
-        /// </summary>
-        Body = 32,
-        /// <summary>
-        /// Apply a foot-note style.
-        /// </summary>
-        FootNote = 33
     }
     
     public enum CustomStyleSizeMode
