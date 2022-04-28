@@ -151,6 +151,11 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Reset();
             m_scrollView.Reset();
+            ToolboxButton.ResetClickedEvent();
+            Avatar.ResetClickedEvent();
+            Sound.ResetClickedEvent();
+            Mic.ResetClickedEvent();
+            LeaveButton.ResetClickedEvent();
         }
 
         public override void InsertRootTo(VisualElement parent)
