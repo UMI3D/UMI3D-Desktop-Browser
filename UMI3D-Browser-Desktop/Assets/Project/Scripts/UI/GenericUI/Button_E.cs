@@ -183,6 +183,22 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class Button_E : Visual_E
     {
+        public override void Add(Visual_E child)
+        {
+            base.Add(child);
+            child.InsertRootTo(Root);
+        }
+        public override void Insert(int index, Visual_E child)
+        {
+            base.Insert(index, child);
+            child.InsertRootAtTo(index, Root);
+        }
+        public override void Remove(Visual_E view)
+        {
+            base.Remove(view);
+            view.RemoveRootFromHierarchy();
+        }
+
         protected override void Initialize()
         {
             base.Initialize();

@@ -87,7 +87,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="receiver"></param>
-        public void LinkMouseBehaviourChanged(Visual_E sender, Visual_E receiver, bool stopSendPropagation)
+        public static void LinkMouseBehaviourChanged(Visual_E sender, Visual_E receiver, bool stopSendPropagation)
         {
             var senderManipulator = sender.GetRootManipulator();
             var receiverManipulator = receiver.GetRootManipulator();

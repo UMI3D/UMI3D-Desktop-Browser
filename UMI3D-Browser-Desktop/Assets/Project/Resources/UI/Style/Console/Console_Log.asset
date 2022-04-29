@@ -86,7 +86,7 @@ MonoBehaviour:
       m_default:
         m_keyword: 2
         m_value:
-          m_font: {fileID: 0}
+          m_font: {fileID: 12800000, guid: 1588f0246e85fb34586c69d5cf08fd5d, type: 3}
           m_fontStyleAndWeight: 0
           m_color:
             m_keyword: 2
