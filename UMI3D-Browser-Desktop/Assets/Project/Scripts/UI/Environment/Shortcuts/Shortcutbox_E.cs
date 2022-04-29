@@ -79,14 +79,14 @@ namespace umi3dDesktopBrowser.ui.viewController
         public void AddShortcutAt(int index, string title, params string[] keys)
         {
             CreateShortcut(out Shortcut_E shortcut, title, keys);
-            s_shortcuts.InsertAt(index, shortcut);
+            s_shortcuts.Insert(index, shortcut);
         }
 
         public void AddRightClickShortcut(string title)
         {
             s_rightClickTitle = title;
             CreateShortcut(out s_rightClickShortcut, title, "Mouse1");
-            s_shortcuts.InsertAt(0, s_rightClickShortcut);
+            s_shortcuts.Insert(0, s_rightClickShortcut);
             s_isRightClickShortcutAdded = true;
         }
 
