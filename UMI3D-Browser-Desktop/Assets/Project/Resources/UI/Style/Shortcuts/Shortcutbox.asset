@@ -78,6 +78,7 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_textAlign: 0
+    m_textWrapping: 0
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle: []
@@ -87,7 +88,7 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 21
+            m_keyword: 25
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 0

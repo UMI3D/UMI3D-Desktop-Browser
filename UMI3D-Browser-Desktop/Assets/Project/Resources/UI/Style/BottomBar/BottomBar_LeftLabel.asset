@@ -89,7 +89,7 @@ MonoBehaviour:
           m_font: {fileID: 0}
           m_fontStyleAndWeight: 0
           m_color:
-            m_keyword: 2
+            m_keyword: 26
             m_value: {r: 1, g: 1, b: 1, a: 1}
           m_outlineColor:
             m_keyword: 0
