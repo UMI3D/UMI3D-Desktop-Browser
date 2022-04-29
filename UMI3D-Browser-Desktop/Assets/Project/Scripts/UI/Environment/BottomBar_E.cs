@@ -22,18 +22,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class BottomBar_E
     {
-        public static BottomBar_E Instance
-        {
-            get
-            {
-                if (s_instance == null)
-                {
-                    s_instance = new BottomBar_E();
-                }
-                return s_instance;
-            }
-        }
-
         public Label_E MenuShortcut { get; private set; } = null;
         public Label_E ShortcutShortcut { get; private set; } = null;
         public Button_E Console { get; private set; } = null;
@@ -41,7 +29,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Label_E Timer { get; private set; } = null;
         public Label_E ParticipantCount { get; private set; } = null;
 
-        private static BottomBar_E s_instance;
         private static string s_uxml => "UI/UXML/Menus/bottomBar";
         private static string s_menuStyle => "UI/Style/BottomBar/BottomBar";
         private static StyleKeys s_menuKeys => new StyleKeys(null, "", null);
@@ -58,10 +45,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         private StyleKeys m_settingsOffKeys = new StyleKeys(null, "off", null);
         private StyleKeys m_settingsOnKeys = new StyleKeys(null, "on", null);
         private StyleKeys m_settingsIconKeys = new StyleKeys(null, "", null);
-    }
 
-    public partial class BottomBar_E
-    {
         public void OpenCloseMenuBar(bool value)
             => MenuShortcut.value = (value) ? "Right Click / Escape - Close Menu" : "Right Click / Escape - Open Menu";
         public void OpenCloseShortcut(bool value)
@@ -73,9 +57,26 @@ namespace umi3dDesktopBrowser.ui.viewController
             => Console.UpdateButtonKeys(m_notificationAlertKeys);
     }
 
+    public partial class BottomBar_E : ISingleUI
+    {
+        public static BottomBar_E Instance
+        {
+            get
+            {
+                if (s_instance == null)
+                {
+                    s_instance = new BottomBar_E();
+                }
+                return s_instance;
+            }
+        }
+
+        private static BottomBar_E s_instance;
+    }
+
     public partial class BottomBar_E : Visual_E
     {
-        public BottomBar_E() :
+        private BottomBar_E() :
             base(s_uxml, s_menuStyle, s_menuKeys)
         { }
 

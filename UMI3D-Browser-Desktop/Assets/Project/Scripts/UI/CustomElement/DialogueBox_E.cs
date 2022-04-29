@@ -22,15 +22,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class DialogueBox_E
     {
-        public static DialogueBox_E Instance
-        {
-            get
-            {
-                Create();
-                return s_instance;
-            }
-        }
-
         protected static VisualElement s_dialogueBox { get; set; } = null;
         protected static Label_E s_title { get; set; } = null;
         protected static Label_E s_message { get; set; } = null;
@@ -45,14 +36,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected static float s_width { get; set; } = default;
         protected static float s_height { get; set; } = default;
         protected static bool s_shouldCenter { get; set; } = false;
-        private static DialogueBox_E s_instance;
         private static string s_uxml => "UI/UXML/dialogueBox";
         private static string s_style => "UI/Style/DialogueBox/DialogueBox";
         private static StyleKeys s_keys => new StyleKeys(null, "", null);
-    }
 
-    public partial class DialogueBox_E
-    {
         public static void SetCursorMovementActions(Action<object> cursorSetMovement, Action<object> cursorUnsetMovement)
         {
             s_cursorSetMovement = cursorSetMovement;
@@ -201,17 +188,31 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
     }
 
-    public partial class DialogueBox_E : Visual_E
+    public partial class DialogueBox_E : ISingleUI
     {
-        private DialogueBox_E() :
-            base(s_uxml, null, null)
-        { }
+        private static DialogueBox_E s_instance;
+
+        public static DialogueBox_E Instance
+        {
+            get
+            {
+                Create();
+                return s_instance;
+            }
+        }
 
         private static void Create()
         {
             if (s_instance == null)
                 s_instance = new DialogueBox_E();
         }
+    }
+
+    public partial class DialogueBox_E : Visual_E
+    {
+        private DialogueBox_E() :
+            base(s_uxml, null, null)
+        { }
 
         protected override void Initialize()
         {

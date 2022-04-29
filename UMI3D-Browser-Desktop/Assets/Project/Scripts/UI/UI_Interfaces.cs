@@ -20,6 +20,9 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
+    public interface ISingleUI
+    { }
+
     public interface IClickableElement
     {
         /// <summary>

@@ -32,18 +32,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         public ToolboxItem_E LeaveButton { get; private set; } = null;
         public VisualElement SubMenuLayout { get; private set; } = null;
 
-        public static MenuBar_E Instance
-        {
-            get
-            {
-                if (m_instance == null)
-                {
-                    m_instance = new MenuBar_E();
-                }
-                return m_instance;
-            }
-        }
-
         public static bool ShouldDisplay { get; set; } = false;
         public static bool ShouldHide { get; set; } = false;
 
@@ -53,17 +41,13 @@ namespace umi3dDesktopBrowser.ui.viewController
         private VisualElement centerLayout_VE;
         private VisualElement rightLayout_VE;
 
-        private static MenuBar_E m_instance;
         private static string m_menuUXML => "UI/UXML/Menus/menuBar";
         private static string m_menuStyle => "UI/Style/Menus/Menus";
         private static StyleKeys m_menuKeys => new StyleKeys(null, "", null);
         private static string m_separatorStyle => "UI/Style/MenuBar/Separator";
         private static StyleKeys m_separatorKeys => new StyleKeys(null, "", null);
         private static float m_height { get; set; } = 0f;
-    }
 
-    public partial class MenuBar_E
-    {
         #region Pin Unpin
         public event Action<bool, Menu> OnPinnedUnpinned;
 
@@ -142,6 +126,21 @@ namespace umi3dDesktopBrowser.ui.viewController
                 vE.experimental.animation.Start(-value, 0, 100, animation);
             else
                 vE.experimental.animation.Start(0, -value, 100, animation);
+        }
+    }
+
+    public partial class MenuBar_E : ISingleUI
+    {
+        private static MenuBar_E m_instance;
+
+        public static MenuBar_E Instance
+        {
+            get
+            {
+                if (m_instance == null)
+                    m_instance = new MenuBar_E();
+                return m_instance;
+            }
         }
     }
 
