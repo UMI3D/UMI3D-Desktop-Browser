@@ -78,6 +78,7 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_textAlign: 0
+    m_textWrapping: 0
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle: []
@@ -346,11 +347,11 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 31
             m_value: {r: 1, g: 1, b: 1, a: 1}
           m_image:
             m_keyword: 2
-            m_value: {fileID: 21300000, guid: bcae8c7469809774ca121d3cf7249094, type: 3}
+            m_value: {fileID: 21300000, guid: 4920978f32f2159428aee9d356fbcef9, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -358,22 +359,22 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 30
             m_value: {r: 1, g: 0, b: 0, a: 1}
           m_image:
-            m_keyword: 2
+            m_keyword: 0
             m_value: {fileID: 21300000, guid: 7fe84c2c22ece7544a0705612436bcca, type: 3}
           m_imageTintColor:
             m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
+            m_value: {r: 0, g: 0, b: 0, a: 1}
       m_mousePressed:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 32
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 2
+            m_keyword: 0
             m_value: {fileID: 21300000, guid: 711619553132e4644aa810f528f6e314, type: 3}
           m_imageTintColor:
             m_keyword: 0

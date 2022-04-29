@@ -61,6 +61,12 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         #region Constructors and Destructor
         
+        public Visual_E() : 
+            this(null, null) 
+        { }
+        public Visual_E(string styleResourcePath, StyleKeys keys) :
+            this (new VisualElement(), styleResourcePath, keys)
+        { }
         public Visual_E(VisualElement visual)
         {
             if (visual == null) throw new NullReferenceException($"visual is null");

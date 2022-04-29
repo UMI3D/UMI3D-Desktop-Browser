@@ -98,10 +98,10 @@ namespace umi3dDesktopBrowser.ui
             BottomBar_E.Instance.InsertRootTo(m_mainView);
 
             MenuBar_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseMenuBar;
-            BottomBar_E.Instance.Notification.Clicked += Console_E.Instance.DisplayOrHide;
+            BottomBar_E.Instance.Console.Clicked += Console_E.Instance.DisplayOrHide;
             Shortcutbox_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseShortcut;
-            Console_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.UpdateOnOffNotificationIcon;
-            Console_E.Instance.NewLogAdded += BottomBar_E.Instance.UpdateAlertNotificationIcon;
+            //Console_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.UpdateOnOffNotificationIcon;
+            //Console_E.Instance.NewLogAdded += BottomBar_E.Instance.UpdateAlertNotificationIcon;
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => m_startOfSession = DateTime.Now);
             UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += () => {

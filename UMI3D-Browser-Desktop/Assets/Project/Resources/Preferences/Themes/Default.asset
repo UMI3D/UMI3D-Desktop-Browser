@@ -17,12 +17,12 @@ MonoBehaviour:
   m_menuSecondaryLight: {r: 0.96862745, g: 0.7137255, b: 0.34117648, a: 1}
   m_menuSecondaryDark: {r: 1, g: 0, b: 0, a: 1}
   m_menuTransparentLight: {r: 1, g: 0, b: 0, a: 1}
-  m_menuTransparentDark: {r: 0, g: 0, b: 0, a: 0.64705884}
+  m_menuTransparentDark: {r: 0, g: 0, b: 0, a: 0.88235295}
   m_labelPrimaryLight: {r: 1, g: 1, b: 1, a: 1}
   m_labelPrimaryDark: {r: 0, g: 0, b: 0, a: 1}
   m_labelSecondaryLight: {r: 0.96862745, g: 0.7137255, b: 0.34117648, a: 1}
   m_labelSecondaryDark: {r: 1, g: 0, b: 0, a: 1}
-  m_iconPrimaryLight: {r: 0.24705884, g: 0.24705884, b: 0.25882354, a: 1}
+  m_iconPrimaryLight: {r: 1, g: 1, b: 1, a: 1}
   m_iconPrimaryDark: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 1}
   m_iconSecondaryLight: {r: 0.9686275, g: 0.7137255, b: 0.34117648, a: 1}
-  m_iconSecondaryDark: {r: 1, g: 0, b: 0, a: 1}
+  m_iconSecondaryDark: {r: 0.24705884, g: 0.24705884, b: 0.25882354, a: 1}
