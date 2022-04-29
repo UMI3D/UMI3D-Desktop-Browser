@@ -71,13 +71,6 @@ namespace umi3dDesktopBrowser.ui.viewController
                 Add(item);
         }
 
-        public virtual void InsertAt(int index, Visual_E item)
-        {
-            m_elements.Insert(index, item);
-            item.InsertRootAtTo(index, Scroll_View);
-            UpdateSeparator();
-        }
-
         /// <summary>
         /// Clear the scrollview.
         /// </summary>
@@ -211,6 +204,13 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Add(child);
             child.InsertRootTo(Scroll_View);
+            UpdateSeparator();
+        }
+        public override void Insert(int index, Visual_E item)
+        {
+            base.Insert(index, item);
+            m_views.Insert(index, item);
+            item.InsertRootAtTo(index, Scroll_View);
             UpdateSeparator();
         }
         public override void Remove(Visual_E item)
