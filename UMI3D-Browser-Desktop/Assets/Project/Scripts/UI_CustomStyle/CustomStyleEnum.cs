@@ -45,18 +45,63 @@ namespace umi3DBrowser.UICustomStyle
         CustomUnresizabe = 11,
 
         /// <summary>
-        /// Primary color.
+        /// Menu Primary Light color.
         /// </summary>
-        Primary = 20,
+        MenuPrimaryLight = 20,
         /// <summary>
-        /// Secondary color.
+        /// Menu Primary Dark color.
         /// </summary>
-        BGSecondary = 21,
+        MenuPrimaryDark = 21,
         /// <summary>
-        /// Tertiary color.
+        /// Menu Secondary Light color.
         /// </summary>
-        Tertiary = 22,
+        MenuSecondaryLight = 22,
+        /// <summary>
+        /// Menu Secondary Dark color.
+        /// </summary>
+        MenuSecondaryDark = 23,
+        /// <summary>
+        /// Menu Transparent Light color.
+        /// </summary>
+        MenuTransparentLight = 24,
+        /// <summary>
+        /// Menu Transparent Dark color.
+        /// </summary>
+        MenuTransparentDark = 25,
 
+        /// <summary>
+        /// Label Primary Light color
+        /// </summary>
+        LabelPrimaryLight = 26,
+        /// <summary>
+        /// Label Primary Dark color
+        /// </summary>
+        LabelPrimaryDark = 27,
+        /// <summary>
+        /// Label Secondary Light color
+        /// </summary>
+        LabelSecondaryLight = 28,
+        /// <summary>
+        /// Label Secondary Dark color
+        /// </summary>
+        LabelSecondaryDark = 29,
+
+        /// <summary>
+        /// Icon Primary Light color
+        /// </summary>
+        IconPrimaryLight = 30,
+        /// <summary>
+        /// Icon Primary Dark color
+        /// </summary>
+        IconPrimaryDark = 31,
+        /// <summary>
+        /// Icon Secondary Light color
+        /// </summary>
+        IconSecondaryLight = 32,
+        /// <summary>
+        /// Icon Secondary Dark color
+        /// </summary>
+        IconSecondaryDark = 33,
     }
 
     public static class CustomStyleKeywordMethods
@@ -127,18 +172,65 @@ namespace umi3DBrowser.UICustomStyle
         /// Apply a custom style.
         /// </summary>
         Custom = 2,
+
         /// <summary>
-        /// Primary color.
+        /// Menu Primary Light color.
         /// </summary>
-        Primary = 20,
+        MenuPrimaryLight = 20,
         /// <summary>
-        /// Secondary color.
+        /// Menu Primary Dark color.
         /// </summary>
-        BGSecondary = 21,
+        MenuPrimaryDark = 21,
         /// <summary>
-        /// Tertiary color.
+        /// Menu Secondary Light color.
         /// </summary>
-        Tertiary = 22,
+        MenuSecondaryLight = 22,
+        /// <summary>
+        /// Menu Secondary Dark color.
+        /// </summary>
+        MenuSecondaryDark = 23,
+        /// <summary>
+        /// Menu Transparent Light color.
+        /// </summary>
+        MenuTransparentLight = 24,
+        /// <summary>
+        /// Menu Transparent Dark color.
+        /// </summary>
+        MenuTransparentDark = 25,
+
+        /// <summary>
+        /// Label Primary Light color
+        /// </summary>
+        LabelPrimaryLight = 26,
+        /// <summary>
+        /// Label Primary Dark color
+        /// </summary>
+        LabelPrimaryDark = 27,
+        /// <summary>
+        /// Label Secondary Light color
+        /// </summary>
+        LabelSecondaryLight = 28,
+        /// <summary>
+        /// Label Secondary Dark color
+        /// </summary>
+        LabelSecondaryDark = 29,
+
+        /// <summary>
+        /// Icon Primary Light color
+        /// </summary>
+        IconPrimaryLight = 30,
+        /// <summary>
+        /// Icon Primary Dark color
+        /// </summary>
+        IconPrimaryDark = 31,
+        /// <summary>
+        /// Icon Secondary Light color
+        /// </summary>
+        IconSecondaryLight = 32,
+        /// <summary>
+        /// Icon Secondary Dark color
+        /// </summary>
+        IconSecondaryDark = 33,
     }
     
     public enum CustomStyleSizeMode
