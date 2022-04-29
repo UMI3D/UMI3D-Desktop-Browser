@@ -115,7 +115,13 @@ namespace umi3dDesktopBrowser.ui
         private void ResetMenus()
         {
             MenuBar_E.Instance.Reset();
+            BottomBar_E.Instance.Reset();
             Shortcutbox_E.Instance.Reset();
+            Console_E.Instance.Reset();
+            ToolboxWindow_E.Instance.Reset();
+            ToolboxPinnedWindow_E.Instance.Reset();
+            ObjectMenuWindow_E.Instance.Reset();
+            m_pinnedToolboxesDM.menu.RemoveAll();
         }
 
         private void DisplayMenus()

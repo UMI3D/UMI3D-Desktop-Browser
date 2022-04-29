@@ -120,7 +120,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             DisplayedOrHidden?.Invoke(false);
         }
         /// <summary>
-        /// Reset at default (should be abled to set the properties againe).
+        /// Reset properties set after Initialization at default (should be abled to set the properties againe).
         /// </summary>
         public virtual void Reset()
         { }

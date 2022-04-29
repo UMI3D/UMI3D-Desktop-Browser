@@ -223,8 +223,6 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         cam.clearFlags = CameraClearFlags.SolidColor;
         UMI3DEnvironmentLoader.Clear();
         UMI3DResourcesManager.Instance.ClearCache();
-        MenuBar_E.Instance.Reset();
-        BottomBar_E.Instance.Reset();
         UMI3DCollaborationClientServer.Logout(() => 
         {
             GameObject.Destroy(UMI3DClientServer.Instance.gameObject);
