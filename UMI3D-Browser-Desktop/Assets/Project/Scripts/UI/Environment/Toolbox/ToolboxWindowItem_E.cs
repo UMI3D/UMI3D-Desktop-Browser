@@ -47,7 +47,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             => FirstToolbox.SetToolboxName(name ?? "");
 
         public void AddToolboxItemInFirstToolbox(params Visual_E[] items)
-            => FirstToolbox.Add(items);
+            => FirstToolbox.AddRange(items);
 
         public void AddToolbox(Toolbox_E toolbox)
             => m_toolboxesContainer.Add(toolbox.Root);

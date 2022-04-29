@@ -43,7 +43,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected VisualElement m_forwardVerticalButtonLayout { get; set; } = null;
         protected VisualElement m_forwardHorizontalButtonLayout { get; set; } = null;
 
-        protected List<Visual_E> m_elements { get; set; } = null;
         protected List<Visual_E> m_separatorsDisplayed { get; set; } = null;
         protected List<Visual_E> m_separatorsWaited { get; set; } = null;
     }
@@ -66,14 +65,10 @@ namespace umi3dDesktopBrowser.ui.viewController
             base(parent, visualResourcePath, styleResourcePath, keys) 
         { }
 
-        public virtual void Add(params Visual_E[] items)
+        public virtual void AddRange(params Visual_E[] items)
         {
             foreach (Visual_E item in items)
-            {
-                m_elements.Add(item);
-                item.InsertRootTo(Scroll_View);
-            }
-            UpdateSeparator();
+                Add(item);
         }
 
         public virtual void InsertAt(Visual_E item, int index)
@@ -81,23 +76,13 @@ namespace umi3dDesktopBrowser.ui.viewController
             Debug.Log("<color=green>TODO: </color>" + $"insert at");
         }
 
-        public virtual void Remove(Visual_E item)
-        {
-            if (!m_elements.Contains(item))
-                return;
-
-            item.RemoveRootFromHierarchy();
-            m_elements.Remove(item);
-            UpdateSeparator();
-        }
-
         /// <summary>
         /// Clear the scrollview.
         /// </summary>
         public virtual void Clear()
         {
-            m_elements.ForEach((elt) => elt.RemoveRootFromHierarchy());
-            m_elements.Clear();
+            m_views.ForEach((elt) => elt.RemoveRootFromHierarchy());
+            m_views.Clear();
             UpdateSeparator();
         }
 
@@ -109,15 +94,14 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_separatorsDisplayed.ForEach((separator) => separator.RemoveRootFromHierarchy());
             m_separatorsWaited.AddRange(m_separatorsDisplayed);
             m_separatorsDisplayed.Clear();
-
-            Action<Visual_E> addSeparators = (elt) =>
+            
+            m_views.ForEach(delegate (Visual_E elt)
             {
                 int eltIndex = Scroll_View.IndexOf(elt.Root);
                 if (eltIndex == 0) return;
                 ObjectPooling(out Visual_E separator, m_separatorsDisplayed, m_separatorsWaited, CreateSeparator);
                 separator.InsertRootAtTo(eltIndex, Scroll_View);
-            };
-            m_elements.ForEach(addSeparators);
+            });
         }
 
         #region Styles
@@ -221,6 +205,21 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class ScrollView_E : Visual_E
     {
+        public override void Add(Visual_E child)
+        {
+            base.Add(child);
+            child.InsertRootTo(Scroll_View);
+            UpdateSeparator();
+        }
+        public override void Remove(Visual_E item)
+        {
+            if (!m_views.Contains(item))
+                return;
+            base.Remove(item);
+            item.RemoveRootFromHierarchy();
+            UpdateSeparator();
+        }
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -243,7 +242,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_verticalScroller.valueChanged += VerticalSliderValueChanged;
             m_horizontalScroller.valueChanged += HorizontalSliderValueChanged;
 
-            m_elements = new List<Visual_E>();
             m_separatorsDisplayed = new List<Visual_E>();
             m_separatorsWaited = new List<Visual_E>();
         }

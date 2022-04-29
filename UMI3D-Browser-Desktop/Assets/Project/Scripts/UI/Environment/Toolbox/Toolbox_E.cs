@@ -76,7 +76,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             }
 
             if (items.Length > 0)
-                Add(items);
+                AddRange(items);
         }
 
         public void SetToolboxName(string text)
