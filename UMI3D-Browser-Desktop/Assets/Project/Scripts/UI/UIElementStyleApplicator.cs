@@ -211,14 +211,47 @@ namespace umi3dDesktopBrowser.ui.viewController
                 case CustomStyleColorKeyword.Custom:
                     customAction();
                     break;
-                case CustomStyleColorKeyword.Primary:
-                    themeAction(m_globalPref.CurrentTheme.Primary);
+                case CustomStyleColorKeyword.MenuPrimaryLight:
+                    themeAction(m_globalPref.CurrentTheme.MenuPrimaryLight);
                     break;
-                case CustomStyleColorKeyword.BGSecondary:
-                    themeAction(m_globalPref.CurrentTheme.Secondary);
+                case CustomStyleColorKeyword.MenuPrimaryDark:
+                    themeAction(m_globalPref.CurrentTheme.MenuPrimaryDark);
                     break;
-                case CustomStyleColorKeyword.Tertiary:
-                    themeAction(m_globalPref.CurrentTheme.Tertiary);
+                case CustomStyleColorKeyword.MenuSecondaryLight:
+                    themeAction(m_globalPref.CurrentTheme.MenuSecondaryLight);
+                    break;
+                case CustomStyleColorKeyword.MenuSecondaryDark:
+                    themeAction(m_globalPref.CurrentTheme.MenuSecondaryDark);
+                    break;
+                case CustomStyleColorKeyword.MenuTransparentLight:
+                    themeAction(m_globalPref.CurrentTheme.MenuTransparentLight);
+                    break;
+                case CustomStyleColorKeyword.MenuTransparentDark:
+                    themeAction(m_globalPref.CurrentTheme.MenuTransparentDark);
+                    break;
+                case CustomStyleColorKeyword.LabelPrimaryLight:
+                    themeAction(m_globalPref.CurrentTheme.LabelPrimaryLight);
+                    break;
+                case CustomStyleColorKeyword.LabelPrimaryDark:
+                    themeAction(m_globalPref.CurrentTheme.LabelPrimaryDark);
+                    break;
+                case CustomStyleColorKeyword.LabelSecondaryLight:
+                    themeAction(m_globalPref.CurrentTheme.LabelSecondaryLight);
+                    break;
+                case CustomStyleColorKeyword.LabelSecondaryDark:
+                    themeAction(m_globalPref.CurrentTheme.LabelSecondaryDark);
+                    break;
+                case CustomStyleColorKeyword.IconPrimaryLight:
+                    themeAction(m_globalPref.CurrentTheme.IconPrimaryLight);
+                    break;
+                case CustomStyleColorKeyword.IconPrimaryDark:
+                    themeAction(m_globalPref.CurrentTheme.IconPrimaryDark);
+                    break;
+                case CustomStyleColorKeyword.IconSecondaryLight:
+                    themeAction(m_globalPref.CurrentTheme.IconSecondaryLight);
+                    break;
+                case CustomStyleColorKeyword.IconSecondaryDark:
+                    themeAction(m_globalPref.CurrentTheme.IconSecondaryDark);
                     break;
             }
         }

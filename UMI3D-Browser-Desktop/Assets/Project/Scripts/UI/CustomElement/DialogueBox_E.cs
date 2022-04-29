@@ -48,7 +48,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static DialogueBox_E s_instance;
         private static string s_uxml => "UI/UXML/dialogueBox";
         private static string s_style => "UI/Style/DialogueBox/DialogueBox";
-        private static StyleKeys s_keys => new StyleKeys(null, "", "");
+        private static StyleKeys s_keys => new StyleKeys(null, "", null);
     }
 
     public partial class DialogueBox_E
