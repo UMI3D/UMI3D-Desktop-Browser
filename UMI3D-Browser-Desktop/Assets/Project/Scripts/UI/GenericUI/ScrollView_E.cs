@@ -71,9 +71,11 @@ namespace umi3dDesktopBrowser.ui.viewController
                 Add(item);
         }
 
-        public virtual void InsertAt(Visual_E item, int index)
+        public virtual void InsertAt(int index, Visual_E item)
         {
-            Debug.Log("<color=green>TODO: </color>" + $"insert at");
+            m_elements.Insert(index, item);
+            item.InsertRootAtTo(index, Scroll_View);
+            UpdateSeparator();
         }
 
         /// <summary>
