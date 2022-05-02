@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using umi3dDesktopBrowser.ui.Controller;
 using UnityEngine;
@@ -23,11 +24,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Shortcutbox_E
     {
-        public static bool ShouldDisplay { get; set; } = false;
-        public static bool ShouldHide { get; set; } = false;
-
         protected static ScrollView_E s_shortcuts { get; set; } = null;
-        protected static float s_width { get; set; } = default;
         protected static List<Shortcut_E> s_shortcutsDisplayed;
         protected static List<Shortcut_E> s_shortcutsWaited;
         protected static KeyBindings_SO s_keyBindings;
@@ -107,22 +104,14 @@ namespace umi3dDesktopBrowser.ui.viewController
             shortcut.Setup(title, shortcutIcons);
         }
 
-        private void OnSizeChanged(GeometryChangedEvent e)
+        private IEnumerator AnimeWindowVisibility(bool state)
         {
-            if (e.oldRect.width != e.newRect.width)
-                s_width = e.newRect.width;
-
-            if (ShouldDisplay)
-                Display();
-            if (ShouldHide)
-                Hide();
-        }
-
-        private void AnimeWindowVisibility(bool state)
-            => Anime(Root, -s_width, 0, 100, state, (elt, val) =>
+            yield return new WaitUntil(() => Root.resolvedStyle.width > 0f);
+            Anime(Root, -Root.resolvedStyle.width, 0, 100, state, (elt, val) =>
             {
                 elt.style.left = val;
             });
+        }
     }
 
     public partial class Shortcutbox_E : ISingleUI
@@ -152,27 +141,15 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void Display()
         {
-            if (s_width <= 0f)
-            {
-                ShouldDisplay = true;
-                return;
-            }
-            AnimeWindowVisibility(true);
+            UIManager.StartCoroutine(AnimeWindowVisibility(true));
             IsDisplaying = true;
-            ShouldDisplay = false;
             OnDisplayedOrHiddenTrigger(true);
         }
 
         public override void Hide()
         {
-            if (s_width <= 0f)
-            {
-                ShouldHide = true;
-                return;
-            }
-            AnimeWindowVisibility(false);
+            UIManager.StartCoroutine(AnimeWindowVisibility(false));
             IsDisplaying = false;
-            ShouldHide = false;
             OnDisplayedOrHiddenTrigger(false);
         }
 
@@ -186,8 +163,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             var scrollView = Root.Q<ScrollView>();
             s_shortcuts = new ScrollView_E(scrollView);
-
-            Root.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
 
             s_shortcutsDisplayed = new List<Shortcut_E>();
             s_shortcutsWaited = new List<Shortcut_E>();

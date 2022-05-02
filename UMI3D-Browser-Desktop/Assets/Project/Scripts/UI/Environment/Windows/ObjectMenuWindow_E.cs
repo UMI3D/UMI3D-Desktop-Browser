@@ -22,25 +22,32 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class ObjectMenuWindow_E
     {
+        protected ScrollView_E s_scrollView { get; set; } = null;
+
+        private static string s_windowUXML = "UI/UXML/ToolboxWindow/pinnedToolboxWindow";
+        private static string s_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_window";
+        private static StyleKeys s_windowKeys = new StyleKeys(null, "", null);
+
+        public void AddRange(params Visual_E[] items)
+            => s_scrollView.AddRange(items);
+    }
+
+    public partial class ObjectMenuWindow_E : ISingleUI
+    {
         public static ObjectMenuWindow_E Instance
         {
             get
             {
-                if (m_instance == null)
-                {
-                    m_instance = new ObjectMenuWindow_E();
-                }
-                return m_instance;
+                if (s_instance == null)
+                    s_instance = new ObjectMenuWindow_E();
+                return s_instance;
             }
         }
 
-        private static ObjectMenuWindow_E m_instance;
-        private static string m_windowUXML = "UI/UXML/ToolboxWindow/pinnedToolboxWindow";
-        private static string m_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_window";
-        private static StyleKeys m_windowKeys = new StyleKeys(null, "", null);
+        private static ObjectMenuWindow_E s_instance;
     }
 
-    public partial class ObjectMenuWindow_E : WindowWithScrollView_E
+    public partial class ObjectMenuWindow_E : AbstractWindow_E
     {
         protected override void Initialize()
         {
@@ -60,17 +67,19 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_closeButton.Add(closeIcon);
             LinkMouseBehaviourChanged(closeIcon, m_closeButton, false);
 
+            s_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"));
             string dcStyle = "UI/Style/ToolboxWindow/ToolboxWindow_DraggerContainer";
             StyleKeys dcKeys = new StyleKeys(null, "", null);
+            s_scrollView.SetVerticalDraggerContainerStyle(dcStyle, dcKeys);
             string dStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Dragger";
             StyleKeys dKeys = new StyleKeys(null, "", "");
-            SetVerticalScrollView(null, null, dcStyle, dcKeys, dStyle, dKeys);
+            s_scrollView.SetVerticalDraggerStyle(dStyle, dKeys);
 
             Root.name = "objectMenuWindow";
         }
 
         private ObjectMenuWindow_E() :
-            base(m_windowUXML, m_windowStyle, m_windowKeys)
+            base(s_windowUXML, s_windowStyle, s_windowKeys)
         { }
     }
 }

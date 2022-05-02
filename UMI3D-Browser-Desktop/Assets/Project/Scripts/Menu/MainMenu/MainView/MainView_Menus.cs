@@ -32,8 +32,8 @@ namespace umi3dDesktopBrowser.ui
         private void InitMenus()
         {
             InitMenuBar();
-            InitToolboxWindow();
-            InitToolboxPinnedWindow();
+            InitSettings();
+            InitToolboxesWindows();
             InitObjectMenuWindow();
             InitShortcut();
             InitConsole();
@@ -62,16 +62,18 @@ namespace umi3dDesktopBrowser.ui
             };
         }
 
-        private void InitToolboxWindow()
+        private void InitSettings()
+        {
+            Settingbox_E.Instance.InsertRootTo(m_viewport);
+        }
+
+        private void InitToolboxesWindows()
         {
             ToolboxWindow_E.Instance.InsertRootTo(m_viewport);
             ToolboxWindow_E.Instance.CloseButtonPressed += () => m_windowToolboxesDM.Collapse(true);
             m_windowToolboxesDM.menu.onContentChange.AddListener(() 
                 => MenuBar_E.Instance.DisplayToolboxButton(m_windowToolboxesDM.menu.Count > 0));
-        }
 
-        private void InitToolboxPinnedWindow()
-        {
             ToolboxPinnedWindow_E.Instance.InsertRootTo(m_viewport);
             ToolboxPinnedWindow_E.Instance.CloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(true);
         }
@@ -116,6 +118,7 @@ namespace umi3dDesktopBrowser.ui
         {
             MenuBar_E.Instance.Reset();
             BottomBar_E.Instance.Reset();
+            Settingbox_E.Instance.Reset();
             Shortcutbox_E.Instance.Reset();
             Console_E.Instance.Reset();
             ToolboxWindow_E.Instance.Reset();
@@ -126,20 +129,17 @@ namespace umi3dDesktopBrowser.ui
 
         private void DisplayMenus()
         {
-            if (m_showMenuBarOnStart)
-                MenuBar_E.Instance.Display();
-            else
-                MenuBar_E.Instance.Hide();
+            if (m_showMenuBarOnStart) MenuBar_E.Instance.Display();
+            else MenuBar_E.Instance.Hide();
 
-            if (m_showShortcutOnStart)
-                Shortcutbox_E.Instance.Display();
-            else
-                Shortcutbox_E.Instance.Hide();
+            if (m_showSettignsOnStart) Settingbox_E.Instance.Display();
+            else Settingbox_E.Instance.Hide();
 
-            if (m_showConsoleOnStart)
-                Console_E.Instance.Display();
-            else
-                Console_E.Instance.Hide();
+            if (m_showShortcutOnStart) Shortcutbox_E.Instance.Display();
+            else Shortcutbox_E.Instance.Hide();
+
+            if (m_showConsoleOnStart) Console_E.Instance.Display();
+            else Console_E.Instance.Hide();
         }
 
         #region Input Menus
