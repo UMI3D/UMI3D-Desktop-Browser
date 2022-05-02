@@ -55,7 +55,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Initialize();
 
             StyleKeys iconKeys = new StyleKeys(null, "toolboxesWindow", "");
-            SetIcon(m_iconStyle, iconKeys);
+            SetWindowIcon(m_iconStyle, iconKeys);
 
             StyleKeys windowNameKeys = new StyleKeys("", "", "");
             SetTopBar("Toolbox", m_windowNameStyle, windowNameKeys);

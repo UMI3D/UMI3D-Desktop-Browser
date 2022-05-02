@@ -22,25 +22,21 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         public event Action CloseButtonPressed;
 
-        protected Label_E m_label { get; set; } = null;
+        protected Visual_E m_windowIcon { get; set; } = null;
+        protected Label_E m_windowName { get; set; } = null;
         protected Button_E m_closeButton { get; set; } = null;
 
         protected virtual string m_iconStyle => "UI/Style/Windows/Window_Icon";
         protected virtual string m_windowNameStyle => "UI/Style/Windows/Window_Name";
         protected virtual string m_closeButtonBGStyle => "UI/Style/Windows/Window_CloseButtonBackground";
         protected virtual string m_closeButtonIconStyle => "UI/Style/Windows/Window_CloseButtonIcon";
-    }
-
-    public abstract partial class AbstractWindow_E : Visual_E
-    {
-        public AbstractWindow_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
-            base(visualResourcePath, styleResourcePath, keys)
-        { }
 
         public void OnCloseButtonPressed()
             => CloseButtonPressed?.Invoke();
 
-        public void SetIcon(string styleResourcePath, StyleKeys keys)
+        //public void SetIcon(string styleResourcePath, StyleKeys keys)
+
+        public void SetWindowIcon(string styleResourcePath, StyleKeys keys)
         {
             VisualElement icon = Root.Q("icon");
             AddVisualStyle(icon, styleResourcePath, keys, PopupManipulator());
@@ -48,15 +44,15 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public void SetTopBar(string name, string styleResourcePath, StyleKeys keys)
         {
-            m_label = new Label_E(Root.Q<Label>("windowName"), styleResourcePath, keys);
-            m_label.value = name;
-            m_label.UpdateRootManipulator(PopupManipulator());
+            m_windowName = new Label_E(Root.Q<Label>("windowName"), styleResourcePath, keys);
+            m_windowName.value = name;
+            m_windowName.UpdateRootManipulator(PopupManipulator());
         }
 
         public void SetTopBarName(string name)
         {
-            if (m_label != null)
-                m_label.value = name;
+            if (m_windowName != null)
+                m_windowName.value = name;
         }
 
         public void SetCloseButton(string styleResourcePath, StyleKeys keys)
@@ -77,5 +73,12 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected PopUpManipulator PopupManipulator()
                 => new PopUpManipulator(Root);
+    }
+
+    public abstract partial class AbstractWindow_E : Visual_E
+    {
+        public AbstractWindow_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
+            base(visualResourcePath, styleResourcePath, keys)
+        { }
     }
 }
