@@ -87,12 +87,13 @@ public class AvatarSetting : ISetting
     }
 
     public void Start()
-        => m_statusChanged(IsOn);
+        => m_statusChanged?.Invoke(IsOn);
 
     public void Toggle()
     {
+        Debug.Log($"toggle avatar from env settings [{!IsOn}]");
         IsOn = !IsOn;
-        m_statusChanged(IsOn);
+        m_statusChanged?.Invoke(IsOn);
     }
 
     public void Update()

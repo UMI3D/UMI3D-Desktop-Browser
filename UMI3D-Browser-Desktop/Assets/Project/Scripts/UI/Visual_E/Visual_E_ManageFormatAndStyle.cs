@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System;
 using umi3DBrowser.UICustomStyle;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
@@ -206,6 +207,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             if (!m_visualStylesMap.ContainsKey(visual))
                 throw new Exception($"Visual [{visual}] unknown wanted to be updated.");
             var (styleSO, _, manipulator) = m_visualStylesMap[visual];
+            Debug.Log($"update keys [{newKeys?.BackgroundStyleKey}]");
             manipulator.UpdateKeys(newKeys);
             m_visualStylesMap[visual] = (styleSO, newKeys, manipulator);
         }

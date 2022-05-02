@@ -130,6 +130,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             ApplyingFormat?.Invoke(m_styleSO, m_keys, target);
             ApplyingStyle?.Invoke(m_styleSO, m_keys, target.style, m_mouseBehaviourFromState);
+            Debug.Log($"mouse state = [{m_mouseBehaviourFromState}]");
         }
     }
 

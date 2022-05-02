@@ -45,6 +45,9 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class Button_E
     {
+        public Button_E() :
+            this(new Button())
+        { }
         public Button_E(Button button) :
             this(button, null, null)
         { }
@@ -52,7 +55,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             this(new Button(), styleResourcePath, keys)
         { }
         public Button_E(Button button, string styleResourcePath, StyleKeys keys) :
-            this(button, styleResourcePath, keys, null, true)
+            this(button, styleResourcePath, keys, keys, true)
         { }
         public Button_E(string styleResourcePath, StyleKeys onKeys, StyleKeys offKeys, bool isOn = false) :
             this(new Button(), styleResourcePath, onKeys, offKeys, isOn)
@@ -72,12 +75,14 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public virtual void Toggle(bool value)
         {
+            Debug.Log($"toggle button [{value}]");
             IsOn = value;
 
             foreach (Visual_E visual in StateKeys.Keys)
             {
                 StyleKeys current = (IsOn) ? StateKeys[visual].Item1 : StateKeys[visual].Item2;
                 visual.UpdateRootKeys(current);
+                Debug.Log($"curent = [{current?.BackgroundStyleKey}]");
             }
         }
         public void AddStateKeys(Visual_E view, string styleResourcePath, StyleKeys on, StyleKeys off)
