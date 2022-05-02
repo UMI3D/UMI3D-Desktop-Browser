@@ -67,24 +67,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected PopUpManipulator PopupManipulator()
                 => new PopUpManipulator(Root);
-
-        /// <summary>
-        /// Anime the VisualElement.
-        /// </summary>
-        /// <param name="vE"></param>
-        /// <param name="startValue"></param>
-        /// <param name="endValue"></param>
-        /// <param name="durationMs"></param>
-        /// <param name="fromStartToEnd"></param>
-        /// <param name="animation"></param>
-        protected virtual void Anime(VisualElement vE, float startValue, float endValue, int durationMs, bool fromStartToEnd, Action<VisualElement, float> animation)
-        {
-            Debug.LogWarning("Use of Unity experimental API. May not work in the future. (2021)");
-            if (fromStartToEnd)
-                vE.experimental.animation.Start(startValue, endValue, durationMs, animation);
-            else
-                vE.experimental.animation.Start(endValue, startValue, durationMs, animation);
-        }
     }
 
     public abstract partial class AbstractWindow_E : Visual_E

@@ -22,14 +22,17 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Settingbox_E
     {
-        public ToolboxItem_E Avatar { get; private set; } = null;
-        public ToolboxItem_E Sound { get; private set; } = null;
-        public ToolboxItem_E Mic { get; private set; } = null;
-        public ToolboxItem_E LeaveButton { get; private set; } = null;
+        public Button_E Avatar { get; private set; } = null;
+        public Button_E Sound { get; private set; } = null;
+        public Button_E Mic { get; private set; } = null;
+        public Button_E LeaveButton { get; private set; } = null;
 
         private static string s_uxml = "UI/UXML/settingbox";
-        private static string s_style = "UI/Style/Settingbox";
+        private static string s_style = "UI/Style/Settings/Settingbox";
         private static StyleKeys s_keys = new StyleKeys(null, "", null);
+        private static string s_buttonStyle = "UI/Style/Settings/Buttons";
+        private static StyleKeys s_buttonKeys = new StyleKeys(null, "", "");
+        private static string s_buttonIconStyle = "UI/Style/Settings/Icons";
 
         private IEnumerator AnimeWindowVisibility(bool state)
         {
@@ -89,13 +92,27 @@ namespace umi3dDesktopBrowser.ui.viewController
             SetTopBar("Options", m_topBarStyle, titleKeys, false);
 
             var buttonbox = Root.Q("buttonbox");
-            Avatar = new ToolboxItem_E("AvatarOn", "AvatarOff", "");
+            Button_E SetButton(string on, string off)
+            {
+                var button = new Button_E(s_buttonStyle, s_buttonKeys);
+                var icon = new Visual_E();
+                button.Add(icon);
+                button.Toggle(true);
+                StyleKeys onKeys = new StyleKeys(null, on, null);
+                StyleKeys offKeys = new StyleKeys(null, off, null);
+                button.AddStateKeys(icon, s_buttonIconStyle, onKeys, offKeys);
+                LinkMouseBehaviourChanged(icon, button, false);
+
+                return button;
+            }
+
+            Avatar = SetButton("avatarOn", "avatarOff");
             Avatar.InsertRootTo(buttonbox);
-            Sound = new ToolboxItem_E("SoundOn", "SoundOff", "");
+            Sound = SetButton("SoundOn", "SoundOff");
             Sound.InsertRootTo(buttonbox);
-            Mic = new ToolboxItem_E("MicOn", "MicOff", "");
+            Mic = SetButton("MicOn", "MicOff");
             Mic.InsertRootTo(buttonbox);
-            LeaveButton = new ToolboxItem_E("Leave", "");
+            LeaveButton = SetButton("Leave", null);
             LeaveButton.InsertRootTo(buttonbox);
         }
 
