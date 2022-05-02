@@ -68,8 +68,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            Button pin = Root.Q<Button>("pinButton");
-            PinButton = new Button_E(pin);
+            PinButton = new Button_E(Root.Q<Button>("pinButton"));
             PinButton.Clicked += PinUnpin;
             PinButton.Toggle(false);
             string pinButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButton";
@@ -78,8 +77,9 @@ namespace umi3dDesktopBrowser.ui.viewController
             PinButton.AddStateKeys(PinButton, pinButtonStyle, pinActiveKeys, pinEnableKeys);
             string pinIconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButtonIcon";
             StyleKeys pinIconKeys = new StyleKeys(null, "", null);
-            PinButton.SetIcon(pinIconStyle, pinIconKeys);
-            LinkMouseBehaviourChanged(PinButton.Icon, PinButton.Button, false);
+            var pinIcon = new Visual_E(pinIconStyle, pinIconKeys);
+            PinButton.Add(pinIcon);
+            LinkMouseBehaviourChanged(pinIcon, PinButton, false);
 
             VisualElement containers = Root.Q("containers");
             string conainerStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_Container";

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
@@ -23,56 +24,67 @@ namespace umi3dDesktopBrowser.ui.viewController
         public event Action CloseButtonPressed;
 
         protected Visual_E m_windowIcon { get; set; } = null;
-        protected Label_E m_windowName { get; set; } = null;
+        protected Label_E m_windowTopBar { get; set; } = null;
         protected Button_E m_closeButton { get; set; } = null;
 
         protected virtual string m_iconStyle => "UI/Style/Windows/Window_Icon";
-        protected virtual string m_windowNameStyle => "UI/Style/Windows/Window_Name";
+        protected virtual string m_topBarStyle => "UI/Style/Windows/Window_Name";
         protected virtual string m_closeButtonBGStyle => "UI/Style/Windows/Window_CloseButtonBackground";
         protected virtual string m_closeButtonIconStyle => "UI/Style/Windows/Window_CloseButtonIcon";
 
         public void OnCloseButtonPressed()
             => CloseButtonPressed?.Invoke();
 
-        //public void SetIcon(string styleResourcePath, StyleKeys keys)
-
-        public void SetWindowIcon(string styleResourcePath, StyleKeys keys)
+        public void SetWindowIcon(string styleResourcePath, StyleKeys keys, bool isDraggable)
         {
-            VisualElement icon = Root.Q("icon");
-            AddVisualStyle(icon, styleResourcePath, keys, PopupManipulator());
+            if (m_windowIcon == null)
+                m_windowIcon = new Visual_E(Root.Q("icon"));
+            m_windowIcon.UpdateRootStyleAndKeysAndManipulator(styleResourcePath, keys, (isDraggable) ? PopupManipulator() : null);
         }
 
-        public void SetTopBar(string name, string styleResourcePath, StyleKeys keys)
+        public void SetTopBar(string name, string styleResourcePath, StyleKeys keys, bool isDraggable)
         {
-            m_windowName = new Label_E(Root.Q<Label>("windowName"), styleResourcePath, keys);
-            m_windowName.value = name;
-            m_windowName.UpdateRootManipulator(PopupManipulator());
+            if (m_windowTopBar == null)
+                m_windowTopBar = new Label_E(Root.Q<Label>("windowName"));
+            m_windowTopBar.UpdateRootStyleAndKeysAndManipulator(styleResourcePath, keys, (isDraggable) ? PopupManipulator() : null);
+            m_windowTopBar.value = name;
         }
 
-        public void SetTopBarName(string name)
+        public void UpdateTopBarName(string name)
         {
-            if (m_windowName != null)
-                m_windowName.value = name;
+            if (m_windowTopBar != null)
+                m_windowTopBar.value = name;
         }
 
-        public void SetCloseButton(string styleResourcePath, StyleKeys keys)
+        public void SetCloseButton()
         {
-            Button closeButton = Root.Q<Button>("closeButton");
-            CloseButtonPressed += Hide;
             if (m_closeButton == null)
-                m_closeButton = new Button_E(closeButton);
-            m_closeButton.UpdateButtonStyle(styleResourcePath, keys);
+                m_closeButton = new Button_E(Root.Q<Button>("closeButton"));
+
+            CloseButtonPressed += Hide;
             m_closeButton.Clicked += OnCloseButtonPressed;
-        }
-        public void SetCloseButton(string butttonStyleResourcePath, StyleKeys buttonKeys, string iconStyleResourcePath, StyleKeys iconKeys)
-        {
-            SetCloseButton(butttonStyleResourcePath, buttonKeys);
-            m_closeButton.SetIcon(iconStyleResourcePath, iconKeys);
-            LinkMouseBehaviourChanged(m_closeButton.Icon, m_closeButton.Button, false);
         }
 
         protected PopUpManipulator PopupManipulator()
                 => new PopUpManipulator(Root);
+
+        /// <summary>
+        /// Anime the VisualElement.
+        /// </summary>
+        /// <param name="vE"></param>
+        /// <param name="startValue"></param>
+        /// <param name="endValue"></param>
+        /// <param name="durationMs"></param>
+        /// <param name="fromStartToEnd"></param>
+        /// <param name="animation"></param>
+        protected virtual void Anime(VisualElement vE, float startValue, float endValue, int durationMs, bool fromStartToEnd, Action<VisualElement, float> animation)
+        {
+            Debug.LogWarning("Use of Unity experimental API. May not work in the future. (2021)");
+            if (fromStartToEnd)
+                vE.experimental.animation.Start(startValue, endValue, durationMs, animation);
+            else
+                vE.experimental.animation.Start(endValue, startValue, durationMs, animation);
+        }
     }
 
     public abstract partial class AbstractWindow_E : Visual_E

@@ -59,7 +59,7 @@ namespace umi3d.desktopBrowser.menu.Container
             ToolboxItem.Clicked += () =>
             {
                 Select();
-                ToolboxPinnedWindow_E.Instance.SetTopBarName(menu.Name);
+                ToolboxPinnedWindow_E.Instance.UpdateTopBarName(menu.Name);
                 ToolboxPinnedWindow_E.Instance.Display();
             };
             ToolboxItem.SetItemStatus(true);

@@ -13,63 +13,65 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
-    public partial class ObjectMenuWindow_E
+    public partial class ToolboxPinnedWindow_E
     {
-        public static ObjectMenuWindow_E Instance
+        public static ToolboxPinnedWindow_E Instance
         {
             get
             {
                 if (m_instance == null)
                 {
-                    m_instance = new ObjectMenuWindow_E();
+                    m_instance = new ToolboxPinnedWindow_E();
                 }
                 return m_instance;
             }
         }
 
-        private static ObjectMenuWindow_E m_instance;
         private static string m_windowUXML = "UI/UXML/ToolboxWindow/pinnedToolboxWindow";
         private static string m_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_window";
         private static StyleKeys m_windowKeys = new StyleKeys(null, "", null);
+        private static ToolboxPinnedWindow_E m_instance;
     }
 
-    public partial class ObjectMenuWindow_E
+    public partial class ToolboxPinnedWindow_E : WindowWithScrollView_E
     {
-        private ObjectMenuWindow_E() :
+        private ToolboxPinnedWindow_E() :
             base(m_windowUXML, m_windowStyle, m_windowKeys)
         { }
-    }
 
-    public partial class ObjectMenuWindow_E : WindowWithScrollView_E
-    {
         protected override void Initialize()
         {
             base.Initialize();
 
-            StyleKeys iconKeys = new StyleKeys(null, "objectMenu", "");
-            SetWindowIcon(m_iconStyle, iconKeys);
+            StyleKeys iconKeys = new StyleKeys(null, "paramettersWindow", "");
+            SetWindowIcon(m_iconStyle, iconKeys, true);
 
             StyleKeys windowNameKeys = new StyleKeys("", "", "");
-            SetTopBar("Object Menu", m_windowNameStyle, windowNameKeys);
+            SetTopBar("Toolbox", m_topBarStyle, windowNameKeys, true);
 
+            SetCloseButton();
             StyleKeys closeButtonBGKeys = new StyleKeys(null, "", "");
+            m_closeButton.UpdateRootStyleAndKeysAndManipulator(m_closeButtonBGStyle, closeButtonBGKeys);
             StyleKeys closeButtonIconKeys = new StyleKeys(null, "", null);
-            SetCloseButton(m_closeButtonBGStyle, closeButtonBGKeys, m_closeButtonIconStyle, closeButtonIconKeys);
+            var closeIcon = new Visual_E(m_closeButtonIconStyle, closeButtonIconKeys);
+            m_closeButton.Add(closeIcon);
+            LinkMouseBehaviourChanged(closeIcon, m_closeButton, false);
 
+            //string svStyle = "UI/Style/ToolboxWindow/parameterWindow_scrollView";
+            //StyleKeys svKeys = new StyleKeys(null, "", null);
             string dcStyle = "UI/Style/ToolboxWindow/ToolboxWindow_DraggerContainer";
             StyleKeys dcKeys = new StyleKeys(null, "", null);
             string dStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Dragger";
             StyleKeys dKeys = new StyleKeys(null, "", "");
             SetVerticalScrollView(null, null, dcStyle, dcKeys, dStyle, dKeys);
 
-            Root.name = "objectMenuWindow";
+            Root.name = "toolParameterWindow";
         }
     }
 }

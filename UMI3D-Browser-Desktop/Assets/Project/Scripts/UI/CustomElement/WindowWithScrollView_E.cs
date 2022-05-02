@@ -28,7 +28,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             base(visualResourcePath, styleResourcePath, keys)
         { }
 
-        public void Adds(params Visual_E[] items)
+        public void AddRange(params Visual_E[] items)
         {
             m_scrollView.AddRange(items);
         }

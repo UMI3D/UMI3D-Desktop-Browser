@@ -55,10 +55,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         protected Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)> m_visualStylesMap;
         protected List<Visual_E> m_views;
-    }
-
-    public partial class Visual_E
-    {
+    
         #region Constructors and Destructor
         
         public Visual_E() : 
@@ -113,6 +110,11 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         #region Public methods
 
+        public virtual void ToogleVisibility()
+        {
+            if (IsDisplaying) Hide();
+            else Display();
+        }
         public virtual void Display()
         {
             Root.style.display = DisplayStyle.Flex;

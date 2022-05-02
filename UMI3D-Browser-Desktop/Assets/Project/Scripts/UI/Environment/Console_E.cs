@@ -24,18 +24,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Console_E
     {
-        public static Console_E Instance
-        {
-            get
-            {
-                if (s_instance == null)
-                    s_instance = new Console_E();
-                return s_instance;
-            }
-        }
-
         public event Action NewLogAdded;
-        public static Label_E Version { get; private set; } = null;
         public static bool ShouldDisplay { get; set; } = false;
         public static bool ShouldHide { get; set; } = false;
 
@@ -49,7 +38,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected static List<Label_E> s_logDetailWaited;
         protected static Dictionary<Label_E, (string, string, string, LogType)> s_logsMap;
 
-        private static Console_E s_instance;
         private static string s_consoleUXML = "UI/UXML/console";
         private static string s_consoleStyle = "UI/Style/Console/Console";
         private static StyleKeys s_consoleKeys = new StyleKeys(null, "", null);
@@ -62,28 +50,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static StyleKeys s_exceptionKeys = new StyleKeys("exception", null, "unselected");
         private static StyleKeys s_exceptionKeysSelected = new StyleKeys("exception", null, "selected");
         private static string s_logDetailStyle = "UI/Style/Console/Console_LogDetail";
-    }
-
-    public partial class Console_E
-    {
-        public void DisplayOrHide()
-        {
-            if (IsDisplaying)
-                Hide();
-            else
-                Display();
-        }
-
-        public void AddLog()
-        {
-            //TODO
-        }
-
-        public void ClearLog()
-        {
-            //TODO
-        }
-
+    
         private void HandleLog(string logString, string stackTrace, LogType type)
         {
             if (type == LogType.Warning)
@@ -172,25 +139,36 @@ namespace umi3dDesktopBrowser.ui.viewController
             }
         }
 
-        /// <summary>
-        /// Anime the VisualElement.
-        /// </summary>
-        /// <param name="vE">the VisualElement to be animated.</param>
-        /// <param name="value">The animation will be trigger from 0 to this value when isShowing is true. Else, from this value to 0.</param>
-        /// <param name="isShowing">The VisualElement should be displayed if true.</param>
-        /// <param name="animation">The animation to be perform.</param>
-        private void AnimeVisualElement(VisualElement vE, float value, bool isShowing, Action<VisualElement, float> animation)
-        {
-            Debug.LogWarning("Use of Unity experimental API. May not work in the future. (2021)");
-            if (!isShowing)
-                vE.experimental.animation.Start(0, -value, 100, animation);
-            else
-                vE.experimental.animation.Start(-value, 0, 100, animation);
-        }
+        private void AnimeWindowVisibility(bool state)
+            => Anime(Root, -s_width, 0, 100, state, (elt, val) =>
+            {
+                elt.style.right = val;
+            });
     }
 
-    public partial class Console_E : Visual_E
+    public partial class Console_E : ISingleUI
     {
+        public static Console_E Instance
+        {
+            get
+            {
+                if (s_instance == null)
+                    s_instance = new Console_E();
+                return s_instance;
+            }
+        }
+
+        private static Console_E s_instance;
+    }
+
+    public partial class Console_E : AbstractWindow_E
+    {
+        public override void Reset()
+        {
+            base.Reset();
+            Debug.Log("<color=green>TODO: </color>" + $"Reset console");
+        }
+
         public override void Display()
         {
             if (s_width <= 0f)
@@ -198,15 +176,11 @@ namespace umi3dDesktopBrowser.ui.viewController
                 ShouldDisplay = true;
                 return;
             }
-            AnimeVisualElement(Root, s_width, true, (elt, val) =>
-            {
-                elt.style.right = val;
-            });
+            AnimeWindowVisibility(true);
             IsDisplaying = true;
             ShouldDisplay = false;
             OnDisplayedOrHiddenTrigger(true);
         }
-
         public override void Hide()
         {
             if (s_width <= 0f)
@@ -214,23 +188,18 @@ namespace umi3dDesktopBrowser.ui.viewController
                 ShouldHide = true;
                 return;
             }
-            AnimeVisualElement(Root, s_width, false, (elt, val) =>
-            {
-                elt.style.right = val;
-            });
+            AnimeWindowVisibility(false);
             IsDisplaying = false;
             ShouldHide = false;
             OnDisplayedOrHiddenTrigger(false);
         }
-
         protected override void Initialize()
         {
             base.Initialize();
 
-            var title = Root.Q<Label>("title");
             string titleStyle = "UI/Style/Console/Console_Version";
             StyleKeys titleKeys = new StyleKeys("", "", null);
-            Version = new Label_E(title, titleStyle, titleKeys);
+            SetTopBar("", titleStyle, titleKeys, false);
 
             var logs = Root.Q<ScrollView>("logs");
             s_logs = new ScrollView_E(logs);

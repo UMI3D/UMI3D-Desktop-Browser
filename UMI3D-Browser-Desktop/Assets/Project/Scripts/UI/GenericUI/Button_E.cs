@@ -141,46 +141,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             => UpdateRootKeys(keys);
     }
 
-    public partial class Button_E : IIconCustomisableElement
-    {
-        public Visual_E Icon { get; protected set; } = null;
-
-        public void AddIcon(VisualElement parent)
-            => AddIcon(parent, null, null);
-        public void AddIcon(VisualElement parent, string styleResourcePath, StyleKeys keys)
-        {
-            if (Icon != null)
-                throw new Exception("Icon of the button is already affected");
-
-            Icon = new Visual_E(parent, new VisualElement(), styleResourcePath, keys);
-        }
-        public void SetIcon(string styleResourcePath, StyleKeys keys)
-            => SetIcon(Root.Q<VisualElement>("icon"), styleResourcePath, keys);
-        public void SetIcon(VisualElement icon, string styleResourcePath, StyleKeys keys)
-        {
-            if (Icon != null)
-                throw new Exception("Icon of the button is already affected");
-            if (icon == null)
-                throw new NullReferenceException("Icon null when trying to setup");
-
-            Icon = new Visual_E(Root, icon, styleResourcePath, keys);
-        }
-        public void UpdateIconStyle(string styleResourcePath, StyleKeys keys)
-        {
-            if (Icon == null)
-                throw new NullReferenceException("Icon null when trying to update");
-
-            Icon.UpdateRootStyleAndKeysAndManipulator(styleResourcePath, keys);
-        }
-        public void UpdateIconKeys(StyleKeys keys)
-        {
-            if (Icon == null)
-                throw new NullReferenceException("Icon null when trying to update");
-
-            Icon.UpdateRootKeys(keys);
-        }
-    }
-
     public partial class Button_E : Visual_E
     {
         public override void Add(Visual_E child)
