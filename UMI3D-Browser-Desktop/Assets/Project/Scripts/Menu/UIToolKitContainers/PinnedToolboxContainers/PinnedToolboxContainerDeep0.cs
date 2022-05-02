@@ -48,12 +48,12 @@ namespace umi3d.desktopBrowser.menu.Container
             ToolboxItem.Clicked += () =>
             {
                 Select();
-                ToolboxPinnedWindow_E.Instance.SetTopBarName(menu.Name);
+                ToolboxPinnedWindow_E.Instance.UpdateTopBarName(menu.Name);
                 ToolboxPinnedWindow_E.Instance.Display();
             };
             ToolboxItem.SetItemStatus(true);
             Displayerbox = new Displayerbox_E(DisplayerboxType.ParametersPopup);
-            ToolboxPinnedWindow_E.Instance.Adds(Displayerbox);
+            ToolboxPinnedWindow_E.Instance.AddRange(Displayerbox);
             base.SetContainerAsTool();
         }
 
@@ -149,7 +149,7 @@ namespace umi3d.desktopBrowser.menu.Container
                 case ItemType.Undefine:
                     break;
                 case ItemType.Tool:
-                    ToolboxPinnedWindow_E.Instance.Adds(containerDeep1.Displayerbox);
+                    ToolboxPinnedWindow_E.Instance.AddRange(containerDeep1.Displayerbox);
                     break;
                 case ItemType.Toolbox:
                     MenuBar_E.Instance.AddToolboxDeep1Plus(containerDeep1.Toolbox);

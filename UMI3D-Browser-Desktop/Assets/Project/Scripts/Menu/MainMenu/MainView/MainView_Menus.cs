@@ -90,7 +90,7 @@ namespace umi3dDesktopBrowser.ui
         private void InitConsole()
         {
             Console_E.Instance.InsertRootTo(m_viewport);
-            Console_E.Version.value = BrowserVersion.Version;
+            Console_E.Instance.UpdateTopBarName(BrowserVersion.Version);
         }
 
         private void InitBottomBar()
@@ -98,7 +98,7 @@ namespace umi3dDesktopBrowser.ui
             BottomBar_E.Instance.InsertRootTo(m_mainView);
 
             MenuBar_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseMenuBar;
-            BottomBar_E.Instance.Console.Clicked += Console_E.Instance.DisplayOrHide;
+            BottomBar_E.Instance.Console.Clicked += Console_E.Instance.ToogleVisibility;
             Shortcutbox_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseShortcut;
             //Console_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.UpdateOnOffNotificationIcon;
             //Console_E.Instance.NewLogAdded += BottomBar_E.Instance.UpdateAlertNotificationIcon;
@@ -158,7 +158,7 @@ namespace umi3dDesktopBrowser.ui
         private void InputShortcut()
         {
             if (Input.GetKeyDown(KeyCode.F1))
-                Shortcutbox_E.Instance.DisplayOrHide();
+                Shortcutbox_E.Instance.ToogleVisibility();
         }
 
         #endregion

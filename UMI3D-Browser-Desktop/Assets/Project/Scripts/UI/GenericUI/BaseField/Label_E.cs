@@ -66,6 +66,9 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Label_E(string styleResourcePath, StyleKeys keys, string text = "") :
             this(new Label(), styleResourcePath, keys, text)
         { }
+        public Label_E(Label label) :
+            this(label, null, null, "")
+        { }
         public Label_E(Label label, string styleResourcePath, StyleKeys keys, string text = "") :
             base(label, styleResourcePath, keys)
         {

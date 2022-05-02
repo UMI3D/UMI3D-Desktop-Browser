@@ -16,6 +16,7 @@ limitations under the License.
 using BrowserDesktop.preferences;
 using System;
 using umi3DBrowser.UICustomStyle;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController

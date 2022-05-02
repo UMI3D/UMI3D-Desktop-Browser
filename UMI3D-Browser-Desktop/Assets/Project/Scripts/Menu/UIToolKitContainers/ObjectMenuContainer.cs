@@ -29,7 +29,7 @@ namespace umi3d.desktopBrowser.menu.Container
         private void Awake()
         {
             Displayerbox = new Displayerbox_E(DisplayerboxType.ParametersPopup);
-            ObjectMenuWindow_E.Instance.Adds(Displayerbox);
+            ObjectMenuWindow_E.Instance.AddRange(Displayerbox);
         }
 
         protected override void CollapseImp()
