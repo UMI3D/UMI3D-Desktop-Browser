@@ -40,6 +40,10 @@ namespace umi3dDesktopBrowser.ui
         [SerializeField]
         private bool m_showMenuBarOnStart = false;
 
+        [Header("Settings")]
+        [SerializeField]
+        private bool m_showSettignsOnStart = false;
+
         [Header("Shortcuts")]
         [SerializeField]
         private bool m_showShortcutOnStart = false;
@@ -64,6 +68,7 @@ namespace umi3dDesktopBrowser.ui
             BindUI();
             InitMenus();
             Display(false);
+            DisplayMenus();
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
             {
@@ -92,8 +97,6 @@ namespace umi3dDesktopBrowser.ui
         public void Display(bool val)
         {
             m_mainView.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
-            if (val)
-                DisplayMenus();
         }
     }
 }

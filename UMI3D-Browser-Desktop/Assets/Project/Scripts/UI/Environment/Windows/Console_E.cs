@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using umi3DBrowser.UICustomStyle;
 using umi3dDesktopBrowser.ui.Controller;
@@ -25,12 +26,9 @@ namespace umi3dDesktopBrowser.ui.viewController
     public partial class Console_E
     {
         public event Action NewLogAdded;
-        public static bool ShouldDisplay { get; set; } = false;
-        public static bool ShouldHide { get; set; } = false;
 
         protected static ScrollView_E s_logs { get; set; } = null;
         protected static ScrollView_E s_details { get; set; } = null;
-        protected static float s_width { get; set; } = default;
         protected static Label_E s_lastSelectedLog { get; set; } = null;
         protected static List<Label_E> s_logDisplayed;
         protected static List<Label_E> s_logWaited;
@@ -50,7 +48,9 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static StyleKeys s_exceptionKeys = new StyleKeys("exception", null, "unselected");
         private static StyleKeys s_exceptionKeysSelected = new StyleKeys("exception", null, "selected");
         private static string s_logDetailStyle = "UI/Style/Console/Console_LogDetail";
-    
+
+        #region Private Methods
+
         private void HandleLog(string logString, string stackTrace, LogType type)
         {
             if (type == LogType.Warning)
@@ -74,17 +74,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             ObjectPooling(out log, displayed, waited, () => new Label_E(style, null));
             UpdateLogStyle(log, type, false);
-        }
-
-        private void OnSizeChanged(GeometryChangedEvent e)
-        {
-            if (e.oldRect.width != e.newRect.width)
-                s_width = e.newRect.width;
-
-            if (ShouldDisplay)
-                Display();
-            if (ShouldHide)
-                Hide();
         }
 
         private void OnLogSelected(MouseBehaviour behaviour, Label_E logSource)
@@ -139,11 +128,16 @@ namespace umi3dDesktopBrowser.ui.viewController
             }
         }
 
-        private void AnimeWindowVisibility(bool state)
-            => Anime(Root, -s_width, 0, 100, state, (elt, val) =>
+        private IEnumerator AnimeWindowVisibility(bool state)
+        {
+            yield return new WaitUntil(() => Root.resolvedStyle.width > 0f);
+            Anime(Root, -Root.resolvedStyle.width, 0, 100, state, (elt, val) =>
             {
                 elt.style.right = val;
             });
+        }
+
+        #endregion
     }
 
     public partial class Console_E : ISingleUI
@@ -163,43 +157,34 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class Console_E : AbstractWindow_E
     {
+        protected override string m_topBarStyle => "UI/Style/Console/Console_Version";
+
         public override void Reset()
         {
             base.Reset();
-            Debug.Log("<color=green>TODO: </color>" + $"Reset console");
+            //Todo
         }
 
         public override void Display()
         {
-            if (s_width <= 0f)
-            {
-                ShouldDisplay = true;
-                return;
-            }
-            AnimeWindowVisibility(true);
+            UIManager.StartCoroutine(AnimeWindowVisibility(true));
             IsDisplaying = true;
-            ShouldDisplay = false;
             OnDisplayedOrHiddenTrigger(true);
         }
+
         public override void Hide()
         {
-            if (s_width <= 0f)
-            {
-                ShouldHide = true;
-                return;
-            }
-            AnimeWindowVisibility(false);
+            UIManager.StartCoroutine(AnimeWindowVisibility(false));
             IsDisplaying = false;
-            ShouldHide = false;
             OnDisplayedOrHiddenTrigger(false);
         }
+
         protected override void Initialize()
         {
             base.Initialize();
 
-            string titleStyle = "UI/Style/Console/Console_Version";
             StyleKeys titleKeys = new StyleKeys("", "", null);
-            SetTopBar("", titleStyle, titleKeys, false);
+            SetTopBar("", m_topBarStyle, titleKeys, false);
 
             var logs = Root.Q<ScrollView>("logs");
             s_logs = new ScrollView_E(logs);
@@ -208,8 +193,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             string detailsStyle = "UI/Style/Console/Console_Details";
             StyleKeys detailsKeys = new StyleKeys(null, "", null);
             s_details = new ScrollView_E(details, detailsStyle, detailsKeys);
-
-            Root.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
 
             s_logDisplayed = new List<Label_E>();
             s_logWaited = new List<Label_E>();

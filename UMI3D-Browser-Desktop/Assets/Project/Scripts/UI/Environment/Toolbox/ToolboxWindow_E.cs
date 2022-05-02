@@ -24,12 +24,17 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         public static event Action UnpinnedPressed;
 
-        private static string m_windowUXML = "UI/UXML/ToolboxWindow/toolboxWindow";
-        private static string m_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_window";
-        private static StyleKeys m_windowKeys = new StyleKeys(null, "", null);
+        protected ScrollView_E s_scrollView { get; set; } = null;
+
+        private static string s_windowUXML = "UI/UXML/ToolboxWindow/toolboxWindow";
+        private static string s_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_window";
+        private static StyleKeys s_windowKeys = new StyleKeys(null, "", null);
         
         public static void OnUnpinnedPressed()
             => UnpinnedPressed?.Invoke();
+
+        public void AddRange(params Visual_E[] items)
+            => s_scrollView.AddRange(items);
     }
 
     public partial class ToolboxWindow_E : ISingleUI
@@ -47,7 +52,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static ToolboxWindow_E m_instance;
     }
 
-    public partial class ToolboxWindow_E : WindowWithScrollView_E
+    public partial class ToolboxWindow_E : AbstractWindow_E
     {
         protected override void Initialize()
         {
@@ -67,11 +72,13 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_closeButton.Add(closeIcon);
             LinkMouseBehaviourChanged(closeIcon, m_closeButton, false);
 
+            s_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"));
             string dcStyle = "UI/Style/ToolboxWindow/ToolboxWindow_DraggerContainer";
             StyleKeys dcKeys = new StyleKeys(null, "", null);
+            s_scrollView.SetVerticalDraggerContainerStyle(dcStyle, dcKeys);
             string dStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Dragger";
             StyleKeys dKeys = new StyleKeys(null, "", "");
-            SetVerticalScrollView(null, null, dcStyle, dcKeys, dStyle, dKeys);
+            s_scrollView.SetVerticalDraggerStyle(dStyle, dKeys);
 
             Button unpinnedButton = Root.Q<Button>("unpinnedButton");
             string unpinnedButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_UnpinnedButton";
@@ -81,7 +88,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         private ToolboxWindow_E() :
-            base(m_windowUXML, m_windowStyle, m_windowKeys)
+            base(s_windowUXML, s_windowStyle, s_windowKeys)
         { }
     }
 }

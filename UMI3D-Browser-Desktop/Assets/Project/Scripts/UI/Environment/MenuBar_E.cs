@@ -26,10 +26,7 @@ namespace umi3dDesktopBrowser.ui.viewController
     public partial class MenuBar_E
     {
         public ToolboxItem_E ToolboxButton { get; private set; } = null;
-        public ToolboxItem_E Avatar { get; private set; } = null;
-        public ToolboxItem_E Sound { get; private set; } = null;
-        public ToolboxItem_E Mic { get; private set; } = null;
-        public ToolboxItem_E LeaveButton { get; private set; } = null;
+        
         public VisualElement SubMenuLayout { get; private set; } = null;
 
         public static bool ShouldDisplay { get; set; } = false;
@@ -39,7 +36,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         private VisualElement leftLayout_VE;
         private VisualElement centerLayout_VE;
-        private VisualElement rightLayout_VE;
 
         private static string m_menuUXML => "UI/UXML/Menus/menuBar";
         private static string m_menuStyle => "UI/Style/Menus/Menus";
@@ -131,8 +127,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class MenuBar_E : ISingleUI
     {
-        private static MenuBar_E m_instance;
-
         public static MenuBar_E Instance
         {
             get
@@ -142,6 +136,8 @@ namespace umi3dDesktopBrowser.ui.viewController
                 return m_instance;
             }
         }
+
+        private static MenuBar_E m_instance;
     }
 
     public partial class MenuBar_E : Visual_E
@@ -151,10 +147,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Reset();
             m_scrollView.Reset();
             ToolboxButton.ResetClickedEvent();
-            Avatar.ResetClickedEvent();
-            Sound.ResetClickedEvent();
-            Mic.ResetClickedEvent();
-            LeaveButton.ResetClickedEvent();
         }
 
         public override void InsertRootTo(VisualElement parent)
@@ -198,7 +190,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             leftLayout_VE = Root.Q<VisualElement>("Left-layout");
             centerLayout_VE = Root.Q<VisualElement>("Center-layout");
-            rightLayout_VE = Root.Q<VisualElement>("Right-layout");
 
             #region Sub menu layout
 
@@ -243,20 +234,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             AddVisualStyle(forwardSeparator, m_separatorStyle, m_separatorKeys);
 
             #endregion
-
-            AddSeparator(rightLayout_VE);
-
-            Avatar = new ToolboxItem_E("AvatarOn", "AvatarOff", "");
-            Sound = new ToolboxItem_E("SoundOn", "SoundOff", "");
-            Mic = new ToolboxItem_E("MicOn", "MicOff", "");
-            new Toolbox_E("", ToolboxType.Pinned, Avatar, Sound, Mic)
-                .InsertRootTo(rightLayout_VE);
-
-            AddSeparator(rightLayout_VE);
-
-            LeaveButton = new ToolboxItem_E("Leave", "");
-            new Toolbox_E("", ToolboxType.Pinned, LeaveButton)
-                .InsertRootTo(rightLayout_VE);
 
             Root.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
             DisplayToolboxButton(false);

@@ -40,8 +40,8 @@ public class AudioSetting : ISetting
     public AudioSetting()
     {
         IsOn = true;
-        m_statusChanged = MenuBar_E.Instance.Sound.Toggle;
-        MenuBar_E.Instance.Sound.Clicked += Toggle;
+        m_statusChanged = Settingbox_E.Instance.Sound.Toggle;
+        Settingbox_E.Instance.Sound.Clicked += Toggle;
         Start();
     }
 
@@ -81,8 +81,8 @@ public class AvatarSetting : ISetting
     public AvatarSetting()
     {
         IsOn = true;
-        m_statusChanged = MenuBar_E.Instance.Avatar.Toggle;
-        MenuBar_E.Instance.Avatar.Clicked += Toggle;
+        m_statusChanged = Settingbox_E.Instance.Avatar.Toggle;
+        Settingbox_E.Instance.Avatar.Clicked += Toggle;
         Start();
     }
 
@@ -117,8 +117,8 @@ public class MicSetting : ISetting
     public MicSetting()
     {
         IsOn = false;
-        m_statusChanged = MenuBar_E.Instance.Mic.Toggle;
-        MenuBar_E.Instance.Mic.Clicked += Toggle;
+        m_statusChanged = Settingbox_E.Instance.Mic.Toggle;
+        Settingbox_E.Instance.Mic.Clicked += Toggle;
         Start();
     }
 
