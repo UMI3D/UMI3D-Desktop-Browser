@@ -25,7 +25,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         private static string m_windowUXML = "UI/UXML/ToolboxWindow/pinnedToolboxWindow";
         private static string m_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_window";
-        private static StyleKeys m_windowKeys = new StyleKeys(null, "", null);
 
         public void AddRange(params Visual_E[] items)
             => s_scrollView.AddRange(items);
@@ -55,31 +54,26 @@ namespace umi3dDesktopBrowser.ui.viewController
             StyleKeys iconKeys = new StyleKeys(null, "paramettersWindow", "");
             SetWindowIcon(m_iconStyle, iconKeys, true);
 
-            StyleKeys windowNameKeys = new StyleKeys("", "", "");
-            SetTopBar("Toolbox", m_topBarStyle, windowNameKeys, true);
+            SetTopBar("Toolbox", m_topBarStyle, StyleKeys.Default, true);
 
             SetCloseButton();
-            StyleKeys closeButtonBGKeys = new StyleKeys(null, "", "");
-            m_closeButton.UpdateRootStyleAndKeysAndManipulator(m_closeButtonBGStyle, closeButtonBGKeys);
-            StyleKeys closeButtonIconKeys = new StyleKeys(null, "", null);
-            var closeIcon = new Visual_E(m_closeButtonIconStyle, closeButtonIconKeys);
+            m_closeButton.UpdateRootStyleAndKeysAndManipulator(m_closeButtonBGStyle, StyleKeys.DefaultBackgroundAndBorder);
+            var closeIcon = new Visual_E(m_closeButtonIconStyle, StyleKeys.DefaultBackground);
             m_closeButton.Add(closeIcon);
             LinkMouseBehaviourChanged(m_closeButton, closeIcon);
             m_closeButton.GetRootManipulator().ProcessDuringBubbleUp = true;
 
             s_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"));
             string dcStyle = "UI/Style/ToolboxWindow/ToolboxWindow_DraggerContainer";
-            StyleKeys dcKeys = new StyleKeys(null, "", null);
-            s_scrollView.SetVerticalDraggerContainerStyle(dcStyle, dcKeys);
+            s_scrollView.SetVerticalDraggerContainerStyle(dcStyle, StyleKeys.DefaultBackground);
             string dStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Dragger";
-            StyleKeys dKeys = new StyleKeys(null, "", "");
-            s_scrollView.SetVerticalDraggerStyle(dStyle, dKeys);
+            s_scrollView.SetVerticalDraggerStyle(dStyle, StyleKeys.DefaultBackgroundAndBorder);
 
             Root.name = "toolParameterWindow";
         }
 
         private ToolboxPinnedWindow_E() :
-            base(m_windowUXML, m_windowStyle, m_windowKeys)
+            base(m_windowUXML, m_windowStyle, StyleKeys.DefaultBackground)
         { }
     }
 }

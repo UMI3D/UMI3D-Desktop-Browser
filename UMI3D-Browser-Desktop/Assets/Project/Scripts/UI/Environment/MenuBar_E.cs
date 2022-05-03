@@ -38,9 +38,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         private static string m_menuUXML => "UI/UXML/Menus/menuBar";
         private static string m_menuStyle => "UI/Style/Menus/Menus";
-        private static StyleKeys m_menuKeys => new StyleKeys(null, "", null);
         private static string m_separatorStyle => "UI/Style/MenuBar/Separator";
-        private static StyleKeys m_separatorKeys => new StyleKeys(null, "", null);
+        private static StyleKeys m_separatorKeys => StyleKeys.DefaultBackground;
 
         #region Pin Unpin
         public event Action<bool, Menu> OnPinnedUnpinned;
@@ -206,7 +205,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             => new Visual_E(new VisualElement(), m_separatorStyle, m_separatorKeys);
 
         private MenuBar_E() :
-            base(m_menuUXML, m_menuStyle, m_menuKeys)
+            base(m_menuUXML, m_menuStyle, StyleKeys.DefaultBackground)
         { }
     }
 }

@@ -36,20 +36,16 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             m_input = new Visual_E(UXMLPath, null, null);
 
             string dropdownStyle = "UI/Style/Displayers/InputDropdown";
-            StyleKeys dropdownKeys = new StyleKeys("", "", "");
-            m_dropdown = new Dropdown_E(m_input.Root.Q<Button>(), dropdownStyle, dropdownKeys);
+            m_dropdown = new Dropdown_E(m_input.Root.Q<Button>(), dropdownStyle, StyleKeys.Default);
 
             string dropdownMenuStyle = "UI/Style/Displayers/DropdownMenu";
-            StyleKeys dropdownMenuKeys = new StyleKeys(null, "", null);
-            m_dropdown.SetMenuStyle(dropdownMenuStyle, dropdownMenuKeys);
+            m_dropdown.SetMenuStyle(dropdownMenuStyle, StyleKeys.DefaultBackground);
 
             string dropdownMenuLabelStyle = "UI/Style/Displayers/DropdownMenuItemLabel";
-            StyleKeys dropdownMenuLabelKeys = new StyleKeys("", null, null);
-            m_dropdown.SetMenuLabel(dropdownMenuLabelStyle, dropdownMenuLabelKeys);
+            m_dropdown.SetMenuLabel(dropdownMenuLabelStyle, StyleKeys.DefaultText);
 
             string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-            StyleKeys labelKeys = new StyleKeys("", "", null);
-            m_label = new Label_E(m_input.Root.Q<Label>(), labelStylePath, labelKeys);
+            m_label = new Label_E(m_input.Root.Q<Label>(), labelStylePath, StyleKeys.DefaultTextAndBackground);
             m_label.value = menu.Name;
 
             m_input.Add(m_label);

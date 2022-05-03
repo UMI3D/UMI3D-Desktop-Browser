@@ -33,15 +33,13 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         private static string m_shortcutUXML = "UI/UXML/Shortcuts/shortcut";
         private static string m_shortcutStyle = "UI/Style/Shortcuts/Shortcut";
-        private static StyleKeys m_shortcutKeys = new StyleKeys();
         private static string m_plusStyle = "UI/Style/Shortcuts/Shortcut_Plus";
-        private static StyleKeys m_plusKeys = new StyleKeys("", null, null);
     }
 
     public partial class Shortcut_E
     {
         public Shortcut_E() :
-            base(m_shortcutUXML, m_shortcutStyle, m_shortcutKeys)
+            base(m_shortcutUXML, m_shortcutStyle, null)
         { }
 
         public void Setup(string title, params Sprite[] icons)
@@ -54,7 +52,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 {
                     ObjectPooling(out Label_E plus, m_plusDisplayed, m_plusWaited, () =>
                     {
-                        return new Label_E(m_plusStyle, m_plusKeys, "+");
+                        return new Label_E(m_plusStyle, StyleKeys.DefaultText, "+");
                     });
                     plus.InsertRootTo(m_iconbox);
                 }
@@ -74,13 +72,11 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             var title = Root.Q<Label>("title");
             string titleStyle = "UI/Style/Shortcuts/Shortcut_Title";
-            StyleKeys titleKeys = new StyleKeys("", null, null);
-            m_title = new Label_E(title, titleStyle, titleKeys);
+            m_title = new Label_E(title, titleStyle, StyleKeys.DefaultText);
 
             m_iconbox = Root.Q("iconbox");
             string iconboxStyle = "UI/Style/Shortcuts/Shortcut_Iconbox";
-            StyleKeys iconboxKeys = new StyleKeys();
-            new Visual_E(m_iconbox, iconboxStyle, iconboxKeys);
+            new Visual_E(m_iconbox, iconboxStyle, null);
 
             m_plusDisplayed = new List<Label_E>();
             m_plusWaited = new List<Label_E>();

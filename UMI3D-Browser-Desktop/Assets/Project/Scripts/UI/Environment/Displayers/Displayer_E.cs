@@ -54,8 +54,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             m_separator = Root.Q("separator");
             string separatorStyle = "UI/Style/Displayers/DisplayerSeparator";
-            StyleKeys separatorKeys = new StyleKeys(null, "", null);
-            AddVisualStyle(m_separator, separatorStyle, separatorKeys);
+            AddVisualStyle(m_separator, separatorStyle, StyleKeys.DefaultBackground);
         }
     }
 }
