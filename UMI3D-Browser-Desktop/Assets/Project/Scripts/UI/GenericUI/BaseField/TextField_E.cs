@@ -85,7 +85,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                     return;
                 var previousValue = m_textField.value;
                 ApplyTextFieldFormat(value);
-                RiseOnValueChanged(previousValue, m_textField.value);
+                OnValueChanged(previousValue, m_textField.value);
             }
         }
 
@@ -93,7 +93,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
             m_textInput = Root.Q("unity-text-input");
-            OnValueChanged += (_, newV) => ApplyTextFieldFormat(newV);
+            ValueChanged += (_, newV) => ApplyTextFieldFormat(newV);
         }
     }
 }

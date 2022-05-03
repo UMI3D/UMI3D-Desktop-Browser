@@ -32,19 +32,12 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public abstract partial class AbstractBaseField_E<T>
     {
-        public event Action<T, T> OnValueChanged;
+        public event Action<T, T> ValueChanged;
 
         protected BaseField<T> m_field => (BaseField<T>)Root;
-    }
-
-    public abstract partial class AbstractBaseField_E<T>
-    {
-        public AbstractBaseField_E(BaseField<T> visual, string styleResourcePath, StyleKeys keys) :
-            base(visual, styleResourcePath, keys)
-        { }
-
-        public void RiseOnValueChanged(T previous, T newValue)
-            => OnValueChanged(previous, newValue);
+    
+        public void OnValueChanged(T previous, T newValue)
+            => ValueChanged?.Invoke(previous, newValue);
 
         protected virtual void OnValueChandedEvent(ChangeEvent<T> e)
             => OnValueChanged(e.previousValue, e.newValue);
@@ -52,6 +45,10 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public abstract partial class AbstractBaseField_E<T> : View_E
     {
+        public AbstractBaseField_E(BaseField<T> visual, string styleResourcePath, StyleKeys keys) :
+            base(visual, styleResourcePath, keys)
+        { }
+
         protected override void Initialize()
         {
             base.Initialize();

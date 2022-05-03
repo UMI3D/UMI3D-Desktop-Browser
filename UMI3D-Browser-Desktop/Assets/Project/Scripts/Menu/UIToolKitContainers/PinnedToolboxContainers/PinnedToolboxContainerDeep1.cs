@@ -161,7 +161,7 @@ namespace umi3d.desktopBrowser.menu.Container
             {
                 if (ToolType != ItemType.Tool)
                     SetContainerAsTool();
-                Displayerbox.Add(displayer.Displayer);
+                Displayerbox.AddRange(displayer.Displayer);
             }
             FindDeep0AndAddBoxToPinnedWindows();
         }

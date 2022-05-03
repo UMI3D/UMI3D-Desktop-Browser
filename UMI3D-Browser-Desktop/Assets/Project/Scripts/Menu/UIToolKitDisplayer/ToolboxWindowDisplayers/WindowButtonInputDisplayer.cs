@@ -31,16 +31,10 @@ namespace umi3d.DesktopBrowser.menu.Displayer
     {
         public override void InitAndBindUI()
         {
-            base.InitAndBindUI();
             string UXMLPath = "UI/UXML/Displayers/buttonInputDisplayer";
-            m_input = new View_E(UXMLPath, null, null);
+            Displayer = new View_E(UXMLPath, s_displayerStyle, null);
 
-            string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-            m_label = new Label_E(m_input.Root.Q<Label>(), labelStylePath, StyleKeys.DefaultTextAndBackground);
-            m_label.value = menu.Name;
-            m_input.Add(m_label);
-            
-            Displayer.AddDisplayer(m_input.Root);
+            base.InitAndBindUI();
         }
     }
 
@@ -53,27 +47,27 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             if (menu is ButtonMenuItem buttonMenu)
             {
                 string buttonStylePath = "UI/Style/Displayers/InputButton";
-                m_button = new Button_E(m_input.Root.Q<Button>(), buttonStylePath, StyleKeys.DefaultTextAndBackground);
+                m_button = new Button_E(Displayer.Root.Q<Button>(), buttonStylePath, StyleKeys.DefaultTextAndBackground);
                 m_button.Text = menu.Name;
-                m_input.Add(m_button);
+                Displayer.Add(m_button);
 
                 m_button.Clicked += () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); };
             }
             else if (menu is EventMenuItem eventMenu)
             {
                 string buttonStylePath = "UI/Style/Displayers/InputButton";
-                m_button = new Button_E(m_input.Root.Q<Button>(), buttonStylePath, StyleKeys.DefaultTextAndBackground);
+                m_button = new Button_E(Displayer.Root.Q<Button>(), buttonStylePath, StyleKeys.DefaultTextAndBackground);
                 m_button.Text = menu.Name;
-                m_input.Add(m_button);
+                Displayer.Add(m_button);
 
                 m_button.Clicked += () => { eventMenu.NotifyValueChange(!eventMenu.GetValue()); };
             }
             else if (menu is HoldableButtonMenuItem holdableButtonMenu)
             {
                 string buttonStylePath = "UI/Style/Displayers/InputButton";
-                m_button = new Button_E(m_input.Root.Q<Button>(), buttonStylePath, StyleKeys.DefaultTextAndBackground);
+                m_button = new Button_E(Displayer.Root.Q<Button>(), buttonStylePath, StyleKeys.DefaultTextAndBackground);
                 m_button.Text = menu.Name;
-                m_input.Add(m_button);
+                Displayer.Add(m_button);
 
                 m_button.ClickedDown += () => holdableButtonMenu.NotifyValueChange(true);
                 m_button.ClickedUp += () => holdableButtonMenu.NotifyValueChange(false);
@@ -83,8 +77,9 @@ namespace umi3d.DesktopBrowser.menu.Displayer
                 string toggleStylePath = "UI/Style/Displayers/InputToggle";
                 StyleKeys toggleOnKeys = new StyleKeys(null, "toggleOn", null);
                 StyleKeys toggleOffKeys = new StyleKeys(null, "toggleOff", null);
-                m_button = new Button_E(m_input.Root.Q<Button>(), toggleStylePath, toggleOnKeys, toggleOffKeys, toggleMenu.GetValue());
+                m_button = new Button_E(Displayer.Root.Q<Button>(), toggleStylePath, toggleOnKeys, toggleOffKeys, toggleMenu.GetValue());
                 m_button.Text = null;
+                Displayer.Add(m_button);
 
                 m_button.Clicked += () =>
                 {

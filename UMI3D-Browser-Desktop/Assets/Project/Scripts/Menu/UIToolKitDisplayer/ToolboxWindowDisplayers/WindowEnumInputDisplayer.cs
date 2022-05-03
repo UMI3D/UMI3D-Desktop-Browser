@@ -31,27 +31,10 @@ namespace umi3d.DesktopBrowser.menu.Displayer
     {
         public override void InitAndBindUI()
         {
-            base.InitAndBindUI();
             string UXMLPath = "UI/UXML/Displayers/buttonInputDisplayer";
-            m_input = new View_E(UXMLPath, null, null);
+            Displayer = new View_E(UXMLPath, s_displayerStyle, null);
 
-            string dropdownStyle = "UI/Style/Displayers/InputDropdown";
-            m_dropdown = new Dropdown_E(m_input.Root.Q<Button>(), dropdownStyle, StyleKeys.Default);
-
-            string dropdownMenuStyle = "UI/Style/Displayers/DropdownMenu";
-            m_dropdown.SetMenuStyle(dropdownMenuStyle, StyleKeys.DefaultBackground);
-
-            string dropdownMenuLabelStyle = "UI/Style/Displayers/DropdownMenuItemLabel";
-            m_dropdown.SetMenuLabel(dropdownMenuLabelStyle, StyleKeys.DefaultText);
-
-            string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-            m_label = new Label_E(m_input.Root.Q<Label>(), labelStylePath, StyleKeys.DefaultTextAndBackground);
-            m_label.value = menu.Name;
-
-            m_input.Add(m_label);
-            m_input.Add(m_dropdown);
-
-            Displayer.AddDisplayer(m_input.Root);
+            base.InitAndBindUI();
         }
     }
 
@@ -63,6 +46,14 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             InitAndBindUI();
             if (menu is DropDownInputMenuItem dropdownMenu)
             {
+                string dropdownStyle = "UI/Style/Displayers/InputDropdown";
+                m_dropdown = new Dropdown_E(Displayer.Root.Q<Button>(), dropdownStyle, StyleKeys.Default);
+                string dropdownMenuStyle = "UI/Style/Displayers/DropdownMenu";
+                m_dropdown.SetMenuStyle(dropdownMenuStyle, StyleKeys.DefaultBackground);
+                string dropdownMenuLabelStyle = "UI/Style/Displayers/DropdownMenuItemLabel";
+                m_dropdown.SetMenuLabel(dropdownMenuLabelStyle, StyleKeys.DefaultText);
+                Displayer.Add(m_dropdown);
+
                 m_dropdown.SetOptions(dropdownMenu.options);
                 m_dropdown.SetDefaultValue(dropdownMenu.GetValue());
                 m_dropdown.ValueChanged = dropdownMenu.NotifyValueChange;
@@ -72,9 +63,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)
-        {
-            return (menu is DropDownInputMenuItem) ? 2 : 0;
-        }
+            => (menu is DropDownInputMenuItem) ? 2 : 0;
 
         public override void Clear()
         {

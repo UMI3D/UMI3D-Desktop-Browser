@@ -41,7 +41,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 Field = new FloatField_E(m_floatField, styleResourcePath, keys);
             else
                 throw new System.NotImplementedException();
-            Field.OnValueChanged += (oldValue, newValue) =>
+            Field.ValueChanged += (oldValue, newValue) =>
             {
                 //To be changed when floatField will be use in runtime.
                 if (FloatField_E.TryConvertToFloat(newValue, out float f))
@@ -87,7 +87,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public override void SetSlider(string styleResourcePath, StyleKeys keys)
         {
             base.SetSlider(styleResourcePath, keys);
-            Element.OnValueChanged += (_, newValue) => RefreshField(newValue);
+            Element.ValueChanged += (_, newValue) => RefreshField(newValue);
         }
     }
 }

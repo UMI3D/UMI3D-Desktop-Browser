@@ -27,7 +27,7 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         //private VisualElement m_displayer { get; set; } = null;
         private VisualElement m_input { get; set; } = null;
-        private VisualElement m_separator { get; set; } = null;
+        //private VisualElement m_separator { get; set; } = null;
     }
 
     public partial class Displayer_E
@@ -48,13 +48,12 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected override void Initialize()
         {
             base.Initialize();
-            m_input = Root.Q("input");
             string inputStyle = "UI/Style/Displayers/Displayer_Input";
-            AddVisualStyle(m_input, inputStyle, null);
+            AddVisualStyle(Root.Q("input"), inputStyle, null);
 
-            m_separator = Root.Q("separator");
-            string separatorStyle = "UI/Style/Displayers/DisplayerSeparator";
-            AddVisualStyle(m_separator, separatorStyle, StyleKeys.DefaultBackground);
+            //m_separator = Root.Q("separator");
+            //string separatorStyle = "UI/Style/Displayers/DisplayerSeparator";
+            //AddVisualStyle(m_separator, separatorStyle, StyleKeys.DefaultBackground);
         }
     }
 }
