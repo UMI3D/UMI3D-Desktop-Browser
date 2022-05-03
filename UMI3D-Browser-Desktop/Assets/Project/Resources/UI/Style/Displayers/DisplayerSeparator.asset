@@ -49,7 +49,7 @@ MonoBehaviour:
       m_keyword: 11
       m_value:
         m_global: 0
-        m_bottom: 0
+        m_bottom: 5
         m_left: 0
         m_right: 0
         m_top: 5
@@ -78,6 +78,7 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_textAlign: 0
+    m_textWrapping: 0
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle: []

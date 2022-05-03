@@ -23,11 +23,11 @@ MonoBehaviour:
     m_height:
       m_keyword: 10
       m_valueMode: 0
-      m_value: 25
+      m_value: 30
     m_width:
       m_keyword: 10
       m_valueMode: 0
-      m_value: 25
+      m_value: 30
     m_maxHeight:
       m_keyword: 0
       m_valueMode: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_mouseOver:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
             m_keyword: 0
