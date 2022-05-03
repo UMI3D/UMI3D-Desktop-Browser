@@ -30,10 +30,10 @@ public class ThemeColorTest : MonoBehaviour
 
         string style = "UI/Tests/ThemeColorTest";
         var primary = UIDoc.rootVisualElement.Q("primary");
-        new Visual_E(primary, style, new StyleKeys(null, "primary", ""));
+        new View_E(primary, style, new StyleKeys(null, "primary", ""));
         var secondary = UIDoc.rootVisualElement.Q("secondary");
-        new Visual_E(secondary, style, new StyleKeys(null, "secondary", ""));
+        new View_E(secondary, style, new StyleKeys(null, "secondary", ""));
         var tertiary = UIDoc.rootVisualElement.Q("tertiary");
-        new Visual_E(tertiary, style, new StyleKeys(null, "tertiary", ""));
+        new View_E(tertiary, style, new StyleKeys(null, "tertiary", ""));
     }
 }

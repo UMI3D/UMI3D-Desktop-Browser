@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
-    public partial class Visual_E
+    public partial class View_E
     {
         protected UIElementStyleApplicator m_styleApplicator;
         protected GlobalPreferences_SO m_globalPref;

@@ -71,19 +71,19 @@ namespace umi3dDesktopBrowser.ui.viewController
     public partial class Button_E : IStateCustomisableElement
     {
         public bool IsOn { get; protected set; } = false;
-        public Dictionary<Visual_E, (StyleKeys, StyleKeys)> StateKeys { get; protected set; } = null;
+        public Dictionary<View_E, (StyleKeys, StyleKeys)> StateKeys { get; protected set; } = null;
 
         public virtual void Toggle(bool value)
         {
             IsOn = value;
 
-            foreach (Visual_E visual in StateKeys.Keys)
+            foreach (View_E visual in StateKeys.Keys)
             {
                 StyleKeys current = (IsOn) ? StateKeys[visual].Item1 : StateKeys[visual].Item2;
                 visual.UpdateRootKeys(current);
             }
         }
-        public void AddStateKeys(Visual_E view, string styleResourcePath, StyleKeys on, StyleKeys off)
+        public void AddStateKeys(View_E view, string styleResourcePath, StyleKeys on, StyleKeys off)
         {
             if (view == null)
                 throw new NullReferenceException("Visual null when trying to add state keys");
@@ -142,19 +142,19 @@ namespace umi3dDesktopBrowser.ui.viewController
             => UpdateRootKeys(keys);
     }
 
-    public partial class Button_E : Visual_E
+    public partial class Button_E : View_E
     {
-        public override void Add(Visual_E child)
+        public override void Add(View_E child)
         {
             base.Add(child);
             child.InsertRootTo(Root);
         }
-        public override void Insert(int index, Visual_E child)
+        public override void Insert(int index, View_E child)
         {
             base.Insert(index, child);
             child.InsertRootAtTo(index, Root);
         }
-        public override void Remove(Visual_E view)
+        public override void Remove(View_E view)
         {
             base.Remove(view);
             view.RemoveRootFromHierarchy();
@@ -174,7 +174,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_button.clicked += OnClicked;
             SetHoldableButton();
             
-            StateKeys = new Dictionary<Visual_E, (StyleKeys, StyleKeys)>();
+            StateKeys = new Dictionary<View_E, (StyleKeys, StyleKeys)>();
         }
 
         public override void Reset()

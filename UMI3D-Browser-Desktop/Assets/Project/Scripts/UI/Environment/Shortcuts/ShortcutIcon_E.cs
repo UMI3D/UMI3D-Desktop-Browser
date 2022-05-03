@@ -45,7 +45,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
     }
 
-    public partial class ShortcutIcon_E : Visual_E
+    public partial class ShortcutIcon_E : View_E
     {
         
     }

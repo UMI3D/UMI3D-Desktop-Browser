@@ -23,7 +23,7 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         public event Action CloseButtonPressed;
 
-        protected Visual_E m_windowIcon { get; set; } = null;
+        protected View_E m_windowIcon { get; set; } = null;
         protected Label_E m_windowTopBar { get; set; } = null;
         protected Button_E m_closeButton { get; set; } = null;
 
@@ -38,7 +38,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public void SetWindowIcon(string styleResourcePath, StyleKeys keys, bool isDraggable)
         {
             if (m_windowIcon == null)
-                m_windowIcon = new Visual_E(Root.Q("icon"));
+                m_windowIcon = new View_E(Root.Q("icon"));
             m_windowIcon.UpdateRootStyleAndKeysAndManipulator(styleResourcePath, keys, (isDraggable) ? PopupManipulator() : null);
         }
 
@@ -69,7 +69,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 => new PopUpManipulator(Root);
     }
 
-    public abstract partial class AbstractWindow_E : Visual_E
+    public abstract partial class AbstractWindow_E : View_E
     {
         public AbstractWindow_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
             base(visualResourcePath, styleResourcePath, keys)

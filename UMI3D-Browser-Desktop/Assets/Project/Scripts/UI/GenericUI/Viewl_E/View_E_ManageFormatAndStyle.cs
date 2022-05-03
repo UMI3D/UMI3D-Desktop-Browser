@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
-    public partial class Visual_E
+    public partial class View_E
     {
         #region Public methods
 
@@ -88,7 +88,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="receiver"></param>
-        public static void LinkMouseBehaviourChanged(Visual_E sender, Visual_E receiver)
+        public static void LinkMouseBehaviourChanged(View_E sender, View_E receiver)
         {
             var senderManipulator = sender.GetRootManipulator();
             var receiverManipulator = receiver.GetRootManipulator();

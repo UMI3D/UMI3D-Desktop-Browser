@@ -23,7 +23,7 @@ using BrowserDesktop.preferences;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
-    public partial class Visual_E
+    public partial class View_E
     {
         /// <summary>
         /// Name of the view.
@@ -54,54 +54,54 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// Maps the visualElements with their styles and VisualManipulator.
         /// </summary>
         protected Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)> m_visualStylesMap;
-        protected List<Visual_E> m_views;
+        protected List<View_E> m_views;
     
         #region Constructors and Destructor
         
-        public Visual_E() : 
+        public View_E() : 
             this(null, null) 
         { }
-        public Visual_E(string styleResourcePath, StyleKeys keys) :
+        public View_E(string styleResourcePath, StyleKeys keys) :
             this (new VisualElement(), styleResourcePath, keys)
         { }
-        public Visual_E(VisualElement visual)
+        public View_E(VisualElement visual)
         {
             if (visual == null) throw new NullReferenceException($"visual is null");
             Init(null, visual, null, null);
         }
-        public Visual_E(VisualElement parent, VisualElement visual, string styleResourcePath, StyleKeys keys)
+        public View_E(VisualElement parent, VisualElement visual, string styleResourcePath, StyleKeys keys)
         {
             if (parent == null) throw new NullReferenceException($"parent is null");
             if (visual == null) throw new NullReferenceException($"visual is null");
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             Init(parent, visual, style_SO, keys);
         }
-        public Visual_E(VisualElement visual, string styleResourcePath, StyleKeys keys)
+        public View_E(VisualElement visual, string styleResourcePath, StyleKeys keys)
         {
             if (visual == null) throw new NullReferenceException($"visual is null");
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             Init(null, visual, style_SO, keys);
         }
-        public Visual_E(string visualResourcePath, string styleResourcePath, StyleKeys keys)
+        public View_E(string visualResourcePath, string styleResourcePath, StyleKeys keys)
         {
             VisualElement visual = GetVisualRoot(visualResourcePath);
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             Init(null, visual, style_SO, keys);
         }
-        public Visual_E(VisualElement parent, string visualResourcePath, string styleResourcePath, StyleKeys keys)
+        public View_E(VisualElement parent, string visualResourcePath, string styleResourcePath, StyleKeys keys)
         {
             if (parent == null) throw new NullReferenceException($"parent is null");
             VisualElement visual = GetVisualRoot(visualResourcePath);
             CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             Init(parent, visual, style_SO, keys);
         }
-        public Visual_E(VisualElement parent, VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys)
+        public View_E(VisualElement parent, VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys)
         {
             if (parent == null) throw new NullReferenceException($"parent is null");
             if (visual == null) throw new NullReferenceException($"visual is null");
             Init(parent, visual, style_SO, keys);
         }
-        ~Visual_E()
+        ~View_E()
         {
             Destroy();
         }
@@ -177,25 +177,25 @@ namespace umi3dDesktopBrowser.ui.viewController
             Root.RemoveFromHierarchy();
             IsDisplaying = false;
         }
-        public virtual void Add(Visual_E child)
+        public virtual void Add(View_E child)
         {
             if (m_views.Contains(child))
                 return;
             m_views.Add(child);
         }
-        public virtual void Insert(int index, Visual_E child)
+        public virtual void Insert(int index, View_E child)
         {
             if (m_views.Contains(child))
                 return;
             m_views.Insert(index, child);
         }
-        public virtual void Remove(Visual_E view)
+        public virtual void Remove(View_E view)
             => m_views.Remove(view);
-        public virtual bool ContainsInHierarchy(Visual_E view)
+        public virtual bool ContainsInHierarchy(View_E view)
         {
             bool result = m_views.Contains(view);
             if (!result)
-                m_views.ForEach(delegate (Visual_E view)
+                m_views.ForEach(delegate (View_E view)
                 {
                     if (result)
                         return;
@@ -203,14 +203,14 @@ namespace umi3dDesktopBrowser.ui.viewController
                 });
             return result;
         }
-        public virtual V Q<V>(string name = null) where V : Visual_E
+        public virtual V Q<V>(string name = null) where V : View_E
         {
-            bool matchName(Visual_E view) 
+            bool matchName(View_E view) 
                 => (name == null || (name != null && view.Name == name));
             
             V resultHorizontal = null;
             V resultVertical = null;
-            m_views.ForEach(delegate (Visual_E view)
+            m_views.ForEach(delegate (View_E view)
             {
                 if (view is V v && matchName(v) && resultHorizontal == null)
                     resultHorizontal = v;
@@ -231,7 +231,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_styleApplicator = new UIElementStyleApplicator(m_globalPref);
 
             m_visualStylesMap = new Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)>();
-            m_views = new List<Visual_E>();
+            m_views = new List<View_E>();
 
             this.Root = visual;
             AddVisualStyle(Root, style_SO, keys);

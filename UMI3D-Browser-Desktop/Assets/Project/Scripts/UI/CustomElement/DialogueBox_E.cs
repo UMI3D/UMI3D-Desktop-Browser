@@ -207,7 +207,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
     }
 
-    public partial class DialogueBox_E : Visual_E
+    public partial class DialogueBox_E : View_E
     {
         private DialogueBox_E() :
             base(s_uxml, null, null)

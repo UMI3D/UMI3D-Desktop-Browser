@@ -119,7 +119,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static MenuBar_E m_instance;
     }
 
-    public partial class MenuBar_E : Visual_E
+    public partial class MenuBar_E : View_E
     {
         public override void Reset()
         {
@@ -201,8 +201,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected void AddSeparator(VisualElement layout)
             => CreateSeparator().InsertRootTo(layout);
-        protected Visual_E CreateSeparator()
-            => new Visual_E(new VisualElement(), m_separatorStyle, m_separatorKeys);
+        protected View_E CreateSeparator()
+            => new View_E(new VisualElement(), m_separatorStyle, m_separatorKeys);
 
         private MenuBar_E() :
             base(m_menuUXML, m_menuStyle, StyleKeys.DefaultBackground)

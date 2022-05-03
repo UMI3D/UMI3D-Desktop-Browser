@@ -46,7 +46,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public void SetFirstToolboxName(string name)
             => FirstToolbox.SetToolboxName(name ?? "");
 
-        public void AddToolboxItemInFirstToolbox(params Visual_E[] items)
+        public void AddToolboxItemInFirstToolbox(params View_E[] items)
             => FirstToolbox.AddRange(items);
 
         public void AddToolbox(Toolbox_E toolbox)
@@ -56,7 +56,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             => m_displayersContainer.Add(displayerbox.Root);
     }
 
-    public partial class ToolboxWindowItem_E : Visual_E
+    public partial class ToolboxWindowItem_E : View_E
     {
         public ToolboxWindowItem_E() :
             base("UI/UXML/ToolboxWindow/toolboxWindow_Item",
@@ -76,7 +76,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             StyleKeys pinEnableKeys = new StyleKeys(null, "PinnedEnable", "PinnedEnable");
             PinButton.AddStateKeys(PinButton, pinButtonStyle, pinActiveKeys, pinEnableKeys);
             string pinIconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButtonIcon";
-            var pinIcon = new Visual_E(pinIconStyle, StyleKeys.DefaultBackground);
+            var pinIcon = new View_E(pinIconStyle, StyleKeys.DefaultBackground);
             PinButton.Add(pinIcon);
             LinkMouseBehaviourChanged(PinButton, pinIcon);
             PinButton.GetRootManipulator().ProcessDuringBubbleUp = true;

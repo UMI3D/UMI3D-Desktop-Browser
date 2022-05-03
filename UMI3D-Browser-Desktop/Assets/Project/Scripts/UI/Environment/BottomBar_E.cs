@@ -73,7 +73,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static BottomBar_E s_instance;
     }
 
-    public partial class BottomBar_E : Visual_E
+    public partial class BottomBar_E : View_E
     {
         private BottomBar_E() :
             base(s_uxml, s_menuStyle, StyleKeys.DefaultBackground)
@@ -107,7 +107,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             string consoleStyle = "UI/Style/BottomBar/Console";
             Console = new Button_E(console, consoleStyle, StyleKeys.DefaultBackground);
             string consoleIconStyle = "UI/Style/BottomBar/ConsoleIcon";
-            var consoleIcon = new Visual_E(consoleIconStyle, m_consoleIconDefaultKeys);
+            var consoleIcon = new View_E(consoleIconStyle, m_consoleIconDefaultKeys);
             Console.Add(consoleIcon);
             LinkMouseBehaviourChanged(Console, consoleIcon);
             Console.GetRootManipulator().ProcessDuringBubbleUp = true;
@@ -119,7 +119,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             string settingsStyle = "UI/Style/BottomBar/Settings";
             Settings.AddStateKeys(Settings, settingsStyle, m_settingsOnKeys, m_settingsOffKeys);
             string settingsIconStyle = "UI/Style/BottomBar/SettingsIcon";
-            var settingsIcon = new Visual_E(settingsIconStyle, m_settingsIconKeys);
+            var settingsIcon = new View_E(settingsIconStyle, m_settingsIconKeys);
             Settings.Add(settingsIcon);
             LinkMouseBehaviourChanged(Settings, settingsIcon);
             Settings.GetRootManipulator().ProcessDuringBubbleUp = true;

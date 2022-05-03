@@ -79,7 +79,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             => UpdateKeys(m_label, keys);
     }
 
-    public partial class Label_E : Visual_E
+    public partial class Label_E : View_E
     {
         protected override void ApplyStyle(CustomStyle_SO styleSO, StyleKeys keys, IStyle style, MouseBehaviour mouseBehaviour)
         {

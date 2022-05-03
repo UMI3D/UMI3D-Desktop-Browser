@@ -44,7 +44,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
     }
 
-    public partial class DropdownItem_E : Visual_E
+    public partial class DropdownItem_E : View_E
     {
         protected override void Initialize()
         {

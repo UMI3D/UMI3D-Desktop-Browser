@@ -32,7 +32,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         {
             base.InitAndBindUI();
             string UXMLPath = "UI/UXML/Displayers/buttonInputDisplayer";
-            m_input = new Visual_E(UXMLPath, null, null);
+            m_input = new View_E(UXMLPath, null, null);
 
             string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
             m_label = new Label_E(m_input.Root.Q<Label>(), labelStylePath, StyleKeys.DefaultTextAndBackground);

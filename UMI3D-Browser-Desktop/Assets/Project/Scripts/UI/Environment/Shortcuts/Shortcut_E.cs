@@ -64,7 +64,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
     }
 
-    public partial class Shortcut_E : Visual_E
+    public partial class Shortcut_E : View_E
     {
         protected override void Initialize()
         {
@@ -76,7 +76,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             m_iconbox = Root.Q("iconbox");
             string iconboxStyle = "UI/Style/Shortcuts/Shortcut_Iconbox";
-            new Visual_E(m_iconbox, iconboxStyle, null);
+            new View_E(m_iconbox, iconboxStyle, null);
 
             m_plusDisplayed = new List<Label_E>();
             m_plusWaited = new List<Label_E>();
@@ -88,7 +88,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.RemoveRootFromHierarchy();
 
-            Action<Visual_E> removeVEFromHierarchy = (vE) =>
+            Action<View_E> removeVEFromHierarchy = (vE) =>
             {
                 vE.RemoveRootFromHierarchy();
             };
