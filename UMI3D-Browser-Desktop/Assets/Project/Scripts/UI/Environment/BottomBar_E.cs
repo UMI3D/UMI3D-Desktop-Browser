@@ -31,7 +31,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         private static string s_uxml => "UI/UXML/Menus/bottomBar";
         private static string s_menuStyle => "UI/Style/BottomBar/BottomBar";
-        private static StyleKeys s_menuKeys => new StyleKeys(null, "", null);
 
         private StyleKeys m_notificationOffKeys = new StyleKeys(null, "off", null);
         private StyleKeys m_notificationOnKeys = new StyleKeys(null, "on", null);
@@ -77,7 +76,7 @@ namespace umi3dDesktopBrowser.ui.viewController
     public partial class BottomBar_E : Visual_E
     {
         private BottomBar_E() :
-            base(s_uxml, s_menuStyle, s_menuKeys)
+            base(s_uxml, s_menuStyle, StyleKeys.DefaultBackground)
         { }
 
         public override void Reset()
@@ -92,7 +91,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             
             string leftLabelsStyle = "UI/Style/BottomBar/BottomBar_LeftLabel";
             string rightLabelsStyle = "UI/Style/BottomBar/BottomBar_rightLabel";
-            StyleKeys labelsKeys = new StyleKeys("", null, null);
+            StyleKeys labelsKeys = StyleKeys.DefaultText;
 
             var menuShortcut = Root.Q<Label>("menuShortcut");
             MenuShortcut = new Label_E(menuShortcut, leftLabelsStyle, labelsKeys, "Right Click - Open Menu");
@@ -106,8 +105,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             var console = Root.Q<Button>("notification");
             string consoleStyle = "UI/Style/BottomBar/Console";
-            StyleKeys consoleKeys = new StyleKeys(null, "", null);
-            Console = new Button_E(console, consoleStyle, consoleKeys);
+            Console = new Button_E(console, consoleStyle, StyleKeys.DefaultBackground);
             string consoleIconStyle = "UI/Style/BottomBar/ConsoleIcon";
             var consoleIcon = new Visual_E(consoleIconStyle, m_consoleIconDefaultKeys);
             Console.Add(consoleIcon);

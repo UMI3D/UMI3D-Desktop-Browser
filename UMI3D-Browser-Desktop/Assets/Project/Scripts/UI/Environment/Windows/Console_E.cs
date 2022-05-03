@@ -38,7 +38,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         private static string s_consoleUXML = "UI/UXML/console";
         private static string s_consoleStyle = "UI/Style/Console/Console";
-        private static StyleKeys s_consoleKeys = new StyleKeys(null, "", null);
         private static string s_logStyle = "UI/Style/Console/Console_Log";
         private static StyleKeys s_logKeys = new StyleKeys("log", null, "unselected");
         private static StyleKeys s_logKeysSelected = new StyleKeys("log", null, "selected");
@@ -183,16 +182,14 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            StyleKeys titleKeys = new StyleKeys("", "", null);
-            SetTopBar("", m_topBarStyle, titleKeys, false);
+            SetTopBar("", m_topBarStyle, StyleKeys.DefaultTextAndBackground, false);
 
             var logs = Root.Q<ScrollView>("logs");
             s_logs = new ScrollView_E(logs);
 
             var details = Root.Q<ScrollView>("details");
             string detailsStyle = "UI/Style/Console/Console_Details";
-            StyleKeys detailsKeys = new StyleKeys(null, "", null);
-            s_details = new ScrollView_E(details, detailsStyle, detailsKeys);
+            s_details = new ScrollView_E(details, detailsStyle, StyleKeys.DefaultBackground);
 
             s_logDisplayed = new List<Label_E>();
             s_logWaited = new List<Label_E>();
@@ -204,7 +201,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         private Console_E() :
-            base(s_consoleUXML, s_consoleStyle, s_consoleKeys)
+            base(s_consoleUXML, s_consoleStyle, StyleKeys.DefaultBackground)
         { }
     }
 }

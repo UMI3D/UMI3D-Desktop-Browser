@@ -17,11 +17,26 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public class StyleKeys
     {
-        public string TextStyleKey { get; set; } = null;
-        public string BackgroundStyleKey { get; set; } = null;
-        public string BorderStyleKey { get; set; } = null;
+        public static StyleKeys Default => s_default;
+        public static StyleKeys DefaultText => s_defaultText;
+        public static StyleKeys DefaultBackground => s_defaultBackground;
+        public static StyleKeys DefaultBorder => s_defaultBorder;
+        public static StyleKeys DefaultTextAndBackground => s_defaultTextAndBackground;
+        public static StyleKeys DefaultTextAndBorder => s_defaultTextAndBorder;
+        public static StyleKeys DefaultBackgroundAndBorder => s_defaultBackgroundAndBorder;
 
-        public StyleKeys() { }
+        private static StyleKeys s_default = new StyleKeys("", "", "");
+        private static StyleKeys s_defaultText = new StyleKeys("", null, null);
+        private static StyleKeys s_defaultBackground = new StyleKeys(null, "", null);
+        private static StyleKeys s_defaultBorder = new StyleKeys(null, null, "");
+        private static StyleKeys s_defaultTextAndBackground = new StyleKeys("", "", null);
+        private static StyleKeys s_defaultTextAndBorder = new StyleKeys("", null, "");
+        private static StyleKeys s_defaultBackgroundAndBorder = new StyleKeys(null, "", "");
+
+        public string TextStyleKey { get; private set; } = null;
+        public string BackgroundStyleKey { get; private set; } = null;
+        public string BorderStyleKey { get; private set; } = null;
+
         public StyleKeys(string textStyle, string backgroundStyle, string borderStyle)
         {
             TextStyleKey = textStyle;

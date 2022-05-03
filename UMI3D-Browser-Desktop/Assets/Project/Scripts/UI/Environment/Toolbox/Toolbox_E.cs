@@ -29,7 +29,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static string m_toolboxPinnedStyle => "UI/Style/MenuBar/MenuBar_ToolboxPinned";
         private static string m_toolboxSubPinnedStyle => "UI/Style/MenuBar/MenuBar_ToolboxSubPinned";
         private static string m_toolboxPopupStyle => "UI/Style/ToolboxWindow/ToolboxWindow_Toolbox";
-        private static StyleKeys m_toolboxKeys => new StyleKeys(null, "", "");
         private static string GetToolboxType(ToolboxType type)
         {
             switch (type)
@@ -51,11 +50,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Toolbox_E(ToolboxType type = ToolboxType.Pinned) :
             this(null, type) { }
         public Toolbox_E(string toolboxName, ToolboxType type = ToolboxType.Pinned, params ToolboxItem_E[] items) : 
-            base(m_toolboxResourcePath, GetToolboxType(type), m_toolboxKeys)
+            base(m_toolboxResourcePath, GetToolboxType(type), StyleKeys.DefaultBackgroundAndBorder)
         {
             string nameStyle = "UI/Style/Toolbox/ToolboxName";
-            StyleKeys nameKeys = new StyleKeys("", null, null);
-            ToolboxName = new Label_E(m_name, nameStyle, nameKeys);
+            ToolboxName = new Label_E(m_name, nameStyle, StyleKeys.DefaultText);
             SetToolboxName(toolboxName);
 
             var backwardLayout = Root.Q("backward");

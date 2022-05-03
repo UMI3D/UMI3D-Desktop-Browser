@@ -32,7 +32,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
         private static string m_displayerboxToolboxStyle = "UI/Style/Displayers/ToolboxDisplayerbox";
         private static string m_displayerboxParameterStyle = "UI/Style/Displayers/ParameterDisplayerbox";
-        private static StyleKeys m_displayerboxKeys = new StyleKeys(null, "", "");
         private static string GetDisplayerboxType(DisplayerboxType type)
         {
             switch (type)
@@ -50,7 +49,7 @@ namespace umi3dDesktopBrowser.ui.viewController
     public partial class Displayerbox_E
     {
         public Displayerbox_E(DisplayerboxType type) :
-            base(m_displayerbox, GetDisplayerboxType(type), m_displayerboxKeys)
+            base(m_displayerbox, GetDisplayerboxType(type), StyleKeys.DefaultBackgroundAndBorder)
         { }
 
         public void Add(params Displayer_E[] displayers)

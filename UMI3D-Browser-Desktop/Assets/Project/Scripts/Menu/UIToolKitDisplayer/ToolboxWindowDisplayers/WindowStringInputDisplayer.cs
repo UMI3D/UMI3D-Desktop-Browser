@@ -34,12 +34,10 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             m_displayerElement = new TextFieldWithLabel_E(UXMLPath);
 
             string textFieldStylePath = "UI/Style/Displayers/InputTextField";
-            StyleKeys textFieldKeys = new StyleKeys(null, "", null);
-            m_displayerElement.SetTextField(textFieldStylePath, textFieldKeys);
+            m_displayerElement.SetTextField(textFieldStylePath, StyleKeys.DefaultBackground);
 
             string textInputStyle = "UI/Style/Displayers/InputTextField_Input";
-            StyleKeys textInputKeys = new StyleKeys("", null, null);
-            m_displayerElement.Element.SetTextInputStyle(textInputStyle, textInputKeys);
+            m_displayerElement.Element.SetTextInputStyle(textInputStyle, StyleKeys.DefaultText);
 
             Displayer.AddDisplayer(m_displayerElement.Root);
         }
@@ -54,8 +52,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             if (menu is TextInputMenuItem textMenu)
             {
                 string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-                StyleKeys labelKeys = new StyleKeys("", "", null);
-                m_displayerElement.SetLabel(labelStylePath, labelKeys);
+                m_displayerElement.SetLabel(labelStylePath, StyleKeys.DefaultTextAndBackground);
                 m_displayerElement.Label.value = textMenu.ToString();
 
                 m_displayerElement.Element.value = textMenu.GetValue();

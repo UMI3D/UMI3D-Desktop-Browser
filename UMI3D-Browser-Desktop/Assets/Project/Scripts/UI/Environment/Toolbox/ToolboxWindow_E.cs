@@ -28,7 +28,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         private static string s_windowUXML = "UI/UXML/ToolboxWindow/toolboxWindow";
         private static string s_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_window";
-        private static StyleKeys s_windowKeys = new StyleKeys(null, "", null);
+        private static StyleKeys s_windowKeys = StyleKeys.DefaultBackground;
         
         public static void OnUnpinnedPressed()
             => UnpinnedPressed?.Invoke();
@@ -61,30 +61,24 @@ namespace umi3dDesktopBrowser.ui.viewController
             StyleKeys iconKeys = new StyleKeys(null, "toolboxesWindow", "");
             SetWindowIcon(m_iconStyle, iconKeys, true);
 
-            StyleKeys windowNameKeys = new StyleKeys("", "", "");
-            SetTopBar("Toolbox", m_topBarStyle, windowNameKeys, true);
+            SetTopBar("Toolbox", m_topBarStyle, StyleKeys.Default, true);
 
             SetCloseButton();
-            StyleKeys closeButtonBGKeys = new StyleKeys(null, "", "");
-            m_closeButton.UpdateRootStyleAndKeysAndManipulator(m_closeButtonBGStyle, closeButtonBGKeys);
-            StyleKeys closeButtonIconKeys = new StyleKeys(null, "", null);
-            var closeIcon = new Visual_E(m_closeButtonIconStyle, closeButtonIconKeys);
+            m_closeButton.UpdateRootStyleAndKeysAndManipulator(m_closeButtonBGStyle, StyleKeys.DefaultBackgroundAndBorder);
+            var closeIcon = new Visual_E(m_closeButtonIconStyle, StyleKeys.DefaultBackground);
             m_closeButton.Add(closeIcon);
             LinkMouseBehaviourChanged(m_closeButton, closeIcon);
             m_closeButton.GetRootManipulator().ProcessDuringBubbleUp = true;
 
             s_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"));
             string dcStyle = "UI/Style/ToolboxWindow/ToolboxWindow_DraggerContainer";
-            StyleKeys dcKeys = new StyleKeys(null, "", null);
-            s_scrollView.SetVerticalDraggerContainerStyle(dcStyle, dcKeys);
+            s_scrollView.SetVerticalDraggerContainerStyle(dcStyle, StyleKeys.DefaultBackground);
             string dStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Dragger";
-            StyleKeys dKeys = new StyleKeys(null, "", "");
-            s_scrollView.SetVerticalDraggerStyle(dStyle, dKeys);
+            s_scrollView.SetVerticalDraggerStyle(dStyle, StyleKeys.DefaultBackgroundAndBorder);
 
             Button unpinnedButton = Root.Q<Button>("unpinnedButton");
             string unpinnedButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_UnpinnedButton";
-            StyleKeys unpinnedButtonKeys = new StyleKeys(null, "", null);
-            Button_E unpinned = new Button_E(unpinnedButton, unpinnedButtonStyle, unpinnedButtonKeys);
+            Button_E unpinned = new Button_E(unpinnedButton, unpinnedButtonStyle, StyleKeys.DefaultBackground);
             unpinned.Clicked += OnUnpinnedPressed;
         }
 

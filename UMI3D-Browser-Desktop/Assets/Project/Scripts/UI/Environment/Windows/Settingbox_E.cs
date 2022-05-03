@@ -29,9 +29,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         private static string s_uxml = "UI/UXML/settingbox";
         private static string s_style = "UI/Style/Settings/Settingbox";
-        private static StyleKeys s_keys = new StyleKeys(null, "", null);
         private static string s_buttonStyle = "UI/Style/Settings/Buttons";
-        private static StyleKeys s_buttonKeys = new StyleKeys(null, "", "");
         private static string s_buttonIconStyle = "UI/Style/Settings/Icons";
 
         private IEnumerator AnimeWindowVisibility(bool state)
@@ -88,13 +86,12 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            StyleKeys titleKeys = new StyleKeys("", "", null);
-            SetTopBar("Options", m_topBarStyle, titleKeys, false);
+            SetTopBar("Options", m_topBarStyle, StyleKeys.DefaultTextAndBackground, false);
 
             var buttonbox = Root.Q("buttonbox");
             static Button_E SetButton(string on, string off)
             {
-                var button = new Button_E(s_buttonStyle, s_buttonKeys);
+                var button = new Button_E(s_buttonStyle, StyleKeys.DefaultBackgroundAndBorder);
                 var icon = new Visual_E();
                 button.Add(icon);
                 button.Toggle(true);
@@ -118,7 +115,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         private Settingbox_E() :
-            base(s_uxml, s_style, s_keys)
+            base(s_uxml, s_style, StyleKeys.DefaultBackground)
         { }
     }
 }

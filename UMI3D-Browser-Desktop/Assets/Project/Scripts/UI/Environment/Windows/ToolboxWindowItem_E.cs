@@ -76,8 +76,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             StyleKeys pinEnableKeys = new StyleKeys(null, "PinnedEnable", "PinnedEnable");
             PinButton.AddStateKeys(PinButton, pinButtonStyle, pinActiveKeys, pinEnableKeys);
             string pinIconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButtonIcon";
-            StyleKeys pinIconKeys = new StyleKeys(null, "", null);
-            var pinIcon = new Visual_E(pinIconStyle, pinIconKeys);
+            var pinIcon = new Visual_E(pinIconStyle, StyleKeys.DefaultBackground);
             PinButton.Add(pinIcon);
             LinkMouseBehaviourChanged(PinButton, pinIcon);
             PinButton.GetRootManipulator().ProcessDuringBubbleUp = true;

@@ -38,7 +38,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected static bool s_shouldCenter { get; set; } = false;
         private static string s_uxml => "UI/UXML/dialogueBox";
         private static string s_style => "UI/Style/DialogueBox/DialogueBox";
-        private static StyleKeys s_keys => new StyleKeys(null, "", null);
 
         public static void SetCursorMovementActions(Action<object> cursorSetMovement, Action<object> cursorUnsetMovement)
         {
@@ -219,29 +218,25 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Initialize();
 
             s_dialogueBox = Root.Q("dialogueBox");
-            AddVisualStyle(s_dialogueBox, s_style, s_keys, new PopUpManipulator(s_dialogueBox));
+            AddVisualStyle(s_dialogueBox, s_style, StyleKeys.DefaultBackground, new PopUpManipulator(s_dialogueBox));
 
             Label title = Root.Q<Label>("title");
             string titleStyle = "UI/Style/DialogueBox/DialogueBox_title";
-            StyleKeys titleKeys = new StyleKeys("", null, null);
-            s_title = new Label_E(title, titleStyle, titleKeys);
+            s_title = new Label_E(title, titleStyle, StyleKeys.DefaultText);
 
             Label message = Root.Q<Label>("message");
             string messageStyle = "UI/Style/DialogueBox/DialogueBox_message";
-            StyleKeys messageKeys = new StyleKeys("", null, "");
-            s_message = new Label_E(message, messageStyle, messageKeys);
+            s_message = new Label_E(message, messageStyle, StyleKeys.DefaultTextAndBorder);
 
             VisualElement choiceBox = Root.Q("choiceBox");
             string choiceBoxStyle = "UI/Style/DialogueBox/DialogueBox_choiceBox";
-            StyleKeys choiceBoxeKeys = new StyleKeys();
-            AddVisualStyle(choiceBox, choiceBoxStyle, choiceBoxeKeys);
+            AddVisualStyle(choiceBox, choiceBoxStyle, null);
 
             string choiceStyle = "UI/Style/DialogueBox/DialogueBox_Choice";
-            StyleKeys choiceKeys = new StyleKeys("", "", "");
             Button choiceA = Root.Q<Button>("choiceA");
-            s_choiceA = new Button_E(choiceA, choiceStyle, choiceKeys);
+            s_choiceA = new Button_E(choiceA, choiceStyle, StyleKeys.Default);
             Button choiceB = Root.Q<Button>("choiceB");
-            s_choiceB = new Button_E(choiceB, choiceStyle, choiceKeys);
+            s_choiceB = new Button_E(choiceB, choiceStyle, StyleKeys.Default);
 
             s_dialogueBox.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
         }

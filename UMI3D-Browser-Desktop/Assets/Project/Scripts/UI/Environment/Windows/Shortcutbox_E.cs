@@ -31,7 +31,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         private static string s_shortcutboxUXML => "UI/UXML/Shortcuts/shortcutbox";
         private static string s_shortcutboxStyle => "UI/Style/Shortcuts/Shortcutbox";
-        private static StyleKeys s_shortcutboxKeys => new StyleKeys(null, "", null);
 
         private static bool s_isRightClickShortcutAdded { get; set; } = false;
         private static Shortcut_E s_rightClickShortcut;
@@ -158,8 +157,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Initialize();
 
             string titleStyle = "UI/Style/Shortcuts/Shortcutbox_Title";
-            StyleKeys titleKeys = new StyleKeys("", "", null);
-            SetTopBar("Actions", titleStyle, titleKeys, false);
+            SetTopBar("Actions", titleStyle, StyleKeys.DefaultTextAndBackground, false);
 
             var scrollView = Root.Q<ScrollView>();
             s_shortcuts = new ScrollView_E(scrollView);
@@ -170,7 +168,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         private Shortcutbox_E() :
-            base(s_shortcutboxUXML, s_shortcutboxStyle, s_shortcutboxKeys)
+            base(s_shortcutboxUXML, s_shortcutboxStyle, StyleKeys.DefaultBackground)
         { }
     }
 }

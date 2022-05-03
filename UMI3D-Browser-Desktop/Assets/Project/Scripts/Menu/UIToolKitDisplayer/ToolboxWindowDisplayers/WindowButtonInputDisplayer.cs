@@ -35,8 +35,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             m_input = new Visual_E(UXMLPath, null, null);
 
             string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-            StyleKeys labelKeys = new StyleKeys("", "", null);
-            m_label = new Label_E(m_input.Root.Q<Label>(), labelStylePath, labelKeys);
+            m_label = new Label_E(m_input.Root.Q<Label>(), labelStylePath, StyleKeys.DefaultTextAndBackground);
             m_label.value = menu.Name;
             m_input.Add(m_label);
             
@@ -53,8 +52,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             if (menu is ButtonMenuItem buttonMenu)
             {
                 string buttonStylePath = "UI/Style/Displayers/InputButton";
-                StyleKeys buttonKeys = new StyleKeys("", "", null);
-                m_button = new Button_E(m_input.Root.Q<Button>(), buttonStylePath, buttonKeys);
+                m_button = new Button_E(m_input.Root.Q<Button>(), buttonStylePath, StyleKeys.DefaultTextAndBackground);
                 m_button.Text = menu.Name;
                 m_input.Add(m_button);
 
@@ -63,8 +61,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             else if (menu is HoldableButtonMenuItem holdableButtonMenu)
             {
                 string buttonStylePath = "UI/Style/Displayers/InputButton";
-                StyleKeys buttonKeys = new StyleKeys("", "", null);
-                m_button = new Button_E(m_input.Root.Q<Button>(), buttonStylePath, buttonKeys);
+                m_button = new Button_E(m_input.Root.Q<Button>(), buttonStylePath, StyleKeys.DefaultTextAndBackground);
                 m_button.Text = menu.Name;
                 m_input.Add(m_button);
 
