@@ -16,6 +16,7 @@ limitations under the License.
 using BrowserDesktop.Menu;
 using System;
 using umi3d.cdk.menu;
+using umi3d.cdk.menu.interaction;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine.UIElements;
 
@@ -56,7 +57,16 @@ namespace umi3d.DesktopBrowser.menu.Displayer
                 m_button.Text = menu.Name;
                 m_input.Add(m_button);
 
-                m_button.Clicked += () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); }; 
+                m_button.Clicked += () => { buttonMenu.NotifyValueChange(!buttonMenu.GetValue()); };
+            }
+            else if (menu is EventMenuItem eventMenu)
+            {
+                string buttonStylePath = "UI/Style/Displayers/InputButton";
+                m_button = new Button_E(m_input.Root.Q<Button>(), buttonStylePath, StyleKeys.DefaultTextAndBackground);
+                m_button.Text = menu.Name;
+                m_input.Add(m_button);
+
+                m_button.Clicked += () => { eventMenu.NotifyValueChange(!eventMenu.GetValue()); };
             }
             else if (menu is HoldableButtonMenuItem holdableButtonMenu)
             {
@@ -88,7 +98,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)
-            => (menu is ButtonMenuItem || menu is HoldableButtonMenuItem || menu is BooleanInputMenuItem) ? 2 : 0;
+            => (menu is ButtonMenuItem || menu is EventMenuItem || menu is HoldableButtonMenuItem || menu is BooleanInputMenuItem) ? 2 : 0;
 
         public override void Clear()
         {
