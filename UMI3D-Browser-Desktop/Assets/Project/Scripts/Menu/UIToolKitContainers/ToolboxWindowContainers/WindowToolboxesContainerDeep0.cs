@@ -146,7 +146,7 @@ namespace umi3d.desktopBrowser.menu.Container
                 if (ToolType != ItemType.Tool)
                     SetContainerAsTool();
                 WindowItem.AddToolboxItemInFirstToolbox(ToolboxItem);
-                Displayerbox.Add(displayer.Displayer);
+                Displayerbox.AddRange(displayer.Displayer);
             }
         }
 

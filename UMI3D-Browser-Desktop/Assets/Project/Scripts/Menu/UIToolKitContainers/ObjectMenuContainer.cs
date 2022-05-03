@@ -49,7 +49,7 @@ namespace umi3d.desktopBrowser.menu.Container
             base.Insert(element, updateDisplay);
             element.Display();
             if (element is AbstractWindowInputDisplayer displayer)
-                Displayerbox.Add(displayer.Displayer);
+                Displayerbox.AddRange(displayer.Displayer);
         }
 
         /// <summary>

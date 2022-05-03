@@ -17,29 +17,23 @@ using BrowserDesktop.Menu;
 using System;
 using umi3d.cdk.menu;
 using umi3dDesktopBrowser.ui.viewController;
+using UnityEngine.UIElements;
 
 namespace umi3d.DesktopBrowser.menu.Displayer
 {
     public partial class WindowStringInputDisplayer
     {
-        private TextFieldWithLabel_E m_displayerElement { get; set; } = null;
+        private TextField_E m_textField { get; set; } = null;
     }
 
     public partial class WindowStringInputDisplayer : IDisplayerElement
     {
         public override void InitAndBindUI()
         {
-            base.InitAndBindUI();
             string UXMLPath = "UI/UXML/Displayers/textFieldInputDisplayer";
-            m_displayerElement = new TextFieldWithLabel_E(UXMLPath);
+            Displayer = new View_E(UXMLPath, s_displayerStyle, null);
 
-            string textFieldStylePath = "UI/Style/Displayers/InputTextField";
-            m_displayerElement.SetTextField(textFieldStylePath, StyleKeys.DefaultBackground);
-
-            string textInputStyle = "UI/Style/Displayers/InputTextField_Input";
-            m_displayerElement.Element.SetTextInputStyle(textInputStyle, StyleKeys.DefaultText);
-
-            Displayer.AddDisplayer(m_displayerElement.Root);
+            base.InitAndBindUI();
         }
     }
 
@@ -51,12 +45,13 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             InitAndBindUI();
             if (menu is TextInputMenuItem textMenu)
             {
-                string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-                m_displayerElement.SetLabel(labelStylePath, StyleKeys.DefaultTextAndBackground);
-                m_displayerElement.Label.value = textMenu.ToString();
+                string textFieldStylePath = "UI/Style/Displayers/InputTextField";
+                m_textField = new TextField_E(Displayer.Root.Q<TextField>(), textFieldStylePath, StyleKeys.DefaultBackground);
+                string textInputStyle = "UI/Style/Displayers/InputTextField_Input";
+                m_textField.SetTextInputStyle(textInputStyle, StyleKeys.DefaultText);
 
-                m_displayerElement.Element.value = textMenu.GetValue();
-                m_displayerElement.Element.OnValueChanged += (_, newValue) =>
+                m_textField.value = textMenu.GetValue();
+                m_textField.ValueChanged += (_, newValue) =>
                 {
                     textMenu.NotifyValueChange(newValue);
                 };
@@ -66,14 +61,11 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)
-        {
-            return (menu is TextInputMenuItem) ? 2 : 0;
-        }
+            => (menu is TextInputMenuItem) ? 2 : 0;
 
         public override void Clear()
         {
             base.Clear();
-            m_displayerElement.Reset();
         }
     }
 }

@@ -13,6 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -21,6 +23,8 @@ namespace umi3dDesktopBrowser.ui.viewController
     public enum DisplayerboxType { ToolboxesPopup, ParametersPopup }
     public partial class Displayerbox_E
     {
+        public Func<View_E> CreateSeparator { get; set; } = null;
+
         private static VisualElement m_displayerbox
         {
             get
@@ -30,40 +34,76 @@ namespace umi3dDesktopBrowser.ui.viewController
                 return displayerbox;
             }
         }
-        private static string m_displayerboxToolboxStyle = "UI/Style/Displayers/ToolboxDisplayerbox";
-        private static string m_displayerboxParameterStyle = "UI/Style/Displayers/ParameterDisplayerbox";
+        private static string s_displayerboxToolboxStyle = "UI/Style/Displayers/ToolboxDisplayerbox";
+        private static string s_displayerboxParameterStyle = "UI/Style/Displayers/ParameterDisplayerbox";
         private static string GetDisplayerboxType(DisplayerboxType type)
         {
             switch (type)
             {
                 case DisplayerboxType.ToolboxesPopup:
-                    return m_displayerboxToolboxStyle;
+                    return s_displayerboxToolboxStyle;
                 case DisplayerboxType.ParametersPopup:
-                    return m_displayerboxParameterStyle;
+                    return s_displayerboxParameterStyle;
                 default:
                     throw new System.Exception();
             }
         }
-    }
 
-    public partial class Displayerbox_E
-    {
-        public Displayerbox_E(DisplayerboxType type) :
-            base(m_displayerbox, GetDisplayerboxType(type), StyleKeys.DefaultBackgroundAndBorder)
-        { }
+        protected List<View_E> m_separatorsDisplayed { get; set; } = null;
+        protected List<View_E> m_separatorsWaited { get; set; } = null;
 
-        public void Add(params Displayer_E[] displayers)
+        public void AddRange(params View_E[] displayers)
         {
-            foreach (Displayer_E displayer in displayers)
-                Root.Add(displayer.Root);
+            foreach (View_E displayer in displayers)
+                Add(displayer);
         }
 
-        public void Clear()
+        protected virtual void UpdateSeparator()
         {
+            if (CreateSeparator == null)
+                return;
 
+            m_separatorsDisplayed.ForEach((separator) => separator.RemoveRootFromHierarchy());
+            m_separatorsWaited.AddRange(m_separatorsDisplayed);
+            m_separatorsDisplayed.Clear();
+
+            m_views.ForEach(delegate (View_E elt)
+            {
+                int eltIndex = Root.IndexOf(elt.Root);
+                if (eltIndex == 0) return;
+                ObjectPooling(out View_E separator, m_separatorsDisplayed, m_separatorsWaited, CreateSeparator);
+                separator.InsertRootAtTo(eltIndex, Root);
+            });
         }
     }
 
     public partial class Displayerbox_E : View_E
-    { }
+    {
+        public Displayerbox_E(DisplayerboxType type) :
+            base(m_displayerbox, GetDisplayerboxType(type), StyleKeys.DefaultBackgroundAndBorder)
+        {
+            string separatorStyle = "UI/Style/Displayers/DisplayerSeparator";
+            CreateSeparator = () =>
+            {
+                var separator = new View_E(separatorStyle, StyleKeys.DefaultBackground);
+                separator.Root.name = "displayerSeparator";
+                return separator;
+            };
+        }
+
+        public override void Add(View_E child)
+        {
+            base.Add(child);
+            child.InsertRootTo(Root);
+            UpdateSeparator();
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            m_separatorsDisplayed = new List<View_E>();
+            m_separatorsWaited = new List<View_E>();
+        }
+    }
 }

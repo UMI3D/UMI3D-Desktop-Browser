@@ -17,30 +17,24 @@ using BrowserDesktop.Menu;
 using umi3d.cdk.menu;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace umi3d.DesktopBrowser.menu.Displayer
 {
     public partial class WindowFloatRangeInputDisplayer
     {
-        private SliderWithLabelAndField_E m_displayerElement { get; set; } = null; 
+        private Slider_E m_slider { get; set; } = null;
+        private FloatField_E m_floatField { get; set; } = null;
     }
 
     public partial class WindowFloatRangeInputDisplayer : IDisplayerElement
     {
         public override void InitAndBindUI()
         {
-            base.InitAndBindUI();
             string UXMLPath = "UI/UXML/Displayers/sliderInputDisplayer";
-            m_displayerElement = new SliderWithLabelAndField_E(UXMLPath);
+            Displayer = new View_E(UXMLPath, s_displayerStyle, null);
 
-            string sliderStylePath = "UI/Style/Displayers/InputSlider";
-            //StyleKeys sliderKeys = new StyleKeys("", null);
-            m_displayerElement.SetSlider(sliderStylePath, null);
-            string floatFieldStylePath = "UI/Style/Displayers/InputFloatField";
-            //StyleKeys floatFieldKeys = new StyleKeys("", null);
-            m_displayerElement.SetFloatField(floatFieldStylePath, null);
-
-            Displayer.AddDisplayer(m_displayerElement.Root);
+            base.InitAndBindUI();
         }
     }
 
@@ -52,29 +46,48 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             InitAndBindUI();
             if (menu is FloatRangeInputMenuItem floatRangeMenu)
             {
-                string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-                m_displayerElement.SetLabel(labelStylePath, StyleKeys.DefaultTextAndBackground);
-                m_displayerElement.Label.value = floatRangeMenu.ToString();
+                void RefreshSlider(float newValue)
+                {
+                    newValue = Mathf.Clamp(newValue, m_slider.LowValue, m_slider.HightValue);
+                    m_slider.SetValueWithoutNotify(newValue);
+                    RefreshField(newValue);
+                }
+                void RefreshField(float newValue)
+                {
+                    m_floatField.SetValueWithoutNotify(newValue.ToString());
+                }
 
-                m_displayerElement.Element.SetSlider(floatRangeMenu.min, floatRangeMenu.max, floatRangeMenu.value);
-                m_displayerElement.Field.SetValueWithoutNotify(floatRangeMenu.value.ToString());
-                m_displayerElement.Element.OnValueChanged += (_, newValue) 
-                    => floatRangeMenu.NotifyValueChange(m_displayerElement.Clamp(newValue));
-                m_displayerElement.Field.OnValueChanged += (_, newValue)
-                    =>
+                string sliderStylePath = "UI/Style/Displayers/InputSlider";
+                m_slider = new Slider_E(Displayer.Root.Q<Slider>(), sliderStylePath, null);
+                m_slider.ValueChanged += (_, newValue) =>
+                {
+                    RefreshField(newValue);
+                    floatRangeMenu.NotifyValueChange(newValue);
+                };
+                m_slider.SetSlider(floatRangeMenu.min, floatRangeMenu.max, floatRangeMenu.value);
+                Displayer.Add(m_slider);
+
+                string floatFieldStylePath = "UI/Style/Displayers/InputFloatField";
+                m_floatField = new FloatField_E(Displayer.Root.Q<TextField>(), floatFieldStylePath, null);
+                m_floatField.ValueChanged += (oldValue, newValue) =>
                 {
                     //To be changed when floatField will be use in runtime.
                     if (FloatField_E.TryConvertToFloat(newValue, out float f))
-                        floatRangeMenu.NotifyValueChange(m_displayerElement.Clamp(f));
+                    {
+                        f = Mathf.Clamp(f, m_slider.LowValue, m_slider.HightValue);
+                        RefreshSlider(f);
+                    }
+                    else
+                        RefreshField(m_slider.value);
                 };
+                m_floatField.SetValueWithoutNotify(floatRangeMenu.value.ToString());
+                Displayer.Add(m_floatField);
             }
             else
                 throw new System.Exception("MenuItem must be a FloatRangeInputMenuItem");
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)
-        {
-            return (menu is FloatRangeInputMenuItem) ? 2 : 0;
-        }
+            => (menu is FloatRangeInputMenuItem) ? 2 : 0;
     }
 }

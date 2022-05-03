@@ -22,9 +22,10 @@ namespace umi3d.DesktopBrowser.menu.Displayer
 {
     public abstract partial class AbstractWindowInputDisplayer
     {
-        public Displayer_E Displayer { get; protected set; } = null;
+        public View_E Displayer { get; protected set; } = null;
 
-        protected View_E m_input { get; set; } = null;
+        protected static string s_displayerStyle = "UI/Style/Displayers/Displayer";
+        protected static string s_labelStyle = "UI/Style/Displayers/DisplayerLabel";
         protected Label_E m_label { get; set; } = null;
 
         private void OnDestroy()
@@ -39,7 +40,11 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             => Displayer.Root;
 
         public virtual void InitAndBindUI()
-            => Displayer = new Displayer_E();
+        {
+            m_label = new Label_E(Displayer.Root.Q<Label>(), s_labelStyle, StyleKeys.DefaultTextAndBackground);
+            m_label.value = menu.Name;
+            Displayer.Add(m_label);
+        }
     }
 
     public partial class AbstractWindowInputDisplayer : AbstractDisplayer
