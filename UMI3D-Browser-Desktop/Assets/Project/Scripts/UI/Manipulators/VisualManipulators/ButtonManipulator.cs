@@ -25,19 +25,19 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected override void RegisterCallbacksOnTarget()
         {
             base.RegisterCallbacksOnTarget();
-            //Buttons don't work with mouseDownEvent
+            //Buttons don't work with mouseDownEvent et mouseUpEvent
             target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
-            target.RegisterCallback<MouseCaptureEvent>(OnMouseCapture);
+            target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
         }
 
-        protected override void UnregisterCallbacksFromTarget()
-        {
-            base.UnregisterCallbacksFromTarget();
+        //protected override void UnregisterCallbacksFromTarget()
+        //{
+        //    base.UnregisterCallbacksFromTarget();
 
-            target.UnregisterCallback<MouseCaptureEvent>(OnMouseCapture);
-        }
+        //    target.UnregisterCallback<MouseCaptureEvent>(OnMouseCapture);
+        //}
 
-        protected virtual void OnMouseCapture(MouseCaptureEvent e)
-            => OnMouseBehaviourChanged(e, (MousePressedState.Pressed, m_mouseState.Item2), target.style);
+        //protected virtual void OnMouseCapture(MouseCaptureEvent e)
+        //    => OnMouseBehaviourChanged(e, (MousePressedState.Pressed, m_mouseState.Item2), target.style);
     }
 }

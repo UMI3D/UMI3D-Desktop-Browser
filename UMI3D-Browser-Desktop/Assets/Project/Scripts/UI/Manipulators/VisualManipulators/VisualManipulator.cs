@@ -38,25 +38,26 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         public event Action<CustomStyle_SO, StyleKeys, IStyle, MouseBehaviour> ApplyingStyle;
 
-        public bool StopPropagation { get; set; } = false;
+        public bool ProcessDuringBubbleUp { get; set; } = false;
 
         protected CustomStyle_SO m_styleSO { get; set; } = null;
         protected StyleKeys m_keys { get; set; } = null;
         
         #region Mouse
 
-        protected enum MousePressedState
+        public enum MousePressedState
         {
             Unpressed,
             Pressed
         }
-        protected enum MousePositionState
+        public enum MousePositionState
         {
             Out,
             Over
         }
 
-        protected (MousePressedState, MousePositionState) m_mouseState { get; set; }
+        protected (MousePressedState, MousePositionState) m_mouseState { get; set; } 
+            = (MousePressedState.Unpressed, MousePositionState.Out);
         protected MouseBehaviour m_mouseBehaviourFromState
         {
             get
@@ -76,15 +77,15 @@ namespace umi3dDesktopBrowser.ui.viewController
     public partial class VisualManipulator
     {
         public VisualManipulator () : 
-            this(true) 
+            this(false) 
         { }
-        public VisualManipulator(bool stopPropagation) : 
-            this(new ManipulatorActivationFilter { button = MouseButton.LeftMouse }, stopPropagation)
+        public VisualManipulator(bool processDuringBubbleUp) : 
+            this(new ManipulatorActivationFilter { button = MouseButton.LeftMouse }, processDuringBubbleUp)
         { }
-        public VisualManipulator(ManipulatorActivationFilter activationFilter, bool stopPropagation)
+        public VisualManipulator(ManipulatorActivationFilter activationFilter, bool processDuringBubbleUp)
         {
             activators.Add(activationFilter);
-            StopPropagation = stopPropagation;
+            ProcessDuringBubbleUp = processDuringBubbleUp;
         }
         
         /// <summary>
@@ -121,16 +122,19 @@ namespace umi3dDesktopBrowser.ui.viewController
             ApplyFormatAndStyle();
         }
 
+        public void ApplyFormat()
+            => ApplyingFormat?.Invoke(m_styleSO, m_keys, target);
         public void ApplyStyle()
             => ApplyingStyle?.Invoke(m_styleSO, m_keys, target.style, m_mouseBehaviourFromState);
         public void ApplyStyle(MouseBehaviour mouseBehaviour)
             => ApplyingStyle?.Invoke(m_styleSO, m_keys, target.style, mouseBehaviour);
 
         public void ApplyFormatAndStyle()
+            => ApplyFormatAndStyle(m_mouseBehaviourFromState);
+        public void ApplyFormatAndStyle(MouseBehaviour mouseBehaviour)
         {
-            ApplyingFormat?.Invoke(m_styleSO, m_keys, target);
-            ApplyingStyle?.Invoke(m_styleSO, m_keys, target.style, m_mouseBehaviourFromState);
-            Debug.Log($"mouse state = [{m_mouseBehaviourFromState}]");
+            ApplyFormat();
+            ApplyStyle(mouseBehaviour);
         }
     }
 
@@ -169,23 +173,36 @@ namespace umi3dDesktopBrowser.ui.viewController
         #endregion
 
         protected virtual void OnMouseOver(MouseOverEvent e)
-            => OnMouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Over), target.style);
+            => OnMouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Over));
 
         protected virtual void OnMouseOut(MouseOutEvent e)
-            => OnMouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Out), target.style);
+            => OnMouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Out));
 
         protected virtual void OnMouseDown(MouseDownEvent e)
-            => OnMouseBehaviourChanged(e, (MousePressedState.Pressed, m_mouseState.Item2), target.style);
+            => OnMouseBehaviourChanged(e, (MousePressedState.Pressed, m_mouseState.Item2));
 
         protected virtual void OnMouseUp(MouseUpEvent e)
-            => OnMouseBehaviourChanged(e, (MousePressedState.Unpressed, m_mouseState.Item2), target.style);
+            => OnMouseBehaviourChanged(e, (MousePressedState.Unpressed, m_mouseState.Item2));
 
-        protected void OnMouseBehaviourChanged(EventBase e, (MousePressedState, MousePositionState) mouseState, IStyle style)
+        public void OnMouseBehaviourChanged(EventBase e, (MousePressedState, MousePositionState) mouseState)
         {
+            if (e.propagationPhase == PropagationPhase.BubbleUp && !ProcessDuringBubbleUp)
+                return;
+
             m_mouseState = mouseState;
-            ApplyingStyle?.Invoke(m_styleSO, m_keys, style, m_mouseBehaviourFromState);
-            if (StopPropagation) e.StopPropagation();
             MouseBehaviourChanged?.Invoke(m_mouseBehaviourFromState);
+
+            ApplyStyle();
+        }
+        public void OnMouseBehaviourChanged(EventBase e, MousePressedState pressedState)
+        {
+            if (e.propagationPhase == PropagationPhase.BubbleUp && !ProcessDuringBubbleUp)
+                return;
+
+            m_mouseState = (pressedState, m_mouseState.Item2);
+            MouseBehaviourChanged?.Invoke(m_mouseBehaviourFromState);
+
+            ApplyStyle();
         }
     }
 }

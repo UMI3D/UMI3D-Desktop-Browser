@@ -88,15 +88,11 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="receiver"></param>
-        public static void LinkMouseBehaviourChanged(Visual_E sender, Visual_E receiver, bool stopSendPropagation)
+        public static void LinkMouseBehaviourChanged(Visual_E sender, Visual_E receiver)
         {
             var senderManipulator = sender.GetRootManipulator();
             var receiverManipulator = receiver.GetRootManipulator();
             senderManipulator.MouseBehaviourChanged += receiverManipulator.ApplyStyle;
-            if (stopSendPropagation)
-                senderManipulator.StopPropagation = true;
-            else
-                senderManipulator.StopPropagation = false;
         }
 
         #endregion
@@ -105,16 +101,16 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         #region Add and Reset Visual Style
 
-        protected void AddVisualStyle(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys, VisualManipulator manipulator = null, bool stopPropagation = true)
-            => AddVisualStyle(visual, GetStyleSO(styleResourcePath), formatAndStyleKeys, manipulator, stopPropagation);
-        protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys, VisualManipulator manipulator = null, bool stopPropagation = true)
+        protected void AddVisualStyle(VisualElement visual, string styleResourcePath, StyleKeys formatAndStyleKeys, VisualManipulator manipulator = null, bool processDuringBubbleUp = false)
+            => AddVisualStyle(visual, GetStyleSO(styleResourcePath), formatAndStyleKeys, manipulator, processDuringBubbleUp);
+        protected void AddVisualStyle(VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys, VisualManipulator manipulator = null, bool processDuringBubbleUp = false)
         {
             if (visual == null) throw new NullReferenceException("visual is null");
 
             if (!m_visualStylesMap.ContainsKey(visual))
             {
                 if (manipulator == null)
-                    manipulator = new VisualManipulator(stopPropagation);
+                    manipulator = new VisualManipulator(processDuringBubbleUp);
 
                 SetManipulator(manipulator, style_SO, keys);
                 visual.AddManipulator(manipulator);
@@ -207,7 +203,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             if (!m_visualStylesMap.ContainsKey(visual))
                 throw new Exception($"Visual [{visual}] unknown wanted to be updated.");
             var (styleSO, _, manipulator) = m_visualStylesMap[visual];
-            Debug.Log($"update keys [{newKeys?.BackgroundStyleKey}]");
             manipulator.UpdateKeys(newKeys);
             m_visualStylesMap[visual] = (styleSO, newKeys, manipulator);
         }

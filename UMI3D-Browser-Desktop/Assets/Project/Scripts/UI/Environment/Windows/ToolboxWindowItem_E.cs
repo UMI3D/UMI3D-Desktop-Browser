@@ -79,7 +79,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             StyleKeys pinIconKeys = new StyleKeys(null, "", null);
             var pinIcon = new Visual_E(pinIconStyle, pinIconKeys);
             PinButton.Add(pinIcon);
-            LinkMouseBehaviourChanged(pinIcon, PinButton, false);
+            LinkMouseBehaviourChanged(PinButton, pinIcon);
+            PinButton.GetRootManipulator().ProcessDuringBubbleUp = true;
 
             VisualElement containers = Root.Q("containers");
             string conainerStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_Container";
