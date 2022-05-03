@@ -33,7 +33,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public static void OnUnpinnedPressed()
             => UnpinnedPressed?.Invoke();
 
-        public void AddRange(params Visual_E[] items)
+        public void AddRange(params View_E[] items)
             => s_scrollView.AddRange(items);
     }
 
@@ -65,7 +65,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             SetCloseButton();
             m_closeButton.UpdateRootStyleAndKeysAndManipulator(m_closeButtonBGStyle, StyleKeys.DefaultBackgroundAndBorder);
-            var closeIcon = new Visual_E(m_closeButtonIconStyle, StyleKeys.DefaultBackground);
+            var closeIcon = new View_E(m_closeButtonIconStyle, StyleKeys.DefaultBackground);
             m_closeButton.Add(closeIcon);
             LinkMouseBehaviourChanged(m_closeButton, closeIcon);
             m_closeButton.GetRootManipulator().ProcessDuringBubbleUp = true;

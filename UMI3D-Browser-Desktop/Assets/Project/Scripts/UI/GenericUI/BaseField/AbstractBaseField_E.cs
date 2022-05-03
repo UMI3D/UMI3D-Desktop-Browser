@@ -50,7 +50,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             => OnValueChanged(e.previousValue, e.newValue);
     }
 
-    public abstract partial class AbstractBaseField_E<T> : Visual_E
+    public abstract partial class AbstractBaseField_E<T> : View_E
     {
         protected override void Initialize()
         {

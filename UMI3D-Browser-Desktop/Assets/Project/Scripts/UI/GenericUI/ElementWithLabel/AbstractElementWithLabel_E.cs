@@ -43,7 +43,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
     }
 
-    public abstract partial class AbstractElementWithLabel_E<E> : Visual_E
+    public abstract partial class AbstractElementWithLabel_E<E> : View_E
     {
         protected override void Initialize()
         {

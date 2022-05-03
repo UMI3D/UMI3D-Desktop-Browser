@@ -47,7 +47,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         
     }
 
-    public partial class ToolboxItem_E : Visual_E
+    public partial class ToolboxItem_E : View_E
     {
         public ToolboxItem_E(bool isInMenuBar = true) :
             this("placeholderToolboxActive", "placeholderToolboxEnable", "", false, isInMenuBar)

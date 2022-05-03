@@ -58,7 +58,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public interface IIconCustomisableElement
     {
-        public Visual_E Icon { get; }
+        public View_E Icon { get; }
 
         public void AddIcon(VisualElement parent);
         public void AddIcon(VisualElement parent, string styleResourcePath, StyleKeys keys);
@@ -74,13 +74,13 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// State of the element.
         /// </summary>
         public bool IsOn { get; }
-        public Dictionary<Visual_E, (StyleKeys, StyleKeys)> StateKeys { get; }
+        public Dictionary<View_E, (StyleKeys, StyleKeys)> StateKeys { get; }
 
         /// <summary>
         /// Change the state of the element.
         /// </summary>
         /// <param name="value"></param>
         public void Toggle(bool value);
-        public void AddStateKeys(Visual_E visual, string styleResourcePath, StyleKeys on, StyleKeys off);
+        public void AddStateKeys(View_E visual, string styleResourcePath, StyleKeys on, StyleKeys off);
     }
 }

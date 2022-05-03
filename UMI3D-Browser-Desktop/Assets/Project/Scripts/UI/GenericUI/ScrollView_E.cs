@@ -23,7 +23,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class ScrollView_E
     {
-        public Func<Visual_E> CreateSeparator { get; set; } = null;
+        public Func<View_E> CreateSeparator { get; set; } = null;
         public ScrollView Scroll_View { get; private set; } = null;
 
         protected Scroller m_verticalScroller { get; set; } = null;
@@ -43,8 +43,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected VisualElement m_forwardVerticalButtonLayout { get; set; } = null;
         protected VisualElement m_forwardHorizontalButtonLayout { get; set; } = null;
 
-        protected List<Visual_E> m_separatorsDisplayed { get; set; } = null;
-        protected List<Visual_E> m_separatorsWaited { get; set; } = null;
+        protected List<View_E> m_separatorsDisplayed { get; set; } = null;
+        protected List<View_E> m_separatorsWaited { get; set; } = null;
     }
 
     public partial class ScrollView_E
@@ -65,9 +65,9 @@ namespace umi3dDesktopBrowser.ui.viewController
             base(parent, visualResourcePath, styleResourcePath, keys) 
         { }
 
-        public virtual void AddRange(params Visual_E[] items)
+        public virtual void AddRange(params View_E[] items)
         {
-            foreach (Visual_E item in items)
+            foreach (View_E item in items)
                 Add(item);
         }
 
@@ -90,11 +90,11 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_separatorsWaited.AddRange(m_separatorsDisplayed);
             m_separatorsDisplayed.Clear();
             
-            m_views.ForEach(delegate (Visual_E elt)
+            m_views.ForEach(delegate (View_E elt)
             {
                 int eltIndex = Scroll_View.IndexOf(elt.Root);
                 if (eltIndex == 0) return;
-                ObjectPooling(out Visual_E separator, m_separatorsDisplayed, m_separatorsWaited, CreateSeparator);
+                ObjectPooling(out View_E separator, m_separatorsDisplayed, m_separatorsWaited, CreateSeparator);
                 separator.InsertRootAtTo(eltIndex, Scroll_View);
             });
         }
@@ -109,7 +109,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             => SetDraggerContainerStyle(m_horizontalScroller, customStyleKey, formatAndStyleKeys);
         protected virtual void SetDraggerContainerStyle(Scroller scroller, string customStyleKey, StyleKeys formatAndStyleKeys)
         {
-            new Visual_E(scroller, customStyleKey, formatAndStyleKeys);
+            new View_E(scroller, customStyleKey, formatAndStyleKeys);
             scroller.style.opacity = 1f;
             scroller.style.alignItems = Align.Center;
         }
@@ -125,7 +125,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public virtual void SetDraggerStyle(VisualElement dragger, string customStyleKey, StyleKeys formatAndStyleKeys)
         {
             dragger.ClearClassList();
-            new Visual_E(dragger, customStyleKey, formatAndStyleKeys);
+            new View_E(dragger, customStyleKey, formatAndStyleKeys);
         }
 
         #endregion
@@ -198,22 +198,22 @@ namespace umi3dDesktopBrowser.ui.viewController
         #endregion
     }
 
-    public partial class ScrollView_E : Visual_E
+    public partial class ScrollView_E : View_E
     {
-        public override void Add(Visual_E child)
+        public override void Add(View_E child)
         {
             base.Add(child);
             child.InsertRootTo(Scroll_View);
             UpdateSeparator();
         }
-        public override void Insert(int index, Visual_E item)
+        public override void Insert(int index, View_E item)
         {
             base.Insert(index, item);
             m_views.Insert(index, item);
             item.InsertRootAtTo(index, Scroll_View);
             UpdateSeparator();
         }
-        public override void Remove(Visual_E item)
+        public override void Remove(View_E item)
         {
             if (!m_views.Contains(item))
                 return;
@@ -244,8 +244,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_verticalScroller.valueChanged += VerticalSliderValueChanged;
             m_horizontalScroller.valueChanged += HorizontalSliderValueChanged;
 
-            m_separatorsDisplayed = new List<Visual_E>();
-            m_separatorsWaited = new List<Visual_E>();
+            m_separatorsDisplayed = new List<View_E>();
+            m_separatorsWaited = new List<View_E>();
         }
 
         public override void Reset()

@@ -33,7 +33,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         {
             base.InitAndBindUI();
             string UXMLPath = "UI/UXML/Displayers/buttonInputDisplayer";
-            m_input = new Visual_E(UXMLPath, null, null);
+            m_input = new View_E(UXMLPath, null, null);
 
             string dropdownStyle = "UI/Style/Displayers/InputDropdown";
             m_dropdown = new Dropdown_E(m_input.Root.Q<Button>(), dropdownStyle, StyleKeys.Default);

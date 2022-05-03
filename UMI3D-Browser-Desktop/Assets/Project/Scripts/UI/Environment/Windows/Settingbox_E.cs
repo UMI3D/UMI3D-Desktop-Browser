@@ -92,7 +92,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             static Button_E SetButton(string on, string off)
             {
                 var button = new Button_E(s_buttonStyle, StyleKeys.DefaultBackgroundAndBorder);
-                var icon = new Visual_E();
+                var icon = new View_E();
                 button.Add(icon);
                 button.Toggle(true);
                 StyleKeys onKeys = new StyleKeys(null, on, null);

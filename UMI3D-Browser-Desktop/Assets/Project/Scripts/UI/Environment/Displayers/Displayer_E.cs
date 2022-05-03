@@ -43,7 +43,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
     }
 
-    public partial class Displayer_E : Visual_E
+    public partial class Displayer_E : View_E
     {
         protected override void Initialize()
         {

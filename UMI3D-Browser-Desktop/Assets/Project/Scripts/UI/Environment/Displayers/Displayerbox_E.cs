@@ -64,6 +64,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
     }
 
-    public partial class Displayerbox_E : Visual_E
+    public partial class Displayerbox_E : View_E
     { }
 }

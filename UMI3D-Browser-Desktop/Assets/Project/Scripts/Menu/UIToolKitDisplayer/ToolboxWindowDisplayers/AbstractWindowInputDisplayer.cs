@@ -24,7 +24,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
     {
         public Displayer_E Displayer { get; protected set; } = null;
 
-        protected Visual_E m_input { get; set; } = null;
+        protected View_E m_input { get; set; } = null;
         protected Label_E m_label { get; set; } = null;
 
         private void OnDestroy()
