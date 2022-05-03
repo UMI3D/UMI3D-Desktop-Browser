@@ -65,7 +65,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             StyleKeys closeButtonIconKeys = new StyleKeys(null, "", null);
             var closeIcon = new Visual_E(m_closeButtonIconStyle, closeButtonIconKeys);
             m_closeButton.Add(closeIcon);
-            LinkMouseBehaviourChanged(closeIcon, m_closeButton, false);
+            LinkMouseBehaviourChanged(m_closeButton, closeIcon);
+            m_closeButton.GetRootManipulator().ProcessDuringBubbleUp = true;
 
             s_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"));
             string dcStyle = "UI/Style/ToolboxWindow/ToolboxWindow_DraggerContainer";

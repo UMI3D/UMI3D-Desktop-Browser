@@ -92,7 +92,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             SetTopBar("Options", m_topBarStyle, titleKeys, false);
 
             var buttonbox = Root.Q("buttonbox");
-            Button_E SetButton(string on, string off)
+            static Button_E SetButton(string on, string off)
             {
                 var button = new Button_E(s_buttonStyle, s_buttonKeys);
                 var icon = new Visual_E();
@@ -101,7 +101,8 @@ namespace umi3dDesktopBrowser.ui.viewController
                 StyleKeys onKeys = new StyleKeys(null, on, null);
                 StyleKeys offKeys = new StyleKeys(null, off, null);
                 button.AddStateKeys(icon, s_buttonIconStyle, onKeys, offKeys);
-                LinkMouseBehaviourChanged(icon, button, false);
+                LinkMouseBehaviourChanged(button, icon);
+                button.GetRootManipulator().ProcessDuringBubbleUp = true;
 
                 return button;
             }

@@ -111,7 +111,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             string consoleIconStyle = "UI/Style/BottomBar/ConsoleIcon";
             var consoleIcon = new Visual_E(consoleIconStyle, m_consoleIconDefaultKeys);
             Console.Add(consoleIcon);
-            LinkMouseBehaviourChanged(consoleIcon, Console, false);
+            LinkMouseBehaviourChanged(Console, consoleIcon);
+            Console.GetRootManipulator().ProcessDuringBubbleUp = true;
 
             var settings = Root.Q<Button>("settings");
             Settings = new Button_E(settings);
@@ -122,7 +123,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             string settingsIconStyle = "UI/Style/BottomBar/SettingsIcon";
             var settingsIcon = new Visual_E(settingsIconStyle, m_settingsIconKeys);
             Settings.Add(settingsIcon);
-            LinkMouseBehaviourChanged(settingsIcon, Settings, false);
+            LinkMouseBehaviourChanged(Settings, settingsIcon);
+            Settings.GetRootManipulator().ProcessDuringBubbleUp = true;
         }
 
     }

@@ -75,14 +75,12 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public virtual void Toggle(bool value)
         {
-            Debug.Log($"toggle button [{value}]");
             IsOn = value;
 
             foreach (Visual_E visual in StateKeys.Keys)
             {
                 StyleKeys current = (IsOn) ? StateKeys[visual].Item1 : StateKeys[visual].Item2;
                 visual.UpdateRootKeys(current);
-                Debug.Log($"curent = [{current?.BackgroundStyleKey}]");
             }
         }
         public void AddStateKeys(Visual_E view, string styleResourcePath, StyleKeys on, StyleKeys off)
@@ -103,7 +101,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public event Action ClickedUp;
         public bool IsPressed { get; protected set; }
 
-        private HoldableButtonManipulator m_holdableManipulator { get; set; } = null;
+        private ClickableManipulator m_clickableManipulator { get; set; } = null;
 
         public void OnClickedDown()
             => ClickedDown?.Invoke();
@@ -111,10 +109,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             => ClickedUp.Invoke();
         public void SetHoldableButton()
         {
-            m_holdableManipulator = new HoldableButtonManipulator();
-            m_holdableManipulator.ClickedDown = OnClickedDown;
-            m_holdableManipulator.ClickedUp = OnClickedUp;
-            m_button.AddManipulator(m_holdableManipulator);
+            m_clickableManipulator.ClickedDown += OnClickedDown;
+            m_clickableManipulator.ClickedUp += OnClickedUp;
             ClickedDown += () => IsPressed = true;
             ClickedUp += () => IsPressed = false;
         }
@@ -167,9 +163,17 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected override void Initialize()
         {
             base.Initialize();
-            UpdateManipulator(Root, new ButtonManipulator());
+
+            var buttonManipulator = new ButtonManipulator();
+            UpdateManipulator(Root, buttonManipulator);
+            m_clickableManipulator = new ClickableManipulator();
+            m_button.clickable = m_clickableManipulator;
+
+            m_clickableManipulator.MouseBehaviourChanged += buttonManipulator.OnMouseBehaviourChanged;
+
             m_button.clicked += OnClicked;
             SetHoldableButton();
+            
             StateKeys = new Dictionary<Visual_E, (StyleKeys, StyleKeys)>();
         }
 
