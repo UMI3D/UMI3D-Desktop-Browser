@@ -39,7 +39,7 @@ namespace umi3dDesktopBrowser.ui
             InitConsole();
             InitBottomBar();
 
-            UMI3DCollaborationClientServer.LoggingOut += ResetMenus;
+            UMI3DCollaborationClientServer.Instance.OnLeaving.AddListener( ResetMenus);
         }
 
         private void InitMenuBar()

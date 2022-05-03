@@ -1224,18 +1224,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28445eece349c7040bc097a86c004de9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HintCursor: {fileID: 0}
-  CrossCursor: {fileID: 0}
-  CircleCursor: {fileID: 0}
-  ClickedCursor: {fileID: 0}
-  LeftClickOptionCursor: {fileID: 0}
-  LeftClickExitCursor: {fileID: 0}
-  FollowCursor: {fileID: 0}
-  MenuIndicator: 0
-  ExitIndicator: 0
-  cursorMode: 0
-  hotSpot: {x: 0, y: 0}
-  LastMenuState: 0
 --- !u!4 &763993284
 Transform:
   m_ObjectHideFlags: 0
@@ -1920,10 +1908,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dee479a7b501484b8b1c8e522450361, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnLeaving:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLeavingEnvironment:
+    m_PersistentCalls:
+      m_Calls: []
   OnNewToken:
     m_PersistentCalls:
       m_Calls: []
   OnConnectionLost:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRedirection:
     m_PersistentCalls:
       m_Calls: []
   Identifier: {fileID: 11400000, guid: a3c89eef08c21e647a83ef6b16993957, type: 2}
@@ -2196,7 +2193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1511698e9348c3469511f24ce7aaac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseMaterial: {fileID: 2100000, guid: 7b15e0d9f27093d4ba530b4923bac4e6, type: 2}
+  baseMaterial: {fileID: 2100000, guid: 379d1cb37b4e689418b48a07f44fa6e8, type: 2}
   onProgressChange:
     m_PersistentCalls:
       m_Calls: []

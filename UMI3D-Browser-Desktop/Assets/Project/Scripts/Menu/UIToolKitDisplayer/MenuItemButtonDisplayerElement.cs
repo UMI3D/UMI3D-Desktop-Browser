@@ -63,6 +63,7 @@ namespace BrowserDesktop.Menu
         /// </summary>
         public void NotifyPress()
         {
+            Debug.Log("PRess");
             menuItem?.NotifyValueChange(!menuItem.GetValue());
         }
 
