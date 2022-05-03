@@ -131,13 +131,15 @@ namespace BrowserDesktop.Cursor
 
         private void Start()
         {
-            UMI3DCollaborationClientServer.LoggingOut += Clear;
+            if (UMI3DCollaborationClientServer.Exists)
+                UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.AddListener(Clear);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            UMI3DCollaborationClientServer.LoggingOut -= Clear;
+            if (UMI3DCollaborationClientServer.Exists)
+                UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.RemoveListener(Clear);
             s_stateUpdated = null;
             s_movementUpdated = null;
             Destroy(gameObject);

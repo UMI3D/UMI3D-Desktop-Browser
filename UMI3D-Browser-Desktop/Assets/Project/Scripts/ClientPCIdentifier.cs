@@ -21,49 +21,35 @@ using umi3d.common.interaction;
 using BeardedManStudios.Forge.Networking;
 using UnityEngine;
 using umi3d.common.collaboration;
+using System.Threading.Tasks;
 
 [CreateAssetMenu(fileName = "ClientPCIdentifier", menuName = "UMI3D/Client PC Identifier")]
 public class ClientPCIdentifier : ClientIdentifierApi
 {
-
-    public Action<Action<string, string>> GetIdentityAction;
-    public Action<Action<string>> GetPinAction;
     public Action<List<string>, Action<bool>> ShouldDownloadLib;
     public Action<FormDto, Action<FormAnswerDto>> GetParameters;
 
-    public override void GetParameterDtos(FormDto parameter, Action<FormAnswerDto> callback)
+    public override async Task<FormAnswerDto> GetParameterDtos(FormDto parameter)
     {
+        bool b = true;
+        FormAnswerDto form = null;
+        Action<FormAnswerDto> callback = (f) => { form = f; b = false; };
+
         GetParameters.Invoke(parameter, callback);
+        while (b)
+            await Task.Yield();
+        return form;
     }
 
-    public override void ShouldDownloadLibraries(List<string> ids, Action<bool> callback)
+    public override async Task<bool> ShouldDownloadLibraries(List<string> LibrariesId)
     {
-        ShouldDownloadLib.Invoke(ids, callback);
-    }
+        bool b = true;
+        bool form = false;
+        Action<bool> callback = (f) => { form = f; b = false; };
 
-    public override void GetIdentity(Action<UMI3DAuthenticator> callback)
-    {
-         callback.Invoke(new UMI3DAuthenticator(GetPin, GetLoginPassword, GetIdentity));
-
-    }
-
-    void GetPin(Action<string> callback)
-    {
-        if (GetPinAction != null)
-            GetPinAction(callback);
-        else
-            callback?.Invoke(null);
-    }
-    void GetLoginPassword(Action<(string, string)> callback)
-    {
-        if (GetIdentityAction != null)
-            GetIdentityAction((l, p) => callback((l, p)));
-        else
-            callback?.Invoke((null,null));
-    }
-
-    void GetIdentity(Action<IdentityDto> callback)
-    {
-        callback?.Invoke(UMI3DCollaborationClientServer.Identity);
+        ShouldDownloadLib.Invoke(LibrariesId, callback);
+        while (b)
+            await Task.Yield();
+        return form;
     }
 }

@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
 using umi3d.cdk;
 using umi3d.cdk.menu.view;
 using UnityEngine;
@@ -57,7 +58,7 @@ namespace umi3dDesktopBrowser.ui
         
     }
 
-    public partial class GameMenu : MonoBehaviour
+    public partial class GameMenu : SingleBehaviour<GameMenu>
     {
         void Start()
         {

@@ -25,6 +25,7 @@ using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3d.common;
 using umi3d.common.interaction;
+using umi3dDesktopBrowser.ui;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.Events;
@@ -93,8 +94,6 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         Debug.Assert(MenuDisplayManager != null);
         Debug.Assert(cam != null);
 
-        identifier.GetPinAction = GetPassword;
-        identifier.GetIdentityAction = GetIdentity;
         identifier.ShouldDownloadLib = ShouldDownloadLibraries;
         identifier.GetParameters = GetParameterDtos;
     }
@@ -103,6 +102,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     {
         InitUI();
 
+        UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(OnRedirection);
         UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
         MenuBar_E.Instance.LeaveButton.OnClicked = () =>
@@ -203,14 +203,22 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     /// Uses the connection data to connect to te server.
     /// </summary>
     /// <param name="connectionData"></param>
-    public void Connect(ServerPreferences.Data connectionData)
+    public async void Connect(ServerPreferences.Data connectionData)
     {
         this.connectionData = connectionData;
 
         loader.OnProgressChange(0);
         var curentUrl = "http://" + connectionData.ip + UMI3DNetworkingKeys.media;
         url = curentUrl;
-        UMI3DCollaborationClientServer.GetMedia(url, GetMediaSucces, GetMediaFailed, (e) => url == curentUrl && e.count < 3);
+        try
+        {
+            GetMediaSucces(await UMI3DCollaborationClientServer.GetMedia(url, (e) => url == curentUrl && e.count < 3));
+        }
+        catch (Exception e)
+        {
+            GetMediaFailed(e.Message);
+        }
+
     }
 
     /// <summary>
@@ -223,11 +231,8 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         cam.clearFlags = CameraClearFlags.SolidColor;
         UMI3DEnvironmentLoader.Clear();
         UMI3DResourcesManager.Instance.ClearCache();
-        UMI3DCollaborationClientServer.Logout(() => 
-        { 
-            GameObject.Destroy(UMI3DClientServer.Instance.gameObject);
-            //CursorHandler.Instance.Clear();
-        }, null);
+        UMI3DCollaborationClientServer.Logout();
+        GameObject.Destroy(UMI3DClientServer.Instance.gameObject);
 
         SceneManager.LoadScene(launcherScene, LoadSceneMode.Single);
     }
@@ -244,6 +249,22 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
     }
 
+    private void OnRedirection()
+    {
+        Display();
+    }
+
+    private void Display()
+    {
+        isDisplayed = true;
+
+        connectionScreen.style.display = DisplayStyle.Flex;
+
+        CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
+
+
+        GameMenu.Instance.Display(false);
+    }
     #endregion
 
     #region Events/Callbacks
@@ -267,7 +288,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
         SessionInformationMenu.Instance.SetEnvironmentName(media);
 
-        UMI3DCollaborationClientServer.Connect();
+        UMI3DCollaborationClientServer.Connect(media);
     }
 
     private void OnConnectionLost()
@@ -295,31 +316,6 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
             );
     }
 
-    /// <summary>
-    /// Asks users a login to join the environement.
-    /// </summary>
-    private void GetPassword(Action<string> callback)
-    {
-        DisplayScreenToLogin();
-
-        AskLogin(false);
-        connectBtn.clickable.clicked += () => SendIdentity((login, password) => callback(password));
-
-        nextStep = () => SendIdentity((login, password) => callback(password));
-    }
-
-    /// <summary>
-    /// Asks users a login and password to join the environement.
-    /// </summary>
-    private void GetIdentity(Action<string, string> callback)
-    {
-
-        DisplayScreenToLogin();
-
-        AskLogin(true);
-        connectBtn.clickable.clicked += () => SendIdentity(callback);
-        nextStep = () => SendIdentity(callback);
-    }
 
     private void DisplayScreenToLogin()
     {
@@ -350,25 +346,12 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     }
 
     /// <summary>
-    /// Sends the login/password to the server.
-    /// </summary>
-    /// <param name="callback"></param>
-    private void SendIdentity(Action<string, string> callback)
-    {
-        passwordScreen.style.display = DisplayStyle.None;
-        callback.Invoke(loginInput.value, passwordInput.value);
-        UMI3DCollaborationClientServer.Identity.login = loginInput.value;
-        loadingScreen.style.display = DisplayStyle.Flex;
-        loader.SetText("Loading");
-        nextStep = null;
-    }
-
-    /// <summary>
     /// Checks if users need to download libraries to join the environement.
     /// If yes, a screen is displayed to explain that.
     /// </summary>
     private void ShouldDownloadLibraries(List<string> ids, Action<bool> callback)
     {
+        Display();
         loader.SetText("Loading environment"); // TODO change
         if (ids.Count == 0)
         {
@@ -401,6 +384,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     /// <param name="callback"></param>
     void GetParameterDtos(FormDto form, Action<FormAnswerDto> callback)
     {
+        Display();
         loadingScreen.style.display = DisplayStyle.None;
         parametersScreen.style.display = DisplayStyle.Flex;
 
