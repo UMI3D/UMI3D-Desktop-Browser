@@ -72,7 +72,7 @@ namespace umi3dDesktopBrowser.ui
             ToolboxWindow_E.Instance.InsertRootTo(m_viewport);
             ToolboxWindow_E.Instance.CloseButtonPressed += () => m_windowToolboxesDM.Collapse(true);
             m_windowToolboxesDM.menu.onContentChange.AddListener(() 
-                => MenuBar_E.Instance.DisplayToolboxButton(m_windowToolboxesDM.menu.Count > 0));
+                => MenuBar_E.AreThereToolboxes = m_windowToolboxesDM.menu.Count > 0);
 
             ToolboxPinnedWindow_E.Instance.InsertRootTo(m_viewport);
             ToolboxPinnedWindow_E.Instance.CloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(true);
