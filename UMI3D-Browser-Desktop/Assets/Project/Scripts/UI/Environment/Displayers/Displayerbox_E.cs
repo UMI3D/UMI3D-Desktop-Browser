@@ -98,6 +98,13 @@ namespace umi3dDesktopBrowser.ui.viewController
             UpdateSeparator();
         }
 
+        public override void Remove(View_E child)
+        {
+            base.Remove(child);
+            Root.Remove(child.Root);
+            UpdateSeparator();
+        }
+
         protected override void Initialize()
         {
             base.Initialize();

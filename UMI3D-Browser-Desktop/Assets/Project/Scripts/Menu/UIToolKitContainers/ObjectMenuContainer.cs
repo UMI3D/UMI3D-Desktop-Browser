@@ -16,6 +16,7 @@ limitations under the License.
 using umi3d.cdk.menu.view;
 using umi3d.DesktopBrowser.menu.Displayer;
 using umi3dDesktopBrowser.ui.viewController;
+using UnityEngine;
 
 namespace umi3d.desktopBrowser.menu.Container
 {
@@ -82,6 +83,9 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             if (!m_currentDisplayers.Remove(element))
                 return false;
+
+            if (element is AbstractWindowInputDisplayer displayer)
+                Displayerbox.Remove(displayer.Displayer);
             if (updateDisplay)
                 Display(true);
 
