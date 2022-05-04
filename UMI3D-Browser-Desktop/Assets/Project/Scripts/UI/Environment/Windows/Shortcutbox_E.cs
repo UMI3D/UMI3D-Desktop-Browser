@@ -29,9 +29,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected static List<Shortcut_E> s_shortcutsWaited;
         protected static KeyBindings_SO s_keyBindings;
 
-        private static string s_shortcutboxUXML => "UI/UXML/Shortcuts/shortcutbox";
-        private static string s_shortcutboxStyle => "UI/Style/Shortcuts/Shortcutbox";
-
         private static bool s_isRightClickShortcutAdded { get; set; } = false;
         private static Shortcut_E s_rightClickShortcut;
         private static string s_rightClickTitle { get; set; } = null;
@@ -128,7 +125,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static Shortcutbox_E s_instance;
     }
 
-    public partial class Shortcutbox_E : AbstractWindow_E
+    public partial class Shortcutbox_E : AbstractPinnedWindow_E
     {
         public override void Reset()
         {
@@ -156,8 +153,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            string titleStyle = "UI/Style/Shortcuts/Shortcutbox_Title";
-            SetTopBar("Actions", titleStyle, StyleKeys.DefaultTextAndBackground, false);
+            SetTopBar("Actions");
 
             var scrollView = Root.Q<ScrollView>();
             s_shortcuts = new ScrollView_E(scrollView);
@@ -168,7 +164,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         private Shortcutbox_E() :
-            base(s_shortcutboxUXML, s_shortcutboxStyle, StyleKeys.DefaultBackground)
+            base("UI/UXML/Shortcuts/shortcutbox", "Shortcutbox", StyleKeys.DefaultBackground)
         { }
     }
 }

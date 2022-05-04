@@ -14,37 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using umi3DBrowser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
-    public abstract partial class AbstractWindow_E
+    public partial class AbstractPinnedWindow_E : AbstractWindow_E
     {
-        protected Label_E m_windowTopBar { get; set; } = null;
-
-
-        public virtual void SetTopBar(string name)
-            => UpdateTopBarName(Name);
-
-        public void UpdateTopBarName(string name)
-        {
-            if (m_windowTopBar != null)
-                m_windowTopBar.value = name;
-        }
-    }
-
-    public abstract partial class AbstractWindow_E : View_E
-    {
-        public AbstractWindow_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
+        public AbstractPinnedWindow_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
             base(visualResourcePath, styleResourcePath, keys)
         { }
 
-        protected override CustomStyle_SO GetStyleSO(string resourcePath)
+        public override void SetTopBar(string name)
         {
-            var path = $"UI/Style/Windows/{resourcePath}";
-            return base.GetStyleSO(path);
+            if (m_windowTopBar == null)
+                m_windowTopBar = new Label_E(QR<Label>("windowName"), "Title1", StyleKeys.DefaultTextAndBackground);
+            base.SetTopBar(name);
         }
     }
 }

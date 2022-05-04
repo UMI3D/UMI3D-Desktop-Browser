@@ -220,15 +220,15 @@ namespace umi3dDesktopBrowser.ui.viewController
             s_dialogueBox = Root.Q("dialogueBox");
             AddVisualStyle(s_dialogueBox, s_style, StyleKeys.DefaultBackground, new PopUpManipulator(s_dialogueBox));
 
-            s_title = new Label_E(Root.Q<Label>("title"), "DialogueBox_title", StyleKeys.DefaultText);
-            s_message = new Label_E(Root.Q<Label>("message"), "DialogueBox_message", StyleKeys.DefaultText);
+            s_title = new Label_E(Root.Q<Label>("title"), "Title2", StyleKeys.DefaultText);
+            s_message = new Label_E(Root.Q<Label>("message"), "Corps1", StyleKeys.DefaultText);
 
             VisualElement choiceBox = Root.Q("choiceBox");
             string choiceBoxStyle = "UI/Style/DialogueBox/DialogueBox_choiceBox";
             AddVisualStyle(choiceBox, choiceBoxStyle, null);
 
-            s_choiceA = new Button_E(Root.Q<Button>("choiceA"), "DialogueBox_Choice", StyleKeys.Default);
-            s_choiceB = new Button_E(Root.Q<Button>("choiceB"), "DialogueBox_Choice", StyleKeys.Default);
+            s_choiceA = new Button_E(QR<Button>("choiceA"), "Rectangle1", StyleKeys.Default);
+            s_choiceB = new Button_E(QR<Button>("choiceB"), "Rectangle1", StyleKeys.Default);
 
             s_dialogueBox.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
         }

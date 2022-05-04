@@ -36,8 +36,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected static List<Label_E> s_logDetailWaited;
         protected static Dictionary<Label_E, (string, string, string, LogType)> s_logsMap;
 
-        private static string s_consoleUXML = "UI/UXML/console";
-        private static string s_consoleStyle = "UI/Style/Console/Console";
         private static StyleKeys s_logKeys = new StyleKeys("log", null, "unselected");
         private static StyleKeys s_logKeysSelected = new StyleKeys("log", null, "selected");
         private static StyleKeys s_assertKeys = new StyleKeys("assert", null, "unselected");
@@ -164,10 +162,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static Console_E s_instance;
     }
 
-    public partial class Console_E : AbstractWindow_E
+    public partial class Console_E : AbstractPinnedWindow_E
     {
-        protected override string m_topBarStyle => "UI/Style/Console/Console_Version";
-
         public override void Reset()
         {
             base.Reset();
@@ -193,7 +189,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            SetTopBar("", m_topBarStyle, StyleKeys.DefaultTextAndBackground, false);
+            SetTopBar("");
 
             var logs = Root.Q<ScrollView>("logs");
             s_logs = new ScrollView_E(logs);
@@ -212,7 +208,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         private Console_E() :
-            base(s_consoleUXML, s_consoleStyle, StyleKeys.DefaultBackground)
+            base("UI/UXML/console", "Console", StyleKeys.DefaultBackground)
         { }
     }
 }

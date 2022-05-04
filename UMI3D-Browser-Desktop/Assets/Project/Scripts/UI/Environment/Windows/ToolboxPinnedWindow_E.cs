@@ -23,9 +23,6 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         protected ScrollView_E s_scrollView { get; set; } = null;
 
-        private static string m_windowUXML = "UI/UXML/ToolboxWindow/pinnedToolboxWindow";
-        private static string m_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_window";
-
         public void AddRange(params View_E[] items)
             => s_scrollView.AddRange(items);
     }
@@ -45,19 +42,18 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static ToolboxPinnedWindow_E m_instance;
     }
 
-    public partial class ToolboxPinnedWindow_E : AbstractWindow_E
+    public partial class ToolboxPinnedWindow_E : AbstractDraggableWindow_E
     {
         protected override void Initialize()
         {
             base.Initialize();
 
             StyleKeys iconKeys = new StyleKeys(null, "paramettersWindow", "");
-            SetWindowIcon(m_iconStyle, iconKeys, true);
+            SetWindowIcon(iconKeys);
 
-            SetTopBar("Toolbox", m_topBarStyle, StyleKeys.Default, true);
+            SetTopBar("Toolbox");
 
             SetCloseButton();
-            m_closeButton.UpdateRootStyleAndKeysAndManipulator(m_closeButtonBGStyle, StyleKeys.DefaultBackgroundAndBorder);
             var closeIcon = new View_E(m_closeButtonIconStyle, StyleKeys.DefaultBackground);
             m_closeButton.Add(closeIcon);
             LinkMouseBehaviourChanged(m_closeButton, closeIcon);
@@ -73,7 +69,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         private ToolboxPinnedWindow_E() :
-            base(m_windowUXML, m_windowStyle, StyleKeys.DefaultBackground)
+            base("UI/UXML/ToolboxWindow/pinnedToolboxWindow")
         { }
     }
 }
