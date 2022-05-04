@@ -56,14 +56,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             StyleKeys iconKeys = new StyleKeys(null, "toolboxesWindow", "");
             SetWindowIcon(iconKeys);
-
             SetTopBar("Toolbox");
-
             SetCloseButton();
-            var closeIcon = new View_E(m_closeButtonIconStyle, StyleKeys.DefaultBackground);
-            m_closeButton.Add(closeIcon);
-            LinkMouseBehaviourChanged(m_closeButton, closeIcon);
-            m_closeButton.GetRootManipulator().ProcessDuringBubbleUp = true;
 
             s_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"));
             string dcStyle = "UI/Style/ToolboxWindow/ToolboxWindow_DraggerContainer";
@@ -73,6 +67,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             Button_E unpinned = new Button_E(Root.Q<Button>("unpinnedButton"), "LargeRectangle", StyleKeys.DefaultBackground);
             unpinned.Clicked += OnUnpinnedPressed;
+
+            Root.name = "toolboxWindow";
         }
 
         private ToolboxWindow_E() :

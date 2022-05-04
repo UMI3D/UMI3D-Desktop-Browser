@@ -45,32 +45,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected List<View_E> m_separatorsDisplayed { get; set; } = null;
         protected List<View_E> m_separatorsWaited { get; set; } = null;
-    }
-
-    public partial class ScrollView_E
-    {
-        public ScrollView_E(VisualElement visual) :
-            this(visual, null, null)
-        { }
-        public ScrollView_E(VisualElement visual, string styleResourcePath, StyleKeys keys) : 
-            base(visual, styleResourcePath, keys) 
-        { }
-        public ScrollView_E(string visualResourcePath) :
-            this(visualResourcePath, null, null)
-        { }
-        public ScrollView_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
-            base(visualResourcePath, styleResourcePath, keys) 
-        { }
-        public ScrollView_E(VisualElement parent, string visualResourcePath, string styleResourcePath, StyleKeys keys) : 
-            base(parent, visualResourcePath, styleResourcePath, keys) 
-        { }
-
-        public virtual void AddRange(params View_E[] items)
-        {
-            foreach (View_E item in items)
-                Add(item);
-        }
-
+        
         /// <summary>
         /// Clear the scrollview.
         /// </summary>
@@ -200,6 +175,28 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class ScrollView_E : View_E
     {
+        public ScrollView_E(VisualElement visual) :
+            this(visual, null, null)
+        { }
+        public ScrollView_E(VisualElement visual, string styleResourcePath, StyleKeys keys) :
+            base(visual, styleResourcePath, keys)
+        { }
+        public ScrollView_E(string visualResourcePath) :
+            this(visualResourcePath, null, null)
+        { }
+        public ScrollView_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
+            base(visualResourcePath, styleResourcePath, keys)
+        { }
+        public ScrollView_E(VisualElement parent, string visualResourcePath, string styleResourcePath, StyleKeys keys) :
+            base(parent, visualResourcePath, styleResourcePath, keys)
+        { }
+
+        public virtual void AddRange(params View_E[] items)
+        {
+            foreach (View_E item in items)
+                Add(item);
+        }
+
         public override void Add(View_E child)
         {
             base.Add(child);

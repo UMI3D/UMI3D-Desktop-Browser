@@ -29,31 +29,38 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Label_E Timer { get; private set; } = null;
         public Label_E ParticipantCount { get; private set; } = null;
 
-        private static string s_uxml => "UI/UXML/Menus/bottomBar";
-        private static string s_menuStyle => "UI/Style/BottomBar/BottomBar";
-
-        private StyleKeys m_notificationOffKeys = new StyleKeys(null, "off", null);
-        private StyleKeys m_notificationOnKeys = new StyleKeys(null, "on", null);
-        private StyleKeys m_notificationAlertKeys = new StyleKeys(null, "alert", null);
-
-        private StyleKeys m_consoleIconDefaultKeys = new StyleKeys(null, "", null);
-        private StyleKeys m_consoleIconLogKeys = new StyleKeys(null, "log", null);
-        private StyleKeys m_consoleIconWarningKeys = new StyleKeys(null, "warning", null);
-        private StyleKeys m_consoleIconErrorKeys = new StyleKeys(null, "error", null);
-
-        private StyleKeys m_settingsOffKeys = new StyleKeys(null, "off", null);
-        private StyleKeys m_settingsOnKeys = new StyleKeys(null, "on", null);
-        private StyleKeys m_settingsIconKeys = new StyleKeys(null, "", null);
+        private static StyleKeys s_consoleDefaultKeys = StyleKeys.Bg("consoleDefault");
+        private static StyleKeys s_consoleLogKeys = StyleKeys.Bg("consoleLog");
+        private static StyleKeys s_consoleWarningKeys = StyleKeys.Bg("consoleWarning");
+        private static StyleKeys s_consoleErrorKeys = StyleKeys.Bg("consoleError");
 
         public void OpenCloseMenuBar(bool value)
             => MenuShortcut.value = (value) ? "Right Click / Escape - Close Menu" : "Right Click / Escape - Open Menu";
         public void OpenCloseShortcut(bool value)
             => ShortcutShortcut.value = (value) ? "F1 - Close Actions Shortcuts" : "F1 - Open Actions Shortcuts";
 
-        public void UpdateOnOffNotificationIcon(bool value)
-            => Console.UpdateRootKeys((value) ? m_notificationOnKeys : m_notificationOffKeys);
-        public void UpdateAlertNotificationIcon()
-            => Console.UpdateRootKeys(m_notificationAlertKeys);
+        public void UpdateConsole(LogType type)
+        {
+            if (Console_E.Instance.IsDisplaying)
+                return;
+
+            switch (type)
+            {
+                case LogType.Error:
+                case LogType.Exception:
+                    Console.Q<Icon_E>().UpdateRootKeys(s_consoleErrorKeys);
+                    break;
+                case LogType.Assert:
+                case LogType.Warning:
+                    Console.Q<Icon_E>().UpdateRootKeys(s_consoleWarningKeys);
+                    break;
+                case LogType.Log:
+                    Console.Q<Icon_E>().UpdateRootKeys(s_consoleLogKeys);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     public partial class BottomBar_E : ISingleUI
@@ -76,7 +83,7 @@ namespace umi3dDesktopBrowser.ui.viewController
     public partial class BottomBar_E : View_E
     {
         private BottomBar_E() :
-            base(s_uxml, s_menuStyle, StyleKeys.DefaultBackground)
+            base("UI/UXML/Menus/bottomBar", "UI/Style/BottomBar/BottomBar", StyleKeys.DefaultBackground)
         { }
 
         public override void Reset()
@@ -94,9 +101,10 @@ namespace umi3dDesktopBrowser.ui.viewController
             Timer = new Label_E(QR<Label>("timer"), "BottomBar_rightLabel", StyleKeys.DefaultText, "00:00:00");
             ParticipantCount = new Label_E(QR<Label>("participantCount"), "BottomBar_rightLabel", StyleKeys.DefaultText);
 
-            Console = new Button_E(Root.Q<Button>("notification"), "Square1", StyleKeys.DefaultBackground);
-            string consoleIconStyle = "UI/Style/BottomBar/ConsoleIcon";
-            var consoleIcon = new View_E(consoleIconStyle, m_consoleIconDefaultKeys);
+            Console = new Button_E(Root.Q<Button>("console"), "Square1", StyleKeys.DefaultBackground);
+            Console.Toggle(false);
+            Console.AddStateKeys(Console, "Square1", StyleKeys.Bg("on"), StyleKeys.Bg("off"));
+            var consoleIcon = new Icon_E("Square1", s_consoleDefaultKeys);
             Console.Add(consoleIcon);
             LinkMouseBehaviourChanged(Console, consoleIcon);
             Console.GetRootManipulator().ProcessDuringBubbleUp = true;
@@ -104,8 +112,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             Settings = new Button_E(Root.Q<Button>("settings"));
             Settings.Toggle(false);
             Settings.AddStateKeys(Settings, "Square1", StyleKeys.Bg("on"), StyleKeys.Bg("off"));
-            string settingsIconStyle = "UI/Style/BottomBar/SettingsIcon";
-            var settingsIcon = new View_E(settingsIconStyle, m_settingsIconKeys);
+            var settingsIcon = new Icon_E("Square1", StyleKeys.Bg("settings"));
             Settings.Add(settingsIcon);
             LinkMouseBehaviourChanged(Settings, settingsIcon);
             Settings.GetRootManipulator().ProcessDuringBubbleUp = true;

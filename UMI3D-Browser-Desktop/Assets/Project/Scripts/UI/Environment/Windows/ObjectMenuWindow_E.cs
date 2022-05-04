@@ -51,14 +51,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             StyleKeys iconKeys = new StyleKeys(null, "objectMenu", "");
             SetWindowIcon(iconKeys);
-
             SetTopBar("Object Menu");
-
             SetCloseButton();
-            var closeIcon = new View_E(m_closeButtonIconStyle, StyleKeys.DefaultBackground);
-            m_closeButton.Add(closeIcon);
-            LinkMouseBehaviourChanged(m_closeButton, closeIcon);
-            m_closeButton.GetRootManipulator().ProcessDuringBubbleUp = true;
 
             s_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"));
             string dcStyle = "UI/Style/ToolboxWindow/ToolboxWindow_DraggerContainer";

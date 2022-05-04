@@ -27,8 +27,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Button_E Mic { get; private set; } = null;
         public Button_E LeaveButton { get; private set; } = null;
 
-        private static string s_buttonIconStyle = "UI/Style/Settings/Icons";
-
         private IEnumerator DisplayWithoutAnimation()
         {
             yield return new WaitUntil(() => Root.resolvedStyle.width > 0f);
@@ -102,12 +100,10 @@ namespace umi3dDesktopBrowser.ui.viewController
             static Button_E SetButton(string on, string off)
             {
                 var button = new Button_E("Square", StyleKeys.DefaultBackgroundAndBorder);
-                var icon = new View_E();
+                var icon = new Icon_E();
                 button.Add(icon);
                 button.Toggle(true);
-                StyleKeys onKeys = new StyleKeys(null, on, null);
-                StyleKeys offKeys = new StyleKeys(null, off, null);
-                button.AddStateKeys(icon, s_buttonIconStyle, onKeys, offKeys);
+                button.AddStateKeys(icon, "Square2", StyleKeys.Bg(on), StyleKeys.Bg(off));
                 LinkMouseBehaviourChanged(button, icon);
                 button.GetRootManipulator().ProcessDuringBubbleUp = true;
 

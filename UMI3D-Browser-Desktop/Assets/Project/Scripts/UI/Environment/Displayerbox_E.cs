@@ -25,7 +25,7 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         public Func<View_E> CreateSeparator { get; set; } = null;
 
-        private static VisualElement m_displayerbox
+        private static VisualElement s_displayerbox
         {
             get
             {
@@ -80,12 +80,11 @@ namespace umi3dDesktopBrowser.ui.viewController
     public partial class Displayerbox_E : View_E
     {
         public Displayerbox_E(DisplayerboxType type) :
-            base(m_displayerbox, GetDisplayerboxType(type), StyleKeys.DefaultBackgroundAndBorder)
+            base(s_displayerbox, GetDisplayerboxType(type), StyleKeys.DefaultBackgroundAndBorder)
         {
-            string separatorStyle = "UI/Style/Displayers/DisplayerSeparator";
             CreateSeparator = () =>
             {
-                var separator = new View_E(separatorStyle, StyleKeys.DefaultBackground);
+                var separator = new Icon_E("SeparatorHorizontal", StyleKeys.DefaultBackground);
                 separator.Root.name = "displayerSeparator";
                 return separator;
             };
