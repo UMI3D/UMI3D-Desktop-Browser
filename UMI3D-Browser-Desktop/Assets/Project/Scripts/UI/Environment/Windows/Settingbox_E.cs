@@ -27,8 +27,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Button_E Mic { get; private set; } = null;
         public Button_E LeaveButton { get; private set; } = null;
 
-        private static string s_uxml = "UI/UXML/settingbox";
-        private static string s_style = "UI/Style/Settings/Settingbox";
         private static string s_buttonIconStyle = "UI/Style/Settings/Icons";
 
         private IEnumerator DisplayWithoutAnimation()
@@ -68,7 +66,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static Settingbox_E s_instance;
     }
 
-    public partial class Settingbox_E : AbstractWindow_E
+    public partial class Settingbox_E : AbstractPinnedWindow_E
     {
         public override void Reset()
         {
@@ -98,7 +96,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            SetTopBar("Options", m_topBarStyle, StyleKeys.DefaultTextAndBackground, false);
+            SetTopBar("Options");
 
             var buttonbox = Root.Q("buttonbox");
             static Button_E SetButton(string on, string off)
@@ -127,7 +125,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         private Settingbox_E() :
-            base(s_uxml, s_style, StyleKeys.DefaultBackground)
+            base("UI/UXML/settingbox", "Settingbox", StyleKeys.DefaultBackground)
         { }
     }
 }
