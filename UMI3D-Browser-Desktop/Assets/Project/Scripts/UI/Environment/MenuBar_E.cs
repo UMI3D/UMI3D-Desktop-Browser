@@ -40,6 +40,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static string m_menuStyle => "UI/Style/Menus/Menus";
         private static string m_separatorStyle => "UI/Style/MenuBar/Separator";
         private static StyleKeys m_separatorKeys => StyleKeys.DefaultBackground;
+        public static bool AreThereToolboxes { get; set; } = false;
 
         #region Pin Unpin
         public event Action<bool, Menu> OnPinnedUnpinned;
@@ -47,9 +48,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         public void PinUnpin(bool value, Menu menu)
             => OnPinnedUnpinned?.Invoke(value, menu);
         #endregion
-
-        public void DisplayToolboxButton(bool value)
-            => leftLayout_VE.style.display = (value) ? DisplayStyle.Flex : DisplayStyle.None;
 
         public void DisplaySubMenu(bool value)
             => SubMenuLayout.style.display = (value) ? DisplayStyle.Flex : DisplayStyle.None;
@@ -133,6 +131,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void Display()
         {
+            if (!AreThereToolboxes)
+                return;
             UIManager.StartCoroutine(AnimeWindowVisibility(true));
             IsDisplaying = true;
             OnDisplayedOrHiddenTrigger(true);
@@ -195,8 +195,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             AddVisualStyle(forwardSeparator, m_separatorStyle, m_separatorKeys);
 
             #endregion
-
-            DisplayToolboxButton(false);
         }
 
         protected void AddSeparator(VisualElement layout)
