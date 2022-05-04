@@ -35,25 +35,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected StyleKeys m_menuCheckmarkKeys { get; set; } = null;
         protected string m_menuLabelStyle { get; set; } = null;
         protected StyleKeys m_menuLabelKeys { get; set; } = null;
-    }
-
-    public partial class Dropdown_E
-    {
-        public Dropdown_E(string styleResourcePath, StyleKeys keys) :
-            this(styleResourcePath, keys, new List<string>())
-        { }
-        public Dropdown_E(string styleResourcePath, StyleKeys keys, List<string> items) :
-            this(new Button(), styleResourcePath, keys, items)
-        { }
-        public Dropdown_E(Button button, string styleResourcePath, StyleKeys keys) :
-            this(button, styleResourcePath, keys, new List<string>())
-        { }
-        public Dropdown_E(Button button, string styleResourcePath, StyleKeys keys, List<string> items) :
-            base(button, styleResourcePath, keys)
-        {
-            m_items = items;
-        }
-
+    
         public void SetMenuStyle(string styleResourcePath, StyleKeys keys)
         {
             m_menuStyle = GetStyleSO(styleResourcePath);
@@ -137,6 +119,21 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class Dropdown_E : Button_E
     {
+        public Dropdown_E(string styleResourcePath, StyleKeys keys) :
+            this(styleResourcePath, keys, new List<string>())
+        { }
+        public Dropdown_E(string styleResourcePath, StyleKeys keys, List<string> items) :
+            this(new Button(), styleResourcePath, keys, items)
+        { }
+        public Dropdown_E(Button button, string styleResourcePath, StyleKeys keys) :
+            this(button, styleResourcePath, keys, new List<string>())
+        { }
+        public Dropdown_E(Button button, string styleResourcePath, StyleKeys keys, List<string> items) :
+            base(button, styleResourcePath, keys)
+        {
+            m_items = items;
+        }
+
         protected override void Initialize()
         {
             base.Initialize();

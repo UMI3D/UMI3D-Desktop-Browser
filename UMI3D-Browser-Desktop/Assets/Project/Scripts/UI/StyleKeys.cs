@@ -37,6 +37,13 @@ namespace umi3dDesktopBrowser.ui.viewController
         public string BackgroundStyleKey { get; private set; } = null;
         public string BorderStyleKey { get; private set; } = null;
 
+        public static StyleKeys Text(string text) => new StyleKeys(text, null, null);
+        public static StyleKeys Bg(string bg) => new StyleKeys(null, bg, null);
+        public static StyleKeys Border(string border) => new StyleKeys(null, null, border);
+        public static StyleKeys Text_Bg(string value) => new StyleKeys(value, value, null);
+        public static StyleKeys Text_Border(string value) => new StyleKeys(value, null, value);
+        public static StyleKeys Bg_Border(string value) => new StyleKeys(null, value, value);
+
         public StyleKeys(string textStyle, string backgroundStyle, string borderStyle)
         {
             TextStyleKey = textStyle;

@@ -273,7 +273,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         /// <param name="resourcePath"></param>
         /// <returns></returns>
-        protected CustomStyle_SO GetStyleSO(string resourcePath)
+        protected virtual CustomStyle_SO GetStyleSO(string resourcePath)
         {
             if (resourcePath == "") throw new Exception("resourcePath empty");
             if (resourcePath == null) return null;

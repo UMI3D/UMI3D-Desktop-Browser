@@ -51,9 +51,9 @@ namespace umi3dDesktopBrowser.ui.viewController
             => ShortcutShortcut.value = (value) ? "F1 - Close Actions Shortcuts" : "F1 - Open Actions Shortcuts";
 
         public void UpdateOnOffNotificationIcon(bool value)
-            => Console.UpdateButtonKeys((value) ? m_notificationOnKeys : m_notificationOffKeys);
+            => Console.UpdateRootKeys((value) ? m_notificationOnKeys : m_notificationOffKeys);
         public void UpdateAlertNotificationIcon()
-            => Console.UpdateButtonKeys(m_notificationAlertKeys);
+            => Console.UpdateRootKeys(m_notificationAlertKeys);
     }
 
     public partial class BottomBar_E : ISingleUI
@@ -103,21 +103,16 @@ namespace umi3dDesktopBrowser.ui.viewController
             var participantCount = Root.Q<Label>("participantCount");
             ParticipantCount = new Label_E(participantCount, rightLabelsStyle, labelsKeys);
 
-            var console = Root.Q<Button>("notification");
-            string consoleStyle = "UI/Style/BottomBar/Console";
-            Console = new Button_E(console, consoleStyle, StyleKeys.DefaultBackground);
+            Console = new Button_E(Root.Q<Button>("notification"), "Square1", StyleKeys.DefaultBackground);
             string consoleIconStyle = "UI/Style/BottomBar/ConsoleIcon";
             var consoleIcon = new View_E(consoleIconStyle, m_consoleIconDefaultKeys);
             Console.Add(consoleIcon);
             LinkMouseBehaviourChanged(Console, consoleIcon);
             Console.GetRootManipulator().ProcessDuringBubbleUp = true;
 
-            var settings = Root.Q<Button>("settings");
-            Settings = new Button_E(settings);
-            //settings.clicked += 
+            Settings = new Button_E(Root.Q<Button>("settings"));
             Settings.Toggle(false);
-            string settingsStyle = "UI/Style/BottomBar/Settings";
-            Settings.AddStateKeys(Settings, settingsStyle, m_settingsOnKeys, m_settingsOffKeys);
+            Settings.AddStateKeys(Settings, "Square1", StyleKeys.Bg("on"), StyleKeys.Bg("off"));
             string settingsIconStyle = "UI/Style/BottomBar/SettingsIcon";
             var settingsIcon = new View_E(settingsIconStyle, m_settingsIconKeys);
             Settings.Add(settingsIcon);

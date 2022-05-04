@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
-  m_Name: ToolboxWindow_Item_PinButton
+  m_Name: Square
   m_EditorClassIdentifier: 
   AppliesFormatAndStyle:
     m_PersistentCalls:
@@ -22,12 +22,12 @@ MonoBehaviour:
   m_size:
     m_height:
       m_keyword: 10
-      m_valueMode: 1
-      m_value: 71
+      m_valueMode: 0
+      m_value: 32
     m_width:
       m_keyword: 10
       m_valueMode: 0
-      m_value: 30
+      m_value: 32
     m_maxHeight:
       m_keyword: 0
       m_valueMode: 0
@@ -48,11 +48,11 @@ MonoBehaviour:
     m_margin:
       m_keyword: 11
       m_value:
-        m_global: 0
-        m_bottom: 0
-        m_left: 0
-        m_right: 0
-        m_top: 0
+        m_global: 10
+        m_bottom: 10
+        m_left: 10
+        m_right: 10
+        m_top: 10
     m_padding:
       m_keyword: 0
       m_value:
@@ -78,55 +78,17 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_textAlign: 0
+    m_textWrapping: 0
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle: []
     m_background:
-    - m_key: PinnedEnable
+    - m_key: 
       m_default:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 21
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_image:
-            m_keyword: 0
-            m_value: {fileID: 21300000, guid: 441051e6607fd954688e2839a15a597b, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-      m_mouseOver:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 21
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_image:
-            m_keyword: 0
-            m_value: {fileID: -1717481766539218145, guid: f2c33038eef152746badeaf5a34011c3,
-              type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-      m_mousePressed:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 22
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_image:
-            m_keyword: 0
-            m_value: {fileID: -1011162752776673693, guid: 4b71712b293e6754a8aeddce22fb128c,
-              type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-    - m_key: PinnedActive
-      m_default:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 22
+            m_keyword: 31
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 0
@@ -138,7 +100,7 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 22
+            m_keyword: 30
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 0
@@ -150,7 +112,7 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 21
+            m_keyword: 32
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 0
@@ -159,66 +121,12 @@ MonoBehaviour:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
     m_border:
-    - m_key: PinnedEnable
+    - m_key: 
       m_default:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 2
-            m_value:
-              m_global: {r: 0, g: 0, b: 0, a: 1}
-              m_bottom: {r: 0, g: 0, b: 0, a: 1}
-              m_left: {r: 0, g: 0, b: 0, a: 1}
-              m_right: {r: 0, g: 0, b: 0, a: 1}
-              m_top: {r: 0, g: 0, b: 0, a: 1}
-          m_width:
-            m_keyword: 11
-            m_value:
-              m_global: 2
-              m_bottom: 2
-              m_left: 2
-              m_right: 2
-              m_top: 2
-          m_radius:
-            m_keyword: 11
-            m_value:
-              m_global: 4
-              m_bottomLeft: 4
-              m_bottomRight: 4
-              m_topLeft: 4
-              m_TopRight: 4
-      m_mouseOver:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 2
-            m_value:
-              m_global: {r: 1, g: 1, b: 1, a: 1}
-              m_bottom: {r: 1, g: 1, b: 1, a: 1}
-              m_left: {r: 1, g: 1, b: 1, a: 1}
-              m_right: {r: 1, g: 1, b: 1, a: 1}
-              m_top: {r: 1, g: 1, b: 1, a: 1}
-          m_width:
-            m_keyword: 11
-            m_value:
-              m_global: 2
-              m_bottom: 2
-              m_left: 2
-              m_right: 2
-              m_top: 2
-          m_radius:
-            m_keyword: 11
-            m_value:
-              m_global: 4
-              m_bottomLeft: 4
-              m_bottomRight: 4
-              m_topLeft: 4
-              m_TopRight: 4
-      m_mousePressed:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 22
+            m_keyword: 30
             m_value:
               m_global: {r: 0, g: 0, b: 0, a: 0}
               m_bottom: {r: 0, g: 0, b: 0, a: 0}
@@ -228,39 +136,11 @@ MonoBehaviour:
           m_width:
             m_keyword: 11
             m_value:
-              m_global: 2
-              m_bottom: 2
-              m_left: 2
-              m_right: 2
-              m_top: 2
-          m_radius:
-            m_keyword: 11
-            m_value:
-              m_global: 4
-              m_bottomLeft: 4
-              m_bottomRight: 4
-              m_topLeft: 4
-              m_TopRight: 4
-    - m_key: PinnedActive
-      m_default:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 22
-            m_value:
-              m_global: {r: 0, g: 0, b: 0, a: 0}
-              m_bottom: {r: 0, g: 0, b: 0, a: 0}
-              m_left: {r: 0, g: 0, b: 0, a: 0}
-              m_right: {r: 0, g: 0, b: 0, a: 0}
-              m_top: {r: 0, g: 0, b: 0, a: 0}
-          m_width:
-            m_keyword: 0
-            m_value:
-              m_global: 0
-              m_bottom: 0
-              m_left: 0
-              m_right: 0
-              m_top: 0
+              m_global: 1
+              m_bottom: 1
+              m_left: 1
+              m_right: 1
+              m_top: 1
           m_radius:
             m_keyword: 0
             m_value:
@@ -273,7 +153,7 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 31
             m_value:
               m_global: {r: 0, g: 0, b: 0, a: 0}
               m_bottom: {r: 0, g: 0, b: 0, a: 0}
@@ -300,7 +180,7 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 32
             m_value:
               m_global: {r: 0, g: 0, b: 0, a: 0}
               m_bottom: {r: 0, g: 0, b: 0, a: 0}

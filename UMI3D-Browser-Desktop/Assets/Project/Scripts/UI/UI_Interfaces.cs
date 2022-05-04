@@ -34,16 +34,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         public void OnClicked();
     }
 
-    public interface IButtonCustomisableElement : IClickableElement
-    {
-        public Button_E Button { get; }
-
-        public void SetButton(string styleResourcePath, StyleKeys keys, Action clicked = null);
-        public void SetButton(VisualElement button, string styleResourcePath, StyleKeys keys, Action clicked = null);
-        public void UpdateButtonStyle(string styleResourcePath, StyleKeys keys);
-        public void UpdateButtonKeys(StyleKeys keys);
-    }
-
     public interface IHoldableElement
     {
         public event Action ClickedDown;
@@ -54,18 +44,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         public void OnClickedUp();
         public void SetHoldableButton();
         public void UnSetHoldableButton();
-    }
-
-    public interface IIconCustomisableElement
-    {
-        public View_E Icon { get; }
-
-        public void AddIcon(VisualElement parent);
-        public void AddIcon(VisualElement parent, string styleResourcePath, StyleKeys keys);
-        public void SetIcon(string styleResourcePath, StyleKeys keys);
-        public void SetIcon(VisualElement icon, string styleResourcePath, StyleKeys keys);
-        public void UpdateIconStyle(string styleResourcePath, StyleKeys keys);
-        public void UpdateIconKeys(StyleKeys keys);
     }
 
     public interface IStateCustomisableElement

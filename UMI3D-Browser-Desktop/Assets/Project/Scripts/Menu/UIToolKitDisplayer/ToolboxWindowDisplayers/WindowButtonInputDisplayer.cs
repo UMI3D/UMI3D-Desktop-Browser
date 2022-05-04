@@ -46,8 +46,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             InitAndBindUI();
             if (menu is ButtonMenuItem buttonMenu)
             {
-                string buttonStylePath = "UI/Style/Displayers/InputButton";
-                m_button = new Button_E(Displayer.Root.Q<Button>(), buttonStylePath, StyleKeys.DefaultTextAndBackground);
+                m_button = new Button_E(Displayer.Root.Q<Button>(), "Rectangle", StyleKeys.DefaultTextAndBackground);
                 m_button.Text = menu.Name;
                 Displayer.Add(m_button);
 
@@ -55,8 +54,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             }
             else if (menu is EventMenuItem eventMenu)
             {
-                string buttonStylePath = "UI/Style/Displayers/InputButton";
-                m_button = new Button_E(Displayer.Root.Q<Button>(), buttonStylePath, StyleKeys.DefaultTextAndBackground);
+                m_button = new Button_E(Displayer.Root.Q<Button>(), "Rectangle", StyleKeys.DefaultTextAndBackground);
                 m_button.Text = menu.Name;
                 Displayer.Add(m_button);
 
@@ -64,8 +62,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             }
             else if (menu is HoldableButtonMenuItem holdableButtonMenu)
             {
-                string buttonStylePath = "UI/Style/Displayers/InputButton";
-                m_button = new Button_E(Displayer.Root.Q<Button>(), buttonStylePath, StyleKeys.DefaultTextAndBackground);
+                m_button = new Button_E(Displayer.Root.Q<Button>(), "Rectangle", StyleKeys.DefaultTextAndBackground);
                 m_button.Text = menu.Name;
                 Displayer.Add(m_button);
 
@@ -74,10 +71,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             }
             else if (menu is BooleanInputMenuItem toggleMenu)
             {
-                string toggleStylePath = "UI/Style/Displayers/InputToggle";
-                StyleKeys toggleOnKeys = new StyleKeys(null, "toggleOn", null);
-                StyleKeys toggleOffKeys = new StyleKeys(null, "toggleOff", null);
-                m_button = new Button_E(Displayer.Root.Q<Button>(), toggleStylePath, toggleOnKeys, toggleOffKeys, toggleMenu.GetValue());
+                m_button = new Button_E(Displayer.Root.Q<Button>(), "Toggle", StyleKeys.Bg("on"), StyleKeys.Bg("off"), toggleMenu.GetValue());
                 m_button.Text = null;
                 Displayer.Add(m_button);
 
