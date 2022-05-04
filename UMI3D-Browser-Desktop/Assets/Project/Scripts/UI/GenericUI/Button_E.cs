@@ -43,31 +43,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected Button m_button => (Button)Root;
     }
 
-    public partial class Button_E
-    {
-        public Button_E() :
-            this(new Button())
-        { }
-        public Button_E(Button button) :
-            this(button, null, null)
-        { }
-        public Button_E(string styleResourcePath, StyleKeys keys) :
-            this(new Button(), styleResourcePath, keys)
-        { }
-        public Button_E(Button button, string styleResourcePath, StyleKeys keys) :
-            this(button, styleResourcePath, keys, keys, true)
-        { }
-        public Button_E(string styleResourcePath, StyleKeys onKeys, StyleKeys offKeys, bool isOn = false) :
-            this(new Button(), styleResourcePath, onKeys, offKeys, isOn)
-        { }
-        public Button_E(Button button, string styleResourcePath, StyleKeys onKeys, StyleKeys offKeys, bool isOn = false) :
-            base(button, styleResourcePath, (isOn) ? onKeys : offKeys)
-        {
-            IsOn = isOn;
-            AddStateKeys(Button, styleResourcePath, onKeys, offKeys);
-        }
-    }
-
     public partial class Button_E : IStateCustomisableElement
     {
         public bool IsOn { get; protected set; } = false;
@@ -120,7 +95,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
     }
 
-    public partial class Button_E : IButtonCustomisableElement
+    public partial class Button_E : IClickableElement
     {
         public event Action Clicked;
         public Button_E Button => this;
@@ -129,21 +104,32 @@ namespace umi3dDesktopBrowser.ui.viewController
             => Clicked = null;
         public void OnClicked()
             => Clicked?.Invoke();
-        public void SetButton(string styleResourcePath, StyleKeys keys, Action clicked = null)
-        {
-            UpdateButtonStyle(styleResourcePath, keys);
-            Clicked += clicked;
-        }
-        public void SetButton(VisualElement button, string styleResourcePath, StyleKeys keys, Action clicked = null)
-            => throw new Exception("You shouldn't use this method here (see UpdateButton methods)");
-        public void UpdateButtonStyle(string styleResourcePath, StyleKeys keys)
-            => UpdateRootStyleAndKeysAndManipulator(styleResourcePath, keys);
-        public void UpdateButtonKeys(StyleKeys keys)
-            => UpdateRootKeys(keys);
     }
 
     public partial class Button_E : View_E
     {
+        public Button_E() :
+            this(new Button())
+        { }
+        public Button_E(Button button) :
+            this(button, null, null)
+        { }
+        public Button_E(string partialStylePath, StyleKeys keys) :
+            this(new Button(), partialStylePath, keys)
+        { }
+        public Button_E(Button button, string partialStylePath, StyleKeys keys) :
+            this(button, partialStylePath, keys, keys, true)
+        { }
+        public Button_E(string partialStylePath, StyleKeys onKeys, StyleKeys offKeys, bool isOn = false) :
+            this(new Button(), partialStylePath, onKeys, offKeys, isOn)
+        { }
+        public Button_E(Button button, string partialStylePath, StyleKeys onKeys, StyleKeys offKeys, bool isOn = false) :
+            base(button, partialStylePath, (isOn) ? onKeys : offKeys)
+        {
+            IsOn = isOn;
+            AddStateKeys(Button, partialStylePath, onKeys, offKeys);
+        }
+
         public override void Add(View_E child)
         {
             base.Add(child);
@@ -158,6 +144,16 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Remove(view);
             view.RemoveRootFromHierarchy();
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            m_button.clicked -= OnClicked;
+
+            Clicked = null;
+            ClickedDown = null;
+            ClickedUp = null;
         }
 
         protected override void Initialize()
@@ -177,14 +173,10 @@ namespace umi3dDesktopBrowser.ui.viewController
             StateKeys = new Dictionary<View_E, (StyleKeys, StyleKeys)>();
         }
 
-        public override void Reset()
+        protected override CustomStyle_SO GetStyleSO(string resourcePath)
         {
-            base.Reset();
-            m_button.clicked -= OnClicked;
-
-            Clicked = null;
-            ClickedDown = null;
-            ClickedUp = null;
+            var path = $"UI/Style/Buttons{resourcePath}";
+            return base.GetStyleSO(path);
         }
 
         protected override void ApplyStyle(CustomStyle_SO styleSO, StyleKeys keys, IStyle style, MouseBehaviour mouseBehaviour)

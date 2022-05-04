@@ -76,9 +76,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             string dStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Dragger";
             s_scrollView.SetVerticalDraggerStyle(dStyle, StyleKeys.DefaultBackgroundAndBorder);
 
-            Button unpinnedButton = Root.Q<Button>("unpinnedButton");
-            string unpinnedButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_UnpinnedButton";
-            Button_E unpinned = new Button_E(unpinnedButton, unpinnedButtonStyle, StyleKeys.DefaultBackground);
+            Button_E unpinned = new Button_E(Root.Q<Button>("unpinnedButton"), "LargeRectangle", StyleKeys.DefaultBackground);
             unpinned.Clicked += OnUnpinnedPressed;
         }
 

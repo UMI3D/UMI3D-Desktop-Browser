@@ -29,7 +29,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         private static string s_uxml = "UI/UXML/settingbox";
         private static string s_style = "UI/Style/Settings/Settingbox";
-        private static string s_buttonStyle = "UI/Style/Settings/Buttons";
         private static string s_buttonIconStyle = "UI/Style/Settings/Icons";
 
         private IEnumerator DisplayWithoutAnimation()
@@ -104,7 +103,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             var buttonbox = Root.Q("buttonbox");
             static Button_E SetButton(string on, string off)
             {
-                var button = new Button_E(s_buttonStyle, StyleKeys.DefaultBackgroundAndBorder);
+                var button = new Button_E("Square", StyleKeys.DefaultBackgroundAndBorder);
                 var icon = new View_E();
                 button.Add(icon);
                 button.Toggle(true);

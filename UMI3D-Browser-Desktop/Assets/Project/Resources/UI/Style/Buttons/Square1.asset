@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
-  m_Name: ToolboxWindow_UnpinnedButton
+  m_Name: Square1
   m_EditorClassIdentifier: 
   AppliesFormatAndStyle:
     m_PersistentCalls:
@@ -23,11 +23,11 @@ MonoBehaviour:
     m_height:
       m_keyword: 10
       m_valueMode: 0
-      m_value: 40
+      m_value: 32
     m_width:
       m_keyword: 10
       m_valueMode: 0
-      m_value: 304
+      m_value: 32
     m_maxHeight:
       m_keyword: 0
       m_valueMode: 0
@@ -78,6 +78,7 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_textAlign: 0
+    m_textWrapping: 0
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle: []
@@ -87,11 +88,11 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 31
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: a92cc949f73b7e6439ad0cf9ef734c86, type: 3}
+            m_keyword: 0
+            m_value: {fileID: 21300000, guid: d82be8471c5362444a3c4d9466210a87, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -99,11 +100,11 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 33
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 84b7c95eaa80d804497d9aa7e62f27cb, type: 3}
+            m_keyword: 0
+            m_value: {fileID: 21300000, guid: 825dee1b5d94e9b4d928af953ffd6ccb, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -111,11 +112,11 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 31
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 576ba31d60fc1894591584e7b2de3897, type: 3}
+            m_keyword: 0
+            m_value: {fileID: 21300000, guid: 3e818dc574ed91646a78ed313202dad3, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}

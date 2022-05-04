@@ -30,7 +30,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static string m_uxmlPath => "UI/UXML/Toolbox/toolboxItem";
         private static string m_menuBarStyle => "UI/Style/MenuBar/MenuBar_ToolboxItem";
         private static string m_windowStyle => "UI/Style/ToolboxWindow/ToolboxWindow_ToolboxItem";
-        private static string m_buttonStyle => "UI/Style/Toolbox/ToolboxItem_Icon";
 
         public void Toggle(bool value)
             => Button?.Toggle(value);
@@ -65,11 +64,11 @@ namespace umi3dDesktopBrowser.ui.viewController
             if (iconOffKey != null)
             {
                 StyleKeys buttonOffKeys = new StyleKeys(null, iconOffKey, null);
-                Button.AddStateKeys(Button, m_buttonStyle, buttonOnKeys, buttonOffKeys);
+                Button.AddStateKeys(Button, "ToolboxItem_Icon", buttonOnKeys, buttonOffKeys);
                 Button.Toggle(isOn);
             }
             else
-                Button.SetButton(m_buttonStyle, buttonOnKeys);
+                Button.UpdateRootStyleAndKeysAndManipulator("ToolboxItem_Icon", buttonOnKeys);
 
             Name = itemName;
             Label.value = itemName;
@@ -89,7 +88,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             StyleKeys onKeys = new StyleKeys(null, (isTool) ? "placeholderToolActive" : "placeholderToolboxActive", null);
             StyleKeys offKeys = new StyleKeys(null, (isTool) ? "placeholderToolEnable" : "placeholderToolboxEnable", null);
-            Button.AddStateKeys(Button, m_buttonStyle, onKeys, offKeys);
+            Button.AddStateKeys(Button, "ToolboxItem_Icon", onKeys, offKeys);
         }
 
         protected override void Initialize()

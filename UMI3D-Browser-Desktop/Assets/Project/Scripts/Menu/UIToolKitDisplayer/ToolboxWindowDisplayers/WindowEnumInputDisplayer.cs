@@ -46,8 +46,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             InitAndBindUI();
             if (menu is DropDownInputMenuItem dropdownMenu)
             {
-                string dropdownStyle = "UI/Style/Displayers/InputDropdown";
-                m_dropdown = new Dropdown_E(Displayer.Root.Q<Button>(), dropdownStyle, StyleKeys.Default);
+                m_dropdown = new Dropdown_E(Displayer.Root.Q<Button>(), "Rectangle2", StyleKeys.Default);
                 string dropdownMenuStyle = "UI/Style/Displayers/DropdownMenu";
                 m_dropdown.SetMenuStyle(dropdownMenuStyle, StyleKeys.DefaultBackground);
                 string dropdownMenuLabelStyle = "UI/Style/Displayers/DropdownMenuItemLabel";

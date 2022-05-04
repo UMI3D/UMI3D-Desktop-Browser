@@ -232,11 +232,10 @@ namespace umi3dDesktopBrowser.ui.viewController
             string choiceBoxStyle = "UI/Style/DialogueBox/DialogueBox_choiceBox";
             AddVisualStyle(choiceBox, choiceBoxStyle, null);
 
-            string choiceStyle = "UI/Style/DialogueBox/DialogueBox_Choice";
             Button choiceA = Root.Q<Button>("choiceA");
-            s_choiceA = new Button_E(choiceA, choiceStyle, StyleKeys.Default);
+            s_choiceA = new Button_E(choiceA, "DialogueBox_Choice", StyleKeys.Default);
             Button choiceB = Root.Q<Button>("choiceB");
-            s_choiceB = new Button_E(choiceB, choiceStyle, StyleKeys.Default);
+            s_choiceB = new Button_E(choiceB, "DialogueBox_Choice", StyleKeys.Default);
 
             s_dialogueBox.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
         }
