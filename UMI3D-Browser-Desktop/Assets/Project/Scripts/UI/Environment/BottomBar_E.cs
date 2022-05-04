@@ -88,20 +88,11 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected override void Initialize()
         {
             base.Initialize();
-            
-            string leftLabelsStyle = "UI/Style/BottomBar/BottomBar_LeftLabel";
-            string rightLabelsStyle = "UI/Style/BottomBar/BottomBar_rightLabel";
-            StyleKeys labelsKeys = StyleKeys.DefaultText;
 
-            var menuShortcut = Root.Q<Label>("menuShortcut");
-            MenuShortcut = new Label_E(menuShortcut, leftLabelsStyle, labelsKeys, "Right Click - Open Menu");
-            var shortcutShortcut = Root.Q<Label>("shortcutShortcut");
-            ShortcutShortcut = new Label_E(shortcutShortcut, leftLabelsStyle, labelsKeys, "F1 - Open Actions Shortcuts");
-
-            var timer = Root.Q<Label>("timer");
-            Timer = new Label_E(timer, rightLabelsStyle, labelsKeys, "00:00:00");
-            var participantCount = Root.Q<Label>("participantCount");
-            ParticipantCount = new Label_E(participantCount, rightLabelsStyle, labelsKeys);
+            MenuShortcut = new Label_E(QR<Label>("menuShortcut"), "BottomBar_LeftLabel", StyleKeys.DefaultText, "Right Click - Open Menu");
+            ShortcutShortcut = new Label_E(QR<Label>("shortcutShortcut"), "BottomBar_LeftLabel", StyleKeys.DefaultText, "F1 - Open Actions Shortcuts");
+            Timer = new Label_E(QR<Label>("timer"), "BottomBar_rightLabel", StyleKeys.DefaultText, "00:00:00");
+            ParticipantCount = new Label_E(QR<Label>("participantCount"), "BottomBar_rightLabel", StyleKeys.DefaultText);
 
             Console = new Button_E(Root.Q<Button>("notification"), "Square1", StyleKeys.DefaultBackground);
             string consoleIconStyle = "UI/Style/BottomBar/ConsoleIcon";

@@ -95,8 +95,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            string labelStyle = "UI/Style/Toolbox/ToolboxItem_Label";
-            Label = new Label_E(Root.Q<Label>(), labelStyle, StyleKeys.DefaultText);
+            Label = new Label_E(QR<Label>(), "Label", StyleKeys.DefaultText);
             
             Button = new Button_E(Root.Q<Button>());
             Button.Clicked += OnClicked;

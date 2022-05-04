@@ -175,7 +175,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected override CustomStyle_SO GetStyleSO(string resourcePath)
         {
-            var path = $"UI/Style/Buttons{resourcePath}";
+            var path = $"UI/Style/Buttons/{resourcePath}";
             return base.GetStyleSO(path);
         }
 
