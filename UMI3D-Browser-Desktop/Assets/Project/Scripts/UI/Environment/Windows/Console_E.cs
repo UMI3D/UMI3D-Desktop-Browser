@@ -50,6 +50,18 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         #region Private Methods
 
+        private IEnumerator DisplayWithoutAnimation()
+        {
+            yield return new WaitUntil(() => Root.resolvedStyle.width > 0f);
+            Root.style.right = 0;
+        }
+
+        private IEnumerator HideWithoutAnimation()
+        {
+            yield return new WaitUntil(() => Root.resolvedStyle.width > 0f);
+            Root.style.right = -Root.resolvedStyle.width;
+        }
+
         private void HandleLog(string logString, string stackTrace, LogType type)
         {
             if (type == LogType.Warning)
@@ -127,14 +139,14 @@ namespace umi3dDesktopBrowser.ui.viewController
             }
         }
 
-        private IEnumerator AnimeWindowVisibility(bool state)
-        {
-            yield return new WaitUntil(() => Root.resolvedStyle.width > 0f);
-            Anime(Root, -Root.resolvedStyle.width, 0, 100, state, (elt, val) =>
-            {
-                elt.style.right = val;
-            });
-        }
+        //private IEnumerator AnimeWindowVisibility(bool state)
+        //{
+        //    yield return new WaitUntil(() => Root.resolvedStyle.width > 0f);
+        //    Anime(Root, -Root.resolvedStyle.width, 0, 100, state, (elt, val) =>
+        //    {
+        //        elt.style.right = val;
+        //    });
+        //}
 
         #endregion
     }
@@ -166,14 +178,15 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void Display()
         {
-            UIManager.StartCoroutine(AnimeWindowVisibility(true));
+            UIManager.StartCoroutine(DisplayWithoutAnimation());
+            Settingbox_E.Instance.Hide();
             IsDisplaying = true;
             OnDisplayedOrHiddenTrigger(true);
         }
 
         public override void Hide()
         {
-            UIManager.StartCoroutine(AnimeWindowVisibility(false));
+            UIManager.StartCoroutine(HideWithoutAnimation());
             IsDisplaying = false;
             OnDisplayedOrHiddenTrigger(false);
         }

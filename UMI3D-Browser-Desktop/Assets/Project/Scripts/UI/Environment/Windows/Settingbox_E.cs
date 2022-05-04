@@ -32,14 +32,26 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static string s_buttonStyle = "UI/Style/Settings/Buttons";
         private static string s_buttonIconStyle = "UI/Style/Settings/Icons";
 
-        private IEnumerator AnimeWindowVisibility(bool state)
+        private IEnumerator DisplayWithoutAnimation()
         {
             yield return new WaitUntil(() => Root.resolvedStyle.width > 0f);
-            Anime(Root, -Root.resolvedStyle.width, 0, 100, state, (elt, val) =>
-            {
-                elt.style.right = val;
-            }); 
+            Root.style.right = 0;
         }
+
+        private IEnumerator HideWithoutAnimation()
+        {
+            yield return new WaitUntil(() => Root.resolvedStyle.width > 0f);
+            Root.style.right = -Root.resolvedStyle.width;
+        }
+
+        //private IEnumerator AnimeWindowVisibility(bool state)
+        //{
+        //    yield return new WaitUntil(() => Root.resolvedStyle.width > 0f);
+        //    Anime(Root, -Root.resolvedStyle.width, 0, 100, state, (elt, val) =>
+        //    {
+        //        elt.style.right = val;
+        //    }); 
+        //}
     }
 
     public partial class Settingbox_E : ISingleUI
@@ -70,14 +82,15 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void Display()
         {
-            UIManager.StartCoroutine(AnimeWindowVisibility(true));
+            UIManager.StartCoroutine(DisplayWithoutAnimation());
+            Console_E.Instance.Hide();
             IsDisplaying = true;
             OnDisplayedOrHiddenTrigger(true);
         }
 
         public override void Hide()
         {
-            UIManager.StartCoroutine(AnimeWindowVisibility(false));
+            UIManager.StartCoroutine(HideWithoutAnimation());
             IsDisplaying = false;
             OnDisplayedOrHiddenTrigger(false);
         }
