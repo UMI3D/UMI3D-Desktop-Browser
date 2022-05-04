@@ -21,17 +21,14 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class ToolboxWindowItem_E
     {
-        public event Action<bool> OnPinnedUnpinned;
+        public event Action<bool> PinnedOrUnpinned;
 
         public Button_E PinButton { get; private set; } = null;
         public Toolbox_E FirstToolbox { get; private set; } = null;
 
         private VisualElement m_toolboxesContainer { get; set; } = null;
         private VisualElement m_displayersContainer { get; set; } = null;
-    }
-
-    public partial class ToolboxWindowItem_E
-    {
+    
         private void PinUnpin()
         {
             var willBePinned = !PinButton.IsOn;
@@ -39,7 +36,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
         public void PinUnpin(bool willBePinned)
         {
-            OnPinnedUnpinned?.Invoke(willBePinned);
+            PinnedOrUnpinned?.Invoke(willBePinned);
             PinButton.Toggle(willBePinned);
         }
 
@@ -68,12 +65,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            PinButton = new Button_E(Root.Q<Button>("pinButton"));
+
+            PinButton = new Button_E(QR<Button>("pinButton"), "HorizontalRectangle", StyleKeys.Bg_Border("on"), StyleKeys.Bg_Border("off"), false);
             PinButton.Clicked += PinUnpin;
-            PinButton.Toggle(false);
-            PinButton.AddStateKeys(PinButton, "HorizontalRectangle", StyleKeys.Bg_Border("on"), StyleKeys.Bg_Border("off"));
-            string pinIconStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_PinButtonIcon";
-            var pinIcon = new View_E(pinIconStyle, StyleKeys.DefaultBackground);
+            var pinIcon = new Icon_E("Square1", StyleKeys.Bg("pin"));
             PinButton.Add(pinIcon);
             LinkMouseBehaviourChanged(PinButton, pinIcon);
             PinButton.GetRootManipulator().ProcessDuringBubbleUp = true;
@@ -99,7 +94,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public override void Reset()
         {
             base.Reset();
-            OnPinnedUnpinned = null;
+            PinnedOrUnpinned = null;
         }
     }
 }

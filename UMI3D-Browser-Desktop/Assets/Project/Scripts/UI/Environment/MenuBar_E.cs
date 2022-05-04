@@ -36,8 +36,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         private VisualElement leftLayout_VE;
         private VisualElement centerLayout_VE;
 
-        private static string m_menuUXML => "UI/UXML/Menus/menuBar";
-        private static string m_menuStyle => "UI/Style/Menus/Menus";
         private static string m_separatorStyle => "UI/Style/MenuBar/Separator";
         private static StyleKeys m_separatorKeys => StyleKeys.DefaultBackground;
         public static bool AreThereToolboxes { get; set; } = false;
@@ -199,11 +197,11 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected void AddSeparator(VisualElement layout)
             => CreateSeparator().InsertRootTo(layout);
-        protected View_E CreateSeparator()
-            => new View_E(new VisualElement(), m_separatorStyle, m_separatorKeys);
+        protected Icon_E CreateSeparator()
+            => new Icon_E("SeparatorVertical", StyleKeys.DefaultBackground);
 
         private MenuBar_E() :
-            base(m_menuUXML, m_menuStyle, StyleKeys.DefaultBackground)
+            base("UI/UXML/Menus/menuBar", "UI/Style/Menus/Menus", StyleKeys.DefaultBackground)
         { }
     }
 }

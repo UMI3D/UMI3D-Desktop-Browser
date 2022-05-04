@@ -27,8 +27,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void SetTopBar(string name)
         {
-            if (m_windowTopBar == null)
-                m_windowTopBar = new Label_E(QR<Label>("windowName"), "Title1", StyleKeys.DefaultTextAndBackground);
+            if (m_topBar == null)
+                m_topBar = new Label_E(QR<Label>("windowName"), "Title1", StyleKeys.DefaultTextAndBackground);
             base.SetTopBar(name);
         }
     }

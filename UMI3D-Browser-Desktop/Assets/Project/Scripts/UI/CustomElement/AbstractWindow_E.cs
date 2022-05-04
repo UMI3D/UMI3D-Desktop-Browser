@@ -22,7 +22,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public abstract partial class AbstractWindow_E
     {
-        protected Label_E m_windowTopBar { get; set; } = null;
+        protected Label_E m_topBar { get; set; } = null;
 
 
         public virtual void SetTopBar(string name)
@@ -30,8 +30,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public void UpdateTopBarName(string name)
         {
-            if (m_windowTopBar != null)
-                m_windowTopBar.value = name;
+            if (m_topBar != null)
+                m_topBar.value = name;
         }
     }
 

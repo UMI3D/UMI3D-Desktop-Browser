@@ -74,7 +74,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.SetMenuItem(menu);
             WindowItem.SetFirstToolboxName(menu.Name);
-            WindowItem.OnPinnedUnpinned += PinUnpin;
+            WindowItem.PinnedOrUnpinned += PinUnpin;
         }
 
         /// <summary>

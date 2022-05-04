@@ -26,14 +26,7 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         protected VisualElement m_checkmark { get; set; } = null;
         protected Label m_label { get; set; } = null;
-    }
-
-    public partial class DropdownItem_E
-    {
-        public DropdownItem_E(VisualElement row, string styleResourcePath, StyleKeys keys) :
-            base(row, styleResourcePath, keys)
-        { }
-
+    
         public void SetCheckmark(string styleResourcePath, StyleKeys keys)
         {
             AddVisualStyle(m_checkmark, styleResourcePath, keys);
@@ -46,6 +39,10 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class DropdownItem_E : View_E
     {
+        public DropdownItem_E(VisualElement row, string styleResourcePath, StyleKeys keys) :
+            base(row, styleResourcePath, keys)
+        { }
+
         protected override void Initialize()
         {
             base.Initialize();

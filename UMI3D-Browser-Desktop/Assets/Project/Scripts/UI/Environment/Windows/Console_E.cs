@@ -25,7 +25,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Console_E
     {
-        public event Action NewLogAdded;
+        public event Action<LogType> NewLogAdded;
 
         protected static ScrollView_E s_logs { get; set; } = null;
         protected static ScrollView_E s_details { get; set; } = null;
@@ -74,7 +74,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             s_logs.Add(log);
             s_logsMap.Add(log, (time, logString, stackTrace, type));
-            NewLogAdded?.Invoke();
+            NewLogAdded?.Invoke(type);
         }
 
         private void SetLogLabel(out Label_E log, List<Label_E> displayed, List<Label_E> waited, string style, LogType type)
