@@ -52,8 +52,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Toolbox_E(string toolboxName, ToolboxType type = ToolboxType.Pinned, params ToolboxItem_E[] items) : 
             base(m_toolboxResourcePath, GetToolboxType(type), StyleKeys.DefaultBackgroundAndBorder)
         {
-            string nameStyle = "UI/Style/Toolbox/ToolboxName";
-            ToolboxName = new Label_E(m_name, nameStyle, StyleKeys.DefaultText);
+            ToolboxName = new Label_E(m_name, "Corps", StyleKeys.Text("corps0"));
             SetToolboxName(toolboxName);
 
             var backwardLayout = Root.Q("backward");

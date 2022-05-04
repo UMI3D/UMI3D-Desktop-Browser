@@ -177,6 +177,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             Root.RemoveFromHierarchy();
             IsDisplaying = false;
         }
+        public virtual V QR<V>(string name = null) where V : VisualElement
+            => Root.Q<V>(name);
         public virtual void Add(View_E child)
         {
             if (m_views.Contains(child))

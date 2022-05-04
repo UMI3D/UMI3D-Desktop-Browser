@@ -38,7 +38,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         private static string s_consoleUXML = "UI/UXML/console";
         private static string s_consoleStyle = "UI/Style/Console/Console";
-        private static string s_logStyle = "UI/Style/Console/Console_Log";
         private static StyleKeys s_logKeys = new StyleKeys("log", null, "unselected");
         private static StyleKeys s_logKeysSelected = new StyleKeys("log", null, "selected");
         private static StyleKeys s_assertKeys = new StyleKeys("assert", null, "unselected");
@@ -46,7 +45,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static StyleKeys m_errorKeys = new StyleKeys("error", null, "unselected");
         private static StyleKeys s_exceptionKeys = new StyleKeys("exception", null, "unselected");
         private static StyleKeys s_exceptionKeysSelected = new StyleKeys("exception", null, "selected");
-        private static string s_logDetailStyle = "UI/Style/Console/Console_LogDetail";
 
         #region Private Methods
 
@@ -67,7 +65,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             if (type == LogType.Warning)
                 return;
 
-            SetLogLabel(out Label_E log, s_logDisplayed, s_logWaited, s_logStyle, type);
+            SetLogLabel(out Label_E log, s_logDisplayed, s_logWaited, "Console_Log", type);
             
             VisualManipulator manipulator = log.GetVisualManipulator(log.Root);
             manipulator.MouseBehaviourChanged += (behaviour) 
@@ -98,7 +96,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             s_lastSelectedLog = logSource;
             UpdateLogStyle(s_lastSelectedLog, type, true);
 
-            SetLogLabel(out Label_E log, s_logDetailDisplayed, s_logDetailWaited, s_logDetailStyle, type);
+            SetLogLabel(out Label_E log, s_logDetailDisplayed, s_logDetailWaited, "Console_LogDetail", type);
             log.value = logString;
 
             s_details.Add(log);
@@ -106,7 +104,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             string[] traces = stackTrace.Split('\n');
             foreach (string trace in traces)
             {
-                SetLogLabel(out Label_E logTrace, s_logDetailDisplayed, s_logDetailWaited, s_logDetailStyle, LogType.Log);
+                SetLogLabel(out Label_E logTrace, s_logDetailDisplayed, s_logDetailWaited, "Console_LogDetail", LogType.Log);
                 logTrace.value = trace;
                 s_details.Add(logTrace);
             }

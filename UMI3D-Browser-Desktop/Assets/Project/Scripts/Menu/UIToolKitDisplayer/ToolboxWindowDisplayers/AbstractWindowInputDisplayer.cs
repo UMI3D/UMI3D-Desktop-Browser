@@ -25,7 +25,6 @@ namespace umi3d.DesktopBrowser.menu.Displayer
         public View_E Displayer { get; protected set; } = null;
 
         protected static string s_displayerStyle = "UI/Style/Displayers/Displayer";
-        protected static string s_labelStyle = "UI/Style/Displayers/DisplayerLabel";
         protected Label_E m_label { get; set; } = null;
 
         private void OnDestroy()
@@ -41,7 +40,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
 
         public virtual void InitAndBindUI()
         {
-            m_label = new Label_E(Displayer.Root.Q<Label>(), s_labelStyle, StyleKeys.DefaultTextAndBackground);
+            m_label = new Label_E(Displayer.Root.Q<Label>(), "Corps", StyleKeys.Text("corps1"));
             m_label.value = menu.Name;
             Displayer.Add(m_label);
         }

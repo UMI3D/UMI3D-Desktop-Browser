@@ -21,11 +21,22 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
+    public partial class Label_E
+    {
+        public event Action<string, string> OnValueChanged;
+
+        protected Label m_label => (Label)Root;
+        protected string m_rawValue { get; set; } = null;
+
+        public void UpdateLabelKeys(StyleKeys keys)
+            => UpdateKeys(m_label, keys);
+    }
+
     public partial class Label_E : INotifyValueChanged<string>
     {
-        public string value 
-        { 
-            get => m_label?.text; 
+        public string value
+        {
+            get => m_label?.text;
             set
             {
                 if (value == m_label.text)
@@ -47,15 +58,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
     }
 
-    public partial class Label_E
-    {
-        public event Action<string, string> OnValueChanged;
-
-        protected Label m_label => (Label)Root;
-        protected string m_rawValue { get; set; } = null;
-    }
-
-    public partial class Label_E
+    public partial class Label_E : View_E
     {
         public Label_E() :
             this("")
@@ -63,28 +66,28 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Label_E(string text) :
             this(null, null, text)
         { }
-        public Label_E(string styleResourcePath, StyleKeys keys, string text = "") :
-            this(new Label(), styleResourcePath, keys, text)
+        public Label_E(string partialStylePath, StyleKeys keys, string text = "") :
+            this(new Label(), partialStylePath, keys, text)
         { }
         public Label_E(Label label) :
             this(label, null, null, "")
         { }
-        public Label_E(Label label, string styleResourcePath, StyleKeys keys, string text = "") :
-            base(label, styleResourcePath, keys)
+        public Label_E(Label label, string partialStylePath, StyleKeys keys, string text = "") :
+            base(label, partialStylePath, keys)
         {
             value = text;
         }
 
-        public void UpdateLabelKeys(StyleKeys keys)
-            => UpdateKeys(m_label, keys);
-    }
-
-    public partial class Label_E : View_E
-    {
         protected override void ApplyStyle(CustomStyle_SO styleSO, StyleKeys keys, IStyle style, MouseBehaviour mouseBehaviour)
         {
             base.ApplyStyle(styleSO, keys, style, mouseBehaviour);
             value = m_rawValue;
+        }
+
+        protected override CustomStyle_SO GetStyleSO(string resourcePath)
+        {
+            var path = $"UI/Style/Labels/{resourcePath}";
+            return base.GetStyleSO(path);
         }
     }
 }

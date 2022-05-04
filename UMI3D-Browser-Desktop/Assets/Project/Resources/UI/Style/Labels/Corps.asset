@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
-  m_Name: ToolboxName
+  m_Name: Corps
   m_EditorClassIdentifier: 
   AppliesFormatAndStyle:
     m_PersistentCalls:
@@ -63,11 +63,11 @@ MonoBehaviour:
         m_top: 0
   m_textFormat:
     m_fontSize:
-      m_keyword: 10
-      m_value: 12
+      m_keyword: 0
+      m_value: 0
     m_letterSpacing:
       m_keyword: 0
-      m_value: 20
+      m_value: 0
     m_wordSpacing:
       m_keyword: 0
       m_value: 0
@@ -77,7 +77,8 @@ MonoBehaviour:
     m_numberOfVisibleCharacter:
       m_keyword: 0
       m_value: 0
-    m_textAlign: 4
+    m_textAlign: 0
+    m_textWrapping: 0
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle:
@@ -88,7 +89,7 @@ MonoBehaviour:
           m_font: {fileID: 0}
           m_fontStyleAndWeight: 0
           m_color:
-            m_keyword: 2
+            m_keyword: 26
             m_value: {r: 1, g: 1, b: 1, a: 1}
           m_outlineColor:
             m_keyword: 0
