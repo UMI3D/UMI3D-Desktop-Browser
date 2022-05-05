@@ -64,7 +64,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             Button_E unpinned = new Button_E("LargeRectangle", StyleKeys.DefaultBackground);
             unpinned.Clicked += OnUnpinnedPressed;
-            unpinned.InsertRootTo(QR("bottomBar"));
+            unpinned.InsertRootTo(m_bottomBox);
 
             Root.name = "toolboxWindow";
         }

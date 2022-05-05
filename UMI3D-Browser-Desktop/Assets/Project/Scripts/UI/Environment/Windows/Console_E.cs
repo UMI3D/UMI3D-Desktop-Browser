@@ -212,7 +212,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         private Console_E() :
-            base("UI/UXML/console", "Console", StyleKeys.DefaultBackground)
+            base("console", "Console", StyleKeys.DefaultBackground)
         { }
     }
 }

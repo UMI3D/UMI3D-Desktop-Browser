@@ -101,7 +101,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             Timer = new Label_E(QR<Label>("timer"), "BottomBar_rightLabel", StyleKeys.DefaultText, "00:00:00");
             ParticipantCount = new Label_E(QR<Label>("participantCount"), "BottomBar_rightLabel", StyleKeys.DefaultText);
 
-            Console = new Button_E(Root.Q<Button>("console"), "Square1", StyleKeys.DefaultBackground);
+            Console = new Button_E(QR<Button>("console"));
             Console.Toggle(false);
             Console.AddStateKeys(Console, "Square1", StyleKeys.Bg("on"), StyleKeys.Bg("off"));
             var consoleIcon = new Icon_E("Square1", s_consoleDefaultKeys);
@@ -109,7 +109,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             LinkMouseBehaviourChanged(Console, consoleIcon);
             Console.GetRootManipulator().ProcessDuringBubbleUp = true;
 
-            Settings = new Button_E(Root.Q<Button>("settings"));
+            Settings = new Button_E(QR<Button>("settings"));
             Settings.Toggle(false);
             Settings.AddStateKeys(Settings, "Square1", StyleKeys.Bg("on"), StyleKeys.Bg("off"));
             var settingsIcon = new Icon_E("Square1", StyleKeys.Bg("settings"));

@@ -63,7 +63,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         private ToolboxPinnedWindow_E() :
-            base("UI/UXML/ToolboxWindow/pinnedToolboxWindow")
+            base("draggable")
         { }
     }
 }

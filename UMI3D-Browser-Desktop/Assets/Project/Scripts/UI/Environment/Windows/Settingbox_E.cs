@@ -121,7 +121,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         private Settingbox_E() :
-            base("UI/UXML/settingbox", "Settingbox", StyleKeys.DefaultBackground)
+            base("settingbox", "Settingbox", StyleKeys.DefaultBackground)
         { }
     }
 }

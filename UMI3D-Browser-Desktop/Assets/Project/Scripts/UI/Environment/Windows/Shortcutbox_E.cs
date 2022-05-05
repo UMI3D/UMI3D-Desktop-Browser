@@ -164,7 +164,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         private Shortcutbox_E() :
-            base("UI/UXML/Shortcuts/shortcutbox", "Shortcutbox", StyleKeys.DefaultBackground)
+            base("shortcutbox", "Shortcutbox", StyleKeys.DefaultBackground)
         { }
     }
 }
