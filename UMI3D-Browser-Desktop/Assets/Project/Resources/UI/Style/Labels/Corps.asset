@@ -82,7 +82,7 @@ MonoBehaviour:
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle:
-    - m_key: 
+    - m_key: corps0
       m_default:
         m_keyword: 2
         m_value:
@@ -90,6 +90,49 @@ MonoBehaviour:
           m_fontStyleAndWeight: 0
           m_color:
             m_keyword: 26
+            m_value: {r: 1, g: 1, b: 1, a: 1}
+          m_outlineColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_outlineWidth:
+            m_keyword: 0
+            m_value: 0
+      m_mouseOver:
+        m_keyword: 0
+        m_value:
+          m_font: {fileID: 0}
+          m_fontStyleAndWeight: 0
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_outlineColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_outlineWidth:
+            m_keyword: 0
+            m_value: 0
+      m_mousePressed:
+        m_keyword: 0
+        m_value:
+          m_font: {fileID: 0}
+          m_fontStyleAndWeight: 0
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_outlineColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_outlineWidth:
+            m_keyword: 0
+            m_value: 0
+    - m_key: corps1
+      m_default:
+        m_keyword: 2
+        m_value:
+          m_font: {fileID: 0}
+          m_fontStyleAndWeight: 0
+          m_color:
+            m_keyword: 28
             m_value: {r: 1, g: 1, b: 1, a: 1}
           m_outlineColor:
             m_keyword: 0

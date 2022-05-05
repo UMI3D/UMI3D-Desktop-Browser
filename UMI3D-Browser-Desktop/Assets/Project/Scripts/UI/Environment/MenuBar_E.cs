@@ -115,7 +115,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static MenuBar_E m_instance;
     }
 
-    public partial class MenuBar_E : View_E
+    public partial class MenuBar_E : Box_E
     {
         public override void Reset()
         {
@@ -169,28 +169,26 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             #region ScrollView
 
-            string scrollViewUXML = "UI/UXML/horizontalScrollView";
-            m_scrollView = new ScrollView_E(scrollViewUXML)
+            var scrollViewBox = new View_E("UI/UXML/horizontalScrollView", null, null);
+            scrollViewBox.InsertRootTo(centerLayout_VE);
+            VisualElement backward = scrollViewBox.QR("backward");
+            VisualElement forward = scrollViewBox.QR("forward");
+
+            m_scrollView = new ScrollView_E(scrollViewBox.QR<ScrollView>());
+            m_scrollView.CreateSeparator = CreateSeparator;
+            m_scrollView.HSliderValueChanged += (value, low, high) =>
             {
-                CreateSeparator = CreateSeparator
+                backward.visible = (value > low) ? true : false;
+                forward.visible = (value < high) ? true : false;
             };
-            m_scrollView.InsertRootTo(centerLayout_VE);
 
-            VisualElement backwardContainer = m_scrollView.Root.Q("backwardButton");
-            VisualElement backwardLayout = m_scrollView.Root.Q("backward");
-            string ButtonStyle = "UI/Style/MenuBar/ScrollView_Button";
-            StyleKeys backwardButtonKeys = new StyleKeys(null, "backward", null);
-            m_scrollView.SetHorizontalBackwardButtonStyle(backwardContainer, backwardLayout, ButtonStyle, backwardButtonKeys);
+            m_scrollView.SetHBackwardButton("ButtonH", StyleKeys.Bg("backward"));
+            m_scrollView.SetHForwarddButton("ButtonH", StyleKeys.Bg("forward"));
+            backward.Insert(0, m_scrollView.HBackwardButton);
+            forward.Insert(1, m_scrollView.HForwardButton);
 
-            VisualElement forwardContainer = m_scrollView.Root.Q("forwardButton");
-            VisualElement forwardLayout = m_scrollView.Root.Q("forward");
-            StyleKeys forwardButtonKeys = new StyleKeys(null, "forward", null);
-            m_scrollView.SetHorizontalForwarddButtonStyle(forwardContainer, forwardLayout, ButtonStyle, forwardButtonKeys);
-
-            VisualElement backwardSeparator = m_scrollView.Root.Q("backward").Q("separator");
-            AddVisualStyle(backwardSeparator, m_separatorStyle, m_separatorKeys);
-            VisualElement forwardSeparator = m_scrollView.Root.Q("forward").Q("separator");
-            AddVisualStyle(forwardSeparator, m_separatorStyle, m_separatorKeys);
+            new Icon_E(backward.Q("separator"), "SeparatorVertical", StyleKeys.DefaultBackground);
+            new Icon_E(forward.Q("separator"), "SeparatorVertical", StyleKeys.DefaultBackground);
 
             #endregion
         }
@@ -201,7 +199,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             => new Icon_E("SeparatorVertical", StyleKeys.DefaultBackground);
 
         private MenuBar_E() :
-            base("UI/UXML/Menus/menuBar", "UI/Style/Menus/Menus", StyleKeys.DefaultBackground)
+            base("UI/UXML/Menus/menuBar", "box", StyleKeys.Bg("box0"))
         { }
     }
 }

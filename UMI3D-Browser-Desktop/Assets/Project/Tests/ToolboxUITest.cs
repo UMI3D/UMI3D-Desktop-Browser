@@ -30,10 +30,12 @@ public class ToolboxUITest : MonoBehaviour
     {
         mainView = UIDoc.rootVisualElement.Q("mainView");
 
-        ObjectMenuWindow_E
-            .Instance
-            .InsertRootTo(mainView);
+        ObjectMenuWindow_E.Instance.InsertRootTo(mainView);
+
+        //ToolboxWindow_E.Instance.InsertRootTo(mainView);
     }
+
+    #region Toolboxes tests
 
     [ContextMenu("Open player menu")]
     public void Open()
@@ -106,4 +108,6 @@ public class ToolboxUITest : MonoBehaviour
 
         Open();
     }
+
+    #endregion*
 }

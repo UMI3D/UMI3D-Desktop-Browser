@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
-  m_Name: RectangleVertical1
+  m_Name: DraggerContainer
   m_EditorClassIdentifier: 
   AppliesFormatAndStyle:
     m_PersistentCalls:
@@ -21,13 +21,13 @@ MonoBehaviour:
       m_value: 0
   m_size:
     m_height:
-      m_keyword: 10
+      m_keyword: 0
       m_valueMode: 0
-      m_value: 30
+      m_value: 0
     m_width:
       m_keyword: 10
       m_valueMode: 0
-      m_value: 10
+      m_value: 15
     m_maxHeight:
       m_keyword: 0
       m_valueMode: 0
@@ -46,13 +46,13 @@ MonoBehaviour:
       m_value: 0
   m_marginAndPadding:
     m_margin:
-      m_keyword: 10
+      m_keyword: 0
       m_value:
-        m_global: 5
-        m_bottom: 5
-        m_left: 5
-        m_right: 5
-        m_top: 5
+        m_global: 0
+        m_bottom: 0
+        m_left: 0
+        m_right: 0
+        m_top: 0
     m_padding:
       m_keyword: 0
       m_value:
@@ -82,77 +82,40 @@ MonoBehaviour:
   - m_theme: {fileID: 0}
     m_textStyle: []
     m_background:
-    - m_key: backward
+    - m_key: 
       m_default:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 0
+            m_keyword: 21
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 2bf37f2e395970349ab968a04418a6eb, type: 3}
+            m_keyword: 0
+            m_value: {fileID: 0}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_mouseOver:
-        m_keyword: 2
+        m_keyword: 0
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: e96abacb400c5e847bdfe6616cdd8715, type: 3}
+            m_keyword: 0
+            m_value: {fileID: 0}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_mousePressed:
-        m_keyword: 2
+        m_keyword: 0
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 336908de39127d24c963ad7e9555db5a, type: 3}
-          m_imageTintColor:
             m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-    - m_key: forward
-      m_default:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 03390f77b81214642996cab3002eb5b2, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-      m_mouseOver:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 9ca7a62849e586c418b2463ef4083de0, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-      m_mousePressed:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 2fe35ce51d5e78c4193f533ee9f45f3c, type: 3}
+            m_value: {fileID: 0}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}

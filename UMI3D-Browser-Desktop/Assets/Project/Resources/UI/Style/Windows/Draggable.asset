@@ -54,13 +54,13 @@ MonoBehaviour:
         m_right: 0
         m_top: 0
     m_padding:
-      m_keyword: 0
+      m_keyword: 11
       m_value:
-        m_global: 0
-        m_bottom: 0
-        m_left: 0
-        m_right: 0
-        m_top: 0
+        m_global: 10
+        m_bottom: 10
+        m_left: 10
+        m_right: 10
+        m_top: 10
   m_textFormat:
     m_fontSize:
       m_keyword: 0
@@ -78,6 +78,7 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_textAlign: 0
+    m_textWrapping: 0
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle: []
@@ -87,7 +88,7 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 2
+            m_keyword: 24
             m_value: {r: 0, g: 0, b: 0, a: 0.64705884}
           m_image:
             m_keyword: 0

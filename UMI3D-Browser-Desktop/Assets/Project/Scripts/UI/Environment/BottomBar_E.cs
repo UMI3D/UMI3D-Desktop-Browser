@@ -80,10 +80,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static BottomBar_E s_instance;
     }
 
-    public partial class BottomBar_E : View_E
+    public partial class BottomBar_E : Box_E
     {
         private BottomBar_E() :
-            base("UI/UXML/Menus/bottomBar", "UI/Style/BottomBar/BottomBar", StyleKeys.DefaultBackground)
+            base("UI/UXML/Menus/bottomBar", "Box", StyleKeys.Bg("box1"))
         { }
 
         public override void Reset()
@@ -117,6 +117,5 @@ namespace umi3dDesktopBrowser.ui.viewController
             LinkMouseBehaviourChanged(Settings, settingsIcon);
             Settings.GetRootManipulator().ProcessDuringBubbleUp = true;
         }
-
     }
 }
