@@ -41,7 +41,8 @@ namespace BrowserDesktop.Menu
 
         public override void Collapse(bool forceUpdate = false)
         {
-            scrollView.style.display = DisplayStyle.None;
+            if(scrollView != null)
+                scrollView.style.display = DisplayStyle.None;
             base.Collapse(forceUpdate);
         }
 
