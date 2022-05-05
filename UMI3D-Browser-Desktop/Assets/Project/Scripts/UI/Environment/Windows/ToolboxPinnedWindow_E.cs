@@ -53,11 +53,11 @@ namespace umi3dDesktopBrowser.ui.viewController
             SetTopBar("Toolbox");
             SetCloseButton();
 
-            s_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"));
-            string dcStyle = "UI/Style/ToolboxWindow/ToolboxWindow_DraggerContainer";
-            s_scrollView.SetVerticalDraggerContainerStyle(dcStyle, StyleKeys.DefaultBackground);
-            string dStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Dragger";
-            s_scrollView.SetVerticalDraggerStyle(dStyle, StyleKeys.DefaultBackgroundAndBorder);
+            s_scrollView = new ScrollView_E(QR<ScrollView>());
+            s_scrollView.SetVDraggerContainer("draggerContainer", StyleKeys.DefaultBackground);
+            s_scrollView.SetVDragger("dragger", StyleKeys.DefaultBackgroundAndBorder);
+
+            m_bottomBox.style.display = DisplayStyle.None;
 
             Root.name = "toolParameterWindow";
         }

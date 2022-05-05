@@ -23,6 +23,10 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         public event Action CloseButtonPressed;
 
+        protected VisualElement m_topBox { get; set; } = null;
+        protected VisualElement m_mainBox { get; set; } = null;
+        protected VisualElement m_bottomBox { get; set; } = null;
+
         protected Icon_E m_windowIcon { get; set; } = null;
         protected Button_E m_closeButton { get; set; } = null;
 
@@ -59,8 +63,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class AbstractDraggableWindow_E : AbstractWindow_E
     {
-        public AbstractDraggableWindow_E(string visualResourcePath) :
-            base(visualResourcePath, "Draggable", StyleKeys.DefaultBackground)
+        public AbstractDraggableWindow_E(string partialVisualPath) :
+            base(partialVisualPath, "Draggable", StyleKeys.DefaultBackground)
         { }
 
         public override void SetTopBar(string name)
@@ -69,6 +73,15 @@ namespace umi3dDesktopBrowser.ui.viewController
                 m_topBar = new Label_E(QR<Label>("windowName"), "Title", StyleKeys.Default);
             m_topBar.UpdateRootManipulator(PopupManipulator());
             base.SetTopBar(name);
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            m_topBox = QR("topBox");
+            m_mainBox = QR("mainBox");
+            m_bottomBox = QR("bottomBox");
         }
     }
 }

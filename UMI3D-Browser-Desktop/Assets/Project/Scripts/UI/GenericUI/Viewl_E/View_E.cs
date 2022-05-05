@@ -264,8 +264,9 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <returns></returns>
         protected virtual VisualElement GetVisualRoot(string resourcePath)
         {
+            if (string.IsNullOrEmpty(resourcePath)) throw new Exception("resourcePath null or empty");
             VisualTreeAsset visualTA = Resources.Load<VisualTreeAsset>(resourcePath);
-            Debug.Assert(visualTA != null, $"[{resourcePath}] return a null visual tree asset.");
+            if (visualTA == null) throw new NullReferenceException($"[{resourcePath}] return a null visual tree asset.");
             Debug.Assert(visualTA.CloneTree().childCount == 1, $"[{resourcePath}] must have a single visual as root.");
             IEnumerator<VisualElement> iterator = visualTA.CloneTree().Children().GetEnumerator();
             iterator.MoveNext();

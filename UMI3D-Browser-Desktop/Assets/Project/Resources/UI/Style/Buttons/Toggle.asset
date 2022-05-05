@@ -78,11 +78,12 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_textAlign: 0
+    m_textWrapping: 0
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle: []
     m_background:
-    - m_key: toggleOn
+    - m_key: on
       m_default:
         m_keyword: 2
         m_value:
@@ -119,7 +120,7 @@ MonoBehaviour:
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
-    - m_key: toggleOff
+    - m_key: off
       m_default:
         m_keyword: 2
         m_value:

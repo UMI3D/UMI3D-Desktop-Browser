@@ -24,13 +24,13 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         public static event Action UnpinnedPressed;
 
-        protected ScrollView_E s_scrollView { get; set; } = null;
+        protected ScrollView_E m_scrollView { get; set; } = null;
         
         public static void OnUnpinnedPressed()
             => UnpinnedPressed?.Invoke();
 
         public void AddRange(params View_E[] items)
-            => s_scrollView.AddRange(items);
+            => m_scrollView.AddRange(items);
     }
 
     public partial class ToolboxWindow_E : ISingleUI
@@ -54,25 +54,23 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            StyleKeys iconKeys = new StyleKeys(null, "toolboxesWindow", "");
-            SetWindowIcon(iconKeys);
+            SetWindowIcon(new StyleKeys(null, "toolboxesWindow", ""));
             SetTopBar("Toolbox");
             SetCloseButton();
 
-            s_scrollView = new ScrollView_E(Root.Q("scrollViewContainer"));
-            string dcStyle = "UI/Style/ToolboxWindow/ToolboxWindow_DraggerContainer";
-            s_scrollView.SetVerticalDraggerContainerStyle(dcStyle, StyleKeys.DefaultBackground);
-            string dStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Dragger";
-            s_scrollView.SetVerticalDraggerStyle(dStyle, StyleKeys.DefaultBackgroundAndBorder);
+            m_scrollView = new ScrollView_E(QR<ScrollView>());
+            m_scrollView.SetVDraggerContainer("DraggerContainer", StyleKeys.DefaultBackground);
+            m_scrollView.SetVDragger("Dragger", StyleKeys.DefaultBackgroundAndBorder);
 
-            Button_E unpinned = new Button_E(Root.Q<Button>("unpinnedButton"), "LargeRectangle", StyleKeys.DefaultBackground);
+            Button_E unpinned = new Button_E("LargeRectangle", StyleKeys.DefaultBackground);
             unpinned.Clicked += OnUnpinnedPressed;
+            unpinned.InsertRootTo(QR("bottomBar"));
 
             Root.name = "toolboxWindow";
         }
 
         private ToolboxWindow_E() :
-            base("UI/UXML/ToolboxWindow/toolboxWindow")
+            base("draggable")
         { }
     }
 }

@@ -24,9 +24,8 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         protected Label_E m_topBar { get; set; } = null;
 
-
         public virtual void SetTopBar(string name)
-            => UpdateTopBarName(Name);
+            => UpdateTopBarName(name);
 
         public void UpdateTopBarName(string name)
         {
@@ -37,13 +36,19 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public abstract partial class AbstractWindow_E : View_E
     {
-        public AbstractWindow_E(string visualResourcePath, string styleResourcePath, StyleKeys keys) :
-            base(visualResourcePath, styleResourcePath, keys)
+        public AbstractWindow_E(string partialVisualPath, string partialStylePath, StyleKeys keys) :
+            base(partialVisualPath, partialStylePath, keys)
         { }
+
+        protected override VisualElement GetVisualRoot(string resourcePath)
+        {
+            var path = (resourcePath == null) ? null : $"UI/UXML/Windows/{resourcePath}";
+            return base.GetVisualRoot(path);
+        }
 
         protected override CustomStyle_SO GetStyleSO(string resourcePath)
         {
-            var path = $"UI/Style/Windows/{resourcePath}";
+            var path = (resourcePath == null) ? null : $"UI/Style/Windows/{resourcePath}";
             return base.GetStyleSO(path);
         }
     }

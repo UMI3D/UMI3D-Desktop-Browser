@@ -25,15 +25,17 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Console_E
     {
+        #region Fields
+
         public event Action<LogType> NewLogAdded;
 
         protected static ScrollView_E s_logs { get; set; } = null;
-        protected static ScrollView_E s_details { get; set; } = null;
+        //protected static ScrollView_E s_details { get; set; } = null;
         protected static Label_E s_lastSelectedLog { get; set; } = null;
         protected static List<Label_E> s_logDisplayed;
         protected static List<Label_E> s_logWaited;
-        protected static List<Label_E> s_logDetailDisplayed;
-        protected static List<Label_E> s_logDetailWaited;
+        //protected static List<Label_E> s_logDetailDisplayed;
+        //protected static List<Label_E> s_logDetailWaited;
         protected static Dictionary<Label_E, (string, string, string, LogType)> s_logsMap;
 
         private static StyleKeys s_logKeys = new StyleKeys("log", null, "unselected");
@@ -43,6 +45,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static StyleKeys m_errorKeys = new StyleKeys("error", null, "unselected");
         private static StyleKeys s_exceptionKeys = new StyleKeys("exception", null, "unselected");
         private static StyleKeys s_exceptionKeysSelected = new StyleKeys("exception", null, "selected");
+
+        #endregion
 
         #region Private Methods
 
@@ -63,11 +67,11 @@ namespace umi3dDesktopBrowser.ui.viewController
             if (type == LogType.Warning)
                 return;
 
-            SetLogLabel(out Label_E log, s_logDisplayed, s_logWaited, "Console_Log", type);
+            SetLogLabel(out Label_E log, s_logDisplayed, s_logWaited, "Corps2", type);
             
-            VisualManipulator manipulator = log.GetVisualManipulator(log.Root);
-            manipulator.MouseBehaviourChanged += (behaviour) 
-                => OnLogSelected(behaviour, log);
+            //VisualManipulator manipulator = log.GetRootManipulator();
+            //manipulator.MouseBehaviourChanged += (behaviour) 
+            //    => OnLogSelected(behaviour, log);
             
             string time = DateTime.Now.ToLongTimeString();
             log.value = $"[{time}] {logString}";
@@ -83,30 +87,30 @@ namespace umi3dDesktopBrowser.ui.viewController
             UpdateLogStyle(log, type, false);
         }
 
-        private void OnLogSelected(MouseBehaviour behaviour, Label_E logSource)
-        {
-            if (behaviour != MouseBehaviour.MousePressed)
-                return;
+        //private void OnLogSelected(MouseBehaviour behaviour, Label_E logSource)
+        //{
+        //    if (behaviour != MouseBehaviour.MousePressed)
+        //        return;
             
-            s_details.Clear();
-            var (_, logString, stackTrace, type) = s_logsMap[logSource];
-            UpdateLogStyle(s_lastSelectedLog, type, false);
-            s_lastSelectedLog = logSource;
-            UpdateLogStyle(s_lastSelectedLog, type, true);
+        //    s_details.Clear();
+        //    var (_, logString, stackTrace, type) = s_logsMap[logSource];
+        //    UpdateLogStyle(s_lastSelectedLog, type, false);
+        //    s_lastSelectedLog = logSource;
+        //    UpdateLogStyle(s_lastSelectedLog, type, true);
 
-            SetLogLabel(out Label_E log, s_logDetailDisplayed, s_logDetailWaited, "Console_LogDetail", type);
-            log.value = logString;
+        //    SetLogLabel(out Label_E log, s_logDetailDisplayed, s_logDetailWaited, "Console_LogDetail", type);
+        //    log.value = logString;
 
-            s_details.Add(log);
+        //    s_details.Add(log);
 
-            string[] traces = stackTrace.Split('\n');
-            foreach (string trace in traces)
-            {
-                SetLogLabel(out Label_E logTrace, s_logDetailDisplayed, s_logDetailWaited, "Console_LogDetail", LogType.Log);
-                logTrace.value = trace;
-                s_details.Add(logTrace);
-            }
-        }
+        //    string[] traces = stackTrace.Split('\n');
+        //    foreach (string trace in traces)
+        //    {
+        //        SetLogLabel(out Label_E logTrace, s_logDetailDisplayed, s_logDetailWaited, "Console_LogDetail", LogType.Log);
+        //        logTrace.value = trace;
+        //        s_details.Add(logTrace);
+        //    }
+        //}
 
         private void UpdateLogStyle(Label_E log, LogType type, bool isSelected)
         {
@@ -194,14 +198,14 @@ namespace umi3dDesktopBrowser.ui.viewController
             var logs = Root.Q<ScrollView>("logs");
             s_logs = new ScrollView_E(logs);
 
-            var details = Root.Q<ScrollView>("details");
-            string detailsStyle = "UI/Style/Console/Console_Details";
-            s_details = new ScrollView_E(details, detailsStyle, StyleKeys.DefaultBackground);
+            //var details = Root.Q<ScrollView>("details");
+            //string detailsStyle = "UI/Style/Console/Console_Details";
+            //s_details = new ScrollView_E(details, detailsStyle, StyleKeys.DefaultBackground);
 
             s_logDisplayed = new List<Label_E>();
             s_logWaited = new List<Label_E>();
-            s_logDetailDisplayed = new List<Label_E>();
-            s_logDetailWaited = new List<Label_E>();
+            //s_logDetailDisplayed = new List<Label_E>();
+            //s_logDetailWaited = new List<Label_E>();
             s_logsMap = new Dictionary<Label_E, (string, string, string, LogType)>();
 
             Application.logMessageReceived += HandleLog;
