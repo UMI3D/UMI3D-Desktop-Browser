@@ -24,9 +24,9 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected Label_E m_title { get; set; } = null;
         protected ScrollView_E m_scrollView { get; set; } = null;
 
-        private static string m_toolboxPinnedStyle => "UI/Style/MenuBar/MenuBar_ToolboxPinned";
-        private static string m_toolboxSubPinnedStyle => "UI/Style/MenuBar/MenuBar_ToolboxSubPinned";
-        private static string m_toolboxPopupStyle => "UI/Style/ToolboxWindow/ToolboxWindow_Toolbox";
+        private static string m_toolboxPinnedStyle => "Box1";
+        private static string m_toolboxSubPinnedStyle => "BoxV";
+        private static string m_toolboxPopupStyle => "Box2";
         private static string GetToolboxType(ToolboxType type)
         {
             switch (type)
@@ -53,7 +53,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             => m_scrollView.AddRange(items);
     }
 
-    public partial class Toolbox_E : View_E
+    public partial class Toolbox_E : Box_E
     {
         public Toolbox_E(ToolboxType type = ToolboxType.Pinned) :
             this(null, type)

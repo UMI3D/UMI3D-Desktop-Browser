@@ -32,7 +32,7 @@ namespace umi3DBrowser.UICustomStyle
         private UIBorder[] m_border;
 
         public Theme_SO Theme => m_theme;
-        public UITextStyle GetTextStyle(string key)
+        public UITextStyle GetTextStyle(string key, string styleName)
         {
             key = key.ToLower();
             foreach (UITextStyle themeText in m_textStyle)
@@ -40,9 +40,9 @@ namespace umi3DBrowser.UICustomStyle
                 if (themeText.Key.ToLower() == key)
                     return themeText;
             }
-            throw new KeyNotFoundException(key, "UIThemeStyle");
+            throw new KeyNotFoundException(key, styleName);
         }
-        public UIBackground GetBackground(string key)
+        public UIBackground GetBackground(string key, string styleName)
         {
             key = key.ToLower();
             foreach (UIBackground background in m_background)
@@ -50,9 +50,9 @@ namespace umi3DBrowser.UICustomStyle
                 if (background.Key.ToLower() == key)
                     return background;
             }
-            throw new KeyNotFoundException(key, "UIThemeStyle");
+            throw new KeyNotFoundException(key, styleName);
         }
-        public UIBorder GetBorder(string key)
+        public UIBorder GetBorder(string key, string styleName)
         {
             key = key.ToLower();
             foreach (UIBorder border in m_border)
@@ -60,7 +60,7 @@ namespace umi3DBrowser.UICustomStyle
                 if (border.Key.ToLower() == key)
                     return border;
             }
-            throw new KeyNotFoundException(key, "UIThemeStyle");
+            throw new KeyNotFoundException(key, styleName);
         }
     }
 
@@ -69,6 +69,13 @@ namespace umi3DBrowser.UICustomStyle
     {
         [HideInInspector]
         public UnityEvent AppliesFormatAndStyle = new UnityEvent();
+
+        public string Key => name.ToLower();
+        public UIDisplay Display => m_display;
+        //public UIPosition UIPosition => m_uIPosition;
+        public UISize Size => m_size;
+        public UIMarginAndPadding MarginAndPadding => m_marginAndPadding;
+        public UITextFormat TextFormat => m_textFormat;
 
         [Header("Formatting Style")]
         [SerializeField]
@@ -85,25 +92,12 @@ namespace umi3DBrowser.UICustomStyle
         [SerializeField]
         private UIThemeStyle[] m_themeStyles;
 
-        [ContextMenu("Apply Custom Style")]
-        private void ApplyCustomStyleInInspector() => AppliesFormatAndStyle.Invoke();
-    }
-
-    public partial class CustomStyle_SO
-    {
-        public string Key => name.ToLower();
-        public UIDisplay Display => m_display;
-        //public UIPosition UIPosition => m_uIPosition;
-        public UISize Size => m_size;
-        public UIMarginAndPadding MarginAndPadding => m_marginAndPadding;
-        public UITextFormat TextFormat => m_textFormat;
-
         public ICustomisableByMouseBehaviour<CustomStyleTextStyle> GetTextStyle(Theme_SO theme, string key)
-            => GetStyle(theme, (themeStyle) => themeStyle.GetTextStyle(key));
+            => GetStyle(theme, (themeStyle) => themeStyle.GetTextStyle(key, name));
         public ICustomisableByMouseBehaviour<CustomStyleBackground> GetBackground(Theme_SO theme, string key)
-            => GetStyle(theme, (themeStyle) => themeStyle.GetBackground(key));
+            => GetStyle(theme, (themeStyle) => themeStyle.GetBackground(key, name));
         public ICustomisableByMouseBehaviour<CustomStyleBorder> GetBorder(Theme_SO theme, string key)
-            => GetStyle(theme, (themeStyle) => themeStyle.GetBorder(key));
+            => GetStyle(theme, (themeStyle) => themeStyle.GetBorder(key, name));
         
         protected ICustomisableByMouseBehaviour<T> GetStyle<T>(Theme_SO theme, Func<UIThemeStyle, ICustomisableByMouseBehaviour<T>> styleGetter)
         {
@@ -116,5 +110,9 @@ namespace umi3DBrowser.UICustomStyle
             if (m_themeStyles[0].Theme == null) return styleGetter(m_themeStyles[0]);
             throw new ThemeNotFoundException(theme, this.name);
         }
+
+        [ContextMenu("Apply Custom Style")]
+        private void ApplyCustomStyleInInspector()
+            => AppliesFormatAndStyle.Invoke();
     }
 }
