@@ -23,7 +23,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Label_E
     {
-        public event Action<string, string> OnValueChanged;
+        public event Action<string, string> ValueChanged;
 
         protected Label m_label => (Label)Root;
         protected string m_rawValue { get; set; } = null;
@@ -39,16 +39,12 @@ namespace umi3dDesktopBrowser.ui.viewController
             get => m_label?.text;
             set
             {
-                if (value == m_label.text)
-                    return;
                 m_rawValue = value;
                 var previousValue = m_label.text;
-                var (styleSO, _, _) = m_visualStylesMap[m_label];
-                if (styleSO == null)
-                    m_label.text = value;
-                else
-                    m_label.text = m_styleApplicator.GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, value);
-                OnValueChanged?.Invoke(previousValue, m_label.text);
+                var styleSO = GetVisualStyle(m_label);
+                if (styleSO == null) m_label.text = value;
+                else m_label.text = GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, value);
+                ValueChanged?.Invoke(previousValue, m_label.text);
             }
         }
 
@@ -66,27 +62,28 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Label_E(string text) :
             this(null, null, text)
         { }
-        public Label_E(string partialStylePath, StyleKeys keys, string text = "") :
+        public Label_E(string partialStylePath, StyleKeys keys, string text = null) :
             this(new Label(), partialStylePath, keys, text)
         { }
         public Label_E(Label label) :
-            this(label, null, null, "")
+            this(label, null, null, null)
         { }
-        public Label_E(Label label, string partialStylePath, StyleKeys keys, string text = "") :
+        public Label_E(Label label, string partialStylePath, StyleKeys keys, string text = null) :
             base(label, partialStylePath, keys)
         {
-            value = text;
+            if (text != null) value = text;
+            else value = m_label.text;
         }
 
         protected override void ApplyStyle(CustomStyle_SO styleSO, StyleKeys keys, IStyle style, MouseBehaviour mouseBehaviour)
         {
             base.ApplyStyle(styleSO, keys, style, mouseBehaviour);
-            value = m_rawValue;
+            if (m_rawValue != null) value = m_rawValue;
         }
 
         protected override CustomStyle_SO GetStyleSO(string resourcePath)
         {
-            var path = $"UI/Style/Labels/{resourcePath}";
+            var path = (resourcePath == null) ? null : $"UI/Style/Labels/{resourcePath}";
             return base.GetStyleSO(path);
         }
     }

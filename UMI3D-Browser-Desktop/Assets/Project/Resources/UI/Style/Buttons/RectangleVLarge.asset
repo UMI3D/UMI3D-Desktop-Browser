@@ -160,12 +160,12 @@ MonoBehaviour:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
     m_border:
-    - m_key: PinnedEnable
+    - m_key: off
       m_default:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 2
+            m_keyword: 27
             m_value:
               m_global: {r: 0, g: 0, b: 0, a: 1}
               m_bottom: {r: 0, g: 0, b: 0, a: 1}
@@ -192,7 +192,7 @@ MonoBehaviour:
         m_keyword: 2
         m_value:
           m_color:
-            m_keyword: 2
+            m_keyword: 26
             m_value:
               m_global: {r: 1, g: 1, b: 1, a: 1}
               m_bottom: {r: 1, g: 1, b: 1, a: 1}
@@ -242,7 +242,7 @@ MonoBehaviour:
               m_bottomRight: 4
               m_topLeft: 4
               m_TopRight: 4
-    - m_key: PinnedActive
+    - m_key: on
       m_default:
         m_keyword: 2
         m_value:

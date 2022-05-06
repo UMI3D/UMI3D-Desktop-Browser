@@ -53,7 +53,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <summary>
         /// Maps the visualElements with their styles and VisualManipulator.
         /// </summary>
-        protected Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)> m_visualStylesMap;
+        protected Dictionary<VisualElement, VisualManipulator> m_visualMap;
         protected List<View_E> m_views;
     
         #region Constructors and Destructor
@@ -64,42 +64,18 @@ namespace umi3dDesktopBrowser.ui.viewController
         public View_E(string styleResourcePath, StyleKeys keys) :
             this (new VisualElement(), styleResourcePath, keys)
         { }
-        public View_E(VisualElement visual)
-        {
-            if (visual == null) throw new NullReferenceException($"visual is null");
-            Init(null, visual, null, null);
-        }
-        public View_E(VisualElement parent, VisualElement visual, string styleResourcePath, StyleKeys keys)
-        {
-            if (parent == null) throw new NullReferenceException($"parent is null");
-            if (visual == null) throw new NullReferenceException($"visual is null");
-            CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
-            Init(parent, visual, style_SO, keys);
-        }
+        public View_E(VisualElement visual) :
+            this (visual, null, null)
+        { }
         public View_E(VisualElement visual, string styleResourcePath, StyleKeys keys)
         {
             if (visual == null) throw new NullReferenceException($"visual is null");
-            CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
-            Init(null, visual, style_SO, keys);
+            Init(visual, styleResourcePath, keys);
         }
         public View_E(string visualResourcePath, string styleResourcePath, StyleKeys keys)
         {
             VisualElement visual = GetVisualRoot(visualResourcePath);
-            CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
-            Init(null, visual, style_SO, keys);
-        }
-        public View_E(VisualElement parent, string visualResourcePath, string styleResourcePath, StyleKeys keys)
-        {
-            if (parent == null) throw new NullReferenceException($"parent is null");
-            VisualElement visual = GetVisualRoot(visualResourcePath);
-            CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
-            Init(parent, visual, style_SO, keys);
-        }
-        public View_E(VisualElement parent, VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys)
-        {
-            if (parent == null) throw new NullReferenceException($"parent is null");
-            if (visual == null) throw new NullReferenceException($"visual is null");
-            Init(parent, visual, style_SO, keys);
+            Init(visual, styleResourcePath, keys);
         }
         ~View_E()
         {
@@ -228,22 +204,20 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         #region Protected methods
 
-        protected void Init(VisualElement parent, VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys)
+        protected void Init(VisualElement visual, string styleResourcePath, StyleKeys keys)
         {
             m_globalPref = GetGlobalPrefSO();
             m_globalPref.ApplyCustomStyle.AddListener(ApplyAllFormatAndStyle);
-            m_styleApplicator = new UIElementStyleApplicator(m_globalPref);
 
-            m_visualStylesMap = new Dictionary<VisualElement, (CustomStyle_SO, StyleKeys, VisualManipulator)>();
+            m_visualMap = new Dictionary<VisualElement, VisualManipulator>();
             m_views = new List<View_E>();
 
             this.Root = visual;
+            CustomStyle_SO style_SO = GetStyleSO(styleResourcePath);
             AddVisualStyle(Root, style_SO, keys);
 
             Initialize();
             IsInstantiated = true;
-
-            if (parent != null) InsertRootTo(parent);
         }
 
         protected virtual void Initialize()

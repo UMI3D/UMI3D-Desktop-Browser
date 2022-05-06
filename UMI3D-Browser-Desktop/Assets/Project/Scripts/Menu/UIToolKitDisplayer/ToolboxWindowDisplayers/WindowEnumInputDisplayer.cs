@@ -47,8 +47,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             if (menu is DropDownInputMenuItem dropdownMenu)
             {
                 m_dropdown = new Dropdown_E(Displayer.QR<Button>(), "Rectangle2", StyleKeys.Default);
-                string dropdownMenuStyle = "UI/Style/Displayers/DropdownMenu";
-                m_dropdown.SetMenuStyle(dropdownMenuStyle, StyleKeys.DefaultBackground);
+                m_dropdown.SetMenuStyle("BoxV", StyleKeys.DefaultBackground);
                 m_dropdown.SetMenuLabel("Corps3", StyleKeys.DefaultText);
                 Displayer.Add(m_dropdown);
 

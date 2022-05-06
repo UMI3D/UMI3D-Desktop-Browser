@@ -23,23 +23,15 @@ namespace BrowserDesktop.preferences
     [CreateAssetMenu(fileName = "GlobalPreferences", menuName = "ScriptableObjects/UserPreferences/GlobalPreferences")]
     public class GlobalPreferences_SO : ScriptableObject
     {
-        private const int minZoom = 20;
-        private const int maxZoom = 200;
+        [HideInInspector]
+        public UnityEvent ApplyCustomStyle = new UnityEvent();
 
         [Range(minZoom, maxZoom)]
         [Tooltip("Zoom percentage")]
         [SerializeField]
         private int zoomPercentage = 100;
-        public int Zoom
-        {
-            get => zoomPercentage;
-            set
-            {
-                if (value < minZoom || value > maxZoom) Debug.LogError("Zoom value behond limit");
-                else zoomPercentage = value;
-            }
-        }
-        public float ZoomCoef => (float)zoomPercentage / 100f;
+        private const int minZoom = 20;
+        private const int maxZoom = 200;
 
         [Tooltip("TODO")]
         [SerializeField]
@@ -50,8 +42,20 @@ namespace BrowserDesktop.preferences
             set => currentTheme = value;
         }
 
-        [HideInInspector]
-        public UnityEvent ApplyCustomStyle = new UnityEvent();
+        public int Zoom
+        {
+            get => zoomPercentage;
+            set
+            {
+                if (value < minZoom || value > maxZoom) Debug.LogError("Zoom value behond limit");
+                else zoomPercentage = value;
+            }
+        }
+        public float ZoomCoef
+            => (float)zoomPercentage / 100f;
+
+        public float ApplyZoomCoef(float value)
+            => ZoomCoef * value;
 
         [ContextMenu("Apply Custom Style")]
         private void ApplyCustomStyleInInspector() => ApplyCustomStyle.Invoke();

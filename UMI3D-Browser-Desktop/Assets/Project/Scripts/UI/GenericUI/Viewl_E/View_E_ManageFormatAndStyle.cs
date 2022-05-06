@@ -77,12 +77,26 @@ namespace umi3dDesktopBrowser.ui.viewController
         #endregion
 
         /// <summary>
-        /// Return the VisualManipulator of the [visual] (that is the Root or child of Root).
+        /// Return the VisualManipulator of the [visual].
         /// </summary>
         /// <param name="visual"></param>
         /// <returns></returns>
         public VisualManipulator GetVisualManipulator(VisualElement visual)
-            => m_visualStylesMap[visual].Item3;
+            => m_visualMap[visual];
+        /// <summary>
+        /// Return the CustomStyle_SO of the [visual].
+        /// </summary>
+        /// <param name="visual"></param>
+        /// <returns></returns>
+        public CustomStyle_SO GetVisualStyle(VisualElement visual)
+            => m_visualMap[visual].StyleSO;
+        /// <summary>
+        /// Return the StyleKeys of the [visual].
+        /// </summary>
+        /// <param name="visual"></param>
+        /// <returns></returns>
+        public StyleKeys GetVisualKeys(VisualElement visual)
+            => m_visualMap[visual].Keys;
         /// <summary>
         /// Link the mouse behaviour style changement from [sender] to [receiver].
         /// </summary>
@@ -107,15 +121,14 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             if (visual == null) throw new NullReferenceException("visual is null");
 
-            if (!m_visualStylesMap.ContainsKey(visual))
+            if (!m_visualMap.ContainsKey(visual))
             {
                 if (manipulator == null)
                     manipulator = new VisualManipulator(processDuringBubbleUp);
 
                 SetManipulator(manipulator, style_SO, keys);
                 visual.AddManipulator(manipulator);
-
-                m_visualStylesMap.Add(visual, (style_SO, keys, manipulator));
+                m_visualMap.Add(visual, manipulator);
                 manipulator.ApplyFormatAndStyle();
             }
             else
@@ -123,12 +136,13 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
         protected void ResetAllVisualStyle()
         {
-            foreach (VisualElement visual in m_visualStylesMap.Keys)
+            foreach (VisualElement visual in m_visualMap.Keys)
             {
-                var (_, _, manipulator) = m_visualStylesMap[visual];
+                var manipulator = m_visualMap[visual];
                 visual.RemoveManipulator(manipulator);
+                manipulator.Reset();
             }
-            m_visualStylesMap.Clear();
+            m_visualMap.Clear();
         }
 
         #endregion
@@ -153,10 +167,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="manipulator"></param>
         protected void UpdateStyleAndKeysAndManipulator(VisualElement visual, CustomStyle_SO style_SO, StyleKeys keys, VisualManipulator manipulator = null)
         {
-            if (!m_visualStylesMap.ContainsKey(visual)) 
+            if (!m_visualMap.ContainsKey(visual)) 
                 throw new Exception($"Visual [{visual}] unknown wanted to be updated.");
 
-            var (_, _, oldManipulator) = m_visualStylesMap[visual];
+            var oldManipulator = m_visualMap[visual];
             if (manipulator == null)
             {
                 manipulator = oldManipulator;
@@ -168,7 +182,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 SetManipulator(manipulator, style_SO, keys);
                 visual.AddManipulator(manipulator);
             }
-            m_visualStylesMap[visual] = (style_SO, keys, manipulator);
+            m_visualMap[visual] = manipulator;
             manipulator.ApplyFormatAndStyle();
         }
 
@@ -186,11 +200,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="style_SO"></param>
         protected void UpdateStyle(VisualElement visual, CustomStyle_SO style_SO)
         {
-            if (!m_visualStylesMap.ContainsKey(visual))
+            if (!m_visualMap.ContainsKey(visual))
                 throw new Exception($"Visual [{visual}] unknown wanted to be updated.");
-            var (_, keys, manipulator) = m_visualStylesMap[visual];
+            var manipulator = m_visualMap[visual];
             manipulator.UpdateStyle(style_SO);
-            m_visualStylesMap[visual] = (style_SO, keys, manipulator);
         }
 
         /// <summary>
@@ -200,11 +213,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="newKeys"></param>
         protected void UpdateKeys(VisualElement visual, StyleKeys newKeys)
         {
-            if (!m_visualStylesMap.ContainsKey(visual))
+            if (!m_visualMap.ContainsKey(visual))
                 throw new Exception($"Visual [{visual}] unknown wanted to be updated.");
-            var (styleSO, _, manipulator) = m_visualStylesMap[visual];
+            var manipulator = m_visualMap[visual];
             manipulator.UpdateKeys(newKeys);
-            m_visualStylesMap[visual] = (styleSO, newKeys, manipulator);
         }
 
         /// <summary>
@@ -214,15 +226,15 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="newManipulator"></param>
         protected void UpdateManipulator(VisualElement visual, VisualManipulator newManipulator)
         {
-            if (!m_visualStylesMap.ContainsKey(visual))
+            if (!m_visualMap.ContainsKey(visual))
                 throw new Exception($"Visual [{visual}] unknown wanted to be updated.");
             if (newManipulator == null) 
                 throw new NullReferenceException("Manipulator null");
-            var (styleSO, keys, oldManipulator) = m_visualStylesMap[visual];
+            var oldManipulator = m_visualMap[visual];
+            SetManipulator(newManipulator, oldManipulator.StyleSO, oldManipulator.Keys);
             visual.RemoveManipulator(oldManipulator);
-            SetManipulator(newManipulator, styleSO, keys);
             visual.AddManipulator(newManipulator);
-            m_visualStylesMap[visual] = (styleSO, keys, newManipulator);
+            m_visualMap[visual] = newManipulator;
         }
 
         #endregion
