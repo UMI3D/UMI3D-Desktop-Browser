@@ -42,9 +42,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected override void Initialize()
         {
             base.Initialize();
-            m_checkmark = new Icon_E(QR("checkmark"));
+            m_checkmark = new Icon_E();
+            //m_checkmark.Root.name = "checkmark";
+            //m_checkmark.Root.Insert(0, Root);
             m_label = new Label_E(QR<Label>());
-
         }
     }
 }

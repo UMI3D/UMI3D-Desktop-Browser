@@ -32,7 +32,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <summary>
         /// Event raised when the customStyle'format will be applied on the target.
         /// </summary>
-        public event Action<CustomStyle_SO, StyleKeys, VisualElement> ApplyingFormat;
+        public event Action<CustomStyle_SO, VisualElement> ApplyingFormat;
         /// <summary>
         /// Event raised when the customStyle'style will be applied on the target.
         /// </summary>
@@ -40,8 +40,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public bool ProcessDuringBubbleUp { get; set; } = false;
 
-        protected CustomStyle_SO m_styleSO { get; set; } = null;
-        protected StyleKeys m_keys { get; set; } = null;
+        public CustomStyle_SO StyleSO { get; protected set; } = null;
+        public StyleKeys Keys { get; protected set; } = null;
         
         #region Mouse
 
@@ -95,10 +95,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="keys"></param>
         public void Set(CustomStyle_SO style_SO, StyleKeys keys)
         {
-            m_styleSO?.AppliesFormatAndStyle.RemoveListener(ApplyFormatAndStyle);
-            m_styleSO = style_SO;
-            m_keys = keys;
-            m_styleSO?.AppliesFormatAndStyle.AddListener(ApplyFormatAndStyle);
+            StyleSO?.AppliesFormatAndStyle.RemoveListener(ApplyFormatAndStyle);
+            StyleSO = style_SO;
+            Keys = keys;
+            StyleSO?.AppliesFormatAndStyle.AddListener(ApplyFormatAndStyle);
         }
 
         /// <summary>
@@ -113,21 +113,21 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public void UpdateStyle(CustomStyle_SO style_SO)
         {
-            m_styleSO = style_SO;
+            StyleSO = style_SO;
             ApplyFormatAndStyle();
         }
         public void UpdateKeys(StyleKeys newKeys)
         {
-            m_keys = newKeys;
+            Keys = newKeys;
             ApplyFormatAndStyle();
         }
 
         public void ApplyFormat()
-            => ApplyingFormat?.Invoke(m_styleSO, m_keys, target);
+            => ApplyingFormat?.Invoke(StyleSO, target);
         public void ApplyStyle()
-            => ApplyingStyle?.Invoke(m_styleSO, m_keys, target.style, m_mouseBehaviourFromState);
+            => ApplyStyle(m_mouseBehaviourFromState);
         public void ApplyStyle(MouseBehaviour mouseBehaviour)
-            => ApplyingStyle?.Invoke(m_styleSO, m_keys, target.style, mouseBehaviour);
+            => ApplyingStyle?.Invoke(StyleSO, Keys, target.style, mouseBehaviour);
 
         public void ApplyFormatAndStyle()
             => ApplyFormatAndStyle(m_mouseBehaviourFromState);
@@ -152,7 +152,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             target.RegisterCallback<MouseDownEvent>(OnMouseDown);
             target.RegisterCallback<MouseUpEvent>(OnMouseUp);
 
-            m_styleSO?.AppliesFormatAndStyle.AddListener(ApplyFormatAndStyle);
+            StyleSO?.AppliesFormatAndStyle.AddListener(ApplyFormatAndStyle);
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
             target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
 
-            m_styleSO?.AppliesFormatAndStyle.RemoveListener(ApplyFormatAndStyle);
+            StyleSO?.AppliesFormatAndStyle.RemoveListener(ApplyFormatAndStyle);
 
             Reset();
         }

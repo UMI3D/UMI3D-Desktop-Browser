@@ -25,7 +25,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected ScrollView_E m_scrollView { get; set; } = null;
 
         private static string m_toolboxPinnedStyle => "Box1";
-        private static string m_toolboxSubPinnedStyle => "BoxV";
+        private static string m_toolboxSubPinnedStyle => "BoxV1";
         private static string m_toolboxPopupStyle => "Box2";
         private static string GetToolboxType(ToolboxType type)
         {

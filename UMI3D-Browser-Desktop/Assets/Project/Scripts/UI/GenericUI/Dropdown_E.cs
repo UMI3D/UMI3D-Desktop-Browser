@@ -25,9 +25,11 @@ namespace umi3dDesktopBrowser.ui.viewController
     {
         public Action<string> ValueChanged { get; set; } = null;
 
+        protected Box_E m_menu { get; set; } = null;
+
         protected List<string> m_items { get; set; } = null;
         protected string m_currentValue { get; set; } = null;
-        protected CustomStyle_SO m_menuStyle { get; set; } = null;
+        protected string m_menuStyle { get; set; } = null;
         protected StyleKeys m_menuKeys { get; set; } = null;
         protected string m_menuItemStyle { get; set; } = null;
         protected StyleKeys m_menuItemKeys { get; set; } = null;
@@ -38,7 +40,7 @@ namespace umi3dDesktopBrowser.ui.viewController
     
         public void SetMenuStyle(string styleResourcePath, StyleKeys keys)
         {
-            m_menuStyle = GetStyleSO(styleResourcePath);
+            m_menuStyle = styleResourcePath;
             m_menuKeys = keys;
         }
         public void SetMenuItemStyle(string styleResourcePath, StyleKeys keys)
@@ -78,22 +80,15 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected void ShowMenu()
         {
             var menu = new GenericDropdownMenu();
-            foreach (string item in m_items)
+            var menubox = new Box_E(menu.contentContainer, m_menuStyle, m_menuKeys);
+            m_items.ForEach((item) =>
             {
-                bool isSelected = item == m_currentValue;
-                menu.AddItem(item, isSelected, () => SelectItem(item));
-            }
-            if (m_menuStyle != null)
-            {
-                ApplyFormat(m_menuStyle, m_menuKeys, menu.contentContainer);
-                ApplyStyle(m_menuStyle, m_menuKeys, menu.contentContainer.style, MouseBehaviour.MouseOut);
-            }
+                menu.AddItem(item, item == m_currentValue, () => SelectItem(item));
+            });
             foreach (VisualElement row in menu.contentContainer.Children())
             {
                 var item = new DropdownItem_E(row, m_menuItemStyle, m_menuItemKeys);
                 item.SetCheckmark(m_menuCheckmarkStyle, m_menuCheckmarkKeys);
-                if (m_menuLabelKeys == null)
-                    return;
                 item.SetLabel(m_menuLabelStyle, m_menuLabelKeys);
             }
             menu.DropDown(Root.worldBound, Root, true);

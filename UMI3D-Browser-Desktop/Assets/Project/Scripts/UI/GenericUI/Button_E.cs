@@ -31,11 +31,11 @@ namespace umi3dDesktopBrowser.ui.viewController
                 if (value == m_button.text)
                     return;
                 m_rawText = value;
-                var (styleSO, _, _) = m_visualStylesMap[m_button];
+                var styleSO = GetVisualStyle(m_button);
                 string newValue = m_rawText;
-                if (styleSO != null)
-                    newValue = m_styleApplicator.GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, value);
-                m_button.text = newValue;
+                if (styleSO == null) m_button.text = value;
+                else
+                    m_button.text = GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, value);
             }
         }
 

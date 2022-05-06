@@ -56,13 +56,14 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected void ApplyTextFieldFormat(string newValue)
         {
-            if (!m_visualStylesMap.ContainsKey(m_textInput))
+            if (!m_visualMap.ContainsKey(m_textInput))
             {
                 m_textField.value = newValue;
                 return;
             }
-            var (styleSO, _, _) = m_visualStylesMap[m_textInput];
-            m_textField.value = m_styleApplicator.GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, newValue);
+            var styleSO = GetVisualStyle(m_textInput);
+            if (styleSO != null)
+                m_textField.value = GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, newValue);
         }
     }
 
