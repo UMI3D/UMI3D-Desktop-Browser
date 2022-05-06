@@ -24,17 +24,13 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class DropdownItem_E
     {
-        protected VisualElement m_checkmark { get; set; } = null;
-        protected Label m_label { get; set; } = null;
+        protected Icon_E m_checkmark { get; set; } = null;
+        protected Label_E m_label { get; set; } = null;
     
-        public void SetCheckmark(string styleResourcePath, StyleKeys keys)
-        {
-            AddVisualStyle(m_checkmark, styleResourcePath, keys);
-        }
-        public void SetLabel(string styleResourcePath, StyleKeys keys)
-        {
-            AddVisualStyle(m_label, styleResourcePath, keys);
-        }
+        public void SetCheckmark(string partialStylePath, StyleKeys keys)
+            => m_checkmark.UpdateRootStyleAndKeysAndManipulator(partialStylePath, keys);
+        public void SetLabel(string partialStylePath, StyleKeys keys)
+            => m_label.UpdateRootStyleAndKeysAndManipulator(partialStylePath, keys);
     }
 
     public partial class DropdownItem_E : View_E
@@ -46,8 +42,9 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected override void Initialize()
         {
             base.Initialize();
-            m_checkmark = Root.Q();
-            m_label = Root.Q<Label>();
+            m_checkmark = new Icon_E(QR("checkmark"));
+            m_label = new Label_E(QR<Label>());
+
         }
     }
 }

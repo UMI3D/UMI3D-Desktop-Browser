@@ -66,7 +66,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Initialize();
 
 
-            PinButton = new Button_E(QR<Button>("pinButton"), "HorizontalRectangle", StyleKeys.Bg_Border("on"), StyleKeys.Bg_Border("off"), false);
+            PinButton = new Button_E(QR<Button>("pinButton"), "RectangleVLarge", StyleKeys.Bg_Border("on"), StyleKeys.Bg_Border("off"), false);
             PinButton.Clicked += PinUnpin;
             var pinIcon = new Icon_E("Square1", StyleKeys.Bg("pin"));
             PinButton.Add(pinIcon);
