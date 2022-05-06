@@ -153,8 +153,19 @@ namespace umi3dDesktopBrowser.ui.viewController
             Root.RemoveFromHierarchy();
             IsDisplaying = false;
         }
+        /// <summary>
+        /// Query a visualElement child of Root where name = [name if not null].
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public virtual VisualElement QR(string name = null)
             => QR<VisualElement>(name);
+        /// <summary>
+        /// Query a visualElement of type [V] child of Root where name = [name if not null].
+        /// </summary>
+        /// <typeparam name="V"></typeparam>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public virtual V QR<V>(string name = null) where V : VisualElement
             => Root.Q<V>(name);
         public virtual void Add(View_E child)
@@ -186,18 +197,27 @@ namespace umi3dDesktopBrowser.ui.viewController
         public virtual V Q<V>(string name = null) where V : View_E
         {
             bool matchName(View_E view) 
-                => (name == null || (name != null && view.Name == name));
-            
-            V resultHorizontal = null;
-            V resultVertical = null;
-            m_views.ForEach(delegate (View_E view)
+                => (name == null || view.Name == name);
+
+            var toQuery = new Queue<View_E>(m_views);
+            var queried = new List<View_E>();
+
+            while (toQuery.Count > 0)
             {
-                if (view is V v && matchName(v) && resultHorizontal == null)
-                    resultHorizontal = v;
-                if (resultHorizontal == null && resultVertical == null)
-                    resultVertical = view.Q<V>(name);
-            });
-            return (resultHorizontal != null) ? resultHorizontal : resultVertical;
+                var current = toQuery.Dequeue();
+                if (queried.Contains(current))
+                    continue;
+
+                queried.Add(current);
+                if (current is V v && matchName(v))
+                    return v;
+
+                current.m_views.ForEach((view) =>
+                {
+                    toQuery.Enqueue(view);
+                });
+            }
+            return null;
         }
 
         #endregion
