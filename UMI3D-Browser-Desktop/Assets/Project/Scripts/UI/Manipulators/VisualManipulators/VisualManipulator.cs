@@ -72,22 +72,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         #endregion
-    }
 
-    public partial class VisualManipulator
-    {
-        public VisualManipulator () : 
-            this(false) 
-        { }
-        public VisualManipulator(bool processDuringBubbleUp) : 
-            this(new ManipulatorActivationFilter { button = MouseButton.LeftMouse }, processDuringBubbleUp)
-        { }
-        public VisualManipulator(ManipulatorActivationFilter activationFilter, bool processDuringBubbleUp)
-        {
-            activators.Add(activationFilter);
-            ProcessDuringBubbleUp = processDuringBubbleUp;
-        }
-        
         /// <summary>
         /// Bind custom style ans keys.
         /// </summary>
@@ -136,11 +121,54 @@ namespace umi3dDesktopBrowser.ui.viewController
             ApplyFormat();
             ApplyStyle(mouseBehaviour);
         }
+
+        public void OnMouseBehaviourChanged(EventBase e, (MousePressedState, MousePositionState) mouseState)
+        {
+            if (e.propagationPhase == PropagationPhase.BubbleUp && !ProcessDuringBubbleUp)
+                return;
+
+            m_mouseState = mouseState;
+            MouseBehaviourChanged?.Invoke(m_mouseBehaviourFromState);
+
+            ApplyStyle();
+        }
+        public void OnMouseBehaviourChanged(EventBase e, MousePressedState pressedState)
+        {
+            if (e.propagationPhase == PropagationPhase.BubbleUp && !ProcessDuringBubbleUp)
+                return;
+
+            m_mouseState = (pressedState, m_mouseState.Item2);
+            MouseBehaviourChanged?.Invoke(m_mouseBehaviourFromState);
+
+            ApplyStyle();
+        }
+
+        protected virtual void OnMouseOver(MouseOverEvent e)
+            => OnMouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Over));
+
+        protected virtual void OnMouseOut(MouseOutEvent e)
+            => OnMouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Out));
+
+        protected virtual void OnMouseDown(MouseDownEvent e)
+            => OnMouseBehaviourChanged(e, (MousePressedState.Pressed, m_mouseState.Item2));
+
+        protected virtual void OnMouseUp(MouseUpEvent e)
+            => OnMouseBehaviourChanged(e, (MousePressedState.Unpressed, m_mouseState.Item2));
     }
 
     public partial class VisualManipulator : MouseManipulator
     {
-        #region Registrations
+        public VisualManipulator() :
+            this(false)
+        { }
+        public VisualManipulator(bool processDuringBubbleUp) :
+            this(new ManipulatorActivationFilter { button = MouseButton.LeftMouse }, processDuringBubbleUp)
+        { }
+        public VisualManipulator(ManipulatorActivationFilter activationFilter, bool processDuringBubbleUp)
+        {
+            activators.Add(activationFilter);
+            ProcessDuringBubbleUp = processDuringBubbleUp;
+        }
 
         /// <summary>
         /// <inheritdoc/>
@@ -168,41 +196,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             StyleSO?.AppliesFormatAndStyle.RemoveListener(ApplyFormatAndStyle);
 
             Reset();
-        }
-
-        #endregion
-
-        protected virtual void OnMouseOver(MouseOverEvent e)
-            => OnMouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Over));
-
-        protected virtual void OnMouseOut(MouseOutEvent e)
-            => OnMouseBehaviourChanged(e, (m_mouseState.Item1, MousePositionState.Out));
-
-        protected virtual void OnMouseDown(MouseDownEvent e)
-            => OnMouseBehaviourChanged(e, (MousePressedState.Pressed, m_mouseState.Item2));
-
-        protected virtual void OnMouseUp(MouseUpEvent e)
-            => OnMouseBehaviourChanged(e, (MousePressedState.Unpressed, m_mouseState.Item2));
-
-        public void OnMouseBehaviourChanged(EventBase e, (MousePressedState, MousePositionState) mouseState)
-        {
-            if (e.propagationPhase == PropagationPhase.BubbleUp && !ProcessDuringBubbleUp)
-                return;
-
-            m_mouseState = mouseState;
-            MouseBehaviourChanged?.Invoke(m_mouseBehaviourFromState);
-
-            ApplyStyle();
-        }
-        public void OnMouseBehaviourChanged(EventBase e, MousePressedState pressedState)
-        {
-            if (e.propagationPhase == PropagationPhase.BubbleUp && !ProcessDuringBubbleUp)
-                return;
-
-            m_mouseState = (pressedState, m_mouseState.Item2);
-            MouseBehaviourChanged?.Invoke(m_mouseBehaviourFromState);
-
-            ApplyStyle();
         }
     }
 }

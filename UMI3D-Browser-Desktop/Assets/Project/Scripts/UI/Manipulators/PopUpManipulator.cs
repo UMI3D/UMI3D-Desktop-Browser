@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -23,6 +24,9 @@ namespace umi3dDesktopBrowser.ui.viewController
     /// </summary>
     public partial class PopUpManipulator
     {
+        public event Action MouseDown;
+        public event Action MouseUp;
+
         protected Vector2 start;
         protected bool active = false;
         protected VisualElement m_popup;
@@ -30,8 +34,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class PopUpManipulator : VisualManipulator
     {
-        public PopUpManipulator(VisualElement visualTarget, bool stopPropagation = true) :
-            base(stopPropagation)
+        public PopUpManipulator(VisualElement visualTarget, bool processDuringBubbleUp = true) :
+            base(processDuringBubbleUp)
         { m_popup = visualTarget; }
 
         #region Registrations
@@ -60,19 +64,21 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected virtual void OnMouseDown(MouseDownEvent e)
         {
-            if (active)
-            {
-                e.StopImmediatePropagation();
-                return;
-            }
+            //if (active)
+            //{
+            //    e.StopImmediatePropagation();
+            //    return;
+            //}
 
             if (CanStartManipulation(e))
             {
                 start = e.localMousePosition;
                 active = true;
                 target.CaptureMouse();
-                e.StopPropagation();
+                //e.StopPropagation();
             }
+
+            MouseDown?.Invoke();
         }
 
         /// <summary>
@@ -107,7 +113,32 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             active = false;
             target.ReleaseMouse();
-            e.StopPropagation();
+            //e.StopPropagation();
+
+            MouseUp?.Invoke();
         }
     }
+
+    //public partial class PopUpManipulator : MouseManipulator
+    //{
+    //    /// <summary>
+    //    /// <inheritdoc/>
+    //    /// </summary>
+    //    protected override void RegisterCallbacksOnTarget()
+    //    {
+    //        target.RegisterCallback<MouseDownEvent>(OnMouseDown);
+    //        target.RegisterCallback<MouseMoveEvent>(OnMouseMove);
+    //        target.RegisterCallback<MouseUpEvent>(OnMouseUp);
+    //    }
+
+    //    /// <summary>
+    //    /// <inheritdoc/>
+    //    /// </summary>
+    //    protected override void UnregisterCallbacksFromTarget()
+    //    {
+    //        target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
+    //        target.UnregisterCallback<MouseMoveEvent>(OnMouseMove);
+    //        target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
+    //    }
+    //}
 }
