@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
+using System.Collections;
 using umi3DBrowser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -33,31 +34,21 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static Action<object> s_cursorSetMovement { get; set; } = null;
         private static Action<object> s_cursorUnsetMovement { get; set; } = null;
 
-        protected static float s_width { get; set; } = default;
-        protected static float s_height { get; set; } = default;
-        protected static bool s_shouldCenter { get; set; } = false;
-        private static string s_uxml => "UI/UXML/dialogueBox";
-        private static string s_style => "UI/Style/DialogueBox/DialogueBox";
+        protected static float s_dialogueboxWidth => s_dialogueBox.resolvedStyle.width;
+        protected static float s_dialogueboxHeight => s_dialogueBox.resolvedStyle.height;
+
+        protected static float s_centerRadius = 10f;
+        protected static bool s_isCentered
+            => s_dialogueBox.resolvedStyle.top == (Screen.height - s_dialogueboxHeight) / 2f
+            && s_dialogueBox.resolvedStyle.left == (Screen.width - s_dialogueboxWidth) / 2f;
+        protected static bool s_canBeCentered 
+            => (s_dialogueBox.resolvedStyle.top <= (Screen.height - s_dialogueboxHeight) / 2f + s_centerRadius && s_dialogueBox.resolvedStyle.top >= (Screen.height - s_dialogueboxHeight) / 2f - s_centerRadius) 
+            && (s_dialogueBox.resolvedStyle.left <= (Screen.width - s_dialogueboxWidth) / 2f + s_centerRadius && s_dialogueBox.resolvedStyle.left >= (Screen.width - s_dialogueboxWidth) / 2f - s_centerRadius);
 
         public static void SetCursorMovementActions(Action<object> cursorSetMovement, Action<object> cursorUnsetMovement)
         {
             s_cursorSetMovement = cursorSetMovement;
             s_cursorUnsetMovement = cursorUnsetMovement;
-        }
-
-        /// <summary>
-        /// Sets up the dialogue box for two choices. And displayed it at the root of the [uiDocument].
-        /// </summary>
-        /// <param name="title"></param>
-        /// <param name="message"></param>
-        /// <param name="optionA"></param>
-        /// <param name="optionB"></param>
-        /// <param name="choiceCallback"></param>
-        /// <param name="uiDoc"></param>
-        public static void Setup(string title, string message, string optionA, string optionB, Action<bool> choiceCallback, UIDocument uiDoc)
-        {
-            Setup(title, message, optionA, optionB, choiceCallback);
-            DisplayFrom(uiDoc);
         }
 
         /// <summary>
@@ -69,7 +60,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="optionB"></param>
         /// <param name="choiceCallback"></param>
         /// <param name="marginForTitleBar"></param>
-        public static void Setup(string title, string message, string optionA, string optionB, Action<bool> choiceCallback)
+        public void Setup(string title, string message, string optionA, string optionB, Action<bool> choiceCallback)
         {
             Setup(title, message);
 
@@ -86,20 +77,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         /// <summary>
-        /// Sets up the dialogue box for one choice. And displayed it at the root of the [uiDocument].
-        /// </summary>
-        /// <param name="title"></param>
-        /// <param name="message"></param>
-        /// <param name="optionA"></param>
-        /// <param name="choiceCallback"></param>
-        /// <param name="uiDoc"></param>
-        public static void Setup(string title, string message, string optionA, Action choiceCallback, UIDocument uiDoc)
-        {
-            Setup(title, message, optionA, choiceCallback);
-            DisplayFrom(uiDoc);
-        }
-
-        /// <summary>
         /// Sets up the dialogue box for one choice.
         /// </summary>
         /// <param name="title"></param>
@@ -108,7 +85,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="optionB"></param>
         /// <param name="choiceCallback"></param>
         /// <param name="marginForTitleBar"></param>
-        public static void Setup(string title, string message, string optionA, Action choiceCallback)
+        public void Setup(string title, string message, string optionA, Action choiceCallback)
         {
             Setup(title, message);
 
@@ -131,47 +108,48 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <returns></returns>
         private static void Setup(string title, string message)
         {
-            Create();
-
             ResetButtons();
             s_cursorSetMovement(Instance);
 
-            s_choiceA.Clicked += () =>
-            {
-                ChoiceMade(true);
-            };
-            s_choiceB.Clicked += () =>
-            {
-                
-                ChoiceMade(false);
-            };
+            s_choiceA.Clicked += () => ChoiceMade(true);
+            s_choiceB.Clicked += () => ChoiceMade(false);
 
             s_title.value = title;
             s_message.value = message;
         }
 
-        public static void DisplayFrom(UIDocument uiDocument)
+        public void DisplayFrom(UIDocument uiDocument)
         {
             if (Instance.IsDisplaying) return;
             else Instance.IsDisplaying = true;
             Instance.InsertRootTo(uiDocument.rootVisualElement);
-            Center();
-            s_shouldCenter = true;
+            s_dialogueBox.style.visibility = Visibility.Hidden;
+            Instance.OnDisplayedOrHiddenTrigger(true);
+            UIManager.StartCoroutine(Center());
+            //s_isCenter = true;
         }
 
-        protected void OnSizeChanged(GeometryChangedEvent e)
+        protected void OnDialgueboxSizeChanged(GeometryChangedEvent e)
         {
-            s_width = e.newRect.width;
-            s_height = e.newRect.height;
-            if (s_shouldCenter)
-                Center();
+            bool shouldCenter()
+                => !s_isCentered &&
+                s_canBeCentered 
+                /*&& (e.newRect.width != e.oldRect.width || e.newRect.height != e.oldRect.height)*/;
+
+            if (shouldCenter()) UIManager.StartCoroutine(Center());
         }
 
-        protected static void Center()
+        protected void OnBackgroundSizeChanged(GeometryChangedEvent e)
         {
-            s_dialogueBox.style.top = Screen.height / 2f - s_height / 2f;
-            s_dialogueBox.style.left = Screen.width / 2f - s_width / 2f;
-            s_shouldCenter = false;
+            if (s_canBeCentered) UIManager.StartCoroutine(Center());
+        }
+
+        protected static IEnumerator Center()
+        {
+            yield return new WaitUntil(() => s_dialogueboxWidth > 0f && s_dialogueboxHeight > 0f);
+            s_dialogueBox.style.top = (Screen.height - s_dialogueboxHeight) / 2f;
+            s_dialogueBox.style.left = (Screen.width - s_dialogueboxWidth) / 2f;
+            s_dialogueBox.style.visibility = Visibility.Visible;
         }
 
         protected static void ResetButtons()
@@ -189,28 +167,23 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class DialogueBox_E : ISingleUI
     {
-        private static DialogueBox_E s_instance;
-
         public static DialogueBox_E Instance
         {
             get
             {
-                Create();
+                if (s_instance == null)
+                    s_instance = new DialogueBox_E();
                 return s_instance;
             }
         }
 
-        private static void Create()
-        {
-            if (s_instance == null)
-                s_instance = new DialogueBox_E();
-        }
+        private static DialogueBox_E s_instance;
     }
 
     public partial class DialogueBox_E : View_E
     {
         private DialogueBox_E() :
-            base(s_uxml, null, null)
+            base("UI/UXML/dialogueBox", null, null)
         { }
 
         protected override void Initialize()
@@ -218,7 +191,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Initialize();
 
             s_dialogueBox = Root.Q("dialogueBox");
-            AddVisualStyle(s_dialogueBox, s_style, StyleKeys.DefaultBackground, new PopUpManipulator(s_dialogueBox));
+            AddVisualStyle(s_dialogueBox, "UI/Style/DialogueBox/DialogueBox", StyleKeys.DefaultBackground, new PopUpManipulator(s_dialogueBox));
 
             s_title = new Label_E(Root.Q<Label>("title"), "Title2", StyleKeys.DefaultText);
             s_message = new Label_E(Root.Q<Label>("message"), "Corps1", StyleKeys.DefaultText);
@@ -230,7 +203,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             s_choiceA = new Button_E(QR<Button>("choiceA"), "Rectangle1", StyleKeys.Default);
             s_choiceB = new Button_E(QR<Button>("choiceB"), "Rectangle1", StyleKeys.Default);
 
-            s_dialogueBox.RegisterCallback<GeometryChangedEvent>(OnSizeChanged);
+            Root.RegisterCallback<GeometryChangedEvent>(OnBackgroundSizeChanged);
+            s_dialogueBox.RegisterCallback<GeometryChangedEvent>(OnDialgueboxSizeChanged);
         }
     }
 }
