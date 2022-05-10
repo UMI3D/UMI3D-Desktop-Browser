@@ -66,7 +66,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Initialize();
 
 
-            PinButton = new Button_E(QR<Button>("pinButton"), "RectangleVLarge", StyleKeys.Bg_Border("on"), StyleKeys.Bg_Border("off"), false);
+            PinButton = new Button_E(QR<Button>("pinButton"), "Pin", StyleKeys.Bg_Border("on"), StyleKeys.Bg_Border("off"), false);
             PinButton.Clicked += PinUnpin;
             var pinIcon = new Icon_E("Square1", StyleKeys.Bg("pin"));
             PinButton.Add(pinIcon);
@@ -79,12 +79,10 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             m_toolboxesContainer = Root.Q("toolboxesContainer");
             string toolboxesContainerStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_ToolboxesContainer";
-            //StyleKeys toolboxesContainerKeys = new StyleKeys(null, "");
             AddVisualStyle(m_toolboxesContainer, toolboxesContainerStyle, null);
 
             m_displayersContainer = Root.Q("displayersContainer");
             string displayersContainerStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_DisplayersContainer";
-            //StyleKeys displayersContainerKeys = new StyleKeys(null, "");
             AddVisualStyle(m_displayersContainer, displayersContainerStyle, null);
 
             FirstToolbox = new Toolbox_E(ToolboxType.Popup);

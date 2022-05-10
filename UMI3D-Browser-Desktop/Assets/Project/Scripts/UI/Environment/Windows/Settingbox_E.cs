@@ -99,7 +99,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             var buttonbox = Root.Q("buttonbox");
             static Button_E SetButton(string on, string off)
             {
-                var button = new Button_E("Square", StyleKeys.DefaultBackgroundAndBorder);
+                var button = new Button_E("Square_m", StyleKeys.DefaultBackgroundAndBorder);
                 var icon = new Icon_E();
                 button.Add(icon);
                 button.Toggle(true);

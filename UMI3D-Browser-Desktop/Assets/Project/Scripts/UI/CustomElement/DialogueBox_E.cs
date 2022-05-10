@@ -192,15 +192,15 @@ namespace umi3dDesktopBrowser.ui.viewController
                 if (shouldCenter()) UIManager.StartCoroutine(Center());
             };
 
-            s_title = new Label_E(Root.Q<Label>("title"), "Title2", StyleKeys.DefaultText);
-            s_message = new Label_E(Root.Q<Label>("message"), "Corps1", StyleKeys.DefaultText);
+            s_title = new Label_E(Root.Q<Label>("title"), "TitleDialogueBox", StyleKeys.DefaultText);
+            s_message = new Label_E(Root.Q<Label>("message"), "CorpsDialogueBox", StyleKeys.DefaultText);
 
             VisualElement choiceBox = Root.Q("choiceBox");
             string choiceBoxStyle = "UI/Style/DialogueBox/DialogueBox_choiceBox";
             AddVisualStyle(choiceBox, choiceBoxStyle, null);
 
-            s_choiceA = new Button_E(QR<Button>("choiceA"), "Rectangle1", StyleKeys.Default);
-            s_choiceB = new Button_E(QR<Button>("choiceB"), "Rectangle1", StyleKeys.Default);
+            s_choiceA = new Button_E(QR<Button>("choiceA"), "DialogueBoxChoice", StyleKeys.Default);
+            s_choiceB = new Button_E(QR<Button>("choiceB"), "DialogueBoxChoice", StyleKeys.Default);
 
             Root.RegisterCallback<GeometryChangedEvent>(OnBackgroundSizeChanged);
         }

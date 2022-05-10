@@ -57,7 +57,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             if (m_closeButton != null)
                 return;
             
-            m_closeButton = new Button_E(QR<Button>("closeButton"), "RectangleV", StyleKeys.DefaultBackgroundAndBorder);
+            m_closeButton = new Button_E(QR<Button>("closeButton"), "Close", StyleKeys.DefaultBackgroundAndBorder);
             var closeIcon = new Icon_E("Square", StyleKeys.DefaultBackground);
             m_closeButton.Add(closeIcon);
             LinkMouseBehaviourChanged(m_closeButton, closeIcon);
@@ -102,7 +102,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public override void SetTopBar(string name)
         {
             if (m_topBar == null)
-                m_topBar = new Label_E(QR<Label>("windowName"), "Title", StyleKeys.Default);
+                m_topBar = new Label_E(QR<Label>("windowName"), "TitleDraggableWindow", StyleKeys.Default);
             m_topBar.Root.AddManipulator(GetNewWindowManipulator());
             base.SetTopBar(name);
         }

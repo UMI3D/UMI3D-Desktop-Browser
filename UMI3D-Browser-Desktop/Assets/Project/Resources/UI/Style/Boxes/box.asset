@@ -83,7 +83,7 @@ MonoBehaviour:
   - m_theme: {fileID: 0}
     m_textStyle: []
     m_background:
-    - m_key: box0
+    - m_key: light
       m_default:
         m_keyword: 2
         m_value:
@@ -120,7 +120,7 @@ MonoBehaviour:
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
-    - m_key: box1
+    - m_key: dark
       m_default:
         m_keyword: 2
         m_value:

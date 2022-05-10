@@ -82,7 +82,7 @@ MonoBehaviour:
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle:
-    - m_key: corps0
+    - m_key: primaryLight
       m_default:
         m_keyword: 2
         m_value:
@@ -125,7 +125,7 @@ MonoBehaviour:
           m_outlineWidth:
             m_keyword: 0
             m_value: 0
-    - m_key: corps1
+    - m_key: secondaryLight
       m_default:
         m_keyword: 2
         m_value:
