@@ -36,15 +36,13 @@ namespace umi3dDesktopBrowser.ui.viewController
         private VisualElement leftLayout_VE;
         private VisualElement centerLayout_VE;
 
-        private static string m_separatorStyle => "UI/Style/MenuBar/Separator";
-        private static StyleKeys m_separatorKeys => StyleKeys.DefaultBackground;
         public static bool AreThereToolboxes { get; set; } = false;
 
         #region Pin Unpin
-        public event Action<bool, Menu> OnPinnedUnpinned;
+        public event Action<bool, Menu> PinnedUnpinned;
 
-        public void PinUnpin(bool value, Menu menu)
-            => OnPinnedUnpinned?.Invoke(value, menu);
+        public void OnPinUnpin(bool value, Menu menu)
+            => PinnedUnpinned?.Invoke(value, menu);
         #endregion
 
         public void DisplaySubMenu(bool value)

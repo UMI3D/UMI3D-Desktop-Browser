@@ -53,7 +53,7 @@ namespace umi3dDesktopBrowser.ui
 
             m_viewport.Add(MenuBar_E.Instance.SubMenuLayout);
 
-            MenuBar_E.Instance.OnPinnedUnpinned += (value, menu) =>
+            MenuBar_E.Instance.PinnedUnpinned += (value, menu) =>
             {
                 if (value)
                     m_pinnedToolboxesDM.menu.Add(menu);

@@ -60,5 +60,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <param name="value"></param>
         public void Toggle(bool value);
         public void AddStateKeys(View_E visual, string styleResourcePath, StyleKeys on, StyleKeys off);
+        public void UpdateStateKeys(View_E view, StyleKeys on, StyleKeys off);
     }
 }

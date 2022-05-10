@@ -27,52 +27,11 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Label_E Label { get; protected set; } = null;
         public Button_E Button { get; protected set; } = null;
 
-        private static string m_uxmlPath => "UI/UXML/Toolbox/toolboxItem";
         private static string m_menuBarStyle => "UI/Style/MenuBar/MenuBar_ToolboxItem";
         private static string m_windowStyle => "UI/Style/ToolboxWindow/ToolboxWindow_ToolboxItem";
 
         public void Toggle(bool value)
             => Button?.Toggle(value);
-    }
-
-    public partial class ToolboxItem_E : IClickableElement
-    {
-        public event Action Clicked;
-
-        public void ResetClickedEvent()
-            => Clicked = null;
-        public void OnClicked()
-            => Clicked?.Invoke();
-        
-    }
-
-    public partial class ToolboxItem_E : View_E
-    {
-        public ToolboxItem_E(bool isInMenuBar = true) :
-            this("placeholderToolboxActive", "placeholderToolboxEnable", "", false, isInMenuBar)
-        { }
-        public ToolboxItem_E(string iconKey, string itemName, bool isInMenuBar = true) :
-            this(iconKey, null, itemName, true, isInMenuBar)
-        { }
-        public ToolboxItem_E(string iconOnKey, string iconOffKey, string itemName, bool isOn = false) : 
-            this(iconOnKey, iconOffKey, itemName, isOn, true)
-        { }
-        private ToolboxItem_E(string iconOnKey, string iconOffKey, string itemName, bool isOn = false, bool isInMenuBar = true) :
-            base(m_uxmlPath, (isInMenuBar) ? m_menuBarStyle : m_windowStyle, null)
-        {
-            StyleKeys buttonOnKeys = new StyleKeys(null, iconOnKey, null);
-            if (iconOffKey != null)
-            {
-                StyleKeys buttonOffKeys = new StyleKeys(null, iconOffKey, null);
-                Button.AddStateKeys(Button, "ToolboxItem_Icon", buttonOnKeys, buttonOffKeys);
-                Button.Toggle(isOn);
-            }
-            else
-                Button.UpdateRootStyleAndKeysAndManipulator("ToolboxItem_Icon", buttonOnKeys);
-
-            Name = itemName;
-            Label.value = itemName;
-        }
 
         public void SetIcon(Texture2D icon)
         {
@@ -91,13 +50,67 @@ namespace umi3dDesktopBrowser.ui.viewController
             Button.AddStateKeys(Button, "ToolboxItem_Icon", onKeys, offKeys);
         }
 
+        public static ToolboxItem_E NewItem(string on, string iconOffKey, string itemName, bool isOn = false)
+        {
+            var item = new ToolboxItem_E();
+
+            return item;
+        }
+
+        public static ToolboxItem_E NewPlaceHolder()
+        {
+            var item = new ToolboxItem_E();
+
+            return item;
+        }
+    }
+
+    public partial class ToolboxItem_E : IClickableElement
+    {
+        public event Action Clicked;
+
+        public void ResetClickedEvent()
+            => Clicked = null;
+        public void OnClicked()
+            => Clicked?.Invoke();
+        
+    }
+
+    public partial class ToolboxItem_E : View_E
+    {
+        public ToolboxItem_E(bool isInMenuBar = true) :
+            this("placeholderToolboxActive", "placeholderToolboxEnable", "", false, isInMenuBar)
+        { }
+        public ToolboxItem_E(string iconKey, string itemName) :
+            this(iconKey, null, itemName, true, true)
+        { }
+        private ToolboxItem_E(string iconOnKey, string iconOffKey, string itemName, bool isOn = false, bool isInMenuBar = true) :
+            base("UI/UXML/Toolbox/toolboxItem", (isInMenuBar) ? m_menuBarStyle : m_windowStyle, null)
+        {
+            StyleKeys buttonOnKeys = new StyleKeys(null, iconOnKey, null);
+            if (iconOffKey != null)
+            {
+                StyleKeys buttonOffKeys = new StyleKeys(null, iconOffKey, null);
+                Button.AddStateKeys(Button, "ToolboxItem_Icon", buttonOnKeys, buttonOffKeys);
+                Button.Toggle(isOn);
+            }
+            else
+                Button.UpdateRootStyleAndKeysAndManipulator("ToolboxItem_Icon", buttonOnKeys);
+
+            Name = itemName;
+            Label.value = itemName;
+        }
+
+        private ToolboxItem_E(string partialStyle) :
+            base ("UI/UXML/Toolbox/toolboxItem", partialStyle, null)
+        { }
+
         protected override void Initialize()
         {
             base.Initialize();
 
             Label = new Label_E(QR<Label>(), "CorpsToolboxItem", StyleKeys.DefaultText);
-            
-            Button = new Button_E(Root.Q<Button>());
+            Button = new Button_E(Root.Q<Button>(), "ToolboxItem_Icon", null);
             Button.Clicked += OnClicked;
         }
     }

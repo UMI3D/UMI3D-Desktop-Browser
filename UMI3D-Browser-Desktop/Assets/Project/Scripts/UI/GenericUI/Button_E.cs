@@ -68,6 +68,16 @@ namespace umi3dDesktopBrowser.ui.viewController
                 StateKeys.Add(view, (on, off));
             view.UpdateRootStyleAndKeysAndManipulator(styleResourcePath, (IsOn) ? on : off);
         }
+        public void UpdateStateKeys(View_E view, StyleKeys on, StyleKeys off)
+        {
+            if (view == null)
+                throw new NullReferenceException("Visual null when trying to add state keys");
+            if (StateKeys.ContainsKey(view))
+                StateKeys[view] = (on, off);
+            else
+                throw new NullReferenceException($"StateKeys doesn't contain the view");
+            view.UpdateRootKeys((IsOn) ? on : off);
+        }
     }
 
     public partial class Button_E : IHoldableElement
