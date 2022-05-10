@@ -128,15 +128,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             UIManager.StartCoroutine(Center());
         }
 
-        protected void OnDialgueboxSizeChanged(GeometryChangedEvent e)
-        {
-            //bool shouldCenter()
-            //    => !s_isCentered &&
-            //    s_canBeCentered;
-
-            //if (shouldCenter()) UIManager.StartCoroutine(Center());
-        }
-
         protected void OnBackgroundSizeChanged(GeometryChangedEvent e)
         {
             if (s_canBeCentered) UIManager.StartCoroutine(Center());
@@ -212,7 +203,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             s_choiceB = new Button_E(QR<Button>("choiceB"), "Rectangle1", StyleKeys.Default);
 
             Root.RegisterCallback<GeometryChangedEvent>(OnBackgroundSizeChanged);
-            s_dialogueBox.RegisterCallback<GeometryChangedEvent>(OnDialgueboxSizeChanged);
         }
     }
 }

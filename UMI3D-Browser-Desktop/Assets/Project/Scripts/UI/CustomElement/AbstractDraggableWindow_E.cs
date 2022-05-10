@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -29,6 +30,15 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected Icon_E m_windowIcon { get; set; } = null;
         protected Button_E m_closeButton { get; set; } = null;
+
+        protected float m_rootWidth => Root.resolvedStyle.width;
+        protected float m_rootHeight => Root.resolvedStyle.height;
+
+        protected float m_pinnableLimit = 10f;
+        protected bool m_isPinned
+            => Root.resolvedStyle.left == 0f || Root.resolvedStyle.left == Screen.width - m_rootWidth / 2f;
+        protected bool m_canBePinned
+            => Root.resolvedStyle.left <= m_pinnableLimit || Root.resolvedStyle.left >= Screen.width - m_pinnableLimit - m_rootWidth;
 
         public void OnCloseButtonPressed()
             => CloseButtonPressed?.Invoke();
@@ -58,7 +68,29 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         protected WindowManipulator GetNewWindowManipulator()
-                => new WindowManipulator(Root);
+        {
+            var manipulator = new WindowManipulator(Root);
+            manipulator.MouseUp += () =>
+            {
+                bool shouldPin()
+                => !m_isPinned && m_canBePinned;
+
+                if (shouldPin()) UIManager.StartCoroutine(Pin());
+            };
+            return manipulator;
+        }
+
+        protected IEnumerator Pin()
+        {
+            yield return new WaitUntil(() => m_rootWidth > 0f && m_rootHeight > 0f);
+            if (Root.resolvedStyle.left <= m_pinnableLimit)
+                Root.style.left = 0f;
+            else
+            {
+                Root.style.left = StyleKeyword.Auto;
+                Root.style.right = 0f;
+            }
+        }
     }
 
     public partial class AbstractDraggableWindow_E : AbstractWindow_E
