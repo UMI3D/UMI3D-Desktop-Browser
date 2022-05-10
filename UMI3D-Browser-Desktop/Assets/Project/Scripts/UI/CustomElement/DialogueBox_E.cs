@@ -37,7 +37,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected static float s_dialogueboxWidth => s_dialogueBox.resolvedStyle.width;
         protected static float s_dialogueboxHeight => s_dialogueBox.resolvedStyle.height;
 
-        protected static float s_centerRadius = 10f;
+        protected static float s_centerRadius = 20f;
         protected static bool s_isCentered
             => s_dialogueBox.resolvedStyle.top == (Screen.height - s_dialogueboxHeight) / 2f
             && s_dialogueBox.resolvedStyle.left == (Screen.width - s_dialogueboxWidth) / 2f;
@@ -126,17 +126,15 @@ namespace umi3dDesktopBrowser.ui.viewController
             s_dialogueBox.style.visibility = Visibility.Hidden;
             Instance.OnDisplayedOrHiddenTrigger(true);
             UIManager.StartCoroutine(Center());
-            //s_isCenter = true;
         }
 
         protected void OnDialgueboxSizeChanged(GeometryChangedEvent e)
         {
-            bool shouldCenter()
-                => !s_isCentered &&
-                s_canBeCentered 
-                /*&& (e.newRect.width != e.oldRect.width || e.newRect.height != e.oldRect.height)*/;
+            //bool shouldCenter()
+            //    => !s_isCentered &&
+            //    s_canBeCentered;
 
-            if (shouldCenter()) UIManager.StartCoroutine(Center());
+            //if (shouldCenter()) UIManager.StartCoroutine(Center());
         }
 
         protected void OnBackgroundSizeChanged(GeometryChangedEvent e)
@@ -191,7 +189,17 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Initialize();
 
             s_dialogueBox = Root.Q("dialogueBox");
-            AddVisualStyle(s_dialogueBox, "UI/Style/DialogueBox/DialogueBox", StyleKeys.DefaultBackground, new PopUpManipulator(s_dialogueBox));
+            AddVisualStyle(s_dialogueBox, "UI/Style/DialogueBox/DialogueBox", StyleKeys.DefaultBackground);
+            var manipulator = new WindowManipulator(s_dialogueBox);
+            s_dialogueBox.AddManipulator(manipulator);
+            manipulator.MouseUp += () =>
+            {
+                bool shouldCenter()
+                => !s_isCentered &&
+                s_canBeCentered;
+
+                if (shouldCenter()) UIManager.StartCoroutine(Center());
+            };
 
             s_title = new Label_E(Root.Q<Label>("title"), "Title2", StyleKeys.DefaultText);
             s_message = new Label_E(Root.Q<Label>("message"), "Corps1", StyleKeys.DefaultText);

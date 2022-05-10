@@ -29,15 +29,5 @@ namespace umi3dDesktopBrowser.ui.viewController
             target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
             target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
         }
-
-        //protected override void UnregisterCallbacksFromTarget()
-        //{
-        //    base.UnregisterCallbacksFromTarget();
-
-        //    target.UnregisterCallback<MouseCaptureEvent>(OnMouseCapture);
-        //}
-
-        //protected virtual void OnMouseCapture(MouseCaptureEvent e)
-        //    => OnMouseBehaviourChanged(e, (MousePressedState.Pressed, m_mouseState.Item2), target.style);
     }
 }

@@ -39,7 +39,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 return;
             
             m_windowIcon = new Icon_E(QR("icon"), "Square2", keys);
-            m_windowIcon.UpdateRootManipulator(PopupManipulator());
+            m_windowIcon.Root.AddManipulator(GetNewWindowManipulator());
         }
 
         public virtual void SetCloseButton()
@@ -57,8 +57,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_closeButton.Clicked += OnCloseButtonPressed;
         }
 
-        protected PopUpManipulator PopupManipulator()
-                => new PopUpManipulator(Root);
+        protected WindowManipulator GetNewWindowManipulator()
+                => new WindowManipulator(Root);
     }
 
     public partial class AbstractDraggableWindow_E : AbstractWindow_E
@@ -71,7 +71,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             if (m_topBar == null)
                 m_topBar = new Label_E(QR<Label>("windowName"), "Title", StyleKeys.Default);
-            m_topBar.UpdateRootManipulator(PopupManipulator());
+            m_topBar.Root.AddManipulator(GetNewWindowManipulator());
             base.SetTopBar(name);
         }
 
