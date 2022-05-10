@@ -164,7 +164,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             UpdateManipulator(Root, buttonManipulator);
             m_clickableManipulator = new ClickableManipulator();
             m_button.clickable = m_clickableManipulator;
-
             m_clickableManipulator.MouseBehaviourChanged += buttonManipulator.OnMouseBehaviourChanged;
 
             m_button.clicked += OnClicked;
