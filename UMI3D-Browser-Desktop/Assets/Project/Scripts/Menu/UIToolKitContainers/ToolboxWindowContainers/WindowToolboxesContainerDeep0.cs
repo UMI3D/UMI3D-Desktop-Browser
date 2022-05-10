@@ -41,7 +41,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         /// <param name="value"></param>
         private void PinUnpin(bool value)
-            => MenuBar_E.Instance.PinUnpin(value, (Menu)menu);
+            => MenuBar_E.Instance.OnPinUnpin(value, (Menu)menu);
     }
 
     public partial class WindowToolboxesContainerDeep0 : AbstractToolboxesContainer

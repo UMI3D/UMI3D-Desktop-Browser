@@ -24,19 +24,16 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected Label_E m_title { get; set; } = null;
         protected ScrollView_E m_scrollView { get; set; } = null;
 
-        private static string m_toolboxPinnedStyle => "Box_p";
-        private static string m_toolboxSubPinnedStyle => "Box_w1";
-        private static string m_toolboxPopupStyle => "Box_mp";
         private static string GetToolboxType(ToolboxType type)
         {
             switch (type)
             {
                 case ToolboxType.Pinned:
-                    return m_toolboxPinnedStyle;
+                    return "Box_p";
                 case ToolboxType.SubPinned:
-                    return m_toolboxSubPinnedStyle;
+                    return "Box_w1";
                 case ToolboxType.Popup:
-                    return m_toolboxPopupStyle;
+                    return "Box_mp";
                 default:
                     throw new System.Exception();
             }
@@ -87,10 +84,11 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            m_title = new Label_E(QR<Label>(), "Corps", StyleKeys.Text("primaryLight"));
+            m_title = new Label_E(QR<Label>(), "TitleToolbox", StyleKeys.Text("primaryLight"));
 
             var scrollViewBox = new View_E("UI/UXML/horizontalScrollView", null, null);
-            scrollViewBox.InsertRootTo(QR("mainBox"));
+            //scrollViewBox.InsertRootTo(QR("mainBox"));
+            scrollViewBox.InsertRootTo(Root);
             VisualElement backward = scrollViewBox.QR("backward");
             VisualElement forward = scrollViewBox.QR("forward");
 
