@@ -24,9 +24,9 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected Label_E m_title { get; set; } = null;
         protected ScrollView_E m_scrollView { get; set; } = null;
 
-        private static string m_toolboxPinnedStyle => "Box1";
-        private static string m_toolboxSubPinnedStyle => "BoxV1";
-        private static string m_toolboxPopupStyle => "Box2";
+        private static string m_toolboxPinnedStyle => "Box_p";
+        private static string m_toolboxSubPinnedStyle => "Box_w1";
+        private static string m_toolboxPopupStyle => "Box_mp";
         private static string GetToolboxType(ToolboxType type)
         {
             switch (type)
@@ -87,7 +87,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            m_title = new Label_E(QR<Label>(), "Corps", StyleKeys.Text("corps0"));
+            m_title = new Label_E(QR<Label>(), "Corps", StyleKeys.Text("primaryLight"));
 
             var scrollViewBox = new View_E("UI/UXML/horizontalScrollView", null, null);
             scrollViewBox.InsertRootTo(QR("mainBox"));

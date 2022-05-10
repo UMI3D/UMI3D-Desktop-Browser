@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
-  m_Name: Corps1
+  m_Name: CorpsShortcut
   m_EditorClassIdentifier: 
   AppliesFormatAndStyle:
     m_PersistentCalls:
@@ -25,9 +25,9 @@ MonoBehaviour:
       m_valueMode: 0
       m_value: 0
     m_width:
-      m_keyword: 0
-      m_valueMode: 0
-      m_value: 0
+      m_keyword: 11
+      m_valueMode: 1
+      m_value: 50
     m_maxHeight:
       m_keyword: 0
       m_valueMode: 0
@@ -54,12 +54,12 @@ MonoBehaviour:
         m_right: 0
         m_top: 0
     m_padding:
-      m_keyword: 0
+      m_keyword: 11
       m_value:
         m_global: 0
         m_bottom: 0
-        m_left: 0
-        m_right: 0
+        m_left: 10
+        m_right: 10
         m_top: 0
   m_textFormat:
     m_fontSize:
@@ -75,9 +75,9 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_numberOfVisibleCharacter:
-      m_keyword: 2
-      m_value: 200
-    m_textAlign: 4
+      m_keyword: 0
+      m_value: 0
+    m_textAlign: 5
     m_textWrapping: 0
   m_themeStyles:
   - m_theme: {fileID: 0}

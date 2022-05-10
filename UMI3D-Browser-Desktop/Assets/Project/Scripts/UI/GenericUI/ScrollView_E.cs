@@ -142,6 +142,20 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         #endregion
 
+        public void SetBackground(string partialStylePath, StyleKeys keys)
+        {
+            var background = new VisualElement();
+            background.name = "background";
+            background.style.position = Position.Absolute;
+            background.style.top = 0f;
+            background.style.left = 0f;
+            background.style.right = 0f;
+            background.style.bottom = 0f;
+            AddVisualStyle(background, partialStylePath, keys);
+            Scroll_View.contentViewport.Insert(0, background);
+            background.Add(Scroll_View.contentContainer);
+        }
+
         #endregion
 
         #region Events
@@ -232,6 +246,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             Scroll_View.contentContainer.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             Scroll_View.contentViewport.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            
             m_verticalScroller.valueChanged += OnVSliderValueChanged;
             m_horizontalScroller.valueChanged += OnHSliderValueChanged;
 

@@ -46,7 +46,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             InitAndBindUI();
             if (menu is ButtonMenuItem buttonMenu)
             {
-                m_button = new Button_E(Displayer.Root.Q<Button>(), "Rectangle", StyleKeys.DefaultTextAndBackground);
+                m_button = new Button_E(Displayer.Root.Q<Button>(), "Displayer", StyleKeys.Text_Bg("button"));
                 m_button.Text = menu.Name;
                 Displayer.Add(m_button);
 
@@ -54,7 +54,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             }
             else if (menu is EventMenuItem eventMenu)
             {
-                m_button = new Button_E(Displayer.Root.Q<Button>(), "Rectangle", StyleKeys.DefaultTextAndBackground);
+                m_button = new Button_E(Displayer.Root.Q<Button>(), "Displayer", StyleKeys.Text_Bg("button"));
                 m_button.Text = menu.Name;
                 Displayer.Add(m_button);
 
@@ -62,7 +62,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             }
             else if (menu is HoldableButtonMenuItem holdableButtonMenu)
             {
-                m_button = new Button_E(Displayer.Root.Q<Button>(), "Rectangle", StyleKeys.DefaultTextAndBackground);
+                m_button = new Button_E(Displayer.Root.Q<Button>(), "Displayer", StyleKeys.Text_Bg("button"));
                 m_button.Text = menu.Name;
                 Displayer.Add(m_button);
 

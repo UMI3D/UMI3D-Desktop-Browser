@@ -46,9 +46,9 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             InitAndBindUI();
             if (menu is DropDownInputMenuItem dropdownMenu)
             {
-                m_dropdown = new Dropdown_E(Displayer.QR<Button>(), "Rectangle2", StyleKeys.Default);
-                m_dropdown.SetMenuStyle("BoxV", StyleKeys.DefaultBackground);
-                m_dropdown.SetMenuLabel("Corps3", StyleKeys.DefaultText);
+                m_dropdown = new Dropdown_E(Displayer.QR<Button>(), "Displayer", StyleKeys.Text_Bg("enum"));
+                m_dropdown.SetMenuStyle("EnumBox", StyleKeys.DefaultBackgroundAndBorder);
+                m_dropdown.SetMenuLabel("CorpsDropdown", StyleKeys.DefaultText);
                 Displayer.Add(m_dropdown);
 
                 m_dropdown.SetOptions(dropdownMenu.options);

@@ -62,7 +62,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_scrollView.SetVDraggerContainer("DraggerContainer", StyleKeys.DefaultBackground);
             m_scrollView.SetVDragger("Dragger", StyleKeys.DefaultBackgroundAndBorder);
 
-            Button_E unpinned = new Button_E("LargeRectangle", StyleKeys.DefaultBackground);
+            Button_E unpinned = new Button_E("Unpin", StyleKeys.DefaultBackground);
             unpinned.Clicked += OnUnpinnedPressed;
             unpinned.InsertRootTo(m_bottomBox);
 

@@ -199,7 +199,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             => new Icon_E("SeparatorVertical", StyleKeys.DefaultBackground);
 
         private MenuBar_E() :
-            base("UI/UXML/Menus/menuBar", "box", StyleKeys.Bg("box0"))
+            base("UI/UXML/Menus/menuBar", "box", StyleKeys.Bg("light"))
         { }
     }
 }

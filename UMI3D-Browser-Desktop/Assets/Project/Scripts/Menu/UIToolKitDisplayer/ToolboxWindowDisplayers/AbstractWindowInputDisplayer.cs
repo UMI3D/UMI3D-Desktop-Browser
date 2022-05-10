@@ -40,7 +40,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
 
         public virtual void InitAndBindUI()
         {
-            m_label = new Label_E(Displayer.Root.Q<Label>(), "Corps", StyleKeys.Text("corps1"));
+            m_label = new Label_E(Displayer.Root.Q<Label>(), "Corps", StyleKeys.Text("secondaryLight"));
             m_label.value = menu.Name;
             Displayer.Add(m_label);
         }

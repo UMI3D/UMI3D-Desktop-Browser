@@ -34,16 +34,26 @@ namespace umi3dDesktopBrowser.ui.viewController
                 return displayerbox;
             }
         }
-        private static string s_displayerboxToolboxStyle = "UI/Style/Displayers/ToolboxDisplayerbox";
-        private static string s_displayerboxParameterStyle = "UI/Style/Displayers/ParameterDisplayerbox";
-        private static string GetDisplayerboxType(DisplayerboxType type)
+        private static string GetStyle(DisplayerboxType type)
         {
             switch (type)
             {
                 case DisplayerboxType.ToolboxesPopup:
-                    return s_displayerboxToolboxStyle;
+                    return "ToolboxDisplayerbox";
                 case DisplayerboxType.ParametersPopup:
-                    return s_displayerboxParameterStyle;
+                    return "DisplayerBox";
+                default:
+                    throw new System.Exception();
+            }
+        }
+        private static StyleKeys GetKeys(DisplayerboxType type)
+        {
+            switch (type)
+            {
+                case DisplayerboxType.ToolboxesPopup:
+                    return StyleKeys.DefaultBackgroundAndBorder;
+                case DisplayerboxType.ParametersPopup:
+                    return null;
                 default:
                     throw new System.Exception();
             }
@@ -77,10 +87,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
     }
 
-    public partial class Displayerbox_E : View_E
+    public partial class Displayerbox_E : Box_E
     {
         public Displayerbox_E(DisplayerboxType type) :
-            base(s_displayerbox, GetDisplayerboxType(type), StyleKeys.DefaultBackgroundAndBorder)
+            base(s_displayerbox, GetStyle(type), GetKeys(type))
         {
             CreateSeparator = () =>
             {
