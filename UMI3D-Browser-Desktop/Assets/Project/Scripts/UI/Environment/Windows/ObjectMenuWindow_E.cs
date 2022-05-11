@@ -56,8 +56,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             s_scrollView = new ScrollView_E(QR<ScrollView>());
             s_scrollView.SetVDraggerContainer("DraggerContainer", StyleKeys.DefaultBackground);
-            s_scrollView.SetVDragger("Dragger", StyleKeys.DefaultBackgroundAndBorder);
-            s_scrollView.SetBackground("Background", StyleKeys.DefaultBackgroundAndBorder);
+            s_scrollView.SetVDragger("Dragger", StyleKeys.Default_Bg_Border);
+            s_scrollView.SetBackground("Background", StyleKeys.Default_Bg_Border);
 
             m_bottomBox.style.display = DisplayStyle.None;
 

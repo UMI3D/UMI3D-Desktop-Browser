@@ -52,7 +52,7 @@ MonoBehaviour:
         m_bottom: 10
         m_left: 10
         m_right: 10
-        m_top: 10
+        m_top: 0
     m_padding:
       m_keyword: 0
       m_value:

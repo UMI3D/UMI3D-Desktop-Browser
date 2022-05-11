@@ -159,7 +159,11 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             #endregion
 
-            ToolboxButton = new ToolboxItem_E("Toolbox", "Toolbox");
+            ToolboxButton = ToolboxItem_E.NewMenuItem("Toolbox");
+            ToolboxButton.Button.UpdateStateKeys(ToolboxButton.Button, StyleKeys.Default_Bg_Border, StyleKeys.Default_Bg_Border);
+            //var icon = new Icon_E("")
+
+            //new ToolboxItem_E("Toolbox", "Toolbox");
             new Toolbox_E("", ToolboxType.Pinned, ToolboxButton)
                 .InsertRootTo(leftLayout_VE);
 

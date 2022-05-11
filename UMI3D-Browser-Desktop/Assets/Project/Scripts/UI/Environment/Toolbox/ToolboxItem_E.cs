@@ -24,45 +24,71 @@ namespace umi3dDesktopBrowser.ui.viewController
     /// </summary>
     public partial class ToolboxItem_E
     {
+        public enum ItemType { Undefine, Tool, Toolbox }
+
         public Label_E Label { get; protected set; } = null;
         public Button_E Button { get; protected set; } = null;
 
-        private static string m_menuBarStyle => "UI/Style/MenuBar/MenuBar_ToolboxItem";
-        private static string m_windowStyle => "UI/Style/ToolboxWindow/ToolboxWindow_ToolboxItem";
-
         public void Toggle(bool value)
             => Button?.Toggle(value);
+
+        public void SetName(string itemName)
+        {
+            Name = itemName;
+            Label.value = itemName;
+        }
 
         public void SetIcon(Texture2D icon)
         {
             Button.UpdateRootKeys(null);
             Button.Root.style.backgroundImage = icon;
         }
-
-        /// <summary>
-        /// A ToolboxItem can be a toolbox or a tool. This item will be set has tool if [isTool] is set to true, else toolbox.
-        /// </summary>
-        /// <param name="isTool"></param>
-        public void SetItemStatus(bool isTool)
+        public void SetIcon(ItemType type)
         {
-            StyleKeys onKeys = new StyleKeys(null, (isTool) ? "placeholderToolActive" : "placeholderToolboxActive", null);
-            StyleKeys offKeys = new StyleKeys(null, (isTool) ? "placeholderToolEnable" : "placeholderToolboxEnable", null);
-            Button.AddStateKeys(Button, "ToolboxItem_Icon", onKeys, offKeys);
+            switch (type)
+            {
+                case ItemType.Undefine:
+                    break;
+                case ItemType.Tool:
+                    Button.UpdateStateKeys(Button, StyleKeys.Bg("placeholderToolActive"), StyleKeys.Bg("placeholderToolEnable"));
+                    break;
+                case ItemType.Toolbox:
+                    Button.UpdateStateKeys(Button, StyleKeys.Bg("placeholderToolboxActive"), StyleKeys.Bg("placeholderToolboxEnable"));
+                    break;
+                default:
+                    break;
+            }
         }
 
-        public static ToolboxItem_E NewItem(string on, string iconOffKey, string itemName, bool isOn = false)
+        ///// <summary>
+        ///// A ToolboxItem can be a toolbox or a tool. This item will be set has tool if [isTool] is set to true, else toolbox.
+        ///// </summary>
+        ///// <param name="isTool"></param>
+        //public void SetItemStatus(bool isTool)
+        //{
+        //    StyleKeys onKeys = new StyleKeys(null, (isTool) ? "placeholderToolActive" : "placeholderToolboxActive", null);
+        //    StyleKeys offKeys = new StyleKeys(null, (isTool) ? "placeholderToolEnable" : "placeholderToolboxEnable", null);
+        //    Button.AddStateKeys(Button, "ToolboxItem_Icon", onKeys, offKeys);
+        //}
+
+        public static ToolboxItem_E NewMenuItem(string itemName, ItemType type = ItemType.Undefine)
         {
-            var item = new ToolboxItem_E();
+            var item = new ToolboxItem_E("ItemMenu");
+            item.SetName(itemName);
+            item.SetIcon(type);
+            
+            return item;
+        }
+
+        public static ToolboxItem_E NewWindowItem(string itemName, ItemType type = ItemType.Undefine)
+        {
+            var item = new ToolboxItem_E("ItemWindow");
+            item.SetName(itemName);
+            item.SetIcon(type);
 
             return item;
         }
 
-        public static ToolboxItem_E NewPlaceHolder()
-        {
-            var item = new ToolboxItem_E();
-
-            return item;
-        }
     }
 
     public partial class ToolboxItem_E : IClickableElement
@@ -76,14 +102,13 @@ namespace umi3dDesktopBrowser.ui.viewController
         
     }
 
-    public partial class ToolboxItem_E : View_E
+    public partial class ToolboxItem_E : Box_E
     {
-        public ToolboxItem_E(bool isInMenuBar = true) :
-            this("placeholderToolboxActive", "placeholderToolboxEnable", "", false, isInMenuBar)
-        { }
         public ToolboxItem_E(string iconKey, string itemName) :
             this(iconKey, null, itemName, true, true)
         { }
+        private static string m_menuBarStyle => "UI/Style/MenuBar/MenuBar_ToolboxItem";
+        private static string m_windowStyle => "UI/Style/ToolboxWindow/ToolboxWindow_ToolboxItem";
         private ToolboxItem_E(string iconOnKey, string iconOffKey, string itemName, bool isOn = false, bool isInMenuBar = true) :
             base("UI/UXML/Toolbox/toolboxItem", (isInMenuBar) ? m_menuBarStyle : m_windowStyle, null)
         {
@@ -91,7 +116,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             if (iconOffKey != null)
             {
                 StyleKeys buttonOffKeys = new StyleKeys(null, iconOffKey, null);
-                Button.AddStateKeys(Button, "ToolboxItem_Icon", buttonOnKeys, buttonOffKeys);
+                Button.UpdateStateKeys(Button, buttonOnKeys, buttonOffKeys);
                 Button.Toggle(isOn);
             }
             else

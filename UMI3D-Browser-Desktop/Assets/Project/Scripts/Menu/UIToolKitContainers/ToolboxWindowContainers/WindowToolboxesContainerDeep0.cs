@@ -58,9 +58,9 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void SetContainerAsTool()
         {
-            ToolboxItem = new ToolboxItem_E(false);
+            ToolboxItem = ToolboxItem_E.NewWindowItem(null);
             ToolboxItem.Clicked += Select;
-            ToolboxItem.SetItemStatus(true);
+            ToolboxItem.SetIcon(ToolboxItem_E.ItemType.Tool);
             Displayerbox = new Displayerbox_E(DisplayerboxType.ToolboxesPopup);
             WindowItem.AddDisplayerbox(Displayerbox);
             base.SetContainerAsTool();
