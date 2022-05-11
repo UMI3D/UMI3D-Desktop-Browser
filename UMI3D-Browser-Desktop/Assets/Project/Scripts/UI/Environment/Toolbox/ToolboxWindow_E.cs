@@ -60,7 +60,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             m_scrollView = new ScrollView_E(QR<ScrollView>());
             m_scrollView.SetVDraggerContainer("DraggerContainer", StyleKeys.DefaultBackground);
-            m_scrollView.SetVDragger("Dragger", StyleKeys.DefaultBackgroundAndBorder);
+            m_scrollView.SetVDragger("Dragger", StyleKeys.Default_Bg_Border);
 
             Button_E unpinned = new Button_E("Unpin", StyleKeys.DefaultBackground);
             unpinned.Clicked += OnUnpinnedPressed;

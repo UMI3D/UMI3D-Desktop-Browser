@@ -56,7 +56,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             this(null, type)
         { }
         public Toolbox_E(string toolboxName, ToolboxType type = ToolboxType.Pinned, params ToolboxItem_E[] items) :
-            base("UI/UXML/Toolbox/Toolbox", GetToolboxType(type), StyleKeys.DefaultBackgroundAndBorder)
+            base("UI/UXML/Toolbox/Toolbox", GetToolboxType(type), StyleKeys.Default_Bg_Border)
         {
             SetToolboxName(toolboxName);
 

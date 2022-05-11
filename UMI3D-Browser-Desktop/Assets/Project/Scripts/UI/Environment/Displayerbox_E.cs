@@ -51,7 +51,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             switch (type)
             {
                 case DisplayerboxType.ToolboxesPopup:
-                    return StyleKeys.DefaultBackgroundAndBorder;
+                    return StyleKeys.Default_Bg_Border;
                 case DisplayerboxType.ParametersPopup:
                     return null;
                 default:

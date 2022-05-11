@@ -23,7 +23,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public static StyleKeys DefaultBorder => s_defaultBorder;
         public static StyleKeys DefaultTextAndBackground => s_defaultTextAndBackground;
         public static StyleKeys DefaultTextAndBorder => s_defaultTextAndBorder;
-        public static StyleKeys DefaultBackgroundAndBorder => s_defaultBackgroundAndBorder;
+        public static StyleKeys Default_Bg_Border => s_defaultBackgroundAndBorder;
 
         private static StyleKeys s_default = new StyleKeys("", "", "");
         private static StyleKeys s_defaultText = new StyleKeys("", null, null);

@@ -36,7 +36,7 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void Awake()
         {
             base.Awake();
-            ToolboxItem = new ToolboxItem_E(false);
+            ToolboxItem = ToolboxItem_E.NewWindowItem(null);
             ToolboxItem.Clicked += Select;
         }
 
@@ -45,7 +45,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void SetContainerAsToolbox()
         {
-            ToolboxItem.SetItemStatus(false);
+            ToolboxItem.SetIcon(ToolboxItem_E.ItemType.Toolbox);
             Toolbox = new Toolbox_E(ToolboxType.Popup);
             Toolbox.SetToolboxName(menu.Name ?? "");
             base.SetContainerAsToolbox();
@@ -56,7 +56,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void SetContainerAsTool()
         {
-            ToolboxItem.SetItemStatus(true);
+            ToolboxItem.SetIcon(ToolboxItem_E.ItemType.Tool);
             Displayerbox = new Displayerbox_E(DisplayerboxType.ToolboxesPopup);
             base.SetContainerAsTool();
         }
@@ -70,7 +70,7 @@ namespace umi3d.desktopBrowser.menu.Container
             base.SetMenuItem(menu);
             if (menu.icon2D != null)
                 ToolboxItem.SetIcon(menu.icon2D);
-            ToolboxItem.Label.value = menu.Name;
+            ToolboxItem.SetName(menu.Name);
         }
 
         /// <summary>

@@ -21,7 +21,7 @@ MonoBehaviour:
       m_value: 0
   m_size:
     m_height:
-      m_keyword: 10
+      m_keyword: 11
       m_valueMode: 0
       m_value: 30
     m_width:
@@ -270,14 +270,14 @@ MonoBehaviour:
             m_value: {r: 0, g: 0, b: 0, a: 0}
     - m_key: soundOn
       m_default:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 661eb5121999cd14ab2d268bf81ac4b5, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -294,27 +294,27 @@ MonoBehaviour:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_mousePressed:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 661eb5121999cd14ab2d268bf81ac4b5, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
     - m_key: soundOff
       m_default:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 1082360f6ef314f4b86e71862b0f5fdb, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -381,14 +381,14 @@ MonoBehaviour:
             m_value: {r: 0, g: 0, b: 0, a: 0}
     - m_key: micOff
       m_default:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 7262103024684794d9303ea80e1bbdab, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}

@@ -44,14 +44,13 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void SetContainerAsTool()
         {
-            ToolboxItem = new ToolboxItem_E();
+            ToolboxItem = ToolboxItem_E.NewMenuItem(null, ToolboxItem_E.ItemType.Tool);
             ToolboxItem.Clicked += () =>
             {
                 Select();
                 ToolboxPinnedWindow_E.Instance.UpdateTopBarName(menu.Name);
                 ToolboxPinnedWindow_E.Instance.Display();
             };
-            ToolboxItem.SetItemStatus(true);
             Displayerbox = new Displayerbox_E(DisplayerboxType.ParametersPopup);
             ToolboxPinnedWindow_E.Instance.AddRange(Displayerbox);
             base.SetContainerAsTool();
