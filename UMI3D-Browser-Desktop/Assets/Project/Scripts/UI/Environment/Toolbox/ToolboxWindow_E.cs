@@ -54,7 +54,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             base.Initialize();
 
-            SetWindowIcon(new StyleKeys(null, "toolboxesWindow", ""));
+            SetWindowIcon(new StyleKeys(null, "toolboxWindow", ""));
             SetTopBar("Toolbox");
             SetCloseButton();
 

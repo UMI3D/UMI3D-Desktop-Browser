@@ -99,7 +99,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             var buttonbox = Root.Q("buttonbox");
             Button_E SetButton(string on, string off)
             {
-                var button = new Button_E("Square_m", StyleKeys.Default_Bg_Border);
+                var button = new Button_E("Square_m", StyleKeys.Bg_Border("menuOff", ""));
                 button.AddIconInFront(new Icon_E(), "Square2", StyleKeys.Bg(on), StyleKeys.Bg(off));
                 button.Root.style.alignContent = Align.Center;
                 button.Root.style.alignItems = Align.Center;

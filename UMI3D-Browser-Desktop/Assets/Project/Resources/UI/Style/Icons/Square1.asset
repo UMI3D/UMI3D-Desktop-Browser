@@ -92,7 +92,7 @@ MonoBehaviour:
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 2
-            m_value: {fileID: 21300000, guid: 866f457f0bb92ea41b046e78fc8a1317, type: 3}
+            m_value: {fileID: 21300000, guid: 0a0d903d168ce424684461fce9708e24, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
