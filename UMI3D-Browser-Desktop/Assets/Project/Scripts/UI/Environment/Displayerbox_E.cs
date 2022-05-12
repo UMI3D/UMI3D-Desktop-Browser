@@ -39,9 +39,9 @@ namespace umi3dDesktopBrowser.ui.viewController
             switch (type)
             {
                 case DisplayerboxType.ToolboxesPopup:
-                    return "ToolboxDisplayerbox";
+                    return "DisplayerboxToolbox";
                 case DisplayerboxType.ParametersPopup:
-                    return "DisplayerBox";
+                    return "DisplayerBoxParameter";
                 default:
                     throw new System.Exception();
             }

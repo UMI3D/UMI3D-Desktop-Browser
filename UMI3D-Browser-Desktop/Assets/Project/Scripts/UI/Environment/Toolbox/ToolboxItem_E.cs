@@ -43,6 +43,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             Button.UpdateRootKeys(null);
             Button.Root.style.backgroundImage = icon;
+            Icon.Hide();
         }
         public void SetIcon(ItemType type)
         {
@@ -66,7 +67,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             var item = new ToolboxItem_E("ItemMenu");
             item.Button.UpdateStateKeys(item.Button, StyleKeys.Default_Bg_Border, StyleKeys.Default_Bg_Border);
             item.SetName(itemName);
-            item.SetIcon(type);
+            //item.SetIcon(type);
             
             return item;
         }
@@ -110,6 +111,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             Icon = new Icon_E();
             Button.AddIconInFront(Icon, "Square2", null, null);
+            Button.Root.style.alignContent = Align.Center;
+            Button.Root.style.alignItems = Align.Center;
         }
     }
 }

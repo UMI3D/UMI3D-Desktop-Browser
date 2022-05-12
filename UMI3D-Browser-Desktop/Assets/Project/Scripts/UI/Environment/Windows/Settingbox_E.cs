@@ -101,6 +101,8 @@ namespace umi3dDesktopBrowser.ui.viewController
             {
                 var button = new Button_E("Square_m", StyleKeys.Default_Bg_Border);
                 button.AddIconInFront(new Icon_E(), "Square2", StyleKeys.Bg(on), StyleKeys.Bg(off));
+                button.Root.style.alignContent = Align.Center;
+                button.Root.style.alignItems = Align.Center;
                 button.InsertRootTo(buttonbox);
                 return button;
             }
