@@ -82,9 +82,7 @@ namespace umi3d.cdk.collaboration
         /// <param name="connectionDto"></param>
         public static async Task<UMI3DDto> Connect(ConnectionDto connectionDto, string MasterUrl, Func<RequestFailedArgument, bool> shouldTryAgain = null)
         {
-            UnityEngine.Debug.Log(connectionDto.ToJson(Newtonsoft.Json.TypeNameHandling.None));
-
-            var bytes = System.Text.Encoding.UTF8.GetBytes( connectionDto.ToJson(Newtonsoft.Json.TypeNameHandling.None));
+            var bytes = System.Text.Encoding.UTF8.GetBytes(connectionDto.ToJson(Newtonsoft.Json.TypeNameHandling.None));
             var uwr = await _PostRequest(null, MasterUrl + UMI3DNetworkingKeys.connect, "application/json", bytes, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e), false);
             UMI3DLogger.Log($"Received answer to Connect", scope | DebugScope.Connection);
             var dto = uwr?.downloadHandler.data != null ? ReadConnectAnswer(System.Text.Encoding.UTF8.GetString(uwr?.downloadHandler.data)) : null;
@@ -100,12 +98,7 @@ namespace umi3d.cdk.collaboration
                 return dto1;
             else
                 return dto2;
-
-
-            //return (UMI3DDto)UMI3DDto.FromJson<PrivateIdentityDto>(text, Newtonsoft.Json.TypeNameHandling.None)
-            //     ?? UMI3DDto.FromJson<ConnectionFormDto>(text, Newtonsoft.Json.TypeNameHandling.None);
         }
-
 
         public class FooConverter : Newtonsoft.Json.JsonConverter
         {
@@ -126,7 +119,7 @@ namespace umi3d.cdk.collaboration
                 {
                     UnityEngine.Debug.Log(tokenA.Type.ToString());
                 }
-                if (jo.TryGetValue("value",out JToken token))
+                if (jo.TryGetValue("value", out JToken token))
                 {
                     var obj = token.Value<object>();
 
@@ -179,17 +172,6 @@ namespace umi3d.cdk.collaboration
             }
         }
 
-        //private class ConnectionFormDto : UMI3DDto
-        //{
-        //    public string temporaryUserId;
-        //    public List<string> fields = new List<string>();
-        //    public string name = null;
-        //    public string description = null;
-        //    public ResourceDto icon2D;
-        //    public ResourceDto icon3D;
-        //    public ulong id = 0;
-        //}
-
         /// <summary>
         /// Send request using GET method to get the user Identity.
         /// </summary>
@@ -222,7 +204,7 @@ namespace umi3d.cdk.collaboration
             }
             catch
             {
-                if(throwError)
+                if (throwError)
                     throw;
             }
         }
@@ -252,13 +234,13 @@ namespace umi3d.cdk.collaboration
             {
                 await SendPostUpdateStatus(status, shouldTryAgain);
             }
-            catch(UMI3DAsyncManagerException e)
+            catch (UMI3DAsyncManagerException e)
             {
 
             }
             catch
             {
-                if(throwError)
+                if (throwError)
                     throw;
             }
         }
@@ -310,8 +292,9 @@ namespace umi3d.cdk.collaboration
             UMI3DLogger.Log($"Send GetMedia", scope | DebugScope.Connection);
             var uwr = await _GetRequest(null, url, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e));
             UMI3DLogger.Log($"Received GetMedia", scope | DebugScope.Connection);
-            var dto = uwr?.downloadHandler.data != null ? UMI3DDto.FromBson(uwr?.downloadHandler.data) : null;
-            return dto as MediaDto;
+            if (uwr?.downloadHandler.data == null) return null;
+            var json = System.Text.Encoding.UTF8.GetString(uwr.downloadHandler.data);
+            return UMI3DDto.FromJson<UMI3DDto>(json,Newtonsoft.Json.TypeNameHandling.None) as MediaDto;
         }
 
         #endregion
@@ -469,7 +452,7 @@ namespace umi3d.cdk.collaboration
             {
                 (UMI3DNetworkingKeys.contentHeader, fileName)
             };
-            await _PostRequest(HeaderToken, url,null, bytes, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e), true, headers);
+            await _PostRequest(HeaderToken, url, null, bytes, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e), true, headers);
         }
         #endregion
 
@@ -551,7 +534,7 @@ namespace umi3d.cdk.collaboration
             {
 
                 if (UMI3DClientServer.Exists && await UMI3DClientServer.Instance.TryAgainOnHttpFail(new RequestFailedArgument(www, tryCount, date, ShouldTryAgain)))
-                    return await _PostRequest(HeaderToken, url,contentType, bytes, ShouldTryAgain, UseCredential, headers, tryCount + 1);
+                    return await _PostRequest(HeaderToken, url, contentType, bytes, ShouldTryAgain, UseCredential, headers, tryCount + 1);
                 else
                     throw new Umi3dException(www.responseCode, www.error + " Failed to post " + www.url);
             }
