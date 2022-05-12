@@ -36,7 +36,7 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void Awake()
         {
             base.Awake();
-            Toolbox = new Toolbox_E(ToolboxType.Pinned);
+            Toolbox = Toolbox_E.NewMenuToolbox(null);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace umi3d.desktopBrowser.menu.Container
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);
-            Toolbox.SetToolboxName(menu.Name);
+            Toolbox.SetName(menu.Name);
         }
 
         protected override void DisplayImp()

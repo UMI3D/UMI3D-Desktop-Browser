@@ -18,28 +18,14 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
-    public enum ToolboxType { Pinned, SubPinned, Popup }
     public partial class Toolbox_E
     {
         protected Label_E m_title { get; set; } = null;
         protected ScrollView_E m_scrollView { get; set; } = null;
+        protected VisualElement m_backward;
+        protected VisualElement m_forward;
 
-        private static string GetToolboxType(ToolboxType type)
-        {
-            switch (type)
-            {
-                case ToolboxType.Pinned:
-                    return "Box_p";
-                case ToolboxType.SubPinned:
-                    return "Box_w1";
-                case ToolboxType.Popup:
-                    return "Box_mp";
-                default:
-                    throw new System.Exception();
-            }
-        }
-
-        public void SetToolboxName(string text)
+        public void SetName(string text)
         {
             if (text == null) m_title.Hide();
             else m_title.Display();
@@ -48,27 +34,50 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public void AddRange(params View_E[] items)
             => m_scrollView.AddRange(items);
+
+        public static Toolbox_E NewMenuToolbox(string toolboxName, params ToolboxItem_E[] items)
+        {
+            var toolbox = new Toolbox_E("Box_p", items);
+            toolbox.SetName(toolboxName);
+            toolbox.m_backward.style.display = DisplayStyle.None;
+            toolbox.m_forward.style.display = DisplayStyle.None;
+
+            return toolbox;
+        }
+
+        public static Toolbox_E NewSubMenuToolbox(string toolboxName, params ToolboxItem_E[] items)
+        {
+            var toolbox = new Toolbox_E("Box_w1", items);
+            toolbox.SetName(toolboxName);
+            toolbox.m_scrollView.HSliderValueChanged += (value, low, high) =>
+            {
+                toolbox.m_backward.visible = (value > low) ? true : false;
+                toolbox.m_forward.visible = (value < high) ? true : false;
+            };
+
+            return toolbox;
+        }
+
+        public static Toolbox_E NewWindowToolbox(string toolboxName, params ToolboxItem_E[] items)
+        {
+            var toolbox = new Toolbox_E("Box_mp", items);
+            toolbox.SetName(toolboxName);
+            toolbox.m_scrollView.HSliderValueChanged += (value, low, high) =>
+            {
+                toolbox.m_backward.visible = (value > low) ? true : false;
+                toolbox.m_forward.visible = (value < high) ? true : false;
+            };
+
+            return toolbox;
+        }
     }
 
     public partial class Toolbox_E : Box_E
     {
-        public Toolbox_E(ToolboxType type = ToolboxType.Pinned) :
-            this(null, type)
-        { }
-        public Toolbox_E(string toolboxName, ToolboxType type = ToolboxType.Pinned, params ToolboxItem_E[] items) :
-            base("UI/UXML/Toolbox/Toolbox", GetToolboxType(type), StyleKeys.Default_Bg_Border)
+        protected Toolbox_E(string partialStylePath, params ToolboxItem_E[] items) :
+            base("UI/UXML/Toolbox/Toolbox", partialStylePath, StyleKeys.Default_Bg_Border)
         {
-            SetToolboxName(toolboxName);
-
-
-            //if (type == ToolboxType.Pinned)
-            //{
-            //    backwardLayout.style.display = DisplayStyle.None;
-            //    forwardLayout.style.display = DisplayStyle.None;
-            //}
-
-            if (items.Length > 0)
-                AddRange(items);
+            AddRange(items);
         }
 
         public override V Q<V>(string name = null)
@@ -89,20 +98,14 @@ namespace umi3dDesktopBrowser.ui.viewController
             var scrollViewBox = new View_E("UI/UXML/horizontalScrollView", null, null);
             //scrollViewBox.InsertRootTo(QR("mainBox"));
             scrollViewBox.InsertRootTo(Root);
-            VisualElement backward = scrollViewBox.QR("backward");
-            VisualElement forward = scrollViewBox.QR("forward");
+            m_backward = scrollViewBox.QR("backward");
+            m_forward = scrollViewBox.QR("forward");
 
             m_scrollView = new ScrollView_E(scrollViewBox.QR<ScrollView>());
-            m_scrollView.HSliderValueChanged += (value, low, high) =>
-            {
-                backward.visible = (value > low) ? true : false;
-                forward.visible = (value < high) ? true : false;
-            };
-
             m_scrollView.SetHBackwardButton("ButtonH", StyleKeys.Bg("backward"));
             m_scrollView.SetHForwarddButton("ButtonH", StyleKeys.Bg("forward"));
-            backward.Insert(0, m_scrollView.HBackwardButton);
-            forward.Insert(1, m_scrollView.HForwardButton);
+            m_backward.Insert(0, m_scrollView.HBackwardButton);
+            m_forward.Insert(1, m_scrollView.HForwardButton);
         }
     }
 }

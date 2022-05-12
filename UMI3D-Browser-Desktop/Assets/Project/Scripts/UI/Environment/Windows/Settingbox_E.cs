@@ -97,26 +97,18 @@ namespace umi3dDesktopBrowser.ui.viewController
             SetTopBar("Options");
 
             var buttonbox = Root.Q("buttonbox");
-            static Button_E SetButton(string on, string off)
+            Button_E SetButton(string on, string off)
             {
                 var button = new Button_E("Square_m", StyleKeys.Default_Bg_Border);
-                var icon = new Icon_E();
-                button.Add(icon);
-                button.AddStateKeys(icon, "Square2", StyleKeys.Bg(on), StyleKeys.Bg(off));
-                LinkMouseBehaviourChanged(button, icon);
-                button.GetRootManipulator().ProcessDuringBubbleUp = true;
-
+                button.AddIconInFront(new Icon_E(), "Square2", StyleKeys.Bg(on), StyleKeys.Bg(off));
+                button.InsertRootTo(buttonbox);
                 return button;
             }
 
             Avatar = SetButton("avatarOn", "avatarOff");
-            Avatar.InsertRootTo(buttonbox);
             Sound = SetButton("SoundOn", "SoundOff");
-            Sound.InsertRootTo(buttonbox);
             Mic = SetButton("MicOn", "MicOff");
-            Mic.InsertRootTo(buttonbox);
-            LeaveButton = SetButton("Leave", null);
-            LeaveButton.InsertRootTo(buttonbox);
+            LeaveButton = SetButton("Leave", "Leave");
         }
 
         private Settingbox_E() :
