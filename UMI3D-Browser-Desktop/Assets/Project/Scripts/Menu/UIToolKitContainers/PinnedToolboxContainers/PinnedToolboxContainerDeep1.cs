@@ -45,7 +45,7 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void SetContainerAsToolbox()
         {
             ToolboxItem.Clicked += Select;
-            //ToolboxItem.SetIcon(ToolboxItem_E.ItemType.Toolbox);
+            ToolboxItem.SetMenuIcon(ToolboxItem_E.ItemType.Toolbox);
             Toolbox = Toolbox_E.NewSubMenuToolbox(menu.Name ?? "");
             base.SetContainerAsToolbox();
         }
@@ -61,7 +61,7 @@ namespace umi3d.desktopBrowser.menu.Container
                 ToolboxPinnedWindow_E.Instance.UpdateTopBarName(menu.Name);
                 ToolboxPinnedWindow_E.Instance.Display();
             };
-            //ToolboxItem.SetIcon(ToolboxItem_E.ItemType.Tool);
+            ToolboxItem.SetMenuIcon(ToolboxItem_E.ItemType.Tool);
             Displayerbox = new Displayerbox_E(DisplayerboxType.ParametersPopup);
             base.SetContainerAsTool();
         }

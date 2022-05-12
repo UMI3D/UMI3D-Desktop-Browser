@@ -83,7 +83,44 @@ MonoBehaviour:
   - m_theme: {fileID: 0}
     m_textStyle: []
     m_background:
-    - m_key: toolboxesWindow
+    - m_key: toolbox
+      m_default:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 1, g: 1, b: 1, a: 1}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 8822e502db6733e4e99527eefa99fea6, type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_mouseOver:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 1, g: 0, b: 0, a: 1}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 59bee42b0e4c19743be1a5dded69d44f, type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_mousePressed:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 8822e502db6733e4e99527eefa99fea6, type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+    - m_key: toolboxMenu
       m_default:
         m_keyword: 2
         m_value:
@@ -92,7 +129,44 @@ MonoBehaviour:
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 2
-            m_value: {fileID: 21300000, guid: 4387a4c7a3dd6134fa2b95a0344d5f87, type: 3}
+            m_value: {fileID: 21300000, guid: 616d6aa68d9f107488133cc5ecc96e4b, type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_mouseOver:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: b2e1d532accaa9c4aaa4404c0f7ba6f3, type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+      m_mousePressed:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 616d6aa68d9f107488133cc5ecc96e4b, type: 3}
+          m_imageTintColor:
+            m_keyword: 0
+            m_value: {r: 0, g: 0, b: 0, a: 0}
+    - m_key: toolboxWindow
+      m_default:
+        m_keyword: 2
+        m_value:
+          m_color:
+            m_keyword: 32
+            m_value: {r: 1, g: 1, b: 1, a: 1}
+          m_image:
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 616d6aa68d9f107488133cc5ecc96e4b, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -101,10 +175,10 @@ MonoBehaviour:
         m_value:
           m_color:
             m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
+            m_value: {r: 1, g: 0, b: 0, a: 1}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: b2e1d532accaa9c4aaa4404c0f7ba6f3, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -115,8 +189,8 @@ MonoBehaviour:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 616d6aa68d9f107488133cc5ecc96e4b, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -203,7 +277,7 @@ MonoBehaviour:
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 2
-            m_value: {fileID: 21300000, guid: 13414c31405b87f4887005caaedd71f0, type: 3}
+            m_value: {fileID: 21300000, guid: cfcc446e956695b4090750ebb0be6c62, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -214,8 +288,8 @@ MonoBehaviour:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 393790d26fef58049b5cf5a0c3173091, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -227,7 +301,7 @@ MonoBehaviour:
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 2
-            m_value: {fileID: 21300000, guid: 13414c31405b87f4887005caaedd71f0, type: 3}
+            m_value: {fileID: 21300000, guid: cfcc446e956695b4090750ebb0be6c62, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -240,7 +314,7 @@ MonoBehaviour:
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 2
-            m_value: {fileID: 21300000, guid: 89bdf66faf9fe0a4b81a74e13a81aebb, type: 3}
+            m_value: {fileID: 21300000, guid: d5b1fcd01f676a6498287cd358753040, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -251,8 +325,8 @@ MonoBehaviour:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: b13e5f41cf9b5214484e3cd1e36f5433, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -264,7 +338,7 @@ MonoBehaviour:
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 2
-            m_value: {fileID: 21300000, guid: 89bdf66faf9fe0a4b81a74e13a81aebb, type: 3}
+            m_value: {fileID: 21300000, guid: d5b1fcd01f676a6498287cd358753040, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -277,19 +351,19 @@ MonoBehaviour:
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 2
-            m_value: {fileID: 21300000, guid: 661eb5121999cd14ab2d268bf81ac4b5, type: 3}
+            m_value: {fileID: 21300000, guid: e3c78ad85fe1bb04fa55568d10f19f07, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_mouseOver:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 0f0d6dbfa6335bb43b9fd160a75630bc, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -301,7 +375,7 @@ MonoBehaviour:
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 2
-            m_value: {fileID: 21300000, guid: 661eb5121999cd14ab2d268bf81ac4b5, type: 3}
+            m_value: {fileID: 21300000, guid: e3c78ad85fe1bb04fa55568d10f19f07, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -314,68 +388,68 @@ MonoBehaviour:
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 2
-            m_value: {fileID: 21300000, guid: 1082360f6ef314f4b86e71862b0f5fdb, type: 3}
+            m_value: {fileID: 21300000, guid: 3028547faf205d84ca51f9d7e0e91d37, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_mouseOver:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 2b98a35d23bb2314d978b181ed76699e, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_mousePressed:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 3028547faf205d84ca51f9d7e0e91d37, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
     - m_key: micOn
       m_default:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 89ebe7cd4f8d43842a63462199e45f7a, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_mouseOver:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 79f5313243c1f9a4aa7e4aa10793d712, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_mousePressed:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 89ebe7cd4f8d43842a63462199e45f7a, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -388,31 +462,31 @@ MonoBehaviour:
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 2
-            m_value: {fileID: 21300000, guid: 7262103024684794d9303ea80e1bbdab, type: 3}
+            m_value: {fileID: 21300000, guid: 4e3dea9240234f546a57221358a8c081, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_mouseOver:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 6d056fc1ce597ef4a8c609259d8f92fb, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_mousePressed:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 4e3dea9240234f546a57221358a8c081, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -425,19 +499,19 @@ MonoBehaviour:
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 2
-            m_value: {fileID: 21300000, guid: 4920978f32f2159428aee9d356fbcef9, type: 3}
+            m_value: {fileID: 21300000, guid: b8f3040fe04a3bd429488c3d801d7a0a, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
       m_mouseOver:
-        m_keyword: 0
+        m_keyword: 2
         m_value:
           m_color:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
+            m_keyword: 2
+            m_value: {fileID: 21300000, guid: 17faab2ef23f6ac48b5eeb52bb8cc7e4, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
@@ -449,155 +523,7 @@ MonoBehaviour:
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 2
-            m_value: {fileID: 21300000, guid: 4920978f32f2159428aee9d356fbcef9, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-    - m_key: placeholderToolEnable
-      m_default:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 1, g: 1, b: 1, a: 1}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: cc0ac900d1365ac4db765cf11f40ada8, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-      m_mouseOver:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 1, g: 0, b: 0, a: 1}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 1f56dbc5a9a5ed7479f45208c02f068a, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-      m_mousePressed:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 7d42846522b371b49a404e37fb0db40e, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-    - m_key: placeholderToolboxEnable
-      m_default:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 1, g: 1, b: 1, a: 1}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 2566184491ef465489ca12c18e61127e, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-      m_mouseOver:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 1, g: 0, b: 0, a: 1}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 5344e20056d000d42aad888f03025c9c, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-      m_mousePressed:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 647f3ac1464b09c45a43a70f8ebb5548, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-    - m_key: placeholderToolActive
-      m_default:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 1, g: 1, b: 1, a: 1}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 7d42846522b371b49a404e37fb0db40e, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-      m_mouseOver:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 1, g: 0, b: 0, a: 1}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 7d42846522b371b49a404e37fb0db40e, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-      m_mousePressed:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: cc0ac900d1365ac4db765cf11f40ada8, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-    - m_key: placeholderToolboxActive
-      m_default:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 1, g: 1, b: 1, a: 1}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 647f3ac1464b09c45a43a70f8ebb5548, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-      m_mouseOver:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 1, g: 0, b: 0, a: 1}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 647f3ac1464b09c45a43a70f8ebb5548, type: 3}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-      m_mousePressed:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_image:
-            m_keyword: 2
-            m_value: {fileID: 21300000, guid: 2566184491ef465489ca12c18e61127e, type: 3}
+            m_value: {fileID: 21300000, guid: b8f3040fe04a3bd429488c3d801d7a0a, type: 3}
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}

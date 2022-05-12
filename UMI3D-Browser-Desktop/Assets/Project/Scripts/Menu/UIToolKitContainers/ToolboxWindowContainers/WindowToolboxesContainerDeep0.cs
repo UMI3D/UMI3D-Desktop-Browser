@@ -60,7 +60,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             ToolboxItem = ToolboxItem_E.NewWindowItem(null);
             ToolboxItem.Clicked += Select;
-            ToolboxItem.SetIcon(ToolboxItem_E.ItemType.Tool);
+            ToolboxItem.SetWindowIcon(ToolboxItem_E.ItemType.Tool);
             Displayerbox = new Displayerbox_E(DisplayerboxType.ToolboxesPopup);
             WindowItem.AddDisplayerbox(Displayerbox);
             base.SetContainerAsTool();

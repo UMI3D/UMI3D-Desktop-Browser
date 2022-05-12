@@ -45,29 +45,68 @@ namespace umi3dDesktopBrowser.ui.viewController
             Button.Root.style.backgroundImage = icon;
             Icon.Hide();
         }
-        public void SetIcon(ItemType type)
+        //public void SetIcon(ItemType type)
+        //{
+        //    switch (type)
+        //    {
+        //        case ItemType.Undefine:
+        //            break;
+        //        case ItemType.Tool:
+        //            SetIcon(StyleKeys.Bg("placeholderToolActive"), StyleKeys.Bg("placeholderToolEnable"));
+        //            break;
+        //        case ItemType.Toolbox:
+        //            SetIcon(StyleKeys.Bg("toolbox"));
+        //            Button.UpdateStateKeys(Button, StyleKeys.Bg_Border("menu", ""), StyleKeys.Bg_Border("menu", ""));
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
+        public void SetMenuIcon(ItemType type)
         {
             switch (type)
             {
                 case ItemType.Undefine:
                     break;
                 case ItemType.Tool:
-                    Button.UpdateStateKeys(Icon, StyleKeys.Bg("placeholderToolActive"), StyleKeys.Bg("placeholderToolEnable"));
+                    Button.UpdateStateKeys(Button, StyleKeys.Bg_Border("menuOn", ""), StyleKeys.Bg_Border("menuOff", ""));
                     break;
                 case ItemType.Toolbox:
-                    Button.UpdateStateKeys(Icon, StyleKeys.Bg("placeholderToolboxActive"), StyleKeys.Bg("placeholderToolboxEnable"));
+                    SetIcon(StyleKeys.Bg("toolbox"));
+                    Button.UpdateStateKeys(Button, StyleKeys.Bg_Border("menuOn", ""), StyleKeys.Bg_Border("menuOff", ""));
                     break;
                 default:
                     break;
             }
         }
+        public void SetWindowIcon(ItemType type)
+        {
+            switch (type)
+            {
+                case ItemType.Undefine:
+                    break;
+                case ItemType.Tool:
+                    Button.UpdateStateKeys(Button, StyleKeys.Bg_Border("windowOn", ""), StyleKeys.Bg_Border("windowOff", ""));
+                    break;
+                case ItemType.Toolbox:
+                    SetIcon(StyleKeys.Bg("toolbox"));
+                    Button.UpdateStateKeys(Button, StyleKeys.Bg_Border("windowOn", ""), StyleKeys.Bg_Border("windowOff", ""));
+                    break;
+                default:
+                    break;
+            }
+        }
+        public void SetIcon(StyleKeys keys)
+            => SetIcon(keys, keys);
+        public void SetIcon(StyleKeys on, StyleKeys off)
+            => Button.UpdateStateKeys(Icon, on, off);
 
         public static ToolboxItem_E NewMenuItem(string itemName, ItemType type = ItemType.Undefine)
         {
             var item = new ToolboxItem_E("ItemMenu");
-            item.Button.UpdateStateKeys(item.Button, StyleKeys.Default_Bg_Border, StyleKeys.Default_Bg_Border);
+            item.Button.UpdateStateKeys(item.Button, StyleKeys.Bg_Border("menuOff", ""), StyleKeys.Bg_Border("menuOff", ""));
             item.SetName(itemName);
-            //item.SetIcon(type);
+            item.SetMenuIcon(type);
             
             return item;
         }
@@ -75,9 +114,9 @@ namespace umi3dDesktopBrowser.ui.viewController
         public static ToolboxItem_E NewWindowItem(string itemName, ItemType type = ItemType.Undefine)
         {
             var item = new ToolboxItem_E("ItemWindow");
-            item.Button.UpdateStateKeys(item.Button, StyleKeys.DefaultBackground, StyleKeys.DefaultBackground);
+            item.Button.UpdateStateKeys(item.Button, StyleKeys.Bg("windowOn"), StyleKeys.Bg("windowOff"));
             item.SetName(itemName);
-            item.SetIcon(type);
+            item.SetWindowIcon(type);
 
             return item;
         }
