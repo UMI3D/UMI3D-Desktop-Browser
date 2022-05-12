@@ -28,6 +28,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public Label_E Label { get; protected set; } = null;
         public Button_E Button { get; protected set; } = null;
+        public Icon_E Icon { get; protected set; } = null;
 
         public void Toggle(bool value)
             => Button?.Toggle(value);
@@ -50,30 +51,20 @@ namespace umi3dDesktopBrowser.ui.viewController
                 case ItemType.Undefine:
                     break;
                 case ItemType.Tool:
-                    Button.UpdateStateKeys(Button, StyleKeys.Bg("placeholderToolActive"), StyleKeys.Bg("placeholderToolEnable"));
+                    Button.UpdateStateKeys(Icon, StyleKeys.Bg("placeholderToolActive"), StyleKeys.Bg("placeholderToolEnable"));
                     break;
                 case ItemType.Toolbox:
-                    Button.UpdateStateKeys(Button, StyleKeys.Bg("placeholderToolboxActive"), StyleKeys.Bg("placeholderToolboxEnable"));
+                    Button.UpdateStateKeys(Icon, StyleKeys.Bg("placeholderToolboxActive"), StyleKeys.Bg("placeholderToolboxEnable"));
                     break;
                 default:
                     break;
             }
         }
 
-        ///// <summary>
-        ///// A ToolboxItem can be a toolbox or a tool. This item will be set has tool if [isTool] is set to true, else toolbox.
-        ///// </summary>
-        ///// <param name="isTool"></param>
-        //public void SetItemStatus(bool isTool)
-        //{
-        //    StyleKeys onKeys = new StyleKeys(null, (isTool) ? "placeholderToolActive" : "placeholderToolboxActive", null);
-        //    StyleKeys offKeys = new StyleKeys(null, (isTool) ? "placeholderToolEnable" : "placeholderToolboxEnable", null);
-        //    Button.AddStateKeys(Button, "ToolboxItem_Icon", onKeys, offKeys);
-        //}
-
         public static ToolboxItem_E NewMenuItem(string itemName, ItemType type = ItemType.Undefine)
         {
             var item = new ToolboxItem_E("ItemMenu");
+            item.Button.UpdateStateKeys(item.Button, StyleKeys.Default_Bg_Border, StyleKeys.Default_Bg_Border);
             item.SetName(itemName);
             item.SetIcon(type);
             
@@ -83,6 +74,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public static ToolboxItem_E NewWindowItem(string itemName, ItemType type = ItemType.Undefine)
         {
             var item = new ToolboxItem_E("ItemWindow");
+            item.Button.UpdateStateKeys(item.Button, StyleKeys.DefaultBackground, StyleKeys.DefaultBackground);
             item.SetName(itemName);
             item.SetIcon(type);
 
@@ -104,28 +96,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class ToolboxItem_E : Box_E
     {
-        public ToolboxItem_E(string iconKey, string itemName) :
-            this(iconKey, null, itemName, true, true)
-        { }
-        private static string m_menuBarStyle => "UI/Style/MenuBar/MenuBar_ToolboxItem";
-        private static string m_windowStyle => "UI/Style/ToolboxWindow/ToolboxWindow_ToolboxItem";
-        private ToolboxItem_E(string iconOnKey, string iconOffKey, string itemName, bool isOn = false, bool isInMenuBar = true) :
-            base("UI/UXML/Toolbox/toolboxItem", (isInMenuBar) ? m_menuBarStyle : m_windowStyle, null)
-        {
-            StyleKeys buttonOnKeys = new StyleKeys(null, iconOnKey, null);
-            if (iconOffKey != null)
-            {
-                StyleKeys buttonOffKeys = new StyleKeys(null, iconOffKey, null);
-                Button.UpdateStateKeys(Button, buttonOnKeys, buttonOffKeys);
-                Button.Toggle(isOn);
-            }
-            else
-                Button.UpdateRootStyleAndKeysAndManipulator("ToolboxItem_Icon", buttonOnKeys);
-
-            Name = itemName;
-            Label.value = itemName;
-        }
-
         private ToolboxItem_E(string partialStyle) :
             base ("UI/UXML/Toolbox/toolboxItem", partialStyle, null)
         { }
@@ -135,8 +105,11 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Initialize();
 
             Label = new Label_E(QR<Label>(), "CorpsToolboxItem", StyleKeys.DefaultText);
-            Button = new Button_E(Root.Q<Button>(), "ToolboxItem_Icon", null);
+            Button = new Button_E(Root.Q<Button>(), "Square_m", null);
             Button.Clicked += OnClicked;
+
+            Icon = new Icon_E();
+            Button.AddIconInFront(Icon, "Square2", null, null);
         }
     }
 }

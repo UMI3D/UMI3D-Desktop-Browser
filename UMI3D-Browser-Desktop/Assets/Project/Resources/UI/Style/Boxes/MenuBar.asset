@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dddf81196ba90d144a00ec1dc5dec5ca, type: 3}
-  m_Name: box
+  m_Name: MenuBar
   m_EditorClassIdentifier: 
   AppliesFormatAndStyle:
     m_PersistentCalls:
@@ -54,12 +54,12 @@ MonoBehaviour:
         m_right: 0
         m_top: 0
     m_padding:
-      m_keyword: 0
+      m_keyword: 11
       m_value:
         m_global: 0
         m_bottom: 0
-        m_left: 0
-        m_right: 0
+        m_left: 5
+        m_right: 5
         m_top: 0
   m_textFormat:
     m_fontSize:
@@ -89,43 +89,6 @@ MonoBehaviour:
         m_value:
           m_color:
             m_keyword: 20
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-      m_mouseOver:
-        m_keyword: 0
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-      m_mousePressed:
-        m_keyword: 0
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-          m_image:
-            m_keyword: 0
-            m_value: {fileID: 0}
-          m_imageTintColor:
-            m_keyword: 0
-            m_value: {r: 0, g: 0, b: 0, a: 0}
-    - m_key: dark
-      m_default:
-        m_keyword: 2
-        m_value:
-          m_color:
-            m_keyword: 21
             m_value: {r: 0, g: 0, b: 0, a: 0}
           m_image:
             m_keyword: 0

@@ -82,10 +82,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
     public partial class BottomBar_E : Box_E
     {
-        private BottomBar_E() :
-            base("UI/UXML/Menus/bottomBar", "Box", StyleKeys.Bg("dark"))
-        { }
-
         public override void Reset()
         {
             base.Reset();
@@ -102,16 +98,14 @@ namespace umi3dDesktopBrowser.ui.viewController
             ParticipantCount = new Label_E(QR<Label>("participantCount"), "BottomBar_rightLabel", StyleKeys.DefaultText);
 
             Console = new Button_E(QR<Button>("console"), "Square", StyleKeys.Bg("on"), StyleKeys.Bg("off"), false);
-            var consoleIcon = new Icon_E("Square1", s_consoleDefaultKeys);
-            Console.Add(consoleIcon);
-            LinkMouseBehaviourChanged(Console, consoleIcon);
-            Console.GetRootManipulator().ProcessDuringBubbleUp = true;
+            Console.AddIconInFront(new Icon_E(), "Square1", s_consoleDefaultKeys);
 
             Settings = new Button_E(QR<Button>("settings"), "Square", StyleKeys.Bg("on"), StyleKeys.Bg("off"), false);
-            var settingsIcon = new Icon_E("Square1", StyleKeys.Bg("settings"));
-            Settings.Add(settingsIcon);
-            LinkMouseBehaviourChanged(Settings, settingsIcon);
-            Settings.GetRootManipulator().ProcessDuringBubbleUp = true;
+            Settings.AddIconInFront(new Icon_E(), "Square1", StyleKeys.Bg("settings"));
         }
+
+        private BottomBar_E() :
+            base("UI/UXML/Menus/bottomBar", "BottomBar", StyleKeys.Bg("dark"))
+        { }
     }
 }

@@ -46,8 +46,7 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void SetContainerAsToolbox()
         {
             ToolboxItem.SetIcon(ToolboxItem_E.ItemType.Toolbox);
-            Toolbox = new Toolbox_E(ToolboxType.Popup);
-            Toolbox.SetToolboxName(menu.Name ?? "");
+            Toolbox = Toolbox_E.NewWindowToolbox(menu.Name ?? "");
             base.SetContainerAsToolbox();
         }
 

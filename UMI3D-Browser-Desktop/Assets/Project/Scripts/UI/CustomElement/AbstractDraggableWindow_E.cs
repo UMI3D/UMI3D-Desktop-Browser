@@ -58,10 +58,7 @@ namespace umi3dDesktopBrowser.ui.viewController
                 return;
             
             m_closeButton = new Button_E(QR<Button>("closeButton"), "Close", StyleKeys.Default_Bg_Border);
-            var closeIcon = new Icon_E("Square", StyleKeys.DefaultBackground);
-            m_closeButton.Add(closeIcon);
-            LinkMouseBehaviourChanged(m_closeButton, closeIcon);
-            m_closeButton.GetRootManipulator().ProcessDuringBubbleUp = true;
+            m_closeButton.AddIconInFront(new Icon_E(), "Square", StyleKeys.DefaultBackground);
 
             CloseButtonPressed += Hide;
             m_closeButton.Clicked += OnCloseButtonPressed;

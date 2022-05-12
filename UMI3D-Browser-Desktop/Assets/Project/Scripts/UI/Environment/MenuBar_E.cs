@@ -160,11 +160,10 @@ namespace umi3dDesktopBrowser.ui.viewController
             #endregion
 
             ToolboxButton = ToolboxItem_E.NewMenuItem("Toolbox");
-            ToolboxButton.Button.UpdateStateKeys(ToolboxButton.Button, StyleKeys.Default_Bg_Border, StyleKeys.Default_Bg_Border);
+            
             //var icon = new Icon_E("")
 
-            //new ToolboxItem_E("Toolbox", "Toolbox");
-            new Toolbox_E("", ToolboxType.Pinned, ToolboxButton)
+            Toolbox_E.NewMenuToolbox("", ToolboxButton)
                 .InsertRootTo(leftLayout_VE);
 
             AddSeparator(leftLayout_VE);
@@ -198,10 +197,14 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected void AddSeparator(VisualElement layout)
             => CreateSeparator().InsertRootTo(layout);
         protected Icon_E CreateSeparator()
-            => new Icon_E("SeparatorVertical", StyleKeys.DefaultBackground);
+        {
+            var separator = new Icon_E("SeparatorVertical", StyleKeys.DefaultBackground);
+            separator.Root.name = "separator";
+            return separator;
+        }
 
         private MenuBar_E() :
-            base("UI/UXML/Menus/menuBar", "box", StyleKeys.Bg("light"))
+            base("UI/UXML/Menus/menuBar", "MenuBar", StyleKeys.Bg("light"))
         { }
     }
 }

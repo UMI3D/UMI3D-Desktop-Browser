@@ -41,7 +41,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         public void SetFirstToolboxName(string name)
-            => FirstToolbox.SetToolboxName(name ?? "");
+            => FirstToolbox.SetName(name ?? "");
 
         public void AddToolboxItemInFirstToolbox(params View_E[] items)
             => FirstToolbox.AddRange(items);
@@ -68,10 +68,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             PinButton = new Button_E(QR<Button>("pinButton"), "Pin", StyleKeys.Bg_Border("on"), StyleKeys.Bg_Border("off"), false);
             PinButton.Clicked += PinUnpin;
-            var pinIcon = new Icon_E("Square1", StyleKeys.Bg("pin"));
-            PinButton.Add(pinIcon);
-            LinkMouseBehaviourChanged(PinButton, pinIcon);
-            PinButton.GetRootManipulator().ProcessDuringBubbleUp = true;
+            PinButton.AddIconInFront(new Icon_E(), "Square1", StyleKeys.Bg("pin"));
 
             VisualElement containers = Root.Q("containers");
             string conainerStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_Container";
@@ -85,7 +82,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             string displayersContainerStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Item_DisplayersContainer";
             AddVisualStyle(m_displayersContainer, displayersContainerStyle, null);
 
-            FirstToolbox = new Toolbox_E(ToolboxType.Popup);
+            FirstToolbox = Toolbox_E.NewWindowToolbox(null);
             AddToolbox(FirstToolbox);
         }
 

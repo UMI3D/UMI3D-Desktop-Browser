@@ -41,6 +41,18 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         protected string m_rawText { get; set; } = null;
         protected Button m_button => (Button)Root;
+
+        public void AddIconInFront(Icon_E icon, string style, StyleKeys keys)
+            => AddIconInFront(icon, style, keys, keys);
+        public void AddIconInFront(Icon_E icon, string style, StyleKeys on, StyleKeys off)
+        {
+            if (icon == null)
+                throw new NullReferenceException("Visual null when trying to add in front of button.");
+            Add(icon);
+            AddStateKeys(icon, style, on, off);
+            m_clickableManipulator.MouseBehaviourChanged += icon.GetRootManipulator().OnMouseBehaviourChanged;
+            GetRootManipulator().ProcessDuringBubbleUp = true;
+        }
     }
 
     public partial class Button_E : IStateCustomisableElement
@@ -127,8 +139,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Button_E(string partialStylePath, StyleKeys keys) :
             this(new Button(), partialStylePath, keys)
         { }
-        public Button_E(Button button, string partialStylePath, StyleKeys keys) :
-            this(button, partialStylePath, keys, keys, true)
+        public Button_E(Button button, string partialStylePath, StyleKeys keys, bool isOn = false) :
+            this(button, partialStylePath, keys, keys, isOn)
         { }
         public Button_E(string partialStylePath, StyleKeys onKeys, StyleKeys offKeys, bool isOn = false) :
             this(new Button(), partialStylePath, onKeys, offKeys, isOn)
