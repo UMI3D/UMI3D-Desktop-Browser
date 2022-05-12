@@ -161,9 +161,8 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             ToolboxButton = ToolboxItem_E.NewMenuItem("Toolbox");
             
-            //var icon = new Icon_E("")
-
-            Toolbox_E.NewMenuToolbox("", ToolboxButton)
+            Toolbox_E
+                .NewMenuToolbox("", ToolboxButton)
                 .InsertRootTo(leftLayout_VE);
 
             AddSeparator(leftLayout_VE);

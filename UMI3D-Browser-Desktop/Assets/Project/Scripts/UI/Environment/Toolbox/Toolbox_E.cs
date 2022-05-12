@@ -37,7 +37,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public static Toolbox_E NewMenuToolbox(string toolboxName, params ToolboxItem_E[] items)
         {
-            var toolbox = new Toolbox_E("Box_p", items);
+            var toolbox = new Toolbox_E("ToolboxMenu", items);
             toolbox.SetName(toolboxName);
             toolbox.m_backward.style.display = DisplayStyle.None;
             toolbox.m_forward.style.display = DisplayStyle.None;
@@ -47,7 +47,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public static Toolbox_E NewSubMenuToolbox(string toolboxName, params ToolboxItem_E[] items)
         {
-            var toolbox = new Toolbox_E("Box_w1", items);
+            var toolbox = new Toolbox_E("ToolboxSubMenu", items);
             toolbox.SetName(toolboxName);
             toolbox.m_scrollView.HSliderValueChanged += (value, low, high) =>
             {
@@ -60,7 +60,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public static Toolbox_E NewWindowToolbox(string toolboxName, params ToolboxItem_E[] items)
         {
-            var toolbox = new Toolbox_E("Box_mp", items);
+            var toolbox = new Toolbox_E("ToolboxWindow", items);
             toolbox.SetName(toolboxName);
             toolbox.m_scrollView.HSliderValueChanged += (value, low, high) =>
             {

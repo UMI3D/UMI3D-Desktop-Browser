@@ -67,7 +67,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             base.Initialize();
 
             m_title = new Label_E(Root.Q<Label>("title"), "CorpsShortcut", StyleKeys.DefaultText);
-            m_iconbox = new Box_E(QR("iconbox"), "Shortcut_Iconbox", null);
+            m_iconbox = new Box_E(QR("iconbox"), "KeyIconbox", null);
 
             m_plusDisplayed = new List<Label_E>();
             m_plusWaited = new List<Label_E>();
