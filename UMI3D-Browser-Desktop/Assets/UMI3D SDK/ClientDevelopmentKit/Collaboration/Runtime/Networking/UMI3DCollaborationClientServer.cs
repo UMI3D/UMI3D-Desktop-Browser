@@ -73,7 +73,7 @@ namespace umi3d.cdk.collaboration
 
         public async void Clear()
         {
-            if (!Exists)
+            if (Exists)
             {
                 worldControllerClient?.Clear();
                 await environmentClient?.Clear();

@@ -61,13 +61,13 @@ namespace umi3d.common
         // Should be used to serialize this object to bson.
         public byte[] ToBson(TypeNameHandling typeNameHandling = TypeNameHandling.All)
         {
-            return ToBson(this,typeNameHandling);
+            return ToBson(this, typeNameHandling);
         }
 
         // Should be used to serialize this object to json.
         public string ToJson(TypeNameHandling typeNameHandling = TypeNameHandling.All)
         {
-            return ToJson(this,typeNameHandling);
+            return ToJson(this, typeNameHandling);
         }
 
         #endregion
