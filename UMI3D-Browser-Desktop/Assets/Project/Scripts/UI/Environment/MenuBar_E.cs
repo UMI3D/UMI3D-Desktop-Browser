@@ -161,7 +161,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             ToolboxButton = ToolboxItem_E
                 .NewMenuItem("Toolbox");
-            ToolboxButton.SetIcon(StyleKeys.Bg("toolbox"));
+            ToolboxButton.SetIcon(StyleKeys.Bg("toolboxMenu"));
             
             Toolbox_E
                 .NewMenuToolbox("", ToolboxButton)

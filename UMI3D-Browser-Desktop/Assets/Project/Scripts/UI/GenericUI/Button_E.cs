@@ -51,6 +51,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             Add(icon);
             AddStateKeys(icon, style, on, off);
             m_clickableManipulator.MouseBehaviourChanged += icon.GetRootManipulator().OnMouseBehaviourChanged;
+            LinkMouseBehaviourChanged(this, icon);
             GetRootManipulator().ProcessDuringBubbleUp = true;
         }
     }
