@@ -15,10 +15,9 @@ limitations under the License.
 */
 using System;
 using umi3DBrowser.UICustomStyle;
-using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.ui.viewController
+namespace umi3d.baseBrowser.ui.viewController
 {
     /// <summary>
     /// This class provides a class for a manipulator which enables visual styles to change according to mouse behaviour.

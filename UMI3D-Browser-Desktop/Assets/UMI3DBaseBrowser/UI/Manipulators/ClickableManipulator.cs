@@ -14,12 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using umi3DBrowser.UICustomStyle;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static umi3dDesktopBrowser.ui.viewController.VisualManipulator;
+using static umi3d.baseBrowser.ui.viewController.VisualManipulator;
 
-namespace umi3dDesktopBrowser.ui.viewController
+namespace umi3d.baseBrowser.ui.viewController
 {
     public class ClickableManipulator : Clickable
     {

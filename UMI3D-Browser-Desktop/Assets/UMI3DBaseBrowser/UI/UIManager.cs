@@ -15,7 +15,7 @@ limitations under the License.
 */
 using inetum.unityUtils;
 
-namespace umi3dDesktopBrowser.ui.viewController
+namespace umi3d.baseBrowser.ui.viewController
 {
     public class UIManager : SingleBehaviour<UIManager>
     { } 

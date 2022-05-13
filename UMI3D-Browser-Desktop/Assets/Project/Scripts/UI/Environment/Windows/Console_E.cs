@@ -16,6 +16,7 @@ limitations under the License.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.baseBrowser.ui.viewController;
 using umi3DBrowser.UICustomStyle;
 using umi3dDesktopBrowser.ui.Controller;
 using UnityEngine;
