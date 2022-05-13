@@ -16,7 +16,7 @@ limitations under the License.
 using System;
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.ui.viewController
+namespace umi3d.baseBrowser.ui.viewController
 {
     public abstract partial class AbstractBaseField_E<T> : INotifyValueChanged<T>
     {
