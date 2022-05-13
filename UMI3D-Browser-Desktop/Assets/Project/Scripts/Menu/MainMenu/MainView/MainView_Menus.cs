@@ -105,6 +105,7 @@ namespace umi3dDesktopBrowser.ui
             Shortcutbox_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseShortcut;
             Console_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.Console.Toggle;
             Console_E.Instance.NewLogAdded += BottomBar_E.Instance.UpdateConsole;
+            Settingbox_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.Settings.Toggle;
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => m_startOfSession = DateTime.Now);
             UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += () => {
