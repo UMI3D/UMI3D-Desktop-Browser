@@ -37,6 +37,10 @@ namespace BrowserDesktop.Interaction
         static internal Dictionary<ManipulationGroup, List<ManipulationInput>> InputInstances = new Dictionary<ManipulationGroup, List<ManipulationInput>>();
         static int currentInstance;
 
+        private void Start()
+        {
+            Debug.LogWarning($"There were references to CircularMenu here [Manipulation Group].");
+        }
 
         static public void NextManipulation()
         {
@@ -71,7 +75,6 @@ namespace BrowserDesktop.Interaction
         internal void Activate()
         {
             Active = true;
-            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu [Manipulation Group]");
             //if (menuItem != null)
             //    Menu?.Remove(menuItem);
             ManipulationInput.SelectFirst();
@@ -81,7 +84,7 @@ namespace BrowserDesktop.Interaction
         internal void Deactivate()
         {
             Active = false;
-            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu [Manipulation Groupe]");
+            //Debug.Log("<color=green>TODO: </color>" + $"CircularMenu [Manipulation Groupe]");
             //if (menuItem != null)
             //    Menu?.Add(menuItem);
             foreach (ManipulationInput input in manipulationInputs)
@@ -126,7 +129,7 @@ namespace BrowserDesktop.Interaction
                     currentInstance = 0;
                     CursorHandler.State = CursorHandler.CursorState.Hover;
                 }
-                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu [Manipulation Groupe]");
+                //Debug.Log("<color=green>TODO: </color>" + $"CircularMenu [Manipulation Groupe]");
                 //if (menuItem != null)
                 //    Menu?.Remove(menuItem);
                 if (menuItem != null)
@@ -177,7 +180,7 @@ namespace BrowserDesktop.Interaction
         void Select(bool state)
         {
             SwicthManipulation(instances.FindIndex(a => a == this));
-            Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
+            //Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
             //if (CircularMenu.Exists)
             //    CircularMenu.Collapse();
         }
