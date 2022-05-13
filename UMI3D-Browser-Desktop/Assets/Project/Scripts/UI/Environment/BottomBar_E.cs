@@ -97,10 +97,10 @@ namespace umi3dDesktopBrowser.ui.viewController
             Timer = new Label_E(QR<Label>("timer"), "BottomBar_rightLabel", StyleKeys.DefaultText, "00:00:00");
             ParticipantCount = new Label_E(QR<Label>("participantCount"), "BottomBar_rightLabel", StyleKeys.DefaultText);
 
-            Console = new Button_E(QR<Button>("console"), "Square", StyleKeys.Bg("on"), StyleKeys.Bg("off"), false);
+            Console = new Button_E(QR<Button>("console"), "Square", StyleKeys.Bg("on"), StyleKeys.Bg("off"));
             Console.AddIconInFront(new Icon_E(), "Square1", s_consoleDefaultKeys);
 
-            Settings = new Button_E(QR<Button>("settings"), "Square", StyleKeys.Bg("on"), StyleKeys.Bg("off"), false);
+            Settings = new Button_E(QR<Button>("settings"), "Square", StyleKeys.Bg("on"), StyleKeys.Bg("off"));
             Settings.AddIconInFront(new Icon_E(), "Square1", StyleKeys.Bg("settings"));
         }
 
