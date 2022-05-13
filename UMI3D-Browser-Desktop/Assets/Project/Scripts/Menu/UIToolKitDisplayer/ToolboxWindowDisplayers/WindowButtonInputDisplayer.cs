@@ -70,7 +70,7 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             }
             else if (menu is BooleanInputMenuItem toggleMenu)
             {
-                m_button = new Button_E(Displayer.Root.Q<Button>(), "Toggle", StyleKeys.Bg("on"), StyleKeys.Bg("off"), toggleMenu.GetValue());
+                m_button = new Button_E(Displayer.Root.Q<Button>(), "Toggle", StyleKeys.Bg_Border("on", ""), StyleKeys.Bg_Border("off", ""), toggleMenu.GetValue());
                 m_button.Text = null;
                 Displayer.Add(m_button);
 
