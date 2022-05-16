@@ -159,6 +159,8 @@ namespace BrowserDesktop.Interaction
                 manipulationDisplayer = ManipulationDisplayerManager.CreateDisplayer();
                 manipulationDisplayer.Display(false);
             }
+
+            Debug.LogWarning($"There were references to CircularMenu and MainMenu here [Manipulation Input]");
         }
 
         private void OnDestroy()
@@ -282,7 +284,6 @@ namespace BrowserDesktop.Interaction
         {
             while (true)
             {
-                Debug.Log("<color=green>TODO: </color>" + $"CircularMenu et MainMenu [Manipulation Input]");
                 //if (/*(!CircularMenu.Exists || !CircularMenu.Instance.IsExpanded) &&*/ !MainMenu.IsDisplaying)
                 if (true)
                 {

@@ -356,13 +356,7 @@ public class LauncherManager : MonoBehaviour
                 //4.Bind the button to unistall this lib
                 entry.Q<Button>("library-unistall").clickable.clicked += () =>
                 {
-                    DialogueBox_E.
-                        Setup(
-                        "Are you sure ... ?", 
-                        "This library is required for " + app.Key + " environment", 
-                        "YES", 
-                        "NO", 
-                        (b) =>
+                    DialogueBox_E.Instance.Setup("Are you sure ... ?", "This library is required for " + app.Key + " environment", "YES", "NO", (b) =>
                         {
                             if (b)
                             {
@@ -370,9 +364,8 @@ public class LauncherManager : MonoBehaviour
                                 UMI3DResourcesManager.RemoveLibrary(lib.key);
                                 DisplayLibraries();
                             }
-                        },
-                        uiDocument
-                        );
+                        });
+                    DialogueBox_E.Instance.DisplayFrom(uiDocument);
                 };
                 librariesList.Add(entry);
             }
@@ -650,13 +643,7 @@ public class LauncherManager : MonoBehaviour
             });
             item.Q<Button>("delete-item").clickable.clicked += () =>
             {
-                DialogueBox_E.
-                    Setup(
-                    env.serverName, 
-                    "Delete this server from registered ?", 
-                    "YES", 
-                    "NO", 
-                    (b) =>
+                DialogueBox_E.Instance.Setup(env.serverName, "Delete this server from registered ?", "YES", "NO", (b) =>
                     {
                         if (b)
                         {
@@ -664,8 +651,8 @@ public class LauncherManager : MonoBehaviour
                             ServerPreferences.StoreRegisteredServerData(serverConnectionData);
                             savedServersSlider.RemoveElement(item);
                         }
-                    },
-                    uiDocument);
+                    });
+                DialogueBox_E.Instance.DisplayFrom(uiDocument);
             };
             savedServersSlider.AddElement(item);
         }

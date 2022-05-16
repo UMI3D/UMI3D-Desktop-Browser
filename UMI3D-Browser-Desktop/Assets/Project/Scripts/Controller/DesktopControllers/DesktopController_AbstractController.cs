@@ -78,12 +78,14 @@ namespace BrowserDesktop.Controller
                 {
                     CursorHandler.UnSetMovement(this);
                     MenuBar_E.Instance.Hide();
+                    Settingbox_E.Instance.Hide();
                     IsFreeAndHovering = false;
                 }
                 else
                 {
                     CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
                     MenuBar_E.Instance.Display();
+                    Settingbox_E.Instance.Display();
                     if (m_objectMenu.menu.Count > 0)
                     {
                         m_objectMenu.Expand(true);

@@ -32,8 +32,8 @@ namespace umi3dDesktopBrowser.ui
         private void InitMenus()
         {
             InitMenuBar();
-            InitToolboxWindow();
-            InitToolboxPinnedWindow();
+            InitSettings();
+            InitToolboxesWindows();
             InitObjectMenuWindow();
             InitShortcut();
             InitConsole();
@@ -46,14 +46,14 @@ namespace umi3dDesktopBrowser.ui
         {
             MenuBar_E.Instance.InsertRootTo(m_mainView);
 
-            MenuBar_E.Instance.ToolboxButton.OnClicked = () =>
+            MenuBar_E.Instance.ToolboxButton.Clicked += () =>
             {
                 m_windowToolboxesDM.Display(true);
             };
 
             m_viewport.Add(MenuBar_E.Instance.SubMenuLayout);
 
-            MenuBar_E.Instance.OnPinnedUnpinned += (value, menu) =>
+            MenuBar_E.Instance.PinnedUnpinned += (value, menu) =>
             {
                 if (value)
                     m_pinnedToolboxesDM.menu.Add(menu);
@@ -62,24 +62,26 @@ namespace umi3dDesktopBrowser.ui
             };
         }
 
-        private void InitToolboxWindow()
+        private void InitSettings()
         {
-            ToolboxWindow_E.Instance.InsertRootTo(m_viewport);
-            ToolboxWindow_E.Instance.OnCloseButtonPressed += () => m_windowToolboxesDM.Collapse(true);
-            m_windowToolboxesDM.menu.onContentChange.AddListener(() 
-                => MenuBar_E.Instance.DisplayToolboxButton(m_windowToolboxesDM.menu.Count > 0));
+            Settingbox_E.Instance.InsertRootTo(m_viewport);
         }
 
-        private void InitToolboxPinnedWindow()
+        private void InitToolboxesWindows()
         {
+            ToolboxWindow_E.Instance.InsertRootTo(m_viewport);
+            ToolboxWindow_E.Instance.CloseButtonPressed += () => m_windowToolboxesDM.Collapse(true);
+            m_windowToolboxesDM.menu.onContentChange.AddListener(() 
+                => MenuBar_E.AreThereToolboxes = m_windowToolboxesDM.menu.Count > 0);
+
             ToolboxPinnedWindow_E.Instance.InsertRootTo(m_viewport);
-            ToolboxPinnedWindow_E.Instance.OnCloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(true);
+            ToolboxPinnedWindow_E.Instance.CloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(true);
         }
 
         private void InitObjectMenuWindow()
         {
             ObjectMenuWindow_E.Instance.InsertRootTo(m_viewport);
-            ObjectMenuWindow_E.Instance.OnCloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(true);
+            ObjectMenuWindow_E.Instance.CloseButtonPressed += () => m_pinnedToolboxesDM.Collapse(true);
         }
 
         private void InitShortcut()
@@ -90,7 +92,7 @@ namespace umi3dDesktopBrowser.ui
         private void InitConsole()
         {
             Console_E.Instance.InsertRootTo(m_viewport);
-            Console_E.Version.value = BrowserVersion.Version;
+            Console_E.Instance.UpdateTopBarName(BrowserVersion.Version);
         }
 
         private void InitBottomBar()
@@ -98,10 +100,12 @@ namespace umi3dDesktopBrowser.ui
             BottomBar_E.Instance.InsertRootTo(m_mainView);
 
             MenuBar_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseMenuBar;
-            BottomBar_E.Instance.Notification.OnClicked = Console_E.Instance.DisplayOrHide;
+            BottomBar_E.Instance.Console.Clicked += Console_E.Instance.ToogleVisibility;
+            BottomBar_E.Instance.Settings.Clicked += Settingbox_E.Instance.ToogleVisibility;
             Shortcutbox_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseShortcut;
-            Console_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.UpdateOnOffNotificationIcon;
-            Console_E.Instance.NewLogAdded += BottomBar_E.Instance.UpdateAlertNotificationIcon;
+            Console_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.Console.Toggle;
+            Console_E.Instance.NewLogAdded += BottomBar_E.Instance.UpdateConsole;
+            Settingbox_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.Settings.Toggle;
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => m_startOfSession = DateTime.Now);
             UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += () => {
@@ -115,25 +119,29 @@ namespace umi3dDesktopBrowser.ui
         private void ResetMenus()
         {
             MenuBar_E.Instance.Reset();
+            BottomBar_E.Instance.Reset();
+            Settingbox_E.Instance.Reset();
             Shortcutbox_E.Instance.Reset();
+            Console_E.Instance.Reset();
+            ToolboxWindow_E.Instance.Reset();
+            ToolboxPinnedWindow_E.Instance.Reset();
+            ObjectMenuWindow_E.Instance.Reset();
+            m_pinnedToolboxesDM.menu.RemoveAll();
         }
 
         private void DisplayMenus()
         {
-            if (m_showMenuBarOnStart)
-                MenuBar_E.Instance.Display();
-            else
-                MenuBar_E.Instance.Hide();
+            if (m_showMenuBarOnStart) MenuBar_E.Instance.Display();
+            else MenuBar_E.Instance.Hide();
 
-            if (m_showShortcutOnStart)
-                Shortcutbox_E.Instance.Display();
-            else
-                Shortcutbox_E.Instance.Hide();
+            if (m_showSettignsOnStart) Settingbox_E.Instance.Display();
+            else Settingbox_E.Instance.Hide();
 
-            if (m_showConsoleOnStart)
-                Console_E.Instance.Display();
-            else
-                Console_E.Instance.Hide();
+            if (m_showShortcutOnStart) Shortcutbox_E.Instance.Display();
+            else Shortcutbox_E.Instance.Hide();
+
+            if (m_showConsoleOnStart) Console_E.Instance.Display();
+            else Console_E.Instance.Hide();
         }
 
         #region Input Menus
@@ -152,7 +160,7 @@ namespace umi3dDesktopBrowser.ui
         private void InputShortcut()
         {
             if (Input.GetKeyDown(KeyCode.F1))
-                Shortcutbox_E.Instance.DisplayOrHide();
+                Shortcutbox_E.Instance.ToogleVisibility();
         }
 
         #endregion
