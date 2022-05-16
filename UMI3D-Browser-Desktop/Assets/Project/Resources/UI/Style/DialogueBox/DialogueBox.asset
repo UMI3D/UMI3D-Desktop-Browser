@@ -78,6 +78,7 @@ MonoBehaviour:
       m_keyword: 0
       m_value: 0
     m_textAlign: 0
+    m_textWrapping: 0
   m_themeStyles:
   - m_theme: {fileID: 0}
     m_textStyle: []
@@ -119,86 +120,4 @@ MonoBehaviour:
           m_imageTintColor:
             m_keyword: 0
             m_value: {r: 0, g: 0, b: 0, a: 0}
-    m_border:
-    - m_key: 
-      m_default:
-        m_keyword: 0
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value:
-              m_global: {r: 0, g: 0, b: 0, a: 0}
-              m_bottom: {r: 0, g: 0, b: 0, a: 0}
-              m_left: {r: 0, g: 0, b: 0, a: 0}
-              m_right: {r: 0, g: 0, b: 0, a: 0}
-              m_top: {r: 0, g: 0, b: 0, a: 0}
-          m_width:
-            m_keyword: 0
-            m_value:
-              m_global: 0
-              m_bottom: 0
-              m_left: 0
-              m_right: 0
-              m_top: 0
-          m_radius:
-            m_keyword: 0
-            m_value:
-              m_global: 0
-              m_bottomLeft: 0
-              m_bottomRight: 0
-              m_topLeft: 0
-              m_TopRight: 0
-      m_mouseOver:
-        m_keyword: 0
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value:
-              m_global: {r: 0, g: 0, b: 0, a: 0}
-              m_bottom: {r: 0, g: 0, b: 0, a: 0}
-              m_left: {r: 0, g: 0, b: 0, a: 0}
-              m_right: {r: 0, g: 0, b: 0, a: 0}
-              m_top: {r: 0, g: 0, b: 0, a: 0}
-          m_width:
-            m_keyword: 0
-            m_value:
-              m_global: 0
-              m_bottom: 0
-              m_left: 0
-              m_right: 0
-              m_top: 0
-          m_radius:
-            m_keyword: 0
-            m_value:
-              m_global: 0
-              m_bottomLeft: 0
-              m_bottomRight: 0
-              m_topLeft: 0
-              m_TopRight: 0
-      m_mousePressed:
-        m_keyword: 0
-        m_value:
-          m_color:
-            m_keyword: 0
-            m_value:
-              m_global: {r: 0, g: 0, b: 0, a: 0}
-              m_bottom: {r: 0, g: 0, b: 0, a: 0}
-              m_left: {r: 0, g: 0, b: 0, a: 0}
-              m_right: {r: 0, g: 0, b: 0, a: 0}
-              m_top: {r: 0, g: 0, b: 0, a: 0}
-          m_width:
-            m_keyword: 0
-            m_value:
-              m_global: 0
-              m_bottom: 0
-              m_left: 0
-              m_right: 0
-              m_top: 0
-          m_radius:
-            m_keyword: 0
-            m_value:
-              m_global: 0
-              m_bottomLeft: 0
-              m_bottomRight: 0
-              m_topLeft: 0
-              m_TopRight: 0
+    m_border: []

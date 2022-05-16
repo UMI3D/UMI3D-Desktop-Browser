@@ -105,15 +105,16 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(OnRedirection);
         UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
-        MenuBar_E.Instance.LeaveButton.OnClicked = () =>
+        Settingbox_E.Instance.LeaveButton.Clicked += () =>
         {
             string title = "Leave environment";
             string message = "Are you sure ...?";
-            DialogueBox_E.Setup(title, message, "YES", "NO", (b) =>
+            DialogueBox_E.Instance.Setup(title, message, "YES", "NO", (b) =>
             {
                 if (b)
                     Leave();
-            }, uiDocument);
+            });
+            DialogueBox_E.Instance.DisplayFrom(uiDocument);
         };
     }
 
@@ -271,14 +272,8 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
     private void GetMediaFailed(string error)
     {
-        DialogueBox_E.
-            Setup(
-                "Server error",
-                error,
-                "Leave",
-                Leave,
-                uiDocument
-            );
+        DialogueBox_E.Instance.Setup("Server error", error, "Leave", Leave);
+        DialogueBox_E.Instance.DisplayFrom(uiDocument);
     }
 
     private void GetMediaSucces(MediaDto media)
@@ -305,15 +300,8 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
     private void OnConnectionLost(Action<bool> callback)
     {
-        DialogueBox_E.
-            Setup(
-                "Connection to the server lost",
-                "Leave to the connection menu or try again ?",
-                "Try again ?",
-                "Leave",
-                callback,
-                uiDocument
-            );
+        DialogueBox_E.Instance.Setup("Connection to the server lost", "Leave to the connection menu or try again ?", "Try again ?", "Leave", callback);
+        DialogueBox_E.Instance.DisplayFrom(uiDocument);
     }
 
 
@@ -361,19 +349,12 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         {
             string title = (ids.Count == 1) ? "One assets library is required" : ids.Count + " assets libraries are required";
 
-            DialogueBox_E.
-            Setup(
-                title, 
-                "Download libraries and connect to the server ?", 
-                "Accept", 
-                "Deny", 
-                (b) =>
+            DialogueBox_E.Instance.Setup(title, "Download libraries and connect to the server ?", "Accept", "Deny", (b) =>
                 {
                     callback.Invoke(b);
                     CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
-                },
-                uiDocument
-                );
+                });
+            DialogueBox_E.Instance.DisplayFrom(uiDocument);
         }
     }
 
