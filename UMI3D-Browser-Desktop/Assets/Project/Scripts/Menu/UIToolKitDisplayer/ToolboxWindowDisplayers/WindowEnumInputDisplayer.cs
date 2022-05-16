@@ -14,40 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Menu;
-using System;
-using System.Collections.Generic;
+using umi3d.baseBrowser.ui.viewController;
 using umi3d.cdk.menu;
-using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine.UIElements;
 
 namespace umi3d.DesktopBrowser.menu.Displayer
 {
     public partial class WindowEnumInputDisplayer
     {
-        private DropdownWithLabel_E m_displayerElement { get; set; } = null;
-        private List<string> m_options => ((DropDownInputMenuItem) menu).options;
-        private string m_currentValue => ((DropDownInputMenuItem)menu).GetValue();
+        private Dropdown_E m_dropdown { get; set; } = null;
     }
 
     public partial class WindowEnumInputDisplayer : IDisplayerElement
     {
         public override void InitAndBindUI()
         {
-            base.InitAndBindUI();
             string UXMLPath = "UI/UXML/Displayers/buttonInputDisplayer";
-            m_displayerElement = new DropdownWithLabel_E(UXMLPath, null, null);
+            Displayer = new View_E(UXMLPath, s_displayerStyle, null);
 
-            string dropdownStyle = "UI/Style/Displayers/InputDropdown";
-            StyleKeys dropdownKeys = new StyleKeys("", "", "");
-            m_displayerElement.SetButton(dropdownStyle, dropdownKeys, null);
-            string dropdownMenuStyle = "UI/Style/Displayers/DropdownMenu";
-            StyleKeys dropdownMenuKeys = new StyleKeys(null, "", null);
-            m_displayerElement.SetMenuStyle(dropdownMenuStyle, dropdownMenuKeys);
-            string dropdownMenuLabelStyle = "UI/Style/Displayers/DropdownMenuItemLabel";
-            StyleKeys dropdownMenuLabelKeys = new StyleKeys("", null, null);
-            m_displayerElement.SetMenuItemLabel(dropdownMenuLabelStyle, dropdownMenuLabelKeys);
-
-            Displayer.AddDisplayer(m_displayerElement.Root);
+            base.InitAndBindUI();
         }
     }
 
@@ -59,28 +44,25 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             InitAndBindUI();
             if (menu is DropDownInputMenuItem dropdownMenu)
             {
-                m_displayerElement.Element.SetsOptions(dropdownMenu.options);
-                m_displayerElement.Element.SetDefaultValue(dropdownMenu.GetValue());
-                m_displayerElement.Element.OnValueChanged = dropdownMenu.NotifyValueChange;
+                m_dropdown = new Dropdown_E(Displayer.QR<Button>(), "Displayer", StyleKeys.Text_Bg("enum"));
+                m_dropdown.SetMenuStyle("EnumBox", StyleKeys.Default_Bg_Border);
+                m_dropdown.SetMenuLabel("CorpsDropdown", StyleKeys.DefaultText);
+                Displayer.Add(m_dropdown);
 
-                string labelStylePath = "UI/Style/Displayers/DisplayerLabel";
-                StyleKeys labelKeys = new StyleKeys("", "", null);
-                m_displayerElement.SetLabel(labelStylePath, labelKeys);
-                m_displayerElement.Label.value = dropdownMenu.ToString();
+                m_dropdown.SetOptions(dropdownMenu.options);
+                m_dropdown.SetDefaultValue(dropdownMenu.GetValue());
+                m_dropdown.ValueChanged = dropdownMenu.NotifyValueChange;
             }
             else
                 throw new System.Exception("MenuItem must be a DropDownInputMenuItem");
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)
-        {
-            return (menu is DropDownInputMenuItem) ? 2 : 0;
-        }
+            => (menu is DropDownInputMenuItem) ? 2 : 0;
 
         public override void Clear()
         {
             base.Clear();
-            m_displayerElement.Reset();
         }
     }
 }

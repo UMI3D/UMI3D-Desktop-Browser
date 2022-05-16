@@ -40,8 +40,8 @@ public class AudioSetting : ISetting
     public AudioSetting()
     {
         IsOn = true;
-        m_statusChanged = MenuBar_E.Instance.Sound.Toggle;
-        MenuBar_E.Instance.Sound.OnClicked = Toggle;
+        m_statusChanged = Settingbox_E.Instance.Sound.Toggle;
+        Settingbox_E.Instance.Sound.Clicked += Toggle;
         Start();
     }
 
@@ -81,18 +81,18 @@ public class AvatarSetting : ISetting
     public AvatarSetting()
     {
         IsOn = true;
-        m_statusChanged = MenuBar_E.Instance.Avatar.Toggle;
-        MenuBar_E.Instance.Avatar.OnClicked = Toggle;
+        m_statusChanged = Settingbox_E.Instance.Avatar.Toggle;
+        Settingbox_E.Instance.Avatar.Clicked += Toggle;
         Start();
     }
 
     public void Start()
-        => m_statusChanged(IsOn);
+        => m_statusChanged?.Invoke(IsOn);
 
     public void Toggle()
     {
         IsOn = !IsOn;
-        m_statusChanged(IsOn);
+        m_statusChanged?.Invoke(IsOn);
     }
 
     public void Update()
@@ -117,8 +117,8 @@ public class MicSetting : ISetting
     public MicSetting()
     {
         IsOn = false;
-        m_statusChanged = MenuBar_E.Instance.Mic.Toggle;
-        MenuBar_E.Instance.Mic.OnClicked = Toggle;
+        m_statusChanged = Settingbox_E.Instance.Mic.Toggle;
+        Settingbox_E.Instance.Mic.Clicked += Toggle;
         Start();
     }
 
@@ -154,7 +154,6 @@ public sealed class EnvironmentSettings : MonoBehaviour
 
     void Start()
     {
-        //StartCoroutine(Initialize());
         avatarSetting = new AvatarSetting();
         audioSetting = new AudioSetting();
         micSetting = new MicSetting();
@@ -162,13 +161,6 @@ public sealed class EnvironmentSettings : MonoBehaviour
             m_environmentLoaded = true;
         });
         initialized = true;
-    }
-
-    private IEnumerator Initialize()
-    {
-        //while (!MenuBar_E.Instance.Initialized) yield return null;
-        
-        yield return null;
     }
 
     void Update()

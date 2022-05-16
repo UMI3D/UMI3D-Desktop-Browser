@@ -15,7 +15,7 @@ limitations under the License.
 */
 using System;
 using System.Collections.Generic;
-using umi3d.cdk.menu;
+using umi3d.baseBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -23,7 +23,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Shortcut_E
     {
-        protected VisualElement m_iconbox { get; set; } = null;
+        protected Box_E m_iconbox { get; set; } = null;
         protected Label_E m_title { get; set; } = null;
 
         protected List<Label_E> m_plusDisplayed;
@@ -31,17 +31,13 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected List<ShortcutIcon_E> m_iconsDisplayed;
         protected static List<ShortcutIcon_E> m_iconsWaited;
 
-        private static string m_shortcutUXML = "UI/UXML/Shortcuts/shortcut";
         private static string m_shortcutStyle = "UI/Style/Shortcuts/Shortcut";
-        private static StyleKeys m_shortcutKeys = new StyleKeys();
-        private static string m_plusStyle = "UI/Style/Shortcuts/Shortcut_Plus";
-        private static StyleKeys m_plusKeys = new StyleKeys("", null, null);
     }
 
     public partial class Shortcut_E
     {
         public Shortcut_E() :
-            base(m_shortcutUXML, m_shortcutStyle, m_shortcutKeys)
+            base("UI/UXML/Shortcuts/shortcut", m_shortcutStyle, null)
         { }
 
         public void Setup(string title, params Sprite[] icons)
@@ -52,35 +48,26 @@ namespace umi3dDesktopBrowser.ui.viewController
             {
                 if (i != 0 && i < icons.Length)
                 {
-                    ObjectPooling(out Label_E plus, m_plusDisplayed, m_plusWaited, () =>
-                    {
-                        return new Label_E(m_plusStyle, m_plusKeys, "+");
-                    });
-                    plus.InsertRootTo(m_iconbox);
+                    ObjectPooling(out Label_E plus, m_plusDisplayed, m_plusWaited, () 
+                        => new Label_E("Corps", StyleKeys.Text("primaryLight"), "+"));
+                    plus.InsertRootTo(m_iconbox.Root);
                 }
 
                 ObjectPooling(out ShortcutIcon_E icon, m_iconsDisplayed, m_iconsWaited, () => new ShortcutIcon_E());
                 icon.Setup(icons[i]);
-                icon.InsertRootTo(m_iconbox);
+                icon.InsertRootTo(m_iconbox.Root);
             }
         }
     }
 
-    public partial class Shortcut_E : Visual_E
+    public partial class Shortcut_E : View_E
     {
         protected override void Initialize()
         {
             base.Initialize();
 
-            var title = Root.Q<Label>("title");
-            string titleStyle = "UI/Style/Shortcuts/Shortcut_Title";
-            StyleKeys titleKeys = new StyleKeys("", null, null);
-            m_title = new Label_E(title, titleStyle, titleKeys);
-
-            m_iconbox = Root.Q("iconbox");
-            string iconboxStyle = "UI/Style/Shortcuts/Shortcut_Iconbox";
-            StyleKeys iconboxKeys = new StyleKeys();
-            new Visual_E(m_iconbox, iconboxStyle, iconboxKeys);
+            m_title = new Label_E(Root.Q<Label>("title"), "CorpsShortcut", StyleKeys.DefaultText);
+            m_iconbox = new Box_E(QR("iconbox"), "KeyIconbox", null);
 
             m_plusDisplayed = new List<Label_E>();
             m_plusWaited = new List<Label_E>();
@@ -88,13 +75,13 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_iconsWaited = new List<ShortcutIcon_E>();
         }
 
-        public override void Remove()
+        public override void RemoveRootFromHierarchy()
         {
-            base.Remove();
+            base.RemoveRootFromHierarchy();
 
-            Action<Visual_E> removeVEFromHierarchy = (vE) =>
+            Action<View_E> removeVEFromHierarchy = (vE) =>
             {
-                vE.Remove();
+                vE.RemoveRootFromHierarchy();
             };
 
             m_iconsDisplayed.ForEach(removeVEFromHierarchy);
