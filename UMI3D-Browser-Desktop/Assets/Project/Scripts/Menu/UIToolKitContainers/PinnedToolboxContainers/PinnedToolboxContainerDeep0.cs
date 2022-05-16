@@ -25,9 +25,9 @@ namespace umi3d.desktopBrowser.menu.Container
     {
         private void OnDestroy()
         {
-            Toolbox?.Remove();
-            ToolboxItem?.Remove();
-            Displayerbox?.Remove();
+            Toolbox?.RemoveRootFromHierarchy();
+            ToolboxItem?.RemoveRootFromHierarchy();
+            Displayerbox?.RemoveRootFromHierarchy();
         }
     }
 
@@ -36,7 +36,7 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void Awake()
         {
             base.Awake();
-            Toolbox = new Toolbox_E(ToolboxType.Pinned);
+            Toolbox = Toolbox_E.NewMenuToolbox(null);
         }
 
         /// <summary>
@@ -44,18 +44,15 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void SetContainerAsTool()
         {
-            ToolboxItem = new ToolboxItem_E()
+            ToolboxItem = ToolboxItem_E.NewMenuItem(null, ToolboxItem_E.ItemType.Tool);
+            ToolboxItem.Clicked += () =>
             {
-                OnClicked = () =>
-                {
-                    Select();
-                    ToolboxPinnedWindow_E.Instance.SetTopBarName(menu.Name);
-                    ToolboxPinnedWindow_E.Instance.Display();
-                }
+                Select();
+                ToolboxPinnedWindow_E.Instance.UpdateTopBarName(menu.Name);
+                ToolboxPinnedWindow_E.Instance.Display();
             };
-            ToolboxItem.SetItemStatus(true);
             Displayerbox = new Displayerbox_E(DisplayerboxType.ParametersPopup);
-            ToolboxPinnedWindow_E.Instance.Adds(Displayerbox);
+            ToolboxPinnedWindow_E.Instance.AddRange(Displayerbox);
             base.SetContainerAsTool();
         }
 
@@ -66,7 +63,7 @@ namespace umi3d.desktopBrowser.menu.Container
         public override void SetMenuItem(AbstractMenuItem menu)
         {
             base.SetMenuItem(menu);
-            Toolbox.SetToolboxName(menu.Name);
+            Toolbox.SetName(menu.Name);
         }
 
         protected override void DisplayImp()
@@ -134,7 +131,7 @@ namespace umi3d.desktopBrowser.menu.Container
                 if (ToolType != ItemType.Tool)
                     SetContainerAsTool();
                 Toolbox.Add(ToolboxItem);
-                Displayerbox.Add(displayer.Displayer);
+                Displayerbox.AddRange(displayer.Displayer);
             }
         }
 
@@ -151,7 +148,7 @@ namespace umi3d.desktopBrowser.menu.Container
                 case ItemType.Undefine:
                     break;
                 case ItemType.Tool:
-                    ToolboxPinnedWindow_E.Instance.Adds(containerDeep1.Displayerbox);
+                    ToolboxPinnedWindow_E.Instance.AddRange(containerDeep1.Displayerbox);
                     break;
                 case ItemType.Toolbox:
                     MenuBar_E.Instance.AddToolboxDeep1Plus(containerDeep1.Toolbox);

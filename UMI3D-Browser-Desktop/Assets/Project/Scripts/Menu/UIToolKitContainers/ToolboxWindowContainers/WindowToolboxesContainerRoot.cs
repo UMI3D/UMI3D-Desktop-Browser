@@ -69,7 +69,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.Insert(element, updateDisplay);
             if (element is WindowToolboxesContainerDeep0 containerDeep0)
-                ToolboxWindow_E.Instance.Adds(containerDeep0.WindowItem);
+                ToolboxWindow_E.Instance.AddRange(containerDeep0.WindowItem);
         }
 
         /// <summary>

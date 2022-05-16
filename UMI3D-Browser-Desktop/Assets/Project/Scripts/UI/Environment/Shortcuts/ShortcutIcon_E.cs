@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using umi3d.baseBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -25,13 +26,12 @@ namespace umi3dDesktopBrowser.ui.viewController
         private static string m_fnStyle = "UI/Style/Shortcuts/Shortcut_FN";
         private static string m_ctrlStyle = "UI/Style/Shortcuts/Shortcut_CTRL";
         private static string m_shiftStyle = "UI/Style/Shortcuts/Shortcut_SHIFT";
-        private static StyleKeys m_keys = new StyleKeys();
     }
 
     public partial class ShortcutIcon_E
     {
         public ShortcutIcon_E() :
-            base(new VisualElement(), m_squareStyle, m_keys)
+            base(new VisualElement(), m_squareStyle, null)
         { }
 
         public void Setup(Sprite sprite)
@@ -46,7 +46,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
     }
 
-    public partial class ShortcutIcon_E : Visual_E
+    public partial class ShortcutIcon_E : View_E
     {
         
     }
