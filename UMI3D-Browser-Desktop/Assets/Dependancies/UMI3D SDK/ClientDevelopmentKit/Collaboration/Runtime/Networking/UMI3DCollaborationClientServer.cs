@@ -73,10 +73,10 @@ namespace umi3d.cdk.collaboration
 
         public async void Clear()
         {
-            if (!Exists)
+            if (Exists)
             {
-                worldControllerClient.Clear();
-                await environmentClient.Clear();
+                worldControllerClient?.Clear();
+                await environmentClient?.Clear();
             }
         }
 
@@ -273,7 +273,7 @@ namespace umi3d.cdk.collaboration
         }
 
         ///<inheritdoc/>
-        public override ulong GetId() { return worldControllerClient.PublicIdentity.userId; }
+        public override ulong GetUserId() { return worldControllerClient?.GetUserID() ?? 0; }
 
         ///<inheritdoc/>
         public override ulong GetTime()
