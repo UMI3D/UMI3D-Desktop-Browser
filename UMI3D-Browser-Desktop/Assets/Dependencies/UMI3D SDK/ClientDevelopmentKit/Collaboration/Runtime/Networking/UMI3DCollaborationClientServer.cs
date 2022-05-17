@@ -256,8 +256,6 @@ namespace umi3d.cdk.collaboration
                 environmentClient?.SendVOIP(length, sample);
         }
 
-
-
         ///<inheritdoc/>
         protected override async Task<byte[]> _GetFile(string url)
         {
