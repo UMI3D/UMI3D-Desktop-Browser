@@ -1,0 +1,16 @@
+{
+    "name": "UMI3D.BaseBrowser.Preferences",
+    "rootNamespace": "",
+    "references": [
+        "GUID:19c652f19f20898498285002c097cd77"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

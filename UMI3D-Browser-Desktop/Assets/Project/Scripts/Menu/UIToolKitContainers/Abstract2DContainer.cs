@@ -31,10 +31,7 @@ namespace umi3d.desktopBrowser.menu.Container
         protected List<AbstractDisplayer> m_currentDisplayers = new List<AbstractDisplayer>();
 
         protected AbstractMenuDisplayContainer m_virtualContainer = null;
-    }
-
-    public abstract partial class Abstract2DContainer
-    {
+    
         protected virtual void DisplayImp()
         {
             gameObject.SetActive(true);

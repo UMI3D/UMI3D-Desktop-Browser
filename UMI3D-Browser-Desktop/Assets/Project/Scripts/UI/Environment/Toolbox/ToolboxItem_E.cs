@@ -13,6 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
+using umi3d.baseBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -23,59 +25,134 @@ namespace umi3dDesktopBrowser.ui.viewController
     /// </summary>
     public partial class ToolboxItem_E
     {
-        private static string m_uxmlPath => "UI/UXML/Toolbox/toolboxItem";
-        private static string m_menuBarStyle => "UI/Style/MenuBar/MenuBar_ToolboxItem";
-        private static string m_windowStyle => "UI/Style/ToolboxWindow/ToolboxWindow_ToolboxItem";
-    }
+        public enum ItemType { Undefine, Tool, Toolbox }
 
-    public partial class ToolboxItem_E : ButtonWithLabel_E
-    {
-        public ToolboxItem_E(bool isInMenuBar = true) :
-            this("placeholderToolboxActive", "placeholderToolboxEnable", "", false, isInMenuBar)
-        { }
-        public ToolboxItem_E(string iconKey, string itemName, bool isInMenuBar = true) :
-            this(iconKey, null, itemName, true, isInMenuBar)
-        { }
-        public ToolboxItem_E(string iconOnKey, string iconOffKey, string itemName, bool isOn = false) : 
-            this(iconOnKey, iconOffKey, itemName, isOn, true)
-        { }
-        private ToolboxItem_E(string iconOnKey, string iconOffKey, string itemName, bool isOn = false, bool isInMenuBar = true) :
-            base(m_uxmlPath, (isInMenuBar) ? m_menuBarStyle : m_windowStyle, null)
+        public Label_E Label { get; protected set; } = null;
+        public Button_E Button { get; protected set; } = null;
+        public Icon_E Icon { get; protected set; } = null;
+
+        public void Toggle(bool value)
+            => Button?.Toggle(value);
+
+        public void SetName(string itemName)
         {
-            string buttonStyle = "UI/Style/Toolbox/ToolboxItem_Icon";
-            StyleKeys buttonOnKeys = new StyleKeys(null, iconOnKey, null);
-            if (iconOffKey != null)
-            {
-                StyleKeys buttonOffKeys = new StyleKeys(null, iconOffKey, null);
-                SetButton(buttonStyle, buttonOnKeys, buttonOffKeys, isOn, null);
-            }
-            else
-                SetButton(buttonStyle, buttonOnKeys, null);
-
-            string labelStyle = "UI/Style/Toolbox/ToolboxItem_Label";
-            StyleKeys labelKeys = new StyleKeys("", null, null);
-            SetLabel(labelStyle, labelKeys);
+            Name = itemName;
             Label.value = itemName;
         }
 
         public void SetIcon(Texture2D icon)
         {
-            UpdateKeys(m_button, null);
-            m_button.style.backgroundImage = icon;
+            Button.UpdateRootKeys(null);
+            Button.Root.style.backgroundImage = icon;
+            Icon.Hide();
+        }
+        //public void SetIcon(ItemType type)
+        //{
+        //    switch (type)
+        //    {
+        //        case ItemType.Undefine:
+        //            break;
+        //        case ItemType.Tool:
+        //            SetIcon(StyleKeys.Bg("placeholderToolActive"), StyleKeys.Bg("placeholderToolEnable"));
+        //            break;
+        //        case ItemType.Toolbox:
+        //            SetIcon(StyleKeys.Bg("toolbox"));
+        //            Button.UpdateStateKeys(Button, StyleKeys.Bg_Border("menu", ""), StyleKeys.Bg_Border("menu", ""));
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
+        public void SetMenuIcon(ItemType type)
+        {
+            switch (type)
+            {
+                case ItemType.Undefine:
+                    break;
+                case ItemType.Tool:
+                    Button.UpdateStateKeys(Button, StyleKeys.Bg_Border("menuOn", ""), StyleKeys.Bg_Border("menuOff", ""));
+                    break;
+                case ItemType.Toolbox:
+                    SetIcon(StyleKeys.Bg("toolbox"));
+                    Button.UpdateStateKeys(Button, StyleKeys.Bg_Border("menuOn", ""), StyleKeys.Bg_Border("menuOff", ""));
+                    break;
+                default:
+                    break;
+            }
+        }
+        public void SetWindowIcon(ItemType type)
+        {
+            switch (type)
+            {
+                case ItemType.Undefine:
+                    break;
+                case ItemType.Tool:
+                    Button.UpdateStateKeys(Button, StyleKeys.Bg_Border("windowOn", ""), StyleKeys.Bg_Border("windowOff", ""));
+                    break;
+                case ItemType.Toolbox:
+                    SetIcon(StyleKeys.Bg("toolbox"));
+                    Button.UpdateStateKeys(Button, StyleKeys.Bg_Border("windowOn", ""), StyleKeys.Bg_Border("windowOff", ""));
+                    break;
+                default:
+                    break;
+            }
+        }
+        public void SetIcon(StyleKeys keys)
+            => SetIcon(keys, keys);
+        public void SetIcon(StyleKeys on, StyleKeys off)
+            => Button.UpdateStateKeys(Icon, on, off);
+
+        public static ToolboxItem_E NewMenuItem(string itemName, ItemType type = ItemType.Undefine)
+        {
+            var item = new ToolboxItem_E("ItemMenu");
+            item.Button.UpdateStateKeys(item.Button, StyleKeys.Bg_Border("menuOff", ""), StyleKeys.Bg_Border("menuOff", ""));
+            item.SetName(itemName);
+            item.SetMenuIcon(type);
+            
+            return item;
         }
 
-        /// <summary>
-        /// A ToolboxItem can be a toolbox or a tool. This item will be set has tool if [isTool] is set to true, else toolbox.
-        /// </summary>
-        /// <param name="isTool"></param>
-        public void SetItemStatus(bool isTool)
+        public static ToolboxItem_E NewWindowItem(string itemName, ItemType type = ItemType.Undefine)
         {
-            StyleKeys onKeys = new StyleKeys(null, (isTool) ? "placeholderToolActive" : "placeholderToolboxActive", null);
-            StyleKeys offKeys = new StyleKeys(null, (isTool) ? "placeholderToolEnable" : "placeholderToolboxEnable", null);
-            Element.UpdatesStyle(onKeys, offKeys, IsOn);
+            var item = new ToolboxItem_E("ItemWindow");
+            item.Button.UpdateStateKeys(item.Button, StyleKeys.Bg("windowOn"), StyleKeys.Bg("windowOff"));
+            item.SetName(itemName);
+            item.SetWindowIcon(type);
+
+            return item;
+        }
+
+    }
+
+    public partial class ToolboxItem_E : IClickableElement
+    {
+        public event Action Clicked;
+
+        public void ResetClickedEvent()
+            => Clicked = null;
+        public void OnClicked()
+            => Clicked?.Invoke();
+        
+    }
+
+    public partial class ToolboxItem_E : Box_E
+    {
+        private ToolboxItem_E(string partialStyle) :
+            base ("UI/UXML/Toolbox/toolboxItem", partialStyle, null)
+        { }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            Label = new Label_E(QR<Label>(), "CorpsToolboxItem", StyleKeys.DefaultText);
+            Button = new Button_E(Root.Q<Button>(), "Square_m", null);
+            Button.Clicked += OnClicked;
+
+            Icon = new Icon_E();
+            Button.AddIconInFront(Icon, "Square2", null, null);
+            Button.Root.style.alignContent = Align.Center;
+            Button.Root.style.alignItems = Align.Center;
         }
     }
-    
-    public partial class ToolboxItem_E
-    { }
 }

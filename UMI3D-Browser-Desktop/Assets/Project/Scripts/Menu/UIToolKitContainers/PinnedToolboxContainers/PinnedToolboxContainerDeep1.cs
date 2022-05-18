@@ -25,9 +25,9 @@ namespace umi3d.desktopBrowser.menu.Container
     {
         private void OnDestroy()
         {
-            ToolboxItem?.Remove();
-            Toolbox?.Remove();
-            Displayerbox?.Remove();
+            ToolboxItem?.RemoveRootFromHierarchy();
+            Toolbox?.RemoveRootFromHierarchy();
+            Displayerbox?.RemoveRootFromHierarchy();
         }
     }
 
@@ -36,7 +36,7 @@ namespace umi3d.desktopBrowser.menu.Container
         protected override void Awake()
         {
             base.Awake();
-            ToolboxItem = new ToolboxItem_E(false);
+            ToolboxItem = ToolboxItem_E.NewMenuItem(null);
         }
 
         /// <summary>
@@ -44,10 +44,9 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void SetContainerAsToolbox()
         {
-            ToolboxItem.OnClicked = () => Select();
-            ToolboxItem.SetItemStatus(false);
-            Toolbox = new Toolbox_E(ToolboxType.SubPinned);
-            Toolbox?.SetToolboxName(menu.Name ?? "");
+            ToolboxItem.Clicked += Select;
+            ToolboxItem.SetMenuIcon(ToolboxItem_E.ItemType.Toolbox);
+            Toolbox = Toolbox_E.NewSubMenuToolbox(menu.Name ?? "");
             base.SetContainerAsToolbox();
         }
 
@@ -56,13 +55,13 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void SetContainerAsTool()
         {
-            ToolboxItem.OnClicked = () =>
+            ToolboxItem.Clicked += () =>
             {
                 Select();
-                ToolboxPinnedWindow_E.Instance.SetTopBarName(menu.Name);
+                ToolboxPinnedWindow_E.Instance.UpdateTopBarName(menu.Name);
                 ToolboxPinnedWindow_E.Instance.Display();
             };
-            ToolboxItem.SetItemStatus(true);
+            ToolboxItem.SetMenuIcon(ToolboxItem_E.ItemType.Tool);
             Displayerbox = new Displayerbox_E(DisplayerboxType.ParametersPopup);
             base.SetContainerAsTool();
         }
@@ -76,7 +75,7 @@ namespace umi3d.desktopBrowser.menu.Container
             base.SetMenuItem(menu);
             if (menu.icon2D != null)
                 ToolboxItem.SetIcon(menu.icon2D);
-            ToolboxItem.Label.value = menu.Name;
+            ToolboxItem.SetName(menu.Name);
         }
 
         /// <summary>
@@ -161,7 +160,7 @@ namespace umi3d.desktopBrowser.menu.Container
             {
                 if (ToolType != ItemType.Tool)
                     SetContainerAsTool();
-                Displayerbox.Add(displayer.Displayer);
+                Displayerbox.AddRange(displayer.Displayer);
             }
             FindDeep0AndAddBoxToPinnedWindows();
         }

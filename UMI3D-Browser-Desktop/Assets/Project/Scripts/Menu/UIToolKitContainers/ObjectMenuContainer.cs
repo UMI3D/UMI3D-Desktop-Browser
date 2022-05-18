@@ -13,10 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3d.DesktopBrowser.menu.Displayer;
 using umi3dDesktopBrowser.ui.viewController;
@@ -34,7 +30,7 @@ namespace umi3d.desktopBrowser.menu.Container
         private void Awake()
         {
             Displayerbox = new Displayerbox_E(DisplayerboxType.ParametersPopup);
-            ObjectMenuWindow_E.Instance.Adds(Displayerbox);
+            ObjectMenuWindow_E.Instance.AddRange(Displayerbox);
         }
 
         protected override void CollapseImp()
@@ -54,7 +50,7 @@ namespace umi3d.desktopBrowser.menu.Container
             base.Insert(element, updateDisplay);
             element.Display();
             if (element is AbstractWindowInputDisplayer displayer)
-                Displayerbox.Add(displayer.Displayer);
+                Displayerbox.AddRange(displayer.Displayer);
         }
 
         /// <summary>
@@ -87,6 +83,9 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             if (!m_currentDisplayers.Remove(element))
                 return false;
+
+            if (element is AbstractWindowInputDisplayer displayer)
+                Displayerbox.Remove(displayer.Displayer);
             if (updateDisplay)
                 Display(true);
 
