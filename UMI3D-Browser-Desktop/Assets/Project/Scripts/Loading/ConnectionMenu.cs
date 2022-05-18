@@ -209,11 +209,12 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         this.connectionData = connectionData;
 
         loader.OnProgressChange(0);
-        var curentUrl = formatUrl(connectionData.ip) + UMI3DNetworkingKeys.media;
+        var baseUrl = formatUrl(connectionData.ip, connectionData.port);
+        var curentUrl =  baseUrl + UMI3DNetworkingKeys.media;
         url = curentUrl;
         try
         {
-            GetMediaSucces(new MediaDto() { url = formatUrl(connectionData.ip), name = connectionData.ip });
+            GetMediaSucces(new MediaDto() { url = baseUrl, name = connectionData.ip });
         }
         catch (Exception e)
         {
@@ -222,8 +223,10 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
     }
 
-    static string formatUrl(string url)
+    static string formatUrl(string ip,string port)
     {
+        string url = ip + (string.IsNullOrEmpty(port) ? "" : (":" + port));
+
         if (!url.StartsWith("http://") && !url.StartsWith("https://"))
             return "http://" + url;
         return url;
@@ -232,7 +235,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     public static async System.Threading.Tasks.Task<MediaDto> GetMediaDto(ServerPreferences.ServerData connectionData)
     {
         //loader.OnProgressChange(0);
-        var curentUrl = formatUrl(connectionData.serverUrl) + UMI3DNetworkingKeys.media;
+        var curentUrl = formatUrl(connectionData.serverUrl,null) + UMI3DNetworkingKeys.media;
         Debug.Log(curentUrl);
         url = curentUrl;
         try

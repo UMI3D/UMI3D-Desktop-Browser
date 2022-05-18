@@ -299,12 +299,8 @@ public class LauncherManager : MonoBehaviour
         previousStep = ResetLauncher;
 
         //Update Ip and Port input
-        var s = currentConnectionData?.ip?.Split(':') ?? new string[] { "localhost" };
-        IpInput.value = s[0];
-        if (s.Length > 1)
-        {
-            PortInput.value = s[1];
-        }
+        IpInput.value = currentConnectionData?.ip ?? "localhost";
+        PortInput.value = currentConnectionData?.port ?? "";
     }
 
     /// <summary>
@@ -520,18 +516,20 @@ public class LauncherManager : MonoBehaviour
     /// <summary>
     /// Gets the url and port written by users and stores them.
     /// </summary>
-    private void SetDomain(string ip_port = "")
+    private void SetDomain(string ip = "", string port = "")
     {
-        string url = string.IsNullOrEmpty(ip_port) ? IpInput.value.Trim() + ":" + PortInput.value.Trim() : ip_port;
+        ip = string.IsNullOrEmpty(ip) ? IpInput.value.Trim() : ip;
+        port = string.IsNullOrEmpty(port) ? PortInput.value.Trim() : port;
         //string url = urlInput.value;
-    
-        if (string.IsNullOrEmpty(url))
+
+        if (string.IsNullOrEmpty(ip))
         {
             //urlScreen.Q<Label>("url-error").style.display = DisplayStyle.Flex;
             //urlScreen.Q<Label>("url-error").text = "The domain is empty.";
         } else
         {
-            currentConnectionData.ip = url;
+            currentConnectionData.ip = ip;
+            currentConnectionData.port = port;
 
             urlScreen.style.display = DisplayStyle.None;
             previousStep = ResetLauncher;
