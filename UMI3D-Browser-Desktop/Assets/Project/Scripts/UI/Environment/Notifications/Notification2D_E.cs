@@ -22,10 +22,31 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
 {
-    public class Notification2D_E : View_E
+    public partial class Notification2D_E
     {
         public Label_E Title { get; protected set; } = null;
         public Label_E Message { get; protected set; } = null;
+        public ProgressBar_E ProgressBar { get; protected set; } = null;
+
+        public void SetProgressBar()
+        {
+
+        }
+    }
+
+    public partial class Notification2D_E : Box_E
+    {
+        public Notification2D_E(string title, string message, int displayTime, Action OnDelete = null) :
+            base("UI/UXML/notification2D", "Notification2D", StyleKeys.DefaultBackground)
+        {
+            Title.value = title;
+            Message.value = message;
+        }
+
+        private void ProgressBarAnimation()
+        {
+
+        }
 
         protected override void Initialize()
         {
@@ -33,6 +54,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             Title = new Label_E(QR<Label>("title"), "Notification2DTitle", StyleKeys.Default_Text_Border);
             Message = new Label_E(QR<Label>("message"), "Notification2DMessage", StyleKeys.DefaultText);
+            ProgressBar = new ProgressBar_E("Notification2DProgressBar", StyleKeys.DefaultBackground);
         }
     }
 }
