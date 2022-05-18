@@ -20,27 +20,29 @@ using umi3d.common;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NotificationLoader", menuName = "UMI3D/Notification Loader")]
-
 public class NotificationLoader : umi3d.cdk.NotificationLoader
 {
     public Notification notificationPrefab;
     public Notification3D notification3DPrefab;
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <param name="dto"></param>
     public override void Load(NotificationDto dto)
     {
         AbstractNotification notif;
-        if (dto is NotificationOnObjectDto)
+        if (dto is NotificationOnObjectDto dto3D)
         {
             var notif3d = Instantiate(notification3DPrefab, NotificationContainer.Instance.transform);
+            notif3d.Parent = UMI3DEnvironmentLoader.GetNode(dto3D.objectId)?.gameObject.transform;
+
             notif = notif3d;
-            var Odto = dto as NotificationOnObjectDto;
-            notif3d.Parent = UMI3DEnvironmentLoader.GetNode(Odto.objectId)?.gameObject.transform;
+            notif.Title = dto3D.title;
+            notif.Content = dto3D.content;
+            notif.SetNotificationTime(dto3D.duration);
 
-            notif.Title = dto.title;
-            notif.Content = dto.content;
-            notif.SetNotificationTime(dto.duration);
-
-            loadIcon3d(dto.icon3D);
+            loadIcon3d(dto3D.icon3D);
         }
         else
         {
@@ -50,7 +52,7 @@ public class NotificationLoader : umi3d.cdk.NotificationLoader
 
         //LoadIcon2d(dto.icon2D);
         
-        UMI3DEnvironmentLoader.RegisterNodeInstance(dto.id, dto,notif.gameObject).NotifyLoaded();
+        UMI3DEnvironmentLoader.RegisterNodeInstance(dto.id, dto, notif.gameObject).NotifyLoaded();
 
     }
 
