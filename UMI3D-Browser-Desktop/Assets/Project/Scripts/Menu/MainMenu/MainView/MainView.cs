@@ -47,6 +47,10 @@ namespace umi3dDesktopBrowser.ui
         [SerializeField]
         private bool m_showConsoleOnStart = false;
 
+        [Header("Notifications")]
+        [SerializeField]
+        private int m_maxNotification2DDisplayed;
+
         private VisualElement m_root => m_uiDoc.rootVisualElement;
         private VisualElement m_mainView { get; set; } = null;
         private VisualElement m_viewport { get; set; } = null;
