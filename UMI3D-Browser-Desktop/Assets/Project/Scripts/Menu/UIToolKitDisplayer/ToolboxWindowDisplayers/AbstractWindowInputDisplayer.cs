@@ -14,19 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Menu;
+using umi3d.baseBrowser.ui.viewController;
 using umi3d.cdk.menu.view;
-using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine.UIElements;
 
 namespace umi3d.DesktopBrowser.menu.Displayer
 {
     public abstract partial class AbstractWindowInputDisplayer
     {
-        public Displayer_E Displayer { get; protected set; } = null;
+        public View_E Displayer { get; protected set; } = null;
+
+        protected static string s_displayerStyle = "UI/Style/Displayers/Displayer";
+        protected Label_E m_label { get; set; } = null;
 
         private void OnDestroy()
         {
-            Displayer.Remove();
+            Displayer.RemoveRootFromHierarchy();
         }
     }
 
@@ -36,7 +39,11 @@ namespace umi3d.DesktopBrowser.menu.Displayer
             => Displayer.Root;
 
         public virtual void InitAndBindUI()
-            => Displayer = new Displayer_E();
+        {
+            m_label = new Label_E(Displayer.Root.Q<Label>(), "Corps", StyleKeys.Text("secondaryLight"));
+            m_label.value = menu.Name;
+            Displayer.Add(m_label);
+        }
     }
 
     public partial class AbstractWindowInputDisplayer : AbstractDisplayer

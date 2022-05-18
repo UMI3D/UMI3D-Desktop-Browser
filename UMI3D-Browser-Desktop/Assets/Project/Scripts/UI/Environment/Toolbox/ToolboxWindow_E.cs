@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
+using umi3d.baseBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -22,58 +23,55 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class ToolboxWindow_E
     {
+        public static event Action UnpinnedPressed;
+
+        protected ScrollView_E m_scrollView { get; set; } = null;
+        
+        public static void OnUnpinnedPressed()
+            => UnpinnedPressed?.Invoke();
+
+        public void AddRange(params View_E[] items)
+            => m_scrollView.AddRange(items);
+    }
+
+    public partial class ToolboxWindow_E : ISingleUI
+    {
         public static ToolboxWindow_E Instance
         {
             get
             {
                 if (m_instance == null)
-                {
                     m_instance = new ToolboxWindow_E();
-                }
                 return m_instance;
             }
         }
-        public static event Action UnPinedButtonPressed;
 
-        private static string m_windowUXML = "UI/UXML/ToolboxWindow/toolboxWindow";
-        private static string m_windowStyle = "UI/Style/ToolboxWindow/ToolboxWindow_window";
-        private static StyleKeys m_windowKeys = new StyleKeys(null, "", null);
         private static ToolboxWindow_E m_instance;
     }
 
-    public partial class ToolboxWindow_E : WindowWithScrollView_E
+    public partial class ToolboxWindow_E : AbstractDraggableWindow_E
     {
-        private ToolboxWindow_E() :
-            base(m_windowUXML, m_windowStyle, m_windowKeys)
-        { }
-
         protected override void Initialize()
         {
             base.Initialize();
 
-            StyleKeys iconKeys = new StyleKeys(null, "toolboxesWindow", "");
-            SetIcon(m_iconStyle, iconKeys);
+            SetWindowIcon(new StyleKeys(null, "toolboxWindow", ""));
+            SetTopBar("Toolbox");
+            SetCloseButton();
 
-            StyleKeys windowNameKeys = new StyleKeys("", "", "");
-            SetTopBar("Toolbox", m_windowNameStyle, windowNameKeys);
+            m_scrollView = new ScrollView_E(QR<ScrollView>());
+            m_scrollView.SetVDraggerContainer("DraggerContainer", StyleKeys.DefaultBackground);
+            m_scrollView.SetVDragger("Dragger", StyleKeys.Default_Bg_Border);
 
-            StyleKeys closeButtonBGKeys = new StyleKeys(null, "", "");
-            StyleKeys closeButtonIconKeys = new StyleKeys(null, "", null);
-            SetCloseButton(m_closeButtonBGStyle, closeButtonBGKeys, m_closeButtonIconStyle, closeButtonIconKeys);
+            Button_E unpinned = new Button_E("Unpin", StyleKeys.DefaultBackground);
+            unpinned.Clicked += OnUnpinnedPressed;
+            unpinned.InsertRootTo(m_bottomBox);
 
-            string dcStyle = "UI/Style/ToolboxWindow/ToolboxWindow_DraggerContainer";
-            StyleKeys dcKeys = new StyleKeys(null, "", null);
-            string dStyle = "UI/Style/ToolboxWindow/ToolboxWindow_Dragger";
-            StyleKeys dKeys = new StyleKeys(null, "", "");
-            SetVerticalScrollView(null, null, dcStyle, dcKeys, dStyle, dKeys);
-
-            Button unpinnedButton = Root.Q<Button>("unpinnedButton");
-            string unpinnedButtonStyle = "UI/Style/ToolboxWindow/ToolboxWindow_UnpinnedButton";
-            StyleKeys unpinnedButtonKeys = new StyleKeys(null, "", null);
-            new Button_E(unpinnedButton, unpinnedButtonStyle, unpinnedButtonKeys)
-            {
-                OnClicked = () => { UnPinedButtonPressed?.Invoke(); },
-            };
+            Root.name = "toolboxWindow";
         }
+
+        private ToolboxWindow_E() :
+            base("draggable")
+        { }
     }
 }

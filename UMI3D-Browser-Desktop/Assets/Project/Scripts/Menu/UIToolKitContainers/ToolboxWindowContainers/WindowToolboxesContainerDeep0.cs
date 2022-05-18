@@ -30,10 +30,10 @@ namespace umi3d.desktopBrowser.menu.Container
     {
         private void OnDestroy()
         {
-            WindowItem.Remove();
-            ToolboxItem?.Remove();
-            Displayerbox?.Remove();
-            ToolboxWindow_E.UnPinedButtonPressed -= () => WindowItem.PinUnpin(false);
+            WindowItem.RemoveRootFromHierarchy();
+            ToolboxItem?.RemoveRootFromHierarchy();
+            Displayerbox?.RemoveRootFromHierarchy();
+            ToolboxWindow_E.UnpinnedPressed -= () => WindowItem.PinUnpin(false);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         /// <param name="value"></param>
         private void PinUnpin(bool value)
-            => MenuBar_E.Instance.PinUnpin(value, (Menu)menu);
+            => MenuBar_E.Instance.OnPinUnpin(value, (Menu)menu);
     }
 
     public partial class WindowToolboxesContainerDeep0 : AbstractToolboxesContainer
@@ -50,7 +50,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.Awake();
             WindowItem = new ToolboxWindowItem_E();
-            ToolboxWindow_E.UnPinedButtonPressed += () => WindowItem.PinUnpin(false);
+            ToolboxWindow_E.UnpinnedPressed += () => WindowItem.PinUnpin(false);
         }
 
         /// <summary>
@@ -58,11 +58,9 @@ namespace umi3d.desktopBrowser.menu.Container
         /// </summary>
         protected override void SetContainerAsTool()
         {
-            ToolboxItem = new ToolboxItem_E(false)
-            {
-                OnClicked = () => Select()
-            };
-            ToolboxItem.SetItemStatus(true);
+            ToolboxItem = ToolboxItem_E.NewWindowItem(null);
+            ToolboxItem.Clicked += Select;
+            ToolboxItem.SetWindowIcon(ToolboxItem_E.ItemType.Tool);
             Displayerbox = new Displayerbox_E(DisplayerboxType.ToolboxesPopup);
             WindowItem.AddDisplayerbox(Displayerbox);
             base.SetContainerAsTool();
@@ -76,7 +74,7 @@ namespace umi3d.desktopBrowser.menu.Container
         {
             base.SetMenuItem(menu);
             WindowItem.SetFirstToolboxName(menu.Name);
-            WindowItem.OnPinnedUnpinned += PinUnpin;
+            WindowItem.PinnedOrUnpinned += PinUnpin;
         }
 
         /// <summary>
@@ -148,7 +146,7 @@ namespace umi3d.desktopBrowser.menu.Container
                 if (ToolType != ItemType.Tool)
                     SetContainerAsTool();
                 WindowItem.AddToolboxItemInFirstToolbox(ToolboxItem);
-                Displayerbox.Add(displayer.Displayer);
+                Displayerbox.AddRange(displayer.Displayer);
             }
         }
 

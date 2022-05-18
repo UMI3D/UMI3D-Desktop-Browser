@@ -154,20 +154,13 @@ public class WindowsManager : MonoBehaviour
     /// </summary>
     private void ShowDialogueBoxToQuit()
     {
-        DialogueBox_E.
-            Setup(
-            "Close application", 
-            "Are you sure ...?", 
-            "YES", 
-            "NO",
-            (b) =>
-            {
-                QuittingManager.ApplicationIsQuitting = b;
-                if (b)
-                    Application.Quit();
-            },
-            uiDocument
-            );
+        DialogueBox_E.Instance.Setup("Close application", "Are you sure ...?", "YES", "NO", (b) => 
+        { 
+            QuittingManager.ApplicationIsQuitting = b; 
+            if (b) 
+                Application.Quit(); 
+        });
+        DialogueBox_E.Instance.DisplayFrom(uiDocument);
     }
 
     #endregion
