@@ -314,13 +314,16 @@ namespace umi3d.baseBrowser.ui.viewController
         /// <param name="durationMs"></param>
         /// <param name="fromStartToEnd"></param>
         /// <param name="animation"></param>
-        protected virtual void Anime(VisualElement vE, float startValue, float endValue, int durationMs, bool fromStartToEnd, Action<VisualElement, float> animation)
+        protected virtual UnityEngine.UIElements.Experimental.ValueAnimation<float> Anime(VisualElement vE, float startValue, float endValue, int durationMs, bool fromStartToEnd, Action<VisualElement, float> animation)
         {
             Debug.LogWarning("Use of Unity experimental API. May not work in the future. (2021)");
+            UnityEngine.UIElements.Experimental.ValueAnimation<float> valueAnimation;
             if (fromStartToEnd)
-                vE.experimental.animation.Start(startValue, endValue, durationMs, animation);
+                valueAnimation = vE.experimental.animation.Start(startValue, endValue, durationMs, animation);
             else
-                vE.experimental.animation.Start(endValue, startValue, durationMs, animation);
+                valueAnimation = vE.experimental.animation.Start(endValue, startValue, durationMs, animation);
+
+            return valueAnimation;
         }
 
         #endregion

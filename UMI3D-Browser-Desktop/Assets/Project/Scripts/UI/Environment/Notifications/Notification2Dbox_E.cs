@@ -42,9 +42,13 @@ namespace umi3dDesktopBrowser.ui.viewController
                 yield return new WaitUntil(() => m_process);
                 var dto = m_notifications.Dequeue();
 
-                // TODO create new notification2D_E
-                //notification.Setup(notifDto.title, notifDto.content, (int)notifDto.duration * 1000, () => notificationCurrentlyDisplayed--);
-                //notificationContainer.Insert(0, notification);
+                var notification = new Notification2D_E(dto.title, dto.content, (int)dto.duration * 1000);
+                notification.Complete += () =>
+                {
+                    notification.RemoveRootFromHierarchy();
+                    --m_currentlyDisplayed;
+                };
+                notification.InsertRootAtTo(0, Root);
 
                 ++m_currentlyDisplayed;
             }
