@@ -32,6 +32,7 @@ using BrowserDesktop.preferences;
 using BrowserDesktop.Menu;
 using umi3d.cdk.collaboration;
 using umi3dDesktopBrowser.ui.viewController;
+using System.Linq;
 
 public class LauncherManager : MonoBehaviour
 {
@@ -576,28 +577,45 @@ public class LauncherManager : MonoBehaviour
     /// <summary>
     /// Initiates the connection to the forge master server.
     /// </summary>
-    private void Connect(ServerPreferences.ServerData server, bool saveInfo = false) 
+    private async void Connect(ServerPreferences.ServerData server, bool saveInfo = false) 
     {
-        
-        Debug.Log("Try to connect to : " + server.serverUrl);
-        masterServer.ConnectToMasterServer(() => {
-            masterServer.RequestInfo((name, icon) => {
-                if (saveInfo)
-                {
-                    server.serverName = name;
-                    server.serverIcon = icon;
-                    updateInfo = true;
-                }
-            });
-            ShouldDisplaySessionScreen = true;
+        var media = await ConnectionMenu.GetMediaDto(server);
+        Debug.Log(media != null);
+        if (media != null)
+        {
+            server.serverName = media.name;
+            Debug.Log(media.ToJson());
+            //To handle Properly.
+            server.serverIcon = media?.icon2D?.variants?.FirstOrDefault()?.url;
+            updateInfo = true;
+            currentConnectionData.environmentName = media.name;
+            currentConnectionData.ip = media.url;
+            StartCoroutine(WaitReady());
         }
-            
-           // () => masterServer.SendDataSession("test", (ser) => { Debug.Log(" update UI "); })
-            , server.serverUrl);
-        var text = root.Q<Label>("connectedText");
-        Debug.Log(text);
-        root.Q<Label>("connectedText").text = "Connected to : " + server.serverUrl;
+        else
+        {
 
+            Debug.Log("Try to connect to : " + server.serverUrl);
+            masterServer.ConnectToMasterServer(() =>
+            {
+                masterServer.RequestInfo((name, icon) =>
+                {
+                    if (saveInfo)
+                    {
+                        server.serverName = name;
+                        server.serverIcon = icon;
+                        updateInfo = true;
+                    }
+                });
+                ShouldDisplaySessionScreen = true;
+            }
+
+                // () => masterServer.SendDataSession("test", (ser) => { Debug.Log(" update UI "); })
+                , server.serverUrl);
+            var text = root.Q<Label>("connectedText");
+            Debug.Log(text);
+            root.Q<Label>("connectedText").text = "Connected to : " + server.serverUrl;
+        }
     }
 
     /// <summary>
