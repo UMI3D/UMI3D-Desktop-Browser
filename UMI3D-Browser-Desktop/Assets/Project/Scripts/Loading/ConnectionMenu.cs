@@ -289,7 +289,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
 
 
-        GameMenu.Instance.Display(false);
+        MainView.Instance.Display(false);
     }
     #endregion
 
