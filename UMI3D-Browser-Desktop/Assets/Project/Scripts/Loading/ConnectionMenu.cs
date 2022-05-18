@@ -198,22 +198,22 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
     #region Actions
 
-    string url = null;
+    static string url = null;
 
     /// <summary>
     /// Uses the connection data to connect to te server.
     /// </summary>
     /// <param name="connectionData"></param>
-    public async void Connect(ServerPreferences.Data connectionData)
+    public void Connect(ServerPreferences.Data connectionData)
     {
         this.connectionData = connectionData;
 
         loader.OnProgressChange(0);
-        var curentUrl = "http://" + connectionData.ip + UMI3DNetworkingKeys.media;
+        var curentUrl = formatUrl(connectionData.ip) + UMI3DNetworkingKeys.media;
         url = curentUrl;
         try
         {
-            GetMediaSucces(await UMI3DCollaborationClientServer.GetMedia(url, (e) => url == curentUrl && e.count < 3));
+            GetMediaSucces(new MediaDto() { url = formatUrl(connectionData.ip), name = connectionData.ip });
         }
         catch (Exception e)
         {
@@ -221,6 +221,31 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         }
 
     }
+
+    static string formatUrl(string url)
+    {
+        if (!url.StartsWith("http://") && !url.StartsWith("https://"))
+            return "http://" + url;
+        return url;
+    }
+
+    public static async System.Threading.Tasks.Task<MediaDto> GetMediaDto(ServerPreferences.ServerData connectionData)
+    {
+        //loader.OnProgressChange(0);
+        var curentUrl = formatUrl(connectionData.serverUrl) + UMI3DNetworkingKeys.media;
+        Debug.Log(curentUrl);
+        url = curentUrl;
+        try
+        {
+            return await UMI3DCollaborationClientServer.GetMedia(url, (e) => url == curentUrl && e.count < 3);
+        }
+        catch
+        {
+            return null;
+        }
+
+    }
+
 
     /// <summary>
     /// Clears the environment and goes back to the launcher.
