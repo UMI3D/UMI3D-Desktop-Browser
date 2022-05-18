@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="/Assets/Project/UI/UXML/main-style.uss" />
     <ui:VisualElement name="saved-server-item" class="dark-grey1-bck orange-hover" style="width: 140px; height: 140px; align-items: center; justify-content: flex-end; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; margin-bottom: 10px;">
-        <ui:Button name="delete-item" class="border-hover grey-border" style="background-image: url(&apos;/Assets/Project/UI/Icons/Windows/close.png&apos;); background-color: rgba(228, 228, 228, 0); width: 20px; height: 20px; position: absolute; top: 5px; right: 5px;" />
+        <ui:Button name="delete-item" class="border-hover grey-border" style="background-color: rgba(228, 228, 228, 0); width: 20px; height: 20px; position: absolute; top: 5px; right: 5px; background-image: url(&apos;/Assets/Project/UI/Icons/Browser - Windows/close.png&apos;);" />
         <ui:Label text="Label" name="saved-server-item-name" class="white-txt" />
     </ui:VisualElement>
 </ui:UXML>
