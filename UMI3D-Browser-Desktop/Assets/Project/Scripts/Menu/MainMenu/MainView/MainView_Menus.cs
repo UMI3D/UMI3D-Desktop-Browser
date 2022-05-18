@@ -23,7 +23,7 @@ using UnityEngine;
 
 namespace umi3dDesktopBrowser.ui
 {
-    public partial class GameMenu
+    public partial class MainView
     {
         private DateTime m_startOfSession = new DateTime();
 

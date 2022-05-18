@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui
 {
-    public partial class GameMenu
+    public partial class MainView
     {
         [SerializeField]
         private UIDocument m_uiDoc;
@@ -56,7 +56,7 @@ namespace umi3dDesktopBrowser.ui
         
     }
 
-    public partial class GameMenu : SingleBehaviour<GameMenu>
+    public partial class MainView : SingleBehaviour<MainView>
     {
         void Start()
         {

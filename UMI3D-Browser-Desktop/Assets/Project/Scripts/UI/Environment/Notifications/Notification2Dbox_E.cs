@@ -1,5 +1,5 @@
-﻿/*
-Copyright 2019 Gfi Informatique
+/*
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,10 +13,23 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
+using System.Collections;
+using umi3d.baseBrowser.ui.viewController;
+using umi3d.cdk.menu;
+using UnityEngine;
+using UnityEngine.UIElements;
 
-using inetum.unityUtils;
-
-public class NotificationContainer : SingleBehaviour<NotificationContainer>
+namespace umi3dDesktopBrowser.ui.viewController
 {
+    public class Notification2Dbox_E : Box_E
+    {
+        protected override void Initialize()
+        {
+            base.Initialize();
 
+            Root.name = "notification2Dbox";
+            Root.style.flexDirection = FlexDirection.ColumnReverse;
+        }
+    }
 }
