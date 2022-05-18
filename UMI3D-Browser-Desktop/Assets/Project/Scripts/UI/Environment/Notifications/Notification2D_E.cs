@@ -24,14 +24,10 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Notification2D_E
     {
+        public event Action Complete;
         public Label_E Title { get; protected set; } = null;
         public Label_E Message { get; protected set; } = null;
         public ProgressBar_E ProgressBar { get; protected set; } = null;
-
-        public void SetProgressBar()
-        {
-
-        }
     }
 
     public partial class Notification2D_E : Box_E
@@ -41,11 +37,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             Title.value = title;
             Message.value = message;
-        }
-
-        private void ProgressBarAnimation()
-        {
-
+            ProgressBar.LaunchTimeBar(displayTime);
         }
 
         protected override void Initialize()
@@ -54,7 +46,10 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             Title = new Label_E(QR<Label>("title"), "Notification2DTitle", StyleKeys.Default_Text_Border);
             Message = new Label_E(QR<Label>("message"), "Notification2DMessage", StyleKeys.DefaultText);
-            ProgressBar = new ProgressBar_E("Notification2DProgressBar", StyleKeys.DefaultBackground);
+            ProgressBar = new ProgressBar_E("Notification2DProgressBar", null);
+            ProgressBar.Complete += () => Complete?.Invoke();
+            ProgressBar.SetBar("Notification2DProgressBar", StyleKeys.DefaultBackground);
+            ProgressBar.InsertRootTo(Root);
         }
     }
 }
