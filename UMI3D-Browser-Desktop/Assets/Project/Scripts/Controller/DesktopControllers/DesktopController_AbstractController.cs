@@ -42,10 +42,7 @@ namespace BrowserDesktop.Controller
                 return list;
             }
         }
-    }
-
-    public partial class MouseAndKeyboardController : AbstractController
-    {
+    
         #region Monobehaviour Life Cycle
 
         public void Awake()

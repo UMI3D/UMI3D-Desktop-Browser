@@ -290,6 +290,7 @@ namespace BrowserDesktop.Controller
                     s_isRightClickAdded = false;
                 }
                 CursorDisplayer.DisplaySettingsCursor(false);
+                m_objectMenu.Collapse(true);
             }
         }
 
