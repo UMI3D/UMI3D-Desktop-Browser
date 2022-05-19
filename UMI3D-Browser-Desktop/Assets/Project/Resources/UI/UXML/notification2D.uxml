@@ -4,5 +4,6 @@
             <ui:Label text="Label" display-tooltip-when-elided="true" name="title" />
             <ui:Label text="Label" display-tooltip-when-elided="true" name="message" />
         </ui:VisualElement>
+        <ui:VisualElement name="progressBar" />
     </ui:VisualElement>
 </ui:UXML>

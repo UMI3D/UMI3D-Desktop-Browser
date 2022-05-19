@@ -51,9 +51,9 @@ namespace umi3d.baseBrowser.ui.viewController
         public void SetBar(string partialStylePath, StyleKeys keys)
             => Bar.UpdateRootStyleAndKeysAndManipulator(partialStylePath, keys);
 
-        public void LaunchTimeBar(int time)
+        public void LaunchTimeBar(int time, bool fromStartToEnd)
         {
-            Anime(Bar.Root, 0f, 100f, time, true, (visual, percentage) =>
+            Anime(Bar.Root, 0f, 100f, time, fromStartToEnd, (visual, percentage) =>
             {
                 visual.style.width = Length.Percent(percentage);
                 m_percentage = percentage;
@@ -63,6 +63,9 @@ namespace umi3d.baseBrowser.ui.viewController
 
     public partial class ProgressBar_E : Box_E
     {
+        public ProgressBar_E(VisualElement progressBar, string partialStylePath, StyleKeys keys) :
+            base(progressBar, partialStylePath, keys)
+        { }
         public ProgressBar_E(string partialStylePath, StyleKeys keys) :
             base(partialStylePath, keys)
         { }
