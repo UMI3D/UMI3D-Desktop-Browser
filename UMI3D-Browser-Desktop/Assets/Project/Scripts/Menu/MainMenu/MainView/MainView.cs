@@ -54,10 +54,7 @@ namespace umi3dDesktopBrowser.ui
         private VisualElement m_root => m_uiDoc.rootVisualElement;
         private VisualElement m_mainView { get; set; } = null;
         private VisualElement m_viewport { get; set; } = null;
-        private VisualElement m_leftSideMenu { get; set; } = null;
         private VisualElement m_leftSideMenuDownUp { get; set; } = null;
-
-        
     }
 
     public partial class MainView : SingleBehaviour<MainView>
@@ -79,7 +76,6 @@ namespace umi3dDesktopBrowser.ui
         {
             m_mainView = m_root.Q("game-menu-container");
             m_viewport = m_root.Q("viewport");
-            m_leftSideMenu = m_root.Q("left-side-menu");
             m_leftSideMenuDownUp = m_root.Q("leftSideDownUp");
         }
 

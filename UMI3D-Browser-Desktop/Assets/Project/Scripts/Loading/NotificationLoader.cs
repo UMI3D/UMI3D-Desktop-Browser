@@ -17,6 +17,7 @@ limitations under the License.
 using System;
 using umi3d.cdk;
 using umi3d.common;
+using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NotificationLoader", menuName = "UMI3D/Notification Loader")]
@@ -42,6 +43,7 @@ public class NotificationLoader : umi3d.cdk.NotificationLoader
             UMI3DEnvironmentLoader.RegisterNodeInstance(dto.id, dto, notif3d.gameObject).NotifyLoaded();
         }
         else
-            NotificationDisplayer.Instance.DisplayNotification(dto);
+            Notificationbox2D_E.Instance.Add(dto);
+            //NotificationDisplayer.Instance.DisplayNotification(dto);
     }
 }

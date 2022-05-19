@@ -37,19 +37,21 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             Title.value = title;
             Message.value = message;
-            ProgressBar.LaunchTimeBar(displayTime);
+            if (displayTime > 0)
+                ProgressBar.LaunchTimeBar(displayTime, false);
+            else
+                ProgressBar.Hide();
         }
 
         protected override void Initialize()
         {
             base.Initialize();
 
-            Title = new Label_E(QR<Label>("title"), "Notification2DTitle", StyleKeys.Default_Text_Border);
-            Message = new Label_E(QR<Label>("message"), "Notification2DMessage", StyleKeys.DefaultText);
-            ProgressBar = new ProgressBar_E("Notification2DProgressBar", null);
+            Title = new Label_E(QR<Label>("title"), "TitleNotification2D", StyleKeys.Default_Text_Border);
+            Message = new Label_E(QR<Label>("message"), "CorpsNotification2D", StyleKeys.DefaultText);
+            ProgressBar = new ProgressBar_E(QR("progressBar"), "ProgressBarNotification2D", null);
             ProgressBar.Complete += () => Complete?.Invoke();
-            ProgressBar.SetBar("Notification2DProgressBar", StyleKeys.DefaultBackground);
-            ProgressBar.InsertRootTo(Root);
+            ProgressBar.SetBar("ProgressBarNotification2D", StyleKeys.DefaultBackground);
         }
     }
 }
