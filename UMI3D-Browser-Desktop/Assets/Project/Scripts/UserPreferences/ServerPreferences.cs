@@ -29,6 +29,7 @@ namespace BrowserDesktop.preferences
         {
             public string environmentName;
             public string ip;
+            public string port;
         }
 
         [Serializable]
