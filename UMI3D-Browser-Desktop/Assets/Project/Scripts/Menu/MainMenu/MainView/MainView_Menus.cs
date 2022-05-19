@@ -23,7 +23,7 @@ using UnityEngine;
 
 namespace umi3dDesktopBrowser.ui
 {
-    public partial class GameMenu
+    public partial class MainView
     {
         private DateTime m_startOfSession = new DateTime();
 
@@ -37,6 +37,7 @@ namespace umi3dDesktopBrowser.ui
             InitObjectMenuWindow();
             InitShortcut();
             InitConsole();
+            InitNotification2D();
             InitBottomBar();
 
             UMI3DCollaborationClientServer.Instance.OnLeaving.AddListener( ResetMenus);
@@ -95,6 +96,12 @@ namespace umi3dDesktopBrowser.ui
             Console_E.Instance.UpdateTopBarName(BrowserVersion.Version);
         }
 
+        private void InitNotification2D()
+        {
+            Notificationbox2D_E.Instance.InsertRootTo(m_viewport);
+            Notificationbox2D_E.Instance.MaxNotification = () => m_maxNotification2DDisplayed;
+        }
+
         private void InitBottomBar()
         {
             BottomBar_E.Instance.InsertRootTo(m_mainView);
@@ -144,17 +151,11 @@ namespace umi3dDesktopBrowser.ui
             else Console_E.Instance.Hide();
         }
 
-        #region Input Menus
+        #region Input Menus (To be move in the DesktopController)
 
         private void InputMenus()
         {
-            InputMenuBar();
             InputShortcut();
-        }
-
-        private void InputMenuBar()
-        {
-            //TODO show when right click
         }
 
         private void InputShortcut()
