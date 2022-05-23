@@ -117,11 +117,11 @@ namespace BrowserDesktop.Navigation
                 ChangeObjectAndChildrenLayer(obj, obstacleLayer);
                 foreach (var r in nodeInstance.renderers)
                 {
-                    if (r.gameObject.GetComponent<NavMeshModifier>() == null)
+                    if (r.gameObject.GetComponent<MeshCollider>() == null)
                     {
-                        NavMeshModifier modifier = r.gameObject.AddComponent<NavMeshModifier>();
-                        modifier.overrideArea = true;
-                        modifier.area = 1; // 1 = means not walkable.
+                        r.gameObject.AddComponent<MeshCollider>();
+                        //modifier.overrideArea = true;
+                        //modifier.area = 1; // 1 = means not walkable.
                     } else
                     {
                         Debug.LogWarning(r.gameObject.name + " tries to init its navmesh at least twice, this should not happen.");

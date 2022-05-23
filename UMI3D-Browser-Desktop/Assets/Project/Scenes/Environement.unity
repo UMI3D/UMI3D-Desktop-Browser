@@ -1017,6 +1017,9 @@ MonoBehaviour:
   TorsoUpAnchor: {fileID: 2119596090}
   SkeletonContainer: {fileID: 2119596100}
   agent: {fileID: 2119596092}
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 512
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
   state: 0
   navigation: 0
@@ -1712,7 +1715,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 1536
+    m_Bits: 1024
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
