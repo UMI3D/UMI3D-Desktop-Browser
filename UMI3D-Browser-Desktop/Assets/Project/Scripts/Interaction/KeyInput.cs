@@ -88,6 +88,9 @@ namespace BrowserDesktop.Interaction
 
         protected virtual void Update()
         {
+            if (ConnectionMenu.Instance.isDisplayed)
+                return;
+
             if (LastFrameButton != InputLayoutManager.GetInputCode(activationButton))
             {
                 ResetButton();
