@@ -34,7 +34,6 @@ public class FpsNavigation : AbstractNavigation
     public Transform TorsoUpAnchor;
     public Transform SkeletonContainer;
 
-
     /// <summary>
     /// Agent to limit user's movements.
     /// </summary>
@@ -44,6 +43,8 @@ public class FpsNavigation : AbstractNavigation
     /// Current ground height.
     /// </summary>
     private float baseHeight;
+
+    public LayerMask obstacleLayer;
 
     bool isActive = false;
     public FpsScriptableAsset data;
@@ -213,8 +214,17 @@ public class FpsNavigation : AbstractNavigation
         Move *= Time.deltaTime;
 
         HandleView();
+
         Vector3 pos = Node.rotation * new Vector3(Move.y, 0, Move.x);
-        pos += Node.transform.position;
+
+        if (CanMove(pos))
+        {
+            pos += Node.transform.position;
+        } else
+        {
+            pos = Node.transform.position;
+        }
+
         pos.y = height + baseHeight;
         Node.transform.position = new Vector3(pos.x, baseHeight, pos.z);
         SkeletonContainer.transform.position = pos;
@@ -296,4 +306,40 @@ public class FpsNavigation : AbstractNavigation
         return angle;
     }
 
+    private float lastObstacleHeight = .5f;
+
+    private bool CanMove(Vector3 direction)
+    {
+        if (direction == Vector3.zero)
+            return false;
+
+
+        if (UnityEngine.Physics.Raycast(_viewpoint.transform.position, direction.normalized, .2f, obstacleLayer))
+        {
+            return false;
+        }
+        if (UnityEngine.Physics.Raycast(_viewpoint.transform.position - Vector3.up * 1.75f, direction.normalized, .2f, obstacleLayer))
+        {
+            return false;
+        }
+
+        if (UnityEngine.Physics.Raycast(_viewpoint.transform.position - Vector3.up * lastObstacleHeight, direction.normalized, .2f, obstacleLayer))
+        {
+            return false;
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            float random = Random.Range(.1f, 1.8f);
+
+            if (UnityEngine.Physics.Raycast(_viewpoint.transform.position - Vector3.up * random, direction.normalized, .2f, obstacleLayer))
+            {
+                lastObstacleHeight = random;
+                return false;
+            }
+        }
+
+        lastObstacleHeight = .5f;
+        return true;
+    }
 }
