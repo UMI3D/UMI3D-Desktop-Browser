@@ -143,8 +143,11 @@ namespace umi3d.cdk.collaboration
                 await environmentClient.Logout();
             if (worldControllerClient != null)
                 worldControllerClient.Logout();
-            Instance.OnLeavingEnvironment.Invoke();
-            Instance.OnLeaving.Invoke();
+            if (Exists)
+            {
+                Instance.OnLeavingEnvironment.Invoke();
+                Instance.OnLeaving.Invoke();
+            }
         }
 
         /// <summary>
@@ -255,6 +258,8 @@ namespace umi3d.cdk.collaboration
                 && Instance.status == StatusType.ACTIVE)
                 environmentClient?.SendVOIP(length, sample);
         }
+
+
 
         ///<inheritdoc/>
         protected override async Task<byte[]> _GetFile(string url)
