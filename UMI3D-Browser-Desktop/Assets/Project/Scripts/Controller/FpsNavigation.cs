@@ -37,6 +37,9 @@ public class FpsNavigation : AbstractNavigation
     [SerializeField]
     private Transform head;
 
+    [SerializeField]
+    private Transform skeleton;
+
     [Header("Parameters")]
     [SerializeField]
     private FpsScriptableAsset data;
@@ -65,7 +68,7 @@ public class FpsNavigation : AbstractNavigation
     /// <summary>
     /// Is player currently grounded ?
     /// </summary>
-    public bool IsGrounded { get => Mathf.Abs(transform.position.y - groundHeight) < 0.01f; }
+    public bool IsGrounded { get => Mathf.Abs(transform.position.y - groundHeight) < maxStepHeight; }
 
     /// <summary>
     /// Current ground height.
@@ -84,6 +87,13 @@ public class FpsNavigation : AbstractNavigation
     bool changeToDefault = false;
 
     Vector3 lastAngleView;
+
+    /// <summary>
+    /// Is navigation currently performed ?
+    /// </summary>
+    bool navigateTo;
+
+    Vector3 navigationDestination;
 
     #endregion
 
@@ -106,8 +116,8 @@ public class FpsNavigation : AbstractNavigation
         isActive = true;
         state = State.Default;
         jumpData = new JumpData();
-        Debug.LogError("IMPLEMENT COUNCH");
-        Debug.LogError("IMPLEMENT START");
+
+        UpdateBaseHeight();
 
         maxJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(data.gravity) * data.MaxJumpHeight);
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(data.gravity) * data.MinJumpHeight);
@@ -124,9 +134,8 @@ public class FpsNavigation : AbstractNavigation
     /// <param name="data"></param>
     public override void Navigate(NavigateDto data)
     {
-        throw new System.NotImplementedException("NAVIGATE TO not implemented yet.");
-        //navigateTo = true;
-        //destination = data.position;
+        navigateTo = true;
+        navigationDestination = data.position;
     }
 
     public override void Teleport(TeleportDto data)
@@ -139,7 +148,7 @@ public class FpsNavigation : AbstractNavigation
 
     #endregion
 
-    void ApplyGravity(bool jumping, ref float height)
+    void ComputeGravity(bool jumping, ref float height)
     {
         if (jumpData.jumping != jumping)
         {
@@ -173,58 +182,56 @@ public class FpsNavigation : AbstractNavigation
         if (!isActive)
             return;
 
-        /*if (CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHidden)
+        float height = transform.position.y;
+
+        if (CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHidden)
         {
-            Vector3 position = Node.transform.position;
+            ComputeGravity(false, ref height);
 
-            ComputeJump(false);
+            transform.Translate(0, height - transform.position.y, 0);
 
-            height += jumpData.deltaHeight;
-            position.y = height;
-            if (position.y < groundHeight)
-                position.y = groundHeight;
-
-            SkeletonContainer.transform.position = position;
             return;
-        }*/
+        }
 
         if (TextInputDisplayerElement.isTyping)
             return;
 
         if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.FreeHead; }
         else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.Default; changeToDefault = true; }
-        Vector2 Move = Vector2.zero;
 
-        /*if (navigateTo)
+        Vector2 move = Vector2.zero;
+
+        if (navigateTo)
         {
-            var delta = destination - Node.transform.position;
-            Move = delta.normalized;
+            var delta = navigationDestination - transform.position;
+            move = delta.normalized;
+
+            if (Vector3.Distance(transform.position, navigationDestination) < .5f)
+                navigateTo = false;
         }
         else
-        {*/
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Forward))) { Move.x += 1; }
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Backward))) { Move.x -= 1; }
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))) { Move.y += 1; }
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Left))) { Move.y -= 1; }
-        //}
-
-        float height = transform.position.y;
+        {
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Forward))) { move.x += 1; }
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Backward))) { move.x -= 1; }
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))) { move.y += 1; }
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Left))) { move.y -= 1; }
+        }
 
         switch (navigation)
         {
             case Navigation.Walking:
-                Walk(ref Move, ref height);
+                Walk(ref move, ref height);
                 break;
             case Navigation.Flying:
-                Fly(ref Move, ref height);
+                Fly(ref move, ref height);
                 break;
         }
 
-        Move *= Time.deltaTime;
+        move *= Time.deltaTime;
 
         HandleView();
 
-        Vector3 pos = transform.rotation * new Vector3(Move.y, 0, Move.x);
+        Vector3 pos = transform.rotation * new Vector3(move.y, 0, move.x);
 
         if (CanMove(pos))
         {
@@ -260,10 +267,11 @@ public class FpsNavigation : AbstractNavigation
             move.x *= (move.x > 0) ? data.forwardSpeed.x : data.backwardSpeed.x;
             move.y *= data.lateralSpeed.x;
         }
-        //bool Squatting = Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat));
-        //height = Mathf.Lerp(height, (Squatting) ? data.squatHeight : data.standHeight, data.squatSpeed == 0 ? 1000000 : Time.deltaTime / data.squatSpeed);
+        
+        bool squatting = Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat));
+        skeleton.transform.localPosition = new Vector3(0, Mathf.Lerp(skeleton.transform.localPosition.y, (squatting) ? data.squatHeight : data.standHeight, data.squatSpeed == 0 ? 1000000 : Time.deltaTime / data.squatSpeed), 0);
 
-        ApplyGravity(Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Jump)), ref height);
+        ComputeGravity(Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Jump)), ref height);
     }
 
     void Fly(ref Vector2 Move, ref float height)
@@ -339,9 +347,7 @@ public class FpsNavigation : AbstractNavigation
 
         direction = direction / 2f;
 
-        Vector3 origin = transform.position + Vector3.up * maxStepHeight + direction;
-
-        if (UnityEngine.Physics.Raycast(origin + Vector3.up * (.05f + maxStepHeight), Vector3.down, out hit, 100, navmeshLayer))
+        if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * (.05f + maxStepHeight) + direction, Vector3.down, out hit, 100, navmeshLayer))
         {
             groundHeight = hit.point.y;
             return true;
@@ -391,7 +397,14 @@ public class FpsNavigation : AbstractNavigation
 
     private void UpdateBaseHeight()
     {
+        RaycastHit hit;
 
+        Vector3 origin = transform.position + Vector3.up * maxStepHeight;
+
+        if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * (.05f + maxStepHeight), Vector3.down, out hit, 100, navmeshLayer))
+        {
+            groundHeight = hit.point.y;
+        }
     }
 
     #endregion

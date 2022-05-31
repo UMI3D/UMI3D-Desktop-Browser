@@ -1012,6 +1012,7 @@ MonoBehaviour:
   viewpoint: {fileID: 2119596089}
   neckPivot: {fileID: 2119596088}
   head: {fileID: 2119596091}
+  skeleton: {fileID: 2119596090}
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
   maxNeckAngle: 0
   maxStepHeight: 0.2
@@ -2729,6 +2730,12 @@ Transform:
 --- !u!4 &2119596089 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2377199356570503951, guid: d599db4b8e88c6246a10c7a44287b2d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2119596086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2119596090 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3468897966034388038, guid: d599db4b8e88c6246a10c7a44287b2d5,
     type: 3}
   m_PrefabInstance: {fileID: 2119596086}
   m_PrefabAsset: {fileID: 0}
