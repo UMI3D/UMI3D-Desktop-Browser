@@ -22,76 +22,95 @@ using umi3d.cdk;
 using umi3d.common;
 using UnityEngine;
 
-using UnityEngine.AI;
-
 public class FpsNavigation : AbstractNavigation
 {
-    public Transform _viewpoint;
-    public Transform _neckPivot;
-    public float maxAngle;
-    public Transform head;
-    public Transform Node;
-    public Transform TorsoUpAnchor;
-    public Transform SkeletonContainer;
+    #region Fields
+
+    [Header("Player parts")]
+
+    [SerializeField]
+    private Transform viewpoint;
+
+    [SerializeField]
+    private Transform neckPivot;
+
+    [SerializeField]
+    private Transform head;
+
+    [Header("Parameters")]
+    [SerializeField]
+    private FpsScriptableAsset data;
+
+    [SerializeField]
+    private float maxNeckAngle;
+
+    [SerializeField]
+    private float maxStepHeight = .2f;
+
+    private float stepEpsilon = 0.05f;
+
+    [SerializeField]
+    [Tooltip("Navigation mode")]
+    private Navigation navigation;
+
+    [Header("Navmesh")]
+    [SerializeField]
+    public LayerMask obstacleLayer;
+
+    [SerializeField]
+    public LayerMask navmeshLayer;
+
+    #region Player state
 
     /// <summary>
-    /// Agent to limit user's movements.
+    /// Is player currently grounded ?
     /// </summary>
-    public NavMeshAgent agent;
+    public bool IsGrounded { get => Mathf.Abs(transform.position.y - groundHeight) < 0.01f; }
 
     /// <summary>
     /// Current ground height.
     /// </summary>
-    private float baseHeight;
+    private float groundHeight = 0;
 
-    public LayerMask obstacleLayer;
+    /// <summary>
+    /// Is player active ?
+    /// </summary>
+    private bool isActive = false;
 
-    bool isActive = false;
-    public FpsScriptableAsset data;
-
-    bool navigateTo = false;
-    Vector3 destination;
-
-    public enum State { Default, FreeHead, FreeMousse }
-    public enum Navigation { Walking, Flying }
-
-    public State state;
-    bool changeToDefault = false;
-    Vector3 LastAngleView;
-    public Navigation navigation;
-
-    float MaxJumpVelocity;
-    float MinJumpVelocity;
-
-    struct JumpData
-    {
-        public bool jumping;
-        public float timeSinceJump;
-        public float velocity;
-        public float deltaHeight;
-        public float heigth;
-
-        public JumpData(bool jumping, float timeSinceJump, float velocity, float deltaHeight) : this()
-        {
-            this.jumping = jumping;
-            this.timeSinceJump = timeSinceJump;
-            this.velocity = velocity;
-            this.deltaHeight = deltaHeight;
-        }
-    }
     JumpData jumpData;
 
-    #region abstract
+    public State state;
+
+    bool changeToDefault = false;
+
+    Vector3 lastAngleView;
+
+    #endregion
+
+    #region Computed parameters
+
+    private float maxJumpVelocity;
+
+    private float minJumpVelocity;
+
+    #endregion
+
+    #endregion
+
+    #region Methods
+
+    #region Abstract Navigation
+
     public override void Activate()
     {
         isActive = true;
-        navigateTo = false;
         state = State.Default;
         jumpData = new JumpData();
-        //CursorHandler.Movement = CursorHandler.CursorMovement.Center;
+        Debug.LogError("IMPLEMENT COUNCH");
+        Debug.LogError("IMPLEMENT START");
 
-        MaxJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(data.gravity) * data.MaxJumpHeight);
-        MinJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(data.gravity) * data.MinJumpHeight);
+        maxJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(data.gravity) * data.MaxJumpHeight);
+        minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(data.gravity) * data.MinJumpHeight);
     }
 
     public override void Disable()
@@ -99,51 +118,54 @@ public class FpsNavigation : AbstractNavigation
         isActive = false;
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <param name="data"></param>
     public override void Navigate(NavigateDto data)
     {
-        navigateTo = true;
-        destination = data.position;
+        throw new System.NotImplementedException("NAVIGATE TO not implemented yet.");
+        //navigateTo = true;
+        //destination = data.position;
     }
 
     public override void Teleport(TeleportDto data)
     {
-        agent.enabled = false;
-        Node.position = data.position;
-        Node.rotation = data.rotation;
-        baseHeight = data.position.Y;
+        transform.position = data.position;
+        transform.rotation = data.rotation;
 
-        StartCoroutine(ResetNavmeshAgent());
-    }
-
-    IEnumerator ResetNavmeshAgent()
-    {
-        yield return null;
-        agent.enabled = true;
+        UpdateBaseHeight();
     }
 
     #endregion
 
-    float ComputeJump(bool jumping)
+    void ApplyGravity(bool jumping, ref float height)
     {
-        if (jumpData.jumping && jumpData.deltaHeight == 0)
-        {
-            jumpData.velocity = MaxJumpVelocity;
-        }
-
         if (jumpData.jumping != jumping)
         {
             jumpData.jumping = jumping;
 
-            if (!jumpData.jumping && jumpData.velocity > MinJumpVelocity)
+            if (jumpData.jumping && IsGrounded)
             {
-                jumpData.velocity = MinJumpVelocity;
+                jumpData.velocity = maxJumpVelocity;
             }
-
         }
 
         jumpData.velocity += data.gravity * Time.deltaTime;
-        jumpData.deltaHeight = Mathf.Max(0, jumpData.deltaHeight + jumpData.velocity * Time.deltaTime);
-        return jumpData.deltaHeight;
+        height += jumpData.velocity * Time.deltaTime;
+
+        if (height < groundHeight)
+        {
+            if (Mathf.Abs(height - groundHeight) < maxStepHeight + stepEpsilon)
+            {
+                height = Mathf.Lerp(height, groundHeight, .5f);
+            } else
+            {
+                height = groundHeight;
+            }
+
+            jumpData.velocity = 0;
+        }
     }
 
     private void Update()
@@ -151,33 +173,20 @@ public class FpsNavigation : AbstractNavigation
         if (!isActive)
             return;
 
-        if (agent.isActiveAndEnabled && agent.isOnNavMesh)
-        {
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(agent.transform.position, out hit, .2f, NavMesh.AllAreas))
-            {
-                baseHeight = hit.position.y;
-            }
-        }
-
-        if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
-        {
-            //PauseMenu.ToggleDisplay();
-        }
-
-        float height = jumpData.heigth;
-
-        if (CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHidden)
+        /*if (CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHidden)
         {
             Vector3 position = Node.transform.position;
 
             ComputeJump(false);
 
             height += jumpData.deltaHeight;
-            position.y = height + baseHeight;
+            position.y = height;
+            if (position.y < groundHeight)
+                position.y = groundHeight;
+
             SkeletonContainer.transform.position = position;
             return;
-        }
+        }*/
 
         if (TextInputDisplayerElement.isTyping)
             return;
@@ -186,71 +195,75 @@ public class FpsNavigation : AbstractNavigation
         else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.Default; changeToDefault = true; }
         Vector2 Move = Vector2.zero;
 
-        if (navigateTo)
+        /*if (navigateTo)
         {
             var delta = destination - Node.transform.position;
             Move = delta.normalized;
         }
         else
-        {
+        {*/
             if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Forward))) { Move.x += 1; }
             if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Backward))) { Move.x -= 1; }
             if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))) { Move.y += 1; }
             if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Left))) { Move.y -= 1; }
-        }
+        //}
+
+        float height = transform.position.y;
 
         switch (navigation)
         {
             case Navigation.Walking:
                 Walk(ref Move, ref height);
-                jumpData.heigth = height;
-                height += jumpData.deltaHeight;
                 break;
             case Navigation.Flying:
                 Fly(ref Move, ref height);
-                jumpData.heigth = height;
                 break;
         }
+
         Move *= Time.deltaTime;
 
         HandleView();
 
-        Vector3 pos = Node.rotation * new Vector3(Move.y, 0, Move.x);
+        Vector3 pos = transform.rotation * new Vector3(Move.y, 0, Move.x);
 
         if (CanMove(pos))
         {
-            pos += Node.transform.position;
+            pos += transform.position;
         } else
         {
-            pos = Node.transform.position;
+            pos = transform.position;
         }
 
-        pos.y = height + baseHeight;
-        Node.transform.position = new Vector3(pos.x, baseHeight, pos.z);
-        SkeletonContainer.transform.position = pos;
+        pos.y = height;
+
+        transform.position = pos;
     }
 
-    void Walk(ref Vector2 Move, ref float height)
+    /// <summary>
+    /// Computes <paramref name="move"/> vector to perform a walk movement and applies gravitu.
+    /// </summary>
+    /// <param name="move"></param>
+    void Walk(ref Vector2 move, ref float height)
     {
         if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat)))
         {
-            Move.x *= (Move.x > 0) ? data.forwardSpeed.y : data.backwardSpeed.y;
-            Move.y *= data.lateralSpeed.y;
+            move.x *= (move.x > 0) ? data.forwardSpeed.y : data.backwardSpeed.y;
+            move.y *= data.lateralSpeed.y;
         }
         else if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Sprint)))
         {
-            Move.x *= (Move.x > 0) ? data.forwardSpeed.z : data.backwardSpeed.z;
-            Move.y *= data.lateralSpeed.z;
+            move.x *= (move.x > 0) ? data.forwardSpeed.z : data.backwardSpeed.z;
+            move.y *= data.lateralSpeed.z;
         }
         else
         {
-            Move.x *= (Move.x > 0) ? data.forwardSpeed.x : data.backwardSpeed.x;
-            Move.y *= data.lateralSpeed.x;
+            move.x *= (move.x > 0) ? data.forwardSpeed.x : data.backwardSpeed.x;
+            move.y *= data.lateralSpeed.x;
         }
-        bool Squatting = Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat));
-        height = Mathf.Lerp(height, (Squatting) ? data.squatHeight : data.standHeight, data.squatSpeed == 0 ? 1000000 : Time.deltaTime / data.squatSpeed);
-        //TorsoUpAnchor.localRotation = Quaternion.Euler((Squatting) ? data.squatTorsoAngle : 0, 0, 0);
-        ComputeJump(Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Jump)));
+        //bool Squatting = Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat));
+        //height = Mathf.Lerp(height, (Squatting) ? data.squatHeight : data.standHeight, data.squatSpeed == 0 ? 1000000 : Time.deltaTime / data.squatSpeed);
+
+        ApplyGravity(Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Jump)), ref height);
     }
 
     void Fly(ref Vector2 Move, ref float height)
@@ -263,13 +276,13 @@ public class FpsNavigation : AbstractNavigation
     void HandleView()
     {
         if (state == State.FreeMousse) return;
-        Vector3 angleView = NormalizeAngle(_viewpoint.rotation.eulerAngles);
+        Vector3 angleView = NormalizeAngle(viewpoint.rotation.eulerAngles);
 
         Vector2 angularSpeed = new Vector2(-1 * Input.GetAxis("Mouse Y") * data.AngularViewSpeed.x, Input.GetAxis("Mouse X") * data.AngularViewSpeed.y);
         Vector3 result = NormalizeAngle(angleView + (Vector3)angularSpeed);
         if (changeToDefault)
         {
-            result = LastAngleView;
+            result = lastAngleView;
             changeToDefault = false;
         }
         Vector3 displayResult;
@@ -282,19 +295,19 @@ public class FpsNavigation : AbstractNavigation
 
         if (state == State.Default)
         {
-            Node.transform.rotation = Quaternion.Euler(new Vector3(0, result.y, 0));
-            LastAngleView = result;
+            transform.rotation = Quaternion.Euler(new Vector3(0, result.y, 0));
+            lastAngleView = result;
         }
         else
         {
-            Vector3 angleNeck = NormalizeAngle(Node.rotation.eulerAngles);
+            Vector3 angleNeck = NormalizeAngle(transform.rotation.eulerAngles);
             float delta = Mathf.DeltaAngle(result.y, angleNeck.y);
 
             if (delta < data.YAngleRange.x) result.y = -data.YAngleRange.x + angleNeck.y;
             if (delta > data.YAngleRange.y) result.y = -data.YAngleRange.y + angleNeck.y;
         }
-        _viewpoint.transform.rotation = Quaternion.Euler(result);
-        _neckPivot.transform.rotation = Quaternion.Euler(new Vector3(Mathf.Clamp(result.x, -maxAngle, maxAngle), result.y, result.z));
+        viewpoint.transform.rotation = Quaternion.Euler(result);
+        neckPivot.transform.rotation = Quaternion.Euler(new Vector3(Mathf.Clamp(result.x, -maxNeckAngle, maxNeckAngle), result.y, result.z));
         head.transform.rotation = Quaternion.Euler(displayResult);
     }
 
@@ -306,33 +319,65 @@ public class FpsNavigation : AbstractNavigation
         return angle;
     }
 
+    #region Check Navmesh and Obstacles
+
     private float lastObstacleHeight = .5f;
 
     private bool CanMove(Vector3 direction)
     {
-        if (direction == Vector3.zero)
-            return false;
+        return CheckNavmesh(direction) && CheckCollision(direction);
+    }
 
+    /// <summary>
+    /// Checks if a translation along <paramref name="direction"/> would move the player on a navmesh surface.
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <returns></returns>
+    private bool CheckNavmesh(Vector3 direction)
+    {
+        RaycastHit hit;
 
-        if (UnityEngine.Physics.Raycast(_viewpoint.transform.position, direction.normalized, .2f, obstacleLayer))
+        direction = direction / 2f;
+
+        Vector3 origin = transform.position + Vector3.up * maxStepHeight + direction;
+
+        if (UnityEngine.Physics.Raycast(origin + Vector3.up * (.05f + maxStepHeight), Vector3.down, out hit, 100, navmeshLayer))
+        {
+            groundHeight = hit.point.y;
+            return true;
+        }
+        else
         {
             return false;
         }
-        if (UnityEngine.Physics.Raycast(_viewpoint.transform.position - Vector3.up * 1.75f, direction.normalized, .2f, obstacleLayer))
+    }
+
+    /// <summary>
+    /// Checks if there is an obstacle for the player.
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <returns></returns>
+    private bool CheckCollision(Vector3 direction)
+    {
+        if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * 1.75f, direction.normalized, .2f, obstacleLayer))
+        {
+            return false;
+        }
+        if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * (maxStepHeight + stepEpsilon), direction.normalized, .2f, obstacleLayer))
         {
             return false;
         }
 
-        if (UnityEngine.Physics.Raycast(_viewpoint.transform.position - Vector3.up * lastObstacleHeight, direction.normalized, .2f, obstacleLayer))
+        if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * lastObstacleHeight, direction.normalized, .2f, obstacleLayer))
         {
             return false;
         }
 
         for (int i = 0; i < 3; i++)
         {
-            float random = Random.Range(.1f, 1.8f);
+            float random = Random.Range(maxStepHeight + stepEpsilon, 1.8f);
 
-            if (UnityEngine.Physics.Raycast(_viewpoint.transform.position - Vector3.up * random, direction.normalized, .2f, obstacleLayer))
+            if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * random, direction.normalized, .2f, obstacleLayer))
             {
                 lastObstacleHeight = random;
                 return false;
@@ -340,6 +385,35 @@ public class FpsNavigation : AbstractNavigation
         }
 
         lastObstacleHeight = .5f;
+
         return true;
     }
+
+    private void UpdateBaseHeight()
+    {
+
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Struct Definition 
+
+    public enum State { Default, FreeHead, FreeMousse }
+    public enum Navigation { Walking, Flying }
+
+    struct JumpData
+    {
+        public bool jumping;
+        public float velocity;
+
+        public JumpData(bool jumping, float timeSinceJump, float velocity, float deltaHeight) : this()
+        {
+            this.jumping = jumping;
+            this.velocity = velocity;
+        }
+    }
+
+    #endregion
 }

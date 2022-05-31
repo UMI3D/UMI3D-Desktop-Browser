@@ -1009,20 +1009,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83761c411af74f04eb4787a5e97f291e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _viewpoint: {fileID: 2119596089}
-  _neckPivot: {fileID: 2119596088}
-  maxAngle: 55
+  viewpoint: {fileID: 2119596089}
+  neckPivot: {fileID: 2119596088}
   head: {fileID: 2119596091}
-  Node: {fileID: 2119596087}
-  TorsoUpAnchor: {fileID: 2119596090}
-  SkeletonContainer: {fileID: 2119596100}
-  agent: {fileID: 2119596092}
+  data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
+  maxNeckAngle: 0
+  maxStepHeight: 0.2
+  navigation: 0
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 512
-  data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
+    m_Bits: 1536
+  navmeshLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   state: 0
-  navigation: 0
 --- !u!114 &498482123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2609,6 +2609,11 @@ PrefabInstance:
       propertyPath: volume
       value: 
       objectReference: {fileID: 1903202761}
+    - target: {fileID: 2377199355413914548, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2377199355543386052, guid: d599db4b8e88c6246a10c7a44287b2d5,
         type: 3}
       propertyPath: LeftFoot
@@ -2707,6 +2712,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 3464317912480805684, guid: d599db4b8e88c6246a10c7a44287b2d5, type: 3}
     - {fileID: 682933217698716441, guid: d599db4b8e88c6246a10c7a44287b2d5, type: 3}
+    - {fileID: 2377199355413914548, guid: d599db4b8e88c6246a10c7a44287b2d5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d599db4b8e88c6246a10c7a44287b2d5, type: 3}
 --- !u!4 &2119596087 stripped
 Transform:
@@ -2726,21 +2732,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2119596086}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &2119596090 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3655325647420470210, guid: d599db4b8e88c6246a10c7a44287b2d5,
-    type: 3}
-  m_PrefabInstance: {fileID: 2119596086}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2119596091 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7370302028105062085, guid: d599db4b8e88c6246a10c7a44287b2d5,
-    type: 3}
-  m_PrefabInstance: {fileID: 2119596086}
-  m_PrefabAsset: {fileID: 0}
---- !u!195 &2119596092 stripped
-NavMeshAgent:
-  m_CorrespondingSourceObject: {fileID: 2377199355413914548, guid: d599db4b8e88c6246a10c7a44287b2d5,
     type: 3}
   m_PrefabInstance: {fileID: 2119596086}
   m_PrefabAsset: {fileID: 0}
