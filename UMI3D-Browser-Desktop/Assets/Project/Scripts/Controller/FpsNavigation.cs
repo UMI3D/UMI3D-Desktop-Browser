@@ -399,8 +399,6 @@ public class FpsNavigation : AbstractNavigation
     {
         RaycastHit hit;
 
-        Vector3 origin = transform.position + Vector3.up * maxStepHeight;
-
         if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * (.05f + maxStepHeight), Vector3.down, out hit, 100, navmeshLayer))
         {
             groundHeight = hit.point.y;
