@@ -17,7 +17,7 @@ limitations under the License.
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
-using System.Collections;
+using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.common;
 using UnityEngine;
@@ -95,13 +95,15 @@ public class FpsNavigation : AbstractNavigation
 
     Vector3 navigationDestination;
 
+    Vector3 lastPosition;
+
     #endregion
 
     #region Computed parameters
 
     private float maxJumpVelocity;
 
-    private float minJumpVelocity;
+    FixedQueue<float> velocities = new FixedQueue<float>(3);
 
     #endregion
 
@@ -120,7 +122,6 @@ public class FpsNavigation : AbstractNavigation
         UpdateBaseHeight();
 
         maxJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(data.gravity) * data.MaxJumpHeight);
-        minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(data.gravity) * data.MinJumpHeight);
     }
 
     public override void Disable()
@@ -148,6 +149,11 @@ public class FpsNavigation : AbstractNavigation
 
     #endregion
 
+    /// <summary>
+    /// Applies gravity to player and makes it jump.
+    /// </summary>
+    /// <param name="jumping"></param>
+    /// <param name="height"></param>
     void ComputeGravity(bool jumping, ref float height)
     {
         if (jumpData.jumping != jumping)
@@ -156,7 +162,8 @@ public class FpsNavigation : AbstractNavigation
 
             if (jumpData.jumping && IsGrounded)
             {
-                jumpData.velocity = maxJumpVelocity;
+                jumpData.velocity = maxJumpVelocity * (1 + ComputeSpeed() * 6);
+                jumpData.lastTimeJumped = Time.time;
             }
         }
 
@@ -165,15 +172,15 @@ public class FpsNavigation : AbstractNavigation
 
         if (height < groundHeight)
         {
-            if (Mathf.Abs(height - groundHeight) < maxStepHeight + stepEpsilon)
+            float offset = Mathf.Abs(height - groundHeight);
+            if ((offset < maxStepHeight + stepEpsilon) && (offset > stepEpsilon))
             {
                 height = Mathf.Lerp(height, groundHeight, .5f);
             } else
             {
+                jumpData.velocity = 0;
                 height = groundHeight;
             }
-
-            jumpData.velocity = 0;
         }
     }
 
@@ -244,6 +251,9 @@ public class FpsNavigation : AbstractNavigation
         pos.y = height;
 
         transform.position = pos;
+
+        velocities.Push((pos - lastPosition).magnitude);
+        lastPosition = pos;
     }
 
     /// <summary>
@@ -325,6 +335,17 @@ public class FpsNavigation : AbstractNavigation
         angle.y = Mathf.DeltaAngle(0, angle.y);
         angle.z = Mathf.DeltaAngle(0, angle.z);
         return angle;
+    }
+
+    float ComputeSpeed()
+    {
+        float sum = 0;
+        foreach (var vel in velocities.data)
+        {
+            sum += vel;
+        }
+
+        return sum / velocities.data.Count;
     }
 
     #region Check Navmesh and Obstacles
@@ -418,11 +439,37 @@ public class FpsNavigation : AbstractNavigation
     {
         public bool jumping;
         public float velocity;
+        public float lastTimeJumped;
 
-        public JumpData(bool jumping, float timeSinceJump, float velocity, float deltaHeight) : this()
+        public JumpData(bool jumping, float lastTimeJumped, float velocity, float deltaHeight) : this()
         {
             this.jumping = jumping;
             this.velocity = velocity;
+            this.lastTimeJumped = lastTimeJumped;
+        }
+    }
+
+
+    class FixedQueue<T>
+    {
+        public List<T> data;
+
+        public int capacity;
+
+        public FixedQueue(int capacity)
+        {
+            Debug.Assert(capacity >= 1);
+            this.capacity = capacity;
+
+            data = new List<T>();
+        }
+
+        public void Push(T elt)
+        {
+            if (data.Count >= capacity)
+                data.RemoveAt(0);
+
+            data.Add(elt);
         }
     }
 
