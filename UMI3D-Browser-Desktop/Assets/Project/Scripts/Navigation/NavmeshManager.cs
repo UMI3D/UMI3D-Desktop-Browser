@@ -12,7 +12,6 @@ limitations under the License.
 using umi3d.cdk;
 using umi3d.common;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace BrowserDesktop.Navigation
 {
@@ -36,14 +35,11 @@ namespace BrowserDesktop.Navigation
 
         private LayerMask obstacleLayer;
 
-        public NavMeshSurface surface;
-
         void Start()
         {
             navmeshLayer = LayerMask.NameToLayer(navmeshLayerName);
             obstacleLayer = LayerMask.NameToLayer(obstacleLayerName);
             Debug.Assert(navmeshLayer != default && obstacleLayerName != default);
-            Debug.Assert(surface);
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(InitNavMesh);
         }
@@ -63,7 +59,6 @@ namespace BrowserDesktop.Navigation
                         InitModel(nodeInstance);
                 }
             }
-            surface.BuildNavMesh();
         }
 
         /// <summary>
@@ -120,8 +115,6 @@ namespace BrowserDesktop.Navigation
                     if (r.gameObject.GetComponent<MeshCollider>() == null)
                     {
                         r.gameObject.AddComponent<MeshCollider>();
-                        //modifier.overrideArea = true;
-                        //modifier.area = 1; // 1 = means not walkable.
                     } else
                     {
                         Debug.LogWarning(r.gameObject.name + " tries to init its navmesh at least twice, this should not happen.");
