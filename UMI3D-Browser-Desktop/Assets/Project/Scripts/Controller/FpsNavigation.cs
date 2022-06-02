@@ -191,11 +191,13 @@ public class FpsNavigation : AbstractNavigation
 
         float height = transform.position.y;
 
-        if (CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHidden)
+        if ((CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHidden))
         {
-            ComputeGravity(false, ref height);
-
-            transform.Translate(0, height - transform.position.y, 0);
+            if (navigation != Navigation.Flying)
+            {
+                ComputeGravity(false, ref height);
+                transform.Translate(0, height - transform.position.y, 0);
+            }
 
             return;
         }
@@ -288,7 +290,7 @@ public class FpsNavigation : AbstractNavigation
     {
         Move.x *= data.flyingSpeed;
         Move.y *= data.flyingSpeed;
-        height += data.flyingSpeed * ((Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat)) ? -1 : 0) + (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Jump)) ? 1 : 0));
+        height += data.flyingSpeed * 0.01f * ((Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat)) ? -1 : 0) + (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Jump)) ? 1 : 0));
     }
 
     void HandleView()
@@ -354,7 +356,7 @@ public class FpsNavigation : AbstractNavigation
 
     private bool CanMove(Vector3 direction)
     {
-        return CheckNavmesh(direction) && CheckCollision(direction);
+        return CheckNavmesh(direction) && CheckCollision(direction) || navigation == Navigation.Flying;
     }
 
     /// <summary>
