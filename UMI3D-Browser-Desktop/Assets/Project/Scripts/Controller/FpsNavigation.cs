@@ -50,6 +50,9 @@ public class FpsNavigation : AbstractNavigation
     [SerializeField]
     private float maxStepHeight = .2f;
 
+    [SerializeField]
+    private float maxSlopeAngle = 45f;
+
     private float stepEpsilon = 0.05f;
 
     [SerializeField]
@@ -80,8 +83,6 @@ public class FpsNavigation : AbstractNavigation
     /// </summary>
     private bool isActive = false;
 
-    JumpData jumpData;
-
     public State state;
 
     bool changeToDefault = false;
@@ -95,6 +96,9 @@ public class FpsNavigation : AbstractNavigation
 
     Vector3 navigationDestination;
 
+    /// <summary>
+    /// Last frame player position .
+    /// </summary>
     Vector3 lastPosition;
 
     #endregion
@@ -103,7 +107,15 @@ public class FpsNavigation : AbstractNavigation
 
     private float maxJumpVelocity;
 
+    /// <summary>
+    /// Stores the last player positions delta of the last frames.
+    /// </summary>
     FixedQueue<float> velocities = new FixedQueue<float>(3);
+
+    /// <summary>
+    /// Stores all data about player jumps.
+    /// </summary>
+    JumpData jumpData;
 
     #endregion
 
@@ -162,7 +174,7 @@ public class FpsNavigation : AbstractNavigation
 
             if (jumpData.jumping && IsGrounded)
             {
-                jumpData.velocity = maxJumpVelocity * (1 + ComputeSpeed() * 6);
+                jumpData.velocity = maxJumpVelocity * (1 + ComputeVelocity() * 6);
                 jumpData.lastTimeJumped = Time.time;
             }
         }
@@ -208,6 +220,20 @@ public class FpsNavigation : AbstractNavigation
         if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.FreeHead; }
         else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.Default; changeToDefault = true; }
 
+        HandleMovement();
+
+        HandleView();
+    }
+
+    #region Movement
+
+    /// <summary>
+    /// Moves player.
+    /// </summary>
+    private void HandleMovement()
+    {
+        float height = transform.position.y;
+
         Vector2 move = Vector2.zero;
 
         if (navigateTo)
@@ -238,14 +264,13 @@ public class FpsNavigation : AbstractNavigation
 
         move *= Time.deltaTime;
 
-        HandleView();
-
         Vector3 pos = transform.rotation * new Vector3(move.y, 0, move.x);
 
         if (CanMove(pos))
         {
             pos += transform.position;
-        } else
+        }
+        else
         {
             pos = transform.position;
         }
@@ -262,7 +287,7 @@ public class FpsNavigation : AbstractNavigation
     /// Computes <paramref name="move"/> vector to perform a walk movement and applies gravitu.
     /// </summary>
     /// <param name="move"></param>
-    void Walk(ref Vector2 move, ref float height)
+    private void Walk(ref Vector2 move, ref float height)
     {
         if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat)))
         {
@@ -279,21 +304,41 @@ public class FpsNavigation : AbstractNavigation
             move.x *= (move.x > 0) ? data.forwardSpeed.x : data.backwardSpeed.x;
             move.y *= data.lateralSpeed.x;
         }
-        
+
         bool squatting = Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat));
         skeleton.transform.localPosition = new Vector3(0, Mathf.Lerp(skeleton.transform.localPosition.y, (squatting) ? data.squatHeight : data.standHeight, data.squatSpeed == 0 ? 1000000 : Time.deltaTime / data.squatSpeed), 0);
 
         ComputeGravity(Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Jump)), ref height);
     }
 
-    void Fly(ref Vector2 Move, ref float height)
+    private void Fly(ref Vector2 Move, ref float height)
     {
         Move.x *= data.flyingSpeed;
         Move.y *= data.flyingSpeed;
         height += data.flyingSpeed * 0.01f * ((Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat)) ? -1 : 0) + (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Jump)) ? 1 : 0));
     }
 
-    void HandleView()
+    /// <summary>
+    /// Computes player velocity.
+    /// </summary>
+    /// <returns></returns>
+    private float ComputeVelocity()
+    {
+        float sum = 0;
+        foreach (var vel in velocities.data)
+        {
+            sum += vel;
+        }
+
+        return sum / velocities.data.Count;
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Rotates camera.
+    /// </summary>
+    private void HandleView()
     {
         if (state == State.FreeMousse) return;
         Vector3 angleView = NormalizeAngle(viewpoint.rotation.eulerAngles);
@@ -326,12 +371,13 @@ public class FpsNavigation : AbstractNavigation
             if (delta < data.YAngleRange.x) result.y = -data.YAngleRange.x + angleNeck.y;
             if (delta > data.YAngleRange.y) result.y = -data.YAngleRange.y + angleNeck.y;
         }
+
         viewpoint.transform.rotation = Quaternion.Euler(result);
         neckPivot.transform.rotation = Quaternion.Euler(new Vector3(Mathf.Clamp(result.x, -maxNeckAngle, maxNeckAngle), result.y, result.z));
         head.transform.rotation = Quaternion.Euler(displayResult);
     }
 
-    Vector3 NormalizeAngle(Vector3 angle)
+    private Vector3 NormalizeAngle(Vector3 angle)
     {
         angle.x = Mathf.DeltaAngle(0, angle.x);
         angle.y = Mathf.DeltaAngle(0, angle.y);
@@ -339,16 +385,6 @@ public class FpsNavigation : AbstractNavigation
         return angle;
     }
 
-    float ComputeSpeed()
-    {
-        float sum = 0;
-        foreach (var vel in velocities.data)
-        {
-            sum += vel;
-        }
-
-        return sum / velocities.data.Count;
-    }
 
     #region Check Navmesh and Obstacles
 
@@ -372,8 +408,15 @@ public class FpsNavigation : AbstractNavigation
 
         if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * (.05f + maxStepHeight) + direction, Vector3.down, out hit, 100, navmeshLayer))
         {
-            groundHeight = hit.point.y;
-            return true;
+            if (Vector3.Angle(transform.up, hit.normal) <= maxSlopeAngle)
+            {
+                groundHeight = hit.point.y;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {
