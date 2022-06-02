@@ -1016,7 +1016,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
   maxNeckAngle: 0
   maxStepHeight: 0.2
-  navigation: 0
+  navigation: 1
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1536
