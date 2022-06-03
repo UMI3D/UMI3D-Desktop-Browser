@@ -110,7 +110,6 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         public virtual void Destroy()
         {
-            Reset();
             ResetAllVisualStyle();
             this.Root = null;
             m_globalPref.ApplyCustomStyle.RemoveListener(ApplyAllFormatAndStyle);
@@ -147,8 +146,16 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         public virtual void Remove()
         {
-            Root.RemoveFromHierarchy();
+            Remove(Root);
             IsDisplaying = false;
+        }
+
+        protected bool Remove(VisualElement visual)
+        {
+            if (visual.parent == null)
+                return false;
+            visual.RemoveFromHierarchy();
+            return true;
         }
     }
 
