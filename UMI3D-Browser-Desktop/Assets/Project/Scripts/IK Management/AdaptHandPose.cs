@@ -223,7 +223,7 @@ public class AdaptHandPose : MonoBehaviour
                 {
                     if (passiveHoverPose != null)
                     {
-                        StopCoroutine(rightHandPlacement);
+                        StopCoroutine(leftHandPlacement);
                         currentPose = passiveHoverPose;
 
                         leftPhalanxRotations = GetHandedRotations(currentPose.PhalanxRotations);
