@@ -44,6 +44,5 @@ public class NotificationLoader : umi3d.cdk.NotificationLoader
         }
         else
             Notificationbox2D_E.Instance.Add(dto);
-            //NotificationDisplayer.Instance.DisplayNotification(dto);
     }
 }
