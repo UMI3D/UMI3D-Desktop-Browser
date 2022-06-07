@@ -26,23 +26,42 @@ namespace umi3dDesktopBrowser.ui.viewController
     public partial class Notificationbox2D_E
     {
         public Func<int> MaxNotification;
-        private Queue<NotificationDto> m_notifications;
+        private Queue<NotificationDto> m_lowPriorityNotifications;
+        private Queue<NotificationDto> m_mediumPriorityNotifications;
+        private Queue<NotificationDto> m_HighPriorityNotifications;
         private int m_currentlyDisplayed;
 
         private bool m_process 
             => (MaxNotification != null) 
-            ? m_notifications.Count > 0 && m_currentlyDisplayed < MaxNotification() 
-            : m_notifications.Count > 0;
+            ? m_lowPriorityNotifications.Count > 0 && m_currentlyDisplayed < MaxNotification() 
+            : m_lowPriorityNotifications.Count > 0;
+
+        private Notification2D_E redirectionNotif;
 
         public void Add(NotificationDto dto)
-            => m_notifications.Enqueue(dto);
+        {
+            switch (dto.priority)
+            {
+                case NotificationDto.NotificationPriority.Low:
+                    m_lowPriorityNotifications.Enqueue(dto);
+                    break;
+                case NotificationDto.NotificationPriority.Medium:
+                    //med.Enqueue(dto);
+                    break;
+                case NotificationDto.NotificationPriority.High:
+                    m_lowPriorityNotifications.Enqueue(dto);
+                    break;
+                default:
+                    break;
+            }
+        }
 
-        public IEnumerator DisplayNotifications()
+        private IEnumerator DisplayNotifications()
         {
             while (true)
             {
                 yield return new WaitUntil(() => m_process);
-                var dto = m_notifications.Dequeue();
+                var dto = m_lowPriorityNotifications.Dequeue();
 
                 var notification = new Notification2D_E(dto.title, dto.content, (int)dto.duration * 1000);
                 //var notification = new Notification2D_E(dto.title, dto.content, 0);
@@ -90,7 +109,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             Root.style.right = 0f;
             Root.style.top = 0f;
             Root.style.bottom = 0f;
-            m_notifications = new Queue<NotificationDto>();
+            m_lowPriorityNotifications = new Queue<NotificationDto>();
 
             UIManager.StartCoroutine(DisplayNotifications());
         }
