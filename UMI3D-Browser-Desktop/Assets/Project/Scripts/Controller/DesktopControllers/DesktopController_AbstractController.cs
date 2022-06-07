@@ -239,6 +239,7 @@ namespace BrowserDesktop.Controller
             {
                 mouseData.ForceProjection = true;
                 mouseData.ForceProjectionReleasable = releasable;
+                mouseData.LastProjected = null;
             }
             tool.onProjected(interactionBoneType);
         }
