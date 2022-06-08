@@ -2938,5 +2938,33 @@ MonoBehaviour:
   EmoteAnimatorController: {fileID: 9100000, guid: 4a5c7fcfa933abd489a94ab00fa0e3db,
     type: 2}
   animatorOverride: {fileID: 22100000, guid: eef8bdad69241d2468e2331a6601734e, type: 2}
+  idleAnimation: {fileID: -203655887218126122, guid: 68661901237200744b2d85059f35e890,
+    type: 3}
   availableEmotes:
   - {fileID: -203655887218126122, guid: c0ee5d26cf7118a42a9ef803ab429063, type: 3}
+  - {fileID: -203655887218126122, guid: 18c2d645f977e6249803ed2d7923caca, type: 3}
+  - {fileID: -203655887218126122, guid: d85540fb210192a40b34d13dc23dcb96, type: 3}
+  - {fileID: -203655887218126122, guid: fc8e11b25b3fc6a45a7e5d35852202b6, type: 3}
+  - {fileID: -203655887218126122, guid: 6f1ecb87c3a265641a1b02b1f2f9228a, type: 3}
+  associatedIcons:
+  - {fileID: 21300000, guid: 17e1536176d5f10478e7b7a0f3236bb4, type: 3}
+  - {fileID: 21300000, guid: c700d29f7172e0a46a1a095ea46eaf61, type: 3}
+  - {fileID: 21300000, guid: d456934c81f95964b911f80340eba015, type: 3}
+  - {fileID: 21300000, guid: 6c33c22c39f52b045a1740cc39e0a362, type: 3}
+  - {fileID: 21300000, guid: ae8702de38251e94c827588d13a063e5, type: 3}
+  emotes:
+  - icon: {fileID: 21300000, guid: 17e1536176d5f10478e7b7a0f3236bb4, type: 3}
+    anim: {fileID: -203655887218126122, guid: c0ee5d26cf7118a42a9ef803ab429063, type: 3}
+    id: 0
+  - icon: {fileID: 21300000, guid: c700d29f7172e0a46a1a095ea46eaf61, type: 3}
+    anim: {fileID: -203655887218126122, guid: 18c2d645f977e6249803ed2d7923caca, type: 3}
+    id: 1
+  - icon: {fileID: 21300000, guid: d456934c81f95964b911f80340eba015, type: 3}
+    anim: {fileID: -203655887218126122, guid: d85540fb210192a40b34d13dc23dcb96, type: 3}
+    id: 2
+  - icon: {fileID: 21300000, guid: 6c33c22c39f52b045a1740cc39e0a362, type: 3}
+    anim: {fileID: -203655887218126122, guid: fc8e11b25b3fc6a45a7e5d35852202b6, type: 3}
+    id: 3
+  - icon: {fileID: 21300000, guid: ae8702de38251e94c827588d13a063e5, type: 3}
+    anim: {fileID: -203655887218126122, guid: 6f1ecb87c3a265641a1b02b1f2f9228a, type: 3}
+    id: 4
