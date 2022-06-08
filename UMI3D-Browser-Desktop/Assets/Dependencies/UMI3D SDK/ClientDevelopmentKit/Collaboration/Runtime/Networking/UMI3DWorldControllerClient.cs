@@ -27,9 +27,11 @@ namespace umi3d.cdk.collaboration
     public class UMI3DWorldControllerClient
     {
         MediaDto media;
+
+        public ForgeConnectionDto forgeConnectionDto;
         public string name => media?.name;
-        GateDto gate;
-        string globalToken;
+        GateDto gate = new GateDto();
+        static string globalToken;
         UMI3DEnvironmentClient environment;
         PrivateIdentityDto privateIdentity;
         public PublicIdentityDto PublicIdentity => new PublicIdentityDto()
@@ -75,7 +77,7 @@ namespace umi3d.cdk.collaboration
 
         public UMI3DWorldControllerClient(RedirectionDto redirection, string globalToken) : this(redirection)
         {
-            this.globalToken = globalToken;
+            UMI3DWorldControllerClient.globalToken = globalToken;
         }
 
         public ulong GetUserID() { return environment?.GetUserID() ?? 0; }
@@ -85,7 +87,7 @@ namespace umi3d.cdk.collaboration
             if (!isConnected && !isConnecting)
                 return await Connect(new ConnectionDto()
                 {
-                    globalToken = this.globalToken,
+                    globalToken = globalToken,
                     gate = this.gate,
                     libraryPreloading = downloadLibraryOnly
                 });
@@ -100,6 +102,11 @@ namespace umi3d.cdk.collaboration
                 if (answerDto is PrivateIdentityDto identity)
                 {
                     Connected(identity);
+                    return true;
+                }
+                else if (answerDto is PrivateIdentity2Dto identity2)
+                {
+                    Connected(identity2.ToPrivateIdentity());
                     return true;
                 }
                 else if (answerDto is ConnectionFormDto form)
@@ -120,13 +127,23 @@ namespace umi3d.cdk.collaboration
 
         void Connected(PrivateIdentityDto identity)
         {
+            try
+            {
+                forgeConnectionDto = identity.connectionDto;
+            }
+            catch (System.Exception)
+            {
+                Debug.LogError($"error dto is not a forgeConncection dto");
+                throw;
+            }
             globalToken = identity.GlobalToken;
             privateIdentity = identity;
         }
 
         async Task<FormAnswerDto> GetFormAnswer(ConnectionFormDto form)
         {
-            return await UMI3DCollaborationClientServer.Instance.Identifier.GetParameterDtos(form);
+            var identifier = UMI3DCollaborationClientServer.Instance.Identifier;
+            return await identifier.GetParameterDtos(form);
         }
 
         public UMI3DWorldControllerClient Redirection(RedirectionDto redirection)
@@ -139,7 +156,11 @@ namespace umi3d.cdk.collaboration
 
         public UMI3DEnvironmentClient ConnectToEnvironment()
         {
-            environment = new UMI3DEnvironmentClient(privateIdentity.connectionDto, this);
+            ForgeConnectionDto dto;
+            dto = privateIdentity.connectionDto;
+            
+            environment = new UMI3DEnvironmentClient(dto, this);
+
             if (environment.Connect())
                 return environment;
             else

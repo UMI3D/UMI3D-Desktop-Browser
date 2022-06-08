@@ -96,13 +96,15 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
         identifier.ShouldDownloadLib = ShouldDownloadLibraries;
         identifier.GetParameters = GetParameterDtos;
+
+        UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(OnRedirection);
     }
 
     private void Start()
     {
         InitUI();
 
-        UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(OnRedirection);
+        
         UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
         Settingbox_E.Instance.LeaveButton.Clicked += () =>

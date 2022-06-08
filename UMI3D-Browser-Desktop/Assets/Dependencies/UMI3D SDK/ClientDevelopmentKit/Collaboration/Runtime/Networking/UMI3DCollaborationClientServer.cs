@@ -96,48 +96,56 @@ namespace umi3d.cdk.collaboration
             return environmentClient?.IsConnected() ?? false;
         }
 
-        
-        //public static async Task Connect(Action<string> failed = null)
-        //{
-        //    try
-        //    {
-        //        if (Exists)
-        //        {
-        //            Instance.status = StatusType.AWAY;
-        //            UMI3DWorldControllerClient wc =  new UMI3DWorldControllerClient(new MediaDto());
-        //            if (await wc.Connect())
-        //            {
-        //                Instance.OnRedirection.Invoke();
+        /// <summary>
+        /// Test to fix wc connection process
+        /// </summary>
+        /// <param name="failed"></param>
+        /// <returns></returns>
+        public static async Task<ForgeConnectionDto> Connect(string url, Action<string> failed = null)
+        {
+            await Task.Yield();
+            await Task.Yield();
+            try
+            {
+                if (Exists)
+                {
+                    Instance.status = StatusType.AWAY;
+                    worldControllerClient = new UMI3DWorldControllerClient(new MediaDto() { url = url });
+                    if (await worldControllerClient.Connect())
+                    {
+                        Instance.OnRedirection.Invoke();
 
-        //                var env = environmentClient;
-        //                environmentClient = null;
-        //                UMI3DEnvironmentLoader.Clear();
+                        var env = environmentClient;
+                        environmentClient = null;
+                        UMI3DEnvironmentLoader.Clear();
 
-        //                if (env != null)
-        //                    await env.Logout();
-        //                if (worldControllerClient != null)
-        //                    worldControllerClient.Logout();
+                        if (env != null)
+                            await env.Logout();
+                        if (worldControllerClient != null)
+                            worldControllerClient.Logout();
 
-        //                //Connection will not restart without this...
-        //                await Task.Yield();
+                        //Connection will not restart without this...
+                        await Task.Yield();
+                        await Task.Yield();
 
-        //                worldControllerClient = wc;
-        //                environmentClient = wc.ConnectToEnvironment();
-        //                environmentClient.status = StatusType.ACTIVE;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            failed?.Invoke("Client Server do not exist");
-        //            Debug.Log($"exist = {Exists}");
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        failed?.Invoke(e.Message); 
-        //        Debug.Log($"exc = {e.Message}");
-        //    }
-        //}
+                        environmentClient = worldControllerClient.ConnectToEnvironment();
+                        environmentClient.status = StatusType.ACTIVE;
+
+                        return worldControllerClient.forgeConnectionDto;
+                    }
+                }
+                else
+                {
+                    failed?.Invoke("Client Server do not exist");
+                }
+            }
+            catch (Exception e)
+            {
+                failed?.Invoke(e.Message);
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Start the connection to a Master Server.
@@ -164,6 +172,7 @@ namespace umi3d.cdk.collaboration
                             worldControllerClient.Logout();
 
                         //Connection will not restart without this...
+                        await Task.Yield();
                         await Task.Yield();
 
                         worldControllerClient = wc;

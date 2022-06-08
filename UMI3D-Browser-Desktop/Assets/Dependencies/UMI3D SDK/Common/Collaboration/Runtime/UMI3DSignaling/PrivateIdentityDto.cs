@@ -22,6 +22,35 @@ namespace umi3d.common.collaboration
     /// Abstract class to describe an operation
     /// </summary>
     [Serializable]
+    public class PrivateIdentity2Dto : IdentityDto
+    {
+        public string GlobalToken;
+        public string connectionDto;
+        public List<LibrariesDto> libraries;
+
+        public PrivateIdentityDto ToPrivateIdentity()
+        {
+            return new PrivateIdentityDto()
+            {
+                GlobalToken = GlobalToken,
+                connectionDto = UMI3DDto.FromJson<ForgeConnectionDto>(connectionDto, Newtonsoft.Json.TypeNameHandling.None),
+                libraries = libraries,
+                localToken = localToken,
+                headerToken = headerToken,
+                guid = guid,
+                displayName = displayName,
+                key = key,
+                login = login,
+                userId = userId
+            };
+        }
+    }
+
+
+    /// <summary>
+    /// Abstract class to describe an operation
+    /// </summary>
+    [Serializable]
     public class PrivateIdentityDto : IdentityDto
     {
         public string GlobalToken;
