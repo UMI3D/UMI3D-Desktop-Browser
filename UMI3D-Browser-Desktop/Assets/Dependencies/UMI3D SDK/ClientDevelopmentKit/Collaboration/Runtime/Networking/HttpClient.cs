@@ -572,7 +572,7 @@ namespace umi3d.cdk.collaboration
             if (www.isNetworkError || www.isHttpError)
 #endif
             {
-                Debug.Log($"error www = {www.result} ");
+                Debug.Log($"error www = {www.result}, response code = {www.responseCode}, txt = {www.downloadHandler.text}");
                 if (UMI3DClientServer.Exists && await UMI3DClientServer.Instance.TryAgainOnHttpFail(new RequestFailedArgument(www, tryCount, date, ShouldTryAgain)))
                     return await _PostRequest(HeaderToken, url, contentType, bytes, ShouldTryAgain, UseCredential, headers, tryCount + 1);
                 else
