@@ -40,6 +40,10 @@ public class FpsNavigation : AbstractNavigation
     [SerializeField]
     private Transform skeleton;
 
+    [SerializeField]
+    [Tooltip("List of point which from rays will be created to check is there is a navmesh under player's feet")]
+    private List<Transform> feetRaycastOrigin;
+
     [Header("Parameters")]
     [SerializeField]
     private FpsScriptableAsset data;
@@ -404,24 +408,27 @@ public class FpsNavigation : AbstractNavigation
     {
         RaycastHit hit;
 
+        RaycastHit foundHit = new RaycastHit { distance = Mathf.Infinity };
+
         direction = direction / 2f;
 
-        if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * (.05f + maxStepHeight) + direction, Vector3.down, out hit, 100, navmeshLayer))
+        foreach (Transform foot in feetRaycastOrigin)
         {
-            if (Vector3.Angle(transform.up, hit.normal) <= maxSlopeAngle)
-            {
-                groundHeight = hit.point.y;
-                return true;
-            }
-            else
-            {
-                return false;
+            if (UnityEngine.Physics.Raycast(foot.position + Vector3.up * (.05f + maxStepHeight) + direction, Vector3.down, out hit, 100, navmeshLayer)) {
+
+                if ((foundHit.distance > hit.distance))
+                    foundHit = hit;
+
             }
         }
-        else
+
+        if ((foundHit.distance < Mathf.Infinity) && (Vector3.Angle(transform.up, foundHit.normal) <= maxSlopeAngle))
         {
-            return false;
+            groundHeight = foundHit.point.y;
+            return true;
         }
+
+        return false;
     }
 
     /// <summary>
@@ -461,13 +468,29 @@ public class FpsNavigation : AbstractNavigation
         return true;
     }
 
+    /// <summary>
+    /// Checks under player's feet to update <see cref="groundHeight"/>.
+    /// </summary>
     private void UpdateBaseHeight()
     {
         RaycastHit hit;
 
-        if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * (.05f + maxStepHeight), Vector3.down, out hit, 100, navmeshLayer))
+        RaycastHit foundHit = new RaycastHit { distance = Mathf.Infinity };
+
+
+        foreach (Transform foot in feetRaycastOrigin)
         {
-            groundHeight = hit.point.y;
+            if (UnityEngine.Physics.Raycast(foot.position + Vector3.up * (.05f + maxStepHeight), Vector3.down, out hit, 100, navmeshLayer))
+            {
+
+                if ((foundHit.distance > hit.distance))
+                    foundHit = hit;
+            }
+        }
+
+        if ((foundHit.distance < Mathf.Infinity) && (Vector3.Angle(transform.up, foundHit.normal) <= maxSlopeAngle))
+        {
+            groundHeight = foundHit.point.y;
         }
     }
 

@@ -107,15 +107,20 @@ namespace BrowserDesktop.Navigation
             if (isPartOfNavmesh)
             {
                 ChangeObjectAndChildrenLayer(obj, navmeshLayer);
-            }else if (!isTraversable)
+            } else if (!isTraversable)
             {
                 ChangeObjectAndChildrenLayer(obj, obstacleLayer);
+            }
+
+            if (isPartOfNavmesh || !isTraversable)
+            {
                 foreach (var r in nodeInstance.renderers)
                 {
-                    if (r.gameObject.GetComponent<MeshCollider>() == null)
+                    if (r.gameObject.GetComponent<Collider>() == null)
                     {
                         r.gameObject.AddComponent<MeshCollider>();
-                    } else
+                    }
+                    else
                     {
                         Debug.LogWarning(r.gameObject.name + " tries to init its navmesh at least twice, this should not happen.");
                     }
