@@ -131,7 +131,7 @@ namespace umi3d.cdk.collaboration
                 else
                     failed?.Invoke("Client Server do not exist");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 failed?.Invoke(e.Message);
             }
@@ -143,7 +143,7 @@ namespace umi3d.cdk.collaboration
             {
                 media = dto,
                 gate = null
-            },failed);
+            }, failed);
         }
 
         public static async void Logout()

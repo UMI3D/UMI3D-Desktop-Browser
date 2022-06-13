@@ -87,7 +87,17 @@ public class AvatarSetting : ISetting
     }
 
     public void Start()
-        => m_statusChanged?.Invoke(IsOn);
+    {
+        UMI3DUser.OnUserAvatarStatusUpdated.AddListener((u) =>
+        {
+            if (UMI3DCollaborationClientServer.Exists && u.id == UMI3DCollaborationClientServer.Instance.GetUserId())
+            {
+                IsOn = u.avatarStatus;
+                m_statusChanged?.Invoke(IsOn);
+            }
+        });
+        m_statusChanged?.Invoke(IsOn);
+    }
 
     public void Toggle()
     {
@@ -123,7 +133,17 @@ public class MicSetting : ISetting
     }
 
     public void Start()
-        => m_statusChanged(IsOn);
+    {
+        UMI3DUser.OnUserMicrophoneStatusUpdated.AddListener((u) =>
+        {
+            if (UMI3DCollaborationClientServer.Exists && u.id == UMI3DCollaborationClientServer.Instance.GetUserId())
+            {
+                IsOn = u.microphoneStatus;
+                m_statusChanged?.Invoke(IsOn);
+            }
+        });
+        m_statusChanged?.Invoke(IsOn);
+    }
 
     public void Toggle()
     {
