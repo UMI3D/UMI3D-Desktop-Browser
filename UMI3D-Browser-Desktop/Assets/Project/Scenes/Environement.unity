@@ -1082,7 +1082,7 @@ MonoBehaviour:
   - {fileID: 1459995123}
   - {fileID: 48354697}
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
-  maxNeckAngle: 0
+  maxNeckAngle: 45
   maxStepHeight: 0.2
   maxSlopeAngle: 45
   navigation: 0
