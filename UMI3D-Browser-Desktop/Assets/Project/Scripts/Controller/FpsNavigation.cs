@@ -311,6 +311,7 @@ public class FpsNavigation : AbstractNavigation
 
         bool squatting = Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat));
         skeleton.transform.localPosition = new Vector3(0, Mathf.Lerp(skeleton.transform.localPosition.y, (squatting) ? data.squatHeight : data.standHeight, data.squatSpeed == 0 ? 1000000 : Time.deltaTime / data.squatSpeed), 0);
+        viewpoint.transform.localPosition = skeleton.transform.localPosition;
 
         ComputeGravity(Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Jump)), ref height);
     }
