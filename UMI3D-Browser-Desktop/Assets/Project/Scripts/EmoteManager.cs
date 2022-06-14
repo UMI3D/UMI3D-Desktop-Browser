@@ -15,6 +15,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using umi3d.baseBrowser.ui.viewController;
 using umi3d.cdk;
 using umi3d.cdk.userCapture;
 using umi3dDesktopBrowser.ui.viewController;
@@ -22,54 +23,93 @@ using UnityEngine;
 
 public class EmoteManager : MonoBehaviour
 {
-    public RuntimeAnimatorController EmoteAnimatorController;
+    public RuntimeAnimatorController emoteAnimatorController;
     private RuntimeAnimatorController cachedAnimatorController;
-    private Animator animator;
+    private Animator avatarAnimator;
 
     [HideInInspector]
     public AnimatorOverrideController animatorOverride;
 
     public AnimationClip idleAnimation;
 
-    public List<Emote> emotes;
+    [HideInInspector]
+    public List<Emote> emotesAvailable = new List<Emote>();
 
-    [System.Serializable]
-    public struct Emote
+    public class Emote
     {
         public Sprite icon;
         public AnimationClip anim;
         public int id;
     }
 
+    public Sprite defaultSprite;
+
     void Awake()
     {
         Settingbox_E.Instance.Emote.ClickedDown += ManageEmoteTab;
 
-        animator = GetComponent<Animator>();
+        avatarAnimator = GetComponent<Animator>();
 
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(delegate
         {
-            var id = UMI3DClientServer.Instance.GetUserId();
-            var avatar = UMI3DClientUserTracking.Instance.embodimentDict[id];
-            
-            IEnumerator GetAnimator() //wait for bundle loading
-            {
-                while (avatar.transform.childCount == 0)
-                {
-                    yield return null;
-                }
-                var animator = avatar.GetComponentInChildren<Animator>();
-                if (animator != null)
-                {
-                    EmoteAnimatorController = animator.runtimeAnimatorController;
-                }
-                    
-            }
-
-            StartCoroutine(GetAnimator());
+            StartCoroutine(GetEmotes());
         }); 
     }
 
+    private void OnDestroy()
+    {
+        Settingbox_E.Instance.Emote.ClickedDown -= ManageEmoteTab;
+    }
+
+    /// <summary>
+    /// Waits bundle loading and retreives emotes
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator GetEmotes() //wait for bundle loading
+    {
+        var id = UMI3DClientServer.Instance.GetUserId();
+        var avatar = UMI3DClientUserTracking.Instance.embodimentDict[id];
+
+        while (avatar.transform.childCount == 0
+            || (avatar.transform.childCount == 1 && avatar.transform.GetChild(0).transform.childCount == 0))
+        {
+            yield return null;
+        }
+        
+        var emoteFromBundleAnimator = avatar.GetComponentInChildren<Animator>();
+        if (emoteFromBundleAnimator != null)
+        {
+            animatorOverride = new AnimatorOverrideController(emoteAnimatorController);
+            var importedEmotesAnim = emoteFromBundleAnimator.runtimeAnimatorController.animationClips.Where(e => !e.name.Contains("Idle"));
+
+            var overrides = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+            var i = 0;
+            foreach (var anim in importedEmotesAnim)
+            {
+                if (i < animatorOverride.runtimeAnimatorController.animationClips.Length)
+                {
+                    var holderToOverride = animatorOverride.runtimeAnimatorController.animationClips[i];
+                    var emote = new Emote()
+                    {
+                        icon = defaultSprite,
+                        anim = anim,
+                        id = i
+                    };
+                    emotesAvailable.Add(emote);
+                    overrides.Add(new KeyValuePair<AnimationClip, AnimationClip>(holderToOverride, anim));
+                    i++;
+                }
+                else
+                    Debug.LogWarning("Not enough emote holders to receive all emotes from server");
+            }
+            animatorOverride.ApplyOverrides(overrides);
+            emoteAnimatorController = animatorOverride;
+        }
+    }
+
+    /// <summary>
+    /// Toggle Emote window
+    /// </summary>
     private void ManageEmoteTab()
     {
         if (!EmoteWindow_E.Instance.IsDisplaying)
@@ -78,12 +118,7 @@ public class EmoteManager : MonoBehaviour
             EmoteWindow_E.Instance.Hide();
     }
 
-    private void OnDestroy()
-    {
-        Settingbox_E.Instance.Emote.ClickedDown -= ManageEmoteTab;
-    }
-
-
+    private Dictionary<Button_E, int> dict;
     /// <summary>
     /// Open emote window UI
     /// </summary>
@@ -91,27 +126,34 @@ public class EmoteManager : MonoBehaviour
     {
         if (!EmoteWindow_E.Instance.AreButtonsLoaded)
         {
-            EmoteWindow_E.Instance.LoadButtons(emotes.Select(x => x.icon).ToList());
-            foreach(var emote in emotes)
-            {
-                EmoteWindow_E.Instance.EmoteButtons[emote.id].Button.ClickedDown += delegate { TriggerAnimation(emote.id); };
-            }
+            EmoteWindow_E.Instance.LoadButtons(emotesAvailable.Select(x => x.icon).ToList());
+            dict = EmoteWindow_E.Instance.MapButtons(ClickButton);
         }
-            
         EmoteWindow_E.Instance.Display();
     }
 
     /// <summary>
     /// Loads the emotes in the animator
     /// </summary>
-    public void LoadEmotes()
+    private void LoadEmotes()
     {
-        animator.runtimeAnimatorController = EmoteAnimatorController;
+        cachedAnimatorController = avatarAnimator.runtimeAnimatorController;
+        avatarAnimator.runtimeAnimatorController = emoteAnimatorController;
     }
 
-    public void TriggerAnimation(int emoteId)
+    private void UnloadEmotes()
     {
-        StartCoroutine(PlayEmoteAnimation(emotes[emoteId]));
+        avatarAnimator.runtimeAnimatorController = cachedAnimatorController;
+    }
+
+    public void ClickButton(Button_E button)
+    {
+        TriggerEmote(dict[button]);
+    }
+
+    public void TriggerEmote(int emoteId)
+    {
+        StartCoroutine(PlayEmoteAnimation(emotesAvailable[emoteId]));
     }
 
 
@@ -122,17 +164,16 @@ public class EmoteManager : MonoBehaviour
     /// <returns></returns>
     public IEnumerator PlayEmoteAnimation(Emote emote)
     {
-        cachedAnimatorController = animator.runtimeAnimatorController;
         LoadEmotes();
-        animator.SetTrigger($"trigger{emote.id}");
+        avatarAnimator.SetTrigger($"trigger{emote.id}");
         yield return new WaitForSeconds(emote.anim.length);
-        animator.runtimeAnimatorController = cachedAnimatorController;
+        UnloadEmotes();
     }
 
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.AltGr))
-            TriggerAnimation(0);
+            TriggerEmote(0);
     }
 }
 
