@@ -77,18 +77,20 @@ public class EmoteManager : MonoBehaviour
         }
         
         var emoteFromBundleAnimator = avatar.GetComponentInChildren<Animator>();
+        emoteFromBundleAnimator.enabled = false; //disabled because it causes interferences with avatar bindings
         if (emoteFromBundleAnimator != null)
         {
             animatorOverride = new AnimatorOverrideController(emoteAnimatorController);
             var importedEmotesAnim = emoteFromBundleAnimator.runtimeAnimatorController.animationClips.Where(e => !e.name.Contains("Idle"));
+            var holderEmotesAnim = emoteAnimatorController.animationClips.Where(e => !e.name.Contains("Idle")).ToList();
 
             var overrides = new List<KeyValuePair<AnimationClip, AnimationClip>>();
             var i = 0;
             foreach (var anim in importedEmotesAnim)
             {
-                if (i < animatorOverride.runtimeAnimatorController.animationClips.Length)
+                if (i < holderEmotesAnim.Count)
                 {
-                    var holderToOverride = animatorOverride.runtimeAnimatorController.animationClips[i];
+                    var holderToOverride = holderEmotesAnim[i];
                     var emote = new Emote()
                     {
                         icon = defaultSprite,
