@@ -41,6 +41,7 @@ namespace umi3d.cdk.collaboration
         public bool avatarStatus => dto.avatarStatus;
         public bool attentionRequired => dto.attentionRequired;
 
+        public string login => dto?.login;
 
         public UMI3DUser(UserDto user)
         {

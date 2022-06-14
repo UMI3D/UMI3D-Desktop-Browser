@@ -38,6 +38,7 @@ namespace umi3d.cdk.collaboration
             if (dto == null) return;
             UserList = dto.userList.Select(u => new UMI3DUser(u)).ToList();
             OnUpdateUserList?.Invoke();
+            Debug.Log(UserList.Count);
         }
 
         ///<inheritdoc/>
@@ -165,6 +166,7 @@ namespace umi3d.cdk.collaboration
                             user.Destroy();
                         dto.userList = property.value as List<UserDto>;
                         UserList = dto.userList.Select(u => new UMI3DUser(u)).ToList();
+                        Debug.Log(UserList.Count);
                         OnUpdateUserList?.Invoke();
                         break;
                     }
@@ -231,6 +233,7 @@ namespace umi3d.cdk.collaboration
                             user.Destroy();
                         dto.userList = UMI3DNetworkingHelper.ReadList<UserDto>(container);
                         UserList = dto.userList.Select(u => new UMI3DUser(u)).ToList();
+                        Debug.Log(UserList.Count);
                         OnUpdateUserList?.Invoke();
                         break;
                     }
