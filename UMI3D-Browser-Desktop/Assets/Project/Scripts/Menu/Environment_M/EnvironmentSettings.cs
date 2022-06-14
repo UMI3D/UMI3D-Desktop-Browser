@@ -17,11 +17,13 @@ using BrowserDesktop.Controller;
 using BrowserDesktop.Menu;
 using System;
 using System.Collections;
+using System.Linq;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.userCapture;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public interface ISetting
 {
@@ -161,6 +163,76 @@ public class MicSetting : ISetting
     }
 }
 
+
+public class UserListSetting
+{
+    public Action<bool> m_statusChanged { get; private set; }
+
+    public class User : User_item_E
+    {
+        public UMI3DUser user {get;}
+
+        public User(UMI3DUser user)
+        {
+            this.user = user;
+        }
+
+        public void ToggleMic()
+        {
+            user.SetMicrophoneStatus(user.microphoneStatus);
+        }
+
+        public void setValue() {
+            Avatar?.Toggle(user.avatarStatus);
+            Mic?.Toggle(user.microphoneStatus);
+            Sound?.Toggle(true);
+        }
+
+
+        public override void Bind(VisualElement element)
+        {
+            base.Bind(element);
+            setValue();
+            Mic.Clicked += ToggleMic;
+            element.Q<Label>("userLabel").text = user.login;
+        }
+
+        public override void Unbind(VisualElement element)
+        {
+            Mic.Clicked -= ToggleMic;
+            base.Unbind(element);
+        }
+    }
+
+    User[] Users;
+
+    public UserListSetting()
+    {
+        UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += RefreshList;
+
+        UMI3DUser.OnUserMicrophoneStatusUpdated.AddListener((u) => { Users.FirstOrDefault(U => (U.user == u)).setValue(); });
+        UMI3DUser.OnUserAvatarStatusUpdated.AddListener((u) => { Users.FirstOrDefault(U => (U.user == u)).setValue(); });
+        UMI3DUser.OnUserAttentionStatusUpdated.AddListener((u) => { Users.FirstOrDefault(U => (U.user == u)).setValue(); });
+
+        UMI3DUser.OnRemoveUser.AddListener((u) => { Users.FirstOrDefault(U => (U.user == u)).Unbind(null); });
+
+        RefreshList();
+    }
+
+    void RefreshList()
+    {
+        Settingbox_E.Instance.UserList.Clear();
+        InitUsers();
+        Settingbox_E.Instance.UserList.AddRange(Users);
+    }
+
+
+    void InitUsers()
+    {
+        Users = UMI3DCollaborationEnvironmentLoader.Instance.UserList.Select(u => new User(u)).ToArray();
+    }
+}
+
 public sealed class EnvironmentSettings : MonoBehaviour
 {
     private UMI3DEnvironmentLoader m_environmentLoader => UMI3DEnvironmentLoader.Instance;
@@ -170,6 +242,9 @@ public sealed class EnvironmentSettings : MonoBehaviour
     private AvatarSetting avatarSetting;
     private MicSetting micSetting;
 
+    private UserListSetting userListSetting;
+
+
     private bool initialized = false;
 
     void Start()
@@ -177,6 +252,9 @@ public sealed class EnvironmentSettings : MonoBehaviour
         avatarSetting = new AvatarSetting();
         audioSetting = new AudioSetting();
         micSetting = new MicSetting();
+
+        userListSetting = new UserListSetting();
+
         m_environmentLoader.onEnvironmentLoaded.AddListener(() => {
             m_environmentLoaded = true;
         });
