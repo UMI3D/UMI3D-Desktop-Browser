@@ -97,11 +97,26 @@ public class EmoteWindow_E : AbstractWindow_E, ISingleUI
             return button;
         }
 
+        var i = 0;
         foreach (var sprite in emotesToDisplay)
         {
-            EmoteButtons.Add(SetButton(sprite.name, sprite.name, sprite));
+            EmoteButtons.Add(SetButton($"{sprite.name}_{i}", $"{sprite.name}_{i}", sprite));
+            i++;
         }
         AreButtonsLoaded = true;
+    }
+
+    public Dictionary<Button_E, int> MapButtons(System.Action<Button_E> trigger)
+    {
+        int i = 0;
+        var dict = new Dictionary<Button_E, int>();
+        foreach (var button in EmoteButtons)
+        {
+            button.ClickedDown += delegate { trigger(button); };
+            dict.Add(button, i);
+            i++;
+        }
+        return dict;
     }
 
 
