@@ -30,7 +30,10 @@ namespace umi3d.cdk.collaboration
         public List<UMI3DUser> UserList;
         public static event Action OnUpdateUserList;
 
-        public UMI3DUser GetClientUser() => UserList.FirstOrDefault(u => UMI3DCollaborationClientServer.Exists && u.id == UMI3DCollaborationClientServer.Instance.GetUserId());
+        public UMI3DUser GetClientUser()
+        {
+            return UserList.FirstOrDefault(u => UMI3DCollaborationClientServer.Exists && u.id == UMI3DCollaborationClientServer.Instance.GetUserId());
+        }
 
         ///<inheritdoc/>
         public override void ReadUMI3DExtension(GlTFEnvironmentDto _dto, GameObject node)
@@ -40,7 +43,6 @@ namespace umi3d.cdk.collaboration
             if (dto == null) return;
             UserList = dto.userList.Select(u => new UMI3DUser(u)).ToList();
             OnUpdateUserList?.Invoke();
-            Debug.Log(UserList.Count);
         }
 
         ///<inheritdoc/>
@@ -66,17 +68,18 @@ namespace umi3d.cdk.collaboration
             }
         }
 
-        bool UpdateUser(ulong property, UMI3DEntityInstance userInstance, object value) {
+        private bool UpdateUser(ulong property, UMI3DEntityInstance userInstance, object value)
+        {
             if (userInstance.dto is UserDto dto)
             {
-                var user = GetUser(dto);
+                UMI3DUser user = GetUser(dto);
                 return user?.UpdateUser(property, value) ?? false;
             }
 
-            return false; 
+            return false;
         }
 
-        UMI3DUser GetUser(UserDto dto)
+        private UMI3DUser GetUser(UserDto dto)
         {
             return UserList.FirstOrDefault(u => u.id == dto.id);
         }
@@ -84,11 +87,9 @@ namespace umi3d.cdk.collaboration
 
         protected override bool _SetUMI3DPorperty(UMI3DEntityInstance entity, uint operationId, uint propertyKey, ByteContainer container)
         {
-            Debug.Log("set user");
             if (base._SetUMI3DPorperty(entity, operationId, propertyKey, container)) return true;
             if (entity == null) return false;
 
-            Debug.Log("set user 2");
             switch (propertyKey)
             {
                 case UMI3DPropertyKeys.UserList:
@@ -100,9 +101,8 @@ namespace umi3d.cdk.collaboration
                 case UMI3DPropertyKeys.UserAttentionRequired:
                 case UMI3DPropertyKeys.UserAvatarStatus:
                     {
-                        
+
                         bool value = UMI3DNetworkingHelper.Read<bool>(container);
-                        Debug.Log(value);
                         return UpdateUser(propertyKey, entity, value);
                     }
 
@@ -173,7 +173,6 @@ namespace umi3d.cdk.collaboration
                             user.Destroy();
                         dto.userList = property.value as List<UserDto>;
                         UserList = dto.userList.Select(u => new UMI3DUser(u)).ToList();
-                        Debug.Log(UserList.Count);
                         OnUpdateUserList?.Invoke();
                         break;
                     }
@@ -240,7 +239,6 @@ namespace umi3d.cdk.collaboration
                             user.Destroy();
                         dto.userList = UMI3DNetworkingHelper.ReadList<UserDto>(container);
                         UserList = dto.userList.Select(u => new UMI3DUser(u)).ToList();
-                        Debug.Log(UserList.Count);
                         OnUpdateUserList?.Invoke();
                         break;
                     }

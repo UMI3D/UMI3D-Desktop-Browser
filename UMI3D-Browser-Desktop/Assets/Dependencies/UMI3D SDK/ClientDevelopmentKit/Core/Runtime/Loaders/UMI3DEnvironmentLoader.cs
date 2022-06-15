@@ -53,11 +53,7 @@ namespace umi3d.cdk
             if (!Exists) return;
             if (Instance.entitywaited == null) return;
 
-            Debug.Log($"look for id : {id}");
-
             UMI3DEntityInstance node = GetEntity(id);
-
-            Debug.Log($"found : {node.IsLoaded}");
             if (node != null && node.IsLoaded)
             {
                 entityLoaded?.Invoke(node);
@@ -199,7 +195,6 @@ namespace umi3d.cdk
             }
             else
             {
-                Debug.Log($"Add {id}");
                 node = new UMI3DEntityInstance(() => NotifyEntityLoad(id)) { dto = dto, Object = Object, Delete = delete };
                 Instance.entities.Add(id, node);
             }
@@ -554,7 +549,7 @@ namespace umi3d.cdk
             {
                 UMI3DClientServer.GetEntity(ids, callback);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 UMI3DLogger.LogError(e.Message, scope);
                 performed2.Invoke();
@@ -629,7 +624,7 @@ namespace umi3d.cdk
             Instance.downloaded = false;
             Instance.loaded = false;
 
-    }
+        }
 
         /// <summary>
         /// Load environment.
@@ -718,7 +713,6 @@ namespace umi3d.cdk
         /// <returns></returns>
         public static bool SetUMI3DPorperty(UMI3DEntityInstance entity, uint operationId, uint propertyKey, ByteContainer container)
         {
-            Debug.Log("set user -2");
             if (Exists)
                 return Instance._SetUMI3DPorperty(entity, operationId, propertyKey, container);
             else
@@ -755,7 +749,6 @@ namespace umi3d.cdk
         /// <returns></returns>
         protected virtual bool _SetUMI3DPorperty(UMI3DEntityInstance entity, uint operationId, uint propertyKey, ByteContainer container)
         {
-            Debug.Log("set user -1");
             if (entity == null) return false;
             UMI3DEnvironmentDto dto = ((entity.dto as GlTFEnvironmentDto)?.extensions as GlTFEnvironmentExtensions)?.umi3d;
             if (dto == null) return false;
@@ -803,10 +796,8 @@ namespace umi3d.cdk
         /// <returns></returns>
         public static void SetEntity(uint operationId, ulong entityId, uint propertyKey, ByteContainer container)
         {
-            Debug.Log($"{operationId} {entityId} {propertyKey}");
             UMI3DEnvironmentLoader.WaitForAnEntityToBeLoaded(entityId, (e) =>
             {
-                Debug.Log($"Hello");
                 SetEntity(e, operationId, entityId, propertyKey, container);
             }
             );
@@ -844,7 +835,6 @@ namespace umi3d.cdk
         /// <returns></returns>
         public static bool SetEntity(UMI3DEntityInstance node, uint operationId, ulong entityId, uint propertyKey, ByteContainer container)
         {
-            Debug.Log("set user -4");
             if (Instance.entityFilters.ContainsKey(entityId) && Instance.entityFilters[entityId].ContainsKey(propertyKey))
             {
                 float now = Time.time;
@@ -857,7 +847,6 @@ namespace umi3d.cdk
             }
             else
             {
-                Debug.Log("set user -3");
                 if (SetUMI3DPorperty(node, operationId, propertyKey, container)) return true;
                 if (UMI3DEnvironmentLoader.Exists && UMI3DEnvironmentLoader.Instance.sceneLoader.SetUMI3DProperty(node, operationId, propertyKey, container)) return true;
                 return Parameters.SetUMI3DProperty(node, operationId, propertyKey, container);

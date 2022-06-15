@@ -34,7 +34,6 @@ namespace umi3d.common
         public const uint MuteAllAvatarStatus = 25;
         public const uint MuteAllAttentionStatus = 26;
 
-
         public const uint SetEntityProperty = 101;
         public const uint SetEntityDictionnaryProperty = 103;
         public const uint SetEntityDictionnaryAddProperty = 104;
