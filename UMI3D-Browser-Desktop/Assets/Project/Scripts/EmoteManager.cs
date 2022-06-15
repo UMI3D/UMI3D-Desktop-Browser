@@ -42,7 +42,9 @@ public class EmoteManager : MonoBehaviour
         public int id;
     }
 
-    public Sprite defaultSprite;
+    public List<Sprite> availableIcons;
+
+    public Sprite defaultIcon;
 
     void Awake()
     {
@@ -80,32 +82,33 @@ public class EmoteManager : MonoBehaviour
         emoteFromBundleAnimator.enabled = false; //disabled because it causes interferences with avatar bindings
         if (emoteFromBundleAnimator != null)
         {
-            animatorOverride = new AnimatorOverrideController(emoteAnimatorController);
-            var importedEmotesAnim = emoteFromBundleAnimator.runtimeAnimatorController.animationClips.Where(e => !e.name.Contains("Idle"));
-            var holderEmotesAnim = emoteAnimatorController.animationClips.Where(e => !e.name.Contains("Idle")).ToList();
+            var importedEmoteController = emoteFromBundleAnimator.runtimeAnimatorController.animationClips.Where(e => !e.name.Contains("Idle"));
+            var hodlerEmoteController = emoteAnimatorController.animationClips.Where(e => !e.name.Contains("Idle")).ToList();
 
-            var overrides = new List<KeyValuePair<AnimationClip, AnimationClip>>();
             var i = 0;
-            foreach (var anim in importedEmotesAnim)
+            foreach (var anim in importedEmoteController)
             {
-                if (i < holderEmotesAnim.Count)
+                if (i < hodlerEmoteController.Count)
                 {
-                    var holderToOverride = holderEmotesAnim[i];
+                    var holderToOverride = hodlerEmoteController[i];
+
+                    var icon = availableIcons.Where(x => x.name.ToUpper().Contains(anim.name.ToUpper())).FirstOrDefault();
+                    if (icon == default)
+                        icon = defaultIcon;
+
                     var emote = new Emote()
                     {
-                        icon = defaultSprite,
+                        icon = icon,
                         anim = anim,
                         id = i
                     };
                     emotesAvailable.Add(emote);
-                    overrides.Add(new KeyValuePair<AnimationClip, AnimationClip>(holderToOverride, anim));
                     i++;
                 }
                 else
                     Debug.LogWarning("Not enough emote holders to receive all emotes from server");
             }
-            animatorOverride.ApplyOverrides(overrides);
-            emoteAnimatorController = animatorOverride;
+            emoteAnimatorController = emoteFromBundleAnimator.runtimeAnimatorController;
         }
     }
 
