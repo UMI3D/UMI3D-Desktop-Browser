@@ -27,6 +27,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Button_E Avatar { get; private set; } = null;
         public Button_E Sound { get; private set; } = null;
         public Button_E Mic { get; private set; } = null;
+        public Button_E AllMic { get; private set; } = null;
         public Button_E LeaveButton { get; private set; } = null;
 
         public ListView_E<User_item_E> UserList { get; private set; } = null;
@@ -122,6 +123,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             Avatar = SetButton("avatarOn", "avatarOff");
             Sound = SetButton("SoundOn", "SoundOff");
             Mic = SetButton("MicOn", "MicOff");
+            AllMic = SetButton("allMicOff", "allMicOff");
             LeaveButton = SetButton("Leave", "Leave");
         }
 

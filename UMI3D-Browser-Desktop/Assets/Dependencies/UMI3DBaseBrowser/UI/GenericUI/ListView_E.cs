@@ -54,8 +54,10 @@ namespace umi3d.baseBrowser.ui.viewController
         /// </summary>
         public virtual void Clear()
         {
-            m_views.ForEach((elt) => elt.RemoveRootFromHierarchy());
-            m_views.Clear();
+            this.items.Clear();
+            List_View.itemsSource = this.items;
+            UnityEngine.Debug.Log(this.items.Count);
+            List_View.Refresh();
         }
     }
 

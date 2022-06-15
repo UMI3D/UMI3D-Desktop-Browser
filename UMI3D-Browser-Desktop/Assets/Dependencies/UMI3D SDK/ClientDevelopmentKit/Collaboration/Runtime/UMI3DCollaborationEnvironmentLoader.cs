@@ -30,6 +30,8 @@ namespace umi3d.cdk.collaboration
         public List<UMI3DUser> UserList;
         public static event Action OnUpdateUserList;
 
+        public UMI3DUser GetClientUser() => UserList.FirstOrDefault(u => UMI3DCollaborationClientServer.Exists && u.id == UMI3DCollaborationClientServer.Instance.GetUserId());
+
         ///<inheritdoc/>
         public override void ReadUMI3DExtension(GlTFEnvironmentDto _dto, GameObject node)
         {
@@ -82,20 +84,25 @@ namespace umi3d.cdk.collaboration
 
         protected override bool _SetUMI3DPorperty(UMI3DEntityInstance entity, uint operationId, uint propertyKey, ByteContainer container)
         {
+            Debug.Log("set user");
             if (base._SetUMI3DPorperty(entity, operationId, propertyKey, container)) return true;
             if (entity == null) return false;
-            var dto = ((entity.dto as GlTFEnvironmentDto)?.extensions as GlTFEnvironmentExtensions)?.umi3d as UMI3DCollaborationEnvironmentDto;
-            if (dto == null) return false;
+
+            Debug.Log("set user 2");
             switch (propertyKey)
             {
                 case UMI3DPropertyKeys.UserList:
+                    var dto = ((entity.dto as GlTFEnvironmentDto)?.extensions as GlTFEnvironmentExtensions)?.umi3d as UMI3DCollaborationEnvironmentDto;
+                    if (dto == null) return false;
                     return SetUserList(dto, operationId, propertyKey, container);
 
                 case UMI3DPropertyKeys.UserMicrophoneStatus:
                 case UMI3DPropertyKeys.UserAttentionRequired:
                 case UMI3DPropertyKeys.UserAvatarStatus:
                     {
+                        
                         bool value = UMI3DNetworkingHelper.Read<bool>(container);
+                        Debug.Log(value);
                         return UpdateUser(propertyKey, entity, value);
                     }
 
