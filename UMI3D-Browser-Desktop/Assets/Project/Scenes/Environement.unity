@@ -2940,4 +2940,10 @@ MonoBehaviour:
   animatorOverride: {fileID: 22100000, guid: eef8bdad69241d2468e2331a6601734e, type: 2}
   idleAnimation: {fileID: -203655887218126122, guid: 68661901237200744b2d85059f35e890,
     type: 3}
-  defaultSprite: {fileID: 21300000, guid: 17e1536176d5f10478e7b7a0f3236bb4, type: 3}
+  availableIcons:
+  - {fileID: 21300000, guid: ae8702de38251e94c827588d13a063e5, type: 3}
+  - {fileID: 21300000, guid: d456934c81f95964b911f80340eba015, type: 3}
+  - {fileID: 21300000, guid: 6c33c22c39f52b045a1740cc39e0a362, type: 3}
+  - {fileID: 21300000, guid: 17e1536176d5f10478e7b7a0f3236bb4, type: 3}
+  - {fileID: 21300000, guid: c700d29f7172e0a46a1a095ea46eaf61, type: 3}
+  defaultIcon: {fileID: 21300000, guid: 17e1536176d5f10478e7b7a0f3236bb4, type: 3}
