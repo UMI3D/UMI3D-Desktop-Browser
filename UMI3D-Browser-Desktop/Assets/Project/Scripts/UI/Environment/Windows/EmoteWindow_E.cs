@@ -14,11 +14,13 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
-using umi3DBrowser.UICustomStyle;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// Window that contains buttons for emotes triggering
+/// </summary>
 public class EmoteWindow_E : AbstractWindow_E, ISingleUI
 {
     public List<Button_E> EmoteButtons { get; private set; } = new List<Button_E>();
@@ -36,7 +38,6 @@ public class EmoteWindow_E : AbstractWindow_E, ISingleUI
     public bool AreButtonsLoaded { get; private set; } = false;
 
     private static EmoteWindow_E s_instance;
-
 
     private IEnumerator DisplayWithoutAnimation()
     {
@@ -83,7 +84,7 @@ public class EmoteWindow_E : AbstractWindow_E, ISingleUI
     public void LoadButtons(List<Sprite> emotesToDisplay)
     {
         var buttonbox = Root.Q("buttonBox");
-        
+
         Button_E SetButton(string on, string off, Sprite sprite)
         {
             var button = new Button_E("Square_m", StyleKeys.Bg_Border("menuOff", ""));
@@ -119,9 +120,7 @@ public class EmoteWindow_E : AbstractWindow_E, ISingleUI
         return dict;
     }
 
-
     private EmoteWindow_E() :
         base("emoteWindow", "EmoteWindow", StyleKeys.DefaultBackground)
     { }
 }
-

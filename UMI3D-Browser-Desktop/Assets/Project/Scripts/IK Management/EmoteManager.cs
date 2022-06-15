@@ -11,7 +11,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,32 +20,76 @@ using umi3d.cdk.userCapture;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 
+/// <summary>
+/// Manager that handles emotes
+/// </summary>
 public class EmoteManager : MonoBehaviour
 {
+    /// <summary>
+    /// AnimatorController that manages emotes from a bundle
+    /// </summary>
+    [HideInInspector]
     public RuntimeAnimatorController emoteAnimatorController;
+
+    /// <summary>
+    /// Cache to keep previous animator controller during emote animation
+    /// </summary>
     private RuntimeAnimatorController cachedAnimatorController;
+
+    /// <summary>
+    /// Reference to the avatar animator
+    /// </summary>
     private Animator avatarAnimator;
 
+    /// <summary>
+    /// True when a bundle with emotes has been loaded
+    /// </summary>
     [HideInInspector]
-    public AnimatorOverrideController animatorOverride;
+    public bool hasReceivedEmotes = false;
 
+    /// <summary>
+    /// Default idle animation
+    /// </summary>
     public AnimationClip idleAnimation;
 
-    [HideInInspector]
-    public List<Emote> emotesAvailable = new List<Emote>();
-
+    /// <summary>
+    /// Describes an emote from the client side
+    /// </summary>
     public class Emote
     {
+        /// <summary>
+        /// Icon of the emote in the UI
+        /// </summary>
         public Sprite icon;
+
+        /// <summary>
+        /// Animation of the emote
+        /// </summary>
         public AnimationClip anim;
+
+        /// <summary>
+        /// Emote id
+        /// </summary>
         public int id;
     }
 
+    /// <summary>
+    /// Available emotes from bundle
+    /// </summary>
+    [HideInInspector]
+    public List<Emote> emotesAvailable = new List<Emote>();
+
+    /// <summary>
+    /// List of icons to be associated with emotes
+    /// </summary>
     public List<Sprite> availableIcons;
 
+    /// <summary>
+    /// Default icon used when no corresponding emote is found
+    /// </summary>
     public Sprite defaultIcon;
 
-    void Awake()
+    private void Awake()
     {
         Settingbox_E.Instance.Emote.ClickedDown += ManageEmoteTab;
 
@@ -55,7 +98,7 @@ public class EmoteManager : MonoBehaviour
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(delegate
         {
             StartCoroutine(GetEmotes());
-        }); 
+        });
     }
 
     private void OnDestroy()
@@ -77,38 +120,31 @@ public class EmoteManager : MonoBehaviour
         {
             yield return null;
         }
-        
+
         var emoteFromBundleAnimator = avatar.GetComponentInChildren<Animator>();
         emoteFromBundleAnimator.enabled = false; //disabled because it causes interferences with avatar bindings
         if (emoteFromBundleAnimator != null)
         {
             var importedEmoteController = emoteFromBundleAnimator.runtimeAnimatorController.animationClips.Where(e => !e.name.Contains("Idle"));
-            var hodlerEmoteController = emoteAnimatorController.animationClips.Where(e => !e.name.Contains("Idle")).ToList();
 
             var i = 0;
             foreach (var anim in importedEmoteController)
             {
-                if (i < hodlerEmoteController.Count)
+                var icon = availableIcons.Where(x => x.name.ToUpper().Contains(anim.name.ToUpper())).FirstOrDefault();
+                if (icon == default)
+                    icon = defaultIcon;
+
+                var emote = new Emote()
                 {
-                    var holderToOverride = hodlerEmoteController[i];
-
-                    var icon = availableIcons.Where(x => x.name.ToUpper().Contains(anim.name.ToUpper())).FirstOrDefault();
-                    if (icon == default)
-                        icon = defaultIcon;
-
-                    var emote = new Emote()
-                    {
-                        icon = icon,
-                        anim = anim,
-                        id = i
-                    };
-                    emotesAvailable.Add(emote);
-                    i++;
-                }
-                else
-                    Debug.LogWarning("Not enough emote holders to receive all emotes from server");
+                    icon = icon,
+                    anim = anim,
+                    id = i
+                };
+                emotesAvailable.Add(emote);
+                i++;
             }
             emoteAnimatorController = emoteFromBundleAnimator.runtimeAnimatorController;
+            hasReceivedEmotes = true;
         }
     }
 
@@ -124,6 +160,7 @@ public class EmoteManager : MonoBehaviour
     }
 
     private Dictionary<Button_E, int> dict;
+
     /// <summary>
     /// Open emote window UI
     /// </summary>
@@ -146,26 +183,36 @@ public class EmoteManager : MonoBehaviour
         avatarAnimator.runtimeAnimatorController = emoteAnimatorController;
     }
 
+    /// <summary>
+    /// Put back the normal animator of the avatar
+    /// </summary>
     private void UnloadEmotes()
     {
         avatarAnimator.runtimeAnimatorController = cachedAnimatorController;
     }
 
-    public void ClickButton(Button_E button)
+    /// <summary>
+    /// Triggered action when clicked on <paramref name="button"/>
+    /// </summary>
+    /// <param name="button"></param>
+    private void ClickButton(Button_E button)
     {
         TriggerEmote(dict[button]);
     }
 
+    /// <summary>
+    /// Starts the coroutine associated to the emote
+    /// </summary>
+    /// <param name="emoteId"></param>
     public void TriggerEmote(int emoteId)
     {
         StartCoroutine(PlayEmoteAnimation(emotesAvailable[emoteId]));
     }
 
-
     /// <summary>
-    /// Play the emote of given id
+    /// Play the emote
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="emote"></param>
     /// <returns></returns>
     public IEnumerator PlayEmoteAnimation(Emote emote)
     {
@@ -174,11 +221,4 @@ public class EmoteManager : MonoBehaviour
         yield return new WaitForSeconds(emote.anim.length);
         UnloadEmotes();
     }
-
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.AltGr))
-            TriggerEmote(0);
-    }
 }
-
