@@ -17,11 +17,13 @@ using BrowserDesktop.Controller;
 using BrowserDesktop.Menu;
 using System;
 using System.Collections;
+using System.Linq;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.userCapture;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public interface ISetting
 {
@@ -69,10 +71,14 @@ public class AudioSetting : ISetting
 
 public class AvatarSetting : ISetting
 {
-    public bool IsOn 
-    { 
+    public bool IsOn
+    {
         get => (userTracking != null) ? userTracking.SendTracking : false;
-        private set => userTracking?.setTrackingSending(value);
+        private set
+        {
+            userTracking?.setTrackingSending(value);
+            UMI3DCollaborationEnvironmentLoader.Instance.GetClientUser()?.SetAvatarStatus(value);
+        }
     }
     public Action<bool> m_statusChanged { get; private set; }
 
@@ -87,7 +93,17 @@ public class AvatarSetting : ISetting
     }
 
     public void Start()
-        => m_statusChanged?.Invoke(IsOn);
+    {
+        UMI3DUser.OnUserAvatarStatusUpdated.AddListener((u) =>
+        {
+            if (UMI3DCollaborationClientServer.Exists && u.id == UMI3DCollaborationClientServer.Instance.GetUserId())
+            {
+                IsOn = u.avatarStatus;
+                m_statusChanged?.Invoke(IsOn);
+            }
+        });
+        m_statusChanged?.Invoke(IsOn);
+    }
 
     public void Toggle()
     {
@@ -123,7 +139,17 @@ public class MicSetting : ISetting
     }
 
     public void Start()
-        => m_statusChanged(IsOn);
+    {
+        UMI3DUser.OnUserMicrophoneStatusUpdated.AddListener((u) =>
+        {
+            if (UMI3DCollaborationClientServer.Exists && u.id == UMI3DCollaborationClientServer.Instance.GetUserId())
+            {
+                IsOn = u.microphoneStatus;
+                m_statusChanged?.Invoke(IsOn);
+            }
+        });
+        m_statusChanged?.Invoke(IsOn);
+    }
 
     public void Toggle()
     {
@@ -141,6 +167,123 @@ public class MicSetting : ISetting
     }
 }
 
+
+public class AllMicSetting : ISetting
+{
+    public bool IsOn
+    {
+        get => false;
+        private set{
+            UMI3DUser.MuteAllMicrophone();
+        }
+    }
+    public Action<bool> m_statusChanged { get; private set; }
+
+    public AllMicSetting()
+    {
+        IsOn = false;
+        m_statusChanged = Settingbox_E.Instance.AllMic.Toggle;
+        Settingbox_E.Instance.AllMic.Clicked += Toggle;
+        Start();
+    }
+
+    public void Start()
+    {
+        m_statusChanged?.Invoke(IsOn);
+    }
+
+    public void Toggle()
+    {
+        IsOn = !IsOn;
+        m_statusChanged(IsOn);
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MuteAllMicrophone)) &&
+            !TextInputDisplayerElement.isTyping)
+        {
+            Toggle();
+        }
+    }
+}
+
+
+public class UserListSetting
+{
+    public Action<bool> m_statusChanged { get; private set; }
+
+    public class User : User_item_E
+    {
+        public UMI3DUser user {get;}
+
+        public User(UMI3DUser user)
+        {
+            this.user = user;
+        }
+
+        public void ToggleMic()
+        {
+            user.SetMicrophoneStatus(!user.microphoneStatus);
+        }
+
+        public void ToggleAvatar()
+        {
+            user.SetMicrophoneStatus(!user.avatarStatus);
+        }
+
+        public void setValue() {
+            Avatar?.Toggle(user.avatarStatus);
+            Mic?.Toggle(user.microphoneStatus);
+            Sound?.Toggle(true);
+        }
+
+
+        public override void Bind(VisualElement element)
+        {
+            base.Bind(element);
+            Debug.LogError("-- "+user.login);
+            setValue();
+            Mic.Clicked += ToggleMic;
+            element.Q<Label>("userLabel").text = user.login;
+        }
+
+        public override void Unbind(VisualElement element)
+        {
+            Mic.Clicked -= ToggleMic;
+            base.Unbind(element);
+        }
+    }
+
+    User[] Users;
+
+    public UserListSetting()
+    {
+        UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += RefreshList;
+
+        UMI3DUser.OnUserMicrophoneStatusUpdated.AddListener((u) => { Users.FirstOrDefault(U => (U.user == u))?.setValue(); });
+        UMI3DUser.OnUserAvatarStatusUpdated.AddListener((u) => { Users.FirstOrDefault(U => (U.user == u))?.setValue(); });
+        UMI3DUser.OnUserAttentionStatusUpdated.AddListener((u) => { Users.FirstOrDefault(U => (U.user == u))?.setValue(); });
+
+        UMI3DUser.OnRemoveUser.AddListener((u) => { Users.FirstOrDefault(U => (U.user == u))?.Unbind(null); });
+
+        RefreshList();
+    }
+
+    void RefreshList()
+    {
+        Settingbox_E.Instance.UserList.Clear();
+        InitUsers();
+        Settingbox_E.Instance.UserList.AddRange(Users);
+    }
+
+
+    void InitUsers()
+    {
+        Users = UMI3DCollaborationEnvironmentLoader.Instance.UserList.Where(u=>!u.isClient).Select(u => new User(u)).ToArray();
+    }
+}
+
 public sealed class EnvironmentSettings : MonoBehaviour
 {
     private UMI3DEnvironmentLoader m_environmentLoader => UMI3DEnvironmentLoader.Instance;
@@ -149,6 +292,10 @@ public sealed class EnvironmentSettings : MonoBehaviour
     private AudioSetting audioSetting;
     private AvatarSetting avatarSetting;
     private MicSetting micSetting;
+    private AllMicSetting allMicSetting;
+
+    private UserListSetting userListSetting;
+
 
     private bool initialized = false;
 
@@ -157,6 +304,10 @@ public sealed class EnvironmentSettings : MonoBehaviour
         avatarSetting = new AvatarSetting();
         audioSetting = new AudioSetting();
         micSetting = new MicSetting();
+        allMicSetting = new AllMicSetting();
+
+        userListSetting = new UserListSetting();
+
         m_environmentLoader.onEnvironmentLoaded.AddListener(() => {
             m_environmentLoaded = true;
         });
@@ -169,5 +320,6 @@ public sealed class EnvironmentSettings : MonoBehaviour
         avatarSetting.Update();
         audioSetting.Update();
         micSetting.Update();
+        allMicSetting.Update();
     }
 }
