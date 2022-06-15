@@ -54,7 +54,7 @@ namespace umi3d.cdk.collaboration
 
         public void Destroy()
         {
-            UMI3DEnvironmentLoader.DeleteEntity(dto.id,null);
+            UMI3DEnvironmentLoader.DeleteEntity(dto.id, null);
             OnRemoveUser.Invoke(this);
         }
 
@@ -91,9 +91,7 @@ namespace umi3d.cdk.collaboration
             switch (property)
             {
                 case UMI3DPropertyKeys.UserMicrophoneStatus:
-                    UnityEngine.Debug.Log(value);
                     dto.microphoneStatus = (bool)value;
-                    UnityEngine.Debug.Log($"Set mic to {value}");
                     OnUserMicrophoneStatusUpdated.Invoke(this);
                     return true;
 
@@ -118,10 +116,9 @@ namespace umi3d.cdk.collaboration
 
         public void SetMicrophoneStatus(bool microphoneStatus)
         {
-            if(dto.microphoneStatus != microphoneStatus)
+            if (dto.microphoneStatus != microphoneStatus)
             {
-                UMI3DClientServer.SendData(ConferenceBrowserRequest.GetChangeMicrophoneStatusRequest(id, microphoneStatus),true);
-                UnityEngine.Debug.Log($"set microphone value to {microphoneStatus}");
+                UMI3DClientServer.SendData(ConferenceBrowserRequest.GetChangeMicrophoneStatusRequest(id, microphoneStatus), true);
             }
         }
         public void SetAvatarStatus(bool avatarStatus)

@@ -64,11 +64,10 @@ namespace umi3d.cdk.collaboration
             {
                 if (Exists)
                 {
-                    if(UMI3DCollaborationEnvironmentLoader.Exists)
+                    if (UMI3DCollaborationEnvironmentLoader.Exists)
                         UMI3DCollaborationEnvironmentLoader.Instance.GetClientUser()?.SetMicrophoneStatus(!value);
                     if (Instance.muted != value)
                     {
-                        
                         if (value) Instance.StopRecording();
                         else Instance.StartRecording();
                     }
