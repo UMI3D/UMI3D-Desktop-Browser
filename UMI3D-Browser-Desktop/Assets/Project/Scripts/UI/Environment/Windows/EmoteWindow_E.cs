@@ -83,6 +83,13 @@ public class EmoteWindow_E : AbstractWindow_E, ISingleUI
 
     public void LoadButtons(List<Sprite> emotesToDisplay)
     {
+        if (emotesToDisplay.Count == 0)
+        {
+            Hide();
+            var menuLabel = Root.Q<Label>("windowName");
+            menuLabel.text = "No emote available";
+            return;
+        }
         var buttonbox = Root.Q("buttonBox");
 
         Button_E SetButton(string on, string off, Sprite sprite)
