@@ -45,7 +45,6 @@ namespace umi3d.baseBrowser.ui.viewController
         {
             this.items.AddRange(items);
             List_View.itemsSource = this.items;
-            UnityEngine.Debug.Log(this.items.Count);
             List_View.Refresh();
         }
 
@@ -56,7 +55,6 @@ namespace umi3d.baseBrowser.ui.viewController
         {
             this.items.Clear();
             List_View.itemsSource = this.items;
-            UnityEngine.Debug.Log(this.items.Count);
             List_View.Refresh();
         }
     }
