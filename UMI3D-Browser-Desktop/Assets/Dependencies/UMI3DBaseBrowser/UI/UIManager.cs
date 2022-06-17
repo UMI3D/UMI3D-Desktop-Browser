@@ -17,6 +17,6 @@ using inetum.unityUtils;
 
 namespace umi3d.baseBrowser.ui.viewController
 {
-    public class UIManager : SingleBehaviour<UIManager>
+    public class UIManager : PersistentSingleBehaviour<UIManager>
     { } 
 }

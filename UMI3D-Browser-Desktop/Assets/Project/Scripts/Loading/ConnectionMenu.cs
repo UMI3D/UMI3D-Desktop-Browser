@@ -214,7 +214,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         url = curentUrl;
         try
         {
-            GetMediaSucces(new MediaDto() { url = baseUrl, name = connectionData.ip });
+            GetMediaSucces(new MediaDto() { url = baseUrl, name = connectionData.ip }, (s) => GetMediaFailed(s));
         }
         catch (Exception e)
         {
@@ -304,14 +304,14 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         DialogueBox_E.Instance.DisplayFrom(uiDocument);
     }
 
-    private void GetMediaSucces(MediaDto media)
+    private void GetMediaSucces(MediaDto media, Action<string> failed)
     {
         this.connectionData.environmentName = media.name;
         this.uiDocument.rootVisualElement.Q<Label>("environment-name").text = media.name;
 
         SessionInformationMenu.Instance.SetEnvironmentName(media);
 
-        UMI3DCollaborationClientServer.Connect(media);
+        UMI3DCollaborationClientServer.Connect(media,failed);
     }
 
     private void OnConnectionLost()
