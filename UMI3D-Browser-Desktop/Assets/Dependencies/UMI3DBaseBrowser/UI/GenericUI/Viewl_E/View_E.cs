@@ -112,7 +112,6 @@ namespace umi3d.baseBrowser.ui.viewController
         /// </summary>
         public virtual void Destroy()
         {
-            Reset();
             ResetAllVisualStyle();
             this.Root = null;
             m_globalPref.ApplyCustomStyle.RemoveListener(ApplyAllFormatAndStyle);
@@ -149,7 +148,7 @@ namespace umi3d.baseBrowser.ui.viewController
         /// </summary>
         public virtual void RemoveRootFromHierarchy()
         {
-            Root.RemoveFromHierarchy();
+            RemoveFromHierarchy(Root);
             IsDisplaying = false;
         }
         /// <summary>
@@ -243,6 +242,14 @@ namespace umi3d.baseBrowser.ui.viewController
         {
             if (IsInitialized) return;
             IsInitialized = true;
+        }
+
+        protected bool RemoveFromHierarchy(VisualElement visual)
+        {
+            if (visual.parent == null)
+                return false;
+            visual.RemoveFromHierarchy();
+            return true;
         }
 
         protected void OnDisplayedOrHiddenTrigger(bool value)

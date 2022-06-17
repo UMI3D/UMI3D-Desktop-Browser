@@ -16,15 +16,10 @@ limitations under the License.
 
 using inetum.unityUtils;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using umi3d.cdk.userCapture;
 using umi3d.common;
 using umi3d.common.collaboration;
-using umi3d.common.interaction;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace umi3d.cdk.collaboration
@@ -44,7 +39,7 @@ namespace umi3d.cdk.collaboration
 
         public static PublicIdentityDto PublicIdentity => worldControllerClient?.PublicIdentity;
 
-        override protected ForgeConnectionDto connectionDto => environmentClient?.connectionDto;
+        protected override ForgeConnectionDto connectionDto => environmentClient?.connectionDto;
 
         public UnityEvent OnLeaving = new UnityEvent();
         public UnityEvent OnLeavingEnvironment = new UnityEvent();
@@ -99,42 +94,51 @@ namespace umi3d.cdk.collaboration
         /// <summary>
         /// Start the connection to a Master Server.
         /// </summary>
-        public static async void Connect(RedirectionDto redirection)
+        public static async void Connect(RedirectionDto redirection, Action<string> failed = null)
         {
-            if (Exists)
+            try
             {
-                Instance.status = StatusType.AWAY;
-                UMI3DWorldControllerClient wc = worldControllerClient?.Redirection(redirection) ?? new UMI3DWorldControllerClient(redirection);
-                if (await wc.Connect())
+                if (Exists)
                 {
-                    Instance.OnRedirection.Invoke();
+                    Instance.status = StatusType.AWAY;
+                    UMI3DWorldControllerClient wc = worldControllerClient?.Redirection(redirection) ?? new UMI3DWorldControllerClient(redirection);
+                    if (await wc.Connect())
+                    {
+                        Instance.OnRedirection.Invoke();
 
-                    var env = environmentClient;
-                    environmentClient = null;
-                    UMI3DEnvironmentLoader.Clear();
+                        UMI3DEnvironmentClient env = environmentClient;
+                        environmentClient = null;
+                        UMI3DEnvironmentLoader.Clear();
 
-                    if (env != null)
-                        await env.Logout();
-                    if (worldControllerClient != null)
-                        worldControllerClient.Logout();
+                        if (env != null)
+                            await env.Logout();
+                        if (worldControllerClient != null)
+                            worldControllerClient.Logout();
 
-                    //Connection will not restart without this...
-                    await Task.Yield();
+                        //Connection will not restart without this...
+                        await Task.Yield();
 
-                    worldControllerClient = wc;
-                    environmentClient = wc.ConnectToEnvironment();
-                    environmentClient.status = StatusType.ACTIVE;
+                        worldControllerClient = wc;
+                        environmentClient = wc.ConnectToEnvironment();
+                        environmentClient.status = StatusType.ACTIVE;
+                    }
                 }
+                else
+                    failed?.Invoke("Client Server do not exist");
+            }
+            catch (Exception e)
+            {
+                failed?.Invoke(e.Message);
             }
         }
 
-        public static void Connect(MediaDto dto)
+        public static void Connect(MediaDto dto, Action<string> failed = null)
         {
             Connect(new RedirectionDto()
             {
                 media = dto,
                 gate = null
-            });
+            }, failed);
         }
 
         public static async void Logout()
@@ -143,8 +147,11 @@ namespace umi3d.cdk.collaboration
                 await environmentClient.Logout();
             if (worldControllerClient != null)
                 worldControllerClient.Logout();
-            Instance.OnLeavingEnvironment.Invoke();
-            Instance.OnLeaving.Invoke();
+            if (Exists)
+            {
+                Instance.OnLeavingEnvironment.Invoke();
+                Instance.OnLeaving.Invoke();
+            }
         }
 
         /// <summary>
@@ -255,6 +262,8 @@ namespace umi3d.cdk.collaboration
                 && Instance.status == StatusType.ACTIVE)
                 environmentClient?.SendVOIP(length, sample);
         }
+
+
 
         ///<inheritdoc/>
         protected override async Task<byte[]> _GetFile(string url)
