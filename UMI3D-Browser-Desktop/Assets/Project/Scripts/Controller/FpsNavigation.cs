@@ -178,7 +178,7 @@ public class FpsNavigation : AbstractNavigation
 
             if (jumpData.jumping && IsGrounded)
             {
-                jumpData.velocity = maxJumpVelocity * (1 + ComputeVelocity() * 6);
+                jumpData.velocity = maxJumpVelocity *Mathf.Clamp((1 + ComputeVelocity() * 6), 1, 1.5f);
                 jumpData.lastTimeJumped = Time.time;
             }
         }
@@ -284,7 +284,7 @@ public class FpsNavigation : AbstractNavigation
         transform.position = pos;
 
         velocities.Push((pos - lastPosition).magnitude);
-        lastPosition = pos;
+        lastPosition = transform.localPosition;
     }
 
     /// <summary>
