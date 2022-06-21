@@ -416,14 +416,12 @@ public class FpsNavigation : AbstractNavigation
         foreach (Transform foot in feetRaycastOrigin)
         {
             if (UnityEngine.Physics.Raycast(foot.position + Vector3.up * (.05f + maxStepHeight) + direction, Vector3.down, out hit, 100, navmeshLayer)) {
-
-                if ((foundHit.distance > hit.distance))
+                if ((foundHit.distance > hit.distance) && (Vector3.Angle(transform.up, hit.normal) <= maxSlopeAngle))
                     foundHit = hit;
-
             }
         }
 
-        if ((foundHit.distance < Mathf.Infinity) && (Vector3.Angle(transform.up, foundHit.normal) <= maxSlopeAngle))
+        if (foundHit.distance < Mathf.Infinity)
         {
             groundHeight = foundHit.point.y;
             return true;
