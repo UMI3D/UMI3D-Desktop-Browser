@@ -76,6 +76,7 @@ namespace BrowserDesktop.Controller
                     CursorHandler.UnSetMovement(this);
                     MenuBar_E.Instance.Hide();
                     Settingbox_E.Instance.Hide();
+                    EmoteWindow_E.Instance.Hide();
                     IsFreeAndHovering = false;
                 }
                 else
