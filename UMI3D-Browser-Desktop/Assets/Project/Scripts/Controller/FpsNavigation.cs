@@ -44,6 +44,10 @@ public class FpsNavigation : AbstractNavigation
     [Tooltip("List of point which from rays will be created to check is there is a navmesh under player's feet")]
     private List<Transform> feetRaycastOrigin;
 
+    [SerializeField]
+    [Tooltip("List of point which from rays will be created to check is there is an obstacle in front of the player")]
+    private List<Transform> obstacleRaycastOrigins;
+
     [Header("Parameters")]
     [SerializeField]
     private FpsScriptableAsset data;
@@ -437,6 +441,7 @@ public class FpsNavigation : AbstractNavigation
     /// <returns></returns>
     private bool CheckCollision(Vector3 direction)
     {
+
         if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * 1.75f, direction.normalized, .2f, obstacleLayer))
         {
             return false;
@@ -449,6 +454,14 @@ public class FpsNavigation : AbstractNavigation
         if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * lastObstacleHeight, direction.normalized, .2f, obstacleLayer))
         {
             return false;
+        }
+
+        foreach (var t in obstacleRaycastOrigins)
+        {
+            if (UnityEngine.Physics.Raycast(t.position, direction.normalized, .2f, obstacleLayer))
+            {
+                return false;
+            }
         }
 
         for (int i = 0; i < 3; i++)
