@@ -549,7 +549,7 @@ namespace umi3d.cdk
             {
                 UMI3DClientServer.GetEntity(ids, callback);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 UMI3DLogger.LogError(e.Message, scope);
                 performed2.Invoke();
@@ -624,7 +624,7 @@ namespace umi3d.cdk
             Instance.downloaded = false;
             Instance.loaded = false;
 
-    }
+        }
 
         /// <summary>
         /// Load environment.
