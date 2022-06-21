@@ -137,7 +137,7 @@ namespace BrowserDesktop.Controller
                 Interactable interactable = interactableContainer.Interactable;
                 RaycastHit hit = entry.Item1;
 
-                if (!interactable.Active)
+                if (!interactable.Active || interactable.interactions.Count == 0)
                     continue;
 
                 mouseData.CurrentHoveredId = UMI3DEnvironmentLoader.GetNodeID(hit.collider);
@@ -161,7 +161,7 @@ namespace BrowserDesktop.Controller
 
             if (CursorHandler.State != CursorHandler.CursorState.Clicked)
                 UpdateTool();
-
+            
             Hover();
         }
 
