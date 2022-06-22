@@ -84,11 +84,10 @@ namespace umi3dDesktopBrowser.ui.viewController
                 yield return new WaitUntil(() => m_HighPriorityNotifications.Count > 0);
                 var dto = m_HighPriorityNotifications.Dequeue();
 
-                var notification = new Notification2D_E(dto.title, dto.content, (int)dto.duration * 1000);
-                notification.Complete += () =>
-                {
-                    notification.RemoveRootFromHierarchy();
-                };
+                Action<bool> callback = (value) => { };
+
+                var notification = new Notification2D_E(dto.title, dto.content, dto.callback, callback);
+                notification.Complete += () => notification.RemoveRootFromHierarchy();
                 notification.InsertRootAtTo(0, m_highPriorityBox);
             }
         }
@@ -142,6 +141,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             m_HighPriorityNotifications = new Queue<NotificationDto>();
 
             UIManager.StartCoroutine(DisplayLowPriorityNotifications());
+            UIManager.StartCoroutine(DisplayHighPriorityNotifications());
         }
 
         private Notificationbox2D_E() :

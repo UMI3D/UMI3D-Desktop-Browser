@@ -4,6 +4,10 @@
             <ui:Label text="Label" display-tooltip-when-elided="true" name="title" />
             <ui:Label text="Label" display-tooltip-when-elided="true" name="message" />
         </ui:VisualElement>
+        <ui:VisualElement name="HStack" style="flex-direction: row; justify-content: space-around;">
+            <ui:Button display-tooltip-when-elided="true" name="choiceA" />
+            <ui:Button display-tooltip-when-elided="true" name="choiceB" />
+        </ui:VisualElement>
         <ui:VisualElement name="progressBar" />
     </ui:VisualElement>
 </ui:UXML>
