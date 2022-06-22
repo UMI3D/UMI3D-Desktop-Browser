@@ -60,16 +60,28 @@ namespace umi3dDesktopBrowser.ui.viewController
                 ProgressBar.Hide();
         }
 
-        public Notification2D_E(string title, string message, string choiceA, string choiceB, Action<bool> callback) :
+        public Notification2D_E(string title, string message, string[] choices, Action<bool> callback) :
             base("UI/UXML/notification2D", "Notification2D", StyleKeys.DefaultBackground)
         {
             ResetButtons();
             Title.value = title;
             Message.value = message;
+
             ChoiceA.Display();
-            ChoiceA.Text = choiceA;
+            ChoiceA.Text = choices[0];
             ChoiceB.Display();
-            ChoiceB.Text = choiceB;
+            ChoiceB.Text = choices[1];
+            ChoiceA.Clicked += () =>
+            {
+                m_callback?.Invoke(true);
+                Complete?.Invoke();
+            };
+            ChoiceB.Clicked += () =>
+            {
+                m_callback?.Invoke(false);
+                Complete?.Invoke();
+            };
+
             m_callback = callback;
             ProgressBar.Hide();
         }
@@ -82,8 +94,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             Message = new Label_E(QR<Label>("message"), "CorpsNotification2D", StyleKeys.DefaultText);
             ChoiceA = new Button_E(QR<Button>("choiceA"), "DialogueBoxChoice", StyleKeys.Default);
             ChoiceB = new Button_E(QR<Button>("choiceB"), "DialogueBoxChoice", StyleKeys.Default);
-            ChoiceA.Clicked += () => m_callback?.Invoke(true);
-            ChoiceB.Clicked += () => m_callback?.Invoke(false);
             ProgressBar = new ProgressBar_E(QR("progressBar"), "ProgressBarNotification2D", null);
             ProgressBar.Complete += () => Complete?.Invoke();
             ProgressBar.SetBar("ProgressBarNotification2D", StyleKeys.DefaultBackground);
