@@ -20,6 +20,7 @@ using umi3d.cdk;
 using umi3d.cdk.userCapture;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace umi3dDesktopBrowser.emotes
 {
@@ -92,12 +93,16 @@ namespace umi3dDesktopBrowser.emotes
         /// </summary>
         public Sprite defaultIcon;
 
+        private FpsNavigation playerFPSNavigation;
+
         protected override void Awake()
         {
             base.Awake();
             Settingbox_E.Instance.Emote.ClickedDown += ManageEmoteTab;
 
             avatarAnimator = GetComponent<Animator>();
+
+            playerFPSNavigation = GetComponentInParent<FpsNavigation>();
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(delegate
             {
@@ -198,6 +203,7 @@ namespace umi3dDesktopBrowser.emotes
         private void UnloadEmotes()
         {
             avatarAnimator.runtimeAnimatorController = cachedAnimatorController;
+            avatarAnimator.Update(0);
         }
 
         /// <summary>
@@ -227,7 +233,16 @@ namespace umi3dDesktopBrowser.emotes
         {
             LoadEmotes();
             avatarAnimator.SetTrigger($"trigger{emote.id}");
+            var interruptionAction = new UnityAction(delegate { InterruptEmote(emote); });
+            FpsNavigation.PlayerMoved.AddListener(interruptionAction);
             yield return new WaitForSeconds(emote.anim.length);
+            FpsNavigation.PlayerMoved.RemoveListener(interruptionAction);
+            UnloadEmotes();
+        }
+
+        private void InterruptEmote(Emote emote)
+        {
+            StopCoroutine(PlayEmoteAnimation(emote));
             UnloadEmotes();
         }
     }
