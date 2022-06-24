@@ -12,7 +12,6 @@ limitations under the License.
 using umi3d.cdk;
 using umi3d.common;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace BrowserDesktop.Navigation
 {
@@ -36,14 +35,11 @@ namespace BrowserDesktop.Navigation
 
         private LayerMask obstacleLayer;
 
-        public NavMeshSurface surface;
-
         void Start()
         {
             navmeshLayer = LayerMask.NameToLayer(navmeshLayerName);
             obstacleLayer = LayerMask.NameToLayer(obstacleLayerName);
             Debug.Assert(navmeshLayer != default && obstacleLayerName != default);
-            Debug.Assert(surface);
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(InitNavMesh);
         }
@@ -63,7 +59,6 @@ namespace BrowserDesktop.Navigation
                         InitModel(nodeInstance);
                 }
             }
-            surface.BuildNavMesh();
         }
 
         /// <summary>
@@ -112,17 +107,20 @@ namespace BrowserDesktop.Navigation
             if (isPartOfNavmesh)
             {
                 ChangeObjectAndChildrenLayer(obj, navmeshLayer);
-            }else if (!isTraversable)
+            } else if (!isTraversable)
             {
                 ChangeObjectAndChildrenLayer(obj, obstacleLayer);
+            }
+
+            if (isPartOfNavmesh || !isTraversable)
+            {
                 foreach (var r in nodeInstance.renderers)
                 {
-                    if (r.gameObject.GetComponent<NavMeshModifier>() == null)
+                    if (r.gameObject.GetComponent<Collider>() == null)
                     {
-                        NavMeshModifier modifier = r.gameObject.AddComponent<NavMeshModifier>();
-                        modifier.overrideArea = true;
-                        modifier.area = 1; // 1 = means not walkable.
-                    } else
+                        r.gameObject.AddComponent<MeshCollider>();
+                    }
+                    else
                     {
                         Debug.LogWarning(r.gameObject.name + " tries to init its navmesh at least twice, this should not happen.");
                     }
