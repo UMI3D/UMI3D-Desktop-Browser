@@ -189,6 +189,7 @@ namespace umi3dDesktopBrowser.emotes
         {
             cachedAnimatorController = avatarAnimator.runtimeAnimatorController;
             avatarAnimator.runtimeAnimatorController = emoteAnimatorController;
+            avatarAnimator.Update(0);
         }
 
         /// <summary>
