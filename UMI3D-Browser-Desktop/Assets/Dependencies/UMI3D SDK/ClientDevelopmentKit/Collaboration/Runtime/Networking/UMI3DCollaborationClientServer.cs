@@ -91,49 +91,6 @@ namespace umi3d.cdk.collaboration
             return environmentClient?.IsConnected() ?? false;
         }
 
-        
-        //public static async Task Connect(Action<string> failed = null)
-        //{
-        //    try
-        //    {
-        //        if (Exists)
-        //        {
-        //            Instance.status = StatusType.AWAY;
-        //            UMI3DWorldControllerClient wc =  new UMI3DWorldControllerClient(new MediaDto());
-        //            if (await wc.Connect())
-        //            {
-        //                Instance.OnRedirection.Invoke();
-
-        //                var env = environmentClient;
-        //                environmentClient = null;
-        //                UMI3DEnvironmentLoader.Clear();
-
-        //                if (env != null)
-        //                    await env.Logout();
-        //                if (worldControllerClient != null)
-        //                    worldControllerClient.Logout();
-
-        //                //Connection will not restart without this...
-        //                await Task.Yield();
-
-        //                worldControllerClient = wc;
-        //                environmentClient = wc.ConnectToEnvironment();
-        //                environmentClient.status = StatusType.ACTIVE;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            failed?.Invoke("Client Server do not exist");
-        //            Debug.Log($"exist = {Exists}");
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        failed?.Invoke(e.Message); 
-        //        Debug.Log($"exc = {e.Message}");
-        //    }
-        //}
-
         /// <summary>
         /// Start the connection to a Master Server.
         /// </summary>
