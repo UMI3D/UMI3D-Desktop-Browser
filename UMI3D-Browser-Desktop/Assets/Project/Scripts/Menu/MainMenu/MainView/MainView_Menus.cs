@@ -39,6 +39,7 @@ namespace umi3dDesktopBrowser.ui
             InitConsole();
             InitNotification2D();
             InitBottomBar();
+            InitEmoteWindow();
 
             UMI3DCollaborationClientServer.Instance.OnLeaving.AddListener( ResetMenus);
         }
@@ -66,6 +67,12 @@ namespace umi3dDesktopBrowser.ui
         private void InitSettings()
         {
             Settingbox_E.Instance.InsertRootTo(m_viewport);
+        }
+
+        private void InitEmoteWindow()
+        {
+            EmoteWindow_E.Instance.InsertRootTo(m_viewport);
+            EmoteWindow_E.Instance.Hide();
         }
 
         private void InitToolboxesWindows()

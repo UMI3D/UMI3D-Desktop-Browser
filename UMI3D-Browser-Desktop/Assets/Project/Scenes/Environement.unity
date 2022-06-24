@@ -3280,7 +3280,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 2119596086}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2119596105}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 773cf0b54c5ca3d478a37265631a5a24, type: 3}
@@ -3374,3 +3374,33 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!1 &2119596105 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4282871562832338684, guid: d599db4b8e88c6246a10c7a44287b2d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2119596086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2119596107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119596105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 200fc4b1933ada5428793aab2e51f6e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  emoteAnimatorController: {fileID: 9100000, guid: 4a5c7fcfa933abd489a94ab00fa0e3db,
+    type: 2}
+  animatorOverride: {fileID: 22100000, guid: eef8bdad69241d2468e2331a6601734e, type: 2}
+  idleAnimation: {fileID: -203655887218126122, guid: 68661901237200744b2d85059f35e890,
+    type: 3}
+  availableIcons:
+  - {fileID: 21300000, guid: ae8702de38251e94c827588d13a063e5, type: 3}
+  - {fileID: 21300000, guid: d456934c81f95964b911f80340eba015, type: 3}
+  - {fileID: 21300000, guid: 6c33c22c39f52b045a1740cc39e0a362, type: 3}
+  - {fileID: 21300000, guid: 17e1536176d5f10478e7b7a0f3236bb4, type: 3}
+  - {fileID: 21300000, guid: c700d29f7172e0a46a1a095ea46eaf61, type: 3}
+  defaultIcon: {fileID: 21300000, guid: 17e1536176d5f10478e7b7a0f3236bb4, type: 3}
