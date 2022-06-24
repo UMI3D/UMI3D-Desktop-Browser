@@ -23,6 +23,7 @@ using umi3d.common;
 using UnityEngine;
 
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class FpsNavigation : AbstractNavigation
 {
@@ -51,6 +52,7 @@ public class FpsNavigation : AbstractNavigation
     bool navigateTo = false;
     Vector3 destination;
 
+    public static UnityEvent PlayerMoved = new UnityEvent();
     public enum State { Default, FreeHead, FreeMousse }
     public enum Navigation { Walking, Flying }
 
@@ -196,6 +198,13 @@ public class FpsNavigation : AbstractNavigation
             if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Backward))) { Move.x -= 1; }
             if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))) { Move.y += 1; }
             if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Left))) { Move.y -= 1; }
+            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Forward))
+                || Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Backward))
+                || Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))
+                || Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Left)))
+            {
+                PlayerMoved.Invoke();
+            }
         }
 
         switch (navigation)
