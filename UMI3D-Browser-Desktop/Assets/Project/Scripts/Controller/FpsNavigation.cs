@@ -91,14 +91,10 @@ public class FpsNavigation : AbstractNavigation
     /// Is player active ?
     /// </summary>
     bool isActive = false;
-    public FpsScriptableAsset data;
 
-    bool navigateTo = false;
     Vector3 destination;
 
     public static UnityEvent PlayerMoved = new UnityEvent();
-    public enum State { Default, FreeHead, FreeMousse }
-    public enum Navigation { Walking, Flying }
 
     public State state;
 
