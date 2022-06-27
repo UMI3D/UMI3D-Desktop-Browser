@@ -95,8 +95,6 @@ public class FpsNavigation : AbstractNavigation
     Vector3 destination;
 
     public static UnityEvent PlayerMoved = new UnityEvent();
-    public enum State { Default, FreeHead, FreeMousse }
-    public enum Navigation { Walking, Flying }
 
     public State state;
 
