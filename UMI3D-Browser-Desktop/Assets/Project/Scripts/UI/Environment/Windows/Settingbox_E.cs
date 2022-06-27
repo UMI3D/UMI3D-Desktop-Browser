@@ -24,7 +24,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 {
     public partial class Settingbox_E
     {
-        public Button_E Emote { get; private set; } = null;
         public Button_E Avatar { get; private set; } = null;
         public Button_E Sound { get; private set; } = null;
         public Button_E Mic { get; private set; } = null;
@@ -85,6 +84,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             UIManager.StartCoroutine(DisplayWithoutAnimation());
             Console_E.Instance.Hide();
+            EmoteWindow_E.Instance.Hide();
             IsDisplaying = true;
             OnDisplayedOrHiddenTrigger(true);
         }
@@ -121,7 +121,6 @@ namespace umi3dDesktopBrowser.ui.viewController
                 return button;
             }
 
-            Emote = SetButton("Emote", "Emote");
             Avatar = SetButton("avatarOn", "avatarOff");
             Sound = SetButton("SoundOn", "SoundOff");
             Mic = SetButton("MicOn", "MicOff");

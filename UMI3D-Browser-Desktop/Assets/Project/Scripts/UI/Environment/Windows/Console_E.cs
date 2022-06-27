@@ -179,6 +179,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             UIManager.StartCoroutine(DisplayWithoutAnimation());
             Settingbox_E.Instance.Hide();
+            EmoteWindow_E.Instance.Hide();
             IsDisplaying = true;
             OnDisplayedOrHiddenTrigger(true);
         }
