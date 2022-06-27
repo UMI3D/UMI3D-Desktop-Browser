@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.common;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FpsNavigation : AbstractNavigation
 {
@@ -89,7 +90,15 @@ public class FpsNavigation : AbstractNavigation
     /// <summary>
     /// Is player active ?
     /// </summary>
-    private bool isActive = false;
+    bool isActive = false;
+    public FpsScriptableAsset data;
+
+    bool navigateTo = false;
+    Vector3 destination;
+
+    public static UnityEvent PlayerMoved = new UnityEvent();
+    public enum State { Default, FreeHead, FreeMousse }
+    public enum Navigation { Walking, Flying }
 
     public State state;
 
@@ -258,6 +267,13 @@ public class FpsNavigation : AbstractNavigation
             if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Backward))) { move.x -= 1; }
             if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))) { move.y += 1; }
             if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Left))) { move.y -= 1; }
+            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Forward))
+                || Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Backward))
+                || Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))
+                || Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Left)))
+            {
+                PlayerMoved.Invoke();
+            }
         }
 
         switch (navigation)
