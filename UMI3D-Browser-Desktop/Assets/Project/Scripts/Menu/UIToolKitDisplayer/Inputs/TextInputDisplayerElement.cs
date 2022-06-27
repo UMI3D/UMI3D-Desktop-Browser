@@ -23,7 +23,9 @@ namespace BrowserDesktop.Menu
 {
     public class TextInputDisplayerElement : AbstractTextInputDisplayer, IDisplayerElement
     {
-        public static bool isTyping;
+        public static bool isTyping { get => elementFocus != null; }
+
+        public static TextInputDisplayerElement elementFocus = null;
 
         public VisualTreeAsset textFieldTreeAsset;
 
@@ -94,6 +96,9 @@ namespace BrowserDesktop.Menu
 
             if (textInputContainer.resolvedStyle.display == DisplayStyle.Flex)
                 textInputContainer.style.display = DisplayStyle.None;
+
+            if (elementFocus == this)
+                elementFocus = null;
         }
 
         public VisualElement GetUXMLContent()
@@ -109,8 +114,8 @@ namespace BrowserDesktop.Menu
                 textInputContainer = textFieldTreeAsset.CloneTree();
                 textInputContainer.name = gameObject.name;
                 textInput = textInputContainer.Q<TextField>();
-                textInput.RegisterCallback<FocusInEvent>((e) => { isTyping = true;});
-                textInput.RegisterCallback<FocusOutEvent>((e) => { isTyping = false;});
+                textInput.RegisterCallback<FocusInEvent>((e) => { elementFocus = this;});
+                textInput.RegisterCallback<FocusOutEvent>((e) => { elementFocus = null; ;});
             }
         }
 
