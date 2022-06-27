@@ -14,11 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections;
-using System.Collections.Generic;
+using umi3d.baseBrowser.Menu;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace BrowserDesktop.Menu

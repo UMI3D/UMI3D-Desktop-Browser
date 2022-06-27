@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using BrowserDesktop.Menu;
+using umi3d.baseBrowser.Menu;
 using umi3d.baseBrowser.ui.viewController;
 using umi3d.cdk.menu;
 using UnityEngine;

@@ -15,8 +15,6 @@ limitations under the License.
 */
 using System;
 using umi3d.baseBrowser.ui.viewController;
-using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace umi3dDesktopBrowser.ui.viewController
