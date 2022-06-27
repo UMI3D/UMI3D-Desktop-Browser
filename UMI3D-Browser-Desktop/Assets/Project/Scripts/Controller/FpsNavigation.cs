@@ -121,11 +121,6 @@ public class FpsNavigation : AbstractNavigation
     private float maxJumpVelocity;
 
     /// <summary>
-    /// Stores the last player positions delta of the last frames.
-    /// </summary>
-    FixedQueue<float> velocities = new FixedQueue<float>(3);
-
-    /// <summary>
     /// Stores all data about player jumps.
     /// </summary>
     JumpData jumpData;
@@ -187,7 +182,7 @@ public class FpsNavigation : AbstractNavigation
 
             if (jumpData.jumping && IsGrounded)
             {
-                jumpData.velocity = maxJumpVelocity *Mathf.Clamp((1 + ComputeVelocity() * 6), 1, 1.5f);
+                jumpData.velocity = maxJumpVelocity;
                 jumpData.lastTimeJumped = Time.time;
             }
         }
@@ -299,7 +294,6 @@ public class FpsNavigation : AbstractNavigation
 
         transform.position = pos;
 
-        velocities.Push((pos - lastPosition).magnitude);
         lastPosition = transform.localPosition;
     }
 
@@ -337,21 +331,6 @@ public class FpsNavigation : AbstractNavigation
         Move.x *= data.flyingSpeed;
         Move.y *= data.flyingSpeed;
         height += data.flyingSpeed * 0.01f * ((Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat)) ? -1 : 0) + (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Jump)) ? 1 : 0));
-    }
-
-    /// <summary>
-    /// Computes player velocity.
-    /// </summary>
-    /// <returns></returns>
-    private float ComputeVelocity()
-    {
-        float sum = 0;
-        foreach (var vel in velocities.data)
-        {
-            sum += vel;
-        }
-
-        return sum / velocities.data.Count;
     }
 
     #endregion
@@ -537,30 +516,6 @@ public class FpsNavigation : AbstractNavigation
             this.jumping = jumping;
             this.velocity = velocity;
             this.lastTimeJumped = lastTimeJumped;
-        }
-    }
-
-
-    class FixedQueue<T>
-    {
-        public List<T> data;
-
-        public int capacity;
-
-        public FixedQueue(int capacity)
-        {
-            Debug.Assert(capacity >= 1);
-            this.capacity = capacity;
-
-            data = new List<T>();
-        }
-
-        public void Push(T elt)
-        {
-            if (data.Count >= capacity)
-                data.RemoveAt(0);
-
-            data.Add(elt);
         }
     }
 
