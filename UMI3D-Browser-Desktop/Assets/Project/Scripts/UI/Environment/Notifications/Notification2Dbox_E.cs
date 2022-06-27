@@ -17,7 +17,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.cdk;
 using umi3d.common;
+using umi3d.common.interaction;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -83,8 +85,15 @@ namespace umi3dDesktopBrowser.ui.viewController
             {
                 yield return new WaitUntil(() => m_HighPriorityNotifications.Count > 0);
                 var dto = m_HighPriorityNotifications.Dequeue();
-
-                Action<bool> callback = (value) => { };
+                Action<bool> callback = (value) => 
+                {
+                    var callbackDto = new NotificationCallbackDto()
+                    {
+                        id = dto.id,
+                        callback = value
+                    };
+                    UMI3DClientServer.SendData(callbackDto, true);
+                };
 
                 var notification = new Notification2D_E(dto.title, dto.content, dto.callback, callback);
                 notification.Complete += () => notification.RemoveRootFromHierarchy();
