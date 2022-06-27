@@ -7,6 +7,7 @@
         <ui:VisualElement name="sessionInformations" style="flex-direction: row-reverse;">
             <ui:Button display-tooltip-when-elided="true" name="console" style="align-items: center; justify-content: center;" />
             <ui:Button display-tooltip-when-elided="true" name="settings" style="align-items: center; justify-content: center;" />
+            <ui:Button display-tooltip-when-elided="true" name="emotes" style="align-items: center; justify-content: center;" />
             <ui:Label text="Label" display-tooltip-when-elided="true" name="timer" />
             <ui:Label text="Label" display-tooltip-when-elided="true" name="participantCount" />
         </ui:VisualElement>

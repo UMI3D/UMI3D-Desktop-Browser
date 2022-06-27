@@ -81,7 +81,7 @@ namespace umi3dDesktopBrowser.emotes
         /// Available emotes from bundle
         /// </summary>
         [HideInInspector]
-        public List<Emote> emotesAvailable = new List<Emote>();
+        public List<Emote> EmotesAvailable = new List<Emote>();
 
         /// <summary>
         /// List of icons to be associated with emotes
@@ -98,7 +98,7 @@ namespace umi3dDesktopBrowser.emotes
         protected override void Awake()
         {
             base.Awake();
-            Settingbox_E.Instance.Emote.ClickedDown += ManageEmoteTab;
+            BottomBar_E.Instance.Emotes.ClickedDown += ManageEmoteTab;
 
             avatarAnimator = GetComponent<Animator>();
 
@@ -113,7 +113,7 @@ namespace umi3dDesktopBrowser.emotes
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            Settingbox_E.Instance.Emote.ClickedDown -= ManageEmoteTab;
+            BottomBar_E.Instance.Emotes.ClickedDown -= ManageEmoteTab;
         }
 
         /// <summary>
@@ -136,7 +136,11 @@ namespace umi3dDesktopBrowser.emotes
             if (emoteFromBundleAnimator != null)
             {
                 if (emoteFromBundleAnimator.runtimeAnimatorController == null)
+                {
+                    DisableEmoteSystem();
                     yield break;
+                }
+                    
 
                 var importedEmoteController = emoteFromBundleAnimator.runtimeAnimatorController.animationClips.Where(e => !e.name.Contains("Idle"));
 
@@ -153,12 +157,14 @@ namespace umi3dDesktopBrowser.emotes
                         anim = anim,
                         id = i
                     };
-                    emotesAvailable.Add(emote);
+                    EmotesAvailable.Add(emote);
                     i++;
                 }
                 emoteAnimatorController = emoteFromBundleAnimator.runtimeAnimatorController;
                 hasReceivedEmotes = true;
             }
+            if (EmotesAvailable.Count == 0)
+                DisableEmoteSystem();
         }
 
         /// <summary>
@@ -167,7 +173,7 @@ namespace umi3dDesktopBrowser.emotes
         private void ManageEmoteTab()
         {
             if (!EmoteWindow_E.Instance.IsDisplaying)
-                OpenEmoteTab();
+                ToggleEmoteWindow();
             else
                 EmoteWindow_E.Instance.Hide();
         }
@@ -177,11 +183,11 @@ namespace umi3dDesktopBrowser.emotes
         /// <summary>
         /// Open emote window UI
         /// </summary>
-        private void OpenEmoteTab()
+        private void ToggleEmoteWindow()
         {
             if (!EmoteWindow_E.Instance.AreButtonsLoaded)
             {
-                EmoteWindow_E.Instance.LoadButtons(emotesAvailable.Select(x => x.icon).ToList());
+                EmoteWindow_E.Instance.LoadButtons(EmotesAvailable.Select(x => x.icon).ToList());
                 dict = EmoteWindow_E.Instance.MapButtons(ClickButton);
             }
             EmoteWindow_E.Instance.Display();
@@ -221,7 +227,7 @@ namespace umi3dDesktopBrowser.emotes
         /// <param name="emoteId"></param>
         public void TriggerEmote(int emoteId)
         {
-            StartCoroutine(PlayEmoteAnimation(emotesAvailable[emoteId]));
+            StartCoroutine(PlayEmoteAnimation(EmotesAvailable[emoteId]));
         }
 
         /// <summary>
@@ -244,6 +250,11 @@ namespace umi3dDesktopBrowser.emotes
         {
             StopCoroutine(PlayEmoteAnimation(emote));
             UnloadEmotes();
+        }
+
+        public void DisableEmoteSystem()
+        {
+            BottomBar_E.Instance.Emotes.Hide();
         }
     }
 }

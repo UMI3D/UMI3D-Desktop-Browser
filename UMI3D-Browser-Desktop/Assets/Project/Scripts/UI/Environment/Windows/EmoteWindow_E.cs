@@ -62,6 +62,7 @@ public class EmoteWindow_E : AbstractWindow_E, ISingleUI
     {
         UIManager.StartCoroutine(DisplayWithoutAnimation());
         Console_E.Instance.Hide();
+        Settingbox_E.Instance.Hide();
         IsDisplaying = true;
         OnDisplayedOrHiddenTrigger(true);
     }
