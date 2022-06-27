@@ -17,7 +17,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.cdk;
 using umi3d.common;
+using umi3d.common.interaction;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -26,34 +28,76 @@ namespace umi3dDesktopBrowser.ui.viewController
     public partial class Notificationbox2D_E
     {
         public Func<int> MaxNotification;
-        private Queue<NotificationDto> m_notifications;
+        private Queue<NotificationDto> m_lowPriorityNotifications;
+        private Queue<NotificationDto> m_mediumPriorityNotifications;
+        private Queue<NotificationDto> m_HighPriorityNotifications;
         private int m_currentlyDisplayed;
 
-        private bool m_process 
-            => (MaxNotification != null) 
-            ? m_notifications.Count > 0 && m_currentlyDisplayed < MaxNotification() 
-            : m_notifications.Count > 0;
+        private VisualElement m_highPriorityBox;
+        private VisualElement m_lowPriorityBox;
+
+
+        private bool m_processLowPriority => 
+            (MaxNotification != null) 
+            ? m_lowPriorityNotifications.Count > 0 && m_currentlyDisplayed < MaxNotification() 
+            : m_lowPriorityNotifications.Count > 0;
 
         public void Add(NotificationDto dto)
-            => m_notifications.Enqueue(dto);
+        {
+            switch (dto.priority)
+            {
+                case NotificationDto.NotificationPriority.Low:
+                    m_lowPriorityNotifications.Enqueue(dto);
+                    break;
+                case NotificationDto.NotificationPriority.Medium:
+                    m_mediumPriorityNotifications.Enqueue(dto);
+                    break;
+                case NotificationDto.NotificationPriority.High:
+                    m_HighPriorityNotifications.Enqueue(dto);
+                    break;
+                default:
+                    break;
+            }
+        }
 
-        public IEnumerator DisplayNotifications()
+        private IEnumerator DisplayLowPriorityNotifications()
         {
             while (true)
             {
-                yield return new WaitUntil(() => m_process);
-                var dto = m_notifications.Dequeue();
+                yield return new WaitUntil(() => m_processLowPriority);
+                var dto = m_lowPriorityNotifications.Dequeue();
 
                 var notification = new Notification2D_E(dto.title, dto.content, (int)dto.duration * 1000);
-                //var notification = new Notification2D_E(dto.title, dto.content, 0);
                 notification.Complete += () =>
                 {
                     notification.RemoveRootFromHierarchy();
                     --m_currentlyDisplayed;
                 };
-                notification.InsertRootAtTo(0, Root);
+                notification.InsertRootAtTo(0, m_lowPriorityBox);
 
                 ++m_currentlyDisplayed;
+            }
+        }
+
+        private IEnumerator DisplayHighPriorityNotifications()
+        {
+            while (true)
+            {
+                yield return new WaitUntil(() => m_HighPriorityNotifications.Count > 0);
+                var dto = m_HighPriorityNotifications.Dequeue();
+                Action<bool> callback = (value) => 
+                {
+                    var callbackDto = new NotificationCallbackDto()
+                    {
+                        id = dto.id,
+                        callback = value
+                    };
+                    UMI3DClientServer.SendData(callbackDto, true);
+                };
+
+                var notification = new Notification2D_E(dto.title, dto.content, dto.callback, callback);
+                notification.Complete += () => notification.RemoveRootFromHierarchy();
+                notification.InsertRootAtTo(0, m_highPriorityBox);
             }
         }
     }
@@ -90,9 +134,23 @@ namespace umi3dDesktopBrowser.ui.viewController
             Root.style.right = 0f;
             Root.style.top = 0f;
             Root.style.bottom = 0f;
-            m_notifications = new Queue<NotificationDto>();
 
-            UIManager.StartCoroutine(DisplayNotifications());
+            m_highPriorityBox = new VisualElement();
+            m_highPriorityBox.name = "highPriorityBox";
+            m_highPriorityBox.style.width = new Length(100, LengthUnit.Percent);
+            Root.Add(m_highPriorityBox);
+
+            m_lowPriorityBox = new VisualElement();
+            m_lowPriorityBox.name = "lowPriorityBox";
+            m_lowPriorityBox.style.width = new Length(100, LengthUnit.Percent);
+            Root.Add(m_lowPriorityBox);
+
+            m_lowPriorityNotifications = new Queue<NotificationDto>();
+            m_mediumPriorityNotifications = new Queue<NotificationDto>();
+            m_HighPriorityNotifications = new Queue<NotificationDto>();
+
+            UIManager.StartCoroutine(DisplayLowPriorityNotifications());
+            UIManager.StartCoroutine(DisplayHighPriorityNotifications());
         }
 
         private Notificationbox2D_E() :
