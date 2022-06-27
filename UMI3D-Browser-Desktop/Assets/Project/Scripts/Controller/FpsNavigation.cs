@@ -523,6 +523,8 @@ public class FpsNavigation : AbstractNavigation
     #endregion
 
     #region Struct Definition 
+    public enum State { Default, FreeHead, FreeMousse }
+    public enum Navigation { Walking, Flying }
 
     struct JumpData
     {
