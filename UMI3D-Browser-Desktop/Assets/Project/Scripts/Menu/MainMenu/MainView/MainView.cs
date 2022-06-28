@@ -46,6 +46,8 @@ namespace umi3dDesktopBrowser.ui
         private bool m_showShortcutOnStart = false;
         [SerializeField]
         private bool m_showConsoleOnStart = false;
+        [SerializeField]
+        private bool m_showEmotesOnStart = false;
 
         [Header("Notifications")]
         [SerializeField]
@@ -92,6 +94,12 @@ namespace umi3dDesktopBrowser.ui
         public void Display(bool val)
         {
             m_mainView.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            ResetMenus();
         }
     }
 }
