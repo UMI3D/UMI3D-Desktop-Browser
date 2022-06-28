@@ -1129,7 +1129,7 @@ MonoBehaviour:
   - {fileID: 968847598}
   - {fileID: 1974967404}
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
-  maxNeckAngle: 0
+  maxNeckAngle: 50
   maxStepHeight: 0.2
   maxSlopeAngle: 45
   navigation: 0
@@ -3394,7 +3394,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   emoteAnimatorController: {fileID: 9100000, guid: 4a5c7fcfa933abd489a94ab00fa0e3db,
     type: 2}
-  animatorOverride: {fileID: 22100000, guid: eef8bdad69241d2468e2331a6601734e, type: 2}
+  hasReceivedEmotes: 0
   idleAnimation: {fileID: -203655887218126122, guid: 68661901237200744b2d85059f35e890,
     type: 3}
   availableIcons:
