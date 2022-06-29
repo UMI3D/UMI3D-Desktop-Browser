@@ -14,26 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using BeardedManStudios.Forge.Networking;
+using BrowserDesktop.Controller;
 using System;
 using System.Collections;
-using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEngine.SceneManagement;
-
-using BrowserDesktop.Cursor;
-using System.IO;
 using System.Collections.Generic;
-using umi3d.cdk;
-using BrowserDesktop.Controller;
-using BeardedManStudios.Forge.Networking;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using BrowserDesktop.preferences;
-using BrowserDesktop.Menu;
+using umi3d.baseBrowser.preferences;
+using umi3d.cdk;
 using umi3d.cdk.collaboration;
-using umi3dDesktopBrowser.ui.viewController;
-using System.Linq;
 using umi3d.common.collaboration;
+using umi3dDesktopBrowser.ui.viewController;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class LauncherManager : MonoBehaviour
 {
