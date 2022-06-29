@@ -21,10 +21,9 @@ using UnityEngine.UIElements;
 /// <summary>
 /// Window that contains buttons for emotes triggering
 /// </summary>
-public class EmoteWindow_E : AbstractWindow_E, ISingleUI
+public class EmoteWindow_E : AbstractPinnedWindow_E, ISingleUI
 {
-    public List<Button_E> EmoteButtons { get; private set; } = new List<Button_E>();
-
+    #region SingletonPattern
     public static EmoteWindow_E Instance
     {
         get
@@ -35,9 +34,18 @@ public class EmoteWindow_E : AbstractWindow_E, ISingleUI
         }
     }
 
-    public bool AreButtonsLoaded { get; private set; } = false;
-
     private static EmoteWindow_E s_instance;
+    #endregion
+
+    /// <summary>
+    /// Available emote buttons list
+    /// </summary>
+    public List<Button_E> EmoteButtons { get; private set; } = new List<Button_E>();
+
+    /// <summary>
+    /// True when buttons have been loaded once
+    /// </summary>
+    public bool AreButtonsLoaded { get; private set; } = false;
 
     private IEnumerator DisplayWithoutAnimation()
     {
@@ -62,6 +70,7 @@ public class EmoteWindow_E : AbstractWindow_E, ISingleUI
     {
         UIManager.StartCoroutine(DisplayWithoutAnimation());
         Console_E.Instance.Hide();
+        Settingbox_E.Instance.Hide();
         IsDisplaying = true;
         OnDisplayedOrHiddenTrigger(true);
     }
@@ -81,6 +90,10 @@ public class EmoteWindow_E : AbstractWindow_E, ISingleUI
         menuLabel.text = "Emotes";
     }
 
+    /// <summary>
+    /// Create buttons on runtime based on the list of available emotes
+    /// </summary>
+    /// <param name="emotesToDisplay"></param>
     public void LoadButtons(List<Sprite> emotesToDisplay)
     {
         if (emotesToDisplay.Count == 0)
@@ -114,6 +127,11 @@ public class EmoteWindow_E : AbstractWindow_E, ISingleUI
         AreButtonsLoaded = true;
     }
 
+    /// <summary>
+    /// Map interaction to buttons
+    /// </summary>
+    /// <param name="trigger"></param>
+    /// <returns></returns>
     public Dictionary<Button_E, int> MapButtons(System.Action<Button_E> trigger)
     {
         int i = 0;
