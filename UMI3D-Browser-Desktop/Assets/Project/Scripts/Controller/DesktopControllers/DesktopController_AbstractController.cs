@@ -18,6 +18,7 @@ using BrowserDesktop.Interaction;
 using System.Collections.Generic;
 using umi3d.cdk.interaction;
 using umi3d.common.interaction;
+using umi3dDesktopBrowser.emotes;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 
@@ -63,6 +64,8 @@ namespace BrowserDesktop.Controller
 
             mouseData.saveDelay = 0;
             m_objectMenu?.menu.onContentChange.AddListener(OnMenuObjectContentChange);
+
+            EmoteManager.PlayingEmote.AddListener(CloseMainMenu);
         }
 
         private void Update()
@@ -72,24 +75,9 @@ namespace BrowserDesktop.Controller
                 Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
             {
                 if (m_isCursorMovementFree)
-                {
-                    CursorHandler.UnSetMovement(this);
-                    MenuBar_E.Instance.Hide();
-                    Settingbox_E.Instance.Hide();
-                    EmoteWindow_E.Instance.Hide();
-                    IsFreeAndHovering = false;
-                }
+                    CloseMainMenu();
                 else
-                {
-                    CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
-                    MenuBar_E.Instance.Display();
-                    Settingbox_E.Instance.Display();
-                    if (m_objectMenu.menu.Count > 0)
-                    {
-                        m_objectMenu.Expand(true);
-                        IsFreeAndHovering = true;
-                    }
-                }
+                    OpenMainMenu();
             }
 
             if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationDirect)) || Input.mouseScrollDelta.y < 0)
@@ -115,6 +103,36 @@ namespace BrowserDesktop.Controller
             MouseHandler();
         }
 
+        #endregion
+
+        #region Menu handler
+        /// <summary>
+        /// Open the main menu and free the mouse cursor
+        /// </summary>
+        public void OpenMainMenu()
+        {
+            CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
+            if (MenuBar_E.AreThereToolboxes)
+                MenuBar_E.Instance.Display();
+            Settingbox_E.Instance.Display();
+            if (m_objectMenu.menu.Count > 0)
+            {
+                m_objectMenu.Expand(true);
+                IsFreeAndHovering = true;
+            }
+        }
+
+        /// <summary>
+        /// Close the main menu and lock the mouse cursor
+        /// </summary>
+        public void CloseMainMenu()
+        {
+            CursorHandler.UnSetMovement(this);
+            if (MenuBar_E.Instance.IsDisplaying) MenuBar_E.Instance.Hide();
+            if (Settingbox_E.Instance.IsDisplaying) Settingbox_E.Instance.Hide();
+            if (EmoteWindow_E.Instance.IsDisplaying) EmoteWindow_E.Instance.Hide();
+            IsFreeAndHovering = false;
+        }
         #endregion
 
         #region Input

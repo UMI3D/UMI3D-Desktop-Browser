@@ -72,7 +72,6 @@ namespace umi3dDesktopBrowser.ui
         private void InitEmoteWindow()
         {
             EmoteWindow_E.Instance.InsertRootTo(m_viewport);
-            EmoteWindow_E.Instance.Hide();
         }
 
         private void InitToolboxesWindows()
@@ -116,10 +115,12 @@ namespace umi3dDesktopBrowser.ui
             MenuBar_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseMenuBar;
             BottomBar_E.Instance.Console.Clicked += Console_E.Instance.ToogleVisibility;
             BottomBar_E.Instance.Settings.Clicked += Settingbox_E.Instance.ToogleVisibility;
+            BottomBar_E.Instance.Emotes.Clicked += EmoteWindow_E.Instance.ToogleVisibility;
             Shortcutbox_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseShortcut;
             Console_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.Console.Toggle;
             Console_E.Instance.NewLogAdded += BottomBar_E.Instance.UpdateConsole;
             Settingbox_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.Settings.Toggle;
+            EmoteWindow_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.Emotes.Toggle;
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => m_startOfSession = DateTime.Now);
             UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += () => {
@@ -128,14 +129,29 @@ namespace umi3dDesktopBrowser.ui
             };
         }
 
+        private void ResetBottomBar()
+        {
+            MenuBar_E.Instance.DisplayedOrHidden -= BottomBar_E.Instance.OpenCloseMenuBar;
+            BottomBar_E.Instance.Console.Clicked -= Console_E.Instance.ToogleVisibility;
+            BottomBar_E.Instance.Settings.Clicked -= Settingbox_E.Instance.ToogleVisibility;
+            BottomBar_E.Instance.Emotes.Clicked -= EmoteWindow_E.Instance.ToogleVisibility;
+            Shortcutbox_E.Instance.DisplayedOrHidden -= BottomBar_E.Instance.OpenCloseShortcut;
+            Console_E.Instance.DisplayedOrHidden -= BottomBar_E.Instance.Console.Toggle;
+            Console_E.Instance.NewLogAdded -= BottomBar_E.Instance.UpdateConsole;
+            Settingbox_E.Instance.DisplayedOrHidden -= BottomBar_E.Instance.Settings.Toggle;
+            EmoteWindow_E.Instance.DisplayedOrHidden -= BottomBar_E.Instance.Emotes.Toggle;
+        }
+
         #endregion
 
         private void ResetMenus()
         {
+            ResetBottomBar();
             MenuBar_E.Instance.Reset();
             BottomBar_E.Instance.Reset();
             Settingbox_E.Instance.Reset();
             Shortcutbox_E.Instance.Reset();
+            EmoteWindow_E.Instance.Reset();
             Console_E.Instance.Reset();
             ToolboxWindow_E.Instance.Reset();
             ToolboxPinnedWindow_E.Instance.Reset();
@@ -156,6 +172,9 @@ namespace umi3dDesktopBrowser.ui
 
             if (m_showConsoleOnStart) Console_E.Instance.Display();
             else Console_E.Instance.Hide();
+
+            if (m_showEmotesOnStart) EmoteWindow_E.Instance.Display();
+            else EmoteWindow_E.Instance.Hide();
         }
 
         #region Input Menus (To be move in the DesktopController)

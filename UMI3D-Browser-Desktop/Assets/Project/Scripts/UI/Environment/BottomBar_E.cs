@@ -25,6 +25,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Label_E ShortcutShortcut { get; private set; } = null;
         public Button_E Console { get; private set; } = null;
         public Button_E Settings { get; private set; } = null;
+        public Button_E Emotes { get; private set; } = null;
         public Label_E Timer { get; private set; } = null;
         public Label_E ParticipantCount { get; private set; } = null;
 
@@ -101,6 +102,9 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             Settings = new Button_E(QR<Button>("settings"), "Square", StyleKeys.Bg("on"), StyleKeys.Bg("off"));
             Settings.AddIconInFront(new Icon_E(), "Square1", StyleKeys.Bg("settings"));
+
+            Emotes = new Button_E(QR<Button>("emotes"), "Square", StyleKeys.Bg("on"), StyleKeys.Bg("off"));
+            Emotes.AddIconInFront(new Icon_E(), "Square1", StyleKeys.Bg("emotes"));
         }
 
         private BottomBar_E() :
