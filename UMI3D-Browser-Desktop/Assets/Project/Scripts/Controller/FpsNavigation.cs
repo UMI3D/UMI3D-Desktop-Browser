@@ -109,11 +109,6 @@ public class FpsNavigation : AbstractNavigation
 
     Vector3 navigationDestination;
 
-    /// <summary>
-    /// Last frame player position .
-    /// </summary>
-    Vector3 lastPosition;
-
     #endregion
 
     #region Computed parameters
@@ -293,8 +288,6 @@ public class FpsNavigation : AbstractNavigation
         pos.y = height;
 
         transform.position = pos;
-
-        lastPosition = transform.localPosition;
     }
 
     /// <summary>
