@@ -18,6 +18,7 @@ using BrowserDesktop.preferences;
 using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
+using umi3d.baseBrowser.preferences;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.interaction;
