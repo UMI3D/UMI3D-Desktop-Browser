@@ -162,6 +162,47 @@ public class FpsNavigation : AbstractNavigation
         UpdateBaseHeight();
     }
 
+    UMI3DNodeInstance globalVehicle;
+
+    public override void Embark(VehicleDto data)
+    {
+        isActive = !data.StopNavigation;
+
+        if (data.VehicleId == 0)
+        {
+            this.transform.SetParent(UMI3DEnvironmentLoader.Instance.transform, true);
+            this.transform.localPosition = data.position;
+            this.transform.localRotation = data.rotation;
+
+            DontDestroyOnLoad(UMI3DNavigation.Instance);
+
+            globalVehicle.Delete -= new System.Action(() => {
+                UMI3DNavigation.Instance.transform.SetParent(UMI3DEnvironmentLoader.Instance.transform, true);
+                DontDestroyOnLoad(UMI3DNavigation.Instance);
+            });
+
+            globalVehicle = null;
+        }
+        else
+        {
+            UMI3DNodeInstance vehicle = UMI3DEnvironmentLoader.GetNode(data.VehicleId);
+
+            if (vehicle != null)
+            {
+                globalVehicle = vehicle;
+
+                this.transform.SetParent(vehicle.transform, true);
+                this.transform.localPosition = data.position;
+                this.transform.localRotation = data.rotation;
+
+                globalVehicle.Delete += new System.Action(() => {
+                    UMI3DNavigation.Instance.transform.SetParent(UMI3DEnvironmentLoader.Instance.transform, true);
+                    DontDestroyOnLoad(UMI3DNavigation.Instance);
+                });
+            }
+        }
+    }
+
     #endregion
 
     /// <summary>
@@ -376,11 +417,6 @@ public class FpsNavigation : AbstractNavigation
         angle.y = Mathf.DeltaAngle(0, angle.y);
         angle.z = Mathf.DeltaAngle(0, angle.z);
         return angle;
-    }
-
-    public override void Embark(VehicleDto data)
-    {
-        throw new System.NotImplementedException();
     }
 
     #region Check Navmesh and Obstacles
