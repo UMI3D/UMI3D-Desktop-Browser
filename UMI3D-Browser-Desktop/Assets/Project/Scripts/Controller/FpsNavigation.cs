@@ -378,6 +378,10 @@ public class FpsNavigation : AbstractNavigation
         return angle;
     }
 
+    public override void Embark(VehicleDto data)
+    {
+        throw new System.NotImplementedException();
+    }
 
     #region Check Navmesh and Obstacles
 
