@@ -14,14 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d
+using System;
+using System.Collections.Generic;
+
+namespace umi3d.common
 {
-    public static class UMI3DVersion
+    [System.Serializable]
+    public class VehicleDto : TeleportDto
     {
-        public static string version => major + "." + minor + "." + status + "." + date;
-        public static readonly string major = "2";
-        public static readonly string minor = "5";
-        public static readonly string status = "b";
-        public static readonly string date = "220701";
+        public ulong VehicleId = 0;
+
+        public bool StopNavigation = false;
+
+        public VehicleDto() : base() { }
     }
 }
