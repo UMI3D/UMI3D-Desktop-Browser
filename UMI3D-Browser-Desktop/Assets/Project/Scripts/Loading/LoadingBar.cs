@@ -65,7 +65,7 @@ public class LoadingBar : Singleton<LoadingBar>
         {
             loadingScreen.style.display = DisplayStyle.Flex;
             CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
-            MouseAndKeyboardController.CanProcess = false;
+            DesktopController.CanProcess = false;
             
         }
         if (val > 1)
@@ -92,7 +92,7 @@ public class LoadingBar : Singleton<LoadingBar>
     {
         loadingScreen.style.display = DisplayStyle.None;
         CursorHandler.UnSetMovement(this);
-        MouseAndKeyboardController.CanProcess = true;
+        DesktopController.CanProcess = true;
     }
 
 }
