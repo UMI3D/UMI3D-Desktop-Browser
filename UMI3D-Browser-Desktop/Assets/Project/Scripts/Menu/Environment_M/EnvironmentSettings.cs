@@ -242,7 +242,6 @@ public class UserListSetting
         public override void Bind(VisualElement element)
         {
             base.Bind(element);
-            Debug.LogError("-- "+user.login);
             setValue();
             Mic.Clicked += ToggleMic;
             element.Q<Label>("userLabel").text = user.login;
