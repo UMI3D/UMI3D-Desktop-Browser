@@ -315,11 +315,11 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
     private void OnConnectionLost()
     {
-        MouseAndKeyboardController.CanProcess = false;
+        DesktopController.CanProcess = false;
         Action<bool> callback = (b) => {
             if (b) Connect(connectionData);
             else Leave();
-            MouseAndKeyboardController.CanProcess = true;
+            DesktopController.CanProcess = true;
         };
 
         OnConnectionLost(callback);
