@@ -549,9 +549,9 @@ public class LauncherManager : MonoBehaviour
 
     private void SetServer(string serverUrl)
     {
-        if (String.IsNullOrEmpty(serverUrl))
-            return;
+        if (string.IsNullOrEmpty(serverUrl)) return;
         serverUrl = serverUrl.Trim();
+
         if (root.Q<Toggle>("toggleRemember").value)
         {
             if (currentServerConnectionData != null)
