@@ -37,8 +37,7 @@ namespace umi3d.cdk.collaboration
             string[] tab = ip_port.Split(':');
             if (tab.Length == 1)
                 ConnectToMasterServer(callback, tab[0], 15940); // use default port
-            else
-                if (ushort.TryParse(tab[1], out ushort port))
+            else if (ushort.TryParse(tab[1], out ushort port))
                 ConnectToMasterServer(callback, tab[0], port);
             else
                 ConnectToMasterServer(callback, tab[0], 15940); // use default port

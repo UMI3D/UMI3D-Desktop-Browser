@@ -97,7 +97,7 @@ public class LauncherManager : MonoBehaviour
 
     private ServerPreferences.ServerData currentServerConnectionData;
     private List<ServerPreferences.ServerData> serverConnectionData = new List<ServerPreferences.ServerData>();
-
+    
     private ServerPreferences.Data currentConnectionData;
     private List<ServerPreferences.Data> connectionData = new List<ServerPreferences.Data>();
 
@@ -543,7 +543,7 @@ public class LauncherManager : MonoBehaviour
         //currentConnectionData.environmentName
         ServerPreferences.StoreUserData(currentConnectionData);
       
-        StartCoroutine(WaitReady());
+        StartCoroutine(WaitReady(currentConnectionData));
     }
 
 
@@ -576,75 +576,53 @@ public class LauncherManager : MonoBehaviour
     private async void Connect(ServerPreferences.ServerData server, bool saveInfo = false) 
     {
         var media = await ConnectionMenu.GetMediaDto(server);
-        Debug.Log(media != null);
         if (media != null)
         {
+            ServerPreferences.Data data = new ServerPreferences.Data();
+
             server.serverName = media.name;
-            Debug.Log(media.ToJson());
             //To handle Properly.
             server.serverIcon = media?.icon2D?.variants?.FirstOrDefault()?.url;
             updateInfo = true;
-            currentConnectionData.environmentName = media.name;
-            currentConnectionData.ip = media.url;
-            StartCoroutine(WaitReady());
+            data.environmentName = media.name;
+            data.ip = media.url;
+            data.port = null;
+
+            StartCoroutine(WaitReady(data));
         }
         else
         {
-            var answerDto = await HttpClient.Connect(new ConnectionDto(), media.url);
-            if (answerDto is PrivateIdentityDto identity)
+            masterServer.ConnectToMasterServer(() =>
             {
-                //Connected(identity);
-                Debug.Log($"impossible");
+                masterServer.RequestInfo((name, icon) =>
+                {
+                    if (saveInfo)
+                    {
+                        server.serverName = name;
+                        server.serverIcon = icon;
+                        updateInfo = true;
+                    }
+                });
+                ShouldDisplaySessionScreen = true;
             }
-            //else if (answerDto is ConnectionFormDto form)
-            //{
-            //    FormAnswerDto answer = await GetFormAnswer(form);
-            //    var _answer = new FormConnectionAnswerDto()
-            //    {
-            //        formAnswerDto = answer,
-            //        globalToken = form.globalToken,
-            //        gate = dto.gate,
-            //        libraryPreloading = dto.libraryPreloading
-            //    };
-            //    return await Connect(_answer);
-            //}
+                , server.serverUrl);
+            var text = root.Q<Label>("connectedText");
+            Debug.Log(text);
+            root.Q<Label>("connectedText").text = "Connected to : " + server.serverUrl;
         }
-        //{
-
-        //    Debug.Log("Try to connect to : " + server.serverUrl);
-        //    masterServer.ConnectToMasterServer(() =>
-        //    {
-        //        masterServer.RequestInfo((name, icon) =>
-        //        {
-        //            if (saveInfo)
-        //            {
-        //                server.serverName = name;
-        //                server.serverIcon = icon;
-        //                updateInfo = true;
-        //            }
-        //        });
-        //        ShouldDisplaySessionScreen = true;
-        //    }
-
-        //        // () => masterServer.SendDataSession("test", (ser) => { Debug.Log(" update UI "); })
-        //        , server.serverUrl);
-        //    var text = root.Q<Label>("connectedText");
-        //    Debug.Log(text);
-        //    root.Q<Label>("connectedText").text = "Connected to : " + server.serverUrl;
-        //}
     }
 
     /// <summary>
     /// Load the environment scene when it is ready.
     /// </summary>
     /// <returns></returns>
-    IEnumerator WaitReady()
+    IEnumerator WaitReady(ServerPreferences.Data data)
     {
         SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Additive);
 
         while (!ConnectionMenu.Exists)
             yield return new WaitForEndOfFrame();
-        ConnectionMenu.Instance.Connect(currentConnectionData);
+        ConnectionMenu.Instance.Connect(data);
         SceneManager.UnloadSceneAsync(currentScene);
     }
 
