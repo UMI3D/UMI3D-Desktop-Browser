@@ -507,7 +507,14 @@ namespace umi3d.cdk
                         if (matDto.name != null && matDto.name.Length > 0)
                             m.name = matDto.name;
                         //register the material
-                        RegisterEntityInstance(((AbstractEntityDto)matDto.extensions.umi3d).id, matDto, m).NotifyLoaded();
+                        if (m == null)
+                        {
+                            RegisterEntityInstance(((AbstractEntityDto)matDto.extensions.umi3d).id, matDto, new List<Material>()).NotifyLoaded();
+                        }
+                        else
+                        {
+                            RegisterEntityInstance(((AbstractEntityDto)matDto.extensions.umi3d).id, matDto, m).NotifyLoaded();
+                        }
                         performed.Invoke();
                     });
                     break;
@@ -783,7 +790,8 @@ namespace umi3d.cdk
             if (!Exists) return;
             UMI3DEnvironmentLoader.WaitForAnEntityToBeLoaded(dto.entityId, (e) =>
             {
-                SetEntity(e, dto);
+                if (!SetEntity(e, dto))
+                    UMI3DLogger.LogWarning("SetEntity operation was not applied : entity : " + dto.entityId +  "   propKey : " + dto.property, scope);
             });
 
 
@@ -798,7 +806,8 @@ namespace umi3d.cdk
         {
             UMI3DEnvironmentLoader.WaitForAnEntityToBeLoaded(entityId, (e) =>
             {
-                SetEntity(e, operationId, entityId, propertyKey, container);
+                if (!SetEntity(e, operationId, entityId, propertyKey, container))
+                    UMI3DLogger.LogWarning("SetEntity operation was not applied : entity : " + entityId + "  opération : " + operationId + "   propKey : " + propertyKey, scope);
             }
             );
         }
@@ -1033,10 +1042,9 @@ namespace umi3d.cdk
             if (!Exists) return false;
             ulong entityId = UMI3DNetworkingHelper.Read<ulong>(container);
             uint propertyKey = UMI3DNetworkingHelper.Read<uint>(container);
-            uint frequence = UMI3DNetworkingHelper.Read<uint>(container);
             WaitForAnEntityToBeLoaded(entityId, (e) =>
             {
-                StartInterpolation(e, entityId, propertyKey, frequence, container);
+                StartInterpolation(e, entityId, propertyKey, container);
             }
             );
             return true;
@@ -1096,7 +1104,7 @@ namespace umi3d.cdk
             return false;
         }
 
-        public static bool StartInterpolation(UMI3DEntityInstance node, ulong entityId, uint property, uint frequence, ByteContainer container)
+        public static bool StartInterpolation(UMI3DEntityInstance node, ulong entityId, uint property, ByteContainer container)
         {
             if (!Instance.entityFilters.ContainsKey(entityId))
             {
