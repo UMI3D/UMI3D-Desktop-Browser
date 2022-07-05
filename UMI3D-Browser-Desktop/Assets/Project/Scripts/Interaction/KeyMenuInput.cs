@@ -111,7 +111,7 @@ public class KeyMenuInput : AbstractUMI3DInput
                 };
                 UMI3DClientServer.SendData(eventdto, true);
                 risingEdgeEventSent = true;
-                MouseAndKeyboardController.IsInputHold = true;
+                DesktopController.IsInputHold = true;
             }
             else
             {
@@ -142,7 +142,7 @@ public class KeyMenuInput : AbstractUMI3DInput
                     };
                     UMI3DClientServer.SendData(eventdto, true);
                     risingEdgeEventSent = false;
-                    MouseAndKeyboardController.IsInputHold = false;
+                    DesktopController.IsInputHold = false;
                 }
             }
         }

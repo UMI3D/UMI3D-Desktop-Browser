@@ -20,7 +20,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-namespace BrowserDesktop.preferences
+namespace umi3d.baseBrowser.preferences
 {
     public class ServerPreferences
     {

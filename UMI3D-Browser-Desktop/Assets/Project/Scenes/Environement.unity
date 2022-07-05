@@ -1167,7 +1167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Controllers:
-  - {fileID: 2096641628}
+  - {fileID: 0}
   shouldProjectHoldableEventOnSpecificInput: 0
 --- !u!114 &498482125
 MonoBehaviour:
@@ -3020,13 +3020,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2096641626}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 186fadf9099a5e145a0cb610c094a9e0, type: 3}
+  m_Script: {fileID: 11500000, guid: 17b5e0768f3351d4a94af9701bffda78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   projectionMemory: {fileID: 498482125}
+  m_objectMenu: {fileID: 87752526}
   CameraTransform: {fileID: 2119596089}
   InteractionMapper: {fileID: 498482124}
-  m_objectMenu: {fileID: 87752526}
   dofGroups: 04000000050000000600000001000000020000000300000008000000090000000a000000
   interactionBoneType: 3
   hoverBoneType: 3
@@ -3300,3 +3300,4 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 17e1536176d5f10478e7b7a0f3236bb4, type: 3}
   - {fileID: 21300000, guid: c700d29f7172e0a46a1a095ea46eaf61, type: 3}
   defaultIcon: {fileID: 21300000, guid: 17e1536176d5f10478e7b7a0f3236bb4, type: 3}
+  IsPlayingEmote: 0
