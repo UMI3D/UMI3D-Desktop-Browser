@@ -97,7 +97,7 @@ namespace BrowserDesktop.Interaction
                 LastFrameButton = InputLayoutManager.GetInputCode(activationButton);
             }
             
-            if (associatedInteraction != null && !MouseAndKeyboardController.IsFreeAndHovering)
+            if (associatedInteraction != null && !DesktopController.IsFreeAndHovering)
             {
                 if (Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)))
                 {
@@ -144,7 +144,7 @@ namespace BrowserDesktop.Interaction
                 };
                 UMI3DClientServer.SendData(eventdto, true);
                 risingEdgeEventSent = val;
-                MouseAndKeyboardController.IsInputHold = val;
+                DesktopController.IsInputHold = val;
             }
             else if (typeof(T).IsAssignableFrom(typeof(EventTriggeredDto)))
             {

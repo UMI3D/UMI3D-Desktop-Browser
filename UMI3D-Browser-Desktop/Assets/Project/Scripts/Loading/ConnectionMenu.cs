@@ -18,6 +18,7 @@ using BrowserDesktop.preferences;
 using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
+using umi3d.baseBrowser.preferences;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.interaction;
@@ -220,7 +221,6 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         {
             GetMediaFailed(e.Message);
         }
-
     }
 
     static string formatUrl(string ip,string port)
@@ -246,7 +246,6 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         {
             return null;
         }
-
     }
 
 
@@ -311,16 +310,16 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
         SessionInformationMenu.Instance.SetEnvironmentName(media);
 
-        UMI3DCollaborationClientServer.Connect(media,failed);
+        UMI3DCollaborationClientServer.Connect(media, failed);
     }
 
     private void OnConnectionLost()
     {
-        MouseAndKeyboardController.CanProcess = false;
+        DesktopController.CanProcess = false;
         Action<bool> callback = (b) => {
             if (b) Connect(connectionData);
             else Leave();
-            MouseAndKeyboardController.CanProcess = true;
+            DesktopController.CanProcess = true;
         };
 
         OnConnectionLost(callback);
@@ -398,11 +397,10 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         parametersScreen.style.display = DisplayStyle.Flex;
 
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
-        if (form == null)
-            callback.Invoke(null);
+
+        if (form == null) callback.Invoke(null);
         else
         {
-
             FormAnswerDto answer = new FormAnswerDto()
             {
                 boneType = 0,

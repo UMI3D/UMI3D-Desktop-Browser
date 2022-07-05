@@ -43,10 +43,10 @@ public class AdaptHandPose : MonoBehaviour
     void Start()
     {
         UMI3DClientUserTracking.Instance.handPoseEvent.AddListener((dto) => SetupHandPose(dto));
-        MouseAndKeyboardController.HoverEnter.AddListener(id => { 
+        DesktopController.HoverEnter.AddListener(id => { 
             currentHoverId = id;
         });
-        MouseAndKeyboardController.HoverExit.AddListener(id => {
+        DesktopController.HoverExit.AddListener(id => {
             if (currentHoverId != 0 && id.Equals(currentHoverId))
             {
                 currentHoverId = 0;
