@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace UnityGLTF
 {
-    [UnityEditor.AssetImporters.ScriptedImporter(1, new[] { "glb", "gltf" })]
+    [UnityEditor.AssetImporters.ScriptedImporterAttribute(1, new[] { "glb", "gltf" })]
     public class GLTFImporter : UnityEditor.AssetImporters.ScriptedImporter
     {
         [SerializeField] private bool _removeEmptyRootObjects = true;

@@ -120,10 +120,6 @@ namespace umi3d.baseBrowser.Navigation
                     {
                         r.gameObject.AddComponent<MeshCollider>();
                     }
-                    else
-                    {
-                        Debug.LogWarning(r.gameObject.name + " tries to init its navmesh at least twice, this should not happen.");
-                    }
                 }
             }
         }
