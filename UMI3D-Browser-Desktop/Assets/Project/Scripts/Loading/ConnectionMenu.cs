@@ -215,7 +215,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         url = curentUrl;
         try
         {
-            GetMediaSucces(new MediaDto() { url = baseUrl, name = connectionData.ip }, (s) => GetMediaFailed(s));
+            GetMediaSucces(new MediaDto() { url = baseUrl, name = connectionData.environmentName ?? connectionData.ip }, (s) => GetMediaFailed(s));
         }
         catch (Exception e)
         {
