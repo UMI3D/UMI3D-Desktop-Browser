@@ -14,14 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d
+using System;
+using System.Collections.Generic;
+using umi3d.common;
+
+namespace umi3d.common.userCapture
 {
-    public static class UMI3DVersion
+    [System.Serializable]
+    public class BoardedVehicleDto : VehicleDto
     {
-        public static string version => major + "." + minor + "." + status + "." + date;
-        public static readonly string major = "2";
-        public static readonly string minor = "5";
-        public static readonly string status = "b";
-        public static readonly string date = "220704";
+        public ulong BodyAnimationId = 0;
+
+        public bool ChangeBonesToStream = false;
+
+        public List<uint> BonesToStream = new List<uint>();
+
+        public BoardedVehicleDto() : base() { }
     }
 }
