@@ -221,7 +221,6 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         {
             GetMediaFailed(e.Message);
         }
-
     }
 
     static string formatUrl(string ip,string port)
@@ -247,7 +246,6 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         {
             return null;
         }
-
     }
 
 
@@ -312,7 +310,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
         SessionInformationMenu.Instance.SetEnvironmentName(media);
 
-        UMI3DCollaborationClientServer.Connect(media,failed);
+        UMI3DCollaborationClientServer.Connect(media, failed);
     }
 
     private void OnConnectionLost()
@@ -399,11 +397,10 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         parametersScreen.style.display = DisplayStyle.Flex;
 
         CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
-        if (form == null)
-            callback.Invoke(null);
+
+        if (form == null) callback.Invoke(null);
         else
         {
-
             FormAnswerDto answer = new FormAnswerDto()
             {
                 boneType = 0,

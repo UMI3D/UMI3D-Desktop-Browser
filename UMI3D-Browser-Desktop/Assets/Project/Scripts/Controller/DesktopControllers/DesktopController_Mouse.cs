@@ -108,13 +108,10 @@ namespace BrowserDesktop.Controller
             List<(RaycastHit, InteractableContainer)> interactables = new List<(RaycastHit, InteractableContainer)>();
             foreach (RaycastHit hit in hits)
             {
-                if (hit.collider.gameObject.GetComponentInParent<UMI3DEnvironmentLoader>() == null)
-                    continue;
+                if (hit.collider.gameObject.GetComponentInParent<UMI3DEnvironmentLoader>() == null) continue;
                 var interactable = hit.collider.gameObject.GetComponent<InteractableContainer>();
-                if (interactable == null)
-                    interactable = hit.collider.gameObject.GetComponentInParent<InteractableContainer>();
-                if (interactable != null)
-                    interactables.Add((hit, interactable));
+                if (interactable == null) interactable = hit.collider.gameObject.GetComponentInParent<InteractableContainer>();
+                if (interactable != null) interactables.Add((hit, interactable));
             }
 
             //2. Sort them by hasPriority and distance from user

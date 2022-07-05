@@ -134,8 +134,7 @@ namespace BrowserDesktop.Controller
         private AbstractUMI3DInput FindInput<T>(List<T> inputs, System.Predicate<T> predicate, GameObject gO = null) where T : AbstractUMI3DInput, new()
         {
             T input = inputs.Find(predicate);
-            if (input == null)
-                AddInput(inputs, out input, gO);
+            if (input == null) AddInput(inputs, out input, gO);
             return input;
         }
 

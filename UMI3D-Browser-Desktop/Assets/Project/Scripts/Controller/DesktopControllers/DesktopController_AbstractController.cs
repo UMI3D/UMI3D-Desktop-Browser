@@ -92,13 +92,10 @@ namespace BrowserDesktop.Controller
 
         private void LateUpdate()
         {
-            if (!CanProcess)
-                return;
+            if (!CanProcess) return;
 
-            if (m_navigationDirect > 0)
-                ManipulationInput.NextManipulation();
-            else if (m_navigationDirect < 0)
-                ManipulationInput.PreviousManipulation();
+            if (m_navigationDirect > 0) ManipulationInput.NextManipulation();
+            else if (m_navigationDirect < 0) ManipulationInput.PreviousManipulation();
             m_navigationDirect = 0;
             MouseHandler();
         }
@@ -112,8 +109,7 @@ namespace BrowserDesktop.Controller
         public void OpenMainMenu()
         {
             CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
-            if (MenuBar_E.AreThereToolboxes)
-                MenuBar_E.Instance.Display();
+            if (MenuBar_E.AreThereToolboxes) MenuBar_E.Instance.Display();
             Settingbox_E.Instance.Display();
             if (m_objectMenu.menu.Count > 0)
             {
