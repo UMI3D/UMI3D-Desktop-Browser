@@ -144,7 +144,6 @@ public class WindowsManager : MonoBehaviour
     private bool WantsToQuit()
     {
         bool wantsToQuit = QuittingManager.ApplicationIsQuitting;
-        UnityEngine.Debug.Log($"want to quit : {wantsToQuit} {DialogueBox_E.Instance.IsDisplaying} {QuittingManager.ShouldWaitForApplicationToQuit}");
         if (!wantsToQuit && !DialogueBox_E.Instance.IsDisplaying)
             ShowDialogueBoxToQuit();
         return wantsToQuit;
@@ -155,11 +154,9 @@ public class WindowsManager : MonoBehaviour
     /// </summary>
     private void ShowDialogueBoxToQuit()
     {
-        UnityEngine.Debug.Log($"Display popup ");
         DialogueBox_E.Instance.Setup("Close application", "Are you sure ...?", "YES", "NO", (b) => 
         { 
             QuittingManager.ApplicationIsQuitting = b;
-            UnityEngine.Debug.Log($"dialogue box result {b}");
             if (b) 
                 Application.Quit(); 
         });
