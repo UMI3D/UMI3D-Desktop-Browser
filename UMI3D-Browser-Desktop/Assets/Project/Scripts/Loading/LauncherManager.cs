@@ -100,7 +100,7 @@ public class LauncherManager : MonoBehaviour
 
     private ServerPreferences.ServerData currentServerConnectionData;
     private List<ServerPreferences.ServerData> serverConnectionData = new List<ServerPreferences.ServerData>();
-
+    
     private ServerPreferences.Data currentConnectionData;
     private List<ServerPreferences.Data> connectionData = new List<ServerPreferences.Data>();
 
@@ -546,7 +546,7 @@ public class LauncherManager : MonoBehaviour
         //currentConnectionData.environmentName
         ServerPreferences.StoreUserData(currentConnectionData);
       
-        StartCoroutine(WaitReady());
+        StartCoroutine(WaitReady(currentConnectionData));
     }
 
 
@@ -579,17 +579,19 @@ public class LauncherManager : MonoBehaviour
     private async void Connect(ServerPreferences.ServerData server, bool saveInfo = false) 
     {
         var media = await ConnectionMenu.GetMediaDto(server);
-        Debug.Log(media != null);
         if (media != null)
         {
+            ServerPreferences.Data data = new ServerPreferences.Data();
+
             server.serverName = media.name;
-            Debug.Log(media.ToJson());
             //To handle Properly.
             server.serverIcon = media?.icon2D?.variants?.FirstOrDefault()?.url;
             updateInfo = true;
-            currentConnectionData.environmentName = media.name;
-            currentConnectionData.ip = media.url;
-            StartCoroutine(WaitReady());
+            data.environmentName = media.name;
+            data.ip = media.url;
+            data.port = null;
+
+            StartCoroutine(WaitReady(data));
         }
         else
         {
@@ -641,13 +643,13 @@ public class LauncherManager : MonoBehaviour
     /// Load the environment scene when it is ready.
     /// </summary>
     /// <returns></returns>
-    IEnumerator WaitReady()
+    IEnumerator WaitReady(ServerPreferences.Data data)
     {
         SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Additive);
 
         while (!ConnectionMenu.Exists)
             yield return new WaitForEndOfFrame();
-        ConnectionMenu.Instance.Connect(currentConnectionData);
+        ConnectionMenu.Instance.Connect(data);
         SceneManager.UnloadSceneAsync(currentScene);
     }
 
