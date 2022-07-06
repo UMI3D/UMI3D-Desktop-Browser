@@ -23,7 +23,7 @@ namespace BrowserDesktop
         /// </summary>
         public static string Version { get { return major + "." + minor + "." + buildCount + "." + date; } }
         public readonly static string major = "2";
-        public readonly static string minor = "1";
+        public readonly static string minor = "2";
         /// <summary>
         /// Build count, to be increament by 1.
         /// </summary>
@@ -31,7 +31,7 @@ namespace BrowserDesktop
         /// <summary>
         /// Year-Month-Day.
         /// </summary>
-        public readonly static string date = "220606";
+        public readonly static string date = "220607";
     }
 }
 
