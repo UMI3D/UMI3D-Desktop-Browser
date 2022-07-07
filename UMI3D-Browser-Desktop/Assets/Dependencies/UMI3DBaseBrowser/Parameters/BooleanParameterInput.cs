@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 Gfi Informatique
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,13 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d.cdk.menu;
-using umi3d.common.interaction;
-
-namespace BrowserDesktop.Parameters
+namespace umi3d.baseBrowser.parameters
 {
-    public class FloatParameterInput : AbstractParameterInput<FloatInputMenuItem, FloatParameterDto, float>
-    {
-
-    }
+    public class BooleanParameterInput : BaseParameter<cdk.menu.BooleanInputMenuItem, common.interaction.BooleanParameterDto, bool>
+    {}
 }
