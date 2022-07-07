@@ -314,7 +314,7 @@ namespace BrowserDesktop.Interaction
                             {
                                 if (DoesPerformRotation())
                                 {
-                                    CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
+                                    umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
                                 }
 
                                 manipulated = true;
@@ -324,15 +324,15 @@ namespace BrowserDesktop.Interaction
                                 frameIndicator.gameObject.SetActive(true);
                                 frameIndicator.DofGroup = DofGroup;
                                 frameIndicator.Frame = frameOfReference;
-                                CursorHandler.State = CursorHandler.CursorState.Clicked;
+                                umi3d.baseBrowser.Controller.BaseCursor.State = umi3d.baseBrowser.Controller.BaseCursor.CursorState.Clicked;
                             }
                         }
                         else if (manipulated)
                         {
                             manipulated = false;
-                            CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+                            umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Center);
                             frameIndicator.gameObject.SetActive(false);
-                            CursorHandler.State = CursorHandler.CursorState.Hover;
+                            umi3d.baseBrowser.Controller.BaseCursor.State = umi3d.baseBrowser.Controller.BaseCursor.CursorState.Hover;
                         }
 
                     }

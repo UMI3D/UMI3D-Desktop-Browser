@@ -127,7 +127,7 @@ namespace BrowserDesktop.Interaction
                 if (instances.Count == 0)
                 {
                     currentInstance = 0;
-                    CursorHandler.State = CursorHandler.CursorState.Hover;
+                    umi3d.baseBrowser.Controller.BaseCursor.State = umi3d.baseBrowser.Controller.BaseCursor.CursorState.Hover;
                 }
                 //Debug.Log("<color=green>TODO: </color>" + $"CircularMenu [Manipulation Groupe]");
                 //if (menuItem != null)
@@ -172,7 +172,7 @@ namespace BrowserDesktop.Interaction
                 if (active && InputInstances[this].Count == 0)
                 {
                     currentInstance = 0;
-                    CursorHandler.State = CursorHandler.CursorState.Hover;
+                    umi3d.baseBrowser.Controller.BaseCursor.State = umi3d.baseBrowser.Controller.BaseCursor.CursorState.Hover;
                 }
             }
         }

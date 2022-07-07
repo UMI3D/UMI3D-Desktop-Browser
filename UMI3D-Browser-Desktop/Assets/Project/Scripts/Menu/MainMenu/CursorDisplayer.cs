@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 Gfi Informatique
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,75 +13,30 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using inetum.unityUtils;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static BrowserDesktop.Cursor.CursorHandler;
 
-public class CursorDisplayer : SingleBehaviour<CursorDisplayer>
+public class CursorDisplayer : umi3d.baseBrowser.Controller.BaseCursorDisplayer
 {
-    public UIDocument uiDocument;
-
-    [Header("Class names")]
-    [SerializeField]
-    Sprite defaultCursor = null;
-    [SerializeField]
-    Sprite hoverCursor = null;
-    [SerializeField]
-    Sprite followCursor = null;
-    [SerializeField]
-    Sprite clickedCursor = null;
-
     [SerializeField]
     Sprite settingsCursor = null;
 
-    VisualElement cursorContainer;
-    VisualElement cursorCenter;
-    VisualElement cursorSettings;
+    private static VisualElement cursorSettings;
 
-    void Start()
+    protected override void Awake()
     {
-        Debug.Assert(uiDocument != null);
-        var root = uiDocument.rootVisualElement;
-
-        cursorContainer = root.Q<VisualElement>("cursor-container");
-        cursorCenter = root.Q<VisualElement>("cursor-center");
+        base.Awake();
+        var root = document.rootVisualElement;
         cursorSettings = root.Q<VisualElement>("cursor-settings");
         cursorSettings.style.backgroundImage = new StyleBackground(settingsCursor.texture);
         DisplaySettingsCursor(false);
     }
 
-    public void DisplayCursor(bool display, CursorState state)
-    {
-        cursorCenter.ClearClassList();
-        cursorCenter.style.display = display ? DisplayStyle.Flex : DisplayStyle.None;
-
-		switch (state)
-		{
-			case CursorState.Default:
-                cursorCenter.style.backgroundImage = new StyleBackground(defaultCursor.texture);
-                break;
-			case CursorState.Hover:
-                cursorCenter.style.backgroundImage = new StyleBackground(hoverCursor.texture);
-                break;
-			case CursorState.Clicked:
-                cursorCenter.style.backgroundImage = new StyleBackground(clickedCursor.texture);
-                break;
-            case CursorState.FollowCursor:
-                cursorCenter.style.backgroundImage = new StyleBackground(followCursor.texture);
-                break;
-			default:
-				break;
-		}
-	}
-
     public static void DisplaySettingsCursor(bool display)
     {
-        if (!Exists)
-            return;
-        Instance.cursorSettings.style.display = display ? DisplayStyle.Flex : DisplayStyle.None;
+        if (!Exists) return;
+        cursorSettings.style.display = display ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
-    public bool IsSettingsCursorDisplayed
-        => cursorSettings.resolvedStyle.display == DisplayStyle.Flex;
+    public bool IsSettingsCursorDisplayed => cursorSettings.resolvedStyle.display == DisplayStyle.Flex;
 }

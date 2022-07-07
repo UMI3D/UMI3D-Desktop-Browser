@@ -75,14 +75,14 @@ namespace BrowserDesktop.Interaction
         {
             onInputDown.AddListener(() =>
             {
-                SwichOnDown = (CursorHandler.State == CursorHandler.CursorState.Hover);
+                SwichOnDown = (umi3d.baseBrowser.Controller.BaseCursor.State == umi3d.baseBrowser.Controller.BaseCursor.CursorState.Hover);
                 if (SwichOnDown)
-                    CursorHandler.State = CursorHandler.CursorState.Clicked;
+                    umi3d.baseBrowser.Controller.BaseCursor.State = umi3d.baseBrowser.Controller.BaseCursor.CursorState.Clicked;
             });
             onInputUp.AddListener(() =>
             {
-                if (SwichOnDown && CursorHandler.State == CursorHandler.CursorState.Clicked)
-                    CursorHandler.State = CursorHandler.CursorState.Hover;
+                if (SwichOnDown && umi3d.baseBrowser.Controller.BaseCursor.State == umi3d.baseBrowser.Controller.BaseCursor.CursorState.Clicked)
+                    umi3d.baseBrowser.Controller.BaseCursor.State = umi3d.baseBrowser.Controller.BaseCursor.CursorState.Hover;
             });
         }
 

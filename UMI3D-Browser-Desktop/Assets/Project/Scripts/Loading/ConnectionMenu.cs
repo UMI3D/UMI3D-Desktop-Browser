@@ -274,7 +274,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
         connectionScreen.style.display = DisplayStyle.None;
 
-        CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+        umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Center);
     }
 
     private void OnRedirection()
@@ -288,7 +288,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
         connectionScreen.style.display = DisplayStyle.Flex;
 
-        CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
+        umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
 
 
         MainView.Instance.Display(false);
@@ -336,7 +336,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     {
         loadingScreen = uiDocument.rootVisualElement.Q<VisualElement>("loading-screen");
         loadingScreen.style.display = DisplayStyle.None;
-        CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
+        umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
         passwordScreen.style.display = DisplayStyle.Flex;
     }
 
@@ -379,7 +379,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
             DialogueBox_E.Instance.Setup(title, "Download libraries and connect to the server ?", "Accept", "Deny", (b) =>
                 {
                     callback.Invoke(b);
-                    CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+                    umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Center);
                 });
             DialogueBox_E.Instance.DisplayFrom(uiDocument);
         }
@@ -396,7 +396,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
         loadingScreen.style.display = DisplayStyle.None;
         parametersScreen.style.display = DisplayStyle.Flex;
 
-        CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
+        umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
 
         if (form == null) callback.Invoke(null);
         else
@@ -426,7 +426,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
                 MenuDisplayManager.Hide(true);
                 Menu.menu.RemoveAll();
                 callback.Invoke(answer);
-                CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Center);
+                umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Center);
                 nextStep = null;
                 LocalInfoSender.CheckFormToUpdateAuthorizations(form);
             };

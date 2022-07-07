@@ -247,7 +247,7 @@ public class FpsNavigation : AbstractNavigation
 
         float height = transform.position.y;
 
-        if ((CursorHandler.Movement == CursorHandler.CursorMovement.Free || CursorHandler.Movement == CursorHandler.CursorMovement.FreeHidden))
+        if ((umi3d.baseBrowser.Controller.BaseCursor.Movement == umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free || umi3d.baseBrowser.Controller.BaseCursor.Movement == umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.FreeHidden))
         {
             if (navigation != Navigation.Flying)
             {

@@ -48,7 +48,7 @@ namespace BrowserDesktop.Controller
                 return list;
             }
         }
-        private bool m_isCursorMovementFree => CursorHandler.Movement == CursorHandler.CursorMovement.Free;
+        private bool m_isCursorMovementFree => umi3d.baseBrowser.Controller.BaseCursor.Movement == umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free;
 
         public static bool IsFreeAndHovering = false;
         private static bool s_isRightClickAdded = false;
@@ -66,8 +66,9 @@ namespace BrowserDesktop.Controller
 
             EmoteManager.PlayingEmote.AddListener(CloseMainMenu);
         }
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)) 
                 ||
                 Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
@@ -77,13 +78,8 @@ namespace BrowserDesktop.Controller
             }
 
             if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationDirect)) || Input.mouseScrollDelta.y < 0)
-            {
                 m_navigationDirect++;
-            }
-            else if (Input.mouseScrollDelta.y > 0)
-            {
-                m_navigationDirect--;
-            }
+            else if (Input.mouseScrollDelta.y > 0) m_navigationDirect--;
         }
         #endregion
 
@@ -116,7 +112,7 @@ namespace BrowserDesktop.Controller
         /// </summary>
         public void OpenMainMenu()
         {
-            CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
+            umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
             if (MenuBar_E.AreThereToolboxes) MenuBar_E.Instance.Display();
             Settingbox_E.Instance.Display();
             if (m_objectMenu.menu.Count > 0)
@@ -131,7 +127,7 @@ namespace BrowserDesktop.Controller
         /// </summary>
         public void CloseMainMenu()
         {
-            CursorHandler.UnSetMovement(this);
+            umi3d.baseBrowser.Controller.BaseCursor.UnSetMovement(this);
             if (MenuBar_E.Instance.IsDisplaying) MenuBar_E.Instance.Hide();
             if (Settingbox_E.Instance.IsDisplaying) Settingbox_E.Instance.Hide();
             if (EmoteWindow_E.Instance.IsDisplaying) EmoteWindow_E.Instance.Hide();

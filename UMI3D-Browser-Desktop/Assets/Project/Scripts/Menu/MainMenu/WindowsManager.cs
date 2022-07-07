@@ -91,8 +91,8 @@ public class WindowsManager : MonoBehaviour
         DialogueBox_E
             .SetCursorMovementActions
             (
-                    (o) => { CursorHandler.SetMovement(o, CursorHandler.CursorMovement.Free); },
-                    (o) => { CursorHandler.UnSetMovement(o); }
+                    (o) => { umi3d.baseBrowser.Controller.BaseCursor.SetMovement(o, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free); },
+                    (o) => { umi3d.baseBrowser.Controller.BaseCursor.UnSetMovement(o); }
             );
     }
 
