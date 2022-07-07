@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Interaction;
-using BrowserDesktop.Parameters;
 using inetum.unityUtils;
 using System.Collections.Generic;
 using umi3d.cdk.interaction;
@@ -119,32 +118,32 @@ namespace umi3d.baseBrowser.Controller
         /// Instantiated float parameter inputs.
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<FloatParameterInput> floatParameterInputs = new List<FloatParameterInput>();
+        protected List<parameters.FloatParameterInput> floatParameterInputs = new List<parameters.FloatParameterInput>();
         /// <summary>
         /// Instantiated float range parameter inputs.
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<FloatRangeParameterInput> floatRangeParameterInputs = new List<FloatRangeParameterInput>();
+        protected List<parameters.FloatRangeParameterInput> floatRangeParameterInputs = new List<parameters.FloatRangeParameterInput>();
         /// <summary>
         /// Instantiated int parameter inputs.
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<IntParameterInput> intParameterInputs = new List<IntParameterInput>();
+        protected List<parameters.IntParameterInput> intParameterInputs = new List<parameters.IntParameterInput>();
         /// <summary>
         /// Instantiated bool parameter inputs.
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<BooleanParameterInput> boolParameterInputs = new List<BooleanParameterInput>();
+        protected List<parameters.BooleanParameterInput> boolParameterInputs = new List<parameters.BooleanParameterInput>();
         /// <summary>
         /// Instantiated string parameter inputs.
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<StringParameterInput> stringParameterInputs = new List<StringParameterInput>();
+        protected List<parameters.StringParameterInput> stringParameterInputs = new List<parameters.StringParameterInput>();
         /// <summary>
         /// Instantiated string enum parameter inputs.
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<StringEnumParameterInput> stringEnumParameterInputs = new List<StringEnumParameterInput>();
+        protected List<parameters.StringEnumParameterInput> stringEnumParameterInputs = new List<parameters.StringEnumParameterInput>();
 
         protected int m_navigationDirect = 0;
         protected AutoProjectOnHover reason = new AutoProjectOnHover();
@@ -182,7 +181,6 @@ namespace umi3d.baseBrowser.Controller
             m_navigationDirect = 0;
             MouseHandler();
         }
-
         protected virtual void Update() { }
         #endregion
 
@@ -211,7 +209,7 @@ namespace umi3d.baseBrowser.Controller
             ClearInputs(ref stringParameterInputs, action);
             ClearInputs(ref stringEnumParameterInputs, action);
         }
-        protected void ClearInputs<T>(ref List<T> inputs, System.Action<T> action) 
+        protected void ClearInputs<T>(ref List<T> inputs, System.Action<T> action)
             where T : AbstractUMI3DInput
         {
             inputs.ForEach(action);
@@ -599,6 +597,6 @@ namespace umi3d.baseBrowser.Controller
         }
         #endregion
 
-        
+
     }
 }

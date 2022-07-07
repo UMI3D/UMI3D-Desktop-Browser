@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 Gfi Informatique
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,17 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using umi3d.cdk.menu;
 
-
-namespace BrowserDesktop.Parameters
+namespace umi3d.baseBrowser.parameters
 {
-    public class StringEnumParameterInput : AbstractEnumParameterInput<DropDownInputMenuItem, string>
-    {
-
-    }
+    public class IntParameterInput : BaseParameter<cdk.menu.IntegerInputMenuItem, common.interaction.IntegerParameterDto, int>
+    { }
 }
-
-
-    
-
