@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using BrowserDesktop.Cursor;
 using BrowserDesktop.Interaction;
 using BrowserDesktop.Parameters;
 using inetum.unityUtils;
@@ -183,6 +182,8 @@ namespace umi3d.baseBrowser.Controller
             m_navigationDirect = 0;
             MouseHandler();
         }
+
+        protected virtual void Update() { }
         #endregion
 
         protected abstract void OnMenuObjectContentChange();
@@ -303,7 +304,7 @@ namespace umi3d.baseBrowser.Controller
         {
             InteractionMapper.SelectTool(mouseData.CurrentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
             mouseData.HoverState = HoverState.AutoProjected;
-            CursorHandler.State = CursorHandler.CursorState.Hover;
+            BaseCursor.State = BaseCursor.CursorState.Hover;
             mouseData.LastProjected = mouseData.CurrentHovered;
         }
         private void ReleaseAutoProjection()
@@ -311,7 +312,7 @@ namespace umi3d.baseBrowser.Controller
             if (mouseData.HoverState == HoverState.AutoProjected && currentTool != null)
                 InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
             mouseData.HoverState = HoverState.None;
-            CursorHandler.State = CursorHandler.CursorState.Default;
+            BaseCursor.State = BaseCursor.CursorState.Default;
             mouseData.LastProjected = null;
         }
         #endregion
@@ -332,7 +333,7 @@ namespace umi3d.baseBrowser.Controller
                 mouseData.CurrentHovered = null;
                 mouseData.CurrentHoveredTransform = null;
                 mouseData.HoverState = HoverState.None;
-                CursorHandler.State = CursorHandler.CursorState.Default;
+                BaseCursor.State = BaseCursor.CursorState.Default;
             }
             if (mouseData.ForceProjection)
             {
@@ -527,7 +528,7 @@ namespace umi3d.baseBrowser.Controller
                 break;
             }
 
-            if (CursorHandler.State != CursorHandler.CursorState.Clicked) UpdateTool();
+            if (BaseCursor.State != BaseCursor.CursorState.Clicked) UpdateTool();
 
             Hover();
         }

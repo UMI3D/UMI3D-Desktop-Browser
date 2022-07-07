@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,34 +13,29 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using BrowserDesktop.Menu;
-using inetum.unityUtils;
-using System;
-using System.Collections.Generic;
-using umi3d.cdk.collaboration;
-using UnityEngine;
+using ccs = umi3d.cdk.collaboration.UMI3DCollaborationClientServer;
 
-namespace BrowserDesktop.Cursor
+namespace umi3d.baseBrowser.Controller
 {
-    public partial class CursorHandler
+    public class BaseCursor : inetum.unityUtils.SingleBehaviour<BaseCursor>
     {
         public enum CursorState { Default, Hover, Clicked, FollowCursor }
         public enum CursorMovement { Free, Center, Confined, FreeHidden }
 
-        public static CursorState State 
-        { 
+        public static CursorState State
+        {
             get => Exists ? s_state : CursorState.Default;
-            set 
-            { 
+            set
+            {
                 if (Exists && s_state != value)
                 {
-                    s_state = value; 
+                    s_state = value;
                     s_stateUpdated?.Invoke();
                 }
-            } 
+            }
         }
         public static CursorMovement Movement
-        { 
+        {
             get => Exists ? s_movement : CursorMovement.Free;
             private set
             {
@@ -53,73 +48,12 @@ namespace BrowserDesktop.Cursor
         }
 
         private static CursorState s_state;
-        private static event Action s_stateUpdated;
+        private static event System.Action s_stateUpdated;
         private static CursorMovement s_movement;
-        private static event Action s_movementUpdated;
+        private static event System.Action s_movementUpdated;
 
-
-        private Dictionary<object, CursorMovement> m_movementMap = new Dictionary<object, CursorMovement>();
-
-        private bool m_isMovementCenterOrFreeHidden 
-            => Movement == CursorMovement.Center || Movement == CursorMovement.FreeHidden;
-    }
-
-
-    public partial class CursorHandler : SingleBehaviour<CursorHandler>
-    {
-        #region Movement mapping and setup
-
-        /// <summary>
-        /// Add the Object to the map of movement.
-        /// </summary>
-        /// <param name="Object"></param>
-        /// <param name="movement"></param>
-        public static void SetMovement(object Object, CursorMovement movement)
-        {
-            if (!Exists)
-                return;
-            Instance.m_movementMap[Object] = movement;
-            Instance.MapToMovement();
-        }
-        /// <summary>
-        /// Remove the Object from the map of movement.
-        /// </summary>
-        /// <param name="Object"></param>
-        public static void UnSetMovement(object Object)
-        {
-            if (!Exists)
-                return;
-            Instance.m_movementMap.Remove(Object);
-            Instance.MapToMovement();
-        }
-
-        /// <summary>
-        /// Clear Movement map
-        /// </summary>
-        public void Clear()
-            => m_movementMap.Clear();
-
-        private void MapToMovement()
-        {
-            CursorMovement movement = CursorMovement.FreeHidden;
-            if (m_movementMap.Count > 0) 
-            {
-                foreach (var move in m_movementMap.Values)
-                {
-                    if (move >= movement) continue;
-                    movement = move;
-                    if (movement == CursorMovement.Free) break;
-                }
-            }
-            else 
-                movement = CursorMovement.Free;
-
-            Movement = movement;
-        }
-
-        #endregion
-
-        #region Monobehaviour
+        protected System.Collections.Generic.Dictionary<object, CursorMovement> m_movementMap = new System.Collections.Generic.Dictionary<object, CursorMovement>();
+        private bool m_isMovementCenterOrFreeHidden => Movement == CursorMovement.Center || Movement == CursorMovement.FreeHidden;
 
         protected override void Awake()
         {
@@ -129,47 +63,87 @@ namespace BrowserDesktop.Cursor
             s_movementUpdated += UpdateEnvironmentCursor;
         }
 
-        private void Start()
+        protected virtual void Start()
         {
-            if (UMI3DCollaborationClientServer.Exists)
-                UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.AddListener(Clear);
+            if (ccs.Exists) ccs.Instance.OnLeavingEnvironment.AddListener(Clear);
+        }
+
+        protected virtual void Update()
+        {
+            transform.position = UnityEngine.Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            if (UMI3DCollaborationClientServer.Exists)
-                UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.RemoveListener(Clear);
+            if (ccs.Exists) ccs.Instance.OnLeavingEnvironment.RemoveListener(Clear);
             s_stateUpdated = null;
             s_movementUpdated = null;
             Destroy(gameObject);
         }
 
-        private void Update()
+        /// <summary>
+        /// Add the Object to the map of movement.
+        /// </summary>
+        /// <param name="Object"></param>
+        /// <param name="movement"></param>
+        public static void SetMovement(object Object, CursorMovement movement)
         {
-            transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (!Exists) return;
+            Instance.m_movementMap[Object] = movement;
+            Instance.MapToMovement();
+        }
+        /// <summary>
+        /// Remove the Object from the map of movement.
+        /// </summary>
+        /// <param name="Object"></param>
+        public static void UnSetMovement(object Object)
+        {
+            if (!Exists) return;
+            Instance.m_movementMap.Remove(Object);
+            Instance.MapToMovement();
         }
 
-        #endregion
+        private void MapToMovement()
+        {
+            CursorMovement movement = CursorMovement.FreeHidden;
+            if (m_movementMap.Count > 0)
+            {
+                foreach (var move in m_movementMap.Values)
+                {
+                    if (move >= movement) continue;
+                    movement = move;
+                    if (movement == CursorMovement.Free) break;
+                }
+            }
+            else movement = CursorMovement.Free;
+
+            Movement = movement;
+        }
+
+        /// <summary>
+        /// Clear Movement map
+        /// </summary>
+        public void Clear() => m_movementMap.Clear();
 
         private void UpdateUnityCursor()
         {
             switch (s_movement)
             {
                 case CursorMovement.Center:
-                    UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+                    UnityEngine.Cursor.lockState = UnityEngine.CursorLockMode.Locked;
                     UnityEngine.Cursor.visible = false;
                     break;
                 case CursorMovement.Free:
-                    UnityEngine.Cursor.lockState = CursorLockMode.None;
+                    UnityEngine.Cursor.lockState = UnityEngine.CursorLockMode.None;
                     UnityEngine.Cursor.visible = true;
                     break;
                 case CursorMovement.FreeHidden:
-                    UnityEngine.Cursor.lockState = CursorLockMode.None;
+                    UnityEngine.Cursor.lockState = UnityEngine.CursorLockMode.None;
                     UnityEngine.Cursor.visible = false;
                     break;
                 case CursorMovement.Confined:
-                    UnityEngine.Cursor.lockState = CursorLockMode.Confined;
+                    UnityEngine.Cursor.lockState = UnityEngine.CursorLockMode.Confined;
                     UnityEngine.Cursor.visible = true;
                     break;
             }
@@ -177,13 +151,11 @@ namespace BrowserDesktop.Cursor
 
         private void UpdateEnvironmentCursor()
         {
-            if (!CursorDisplayer.Exists || !m_isMovementCenterOrFreeHidden)
-                return;
-
-            if (Movement == CursorMovement.Center)
-                CursorDisplayer.Instance.DisplayCursor(true, State);
-            else if (Movement == CursorMovement.FreeHidden)
-                CursorDisplayer.Instance.DisplayCursor(true, CursorState.FollowCursor);
+            if (!BaseCursorDisplayer.Exists || !m_isMovementCenterOrFreeHidden) return;
+            if (Movement == CursorMovement.Center) BaseCursorDisplayer.Instance.DisplayCursor(true, State);
+            else if (Movement == CursorMovement.FreeHidden) BaseCursorDisplayer.Instance.DisplayCursor(true, CursorState.FollowCursor);
         }
     }
+
+
 }
