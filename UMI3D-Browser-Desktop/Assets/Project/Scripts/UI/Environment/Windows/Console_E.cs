@@ -163,6 +163,12 @@ namespace umi3dDesktopBrowser.ui.viewController
                 return s_instance;
             }
         }
+        public static void DestroySingleton()
+        {
+            if (s_instance == null) return;
+            s_instance.Destroy();
+            s_instance = null;
+        }
 
         private static Console_E s_instance;
     }

@@ -117,10 +117,15 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             get
             {
-                if (s_instance == null)
-                    s_instance = new Shortcutbox_E();
+                if (s_instance == null) s_instance = new Shortcutbox_E();
                 return s_instance;
             }
+        }
+        public static void DestroySingleton()
+        {
+            if (s_instance == null) return;
+            s_instance.Destroy();
+            s_instance = null;
         }
 
         private static Shortcutbox_E s_instance;
