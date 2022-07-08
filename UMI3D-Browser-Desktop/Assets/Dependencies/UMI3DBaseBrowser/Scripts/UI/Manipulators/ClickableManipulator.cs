@@ -53,4 +53,38 @@ namespace umi3d.baseBrowser.ui.viewController
             MouseBehaviourChanged?.Invoke(evt, MousePressedState.Unpressed);
         }
     }
+
+    public class TouchManipulator : Manipulator
+    {
+        public event Action ClickedDown;
+        public event Action ClickedUp;
+
+        private bool isActive;
+
+        protected override void RegisterCallbacksOnTarget()
+        {
+            target.RegisterCallback<PointerDownEvent>(OnPointerDownEvent);
+            target.RegisterCallback<PointerUpEvent>(OnPointerUpEvent);
+        }
+
+        protected override void UnregisterCallbacksFromTarget()
+        {
+            target.UnregisterCallback<PointerDownEvent>(OnPointerDownEvent);
+            target.UnregisterCallback<PointerUpEvent>(OnPointerUpEvent);
+        }
+
+        private void OnPointerDownEvent(PointerDownEvent evt)
+        {
+            if (isActive) return;
+            isActive = true;
+            ClickedDown?.Invoke();
+        }
+
+        private void OnPointerUpEvent(PointerUpEvent evt)
+        {
+            if (!isActive) return;
+            isActive = false;
+            ClickedUp?.Invoke();
+        }
+    }
 }
