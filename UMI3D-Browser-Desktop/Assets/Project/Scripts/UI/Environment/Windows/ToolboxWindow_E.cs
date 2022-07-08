@@ -38,13 +38,18 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             get
             {
-                if (m_instance == null)
-                    m_instance = new ToolboxWindow_E();
-                return m_instance;
+                if (s_instance == null) s_instance = new ToolboxWindow_E();
+                return s_instance;
             }
         }
+        public static void DestroySingleton()
+        {
+            if (s_instance == null) return;
+            s_instance.Destroy();
+            s_instance = null;
+        }
 
-        private static ToolboxWindow_E m_instance;
+        private static ToolboxWindow_E s_instance;
     }
 
     public partial class ToolboxWindow_E : AbstractDraggableWindow_E

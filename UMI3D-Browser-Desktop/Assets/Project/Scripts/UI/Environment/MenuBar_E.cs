@@ -105,13 +105,18 @@ namespace umi3dDesktopBrowser.ui.viewController
         {
             get
             {
-                if (m_instance == null)
-                    m_instance = new MenuBar_E();
-                return m_instance;
+                if (s_instance == null) s_instance = new MenuBar_E();
+                return s_instance;
             }
         }
+        public static void DestroySingleton()
+        {
+            if (s_instance == null) return;
+            s_instance.Destroy();
+            s_instance = null;
+        }
 
-        private static MenuBar_E m_instance;
+        private static MenuBar_E s_instance;
     }
 
     public partial class MenuBar_E : Box_E
