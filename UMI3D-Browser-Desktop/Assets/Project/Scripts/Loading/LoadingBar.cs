@@ -64,7 +64,7 @@ public class LoadingBar : Singleton<LoadingBar>
         if ((loadingScreen.style.display == DisplayStyle.None) && val < 1f)
         {
             loadingScreen.style.display = DisplayStyle.Flex;
-            CursorHandler.SetMovement(this, CursorHandler.CursorMovement.Free);
+            umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
             DesktopController.CanProcess = false;
             
         }
@@ -91,7 +91,7 @@ public class LoadingBar : Singleton<LoadingBar>
     void Hide()
     {
         loadingScreen.style.display = DisplayStyle.None;
-        CursorHandler.UnSetMovement(this);
+        umi3d.baseBrowser.Controller.BaseCursor.UnSetMovement(this);
         DesktopController.CanProcess = true;
     }
 
