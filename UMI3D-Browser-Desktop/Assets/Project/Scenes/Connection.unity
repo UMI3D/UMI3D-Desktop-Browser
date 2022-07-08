@@ -538,7 +538,6 @@ GameObject:
   - component: {fileID: 1049023329}
   - component: {fileID: 1049023332}
   - component: {fileID: 1049023333}
-  - component: {fileID: 1049023334}
   m_Layer: 0
   m_Name: ConnectionUI
   m_TagString: Untagged
@@ -614,22 +613,6 @@ MonoBehaviour:
   ShouldDisplaySessionScreen: 0
   updateResponse: 0
   updateInfo: 0
---- !u!114 &1049023334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1049023328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 1
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff
 --- !u!1 &1331140337
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,7 +654,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1506163087
 GameObject:

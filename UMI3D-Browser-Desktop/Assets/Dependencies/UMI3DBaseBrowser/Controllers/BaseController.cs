@@ -13,48 +13,30 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using BrowserDesktop.Cursor;
 using BrowserDesktop.Interaction;
-using BrowserDesktop.Parameters;
-using inetum.unityUtils;
 using System.Collections.Generic;
 using umi3d.cdk.interaction;
-using umi3d.cdk.menu.view;
 using umi3d.common.interaction;
-using umi3d.common.userCapture;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace umi3d.baseBrowser.Controller
 {
     public abstract class BaseController : AbstractController
     {
         #region Types
-        public class HoverEvent : UnityEvent<ulong> { };
+        public class HoverEvent : UnityEngine.Events.UnityEvent<ulong> { };
         public struct MouseData
         {
-            public bool ForceProjection;
-            public bool ForceProjectionReleasable;
+            public bool ForceProjection, ForceProjectionReleasable;
             public HoldableButtonMenuItem ForceProjectionReleasableButton;
 
-            public Interactable LastProjected;
-            public Interactable OldHovered;
-            public ulong LastHoveredId;
-            public Interactable CurrentHovered;
+            public Interactable LastProjected, OldHovered, CurrentHovered;
+            public ulong LastHoveredId, CurrentHoveredId;
             public Transform CurrentHoveredTransform;
-            public ulong CurrentHoveredId;
 
-            public Vector3 point;
-            public Vector3 worldPoint;
-            public Vector3 centeredWorldPoint;
-            public Vector3 normal;
-
-            public Vector3 worldNormal;
-            public Vector3 direction;
-            public Vector3 worlDirection;
-            public Vector3 cursorOffset;
-
-            public Vector3 lastPoint, lastNormal, lastDirection;
+            public Vector3 LastPosition, LastNormal, LastDirection;
+            public Vector3 Position, Normal, Direction;
+            public Vector3 CenteredWorldPosition, WorldPosition, WorldNormal, WorlDirection;
 
             public HoverState HoverState;
 
@@ -62,8 +44,7 @@ namespace umi3d.baseBrowser.Controller
 
             public void Save()
             {
-                if (saveDelay > 0)
-                    saveDelay--;
+                if (saveDelay > 0) saveDelay--;
                 else
                 {
                     if (saveDelay < 0) saveDelay = 0;
@@ -72,14 +53,13 @@ namespace umi3d.baseBrowser.Controller
                     CurrentHovered = null;
                     CurrentHoveredTransform = null;
                     CurrentHoveredId = 0;
-                    lastPoint = point;
-                    lastNormal = normal;
-                    lastDirection = direction;
+                    LastPosition = Position;
+                    LastNormal = Normal;
+                    LastDirection = Direction;
                 }
             }
 
-            public bool isDelaying()
-                => saveDelay > 0;
+            public bool IsDelaying() => saveDelay > 0;
         }
         public enum HoverState
         {
@@ -93,7 +73,7 @@ namespace umi3d.baseBrowser.Controller
         public MouseData mouseData;
 
         [SerializeField]
-        protected MenuDisplayManager m_objectMenu;
+        protected cdk.menu.view.MenuDisplayManager m_objectMenu;
         [SerializeField]
         protected Transform CameraTransform;
         [SerializeField]
@@ -106,46 +86,46 @@ namespace umi3d.baseBrowser.Controller
         /// Avatar bone linked to this input.
         /// </summary>
         [SerializeField]
-        [ConstEnum(typeof(BoneType), typeof(uint))]
-        protected uint interactionBoneType = BoneType.RightHand;
+        [inetum.unityUtils.ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
+        protected uint interactionBoneType = common.userCapture.BoneType.RightHand;
         [SerializeField]
-        [ConstEnum(typeof(BoneType), typeof(uint))]
-        protected uint hoverBoneType = BoneType.Head;
+        [inetum.unityUtils.ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
+        protected uint hoverBoneType = common.userCapture.BoneType.Head;
 
         protected List<ManipulationGroup> ManipulationInputs = new List<ManipulationGroup>();
-        protected List<KeyMenuInput> KeyMenuInputs = new List<KeyMenuInput>();
-        protected List<FormInput> FormInputs = new List<FormInput>();
-        protected List<LinkInput> LinkInputs = new List<LinkInput>();
+        protected List<inputs.interactions.KeyMenuInput> KeyMenuInputs = new List<inputs.interactions.KeyMenuInput>();
+        protected List<inputs.interactions.FormInput> FormInputs = new List<inputs.interactions.FormInput>();
+        protected List<inputs.interactions.LinkInput> LinkInputs = new List<inputs.interactions.LinkInput>();
         /// <summary>
         /// Instantiated float parameter inputs.
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<FloatParameterInput> floatParameterInputs = new List<FloatParameterInput>();
+        protected List<parameters.FloatParameterInput> floatParameterInputs = new List<parameters.FloatParameterInput>();
         /// <summary>
         /// Instantiated float range parameter inputs.
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<FloatRangeParameterInput> floatRangeParameterInputs = new List<FloatRangeParameterInput>();
+        protected List<parameters.FloatRangeParameterInput> floatRangeParameterInputs = new List<parameters.FloatRangeParameterInput>();
         /// <summary>
         /// Instantiated int parameter inputs.
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<IntParameterInput> intParameterInputs = new List<IntParameterInput>();
+        protected List<parameters.IntParameterInput> intParameterInputs = new List<parameters.IntParameterInput>();
         /// <summary>
         /// Instantiated bool parameter inputs.
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<BooleanParameterInput> boolParameterInputs = new List<BooleanParameterInput>();
+        protected List<parameters.BooleanParameterInput> boolParameterInputs = new List<parameters.BooleanParameterInput>();
         /// <summary>
         /// Instantiated string parameter inputs.
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<StringParameterInput> stringParameterInputs = new List<StringParameterInput>();
+        protected List<parameters.StringParameterInput> stringParameterInputs = new List<parameters.StringParameterInput>();
         /// <summary>
         /// Instantiated string enum parameter inputs.
         /// </summary>
         /// <see cref="FindInput(AbstractParameterDto, bool)"/>
-        protected List<StringEnumParameterInput> stringEnumParameterInputs = new List<StringEnumParameterInput>();
+        protected List<parameters.StringEnumParameterInput> stringEnumParameterInputs = new List<parameters.StringEnumParameterInput>();
 
         protected int m_navigationDirect = 0;
         protected AutoProjectOnHover reason = new AutoProjectOnHover();
@@ -183,6 +163,7 @@ namespace umi3d.baseBrowser.Controller
             m_navigationDirect = 0;
             MouseHandler();
         }
+        protected virtual void Update() { }
         #endregion
 
         protected abstract void OnMenuObjectContentChange();
@@ -210,7 +191,7 @@ namespace umi3d.baseBrowser.Controller
             ClearInputs(ref stringParameterInputs, action);
             ClearInputs(ref stringEnumParameterInputs, action);
         }
-        protected void ClearInputs<T>(ref List<T> inputs, System.Action<T> action) 
+        protected void ClearInputs<T>(ref List<T> inputs, System.Action<T> action)
             where T : AbstractUMI3DInput
         {
             inputs.ForEach(action);
@@ -261,9 +242,9 @@ namespace umi3d.baseBrowser.Controller
             if (gO != null) input = gO.AddComponent<T>();
             else input = new T();
 
-            if (input is KeyMenuInput keyMenuInput) keyMenuInput.bone = interactionBoneType;
-            else if (input is FormInput formInput) formInput.bone = interactionBoneType;
-            else if (input is LinkInput linkInput) linkInput.bone = interactionBoneType;
+            if (input is inputs.interactions.KeyMenuInput keyMenuInput) keyMenuInput.bone = interactionBoneType;
+            else if (input is inputs.interactions.FormInput formInput) formInput.bone = interactionBoneType;
+            else if (input is inputs.interactions.LinkInput linkInput) linkInput.bone = interactionBoneType;
 
             input.Menu = m_objectMenu?.menu;
             inputs.Add(input);
@@ -303,7 +284,7 @@ namespace umi3d.baseBrowser.Controller
         {
             InteractionMapper.SelectTool(mouseData.CurrentHovered.dto.id, true, this, mouseData.CurrentHoveredId, reason);
             mouseData.HoverState = HoverState.AutoProjected;
-            CursorHandler.State = CursorHandler.CursorState.Hover;
+            BaseCursor.State = BaseCursor.CursorState.Hover;
             mouseData.LastProjected = mouseData.CurrentHovered;
         }
         private void ReleaseAutoProjection()
@@ -311,7 +292,7 @@ namespace umi3d.baseBrowser.Controller
             if (mouseData.HoverState == HoverState.AutoProjected && currentTool != null)
                 InteractionMapper.ReleaseTool(currentTool.id, new RequestedByUser());
             mouseData.HoverState = HoverState.None;
-            CursorHandler.State = CursorHandler.CursorState.Default;
+            BaseCursor.State = BaseCursor.CursorState.Default;
             mouseData.LastProjected = null;
         }
         #endregion
@@ -332,7 +313,7 @@ namespace umi3d.baseBrowser.Controller
                 mouseData.CurrentHovered = null;
                 mouseData.CurrentHoveredTransform = null;
                 mouseData.HoverState = HoverState.None;
-                CursorHandler.State = CursorHandler.CursorState.Default;
+                BaseCursor.State = BaseCursor.CursorState.Default;
             }
             if (mouseData.ForceProjection)
             {
@@ -513,21 +494,21 @@ namespace umi3d.baseBrowser.Controller
                 mouseData.CurrentHovered = interactable;
                 mouseData.CurrentHoveredTransform = interactableContainer.transform;
 
-                mouseData.point = interactableContainer.transform.InverseTransformPoint(hit.point);
-                mouseData.worldPoint = hit.point;
-                if (Vector3.Distance(mouseData.worldPoint, hit.transform.position) < 0.1f) mouseData.centeredWorldPoint = hit.transform.position;
-                else mouseData.centeredWorldPoint = mouseData.worldPoint;
+                mouseData.Position = interactableContainer.transform.InverseTransformPoint(hit.point);
+                mouseData.WorldPosition = hit.point;
+                if (Vector3.Distance(mouseData.WorldPosition, hit.transform.position) < 0.1f) mouseData.CenteredWorldPosition = hit.transform.position;
+                else mouseData.CenteredWorldPosition = mouseData.WorldPosition;
 
-                mouseData.normal = interactableContainer.transform.InverseTransformDirection(hit.normal);
-                mouseData.worldNormal = hit.normal;
+                mouseData.Normal = interactableContainer.transform.InverseTransformDirection(hit.normal);
+                mouseData.WorldNormal = hit.normal;
 
-                mouseData.direction = interactableContainer.transform.InverseTransformDirection(ray.direction);
-                mouseData.worlDirection = ray.direction;
+                mouseData.Direction = interactableContainer.transform.InverseTransformDirection(ray.direction);
+                mouseData.WorlDirection = ray.direction;
 
                 break;
             }
 
-            if (CursorHandler.State != CursorHandler.CursorState.Clicked) UpdateTool();
+            if (BaseCursor.State != BaseCursor.CursorState.Clicked) UpdateTool();
 
             Hover();
         }
@@ -555,7 +536,7 @@ namespace umi3d.baseBrowser.Controller
                         input.UpdateHoveredObjectId(mouseData.CurrentHoveredId);
                 }
 
-                mouseData.CurrentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
+                mouseData.CurrentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.Position, mouseData.Normal, mouseData.Direction);
             }
         }
         private void OldHoverExitAndCurrentHoverEnter()
@@ -569,7 +550,7 @@ namespace umi3d.baseBrowser.Controller
 
             ulong lastHoverId = mouseData.LastHoveredId;
             mouseData.OldHovered
-                .HoverExit(hoverBoneType, lastHoverId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
+                .HoverExit(hoverBoneType, lastHoverId, mouseData.LastPosition, mouseData.LastNormal, mouseData.LastDirection);
 
             ulong hoverExitAnimationId = mouseData.OldHovered.dto.HoverExitAnimationId;
             if (hoverExitAnimationId != 0)
@@ -586,7 +567,7 @@ namespace umi3d.baseBrowser.Controller
 
             ulong currentHoverId = mouseData.CurrentHoveredId;
             mouseData.CurrentHovered
-                .HoverEnter(hoverBoneType, currentHoverId, mouseData.point, mouseData.normal, mouseData.direction);
+                .HoverEnter(hoverBoneType, currentHoverId, mouseData.Position, mouseData.Normal, mouseData.Direction);
 
             ulong hoverEnterAnimationId = mouseData.CurrentHovered.dto.HoverEnterAnimationId;
             if (hoverEnterAnimationId != 0)
@@ -598,6 +579,6 @@ namespace umi3d.baseBrowser.Controller
         }
         #endregion
 
-        
+
     }
 }

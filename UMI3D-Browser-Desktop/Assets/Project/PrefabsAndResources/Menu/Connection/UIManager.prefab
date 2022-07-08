@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5785764bf66a2641bf1b5ba785d58c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiDocument: {fileID: 1750602239179936672}
+  document: {fileID: 1750602239179936672}
   defaultCursor: {fileID: 21300000, guid: 9587d1061d5f1914cb5451dd3fee0ff2, type: 3}
   hoverCursor: {fileID: 21300000, guid: 87684a493ff09d7409d738c133ce3c6d, type: 3}
   followCursor: {fileID: 21300000, guid: 7ad7c876c8798db4d83cb5fed09a584a, type: 3}
@@ -711,6 +711,7 @@ MonoBehaviour:
   m_showSettignsOnStart: 0
   m_showShortcutOnStart: 1
   m_showConsoleOnStart: 0
+  m_showEmotesOnStart: 0
   m_maxNotification2DDisplayed: 3
 --- !u!114 &4820613813600277437
 MonoBehaviour:
