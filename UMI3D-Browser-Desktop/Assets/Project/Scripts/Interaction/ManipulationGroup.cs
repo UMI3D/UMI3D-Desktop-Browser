@@ -28,9 +28,10 @@ namespace BrowserDesktop.Interaction
 {
     public class ManipulationGroup : AbstractUMI3DInput
     {
-        bool active = false;
+        bool Active { get; set; } = false;
         ButtonMenuItem menuItem;
         ulong hoveredObjectId;
+
         #region Instances List
 
         static List<ManipulationGroup> instances = new List<ManipulationGroup>();
@@ -42,35 +43,22 @@ namespace BrowserDesktop.Interaction
             Debug.LogWarning($"There were references to CircularMenu here [Manipulation Group].");
         }
 
-        static public void NextManipulation()
-        {
-            SwicthManipulation(currentInstance + 1);
-        }
-
-        static public void PreviousManipulation()
-        {
-            SwicthManipulation(currentInstance - 1);
-        }
+        static public void NextManipulation() => SwicthManipulation(currentInstance + 1);
+        static public void PreviousManipulation() => SwicthManipulation(currentInstance - 1);
 
         static void SwicthManipulation(int i)
         {
-            if (instances.Count > 0)
-            {
-                if (currentInstance < instances.Count)
-                    instances[currentInstance].Deactivate();
-                currentInstance = i;
-                if (currentInstance < 0)
-                    currentInstance = instances.Count - 1;
-                else if (currentInstance >= instances.Count)
-                    currentInstance = 0;
-                if (currentInstance < instances.Count)
-                    instances[currentInstance].Activate();
-            }
+            if (instances.Count == 0) return;
+            if (currentInstance < instances.Count) instances[currentInstance].Deactivate();
+            currentInstance = i;
+            if (currentInstance < 0) currentInstance = instances.Count - 1;
+            else if (currentInstance >= instances.Count) currentInstance = 0;
+            if (currentInstance < instances.Count) instances[currentInstance].Activate();
         }
 
         static public ManipulationGroup CurrentManipulationGroup { get { if (instances.Count > 0) return instances[currentInstance]; else return null; } }
 
-        bool Active { get => active; set { active = value; } }
+        
 
         internal void Activate()
         {
@@ -148,32 +136,25 @@ namespace BrowserDesktop.Interaction
 
         internal void Add(ManipulationInput input)
         {
-            if (!InputInstances[this].Contains(input))
+            if (InputInstances[this].Contains(input)) return;
+            InputInstances[this].Add(input);
+            if (Active && InputInstances[this].Count == 1)
             {
-                InputInstances[this].Add(input);
-                if (active && InputInstances[this].Count == 1)
-                {
-                    currentInstance = 0;
-                    input.Activate();
-                }
-                else
-                {
-                    input.Deactivate();
-                }
-                input.DisplayDisplayer(active);
+                currentInstance = 0;
+                input.Activate();
             }
+            else input.Deactivate();
+            input.DisplayDisplayer(Active);
         }
         internal void Remove(ManipulationInput input)
         {
-            if (InputInstances[this].Contains(input))
+            if (!InputInstances[this].Contains(input)) return;
+            if (Active) PreviousManipulation();
+            InputInstances[this].Remove(input);
+            if (Active && InputInstances[this].Count == 0)
             {
-                if (Active) PreviousManipulation();
-                InputInstances[this].Remove(input);
-                if (active && InputInstances[this].Count == 0)
-                {
-                    currentInstance = 0;
-                    umi3d.baseBrowser.Controller.BaseCursor.State = umi3d.baseBrowser.Controller.BaseCursor.CursorState.Hover;
-                }
+                currentInstance = 0;
+                umi3d.baseBrowser.Controller.BaseCursor.State = umi3d.baseBrowser.Controller.BaseCursor.CursorState.Hover;
             }
         }
 
