@@ -14,33 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Interaction;
-using inetum.unityUtils;
 using System.Collections.Generic;
 using umi3d.cdk.interaction;
-using umi3d.cdk.menu.view;
 using umi3d.common.interaction;
-using umi3d.common.userCapture;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace umi3d.baseBrowser.Controller
 {
     public abstract class BaseController : AbstractController
     {
         #region Types
-        public class HoverEvent : UnityEvent<ulong> { };
+        public class HoverEvent : UnityEngine.Events.UnityEvent<ulong> { };
         public struct MouseData
         {
-            public bool ForceProjection;
-            public bool ForceProjectionReleasable;
+            public bool ForceProjection, ForceProjectionReleasable;
             public HoldableButtonMenuItem ForceProjectionReleasableButton;
 
-            public Interactable LastProjected;
-            public Interactable OldHovered;
-            public ulong LastHoveredId;
-            public Interactable CurrentHovered;
+            public Interactable LastProjected, OldHovered, CurrentHovered;
+            public ulong LastHoveredId, CurrentHoveredId;
             public Transform CurrentHoveredTransform;
-            public ulong CurrentHoveredId;
 
             public Vector3 point;
             public Vector3 worldPoint;
@@ -60,8 +52,7 @@ namespace umi3d.baseBrowser.Controller
 
             public void Save()
             {
-                if (saveDelay > 0)
-                    saveDelay--;
+                if (saveDelay > 0) saveDelay--;
                 else
                 {
                     if (saveDelay < 0) saveDelay = 0;
@@ -76,8 +67,7 @@ namespace umi3d.baseBrowser.Controller
                 }
             }
 
-            public bool isDelaying()
-                => saveDelay > 0;
+            public bool isDelaying() => saveDelay > 0;
         }
         public enum HoverState
         {
@@ -91,7 +81,7 @@ namespace umi3d.baseBrowser.Controller
         public MouseData mouseData;
 
         [SerializeField]
-        protected MenuDisplayManager m_objectMenu;
+        protected cdk.menu.view.MenuDisplayManager m_objectMenu;
         [SerializeField]
         protected Transform CameraTransform;
         [SerializeField]
@@ -104,16 +94,16 @@ namespace umi3d.baseBrowser.Controller
         /// Avatar bone linked to this input.
         /// </summary>
         [SerializeField]
-        [ConstEnum(typeof(BoneType), typeof(uint))]
-        protected uint interactionBoneType = BoneType.RightHand;
+        [inetum.unityUtils.ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
+        protected uint interactionBoneType = common.userCapture.BoneType.RightHand;
         [SerializeField]
-        [ConstEnum(typeof(BoneType), typeof(uint))]
-        protected uint hoverBoneType = BoneType.Head;
+        [inetum.unityUtils.ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
+        protected uint hoverBoneType = common.userCapture.BoneType.Head;
 
         protected List<ManipulationGroup> ManipulationInputs = new List<ManipulationGroup>();
-        protected List<KeyMenuInput> KeyMenuInputs = new List<KeyMenuInput>();
-        protected List<FormInput> FormInputs = new List<FormInput>();
-        protected List<LinkInput> LinkInputs = new List<LinkInput>();
+        protected List<inputs.interactions.KeyMenuInput> KeyMenuInputs = new List<inputs.interactions.KeyMenuInput>();
+        protected List<inputs.interactions.FormInput> FormInputs = new List<inputs.interactions.FormInput>();
+        protected List<inputs.interactions.LinkInput> LinkInputs = new List<inputs.interactions.LinkInput>();
         /// <summary>
         /// Instantiated float parameter inputs.
         /// </summary>
@@ -260,9 +250,9 @@ namespace umi3d.baseBrowser.Controller
             if (gO != null) input = gO.AddComponent<T>();
             else input = new T();
 
-            if (input is KeyMenuInput keyMenuInput) keyMenuInput.bone = interactionBoneType;
-            else if (input is FormInput formInput) formInput.bone = interactionBoneType;
-            else if (input is LinkInput linkInput) linkInput.bone = interactionBoneType;
+            if (input is inputs.interactions.KeyMenuInput keyMenuInput) keyMenuInput.bone = interactionBoneType;
+            else if (input is inputs.interactions.FormInput formInput) formInput.bone = interactionBoneType;
+            else if (input is inputs.interactions.LinkInput linkInput) linkInput.bone = interactionBoneType;
 
             input.Menu = m_objectMenu?.menu;
             inputs.Add(input);
