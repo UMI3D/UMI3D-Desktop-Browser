@@ -43,7 +43,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
 
     private ServerPreferences.Data connectionData;
 
-    public ClientPCIdentifier identifier;
+    public umi3d.baseBrowser.connection.BaseClientIdentifier identifier;
 
     public MenuAsset Menu;
     public MenuDisplayManager MenuDisplayManager;
