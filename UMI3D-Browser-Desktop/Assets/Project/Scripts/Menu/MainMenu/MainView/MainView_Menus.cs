@@ -147,15 +147,15 @@ namespace umi3dDesktopBrowser.ui
         private void ResetMenus()
         {
             ResetBottomBar();
-            MenuBar_E.Instance.Reset();
-            BottomBar_E.Instance.Reset();
-            Settingbox_E.Instance.Reset();
-            Shortcutbox_E.Instance.Reset();
-            EmoteWindow_E.Instance.Reset();
-            Console_E.Instance.Reset();
-            ToolboxWindow_E.Instance.Reset();
-            ToolboxPinnedWindow_E.Instance.Reset();
-            ObjectMenuWindow_E.Instance.Reset();
+            MenuBar_E.DestroySingleton();
+            BottomBar_E.DestroySingleton();
+            Settingbox_E.DestroySingleton();
+            Shortcutbox_E.DestroySingleton();
+            EmoteWindow_E.DestroySingleton();
+            Console_E.DestroySingleton();
+            ToolboxWindow_E.DestroySingleton();
+            ToolboxPinnedWindow_E.DestroySingleton();
+            ObjectMenuWindow_E.DestroySingleton();
             m_pinnedToolboxesDM.menu.RemoveAll();
         }
 
