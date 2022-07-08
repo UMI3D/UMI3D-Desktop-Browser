@@ -34,17 +34,9 @@ namespace umi3d.baseBrowser.Controller
             public ulong LastHoveredId, CurrentHoveredId;
             public Transform CurrentHoveredTransform;
 
-            public Vector3 point;
-            public Vector3 worldPoint;
-            public Vector3 centeredWorldPoint;
-            public Vector3 normal;
-
-            public Vector3 worldNormal;
-            public Vector3 direction;
-            public Vector3 worlDirection;
-            public Vector3 cursorOffset;
-
-            public Vector3 lastPoint, lastNormal, lastDirection;
+            public Vector3 LastPosition, LastNormal, LastDirection;
+            public Vector3 Position, Normal, Direction;
+            public Vector3 CenteredWorldPosition, WorldPosition, WorldNormal, WorlDirection;
 
             public HoverState HoverState;
 
@@ -61,13 +53,13 @@ namespace umi3d.baseBrowser.Controller
                     CurrentHovered = null;
                     CurrentHoveredTransform = null;
                     CurrentHoveredId = 0;
-                    lastPoint = point;
-                    lastNormal = normal;
-                    lastDirection = direction;
+                    LastPosition = Position;
+                    LastNormal = Normal;
+                    LastDirection = Direction;
                 }
             }
 
-            public bool isDelaying() => saveDelay > 0;
+            public bool IsDelaying() => saveDelay > 0;
         }
         public enum HoverState
         {
@@ -502,16 +494,16 @@ namespace umi3d.baseBrowser.Controller
                 mouseData.CurrentHovered = interactable;
                 mouseData.CurrentHoveredTransform = interactableContainer.transform;
 
-                mouseData.point = interactableContainer.transform.InverseTransformPoint(hit.point);
-                mouseData.worldPoint = hit.point;
-                if (Vector3.Distance(mouseData.worldPoint, hit.transform.position) < 0.1f) mouseData.centeredWorldPoint = hit.transform.position;
-                else mouseData.centeredWorldPoint = mouseData.worldPoint;
+                mouseData.Position = interactableContainer.transform.InverseTransformPoint(hit.point);
+                mouseData.WorldPosition = hit.point;
+                if (Vector3.Distance(mouseData.WorldPosition, hit.transform.position) < 0.1f) mouseData.CenteredWorldPosition = hit.transform.position;
+                else mouseData.CenteredWorldPosition = mouseData.WorldPosition;
 
-                mouseData.normal = interactableContainer.transform.InverseTransformDirection(hit.normal);
-                mouseData.worldNormal = hit.normal;
+                mouseData.Normal = interactableContainer.transform.InverseTransformDirection(hit.normal);
+                mouseData.WorldNormal = hit.normal;
 
-                mouseData.direction = interactableContainer.transform.InverseTransformDirection(ray.direction);
-                mouseData.worlDirection = ray.direction;
+                mouseData.Direction = interactableContainer.transform.InverseTransformDirection(ray.direction);
+                mouseData.WorlDirection = ray.direction;
 
                 break;
             }
@@ -544,7 +536,7 @@ namespace umi3d.baseBrowser.Controller
                         input.UpdateHoveredObjectId(mouseData.CurrentHoveredId);
                 }
 
-                mouseData.CurrentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.point, mouseData.normal, mouseData.direction);
+                mouseData.CurrentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.Position, mouseData.Normal, mouseData.Direction);
             }
         }
         private void OldHoverExitAndCurrentHoverEnter()
@@ -558,7 +550,7 @@ namespace umi3d.baseBrowser.Controller
 
             ulong lastHoverId = mouseData.LastHoveredId;
             mouseData.OldHovered
-                .HoverExit(hoverBoneType, lastHoverId, mouseData.lastPoint, mouseData.lastNormal, mouseData.lastDirection);
+                .HoverExit(hoverBoneType, lastHoverId, mouseData.LastPosition, mouseData.LastNormal, mouseData.LastDirection);
 
             ulong hoverExitAnimationId = mouseData.OldHovered.dto.HoverExitAnimationId;
             if (hoverExitAnimationId != 0)
@@ -575,7 +567,7 @@ namespace umi3d.baseBrowser.Controller
 
             ulong currentHoverId = mouseData.CurrentHoveredId;
             mouseData.CurrentHovered
-                .HoverEnter(hoverBoneType, currentHoverId, mouseData.point, mouseData.normal, mouseData.direction);
+                .HoverEnter(hoverBoneType, currentHoverId, mouseData.Position, mouseData.Normal, mouseData.Direction);
 
             ulong hoverEnterAnimationId = mouseData.CurrentHovered.dto.HoverEnterAnimationId;
             if (hoverEnterAnimationId != 0)
