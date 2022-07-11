@@ -14,14 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using System.Collections;
-using umi3d.baseBrowser.ui.viewController;
-using umi3d.cdk.menu;
 using umi3DBrowser.UICustomStyle;
-using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.ui.viewController
+namespace umi3d.baseBrowser.ui.viewController
 {
     public partial class Notification2D_E
     {
