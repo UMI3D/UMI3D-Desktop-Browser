@@ -104,8 +104,13 @@ namespace umi3dDesktopBrowser.ui
 
         private void InitNotification2D()
         {
-            Notificationbox2D_E.Instance.InsertRootTo(m_viewport);
-            Notificationbox2D_E.Instance.MaxNotification = () => m_maxNotification2DDisplayed;
+            umi3d.baseBrowser.ui.viewController.Notificationbox2D_E.Instance.InsertRootTo(m_viewport);
+            umi3d.baseBrowser.ui.viewController.Notificationbox2D_E.Instance.MaxNotification = () => m_maxNotification2DDisplayed;
+            var root = umi3d.baseBrowser.ui.viewController.Notificationbox2D_E.Instance.Root;
+            root.style.right = 0f;
+            root.style.top = 0f;
+            root.style.bottom = 0f;
+            umi3d.baseBrowser.ui.viewController.Notificationbox2D_E.Instance.HighPriorityBox.style.maxHeight = new UnityEngine.UIElements.Length(40, UnityEngine.UIElements.LengthUnit.Percent);
         }
 
         private void InitBottomBar()
