@@ -135,9 +135,9 @@ namespace umi3dDesktopBrowser.emotes
             }
 
             var emoteFromBundleAnimator = avatar.GetComponentInChildren<Animator>();
-            emoteFromBundleAnimator.enabled = false; //disabled because it causes interferences with avatar bindings
             if (emoteFromBundleAnimator != null)
             {
+                emoteFromBundleAnimator.enabled = false; //disabled because it causes interferences with avatar bindings
                 if (emoteFromBundleAnimator.runtimeAnimatorController == null)
                 {
                     DisableEmoteSystem();
