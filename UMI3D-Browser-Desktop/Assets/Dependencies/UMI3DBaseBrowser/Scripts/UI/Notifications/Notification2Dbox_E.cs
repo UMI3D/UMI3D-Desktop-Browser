@@ -16,14 +16,13 @@ limitations under the License.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using umi3d.baseBrowser.ui.viewController;
 using umi3d.cdk;
 using umi3d.common;
 using umi3d.common.interaction;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace umi3dDesktopBrowser.ui.viewController
+namespace umi3d.baseBrowser.ui.viewController
 {
     public partial class Notificationbox2D_E
     {
@@ -33,9 +32,9 @@ namespace umi3dDesktopBrowser.ui.viewController
         private Queue<NotificationDto> m_HighPriorityNotifications;
         private int m_currentlyDisplayed;
 
-        private VisualElement m_highPriorityBox;
+        public VisualElement HighPriorityBox { get; protected set; }
         private VisualElement m_lowPriorityBox;
-
+        protected ScrollView_E m_highPriorityScrollView;
 
         private bool m_processLowPriority => 
             (MaxNotification != null) 
@@ -97,7 +96,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
                 var notification = new Notification2D_E(dto.title, dto.content, dto.callback, callback);
                 notification.Complete += () => notification.RemoveRootFromHierarchy();
-                notification.InsertRootAtTo(0, m_highPriorityBox);
+                notification.InsertRootAtTo(0, m_highPriorityScrollView.Root);
             }
         }
     }
@@ -136,14 +135,15 @@ namespace umi3dDesktopBrowser.ui.viewController
 
             Root.name = "notification2Dbox";
             Root.style.position = Position.Absolute;
-            Root.style.right = 0f;
-            Root.style.top = 0f;
-            Root.style.bottom = 0f;
 
-            m_highPriorityBox = new VisualElement();
-            m_highPriorityBox.name = "highPriorityBox";
-            m_highPriorityBox.style.width = new Length(100, LengthUnit.Percent);
-            Root.Add(m_highPriorityBox);
+            HighPriorityBox = new VisualElement();
+            HighPriorityBox.name = "highPriorityBox";
+            HighPriorityBox.style.width = new Length(100, LengthUnit.Percent);
+            Root.Add(HighPriorityBox);
+            m_highPriorityScrollView = new ScrollView_E();
+            m_highPriorityScrollView.InsertRootTo(HighPriorityBox);
+
+            HighPriorityBox.style.marginBottom = 10f;
 
             m_lowPriorityBox = new VisualElement();
             m_lowPriorityBox.name = "lowPriorityBox";
