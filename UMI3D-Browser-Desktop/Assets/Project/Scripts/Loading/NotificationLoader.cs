@@ -23,7 +23,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NotificationLoader", menuName = "UMI3D/Notification Loader")]
 public class NotificationLoader : umi3d.cdk.NotificationLoader
 {
-    public Notification3D notification3DPrefab;
+    public umi3d.baseBrowser.notification.Notification3D notification3DPrefab;
 
     /// <summary>
     /// <inheritdoc/>
