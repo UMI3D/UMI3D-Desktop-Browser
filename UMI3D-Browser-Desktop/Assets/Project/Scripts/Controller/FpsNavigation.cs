@@ -87,6 +87,8 @@ public class FpsNavigation : AbstractNavigation
     /// </summary>
     private float groundHeight = 0;
 
+    private bool hasGroundHeightChangedLastFrame = false;
+
     /// <summary>
     /// Is player active ?
     /// </summary>
@@ -229,7 +231,7 @@ public class FpsNavigation : AbstractNavigation
         if (height < groundHeight)
         {
             float offset = Mathf.Abs(height - groundHeight);
-            if ((offset < maxStepHeight + stepEpsilon) && (offset > stepEpsilon))
+            if ((offset < maxStepHeight + stepEpsilon) && (offset > stepEpsilon) && hasGroundHeightChangedLastFrame)
             {
                 height = Mathf.Lerp(height, groundHeight, .5f);
             } else
@@ -451,9 +453,20 @@ public class FpsNavigation : AbstractNavigation
 
         if (foundHit.distance < Mathf.Infinity)
         {
-            groundHeight = foundHit.point.y;
+            float newHeight = foundHit.point.y;
+            if(Mathf.Abs(newHeight - groundHeight) > .001f)
+            {
+                groundHeight = newHeight;
+                hasGroundHeightChangedLastFrame = true;
+            } else
+            {
+                hasGroundHeightChangedLastFrame = false;
+            }
+
             return true;
         }
+
+        hasGroundHeightChangedLastFrame = false;
 
         return false;
     }
