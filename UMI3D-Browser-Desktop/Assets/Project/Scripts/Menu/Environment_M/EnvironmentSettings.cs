@@ -229,7 +229,7 @@ public class UserListSetting
 
         public void ToggleAvatar()
         {
-            user.SetMicrophoneStatus(!user.avatarStatus);
+            user.SetAvatarStatus(!user.avatarStatus);
         }
 
         public void setValue() {
