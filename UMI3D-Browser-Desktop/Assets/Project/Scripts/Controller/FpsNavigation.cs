@@ -87,6 +87,9 @@ public class FpsNavigation : AbstractNavigation
     /// </summary>
     private float groundHeight = 0;
 
+    /// <summary>
+    /// Has <see cref="groundHeight"/> changed last frame ?
+    /// </summary>
     private bool hasGroundHeightChangedLastFrame = false;
 
     /// <summary>
