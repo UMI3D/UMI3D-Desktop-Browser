@@ -24,16 +24,21 @@ namespace umi3d.baseBrowser.ui.viewController
             base(window)
         { }
 
-        /// <summary>
-        /// Makes the VisualElement follow user's mouse position.
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnMouseMove(MouseMoveEvent e)
+        protected override bool IsPointerIdCompatible(int pointID)
         {
-            if (!target.HasMouseCapture())
-                return;
+            return true;
+        }
 
-            Vector2 diff = e.localMousePosition - start;
+        protected override bool IsPointerIdUsed(int pointerId)
+        {
+            return true;
+        }
+
+        protected override void ProcessMoveEvent(EventBase e, Vector2 localPosition, int pointerId)
+        {
+            if (m_startPosition == null || !target.HasMouseCapture()) return;
+
+            Vector2 diff = localPosition - m_startPosition.Value;
 
             float heightDivTwo = m_visual.resolvedStyle.height / 2;
             float widthDivTwo = m_visual.resolvedStyle.width / 2;

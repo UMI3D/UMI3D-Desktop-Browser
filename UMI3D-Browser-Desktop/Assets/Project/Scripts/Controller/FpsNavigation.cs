@@ -15,242 +15,16 @@ limitations under the License.
 */
 
 using BrowserDesktop.Controller;
-using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
-using System.Collections.Generic;
-using umi3d.cdk;
-using umi3d.common;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class FpsNavigation : AbstractNavigation
+public class FpsNavigation : umi3d.baseBrowser.Navigation.BaseFPSNavigation
 {
-    #region Fields
-
-    [Header("Player parts")]
-
-    [SerializeField]
-    private Transform viewpoint;
-
-    [SerializeField]
-    private Transform neckPivot;
-
-    [SerializeField]
-    private Transform head;
-
-    [SerializeField]
-    private Transform skeleton;
-
-    [SerializeField]
-    [Tooltip("List of point which from rays will be created to check is there is a navmesh under player's feet")]
-    private List<Transform> feetRaycastOrigin;
-
-    [SerializeField]
-    [Tooltip("List of point which from rays will be created to check is there is an obstacle in front of the player")]
-    private List<Transform> obstacleRaycastOrigins;
-
-    [Header("Parameters")]
-    [SerializeField]
-    private FpsScriptableAsset data;
-
-    [SerializeField]
-    private float maxNeckAngle;
-
-    [SerializeField]
-    private float maxStepHeight = .2f;
-
-    [SerializeField]
-    private float maxSlopeAngle = 45f;
-
-    private float stepEpsilon = 0.05f;
-
-    [SerializeField]
-    [Tooltip("Navigation mode")]
-    private Navigation navigation;
-
-    [Header("Navmesh")]
-    [SerializeField]
-    public LayerMask obstacleLayer;
-
-    [SerializeField]
-    public LayerMask navmeshLayer;
-
-    #region Player state
-
-    /// <summary>
-    /// Is player currently grounded ?
-    /// </summary>
-    public bool IsGrounded { get => Mathf.Abs(transform.position.y - groundHeight) < maxStepHeight; }
-
-    /// <summary>
-    /// Current ground height.
-    /// </summary>
-    private float groundHeight = 0;
-
-    /// <summary>
-    /// Has <see cref="groundHeight"/> changed last frame ?
-    /// </summary>
-    private bool hasGroundHeightChangedLastFrame = false;
-
-    /// <summary>
-    /// Is player active ?
-    /// </summary>
-    bool isActive = false;
-
-    Vector3 destination;
-
-    public static UnityEvent PlayerMoved = new UnityEvent();
-
-    public State state;
-
-    bool changeToDefault = false;
-
-    Vector3 lastAngleView;
-
-    /// <summary>
-    /// Is navigation currently performed ?
-    /// </summary>
-    bool navigateTo;
-
-    Vector3 navigationDestination;
-
-    #endregion
-
-    #region Computed parameters
-
-    private float maxJumpVelocity;
-
-    /// <summary>
-    /// Stores all data about player jumps.
-    /// </summary>
-    JumpData jumpData;
-
-    #endregion
-
-    #endregion
-
     #region Methods
-
-    #region Abstract Navigation
-
-    public override void Activate()
-    {
-        isActive = true;
-        state = State.Default;
-        jumpData = new JumpData();
-
-        UpdateBaseHeight();
-
-        maxJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(data.gravity) * data.MaxJumpHeight);
-    }
-
-    public override void Disable()
-    {
-        isActive = false;
-    }
-
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
-    /// <param name="data"></param>
-    public override void Navigate(NavigateDto data)
-    {
-        navigateTo = true;
-        navigationDestination = data.position;
-    }
-
-    public override void Teleport(TeleportDto data)
-    {
-        transform.position = data.position;
-        groundHeight = data.position.Y;
-
-        transform.rotation = data.rotation;
-
-        UpdateBaseHeight();
-    }
-
-    UMI3DNodeInstance globalVehicle;
-
-    public override void Embark(VehicleDto data)
-    {
-        isActive = !data.StopNavigation;
-
-        if (data.VehicleId == 0)
-        {
-            this.transform.SetParent(UMI3DEnvironmentLoader.Instance.transform, true);
-            this.transform.localPosition = data.position;
-            this.transform.localRotation = data.rotation;
-
-            DontDestroyOnLoad(UMI3DNavigation.Instance);
-
-            globalVehicle.Delete -= new System.Action(() => {
-                UMI3DNavigation.Instance.transform.SetParent(UMI3DEnvironmentLoader.Instance.transform, true);
-                DontDestroyOnLoad(UMI3DNavigation.Instance);
-            });
-
-            globalVehicle = null;
-        }
-        else
-        {
-            UMI3DNodeInstance vehicle = UMI3DEnvironmentLoader.GetNode(data.VehicleId);
-
-            if (vehicle != null)
-            {
-                globalVehicle = vehicle;
-
-                this.transform.SetParent(vehicle.transform, true);
-                this.transform.localPosition = data.position;
-                this.transform.localRotation = data.rotation;
-
-                globalVehicle.Delete += new System.Action(() => {
-                    UMI3DNavigation.Instance.transform.SetParent(UMI3DEnvironmentLoader.Instance.transform, true);
-                    DontDestroyOnLoad(UMI3DNavigation.Instance);
-                });
-            }
-        }
-    }
-
-    #endregion
-
-    /// <summary>
-    /// Applies gravity to player and makes it jump.
-    /// </summary>
-    /// <param name="jumping"></param>
-    /// <param name="height"></param>
-    void ComputeGravity(bool jumping, ref float height)
-    {
-        if (jumpData.jumping != jumping)
-        {
-            jumpData.jumping = jumping;
-
-            if (jumpData.jumping && IsGrounded)
-            {
-                jumpData.velocity = maxJumpVelocity;
-                jumpData.lastTimeJumped = Time.time;
-            }
-        }
-
-        jumpData.velocity += data.gravity * Time.deltaTime;
-        height += jumpData.velocity * Time.deltaTime;
-
-        if (height < groundHeight)
-        {
-            float offset = Mathf.Abs(height - groundHeight);
-            if ((offset < maxStepHeight + stepEpsilon) && (offset > stepEpsilon) && hasGroundHeightChangedLastFrame)
-            {
-                height = Mathf.Lerp(height, groundHeight, .5f);
-            } else
-            {
-                jumpData.velocity = 0;
-                height = groundHeight;
-            }
-        }
-    }
 
     private void Update()
     {
-        if (!isActive)
-            return;
+        if (!isActive) return;
 
         float height = transform.position.y;
 
@@ -265,11 +39,18 @@ public class FpsNavigation : AbstractNavigation
             return;
         }
 
-        if (TextInputDisplayerElement.isTyping)
-            return;
+        if (TextInputDisplayerElement.isTyping) return;
 
-        if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.FreeHead; }
-        else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) { state = State.Default; changeToDefault = true; }
+        if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) 
+        { 
+            state = State.FreeHead; 
+        }
+        else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) 
+        {
+            Debug.Log($"test");
+            state = State.Default; 
+            changeToDefault = true; 
+        }
 
         HandleMovement();
 
@@ -324,14 +105,8 @@ public class FpsNavigation : AbstractNavigation
 
         Vector3 pos = transform.rotation * new Vector3(move.y, 0, move.x);
 
-        if (CanMove(pos))
-        {
-            pos += transform.position;
-        }
-        else
-        {
-            pos = transform.position;
-        }
+        if (CanMove(pos)) pos += transform.position;
+        else pos = transform.position;
 
         pos.y = height;
 
@@ -382,10 +157,14 @@ public class FpsNavigation : AbstractNavigation
     private void HandleView()
     {
         if (state == State.FreeMousse) return;
-        Vector3 angleView = NormalizeAngle(viewpoint.rotation.eulerAngles);
+        Vector3 angleView = viewpoint.rotation.eulerAngles.NormalizeAngle();
 
-        Vector2 angularSpeed = new Vector2(-1 * Input.GetAxis("Mouse Y") * data.AngularViewSpeed.x, Input.GetAxis("Mouse X") * data.AngularViewSpeed.y);
-        Vector3 result = NormalizeAngle(angleView + (Vector3)angularSpeed);
+        Vector2 angularSpeed = new Vector2
+            (
+            -1 * Input.GetAxis("Mouse Y") * data.AngularViewSpeed.x, 
+            Input.GetAxis("Mouse X") * data.AngularViewSpeed.y
+            );
+        Vector3 result = angleView + ((Vector3)angularSpeed).NormalizeAngle();
         if (changeToDefault)
         {
             result = lastAngleView;
@@ -406,167 +185,15 @@ public class FpsNavigation : AbstractNavigation
         }
         else
         {
-            Vector3 angleNeck = NormalizeAngle(transform.rotation.eulerAngles);
+            Vector3 angleNeck = transform.rotation.eulerAngles.NormalizeAngle();
             float delta = Mathf.DeltaAngle(result.y, angleNeck.y);
 
             if (delta < data.YAngleRange.x) result.y = -data.YAngleRange.x + angleNeck.y;
             if (delta > data.YAngleRange.y) result.y = -data.YAngleRange.y + angleNeck.y;
         }
-
         viewpoint.transform.rotation = Quaternion.Euler(result);
         neckPivot.transform.rotation = Quaternion.Euler(new Vector3(Mathf.Clamp(result.x, -maxNeckAngle, maxNeckAngle), result.y, result.z));
         head.transform.rotation = Quaternion.Euler(displayResult);
-    }
-
-    private Vector3 NormalizeAngle(Vector3 angle)
-    {
-        angle.x = Mathf.DeltaAngle(0, angle.x);
-        angle.y = Mathf.DeltaAngle(0, angle.y);
-        angle.z = Mathf.DeltaAngle(0, angle.z);
-        return angle;
-    }
-
-    #region Check Navmesh and Obstacles
-
-    private float lastObstacleHeight = .5f;
-
-    private bool CanMove(Vector3 direction)
-    {
-        return CheckNavmesh(direction) && CheckCollision(direction) || navigation == Navigation.Flying;
-    }
-
-    /// <summary>
-    /// Checks if a translation along <paramref name="direction"/> would move the player on a navmesh surface.
-    /// </summary>
-    /// <param name="direction"></param>
-    /// <returns></returns>
-    private bool CheckNavmesh(Vector3 direction)
-    {
-        RaycastHit hit;
-
-        RaycastHit foundHit = new RaycastHit { distance = Mathf.Infinity };
-
-        direction = direction / 2f;
-
-        foreach (Transform foot in feetRaycastOrigin)
-        {
-            if (UnityEngine.Physics.Raycast(foot.position + Vector3.up * (.05f + maxStepHeight) + direction, Vector3.down, out hit, 100, navmeshLayer)) {
-                if ((foundHit.distance > hit.distance) && (Vector3.Angle(transform.up, hit.normal) <= maxSlopeAngle))
-                    foundHit = hit;
-            }
-        }
-
-        if (foundHit.distance < Mathf.Infinity)
-        {
-            float newHeight = foundHit.point.y;
-            if(Mathf.Abs(newHeight - groundHeight) > .001f)
-            {
-                groundHeight = newHeight;
-                hasGroundHeightChangedLastFrame = true;
-            } else
-            {
-                hasGroundHeightChangedLastFrame = false;
-            }
-
-            return true;
-        }
-
-        hasGroundHeightChangedLastFrame = false;
-
-        return false;
-    }
-
-    /// <summary>
-    /// Checks if there is an obstacle for the player.
-    /// </summary>
-    /// <param name="direction"></param>
-    /// <returns></returns>
-    private bool CheckCollision(Vector3 direction)
-    {
-
-        if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * 1.75f, direction.normalized, .2f, obstacleLayer))
-        {
-            return false;
-        }
-        if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * (maxStepHeight + stepEpsilon), direction.normalized, .2f, obstacleLayer))
-        {
-            return false;
-        }
-
-        if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * lastObstacleHeight, direction.normalized, .2f, obstacleLayer))
-        {
-            return false;
-        }
-
-        foreach (var t in obstacleRaycastOrigins)
-        {
-            if (UnityEngine.Physics.Raycast(t.position, direction.normalized, .2f, obstacleLayer))
-            {
-                return false;
-            }
-        }
-
-        for (int i = 0; i < 3; i++)
-        {
-            float random = Random.Range(maxStepHeight + stepEpsilon, 1.8f);
-
-            if (UnityEngine.Physics.Raycast(transform.position + Vector3.up * random, direction.normalized, .2f, obstacleLayer))
-            {
-                lastObstacleHeight = random;
-                return false;
-            }
-        }
-
-        lastObstacleHeight = .5f;
-
-        return true;
-    }
-
-    /// <summary>
-    /// Checks under player's feet to update <see cref="groundHeight"/>.
-    /// </summary>
-    private void UpdateBaseHeight()
-    {
-        RaycastHit hit;
-
-        RaycastHit foundHit = new RaycastHit { distance = Mathf.Infinity };
-
-        foreach (Transform foot in feetRaycastOrigin)
-        {
-            if (UnityEngine.Physics.Raycast(foot.position + Vector3.up * (.05f + maxStepHeight), Vector3.down, out hit, 100, navmeshLayer))
-            {
-
-                if ((foundHit.distance > hit.distance))
-                    foundHit = hit;
-            }
-        }
-
-        if ((foundHit.distance < Mathf.Infinity) && (Vector3.Angle(transform.up, foundHit.normal) <= maxSlopeAngle))
-        {
-            groundHeight = foundHit.point.y;
-        }
-    }
-
-    #endregion
-
-    #endregion
-
-    #region Struct Definition 
-    public enum State { Default, FreeHead, FreeMousse }
-    public enum Navigation { Walking, Flying }
-
-    struct JumpData
-    {
-        public bool jumping;
-        public float velocity;
-        public float lastTimeJumped;
-
-        public JumpData(bool jumping, float lastTimeJumped, float velocity, float deltaHeight) : this()
-        {
-            this.jumping = jumping;
-            this.velocity = velocity;
-            this.lastTimeJumped = lastTimeJumped;
-        }
     }
 
     #endregion
