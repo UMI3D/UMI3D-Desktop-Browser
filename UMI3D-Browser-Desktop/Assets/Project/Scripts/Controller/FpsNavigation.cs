@@ -162,6 +162,8 @@ public class FpsNavigation : AbstractNavigation
     public override void Teleport(TeleportDto data)
     {
         transform.position = data.position;
+        groundHeight = data.position.Y;
+
         transform.rotation = data.rotation;
 
         UpdateBaseHeight();
@@ -528,7 +530,6 @@ public class FpsNavigation : AbstractNavigation
         RaycastHit hit;
 
         RaycastHit foundHit = new RaycastHit { distance = Mathf.Infinity };
-
 
         foreach (Transform foot in feetRaycastOrigin)
         {
