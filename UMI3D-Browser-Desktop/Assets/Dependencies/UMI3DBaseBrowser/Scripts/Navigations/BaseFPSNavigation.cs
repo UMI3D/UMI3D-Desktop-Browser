@@ -150,6 +150,7 @@ namespace umi3d.baseBrowser.Navigation
         public override void Teleport(common.TeleportDto data)
         {
             transform.position = data.position;
+            groundHeight = data.position.Y;
             transform.rotation = data.rotation;
 
             UpdateBaseHeight();
