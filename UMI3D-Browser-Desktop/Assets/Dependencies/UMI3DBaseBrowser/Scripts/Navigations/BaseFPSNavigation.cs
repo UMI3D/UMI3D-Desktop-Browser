@@ -115,7 +115,6 @@ namespace umi3d.baseBrowser.Navigation
 
         #region Methods
 
-
         #region Abstract Navigation
         /// <summary>
         /// <inheritdoc/>
