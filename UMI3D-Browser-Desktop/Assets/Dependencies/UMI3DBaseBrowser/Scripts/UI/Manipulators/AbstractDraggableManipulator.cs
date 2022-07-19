@@ -27,20 +27,46 @@ namespace umi3d.baseBrowser.ui.viewController
         public event Action MouseDown;
         public event Action MouseUp;
 
-        protected Vector2 start;
+        /// <summary>
+        /// Where the drag started.
+        /// </summary>
+        protected Vector2? m_startPosition;
+        /// <summary>
+        /// Required to get canvas size.
+        /// </summary>
         protected VisualElement m_visual;
 
         protected virtual void OnMouseDown(MouseDownEvent e)
         {
-            if (!CanStartManipulation(e))
-                return;
-
-            start = e.localMousePosition;
-            target.CaptureMouse();
+            if (!IsPointerIdCompatible(PointerId.mousePointerId) || !CanStartManipulation(e)) return;
+            ProcessDownEvent(e, e.localMousePosition, PointerId.mousePointerId);
+        }
+        protected virtual void OnPointerDown(PointerDownEvent e)
+        {
+            if (!IsPointerIdCompatible(e.pointerId)) return;
+            ProcessDownEvent(e, e.position, e.pointerId);
+        }
+        protected virtual void ProcessDownEvent(EventBase evt, Vector2 localPosition, int pointerId)
+        {
+            m_startPosition = localPosition;
+            target.CapturePointer(pointerId);
             MouseDown?.Invoke();
         }
 
-        
+        /// <summary>
+        /// Makes the VisualElement follow user's mouse position.
+        /// </summary>
+        /// <param name="e"></param>
+        protected virtual void OnMouseMove(MouseMoveEvent e)
+        {
+            if (!IsPointerIdUsed(PointerId.mousePointerId) || !target.HasMouseCapture()) return;
+            ProcessMoveEvent(e, e.localMousePosition, PointerId.mousePointerId);
+        }
+        protected virtual void OnPointerMove(PointerMoveEvent e)
+        {
+            if (!IsPointerIdUsed(e.pointerId) || !target.HasPointerCapture(e.pointerId)) return;
+            ProcessMoveEvent(e, e.position, e.pointerId);
+        }
 
         /// <summary>
         /// Releases the VisualElement currently dragged.
@@ -48,17 +74,27 @@ namespace umi3d.baseBrowser.ui.viewController
         /// <param name="e"></param>
         protected virtual void OnMouseUp(MouseUpEvent e)
         {
-            if (!target.HasMouseCapture() || !CanStopManipulation(e))
-                return;
-
-            target.ReleaseMouse();
+            if (!IsPointerIdUsed(PointerId.mousePointerId) || !target.HasMouseCapture() || !CanStopManipulation(e)) return;
+            ProcessUpEvent(e, PointerId.mousePointerId);
+        }
+        protected virtual void OnPointerUp(PointerUpEvent e)
+        {
+            if (!IsPointerIdUsed(e.pointerId) || !target.HasPointerCapture(e.pointerId)) return;
+            ProcessUpEvent(e, e.pointerId);
+        }
+        protected virtual void ProcessUpEvent(EventBase evt, int pointerId)
+        {
+            target.ReleasePointer(pointerId);
+            m_startPosition = null;
             MouseUp?.Invoke();
         }
     }
 
     public abstract partial class AbstractDraggableManipulator
     {
-        protected abstract void OnMouseMove(MouseMoveEvent e);
+        protected abstract void ProcessMoveEvent(EventBase e, Vector2 localPosition, int pointerId);
+        protected abstract bool IsPointerIdCompatible(int pointerId);
+        protected abstract bool IsPointerIdUsed(int pointerId);
     }
 
     public partial class AbstractDraggableManipulator : MouseManipulator
@@ -77,6 +113,9 @@ namespace umi3d.baseBrowser.ui.viewController
             target.RegisterCallback<MouseDownEvent>(OnMouseDown);
             target.RegisterCallback<MouseMoveEvent>(OnMouseMove);
             target.RegisterCallback<MouseUpEvent>(OnMouseUp);
+            target.RegisterCallback<PointerDownEvent>(OnPointerDown);
+            target.RegisterCallback<PointerMoveEvent>(OnPointerMove);
+            target.RegisterCallback<PointerUpEvent>(OnPointerUp);
         }
 
         /// <summary>
@@ -87,6 +126,9 @@ namespace umi3d.baseBrowser.ui.viewController
             target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
             target.UnregisterCallback<MouseMoveEvent>(OnMouseMove);
             target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
+            target.UnregisterCallback<PointerDownEvent>(OnPointerDown);
+            target.UnregisterCallback<PointerMoveEvent>(OnPointerMove);
+            target.UnregisterCallback<PointerUpEvent>(OnPointerUp);
         }
     }
 }
