@@ -248,7 +248,7 @@ namespace umi3dDesktopBrowser.emotes
                         var emote = new Emote()
                         {
                             name = emoteRefInConfig.name,
-                            available = emoteRefInConfig.available,
+                            available = emoteConfigDto.allAvailableByDefault ? true : emoteRefInConfig.available,
                             icon = icon,
                             anim = anim,
                             id = i,
