@@ -29,7 +29,7 @@ namespace umi3dDesktopBrowser.emotes
     /// <summary>
     /// Manager that handles emotes
     /// </summary>
-    public class EmoteManager : SingleBehaviour<EmoteManager>
+    public class EmoteManager : MonoBehaviour
     {
         #region Fields
 
@@ -143,12 +143,16 @@ namespace umi3dDesktopBrowser.emotes
 
         #endregion Fields
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
             UMI3DClientUserTracking.Instance.EmotesLoadedEvent.AddListener(ConfigEmotes);
+            BottomBar_E.Instance.Emotes.Hide();
+        }
 
-            avatarAnimator = GetComponent<Animator>();
+        protected void OnDestroy()
+        {
+            EmoteWindow_E.Instance.DestroyButtons();
+            EmoteWindow_E.Instance.Hide();
         }
 
         #region Emote Config
@@ -164,6 +168,7 @@ namespace umi3dDesktopBrowser.emotes
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(delegate
             {
+                avatarAnimator = GetComponentInChildren<Animator>();
                 StartCoroutine(GetEmotes());
             });
         }
