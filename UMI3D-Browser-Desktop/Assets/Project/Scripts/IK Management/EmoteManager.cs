@@ -260,6 +260,7 @@ namespace umi3dDesktopBrowser.emotes
                 }
                 emoteAnimatorController = emoteFromBundleAnimator.runtimeAnimatorController;
                 hasReceivedEmotes = true;
+                BottomBar_E.Instance.Emotes.Display();
                 PrepareEmoteWindow();
                 UMI3DClientUserTracking.Instance.EmoteChangedEvent.AddListener(UpdateEmote);
             }
