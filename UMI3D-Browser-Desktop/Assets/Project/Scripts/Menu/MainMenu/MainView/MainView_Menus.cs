@@ -121,6 +121,7 @@ namespace umi3dDesktopBrowser.ui
             BottomBar_E.Instance.Console.Clicked += Console_E.Instance.ToogleVisibility;
             BottomBar_E.Instance.Settings.Clicked += Settingbox_E.Instance.ToogleVisibility;
             BottomBar_E.Instance.Emotes.Clicked += EmoteWindow_E.Instance.ToogleVisibility;
+            BottomBar_E.Instance.ReportBug.Clicked += BugReporter.Instance.DisplayPopUp;
             Shortcutbox_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseShortcut;
             Console_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.Console.Toggle;
             Console_E.Instance.NewLogAdded += BottomBar_E.Instance.UpdateConsole;
@@ -139,6 +140,7 @@ namespace umi3dDesktopBrowser.ui
             MenuBar_E.Instance.DisplayedOrHidden -= BottomBar_E.Instance.OpenCloseMenuBar;
             BottomBar_E.Instance.Console.Clicked -= Console_E.Instance.ToogleVisibility;
             BottomBar_E.Instance.Settings.Clicked -= Settingbox_E.Instance.ToogleVisibility;
+            BottomBar_E.Instance.ReportBug.Clicked -= BugReporter.Instance.DisplayPopUp;
             BottomBar_E.Instance.Emotes.Clicked -= EmoteWindow_E.Instance.ToogleVisibility;
             Shortcutbox_E.Instance.DisplayedOrHidden -= BottomBar_E.Instance.OpenCloseShortcut;
             Console_E.Instance.DisplayedOrHidden -= BottomBar_E.Instance.Console.Toggle;
