@@ -100,7 +100,7 @@ namespace umi3dDesktopBrowser.emotes
         /// <summary>
         /// Available emotes from bundle
         /// </summary>
-        [ReadOnly]
+        [HideInInspector]
         public List<Emote> Emotes = new List<Emote>();
 
         /// <summary>
