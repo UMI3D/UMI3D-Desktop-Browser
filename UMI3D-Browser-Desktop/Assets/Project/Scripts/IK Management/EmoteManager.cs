@@ -377,7 +377,8 @@ namespace umi3dDesktopBrowser.emotes
             FpsNavigation.PlayerMoved.AddListener(interruptionAction);
             PlayingEmote.AddListener(interruptionAction); //used if another emote is played in the meanwhile
 
-            yield return new WaitForSeconds(emote.anim.length); //wait for emote end of animation
+            yield return new WaitWhile(() => avatarAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1); //wait for emote end of animation
+            //? Possible to improve using a StateMachineBehaviour attached to the EmoteController & trigger events on OnStateExit on anim/OnStateEnter on AnyState
 
             FpsNavigation.PlayerMoved.RemoveListener(interruptionAction);
             PlayingEmote.RemoveListener(interruptionAction);
