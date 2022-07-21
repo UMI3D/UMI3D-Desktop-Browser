@@ -317,7 +317,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     {
         DesktopController.CanProcess = false;
         Action<bool> callback = (b) => {
-            if (b) Connect(connectionData);
+            if (b) UMI3DCollaborationClientServer.Reconnect();
             else Leave();
             DesktopController.CanProcess = true;
         };
