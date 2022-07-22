@@ -576,8 +576,7 @@ public class LauncherManager : MonoBehaviour
     private async void Connect(ServerPreferences.ServerData server, bool saveInfo = false) 
     {
         bool mediaDtoFound = false;
-
-        Debug.Log(server.serverUrl);
+        bool masterServerFound = false;
 
         //1. Try to find a master server
         masterServer.ConnectToMasterServer(() =>
@@ -589,6 +588,8 @@ public class LauncherManager : MonoBehaviour
             {
                 if (mediaDtoFound)
                     return;
+
+                masterServerFound = true;
 
                 if (saveInfo)
                 {
@@ -607,7 +608,7 @@ public class LauncherManager : MonoBehaviour
 
         //2. try to get a mediaDto
         var media = await ConnectionMenu.GetMediaDto(server);
-        if (media != null)
+        if (media != null && !masterServerFound)
         {
             mediaDtoFound = true;
 
