@@ -443,12 +443,12 @@ public class LauncherManager : MonoBehaviour
         }
 
         //Display and set nextMenuBnt action
-        string ip_port = ip + ":" + port.ToString();
         if (currentNextButtonAction != null)
         {
             nextMenuBnt.clickable.clicked -= currentNextButtonAction;
         }
-        currentNextButtonAction = ()=> SetDomain(ip_port);
+
+        currentNextButtonAction = ()=> SetDomain(ip, port.ToString());
         nextMenuBnt.clickable.clicked += currentNextButtonAction;
         nextMenuBnt.style.display = DisplayStyle.Flex;
         
@@ -542,7 +542,7 @@ public class LauncherManager : MonoBehaviour
     {
         //currentConnectionData.environmentName
         ServerPreferences.StoreUserData(currentConnectionData);
-      
+
         StartCoroutine(WaitReady(currentConnectionData));
     }
 
@@ -575,9 +575,42 @@ public class LauncherManager : MonoBehaviour
     /// </summary>
     private async void Connect(ServerPreferences.ServerData server, bool saveInfo = false) 
     {
+        bool mediaDtoFound = false;
+
+        Debug.Log(server.serverUrl);
+
+        //1. Try to find a master server
+        masterServer.ConnectToMasterServer(() =>
+        {
+            if (mediaDtoFound)
+                return;
+
+            masterServer.RequestInfo((name, icon) =>
+            {
+                if (mediaDtoFound)
+                    return;
+
+                if (saveInfo)
+                {
+                    server.serverName = name;
+                    server.serverIcon = icon;
+                    updateInfo = true;
+                }
+            });
+            ShouldDisplaySessionScreen = true;
+        }, server.serverUrl);
+
+        var text = root.Q<Label>("connectedText");
+        Debug.Log(text);
+        root.Q<Label>("connectedText").text = "Connected to : " + server.serverUrl;
+
+
+        //2. try to get a mediaDto
         var media = await ConnectionMenu.GetMediaDto(server);
         if (media != null)
         {
+            mediaDtoFound = true;
+
             ServerPreferences.Data data = new ServerPreferences.Data();
 
             server.serverName = media.name;
@@ -589,26 +622,6 @@ public class LauncherManager : MonoBehaviour
             data.port = null;
 
             StartCoroutine(WaitReady(data));
-        }
-        else
-        {
-            masterServer.ConnectToMasterServer(() =>
-            {
-                masterServer.RequestInfo((name, icon) =>
-                {
-                    if (saveInfo)
-                    {
-                        server.serverName = name;
-                        server.serverIcon = icon;
-                        updateInfo = true;
-                    }
-                });
-                ShouldDisplaySessionScreen = true;
-            }
-                , server.serverUrl);
-            var text = root.Q<Label>("connectedText");
-            Debug.Log(text);
-            root.Q<Label>("connectedText").text = "Connected to : " + server.serverUrl;
         }
     }
 
