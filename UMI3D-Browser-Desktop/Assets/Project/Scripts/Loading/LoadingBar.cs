@@ -36,6 +36,7 @@ public class LoadingBar : Singleton<LoadingBar>
 
     public void Setup(VisualElement root)
     {
+        Debug.Log($"set up loading bar");
         loadingBarProgress = root.Q<VisualElement>("loading-bar-progress");
         loadingBarContainer = root.Q<VisualElement>("loading-bar-container");
         loadingScreen = root.Q<VisualElement>("loading-screen");
@@ -61,6 +62,7 @@ public class LoadingBar : Singleton<LoadingBar>
 
     public void OnProgressChange(float val)
     {
+        Debug.Log($"on progressChanged loading bar");
         if ((loadingScreen.style.display == DisplayStyle.None) && val < 1f)
         {
             loadingScreen.style.display = DisplayStyle.Flex;
