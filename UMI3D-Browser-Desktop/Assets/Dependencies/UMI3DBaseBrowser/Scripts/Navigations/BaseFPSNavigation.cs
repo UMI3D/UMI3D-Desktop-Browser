@@ -58,7 +58,7 @@ namespace umi3d.baseBrowser.Navigation
 
         [Header("Parameters")]
         [SerializeField]
-        protected FpsScriptableAsset data;
+        protected BaseFPSData data;
         [SerializeField]
         protected float maxNeckAngle;
         [SerializeField]

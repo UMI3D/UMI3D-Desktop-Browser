@@ -60,29 +60,43 @@ namespace umi3d.baseBrowser.ui.viewController
         public event Action ClickedUp;
 
         private bool isActive;
+        private int? m_pointerId;
 
         protected override void RegisterCallbacksOnTarget()
         {
             target.RegisterCallback<PointerDownEvent>(OnPointerDownEvent);
             target.RegisterCallback<PointerUpEvent>(OnPointerUpEvent);
+            target.RegisterCallback<PointerOutEvent>(OnPointerOutEvent);
         }
 
         protected override void UnregisterCallbacksFromTarget()
         {
             target.UnregisterCallback<PointerDownEvent>(OnPointerDownEvent);
             target.UnregisterCallback<PointerUpEvent>(OnPointerUpEvent);
+            target.UnregisterCallback<PointerOutEvent>(OnPointerOutEvent);
         }
 
         private void OnPointerDownEvent(PointerDownEvent evt)
         {
-            if (isActive) return;
+            evt.StopPropagation();
+            if (isActive || evt.pointerId == 0) return;
+            m_pointerId = evt.pointerId;
             isActive = true;
             ClickedDown?.Invoke();
         }
 
         private void OnPointerUpEvent(PointerUpEvent evt)
         {
-            if (!isActive) return;
+            if (!isActive || m_pointerId == null || evt.pointerId != m_pointerId.Value) return;
+            m_pointerId = null;
+            isActive = false;
+            ClickedUp?.Invoke();
+        }
+
+        private void OnPointerOutEvent(PointerOutEvent evt)
+        {
+            if (!isActive || m_pointerId == null || evt.pointerId != m_pointerId.Value) return;
+            m_pointerId = null;
             isActive = false;
             ClickedUp?.Invoke();
         }
