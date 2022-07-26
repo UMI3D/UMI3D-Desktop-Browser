@@ -164,7 +164,7 @@ public class BugReporter : SingleBehaviour<BugReporter>
         }
     }
 
-    public String GetSystemDetails()
+    public string GetSystemDetails()
     {
         string res = "OS : " + SystemInfo.operatingSystem + "\n";
         res +=  "CPU : " + SystemInfo.processorType + "\n";
