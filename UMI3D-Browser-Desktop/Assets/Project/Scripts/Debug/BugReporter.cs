@@ -138,6 +138,11 @@ public class BugReporter : SingleBehaviour<BugReporter>
                     sw.WriteLine();
 
                     sw.WriteLine("Author : " + name);
+
+                    sw.WriteLine();
+                    sw.WriteLine("# Hardware Description");
+                    sw.WriteLine(GetSystemDetails());
+                    sw.WriteLine();
                 }
             }
 
@@ -157,6 +162,16 @@ public class BugReporter : SingleBehaviour<BugReporter>
             Debug.LogError("Impossible to create bug report file : " + e.Message);
             DeleteDirectory(tmpFolder);
         }
+    }
+
+    public String GetSystemDetails()
+    {
+        string res = "OS : " + SystemInfo.operatingSystem + "\n";
+        res +=  "CPU : " + SystemInfo.processorType + "\n";
+        res += "GPU : " + SystemInfo.graphicsDeviceName + "\n";
+        res += "Memory : " + SystemInfo.systemMemorySize + "mo \n";
+
+        return res;
     }
 
     IEnumerator CreateZipFile(string screenShotFile, string tmpFolder, DateTime now)
