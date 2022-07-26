@@ -174,6 +174,21 @@ namespace umi3dDesktopBrowser.ui.viewController
         }
 
         /// <summary>
+        /// To call to reset the buttons after leaving an environment
+        /// </summary>
+        public void DestroyButtons()
+        {
+            foreach (var button in EmoteButtons)
+            {
+                button.Hide();
+                button.Destroy();
+            }
+            EmoteButtons.Clear();
+            buttonsAvailable.Clear();
+            AreButtonsLoaded = false;
+        }
+
+        /// <summary>
         /// Register the button visibility for next display
         /// </summary>
         /// <param name="buttonId"></param>

@@ -29,7 +29,7 @@ namespace umi3dDesktopBrowser.emotes
     /// <summary>
     /// Manager that handles emotes
     /// </summary>
-    public class EmoteManager : SingleBehaviour<EmoteManager>
+    public class EmoteManager : MonoBehaviour
     {
         #region Fields
 
@@ -100,7 +100,7 @@ namespace umi3dDesktopBrowser.emotes
         /// <summary>
         /// Available emotes from bundle
         /// </summary>
-        [ReadOnly]
+        [HideInInspector]
         public List<Emote> Emotes = new List<Emote>();
 
         /// <summary>
@@ -143,12 +143,16 @@ namespace umi3dDesktopBrowser.emotes
 
         #endregion Fields
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
             UMI3DClientUserTracking.Instance.EmotesLoadedEvent.AddListener(ConfigEmotes);
+            BottomBar_E.Instance.Emotes.Hide();
+        }
 
-            avatarAnimator = GetComponent<Animator>();
+        protected void OnDestroy()
+        {
+            EmoteWindow_E.Instance.DestroyButtons();
+            EmoteWindow_E.Instance.Hide();
         }
 
         #region Emote Config
@@ -164,6 +168,7 @@ namespace umi3dDesktopBrowser.emotes
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(delegate
             {
+                avatarAnimator = GetComponentInChildren<Animator>();
                 StartCoroutine(GetEmotes());
             });
         }
@@ -243,7 +248,7 @@ namespace umi3dDesktopBrowser.emotes
                         var emote = new Emote()
                         {
                             name = emoteRefInConfig.name,
-                            available = emoteRefInConfig.available,
+                            available = emoteConfigDto.allAvailableByDefault ? true : emoteRefInConfig.available,
                             icon = icon,
                             anim = anim,
                             id = i,
@@ -255,6 +260,7 @@ namespace umi3dDesktopBrowser.emotes
                 }
                 emoteAnimatorController = emoteFromBundleAnimator.runtimeAnimatorController;
                 hasReceivedEmotes = true;
+                BottomBar_E.Instance.Emotes.Display();
                 PrepareEmoteWindow();
                 UMI3DClientUserTracking.Instance.EmoteChangedEvent.AddListener(UpdateEmote);
             }
@@ -372,7 +378,8 @@ namespace umi3dDesktopBrowser.emotes
             FpsNavigation.PlayerMoved.AddListener(interruptionAction);
             PlayingEmote.AddListener(interruptionAction); //used if another emote is played in the meanwhile
 
-            yield return new WaitForSeconds(emote.anim.length); //wait for emote end of animation
+            yield return new WaitWhile(() => avatarAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1); //wait for emote end of animation
+            //? Possible to improve using a StateMachineBehaviour attached to the EmoteController & trigger events on OnStateExit on anim/OnStateEnter on AnyState
 
             FpsNavigation.PlayerMoved.RemoveListener(interruptionAction);
             PlayingEmote.RemoveListener(interruptionAction);

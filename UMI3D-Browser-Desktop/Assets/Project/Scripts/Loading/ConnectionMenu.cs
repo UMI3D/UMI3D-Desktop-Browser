@@ -12,9 +12,7 @@ limitations under the License.
 */
 
 using BrowserDesktop.Controller;
-using BrowserDesktop.Cursor;
 using BrowserDesktop.Menu;
-using BrowserDesktop.preferences;
 using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
@@ -53,7 +51,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     [SerializeField]
     private string launcherScene = null;
 
-    private LoadingBar loader;
+    private umi3d.baseBrowser.connection.LoadingBar loader;
 
     public bool isDisplayed = true;
     bool isPasswordVisible = false;
@@ -141,9 +139,9 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     {
         VisualElement root = uiDocument.rootVisualElement;
 
-        loader = LoadingBar.Instance;
+        loader = umi3d.baseBrowser.connection.LoadingBar.Instance;
         loader.Setup(root);
-        loader.SetText("Connection");
+        loader.Text = "Connection";
 
         loadingScreen = root.Q<VisualElement>("loading-screen");
 
@@ -317,7 +315,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     {
         DesktopController.CanProcess = false;
         Action<bool> callback = (b) => {
-            if (b) Connect(connectionData);
+            if (b) UMI3DCollaborationClientServer.Reconnect();
             else Leave();
             DesktopController.CanProcess = true;
         };
@@ -367,7 +365,7 @@ public class ConnectionMenu : SingleBehaviour<ConnectionMenu>
     private void ShouldDownloadLibraries(List<string> ids, Action<bool> callback)
     {
         Display();
-        loader.SetText("Loading environment"); // TODO change
+        loader.Text = "Loading environment"; // TODO change
         if (ids.Count == 0)
         {
             callback.Invoke(true);

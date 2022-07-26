@@ -5,9 +5,10 @@
             <ui:Label text="Label" display-tooltip-when-elided="true" name="shortcutShortcut" />
         </ui:VisualElement>
         <ui:VisualElement name="sessionInformations" style="flex-direction: row-reverse;">
+            <ui:Button text="Report a bug" display-tooltip-when-elided="true" name="reportBug" style="color: rgba(255, 255, 255, 255);" />
             <ui:Button display-tooltip-when-elided="true" name="console" style="align-items: center; justify-content: center;" />
             <ui:Button display-tooltip-when-elided="true" name="settings" style="align-items: center; justify-content: center;" />
-            <ui:Button display-tooltip-when-elided="true" name="emotes" style="align-items: center; justify-content: center;" />
+            <ui:Button display-tooltip-when-elided="true" name="emotes" style="align-items: center; justify-content: center; display: flex;" />
             <ui:Label text="Label" display-tooltip-when-elided="true" name="timer" />
             <ui:Label text="Label" display-tooltip-when-elided="true" name="participantCount" />
         </ui:VisualElement>
