@@ -39,6 +39,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public static void DestroySingleton()
         {
             if (s_instance == null) return;
+            if (Instance.m_coroutine != null) UIManager.StopCoroutine(Instance.m_coroutine);
             s_instance.Destroy();
             s_instance = null;
         }
@@ -61,6 +62,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// True when buttons have been loaded once
         /// </summary>
         public bool AreButtonsLoaded { get; private set; } = false;
+
+        private Coroutine m_coroutine;
 
         /// <inheritdoc/>
         private IEnumerator DisplayWithoutAnimation()
@@ -87,7 +90,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <inheritdoc/>
         public override void Display()
         {
-            UIManager.StartCoroutine(DisplayWithoutAnimation());
+            m_coroutine = UIManager.StartCoroutine(DisplayWithoutAnimation());
             Console_E.Instance.Hide();
             Settingbox_E.Instance.Hide();
             foreach (var button in EmoteButtons)
@@ -104,7 +107,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void Hide()
         {
-            UIManager.StartCoroutine(HideWithoutAnimation());
+            m_coroutine = UIManager.StartCoroutine(HideWithoutAnimation());
             IsDisplaying = false;
             OnDisplayedOrHiddenTrigger(false);
         }

@@ -29,6 +29,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         protected static List<Shortcut_E> s_shortcutsDisplayed;
         protected static List<Shortcut_E> s_shortcutsWaited;
         protected static KeyBindings_SO s_keyBindings;
+        private Coroutine m_coroutine;
 
         private static bool s_isRightClickShortcutAdded { get; set; } = false;
         private static Shortcut_E s_rightClickShortcut;
@@ -124,6 +125,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public static void DestroySingleton()
         {
             if (s_instance == null) return;
+            if (Instance.m_coroutine != null) UIManager.StopCoroutine(Instance.m_coroutine);
             s_instance.Destroy();
             s_instance = null;
         }
@@ -143,14 +145,14 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void Display()
         {
-            UIManager.StartCoroutine(AnimeWindowVisibility(true));
+            m_coroutine = UIManager.StartCoroutine(AnimeWindowVisibility(true));
             IsDisplaying = true;
             OnDisplayedOrHiddenTrigger(true);
         }
 
         public override void Hide()
         {
-            UIManager.StartCoroutine(AnimeWindowVisibility(false));
+            m_coroutine = UIManager.StartCoroutine(AnimeWindowVisibility(false));
             IsDisplaying = false;
             OnDisplayedOrHiddenTrigger(false);
         }
