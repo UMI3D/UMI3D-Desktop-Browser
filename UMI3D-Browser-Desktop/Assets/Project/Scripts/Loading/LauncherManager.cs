@@ -45,8 +45,6 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     [SerializeField]
     private VisualTreeAsset sessionEntry = null;
 
-    //private VisualElement root;
-
     //Element to be resized
     /// <summary>
     /// UMI3D logo to be resized
@@ -608,19 +606,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
         }
     }
 
-    /// <summary>
-    /// Load the environment scene when it is ready.
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator WaitReady(ServerPreferences.Data data)
-    {
-        SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Additive);
-
-        while (!ConnectionMenu.Exists)
-            yield return new WaitForEndOfFrame();
-        ConnectionMenu.Instance.Connect(data);
-        SceneManager.UnloadSceneAsync(currentScene);
-    }
+    
 
     private void DisplayRegisteredServers()
     {
