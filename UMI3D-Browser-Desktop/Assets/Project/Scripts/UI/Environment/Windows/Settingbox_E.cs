@@ -29,6 +29,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Button_E Mic { get; private set; } = null;
         public Button_E AllMic { get; private set; } = null;
         public Button_E LeaveButton { get; private set; } = null;
+        private Coroutine m_coroutine;
 
         public ListView_E<User_item_E> UserList { get; private set; } = null;
 
@@ -67,6 +68,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public static void DestroySingleton()
         {
             if (s_instance == null) return;
+            if (Instance.m_coroutine != null) UIManager.StopCoroutine(Instance.m_coroutine);
             s_instance.Destroy();
             s_instance = null;
         }
@@ -87,7 +89,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void Display()
         {
-            UIManager.StartCoroutine(DisplayWithoutAnimation());
+            m_coroutine = UIManager.StartCoroutine(DisplayWithoutAnimation());
             Console_E.Instance.Hide();
             EmoteWindow_E.Instance.Hide();
             IsDisplaying = true;
@@ -96,7 +98,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void Hide()
         {
-            UIManager.StartCoroutine(HideWithoutAnimation());
+            m_coroutine = UIManager.StartCoroutine(HideWithoutAnimation());
             IsDisplaying = false;
             OnDisplayedOrHiddenTrigger(false);
         }

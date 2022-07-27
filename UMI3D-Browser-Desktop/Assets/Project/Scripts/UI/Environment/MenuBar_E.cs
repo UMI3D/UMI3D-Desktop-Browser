@@ -36,6 +36,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         private VisualElement leftLayout_VE;
         private VisualElement centerLayout_VE;
+        private Coroutine m_coroutine;
 
         public static bool AreThereToolboxes { get; set; } = false;
 
@@ -112,6 +113,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public static void DestroySingleton()
         {
             if (s_instance == null) return;
+            if (Instance.m_coroutine != null) UIManager.StopCoroutine(Instance.m_coroutine);
             s_instance.Destroy();
             s_instance = null;
         }
@@ -133,16 +135,15 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void Display()
         {
-            if (!AreThereToolboxes)
-                return;
-            UIManager.StartCoroutine(AnimeWindowVisibility(true));
+            if (!AreThereToolboxes) return;
+            m_coroutine = UIManager.StartCoroutine(AnimeWindowVisibility(true));
             IsDisplaying = true;
             OnDisplayedOrHiddenTrigger(true);
         }
 
         public override void Hide()
         {
-            UIManager.StartCoroutine(AnimeWindowVisibility(false));
+            m_coroutine = UIManager.StartCoroutine(AnimeWindowVisibility(false));
             IsDisplaying = false;
             OnDisplayedOrHiddenTrigger(false);
         }

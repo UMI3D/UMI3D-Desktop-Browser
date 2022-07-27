@@ -29,6 +29,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         #region Fields
 
         public event Action<LogType> NewLogAdded;
+        private Coroutine m_coroutine;
 
         protected static ScrollView_E s_logs { get; set; } = null;
         //protected static ScrollView_E s_details { get; set; } = null;
@@ -166,6 +167,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public static void DestroySingleton()
         {
             if (s_instance == null) return;
+            if (Instance.m_coroutine != null) UIManager.StopCoroutine(Instance.m_coroutine);
             s_instance.Destroy();
             s_instance = null;
         }
@@ -183,7 +185,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void Display()
         {
-            UIManager.StartCoroutine(DisplayWithoutAnimation());
+            m_coroutine = UIManager.StartCoroutine(DisplayWithoutAnimation());
             Settingbox_E.Instance.Hide();
             EmoteWindow_E.Instance.Hide();
             IsDisplaying = true;
@@ -192,7 +194,7 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public override void Hide()
         {
-            UIManager.StartCoroutine(HideWithoutAnimation());
+            m_coroutine = UIManager.StartCoroutine(HideWithoutAnimation());
             IsDisplaying = false;
             OnDisplayedOrHiddenTrigger(false);
         }
