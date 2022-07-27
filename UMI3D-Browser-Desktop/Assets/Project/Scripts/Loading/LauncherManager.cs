@@ -17,7 +17,6 @@ limitations under the License.
 using BeardedManStudios.Forge.Networking;
 using BrowserDesktop.Controller;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,23 +26,38 @@ using umi3d.baseBrowser.preferences;
 using umi3d.cdk;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
 {
     [DllImport("user32.dll")]
-    private static extern long GetKeyboardLayoutName(
-      StringBuilder pwszKLID);
+    private static extern long GetKeyboardLayoutName(StringBuilder pwszKLID);
+
+    /// <summary>
+    /// Sets up the inputs according to the user's keyboard layout.
+    /// For now, if the keyboard is a 'fr-FR', go for an azerty configuration otherwise a qwerty config.
+    /// </summary>
+    void SetUpKeyboardConfiguration()
+    {
+        StringBuilder name = new StringBuilder(9);
+
+        GetKeyboardLayoutName(name);
+
+        string str = name.ToString();
+
+        if (str == InputLayoutManager.FR_Fr_KeyboardLayout || str == InputLayoutManager.FR_Be_KeyboardLayout)
+        {
+            InputLayoutManager.SetCurrentInputLayout("AzertyLayout");
+        }
+        else
+        {
+            InputLayoutManager.SetCurrentInputLayout("QwertyLayout");
+        }
+    }
 
     #region Fields
 
     #region UI Fields
-
-    [SerializeField]
-    private VisualTreeAsset libraryEntryTreeAsset = null;
-    [SerializeField]
-    private VisualTreeAsset sessionEntry = null;
 
     //Element to be resized
     /// <summary>
@@ -80,15 +94,11 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     Button nextMenuBnt;
 
     //Saved Servers slider
-    [SerializeField]
-    private VisualTreeAsset SavedServerItemTreeAsset;
     SliderElement savedServersSlider;
 
     #endregion
 
     #region Data
-
-    private List<ServerPreferences.Data> connectionData = new List<ServerPreferences.Data>();
 
     /// <summary>
     /// The action trigger when the enter key is pressed.
@@ -118,8 +128,6 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     {
         base.Start();
        
-        Debug.Assert(libraryEntryTreeAsset != null);
-
         SetUpKeyboardConfiguration();
 
         InitUI();
@@ -127,26 +135,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
         ResetLauncher();
     }
 
-    /// <summary>
-    /// Sets up the inputs according to the user's keyboard layout.
-    /// For now, if the keyboard is a 'fr-FR', go for an azerty configuration otherwise a qwerty config.
-    /// </summary>
-    void SetUpKeyboardConfiguration()
-    {
-        StringBuilder name = new StringBuilder(9);
-
-        GetKeyboardLayoutName(name);
-
-        string str = name.ToString();
-        
-        if(str == InputLayoutManager.FR_Fr_KeyboardLayout || str == InputLayoutManager.FR_Be_KeyboardLayout)
-        {
-            InputLayoutManager.SetCurrentInputLayout("AzertyLayout");
-        } else
-        {
-            InputLayoutManager.SetCurrentInputLayout("QwertyLayout");
-        }
-    }
+    
 
     #region UI Binding and Displaying
 
@@ -313,7 +302,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
             foreach (var lib in app.Value)
             {
                 // 1. Diplay lib name
-                var entry = libraryEntryTreeAsset.CloneTree();
+                var entry = libraryEntry.CloneTree();
                 entry.Q<Label>("library-name").text = lib.key;
 
                 //2. Display environments which use this lib
@@ -615,7 +604,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
         foreach (ServerPreferences.ServerData env in serverConnectionData)
         {
             isEmpty = false;
-            var item = SavedServerItemTreeAsset.CloneTree().Q<VisualElement>("saved-server-item");
+            var item = savedServerEntry.CloneTree().Q<VisualElement>("saved-server-item");
             if (env.serverIcon != null) {
                 byte[] imageBytes = Convert.FromBase64String(env.serverIcon);
                 Texture2D tex = new Texture2D(2, 2);
