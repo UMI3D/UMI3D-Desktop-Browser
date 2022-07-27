@@ -601,15 +601,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2bfe7ed181b5a54797c324831437cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiDocument: {fileID: 1049023329}
-  libraryEntryTreeAsset: {fileID: 9197481963319205126, guid: ec57cd8e64bf5c449abe31eb0c8c4487,
+  document: {fileID: 1049023329}
+  libraryEntry: {fileID: 9197481963319205126, guid: 80adaadf17c472b40ac574730c7e8c7b,
     type: 3}
   sessionEntry: {fileID: 9197481963319205126, guid: 6e99b674edcd47641a698e586fe64e60,
     type: 3}
-  SavedServerItemTreeAsset: {fileID: 9197481963319205126, guid: 49ad8f079cfde1e448c820eeacea3337,
+  savedServerEntry: {fileID: 9197481963319205126, guid: 49ad8f079cfde1e448c820eeacea3337,
     type: 3}
-  currentScene: Connection
-  sceneToLoad: Environement
   ShouldDisplaySessionScreen: 0
   updateResponse: 0
   updateInfo: 0

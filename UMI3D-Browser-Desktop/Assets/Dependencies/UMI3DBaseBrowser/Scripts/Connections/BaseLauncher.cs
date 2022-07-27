@@ -19,6 +19,12 @@ namespace umi3d.baseBrowser.connection
         #region UI
         [SerializeField]
         protected UIDocument document;
+        [SerializeField]
+        protected VisualTreeAsset libraryEntry;
+        [SerializeField] 
+        protected VisualTreeAsset sessionEntry;
+        [SerializeField]
+        protected VisualTreeAsset savedServerEntry;
 
         protected VisualElement root => document.rootVisualElement;
         #endregion
@@ -28,6 +34,9 @@ namespace umi3d.baseBrowser.connection
         protected virtual void Start()
         {
             Debug.Assert(document != null);
+            Debug.Assert(libraryEntry != null);
+            Debug.Assert(sessionEntry != null);
+            Debug.Assert(savedServerEntry != null);
 
             masterServer = new cdk.collaboration.LaucherOnMasterServer();
         }
