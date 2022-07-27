@@ -31,5 +31,19 @@ namespace umi3d.baseBrowser.connection
 
             masterServer = new cdk.collaboration.LaucherOnMasterServer();
         }
+
+        /// <summary>
+        /// Load the environment scene when it is ready.
+        /// </summary>
+        /// <returns></returns>
+        protected IEnumerator WaitReady(preferences.ServerPreferences.Data data)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneToLoad, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+
+            while (!ConnectionMenu.Exists) yield return new WaitForEndOfFrame();
+
+            ConnectionMenu.Instance.Connect(data);
+            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(currentScene);
+        }
     }
 }
