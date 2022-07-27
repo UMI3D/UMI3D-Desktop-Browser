@@ -25,14 +25,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using umi3d.baseBrowser.preferences;
 using umi3d.cdk;
-using umi3d.cdk.collaboration;
-using umi3d.common.collaboration;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public class LauncherManager : MonoBehaviour
+public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
 {
     [DllImport("user32.dll")]
     private static extern long GetKeyboardLayoutName(
@@ -43,14 +41,11 @@ public class LauncherManager : MonoBehaviour
     #region UI Fields
 
     [SerializeField]
-    private UIDocument uiDocument = null;
-
-    [SerializeField]
     private VisualTreeAsset libraryEntryTreeAsset = null;
     [SerializeField]
     private VisualTreeAsset sessionEntry = null;
 
-    private VisualElement root;
+    //private VisualElement root;
 
     //Element to be resized
     /// <summary>
@@ -95,16 +90,7 @@ public class LauncherManager : MonoBehaviour
 
     #region Data
 
-    private ServerPreferences.ServerData currentServerConnectionData;
-    private List<ServerPreferences.ServerData> serverConnectionData = new List<ServerPreferences.ServerData>();
-    
-    private ServerPreferences.Data currentConnectionData;
     private List<ServerPreferences.Data> connectionData = new List<ServerPreferences.Data>();
-
-    [SerializeField]
-    public string currentScene;
-    [SerializeField]
-    public string sceneToLoad;
 
     /// <summary>
     /// The action trigger when the enter key is pressed.
@@ -115,8 +101,6 @@ public class LauncherManager : MonoBehaviour
     /// The action to be assigned to the nextMenuBtn.
     /// </summary>
     private Action currentNextButtonAction = null;
-
-    public LaucherOnMasterServer masterServer;
 
     //Session Screen
     /// <summary>
@@ -132,13 +116,11 @@ public class LauncherManager : MonoBehaviour
 
     #endregion
 
-    void Start()
+    protected override void Start()
     {
-        masterServer = new LaucherOnMasterServer();
-
-        Debug.Assert(uiDocument != null);
+        base.Start();
+       
         Debug.Assert(libraryEntryTreeAsset != null);
-        root = uiDocument.rootVisualElement;
 
         SetUpKeyboardConfiguration();
 
@@ -338,7 +320,7 @@ public class LauncherManager : MonoBehaviour
 
                 //2. Display environments which use this lib
                 var dropdown = entry.Q<DropdownElement>();
-                dropdown.SetUp(uiDocument, "dropdown-label-medium");
+                dropdown.SetUp(document, "dropdown-label-medium");
                 dropdown.SetOptions(lib.applications);
 
                 //3. Display lib size
@@ -360,7 +342,7 @@ public class LauncherManager : MonoBehaviour
                                 DisplayLibraries();
                             }
                         });
-                    DialogueBox_E.Instance.DisplayFrom(uiDocument);
+                    DialogueBox_E.Instance.DisplayFrom(document);
                 };
                 librariesList.Add(entry);
             }
@@ -678,7 +660,7 @@ public class LauncherManager : MonoBehaviour
                             savedServersSlider.RemoveElement(item);
                         }
                     });
-                DialogueBox_E.Instance.DisplayFrom(uiDocument);
+                DialogueBox_E.Instance.DisplayFrom(document);
             };
             savedServersSlider.AddElement(item);
         }
