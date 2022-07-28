@@ -17,7 +17,6 @@ limitations under the License.
 using BeardedManStudios.Forge.Networking;
 using BrowserDesktop.Controller;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,32 +24,40 @@ using System.Runtime.InteropServices;
 using System.Text;
 using umi3d.baseBrowser.preferences;
 using umi3d.cdk;
-using umi3d.cdk.collaboration;
-using umi3d.common.collaboration;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-public class LauncherManager : MonoBehaviour
+public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
 {
     [DllImport("user32.dll")]
-    private static extern long GetKeyboardLayoutName(
-      StringBuilder pwszKLID);
+    private static extern long GetKeyboardLayoutName(StringBuilder pwszKLID);
+
+    /// <summary>
+    /// Sets up the inputs according to the user's keyboard layout.
+    /// For now, if the keyboard is a 'fr-FR', go for an azerty configuration otherwise a qwerty config.
+    /// </summary>
+    void SetUpKeyboardConfiguration()
+    {
+        StringBuilder name = new StringBuilder(9);
+
+        GetKeyboardLayoutName(name);
+
+        string str = name.ToString();
+
+        if (str == InputLayoutManager.FR_Fr_KeyboardLayout || str == InputLayoutManager.FR_Be_KeyboardLayout)
+        {
+            InputLayoutManager.SetCurrentInputLayout("AzertyLayout");
+        }
+        else
+        {
+            InputLayoutManager.SetCurrentInputLayout("QwertyLayout");
+        }
+    }
 
     #region Fields
 
     #region UI Fields
-
-    [SerializeField]
-    private UIDocument uiDocument = null;
-
-    [SerializeField]
-    private VisualTreeAsset libraryEntryTreeAsset = null;
-    [SerializeField]
-    private VisualTreeAsset sessionEntry = null;
-
-    private VisualElement root;
 
     //Element to be resized
     /// <summary>
@@ -87,24 +94,11 @@ public class LauncherManager : MonoBehaviour
     Button nextMenuBnt;
 
     //Saved Servers slider
-    [SerializeField]
-    private VisualTreeAsset SavedServerItemTreeAsset;
     SliderElement savedServersSlider;
 
     #endregion
 
     #region Data
-
-    private ServerPreferences.ServerData currentServerConnectionData;
-    private List<ServerPreferences.ServerData> serverConnectionData = new List<ServerPreferences.ServerData>();
-    
-    private ServerPreferences.Data currentConnectionData;
-    private List<ServerPreferences.Data> connectionData = new List<ServerPreferences.Data>();
-
-    [SerializeField]
-    public string currentScene;
-    [SerializeField]
-    public string sceneToLoad;
 
     /// <summary>
     /// The action trigger when the enter key is pressed.
@@ -115,8 +109,6 @@ public class LauncherManager : MonoBehaviour
     /// The action to be assigned to the nextMenuBtn.
     /// </summary>
     private Action currentNextButtonAction = null;
-
-    public LaucherOnMasterServer masterServer;
 
     //Session Screen
     /// <summary>
@@ -132,14 +124,10 @@ public class LauncherManager : MonoBehaviour
 
     #endregion
 
-    void Start()
+    protected override void Start()
     {
-        masterServer = new LaucherOnMasterServer();
-
-        Debug.Assert(uiDocument != null);
-        Debug.Assert(libraryEntryTreeAsset != null);
-        root = uiDocument.rootVisualElement;
-
+        base.Start();
+       
         SetUpKeyboardConfiguration();
 
         InitUI();
@@ -147,26 +135,7 @@ public class LauncherManager : MonoBehaviour
         ResetLauncher();
     }
 
-    /// <summary>
-    /// Sets up the inputs according to the user's keyboard layout.
-    /// For now, if the keyboard is a 'fr-FR', go for an azerty configuration otherwise a qwerty config.
-    /// </summary>
-    void SetUpKeyboardConfiguration()
-    {
-        StringBuilder name = new StringBuilder(9);
-
-        GetKeyboardLayoutName(name);
-
-        string str = name.ToString();
-        
-        if(str == InputLayoutManager.FR_Fr_KeyboardLayout || str == InputLayoutManager.FR_Be_KeyboardLayout)
-        {
-            InputLayoutManager.SetCurrentInputLayout("AzertyLayout");
-        } else
-        {
-            InputLayoutManager.SetCurrentInputLayout("QwertyLayout");
-        }
-    }
+    
 
     #region UI Binding and Displaying
 
@@ -333,12 +302,12 @@ public class LauncherManager : MonoBehaviour
             foreach (var lib in app.Value)
             {
                 // 1. Diplay lib name
-                var entry = libraryEntryTreeAsset.CloneTree();
+                var entry = libraryEntry.CloneTree();
                 entry.Q<Label>("library-name").text = lib.key;
 
                 //2. Display environments which use this lib
                 var dropdown = entry.Q<DropdownElement>();
-                dropdown.SetUp(uiDocument, "dropdown-label-medium");
+                dropdown.SetUp(document, "dropdown-label-medium");
                 dropdown.SetOptions(lib.applications);
 
                 //3. Display lib size
@@ -360,7 +329,7 @@ public class LauncherManager : MonoBehaviour
                                 DisplayLibraries();
                             }
                         });
-                    DialogueBox_E.Instance.DisplayFrom(uiDocument);
+                    DialogueBox_E.Instance.DisplayFrom(document);
                 };
                 librariesList.Add(entry);
             }
@@ -626,19 +595,7 @@ public class LauncherManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Load the environment scene when it is ready.
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator WaitReady(ServerPreferences.Data data)
-    {
-        SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Additive);
-
-        while (!ConnectionMenu.Exists)
-            yield return new WaitForEndOfFrame();
-        ConnectionMenu.Instance.Connect(data);
-        SceneManager.UnloadSceneAsync(currentScene);
-    }
+    
 
     private void DisplayRegisteredServers()
     {
@@ -647,7 +604,7 @@ public class LauncherManager : MonoBehaviour
         foreach (ServerPreferences.ServerData env in serverConnectionData)
         {
             isEmpty = false;
-            var item = SavedServerItemTreeAsset.CloneTree().Q<VisualElement>("saved-server-item");
+            var item = savedServerEntry.CloneTree().Q<VisualElement>("saved-server-item");
             if (env.serverIcon != null) {
                 byte[] imageBytes = Convert.FromBase64String(env.serverIcon);
                 Texture2D tex = new Texture2D(2, 2);
@@ -678,7 +635,7 @@ public class LauncherManager : MonoBehaviour
                             savedServersSlider.RemoveElement(item);
                         }
                     });
-                DialogueBox_E.Instance.DisplayFrom(uiDocument);
+                DialogueBox_E.Instance.DisplayFrom(document);
             };
             savedServersSlider.AddElement(item);
         }
