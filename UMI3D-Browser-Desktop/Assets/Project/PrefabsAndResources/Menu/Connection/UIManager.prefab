@@ -366,13 +366,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ff0a902ab96c244a9c0dca8003fd17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: {fileID: 11400000, guid: a3c89eef08c21e647a83ef6b16993957, type: 2}
-  Menu: {fileID: 11400000, guid: e0ca03fe9e05d634a89f97e4be2f42b7, type: 2}
-  MenuDisplayManager: {fileID: 2575462095453148189}
   cam: {fileID: 0}
-  launcherScene: Connection
+  identifier: {fileID: 11400000, guid: a3c89eef08c21e647a83ef6b16993957, type: 2}
+  FormMenu: {fileID: 11400000, guid: e0ca03fe9e05d634a89f97e4be2f42b7, type: 2}
+  formMenuDisplay: {fileID: 2575462095453148189}
+  document: {fileID: 1750602239179936672}
   isDisplayed: 1
-  uiDocument: {fileID: 1750602239179936672}
 --- !u!1 &4423324782737819672
 GameObject:
   m_ObjectHideFlags: 0

@@ -2271,6 +2271,15 @@ MonoBehaviour:
   OnRedirection:
     m_PersistentCalls:
       m_Calls: []
+  OnReconnect:
+    m_PersistentCalls:
+      m_Calls: []
+  OnConnectionCheck:
+    m_PersistentCalls:
+      m_Calls: []
+  OnConnectionRetreived:
+    m_PersistentCalls:
+      m_Calls: []
   Identifier: {fileID: 11400000, guid: a3c89eef08c21e647a83ef6b16993957, type: 2}
 --- !u!4 &1318732803
 Transform:
