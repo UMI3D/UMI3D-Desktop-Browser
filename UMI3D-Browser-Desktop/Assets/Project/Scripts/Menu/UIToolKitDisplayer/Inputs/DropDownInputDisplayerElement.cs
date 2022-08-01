@@ -69,7 +69,7 @@ namespace BrowserDesktop.Menu
             if (dropdown == null)
             {
                 dropdown = dropdownTreeAsset.CloneTree().Q<DropdownElement>();
-                dropdown.SetUp(ConnectionMenu.Instance.uiDocument, labelClassName);
+                dropdown.SetUp(umi3d.baseBrowser.connection.BaseConnectionMenu.Instance.document, labelClassName);
             }
         }
 
