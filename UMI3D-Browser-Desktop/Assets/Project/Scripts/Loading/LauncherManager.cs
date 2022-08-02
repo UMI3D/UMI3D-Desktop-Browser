@@ -606,10 +606,14 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
             isEmpty = false;
             var item = savedServerEntry.CloneTree().Q<VisualElement>("saved-server-item");
             if (env.serverIcon != null) {
-                byte[] imageBytes = Convert.FromBase64String(env.serverIcon);
-                Texture2D tex = new Texture2D(2, 2);
-                tex.LoadImage(imageBytes);
-                item.style.backgroundImage = tex;
+                try
+                {
+                    byte[] imageBytes = Convert.FromBase64String(env.serverIcon);
+                    Texture2D tex = new Texture2D(2, 2);
+                    tex.LoadImage(imageBytes);
+                    item.style.backgroundImage = tex;
+                }
+                catch { }
              }
             item.Q<Label>().text = env.serverName == null ? env.serverUrl : env.serverName;
             item.RegisterCallback<MouseDownEvent>(e =>
