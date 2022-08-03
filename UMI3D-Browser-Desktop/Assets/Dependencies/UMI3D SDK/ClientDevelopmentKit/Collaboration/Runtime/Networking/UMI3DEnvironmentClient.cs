@@ -87,10 +87,16 @@ namespace umi3d.cdk.collaboration
             public FormDto formdto;
             public UserConnectionAnswerDto answerDto;
 
+            public string AudioLogin;
+            public string AudioPassword;
+
             public UserInfo()
             {
                 formdto = new FormDto();
                 answerDto = new UserConnectionAnswerDto();
+                AudioLogin = null;
+                AudioPassword = null;
+
             }
 
             public void Set(UserConnectionDto dto)
@@ -101,6 +107,8 @@ namespace umi3d.cdk.collaboration
                     parameters = param
                 };
                 this.formdto = dto.parameters;
+                this.AudioPassword = dto.audioPassword;
+                this.AudioLogin = dto.audioLogin;
             }
         }
 
@@ -157,7 +165,7 @@ namespace umi3d.cdk.collaboration
         {
             ForgeClient.Join(authenticator);
             await UMI3DAsyncManager.Delay(5000);
-            if (!ForgeClient.IsConnected && !disconected)
+            if (ForgeClient != null && !ForgeClient.IsConnected && !disconected)
             {
                 isConnecting = false;
                 isConnected = false;

@@ -2855,7 +2855,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2079147379}
   - component: {fileID: 2079147378}
-  - component: {fileID: 2079147377}
   - component: {fileID: 2079147380}
   - component: {fileID: 2079147381}
   m_Layer: 0
@@ -2865,18 +2864,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2079147377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2079147376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f56fda3ef2d041409bcc1b838fb3470, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &2079147378
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2999,13 +2986,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda69d6602aa3f44e99c0700f3af9310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _OnSaturated:
-    m_PersistentCalls:
-      m_Calls: []
-  _OnSending:
-    m_PersistentCalls:
-      m_Calls: []
-  muted: 0
+  MyMumbleAudioPlayerPrefab: {fileID: 1000010552747926, guid: 717073cf103c3014c8ee3b0c2e368e1a,
+    type: 3}
+  MyMumbleAudioPlayerPositionedPrefab: {fileID: 1000010552747926, guid: 131b8a8c86e2993418694f70521ff19f,
+    type: 3}
 --- !u!81 &2079147381
 AudioListener:
   m_ObjectHideFlags: 0

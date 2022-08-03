@@ -41,6 +41,54 @@ namespace umi3d.cdk.collaboration
         public bool avatarStatus => dto.avatarStatus;
         public bool attentionRequired => dto.attentionRequired;
 
+        public bool useMumble => dto.audioUseMumble;
+        public string audioLogin
+        {
+            get
+            {
+                if (isClient && UMI3DCollaborationClientServer.Exists)
+                {
+                    var user = UMI3DCollaborationClientServer.Instance.GetUser();
+                    if (user != null)
+                        return user.AudioLogin;
+                }
+                return null;
+            }
+            private set 
+            {
+                if (isClient && UMI3DCollaborationClientServer.Exists)
+                {
+                    var user = UMI3DCollaborationClientServer.Instance.GetUser();
+                    if (user != null)
+                        user.AudioLogin = value;
+                }
+            }
+        }
+        public string audioPassword
+        {
+            get
+            {
+                if (isClient && UMI3DCollaborationClientServer.Exists)
+                {
+                    var user = UMI3DCollaborationClientServer.Instance.GetUser();
+                    if (user != null)
+                        return user.AudioPassword;
+                }
+                return null;
+            }
+            private set
+            {
+                if (isClient && UMI3DCollaborationClientServer.Exists)
+                {
+                    var user = UMI3DCollaborationClientServer.Instance.GetUser();
+                    if (user != null)
+                        user.AudioPassword = value;
+                }
+            }
+        }
+        public string audioChannel => dto.audioChannel;
+        public string audioServer => dto.audioServerUrl;
+
         public string login => dto?.login;
 
         public bool isClient => id == UMI3DCollaborationClientServer.Instance.GetUserId();
@@ -74,7 +122,24 @@ namespace umi3d.cdk.collaboration
             bool avatarStatusUpdate = dto.avatarStatus != user.avatarStatus;
             bool attentionStatusUpdate = dto.attentionRequired != user.attentionRequired;
 
+            bool useMumbleUpdate = dto.audioUseMumble != user.audioUseMumble;
+            bool channelUpdate = dto.audioChannel != user.audioChannel;
+            bool serverUpdate = dto.audioServerUrl != user.audioServerUrl;
+
+            bool loginUpdate = false;
+            bool pswUpdate = false;
+
+
             dto = user;
+
+            if (isClient && user is UserConnectionDto connectionDto)
+            {
+                loginUpdate = connectionDto.login != audioLogin;
+                pswUpdate = connectionDto.audioPassword != audioPassword;
+
+                audioLogin = connectionDto.login;
+                audioPassword = connectionDto.audioPassword;
+            }
 
             if (statusUpdate) OnUserStatusUpdated.Invoke(this);
             if (avatarUpdate) OnUserAvatarUpdated.Invoke(this);
@@ -84,6 +149,10 @@ namespace umi3d.cdk.collaboration
             if (attentionStatusUpdate) OnUserAttentionStatusUpdated.Invoke(this);
             if (microphoneStatusUpdate) OnUserMicrophoneStatusUpdated.Invoke(this);
             if (avatarStatusUpdate) OnUserAvatarStatusUpdated.Invoke(this);
+            if (useMumbleUpdate) OnUserMicrophoneUseMumbleUpdated.Invoke(this);
+            if (channelUpdate) OnUserMicrophoneChannelUpdated.Invoke(this);
+            if (serverUpdate) OnUserMicrophoneServerUpdated.Invoke(this);
+            if (loginUpdate || pswUpdate) OnUserMicrophoneIdentityUpdated.Invoke(this);
         }
 
         public bool UpdateUser(ulong property, object value)
@@ -108,6 +177,32 @@ namespace umi3d.cdk.collaboration
                 case UMI3DPropertyKeys.UserAudioFrequency:
                     dto.audioFrequency = (int)value;
                     OnUserAudioFrequencyUpdated.Invoke(this);
+                    return true;
+
+                case UMI3DPropertyKeys.UserAudioUseMumble:
+                    dto.audioUseMumble = (bool)value;
+                    OnUserMicrophoneUseMumbleUpdated.Invoke(this);
+                    return true;
+
+
+                case UMI3DPropertyKeys.UserAudioPassword:
+                    audioPassword = (string)value;
+                    OnUserMicrophoneIdentityUpdated.Invoke(this);
+                    return true;
+
+                case UMI3DPropertyKeys.UserAudioLogin:
+                    audioLogin = (string)value;
+                    OnUserMicrophoneIdentityUpdated.Invoke(this);
+                    return true;
+
+                case UMI3DPropertyKeys.UserAudioServer:
+                    dto.audioServerUrl = (string)value;
+                    OnUserMicrophoneServerUpdated.Invoke(this);
+                    return true;
+
+                case UMI3DPropertyKeys.UserAudioChannel:
+                    dto.audioChannel = (string)value;
+                    OnUserMicrophoneChannelUpdated.Invoke(this);
                     return true;
             }
             return false;
@@ -167,5 +262,11 @@ namespace umi3d.cdk.collaboration
         public static UMI3DUserEvent OnUserMicrophoneStatusUpdated = new UMI3DUserEvent();
         public static UMI3DUserEvent OnUserAvatarStatusUpdated = new UMI3DUserEvent();
         public static UMI3DUserEvent OnUserAttentionStatusUpdated = new UMI3DUserEvent();
+
+        public static UMI3DUserEvent OnUserMicrophoneIdentityUpdated = new UMI3DUserEvent();
+        public static UMI3DUserEvent OnUserMicrophoneServerUpdated = new UMI3DUserEvent();
+        public static UMI3DUserEvent OnUserMicrophoneChannelUpdated = new UMI3DUserEvent();
+        public static UMI3DUserEvent OnUserMicrophoneUseMumbleUpdated = new UMI3DUserEvent();
+
     }
 }
