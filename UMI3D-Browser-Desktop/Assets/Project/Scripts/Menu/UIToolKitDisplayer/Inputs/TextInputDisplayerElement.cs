@@ -117,6 +117,7 @@ namespace BrowserDesktop.Menu
                 textInput = textInputContainer.Q<TextField>();
                 textInput.RegisterCallback<FocusInEvent>((e) => { elementFocus = this;});
                 textInput.RegisterCallback<FocusOutEvent>((e) => { elementFocus = null; ;});
+                if (menuItem.dto.privateParameter) textInput.isPasswordField = true;
             }
         }
 
