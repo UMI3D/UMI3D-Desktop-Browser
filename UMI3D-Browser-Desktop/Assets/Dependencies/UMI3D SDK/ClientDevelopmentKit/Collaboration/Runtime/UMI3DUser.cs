@@ -54,7 +54,7 @@ namespace umi3d.cdk.collaboration
                 }
                 return null;
             }
-            private set 
+            private set
             {
                 if (isClient && UMI3DCollaborationClientServer.Exists)
                 {

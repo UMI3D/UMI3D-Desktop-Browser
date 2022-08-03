@@ -71,7 +71,7 @@ namespace umi3d.cdk.collaboration
         {
             get { return Exists ? !Instance.useMumble || muted : true; }
 
-            set { muted = value; if (Exists) Instance.ShouldStop();  }
+            set { muted = value; if (Exists) Instance.ShouldStop(); }
         }
 
         void ShouldStop()
@@ -111,7 +111,8 @@ namespace umi3d.cdk.collaboration
         }
 
         bool IdentityUpdateOnce = false;
-        async void IdentityUpdate(UMI3DUser user) {
+        async void IdentityUpdate(UMI3DUser user)
+        {
             if (user != null && user.isClient && !IdentityUpdateOnce)
             {
                 IdentityUpdateOnce = true;
@@ -130,14 +131,16 @@ namespace umi3d.cdk.collaboration
             }
         }
 
-        async void ChannelUpdate(UMI3DUser user) {
+        async void ChannelUpdate(UMI3DUser user)
+        {
             channelToJoin = user.audioChannel;
             if (playing)
             {
                 await JoinChannel();
             }
         }
-        void ServerUpdate(UMI3DUser user) {
+        void ServerUpdate(UMI3DUser user)
+        {
             SetMumbleUrl(user.audioServer);
             if (playing)
             {
@@ -145,7 +148,8 @@ namespace umi3d.cdk.collaboration
                 StartMicrophone();
             }
         }
-        void UseMumbleUpdate(UMI3DUser user) {
+        void UseMumbleUpdate(UMI3DUser user)
+        {
             if (useMumble != user.useMumble)
             {
                 useMumble = user.useMumble;
@@ -321,7 +325,7 @@ namespace umi3d.cdk.collaboration
         {
             StopMicrophone();
         }
-        
+
         #endregion
 
         public List<DebugInfo> GetInfos()
