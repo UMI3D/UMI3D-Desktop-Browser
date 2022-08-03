@@ -49,6 +49,9 @@ namespace umi3dDesktopBrowser.ui
         [SerializeField]
         private bool m_showEmotesOnStart = false;
 
+        [SerializeField]
+        private bool m_DisplayConsol = false;
+
         [Header("Notifications")]
         [SerializeField]
         private int m_maxNotification2DDisplayed;

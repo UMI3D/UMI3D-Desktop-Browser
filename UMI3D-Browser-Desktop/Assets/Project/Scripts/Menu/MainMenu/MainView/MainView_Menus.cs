@@ -67,6 +67,7 @@ namespace umi3dDesktopBrowser.ui
         private void InitSettings()
         {
             Settingbox_E.Instance.InsertRootTo(m_viewport);
+            Settingbox_E.Instance.UpdateTopBarName($"option                       {BrowserVersion.Version}");
         }
 
         private void InitEmoteWindow()
@@ -119,6 +120,7 @@ namespace umi3dDesktopBrowser.ui
 
             MenuBar_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.OpenCloseMenuBar;
             BottomBar_E.Instance.Console.Clicked += Console_E.Instance.ToogleVisibility;
+            if (!m_DisplayConsol) BottomBar_E.Instance.Console.Hide();
             BottomBar_E.Instance.Settings.Clicked += Settingbox_E.Instance.ToogleVisibility;
             BottomBar_E.Instance.Emotes.Clicked += EmoteWindow_E.Instance.ToogleVisibility;
             BottomBar_E.Instance.ReportBug.Clicked += BugReporter.Instance.DisplayPopUp;
