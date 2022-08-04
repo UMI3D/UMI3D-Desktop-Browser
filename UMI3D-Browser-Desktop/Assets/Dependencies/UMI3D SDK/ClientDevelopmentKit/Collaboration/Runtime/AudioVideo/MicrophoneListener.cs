@@ -153,6 +153,7 @@ namespace umi3d.cdk.collaboration
 
         public async void StopMicrophone()
         {
+            Debug.Log("Stop Microphone");
             if (await IsPLaying() && mumbleClient != null)
             {
                 mumbleMic.OnMicDisconnect -= OnMicDisconnected;
@@ -258,7 +259,7 @@ namespace umi3d.cdk.collaboration
 
         async Task JoinChannel(int trycount = 0)
         {
-            if (trycount < 3)
+            if (trycount < 3 && !string.IsNullOrEmpty(channelToJoin))
             {
                 await UMI3DAsyncManager.Delay(5000);
                 if (!mumbleClient.JoinChannel(channelToJoin))
@@ -317,7 +318,7 @@ namespace umi3d.cdk.collaboration
         async void ChannelUpdate(UMI3DUser user)
         {
             channelToJoin = user.audioChannel;
-            if (await IsPLaying())
+            if (!string.IsNullOrEmpty(channelToJoin) && await IsPLaying())
             {
                 await JoinChannel();
             }
@@ -335,7 +336,7 @@ namespace umi3d.cdk.collaboration
             }
         }
 
-        void UseMumbleUpdate(UMI3DUser user)
+        async void UseMumbleUpdate(UMI3DUser user)
         {
             if (useMumble != user.useMumble)
             {
@@ -344,7 +345,7 @@ namespace umi3d.cdk.collaboration
                 Debug.Log(useMumble);
                 if (useMumble)
                     StartMicrophone();
-                else
+                else if(await IsPLaying())
                     StopMicrophone();
             }
         }
