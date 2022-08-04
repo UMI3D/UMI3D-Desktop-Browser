@@ -88,6 +88,24 @@ namespace umi3d.cdk.collaboration
             }
         }
 
+        public bool Debug
+        {
+            get => _debug; 
+            set
+            {
+                _debug = value;
+                rms = 0;
+                db = 0;
+                saturated = false;
+            }
+        }
+
+
+        bool saturated;
+        float rms;
+        float db;
+
+
         #endregion
         #region private field
         MumbleClient mumbleClient;
@@ -98,6 +116,12 @@ namespace umi3d.cdk.collaboration
         const bool sendPosition = false;
 
         static bool muted;
+
+        /// <summary>
+        ///  RMS value for 0 dB
+        /// </summary>
+        private const float refValue = 1f;
+        bool _debug = false;
 
         string hostName = "1.2.3.4";
         int port = 64738;
@@ -124,6 +148,8 @@ namespace umi3d.cdk.collaboration
                 UseRandomUsername = false,
                 UseSyntheticSource = false
             };
+
+            mumbleMic.OnMicData += DebugSample;
 
             QuittingManager.OnApplicationIsQuitting.AddListener(_OnApplicationQuit);
 
@@ -153,7 +179,7 @@ namespace umi3d.cdk.collaboration
 
         public async void StopMicrophone()
         {
-            Debug.Log("Stop Microphone");
+            UnityEngine.Debug.Log("Stop Microphone");
             if (await IsPLaying() && mumbleClient != null)
             {
                 mumbleMic.OnMicDisconnect -= OnMicDisconnected;
@@ -191,22 +217,22 @@ namespace umi3d.cdk.collaboration
 
         private async Task _StartMicrophone()
         {
-            Debug.LogError($"Start {!useMumble}");
+            UnityEngine.Debug.LogError($"Start {!useMumble}");
             if (!useMumble) return;
 
             if (hostName == "1.2.3.4")
             {
-                Debug.LogError("Please set the mumble host name to your mumble server");
+                UnityEngine.Debug.LogError("Please set the mumble host name to your mumble server");
                 return;
             }
 
             if (UMI3DCollaborationEnvironmentLoader.Exists)
             {
-                Debug.LogError($"Exist");
+                UnityEngine.Debug.LogError($"Exist");
                 var user = UMI3DCollaborationEnvironmentLoader.Instance.GetClientUser();
                 if (user != null)
                 {
-                    Debug.LogError($"user {username} {password} {hostName} {port} {channelToJoin}");
+                    UnityEngine.Debug.LogError($"user {username} {password} {hostName} {port} {channelToJoin}");
                     username = user.audioLogin;
                     password = user.audioPassword;
                     SetMumbleUrl(user.audioServer);
@@ -253,7 +279,7 @@ namespace umi3d.cdk.collaboration
                     }
                 }
             }
-            Debug.LogError($"playing false");
+            UnityEngine.Debug.LogError($"playing false");
             playing = false;
         }
 
@@ -327,7 +353,7 @@ namespace umi3d.cdk.collaboration
         async void ServerUpdate(UMI3DUser user)
         {
 
-            Debug.Log($"server {hostName}:{port} -> {user.audioServer}");
+            UnityEngine.Debug.Log($"server {hostName}:{port} -> {user.audioServer}");
             SetMumbleUrl(user.audioServer);
             if (await IsPLaying())
             {
@@ -342,10 +368,10 @@ namespace umi3d.cdk.collaboration
             {
                 useMumble = user.useMumble;
 
-                Debug.Log(useMumble);
+                UnityEngine.Debug.Log(useMumble);
                 if (useMumble)
                     StartMicrophone();
-                else if(await IsPLaying())
+                else if (await IsPLaying())
                     StopMicrophone();
             }
         }
@@ -360,7 +386,7 @@ namespace umi3d.cdk.collaboration
                 {
                     if (micNames[i] == micToConnect)
                     {
-                        Debug.Log("Desired mic reconnected");
+                        UnityEngine.Debug.Log("Desired mic reconnected");
                         mumbleMic.MicNumberToUse = i;
                         mumbleMic.StartSendingAudio();
                         yield break;
@@ -398,7 +424,7 @@ namespace umi3d.cdk.collaboration
 
         private MumbleAudioPlayer CreateMumbleAudioPlayerFromPrefab(string username, uint session)
         {
-            Debug.LogError("New player");
+            UnityEngine.Debug.LogError("New player");
             // Depending on your use case, you might want to add the prefab to an existing object (like someone's head)
             // If you have users entering and leaving frequently, you might want to implement an object pool
             GameObject newObj = sendPosition
@@ -407,7 +433,7 @@ namespace umi3d.cdk.collaboration
 
             newObj.name = username + "_MumbleAudioPlayer";
             MumbleAudioPlayer newPlayer = newObj.GetComponent<MumbleAudioPlayer>();
-            Debug.Log("Adding audio player for: " + username);
+            UnityEngine.Debug.Log("Adding audio player for: " + username);
             return newPlayer;
         }
         private void OnOtherUserStateChange(uint session, MumbleProto.UserState updatedDeltaState, MumbleProto.UserState fullUserState)
@@ -563,6 +589,30 @@ namespace umi3d.cdk.collaboration
             }
         }
 
+        void DebugSample(PcmArray array)
+        {
+            if (Debug)
+            {
+                float sum = 0;
+                saturated = false;
+
+                foreach (float v in array.Pcm)
+                {
+                    if (v > 1)
+                    {
+                        saturated = true;
+                    }
+                    else if (v < -1)
+                    {
+                        saturated = true;
+                    }
+                    sum += v * v;
+                }
+
+                rms = Mathf.Sqrt(sum / array.Pcm.Length);
+                db = 20 * Mathf.Log10(rms / refValue);
+            }
+        }
 
         #endregion
 
