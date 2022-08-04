@@ -218,7 +218,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             //s_logDetailWaited = new List<Label_E>();
             s_logsMap = new Dictionary<Label_E, (string, string, string, LogType)>();
 
-            Application.logMessageReceived += HandleLog;
+            //Application.logMessageReceived += HandleLog;
         }
 
         private Console_E() :
