@@ -176,6 +176,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         public static VisualElement Make()
         {
             VisualElement item = _GetVisualRoot(@"UI/UXML/userItem");
+            item.style.marginBottom = 10f;
             var buttonbox = item.Q("userButton");
             Button_E SetButton(string on, string off)
             {
@@ -213,7 +214,7 @@ namespace umi3dDesktopBrowser.ui.viewController
             return iterator.Current;
         }
 
-        public static int height { get; } = 30;
+        public static int height { get; } = 65;
 
 
         public class ItemData

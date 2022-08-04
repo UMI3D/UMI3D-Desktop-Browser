@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="settingbox" style="position: absolute; right: 0; bottom: 0; flex-grow: 1; height: 100%;">
         <ui:Label text="Label" display-tooltip-when-elided="true" name="windowName" />
-        <ui:ListView focusable="true" name="userbox" style="width: auto; flex-grow: 1; height: auto; flex-shrink: 0;" />
+        <ui:ListView focusable="true" name="userbox" item-height="55" style="flex-grow: 1; flex-shrink: 0;" />
         <ui:VisualElement name="buttonbox" style="flex-direction: row;" />
     </ui:VisualElement>
 </ui:UXML>
