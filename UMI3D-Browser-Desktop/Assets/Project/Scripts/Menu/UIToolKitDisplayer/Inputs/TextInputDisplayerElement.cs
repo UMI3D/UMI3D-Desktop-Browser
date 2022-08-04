@@ -117,7 +117,29 @@ namespace BrowserDesktop.Menu
                 textInput = textInputContainer.Q<TextField>();
                 textInput.RegisterCallback<FocusInEvent>((e) => { elementFocus = this;});
                 textInput.RegisterCallback<FocusOutEvent>((e) => { elementFocus = null; ;});
-                if (menuItem.dto.privateParameter) textInput.isPasswordField = true;
+                if (menuItem.dto.privateParameter)
+                {
+                    textInput.isPasswordField = true;
+                    textInput.style.width = Length.Percent(80);
+                    var parent = textInput.parent;
+                    var unityTextInput = textInput.Q("unity-text-input");
+
+                    var button = new umi3d.baseBrowser.ui.viewController.Button_E("Free", umi3d.baseBrowser.ui.viewController.StyleKeys.DefaultBackground);
+                    button.Clicked += () => textInput.isPasswordField = !textInput.isPasswordField;
+                    unityTextInput.schedule.Execute(() => unityTextInput.schedule.Execute(() =>
+                    {
+                        button.Root.style.width = unityTextInput.resolvedStyle.height;
+                        button.Root.style.height = unityTextInput.resolvedStyle.height;
+                    }));
+
+                    var box = new VisualElement();
+                    box.style.flexDirection = FlexDirection.Row;
+                    box.style.alignItems = Align.FlexEnd;
+                    box.style.justifyContent = Justify.SpaceBetween;
+                    box.Add(textInput);
+                    box.Add(button.Root);
+                    parent.Add(box);
+                }
             }
         }
 
