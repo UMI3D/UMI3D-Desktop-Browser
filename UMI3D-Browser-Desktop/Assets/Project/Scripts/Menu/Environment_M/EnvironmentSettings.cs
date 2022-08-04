@@ -224,7 +224,7 @@ public class UserListSetting
 
         public void ToggleMic()
         {
-            user.SetMicrophoneStatus(!user.microphoneStatus);
+            user.SetMicrophoneStatus(false);
         }
 
         public void ToggleAvatar()
