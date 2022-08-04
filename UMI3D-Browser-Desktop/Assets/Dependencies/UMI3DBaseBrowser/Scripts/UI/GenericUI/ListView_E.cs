@@ -74,6 +74,7 @@ namespace umi3d.baseBrowser.ui.viewController
             base(scrollView, partialStylePath, keys)
         {
             this.ItemHeight = itemHeight;
+            List_View.itemHeight = itemHeight;
             this.makeFunction = make;
             this.items = new List<Item>();
         }
@@ -85,6 +86,7 @@ namespace umi3d.baseBrowser.ui.viewController
             base(visualResourcePath, partialStylePath, keys)
         {
             this.ItemHeight = itemHeight;
+            List_View.itemHeight = itemHeight;
             this.makeFunction = make;
             this.items = new List<Item>();
         }
@@ -104,7 +106,9 @@ namespace umi3d.baseBrowser.ui.viewController
         {
         }
 
-        public void Add(Item item) { items.Add(item);
+        public void Add(Item item) 
+        { 
+            items.Add(item);
             List_View.Refresh();
         }
         public void Insert(int index, Item item) {
