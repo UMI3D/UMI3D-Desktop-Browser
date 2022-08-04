@@ -23,7 +23,7 @@ namespace umi3d.baseBrowser.ui.viewController
 {
     public partial class TextField_E
     {
-        protected TextField m_textField => (TextField)Root;
+        public TextField TextField => (TextField)Root;
         protected VisualElement m_textInput { get; set; } = null;
     }
 
@@ -43,10 +43,10 @@ namespace umi3d.baseBrowser.ui.viewController
 
         public void SetTextField(bool multiline = false, bool isDelayed = false, bool isPasswordField = false, char maskChar = '*')
         {
-            m_textField.multiline = multiline;
-            m_textField.isDelayed = isDelayed;
-            m_textField.isPasswordField = isPasswordField;
-            m_textField.maskChar = maskChar;
+            TextField.multiline = multiline;
+            TextField.isDelayed = isDelayed;
+            TextField.isPasswordField = isPasswordField;
+            TextField.maskChar = maskChar;
         }
 
         public void SetTextInputStyle(string styleResourcePath, StyleKeys keys)
@@ -58,12 +58,12 @@ namespace umi3d.baseBrowser.ui.viewController
         {
             if (!m_visualMap.ContainsKey(m_textInput))
             {
-                m_textField.value = newValue;
+                TextField.value = newValue;
                 return;
             }
             var styleSO = GetVisualStyle(m_textInput);
             if (styleSO != null)
-                m_textField.value = GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, newValue);
+                TextField.value = GetTextAfterFormatting(styleSO.TextFormat.NumberOfVisibleCharacter, newValue);
         }
     }
 
@@ -82,11 +82,11 @@ namespace umi3d.baseBrowser.ui.viewController
             get => base.value; 
             set
             {
-                if (value == m_textField.value)
+                if (value == TextField.value)
                     return;
-                var previousValue = m_textField.value;
+                var previousValue = TextField.value;
                 ApplyTextFieldFormat(value);
-                OnValueChanged(previousValue, m_textField.value);
+                OnValueChanged(previousValue, TextField.value);
             }
         }
 
