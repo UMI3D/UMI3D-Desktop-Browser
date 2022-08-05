@@ -37,9 +37,13 @@ namespace umi3d.cdk.collaboration
         public UMI3DVideoPlayer videoPlayer => UMI3DVideoPlayer.Get(dto.videoSourceId);
         public UserAvatar avatar => UMI3DEnvironmentLoader.GetEntity(dto.id)?.Object as UserAvatar;
 
-        public bool microphoneStatus => dto.microphoneStatus;
-        public bool avatarStatus => dto.avatarStatus;
-        public bool attentionRequired => dto.attentionRequired;
+        public bool microphoneStatus => localMicrophoneStatus && dto.microphoneStatus;
+        public bool avatarStatus => localAvatarStatus && dto.avatarStatus;
+        public bool attentionRequired => localAttentionRequired && dto.attentionRequired;
+
+        public bool localMicrophoneStatus = true;
+        public bool localAvatarStatus = true;
+        public bool localAttentionRequired = true;
 
         public string login => dto?.login;
 
@@ -113,27 +117,37 @@ namespace umi3d.cdk.collaboration
             return false;
         }
 
+        public void SetLocalMicrophoneStatus(bool microphoneStatus)
+        {
+            if (localMicrophoneStatus == microphoneStatus) return;
+            localMicrophoneStatus = microphoneStatus;
+            audioplayer.audioSource.mute = !microphoneStatus;
+            OnUserMicrophoneStatusUpdated.Invoke(this);
+        }
+        public void SetLocalAvatarStatus(bool avatarStatus)
+        {
+            localAvatarStatus = avatarStatus;
+            throw new System.NotImplementedException();
+        }
+        public void SetLocalAttentionStatus(bool attentionStatus)
+        {
+            throw new System.NotImplementedException();
+        }
 
         public void SetMicrophoneStatus(bool microphoneStatus)
         {
-            if (dto.microphoneStatus != microphoneStatus)
-            {
-                UMI3DClientServer.SendData(ConferenceBrowserRequest.GetChangeMicrophoneStatusRequest(id, microphoneStatus), true);
-            }
+            if (!isClient || dto.microphoneStatus == microphoneStatus) return;
+            UMI3DClientServer.SendData(ConferenceBrowserRequest.GetChangeMicrophoneStatusRequest(id, microphoneStatus), true);
         }
         public void SetAvatarStatus(bool avatarStatus)
         {
-            if (dto.avatarStatus != avatarStatus)
-            {
-                UMI3DClientServer.SendData(ConferenceBrowserRequest.GetChangeAvatarStatusRequest(id, avatarStatus), true);
-            }
+            if (!isClient || dto.avatarStatus != avatarStatus) return;
+            UMI3DClientServer.SendData(ConferenceBrowserRequest.GetChangeAvatarStatusRequest(id, avatarStatus), true);
         }
         public void SetAttentionStatus(bool attentionStatus)
         {
-            if (dto.attentionRequired != attentionStatus)
-            {
-                UMI3DClientServer.SendData(ConferenceBrowserRequest.GetChangeAttentionStatusRequest(id, attentionStatus), true);
-            }
+            if (!isClient || dto.attentionRequired != attentionStatus) return;
+            UMI3DClientServer.SendData(ConferenceBrowserRequest.GetChangeAttentionStatusRequest(id, attentionStatus), true);
         }
 
         public static void MuteAllMicrophone()

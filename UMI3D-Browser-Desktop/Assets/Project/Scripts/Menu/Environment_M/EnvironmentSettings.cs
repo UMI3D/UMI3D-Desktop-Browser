@@ -224,12 +224,12 @@ public class UserListSetting
 
         public void ToggleMic()
         {
-            user.SetMicrophoneStatus(false);
+            user.SetLocalMicrophoneStatus(!user.microphoneStatus);
         }
 
         public void ToggleAvatar()
         {
-            user.SetAvatarStatus(!user.avatarStatus);
+            user.SetLocalAvatarStatus(!user.avatarStatus);
         }
 
         public void setValue() {
