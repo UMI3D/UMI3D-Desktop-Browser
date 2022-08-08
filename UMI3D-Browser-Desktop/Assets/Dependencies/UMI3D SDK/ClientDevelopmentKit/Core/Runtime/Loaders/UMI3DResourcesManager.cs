@@ -208,13 +208,13 @@ namespace umi3d.cdk
             /// </summary>
             /// <param name="url">Url to match.</param>
             /// <returns></returns>
-            public bool MatchUrl(Match matchUrl, string libraryId = null)
+            public bool MatchUrl(Match Matchurl, string libraryId = null)
             {
-
-                //Regex rx = new Regex(@"^https?://(.+?)(:\d+)*/(.*)$");
-                //Match a = rx.Match(this.url);
-                if (a.Success && matchUrl.Success)
-                    return (a.Groups[1].Captures[0].Value == matchUrl.Groups[1].Captures[0].Value && a.Groups[2].Captures[0].Value == matchUrl.Groups[2].Captures[0].Value || libraryId != null && libraryId != "" && libraryIds.Contains(libraryId)) && a.Groups[3].Captures[0].Value == matchUrl.Groups[3].Captures[0].Value;
+                if (a.Success && Matchurl.Success)
+                    return (a.Groups[1].Captures[0].Value == Matchurl.Groups[1].Captures[0].Value &&
+                        ((a.Groups[2].Captures.Count == Matchurl.Groups[2].Captures.Count)
+                        && (a.Groups[2].Captures.Count == 0 || a.Groups[2].Captures[0].Value == Matchurl.Groups[2].Captures[0].Value))
+                        || libraryId != null && libraryId != "" && libraryIds.Contains(libraryId)) && a.Groups[3].Captures[0].Value == Matchurl.Groups[3].Captures[0].Value;
                 return false;
             }
 
@@ -227,11 +227,9 @@ namespace umi3d.cdk
 
                 if (url == this.url) return true;
 
-                //Regex rx = new Regex(@"^https?://(.+?)(:\d+)*/(.*)$");
-                //Match a = rx.Match(this.url);
                 Match b = rx.Match(url);
                 if (a.Success && b.Success)
-                    return (a.Groups[1].Captures[0].Value == b.Groups[1].Captures[0].Value && a.Groups[2].Captures[0].Value == b.Groups[2].Captures[0].Value);
+                    return (a.Groups[1].Captures[0].Value == b.Groups[1].Captures[0].Value && ((a.Groups[2].Captures.Count == b.Groups[2].Captures.Count) && (a.Groups[2].Captures.Count == 0 || a.Groups[2].Captures[0].Value == b.Groups[2].Captures[0].Value)));
                 return false;
             }
 
@@ -937,7 +935,6 @@ namespace umi3d.cdk
                 string url = Path.Combine(list.baseUrl, name);
                 Action callback = () => { data.files.Add(new Data(url, path)); };
                 Action<string> error = (s) => { UMI3DLogger.LogError(s, scope); };
-
                 yield return StartCoroutine(DownloadFile(key, dicPath, path, url, callback, error));
             }
             libraries.Add(data.key, new KeyValuePair<DataFile, HashSet<ulong>>(data, new HashSet<ulong>()));
@@ -983,7 +980,6 @@ namespace umi3d.cdk
             {
                 CacheCollection.Insert(0, new ObjectData(url, null, null, key, filePath));
             }
-
             UMI3DClientServer.GetFile(url, action, error2);
             yield return new WaitUntil(() => { return finished; });
         }
@@ -1031,18 +1027,28 @@ namespace umi3d.cdk
 
         public static void DownloadObject(UnityWebRequest www, Action callback, Action<Umi3dException> failCallback, Func<RequestFailedArgument, bool> shouldTryAgain = null)
         {
+            Debug.Log(www.url);
             StartCoroutine(Instance._DownloadObject(www, callback, failCallback, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e)));
         }
 
+        private static int i = 0;
+
         private IEnumerator _DownloadObject(UnityWebRequest www, Action callback, Action<Umi3dException> failCallback, Func<RequestFailedArgument, bool> ShouldTryAgain, int tryCount = 0)
         {
+            int j = i;
+            i++;
+
             yield return www.SendWebRequest();
+
+
 #if UNITY_2020_1_OR_NEWER
             if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError || www.result == UnityWebRequest.Result.DataProcessingError)
 #else
             if (www.isNetworkError || www.isHttpError)
 #endif
             {
+                Debug.LogError(j + ": Error : impossible to dl " + www.url + " -> " + www.error + " " + www.downloadHandler.text + " " + www.downloadHandler.error);
+
                 //DateTime date = DateTime.UtcNow;
                 //if (!UMI3DClientServer.Instance.TryAgainOnHttpFail(new RequestFailedArgument(www, () => StartCoroutine(_DownloadObject(www, callback, failCallback,ShouldTryAgain,tryCount + 1)), tryCount, date, ShouldTryAgain)))
                 //{
@@ -1056,8 +1062,12 @@ namespace umi3d.cdk
                     UMI3DLogger.LogWarning("Failed to load " + www.url, scope);
                 }
                 //}
+
                 yield break;
             }
+
+            Debug.Log("<color=green>" + j + ": Success " + www.url + "</color>" + " ");
+
             callback.Invoke();
         }
 

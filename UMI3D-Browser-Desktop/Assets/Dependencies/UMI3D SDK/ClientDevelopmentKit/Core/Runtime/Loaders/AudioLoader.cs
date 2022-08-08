@@ -58,7 +58,7 @@ namespace umi3d.cdk
             if (!url.Contains("http")) url = "file://" + url;
 #endif
             UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(url, GetType(extension));
-            SetCertificate(www, authorization);
+            //SetCertificate(www, authorization);
             UMI3DResourcesManager.DownloadObject(www,
                 () =>
                 {
