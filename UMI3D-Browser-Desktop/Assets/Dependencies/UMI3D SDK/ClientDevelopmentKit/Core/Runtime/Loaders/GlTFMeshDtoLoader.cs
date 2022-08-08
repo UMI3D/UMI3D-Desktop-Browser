@@ -96,7 +96,7 @@ namespace umi3d.cdk
                     Value = authorization
                 };
 
-                var headers = new HttpHeader[] { authorizationHeader };
+                var headers = new HttpHeader[] { };
                 var customHeaderDownloadProvider = new CustomHeaderDownloadProvider(headers);
                 MainThreadDispatcher.UnityMainThreadDispatcher.Instance().StartCoroutine(WaitBaseMaterial(() => gltfComp.Load(url, customHeaderDownloadProvider, deferAgent, materialGenerator)));
             }

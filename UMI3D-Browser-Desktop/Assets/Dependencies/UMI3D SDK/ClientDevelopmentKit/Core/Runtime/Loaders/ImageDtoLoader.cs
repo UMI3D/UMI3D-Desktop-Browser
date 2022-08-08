@@ -60,7 +60,7 @@ namespace umi3d.cdk
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
 #endif
 
-            SetCertificate(www, authorization);
+            //SetCertificate(www, authorization);
             UMI3DResourcesManager.DownloadObject(www,
                 () =>
                 {

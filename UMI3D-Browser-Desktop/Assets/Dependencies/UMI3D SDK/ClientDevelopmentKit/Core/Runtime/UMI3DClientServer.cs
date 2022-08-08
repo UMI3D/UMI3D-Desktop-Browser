@@ -79,6 +79,8 @@ namespace umi3d.cdk
         {
             if (Exists)
             {
+                UnityEngine.Debug.Log("GET FILE " + url);
+
                 byte[] bytes = await Instance._GetFile(url);
                 if (bytes != null)
                     callback.Invoke(bytes);

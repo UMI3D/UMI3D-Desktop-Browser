@@ -62,7 +62,7 @@ namespace umi3d.cdk
                     () =>
                     {
                         UMI3DEnvironmentLoader.StartCoroutine(
-                            UMI3DEnvironmentLoader.Instance.nodeLoader.LoadNodes(dto.nodes, finished2, ToLoadNodesCount, LoadedNodesCount));
+                            UMI3DEnvironmentLoader.Instance.nodeLoader.LoadNodes(dto.nodes.OrderBy(n => UnityEngine.Random.Range(0, 10000000)), finished2, ToLoadNodesCount, LoadedNodesCount));
                     }
                 );
             }
@@ -228,7 +228,6 @@ namespace umi3d.cdk
             {
                 try
                 {
-
                     UMI3DEnvironmentLoader.Parameters.SelectMaterialLoader(material).LoadMaterialFromExtension(material, (m) =>
                     {
                         if (material.name != null && material.name.Length > 0 && m != null)
