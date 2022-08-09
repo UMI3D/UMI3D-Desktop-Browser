@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:Template name="libraries-manager-screen" src="/Assets/Project/UI/UXML/Launcher/Screens/libraries-manager-screen.uxml" />
-    <ui:Template name="advancedConnectionScreen" src="/Assets/Project/UI/UXML/Launcher/Screens/advancedConnectionScreen.uxml" />
-    <ui:Template name="connect-screen" src="/Assets/Project/UI/UXML/Launcher/Screens/connect-screen.uxml" />
-    <ui:Template name="sessionScreen" src="/Assets/Project/UI/UXML/Launcher/Screens/sessionScreen.uxml" />
+    <ui:Template name="libraries-manager-screen" src="Screens/libraries-manager-screen.uxml" />
+    <ui:Template name="advancedConnectionScreen" src="Screens/advancedConnectionScreen.uxml" />
+    <ui:Template name="homeScreen" src="Screens/homeScreen.uxml" />
+    <ui:Template name="sessionScreen" src="Screens/sessionScreen.uxml" />
     <Style src="/Assets/Project/UI/UXML/main-style.uss" />
     <ui:VisualElement name="root" style="flex-grow: 1;">
         <ui:VisualElement name="body" style="height: 100%; width: 100%;">
@@ -18,12 +18,12 @@
             </ui:VisualElement>
             <ui:VisualElement name="main" style="width: 100%; flex-direction: row; flex-grow: 1; -unity-background-scale-mode: stretch-to-fill; background-image: url(&apos;/Assets/Project/UI/UI_connection/background-middle.png&apos;); display: flex;">
                 <ui:VisualElement style="flex-grow: 1;">
-                    <ui:Button text="&#10;" name="back-menu-btn" class="btn-left-arrow" style="width: 80px; height: 80px; margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; display: flex; background-color: rgba(228, 228, 228, 0);" />
+                    <ui:Button text="&#10;" name="backMenuBtn" class="btn-left-arrow" style="width: 80px; height: 80px; margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; display: flex; background-color: rgba(228, 228, 228, 0);" />
                 </ui:VisualElement>
                 <ui:VisualElement name="container" class="medium-size-txt" style="width: 685px; margin-left: auto; margin-right: auto; justify-content: center;">
                     <ui:Instance template="libraries-manager-screen" name="libraries-manager-screen" style="display: none;" />
                     <ui:Instance template="advancedConnectionScreen" name="advancedConnectionScreen" style="display: none;" />
-                    <ui:Instance template="connect-screen" name="connect-screen" />
+                    <ui:Instance template="homeScreen" name="homeScreen" />
                     <ui:Instance template="sessionScreen" name="sessionScreen" style="display: none;" />
                 </ui:VisualElement>
                 <ui:VisualElement style="flex-grow: 1;">
