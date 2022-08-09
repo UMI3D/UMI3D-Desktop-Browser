@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:Template name="library-manager-entry" src="library-manager-entry.uxml" />
+    <ui:Template name="library-manager-entry" src="/Assets/Project/UI/UXML/Launcher/Entries/library-manager-entry.uxml" />
     <ui:VisualElement name="assets-librairies-required-screen" class="grey-border" style="display: flex; padding-left: 44px; padding-right: 44px; border-left-width: 2px; border-right-width: 2px; border-top-width: 0; border-bottom-width: 0;">
         <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:VisualElement name="librairies-title-container" style="height: 65px; margin-bottom: 40px; padding-right: 35px;">

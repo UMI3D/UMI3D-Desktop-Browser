@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:Template name="libraries-manager-screen" src="libraries-manager-screen.uxml" />
-    <ui:Template name="advancedConnectionScreen" src="advancedConnectionScreen.uxml" />
-    <ui:Template name="connect-screen" src="connect-screen.uxml" />
-    <ui:Template name="sessionScreen" src="sessionScreen.uxml" />
+    <ui:Template name="libraries-manager-screen" src="/Assets/Project/UI/UXML/Launcher/Screens/libraries-manager-screen.uxml" />
+    <ui:Template name="advancedConnectionScreen" src="/Assets/Project/UI/UXML/Launcher/Screens/advancedConnectionScreen.uxml" />
+    <ui:Template name="connect-screen" src="/Assets/Project/UI/UXML/Launcher/Screens/connect-screen.uxml" />
+    <ui:Template name="sessionScreen" src="/Assets/Project/UI/UXML/Launcher/Screens/sessionScreen.uxml" />
     <Style src="/Assets/Project/UI/UXML/main-style.uss" />
     <ui:VisualElement name="root" style="flex-grow: 1;">
         <ui:VisualElement name="body" style="height: 100%; width: 100%;">
