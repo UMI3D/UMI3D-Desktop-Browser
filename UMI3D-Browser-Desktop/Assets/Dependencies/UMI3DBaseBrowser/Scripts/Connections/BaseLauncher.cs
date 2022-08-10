@@ -26,8 +26,8 @@ namespace umi3d.baseBrowser.connection
         protected const string sceneToLoad = "Environement";
 
         #region Data
-        protected preferences.ServerPreferences.ServerData currentServerConnectionData;
-        protected List<preferences.ServerPreferences.ServerData> serverConnectionData = new List<preferences.ServerPreferences.ServerData>();
+        protected preferences.ServerPreferences.ServerData currentServer;
+        protected List<preferences.ServerPreferences.ServerData> savedServers;
         protected preferences.ServerPreferences.Data currentConnectionData;
         #endregion
 

@@ -18,7 +18,6 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using umi3d.baseBrowser.preferences;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
@@ -107,8 +106,8 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
                 savedServerEntry,
                 currentServer,
                 savedServers,
-                DisplayAdvancedConnectionScreen,
-                DisplayLibrariesManagerScreen,
+                DisplayAdvConnectionScreen,
+                DisplayLibManagerScreen,
                 DisplayDialogueBox,
                 _ResizeElements,
                 Connect
@@ -140,6 +139,9 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
                 DisplayDialogueBox
             );
 
+        advancedConnectionScreen.Hide();
+        sessionScreen.Hide();
+        librariesManagerScreen.Hide();
         DisplayHomeScreen();
 
         root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
@@ -172,7 +174,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     /// <summary>
     /// Displays advanced connection screen.
     /// </summary>
-    public void DisplayAdvancedConnectionScreen()
+    public void DisplayAdvConnectionScreen()
     {
         advancedConnectionScreen.Display();
         previousStep = () =>
@@ -190,7 +192,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     /// <summary>
     /// Displays Libraries manager screen.
     /// </summary>
-    public void DisplayLibrariesManagerScreen()
+    public void DisplayLibManagerScreen()
     {
         librariesManagerScreen.Display();
         previousStep = () =>
@@ -209,7 +211,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     /// <param name="optionA"></param>
     /// <param name="optionB"></param>
     /// <param name="choiceCallback"></param>
-    public void DisplayDialogueBox(string title, string message, string optionA, string optionB, Action<bool> choiceCallback)
+    public void DisplayDialogueBox(string title, string message, string optionA, string optionB, System.Action<bool> choiceCallback)
     {
         DialogueBox_E.Instance.Setup(title, message, optionA, optionB, choiceCallback);
         DialogueBox_E.Instance.DisplayFrom(document);
@@ -242,7 +244,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
 
         currentServer = ServerPreferences.GetPreviousServerData() ?? new ServerPreferences.ServerData();
         currentConnectionData = ServerPreferences.GetPreviousConnectionData() ?? new ServerPreferences.Data();
-        savedServers = ServerPreferences.GetRegisteredServerData();
+        savedServers = ServerPreferences.GetRegisteredServerData() ?? new System.Collections.Generic.List<ServerPreferences.ServerData>();
 
         SetUpKeyboardConfiguration();
 
@@ -255,7 +257,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
         if (ShouldDisplaySessionScreen)
         {
             homeScreen.Hide();
-            sessionScreen.Display();
+            DisplaySessionScreen();
             ShouldDisplaySessionScreen = false;
         }
     }

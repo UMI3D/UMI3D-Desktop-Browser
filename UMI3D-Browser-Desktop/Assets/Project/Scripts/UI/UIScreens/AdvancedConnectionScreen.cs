@@ -18,16 +18,16 @@ using UnityEngine.UIElements;
 
 public class AdvancedConnectionScreen
 {
-    VisualElement rootDocument;
     VisualElement root;
 
     Button backMenuBnt, nextMenuBnt;
-    System.Action back, next, resizeElements;
+    System.Action back, next;
 
     //Advanced Connection screen
-    TextField PortInput;
-    TextField IpInput;
+    TextField IP, Port;
+
     ServerPreferences.Data currentConnectionData;
+    System.Action resizeElements;
 
     public AdvancedConnectionScreen
         (
@@ -38,7 +38,9 @@ public class AdvancedConnectionScreen
             System.Action StoreCurrentConnectionDataAndConnect
         )
     {
-        this.rootDocument = rootDocument;
+        this.currentConnectionData = currentConnectionData;
+        this.resizeElements = resizeElements;
+
         backMenuBnt = rootDocument.Q<Button>("backMenuBtn");
         nextMenuBnt = rootDocument.Q<Button>("nextMenuBtn");
         back = () =>
@@ -53,13 +55,10 @@ public class AdvancedConnectionScreen
             StoreCurrentConnectionDataAndConnect();
         };
 
-        this.resizeElements = resizeElements;
-
         root = rootDocument.Q<VisualElement>("advancedConnectionScreen");
 
-        IpInput = root.Q<TextField>("IpInput");
-        PortInput = root.Q<TextField>("PortInput");
-        this.currentConnectionData = currentConnectionData;
+        IP = root.Q<TextField>("IpInput");
+        Port = root.Q<TextField>("PortInput");
     }
 
     /// <summary>
@@ -77,8 +76,8 @@ public class AdvancedConnectionScreen
         nextMenuBnt.clickable.clicked += next;
 
         //Update Ip and Port input
-        IpInput.value = currentConnectionData.ip ?? "localhost";
-        PortInput.value = currentConnectionData.port ?? "";
+        IP.value = currentConnectionData.ip ?? "localhost";
+        Port.value = currentConnectionData.port ?? "";
     }
 
     public void Hide()
@@ -93,7 +92,7 @@ public class AdvancedConnectionScreen
     /// </summary>
     public void UpdataCurrentConnectionData(string ip = "", string port = "")
     {
-        currentConnectionData.ip = string.IsNullOrEmpty(ip) ? IpInput.value.Trim() : ip;
-        currentConnectionData.port = string.IsNullOrEmpty(port) ? PortInput.value.Trim() : port;
+        currentConnectionData.ip = string.IsNullOrEmpty(ip) ? IP.value.Trim() : ip;
+        currentConnectionData.port = string.IsNullOrEmpty(port) ? Port.value.Trim() : port;
     }
 }

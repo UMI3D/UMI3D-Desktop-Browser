@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -21,22 +20,31 @@ using UnityEngine.UIElements;
 
 public class LibrariesManagerScreen
 {
-    UIDocument document;
-    VisualElement rootDocument;
     VisualElement root;
 
     Button backMenuBnt, nextMenuBnt;
     System.Action back;
 
     //Asset libraries screen
-    VisualTreeAsset libraryTA;
     ScrollView librariesList;
 
+    VisualTreeAsset libraryTA;
+    UIDocument document;
     System.Action<string, string, string, string, System.Action<bool>> displayDialogueBox;
 
-    public LibrariesManagerScreen(VisualElement rootDocument, VisualTreeAsset libraryTA, UIDocument document, System.Action displayHome, System.Action<string, string, string, string, System.Action<bool>> displayDialogueBox)
+    public LibrariesManagerScreen
+        (
+            VisualElement rootDocument, 
+            VisualTreeAsset libraryTA, 
+            UIDocument document, 
+            System.Action displayHome, 
+            System.Action<string, string, string, string, System.Action<bool>> displayDialogueBox
+        )
     {
-        this.rootDocument = rootDocument;
+        this.libraryTA = libraryTA;
+        this.document = document;
+        this.displayDialogueBox = displayDialogueBox;
+
         backMenuBnt = rootDocument.Q<Button>("backMenuBtn");
         nextMenuBnt = rootDocument.Q<Button>("nextMenuBtn"); 
         back =() =>
@@ -47,11 +55,8 @@ public class LibrariesManagerScreen
 
         root = rootDocument.Q<VisualElement>("libraries-manager-screen");
 
-        this.libraryTA = libraryTA;
+        //Library screen
         librariesList = root.Q<ScrollView>("libraries-list");
-
-        this.document = document;
-        this.displayDialogueBox = displayDialogueBox;
     }
 
     /// <summary>
@@ -105,21 +110,26 @@ public class LibrariesManagerScreen
                 DirectoryInfo dirInfo = new DirectoryInfo(lib.path);
                 double dirSize = DirSize(dirInfo) / Mathf.Pow(10, 6);
                 dirSize = System.Math.Round(dirSize, 2);
-                entry.Q<Label>("library-size").text = dirSize.ToString() + " mo"; ;
+                entry.Q<Label>("library-size").text = dirSize.ToString() + " mo";
 
 
                 //4.Bind the button to unistall this lib
                 entry.Q<Button>("library-unistall").clickable.clicked += () =>
                 {
-                    displayDialogueBox("Do you want to uninstall this labrary ?", "This library is required for " + app.Key + " environment", "YES", "NO", (b) =>
-                    {
-                        if (b)
+                    displayDialogueBox
+                    (
+                        "Do you want to uninstall this labrary ?", 
+                        $"This library is required for {app.Key} environment", 
+                        "YES", 
+                        "NO", 
+                        (b) =>
                         {
+                            if (!b) return;
                             lib.applications.Remove(app.Key);
                             umi3d.cdk.UMI3DResourcesManager.RemoveLibrary(lib.key);
                             DisplayLibraries();
                         }
-                    });
+                    );
                 };
                 librariesList.Add(entry);
             }

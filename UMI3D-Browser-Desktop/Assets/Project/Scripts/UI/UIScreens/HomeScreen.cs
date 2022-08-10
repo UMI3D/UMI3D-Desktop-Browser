@@ -20,24 +20,24 @@ using UnityEngine.UIElements;
 
 public class HomeScreen
 {
-    VisualElement rootDocument;
     VisualElement root;
 
-    Button backMenuBnt;
-    Button nextMenuBnt;
-    System.Action<string, string, string, string, System.Action<bool>> displayDialogueBox;
-    System.Action resizeElements;
+    Button backMenuBnt, nextMenuBnt;
 
     //Direct connect
     TextField urlInput;
     Toggle rememberServerToggle;
-    ServerPreferences.ServerData currentServer;
-    System.Action<bool> connect;
-
+    
     //Saved Servers
-    VisualTreeAsset savedServerTA;
+    VisualElement savedServersBox;
     SliderElement savedServersSlider;
+    
+    VisualTreeAsset savedServerTA;
+    ServerPreferences.ServerData currentServer;
     List<ServerPreferences.ServerData> savedServers;
+    System.Action<string, string, string, string, System.Action<bool>> displayDialogueBox;
+    System.Action resizeElements;
+    System.Action<bool> connect;
 
     public HomeScreen
         (
@@ -52,17 +52,20 @@ public class HomeScreen
             System.Action<bool> connect
         )
     {
-        this.rootDocument = rootDocument;
+        this.savedServerTA = savedServerTA;
+        this.currentServer = currentServer;
+        this.savedServers = savedServers;
+        this.displayDialogueBox = displayDialogueBox;
+        this.resizeElements = resizeElements;
+        this.connect = connect;
+
         backMenuBnt = rootDocument.Q<Button>("backMenuBtn");
         nextMenuBnt = rootDocument.Q<Button>("nextMenuBtn");
 
         root = rootDocument.Q<VisualElement>("home-screen");
 
-        this.displayDialogueBox = displayDialogueBox;
-        this.resizeElements = resizeElements;
-
         //Saved Servers
-        this.savedServerTA = savedServerTA;
+        savedServersBox = root.Q<VisualElement>("saved-servers");
         savedServersSlider = new SliderElement();
         savedServersSlider.SetUp(root.Q<VisualElement>("slider"));
 
@@ -77,10 +80,7 @@ public class HomeScreen
         urlInput = root.Q<TextField>("url-input");
         rememberServerToggle = root.Q<Toggle>("toggleRemember");
         root.Q<Button>("url-enter-btn").clickable.clicked += () => SetCurrentServerAndConnect();
-        this.currentServer = currentServer;
-        this.savedServers = savedServers;
-        this.connect = connect;
-
+        
         root.Q<Button>("advanced-connection-btn").clickable.clicked += () =>
         {
             Hide();
@@ -97,15 +97,10 @@ public class HomeScreen
     {
         string serverUrl = urlInput.value;
         if (string.IsNullOrEmpty(serverUrl)) return;
-        serverUrl = serverUrl.Trim();
 
-        if (currentServer != null)
-        {
-            currentServer.serverUrl = serverUrl;
-            currentServer.serverName = null;
-            currentServer.serverIcon = null;
-        }
-        else throw new System.Exception("Shouldt'n be null. Should be initialize in the start of LauncherManager.");
+        currentServer.serverUrl = serverUrl.Trim();
+        currentServer.serverName = null;
+        currentServer.serverIcon = null;
 
         connect(rememberServerToggle.value);
     }
@@ -149,16 +144,21 @@ public class HomeScreen
                 catch { }
             }
             item.Q<Label>("name").text = data.serverName ?? data.serverUrl;
-            item.Q<Button>("delete").clickable.clicked += () => displayDialogueBox(data.serverName, "Delete this server from registered ?", "YES", "NO", (b) =>
-            {
-                if (b)
+            item.Q<Button>("delete").clickable.clicked += () => displayDialogueBox
+            (
+                data.serverName, 
+                "Delete this server from registered ?", 
+                "YES", 
+                "NO", 
+                (b) =>
                 {
+                    if (!b) return;
                     savedServers.Remove(savedServers.Find(d => d.serverName == data.serverName));
                     ServerPreferences.StoreRegisteredServerData(savedServers);
                     savedServersSlider.RemoveElement(item);
                     DisplaySavedServers();
                 }
-            });
+            );
             item.RegisterCallback<MouseDownEvent>(e =>
             {
                 if (e.clickCount == 1)
@@ -171,7 +171,7 @@ public class HomeScreen
             });
             savedServersSlider.AddElement(item);
         }
-        if (isEmpty) root.Q<VisualElement>("saved-servers").style.display = DisplayStyle.None;
+        savedServersBox.style.display = isEmpty ? DisplayStyle.None : DisplayStyle.Flex;
     }
 
     /// <summary>
