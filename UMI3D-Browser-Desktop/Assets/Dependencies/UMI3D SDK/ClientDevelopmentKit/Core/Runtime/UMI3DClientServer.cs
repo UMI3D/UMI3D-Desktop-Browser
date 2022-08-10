@@ -23,6 +23,8 @@ namespace umi3d.cdk
 {
     public class UMI3DClientServer : inetum.unityUtils.PersistentSingleBehaviour<UMI3DClientServer>
     {
+        public bool isUsingResourceServer = true;
+
         /// <summary>
         /// Environment connected to.
         /// </summary>

@@ -548,6 +548,7 @@ namespace umi3d.cdk
                     }
                     if (id == null)
                         throw new Exception("id should never be null");
+
                     LoadFile(
                         id ?? 0,
                         pair,
@@ -562,6 +563,16 @@ namespace umi3d.cdk
         }
         #endregion
         #region file Load
+
+        /// <summary>
+        /// Returns true if <paramref name="url"/> has parameters.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public static bool HasUrlGotParameters(string url)
+        {
+            return Regex.IsMatch(url, ".*\\?((.*=.*)(&?))+");
+        }
 
         public static void LoadFile(ulong id, FileDto file, Action<string, string, string, Action<object>, Action<Umi3dException>, string> urlToObject, Action<object, Action<object>, string> objectFromCache, Action<object> callback, Action<Umi3dException> failCallback, Action<object, string> deleteAction)
         {
@@ -1027,7 +1038,6 @@ namespace umi3d.cdk
 
         public static void DownloadObject(UnityWebRequest www, Action callback, Action<Umi3dException> failCallback, Func<RequestFailedArgument, bool> shouldTryAgain = null)
         {
-            Debug.Log(www.url);
             StartCoroutine(Instance._DownloadObject(www, callback, failCallback, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e)));
         }
 
@@ -1035,11 +1045,8 @@ namespace umi3d.cdk
 
         private IEnumerator _DownloadObject(UnityWebRequest www, Action callback, Action<Umi3dException> failCallback, Func<RequestFailedArgument, bool> ShouldTryAgain, int tryCount = 0)
         {
-            int j = i;
-            i++;
 
             yield return www.SendWebRequest();
-
 
 #if UNITY_2020_1_OR_NEWER
             if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError || www.result == UnityWebRequest.Result.DataProcessingError)
@@ -1047,7 +1054,6 @@ namespace umi3d.cdk
             if (www.isNetworkError || www.isHttpError)
 #endif
             {
-                Debug.LogError(j + ": Error : impossible to dl " + www.url + " -> " + www.error + " " + www.downloadHandler.text + " " + www.downloadHandler.error);
 
                 //DateTime date = DateTime.UtcNow;
                 //if (!UMI3DClientServer.Instance.TryAgainOnHttpFail(new RequestFailedArgument(www, () => StartCoroutine(_DownloadObject(www, callback, failCallback,ShouldTryAgain,tryCount + 1)), tryCount, date, ShouldTryAgain)))
@@ -1065,8 +1071,6 @@ namespace umi3d.cdk
 
                 yield break;
             }
-
-            Debug.Log("<color=green>" + j + ": Success " + www.url + "</color>" + " ");
 
             callback.Invoke();
         }

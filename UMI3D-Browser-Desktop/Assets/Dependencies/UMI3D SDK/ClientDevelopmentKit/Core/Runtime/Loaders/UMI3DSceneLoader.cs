@@ -37,8 +37,8 @@ namespace umi3d.cdk
         {
             if (UMI3DEnvironmentLoader.Exists)
             {
-
                 var go = new GameObject(dto.name);
+
                 UMI3DNodeInstance node = UMI3DEnvironmentLoader.RegisterNodeInstance(
                     dto.extensions.umi3d.id,
                     dto,
@@ -62,7 +62,7 @@ namespace umi3d.cdk
                     () =>
                     {
                         UMI3DEnvironmentLoader.StartCoroutine(
-                            UMI3DEnvironmentLoader.Instance.nodeLoader.LoadNodes(dto.nodes.OrderBy(n => UnityEngine.Random.Range(0, 10000000)), finished2, ToLoadNodesCount, LoadedNodesCount));
+                            UMI3DEnvironmentLoader.Instance.nodeLoader.LoadNodes(dto.nodes, finished2, ToLoadNodesCount, LoadedNodesCount));
                     }
                 );
             }
