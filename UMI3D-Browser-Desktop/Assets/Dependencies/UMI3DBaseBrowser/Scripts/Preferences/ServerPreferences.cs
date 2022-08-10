@@ -23,6 +23,9 @@ namespace umi3d.baseBrowser.preferences
 {
     public class ServerPreferences
     {
+        /// <summary>
+        /// Contains : environment name, ip and port.
+        /// </summary>
         [Serializable]
         public class Data
         {
@@ -31,6 +34,9 @@ namespace umi3d.baseBrowser.preferences
             public string port;
         }
 
+        /// <summary>
+        /// Contains : server name, url and icon.
+        /// </summary>
         [Serializable]
         public class ServerData
         {
@@ -68,9 +74,9 @@ namespace umi3d.baseBrowser.preferences
         /// <summary>
         /// Stores the connection data about the registered servers.
         /// </summary>
-        public static void StoreRegisteredServerData(List<ServerData> favorites)
+        public static void StoreRegisteredServerData(List<ServerData> savedServers)
         {
-            StoreData<List<ServerData>>(favorites, registeredServer);
+            StoreData<List<ServerData>>(savedServers, registeredServer);
         }
 
         private static void StoreData<T>(T data, string dataType)
@@ -147,15 +153,5 @@ namespace umi3d.baseBrowser.preferences
         }
 
         #endregion
-
-        /// <summary>
-        /// Stores the connection data about the registered servers.
-        /// </summary>
-        public static void AddRegisterdeServerData(ServerData newFavorite)
-        {
-            var favorites = GetRegisteredServerData();
-            favorites.Add(newFavorite);
-            StoreRegisteredServerData(favorites);
-        }
     }
 }

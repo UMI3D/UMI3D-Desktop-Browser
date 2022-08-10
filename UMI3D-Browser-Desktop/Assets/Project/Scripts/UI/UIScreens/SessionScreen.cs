@@ -25,25 +25,25 @@ public class SessionScreen
 {
     public System.Action Submit;
 
-    VisualElement rootDocument;
     VisualElement root;
 
     Button backMenuBnt, nextMenuBnt;
     System.Action back, next;
 
     Label connectedTo;
-    ServerPreferences.ServerData currentServer;
-
+    
     //Session screen
-    VisualTreeAsset sessionEntry;
-    ScrollView sessionList;
+    ScrollView sessionsList;
     /// <summary>
     /// The item selected by a click with the mouse.
     /// </summary>
-    private VisualElement selectedItem = null;
-    public List<MasterServerResponse.Server> serverResponses = new List<MasterServerResponse.Server>();
+    VisualElement selectedItem = null;
+    List<MasterServerResponse.Server> serverResponses = new List<MasterServerResponse.Server>();
     string ip, port;
     bool isSessionSelected;
+
+    VisualTreeAsset sessionEntry;
+    ServerPreferences.ServerData currentServer;
 
     public SessionScreen
         (
@@ -56,6 +56,9 @@ public class SessionScreen
             System.Action StoreCurrentConnectionDataAndConnect
         )
     {
+        this.sessionEntry = sessionEntry;
+        this.currentServer = currentServer;
+
         void ConnectWithIPAndPort()
         {
             UpdataCurrentConnectionData(ip, port);
@@ -79,7 +82,6 @@ public class SessionScreen
             else ConnectWithPin();
         };
 
-        this.rootDocument = rootDocument;
         backMenuBnt = rootDocument.Q<Button>("backMenuBtn");
         nextMenuBnt = rootDocument.Q<Button>("nextMenuBtn");
         back = () =>
@@ -90,17 +92,15 @@ public class SessionScreen
         next = () => 
         {
             Hide();
-            ConnectWithIPAndPort();
+            Submit();
         };
 
         root = rootDocument.Q<VisualElement>("sessionScreen");
 
-        this.sessionEntry = sessionEntry;
-        sessionList = root.Q<ScrollView>("sessionsList");
+        //Session screen
+        sessionsList = root.Q<ScrollView>("sessionsList");
         root.Q<Button>("pin-enter-btn").clickable.clicked += () => ConnectWithPin();
-
         connectedTo = root.Q<Label>("connectedText");
-        this.currentServer = currentServer;
     }
 
     /// <summary>
@@ -127,12 +127,12 @@ public class SessionScreen
 
     private void UpdateSessionList()
     {
-        sessionList.Clear();
+        sessionsList.Clear();
 
         foreach (MasterServerResponse.Server session in serverResponses)
         {
             VisualElement item = sessionEntry.CloneTree().Q<VisualElement>("session-entry");
-            sessionList.Add(item);
+            sessionsList.Add(item);
             item.Q<Label>("server-name").text = session.Name;
             item.Q<Label>("users-count").text = session.PlayerCount.ToString();
 
@@ -144,13 +144,11 @@ public class SessionScreen
             {
                 if (!item.ClassListContains("orange-background"))
                     foreach (var label in item.Q<VisualElement>("server-entry-btn").Children()) label.AddToClassList("orange-text");
-            }
-            );
+            });
             item.RegisterCallback<MouseLeaveEvent>(e =>
             {
                 foreach (var label in item.Q<VisualElement>("server-entry-btn").Children()) label.RemoveFromClassList("orange-text");
-            }
-           );
+            });
         }
 
         serverResponses.Clear();
