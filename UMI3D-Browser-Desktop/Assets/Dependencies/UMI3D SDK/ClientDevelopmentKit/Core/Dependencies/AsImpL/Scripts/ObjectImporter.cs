@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -336,6 +337,7 @@ namespace AsImpL
         private Loader CreateLoader(string absolutePath)
         {
             string ext = Path.GetExtension(absolutePath);
+            ext = ext.Split('?')[0];
             if (string.IsNullOrEmpty(ext))
             {
                 Debug.LogError("No extension defined, unable to detect file format");

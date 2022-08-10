@@ -58,7 +58,7 @@ namespace umi3d.cdk
             if (!url.Contains("http")) url = "file://" + url;
 #endif
             UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(url, GetType(extension));
-            //SetCertificate(www, authorization);
+            SetCertificate(www, authorization);
             UMI3DResourcesManager.DownloadObject(www,
                 () =>
                 {
@@ -106,7 +106,16 @@ namespace umi3d.cdk
             if (fileAuthorization != null && fileAuthorization != "")
             {
                 string authorization = fileAuthorization;
-                www.SetRequestHeader(UMI3DNetworkingKeys.Authorization, authorization);
+                if (UMI3DClientServer.Instance.isUsingResourceServer)
+                {
+                    if (UMI3DResourcesManager.HasUrlGotParameters(www.url))
+                        www.url += "&" + UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + authorization;
+                    else
+                        www.url += "?" + UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + authorization;
+                } else
+                {
+                    www.SetRequestHeader(UMI3DNetworkingKeys.Authorization, authorization);
+                }
             }
         }
 

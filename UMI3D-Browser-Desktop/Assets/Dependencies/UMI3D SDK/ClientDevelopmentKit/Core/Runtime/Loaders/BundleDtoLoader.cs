@@ -62,14 +62,9 @@ namespace umi3d.cdk
 #if UNITY_ANDROID
             UnityWebRequest www = url.Contains("http") ? UnityWebRequestAssetBundle.GetAssetBundle(url) : UnityWebRequestAssetBundle.GetAssetBundle("file://" + url);
 #else
-            if (url == "https://resourcesserver-dev-api.azurewebsites.net/api/ResourcesServer/organizations/intraverse%20team/projects/newprotestuploadeverydtmfile/testaccro/1.0.0/testaccro-1.0.0/data/file/private/default/imported/Imported%20Asset/Bundles/plateform_accrobranche.prefab.bundle")
-            {
-                //url = "https://localhost:7165/WeatherForecast";
-            }
-
             UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(url);
 #endif
-            //SetCertificate(www, authorization);
+            SetCertificate(www, authorization);
             UMI3DResourcesManager.DownloadObject(www,
                 () =>
                 {
@@ -161,7 +156,17 @@ namespace umi3d.cdk
             if (fileAuthorization != null && fileAuthorization != "")
             {
                 string authorization = fileAuthorization;
-                www.SetRequestHeader(UMI3DNetworkingKeys.Authorization, authorization);
+                if (UMI3DClientServer.Instance.isUsingResourceServer)
+                {
+                    if (UMI3DResourcesManager.HasUrlGotParameters(www.url))
+                        www.url += "&" + UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + authorization;
+                    else
+                        www.url += "?" + UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + authorization;
+                }
+                else
+                {
+                    www.SetRequestHeader(UMI3DNetworkingKeys.Authorization, authorization);
+                }
             }
         }
 
