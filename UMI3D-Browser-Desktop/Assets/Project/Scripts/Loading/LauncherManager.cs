@@ -18,6 +18,7 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using umi3d.baseBrowser.preferences;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
@@ -74,11 +75,6 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     /// </summary>
     private Action previousStep = null;
 
-    //Session Screen
-    public bool ShouldDisplaySessionScreen = false;
-    public bool updateResponse = false;
-    public bool updateInfo = false;
-
     #endregion
 
     #region UI
@@ -87,6 +83,9 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     SessionScreen sessionScreen;
     AdvancedConnectionScreen advancedConnectionScreen;
     LibrariesManagerScreen librariesManagerScreen;
+
+    //Session Screen
+    public bool ShouldDisplaySessionScreen = false;
 
     //Element to be resized
     /// <summary>
@@ -106,7 +105,8 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
             (
                 root, 
                 savedServerEntry,
-                currentServerConnectionData,
+                currentServer,
+                savedServers,
                 DisplayAdvancedConnectionScreen,
                 DisplayLibrariesManagerScreen,
                 DisplayDialogueBox,
@@ -126,6 +126,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
                 root, 
                 sessionEntry,
                 masterServer,
+                currentServer,
                 DisplayHomeScreen,
                 advancedConnectionScreen.UpdataCurrentConnectionData,
                 StoreCurrentConnectionDataAndConnect
@@ -140,6 +141,8 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
             );
 
         DisplayHomeScreen();
+
+        root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
     }
 
     /// <summary>
@@ -149,7 +152,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     {
         homeScreen.Display();
         previousStep = null;
-        nextStep = () => homeScreen.SetCurrentConnectionDataAndConnect();
+        nextStep = () => homeScreen.SetCurrentServerAndConnect();
     }
 
     /// <summary>
@@ -237,46 +240,37 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     {
         base.Start();
 
-        currentServerConnectionData = new ServerPreferences.ServerData();
-        currentConnectionData = new ServerPreferences.Data();
-        
+        currentServer = ServerPreferences.GetPreviousServerData() ?? new ServerPreferences.ServerData();
+        currentConnectionData = ServerPreferences.GetPreviousConnectionData() ?? new ServerPreferences.Data();
+        savedServers = ServerPreferences.GetRegisteredServerData();
+
         SetUpKeyboardConfiguration();
 
         InitUI();
     }
 
-    
-
-    //private void InitUI()
-    //{
-    //    root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
-    //    backMenuBnt.clickable.clicked += ResetLauncher;
-    //}
-
-
     private void Update()
     {
+        CheckShortcuts();
         if (ShouldDisplaySessionScreen)
         {
-            DisplaySessionScreen();
+            homeScreen.Hide();
+            sessionScreen.Display();
             ShouldDisplaySessionScreen = false;
         }
-        if (updateInfo)
-        {
-            ServerPreferences.StoreRegisteredServerData(serverConnectionData);
-            updateInfo = false;
-        }
-
-        CheckShortcuts();
     }
-
-    
 
     /// <summary>
     /// Initiates the connection to the forge master server.
     /// </summary>
-    private async void Connect(ServerPreferences.ServerData server, bool saveInfo = false) 
+    private async void Connect(bool saveInfo = false) 
     {
+        void StoreServer()
+        {
+            if (savedServers.Find((server) => server.serverName == currentServer.serverName) == null) savedServers.Add(currentServer);
+            ServerPreferences.StoreRegisteredServerData(savedServers);
+        }
+
         bool mediaDtoFound = false;
         bool masterServerFound = false;
 
@@ -288,33 +282,26 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
             masterServer.RequestInfo((name, icon) =>
             {
                 if (mediaDtoFound) return;
-
                 masterServerFound = true;
 
-                if (saveInfo)
-                {
-                    server.serverName = name;
-                    server.serverIcon = icon;
-                    updateInfo = true;
-                }
+                currentServer.serverName = name;
+                currentServer.serverIcon = icon;
+                ServerPreferences.StoreUserData(currentServer);
+                if (saveInfo) StoreServer();
             });
+
             ShouldDisplaySessionScreen = true;
-        }, server.serverUrl);
-
-        var text = root.Q<Label>("connectedText");
-        Debug.Log(text);
-        root.Q<Label>("connectedText").text = "Connected to : " + server.serverUrl;
-
+        }, currentServer.serverUrl);
 
         //2. try to get a mediaDto
-        var media = await ConnectionMenu.GetMediaDto(server);
+        var media = await ConnectionMenu.GetMediaDto(currentServer);
         if (media == null || masterServerFound) return;
         mediaDtoFound = true;
 
-        server.serverName = media.name;
-        //To handle Properly.
-        server.serverIcon = media?.icon2D?.variants?.FirstOrDefault()?.url;
-        updateInfo = true;
+        currentServer.serverName = media.name;
+        currentServer.serverIcon = media?.icon2D?.variants?.FirstOrDefault()?.url;
+        ServerPreferences.StoreUserData(currentServer);
+        if (saveInfo) StoreServer();
 
         currentConnectionData.environmentName = media.name;
         currentConnectionData.ip = media.url;

@@ -121,7 +121,6 @@ namespace umi3dDesktopBrowser.ui.viewController
 
         public void DisplayFrom(UIDocument uiDocument)
         {
-            Debug.Log($"DisplayFrom {Instance.IsDisplaying}");
             if (Instance.IsDisplaying) return;
             else Instance.IsDisplaying = true;
             Instance.InsertRootTo(uiDocument.rootVisualElement);

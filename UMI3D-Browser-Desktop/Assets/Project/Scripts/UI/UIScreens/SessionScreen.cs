@@ -16,6 +16,7 @@ limitations under the License.
 using BeardedManStudios.Forge.Networking;
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.baseBrowser.preferences;
 using umi3d.cdk.collaboration;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -28,6 +29,10 @@ public class SessionScreen
     VisualElement root;
 
     Button backMenuBnt, nextMenuBnt;
+    System.Action back, next;
+
+    Label connectedTo;
+    ServerPreferences.ServerData currentServer;
 
     //Session screen
     VisualTreeAsset sessionEntry;
@@ -45,6 +50,7 @@ public class SessionScreen
             VisualElement rootDocument, 
             VisualTreeAsset sessionEntry,
             LaucherOnMasterServer masterServer,
+            ServerPreferences.ServerData currentServer,
             System.Action displayHome, 
             System.Action<string, string> UpdataCurrentConnectionData, 
             System.Action StoreCurrentConnectionDataAndConnect
@@ -76,12 +82,12 @@ public class SessionScreen
         this.rootDocument = rootDocument;
         backMenuBnt = rootDocument.Q<Button>("backMenuBtn");
         nextMenuBnt = rootDocument.Q<Button>("nextMenuBtn");
-        backMenuBnt.clickable.clicked += () =>
+        back = () =>
         {
             Hide();
             displayHome();
         };
-        nextMenuBnt.clickable.clicked += () =>
+        next = () => 
         {
             Hide();
             ConnectWithIPAndPort();
@@ -92,6 +98,9 @@ public class SessionScreen
         this.sessionEntry = sessionEntry;
         sessionList = root.Q<ScrollView>("sessionsList");
         root.Q<Button>("pin-enter-btn").clickable.clicked += () => ConnectWithPin();
+
+        connectedTo = root.Q<Label>("connectedText");
+        this.currentServer = currentServer;
     }
 
     /// <summary>
@@ -103,9 +112,18 @@ public class SessionScreen
         backMenuBnt.style.display = DisplayStyle.Flex;
         nextMenuBnt.style.display = DisplayStyle.None;
         root.style.display = DisplayStyle.Flex;
+        backMenuBnt.clickable.clicked += back;
+        nextMenuBnt.clickable.clicked += next;
+
+        connectedTo.text = $"Connected to: {currentServer.serverUrl}";
     }
 
-    public void Hide() => root.style.display = DisplayStyle.None;
+    public void Hide()
+    {
+        root.style.display = DisplayStyle.None;
+        backMenuBnt.clickable.clicked -= back;
+        nextMenuBnt.clickable.clicked -= next;
+    }
 
     private void UpdateSessionList()
     {
