@@ -29,18 +29,10 @@ public class HomeScreen
     System.Action resizeElements;
 
     //Direct connect
-    /// <summary>
-    /// Dropdown button to display or hide the new connexion url.
-    /// </summary>
-    Button connectionDropdownBtn;
     TextField urlInput;
-    /// <summary>
-    /// Arrow button to connect to the new server.
-    /// </summary>
-    Button connectBtn;
     Toggle rememberServerToggle;
-    ServerPreferences.ServerData currentServerConnectionData;
-    System.Action<ServerPreferences.ServerData, bool> connect;
+    ServerPreferences.ServerData currentServer;
+    System.Action<bool> connect;
 
     //Saved Servers
     VisualTreeAsset savedServerTA;
@@ -51,12 +43,13 @@ public class HomeScreen
         (
             VisualElement rootDocument, 
             VisualTreeAsset savedServerTA, 
-            ServerPreferences.ServerData currentServerConnectionData, 
+            ServerPreferences.ServerData currentServer,
+            List<ServerPreferences.ServerData> savedServers,
             System.Action displayAdvConnectionScreen, 
             System.Action displayLibrariesManagerScreen, 
             System.Action<string, string, string, string, System.Action<bool>> displayDialogueBox,
             System.Action resizeElements,
-            System.Action<ServerPreferences.ServerData, bool> connect
+            System.Action<bool> connect
         )
     {
         this.rootDocument = rootDocument;
@@ -70,19 +63,22 @@ public class HomeScreen
 
         //Saved Servers
         this.savedServerTA = savedServerTA;
-        savedServers = ServerPreferences.GetRegisteredServerData();
         savedServersSlider = new SliderElement();
         savedServersSlider.SetUp(root.Q<VisualElement>("slider"));
 
         //Direct connect
-        connectionDropdownBtn = root.Q<Button>("newConnection");
+        /// <summary>
+        /// Dropdown button to display or hide the new connexion url.
+        /// </summary>
+        Button connectionDropdownBtn = root.Q<Button>("newConnection");
         connectionDropdownBtn.clickable.clicked += () => ToggleDisplayElement(root.Q<VisualElement>("inputs-url-container"));
         connectionDropdownBtn.clickable.clicked += () => ToggleDisplayElement(root.Q<VisualElement>("icon-close"));
         connectionDropdownBtn.clickable.clicked += () => ToggleDisplayElement(root.Q<VisualElement>("icon-open"));
         urlInput = root.Q<TextField>("url-input");
         rememberServerToggle = root.Q<Toggle>("toggleRemember");
-        root.Q<Button>("url-enter-btn").clickable.clicked += () => SetCurrentConnectionDataAndConnect();
-        this.currentServerConnectionData = currentServerConnectionData;
+        root.Q<Button>("url-enter-btn").clickable.clicked += () => SetCurrentServerAndConnect();
+        this.currentServer = currentServer;
+        this.savedServers = savedServers;
         this.connect = connect;
 
         root.Q<Button>("advanced-connection-btn").clickable.clicked += () =>
@@ -97,23 +93,21 @@ public class HomeScreen
         };
     }
 
-    public void SetCurrentConnectionDataAndConnect()
+    public void SetCurrentServerAndConnect()
     {
         string serverUrl = urlInput.value;
         if (string.IsNullOrEmpty(serverUrl)) return;
         serverUrl = serverUrl.Trim();
 
-        if (currentServerConnectionData != null)
+        if (currentServer != null)
         {
-            currentServerConnectionData.serverUrl = serverUrl;
-            currentServerConnectionData.serverName = null;
-            currentServerConnectionData.serverIcon = null;
+            currentServer.serverUrl = serverUrl;
+            currentServer.serverName = null;
+            currentServer.serverIcon = null;
         }
-        else currentServerConnectionData = new ServerPreferences.ServerData() { serverUrl = serverUrl };
+        else throw new System.Exception("Shouldt'n be null. Should be initialize in the start of LauncherManager.");
 
-        if (rememberServerToggle.value) ServerPreferences.AddRegisterdeServerData(currentServerConnectionData);
-
-        connect(currentServerConnectionData, true);
+        connect(rememberServerToggle.value);
     }
 
     /// <summary>
@@ -130,7 +124,7 @@ public class HomeScreen
 
         DisplaySavedServers();
 
-        urlInput.value = currentServerConnectionData.serverName;
+        urlInput.value = currentServer.serverUrl ?? "Test.com";
     }
 
     public void Hide() => root.style.display = DisplayStyle.None;
@@ -162,16 +156,17 @@ public class HomeScreen
                     savedServers.Remove(savedServers.Find(d => d.serverName == data.serverName));
                     ServerPreferences.StoreRegisteredServerData(savedServers);
                     savedServersSlider.RemoveElement(item);
+                    DisplaySavedServers();
                 }
             });
             item.RegisterCallback<MouseDownEvent>(e =>
             {
                 if (e.clickCount == 1)
                 {
-                    this.currentServerConnectionData.serverName = data.serverName;
-                    this.currentServerConnectionData.serverUrl = data.serverUrl;
-                    this.currentServerConnectionData.serverIcon = data.serverIcon;
-                    connect(data, true);
+                    this.currentServer.serverName = data.serverName;
+                    this.currentServer.serverUrl = data.serverUrl;
+                    this.currentServer.serverIcon = data.serverIcon;
+                    connect(false);
                 }
             });
             savedServersSlider.AddElement(item);

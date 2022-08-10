@@ -25,8 +25,8 @@ public class LibrariesManagerScreen
     VisualElement rootDocument;
     VisualElement root;
 
-    Button backMenuBnt;
-    Button nextMenuBnt;
+    Button backMenuBnt, nextMenuBnt;
+    System.Action back;
 
     //Asset libraries screen
     VisualTreeAsset libraryTA;
@@ -38,8 +38,8 @@ public class LibrariesManagerScreen
     {
         this.rootDocument = rootDocument;
         backMenuBnt = rootDocument.Q<Button>("backMenuBtn");
-        nextMenuBnt = rootDocument.Q<Button>("nextMenuBtn");
-        backMenuBnt.clickable.clicked += () =>
+        nextMenuBnt = rootDocument.Q<Button>("nextMenuBtn"); 
+        back =() =>
         {
             Hide();
             displayHome();
@@ -63,11 +63,15 @@ public class LibrariesManagerScreen
         backMenuBnt.style.display = DisplayStyle.Flex;
         nextMenuBnt.style.display = DisplayStyle.None;
         root.style.display = DisplayStyle.Flex;
-
+        backMenuBnt.clickable.clicked += back;
         DisplayLibraries();
     }
 
-    public void Hide() => root.style.display = DisplayStyle.None;
+    public void Hide()
+    {
+        root.style.display = DisplayStyle.None;
+        backMenuBnt.clickable.clicked -= back;
+    }
 
     private void DisplayLibraries()
     {

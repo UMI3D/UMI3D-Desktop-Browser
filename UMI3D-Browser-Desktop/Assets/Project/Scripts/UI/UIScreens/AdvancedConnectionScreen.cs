@@ -21,9 +21,8 @@ public class AdvancedConnectionScreen
     VisualElement rootDocument;
     VisualElement root;
 
-    Button backMenuBnt;
-    Button nextMenuBnt;
-    System.Action resizeElements;
+    Button backMenuBnt, nextMenuBnt;
+    System.Action back, next, resizeElements;
 
     //Advanced Connection screen
     TextField PortInput;
@@ -42,17 +41,18 @@ public class AdvancedConnectionScreen
         this.rootDocument = rootDocument;
         backMenuBnt = rootDocument.Q<Button>("backMenuBtn");
         nextMenuBnt = rootDocument.Q<Button>("nextMenuBtn");
-        backMenuBnt.clickable.clicked += () =>
+        back = () =>
         {
             Hide();
             displayHome();
         };
-        nextMenuBnt.clickable.clicked += () =>
+        next = () =>
         {
             Hide();
             UpdataCurrentConnectionData();
             StoreCurrentConnectionDataAndConnect();
         };
+
         this.resizeElements = resizeElements;
 
         root = rootDocument.Q<VisualElement>("advancedConnectionScreen");
@@ -73,13 +73,20 @@ public class AdvancedConnectionScreen
         backMenuBnt.style.display = DisplayStyle.Flex;
         nextMenuBnt.style.display = DisplayStyle.Flex;
         root.style.display = DisplayStyle.Flex;
+        backMenuBnt.clickable.clicked += back;
+        nextMenuBnt.clickable.clicked += next;
 
         //Update Ip and Port input
         IpInput.value = currentConnectionData.ip ?? "localhost";
         PortInput.value = currentConnectionData.port ?? "";
     }
 
-    public void Hide() => root.style.display = DisplayStyle.None;
+    public void Hide()
+    {
+        root.style.display = DisplayStyle.None;
+        backMenuBnt.clickable.clicked -= back;
+        nextMenuBnt.clickable.clicked -= next;
+    }
 
     /// <summary>
     /// Gets the url and port written by users and stores them.
