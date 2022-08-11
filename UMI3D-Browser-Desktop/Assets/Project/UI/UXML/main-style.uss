@@ -638,6 +638,7 @@ Toggle > Label {
     height: 40px;
     padding-left: 5px;
     -unity-text-align: middle-left;
+    overflow: hidden;
 }
 
 .dropdown-label-mini {
