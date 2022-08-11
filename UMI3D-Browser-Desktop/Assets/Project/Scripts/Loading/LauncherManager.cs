@@ -83,9 +83,6 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     AdvancedConnectionScreen advancedConnectionScreen;
     LibrariesManagerScreen librariesManagerScreen;
 
-    //Session Screen
-    public bool ShouldDisplaySessionScreen = false;
-
     //Element to be resized
     /// <summary>
     /// UMI3D logo to be resized
@@ -93,7 +90,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     VisualElement umiLogo;
     private float height;
 
-    private void InitUI()
+    protected override void InitUI()
     {
         root.Q<Label>("version").text = BrowserDesktop.BrowserVersion.Version;
 
@@ -150,7 +147,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     /// <summary>
     /// Displays advanced connection screen.
     /// </summary>
-    public void DisplayHomeScreen()
+    public override void DisplayHomeScreen()
     {
         homeScreen.Display();
         previousStep = null;
@@ -160,7 +157,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     /// <summary>
     /// Displays session screen
     /// </summary>
-    public void DisplaySessionScreen()
+    public override void DisplaySessionScreen()
     {
         sessionScreen.Display();
         previousStep = () =>
@@ -174,7 +171,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     /// <summary>
     /// Displays advanced connection screen.
     /// </summary>
-    public void DisplayAdvConnectionScreen()
+    public override void DisplayAdvConnectionScreen()
     {
         advancedConnectionScreen.Display();
         previousStep = () =>
@@ -192,7 +189,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     /// <summary>
     /// Displays Libraries manager screen.
     /// </summary>
-    public void DisplayLibManagerScreen()
+    public override void DisplayLibManagerScreen()
     {
         librariesManagerScreen.Display();
         previousStep = () =>
@@ -211,7 +208,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     /// <param name="optionA"></param>
     /// <param name="optionB"></param>
     /// <param name="choiceCallback"></param>
-    public void DisplayDialogueBox(string title, string message, string optionA, string optionB, System.Action<bool> choiceCallback)
+    public override void DisplayDialogueBox(string title, string message, string optionA, string optionB, System.Action<bool> choiceCallback)
     {
         DialogueBox_E.Instance.Setup(title, message, optionA, optionB, choiceCallback);
         DialogueBox_E.Instance.DisplayFrom(document);
@@ -242,13 +239,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
     {
         base.Start();
 
-        currentServer = ServerPreferences.GetPreviousServerData() ?? new ServerPreferences.ServerData();
-        currentConnectionData = ServerPreferences.GetPreviousConnectionData() ?? new ServerPreferences.Data();
-        savedServers = ServerPreferences.GetRegisteredServerData() ?? new System.Collections.Generic.List<ServerPreferences.ServerData>();
-
         SetUpKeyboardConfiguration();
-
-        InitUI();
     }
 
     private void Update()
@@ -260,63 +251,5 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
             DisplaySessionScreen();
             ShouldDisplaySessionScreen = false;
         }
-    }
-
-    /// <summary>
-    /// Initiates the connection to the forge master server.
-    /// </summary>
-    private async void Connect(bool saveInfo = false) 
-    {
-        void StoreServer()
-        {
-            if (savedServers.Find((server) => server.serverName == currentServer.serverName) == null) savedServers.Add(currentServer);
-            ServerPreferences.StoreRegisteredServerData(savedServers);
-        }
-
-        bool mediaDtoFound = false;
-        bool masterServerFound = false;
-
-        //1. Try to find a master server
-        masterServer.ConnectToMasterServer(() =>
-        {
-            if (mediaDtoFound) return;
-
-            masterServer.RequestInfo((name, icon) =>
-            {
-                if (mediaDtoFound) return;
-                masterServerFound = true;
-
-                currentServer.serverName = name;
-                currentServer.serverIcon = icon;
-                ServerPreferences.StoreUserData(currentServer);
-                if (saveInfo) StoreServer();
-            });
-
-            ShouldDisplaySessionScreen = true;
-        }, currentServer.serverUrl);
-
-        //2. try to get a mediaDto
-        var media = await ConnectionMenu.GetMediaDto(currentServer);
-        if (media == null || masterServerFound) return;
-        mediaDtoFound = true;
-
-        currentServer.serverName = media.name;
-        currentServer.serverIcon = media?.icon2D?.variants?.FirstOrDefault()?.url;
-        ServerPreferences.StoreUserData(currentServer);
-        if (saveInfo) StoreServer();
-
-        currentConnectionData.environmentName = media.name;
-        currentConnectionData.ip = media.url;
-        currentConnectionData.port = null;
-        StoreCurrentConnectionDataAndConnect();
-    }
-
-    /// <summary>
-    /// Store current connection data and initiates the connection to the environment.
-    /// </summary>
-    private void StoreCurrentConnectionDataAndConnect()
-    {
-        ServerPreferences.StoreUserData(currentConnectionData);
-        StartCoroutine(WaitReady(currentConnectionData));
     }
 }
