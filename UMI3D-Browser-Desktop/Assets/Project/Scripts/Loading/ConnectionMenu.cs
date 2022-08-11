@@ -44,7 +44,15 @@ public class ConnectionMenu : umi3d.baseBrowser.connection.BaseConnectionMenu
     protected override void InitUI()
     {
         base.InitUI();
-        document.rootVisualElement.Q<Label>("version").text = BrowserDesktop.BrowserVersion.Version;
+        VisualElement root = document.rootVisualElement;
+        root.Q<Label>("version").text = BrowserDesktop.BrowserVersion.Version;
+        root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
+    }
+
+    protected override void ResizeElements(GeometryChangedEvent e)
+    {
+        logo.style.height = e.newRect.height * 0.16f;
+        logo.style.marginBottom = e.newRect.height * 0.08f;
     }
 
     protected override void Start()
