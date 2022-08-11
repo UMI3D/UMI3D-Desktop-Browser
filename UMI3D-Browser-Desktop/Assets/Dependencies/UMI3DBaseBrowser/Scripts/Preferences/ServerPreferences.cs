@@ -32,6 +32,8 @@ namespace umi3d.baseBrowser.preferences
             public string environmentName;
             public string ip;
             public string port;
+
+            public override string ToString() => $"name = {environmentName}, ip = {ip}, port = {port}";
         }
 
         /// <summary>

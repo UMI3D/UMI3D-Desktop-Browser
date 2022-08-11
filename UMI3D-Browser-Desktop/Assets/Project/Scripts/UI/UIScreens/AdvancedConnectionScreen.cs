@@ -92,6 +92,7 @@ public class AdvancedConnectionScreen
     /// </summary>
     public void UpdataCurrentConnectionData(string ip = "", string port = "")
     {
+        currentConnectionData.environmentName = null;
         currentConnectionData.ip = string.IsNullOrEmpty(ip) ? IP.value.Trim() : ip;
         currentConnectionData.port = string.IsNullOrEmpty(port) ? Port.value.Trim() : port;
     }
