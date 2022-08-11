@@ -124,8 +124,14 @@ namespace BrowserDesktop.Menu
                     var parent = textInput.parent;
                     var unityTextInput = textInput.Q("unity-text-input");
 
-                    var button = new umi3d.baseBrowser.ui.viewController.Button_E("Free", umi3d.baseBrowser.ui.viewController.StyleKeys.DefaultBackground);
-                    button.Clicked += () => textInput.isPasswordField = !textInput.isPasswordField;
+                    var button = new umi3d.baseBrowser.ui.viewController.Button_E("Free", umi3d.baseBrowser.ui.viewController.StyleKeys.Bg("on"), umi3d.baseBrowser.ui.viewController.StyleKeys.Bg("off"), !textInput.isPasswordField);
+                    button.Clicked += () =>
+                    {
+                        textInput.isPasswordField = !textInput.isPasswordField;
+                        button.Toggle(!textInput.isPasswordField);
+                        button.Root.style.width = unityTextInput.resolvedStyle.height;
+                        button.Root.style.height = unityTextInput.resolvedStyle.height;
+                    };
                     unityTextInput.schedule.Execute(() => unityTextInput.schedule.Execute(() =>
                     {
                         button.Root.style.width = unityTextInput.resolvedStyle.height;
