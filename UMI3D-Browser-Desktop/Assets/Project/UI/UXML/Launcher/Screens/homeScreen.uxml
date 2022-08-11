@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:Template name="SliderElement" src="/Assets/Project/UI/UXML/CustomElement/SliderElement.uxml" />
     <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-    <ui:VisualElement name="url-screen" style="min-width: 300px; min-height: 400px;">
+    <ui:VisualElement name="home-screen" style="min-width: 300px; min-height: 400px;">
         <ui:VisualElement style="flex-grow: 0; justify-content: flex-start; height: auto;">
             <ui:VisualElement name="url-center" style="align-items: stretch; justify-content: center; height: auto;">
                 <ui:VisualElement name="logo" style="height: 90px; background-image: url(&apos;/Assets/Project/UI/UI_connection/logo_page.png&apos;); -unity-background-scale-mode: scale-to-fit; margin-bottom: 15px; margin-top: 20px;" />
