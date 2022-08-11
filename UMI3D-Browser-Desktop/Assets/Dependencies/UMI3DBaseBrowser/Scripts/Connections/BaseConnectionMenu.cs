@@ -63,8 +63,6 @@ namespace umi3d.baseBrowser.connection
 
             passwordScreen.style.display = DisplayStyle.None;
             connectionScreen.style.display = DisplayStyle.Flex;
-
-            root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
         }
 
         protected virtual void BindPasswordScreen(VisualElement root)
@@ -101,11 +99,7 @@ namespace umi3d.baseBrowser.connection
         /// <summary>
         /// Resize some elements when the window is resized, to make the UI more responsive.
         /// </summary>
-        protected virtual void ResizeElements(GeometryChangedEvent e)
-        {
-            logo.style.height = e.newRect.height * 0.16f;
-            logo.style.marginBottom = e.newRect.height * 0.08f;
-        }
+        protected abstract void ResizeElements(GeometryChangedEvent e);
 
         protected void DisplayScreenToLogin()
         {
