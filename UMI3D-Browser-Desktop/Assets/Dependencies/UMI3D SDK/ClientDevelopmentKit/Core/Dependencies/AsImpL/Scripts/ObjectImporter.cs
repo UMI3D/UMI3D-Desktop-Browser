@@ -337,7 +337,7 @@ namespace AsImpL
         private Loader CreateLoader(string absolutePath)
         {
             string ext = Path.GetExtension(absolutePath);
-            ext = ext.Split('?')[0];
+
             if (string.IsNullOrEmpty(ext))
             {
                 Debug.LogError("No extension defined, unable to detect file format");
@@ -357,15 +357,13 @@ namespace AsImpL
             }
             else
             {
-                switch (ext)
+                if (ext.Contains(".obj"))
                 {
-                    case ".obj":
-                        loader = gameObject.AddComponent<CustomLoaderObj>();
-                        break;
-                    // TODO: add mode formats here...
-                    default:
-                        Debug.LogErrorFormat("File format not supported ({0})", ext);
-                        return null;
+                    loader = gameObject.AddComponent<CustomLoaderObj>();
+                } else
+                {
+                    Debug.LogErrorFormat("File format not supported ({0})", ext);
+                    return null;
                 }
             }
             loader.ModelCreated += OnModelCreated;

@@ -65,6 +65,7 @@ namespace umi3d.cdk
             UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(url);
 #endif
             SetCertificate(www, authorization);
+            Debug.Log("<color=green>Load Bundle " + url + "</color>");
             UMI3DResourcesManager.DownloadObject(www,
                 () =>
                 {
@@ -156,7 +157,7 @@ namespace umi3d.cdk
             if (fileAuthorization != null && fileAuthorization != "")
             {
                 string authorization = fileAuthorization;
-                if (UMI3DClientServer.Instance.isUsingResourceServer)
+                if (UMI3DResourcesManager.Instance.isUsingResourceServer && www.url.StartsWith("http"))
                 {
                     if (UMI3DResourcesManager.HasUrlGotParameters(www.url))
                         www.url += "&" + UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + authorization;

@@ -23,8 +23,6 @@ namespace umi3d.cdk
 {
     public class UMI3DClientServer : inetum.unityUtils.PersistentSingleBehaviour<UMI3DClientServer>
     {
-        public bool isUsingResourceServer = true;
-
         /// <summary>
         /// Environment connected to.
         /// </summary>
@@ -77,13 +75,11 @@ namespace umi3d.cdk
         protected virtual void _SendTracking(AbstractBrowserRequestDto dto) { }
 
 
-        public static async void GetFile(string url, Action<byte[]> callback, Action<string> onError)
+        public static async void GetFile(string url, Action<byte[]> callback, Action<string> onError, bool useParameterInsteadOfHeader)
         {
             if (Exists)
             {
-                UnityEngine.Debug.Log("GET FILE " + url);
-
-                byte[] bytes = await Instance._GetFile(url);
+                byte[] bytes = await Instance._GetFile(url, useParameterInsteadOfHeader);
                 if (bytes != null)
                     callback.Invoke(bytes);
             }
@@ -91,7 +87,7 @@ namespace umi3d.cdk
                 throw new Exception($"Instance of UMI3DClientServer is null");
         }
 
-        protected virtual Task<byte[]> _GetFile(string url)
+        protected virtual Task<byte[]> _GetFile(string url, bool useParameterInsteadOfHeader)
         {
             throw new NotImplementedException();
         }

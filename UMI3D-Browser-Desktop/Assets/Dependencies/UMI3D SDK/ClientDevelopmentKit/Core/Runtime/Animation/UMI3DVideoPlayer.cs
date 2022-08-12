@@ -52,7 +52,16 @@ namespace umi3d.cdk
             var videoPlayerGameObject = new GameObject("video");
             videoPlayerGameObject.transform.SetParent(UMI3DResourcesManager.Instance.transform);
             videoPlayer = videoPlayerGameObject.AddComponent<VideoPlayer>();
-            videoPlayer.url = UMI3DEnvironmentLoader.Parameters.ChooseVariant(dto.videoResource.variants).url;
+
+            var fileDto = UMI3DEnvironmentLoader.Parameters.ChooseVariant(dto.videoResource.variants);
+            videoPlayer.url = fileDto.url;
+
+            if ( UMI3DResourcesManager.Instance.isUsingResourceServer)
+                if (UMI3DResourcesManager.HasUrlGotParameters(videoPlayer.url))
+                    videoPlayer.url += "&" + UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + UMI3DClientServer.getAuthorization();
+                else
+                    videoPlayer.url += "?" + UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + UMI3DClientServer.getAuthorization();
+
             videoPlayer.targetTexture = renderTexture;
 
             videoPlayer.source = VideoSource.Url;
