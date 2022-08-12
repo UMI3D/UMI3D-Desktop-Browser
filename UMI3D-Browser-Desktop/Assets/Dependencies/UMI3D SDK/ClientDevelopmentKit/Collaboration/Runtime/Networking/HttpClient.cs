@@ -411,11 +411,23 @@ namespace umi3d.cdk.collaboration
         /// <param name="url">Url</param>
         /// <param name="callback">Action to be call when the request succeed.</param>
         /// <param name="onError">Action to be call when the request fail.</param>
-        public async Task<byte[]> SendGetPrivate(string url, Func<RequestFailedArgument, bool> shouldTryAgain = null)
+        /// <param name="useParameterInsteadOfHeader">If true, sets authorization via parameters instead of header</param>
+        public async Task<byte[]> SendGetPrivate(string url, bool useParameterInsteadOfHeader, Func<RequestFailedArgument, bool> shouldTryAgain = null)
         {
             UMI3DLogger.Log($"Send GetPrivate {url}", scope | DebugScope.Connection);
-            UnityWebRequest uwr = await _GetRequest(HeaderToken, url, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e), true);
+
+            if (useParameterInsteadOfHeader)
+            {
+                if (UMI3DResourcesManager.HasUrlGotParameters(url))
+                    url += "&" + UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + HeaderToken;
+                else
+                    url += "?" + UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + HeaderToken;
+            }
+
+            UnityWebRequest uwr = await _GetRequest(HeaderToken, url, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e), !useParameterInsteadOfHeader);
+
             UMI3DLogger.Log($"Received GetPrivate {url}", scope | DebugScope.Connection);
+
             return uwr?.downloadHandler.data;
         }
         #endregion
@@ -539,6 +551,8 @@ namespace umi3d.cdk.collaboration
             UnityWebRequestAsyncOperation operation = www.SendWebRequest();
             while (!operation.isDone)
                 await UMI3DAsyncManager.Yield();
+
+            UnityEngine.Debug.Log("<color=purple>Load lib file " + url + "</color>");
 
 #if UNITY_2020_1_OR_NEWER
             if (www.result > UnityWebRequest.Result.Success)

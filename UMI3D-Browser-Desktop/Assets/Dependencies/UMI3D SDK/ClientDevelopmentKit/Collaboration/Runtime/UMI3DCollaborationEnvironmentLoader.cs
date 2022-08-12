@@ -43,6 +43,8 @@ namespace umi3d.cdk.collaboration
             if (dto == null) return;
             UserList = dto.userList.Select(u => new UMI3DUser(u)).ToList();
             OnUpdateUserList?.Invoke();
+            UMI3DResourcesManager.Instance.isUsingResourceServer = dto.isUsingResourceServer;
+            Debug.Log("<color=blue> Use Resource Server ?" + UMI3DResourcesManager.Instance.isUsingResourceServer + "</color>");
         }
 
         ///<inheritdoc/>

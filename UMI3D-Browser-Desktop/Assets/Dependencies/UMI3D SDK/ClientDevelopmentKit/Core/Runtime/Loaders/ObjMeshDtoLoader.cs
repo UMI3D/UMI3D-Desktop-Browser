@@ -42,7 +42,7 @@ namespace umi3d.cdk
             if (!url.Contains("http")) url = "file://" + url;
 #endif
 
-            bool isUsingResourceServer = url.StartsWith("http") && UMI3DClientServer.Instance.isUsingResourceServer;
+            bool isUsingResourceServer = url.StartsWith("http") && UMI3DResourcesManager.Instance.isUsingResourceServer;
             if (isUsingResourceServer)
             {
                 if (UMI3DResourcesManager.HasUrlGotParameters(url))
