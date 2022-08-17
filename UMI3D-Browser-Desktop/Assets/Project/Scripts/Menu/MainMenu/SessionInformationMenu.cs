@@ -41,6 +41,7 @@ namespace BrowserDesktop.Menu
         #region Top Bar
 
         VisualElement topCenterMenu;
+        VisualElement microphoneSetterContainer;
         VisualElement microphoneSetter;
 
         Label environmentName;
@@ -52,6 +53,10 @@ namespace BrowserDesktop.Menu
         //MicrophoneSlider GainSlider;
         MicrophoneSlider ThresholdSlider;
         Dropdown_E MicrophoneDropDown;
+        Dropdown_E ModeDropDown;
+
+        VisualElement PushToTalk;
+        VisualElement Amplitude;
 
         bool displayMicrophoneSlider = true;
 
@@ -71,10 +76,9 @@ namespace BrowserDesktop.Menu
             topCenterMenu = root.Q<VisualElement>("top-center-menu");
             topCenterMenu.style.display = DisplayStyle.None;
 
-
             //Bottom Bar
-
-            microphoneSetter = root.Q<VisualElement>("microphone-setter");
+            microphoneSetterContainer = root.Q<VisualElement>("microphone-setter-container");
+            microphoneSetter = microphoneSetterContainer.Q<VisualElement>("microphone-setter");
             HideMicrophoneSettingsPopUp();
             InitMicrophoneSlider(microphoneSetter);
 
@@ -95,7 +99,7 @@ namespace BrowserDesktop.Menu
 
             if (Input.GetKeyDown(KeyCode.F8))
             {
-                if (microphoneSetter.resolvedStyle.display == DisplayStyle.Flex)
+                if (microphoneSetterContainer.resolvedStyle.display == DisplayStyle.Flex)
                     HideMicrophoneSettingsPopUp();
                 else
                     DisplayMicrophoneSettingsPopUp();
@@ -104,7 +108,7 @@ namespace BrowserDesktop.Menu
 
         private void HideMicrophoneSettingsPopUp()
         {
-            microphoneSetter.style.display = DisplayStyle.None;
+            microphoneSetterContainer.style.display = DisplayStyle.None;
             umi3d.cdk.collaboration.MicrophoneListener.Instance.Debug = false;
         }
 
@@ -113,13 +117,19 @@ namespace BrowserDesktop.Menu
             //GainSlider.Value = GToP(umi3d.cdk.collaboration.MicrophoneListener.Gain);
             MicrophoneDropDown.SetOptions(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetMicrophonesNames().ToList());
             MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
-            microphoneSetter.style.display = DisplayStyle.Flex;
+            ModeDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneMode().ToString());
+            microphoneSetterContainer.style.display = DisplayStyle.Flex;
             umi3d.cdk.collaboration.MicrophoneListener.Instance.Debug = true;
 
         }
 
+        int _i;
+        int index { get => _i++; set => _i = value; }
         void InitMicrophoneSlider(VisualElement root)
         {
+            index = 0;
+
+
             var okColors = new MicrophoneSliderColor(0.5f, new UnityEngine.Color(0f, 1f, 0f));
             var saturatedColors = new MicrophoneSliderColor(0.9f, new UnityEngine.Color(1f, 0f, 0f));
             var colors = new List<MicrophoneSliderColor>()
@@ -149,23 +159,76 @@ namespace BrowserDesktop.Menu
             //    //umi3d.cdk.collaboration.MicrophoneListener.Gain = PToG(v);
             //});
 
+            /// Add Microphone selecter.
+
+            var MicrophoneLabel = new Label_E("Corps", StyleKeys.Text("primaryLight"), "Microphone :");
+            MicrophoneLabel.InsertRootAtTo(index, root);
 
             MicrophoneDropDown = new Dropdown_E("MicrophoneDropdown", StyleKeys.Text_Bg("button"));
             MicrophoneDropDown.SetMenuStyle("MicrophoneEnumBox", StyleKeys.Default_Bg_Border);
             MicrophoneDropDown.SetMenuLabel("CorpsMicrophoneDropdown", StyleKeys.DefaultText);
-            //root.Add(MicrophoneDropDown.Root);
-            MicrophoneDropDown.InsertRootAtTo(0,root);
+            MicrophoneDropDown.InsertRootAtTo(index, root);
 
             MicrophoneDropDown.ValueChanged = (s) =>
             {
                 UpdateMicrophone(s);
             };
 
-            ThresholdSlider = new MicrophoneSlider(root.Q<VisualElement>("threshold-bar")
-                , "Noise Threshold",
+
+            /// Add Loop back
+
+            var LoopBack = new Button_E("Corps", StyleKeys.Text("primaryLight"));
+            LoopBack.InsertRootAtTo(index, root);
+            LoopBack.Text = "LoopBack Off";
+
+            LoopBack.ClickedDown += () =>
+            {
+                umi3d.cdk.collaboration.MicrophoneListener.Instance.useLocalLoopback = !umi3d.cdk.collaboration.MicrophoneListener.Instance.useLocalLoopback;
+                LoopBack.Text = (umi3d.cdk.collaboration.MicrophoneListener.Instance.useLocalLoopback) ? "LoopBack On" : "LoopBack Off";
+            };
+
+            /// Add Mode selecter.
+
+            var ModeLabel = new Label_E("Corps", StyleKeys.Text("primaryLight"), "Mode :");
+            ModeLabel.InsertRootAtTo(index, root);
+
+            ModeDropDown = new Dropdown_E("MicrophoneDropdown", StyleKeys.Text_Bg("button"));
+            ModeDropDown.SetMenuStyle("MicrophoneEnumBox", StyleKeys.Default_Bg_Border);
+            ModeDropDown.SetMenuLabel("CorpsMicrophoneDropdown", StyleKeys.DefaultText);
+            ModeDropDown.InsertRootAtTo(index, root);
+            ModeDropDown.SetOptions(Enum.GetNames(typeof(umi3d.cdk.collaboration.MicrophoneMode)).Where(s=>s != umi3d.cdk.collaboration.MicrophoneMode.MethodBased.ToString()).ToList());
+            ModeDropDown.ValueChanged = (s) =>
+            {
+                UpdateMode(s);
+            };
+
+
+            /// Add Mode Push To Talk info
+
+            PushToTalk = new VisualElement();
+            root.Insert(index, PushToTalk);
+
+            var PushToTalkKeycodeLabel = new Label_E("Corps", StyleKeys.Text("primaryLight"), "Push To Talk Key");
+            PushToTalkKeycodeLabel.InsertRootTo(PushToTalk);
+
+            var PushToTalkKeycode = new Label_E("Corps", StyleKeys.Text("primaryLight"), $"<{umi3d.cdk.collaboration.MicrophoneListener.Instance.pushToTalkKeycode}>");
+            PushToTalkKeycode.InsertRootTo(PushToTalk);
+
+            /// Add Mode Amplitude info
+
+            Amplitude = new VisualElement();
+            root.Insert(index, Amplitude);
+
+            var tb = root.Q<VisualElement>("threshold-bar");
+            Amplitude.Add(tb);
+            ThresholdSlider = new MicrophoneSlider(
+                tb,
+                "Noise Threshold",
                 (i) => { float r; return (float.TryParse(i, out r), r / 100f); },
                 (f) => { return (f * 100).ToString(); },
-                umi3d.cdk.collaboration.MicrophoneListener.Instance.minAmplitudeToSend, 0f, 0f, 1f, 0.01f, colors);
+                umi3d.cdk.collaboration.MicrophoneListener.Instance.minAmplitudeToSend, 0f, 0f, 1f, 0.01f, colors
+                );
+
             ThresholdSlider.OnValueChanged.AddListener(v =>
             {
                 okColors.Startvalue = v;
@@ -180,6 +243,21 @@ namespace BrowserDesktop.Menu
                 await umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(name);
                 MicrophoneDropDown.SetOptions(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetMicrophonesNames().ToList());
                 MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
+            }
+        }
+
+         void UpdateMode(string name)
+        {
+            if (!string.IsNullOrEmpty(name) && Enum.TryParse<umi3d.cdk.collaboration.MicrophoneMode>(name, out var mode))
+            {
+                if (mode != umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneMode())
+                {
+                    umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneMode(mode);
+                    ModeDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneMode().ToString());
+                }
+
+                PushToTalk.style.display = mode == umi3d.cdk.collaboration.MicrophoneMode.PushToTalk ? DisplayStyle.Flex : DisplayStyle.None;
+                Amplitude.style.display = mode == umi3d.cdk.collaboration.MicrophoneMode.Amplitude ? DisplayStyle.Flex : DisplayStyle.None;
             }
         }
 
