@@ -43,6 +43,9 @@ namespace umi3d.cdk.collaboration
     {
         #region Mumble
         #region public field
+
+        static public MicrophoneEvent OnSaturated = new MicrophoneEvent();
+
         // Basic mumble audio player
         public GameObject myMumbleAudioPlayerPrefab;
         // Mumble audio player that also receives position commands
@@ -100,11 +103,18 @@ namespace umi3d.cdk.collaboration
             }
         }
 
-
-        bool saturated;
-        float rms;
-        float db;
-
+        public bool saturated { 
+            get => _saturated;
+            private set { 
+            if(_saturated != value)
+                {
+                    _saturated = value;
+                    OnSaturated.Invoke(value);
+                }
+            } 
+        }
+        public float rms { get; private set; }
+        public float db { get; private set; }
 
         #endregion
         #region private field
@@ -121,6 +131,7 @@ namespace umi3d.cdk.collaboration
         ///  RMS value for 0 dB
         /// </summary>
         private const float refValue = 1f;
+        bool _saturated = false;
         bool _debug = false;
 
         string hostName = "1.2.3.4";

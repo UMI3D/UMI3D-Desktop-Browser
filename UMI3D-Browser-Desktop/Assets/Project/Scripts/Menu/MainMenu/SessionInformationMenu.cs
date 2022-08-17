@@ -47,7 +47,7 @@ namespace BrowserDesktop.Menu
 
         #region Bottom Bar
 
-        MicrophoneSlider GainSlider;
+        //MicrophoneSlider GainSlider;
         MicrophoneSlider ThresholdSlider;
 
         bool displayMicrophoneSlider = true;
@@ -83,12 +83,12 @@ namespace BrowserDesktop.Menu
 
         private void Update()
         {
-            //if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
-            //    if (displayMicrophoneSlider && GainSlider.DisplayedValue != umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS)
-            //    {
-            //        GainSlider.DisplayedValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS;
-            //        ThresholdSlider.DisplayedValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS;
-            //    }
+            if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+                if (displayMicrophoneSlider && ThresholdSlider.DisplayedValue != umi3d.cdk.collaboration.MicrophoneListener.Instance.rms)
+                {
+                    //GainSlider.DisplayedValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS;
+                    ThresholdSlider.DisplayedValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.rms;
+                }
 
             if (Input.GetKeyDown(KeyCode.F8))
             {
@@ -102,6 +102,7 @@ namespace BrowserDesktop.Menu
         private void HideMicrophoneSettingsPopUp()
         {
             microphoneSetter.style.display = DisplayStyle.None;
+            umi3d.cdk.collaboration.MicrophoneListener.Instance.Debug = false;
         }
 
         private void DisplayMicrophoneSettingsPopUp()
@@ -109,6 +110,7 @@ namespace BrowserDesktop.Menu
             //GainSlider.Value = GToP(umi3d.cdk.collaboration.MicrophoneListener.Gain);
 
             microphoneSetter.style.display = DisplayStyle.Flex;
+            umi3d.cdk.collaboration.MicrophoneListener.Instance.Debug = true;
         }
 
         void InitMicrophoneSlider(VisualElement root)
@@ -122,33 +124,34 @@ namespace BrowserDesktop.Menu
                 saturatedColors
             };
 
-            //umi3d.cdk.collaboration.MicrophoneListener.OnSaturated.AddListener(
-            //    b => {
-            //        if (b)
-            //            saturatedColors.Startvalue = 0;
-            //        else
-            //            saturatedColors.Startvalue = 0.9f;
-            //        GainSlider.RefreshColor();
-            //        ThresholdSlider.RefreshColor();
-            //    });
+            umi3d.cdk.collaboration.MicrophoneListener.OnSaturated.AddListener(
+                b =>
+                {
+                    if (b)
+                        saturatedColors.Startvalue = 0;
+                    else
+                        saturatedColors.Startvalue = 0.9f;
+                    //GainSlider.RefreshColor();
+                    ThresholdSlider.RefreshColor();
+                });
 
-            GainSlider = new MicrophoneSlider(root.Q<VisualElement>("gain-bar"),"Gain",
-                (i) => { float r; return (float.TryParse(i, out r), GToP(r)); },
-                (f) => { return (PToG(f)).ToString(); },
-                GToP(/*umi3d.cdk.collaboration.MicrophoneListener.Gain*/0), 0f, 0f, 1f, 0.01f, colors);
-            GainSlider.OnValueChanged.AddListener(v =>
-            {
-                //umi3d.cdk.collaboration.MicrophoneListener.Gain = PToG(v);
-            });
+            //GainSlider = new MicrophoneSlider(root.Q<VisualElement>("gain-bar"),"Gain",
+            //    (i) => { float r; return (float.TryParse(i, out r), GToP(r)); },
+            //    (f) => { return (PToG(f)).ToString(); },
+            //    GToP(/*umi3d.cdk.collaboration.MicrophoneListener.Gain*/0), 0f, 0f, 1f, 0.01f, colors);
+            //GainSlider.OnValueChanged.AddListener(v =>
+            //{
+            //    //umi3d.cdk.collaboration.MicrophoneListener.Gain = PToG(v);
+            //});
             ThresholdSlider = new MicrophoneSlider(root.Q<VisualElement>("threshold-bar")
                 , "Noise Threshold",
                 (i) => { float r; return (float.TryParse(i, out r), r / 100f); },
                 (f) => { return (f * 100).ToString(); },
-                /*umi3d.cdk.collaboration.MicrophoneListener.NoiseThreshold*/0, 0f, 0f, 1f, 0.01f, colors);
+                umi3d.cdk.collaboration.MicrophoneListener.Instance.minAmplitudeToSend, 0f, 0f, 1f, 0.01f, colors);
             ThresholdSlider.OnValueChanged.AddListener(v =>
             {
                 okColors.Startvalue = v;
-                //umi3d.cdk.collaboration.MicrophoneListener.NoiseThreshold = v;
+                umi3d.cdk.collaboration.MicrophoneListener.Instance.minAmplitudeToSend = v;
             });
         }
 
