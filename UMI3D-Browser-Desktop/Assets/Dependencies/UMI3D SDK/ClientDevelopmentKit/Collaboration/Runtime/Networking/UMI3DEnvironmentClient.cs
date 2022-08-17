@@ -351,9 +351,6 @@ namespace umi3d.cdk.collaboration
                 {
                     LibrariesDto LibrariesDto = await HttpClient.SendGetLibraries();
 
-                    UMI3DResourcesManager.Instance.isUsingResourceServer = LibrariesDto.isUsingResourceServer;
-                    Debug.Log("<color=blue>Is using resource server = " + LibrariesDto.isUsingResourceServer + "</color>");
-
                     // UMI3DLogger.Log($"Ask to download Libraries", scope | DebugScope.Connection);
                     bool b = await UMI3DCollaborationClientServer.Instance.Identifier.ShouldDownloadLibraries(
                         UMI3DResourcesManager.LibrariesToDownload(LibrariesDto)

@@ -42,13 +42,10 @@ namespace umi3d.cdk
             if (!url.Contains("http")) url = "file://" + url;
 #endif
 
-            bool isUsingResourceServer = url.StartsWith("http") && UMI3DResourcesManager.Instance.isUsingResourceServer;
+            bool isUsingResourceServer = url.StartsWith("http") && !UMI3DClientServer.Instance.AuthorizationInHeader;
             if (isUsingResourceServer)
             {
-                if (UMI3DResourcesManager.HasUrlGotParameters(url))
-                    url += "&" + common.UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + authorization;
-                else
-                    url += "?" + common.UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + authorization;
+                url = UMI3DResourcesManager.Instance.SetAuthorisationWithParameter(url, authorization);
             }
 
             var createdObj = new GameObject();

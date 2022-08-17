@@ -425,9 +425,7 @@ namespace umi3d.cdk.collaboration
             }
 
             UnityWebRequest uwr = await _GetRequest(HeaderToken, url, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e), !useParameterInsteadOfHeader);
-
             UMI3DLogger.Log($"Received GetPrivate {url}", scope | DebugScope.Connection);
-
             return uwr?.downloadHandler.data;
         }
         #endregion
@@ -551,8 +549,6 @@ namespace umi3d.cdk.collaboration
             UnityWebRequestAsyncOperation operation = www.SendWebRequest();
             while (!operation.isDone)
                 await UMI3DAsyncManager.Yield();
-
-            UnityEngine.Debug.Log("<color=purple>Load lib file " + url + "</color>");
 
 #if UNITY_2020_1_OR_NEWER
             if (www.result > UnityWebRequest.Result.Success)

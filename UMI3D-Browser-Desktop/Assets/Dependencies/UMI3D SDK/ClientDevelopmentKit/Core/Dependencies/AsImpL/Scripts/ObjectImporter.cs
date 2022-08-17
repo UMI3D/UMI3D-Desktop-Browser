@@ -3,7 +3,6 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -338,6 +337,10 @@ namespace AsImpL
         {
             string ext = Path.GetExtension(absolutePath);
 
+            int index = ext.IndexOf('?');
+            if (index >= 0)
+                ext = ext.Substring(0, index);
+
             if (string.IsNullOrEmpty(ext))
             {
                 Debug.LogError("No extension defined, unable to detect file format");
@@ -357,13 +360,15 @@ namespace AsImpL
             }
             else
             {
-                if (ext.Contains(".obj"))
+                switch (ext)
                 {
-                    loader = gameObject.AddComponent<CustomLoaderObj>();
-                } else
-                {
-                    Debug.LogErrorFormat("File format not supported ({0})", ext);
-                    return null;
+                    case ".obj":
+                        loader = gameObject.AddComponent<CustomLoaderObj>();
+                        break;
+                    // TODO: add mode formats here...
+                    default:
+                        Debug.LogErrorFormat("File format not supported ({0})", ext);
+                        return null;
                 }
             }
             loader.ModelCreated += OnModelCreated;

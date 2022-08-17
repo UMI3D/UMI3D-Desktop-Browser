@@ -90,14 +90,11 @@ namespace umi3d.cdk
 
             if (authorization != null && authorization != "")
             {
-                var headers = new HttpHeader[] {};
+                var headers = new HttpHeader[] { };
 
-                if (UMI3DResourcesManager.Instance.isUsingResourceServer && url.StartsWith("http"))
+                if (!UMI3DClientServer.Instance.AuthorizationInHeader && url.StartsWith("http"))
                 {
-                    if (UMI3DResourcesManager.HasUrlGotParameters(url))
-                        url += "&" + common.UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + authorization;
-                    else
-                        url += "?" + common.UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + authorization;
+                    url = UMI3DResourcesManager.Instance.SetAuthorisationWithParameter(url, authorization);
                 }
                 else
                 {

@@ -37,8 +37,8 @@ namespace umi3d.cdk
         {
             if (UMI3DEnvironmentLoader.Exists)
             {
-                var go = new GameObject(dto.name);
 
+                var go = new GameObject(dto.name);
                 UMI3DNodeInstance node = UMI3DEnvironmentLoader.RegisterNodeInstance(
                     dto.extensions.umi3d.id,
                     dto,
@@ -228,6 +228,7 @@ namespace umi3d.cdk
             {
                 try
                 {
+
                     UMI3DEnvironmentLoader.Parameters.SelectMaterialLoader(material).LoadMaterialFromExtension(material, (m) =>
                     {
                         if (material.name != null && material.name.Length > 0 && m != null)
