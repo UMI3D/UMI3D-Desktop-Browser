@@ -54,6 +54,7 @@ namespace BrowserDesktop.Menu
         MicrophoneSlider ThresholdSlider;
         Dropdown_E MicrophoneDropDown;
         Dropdown_E ModeDropDown;
+        FloatField_E TimeToShut;
 
         VisualElement PushToTalk;
         VisualElement Amplitude;
@@ -118,6 +119,7 @@ namespace BrowserDesktop.Menu
             MicrophoneDropDown.SetOptions(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetMicrophonesNames().ToList());
             MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
             ModeDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneMode().ToString());
+            TimeToShut.value = umi3d.cdk.collaboration.MicrophoneListener.Instance.voiceStopingDelaySeconds.ToString();
             microphoneSetterContainer.style.display = DisplayStyle.Flex;
             umi3d.cdk.collaboration.MicrophoneListener.Instance.Debug = true;
 
@@ -177,7 +179,7 @@ namespace BrowserDesktop.Menu
 
             /// Add Loop back
 
-            var LoopBack = new Button_E("Corps", StyleKeys.Text("primaryLight"));
+            var LoopBack = new Button_E("MicrophoneDropdown", StyleKeys.Text_Bg("button"));
             LoopBack.InsertRootAtTo(index, root);
             LoopBack.Text = "LoopBack Off";
 
@@ -234,6 +236,23 @@ namespace BrowserDesktop.Menu
                 okColors.Startvalue = v;
                 umi3d.cdk.collaboration.MicrophoneListener.Instance.minAmplitudeToSend = v;
             });
+
+            var TimeToShutLabel = new Label_E("Corps", StyleKeys.Text("primaryLight"), $"Delay before stopping the microphone (second) :");
+            TimeToShutLabel.InsertRootTo(Amplitude);
+
+            TimeToShut = new FloatField_E("UI/Style/Displayers/InputFloatField",null);
+            TimeToShut.InsertRootTo(Amplitude);
+            TimeToShut.ValueChanged += (oldValue, newValue) =>
+            {
+                //To be changed when floatField will be use in runtime.
+                if (float.TryParse(newValue,out float value))
+                {
+                    if (value > 0f)
+                        umi3d.cdk.collaboration.MicrophoneListener.Instance.voiceStopingDelaySeconds = value;
+                    else
+                        TimeToShut.value = "0";
+                }
+            };
         }
 
         async void  UpdateMicrophone(string name)
