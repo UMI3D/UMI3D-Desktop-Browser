@@ -157,7 +157,7 @@ namespace umi3d.cdk.collaboration
         {
             ForgeClient.Join(authenticator);
             await UMI3DAsyncManager.Delay(5000);
-            if (!ForgeClient.IsConnected && !disconected)
+            if (ForgeClient != null && !ForgeClient.IsConnected && !disconected)
             {
                 isConnecting = false;
                 isConnected = false;
@@ -489,10 +489,10 @@ namespace umi3d.cdk.collaboration
         }
 
         ///<inheritdoc/>
-        public async Task<byte[]> GetFile(string url)
+        public async Task<byte[]> GetFile(string url, bool useParameterInsteadOfHeader)
         {
             //UMI3DLogger.Log($"GetFile {url}", scope);
-            return await HttpClient.SendGetPrivate(url);
+            return await HttpClient.SendGetPrivate(url, useParameterInsteadOfHeader);
         }
 
         ///<inheritdoc/>
