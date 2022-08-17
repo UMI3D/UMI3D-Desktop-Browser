@@ -2,7 +2,6 @@
     <ui:Template name="loading-screen" src="loading-screen.uxml" />
     <ui:Template name="password-screen" src="password-screen.uxml" />
     <ui:Template name="libraries-screen" src="libraries-screen.uxml" />
-    <ui:Template name="DropdownElementCircular" src="/Assets/Project/UI/UXML/GenericUI/DropdownElementCircular.uxml" />
     <ui:Template name="MicrophoneElement" src="/Assets/Project/UI/UXML/CustomElement/MicrophoneElement.uxml" />
     <Style src="/Assets/Project/UI/UXML/main-style.uss" />
     <ui:VisualElement name="root" style="position: relative; flex-grow: 1;">
@@ -59,7 +58,6 @@
                         <ui:VisualElement name="game-menu" style="flex-grow: 1; display: flex; width: 100%; height: 100%;" />
                     </ui:VisualElement>
                     <ui:VisualElement name="microphone-setter" style="display: flex; position: absolute; width: 430px; height: 100px; bottom: 31px; right: 207px; background-color: rgba(50, 50, 50, 0.8); padding-top: 15px;">
-                        <ui:Instance template="DropdownElementCircular" name="mircophone-dropdown" />
                         <ui:Instance template="MicrophoneElement" name="threshold-bar" />
                     </ui:VisualElement>
                 </ui:VisualElement>
