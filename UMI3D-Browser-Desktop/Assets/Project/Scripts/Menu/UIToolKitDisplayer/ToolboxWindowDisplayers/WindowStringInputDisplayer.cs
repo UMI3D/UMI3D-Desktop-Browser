@@ -48,15 +48,12 @@ namespace umi3d.DesktopBrowser.menu.Displayer
                 m_textField = new TextField_E(Displayer.Root.Q<TextField>(), textFieldStylePath, StyleKeys.DefaultBackground);
                 string textInputStyle = "UI/Style/Displayers/InputTextField_Input";
                 m_textField.SetTextInputStyle(textInputStyle, StyleKeys.DefaultText);
+                if (textMenu.dto.privateParameter) m_textField.TextField.isPasswordField = true;
 
                 m_textField.value = textMenu.GetValue();
-                m_textField.ValueChanged += (_, newValue) =>
-                {
-                    textMenu.NotifyValueChange(newValue);
-                };
+                m_textField.ValueChanged += (_, newValue) => textMenu.NotifyValueChange(newValue);
             }
-            else
-                throw new System.Exception("MenuItem must be a TextInputMenuItem");
+            else throw new System.Exception("MenuItem must be a TextInputMenuItem");
         }
 
         public override int IsSuitableFor(AbstractMenuItem menu)
