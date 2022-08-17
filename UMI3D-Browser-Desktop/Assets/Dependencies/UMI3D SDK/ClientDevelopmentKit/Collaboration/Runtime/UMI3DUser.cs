@@ -132,6 +132,8 @@ namespace umi3d.cdk.collaboration
 
             dto = user;
 
+            UnityEngine.Debug.Log("USeMumble " + dto.audioUseMumble);
+
             if (isClient && user is UserConnectionDto connectionDto)
             {
                 loginUpdate = connectionDto.login != audioLogin;
@@ -181,6 +183,7 @@ namespace umi3d.cdk.collaboration
 
                 case UMI3DPropertyKeys.UserAudioUseMumble:
                     dto.audioUseMumble = (bool)value;
+                    UnityEngine.Debug.Log("update USeMumble " + dto.audioUseMumble);
                     OnUserMicrophoneUseMumbleUpdated.Invoke(this);
                     return true;
 
@@ -192,6 +195,7 @@ namespace umi3d.cdk.collaboration
 
                 case UMI3DPropertyKeys.UserAudioLogin:
                     audioLogin = (string)value;
+                    UnityEngine.Debug.Log(audioLogin);
                     OnUserMicrophoneIdentityUpdated.Invoke(this);
                     return true;
 

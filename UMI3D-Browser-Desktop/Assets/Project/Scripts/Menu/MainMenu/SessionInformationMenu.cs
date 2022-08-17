@@ -18,6 +18,8 @@ using inetum.unityUtils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using umi3d.baseBrowser.ui.viewController;
 using umi3d.cdk;
 using umi3d.common;
 using UnityEngine;
@@ -49,6 +51,7 @@ namespace BrowserDesktop.Menu
 
         //MicrophoneSlider GainSlider;
         MicrophoneSlider ThresholdSlider;
+        Dropdown_E MicrophoneDropDown;
 
         bool displayMicrophoneSlider = true;
 
@@ -108,9 +111,11 @@ namespace BrowserDesktop.Menu
         private void DisplayMicrophoneSettingsPopUp()
         {
             //GainSlider.Value = GToP(umi3d.cdk.collaboration.MicrophoneListener.Gain);
-
+            MicrophoneDropDown.SetOptions(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetMicrophonesNames().ToList());
+            MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
             microphoneSetter.style.display = DisplayStyle.Flex;
             umi3d.cdk.collaboration.MicrophoneListener.Instance.Debug = true;
+
         }
 
         void InitMicrophoneSlider(VisualElement root)
@@ -143,6 +148,15 @@ namespace BrowserDesktop.Menu
             //{
             //    //umi3d.cdk.collaboration.MicrophoneListener.Gain = PToG(v);
             //});
+            MicrophoneDropDown = new Dropdown_E(root.Q<VisualElement>("mircophone-dropdown").Q<Button>(), "Displayer", StyleKeys.Text_Bg("enum"));
+            MicrophoneDropDown.SetMenuStyle("EnumBox", StyleKeys.Default_Bg_Border);
+            MicrophoneDropDown.SetMenuLabel("CorpsDropdown", StyleKeys.DefaultText);
+            //Displayer.Add(dropdown);
+            MicrophoneDropDown.ValueChanged = (s) =>
+            {
+                UpdateMicrophone(s);
+            };
+
             ThresholdSlider = new MicrophoneSlider(root.Q<VisualElement>("threshold-bar")
                 , "Noise Threshold",
                 (i) => { float r; return (float.TryParse(i, out r), r / 100f); },
@@ -153,6 +167,16 @@ namespace BrowserDesktop.Menu
                 okColors.Startvalue = v;
                 umi3d.cdk.collaboration.MicrophoneListener.Instance.minAmplitudeToSend = v;
             });
+        }
+
+        async void  UpdateMicrophone(string name)
+        {
+            if (!string.IsNullOrEmpty(name) && name != umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName())
+            {
+                await umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(name);
+                MicrophoneDropDown.SetOptions(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetMicrophonesNames().ToList());
+                MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
+            }
         }
 
         float GToP(float f)
