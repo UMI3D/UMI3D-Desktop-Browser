@@ -546,7 +546,6 @@ namespace Mumble
 
             //TODO use bool to show if loading worked or not
             DecodedAudioBuffer decodingBuffer;
-            Debug.Log("Read");
             if (_audioDecodingBuffers.TryGetValue(session, out decodingBuffer))
                 return decodingBuffer.Read(pcmArray, offset, length);
             else

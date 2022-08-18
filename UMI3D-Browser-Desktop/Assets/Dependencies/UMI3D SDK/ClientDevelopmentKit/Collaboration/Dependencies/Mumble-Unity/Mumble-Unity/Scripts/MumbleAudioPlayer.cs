@@ -86,6 +86,25 @@ namespace Mumble
                 _audioSource.Stop();
             _pendingAudioVolume = -1f;
         }
+
+        public void Setup(MumbleAudioPlayer source)
+        {
+            _mumbleClient = source._mumbleClient;
+            Session = source.Session;
+            OnAudioSample = source.OnAudioSample;
+            _isPlaying = false;
+            if (_audioSource != null)
+            {
+                _audioSource.Stop();
+            }
+
+            _pendingAudioVolume = source._pendingAudioVolume;
+            if (source._audioSource != null)
+            {
+                SetVolume(source._audioSource.volume);
+            }
+        }
+
         void OnAudioFilterRead(float[] data, int channels)
         {
             if (_mumbleClient == null || !_mumbleClient.ConnectionSetupFinished)

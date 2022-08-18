@@ -20,7 +20,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static MumbleProto.UserList;
 
 namespace umi3d.cdk.collaboration
 {
@@ -30,11 +29,10 @@ namespace umi3d.cdk.collaboration
     /// </summary>
     public class AudioManager : SingleBehaviour<AudioManager>
     {
-        private readonly Dictionary<ulong, MumbleAudioPlayer> MumbleAudioPlayer = new Dictionary<ulong, MumbleAudioPlayer>();
         private readonly Dictionary<string, MumbleAudioPlayer> PendingMumbleAudioPlayer = new Dictionary<string, MumbleAudioPlayer>();
 
-        private readonly Dictionary<ulong, AudioSource> GlobalReader = new Dictionary<ulong, AudioSource>();
-        private readonly Dictionary<ulong, AudioSource> SpacialReader = new Dictionary<ulong, AudioSource>();
+        private readonly Dictionary<ulong, MumbleAudioPlayer> GlobalReader = new Dictionary<ulong, MumbleAudioPlayer>();
+        private readonly Dictionary<ulong, MumbleAudioPlayer> SpacialReader = new Dictionary<ulong, MumbleAudioPlayer>();
         private readonly Dictionary<ulong, Coroutine> WaitCoroutine = new Dictionary<ulong, Coroutine>();
 
         private void Start()
@@ -44,30 +42,28 @@ namespace umi3d.cdk.collaboration
             UMI3DUser.OnUserAudioUpdated.AddListener(OnAudioChanged);
         }
 
+        MumbleAudioPlayer MumbleAudioPlayerContain(ulong id)
+        {
+            if(SpacialReader.ContainsKey(id))
+                return SpacialReader[id];
+            if (GlobalReader.ContainsKey(id))
+                return GlobalReader[id];
+            return null;
+        }
+
+
         public MumbleAudioPlayer GetMumbleAudioPlayer(UMI3DUser user)
         {
+            if (user == null) return null;
+
             var userId = user.id;
 
             if (!string.IsNullOrEmpty(user.audioLogin) && PendingMumbleAudioPlayer.ContainsKey(user.audioLogin))
             {
-                if (MumbleAudioPlayer.ContainsKey(userId))
-                    MumbleAudioPlayer[userId].Reset();
-
-                MumbleAudioPlayer[userId] = PendingMumbleAudioPlayer[user.audioLogin];
-                PendingMumbleAudioPlayer.Remove(user.audioLogin);
+                return PendingMumbleAudioPlayer[user.audioLogin];
             }
 
-            if (!MumbleAudioPlayer.ContainsKey(userId))
-            {
-                MumbleAudioPlayer[userId] = new MumbleAudioPlayer();
-                var g = new GameObject("audioSource for " + userId);
-                var a = g.AddComponent<AudioSource>();
-                a.rolloffMode = AudioRolloffMode.Linear;
-                a.spatialBlend = 0;
-                MumbleAudioPlayer[userId].Setup(a);
-            }
-
-            return MumbleAudioPlayer[userId];
+            return MumbleAudioPlayerContain(userId);
         }
 
         public MumbleAudioPlayer GetMumbleAudioPlayer(string username, uint session)
@@ -78,14 +74,25 @@ namespace umi3d.cdk.collaboration
                 MumbleAudioPlayer newPlayer = GetMumbleAudioPlayer(user);
                 return newPlayer;
             }
-            
-            PendingMumbleAudioPlayer[username] = new MumbleAudioPlayer();
-            var g = new GameObject("audioSource for " + username);
-            var a = g.AddComponent<AudioSource>();
-            a.rolloffMode = AudioRolloffMode.Linear;
-            a.spatialBlend = 0;
-            PendingMumbleAudioPlayer[username].Setup(a);
+
+            return CreatePrending(username);
+        }
+
+        MumbleAudioPlayer CreatePrending(string username) {
+            var g = new GameObject
+            {
+                name = $"pending_audio_{username}"
+            };
+            PendingMumbleAudioPlayer[username] = g.AddComponent<MumbleAudioPlayer>();
             return PendingMumbleAudioPlayer[username];
+        }
+        void CleanPrending(UMI3DUser user) {
+            if (!string.IsNullOrEmpty(user.audioLogin) && PendingMumbleAudioPlayer.ContainsKey(user.audioLogin))
+            {
+               PendingMumbleAudioPlayer[user.audioLogin].Reset();
+               GameObject.Destroy(PendingMumbleAudioPlayer[user.audioLogin].gameObject);
+               PendingMumbleAudioPlayer.Remove(user.audioLogin);
+            }
         }
 
 
@@ -115,25 +122,31 @@ namespace umi3d.cdk.collaboration
         /// <param name="user"></param>
         private void OnAudioChanged(UMI3DUser user)
         {
-            return;
             if (WaitCoroutine.ContainsKey(user.id))
             {
                 StopCoroutine(WaitCoroutine[user.id]);
                 WaitCoroutine.Remove(user.id);
             }
-
-            MumbleAudioPlayer reader = GetMumbleAudioPlayer(user);
+            var oldReader = GetMumbleAudioPlayer(user);
 
             var audioPlayer = user?.audioplayer?.audioSource;
             if (audioPlayer != null)
             {
-                SpacialReader[user.id] = audioPlayer;
-                reader.Setup(audioPlayer);
+                var reader = audioPlayer.gameObject.GetOrAddComponent<MumbleAudioPlayer>();
+
+                SpacialReader[user.id] = reader;
+
+                if (oldReader != null && oldReader != reader)
+                {
+                    reader.Setup(oldReader);
+                    oldReader.Reset();
+                }
                 if (GlobalReader.ContainsKey(user.id))
                 {
                     Destroy(GlobalReader[user.id].gameObject);
                     GlobalReader.Remove(user.id);
                 }
+                CleanPrending(user);
             }
             else
             {
@@ -151,8 +164,13 @@ namespace umi3d.cdk.collaboration
                         {
                             name = $"user_{user.id}_audio_reader"
                         };
-                        GlobalReader[user.id] = g.AddComponent<AudioSource>();
-                        reader.Setup(GlobalReader[user.id]);
+                        GlobalReader[user.id] = g.AddComponent<MumbleAudioPlayer>();
+                        if (oldReader != null && oldReader != GlobalReader[user.id])
+                        {
+                            GlobalReader[user.id].Setup(oldReader);
+                            oldReader.Reset();
+                        }
+                        CleanPrending(user);
                     }
                 }
             }
