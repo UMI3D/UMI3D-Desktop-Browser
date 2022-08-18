@@ -50,7 +50,7 @@ namespace Mumble {
         }
         public void Init(string name, UInt32 session)
         {
-            Debug.Log("Init decoding buffer for: " + name);
+            //Debug.Log("Init decoding buffer for: " + name);
             _name = name;
             _session = session;
             _audioDecodeThread.AddDecoder(_session);

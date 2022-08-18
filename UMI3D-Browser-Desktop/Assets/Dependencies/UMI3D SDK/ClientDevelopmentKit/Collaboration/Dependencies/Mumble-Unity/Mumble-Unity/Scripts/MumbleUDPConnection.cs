@@ -118,6 +118,7 @@ namespace Mumble
                 {
                     if (ex is ObjectDisposedException) { return; }
                     else if (ex is ThreadAbortException) { return; }
+                    else if (ex is System.Net.Sockets.SocketException) { return; }
                     else
                         Debug.LogError("Unhandled UDP receive error: " + ex);
                 }

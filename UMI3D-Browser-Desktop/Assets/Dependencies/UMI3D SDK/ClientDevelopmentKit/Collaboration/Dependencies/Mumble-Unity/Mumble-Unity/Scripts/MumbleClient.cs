@@ -157,7 +157,7 @@ namespace Mumble
                     _outputSampleRate = 48000;
                     break;
             }
-            Debug.Log("Using output sample rate: " + _outputSampleRate);
+            //Debug.Log("Using output sample rate: " + _outputSampleRate);
 
             switch (AudioSettings.speakerMode)
             {
@@ -174,7 +174,7 @@ namespace Mumble
                     _outputChannelCount = 2;
                     break;
             }
-            Debug.Log("Using output channel count of: " + _outputChannelCount);
+           // Debug.Log("Using output channel count of: " + _outputChannelCount);
 
             if (debugVals == null)
                 debugVals = new DebugValues();
@@ -209,7 +209,7 @@ namespace Mumble
 
             _addresses = addresses;
             var endpoint = new IPEndPoint(_addresses[0], _port);
-            Debug.Log($"endpoint : {endpoint.Address} {endpoint.Port}");
+            //Debug.Log($"endpoint : {endpoint.Address} {endpoint.Port}");
             _audioDecodeThread = new AudioDecodeThread(_outputSampleRate, _outputChannelCount, this);
             _decodingBufferPool = new DecodingBufferPool(_audioDecodeThread);
             _udpConnection = new MumbleUdpConnection(endpoint, _audioDecodeThread, this);
@@ -464,7 +464,7 @@ namespace Mumble
         }
         public void Close()
         {
-            Debug.Log("Closing mumble");
+           // Debug.Log("Closing mumble");
             if(_manageSendBuffer != null)
                 _manageSendBuffer.Dispose();
             _manageSendBuffer = null;
@@ -477,7 +477,7 @@ namespace Mumble
             if (_audioDecodeThread != null)
                 _audioDecodeThread.Dispose();
             _audioDecodeThread = null;
-            Debug.Log("Mumble closed");
+           // Debug.Log("Mumble closed");
         }
         public void SendTextMessage(string textMessage)
         {
@@ -676,7 +676,7 @@ namespace Mumble
             };
             _pendingMute = null;
 
-            Debug.Log("Attempting to join channel Id: " + state.ChannelId);
+           // Debug.Log("Attempting to join channel Id: " + state.ChannelId);
             _tcpConnection.SendMessage<MumbleProto.UserState>(MessageType.UserState, state);
             return true;
         }

@@ -44,11 +44,11 @@ namespace Mumble
                 _isWaitingToSendLastPacket = true;
                 if (_unencodedBuffer.Count == 0)
                 {
-                    Debug.Log("Adding stop packet");
+                    //Debug.Log("Adding stop packet");
                     _unencodedBuffer.Enqueue(new TargettedSpeech(stop: true));
                 }
-                else
-                    Debug.Log("Marking last packet");
+                //else
+                //    Debug.Log("Marking last packet");
                 Monitor.Pulse(_bufferLock);
             }
         }

@@ -117,6 +117,9 @@ namespace umi3d.cdk.collaboration
 
         #endregion
         #region private field
+
+        string _pendingMic = null;
+
         MumbleClient mumbleClient;
         MumbleMicrophone mumbleMic;
         DebugValues debuggingVariables;
@@ -149,6 +152,10 @@ namespace umi3d.cdk.collaboration
         protected void Start()
         {
             mumbleMic = gameObject.GetOrAddComponent<MumbleMicrophone>();
+
+            if (_pendingMic != null)
+                SetCurrentMicrophoneNameAsync(_pendingMic);
+
             gameObject.GetOrAddComponent<EventProcessor>();
 
             debuggingVariables = new DebugValues()
@@ -189,7 +196,6 @@ namespace umi3d.cdk.collaboration
 
         public async void StopMicrophone()
         {
-            UnityEngine.Debug.Log("Stop Microphone");
             if (await IsPLaying() && mumbleClient != null)
             {
                 mumbleMic.OnMicDisconnect -= OnMicDisconnected;
@@ -227,7 +233,6 @@ namespace umi3d.cdk.collaboration
 
         private async Task _StartMicrophone()
         {
-            UnityEngine.Debug.LogError($"Start {!useMumble}");
             if (!useMumble) return;
 
             if (hostName == "1.2.3.4")
@@ -238,11 +243,9 @@ namespace umi3d.cdk.collaboration
 
             if (UMI3DCollaborationEnvironmentLoader.Exists)
             {
-                UnityEngine.Debug.LogError($"Exist");
                 var user = UMI3DCollaborationEnvironmentLoader.Instance.GetClientUser();
                 if (user != null)
                 {
-                    UnityEngine.Debug.LogError($"user {username} {password} {hostName} {port} {channelToJoin}");
                     username = user.audioLogin;
                     password = user.audioPassword;
                     SetMumbleUrl(user.audioServer);
@@ -288,7 +291,6 @@ namespace umi3d.cdk.collaboration
                     }
                 }
             }
-            UnityEngine.Debug.LogError($"playing false");
             playing = false;
         }
 
@@ -361,8 +363,6 @@ namespace umi3d.cdk.collaboration
 
         async void ServerUpdate(UMI3DUser user)
         {
-
-            UnityEngine.Debug.Log($"server {hostName}:{port} -> {user.audioServer}");
             SetMumbleUrl(user.audioServer);
             if (await IsPLaying())
             {
@@ -450,11 +450,18 @@ namespace umi3d.cdk.collaboration
 
 
         public string[] GetMicrophonesNames() { return Microphone.devices; }
-        public string GetCurrentMicrophoneName() => mumbleMic?.GetCurrentMicName();
+        public string GetCurrentMicrophoneName() => mumbleMic?.GetCurrentMicName() ?? _pendingMic;
         public async Task<bool> SetCurrentMicrophoneName(string value)
         {
-            if (mumbleMic == null || value == GetCurrentMicrophoneName())
+            if (value == GetCurrentMicrophoneName() && value != _pendingMic)
                 return false;
+
+            if(mumbleMic == null)
+            {
+                _pendingMic = value;
+                return true;
+            }
+            _pendingMic = null;
 
             var mics = GetMicrophonesNames();
             var count = mics.Length;
@@ -470,6 +477,7 @@ namespace umi3d.cdk.collaboration
             if (await IsPLaying())
             {
                 StopMicrophone();
+                await UMI3DAsyncManager.Yield();
                 StartMicrophone();
             }
             return true;

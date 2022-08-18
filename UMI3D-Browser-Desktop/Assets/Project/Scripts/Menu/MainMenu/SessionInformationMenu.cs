@@ -24,6 +24,7 @@ using umi3d.cdk;
 using umi3d.common;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace BrowserDesktop.Menu
 {
@@ -33,6 +34,8 @@ namespace BrowserDesktop.Menu
     /// </summary>
     public class SessionInformationMenu : SingleBehaviour<SessionInformationMenu>
     {
+        const string MicrophoneKey = "last_microphone_used_by_user"; 
+
         #region Fields
 
         public UIDocument uiDocument;
@@ -115,10 +118,18 @@ namespace BrowserDesktop.Menu
 
         private void DisplayMicrophoneSettingsPopUp()
         {
+
             //GainSlider.Value = GToP(umi3d.cdk.collaboration.MicrophoneListener.Gain);
             MicrophoneDropDown.SetOptions(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetMicrophonesNames().ToList());
             MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
             ModeDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneMode().ToString());
+
+            if (PlayerPrefs.HasKey(MicrophoneKey))
+            {
+                var mic = PlayerPrefs.GetString(MicrophoneKey);
+                UpdateMicrophone(mic);
+            }
+
             TimeToShut.value = umi3d.cdk.collaboration.MicrophoneListener.Instance.voiceStopingDelaySeconds.ToString();
             microphoneSetterContainer.style.display = DisplayStyle.Flex;
             umi3d.cdk.collaboration.MicrophoneListener.Instance.Debug = true;
@@ -253,15 +264,35 @@ namespace BrowserDesktop.Menu
                         TimeToShut.value = "0";
                 }
             };
+
+            SetupMicrophone();
         }
+
+        async void SetupMicrophone()
+        {
+            if (PlayerPrefs.HasKey(MicrophoneKey))
+            {
+                var mic = PlayerPrefs.GetString(MicrophoneKey);
+                while (!umi3d.cdk.collaboration.MicrophoneListener.Exists)
+                    await UMI3DAsyncManager.Yield();
+
+                UpdateMicrophone(mic);
+            }
+        }
+
 
         async void  UpdateMicrophone(string name)
         {
+            while (!umi3d.cdk.collaboration.MicrophoneListener.Exists)
+                await UMI3DAsyncManager.Yield();
             if (!string.IsNullOrEmpty(name) && name != umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName())
             {
-                MicrophoneDropDown.SetDefaultValue(name);
-                await umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(name);
                 MicrophoneDropDown.SetOptions(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetMicrophonesNames().ToList());
+                if (name != MicrophoneDropDown.Value)
+                    MicrophoneDropDown.SetDefaultValue(name);
+                PlayerPrefs.SetString(MicrophoneKey, name);
+
+                await umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(name);
                 MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
             }
         }

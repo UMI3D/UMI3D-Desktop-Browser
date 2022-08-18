@@ -240,7 +240,7 @@ namespace Mumble
                             _mumbleClient.ServerConfig = /*Serializer.*/DeserializeWithLengthPrefix<ServerConfig>(_ssl,
                                 PrefixStyle.Fixed32BigEndian);
                             //Debug.Log("Sever config = " + _mumbleClient.ServerConfig);
-                            Debug.Log("Mumble is Connected");
+                            //Debug.Log("Mumble is Connected");
                             _validConnection = true; // handshake complete
                             break;
                         case MessageType.SuggestConfig:
@@ -253,8 +253,8 @@ namespace Mumble
                             TextMessage textMessage = /*Serializer.*/DeserializeWithLengthPrefix<TextMessage>(_ssl,
                                 PrefixStyle.Fixed32BigEndian);
 
-                            Debug.Log("Text message = " + textMessage.Message);
-                            Debug.Log("Text actor = " + textMessage.Actor);
+                            //Debug.Log("Text message = " + textMessage.Message);
+                            //Debug.Log("Text actor = " + textMessage.Actor);
                             //Debug.Log("Text channel = " + textMessage.channel_id[0]);
                             //Debug.Log("Text session Length = " + textMessage.Sessions.Length);
                             //Debug.Log("Text Tree Length = " + textMessage.TreeIds.Length);
@@ -319,6 +319,7 @@ namespace Mumble
                     //These just means the app stopped, it's ok
                     else if (ex is ObjectDisposedException) { }
                     else if (ex is ThreadAbortException) { }
+                    else if (ex is System.Threading.ThreadInterruptedException) { }
                     else
                         Debug.LogError($"Unhandled error: {ex}");
                     return;
