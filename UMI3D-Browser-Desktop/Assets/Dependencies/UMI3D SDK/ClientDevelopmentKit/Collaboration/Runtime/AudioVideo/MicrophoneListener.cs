@@ -19,6 +19,7 @@ using Mumble;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using umi3d.common;
 using UnityEngine;
@@ -46,10 +47,6 @@ namespace umi3d.cdk.collaboration
 
         static public MicrophoneEvent OnSaturated = new MicrophoneEvent();
 
-        // Basic mumble audio player
-        public GameObject myMumbleAudioPlayerPrefab;
-        // Mumble audio player that also receives position commands
-        public GameObject myMumbleAudioPlayerPositionedPrefab;
 
         bool micIsOn => mumbleMic?.isRecording ?? false;
 
@@ -93,7 +90,7 @@ namespace umi3d.cdk.collaboration
 
         public bool Debug
         {
-            get => _debug; 
+            get => _debug;
             set
             {
                 _debug = value;
@@ -103,15 +100,17 @@ namespace umi3d.cdk.collaboration
             }
         }
 
-        public bool saturated { 
+        public bool saturated
+        {
             get => _saturated;
-            private set { 
-            if(_saturated != value)
+            private set
+            {
+                if (_saturated != value)
                 {
                     _saturated = value;
                     OnSaturated.Invoke(value);
                 }
-            } 
+            }
         }
         public float rms { get; private set; }
         public float db { get; private set; }
@@ -433,27 +432,17 @@ namespace umi3d.cdk.collaboration
 
         private MumbleAudioPlayer CreateMumbleAudioPlayerFromPrefab(string username, uint session)
         {
-            UnityEngine.Debug.LogError("New player");
-            // Depending on your use case, you might want to add the prefab to an existing object (like someone's head)
-            // If you have users entering and leaving frequently, you might want to implement an object pool
-            GameObject newObj = sendPosition
-                ? GameObject.Instantiate(myMumbleAudioPlayerPositionedPrefab)
-                : GameObject.Instantiate(myMumbleAudioPlayerPrefab);
-
-            newObj.name = username + "_MumbleAudioPlayer";
-            MumbleAudioPlayer newPlayer = newObj.GetComponent<MumbleAudioPlayer>();
-            UnityEngine.Debug.Log("Adding audio player for: " + username);
-            return newPlayer;
+            return AudioManager.Instance.GetMumbleAudioPlayer(username, session);
         }
         private void OnOtherUserStateChange(uint session, MumbleProto.UserState updatedDeltaState, MumbleProto.UserState fullUserState)
         {
-            print("User #" + session + " had their user state change");
+            //print("User #" + session + " had their user state change");
 
-            // Here we can do stuff like update a UI with users' current channel/mute etc.
+            //// Here we can do stuff like update a UI with users' current channel/mute etc.
         }
         private void DestroyMumbleAudioPlayer(uint session, MumbleAudioPlayer playerToDestroy)
         {
-            UnityEngine.GameObject.Destroy(playerToDestroy.gameObject);
+            //UnityEngine.GameObject.Destroy(playerToDestroy.gameObject);
         }
         #endregion
 
@@ -603,7 +592,7 @@ namespace umi3d.cdk.collaboration
             if (Debug)
             {
                 float sum = 0;
-                saturated = false;
+                bool saturated = false;
 
                 foreach (float v in array.Pcm)
                 {
@@ -618,6 +607,7 @@ namespace umi3d.cdk.collaboration
                     sum += v * v;
                 }
 
+                this.saturated = saturated;
                 rms = Mathf.Sqrt(sum / array.Pcm.Length);
                 db = 20 * Mathf.Log10(rms / refValue);
             }

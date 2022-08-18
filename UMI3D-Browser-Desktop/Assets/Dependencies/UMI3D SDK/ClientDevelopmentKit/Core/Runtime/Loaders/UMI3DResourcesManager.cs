@@ -211,19 +211,21 @@ namespace umi3d.cdk
             /// </summary>
             /// <param name="url">Url to match.</param>
             /// <returns></returns>
-            public bool MatchUrl(Match Matchurl, string url, string libraryId = null)
+            public bool MatchUrl(Match Matchurl,string url, string libraryId = null)
             {
                 if (url == this.url)
                     return true;
+
                 if (a.Success && Matchurl.Success)
-                    return (a.Groups[1].Captures[0].Value == Matchurl.Groups[1].Captures[0].Value
+                    return (a.Groups[1].Captures[0].Value == Matchurl.Groups[1].Captures[0].Value 
                                 && (a.Groups[2].Captures.Count == Matchurl.Groups[2].Captures.Count)
-                                && (a.Groups[2].Captures.Count == 0 || a.Groups[2].Captures[0].Value == Matchurl.Groups[2].Captures[0].Value)
+                                && (a.Groups[2].Captures.Count == 0 || a.Groups[2].Captures[0].Value == Matchurl.Groups[2].Captures[0].Value) 
                                 && a.Groups[3].Captures[0].Value == Matchurl.Groups[3].Captures[0].Value)
                         || ((!string.IsNullOrEmpty(fileRelativePath)
                                 && !string.IsNullOrEmpty(libraryId)
                                 && libraryIds.Contains(libraryId)
                                 && Matchurl.Groups[3].Captures[0].Value.Contains(fileRelativePath)));
+
                 return false;
             }
 

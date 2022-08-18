@@ -50,6 +50,7 @@ namespace Mumble {
         }
         public void Init(string name, UInt32 session)
         {
+            Reset();
             Debug.Log("Init decoding buffer for: " + name);
             _name = name;
             _session = session;
@@ -69,7 +70,7 @@ namespace Mumble {
             //{
                 //Debug.Log("We now have " + _decodedBuffer.Count + " decoded packets");
             //}
-            //Debug.LogWarning("Will read");
+            Debug.LogWarning("Will read");
 
             int readCount = 0;
             while (readCount < count && _decodedCount > 0)
@@ -116,11 +117,13 @@ namespace Mumble {
             {
                 lock (_bufferLock)
                 {
+                    Debug.Log("test");
                     if (_decodedBuffer.Count == 0)
                     {
                         Debug.LogError("No available decode buffers!");
                         return 0;
                     }
+                    Debug.Log("why ?");
                     _currentPacket = _decodedBuffer.Dequeue();
 
                     // If we have a packet, let's update the positions
@@ -169,8 +172,9 @@ namespace Mumble {
                 count = _decodedBuffer.Count;
                 if(count > MumbleConstants.RECEIVED_PACKET_BUFFER_SIZE)
                 {
-                    // TODO this seems to happen at times
-                    Debug.LogWarning("Max recv buffer size reached, dropping for user " + _name);
+                   // TODO this seems to happen at times
+                   Debug.LogWarning($"Max recv buffer size reached [{count} > {MumbleConstants.RECEIVED_PACKET_BUFFER_SIZE}], dropping for user " + _name);
+                    
                 }
                 else
                 {
