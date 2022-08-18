@@ -35,6 +35,54 @@ namespace umi3d.cdk.collaboration
         private readonly Dictionary<ulong, MumbleAudioPlayer> SpacialReader = new Dictionary<ulong, MumbleAudioPlayer>();
         private readonly Dictionary<ulong, Coroutine> WaitCoroutine = new Dictionary<ulong, Coroutine>();
 
+        public bool SetGainForUser(UMI3DUser user, float gain)
+        {
+            if (user == null || gain <= 0)
+                return false;
+            var player = MumbleAudioPlayerContain(user.id);
+            if (player == null)
+                return false;
+
+            player.Gain = gain;
+
+            return true;
+        }
+
+        public float? GetGainForUser(UMI3DUser user)
+        {
+            if (user == null)
+                return null;
+            var player = MumbleAudioPlayerContain(user.id);
+            if (player == null)
+                return null;
+
+            return player.Gain;
+        }
+
+        public bool SetVolumeForUser(UMI3DUser user, float volume)
+        {
+            if (user == null || volume < 0 || volume > 1)
+                return false;
+            var player = MumbleAudioPlayerContain(user.id);
+            if (player == null)
+                return false;
+
+            player.SetVolume(volume);
+
+            return true;
+        }
+
+        public float? GetVolumeForUser(UMI3DUser user)
+        {
+            if (user == null)
+                return null;
+            var player = MumbleAudioPlayerContain(user.id);
+            if (player == null)
+                return null;
+
+            return player.GetVolume();
+        }
+
         private void Start()
         {
             UMI3DUser.OnNewUser.AddListener(OnAudioChanged);
@@ -42,9 +90,17 @@ namespace umi3d.cdk.collaboration
             UMI3DUser.OnUserAudioUpdated.AddListener(OnAudioChanged);
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            UMI3DUser.OnNewUser.RemoveListener(OnAudioChanged);
+            UMI3DUser.OnRemoveUser.RemoveListener(OnUserDisconected);
+            UMI3DUser.OnUserAudioUpdated.RemoveListener(OnAudioChanged);
+        }
+
         MumbleAudioPlayer MumbleAudioPlayerContain(ulong id)
         {
-            if(SpacialReader.ContainsKey(id))
+            if (SpacialReader.ContainsKey(id))
                 return SpacialReader[id];
             if (GlobalReader.ContainsKey(id))
                 return GlobalReader[id];
@@ -78,20 +134,26 @@ namespace umi3d.cdk.collaboration
             return CreatePrending(username);
         }
 
-        MumbleAudioPlayer CreatePrending(string username) {
+        MumbleAudioPlayer CreatePrending(string username)
+        {
             var g = new GameObject
             {
                 name = $"pending_audio_{username}"
             };
             PendingMumbleAudioPlayer[username] = g.AddComponent<MumbleAudioPlayer>();
+            var audio = g.GetComponent<AudioSource>();
+            audio.rolloffMode = AudioRolloffMode.Linear;
+            audio.spatialBlend = 0;
+
             return PendingMumbleAudioPlayer[username];
         }
-        void CleanPrending(UMI3DUser user) {
+        void CleanPrending(UMI3DUser user)
+        {
             if (!string.IsNullOrEmpty(user.audioLogin) && PendingMumbleAudioPlayer.ContainsKey(user.audioLogin))
             {
-               PendingMumbleAudioPlayer[user.audioLogin].Reset();
-               GameObject.Destroy(PendingMumbleAudioPlayer[user.audioLogin].gameObject);
-               PendingMumbleAudioPlayer.Remove(user.audioLogin);
+                PendingMumbleAudioPlayer[user.audioLogin].Reset();
+                GameObject.Destroy(PendingMumbleAudioPlayer[user.audioLogin].gameObject);
+                PendingMumbleAudioPlayer.Remove(user.audioLogin);
             }
         }
 
@@ -165,6 +227,9 @@ namespace umi3d.cdk.collaboration
                             name = $"user_{user.id}_audio_reader"
                         };
                         GlobalReader[user.id] = g.AddComponent<MumbleAudioPlayer>();
+                        var audio = g.GetComponent<AudioSource>();
+                        audio.rolloffMode = AudioRolloffMode.Linear;
+                        audio.spatialBlend = 0;
                         if (oldReader != null && oldReader != GlobalReader[user.id])
                         {
                             GlobalReader[user.id].Setup(oldReader);

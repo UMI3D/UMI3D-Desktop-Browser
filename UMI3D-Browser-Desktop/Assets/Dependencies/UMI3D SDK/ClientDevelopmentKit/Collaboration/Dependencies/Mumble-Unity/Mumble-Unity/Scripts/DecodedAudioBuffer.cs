@@ -170,7 +170,7 @@ namespace Mumble {
                 if(count > MumbleConstants.RECEIVED_PACKET_BUFFER_SIZE)
                 {
                     // TODO this seems to happen at times
-                    Debug.LogWarning($"Max recv buffer size reached [{count} > {MumbleConstants.RECEIVED_PACKET_BUFFER_SIZE}], dropping for user " + _name);
+                    Debug.LogWarning("Max recv buffer size reached, dropping for user " + _name);
                 }
                 else
                 {

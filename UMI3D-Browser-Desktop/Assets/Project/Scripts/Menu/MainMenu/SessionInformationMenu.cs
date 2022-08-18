@@ -259,6 +259,7 @@ namespace BrowserDesktop.Menu
         {
             if (!string.IsNullOrEmpty(name) && name != umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName())
             {
+                MicrophoneDropDown.SetDefaultValue(name);
                 await umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(name);
                 MicrophoneDropDown.SetOptions(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetMicrophonesNames().ToList());
                 MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
