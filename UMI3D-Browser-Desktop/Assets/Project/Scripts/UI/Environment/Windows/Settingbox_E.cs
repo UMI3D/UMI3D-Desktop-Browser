@@ -135,9 +135,6 @@ namespace umi3dDesktopBrowser.ui.viewController
             LeaveButton = SetButton("Leave", "Leave");
         }
 
-
-
-
         private Settingbox_E() :
             base("settingbox", "Settingbox", StyleKeys.DefaultBackground)
         { }
@@ -157,12 +154,10 @@ namespace umi3dDesktopBrowser.ui.viewController
         public Button_E Sound => data?.Sound;
         public Button_E Mic => data?.Mic;
 
-
-
         public override void Bind(VisualElement element)
         {
-            data = element.userData as ItemData;
             base.Bind(element);
+            data = element.userData as ItemData;
             OnItemBinded.Invoke(this);
         }
 
