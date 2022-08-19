@@ -22,12 +22,14 @@ namespace umi3d.baseBrowser.ui.viewController
 {
     public class ListView_item_E : View_E
     {
+        protected bool m_isBinded = false;
+
         public virtual void Bind(VisualElement element)
         {
+            if (m_isBinded) Unbind(element);
+            m_isBinded = true;
         }
-        public virtual void Unbind(VisualElement element)
-        {
-        }
+        public virtual void Unbind(VisualElement element) => m_isBinded = false;
     }
 
 
