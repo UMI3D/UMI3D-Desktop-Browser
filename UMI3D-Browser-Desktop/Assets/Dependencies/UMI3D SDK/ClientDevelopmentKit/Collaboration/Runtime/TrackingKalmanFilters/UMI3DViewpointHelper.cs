@@ -14,14 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace umi3d.cdk.collaboration
 {
-    public static class UMI3DVersion
-    {
-        public static string version => major + "." + minor + "." + status + "." + date;
-        public static readonly string major = "2";
-        public static readonly string minor = "5";
-        public static readonly string status = "b";
-        public static readonly string date = "220819";
-    }
+    public class UMI3DViewpointHelper : MonoBehaviour {}
 }
