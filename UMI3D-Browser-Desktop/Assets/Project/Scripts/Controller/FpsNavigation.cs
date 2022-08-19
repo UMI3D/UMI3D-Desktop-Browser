@@ -47,7 +47,6 @@ public class FpsNavigation : umi3d.baseBrowser.Navigation.BaseFPSNavigation
         }
         else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) 
         {
-            Debug.Log($"test");
             state = State.Default; 
             changeToDefault = true; 
         }
@@ -137,7 +136,6 @@ public class FpsNavigation : umi3d.baseBrowser.Navigation.BaseFPSNavigation
 
         bool squatting = Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat));
         skeleton.transform.localPosition = new Vector3(0, Mathf.Lerp(skeleton.transform.localPosition.y, (squatting) ? data.squatHeight : data.standHeight, data.squatSpeed == 0 ? 1000000 : Time.deltaTime / data.squatSpeed), 0);
-        viewpoint.transform.localPosition = skeleton.transform.localPosition;
 
         ComputeGravity(Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Jump)), ref height);
     }
