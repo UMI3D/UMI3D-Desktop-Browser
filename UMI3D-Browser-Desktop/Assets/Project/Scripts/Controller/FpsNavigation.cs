@@ -47,7 +47,6 @@ public class FpsNavigation : umi3d.baseBrowser.Navigation.BaseFPSNavigation
         }
         else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) 
         {
-            Debug.Log($"test");
             state = State.Default; 
             changeToDefault = true; 
         }
