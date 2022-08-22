@@ -1111,7 +1111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83761c411af74f04eb4787a5e97f291e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewpoint: {fileID: 2119596089}
+  viewpoint: {fileID: 2119596094}
   neckPivot: {fileID: 2119596088}
   head: {fileID: 2119596091}
   skeleton: {fileID: 2119596090}
@@ -3060,8 +3060,8 @@ MonoBehaviour:
   CameraTransform: {fileID: 2119596089}
   InteractionMapper: {fileID: 498482124}
   dofGroups: 04000000050000000600000001000000020000000300000008000000090000000a000000
-  interactionBoneType: 3
-  hoverBoneType: 3
+  interactionBoneType: 58
+  hoverBoneType: 58
   ManipulationActionInput:
   - {fileID: 647256037}
 --- !u!1001 &2119596086
@@ -3091,6 +3091,26 @@ PrefabInstance:
       propertyPath: RightFoot
       value: 
       objectReference: {fileID: 683840925}
+    - target: {fileID: 2377199356062124663, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.8276
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377199356570503948, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_Name
+      value: Viewpoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377199356570503951, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.198
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377199356570503951, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.1243
+      objectReference: {fileID: 0}
     - target: {fileID: 2377199356570503985, guid: d599db4b8e88c6246a10c7a44287b2d5,
         type: 3}
       propertyPath: m_AllowMSAA
@@ -3222,6 +3242,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2119596086}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &2119596094 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2377199356062124663, guid: d599db4b8e88c6246a10c7a44287b2d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2119596086}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2119596095 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1629293160627334959, guid: d599db4b8e88c6246a10c7a44287b2d5,
@@ -3282,6 +3308,12 @@ MonoBehaviour:
   RightFreeAnchor: {fileID: 1435579726}
   LeftFreeAnchor: {fileID: 1435579726}
   isRightHanded: 1
+--- !u!1 &2119596100 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2377199356062124660, guid: d599db4b8e88c6246a10c7a44287b2d5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2119596086}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2119596101 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6192453265960318139, guid: d599db4b8e88c6246a10c7a44287b2d5,
@@ -3301,6 +3333,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneType: 57
+  isTracked: 0
+--- !u!114 &2119596103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119596100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boneType: 58
   isTracked: 0
 --- !u!1 &2119596105 stripped
 GameObject:
