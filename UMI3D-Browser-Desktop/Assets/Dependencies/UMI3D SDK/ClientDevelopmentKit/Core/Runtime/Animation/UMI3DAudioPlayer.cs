@@ -120,12 +120,8 @@ namespace umi3d.cdk
         ///<inheritdoc/>
         public override void Stop()
         {
-            try
-            {
-                audioSource?.Stop();
-                if (OnEndCoroutine != null) UMI3DAnimationManager.StopCoroutine(OnEndCoroutine);
-            }
-            catch { }
+            audioSource?.Stop();
+            if (OnEndCoroutine != null) UMI3DAnimationManager.StopCoroutine(OnEndCoroutine);
         }
 
         ///<inheritdoc/>
