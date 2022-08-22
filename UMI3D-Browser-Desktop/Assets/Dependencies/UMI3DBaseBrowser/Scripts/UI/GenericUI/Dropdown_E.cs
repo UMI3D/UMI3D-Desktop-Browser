@@ -23,6 +23,9 @@ namespace umi3d.baseBrowser.ui.viewController
     {
         public Action<string> ValueChanged { get; set; } = null;
 
+        public string Value => m_currentValue;
+        public List<string> Option => m_items;
+
         protected Box_E m_menu { get; set; } = null;
 
         protected List<string> m_items { get; set; } = null;

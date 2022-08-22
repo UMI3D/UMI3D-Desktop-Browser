@@ -57,10 +57,11 @@
                         <ui:VisualElement name="manipulation-container" class="dark-grey2-bck" style="height: 100px; flex-direction: row; justify-content: space-between;" />
                         <ui:VisualElement name="game-menu" style="flex-grow: 1; display: flex; width: 100%; height: 100%;" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="microphone-setter" style="display: flex; position: absolute; width: 430px; height: 71px; bottom: -5px; right: 108px; background-color: rgba(50, 50, 50, 0.8); padding-top: 15px;">
-                        <ui:Instance template="MicrophoneElement" name="threshold-bar" />
-                        <ui:Instance template="MicrophoneElement" name="gain-bar" style="overflow: hidden;" />
-                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="microphone-setter-container" style="display: flex; position: absolute; width: 80%; height: 80%; bottom: 10%; right: 10%; background-color: rgba(50, 50, 50, 0.8); padding-top: 15px; left: 10%; top: 10%; padding-left: 15px; padding-right: 15px; padding-bottom: 15px;">
+                <ui:VisualElement name="microphone-setter">
+                    <ui:Instance template="MicrophoneElement" name="threshold-bar" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

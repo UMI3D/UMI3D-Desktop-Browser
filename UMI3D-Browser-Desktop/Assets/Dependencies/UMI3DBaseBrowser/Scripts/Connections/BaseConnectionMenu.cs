@@ -189,7 +189,6 @@ namespace umi3d.baseBrowser.connection
         public static async System.Threading.Tasks.Task<common.MediaDto> GetMediaDto(preferences.ServerPreferences.ServerData connectionData)
         {
             var curentUrl = FormatUrl(connectionData.serverUrl, null) + common.UMI3DNetworkingKeys.media;
-            Debug.Log(curentUrl);
             url = curentUrl;
             try
             {
