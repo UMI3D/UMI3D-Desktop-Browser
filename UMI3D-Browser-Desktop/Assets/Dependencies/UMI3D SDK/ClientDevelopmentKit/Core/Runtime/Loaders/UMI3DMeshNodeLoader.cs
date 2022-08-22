@@ -57,6 +57,12 @@ namespace umi3d.cdk
                 //MeshRenderer nodeMesh = node.AddComponent<MeshRenderer>();
                 FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariant(((UMI3DMeshNodeDto)dto).mesh.variants);  // Peut etre ameliore
 
+                if(fileToLoad == null)
+                {
+                    failed.Invoke(new Umi3dException($"No variant found for {dto}"));
+                    return;
+                }
+
                 string url = fileToLoad.url;
                 string ext = fileToLoad.extension;
                 string authorization = fileToLoad.authorization;
