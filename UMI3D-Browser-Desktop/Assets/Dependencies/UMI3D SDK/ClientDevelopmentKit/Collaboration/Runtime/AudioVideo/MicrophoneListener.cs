@@ -183,7 +183,8 @@ namespace umi3d.cdk.collaboration
         }
         #endregion
 
-        public async void StartMicrophoneAsync() {
+        public async void StartMicrophoneAsync()
+        {
             await StartMicrophone();
         }
 
@@ -395,7 +396,6 @@ namespace umi3d.cdk.collaboration
         {
             if (useMumble != user.useMumble)
             {
-                UnityEngine.Debug.Log("user.useMumble:" + user.useMumble);
                 useMumble = user.useMumble;
 
                 if (useMumble)
@@ -473,8 +473,6 @@ namespace umi3d.cdk.collaboration
         public string[] GetMicrophonesNames() { return Microphone.devices; }
         public string GetCurrentMicrophoneName()
         {
-            UnityEngine.Debug.Log($"{mumbleMic != null} {mumbleMic?.HasMic()} {_pendingMic} {mumbleMic?.GetCurrentMicName()}");
-
             if (mumbleMic == null || !mumbleMic.HasMic())
                 return _pendingMic;
             return mumbleMic.GetCurrentMicName();
