@@ -120,14 +120,20 @@ namespace BrowserDesktop.Menu
         {
 
             //GainSlider.Value = GToP(umi3d.cdk.collaboration.MicrophoneListener.Gain);
+            var mics = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetMicrophonesNames().ToList();
+            var mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
+
             MicrophoneDropDown.SetOptions(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetMicrophonesNames().ToList());
-            MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
+            if (mics.Contains(mic))
+            {
+                MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
+            }
             ModeDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneMode().ToString());
 
             if (PlayerPrefs.HasKey(MicrophoneKey))
             {
-                var mic = PlayerPrefs.GetString(MicrophoneKey);
-                UpdateMicrophone(mic);
+                var mic2 = PlayerPrefs.GetString(MicrophoneKey);
+                UpdateMicrophone(mic2);
             }
 
             TimeToShut.value = umi3d.cdk.collaboration.MicrophoneListener.Instance.voiceStopingDelaySeconds.ToString();
@@ -292,8 +298,16 @@ namespace BrowserDesktop.Menu
                     MicrophoneDropDown.SetDefaultValue(name);
                 PlayerPrefs.SetString(MicrophoneKey, name);
 
-                await umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(name);
-                MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
+
+                Debug.Log(name);
+                if (await umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(name))
+                {
+                    var mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
+                    Debug.Log(mic);
+                    foreach(var e in umi3d.cdk.collaboration.MicrophoneListener.Instance.GetMicrophonesNames().ToList())
+                        Debug.Log($"---{e}");
+                    MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
+                }
             }
         }
 
