@@ -89,11 +89,24 @@ namespace umi3d.baseBrowser.connection
             });
         }
 
+        /// <summary>
+        /// Display Menu
+        /// </summary>
         protected virtual void Display()
         {
             isDisplayed = true;
             connectionScreen.style.display = DisplayStyle.Flex;
             Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Free);
+        }
+
+        /// <summary>
+        /// Hide Menu
+        /// </summary>
+        protected virtual void Hide()
+        {
+            isDisplayed = false;
+            connectionScreen.style.display = DisplayStyle.None;
+            Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Center);
         }
 
         /// <summary>
@@ -150,7 +163,8 @@ namespace umi3d.baseBrowser.connection
         {
             InitUI();
             
-            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(OnRedirection);
+            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnRedirectionStarted.AddListener(OnRedirectionStarted);
+            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnRedirectionAborted.AddListener(OnRedirectionAborted);
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
             cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
         }
@@ -232,16 +246,11 @@ namespace umi3d.baseBrowser.connection
         /// <summary>
         /// Inits the UI the environment is loaded.
         /// </summary>
-        protected void OnEnvironmentLoaded()
-        {
-            isDisplayed = false;
+        protected virtual void OnEnvironmentLoaded() => Hide();
 
-            connectionScreen.style.display = DisplayStyle.None;
+        protected virtual void OnRedirectionStarted() => Display();
 
-            Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Center);
-        }
-
-        protected void OnRedirection() => Display();
+        protected virtual void OnRedirectionAborted() => Hide();
 
         protected void OnConnectionLost()
         {

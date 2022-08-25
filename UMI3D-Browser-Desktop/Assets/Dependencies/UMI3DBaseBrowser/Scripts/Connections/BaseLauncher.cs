@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -90,42 +91,104 @@ namespace umi3d.baseBrowser.connection
             InitUI();
         }
 
+        static bool onlyOneConnection = false;
+        static bool? _mediaDtoFound = null;
+        static bool? _masterServerFound = null;
+
+        static bool mediaDtoFound
+        {
+            get
+            {
+                return _mediaDtoFound ?? false;
+            }
+            set
+            {
+                _mediaDtoFound = value;
+            }
+        }
+
+        static bool masterServerFound {
+            get
+            {
+                return _masterServerFound ?? false;
+            }
+            set
+            {
+                _masterServerFound = value;
+            }
+        }
+
         /// <summary>
         /// Initiates the connection to the forge master server.
         /// </summary>
-        protected async void Connect(bool saveInfo = false)
+        protected async Task Connect(bool saveInfo = false)
         {
+            if (onlyOneConnection)
+            {
+                Debug.Log("Only one connection at a time");
+                return;
+            }
+            await _Connect(saveInfo);
+            while (onlyOneConnection)
+                await UMI3DAsyncManager.Yield();
+        }
+
+
+        protected async Task _Connect(bool saveInfo = false)
+        {
+            if (onlyOneConnection)
+            {
+                Debug.Log("Only one connection at a time");
+                return;
+            }
+
+            onlyOneConnection = true;
+            _mediaDtoFound = null;
+            _masterServerFound = null;
+
+            WaitForError();
+
             void StoreServer()
             {
                 if (savedServers.Find((server) => server.serverName == currentServer.serverName) == null) savedServers.Add(currentServer);
                 preferences.ServerPreferences.StoreRegisteredServerData(savedServers);
             }
 
-            bool mediaDtoFound = false;
-            bool masterServerFound = false;
-
             //1. Try to find a master server
             masterServer.ConnectToMasterServer(() =>
-            {
-                if (mediaDtoFound) return;
-
-                masterServer.RequestInfo((name, icon) =>
                 {
-                    if (mediaDtoFound) return;
-                    masterServerFound = true;
+                    if (mediaDtoFound)
+                        return;
 
-                    currentServer.serverName = name;
-                    currentServer.serverIcon = icon;
-                    preferences.ServerPreferences.StoreUserData(currentServer);
-                    if (saveInfo) StoreServer();
+                    masterServer.RequestInfo((name, icon) =>
+                        {
+                            if (mediaDtoFound) return;
+                            masterServerFound = true;
+
+                            currentServer.serverName = name;
+                            currentServer.serverIcon = icon;
+                            preferences.ServerPreferences.StoreUserData(currentServer);
+                            if (saveInfo) StoreServer();
+                        },
+                    ()=>
+                        {
+                            masterServerFound = false;
+                        }
+                    );
+
+                    ShouldDisplaySessionScreen = true;
+                }, 
+            currentServer.serverUrl,
+            () =>
+                {
+                    masterServerFound = false;
                 });
-
-                ShouldDisplaySessionScreen = true;
-            }, currentServer.serverUrl);
 
             //2. try to get a mediaDto
             var media = await ConnectionMenu.GetMediaDto(currentServer);
-            if (media == null || masterServerFound) return;
+            if (media == null || masterServerFound) {
+                mediaDtoFound = false;
+                return; }
             mediaDtoFound = true;
 
             currentServer.serverName = media.name;
@@ -137,7 +200,24 @@ namespace umi3d.baseBrowser.connection
             currentConnectionData.ip = media.url;
             currentConnectionData.port = null;
             StoreCurrentConnectionDataAndConnect();
+
         }
+
+        async void WaitForError()
+        {
+            while (onlyOneConnection)
+            {
+                await UMI3DAsyncManager.Yield();
+                if (masterServerFound || mediaDtoFound)
+                    return;
+                if (_masterServerFound != null && _mediaDtoFound != null)
+                {
+                    onlyOneConnection = false;
+                    return;
+                }
+            }
+        }
+
 
         /// <summary>
         /// Store current connection data and initiates the connection to the environment.
@@ -145,22 +225,25 @@ namespace umi3d.baseBrowser.connection
         protected void StoreCurrentConnectionDataAndConnect()
         {
             preferences.ServerPreferences.StoreUserData(currentConnectionData);
-            StartCoroutine(WaitReady(currentConnectionData));
+            WaitReady(currentConnectionData);
         }
 
         /// <summary>
         /// Load the environment scene when it is ready.
         /// </summary>
         /// <returns></returns>
-        protected System.Collections.IEnumerator WaitReady(preferences.ServerPreferences.Data data)
+        protected async void WaitReady(preferences.ServerPreferences.Data data)
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneToLoad, UnityEngine.SceneManagement.LoadSceneMode.Additive);
 
-            while (!ConnectionMenu.Exists) yield return new WaitForEndOfFrame();
-            while (!cdk.collaboration.UMI3DCollaborationClientServer.Exists) yield return new WaitForEndOfFrame();
+            while (!ConnectionMenu.Exists || !cdk.collaboration.UMI3DCollaborationClientServer.Exists) 
+                await UMI3DAsyncManager.Yield();
+
+
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.Clear();
             ConnectionMenu.Instance.Connect(data);
             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(currentScene);
+            onlyOneConnection = false;
         }
     }
 }
