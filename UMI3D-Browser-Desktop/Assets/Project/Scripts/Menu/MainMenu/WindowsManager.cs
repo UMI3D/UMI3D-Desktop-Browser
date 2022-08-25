@@ -157,6 +157,7 @@ public class WindowsManager : MonoBehaviour
         DialogueBox_E.Instance.Setup("Close application", "Are you sure ...?", "YES", "NO", (b) => 
         { 
             QuittingManager.ApplicationIsQuitting = b;
+            UnityEngine.Debug.Log($"--------------Is Quitting Dialoguebox {b}--------------------");
             if (b) 
                 Application.Quit(); 
         });
