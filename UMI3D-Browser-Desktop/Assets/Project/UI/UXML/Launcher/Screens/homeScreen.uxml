@@ -37,7 +37,7 @@
             </ui:Button>
         </ui:VisualElement>
         <ui:VisualElement name="VisualElement" style="height: auto; justify-content: flex-start; flex-direction: column;" />
-        <ui:VisualElement name="lock" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center; display: flex; width: 100%; height: 100%; background-color: rgba(50, 50, 50, 255);">
+        <ui:VisualElement name="lock" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center; display: flex; width: 100%; height: 100%; background-image: url(&apos;/Assets/Project/UI/UI_connection/background-middle.png&apos;);">
             <ui:Instance template="loading-screen" name="lock-loading-screen" style="width: 100%; height: 100%;" />
         </ui:VisualElement>
     </ui:VisualElement>
