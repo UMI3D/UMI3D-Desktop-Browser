@@ -157,7 +157,8 @@ namespace umi3d.baseBrowser.connection
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneToLoad, UnityEngine.SceneManagement.LoadSceneMode.Additive);
 
             while (!ConnectionMenu.Exists) yield return new WaitForEndOfFrame();
-
+            while (!cdk.collaboration.UMI3DCollaborationClientServer.Exists) yield return new WaitForEndOfFrame();
+            cdk.collaboration.UMI3DCollaborationClientServer.Instance.Clear();
             ConnectionMenu.Instance.Connect(data);
             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(currentScene);
         }
