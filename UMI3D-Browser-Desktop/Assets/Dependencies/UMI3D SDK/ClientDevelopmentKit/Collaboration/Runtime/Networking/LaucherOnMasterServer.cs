@@ -58,7 +58,7 @@ namespace umi3d.cdk.collaboration
         public void ConnectToMasterServer(Action callback, string host, ushort port, Action failed)
         {
             MainThreadManager.Create();
-            Thread thread = new Thread(()=>_ConnectToMasterServer(callback,host,port,failed));
+            Thread thread = new Thread(() => _ConnectToMasterServer(callback, host, port, failed));
             if (!thread.IsAlive)
                 thread.Start();
         }

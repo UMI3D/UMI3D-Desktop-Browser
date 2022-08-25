@@ -120,7 +120,6 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         public static async void Connect(RedirectionDto redirection, Action<string> failed = null)
         {
-            UnityEngine.Debug.Log($"wc null = {worldControllerClient == null}");
             if (UMI3DCollaborationClientServer.Instance.IsRedirectionInProgress)
             {
                 failed?.Invoke("Redirection already in progress");
@@ -330,14 +329,14 @@ namespace umi3d.cdk.collaboration
         protected override async Task<byte[]> _GetFile(string url, bool useParameterInsteadOfHeader)
         {
             UMI3DLogger.Log($"GetFile {url}", scope);
-            return await environmentClient?.GetFile(url, useParameterInsteadOfHeader);
+            return await (environmentClient?.GetFile(url, useParameterInsteadOfHeader) ?? Task.FromResult<byte[]>(null));
         }
 
         ///<inheritdoc/>
         protected override async Task<LoadEntityDto> _GetEntity(List<ulong> ids)
         {
             UMI3DLogger.Log($"GetEntity {ids.ToString<ulong>()}", scope);
-            return await environmentClient?.GetEntity(ids);
+            return await (environmentClient?.GetEntity(ids) ?? Task.FromResult<LoadEntityDto>(null));
         }
 
         ///<inheritdoc/>
