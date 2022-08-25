@@ -139,18 +139,21 @@ namespace umi3d.cdk.collaboration
 
         public MumbleAudioPlayer GetMumbleAudioPlayer(string username, uint session)
         {
-            UMI3DUser user = UMI3DCollaborationEnvironmentLoader.Instance.UserList.FirstOrDefault(u => u.audioLogin == username);
-            if (user != null)
-            {
-                MumbleAudioPlayer newPlayer = GetMumbleAudioPlayer(user);
-                return newPlayer;
-            }
-
-            return CreatePrending(username);
+                UMI3DUser user = UMI3DCollaborationEnvironmentLoader.Instance.UserList.FirstOrDefault(u => u.audioLogin == username);
+                if (user != null)
+                {
+                    MumbleAudioPlayer newPlayer = GetMumbleAudioPlayer(user);
+                    return newPlayer;
+                }
+            
+                return CreatePrending(username);
         }
 
         private MumbleAudioPlayer CreatePrending(string username)
         {
+            if(PendingMumbleAudioPlayer.ContainsKey(username))
+                return PendingMumbleAudioPlayer[username];
+
             var g = new GameObject
             {
                 name = $"pending_audio_{username}"

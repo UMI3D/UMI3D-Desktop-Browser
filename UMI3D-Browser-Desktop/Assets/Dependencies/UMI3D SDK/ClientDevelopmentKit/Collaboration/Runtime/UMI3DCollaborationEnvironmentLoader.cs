@@ -26,8 +26,20 @@ namespace umi3d.cdk.collaboration
     public class UMI3DCollaborationEnvironmentLoader : UMI3DEnvironmentLoader
     {
         public static new UMI3DCollaborationEnvironmentLoader Instance { get => UMI3DEnvironmentLoader.Instance as UMI3DCollaborationEnvironmentLoader; set => UMI3DEnvironmentLoader.Instance = value; }
+        public List<UMI3DUser> UserList
+        {
+            get
+            {
+                lock (userList) return userList;
+            }
+            set
+            {
+                lock (userList)
+                    userList = value;
+            }
+        }
 
-        public List<UMI3DUser> UserList;
+        private List<UMI3DUser> userList;
         public static event Action OnUpdateUserList;
 
         public UMI3DUser GetClientUser()
@@ -197,21 +209,24 @@ namespace umi3d.cdk.collaboration
 
         private void ReplaceUser(UMI3DCollaborationEnvironmentDto dto, int index, UserDto userNew)
         {
-            if (index < 0 || index > UserList.Count) return;
-
-            if (index < UserList.Count)
+            lock (userList)
             {
-                UserList[index].Update(userNew);
-                dto.userList[index] = userNew;
+                if (index < 0 || index > userList.Count) return;
+
+                if (index < userList.Count)
+                {
+                    userList[index].Update(userNew);
+                    dto.userList[index] = userNew;
+                }
+                else if (index == userList.Count) InsertUser(dto, index, userNew);
             }
-            else if (index == UserList.Count) InsertUser(dto, index, userNew);
         }
 
         private void ReplaceAllUser(UMI3DCollaborationEnvironmentDto dto, List<UserDto> usersNew)
         {
             foreach (UMI3DUser user in UserList) user.Destroy();
             dto.userList = usersNew;
-            UserList = dto.userList.Select(u => new UMI3DUser(u)).ToList();
+                UserList = dto.userList.Select(u => new UMI3DUser(u)).ToList();
             OnUpdateUserList?.Invoke();
         }
     }
