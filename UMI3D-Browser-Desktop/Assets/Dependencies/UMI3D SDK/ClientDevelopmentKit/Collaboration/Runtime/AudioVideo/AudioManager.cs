@@ -85,9 +85,24 @@ namespace umi3d.cdk.collaboration
 
         private void Start()
         {
+            UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(Clean);
             UMI3DUser.OnNewUser.AddListener(OnAudioChanged);
             UMI3DUser.OnRemoveUser.AddListener(OnUserDisconected);
             UMI3DUser.OnUserAudioUpdated.AddListener(OnAudioChanged);
+        }
+
+        void Clean()
+        {
+            foreach(var k in PendingMumbleAudioPlayer.Values.ToList())
+                GameObject.Destroy(k.gameObject);
+
+            foreach (var k in GlobalReader.Values.ToList())
+                GameObject.Destroy(k.gameObject);
+
+            PendingMumbleAudioPlayer.Clear();
+            GlobalReader.Clear();
+            SpacialReader.Clear();
+            WaitCoroutine.Clear();
         }
 
         protected override void OnDestroy()

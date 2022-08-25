@@ -612,7 +612,7 @@ namespace umi3d.cdk.collaboration
                     {
                         MainThreadManager.Run(() =>
                         {
-                            if (client.Time.Timestep - frame.TimeStep < 500)
+                            if (client != null && client.Time.Timestep - frame.TimeStep < 500)
                                 StartCoroutine((userAvatar as UMI3DCollaborativeUserAvatar).UpdateAvatarPosition(trackingFrame, frame.TimeStep));
                         });
                     }

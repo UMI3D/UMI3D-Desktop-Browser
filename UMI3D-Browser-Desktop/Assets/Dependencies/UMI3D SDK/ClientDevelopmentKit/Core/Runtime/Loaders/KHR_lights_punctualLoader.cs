@@ -64,53 +64,61 @@ namespace umi3d.cdk
         /// <returns></returns>
         public virtual bool SetLightPorperty(UMI3DEntityInstance entity, SetEntityPropertyDto property)
         {
-            KHR_lights_punctual dto = (entity.dto as GlTFNodeDto)?.extensions.KHR_lights_punctual;
-            var node = entity as UMI3DNodeInstance;
-            Light light = node?.gameObject?.GetComponent<Light>();
-            if (property.property == UMI3DPropertyKeys.Light)
+            try
             {
-                var lightdto = (KHR_lights_punctual)property.value;
-                if (light != null && lightdto == null) GameObject.Destroy(light);
-                else if (lightdto != null) CreateLight(lightdto, node.gameObject);
+                KHR_lights_punctual dto = (entity.dto as GlTFNodeDto)?.extensions.KHR_lights_punctual;
+                var node = entity as UMI3DNodeInstance;
+                Light light = node?.gameObject?.GetComponent<Light>();
+                if (property.property == UMI3DPropertyKeys.Light)
+                {
+                    var lightdto = (KHR_lights_punctual)property.value;
+                    if (light != null && lightdto == null) GameObject.Destroy(light);
+                    else if (lightdto != null) CreateLight(lightdto, node.gameObject);
+                    return true;
+                }
+                if (dto == null || light == null) return false;
+                switch (property.property)
+                {
+                    case UMI3DPropertyKeys.LightIntensity:
+                        light.intensity = dto.intensity = (float)(Double)property.value;
+                        break;
+                    case UMI3DPropertyKeys.LightColor:
+                        light.color = dto.color = (SerializableColor)property.value;
+                        break;
+                    case UMI3DPropertyKeys.LightRange:
+                        light.range = dto.range = (float)(Double)property.value;
+                        break;
+                    case UMI3DPropertyKeys.LightType:
+                        dto.type = (string)property.value;
+                        if (dto.type == KHR_lights_punctual.LightTypes.Directional.ToString())
+                        {
+                            light.type = LightType.Directional;
+                        }
+                        else if (dto.type == KHR_lights_punctual.LightTypes.Point.ToString())
+                        {
+                            light.type = LightType.Point;
+                        }
+                        else if (dto.type == KHR_lights_punctual.LightTypes.Spot.ToString())
+                        {
+                            light.type = LightType.Spot;
+                            light.innerSpotAngle = dto.spot.innerConeAngle;
+                            light.spotAngle = dto.spot.outerConeAngle;
+                        }
+                        break;
+                    case UMI3DPropertyKeys.LightSpot:
+                        light.innerSpotAngle = dto.spot.innerConeAngle = ((KHR_lights_punctual.KHR_spot)property.value).innerConeAngle;
+                        light.spotAngle = dto.spot.outerConeAngle = ((KHR_lights_punctual.KHR_spot)property.value).outerConeAngle;
+                        break;
+                    default:
+                        return false;
+                }
                 return true;
             }
-            if (dto == null || light == null) return false;
-            switch (property.property)
+            catch(Exception e)
             {
-                case UMI3DPropertyKeys.LightIntensity:
-                    light.intensity = dto.intensity = (float)(Double)property.value;
-                    break;
-                case UMI3DPropertyKeys.LightColor:
-                    light.color = dto.color = (SerializableColor)property.value;
-                    break;
-                case UMI3DPropertyKeys.LightRange:
-                    light.range = dto.range = (float)(Double)property.value;
-                    break;
-                case UMI3DPropertyKeys.LightType:
-                    dto.type = (string)property.value;
-                    if (dto.type == KHR_lights_punctual.LightTypes.Directional.ToString())
-                    {
-                        light.type = LightType.Directional;
-                    }
-                    else if (dto.type == KHR_lights_punctual.LightTypes.Point.ToString())
-                    {
-                        light.type = LightType.Point;
-                    }
-                    else if (dto.type == KHR_lights_punctual.LightTypes.Spot.ToString())
-                    {
-                        light.type = LightType.Spot;
-                        light.innerSpotAngle = dto.spot.innerConeAngle;
-                        light.spotAngle = dto.spot.outerConeAngle;
-                    }
-                    break;
-                case UMI3DPropertyKeys.LightSpot:
-                    light.innerSpotAngle = dto.spot.innerConeAngle = ((KHR_lights_punctual.KHR_spot)property.value).innerConeAngle;
-                    light.spotAngle = dto.spot.outerConeAngle = ((KHR_lights_punctual.KHR_spot)property.value).outerConeAngle;
-                    break;
-                default:
-                    return false;
+                Debug.LogError($"error : {e.Message} \n {e.StackTrace}");
+                return false;
             }
-            return true;
         }
 
         /// <summary>
