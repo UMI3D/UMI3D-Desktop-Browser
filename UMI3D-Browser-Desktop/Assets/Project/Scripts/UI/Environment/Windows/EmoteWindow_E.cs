@@ -75,7 +75,8 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// <inheritdoc/>
         private IEnumerator HideWithoutAnimation()
         {
-            yield return new WaitUntil(() => Root.resolvedStyle.width > 0f);
+            yield return new WaitUntil(() => Root == null || Root.resolvedStyle.width > 0f);
+            if (Root == null) yield break;
             Root.style.right = -Root.resolvedStyle.width;
         }
 

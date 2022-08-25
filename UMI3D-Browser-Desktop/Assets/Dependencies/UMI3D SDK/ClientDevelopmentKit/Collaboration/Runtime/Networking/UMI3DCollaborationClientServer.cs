@@ -79,7 +79,9 @@ namespace umi3d.cdk.collaboration
             if (Exists)
             {
                 worldControllerClient?.Clear();
-                await environmentClient?.Clear();
+                if (environmentClient != null) await environmentClient?.Clear();
+                worldControllerClient = null;
+                environmentClient = null;
             }
         }
 
@@ -118,6 +120,7 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         public static async void Connect(RedirectionDto redirection, Action<string> failed = null)
         {
+            UnityEngine.Debug.Log($"wc null = {worldControllerClient == null}");
             if (UMI3DCollaborationClientServer.Instance.IsRedirectionInProgress)
             {
                 failed?.Invoke("Redirection already in progress");
@@ -161,6 +164,7 @@ namespace umi3d.cdk.collaboration
             }
             catch (Exception e)
             {
+                UnityEngine.Debug.Log($"error \n{e.StackTrace}");
                 failed?.Invoke(e.Message);
                 aborted = true;
             }

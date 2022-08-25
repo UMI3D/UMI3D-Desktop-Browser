@@ -236,9 +236,11 @@ namespace umi3d.baseBrowser.connection
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneToLoad, UnityEngine.SceneManagement.LoadSceneMode.Additive);
 
-            while (!ConnectionMenu.Exists) 
+            while (!ConnectionMenu.Exists || !cdk.collaboration.UMI3DCollaborationClientServer.Exists) 
                 await UMI3DAsyncManager.Yield();
 
+
+            cdk.collaboration.UMI3DCollaborationClientServer.Instance.Clear();
             ConnectionMenu.Instance.Connect(data);
             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(currentScene);
             onlyOneConnection = false;
