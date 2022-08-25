@@ -18,10 +18,13 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using umi3d.baseBrowser.connection;
 using umi3d.baseBrowser.preferences;
 using umi3dDesktopBrowser.ui.viewController;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.Rendering.DebugUI;
 
 public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
 {
@@ -78,6 +81,8 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
 
     #region UI
 
+
+    LoadingBarElement loadingBar;
     HomeScreen homeScreen;
     SessionScreen sessionScreen;
     AdvancedConnectionScreen advancedConnectionScreen;
@@ -97,6 +102,14 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
         umiLogo = root.Q<VisualElement>("logo");
         root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
 
+        loadingBar = new LoadingBarElement(root.Q<VisualElement>("lock"),
+            (c) => { },
+            ()=> { },
+            () => { }
+            );
+        loadingBar.Text = "Connecting";
+        loadingBar.Hide();
+
         homeScreen = new HomeScreen
             (
                 root, 
@@ -107,7 +120,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
                 DisplayLibManagerScreen,
                 DisplayDialogueBox,
                 _ResizeElements,
-                Connect
+                ConnectHomeScreen
             );
         advancedConnectionScreen = new AdvancedConnectionScreen
             (
@@ -144,12 +157,53 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
         root.RegisterCallback<GeometryChangedEvent>(ResizeElements);
     }
 
+    private async void ConnectHomeScreen(bool value) {
+        StartLoadingAnimation();
+        await Connect(value);
+        StopLoadingAnimation();
+    }
+
+
+    bool runAnimation = false;
+    private async void StartLoadingAnimation()
+    {
+        runAnimation = true;
+        loadingBar.Display();
+        loadingBar.OnProgressChange(0);
+        float val = 0;
+        float delta = 0.05f;
+        while (runAnimation)
+        {
+            await UMI3DAsyncManager.Delay(50);
+            val += delta;
+            if (val >= 1)
+            {
+                val = 0.99f;
+                delta = -delta;
+            }
+            else if (val <= 0)
+            {
+                val = 0.01f;
+                delta = -delta;
+            }
+            loadingBar.OnProgressChange(val);
+        }
+        loadingBar.Hide();
+    }
+    private void StopLoadingAnimation()
+    {
+        runAnimation = false;
+    }
+
+
     /// <summary>
     /// Displays advanced connection screen.
     /// </summary>
     public override void DisplayHomeScreen()
     {
         homeScreen.Display();
+        loadingBar.Hide();
+        loadingBar.OnProgressChange(0);
         previousStep = null;
         nextStep = () => homeScreen.SetCurrentServerAndConnect();
     }

@@ -41,6 +41,12 @@ public class ConnectionMenu : umi3d.baseBrowser.connection.BaseConnectionMenu
         MainView.Instance.Display(false);
     }
 
+    protected override void OnRedirectionAborted()
+    {
+        base.OnRedirectionAborted();
+        MainView.Instance.Display(true);
+    }
+
     protected override void InitUI()
     {
         base.InitUI();
