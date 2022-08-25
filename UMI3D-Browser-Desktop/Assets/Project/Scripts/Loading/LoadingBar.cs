@@ -13,7 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using UnityEngine;
+using UnityEngine.TextCore.LowLevel;
 using UnityEngine.UIElements;
 
 namespace umi3d.baseBrowser.connection
@@ -22,22 +24,73 @@ namespace umi3d.baseBrowser.connection
     {
         public string Text
         {
+            get => loadingBar.Text;
+            set => loadingBar.Text = value;
+        }
+
+        LoadingBarElement loadingBar; 
+
+        public void Setup(VisualElement root)
+        {
+            loadingBar = new LoadingBarElement(root.Q<VisualElement>("loading-screen"),OnProgressChange,OnHide,OnDisplay);
+
+            cdk.UMI3DEnvironmentLoader.Instance.onProgressChange.AddListener(loadingBar.OnProgressChange);
+            cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(loadingBar.Hide);
+            cdk.UMI3DResourcesManager.Instance.onProgressChange.AddListener(loadingBar.OnProgressChange);
+
+        }
+
+        public void OnProgressChange(float val)
+        {
+            if (!loadingBar.isDisplayed && val < 1f)
+            {
+                loadingBar.Display();
+            }
+            if (loadingBar.isDisplayed && val >= 1)
+            {
+                loadingBar.Hide();
+            }
+        }
+
+        void OnHide()
+        {
+            Controller.BaseCursor.UnSetMovement(this);
+            Controller.BaseController.CanProcess = true;
+        }
+
+        void OnDisplay()
+        {
+            Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Free);
+            Controller.BaseController.CanProcess = false;
+        }
+    }
+
+    public class LoadingBarElement
+    {
+        public string Text
+        {
             get => loaderTxt.text;
             set => loaderTxt.text = value;
         }
+
+        public bool isDisplayed => loadingScreen.style.display != DisplayStyle.None;
 
         VisualElement loadingBarContainer;
         VisualElement loadingBarProgress;
         VisualElement loadingScreen;
         Label loaderTxt;
 
+        public Action<float> OnProgressChanges;
+        public Action OnHide;
+        public Action OnDisplay;
+
         float value = 0;
 
-        public void Setup(VisualElement root)
+        public LoadingBarElement(VisualElement root, Action<float> OnProgressChanges = null, Action OnHide = null, Action OnDisplay = null)
         {
             loadingBarProgress = root.Q<VisualElement>("loading-bar-progress");
             loadingBarContainer = root.Q<VisualElement>("loading-bar-container");
-            loadingScreen = root.Q<VisualElement>("loading-screen");
+            loadingScreen = root;
             loaderTxt = root.Q<Label>("loader-txt");
 
             Debug.Assert(loadingBarProgress != null);
@@ -50,42 +103,42 @@ namespace umi3d.baseBrowser.connection
             loadingScreen.style.display = DisplayStyle.None;
 
             value = 0;
-            MainThreadDispatcher.UnityMainThreadDispatcher.Instance().Enqueue(SetValueNextFrame());
+            SetValueNextFrame();
 
-            cdk.UMI3DEnvironmentLoader.Instance.onProgressChange.AddListener(OnProgressChange);
-            cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(Hide);
-            cdk.UMI3DResourcesManager.Instance.onProgressChange.AddListener(OnProgressChange);
-
+            this.OnProgressChanges = OnProgressChanges;
+            this.OnHide = OnHide;
+            this.OnDisplay = OnDisplay;
         }
 
         public void OnProgressChange(float val)
         {
-            if ((loadingScreen.style.display == DisplayStyle.None) && val < 1f)
-            {
-                loadingScreen.style.display = DisplayStyle.Flex;
-                Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Free);
-                Controller.BaseController.CanProcess = false;
-            }
+            OnProgressChanges?.Invoke(val);
+
             if (val > 1)
-            {
                 val = 1;
-                Hide();
-            }
-           value = val; 
+            value = val;
+
             loadingBarProgress.style.width = val * loadingBarContainer.resolvedStyle.width;
+
         }
 
-        System.Collections.IEnumerator SetValueNextFrame()
+        async void SetValueNextFrame()
         {
-            yield return new WaitForEndOfFrame();
+            await UMI3DAsyncManager.Yield();
             OnProgressChange(value);
         }
 
-        void Hide()
+        public void Display()
+        {
+            loadingScreen.style.display = DisplayStyle.Flex;
+            OnDisplay?.Invoke();
+        }
+
+        public void Hide()
         {
             loadingScreen.style.display = DisplayStyle.None;
-            Controller.BaseCursor.UnSetMovement(this);
-            Controller.BaseController.CanProcess = true;
+            OnHide?.Invoke();
         }
     }
+
 }
