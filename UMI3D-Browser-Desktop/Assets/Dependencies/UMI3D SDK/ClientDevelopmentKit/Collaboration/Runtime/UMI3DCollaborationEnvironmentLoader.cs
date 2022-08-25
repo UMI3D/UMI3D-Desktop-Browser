@@ -39,7 +39,7 @@ namespace umi3d.cdk.collaboration
             }
         }
 
-        private List<UMI3DUser> userList;
+        private List<UMI3DUser> userList = new List<UMI3DUser>();
         public static event Action OnUpdateUserList;
 
         public UMI3DUser GetClientUser()
