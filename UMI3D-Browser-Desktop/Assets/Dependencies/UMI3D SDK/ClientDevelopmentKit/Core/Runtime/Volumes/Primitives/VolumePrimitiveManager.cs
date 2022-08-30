@@ -72,6 +72,7 @@ namespace umi3d.cdk.volumes
             switch (dto)
             {
                 case BoxDto boxDto:
+                    Debug.Log("Create box");
                     var box = new Box() { id = boxDto.id };
                     box.SetBounds(new Bounds() { center = boxDto.center, size = boxDto.size });
                     box.SetLocalToWorldMatrix(localToWorldMatrix);

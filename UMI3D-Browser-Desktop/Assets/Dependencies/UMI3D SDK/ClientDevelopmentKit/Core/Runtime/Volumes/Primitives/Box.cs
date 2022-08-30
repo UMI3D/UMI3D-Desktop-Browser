@@ -71,6 +71,8 @@ namespace umi3d.cdk.volumes
         /// <inheritdoc/>
         public override bool IsInside(Vector3 point, Space relativeTo)
         {
+            Debug.Log(bounds + " " + bounds.Contains(point) + " " + point);
+
             if (relativeTo == Space.Self)
                 return bounds.Contains(point);
             else

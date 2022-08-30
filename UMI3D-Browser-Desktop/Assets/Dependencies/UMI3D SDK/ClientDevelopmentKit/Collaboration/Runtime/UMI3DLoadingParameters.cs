@@ -24,6 +24,7 @@ using umi3d.cdk.volumes;
 using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
+using umi3d.common.volume;
 using UnityEngine;
 
 namespace umi3d.cdk
@@ -94,6 +95,10 @@ namespace umi3d.cdk
                 case SubModelDto s:
                     SubMeshLoader.ReadUMI3DExtension(s, node, callback, failed);
                     break;
+                case AbstractVolumeDescriptorDto v:
+                    Debug.Log("Load volume");
+                    UMI3DVolumeLoader.ReadUMI3DExtension(v, callback, failed);
+                    break;
                 case UIRectDto r:
                     UILoader.ReadUMI3DExtension(dto, node, callback, failed);
                     break;
@@ -150,6 +155,11 @@ namespace umi3d.cdk
                 return true;
             if (meshLoader.SetUMI3DProperty(entity, property))
                 return true;
+            if (UMI3DVolumeLoader.SetUMI3DProperty(entity, property))
+            {
+                Debug.Log("Load volume");
+                return true;
+            }
             if (lineLoader.SetUMI3DProperty(entity, property))
                 return true;
             if (UILoader.SetUMI3DProperty(entity, property))
@@ -195,6 +205,8 @@ namespace umi3d.cdk
             if (SubMeshLoader.SetUMI3DProperty(entity, operationId, propertyKey, container))
                 return true;
             if (meshLoader.SetUMI3DProperty(entity, operationId, propertyKey, container))
+                return true;
+            if (UMI3DVolumeLoader.SetUMI3DProperty(entity, operationId, propertyKey, container))
                 return true;
             if (lineLoader.SetUMI3DProperty(entity, operationId, propertyKey, container))
                 return true;

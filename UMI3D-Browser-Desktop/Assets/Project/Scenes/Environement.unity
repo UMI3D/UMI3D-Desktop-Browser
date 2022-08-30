@@ -891,7 +891,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 498482121}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &400683417
 CapsuleCollider:
@@ -1090,6 +1090,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1595488248}
   - {fileID: 2096641627}
   - {fileID: 400683416}
   - {fileID: 2119596087}
@@ -2024,7 +2025,7 @@ Transform:
   - {fileID: 968847598}
   - {fileID: 1974967404}
   m_Father: {fileID: 498482121}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1188994922
 GameObject:
@@ -2071,6 +2072,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   navmeshLayerName: Navmesh
   obstacleLayerName: Obstacle
+  invisibleMaterial: {fileID: 0}
 --- !u!1 &1202536833
 GameObject:
   m_ObjectHideFlags: 0
@@ -2268,6 +2270,12 @@ MonoBehaviour:
   OnConnectionLost:
     m_PersistentCalls:
       m_Calls: []
+  OnRedirectionStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRedirectionAborted:
+    m_PersistentCalls:
+      m_Calls: []
   OnRedirection:
     m_PersistentCalls:
       m_Calls: []
@@ -2429,6 +2437,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuAsset: {fileID: 11400000, guid: a1215c884fdd17846a33bbba9c8656b9, type: 2}
+--- !u!1 &1595488246
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1595488248}
+  - component: {fileID: 1595488247}
+  - component: {fileID: 1595488249}
+  m_Layer: 0
+  m_Name: UMI3DVolumeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1595488247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595488246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d985b3de2ed4b1949ac80c7fca9b1bbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1595488248
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595488246}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.91, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 498482121}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1595488249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595488246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2532ed492d992d24e9596e2f7047d917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameRate: 30
 --- !u!1001 &1649652679
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2566,7 +2631,7 @@ Transform:
   - {fileID: 327637491}
   - {fileID: 683840924}
   m_Father: {fileID: 498482121}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1699407652
 MonoBehaviour:
@@ -2778,7 +2843,7 @@ Transform:
   - {fileID: 664315880}
   - {fileID: 1381363874}
   m_Father: {fileID: 498482121}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1903202760
 GameObject:
@@ -3041,7 +3106,7 @@ Transform:
   - {fileID: 999219291}
   - {fileID: 751003887}
   m_Father: {fileID: 498482121}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2096641628
 MonoBehaviour:
@@ -3139,7 +3204,7 @@ PrefabInstance:
     - target: {fileID: 8499134510037716410, guid: d599db4b8e88c6246a10c7a44287b2d5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8499134510037716410, guid: d599db4b8e88c6246a10c7a44287b2d5,
         type: 3}

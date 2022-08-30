@@ -13,7 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System.Collections.Generic;
 using umi3d.cdk;
+using umi3d.cdk.volumes;
 using umi3d.common;
 using UnityEngine;
 
@@ -25,6 +27,10 @@ namespace umi3d.baseBrowser.Navigation
     /// </summary>
     public class NavmeshManager : MonoBehaviour
     {
+        #region Methods
+
+        #region Navmesh
+
         /// <summary>
         /// Name of the layer where objects of the navmesh will be set.
         /// </summary>
@@ -38,6 +44,18 @@ namespace umi3d.baseBrowser.Navigation
         private LayerMask navmeshLayer;
 
         private LayerMask obstacleLayer;
+
+        #endregion
+
+        #region Volume
+
+        public Material invisibleMaterial;
+
+        private Dictionary<ulong, GameObject> cellIdToGameobjects = new Dictionary<ulong, GameObject>();
+
+        #endregion
+
+        #endregion
 
         void Start()
         {

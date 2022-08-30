@@ -605,6 +605,7 @@ namespace umi3d.cdk
                 if (entity is UMI3DNodeInstance)
                 {
                     var node = entity as UMI3DNodeInstance;
+                    Debug.Log("DELETE " + node.gameObject?.name);
                     Destroy(node.gameObject);
                 }
                 Instance.entities[entityId].Delete?.Invoke();
@@ -835,6 +836,9 @@ namespace umi3d.cdk
         {
             UMI3DEnvironmentLoader.WaitForAnEntityToBeLoaded(entityId, (e) =>
             {
+                if (propertyKey == UMI3DOperationKeys.DeleteEntity)
+                    Debug.Log("OPERATION REMOVE BINDING");
+
                 if (!SetEntity(e, operationId, entityId, propertyKey, container))
                     UMI3DLogger.LogWarning("SetEntity operation was not applied : entity : " + entityId + "  opération : " + operationId + "   propKey : " + propertyKey, scope);
             }
@@ -1026,9 +1030,10 @@ namespace umi3d.cdk
         {
             foreach (ulong entityId in Instance.entityFilters.Keys)
             {
+                UMI3DEntityInstance node = UMI3DEnvironmentLoader.GetEntity(entityId);
+
                 foreach (ulong property in Instance.entityFilters[entityId].Keys)
                 {
-                    UMI3DEntityInstance node = UMI3DEnvironmentLoader.GetEntity(entityId);
                     AbstractKalmanEntity kalmanEntity = Instance.entityFilters[entityId][property];
 
                     Instance.PropertyRegression(kalmanEntity);
