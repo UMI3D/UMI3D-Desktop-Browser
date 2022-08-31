@@ -76,7 +76,7 @@ public class AvatarSetting : ISetting
         get => (userTracking != null) ? userTracking.SendTracking : false;
         private set
         {
-            userTracking?.setTrackingSending(value);
+            userTracking?.SetTrackingSending(value);
             UMI3DCollaborationEnvironmentLoader.Instance.GetClientUser()?.SetAvatarStatus(value);
         }
     }
