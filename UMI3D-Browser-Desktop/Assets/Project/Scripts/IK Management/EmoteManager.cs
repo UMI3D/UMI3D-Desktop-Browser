@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using umi3d.baseBrowser.ui.viewController;
 using umi3d.cdk;
+using umi3d.cdk.collaboration;
 using umi3d.cdk.userCapture;
 using umi3d.common;
 using umi3d.common.userCapture;
@@ -171,6 +172,7 @@ namespace umi3dDesktopBrowser.emotes
                 avatarAnimator = GetComponentInChildren<Animator>();
                 StartCoroutine(GetEmotes());
             });
+            UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(() => StopAllCoroutines());
         }
 
         /// <summary>
