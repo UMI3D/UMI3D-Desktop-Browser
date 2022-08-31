@@ -24,6 +24,9 @@ using UnityEngine.Events;
 
 namespace umi3d.cdk.collaboration
 {
+
+    public class OnForceLogoutEvent : UnityEvent<string> { }
+
     /// <summary>
     /// Collaboration Extension of the UMI3DClientServer
     /// </summary>
@@ -53,6 +56,8 @@ namespace umi3d.cdk.collaboration
 
         public UnityEvent OnConnectionCheck = new UnityEvent();
         public UnityEvent OnConnectionRetreived = new UnityEvent();
+
+        public OnForceLogoutEvent OnForceLogoutMessage = new OnForceLogoutEvent();
 
         public ClientIdentifierApi Identifier;
 
@@ -163,7 +168,7 @@ namespace umi3d.cdk.collaboration
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.Log($"error \n{e.StackTrace}");
+                UnityEngine.Debug.Log($"Error in connection process : {e.Message} \n{e.StackTrace}");
                 failed?.Invoke(e.Message);
                 aborted = true;
             }
@@ -196,6 +201,13 @@ namespace umi3d.cdk.collaboration
                 Instance.OnLeavingEnvironment.Invoke();
                 Instance.OnLeaving.Invoke();
             }
+        }
+
+
+        public static void ReceivedLogoutMessage(string message)
+        {
+            if (Exists)
+                Instance.OnForceLogoutMessage.Invoke(message);
         }
 
         /// <summary>
