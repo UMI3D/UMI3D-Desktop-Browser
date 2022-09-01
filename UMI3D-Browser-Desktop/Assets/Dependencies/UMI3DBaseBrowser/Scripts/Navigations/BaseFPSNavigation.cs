@@ -55,6 +55,9 @@ namespace umi3d.baseBrowser.Navigation
         [SerializeField]
         [Tooltip("List of point which from rays will be created to check is there is an obstacle in front of the player")]
         protected List<Transform> obstacleRaycastOrigins;
+        [SerializeField]
+        [Tooltip("Radius used from player center to raycast")]
+        protected float playerRadius = .2f;
 
         [Header("Parameters")]
         [SerializeField]
@@ -227,7 +230,25 @@ namespace umi3d.baseBrowser.Navigation
             }
         }
 
-        protected bool CanMove(Vector3 direction) => CheckNavmesh(direction) && CheckCollision(direction) || navigation == Navigation.Flying;
+        /// <summary>
+        /// Return a movement allowed for the player from a given <paramref name="direction"/>.
+        /// If no movement is allowed, return Vector.zero.
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <returns></returns>
+        protected Vector3 ComputeMovement(Vector3 direction)
+        {
+            if (navigation == Navigation.Flying)
+                return direction;
+            Debug.DrawRay(transform.position, direction.normalized * 3, Color.blue);
+            if (CheckNavmesh(direction))
+            {
+                return CheckCollision(direction);
+            } else
+            {
+                return Vector3.zero;
+            }
+        }
 
         /// <summary>
         /// Checks if a translation along <paramref name="direction"/> would move the player on a navmesh surface.
@@ -267,33 +288,87 @@ namespace umi3d.baseBrowser.Navigation
         }
 
         /// <summary>
-        /// Checks if there is an obstacle for the player.
+        /// Checks if there is an obstacle for the player and returns an allowed movement for the player.
         /// </summary>
         /// <param name="direction"></param>
         /// <returns></returns>
-        protected bool CheckCollision(Vector3 direction)
+        protected Vector3 CheckCollision(Vector3 direction)
         {
-            bool Raycast(Vector3 origin) => UnityEngine.Physics.Raycast(origin, direction.normalized, .2f, obstacleLayer);
+            Vector3 origin = transform.position;
 
-            if (Raycast(transform.position + Vector3.up * 1.75f)) return false;
-            if (Raycast(transform.position + Vector3.up * (maxStepHeight + stepEpsilon))) return false;
-            if (Raycast(transform.position + Vector3.up * lastObstacleHeight)) return false;
+            if (Vector3.Angle(direction, transform.forward) < Mathf.Epsilon)
+            {
+                origin += transform.forward * playerRadius;
 
-            foreach (var t in obstacleRaycastOrigins) if (Raycast(t.position)) return false;
+            } else if (Vector3.Angle(direction, -transform.forward) < Mathf.Epsilon)
+            {
+                origin -= transform.forward * playerRadius;
+            }
+
+            var wallCollision = RaycastWall(origin + Vector3.up * 1.75f, direction);
+            if (wallCollision.Item1)
+                return wallCollision.Item2;
+
+            wallCollision = RaycastWall(origin + Vector3.up * (maxStepHeight + stepEpsilon), direction);
+            if (wallCollision.Item1)
+                return wallCollision.Item2;
+
+            wallCollision = RaycastWall(origin + Vector3.up * lastObstacleHeight, direction);
+            if (wallCollision.Item1)
+                return wallCollision.Item2;
+
+            foreach (var t in obstacleRaycastOrigins)
+            {
+                wallCollision = RaycastWall(t.position, direction);
+                if (wallCollision.Item1)
+                    return wallCollision.Item2;
+            }
 
             for (int i = 0; i < 3; i++)
             {
                 float random = Random.Range(maxStepHeight + stepEpsilon, 1.8f);
-
-                if (Raycast(transform.position + Vector3.up * random))
+                wallCollision = RaycastWall(origin + Vector3.up * random, direction);
+                if (wallCollision.Item1)
                 {
                     lastObstacleHeight = random;
-                    return false;
+                    return wallCollision.Item2;
                 }
             }
 
             lastObstacleHeight = .5f;
-            return true;
+
+            return direction;
+        }
+
+        /// <summary>
+        /// Raycasts to check if there is a wall or not. 
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="direction"></param>
+        /// <returns>(wall found ?, movement allowed)</returns>
+        private (bool, Vector3) RaycastWall(Vector3 origin, Vector3 direction)
+        {
+            RaycastHit hit;
+            if (UnityEngine.Physics.Raycast(origin, direction.normalized, out hit, .2f, obstacleLayer))
+            {
+                Vector3 normal = Vector3.ProjectOnPlane(hit.normal, Vector3.up);
+                Vector3 projectedDirection = Vector3.Project(direction, Quaternion.Euler(0, 90, 0) * normal);
+
+                if (UnityEngine.Physics.Raycast(origin, projectedDirection, .2f, obstacleLayer)) {
+                    return (true, Vector3.zero);
+                } else
+                {
+                    float angle = Vector3.Angle(direction, projectedDirection);
+
+                    if (angle < 2 || angle > 90)
+                        return (true, Vector3.zero);
+                    else
+                        return (true, projectedDirection);
+                }
+            } else
+            {
+                return (false, direction);
+            }
         }
 
         /// <summary>
