@@ -103,10 +103,8 @@ public class FpsNavigation : umi3d.baseBrowser.Navigation.BaseFPSNavigation
         move *= Time.deltaTime;
 
         Vector3 pos = transform.rotation * new Vector3(move.y, 0, move.x);
-
-        if (CanMove(pos)) pos += transform.position;
-        else pos = transform.position;
-
+        pos = ComputeMovement(pos);
+        pos += transform.position;
         pos.y = height;
 
         transform.position = pos;
