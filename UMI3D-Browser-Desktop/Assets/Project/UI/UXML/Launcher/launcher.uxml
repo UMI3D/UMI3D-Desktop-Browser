@@ -1,14 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:Template name="libraries-manager-screen" src="Screens/libraries-manager-screen.uxml" />
-    <ui:Template name="advancedConnectionScreen" src="Screens/advancedConnectionScreen.uxml" />
-    <ui:Template name="homeScreen" src="Screens/homeScreen.uxml" />
-    <ui:Template name="sessionScreen" src="Screens/sessionScreen.uxml" />
-    <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+    <ui:Template name="libraries-manager-screen" src="project://database/Assets/Project/UI/UXML/Launcher/Screens/libraries-manager-screen.uxml?fileID=9197481963319205126&amp;guid=264a698e5318f924c9bc6393419de26e&amp;type=3#libraries-manager-screen" />
+    <ui:Template name="advancedConnectionScreen" src="project://database/Assets/Project/UI/UXML/Launcher/Screens/advancedConnectionScreen.uxml?fileID=9197481963319205126&amp;guid=048422ca5351fdd43b70be951e191b3f&amp;type=3#advancedConnectionScreen" />
+    <ui:Template name="homeScreen" src="project://database/Assets/Project/UI/UXML/Launcher/Screens/homeScreen.uxml?fileID=9197481963319205126&amp;guid=cdeb781858f5e974fa644c3a2b73d8b7&amp;type=3#homeScreen" />
+    <ui:Template name="sessionScreen" src="project://database/Assets/Project/UI/UXML/Launcher/Screens/sessionScreen.uxml?fileID=9197481963319205126&amp;guid=34257296111a4b144a8da585958fcbef&amp;type=3#sessionScreen" />
+    <Style src="project://database/Assets/Project/UI/UXML/main-style.uss?fileID=7433441132597879392&amp;guid=94673d93e91baf148996a51e40b938da&amp;type=3#main-style" />
     <ui:VisualElement name="root" style="flex-grow: 1;">
         <ui:VisualElement name="body" style="height: 100%; width: 100%;">
             <ui:VisualElement name="top" class="dark-grey1-bck" style="width: 100%; flex-direction: row; height: 40px; min-height: 40px;">
                 <ui:VisualElement name="top-left-menu" style="width: 50%; justify-content: center;">
-                    <ui:VisualElement name="logo" style="background-image: url(&apos;/Assets/Project/UI/UI_connection/ico_top.png&apos;); height: 30px; -unity-background-scale-mode: scale-to-fit; width: 30px; margin-left: 5px;" />
+                    <ui:VisualElement name="logo" style="background-image: url(&apos;project://database/Assets/Project/UI/UI_connection/ico_top.png?fileID=21300000&amp;guid=ea4f650e147440942879d87088533a60&amp;type=3#ico_top&apos;); height: 30px; -unity-background-scale-mode: scale-to-fit; width: 30px; margin-left: 5px;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="top-right-menu" style="flex-direction: row-reverse; width: 50%; flex-wrap: nowrap; height: 100%;">
                     <ui:Button name="close-window-btn" class="close-btn top-left-menu-btn" style="width: 35px;" />
@@ -16,14 +16,14 @@
                     <ui:Button name="minimize-window-btn" class="top-left-menu-btn minimize-btn" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="main" style="width: 100%; flex-direction: row; flex-grow: 1; -unity-background-scale-mode: stretch-to-fill; background-image: url(&apos;/Assets/Project/UI/UI_connection/background-middle.png&apos;); display: flex;">
+            <ui:VisualElement name="main" style="width: 100%; flex-direction: row; flex-grow: 1; -unity-background-scale-mode: stretch-to-fill; background-image: url(&apos;project://database/Assets/Project/UI/UI_connection/background-middle.png?fileID=21300000&amp;guid=98c75ed71e6362e40beaae3e8ba145ef&amp;type=3#background-middle&apos;); display: flex;">
                 <ui:VisualElement style="flex-grow: 2;">
                     <ui:Button text="&#10;" name="backMenuBtn" class="btn-left-arrow" style="width: 80px; height: 80px; margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; display: flex; background-color: rgba(228, 228, 228, 0);" />
                 </ui:VisualElement>
                 <ui:VisualElement name="container" class="medium-size-txt" style="width: 685px; margin-left: auto; margin-right: auto; justify-content: center; flex-grow: 1;">
                     <ui:Instance template="libraries-manager-screen" name="libraries-manager-screen" style="display: none;" />
                     <ui:Instance template="advancedConnectionScreen" name="advancedConnectionScreen" style="display: none;" />
-                    <ui:Instance template="homeScreen" name="homeScreen" />
+                    <ui:Instance template="homeScreen" name="homeScreen" style="-unity-font-definition: url(&apos;project://database/Assets/Project/UI/Font/Decker%20SDF%20Font%20Asset.asset?fileID=11400000&amp;guid=a677f96d8ebec7342a1a3d86996e1a96&amp;type=2#Decker SDF Font Asset&apos;);" />
                     <ui:Instance template="sessionScreen" name="sessionScreen" style="display: none;" />
                 </ui:VisualElement>
                 <ui:VisualElement style="flex-grow: 2;">
