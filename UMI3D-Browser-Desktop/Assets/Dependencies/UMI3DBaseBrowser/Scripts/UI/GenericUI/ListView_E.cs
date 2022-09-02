@@ -47,7 +47,7 @@ namespace umi3d.baseBrowser.ui.viewController
         {
             this.items.AddRange(items);
             List_View.itemsSource = this.items;
-            List_View.Refresh();
+            List_View.Rebuild();
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace umi3d.baseBrowser.ui.viewController
         {
             this.items.Clear();
             List_View.itemsSource = this.items;
-            List_View.Refresh();
+            List_View.Rebuild();
         }
     }
 
@@ -111,17 +111,17 @@ namespace umi3d.baseBrowser.ui.viewController
         public void Add(Item item) 
         { 
             items.Add(item);
-            List_View.Refresh();
+            List_View.Rebuild();
         }
         public void Insert(int index, Item item) {
             items.Insert(index,item);
-            List_View.Refresh();
+            List_View.Rebuild();
         }
 
         public void Remove(Item item)
         {
             if(items.Remove(item))
-                List_View.Refresh();
+                List_View.Rebuild();
         }
 
         public override void Reset()
@@ -139,7 +139,7 @@ namespace umi3d.baseBrowser.ui.viewController
             List_View.itemHeight = ItemHeight;
             List_View.itemsSource = items;
             List_View.makeItem = Make;
-            List_View.Refresh();
+            List_View.Rebuild();
         }
 
         void Bind(VisualElement element,int index) {
