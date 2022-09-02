@@ -167,6 +167,9 @@ namespace umi3d.baseBrowser.connection
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnRedirectionAborted.AddListener(OnRedirectionAborted);
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
             cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
+
+            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnLeaving.AddListener(Leave);
+            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnForceLogoutMessage.AddListener(ForcedLeave);
         }
 
         /// <summary>
@@ -227,11 +230,22 @@ namespace umi3d.baseBrowser.connection
         protected void GetMediaFailed(string error)
         => DisplayDialogueBox("Server error", error, "Leave", Leave);
 
+
+        public void ForcedLeave(string s)
+        {
+            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnForceLogoutMessage.RemoveListener(ForcedLeave);
+            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnLeaving.RemoveListener(Leave);
+
+            DisplayDialogueBox("Forced Deconnection", s, "Leave", Leave);
+        }
+
         /// <summary>
         /// Clears the environment and goes back to the launcher.
         /// </summary>
         public void Leave()
         {
+            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnLeaving.RemoveListener(Leave);
+
             url = null;
             cam.backgroundColor = new Color(0.196f, 0.196f, 0.196f);
             cam.clearFlags = CameraClearFlags.SolidColor;
