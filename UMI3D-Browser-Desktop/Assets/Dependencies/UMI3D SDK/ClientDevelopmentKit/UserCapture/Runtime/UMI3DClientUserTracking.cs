@@ -138,6 +138,30 @@ namespace umi3d.cdk.userCapture
         /// Trigered when an emote changed on availability
         /// </summary>
         public EmoteEvent EmoteChangedEvent = new EmoteEvent();
+        /// <summary>
+        /// Trigered when an emote is played by the user
+        /// </summary>
+        public UnityEvent EmotePlayedSelfEvent = new UnityEvent();
+
+        private UMI3DEmotesConfigDto emoteConfig;
+        public void PlayEmoteOnOtherAvatar(ulong emoteId, ulong userId)
+        {
+            var otherUserAvatar = embodimentDict[userId];
+            var animators = otherUserAvatar.GetComponentsInChildren<Animator>();
+            var animator = animators.Where(animator => animator.runtimeAnimatorController != null).FirstOrDefault();
+
+            if (animator == null || emoteConfig == null)
+                return;
+            var emoteToPlay = emoteConfig.emotes.Find(x => x.id == emoteId);
+            StartCoroutine(PlayEmote(animator, emoteToPlay));
+        }
+
+        public IEnumerator PlayEmote(Animator animator, UMI3DEmoteDto emote)
+        {
+            animator.Play(emote.animationName);
+            yield return new WaitWhile(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1);
+            animator.Play("Idle"); //todo find a cleaner way to go back to normal
+        }
 
         public class AvatarEvent : UnityEvent<ulong> { };
 
@@ -174,6 +198,7 @@ namespace umi3d.cdk.userCapture
         {
             base.Awake();
             skeletonParsedEvent = new UnityEvent();
+            EmotesLoadedEvent.AddListener((UMI3DEmotesConfigDto dto) => { emoteConfig = dto; });
         }
 
         protected virtual void Start()

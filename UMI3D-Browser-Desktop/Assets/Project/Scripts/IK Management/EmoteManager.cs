@@ -183,7 +183,7 @@ namespace umi3dDesktopBrowser.emotes
         {
             if (!hasReceivedEmotes)
                 return;
-            var emote = Emotes.Find(x => x.name == dto.name);
+            var emote = Emotes.Find(x => x.name == dto.animationName);
 
             emote.available = dto.available;
 
@@ -220,7 +220,7 @@ namespace umi3dDesktopBrowser.emotes
                 var i = 0;
                 foreach (var anim in importedEmoteControllerAnims)
                 {
-                    var emoteRefInConfig = emoteConfigDto.emotes.Find(x => anim.name == x.name);
+                    var emoteRefInConfig = emoteConfigDto.emotes.Find(x => anim.name == x.animationName);
 
                     if (emoteRefInConfig != null)
                     {
@@ -249,7 +249,7 @@ namespace umi3dDesktopBrowser.emotes
 
                         var emote = new Emote()
                         {
-                            name = emoteRefInConfig.name,
+                            name = emoteRefInConfig.animationName,
                             available = emoteConfigDto.allAvailableByDefault ? true : emoteRefInConfig.available,
                             icon = icon,
                             anim = anim,
@@ -363,6 +363,8 @@ namespace umi3dDesktopBrowser.emotes
             avatarAnimator.Update(0);
         }
 
+        private UnityAction currentInterruptionAction;
+
         /// <summary>
         /// Play the emote
         /// </summary>
@@ -372,19 +374,31 @@ namespace umi3dDesktopBrowser.emotes
         {
             IsPlayingEmote = true;
             PlayingEmote.Invoke();
+            UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.Invoke();
+
+            // send the emote triggerring info to other browsers through the server
+            var emoteRequest = new TriggerEmoteRequest()
+            {
+                emoteToTriggerId = emote.dto.id,
+                sendingUserId = UMI3DClientServer.Instance.GetUserId()
+            };
+            UMI3DClientServer.SendData(emoteRequest, true);
 
             LoadEmotes();
-            avatarAnimator.SetTrigger($"trigger{emote.id}");
 
-            var interruptionAction = new UnityAction(delegate { InterruptEmote(emote); });
-            FpsNavigation.PlayerMoved.AddListener(interruptionAction);
-            PlayingEmote.AddListener(interruptionAction); //used if another emote is played in the meanwhile
+
+            currentInterruptionAction = new UnityAction(delegate { InterruptEmote(emote); });
+            FpsNavigation.PlayerMoved.AddListener(currentInterruptionAction);
+
+            avatarAnimator.Play(emote.dto.animationName);
+            UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.AddListener(currentInterruptionAction); //used if another emote is played in the meanwhile
 
             yield return new WaitWhile(() => avatarAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1); //wait for emote end of animation
             //? Possible to improve using a StateMachineBehaviour attached to the EmoteController & trigger events on OnStateExit on anim/OnStateEnter on AnyState
 
-            FpsNavigation.PlayerMoved.RemoveListener(interruptionAction);
-            PlayingEmote.RemoveListener(interruptionAction);
+            FpsNavigation.PlayerMoved.RemoveListener(currentInterruptionAction);
+            UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.RemoveListener(currentInterruptionAction);
+            currentInterruptionAction = null;
             IsPlayingEmote = false;
 
             UnloadEmotes();
@@ -397,6 +411,9 @@ namespace umi3dDesktopBrowser.emotes
         private void InterruptEmote(Emote emote)
         {
             StopCoroutine(PlayEmoteAnimation(emote));
+            FpsNavigation.PlayerMoved.RemoveListener(currentInterruptionAction);
+            UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.RemoveListener(currentInterruptionAction);
+            currentInterruptionAction = null;
             IsPlayingEmote = false;
             UnloadEmotes();
         }

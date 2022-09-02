@@ -24,9 +24,14 @@ namespace umi3d.common.userCapture
     public class UMI3DEmoteDto : AbstractEntityDto, IEntity
     {
         /// <summary>
-        /// Emote name
+        /// Emote label that is displayed to users
         /// </summary>
-        public string name;
+        public string label;
+
+        /// <summary>
+        /// Emote state name on the Animator
+        /// </summary>
+        public string animationName;
 
         /// <summary>
         /// Should the user be able to see and play the emote?

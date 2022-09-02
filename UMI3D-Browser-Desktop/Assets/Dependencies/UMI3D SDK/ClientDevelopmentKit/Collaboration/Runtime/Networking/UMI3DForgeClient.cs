@@ -500,6 +500,16 @@ namespace umi3d.cdk.collaboration
                             });
                         }
                         break;
+                    case UMI3DOperationKeys.TriggerEmoteRequest:
+                        {
+                            ulong emoteId = UMI3DNetworkingHelper.Read<ulong>(container);
+                            ulong sendingUserId = UMI3DNetworkingHelper.Read<ulong>(container);
+                            MainThreadManager.Run(() =>
+                            {
+                                UMI3DClientUserTracking.Instance.PlayEmoteOnOtherAvatar(emoteId, sendingUserId);
+                            });
+                        }
+                        break;
                     case UMI3DOperationKeys.GetLocalInfoRequest:
                         string key = UMI3DNetworkingHelper.Read<string>(container);
                         MainThreadManager.Run(() =>
