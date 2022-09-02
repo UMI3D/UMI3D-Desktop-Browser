@@ -1128,6 +1128,7 @@ MonoBehaviour:
   - {fileID: 590613461}
   - {fileID: 968847598}
   - {fileID: 1974967404}
+  playerRadius: 0.2
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
   maxNeckAngle: 50
   maxStepHeight: 0.2
@@ -2268,6 +2269,12 @@ MonoBehaviour:
   OnConnectionLost:
     m_PersistentCalls:
       m_Calls: []
+  OnRedirectionStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRedirectionAborted:
+    m_PersistentCalls:
+      m_Calls: []
   OnRedirection:
     m_PersistentCalls:
       m_Calls: []
@@ -3130,6 +3137,11 @@ PrefabInstance:
         type: 3}
       propertyPath: viewpointBonetype
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7079216685592033180, guid: d599db4b8e88c6246a10c7a44287b2d5,
+        type: 3}
+      propertyPath: <targetTrackingFPS>k__BackingField
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7449068796877125518, guid: d599db4b8e88c6246a10c7a44287b2d5,
         type: 3}
