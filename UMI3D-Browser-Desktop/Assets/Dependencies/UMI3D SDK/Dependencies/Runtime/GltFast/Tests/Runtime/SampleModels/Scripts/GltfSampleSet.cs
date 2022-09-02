@@ -79,16 +79,19 @@ public class GltfSampleSet : ScriptableObject {
 #endif
 
         Debug.LogFormat("Trying to load file list from {0}",uri);
-        var webRequest = UnityWebRequest.Get(uri);
-        yield return webRequest.SendWebRequest();
-        var lines = webRequest.downloadHandler.text.Split('\n');
-        var filteredLines = new List<string>();
-        foreach (var line in lines)
+        using (var webRequest = UnityWebRequest.Get(uri))
         {
-            if(!line.StartsWith("#") && !string.IsNullOrEmpty(line)) {
-                filteredLines.Add(line.TrimEnd('\r'));
+            yield return webRequest.SendWebRequest();
+            var lines = webRequest.downloadHandler.text.Split('\n');
+            var filteredLines = new List<string>();
+            foreach (var line in lines)
+            {
+                if (!line.StartsWith("#") && !string.IsNullOrEmpty(line))
+                {
+                    filteredLines.Add(line.TrimEnd('\r'));
+                }
             }
+            callback(filteredLines.ToArray());
         }
-        callback( filteredLines.ToArray() );
     }
 }

@@ -14,14 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d
+using System.Collections;
+using System.Collections.Generic;
+using umi3d.common;
+using UnityEngine;
+
+namespace umi3d.common.collaboration
 {
-    public static class UMI3DVersion
+    public class ForceLogoutDto : UMI3DDto
     {
-        public static string version => major + "." + minor + "." + status + "." + date;
-        public static readonly string major = "2";
-        public static readonly string minor = "5";
-        public static readonly string status = "b";
-        public static readonly string date = "220901";
+        /// <summary>
+        /// reason for force logout
+        /// </summary>
+        public string reason;
     }
 }
