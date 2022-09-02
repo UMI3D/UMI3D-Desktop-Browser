@@ -1,11 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:Template name="SliderElement" src="/Assets/Project/UI/UXML/CustomElement/SliderElement.uxml" />
-    <ui:Template name="loading-screen" src="/Assets/Project/UI/UXML/Environement/loading-screen.uxml" />
-    <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+    <ui:Template name="SliderElement" src="project://database/Assets/Project/UI/UXML/CustomElement/SliderElement.uxml?fileID=9197481963319205126&amp;guid=48ffd6c0f55004b47b32c213d0ecbbb6&amp;type=3#SliderElement" />
+    <ui:Template name="loading-screen" src="project://database/Assets/Project/UI/UXML/Environement/loading-screen.uxml?fileID=9197481963319205126&amp;guid=9823b8ad6d25bdb4c9dc02eb4510e94a&amp;type=3#loading-screen" />
+    <Style src="project://database/Assets/Project/UI/UXML/main-style.uss?fileID=7433441132597879392&amp;guid=94673d93e91baf148996a51e40b938da&amp;type=3#main-style" />
     <ui:VisualElement name="home-screen" style="min-width: 300px; min-height: 400px;">
         <ui:VisualElement style="flex-grow: 0; justify-content: flex-start; height: auto;">
             <ui:VisualElement name="url-center" style="align-items: stretch; justify-content: center; height: auto;">
-                <ui:VisualElement name="logo" style="height: 90px; background-image: url(&apos;/Assets/Project/UI/UI_connection/logo_page.png&apos;); -unity-background-scale-mode: scale-to-fit; margin-bottom: 15px; margin-top: 20px;" />
+                <ui:VisualElement name="logo" style="height: 90px; background-image: url(&apos;project://database/Assets/Project/UI/UI_connection/logo_page.png?fileID=21300000&amp;guid=6146758f2abfb8045bee11da154009f4&amp;type=3#logo_page&apos;); -unity-background-scale-mode: scale-to-fit; margin-bottom: 15px; margin-top: 20px;" />
             </ui:VisualElement>
             <ui:VisualElement name="saved-servers" style="flex-shrink: 1;">
                 <ui:Label text="Saved servers" class="white-txt medium-size-txt" style="margin-bottom: 15px;" />
@@ -15,8 +15,8 @@
         </ui:VisualElement>
         <ui:VisualElement name="VisualElement" style="height: auto; justify-content: flex-start; flex-direction: column; flex-grow: 0; align-items: stretch; flex-shrink: 0;">
             <ui:Button text="Connect to a new server" name="newConnection" class="white-btn white-icon-tint" style="background-color: rgba(93, 93, 93, 0); width: 100%; height: 28px; margin-left: 0; margin-right: auto; margin-top: 20px; margin-bottom: 8px; position: relative; bottom: auto; left: 0; flex-direction: column; justify-content: flex-start; align-items: stretch; -unity-text-align: middle-left; font-size: 15px;">
-                <ui:VisualElement name="icon-open" style="background-image: url(&apos;/Assets/Project/UI/UI_connection/icon_open_ENABLE.png&apos;); width: 25px; height: 25px; left: 174px; top: 0; flex-shrink: 0; overflow: visible; display: none;" />
-                <ui:VisualElement name="icon-close" style="background-image: url(&apos;/Assets/Project/UI/UI_connection/icon_close_ENABLE.png&apos;); width: 25px; height: 25px; left: 174px; flex-shrink: 0; overflow: visible; display: flex;" />
+                <ui:VisualElement name="icon-open" style="background-image: url(&apos;project://database/Assets/Project/UI/UI_connection/icon_open_ENABLE.png?fileID=21300000&amp;guid=eec5713344324ca4f8165cc567884334&amp;type=3#icon_open_ENABLE&apos;); width: 25px; height: 25px; left: 174px; top: 0; flex-shrink: 0; overflow: visible; display: none;" />
+                <ui:VisualElement name="icon-close" style="background-image: url(&apos;project://database/Assets/Project/UI/UI_connection/icon_close_ENABLE.png?fileID=21300000&amp;guid=afd69129c96289242a052ae90b2c7756&amp;type=3#icon_close_ENABLE&apos;); width: 25px; height: 25px; left: 174px; flex-shrink: 0; overflow: visible; display: flex;" />
             </ui:Button>
             <ui:VisualElement name="inputs-url-container" style="flex-direction: column; justify-content: space-between; height: 70px; display: flex; overflow: visible; visibility: visible; flex-shrink: 0;">
                 <ui:VisualElement style="flex-direction: row; width: 100%; display: flex; visibility: visible; flex-grow: 0; height: auto;">
@@ -37,7 +37,7 @@
             </ui:Button>
         </ui:VisualElement>
         <ui:VisualElement name="VisualElement" style="height: auto; justify-content: flex-start; flex-direction: column;" />
-        <ui:VisualElement name="lock" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center; display: flex; width: 100%; height: 100%; background-image: url(&apos;/Assets/Project/UI/UI_connection/background-middle.png&apos;);">
+        <ui:VisualElement name="lock" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center; width: 100%; height: 100%; background-image: url(&apos;project://database/Assets/Project/UI/UI_connection/background-middle.png?fileID=21300000&amp;guid=98c75ed71e6362e40beaae3e8ba145ef&amp;type=3#background-middle&apos;);">
             <ui:Instance template="loading-screen" name="lock-loading-screen" style="width: 100%; height: 100%;" />
         </ui:VisualElement>
     </ui:VisualElement>
