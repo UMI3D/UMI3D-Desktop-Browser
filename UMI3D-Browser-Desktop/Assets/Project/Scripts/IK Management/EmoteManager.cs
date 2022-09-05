@@ -396,11 +396,15 @@ namespace umi3dDesktopBrowser.emotes
             yield return new WaitWhile(() => avatarAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1); //wait for emote end of animation
             //? Possible to improve using a StateMachineBehaviour attached to the EmoteController & trigger events on OnStateExit on anim/OnStateEnter on AnyState
 
-            FpsNavigation.PlayerMoved.RemoveListener(currentInterruptionAction);
-            UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.RemoveListener(currentInterruptionAction);
-            currentInterruptionAction = null;
-            IsPlayingEmote = false;
-
+            
+            if (IsPlayingEmote)
+            {
+                FpsNavigation.PlayerMoved.RemoveListener(currentInterruptionAction);
+                UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.RemoveListener(currentInterruptionAction);
+                currentInterruptionAction = null;
+                IsPlayingEmote = false;
+            }
+            
             UnloadEmotes();
         }
 
@@ -410,11 +414,14 @@ namespace umi3dDesktopBrowser.emotes
         /// <param name="emote"></param>
         private void InterruptEmote(Emote emote)
         {
-            StopCoroutine(PlayEmoteAnimation(emote));
-            FpsNavigation.PlayerMoved.RemoveListener(currentInterruptionAction);
-            UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.RemoveListener(currentInterruptionAction);
-            currentInterruptionAction = null;
-            IsPlayingEmote = false;
+            if (IsPlayingEmote)
+            {
+                StopCoroutine(PlayEmoteAnimation(emote));
+                FpsNavigation.PlayerMoved.RemoveListener(currentInterruptionAction);
+                UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.RemoveListener(currentInterruptionAction);
+                currentInterruptionAction = null;
+                IsPlayingEmote = false;
+            }
             UnloadEmotes();
         }
 
