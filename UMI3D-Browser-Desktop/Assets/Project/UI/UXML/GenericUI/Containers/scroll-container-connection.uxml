@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+    <Style src="project://database/Assets/Project/UI/UXML/main-style.uss?fileID=7433441132597879392&amp;guid=94673d93e91baf148996a51e40b938da&amp;type=3#main-style" />
     <ui:VisualElement name="simpleUIScrollContainer" class="grey-border" style="padding-left: 75px; padding-right: 75px; border-top-width: 0; border-left-width: 1px; border-right-width: 1px;">
         <ui:VisualElement class="dark-grey2-bck" style="height: 100%;">
             <ui:Button text="Button" name="container-select-btn" class="medium-size-txt orange-text dark-grey1-bck" style="height: 45px; -unity-font-style: normal; -unity-text-align: middle-left; padding-left: 10px;" />

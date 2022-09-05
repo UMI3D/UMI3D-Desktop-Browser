@@ -5,6 +5,8 @@
 [Bb]uilds/
 [Ll]ogs/
 Assets/AssetStoreTools*
+UMI3D-Browser-Desktop/[Mm]emoryCaptures/
+UMI3D-Browser-Desktop/[Uu]serSettings/
 
 # Visual Studio cache directory
 .vs/
@@ -36,4 +38,4 @@ sysinfo.txt
 *.apk
 /UMI3D-Browser-Desktop/Assets/EXCLUDED.meta
 /UMI3D-Browser-Desktop/Assets/EXCLUDED
-/UMI3D-Browser-Desktop/Assets
+
