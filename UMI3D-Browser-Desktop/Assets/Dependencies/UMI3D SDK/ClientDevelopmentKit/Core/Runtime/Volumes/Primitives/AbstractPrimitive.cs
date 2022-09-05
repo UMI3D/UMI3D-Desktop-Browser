@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using UnityEngine;
+
 namespace umi3d.cdk.volumes
 {
     /// <summary>
@@ -27,6 +29,23 @@ namespace umi3d.cdk.volumes
             if (id == null)
                 throw new System.Exception("Id should have been set on dto reception !");
             return id.Value;
+        }
+
+        public Transform rootNode;
+
+        private ulong rootNodeId;
+
+        public ulong RootNodeId
+        {
+            get => rootNodeId;
+            set
+            {
+                if (rootNodeId != value)
+                {
+                    rootNodeId = value;
+                    rootNode = UMI3DEnvironmentLoader.GetNode(rootNodeId)?.transform;
+                }
+            }
         }
 
         public abstract void Delete();

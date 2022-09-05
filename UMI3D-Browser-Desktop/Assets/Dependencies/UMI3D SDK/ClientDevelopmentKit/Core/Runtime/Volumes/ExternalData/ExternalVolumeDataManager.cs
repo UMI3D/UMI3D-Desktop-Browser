@@ -85,7 +85,7 @@ namespace umi3d.cdk.volumes
                     parts = new List<GameObject>() { obj as GameObject }
                 };
 
-                Matrix4x4 m = dto.rootNodeToLocalMatrix;
+                Matrix4x4 m = UMI3DEnvironmentLoader.GetNode(dto.rootNodeId).transform.localToWorldMatrix;
                 foreach (Mesh mesh in cell.meshes)
                 {
                     mesh.vertices = mesh.vertices.ToList().ConvertAll(v => Vector3.Scale(v, new Vector3(-1, 1, -1))).ToArray(); //asimpl right handed coordinate system dirty fix
