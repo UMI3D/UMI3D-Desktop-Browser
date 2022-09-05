@@ -1068,20 +1068,16 @@ namespace umi3d.cdk
                 if (failCallback != null)
                 {
                     failCallback.Invoke(new Umi3dException(www.responseCode, $"failed to load {www.url} [{www.error}]"));
-                    UnityEngine.Debug.Log($"{www.url}");
                 }
                 else
                 {
                     UMI3DLogger.LogWarning(www.error, scope);
                     UMI3DLogger.LogWarning("Failed to load " + www.url, scope);
-                    
                 }
                 //}
-                www.Dispose();
                 yield break;
             }
             callback.Invoke();
-            www.Dispose();
         }
 
         #endregion
