@@ -11,24 +11,22 @@ public class CustomLoaderObj : LoaderObj
     {
         loadedText = null;
 #if UNITY_2018_3_OR_NEWER
-        using (UnityWebRequest uwr = UnityWebRequest.Get(url))
-        {
-            SetCertificate(uwr);
-            yield return uwr.SendWebRequest();
+        UnityWebRequest uwr = UnityWebRequest.Get(url);
+        SetCertificate(uwr);
+        yield return uwr.SendWebRequest();
 
-            if (uwr.isNetworkError || uwr.isHttpError)
+        if (uwr.isNetworkError || uwr.isHttpError)
+        {
+            if (notifyErrors)
             {
-                if (notifyErrors)
-                {
-                    //Debug.LogError(uwr.error);
-                }
-                objLoadingProgress.error = true;
+                //Debug.LogError(uwr.error);
             }
-            else
-            {
-                // Get downloaded asset bundle
-                loadedText = uwr.downloadHandler.text;
-            }
+            objLoadingProgress.error = true;
+        }
+        else
+        {
+            // Get downloaded asset bundle
+            loadedText = uwr.downloadHandler.text;
         }
 #else
             WWW www = new WWW(url);
