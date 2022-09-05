@@ -156,11 +156,31 @@ namespace umi3d.cdk.userCapture
             StartCoroutine(PlayEmote(animator, emoteToPlay));
         }
 
+        private const string IdleStateName = "Idle";
         public IEnumerator PlayEmote(Animator animator, UMI3DEmoteDto emote)
         {
+            animator.enabled = true;
+            animator.Update(0);
             animator.Play(emote.animationName);
             yield return new WaitWhile(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1);
-            animator.Play("Idle"); //todo find a cleaner way to go back to normal
+            animator.Play(IdleStateName);
+            animator.enabled = false;
+            animator.Update(0);
+        }
+
+        public void StopEmoteOnOtherAvatar(ulong emoteId, ulong userId)
+        {
+            var otherUserAvatar = embodimentDict[userId];
+            var animators = otherUserAvatar.GetComponentsInChildren<Animator>();
+            var animator = animators.Where(animator => animator.runtimeAnimatorController != null).FirstOrDefault();
+
+            if (animator == null || emoteConfig == null)
+                return;
+            var emoteToStop = emoteConfig.emotes.Find(x => x.id == emoteId);
+            StopCoroutine(PlayEmote(animator, emoteToStop));
+            animator.Play(IdleStateName);
+            animator.enabled = false;
+            animator.Update(0);
         }
 
         public class AvatarEvent : UnityEvent<ulong> { };

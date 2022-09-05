@@ -500,13 +500,17 @@ namespace umi3d.cdk.collaboration
                             });
                         }
                         break;
-                    case UMI3DOperationKeys.TriggerEmoteRequest:
+                    case UMI3DOperationKeys.EmoteRequest:
                         {
                             ulong emoteId = UMI3DNetworkingHelper.Read<ulong>(container);
+                            bool trigger = UMI3DNetworkingHelper.Read<bool>(container);
                             ulong sendingUserId = UMI3DNetworkingHelper.Read<ulong>(container);
                             MainThreadManager.Run(() =>
                             {
-                                UMI3DClientUserTracking.Instance.PlayEmoteOnOtherAvatar(emoteId, sendingUserId);
+                                if (trigger)
+                                    UMI3DClientUserTracking.Instance.PlayEmoteOnOtherAvatar(emoteId, sendingUserId);
+                                else
+                                    UMI3DClientUserTracking.Instance.StopEmoteOnOtherAvatar(emoteId, sendingUserId);
                             });
                         }
                         break;

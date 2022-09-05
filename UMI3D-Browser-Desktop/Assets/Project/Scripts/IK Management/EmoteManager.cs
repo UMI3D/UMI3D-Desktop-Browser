@@ -377,9 +377,10 @@ namespace umi3dDesktopBrowser.emotes
             UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.Invoke();
 
             // send the emote triggerring info to other browsers through the server
-            var emoteRequest = new TriggerEmoteRequest()
+            var emoteRequest = new EmoteRequest()
             {
-                emoteToTriggerId = emote.dto.id,
+                emoteId = emote.dto.id,
+                shouldTrigger = true,
                 sendingUserId = UMI3DClientServer.Instance.GetUserId()
             };
             UMI3DClientServer.SendData(emoteRequest, true);
@@ -395,8 +396,15 @@ namespace umi3dDesktopBrowser.emotes
 
             yield return new WaitWhile(() => avatarAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1); //wait for emote end of animation
             //? Possible to improve using a StateMachineBehaviour attached to the EmoteController & trigger events on OnStateExit on anim/OnStateEnter on AnyState
+            StopEmotePlayMode();
+        }
 
-            
+        /// <summary>
+        /// Stop the emote playing process.
+        /// </summary>
+        /// <param name="emote"></param>
+        private void StopEmotePlayMode()
+        {
             if (IsPlayingEmote)
             {
                 FpsNavigation.PlayerMoved.RemoveListener(currentInterruptionAction);
@@ -404,7 +412,6 @@ namespace umi3dDesktopBrowser.emotes
                 currentInterruptionAction = null;
                 IsPlayingEmote = false;
             }
-            
             UnloadEmotes();
         }
 
@@ -414,15 +421,16 @@ namespace umi3dDesktopBrowser.emotes
         /// <param name="emote"></param>
         private void InterruptEmote(Emote emote)
         {
-            if (IsPlayingEmote)
+            StopCoroutine(PlayEmoteAnimation(emote));
+            StopEmotePlayMode();
+            // send the emote interruption info to other browsers through the server
+            var emoteRequest = new EmoteRequest()
             {
-                StopCoroutine(PlayEmoteAnimation(emote));
-                FpsNavigation.PlayerMoved.RemoveListener(currentInterruptionAction);
-                UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.RemoveListener(currentInterruptionAction);
-                currentInterruptionAction = null;
-                IsPlayingEmote = false;
-            }
-            UnloadEmotes();
+                emoteId = emote.dto.id,
+                shouldTrigger = false,
+                sendingUserId = UMI3DClientServer.Instance.GetUserId()
+            };
+            UMI3DClientServer.SendData(emoteRequest, true);
         }
 
         #endregion Emote Playing
