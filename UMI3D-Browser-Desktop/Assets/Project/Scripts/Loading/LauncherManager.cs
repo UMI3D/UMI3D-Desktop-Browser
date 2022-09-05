@@ -15,16 +15,12 @@ limitations under the License.
 */
 using BrowserDesktop.Controller;
 using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using umi3d.baseBrowser.connection;
-using umi3d.baseBrowser.preferences;
 using umi3dDesktopBrowser.ui.viewController;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.Rendering.DebugUI;
 
 public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
 {
