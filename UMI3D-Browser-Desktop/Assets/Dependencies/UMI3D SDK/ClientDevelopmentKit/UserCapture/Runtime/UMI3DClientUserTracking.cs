@@ -152,6 +152,9 @@ namespace umi3d.cdk.userCapture
         /// </summary>
         public bool IsEmotePlaying { get; protected set; } = false;
 
+        /// <summary>
+        /// Emote configuration on the server, with al available emotes for the user.
+        /// </summary>
         private UMI3DEmotesConfigDto emoteConfig;
 
         public void PlayEmoteOnOtherAvatar(ulong emoteId, ulong userId)
@@ -174,8 +177,8 @@ namespace umi3d.cdk.userCapture
             animator.Play(emote.animationName);
             yield return new WaitWhile(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1);
             animator.Play(IdleStateName);
-            animator.enabled = false;
             animator.Update(0);
+            animator.enabled = false;
         }
 
         public void StopEmoteOnOtherAvatar(ulong emoteId, ulong userId)
@@ -189,8 +192,8 @@ namespace umi3d.cdk.userCapture
             var emoteToStop = emoteConfig.emotes.Find(x => x.id == emoteId);
             StopCoroutine(PlayEmote(animator, emoteToStop));
             animator.Play(IdleStateName);
-            animator.enabled = false;
             animator.Update(0);
+            animator.enabled = false;
         }
 
         public class AvatarEvent : UnityEvent<ulong> { };
@@ -232,7 +235,7 @@ namespace umi3d.cdk.userCapture
         {
             base.Awake();
             skeletonParsedEvent = new UnityEvent();
-            EmotesLoadedEvent.AddListener((UMI3DEmotesConfigDto dto) => { emoteConfig = dto; });
+            
         }
 
         protected virtual void Start()
@@ -243,6 +246,7 @@ namespace umi3d.cdk.userCapture
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => StartCoroutine(DispatchCamera()));
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => { if (sendTracking) StartCoroutine(DispatchTracking()); });
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => trackingReception = true);
+            EmotesLoadedEvent.AddListener((UMI3DEmotesConfigDto dto) => { emoteConfig = dto; });
             EmotePlayedSelfEvent.AddListener(delegate 
             { 
                 IgnoreBones = true; 
@@ -335,7 +339,7 @@ namespace umi3d.cdk.userCapture
                 Vector3 position = UMI3DNavigation.Instance.transform.localPosition;
                 Quaternion rotation = UMI3DNavigation.Instance.transform.localRotation;
 
-                if (!HasPlayerMoved(position, rotation, bonesList) && !forceNotNullDto && !IsEmotePlaying)
+                if (!HasPlayerMoved(position, rotation, bonesList) && !forceNotNullDto)
                 {
                     LastFrameDto = null;
                 }
