@@ -157,6 +157,12 @@ namespace umi3d.cdk.userCapture
         /// </summary>
         private UMI3DEmotesConfigDto emoteConfig;
 
+        /// <summary>
+        /// Starts an emote on another user's avatar in the scene.
+        /// </summary>
+        /// <param name="emoteId">Emote to start UMI3D Id.</param>
+        /// <param name="userId">Id of the user to start the emote for.</param>
+        /// Don't use this for your own avatar's emotes.
         public void PlayEmoteOnOtherAvatar(ulong emoteId, ulong userId)
         {
             var otherUserAvatar = embodimentDict[userId];
@@ -170,17 +176,34 @@ namespace umi3d.cdk.userCapture
         }
 
         private const string IdleStateName = "Idle";
-        public IEnumerator PlayEmote(Animator animator, UMI3DEmoteDto emote)
+        /// <summary>
+        /// Plays an emote on an animator.
+        /// </summary>
+        /// <param name="animator">Animator to play the emote on.</param>
+        /// <param name="emote">Emote to play.</param>
+        /// <returns></returns>
+        protected IEnumerator PlayEmote(Animator animator, UMI3DEmoteDto emote)
         {
             animator.enabled = true;
             animator.Update(0);
             animator.Play(emote.animationName);
-            yield return new WaitWhile(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1);
+            yield return new WaitWhile(() =>
+            {
+                if (animator == null) // heppens when a user leaves the scene when playing an emote
+                    return false;
+                return animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1;
+            });
             animator.Play(IdleStateName);
             animator.Update(0);
             animator.enabled = false;
         }
 
+        /// <summary>
+        /// Stops an emote on another user's avatar in the scene.
+        /// </summary>
+        /// <param name="emoteId">Emote to stop UMI3D Id.</param>
+        /// <param name="userId">Id of the user to stop the emote for.</param>
+        /// Don't use this for your own avatar's emotes.
         public void StopEmoteOnOtherAvatar(ulong emoteId, ulong userId)
         {
             var otherUserAvatar = embodimentDict[userId];
@@ -226,6 +249,7 @@ namespace umi3d.cdk.userCapture
         /// <summary>
         /// If true, disable the sending of bones rotations in frame dtos.
         /// </summary>
+        /// Frame dtos withouth bones are much lighter.
         public bool IgnoreBones { get; protected set; } = false;
 
         #endregion
