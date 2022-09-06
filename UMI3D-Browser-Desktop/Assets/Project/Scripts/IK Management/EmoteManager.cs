@@ -43,7 +43,7 @@ namespace umi3dDesktopBrowser.emotes
         public RuntimeAnimatorController emoteAnimatorController;
 
         /// <summary>
-        /// Cache to keep previous animator controller during emote animationMf
+        /// Cache to keep previous animator controller during emote animation
         /// </summary>
         private RuntimeAnimatorController cachedAnimatorController;
 
@@ -68,9 +68,9 @@ namespace umi3dDesktopBrowser.emotes
         public class Emote
         {
             /// <summary>
-            /// Emote's name
+            /// Emote's label
             /// </summary>
-            public string name;
+            public string Label => dto.label;
 
             /// <summary>
             /// Icon of the emote in the UI
@@ -78,19 +78,14 @@ namespace umi3dDesktopBrowser.emotes
             public Sprite icon;
 
             /// <summary>
-            /// Animation of the emote
-            /// </summary>
-            public AnimationClip anim;
-
-            /// <summary>
             /// Should the emote be available or not
             /// </summary>
             public bool available;
 
             /// <summary>
-            /// Emote id
+            /// Emote order in UI
             /// </summary>
-            public int id;
+            public int uiOrder;
 
             /// <summary>
             /// Emote dto
@@ -118,29 +113,18 @@ namespace umi3dDesktopBrowser.emotes
         /// True when a bundle with emotes has been loaded
         /// </summary>
         [HideInInspector]
-        public bool hasReceivedEmotes = false;
+        private bool hasReceivedEmotes = false;
 
         #endregion EmotesConfigManagement
 
-        #region EmotePlayingManagement
-
-        /// <summary>
-        /// True when an emote is currently playing
-        /// </summary>
-        [HideInInspector]
-        public bool IsPlayingEmote = false;
-
-        /// <summary>
-        /// Triggered when an emote starts playing
-        /// </summary>
-        public static UnityEvent PlayingEmote = new UnityEvent();
+        #region UIEmoteManagement
 
         /// <summary>
         /// Link between buttons and emotes indexing
         /// </summary>
         private Dictionary<Button_E, int> buttonTriggerEmotesMapping;
 
-        #endregion EmotePlayingManagement
+        #endregion UIEmoteManagement
 
         #endregion Fields
 
@@ -172,7 +156,11 @@ namespace umi3dDesktopBrowser.emotes
                 avatarAnimator = GetComponentInChildren<Animator>();
                 StartCoroutine(GetEmotes());
             });
-            UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(() => StopAllCoroutines());
+            UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(() =>
+            {
+                StopAllCoroutines();
+                ResetEmoteSystem();
+            });
         }
 
         /// <summary>
@@ -183,9 +171,10 @@ namespace umi3dDesktopBrowser.emotes
         {
             if (!hasReceivedEmotes)
                 return;
-            var emote = Emotes.Find(x => x.name == dto.name);
+            var emote = Emotes.Find(x => x.dto.stateName == dto.stateName);
 
             emote.available = dto.available;
+            emote.dto = dto;
 
             UpdateEmoteWindow(emote);
         }
@@ -194,13 +183,13 @@ namespace umi3dDesktopBrowser.emotes
         /// Waits bundle loading attached to avatar, retreives emotes and their icon
         /// </summary>
         /// <returns></returns>
-        private IEnumerator GetEmotes() //wait for bundle loading
+        private IEnumerator GetEmotes() 
         {
             var id = UMI3DClientServer.Instance.GetUserId();
             var avatar = UMI3DClientUserTracking.Instance.embodimentDict[id];
 
             while (avatar.transform.childCount == 0
-                || (avatar.transform.childCount == 1 && avatar.transform.GetChild(0).transform.childCount == 0))
+                || (avatar.transform.childCount == 1 && avatar.transform.GetChild(0).transform.childCount == 0)) //wait for bundle loading
             {
                 yield return null;
             }
@@ -215,13 +204,9 @@ namespace umi3dDesktopBrowser.emotes
                     yield break;
                 }
 
-                var importedEmoteControllerAnims = emoteFromBundleAnimator.runtimeAnimatorController.animationClips.Where(e => !e.name.Contains("Idle"));
-
                 var i = 0;
-                foreach (var anim in importedEmoteControllerAnims)
+                foreach (var emoteRefInConfig in emoteConfigDto.emotes)
                 {
-                    var emoteRefInConfig = emoteConfigDto.emotes.Find(x => anim.name == x.name);
-
                     if (emoteRefInConfig != null)
                     {
                         Sprite icon = default;
@@ -249,11 +234,9 @@ namespace umi3dDesktopBrowser.emotes
 
                         var emote = new Emote()
                         {
-                            name = emoteRefInConfig.name,
                             available = emoteConfigDto.allAvailableByDefault ? true : emoteRefInConfig.available,
                             icon = icon,
-                            anim = anim,
-                            id = i,
+                            uiOrder = i,
                             dto = emoteRefInConfig
                         };
                         Emotes.Add(emote);
@@ -332,12 +315,28 @@ namespace umi3dDesktopBrowser.emotes
         }
 
         /// <summary>
-        /// Definitively disable the emote system for the session
+        /// Disable the emote system
         /// </summary>
         public void DisableEmoteSystem()
         {
-            BottomBar_E.Instance.Emotes.Reset();
             BottomBar_E.Instance.Emotes.Hide();
+        }
+
+        /// <summary>
+        /// Reset all variables and disable the system
+        /// </summary>
+        public void ResetEmoteSystem()
+        {
+            if (hasReceivedEmotes)
+            {
+                EmoteWindow_E.Instance.DestroyButtons();
+                BottomBar_E.Instance.Emotes.Hide();
+                Emotes.Clear();
+                buttonTriggerEmotesMapping.Clear();
+                emoteConfigDto = null;
+                emoteAnimatorController = null;
+                hasReceivedEmotes = false;
+            }
         }
 
         #endregion UI-related
@@ -363,6 +362,8 @@ namespace umi3dDesktopBrowser.emotes
             avatarAnimator.Update(0);
         }
 
+        private UnityAction currentInterruptionAction;
+
         /// <summary>
         /// Play the emote
         /// </summary>
@@ -370,24 +371,44 @@ namespace umi3dDesktopBrowser.emotes
         /// <returns></returns>
         public IEnumerator PlayEmoteAnimation(Emote emote)
         {
-            IsPlayingEmote = true;
-            PlayingEmote.Invoke();
+            UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.Invoke();
+            // send the emote triggerring info to other browsers through the server
+            var emoteRequest = new EmoteRequest()
+            {
+                emoteId = emote.dto.id,
+                shouldTrigger = true,
+                sendingUserId = UMI3DClientServer.Instance.GetUserId()
+            };
+            UMI3DClientServer.SendData(emoteRequest, true);
 
             LoadEmotes();
-            avatarAnimator.SetTrigger($"trigger{emote.id}");
 
-            var interruptionAction = new UnityAction(delegate { InterruptEmote(emote); });
-            FpsNavigation.PlayerMoved.AddListener(interruptionAction);
-            PlayingEmote.AddListener(interruptionAction); //used if another emote is played in the meanwhile
+
+            currentInterruptionAction = new UnityAction(delegate { InterruptEmote(emote); });
+            FpsNavigation.PlayerMoved.AddListener(currentInterruptionAction);
+
+            avatarAnimator.Play(emote.dto.stateName);
+            UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.AddListener(currentInterruptionAction); //used if another emote is played in the meanwhile
 
             yield return new WaitWhile(() => avatarAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1); //wait for emote end of animation
             //? Possible to improve using a StateMachineBehaviour attached to the EmoteController & trigger events on OnStateExit on anim/OnStateEnter on AnyState
+            StopEmotePlayMode();
+        }
 
-            FpsNavigation.PlayerMoved.RemoveListener(interruptionAction);
-            PlayingEmote.RemoveListener(interruptionAction);
-            IsPlayingEmote = false;
-
+        /// <summary>
+        /// Stop the emote playing process.
+        /// </summary>
+        /// <param name="emote"></param>
+        private void StopEmotePlayMode()
+        {
+            if (UMI3DClientUserTracking.Instance.IsEmotePlaying)
+            {
+                FpsNavigation.PlayerMoved.RemoveListener(currentInterruptionAction);
+                UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.RemoveListener(currentInterruptionAction);
+                currentInterruptionAction = null;
+            }
             UnloadEmotes();
+            UMI3DClientUserTracking.Instance.EmoteEndedSelfEvent.Invoke();
         }
 
         /// <summary>
@@ -397,8 +418,15 @@ namespace umi3dDesktopBrowser.emotes
         private void InterruptEmote(Emote emote)
         {
             StopCoroutine(PlayEmoteAnimation(emote));
-            IsPlayingEmote = false;
-            UnloadEmotes();
+            StopEmotePlayMode();
+            // send the emote interruption info to other browsers through the server
+            var emoteRequest = new EmoteRequest()
+            {
+                emoteId = emote.dto.id,
+                shouldTrigger = false,
+                sendingUserId = UMI3DClientServer.Instance.GetUserId()
+            };
+            UMI3DClientServer.SendData(emoteRequest, true);
         }
 
         #endregion Emote Playing
