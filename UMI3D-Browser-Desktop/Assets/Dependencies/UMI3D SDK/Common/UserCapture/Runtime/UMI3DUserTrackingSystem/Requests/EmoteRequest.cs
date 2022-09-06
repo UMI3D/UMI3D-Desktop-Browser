@@ -22,7 +22,7 @@ namespace umi3d.common.userCapture
     public class EmoteRequest : AbstractBrowserRequestDto
     {
         /// <summary>
-        /// UMI3D id of the emote to trigger.
+        /// UMI3D id of the emote to trigger/interrupt.
         /// </summary>
         public ulong emoteId;
         /// <summary>
@@ -48,7 +48,6 @@ namespace umi3d.common.userCapture
                 + UMI3DNetworkingHelper.Write(emoteId)
                 + UMI3DNetworkingHelper.Write(shouldTrigger)
                 + UMI3DNetworkingHelper.Write(sendingUserId);
-
         }
     }
 }

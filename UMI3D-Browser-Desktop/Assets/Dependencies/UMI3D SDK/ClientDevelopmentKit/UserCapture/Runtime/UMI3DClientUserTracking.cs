@@ -65,7 +65,7 @@ namespace umi3d.cdk.userCapture
         /// <summary>
         /// Frequency indicating the number tracked frames send to the server per seconds.
         /// </summary>
-        [field:SerializeField, Tooltip(" Frequency indicating the number tracked frames send to the server per seconds.")]
+        [field: SerializeField, Tooltip(" Frequency indicating the number tracked frames send to the server per seconds.")]
         public float targetTrackingFPS { get; protected set; } = 15;
 
         /// <summary>
@@ -167,12 +167,12 @@ namespace umi3d.cdk.userCapture
         {
             var otherUserAvatar = embodimentDict[userId];
             var animators = otherUserAvatar.GetComponentsInChildren<Animator>();
-            var animator = animators.Where(animator => animator.runtimeAnimatorController != null).FirstOrDefault();
+            var emoteAnimator = animators.Where(animator => animator.runtimeAnimatorController != null).FirstOrDefault();
 
-            if (animator == null || emoteConfig == null)
+            if (emoteAnimator == null || emoteConfig == null)
                 return;
             var emoteToPlay = emoteConfig.emotes.Find(x => x.id == emoteId);
-            StartCoroutine(PlayEmote(animator, emoteToPlay));
+            StartCoroutine(PlayEmote(emoteAnimator, emoteToPlay));
         }
 
         private const string IdleStateName = "Idle";
@@ -209,15 +209,15 @@ namespace umi3d.cdk.userCapture
         {
             var otherUserAvatar = embodimentDict[userId];
             var animators = otherUserAvatar.GetComponentsInChildren<Animator>();
-            var animator = animators.Where(animator => animator.runtimeAnimatorController != null).FirstOrDefault();
+            var emoteAnimator = animators.Where(animator => animator.runtimeAnimatorController != null).FirstOrDefault();
 
-            if (animator == null || emoteConfig == null)
+            if (emoteAnimator == null || emoteConfig == null)
                 return;
             var emoteToStop = emoteConfig.emotes.Find(x => x.id == emoteId);
-            StopCoroutine(PlayEmote(animator, emoteToStop));
-            animator.Play(IdleStateName);
-            animator.Update(0);
-            animator.enabled = false;
+            StopCoroutine(PlayEmote(emoteAnimator, emoteToStop));
+            emoteAnimator.Play(IdleStateName);
+            emoteAnimator.Update(0);
+            emoteAnimator.enabled = false;
         }
 
         public class AvatarEvent : UnityEvent<ulong> { };
@@ -260,7 +260,7 @@ namespace umi3d.cdk.userCapture
         {
             base.Awake();
             skeletonParsedEvent = new UnityEvent();
-            
+
         }
 
         protected virtual void Start()
@@ -272,14 +272,14 @@ namespace umi3d.cdk.userCapture
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => { if (sendTracking) StartCoroutine(DispatchTracking()); });
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => trackingReception = true);
             EmotesLoadedEvent.AddListener((UMI3DEmotesConfigDto dto) => { emoteConfig = dto; });
-            EmotePlayedSelfEvent.AddListener(delegate 
-            { 
-                IgnoreBones = true; 
+            EmotePlayedSelfEvent.AddListener(delegate
+            {
+                IgnoreBones = true;
                 IsEmotePlaying = true;
             });
-            EmoteEndedSelfEvent.AddListener(delegate 
-            { 
-                IgnoreBones = false; 
+            EmoteEndedSelfEvent.AddListener(delegate
+            {
+                IgnoreBones = false;
                 IsEmotePlaying = false;
             });
         }
@@ -358,7 +358,7 @@ namespace umi3d.cdk.userCapture
                         }
                     }
                 }
-                
+
 
 
                 Vector3 position = UMI3DNavigation.Instance.transform.localPosition;
@@ -479,7 +479,8 @@ namespace umi3d.cdk.userCapture
             if (newFPSTarget > 0)
             {
                 targetTrackingFPS = newFPSTarget;
-            } else
+            }
+            else
             {
                 UMI3DLogger.LogError("Tracking frame Fps must be greater than 0.", DebugScope.CDK);
             }

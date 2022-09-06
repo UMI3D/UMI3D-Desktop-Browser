@@ -177,7 +177,7 @@ namespace umi3d.common.collaboration
                     var conf = new UMI3DEmotesConfigDto();
                     result = default(T);
                     readable = UMI3DNetworkingHelper.TryRead<bool>(container, out conf.allAvailableByDefault);
-                    readable = UMI3DNetworkingHelper.TryRead<string>(container, out conf.defaultStateName);
+                    readable &= UMI3DNetworkingHelper.TryRead<string>(container, out conf.defaultStateName);
 
                     if (readable)
                     {
