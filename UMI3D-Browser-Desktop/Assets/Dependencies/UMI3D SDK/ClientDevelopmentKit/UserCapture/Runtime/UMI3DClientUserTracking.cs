@@ -186,13 +186,14 @@ namespace umi3d.cdk.userCapture
         {
             animator.enabled = true;
             animator.Update(0);
-            animator.Play(emote.animationName);
+            animator.Play(emote.stateName);
             yield return new WaitWhile(() =>
             {
-                if (animator == null) // heppens when a user leaves the scene when playing an emote
-                    return false;
+                if (animator == null) return false;  // heppens when a user leaves the scene when playing an emote
                 return animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1;
             });
+            if (animator == null) // heppens when a user leaves the scene when playing an emote
+                yield break;
             animator.Play(IdleStateName);
             animator.Update(0);
             animator.enabled = false;

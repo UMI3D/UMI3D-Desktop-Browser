@@ -68,9 +68,9 @@ namespace umi3dDesktopBrowser.emotes
         public class Emote
         {
             /// <summary>
-            /// Emote's name
+            /// Emote's label
             /// </summary>
-            public string name;
+            public string Label => dto.label;
 
             /// <summary>
             /// Icon of the emote in the UI
@@ -78,19 +78,14 @@ namespace umi3dDesktopBrowser.emotes
             public Sprite icon;
 
             /// <summary>
-            /// Animation of the emote
-            /// </summary>
-            public AnimationClip anim;
-
-            /// <summary>
             /// Should the emote be available or not
             /// </summary>
             public bool available;
 
             /// <summary>
-            /// Emote id
+            /// Emote order in UI
             /// </summary>
-            public int id;
+            public int uiOrder;
 
             /// <summary>
             /// Emote dto
@@ -172,9 +167,10 @@ namespace umi3dDesktopBrowser.emotes
         {
             if (!hasReceivedEmotes)
                 return;
-            var emote = Emotes.Find(x => x.name == dto.animationName);
+            var emote = Emotes.Find(x => x.dto.stateName == dto.stateName);
 
             emote.available = dto.available;
+            emote.dto = dto;
 
             UpdateEmoteWindow(emote);
         }
@@ -204,13 +200,9 @@ namespace umi3dDesktopBrowser.emotes
                     yield break;
                 }
 
-                var importedEmoteControllerAnims = emoteFromBundleAnimator.runtimeAnimatorController.animationClips.Where(e => !e.name.Contains("Idle"));
-
                 var i = 0;
-                foreach (var anim in importedEmoteControllerAnims)
+                foreach (var emoteRefInConfig in emoteConfigDto.emotes)
                 {
-                    var emoteRefInConfig = emoteConfigDto.emotes.Find(x => anim.name == x.animationName);
-
                     if (emoteRefInConfig != null)
                     {
                         Sprite icon = default;
@@ -238,11 +230,9 @@ namespace umi3dDesktopBrowser.emotes
 
                         var emote = new Emote()
                         {
-                            name = emoteRefInConfig.animationName,
                             available = emoteConfigDto.allAvailableByDefault ? true : emoteRefInConfig.available,
                             icon = icon,
-                            anim = anim,
-                            id = i,
+                            uiOrder = i,
                             dto = emoteRefInConfig
                         };
                         Emotes.Add(emote);
@@ -377,7 +367,7 @@ namespace umi3dDesktopBrowser.emotes
             currentInterruptionAction = new UnityAction(delegate { InterruptEmote(emote); });
             FpsNavigation.PlayerMoved.AddListener(currentInterruptionAction);
 
-            avatarAnimator.Play(emote.dto.animationName);
+            avatarAnimator.Play(emote.dto.stateName);
             UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.AddListener(currentInterruptionAction); //used if another emote is played in the meanwhile
 
             yield return new WaitWhile(() => avatarAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1); //wait for emote end of animation

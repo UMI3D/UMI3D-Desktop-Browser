@@ -177,6 +177,7 @@ namespace umi3d.common.collaboration
                     var conf = new UMI3DEmotesConfigDto();
                     result = default(T);
                     readable = UMI3DNetworkingHelper.TryRead<bool>(container, out conf.allAvailableByDefault);
+                    readable = UMI3DNetworkingHelper.TryRead<string>(container, out conf.defaultStateName);
 
                     if (readable)
                     {
@@ -203,7 +204,7 @@ namespace umi3d.common.collaboration
 
                     readable = UMI3DNetworkingHelper.TryRead<ulong>(container, out e.id);
                     readable &= UMI3DNetworkingHelper.TryRead<string>(container, out e.label);
-                    readable &= UMI3DNetworkingHelper.TryRead<string>(container, out e.animationName);
+                    readable &= UMI3DNetworkingHelper.TryRead<string>(container, out e.stateName);
                     readable &= UMI3DNetworkingHelper.TryRead<bool>(container, out e.available);
                     readable &= UMI3DNetworkingHelper.TryRead<FileDto>(container, out e.iconResource);
 
