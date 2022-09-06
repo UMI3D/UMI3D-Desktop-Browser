@@ -43,7 +43,7 @@ namespace umi3dDesktopBrowser.emotes
         public RuntimeAnimatorController emoteAnimatorController;
 
         /// <summary>
-        /// Cache to keep previous animator controller during emote animationMf
+        /// Cache to keep previous animator controller during emote animation
         /// </summary>
         private RuntimeAnimatorController cachedAnimatorController;
 
@@ -113,7 +113,7 @@ namespace umi3dDesktopBrowser.emotes
         /// True when a bundle with emotes has been loaded
         /// </summary>
         [HideInInspector]
-        public bool hasReceivedEmotes = false;
+        private bool hasReceivedEmotes = false;
 
         #endregion EmotesConfigManagement
 
@@ -156,7 +156,12 @@ namespace umi3dDesktopBrowser.emotes
                 avatarAnimator = GetComponentInChildren<Animator>();
                 StartCoroutine(GetEmotes());
             });
-            UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(() => StopAllCoroutines());
+            UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(() =>
+            {
+                StopAllCoroutines();
+                ResetEmoteSystem();
+                
+            });
         }
 
         /// <summary>
@@ -179,13 +184,13 @@ namespace umi3dDesktopBrowser.emotes
         /// Waits bundle loading attached to avatar, retreives emotes and their icon
         /// </summary>
         /// <returns></returns>
-        private IEnumerator GetEmotes() //wait for bundle loading
+        private IEnumerator GetEmotes() 
         {
             var id = UMI3DClientServer.Instance.GetUserId();
             var avatar = UMI3DClientUserTracking.Instance.embodimentDict[id];
 
             while (avatar.transform.childCount == 0
-                || (avatar.transform.childCount == 1 && avatar.transform.GetChild(0).transform.childCount == 0))
+                || (avatar.transform.childCount == 1 && avatar.transform.GetChild(0).transform.childCount == 0)) //wait for bundle loading
             {
                 yield return null;
             }
@@ -311,12 +316,26 @@ namespace umi3dDesktopBrowser.emotes
         }
 
         /// <summary>
-        /// Definitively disable the emote system for the session
+        /// Disable the emote system
         /// </summary>
         public void DisableEmoteSystem()
         {
             BottomBar_E.Instance.Emotes.Reset();
             BottomBar_E.Instance.Emotes.Hide();
+        }
+
+        /// <summary>
+        /// Reset all variables and disable the system
+        /// </summary>
+        public void ResetEmoteSystem()
+        {
+            Emotes.Clear();
+            buttonTriggerEmotesMapping.Clear();
+            emoteConfigDto = null;
+            emoteAnimatorController = null;
+            BottomBar_E.Instance.Emotes.Reset();
+            BottomBar_E.Instance.Emotes.Hide();
+            hasReceivedEmotes = false;
         }
 
         #endregion UI-related
