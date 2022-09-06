@@ -122,25 +122,14 @@ namespace umi3dDesktopBrowser.emotes
 
         #endregion EmotesConfigManagement
 
-        #region EmotePlayingManagement
-
-        /// <summary>
-        /// True when an emote is currently playing
-        /// </summary>
-        [HideInInspector]
-        public bool IsPlayingEmote = false;
-
-        /// <summary>
-        /// Triggered when an emote starts playing
-        /// </summary>
-        public static UnityEvent PlayingEmote = new UnityEvent();
+        #region UIEmoteManagement
 
         /// <summary>
         /// Link between buttons and emotes indexing
         /// </summary>
         private Dictionary<Button_E, int> buttonTriggerEmotesMapping;
 
-        #endregion EmotePlayingManagement
+        #endregion UIEmoteManagement
 
         #endregion Fields
 
@@ -372,10 +361,7 @@ namespace umi3dDesktopBrowser.emotes
         /// <returns></returns>
         public IEnumerator PlayEmoteAnimation(Emote emote)
         {
-            IsPlayingEmote = true;
-            PlayingEmote.Invoke();
             UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.Invoke();
-
             // send the emote triggerring info to other browsers through the server
             var emoteRequest = new EmoteRequest()
             {
@@ -405,14 +391,14 @@ namespace umi3dDesktopBrowser.emotes
         /// <param name="emote"></param>
         private void StopEmotePlayMode()
         {
-            if (IsPlayingEmote)
+            if (UMI3DClientUserTracking.Instance.IsEmotePlaying)
             {
                 FpsNavigation.PlayerMoved.RemoveListener(currentInterruptionAction);
                 UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.RemoveListener(currentInterruptionAction);
                 currentInterruptionAction = null;
-                IsPlayingEmote = false;
             }
             UnloadEmotes();
+            UMI3DClientUserTracking.Instance.EmoteEndedSelfEvent.Invoke();
         }
 
         /// <summary>

@@ -142,8 +142,18 @@ namespace umi3d.cdk.userCapture
         /// Trigered when an emote is played by the user
         /// </summary>
         public UnityEvent EmotePlayedSelfEvent = new UnityEvent();
+        /// <summary>
+        /// Trigered when an emote is finished to be played by the user
+        /// </summary>
+        public UnityEvent EmoteEndedSelfEvent = new UnityEvent();
+
+        /// <summary>
+        /// True when an emote is currently playing
+        /// </summary>
+        public bool IsEmotePlaying { get; protected set; } = false;
 
         private UMI3DEmotesConfigDto emoteConfig;
+
         public void PlayEmoteOnOtherAvatar(ulong emoteId, ulong userId)
         {
             var otherUserAvatar = embodimentDict[userId];
@@ -210,6 +220,10 @@ namespace umi3d.cdk.userCapture
         /// Store last rotations for every bone.
         /// </summary>
         private Dictionary<uint, Quaternion> lastBoneRotations = new Dictionary<uint, Quaternion>();
+        /// <summary>
+        /// If true, disable the sending of bones rotations in frame dtos.
+        /// </summary>
+        public bool IgnoreBones { get; protected set; } = false;
 
         #endregion
 
@@ -229,6 +243,16 @@ namespace umi3d.cdk.userCapture
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => StartCoroutine(DispatchCamera()));
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => { if (sendTracking) StartCoroutine(DispatchTracking()); });
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => trackingReception = true);
+            EmotePlayedSelfEvent.AddListener(delegate 
+            { 
+                IgnoreBones = true; 
+                IsEmotePlaying = true;
+            });
+            EmoteEndedSelfEvent.AddListener(delegate 
+            { 
+                IgnoreBones = false; 
+                IsEmotePlaying = false;
+            });
         }
 
         /// <summary>
@@ -293,20 +317,25 @@ namespace umi3d.cdk.userCapture
             if (UMI3DEnvironmentLoader.Exists)
             {
                 var bonesList = new List<BoneDto>();
-                foreach (UMI3DClientUserTrackingBone bone in UMI3DClientUserTrackingBone.instances.Values)
+                if (!IgnoreBones)
                 {
-                    if (streamedBonetypes.Contains(bone.boneType))
+                    foreach (UMI3DClientUserTrackingBone bone in UMI3DClientUserTrackingBone.instances.Values)
                     {
-                        BoneDto dto = bone.ToDto();
-                        if (dto != null)
-                            bonesList.Add(dto);
+                        if (streamedBonetypes.Contains(bone.boneType))
+                        {
+                            BoneDto dto = bone.ToDto();
+                            if (dto != null)
+                                bonesList.Add(dto);
+                        }
                     }
                 }
+                
+
 
                 Vector3 position = UMI3DNavigation.Instance.transform.localPosition;
                 Quaternion rotation = UMI3DNavigation.Instance.transform.localRotation;
 
-                if (!HasPlayerMoved(position, rotation, bonesList) && !forceNotNullDto)
+                if (!HasPlayerMoved(position, rotation, bonesList) && !forceNotNullDto && !IsEmotePlaying)
                 {
                     LastFrameDto = null;
                 }
