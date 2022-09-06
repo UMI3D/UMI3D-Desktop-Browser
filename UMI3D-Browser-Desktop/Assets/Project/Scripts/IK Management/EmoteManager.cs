@@ -160,7 +160,6 @@ namespace umi3dDesktopBrowser.emotes
             {
                 StopAllCoroutines();
                 ResetEmoteSystem();
-                
             });
         }
 
@@ -320,7 +319,6 @@ namespace umi3dDesktopBrowser.emotes
         /// </summary>
         public void DisableEmoteSystem()
         {
-            BottomBar_E.Instance.Emotes.Reset();
             BottomBar_E.Instance.Emotes.Hide();
         }
 
@@ -329,13 +327,16 @@ namespace umi3dDesktopBrowser.emotes
         /// </summary>
         public void ResetEmoteSystem()
         {
-            Emotes.Clear();
-            buttonTriggerEmotesMapping.Clear();
-            emoteConfigDto = null;
-            emoteAnimatorController = null;
-            BottomBar_E.Instance.Emotes.Reset();
-            BottomBar_E.Instance.Emotes.Hide();
-            hasReceivedEmotes = false;
+            if (hasReceivedEmotes)
+            {
+                EmoteWindow_E.Instance.DestroyButtons();
+                BottomBar_E.Instance.Emotes.Hide();
+                Emotes.Clear();
+                buttonTriggerEmotesMapping.Clear();
+                emoteConfigDto = null;
+                emoteAnimatorController = null;
+                hasReceivedEmotes = false;
+            }
         }
 
         #endregion UI-related
