@@ -70,8 +70,6 @@ namespace umi3d.cdk.volumes
         {
             Matrix4x4 localToWorldMatrix = UMI3DEnvironmentLoader.GetNode(dto.rootNodeId).transform.localToWorldMatrix;
 
-            Debug.Log("ROOT " + UMI3DEnvironmentLoader.GetNode(dto.rootNodeId)?.transform.name);
-
             switch (dto)
             {
                 case BoxDto boxDto:
@@ -84,16 +82,6 @@ namespace umi3d.cdk.volumes
                     box.isTraversable = dto.isTraversable;
                     onPrimitiveCreation.Invoke(box);
                     finished.Invoke(box);
-
-                    var go = new GameObject("Empty-collider");
-                    go.transform.position = box.rootNode.position;
-                    go.transform.localRotation = Quaternion.identity;
-
-                    BoxCollider boxCollider = go.AddComponent<BoxCollider>();
-                    boxCollider.center = boxDto.center;
-                    boxCollider.size = boxDto.size;
-
-                    box.go = go;
 
                     break;
                 case CylinderDto cylinderDto:
@@ -112,6 +100,7 @@ namespace umi3d.cdk.volumes
                     c.isTraversable = dto.isTraversable;
                     onPrimitiveCreation.Invoke(c);
                     finished.Invoke(c);
+
                     break;
                 default:
                     throw new System.Exception("Unknown primitive type !");

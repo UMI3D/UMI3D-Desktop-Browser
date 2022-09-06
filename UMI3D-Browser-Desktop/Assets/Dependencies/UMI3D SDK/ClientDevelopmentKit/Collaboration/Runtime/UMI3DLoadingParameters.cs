@@ -96,7 +96,6 @@ namespace umi3d.cdk
                     SubMeshLoader.ReadUMI3DExtension(s, node, callback, failed);
                     break;
                 case AbstractVolumeDescriptorDto v:
-                    Debug.Log("Load volume");
                     UMI3DVolumeLoader.ReadUMI3DExtension(v, callback, failed);
                     break;
                 case UIRectDto r:
