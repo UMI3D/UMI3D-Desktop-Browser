@@ -17,6 +17,7 @@ using BrowserDesktop.Cursor;
 using BrowserDesktop.Interaction;
 using System.Collections.Generic;
 using umi3d.cdk.interaction;
+using umi3d.cdk.userCapture;
 using umi3d.common.interaction;
 using umi3dDesktopBrowser.emotes;
 using umi3dDesktopBrowser.ui.viewController;
@@ -64,7 +65,7 @@ namespace BrowserDesktop.Controller
                 input.bone = interactionBoneType;
             }
 
-            EmoteManager.PlayingEmote.AddListener(CloseMainMenu);
+            UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.AddListener(CloseMainMenu);
         }
         protected override void Update()
         {
