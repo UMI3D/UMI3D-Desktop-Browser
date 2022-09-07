@@ -43,6 +43,7 @@ namespace umi3d.cdk.collaboration
 
         public bool useMumble => dto.audioUseMumble;
         public string audioLogin => dto.audioLogin;
+
         public string audioPassword
         {
             get
@@ -107,7 +108,6 @@ namespace umi3d.cdk.collaboration
 
             bool loginUpdate = dto.audioLogin != user.audioLogin;
             bool pswUpdate = false;
-
 
             dto = user;
 
