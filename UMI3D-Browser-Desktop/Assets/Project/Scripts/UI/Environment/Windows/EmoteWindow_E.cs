@@ -182,6 +182,7 @@ namespace umi3dDesktopBrowser.ui.viewController
         /// </summary>
         public void DestroyButtons()
         {
+            Reset();
             foreach (var button in EmoteButtons)
             {
                 button.Hide();
