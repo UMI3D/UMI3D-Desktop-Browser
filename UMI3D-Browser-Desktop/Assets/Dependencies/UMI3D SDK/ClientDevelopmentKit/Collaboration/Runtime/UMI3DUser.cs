@@ -43,7 +43,6 @@ namespace umi3d.cdk.collaboration
 
         public bool useMumble => dto.audioUseMumble;
         public string audioLogin => dto.audioLogin;
-
         public string audioPassword
         {
             get
@@ -68,6 +67,9 @@ namespace umi3d.cdk.collaboration
         }
         public string audioChannel => dto.audioChannel;
         public string audioServer => dto.audioServerUrl;
+
+        public ulong onStartSpeakingAnimationId => dto.onStartSpeakingAnimationId;
+        public ulong onStopSpeakingAnimationId => dto.onStopSpeakingAnimationId;
 
         public string login => dto?.login;
 
