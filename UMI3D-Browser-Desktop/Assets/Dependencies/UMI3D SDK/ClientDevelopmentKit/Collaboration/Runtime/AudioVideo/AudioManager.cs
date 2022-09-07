@@ -25,7 +25,7 @@ using UnityEngine.Events;
 namespace umi3d.cdk.collaboration
 {
 
-    public class AudioUserIsSpeaking : UnityEvent<UMI3DUser,bool> { }
+    public class AudioUserIsSpeaking : UnityEvent<UMI3DUser, bool> { }
 
     /// <summary>
     /// Singleton use to read AudioDto.
@@ -37,7 +37,7 @@ namespace umi3d.cdk.collaboration
         private readonly Dictionary<ulong, MumbleAudioPlayer> GlobalReader = new Dictionary<ulong, MumbleAudioPlayer>();
         private readonly Dictionary<ulong, MumbleAudioPlayer> SpacialReader = new Dictionary<ulong, MumbleAudioPlayer>();
         private readonly Dictionary<ulong, Coroutine> WaitCoroutine = new Dictionary<ulong, Coroutine>();
-        
+
         public readonly Dictionary<string, float> volumeMemory = new Dictionary<string, float>();
         public readonly Dictionary<string, float> gainMemory = new Dictionary<string, float>();
 
@@ -47,7 +47,7 @@ namespace umi3d.cdk.collaboration
         public void Setup(Dictionary<string, float> volumeMemory, Dictionary<string, float> gainMemory)
         {
             this.volumeMemory.Clear();
-            foreach(var k in volumeMemory)
+            foreach (var k in volumeMemory)
             {
                 this.volumeMemory[k.Key] = k.Value;
             }
@@ -82,7 +82,7 @@ namespace umi3d.cdk.collaboration
             MumbleAudioPlayer player = MumbleAudioPlayerContain(user);
             if (player == null)
             {
-                if(gainMemory.ContainsKey(user.login))
+                if (gainMemory.ContainsKey(user.login))
                     return gainMemory[user.login];
                 return null;
             }
@@ -305,8 +305,6 @@ namespace umi3d.cdk.collaboration
             }
             SetGainAndVolumeForUser(user);
         }
-
-        
 
         private IEnumerator WaitForAudioCreation(UMI3DUser user)
         {
