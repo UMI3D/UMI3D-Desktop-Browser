@@ -555,7 +555,7 @@ namespace umi3d.baseBrowser.Controller
             ulong hoverExitAnimationId = mouseData.OldHovered.dto.HoverExitAnimationId;
             if (hoverExitAnimationId != 0)
             {
-                cdk.UMI3DNodeAnimation anim = cdk.UMI3DNodeAnimation.Get(hoverExitAnimationId);
+                cdk.UMI3DAbstractAnimation anim = cdk.UMI3DAbstractAnimation.Get(hoverExitAnimationId);
                 HoverExit.Invoke(lastHoverId);
                 if (anim != null) anim.Start();
             }
@@ -572,7 +572,7 @@ namespace umi3d.baseBrowser.Controller
             ulong hoverEnterAnimationId = mouseData.CurrentHovered.dto.HoverEnterAnimationId;
             if (hoverEnterAnimationId != 0)
             {
-                cdk.UMI3DNodeAnimation anim = cdk.UMI3DNodeAnimation.Get(hoverEnterAnimationId);
+                cdk.UMI3DAbstractAnimation anim = cdk.UMI3DAbstractAnimation.Get(hoverEnterAnimationId);
                 HoverEnter.Invoke(currentHoverId);
                 if (anim != null) anim.Start();
             }
