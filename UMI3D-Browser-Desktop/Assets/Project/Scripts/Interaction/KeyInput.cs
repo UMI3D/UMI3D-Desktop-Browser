@@ -161,7 +161,7 @@ namespace BrowserDesktop.Interaction
 
         private void StartAnim(ulong id)
         {
-            UMI3DNodeAnimation.Get(id)?.Start();
+            UMI3DAbstractAnimation.Get(id)?.Start();
         }
 
         private void DisplayInput(string label, string inputName, Texture2D icon = null)
