@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using System.Linq;
-using umi3d.common;
 using umi3d.common.volume;
 
 namespace umi3d.cdk.volumes

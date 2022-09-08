@@ -30,7 +30,7 @@ namespace umi3d.cdk.volumes
         /// <summary>
         /// World to local matrix
         /// </summary>
-        public Matrix4x4 localToWorld { get => rootNode.localToWorldMatrix; }
+        public Matrix4x4 localToWorld { get => rootNode?.localToWorldMatrix ?? Matrix4x4.identity; }
 
         public Bounds bounds { get; private set; }
 

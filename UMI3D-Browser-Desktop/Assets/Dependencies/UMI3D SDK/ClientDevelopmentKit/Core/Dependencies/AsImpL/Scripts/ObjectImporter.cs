@@ -343,7 +343,7 @@ namespace AsImpL
 
             if (string.IsNullOrEmpty(ext))
             {
-                Debug.LogError("No extension defined, unable to detect file format ");
+                Debug.LogError("No extension defined, unable to detect file format");
                 return null;
             }
             Loader loader = null;

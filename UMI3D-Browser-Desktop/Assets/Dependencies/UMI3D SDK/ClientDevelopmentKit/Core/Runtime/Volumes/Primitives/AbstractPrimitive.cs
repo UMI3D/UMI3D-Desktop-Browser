@@ -31,10 +31,16 @@ namespace umi3d.cdk.volumes
             return id.Value;
         }
 
+        /// <summary>
+        /// Node instance which has the primitive. 
+        /// </summary>
         public Transform rootNode;
 
         private ulong rootNodeId;
 
+        /// <summary>
+        /// Id of the node which has the primitive.
+        /// </summary>
         public ulong RootNodeId
         {
             get => rootNodeId;

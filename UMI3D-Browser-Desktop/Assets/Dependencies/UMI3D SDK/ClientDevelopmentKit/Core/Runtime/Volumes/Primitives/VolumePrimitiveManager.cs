@@ -68,12 +68,11 @@ namespace umi3d.cdk.volumes
 
         public static void CreatePrimitive(AbstractPrimitiveDto dto, UnityAction<AbstractVolumeCell> finished)
         {
-            Matrix4x4 localToWorldMatrix = UMI3DEnvironmentLoader.GetNode(dto.rootNodeId).transform.localToWorldMatrix;
+            Matrix4x4 localToWorldMatrix = UMI3DEnvironmentLoader.GetNode(dto.rootNodeId)?.transform.localToWorldMatrix ?? Matrix4x4.identity;
 
             switch (dto)
             {
                 case BoxDto boxDto:
-                    Debug.Log("Create box");
                     var box = new Box() { id = boxDto.id };
                     box.SetBounds(new Bounds() { center = boxDto.center, size = boxDto.size });
                     box.RootNodeId = dto.rootNodeId;
@@ -82,7 +81,6 @@ namespace umi3d.cdk.volumes
                     box.isTraversable = dto.isTraversable;
                     onPrimitiveCreation.Invoke(box);
                     finished.Invoke(box);
-
                     break;
                 case CylinderDto cylinderDto:
                     var c = new Cylinder()
@@ -100,7 +98,6 @@ namespace umi3d.cdk.volumes
                     c.isTraversable = dto.isTraversable;
                     onPrimitiveCreation.Invoke(c);
                     finished.Invoke(c);
-
                     break;
                 default:
                     throw new System.Exception("Unknown primitive type !");

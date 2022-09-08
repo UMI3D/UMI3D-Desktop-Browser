@@ -155,10 +155,7 @@ namespace umi3d.cdk
             if (meshLoader.SetUMI3DProperty(entity, property))
                 return true;
             if (UMI3DVolumeLoader.SetUMI3DProperty(entity, property))
-            {
-                Debug.Log("Load volume");
                 return true;
-            }
             if (lineLoader.SetUMI3DProperty(entity, property))
                 return true;
             if (UILoader.SetUMI3DProperty(entity, property))
