@@ -345,7 +345,7 @@ namespace umi3d.cdk
             while (!downloaded)
             {
                 onProgressChange.Invoke(resourcesToLoad == 0 ? 0.2f : 0.1f + (loadedResources / resourcesToLoad * 0.4f));
-                onProgressTitleChange.Invoke($"Load resources {loadedResources / resourcesToLoad *100}%");
+                onProgressTitleChange.Invoke($"Load resources {(loadedResources / resourcesToLoad *100).ToString("N2")} %");
                 yield return null;
             }
             onProgressTitleChange.Invoke("Resources Loaded");
@@ -364,7 +364,7 @@ namespace umi3d.cdk
             while (!loaded)
             {
                 onProgressChange.Invoke(nodesToInstantiate == 0 ? 0.6f : 0.5f + (instantiatedNodes / nodesToInstantiate * 0.4f));
-                onProgressTitleChange.Invoke($"Instantiate environment {instantiatedNodes / nodesToInstantiate * 100}%");
+                onProgressTitleChange.Invoke($"Instantiate environment {(instantiatedNodes / nodesToInstantiate * 100).ToString("N2")} %");
                 yield return null;
             }
 
