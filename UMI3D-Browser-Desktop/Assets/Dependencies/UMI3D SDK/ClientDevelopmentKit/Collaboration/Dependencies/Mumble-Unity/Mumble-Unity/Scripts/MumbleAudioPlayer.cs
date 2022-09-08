@@ -125,8 +125,6 @@ namespace Mumble
 
         void OnAudioFilterRead(float[] data, int channels)
         {
-
-
             if (_mumbleClient == null || !_mumbleClient.ConnectionSetupFinished)
                 return;
 
