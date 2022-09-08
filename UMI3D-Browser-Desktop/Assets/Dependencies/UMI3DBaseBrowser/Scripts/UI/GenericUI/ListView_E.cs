@@ -136,17 +136,23 @@ namespace umi3d.baseBrowser.ui.viewController
             List_View = Root.Q<ListView>();
             List_View.bindItem = Bind;
             List_View.unbindItem = Unbind;
-            List_View.itemHeight = ItemHeight;
+            List_View.fixedItemHeight = ItemHeight;
             List_View.itemsSource = items;
             List_View.makeItem = Make;
             List_View.Rebuild();
         }
 
         void Bind(VisualElement element,int index) {
-            items[index].Bind(element);
+            if (index >= 0 && index < items.Count)
+            {
+                items[index].Bind(element);
+            }
         }
         void Unbind(VisualElement element, int index) {
-            items[index].Unbind(element);
+            if (index >= 0 && index < items.Count)
+            {
+                items[index].Unbind(element);
+            }
         }
         VisualElement Make()
         {
