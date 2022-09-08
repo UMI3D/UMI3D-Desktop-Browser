@@ -42,6 +42,7 @@ namespace umi3d.baseBrowser.connection
 
         public void OnProgressChange(float val)
         {
+            if (val < 0) val = 0;
             if (!loadingBar.isDisplayed && val < 1f)
             {
                 loadingBar.Display();
@@ -50,6 +51,11 @@ namespace umi3d.baseBrowser.connection
             {
                 loadingBar.Hide();
             }
+        }
+
+        public void OnProgressOver()
+        {
+            OnProgressChange(3f);
         }
 
         void OnHide()
