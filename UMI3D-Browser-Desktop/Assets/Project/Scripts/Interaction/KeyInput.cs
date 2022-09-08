@@ -16,6 +16,7 @@ limitations under the License.
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
 using inetum.unityUtils;
+using umi3d.baseBrowser.Controller;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
 using umi3d.common;
@@ -88,7 +89,7 @@ namespace BrowserDesktop.Interaction
 
         protected virtual void Update()
         {
-            if (ConnectionMenu.Instance.isDisplayed)
+            if (ConnectionMenu.Instance.isDisplayed || BaseCursor.Movement == BaseCursor.CursorMovement.Free)
                 return;
 
             if (LastFrameButton != InputLayoutManager.GetInputCode(activationButton))
