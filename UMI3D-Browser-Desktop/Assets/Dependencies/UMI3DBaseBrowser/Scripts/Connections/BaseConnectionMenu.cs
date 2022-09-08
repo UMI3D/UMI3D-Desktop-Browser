@@ -97,7 +97,7 @@ namespace umi3d.baseBrowser.connection
             isDisplayed = true;
             connectionScreen.style.display = DisplayStyle.Flex;
             Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Free);
-            loader.OnProgressChange(0.01f);
+            loader.OnProgressChange(0f);
             loader.Text = "Connecting to the new environment";
         }
 
@@ -106,7 +106,7 @@ namespace umi3d.baseBrowser.connection
         /// </summary>
         protected virtual void Hide()
         {
-            loader.OnProgressChange(3f);
+            loader.OnProgressOver();
             isDisplayed = false;
             connectionScreen.style.display = DisplayStyle.None;
             Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Center);
