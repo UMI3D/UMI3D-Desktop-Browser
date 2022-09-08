@@ -168,6 +168,7 @@ namespace umi3d.baseBrowser.connection
             
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnRedirectionStarted.AddListener(OnRedirectionStarted);
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnRedirectionAborted.AddListener(OnRedirectionAborted);
+            cdk.collaboration.UMI3DEnvironmentClient.ConnectionState.AddListener(OnConnectionToEnvironment);
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(OnConnectionLost);
             cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
 
@@ -266,6 +267,11 @@ namespace umi3d.baseBrowser.connection
         protected virtual void OnEnvironmentLoaded() => Hide();
 
         protected virtual void OnRedirectionStarted() => Display();
+
+        protected virtual void OnConnectionToEnvironment(string state) {
+            if (!isDisplayed) Display();
+            loader.Text = state;
+        }
 
         protected virtual void OnRedirectionAborted() => Hide();
 
