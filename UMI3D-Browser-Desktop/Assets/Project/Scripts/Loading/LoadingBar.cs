@@ -37,7 +37,7 @@ namespace umi3d.baseBrowser.connection
             cdk.UMI3DEnvironmentLoader.Instance.onProgressChange.AddListener(loadingBar.OnProgressChange);
             cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(loadingBar.Hide);
             cdk.UMI3DResourcesManager.Instance.onProgressChange.AddListener(loadingBar.OnProgressChange);
-
+            cdk.UMI3DEnvironmentLoader.Instance.onProgressTitleChange.AddListener((t)=>Text = t);
         }
 
         public void OnProgressChange(float val)
