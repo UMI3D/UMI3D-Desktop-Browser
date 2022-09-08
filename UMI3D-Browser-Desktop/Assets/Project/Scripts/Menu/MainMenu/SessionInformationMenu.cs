@@ -298,14 +298,9 @@ namespace BrowserDesktop.Menu
                     MicrophoneDropDown.SetDefaultValue(name);
                 PlayerPrefs.SetString(MicrophoneKey, name);
 
-
-                Debug.Log(name);
                 if (await umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(name))
                 {
                     var mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
-                    Debug.Log(mic);
-                    foreach(var e in umi3d.cdk.collaboration.MicrophoneListener.Instance.GetMicrophonesNames().ToList())
-                        Debug.Log($"---{e}");
                     MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
                 }
             }
