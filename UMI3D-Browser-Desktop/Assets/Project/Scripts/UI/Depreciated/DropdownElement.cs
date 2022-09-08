@@ -75,20 +75,23 @@ public class DropdownElement : VisualElement
 
         currentChoice.RegisterCallback<MouseDownEvent>(e =>
         {
-            CloseChoices(currentChoice.text, currentChoiceId);
+            OpenChoices();
         });
 
-        openChoiceButton.clickable.clicked += () =>
+        openChoiceButton.clickable.clicked += OpenChoices;
+    }
+
+    private void OpenChoices()
+    {
+        areChoicesVisible = !areChoicesVisible;
+
+        if (areChoicesVisible && options.Count > 1)
+            umi3d.cdk.UMI3DResourcesManager.StartCoroutine(OpenDropdown());
+        else
         {
-            areChoicesVisible = !areChoicesVisible;
-            if (areChoicesVisible && options.Count > 1)
-                umi3d.cdk.UMI3DResourcesManager.StartCoroutine(OpenDropdown());
-            else
-            {
-                choicesDropdown.style.display = DisplayStyle.None;
-                choicesDropdown.RemoveFromHierarchy();
-            }
-        };
+            choicesDropdown.style.display = DisplayStyle.None;
+            choicesDropdown.RemoveFromHierarchy();
+        }
     }
 
     /// <summary>
@@ -165,6 +168,8 @@ public class DropdownElement : VisualElement
 
     private void CloseChoices(string name, int i)
     {
+        areChoicesVisible = false;
+
         if (i != currentChoiceId)
         {
             OnValueChanged?.Invoke(i);
