@@ -1,8 +1,8 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/UI/UXML/main-style.uss?fileID=7433441132597879392&amp;guid=94673d93e91baf148996a51e40b938da&amp;type=3#main-style" />
     <DropdownElement focusable="true" class="min-size-label" style="flex-direction: row; height: 42px; align-items: center;">
-        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
         <ui:Label text="Label" name="label" class="orange-text medium-size-txt" style="height: 100%; -unity-text-align: middle-left;" />
-        <ui:Label text="Label" name="dropdown-current-choice-label" class="grey-border" style="flex-grow: 1; height: 40px; padding-left: 5px; padding-top: 0; padding-bottom: 0; -unity-text-align: middle-left; border-left-width: 1px; border-right-width: 0; border-top-width: 1px; border-bottom-width: 1px; background-color: rgb(63, 63, 66); color: rgb(255, 255, 255); border-left-color: rgb(102, 102, 102); border-right-color: rgb(102, 102, 102); border-top-color: rgb(102, 102, 102); border-bottom-color: rgb(102, 102, 102);" />
+        <ui:Label text="Label" name="dropdown-current-choice-label" class="grey-border" style="flex-grow: 1; height: 40px; padding-left: 5px; padding-top: 0; padding-bottom: 0; -unity-text-align: middle-left; border-left-width: 1px; border-right-width: 0; border-top-width: 1px; border-bottom-width: 1px; background-color: rgb(63, 63, 66); color: rgb(255, 255, 255); border-left-color: rgb(102, 102, 102); border-right-color: rgb(102, 102, 102); border-top-color: rgb(102, 102, 102); border-bottom-color: rgb(102, 102, 102); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
         <ui:Button name="dropdown-open-choice" class="dropdown-btn-pressed dropdown-btn" style="width: 40px; height: 40px; background-color: rgb(63, 63, 66); border-left-color: rgb(102, 102, 102); border-right-color: rgb(102, 102, 102); border-top-color: rgb(102, 102, 102); border-bottom-color: rgb(102, 102, 102); border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; justify-content: center; align-items: center;">
             <ui:VisualElement style="width: 20px; height: 14px;" />
         </ui:Button>
