@@ -37,7 +37,7 @@ namespace umi3d.cdk.collaboration
             return ForgeClient != null && isConnected && ForgeClient.IsConnected && !disconected;
         }
 
-        public class ConnectionStateEvent : UnityEvent<string>{};
+        public class ConnectionStateEvent : UnityEvent<string> { };
         public static ConnectionStateEvent ConnectionState = new ConnectionStateEvent();
 
         public readonly double maxMillisecondToWait = 10000;
