@@ -87,6 +87,9 @@ namespace Mumble
 
         public UnityEvent connectionFailed = new UnityEvent();
 
+        public class ConnectionErrorEvent : UnityEvent<Exception> { }
+        public ConnectionErrorEvent ConnectionError = new ConnectionErrorEvent();
+
         public OnChannelChangedMethod OnChannelChanged;
         public OnDisconnectedMethod OnDisconnected;
         private MumbleTcpConnection _tcpConnection;
@@ -219,6 +222,7 @@ namespace Mumble
             _audioDecodeThread = new AudioDecodeThread(_outputSampleRate, _outputChannelCount, this);
             _decodingBufferPool = new DecodingBufferPool(_audioDecodeThread);
             _udpConnection = new MumbleUdpConnection(endpoint, _audioDecodeThread, this);
+            _udpConnection.ConnectionError.AddListener(SendError);
             _tcpConnection = new MumbleTcpConnection(endpoint, _hostName,
                 _udpConnection.UpdateOcbServerNonce, _udpConnection, this);
 
@@ -226,6 +230,12 @@ namespace Mumble
             _manageSendBuffer = new ManageAudioSendBuffer(_udpConnection, this, _maxPositionalDataLength);
             ReadyToConnect = true;
         }
+
+        void SendError(Exception e)
+        {
+            ConnectionError.Invoke(e);
+        }
+
         private void OnHostRecv(IAsyncResult result)
         {
             IPAddress[] addresses = Dns.EndGetHostAddresses(result);
@@ -488,7 +498,10 @@ namespace Mumble
                 _tcpConnection.Close();
             _tcpConnection = null;
             if (_udpConnection != null)
+            {
                 _udpConnection.Close();
+                _udpConnection.ConnectionError.RemoveAllListeners();
+            }
             _udpConnection = null;
             if (_audioDecodeThread != null)
                 _audioDecodeThread.Dispose();
