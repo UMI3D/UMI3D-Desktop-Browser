@@ -4,6 +4,7 @@ using MumbleProto;
 using Version = MumbleProto.Version;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 namespace Mumble
 {
@@ -83,6 +84,8 @@ namespace Mumble
         public Action<uint> OnRecvAudioThreaded;
         public Action<Channel> OnChannelAddedThreaded;
         public Action<Channel> OnChannelRemovedThreaded;
+
+        public UnityEvent connectionFailed = new UnityEvent();
 
         public OnChannelChangedMethod OnChannelChanged;
         public OnDisconnectedMethod OnDisconnected;
@@ -460,8 +463,17 @@ namespace Mumble
                 Debug.LogError("We're not ready to connect yet!");
                 return;
             }
+            _tcpConnection.connectionFailed.AddListener(sendFailed);
+
             _tcpConnection.StartClient(username, password);
         }
+
+        void sendFailed()
+        {
+            _tcpConnection.connectionFailed.RemoveListener(sendFailed);
+            connectionFailed.Invoke();
+        }
+
         internal void ConnectUdp()
         {
             _udpConnection.Connect();
