@@ -602,11 +602,11 @@ Toggle > Label {
 }
 
 .maximize-btn {
-    background-image: url('/Assets/Project/UI/Icons/Windows/maximise_ENABLE.png');
+    background-image: url('/Assets/Project/UI/Icons/Browser - Windows/maximise_ENABLE.png');
 }
 
 .maximize-btn:active {
-    background-image: url('/Assets/Project/UI/Icons/Windows/maximise_PRESS.png');
+    background-image: url('/Assets/Project/UI/Icons/Browser - Windows/maximise_PRESS.png');
 }
 
 .maximize-btn:hover {
