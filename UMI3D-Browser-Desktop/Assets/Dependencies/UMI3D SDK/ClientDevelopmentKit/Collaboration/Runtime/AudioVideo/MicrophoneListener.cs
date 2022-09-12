@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using BeardedManStudios.Forge.Networking.Unity;
 using inetum.unityUtils;
 using Mumble;
 using System;
@@ -205,14 +206,40 @@ namespace umi3d.cdk.collaboration
 
         public async Task StopMicrophone()
         {
-            if (await IsPLaying() && mumbleClient != null)
+            await ForceStopMicrophone(false);
+        }
+
+        private async Task ForceStopMicrophone(bool force = false)
+        {
+            if (force || await IsPLaying())
             {
-                mumbleMic.OnMicDisconnect -= OnMicDisconnected;
-                mumbleMic.StopSendingAudio();
-                mumbleClient.Close();
+                try
+                {
+                    if (mumbleMic != null)
+                    {
+                        mumbleMic.OnMicDisconnect -= OnMicDisconnected;
+                        MainThreadManager.Run(
+                            mumbleMic.StopSendingAudio);
+                    }
+                    if (mumbleClient != null)
+                    {
+                        mumbleClient.ConnectionError.RemoveListener(Failed);
+                        mumbleClient.connectionFailed.RemoveListener(Failed);
+                        mumbleClient.OnDisconnected -= OnDisconected;
+
+                        mumbleClient.Close();
+                    }
+                }
+                catch(Exception e)
+                {
+                    UnityEngine.Debug.LogException(e);
+                }
             }
+            mumbleClient = null;
+            playingInit = false;
             playing = false;
         }
+
 
         private void OnMicDisconnected()
         {
@@ -289,6 +316,7 @@ namespace umi3d.cdk.collaboration
                         mumbleClient = new MumbleClient(hostName, port, CreateMumbleAudioPlayerFromPrefab,
                             DestroyMumbleAudioPlayer, OnOtherUserStateChange, connectAsyncronously,
                             SpeakerCreationMode.ALL, debuggingVariables, posLength);
+                        mumbleClient.ConnectionError.AddListener(Failed);
 
                         if (connectAsyncronously)
                             while (!mumbleClient.ReadyToConnect)
@@ -296,6 +324,7 @@ namespace umi3d.cdk.collaboration
 
                         mumbleClient.Connect(username, password);
                         mumbleClient.connectionFailed.AddListener(Failed);
+                        mumbleClient.OnDisconnected += OnDisconected;
 
                         if (connectAsyncronously)
                             await UMI3DAsyncManager.Yield();
@@ -327,16 +356,27 @@ namespace umi3d.cdk.collaboration
             }
             catch
             {
-                mumbleClient = null;
+                await ForceStopMicrophone(true);
             }
             playing = false;
         }
 
-        void Failed()
+        async void Failed(Exception e)
         {
-            mumbleClient.connectionFailed.RemoveListener(Failed);
-            mumbleClient = null;
-            playing = false;
+            UnityEngine.Debug.Log("Failed e " + e);
+            await ForceStopMicrophone(true);
+        }
+
+        async void OnDisconected()
+        {
+            UnityEngine.Debug.Log("OnDisconnected");
+            await ForceStopMicrophone(true);
+        }
+
+        async void Failed() 
+        {
+            UnityEngine.Debug.Log("Failed");
+            await ForceStopMicrophone(true);
         }
 
         private async Task JoinChannel(int trycount = 0)
