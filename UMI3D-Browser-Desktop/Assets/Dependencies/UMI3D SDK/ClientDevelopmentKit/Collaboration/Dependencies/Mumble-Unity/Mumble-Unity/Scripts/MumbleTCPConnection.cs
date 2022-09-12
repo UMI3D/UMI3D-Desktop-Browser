@@ -325,9 +325,7 @@ namespace Mumble
                     //These just means the app stopped, it's ok
                     else if (ex is ObjectDisposedException) { }
                     else if (ex is ThreadAbortException) { }
-                    else if (ex is System.Threading.ThreadInterruptedException) {
-                        Debug.LogError(ex);
-                    }
+                    else if (ex is System.Threading.ThreadInterruptedException) { }
                     else
                         Debug.LogError($"Unhandled error: {ex}");
                     return;

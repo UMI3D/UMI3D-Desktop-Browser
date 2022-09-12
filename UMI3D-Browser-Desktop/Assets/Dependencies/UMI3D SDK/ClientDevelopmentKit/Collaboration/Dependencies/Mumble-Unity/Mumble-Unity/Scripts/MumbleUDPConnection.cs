@@ -33,7 +33,7 @@ namespace Mumble
         private readonly byte[] _sendPingBuffer = new byte[9];
 
         public class ConnectionErrorEvent : UnityEvent<Exception> { }
-        public ConnectionErrorEvent ConnectionError = new ConnectionErrorEvent(); 
+        public ConnectionErrorEvent ConnectionError = new ConnectionErrorEvent();
 
         internal MumbleUdpConnection(IPEndPoint host, AudioDecodeThread audioDecodeThread, MumbleClient mumbleClient)
         {

@@ -230,7 +230,7 @@ namespace umi3d.cdk.collaboration
                         mumbleClient.Close();
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     UnityEngine.Debug.LogException(e);
                 }
@@ -239,7 +239,6 @@ namespace umi3d.cdk.collaboration
             playingInit = false;
             playing = false;
         }
-
 
         private void OnMicDisconnected()
         {
@@ -286,7 +285,6 @@ namespace umi3d.cdk.collaboration
         private async Task _StartMicrophone()
         {
             UpdateUser();
-            UnityEngine.Debug.LogError($"_StartMicrophone {useMumble}");
             try
             {
                 if (!useMumble) return;
@@ -363,19 +361,16 @@ namespace umi3d.cdk.collaboration
 
         async void Failed(Exception e)
         {
-            UnityEngine.Debug.Log("Failed e " + e);
             await ForceStopMicrophone(true);
         }
 
         async void OnDisconected()
         {
-            UnityEngine.Debug.Log("OnDisconnected");
             await ForceStopMicrophone(true);
         }
 
-        async void Failed() 
+        async void Failed()
         {
-            UnityEngine.Debug.Log("Failed");
             await ForceStopMicrophone(true);
         }
 
@@ -384,10 +379,9 @@ namespace umi3d.cdk.collaboration
             if (trycount < 5 && !string.IsNullOrEmpty(channelToJoin))
             {
                 await UMI3DAsyncManager.Delay(1000);
-                UnityEngine.Debug.Log("Joinning " + channelToJoin);
-                if (!mumbleClient.JoinChannel(channelToJoin))
+                if (mumbleClient != null && !mumbleClient.JoinChannel(channelToJoin))
                 {
-                    await JoinChannel(trycount+1);
+                    await JoinChannel(trycount + 1);
                 }
             }
         }
