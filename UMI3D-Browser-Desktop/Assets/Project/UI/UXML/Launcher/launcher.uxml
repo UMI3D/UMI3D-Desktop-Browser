@@ -20,10 +20,10 @@
                 <ui:VisualElement style="flex-grow: 2;">
                     <ui:Button text="&#10;" name="backMenuBtn" class="btn-left-arrow" style="width: 80px; height: 80px; margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: auto; display: flex; background-color: rgba(228, 228, 228, 0);" />
                 </ui:VisualElement>
-                <ui:VisualElement name="container" class="medium-size-txt" style="width: 685px; margin-left: auto; margin-right: auto; justify-content: center; flex-grow: 1;">
+                <ui:VisualElement name="container" class="medium-size-txt" style="width: 685px; margin-left: auto; margin-right: auto; justify-content: center; flex-grow: 1; height: 100%;">
                     <ui:Instance template="libraries-manager-screen" name="libraries-manager-screen" style="display: none;" />
                     <ui:Instance template="advancedConnectionScreen" name="advancedConnectionScreen" style="display: none;" />
-                    <ui:Instance template="homeScreen" name="homeScreen" style="-unity-font-definition: url(&apos;project://database/Assets/Project/UI/Font/Decker%20SDF%20Font%20Asset.asset?fileID=11400000&amp;guid=a677f96d8ebec7342a1a3d86996e1a96&amp;type=2#Decker SDF Font Asset&apos;);" />
+                    <ui:Instance template="homeScreen" name="homeScreen" style="-unity-font-definition: url(&apos;project://database/Assets/Project/UI/Font/Decker%20SDF%20Font%20Asset.asset?fileID=11400000&amp;guid=a677f96d8ebec7342a1a3d86996e1a96&amp;type=2#Decker SDF Font Asset&apos;); width: auto; height: 100%;" />
                     <ui:Instance template="sessionScreen" name="sessionScreen" style="display: none;" />
                 </ui:VisualElement>
                 <ui:VisualElement style="flex-grow: 2;">
