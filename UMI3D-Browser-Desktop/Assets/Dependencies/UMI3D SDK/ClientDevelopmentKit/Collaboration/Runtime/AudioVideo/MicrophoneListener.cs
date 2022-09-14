@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using BeardedManStudios.Forge.Networking.Unity;
 using inetum.unityUtils;
 using Mumble;
 using System;
@@ -205,12 +206,37 @@ namespace umi3d.cdk.collaboration
 
         public async Task StopMicrophone()
         {
-            if (await IsPLaying() && mumbleClient != null)
+            await ForceStopMicrophone(false);
+        }
+
+        private async Task ForceStopMicrophone(bool force = false)
+        {
+            if (force || await IsPLaying())
             {
-                mumbleMic.OnMicDisconnect -= OnMicDisconnected;
-                mumbleMic.StopSendingAudio();
-                mumbleClient.Close();
+                try
+                {
+                    if (mumbleMic != null)
+                    {
+                        mumbleMic.OnMicDisconnect -= OnMicDisconnected;
+                        MainThreadManager.Run(
+                            mumbleMic.StopSendingAudio);
+                    }
+                    if (mumbleClient != null)
+                    {
+                        mumbleClient.ConnectionError.RemoveListener(Failed);
+                        mumbleClient.connectionFailed.RemoveListener(Failed);
+                        mumbleClient.OnDisconnected -= OnDisconected;
+
+                        mumbleClient.Close();
+                    }
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.LogException(e);
+                }
             }
+            mumbleClient = null;
+            playingInit = false;
             playing = false;
         }
 
@@ -240,16 +266,8 @@ namespace umi3d.cdk.collaboration
 
         #region private method
 
-        private async Task _StartMicrophone()
+        void UpdateUser()
         {
-            if (!useMumble) return;
-
-            if (hostName == "1.2.3.4")
-            {
-                UnityEngine.Debug.LogError("Please set the mumble host name to your mumble server");
-                return;
-            }
-
             if (UMI3DCollaborationEnvironmentLoader.Exists)
             {
                 UMI3DUser user = UMI3DCollaborationEnvironmentLoader.Instance.GetClientUser();
@@ -260,60 +278,110 @@ namespace umi3d.cdk.collaboration
                     SetMumbleUrl(user.audioServer);
                     channelToJoin = user.audioChannel;
                     useMumble = user.useMumble;
+                }
+            }
+        }
 
-                    Application.runInBackground = true;
-                    // If SendPosition, we'll send three floats.
-                    // This is roughly the standard for Mumble, however it seems that
-                    // Murmur supports more
-                    int posLength = sendPosition ? 3 * sizeof(float) : 0;
-                    mumbleClient = new MumbleClient(hostName, port, CreateMumbleAudioPlayerFromPrefab,
-                        DestroyMumbleAudioPlayer, OnOtherUserStateChange, connectAsyncronously,
-                        SpeakerCreationMode.ALL, debuggingVariables, posLength);
+        private async Task _StartMicrophone()
+        {
+            UpdateUser();
+            try
+            {
+                if (!useMumble) return;
 
-                    if (connectAsyncronously)
-                        while (!mumbleClient.ReadyToConnect)
+                if (hostName == "1.2.3.4")
+                {
+                    UnityEngine.Debug.LogError("Please set the mumble host name to your mumble server");
+                    return;
+                }
+
+                if (UMI3DCollaborationEnvironmentLoader.Exists)
+                {
+                    UMI3DUser user = UMI3DCollaborationEnvironmentLoader.Instance.GetClientUser();
+                    if (user != null)
+                    {
+                        username = user.audioLogin;
+                        password = user.audioPassword;
+                        SetMumbleUrl(user.audioServer);
+                        channelToJoin = user.audioChannel;
+                        useMumble = user.useMumble;
+
+                        Application.runInBackground = true;
+                        // If SendPosition, we'll send three floats.
+                        // This is roughly the standard for Mumble, however it seems that
+                        // Murmur supports more
+                        int posLength = sendPosition ? 3 * sizeof(float) : 0;
+                        mumbleClient = new MumbleClient(hostName, port, CreateMumbleAudioPlayerFromPrefab,
+                            DestroyMumbleAudioPlayer, OnOtherUserStateChange, connectAsyncronously,
+                            SpeakerCreationMode.ALL, debuggingVariables, posLength);
+                        mumbleClient.ConnectionError.AddListener(Failed);
+
+                        if (connectAsyncronously)
+                            while (!mumbleClient.ReadyToConnect)
+                                await UMI3DAsyncManager.Yield();
+
+                        mumbleClient.Connect(username, password);
+                        mumbleClient.connectionFailed.AddListener(Failed);
+                        mumbleClient.OnDisconnected += OnDisconected;
+
+                        if (connectAsyncronously)
                             await UMI3DAsyncManager.Yield();
 
-                    mumbleClient.Connect(username, password);
+                        if (mumbleMic != null)
+                        {
+                            if (_pendingMic != null)
+                                SetMicrophone(_pendingMic);
+                            mumbleMic.SendAudioOnStart = false;
+                            mumbleClient.AddMumbleMic(mumbleMic);
+                            _pendingMic = null;
+                            mumbleClient.SetSelfMute(isMute);
+                            if (sendPosition)
+                                mumbleMic.SetPositionalDataFunction(WritePositionalData);
+                            mumbleMic.OnMicDisconnect += OnMicDisconnected;
 
-                    if (connectAsyncronously)
-                        await UMI3DAsyncManager.Yield();
+                            await JoinChannel();
 
-                    if (mumbleMic != null)
-                    {
-                        if (_pendingMic != null)
-                            SetMicrophone(_pendingMic);
-                        mumbleMic.SendAudioOnStart = false;
-                        mumbleClient.AddMumbleMic(mumbleMic);
-                        _pendingMic = null;
-                        mumbleClient.SetSelfMute(isMute);
-                        if (sendPosition)
-                            mumbleMic.SetPositionalDataFunction(WritePositionalData);
-                        mumbleMic.OnMicDisconnect += OnMicDisconnected;
+                            if (mumbleMic.VoiceSendingType == MumbleMicrophone.MicType.AlwaysSend
+                                    || mumbleMic.VoiceSendingType == MumbleMicrophone.MicType.Amplitude)
+                                mumbleMic.StartSendingAudio();
 
-                        await JoinChannel();
+                            playing = true;
 
-                        if (mumbleMic.VoiceSendingType == MumbleMicrophone.MicType.AlwaysSend
-                                || mumbleMic.VoiceSendingType == MumbleMicrophone.MicType.Amplitude)
-                            mumbleMic.StartSendingAudio();
-
-                        playing = true;
-
-                        return;
+                            return;
+                        }
                     }
                 }
+            }
+            catch
+            {
+                await ForceStopMicrophone(true);
             }
             playing = false;
         }
 
+        async void Failed(Exception e)
+        {
+            await ForceStopMicrophone(true);
+        }
+
+        async void OnDisconected()
+        {
+            await ForceStopMicrophone(true);
+        }
+
+        async void Failed()
+        {
+            await ForceStopMicrophone(true);
+        }
+
         private async Task JoinChannel(int trycount = 0)
         {
-            if (trycount < 3 && !string.IsNullOrEmpty(channelToJoin))
+            if (trycount < 5 && !string.IsNullOrEmpty(channelToJoin))
             {
-                await UMI3DAsyncManager.Delay(5000);
-                if (!mumbleClient.JoinChannel(channelToJoin))
+                await UMI3DAsyncManager.Delay(1000);
+                if (mumbleClient != null && !mumbleClient.JoinChannel(channelToJoin))
                 {
-                    await JoinChannel(trycount++);
+                    await JoinChannel(trycount + 1);
                 }
             }
         }
@@ -331,6 +399,8 @@ namespace umi3d.cdk.collaboration
         {
             if (useMumble && mumbleClient != null)
                 mumbleClient.SetSelfMute(isMute);
+            else
+                StartMicrophoneAsync();
         }
 
         private void SetMumbleUrl(string url)

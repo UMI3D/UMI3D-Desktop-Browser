@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="/Assets/Project/UI/UXML/main-style.uss" />
+    <Style src="project://database/Assets/Project/UI/UXML/main-style.uss?fileID=7433441132597879392&amp;guid=94673d93e91baf148996a51e40b938da&amp;type=3#main-style" />
     <ui:VisualElement name="VisualElement" style="flex-grow: 1; justify-content: center;">
         <ui:VisualElement name="loading-screen" class="grey-border" style="display: flex; padding-left: 38px; padding-right: 38px; padding-top: 0; padding-bottom: 0; height: 318px; border-left-width: 1px; border-right-width: 1px; border-top-width: 0;">
             <ui:VisualElement name="loading-container" style="margin-top: auto; margin-bottom: auto;">
@@ -8,7 +8,7 @@
                         <ui:VisualElement name="loading-bar-progress" style="height: 100%; width: 0; background-color: rgb(247, 182, 87); overflow: hidden;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:Label text="Loading" name="loader-txt" class="medium-size-txt white-txt" style="-unity-text-align: upper-center; margin-top: 22px;" />
+                <ui:Label text="Loading" name="loader-txt" class="medium-size-txt white-txt" style="-unity-text-align: upper-center; position: absolute; width: 100%; top: 50px;" />
                 <ui:VisualElement name="loader-container" style="margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;" />
             </ui:VisualElement>
         </ui:VisualElement>

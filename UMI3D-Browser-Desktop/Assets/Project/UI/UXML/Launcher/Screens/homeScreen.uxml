@@ -2,7 +2,7 @@
     <ui:Template name="SliderElement" src="project://database/Assets/Project/UI/UXML/CustomElement/SliderElement.uxml?fileID=9197481963319205126&amp;guid=48ffd6c0f55004b47b32c213d0ecbbb6&amp;type=3#SliderElement" />
     <ui:Template name="loading-screen" src="project://database/Assets/Project/UI/UXML/Environement/loading-screen.uxml?fileID=9197481963319205126&amp;guid=9823b8ad6d25bdb4c9dc02eb4510e94a&amp;type=3#loading-screen" />
     <Style src="project://database/Assets/Project/UI/UXML/main-style.uss?fileID=7433441132597879392&amp;guid=94673d93e91baf148996a51e40b938da&amp;type=3#main-style" />
-    <ui:VisualElement name="home-screen" style="min-width: 300px; min-height: 400px;">
+    <ui:VisualElement name="home-screen" style="min-width: 300px; min-height: 400px; height: 100%;">
         <ui:VisualElement style="flex-grow: 0; justify-content: flex-start; height: auto;">
             <ui:VisualElement name="url-center" style="align-items: stretch; justify-content: center; height: auto;">
                 <ui:VisualElement name="logo" style="height: 90px; background-image: url(&apos;project://database/Assets/Project/UI/UI_connection/logo_page.png?fileID=21300000&amp;guid=6146758f2abfb8045bee11da154009f4&amp;type=3#logo_page&apos;); -unity-background-scale-mode: scale-to-fit; margin-bottom: 15px; margin-top: 20px;" />

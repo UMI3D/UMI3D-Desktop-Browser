@@ -37,11 +37,12 @@ namespace umi3d.baseBrowser.connection
             cdk.UMI3DEnvironmentLoader.Instance.onProgressChange.AddListener(loadingBar.OnProgressChange);
             cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(loadingBar.Hide);
             cdk.UMI3DResourcesManager.Instance.onProgressChange.AddListener(loadingBar.OnProgressChange);
-
+            cdk.UMI3DEnvironmentLoader.Instance.onProgressTitleChange.AddListener((t)=>Text = t);
         }
 
         public void OnProgressChange(float val)
         {
+            if (val < 0) val = 0;
             if (!loadingBar.isDisplayed && val < 1f)
             {
                 loadingBar.Display();
@@ -50,6 +51,11 @@ namespace umi3d.baseBrowser.connection
             {
                 loadingBar.Hide();
             }
+        }
+
+        public void OnProgressOver()
+        {
+            OnProgressChange(3f);
         }
 
         void OnHide()
