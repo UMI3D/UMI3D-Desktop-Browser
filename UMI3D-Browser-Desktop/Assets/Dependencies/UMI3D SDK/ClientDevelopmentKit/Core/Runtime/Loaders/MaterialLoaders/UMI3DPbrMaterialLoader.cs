@@ -55,6 +55,14 @@ namespace umi3d.cdk
                         newMat.SetFloat("_Surface", 1);
 #endif
                     }
+                    //if ((Vector4)(Vector3)dto.emissiveFactor != new Vector4(0,0,0,0) && (Vector4)(Vector3)dto.emissiveFactor != new Vector4(1,1,1,1)) 
+                    //    UnityEngine.Debug.Log($"color = {(Vector4)(Vector3)dto.emissiveFactor}; {dto.name}");
+                    if ((Vector4)(Vector3)dto.emissiveFactor != new Vector4(0, 0, 0, 0))
+                    {
+                        UnityEngine.Debug.Log($"color {(Vector4)(Vector3)dto.emissiveFactor}, {dto.name}");
+                        newMat.EnableKeyword("_EMISSION");
+                        newMat.globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive;
+                    }
                     newMat.ApplyShaderProperty(MRTKShaderUtils.EmissiveColor, (Vector4)(Vector3)dto.emissiveFactor);
                     newMat.ApplyShaderProperty(MRTKShaderUtils.Metallic, dto.pbrMetallicRoughness.metallicFactor);
                     newMat.ApplyShaderProperty(MRTKShaderUtils.Smoothness, 1 - dto.pbrMetallicRoughness.roughnessFactor);
@@ -74,7 +82,7 @@ namespace umi3d.cdk
                     {
 #if USING_URP
                         LoadTextureInMaterial(ext.id, ext.occlusionTexture, MRTKShaderUtils.OcclusionMap, newMat);
-
+                        
                         LoadTextureInMaterial(ext.id, ext.metallicTexture, MRTKShaderUtils.MetallicMap, newMat);
                         LoadTextureInMaterial(ext.id, ext.metallicRoughnessTexture, MRTKShaderUtils.MetallicMap, newMat);
 #else
