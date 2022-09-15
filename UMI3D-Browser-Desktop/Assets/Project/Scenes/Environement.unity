@@ -3120,11 +3120,6 @@ PrefabInstance:
       propertyPath: viewpointBonetype
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 7079216685592033180, guid: d599db4b8e88c6246a10c7a44287b2d5,
-        type: 3}
-      propertyPath: <targetTrackingFPS>k__BackingField
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 7449068796877125518, guid: d599db4b8e88c6246a10c7a44287b2d5,
         type: 3}
       propertyPath: m_Enabled
@@ -3366,5 +3361,3 @@ MonoBehaviour:
     type: 3}
   Emotes: []
   defaultIcon: {fileID: 21300000, guid: 17e1536176d5f10478e7b7a0f3236bb4, type: 3}
-  hasReceivedEmotes: 0
-  IsPlayingEmote: 0
