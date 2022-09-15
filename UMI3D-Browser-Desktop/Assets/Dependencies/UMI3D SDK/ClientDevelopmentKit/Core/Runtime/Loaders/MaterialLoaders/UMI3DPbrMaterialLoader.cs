@@ -55,13 +55,7 @@ namespace umi3d.cdk
                         newMat.SetFloat("_Surface", 1);
 #endif
                     }
-                    // Check if emissive color is not black
-                    if ((Vector4)(Vector3)dto.emissiveFactor != new Vector4(0, 0, 0, 0))
-                    {
-                        // set material emissive. Should have a material with emissive to true and a emissive color not to black in Resource folder to works (Unity requirement).
-                        newMat.EnableKeyword("_EMISSION");
-                        newMat.globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive;
-                    }
+                    //Should have a material with emissive to true and a emissive color not to black in Resource folder to works(Unity requirement).
                     newMat.ApplyShaderProperty(MRTKShaderUtils.EmissiveColor, (Vector4)(Vector3)dto.emissiveFactor);
                     newMat.ApplyShaderProperty(MRTKShaderUtils.Metallic, dto.pbrMetallicRoughness.metallicFactor);
                     newMat.ApplyShaderProperty(MRTKShaderUtils.Smoothness, 1 - dto.pbrMetallicRoughness.roughnessFactor);
