@@ -13,9 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System.Collections.Generic;
 using umi3d.cdk;
+using umi3d.cdk.volumes;
 using umi3d.common;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace umi3d.baseBrowser.Navigation
 {
@@ -25,6 +28,10 @@ namespace umi3d.baseBrowser.Navigation
     /// </summary>
     public class NavmeshManager : MonoBehaviour
     {
+        #region Methods
+
+        #region Navmesh
+
         /// <summary>
         /// Name of the layer where objects of the navmesh will be set.
         /// </summary>
@@ -39,6 +46,18 @@ namespace umi3d.baseBrowser.Navigation
 
         private LayerMask obstacleLayer;
 
+        #endregion
+
+        #region Volume
+
+        public Material invisibleMaterial;
+
+        private Dictionary<ulong, GameObject> cellIdToGameobjects = new Dictionary<ulong, GameObject>();
+
+        #endregion
+
+        #endregion
+
         void Start()
         {
             navmeshLayer = LayerMask.NameToLayer(navmeshLayerName);
@@ -46,6 +65,72 @@ namespace umi3d.baseBrowser.Navigation
             Debug.Assert(navmeshLayer != default && obstacleLayerName != default);
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(InitNavMesh);
+
+            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnLeaving.AddListener(Reset);
+
+            VolumePrimitiveManager.SubscribeToPrimitiveCreation(OnPrimitiveCreated, false);
+            VolumePrimitiveManager.SubscribeToPrimitiveDelete(OnPrimitiveDeleted);
+        }
+
+        /// <summary>
+        /// Creates an obstacle when a new primitive non traversable is created.
+        /// </summary>
+        /// <param name="primitive"></param>
+        private void OnPrimitiveCreated(AbstractVolumeCell primitive)
+        {
+            if (primitive.isTraversable)
+                return;
+
+            GameObject go = new GameObject("Obstacle-Volume-" + primitive.Id());
+            go.transform.SetParent((primitive as AbstractPrimitive)?.rootNode?.transform);
+            go.transform.localPosition = Vector3.zero;
+            go.transform.localRotation = Quaternion.identity;
+
+            switch (primitive)
+            {
+                case Box box:
+                    BoxCollider boxCollider = go.AddComponent<BoxCollider>();
+                    boxCollider.center = box.bounds.center;
+                    boxCollider.size = box.bounds.size;
+                    break;
+                case Cylinder cylinder:
+                    CapsuleCollider capsuleCollider = go.AddComponent<CapsuleCollider>();
+                    capsuleCollider.height = cylinder.height;
+                    capsuleCollider.radius = cylinder.radius;
+                    break;
+                default:
+                    Destroy(go);
+                    Debug.LogError("Primitive of type " + primitive?.GetType() + " not supported.");
+                    break;
+            }
+
+            if (go != null)
+                ChangeObjectAndChildrenLayer(go, obstacleLayer);
+        }
+
+        /// <summary>
+        /// If <paramref name="primitive"/> had a related obstacle, deletes it.
+        /// </summary>
+        /// <param name="primitive"></param>
+        private void OnPrimitiveDeleted(AbstractVolumeCell primitive)
+        {
+            if (cellIdToGameobjects.ContainsKey(primitive.Id()))
+            {
+                GameObject go = cellIdToGameobjects[primitive.Id()];
+                if (go != null)
+                    Destroy(go);
+                cellIdToGameobjects.Remove(primitive.Id());
+            }
+        }
+
+        private void Reset()
+        {
+            foreach (var primitive in cellIdToGameobjects)
+            {
+                if (primitive.Value != null)
+                 Destroy(primitive.Value);
+            }
+            cellIdToGameobjects.Clear();
         }
 
         /// <summary>
