@@ -55,11 +55,10 @@ namespace umi3d.cdk
                         newMat.SetFloat("_Surface", 1);
 #endif
                     }
-                    //if ((Vector4)(Vector3)dto.emissiveFactor != new Vector4(0,0,0,0) && (Vector4)(Vector3)dto.emissiveFactor != new Vector4(1,1,1,1)) 
-                    //    UnityEngine.Debug.Log($"color = {(Vector4)(Vector3)dto.emissiveFactor}; {dto.name}");
+                    // Check if emissive color is not black
                     if ((Vector4)(Vector3)dto.emissiveFactor != new Vector4(0, 0, 0, 0))
                     {
-                        UnityEngine.Debug.Log($"color {(Vector4)(Vector3)dto.emissiveFactor}, {dto.name}");
+                        // set material emissive. Should have a material with emissive to true and a emissive color not to black in Resource folder to works (Unity requirement).
                         newMat.EnableKeyword("_EMISSION");
                         newMat.globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive;
                     }
