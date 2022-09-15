@@ -46,6 +46,8 @@ namespace umi3d.cdk.collaboration
         #region public field
 
         public static MicrophoneEvent OnSaturated = new MicrophoneEvent();
+        public static MicrophoneEvent OnConnectedToMumble = new MicrophoneEvent();
+        public bool ConnectedToMumble { get; private set; } = false;
 
         private bool micIsOn => mumbleMic?.isRecording ?? false;
 
@@ -117,6 +119,9 @@ namespace umi3d.cdk.collaboration
         #endregion
         #region private field
 
+        private bool running = false;
+        private int millisecondsHeartBeat = 3000;
+
         private string _pendingMic = null;
         private MumbleClient mumbleClient;
         private MumbleMicrophone mumbleMic;
@@ -171,6 +176,8 @@ namespace umi3d.cdk.collaboration
             UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(Reset);
 
             pushToTalkKeycode = KeyCode.M;
+
+            Heartbeat();
         }
 
         private void _OnApplicationQuit()
@@ -181,6 +188,7 @@ namespace umi3d.cdk.collaboration
             UMI3DUser.OnUserMicrophoneServerUpdated.RemoveListener(ServerUpdate);
             UMI3DUser.OnUserMicrophoneUseMumbleUpdated.RemoveListener(UseMumbleUpdate);
             UMI3DCollaborationClientServer.Instance.OnRedirection.RemoveListener(Reset);
+            running = false;
         }
         #endregion
 
@@ -235,6 +243,7 @@ namespace umi3d.cdk.collaboration
                     UnityEngine.Debug.LogException(e);
                 }
             }
+            SendConnectedToMumble(false);
             mumbleClient = null;
             playingInit = false;
             playing = false;
@@ -266,6 +275,22 @@ namespace umi3d.cdk.collaboration
 
         #region private method
 
+        void SendConnectedToMumble(bool state)
+        {
+            if (state != ConnectedToMumble)
+            {
+                ConnectedToMumble = state;
+                try
+                {
+                    OnConnectedToMumble.Invoke(ConnectedToMumble);
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.LogError(e);
+                }
+            }
+        }
+
         void UpdateUser()
         {
             if (UMI3DCollaborationEnvironmentLoader.Exists)
@@ -279,6 +304,17 @@ namespace umi3d.cdk.collaboration
                     channelToJoin = user.audioChannel;
                     useMumble = user.useMumble;
                 }
+            }
+        }
+
+        private async void Heartbeat()
+        {
+            running = true;
+            while (running)
+            {
+                await UMI3DAsyncManager.Delay(millisecondsHeartBeat);
+                if (mumbleClient == null)
+                    StartMicrophoneAsync();
             }
         }
 
@@ -346,6 +382,8 @@ namespace umi3d.cdk.collaboration
                                 mumbleMic.StartSendingAudio();
 
                             playing = true;
+
+                            SendConnectedToMumble(true);
 
                             return;
                         }
@@ -533,6 +571,7 @@ namespace umi3d.cdk.collaboration
         }
         private void DestroyMumbleAudioPlayer(uint session, MumbleAudioPlayer playerToDestroy)
         {
+            playerToDestroy?.Reset();
             //UnityEngine.GameObject.Destroy(playerToDestroy.gameObject);
         }
         #endregion
