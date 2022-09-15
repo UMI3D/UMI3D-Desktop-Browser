@@ -25,8 +25,6 @@ namespace umi3d.cdk.volumes
     /// </summary>
     public class Box : AbstractPrimitive
     {
-        public GameObject go;
-
         /// <summary>
         /// World to local matrix
         /// </summary>
