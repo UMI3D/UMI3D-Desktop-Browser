@@ -15,6 +15,7 @@ limitations under the License.
 */
 using BrowserDesktop;
 using System;
+using System.Linq;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.menu;
@@ -131,8 +132,8 @@ namespace umi3dDesktopBrowser.ui
             EmoteWindow_E.Instance.DisplayedOrHidden += BottomBar_E.Instance.Emotes.Toggle;
 
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => m_startOfSession = DateTime.Now);
-            UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += () => {
-                int usersCount = UMI3DCollaborationEnvironmentLoader.Instance.UserList.Count;
+            UMI3DCollaborationEnvironmentLoader.OnUpdateJoinnedUserList += () => {
+                int usersCount = UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList.Count();
                 BottomBar_E.Instance.ParticipantCount.value = (usersCount < 2) ? $"{usersCount} participant" : $"{usersCount} participants";
             };
         }
