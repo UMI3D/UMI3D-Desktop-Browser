@@ -327,7 +327,7 @@ namespace umi3d.cdk.collaboration
                 await UMI3DAsyncManager.Delay(millisecondsHeartBeat);
                 if ((mumbleClient == null || !playing) && running)
                     await StartMicrophone();
-                else if(await IsPLaying() && running && channelToJoin != lastChannelJoined)
+                else if (await IsPLaying() && running && channelToJoin != lastChannelJoined)
                     await JoinChannel();
             }
         }
@@ -345,7 +345,6 @@ namespace umi3d.cdk.collaboration
                     return;
                 }
 
-                UnityEngine.Debug.Log("Sart Connection");
                 if (UMI3DCollaborationEnvironmentLoader.Exists)
                 {
                     UMI3DUser user = UMI3DCollaborationEnvironmentLoader.Instance.GetClientUser();
@@ -394,7 +393,7 @@ namespace umi3d.cdk.collaboration
                             lastChannelJoined = null;
 
                             joinOnce = true;
-                            await _JoinChannel(0,true);
+                            await _JoinChannel(0, true);
                             joinOnce = false;
 
                             if (mumbleMic.VoiceSendingType == MumbleMicrophone.MicType.AlwaysSend
@@ -437,12 +436,12 @@ namespace umi3d.cdk.collaboration
 
         private async Task JoinChannel()
         {
-            if(joinOnce)
+            if (joinOnce)
             {
                 while (joinOnce)
                     await UMI3DAsyncManager.Yield();
                 return;
-            }    
+            }
 
             joinOnce = true;
             await _JoinChannel(0);
@@ -451,11 +450,9 @@ namespace umi3d.cdk.collaboration
 
         private async Task _JoinChannel(int trycount, bool ignorePlaying = false)
         {
-            //channelToJoin = lastChannelJoined;
-            //return;
             if ((ignorePlaying || await IsPLaying())
                 && canJoinChannel
-                && joinOnce 
+                && joinOnce
                 && trycount < 5
                 && !string.IsNullOrEmpty(channelToJoin)
                 && mumbleClient != null
@@ -464,17 +461,15 @@ namespace umi3d.cdk.collaboration
                 if (!mumbleClient.JoinChannel(channelToJoin))
                 {
                     float t = Time.time + 1;
-                    while(Time.time < t && canJoinChannel)
+                    while (Time.time < t && canJoinChannel)
                         await UMI3DAsyncManager.Yield();
-                    if(canJoinChannel)
+                    if (canJoinChannel)
                         await _JoinChannel(trycount + 1, ignorePlaying);
                     return;
                 }
                 lastChannelJoined = channelToJoin;
-                UnityEngine.Debug.LogError($"Success join channel {channelToJoin} {lastChannelJoined}");
                 return;
             }
-            UnityEngine.Debug.LogError($"Abort join channel {canJoinChannel} {playing} {playingInit} {joinOnce} {trycount} {channelToJoin} {mumbleClient != null} {lastChannelJoined}");
         }
 
         private async Task<bool> IsPLaying()

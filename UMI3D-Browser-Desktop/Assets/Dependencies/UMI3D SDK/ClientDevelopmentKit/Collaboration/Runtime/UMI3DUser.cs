@@ -93,8 +93,7 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         /// <param name="user"></param>
         public void Update(UserDto user)
-        { 
-
+        {
             bool statusUpdate = dto.status != user.status;
             bool avatarUpdate = dto.avatarId != user.avatarId;
             bool audioUpdate = dto.audioSourceId != user.audioSourceId;

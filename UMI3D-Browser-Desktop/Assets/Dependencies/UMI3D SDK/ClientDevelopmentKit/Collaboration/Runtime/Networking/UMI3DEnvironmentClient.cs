@@ -301,7 +301,7 @@ namespace umi3d.cdk.collaboration
                         break;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 UMI3DLogger.LogWarning($"Error on OnMessage({message})", scope);
                 UMI3DLogger.LogExcetion(e, scope);
@@ -339,7 +339,7 @@ namespace umi3d.cdk.collaboration
                         break;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 UMI3DLogger.LogWarning($"Error on OnStatusChanged({statusDto})", scope);
                 UMI3DLogger.LogExcetion(e, scope);
