@@ -489,6 +489,8 @@ namespace umi3d.baseBrowser.Controller
 
                 if (!interactable.Active) continue;
 
+                if (interactable.InteractionDistance >= 0 && interactable.InteractionDistance < hit.distance) continue;
+
                 mouseData.CurrentHoveredId = cdk.UMI3DEnvironmentLoader.GetNodeID(hit.collider);
 
                 mouseData.CurrentHovered = interactable;
