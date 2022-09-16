@@ -16,7 +16,6 @@ limitations under the License.
 using BrowserDesktop.Controller;
 using BrowserDesktop.Menu;
 using System;
-using System.Collections;
 using System.Linq;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
@@ -258,15 +257,24 @@ public class UserListSetting
 
     public UserListSetting()
     {
-        UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += RefreshList;
+        UMI3DCollaborationEnvironmentLoader.OnUpdateJoinnedUserList += RefreshList;
 
-        UMI3DUser.OnUserMicrophoneStatusUpdated.AddListener((u) => { Users.FirstOrDefault(U => (U.user == u))?.setValue(); });
-        UMI3DUser.OnUserAvatarStatusUpdated.AddListener((u) => { Users.FirstOrDefault(U => (U.user == u))?.setValue(); });
-        UMI3DUser.OnUserAttentionStatusUpdated.AddListener((u) => { Users.FirstOrDefault(U => (U.user == u))?.setValue(); });
+        UMI3DUser.OnUserMicrophoneStatusUpdated.AddListener(UpdateUser);
+        UMI3DUser.OnUserAvatarStatusUpdated.AddListener(UpdateUser);
+        UMI3DUser.OnUserAttentionStatusUpdated.AddListener(UpdateUser);
 
         UMI3DUser.OnRemoveUser.AddListener((u) => { Users.FirstOrDefault(U => (U.user == u))?.Unbind(null); });
 
         RefreshList();
+    }
+
+    void UpdateUser(UMI3DUser user)
+    {
+        var _u = Users.FirstOrDefault(U => (U.user == user));
+        if (_u == null)
+            RefreshList();
+        else
+            _u.setValue();
     }
 
     void RefreshList()
@@ -279,7 +287,7 @@ public class UserListSetting
 
     void InitUsers()
     {
-        Users = UMI3DCollaborationEnvironmentLoader.Instance.UserList.Where(u=>!u.isClient).Select(u => new User(u)).ToArray();
+        Users = UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList.Where(u=>!u.isClient).Select(u => new User(u)).ToArray();
     }
 }
 
