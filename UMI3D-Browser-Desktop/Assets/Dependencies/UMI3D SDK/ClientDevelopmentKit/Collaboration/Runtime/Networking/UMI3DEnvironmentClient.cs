@@ -45,6 +45,8 @@ namespace umi3d.cdk.collaboration
         public readonly ForgeConnectionDto connectionDto;
         private readonly UMI3DWorldControllerClient worldControllerClient;
 
+        static public UnityEvent Connected = new UnityEvent();
+
         public ulong GetUserID() { return UserDto.answerDto.id; }
 
         public DateTime lastTokenUpdate { get; private set; }
@@ -171,6 +173,10 @@ namespace umi3d.cdk.collaboration
                 GameObject.Destroy(ForgeClient);
                 await UMI3DAsyncManager.Delay(500);
                 Connect();
+            }
+            else
+            {
+                Connected.Invoke();
             }
         }
 
