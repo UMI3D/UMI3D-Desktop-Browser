@@ -57,7 +57,7 @@ namespace umi3d.cdk.collaboration
 
         void OnUserSpeaking(UMI3DUser user, bool isSpeaking)
         {
-            if(isSpeaking)
+            if (isSpeaking)
             {
                 if (user != null && user.onStartSpeakingAnimationId != 0)
                     StartAnim(user.onStartSpeakingAnimationId);
