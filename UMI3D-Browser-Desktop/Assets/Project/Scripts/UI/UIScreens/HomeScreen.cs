@@ -62,7 +62,7 @@ public class HomeScreen
         backMenuBnt = rootDocument.Q<Button>("backMenuBtn");
         nextMenuBnt = rootDocument.Q<Button>("nextMenuBtn");
 
-        root = rootDocument.Q<VisualElement>("home-screen");
+        root = rootDocument.Q<VisualElement>("homeScreen");
 
         //Saved Servers
         savedServersBox = root.Q<VisualElement>("saved-servers");
