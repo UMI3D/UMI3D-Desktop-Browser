@@ -54,10 +54,6 @@ namespace Mumble
 
         internal void Connect()
         {
-            EventProcessor.Instance.QueueEvent(() =>
-            {
-                UnityEngine.Debug.Log("Connect");
-            });
             //Debug.Log("Establishing UDP connection");
             _cryptState = new CryptState
             {
@@ -88,8 +84,6 @@ namespace Mumble
         {
             SendPing();
         }
-
-        bool once = false;
 
         private void ReceiveUDP()
         {
@@ -130,7 +124,7 @@ namespace Mumble
                 catch (Exception ex)
                 {
                     if (ex is ObjectDisposedException) { return; }
-                    else if (ex is ThreadAbortException) { Debug.LogException( ex); return; }
+                    else if (ex is ThreadAbortException) { Debug.LogException(ex); return; }
                     else if (ex is System.Net.Sockets.SocketException) { Debug.LogException(ex); return; }
                     else
                         Debug.LogError("Unhandled UDP receive error: " + ex);
@@ -168,11 +162,6 @@ namespace Mumble
                 default:
                     Debug.LogError("Not implemented: " + ((UDPType)type) + " #" + type);
                     return false;
-            }
-            if (!once)
-            {
-                once = true;
-                Debug.LogError("Received something once");
             }
             return true;
         }
@@ -242,10 +231,6 @@ namespace Mumble
         }
         internal void SendPing()
         {
-            EventProcessor.Instance.QueueEvent(() =>
-            {
-                UnityEngine.Debug.Log("Send Ping");
-            });
             ulong unixTimeStamp = (ulong)(DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks);
             byte[] timeBytes = BitConverter.GetBytes(unixTimeStamp);
             timeBytes.CopyTo(_sendPingBuffer, 1);
