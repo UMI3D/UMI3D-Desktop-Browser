@@ -226,7 +226,6 @@ namespace Mumble
             _decodingBufferPool = new DecodingBufferPool(_audioDecodeThread);
             _udpConnection = new MumbleUdpConnection(endpoint, _audioDecodeThread, this);
             _udpConnection.ConnectionError.AddListener(SendError);
-            UnityEngine.Debug.Log("Init");
             _tcpConnection = new MumbleTcpConnection(endpoint, _hostName,
                 _udpConnection.UpdateOcbServerNonce, _udpConnection, this);
 
@@ -490,7 +489,6 @@ namespace Mumble
 
         internal void ConnectUdp()
         {
-            Debug.LogWarning("Connect Udp");
             _udpConnection.Connect();
         }
         public void Close()
@@ -883,7 +881,6 @@ namespace Mumble
                 return _udpConnection.GetLatestClientNonce();
             return null;
         }
-
         internal void OnNotifyPingReceived()
         {
             EventProcessor.Instance.QueueEvent(() =>
@@ -892,7 +889,6 @@ namespace Mumble
                     OnPingReceived();
             });
         }
-
         internal void OnConnectionDisconnect()
         {
             Debug.LogError("Mumble connection disconnected");

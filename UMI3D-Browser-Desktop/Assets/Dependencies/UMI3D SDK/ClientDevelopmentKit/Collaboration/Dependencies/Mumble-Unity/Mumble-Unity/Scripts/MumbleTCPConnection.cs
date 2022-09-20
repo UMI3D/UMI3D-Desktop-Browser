@@ -41,8 +41,6 @@ namespace Mumble
         internal MumbleTcpConnection(IPEndPoint host, string hostname, UpdateOcbServerNonce updateOcbServerNonce,
             MumbleUdpConnection udpConnection, MumbleClient mumbleClient)
         {
-            UnityEngine.Debug.Log("MumbleTcpConnection");
-
             _model = (ProtoBuf.Meta.TypeModel)Activator.CreateInstance(Type.GetType("MyProtoModel, MyProtoModel"));
 
             _host = host;
@@ -58,20 +56,17 @@ namespace Mumble
             {
                 IsBackground = true
             };
-            UnityEngine.Debug.Log("_MumbleTcpConnection");
         }
 
         internal void StartClient(string username, string password)
         {
-            Debug.LogError("Start Client");
             _username = username;
             _password = password;
             _tcpClient.BeginConnect(_host.Address, _host.Port, new AsyncCallback(OnTcpConnected), null);
             //Debug.Log("Attempting to connect to " + _host);
         }
-        private async void OnTcpConnected(IAsyncResult connectionResult)
+        private void OnTcpConnected(IAsyncResult connectionResult)
         {
-            Debug.LogError($"Tcp Connected {_tcpClient?.Connected}");
             try
             {
                 if (_tcpClient == null || !_tcpClient.Connected)
@@ -79,45 +74,23 @@ namespace Mumble
                     throw new Exception("Failed to connect");
                 }
 
-                Debug.LogError($"Tcp Connected A");
                 NetworkStream networkStream = _tcpClient.GetStream();
-                Debug.LogError($"Tcp Connected B");
                 _ssl = new SslStream(networkStream, false, ValidateCertificate);
-                Debug.LogError($"Tcp Connected C");
-                int trycount = 0;
-                while (true)
-                {
-                    try
-                    {
-                        _ssl.AuthenticateAsClient(_hostname);
-                    }
-                    catch 
-                    {
-                        trycount++;
-                        if (trycount < 4)
-                        {
-                            await Task.Delay(3000);
-                            continue;
-                        }
-                        throw;
-                    }
-                }
-                Debug.LogError($"Tcp Connected D");
+
+                _ssl.AuthenticateAsClient(_hostname);
+
                 _reader = new BinaryReader(_ssl);
-                Debug.LogError($"Tcp Connected E");
                 _writer = new BinaryWriter(_ssl);
-                Debug.LogError($"Tcp Connected F");
                 DateTime startWait = DateTime.Now;
                 while (!_ssl.IsAuthenticated)
                 {
                     if (DateTime.Now - startWait > TimeSpan.FromSeconds(2))
                         throw new TimeoutException("Time out waiting for SSL authentication");
                 }
-                Debug.LogError($"Tcp Connected G");
                 SendVersion();
                 StartPingTimer();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.LogException(e);
                 Debug.LogError("Connection failed! Please confirm that you have internet access, and that the hostname is correct");
@@ -204,19 +177,11 @@ namespace Mumble
 
         private void ProcessTcpData()
         {
-            EventProcessor.Instance.QueueEvent(() =>
-            {
-                UnityEngine.Debug.LogError("Start ProcessTcpData");
-            });
             // This thread is aborted in Close()
             while (_running)
             {
                 try
                 {
-                    EventProcessor.Instance.QueueEvent(() =>
-                    {
-                        UnityEngine.Debug.Log("ProcessTcpData");
-                    });
                     var messageType = (MessageType)IPAddress.NetworkToHostOrder(_reader.ReadInt16());
                     switch (messageType)
                     {
@@ -356,7 +321,6 @@ namespace Mumble
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogException(ex);
                     if (ex is EndOfStreamException)
                     {
                         Debug.LogError("EOS Exception: " + ex);//This happens when we connect again with the same username
@@ -386,10 +350,8 @@ namespace Mumble
 
         private void ProcessCryptSetup(CryptSetup cryptSetup)
         {
-            Debug.LogWarning("ProcessCryptSetup");
             if (cryptSetup.Key != null && cryptSetup.ClientNonce != null && cryptSetup.ServerNonce != null)
             {
-                Debug.LogWarning("Connect Udp");
                 // Apply the key and client/server nonce values provided
                 _mumbleClient.CryptSetup = cryptSetup;
                 _mumbleClient.ConnectUdp();
@@ -409,15 +371,10 @@ namespace Mumble
         internal void Close()
         {
             // Signal thread that it's time to shut down
-            EventProcessor.Instance.QueueEvent(() =>
-            {
-                UnityEngine.Debug.Log("Close");
-            });
             _running = false;
 
             if (_ssl != null)
-                lock(_ssl)
-                    _ssl.Close();
+                _ssl.Close();
             _ssl = null;
             if (_tcpTimer != null)
                 _tcpTimer.Close();
