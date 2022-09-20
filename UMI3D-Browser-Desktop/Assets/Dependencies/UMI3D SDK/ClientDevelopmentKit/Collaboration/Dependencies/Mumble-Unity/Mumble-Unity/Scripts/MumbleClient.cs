@@ -78,6 +78,8 @@ namespace Mumble
         /// </summary>
         public delegate void OnDisconnectedMethod();
 
+        public delegate void OnPingReceivedMethod();
+
         // Actions for non-main threaded events
         public Action<uint> OnNewDecodeBufferThreaded;
         public Action<uint> OnRemovedDecodeBufferThreaded;
@@ -92,6 +94,7 @@ namespace Mumble
 
         public OnChannelChangedMethod OnChannelChanged;
         public OnDisconnectedMethod OnDisconnected;
+        public OnPingReceivedMethod OnPingReceived;
         private MumbleTcpConnection _tcpConnection;
         private MumbleUdpConnection _udpConnection;
         private DecodingBufferPool _decodingBufferPool;
@@ -223,6 +226,7 @@ namespace Mumble
             _decodingBufferPool = new DecodingBufferPool(_audioDecodeThread);
             _udpConnection = new MumbleUdpConnection(endpoint, _audioDecodeThread, this);
             _udpConnection.ConnectionError.AddListener(SendError);
+            UnityEngine.Debug.Log("Init");
             _tcpConnection = new MumbleTcpConnection(endpoint, _hostName,
                 _udpConnection.UpdateOcbServerNonce, _udpConnection, this);
 
@@ -486,6 +490,7 @@ namespace Mumble
 
         internal void ConnectUdp()
         {
+            Debug.LogWarning("Connect Udp");
             _udpConnection.Connect();
         }
         public void Close()
@@ -878,6 +883,16 @@ namespace Mumble
                 return _udpConnection.GetLatestClientNonce();
             return null;
         }
+
+        internal void OnNotifyPingReceived()
+        {
+            EventProcessor.Instance.QueueEvent(() =>
+            {
+                if (OnPingReceived != null)
+                    OnPingReceived();
+            });
+        }
+
         internal void OnConnectionDisconnect()
         {
             Debug.LogError("Mumble connection disconnected");

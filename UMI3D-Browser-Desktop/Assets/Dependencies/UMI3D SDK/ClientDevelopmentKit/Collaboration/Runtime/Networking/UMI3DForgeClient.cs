@@ -634,12 +634,12 @@ namespace umi3d.cdk.collaboration
 
                     foreach (UserTrackingFrameDto trackingFrame in frames)
                     {
-                        if (UMI3DClientUserTracking.Instance.embodimentDict.TryGetValue(trackingFrame.userId, out UserAvatar userAvatar))
+                        if (UMI3DClientUserTracking.Instance.embodimentDict.TryGetValue(trackingFrame.userId, out UserAvatar userAvatar) && userAvatar is UMI3DCollaborativeUserAvatar user)
                         {
                             MainThreadManager.Run(() =>
                             {
                                 if (client.Time.Timestep - frame.TimeStep < 500)
-                                    StartCoroutine((userAvatar as UMI3DCollaborativeUserAvatar).UpdateAvatarPosition(trackingFrame, frame.TimeStep));
+                                    StartCoroutine((user).UpdateAvatarPosition(trackingFrame, frame.TimeStep));
                             });
                         }
                         else
