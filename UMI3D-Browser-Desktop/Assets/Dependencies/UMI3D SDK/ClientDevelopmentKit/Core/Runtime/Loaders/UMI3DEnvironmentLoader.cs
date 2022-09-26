@@ -574,12 +574,6 @@ namespace umi3d.cdk
             
             Action<LoadEntityDto> callback = (load) =>
             {
-                if(load == null)
-                {
-                    performed?.Invoke();
-                    return;
-                }
-
                 int count = load.entities.Count;
                 Action performed2 = () => { performedCount++; if (performedCount == count) performed.Invoke(); };
                 foreach (IEntity item in load.entities)
@@ -698,7 +692,7 @@ namespace umi3d.cdk
                     LoadDefaultMaterial(extension.defaultMaterial);
                 }
                 foreach (PreloadedSceneDto scene in extension.preloadedScenes)
-                    Parameters.ReadUMI3DExtension(scene, node, null, (e)=>UMI3DLogger.LogException(e,scope));
+                    Parameters.ReadUMI3DExtension(scene, node, null, (e) => UMI3DLogger.LogException(e, scope));
                 RenderSettings.ambientMode = (AmbientMode)extension.ambientType;
                 RenderSettings.ambientSkyColor = extension.skyColor;
                 RenderSettings.ambientEquatorColor = extension.horizontalColor;

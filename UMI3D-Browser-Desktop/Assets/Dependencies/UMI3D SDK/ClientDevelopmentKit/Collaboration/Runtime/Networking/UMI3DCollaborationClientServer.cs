@@ -17,7 +17,6 @@ limitations under the License.
 using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.collaboration;
@@ -144,7 +143,6 @@ namespace umi3d.cdk.collaboration
                     {
                         Instance.OnRedirection.Invoke();
                         loadingEntities.Clear();
-
 
                         UMI3DEnvironmentClient env = environmentClient;
                         environmentClient = null;
@@ -373,13 +371,9 @@ namespace umi3d.cdk.collaboration
                     await (environmentClient?.GetEntity(idsToSend) ?? Task.FromResult<LoadEntityDto>(null))
                     : new LoadEntityDto() { entities = new List<IEntity>() };
             }
-            catch
-            {
-                UnityEngine.Debug.LogError($"FAILED {idsToSend.ToString<ulong>()}");
-            }
             finally
             {
-                
+
                 foreach (var id in idsToSend)
                 {
                     loadingEntities.Remove(id);
@@ -392,7 +386,6 @@ namespace umi3d.cdk.collaboration
         }
 
         private static SortedSet<ulong> loadingEntities = new SortedSet<ulong>();
-       // private List<ulong> idsToSend = new List<ulong>();
 
 
         ///<inheritdoc/>
