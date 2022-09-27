@@ -73,7 +73,7 @@ namespace umi3d.cdk
             this.computedString = ComputeString(info);
         }
 
-        public RequestFailedArgument(long responseCode, int count, DateTime date, Func<RequestFailedArgument, bool> ShouldTryAgain, string info =null)
+        public RequestFailedArgument(long responseCode, int count, DateTime date, Func<RequestFailedArgument, bool> ShouldTryAgain, string info = null)
         {
             this.request = null;
             this.responseCode = responseCode;
