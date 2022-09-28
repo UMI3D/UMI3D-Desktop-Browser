@@ -265,9 +265,6 @@ namespace umi3d.cdk.collaboration
         private async void OnMicDisconnected()
         {
             await ForceStopMicrophone(true);
-
-            //string disconnectedMicName = mumbleMic.GetCurrentMicName();
-            //StartCoroutine(ExampleMicReconnect(disconnectedMicName));
         }
 
 
@@ -418,9 +415,9 @@ namespace umi3d.cdk.collaboration
 
                 if (await AbortConnection())
                     return;
-                
 
-                if(mumbleMic == null)
+
+                if (mumbleMic == null)
                     throw new Exception("No Mumble Microphone");
 
                 if (_pendingMic != null)
