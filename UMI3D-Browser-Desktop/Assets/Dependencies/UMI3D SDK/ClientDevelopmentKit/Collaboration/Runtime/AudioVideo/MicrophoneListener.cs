@@ -262,10 +262,12 @@ namespace umi3d.cdk.collaboration
             joinOnce = false;
         }
 
-        private void OnMicDisconnected()
+        private async void OnMicDisconnected()
         {
-            string disconnectedMicName = mumbleMic.GetCurrentMicName();
-            StartCoroutine(ExampleMicReconnect(disconnectedMicName));
+            await ForceStopMicrophone(true);
+
+            //string disconnectedMicName = mumbleMic.GetCurrentMicName();
+            //StartCoroutine(ExampleMicReconnect(disconnectedMicName));
         }
 
 
@@ -654,6 +656,7 @@ namespace umi3d.cdk.collaboration
 
         private IEnumerator ExampleMicReconnect(string micToConnect)
         {
+
             while (playing)
             {
                 string[] micNames = Microphone.devices;
