@@ -129,6 +129,9 @@ namespace umi3d.cdk.userCapture
 
         private float lastTimeFrameSent = 0;
 
+        private ulong parentId = 0;
+
+        public ulong avatarSceneId = 0;
 
         public class HandPoseEvent : UnityEvent<UMI3DHandPoseDto> { };
         public class BodyPoseEvent : UnityEvent<UMI3DBodyPoseDto> { };
@@ -168,6 +171,11 @@ namespace umi3d.cdk.userCapture
         private UMI3DEmotesConfigDto emoteConfig;
 
         /// <summary>
+        /// Collection of emotes' coroutine related to playing for each user.
+        /// </summary>
+        private Dictionary<ulong, Coroutine> emoteCoroutineDict = new Dictionary<ulong, Coroutine>();
+
+        /// <summary>
         /// Starts an emote on another user's avatar in the scene.
         /// </summary>
         /// <param name="emoteId">Emote to start UMI3D Id.</param>
@@ -182,10 +190,20 @@ namespace umi3d.cdk.userCapture
             if (emoteAnimator == null || emoteConfig == null)
                 return;
             var emoteToPlay = emoteConfig.emotes.Find(x => x.id == emoteId);
-            StartCoroutine(PlayEmote(emoteAnimator, emoteToPlay));
+            if (emoteCoroutineDict.ContainsKey(userId) && emoteCoroutineDict[userId] != null) //an Emote is playing, need to interrupt it
+            {
+                StopCoroutine(emoteCoroutineDict[userId]);
+                emoteAnimator.enabled = false;
+                emoteAnimator.Update(0);
+            }
+
+            var coroutine = StartCoroutine(PlayEmote(emoteAnimator, emoteToPlay));
+            if (emoteCoroutineDict.ContainsKey(userId))
+                emoteCoroutineDict[userId] = coroutine;
+            else
+                emoteCoroutineDict.Add(userId, coroutine);
         }
 
-        private const string IdleStateName = "Idle";
         /// <summary>
         /// Plays an emote on an animator.
         /// </summary>
@@ -195,8 +213,8 @@ namespace umi3d.cdk.userCapture
         protected IEnumerator PlayEmote(Animator animator, UMI3DEmoteDto emote)
         {
             animator.enabled = true;
-            animator.Update(0);
             animator.Play(emote.stateName);
+            animator.Update(0);
             yield return new WaitWhile(() =>
             {
                 if (animator == null) return false;  // heppens when a user leaves the scene when playing an emote
@@ -204,8 +222,6 @@ namespace umi3d.cdk.userCapture
             });
             if (animator == null) // heppens when a user leaves the scene when playing an emote
                 yield break;
-            animator.Play(IdleStateName);
-            animator.Update(0);
             animator.enabled = false;
         }
 
@@ -217,17 +233,36 @@ namespace umi3d.cdk.userCapture
         /// Don't use this for your own avatar's emotes.
         public void StopEmoteOnOtherAvatar(ulong emoteId, ulong userId)
         {
-            var otherUserAvatar = embodimentDict[userId];
-            var animators = otherUserAvatar.GetComponentsInChildren<Animator>();
-            var emoteAnimator = animators.Where(animator => animator.runtimeAnimatorController != null).FirstOrDefault();
-
-            if (emoteAnimator == null || emoteConfig == null)
+            if (emoteConfig == null) //no emote support in the scene
                 return;
-            var emoteToStop = emoteConfig.emotes.Find(x => x.id == emoteId);
-            StopCoroutine(PlayEmote(emoteAnimator, emoteToStop));
-            emoteAnimator.Play(IdleStateName);
-            emoteAnimator.Update(0);
-            emoteAnimator.enabled = false;
+
+            if (emoteCoroutineDict.ContainsKey(userId) 
+                && emoteCoroutineDict[userId] != null)
+            {
+                StopCoroutine(emoteCoroutineDict[userId]);
+                emoteCoroutineDict[userId] = null;
+
+                if (UMI3DClientUserTracking.Instance.embodimentDict.TryGetValue(userId, out UserAvatar otherUserAvatar))
+                {
+                    if (otherUserAvatar == null) //the embodiment system lost the avatar
+                        return;
+
+                    var animators = otherUserAvatar.GetComponentsInChildren<Animator>();
+                    if (animators == null) //no animator to desactive found on the avatar
+                        return;
+
+                    var emoteAnimator = animators.Where(animator => animator.runtimeAnimatorController != null).FirstOrDefault();
+                    if (emoteAnimator == null) //no animator to desactive found on the avatar
+                        return;
+
+                    var emoteToStop = emoteConfig.emotes.Find(x => x.id == emoteId);
+                    if (emoteAnimator == null) //the emote to stop doesn't exist
+                        throw new Umi3dException("The emote to stop does not exist in emote configuration file.");
+
+                    emoteAnimator.Update(0);
+                    emoteAnimator.enabled = false;
+                }
+            }
         }
 
         public class AvatarEvent : UnityEvent<ulong> { };
@@ -281,6 +316,8 @@ namespace umi3d.cdk.userCapture
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => StartCoroutine(DispatchCamera()));
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => { if (sendTracking) StartCoroutine(DispatchTracking()); });
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => trackingReception = true);
+            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(InitParentId);
+            UMI3DNavigation.onEmbarkVehicleDelegate += UpdateParentId;
             EmotesLoadedEvent.AddListener((UMI3DEmotesConfigDto dto) => { emoteConfig = dto; });
             EmotePlayedSelfEvent.AddListener(delegate
             {
@@ -292,6 +329,22 @@ namespace umi3d.cdk.userCapture
                 IgnoreBones = false;
                 IsEmotePlaying = false;
             });
+        }
+
+        private void InitParentId()
+        {
+            var avatarScene = embodimentDict[UMI3DClientServer.Instance.GetUserId()].transform.parent;
+
+            parentId = UMI3DEnvironmentLoader.GetNodeID(avatarScene);
+            avatarSceneId = parentId;
+        }
+
+        private void UpdateParentId(ulong vehicleId)
+        {
+            if (vehicleId != 0)
+                parentId = vehicleId;
+            else
+                Debug.LogError("Parent id not valid.");
         }
 
         /// <summary>
@@ -351,7 +404,7 @@ namespace umi3d.cdk.userCapture
         /// Iterate through the bones of the browser's skeleton to create BoneDto
         /// </summary>
         /// <param name="forceNotNullDto">If true, <see cref="LastFrameDto"/> won't be null.</param>
-        protected void BonesIterator(bool forceNotNullDto = false)
+        protected void BonesIterator()
         {
             if (UMI3DEnvironmentLoader.Exists)
             {
@@ -369,10 +422,10 @@ namespace umi3d.cdk.userCapture
                     }
                 }
 
-                Vector3 position = UMI3DNavigation.Instance.transform.localPosition;
+                Vector3 position = UMI3DNavigation.Instance.transform.localPosition - (UMI3DNavigation.Instance.transform.position - transform.position);
                 Quaternion rotation = UMI3DNavigation.Instance.transform.localRotation * Quaternion.Inverse(UMI3DNavigation.Instance.transform.rotation) * transform.rotation;
 
-                if (!HasPlayerMoved(position, rotation, bonesList) && !forceNotNullDto && (Time.realtimeSinceStartup < lastTimeFrameSent + maximumTimeBetweenFramesSent))
+                if (!HasPlayerMoved(position, rotation, bonesList) && (Time.realtimeSinceStartup < lastTimeFrameSent + maximumTimeBetweenFramesSent))
                 {
                     LastFrameDto = null;
                 }
@@ -388,6 +441,7 @@ namespace umi3d.cdk.userCapture
                         rotation = rotation, //rotation relative to UMI3DEnvironmentLoader node
                         refreshFrequency = targetTrackingFPS,
                         userId = UMI3DClientServer.Instance.GetUserId(),
+                        parentId = parentId
                     };
                 }
 
