@@ -259,6 +259,8 @@ namespace umi3d.baseBrowser.connection
             Destroy(cdk.UMI3DClientServer.Instance.gameObject);
 
             UnityEngine.SceneManagement.SceneManager.LoadScene(launcherScene, UnityEngine.SceneManagement.LoadSceneMode.Single);
+
+            Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Free);
         }
 
         /// <summary>
