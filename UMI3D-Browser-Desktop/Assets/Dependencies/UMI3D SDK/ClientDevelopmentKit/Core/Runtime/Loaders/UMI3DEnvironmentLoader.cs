@@ -145,6 +145,13 @@ namespace umi3d.cdk
         public static ulong GetNodeID(Collider collider) { return Exists ? Instance.entities.Where(k => k.Value is UMI3DNodeInstance).FirstOrDefault(k => (k.Value as UMI3DNodeInstance).colliders.Any(c => c == collider)).Key : 0; }
 
         /// <summary>
+        /// Get node id associated to <paramref name="t"/>.
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static ulong GetNodeID(Transform t) { return Exists ? Instance.entities.Where(k => k.Value is UMI3DNodeInstance).FirstOrDefault(k => (k.Value as UMI3DNodeInstance).transform == t).Key : 0; }
+
+        /// <summary>
         /// Register a node instance.
         /// </summary>
         /// <param name="id">unique id of the node.</param>
@@ -532,7 +539,7 @@ namespace umi3d.cdk
                         });
                     break;
                 case AbstractEntityDto dto:
-                    Parameters.ReadUMI3DExtension(dto, null, performed, (s) => { UMI3DLogger.LogError(s, scope); performed.Invoke(); });
+                    Parameters.ReadUMI3DExtension(dto, null, performed, (s) => { UMI3DLogger.LogException(s, scope); performed.Invoke(); });
                     break;
                 case GlTFMaterialDto matDto:
                     Parameters.SelectMaterialLoader(matDto).LoadMaterialFromExtension(matDto, (m) =>
@@ -569,11 +576,13 @@ namespace umi3d.cdk
         {
             List<ulong> ids = UMI3DNetworkingHelper.ReadList<ulong>(container);
             ids.ForEach(id => NotifyEntityToBeLoaded(id));
-            int count = ids.Count;
+            
             int performedCount = 0;
-            Action performed2 = () => { performedCount++; if (performedCount == count) performed.Invoke(); };
+            
             Action<LoadEntityDto> callback = (load) =>
             {
+                int count = load.entities.Count;
+                Action performed2 = () => { performedCount++; if (performedCount == count) performed.Invoke(); };
                 foreach (IEntity item in load.entities)
                 {
                     if (item is MissingEntityDto missing)
@@ -592,8 +601,8 @@ namespace umi3d.cdk
             }
             catch (Exception e)
             {
-                UMI3DLogger.LogExcetion(e, scope);
-                performed2.Invoke();
+                UMI3DLogger.LogException(e, scope);
+                performed?.Invoke();
             }
         }
 
@@ -690,7 +699,7 @@ namespace umi3d.cdk
                     LoadDefaultMaterial(extension.defaultMaterial);
                 }
                 foreach (PreloadedSceneDto scene in extension.preloadedScenes)
-                    Parameters.ReadUMI3DExtension(scene, node, null, null);
+                    Parameters.ReadUMI3DExtension(scene, node, null, (e) => UMI3DLogger.LogException(e, scope));
                 RenderSettings.ambientMode = (AmbientMode)extension.ambientType;
                 RenderSettings.ambientSkyColor = extension.skyColor;
                 RenderSettings.ambientEquatorColor = extension.horizontalColor;
@@ -723,7 +732,7 @@ namespace umi3d.cdk
                     loader.UrlToObject,
                     loader.ObjectFromCache,
                     (mat) => SetBaseMaterial((Material)mat),
-                    (e) => UMI3DLogger.LogExcetion(e, scope),
+                    (e) => UMI3DLogger.LogException(e, scope),
                     loader.DeleteObject
                     );
             }
@@ -945,7 +954,7 @@ namespace umi3d.cdk
                 catch (Exception e)
                 {
                     UMI3DLogger.LogWarning("SetEntity not apply on this object, id = " + id + " ,  property = " + dto.property, scope);
-                    UMI3DLogger.LogExcetion(e, scope);
+                    UMI3DLogger.LogException(e, scope);
                 }
             }
             return true;
@@ -977,7 +986,7 @@ namespace umi3d.cdk
                 catch (Exception e)
                 {
                     UMI3DLogger.LogWarning($"SetEntity not apply on this object, id = {id},  operation = {operationId} ,  property = {propertyKey}", scope | DebugScope.Bytes);
-                    UMI3DLogger.LogExcetion(e, scope);
+                    UMI3DLogger.LogException(e, scope);
                 }
             }
             return true;
