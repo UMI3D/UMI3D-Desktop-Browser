@@ -213,8 +213,7 @@ namespace BrowserDesktop.Interaction
                         UMI3DResourcesManager.LoadFile(
                             interaction.id,
                             fileToLoad,
-                            loader.UrlToObject,
-                            loader.ObjectFromCache,
+                            loader,
                             (o) =>
                             {
                                 var obj = o as Texture2D;

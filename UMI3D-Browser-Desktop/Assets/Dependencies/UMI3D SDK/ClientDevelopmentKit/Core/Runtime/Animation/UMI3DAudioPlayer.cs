@@ -67,8 +67,7 @@ namespace umi3d.cdk
                 UMI3DResourcesManager.LoadFile(
                     dto.id,
                     fileToLoad,
-                    loader.UrlToObject,
-                    loader.ObjectFromCache,
+                    loader,
                     (o) =>
                     {
                         var clip = (AudioClip)o;
@@ -167,8 +166,7 @@ namespace umi3d.cdk
                         UMI3DResourcesManager.LoadFile(
                             ADto.id,
                             fileToLoad,
-                            loader.UrlToObject,
-                            loader.ObjectFromCache,
+                            loader,
                             (o) =>
                             {
                                 var clipa = (AudioClip)o;
@@ -232,8 +230,7 @@ namespace umi3d.cdk
                         UMI3DResourcesManager.LoadFile(
                             ADto.id,
                             fileToLoad,
-                            loader.UrlToObject,
-                            loader.ObjectFromCache,
+                            loader,
                             (o) =>
                             {
                                 var clipa = (AudioClip)o;

@@ -70,8 +70,7 @@ namespace umi3d.cdk
                     UMI3DResourcesManager.LoadFile(
                         nodeDto.id,
                         fileToLoad,
-                        loader.UrlToObject,
-                        loader.ObjectFromCache,
+                        loader,
                         (o) =>
                         {
                             if (o is GameObject g && dto is UMI3DMeshNodeDto meshDto)

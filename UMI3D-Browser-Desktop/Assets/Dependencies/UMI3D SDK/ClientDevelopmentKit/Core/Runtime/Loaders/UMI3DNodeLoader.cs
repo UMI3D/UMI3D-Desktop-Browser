@@ -625,8 +625,7 @@ namespace umi3d.cdk
                 UMI3DResourcesManager.LoadFile(
                     id,
                     fileToLoad,
-                    loader.UrlToObject,
-                    loader.ObjectFromCache,
+                    loader,
                     (o) =>
                     {
                         CallbackAfterLoadingCollider((GameObject)o, node.GetComponent<MeshCollider>());

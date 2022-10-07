@@ -517,7 +517,7 @@ namespace umi3d.cdk
                 if (loader != null)
                 {
                     count++;
-                    LoadFile(pair.entityIds.First(), pair, loader.UrlToObject, loader.ObjectFromCache, (obj) => { count--; }, (error) => { UMI3DLogger.LogError(error, scope); count--; }, loader.DeleteObject);
+                    LoadFile(pair.entityIds.First(), pair, loader, (obj) => { count--; }, (error) => { UMI3DLogger.LogError(error, scope); count--; }, loader.DeleteObject);
                 }
             }
             yield return new WaitUntil(() => { return count <= 0; });
@@ -559,8 +559,7 @@ namespace umi3d.cdk
                     LoadFile(
                         id ?? 0,
                         pair,
-                        loader.UrlToObject,
-                        loader.ObjectFromCache,
+                        loader,
                         (obj) => { count--; loadedResources.Invoke(total - count); },
                         (error) => { UMI3DLogger.LogError($"{error}[{pair.url}]", scope); count--; },
                         loader.DeleteObject);
@@ -596,17 +595,17 @@ namespace umi3d.cdk
             return fileUrl;
         }
 
-        public static void LoadFile(ulong id, FileDto file, Action<string, string, string, Action<object>, Action<Umi3dException>, string> urlToObject, Action<object, Action<object>, string> objectFromCache, Action<object> callback, Action<Umi3dException> failCallback, Action<object, string> deleteAction)
+        public static void LoadFile(ulong id, FileDto file, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback, Action<object, string> deleteAction)
         {
-            Instance._LoadFile(id, file, urlToObject, objectFromCache, callback, failCallback, deleteAction);
+            Instance._LoadFile(id, file, loader, callback, failCallback, deleteAction);
         }
 
-        private static void LoadFile(ulong id, ObjectData file, Action<string, string, string, Action<object>, Action<Umi3dException>, string> urlToObject, Action<object, Action<object>, string> objectFromCache, Action<object> callback, Action<Umi3dException> failCallback, Action<object, string> deleteAction)
+        private static void LoadFile(ulong id, ObjectData file, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback, Action<object, string> deleteAction)
         {
-            Instance._LoadFile(id, file, urlToObject, objectFromCache, callback, failCallback, deleteAction);
+            Instance._LoadFile(id, file, loader, callback, failCallback, deleteAction);
         }
 
-        private void _LoadFile(ulong id, ObjectData objectData, Action<string, string, string, Action<object>, Action<Umi3dException>, string> urlToObject, Action<object, Action<object>, string> objectFromCache, Action<object> callback, Action<Umi3dException> failCallback, Action<object, string> deleteAction, string PathIfInBundle = null)
+        private void _LoadFile(ulong id, ObjectData objectData, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback, Action<object, string> deleteAction, string PathIfInBundle = null)
         {
             bool shouldLoad = true;
 
@@ -617,12 +616,12 @@ namespace umi3d.cdk
             {
                 //callback.Invoke(objectData.value);
                 // replace
-                objectFromCache(objectData.value, callback, PathIfInBundle);
+                loader.ObjectFromCache(objectData.value, callback, PathIfInBundle);
 
             }
             else
             {
-                objectData.loadCallback.Add((o) => { objectFromCache(o, callback, PathIfInBundle); });
+                objectData.loadCallback.Add((o) => { loader.ObjectFromCache(o, callback, PathIfInBundle); });
                 objectData.loadFailCallback.Add(failCallback);
             }
             shouldLoad = objectData.state == ObjectData.Estate.NotLoaded;
@@ -651,7 +650,7 @@ namespace umi3d.cdk
                         objectData.loadFailCallback.Clear();
                         objectData.state = ObjectData.Estate.NotLoaded;
                     };
-                    StartCoroutine(UrlToObjectWithPolicy(sucess2, error2, path, objectData.extension, objectData, null, urlToObject));
+                    StartCoroutine(UrlToObjectWithPolicy(sucess2, error2, path, objectData.extension, objectData, null, loader));
                 };
 
                 Action<Umi3dException> error = (reason) =>
@@ -667,7 +666,7 @@ namespace umi3d.cdk
             }
         }
 
-        private IEnumerator UrlToObjectWithPolicy(Action<object> succes, Action<Umi3dException> error, string path, string extension, ObjectData objectData, string bundlePath, Action<string, string, string, Action<object>, Action<Umi3dException>, string> urlToObject, Func<RequestFailedArgument, bool> ShouldTryAgain = null, int tryCount = 0)
+        private IEnumerator UrlToObjectWithPolicy(Action<object> succes, Action<Umi3dException> error, string path, string extension, ObjectData objectData, string bundlePath, IResourcesLoader loader, Func<RequestFailedArgument, bool> ShouldTryAgain = null, int tryCount = 0)
         {
             if (ShouldTryAgain == null)
                 ShouldTryAgain = DefaultShouldTryAgain;
@@ -687,7 +686,7 @@ namespace umi3d.cdk
                              $"{path}\n{reason.Message}\n{reason.StackTrace}"
                              )))
                     {
-                        StartCoroutine(UrlToObjectWithPolicy(succes, error, path, extension, objectData, bundlePath, urlToObject, ShouldTryAgain, tryCount + 1));
+                        StartCoroutine(UrlToObjectWithPolicy(succes, error, path, extension, objectData, bundlePath, loader, ShouldTryAgain, tryCount + 1));
                     }
                     else
                     {
@@ -698,11 +697,11 @@ namespace umi3d.cdk
                 retry();
             };
 
-            urlToObject.Invoke(path, extension, objectData.authorization, succes, error2, bundlePath);
+            loader.UrlToObject(path, extension, objectData.authorization, succes, error2, bundlePath);
             yield break;
         }
 
-        private void _LoadFile(ulong id, FileDto file, Action<string, string, string, Action<object>, Action<Umi3dException>, string> urlToObject, Action<object, Action<object>, string> objectFromCache, Action<object> callback, Action<Umi3dException> failCallback, Action<object, string> deleteAction)
+        private void _LoadFile(ulong id, FileDto file, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback, Action<object, string> deleteAction)
         {
             string fileName = System.IO.Path.GetFileName(file.url);
 
@@ -717,7 +716,7 @@ namespace umi3d.cdk
                 objectData = new ObjectData(file.url, file.extension, file.authorization, id);
                 CacheCollection.Insert(0, objectData);
             }
-            _LoadFile(id, objectData, urlToObject, objectFromCache, callback, failCallback, deleteAction, file.pathIfInBundle);
+            _LoadFile(id, objectData, loader, callback, failCallback, deleteAction, file.pathIfInBundle);
         }
 
         private void GetFilePath(string url, Action<string> callback, Action<Umi3dException> error, string libraryKey = null)

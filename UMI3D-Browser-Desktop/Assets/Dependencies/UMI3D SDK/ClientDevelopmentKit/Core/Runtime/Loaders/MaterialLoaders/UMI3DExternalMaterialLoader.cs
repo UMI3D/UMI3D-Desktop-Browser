@@ -49,8 +49,7 @@ namespace umi3d.cdk
                     UMI3DResourcesManager.LoadFile(
                    (dto.extensions.umi3d as ExternalMaterialDto)?.id ?? 0,
                    fileToLoad,
-                   loader.UrlToObject,
-                   loader.ObjectFromCache,
+                   loader,
                    (o) =>
                    {
                        var newMat = (Material)o;

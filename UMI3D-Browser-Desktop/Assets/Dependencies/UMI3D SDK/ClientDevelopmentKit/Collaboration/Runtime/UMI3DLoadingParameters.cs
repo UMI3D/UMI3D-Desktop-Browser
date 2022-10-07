@@ -369,8 +369,7 @@ namespace umi3d.cdk
                 UMI3DResourcesManager.LoadFile(
                     UMI3DGlobalID.EnvironementId,
                     fileToLoad,
-                    loader.UrlToObject,
-                    loader.ObjectFromCache,
+                    loader,
                     (o) =>
                     {
 

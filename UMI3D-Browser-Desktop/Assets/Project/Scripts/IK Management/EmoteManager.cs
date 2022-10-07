@@ -216,8 +216,7 @@ namespace umi3dDesktopBrowser.emotes
                             UMI3DResourcesManager.LoadFile(
                                 emoteConfigDto.id,
                                 emoteRefInConfig.iconResource,
-                                loader.UrlToObject,
-                                loader.ObjectFromCache,
+                                loader,
                                 (image) =>
                                 {
                                     var tex = (Texture2D)image;

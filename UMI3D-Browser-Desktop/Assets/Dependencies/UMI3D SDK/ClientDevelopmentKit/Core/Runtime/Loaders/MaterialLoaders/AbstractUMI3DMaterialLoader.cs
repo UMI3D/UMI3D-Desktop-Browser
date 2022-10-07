@@ -95,8 +95,7 @@ namespace umi3d.cdk
                 UMI3DResourcesManager.LoadFile(
                     id,
                     fileToLoad,
-                    loader.UrlToObject,
-                    loader.ObjectFromCache,
+                    loader,
                     (o) =>
                     {
                         var tex = (Texture2D)o;
@@ -142,8 +141,7 @@ namespace umi3d.cdk
                 UMI3DResourcesManager.LoadFile(
                     id,
                     fileToLoad,
-                    loader.UrlToObject,
-                    loader.ObjectFromCache,
+                    loader,
                     (o) =>
                     {
                         var tex = (Texture2D)o;
