@@ -124,8 +124,8 @@ public class MicSetting : ISetting
 {
     public bool IsOn 
     { 
-        get => !MicrophoneListener.isMute; 
-        private set => MicrophoneListener.isMute = !value; 
+        get => !MicrophoneListener.mute; 
+        private set => MicrophoneListener.mute = !value; 
     }
     public Action<bool> m_statusChanged { get; private set; }
 
