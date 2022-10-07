@@ -801,27 +801,36 @@ namespace umi3d.cdk
 
         public static void DownloadLibraries(LibrariesDto libraries, string applicationName, Action callback, Action<string> error)
         {
+            UnityEngine.Debug.Log("DownloadLibraries");
             StartCoroutine(Instance.DownloadResources(libraries.libraries, applicationName, callback, error));
         }
 
         private IEnumerator DownloadResources(List<AssetLibraryDto> assetlibraries, string applicationName, Action callback, Action<string> error)
         {
+            UnityEngine.Debug.Log("DownloadResources A");
             if (assetlibraries != null && assetlibraries.Count > 0)
             {
+                UnityEngine.Debug.Log("DownloadResources B");
                 librariesToDownload = assetlibraries.Count;
                 librariesDownloaded = 0;
                 onProgressChange.Invoke(0f);
+                UnityEngine.Debug.Log("DownloadResources C");
                 foreach (AssetLibraryDto assetlibrary in assetlibraries)
                 {
+                    UnityEngine.Debug.Log("DownloadResources D");
                     yield return StartCoroutine(DownloadResources(assetlibrary, applicationName));
                     librariesDownloaded += 1;
                     onProgressChange.Invoke(librariesDownloaded / librariesToDownload);
+                    UnityEngine.Debug.Log("DownloadResources E");
                 }
             }
+            UnityEngine.Debug.Log("DownloadResources F");
             onProgressChange.Invoke(1f);
             yield return new WaitForSeconds(0.3f);
+            UnityEngine.Debug.Log("DownloadResources G");
             onLibrariesDownloaded.Invoke();
             callback.Invoke();
+            UnityEngine.Debug.Log("DownloadResources H");
         }
 
 
@@ -838,61 +847,114 @@ namespace umi3d.cdk
 
         private IEnumerator DownloadResources(AssetLibraryDto assetLibrary, string application)
         {
-            var applications = new List<string>() { application };
-            librariesMap[assetLibrary.id] = assetLibrary.libraryId;
-            string directoryPath = Path.Combine(Application.persistentDataPath, assetLibrary.libraryId);
-            if (Directory.Exists(directoryPath))
-            {
-                try
-                {
-                    DataFile dt = Instance.libraries[assetLibrary.libraryId].Key;
-                    var info = new CultureInfo(assetLibrary.culture);
-                    var dtInfo = new CultureInfo(dt.culture);
-                    if (DateTime.TryParseExact(dt.date, dt.dateformat, dtInfo, DateTimeStyles.None, out DateTime local) && DateTime.TryParseExact(assetLibrary.date, assetLibrary.format, info, DateTimeStyles.None, out DateTime server))
-                    {
-
-                        if (dt.applications == null)
-                            dt.applications = new List<string>();
-                        if (local.Ticks >= server.Ticks)
-                        {
-                            if (!dt.applications.Contains(application))
-                            {
-                                dt.applications.Add(application);
-                                SetData(dt, directoryPath);
-                            }
-                            yield break;
-                        }
-                        applications = dt.applications;
-                        if (!applications.Contains(application))
-                            applications.Add(application);
-                    }
-                }
-                catch { }
-                RemoveLibrary(assetLibrary.libraryId);
-            }
-
+            UnityEngine.Debug.Log("DownloadResources2 A");
             bool finished = false;
-            Action<byte[]> action = (bytes) =>
+            try
             {
-                deserializer.FromBson(bytes,
-                    (dto) =>
+                var applications = new List<string>() { application };
+                librariesMap[assetLibrary.id] = assetLibrary.libraryId;
+                string directoryPath = Path.Combine(Application.persistentDataPath, assetLibrary.libraryId);
+                if (Directory.Exists(directoryPath))
+                {
+                    UnityEngine.Debug.Log("DownloadResources2 B");
+                    try
                     {
-                        string assetDirectoryPath = Path.Combine(directoryPath, assetDirectory);
-                        if (dto is FileListDto)
-                            StartCoroutine(DownloadFiles(assetLibrary.libraryId, directoryPath, assetDirectoryPath, applications, assetLibrary.date, assetLibrary.format, assetLibrary.culture, dto as FileListDto, (data) => { if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath); SetData(data, directoryPath); finished = true; }));
-                        else
-                            finished = true;
-                    });
+                        DataFile dt = Instance.libraries[assetLibrary.libraryId].Key;
+                        var info = new CultureInfo(assetLibrary.culture);
+                        var dtInfo = new CultureInfo(dt.culture);
+                        if (DateTime.TryParseExact(dt.date, dt.dateformat, dtInfo, DateTimeStyles.None, out DateTime local) && DateTime.TryParseExact(assetLibrary.date, assetLibrary.format, info, DateTimeStyles.None, out DateTime server))
+                        {
+
+                            UnityEngine.Debug.Log("DownloadResources2 C");
+                            if (dt.applications == null)
+                                dt.applications = new List<string>();
+                            if (local.Ticks >= server.Ticks)
+                            {
+                                if (!dt.applications.Contains(application))
+                                {
+                                    dt.applications.Add(application);
+                                    SetData(dt, directoryPath);
+                                    UnityEngine.Debug.Log("DownloadResources2 D");
+                                }
+                                yield break;
+                            }
+                            UnityEngine.Debug.Log("DownloadResources2 E");
+                            applications = dt.applications;
+                            if (!applications.Contains(application))
+                                applications.Add(application);
+                            UnityEngine.Debug.Log("DownloadResources2 F");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        UMI3DLogger.LogException(e, scope);
+                    }
+                    UnityEngine.Debug.Log("DownloadResources2 H");
+                    RemoveLibrary(assetLibrary.libraryId);
+                }
 
 
-            };
-            Action<string> error = (s) =>
+                Action<byte[]> action = (bytes) =>
+                {
+                    try
+                    {
+                        UnityEngine.Debug.Log("DownloadResources2 I");
+                        deserializer.FromBson(bytes,
+                            (dto) =>
+                            {
+                                UnityEngine.Debug.Log("DownloadResources2 J");
+                                try
+                                {
+                                    string assetDirectoryPath = Path.Combine(directoryPath, assetDirectory);
+                                    if (dto is FileListDto)
+                                        StartCoroutine(
+                                            DownloadFiles(
+                                                assetLibrary.libraryId,
+                                                directoryPath,
+                                                assetDirectoryPath,
+                                                applications,
+                                                assetLibrary.date,
+                                                assetLibrary.format,
+                                                assetLibrary.culture,
+                                                dto as FileListDto,
+                                                (data) =>
+                                                {
+                                                    if (!Directory.Exists(directoryPath))
+                                                        Directory.CreateDirectory(directoryPath);
+                                                    SetData(data, directoryPath);
+                                                    finished = true;
+                                                }
+                                                ));
+                                    else
+                                        finished = true;
+                                }
+                                catch (Exception e)
+                                {
+                                    UMI3DLogger.LogException(e, scope);
+                                    finished = true;
+                                }
+                            });
+                    }
+                    catch (Exception e)
+                    {
+                        UMI3DLogger.LogException(e, scope);
+                        finished = true;
+                    }
+
+                };
+                Action<string> error = (s) =>
+                {
+                    UMI3DLogger.LogError(s, scope);
+                    finished = true;
+                };
+                UMI3DLocalAssetDirectory variant = UMI3DEnvironmentLoader.Parameters.ChooseVariant(assetLibrary);
+                UMI3DClientServer.GetFile(Path.Combine(assetLibrary.baseUrl, variant.path), action, error, false);
+            }
+            catch (Exception e)
             {
-                UMI3DLogger.LogError(s, scope);
+                UMI3DLogger.LogException(e, scope);
                 finished = true;
-            };
-            UMI3DLocalAssetDirectory variant = UMI3DEnvironmentLoader.Parameters.ChooseVariant(assetLibrary);
-            UMI3DClientServer.GetFile(Path.Combine(assetLibrary.baseUrl, variant.path), action, error, false);
+            }
             yield return new WaitUntil(() => { return finished; });
         }
 
@@ -954,9 +1016,11 @@ namespace umi3d.cdk
         #region file downloading
         private IEnumerator DownloadFiles(string key, string rootDirectoryPath, string directoryPath, List<string> applications, string date, string format, string culture, FileListDto list, Action<DataFile> finished)
         {
+            UnityEngine.Debug.Log("DownloadFiles A");
             var data = new DataFile(key, rootDirectoryPath, applications, date, format, culture);
             foreach (string name in list.files)
             {
+                UnityEngine.Debug.Log("DownloadFiles B");
                 string path = Path.Combine(directoryPath, name);
                 path = System.Uri.UnescapeDataString(path);
                 string dicPath = System.IO.Path.GetDirectoryName(path);
@@ -965,8 +1029,10 @@ namespace umi3d.cdk
                 Action<string> error = (s) => { UMI3DLogger.LogError(s, scope); };
 
                 yield return StartCoroutine(DownloadFile(key, dicPath, path, url, name, callback, error));
+                UnityEngine.Debug.Log("DownloadFiles C");
             }
             libraries.Add(data.key, new KeyValuePair<DataFile, HashSet<ulong>>(data, new HashSet<ulong>()));
+            UnityEngine.Debug.Log("DownloadFiles D");
             finished.Invoke(data);
         }
 
