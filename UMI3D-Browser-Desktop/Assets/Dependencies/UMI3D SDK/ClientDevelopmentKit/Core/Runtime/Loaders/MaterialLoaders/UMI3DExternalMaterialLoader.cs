@@ -72,8 +72,7 @@ namespace umi3d.cdk
                            UMI3DLogger.LogWarning($"invalid cast from {o.GetType()} to {typeof(Material)}", scope);
                        }
                    },
-                   e => UMI3DLogger.LogWarning(e, scope),
-                   loader.DeleteObject
+                   e => UMI3DLogger.LogWarning(e, scope)
                    );
                 }
                 else

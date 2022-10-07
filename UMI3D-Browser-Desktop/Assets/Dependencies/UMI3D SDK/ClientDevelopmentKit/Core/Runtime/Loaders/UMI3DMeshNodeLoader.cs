@@ -82,8 +82,7 @@ namespace umi3d.cdk
                                 failed?.Invoke(new Umi3dException($"Cast not valid for {o.GetType()} into GameObject or {dto.GetType()} into UMI3DMeshNodeDto"));
                             }
                         },
-                        failed,
-                        loader.DeleteObject
+                        failed
                         );
                 }
                 else

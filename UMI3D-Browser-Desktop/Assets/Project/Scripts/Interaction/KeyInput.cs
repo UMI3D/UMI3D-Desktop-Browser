@@ -225,8 +225,7 @@ namespace BrowserDesktop.Interaction
                             (Umi3dException str) =>
                             {
                                 DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
-                            },
-                            loader.DeleteObject
+                            }
                             );
                     }
                     else

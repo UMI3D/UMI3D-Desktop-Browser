@@ -426,8 +426,7 @@ namespace umi3d.cdk
                             UMI3DLogger.LogWarning($"invalid cast from {o.GetType()} to {typeof(Texture2D)}", scope);
                         }
                     },
-                    e => UMI3DLogger.LogException(e, scope),
-                    loader.DeleteObject
+                    e => UMI3DLogger.LogException(e, scope)
                     );
             }
         }

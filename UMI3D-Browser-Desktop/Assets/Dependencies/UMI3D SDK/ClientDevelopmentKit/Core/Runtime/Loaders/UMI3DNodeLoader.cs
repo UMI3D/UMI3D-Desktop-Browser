@@ -630,8 +630,7 @@ namespace umi3d.cdk
                     {
                         CallbackAfterLoadingCollider((GameObject)o, node.GetComponent<MeshCollider>());
                     },
-                    e => UMI3DLogger.LogException(e, scope),
-                    loader.DeleteObject
+                    e => UMI3DLogger.LogException(e, scope)
                     );
             }
         }

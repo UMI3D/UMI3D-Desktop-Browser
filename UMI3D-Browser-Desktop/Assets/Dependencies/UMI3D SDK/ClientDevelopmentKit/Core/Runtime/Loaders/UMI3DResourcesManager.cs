@@ -517,7 +517,7 @@ namespace umi3d.cdk
                 if (loader != null)
                 {
                     count++;
-                    LoadFile(pair.entityIds.First(), pair, loader, (obj) => { count--; }, (error) => { UMI3DLogger.LogError(error, scope); count--; }, loader.DeleteObject);
+                    LoadFile(pair.entityIds.First(), pair, loader, (obj) => { count--; }, (error) => { UMI3DLogger.LogError(error, scope); count--; });
                 }
             }
             yield return new WaitUntil(() => { return count <= 0; });
@@ -561,8 +561,8 @@ namespace umi3d.cdk
                         pair,
                         loader,
                         (obj) => { count--; loadedResources.Invoke(total - count); },
-                        (error) => { UMI3DLogger.LogError($"{error}[{pair.url}]", scope); count--; },
-                        loader.DeleteObject);
+                        (error) => { UMI3DLogger.LogError($"{error}[{pair.url}]", scope); count--; }
+                        );
                 }
             }
             yield return new WaitUntil(() => { return count <= 0; });
@@ -595,17 +595,17 @@ namespace umi3d.cdk
             return fileUrl;
         }
 
-        public static void LoadFile(ulong id, FileDto file, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback, Action<object, string> deleteAction)
+        public static void LoadFile(ulong id, FileDto file, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback)
         {
-            Instance._LoadFile(id, file, loader, callback, failCallback, deleteAction);
+            Instance._LoadFile(id, file, loader, callback, failCallback);
         }
 
-        private static void LoadFile(ulong id, ObjectData file, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback, Action<object, string> deleteAction)
+        private static void LoadFile(ulong id, ObjectData file, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback)
         {
-            Instance._LoadFile(id, file, loader, callback, failCallback, deleteAction);
+            Instance._LoadFile(id, file, loader, callback, failCallback);
         }
 
-        private void _LoadFile(ulong id, ObjectData objectData, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback, Action<object, string> deleteAction, string PathIfInBundle = null)
+        private void _LoadFile(ulong id, ObjectData objectData, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback, string PathIfInBundle = null)
         {
             bool shouldLoad = true;
 
@@ -628,7 +628,7 @@ namespace umi3d.cdk
 
             if (objectData.DeleteAction == null)
             {
-                objectData.DeleteAction = deleteAction;
+                objectData.DeleteAction = loader.DeleteObject;
             }
 
             if (shouldLoad)
@@ -701,7 +701,7 @@ namespace umi3d.cdk
             yield break;
         }
 
-        private void _LoadFile(ulong id, FileDto file, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback, Action<object, string> deleteAction)
+        private void _LoadFile(ulong id, FileDto file, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback)
         {
             string fileName = System.IO.Path.GetFileName(file.url);
 
@@ -716,7 +716,7 @@ namespace umi3d.cdk
                 objectData = new ObjectData(file.url, file.extension, file.authorization, id);
                 CacheCollection.Insert(0, objectData);
             }
-            _LoadFile(id, objectData, loader, callback, failCallback, deleteAction, file.pathIfInBundle);
+            _LoadFile(id, objectData, loader, callback, failCallback, file.pathIfInBundle);
         }
 
         private void GetFilePath(string url, Action<string> callback, Action<Umi3dException> error, string libraryKey = null)

@@ -739,8 +739,7 @@ namespace umi3d.cdk
                     fileToLoad,
                     loader,
                     (mat) => SetBaseMaterial((Material)mat),
-                    (e) => UMI3DLogger.LogException(e, scope),
-                    loader.DeleteObject
+                    (e) => UMI3DLogger.LogException(e, scope)
                     );
             }
         }

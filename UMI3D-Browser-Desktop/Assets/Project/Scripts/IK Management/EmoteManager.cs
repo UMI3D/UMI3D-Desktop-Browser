@@ -223,8 +223,7 @@ namespace umi3dDesktopBrowser.emotes
                                     icon = Sprite.Create((Texture2D)image, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
                                     return;
                                 },
-                                e => UMI3DLogger.LogWarning(e, DebugScope.CDK),
-                                loader.DeleteObject
+                                e => UMI3DLogger.LogWarning(e, DebugScope.CDK)
                                 );
                         }
 
