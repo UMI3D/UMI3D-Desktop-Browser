@@ -418,7 +418,7 @@ namespace umi3d.common.collaboration
                     return false;
                 case true when typeof(T) == typeof(UserTrackingFrameDto):
                     uint idKey = 0;
-                    ulong userId, parentId;
+                    ulong userId;
                     float skeletonHighOffset, refreshFrequency;
                     SerializableVector3 position;
                     SerializableVector4 rotation;
@@ -426,7 +426,6 @@ namespace umi3d.common.collaboration
                     if (
                         UMI3DNetworkingHelper.TryRead(container, out idKey)
                         && UMI3DNetworkingHelper.TryRead(container, out userId)
-                        && UMI3DNetworkingHelper.TryRead(container, out parentId)
                         && UMI3DNetworkingHelper.TryRead(container, out skeletonHighOffset)
                         && UMI3DNetworkingHelper.TryRead(container, out position)
                         && UMI3DNetworkingHelper.TryRead(container, out rotation)
@@ -440,7 +439,6 @@ namespace umi3d.common.collaboration
                             var trackingFrame = new UserTrackingFrameDto
                             {
                                 userId = userId,
-                                parentId = parentId,
                                 skeletonHighOffset = skeletonHighOffset,
                                 position = position,
                                 rotation = rotation,

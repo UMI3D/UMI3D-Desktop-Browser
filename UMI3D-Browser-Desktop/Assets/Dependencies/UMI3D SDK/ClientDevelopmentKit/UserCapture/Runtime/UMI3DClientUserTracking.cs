@@ -445,8 +445,7 @@ namespace umi3d.cdk.userCapture
                         position = position, //position relative to UMI3DEnvironmentLoader node
                         rotation = rotation, //rotation relative to UMI3DEnvironmentLoader node
                         refreshFrequency = targetTrackingFPS,
-                        userId = UMI3DClientServer.Instance.GetUserId(),
-                        parentId = parentId
+                        userId = UMI3DClientServer.Instance.GetUserId()
                     };
                 }
 

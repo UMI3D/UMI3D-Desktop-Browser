@@ -135,9 +135,6 @@ namespace umi3d.cdk.collaboration
             if (timeFrame < lastFrameTime)
                 return;
 
-            if (UMI3DEnvironmentLoader.GetNode(trackingFrameDto.parentId)?.transform != transform.parent)
-                return;
-
             if (updateCoroutine != null)
                 StopCoroutine(updateCoroutine);
 
