@@ -84,6 +84,8 @@ namespace umi3d.cdk.collaboration
 
                 anim.Start();
             }
+
+
         }
 
 
