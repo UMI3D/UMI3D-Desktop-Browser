@@ -821,7 +821,7 @@ namespace umi3d.cdk
                     librariesDownloaded += 1;
                     onProgressChange.Invoke(librariesDownloaded / librariesToDownload);
 
-                    if(errorCount > 0)
+                    if (errorCount > 0)
                     {
                         error?.Invoke(errorMsg);
                         yield break;
@@ -845,7 +845,7 @@ namespace umi3d.cdk
             yield return StartCoroutine(DownloadResources(library, application, callback));
         }
 
-        private IEnumerator DownloadResources(AssetLibraryDto assetLibrary, string application, Action<int,string> callback)
+        private IEnumerator DownloadResources(AssetLibraryDto assetLibrary, string application, Action<int, string> callback)
         {
             int errorCount = 0;
             string errorMessage = "";
@@ -916,7 +916,7 @@ namespace umi3d.cdk
                                                     SetData(data, directoryPath);
                                                     finished = true;
                                                 },
-                                                (s)=> {
+                                                (s) => {
                                                     errorCount++;
                                                     errorMessage += s + "\n";
                                                 }
@@ -1038,7 +1038,7 @@ namespace umi3d.cdk
                 }
                 catch (Exception e)
                 {
-                    UMI3DLogger.LogException(e,scope);
+                    UMI3DLogger.LogException(e, scope);
                 }
                 Action callback = () => { data.files.Add(new Data(url, path, name)); };
                 Action<string> error2 = (s) => { UMI3DLogger.LogError(s, scope); error?.Invoke(s); };

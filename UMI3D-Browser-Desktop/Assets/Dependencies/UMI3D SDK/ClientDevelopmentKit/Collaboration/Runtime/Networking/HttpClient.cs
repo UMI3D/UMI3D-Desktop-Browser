@@ -444,7 +444,7 @@ namespace umi3d.cdk.collaboration
                 using (UnityWebRequest uwr = await _GetRequest(HeaderToken, url, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e), !useParameterInsteadOfHeader))
                 {
                     UMI3DLogger.Log($"Received GetPrivate {url}\n{uwr?.responseCode}\n{uwr?.url}", scope | DebugScope.Connection);
-                    if(uwr?.responseCode != 204)
+                    if (uwr?.responseCode != 204)
                         return uwr?.downloadHandler.data;
                     UMI3DLogger.Log($"Resend GetPrivate Because responce code was 204 {url}", scope | DebugScope.Connection);
                     await UMI3DAsyncManager.Delay(1000);

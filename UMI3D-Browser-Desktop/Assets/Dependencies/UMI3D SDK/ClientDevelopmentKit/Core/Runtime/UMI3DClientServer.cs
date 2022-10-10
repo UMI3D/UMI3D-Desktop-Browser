@@ -101,7 +101,7 @@ namespace umi3d.cdk
                 else
                     onError?.Invoke("Instance of UMI3DClientServer is null");//throw new Exception($"Instance of UMI3DClientServer is null");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 UMI3DLogger.LogException(e, scope);
                 onError?.Invoke(e.Message);
