@@ -801,53 +801,54 @@ namespace umi3d.cdk
 
         public static void DownloadLibraries(LibrariesDto libraries, string applicationName, Action callback, Action<string> error)
         {
-            UnityEngine.Debug.Log("DownloadLibraries");
             StartCoroutine(Instance.DownloadResources(libraries.libraries, applicationName, callback, error));
         }
 
         private IEnumerator DownloadResources(List<AssetLibraryDto> assetlibraries, string applicationName, Action callback, Action<string> error)
         {
-            UnityEngine.Debug.Log("DownloadResources A");
+            int errorCount = 0;
+            string errorMsg = string.Empty;
+            Action<int, string> callback2 = (i, s) => { errorCount += i; errorMsg += s; };
+
             if (assetlibraries != null && assetlibraries.Count > 0)
             {
-                UnityEngine.Debug.Log("DownloadResources B");
                 librariesToDownload = assetlibraries.Count;
                 librariesDownloaded = 0;
                 onProgressChange.Invoke(0f);
-                UnityEngine.Debug.Log("DownloadResources C");
                 foreach (AssetLibraryDto assetlibrary in assetlibraries)
                 {
-                    UnityEngine.Debug.Log("DownloadResources D");
-                    yield return StartCoroutine(DownloadResources(assetlibrary, applicationName));
+                    yield return StartCoroutine(DownloadResources(assetlibrary, applicationName, callback2));
                     librariesDownloaded += 1;
                     onProgressChange.Invoke(librariesDownloaded / librariesToDownload);
-                    UnityEngine.Debug.Log("DownloadResources E");
+
+                    if(errorCount > 0)
+                    {
+                        error?.Invoke(errorMsg);
+                        yield break;
+                    }
                 }
             }
-            UnityEngine.Debug.Log("DownloadResources F");
             onProgressChange.Invoke(1f);
             yield return new WaitForSeconds(0.3f);
-            UnityEngine.Debug.Log("DownloadResources G");
             onLibrariesDownloaded.Invoke();
             callback.Invoke();
-            UnityEngine.Debug.Log("DownloadResources H");
         }
 
 
-        public static void DownloadLibrary(AssetLibraryDto library, string application, Action callback)
+        public static void DownloadLibrary(AssetLibraryDto library, string application, Action<int, string> callback)
         {
             StartCoroutine(Instance._DownloadLibrary(library, application, callback));
         }
 
-        private IEnumerator _DownloadLibrary(AssetLibraryDto library, string application, Action callback)
+        private IEnumerator _DownloadLibrary(AssetLibraryDto library, string application, Action<int, string> callback)
         {
-            yield return StartCoroutine(DownloadResources(library, application));
-            callback.Invoke();
+            yield return StartCoroutine(DownloadResources(library, application, callback));
         }
 
-        private IEnumerator DownloadResources(AssetLibraryDto assetLibrary, string application)
+        private IEnumerator DownloadResources(AssetLibraryDto assetLibrary, string application, Action<int,string> callback)
         {
-            UnityEngine.Debug.Log("DownloadResources2 A");
+            int errorCount = 0;
+            string errorMessage = "";
             bool finished = false;
             try
             {
@@ -856,7 +857,6 @@ namespace umi3d.cdk
                 string directoryPath = Path.Combine(Application.persistentDataPath, assetLibrary.libraryId);
                 if (Directory.Exists(directoryPath))
                 {
-                    UnityEngine.Debug.Log("DownloadResources2 B");
                     try
                     {
                         DataFile dt = Instance.libraries[assetLibrary.libraryId].Key;
@@ -864,8 +864,6 @@ namespace umi3d.cdk
                         var dtInfo = new CultureInfo(dt.culture);
                         if (DateTime.TryParseExact(dt.date, dt.dateformat, dtInfo, DateTimeStyles.None, out DateTime local) && DateTime.TryParseExact(assetLibrary.date, assetLibrary.format, info, DateTimeStyles.None, out DateTime server))
                         {
-
-                            UnityEngine.Debug.Log("DownloadResources2 C");
                             if (dt.applications == null)
                                 dt.applications = new List<string>();
                             if (local.Ticks >= server.Ticks)
@@ -874,22 +872,18 @@ namespace umi3d.cdk
                                 {
                                     dt.applications.Add(application);
                                     SetData(dt, directoryPath);
-                                    UnityEngine.Debug.Log("DownloadResources2 D");
                                 }
                                 yield break;
                             }
-                            UnityEngine.Debug.Log("DownloadResources2 E");
                             applications = dt.applications;
                             if (!applications.Contains(application))
                                 applications.Add(application);
-                            UnityEngine.Debug.Log("DownloadResources2 F");
                         }
                     }
                     catch (Exception e)
                     {
                         UMI3DLogger.LogException(e, scope);
                     }
-                    UnityEngine.Debug.Log("DownloadResources2 H");
                     RemoveLibrary(assetLibrary.libraryId);
                 }
 
@@ -898,11 +892,9 @@ namespace umi3d.cdk
                 {
                     try
                     {
-                        UnityEngine.Debug.Log("DownloadResources2 I");
                         deserializer.FromBson(bytes,
                             (dto) =>
                             {
-                                UnityEngine.Debug.Log("DownloadResources2 J");
                                 try
                                 {
                                     string assetDirectoryPath = Path.Combine(directoryPath, assetDirectory);
@@ -923,6 +915,10 @@ namespace umi3d.cdk
                                                         Directory.CreateDirectory(directoryPath);
                                                     SetData(data, directoryPath);
                                                     finished = true;
+                                                },
+                                                (s)=> {
+                                                    errorCount++;
+                                                    errorMessage += s + "\n";
                                                 }
                                                 ));
                                     else
@@ -931,6 +927,8 @@ namespace umi3d.cdk
                                 catch (Exception e)
                                 {
                                     UMI3DLogger.LogException(e, scope);
+                                    errorCount++;
+                                    errorMessage += e.Message + "\n";
                                     finished = true;
                                 }
                             });
@@ -938,6 +936,8 @@ namespace umi3d.cdk
                     catch (Exception e)
                     {
                         UMI3DLogger.LogException(e, scope);
+                        errorCount++;
+                        errorMessage += e.Message + "\n";
                         finished = true;
                     }
 
@@ -945,6 +945,8 @@ namespace umi3d.cdk
                 Action<string> error = (s) =>
                 {
                     UMI3DLogger.LogError(s, scope);
+                    errorCount++;
+                    errorMessage += s + "\n";
                     finished = true;
                 };
                 UMI3DLocalAssetDirectory variant = UMI3DEnvironmentLoader.Parameters.ChooseVariant(assetLibrary);
@@ -953,9 +955,14 @@ namespace umi3d.cdk
             catch (Exception e)
             {
                 UMI3DLogger.LogException(e, scope);
+                errorCount++;
+                errorMessage += e.Message + "\n";
                 finished = true;
             }
             yield return new WaitUntil(() => { return finished; });
+            if (errorCount > 0)
+                RemoveLibrary(assetLibrary.libraryId);
+            callback.Invoke(errorCount, errorMessage);
         }
 
         public static bool isKnowedLibrary(ulong key)
@@ -1014,25 +1021,30 @@ namespace umi3d.cdk
 
         #endregion
         #region file downloading
-        private IEnumerator DownloadFiles(string key, string rootDirectoryPath, string directoryPath, List<string> applications, string date, string format, string culture, FileListDto list, Action<DataFile> finished)
+        private IEnumerator DownloadFiles(string key, string rootDirectoryPath, string directoryPath, List<string> applications, string date, string format, string culture, FileListDto list, Action<DataFile> finished, Action<string> error)
         {
-            UnityEngine.Debug.Log("DownloadFiles A");
             var data = new DataFile(key, rootDirectoryPath, applications, date, format, culture);
             foreach (string name in list.files)
             {
-                UnityEngine.Debug.Log("DownloadFiles B");
-                string path = Path.Combine(directoryPath, name);
-                path = System.Uri.UnescapeDataString(path);
-                string dicPath = System.IO.Path.GetDirectoryName(path);
-                string url = Path.Combine(list.baseUrl, name);
+                string path = null;
+                string dicPath = null;
+                string url = null;
+                try
+                {
+                    path = Path.Combine(directoryPath, name);
+                    path = System.Uri.UnescapeDataString(path);
+                    dicPath = System.IO.Path.GetDirectoryName(path);
+                    url = Path.Combine(list.baseUrl, name);
+                }
+                catch (Exception e)
+                {
+                    UMI3DLogger.LogException(e,scope);
+                }
                 Action callback = () => { data.files.Add(new Data(url, path, name)); };
-                Action<string> error = (s) => { UMI3DLogger.LogError(s, scope); };
-
-                yield return StartCoroutine(DownloadFile(key, dicPath, path, url, name, callback, error));
-                UnityEngine.Debug.Log("DownloadFiles C");
+                Action<string> error2 = (s) => { UMI3DLogger.LogError(s, scope); error?.Invoke(s); };
+                yield return StartCoroutine(DownloadFile(key, dicPath, path, url, name, callback, error2));
             }
             libraries.Add(data.key, new KeyValuePair<DataFile, HashSet<ulong>>(data, new HashSet<ulong>()));
-            UnityEngine.Debug.Log("DownloadFiles D");
             finished.Invoke(data);
         }
 

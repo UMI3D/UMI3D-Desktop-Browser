@@ -533,8 +533,14 @@ namespace umi3d.cdk
                 case AssetLibraryDto library:
                     UMI3DResourcesManager.DownloadLibrary(library,
                         UMI3DClientServer.Media.name,
-                        () =>
+                        (i,s) =>
                         {
+                            if (i > 0)
+                            {
+                                UMI3DLogger.LogError($"Download Library failed for {library.libraryId}", scope);
+                                performed.Invoke();
+                                return;
+                            }
                             UMI3DResourcesManager.LoadLibrary(library.libraryId, performed);
                         });
                     break;
