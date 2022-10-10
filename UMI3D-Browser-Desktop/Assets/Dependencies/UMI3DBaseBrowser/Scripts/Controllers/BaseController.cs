@@ -15,7 +15,9 @@ limitations under the License.
 */
 using BrowserDesktop.Interaction;
 using System.Collections.Generic;
+using umi3d.cdk;
 using umi3d.cdk.interaction;
+using umi3d.common;
 using umi3d.common.interaction;
 using UnityEngine;
 
@@ -558,6 +560,14 @@ namespace umi3d.baseBrowser.Controller
             if (hoverExitAnimationId != 0)
             {
                 cdk.UMI3DAbstractAnimation anim = cdk.UMI3DAbstractAnimation.Get(hoverExitAnimationId);
+                
+                anim.SetUMI3DProperty(UMI3DEnvironmentLoader.GetEntity(hoverExitAnimationId), new SetEntityPropertyDto()
+                {
+                    entityId = hoverExitAnimationId,
+                    property = UMI3DPropertyKeys.AnimationPlaying,
+                    value = true
+                });
+
                 HoverExit.Invoke(lastHoverId);
                 if (anim != null) anim.Start();
             }
@@ -575,6 +585,14 @@ namespace umi3d.baseBrowser.Controller
             if (hoverEnterAnimationId != 0)
             {
                 cdk.UMI3DAbstractAnimation anim = cdk.UMI3DAbstractAnimation.Get(hoverEnterAnimationId);
+                
+                anim.SetUMI3DProperty(UMI3DEnvironmentLoader.GetEntity(hoverEnterAnimationId), new SetEntityPropertyDto()
+                {
+                    entityId = hoverEnterAnimationId,
+                    property = UMI3DPropertyKeys.AnimationPlaying,
+                    value = true
+                });
+
                 HoverEnter.Invoke(currentHoverId);
                 if (anim != null) anim.Start();
             }
