@@ -522,7 +522,7 @@ namespace umi3d.cdk
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="performed"></param>
-        private void _LoadEntity(IEntity entity, Action performed)
+        private async void _LoadEntity(IEntity entity, Action performed)
         {
             switch (entity)
             {
@@ -533,18 +533,8 @@ namespace umi3d.cdk
                     StartCoroutine(nodeLoader.LoadNodes(new List<GlTFNodeDto>() { node }, performed));
                     break;
                 case AssetLibraryDto library:
-                    UMI3DResourcesManager.DownloadLibrary(library,
-                        UMI3DClientServer.Media.name,
-                        (i, s) =>
-                        {
-                            if (i > 0)
-                            {
-                                UMI3DLogger.LogError($"Download Library failed for {library.libraryId}", scope);
-                                performed.Invoke();
-                                return;
-                            }
-                            UMI3DResourcesManager.LoadLibrary(library.libraryId, performed);
-                        });
+                    await UMI3DResourcesManager.DownloadLibrary(library, UMI3DClientServer.Media.name);
+                    UMI3DResourcesManager.LoadLibrary(library.libraryId, performed);
                     break;
                 case AbstractEntityDto dto:
                     Parameters.ReadUMI3DExtension(dto, null, performed, (s) => { UMI3DLogger.LogException(s, scope); performed.Invoke(); });
