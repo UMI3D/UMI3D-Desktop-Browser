@@ -17,6 +17,7 @@ limitations under the License.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -606,11 +607,12 @@ namespace umi3d.cdk
             Instance._LoadFile(id, file, loader, callback, failCallback);
         }
 
-        private void _LoadFile(ulong id, ObjectData objectData, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback, string PathIfInBundle = null)
+        private async Task<object> _LoadFile(ulong id, ObjectData objectData, IResourcesLoader loader, string PathIfInBundle = null)
         {
             bool shouldLoad = true;
 
-            if (objectData == null) return;
+            if (objectData == null) 
+                return null;
             objectData.entityIds.Add(id);
 
             if (objectData.state == ObjectData.Estate.Loaded)
@@ -634,36 +636,38 @@ namespace umi3d.cdk
 
             if (shouldLoad)
             {
-                Action<string> sucess = (path) =>
+                string path = null;
+                try
                 {
-                    Action<object> sucess2 = (obj) =>
-                    {
-                        objectData.value = obj;
-                        objectData.state = ObjectData.Estate.Loaded;
-                        foreach (Action<object> back in objectData.loadCallback)
-                            back.Invoke(obj);
-                        objectData.loadCallback.Clear();
-                    };
-                    Action<Umi3dException> error2 = (reason) =>
-                    {
-                        foreach (Action<Umi3dException> back in objectData.loadFailCallback)
-                            back.Invoke(reason);
-                        objectData.loadFailCallback.Clear();
-                        objectData.state = ObjectData.Estate.NotLoaded;
-                    };
-                    StartCoroutine(UrlToObjectWithPolicy(sucess2, error2, path, objectData.extension, objectData, null, loader));
-                };
-
-                Action<Umi3dException> error = (reason) =>
+                    objectData.state = ObjectData.Estate.Loading;
+                    path = GetFilePath(objectData.url, objectData.libraryIds.FirstOrDefault());
+                }
+                catch
                 {
                     //UMI3DLogger.LogWarning($"error {reason}");
                     foreach (Action<Umi3dException> back in objectData.loadFailCallback)
                         back.Invoke(reason);
                     objectData.loadFailCallback.Clear();
                     objectData.state = ObjectData.Estate.NotLoaded;
+                }
+
+
+                Action<object> sucess2 = (obj) =>
+                {
+                    objectData.value = obj;
+                    objectData.state = ObjectData.Estate.Loaded;
+                    foreach (Action<object> back in objectData.loadCallback)
+                        back.Invoke(obj);
+                    objectData.loadCallback.Clear();
                 };
-                objectData.state = ObjectData.Estate.Loading;
-                GetFilePath(objectData.url, sucess, error, objectData.libraryIds.FirstOrDefault());
+                Action<Umi3dException> error2 = (reason) =>
+                {
+                    foreach (Action<Umi3dException> back in objectData.loadFailCallback)
+                        back.Invoke(reason);
+                    objectData.loadFailCallback.Clear();
+                    objectData.state = ObjectData.Estate.NotLoaded;
+                };
+                StartCoroutine(UrlToObjectWithPolicy(sucess2, error2, path, objectData.extension, objectData, null, loader));
             }
         }
 
@@ -699,8 +703,23 @@ namespace umi3d.cdk
                 retry();
             };
 
-            loader.UrlToObject(path, extension, objectData.authorization, succes, error2, bundlePath);
+            loader.UrlToObject1(loader, path, extension, objectData.authorization, succes, error2, bundlePath);
             yield break;
+        }
+
+        protected virtual async Task<object> _UrlToObject1(IResourcesLoader loader ,string url, string extension, string authorization, string pathIfObjectInBundle, int count = 0)
+        {
+            try
+            {
+                return await loader.UrlToObject(url, extension, authorization, pathIfObjectInBundle);
+            }
+            catch (Exception e)
+            {
+                if (count >= 2 || (e is Umi3dNetworkingException n && n.errorCode == 404))
+                    throw;
+            }
+            await UMI3DAsyncManager.Delay(10000);
+            return await _UrlToObject1(loader ,url, extension, authorization, pathIfObjectInBundle, count + 1);
         }
 
         private void _LoadFile(ulong id, FileDto file, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback)
@@ -721,7 +740,7 @@ namespace umi3d.cdk
             _LoadFile(id, objectData, loader, callback, failCallback, file.pathIfInBundle);
         }
 
-        private void GetFilePath(string url, Action<string> callback, Action<Umi3dException> error, string libraryKey = null)
+        private string GetFilePath(string url, string libraryKey = null)
         {
             Match matchUrl = ObjectData.rx.Match(url);
 
@@ -733,11 +752,11 @@ namespace umi3d.cdk
 
             if (objectData != null && objectData.downloadedPath != null)
             {
-                callback.Invoke(objectData.downloadedPath);
+                return objectData.downloadedPath;
             }
             else
             {
-                callback.Invoke(url);
+                return url;
             }
         }
 
@@ -1039,14 +1058,18 @@ namespace umi3d.cdk
             return argument.GetRespondCode() == 401 && argument.count < 3;
         }
 
-        public static void DownloadObject(UnityWebRequest www, Action callback, Action<Umi3dException> failCallback, Func<RequestFailedArgument, bool> shouldTryAgain = null)
+        public static async Task DownloadObject(UnityWebRequest www, Func<RequestFailedArgument, bool> shouldTryAgain = null)
         {
-            StartCoroutine(Instance._DownloadObject(www, callback, failCallback, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e)));
+            await Instance._DownloadObject(www, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e));
         }
 
-        private IEnumerator _DownloadObject(UnityWebRequest www, Action callback, Action<Umi3dException> failCallback, Func<RequestFailedArgument, bool> ShouldTryAgain, int tryCount = 0)
+        private async Task _DownloadObject(UnityWebRequest www, Func<RequestFailedArgument, bool> ShouldTryAgain, int tryCount = 0)
         {
-            yield return www.SendWebRequest();
+            www.SendWebRequest();
+
+            while (www.isDone)
+                await UMI3DAsyncManager.Yield();
+
 #if UNITY_2020_1_OR_NEWER
             if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError || www.result == UnityWebRequest.Result.DataProcessingError)
 #else
@@ -1056,23 +1079,11 @@ namespace umi3d.cdk
                 //DateTime date = DateTime.UtcNow;
                 //if (!UMI3DClientServer.Instance.TryAgainOnHttpFail(new RequestFailedArgument(www, () => StartCoroutine(_DownloadObject(www, callback, failCallback,ShouldTryAgain,tryCount + 1)), tryCount, date, ShouldTryAgain)))
                 //{
-                if (failCallback != null)
-                {
-                    failCallback.Invoke(new Umi3dNetworkingException(www, $"failed to load"));
-                }
-                else
-                {
-                    UMI3DLogger.LogWarning(www.error, scope);
-                    UMI3DLogger.LogWarning("Failed to load " + www.url, scope);
-                }
 
-                www.Dispose();
+
                 //}
-                yield break;
+                throw new Umi3dNetworkingException(www, $"failed to load");
             }
-
-            callback.Invoke();
-            www.Dispose();
         }
 
         #endregion

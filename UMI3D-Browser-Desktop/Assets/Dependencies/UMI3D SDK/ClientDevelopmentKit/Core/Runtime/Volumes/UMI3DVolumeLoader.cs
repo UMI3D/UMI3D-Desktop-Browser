@@ -26,24 +26,19 @@ namespace umi3d.cdk.volumes
     /// </summary>
 	public static class UMI3DVolumeLoader
     {
-        public static void ReadUMI3DExtension(AbstractVolumeDescriptorDto dto, Action finished, Action<Umi3dException> failed)
+        public static async void ReadUMI3DExtension(AbstractVolumeDescriptorDto dto, Action finished, Action<Umi3dException> failed)
         {
             switch (dto)
             {
                 case AbstractPrimitiveDto prim:
-                    VolumePrimitiveManager.CreatePrimitive(prim, p =>
-                    {
-                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, p, () => VolumePrimitiveManager.DeletePrimitive(dto.id));
-                        finished.Invoke();
-                    });
+                    var p = await VolumePrimitiveManager.CreatePrimitive(prim);
+                    UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, p, () => VolumePrimitiveManager.DeletePrimitive(dto.id));
+                    finished.Invoke();
                     break;
                 case OBJVolumeDto obj:
-                    ExternalVolumeDataManager.Instance.CreateOBJVolume(obj, objVolume =>
-                    {
-                        UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, objVolume, () => ExternalVolumeDataManager.Instance.DeleteOBJVolume(dto.id));
-                        finished.Invoke();
-                    });
-
+                    var objVolume = await ExternalVolumeDataManager.Instance.CreateOBJVolume(obj);
+                    UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, objVolume, () => ExternalVolumeDataManager.Instance.DeleteOBJVolume(dto.id));
+                    finished.Invoke();
                     break;
                 default:
                     failed(new Umi3dException("Unknown Dto Type"));
