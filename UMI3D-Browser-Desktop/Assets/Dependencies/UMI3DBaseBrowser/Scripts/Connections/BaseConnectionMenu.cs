@@ -107,6 +107,7 @@ namespace umi3d.baseBrowser.connection
         protected virtual void Hide()
         {
             loader.OnProgressOver();
+            UnityEngine.Debug.Log("Should Check if was already connected and return to menu if not.");
             isDisplayed = false;
             connectionScreen.style.display = DisplayStyle.None;
             Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Center);
@@ -268,7 +269,11 @@ namespace umi3d.baseBrowser.connection
         /// </summary>
         protected virtual void OnEnvironmentLoaded() => Hide();
 
-        protected virtual void OnRedirectionStarted() => Display();
+        protected virtual void OnRedirectionStarted()
+        {
+            loader.Text = "Contacting WorldController";
+            Display();
+        }
 
         protected virtual void OnConnectionToEnvironment(string state) {
             if (!isDisplayed) Display();
