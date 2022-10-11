@@ -383,16 +383,17 @@ namespace umi3d.cdk.collaboration
                     else
                     {
                         ConnectionState.Invoke("Downloading Libraries");
-                        UMI3DResourcesManager.DownloadLibraries(LibrariesDto,
-                            worldControllerClient.name,
-                            () =>
-                            {
-                                librariesUpdated = true;
-                            },
-                            (error) => { Ok = false;/* UMI3DLogger.Log("error on download Libraries :" + error, scope);*/ }
-                            );
+                        try
+                        {
+                            await UMI3DResourcesManager.DownloadLibraries(LibrariesDto, worldControllerClient.name);
+                            librariesUpdated = true;
+                        }
+                        catch (Exception e)
+                        {
+                            UMI3DLogger.LogException(e, scope);
+                            Ok = false;
+                        }
                     }
-
                     while (!librariesUpdated && Ok)
                         await UMI3DAsyncManager.Yield();
                     UserDto.answerDto.librariesUpdated = librariesUpdated;
@@ -423,19 +424,12 @@ namespace umi3d.cdk.collaboration
             {
                 //This exeception is thrown only when app is stopping.
             }
-            catch (Umi3dException e)
+            catch (Exception e)
             {
                 await Logout();
-                if (e.errorCode == 401)
+                if (e is Umi3dNetworkingException n && n.errorCode == 401)
                     UMI3DCollaborationClientServer.ReceivedLogoutMessage("You are not authorized to proceed further.");
                 else if (UMI3DCollaborationClientServer.Exists)
-                    UMI3DCollaborationClientServer.Instance.ConnectionLost(this);
-                throw;
-            }
-            catch
-            {
-                await Logout();
-                if (UMI3DCollaborationClientServer.Exists)
                     UMI3DCollaborationClientServer.Instance.ConnectionLost(this);
                 throw;
             }

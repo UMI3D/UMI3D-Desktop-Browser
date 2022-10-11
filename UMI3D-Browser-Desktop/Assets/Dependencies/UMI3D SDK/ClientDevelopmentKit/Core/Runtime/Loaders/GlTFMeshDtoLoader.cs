@@ -52,7 +52,7 @@ namespace umi3d.cdk
         {
             Action<Umi3dException> failCallback2 = async (e) =>
             {
-                if (count == 2 || e.errorCode == 404)
+                if (count == 2 || (e is Umi3dNetworkingException n && n.errorCode == 404))
                 {
                     failCallback?.Invoke(e);
                     return;
@@ -92,7 +92,7 @@ namespace umi3d.cdk
                     }
                     catch (Exception e)
                     {
-                        failCallback(new Umi3dException(e, "Importing failed for " + url));
+                        failCallback(new Umi3dNetworkingException(0,e.Message, url, "Importing failed for "));
                     }
                 }
                 else

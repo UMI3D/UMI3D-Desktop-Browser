@@ -66,7 +66,7 @@ namespace umi3d.cdk
         {
             Action<Umi3dException> failCallback2 = async (e) =>
             {
-                if (count == 2 || e.errorCode == 404)
+                if (count == 2 || (e is Umi3dNetworkingException n && n.errorCode == 404))
                 {
                     failCallback?.Invoke(e);
                     return;
@@ -110,7 +110,7 @@ namespace umi3d.cdk
                     }
                     catch (Exception e)
                     {
-                        failCallback.Invoke(new Umi3dException(e));
+                        failCallback.Invoke(new Umi3dException(e.Message));
                     }
                 },
                 s => { failCallback?.Invoke(s); }

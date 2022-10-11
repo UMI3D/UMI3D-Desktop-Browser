@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using umi3d.common;
 using UnityEngine;
 using UnityEngine.Events;
@@ -677,9 +678,10 @@ namespace umi3d.cdk
             {
                 async void retry()
                 {
+                    var code = (reason as Umi3dNetworkingException)?.errorCode ?? 0;
                     if (await UMI3DClientServer.Instance.TryAgainOnHttpFail(
                          new RequestFailedArgument(
-                             reason.errorCode,
+                             code,
                              tryCount,
                              date,
                              ShouldTryAgain,
@@ -798,39 +800,37 @@ namespace umi3d.cdk
             return toDownload;
         }
 
-        public static void DownloadLibraries(LibrariesDto libraries, string applicationName, Action callback, Action<string> error)
+        public static async Task DownloadLibraries(LibrariesDto libraries, string applicationName)
         {
-            StartCoroutine(Instance.DownloadResources(libraries.libraries, applicationName, callback, error));
+            await Instance.DownloadResources(libraries.libraries, applicationName);
         }
 
-        private IEnumerator DownloadResources(List<AssetLibraryDto> assetlibraries, string applicationName, Action callback, Action<string> error)
+        private async Task DownloadResources(List<AssetLibraryDto> assetlibraries, string applicationName)
         {
-            int errorCount = 0;
-            string errorMsg = string.Empty;
-            Action<int, string> callback2 = (i, s) => { errorCount += i; errorMsg += s; };
+            //int errorCount = 0;
+            //string errorMsg = string.Empty;
+            //Action<int, string> callback2 = (i, s) => { errorCount += i; errorMsg += s; };
 
-            if (assetlibraries != null && assetlibraries.Count > 0)
-            {
-                librariesToDownload = assetlibraries.Count;
-                librariesDownloaded = 0;
-                onProgressChange.Invoke(0f);
-                foreach (AssetLibraryDto assetlibrary in assetlibraries)
-                {
-                    yield return StartCoroutine(DownloadResources(assetlibrary, applicationName, callback2));
-                    librariesDownloaded += 1;
-                    onProgressChange.Invoke(librariesDownloaded / librariesToDownload);
+            //if (assetlibraries != null && assetlibraries.Count > 0)
+            //{
+            //    librariesToDownload = assetlibraries.Count;
+            //    librariesDownloaded = 0;
+            //    onProgressChange.Invoke(0f);
+            //    foreach (AssetLibraryDto assetlibrary in assetlibraries)
+            //    {
+            //        yield return StartCoroutine(DownloadResources(assetlibrary, applicationName, callback2));
+            //        librariesDownloaded += 1;
+            //        onProgressChange.Invoke(librariesDownloaded / librariesToDownload);
 
-                    if (errorCount > 0)
-                    {
-                        error?.Invoke(errorMsg);
-                        yield break;
-                    }
-                }
-            }
-            onProgressChange.Invoke(1f);
-            yield return new WaitForSeconds(0.3f);
-            onLibrariesDownloaded.Invoke();
-            callback.Invoke();
+            //        if (errorCount > 0)
+            //        {
+            //            throw new Umi3dException()
+            //        }
+            //    }
+            //}
+            //onProgressChange.Invoke(1f);
+            //yield return new WaitForSeconds(0.3f);
+            //onLibrariesDownloaded.Invoke();
         }
 
 
@@ -1145,7 +1145,7 @@ namespace umi3d.cdk
                 //{
                 if (failCallback != null)
                 {
-                    failCallback.Invoke(new Umi3dException(www.responseCode, $"failed to load {www.url} [{www.error}]"));
+                    failCallback.Invoke(new Umi3dNetworkingException(www, $"failed to load"));
                 }
                 else
                 {
