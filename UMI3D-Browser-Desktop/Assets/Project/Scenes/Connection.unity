@@ -446,7 +446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _logScope: -1
-  _logLevel: -1
+  _logLevel: 14
   logPath: 
   log: 0
   infoPath: 
