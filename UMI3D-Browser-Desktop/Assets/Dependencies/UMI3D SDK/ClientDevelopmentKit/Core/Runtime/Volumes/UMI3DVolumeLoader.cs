@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using System;
+using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.volume;
 using UnityEngine;
@@ -26,23 +27,22 @@ namespace umi3d.cdk.volumes
     /// </summary>
 	public static class UMI3DVolumeLoader
     {
-        public static async void ReadUMI3DExtension(AbstractVolumeDescriptorDto dto, Action finished, Action<Umi3dException> failed)
+        public static async Task ReadUMI3DExtension(AbstractVolumeDescriptorDto dto)
         {
             switch (dto)
             {
                 case AbstractPrimitiveDto prim:
                     var p = await VolumePrimitiveManager.CreatePrimitive(prim);
                     UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, p, () => VolumePrimitiveManager.DeletePrimitive(dto.id));
-                    finished.Invoke();
+                    
                     break;
                 case OBJVolumeDto obj:
                     var objVolume = await ExternalVolumeDataManager.Instance.CreateOBJVolume(obj);
                     UMI3DEnvironmentLoader.RegisterEntityInstance(dto.id, dto, objVolume, () => ExternalVolumeDataManager.Instance.DeleteOBJVolume(dto.id));
-                    finished.Invoke();
+                    
                     break;
                 default:
-                    failed(new Umi3dException("Unknown Dto Type"));
-                    break;
+                    throw (new Umi3dException("Unknown Dto Type"));
             }
         }
 

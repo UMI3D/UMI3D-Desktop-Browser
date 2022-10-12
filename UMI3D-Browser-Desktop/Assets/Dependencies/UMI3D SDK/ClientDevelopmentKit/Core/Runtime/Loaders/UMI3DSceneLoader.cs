@@ -18,6 +18,7 @@ using MrtkShader;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using umi3d.common;
 using UnityEngine;
 
@@ -50,19 +51,15 @@ namespace umi3d.cdk
                             UMI3DResourcesManager.UnloadLibrary(library, sceneDto.id);
                     });
 
-                void finished2()
-                {
-                    node.NotifyLoaded();
-                    finished?.Invoke();
-                }
 
                 go.transform.SetParent(UMI3DEnvironmentLoader.Instance.transform);
                 //Load Materials and then Nodes
                 LoadSceneMaterials(dto,
-                    () =>
+                    async () =>
                     {
-                        UMI3DEnvironmentLoader.StartCoroutine(
-                            UMI3DEnvironmentLoader.Instance.nodeLoader.LoadNodes(dto.nodes, finished2, ToLoadNodesCount, LoadedNodesCount));
+                        await UMI3DEnvironmentLoader.Instance.nodeLoader.LoadNodes(dto.nodes, ToLoadNodesCount, LoadedNodesCount);
+                        node.NotifyLoaded();
+                        finished?.Invoke();
                     }
                 );
             }
@@ -75,30 +72,29 @@ namespace umi3d.cdk
         /// </summary>
         /// <param name="node"></param>
         /// <param name="dto"></param>
-        public override void ReadUMI3DExtension(UMI3DDto dto, GameObject node, Action finished, Action<Umi3dException> failed)
+        public override async Task ReadUMI3DExtension(UMI3DDto dto, GameObject node)
         {
-            base.ReadUMI3DExtension(dto, node, () =>
+            await base.ReadUMI3DExtension(dto, node);
+            var sceneDto = dto as UMI3DSceneNodeDto;
+            if (sceneDto == null) return;
+            node.transform.localPosition = sceneDto.position;
+            node.transform.localRotation = sceneDto.rotation;
+            node.transform.localScale = sceneDto.scale;
+            await Task.WhenAll(sceneDto.LibrariesId.Select(async libraryId => await UMI3DResourcesManager.LoadLibrary(libraryId, sceneDto.id)));
+            int count = 0;
+            if (sceneDto.otherEntities != null)
             {
-                var sceneDto = dto as UMI3DSceneNodeDto;
-                if (sceneDto == null) return;
-                node.transform.localPosition = sceneDto.position;
-                node.transform.localRotation = sceneDto.rotation;
-                node.transform.localScale = sceneDto.scale;
-                foreach (string library in sceneDto.LibrariesId)
-                    UMI3DResourcesManager.LoadLibrary(library, null, sceneDto.id);
-                int count = 0;
-                if (sceneDto.otherEntities != null)
+                foreach (IEntity entity in sceneDto.otherEntities)
                 {
-                    foreach (IEntity entity in sceneDto.otherEntities)
-                    {
-                        count++;
-                        UMI3DEnvironmentLoader.LoadEntity(entity, () => { count--; if (count == 0) finished.Invoke(); });
-                    }
+                    count++;
+                    UMI3DEnvironmentLoader.LoadEntity(entity, () => { count--; });
                 }
+            }
 
-                if (count == 0)
-                    finished.Invoke();
-            }, failed);
+            while (count > 0)
+            {
+                await UMI3DAsyncManager.Yield();
+            }
         }
 
         /// <summary>

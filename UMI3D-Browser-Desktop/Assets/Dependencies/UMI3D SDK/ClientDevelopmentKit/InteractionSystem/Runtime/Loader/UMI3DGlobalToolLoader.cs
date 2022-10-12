@@ -16,6 +16,7 @@ limitations under the License.
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.interaction;
 using UnityEngine.Events;
@@ -68,11 +69,13 @@ namespace umi3d.cdk.interaction
         /// <param name="dto">Tool dto</param>
         /// <param name="finished">Callback on finished</param>
         /// <param name="failed">Callback on failed</param>
-        public static void ReadUMI3DExtension(GlobalToolDto dto, Action finished, Action<Umi3dException> failed, Toolbox parent = null)
+        static void ReadUMI3DExtension(GlobalToolDto dto, Action finished, Action<Umi3dException> failed, Toolbox parent = null)
         {
             if (GlobalTool.GetGlobalTools().Exists(t => t.id == dto.id))
+            {
+                finished?.Invoke();
                 return;
-
+            }
             if (dto is ToolboxDto toolbox)
             {
                 var tool = new Toolbox(dto, parent);
@@ -98,6 +101,19 @@ namespace umi3d.cdk.interaction
                 finished?.Invoke();
                 onGlobalToolCreation.Invoke(new GlobalTool(dto, parent));
             }
+        }
+
+        public static async Task ReadUMI3DExtension(GlobalToolDto dto, Toolbox parent = null)
+        {
+            bool finished = false;
+            Umi3dException ex = null;
+            Action callback = ()=> finished = true;
+            Action<Umi3dException> failed = (e) => { e = ex; finished = true; };
+            ReadUMI3DExtension(dto, callback, failed);
+            while (!finished)
+                await UMI3DAsyncManager.Yield();
+            if (ex != null)
+                throw ex;
         }
 
         /// <summary>

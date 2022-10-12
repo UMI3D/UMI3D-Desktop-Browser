@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using umi3d.common;
 using UnityEngine;
@@ -187,14 +188,6 @@ namespace umi3d.cdk
             public string downloadedPath;
 
             /// <summary>
-            /// Callback to call when the object finish loading.
-            /// </summary>
-            public List<Action<object>> loadCallback;
-            /// <summary>
-            /// Callback to call when the object finish loading with an error.
-            /// </summary>
-            public List<Action<Umi3dException>> loadFailCallback;
-            /// <summary>
             /// Action to invoke when the object need to be deleted.
             /// </summary>
             public Action<object, string> DeleteAction;
@@ -264,8 +257,6 @@ namespace umi3d.cdk
                 this.value = value;
                 entityIds = entityId;
                 libraryIds = new HashSet<string>();
-                loadCallback = new List<Action<object>>();
-                loadFailCallback = new List<Action<Umi3dException>>();
                 state = Estate.Loaded;
                 downloadedPath = null;
                 this.url = url;
@@ -277,36 +268,17 @@ namespace umi3d.cdk
                 this.value = value;
                 entityIds = new HashSet<ulong>() { entityId };
                 libraryIds = new HashSet<string>();
-                loadCallback = new List<Action<object>>();
-                loadFailCallback = new List<Action<Umi3dException>>();
                 state = Estate.Loaded;
                 downloadedPath = null;
                 this.url = url;
                 a = rx.Match(url);
             }
 
-            public ObjectData(string url, string extension, string authorization, HashSet<ulong> entityId, List<Action<object>> loadCallback, List<Action<Umi3dException>> loadFailCallback)
+            public ObjectData(string url, string extension, string authorization, HashSet<ulong> entityId)
             {
                 value = null;
                 entityIds = entityId;
                 libraryIds = new HashSet<string>();
-                this.loadCallback = loadCallback;
-                this.loadFailCallback = loadFailCallback;
-                state = Estate.NotLoaded;
-                downloadedPath = null;
-                this.url = url;
-                this.extension = extension;
-                a = rx.Match(url);
-                this.authorization = ComputeAuthorization(authorization);
-            }
-
-            public ObjectData(string url, string extension, string authorization, ulong entityId, Action<object> loadCallback, Action<Umi3dException> loadFailCallback)
-            {
-                value = null;
-                entityIds = new HashSet<ulong>() { entityId };
-                libraryIds = new HashSet<string>();
-                this.loadCallback = new List<Action<object>>() { loadCallback };
-                this.loadFailCallback = new List<Action<Umi3dException>>() { loadFailCallback };
                 state = Estate.NotLoaded;
                 downloadedPath = null;
                 this.url = url;
@@ -320,8 +292,6 @@ namespace umi3d.cdk
                 value = null;
                 entityIds = new HashSet<ulong>() { entityId };
                 libraryIds = new HashSet<string>();
-                loadCallback = new List<Action<object>>();
-                loadFailCallback = new List<Action<Umi3dException>>();
                 state = Estate.NotLoaded;
                 downloadedPath = null;
                 this.url = url;
@@ -335,8 +305,6 @@ namespace umi3d.cdk
                 value = null;
                 entityIds = new HashSet<ulong>();
                 libraryIds = new HashSet<string>() { libraryId };
-                loadCallback = new List<Action<object>>();
-                loadFailCallback = new List<Action<Umi3dException>>();
                 state = Estate.NotLoaded;
                 this.downloadedPath = downloadedPath;
                 this.url = url;
@@ -351,8 +319,6 @@ namespace umi3d.cdk
                 value = null;
                 entityIds = new HashSet<ulong>() { entityId };
                 libraryIds = new HashSet<string>();
-                loadCallback = new List<Action<object>>();
-                loadFailCallback = new List<Action<Umi3dException>>();
                 state = Estate.NotLoaded;
                 this.downloadedPath = downloadedPath;
                 this.url = url;
@@ -399,18 +365,14 @@ namespace umi3d.cdk
             {
                 ObjectData ObjectValue = CacheCollection.FirstOrDefault(predicate);
                 if (ObjectValue == null) return false;
-                if (ObjectValue.state == ObjectData.Estate.Loading && ObjectValue.loadFailCallback != null)
+                if (ObjectValue.state == ObjectData.Estate.Loading)
                 {
-                    foreach (Action<Umi3dException> failback in ObjectValue.loadFailCallback)
-                    {
-                        failback.Invoke(new Umi3dException("clear requested"));
-                    }
+                    ObjectValue.state = ObjectData.Estate.NotLoaded;
                 }
 
                 if (subModelsCache != null && subModelsCache.ContainsKey(ObjectValue.url))
                 {
                     subModelsCache[ObjectValue.url].Destroy();
-
                     subModelsCache.Remove(ObjectValue.url);
                 }
 
@@ -427,12 +389,9 @@ namespace umi3d.cdk
             {
                 foreach (ObjectData ObjectValue in CacheCollection)
                 {
-                    if (ObjectValue.state == ObjectData.Estate.Loading && ObjectValue.loadFailCallback != null)
+                    if (ObjectValue.state == ObjectData.Estate.Loading )
                     {
-                        foreach (Action<Umi3dException> failback in ObjectValue.loadFailCallback)
-                        {
-                            failback.Invoke(new Umi3dException("clear all cache"));
-                        }
+                        ObjectValue.state = ObjectData.Estate.NotLoaded;
                     }
 
                     ObjectValue.DeleteAction?.Invoke(ObjectValue.value, "clear all cache");
@@ -498,32 +457,35 @@ namespace umi3d.cdk
         /// <param name="libraryId">id of the library to load.</param>
         /// <param name="finished">finished callback.</param>
         /// <param name="SceneId">id of the scene which use this library</param>
-        public static void LoadLibrary(string libraryId, Action finished, ulong SceneId = 0)
+        public static async Task LoadLibrary(string libraryId, ulong SceneId = 0)
         {
-            StartCoroutine(_LoadLibrary(libraryId, finished, SceneId));
+            await (_LoadLibrary(libraryId, SceneId));
         }
 
-        public static IEnumerator _LoadLibrary(string libraryId, Action finished, ulong SceneId)
+        public static async Task _LoadLibrary(string libraryId, ulong SceneId)
         {
-            int count = 0;
             KeyValuePair<DataFile, HashSet<ulong>> lib = Instance.libraries.Where((p) => { return p.Key == libraryId; }).Select((p) => { return p.Value; }).FirstOrDefault();
             if (lib.Key != null && SceneId != 0)
                 lib.Value.Add(SceneId);
 
-            IEnumerable<ObjectData> downloaded = Instance.CacheCollection.Where((od) => { return od.state == ObjectData.Estate.NotLoaded && od.libraryIds.Contains(libraryId); });
-            foreach (ObjectData pair in downloaded)
-            {
-
-                string extension = System.IO.Path.GetExtension(pair.url);
-                IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(extension);
-                if (loader != null)
+            var downloaded = Instance.CacheCollection.Where((od) => { return od.state == ObjectData.Estate.NotLoaded && od.libraryIds.Contains(libraryId); }).
+                Select(async pair =>
                 {
-                    count++;
-                    LoadFile(pair.entityIds.First(), pair, loader, (obj) => { count--; }, (error) => { UMI3DLogger.LogError(error, scope); count--; });
-                }
-            }
-            yield return new WaitUntil(() => { return count <= 0; });
-            finished?.Invoke();
+                    
+                    try
+                    {
+                        string extension = System.IO.Path.GetExtension(pair.url);
+                        IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(extension);
+                        
+                        if (loader != null)
+                        {
+                            await LoadFile(pair.entityIds.First(), pair, loader);
+
+                        }
+                    }
+                    catch(Exception e) { Debug.LogException(e); }
+                }).ToList();
+            await Task.WhenAll(downloaded);
         }
 
         /// <summary>
@@ -542,30 +504,32 @@ namespace umi3d.cdk
             loadedResources.Invoke(0);
             foreach (ObjectData pair in downloaded)
             {
-                string extension = System.IO.Path.GetExtension(pair.url);
-                IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(extension);
-                if (loader != null)
+                Action a = async () =>
                 {
-                    count++;
-                    ulong? id = pair.entityIds?.FirstOrDefault();
-                    if (id == null)
+                    string extension = System.IO.Path.GetExtension(pair.url);
+                    IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(extension);
+                    if (loader != null)
                     {
-                        string libId = pair.libraryIds?.FirstOrDefault();
-                        if (libId != null && Instance.librariesMap.ContainsValue(libId))
+                        count++;
+                        Debug.Log($"LoadLibraries {count}");
+                        ulong? id = pair.entityIds?.FirstOrDefault();
+                        if (id == null)
                         {
-                            id = Instance.librariesMap.FirstOrDefault(l => l.Value == libId).Key;
+                            string libId = pair.libraryIds?.FirstOrDefault();
+                            if (libId != null && Instance.librariesMap.ContainsValue(libId))
+                            {
+                                id = Instance.librariesMap.FirstOrDefault(l => l.Value == libId).Key;
+                            }
                         }
+                        if (id == null)
+                            throw new Exception("id should never be null");
+                        var obj = await LoadFile(id ?? 0, pair, loader);
+                        count--;
+                        Debug.Log($"LoadLibraries {count}");
+                        loadedResources.Invoke(total - count);
                     }
-                    if (id == null)
-                        throw new Exception("id should never be null");
-                    LoadFile(
-                        id ?? 0,
-                        pair,
-                        loader,
-                        (obj) => { count--; loadedResources.Invoke(total - count); },
-                        (error) => { UMI3DLogger.LogError($"{error}[{pair.url}]", scope); count--; }
-                        );
-                }
+                };
+                a();
             }
             yield return new WaitUntil(() => { return count <= 0; });
         }
@@ -597,21 +561,19 @@ namespace umi3d.cdk
             return fileUrl;
         }
 
-        public static void LoadFile(ulong id, FileDto file, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback)
+        public static async Task<object> LoadFile(ulong id, FileDto file, IResourcesLoader loader)
         {
-            Instance._LoadFile(id, file, loader, callback, failCallback);
+            return await Instance._LoadFile(id, file, loader);
         }
 
-        private static void LoadFile(ulong id, ObjectData file, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback)
+        private static async Task<object> LoadFile(ulong id, ObjectData file, IResourcesLoader loader)
         {
-            Instance._LoadFile(id, file, loader, callback, failCallback);
+            return await Instance._LoadFile(id, file, loader);
         }
 
         private async Task<object> _LoadFile(ulong id, ObjectData objectData, IResourcesLoader loader, string PathIfInBundle = null)
         {
-            bool shouldLoad = true;
-
-            if (objectData == null) 
+            if (objectData == null)
                 return null;
             objectData.entityIds.Add(id);
 
@@ -619,92 +581,70 @@ namespace umi3d.cdk
             {
                 //callback.Invoke(objectData.value);
                 // replace
-                loader.ObjectFromCache(objectData.value, callback, PathIfInBundle);
+                return await loader.ObjectFromCache(objectData.value, PathIfInBundle);
 
             }
-            else
-            {
-                objectData.loadCallback.Add((o) => { loader.ObjectFromCache(o, callback, PathIfInBundle); });
-                objectData.loadFailCallback.Add(failCallback);
-            }
-            shouldLoad = objectData.state == ObjectData.Estate.NotLoaded;
 
             if (objectData.DeleteAction == null)
             {
                 objectData.DeleteAction = loader.DeleteObject;
             }
 
-            if (shouldLoad)
+            if (objectData.state == ObjectData.Estate.Loading)
             {
-                string path = null;
+                UnityEngine.Debug.Log($"objectData already loading {objectData.url}");
+                while (objectData.state == ObjectData.Estate.Loading)
+                {
+                    await UMI3DAsyncManager.Yield();
+                }
+                if (objectData.state == ObjectData.Estate.NotLoaded)
+                    throw new Umi3dLoadingException("Waited ObjectData failed to load");
+            }
+            else
+            {
                 try
                 {
                     objectData.state = ObjectData.Estate.Loading;
-                    path = GetFilePath(objectData.url, objectData.libraryIds.FirstOrDefault());
+                    string path = GetFilePath(objectData.url, objectData.libraryIds.FirstOrDefault());
+                    objectData.value = await UrlToObjectWithPolicy(path, objectData.extension, objectData, null, loader);
+                    objectData.state = ObjectData.Estate.Loaded;
                 }
                 catch
                 {
-                    //UMI3DLogger.LogWarning($"error {reason}");
-                    foreach (Action<Umi3dException> back in objectData.loadFailCallback)
-                        back.Invoke(reason);
-                    objectData.loadFailCallback.Clear();
                     objectData.state = ObjectData.Estate.NotLoaded;
+                    throw;
                 }
-
-
-                Action<object> sucess2 = (obj) =>
-                {
-                    objectData.value = obj;
-                    objectData.state = ObjectData.Estate.Loaded;
-                    foreach (Action<object> back in objectData.loadCallback)
-                        back.Invoke(obj);
-                    objectData.loadCallback.Clear();
-                };
-                Action<Umi3dException> error2 = (reason) =>
-                {
-                    foreach (Action<Umi3dException> back in objectData.loadFailCallback)
-                        back.Invoke(reason);
-                    objectData.loadFailCallback.Clear();
-                    objectData.state = ObjectData.Estate.NotLoaded;
-                };
-                StartCoroutine(UrlToObjectWithPolicy(sucess2, error2, path, objectData.extension, objectData, null, loader));
             }
+            UnityEngine.Debug.Log($"objectData loaded {objectData.url}");
+            return await loader.ObjectFromCache(objectData.value, PathIfInBundle);
+
         }
 
-        private IEnumerator UrlToObjectWithPolicy(Action<object> succes, Action<Umi3dException> error, string path, string extension, ObjectData objectData, string bundlePath, IResourcesLoader loader, Func<RequestFailedArgument, bool> ShouldTryAgain = null, int tryCount = 0)
+        private async Task<object> UrlToObjectWithPolicy(string path, string extension, ObjectData objectData, string bundlePath, IResourcesLoader loader, Func<RequestFailedArgument, bool> ShouldTryAgain = null, int tryCount = 0)
         {
             if (ShouldTryAgain == null)
                 ShouldTryAgain = DefaultShouldTryAgain;
             if (tryCount > 0)
-                yield return null;
+                return null;
             DateTime date = DateTime.UtcNow;
-            Action<Umi3dException> error2 = (reason) =>
+            try
             {
-                async void retry()
-                {
-                    var code = (reason as Umi3dNetworkingException)?.errorCode ?? 0;
-                    if (await UMI3DClientServer.Instance.TryAgainOnHttpFail(
-                         new RequestFailedArgument(
-                             code,
-                             tryCount,
-                             date,
-                             ShouldTryAgain,
-                             $"{path}\n{reason.Message}\n{reason.StackTrace}"
-                             )))
-                    {
-                        StartCoroutine(UrlToObjectWithPolicy(succes, error, path, extension, objectData, bundlePath, loader, ShouldTryAgain, tryCount + 1));
-                    }
-                    else
-                    {
-                        error?.Invoke(reason);
-                    }
-                }
-
-                retry();
-            };
-
-            loader.UrlToObject1(loader, path, extension, objectData.authorization, succes, error2, bundlePath);
-            yield break;
+                return await _UrlToObject1(loader, path, extension, objectData.authorization, bundlePath);
+            }
+            catch(Exception e)
+            {
+                var code = (e as Umi3dNetworkingException)?.errorCode ?? 0;
+                if (!await UMI3DClientServer.Instance.TryAgainOnHttpFail(
+                     new RequestFailedArgument(
+                         code,
+                         tryCount,
+                         date,
+                         ShouldTryAgain,
+                         $"{path}\n{e.Message}\n{e.StackTrace}"
+                         )))
+                    throw;
+            }
+            return await UrlToObjectWithPolicy(path, extension, objectData, bundlePath, loader, ShouldTryAgain, tryCount + 1);
         }
 
         protected virtual async Task<object> _UrlToObject1(IResourcesLoader loader ,string url, string extension, string authorization, string pathIfObjectInBundle, int count = 0)
@@ -715,6 +655,7 @@ namespace umi3d.cdk
             }
             catch (Exception e)
             {
+                Debug.LogException(e);
                 if (count >= 2 || (e is Umi3dNetworkingException n && n.errorCode == 404))
                     throw;
             }
@@ -722,7 +663,7 @@ namespace umi3d.cdk
             return await _UrlToObject1(loader ,url, extension, authorization, pathIfObjectInBundle, count + 1);
         }
 
-        private void _LoadFile(ulong id, FileDto file, IResourcesLoader loader, Action<object> callback, Action<Umi3dException> failCallback)
+        private async Task<object> _LoadFile(ulong id, FileDto file, IResourcesLoader loader)
         {
             string fileName = System.IO.Path.GetFileName(file.url);
 
@@ -737,7 +678,7 @@ namespace umi3d.cdk
                 objectData = new ObjectData(file.url, file.extension, file.authorization, id);
                 CacheCollection.Insert(0, objectData);
             }
-            _LoadFile(id, objectData, loader, callback, failCallback, file.pathIfInBundle);
+            return await _LoadFile(id, objectData, loader, file.pathIfInBundle);
         }
 
         private string GetFilePath(string url, string libraryKey = null)
@@ -1067,7 +1008,7 @@ namespace umi3d.cdk
         {
             www.SendWebRequest();
 
-            while (www.isDone)
+            while (!www.isDone)
                 await UMI3DAsyncManager.Yield();
 
 #if UNITY_2020_1_OR_NEWER
@@ -1177,7 +1118,7 @@ namespace umi3d.cdk
             subModelsCache[modelUrlInCache] = nodes;
         }
 
-        public void GetSubModel(string modelUrlInCache, string subModelName, List<int> indexes, List<string> names, Action<object> callback)
+        public async void GetSubModel(string modelUrlInCache, string subModelName, List<int> indexes, List<string> names, Action<object> callback)
         {
             if (IsSubModelsSetFor(modelUrlInCache))
             {
@@ -1190,12 +1131,14 @@ namespace umi3d.cdk
                 {
                     return o.MatchUrl(matchUrl, modelUrlInCache);
                 });
+
                 if (objectData == null)
                     UMI3DLogger.LogError("not found in cache", scope);
-                objectData.loadCallback.Add((o) =>
-                {
-                    GetSubModel(modelUrlInCache, subModelName, indexes, names, (obj) => { callback.Invoke(obj); });
-                });
+
+                while (objectData.state != ObjectData.Estate.Loaded)
+                    await UMI3DAsyncManager.Yield();
+
+                GetSubModel(modelUrlInCache, subModelName, indexes, names, (obj) => { callback.Invoke(obj); });
             }
         }
 
