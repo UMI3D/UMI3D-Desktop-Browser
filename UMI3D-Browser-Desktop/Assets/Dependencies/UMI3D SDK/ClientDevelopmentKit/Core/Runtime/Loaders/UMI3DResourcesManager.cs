@@ -511,7 +511,6 @@ namespace umi3d.cdk
                     if (loader != null)
                     {
                         count++;
-                        Debug.Log($"LoadLibraries {count}");
                         ulong? id = pair.entityIds?.FirstOrDefault();
                         if (id == null)
                         {
@@ -525,7 +524,6 @@ namespace umi3d.cdk
                             throw new Exception("id should never be null");
                         var obj = await LoadFile(id ?? 0, pair, loader);
                         count--;
-                        Debug.Log($"LoadLibraries {count}");
                         loadedResources.Invoke(total - count);
                     }
                 };
@@ -592,7 +590,6 @@ namespace umi3d.cdk
 
             if (objectData.state == ObjectData.Estate.Loading)
             {
-                UnityEngine.Debug.Log($"objectData already loading {objectData.url}");
                 while (objectData.state == ObjectData.Estate.Loading)
                 {
                     await UMI3DAsyncManager.Yield();
@@ -615,7 +612,6 @@ namespace umi3d.cdk
                     throw;
                 }
             }
-            UnityEngine.Debug.Log($"objectData loaded {objectData.url}");
             return await loader.ObjectFromCache(objectData.value, PathIfInBundle);
 
         }
