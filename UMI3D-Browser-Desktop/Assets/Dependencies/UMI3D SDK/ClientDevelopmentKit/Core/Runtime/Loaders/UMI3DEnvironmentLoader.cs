@@ -361,7 +361,7 @@ namespace umi3d.cdk
         /// <param name="onSuccess">Finished callback.</param>
         /// <param name="onError">Error callback.</param>
         /// <returns></returns>
-        public IEnumerator Load(GlTFEnvironmentDto dto, Action onSuccess, Action<string> onError)
+        public async Task Load(GlTFEnvironmentDto dto)
         {
             if (baseMaterial == null)
             {
@@ -380,12 +380,12 @@ namespace umi3d.cdk
             // Load resources
             //
             onProgressTitleChange.Invoke("Load resources");
-            StartCoroutine(LoadResources(dto));
+            LoadResources(dto);
             while (!downloaded)
             {
                 onProgressChange.Invoke(resourcesToLoad == 0 ? 0.2f : 0.1f + (loadedResources / resourcesToLoad * 0.4f));
                 onProgressTitleChange.Invoke($"Load resources {(loadedResources / resourcesToLoad * 100).ToString("N2")} %");
-                yield return null;
+                await UMI3DAsyncManager.Yield();
             }
             onProgressTitleChange.Invoke("Resources Loaded");
 
@@ -396,7 +396,7 @@ namespace umi3d.cdk
             // Instantiate nodes
             //
             onProgressTitleChange.Invoke("Load environment data");
-            ReadUMI3DExtension(dto, null);
+            await ReadUMI3DExtension(dto, null);
 
             onProgressTitleChange.Invoke("Instantiate environment");
             InstantiateNodes();
@@ -404,39 +404,25 @@ namespace umi3d.cdk
             {
                 onProgressChange.Invoke(nodesToInstantiate == 0 ? 0.6f : 0.5f + (instantiatedNodes / nodesToInstantiate * 0.4f));
                 onProgressTitleChange.Invoke($"Instantiate environment {(instantiatedNodes / nodesToInstantiate * 100).ToString("N2")} %");
-                yield return null;
+                await UMI3DAsyncManager.Yield();
             }
 
             onProgressTitleChange.Invoke("Instantiation is done");
             onProgressChange.Invoke(0.9f);
-            yield return new WaitForSeconds(0.3f);
+            await UMI3DAsyncManager.Delay(200);
             isEnvironmentLoaded = true;
-            Action onFinish = () =>
-            {
-                StartCoroutine(Load());
-            };
-
-            IEnumerator Load()
-            {
-                onProgressTitleChange.Invoke("Loading over");
-                RenderProbes();
-
-                onProgressChange.Invoke(1f);
-                yield return new WaitForSeconds(0.3f);
-                onEnvironmentLoaded.Invoke();
-                yield return null;
-                onSuccess.Invoke();
-            }
 
 
             if (UMI3DVideoPlayerLoader.HasVideoToLoad)
-            {
-                UMI3DVideoPlayerLoader.LoadVideoPlayers(() => { onFinish(); });
-            }
-            else
-            {
-                onFinish();
-            }
+                await UMI3DVideoPlayerLoader.LoadVideoPlayers();
+
+            onProgressTitleChange.Invoke("Loading over");
+            RenderProbes();
+
+            onProgressChange.Invoke(1f);
+            await UMI3DAsyncManager.Delay(100);
+            onEnvironmentLoaded.Invoke();
+            await UMI3DAsyncManager.Yield();
         }
 
         /// <summary>
@@ -467,14 +453,14 @@ namespace umi3d.cdk
         /// <summary>
         /// Load the environment's resources
         /// </summary>
-        private IEnumerator LoadResources(GlTFEnvironmentDto dto)
+        private async void LoadResources(GlTFEnvironmentDto dto)
         {
             started = true;
             downloaded = false;
             List<string> ids = dto.extensions.umi3d.LibrariesId;
             foreach (GlTFSceneDto scene in dto.scenes)
                 ids.AddRange(scene.extensions.umi3d.LibrariesId);
-            yield return StartCoroutine(UMI3DResourcesManager.LoadLibraries(ids, (i) => { loadedResources = i; }, (i) => { resourcesToLoad = i; }));
+            await UMI3DResourcesManager.LoadLibraries(ids, (i) => { loadedResources = i; }, (i) => { resourcesToLoad = i; });
             downloaded = true;
         }
 

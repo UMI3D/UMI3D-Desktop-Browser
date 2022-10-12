@@ -495,19 +495,15 @@ namespace umi3d.cdk
         /// <param name="loadedResources">call each time a library have been loaded with the count of all loaded libraries in parameter.</param>
         /// <param name="resourcesToLoad">call with the total count of libraries to load in parameter.</param>
         /// <returns></returns>
-        public static IEnumerator LoadLibraries(List<string> ids, Action<int> loadedResources, Action<int> resourcesToLoad)
+        public static async Task LoadLibraries(List<string> ids, Action<int> loadedResources, Action<int> resourcesToLoad)
         {
             int count = 0;
-            IEnumerable<ObjectData> downloaded = Instance.CacheCollection.Where((p) => { return p.downloadedPath != null && p.state == ObjectData.Estate.NotLoaded && p.libraryIds.Any(i => ids.Contains(i)); });
-            int total = downloaded.Count();
-            resourcesToLoad.Invoke(total);
-            loadedResources.Invoke(0);
-            foreach (ObjectData pair in downloaded)
-            {
-                Action a = async () =>
-                {
+            int total = 0;
+            var downloaded = Instance.CacheCollection.Where((p) => { return p.downloadedPath != null && p.state == ObjectData.Estate.NotLoaded && p.libraryIds.Any(i => ids.Contains(i)); })
+                .Select(async (pair) => {
                     string extension = System.IO.Path.GetExtension(pair.url);
                     IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(extension);
+                    total++;
                     if (loader != null)
                     {
                         count++;
@@ -526,10 +522,10 @@ namespace umi3d.cdk
                         count--;
                         loadedResources.Invoke(total - count);
                     }
-                };
-                a();
-            }
-            yield return new WaitUntil(() => { return count <= 0; });
+                });
+            resourcesToLoad.Invoke(total);
+            loadedResources.Invoke(0);
+            await Task.WhenAll(downloaded);
         }
         #endregion
         #region file Load

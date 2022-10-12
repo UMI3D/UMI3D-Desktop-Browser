@@ -445,7 +445,7 @@ namespace umi3d.cdk.collaboration
         {
             //UMI3DLogger.Log($"Join {joinning} {connected}", scope | DebugScope.Connection);
             if (isJoinning || isConnected) return;
-            //UMI3DLogger.Log($"Join", scope | DebugScope.Connection);
+            UMI3DLogger.Log($"Join", scope | DebugScope.Connection);
             isJoinning = true;
 
             var joinDto = new JoinDto()
@@ -456,7 +456,13 @@ namespace umi3d.cdk.collaboration
             try
             {
                 EnterDto enter = await HttpClient.SendPostJoin(joinDto);
-                isConnecting = false; isConnected = true; EnterScene(enter);
+                isConnecting = false;
+                isConnected = true;
+                await EnterScene(enter);
+            }
+            catch (Exception e)
+            {
+                UMI3DLogger.LogException(e, scope);
             }
             finally
             {
@@ -464,31 +470,19 @@ namespace umi3d.cdk.collaboration
             }
         }
 
-        private async void EnterScene(EnterDto enter)
+        private async Task EnterScene(EnterDto enter)
         {
-            try
-            {
-                //UMI3DLogger.Log($"Enter scene", scope | DebugScope.Connection);
-                useDto = enter.usedDto;
-                UMI3DEnvironmentLoader.Instance.NotifyLoad();
-                GlTFEnvironmentDto environement = await HttpClient.SendGetEnvironment();
-                //UMI3DLogger.Log($"get environment completed", scope | DebugScope.Connection);
-                Action setStatus = () =>
-                {
-                    async void set()
-                    {
-                        //UMI3DLogger.Log($"Load ended, Teleport and set status to active", scope | DebugScope.Connection);
-                        UMI3DNavigation.Instance.currentNav.Teleport(new TeleportDto() { position = enter.userPosition, rotation = enter.userRotation });
-                        EnvironementLoaded.Invoke();
-                        UserDto.answerDto.status = statusToBeSet;
-
-                        await HttpClient.SendPostUpdateIdentity(UserDto.answerDto, null);
-                    }
-                    set();
-                };
-                UMI3DEnvironmentLoader.StartCoroutine(UMI3DEnvironmentLoader.Instance.Load(environement, setStatus, null));
-            }
-            catch { }
+            UMI3DLogger.Log($"Enter scene", scope | DebugScope.Connection);
+            useDto = enter.usedDto;
+            UMI3DEnvironmentLoader.Instance.NotifyLoad();
+            GlTFEnvironmentDto environement = await HttpClient.SendGetEnvironment();
+            UMI3DLogger.Log($"get environment completed", scope | DebugScope.Connection);
+            await (UMI3DEnvironmentLoader.Instance.Load(environement));
+            UMI3DLogger.Log($"Load ended, Teleport and set status to active", scope | DebugScope.Connection);
+            UMI3DNavigation.Instance.currentNav.Teleport(new TeleportDto() { position = enter.userPosition, rotation = enter.userRotation });
+            EnvironementLoaded.Invoke();
+            UserDto.answerDto.status = statusToBeSet;
+            await HttpClient.SendPostUpdateIdentity(UserDto.answerDto, null);
         }
 
         /// <summary>
