@@ -495,36 +495,45 @@ namespace umi3d.cdk
         /// <param name="loadedResources">call each time a library have been loaded with the count of all loaded libraries in parameter.</param>
         /// <param name="resourcesToLoad">call with the total count of libraries to load in parameter.</param>
         /// <returns></returns>
-        public static async Task LoadLibraries(List<string> ids, Action<int> loadedResources, Action<int> resourcesToLoad)
+        public static async Task LoadLibraries(List<string> ids, Progress progress)
         {
-            int count = 0;
-            int total = 0;
+            progress.AddTotal();
             var downloaded = Instance.CacheCollection.Where((p) => { return p.downloadedPath != null && p.state == ObjectData.Estate.NotLoaded && p.libraryIds.Any(i => ids.Contains(i)); })
-                .Select(async (pair) => {
-                    string extension = System.IO.Path.GetExtension(pair.url);
-                    IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(extension);
-                    total++;
-                    if (loader != null)
+                .Select(async (data) => {
+                    progress.AddTotal();
+                    try
                     {
-                        count++;
-                        ulong? id = pair.entityIds?.FirstOrDefault();
-                        if (id == null)
+                        string extension = System.IO.Path.GetExtension(data.url);
+                        IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(extension);
+                        if (loader != null)
                         {
-                            string libId = pair.libraryIds?.FirstOrDefault();
-                            if (libId != null && Instance.librariesMap.ContainsValue(libId))
+                            ulong? id = data.entityIds?.FirstOrDefault();
+                            if (id == null)
                             {
-                                id = Instance.librariesMap.FirstOrDefault(l => l.Value == libId).Key;
+                                string libId = data.libraryIds?.FirstOrDefault();
+                                if (libId != null && Instance.librariesMap.ContainsValue(libId))
+                                {
+                                    id = Instance.librariesMap.FirstOrDefault(l => l.Value == libId).Key;
+                                }
                             }
+                            if (id == null)
+                                throw new Exception("id should never be null");
+                            var obj = await LoadFile(id ?? 0, data, loader);
+                            progress.AddComplete();
                         }
-                        if (id == null)
-                            throw new Exception("id should never be null");
-                        var obj = await LoadFile(id ?? 0, pair, loader);
-                        count--;
-                        loadedResources.Invoke(total - count);
+                        else
+                        {
+                            await UMI3DAsyncManager.Yield();
+                            progress.AddFailed();
+                        }
                     }
-                });
-            resourcesToLoad.Invoke(total);
-            loadedResources.Invoke(0);
+                    catch(Exception e)
+                    {
+                        UMI3DLogger.LogException(e,scope);
+                        progress.AddFailed();
+                    }
+                }).ToList();
+            progress.AddComplete();
             await Task.WhenAll(downloaded);
         }
         #endregion

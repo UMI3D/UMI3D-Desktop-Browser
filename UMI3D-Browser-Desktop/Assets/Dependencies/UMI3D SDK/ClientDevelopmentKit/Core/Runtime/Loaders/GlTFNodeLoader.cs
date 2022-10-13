@@ -44,9 +44,9 @@ namespace umi3d.cdk
         /// <param name="node">node to load.</param>
         /// <param name="finished">Callback called when the node is loaded.</param>
         /// <returns></returns>
-        public async Task LoadNode(GlTFNodeDto node, System.Action finished)
+        public async Task LoadNode(GlTFNodeDto node)
         {
-            await LoadNodes(new List<GlTFNodeDto>() { node });
+            await LoadNodes(new List<GlTFNodeDto>() { node }, new Progress(0,"Load Node"));
         }
 
         /// <summary>
@@ -56,41 +56,38 @@ namespace umi3d.cdk
         /// <param name="finished">Callback called when all nodes are loaded.</param>
         /// <param name="LoadedNodesCount">Action called each time a node is loaded with the count of all loaded node in parameter.</param>
         /// <returns></returns>
-        public async Task LoadNodes(IEnumerable<GlTFNodeDto> nodes, System.Action<int> ToLoadNodesCount = null, System.Action<int> LoadedNodesCount = null)
+        public async Task LoadNodes(IEnumerable<GlTFNodeDto> nodes, Progress progress)
         {
-            int count = 0;
-            int total = nodes.Count();
-            ToLoadNodesCount?.Invoke(total);
-            LoadedNodesCount?.Invoke(0);
             await Task.WhenAll(
-                nodes.Select(n => CreateNode(n))
+                nodes
+                .Select(n => CreateNode(n))
                 .Select(async node =>
-                {
-                    var dto = node.dto as GlTFNodeDto;
-                    count += 1;
-                    try
                     {
-                        await UMI3DEnvironmentLoader.Parameters.ReadUMI3DExtension(dto.extensions.umi3d, node.gameObject);
-                    }
-                    catch (Exception e)
-                    {
-                        UMI3DLogger.LogException(e, scope);
-                        UMI3DLogger.LogError($"Failed to read Umi3d extension [{dto.name}]", scope);
-                    }
-                    ReadLightingExtensions(dto, node.gameObject);
-                    // Important: all nodes in the scene must be registred before to handle hierarchy. 
-                    // Done using CreateNode( GlTFNodeDto dto) on the whole nodes collections
-                    node.transform.localPosition = dto.position;
-                    node.transform.localRotation = dto.rotation;
-                    node.transform.localScale = dto.scale;
+                        var dto = node.dto as GlTFNodeDto;
+                        progress.AddTotal();
+                        try
+                        {
+                            await UMI3DEnvironmentLoader.Parameters.ReadUMI3DExtension(dto.extensions.umi3d, node.gameObject);
 
-                    node.SendOnPoseUpdated();
-                    node.NotifyLoaded();
+                            ReadLightingExtensions(dto, node.gameObject);
+                            // Important: all nodes in the scene must be registred before to handle hierarchy. 
+                            // Done using CreateNode( GlTFNodeDto dto) on the whole nodes collections
+                            node.transform.localPosition = dto.position;
+                            node.transform.localRotation = dto.rotation;
+                            node.transform.localScale = dto.scale;
 
-                    count -= 1;
-                    LoadedNodesCount?.Invoke(total - count);
-                }));
-            LoadedNodesCount?.Invoke(total);
+                            node.SendOnPoseUpdated();
+                            node.NotifyLoaded();
+
+                            progress.AddComplete();
+                        }
+                        catch (Exception e)
+                        {
+                            UMI3DLogger.LogException(e, scope);
+                            UMI3DLogger.LogError($"Failed to read Umi3d extension [{dto.name}]", scope);
+                            progress.AddFailed();
+                        }
+                    }));
         }
 
         /// <summary>

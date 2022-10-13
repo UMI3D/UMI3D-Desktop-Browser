@@ -34,11 +34,13 @@ namespace umi3d.cdk
         /// </summary>
         /// <param name="dto"></param>
         /// <param name="finished"></param>
-        public void LoadGlTFScene(GlTFSceneDto dto, System.Action finished, System.Action<int> ToLoadNodesCount, System.Action<int> LoadedNodesCount)
+        public async Task LoadGlTFScene(GlTFSceneDto dto, Progress progress)
         {
             if (UMI3DEnvironmentLoader.Exists)
             {
-
+                progress.AddTotal();
+                progress.AddTotal();
+                progress.AddComplete();
                 var go = new GameObject(dto.name);
                 UMI3DNodeInstance node = UMI3DEnvironmentLoader.RegisterNodeInstance(
                     dto.extensions.umi3d.id,
@@ -54,17 +56,12 @@ namespace umi3d.cdk
 
                 go.transform.SetParent(UMI3DEnvironmentLoader.Instance.transform);
                 //Load Materials and then Nodes
-                LoadSceneMaterials(dto,
-                    async () =>
-                    {
-                        await UMI3DEnvironmentLoader.Instance.nodeLoader.LoadNodes(dto.nodes, ToLoadNodesCount, LoadedNodesCount);
-                        node.NotifyLoaded();
-                        finished?.Invoke();
-                    }
-                );
+                LoadSceneMaterials(dto);
+                
+                await UMI3DEnvironmentLoader.Instance.nodeLoader.LoadNodes(dto.nodes, progress);
+                progress.AddComplete();
+                node.NotifyLoaded();
             }
-            else
-                finished?.Invoke();
         }
 
         /// <summary>
@@ -218,7 +215,7 @@ namespace umi3d.cdk
             return true;
         }
 
-        public void LoadSceneMaterials(GlTFSceneDto dto, Action callback)
+        public void LoadSceneMaterials(GlTFSceneDto dto)
         {
             foreach (GlTFMaterialDto material in dto.materials)
             {
@@ -248,7 +245,6 @@ namespace umi3d.cdk
                     UMI3DLogger.LogError("this material failed to load : " + material.name, scope);
                 }
             }
-            callback.Invoke();
         }
 
         private float RoughnessToSmoothness(float f)

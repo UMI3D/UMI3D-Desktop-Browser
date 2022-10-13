@@ -27,6 +27,8 @@ namespace umi3d.cdk.collaboration
 
     public class OnForceLogoutEvent : UnityEvent<string> { }
 
+    public class OnJoinProgressEvent : UnityEvent<Progress> { }
+
     /// <summary>
     /// Collaboration Extension of the UMI3DClientServer
     /// </summary>
@@ -56,6 +58,8 @@ namespace umi3d.cdk.collaboration
 
         public UnityEvent OnConnectionCheck = new UnityEvent();
         public UnityEvent OnConnectionRetreived = new UnityEvent();
+
+        static public OnJoinProgressEvent onJoinProgress = new OnJoinProgressEvent();
 
         public OnForceLogoutEvent OnForceLogoutMessage = new OnForceLogoutEvent();
 
@@ -115,7 +119,9 @@ namespace umi3d.cdk.collaboration
             {
                 Instance.OnReconnect.Invoke();
                 UMI3DEnvironmentLoader.Clear(false);
-                environmentClient = await worldControllerClient.ConnectToEnvironment();
+                DebugProgress progress = new DebugProgress("Reconnect");
+                onJoinProgress.Invoke(progress);
+                environmentClient = await worldControllerClient.ConnectToEnvironment(progress);
                 environmentClient.status = StatusType.CREATED;
             }
         }
@@ -157,8 +163,11 @@ namespace umi3d.cdk.collaboration
                         //Connection will not restart without this...
                         await Task.Yield();
 
+                        MultiProgress progress = new MultiProgress("Joinning Environement");
+                        onJoinProgress.Invoke(progress);
+
                         worldControllerClient = wc;
-                        environmentClient = await wc.ConnectToEnvironment();
+                        environmentClient = await wc.ConnectToEnvironment(progress);
                         environmentClient.status = StatusType.CREATED;
                     }
                 }

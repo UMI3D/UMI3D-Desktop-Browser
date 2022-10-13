@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
+using umi3d.cdk;
 using UnityEngine;
 using UnityEngine.TextCore.LowLevel;
 using UnityEngine.UIElements;
@@ -34,11 +35,45 @@ namespace umi3d.baseBrowser.connection
         {
             loadingBar = new LoadingBarElement(root.Q<VisualElement>("loading-screen"),OnProgressChange,OnHide,OnDisplay);
 
-            cdk.UMI3DEnvironmentLoader.Instance.onProgressChange.AddListener(loadingBar.OnProgressChange);
+            cdk.collaboration.UMI3DCollaborationClientServer.onJoinProgress.AddListener(NewProgress);
+
             cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(loadingBar.Hide);
             cdk.UMI3DResourcesManager.Instance.onProgressChange.AddListener(loadingBar.OnProgressChange);
-            cdk.UMI3DEnvironmentLoader.Instance.onProgressTitleChange.AddListener((t)=>Text = t);
         }
+
+        Progress _progress = null;
+        void NewProgress(Progress progress)
+        {
+
+            if (_progress != null)
+            {
+                _progress.OnCompleteUpdated.RemoveListener(OnCompleteUpdated);
+                _progress.OnFailedUpdated.RemoveListener(OnFailedUpdated);
+                _progress.OnStatusUpdated.RemoveListener(OnStatusUpdated);
+            }
+            _progress = progress;
+
+            _progress.OnCompleteUpdated.AddListener(OnCompleteUpdated);
+            _progress.OnFailedUpdated.AddListener(OnFailedUpdated);
+            _progress.OnStatusUpdated.AddListener(OnStatusUpdated);
+
+            loadingBar.OnProgressChange(_progress.progressPercent/100f);
+            Text = _progress.currentState;
+
+            if (!loadingBar.isDisplayed && _progress.started)
+            {
+                loadingBar.Display();
+            }
+            if (loadingBar.isDisplayed && !_progress.started)
+            {
+                loadingBar.Hide();
+            }
+
+        }
+
+        void OnCompleteUpdated(float i) { loadingBar.OnProgressChange(_progress.progressPercent / 100f); }
+        void OnFailedUpdated(float i) { loadingBar.OnProgressChange(_progress.progressPercent / 100f); }
+        void OnStatusUpdated(string i) { Text = _progress.currentState; }
 
         public void OnProgressChange(float val)
         {
@@ -85,6 +120,7 @@ namespace umi3d.baseBrowser.connection
         VisualElement loadingBarProgress;
         VisualElement loadingScreen;
         Label loaderTxt;
+        Label loaderValue;
 
         public Action<float> OnProgressChanges;
         public Action OnHide;
@@ -98,6 +134,7 @@ namespace umi3d.baseBrowser.connection
             loadingBarContainer = root.Q<VisualElement>("loading-bar-container");
             loadingScreen = root;
             loaderTxt = root.Q<Label>("loader-txt");
+            loaderValue = root.Q<Label>("loader-value");
 
             Debug.Assert(loadingBarProgress != null);
             Debug.Assert(loadingBarContainer != null);
@@ -123,7 +160,7 @@ namespace umi3d.baseBrowser.connection
             if (val > 1)
                 val = 1;
             value = val;
-
+            loaderValue.text = (val*100).ToString("N2")+" %";
             loadingBarProgress.style.width = val * loadingBarContainer.resolvedStyle.width;
 
         }
