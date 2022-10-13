@@ -473,6 +473,7 @@ namespace umi3d.cdk.collaboration
             catch (Exception e)
             {
                 UMI3DLogger.LogException(e, scope);
+                UMI3DCollaborationClientServer.Logout();
             }
             finally
             {

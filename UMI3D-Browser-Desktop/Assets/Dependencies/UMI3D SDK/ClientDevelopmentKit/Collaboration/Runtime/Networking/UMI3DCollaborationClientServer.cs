@@ -46,6 +46,8 @@ namespace umi3d.cdk.collaboration
 
         protected override ForgeConnectionDto connectionDto => environmentClient?.connectionDto;
 
+        public static Func<MultiProgress> JoinEnvironmentProgress = null;
+
         public UnityEvent OnLeaving = new UnityEvent();
         public UnityEvent OnLeavingEnvironment = new UnityEvent();
 
@@ -163,7 +165,7 @@ namespace umi3d.cdk.collaboration
                         //Connection will not restart without this...
                         await Task.Yield();
 
-                        MultiProgress progress = new MultiProgress("Joinning Environement");
+                        MultiProgress progress = JoinEnvironmentProgress?.Invoke() ?? new MultiProgress("Joinning Environement");
                         onJoinProgress.Invoke(progress);
 
                         worldControllerClient = wc;

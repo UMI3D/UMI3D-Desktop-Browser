@@ -15,8 +15,10 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -36,8 +38,6 @@ namespace umi3d.cdk
             OnStatusUpdated.AddListener(i => Debug());
 
         }
-
-
     }
 
     public class MultiProgress : Progress
@@ -128,6 +128,8 @@ namespace umi3d.cdk
             item.OnCompleteUpdated.AddListener(OnComplete);
             item.OnFailedUpdated.AddListener(OnFailed);
             item.OnStatusUpdated.AddListener(OnStatus);
+            if(item.ResumeAfterFail == null)
+                item.ResumeAfterFail = ResumeAfterFail;
             NotifyUpdate(completed, failed, state);
         }
 
@@ -140,6 +142,8 @@ namespace umi3d.cdk
                 item.OnCompleteUpdated.AddListener(OnComplete);
                 item.OnFailedUpdated.AddListener(OnFailed);
                 item.OnStatusUpdated.AddListener(OnStatus);
+                if (item.ResumeAfterFail == null)
+                    item.ResumeAfterFail = ResumeAfterFail;
             }
             NotifyUpdate(completed, failed, state);
         }
@@ -152,6 +156,8 @@ namespace umi3d.cdk
                 item.OnCompleteUpdated.RemoveListener(OnComplete);
                 item.OnFailedUpdated.RemoveListener(OnFailed);
                 item.OnStatusUpdated.RemoveListener(OnStatus);
+                if (item.ResumeAfterFail == ResumeAfterFail)
+                    item.ResumeAfterFail = null;
             }
             progressList.Clear();
             NotifyUpdate(completed, failed, state);
@@ -169,6 +175,8 @@ namespace umi3d.cdk
             item.OnCompleteUpdated.AddListener(OnComplete);
             item.OnFailedUpdated.AddListener(OnFailed);
             item.OnStatusUpdated.AddListener(OnStatus);
+            if (item.ResumeAfterFail == null)
+                item.ResumeAfterFail = ResumeAfterFail;
             NotifyUpdate(completed, failed, state);
         }
 
@@ -180,7 +188,8 @@ namespace umi3d.cdk
             item.OnCompleteUpdated.RemoveListener(OnComplete);
             item.OnFailedUpdated.RemoveListener(OnFailed);
             item.OnStatusUpdated.RemoveListener(OnStatus);
-
+            if (item.ResumeAfterFail == ResumeAfterFail)
+                item.ResumeAfterFail = null;
             NotifyUpdate(completed, failed, state);
             return r;
         }
@@ -193,6 +202,8 @@ namespace umi3d.cdk
                 item.OnCompleteUpdated.RemoveListener(OnComplete);
                 item.OnFailedUpdated.RemoveListener(OnFailed);
                 item.OnStatusUpdated.RemoveListener(OnStatus);
+                if (item.ResumeAfterFail == ResumeAfterFail)
+                    item.ResumeAfterFail = null;
             }
             progressList.RemoveRange(index, count);
             NotifyUpdate(completed, failed, state);
@@ -205,7 +216,8 @@ namespace umi3d.cdk
             item.OnCompleteUpdated.RemoveListener(OnComplete);
             item.OnFailedUpdated.RemoveListener(OnFailed);
             item.OnStatusUpdated.RemoveListener(OnStatus);
-
+            if (item.ResumeAfterFail == ResumeAfterFail)
+                item.ResumeAfterFail = null;
             progressList.RemoveAt(index);
             NotifyUpdate(completed, failed, state);
         }
@@ -252,6 +264,9 @@ namespace umi3d.cdk
             currentState = state ?? "Null";
         }
 
+
+        public Func<Exception, Task<bool>> ResumeAfterFail = null;
+
         public ProgressValueUpdate OnCompleteUpdated = new ProgressValueUpdate();
         public ProgressValueUpdate OnFailedUpdated = new ProgressValueUpdate();
         public ProgressStateUpdate OnStatusUpdated = new ProgressStateUpdate();
@@ -269,10 +284,10 @@ namespace umi3d.cdk
         public virtual float progressPercent { get => !started || total == 0 ? 0 : (progress * 100f) / total; }
 
         public virtual void AddComplete() { started = true; completed += 1; OnCompleteUpdated.Invoke(completed); }
-        public virtual void AddFailed() { started = true; failed += 1; OnFailedUpdated.Invoke(failed); }
+        public virtual async Task<bool> AddFailed(Exception e) { started = true; failed += 1; OnFailedUpdated.Invoke(failed); return await (ResumeAfterFail?.Invoke(e) ?? Task.FromResult( true)); }
         public virtual void SetStatus(string status) { currentState = status; OnStatusUpdated.Invoke(currentState); }
 
-        public virtual void SetFailed() { started = true; failed = total - completed; }
+        public virtual void SetFailed() { started = true; failed = total - completed; OnFailedUpdated.Invoke(failed); }
 
         public virtual void SetTotal(float total) { this.total = total; }
         public virtual void AddTotal() { this.total += 1; }

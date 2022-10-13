@@ -85,7 +85,8 @@ namespace umi3d.cdk
                         {
                             UMI3DLogger.LogException(e, scope);
                             UMI3DLogger.LogError($"Failed to read Umi3d extension [{dto.name}]", scope);
-                            progress.AddFailed();
+                            if (!await progress.AddFailed(e))
+                                throw;
                         }
                     }));
         }

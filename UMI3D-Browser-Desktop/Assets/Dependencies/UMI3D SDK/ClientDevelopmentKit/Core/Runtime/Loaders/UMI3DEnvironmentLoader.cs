@@ -441,15 +441,8 @@ namespace umi3d.cdk
             {
                 Progress progress1 = new Progress(0, $"Load scene {scene.name}");
                 progress.Add(progress1);
-                try
-                {
-                    await sceneLoader.LoadGlTFScene(scene, progress1);
-                }
-                catch(Exception e)
-                {
-                    UMI3DLogger.LogException(e, scope);
-                    progress1.SetFailed();
-                }
+                await sceneLoader.LoadGlTFScene(scene, progress1);
+
             }));
             //Organize scenes
             await Task.WhenAll(scenes.Select(async scene =>

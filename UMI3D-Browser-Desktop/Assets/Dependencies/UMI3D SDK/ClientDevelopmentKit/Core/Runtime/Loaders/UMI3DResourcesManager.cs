@@ -499,7 +499,8 @@ namespace umi3d.cdk
         {
             progress.AddTotal();
             var downloaded = Instance.CacheCollection.Where((p) => { return p.downloadedPath != null && p.state == ObjectData.Estate.NotLoaded && p.libraryIds.Any(i => ids.Contains(i)); })
-                .Select(async (data) => {
+                .Select(async (data) =>
+                {
                     progress.AddTotal();
                     try
                     {
@@ -519,18 +520,14 @@ namespace umi3d.cdk
                             if (id == null)
                                 throw new Exception("id should never be null");
                             var obj = await LoadFile(id ?? 0, data, loader);
-                            progress.AddComplete();
                         }
-                        else
-                        {
-                            await UMI3DAsyncManager.Yield();
-                            progress.AddFailed();
-                        }
+                        progress.AddComplete();
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
-                        UMI3DLogger.LogException(e,scope);
-                        progress.AddFailed();
+                        UMI3DLogger.LogException(e, scope);
+                        if (!await progress.AddFailed(e))
+                            throw;
                     }
                 }).ToList();
             progress.AddComplete();
