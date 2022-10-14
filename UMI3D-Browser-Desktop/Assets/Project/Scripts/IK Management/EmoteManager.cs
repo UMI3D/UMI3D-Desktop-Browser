@@ -14,6 +14,7 @@ limitations under the License.
 using inetum.unityUtils;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using umi3d.baseBrowser.ui.viewController;
 using umi3d.cdk;
@@ -205,40 +206,23 @@ namespace umi3dDesktopBrowser.emotes
                 }
 
                 var i = 0;
-                foreach (var emoteRefInConfig in emoteConfigDto.emotes)
+                foreach (UMI3DEmoteDto emoteRefInConfig in emoteConfigDto.emotes)
                 {
                     if (emoteRefInConfig != null)
                     {
-                        Sprite icon = default;
-                        if (emoteRefInConfig.iconResource != null)
-                        {
-                            IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(emoteRefInConfig.iconResource.extension);
-                            UMI3DResourcesManager.LoadFile(
-                                emoteConfigDto.id,
-                                emoteRefInConfig.iconResource,
-                                loader.UrlToObject,
-                                loader.ObjectFromCache,
-                                (image) =>
-                                {
-                                    var tex = (Texture2D)image;
-                                    icon = Sprite.Create((Texture2D)image, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
-                                    return;
-                                },
-                                e => UMI3DLogger.LogWarning(e, DebugScope.CDK),
-                                loader.DeleteObject
-                                );
-                        }
-
-                        if (icon == default)
-                            icon = defaultIcon;
-
                         var emote = new Emote()
                         {
                             available = emoteConfigDto.allAvailableByDefault ? true : emoteRefInConfig.available,
-                            icon = icon,
+                            icon = defaultIcon,
                             uiOrder = i,
                             dto = emoteRefInConfig
                         };
+
+                        if (emoteRefInConfig.iconResource != null)
+                        {
+                            LoadFile(emoteRefInConfig, emote);
+                        }
+
                         Emotes.Add(emote);
                     }
                     i++;
@@ -251,6 +235,18 @@ namespace umi3dDesktopBrowser.emotes
             }
             if (Emotes.Count == 0)
                 DisableEmoteSystem();
+        }
+
+        async void LoadFile(UMI3DEmoteDto emoteRefInConfig, Emote emote)
+        {
+            IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(emoteRefInConfig.iconResource.extension);
+            var image = await UMI3DResourcesManager.LoadFile(
+                emoteConfigDto.id,
+                emoteRefInConfig.iconResource,
+                loader );
+            var tex = (Texture2D)image;
+            emote.icon = Sprite.Create((Texture2D)image, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
+            return;
         }
 
         #endregion Emote Config

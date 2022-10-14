@@ -58,7 +58,7 @@ public class Debugger : PersistentSingleBehaviour<Debugger>
 
     private void OnGUI()
     {
-        if (!DisplayInfo && Exists)
+        if (!DisplayInfo || !Exists)
             return;
 
         line = 50;

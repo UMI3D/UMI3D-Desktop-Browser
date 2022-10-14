@@ -7,6 +7,7 @@
                     <ui:VisualElement style="height: 100%; width: 100%; border-top-left-radius: 9px; border-bottom-left-radius: 9px; border-top-right-radius: 9px; border-bottom-right-radius: 9px; overflow: hidden;">
                         <ui:VisualElement name="loading-bar-progress" style="height: 100%; width: 0; background-color: rgb(247, 182, 87); overflow: hidden;" />
                     </ui:VisualElement>
+                    <ui:Label text="Label" display-tooltip-when-elided="true" name="loader-value" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; -unity-text-align: middle-center; font-size: 21px; -unity-font-style: normal; color: rgb(0, 0, 0);" />
                 </ui:VisualElement>
                 <ui:Label text="Loading" name="loader-txt" class="medium-size-txt white-txt" style="-unity-text-align: upper-center; position: absolute; width: 100%; top: 50px;" />
                 <ui:VisualElement name="loader-container" style="margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;" />
