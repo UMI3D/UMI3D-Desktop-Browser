@@ -23,7 +23,6 @@ using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UIElements;
-using static UnityEditor.Progress;
 using static UnityEngine.Networking.UnityWebRequest;
 
 namespace umi3d.baseBrowser.connection
