@@ -89,7 +89,9 @@ namespace umi3d.cdk.collaboration
             }
         }
 
+        MultiProgress progress;
         MultiProgress joinProgress;
+        MultiProgress libraryProgress;
 
         public class UserInfo
         {
@@ -121,7 +123,7 @@ namespace umi3d.cdk.collaboration
         public UserInfo UserDto = new UserInfo();
 
 
-        public UMI3DEnvironmentClient(ForgeConnectionDto connectionDto, UMI3DWorldControllerClient worldControllerClient, MultiProgress joinProgress)
+        public UMI3DEnvironmentClient(ForgeConnectionDto connectionDto, UMI3DWorldControllerClient worldControllerClient, MultiProgress progress)
         {
             this.isJoinning = false;
             this.isConnecting = false;
@@ -130,7 +132,11 @@ namespace umi3d.cdk.collaboration
             this.connectionDto = connectionDto;
             this.worldControllerClient = worldControllerClient;
 
-            this.joinProgress = joinProgress;
+            this.progress = progress;
+            this.libraryProgress = new MultiProgress("Download libraries");
+            this.joinProgress = new MultiProgress("Joinning Environement");
+            progress.Add(libraryProgress);
+            progress.Add(joinProgress);
 
             lastTokenUpdate = default;
             HttpClient = new HttpClient(this);
@@ -385,10 +391,10 @@ namespace umi3d.cdk.collaboration
                     }
                     else
                     {
-                        ConnectionState.Invoke("Downloading Libraries");
+                        libraryProgress.SetStatus("Downloading Libraries");
                         try
                         {
-                            await UMI3DResourcesManager.DownloadLibraries(LibrariesDto, worldControllerClient.name);
+                            await UMI3DResourcesManager.DownloadLibraries(LibrariesDto, worldControllerClient.name, libraryProgress);
                             librariesUpdated = true;
                         }
                         catch (Exception e)
@@ -401,6 +407,8 @@ namespace umi3d.cdk.collaboration
                         await UMI3DAsyncManager.Yield();
                     UserDto.answerDto.librariesUpdated = librariesUpdated;
                 }
+                else
+                    libraryProgress.SetAsCompleted();
 
                 if (Ok)
                 {
@@ -418,9 +426,7 @@ namespace umi3d.cdk.collaboration
                 }
                 else
                 {
-                    await Logout();
-                    if (UMI3DCollaborationClientServer.Exists)
-                        UMI3DCollaborationClientServer.Instance.ConnectionLost(this);
+                    UMI3DCollaborationClientServer.Logout();
                 }
             }
             catch (UMI3DAsyncManagerException)
@@ -429,12 +435,10 @@ namespace umi3d.cdk.collaboration
             }
             catch (Exception e)
             {
-                await Logout();
                 if (e is Umi3dNetworkingException n && n.errorCode == 401)
                     UMI3DCollaborationClientServer.ReceivedLogoutMessage("You are not authorized to proceed further.");
-                else if (UMI3DCollaborationClientServer.Exists)
-                    UMI3DCollaborationClientServer.Instance.ConnectionLost(this);
-                throw;
+                else
+                    UMI3DCollaborationClientServer.Logout();
             }
         }
 
@@ -447,6 +451,7 @@ namespace umi3d.cdk.collaboration
         private async void Join(MultiProgress progress)
         {
             //UMI3DLogger.Log($"Join {joinning} {connected}", scope | DebugScope.Connection);
+            libraryProgress.SetAsCompleted();
             Progress PostJoinProgress = new Progress(2, "Joinning Environment");
             MultiProgress EnterProgress = new MultiProgress("Enterring Environment");
             progress.Add(PostJoinProgress);
@@ -477,7 +482,7 @@ namespace umi3d.cdk.collaboration
             }
             finally
             {
-                progress.SetFailed();
+                progress.SetAsFailed();
                 isJoinning = false;
             }
         }

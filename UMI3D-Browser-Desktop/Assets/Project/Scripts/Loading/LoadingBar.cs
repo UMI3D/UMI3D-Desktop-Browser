@@ -35,10 +35,9 @@ namespace umi3d.baseBrowser.connection
         {
             loadingBar = new LoadingBarElement(root.Q<VisualElement>("loading-screen"),OnProgressChange,OnHide,OnDisplay);
 
-            cdk.collaboration.UMI3DCollaborationClientServer.onJoinProgress.AddListener(NewProgress);
+            cdk.collaboration.UMI3DCollaborationClientServer.onProgress.AddListener(NewProgress);
 
             cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(loadingBar.Hide);
-            cdk.UMI3DResourcesManager.Instance.onProgressChange.AddListener(loadingBar.OnProgressChange);
         }
 
         Progress _progress = null;
@@ -52,6 +51,10 @@ namespace umi3d.baseBrowser.connection
                 _progress.OnStatusUpdated.RemoveListener(OnStatusUpdated);
             }
             _progress = progress;
+
+            void OnCompleteUpdated(float i) { loadingBar.OnProgressChange(_progress.progressPercent / 100f); }
+            void OnFailedUpdated(float i) { loadingBar.OnProgressChange(_progress.progressPercent / 100f); }
+            void OnStatusUpdated(string i) { Text = _progress.currentState; }
 
             _progress.OnCompleteUpdated.AddListener(OnCompleteUpdated);
             _progress.OnFailedUpdated.AddListener(OnFailedUpdated);
@@ -70,10 +73,6 @@ namespace umi3d.baseBrowser.connection
             }
 
         }
-
-        void OnCompleteUpdated(float i) { loadingBar.OnProgressChange(_progress.progressPercent / 100f); }
-        void OnFailedUpdated(float i) { loadingBar.OnProgressChange(_progress.progressPercent / 100f); }
-        void OnStatusUpdated(string i) { Text = _progress.currentState; }
 
         public void OnProgressChange(float val)
         {

@@ -55,14 +55,17 @@ namespace umi3d.cdk
             OnFailedUpdated.AddListener(i => OnStatusUpdated.Invoke(currentState));
         }
 
-        public override bool started { get => progressList.Count > 0 ? progressList.Any(p => p.started) : false; }
+        bool ForcedFailed = false;
+        bool ForcedCompleted = false;
+        bool _started => ForcedCompleted || ForcedFailed;
+        public override bool started { get => progressList.Count > 0 ? progressList.Any(p => p.started) : _started; }
 
         public override float completed
         {
             get
             {
                 var c = progressList.Count;
-                return c > 0 ? progressList.Aggregate(0f, (a, b) => a + (b.completedPercent / 100f)) : 0;
+                return c > 0 ? progressList.Aggregate(0f, (a, b) => a + (b.completedPercent / 100f)) : ForcedCompleted ? 1 : 0;
             }
         }
         public override float failed
@@ -70,7 +73,7 @@ namespace umi3d.cdk
             get
             {
                 var c = progressList.Count;
-                return c > 0 ? progressList.Aggregate(0f, (a, b) => a + (b.failedPercent / 100f)) : 0;
+                return c > 0 ? progressList.Aggregate(0f, (a, b) => a + (b.failedPercent / 100f)) : ForcedFailed ? 1 : 0;
             }
         }
         public override float total
@@ -226,12 +229,25 @@ namespace umi3d.cdk
         void OnFailed(float f) { OnFailedUpdated.Invoke(failed); }
         void OnStatus(string s) { OnStatusUpdated.Invoke(currentState); }
 
-        public override void SetFailed()
+        public override void SetAsFailed()
         {
-            foreach (Progress item in progressList)
-            {
-                item.SetFailed();
-            }
+            if (progressList.Count > 0)
+                foreach (Progress item in progressList)
+                {
+                    item.SetAsFailed();
+                }
+            else
+                ForcedFailed = true;
+        }
+        public override void SetAsCompleted()
+        {
+            if (progressList.Count > 0)
+                foreach (Progress item in progressList)
+                {
+                    item.SetAsCompleted();
+                }
+            else
+                ForcedCompleted = true;
         }
 
         public override string ToString()
@@ -241,8 +257,8 @@ namespace umi3d.cdk
 
         public override string CompactString()
         {
-            if (progressList == null || progressList.Count < 0)
-                return base.ToString();
+            if (progressList == null || progressList.Count <= 0)
+                return base.ToString() + $"{_started} ";
 
             string sub = null;
 
@@ -250,7 +266,7 @@ namespace umi3d.cdk
                 sub = ($"\n  SUB : {base.currentState} \n" + progressList.ToString<Progress>(progress => progress.CompactString() + "\n"));
             else
                 sub = ($"\n  SUB {base.currentState} List Empty");
-            return base.CompactString() + sub;
+            return base.CompactString() +$"{_started} "+ sub;
         }
     }
 
@@ -287,7 +303,8 @@ namespace umi3d.cdk
         public virtual async Task<bool> AddFailed(Exception e) { started = true; failed += 1; OnFailedUpdated.Invoke(failed); return await (ResumeAfterFail?.Invoke(e) ?? Task.FromResult( true)); }
         public virtual void SetStatus(string status) { currentState = status; OnStatusUpdated.Invoke(currentState); }
 
-        public virtual void SetFailed() { started = true; failed = total - completed; OnFailedUpdated.Invoke(failed); }
+        public virtual void SetAsFailed() { started = true; if (total == 0) total = 1; failed = total - completed; OnFailedUpdated.Invoke(failed); }
+        public virtual void SetAsCompleted() { started = true; if (total == 0) total = 1; completed = total - failed; OnCompleteUpdated.Invoke(completed); }
 
         public virtual void SetTotal(float total) { this.total = total; }
         public virtual void AddTotal() { this.total += 1; }
@@ -304,7 +321,7 @@ namespace umi3d.cdk
 
         public virtual string CompactString()
         {
-            return ($"subState : {(currentState)} {(progressPercent).ToString("N2")} % {(progress)} / {total} | Complete {(completedPercent).ToString("N2")} % {(completed)} / {total} | Failed {(failedPercent).ToString("N2")} %  {(failed)} / {total}");
+            return ($"subState : {(currentState)} {(progressPercent).ToString("N2")} % {(progress)} / {total} | Complete {(completedPercent).ToString("N2")} % {(completed)} / {total} | Failed {(failedPercent).ToString("N2")} %  {(failed)} / {total} | {started}");
         }
 
         public void Debug()

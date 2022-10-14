@@ -184,7 +184,7 @@ namespace umi3d.baseBrowser.connection
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnLeaving.AddListener(Leave);
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnForceLogoutMessage.AddListener(ForcedLeave);
 
-            cdk.collaboration.UMI3DCollaborationClientServer.JoinEnvironmentProgress = () =>
+            cdk.collaboration.UMI3DCollaborationClientServer.EnvironmentProgress = () =>
             {
                 var p = new MultiProgress("Join Environement");
                 p.ResumeAfterFail = ResumeAfterFail;

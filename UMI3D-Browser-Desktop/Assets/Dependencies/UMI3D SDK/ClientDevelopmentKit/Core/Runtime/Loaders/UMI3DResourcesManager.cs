@@ -715,12 +715,6 @@ namespace umi3d.cdk
         #endregion
         #region libraries download
 
-        public class ProgressListener : UnityEvent<float> { }
-        public ProgressListener onProgressChange = new ProgressListener();
-        public UnityEvent onLibrariesDownloaded = new UnityEvent();
-        private float librariesToDownload = 0;
-        private float librariesDownloaded = 0;
-
         public static List<string> LibrariesToDownload(LibrariesDto libraries)
         {
             return Instance._LibrariesToDownload(libraries.libraries);
@@ -754,45 +748,57 @@ namespace umi3d.cdk
             return toDownload;
         }
 
-        public static async Task DownloadLibraries(LibrariesDto libraries, string applicationName)
+        public static async Task DownloadLibraries(LibrariesDto libraries, string applicationName, MultiProgress progress)
         {
-            await Instance.DownloadResources(libraries.libraries, applicationName);
+            await Instance.DownloadResources(libraries.libraries, applicationName, progress);
         }
 
-        private async Task DownloadResources(List<AssetLibraryDto> assetlibraries, string applicationName)
+        private async Task DownloadResources(List<AssetLibraryDto> assetlibraries, string applicationName, MultiProgress progress)
         {
             if (assetlibraries != null && assetlibraries.Count > 0)
             {
-                librariesToDownload = assetlibraries.Count;
-                librariesDownloaded = 0;
-                onProgressChange.Invoke(0f);
-                foreach (AssetLibraryDto assetlibrary in assetlibraries)
+                foreach (var assetlibrary in LibrariesToProgress(assetlibraries, progress))
                 {
-                    await DownloadResources(assetlibrary, applicationName);
-                    librariesDownloaded += 1;
-                    onProgressChange.Invoke(librariesDownloaded / librariesToDownload);
+                    await DownloadResources(assetlibrary.Item2, applicationName, assetlibrary.Item1);
                 }
             }
-            onProgressChange.Invoke(1f);
             await UMI3DAsyncManager.Yield();
-            onLibrariesDownloaded.Invoke();
+        }
+
+        List<(MultiProgress, AssetLibraryDto)> LibrariesToProgress(List<AssetLibraryDto> assetlibraries, MultiProgress progress)
+        {
+            return assetlibraries.Select(a =>
+            {
+                var progress1 = new MultiProgress($"Downloading {a.libraryId}");
+                progress.Add(progress1);
+
+                return (progress1, a);
+            }).ToList();
         }
 
 
-        public static async Task DownloadLibrary(AssetLibraryDto library, string application)
+        public static async Task DownloadLibrary(AssetLibraryDto library, string application, MultiProgress progress)
         {
-            await Instance._DownloadLibrary(library, application);
+            await Instance._DownloadLibrary(library, application, progress);
         }
 
-        private async Task _DownloadLibrary(AssetLibraryDto library, string application)
+        private async Task _DownloadLibrary(AssetLibraryDto library, string application, MultiProgress progress)
         {
-            await DownloadResources(library, application);
+            await DownloadResources(library, application, progress);
         }
 
-        private async Task DownloadResources(AssetLibraryDto assetLibrary, string application)
+        private async Task DownloadResources(AssetLibraryDto assetLibrary, string application, MultiProgress progress)
         {
+            Progress progress1 = new Progress(3, $"Retreiving Data for library {assetLibrary.libraryId}");
+            Progress progress2 = new Progress(0, $"Downloading library {assetLibrary.libraryId}");
+            Progress progress3 = new Progress(1, $"Storring library {assetLibrary.libraryId}");
+            progress.Add(progress1);
+            progress.Add(progress2);
+            progress.Add(progress3);
+
             try
             {
+                progress1.AddComplete();
                 var applications = new List<string>() { application };
                 librariesMap[assetLibrary.id] = assetLibrary.libraryId;
                 string directoryPath = Path.Combine(Application.persistentDataPath, assetLibrary.libraryId);
@@ -814,6 +820,7 @@ namespace umi3d.cdk
                                     dt.applications.Add(application);
                                     SetData(dt, directoryPath);
                                 }
+                                progress.SetAsCompleted();
                                 return;
                             }
                             applications = dt.applications;
@@ -831,11 +838,12 @@ namespace umi3d.cdk
                 UMI3DLocalAssetDirectory variant = UMI3DEnvironmentLoader.Parameters.ChooseVariant(assetLibrary);
 
                 var bytes = await UMI3DClientServer.GetFile(Path.Combine(assetLibrary.baseUrl, variant.path), false);
-
+                progress1.AddComplete();
                 var dto = await deserializer.FromBson(bytes);
-
+                progress1.AddComplete();
                 string assetDirectoryPath = Path.Combine(directoryPath, assetDirectory);
-                if (dto is FileListDto) {
+                if (dto is FileListDto)
+                {
                     var data = await
                         DownloadFiles(
                             assetLibrary.libraryId,
@@ -845,18 +853,22 @@ namespace umi3d.cdk
                             assetLibrary.date,
                             assetLibrary.format,
                             assetLibrary.culture,
-                            dto as FileListDto
+                            dto as FileListDto,
+                            progress2
                             );
                     if (!Directory.Exists(directoryPath))
                         Directory.CreateDirectory(directoryPath);
                     SetData(data, directoryPath);
                 }
+                progress3.AddComplete();
 
             }
             catch (Exception e)
             {
                 UMI3DLogger.LogException(e, scope);
                 RemoveLibrary(assetLibrary.libraryId);
+                if (!await progress.ResumeAfterFail(e))
+                    throw;
             }
         }
 
@@ -916,27 +928,33 @@ namespace umi3d.cdk
 
         #endregion
         #region file downloading
-        private async Task<DataFile> DownloadFiles(string key, string rootDirectoryPath, string directoryPath, List<string> applications, string date, string format, string culture, FileListDto list)
+        private async Task<DataFile> DownloadFiles(string key, string rootDirectoryPath, string directoryPath, List<string> applications, string date, string format, string culture, FileListDto list, Progress progress)
         {
             var data = new DataFile(key, rootDirectoryPath, applications, date, format, culture);
+            progress.SetTotal(list.files.Count);
             foreach (string name in list.files)
             {
-                string path = null;
-                string dicPath = null;
-                string url = null;
                 try
                 {
+                    string path = null;
+                    string dicPath = null;
+                    string url = null;
+
                     path = Path.Combine(directoryPath, name);
                     path = System.Uri.UnescapeDataString(path);
                     dicPath = System.IO.Path.GetDirectoryName(path);
                     url = Path.Combine(list.baseUrl, name);
+
+                    await DownloadFile(key, dicPath, path, url, name);
+                    data.files.Add(new Data(url, path, name));
+                    progress.AddComplete();
                 }
                 catch (Exception e)
                 {
                     UMI3DLogger.LogException(e, scope);
+                    if (!await progress.AddFailed(e))
+                        throw;
                 }
-                await DownloadFile(key, dicPath, path, url, name);
-                data.files.Add(new Data(url, path, name));
             }
             libraries.Add(data.key, new KeyValuePair<DataFile, HashSet<ulong>>(data, new HashSet<ulong>()));
             return (data);

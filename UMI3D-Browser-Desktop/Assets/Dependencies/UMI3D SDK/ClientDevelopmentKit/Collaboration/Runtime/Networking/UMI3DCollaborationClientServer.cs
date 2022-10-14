@@ -27,7 +27,7 @@ namespace umi3d.cdk.collaboration
 
     public class OnForceLogoutEvent : UnityEvent<string> { }
 
-    public class OnJoinProgressEvent : UnityEvent<Progress> { }
+    public class OnProgressEvent : UnityEvent<Progress> { }
 
     /// <summary>
     /// Collaboration Extension of the UMI3DClientServer
@@ -46,7 +46,7 @@ namespace umi3d.cdk.collaboration
 
         protected override ForgeConnectionDto connectionDto => environmentClient?.connectionDto;
 
-        public static Func<MultiProgress> JoinEnvironmentProgress = null;
+        public static Func<MultiProgress> EnvironmentProgress = null;
 
         public UnityEvent OnLeaving = new UnityEvent();
         public UnityEvent OnLeavingEnvironment = new UnityEvent();
@@ -61,7 +61,7 @@ namespace umi3d.cdk.collaboration
         public UnityEvent OnConnectionCheck = new UnityEvent();
         public UnityEvent OnConnectionRetreived = new UnityEvent();
 
-        static public OnJoinProgressEvent onJoinProgress = new OnJoinProgressEvent();
+        static public OnProgressEvent onProgress = new OnProgressEvent();
 
         public OnForceLogoutEvent OnForceLogoutMessage = new OnForceLogoutEvent();
 
@@ -121,8 +121,10 @@ namespace umi3d.cdk.collaboration
             {
                 Instance.OnReconnect.Invoke();
                 UMI3DEnvironmentLoader.Clear(false);
+
                 DebugProgress progress = new DebugProgress("Reconnect");
-                onJoinProgress.Invoke(progress);
+                onProgress.Invoke(progress);
+
                 environmentClient = await worldControllerClient.ConnectToEnvironment(progress);
                 environmentClient.status = StatusType.CREATED;
             }
@@ -165,8 +167,8 @@ namespace umi3d.cdk.collaboration
                         //Connection will not restart without this...
                         await Task.Yield();
 
-                        MultiProgress progress = JoinEnvironmentProgress?.Invoke() ?? new MultiProgress("Joinning Environement");
-                        onJoinProgress.Invoke(progress);
+                        MultiProgress progress = EnvironmentProgress?.Invoke() ?? new MultiProgress("Joinning Environement");
+                        onProgress.Invoke(progress);
 
                         worldControllerClient = wc;
                         environmentClient = await wc.ConnectToEnvironment(progress);

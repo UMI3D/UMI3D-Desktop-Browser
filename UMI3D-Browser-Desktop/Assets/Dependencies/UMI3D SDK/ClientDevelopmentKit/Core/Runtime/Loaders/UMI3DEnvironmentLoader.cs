@@ -495,7 +495,7 @@ namespace umi3d.cdk
                         performed.Invoke();
                         break;
                     case AssetLibraryDto library:
-                        await UMI3DResourcesManager.DownloadLibrary(library, UMI3DClientServer.Media.name);
+                        await UMI3DResourcesManager.DownloadLibrary(library, UMI3DClientServer.Media.name, new MultiProgress("Load Entity"));
                         await UMI3DResourcesManager.LoadLibrary(library.libraryId);
                         performed?.Invoke();
                         break;
