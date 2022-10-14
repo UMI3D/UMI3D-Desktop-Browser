@@ -27,11 +27,11 @@ namespace BrowserDesktop
         /// <summary>
         /// Build count, to be increament by 1.
         /// </summary>
-        public readonly static string buildCount = "11";
+        public readonly static string buildCount = "12";
         /// <summary>
         /// Year-Month-Day.
         /// </summary>
-        public readonly static string date = "221012";
+        public readonly static string date = "221014";
     }
 }
 
