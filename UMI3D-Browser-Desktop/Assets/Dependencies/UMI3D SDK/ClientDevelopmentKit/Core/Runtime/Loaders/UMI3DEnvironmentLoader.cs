@@ -335,10 +335,6 @@ namespace umi3d.cdk
 
             environment = dto;
             RegisterEntityInstance(UMI3DGlobalID.EnvironementId, dto, null).NotifyLoaded();
-            //var nodesToInstantiate = dto.scenes.Count;
-            //foreach (GlTFSceneDto sce in dto.scenes)
-            //    nodesToInstantiate += sce.nodes.Count;
-            //downloadingProgress.SetTotal(nodesToInstantiate);
             //
             // Load resources
             //

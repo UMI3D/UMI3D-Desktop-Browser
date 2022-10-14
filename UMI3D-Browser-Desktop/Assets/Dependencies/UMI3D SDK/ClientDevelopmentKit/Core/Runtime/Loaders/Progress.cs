@@ -93,7 +93,7 @@ namespace umi3d.cdk
                     return base.currentState;
 
                 string name = null;
-                var p = progressList.LastOrDefault(p => p.started && p.completedPercent < 100);
+                var p = progressList.LastOrDefault(pr => pr.started && pr.completedPercent < 100);
 
                 if (p == null)
                     name = base.currentState;
