@@ -16,6 +16,7 @@ limitations under the License.
 using BrowserDesktop.Controller;
 using BrowserDesktop.Cursor;
 using inetum.unityUtils;
+using System;
 using umi3d.baseBrowser.Controller;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
@@ -203,35 +204,7 @@ namespace BrowserDesktop.Interaction
 
                 if (fileToLoad != null)
                 {
-                    string url = fileToLoad.url;
-                    string ext = fileToLoad.extension;
-                    string authorization = fileToLoad.authorization;
-                    IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(ext);
-
-                    if (loader != null)
-                    {
-                        UMI3DResourcesManager.LoadFile(
-                            interaction.id,
-                            fileToLoad,
-                            loader.UrlToObject,
-                            loader.ObjectFromCache,
-                            (o) =>
-                            {
-                                var obj = o as Texture2D;
-                                if (obj == null)
-                                    DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
-                                else
-                                    DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
-                            },
-                            (Umi3dException str) =>
-                            {
-                                DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
-                            },
-                            loader.DeleteObject
-                            );
-                    }
-                    else
-                        DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                    LoadFile(fileToLoad, interaction);
                 }
                 else
                 {
@@ -242,6 +215,36 @@ namespace BrowserDesktop.Interaction
             {
                 throw new System.Exception("Trying to associate an uncompatible interaction !");
             }
+        }
+
+        async void LoadFile(FileDto fileToLoad, AbstractInteractionDto interaction)
+        {
+            string ext = fileToLoad.extension;
+            IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(ext);
+
+            if (loader != null)
+            {
+                try
+                {
+                    var o = await UMI3DResourcesManager.LoadFile(
+                        interaction.id,
+                        fileToLoad,
+                        loader
+                        );
+                    var obj = o as Texture2D;
+                    if (obj == null)
+                        DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                    else
+                        DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString(), obj);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                    DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
+                }
+            }
+            else
+                DisplayInput(associatedInteraction.name, InputLayoutManager.GetInputCode(activationButton).ToString());
         }
 
         public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)

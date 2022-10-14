@@ -14,9 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BrowserDesktop.Menu;
+using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using umi3d.cdk;
+using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UIElements;
+using static UnityEditor.Progress;
+using static UnityEngine.Networking.UnityWebRequest;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -175,6 +183,75 @@ namespace umi3d.baseBrowser.connection
 
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnLeaving.AddListener(Leave);
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnForceLogoutMessage.AddListener(ForcedLeave);
+
+            cdk.collaboration.UMI3DCollaborationClientServer.EnvironmentProgress = () =>
+            {
+                var p = new MultiProgress("Join Environement");
+                p.ResumeAfterFail = ResumeAfterFail;
+
+                return p;
+            };
+        }
+
+        bool rememberNe = false;
+        bool rememberLe = false;
+        bool rememberUe = false;
+
+        async Task<bool> ResumeAfterFail(Exception e)
+        {
+            switch (e)
+            {
+                case Umi3dNetworkingException ne:
+                    if (rememberNe)
+                        return true;
+                    (bool, bool) c = (false, false);
+                    switch (ne.errorCode)
+                    {
+                        case 404:
+                            c = await DisplayPopUp("Resources not found",ne.Message +"\n"+ne.url);
+                            break;
+                        case 204:
+                            c = await DisplayPopUp("Resources Downloaded was empty", ne.Message + "\n" + ne.url);
+                            break;
+                        case 501:
+                            c = await DisplayPopUp("Resources acess was denied", ne.Message + "\n" + ne.url);
+                            break;
+                        default:
+                            c = await DisplayPopUp($"Networking error {ne.errorCode}", $"{ne.Message}\n{ne.url}");
+                            break;
+                    }
+                    rememberNe = c.Item2;
+                    return c.Item1;
+                case Umi3dLoadingException le:
+                    if (rememberLe)
+                        return true;
+                    (bool, bool) lc = await DisplayPopUp("Loading error",$"{le.Message}");
+                    rememberLe = lc.Item2;
+                    return lc.Item1;
+                case Umi3dException ue:
+                    if (rememberUe)
+                        return true;
+                    (bool, bool) uc = await DisplayPopUp("Error",$"{ue.Message}");
+                    rememberUe = uc.Item2;
+                    return uc.Item1;
+            }
+            return true;
+        }
+
+        async Task<(bool,bool)> DisplayPopUp(string title, string message)
+        {
+            UnityEngine.Debug.Log(title+" \n"+ message + " \n" + "Ignore and resume loading ? ");
+
+            bool? choise = null;
+
+            Action<bool> action = (b) => { choise = b; };
+
+            DialogueBox_E.Instance.Setup(title, message, "Resume", "Stop", action);
+            DialogueBox_E.Instance.DisplayFrom(document);
+
+            while(choise == null)
+                await UMI3DAsyncManager.Yield();
+            return (choise.Value, false);
         }
 
         /// <summary>
