@@ -164,7 +164,7 @@ public class BuildHelper : EditorWindow
         EditorGUILayout.Space();
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Build but not push"))
-            CleanComputeBuild(false);
+            CleanComputeBuild(false,false);
         if (GUILayout.Button("Update StandardAsset And Build"))
             CleanComputeBuild(false);
         if (GUILayout.Button("Clean All And Build"))
