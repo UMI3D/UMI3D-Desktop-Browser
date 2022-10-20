@@ -242,13 +242,16 @@ public class UserListSetting
         {
             base.Bind(element);
             setValue();
-            Mic.Clicked += ToggleMic;
+
+            if(Mic != null)
+                Mic.Clicked += ToggleMic;
             element.Q<Label>("userLabel").text = user.login;
         }
 
         public override void Unbind(VisualElement element)
         {
-            Mic.Clicked -= ToggleMic;
+            if (Mic != null)
+                Mic.Clicked -= ToggleMic;
             base.Unbind(element);
         }
     }
