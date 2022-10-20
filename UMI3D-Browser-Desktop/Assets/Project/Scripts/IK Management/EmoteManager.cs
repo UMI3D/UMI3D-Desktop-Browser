@@ -152,16 +152,25 @@ namespace umi3dDesktopBrowser.emotes
         {
             emoteConfigDto = dto;
 
-            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(delegate
-            {
-                avatarAnimator = GetComponentInChildren<Animator>();
-                StartCoroutine(GetEmotes());
-            });
-            UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(() =>
-            {
-                StopAllCoroutines();
-                ResetEmoteSystem();
-            });
+            if (!UMI3DEnvironmentLoader.Instance.isEnvironmentLoaded)
+                UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
+            else
+                OnEnvironmentLoaded();
+            UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(OnRedirection);
+        }
+
+        private void OnEnvironmentLoaded()
+        {
+            avatarAnimator = GetComponentInChildren<Animator>();
+            StartCoroutine(GetEmotes());
+        }
+
+        private void OnRedirection()
+        {
+            StopAllCoroutines();
+            ResetEmoteSystem();
+            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.RemoveListener(OnEnvironmentLoaded);
+            UMI3DCollaborationClientServer.Instance.OnRedirection.RemoveListener(OnRedirection);
         }
 
         /// <summary>
@@ -187,6 +196,18 @@ namespace umi3dDesktopBrowser.emotes
         private IEnumerator GetEmotes() 
         {
             var id = UMI3DClientServer.Instance.GetUserId();
+
+            float failTime = Time.time + 30f;
+            while (!UMI3DClientUserTracking.Instance.embodimentDict.ContainsKey(id))
+            {
+                if (Time.time > failTime)
+                {
+                    UMI3DLogger.LogError("Embodiment loading took too long. Impossible to load emotes.", DebugScope.Loading | DebugScope.Collaboration);
+                    yield break;
+                }
+                    
+                yield return new WaitForSeconds(0.5f);
+            }
             var avatar = UMI3DClientUserTracking.Instance.embodimentDict[id];
 
             while (avatar.transform.childCount == 0
