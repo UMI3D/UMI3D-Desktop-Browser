@@ -132,6 +132,9 @@ namespace umi3dDesktopBrowser.ui.viewController
             Sound = SetButton("SoundOn", "SoundOff");
             Mic = SetButton("MicOn", "MicOff");
             AllMic = SetButton("allMicOff", "allMicOff");
+            AllMic.RemoveRootFromHierarchy();
+            Debug.Log("TODO : implement mute all button");
+
             LeaveButton = SetButton("Leave", "Leave");
         }
 
@@ -186,6 +189,10 @@ namespace umi3dDesktopBrowser.ui.viewController
             Button_E Avatar = SetButton("avatarOn", "avatarOff");
             Button_E Sound = SetButton("SoundOn", "SoundOff");
             Button_E Mic = SetButton("MicOn", "MicOff");
+            Avatar.RemoveRootFromHierarchy();
+            Sound.RemoveRootFromHierarchy();
+            Mic.RemoveRootFromHierarchy();
+            Debug.Log("TODO : implement avatar, sound and mic button");
 
             item.userData = new ItemData(Avatar, Sound, Mic);
 
