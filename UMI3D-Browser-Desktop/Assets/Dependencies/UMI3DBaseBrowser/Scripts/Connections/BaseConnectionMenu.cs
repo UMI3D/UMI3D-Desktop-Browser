@@ -207,7 +207,9 @@ namespace umi3d.baseBrowser.connection
                     switch (ne.errorCode)
                     {
                         case 404:
-                            c = await DisplayPopUp("Resources not found",ne.Message +"\n"+ne.url);
+                            //c = await DisplayPopUp("Resources not found",ne.Message +"\n"+ne.url);
+                            Debug.Log("TODO : display pop up again");
+                            return true;
                             break;
                         case 204:
                             c = await DisplayPopUp("Resources Downloaded was empty", ne.Message + "\n" + ne.url);
