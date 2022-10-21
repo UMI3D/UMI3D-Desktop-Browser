@@ -236,6 +236,8 @@ namespace umi3d.baseBrowser.connection
                     rememberUe = uc.Item2;
                     return uc.Item1;
             }
+            (bool, bool) u = await DisplayPopUp("Other Error", $"{e.Message}");
+            rememberUe = u.Item2;
             return true;
         }
 
