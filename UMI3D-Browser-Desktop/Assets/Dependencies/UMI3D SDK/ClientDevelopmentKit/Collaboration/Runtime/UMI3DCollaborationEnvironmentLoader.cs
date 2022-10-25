@@ -14,12 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.collaboration;
+using umi3d.common.utils.serialization;
 using UnityEngine;
 
 namespace umi3d.cdk.collaboration
@@ -33,6 +35,8 @@ namespace umi3d.cdk.collaboration
 
         public List<UMI3DUser> JoinnedUserList => UserList.Where(u => u.status >= StatusType.AWAY || (UMI3DCollaborationClientServer.Exists && u.id == UMI3DCollaborationClientServer.Instance.GetUserId())).ToList();
         public static event Action OnUpdateJoinnedUserList;
+
+        private ulong lastTimeUserMessageListReceived = 0;
 
         public UMI3DUser GetClientUser()
         {
@@ -160,8 +164,9 @@ namespace umi3d.cdk.collaboration
         /// <param name="property"></param>
         /// <returns></returns>
         private bool SetUserList(UMI3DCollaborationEnvironmentDto dto, SetEntityPropertyDto property)
-        {
+        {        
             if (dto == null) return false;
+
             switch (property)
             {
                 case SetEntityListAddPropertyDto add:
@@ -188,7 +193,13 @@ namespace umi3d.cdk.collaboration
         /// <returns></returns>
         private bool SetUserList(UMI3DCollaborationEnvironmentDto dto, uint operationId, uint propertyKey, ByteContainer container)
         {
+            if (lastTimeUserMessageListReceived < container.timeStep)
+            {
+                lastTimeUserMessageListReceived = container.timeStep;
+            }
+
             if (dto == null) return false;
+
             switch (operationId)
             {
                 case UMI3DOperationKeys.SetEntityListAddProperty:
@@ -218,6 +229,7 @@ namespace umi3d.cdk.collaboration
         private void InsertUser(UMI3DCollaborationEnvironmentDto dto, int index, UserDto userDto)
         {
             if (UserList.Exists((user) => user.id == userDto.id)) return;
+
             UserList.Insert(index, new UMI3DUser(userDto));
             dto.userList.Insert(index, userDto);
             OnUpdateUserList?.Invoke();
