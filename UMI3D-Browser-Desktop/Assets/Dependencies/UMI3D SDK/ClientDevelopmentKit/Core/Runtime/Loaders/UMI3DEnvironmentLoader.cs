@@ -317,7 +317,7 @@ namespace umi3d.cdk
         /// <returns></returns>
         public async Task Load(GlTFEnvironmentDto dto, MultiProgress LoadProgress)
         {
-            Progress downloadingProgress = new Progress(0,"Downloading");
+            Progress downloadingProgress = new Progress(0, "Downloading");
             Progress ReadingDataProgress = new Progress(2, "Reading Data");
             MultiProgress loadingProgress = new MultiProgress("Loading");
             Progress endProgress = new Progress(5, "Cleaning the room");
@@ -352,7 +352,6 @@ namespace umi3d.cdk
 
             endProgress.AddComplete();
             await UMI3DAsyncManager.Delay(200);
-            isEnvironmentLoaded = true;
 
             endProgress.AddComplete();
             if (UMI3DVideoPlayerLoader.HasVideoToLoad)
@@ -362,7 +361,10 @@ namespace umi3d.cdk
 
             await UMI3DAsyncManager.Delay(100);
             endProgress.AddComplete();
+
+            isEnvironmentLoaded = true;
             onEnvironmentLoaded.Invoke();
+
             await UMI3DAsyncManager.Yield();
             endProgress.AddComplete();
         }
@@ -483,7 +485,7 @@ namespace umi3d.cdk
                 switch (entity)
                 {
                     case GlTFSceneDto scene:
-                        await _InstantiateNodes(new List<GlTFSceneDto>() { scene },new MultiProgress("Load Entity"));
+                        await _InstantiateNodes(new List<GlTFSceneDto>() { scene }, new MultiProgress("Load Entity"));
                         performed?.Invoke();
                         break;
                     case GlTFNodeDto node:
@@ -524,7 +526,7 @@ namespace umi3d.cdk
 
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 UMI3DLogger.LogException(e, scope);
                 performed.Invoke();
@@ -628,16 +630,20 @@ namespace umi3d.cdk
             if (clearCache)
                 UMI3DResourcesManager.Instance.ClearCache();
 
-            Instance.entities.Clear();
-            Instance.entitywaited.Clear();
-            Instance.entityToBeLoaded.Clear();
+            Instance.InternalClear();
+        }
+
+        protected virtual void InternalClear()
+        {
+            entities.Clear();
+            entitywaited.Clear();
+            entityToBeLoaded.Clear();
             Instance.entityFailedToBeLoaded.Clear();
 
-            Instance.isEnvironmentLoaded = false;
+            isEnvironmentLoaded = false;
 
-            Instance.environment = null;
-            Instance.loaded = false;
-
+            environment = null;
+            loaded = false;
         }
 
         /// <summary>

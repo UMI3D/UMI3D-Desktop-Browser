@@ -14,14 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.collaboration;
-using umi3d.common.utils.serialization;
 using UnityEngine;
 
 namespace umi3d.cdk.collaboration
@@ -164,7 +162,7 @@ namespace umi3d.cdk.collaboration
         /// <param name="property"></param>
         /// <returns></returns>
         private bool SetUserList(UMI3DCollaborationEnvironmentDto dto, SetEntityPropertyDto property)
-        {        
+        {
             if (dto == null) return false;
 
             switch (property)
@@ -193,12 +191,17 @@ namespace umi3d.cdk.collaboration
         /// <returns></returns>
         private bool SetUserList(UMI3DCollaborationEnvironmentDto dto, uint operationId, uint propertyKey, ByteContainer container)
         {
+
+            if (dto == null) return false;
+
             if (lastTimeUserMessageListReceived < container.timeStep)
             {
                 lastTimeUserMessageListReceived = container.timeStep;
             }
-
-            if (dto == null) return false;
+            else
+            {
+                return true;
+            }
 
             switch (operationId)
             {
@@ -239,6 +242,7 @@ namespace umi3d.cdk.collaboration
         private void RemoveUserAt(UMI3DCollaborationEnvironmentDto dto, int index)
         {
             if (UserList.Count <= index) return;
+
             UMI3DUser Olduser = UserList[index];
             UserList.RemoveAt(index);
             dto.userList.RemoveAt(index);
@@ -274,6 +278,13 @@ namespace umi3d.cdk.collaboration
             UserList = dto.userList.Select(u => new UMI3DUser(u)).ToList();
             OnUpdateUserList?.Invoke();
             OnUpdateJoinnedUserList?.Invoke();
+        }
+
+        protected override void InternalClear()
+        {
+            base.InternalClear();
+
+            lastTimeUserMessageListReceived = 0;
         }
     }
 }
