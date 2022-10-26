@@ -320,7 +320,7 @@ namespace umi3d.cdk
             Progress downloadingProgress = new Progress(0, "Downloading");
             Progress ReadingDataProgress = new Progress(2, "Reading Data");
             MultiProgress loadingProgress = new MultiProgress("Loading");
-            Progress endProgress = new Progress(5, "Cleaning the room");
+            Progress endProgress = new Progress(6, "Cleaning the room");
             LoadProgress.Add(downloadingProgress);
             LoadProgress.Add(ReadingDataProgress);
             LoadProgress.Add(loadingProgress);
@@ -355,12 +355,23 @@ namespace umi3d.cdk
 
             endProgress.AddComplete();
             if (UMI3DVideoPlayerLoader.HasVideoToLoad)
+            {
+                endProgress.SetStatus("Loading videos");
+                Debug.Log("wait for video");
                 await UMI3DVideoPlayerLoader.LoadVideoPlayers();
+                Debug.Log("wait for video end");
+            }
             endProgress.AddComplete();
-            RenderProbes();
 
-            await UMI3DAsyncManager.Delay(100);
+            endProgress.SetStatus("Rendering Probes");
+            await RenderProbes();
             endProgress.AddComplete();
+            await UMI3DAsyncManager.Yield();
+
+            endProgress.SetStatus("Updating the world");
+            await WaitForFirstTransaction();
+            endProgress.AddComplete();
+            await UMI3DAsyncManager.Yield();
 
             isEnvironmentLoaded = true;
             onEnvironmentLoaded.Invoke();
@@ -369,12 +380,19 @@ namespace umi3d.cdk
             endProgress.AddComplete();
         }
 
+        protected virtual Task WaitForFirstTransaction()
+        {
+            return Task.CompletedTask;
+        }
+
         /// <summary>
         /// Renders all <see cref="ReflectionProbe"/> set to <see cref=" ReflectionProbeMode.Realtime"/> 
         /// and <see cref="ReflectionProbeRefreshMode.OnAwake"/> of the environment.
         /// </summary>
-        private void RenderProbes()
+        private async Task RenderProbes()
         {
+            List<(ReflectionProbe probe, int id)> probeList = new List<(ReflectionProbe, int)>();
+
             foreach (var entity in entities)
             {
                 if (entity.Value.dto is GlTFSceneDto && entity.Value is UMI3DNodeInstance scene)
@@ -383,11 +401,18 @@ namespace umi3d.cdk
                     {
                         if (probe.mode == ReflectionProbeMode.Realtime && probe.refreshMode == ReflectionProbeRefreshMode.OnAwake)
                         {
-                            probe.RenderProbe();
+                            var id = probe.RenderProbe();
+                            probeList.Add((probe, id));
                         }
                     }
                 }
             }
+            await Task.WhenAll(probeList.Select(
+                async p =>
+                {
+                    while (!p.probe.IsFinishedRendering(p.id))
+                        await UMI3DAsyncManager.Yield();
+                }));
         }
 
         #endregion
@@ -463,14 +488,15 @@ namespace umi3d.cdk
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="performed"></param>
-        public static void LoadEntity(IEntity entity, Action performed)
+        public static async Task LoadEntity(IEntity entity)
         {
-            if (Exists) Instance._LoadEntity(entity, performed);
+            if (Exists) await Instance._LoadEntity(entity);
         }
 
-        public static void LoadEntity(ByteContainer container, Action performed)
+        public static async Task LoadEntity(ByteContainer container)
         {
-            if (Exists) Instance._LoadEntity(container, performed);
+            if (Exists) 
+                await Instance._LoadEntity(container);
         }
 
         /// <summary>
@@ -478,7 +504,7 @@ namespace umi3d.cdk
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="performed"></param>
-        private async void _LoadEntity(IEntity entity, Action performed)
+        private async Task _LoadEntity(IEntity entity)
         {
             try
             {
@@ -486,20 +512,16 @@ namespace umi3d.cdk
                 {
                     case GlTFSceneDto scene:
                         await _InstantiateNodes(new List<GlTFSceneDto>() { scene }, new MultiProgress("Load Entity"));
-                        performed?.Invoke();
                         break;
                     case GlTFNodeDto node:
                         await nodeLoader.LoadNodes(new List<GlTFNodeDto>() { node }, new Progress(0, "Load Entity"));
-                        performed.Invoke();
                         break;
                     case AssetLibraryDto library:
                         await UMI3DResourcesManager.DownloadLibrary(library, UMI3DClientServer.Media.name, new MultiProgress("Load Entity"));
                         await UMI3DResourcesManager.LoadLibrary(library.libraryId);
-                        performed?.Invoke();
                         break;
                     case AbstractEntityDto dto:
                         await Parameters.ReadUMI3DExtension(dto, null);
-                        performed.Invoke();
                         break;
                     case GlTFMaterialDto matDto:
                         Parameters.SelectMaterialLoader(matDto).LoadMaterialFromExtension(matDto, (m) =>
@@ -516,20 +538,16 @@ namespace umi3d.cdk
                             {
                                 RegisterEntityInstance(((AbstractEntityDto)matDto.extensions.umi3d).id, matDto, m).NotifyLoaded();
                             }
-                            performed.Invoke();
                         });
                         break;
                     default:
                         UMI3DLogger.Log($"load entity fail missing case {entity.GetType()}", scope);
-                        performed.Invoke();
                         break;
-
                 }
             }
             catch (Exception e)
             {
                 UMI3DLogger.LogException(e, scope);
-                performed.Invoke();
             }
         }
 
@@ -538,37 +556,31 @@ namespace umi3d.cdk
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="performed"></param>
-        private void _LoadEntity(ByteContainer container, Action performed)
+        private async Task _LoadEntity(ByteContainer container)
         {
             List<ulong> ids = UMI3DNetworkingHelper.ReadList<ulong>(container);
             ids.ForEach(id => NotifyEntityToBeLoaded(id));
 
-            int performedCount = 0;
-
-            Action<LoadEntityDto> callback = (load) =>
-            {
-                int count = load.entities.Count;
-                Action performed2 = () => { performedCount++; if (performedCount == count) performed.Invoke(); };
-                foreach (IEntity item in load.entities)
-                {
-                    if (item is MissingEntityDto missing)
-                    {
-                        NotifyEntityFailedToLoad(missing.id);
-                        UMI3DLogger.Log($"Get entity [{missing.id}] failed : {missing.reason}", scope);
-                    }
-                    else
-                        LoadEntity(item, performed2);
-                }
-            };
-
             try
             {
-                UMI3DClientServer.GetEntity(ids, callback);
+                var load = await UMI3DClientServer.GetEntity(ids);
+
+                await Task.WhenAll(
+                    load.entities.Select(async item =>
+                        {
+                            if (item is MissingEntityDto missing)
+                            {
+                                NotifyEntityFailedToLoad(missing.id);
+                                UMI3DLogger.Log($"Get entity [{missing.id}] failed : {missing.reason}", scope);
+                            }
+                            else
+                                await LoadEntity(item);
+                        }));
+
             }
             catch (Exception e)
             {
                 UMI3DLogger.LogException(e, scope);
-                performed?.Invoke();
             }
         }
 
@@ -577,7 +589,7 @@ namespace umi3d.cdk
         /// </summary>
         /// <param name="entityId"></param>
         /// <param name="performed"></param>
-        public static void DeleteEntity(ulong entityId, Action performed)
+        public static async Task DeleteEntity(ulong entityId)
         {
             if (Instance.entities.ContainsKey(entityId))
             {
@@ -602,7 +614,8 @@ namespace umi3d.cdk
             }
             else if (UMI3DEnvironmentLoader.IsEntityToBeLoaded(entityId))
             {
-                UMI3DEnvironmentLoader.WaitForAnEntityToBeLoaded(entityId, (e) => DeleteEntity(entityId, null));
+                var e = await UMI3DEnvironmentLoader.WaitForAnEntityToBeLoaded(entityId);
+                await DeleteEntity(entityId);
             }
             else if (UMI3DEnvironmentLoader.IsEntityToFailedBeLoaded(entityId))
             {
@@ -612,8 +625,6 @@ namespace umi3d.cdk
             {
                 UMI3DLogger.LogError($"Entity [{entityId}] To Destroy Not Found And Not in Entities to be loaded", scope);
             }
-
-            performed?.Invoke();
         }
 
         /// <summary>
@@ -625,7 +636,7 @@ namespace umi3d.cdk
 
             foreach (ulong entity in Instance.entities.ToList().Select(p => { return p.Key; }))
             {
-                DeleteEntity(entity, null);
+                DeleteEntity(entity);
             }
             if (clearCache)
                 UMI3DResourcesManager.Instance.ClearCache();
@@ -635,6 +646,8 @@ namespace umi3d.cdk
 
         protected virtual void InternalClear()
         {
+            UMI3DVideoPlayerLoader.Clear();
+
             entities.Clear();
             entitywaited.Clear();
             entityToBeLoaded.Clear();

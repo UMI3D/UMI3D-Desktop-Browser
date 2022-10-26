@@ -46,6 +46,14 @@ namespace umi3d.cdk.collaboration
             return UserList.FirstOrDefault(u => u.id == dto.id);
         }
 
+        protected override async Task WaitForFirstTransaction()
+        {
+            while (UMI3DCollaborationClientServer.transactionPending != null
+                && (UMI3DCollaborationClientServer.transactionPending.areTransactionPending 
+                    || UMI3DCollaborationClientServer.transactionPending.areDispatchableRequestPending))
+                await UMI3DAsyncManager.Yield();
+        }
+
         ///<inheritdoc/>
         public override async Task ReadUMI3DExtension(GlTFEnvironmentDto _dto, GameObject node)
         {
@@ -191,7 +199,6 @@ namespace umi3d.cdk.collaboration
         /// <returns></returns>
         private bool SetUserList(UMI3DCollaborationEnvironmentDto dto, uint operationId, uint propertyKey, ByteContainer container)
         {
-
             if (dto == null) return false;
 
             if (lastTimeUserMessageListReceived < container.timeStep)

@@ -14,9 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using inetum.unityUtils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using umi3d.common;
 using UnityEngine;
@@ -33,7 +35,12 @@ namespace umi3d.cdk
         /// </summary>
         public static Queue<UMI3DVideoPlayerDto> videoPlayersToLoad = new Queue<UMI3DVideoPlayerDto>();
 
-        public static bool HasVideoToLoad => videoPlayersToLoad.Count > 0;
+        public static bool HasVideoToLoad => videoPlayersToLoad.Count > 0 || UMI3DEnvironmentLoader.Entities().Select(e => e?.Object as UMI3DVideoPlayer).Any(v => (v != null && !(v.isPrepared || v.preparationFailed)));
+
+        public static void Clear()
+        {
+            UMI3DEnvironmentLoader.Entities().Select(e => e?.Object as UMI3DVideoPlayer).ForEach(v => v.Clean());
+        }
 
         /// <summary>
         /// Asks to load a <see cref="UMI3DVideoPlayer"/> from a <see cref="UMI3DVideoPlayerDto"/>. 
@@ -59,8 +66,13 @@ namespace umi3d.cdk
         /// </summary>
         public static async Task LoadVideoPlayers()
         {
-            if (HasVideoToLoad)
+            if (videoPlayersToLoad.Count > 0)
                 await LoadVideoPlayersCoroutine();
+            while (HasVideoToLoad)
+            {
+                await UMI3DAsyncManager.Yield();
+            }
+            await UMI3DAsyncManager.Delay(100);
         }
 
         /// <summary>
@@ -72,20 +84,17 @@ namespace umi3d.cdk
         {
             var wait = new WaitForSeconds(.1f);
 
-            await UMI3DAsyncManager.Delay(100);
-
             while (videoPlayersToLoad.Count > 0)
             {
+                await UMI3DAsyncManager.Delay(100);
+
                 UMI3DVideoPlayerDto videoPlayer = videoPlayersToLoad.Dequeue();
 
                 var player = new UMI3DVideoPlayer(videoPlayer);
 
-                while (!player.isPrepared)
+                while (!player.isPrepared && !player.preparationFailed)
                     await UMI3DAsyncManager.Yield();
-
-                await UMI3DAsyncManager.Delay(100);
             }
-
         }
     }
 }

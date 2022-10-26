@@ -134,7 +134,7 @@ namespace umi3d.cdk.collaboration
 
             this.progress = progress;
             this.libraryProgress = new MultiProgress("Download libraries");
-            this.joinProgress = new MultiProgress("Joinning Environement");
+            this.joinProgress = new MultiProgress("Joinning Environment");
             progress.Add(libraryProgress);
             progress.Add(joinProgress);
 
@@ -145,7 +145,7 @@ namespace umi3d.cdk.collaboration
 
         public bool Connect()
         {
-            ConnectionState.Invoke("Connecting to the Environement");
+            ConnectionState.Invoke("Connecting to the Environment");
             if (IsConnected())
                 return false;
 
@@ -453,7 +453,7 @@ namespace umi3d.cdk.collaboration
             //UMI3DLogger.Log($"Join {joinning} {connected}", scope | DebugScope.Connection);
             libraryProgress.SetAsCompleted();
             Progress PostJoinProgress = new Progress(2, "Joinning Environment");
-            MultiProgress EnterProgress = new MultiProgress("Enterring Environment");
+            MultiProgress EnterProgress = new MultiProgress("Entering Environment");
             progress.Add(PostJoinProgress);
             progress.Add(EnterProgress);
 
@@ -490,7 +490,7 @@ namespace umi3d.cdk.collaboration
         private async Task EnterScene(EnterDto enter, MultiProgress progress)
         {
             Progress PostJoinProgress = new Progress(1, "Joinning Environment");
-            MultiProgress LoadProgress = new MultiProgress( "Loading Environment");
+            MultiProgress LoadProgress = new MultiProgress("Loading Environment");
             Progress UpdateProgress = new Progress(2, "Instanciating Environment");
             progress.Add(PostJoinProgress);
             progress.Add(LoadProgress);
@@ -507,7 +507,7 @@ namespace umi3d.cdk.collaboration
             UMI3DNavigation.Instance.currentNav.Teleport(new TeleportDto() { position = enter.userPosition, rotation = enter.userRotation });
             EnvironementLoaded.Invoke();
             UserDto.answerDto.status = statusToBeSet;
-            await HttpClient.SendPostUpdateIdentity(UserDto.answerDto, null);
+            UMI3DCollaborationClientServer.transactionPending = await HttpClient.SendPostUpdateIdentity(UserDto.answerDto, null);
             UpdateProgress.AddComplete();
         }
 
