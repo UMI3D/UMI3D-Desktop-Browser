@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using umi3d.cdk.interaction;
 using umi3d.cdk.userCapture;
 using umi3d.common.interaction;
-using umi3dDesktopBrowser.emotes;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 
@@ -37,7 +36,7 @@ namespace BrowserDesktop.Controller
             get
             {
                 List<AbstractUMI3DInput> list = new List<AbstractUMI3DInput>();
-                list.AddRange(ManipulationInputs);
+                //list.AddRange(ManipulationInputs);
                 list.AddRange(KeyInputs);
                 list.AddRange(KeyMenuInputs);
                 list.AddRange(floatParameterInputs);
@@ -88,7 +87,6 @@ namespace BrowserDesktop.Controller
         {
             if (m_objectMenu?.menu.Count > 0)
             {
-                CursorDisplayer.DisplaySettingsCursor(true);
                 if (!s_isRightClickAdded)
                 {
                     Shortcutbox_E.Instance.AddRightClickShortcut("Object menu");
@@ -102,7 +100,6 @@ namespace BrowserDesktop.Controller
                     Shortcutbox_E.Instance.RemoveRightClickShortcut();
                     s_isRightClickAdded = false;
                 }
-                CursorDisplayer.DisplaySettingsCursor(false);
                 m_objectMenu.Collapse(true);
             }
         }
@@ -139,20 +136,22 @@ namespace BrowserDesktop.Controller
         #region Input
         public override AbstractUMI3DInput FindInput(ManipulationDto manip, DofGroupDto dof, bool unused = true)
         {
-            ManipulationGroup group = ManipulationInputs.Find(i => i.IsAvailableFor(manip));
-            if (group == null)
-            {
-                group = ManipulationGroup.Instanciate(this, ManipulationActionInput, dofGroups, transform);
-                if (group == null)
-                {
-                    Debug.LogWarning("find manip input FAILED");
-                    return null;
-                }
-                group.bone = interactionBoneType;
-                ManipulationInputs.Add(group);
-            }
-            group.Menu = m_objectMenu?.menu;
-            return group;
+            Debug.Log("TODO : Find input for manipulation dto");
+            //ManipulationGroup group = ManipulationInputs.Find(i => i.IsAvailableFor(manip));
+            //if (group == null)
+            //{
+            //    group = ManipulationGroup.Instanciate(this, ManipulationActionInput, dofGroups, transform);
+            //    if (group == null)
+            //    {
+            //        Debug.LogWarning("find manip input FAILED");
+            //        return null;
+            //    }
+            //    group.bone = interactionBoneType;
+            //    ManipulationInputs.Add(group);
+            //}
+            //group.Menu = m_objectMenu?.menu;
+            //return group;
+            return null;
         }
 
         public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)

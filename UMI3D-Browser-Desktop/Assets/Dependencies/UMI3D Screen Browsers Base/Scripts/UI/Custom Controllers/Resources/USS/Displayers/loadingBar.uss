@@ -1,0 +1,89 @@
+.loadingbar {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.loadingbar > .loadingbar__message {
+    -unity-text-align: middle-center;
+}
+
+.loadingbar 
+> .unity-progress-bar__container {
+    min-height: auto;
+    max-height: auto;
+}
+
+.loadingbar 
+> .unity-progress-bar__container 
+> .unity-progress-bar__background {
+    background-color: var(--color-background-displayer);
+    margin-left: var(--margin_padding-displayer);
+    margin-right: var(--margin_padding-displayer);
+    margin-top: var(--margin_padding-displayer);
+    margin-bottom: var(--margin_padding-displayer);
+    border-left-color: var(--color-border-loadingBar__background);
+    border-right-color: var(--color-border-loadingBar__background);
+    border-top-color: var(--color-border-loadingBar__background);
+    border-bottom-color: var(--color-border-loadingBar__background);
+    border-left-width: var(--border-width-displayer);
+    border-right-width: var(--border-width-displayer);
+    border-top-width: var(--border-width-displayer);
+    border-bottom-width: var(--border-width-displayer);
+    border-top-left-radius: var(--border-radius-displayer);
+    border-top-right-radius: var(--border-radius-displayer);
+    border-bottom-left-radius: var(--border-radius-displayer);
+    border-bottom-right-radius: var(--border-radius-displayer);
+    overflow: hidden;
+}
+
+.loadingbar 
+> .unity-progress-bar__container 
+> .unity-progress-bar__background 
+> .unity-progress-bar__progress {
+    margin-left: var(--margin-loadingBar__progress);
+    margin-right: var(--margin-loadingBar__progress);
+    margin-top: var(--margin-loadingBar__progress);
+    margin-bottom: var(--margin-loadingBar__progress);
+    border-top-left-radius: var(--border-radius-loadingBar__progress);
+    border-top-right-radius: var(--border-radius-loadingBar__progress);
+    border-bottom-left-radius: var(--border-radius-loadingBar__progress);
+    border-bottom-right-radius: var(--borderborder-radius-loadingBar__progress);
+}
+
+.loadingbar-menu 
+> .unity-progress-bar__container 
+> .unity-progress-bar__background 
+> .unity-progress-bar__progress {
+    background-color: var(--color-border-menu-displayer);
+}
+
+.loadingbar-game 
+> .unity-progress-bar__container 
+> .unity-progress-bar__background 
+> .unity-progress-bar__progress {
+    background-color: var(--color-border-game-displayer);
+}
+
+.loadingbar-small 
+> .unity-progress-bar__container 
+> .unity-progress-bar__background {
+    height: var(--size-small-loadingBar__background);
+}
+
+.loadingbar-medium 
+> .unity-progress-bar__container 
+> .unity-progress-bar__background {
+    height: var(--size-medium-loadingBar__background);
+}
+
+.loadingbar-large 
+> .unity-progress-bar__container 
+> .unity-progress-bar__background {
+    height: var(--size-large-loadingBar__background);
+}

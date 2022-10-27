@@ -58,23 +58,23 @@ public class BugReporter : SingleBehaviour<BugReporter>
 
         var popUpElement = popUp.Q<VisualElement>("bug-report-pop-up");
 
-        umi3d.baseBrowser.connection.BaseConnectionMenu.Instance.document.rootVisualElement.RegisterCallback<GeometryChangedEvent>(e =>
-        {
-            if (umi3d.baseBrowser.connection.BaseConnectionMenu.Instance.document.rootVisualElement.resolvedStyle.height < 700)
-            {
-                popUpElement.style.height = new StyleLength(new Length (90, LengthUnit.Percent));
-            }
-            else
-            {
-                popUpElement.style.height = 680;
-            }
-        });
+        //umi3d.baseBrowser.connection.BaseConnectionMenu.Instance.document.rootVisualElement.RegisterCallback<GeometryChangedEvent>(e =>
+        //{
+        //    if (umi3d.baseBrowser.connection.BaseConnectionMenu.Instance.document.rootVisualElement.resolvedStyle.height < 700)
+        //    {
+        //        popUpElement.style.height = new StyleLength(new Length (90, LengthUnit.Percent));
+        //    }
+        //    else
+        //    {
+        //        popUpElement.style.height = 680;
+        //    }
+        //});
     }
 
 
     public void DisplayPopUp()
     {
-        umi3d.baseBrowser.connection.BaseConnectionMenu.Instance.document.rootVisualElement.Add(popUp);
+        //umi3d.baseBrowser.connection.BaseConnectionMenu.Instance.document.rootVisualElement.Add(popUp);
         popUp.BringToFront();
 
         umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);

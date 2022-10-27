@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Dependencies/UMI3DBaseBrowser/Scripts/UI/Custom%20Controllers/Resources/USS/Displayers/button.uss?fileID=7433441132597879392&amp;guid=2f73c1231d2447c4eb611dfddea99f82&amp;type=3#button" />
+    <umi3d.mobileBrowser.Displayer.Button_C category="Game" shape="Round" size="Small" direction="Leading" type="Default" icon-alignment="Leading" text="Text">
+        <ui:VisualElement style="background-color: rgb(255, 0, 0); width: 35px; height: 46px;" />
+    </umi3d.mobileBrowser.Displayer.Button_C>
+</ui:UXML>

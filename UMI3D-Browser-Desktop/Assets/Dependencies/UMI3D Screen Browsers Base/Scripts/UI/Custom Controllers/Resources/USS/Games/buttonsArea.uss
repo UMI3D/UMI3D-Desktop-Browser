@@ -1,0 +1,32 @@
+.buttons-area {
+	position: absolute;
+	flex-direction: row;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 30%
+}
+
+.buttons-area__crouch {
+	position: absolute;
+	right: 250px;
+	bottom: 10px;
+}
+
+.buttons-area__jump {
+	position: absolute;
+	right: 150px;
+	bottom: 100px;
+}
+
+.buttons-area__action {
+	position: absolute;
+	right: 25px;
+	bottom: 150px;
+}
+
+.buttons-area__emote {
+	position: absolute;
+	right: 75px;
+	bottom: 10px;
+}

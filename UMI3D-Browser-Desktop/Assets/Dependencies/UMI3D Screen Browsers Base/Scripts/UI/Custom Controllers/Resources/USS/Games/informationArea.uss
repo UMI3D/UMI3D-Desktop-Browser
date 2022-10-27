@@ -1,0 +1,62 @@
+.information-area {
+	position: absolute;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+
+.information-area__main {
+	overflow: hidden;
+	position: absolute;
+	flex-direction: row;
+	background-color: var(--background-color-transparent-game);
+}
+
+.information-area__short__inf {
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: var(--size__width-short-inf);
+	height: var(--size__height-short-inf);
+	border-top-left-radius: var(--border-radius-game);
+	border-top-right-radius: var(--border-radius-game);
+	border-bottom-left-radius: var(--border-radius-game);
+	border-bottom-right-radius: var(--border-radius-game);
+	background-color: var(--background-color-game);
+	-unity-text-align: middle-center;
+	padding-left: var(--padding-short-inf);
+	padding-right: var(--padding-short-inf);
+	padding-top: var(--size-margin-and-padding-game);
+	padding-bottom: var(--size-margin-and-padding-game);
+	margin-top: var(--size-margin-and-padding-game);
+	margin-bottom: var(--size-margin-and-padding-game);
+}
+
+.information-area__mic-sound {
+	width: var(--size-mic__sound);
+	height: var(--size-mic__sound);
+	border-top-left-radius: 100%;
+	border-top-right-radius: 100%;
+	border-bottom-left-radius: 100%;
+	border-bottom-right-radius: 100%;
+}
+
+.information-area__mic-on {
+	left: var(--left-mic);
+	background-image: var(--background-image-mic-on);
+}
+
+.information-area__mic-off {
+	left: var(--left-mic);
+	background-image: var(--background-image-mic-off);
+}
+
+.information-area__sound-on {
+	left: var(--size-mic__sound);
+	background-image: var(--background-image-sound-on);
+}
+
+.information-area__sound-off {
+	left: var(--size-mic__sound);
+	background-image: var(--background-image-sound-off);
+}

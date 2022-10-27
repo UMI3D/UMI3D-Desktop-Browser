@@ -1,0 +1,129 @@
+.segmented-picker-leading-direction {
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.segmented-picker-trailing-direction {
+    flex-direction: row-reverse;
+    align-items: stretch;
+}
+
+.segmented-picker-top-direction {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.segmented-picker-bottom-direction {
+    flex-direction: column-reverse;
+    align-items: stretch;
+}
+
+.segmented-picker-leading-direction > .segmented-picker__label {
+    -unity-text-align: middle-left;
+}
+
+.segmented-picker-trailing-direction > .segmented-picker__label {
+    -unity-text-align: middle-right;
+}
+
+.segmented-picker-top-direction > .segmented-picker__label {
+    -unity-text-align: uper-left;
+}
+
+.segmented-picker-bottom-direction > .segmented-picker__label {
+    -unity-text-align: uper-right;
+}
+
+.segmented-picker__label {
+    min-width: var(--size-min_width-label-displayer);
+}
+
+.segmented-picker__input {
+	overflow: hidden;
+    flex-shrink: 0;
+    flex-grow: 1;
+    align-items: stretch;
+	flex-direction: row;
+
+	margin-left: var(--margin_padding-displayer);
+    margin-right: var(--margin_padding-displayer);
+    margin-top: var(--margin_padding-displayer);
+    margin-bottom: var(--margin_padding-displayer);
+	padding-left: var(--margin_padding-displayer);
+    padding-right: var(--margin_padding-displayer);
+    padding-top: var(--margin_padding-displayer);
+    padding-bottom: var(--margin_padding-displayer);
+
+	border-top-left-radius: var(--border-radius-displayer);
+    border-bottom-left-radius: var(--border-radius-displayer);
+    border-top-right-radius: var(--border-radius-displayer);
+    border-bottom-right-radius: var(--border-radius-displayer);
+	background-color: var(--color-background-displayer);
+}
+
+.segmented-picker__value {
+    top: 0;
+    bottom: 0;
+	overflow: hidden;
+	-unity-text-align: middle-center;
+    padding-left: var(--margin_padding-displayer);
+    padding-right: var(--margin_padding-displayer);
+}
+
+.segmented-picker__separator-box {
+    position: absolute;
+    flex-direction: row;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding-left: var(--margin_padding-displayer);
+    padding-right: var(--margin_padding-displayer);
+    padding-top: var(--margin_padding-displayer);
+    padding-bottom: var(--margin_padding-displayer);
+}
+
+.segmented-picker__separator {
+    width: var(--size-separator-picker);
+    height: 100%;
+    background-color: var(--color-background-separator-picker);
+}
+
+.segmented-picker__selected-value-box {
+    position: absolute;
+    height: 100%;
+    margin-left: var(--margin_padding-displayer);
+    margin-right: var(--margin_padding-displayer);
+    margin-top: var(--margin_padding-displayer);
+    margin-bottom: var(--margin_padding-displayer);
+}
+
+.segmented-picker__selected-value {
+    height: 100%;
+    margin-left: var(--margin_padding-displayer);
+    margin-right: var(--margin_padding-displayer);
+    border-top-left-radius: var(--border-radius-displayer);
+    border-bottom-left-radius: var(--border-radius-displayer);
+    border-top-right-radius: var(--border-radius-displayer);
+    border-bottom-right-radius: var(--border-radius-displayer);
+}
+
+.segmented-picker-menu > .segmented-picker__input > .segmented-picker__selected-value-box > .segmented-picker__selected-value {
+    background-color: var(--color-background-primary-menu-displayer);
+}
+
+.segmented-picker-game > .segmented-picker__input > .segmented-picker__selected-value-box > .segmented-picker__selected-value {
+    background-color: var(--color-background-primary-game-displayer);
+}
+
+.segmented-picker-small > .segmented-picker__input {
+    height: var(--size-small-displayer);
+}
+
+.segmented-picker-medium > .segmented-picker__input {
+    height: var(--size-medium-displayer);
+}
+
+.segmented-picker-large > .segmented-picker__input {
+    height: var(--size-large-displayer);
+}

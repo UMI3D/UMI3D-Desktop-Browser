@@ -1,0 +1,23 @@
+{
+    "name": "UMI3D.BaseBrowser.IK",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d0bf4ea2ef3a7c74e9160b8995fd902b",
+        "GUID:29a403b1410bc9e44b9b0cbcfde58e71",
+        "GUID:09603449e2002d4418d8adc054084195",
+        "GUID:6e34c4b4c3202a14eb95e0a784041765",
+        "GUID:608ff695b5b1d8f46a32962b70ec9792",
+        "GUID:5fcc83811144000419d9262c4c25c3e8",
+        "GUID:7ea11358bc3dfcc4e96d3ee9b43d17a5",
+        "GUID:004e1a03c4400ad46befe89b3eb0c978"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

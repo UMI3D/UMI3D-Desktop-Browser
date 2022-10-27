@@ -64,9 +64,9 @@ public class WindowsManager : MonoBehaviour
     private readonly string closeTagName = "close-window-btn";
 
     VisualElement root;
-    Button minimize_B;
-    Button maximize_B;
-    Button close_B;
+    //Button minimize_B;
+    //Button maximize_B;
+    //Button close_B;
 
     #endregion
 
@@ -101,26 +101,26 @@ public class WindowsManager : MonoBehaviour
     /// </summary>
     private void SetUpCustomTitleBar()
     {
-        root = uiDocument.rootVisualElement;
+        //root = uiDocument.rootVisualElement;
 
-        minimize_B = root.Q<Button>(minimizeTagName);
-        minimize_B.clickable.clicked += () =>
-        {
-            ShowWindow(hWnd, 2);
-        };
+        //minimize_B = root.Q<Button>(minimizeTagName);
+        //minimize_B.clickable.clicked += () =>
+        //{
+        //    ShowWindow(hWnd, 2);
+        //};
 
-        maximize_B = uiDocument.rootVisualElement.Q<Button>(maximizeTagName);
-        maximize_B.clickable.clicked += () =>
-        {
-            SwitchFullScreen(false);
-        };
+        //maximize_B = uiDocument.rootVisualElement.Q<Button>(maximizeTagName);
+        //maximize_B.clickable.clicked += () =>
+        //{
+        //    SwitchFullScreen(false);
+        //};
 
-        close_B = root.Q<Button>(closeTagName);
-        close_B.clickable.clicked += () =>
-        {
-            //This will raise the Application.WantsToQuit event and show a dialogue box.
-            Application.Quit();
-        };
+        //close_B = root.Q<Button>(closeTagName);
+        //close_B.clickable.clicked += () =>
+        //{
+        //    //This will raise the Application.WantsToQuit event and show a dialogue box.
+        //    Application.Quit();
+        //};
     }
 
     private void OnDestroy()
@@ -214,15 +214,15 @@ public class WindowsManager : MonoBehaviour
 
         if (isFullScreen) //The window is in fullscreen
         {
-            maximize_B.visible = true;
-            minimize_B.visible = true;
-            close_B.visible = true;
+            //maximize_B.visible = true;
+            //minimize_B.visible = true;
+            //close_B.visible = true;
         }
         else
         {
-            maximize_B.visible = false;
-            minimize_B.visible = false;
-            close_B.visible = false;
+            //maximize_B.visible = false;
+            //minimize_B.visible = false;
+            //close_B.visible = false;
         }
     }
 
@@ -236,17 +236,17 @@ public class WindowsManager : MonoBehaviour
         {
             Screen.SetResolution(Screen.width, Screen.height, FullScreenMode.FullScreenWindow);
             isFullScreen = true;
-            maximize_B.visible = true;
-            minimize_B.visible = true;
-            close_B.visible = true;
+            //maximize_B.visible = true;
+            //minimize_B.visible = true;
+            //close_B.visible = true;
         }
         else
         {
             Screen.SetResolution(widthWindow, heightWindow, false);
             isFullScreen = false;
-            maximize_B.visible = false;
-            minimize_B.visible = false;
-            close_B.visible = false;
+            //maximize_B.visible = false;
+            //minimize_B.visible = false;
+            //close_B.visible = false;
         }
     }
 

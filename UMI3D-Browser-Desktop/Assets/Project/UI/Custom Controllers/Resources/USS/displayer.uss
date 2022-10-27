@@ -1,0 +1,55 @@
+:root {
+	--size-min_width-label-displayer : 250px;
+
+	--size-small-displayer : 52px;
+	--size-medium-displayer : 76px;
+	--size-large-displayer : 90px;
+	
+	--margin_padding-displayer : 7px;
+	
+	--border-width-displayer : 3px;
+	--border-radius-displayer : 11px;
+	
+	--color-navigation-menu-displayer: rgb(0, 193, 216);
+	--color-navigation-game-displayer: rgb(205, 154, 79);
+	--color-background-displayer: rgb(38, 38, 38);
+	--color-background-primary-menu-displayer: rgb(173, 128, 63);
+	--color-background-primary-game-displayer: rgb(0, 140, 157);
+	--color-background-danger-displayer: red;
+	--color-border-danger-displayer: rgb(127, 0, 0);
+	--color-border-menu-displayer: rgb(205, 154, 79);
+	--color-border-game-displayer: rgb(0, 193, 216);
+
+	--image-arrow__ligth-displayer: resource("Icons/arrow_light");
+	--image-arrow__ligth-displayer: resource("Icons/arrow_light");
+
+	--background-image-mic-on: resource('Icons/Mic/MIC_ON');
+	--background-image-mic-off: resource('Icons/Mic/MIC_OFF');
+
+	--color-background-active-button__front: rgba(255, 255, 255, 0.17);
+
+	--border-radius-slider__dragger : 100%;
+	--size-slider__tracker : 5px;
+	--size-slider__dragger : 35px;
+
+	--image-text__field__toggle-show : resource('Icons/Password/btn_show_ENABLE');
+	--image-text__field__toggle-hide : resource('Icons/Password/btn_hide_ENABLE');
+	
+	--color-border-loadingBar__background: black;
+	--border-radius-loadingBar__progress: 0;
+	--size-small-loadingBar__background: 22px;
+	--size-medium-loadingBar__background: 76px;
+	--size-large-loadingBar__background: 90px;
+	--margin-loadingBar__progress: 0;
+
+	--margin-dialogueBox: 2%;
+	--margin-dialogueBox__choices: 5%;
+	--size-small-dialogueBox: 45%;
+	--size-medium-dialogueBox: 50%;
+	--size-large-dialogueBox: 85%;
+	--size-dialogueBox__choices: 35%;
+	--color-background-dialogueBox: rgba(0, 0, 0, 0.78);
+
+	--size-separator-picker: 3px;
+	--color-background-separator-picker: white;
+}

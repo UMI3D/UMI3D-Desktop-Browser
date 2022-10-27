@@ -1,0 +1,38 @@
+.library__header__search {
+    width: 50px;
+    height: 50px;
+}
+
+.library__header__drop-down__button__icon__background {
+    opacity: 0;
+    width: 60px;
+    margin-right: 7px;
+}
+
+.library__header__name-sort__icon,
+.library__header__size-sort__icon {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+}
+
+.library__header__name-sort__icon {
+    left: 95px;
+}
+
+.library__header__size-sort__icon {
+    left: 65px;
+}
+
+.library__header__sort__icon__ascending {
+    background-image: var(--image-arrow__ligth-displayer);
+}
+
+.library__header__sort__icon__descending {
+    background-image: var(--image-arrow__ligth-displayer);
+    rotate: 180deg;
+}
+
+.library-screen__header > .library__main > .unity-disabled.library__drop-down__button {
+    opacity: 1;
+}
