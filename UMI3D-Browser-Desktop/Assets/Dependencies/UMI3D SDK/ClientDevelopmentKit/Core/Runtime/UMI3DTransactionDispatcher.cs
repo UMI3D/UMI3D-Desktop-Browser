@@ -56,6 +56,7 @@ namespace umi3d.cdk
 
                 isOk();
                 await PerformOperation(operation);
+                performed = true;
             }
         }
 
@@ -84,6 +85,7 @@ namespace umi3d.cdk
 
                 isOk();
                 await PerformOperation(c);
+                performed = true;
             }
         }
 
