@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/Resources/UI/USS/Displayers/textfield.uss?fileID=7433441132597879392&amp;guid=24548a4213a3d54458919d7fac018dda&amp;type=3#textfield" />
+    <umi3d.mobileBrowser.Displayer.Textfield_C direction="Leading" text="Test" size="Medium" password="false" category="Menu" mask-toggle="true" display-mask-toggle="true" display-submit-button="false" />
+</ui:UXML>

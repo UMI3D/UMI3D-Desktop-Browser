@@ -1,0 +1,118 @@
+.textfield {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.textfield > .textfield__label {
+    min-width: var(--size-min_width-label-displayer);
+}
+
+.textfield > .unity-text-field__input {
+    max-height: 90px;
+    color: rgb(255, 255, 255);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: transparent;
+    border-left-width: var(--border-width-displayer);
+    border-right-width: var(--border-width-displayer);
+    border-top-width: var(--border-width-displayer);
+    border-bottom-width: var(--border-width-displayer);
+    border-top-left-radius: var(--border-radius-displayer);
+    border-bottom-left-radius: var(--border-radius-displayer);
+    border-top-right-radius: var(--border-radius-displayer);
+    border-bottom-right-radius: var(--border-radius-displayer);
+    flex-grow: 1;
+    flex-shrink: 1:
+}
+
+.textfield > .textfield__label {
+    margin-left: var(--margin_padding-displayer);
+    margin-right: var(--margin_padding-displayer);
+    margin-top: var(--margin_padding-displayer);
+    margin-bottom: var(--margin_padding-displayer);
+}
+
+.textfield > .unity-text-field__input {
+    margin-left: var(--margin_padding-displayer);
+    margin-right: var(--margin_padding-displayer);
+    margin-top: var(--margin_padding-displayer);
+    margin-bottom: var(--margin_padding-displayer);
+}
+
+.textfield__toggle > .unity-toggle__input > .unity-toggle__checkmark {
+    background-image: var(--image-text__field__toggle-show);
+}
+
+.textfield__toggle > .unity-toggle__input:checked > .unity-toggle__checkmark {
+    background-image: var(--image-text__field__toggle-hide);
+}
+
+.textfield__button {
+    flex-grow: 1;
+    max-width: 30%;
+    min-width: 20%;
+}
+
+.textfield-menu > .unity-text-field__input {
+    --unity-cursor-color: var(--color-border-menu-displayer);
+    border-bottom-color: var(--color-border-menu-displayer);
+    border-left-color: var(--color-border-menu-displayer);
+    border-right-color: var(--color-border-menu-displayer);
+    border-top-color: var(--color-border-menu-displayer);
+}
+
+.textfield-game #unity-text-input {
+    --unity-cursor-color: var(--color-border-game-displayer);
+    border-bottom-color: var(--color-border-game-displayer);
+    border-left-color: var(--color-border-game-displayer);
+    border-right-color: var(--color-border-game-displayer);
+    border-top-color: var(--color-border-game-displayer);
+}
+
+.textfield-small > .unity-text-field__input {
+    height: var(--size-small-displayer);
+}
+
+.textfield-medium > .unity-text-field__input {
+    height: var(--size-medium-displayer);
+}
+
+.textfield-large > .unity-text-field__input {
+    height: var(--size-large-displayer);
+}
+
+.textfield-leading {
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.textfield-leading .textfield__label {
+    -unity-text-align: middle-left;
+}
+
+.textfield-trailing {
+    flex-direction: row-reverse;
+    align-items: stretch;
+}
+
+.textfield-trailing .textfield__label {
+    -unity-text-align: middle-right;
+}
+
+.textfield-top {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.textfield-bottom {
+    flex-direction: column-reverse;
+    align-items: stretch;
+}

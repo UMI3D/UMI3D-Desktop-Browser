@@ -1,0 +1,28 @@
+:root {
+    --margin_padding-menu: 18px;
+
+    --size-width-logo-menu: 200px;
+    --size-height-logo-menu: 235px;
+    --size-separator-menu: 3px;
+
+    --color-background-menu: rgb(50, 50, 50);
+    --color-selected-menu: rgb(205, 154, 79);
+    --color-background_transparent-menu: rgba(38, 38, 38, 0.59);
+    --image-logo-menu: resource('Icons/logoUMI3D');
+    --image-delete-menu: resource('Icons/icon_delete');
+    --image-minimize-window: resource('Icons/Buttons-App-Window/minimize');
+
+    --border-width-menu : 3px;
+	--border-radius-menu : 15px;
+
+    --image-arrow__ligth-displayer-menu: resource("Icons/arrow_light");
+    --color-background-displayer-menu: rgb(38, 38, 38);
+    --margin_padding-displayer-menu: 7px;
+    --border-radius-displayer-menu: 11px;
+
+    --image-server__enable: resource('Icons/Servers/btn_server_ENABLE');
+    --image-server__active: resource('Icons/Servers/btn_server_PRESS');
+    --size-server: 75px;
+
+    --color-background-library-field: rgb(20, 20, 20);
+}

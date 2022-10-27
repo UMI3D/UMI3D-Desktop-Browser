@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/Resources/UI/USS/Menus/libraryScreen.uss?fileID=7433441132597879392&amp;guid=2457659ca951af4448567e885ac5c5c3&amp;type=3#libraryScreen" />
+    <umi3d.mobileBrowser.menu.LibraryScreen_C>
+        <umi3d.mobileBrowser.menu.Library_C title="Name" size="20 Mo" display-message="true" />
+        <umi3d.mobileBrowser.menu.Library_C title="Name" size="20 Mo" />
+        <umi3d.mobileBrowser.menu.Library_C title="Name" size="20 Mo" />
+        <umi3d.mobileBrowser.menu.Library_C title="Name" size="20 Mo" />
+    </umi3d.mobileBrowser.menu.LibraryScreen_C>
+</ui:UXML>

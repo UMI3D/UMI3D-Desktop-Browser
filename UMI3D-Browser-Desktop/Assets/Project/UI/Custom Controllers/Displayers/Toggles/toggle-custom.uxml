@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/UI/UXML/USS/text.uss?fileID=7433441132597879392&amp;guid=55e6082bd632df64a8dcfd72881ecfc3&amp;type=3#text" />
+    <Style src="project://database/Assets/Project/UI/UXML/USS/toggle.uss?fileID=7433441132597879392&amp;guid=448deb2d0c7bfe74f9e61baa2b375a8a&amp;type=3#toggle" />
+    <umi3d.mobileBrowser.Displayer.Toggle_C label="Toggle" size="Medium" category="Game" direction="Leading" />
+</ui:UXML>

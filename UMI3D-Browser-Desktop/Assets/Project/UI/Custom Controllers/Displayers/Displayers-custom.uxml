@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <umi3d.mobileBrowser.Displayer.Text_C text="Text" />
+    <umi3d.mobileBrowser.Displayer.Button_C label="Label" text="Text" />
+    <umi3d.mobileBrowser.Displayer.Dropdown_C index="0" label="Label" focusable="true" choices="choic1" />
+    <umi3d.mobileBrowser.Displayer.Slider_C label="Label" show-input-field="true" />
+    <umi3d.mobileBrowser.Displayer.Textfield_C label="Label" display-mask-toggle="true" display-submit-button="true" text="placeHolder" />
+    <umi3d.mobileBrowser.Displayer.Toggle_C label="Label" />
+    <umi3d.mobileBrowser.Displayer.LoadingBar_C value="50" title="Loading" message="Message" />
+    <umi3d.mobileBrowser.Displayer.SegmentedPicker_C options="All, Low, Medium, High" label="Label" />
+    <umi3d.mobileBrowser.Displayer.Notification_C title="Title" author="Romain" timestamp="2m" message="Message" choice-a-label="choiceA" choice-b-label="choiceB" />
+    <umi3d.mobileBrowser.Displayer.Dialoguebox_C title="Title" message="Message" choice-a-text="Choice A" choice-b-text="Choice B" size="Large" style="display: none;" />
+</ui:UXML>

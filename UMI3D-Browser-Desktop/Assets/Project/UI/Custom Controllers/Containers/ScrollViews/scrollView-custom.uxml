@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/Resources/UI/USS/Containers/scrollview.uss?fileID=7433441132597879392&amp;guid=399502a158fb67e4cb098b4731413ee8&amp;type=3#scrollview" />
+    <umi3d.mobileBrowser.Container.ScrollView_C scroll-deceleration-rate="0,135" elasticity="0,1" mode="Horizontal">
+        <ui:Label text="Label" display-tooltip-when-elided="true" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" />
+    </umi3d.mobileBrowser.Container.ScrollView_C>
+</ui:UXML>

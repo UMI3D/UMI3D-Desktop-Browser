@@ -1,0 +1,26 @@
+.session__title,
+.session__count {
+	height: 100%;
+	margin-left: var(--margin_padding-displayer-menu);
+	margin-right: var(--margin_padding-displayer-menu);
+	margin-top: var(--margin_padding-displayer-menu);
+	margin-bottom: var(--margin_padding-displayer-menu);
+	border-top-left-radius: var(--border-radius-displayer-menu);
+	border-top-right-radius: var(--border-radius-displayer-menu);
+	border-bottom-left-radius: var(--border-radius-displayer-menu);
+	border-bottom-right-radius: var(--border-radius-displayer-menu);
+	background-color: var(--color-background-displayer-menu);
+}
+
+.session__title {
+	width: 60%;
+}
+
+.session__count {
+	width: 40%;
+}
+
+.session__selected .session__title,
+.session__selected .session__count {
+	background-color: var(--color-selected-menu);
+}

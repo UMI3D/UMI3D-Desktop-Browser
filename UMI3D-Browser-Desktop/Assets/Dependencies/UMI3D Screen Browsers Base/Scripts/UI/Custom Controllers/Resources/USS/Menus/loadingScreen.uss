@@ -1,0 +1,9 @@
+.loading-screen__main {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	flex-grow: 1;
+	justify-content: center;
+}

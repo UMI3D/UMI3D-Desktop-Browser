@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Dependencies/UMI3DBaseBrowser/Scripts/UI/Custom%20Controllers/Resources/USS/Displayers/loadingBar.uss?fileID=7433441132597879392&amp;guid=c47a8f98c36734a4d8f6b692c1173e22&amp;type=3#loadingBar" />
+    <umi3d.mobileBrowser.Displayer.LoadingBar_C value="0.5" size="Medium" high-value="1" message="Message" title="Title" />
+</ui:UXML>

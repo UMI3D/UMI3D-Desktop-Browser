@@ -1,0 +1,27 @@
+.button-group {
+	overflow: hidden;
+    flex-shrink: 0;
+	border-top-left-radius: var(--border-radius-button__group);
+    border-bottom-left-radius: var(--border-radius-button__group);
+    border-top-right-radius: var(--border-radius-button__group);
+    border-bottom-right-radius: var(--border-radius-button__group);
+    margin-left: var(--margin_padding-container);
+    margin-right: var(--margin_padding-container);
+    margin-top: var(--margin_padding-container);
+    margin-bottom: var(--margin_padding-container);
+}
+
+.button-group__separator-box {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.button-group__separator {
+    height: var(--size-separator-container);
+    background-color: var(--background-color-separator);
+    margin-left: var(--margin-separator-button__group);
+    margin-right: var(--margin-separator-button__group);
+}

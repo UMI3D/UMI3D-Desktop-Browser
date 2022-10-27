@@ -1,0 +1,20 @@
+.top-area {
+	position: absolute;
+	flex-direction: row;
+	align-items: flex-start;
+	left: 0;
+	right: 0;
+}
+
+.top-area > .top-area__button.button-medium > .button__body {
+	width: var(--size-medium-displayer);
+	max-width: var(--size-medium-displayer);
+}
+
+.top-area > .top-area__button {
+	position: absolute;
+}
+
+.top-area > .top-area__emote {
+	right: 0;
+}
