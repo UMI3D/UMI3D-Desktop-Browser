@@ -1,4 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Project/Resources/UI/USS/Displayers/dialoguebox.uss?fileID=7433441132597879392&amp;guid=e256f20d4f5af9d408013190e099890e&amp;type=3#dialoguebox" />
-    <umi3d.mobileBrowser.Displayer.Dialoguebox_C title="Title" type="Confirmation" category="Game" message="Message.\nMessage2." choice-a-text="Ok" choice-b-text="Cancel" size="Small" />
-</ui:UXML>

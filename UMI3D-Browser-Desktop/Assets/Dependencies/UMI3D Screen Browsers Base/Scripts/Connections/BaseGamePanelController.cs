@@ -19,6 +19,7 @@ using umi3d.baseBrowser.emotes;
 using umi3d.baseBrowser.Navigation;
 using umi3d.baseBrowser.notification;
 using umi3d.cdk.collaboration;
+using umi3d.commonScreen.Container;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.WSA;
@@ -31,8 +32,15 @@ namespace umi3d.baseBrowser.connection
         #region Field
 
         public UIDocument document;
+
+        [Header("Form Loader")]
         public cdk.menu.MenuAsset FormMenu;
         public cdk.menu.view.MenuDisplayManager formMenuDisplay;
+        public LoaderFormContainer FormContainer;
+
+        [Header("Object Menu")]
+        public ObjectMenuFormContainer ObjectMenu;
+
         [HideInInspector]
         public NotificationLoader NotificationLoader;
 
@@ -64,6 +72,10 @@ namespace umi3d.baseBrowser.connection
             Loader.ControllerCanProcess = (value) => BaseController.CanProcess = value;
             Loader.SetMovement = (value) => SetMovement(value, CursorMovement.Free);
             Loader.UnSetMovement = (value) => UnSetMovement(value);
+
+            FormContainer.GetContainer = () => Loader.Form.ScrollView;
+            FormContainer.InsertDisplayer = (index, displayer) => Loader.Form.Insert(index, displayer);
+            FormContainer.RemoveDisplayer = displayer => Loader.Form.Remove(displayer);
         }
 
         protected virtual void InitGame()
@@ -120,6 +132,15 @@ namespace umi3d.baseBrowser.connection
                 Game.TrailingArea.EmoteWindow.Reset();
             };
             EmoteManager.Instance.EmoteUpdated += Game.TrailingArea.EmoteWindow.OnUpdateEmote;
+
+            ObjectMenu.GetContainer = () => Game.TrailingArea.ObjectMenu;
+            ObjectMenu.DisplayObjectMenu = value =>
+            {
+                if (GamePanel.CurrentView != CustomGamePanel.GameViews.Game) return;
+                Game.TrailingArea.DisplayObjectMenu = value;
+            };
+            ObjectMenu.InsertDisplayer = (index, displayer) => Game.TrailingArea.ObjectMenu.Insert(index, displayer);
+            ObjectMenu.RemoveDisplayer = displayer => Game.TrailingArea.ObjectMenu.Remove(displayer);
         }
         
         protected override void Awake()

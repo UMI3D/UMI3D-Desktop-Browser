@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Dependencies/UMI3D%20Screen%20Browsers%20Base/Scripts/UI/Custom%20Controllers/Resources/USS/Displayers/dialoguebox.uss?fileID=7433441132597879392&amp;guid=e256f20d4f5af9d408013190e099890e&amp;type=3#dialoguebox" />
+    <umi3d.commonScreen.Displayer.Dialoguebox_C title="Title" message="Message" choice-a-text="choice A" choice-b-text="choice B" />
+</ui:UXML>

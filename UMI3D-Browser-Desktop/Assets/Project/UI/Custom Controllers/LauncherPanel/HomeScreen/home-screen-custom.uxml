@@ -1,4 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Project/Resources/UI/USS/Menus/homeScreen.uss?fileID=7433441132597879392&amp;guid=6742868e33f95b0438e74ea6b5557a2d&amp;type=3#homeScreen" />
-    <umi3d.mobileBrowser.menu.HomeScreen_C display-saved-server="true" display-saved-servers="true" />
-</ui:UXML>

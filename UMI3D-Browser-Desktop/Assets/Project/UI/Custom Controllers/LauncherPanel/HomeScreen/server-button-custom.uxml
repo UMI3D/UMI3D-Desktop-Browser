@@ -1,5 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Project/Resources/UI/USS/Displayers/button.uss?fileID=7433441132597879392&amp;guid=2f73c1231d2447c4eb611dfddea99f82&amp;type=3#button" />
-    <Style src="project://database/Assets/Project/Resources/UI/USS/Menus/serverButton.uss?fileID=7433441132597879392&amp;guid=e9fa30ebf86ce344da021c0329ab2375&amp;type=3#serverButton" />
-    <umi3d.mobileBrowser.menu.ServerButton_C label="Server url" />
-</ui:UXML>

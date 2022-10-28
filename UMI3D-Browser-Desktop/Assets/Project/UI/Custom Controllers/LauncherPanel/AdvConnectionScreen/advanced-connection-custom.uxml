@@ -1,4 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Project/Resources/UI/USS/Menus/advConnection.uss?fileID=7433441132597879392&amp;guid=d3b572e64d0b8a740a2ea963deb004f4&amp;type=3#advConnection" />
-    <umi3d.mobileBrowser.menu.AdvConnection_C />
-</ui:UXML>

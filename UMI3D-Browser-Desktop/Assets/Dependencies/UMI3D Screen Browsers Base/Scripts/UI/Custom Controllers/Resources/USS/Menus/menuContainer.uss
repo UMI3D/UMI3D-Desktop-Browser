@@ -10,7 +10,7 @@
 }
 
 .menu__window-button {
-	width: 5%;
+	width: 100px;
 }
 
 .menu__minimize-icon,

@@ -1,4 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Dependencies/UMI3DBaseBrowser/Scripts/UI/Custom%20Controllers/Resources/USS/Displayers/slider.uss?fileID=7433441132597879392&amp;guid=5eb10e681cf390e4cae8f478b7672b8c&amp;type=3#slider" />
-    <umi3d.mobileBrowser.Displayer.Slider_C label="Slider" show-input-field="true" direction-displayer="Leading" />
-</ui:UXML>

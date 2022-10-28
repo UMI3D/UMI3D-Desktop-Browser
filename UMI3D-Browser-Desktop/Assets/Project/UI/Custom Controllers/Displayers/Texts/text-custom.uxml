@@ -1,4 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Project/UI/UXML/USS/text.uss?fileID=7433441132597879392&amp;guid=55e6082bd632df64a8dcfd72881ecfc3&amp;type=3#text" />
-    <umi3d.mobileBrowser.Displayer.Text_C text="Text" text-style="Body" color="White" />
-</ui:UXML>
