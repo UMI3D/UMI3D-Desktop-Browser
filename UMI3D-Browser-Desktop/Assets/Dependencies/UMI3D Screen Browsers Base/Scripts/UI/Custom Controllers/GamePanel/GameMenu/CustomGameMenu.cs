@@ -35,6 +35,7 @@ public class CustomGameMenu : CustomMenuContainer<GameMenuScreens>, IGameView
             custom.Set
             (
                 m_currentScreen.GetValueFromBag(bag, cc),
+                m_displayHeader.GetValueFromBag(bag, cc),
                 m_version.GetValueFromBag(bag, cc)
               );
         }
@@ -78,11 +79,11 @@ public class CustomGameMenu : CustomMenuContainer<GameMenuScreens>, IGameView
         Navigation_ScrollView.Add(Leave);
     }
 
-    public override void Set() => Set(GameMenuScreens.Settings, null);
+    public override void Set() => Set(GameMenuScreens.Settings, false, null);
 
-    public virtual void Set(GameMenuScreens screen, string version)
+    public virtual void Set(GameMenuScreens screen, bool displayHeader, string version)
     {
-        Set(version);
+        Set(displayHeader, version);
 
         CurrentScreen = screen;
     }

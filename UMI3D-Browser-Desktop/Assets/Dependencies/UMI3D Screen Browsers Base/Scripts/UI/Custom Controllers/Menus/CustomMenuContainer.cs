@@ -22,6 +22,11 @@ public abstract class CustomMenuContainer : VisualElement, ICustomElement
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
+        protected UxmlBoolAttributeDescription m_displayHeader = new UxmlBoolAttributeDescription
+        {
+            name = "display-header",
+            defaultValue = false,
+        };
         protected UxmlStringAttributeDescription m_version = new UxmlStringAttributeDescription
         {
             name = "version",
@@ -40,6 +45,7 @@ public abstract class CustomMenuContainer : VisualElement, ICustomElement
 
             custom.Set
                 (
+                    m_displayHeader.GetValueFromBag(bag, cc),
                     m_version.GetValueFromBag(bag, cc)
                 );
         }
@@ -62,6 +68,18 @@ public abstract class CustomMenuContainer : VisualElement, ICustomElement
     public virtual string USSCustomClassFooter => $"{USSCustomClassName}__footer";
     public virtual string USSCustomClassVersion => $"{USSCustomClassName}__version";
 
+    public virtual bool DisplayHeader
+    {
+        get => m_displayHeader;
+        set
+        {
+            m_isSet = false;
+            m_displayHeader = value;
+            if (value) Insert(0, Header);
+            else Header.RemoveFromHierarchy();
+            m_isSet = true;
+        }
+    }
     public virtual string Version
     {
         get => VersionLabel.text;
@@ -93,6 +111,7 @@ public abstract class CustomMenuContainer : VisualElement, ICustomElement
 
     protected bool m_isSet;
     protected bool m_hasBeenInitialized;
+    protected bool m_displayHeader;
 
     public virtual void InitElement()
     {
@@ -126,11 +145,12 @@ public abstract class CustomMenuContainer : VisualElement, ICustomElement
         Maximize.Size = ElementSize.Small;
         Close.Size = ElementSize.Small;
 
-        Add(Header);
         Header.Add(Minimize);
         Minimize.Add(Minimize_Icon);
         Header.Add(Maximize);
+        Maximize.Add(Maximize_Icon);
         Header.Add(Close);
+        Close.Add(Close_Icon);
         Add(Main);
         Main.Add(LogoContainer);
         LogoContainer.Add(Logo);
@@ -141,9 +161,9 @@ public abstract class CustomMenuContainer : VisualElement, ICustomElement
         Footer.Add(VersionLabel);
     }
 
-    public virtual void Set() => Set(null);
+    public virtual void Set() => Set(false, null);
 
-    public virtual void Set(string version)
+    public virtual void Set(bool displayeHeader, string version)
     {
         m_isSet = false;
 
@@ -153,6 +173,7 @@ public abstract class CustomMenuContainer : VisualElement, ICustomElement
             m_hasBeenInitialized = true;
         }
 
+        DisplayHeader = displayeHeader;
         Version = version;
 
         m_isSet = true;

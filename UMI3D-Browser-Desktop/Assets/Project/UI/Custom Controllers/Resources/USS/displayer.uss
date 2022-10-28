@@ -26,7 +26,8 @@
 	--background-image-mic-on: resource('Icons/Mic/MIC_ON');
 	--background-image-mic-off: resource('Icons/Mic/MIC_OFF');
 
-	--color-background-active-button__front: rgba(255, 255, 255, 0.17);
+	--color-background-hover-button__front: rgba(255, 255, 255, 0.17);
+	--color-background-active-button__front: rgba(255, 255, 255, 0.25);
 
 	--border-radius-slider__dragger : 100%;
 	--size-slider__tracker : 5px;

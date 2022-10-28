@@ -47,6 +47,10 @@ Button {
     bottom: 0;
 }
 
+.button:hover > .button__body > .button__front {
+    background-color: var(--color-background-hover-button__front);
+}
+
 .button:active > .button__body > .button__front {
     background-color: var(--color-background-active-button__front);
 }
@@ -314,89 +318,4 @@ Button {
 
 .button-trailing-direction > .button__label {
     -unity-text-align: middle-right;
-}
-
-.button-text-menu {
-    border-left-width: 1px;
-    border-right-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-left-color: rgb(205, 154, 79);
-    border-right-color: rgb(205, 154, 79);
-    border-top-color: rgb(205, 154, 79);
-    border-bottom-color: rgb(205, 154, 79);
-    background-color: rgb(38, 38, 38);
-    -unity-text-align: middle-center;
-    border-top-left-radius: 11px;
-    border-bottom-left-radius: 11px;
-    border-top-right-radius: 11px;
-    border-bottom-right-radius: 11px;
-}
-
-.button-text-menu:active {
-    background-color: rgb(205, 154, 79);
-}
-
-.button-text-game {
-    -unity-text-align: middle-center;
-    border-left-width: 1px;
-    border-right-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-top-left-radius: 11px;
-    border-bottom-left-radius: 11px;
-    border-top-right-radius: 11px;
-    border-bottom-right-radius: 11px;
-    border-left-color: rgb(0, 193, 216);
-    border-right-color: rgb(0, 193, 216);
-    border-top-color: rgb(0, 193, 216);
-    border-bottom-color: rgb(0, 193, 216);
-    background-color: rgb(38, 38, 38);
-}
-
-.button-text-game:active {
-    background-color: rgb(0, 193, 216);
-}
-
-.button-text-small {
-    height: 52px;
-    margin-left: 7px;
-    margin-right: 7px;
-    margin-top: 7px;
-    margin-bottom: 7px;
-}
-
-.button-text-medium {
-    height: 76px;
-    margin-top: 7px;
-    margin-bottom: 7px;
-    margin-left: 7px;
-    margin-right: 7px;
-}
-
-.button-text-large {
-    height: 90px;
-    margin-left: 7px;
-    margin-right: 7px;
-    margin-top: 7px;
-    margin-bottom: 7px;
-}
-
-.menu-nav-button {
-    width: 250px;
-}
-
-.text-button-left-icon-box {
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 20%;
-    left: 0;
-}
-
-.text-button-left-icon-box #icon {
-    width: 40px;
-    height: 40px;
 }

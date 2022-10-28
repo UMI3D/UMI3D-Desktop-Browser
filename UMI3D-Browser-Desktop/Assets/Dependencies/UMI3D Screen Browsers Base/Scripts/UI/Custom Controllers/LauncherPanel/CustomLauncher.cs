@@ -37,6 +37,7 @@ public abstract class CustomLauncher : CustomMenuContainer<LauncherScreens>
             custom.Set
             (
                 m_currentScreen.GetValueFromBag(bag, cc),
+                m_displayHeader.GetValueFromBag(bag, cc),
                 m_version.GetValueFromBag(bag, cc)
             );
         }
@@ -97,11 +98,12 @@ public abstract class CustomLauncher : CustomMenuContainer<LauncherScreens>
         Navigation_ScrollView.Add(NavigationButtons);
     }
 
-    public override void Set() => Set(LauncherScreens.Home, null);
+    public override void Set() => Set(LauncherScreens.Home, false, null);
 
-    public virtual void Set(LauncherScreens screen, string version)
+    public virtual void Set(LauncherScreens screen, bool displayHeader, string version)
     {
-        Set(version);
+        UnityEngine.Debug.Log($"{displayHeader}");
+        Set(displayHeader, version);
 
         CurrentScreen = screen;
     }
@@ -149,7 +151,7 @@ public abstract class CustomLauncher : CustomMenuContainer<LauncherScreens>
     protected abstract CustomDialoguebox CreateDialogueBox();
     protected abstract CustomText CreateText();
 
-    #region Implementation
+#region Implementation
 
     public Action<bool> Connect
     {
@@ -212,5 +214,5 @@ public abstract class CustomLauncher : CustomMenuContainer<LauncherScreens>
         currentConnectionData.ip = ip;
         currentConnectionData.port = port;
     }
-    #endregion
+#endregion
 }

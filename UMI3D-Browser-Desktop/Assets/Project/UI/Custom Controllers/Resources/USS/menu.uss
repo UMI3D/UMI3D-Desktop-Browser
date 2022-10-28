@@ -11,6 +11,8 @@
     --image-logo-menu: resource('Icons/logoUMI3D');
     --image-delete-menu: resource('Icons/icon_delete');
     --image-minimize-window: resource('Icons/Buttons-App-Window/minimize');
+    --image-maximize-window: resource('Icons/Buttons-App-Window/maximize');
+    --image-close-window: resource('Icons/Buttons-App-Window/close');
 
     --border-width-menu : 3px;
 	--border-radius-menu : 15px;
