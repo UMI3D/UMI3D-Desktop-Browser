@@ -33,6 +33,11 @@ namespace umi3d.baseBrowser.connection
             Debug.Assert(document != null);
 
             Launcher = root.Q<CustomLauncher>();
+#if UNITY_STANDALONE
+            Launcher.DisplayHeader = true;
+#else
+            Launcher.DisplayHeader = false;
+#endif
             Launcher.Version = UMI3DVersion.version;
             Launcher.Connect = async (value) => await BaseConnectionProcess.Instance.InitConnect(value);
             Launcher.StoreCurrentConnectionDataAndConnect = (ip, port) => BaseConnectionProcess.Instance.ConnectWithMediaDto(ip, port);

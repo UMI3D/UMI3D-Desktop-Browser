@@ -34,6 +34,7 @@ public class CustomLoader : CustomMenuContainer<LoaderScreens>, IGameView
             custom.Set
                 (
                     m_currentScreen.GetValueFromBag(bag, cc),
+                    m_displayHeader.GetValueFromBag(bag, cc),
                     m_version.GetValueFromBag(bag, cc)
                  );
         }
@@ -95,11 +96,11 @@ public class CustomLoader : CustomMenuContainer<LoaderScreens>, IGameView
         Loading.Message = _progress.currentState;
     }
 
-    public override void Set() => Set(LoaderScreens.Loading, null);
+    public override void Set() => Set(LoaderScreens.Loading, false, null);
 
-    public virtual void Set(LoaderScreens screen, string version)
+    public virtual void Set(LoaderScreens screen, bool displayHeader, string version)
     {
-        Set(version);
+        Set(displayHeader, version);
 
         CurrentScreen = screen;
     }
