@@ -102,7 +102,6 @@ public abstract class CustomLauncher : CustomMenuContainer<LauncherScreens>
 
     public virtual void Set(LauncherScreens screen, bool displayHeader, string version)
     {
-        UnityEngine.Debug.Log($"{displayHeader}");
         Set(displayHeader, version);
 
         CurrentScreen = screen;

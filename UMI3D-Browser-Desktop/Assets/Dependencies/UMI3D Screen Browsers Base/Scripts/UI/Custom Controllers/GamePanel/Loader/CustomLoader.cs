@@ -62,7 +62,7 @@ public class CustomLoader : CustomMenuContainer<LoaderScreens>, IGameView
 
         Navigation_ScrollView.RemoveFromHierarchy();
 
-        umi3d.cdk.UMI3DEnvironmentLoader.Instance?.onEnvironmentLoaded?.AddListener(() => ControllerCanProcess?.Invoke(true));
+        if (umi3d.cdk.UMI3DEnvironmentLoader.Exists) umi3d.cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded?.AddListener(() => ControllerCanProcess?.Invoke(true));
 
         umi3d.cdk.collaboration.UMI3DCollaborationClientServer.onProgress.AddListener(OnProgress);
     }

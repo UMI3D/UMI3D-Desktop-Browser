@@ -1,4 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Dependencies/UMI3DBaseBrowser/Scripts/UI/Custom%20Controllers/Resources/USS/Displayers/dropdown.uss?fileID=7433441132597879392&amp;guid=90ef448cd005b1449bbc2a62ab285c1f&amp;type=3#dropdown" />
-    <umi3d.mobileBrowser.Displayer.Dropdown_C index="0" label="Dropdown" choices="pomme, poire" direction="Bottom" size="Large" category="Menu" />
-</ui:UXML>

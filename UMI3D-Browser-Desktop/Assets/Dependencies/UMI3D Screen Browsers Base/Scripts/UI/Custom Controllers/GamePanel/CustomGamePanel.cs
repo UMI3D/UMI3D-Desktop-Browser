@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CustomGamePanel : VisualElement, ICustomElement
+public abstract class CustomGamePanel : VisualElement, ICustomElement
 {
     public enum GameViews
     {
