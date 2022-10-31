@@ -55,11 +55,6 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void InitLoader()
         {
-#if UNITY_STANDALONE
-            Loader.DisplayHeader = true;
-#else
-            Loader.DisplayHeader = false;
-#endif
             Loader.Version = UMI3DVersion.version;
             Loader.Loading.Title = "Connection";
             Loader.Loading.BackText = "Leave";
@@ -89,11 +84,6 @@ namespace umi3d.baseBrowser.connection
             buttonsArea.Crouch.ClickedDown += () => BaseFPSNavigation.Instance.IsCrouching = true;
             buttonsArea.Crouch.ClickedUp += () => BaseFPSNavigation.Instance.IsCrouching = false;
 
-#if UNITY_STANDALONE
-            Menu.DisplayHeader = true;
-#else
-            Menu.DisplayHeader = false;
-#endif
             Menu.Leave.clicked += () =>
             {
                 var dialoguebox = CreateDialogueBox();

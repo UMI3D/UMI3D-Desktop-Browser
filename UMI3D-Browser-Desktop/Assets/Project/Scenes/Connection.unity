@@ -527,6 +527,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   document: {fileID: 1049023334}
+  Windows_Manager: {fileID: 1506163089}
 --- !u!1 &1294132164
 GameObject:
   m_ObjectHideFlags: 0
