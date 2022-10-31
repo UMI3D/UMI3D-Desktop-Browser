@@ -24,8 +24,8 @@ namespace umi3d.commonScreen.Displayer
         protected DropDownInputMenuItem menuItem;
 
         public ElementCategory Category;
-        public ElementSize Size;
-        public ElemnetDirection Direction;
+        public ElementSize Size = ElementSize.Medium;
+        public ElemnetDirection Direction = ElemnetDirection.Leading;
 
         Dropdown_C dropdown;
 

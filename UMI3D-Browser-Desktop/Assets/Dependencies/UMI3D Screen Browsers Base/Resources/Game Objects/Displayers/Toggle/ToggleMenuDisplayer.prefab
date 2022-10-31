@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6265859358162753813}
   - component: {fileID: 7011215360700242088}
   m_Layer: 0
-  m_Name: ToggleGameDisplayer
+  m_Name: ToggleMenuDisplayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6420973110062237808}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 197.48776, y: 293.30142, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -41,13 +41,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 6420973110062237808}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a320d16d221adbe42ae2901574c84cb2, type: 3}
+  m_Script: {fileID: 11500000, guid: b8953b369125e6f42abede1217e64b14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onClear:
     m_PersistentCalls:
       m_Calls: []
   LabelText: 
-  Category: 1
+  Category: 0
   Size: 1
   Direction: 0

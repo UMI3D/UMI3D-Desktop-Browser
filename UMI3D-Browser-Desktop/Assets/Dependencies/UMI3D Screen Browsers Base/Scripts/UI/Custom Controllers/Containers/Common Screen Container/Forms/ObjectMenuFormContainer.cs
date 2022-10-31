@@ -48,7 +48,6 @@ namespace umi3d.commonScreen.Container
         public override void Insert(AbstractDisplayer element, int index, bool updateDisplay = true)
         {
             if (!(element is IDisplayerElement displayer)) return;
-
             InsertDisplayer?.Invoke(index, displayer.GetUXMLContent());
             m_displayers.Insert(index, element);
         }
