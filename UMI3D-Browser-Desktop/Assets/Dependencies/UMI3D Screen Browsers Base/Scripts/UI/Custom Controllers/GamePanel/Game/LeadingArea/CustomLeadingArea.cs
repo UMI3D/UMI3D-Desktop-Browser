@@ -20,6 +20,54 @@ using UnityEngine.UIElements;
 
 public class CustomLeadingArea : VisualElement, ICustomElement
 {
+    public new class UxmlTraits : VisualElement.UxmlTraits
+    {
+        protected UxmlEnumAttributeDescription<ControllerEnum> m_controller = new UxmlEnumAttributeDescription<ControllerEnum>
+        {
+            name = "controller",
+            defaultValue = ControllerEnum.MouseAndKeyboard
+        };
+
+        public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
+        {
+            get { yield break; }
+        }
+
+        public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
+        {
+            base.Init(ve, bag, cc);
+            var custom = ve as CustomLeadingArea;
+
+            custom.Set
+                (
+                    m_controller.GetValueFromBag(bag, cc)
+                );
+        }
+    }
+
+    public ControllerEnum Controller
+    {
+        get => m_controller;
+        set
+        {
+            m_controller = value;
+            switch (value)
+            {
+                case ControllerEnum.MouseAndKeyboard:
+                    JoystickArea.RemoveFromHierarchy();
+                    break;
+                case ControllerEnum.Touch:
+                    Add(JoystickArea);
+                    break;
+                case ControllerEnum.GameController:
+                    JoystickArea.RemoveFromHierarchy();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/leadingArea";
     public virtual string USSCustomClassName => "leading-are";
@@ -27,6 +75,7 @@ public class CustomLeadingArea : VisualElement, ICustomElement
     public CustomJoystickArea JoystickArea;
 
     protected bool m_hasBeenInitialized;
+    protected ControllerEnum m_controller;
 
     public virtual void InitElement()
     {
@@ -41,15 +90,19 @@ public class CustomLeadingArea : VisualElement, ICustomElement
         }
         AddToClassList(USSCustomClassName);
 
-        Add(JoystickArea);
+        
     }
 
-    public virtual void Set()
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard);
+
+    public virtual void Set(ControllerEnum controller)
     {
         if (!m_hasBeenInitialized)
         {
             InitElement();
             m_hasBeenInitialized = true;
         }
+
+        Controller = controller;
     }
 }

@@ -35,6 +35,13 @@ public interface IGameView
     void TransitionOut(VisualElement persistentVisual);
 }
 
+public enum ControllerEnum
+{
+    MouseAndKeyboard,
+    Touch,
+    GameController
+}
+
 public enum ElementPseudoState
 {
     Enabled,
