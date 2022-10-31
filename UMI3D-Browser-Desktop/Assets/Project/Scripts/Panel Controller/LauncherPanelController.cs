@@ -15,13 +15,15 @@ limitations under the License.
 */
 
 using BrowserDesktop.Controller;
+using inetum.unityUtils;
 using System.Runtime.InteropServices;
 using System.Text;
-using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 
 public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncherPanelController
 {
+    public WindowsManager Windows_Manager;
+
     #region Keyboard
     [DllImport("user32.dll")]
     private static extern long GetKeyboardLayoutName(StringBuilder pwszKLID);
@@ -63,6 +65,29 @@ public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncher
     protected override void Start()
     {
         base.Start();
+
+        Debug.Assert(Windows_Manager != null, "WindowsManager reference is null");
+        Launcher.Minimize.clicked += Windows_Manager.Minimize;
+        Launcher.Maximize.clicked += Windows_Manager.Maximize;
+        Launcher.Close.clicked += Application.Quit;
+
+        Windows_Manager.FullScreenEnabled = value => Launcher.DisplayHeader = value;
+        Windows_Manager.DisplayDialogueBoxToQuit = () =>
+        {
+            var dialogueBox = new umi3d.commonScreen.Displayer.Dialoguebox_C();
+            dialogueBox.Type = DialogueboxType.Confirmation;
+            dialogueBox.Title = "Close application";
+            dialogueBox.Message = "Do you want to close the application?";
+            dialogueBox.ChoiceAText = "Cancel";
+            dialogueBox.ChoiceA.Type = ButtonType.Default;
+            dialogueBox.ChoiceBText = "Close";
+            dialogueBox.Callback = index =>
+            {
+                QuittingManager.ApplicationIsQuitting = index == 1;
+                if (index == 1) Application.Quit();
+            };
+            dialogueBox.AddToTheRoot(Launcher);
+        };
 
         SetUpKeyboardConfiguration();
     }
