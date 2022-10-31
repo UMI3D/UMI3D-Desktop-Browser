@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.commonMobile.game;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,6 +23,11 @@ public class CustomTrailingArea : VisualElement, ICustomElement
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
+        protected UxmlEnumAttributeDescription<ControllerEnum> m_controller = new UxmlEnumAttributeDescription<ControllerEnum>
+        {
+            name = "controller",
+            defaultValue = ControllerEnum.MouseAndKeyboard
+        };
         protected UxmlBoolAttributeDescription m_displayObjectMenu = new UxmlBoolAttributeDescription
         {
             name = "display-object-menu",
@@ -45,9 +51,36 @@ public class CustomTrailingArea : VisualElement, ICustomElement
 
             custom.Set
                 (
+                    m_controller.GetValueFromBag(bag, cc),
                     m_displayObjectMenu.GetValueFromBag(bag, cc),
                     m_displayEmoteWindow.GetValueFromBag(bag, cc)
                 );
+        }
+    }
+
+    public ControllerEnum Controller
+    {
+        get => m_controller;
+        set
+        {
+            m_controller = value;
+            switch (value)
+            {
+                case ControllerEnum.MouseAndKeyboard:
+                    CameraLayer.RemoveFromHierarchy();
+                    ButtonsArea.RemoveFromHierarchy();
+                    break;
+                case ControllerEnum.Touch:
+                    Add(CameraLayer);
+                    Add(ButtonsArea);
+                    break;
+                case ControllerEnum.GameController:
+                    CameraLayer.RemoveFromHierarchy();
+                    ButtonsArea.RemoveFromHierarchy();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -122,6 +155,7 @@ public class CustomTrailingArea : VisualElement, ICustomElement
     public umi3d.baseBrowser.ui.viewController.CameraManipulator camTouchManipulator;
 
     protected bool m_hasBeenInitialized;
+    protected ControllerEnum m_controller;
     protected bool m_displayObjectMenu;
     protected bool m_displayEmoteWindow;
 
@@ -147,14 +181,11 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         ObjectMenu.name = "object-menu";
         ObjectMenu.Category = ElementCategory.Game;
         ObjectMenu.Title = "Object Menu";
-
-        Add(CameraLayer);
-        Add(ButtonsArea);
     }
 
-    public virtual void Set() => Set(false, false);
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false, false);
 
-    public virtual void Set(bool displayObjectMenu, bool displayEmoteWindow)
+    public virtual void Set(ControllerEnum controller, bool displayObjectMenu, bool displayEmoteWindow)
     {
         if (!m_hasBeenInitialized)
         {
@@ -162,6 +193,7 @@ public class CustomTrailingArea : VisualElement, ICustomElement
             m_hasBeenInitialized = true;
         }
 
+        Controller = controller;
         DisplayObjectMenu = displayObjectMenu;
         DisplayEmoteWindow = displayEmoteWindow;
     }
