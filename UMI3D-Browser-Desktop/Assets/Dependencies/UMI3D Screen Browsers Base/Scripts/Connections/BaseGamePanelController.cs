@@ -22,7 +22,6 @@ using umi3d.cdk.collaboration;
 using umi3d.commonScreen.Container;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEngine.WSA;
 using static umi3d.baseBrowser.Controller.BaseCursor;
 
 namespace umi3d.baseBrowser.connection
@@ -72,6 +71,8 @@ namespace umi3d.baseBrowser.connection
             Loader.ControllerCanProcess = (value) => BaseController.CanProcess = value;
             Loader.SetMovement = (value) => SetMovement(value, CursorMovement.Free);
             Loader.UnSetMovement = (value) => UnSetMovement(value);
+
+            umi3d.cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded?.AddListener(() => Loader.ControllerCanProcess?.Invoke(true));
 
             FormContainer.GetContainer = () => Loader.Form.ScrollView;
             FormContainer.InsertDisplayer = (index, displayer) => Loader.Form.Insert(index, displayer);

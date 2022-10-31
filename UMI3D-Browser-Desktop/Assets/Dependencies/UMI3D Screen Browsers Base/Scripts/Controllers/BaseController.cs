@@ -243,7 +243,6 @@ namespace umi3d.baseBrowser.Controller
             if (input is inputs.interactions.KeyMenuInput keyMenuInput) keyMenuInput.bone = interactionBoneType;
             else if (input is inputs.interactions.FormInput formInput) formInput.bone = interactionBoneType;
             else if (input is inputs.interactions.LinkInput linkInput) linkInput.bone = interactionBoneType;
-
             input.Menu = m_objectMenu?.menu;
             inputs.Add(input);
         }
@@ -413,7 +412,6 @@ namespace umi3d.baseBrowser.Controller
                 //if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.LeaveContextualMenu)))
                 //    UnequipeForceProjection();
             }
-
             UpdateToolForForceProjection();
             UpdateToolForNonForceProjection();
         }
@@ -507,7 +505,6 @@ namespace umi3d.baseBrowser.Controller
 
                 break;
             }
-
             if (BaseCursor.State != BaseCursor.CursorState.Clicked) UpdateTool();
 
             Hover();
