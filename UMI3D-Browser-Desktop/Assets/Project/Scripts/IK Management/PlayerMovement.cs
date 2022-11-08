@@ -7,6 +7,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     //variables
+    [SerializeField] private FpsNavigation fpsNavigation;
 
     [SerializeField] private float moveSpeed;
     [SerializeField] private float walkSpeed;
@@ -31,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        Debug.Assert(fpsNavigation != null, "PlayerMovement : Fps naviagation not set.");
         anim = GetComponentInChildren<Animator>();
         IKControl = this.GetComponent<IKControl>();
     }
@@ -46,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
 
         Movement = Vector2.zero;
 
-        IKControl.feetIkActive = Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat));
+        IKControl.feetIkActive = fpsNavigation.Squatting;
     }
 
     private void Move()

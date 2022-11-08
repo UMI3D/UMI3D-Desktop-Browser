@@ -456,7 +456,7 @@ namespace umi3d.baseBrowser.Controller
         {
             mouseData.Save();
             Ray ray = new Ray(CameraTransform.position, CameraTransform.forward);
-            Debug.DrawRay(ray.origin, ray.direction.normalized * 100f, Color.red, 0, true);
+
             RaycastHit[] hits = umi3d.common.Physics.RaycastAll(ray, 100f);
 
             //1. Cast a ray to find all interactables
@@ -597,8 +597,7 @@ namespace umi3d.baseBrowser.Controller
                 if (anim != null) anim.Start();
             }
         }
+
         #endregion
-
-
     }
 }
