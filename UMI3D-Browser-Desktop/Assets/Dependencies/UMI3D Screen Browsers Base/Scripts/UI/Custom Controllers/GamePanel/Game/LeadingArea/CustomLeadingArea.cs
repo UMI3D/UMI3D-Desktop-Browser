@@ -90,7 +90,7 @@ public class CustomLeadingArea : VisualElement, ICustomElement
         }
         AddToClassList(USSCustomClassName);
 
-        
+
     }
 
     public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard);

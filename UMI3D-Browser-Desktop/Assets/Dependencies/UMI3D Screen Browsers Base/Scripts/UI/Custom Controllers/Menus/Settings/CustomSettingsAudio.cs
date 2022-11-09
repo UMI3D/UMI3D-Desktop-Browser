@@ -16,16 +16,63 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static umi3d.baseBrowser.preferences.SettingsPreferences;
 
 public class CustomSettingsAudio : CustomSettingScreen
 {
     public override string USSCustomClassName => "setting-audio";
 
+    public CustomSlider GeneralVolume_Visual;
+
     public override void InitElement()
     {
         base.InitElement();
 
+        GeneralVolume_Visual.label = "General volume";
+        GeneralVolume_Visual.DirectionDisplayer = ElemnetDirection.Leading;
+        GeneralVolume_Visual.lowValue = 0f;
+        GeneralVolume_Visual.highValue = 10f;
+        GeneralVolume_Visual.showInputField = true;
+        GeneralVolume_Visual.RegisterValueChangedCallback(ce => OnGeneralVolumeValueChanged(ce.newValue));
+        GeneralVolume_Visual.RegisterCallback<AttachToPanelEvent>(callback =>
+        {
+            GeneralVolume_Visual.SetValueWithoutNotify(Data.GeneralVolume);
+        });
+
+        ScrollView.Add(GeneralVolume_Visual);
+
+        if (TryGetAudiorData(out Data))
+        {
+            OnGeneralVolumeValueChanged(Data.GeneralVolume);
+        }
+        else
+        {
+            OnGeneralVolumeValueChanged(10f);
+        }
     }
 
     public override void Set() => Set("Audio");
+
+    #region Implementation
+    /// <summary>
+    /// Value is between 0 and 1
+    /// </summary>
+    public event System.Action<float> GeneralVolumeValeChanged;
+    public AudioData Data;
+
+    public void OnGeneralVolumeValueChanged(float value)
+    {
+        SetGeneralVolumeValueWithoutNotify(value);
+        GeneralVolumeValeChanged?.Invoke(((int)value) / 10f);
+    }
+    public void SetGeneralVolumeValueWithoutNotify(float value)
+    {
+        value = (int)value;
+        GeneralVolume_Visual.SetValueWithoutNotify(value);
+        Data.GeneralVolume = value;
+        StoreAudioData(Data);
+    }
+
+    #endregion
 }

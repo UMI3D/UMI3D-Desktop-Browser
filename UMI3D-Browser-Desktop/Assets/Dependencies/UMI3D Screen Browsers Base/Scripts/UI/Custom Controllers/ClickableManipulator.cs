@@ -69,6 +69,26 @@ namespace umi3d.baseBrowser.ui.viewController
         /// Invoke clicked long event.
         /// </summary>
         public void OnClickedLong() => ClickedLong?.Invoke();
+        /// <summary>
+        /// Invoke moved event.
+        /// </summary>
+        public void OnMoved() => Moved?.Invoke();
+        /// <summary>
+        /// Invoke clicked down event with information.
+        /// </summary>
+        public void OnClickedDownWithInf(EventBase evt, Vector2 localPosition) => ClickedDownWithInfo?.Invoke(evt, localPosition);
+        /// <summary>
+        /// Invoke clicked up event with information.
+        /// </summary>
+        public void OnClickedUpWithInf(EventBase evt, Vector2 localPosition) => ClickedUpWithInfo?.Invoke(evt, localPosition);
+        /// <summary>
+        /// Invoke clicked long event with information.
+        /// </summary>
+        public void OnClickedLongWithInf(EventBase evt, Vector2 localPosition) => ClickedLongWithInfo?.Invoke(evt, localPosition);
+        /// <summary>
+        /// Invoke moved event with information.
+        /// </summary>
+        public void OnMovedWithInf(EventBase evt, Vector2 localPosition) => MovedWithInfo?.Invoke(evt, localPosition);
 
         protected override void ProcessDownEvent(EventBase evt, Vector2 localPosition, int pointerId)
         {

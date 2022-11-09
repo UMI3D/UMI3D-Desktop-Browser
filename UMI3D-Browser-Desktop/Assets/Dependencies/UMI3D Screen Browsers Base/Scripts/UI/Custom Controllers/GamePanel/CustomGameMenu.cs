@@ -46,6 +46,7 @@ public abstract class CustomGameMenu : CustomMenuContainer<GameMenuScreens>, IGa
 
     public System.Action<object> SetMovement;
     public System.Action<object> UnSetMovement;
+    public CustomGameData GameData;
     public CustomLibraryScreen Libraries;
     public CustomSettingsContainer Settings;
 
@@ -79,13 +80,13 @@ public abstract class CustomGameMenu : CustomMenuContainer<GameMenuScreens>, IGa
         Navigation_ScrollView.Add(Leave);
     }
 
-    public override void Set() => Set(GameMenuScreens.Settings, false, null);
+    public override void Set() => Set(GameMenuScreens.Data, false, null);
 
     public virtual void Set(GameMenuScreens screen, bool displayHeader, string version)
     {
         Set(displayHeader, version);
 
-        CurrentScreen = screen;
+        NavigationButtons.Value = screen.ToString();
     }
 
     protected override void GetScreen(GameMenuScreens screenEnum, out CustomMenuScreen screen)
@@ -93,7 +94,7 @@ public abstract class CustomGameMenu : CustomMenuContainer<GameMenuScreens>, IGa
         switch (screenEnum)
         {
             case GameMenuScreens.Data:
-                screen = null;
+                screen = GameData;
                 break;
             case GameMenuScreens.Libraries:
                 screen = Libraries;

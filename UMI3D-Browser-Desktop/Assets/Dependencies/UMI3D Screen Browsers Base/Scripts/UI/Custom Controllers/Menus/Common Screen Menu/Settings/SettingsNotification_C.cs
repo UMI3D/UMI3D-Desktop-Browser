@@ -26,6 +26,8 @@ namespace umi3d.commonScreen.menu
             if (Button_Back == null) Button_Back = new Displayer.Button_C();
 
             if (ScrollView == null) ScrollView = new Container.ScrollView_C();
+            if (HideNotification == null) HideNotification = new Displayer.Toggle_C();
+            if (HideNotificationDescription == null) HideNotificationDescription = new Displayer.Text_C();
 
             base.InitElement();
         }

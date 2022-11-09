@@ -88,6 +88,9 @@ public class CustomButtonsArea : VisualElement, ICustomElement
     public CustomButton Action;
     public CustomButton Emote;
 
+    public System.Action<EventBase, Vector2> ClickedDown;
+    public System.Action<EventBase, Vector2> Moved;
+
     protected bool m_isActionButtonDisplayed;
     protected bool m_isEmoteButtonDisplayed;
     protected bool m_hasBeenInitialized;
@@ -109,6 +112,11 @@ public class CustomButtonsArea : VisualElement, ICustomElement
         Action.AddToClassList(USSCustomClassAction);
         Emote.AddToClassList(USSCustomClassEmote);
 
+        Crouch.name = "crouch";
+        Jump.name = "jump";
+        Action.name = "action";
+        Emote.name = "emote";
+
         Crouch.text = "Crouch";
         Jump.text = "Jump";
         Action.text = "Action";
@@ -119,6 +127,11 @@ public class CustomButtonsArea : VisualElement, ICustomElement
         Action.Category = ElementCategory.Game;
         Emote.Category = ElementCategory.Game;
 
+        Crouch.Size = ElementSize.Custom;
+        Jump.Size = ElementSize.Custom;
+        Action.Size = ElementSize.Custom;
+        Emote.Size = ElementSize.Custom;
+
         Crouch.Shape = ButtonShape.Round;
         Jump.Shape = ButtonShape.Round;
         Action.Shape = ButtonShape.Round;
@@ -126,6 +139,14 @@ public class CustomButtonsArea : VisualElement, ICustomElement
 
         Action.ClickedDown += () => MainActionDown?.Invoke();
         Action.ClickedUp += () => MainActionUp?.Invoke();
+
+        Crouch.ClickedDownWithInfo += (evt, localposition) => ClickedDown?.Invoke(evt, Crouch.LocalToWorld(localposition));
+        Jump.ClickedDownWithInfo += (evt, localposition) => ClickedDown?.Invoke(evt, Jump.LocalToWorld(localposition));
+        Action.ClickedDownWithInfo += (evt, localposition) => ClickedDown?.Invoke(evt, Action.LocalToWorld(localposition));
+
+        Crouch.MovedWithInfo += (evt, localposition) => Moved?.Invoke(evt, Crouch.LocalToWorld(localposition));
+        Jump.MovedWithInfo += (evt, localposition) => Moved?.Invoke(evt, Jump.LocalToWorld(localposition));
+        Action.MovedWithInfo += (evt, localposition) => Moved?.Invoke(evt, Action.LocalToWorld(localposition));
 
         Add(Crouch);
         Add(Jump);

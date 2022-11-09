@@ -15,22 +15,18 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.baseBrowser.preferences;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
+using static umi3d.baseBrowser.preferences.SettingsPreferences;
 
 public class CustomSettingsResolution : CustomSettingScreen
 {
-    public enum ResolutionEnum
-    {
-        Low,
-        Medium,
-        High,
-        Custom
-    }
-
     public override string USSCustomClassName => "setting-resolution";
 
+    public int MaxFPS;
+    public int TargetFPS;
     public CustomSegmentedPicker<ResolutionEnum> SegmentedResolution;
     public CustomDropdown ResolutionsDropdown;
     public CustomToggle SupportHDR;
@@ -41,60 +37,58 @@ public class CustomSettingsResolution : CustomSettingScreen
     {
         base.InitElement();
 
-        SegmentedResolution.ValueEnumChanged += value =>
-        {
-            switch (value)
-            {
-                case ResolutionEnum.Low:
-                    SupportHDR.value = false;
-                    RenderPipeline.renderScale = 0.7f;
-                    break;
-                case ResolutionEnum.Medium:
-                    SupportHDR.value = false;
-                    RenderPipeline.renderScale = 1f;
-                    break;
-                case ResolutionEnum.High:
-                    SupportHDR.value = true;
-                    RenderPipeline.renderScale = 1.3f;
-                    break;
-                case ResolutionEnum.Custom:
-                    break;
-                default:
-                    break;
-            }
-        };
+        RenderPipeline_Low = Resources.Load<UniversalRenderPipelineAsset>("Scriptables/Rendering/UniversalRenderPipelineAsset_low");
+        RenderPipeline_Medium = Resources.Load<UniversalRenderPipelineAsset>("Scriptables/Rendering/UniversalRenderPipelineAsset_medium");
+        RenderPipeline_High = Resources.Load<UniversalRenderPipelineAsset>("Scriptables/Rendering/UniversalRenderPipelineAsset_high");
 
-        ResolutionsDropdown.label = "Resolustion";
-        var screenResolutions = Screen.resolutions;
+        SegmentedResolution.LabelDirection = ElemnetDirection.Top;
+        SegmentedResolution.ValueEnumChanged += value => SegmentedResolutionValueChanged(value);
+
+        MaxFPS = Screen.currentResolution.refreshRate;
+
+        ResolutionsDropdown.label = "Resolusion";
         List<string> res = new List<string>();
-        foreach (var resolution in screenResolutions) res.Add($"{resolution.width}x{resolution.height}");
+        foreach (var resolution in Screen.resolutions) res.Add($"{resolution.width}x{resolution.height}");
         ResolutionsDropdown.choices = res;
-        ResolutionsDropdown.RegisterValueChangedCallback((ce_resolution) =>
-        {
-            var index = res.IndexOf(ce_resolution.newValue);
-            UnityEngine.Debug.Log($"index = {index}");
-            var resolution = screenResolutions[index];
-            Screen.SetResolution(resolution.width, resolution.height, true);
-            UnityEngine.Debug.Log($"current resolution = {Screen.currentResolution.width}x{Screen.currentResolution.height}");
-            UnityEngine.Debug.Log($"reso {resolution.width}x{resolution.height}");
-        });
-        ResolutionsDropdown.value = res[0];
+        ResolutionsDropdown.RegisterValueChangedCallback((ce_resolution) => ResolutionValueChanged(ce_resolution.newValue));
 
         SupportHDR.label = "Enable HDR";
-        SupportHDR.RegisterValueChangedCallback(value => RenderPipeline.supportsHDR = value.newValue);
+        SupportHDR.RegisterValueChangedCallback(value => SupportHDRValueChanged(value.newValue));
 
         RenderScale.label = "Render Scale";
+        RenderScale.DirectionDisplayer = ElemnetDirection.Leading;
         RenderScale.lowValue = 0f;
         RenderScale.highValue = 2f;
         RenderScale.showInputField = true;
-        RenderScale.RegisterValueChangedCallback(value => RenderPipeline.renderScale = value.newValue);
+        RenderScale.RegisterValueChangedCallback(value => RenderScaleValueChanged(value.newValue));
 
         ReduceAnimation.label = "Reduce animation";
         ReduceAnimation.value = false;
-        ReduceAnimation.RegisterValueChangedCallback((ce_value) => AnimatorManager.ReduceAnimation = ce_value.newValue);
+        ReduceAnimation.RegisterValueChangedCallback((ce_value) => ReduceAnimationValueChanged(ce_value.newValue));
 
         ScrollView.Add(SegmentedResolution);
+#if UNITY_STANDALONE
+        ScrollView.Add(ResolutionsDropdown);
+#endif
+        ScrollView.Add(SupportHDR);
+        ScrollView.Add(RenderScale);
         ScrollView.Add(ReduceAnimation);
+
+        if (TryGetResolutionData(out Data))
+        {
+            SegmentedResolution.Value = Data.SegmentedResolution.ToString();
+            ResolutionsDropdown.value = Data.Resolution;
+            SupportHDR.value = Data.SupportHDR;
+            RenderScale.value = Data.RenderScale;
+            ReduceAnimation.value = Data.ReduceAnimation;
+        }
+        else
+        {
+            SegmentedResolution.Value = ResolutionEnum.Medium.ToString();
+            ResolutionsDropdown.value = res[0];
+        }
+
+        //RenderPipeline.colorGradingLutSize
     }
 
     public override void Set() => Set("Resolution");
@@ -103,6 +97,103 @@ public class CustomSettingsResolution : CustomSettingScreen
     #region Implementation
 
     public UniversalRenderPipelineAsset RenderPipeline;
+    protected UniversalRenderPipelineAsset RenderPipeline_Low;
+    protected UniversalRenderPipelineAsset RenderPipeline_Medium;
+    protected UniversalRenderPipelineAsset RenderPipeline_High;
+    public ResolutionData Data;
+
+    public void SegmentedResolutionValueChanged(ResolutionEnum value)
+    {
+        SegmentedResolution.SetValueEnumWithoutNotify(value);
+        switch (value)
+        {
+            case ResolutionEnum.Low:
+                RenderPipeline = RenderPipeline_Low;
+                QualitySettings.renderPipeline = RenderPipeline;
+
+                TargetFPS = MaxFPS;
+                Application.targetFrameRate = TargetFPS;
+                SegmentedResolution.Label = $"Low resolution is targetting {TargetFPS}fps with lower rendering";
+                SupportHDR.value = false;
+                RenderScale.value = 0.7f;
+                QualitySettings.SetQualityLevel(0, false);
+                RenderPipeline.shadowDistance = 20f;
+                SupportHDR.Hide();
+                RenderScale.Hide();
+                break;
+            case ResolutionEnum.Medium:
+                RenderPipeline = RenderPipeline_Medium;
+                QualitySettings.renderPipeline = RenderPipeline;
+
+                TargetFPS = MaxFPS / 2;
+                Application.targetFrameRate = TargetFPS;
+                SegmentedResolution.Label = $"Medium resolution is targetting {TargetFPS}fps with midium rendering";
+                SupportHDR.value = false;
+                RenderScale.value = 1f;
+                QualitySettings.SetQualityLevel(1, false);
+                RenderPipeline.shadowDistance = 35f;
+                SupportHDR.Hide();
+                RenderScale.Hide();
+                break;
+            case ResolutionEnum.High:
+                RenderPipeline = RenderPipeline_High;
+                QualitySettings.renderPipeline = RenderPipeline;
+
+                TargetFPS = MaxFPS / 3;
+                Application.targetFrameRate = TargetFPS;
+                SegmentedResolution.Label = $"High resolution is targetting {TargetFPS}fps with higher rendering";
+                SupportHDR.value = true;
+                RenderScale.value = 1.3f;
+                QualitySettings.SetQualityLevel(2, false);
+                RenderPipeline.shadowDistance = 50f;
+                SupportHDR.Hide();
+                RenderScale.Hide();
+                break;
+            case ResolutionEnum.Custom:
+                SegmentedResolution.Label = "Custom resolution let you choose your settings";
+                SupportHDR.Display();
+                RenderScale.Display();
+                break;
+            default:
+                break;
+        }
+
+        Data.SegmentedResolution = SegmentedResolution.ValueEnum.Value;
+        StoreResolutionData(Data);
+    }
+
+    public void ResolutionValueChanged(string value)
+    {
+        ResolutionsDropdown.SetValueWithoutNotify(value);
+        var resolution = Screen.resolutions[ResolutionsDropdown.choices.IndexOf(value)];
+        Screen.SetResolution(resolution.width, resolution.height, true);
+        Data.Resolution = value;
+        StoreResolutionData(Data);
+    }
+
+    public void SupportHDRValueChanged(bool value)
+    {
+        SupportHDR.SetValueWithoutNotify(value);
+        RenderPipeline.supportsHDR = value;
+        Data.SupportHDR = value;
+        StoreResolutionData(Data);
+    }
+
+    public void RenderScaleValueChanged(float value)
+    {
+        RenderScale.SetValueWithoutNotify(value);
+        RenderPipeline.renderScale = value;
+        Data.RenderScale = value;
+        StoreResolutionData(Data);
+    }
+
+    public void ReduceAnimationValueChanged(bool value)
+    {
+        ReduceAnimation.SetValueWithoutNotify(value);
+        AnimatorManager.ReduceAnimation = value;
+        Data.ReduceAnimation = value;
+        StoreResolutionData(Data);
+    }
 
     #endregion
 }

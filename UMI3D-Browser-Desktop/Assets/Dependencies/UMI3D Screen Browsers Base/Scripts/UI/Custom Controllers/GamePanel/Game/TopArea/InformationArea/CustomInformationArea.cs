@@ -75,33 +75,28 @@ public class CustomInformationArea : VisualElement, ICustomElement
         set 
         {
             if (value == ShortInf.text) return;
-            ShortInf.schedule.Execute(() =>
-            {
-                var color = ShortInf.resolvedStyle.color;
-                ShortInf.AddAnimation
-                (
-                    this,
-                    () => ShortInf.style.color = new Color(color.r, color.g, color.b, color.a),
-                    () => ShortInf.style.color = new Color(color.r, color.g, color.b, 0),
-                    "color",
-                    AnimatorManager.TextFadeDuration,
-                    callback: () =>
-                    {
-                        ShortInf.text = value;
-                        ShortInf.AddAnimation
-                        (
-                            this,
-                            () => ShortInf.style.color = new Color(color.r, color.g, color.b, 0),
-                            () => ShortInf.style.color = new Color(color.r, color.g, color.b, color.a),
-                            "color",
-                            AnimatorManager.TextFadeDuration,
-                            callback: () => ShortInf.style.color = StyleKeyword.Null
-                        );
-                    }
-                );
-
-                
-            });
+            var color = ShortInf.resolvedStyle.color;
+            ShortInf.AddAnimation
+            (
+                this,
+                () => ShortInf.style.color = new Color(color.r, color.g, color.b, color.a),
+                () => ShortInf.style.color = new Color(color.r, color.g, color.b, 0),
+                "color",
+                AnimatorManager.TextFadeDuration,
+                callback: () =>
+                {
+                    ShortInf.text = value;
+                    ShortInf.AddAnimation
+                    (
+                        this,
+                        () => ShortInf.style.color = new Color(color.r, color.g, color.b, 0),
+                        () => ShortInf.style.color = new Color(color.r, color.g, color.b, color.a),
+                        "color",
+                        AnimatorManager.TextFadeDuration,
+                        callback: () => ShortInf.style.color = StyleKeyword.Null
+                    );
+                }
+            );
         }
     }
 
@@ -229,6 +224,7 @@ public class CustomInformationArea : VisualElement, ICustomElement
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/informationArea";
     public virtual string USSCustomClassName => "information-area";
     public virtual string USSCustomClassMain => $"{USSCustomClassName}__main";
+    public virtual string USSCustomClassMain_Background => $"{USSCustomClassName}__main-background";
     public virtual string USSCustomClassShortInf => $"{USSCustomClassName}__short__inf";
     public virtual string USSCustomClassMic_Sound => $"{USSCustomClassName}__mic-sound";
     public virtual string USSCustomClassMic_On => $"{USSCustomClassName}__mic-on";
@@ -249,14 +245,18 @@ public class CustomInformationArea : VisualElement, ICustomElement
     public Stack<string> NotificationTitleStack = new Stack<string>();
     public CustomText ShortInf;
     public VisualElement Main = new VisualElement { name = "main" };
+    public VisualElement Main_Background = new VisualElement { name = "main-background" };
     public CustomUserList UserList;
     public CustomNotificationCenter NotificationCenter;
     public VisualElement Mic = new VisualElement { name = "mic-icon" };
     public VisualElement Sound = new VisualElement { name = "sound-icon" };
+    public TouchManipulator2 InfManipulator = new TouchManipulator2(null, 0, 0);
+    public TouchManipulator2 MainManipulator = new TouchManipulator2(null, 0, 0);
     public TouchManipulator2 ShortInfManipulator = new TouchManipulator2(null, 0, 0);
     public TouchManipulator2 MicManipulator = new TouchManipulator2(null, 0, 0);
     public TouchManipulator2 SoundManipulator = new TouchManipulator2(null, 0, 0);
 
+    protected Vector2 m_initialManipulatedPosition;
     protected bool m_isExplanded;
     protected bool m_isMicOn;
     protected bool m_isSoundOn;
@@ -264,6 +264,7 @@ public class CustomInformationArea : VisualElement, ICustomElement
     protected Length m_shortInfheightLength = float.NaN;
     protected Length m_shortInfWidthgLength = float.NaN;
     protected Length m_shortInfMargin_PaddingLength = float.NaN;
+    protected bool m_shortInfExpended = true;
 
     public virtual void InitElement()
     {
@@ -278,6 +279,7 @@ public class CustomInformationArea : VisualElement, ICustomElement
         }
         AddToClassList(USSCustomClassName);
         Main.AddToClassList(USSCustomClassMain);
+        Main_Background.AddToClassList(USSCustomClassMain_Background);
         ShortInf.AddToClassList(USSCustomClassShortInf);
         Mic.AddToClassList(USSCustomClassMic_Sound);
         Sound.AddToClassList(USSCustomClassMic_Sound);
@@ -289,11 +291,23 @@ public class CustomInformationArea : VisualElement, ICustomElement
             this.TryGetCustomStyle("--size-margin-and-padding-game", out m_shortInfMargin_PaddingLength);
         });
 
-        ShortInf.name = "short-inf";
+        this.AddManipulator(InfManipulator);
+        InfManipulator.ClickedDownWithInfo += (evt, locaPosition) => m_initialManipulatedPosition = locaPosition;
+        InfManipulator.MovedWithInfo += (evt, localPosition) =>
+        {
+            if (!IsExpanded && m_initialManipulatedPosition.y < localPosition.y) IsExpanded = true;
+        };
+        Main_Background.AddManipulator(MainManipulator);
+        MainManipulator.ClickedDownWithInfo += (evt, locaPosition) => m_initialManipulatedPosition = locaPosition;
+        MainManipulator.MovedWithInfo += (evt, localPosition) =>
+        {
+            if (IsExpanded && m_initialManipulatedPosition.y > localPosition.y) IsExpanded = false;
+        };
 
+        ShortInf.name = "short-inf";
         ShortInf.AddManipulator(ShortInfManipulator);
         ShortInfManipulator.LongPressDelay = 400;
-        ShortInfManipulator.ClickedLong += () => IsExpanded = !IsExpanded;
+        //ShortInfManipulator.ClickedLong += () => IsExpanded = !IsExpanded;
         ShortInfManipulator.ClickedDownWithInfo += (e, localPosition) =>
         {
             var localToWorld = ShortInf.LocalToWorld(localPosition);
@@ -308,49 +322,40 @@ public class CustomInformationArea : VisualElement, ICustomElement
                 return;
             }
 
-            ShortInf.AddAnimation
-            (
-                this,
-                () => ShortInf.style.scale = new Scale(Vector3.one),
-                () => ShortInf.style.scale = new Scale(new Vector3(1.2f, 1.2f, 1)),
-                "scale",
-                0.5f,
-                forceAnimation: true
-            );
+            //ShortInf.AddAnimation
+            //(
+            //    this,
+            //    () => ShortInf.style.scale = new Scale(Vector3.one),
+            //    () => ShortInf.style.scale = new Scale(new Vector3(1.2f, 1.2f, 1)),
+            //    "scale",
+            //    0.5f,
+            //    forceAnimation: true
+            //);
         };
-        ShortInfManipulator.ClickedUp += () =>
-        {
-            ShortInf.AddAnimation
-            (
-                this,
-                () => { },
-                () => ShortInf.style.scale = new Scale(Vector3.one),
-                "scale",
-                0.5f,
-                forceAnimation: true
-            );
-        };
+        //ShortInfManipulator.ClickedUp += () =>
+        //{
+        //    ShortInf.AddAnimation
+        //    (
+        //        this,
+        //        () => { },
+        //        () => ShortInf.style.scale = new Scale(Vector3.one),
+        //        "scale",
+        //        0.5f,
+        //        forceAnimation: true
+        //    );
+        //};
 
         Mic.AddManipulator(MicManipulator);
         MicManipulator.clicked += () => MicStatusChanged?.Invoke();
         Sound.AddManipulator(SoundManipulator);
         SoundManipulator.clicked += () => SoundStatusChanged?.Invoke();
 
+        Main.Add(Main_Background);
         Main.Add(UserList);
         Main.Add(NotificationCenter);
         Add(ShortInf);
         ShortInf.Add(Mic);
         ShortInf.Add(Sound);
-
-        ShortInf.schedule.Execute(() =>
-        {
-            if (!NotificationTitleStack.TryPop(out var title)) ShortText = EnvironmentName;
-            else
-            {
-                var NotifCount = NotificationTitleStack.Count + 1;
-                ShortText = NotifCount == 1 ? $"1 notif: {title}" : $"{NotifCount} notifs: {title}";
-            }
-        }).Every(3000);
     }
 
     public virtual void Set() => Set(null, false, false, true);
@@ -367,9 +372,27 @@ public class CustomInformationArea : VisualElement, ICustomElement
         IsExpanded = isExpanded;
         IsMicOn = isMicOn;
         IsSoundOn = isSoundOn;
+
+        ShortInf.schedule.Execute(() =>
+        {
+            if (!NotificationTitleStack.TryPeek(out var title))
+            {
+                AnimateShortInf(true);
+                ShortText = null;
+            }
+            else if (!HideNotification)
+            {
+                NotificationTitleStack.Pop();
+                AnimateShortInf(false);
+                var NotifCount = NotificationTitleStack.Count + 1;
+                ShortText = NotifCount == 1 ? $"1 notif: {title}" : $"{NotifCount} notifs: {title}";
+            }
+        }).Every(3000);
     }
 
     #region Implementation
+
+    public static bool HideNotification;
 
     public virtual void AddNotification(NotificationDto dto)
     {
@@ -377,7 +400,6 @@ public class CustomInformationArea : VisualElement, ICustomElement
         NotificationTitleStack.Push(notification.Title);
 
         var root = this.FindRoot();
-
         root.schedule.Execute(() =>
         {
             notification.Timestamp = "0min";
@@ -387,8 +409,22 @@ public class CustomInformationArea : VisualElement, ICustomElement
                 notification.Timestamp = $"{int.Parse(time) + 1}min";
             }).Every(60000);
         }).ExecuteLater(60000);
+    }
 
-        
+    protected void AnimateShortInf(bool isRevert)
+    {
+        if (isRevert != m_shortInfExpended) return;
+        ShortInf.AddAnimation
+        (
+            this,
+            () => ShortInf.style.width = Length.Percent(10),
+            () => ShortInf.style.width = Length.Percent(40),
+            "width",
+            0.5f,
+            delay: isRevert ? 0.5f : 0f,
+            revert: isRevert,
+            callback: () => m_shortInfExpended = !isRevert
+        );
     }
 
     #endregion

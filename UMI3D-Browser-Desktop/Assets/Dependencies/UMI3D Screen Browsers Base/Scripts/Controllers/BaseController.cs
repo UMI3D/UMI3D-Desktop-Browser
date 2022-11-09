@@ -16,6 +16,7 @@ limitations under the License.
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
+using umi3d.cdk.menu;
 using umi3d.common;
 using umi3d.common.interaction;
 using UnityEngine;
@@ -71,10 +72,12 @@ namespace umi3d.baseBrowser.Controller
         #endregion
 
         #region Fields
+        [HideInInspector]
+        public MenuAsset ObjectMenu;
         public MouseData mouseData;
 
-        [SerializeField]
-        protected cdk.menu.view.MenuDisplayManager m_objectMenu;
+        //[SerializeField]
+        //protected cdk.menu.view.MenuDisplayManager m_objectMenu;
         [SerializeField]
         protected Transform CameraTransform;
         [SerializeField]
@@ -149,7 +152,7 @@ namespace umi3d.baseBrowser.Controller
             mouseData.ForceProjectionReleasableButton.Subscribe(ReleaseForceProjection);
 
             mouseData.saveDelay = 0;
-            m_objectMenu?.menu.onContentChange.AddListener(OnMenuObjectContentChange);
+            ObjectMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ObjectMenu");
         }
 
         protected virtual void LateUpdate()
@@ -163,8 +166,6 @@ namespace umi3d.baseBrowser.Controller
         }
         protected virtual void Update() { }
         #endregion
-
-        protected abstract void OnMenuObjectContentChange();
 
         #region Inputs
         public override void Clear()
@@ -243,7 +244,7 @@ namespace umi3d.baseBrowser.Controller
             if (input is inputs.interactions.KeyMenuInput keyMenuInput) keyMenuInput.bone = interactionBoneType;
             else if (input is inputs.interactions.FormInput formInput) formInput.bone = interactionBoneType;
             else if (input is inputs.interactions.LinkInput linkInput) linkInput.bone = interactionBoneType;
-            input.Menu = m_objectMenu?.menu;
+            input.Menu = ObjectMenu.menu;
             inputs.Add(input);
         }
         #endregion
@@ -260,13 +261,13 @@ namespace umi3d.baseBrowser.Controller
         {
             if (mouseData.ForceProjectionReleasableButton == null || !mouseData.ForceProjectionReleasable)
                 return;
-            if (!m_objectMenu.menu.Contains(mouseData.ForceProjectionReleasableButton))
-                m_objectMenu?.menu.Add(mouseData.ForceProjectionReleasableButton);
+            if (!ObjectMenu.menu.Contains(mouseData.ForceProjectionReleasableButton))
+                ObjectMenu.menu.Add(mouseData.ForceProjectionReleasableButton);
         }
         protected void RemoveForceProjectionReleaseButton()
         {
             if (mouseData.ForceProjectionReleasableButton == null) return;
-            m_objectMenu?.menu.Remove(mouseData.ForceProjectionReleasableButton);
+            ObjectMenu.menu.Remove(mouseData.ForceProjectionReleasableButton);
         }
         protected void UnequipeForceProjection()
         {
@@ -450,7 +451,6 @@ namespace umi3d.baseBrowser.Controller
         {
             mouseData.Save();
             Ray ray = new Ray(CameraTransform.position, CameraTransform.forward);
-            Debug.DrawRay(ray.origin, ray.direction.normalized * 100f, Color.red, 0, true);
             RaycastHit[] hits = umi3d.common.Physics.RaycastAll(ray, 100f);
 
             //1. Cast a ray to find all interactables

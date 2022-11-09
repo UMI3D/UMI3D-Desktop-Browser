@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.baseBrowser.ui.viewController;
 using umi3d.commonMobile.game;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -152,12 +153,29 @@ public class CustomTrailingArea : VisualElement, ICustomElement
     public CustomButtonsArea ButtonsArea;
     public VisualElement CameraLayer = new VisualElement { name = "camera-layer" };
 
-    public umi3d.baseBrowser.ui.viewController.CameraManipulator camTouchManipulator;
+    public TouchManipulator2 m_touchManipulator = new TouchManipulator2(null, 0, 0);
+    /// <summary>
+    /// Direction of the swipe.
+    /// </summary>
+    public Vector2 Direction
+    {
+        get
+        {
+            if (!m_cameraMoved) return Vector2.zero;
+            m_cameraMoved = false;
+            m_initialDownPosition = m_localPosition;
+            return m_direction;
+        }
+    }
 
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
     protected bool m_displayObjectMenu;
     protected bool m_displayEmoteWindow;
+    protected Vector2 m_initialDownPosition;
+    protected Vector2 m_localPosition;
+    protected bool m_cameraMoved;
+    protected Vector2 m_direction;
 
     public virtual void InitElement()
     {
@@ -175,8 +193,24 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         EmoteWindow.AddToClassList(USSCustomClassEmoteWindow);
         CameraLayer.AddToClassList(USSCustomClassCameraLayer);
 
-        camTouchManipulator = new umi3d.baseBrowser.ui.viewController.CameraManipulator(this);
-        CameraLayer.AddManipulator(camTouchManipulator);
+        CameraLayer.AddManipulator(m_touchManipulator);
+        m_touchManipulator.ClickedDownWithInfo += (evt, localposition) => m_initialDownPosition = localposition;
+        m_touchManipulator.MovedWithInfo += (evt, localposition) =>
+        {
+            m_localPosition = localposition;
+            m_direction = localposition - m_initialDownPosition;
+            m_direction.x /= worldBound.width;
+            m_direction.y /= -worldBound.height;
+            m_direction *= 50;
+            m_cameraMoved = true;
+        };
+        m_touchManipulator.ClickedUpWithInfo += (evt, localposition) =>
+        {
+
+        };
+
+        ButtonsArea.ClickedDown = (evt, worldPosition) => m_touchManipulator.OnClickedDownWithInf(evt, CameraLayer.WorldToLocal(worldPosition));
+        ButtonsArea.Moved = (evt, worldPosition) => m_touchManipulator.OnMovedWithInf(evt, CameraLayer.WorldToLocal(worldPosition));
 
         ObjectMenu.name = "object-menu";
         ObjectMenu.Category = ElementCategory.Game;

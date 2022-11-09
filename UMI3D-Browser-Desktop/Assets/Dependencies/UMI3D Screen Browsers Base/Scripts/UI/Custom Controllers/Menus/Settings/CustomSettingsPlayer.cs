@@ -15,17 +15,57 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.baseBrowser.Navigation;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static umi3d.baseBrowser.preferences.SettingsPreferences;
 
 public class CustomSettingsPlayer : CustomSettingScreen
 {
     public override string USSCustomClassName => "setting-player";
 
+    
+    public CustomSlider CamreraSensibility;
+
     public override void InitElement()
     {
         base.InitElement();
 
+        fpsData = Resources.Load<BaseFPSData>("Scriptables/GamePanel/FPSData");
+
+        CamreraSensibility.label = "Camera sensibility";
+        CamreraSensibility.lowValue = 2f;
+        CamreraSensibility.highValue = 10f;
+        CamreraSensibility.showInputField = true;
+        CamreraSensibility.RegisterValueChangedCallback(ce =>
+        {
+            var value = (int)ce.newValue;
+            CamreraSensibility.SetValueWithoutNotify(value);
+            fpsData.AngularViewSpeed = new Vector2(value, value);
+            Data.CameraSensibility = value;
+            StorePlayerData(Data);
+        });
+
+        ScrollView.Add(CamreraSensibility);
+
+        if (TryGetPlayerData(out Data))
+        {
+            CamreraSensibility.value = Data.CameraSensibility;
+        }
+        else
+        {
+            CamreraSensibility.value = 5;
+        }
     }
 
     public override void Set() => Set("Player");
+
+    protected float CameraSpeedToSensibility(float speed) { return speed; }
+
+    #region Implementation
+
+    public BaseFPSData fpsData;
+    public PlayerData Data;
+
+    #endregion
 }

@@ -55,11 +55,11 @@ public enum ElementSize { Small, Medium, Large, Custom }
 public enum ElemnetDirection { Leading, Trailing, Top, Bottom }
 public enum ElementVerticalAlignment { Top, Center, Bottom }
 public enum ElementHorizontalAlignment { Leading, Center, Trailing }
-public enum ElementAlignment 
+public enum ElementAlignment
 {
-               Top,
+    Top,
     Leading, Center, Trailing,
-              Bottom
+    Bottom
 }
 
 public enum TextStyle

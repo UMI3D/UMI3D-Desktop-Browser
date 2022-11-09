@@ -25,8 +25,10 @@ public class CustomJoystickArea : VisualElement, ICustomElement
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/joystickArea";
     public virtual string USSCustomClassName => "joystick-area";
 
+    public static System.Action JoystickStaticModeUpdated;
+    public static bool IsJoystickStatic;
     public CustomJoystick Joystick;
-    public TouchManipulator2 m_touchManipulator = new TouchManipulator2(null, 0, 0);
+    public TouchManipulator2 JoystickManipulator = new TouchManipulator2(null, 0, 0);
 
     protected bool m_hasBeenInitialized;
 
@@ -43,10 +45,13 @@ public class CustomJoystickArea : VisualElement, ICustomElement
         }
         AddToClassList(USSCustomClassName);
 
-        this.AddManipulator(m_touchManipulator);
-        m_touchManipulator.ClickedDownWithInfo += SetActivePosition;
-        m_touchManipulator.MovedWithInfo += UpdateJoystick;
-        m_touchManipulator.ClickedUp += SetDisableJoystick;
+        JoystickStaticModeUpdated = UpdateStaticMode;
+        UpdateStaticMode();
+
+        this.AddManipulator(JoystickManipulator);
+        JoystickManipulator.ClickedDownWithInfo += SetActivePosition;
+        JoystickManipulator.MovedWithInfo += UpdateJoystick;
+        JoystickManipulator.ClickedUp += SetDisableJoystick;
 
         Joystick.State = ElementPseudoState.Disabled;
 
@@ -66,6 +71,7 @@ public class CustomJoystickArea : VisualElement, ICustomElement
     {
         Joystick.State = ElementPseudoState.Enabled;
 
+        if (IsJoystickStatic) return;
         var worldPosition = this.LocalToWorld(localPosition);
         var joystickLocal = Joystick.WorldToLocal(worldPosition);
 
@@ -97,8 +103,15 @@ public class CustomJoystickArea : VisualElement, ICustomElement
     protected virtual void SetDisableJoystick()
     {
         Joystick.State = ElementPseudoState.Disabled;
+        Joystick.Magnitude = 0;
+        if (IsJoystickStatic) return;
         Joystick.style.left = StyleKeyword.Null;
         Joystick.style.bottom = StyleKeyword.Null;
-        Joystick.Magnitude = 0;
+    }
+
+    protected virtual void UpdateStaticMode()
+    {
+        Joystick.style.left = IsJoystickStatic ? 100f : StyleKeyword.Null;
+        Joystick.style.bottom = IsJoystickStatic ? 100f : StyleKeyword.Null;
     }
 }

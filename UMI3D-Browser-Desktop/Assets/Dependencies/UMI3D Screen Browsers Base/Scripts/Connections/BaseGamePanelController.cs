@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using System.Collections.Generic;
 using umi3d.baseBrowser.Controller;
 using umi3d.baseBrowser.emotes;
@@ -39,6 +40,7 @@ namespace umi3d.baseBrowser.connection
 
         [Header("Object Menu")]
         public ObjectMenuFormContainer ObjectMenu;
+        public cdk.menu.view.MenuDisplayManager ObjectMenuDisplay;
 
         [HideInInspector]
         public NotificationLoader NotificationLoader;
@@ -50,6 +52,8 @@ namespace umi3d.baseBrowser.connection
 
         protected VisualElement root => document.rootVisualElement;
         protected VisualElement logo;
+
+        protected DateTime m_time_Start;
 
         #endregion
 
@@ -72,6 +76,8 @@ namespace umi3d.baseBrowser.connection
             FormContainer.GetContainer = () => Loader.Form.ScrollView;
             FormContainer.InsertDisplayer = (index, displayer) => Loader.Form.Insert(index, displayer);
             FormContainer.RemoveDisplayer = displayer => Loader.Form.Remove(displayer);
+
+            ObjectMenuDisplay.menu.onContentChange.AddListener(OnMenuObjectContentChange);
         }
 
         protected virtual void InitGame()
@@ -81,8 +87,8 @@ namespace umi3d.baseBrowser.connection
             var buttonsArea = Game.TrailingArea.ButtonsArea;
             buttonsArea.Jump.ClickedDown += () => BaseFPSNavigation.Instance.IsJumping = true;
             buttonsArea.Jump.ClickedUp += () => BaseFPSNavigation.Instance.IsJumping = false;
-            buttonsArea.Crouch.ClickedDown += () => BaseFPSNavigation.Instance.IsCrouching = true;
-            buttonsArea.Crouch.ClickedUp += () => BaseFPSNavigation.Instance.IsCrouching = false;
+            buttonsArea.Crouch.ClickedDown += () => BaseFPSNavigation.Instance.WantToCrouch = true;
+            buttonsArea.Crouch.ClickedUp += () => BaseFPSNavigation.Instance.WantToCrouch = false;
 
             Menu.Leave.clicked += () =>
             {
@@ -99,15 +105,15 @@ namespace umi3d.baseBrowser.connection
                 };
                 dialoguebox.AddToTheRoot(root);
             };
-            Menu.Settings.Resolution.RenderPipeline = BaseConnectionProcess.Instance.RenderPipeline;
+            var envAudioSettings = EnvironmentSettings.Instance.AudioSetting;
+            Menu.Settings.Audio.GeneralVolumeValeChanged += value => envAudioSettings.GeneralVolume = value;
+            envAudioSettings.StatusChanged += isOn => Menu.Settings.Audio.SetGeneralVolumeValueWithoutNotify(envAudioSettings.GeneralVolume * 10f);
 
             var infArea = Game.TopArea.InformationArea;
             EnvironmentSettings.Instance.AudioSetting.StatusChanged += (value) => infArea.IsSoundOn = value;
             EnvironmentSettings.Instance.MicSetting.StatusChanged += (value) => infArea.IsMicOn = value;
             infArea.SoundStatusChanged += () => EnvironmentSettings.Instance.AudioSetting.Toggle();
             infArea.MicStatusChanged += () => EnvironmentSettings.Instance.MicSetting.Toggle();
-
-            UMI3DCollaborationEnvironmentLoader.OnUpdateJoinnedUserList += infArea.UserList.RefreshList;
 
             NotificationLoader.Notification2DReceived += dto => infArea.AddNotification(dto);
 
@@ -142,6 +148,7 @@ namespace umi3d.baseBrowser.connection
             Debug.Assert(formMenuDisplay != null);
 
             NotificationLoader = Resources.Load<NotificationLoader>("Scriptables/GamePanel/NotificationLoader");
+            m_time_Start = DateTime.Now;
         }
 
         protected virtual void Start()
@@ -189,6 +196,7 @@ namespace umi3d.baseBrowser.connection
                 dialoguebox.Title = "Connection to the server lost";
                 dialoguebox.Message = "Leave the environment or try to reconnect ?";
                 dialoguebox.ChoiceAText = "Reconnect";
+                dialoguebox.ChoiceA.Type = ButtonType.Default;
                 dialoguebox.ChoiceBText = "Leave";
                 dialoguebox.Callback = (index) =>
                 {
@@ -216,6 +224,7 @@ namespace umi3d.baseBrowser.connection
                 dialoguebox.Message = "Download libraries and connect to the server ?";
                 dialoguebox.ChoiceA.Type = ButtonType.Default;
                 dialoguebox.ChoiceAText = "Accept";
+                dialoguebox.ChoiceB.Type = ButtonType.Default;
                 dialoguebox.ChoiceBText = "Deny";
                 dialoguebox.Callback = (index) => callback?.Invoke(index == 0);
                 dialoguebox.AddToTheRoot(root);
@@ -228,6 +237,52 @@ namespace umi3d.baseBrowser.connection
                 Loader.Loading.Title = "Leaving environment";
                 Loader.Loading.Value = value / 100f;
             };
+            BaseConnectionProcess.Instance.DisplayPopUpAfterLoadingFailed += (title, message, action) =>
+            {
+                var dialoguebox = CreateDialogueBox();
+                dialoguebox.Type = DialogueboxType.Confirmation;
+                dialoguebox.Title = title;
+                dialoguebox.Message = message;
+                dialoguebox.ChoiceAText = "Resume";
+                dialoguebox.ChoiceA.Type = ButtonType.Default;
+                dialoguebox.ChoiceBText = "Stop";
+                dialoguebox.Callback = action;
+                dialoguebox.AddToTheRoot(root);
+            };
+            BaseConnectionProcess.Instance.EnvironmentLoaded += () =>
+            {
+                Menu.Libraries.InitLibraries();
+                EnvironmentSettings.Instance.AudioSetting.GeneralVolume = ((int)Menu.Settings.Audio.Data.GeneralVolume) / 10f;
+            };
+            BaseConnectionProcess.Instance.UserCountUpdated += count =>
+            {
+                Game.TopArea.InformationArea.UserList.RefreshList();
+                Menu.GameData.ParticipantCount = count;
+            };
+        }
+
+        float fps = 30;
+        private void Update()
+        {
+            var time = DateTime.Now - m_time_Start;
+            Menu.GameData.Time = time.ToString("hh") + ":" + time.ToString("mm") + ":" + time.ToString("ss");
+
+            //FrameManagement();
+        }
+
+        protected void FrameManagement()
+        {
+            float newFPS = 1.0f / Time.deltaTime;
+            fps = Mathf.Lerp(fps, newFPS, Time.deltaTime);
+
+            UnityEngine.Debug.Log($"fps = {fps}, {Menu.Settings.Resolution.RenderScale.value}, {QualitySettings.names[QualitySettings.GetQualityLevel()]}");
+
+            if (GamePanel.CurrentView != CustomGamePanel.GameViews.Game || Menu.Settings.Resolution.SegmentedResolution.ValueEnum == preferences.SettingsPreferences.ResolutionEnum.Custom) return;
+
+            var renderScaleValue = Menu.Settings.Resolution.RenderScale.value;
+
+            if (fps < Menu.Settings.Resolution.TargetFPS - 20 && renderScaleValue > 0.01) Menu.Settings.Resolution.RenderScaleValueChanged(renderScaleValue * 0.95f);
+            else if (fps > Menu.Settings.Resolution.TargetFPS - 5) Menu.Settings.Resolution.RenderScaleValueChanged(renderScaleValue * 1.05f);
         }
 
         public abstract CustomDialoguebox CreateDialogueBox();
@@ -296,6 +351,27 @@ namespace umi3d.baseBrowser.connection
                     break;
                 default:
                     break;
+            }
+        }
+        
+        protected virtual void OnMenuObjectContentChange()
+        {
+            var count = ObjectMenuDisplay.menu.Count;
+
+            if (count == 0)
+            {
+                ObjectMenuDisplay.Collapse(false);
+                if (Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed) Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed = false;
+            }
+            else
+            {
+                if (!Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed) Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed = true;
+                if (Game.TrailingArea.ButtonsArea.MainActionUp != null) return;
+                Game.TrailingArea.ButtonsArea.MainActionUp = () =>
+                {
+                    if (ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Collapse(true);
+                    else ObjectMenuDisplay.Expand(false);
+                };
             }
         }
     }

@@ -193,7 +193,7 @@ public abstract class CustomDialoguebox : VisualElement, ICustomElement
             if (string.IsNullOrEmpty(value)) MessageLabel.RemoveFromHierarchy();
             else
             {
-                Main.Insert(0, MessageLabel);
+                Container.Insert(0, MessageLabel);
                 MessageLabel.text = value;
             }
             m_isSet = true;
@@ -267,6 +267,11 @@ public abstract class CustomDialoguebox : VisualElement, ICustomElement
         ChoiceB.AddToClassList(USSCustomClassChoice);
         ChoiceA.AddToClassList(USSCustomClassChoiceA);
         ChoiceB.AddToClassList(USSCustomClassChoiceB);
+
+        TitleLabel.name = "title";
+        MessageLabel.name = "message";
+        ChoiceA.name = "choice-a";
+        ChoiceB.name = "choice-b";
 
         ChoiceA.clicked += () =>
         {

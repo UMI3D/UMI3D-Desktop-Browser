@@ -13,9 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 public class CustomTopArea : VisualElement, ICustomElement
@@ -51,7 +49,6 @@ public class CustomTopArea : VisualElement, ICustomElement
         set
         {
             m_isExplanded = value;
-            if (m_isExplanded) Emote.PlaceBehind(InformationArea);
             this.AddAnimation
             (
                 this,
@@ -59,8 +56,7 @@ public class CustomTopArea : VisualElement, ICustomElement
                 () => style.height = Length.Percent(100),
                 "height",
                 1,
-                revert: !m_isExplanded,
-                callback: m_isExplanded ? null : () => Emote.PlaceInFront(InformationArea)
+                revert: !m_isExplanded
             );
         }
     }
@@ -75,7 +71,6 @@ public class CustomTopArea : VisualElement, ICustomElement
     public CustomInformationArea InformationArea;
     public CustomButton Menu;
     public CustomButton Toolbox;
-    public CustomButton Emote;
 
     protected bool m_isExplanded;
     protected bool m_hasBeenInitialized;
@@ -92,19 +87,16 @@ public class CustomTopArea : VisualElement, ICustomElement
             throw e;
         }
         AddToClassList(USSCustomClassName);
-        Emote.AddToClassList(USSCustomClassEmote);
         Menu.AddToClassList(USSCustomClassMenu);
-        Emote.AddToClassList(USSCustomClassButton);
         Menu.AddToClassList(USSCustomClassButton);
 
         Menu.name = "menu";
-        Emote.name = "emote";
+        Menu.Category = ElementCategory.Game;
 
         InformationArea.ExpandUpdate += (value) => IsExpanded = value;
 
         Add(InformationArea);
         Add(Menu);
-        Add(Emote);
     }
 
     public virtual void Set() => Set(false);

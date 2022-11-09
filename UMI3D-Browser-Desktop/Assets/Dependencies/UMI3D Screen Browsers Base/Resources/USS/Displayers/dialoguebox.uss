@@ -44,6 +44,7 @@
 
 .dialoguebox__message {
     -unity-text-align: middle-center;
+    white-space: normal;
 }
 
 .dialoguebox__choices-container {

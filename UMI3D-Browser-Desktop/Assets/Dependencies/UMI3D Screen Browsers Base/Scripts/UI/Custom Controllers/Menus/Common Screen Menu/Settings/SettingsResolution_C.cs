@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using UnityEngine.UIElements;
+using static umi3d.baseBrowser.preferences.SettingsPreferences;
 
 namespace umi3d.commonScreen.menu
 {

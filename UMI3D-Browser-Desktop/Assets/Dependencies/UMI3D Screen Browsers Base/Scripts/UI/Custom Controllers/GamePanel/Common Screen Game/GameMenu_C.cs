@@ -31,6 +31,7 @@ namespace umi3d.commonScreen.menu
             if (Maximize == null) Maximize = new Displayer.Button_C();
             if (Close == null) Close = new Displayer.Button_C();
 
+            if (GameData == null) GameData = new GameData_C();
             if (Libraries == null) Libraries = new LibraryScreen_C();
             if (Settings == null) Settings = new SettingsContainer_C();
 

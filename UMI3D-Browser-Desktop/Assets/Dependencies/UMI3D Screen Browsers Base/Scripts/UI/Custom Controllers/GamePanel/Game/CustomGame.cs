@@ -20,6 +20,42 @@ using UnityEngine.UIElements;
 
 public class CustomGame : VisualElement, ICustomElement, IGameView
 {
+    public new class UxmlTraits : VisualElement.UxmlTraits
+    {
+        protected UxmlEnumAttributeDescription<ControllerEnum> m_controller = new UxmlEnumAttributeDescription<ControllerEnum>
+        {
+            name = "controller",
+            defaultValue = ControllerEnum.MouseAndKeyboard
+        };
+
+        public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
+        {
+            get { yield break; }
+        }
+
+        public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
+        {
+            base.Init(ve, bag, cc);
+            var custom = ve as CustomGame;
+
+            custom.Set
+                (
+                    m_controller.GetValueFromBag(bag, cc)
+                );
+        }
+    }
+
+    public ControllerEnum Controller
+    {
+        get => m_controller;
+        set
+        {
+            m_controller = value;
+            LeadingArea.Controller = value;
+            TrailingArea.Controller = value;
+        }
+    }
+
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/game";
     public virtual string USSCustomClassName => "game";
@@ -33,6 +69,7 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
     public CustomBottomArea BottomArea;
 
     protected bool m_hasBeenInitialized;
+    protected ControllerEnum m_controller;
 
     public virtual void InitElement()
     {
@@ -54,13 +91,17 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         //Add(BottomArea);
     }
 
-    public virtual void Set()
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard);
+
+    public virtual void Set(ControllerEnum controller)
     {
         if (!m_hasBeenInitialized)
         {
             InitElement();
             m_hasBeenInitialized = true;
         }
+
+        Controller = controller;
     }
 
     public void TransitionIn(VisualElement persistentVisual)
