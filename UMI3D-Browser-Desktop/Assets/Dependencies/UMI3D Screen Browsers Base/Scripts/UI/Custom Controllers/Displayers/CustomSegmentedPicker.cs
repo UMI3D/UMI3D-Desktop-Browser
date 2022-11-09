@@ -354,13 +354,26 @@ public abstract class CustomSegmentedPicker<PickerEnum> : CustomSegmentedPicker
         get => m_value;
         set
         {
+            
+            if (!Enum.TryParse<PickerEnum>(value, out PickerEnum result)) return;
             base.Value = value;
-            if (!Enum.TryParse<PickerEnum>(m_value, out PickerEnum result)) return;
             ValueEnumChanged?.Invoke(result);
         }
     }
 
+    public virtual PickerEnum? ValueEnum
+    {
+        get
+        {
+            if (!Enum.TryParse<PickerEnum>(m_value, out PickerEnum result)) return null;
+            else return result;
+        }
+        set => Value = value.ToString();
+    }
+
     public event Action<PickerEnum> ValueEnumChanged;
+
+    public virtual void SetValueEnumWithoutNotify(PickerEnum value) => SetValueWithoutNotify(value.ToString()); 
 
     public override void Set() => Set(ElementCategory.Menu, ElementSize.Medium, null, null, ElemnetDirection.Leading);
 

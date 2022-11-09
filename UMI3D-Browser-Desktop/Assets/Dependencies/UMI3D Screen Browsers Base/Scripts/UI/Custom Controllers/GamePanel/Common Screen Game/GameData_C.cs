@@ -13,21 +13,22 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using UnityEngine.UIElements;
+using System.Runtime.Remoting.Messaging;
 
-namespace umi3d.commonScreen.game
+namespace umi3d.commonScreen.menu
 {
-    public sealed class TopArea_C : CustomTopArea
+    public class GameData_C : CustomGameData
     {
-        public new class UxmlFactory : UxmlFactory<TopArea_C, UxmlTraits> { }
-
-        public TopArea_C() => Set();
+        public GameData_C() => Set();
 
         public override void InitElement()
         {
-            if (Menu == null) Menu = new Displayer.Button_C();
-            if (InformationArea == null) InformationArea = new commonMobile.game.InformationArea_C();
-            if (Toolbox == null) Toolbox = new Displayer.Button_C();
+            if (TitleLabel == null) TitleLabel = new Displayer.Text_C();
+            if (Button_Back == null) Button_Back = new Displayer.Button_C();
+
+            if (ScrollView == null) ScrollView = new Container.ScrollView_C();
+            if (TimeInTheEnvironment_Visual == null) TimeInTheEnvironment_Visual = new Displayer.Textfield_C();
+            if (ParticipantCount_Visual == null) ParticipantCount_Visual = new Displayer.Textfield_C();
 
             base.InitElement();
         }

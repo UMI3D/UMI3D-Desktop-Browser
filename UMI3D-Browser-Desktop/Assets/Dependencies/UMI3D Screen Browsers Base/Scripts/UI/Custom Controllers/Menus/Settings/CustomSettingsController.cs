@@ -16,16 +16,89 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static umi3d.baseBrowser.preferences.SettingsPreferences;
 
 public class CustomSettingsController : CustomSettingScreen
 {
+    public new class UxmlTraits : CustomSettingScreen.UxmlTraits
+    {
+        protected UxmlEnumAttributeDescription<ControllerEnum> m_controller = new UxmlEnumAttributeDescription<ControllerEnum>
+        {
+            name = "controller"
+        };
+
+        public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
+        {
+            get { yield break; }
+        }
+
+        public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
+        {
+            base.Init(ve, bag, cc);
+            var custom = ve as CustomSettingsController;
+
+            custom.Set();
+        }
+    }
+
+    public ControllerEnum Controller
+    {
+        get => m_controller;
+        set
+        {
+            m_controller = value;
+            switch (value)
+            {
+                case ControllerEnum.MouseAndKeyboard:
+                    JoystickStaticToggle.RemoveFromHierarchy();
+                    break;
+                case ControllerEnum.Touch:
+                    ScrollView.Add(JoystickStaticToggle);
+                    break;
+                case ControllerEnum.GameController:
+                    JoystickStaticToggle.RemoveFromHierarchy();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     public override string USSCustomClassName => "setting-controller";
+
+    public CustomToggle JoystickStaticToggle;
+
+    protected ControllerEnum m_controller;
 
     public override void InitElement()
     {
         base.InitElement();
 
+        JoystickStaticToggle.label = "Static joystick";
+        JoystickStaticToggle.RegisterValueChangedCallback(ce =>
+        {
+            CustomJoystickArea.IsJoystickStatic = !CustomJoystickArea.IsJoystickStatic;
+            CustomJoystickArea.JoystickStaticModeUpdated?.Invoke();
+            Data.JoystickStatic = ce.newValue;
+            StoreControllerrData(Data);
+        });
+
+        if (TryGetControllerData(out Data))
+        {
+            JoystickStaticToggle.value = Data.JoystickStatic;
+        }
+        else
+        {
+            JoystickStaticToggle.value = false;
+        }
     }
 
     public override void Set() => Set("Controller");
+
+    #region Implementation
+
+    public ControllerData Data;
+
+    #endregion
 }

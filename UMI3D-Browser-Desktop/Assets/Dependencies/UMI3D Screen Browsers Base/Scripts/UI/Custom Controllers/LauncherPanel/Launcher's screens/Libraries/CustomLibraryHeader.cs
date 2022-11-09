@@ -162,7 +162,13 @@ public abstract class CustomLibraryHeader : CustomLibrary
     }
 
     public System.Action<LibrarySort> Sorted;
+    /// <summary>
+    /// For textField search.
+    /// </summary>
     public System.Action<ChangeEvent<string>> Searched;
+    /// <summary>
+    /// For dropdown filter.
+    /// </summary>
     public System.Action<ChangeEvent<string>> Filtered;
 
     protected LibrarySort m_sort;

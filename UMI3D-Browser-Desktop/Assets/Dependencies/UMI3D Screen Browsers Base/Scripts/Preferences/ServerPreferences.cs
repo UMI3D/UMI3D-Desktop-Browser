@@ -15,9 +15,6 @@ limitations under the License.
 */
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using UnityEngine;
 
 namespace umi3d.baseBrowser.preferences
 {
@@ -60,40 +57,20 @@ namespace umi3d.baseBrowser.preferences
         /// <param name="data">DataFile to write.</param>
         /// <param name="directory">Directory to write the file into.</param>
         public static void StoreUserData(Data data)
-        {
-            StoreData<Data>(data, dataFile);
-        }
+            => PreferencesManager.StoreData(data, dataFile);
 
         /// <summary>
         /// Write a previous userInfo data server.
         /// </summary>
         /// <param name="data">ServerData to write.</param>
         public static void StoreUserData(ServerData data)
-        {
-            StoreData<ServerData>(data, previousServer);
-        }
+            => PreferencesManager.StoreData(data, previousServer);
 
         /// <summary>
         /// Stores the connection data about the registered servers.
         /// </summary>
-        public static void StoreRegisteredServerData(List<ServerData> savedServers)
-        {
-            StoreData<List<ServerData>>(savedServers, registeredServer);
-        }
-
-        private static void StoreData<T>(T data, string dataType)
-        {
-            string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, dataType);
-
-            FileStream file;
-            if (File.Exists(path)) file = File.OpenWrite(path);
-            else file = File.Create(path);
-
-            BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(file, data);
-
-            file.Close();
-        }
+        public static void StoreRegisteredServerData(List<ServerData> savedServers) 
+            => PreferencesManager.StoreData(savedServers, registeredServer);
 
         #endregion
 
@@ -104,55 +81,21 @@ namespace umi3d.baseBrowser.preferences
         /// </summary>
         /// <returns>A DataFile if the directory containe one, null otherwhise.</returns>
         public static Data GetPreviousConnectionData()
-        {
-            return GetData<Data>(dataFile);
-        }
+            => PreferencesManager.GetData<Data>(dataFile);
 
         /// <summary>
         /// Read a userInfo data in a directory.
         /// </summary>
         /// <returns>A ServerData if the directory containe one, null otherwhise.</returns>
         public static ServerData GetPreviousServerData()
-        {
-            return GetData<ServerData>(previousServer);
-        }
+            => PreferencesManager.GetData<ServerData>(previousServer);
 
         /// <summary>
         /// get the connection data about the favorite server.
         /// </summary>
         /// <returns></returns>
         public static List<ServerData> GetRegisteredServerData()
-        {
-            return GetData<List<ServerData>>(registeredServer);
-        }
-
-        private static T GetData<T>(string dataType) where T : new()
-        {
-            string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, dataType);
-
-            if (File.Exists(path))
-            {
-                FileStream file;
-                file = File.OpenRead(path);
-
-                BinaryFormatter bf = new BinaryFormatter();
-                T data;
-
-                try
-                {
-                    data = (T)bf.Deserialize(file);
-                }
-                catch
-                {
-                    data = new T();
-                }
-
-                file.Close();
-                return data;
-            }
-
-            return new T();
-        }
+            => PreferencesManager.GetData<List<ServerData>>(registeredServer);
 
         #endregion
     }

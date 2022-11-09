@@ -20,36 +20,15 @@ using UnityEngine.UIElements;
 
 public abstract class CustomSettingScreen : CustomMenuScreen
 {
-
     public override string StyleSheetPath => $"{ElementExtensions.StyleSheetMenusFolderPath}/settings";
 
     public override string ShortScreenTitle => "Settings";
     public CustomScrollView ScrollView;
-    
-    
-    public CustomSlider MainAudioSlider;
-    
 
     public override void InitElement()
     {
         base.InitElement();
 
-        
-
-        //MainAudioSlider.label = "Main audio";
-
-
-        //MainAudioSlider.DirectionDisplayer = ElemnetDirection.Leading;
-        //MainAudioSlider.showInputField = true;
-
-
-
-
-
         Add(ScrollView);
-        
-       
-        //ScrollView.Add(MainAudioSlider);
-
     }
 }

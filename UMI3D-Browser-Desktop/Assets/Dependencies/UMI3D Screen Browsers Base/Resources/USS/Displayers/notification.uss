@@ -11,6 +11,7 @@
 }
 
 .notification__header {
+    height: 60px;
     align-items: flex-end;
     padding-left: 7px;
     padding-right: 7px;

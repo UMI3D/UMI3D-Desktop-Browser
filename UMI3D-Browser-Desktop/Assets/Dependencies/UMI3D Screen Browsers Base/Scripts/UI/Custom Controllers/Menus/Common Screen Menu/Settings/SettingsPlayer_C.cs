@@ -27,6 +27,8 @@ namespace umi3d.commonScreen.menu
 
             if (ScrollView == null) ScrollView = new Container.ScrollView_C();
 
+            if (CamreraSensibility == null) CamreraSensibility = new Displayer.Slider_C();
+
             base.InitElement();
         }
     }

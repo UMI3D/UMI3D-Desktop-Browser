@@ -1,12 +1,9 @@
 /*
 Copyright 2019 - 2021 Inetum
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
     http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +13,6 @@ limitations under the License.
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-
 namespace umi3d.baseBrowser.Navigation
 {
     public abstract class BaseFPSNavigation : cdk.AbstractNavigation
@@ -24,12 +20,10 @@ namespace umi3d.baseBrowser.Navigation
         #region Struct Definition 
         public enum State { Default, FreeHead, FreeMousse }
         public enum Navigation { Walking, Flying }
-
         protected struct JumpData
         {
             public bool IsJumping;
             public float velocity, lastTimeJumped;
-
             public JumpData(bool jumping, float lastTimeJumped, float velocity)
             {
                 this.IsJumping = jumping;
@@ -38,13 +32,13 @@ namespace umi3d.baseBrowser.Navigation
             }
         }
         #endregion
-
         #region Fields
         public static BaseFPSNavigation Instance => s_instance;
         protected static BaseFPSNavigation s_instance;
 
         public bool IsJumping;
         public bool IsCrouching;
+        public bool WantToCrouch;
         [Header("Player Body")]
         [SerializeField]
         protected Transform viewpoint;
@@ -53,17 +47,15 @@ namespace umi3d.baseBrowser.Navigation
         [SerializeField]
         protected Transform head;
         [SerializeField]
+        protected Transform topHead;
+        [SerializeField]
         protected Transform skeleton;
+        [SerializeField]
+        [Tooltip("Radius used from player center to raycast")]
+        protected float playerRadius = .3f;
         [SerializeField]
         [Tooltip("List of point which from rays will be created to check is there is a navmesh under player's feet")]
         protected List<Transform> feetRaycastOrigin;
-        [SerializeField]
-        [Tooltip("List of point which from rays will be created to check is there is an obstacle in front of the player")]
-        protected List<Transform> obstacleRaycastOrigins;
-        [SerializeField]
-        [Tooltip("Radius used from player center to raycast")]
-        protected float playerRadius = .2f;
-
         [Header("Parameters")]
         [SerializeField]
         protected BaseFPSData data;
@@ -82,7 +74,6 @@ namespace umi3d.baseBrowser.Navigation
         public LayerMask obstacleLayer;
         [SerializeField]
         public LayerMask navmeshLayer;
-
         #region Player state
         /// <summary>
         /// Is player currently grounded ?
@@ -115,14 +106,15 @@ namespace umi3d.baseBrowser.Navigation
         /// Stores all data about player jumps.
         /// </summary>
         protected JumpData jumpData;
+        protected Vector3 currentCapsuleBase, currentCapsuleEnd;
         #endregion
-
+#if UNITY_EDITOR
+        private Vector3 collisionHitPoint;
+#endif
         protected cdk.UMI3DNodeInstance globalVehicle;
         protected float lastObstacleHeight = .5f;
         #endregion
-
         #region Methods
-
         #region Abstract Navigation
         /// <summary>
         /// <inheritdoc/>
@@ -132,9 +124,7 @@ namespace umi3d.baseBrowser.Navigation
             isActive = true;
             state = State.Default;
             jumpData = new JumpData();
-
             UpdateBaseHeight();
-
             maxJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(data.gravity) * data.MaxJumpHeight);
         }
         /// <summary>
@@ -153,46 +143,45 @@ namespace umi3d.baseBrowser.Navigation
             navigateTo = true;
             navigationDestination = data.position;
         }
-
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="data"></param>
         public override void Teleport(common.TeleportDto data)
         {
             transform.position = data.position;
             groundHeight = data.position.Y;
             transform.rotation = data.rotation;
-
             UpdateBaseHeight();
         }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="data"></param>
         public override void Embark(common.VehicleDto data)
         {
             isActive = !data.StopNavigation;
-
             if (data.VehicleId == 0)
             {
                 this.transform.SetParent(cdk.UMI3DEnvironmentLoader.Instance.transform, true);
                 this.transform.localPosition = data.position;
                 this.transform.localRotation = data.rotation;
-
                 DontDestroyOnLoad(cdk.UMI3DNavigation.Instance);
-
                 globalVehicle.Delete -= new System.Action(() => {
                     cdk.UMI3DNavigation.Instance.transform.SetParent(cdk.UMI3DEnvironmentLoader.Instance.transform, true);
                     DontDestroyOnLoad(cdk.UMI3DNavigation.Instance);
                 });
-
                 globalVehicle = null;
             }
             else
             {
                 cdk.UMI3DNodeInstance vehicle = cdk.UMI3DEnvironmentLoader.GetNode(data.VehicleId);
-
                 if (vehicle != null)
                 {
                     globalVehicle = vehicle;
-
                     this.transform.SetParent(vehicle.transform, true);
                     this.transform.localPosition = data.position;
                     this.transform.localRotation = data.rotation;
-
                     globalVehicle.Delete += new System.Action(() => {
                         cdk.UMI3DNavigation.Instance.transform.SetParent(cdk.UMI3DEnvironmentLoader.Instance.transform, true);
                         DontDestroyOnLoad(cdk.UMI3DNavigation.Instance);
@@ -201,7 +190,6 @@ namespace umi3d.baseBrowser.Navigation
             }
         }
         #endregion
-
         /// <summary>
         /// Applies gravity to player and makes it jump.
         /// </summary>
@@ -212,21 +200,19 @@ namespace umi3d.baseBrowser.Navigation
             if (jumpData.IsJumping != jumping)
             {
                 jumpData.IsJumping = jumping;
-
-                if (jumpData.IsJumping && IsGrounded)
+                if (jumpData.IsJumping && CanJump())
                 {
                     jumpData.velocity = maxJumpVelocity;
                     jumpData.lastTimeJumped = Time.time;
                 }
             }
-
             jumpData.velocity += data.gravity * Time.deltaTime;
             height += jumpData.velocity * Time.deltaTime;
-
             if (height < groundHeight)
             {
                 float offset = Mathf.Abs(height - groundHeight);
-                if ((offset < maxStepHeight + stepEpsilon) && (offset > stepEpsilon) && hasGroundHeightChangedLastFrame) height = Mathf.Lerp(height, groundHeight, .5f);
+                if ((offset < maxStepHeight + stepEpsilon) && (offset > stepEpsilon) && hasGroundHeightChangedLastFrame)
+                    height = Mathf.Lerp(height, groundHeight, .5f);
                 else
                 {
                     jumpData.velocity = 0;
@@ -234,7 +220,16 @@ namespace umi3d.baseBrowser.Navigation
                 }
             }
         }
-
+        /// <summary>
+        /// Checks if player can jump.
+        /// </summary>
+        /// <returns></returns>
+        protected bool CanJump()
+        {
+            if (!IsGrounded)
+                return false;
+            return !Physics.CapsuleCast(currentCapsuleBase, currentCapsuleEnd, playerRadius, transform.up, .5f, obstacleLayer);
+        }
         /// <summary>
         /// Return a movement allowed for the player from a given <paramref name="direction"/>.
         /// If no movement is allowed, return Vector.zero.
@@ -245,7 +240,6 @@ namespace umi3d.baseBrowser.Navigation
         {
             if (navigation == Navigation.Flying)
                 return direction;
-            Debug.DrawRay(transform.position, direction.normalized * 3, Color.blue);
             if (CheckNavmesh(direction))
             {
                 return CheckCollision(direction);
@@ -255,7 +249,6 @@ namespace umi3d.baseBrowser.Navigation
                 return Vector3.zero;
             }
         }
-
         /// <summary>
         /// Checks if a translation along <paramref name="direction"/> would move the player on a navmesh surface.
         /// </summary>
@@ -266,17 +259,15 @@ namespace umi3d.baseBrowser.Navigation
             RaycastHit hit;
             RaycastHit foundHit = new RaycastHit { distance = Mathf.Infinity };
             direction /= 2f;
-
             foreach (Transform foot in feetRaycastOrigin)
             {
                 if (
-                    UnityEngine.Physics.Raycast(foot.position + Vector3.up * (.05f + maxStepHeight) + direction, Vector3.down, out hit, 100, navmeshLayer)
+                    UnityEngine.Physics.Raycast(foot.position + Vector3.up * maxStepHeight + direction, Vector3.down, out hit, 100, navmeshLayer)
                     && foundHit.distance > hit.distance
                     && Vector3.Angle(transform.up, hit.normal) <= maxSlopeAngle
                     )
                     foundHit = hit;
             }
-
             if (foundHit.distance < Mathf.Infinity)
             {
                 float newHeight = foundHit.point.y;
@@ -288,11 +279,9 @@ namespace umi3d.baseBrowser.Navigation
                 else hasGroundHeightChangedLastFrame = false;
                 return true;
             }
-
             hasGroundHeightChangedLastFrame = false;
             return false;
         }
-
         /// <summary>
         /// Checks if there is an obstacle for the player and returns an allowed movement for the player.
         /// </summary>
@@ -300,111 +289,56 @@ namespace umi3d.baseBrowser.Navigation
         /// <returns></returns>
         protected Vector3 CheckCollision(Vector3 direction)
         {
-            Vector3 origin = transform.position;
-
-            if (Vector3.Angle(direction, transform.forward) < Mathf.Epsilon)
+            if (Physics.CapsuleCast(currentCapsuleBase, currentCapsuleEnd, playerRadius, direction, out var hit, IsGrounded ? .2f : 1f, obstacleLayer))
             {
-                origin += transform.forward * playerRadius;
-
-            }
-            else if (Vector3.Angle(direction, -transform.forward) < Mathf.Epsilon)
-            {
-                origin -= transform.forward * playerRadius;
-            }
-
-            var wallCollision = RaycastWall(origin + Vector3.up * 1.75f, direction);
-            if (wallCollision.Item1)
-                return wallCollision.Item2;
-
-            wallCollision = RaycastWall(origin + Vector3.up * (maxStepHeight + stepEpsilon), direction);
-            if (wallCollision.Item1)
-                return wallCollision.Item2;
-
-            wallCollision = RaycastWall(origin + Vector3.up * lastObstacleHeight, direction);
-            if (wallCollision.Item1)
-                return wallCollision.Item2;
-
-            foreach (var t in obstacleRaycastOrigins)
-            {
-                wallCollision = RaycastWall(t.position, direction);
-                if (wallCollision.Item1)
-                    return wallCollision.Item2;
-            }
-
-            for (int i = 0; i < 3; i++)
-            {
-                float random = Random.Range(maxStepHeight + stepEpsilon, 1.8f);
-                wallCollision = RaycastWall(origin + Vector3.up * random, direction);
-                if (wallCollision.Item1)
-                {
-                    lastObstacleHeight = random;
-                    return wallCollision.Item2;
-                }
-            }
-
-            lastObstacleHeight = .5f;
-
-            return direction;
-        }
-
-        /// <summary>
-        /// Raycasts to check if there is a wall or not. 
-        /// </summary>
-        /// <param name="origin"></param>
-        /// <param name="direction"></param>
-        /// <returns>(wall found ?, movement allowed)</returns>
-        private (bool, Vector3) RaycastWall(Vector3 origin, Vector3 direction)
-        {
-            RaycastHit hit;
-            if (UnityEngine.Physics.Raycast(origin, direction.normalized, out hit, .2f, obstacleLayer))
-            {
+#if UNITY_EDITOR
+                collisionHitPoint = hit.point;
+#endif
                 Vector3 normal = Vector3.ProjectOnPlane(hit.normal, Vector3.up);
                 Vector3 projectedDirection = Vector3.Project(direction, Quaternion.Euler(0, 90, 0) * normal);
-
-                if (UnityEngine.Physics.Raycast(origin, projectedDirection, .2f, obstacleLayer))
+                if (Physics.CapsuleCast(currentCapsuleBase, currentCapsuleEnd, playerRadius, projectedDirection, .2f, obstacleLayer))
                 {
-                    return (true, Vector3.zero);
+                    return Vector3.zero;
                 }
                 else
                 {
-                    float angle = Vector3.Angle(direction, projectedDirection);
-
-                    if (angle < 2 || angle > 90)
-                        return (true, Vector3.zero);
-                    else
-                        return (true, projectedDirection);
+                    return projectedDirection;
                 }
             }
-            else
-            {
-                return (false, direction);
-            }
+            return direction;
         }
-
         /// <summary>
         /// Checks under player's feet to update <see cref="groundHeight"/>.
         /// </summary>
         protected void UpdateBaseHeight()
         {
-            RaycastHit hit;
             RaycastHit foundHit = new RaycastHit { distance = Mathf.Infinity };
-
-            foreach (Transform foot in feetRaycastOrigin)
+            RaycastHit[] hits = Physics.CapsuleCastAll(currentCapsuleBase, currentCapsuleEnd, playerRadius, Vector3.down, 100, navmeshLayer);
+            foreach (RaycastHit hit in hits)
             {
-                if (
-                    UnityEngine.Physics.Raycast(foot.position + Vector3.up * (.05f + maxStepHeight), Vector3.down, out hit, 100, navmeshLayer)
-                    && foundHit.distance > hit.distance
-                    )
+                if ((foundHit.distance > hit.distance) && (Vector3.Angle(transform.up, hit.normal) <= maxSlopeAngle))
+                {
                     foundHit = hit;
+                }
             }
-
             if ((foundHit.distance < Mathf.Infinity) && (Vector3.Angle(transform.up, foundHit.normal) <= maxSlopeAngle)) groundHeight = foundHit.point.y;
         }
-
+        protected (Vector3, Vector3) GetCapsuleSphereCenters()
+        {
+            return (transform.position + transform.up * (playerRadius + maxStepHeight + stepEpsilon),
+                topHead.position - transform.up * playerRadius);
+        }
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawWireSphere(currentCapsuleBase, playerRadius);
+            Gizmos.DrawWireSphere(currentCapsuleEnd, playerRadius);
+            Gizmos.DrawWireSphere(collisionHitPoint, .1f);
+        }
+#endif
         #endregion
     }
 }
-
 public static class Vector3Extension
 {
     /// <summary>

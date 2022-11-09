@@ -16,6 +16,7 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -121,17 +122,7 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
 
     public void InitLibraries()
     {
-        m_libraries = umi3d.cdk.UMI3DResourcesManager.Libraries;
-        m_environments.Clear();
-        foreach (var lib in m_libraries)
-        {
-            if (lib.applications == null) return;
-
-            foreach (var app in lib.applications) if (!m_environments.Contains(app)) m_environments.Add(app);
-            Header.FilterField.choices.AddRange(m_environments);
-            Header.FilterField.choices.Insert(0, "All");
-            Header.FilterField.index = 0;
-        }
+        UpdateFilterdList(null);
 
         libraries.Clear();
         bool isThereWrongLibrariesPath = false;
@@ -183,6 +174,8 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
                     if (index != 1) return;
                     umi3d.cdk.UMI3DResourcesManager.RemoveLibrary(lib.key);
                     library.RemoveFromHierarchy();
+                    libraries.Remove(library);
+                    UpdateFilterdList(Header.FilterField.value);
                 };
                 dialogueBox.ChoiceA.Type = ButtonType.Default;
                 dialogueBox.AddToTheRoot(this);
@@ -226,12 +219,20 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
         foreach (var lib in m_librariesFiltered) Libraries_SV.Add(lib);
     }
 
+    /// <summary>
+    /// For textfield search.
+    /// </summary>
+    /// <param name="ce"></param>
     protected void Searched(ChangeEvent<string> ce)
     {
         m_searchedValue = ce.newValue;
         UpdateSelection();
     }
 
+    /// <summary>
+    /// For dropdown filter.
+    /// </summary>
+    /// <param name="ce"></param>
     protected void Filtered(ChangeEvent<string> ce)
     {
         m_filteredValue = ce.newValue == "All" ? "" : ce.newValue;
@@ -243,6 +244,23 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
         m_librariesFiltered.Clear();
         foreach (var lib in libraries) if (lib.Title.Contains(m_searchedValue) && lib.Message.Contains(m_filteredValue)) m_librariesFiltered.Add(lib);
         UpdateFilteredLibrariesOrder();
+    }
+
+    protected void UpdateFilterdList(string current)
+    {
+        m_libraries = umi3d.cdk.UMI3DResourcesManager.Libraries;
+        m_environments.Clear();
+        Header.FilterField.choices.Clear();
+        foreach (var lib in m_libraries)
+        {
+            if (lib.applications == null) return;
+
+            foreach (var app in lib.applications) if (!m_environments.Contains(app)) m_environments.Add(app);
+            Header.FilterField.choices.AddRange(m_environments);
+        }
+        Header.FilterField.choices.Insert(0, "All");
+        if (string.IsNullOrEmpty(current) || !Header.FilterField.choices.Contains(current)) Header.FilterField.index = 0;
+        else Header.FilterField.index = Header.FilterField.choices.IndexOf(current);
     }
 
     /// <summary>

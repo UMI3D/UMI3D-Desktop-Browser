@@ -44,8 +44,6 @@ namespace umi3d.baseBrowser.connection
 
             BaseConnectionProcess.Instance.ResetLauncherEvent();
             //BaseConnectionProcess.Instance.DisplaySessions += () => Launcher.AddScreenToStack = LauncherScreens.Session;
-
-            Launcher.Settings.Resolution.RenderPipeline = BaseConnectionProcess.Instance.RenderPipeline;
         }
     }
 }

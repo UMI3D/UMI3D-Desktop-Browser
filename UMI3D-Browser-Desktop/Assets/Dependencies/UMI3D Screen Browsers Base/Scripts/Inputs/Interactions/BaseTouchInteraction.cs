@@ -34,7 +34,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             if (associatedInteraction != null) throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
             
             if (!IsCompatibleWith(interaction)) throw new System.Exception("Trying to associate an uncompatible interaction !");
-
+            
             this.hoveredObjectId = hoveredObjectId;
             this.toolId = toolId;
             associatedInteraction = interaction as InteractionType;

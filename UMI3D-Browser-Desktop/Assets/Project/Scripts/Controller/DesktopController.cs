@@ -83,26 +83,26 @@ namespace BrowserDesktop.Controller
         }
         #endregion
 
-        protected override void OnMenuObjectContentChange()
-        {
-            if (m_objectMenu?.menu.Count > 0)
-            {
-                if (!s_isRightClickAdded)
-                {
-                    Shortcutbox_E.Instance.AddRightClickShortcut("Object menu");
-                    s_isRightClickAdded = true;
-                }
-            }
-            else
-            {
-                if (s_isRightClickAdded)
-                {
-                    Shortcutbox_E.Instance.RemoveRightClickShortcut();
-                    s_isRightClickAdded = false;
-                }
-                m_objectMenu.Collapse(true);
-            }
-        }
+        //protected override void OnMenuObjectContentChange()
+        //{
+        //    if (m_objectMenu?.menu.Count > 0)
+        //    {
+        //        if (!s_isRightClickAdded)
+        //        {
+        //            Shortcutbox_E.Instance.AddRightClickShortcut("Object menu");
+        //            s_isRightClickAdded = true;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (s_isRightClickAdded)
+        //        {
+        //            Shortcutbox_E.Instance.RemoveRightClickShortcut();
+        //            s_isRightClickAdded = false;
+        //        }
+        //        m_objectMenu.Collapse(true);
+        //    }
+        //}
 
         #region Menu handler
         /// <summary>
@@ -113,11 +113,11 @@ namespace BrowserDesktop.Controller
             umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
             if (MenuBar_E.AreThereToolboxes) MenuBar_E.Instance.Display();
             Settingbox_E.Instance.Display();
-            if (m_objectMenu.menu.Count > 0)
-            {
-                m_objectMenu.Expand(true);
-                IsFreeAndHovering = true;
-            }
+            //if (m_objectMenu.menu.Count > 0)
+            //{
+            //    m_objectMenu.Expand(true);
+            //    IsFreeAndHovering = true;
+            //}
         }
 
         /// <summary>

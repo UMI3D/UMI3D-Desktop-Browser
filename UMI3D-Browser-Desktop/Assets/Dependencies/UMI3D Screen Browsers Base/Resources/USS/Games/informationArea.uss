@@ -12,7 +12,17 @@
 	background-color: var(--background-color-transparent-game);
 }
 
-.information-area__short__inf {
+.information-area__main-background {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.information-area__short__inf.text.unity-label {
+	position: absolute;
+	right: 0;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
@@ -28,11 +38,13 @@
 	padding-right: var(--padding-short-inf);
 	padding-top: var(--size-margin-and-padding-game);
 	padding-bottom: var(--size-margin-and-padding-game);
+	margin-right: var(--size-margin-and-padding-game);
 	margin-top: var(--size-margin-and-padding-game);
 	margin-bottom: var(--size-margin-and-padding-game);
 }
 
 .information-area__mic-sound {
+	position: absolute;
 	width: var(--size-mic__sound);
 	height: var(--size-mic__sound);
 	border-top-left-radius: 100%;
@@ -42,21 +54,25 @@
 }
 
 .information-area__mic-on {
-	left: var(--left-mic);
+	/*left: var(--left-mic);*/
+	left: 10;
 	background-image: var(--background-image-mic-on);
 }
 
 .information-area__mic-off {
-	left: var(--left-mic);
+	left: 10;
+	/*left: var(--left-mic);*/
 	background-image: var(--background-image-mic-off);
 }
 
 .information-area__sound-on {
-	left: var(--size-mic__sound);
+	/*left: var(--size-mic__sound);*/
+	right: 10;
 	background-image: var(--background-image-sound-on);
 }
 
 .information-area__sound-off {
-	left: var(--size-mic__sound);
+	/*left: var(--size-mic__sound);*/
+	right: 10;
 	background-image: var(--background-image-sound-off);
 }

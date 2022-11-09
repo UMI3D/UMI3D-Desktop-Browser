@@ -16,8 +16,10 @@ limitations under the License.
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using umi3d.cdk;
+using umi3d.cdk.collaboration;
+using umi3d.common;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -41,7 +43,7 @@ namespace umi3d.baseBrowser.connection
         [HideInInspector]
         public BaseClientIdentifier Identifier;
         [HideInInspector]
-        public UniversalRenderPipelineAsset RenderPipeline;
+        public UMI3DCollabLoadingParameters LoadingParameters;
         #endregion
 
         protected override void Awake()
@@ -56,7 +58,19 @@ namespace umi3d.baseBrowser.connection
             Identifier = Resources.Load<BaseClientIdentifier>("Scriptables/Connections/BaseClientIdentifier");
             Identifier.ShouldDownloadLib = ShouldDownloadLibraries;
             Identifier.GetParameters = (form, callback) => GetParameterDtos?.Invoke(form, callback);
-            RenderPipeline = Resources.Load<UniversalRenderPipelineAsset>("Scriptables/Rendering/UniversalRenderPipelineAsset");
+
+            LoadingParameters = Resources.Load<UMI3DCollabLoadingParameters>("Scriptables/CollabLoadingParameters");
+            LoadingParameters.supportedformats.Clear();
+            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.gltf);
+            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.obj);
+            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.fbx);
+            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.png);
+            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.jpg);
+#if UNITY_STANDALONE || UNITY_EDITOR
+            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.unity_standalone_urp);
+#elif UNITY_ANDROID
+            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.unity_android_urp);
+#endif
         }
 
         void Start()
@@ -66,6 +80,18 @@ namespace umi3d.baseBrowser.connection
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnRedirectionAborted.AddListener(() => RedirectionEnded?.Invoke());
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(() => ConnectionLost?.Invoke());
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnForceLogoutMessage.AddListener((s) => ForcedLeave?.Invoke(s));
+
+            cdk.collaboration.UMI3DCollaborationClientServer.EnvironmentProgress = () =>
+            {
+                var p = new MultiProgress("Join Environement");
+                p.ResumeAfterFail = ResumeAfterFail;
+
+                return p;
+            };
+
+            cdk.collaboration.UMI3DEnvironmentClient.EnvironementLoaded.AddListener(() => EnvironmentLoaded?.Invoke());
+
+            UMI3DCollaborationEnvironmentLoader.OnUpdateJoinnedUserList += () => UserCountUpdated?.Invoke(UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList.Count());
         }
 
         #region Launcher
@@ -310,6 +336,71 @@ namespace umi3d.baseBrowser.connection
         public event System.Action<string> ForcedLeave;
         [HideInInspector]
         public event System.Action<float> LoadingLauncher;
+        [HideInInspector]
+        public event System.Action<string, string, System.Action<int>> DisplayPopUpAfterLoadingFailed;
+        [HideInInspector]
+        public event System.Action EnvironmentLoaded;
+        [HideInInspector]
+        public event System.Action<int> UserCountUpdated;
+
+        bool rememberNe = false;
+        bool rememberLe = false;
+        bool rememberUe = false;
+
+        async Task<bool> ResumeAfterFail(System.Exception e)
+        {
+            switch (e)
+            {
+                case Umi3dNetworkingException ne:
+                    if (rememberNe) return true;
+                    (bool, bool) c = (false, false);
+                    switch (ne.errorCode)
+                    {
+                        case 404:
+                            //c = await DisplayPopUp("Resources not found",ne.Message +"\n"+ne.url);
+                            Debug.Log("TODO : display pop up again");
+                            return true;
+                            break;
+                        case 204:
+                            c = await DisplayPopUp("Resources Downloaded was empty", ne.Message + "\n" + ne.url);
+                            break;
+                        case 501:
+                            c = await DisplayPopUp("Resources acess was denied", ne.Message + "\n" + ne.url);
+                            break;
+                        default:
+                            c = await DisplayPopUp($"Networking error {ne.errorCode}", $"{ne.Message}\n{ne.url}");
+                            break;
+                    }
+                    rememberNe = c.Item2;
+                    return c.Item1;
+                case Umi3dLoadingException le:
+                    if (rememberLe) return true;
+                    (bool, bool) lc = await DisplayPopUp("Loading error", $"{le.Message}");
+                    rememberLe = lc.Item2;
+                    return lc.Item1;
+                case Umi3dException ue:
+                    if (rememberUe) return true;
+                    (bool, bool) uc = await DisplayPopUp("Error", $"{ue.Message}");
+                    rememberUe = uc.Item2;
+                    return uc.Item1;
+            }
+            (bool, bool) u = await DisplayPopUp("Other Error", $"{e.Message}");
+            rememberUe = u.Item2;
+            return true;
+        }
+
+        async Task<(bool, bool)> DisplayPopUp(string title, string message)
+        {
+            UnityEngine.Debug.Log(title + " \n" + message + " \n" + "Ignore and resume loading ? ");
+
+            bool? choise = null;
+            System.Action<int> action = (index) => { choise = index == 1; };
+
+            DisplayPopUpAfterLoadingFailed?.Invoke(title, message, action);
+
+            while (choise == null) await UMI3DAsyncManager.Yield();
+            return (choise.Value, false);
+        }
 
         public void ResetEnvironmentEvents()
         {
@@ -324,6 +415,9 @@ namespace umi3d.baseBrowser.connection
             ForcedLeave = null;
             AskForDownloadingLibraries = null;
             GetParameterDtos = null;
+            DisplayPopUpAfterLoadingFailed = null;
+            EnvironmentLoaded = null;
+            UserCountUpdated = null;
         }
 
         /// <summary>

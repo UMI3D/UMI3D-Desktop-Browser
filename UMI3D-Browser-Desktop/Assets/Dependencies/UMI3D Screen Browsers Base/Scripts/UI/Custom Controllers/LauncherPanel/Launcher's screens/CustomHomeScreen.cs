@@ -203,7 +203,7 @@ public abstract class CustomHomeScreen : CustomMenuScreen
         string serverUrl = DirectConnect__TextField.value;
         if (string.IsNullOrEmpty(serverUrl)) return;
 
-        Connect(new ServerPreferences.ServerData { serverUrl = serverUrl.Trim() }, DirectConnect__Toggle.value);
+        TryToConnect(new ServerPreferences.ServerData { serverUrl = serverUrl.Trim() }, DirectConnect__Toggle.value);
     }
 
     public void InitSavedServer()
@@ -222,7 +222,7 @@ public abstract class CustomHomeScreen : CustomMenuScreen
 
             item.clicked += () =>
             {
-                if (!m_isEditingSavedServers) Connect(item.Data);
+                if (!m_isEditingSavedServers) TryToConnect(item.Data);
                 else UpdateSavedServer(item, item.Data, true, null);
             };
             SavedServers__ScrollView.Add(item);
@@ -247,6 +247,44 @@ public abstract class CustomHomeScreen : CustomMenuScreen
         item.Label = data.serverName ?? data.serverUrl;
         item.TouchManipulator.LongPressDelay = 1000;
         item.Data = data;
+    }
+
+    protected void TryToConnect(ServerPreferences.ServerData data, bool saveServer = false)
+    {
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            var dialogueBox = CreateDialogueBox();
+            dialogueBox.Title = "No internet connection";
+            dialogueBox.Message = $"Connect your device to load {data.serverName}";
+            dialogueBox.Type = DialogueboxType.Confirmation;
+            dialogueBox.ChoiceAText = "Cancel";
+            dialogueBox.ChoiceBText = "Retry";
+            dialogueBox.ChoiceA.Type = ButtonType.Default;
+            dialogueBox.ChoiceB.Type = ButtonType.Default;
+            dialogueBox.Callback = index =>
+            {
+                if (index == 1) TryToConnect(data, saveServer);
+            };
+            dialogueBox.AddToTheRoot(this);
+        }
+        else if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork)
+        {
+            var dialogueBox = CreateDialogueBox();
+            dialogueBox.Title = "You are connected to internet via carrier data network";
+            dialogueBox.Message = $"You are trying to load {data.serverName} via carrier data network. \nLoading environment use a lot of data, if you can you should connect via wifi or cable and retry";
+            dialogueBox.Type = DialogueboxType.Confirmation;
+            dialogueBox.ChoiceAText = "Connect anyway";
+            dialogueBox.ChoiceBText = "Retry";
+            dialogueBox.ChoiceA.Type = ButtonType.Default;
+            dialogueBox.ChoiceB.Type = ButtonType.Default;
+            dialogueBox.Callback = index =>
+            {
+                if (index == 1) TryToConnect(data, saveServer);
+                else Connect(data, saveServer);
+            };
+            dialogueBox.AddToTheRoot(this);
+        }
+        else Connect(data, saveServer);
     }
 
     protected void Connect(ServerPreferences.ServerData data, bool saveServer = false)
@@ -382,7 +420,7 @@ public abstract class CustomHomeScreen : CustomMenuScreen
 
             newServer.clicked += () =>
             {
-                if (!m_isEditingSavedServers) Connect(newServer.Data);
+                if (!m_isEditingSavedServers) TryToConnect(newServer.Data);
                 else UpdateSavedServer(newServer, newServer.Data, true, null);
             };
             SavedServers__ScrollView.Insert(1, newServer);

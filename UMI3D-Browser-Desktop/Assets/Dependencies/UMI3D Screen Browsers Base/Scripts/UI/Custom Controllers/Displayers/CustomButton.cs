@@ -223,6 +223,11 @@ public abstract class CustomButton : Button, ICustomElement
         add => TouchManipulator.ClickedLongWithInfo += value;
         remove => TouchManipulator.ClickedLongWithInfo -= value;
     }
+    public event System.Action<EventBase, UnityEngine.Vector2> MovedWithInfo
+    {
+        add => TouchManipulator.MovedWithInfo += value;
+        remove => TouchManipulator.MovedWithInfo -= value;
+    }
     /// <summary>
     /// Event raised when the interaction is up if delay and interval is 0. 
     /// Otherwise it will be raised once when down then repeatedly after [delay] at [interval] rate.
@@ -252,6 +257,11 @@ public abstract class CustomButton : Button, ICustomElement
     {
         add => TouchManipulator.ClickedLong += value;
         remove => TouchManipulator.ClickedLong -= value;
+    }
+    public event System.Action Moved
+    {
+        add => TouchManipulator.Moved += value;
+        remove => TouchManipulator.Moved -= value;
     }
 
     public TouchManipulator2 TouchManipulator = new TouchManipulator2(null, 0, 0);

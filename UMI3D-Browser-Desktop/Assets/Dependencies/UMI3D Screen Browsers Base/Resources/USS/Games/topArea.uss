@@ -15,6 +15,6 @@
 	position: absolute;
 }
 
-.top-area > .top-area__emote {
-	right: 0;
+.top-area > .top-area__menu > .button__body > .button__content-container {
+	background-image: var(--background-image-pause);
 }

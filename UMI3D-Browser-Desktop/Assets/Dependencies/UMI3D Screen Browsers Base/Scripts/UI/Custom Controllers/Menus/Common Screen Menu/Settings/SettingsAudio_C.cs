@@ -26,6 +26,7 @@ namespace umi3d.commonScreen.menu
             if (Button_Back == null) Button_Back = new Displayer.Button_C();
 
             if (ScrollView == null) ScrollView = new Container.ScrollView_C();
+            if (GeneralVolume_Visual == null) GeneralVolume_Visual = new Displayer.Slider_C();
 
             base.InitElement();
         }

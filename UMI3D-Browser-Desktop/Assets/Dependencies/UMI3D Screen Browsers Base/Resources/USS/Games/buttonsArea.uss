@@ -4,7 +4,14 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	height: 30%
+}
+
+.buttons-area__crouch,
+.buttons-area__jump,
+.buttons-area__action,
+.buttons-area__emote {
+	width: 100px;
+	height: 100px;
 }
 
 .buttons-area__crouch {

@@ -33,6 +33,20 @@ public class AudioSetting : ISetting
     public bool IsOn { get; private set; }
     public event Action<bool> StatusChanged;
 
+    /// <summary>
+    /// Value is between 0 and 1.
+    /// </summary>
+    public float GeneralVolume
+    {
+        get => AudioListener.volume;
+        set
+        {
+            SetGeneralVolumeWithoutNotify(value);
+            StatusChanged?.Invoke(IsOn);
+        }
+    }
+    private float m_generalVolume;
+
     public AudioSetting()
     {
         IsOn = true;
@@ -43,10 +57,7 @@ public class AudioSetting : ISetting
 
     public void Toggle()
     {
-        IsOn = !IsOn;
-        if (IsOn) AudioListener.volume = 1f;
-        else AudioListener.volume = 0f;
-
+        SetGeneralVolumeWithoutNotify(IsOn ? 0f : m_generalVolume);
         StatusChanged?.Invoke(IsOn);
     }
 
@@ -57,6 +68,13 @@ public class AudioSetting : ISetting
         //{
         //    Toggle();
         //}
+    }
+
+    public void SetGeneralVolumeWithoutNotify(float value)
+    {
+        if (value != 0f) m_generalVolume = value;
+        AudioListener.volume = value;
+        IsOn = value != 0f;
     }
 }
 

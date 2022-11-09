@@ -58,6 +58,7 @@ public abstract class CustomUserList : VisualElement, ICustomElement
         });
 
         FilterTextField.Category = ElementCategory.Game;
+        FilterTextField.RegisterValueChangedCallback(ce => Filter());
 
         Add(FilterTextField);
         Add(ScrollView);
