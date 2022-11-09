@@ -1,6 +1,6 @@
 :root {
 	--border-color-game: rgb(0, 193, 216);
-	--background-color-game: black;
+	--background-color-game: rgb(38, 38, 38);
 	--size-margin-and-padding-game: 7px;
 	--background-color-transparent-game: rgba(38, 38, 38, 0.90);
 	--border-radius-game : 11px;
@@ -9,10 +9,10 @@
 	--background-image-cursor__target-enabled: resource('Icons/Cursor/cursor-default');
 	--background-image-cursor__target-hover: resource('Icons/Cursor/cursor-hover');
 
-	--size-joystick__background: 200px;
+	--size-joystick__background: 300px;
 	--border-color-joystick__background: var(--border-color-game);
 	--border-width-joystick__background: 3px;
-	--size-joystick__foreground__icon: 40%;
+	--size-joystick__foreground__icon: 30%;
 	--background-color-joystick__foreground__icon: var(--background-color-game);
 	--border-color-joystick__foreground__icon: var(--border-color-game);
 	--border-width-joystick__foreground__icon: 3px;
@@ -26,4 +26,6 @@
 	--background-image-sound-off: resource('Icons/Sound/SOUND_OFF');
 	--size__width-short-inf: 40%;
 	--size__height-short-inf: 76px;
+
+	--background-image-pause: resource('Icons/pause-icon');
 }
