@@ -407,13 +407,16 @@ namespace umi3d.baseBrowser.Navigation
                 topHead.position - transform.up * playerRadius);
         }
 
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
+
             Gizmos.DrawWireSphere(currentCapsuleBase, playerRadius);
             Gizmos.DrawWireSphere(currentCapsuleEnd, playerRadius);
 
             Gizmos.DrawWireSphere(collisionHitPoint, .1f);
         }
+#endif
 
         #endregion
     }
