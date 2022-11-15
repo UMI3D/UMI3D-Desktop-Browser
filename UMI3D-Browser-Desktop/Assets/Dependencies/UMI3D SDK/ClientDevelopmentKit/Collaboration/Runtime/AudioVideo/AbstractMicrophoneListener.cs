@@ -62,6 +62,12 @@ namespace umi3d.cdk.collaboration
         RemovingMicrophone,
     }
 
+    public enum MirophoneInputType
+    {
+        Unity,
+        NAudio
+    }
+
     [RequireComponent(typeof(AudioSource))]
     public abstract class AbstractMicrophoneListener<T> : SingleBehaviour<T> where T : AbstractMicrophoneListener<T> /*, ILoggable*/
     {
@@ -152,6 +158,9 @@ namespace umi3d.cdk.collaboration
                 OnMicrophoneStatusUpdateUpdater.SetValue(value);
             }
         }
+
+        public MirophoneInputType inputType;
+
         protected string channel { get; private set; } = null;
         protected string pendingChannel { get; private set; } = null;
 
@@ -294,7 +303,18 @@ namespace umi3d.cdk.collaboration
             OnMumbleStatusUpdateUpdater = new EventUpdater<MumbleStatus>(mumbleStatus, OnMumbleStatusUpdate);
             OnMicrophoneStatusUpdateUpdater = new EventUpdater<MicrophoneStatus>(microphoneStatus, OnMicrophoneStatusUpdate);
 
-            mumbleMic = gameObject.AddComponent<MumbleMicrophone>();
+            switch (inputType)
+            {
+                case MirophoneInputType.Unity:
+                    mumbleMic = gameObject.AddComponent<MumbleMicrophone>();
+                    break;
+                case MirophoneInputType.NAudio:
+                    mumbleMic = gameObject.AddComponent<NAudioMicrophone>();
+                    break;
+                default:
+                    break;
+            }
+
             SetMicrophone();
             gameObject.GetOrAddComponent<EventProcessor>();
 

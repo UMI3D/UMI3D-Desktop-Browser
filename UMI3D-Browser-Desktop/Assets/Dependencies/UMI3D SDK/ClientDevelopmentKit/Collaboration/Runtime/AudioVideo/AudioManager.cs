@@ -43,7 +43,6 @@ namespace umi3d.cdk.collaboration
 
         public AudioUserIsSpeaking OnUserSpeaking = new AudioUserIsSpeaking();
 
-
         public void Setup(Dictionary<string, float> volumeMemory, Dictionary<string, float> gainMemory)
         {
             this.volumeMemory.Clear();
