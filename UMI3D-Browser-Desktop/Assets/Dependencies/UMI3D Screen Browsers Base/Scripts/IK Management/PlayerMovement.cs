@@ -35,9 +35,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
-        if (Movement.x != 0 && !Input.GetKey(KeyCode.LeftShift)) Walk();
+        if(Movement.x != 0 && !Input.GetKey(KeyCode.LeftShift)) Walk();
         else if (Movement.x != 0 && Input.GetKey(KeyCode.LeftShift)) Run();
-        else if (Movement.x == 0) Idle();
+        else if(Movement.x == 0) Idle();
     }
 
     private void Idle() => anim.SetFloat("Speed", 0f, 0.1f, Time.deltaTime);

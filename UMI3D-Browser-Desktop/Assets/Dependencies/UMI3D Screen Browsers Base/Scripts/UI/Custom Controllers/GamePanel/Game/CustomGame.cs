@@ -28,6 +28,12 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
             defaultValue = ControllerEnum.MouseAndKeyboard
         };
 
+        protected UxmlBoolAttributeDescription m_leftHand = new UxmlBoolAttributeDescription
+        {
+            name = "left-hand",
+            defaultValue = false
+        };
+
         public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
         {
             get { yield break; }
@@ -40,7 +46,8 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
 
             custom.Set
                 (
-                    m_controller.GetValueFromBag(bag, cc)
+                    m_controller.GetValueFromBag(bag, cc),
+                    m_leftHand.GetValueFromBag(bag, cc)
                 );
         }
     }
@@ -53,6 +60,17 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
             m_controller = value;
             LeadingArea.Controller = value;
             TrailingArea.Controller = value;
+        }
+    }
+
+    public bool LeftHand
+    {
+        get => m_leftHand;
+        set
+        {
+            m_leftHand = value;
+            LeadingArea.LeftHand = value;
+            TrailingArea.LeftHand = value;
         }
     }
 
@@ -70,6 +88,8 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
 
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
+    public static System.Action LeftHandModeUpdated;
+    protected bool m_leftHand;
 
     public virtual void InitElement()
     {
@@ -89,11 +109,13 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         Add(TrailingArea);
         Add(TopArea);
         //Add(BottomArea);
+
+        LeftHandModeUpdated = () => LeftHand = !LeftHand;
     }
 
-    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard);
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false);
 
-    public virtual void Set(ControllerEnum controller)
+    public virtual void Set(ControllerEnum controller, bool leftHand)
     {
         if (!m_hasBeenInitialized)
         {
@@ -102,6 +124,7 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         }
 
         Controller = controller;
+        LeftHand = leftHand;
     }
 
     public void TransitionIn(VisualElement persistentVisual)

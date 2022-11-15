@@ -28,6 +28,12 @@ public class CustomLeadingArea : VisualElement, ICustomElement
             defaultValue = ControllerEnum.MouseAndKeyboard
         };
 
+        protected UxmlBoolAttributeDescription m_leftHand = new UxmlBoolAttributeDescription
+        {
+            name = "left-hand",
+            defaultValue = false
+        };
+
         public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
         {
             get { yield break; }
@@ -40,7 +46,8 @@ public class CustomLeadingArea : VisualElement, ICustomElement
 
             custom.Set
                 (
-                    m_controller.GetValueFromBag(bag, cc)
+                    m_controller.GetValueFromBag(bag, cc),
+                    m_leftHand.GetValueFromBag(bag, cc)
                 );
         }
     }
@@ -68,16 +75,36 @@ public class CustomLeadingArea : VisualElement, ICustomElement
         }
     }
 
+    public bool LeftHand
+    {
+        get => m_leftHand;
+        set
+        {
+            m_leftHand = value;
+            JoystickArea.LeftHand = value;
+            if (value)
+            {
+                RemoveFromClassList(USSCustomClassName);
+                AddToClassList(USSCustomClassNameReverse);
+            }
+            else
+            {
+                RemoveFromClassList(USSCustomClassNameReverse);
+                AddToClassList(USSCustomClassName);
+            }
+        }
+    }
+
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/leadingArea";
     public virtual string USSCustomClassName => "leading-are";
     public virtual string USSCustomClassNameReverse => "leading-are_reverse";
 
     public CustomJoystickArea JoystickArea;
-    public static bool IsLeftHand;
 
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
+    protected bool m_leftHand;
 
     public virtual void InitElement()
     {
@@ -90,23 +117,11 @@ public class CustomLeadingArea : VisualElement, ICustomElement
         {
             throw e;
         }
-        if (IsLeftHand)
-        {
-            RemoveFromClassList(USSCustomClassName);
-            AddToClassList(USSCustomClassNameReverse);
-        }
-        else
-        {
-            RemoveFromClassList(USSCustomClassNameReverse);
-            AddToClassList(USSCustomClassName);
-        }
-
-
     }
 
-    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard);
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false);
 
-    public virtual void Set(ControllerEnum controller)
+    public virtual void Set(ControllerEnum controller, bool leftHand)
     {
         if (!m_hasBeenInitialized)
         {
@@ -115,5 +130,6 @@ public class CustomLeadingArea : VisualElement, ICustomElement
         }
 
         Controller = controller;
+        LeftHand = leftHand;
     }
 }
