@@ -124,12 +124,6 @@ namespace umi3d.baseBrowser.Navigation
         #endregion
 
         #region Methods
-        void Start()
-        {
-            if (s_instance == null) s_instance = this;
-            else Destroy(this.gameObject);
-        }
-
         #region Abstract Navigation
         /// <summary>
         /// <inheritdoc/>
@@ -205,6 +199,12 @@ namespace umi3d.baseBrowser.Navigation
             }
         }
         #endregion
+
+        void Start()
+        {
+            if (s_instance == null) s_instance = this;
+            else Destroy(this.gameObject);
+        }
 
         /// <summary>
         /// Applies gravity to player and makes it jump.

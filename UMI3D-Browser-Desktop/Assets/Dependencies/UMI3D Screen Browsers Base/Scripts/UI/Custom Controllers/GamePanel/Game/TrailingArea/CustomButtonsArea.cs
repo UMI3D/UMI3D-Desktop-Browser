@@ -73,6 +73,37 @@ public class CustomButtonsArea : VisualElement, ICustomElement
         }
     }
 
+    public bool LeftHand
+    {
+        get => m_leftHand;
+        set
+        {
+            m_leftHand = value;
+            if (value)
+            {
+            Crouch.RemoveFromClassList(USSCustomClassCrouch);
+            Crouch.AddToClassList(USSCustomClassCrouchReverse);
+            Jump.RemoveFromClassList(USSCustomClassjump);
+            Jump.AddToClassList(USSCustomClassjumpReverse);
+            Action.RemoveFromClassList(USSCustomClassAction);
+            Action.AddToClassList(USSCustomClassActionReverse);
+            Emote.RemoveFromClassList(USSCustomClassEmote);
+            Emote.AddToClassList(USSCustomClassEmoteReverse);
+        }
+        else
+        {
+            Crouch.RemoveFromClassList(USSCustomClassCrouchReverse);
+            Crouch.AddToClassList(USSCustomClassCrouch);
+            Jump.RemoveFromClassList(USSCustomClassjumpReverse);
+            Jump.AddToClassList(USSCustomClassjump);
+            Action.RemoveFromClassList(USSCustomClassActionReverse);
+            Action.AddToClassList(USSCustomClassAction);
+            Emote.RemoveFromClassList(USSCustomClassEmoteReverse);
+            Emote.AddToClassList(USSCustomClassEmote);
+        }
+        }
+    }
+
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/buttonsArea";
     public virtual string USSCustomClassName => "buttons-area";
@@ -95,7 +126,7 @@ public class CustomButtonsArea : VisualElement, ICustomElement
     public System.Action<EventBase, Vector2> ClickedDown;
     public System.Action<EventBase, Vector2> Moved;
 
-    public static bool IsLeftHand;
+    protected bool m_leftHand;
 
     protected bool m_isActionButtonDisplayed;
     protected bool m_isEmoteButtonDisplayed;
@@ -113,30 +144,6 @@ public class CustomButtonsArea : VisualElement, ICustomElement
             throw e;
         }
         AddToClassList(USSCustomClassName);
-        if (IsLeftHand)
-        {
-            Crouch.RemoveFromClassList(USSCustomClassCrouch);
-            Crouch.AddToClassList(USSCustomClassCrouchReverse);
-            Jump.RemoveFromClassList(USSCustomClassjump);
-            Jump.AddToClassList(USSCustomClassjumpReverse);
-            Action.RemoveFromClassList(USSCustomClassAction);
-            Action.AddToClassList(USSCustomClassActionReverse);
-            Emote.RemoveFromClassList(USSCustomClassEmote);
-            Emote.AddToClassList(USSCustomClassEmoteReverse);
-        }
-        else
-        {
-            Crouch.RemoveFromClassList(USSCustomClassCrouchReverse);
-            Crouch.AddToClassList(USSCustomClassCrouch);
-            Jump.RemoveFromClassList(USSCustomClassjumpReverse);
-            Jump.AddToClassList(USSCustomClassjump);
-            Action.RemoveFromClassList(USSCustomClassActionReverse);
-            Action.AddToClassList(USSCustomClassAction);
-            Emote.RemoveFromClassList(USSCustomClassEmoteReverse);
-            Emote.AddToClassList(USSCustomClassEmote);
-        }
-        Action.AddToClassList(USSCustomClassAction);
-        Emote.AddToClassList(USSCustomClassEmote);
 
         Crouch.name = "crouch";
         Jump.name = "jump";

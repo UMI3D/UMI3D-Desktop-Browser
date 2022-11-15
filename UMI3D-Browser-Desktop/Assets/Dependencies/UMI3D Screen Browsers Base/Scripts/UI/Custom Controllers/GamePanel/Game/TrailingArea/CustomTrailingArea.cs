@@ -39,7 +39,11 @@ public class CustomTrailingArea : VisualElement, ICustomElement
             name = "display-emote-window",
             defaultValue = false
         };
-
+        protected UxmlBoolAttributeDescription m_leftHand = new UxmlBoolAttributeDescription
+        {
+            name = "left-hand",
+            defaultValue = false
+        };
         public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
         {
             get { yield break; }
@@ -54,7 +58,8 @@ public class CustomTrailingArea : VisualElement, ICustomElement
                 (
                     m_controller.GetValueFromBag(bag, cc),
                     m_displayObjectMenu.GetValueFromBag(bag, cc),
-                    m_displayEmoteWindow.GetValueFromBag(bag, cc)
+                    m_displayEmoteWindow.GetValueFromBag(bag, cc),
+                    m_leftHand.GetValueFromBag(bag, cc)
                 );
         }
     }
@@ -141,6 +146,26 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         }
     }
 
+    public bool LeftHand
+    {
+        get => m_leftHand;
+        set
+        {
+            m_leftHand = value;
+            ButtonsArea.LeftHand = value;
+            if (value)
+            {
+                RemoveFromClassList(USSCustomClassName);
+                AddToClassList(USSCustomClassNameReverse);
+            }
+            else
+            {
+                RemoveFromClassList(USSCustomClassNameReverse);
+                AddToClassList(USSCustomClassName);
+            }
+        }
+    }
+
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/trailingArea";
     public virtual string USSCustomClassName => "trailing-area";
@@ -169,7 +194,8 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         }
     }
 
-    public static bool IsLeftHand;
+    public static System.Action LeftHandModeUpdated;
+    protected bool m_leftHand;
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
     protected bool m_displayObjectMenu;
@@ -190,16 +216,7 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         {
             throw e;
         }
-        if (IsLeftHand)
-        {
-            RemoveFromClassList(USSCustomClassName);
-            AddToClassList(USSCustomClassNameReverse);
-        }
-        else
-        {
-            RemoveFromClassList(USSCustomClassNameReverse);
-            AddToClassList(USSCustomClassName);
-        }
+
         ObjectMenu.AddToClassList(USSCustomClassObjectMenu);
         EmoteWindow.AddToClassList(USSCustomClassEmoteWindow);
         CameraLayer.AddToClassList(USSCustomClassCameraLayer);
@@ -228,9 +245,9 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         ObjectMenu.Title = "Object Menu";
     }
 
-    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false, false);
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false, false, false);
 
-    public virtual void Set(ControllerEnum controller, bool displayObjectMenu, bool displayEmoteWindow)
+    public virtual void Set(ControllerEnum controller, bool displayObjectMenu, bool displayEmoteWindow, bool leftHand)
     {
         if (!m_hasBeenInitialized)
         {
@@ -241,5 +258,6 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         Controller = controller;
         DisplayObjectMenu = displayObjectMenu;
         DisplayEmoteWindow = displayEmoteWindow;
+        LeftHand = leftHand;
     }
 }

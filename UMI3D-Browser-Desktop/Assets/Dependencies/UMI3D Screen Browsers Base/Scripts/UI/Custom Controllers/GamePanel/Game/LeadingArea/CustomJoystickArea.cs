@@ -21,6 +21,25 @@ using UnityEngine.UIElements;
 
 public class CustomJoystickArea : VisualElement, ICustomElement
 {
+    public bool LeftHand
+    {
+        get => m_leftHand;
+        set
+        {
+            m_leftHand = value;
+            if (value)
+            {
+                RemoveFromClassList(USSCustomClassName);
+                AddToClassList(USSCustomClassNameReverse);
+            }
+            else
+            {
+                RemoveFromClassList(USSCustomClassNameReverse);
+                AddToClassList(USSCustomClassName);
+            }
+        }
+    }
+
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/joystickArea";
     public virtual string USSCustomClassName => "joystick-area";
@@ -28,11 +47,11 @@ public class CustomJoystickArea : VisualElement, ICustomElement
 
     public static System.Action JoystickStaticModeUpdated;
     public static bool IsJoystickStatic;
-    public static bool IsLeftHand;
     public CustomJoystick Joystick;
     public TouchManipulator2 JoystickManipulator = new TouchManipulator2(null, 0, 0);
 
     protected bool m_hasBeenInitialized;
+    protected bool m_leftHand;
 
     public virtual void InitElement()
     {
@@ -44,17 +63,6 @@ public class CustomJoystickArea : VisualElement, ICustomElement
         catch (System.Exception e)
         {
             throw e;
-        }
-        
-        if (IsLeftHand)
-        {
-            RemoveFromClassList(USSCustomClassName);
-            AddToClassList(USSCustomClassNameReverse);
-        }
-        else
-        {
-            RemoveFromClassList(USSCustomClassNameReverse);
-            AddToClassList(USSCustomClassName);
         }
 
         JoystickStaticModeUpdated = UpdateStaticMode;

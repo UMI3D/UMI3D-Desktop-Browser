@@ -91,10 +91,7 @@ public class CustomSettingsController : CustomSettingScreen
         LeftHandToggle.label = "Left hand interface";
         LeftHandToggle.RegisterValueChangedCallback(ce =>
         {
-            CustomJoystickArea.IsLeftHand = !CustomJoystickArea.IsLeftHand;
-            CustomLeadingArea.IsLeftHand = !CustomLeadingArea.IsLeftHand;
-            CustomButtonsArea.IsLeftHand = !CustomButtonsArea.IsLeftHand;
-            CustomTrailingArea.IsLeftHand = !CustomTrailingArea.IsLeftHand;
+            CustomGame.LeftHandModeUpdated?.Invoke();
             Data.LeftHand = ce.newValue;
             StoreControllerrData(Data);
         });
