@@ -18,6 +18,7 @@ using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
 using umi3d.common;
+using umi3d.commonMobile.game;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -25,6 +26,12 @@ public class CustomInformationArea : VisualElement, ICustomElement
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
+        protected UxmlEnumAttributeDescription<ControllerEnum> m_controller = new UxmlEnumAttributeDescription<ControllerEnum>
+        {
+            name = "controller",
+            defaultValue = ControllerEnum.MouseAndKeyboard
+        };
+
         UxmlStringAttributeDescription m_shortText = new UxmlStringAttributeDescription
         {
             name = "short-text",
@@ -61,11 +68,38 @@ public class CustomInformationArea : VisualElement, ICustomElement
 
             custom.Set
                 (
+                    m_controller.GetValueFromBag(bag, cc),
                     m_shortText.GetValueFromBag(bag, cc),
                     m_isExpanded.GetValueFromBag(bag, cc),
                     m_isMicOn.GetValueFromBag(bag, cc),
                     m_isSoundOn.GetValueFromBag(bag, cc)
                 );
+        }
+    }
+
+    public ControllerEnum Controller
+    {
+        get => m_controller;
+        set
+        {
+            m_controller = value;
+            switch (value)
+            {
+                case ControllerEnum.MouseAndKeyboard:
+                    Mic.RemoveFromHierarchy();
+                    Sound.RemoveFromHierarchy();
+                    break;
+                case ControllerEnum.Touch:
+                    ShortInf.Add(Mic);
+                    ShortInf.Add(Sound);
+                    break;
+                case ControllerEnum.GameController:
+                    ShortInf.Add(Mic);
+                    ShortInf.Add(Sound);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -258,6 +292,7 @@ public class CustomInformationArea : VisualElement, ICustomElement
     public TouchManipulator2 MicManipulator = new TouchManipulator2(null, 0, 0);
     public TouchManipulator2 SoundManipulator = new TouchManipulator2(null, 0, 0);
 
+    protected ControllerEnum m_controller;
     protected Vector2 m_initialManipulatedPosition;
     protected bool m_isExplanded;
     protected bool m_isMicOn;
@@ -361,13 +396,11 @@ public class CustomInformationArea : VisualElement, ICustomElement
         Main.Add(UserList);
         Main.Add(NotificationCenter);
         Add(ShortInf);
-        ShortInf.Add(Mic);
-        ShortInf.Add(Sound);
     }
 
-    public virtual void Set() => Set(null, false, false, true);
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, null, false, false, true);
 
-    public virtual void Set(string shortText, bool isExpanded, bool isMicOn, bool isSoundOn)
+    public virtual void Set(ControllerEnum controller, string shortText, bool isExpanded, bool isMicOn, bool isSoundOn)
     {
         if (!m_hasBeenInitialized)
         {
@@ -375,6 +408,7 @@ public class CustomInformationArea : VisualElement, ICustomElement
             m_hasBeenInitialized = true;
         }
 
+        Controller = controller;
         ShortText = shortText;
         IsExpanded = isExpanded;
         IsMicOn = isMicOn;

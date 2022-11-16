@@ -29,6 +29,7 @@ namespace umi3d.commonScreen.game
             if (LeadingArea == null) LeadingArea = new LeadingArea_C();
             if (TrailingArea == null) TrailingArea = new TrailingArea_C();
             if (TopArea == null) TopArea = new TopArea_C();
+            if (BottomArea == null) BottomArea = new commonDesktop.game.BottomArea_C();
 
             base.InitElement();
         }

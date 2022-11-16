@@ -58,8 +58,11 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         set
         {
             m_controller = value;
+            TopArea.Controller = value;
             LeadingArea.Controller = value;
             TrailingArea.Controller = value;
+            if (value == ControllerEnum.MouseAndKeyboard) Add(BottomArea);
+            else BottomArea.RemoveFromHierarchy();
         }
     }
 
@@ -108,7 +111,6 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         Add(LeadingArea);
         Add(TrailingArea);
         Add(TopArea);
-        //Add(BottomArea);
 
         LeftHandModeUpdated = () => LeftHand = !LeftHand;
     }

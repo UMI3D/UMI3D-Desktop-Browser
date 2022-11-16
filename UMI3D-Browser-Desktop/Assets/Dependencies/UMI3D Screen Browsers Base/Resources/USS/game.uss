@@ -20,10 +20,13 @@
 	--size-mic__sound: 50px;
 	--left-mic: -50px;
 	--padding-short-inf: 60px;
+	--background-image-avatar-on: resource('Icons/Avatar/AVATAR_ON');
+	--background-image-avatar-off: resource('Icons/Avatar/AVATAR_OFF');
 	--background-image-mic-on: resource('Icons/Mic/MIC_ON');
 	--background-image-mic-off: resource('Icons/Mic/MIC_OFF');
 	--background-image-sound-on: resource('Icons/Sound/SOUND_ON');
 	--background-image-sound-off: resource('Icons/Sound/SOUND_OFF');
+	--background-image-emote: resource('Icons/emote-default-placeholder');
 	--size__width-short-inf: 40%;
 	--size__height-short-inf: 76px;
 
