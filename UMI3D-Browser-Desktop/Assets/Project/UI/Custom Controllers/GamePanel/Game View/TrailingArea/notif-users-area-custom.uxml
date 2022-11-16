@@ -1,0 +1,3 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <umi3d.commonScreen.game.NotifAndUsersArea_C panel="UnityEditor.UIElements.EditorPanel" area-panel="Notifications" style="height: 408px;" />
+</ui:UXML>
