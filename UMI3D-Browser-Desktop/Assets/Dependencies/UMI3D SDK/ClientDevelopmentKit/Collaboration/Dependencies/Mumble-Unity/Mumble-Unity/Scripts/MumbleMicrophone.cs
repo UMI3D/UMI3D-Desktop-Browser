@@ -104,7 +104,7 @@ namespace Mumble
                 Debug.LogWarning("No microphone connected!");
                 return -1;
             }
-            Debug.Log("Pomme");
+
             _currentMic = Microphone.devices[MicNumberToUse];
             int minFreq;
             int maxFreq;

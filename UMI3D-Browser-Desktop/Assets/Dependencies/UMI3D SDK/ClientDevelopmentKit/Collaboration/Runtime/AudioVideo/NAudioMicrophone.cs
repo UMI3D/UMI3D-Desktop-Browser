@@ -20,7 +20,6 @@ using NAudio.Dsp;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
 
 namespace umi3d.cdk.collaboration
@@ -68,6 +67,8 @@ namespace umi3d.cdk.collaboration
         #endregion
 
         #region Record data
+
+        private bool shouldSendAudioToServer = false;
 
         /// <summary>
         /// Does microphone needs to record data.
@@ -233,7 +234,7 @@ namespace umi3d.cdk.collaboration
 
         public override void StartSendingAudio(int sampleRate)
         {
-            Debug.Log("TODO");
+            shouldSendAudioToServer = true;
         }
 
         /// <summary>
@@ -259,7 +260,7 @@ namespace umi3d.cdk.collaboration
 
         public override void StopSendingAudio()
         {
-            Debug.Log("TODO");
+            shouldSendAudioToServer = false;
         }
 
         /// <summary>
@@ -271,7 +272,6 @@ namespace umi3d.cdk.collaboration
             {
                 needToRecord = false;
                 waveIn.StopRecording();
-
             }
         }
 
@@ -303,7 +303,7 @@ namespace umi3d.cdk.collaboration
                 }
             }
 
-            if (needToRecord)
+            if (needToRecord && shouldSendAudioToServer)
                 SendVoiceIfReady();
 
             if (Input.GetKeyDown(KeyCode.K))
