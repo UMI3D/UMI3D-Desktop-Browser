@@ -73,7 +73,7 @@ namespace umi3d.cdk.userCapture
                 if (gameObject.GetComponents<UMI3DClientUserTrackingBone>().Count() > 1)
                     throw new System.Exception("There can be only one bone per gameobject !");
                 else
-                    throw new System.Exception("Internal error");
+                    throw new System.Exception($"Internal error. BoneType = {boneType}");
             }
             instances.Add(boneType, this);
         }
