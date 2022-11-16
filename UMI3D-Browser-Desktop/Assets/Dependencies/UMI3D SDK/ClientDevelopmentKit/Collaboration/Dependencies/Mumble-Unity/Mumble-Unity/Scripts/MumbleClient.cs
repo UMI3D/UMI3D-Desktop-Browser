@@ -49,6 +49,7 @@ namespace Mumble
             }
         }
         public bool ReadyToConnect { get; private set; }
+
         public bool ConnectionSetupFinished { get; private set; }
         /// <summary>
         /// Methods to create or delete the Unity audio players
@@ -188,17 +189,6 @@ namespace Mumble
             }*/
 
             _outputChannelCount = 1;
-
-            var settings = AudioSettings.GetConfiguration();
-            settings.speakerMode = AudioSpeakerMode.Mono;
-            AudioSettings.Reset(settings);
-
-            for (int i = 0; i < WaveOut.DeviceCount; i++)
-            {
-                var output = WaveOut.GetCapabilities(i);
-
-                Debug.Log(output.SupportsPlaybackRateControl + " " + output.ProductName);
-            }
 
             if (debugVals == null)
                 debugVals = new DebugValues();
@@ -505,7 +495,7 @@ namespace Mumble
         }
         public void Close()
         {
-            // Debug.Log("Closing mumble");
+            Debug.Log("Closing mumble");
             if (_manageSendBuffer != null)
                 _manageSendBuffer.Dispose();
             _manageSendBuffer = null;

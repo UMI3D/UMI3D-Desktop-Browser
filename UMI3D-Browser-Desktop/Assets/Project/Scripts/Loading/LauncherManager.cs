@@ -287,6 +287,12 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
 
     protected override void Start()
     {
+        Debug.Log("TODO : not force mono");
+
+        var settings = AudioSettings.GetConfiguration();
+        settings.speakerMode = AudioSpeakerMode.Mono;
+        AudioSettings.Reset(settings);
+
         base.Start();
 
         SetUpKeyboardConfiguration();

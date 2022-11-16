@@ -114,7 +114,6 @@ namespace umi3d.cdk.collaboration
 
             Microphone.GetDeviceCaps(Microphone.devices[MicNumberToUse], out int minFreq, out int maxFreq);
 
-            Debug.Log("Init mic with " + GetCurrentMicName());
 
             currentMicSampleRate = MumbleClient.GetNearestSupportedSampleRate(maxFreq);
             NumSamplesPerOutgoingPacket = MumbleConstants.NUM_FRAMES_PER_OUTGOING_PACKET * currentMicSampleRate / 100;
@@ -248,7 +247,6 @@ namespace umi3d.cdk.collaboration
                 {
                     waveIn.StartRecording();
                     needToRecord = true;
-                    Debug.Log("Start recording");
                 }
                 catch (Exception ex)
                 {
@@ -273,7 +271,7 @@ namespace umi3d.cdk.collaboration
             {
                 needToRecord = false;
                 waveIn.StopRecording();
-                Debug.Log("Stop recording");
+
             }
         }
 
@@ -314,15 +312,6 @@ namespace umi3d.cdk.collaboration
                     channelChoosen = 2;
                 else
                     channelChoosen = 0;
-                Debug.Log("Set channel " + channelChoosen);
-            }
-
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                Debug.Log("Set stop " + channelChoosen);
-
-                StopRecording();
-                needToRecord = false;
             }
         }
 

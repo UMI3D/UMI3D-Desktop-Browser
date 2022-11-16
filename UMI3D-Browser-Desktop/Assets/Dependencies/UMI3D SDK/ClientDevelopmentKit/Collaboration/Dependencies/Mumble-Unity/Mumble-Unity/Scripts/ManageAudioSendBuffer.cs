@@ -54,8 +54,6 @@ namespace Mumble
             }
             _pcmArrays.Clear();
 
-            Debug.Log("InitForSampleRate");
-
             _encoder = new OpusEncoder(sampleRate, 1) { EnableForwardErrorCorrection = false };
 
             if(_pendingBitrate > 0)

@@ -243,7 +243,7 @@ namespace umi3d.cdk
                         audioSource.time = atTime;
                         audioSource.Play();
                     }
-
+                    Debug.Log("Audio " + audioSource.clip.length + " " + atTime);
                     OnEndCoroutine = UMI3DAnimationManager.StartCoroutine(WaitUntilTheEnd(audioSource.clip.length - atTime));
                 }
                 else
