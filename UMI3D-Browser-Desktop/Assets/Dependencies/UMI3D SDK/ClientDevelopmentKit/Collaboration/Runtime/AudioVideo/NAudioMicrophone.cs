@@ -139,6 +139,9 @@ namespace umi3d.cdk.collaboration
 
                 waveIn.DataAvailable += (s, a) =>
                 {
+                    if (!shouldSendAudioToServer)
+                        return;
+
                     byte[] buffer = a.Buffer;
 
                     lock (data)
@@ -232,8 +235,14 @@ namespace umi3d.cdk.collaboration
             }
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="sampleRate"></param>
         public override void StartSendingAudio(int sampleRate)
         {
+            data.Clear();
+
             shouldSendAudioToServer = true;
         }
 
@@ -258,8 +267,13 @@ namespace umi3d.cdk.collaboration
             }
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void StopSendingAudio()
         {
+            data.Clear();
+
             shouldSendAudioToServer = false;
         }
 

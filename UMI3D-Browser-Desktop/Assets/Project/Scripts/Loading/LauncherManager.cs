@@ -287,7 +287,7 @@ public class LauncherManager : umi3d.baseBrowser.connection.BaseLauncher
 
     protected override void Start()
     {
-        Debug.Log("TODO : not force mono");
+        Debug.Log("TODO : Not force mono speaker mode. For now forced for bluetooth headset.");
 
         var settings = AudioSettings.GetConfiguration();
         settings.speakerMode = AudioSpeakerMode.Mono;
