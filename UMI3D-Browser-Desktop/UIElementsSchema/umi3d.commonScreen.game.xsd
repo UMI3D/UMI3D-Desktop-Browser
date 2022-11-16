@@ -108,6 +108,13 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="NotificationCenter_C" substitutionGroup="engine:VisualElement" xmlns:q8="umi3d.commonScreen.game" type="q8:NotificationCenter_CType" />
+  <xs:simpleType name="TopArea_C_controller_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="MouseAndKeyboard" />
+      <xs:enumeration value="Touch" />
+      <xs:enumeration value="GameController" />
+    </xs:restriction>
+  </xs:simpleType>
   <xs:complexType name="TopArea_CType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -121,12 +128,13 @@
         <xs:attribute default="" name="class" type="xs:string" use="optional" />
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute default="MouseAndKeyboard" name="controller" xmlns:q9="umi3d.commonScreen.game" type="q9:TopArea_C_controller_Type" use="optional" />
         <xs:attribute default="false" name="is-expanded" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="TopArea_C" substitutionGroup="engine:VisualElement" xmlns:q9="umi3d.commonScreen.game" type="q9:TopArea_CType" />
+  <xs:element name="TopArea_C" substitutionGroup="engine:VisualElement" xmlns:q10="umi3d.commonScreen.game" type="q10:TopArea_CType" />
   <xs:complexType name="UserList_CType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -147,7 +155,32 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="UserList_C" substitutionGroup="engine:VisualElement" xmlns:q10="umi3d.commonScreen.game" type="q10:UserList_CType" />
+  <xs:element name="UserList_C" substitutionGroup="engine:VisualElement" xmlns:q11="umi3d.commonScreen.game" type="q11:UserList_CType" />
+  <xs:simpleType name="NotifAndUsersArea_C_panel_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Notifications" />
+      <xs:enumeration value="Users" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="NotifAndUsersArea_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute default="Notifications" name="panel" xmlns:q12="umi3d.commonScreen.game" type="q12:NotifAndUsersArea_C_panel_Type" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NotifAndUsersArea_C" substitutionGroup="engine:VisualElement" xmlns:q13="umi3d.commonScreen.game" type="q13:NotifAndUsersArea_CType" />
   <xs:simpleType name="TrailingArea_C_controller_Type">
     <xs:restriction base="xs:string">
       <xs:enumeration value="MouseAndKeyboard" />
@@ -168,7 +201,7 @@
         <xs:attribute default="" name="class" type="xs:string" use="optional" />
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
-        <xs:attribute default="MouseAndKeyboard" name="controller" xmlns:q11="umi3d.commonScreen.game" type="q11:TrailingArea_C_controller_Type" use="optional" />
+        <xs:attribute default="MouseAndKeyboard" name="controller" xmlns:q14="umi3d.commonScreen.game" type="q14:TrailingArea_C_controller_Type" use="optional" />
         <xs:attribute default="false" name="display-object-menu" type="xs:boolean" use="optional" />
         <xs:attribute default="false" name="display-emote-window" type="xs:boolean" use="optional" />
         <xs:attribute default="false" name="left-hand" type="xs:boolean" use="optional" />
@@ -176,7 +209,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="TrailingArea_C" substitutionGroup="engine:VisualElement" xmlns:q12="umi3d.commonScreen.game" type="q12:TrailingArea_CType" />
+  <xs:element name="TrailingArea_C" substitutionGroup="engine:VisualElement" xmlns:q15="umi3d.commonScreen.game" type="q15:TrailingArea_CType" />
   <xs:simpleType name="GamePanel_C_current-view_Type">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Loader" />
@@ -197,10 +230,10 @@
         <xs:attribute default="" name="class" type="xs:string" use="optional" />
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
-        <xs:attribute default="Game" name="current-view" xmlns:q13="umi3d.commonScreen.game" type="q13:GamePanel_C_current-view_Type" use="optional" />
+        <xs:attribute default="Game" name="current-view" xmlns:q16="umi3d.commonScreen.game" type="q16:GamePanel_C_current-view_Type" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="GamePanel_C" substitutionGroup="engine:VisualElement" xmlns:q14="umi3d.commonScreen.game" type="q14:GamePanel_CType" />
+  <xs:element name="GamePanel_C" substitutionGroup="engine:VisualElement" xmlns:q17="umi3d.commonScreen.game" type="q17:GamePanel_CType" />
 </xs:schema>
