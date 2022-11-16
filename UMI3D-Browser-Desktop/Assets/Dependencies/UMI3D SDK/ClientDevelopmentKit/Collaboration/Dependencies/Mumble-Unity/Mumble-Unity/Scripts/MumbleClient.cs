@@ -5,6 +5,7 @@ using Version = MumbleProto.Version;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using NAudio.Wave;
 
 namespace Mumble
 {
@@ -187,6 +188,17 @@ namespace Mumble
             }*/
 
             _outputChannelCount = 1;
+
+            var settings = AudioSettings.GetConfiguration();
+            settings.speakerMode = AudioSpeakerMode.Mono;
+            AudioSettings.Reset(settings);
+
+            for (int i = 0; i < WaveOut.DeviceCount; i++)
+            {
+                var output = WaveOut.GetCapabilities(i);
+
+                Debug.Log(output.SupportsPlaybackRateControl + " " + output.ProductName);
+            }
 
             if (debugVals == null)
                 debugVals = new DebugValues();

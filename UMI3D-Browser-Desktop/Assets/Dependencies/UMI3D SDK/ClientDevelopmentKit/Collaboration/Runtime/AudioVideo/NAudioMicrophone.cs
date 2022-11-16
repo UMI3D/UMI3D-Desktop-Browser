@@ -25,6 +25,10 @@ using UnityEngine;
 
 namespace umi3d.cdk.collaboration
 {
+    /// <summary>
+    /// Custom microphone for <see cref="MumbleClient"/> not based on Unity interface for mics 
+    /// but on <see cref="https://github.com/naudio/NAudio"/>. 
+    /// </summary>
     public class NAudioMicrophone : MumbleMicrophone
     {
         #region Fields
@@ -32,7 +36,12 @@ namespace umi3d.cdk.collaboration
         /// <summary>
         /// Filter to improve voice recording.
         /// </summary>
-        BiQuadFilter filter;
+        private BiQuadFilter filter;
+
+        /// <summary>
+        /// Use <see cref="filter"/> to improve record quality ?
+        /// </summary>
+        private bool useFilter = false;
 
         #region Mic data
 
@@ -40,7 +49,21 @@ namespace umi3d.cdk.collaboration
 
         private int currentMicSampleRate = -1;
 
+        /// <summary>
+        /// Two channels are recorded by default because some microphones only record data in one channel.
+        /// (But a mono audio input is sent to murmure)
+        /// </summary>
         private int numberOfChannel = 2;
+
+        /// <summary>
+        /// Input audio channel which is sent to the server. 0 = right channel, 1 = left channel.
+        /// </summary>
+        private int channelChoosen = 0;
+
+        /// <summary>
+        /// Is <see cref="channelChoosen"/> set up ?
+        /// </summary>
+        private bool isChannelChoosen = false;
 
         #endregion
 
@@ -87,6 +110,8 @@ namespace umi3d.cdk.collaboration
             }
 
             currentMicIndex = MicNumberToUse;
+            isChannelChoosen = false;
+
             Microphone.GetDeviceCaps(Microphone.devices[MicNumberToUse], out int minFreq, out int maxFreq);
 
             Debug.Log("Init mic with " + GetCurrentMicName());
@@ -99,15 +124,13 @@ namespace umi3d.cdk.collaboration
 
             InitializeInternalMic(currentMicSampleRate);
 
-            /*if (SendAudioOnStart && (VoiceSendingType == MicType.AlwaysSend
-                || VoiceSendingType == MicType.Amplitude))
-                StartSendingAudio(micSampleRate);*/
-
             return currentMicSampleRate;
         }
 
-        bool useFilter = false;
-
+        /// <summary>
+        /// Inits <see cref="waveIn"/>.
+        /// </summary>
+        /// <param name="micSampleRate"></param>
         protected void InitializeInternalMic(int micSampleRate)
         {
             if (waveIn == null)
@@ -122,7 +145,7 @@ namespace umi3d.cdk.collaboration
                     {
                         for (int index = 0; index < a.BytesRecorded; index += 2 * numberOfChannel)
                         {
-                            short sample = (short)((buffer[index + 1] << 8) | buffer[index]);
+                            short sample = (short)((buffer[channelChoosen + index + 1] << 8) | buffer[channelChoosen + index]);
 
                             if (useFilter)
                                 data.Add(filter.Transform(sample / 32768f));
@@ -130,6 +153,10 @@ namespace umi3d.cdk.collaboration
                                 data.Add(sample / 32768f);
                         }
                     }
+
+                    if (!isChannelChoosen)
+                        ChooseChannel(buffer, a.BytesRecorded, micSampleRate);
+
                 };
             } 
 
@@ -137,6 +164,40 @@ namespace umi3d.cdk.collaboration
             waveIn.DeviceNumber = MicNumberToUse;
 
             filter = BiQuadFilter.LowPassFilter(micSampleRate, 10000, 1);
+        }
+
+        /// <summary>
+        /// Sets up <see cref="channelChoosen"/>, meaning choose the audio input channel to send to the server.
+        /// </summary>
+        /// <returns></returns>
+        private void ChooseChannel(byte[] buffer, int nbByte, int sampleRate)
+        {
+            if (!isChannelChoosen)
+            {
+                int right = 0;
+                int left = 0;
+
+                for (int i = 0; i < nbByte; i += 4)
+                {
+                    right = right + Mathf.Abs((short)((buffer[i + 1] << 8) | buffer[i]));
+                    left = left + Mathf.Abs((short)((buffer[i + 3] << 8) | buffer[i + 2]));
+                }
+
+                var diff = Mathf.Abs(right - left);
+
+                if (diff > 100000)
+                {
+                    isChannelChoosen = true;
+                    channelChoosen = (right - left > 0) ? 0 : 2;
+                    Debug.Log("Choosen " + channelChoosen);
+                }
+                else if (diff < 1000)
+                {
+                    isChannelChoosen = true;
+                    channelChoosen = 0;
+                    Debug.Log("Choosen " + channelChoosen);
+                }
+            }
         }
 
         /// <summary>
@@ -216,6 +277,9 @@ namespace umi3d.cdk.collaboration
             }
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected override void Update()
         {
             if (_mumbleClient == null || !_mumbleClient.ConnectionSetupFinished)
@@ -246,8 +310,19 @@ namespace umi3d.cdk.collaboration
 
             if (Input.GetKeyDown(KeyCode.K))
             {
-                useFilter = !useFilter;
-                Debug.Log("Use filter " + useFilter);
+                if (channelChoosen == 0)
+                    channelChoosen = 2;
+                else
+                    channelChoosen = 0;
+                Debug.Log("Set channel " + channelChoosen);
+            }
+
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                Debug.Log("Set stop " + channelChoosen);
+
+                StopRecording();
+                needToRecord = false;
             }
         }
 
