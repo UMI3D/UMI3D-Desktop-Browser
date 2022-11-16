@@ -118,17 +118,24 @@ namespace umi3d.baseBrowser.connection
             NotificationLoader.Notification2DReceived += dto => infArea.AddNotification(dto);
 
             Game.TrailingArea.ButtonsArea.Emote.clicked += () => Game.TrailingArea.DisplayEmoteWindow = !Game.TrailingArea.DisplayEmoteWindow;
+            Game.BottomArea.Emote.clicked += () => Game.BottomArea.ButtonSelected = CustomBottomArea.BottomBarButton.Emote;
             EmoteManager.Instance.EmoteReceived += emotes => 
             {
                 Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
                 Game.TrailingArea.EmoteWindow.OnEmoteReceived(emotes);
+                Game.BottomArea.EmoteWindow.OnEmoteReceived(emotes);
             };
             EmoteManager.Instance.NoEmoteReeived += () => 
             {
                 Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
                 Game.TrailingArea.EmoteWindow.Reset();
+                Game.BottomArea.EmoteWindow.Reset();
             };
-            EmoteManager.Instance.EmoteUpdated += Game.TrailingArea.EmoteWindow.OnUpdateEmote;
+            EmoteManager.Instance.EmoteUpdated += emote =>
+            {
+                Game.TrailingArea.EmoteWindow.OnUpdateEmote(emote);
+                Game.BottomArea.EmoteWindow.OnUpdateEmote(emote);
+            };
 
             ObjectMenu.GetContainer = () => Game.TrailingArea.ObjectMenu;
             ObjectMenu.DisplayObjectMenu = value =>

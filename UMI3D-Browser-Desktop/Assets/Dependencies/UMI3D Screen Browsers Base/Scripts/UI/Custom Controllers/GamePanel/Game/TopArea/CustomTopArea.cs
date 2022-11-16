@@ -14,12 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using umi3d.commonMobile.game;
 using UnityEngine.UIElements;
 
 public class CustomTopArea : VisualElement, ICustomElement
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
+        protected UxmlEnumAttributeDescription<ControllerEnum> m_controller = new UxmlEnumAttributeDescription<ControllerEnum>
+        {
+            name = "controller",
+            defaultValue = ControllerEnum.MouseAndKeyboard
+        };
+
         UxmlBoolAttributeDescription m_isExpanded = new UxmlBoolAttributeDescription
         {
             name = "is-expanded",
@@ -38,8 +45,19 @@ public class CustomTopArea : VisualElement, ICustomElement
 
             custom.Set
                 (
+                    m_controller.GetValueFromBag(bag, cc),
                     m_isExpanded.GetValueFromBag(bag, cc)
                 );
+        }
+    }
+
+    public ControllerEnum Controller
+    {
+        get => m_controller;
+        set
+        {
+            m_controller = value;
+            InformationArea.Controller = value;
         }
     }
 
@@ -72,6 +90,7 @@ public class CustomTopArea : VisualElement, ICustomElement
     public CustomButton Menu;
     public CustomButton Toolbox;
 
+    protected ControllerEnum m_controller;
     protected bool m_isExplanded;
     protected bool m_hasBeenInitialized;
 
@@ -99,9 +118,9 @@ public class CustomTopArea : VisualElement, ICustomElement
         Add(Menu);
     }
 
-    public virtual void Set() => Set(false);
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false);
 
-    public virtual void Set(bool isExpand)
+    public virtual void Set(ControllerEnum controller, bool isExpand)
     {
         if (!m_hasBeenInitialized)
         {
@@ -109,6 +128,7 @@ public class CustomTopArea : VisualElement, ICustomElement
             m_hasBeenInitialized = true;
         }
 
+        Controller = controller;
         IsExpanded = isExpand;
     }
 }
