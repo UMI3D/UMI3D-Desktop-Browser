@@ -123,7 +123,7 @@ namespace BrowserDesktop.Menu
             var mics = umi3d.cdk.collaboration.MicrophoneListener.GetMicrophonesNames().ToList();
             var mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
 
-            MicrophoneDropDown.SetOptions(umi3d.cdk.collaboration.MicrophoneListener.GetMicrophonesNames().ToList());
+            MicrophoneDropDown.SetOptions(mics);
             if (mics.Contains(mic))
             {
                 MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
@@ -293,8 +293,10 @@ namespace BrowserDesktop.Menu
                 await UMI3DAsyncManager.Yield();
             if (!string.IsNullOrEmpty(name) && name != umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName())
             {
-                MicrophoneDropDown.SetOptions(umi3d.cdk.collaboration.MicrophoneListener.GetMicrophonesNames().ToList());
-                if (name != MicrophoneDropDown.Value)
+                var mics = umi3d.cdk.collaboration.MicrophoneListener.GetMicrophonesNames().ToList();
+
+                MicrophoneDropDown.SetOptions(mics);
+                if (name != MicrophoneDropDown.Value && mics.Contains(name))
                     MicrophoneDropDown.SetDefaultValue(name);
                 PlayerPrefs.SetString(MicrophoneKey, name);
 
