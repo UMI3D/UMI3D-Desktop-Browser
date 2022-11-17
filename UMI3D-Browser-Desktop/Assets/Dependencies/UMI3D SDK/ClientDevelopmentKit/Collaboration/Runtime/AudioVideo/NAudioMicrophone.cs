@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2019 - 2022 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@ limitations under the License.
 
 
 using Mumble;
-using NAudio.Dsp;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
@@ -167,7 +166,7 @@ namespace umi3d.cdk.collaboration
                         ChooseChannel(buffer, a.BytesRecorded, micSampleRate);
 
                 };
-            } 
+            }
 
             waveIn.WaveFormat = new WaveFormat(micSampleRate, numberOfChannel);
             waveIn.DeviceNumber = MicNumberToUse;
@@ -230,7 +229,8 @@ namespace umi3d.cdk.collaboration
                             data = data.GetRange(NumSamplesPerOutgoingPacket + 1, data.Count - NumSamplesPerOutgoingPacket - 1);
                         else
                             data.Clear();
-                    } else
+                    }
+                    else
                     {
                         sendData = true;
                     }
@@ -322,7 +322,8 @@ namespace umi3d.cdk.collaboration
                     StartRecording();
                 else if (Input.GetKeyUp(PushToTalkKeycode))
                     StopRecording();
-            } else
+            }
+            else
             {
                 if (!_mumbleClient.IsSelfMuted())
                 {

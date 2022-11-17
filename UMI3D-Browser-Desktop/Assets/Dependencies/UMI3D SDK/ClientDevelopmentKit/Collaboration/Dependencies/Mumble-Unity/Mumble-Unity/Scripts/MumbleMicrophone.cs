@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using NAudio.Wave;
-using System.Collections.Generic;
 
 namespace Mumble
 {

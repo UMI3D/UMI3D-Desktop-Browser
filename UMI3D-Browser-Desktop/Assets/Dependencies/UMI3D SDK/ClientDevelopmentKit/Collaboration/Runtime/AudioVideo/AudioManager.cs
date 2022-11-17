@@ -28,7 +28,7 @@ namespace umi3d.cdk.collaboration
     public class AudioUserIsSpeaking : UnityEvent<UMI3DUser, bool> { }
 
     /// <summary>
-    /// Singleton use to read AudioDto.
+    /// Manager for audio reading.
     /// </summary>
     public class AudioManager : SingleBehaviour<AudioManager>
     {
@@ -264,7 +264,7 @@ namespace umi3d.cdk.collaboration
                 SpacialReader.Remove(user.id);
             }
 
-            if(pending != null && !pending.IsMumbleClientSet())
+            if (pending != null && !pending.IsMumbleClientSet())
             {
                 CleanPending(user);
             }

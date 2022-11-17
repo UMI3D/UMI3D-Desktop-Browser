@@ -367,9 +367,10 @@ namespace umi3d.cdk
             if (QualitySettings.realtimeReflectionProbes)
             {
                 await RenderProbes();
-            } else
+            }
+            else
             {
-                Debug.Log("Rendering probes not enabled on this browser " + QualitySettings.GetQualityLevel());
+                Debug.Log("Rendering probes not enabled on this browser.");
             }
             endProgress.AddComplete();
             await UMI3DAsyncManager.Yield();
@@ -501,7 +502,7 @@ namespace umi3d.cdk
 
         public static async Task LoadEntity(ByteContainer container)
         {
-            if (Exists) 
+            if (Exists)
                 await Instance._LoadEntity(container);
         }
 
@@ -573,15 +574,15 @@ namespace umi3d.cdk
 
                 await Task.WhenAll(
                     load.entities.Select(async item =>
+                    {
+                        if (item is MissingEntityDto missing)
                         {
-                            if (item is MissingEntityDto missing)
-                            {
-                                NotifyEntityFailedToLoad(missing.id);
-                                UMI3DLogger.Log($"Get entity [{missing.id}] failed : {missing.reason}", scope);
-                            }
-                            else
-                                await LoadEntity(item);
-                        }));
+                            NotifyEntityFailedToLoad(missing.id);
+                            UMI3DLogger.Log($"Get entity [{missing.id}] failed : {missing.reason}", scope);
+                        }
+                        else
+                            await LoadEntity(item);
+                    }));
 
             }
             catch (Exception e)

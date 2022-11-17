@@ -5,7 +5,6 @@ using Version = MumbleProto.Version;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Events;
-using NAudio.Wave;
 
 namespace Mumble
 {
@@ -110,7 +109,7 @@ namespace Mumble
         private readonly AudioPlayerRemoverMethod _audioPlayerDestroyer;
         private readonly AnyUserStateChangedMethod _anyUserStateChange;
         private readonly int _outputSampleRate;
-        private int _outputChannelCount;
+        private readonly int _outputChannelCount;
         private readonly SpeakerCreationMode _speakerCreationMode;
         private readonly int _maxPositionalDataLength;
         // The mute that we're waiting to set
@@ -496,7 +495,6 @@ namespace Mumble
         }
         public void Close()
         {
-            Debug.Log("Closing mumble");
             if (_manageSendBuffer != null)
                 _manageSendBuffer.Dispose();
             _manageSendBuffer = null;
