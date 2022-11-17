@@ -1,7 +1,5 @@
 .user-list {
 	flex-grow: 1;
-	width: 33%;
-	max-width: 33%;
 	padding-left: var(--size-margin-and-padding-game);
 	padding-right: var(--size-margin-and-padding-game);
 }

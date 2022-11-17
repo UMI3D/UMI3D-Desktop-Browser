@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 52398012}
   - component: {fileID: 52398011}
   - component: {fileID: 52398013}
+  - component: {fileID: 52398014}
   m_Layer: 0
   m_Name: GamePanel
   m_TagString: Untagged
@@ -197,6 +198,18 @@ MonoBehaviour:
   ObjectMenuDisplay: {fileID: 1635769821}
   NotificationLoader: {fileID: 0}
   Windows_Manager: {fileID: 198329002}
+--- !u!114 &52398014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52398010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebec79af3d7d7a14cab9ed890ef823bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &87752525
 PrefabInstance:
   m_ObjectHideFlags: 0

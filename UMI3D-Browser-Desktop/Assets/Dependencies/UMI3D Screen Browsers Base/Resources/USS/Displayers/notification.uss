@@ -15,7 +15,7 @@
 }
 
 .notification__header {
-    height: 60px;
+    height: 70px;
     align-items: flex-end;
     padding-left: 7px;
     padding-right: 7px;
@@ -34,20 +34,26 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    margin-left: 2%;
-    margin-right: 2%;
+}
+
+.notification__author.unity-label.text {
+    margin-left: 7px;
+    margin-right: 7px;
     margin-top: 2%;
-    margin-bottom: 0;
+    margin-bottom: 2%;
 }
 
 .notification__timestamp {
     position: absolute;
     bottom: 0;
-    margin-left: 2%;
-    margin-right: 2%;
-    margin-top: 2%;
-    margin-bottom: 0;
     left: 0;
+}
+
+.notification__timestamp.unity-label.text {
+    margin-left: 7px;
+    margin-right: 7px;
+    margin-top: 2%;
+    margin-bottom: 1%;
 }
 
 .text-white .notification__author {
@@ -63,7 +69,7 @@
     flex-grow: 1;
 }
 
-.notification__message {
+.notification__message.unity-label.text {
     margin-left: 7px;
     margin-right: 7px;
     margin-top: 7px;

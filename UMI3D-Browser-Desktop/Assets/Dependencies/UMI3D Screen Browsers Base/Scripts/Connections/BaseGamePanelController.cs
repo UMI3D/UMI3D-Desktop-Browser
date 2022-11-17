@@ -115,7 +115,16 @@ namespace umi3d.baseBrowser.connection
             infArea.SoundStatusChanged += () => EnvironmentSettings.Instance.AudioSetting.Toggle();
             infArea.MicStatusChanged += () => EnvironmentSettings.Instance.MicSetting.Toggle();
 
-            NotificationLoader.Notification2DReceived += dto => infArea.AddNotification(dto);
+            EnvironmentSettings.Instance.AudioSetting.StatusChanged += (value) => Game.BottomArea.IsSoundOn = value;
+            EnvironmentSettings.Instance.MicSetting.StatusChanged += (value) => Game.BottomArea.IsMicOn = value;
+            Game.BottomArea.Sound.clicked += () => EnvironmentSettings.Instance.AudioSetting.Toggle();
+            Game.BottomArea.Mic.clicked += () => EnvironmentSettings.Instance.MicSetting.Toggle();
+
+            NotificationLoader.Notification2DReceived += dto =>
+            {
+                infArea.AddNotification(dto);
+                Game.TrailingArea.NotifAndUserArea.notificationCenter.UpdateFilter();
+            };
 
             Game.TrailingArea.ButtonsArea.Emote.clicked += () => Game.TrailingArea.DisplayEmoteWindow = !Game.TrailingArea.DisplayEmoteWindow;
             Game.BottomArea.Emote.clicked += () => Game.BottomArea.ButtonSelected = CustomBottomArea.BottomBarButton.Emote;
@@ -264,6 +273,7 @@ namespace umi3d.baseBrowser.connection
             BaseConnectionProcess.Instance.UserCountUpdated += count =>
             {
                 Game.TopArea.InformationArea.UserList.RefreshList();
+                Game.TrailingArea.NotifAndUserArea.UserList.RefreshList();
                 Menu.GameData.ParticipantCount = count;
             };
         }

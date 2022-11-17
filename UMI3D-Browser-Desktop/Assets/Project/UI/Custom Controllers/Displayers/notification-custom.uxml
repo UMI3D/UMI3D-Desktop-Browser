@@ -1,4 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Dependencies/UMI3D%20Screen%20Browsers%20Base/Scripts/UI/Custom%20Controllers/Resources/USS/Displayers/notification.uss?fileID=7433441132597879392&amp;guid=98c8ae65b599a05439ab2ea4cda73d53&amp;type=3#notification" />
+    <Style src="project://database/Assets/Dependencies/UMI3D%20Screen%20Browsers%20Base/Resources/USS/Displayers/notification.uss?fileID=7433441132597879392&amp;guid=98c8ae65b599a05439ab2ea4cda73d53&amp;type=3#notification" />
     <umi3d.commonScreen.Displayer.Notification_C title="Title" author="Romain" timestamp="now" message="Message" choice-a-label="Choice A" choice-b-label="Choice B" />
 </ui:UXML>

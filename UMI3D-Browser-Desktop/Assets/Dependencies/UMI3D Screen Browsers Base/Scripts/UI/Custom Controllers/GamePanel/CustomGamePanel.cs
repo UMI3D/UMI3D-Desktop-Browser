@@ -34,6 +34,11 @@ public abstract class CustomGamePanel : VisualElement, ICustomElement
             name = "current-view",
             defaultValue = GameViews.Game
         };
+        protected UxmlBoolAttributeDescription m_displayHeader = new UxmlBoolAttributeDescription
+        {
+            name = "display-header",
+            defaultValue = false,
+        };
 
         public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
         {
@@ -47,7 +52,8 @@ public abstract class CustomGamePanel : VisualElement, ICustomElement
 
             custom.Set
                 (
-                    m_currentView.GetValueFromBag(bag, cc)
+                    m_currentView.GetValueFromBag(bag, cc),
+                    m_displayHeader.GetValueFromBag(bag, cc)
                 );
         }
     }
@@ -128,13 +134,26 @@ public abstract class CustomGamePanel : VisualElement, ICustomElement
         return menuScreen;
     }
 
+    public virtual bool DisplayHeader
+    {
+        get => m_displayHeader;
+        set
+        {
+            Loader.DisplayHeader = value;
+            Menu.DisplayHeader = value;
+            Game.TopArea.DisplayHeader = value;
+        }
+    }
+
     public System.Action<object> UnSetMovement;
     public CustomLoader Loader;
     public CustomGameMenu Menu;
     public CustomGame Game;
+    public CustomAppHeader GameAppHeader;
 
     public Stack<GameViews> ViewStack = new Stack<GameViews>();
     protected GameViews m_currentGameView;
+    protected bool m_displayHeader;
     protected bool m_hasBeenInitialized;
 
     public virtual void InitElement()
@@ -154,9 +173,9 @@ public abstract class CustomGamePanel : VisualElement, ICustomElement
         Menu.Resume.clicked += () => AddScreenToStack = GameViews.Game;
     }
 
-    public virtual void Set() => Set(GameViews.Game);
+    public virtual void Set() => Set(GameViews.Game, false);
 
-    public virtual void Set(GameViews view)
+    public virtual void Set(GameViews view, bool displayHeader)
     {
         if (!m_hasBeenInitialized)
         {
@@ -165,6 +184,7 @@ public abstract class CustomGamePanel : VisualElement, ICustomElement
         }
 
         CurrentView = view;
+        DisplayHeader = displayHeader;
     }
 
     protected void RemoveAllView()

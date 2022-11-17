@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -55,6 +54,12 @@ public class CustomBottomArea : VisualElement, ICustomElement
             defaultValue = BottomBarButton.None,
         };
 
+        UxmlBoolAttributeDescription m_displayNotifAndUsersArea = new UxmlBoolAttributeDescription
+        {
+            name = "display-notif-users-area",
+            defaultValue = false,
+        };
+
         public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
         {
             get { yield break; }
@@ -72,7 +77,8 @@ public class CustomBottomArea : VisualElement, ICustomElement
                     m_isAvatarOn.GetValueFromBag(bag, cc),
                     m_isMicOn.GetValueFromBag(bag, cc),
                     m_isSoundOn.GetValueFromBag(bag, cc),
-                    m_buttonSelected.GetValueFromBag(bag, cc)
+                    m_buttonSelected.GetValueFromBag(bag, cc),
+                    m_displayNotifAndUsersArea.GetValueFromBag(bag, cc)
                 );
         }
     }
@@ -179,7 +185,7 @@ public class CustomBottomArea : VisualElement, ICustomElement
         }
     }
 
-    public virtual bool DisplayEmoteWindow
+    protected virtual bool DisplayEmoteWindow
     {
         get => m_displayEmoteWindow;
         set
@@ -207,6 +213,18 @@ public class CustomBottomArea : VisualElement, ICustomElement
         }
     }
 
+    public virtual bool DisplayNotifUsersArea
+    {
+        get => m_displayNotifUsersArea;
+        set
+        {
+            m_displayNotifUsersArea = value;
+            if (value) NotifAndUsers.AddToClassList(USSCustomClassButtonSelected);
+            else NotifAndUsers.RemoveFromClassList(USSCustomClassButtonSelected);
+            NotifUsersValueChanged?.Invoke(value);
+        }
+    }
+
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/bottomArea";
     public virtual string USSCustomClassName => "bottom-area";
@@ -226,6 +244,8 @@ public class CustomBottomArea : VisualElement, ICustomElement
     public virtual string USSCustomClassSound_Icon_off => $"{USSCustomClassName}__sound-icon__off";
     public virtual string USSCustomClassButtonSelected => $"{USSCustomClassName}__button-selected";
     public virtual string USSCustomClassEmote_Window => $"{USSCustomClassName}__emote-window";
+
+    public System.Action<bool> NotifUsersValueChanged;
 
     public VisualElement BottomBar = new VisualElement { name = "bottom-bar" };
     public VisualElement LeftBox = new VisualElement { name = "left-box" };
@@ -250,6 +270,8 @@ public class CustomBottomArea : VisualElement, ICustomElement
     protected bool m_isEmoteOpen;
 
     protected bool m_displayEmoteWindow;
+
+    protected bool m_displayNotifUsersArea;
 
     public virtual void InitElement()
     {
@@ -290,6 +312,8 @@ public class CustomBottomArea : VisualElement, ICustomElement
         Sound.Type = ButtonType.Invisible;
         NotifAndUsers.Type = ButtonType.Invisible;
 
+        NotifAndUsers.clicked += () => DisplayNotifUsersArea = !DisplayNotifUsersArea;
+
         Add(BottomBar);
 
         BottomBar.Add(LeftBox);
@@ -302,9 +326,9 @@ public class CustomBottomArea : VisualElement, ICustomElement
         RightBox.Add(NotifAndUsers);
     }
 
-    public virtual void Set() => Set(true, true, false, BottomBarButton.None);
+    public virtual void Set() => Set(true, false, true, BottomBarButton.None, false);
 
-    public virtual void Set(bool avatarOn, bool micOn, bool soundOn, BottomBarButton buttonSelected)
+    public virtual void Set(bool avatarOn, bool micOn, bool soundOn, BottomBarButton buttonSelected, bool displayNotifUsersArea)
     {
         if (!m_hasBeenInitialized)
         {
@@ -316,5 +340,6 @@ public class CustomBottomArea : VisualElement, ICustomElement
         IsMicOn = micOn;
         IsSoundOn = soundOn;
         ButtonSelected = buttonSelected;
+        DisplayNotifUsersArea = displayNotifUsersArea;
     }
 }

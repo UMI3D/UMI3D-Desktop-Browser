@@ -67,9 +67,9 @@ public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncher
         base.Start();
 
         Debug.Assert(Windows_Manager != null, "WindowsManager reference is null");
-        Launcher.Minimize.clicked += Windows_Manager.Minimize;
-        Launcher.Maximize.clicked += Windows_Manager.Maximize;
-        Launcher.Close.clicked += Application.Quit;
+        Launcher.Header.Minimize.clicked += Windows_Manager.Minimize;
+        Launcher.Header.Maximize.clicked += Windows_Manager.Maximize;
+        Launcher.Header.Close.clicked += Application.Quit;
 
         Windows_Manager.FullScreenEnabled = value => Launcher.DisplayHeader = value;
         Windows_Manager.DisplayDialogueBoxToQuit = () =>

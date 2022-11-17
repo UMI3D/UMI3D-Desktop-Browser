@@ -6,15 +6,15 @@
 	right: 0;
 }
 
-.top-area > .top-area__button.button-medium > .button__body {
+.top-area > .top-area-main > .top-area__button.button-medium > .button__body {
 	width: var(--size-medium-displayer);
 	max-width: var(--size-medium-displayer);
 }
 
-.top-area > .top-area__button {
+.top-area > .top-area-main > .top-area__button {
 	position: absolute;
 }
 
-.top-area > .top-area__menu > .button__body > .button__content-container {
+.top-area > .top-area-main > .top-area__menu > .button__body > .button__content-container {
 	background-image: var(--background-image-pause);
 }

@@ -57,6 +57,7 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
         set
         {
             m_filter = value;
+            FilterPicker.SetValueEnumWithoutNotify(value);
             UpdateFilter();
         }
     }
@@ -67,7 +68,7 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
     public virtual string USSCustomClassNoNotif => $"{USSCustomClassName}__no-notif-text";
 
     
-    public List<CustomNotification> Notifications = new List<CustomNotification>();
+    public static List<CustomNotification> Notifications = new List<CustomNotification>();
     public List<CustomNotification> FilteredNotifications = new List<CustomNotification>();
     public CustomSegmentedPicker<NotificationFilter> FilterPicker;
     public CustomScrollView ScrollView;
@@ -123,8 +124,8 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
 
     #region Implementation
 
-    protected List<NotificationDto> m_notificationDtos = new List<NotificationDto>();
-    protected List<NotificationDto> m_newNotificationDtos = new List<NotificationDto>();
+    protected static List<NotificationDto> m_notificationDtos = new List<NotificationDto>();
+    protected static List<NotificationDto> m_newNotificationDtos = new List<NotificationDto>();
 
     public virtual CustomNotification AddNotification(NotificationDto dto)
     {
@@ -186,8 +187,9 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
         UpdateFilter();
     }
 
-    protected void UpdateFilter()
+    public void UpdateFilter()
     {
+        UnityEngine.Debug.Log($"update filter");
         ScrollView.Clear();
         FilteredNotifications.Clear();
         m_isSet = false;

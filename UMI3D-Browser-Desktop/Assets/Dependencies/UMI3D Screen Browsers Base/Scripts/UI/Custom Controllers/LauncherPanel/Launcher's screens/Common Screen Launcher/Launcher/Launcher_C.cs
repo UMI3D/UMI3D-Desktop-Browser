@@ -29,9 +29,7 @@ namespace umi3d.commonScreen.menu
         public override void InitElement()
         {
             if (VersionLabel == null) VersionLabel = new Displayer.Text_C();
-            if (Minimize == null) Minimize = new Displayer.Button_C();
-            if (Maximize == null) Maximize = new Displayer.Button_C();
-            if (Close == null) Close = new Displayer.Button_C();
+            if (Header == null) Header = new commonDesktop.menu.AppHeader_C();
 
             if (Navigation_ScrollView == null) Navigation_ScrollView = new Container.ScrollView_C();
             if (Home == null) Home = new HomeScreen_C();
