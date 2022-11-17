@@ -42,10 +42,18 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         private bool useFilter = false;
 
+        private bool debugMode = false;
+
         #region Mic data
 
+        /// <summary>
+        /// Index of the current input device choosen to record audio.
+        /// </summary>
         private int currentMicIndex = -1;
 
+        /// <summary>
+        /// Current sample rate used to record audio.
+        /// </summary>
         private int currentMicSampleRate = -1;
 
         /// <summary>
@@ -64,10 +72,18 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         private bool isChannelChoosen = false;
 
+        /// <summary>
+        /// Audio data to process;
+        /// </summary>
+        private PcmArray newData;
+
         #endregion
 
         #region Record data
 
+        /// <summary>
+        /// Sends audio to Murmure server ?
+        /// </summary>
         private bool shouldSendAudioToServer = false;
 
         /// <summary>
@@ -84,6 +100,11 @@ namespace umi3d.cdk.collaboration
         /// Microphone recorder.
         /// </summary>
         private WaveInEvent waveIn;
+
+        /// <summary>
+        /// Last <see cref="MicType"/> used by the microphone last frame.
+        /// </summary>
+        private MicType lastMicrophoneMode;
 
         #endregion
 
@@ -124,6 +145,8 @@ namespace umi3d.cdk.collaboration
 
             InitializeInternalMic(currentMicSampleRate);
 
+            filter = BiQuadFilter.LowPassFilter(currentMicSampleRate, 10000, 1);
+
             return currentMicSampleRate;
         }
 
@@ -150,7 +173,7 @@ namespace umi3d.cdk.collaboration
                         {
                             short sample = (short)((buffer[channelChoosen + index + 1] << 8) | buffer[channelChoosen + index]);
 
-                            if (useFilter)
+                            if (useFilter && filter!= null)
                                 data.Add(filter.Transform(sample / 32768f));
                             else
                                 data.Add(sample / 32768f);
@@ -165,8 +188,6 @@ namespace umi3d.cdk.collaboration
 
             waveIn.WaveFormat = new WaveFormat(micSampleRate, numberOfChannel);
             waveIn.DeviceNumber = MicNumberToUse;
-
-            filter = BiQuadFilter.LowPassFilter(micSampleRate, 10000, 1);
         }
 
         /// <summary>
@@ -192,13 +213,13 @@ namespace umi3d.cdk.collaboration
                 {
                     isChannelChoosen = true;
                     channelChoosen = (right - left > 0) ? 0 : 2;
-                    Debug.Log("Choosen " + channelChoosen);
+                    Debug.Log("Mic canal choosen " + channelChoosen);
                 }
                 else if (diff < 1000)
                 {
                     isChannelChoosen = true;
                     channelChoosen = 0;
-                    Debug.Log("Choosen " + channelChoosen);
+                    Debug.Log("Mic canal choosen " + channelChoosen);
                 }
             }
         }
@@ -210,17 +231,29 @@ namespace umi3d.cdk.collaboration
         {
             lock (data)
             {
+                bool sendData = VoiceSendingType == MicType.AlwaysSend;
+
                 while (data.Count >= NumSamplesPerOutgoingPacket)
                 {
-                    if (VoiceSendingType == MicType.Amplitude)
+                    newData = _mumbleClient.GetAvailablePcmArray();
+                    newData.Pcm = data.GetRange(0, NumSamplesPerOutgoingPacket).ToArray();
+
+                    if (VoiceSendingType == MicType.Amplitude && !AmplitudeHigherThan(MinAmplitude, newData.Pcm))
                     {
-                        Debug.LogError("Mic Amplitude not implemented");
+                        sendData = false;
+
+                        //Drop data with low amplitude
+                        if (data.Count > NumSamplesPerOutgoingPacket)
+                            data = data.GetRange(NumSamplesPerOutgoingPacket + 1, data.Count - NumSamplesPerOutgoingPacket - 1);
+                        else
+                            data.Clear();
                     } else
                     {
-                        PcmArray newData = _mumbleClient.GetAvailablePcmArray();
+                        sendData = true;
+                    }
 
-                        newData.Pcm = data.GetRange(0, NumSamplesPerOutgoingPacket).ToArray();
-
+                    if (sendData)
+                    {
                         if (data.Count > NumSamplesPerOutgoingPacket)
                             data = data.GetRange(NumSamplesPerOutgoingPacket + 1, data.Count - NumSamplesPerOutgoingPacket - 1);
 
@@ -299,7 +332,8 @@ namespace umi3d.cdk.collaboration
 
             if (VoiceSendingType == MicType.PushToTalk)
             {
-                Debug.LogError("MicType.PushToTalk not implemented");
+                if (lastMicrophoneMode != MicType.PushToTalk)
+                    StopRecording();
 
                 if (Input.GetKeyDown(PushToTalkKeycode))
                     StartRecording();
@@ -320,13 +354,10 @@ namespace umi3d.cdk.collaboration
             if (needToRecord && shouldSendAudioToServer)
                 SendVoiceIfReady();
 
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                if (channelChoosen == 0)
-                    channelChoosen = 2;
-                else
-                    channelChoosen = 0;
-            }
+            lastMicrophoneMode = VoiceSendingType;
+
+            if (Input.GetKeyDown(KeyCode.P))
+                debugMode = !debugMode;
         }
 
         /// <summary>
@@ -355,8 +386,43 @@ namespace umi3d.cdk.collaboration
             waveIn.Dispose();
         }
 
+        private void OnGUI()
+        {
+            if (debugMode)
+            {
+                GUI.Box(new Rect(0, Screen.height - 120, 425, 80), "");
+
+                if (GUI.Button(new Rect(0, Screen.height - 115, 100, 70), "Reset filter"))
+                    useFilter = false;
+                if (GUI.Button(new Rect(105, Screen.height - 115, 100, 70), "Low pass filter"))
+                {
+                    lock (filter)
+                    {
+                        filter = BiQuadFilter.LowPassFilter(currentMicSampleRate, 10000, 1);
+                        useFilter = true;
+                        Debug.Log("Apply low pass filter");
+                    }
+                }
+                if (GUI.Button(new Rect(210, Screen.height - 115, 100, 70), "High pass filter"))
+                {
+                    lock (filter)
+                    {
+                        filter = BiQuadFilter.HighPassFilter(currentMicSampleRate, 300, 1);
+                        useFilter = true;
+                        Debug.Log("Apply high pass filter");
+                    }
+                }
+                if (GUI.Button(new Rect(320, Screen.height - 115, 100, 70), "Change audio \n canal" + channelChoosen))
+                {
+                    if (channelChoosen == 2)
+                        channelChoosen = 0;
+                    else
+                        channelChoosen = 2;
+                }
+            }
+        }
+
         #endregion
     }
-
 }
 

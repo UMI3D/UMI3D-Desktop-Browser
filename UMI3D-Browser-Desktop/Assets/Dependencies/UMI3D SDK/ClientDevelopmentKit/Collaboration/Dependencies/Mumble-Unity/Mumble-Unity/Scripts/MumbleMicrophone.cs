@@ -245,7 +245,7 @@ namespace Mumble
             }
         }
 
-        private static bool AmplitudeHigherThan(float minAmplitude, float[] pcm)
+        protected static bool AmplitudeHigherThan(float minAmplitude, float[] pcm)
         {
             //return true;
             float currentSum = pcm[0];
@@ -258,6 +258,7 @@ namespace Mumble
                 if (i % checkInterval == 0 && currentSum / i > minAmplitude)
                     return true;
             }
+
             return currentSum / pcm.Length > minAmplitude;
         }
         public virtual bool HasMic()
