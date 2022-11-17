@@ -26,7 +26,11 @@ public class CustomTopArea : VisualElement, ICustomElement
             name = "controller",
             defaultValue = ControllerEnum.MouseAndKeyboard
         };
-
+        protected UxmlBoolAttributeDescription m_displayHeader = new UxmlBoolAttributeDescription
+        {
+            name = "display-header",
+            defaultValue = false,
+        };
         UxmlBoolAttributeDescription m_isExpanded = new UxmlBoolAttributeDescription
         {
             name = "is-expanded",
@@ -46,6 +50,7 @@ public class CustomTopArea : VisualElement, ICustomElement
             custom.Set
                 (
                     m_controller.GetValueFromBag(bag, cc),
+                    m_displayHeader.GetValueFromBag(bag, cc),
                     m_isExpanded.GetValueFromBag(bag, cc)
                 );
         }
@@ -61,6 +66,17 @@ public class CustomTopArea : VisualElement, ICustomElement
         }
     }
 
+    public virtual bool DisplayHeader
+    {
+        get => m_displayHeader;
+        set
+        {
+            m_displayHeader = value;
+            if (value) Insert(0, AppHeader);
+            else AppHeader.RemoveFromHierarchy();
+        }
+    }
+
     public virtual bool IsExpanded
     {
         get => m_isExplanded;
@@ -70,7 +86,11 @@ public class CustomTopArea : VisualElement, ICustomElement
             this.AddAnimation
             (
                 this,
+#if UNITY_STANDALONE
+                () => style.height = Length.Percent(0),
+#else
                 () => style.height = Length.Percent(20),
+#endif
                 () => style.height = Length.Percent(100),
                 "height",
                 1,
@@ -82,15 +102,17 @@ public class CustomTopArea : VisualElement, ICustomElement
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/topArea";
     public virtual string USSCustomClassName => "top-area";
-    public virtual string USSCustomClassEmote => $"{USSCustomClassName}__emote";
+    public virtual string USSCustomClassMain => $"{USSCustomClassName}-main";
     public virtual string USSCustomClassMenu => $"{USSCustomClassName}__menu";
     public virtual string USSCustomClassButton => $"{USSCustomClassName}__button";
 
+    public CustomAppHeader AppHeader;
+    public VisualElement Main = new VisualElement { name = "main" };
     public CustomInformationArea InformationArea;
     public CustomButton Menu;
-    public CustomButton Toolbox;
 
     protected ControllerEnum m_controller;
+    protected bool m_displayHeader;
     protected bool m_isExplanded;
     protected bool m_hasBeenInitialized;
 
@@ -106,6 +128,7 @@ public class CustomTopArea : VisualElement, ICustomElement
             throw e;
         }
         AddToClassList(USSCustomClassName);
+        Main.AddToClassList(USSCustomClassMain);
         Menu.AddToClassList(USSCustomClassMenu);
         Menu.AddToClassList(USSCustomClassButton);
 
@@ -114,13 +137,14 @@ public class CustomTopArea : VisualElement, ICustomElement
 
         InformationArea.ExpandUpdate += (value) => IsExpanded = value;
 
-        Add(InformationArea);
-        Add(Menu);
+        Add(Main);
+        Main.Add(InformationArea);
+        Main.Add(Menu);
     }
 
-    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false);
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false, false);
 
-    public virtual void Set(ControllerEnum controller, bool isExpand)
+    public virtual void Set(ControllerEnum controller, bool displayHeader, bool isExpand)
     {
         if (!m_hasBeenInitialized)
         {
@@ -129,6 +153,7 @@ public class CustomTopArea : VisualElement, ICustomElement
         }
 
         Controller = controller;
+        DisplayHeader = displayHeader;
         IsExpanded = isExpand;
     }
 }

@@ -29,6 +29,11 @@ public class CustomTrailingArea : VisualElement, ICustomElement
             name = "controller",
             defaultValue = ControllerEnum.MouseAndKeyboard
         };
+        protected UxmlBoolAttributeDescription m_displayNotifAndUsersArea = new UxmlBoolAttributeDescription
+        {
+            name = "display-notif-users-area",
+            defaultValue = false
+        };
         protected UxmlBoolAttributeDescription m_displayObjectMenu = new UxmlBoolAttributeDescription
         {
             name = "display-object-menu",
@@ -57,6 +62,7 @@ public class CustomTrailingArea : VisualElement, ICustomElement
             custom.Set
                 (
                     m_controller.GetValueFromBag(bag, cc),
+                    m_displayNotifAndUsersArea.GetValueFromBag(bag, cc),
                     m_displayObjectMenu.GetValueFromBag(bag, cc),
                     m_displayEmoteWindow.GetValueFromBag(bag, cc),
                     m_leftHand.GetValueFromBag(bag, cc)
@@ -87,6 +93,34 @@ public class CustomTrailingArea : VisualElement, ICustomElement
                 default:
                     break;
             }
+        }
+    }
+
+    public virtual bool DisplayNotifUsersArea
+    {
+        get => m_displayNotifUsersArea;
+        set
+        {
+            m_displayNotifUsersArea = value;
+            if (value)
+            {
+                this.AddIfNotInHierarchy(NotifAndUserArea);
+                NotifAndUserArea.style.visibility = Visibility.Hidden;
+            }
+            NotifAndUserArea.schedule.Execute(() =>
+            {
+                NotifAndUserArea.style.visibility = StyleKeyword.Null;
+                NotifAndUserArea.AddAnimation
+                (
+                    this,
+                    () => NotifAndUserArea.style.width = Length.Percent(0),
+                    () => NotifAndUserArea.style.width = Length.Percent(60),
+                    "width",
+                    0.5f,
+                    revert: !m_displayNotifUsersArea,
+                    callback: m_displayNotifUsersArea ? null : NotifAndUserArea.RemoveFromHierarchy
+                );
+            });
         }
     }
 
@@ -174,6 +208,7 @@ public class CustomTrailingArea : VisualElement, ICustomElement
     public virtual string USSCustomClassEmoteWindow => $"{USSCustomClassName}__emote-window";
     public virtual string USSCustomClassCameraLayer => $"{USSCustomClassName}__camera-layer";
 
+    public CustomNotifAndUsersArea NotifAndUserArea;
     public CustomForm ObjectMenu;
     public CustomEmoteWindow EmoteWindow;
     public CustomButtonsArea ButtonsArea;
@@ -198,6 +233,7 @@ public class CustomTrailingArea : VisualElement, ICustomElement
     protected bool m_leftHand;
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
+    protected bool m_displayNotifUsersArea;
     protected bool m_displayObjectMenu;
     protected bool m_displayEmoteWindow;
     protected Vector2 m_initialDownPosition;
@@ -245,9 +281,9 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         ObjectMenu.Title = "Object Menu";
     }
 
-    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false, false, false);
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false, false, false, false);
 
-    public virtual void Set(ControllerEnum controller, bool displayObjectMenu, bool displayEmoteWindow, bool leftHand)
+    public virtual void Set(ControllerEnum controller, bool displayNotifUsersArea, bool displayObjectMenu, bool displayEmoteWindow, bool leftHand)
     {
         if (!m_hasBeenInitialized)
         {
@@ -256,6 +292,7 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         }
 
         Controller = controller;
+        DisplayNotifUsersArea = displayNotifUsersArea;
         DisplayObjectMenu = displayObjectMenu;
         DisplayEmoteWindow = displayEmoteWindow;
         LeftHand = leftHand;

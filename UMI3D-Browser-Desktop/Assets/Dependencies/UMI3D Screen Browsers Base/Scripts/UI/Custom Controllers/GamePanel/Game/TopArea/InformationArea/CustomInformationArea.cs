@@ -63,6 +63,8 @@ public class CustomInformationArea : VisualElement, ICustomElement
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomInformationArea;
 
@@ -267,13 +269,7 @@ public class CustomInformationArea : VisualElement, ICustomElement
     public virtual string USSCustomClassSound_Off => $"{USSCustomClassName}__sound-off";
 
     public event Action<bool> ExpandUpdate;
-    /// <summary>
-    /// True if the mic is on.
-    /// </summary>
     public event Action MicStatusChanged;
-    /// <summary>
-    /// True if the sound is on.
-    /// </summary>
     public event Action SoundStatusChanged;
 
     public event Action NotificationTitleClicked;
@@ -419,7 +415,7 @@ public class CustomInformationArea : VisualElement, ICustomElement
             if (!NotificationTitleStack.TryPeek(out var title))
             {
                 AnimateShortInf(true);
-                ShortText = null;
+                ShortText = EnvironmentName;
             }
             else if (!HideNotification)
             {

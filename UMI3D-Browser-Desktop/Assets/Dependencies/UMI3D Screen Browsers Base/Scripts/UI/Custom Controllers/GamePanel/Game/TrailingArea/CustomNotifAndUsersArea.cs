@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CustomNotifAndUsersArea : VisualElement, ICustomElement
+public abstract class CustomNotifAndUsersArea : VisualElement, ICustomElement
 {
     public enum NotificationsOrUsers { Notifications, Users }
 
@@ -96,6 +96,7 @@ public class CustomNotifAndUsersArea : VisualElement, ICustomElement
         AddToClassList(USSCustomClassName);
 
         SegmentedPicker.ValueEnumChanged += value => AreaPanel = value;
+        SegmentedPicker.Category = ElementCategory.Game;
 
         Add(SegmentedPicker);
     }

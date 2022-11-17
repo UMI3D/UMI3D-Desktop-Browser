@@ -182,6 +182,8 @@ public abstract class CustomUser : VisualElement, ICustomElement
         Mute.Shape = ButtonShape.Round;
         Mute.clicked += () => MuteValueChanged?.Invoke(!m_isMute);
 
+        MuteValueChanged += value => User?.SetMicrophoneStatus(value);
+
         Add(User_Background);
         User_Background.Add(User_Audio_Slider);
         User_Background.Add(UserNameVisual);

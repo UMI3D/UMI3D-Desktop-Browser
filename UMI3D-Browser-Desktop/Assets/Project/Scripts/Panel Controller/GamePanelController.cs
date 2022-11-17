@@ -30,18 +30,14 @@ public class GamePanelController : umi3d.baseBrowser.connection.BaseGamePanelCon
         base.Start();
 
         Debug.Assert(Windows_Manager != null, "WindowsManager reference null");
-        Loader.Minimize.clicked += Windows_Manager.Minimize;
-        Loader.Maximize.clicked += Windows_Manager.Maximize;
-        Loader.Close.clicked += Application.Quit;
-        Menu.Minimize.clicked += Windows_Manager.Minimize;
-        Menu.Maximize.clicked += Windows_Manager.Maximize;
-        Menu.Close.clicked += Application.Quit;
+        Loader.Header.Minimize.clicked += Windows_Manager.Minimize;
+        Loader.Header.Maximize.clicked += Windows_Manager.Maximize;
+        Loader.Header.Close.clicked += Application.Quit;
+        Menu.Header.Minimize.clicked += Windows_Manager.Minimize;
+        Menu.Header.Maximize.clicked += Windows_Manager.Maximize;
+        Menu.Header.Close.clicked += Application.Quit;
 
-        Windows_Manager.FullScreenEnabled = value =>
-        {
-            Loader.DisplayHeader = value;
-            Menu.DisplayHeader = value;
-        };
+        Windows_Manager.FullScreenEnabled = value => GamePanel.DisplayHeader = value;
         Windows_Manager.DisplayDialogueBoxToQuit = () =>
         {
             var dialogueBox = new umi3d.commonScreen.Displayer.Dialoguebox_C();

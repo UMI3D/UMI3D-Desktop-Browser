@@ -1,1 +1,9 @@
-VisualElement {}
+.notif-users {
+	position: absolute;
+	right: 0;
+	top: 90;
+	bottom: 70;
+	background-color: var(--background-color-game);
+	border-top-left-radius: var(--border-radius-game);
+	border-bottom-left-radius: var(--border-radius-game);
+}

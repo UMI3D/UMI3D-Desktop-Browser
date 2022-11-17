@@ -25,9 +25,9 @@ namespace umi3d.commonScreen.game
 
         public override void InitElement()
         {
+            if (AppHeader == null) AppHeader = new commonDesktop.menu.AppHeader_C();
             if (Menu == null) Menu = new Displayer.Button_C();
             if (InformationArea == null) InformationArea = new commonMobile.game.InformationArea_C();
-            if (Toolbox == null) Toolbox = new Displayer.Button_C();
 
             base.InitElement();
         }

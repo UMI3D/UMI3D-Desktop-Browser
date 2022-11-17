@@ -26,7 +26,7 @@
 	--background-image-mic-off: resource('Icons/Mic/MIC_OFF');
 	--background-image-sound-on: resource('Icons/Sound/SOUND_ON');
 	--background-image-sound-off: resource('Icons/Sound/SOUND_OFF');
-	--background-image-emote: resource('Icons/emote-default-placeholder');
+	--background-image-emote: resource('Icons/Emote/EMOTE');
 	--size__width-short-inf: 40%;
 	--size__height-short-inf: 76px;
 

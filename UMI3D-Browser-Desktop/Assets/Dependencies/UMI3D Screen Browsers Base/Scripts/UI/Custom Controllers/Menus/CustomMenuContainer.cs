@@ -53,10 +53,8 @@ public abstract class CustomMenuContainer : VisualElement, ICustomElement
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetMenusFolderPath}/menuContainer";
     public virtual string USSCustomClassName => "menu";
     public virtual string USSCustomClassHeader => $"{USSCustomClassName}__header";
-    public virtual string USSCustomClassWindowButton => $"{USSCustomClassName}__window-button";
-    public virtual string USSCustomClassMinimize => $"{USSCustomClassName}__minimize-icon";
-    public virtual string USSCustomClassMaximize => $"{USSCustomClassName}__maximize-icon";
-    public virtual string USSCustomClassClose => $"{USSCustomClassName}__close-icon";
+    
+    
     public virtual string USSCustomClassMain => $"{USSCustomClassName}__main";
     public virtual string USSCustomClassLogo_Container => $"{USSCustomClassName}__logo__container";
     public virtual string USSCustomClassLogo => $"{USSCustomClassName}__logo";
@@ -91,20 +89,14 @@ public abstract class CustomMenuContainer : VisualElement, ICustomElement
         }
     }
 
-    public VisualElement Header = new VisualElement();
-    public CustomButton Minimize;
-    public VisualElement Minimize_Icon = new VisualElement { name = "mimimize-icon" };
-    public CustomButton Maximize;
-    public VisualElement Maximize_Icon = new VisualElement { name = "maximize-icon" };
-    public CustomButton Close;
-    public VisualElement Close_Icon = new VisualElement { name = "close-icon" };
-    public VisualElement Main = new VisualElement();
-    public VisualElement LogoContainer = new VisualElement();
-    public VisualElement Logo = new VisualElement();
+    public CustomAppHeader Header;
+    public VisualElement Main = new VisualElement { name = "main" };
+    public VisualElement LogoContainer = new VisualElement { name = "logo-container" };
+    public VisualElement Logo = new VisualElement { name = "logo" };
     public CustomScrollView Navigation_ScrollView;
     public VisualElement Separator = new VisualElement();
     public VisualElement Container = new VisualElement();
-    public VisualElement Footer = new VisualElement();
+    public VisualElement Footer = new VisualElement { name = "footer" };
     public CustomText VersionLabel;
 
     protected bool m_isSet;
@@ -124,12 +116,6 @@ public abstract class CustomMenuContainer : VisualElement, ICustomElement
         }
         AddToClassList(USSCustomClassName);
         Header.AddToClassList(USSCustomClassHeader);
-        Minimize.AddToClassList(USSCustomClassWindowButton);
-        Maximize.AddToClassList(USSCustomClassWindowButton);
-        Close.AddToClassList(USSCustomClassWindowButton);
-        Minimize_Icon.AddToClassList(USSCustomClassMinimize);
-        Maximize_Icon.AddToClassList(USSCustomClassMaximize);
-        Close_Icon.AddToClassList(USSCustomClassClose);
         Main.AddToClassList(USSCustomClassMain);
         LogoContainer.AddToClassList(USSCustomClassLogo_Container);
         Logo.AddToClassList(USSCustomClassLogo);
@@ -139,16 +125,6 @@ public abstract class CustomMenuContainer : VisualElement, ICustomElement
         Footer.AddToClassList(USSCustomClassFooter);
         VersionLabel.AddToClassList(USSCustomClassVersion);
 
-        Minimize.Size = ElementSize.Small;
-        Maximize.Size = ElementSize.Small;
-        Close.Size = ElementSize.Small;
-
-        Header.Add(Minimize);
-        Minimize.Add(Minimize_Icon);
-        Header.Add(Maximize);
-        Maximize.Add(Maximize_Icon);
-        Header.Add(Close);
-        Close.Add(Close_Icon);
         Add(Main);
         Main.Add(LogoContainer);
         LogoContainer.Add(Logo);

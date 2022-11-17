@@ -30,9 +30,7 @@ namespace umi3d.commonScreen.menu
         {
             if (VersionLabel == null) VersionLabel = new Displayer.Text_C();
             if (Navigation_ScrollView == null) Navigation_ScrollView = new Container.ScrollView_C();
-            if (Minimize == null) Minimize = new Displayer.Button_C();
-            if (Maximize == null) Maximize = new Displayer.Button_C();
-            if (Close == null) Close = new Displayer.Button_C();
+            if (Header == null) Header = new commonDesktop.menu.AppHeader_C();
 
             if (Loading == null) Loading = new LoadingScreen_C();
             if (Form == null) Form = new FormScreen_C();

@@ -107,6 +107,14 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         }
         AddToClassList(USSCustomClassName);
 
+        TopArea.InformationArea.NotificationTitleClicked += () =>
+        {
+            if (!BottomArea.DisplayNotifUsersArea) BottomArea.DisplayNotifUsersArea = true;
+            TrailingArea.NotifAndUserArea.AreaPanel = CustomNotifAndUsersArea.NotificationsOrUsers.Notifications;
+            TrailingArea.NotifAndUserArea.notificationCenter.Filter = NotificationFilter.New;
+        };
+        BottomArea.NotifUsersValueChanged = value => TrailingArea.DisplayNotifUsersArea = value;
+
         Add(Cursor);
         Add(LeadingArea);
         Add(TrailingArea);

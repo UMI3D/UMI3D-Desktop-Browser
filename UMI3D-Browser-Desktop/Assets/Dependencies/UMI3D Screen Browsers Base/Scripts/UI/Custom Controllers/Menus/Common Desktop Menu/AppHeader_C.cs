@@ -13,22 +13,26 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using umi3d.commonScreen.menu;
+using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace umi3d.commonScreen.game
+namespace umi3d.commonDesktop.menu
 {
-    public sealed class TrailingArea_C : CustomTrailingArea
+    public class AppHeader_C : CustomAppHeader
     {
-        public new class UxmlFactory : UxmlFactory<TrailingArea_C, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<AppHeader_C, UxmlTraits> { }
 
-        public TrailingArea_C() => Set();
+        public AppHeader_C() => Set();
 
         public override void InitElement()
         {
-            if (NotifAndUserArea == null) NotifAndUserArea = new NotifAndUsersArea_C();
-            if (ObjectMenu == null) ObjectMenu = new Container.Form_C();
-            if (EmoteWindow == null) EmoteWindow = new commonMobile.game.EmoteWindow_C();
-            if (ButtonsArea == null) ButtonsArea = new commonMobile.game.ButtonArea_C();
+            if (Minimize == null) Minimize = new commonScreen.Displayer.Button_C();
+            if (Maximize == null) Maximize = new commonScreen.Displayer.Button_C();
+            if (Close == null) Close = new commonScreen.Displayer.Button_C();
 
             base.InitElement();
         }
