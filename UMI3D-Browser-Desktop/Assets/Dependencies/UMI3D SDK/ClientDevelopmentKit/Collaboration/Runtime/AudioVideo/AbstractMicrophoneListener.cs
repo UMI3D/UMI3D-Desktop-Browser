@@ -760,7 +760,11 @@ namespace umi3d.cdk.collaboration
                 $"------------------------------------";
 
             Log(debug);
-            playerToDestroy?.Reset();
+
+            if(!AudioManager.Instance.DeletePending(playerToDestroy?.GetUsername(), session))
+            {
+                playerToDestroy?.Reset();
+            }
         }
         #endregion
 

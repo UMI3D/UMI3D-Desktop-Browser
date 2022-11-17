@@ -395,6 +395,7 @@ namespace Mumble
                 //Debug.Log("Adding audioPlayer session #" + userState.Session);
                 // We also create a new audio player for the user
                 MumbleAudioPlayer newPlayer = _audioPlayerCreator(userState.Name, userState.Session);
+                Debug.Assert(newPlayer != null, "MumbleAudioPlayer created null for " + userState.Name + ", " + userState.Session);
                 _mumbleAudioPlayers.Add(userState.Session, newPlayer);
                 newPlayer.Initialize(this, userState.Session);
             });
