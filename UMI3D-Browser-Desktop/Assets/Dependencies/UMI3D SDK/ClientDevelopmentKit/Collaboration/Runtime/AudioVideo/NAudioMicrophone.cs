@@ -383,7 +383,7 @@ namespace umi3d.cdk.collaboration
 
         protected void OnDestroy()
         {
-            waveIn.Dispose();
+            waveIn?.Dispose();
         }
 
         private void OnGUI()
