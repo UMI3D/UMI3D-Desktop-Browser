@@ -364,7 +364,13 @@ namespace umi3d.cdk
             endProgress.AddComplete();
 
             endProgress.SetStatus("Rendering Probes");
-            await RenderProbes();
+            if (QualitySettings.realtimeReflectionProbes)
+            {
+                await RenderProbes();
+            } else
+            {
+                Debug.Log("Rendering probes not enabled on this browser " + QualitySettings.GetQualityLevel());
+            }
             endProgress.AddComplete();
             await UMI3DAsyncManager.Yield();
 

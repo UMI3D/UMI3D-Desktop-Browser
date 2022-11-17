@@ -62,7 +62,7 @@ namespace umi3d.cdk.collaboration
         RemovingMicrophone,
     }
 
-    public enum MirophoneInputType
+    public enum MicrophoneInputType
     {
         Unity,
         NAudio
@@ -159,7 +159,7 @@ namespace umi3d.cdk.collaboration
             }
         }
 
-        public MirophoneInputType inputType;
+        public MicrophoneInputType inputType;
 
         protected string channel { get; private set; } = null;
         protected string pendingChannel { get; private set; } = null;
@@ -305,10 +305,10 @@ namespace umi3d.cdk.collaboration
 
             switch (inputType)
             {
-                case MirophoneInputType.Unity:
+                case MicrophoneInputType.Unity:
                     mumbleMic = gameObject.AddComponent<MumbleMicrophone>();
                     break;
-                case MirophoneInputType.NAudio:
+                case MicrophoneInputType.NAudio:
                     mumbleMic = gameObject.AddComponent<NAudioMicrophone>();
                     break;
                 default:

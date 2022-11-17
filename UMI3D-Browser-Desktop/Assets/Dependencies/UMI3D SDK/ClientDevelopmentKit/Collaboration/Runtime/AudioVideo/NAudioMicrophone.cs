@@ -32,18 +32,6 @@ namespace umi3d.cdk.collaboration
     {
         #region Fields
 
-        /// <summary>
-        /// Filter to improve voice recording.
-        /// </summary>
-        private BiQuadFilter filter;
-
-        /// <summary>
-        /// Use <see cref="filter"/> to improve record quality ?
-        /// </summary>
-        private bool useFilter = false;
-
-        private bool debugMode = false;
-
         #region Mic data
 
         /// <summary>
@@ -145,8 +133,6 @@ namespace umi3d.cdk.collaboration
 
             InitializeInternalMic(currentMicSampleRate);
 
-            filter = BiQuadFilter.LowPassFilter(currentMicSampleRate, 10000, 1);
-
             return currentMicSampleRate;
         }
 
@@ -173,10 +159,7 @@ namespace umi3d.cdk.collaboration
                         {
                             short sample = (short)((buffer[channelChoosen + index + 1] << 8) | buffer[channelChoosen + index]);
 
-                            if (useFilter && filter!= null)
-                                data.Add(filter.Transform(sample / 32768f));
-                            else
-                                data.Add(sample / 32768f);
+                            data.Add(sample / 32768f);
                         }
                     }
 
@@ -355,9 +338,6 @@ namespace umi3d.cdk.collaboration
                 SendVoiceIfReady();
 
             lastMicrophoneMode = VoiceSendingType;
-
-            if (Input.GetKeyDown(KeyCode.P))
-                debugMode = !debugMode;
         }
 
         /// <summary>
@@ -384,42 +364,6 @@ namespace umi3d.cdk.collaboration
         protected void OnDestroy()
         {
             waveIn?.Dispose();
-        }
-
-        private void OnGUI()
-        {
-            if (debugMode)
-            {
-                GUI.Box(new Rect(0, Screen.height - 120, 425, 80), "");
-
-                if (GUI.Button(new Rect(0, Screen.height - 115, 100, 70), "Reset filter"))
-                    useFilter = false;
-                if (GUI.Button(new Rect(105, Screen.height - 115, 100, 70), "Low pass filter"))
-                {
-                    lock (filter)
-                    {
-                        filter = BiQuadFilter.LowPassFilter(currentMicSampleRate, 10000, 1);
-                        useFilter = true;
-                        Debug.Log("Apply low pass filter");
-                    }
-                }
-                if (GUI.Button(new Rect(210, Screen.height - 115, 100, 70), "High pass filter"))
-                {
-                    lock (filter)
-                    {
-                        filter = BiQuadFilter.HighPassFilter(currentMicSampleRate, 300, 1);
-                        useFilter = true;
-                        Debug.Log("Apply high pass filter");
-                    }
-                }
-                if (GUI.Button(new Rect(320, Screen.height - 115, 100, 70), "Change audio \n canal" + channelChoosen))
-                {
-                    if (channelChoosen == 2)
-                        channelChoosen = 0;
-                    else
-                        channelChoosen = 2;
-                }
-            }
         }
 
         #endregion
