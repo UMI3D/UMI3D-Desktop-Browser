@@ -33,10 +33,13 @@ public class CustomSettingsResolution : CustomSettingScreen
     public CustomSlider RenderScale;
     public CustomToggle ReduceAnimation;
 
+    public CustomSlider DPI; 
+
     public override void InitElement()
     {
         base.InitElement();
 
+        UIPanelSettings = Resources.Load<PanelSettings>("PanelSettings");
         RenderPipeline_Low = Resources.Load<UniversalRenderPipelineAsset>("Scriptables/Rendering/UniversalRenderPipelineAsset_low");
         RenderPipeline_Medium = Resources.Load<UniversalRenderPipelineAsset>("Scriptables/Rendering/UniversalRenderPipelineAsset_medium");
         RenderPipeline_High = Resources.Load<UniversalRenderPipelineAsset>("Scriptables/Rendering/UniversalRenderPipelineAsset_high");
@@ -66,9 +69,17 @@ public class CustomSettingsResolution : CustomSettingScreen
         ReduceAnimation.value = false;
         ReduceAnimation.RegisterValueChangedCallback((ce_value) => ReduceAnimationValueChanged(ce_value.newValue));
 
+        DPI.label = "DPI";
+        DPI.DirectionDisplayer = ElemnetDirection.Leading;
+        DPI.lowValue = 90f;
+        DPI.highValue = 200f;
+        DPI.showInputField = true;
+        DPI.RegisterValueChangedCallback(value => DPIValueChanged(value.newValue));
+
         ScrollView.Add(SegmentedResolution);
 #if UNITY_STANDALONE
         ScrollView.Add(ResolutionsDropdown);
+        ScrollView.Add(DPI);
 #endif
         ScrollView.Add(SupportHDR);
         ScrollView.Add(RenderScale);
@@ -77,7 +88,7 @@ public class CustomSettingsResolution : CustomSettingScreen
         if (TryGetResolutionData(out Data))
         {
             SegmentedResolution.Value = Data.SegmentedResolution.ToString();
-            ResolutionsDropdown.value = Data.Resolution;
+            ResolutionValueChanged(Data.Resolution);
             SupportHDR.value = Data.SupportHDR;
             RenderScale.value = Data.RenderScale;
             ReduceAnimation.value = Data.ReduceAnimation;
@@ -85,7 +96,7 @@ public class CustomSettingsResolution : CustomSettingScreen
         else
         {
             SegmentedResolution.Value = ResolutionEnum.Medium.ToString();
-            ResolutionsDropdown.value = res[0];
+            ResolutionValueChanged(res[0]);
         }
 
         //RenderPipeline.colorGradingLutSize
@@ -96,6 +107,7 @@ public class CustomSettingsResolution : CustomSettingScreen
 
     #region Implementation
 
+    public PanelSettings UIPanelSettings;
     public UniversalRenderPipelineAsset RenderPipeline;
     protected UniversalRenderPipelineAsset RenderPipeline_Low;
     protected UniversalRenderPipelineAsset RenderPipeline_Medium;
@@ -193,6 +205,14 @@ public class CustomSettingsResolution : CustomSettingScreen
         AnimatorManager.ReduceAnimation = value;
         Data.ReduceAnimation = value;
         StoreResolutionData(Data);
+    }
+
+    public void DPIValueChanged(float value)
+    {
+        DPI.SetValueWithoutNotify(value);
+        UIPanelSettings.referenceDpi = value;
+        //Data.RenderScale = value;
+        //StoreResolutionData(Data);
     }
 
     #endregion
