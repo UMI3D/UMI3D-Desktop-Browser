@@ -32,8 +32,6 @@
 	left: 5%;
 	top: 0;
 	bottom: 0;
-	margin-top: 20%;
-	margin-bottom: 30%;
 }
 
 .trailing__area-emote__window {
@@ -41,8 +39,6 @@
 	left: 5%;
 	top: 0;
 	bottom: 0;
-	margin-top: 20%;
-	margin-bottom: 30%;
 }
 
 .ttrailing__area-emote__window.emote__window .button__body {

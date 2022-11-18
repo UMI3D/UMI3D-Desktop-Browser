@@ -276,6 +276,13 @@ namespace umi3d.baseBrowser.connection
                 Game.TrailingArea.NotifAndUserArea.UserList.RefreshList();
                 Menu.GameData.ParticipantCount = count;
             };
+
+            BaseController.SecondActionClicked += () =>
+            {
+                if (ObjectMenuDisplay.menu.Count == 0) return;
+                if (ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Collapse(true);
+                else ObjectMenuDisplay.Expand(false);
+            };
         }
 
         float fps = 30;
