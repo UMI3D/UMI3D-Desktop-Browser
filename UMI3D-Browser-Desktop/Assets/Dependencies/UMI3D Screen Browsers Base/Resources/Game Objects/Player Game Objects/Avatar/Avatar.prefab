@@ -319,8 +319,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IKControl: {fileID: 3714778082766431342}
-  RightHand: {fileID: 2040949565798228294}
-  LeftHand: {fileID: 1615102396529365852}
+  RightHand: {fileID: 0}
+  LeftHand: {fileID: 0}
   RightFreeAnchor: {fileID: 3040778118022020032}
   LeftFreeAnchor: {fileID: 3040778118022020032}
   isRightHanded: 1
@@ -340,7 +340,7 @@ MonoBehaviour:
   idleAnimation: {fileID: -203655887218126122, guid: 68661901237200744b2d85059f35e890,
     type: 3}
   Emotes: []
-  defaultIcon: {fileID: 21300000, guid: ea9d6dafb15921c489c625e545da907c, type: 3}
+  defaultIcon: {fileID: 21300000, guid: 17e1536176d5f10478e7b7a0f3236bb4, type: 3}
 --- !u!1 &9168339694928879792
 GameObject:
   m_ObjectHideFlags: 0
@@ -503,30 +503,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c95999b4e970d984db2324d70298aff0, type: 3}
---- !u!114 &1615102396529365852 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4349066036429462600, guid: c95999b4e970d984db2324d70298aff0,
-    type: 3}
-  m_PrefabInstance: {fileID: 3040778116237348628}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 312994988544e9549a46b379bfeb873b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2040949565798228294 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3918671841283010130, guid: c95999b4e970d984db2324d70298aff0,
-    type: 3}
-  m_PrefabInstance: {fileID: 3040778116237348628}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 312994988544e9549a46b379bfeb873b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &3040778118022020032 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1851815124, guid: c95999b4e970d984db2324d70298aff0,
