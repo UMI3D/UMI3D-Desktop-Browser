@@ -279,9 +279,17 @@ namespace umi3d.baseBrowser.connection
 
             BaseController.SecondActionClicked += () =>
             {
-                if (ObjectMenuDisplay.menu.Count == 0) return;
-                if (ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Collapse(true);
-                else ObjectMenuDisplay.Expand(false);
+                if (ObjectMenuDisplay.menu.Count > 0)
+                {
+                    if (ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Collapse(true);
+                    else ObjectMenuDisplay.Expand(false);
+                }
+                else
+                {
+                    if (BaseCursor.Movement == CursorMovement.Free)
+                        Game.BottomArea.DisplayNotifUsersArea = true;
+                    else Game.BottomArea.DisplayNotifUsersArea = false;
+                }
             };
         }
 

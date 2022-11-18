@@ -1,5 +1,11 @@
 .user {
 	flex-direction: row;
+
+	margin-left: var(--margin_padding-displayer);
+	margin-right: var(--margin_padding-displayer);
+	margin-top: var(--margin_padding-displayer);
+	margin-bottom: var(--margin_padding-displayer);
+
 	border-left-color: var(--color-border-menu-displayer);
 	border-right-color: var(--color-border-menu-displayer);
 	border-top-color: var(--color-border-menu-displayer);
