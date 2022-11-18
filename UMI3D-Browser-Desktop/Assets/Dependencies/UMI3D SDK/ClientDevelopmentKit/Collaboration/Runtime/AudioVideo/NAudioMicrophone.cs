@@ -20,6 +20,7 @@ using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static umi3d.cdk.collaboration.NoiseReducer;
 
 namespace umi3d.cdk.collaboration
 {
@@ -95,7 +96,25 @@ namespace umi3d.cdk.collaboration
 
         #endregion
 
+#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
+
+        #region Noise Reducer
+
+        private bool debugLog = false;
+
+        private NoiseReducer noiseReducer;
+
+        [field: SerializeField]
+        private bool UseNoiseReducer { get; set; } = false;
+
+        private RnNoiseModel noiseModel = RnNoiseModel.Speech;
+
+        private int attenuationStrenght = 20;
+
         #endregion
+#endif
+
+#endregion
 
         #region Methods
 
@@ -131,6 +150,17 @@ namespace umi3d.cdk.collaboration
                 Debug.LogWarning("Using a possibly unsupported sample rate of " + currentMicSampleRate + " things might get weird");
 
             InitializeInternalMic(currentMicSampleRate);
+
+#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
+            noiseReducer?.Destroy();
+            noiseReducer = new NoiseReducer(new NoiseReducerConfig()
+            {
+                SampleRate = currentMicSampleRate,
+                NumChannels = 1,
+                Attenuation = attenuationStrenght,
+                Model = noiseModel
+            });
+#endif
 
             return currentMicSampleRate;
         }
@@ -220,6 +250,12 @@ namespace umi3d.cdk.collaboration
                     newData = _mumbleClient.GetAvailablePcmArray();
                     newData.Pcm = data.GetRange(0, NumSamplesPerOutgoingPacket).ToArray();
 
+#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
+                    if (UseNoiseReducer)
+                    {
+                        noiseReducer.ReduceNoiseFloat(newData.Pcm, 0);
+                    }
+#endif
                     if (VoiceSendingType == MicType.Amplitude && !AmplitudeHigherThan(MinAmplitude, newData.Pcm))
                     {
                         sendData = false;
@@ -310,6 +346,9 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         protected override void Update()
         {
+            if (Input.GetKeyDown(KeyCode.P))
+                debugLog = !debugLog;
+
             if (_mumbleClient == null || !_mumbleClient.ConnectionSetupFinished)
                 return;
 
@@ -364,10 +403,44 @@ namespace umi3d.cdk.collaboration
 
         protected void OnDestroy()
         {
+#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
+            noiseReducer?.Destroy();
+#endif
             waveIn?.Dispose();
         }
 
         #endregion
+
+        /*private void OnGUI()
+        {
+            if (debugLog)
+            {
+                if (GUI.Button(new Rect(10, 10, 200, 50), "Change model " + noiseModel.ToString()))
+                {
+                    noiseModel = noiseModel == RnNoiseModel.None ? 0 : noiseModel += 1;
+                    noiseReducer?.ChangeRnnModel(noiseModel);
+                }
+
+                if (GUI.Button(new Rect(10, 60, 50, 50), "+"))
+                {
+                    attenuationStrenght += 10;
+                    noiseReducer?.SetAttenuation(attenuationStrenght);
+                }
+
+                GUI.Label(new Rect(10 + 50 + 10, 60, 50, 50), attenuationStrenght.ToString());
+
+                if (GUI.Button(new Rect(10 + 50 + 10 + 50 + 10, 60, 50, 50), "-"))
+                {
+                    attenuationStrenght -= 10;
+                    noiseReducer?.SetAttenuation(attenuationStrenght);
+                }
+                
+                if (GUI.Button(new Rect(10, 110, 50, 50), "Use noise reduction " + UseNoiseReducer))
+                {
+                    UseNoiseReducer = !UseNoiseReducer;
+                }
+            }
+        }*/
     }
 }
 
