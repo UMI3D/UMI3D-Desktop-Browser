@@ -23,8 +23,6 @@ namespace BrowserDesktop.Cursor
 {
     public class CursorKeyInput : KeyInput
     {
-        // Start is called before the first frame update
-        
         private bool constrainDistanceChange = false;
         public Transform Cursor;
         public Transform AvatarParent;
@@ -34,8 +32,6 @@ namespace BrowserDesktop.Cursor
         public float MinimumCursorDistance = 0.5f;
         public float ScrollToDistSpeed = 20f;
         Transform lastObject;
-
-       
 
         protected override void Start()
         {

@@ -73,6 +73,7 @@ namespace BrowserDesktop.Controller
                 ||
                 Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
             {
+                OnSecondActionClicked();
                 if (m_isCursorMovementFree) CloseMainMenu();
                 else OpenMainMenu();
             }
