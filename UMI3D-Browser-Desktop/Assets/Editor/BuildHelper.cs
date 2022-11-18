@@ -28,6 +28,7 @@ using umi3d;
 using umi3d.cdk;
 using UnityEditor;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class BuildHelper : EditorWindow
 {
@@ -104,6 +105,7 @@ public class BuildHelper : EditorWindow
 
     void Init()
     {
+        Debug.Log("Init");
          patternMajor = new VersionRegex("string major = \"", "\";", () => major);
          patternMinor = new VersionRegex("string minor = \"", "\";", () => minor);
          patternCount = new VersionRegex("string buildCount = \"", "\";", () => count);
@@ -255,7 +257,9 @@ public class BuildHelper : EditorWindow
 
     void UpdateVersion()
     {
+        UnityEngine.Debug.Log(Application.dataPath + browserVersionPath);
         string text = File.ReadAllText(Application.dataPath + browserVersionPath);
+        UnityEngine.Debug.Log(patternMajor != null);
         text = patternMajor.Replace(text);
         text = patternMinor.Replace(text);
         text = patternCount.Replace(text);
