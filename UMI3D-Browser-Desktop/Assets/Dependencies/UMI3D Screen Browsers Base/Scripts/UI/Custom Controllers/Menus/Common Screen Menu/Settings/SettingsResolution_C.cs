@@ -33,6 +33,7 @@ namespace umi3d.commonScreen.menu
             if (SupportHDR == null) SupportHDR = new Displayer.Toggle_C();
             if (RenderScale == null) RenderScale = new Displayer.Slider_C();
             if (ReduceAnimation == null) ReduceAnimation = new Displayer.Toggle_C();
+            if (DPI == null) DPI = new Displayer.Slider_C();
 
             base.InitElement();
         }

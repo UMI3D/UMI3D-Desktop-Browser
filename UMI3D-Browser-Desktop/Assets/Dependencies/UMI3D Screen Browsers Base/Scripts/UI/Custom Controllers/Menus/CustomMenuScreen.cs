@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public abstract class CustomMenuScreen : VisualElement, ICustomElement
@@ -33,6 +34,8 @@ public abstract class CustomMenuScreen : VisualElement, ICustomElement
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomMenuScreen;
 
