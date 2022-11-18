@@ -29,10 +29,9 @@ namespace umi3d.commonScreen.game
             if (FilterPicker == null) FilterPicker = new Displayer.SegmentedPicker_C<NotificationFilter>();
             if (ScrollView == null) ScrollView = new Container.ScrollView_C();
 
+            CreateNotification = () => new Displayer.Notification_C();
+
             base.InitElement();
         }
-
-        protected override CustomNotification CreateNotification()
-            => new Displayer.Notification_C();
     }
 }

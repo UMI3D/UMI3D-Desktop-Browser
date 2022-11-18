@@ -15,8 +15,8 @@ limitations under the License.
 */
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using umi3d.baseBrowser.ui.viewController;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public abstract class CustomSegmentedPicker : VisualElement, ICustomElement
@@ -66,6 +66,8 @@ public abstract class CustomSegmentedPicker : VisualElement, ICustomElement
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomSegmentedPicker;
             custom.Set
@@ -334,6 +336,8 @@ public abstract class CustomSegmentedPicker<PickerEnum> : CustomSegmentedPicker
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomSegmentedPicker<PickerEnum>;
             custom.Set
@@ -354,7 +358,6 @@ public abstract class CustomSegmentedPicker<PickerEnum> : CustomSegmentedPicker
         get => m_value;
         set
         {
-            
             if (!Enum.TryParse<PickerEnum>(value, out PickerEnum result)) return;
             base.Value = value;
             ValueEnumChanged?.Invoke(result);
