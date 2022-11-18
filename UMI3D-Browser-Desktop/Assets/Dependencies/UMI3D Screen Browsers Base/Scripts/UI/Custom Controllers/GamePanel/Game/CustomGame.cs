@@ -80,14 +80,16 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/game";
     public virtual string USSCustomClassName => "game";
+    public virtual string USSCustomClassLeadingAndTrailingBox => "game-leading__trailing__box";
 
     public System.Action<object> SetMovement;
     public System.Action<object> UnSetMovement;
     public CustomCursor Cursor;
+    public CustomTopArea TopArea;
     public CustomLeadingArea LeadingArea;
     public CustomTrailingArea TrailingArea;
-    public CustomTopArea TopArea;
     public CustomBottomArea BottomArea;
+    public VisualElement LeadingAndTrailingBox = new VisualElement { name = "leading-trailing-area" };
 
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
@@ -106,6 +108,7 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
             throw e;
         }
         AddToClassList(USSCustomClassName);
+        LeadingAndTrailingBox.AddToClassList(USSCustomClassLeadingAndTrailingBox);
 
         TopArea.InformationArea.NotificationTitleClicked += () =>
         {
@@ -116,9 +119,10 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         BottomArea.NotifUsersValueChanged = value => TrailingArea.DisplayNotifUsersArea = value;
 
         Add(Cursor);
-        Add(LeadingArea);
-        Add(TrailingArea);
         Add(TopArea);
+        Add(LeadingAndTrailingBox);
+        LeadingAndTrailingBox.Add(LeadingArea);
+        LeadingAndTrailingBox.Add(TrailingArea);
 
         LeftHandModeUpdated = () => LeftHand = !LeftHand;
     }

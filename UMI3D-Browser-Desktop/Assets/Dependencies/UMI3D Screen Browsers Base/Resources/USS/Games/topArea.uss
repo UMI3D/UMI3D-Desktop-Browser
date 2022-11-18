@@ -1,20 +1,24 @@
-.top-area {
-	position: absolute;
-	flex-direction: row;
+.top__area {
 	align-items: flex-start;
 	left: 0;
 	right: 0;
 }
 
-.top-area > .top-area-main > .top-area__button.button-medium > .button__body {
+.top__area > .top__area-main {
+	flex-direction: row;
+	width: 100%;
+	min-height: 90px;
+}
+
+.top__area > .top__area-main > .top__area-button.button-medium > .button__body {
 	width: var(--size-medium-displayer);
 	max-width: var(--size-medium-displayer);
 }
 
-.top-area > .top-area-main > .top-area__button {
+.top__area > .top__area-main > .top__area-button {
 	position: absolute;
 }
 
-.top-area > .top-area-main > .top-area__menu > .button__body > .button__content-container {
+.top__area > .top__area-main > .top__area-button > .button__body > .button__content-container {
 	background-image: var(--background-image-pause);
 }

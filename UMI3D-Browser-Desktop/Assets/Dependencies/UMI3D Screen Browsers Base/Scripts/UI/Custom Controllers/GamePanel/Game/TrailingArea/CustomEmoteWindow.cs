@@ -42,8 +42,8 @@ public abstract class CustomEmoteWindow : CustomForm
         }
     }
 
-    public virtual string USSCustomClassEmote => "emote-window";
-    public virtual string USSCustomClassEmoteIcon => $"{USSCustomClassEmote}__icon";
+    public virtual string USSCustomClassEmote => "emote__window";
+    public virtual string USSCustomClassEmoteIcon => $"{USSCustomClassEmote}-icon";
 
     public List<Emote> Emotes;
     public List<CustomButton> EmoteButtons = new List<CustomButton>();

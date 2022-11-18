@@ -73,7 +73,7 @@ public abstract class CustomNotifAndUsersArea : VisualElement, ICustomElement
 
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/notifAndUsers";
-    public virtual string USSCustomClassName => "notif-users";
+    public virtual string USSCustomClassName => "notif__users";
 
     public CustomSegmentedPicker<NotificationsOrUsers> SegmentedPicker;
     public CustomNotificationCenter notificationCenter;

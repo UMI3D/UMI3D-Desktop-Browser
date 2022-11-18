@@ -22,12 +22,12 @@ public class CustomAppHeader : VisualElement, ICustomElement
 {
     public virtual string StyleSheetMenuPath => $"USS/menu";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetMenusFolderPath}/appHeader";
-    public virtual string USSCustomClassName => "app_header";
+    public virtual string USSCustomClassName => "app__header";
 
-    public virtual string USSCustomClassWindowButton => $"{USSCustomClassName}__window-button";
-    public virtual string USSCustomClassMinimize => $"{USSCustomClassName}__minimize-icon";
-    public virtual string USSCustomClassMaximize => $"{USSCustomClassName}__maximize-icon";
-    public virtual string USSCustomClassClose => $"{USSCustomClassName}__close-icon";
+    public virtual string USSCustomClassWindowButton => $"{USSCustomClassName}-window__button";
+    public virtual string USSCustomClassMinimize => $"{USSCustomClassName}-minimize__icon";
+    public virtual string USSCustomClassMaximize => $"{USSCustomClassName}-maximize__icon";
+    public virtual string USSCustomClassClose => $"{USSCustomClassName}-close__icon";
 
     public CustomButton Minimize;
     public VisualElement Minimize_Icon = new VisualElement { name = "mimimize-icon" };

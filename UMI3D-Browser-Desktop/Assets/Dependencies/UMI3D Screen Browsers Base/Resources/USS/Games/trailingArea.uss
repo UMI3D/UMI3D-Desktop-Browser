@@ -1,5 +1,5 @@
-.trailing-area,
-.trailing-area_reverse {
+.trailing__area,
+.trailing__area-reverse {
 	position: absolute;
 	align-items: center;
 	top: 0;
@@ -11,15 +11,15 @@
 	padding-bottom: var(--size-margin-and-padding-game);
 }
 
-.trailing-area {
+.trailing__area {
 	right: 0;
 }
 
-.trailing-area_reverse {
+.trailing__area-reverse {
 	left: 0;
 }
 
-.trailing-area__camera-layer {
+.trailing__area-camera__layer {
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -27,7 +27,7 @@
 	bottom: 0;
 }
 
-.trailing-area__object-menu {
+.trailing__area-object__menu {
 	position: absolute;
 	left: 5%;
 	top: 0;
@@ -36,7 +36,7 @@
 	margin-bottom: 30%;
 }
 
-.trailing-area__emote-window {
+.trailing__area-emote__window {
 	position: absolute;
 	left: 5%;
 	top: 0;
@@ -45,11 +45,11 @@
 	margin-bottom: 30%;
 }
 
-.trailing-area__emote-window.emote-window .button__body {
+.ttrailing__area-emote__window.emote__window .button__body {
 	flex-grow: 0;
 }
 
-.trailing-area__emote-window.emote-window .emote-window__icon {
+.trailing__area-emote__window.emote__window .emote__window-icon {
 	width: 100%;
 	height: 100%;
 }

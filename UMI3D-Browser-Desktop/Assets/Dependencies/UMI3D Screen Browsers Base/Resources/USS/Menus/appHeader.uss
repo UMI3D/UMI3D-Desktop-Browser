@@ -1,1 +1,30 @@
-VisualElement {}
+.app__header {
+	flex-direction: row;
+	justify-content: flex-end;
+	background-color: var(--color-background-displayer-menu);
+	width: 100%;
+	min-height: 66px;
+}
+
+.app__header-window__button > .button__body {
+	width: 52px;
+}
+
+.app__header-minimize__icon,
+.app__header-maximize__icon,
+.app__header-close__icon {
+	width: 100%;
+	height: 100%;
+}
+
+.app__header-minimize__icon {
+	background-image: var(--image-minimize-window);
+}
+
+.app__header-maximize__icon {
+	background-image: var(--image-maximize-window);
+}
+
+.app__header-close__icon {
+	background-image: var(--image-close-window);
+}

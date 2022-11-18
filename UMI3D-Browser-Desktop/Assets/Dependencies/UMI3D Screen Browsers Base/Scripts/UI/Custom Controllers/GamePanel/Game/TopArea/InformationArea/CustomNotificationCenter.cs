@@ -64,8 +64,8 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
 
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/notificationCenter";
-    public virtual string USSCustomClassName => "notification-center";
-    public virtual string USSCustomClassNoNotif => $"{USSCustomClassName}__no-notif-text";
+    public virtual string USSCustomClassName => "notification__center";
+    public virtual string USSCustomClassNoNotif => $"{USSCustomClassName}-no__notif__text";
 
     
     public static List<CustomNotification> Notifications = new List<CustomNotification>();
