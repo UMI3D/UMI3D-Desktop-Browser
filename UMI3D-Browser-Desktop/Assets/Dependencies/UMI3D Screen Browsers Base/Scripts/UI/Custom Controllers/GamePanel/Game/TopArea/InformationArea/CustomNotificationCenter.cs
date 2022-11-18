@@ -13,11 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using MathNet.Numerics;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.AccessControl;
 using umi3d.cdk;
 using umi3d.common;
 using umi3d.common.interaction;
@@ -41,6 +37,8 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomNotificationCenter;
 
@@ -97,6 +95,8 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
 
         ScrollView.Category = ElementCategory.Game;
 
+        WillUpdateFilter += UpdateFilter;
+
         Add(FilterPicker);
         Add(ScrollView);
     }
@@ -118,16 +118,24 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
         m_isSet = true;
     }
 
+    ~CustomNotificationCenter()
+    {
+        WillUpdateFilter -= UpdateFilter;
+    }
+
     public override VisualElement contentContainer => m_isSet ? ScrollView.contentContainer : this;
 
-    protected abstract CustomNotification CreateNotification();
+    protected static System.Func<CustomNotification> CreateNotification;
 
     #region Implementation
 
+    public static Stack<string> NotificationTitleStack = new Stack<string>();
+
+    protected static event System.Action WillUpdateFilter;
     protected static List<NotificationDto> m_notificationDtos = new List<NotificationDto>();
     protected static List<NotificationDto> m_newNotificationDtos = new List<NotificationDto>();
 
-    public virtual CustomNotification AddNotification(NotificationDto dto)
+    public static CustomNotification AddNotification(NotificationDto dto)
     {
         m_notificationDtos.Insert(0, dto);
         m_newNotificationDtos.Insert(0, dto);
@@ -138,6 +146,9 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
         notification.Title = dto.title;
         notification.Timestamp = "Now";
         notification.Message = dto.content;
+        notification.DTO = dto;
+
+        NotificationTitleStack.Push(notification.Title);
 
         if (dto.callback == null || dto.callback.Length == 0)
         {
@@ -167,12 +178,11 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
             Notifications.Remove(notification);
             m_notificationDtos.Remove(dto);
             if (m_newNotificationDtos.Contains(dto)) m_newNotificationDtos.Remove(dto);
-            UpdateFilter();
+            WillUpdateFilter?.Invoke();
         };
-        notification.DTO = dto;
 
         Notifications.Add(notification);
-        UpdateFilter();
+        WillUpdateFilter?.Invoke();
         return notification;
     }
 
@@ -189,10 +199,10 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
 
     public void UpdateFilter()
     {
-        UnityEngine.Debug.Log($"update filter");
+        m_isSet = false;
         ScrollView.Clear();
         FilteredNotifications.Clear();
-        m_isSet = false;
+        
         switch (m_filter)
         {
             case NotificationFilter.All:
@@ -212,7 +222,8 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
         }
         m_isSet = true;
 
-        foreach (var notification in FilteredNotifications) ScrollView.Add(notification);
+        if (this.FindRoot() == null) return;
+        foreach (var notification in FilteredNotifications) Add(notification);
     }
 
     #endregion

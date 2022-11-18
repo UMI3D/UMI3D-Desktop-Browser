@@ -98,15 +98,17 @@ public class CustomTrailingArea : VisualElement, ICustomElement
 
     public virtual bool DisplayNotifUsersArea
     {
-        get => m_displayNotifUsersArea;
+        get => S_displayNotifUsersArea;
         set
         {
-            m_displayNotifUsersArea = value;
+            S_displayNotifUsersArea = value;
             if (value)
             {
                 this.AddIfNotInHierarchy(NotifAndUserArea);
                 NotifAndUserArea.style.visibility = Visibility.Hidden;
+                NotifAndUserArea.notificationCenter.UpdateFilter();
             }
+            else NotifAndUserArea.notificationCenter.ResetNewNotificationFilter();
             NotifAndUserArea.schedule.Execute(() =>
             {
                 NotifAndUserArea.style.visibility = StyleKeyword.Null;
@@ -117,8 +119,8 @@ public class CustomTrailingArea : VisualElement, ICustomElement
                     () => NotifAndUserArea.style.width = Length.Percent(60),
                     "width",
                     0.5f,
-                    revert: !m_displayNotifUsersArea,
-                    callback: m_displayNotifUsersArea ? null : NotifAndUserArea.RemoveFromHierarchy
+                    revert: !S_displayNotifUsersArea,
+                    callback: S_displayNotifUsersArea ? null : NotifAndUserArea.RemoveFromHierarchy
                 );
             });
         }
@@ -229,11 +231,12 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         }
     }
 
+    public static bool S_displayNotifUsersArea;
+
     public static System.Action LeftHandModeUpdated;
     protected bool m_leftHand;
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
-    protected bool m_displayNotifUsersArea;
     protected bool m_displayObjectMenu;
     protected bool m_displayEmoteWindow;
     protected Vector2 m_initialDownPosition;

@@ -60,6 +60,7 @@ public abstract class CustomNotifAndUsersArea : VisualElement, ICustomElement
                 case NotificationsOrUsers.Notifications:
                     Add(notificationCenter);
                     UserList.RemoveFromHierarchy();
+                    notificationCenter.UpdateFilter();
                     break;
                 case NotificationsOrUsers.Users:
                     Add(UserList);

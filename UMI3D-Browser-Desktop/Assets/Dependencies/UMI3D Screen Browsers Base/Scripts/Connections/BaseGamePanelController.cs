@@ -122,8 +122,17 @@ namespace umi3d.baseBrowser.connection
 
             NotificationLoader.Notification2DReceived += dto =>
             {
-                infArea.AddNotification(dto);
-                Game.TrailingArea.NotifAndUserArea.notificationCenter.UpdateFilter();
+                var notification = CustomNotificationCenter.AddNotification(dto);
+
+                root.schedule.Execute(() =>
+                {
+                    notification.Timestamp = "0min";
+                    root.schedule.Execute(() =>
+                    {
+                        var time = notification.Timestamp.Substring(0, notification.Timestamp.Length - 3);
+                        notification.Timestamp = $"{int.Parse(time) + 1}min";
+                    }).Every(60000);
+                }).ExecuteLater(60000);
             };
 
             Game.TrailingArea.ButtonsArea.Emote.clicked += () => Game.TrailingArea.DisplayEmoteWindow = !Game.TrailingArea.DisplayEmoteWindow;

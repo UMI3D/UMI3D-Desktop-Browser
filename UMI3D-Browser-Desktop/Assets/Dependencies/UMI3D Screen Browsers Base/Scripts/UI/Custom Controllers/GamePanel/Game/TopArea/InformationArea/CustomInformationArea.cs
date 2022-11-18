@@ -274,7 +274,6 @@ public class CustomInformationArea : VisualElement, ICustomElement
 
     public event Action NotificationTitleClicked;
     public string EnvironmentName;
-    public Stack<string> NotificationTitleStack = new Stack<string>();
     public CustomText ShortInf;
     public VisualElement Main = new VisualElement { name = "main" };
     public VisualElement Main_Background = new VisualElement { name = "main-background" };
@@ -412,16 +411,16 @@ public class CustomInformationArea : VisualElement, ICustomElement
 
         ShortInf.schedule.Execute(() =>
         {
-            if (!NotificationTitleStack.TryPeek(out var title))
+            if (!CustomNotificationCenter.NotificationTitleStack.TryPeek(out var title))
             {
                 AnimateShortInf(true);
                 ShortText = EnvironmentName;
             }
             else if (!HideNotification)
             {
-                NotificationTitleStack.Pop();
+                CustomNotificationCenter.NotificationTitleStack.Pop();
                 AnimateShortInf(false);
-                var NotifCount = NotificationTitleStack.Count + 1;
+                var NotifCount = CustomNotificationCenter.NotificationTitleStack.Count + 1;
                 ShortText = NotifCount == 1 ? $"1 notif: {title}" : $"{NotifCount} notifs: {title}";
             }
         }).Every(3000);
@@ -430,23 +429,6 @@ public class CustomInformationArea : VisualElement, ICustomElement
     #region Implementation
 
     public static bool HideNotification;
-
-    public virtual void AddNotification(NotificationDto dto)
-    {
-        var notification = NotificationCenter.AddNotification(dto);
-        NotificationTitleStack.Push(notification.Title);
-
-        var root = this.FindRoot();
-        root.schedule.Execute(() =>
-        {
-            notification.Timestamp = "0min";
-            root.schedule.Execute(() =>
-            {
-                var time = notification.Timestamp.Substring(0, notification.Timestamp.Length - 3);
-                notification.Timestamp = $"{int.Parse(time) + 1}min";
-            }).Every(60000);
-        }).ExecuteLater(60000);
-    }
 
     protected void AnimateShortInf(bool isRevert)
     {

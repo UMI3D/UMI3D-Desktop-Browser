@@ -215,10 +215,10 @@ public class CustomBottomArea : VisualElement, ICustomElement
 
     public virtual bool DisplayNotifUsersArea
     {
-        get => m_displayNotifUsersArea;
+        get => CustomTrailingArea.S_displayNotifUsersArea;
         set
         {
-            m_displayNotifUsersArea = value;
+            if (CustomTrailingArea.S_displayNotifUsersArea == value) return;
             if (value) NotifAndUsers.AddToClassList(USSCustomClassButtonSelected);
             else NotifAndUsers.RemoveFromClassList(USSCustomClassButtonSelected);
             NotifUsersValueChanged?.Invoke(value);
@@ -270,8 +270,6 @@ public class CustomBottomArea : VisualElement, ICustomElement
     protected bool m_isEmoteOpen;
 
     protected bool m_displayEmoteWindow;
-
-    protected bool m_displayNotifUsersArea;
 
     public virtual void InitElement()
     {
