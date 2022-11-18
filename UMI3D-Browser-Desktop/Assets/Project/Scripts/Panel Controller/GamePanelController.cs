@@ -55,7 +55,7 @@ public class GamePanelController : umi3d.baseBrowser.connection.BaseGamePanelCon
                 QuittingManager.ApplicationIsQuitting = index == 1;
                 if (index == 1) Application.Quit();
             };
-            dialogueBox.AddToTheRoot(Game);
+            dialogueBox.AddToTheRoot(GamePanel);
         };
     }
 
