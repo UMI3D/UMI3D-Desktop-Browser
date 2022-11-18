@@ -83,28 +83,26 @@ public class CustomTopArea : VisualElement, ICustomElement
         set
         {
             m_isExplanded = value;
+#if !UNITY_STANDALONE
             this.AddAnimation
             (
                 this,
-#if UNITY_STANDALONE
-                () => style.height = Length.Percent(0),
-#else
                 () => style.height = Length.Percent(20),
-#endif
                 () => style.height = Length.Percent(100),
                 "height",
                 1,
                 revert: !m_isExplanded
             );
+#endif
         }
     }
 
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/topArea";
-    public virtual string USSCustomClassName => "top-area";
+    public virtual string USSCustomClassName => "top__area";
     public virtual string USSCustomClassMain => $"{USSCustomClassName}-main";
-    public virtual string USSCustomClassMenu => $"{USSCustomClassName}__menu";
-    public virtual string USSCustomClassButton => $"{USSCustomClassName}__button";
+    public virtual string USSCustomClassMenu => $"{USSCustomClassName}-menu";
+    public virtual string USSCustomClassButton => $"{USSCustomClassName}-button";
 
     public CustomAppHeader AppHeader;
     public VisualElement Main = new VisualElement { name = "main" };

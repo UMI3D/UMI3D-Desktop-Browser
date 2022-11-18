@@ -202,11 +202,11 @@ public class CustomTrailingArea : VisualElement, ICustomElement
 
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/trailingArea";
-    public virtual string USSCustomClassName => "trailing-area";
-    public virtual string USSCustomClassNameReverse => "trailing-area_reverse";
-    public virtual string USSCustomClassObjectMenu => $"{USSCustomClassName}__object-menu";
-    public virtual string USSCustomClassEmoteWindow => $"{USSCustomClassName}__emote-window";
-    public virtual string USSCustomClassCameraLayer => $"{USSCustomClassName}__camera-layer";
+    public virtual string USSCustomClassName => "trailing__area";
+    public virtual string USSCustomClassNameReverse => "trailing__area-reverse";
+    public virtual string USSCustomClassObjectMenu => $"{USSCustomClassName}-object__menu";
+    public virtual string USSCustomClassEmoteWindow => $"{USSCustomClassName}-emote__window";
+    public virtual string USSCustomClassCameraLayer => $"{USSCustomClassName}-camera__layer";
 
     public CustomNotifAndUsersArea NotifAndUserArea;
     public CustomForm ObjectMenu;

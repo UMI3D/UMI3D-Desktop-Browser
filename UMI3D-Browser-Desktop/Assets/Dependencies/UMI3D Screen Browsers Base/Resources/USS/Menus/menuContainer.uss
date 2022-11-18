@@ -4,34 +4,6 @@
 	background-color: var(--color-background-menu);
 }
 
-.menu__header {
-	flex-direction: row;
-	justify-content: flex-end;
-}
-
-.menu__window-button {
-	width: 100px;
-}
-
-.menu__minimize-icon,
-.menu__maximize-icon,
-.menu__close-icon {
-	width: 100%;
-	height: 100%;
-}
-
-.menu__minimize-icon {
-	background-image: var(--image-minimize-window);
-}
-
-.menu__maximize-icon {
-	background-image: var(--image-maximize-window);
-}
-
-.menu__close-icon {
-	background-image: var(--image-close-window);
-}
-
 .menu__main {
 	flex-grow: 1;
 	flex-direction: row;
@@ -75,7 +47,6 @@
 	flex-grow: 1;
 }
 
-.menu__header,
 .menu__footer {
 	background-color: var(--color-background-displayer-menu);
 }

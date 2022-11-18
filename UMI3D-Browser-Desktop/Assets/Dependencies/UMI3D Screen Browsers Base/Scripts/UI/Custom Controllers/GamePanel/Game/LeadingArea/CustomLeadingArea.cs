@@ -97,8 +97,8 @@ public class CustomLeadingArea : VisualElement, ICustomElement
 
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/leadingArea";
-    public virtual string USSCustomClassName => "leading-are";
-    public virtual string USSCustomClassNameReverse => "leading-are_reverse";
+    public virtual string USSCustomClassName => "leading__area";
+    public virtual string USSCustomClassNameReverse => "leading__area-reverse";
 
     public CustomJoystickArea JoystickArea;
 

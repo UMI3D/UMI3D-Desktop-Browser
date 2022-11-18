@@ -1,15 +1,15 @@
-.leading-are,
-.leading-are_reverse {
+.leading__area,
+.leading__area_reverse {
 	position: absolute;
 	top: 0;
 	bottom: 0;
 	width: 50%;
 }
 
-.leading-are {
+.leading__area {
 	left: 0;
 }
 
-.leading-are_reverse {
+.leading__area-reverse {
 	right: 0;
 }

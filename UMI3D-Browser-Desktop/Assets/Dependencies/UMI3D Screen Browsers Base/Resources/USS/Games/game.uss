@@ -3,3 +3,7 @@
 	width: 100%;
 	height: 100%
 }
+
+.game-leading__trailing__box {
+	flex-grow: 1;
+}
