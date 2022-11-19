@@ -55,6 +55,8 @@ namespace umi3d.baseBrowser.connection
 
         protected DateTime m_time_Start;
 
+        protected System.Action m_next;
+
         #endregion
 
         protected virtual void InitLoader()
@@ -300,6 +302,14 @@ namespace umi3d.baseBrowser.connection
                     else Game.BottomArea.DisplayNotifUsersArea = false;
                 }
             };
+
+            BaseController.MainActionClicked += () =>
+            {
+                if (ObjectMenuDisplay.menu.Count != 1) return;
+                //if (ObjectMenu.)
+            };
+
+            BaseController.EnterKeyPressed += () => m_next?.Invoke();
         }
 
         float fps = 30;
@@ -368,8 +378,10 @@ namespace umi3d.baseBrowser.connection
                     callback.Invoke(answer);
                     Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Center);
                     cdk.collaboration.LocalInfoSender.CheckFormToUpdateAuthorizations(form);
+                    m_next = null;
                 };
                 send.Subscribe(action);
+                m_next = () => action(true);
                 FormMenu.menu.Add(send);
             }
         }

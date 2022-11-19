@@ -78,6 +78,7 @@ namespace umi3d.baseBrowser.Controller
 
         public static event System.Action MainActionClicked;
         public static event System.Action SecondActionClicked;
+        public static event System.Action EnterKeyPressed;
 
         //[SerializeField]
         //protected cdk.menu.view.MenuDisplayManager m_objectMenu;
@@ -143,14 +144,16 @@ namespace umi3d.baseBrowser.Controller
         public static bool CanProcess = false;
         #endregion
 
-        public void OnMainActionClicked() => MainActionClicked?.Invoke();
-        public void OnSecondActionClicked() => SecondActionClicked?.Invoke();
+        public static void OnMainActionClicked() => MainActionClicked?.Invoke();
+        public static void OnSecondActionClicked() => SecondActionClicked?.Invoke();
+        public static void OnEnterKeyPressed() => EnterKeyPressed?.Invoke();
 
         #region Monobehaviour Life Cycle
         protected virtual void Awake()
         {
             MainActionClicked = null;
             SecondActionClicked = null;
+            EnterKeyPressed = null;
 
             UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Add manipulator in android browser and reactivate it in desktop browser");
             mouseData.ForceProjectionReleasableButton = new ButtonMenuItem
