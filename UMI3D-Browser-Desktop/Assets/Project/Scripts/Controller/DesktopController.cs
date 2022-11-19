@@ -69,13 +69,31 @@ namespace BrowserDesktop.Controller
         protected override void Update()
         {
             base.Update();
-            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)) 
-                ||
-                Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
+            if 
+            (
+                Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)) 
+                || Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle))
+            )
             {
                 if (m_isCursorMovementFree) CloseMainMenu();
                 else OpenMainMenu();
                 OnSecondActionClicked();
+            }
+
+            if
+            (
+                Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainActionKey))
+            )
+            {
+                OnMainActionClicked();
+            }
+
+            if
+            (
+                Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)
+            )
+            {
+                OnEnterKeyPressed();
             }
 
             if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationDirect)) || Input.mouseScrollDelta.y < 0)
