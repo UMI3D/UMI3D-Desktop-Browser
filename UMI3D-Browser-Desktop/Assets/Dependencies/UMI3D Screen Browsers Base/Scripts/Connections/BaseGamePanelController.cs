@@ -21,6 +21,7 @@ using umi3d.baseBrowser.Navigation;
 using umi3d.baseBrowser.notification;
 using umi3d.cdk.collaboration;
 using umi3d.commonScreen.Container;
+using umi3d.commonScreen.Displayer;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static umi3d.baseBrowser.Controller.BaseCursor;
@@ -306,7 +307,9 @@ namespace umi3d.baseBrowser.connection
             BaseController.MainActionClicked += () =>
             {
                 if (ObjectMenuDisplay.menu.Count != 1) return;
-                //if (ObjectMenu.)
+                if (!(ObjectMenu.m_displayers[0] is TextfieldDisplayer textfield)) return;
+                if (!ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Expand(false);
+                textfield.Focus();
             };
 
             BaseController.EnterKeyPressed += () => m_next?.Invoke();
