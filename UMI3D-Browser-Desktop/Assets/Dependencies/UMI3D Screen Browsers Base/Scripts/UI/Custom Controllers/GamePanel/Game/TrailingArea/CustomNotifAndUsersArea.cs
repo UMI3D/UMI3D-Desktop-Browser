@@ -121,4 +121,14 @@ public abstract class CustomNotifAndUsersArea : VisualElement, ICustomElement
 
         AreaPanel = panel;
     }
+
+    #region Implementation
+
+    public virtual void OnUserCountUpdated(int count)
+    {
+        var options = SegmentedPicker.Options.Split(',');
+        SegmentedPicker.Options = $"{options[0]}, Users: {count}";
+    }
+
+    #endregion
 }
