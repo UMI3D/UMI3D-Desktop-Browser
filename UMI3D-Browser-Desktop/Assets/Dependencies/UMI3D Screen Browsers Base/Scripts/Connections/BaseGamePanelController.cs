@@ -385,7 +385,7 @@ namespace umi3d.baseBrowser.connection
                     m_next = null;
                 };
                 send.Subscribe(action);
-                m_next = () => action(true);
+                //m_next = () => send.NotifyValueChange(true);
                 FormMenu.menu.Add(send);
             }
         }
