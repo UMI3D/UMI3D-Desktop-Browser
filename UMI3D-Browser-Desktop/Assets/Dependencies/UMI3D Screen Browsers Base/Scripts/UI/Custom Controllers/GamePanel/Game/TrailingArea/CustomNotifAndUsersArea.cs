@@ -98,6 +98,13 @@ public abstract class CustomNotifAndUsersArea : VisualElement, ICustomElement
 
         SegmentedPicker.ValueEnumChanged += value => AreaPanel = value;
         SegmentedPicker.Category = ElementCategory.Game;
+        SegmentedPicker.Options = "Notifications: 0, Users: 0";
+
+        CustomNotificationCenter.NotificationCountUpdate += value =>
+        {
+            var options = SegmentedPicker.Options.Split(',');
+            SegmentedPicker.Options = $"Notifications: {value},{options[1]}";
+        };
 
         Add(SegmentedPicker);
     }

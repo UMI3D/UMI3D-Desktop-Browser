@@ -23,13 +23,45 @@ namespace umi3d.commonScreen.game
 {
     public class NotifAndUsersArea_C : CustomNotifAndUsersArea
     {
+        public class NotifAndUsersSegmentedPicker: Displayer.SegmentedPicker_C<NotificationsOrUsers>
+        {
+            public override string Value 
+            { 
+                get => base.Value;
+                set
+                {
+                    if (!string.IsNullOrEmpty(value)) value = value.Split(':')[0];
+                    base.Value = value;
+                }
+            }
+
+            public override void SetValueWithoutNotify(string newValue)
+            {
+                m_value = newValue;
+
+                if (string.IsNullOrEmpty(newValue)) return;
+                var tps = m_options.Find(str => str.StartsWith(newValue));
+                if (!m_options.Contains(tps)) return;
+
+                var index = m_options.IndexOf(tps);
+                SelectedValueBox.AddAnimation
+                (
+                    this,
+                    () => SelectedValueBox.style.left = SelectedValueBox.style.left,
+                    () => SelectedValueBox.style.left = Length.Percent(m_textWidth.value * index),
+                    "left",
+                    0.5f
+                );
+            }
+        }
+
         public new class UxmlFactory : UxmlFactory<NotifAndUsersArea_C, UxmlTraits> { }
 
         public NotifAndUsersArea_C() => Set();
 
         public override void InitElement()
         {
-            if (SegmentedPicker == null) SegmentedPicker = new Displayer.SegmentedPicker_C<NotificationsOrUsers>();
+            if (SegmentedPicker == null) SegmentedPicker = new NotifAndUsersSegmentedPicker();
             if (notificationCenter == null) notificationCenter = new NotificationCenter_C();
             if (UserList == null) UserList = new UserList_C();
 
