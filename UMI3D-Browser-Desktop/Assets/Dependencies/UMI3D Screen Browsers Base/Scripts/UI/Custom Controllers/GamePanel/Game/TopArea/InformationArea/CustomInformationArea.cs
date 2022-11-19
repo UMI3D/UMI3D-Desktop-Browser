@@ -174,7 +174,7 @@ public class CustomInformationArea : VisualElement, ICustomElement
                         Main.AddAnimation
                            (
                                this,
-                               () => Main.style.marginTop = m_shortInfMargin_PaddingLength,
+                               () => Main.style.marginTop = m_gameMargin_Padding,
                                () => Main.style.marginTop = 0f,
                                "margin-top",
                                AnimatorManager.MainDuration,
@@ -295,7 +295,8 @@ public class CustomInformationArea : VisualElement, ICustomElement
     protected bool m_hasBeenInitialized;
     protected Length m_shortInfheightLength = float.NaN;
     protected Length m_shortInfWidthgLength = float.NaN;
-    protected Length m_shortInfMargin_PaddingLength = float.NaN;
+    protected Length m_gameMargin_Padding = float.NaN;
+    protected Length m_shortInf_Padding = float.NaN;
     protected bool m_shortInfExpended = true;
 
     public virtual void InitElement()
@@ -320,7 +321,16 @@ public class CustomInformationArea : VisualElement, ICustomElement
         {
             this.TryGetCustomStyle("--size__height-short-inf", out m_shortInfheightLength);
             this.TryGetCustomStyle("--size__width-short-inf", out m_shortInfWidthgLength);
-            this.TryGetCustomStyle("--size-margin-and-padding-game", out m_shortInfMargin_PaddingLength);
+            this.TryGetCustomStyle("--size-margin-and-padding-game", out m_gameMargin_Padding);
+            this.TryGetCustomStyle("--padding-short-inf", out m_shortInf_Padding);
+
+#if UNITY_STANDALONE
+            ShortInf.style.paddingLeft = m_gameMargin_Padding;
+            ShortInf.style.paddingRight = m_gameMargin_Padding;
+#else
+            ShortInf.style.paddingLeft = m_gameMargin_Padding;
+            ShortInf.style.paddingRight = m_shortInf_Padding;
+#endif
         });
 
         this.AddManipulator(InfManipulator);
@@ -338,6 +348,7 @@ public class CustomInformationArea : VisualElement, ICustomElement
 
         ShortInf.name = "short-inf";
         ShortInf.AddManipulator(ShortInfManipulator);
+
         ShortInfManipulator.LongPressDelay = 400;
         //ShortInfManipulator.ClickedLong += () => IsExpanded = !IsExpanded;
         ShortInfManipulator.ClickedDownWithInfo += (e, localPosition) =>
@@ -413,15 +424,14 @@ public class CustomInformationArea : VisualElement, ICustomElement
         {
             if (!CustomNotificationCenter.NotificationTitleStack.TryPeek(out var title))
             {
-                AnimateShortInf(true);
+                //AnimateShortInf(true);
                 ShortText = EnvironmentName;
             }
             else if (!HideNotification)
             {
                 CustomNotificationCenter.NotificationTitleStack.Pop();
-                AnimateShortInf(false);
-                var NotifCount = CustomNotificationCenter.NotificationTitleStack.Count + 1;
-                ShortText = NotifCount == 1 ? $"1 notif: {title}" : $"{NotifCount} notifs: {title}";
+                //AnimateShortInf(false);
+                ShortText = $"Notif: {title}";
             }
         }).Every(3000);
     }

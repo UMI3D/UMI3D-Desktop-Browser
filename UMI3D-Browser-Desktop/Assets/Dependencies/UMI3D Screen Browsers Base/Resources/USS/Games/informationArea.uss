@@ -23,21 +23,25 @@
 .information-area__short__inf.text.unity-label {
 	position: absolute;
 	right: 0;
+
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+
 	width: var(--size__width-short-inf);
 	height: var(--size__height-short-inf);
+
 	border-top-left-radius: var(--border-radius-game);
 	border-top-right-radius: var(--border-radius-game);
 	border-bottom-left-radius: var(--border-radius-game);
 	border-bottom-right-radius: var(--border-radius-game);
+
 	background-color: var(--background-color-game);
 	-unity-text-align: middle-center;
-	padding-left: var(--padding-short-inf);
-	padding-right: var(--padding-short-inf);
+
 	padding-top: var(--size-margin-and-padding-game);
 	padding-bottom: var(--size-margin-and-padding-game);
+
 	margin-right: var(--size-margin-and-padding-game);
 	margin-top: var(--size-margin-and-padding-game);
 	margin-bottom: var(--size-margin-and-padding-game);
