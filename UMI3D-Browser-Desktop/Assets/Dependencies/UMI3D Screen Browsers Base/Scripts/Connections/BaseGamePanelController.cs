@@ -287,6 +287,7 @@ namespace umi3d.baseBrowser.connection
                 Game.TopArea.InformationArea.UserList.RefreshList();
                 Game.TrailingArea.NotifAndUserArea.UserList.RefreshList();
                 Menu.GameData.ParticipantCount = count;
+                Game.TrailingArea.NotifAndUserArea.OnUserCountUpdated(count);
             };
 
             BaseController.SecondActionClicked += () =>
