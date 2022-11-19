@@ -120,7 +120,8 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
 
     ~CustomNotificationCenter()
     {
-        WillUpdateFilter -= UpdateFilter;
+        WillUpdateFilter = null;
+        NotificationCountUpdate = null;
     }
 
     public override VisualElement contentContainer => m_isSet ? ScrollView.contentContainer : this;
@@ -129,9 +130,10 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
 
     #region Implementation
 
+    public static event System.Action WillUpdateFilter;
+    public static event System.Action<int> NotificationCountUpdate;
     public static Stack<string> NotificationTitleStack = new Stack<string>();
 
-    protected static event System.Action WillUpdateFilter;
     protected static List<NotificationDto> m_notificationDtos = new List<NotificationDto>();
     protected static List<NotificationDto> m_newNotificationDtos = new List<NotificationDto>();
 
@@ -179,10 +181,12 @@ public abstract class CustomNotificationCenter : VisualElement, ICustomElement
             m_notificationDtos.Remove(dto);
             if (m_newNotificationDtos.Contains(dto)) m_newNotificationDtos.Remove(dto);
             WillUpdateFilter?.Invoke();
+            NotificationCountUpdate?.Invoke(m_notificationDtos.Count);
         };
 
         Notifications.Add(notification);
         WillUpdateFilter?.Invoke();
+        NotificationCountUpdate?.Invoke(m_notificationDtos.Count);
         return notification;
     }
 
