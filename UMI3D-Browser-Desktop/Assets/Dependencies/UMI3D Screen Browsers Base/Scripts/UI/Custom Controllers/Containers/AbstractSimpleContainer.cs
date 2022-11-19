@@ -22,7 +22,7 @@ using umi3d.cdk.menu.view;
 /// </summary>
 public abstract class AbstractSimpleContainer : AbstractMenuDisplayContainer
 {
-    protected List<AbstractDisplayer> m_displayers = new List<AbstractDisplayer>();
+    public List<AbstractDisplayer> m_displayers = new List<AbstractDisplayer>();
 
     public override AbstractDisplayer this[int i]
     {
