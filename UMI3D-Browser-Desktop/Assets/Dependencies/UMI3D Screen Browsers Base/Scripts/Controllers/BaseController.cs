@@ -602,8 +602,7 @@ namespace umi3d.baseBrowser.Controller
                 if (anim != null) anim.Start();
             }
         }
+
         #endregion
-
-
     }
 }

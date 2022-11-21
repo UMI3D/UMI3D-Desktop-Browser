@@ -10,6 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -48,79 +49,112 @@ namespace umi3d.baseBrowser.Navigation
         [Header("Player Body")]
         [SerializeField]
         protected Transform viewpoint;
+
         [SerializeField]
         protected Transform neckPivot;
+
         [SerializeField]
         protected Transform head;
+
+
         [SerializeField]
         protected Transform topHead;
         [SerializeField]
         protected Transform skeleton;
+
         [SerializeField]
         [Tooltip("Radius used from player center to raycast")]
         protected float playerRadius = .3f;
         [SerializeField]
         [Tooltip("List of point which from rays will be created to check is there is a navmesh under player's feet")]
         protected List<Transform> feetRaycastOrigin;
+
         [Header("Parameters")]
         [SerializeField]
         protected BaseFPSData data;
+
         [SerializeField]
         protected float maxNeckAngle;
+
         [SerializeField]
         protected float maxStepHeight = .2f;
+
         [SerializeField]
         protected float maxSlopeAngle = 45f;
+
         protected float stepEpsilon = 0.05f;
+
         [SerializeField]
         [Tooltip("Navigation mode")]
         protected Navigation navigation;
+
         [Header("Navmesh")]
         [SerializeField]
         public LayerMask obstacleLayer;
+
         [SerializeField]
         public LayerMask navmeshLayer;
 
         #region Player state
+
         /// <summary>
         /// Is player currently grounded ?
         /// </summary>
         public bool IsGrounded => Mathf.Abs(transform.position.y - groundHeight) < maxStepHeight;
+
         /// <summary>
         /// Current ground height.
         /// </summary>
         protected float groundHeight = 0;
+
         /// <summary>
         /// Has <see cref="groundHeight"/> changed last frame ?
         /// </summary>
         protected bool hasGroundHeightChangedLastFrame = false;
+
         /// <summary>
         /// Is player active ?
         /// </summary>
         protected bool isActive = false;
+
         protected Vector3 destination;
+
+
         public static UnityEvent PlayerMoved = new UnityEvent();
+
         public State state;
+
         protected bool changeToDefault = false;
+
         protected Vector3 lastAngleView;
+
         /// <summary>
         /// Is navigation currently performed ?
         /// </summary>
         protected bool navigateTo;
+
         protected Vector3 navigationDestination;
+
         protected float maxJumpVelocity;
+
         /// <summary>
         /// Stores all data about player jumps.
         /// </summary>
         protected JumpData jumpData;
         protected Vector3 currentCapsuleBase, currentCapsuleEnd;
+
         #endregion
 
 #if UNITY_EDITOR
+
         private Vector3 collisionHitPoint;
+
 #endif
+
         protected cdk.UMI3DNodeInstance globalVehicle;
+
         protected float lastObstacleHeight = .5f;
+
         #endregion
 
         #region Methods
@@ -152,6 +186,7 @@ namespace umi3d.baseBrowser.Navigation
             navigateTo = true;
             navigationDestination = data.position;
         }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -163,6 +198,7 @@ namespace umi3d.baseBrowser.Navigation
             transform.rotation = data.rotation;
             UpdateBaseHeight();
         }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -198,6 +234,7 @@ namespace umi3d.baseBrowser.Navigation
                 }
             }
         }
+
         #endregion
 
         void Start()
@@ -216,6 +253,7 @@ namespace umi3d.baseBrowser.Navigation
             if (jumpData.IsJumping != jumping)
             {
                 jumpData.IsJumping = jumping;
+
                 if (jumpData.IsJumping && CanJump())
                 {
                     jumpData.velocity = maxJumpVelocity;
@@ -227,6 +265,7 @@ namespace umi3d.baseBrowser.Navigation
             if (height < groundHeight)
             {
                 float offset = Mathf.Abs(height - groundHeight);
+
                 if ((offset < maxStepHeight + stepEpsilon) && (offset > stepEpsilon) && hasGroundHeightChangedLastFrame)
                     height = Mathf.Lerp(height, groundHeight, .5f);
                 else
@@ -244,8 +283,10 @@ namespace umi3d.baseBrowser.Navigation
         {
             if (!IsGrounded)
                 return false;
+
             return !Physics.CapsuleCast(currentCapsuleBase, currentCapsuleEnd, playerRadius, transform.up, .5f, obstacleLayer);
         }
+
         /// <summary>
         /// Return a movement allowed for the player from a given <paramref name="direction"/>.
         /// If no movement is allowed, return Vector.zero.
@@ -256,6 +297,7 @@ namespace umi3d.baseBrowser.Navigation
         {
             if (navigation == Navigation.Flying)
                 return direction;
+
             if (CheckNavmesh(direction))
             {
                 return CheckCollision(direction);
@@ -307,11 +349,14 @@ namespace umi3d.baseBrowser.Navigation
         {
             if (Physics.CapsuleCast(currentCapsuleBase, currentCapsuleEnd, playerRadius, direction, out var hit, IsGrounded ? .2f : 1f, obstacleLayer))
             {
+
 #if UNITY_EDITOR
                 collisionHitPoint = hit.point;
 #endif
+
                 Vector3 normal = Vector3.ProjectOnPlane(hit.normal, Vector3.up);
                 Vector3 projectedDirection = Vector3.Project(direction, Quaternion.Euler(0, 90, 0) * normal);
+
                 if (Physics.CapsuleCast(currentCapsuleBase, currentCapsuleEnd, playerRadius, projectedDirection, .2f, obstacleLayer))
                 {
                     return Vector3.zero;
@@ -321,6 +366,7 @@ namespace umi3d.baseBrowser.Navigation
                     return projectedDirection;
                 }
             }
+
             return direction;
         }
         /// <summary>
@@ -367,6 +413,7 @@ public static class Vector3Extension
         angle.x = Mathf.DeltaAngle(0, angle.x);
         angle.y = Mathf.DeltaAngle(0, angle.y);
         angle.z = Mathf.DeltaAngle(0, angle.z);
+
         return angle;
     }
 }
