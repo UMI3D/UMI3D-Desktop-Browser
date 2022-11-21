@@ -16,6 +16,7 @@ limitations under the License.
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using UnityEngine.UIElements;
+using static UnityEngine.UIElements.VisualElement;
 
 namespace umi3d.commonScreen.Displayer
 {
@@ -134,8 +135,14 @@ namespace umi3d.commonScreen.Displayer
             textfield?.RemoveFromHierarchy();
         }
 
-        public void Focus() {
-            textfield.Focus();
+        public void Focus() 
+        {
+            
+            textfield.schedule.Execute(() =>
+            {
+                UnityEngine.Debug.Log($"{!textfield.canGrabFocus} {textfield.hierarchy.parent != null}");
+                textfield.Focus();
+            });
         }
         public void Blur()
         {

@@ -299,14 +299,21 @@ namespace umi3d.baseBrowser.connection
             {
                 if (ObjectMenuDisplay.menu.Count > 0)
                 {
-                    if (ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Collapse(true);
+                    if (ObjectMenuDisplay.isDisplaying)
+                    {
+                        ObjectMenuDisplay.Collapse(true);
+                        umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Center);
+                    }
                     else ObjectMenuDisplay.Expand(false);
                 }
                 else
                 {
-                    if (BaseCursor.Movement == CursorMovement.Free)
-                        Game.BottomArea.DisplayNotifUsersArea = true;
-                    else Game.BottomArea.DisplayNotifUsersArea = false;
+                    if (BaseCursor.Movement != CursorMovement.Free)
+                    {
+                        Game.BottomArea.DisplayNotifUsersArea = false;
+                        umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Center);
+                    }
+                    else Game.BottomArea.DisplayNotifUsersArea = true;
                 }
             };
 
@@ -314,6 +321,7 @@ namespace umi3d.baseBrowser.connection
             {
                 if (ObjectMenuDisplay.menu.Count != 1) return;
                 if (!(ObjectMenu.m_displayers[0] is TextfieldDisplayer textfield)) return;
+                umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
                 if (!ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Expand(false);
                 textfield.Focus();
             };
