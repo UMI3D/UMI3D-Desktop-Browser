@@ -27,8 +27,9 @@ namespace umi3d.commonScreen.menu
             if (Button_Back == null) Button_Back = new Displayer.Button_C();
 
             if (ScrollView == null) ScrollView = new Container.ScrollView_C();
-            if (TimeInTheEnvironment_Visual == null) TimeInTheEnvironment_Visual = new Displayer.Textfield_C();
-            if (ParticipantCount_Visual == null) ParticipantCount_Visual = new Displayer.Textfield_C();
+
+            TextLineDisplayer.CreateText = () => new Displayer.Text_C();
+            TextLineDisplayer.USSCustomClassBox = () => USSCustomClassBox;
 
             base.InitElement();
         }

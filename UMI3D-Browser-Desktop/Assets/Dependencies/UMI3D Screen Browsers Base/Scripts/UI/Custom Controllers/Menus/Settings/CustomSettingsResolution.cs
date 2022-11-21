@@ -51,7 +51,7 @@ public class CustomSettingsResolution : CustomSettingScreen
 
         ResolutionsDropdown.label = "Resolusion";
         List<string> res = new List<string>();
-        foreach (var resolution in Screen.resolutions) res.Add($"{resolution.width}x{resolution.height}");
+        foreach (var resolution in Screen.resolutions) res.Insert(0, $"{resolution.width}x{resolution.height}");
         ResolutionsDropdown.choices = res;
         ResolutionsDropdown.RegisterValueChangedCallback((ce_resolution) => ResolutionValueChanged(ce_resolution.newValue));
 
@@ -73,6 +73,7 @@ public class CustomSettingsResolution : CustomSettingScreen
         DPI.DirectionDisplayer = ElemnetDirection.Leading;
         DPI.lowValue = 90f;
         DPI.highValue = 200f;
+        DPI.value = UIPanelSettings.referenceDpi;
         DPI.showInputField = true;
         DPI.RegisterValueChangedCallback(value => DPIValueChanged(value.newValue));
 
@@ -98,8 +99,6 @@ public class CustomSettingsResolution : CustomSettingScreen
             SegmentedResolution.Value = ResolutionEnum.Medium.ToString();
             ResolutionValueChanged(res[0]);
         }
-
-        //RenderPipeline.colorGradingLutSize
     }
 
     public override void Set() => Set("Resolution");

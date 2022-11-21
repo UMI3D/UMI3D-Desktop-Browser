@@ -74,7 +74,12 @@ namespace umi3d.baseBrowser.connection
             Loader.SetMovement = (value) => SetMovement(value, CursorMovement.Free);
             Loader.UnSetMovement = (value) => UnSetMovement(value);
 
-            umi3d.cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded?.AddListener(() => Loader.ControllerCanProcess?.Invoke(true));
+            umi3d.cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded?.AddListener(() =>
+            {
+                Loader.ControllerCanProcess?.Invoke(true);
+                Game.TopArea.InformationArea.EnvironmentName = UMI3DCollaborationClientServer.Instance.environementName;
+                Menu.GameData.EnvironmentName = UMI3DCollaborationClientServer.Instance.environementName;
+            });
 
             FormContainer.GetContainer = () => Loader.Form.ScrollView;
             FormContainer.InsertDisplayer = (index, displayer) => Loader.Form.Insert(index, displayer);
@@ -195,7 +200,7 @@ namespace umi3d.baseBrowser.connection
                 GamePanel.CurrentView = CustomGamePanel.GameViews.Loader;
                 Loader.Loading.Title = "Loading environment";
                 Loader.Loading.Value = 0;
-                Game.TopArea.InformationArea.EnvironmentName = media.name;
+                Menu.GameData.WorldName = media.name;
             };
             BaseConnectionProcess.Instance.ConnectionFail += (message) =>
             {
@@ -343,7 +348,7 @@ namespace umi3d.baseBrowser.connection
         public abstract CustomDialoguebox CreateDialogueBox();
 
         /// <summary>
-        /// Asks users some parameters when they join the environement.
+        /// Asks users some parameters when they join the environment.
         /// </summary>
         /// <param name="form"></param>
         /// <param name="callback"></param>
