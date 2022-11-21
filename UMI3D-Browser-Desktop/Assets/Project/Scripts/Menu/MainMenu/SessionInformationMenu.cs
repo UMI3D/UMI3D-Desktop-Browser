@@ -47,8 +47,6 @@ namespace BrowserDesktop.Menu
         VisualElement microphoneSetterContainer;
         VisualElement microphoneSetter;
 
-        Label environmentName;
-
         #endregion
 
         #region Bottom Bar
@@ -332,24 +330,9 @@ namespace BrowserDesktop.Menu
             return f * 10f;
         }
 
-        /// <summary>
-        /// Initiates the custom title bar with the name of the environment.
-        /// </summary>
-        /// <param name="media"></param>
-        public void SetEnvironmentName(MediaDto media)
-        {
-            environmentName = root.Q<Label>("environment-name");
-            environmentName.text = media.name;
-        }
 
         /*bool isDisplayed = false;
-        void DisplayConsole(bool val)
-        {
-            isDisplayed = val;
-            microphoneSetter.style.display = val ? DisplayStyle.Flex : DisplayStyle.None;
-            if (val)
-                MainThreadDispatcher.UnityMainThreadDispatcher.Instance().Enqueue(SetValues());
-        }*/
+        */
 
         /*IEnumerator SetValues()
         {
