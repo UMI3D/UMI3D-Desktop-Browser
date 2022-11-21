@@ -296,7 +296,7 @@ public class BuildHelper : EditorWindow
     async Task Build(string buildFolder)
     {
         string[] levels = new string[] { "Assets/Project/Scenes/Connection.unity", "Assets/Project/Scenes/Environement.unity" };
-        BuildPipeline.BuildPlayer(levels, buildFolder + "/UMI3D-Browser-Desktop.exe", BuildTarget.StandaloneWindows, BuildOptions.None);
+        BuildPipeline.BuildPlayer(levels, buildFolder + "/UMI3D-Browser-Desktop.exe", BuildTarget.StandaloneWindows64, BuildOptions.None);
 
         while (BuildPipeline.isBuildingPlayer)
             await Task.Yield();
