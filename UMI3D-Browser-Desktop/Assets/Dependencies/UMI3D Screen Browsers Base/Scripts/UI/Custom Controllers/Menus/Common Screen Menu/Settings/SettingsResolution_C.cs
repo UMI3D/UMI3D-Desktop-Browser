@@ -28,12 +28,19 @@ namespace umi3d.commonScreen.menu
             if (Button_Back == null) Button_Back = new Displayer.Button_C();
 
             if (ScrollView == null) ScrollView = new Container.ScrollView_C();
-            if (SegmentedResolution == null) SegmentedResolution = new Displayer.SegmentedPicker_C<ResolutionEnum>();
-            if (ResolutionsDropdown == null) ResolutionsDropdown = new Displayer.Dropdown_C();
-            if (SupportHDR == null) SupportHDR = new Displayer.Toggle_C();
-            if (RenderScale == null) RenderScale = new Displayer.Slider_C();
+            if (GameResolutionSegmentedPicker == null) GameResolutionSegmentedPicker = new Displayer.SegmentedPicker_C<ResolutionEnum>();
+            if (FullScreenResolutionsDropdown == null) FullScreenResolutionsDropdown = new Displayer.Dropdown_C();
+            if (QualitySettingsSegmentedPicker == null) QualitySettingsSegmentedPicker = new Displayer.SegmentedPicker_C<QualityEnum>();
+            if (HDRToggle == null) HDRToggle = new Displayer.Toggle_C();
+            if (RenderScaleSlider == null) RenderScaleSlider = new Displayer.Slider_C();
             if (ReduceAnimation == null) ReduceAnimation = new Displayer.Toggle_C();
-            if (DPI == null) DPI = new Displayer.Slider_C();
+
+
+            if (DPISlider == null) DPISlider = new Displayer.Slider_C();
+            if (UISizeSegmentedPicker == null) UISizeSegmentedPicker = new Displayer.SegmentedPicker_C<UIZoom>();
+
+            ResolutionDisplayer.CreateText = () => new Displayer.Text_C();
+            ResolutionDisplayer.USSCustomClassBox = () => USSCustomClassBox;
 
             base.InitElement();
         }

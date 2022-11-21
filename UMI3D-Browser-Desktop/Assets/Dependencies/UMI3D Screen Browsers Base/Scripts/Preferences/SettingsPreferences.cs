@@ -40,13 +40,31 @@ namespace umi3d.baseBrowser.preferences
             High,
             Custom
         }
+        public enum QualityEnum
+        {
+            VLow,
+            Low,
+            Medium,
+            High,
+            VHigh,
+            Ultra
+        }
+        public enum UIZoom
+        {
+            Small,
+            Medium,
+            Large,
+            Custom
+        }
         [Serializable]
         public struct ResolutionData
         {
-            public ResolutionEnum SegmentedResolution;
-            public string Resolution;
-            public bool SupportHDR;
+            public ResolutionEnum GameResolution;
+            public string FullScreenResolution;
+            public QualityEnum Quality;
+            public bool HDR;
             public float RenderScale;
+            public UIZoom UISize;
             public bool ReduceAnimation;
         }
 

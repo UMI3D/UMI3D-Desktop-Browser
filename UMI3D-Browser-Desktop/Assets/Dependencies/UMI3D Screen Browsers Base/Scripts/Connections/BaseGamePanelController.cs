@@ -343,11 +343,11 @@ namespace umi3d.baseBrowser.connection
             float newFPS = 1.0f / Time.deltaTime;
             fps = Mathf.Lerp(fps, newFPS, Time.deltaTime);
 
-            UnityEngine.Debug.Log($"fps = {fps}, {Menu.Settings.Resolution.RenderScale.value}, {QualitySettings.names[QualitySettings.GetQualityLevel()]}");
+            UnityEngine.Debug.Log($"fps = {fps}, {Menu.Settings.Resolution.RenderScaleSlider.value}, {QualitySettings.names[QualitySettings.GetQualityLevel()]}");
 
-            if (GamePanel.CurrentView != CustomGamePanel.GameViews.Game || Menu.Settings.Resolution.SegmentedResolution.ValueEnum == preferences.SettingsPreferences.ResolutionEnum.Custom) return;
+            if (GamePanel.CurrentView != CustomGamePanel.GameViews.Game || Menu.Settings.Resolution.GameResolutionSegmentedPicker.ValueEnum == preferences.SettingsPreferences.ResolutionEnum.Custom) return;
 
-            var renderScaleValue = Menu.Settings.Resolution.RenderScale.value;
+            var renderScaleValue = Menu.Settings.Resolution.RenderScaleSlider.value;
 
             if (fps < Menu.Settings.Resolution.TargetFPS - 20 && renderScaleValue > 0.01) Menu.Settings.Resolution.RenderScaleValueChanged(renderScaleValue * 0.95f);
             else if (fps > Menu.Settings.Resolution.TargetFPS - 5) Menu.Settings.Resolution.RenderScaleValueChanged(renderScaleValue * 1.05f);
@@ -411,6 +411,7 @@ namespace umi3d.baseBrowser.connection
                 Loader.Form.Buttond_Submit.text = "Join";
                 Loader.Form.SubmitClicked += () => send.NotifyValueChange(true);
                 Loader.Form.Buttond_Submit.Focus();
+                Loader.Form.Buttond_Submit.Blur();
             }
         }
 

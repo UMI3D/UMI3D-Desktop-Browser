@@ -1,1 +1,4 @@
-VisualElement {}
+.setting__resolution-box {
+	margin-top: var(--margin_padding-menu);
+	margin-bottom: var(--margin_padding-menu);
+}
