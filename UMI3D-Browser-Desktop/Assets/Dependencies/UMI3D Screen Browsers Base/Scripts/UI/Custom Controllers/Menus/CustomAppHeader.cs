@@ -62,6 +62,8 @@ public class CustomAppHeader : VisualElement, ICustomElement
         Maximize.Size = ElementSize.Small;
         Close.Size = ElementSize.Small;
 
+        Close.Type = ButtonType.Danger;
+
         Add(Minimize);
         Minimize.Add(Minimize_Icon);
         Add(Maximize);

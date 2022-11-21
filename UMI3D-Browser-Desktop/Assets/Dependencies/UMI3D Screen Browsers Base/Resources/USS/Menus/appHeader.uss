@@ -1,20 +1,21 @@
 .app__header {
 	flex-direction: row;
 	justify-content: flex-end;
-	background-color: var(--color-background-displayer-menu);
+	background-color: var(--color-background_transparent-menu);
 	width: 100%;
-	min-height: 66px;
+	min-height: 54px;
 }
 
-.app__header-window__button > .button__body {
-	width: 52px;
+.app__header-window__button.button-small.button-square > .button__body {
+	width: 70px;
+	height: 40px;
 }
 
 .app__header-minimize__icon,
 .app__header-maximize__icon,
 .app__header-close__icon {
-	width: 100%;
-	height: 100%;
+	width: 40px;
+	height: 40px;
 }
 
 .app__header-minimize__icon {
