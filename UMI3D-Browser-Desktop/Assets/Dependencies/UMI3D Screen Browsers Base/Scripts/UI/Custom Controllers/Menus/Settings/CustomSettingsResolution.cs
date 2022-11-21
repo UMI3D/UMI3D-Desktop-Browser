@@ -49,7 +49,7 @@ public class CustomSettingsResolution : CustomSettingScreen
 
         MaxFPS = Screen.currentResolution.refreshRate;
 
-        ResolutionsDropdown.label = "Resolusion";
+        ResolutionsDropdown.label = "Resolution";
         List<string> res = new List<string>();
         foreach (var resolution in Screen.resolutions) res.Insert(0, $"{resolution.width}x{resolution.height}");
         ResolutionsDropdown.choices = res;
@@ -176,8 +176,10 @@ public class CustomSettingsResolution : CustomSettingScreen
     public void ResolutionValueChanged(string value)
     {
         ResolutionsDropdown.SetValueWithoutNotify(value);
-        var resolution = Screen.resolutions[ResolutionsDropdown.choices.IndexOf(value)];
-        Screen.SetResolution(resolution.width, resolution.height, true);
+        var resolution = value.Split('x');
+        int.TryParse(resolution[0], out var width);
+        int.TryParse(resolution[1], out var height);
+        Screen.SetResolution(width, height, true);
         Data.Resolution = value;
         StoreResolutionData(Data);
     }

@@ -10,6 +10,7 @@
 	--border-width-displayer : 3px;
 	--border-radius-displayer : 11px;
 	
+	--color-background-transparent-displayer: rgb(38, 38, 38, 0.78);
 	--color-navigation-menu-displayer: rgb(0, 193, 216);
 	--color-navigation-game-displayer: rgb(205, 154, 79);
 	--color-background-displayer: rgb(38, 38, 38);
