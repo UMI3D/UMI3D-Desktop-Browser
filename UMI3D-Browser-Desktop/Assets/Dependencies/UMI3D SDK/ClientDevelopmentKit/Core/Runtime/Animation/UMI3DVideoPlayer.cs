@@ -33,6 +33,11 @@ namespace umi3d.cdk
         private readonly Material mat;
         private readonly RenderTexture renderTexture;
 
+        /// <summary>
+        /// Get an <see cref="UMI3DVideoPlayer"/> by id.
+        /// </summary>
+        /// <param name="id">UMI3D id</param>
+        /// <returns></returns>
         public static new UMI3DVideoPlayer Get(ulong id) { return UMI3DAbstractAnimation.Get(id) as UMI3DVideoPlayer; }
 
         /// <summary>
@@ -42,6 +47,9 @@ namespace umi3d.cdk
 
         bool readyOrFailed => isPrepared || preparationFailed;
 
+        /// <summary>
+        /// Has the preparation of the video content failed?
+        /// </summary>
         public bool preparationFailed { get; private set; } = false;
 
         public UMI3DVideoPlayer(UMI3DVideoPlayerDto dto) : base(dto)
@@ -204,7 +212,7 @@ namespace umi3d.cdk
         }
 
         /// <summary>
-        /// Fix added for some issues encountered on Android (<see cref="VideoPlayer.time"/> not necessarily correctly set.
+        /// Fix added for some issues encountered on Android (<see cref="VideoPlayer.time"/> not necessarily correctly set).
         /// </summary>
         /// <param name="time"></param>
         /// <returns></returns>
