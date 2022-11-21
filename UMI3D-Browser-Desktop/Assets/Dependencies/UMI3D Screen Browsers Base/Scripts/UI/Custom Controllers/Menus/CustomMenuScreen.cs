@@ -93,10 +93,10 @@ public abstract class CustomMenuScreen : VisualElement, ICustomElement
     /// </summary>
     public virtual string ShortScreenTitle { get; set; }
     public System.Action BackButtonCkicked;
-    public VisualElement Header_ = new VisualElement();
+    public VisualElement Header_ = new VisualElement { name = "header" };
     public CustomText TitleLabel;
-    public VisualElement Header__Left = new VisualElement();
-    public VisualElement Header__Right = new VisualElement();
+    public VisualElement Header__Left = new VisualElement { name = "header-left" };
+    public VisualElement Header__Right = new VisualElement { name = "header-right" };
     public CustomButton Button_Back;
     public VisualElement Button_Back_Icon = new VisualElement();
 

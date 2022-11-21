@@ -396,10 +396,21 @@ namespace umi3d.baseBrowser.connection
                     Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Center);
                     cdk.collaboration.LocalInfoSender.CheckFormToUpdateAuthorizations(form);
                     m_next = null;
+                    Loader.Form.ResetSubmitEvent();
+                    Loader.Form.DisplaySubmitButton = false;
                 };
                 send.Subscribe(action);
-                //m_next = () => send.NotifyValueChange(true);
-                FormMenu.menu.Add(send);
+
+                m_next = () =>
+                {
+                    Loader.Form.Buttond_Submit.Focus();
+                    send.NotifyValueChange(true);
+                };
+
+                Loader.Form.DisplaySubmitButton = true;
+                Loader.Form.Buttond_Submit.text = "Join";
+                Loader.Form.SubmitClicked += () => send.NotifyValueChange(true);
+                Loader.Form.Buttond_Submit.Focus();
             }
         }
 

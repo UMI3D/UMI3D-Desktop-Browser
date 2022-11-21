@@ -1,1 +1,8 @@
-VisualElement {}
+.form__screen {
+	align-items: center; 
+}
+
+.form__screen-form {
+	width: 100%;
+	max-width: 800px;
+}
