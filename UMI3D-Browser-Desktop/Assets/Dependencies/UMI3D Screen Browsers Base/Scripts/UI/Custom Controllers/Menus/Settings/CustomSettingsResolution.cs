@@ -23,17 +23,69 @@ using static umi3d.baseBrowser.preferences.SettingsPreferences;
 
 public class CustomSettingsResolution : CustomSettingScreen
 {
-    public override string USSCustomClassName => "setting-resolution";
+    public struct ResolutionDisplayer
+    {
+        public VisualElement Displayer;
+        public CustomText Description;
+        public VisualElement Box;
+
+        public ResolutionDisplayer(VisualElement displayer, string text)
+        {
+            Displayer = displayer;
+
+            Description = CreateText();
+            Description.text = text;
+            Description.Color = TextColor.Menu;
+
+            Box = new VisualElement { name = "box-displayer" };
+            Box.AddToClassList(USSCustomClassBox());
+            Box.Add(Displayer);
+            Box.Add(Description);
+        }
+
+        public static System.Func<CustomText> CreateText;
+        public static System.Func<string> USSCustomClassBox;
+    }
+
+    public override string USSCustomClassName => "setting__resolution";
+    public virtual string USSCustomClassBox => $"{USSCustomClassName}-box";
+
+    #region Game Resolution
 
     public int MaxFPS;
     public int TargetFPS;
-    public CustomSegmentedPicker<ResolutionEnum> SegmentedResolution;
-    public CustomDropdown ResolutionsDropdown;
-    public CustomToggle SupportHDR;
-    public CustomSlider RenderScale;
+    public CustomSegmentedPicker<ResolutionEnum> GameResolutionSegmentedPicker;
+    public ResolutionDisplayer GameResolution;
+
+    public List<string> FullScreenResolutionList = new List<string>();
+    public CustomDropdown FullScreenResolutionsDropdown;
+    public ResolutionDisplayer FullScreenResolution;
+
+    public CustomSegmentedPicker<QualityEnum> QualitySettingsSegmentedPicker;
+    public ResolutionDisplayer GameQuality;
+
+    public CustomToggle HDRToggle;
+    public ResolutionDisplayer HDR;
+
+    public CustomSlider RenderScaleSlider;
+    public ResolutionDisplayer RenderScale;
+
+    #endregion
+
+    #region UI Resolution
+
+    public CustomSegmentedPicker<UIZoom> UISizeSegmentedPicker;
+    public ResolutionDisplayer UISize;
+
+    public CustomSlider DPISlider;
+    //public ResolutionDisplayer RenderScale;
+
+    #endregion
+
     public CustomToggle ReduceAnimation;
 
-    public CustomSlider DPI; 
+    
+    
 
     public override void InitElement()
     {
@@ -44,60 +96,91 @@ public class CustomSettingsResolution : CustomSettingScreen
         RenderPipeline_Medium = Resources.Load<UniversalRenderPipelineAsset>("Scriptables/Rendering/UniversalRenderPipelineAsset_medium");
         RenderPipeline_High = Resources.Load<UniversalRenderPipelineAsset>("Scriptables/Rendering/UniversalRenderPipelineAsset_high");
 
-        SegmentedResolution.LabelDirection = ElemnetDirection.Top;
-        SegmentedResolution.ValueEnumChanged += value => SegmentedResolutionValueChanged(value);
-
         MaxFPS = Screen.currentResolution.refreshRate;
 
-        ResolutionsDropdown.label = "Resolution";
-        List<string> res = new List<string>();
-        foreach (var resolution in Screen.resolutions) res.Insert(0, $"{resolution.width}x{resolution.height}");
-        ResolutionsDropdown.choices = res;
-        ResolutionsDropdown.RegisterValueChangedCallback((ce_resolution) => ResolutionValueChanged(ce_resolution.newValue));
+        #region Game Resolution
 
-        SupportHDR.label = "Enable HDR";
-        SupportHDR.RegisterValueChangedCallback(value => SupportHDRValueChanged(value.newValue));
+        GameResolutionSegmentedPicker.Label = "Game resolution";
+        GameResolutionSegmentedPicker.ValueEnumChanged += value => GameResolutionValueChanged(value);
+        GameResolution = new ResolutionDisplayer(GameResolutionSegmentedPicker, "");
+        ScrollView.Add(GameResolution.Box);
 
-        RenderScale.label = "Render Scale";
-        RenderScale.DirectionDisplayer = ElemnetDirection.Leading;
-        RenderScale.lowValue = 0f;
-        RenderScale.highValue = 2f;
-        RenderScale.showInputField = true;
-        RenderScale.RegisterValueChangedCallback(value => RenderScaleValueChanged(value.newValue));
+        FullScreenResolutionsDropdown.label = "Full screen resolution";
+        foreach (var resolution in Screen.resolutions) FullScreenResolutionList.Insert(0, $"{resolution.width}x{resolution.height}");
+        FullScreenResolutionsDropdown.choices = FullScreenResolutionList;
+        FullScreenResolutionsDropdown.RegisterValueChangedCallback((ce_resolution) => FullScreenResolutionValueChanged(ce_resolution.newValue));
+        FullScreenResolution = new ResolutionDisplayer(FullScreenResolutionsDropdown, "Will impact Game and UI Resolutions");
+#if UNITY_STANDALONE
+        ScrollView.Add(FullScreenResolution.Box);
+#endif
+
+        QualitySettingsSegmentedPicker.Label = "Quality Settings";
+        QualitySettingsSegmentedPicker.ValueEnumChanged += value => QualitySettingsValueChanged(value);
+        GameQuality = new ResolutionDisplayer(QualitySettingsSegmentedPicker, "");
+        ScrollView.Add(GameQuality.Box);
+
+        HDRToggle.label = "Enable HDR";
+        HDRToggle.RegisterValueChangedCallback(value => HDRValueChanged(value.newValue));
+        HDR = new ResolutionDisplayer(HDRToggle, "High Dynamic Range");
+        ScrollView.Add(HDR.Box);
+
+        RenderScaleSlider.label = "Render Scale";
+        RenderScaleSlider.DirectionDisplayer = ElemnetDirection.Leading;
+        RenderScaleSlider.lowValue = 0f;
+        RenderScaleSlider.highValue = 2f;
+        RenderScaleSlider.showInputField = true;
+        RenderScaleSlider.RegisterValueChangedCallback(value => RenderScaleValueChanged(value.newValue));
+        RenderScale = new ResolutionDisplayer(RenderScaleSlider, "Lower means less resolution and more FPS.");
+        ScrollView.Add(RenderScale.Box);
+
+        #endregion
+
+#if UNITY_STANDALONE
+        #region UI Resolution
+
+        UISizeSegmentedPicker.Label = "UI Size";
+        UISizeSegmentedPicker.ValueEnumChanged += value => UISizeValueChanged(value);
+        UISize = new ResolutionDisplayer(UISizeSegmentedPicker, "Size of the user interface");
+        ScrollView.Add(UISize.Box);
+
+        DPISlider.label = "DPI";
+        DPISlider.DirectionDisplayer = ElemnetDirection.Leading;
+        DPISlider.lowValue = 90f;
+        DPISlider.highValue = 200f;
+        DPISlider.value = UIPanelSettings.referenceDpi;
+        DPISlider.showInputField = true;
+        DPISlider.RegisterValueChangedCallback(value => DPIValueChanged(value.newValue));
+        ScrollView.Add(DPISlider);
+
+        #endregion
+#endif
+
 
         ReduceAnimation.label = "Reduce animation";
         ReduceAnimation.value = false;
         ReduceAnimation.RegisterValueChangedCallback((ce_value) => ReduceAnimationValueChanged(ce_value.newValue));
-
-        DPI.label = "DPI";
-        DPI.DirectionDisplayer = ElemnetDirection.Leading;
-        DPI.lowValue = 90f;
-        DPI.highValue = 200f;
-        DPI.value = UIPanelSettings.referenceDpi;
-        DPI.showInputField = true;
-        DPI.RegisterValueChangedCallback(value => DPIValueChanged(value.newValue));
-
-        ScrollView.Add(SegmentedResolution);
-#if UNITY_STANDALONE
-        ScrollView.Add(ResolutionsDropdown);
-        ScrollView.Add(DPI);
-#endif
-        ScrollView.Add(SupportHDR);
-        ScrollView.Add(RenderScale);
         ScrollView.Add(ReduceAnimation);
+
+        
+
 
         if (TryGetResolutionData(out Data))
         {
-            SegmentedResolution.Value = Data.SegmentedResolution.ToString();
-            ResolutionValueChanged(Data.Resolution);
-            SupportHDR.value = Data.SupportHDR;
-            RenderScale.value = Data.RenderScale;
-            ReduceAnimation.value = Data.ReduceAnimation;
+            GameResolutionValueChanged(Data.GameResolution);
+            if (Data.GameResolution == ResolutionEnum.Custom)
+            {
+                FullScreenResolutionValueChanged(Data.FullScreenResolution);
+                QualitySettingsValueChanged(Data.Quality);
+                HDRValueChanged(Data.HDR);
+                RenderScaleValueChanged(Data.RenderScale);
+                ReduceAnimationValueChanged(Data.ReduceAnimation);
+            }
+            UISizeValueChanged(Data.UISize);
         }
         else
         {
-            SegmentedResolution.Value = ResolutionEnum.Medium.ToString();
-            ResolutionValueChanged(res[0]);
+            GameResolutionValueChanged(ResolutionEnum.Medium);
+            UISizeValueChanged(UIZoom.Medium);
         }
     }
 
@@ -113,91 +196,168 @@ public class CustomSettingsResolution : CustomSettingScreen
     protected UniversalRenderPipelineAsset RenderPipeline_High;
     public ResolutionData Data;
 
-    public void SegmentedResolutionValueChanged(ResolutionEnum value)
+    public void GameResolutionValueChanged(ResolutionEnum value)
     {
-        SegmentedResolution.SetValueEnumWithoutNotify(value);
+        GameResolutionSegmentedPicker.SetValueEnumWithoutNotify(value);
         switch (value)
         {
             case ResolutionEnum.Low:
-                RenderPipeline = RenderPipeline_Low;
-                QualitySettings.renderPipeline = RenderPipeline;
-
                 TargetFPS = MaxFPS;
                 Application.targetFrameRate = TargetFPS;
-                SegmentedResolution.Label = $"Low resolution is targetting {TargetFPS}fps with lower rendering";
-                SupportHDR.value = false;
-                RenderScale.value = 0.7f;
-                QualitySettings.SetQualityLevel(0, false);
+                GameResolution.Description.text = $"Low resolution is targetting {TargetFPS}fps with lower rendering";
+
+                FullScreenResolutionValueChanged(FullScreenResolutionList[0]);
+                QualitySettingsValueChanged(QualityEnum.Low);
+                HDRValueChanged(false);
+                RenderScaleValueChanged(0.7f);
                 RenderPipeline.shadowDistance = 20f;
-                SupportHDR.Hide();
-                RenderScale.Hide();
+
+                FullScreenResolution.Box.Hide();
+                GameQuality.Box.Hide();
+                HDR.Box.Hide();
+                RenderScale.Box.Hide();
                 break;
             case ResolutionEnum.Medium:
-                RenderPipeline = RenderPipeline_Medium;
-                QualitySettings.renderPipeline = RenderPipeline;
-
                 TargetFPS = MaxFPS / 2;
                 Application.targetFrameRate = TargetFPS;
-                SegmentedResolution.Label = $"Medium resolution is targetting {TargetFPS}fps with midium rendering";
-                SupportHDR.value = false;
-                RenderScale.value = 1f;
-                QualitySettings.SetQualityLevel(1, false);
+                GameResolution.Description.text = $"Medium resolution is targetting {TargetFPS}fps with midium rendering";
+
+                FullScreenResolutionValueChanged(FullScreenResolutionList[0]);
+                QualitySettingsValueChanged(QualityEnum.Medium);
+                HDRValueChanged(false);
+                RenderScaleValueChanged(1f);
                 RenderPipeline.shadowDistance = 35f;
-                SupportHDR.Hide();
-                RenderScale.Hide();
+
+                FullScreenResolution.Box.Hide();
+                GameQuality.Box.Hide();
+                HDR.Box.Hide();
+                RenderScale.Box.Hide();
                 break;
             case ResolutionEnum.High:
-                RenderPipeline = RenderPipeline_High;
-                QualitySettings.renderPipeline = RenderPipeline;
-
                 TargetFPS = MaxFPS / 3;
                 Application.targetFrameRate = TargetFPS;
-                SegmentedResolution.Label = $"High resolution is targetting {TargetFPS}fps with higher rendering";
-                SupportHDR.value = true;
-                RenderScale.value = 1.3f;
-                QualitySettings.SetQualityLevel(2, false);
+                GameResolution.Description.text = $"High resolution is targetting {TargetFPS}fps with higher rendering";
+
+                FullScreenResolutionValueChanged(FullScreenResolutionList[0]);
+                QualitySettingsValueChanged(QualityEnum.High);
+                HDRValueChanged(true);
+                RenderScaleValueChanged(1.3f);
                 RenderPipeline.shadowDistance = 50f;
-                SupportHDR.Hide();
-                RenderScale.Hide();
+
+                FullScreenResolution.Box.Hide();
+                GameQuality.Box.Hide();
+                HDR.Box.Hide();
+                RenderScale.Box.Hide();
                 break;
             case ResolutionEnum.Custom:
-                SegmentedResolution.Label = "Custom resolution let you choose your settings";
-                SupportHDR.Display();
-                RenderScale.Display();
+                GameResolution.Description.text = "Custom resolution let you choose your settings";
+
+                FullScreenResolution.Box.Display();
+                GameQuality.Box.Display();
+                HDR.Box.Display();
+                RenderScale.Box.Display();
                 break;
             default:
                 break;
         }
 
-        Data.SegmentedResolution = SegmentedResolution.ValueEnum.Value;
+        Data.GameResolution = value;
         StoreResolutionData(Data);
     }
 
-    public void ResolutionValueChanged(string value)
+    public void FullScreenResolutionValueChanged(string value)
     {
-        ResolutionsDropdown.SetValueWithoutNotify(value);
+        FullScreenResolutionsDropdown.SetValueWithoutNotify(value);
         var resolution = value.Split('x');
         int.TryParse(resolution[0], out var width);
         int.TryParse(resolution[1], out var height);
-        Screen.SetResolution(width, height, true);
-        Data.Resolution = value;
+        if (Screen.fullScreen) Screen.SetResolution(width, height, true);
+        Data.FullScreenResolution = value;
         StoreResolutionData(Data);
     }
 
-    public void SupportHDRValueChanged(bool value)
+    public void QualitySettingsValueChanged(QualityEnum value)
     {
-        SupportHDR.SetValueWithoutNotify(value);
+        QualitySettingsSegmentedPicker.SetValueEnumWithoutNotify(value);
+        switch (value)
+        {
+            case QualityEnum.VLow:
+                QualitySettings.SetQualityLevel(0, false);
+                break;
+            case QualityEnum.Low:
+                QualitySettings.SetQualityLevel(1, false);
+                break;
+            case QualityEnum.Medium:
+                QualitySettings.SetQualityLevel(2, false);
+                break;
+            case QualityEnum.High:
+                QualitySettings.SetQualityLevel(3, false);
+                break;
+            case QualityEnum.VHigh:
+                QualitySettings.SetQualityLevel(4, false);
+                break;
+            case QualityEnum.Ultra:
+                QualitySettings.SetQualityLevel(5, false);
+                break;
+            default:
+                break;
+        }
+        RenderPipeline = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
+
+        Data.Quality = value;
+        StoreResolutionData(Data);
+    }
+
+    public void HDRValueChanged(bool value)
+    {
+        HDRToggle.SetValueWithoutNotify(value);
         RenderPipeline.supportsHDR = value;
-        Data.SupportHDR = value;
+        Data.HDR = value;
         StoreResolutionData(Data);
     }
 
     public void RenderScaleValueChanged(float value)
     {
-        RenderScale.SetValueWithoutNotify(value);
+        RenderScaleSlider.SetValueWithoutNotify(value);
         RenderPipeline.renderScale = value;
         Data.RenderScale = value;
         StoreResolutionData(Data);
+    }
+
+    public void UISizeValueChanged(UIZoom value)
+    {
+        UISizeSegmentedPicker.SetValueEnumWithoutNotify(value);
+        switch (value)
+        {
+            case UIZoom.Small:
+                DPIValueChanged(120f);
+                DPISlider.Hide();
+                break;
+            case UIZoom.Medium:
+                DPIValueChanged(150f);
+                DPISlider.Hide();
+                break;
+            case UIZoom.Large:
+                DPIValueChanged(170f);
+                DPISlider.Hide();
+                break;
+            case UIZoom.Custom:
+                DPISlider.Display();
+                break;
+            default:
+                break;
+        }
+
+        Data.UISize = value;
+        StoreResolutionData(Data);
+    }
+
+    public void DPIValueChanged(float value)
+    {
+        DPISlider.SetValueWithoutNotify(value);
+        UIPanelSettings.referenceDpi = value;
+        //Data.RenderScale = value;
+        //StoreResolutionData(Data);
     }
 
     public void ReduceAnimationValueChanged(bool value)
@@ -206,14 +366,6 @@ public class CustomSettingsResolution : CustomSettingScreen
         AnimatorManager.ReduceAnimation = value;
         Data.ReduceAnimation = value;
         StoreResolutionData(Data);
-    }
-
-    public void DPIValueChanged(float value)
-    {
-        DPI.SetValueWithoutNotify(value);
-        UIPanelSettings.referenceDpi = value;
-        //Data.RenderScale = value;
-        //StoreResolutionData(Data);
     }
 
     #endregion
