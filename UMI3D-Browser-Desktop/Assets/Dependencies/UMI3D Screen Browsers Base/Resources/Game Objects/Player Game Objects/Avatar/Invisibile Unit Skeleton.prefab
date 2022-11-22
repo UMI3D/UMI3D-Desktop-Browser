@@ -290,6 +290,7 @@ PrefabInstance:
     - {fileID: 1155266111629689672, guid: 3fa30dc4397e12e408bdc65db9cf75d7, type: 3}
     - {fileID: 2694601774477503835, guid: 3fa30dc4397e12e408bdc65db9cf75d7, type: 3}
     - {fileID: 4451619451807869184, guid: 3fa30dc4397e12e408bdc65db9cf75d7, type: 3}
+    - {fileID: 8539241765476605751, guid: 3fa30dc4397e12e408bdc65db9cf75d7, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3fa30dc4397e12e408bdc65db9cf75d7, type: 3}
 --- !u!4 &4102266756403508479 stripped
 Transform:

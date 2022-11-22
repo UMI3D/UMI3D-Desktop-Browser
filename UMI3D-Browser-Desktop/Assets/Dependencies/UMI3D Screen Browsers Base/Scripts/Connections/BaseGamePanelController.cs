@@ -289,6 +289,7 @@ namespace umi3d.baseBrowser.connection
             };
             BaseConnectionProcess.Instance.UserCountUpdated += count =>
             {
+                UnityEngine.Debug.Log($"user compte update {count}");
                 Game.NotifAndUserArea.UserList.RefreshList();
                 Game.NotifAndUserArea.OnUserCountUpdated(count);
                 Menu.GameData.ParticipantCount = count;
