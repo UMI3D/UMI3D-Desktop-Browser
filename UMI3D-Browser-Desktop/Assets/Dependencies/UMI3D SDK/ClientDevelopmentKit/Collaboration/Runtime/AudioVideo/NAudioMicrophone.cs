@@ -135,6 +135,8 @@ namespace umi3d.cdk.collaboration
         /// <returns></returns>
         public override int InitializeMic()
         {
+            UnityEngine.Debug.LogError("Remove when the microphone can be selected");
+            MicNumberToUse = 1;
             if (MicNumberToUse == currentMicIndex)
             {
                 Debug.Log("Mic already init " + GetCurrentMicName());
