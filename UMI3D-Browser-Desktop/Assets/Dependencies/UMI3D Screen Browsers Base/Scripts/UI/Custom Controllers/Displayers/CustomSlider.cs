@@ -14,23 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public abstract class CustomSlider : Slider, ICustomElement
 {
     public new class UxmlTraits : Slider.UxmlTraits
     {
-        UxmlEnumAttributeDescription<ElementCategory> m_category = new UxmlEnumAttributeDescription<ElementCategory> 
+        protected UxmlEnumAttributeDescription<ElementCategory> m_category = new UxmlEnumAttributeDescription<ElementCategory> 
         { 
             name = "category", 
             defaultValue = ElementCategory.Menu 
         };
-        UxmlEnumAttributeDescription<ElementSize> m_size = new UxmlEnumAttributeDescription<ElementSize> 
+        protected UxmlEnumAttributeDescription<ElementSize> m_size = new UxmlEnumAttributeDescription<ElementSize> 
         { 
             name = "size", 
             defaultValue = ElementSize.Medium 
         };
-        UxmlEnumAttributeDescription<ElemnetDirection> m_direction = new UxmlEnumAttributeDescription<ElemnetDirection> 
+        protected UxmlEnumAttributeDescription<ElemnetDirection> m_direction = new UxmlEnumAttributeDescription<ElemnetDirection> 
         { 
             name = "direction-displayer", 
             defaultValue = ElemnetDirection.Leading 
@@ -43,10 +44,17 @@ public abstract class CustomSlider : Slider, ICustomElement
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomSlider;
 
-            custom.Set(m_category.GetValueFromBag(bag, cc), m_size.GetValueFromBag(bag, cc), m_direction.GetValueFromBag(bag, cc));
+            custom.Set
+            (
+                m_category.GetValueFromBag(bag, cc), 
+                m_size.GetValueFromBag(bag, cc), 
+                m_direction.GetValueFromBag(bag, cc)
+            );
         }
     }
 
@@ -58,8 +66,8 @@ public abstract class CustomSlider : Slider, ICustomElement
     public virtual string USSCustomClassCategory(ElementCategory category) => $"{USSCustomClassName}-{category}".ToLower();
     public virtual string USSCustomClassSize(ElementSize size) => $"{USSCustomClassName}-{size}".ToLower();
     public virtual string USSCustomClassDirection(ElemnetDirection direction) => $"{USSCustomClassName}-{direction}".ToLower();
-    public virtual string USSCustomClassLabel => $"{USSCustomClassName}__label";
-    public virtual string USSCustomClassTextField => $"{USSCustomClassName}__text-field";
+    public virtual string USSCustomClassLabel => $"{USSCustomClassName}-label";
+    public virtual string USSCustomClassTextField => $"{USSCustomClassName}-text__field";
 
     public ElementCategory Category
     {
