@@ -107,7 +107,6 @@ namespace umi3d.cdk.collaboration
         private NoiseReducer noiseReducer;
 
         [field: SerializeField]
-        [Tooltip("Use noise reduction ?")]
         private bool UseNoiseReducer { get; set; } = true;
 
         /// <summary>
@@ -126,7 +125,7 @@ namespace umi3d.cdk.collaboration
         #endregion
 #endif
 
-#endregion
+        #endregion
 
         #region Methods
 
@@ -218,7 +217,7 @@ namespace umi3d.cdk.collaboration
                         data.AddRange(noiseReductionBuffer);
                     }
                 }
-            } 
+            }
             else
             {
                 ConvertAudioInputToData(a.BytesRecorded, buffer);
