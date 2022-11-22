@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BeardedManStudios.Threading;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,8 @@ public class CustomSettingsAudio : CustomSettingScreen
 
     public CustomSlider GeneralVolume_Visual;
     public CustomDropdown MicDropdown;
+    public CustomSegmentedPicker<MicModeEnum> MicModeSegmentedPicker;
+    public CustomDropdown PushToTalkKeyDropdown;
 
     public override void InitElement()
     {
@@ -51,6 +54,15 @@ public class CustomSettingsAudio : CustomSettingScreen
         MicDropdown.RegisterValueChangedCallback(ce => OnMicDropdownValueChanged(ce.newValue));
         ScrollView.Add(MicDropdown);
 
+        MicModeSegmentedPicker.Label = "Mode";
+        MicModeSegmentedPicker.ValueEnumChanged += value => OnMicModeValueChanged(value);
+        ScrollView.Add(MicModeSegmentedPicker);
+
+        PushToTalkKeyDropdown.label = "Push to talk key";
+        PushToTalkKeyDropdown.RegisterValueChangedCallback(ce => OnPushToTalkValueChanged(ce.newValue));
+        PushToTalkKeyDropdown.choices = Enum.GetNames(typeof(KeyCode)).ToList();
+        ScrollView.Add(PushToTalkKeyDropdown);
+
         if (TryGetAudiorData(out Data))
         {
             OnGeneralVolumeValueChanged(Data.GeneralVolume);
@@ -70,7 +82,7 @@ public class CustomSettingsAudio : CustomSettingScreen
     public event System.Action<float> GeneralVolumeValeChanged;
     public AudioData Data;
 
-    public void SetMicDropdown()
+    public void SetMic()
     {
         var mics = umi3d.cdk.collaboration.MicrophoneListener.GetMicrophonesNames().ToList();
         MicDropdown.choices = mics;
@@ -78,11 +90,15 @@ public class CustomSettingsAudio : CustomSettingScreen
         if (TryGetAudiorData(out Data))
         {
             if (mics.Contains(Data.CurrentMic)) OnMicDropdownValueChanged(Data.CurrentMic);
+            OnMicModeValueChanged(Data.Mode);
+            OnPushToTalkValueChanged(Data.PushToTalkKey.ToString());
         }
         else
         {
             var mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
             if (mics.Contains(mic)) OnMicDropdownValueChanged(mic);
+            OnMicModeValueChanged(MicModeEnum.AlwaysSend);
+            OnPushToTalkValueChanged(KeyCode.M.ToString());
         }
     }
 
@@ -111,6 +127,47 @@ public class CustomSettingsAudio : CustomSettingScreen
         umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(value);
 
         Data.CurrentMic = value;
+        StoreAudioData(Data);
+    }
+
+    public void OnMicModeValueChanged(MicModeEnum value)
+    {
+        MicModeSegmentedPicker.SetValueEnumWithoutNotify(value);
+        switch (value)
+        {
+            case MicModeEnum.AlwaysSend:
+                PushToTalkKeyDropdown.Hide();
+                break;
+            case MicModeEnum.Amplitude:
+                PushToTalkKeyDropdown.Hide();
+                break;
+            case MicModeEnum.PushToTalk:
+                PushToTalkKeyDropdown.Display();
+                break;
+            default:
+                break;
+        }
+        if (!Enum.TryParse<umi3d.cdk.collaboration.MicrophoneMode>(value.ToString(), out var valueEnum))
+            return;
+
+        if (valueEnum == umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneMode()) 
+            return;
+
+        umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneMode(valueEnum);
+
+        Data.Mode = value;
+        StoreAudioData(Data);
+    }
+
+    public void OnPushToTalkValueChanged(string value)
+    {
+        PushToTalkKeyDropdown.SetValueWithoutNotify(value);
+        if (!Enum.TryParse<KeyCode>(value.ToString(), out var valueEnum))
+            return;
+
+        umi3d.cdk.collaboration.MicrophoneListener.Instance.pushToTalkKeycode = valueEnum;
+
+        Data.PushToTalkKey = valueEnum;
         StoreAudioData(Data);
     }
 
