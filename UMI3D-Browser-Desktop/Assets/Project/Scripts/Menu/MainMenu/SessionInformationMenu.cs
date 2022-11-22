@@ -43,7 +43,6 @@ namespace BrowserDesktop.Menu
 
         #region Top Bar
 
-        VisualElement topCenterMenu;
         VisualElement microphoneSetterContainer;
         VisualElement microphoneSetter;
 
@@ -51,9 +50,7 @@ namespace BrowserDesktop.Menu
 
         #region Bottom Bar
 
-        //MicrophoneSlider GainSlider;
         MicrophoneSlider ThresholdSlider;
-        Dropdown_E MicrophoneDropDown;
         Dropdown_E ModeDropDown;
         FloatField_E TimeToShut;
 
@@ -74,20 +71,11 @@ namespace BrowserDesktop.Menu
             UnityEngine.Debug.Assert(uiDocument != null);
             root = uiDocument.rootVisualElement;
 
-            //Top Bar
-            topCenterMenu = root.Q<VisualElement>("top-center-menu");
-            topCenterMenu.style.display = DisplayStyle.None;
-
             //Bottom Bar
             microphoneSetterContainer = root.Q<VisualElement>("microphone-setter-container");
             microphoneSetter = microphoneSetterContainer.Q<VisualElement>("microphone-setter");
             HideMicrophoneSettingsPopUp();
             InitMicrophoneSlider(microphoneSetter);
-
-            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
-            {
-                topCenterMenu.style.display = DisplayStyle.Flex;
-            });
         }
 
         private void Update()
@@ -116,23 +104,7 @@ namespace BrowserDesktop.Menu
 
         private void DisplayMicrophoneSettingsPopUp()
         {
-
-            //GainSlider.Value = GToP(umi3d.cdk.collaboration.MicrophoneListener.Gain);
-            var mics = umi3d.cdk.collaboration.MicrophoneListener.GetMicrophonesNames().ToList();
-            var mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
-
-            MicrophoneDropDown.SetOptions(mics);
-            if (mics.Contains(mic))
-            {
-                MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
-            }
             ModeDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneMode().ToString());
-
-            if (PlayerPrefs.HasKey(MicrophoneKey))
-            {
-                var mic2 = PlayerPrefs.GetString(MicrophoneKey);
-                UpdateMicrophone(mic2);
-            }
 
             TimeToShut.value = umi3d.cdk.collaboration.MicrophoneListener.Instance.voiceStopingDelaySeconds.ToString();
             microphoneSetterContainer.style.display = DisplayStyle.Flex;
@@ -166,31 +138,6 @@ namespace BrowserDesktop.Menu
                     //GainSlider.RefreshColor();
                     ThresholdSlider.RefreshColor();
                 });
-
-            //GainSlider = new MicrophoneSlider(root.Q<VisualElement>("gain-bar"),"Gain",
-            //    (i) => { float r; return (float.TryParse(i, out r), GToP(r)); },
-            //    (f) => { return (PToG(f)).ToString(); },
-            //    GToP(/*umi3d.cdk.collaboration.MicrophoneListener.Gain*/0), 0f, 0f, 1f, 0.01f, colors);
-            //GainSlider.OnValueChanged.AddListener(v =>
-            //{
-            //    //umi3d.cdk.collaboration.MicrophoneListener.Gain = PToG(v);
-            //});
-
-            /// Add Microphone selecter.
-
-            var MicrophoneLabel = new Label_E("Corps", StyleKeys.Text("primaryLight"), "Microphone :");
-            MicrophoneLabel.InsertRootAtTo(index, root);
-
-            MicrophoneDropDown = new Dropdown_E("MicrophoneDropdown", StyleKeys.Text_Bg("button"));
-            MicrophoneDropDown.SetMenuStyle("MicrophoneEnumBox", StyleKeys.Default_Bg_Border);
-            MicrophoneDropDown.SetMenuLabel("CorpsMicrophoneDropdown", StyleKeys.DefaultText);
-            MicrophoneDropDown.InsertRootAtTo(index, root);
-
-            MicrophoneDropDown.ValueChanged = (s) =>
-            {
-                UpdateMicrophone(s);
-            };
-
 
             /// Add Loop back
 
@@ -268,43 +215,8 @@ namespace BrowserDesktop.Menu
                         TimeToShut.value = "0";
                 }
             };
-
-            SetupMicrophone();
         }
 
-        async void SetupMicrophone()
-        {
-            if (PlayerPrefs.HasKey(MicrophoneKey))
-            {
-                var mic = PlayerPrefs.GetString(MicrophoneKey);
-                while (!umi3d.cdk.collaboration.MicrophoneListener.Exists)
-                    await UMI3DAsyncManager.Yield();
-
-                UpdateMicrophone(mic);
-            }
-        }
-
-
-        async void  UpdateMicrophone(string name)
-        {
-            while (!umi3d.cdk.collaboration.MicrophoneListener.Exists)
-                await UMI3DAsyncManager.Yield();
-            if (!string.IsNullOrEmpty(name) && name != umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName())
-            {
-                var mics = umi3d.cdk.collaboration.MicrophoneListener.GetMicrophonesNames().ToList();
-
-                MicrophoneDropDown.SetOptions(mics);
-                if (name != MicrophoneDropDown.Value && mics.Contains(name))
-                    MicrophoneDropDown.SetDefaultValue(name);
-                PlayerPrefs.SetString(MicrophoneKey, name);
-
-                if (await umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(name))
-                {
-                    var mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
-                    MicrophoneDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName());
-                }
-            }
-        }
 
          void UpdateMode(string name)
         {
@@ -320,26 +232,5 @@ namespace BrowserDesktop.Menu
                 Amplitude.style.display = mode == umi3d.cdk.collaboration.MicrophoneMode.Amplitude ? DisplayStyle.Flex : DisplayStyle.None;
             }
         }
-
-        float GToP(float f)
-        {
-            return f / 10f;
-        }
-        float PToG(float f)
-        {
-            return f * 10f;
-        }
-
-
-        /*bool isDisplayed = false;
-        */
-
-        /*IEnumerator SetValues()
-        {
-            yield return null;
-            GainSlider.Value = GToP(umi3d.cdk.collaboration.MicrophoneListener.Gain);
-            ThresholdSlider.Value = umi3d.cdk.collaboration.MicrophoneListener.NoiseThreshold;
-        }*/
-
     }
 }

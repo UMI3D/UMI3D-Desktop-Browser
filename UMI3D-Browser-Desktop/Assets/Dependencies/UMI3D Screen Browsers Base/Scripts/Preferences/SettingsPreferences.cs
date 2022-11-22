@@ -109,6 +109,7 @@ namespace umi3d.baseBrowser.preferences
         public struct AudioData
         {
             public float GeneralVolume;
+            public string CurrentMic;
         }
 
         public static bool TryGetAudiorData(out AudioData data) => PreferencesManager.TryGet(out data, c_audioPath);
