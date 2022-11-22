@@ -74,6 +74,7 @@ public abstract class CustomUser : VisualElement, ICustomElement
         get => m_isMute;
         set
         {
+            UnityEngine.Debug.Log($"mute {value}");
             m_isMute = value;
             if (value)
             {
@@ -93,6 +94,7 @@ public abstract class CustomUser : VisualElement, ICustomElement
         get => m_isMute ? 0f : m_volume;
         set
         {
+            UnityEngine.Debug.Log($"volume {value}");
             value = Mathf.Clamp(value, 0f, 100f);
             m_volume = value;
             User_Audio_Slider.style.width = Length.Percent(value);

@@ -85,6 +85,7 @@ public abstract class CustomUserList : VisualElement, ICustomElement
 
     public virtual void RefreshList()
     {
+        UnityEngine.Debug.Log($"refresh");
         m_users = UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList
             .Where(u => !u.isClient)
             .Select(u => CreateUser(u))
@@ -95,7 +96,7 @@ public abstract class CustomUserList : VisualElement, ICustomElement
 
     public virtual void UpdateUser(UMI3DUser user)
     {
-        UnityEngine.Debug.Log($"update User {user.microphoneStatus}");
+        UnityEngine.Debug.Log($"update User {user.login} {user.microphoneStatus}");
         var _u = m_users.FirstOrDefault(U => (U.User == user));
         if (_u == null) RefreshList();
         else _u.IsMute = !user.microphoneStatus;
