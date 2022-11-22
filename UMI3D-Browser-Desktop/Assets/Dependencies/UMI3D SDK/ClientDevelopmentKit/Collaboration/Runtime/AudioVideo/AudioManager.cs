@@ -60,6 +60,7 @@ namespace umi3d.cdk.collaboration
 
         public bool SetGainForUser(UMI3DUser user, float gain)
         {
+            UnityEngine.Debug.Log($"<color=purple>set gain {user?.login} {gain}<color>");
             if (user == null || gain <= 0)
                 return false;
 
@@ -91,6 +92,7 @@ namespace umi3d.cdk.collaboration
 
         public bool SetVolumeForUser(UMI3DUser user, float volume)
         {
+            UnityEngine.Debug.Log($"<color=purple>set volume {user?.login} {volume}<color>");
             if (user == null || volume < 0 || volume > 1)
                 return false;
             volumeMemory[user.login] = volume;
