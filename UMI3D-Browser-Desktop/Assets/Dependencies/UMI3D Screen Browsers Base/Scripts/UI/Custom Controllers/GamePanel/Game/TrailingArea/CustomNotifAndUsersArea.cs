@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.commonMobile.game;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,6 +25,12 @@ public abstract class CustomNotifAndUsersArea : VisualElement, ICustomElement
 
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
+        protected UxmlEnumAttributeDescription<ControllerEnum> m_controller = new UxmlEnumAttributeDescription<ControllerEnum>
+        {
+            name = "controller",
+            defaultValue = ControllerEnum.MouseAndKeyboard
+        };
+
         UxmlEnumAttributeDescription<NotificationsOrUsers> m_panel = new UxmlEnumAttributeDescription<NotificationsOrUsers>
         {
             name = "area-panel",
@@ -44,8 +51,35 @@ public abstract class CustomNotifAndUsersArea : VisualElement, ICustomElement
 
             custom.Set
             (
+                m_controller.GetValueFromBag(bag, cc),
                 m_panel.GetValueFromBag(bag, cc)
             );
+        }
+    }
+
+    public ControllerEnum Controller
+    {
+        get => m_controller;
+        set
+        {
+            RemoveFromClassList(USSCustomClassController(m_controller));
+            m_controller = value;
+            AddToClassList(USSCustomClassController(value));
+            switch (value)
+            {
+                case ControllerEnum.MouseAndKeyboard:
+                    Insert(0, SegmentedPicker);
+                    break;
+                case ControllerEnum.Touch:
+                    SegmentedPicker.RemoveFromHierarchy();
+                    Add(UserList);
+                    Add(notificationCenter);
+                    break;
+                case ControllerEnum.GameController:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -75,12 +109,14 @@ public abstract class CustomNotifAndUsersArea : VisualElement, ICustomElement
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/notifAndUsers";
     public virtual string USSCustomClassName => "notif__users";
+    public virtual string USSCustomClassController(ControllerEnum controller) => $"{USSCustomClassName}-{controller.ToString().ToLower()}";
 
     public CustomSegmentedPicker<NotificationsOrUsers> SegmentedPicker;
     public CustomNotificationCenter notificationCenter;
     public CustomUserList UserList;
 
     protected bool m_hasBeenInitialized;
+    protected ControllerEnum m_controller;
     protected NotificationsOrUsers m_panel;
 
     public virtual void InitElement()
@@ -109,9 +145,9 @@ public abstract class CustomNotifAndUsersArea : VisualElement, ICustomElement
         Add(SegmentedPicker);
     }
 
-    public virtual void Set() => Set(NotificationsOrUsers.Notifications);
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, NotificationsOrUsers.Notifications);
 
-    public virtual void Set(NotificationsOrUsers panel)
+    public virtual void Set(ControllerEnum controller, NotificationsOrUsers panel)
     {
         if (!m_hasBeenInitialized)
         {
@@ -119,6 +155,7 @@ public abstract class CustomNotifAndUsersArea : VisualElement, ICustomElement
             m_hasBeenInitialized = true;
         }
 
+        Controller = controller;
         AreaPanel = panel;
     }
 

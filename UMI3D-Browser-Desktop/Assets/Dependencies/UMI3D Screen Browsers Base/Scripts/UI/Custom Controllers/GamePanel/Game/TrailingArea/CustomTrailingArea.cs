@@ -56,6 +56,8 @@ public class CustomTrailingArea : VisualElement, ICustomElement
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomTrailingArea;
 
@@ -101,6 +103,8 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         get => S_displayNotifUsersArea;
         set
         {
+            if (S_displayNotifUsersArea == value) return;
+            if (value && m_controller != ControllerEnum.MouseAndKeyboard) return;
             S_displayNotifUsersArea = value;
             if (value)
             {
