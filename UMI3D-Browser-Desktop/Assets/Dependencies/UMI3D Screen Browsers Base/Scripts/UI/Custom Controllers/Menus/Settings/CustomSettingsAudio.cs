@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static umi3d.baseBrowser.preferences.SettingsPreferences;
@@ -24,6 +25,7 @@ public class CustomSettingsAudio : CustomSettingScreen
     public override string USSCustomClassName => "setting-audio";
 
     public CustomSlider GeneralVolume_Visual;
+    public CustomDropdown MicDropdown;
 
     public override void InitElement()
     {
@@ -35,12 +37,12 @@ public class CustomSettingsAudio : CustomSettingScreen
         GeneralVolume_Visual.highValue = 10f;
         GeneralVolume_Visual.showInputField = true;
         GeneralVolume_Visual.RegisterValueChangedCallback(ce => OnGeneralVolumeValueChanged(ce.newValue));
-        GeneralVolume_Visual.RegisterCallback<AttachToPanelEvent>(callback =>
-        {
-            GeneralVolume_Visual.SetValueWithoutNotify(Data.GeneralVolume);
-        });
-
+        GeneralVolume_Visual.RegisterCallback<AttachToPanelEvent>(callback => GeneralVolume_Visual.SetValueWithoutNotify(Data.GeneralVolume));
         ScrollView.Add(GeneralVolume_Visual);
+
+        
+        //MicDropdown.label = "Microphone";
+        //MicDropdown
 
         if (TryGetAudiorData(out Data))
         {
@@ -60,6 +62,16 @@ public class CustomSettingsAudio : CustomSettingScreen
     /// </summary>
     public event System.Action<float> GeneralVolumeValeChanged;
     public AudioData Data;
+
+    public void SetMicDropdown()
+    {
+        var mics = umi3d.cdk.collaboration.MicrophoneListener.GetMicrophonesNames().ToList();
+        MicDropdown.choices = mics;
+
+        var mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
+        if (mics.Contains(mic)) MicDropdown.value = mic;
+        
+    }
 
     public void OnGeneralVolumeValueChanged(float value)
     {
