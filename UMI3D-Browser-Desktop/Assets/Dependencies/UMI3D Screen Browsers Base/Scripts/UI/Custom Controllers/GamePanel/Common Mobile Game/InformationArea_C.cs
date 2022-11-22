@@ -25,8 +25,6 @@ namespace umi3d.commonMobile.game
 
         public override void InitElement()
         {
-            if(UserList == null) UserList = new commonScreen.game.UserList_C();
-            if (NotificationCenter == null) NotificationCenter = new commonScreen.game.NotificationCenter_C();
             if (ShortInf == null) ShortInf = new commonScreen.Displayer.Text_C();
 
             base.InitElement();

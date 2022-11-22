@@ -79,22 +79,8 @@ public class CustomTopArea : VisualElement, ICustomElement
 
     public virtual bool IsExpanded
     {
-        get => m_isExplanded;
-        set
-        {
-            m_isExplanded = value;
-#if !UNITY_STANDALONE
-            this.AddAnimation
-            (
-                this,
-                () => style.height = Length.Percent(20),
-                () => style.height = Length.Percent(100),
-                "height",
-                1,
-                revert: !m_isExplanded
-            );
-#endif
-        }
+        get => InformationArea.IsExpanded;
+        set => InformationArea.IsExpanded = value;
     }
 
     public virtual string StyleSheetGamePath => $"USS/game";
@@ -107,6 +93,7 @@ public class CustomTopArea : VisualElement, ICustomElement
     public CustomAppHeader AppHeader;
     public VisualElement Main = new VisualElement { name = "main" };
     public CustomInformationArea InformationArea;
+    public CustomNotifAndUsersArea NotifAndUserArea;
     public CustomButton Menu;
 
     protected ControllerEnum m_controller;
@@ -132,8 +119,6 @@ public class CustomTopArea : VisualElement, ICustomElement
 
         Menu.name = "menu";
         Menu.Category = ElementCategory.Game;
-
-        InformationArea.ExpandUpdate += (value) => IsExpanded = value;
 
         Add(Main);
         Main.Add(InformationArea);
