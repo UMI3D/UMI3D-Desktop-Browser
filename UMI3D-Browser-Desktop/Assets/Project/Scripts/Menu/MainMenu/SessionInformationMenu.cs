@@ -51,10 +51,8 @@ namespace BrowserDesktop.Menu
         #region Bottom Bar
 
         MicrophoneSlider ThresholdSlider;
-        Dropdown_E ModeDropDown;
         FloatField_E TimeToShut;
 
-        VisualElement PushToTalk;
         VisualElement Amplitude;
 
         bool displayMicrophoneSlider = true;
@@ -104,8 +102,6 @@ namespace BrowserDesktop.Menu
 
         private void DisplayMicrophoneSettingsPopUp()
         {
-            ModeDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneMode().ToString());
-
             TimeToShut.value = umi3d.cdk.collaboration.MicrophoneListener.Instance.voiceStopingDelaySeconds.ToString();
             microphoneSetterContainer.style.display = DisplayStyle.Flex;
             umi3d.cdk.collaboration.MicrophoneListener.Instance.debugSampling = true;
@@ -151,33 +147,6 @@ namespace BrowserDesktop.Menu
                 LoopBack.Text = (umi3d.cdk.collaboration.MicrophoneListener.Instance.useLocalLoopback) ? "LoopBack On" : "LoopBack Off";
             };
 
-            /// Add Mode selecter.
-
-            var ModeLabel = new Label_E("Corps", StyleKeys.Text("primaryLight"), "Mode :");
-            ModeLabel.InsertRootAtTo(index, root);
-
-            ModeDropDown = new Dropdown_E("MicrophoneDropdown", StyleKeys.Text_Bg("button"));
-            ModeDropDown.SetMenuStyle("MicrophoneEnumBox", StyleKeys.Default_Bg_Border);
-            ModeDropDown.SetMenuLabel("CorpsMicrophoneDropdown", StyleKeys.DefaultText);
-            ModeDropDown.InsertRootAtTo(index, root);
-            ModeDropDown.SetOptions(Enum.GetNames(typeof(umi3d.cdk.collaboration.MicrophoneMode)).Where(s=>s != umi3d.cdk.collaboration.MicrophoneMode.MethodBased.ToString()).ToList());
-            ModeDropDown.ValueChanged = (s) =>
-            {
-                UpdateMode(s);
-            };
-
-
-            /// Add Mode Push To Talk info
-
-            PushToTalk = new VisualElement();
-            root.Insert(index, PushToTalk);
-
-            var PushToTalkKeycodeLabel = new Label_E("Corps", StyleKeys.Text("primaryLight"), "Push To Talk Key");
-            PushToTalkKeycodeLabel.InsertRootTo(PushToTalk);
-
-            var PushToTalkKeycode = new Label_E("Corps", StyleKeys.Text("primaryLight"), $"<{umi3d.cdk.collaboration.MicrophoneListener.Instance.pushToTalkKeycode}>");
-            PushToTalkKeycode.InsertRootTo(PushToTalk);
-
             /// Add Mode Amplitude info
 
             Amplitude = new VisualElement();
@@ -222,13 +191,6 @@ namespace BrowserDesktop.Menu
         {
             if (!string.IsNullOrEmpty(name) && Enum.TryParse<umi3d.cdk.collaboration.MicrophoneMode>(name, out var mode))
             {
-                if (mode != umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneMode())
-                {
-                    umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneMode(mode);
-                    ModeDropDown.SetDefaultValue(umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneMode().ToString());
-                }
-
-                PushToTalk.style.display = mode == umi3d.cdk.collaboration.MicrophoneMode.PushToTalk ? DisplayStyle.Flex : DisplayStyle.None;
                 Amplitude.style.display = mode == umi3d.cdk.collaboration.MicrophoneMode.Amplitude ? DisplayStyle.Flex : DisplayStyle.None;
             }
         }
