@@ -30,6 +30,7 @@ namespace umi3d.commonScreen.game
             if (TrailingArea == null) TrailingArea = new TrailingArea_C();
             if (TopArea == null) TopArea = new TopArea_C();
             if (BottomArea == null) BottomArea = new commonDesktop.game.BottomArea_C();
+            if (NotifAndUserArea == null) NotifAndUserArea = TrailingArea.NotifAndUserArea;
 
             base.InitElement();
         }

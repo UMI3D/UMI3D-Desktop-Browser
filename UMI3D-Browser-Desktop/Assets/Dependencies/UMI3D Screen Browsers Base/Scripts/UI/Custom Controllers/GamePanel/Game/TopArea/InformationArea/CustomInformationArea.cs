@@ -90,10 +90,14 @@ public class CustomInformationArea : VisualElement, ICustomElement
                 case ControllerEnum.MouseAndKeyboard:
                     Mic.RemoveFromHierarchy();
                     Sound.RemoveFromHierarchy();
+                    ShortInf.style.paddingLeft = m_gameMargin_Padding;
+                    ShortInf.style.paddingRight = m_gameMargin_Padding;
                     break;
                 case ControllerEnum.Touch:
                     ShortInf.Add(Mic);
                     ShortInf.Add(Sound);
+                    ShortInf.style.paddingLeft = m_gameMargin_Padding;
+                    ShortInf.style.paddingRight = m_shortInf_Padding;
                     break;
                 case ControllerEnum.GameController:
                     ShortInf.Add(Mic);
@@ -141,80 +145,8 @@ public class CustomInformationArea : VisualElement, ICustomElement
         get => m_isExplanded;
         set
         {
-            if (m_isExplanded == value && !value)
-            {
-                NotificationCenter.ResetNewNotificationFilter();
-                Main.RemoveFromHierarchy();
-                return;
-            }
             m_isExplanded = value;
             ExpandUpdate?.Invoke(value);
-            Main.WaitUntil
-            (
-                () => !float.IsNaN(m_shortInfheightLength.value) && !float.IsNaN(m_shortInfWidthgLength.value),
-                () =>
-                {
-                    this.InsertIfNotInHierarchy(0, Main);
-
-                    Main.schedule.Execute(() =>
-                    {
-                        var padingLength = new Length()
-                        {
-                            unit = m_shortInfheightLength.unit,
-                            value = m_shortInfheightLength.value * 1.2f
-                        };
-                        var widthPercent = m_shortInfWidthgLength.unit == LengthUnit.Percent
-                            ? m_shortInfWidthgLength.value
-                            : m_shortInfWidthgLength.value * 100f / this.layout.width;
-
-                        var heightPercent = m_shortInfheightLength.unit == LengthUnit.Percent
-                            ? m_shortInfheightLength.value
-                            : m_shortInfheightLength.value * 100f / this.layout.width;
-
-                        Main.AddAnimation
-                           (
-                               this,
-                               () => Main.style.marginTop = m_gameMargin_Padding,
-                               () => Main.style.marginTop = 0f,
-                               "margin-top",
-                               AnimatorManager.MainDuration,
-                               revert: !m_isExplanded
-                           );
-                        Main.AddAnimation
-                        (
-                            this,
-                            () => Main.style.paddingTop = 0f,
-                            () => Main.style.paddingTop = padingLength,
-                            "padding-top",
-                            AnimatorManager.MainDuration,
-                            revert: !m_isExplanded
-                        );
-                        Main.AddAnimation
-                        (
-                            this,
-                            () => Main.style.width = Length.Percent(widthPercent),
-                            () => Main.style.width = Length.Percent(100),
-                            "width",
-                            AnimatorManager.MainDuration,
-                            revert: !m_isExplanded
-                        );
-                        Main.AddAnimation
-                        (
-                            this,
-                            () => Main.style.height = Length.Percent(heightPercent),
-                            () => Main.style.height = Length.Percent(100),
-                            "height",
-                            AnimatorManager.MainDuration,
-                            callback: m_isExplanded ? null : () =>
-                            {
-                                NotificationCenter.ResetNewNotificationFilter();
-                                Main.RemoveFromHierarchy();
-                            },
-                            revert: !m_isExplanded
-                        );
-                    });
-                }
-            );
         }
     }
 
@@ -258,15 +190,13 @@ public class CustomInformationArea : VisualElement, ICustomElement
 
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/informationArea";
-    public virtual string USSCustomClassName => "information-area";
-    public virtual string USSCustomClassMain => $"{USSCustomClassName}__main";
-    public virtual string USSCustomClassMain_Background => $"{USSCustomClassName}__main-background";
-    public virtual string USSCustomClassShortInf => $"{USSCustomClassName}__short__inf";
-    public virtual string USSCustomClassMic_Sound => $"{USSCustomClassName}__mic-sound";
-    public virtual string USSCustomClassMic_On => $"{USSCustomClassName}__mic-on";
-    public virtual string USSCustomClassSound_On => $"{USSCustomClassName}__sound-on";
-    public virtual string USSCustomClassMic_Off => $"{USSCustomClassName}__mic-off";
-    public virtual string USSCustomClassSound_Off => $"{USSCustomClassName}__sound-off";
+    public virtual string USSCustomClassName => "information__area";
+    public virtual string USSCustomClassShortInf => $"{USSCustomClassName}-short__inf";
+    public virtual string USSCustomClassMic_Sound => $"{USSCustomClassName}-mic-sound";
+    public virtual string USSCustomClassMic_On => $"{USSCustomClassName}-mic__on";
+    public virtual string USSCustomClassSound_On => $"{USSCustomClassName}-sound__on";
+    public virtual string USSCustomClassMic_Off => $"{USSCustomClassName}-mic__off";
+    public virtual string USSCustomClassSound_Off => $"{USSCustomClassName}-sound__off";
 
     public event Action<bool> ExpandUpdate;
     public event Action MicStatusChanged;
@@ -275,14 +205,9 @@ public class CustomInformationArea : VisualElement, ICustomElement
     public event Action NotificationTitleClicked;
     public string EnvironmentName;
     public CustomText ShortInf;
-    public VisualElement Main = new VisualElement { name = "main" };
-    public VisualElement Main_Background = new VisualElement { name = "main-background" };
-    public CustomUserList UserList;
-    public CustomNotificationCenter NotificationCenter;
     public VisualElement Mic = new VisualElement { name = "mic-icon" };
     public VisualElement Sound = new VisualElement { name = "sound-icon" };
     public TouchManipulator2 InfManipulator = new TouchManipulator2(null, 0, 0);
-    public TouchManipulator2 MainManipulator = new TouchManipulator2(null, 0, 0);
     public TouchManipulator2 ShortInfManipulator = new TouchManipulator2(null, 0, 0);
     public TouchManipulator2 MicManipulator = new TouchManipulator2(null, 0, 0);
     public TouchManipulator2 SoundManipulator = new TouchManipulator2(null, 0, 0);
@@ -311,8 +236,6 @@ public class CustomInformationArea : VisualElement, ICustomElement
             throw e;
         }
         AddToClassList(USSCustomClassName);
-        Main.AddToClassList(USSCustomClassMain);
-        Main_Background.AddToClassList(USSCustomClassMain_Background);
         ShortInf.AddToClassList(USSCustomClassShortInf);
         Mic.AddToClassList(USSCustomClassMic_Sound);
         Sound.AddToClassList(USSCustomClassMic_Sound);
@@ -323,34 +246,18 @@ public class CustomInformationArea : VisualElement, ICustomElement
             this.TryGetCustomStyle("--size__width-short-inf", out m_shortInfWidthgLength);
             this.TryGetCustomStyle("--size-margin-and-padding-game", out m_gameMargin_Padding);
             this.TryGetCustomStyle("--padding-short-inf", out m_shortInf_Padding);
-
-#if UNITY_STANDALONE
-            ShortInf.style.paddingLeft = m_gameMargin_Padding;
-            ShortInf.style.paddingRight = m_gameMargin_Padding;
-#else
-            ShortInf.style.paddingLeft = m_gameMargin_Padding;
-            ShortInf.style.paddingRight = m_shortInf_Padding;
-#endif
         });
 
         this.AddManipulator(InfManipulator);
         InfManipulator.ClickedDownWithInfo += (evt, locaPosition) => m_initialManipulatedPosition = locaPosition;
         InfManipulator.MovedWithInfo += (evt, localPosition) =>
         {
-            if (!IsExpanded && m_initialManipulatedPosition.y < localPosition.y) IsExpanded = true;
-        };
-        Main_Background.AddManipulator(MainManipulator);
-        MainManipulator.ClickedDownWithInfo += (evt, locaPosition) => m_initialManipulatedPosition = locaPosition;
-        MainManipulator.MovedWithInfo += (evt, localPosition) =>
-        {
-            if (IsExpanded && m_initialManipulatedPosition.y > localPosition.y) IsExpanded = false;
+            if (!IsExpanded && 10f < localPosition.y - m_initialManipulatedPosition.y) IsExpanded = true;
+            if (IsExpanded && -10f > localPosition.y - m_initialManipulatedPosition.y) IsExpanded = false;
         };
 
         ShortInf.name = "short-inf";
         ShortInf.AddManipulator(ShortInfManipulator);
-
-        ShortInfManipulator.LongPressDelay = 400;
-        //ShortInfManipulator.ClickedLong += () => IsExpanded = !IsExpanded;
         ShortInfManipulator.ClickedDownWithInfo += (e, localPosition) =>
         {
             var localToWorld = ShortInf.LocalToWorld(localPosition);
@@ -369,38 +276,13 @@ public class CustomInformationArea : VisualElement, ICustomElement
                 NotificationTitleClicked?.Invoke();
                 return;
             }
-
-            //ShortInf.AddAnimation
-            //(
-            //    this,
-            //    () => ShortInf.style.scale = new Scale(Vector3.one),
-            //    () => ShortInf.style.scale = new Scale(new Vector3(1.2f, 1.2f, 1)),
-            //    "scale",
-            //    0.5f,
-            //    forceAnimation: true
-            //);
         };
-        //ShortInfManipulator.ClickedUp += () =>
-        //{
-        //    ShortInf.AddAnimation
-        //    (
-        //        this,
-        //        () => { },
-        //        () => ShortInf.style.scale = new Scale(Vector3.one),
-        //        "scale",
-        //        0.5f,
-        //        forceAnimation: true
-        //    );
-        //};
 
         Mic.AddManipulator(MicManipulator);
         MicManipulator.clicked += () => MicStatusChanged?.Invoke();
         Sound.AddManipulator(SoundManipulator);
         SoundManipulator.clicked += () => SoundStatusChanged?.Invoke();
 
-        Main.Add(Main_Background);
-        Main.Add(UserList);
-        Main.Add(NotificationCenter);
         Add(ShortInf);
     }
 

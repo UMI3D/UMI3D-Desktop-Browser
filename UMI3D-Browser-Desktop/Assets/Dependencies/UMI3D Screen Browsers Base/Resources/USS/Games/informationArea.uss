@@ -1,26 +1,11 @@
-.information-area {
+.information__area {
 	position: absolute;
 	align-items: center;
 	width: 100%;
 	height: 100%;
 }
 
-.information-area__main {
-	overflow: hidden;
-	position: absolute;
-	flex-direction: row;
-	background-color: var(--background-color-transparent-game);
-}
-
-.information-area__main-background {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-}
-
-.information-area__short__inf.text.unity-label {
+.information__area-short__inf.text.unity-label {
 	position: absolute;
 	right: 0;
 
@@ -47,7 +32,7 @@
 	margin-bottom: var(--size-margin-and-padding-game);
 }
 
-.information-area__mic-sound {
+.information__area-mic-sound {
 	position: absolute;
 	width: var(--size-mic__sound);
 	height: var(--size-mic__sound);
@@ -57,26 +42,22 @@
 	border-bottom-right-radius: 100%;
 }
 
-.information-area__mic-on {
-	/*left: var(--left-mic);*/
-	left: 10;
+.information__area-mic__on {
+	right: 70;
 	background-image: var(--background-image-mic-on);
 }
 
-.information-area__mic-off {
-	left: 10;
-	/*left: var(--left-mic);*/
+.information__area-mic__off {
+	right: 65;
 	background-image: var(--background-image-mic-off);
 }
 
-.information-area__sound-on {
-	/*left: var(--size-mic__sound);*/
+.information__area-sound__on {
 	right: 10;
 	background-image: var(--background-image-sound-on);
 }
 
-.information-area__sound-off {
-	/*left: var(--size-mic__sound);*/
+.information__area-sound__off {
 	right: 10;
 	background-image: var(--background-image-sound-off);
 }
