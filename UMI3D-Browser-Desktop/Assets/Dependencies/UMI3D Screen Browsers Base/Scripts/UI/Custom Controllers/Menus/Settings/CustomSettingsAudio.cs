@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using BeardedManStudios.Threading;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,11 @@ public class CustomSettingsAudio : CustomSettingScreen
     {
         base.InitElement();
 
+        this.schedule.Execute(() =>
+        {
+            MicDropdown.choices = umi3d.cdk.collaboration.MicrophoneListener.GetMicrophonesNames().ToList();
+        }).Every(1000);
+
         GeneralVolume_Visual.label = "General volume";
         GeneralVolume_Visual.DirectionDisplayer = ElemnetDirection.Leading;
         GeneralVolume_Visual.lowValue = 0f;
@@ -40,9 +46,10 @@ public class CustomSettingsAudio : CustomSettingScreen
         GeneralVolume_Visual.RegisterCallback<AttachToPanelEvent>(callback => GeneralVolume_Visual.SetValueWithoutNotify(Data.GeneralVolume));
         ScrollView.Add(GeneralVolume_Visual);
 
-        
-        //MicDropdown.label = "Microphone";
-        //MicDropdown
+
+        MicDropdown.label = "Microphone";
+        MicDropdown.RegisterValueChangedCallback(ce => OnMicDropdownValueChanged(ce.newValue));
+        ScrollView.Add(MicDropdown);
 
         if (TryGetAudiorData(out Data))
         {
@@ -68,9 +75,15 @@ public class CustomSettingsAudio : CustomSettingScreen
         var mics = umi3d.cdk.collaboration.MicrophoneListener.GetMicrophonesNames().ToList();
         MicDropdown.choices = mics;
 
-        var mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
-        if (mics.Contains(mic)) MicDropdown.value = mic;
-        
+        if (TryGetAudiorData(out Data))
+        {
+            if (mics.Contains(Data.CurrentMic)) OnMicDropdownValueChanged(Data.CurrentMic);
+        }
+        else
+        {
+            var mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
+            if (mics.Contains(mic)) OnMicDropdownValueChanged(mic);
+        }
     }
 
     public void OnGeneralVolumeValueChanged(float value)
@@ -83,6 +96,21 @@ public class CustomSettingsAudio : CustomSettingScreen
         value = (int)value;
         GeneralVolume_Visual.SetValueWithoutNotify(value);
         Data.GeneralVolume = value;
+        StoreAudioData(Data);
+    }
+
+    public void OnMicDropdownValueChanged(string value)
+    {
+        MicDropdown.SetValueWithoutNotify(value);
+        if 
+        (
+            !MicDropdown.choices.Contains(value)
+            || value == umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName()
+        ) return;
+
+        umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(value);
+
+        Data.CurrentMic = value;
         StoreAudioData(Data);
     }
 
