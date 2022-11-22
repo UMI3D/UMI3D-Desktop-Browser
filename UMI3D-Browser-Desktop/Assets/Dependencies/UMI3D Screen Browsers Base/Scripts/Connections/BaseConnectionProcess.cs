@@ -71,6 +71,11 @@ namespace umi3d.baseBrowser.connection
 #elif UNITY_ANDROID
             LoadingParameters.supportedformats.Add(UMI3DAssetFormat.unity_android_urp);
 #endif
+            Debug.Log("TODO : Not force mono speaker mode. For now forced for bluetooth headset.");
+
+            var settings = AudioSettings.GetConfiguration();
+            settings.speakerMode = AudioSpeakerMode.Mono;
+            AudioSettings.Reset(settings);
         }
 
         void Start()
