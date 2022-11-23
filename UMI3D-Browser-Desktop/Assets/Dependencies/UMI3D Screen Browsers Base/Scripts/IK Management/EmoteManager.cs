@@ -128,6 +128,8 @@ namespace umi3d.baseBrowser.emotes
         private void OnEnvironmentLoaded()
         {
             avatarAnimator = GetComponentInChildren<Animator>();
+            if (avatarAnimator == null && transform.parent != null)
+                avatarAnimator = transform.parent.GetComponent<Animator>();
             StartCoroutine(GetEmotes());
         }
         private void OnRedirection()
@@ -173,6 +175,8 @@ namespace umi3d.baseBrowser.emotes
                 yield return null;
             }
             var emoteFromBundleAnimator = avatar.GetComponentInChildren<Animator>();
+            if (emoteFromBundleAnimator == null && transform.parent != null)
+                emoteFromBundleAnimator = transform.parent.GetComponent<Animator>();
             if (emoteFromBundleAnimator != null)
             {
                 emoteFromBundleAnimator.enabled = false; //disabled because it causes interferences with avatar bindings
