@@ -414,16 +414,12 @@ namespace umi3d.cdk
                     }
                 }
             }
-            await Task.WhenAll
-                (probeList.Select
-                    (
-                        async p =>
-                        {
-                            while (QualitySettings.realtimeReflectionProbes && !p.probe.IsFinishedRendering(p.id))
-                                await UMI3DAsyncManager.Yield();
-                        }
-                    )
-                );
+            await Task.WhenAll(probeList.Select(
+                async p =>
+                {
+                    while (!p.probe.IsFinishedRendering(p.id))
+                        await UMI3DAsyncManager.Yield();
+                }));
         }
 
         #endregion
@@ -1122,6 +1118,36 @@ namespace umi3d.cdk
                 return true;
             }
             return false;
+        }
+
+        #endregion
+
+        #region Navmesh
+
+        public delegate void NodeNavmeshModifiedDelegate(UMI3DNodeInstance node);
+
+        public event NodeNavmeshModifiedDelegate onNodePartOfNavmeshSet;
+
+        /// <summary>
+        /// Notify browser that a <see cref="UMI3DNodeInstance"/> has changed its part of navmesh status.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="isPartOfNavmesh"></param>
+        public void SetNodePartOfNavmesh(UMI3DNodeInstance node)
+        {
+            onNodePartOfNavmeshSet?.Invoke(node);
+        }
+
+        public event NodeNavmeshModifiedDelegate onNodeTraversableSet;
+
+        /// <summary>
+        /// Notify browser that a <see cref="UMI3DNodeInstance"/> has changed its traversable status.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="isTraversable"></param>
+        public void SetNodeTraversable(UMI3DNodeInstance node)
+        {
+            onNodeTraversableSet?.Invoke(node);
         }
 
         #endregion
