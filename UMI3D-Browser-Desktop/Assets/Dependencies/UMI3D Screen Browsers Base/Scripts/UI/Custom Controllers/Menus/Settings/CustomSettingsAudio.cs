@@ -28,13 +28,12 @@ public class CustomSettingsAudio : CustomSettingScreen
 
     public CustomSlider GeneralVolume_Visual;
     public CustomDropdown MicDropdown;
+    public CustomToggle NoiseReductionToggle;
     public CustomSegmentedPicker<MicModeEnum> MicModeSegmentedPicker;
     public CustomThresholdSlider AmplitudeSlider;
     public CustomTextfield DelayBeaforeShutingMicTextfield;
     public CustomDropdown PushToTalkKeyDropdown;
     public CustomButton LoopBackButton;
-
-    protected bool m_loopBack;
 
     public override void InitElement()
     {
@@ -74,6 +73,10 @@ public class CustomSettingsAudio : CustomSettingScreen
         MicDropdown.RegisterValueChangedCallback(ce => OnMicDropdownValueChanged(ce.newValue));
         ScrollView.Add(MicDropdown);
 
+        NoiseReductionToggle.label = "Use noise reduction";
+        NoiseReductionToggle.RegisterValueChangedCallback(ce => OnNoiseReductionValueChanged(ce.newValue));
+        ScrollView.Add(NoiseReductionToggle);
+
         MicModeSegmentedPicker.Label = "Mode";
         MicModeSegmentedPicker.ValueEnumChanged += value => OnMicModeValueChanged(value);
         ScrollView.Add(MicModeSegmentedPicker);
@@ -110,11 +113,14 @@ public class CustomSettingsAudio : CustomSettingScreen
     public override void Set() => Set("Audio");
 
     #region Implementation
+
     /// <summary>
     /// Value is between 0 and 1
     /// </summary>
     public event System.Action<float> GeneralVolumeValeChanged;
     public AudioData Data;
+
+    protected bool m_loopBack;
 
     public void SetMic()
     {
@@ -126,6 +132,7 @@ public class CustomSettingsAudio : CustomSettingScreen
         if (TryGetAudiorData(out Data))
         {
             if (mics.Contains(Data.CurrentMic)) OnMicDropdownValueChanged(Data.CurrentMic);
+            OnNoiseReductionValueChanged(Data.NoiseReduction);
             OnMicModeValueChanged(Data.Mode);
             OnAmplitudeValueChanged(Data.Amplitude);
             OnDelayBeforeShutingMicValueChanged(Data.DelayBeforeShutMic.ToString());
@@ -139,6 +146,7 @@ public class CustomSettingsAudio : CustomSettingScreen
                 if (mics.Contains(mic)) OnMicDropdownValueChanged(mic);
             }
             else OnMicDropdownValueChanged(null);
+            OnNoiseReductionValueChanged(true);
             OnMicModeValueChanged(MicModeEnum.AlwaysSend);
             OnAmplitudeValueChanged(0f);
             OnDelayBeforeShutingMicValueChanged("0");
@@ -171,6 +179,17 @@ public class CustomSettingsAudio : CustomSettingScreen
             umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(value);
 
         Data.CurrentMic = value;
+        StoreAudioData(Data);
+    }
+
+    public void OnNoiseReductionValueChanged(bool value)
+    {
+        NoiseReductionToggle.SetValueWithoutNotify(value);
+
+        if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"connect noise reduction toggle");
+
+        Data.NoiseReduction = value;
         StoreAudioData(Data);
     }
 
