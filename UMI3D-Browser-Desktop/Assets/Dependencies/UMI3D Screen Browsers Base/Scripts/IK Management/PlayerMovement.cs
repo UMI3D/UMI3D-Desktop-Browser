@@ -23,6 +23,8 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         anim = GetComponentInChildren<Animator>();
+        if (anim == null && transform.parent != null)
+            anim = transform.parent.GetComponent<Animator>();
         IKControl = this.GetComponent<IKControl>();
     }
 
