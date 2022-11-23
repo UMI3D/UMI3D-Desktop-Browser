@@ -102,17 +102,16 @@ public class CustomSettingsAudio : CustomSettingScreen
     public void OnMicDropdownValueChanged(string value)
     {
         MicDropdown.SetValueWithoutNotify(value);
-        if 
-        (
-            !MicDropdown.choices.Contains(value)
-            || value == umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName()
-        ) return;
 
-        umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(value);
+        if(!MicDropdown.choices.Contains(value)
+            || (umi3d.cdk.collaboration.MicrophoneListener.Exists && value == umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName())) 
+            return;
+
+        if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+            umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneName(value);
 
         Data.CurrentMic = value;
         StoreAudioData(Data);
     }
-
     #endregion
 }
