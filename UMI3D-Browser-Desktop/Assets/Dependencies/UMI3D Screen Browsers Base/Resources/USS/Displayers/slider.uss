@@ -154,12 +154,8 @@
 .slider-threshold .slider-content {
     position: absolute;
     left: 0;
-    right: 50;
     height: 20px;
-    background-color: red;
 
-    border-top-left-radius: var(--border-radius-displayer);
-    border-bottom-left-radius: var(--border-radius-displayer);
     border-top-right-radius: var(--border-radius-displayer);
     border-bottom-right-radius: var(--border-radius-displayer);
 }
