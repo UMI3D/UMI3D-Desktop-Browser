@@ -166,5 +166,6 @@
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 
-    height: 100px;
+    width: 25px;
+    height: 60px;
 }

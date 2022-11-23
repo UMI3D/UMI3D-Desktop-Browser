@@ -30,6 +30,7 @@ public class CustomSettingsAudio : CustomSettingScreen
     public CustomDropdown MicDropdown;
     public CustomSegmentedPicker<MicModeEnum> MicModeSegmentedPicker;
     public CustomThresholdSlider AmplitudeSlider;
+    public CustomTextfield DelayBeaforeShutingMicTextfield;
     public CustomDropdown PushToTalkKeyDropdown;
     public CustomButton LoopBackButton;
 
@@ -84,6 +85,10 @@ public class CustomSettingsAudio : CustomSettingScreen
         AmplitudeSlider.highValue = 1f;
         ScrollView.Add(AmplitudeSlider);
 
+        DelayBeaforeShutingMicTextfield.label = "Delay before mute mic when lower than threshold";
+        DelayBeaforeShutingMicTextfield.RegisterValueChangedCallback(ce => OnDelayBeforeShutingMicValueChanged(ce.newValue));
+        ScrollView.Add(DelayBeaforeShutingMicTextfield);
+
         PushToTalkKeyDropdown.label = "Push to talk key";
         PushToTalkKeyDropdown.RegisterValueChangedCallback(ce => OnPushToTalkValueChanged(ce.newValue));
         PushToTalkKeyDropdown.choices = Enum.GetNames(typeof(KeyCode)).ToList();
@@ -123,6 +128,7 @@ public class CustomSettingsAudio : CustomSettingScreen
             if (mics.Contains(Data.CurrentMic)) OnMicDropdownValueChanged(Data.CurrentMic);
             OnMicModeValueChanged(Data.Mode);
             OnAmplitudeValueChanged(Data.Amplitude);
+            OnDelayBeforeShutingMicValueChanged(Data.DelayBeforeShutMic.ToString());
             OnPushToTalkValueChanged(Data.PushToTalkKey.ToString());
         }
         else
@@ -135,6 +141,7 @@ public class CustomSettingsAudio : CustomSettingScreen
             else OnMicDropdownValueChanged(null);
             OnMicModeValueChanged(MicModeEnum.AlwaysSend);
             OnAmplitudeValueChanged(0f);
+            OnDelayBeforeShutingMicValueChanged("0");
             OnPushToTalkValueChanged(KeyCode.M.ToString());
         }
     }
@@ -174,14 +181,17 @@ public class CustomSettingsAudio : CustomSettingScreen
         {
             case MicModeEnum.AlwaysSend:
                 AmplitudeSlider.Hide();
+                DelayBeaforeShutingMicTextfield.Hide();
                 PushToTalkKeyDropdown.Hide();
                 break;
             case MicModeEnum.Amplitude:
                 AmplitudeSlider.Display();
+                DelayBeaforeShutingMicTextfield.Display();
                 PushToTalkKeyDropdown.Hide();
                 break;
             case MicModeEnum.PushToTalk:
                 AmplitudeSlider.Hide();
+                DelayBeaforeShutingMicTextfield.Hide();
                 PushToTalkKeyDropdown.Display();
                 break;
             default:
@@ -211,6 +221,32 @@ public class CustomSettingsAudio : CustomSettingScreen
         Data.Amplitude = value;
         StoreAudioData(Data);
     }
+
+    public void OnDelayBeforeShutingMicValueChanged(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            DelayBeaforeShutingMicTextfield.SetValueWithoutNotify(value);
+
+            if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+                umi3d.cdk.collaboration.MicrophoneListener.Instance.voiceStopingDelaySeconds = 0f;
+
+            Data.DelayBeforeShutMic = 0f;
+            StoreAudioData(Data);
+        }
+        else if (float.TryParse(value, out var valueFloat))
+        {
+            DelayBeaforeShutingMicTextfield.SetValueWithoutNotify(valueFloat.ToString());
+
+            if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+                umi3d.cdk.collaboration.MicrophoneListener.Instance.voiceStopingDelaySeconds = valueFloat;
+
+            Data.DelayBeforeShutMic = valueFloat;
+            StoreAudioData(Data);
+        }
+        else DelayBeaforeShutingMicTextfield.SetValueWithoutNotify(Data.DelayBeforeShutMic.ToString());
+    }
+
 
     public void OnPushToTalkValueChanged(string value)
     {
