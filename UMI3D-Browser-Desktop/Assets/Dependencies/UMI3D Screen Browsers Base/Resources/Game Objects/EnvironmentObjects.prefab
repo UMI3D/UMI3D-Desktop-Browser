@@ -177,8 +177,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b7770e1981d08340a09f0b95d573c40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  navmeshLayerName: Navmesh
-  obstacleLayerName: Obstacle
+  defaultLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  navmeshLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 512
   invisibleMaterial: {fileID: 0}
 --- !u!1 &1098573999302734066
 GameObject:
