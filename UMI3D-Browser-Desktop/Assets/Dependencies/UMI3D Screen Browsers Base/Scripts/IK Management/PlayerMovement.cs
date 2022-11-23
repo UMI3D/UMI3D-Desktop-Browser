@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Move();
 
-        IKControl.feetIkActive = BaseFPSNavigation.Instance.IsCrouching;
+        IKControl.feetIkActive = IKControl.overrideFeetIk || BaseFPSNavigation.Instance.IsCrouching;
     }
 
     private void Move()
