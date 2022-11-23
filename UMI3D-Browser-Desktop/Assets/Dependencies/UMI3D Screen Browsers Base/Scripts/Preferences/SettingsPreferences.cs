@@ -117,6 +117,7 @@ namespace umi3d.baseBrowser.preferences
             public float GeneralVolume;
             public string CurrentMic;
             public MicModeEnum Mode;
+            public float Amplitude;
             public KeyCode PushToTalkKey;
         }
 
