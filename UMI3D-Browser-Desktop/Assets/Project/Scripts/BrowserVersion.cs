@@ -22,16 +22,16 @@ namespace BrowserDesktop
         /// Return browser version : Major.Minor.BuildCount.Date
         /// </summary>
         public static string Version { get { return major + "." + minor + "." + buildCount + "." + date; } }
-        public readonly static string major = "2";
-        public readonly static string minor = "3";
+        public readonly static string major = "3";
+        public readonly static string minor = "0";
         /// <summary>
         /// Build count, to be increament by 1.
         /// </summary>
-        public readonly static string buildCount = "17";
+        public readonly static string buildCount = "18";
         /// <summary>
         /// Year-Month-Day.
         /// </summary>
-        public readonly static string date = "221118";
+        public readonly static string date = "221123";
     }
 }
 
