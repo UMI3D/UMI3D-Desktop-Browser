@@ -152,7 +152,7 @@ namespace umi3d.cdk.collaboration
             isChannelChoosen = false;
 
             Microphone.GetDeviceCaps(Microphone.devices[MicNumberToUse], out int minFreq, out int maxFreq);
-
+            UnityEngine.Debug.Log($"init {Microphone.devices[MicNumberToUse]} ");
             NumSamplesPerOutgoingPacket = MumbleConstants.NUM_FRAMES_PER_OUTGOING_PACKET * currentMicSampleRate / 100;
 
             if (maxFreq != currentMicSampleRate)

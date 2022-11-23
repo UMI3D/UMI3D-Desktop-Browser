@@ -619,6 +619,7 @@ namespace umi3d.cdk.collaboration
             for (; i < count; i++)
                 if (mics[i] == _pendingMic)
                 {
+                    UnityEngine.Debug.Log($"set mic {i}");
                     mumbleMic.MicNumberToUse = i;
                     _pendingMic = null;
                     return;
