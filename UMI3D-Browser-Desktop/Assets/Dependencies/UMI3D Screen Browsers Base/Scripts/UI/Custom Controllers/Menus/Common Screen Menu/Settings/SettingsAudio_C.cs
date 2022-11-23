@@ -30,6 +30,7 @@ namespace umi3d.commonScreen.menu
             if (ScrollView == null) ScrollView = new Container.ScrollView_C();
             if (GeneralVolume_Visual == null) GeneralVolume_Visual = new Displayer.Slider_C();
             if (MicDropdown == null) MicDropdown = new Displayer.Dropdown_C();
+            if (NoiseReductionToggle == null) NoiseReductionToggle= new Displayer.Toggle_C();
             if (MicModeSegmentedPicker == null) MicModeSegmentedPicker = new Displayer.SegmentedPicker_C<MicModeEnum>();
             if (AmplitudeSlider == null) AmplitudeSlider = new Displayer.ThresholdSlider_C();
             if (DelayBeaforeShutingMicTextfield == null) DelayBeaforeShutingMicTextfield = new Displayer.Textfield_C();

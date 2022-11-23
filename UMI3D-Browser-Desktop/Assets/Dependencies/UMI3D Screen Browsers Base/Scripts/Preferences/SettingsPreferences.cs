@@ -116,6 +116,7 @@ namespace umi3d.baseBrowser.preferences
         {
             public float GeneralVolume;
             public string CurrentMic;
+            public bool NoiseReduction;
             public MicModeEnum Mode;
             public float Amplitude;
             public float DelayBeforeShutMic;
