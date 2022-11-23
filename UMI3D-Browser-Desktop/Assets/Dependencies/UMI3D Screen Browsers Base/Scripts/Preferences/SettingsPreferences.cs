@@ -105,11 +105,20 @@ namespace umi3d.baseBrowser.preferences
         #region Audio
 
         public const string c_audioPath = "audioData";
+        public enum MicModeEnum
+        {
+            AlwaysSend,
+            Amplitude,
+            PushToTalk,
+        }
         [Serializable]
         public struct AudioData
         {
             public float GeneralVolume;
             public string CurrentMic;
+            public MicModeEnum Mode;
+            public float Amplitude;
+            public KeyCode PushToTalkKey;
         }
 
         public static bool TryGetAudiorData(out AudioData data) => PreferencesManager.TryGet(out data, c_audioPath);

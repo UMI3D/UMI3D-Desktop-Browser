@@ -40,7 +40,7 @@ public class GamePanelController : umi3d.baseBrowser.connection.BaseGamePanelCon
         Game.TopArea.AppHeader.Maximize.clicked += Windows_Manager.Maximize;
         Game.TopArea.AppHeader.Close.clicked += Application.Quit;
 
-        Menu.Settings.Audio.SetMicDropdown();
+        Menu.Settings.Audio.SetMic();
 
         Windows_Manager.FullScreenEnabled = value => GamePanel.DisplayHeader = value;
         Windows_Manager.DisplayDialogueBoxToQuit = () =>
