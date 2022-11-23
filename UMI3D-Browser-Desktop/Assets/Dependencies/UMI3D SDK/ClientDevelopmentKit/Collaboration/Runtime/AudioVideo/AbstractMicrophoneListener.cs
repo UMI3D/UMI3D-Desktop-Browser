@@ -795,7 +795,6 @@ namespace umi3d.cdk.collaboration
 
                 this.saturated = saturated;
                 rms = Mathf.Sqrt(sum / array.Pcm.Length);
-                UnityEngine.Debug.Log($"rms debug sample {sum}, {array.Pcm.Length}");
                 db = 20 * Mathf.Log10(rms / refValue);
             }
         }

@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:UMI3D-Browser-Desktop/Assets/Project/Scripts/Panel Controller/GamePanelController.cs.meta
-guid: e5d0a8568e2b7b046b3908b6b852a806
-========
 guid: a043dc4fd7adccb45961a2469b01371f
->>>>>>>> origin/beta:UMI3D-Browser-Desktop/Assets/Dependencies/UMI3D SDK/ClientDevelopmentKit/Collaboration/Runtime/AudioVideo/NAudioMicrophone.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

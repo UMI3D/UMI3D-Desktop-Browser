@@ -28,7 +28,6 @@ namespace umi3d.cdk
     {
         private const DebugScope scope = DebugScope.CDK | DebugScope.Core | DebugScope.Animation;
 
-        ///
         private readonly VideoPlayer videoPlayer;
         private readonly Material mat;
         private readonly RenderTexture renderTexture;
