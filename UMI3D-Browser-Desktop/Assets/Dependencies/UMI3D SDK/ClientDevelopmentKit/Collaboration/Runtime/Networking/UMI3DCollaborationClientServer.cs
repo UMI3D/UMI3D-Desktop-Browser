@@ -148,7 +148,13 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         public static async void Connect(RedirectionDto redirection, Action<string> failed = null)
         {
-            if (!Exists || UMI3DCollaborationClientServer.Instance.IsRedirectionInProgress)
+            if (!Exists)
+            {
+                failed?.Invoke("No Intance of UMI3DCollaborationServer");
+                return;
+            }
+
+            if (UMI3DCollaborationClientServer.Instance.IsRedirectionInProgress)
             {
                 failed?.Invoke("Redirection already in progress");
                 return;
@@ -231,7 +237,7 @@ namespace umi3d.cdk.collaboration
                 Instance.OnLeaving.Invoke();
                 Instance.IsRedirectionInProgress = false;
             }
-            
+
         }
 
 

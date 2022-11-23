@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:UMI3D-Browser-Desktop/Assets/Project/Scripts/Panel Controller/LauncherPanelController.cs.meta
-guid: 1831b32abc119b74b985eb74bf2ac4dc
-========
 guid: cc7364c91090e7b40be822ae3115206c
->>>>>>>> origin/beta:UMI3D-Browser-Desktop/Assets/Dependencies/UMI3D SDK/ClientDevelopmentKit/Collaboration/Dependencies/NAudio-2.1.0/NAudio.Core/Codecs/ALawDecoder.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
