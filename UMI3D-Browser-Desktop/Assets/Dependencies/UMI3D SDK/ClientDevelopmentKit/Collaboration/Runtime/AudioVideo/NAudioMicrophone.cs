@@ -310,6 +310,9 @@ namespace umi3d.cdk.collaboration
                         if (data.Count > NumSamplesPerOutgoingPacket)
                             data = data.GetRange(NumSamplesPerOutgoingPacket + 1, data.Count - NumSamplesPerOutgoingPacket - 1);
 
+                                                if (OnMicData != null)
+                            OnMicData(newData);
+
                         if (_writePositionalDataFunc != null)
                             _writePositionalDataFunc(ref newData.PositionalData, ref newData.PositionalDataLength);
                         else
