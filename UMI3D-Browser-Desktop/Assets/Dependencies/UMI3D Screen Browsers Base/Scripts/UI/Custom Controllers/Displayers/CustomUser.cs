@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
@@ -22,6 +23,8 @@ using UnityEngine.UIElements;
 
 public abstract class CustomUser : VisualElement, ICustomElement
 {
+    const float userVolumeRangePercent = 3;
+
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
         protected UxmlStringAttributeDescription m_name = new UxmlStringAttributeDescription
@@ -62,7 +65,7 @@ public abstract class CustomUser : VisualElement, ICustomElement
     public virtual string UserName
     {
         get => m_userName;
-        set 
+        set
         {
             m_userName = value;
             UserNameVisual.text = value;
@@ -95,9 +98,9 @@ public abstract class CustomUser : VisualElement, ICustomElement
         set
         {
             UnityEngine.Debug.Log($"volume {value}");
-            value = Mathf.Clamp(value, 0f, 100f);
+            value = Mathf.Clamp(value, 0f, 100f * userVolumeRangePercent);
             m_volume = value;
-            User_Audio_Slider.style.width = Length.Percent(value);
+            User_Audio_Slider.style.width = Length.Percent(value / userVolumeRangePercent);
             if (value == 0f) MuteValueChanged?.Invoke(true);
             else if (m_isMute) MuteValueChanged?.Invoke(true);
         }
@@ -127,7 +130,22 @@ public abstract class CustomUser : VisualElement, ICustomElement
     protected bool m_hasBeenInitialized;
     protected string m_userName;
     protected bool m_isMute;
-    protected float m_volume;
+    protected float m_volume
+    {
+        get => AudioManager.Exists ? VGToUserVolume(AudioManager.Instance.GetVolumeForUser(User) ?? 1, AudioManager.Instance.GetGainForUser(User) ?? 1) : 0;
+        set
+        {
+            if (AudioManager.Exists)
+            {
+                var vg = UserVolumeToVG(value);
+                AudioManager.Instance.SetGainForUser(User, vg.gain);
+                AudioManager.Instance.SetVolumeForUser(User, vg.volume);
+
+                UnityEngine.Debug.Log(value + " -> " + m_volume);
+            }
+        }
+    }
+
     protected TouchManipulator2 m_manipulator = new TouchManipulator2(null, 0, 0);
 
     public virtual void InitElement()
@@ -174,7 +192,7 @@ public abstract class CustomUser : VisualElement, ICustomElement
         m_manipulator.MovedWithInfo += (evnt, localPosition) =>
         {
             var xPercent = localPosition.x * 100f / User_Background.layout.width;
-            xPercent = Mathf.Clamp(xPercent, 0, 100);
+            xPercent = Mathf.Clamp(xPercent, 0, 100) * userVolumeRangePercent;
             Volume = xPercent;
             UserNameVisual.text = $"{m_volume.ToString("0.00")} %";
         };
@@ -189,7 +207,7 @@ public abstract class CustomUser : VisualElement, ICustomElement
         Add(User_Background);
         User_Background.Add(User_Audio_Slider);
         User_Background.Add(UserNameVisual);
-        
+
         Add(Mute);
         Mute.Add(Mute_Background);
         Mute_Background.Add(Mute_Icon);
@@ -197,7 +215,7 @@ public abstract class CustomUser : VisualElement, ICustomElement
 
     public virtual void Set() => Set(null, false, 0f);
 
-    public virtual void Set(string name, bool isMute, float volume) 
+    public virtual void Set(string name, bool isMute, float volume)
     {
         if (!m_hasBeenInitialized)
         {
@@ -209,4 +227,33 @@ public abstract class CustomUser : VisualElement, ICustomElement
         IsMute = isMute;
         Volume = volume;
     }
+
+    /// <summary>
+    /// Convert a user volume to a pair of volume and gain
+    /// </summary>
+    /// <param name="volume">Volume between 0 and <see cref="userVolumeRangePercent">*100</see>/></param>
+    /// <returns>a pair of volume and gain. Volume is between 0 and 1 and Gain if between 1 and <see cref="userVolumeRangePercent"> </returns>
+    (float volume, float gain) UserVolumeToVG(float volume)
+    {
+        if (volume <= 100f)
+            return (volume / 100f, 1);
+        else
+            return (1, GainFactor(volume / 100));
+    }
+
+    /// <summary>
+    /// Convert a user a pair of volume and gain to volume
+    /// </summary>
+    /// <param name="volume">a pair of volume and gain. Volume is between 0 and 1 and Gain if between 1 and <see cref="userVolumeRangePercent"></param>
+    /// <returns>Volume between 0 and <see cref="userVolumeRangePercent">*100</see>/></returns>
+    float VGToUserVolume(float volume, float gain)
+    {
+        if (volume < 1)
+            return volume / userVolumeRangePercent * 100f;
+        return InvertGainFactor(gain) *100;
+    }
+
+    float GainFactor(float gain) { return Mathf.Pow(10, gain / 20); }
+
+    float InvertGainFactor(float gain) { return 20 * MathF.Log10(gain); }
 }
