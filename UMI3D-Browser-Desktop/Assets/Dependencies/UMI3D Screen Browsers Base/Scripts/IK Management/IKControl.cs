@@ -23,6 +23,8 @@ public class IKControl : MonoBehaviour
     public bool leftIkActive = false;
     public bool rightIkActive = false;
     public bool headIkActive = false;
+
+    public bool overrideFeetIk = false;
     public bool feetIkActive = false;
 
     public Transform lookObj = null;
