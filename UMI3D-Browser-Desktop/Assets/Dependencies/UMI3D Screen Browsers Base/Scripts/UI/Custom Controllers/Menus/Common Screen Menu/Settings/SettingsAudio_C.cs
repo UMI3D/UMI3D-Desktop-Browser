@@ -31,6 +31,7 @@ namespace umi3d.commonScreen.menu
             if (GeneralVolume_Visual == null) GeneralVolume_Visual = new Displayer.Slider_C();
             if (MicDropdown == null) MicDropdown = new Displayer.Dropdown_C();
             if (MicModeSegmentedPicker == null) MicModeSegmentedPicker = new Displayer.SegmentedPicker_C<MicModeEnum>();
+            if (AmplitudeSlider == null) AmplitudeSlider = new Displayer.ThresholdSlider_C();
             if (PushToTalkKeyDropdown == null) PushToTalkKeyDropdown = new Displayer.Dropdown_C();
 
             base.InitElement();

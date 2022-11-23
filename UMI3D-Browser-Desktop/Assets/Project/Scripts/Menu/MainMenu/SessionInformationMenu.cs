@@ -50,10 +50,7 @@ namespace BrowserDesktop.Menu
 
         #region Bottom Bar
 
-        MicrophoneSlider ThresholdSlider;
         FloatField_E TimeToShut;
-
-        VisualElement Amplitude;
 
         bool displayMicrophoneSlider = true;
 
@@ -78,12 +75,7 @@ namespace BrowserDesktop.Menu
 
         private void Update()
         {
-            if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
-                if (displayMicrophoneSlider && ThresholdSlider.DisplayedValue != umi3d.cdk.collaboration.MicrophoneListener.Instance.rms)
-                {
-                    //GainSlider.DisplayedValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.RMS;
-                    ThresholdSlider.DisplayedValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.rms;
-                }
+            
 
             if (Input.GetKeyDown(KeyCode.F8))
             {
@@ -115,25 +107,23 @@ namespace BrowserDesktop.Menu
             index = 0;
 
 
-            var okColors = new MicrophoneSliderColor(0.5f, new UnityEngine.Color(0f, 1f, 0f));
-            var saturatedColors = new MicrophoneSliderColor(0.9f, new UnityEngine.Color(1f, 0f, 0f));
-            var colors = new List<MicrophoneSliderColor>()
-            {
-                new MicrophoneSliderColor(0,new UnityEngine.Color32(244,99,11,255)),
-                okColors,
-                saturatedColors
-            };
+            //var okColors = new MicrophoneSliderColor(0.5f, new UnityEngine.Color(0f, 1f, 0f));
+            //var saturatedColors = new MicrophoneSliderColor(0.9f, new UnityEngine.Color(1f, 0f, 0f));
+            //var colors = new List<MicrophoneSliderColor>()
+            //{
+            //    new MicrophoneSliderColor(0,new UnityEngine.Color32(244,99,11,255)),
+            //    okColors,
+            //    saturatedColors
+            //};
 
-            umi3d.cdk.collaboration.MicrophoneListener.OnSaturated.AddListener(
-                b =>
-                {
-                    if (b)
-                        saturatedColors.Startvalue = 0;
-                    else
-                        saturatedColors.Startvalue = 0.9f;
-                    //GainSlider.RefreshColor();
-                    ThresholdSlider.RefreshColor();
-                });
+            //umi3d.cdk.collaboration.MicrophoneListener.OnSaturated.AddListener(
+            //    b =>
+            //    {
+            //        if (b)
+            //            saturatedColors.Startvalue = 0;
+            //        else
+            //            saturatedColors.Startvalue = 0.9f;
+            //    });
 
             /// Add Loop back
 
@@ -149,30 +139,21 @@ namespace BrowserDesktop.Menu
 
             /// Add Mode Amplitude info
 
-            Amplitude = new VisualElement();
-            root.Insert(index, Amplitude);
 
-            var tb = root.Q<VisualElement>("threshold-bar");
-            Amplitude.Add(tb);
-            ThresholdSlider = new MicrophoneSlider(
-                tb,
-                "Noise Threshold",
-                (i) => { float r; return (float.TryParse(i, out r), r / 100f); },
-                (f) => { return (f * 100).ToString(); },
-                umi3d.cdk.collaboration.MicrophoneListener.Instance.minAmplitudeToSend, 0f, 0f, 1f, 0.01f, colors
-                );
+            //ThresholdSlider = new MicrophoneSlider(
+            //    tb,
+            //    "Noise Threshold",
+            //    (i) => { float r; return (float.TryParse(i, out r), r / 100f); },
+            //    (f) => { return (f * 100).ToString(); },
+            //    umi3d.cdk.collaboration.MicrophoneListener.Instance.minAmplitudeToSend, 0f, 0f, 1f, 0.01f, colors
+            //    );
 
-            ThresholdSlider.OnValueChanged.AddListener(v =>
-            {
-                okColors.Startvalue = v;
-                umi3d.cdk.collaboration.MicrophoneListener.Instance.minAmplitudeToSend = v;
-            });
 
             var TimeToShutLabel = new Label_E("Corps", StyleKeys.Text("primaryLight"), $"Delay before stopping the microphone (second) :");
-            TimeToShutLabel.InsertRootTo(Amplitude);
+            //TimeToShutLabel.InsertRootTo(Amplitude);
 
             TimeToShut = new FloatField_E("UI/Style/Displayers/InputFloatField",null);
-            TimeToShut.InsertRootTo(Amplitude);
+            //TimeToShut.InsertRootTo(Amplitude);
             TimeToShut.ValueChanged += (oldValue, newValue) =>
             {
                 //To be changed when floatField will be use in runtime.
@@ -184,15 +165,6 @@ namespace BrowserDesktop.Menu
                         TimeToShut.value = "0";
                 }
             };
-        }
-
-
-         void UpdateMode(string name)
-        {
-            if (!string.IsNullOrEmpty(name) && Enum.TryParse<umi3d.cdk.collaboration.MicrophoneMode>(name, out var mode))
-            {
-                Amplitude.style.display = mode == umi3d.cdk.collaboration.MicrophoneMode.Amplitude ? DisplayStyle.Flex : DisplayStyle.None;
-            }
         }
     }
 }
