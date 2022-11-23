@@ -55,10 +55,14 @@ public class CustomSettingsAudio : CustomSettingScreen
         this.schedule.Execute(() =>
         {
             MicDropdown.choices = umi3d.cdk.collaboration.MicrophoneListener.GetMicrophonesNames().ToList();
+        }).Every(1000);
+
+        this.schedule.Execute(() =>
+        {
             if (MicModeSegmentedPicker.ValueEnum != MicModeEnum.Amplitude) return;
             if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
-                AmplitudeSlider.ContentValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.rms;
-        }).Every(1000);
+                AmplitudeSlider.ContentValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.rms * 10f;
+        }).Every(200);
 
         GeneralVolume_Visual.label = "General volume";
         GeneralVolume_Visual.DirectionDisplayer = ElemnetDirection.Leading;
@@ -82,7 +86,6 @@ public class CustomSettingsAudio : CustomSettingScreen
         ScrollView.Add(MicModeSegmentedPicker);
 
         AmplitudeSlider.label = "Noise Threshold";
-        AmplitudeSlider.DirectionDisplayer = ElemnetDirection.Leading;
         AmplitudeSlider.RegisterValueChangedCallback(ce => OnAmplitudeValueChanged(ce.newValue));
         AmplitudeSlider.lowValue = 0f;
         AmplitudeSlider.highValue = 1f;
@@ -235,7 +238,7 @@ public class CustomSettingsAudio : CustomSettingScreen
         AmplitudeSlider.SetValueWithoutNotify(value);
 
         if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
-            umi3d.cdk.collaboration.MicrophoneListener.Instance.minAmplitudeToSend = value;
+            umi3d.cdk.collaboration.MicrophoneListener.Instance.minAmplitudeToSend = value / 10f;
 
         Data.Amplitude = value;
         StoreAudioData(Data);

@@ -129,7 +129,7 @@ namespace BrowserDesktop.Controller
         /// </summary>
         public void OpenMainMenu()
         {
-            umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
+            //umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
             if (MenuBar_E.AreThereToolboxes) MenuBar_E.Instance.Display();
             Settingbox_E.Instance.Display();
             //if (m_objectMenu.menu.Count > 0)
@@ -144,7 +144,7 @@ namespace BrowserDesktop.Controller
         /// </summary>
         public void CloseMainMenu()
         {
-            umi3d.baseBrowser.Controller.BaseCursor.UnSetMovement(this);
+            //umi3d.baseBrowser.Controller.BaseCursor.UnSetMovement(this);
             if (MenuBar_E.Instance.IsDisplaying) MenuBar_E.Instance.Hide();
             if (Settingbox_E.Instance.IsDisplaying) Settingbox_E.Instance.Hide();
             if (EmoteWindow_E.Instance.IsDisplaying) EmoteWindow_E.Instance.Hide();

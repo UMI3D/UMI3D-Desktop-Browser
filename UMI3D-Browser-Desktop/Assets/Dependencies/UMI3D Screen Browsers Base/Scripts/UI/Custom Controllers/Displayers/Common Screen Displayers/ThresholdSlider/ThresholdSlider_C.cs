@@ -24,7 +24,7 @@ namespace umi3d.commonScreen.Displayer
     {
         public new class UxmlFactory : UxmlFactory<ThresholdSlider_C, UxmlTraits> { }
 
-        public ThresholdSlider_C() => Set(ElementCategory.Menu, ElementSize.Medium, ElemnetDirection.Top);
+        public ThresholdSlider_C() => Set();
 
         public override void InitElement()
         {
