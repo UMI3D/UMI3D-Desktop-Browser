@@ -116,6 +116,7 @@ namespace umi3d.baseBrowser.Navigation
         /// Is player active ?
         /// </summary>
         protected bool isActive = false;
+        protected bool vehicleFreeHead = false;
 
         protected Vector3 destination;
 
@@ -205,7 +206,8 @@ namespace umi3d.baseBrowser.Navigation
         /// <param name="data"></param>
         public override void Embark(common.VehicleDto data)
         {
-            isActive = !data.StopNavigation;
+            vehicleFreeHead = data.StopNavigation;
+
             if (data.VehicleId == 0)
             {
                 this.transform.SetParent(cdk.UMI3DEnvironmentLoader.Instance.transform, true);

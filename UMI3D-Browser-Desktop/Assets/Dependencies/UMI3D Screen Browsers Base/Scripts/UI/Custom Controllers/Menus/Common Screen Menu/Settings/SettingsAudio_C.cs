@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using static umi3d.baseBrowser.preferences.SettingsPreferences;
+
 namespace umi3d.commonScreen.menu
 {
     public class SettingsAudio_C : CustomSettingsAudio
@@ -28,6 +30,9 @@ namespace umi3d.commonScreen.menu
             if (ScrollView == null) ScrollView = new Container.ScrollView_C();
             if (GeneralVolume_Visual == null) GeneralVolume_Visual = new Displayer.Slider_C();
             if (MicDropdown == null) MicDropdown = new Displayer.Dropdown_C();
+            if (MicModeSegmentedPicker == null) MicModeSegmentedPicker = new Displayer.SegmentedPicker_C<MicModeEnum>();
+            if (AmplitudeSlider == null) AmplitudeSlider = new Displayer.ThresholdSlider_C();
+            if (PushToTalkKeyDropdown == null) PushToTalkKeyDropdown = new Displayer.Dropdown_C();
 
             base.InitElement();
         }

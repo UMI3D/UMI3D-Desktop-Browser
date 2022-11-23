@@ -8,4 +8,5 @@
     <umi3d.commonScreen.Displayer.Textfield_C label="Label" />
     <umi3d.commonScreen.Displayer.Toggle_C label="Label" />
     <umi3d.commonScreen.Displayer.User_C user-name="Romain" />
+    <umi3d.commonScreen.Displayer.ThresholdSlider_C show-input-field="true" content-value="5.57" value="2.83" />
 </ui:UXML>
