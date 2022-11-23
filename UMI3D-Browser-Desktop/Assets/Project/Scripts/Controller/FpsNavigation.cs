@@ -28,6 +28,16 @@ public class FpsNavigation : umi3d.baseBrowser.Navigation.BaseFPSNavigation
     {
         if (!isActive) return;
 
+        if (vehicleFreeHead)
+        {
+            state = State.FreeHead;
+
+            if (!(umi3d.baseBrowser.Controller.BaseCursor.Movement == umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free || umi3d.baseBrowser.Controller.BaseCursor.Movement == umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.FreeHidden))
+                HandleView();
+
+            return;
+        }
+
         (currentCapsuleBase, currentCapsuleEnd) = GetCapsuleSphereCenters();
 
         float height = transform.position.y;
