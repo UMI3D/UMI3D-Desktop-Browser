@@ -16,9 +16,7 @@ limitations under the License.
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3d.cdk.volumes;
-using umi3d.common;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace umi3d.baseBrowser.Navigation
 {
@@ -32,19 +30,14 @@ namespace umi3d.baseBrowser.Navigation
 
         #region Navmesh
 
-        /// <summary>
-        /// Name of the layer where objects of the navmesh will be set.
-        /// </summary>
-        public string navmeshLayerName = "Navmesh";
+        [Tooltip("Default layer for traversable objets")]
+        public LayerMask defaultLayer;
 
-        /// <summary>
-        /// Name of the layerer where obstacles objects will be set.
-        /// </summary>
-        public string obstacleLayerName = "Obstacle";
+        [Tooltip("Layer for objects part of the navmesh")]
+        public LayerMask navmeshLayer;
 
-        private LayerMask navmeshLayer;
-
-        private LayerMask obstacleLayer;
+        [Tooltip("Layer for non traversable objects")]
+        public LayerMask obstacleLayer;
 
         #endregion
 
@@ -58,18 +51,25 @@ namespace umi3d.baseBrowser.Navigation
 
         #endregion
 
-        void Start()
+        private void OnEnable()
         {
-            navmeshLayer = LayerMask.NameToLayer(navmeshLayerName);
-            obstacleLayer = LayerMask.NameToLayer(obstacleLayerName);
-            Debug.Assert(navmeshLayer != default && obstacleLayerName != default);
-
-            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(InitNavMesh);
-
+            UMI3DEnvironmentLoader.Instance.onNodePartOfNavmeshSet += SetPartOfNavmesh;
+            UMI3DEnvironmentLoader.Instance.onNodeTraversableSet += SetTraversable;
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnLeaving.AddListener(Reset);
 
             VolumePrimitiveManager.SubscribeToPrimitiveCreation(OnPrimitiveCreated, false);
             VolumePrimitiveManager.SubscribeToPrimitiveDelete(OnPrimitiveDeleted);
+        }
+
+        private void OnDisable()
+        {
+            UMI3DEnvironmentLoader.Instance.onNodePartOfNavmeshSet -= SetPartOfNavmesh;
+            UMI3DEnvironmentLoader.Instance.onNodeTraversableSet -= SetTraversable;
+
+            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnLeaving.RemoveListener(Reset);
+
+            VolumePrimitiveManager.UnsubscribeToPrimitiveCreation(OnPrimitiveCreated);
+            VolumePrimitiveManager.UnsubscribeToPrimitiveDelete(OnPrimitiveDeleted);
         }
 
         /// <summary>
@@ -123,6 +123,9 @@ namespace umi3d.baseBrowser.Navigation
             }
         }
 
+        /// <summary>
+        /// Resets navmesh data.
+        /// </summary>
         private void Reset()
         {
             foreach (var primitive in cellIdToGameobjects)
@@ -134,83 +137,78 @@ namespace umi3d.baseBrowser.Navigation
         }
 
         /// <summary>
-        /// Once the environment is loaded, generates the navmesh.
+        /// Sets <paramref name="node"/> as part of the navmesh.
         /// </summary>
-        private void InitNavMesh()
+        /// <param name="node"></param>
+        private void SetPartOfNavmesh(UMI3DNodeInstance node)
         {
-            foreach (var entity in UMI3DEnvironmentLoader.Entities())
+            if (node.IsPartOfNavmesh)
             {
-                if (entity is UMI3DNodeInstance nodeInstance)
+                if (node.gameObject.GetComponent<Collider>() != null)
                 {
-                    UMI3DDto dto = (nodeInstance.dto as GlTFNodeDto)?.extensions.umi3d;
-
-                    if (dto is UMI3DMeshNodeDto && !(dto is SubModelDto)) //subModels will be initialized with their associated UMI3DModel.
-                        InitModel(nodeInstance);
+                    node.gameObject.layer = ToLayer(navmeshLayer);
                 }
-            }
-        }
 
-        /// <summary>
-        /// Inits navmesh according to the data stored by nodeInstance and its children.
-        /// </summary>
-        /// <param name="nodeInstance"></param>
-        void InitModel(UMI3DNodeInstance nodeInstance)
-        {
-            UMI3DMeshNodeDto meshNodeDto = (nodeInstance.dto as GlTFNodeDto)?.extensions.umi3d as UMI3DMeshNodeDto;
-
-            if (meshNodeDto != null)
-                SetUpGameObject(nodeInstance, meshNodeDto);
-            else
-            {
-                SubModelDto subModelDto = (nodeInstance.dto as GlTFNodeDto)?.extensions.umi3d as SubModelDto;
-                if (subModelDto != null)
-                    SetUpGameObject(nodeInstance, subModelDto);
-            }
-
-            foreach (var child in nodeInstance.subNodeInstances)
-            {
-                InitModel(child);
-            }
-        }
-
-        private void SetUpGameObject(UMI3DNodeInstance nodeInstance, UMI3DMeshNodeDto meshDto)
-        {
-
-            SetUpGameObject(nodeInstance, meshDto.isPartOfNavmesh, meshDto.isTraversable);
-        }
-
-        private void SetUpGameObject(UMI3DNodeInstance nodeInstance, SubModelDto subModelDto)
-        {
-            SetUpGameObject(nodeInstance, subModelDto.isPartOfNavmesh, subModelDto.isTraversable);
-        }
-
-        /// <summary>
-        /// If a gameobject is not traversable or part of the navmesh, sets it up.
-        /// </summary>
-        /// <param name="nodeInstance"></param>
-        /// <param name="dto"></param>
-        private void SetUpGameObject(UMI3DNodeInstance nodeInstance, bool isPartOfNavmesh, bool isTraversable)
-        {
-            GameObject obj = nodeInstance.gameObject;
-
-            if (isPartOfNavmesh)
-            {
-                ChangeObjectAndChildrenLayer(obj, navmeshLayer);
-            }
-            else if (!isTraversable)
-            {
-                ChangeObjectAndChildrenLayer(obj, obstacleLayer);
-            }
-
-            if (isPartOfNavmesh || !isTraversable)
-            {
-                foreach (var r in nodeInstance.renderers)
+                foreach (var renderer in node.renderers)
                 {
-                    if (r.gameObject.GetComponent<Collider>() == null)
+                    if (renderer.TryGetComponent<Collider>(out Collider c))
                     {
-                        r.gameObject.AddComponent<MeshCollider>();
+                        renderer.gameObject.layer = ToLayer(navmeshLayer);
+                    }
+                    else
+                    {
+                        Debug.LogWarning(renderer.gameObject.name + " is set as part of the navmesh but it does not have colliders");
                     }
                 }
+            }
+            else
+            {
+                if (!node.IsTraversable)
+                {
+                    SetTraversable(node);
+                }
+                else
+                {
+
+                    SetLayer(node, defaultLayer);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets <paramref name="node"/> as traversable.
+        /// </summary>
+        /// <param name="node"></param>
+        private void SetTraversable(UMI3DNodeInstance node)
+        {
+            if (!node.IsPartOfNavmesh)
+            {
+                if (node.IsTraversable)
+                {
+                    SetLayer(node, defaultLayer);
+                }
+                else
+                {
+                    SetLayer(node, obstacleLayer);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets a node and its renderers to layer <see cref="mask"/>.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="mask"></param>
+        private void SetLayer(UMI3DNodeInstance node, LayerMask mask)
+        {
+            if (node.gameObject.GetComponent<Collider>() != null)
+            {
+                node.gameObject.layer = ToLayer(navmeshLayer);
+            }
+
+            foreach (var renderer in node.renderers)
+            {
+                renderer.gameObject.layer = ToLayer(mask);
             }
         }
 
@@ -221,5 +219,19 @@ namespace umi3d.baseBrowser.Navigation
             foreach (Transform t in parent.transform)
                 ChangeObjectAndChildrenLayer(t.gameObject, mask);
         }
+
+        /// <summary> Converts given bitmask to layer number </summary>
+        /// <returns> layer number </returns>
+        public static int ToLayer(int bitmask)
+        {
+            int result = bitmask > 0 ? 0 : 31;
+            while (bitmask > 1)
+            {
+                bitmask = bitmask >> 1;
+                result++;
+            }
+            return result;
+        }
+
     }
 }
