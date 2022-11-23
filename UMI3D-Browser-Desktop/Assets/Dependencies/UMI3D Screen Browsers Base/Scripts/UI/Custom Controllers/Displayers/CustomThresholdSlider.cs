@@ -28,6 +28,30 @@ public class CustomThresholdSlider : CustomSlider
             defaultValue = 0f,
         };
 
+        protected UxmlBoolAttributeDescription m_isSaturated = new UxmlBoolAttributeDescription
+        {
+            name = "is-saturated",
+            defaultValue = false
+        };
+
+        protected UxmlColorAttributeDescription m_colorBeforeThreshold = new UxmlColorAttributeDescription
+        {
+            name = "color-before-threshold",
+            defaultValue = new Color(255, 128, 0)
+        };
+
+        protected UxmlColorAttributeDescription m_colorAfterThreshold = new UxmlColorAttributeDescription
+        {
+            name = "color-after-threshold",
+            defaultValue = Color.green
+        };
+
+        protected UxmlColorAttributeDescription m_colorSaturation = new UxmlColorAttributeDescription
+        {
+            name = "color-saturation",
+            defaultValue = Color.red
+        };
+
         public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
         {
             get { yield break; }
@@ -38,15 +62,65 @@ public class CustomThresholdSlider : CustomSlider
             if (Application.isPlaying) return;
 
             base.Init(ve, bag, cc);
-            var custom = ve as CustomSlider;
+            var custom = ve as CustomThresholdSlider;
 
             custom.Set
             (
                 m_category.GetValueFromBag(bag, cc), 
                 m_size.GetValueFromBag(bag, cc), 
-                m_direction.GetValueFromBag(bag, cc)
+                m_direction.GetValueFromBag(bag, cc),
+                m_contentValue.GetValueFromBag(bag, cc),
+                m_isSaturated.GetValueFromBag(bag, cc),
+                m_colorBeforeThreshold.GetValueFromBag(bag, cc),
+                m_colorAfterThreshold.GetValueFromBag(bag, cc),
+                m_colorSaturation.GetValueFromBag(bag, cc)
             );
         }
+    }
+
+    public virtual float ContentValue
+    {
+        get => m_contentValue;
+        set
+        {
+            value = Mathf.Clamp(value, lowValue, highValue);
+            m_contentValue = value;
+
+            if (IsSaturated) Content.style.backgroundColor = ColorSaturation;
+            else Content.style.backgroundColor = value <= this.value ? ColorBeforeThreshold : ColorAfterThreshold;
+
+            var left = (value - lowValue) * 100 / (highValue - lowValue);
+            Content.style.right = Length.Percent(100 - left);
+        }
+    }
+
+    public virtual bool IsSaturated
+    {
+        get => m_isSaturated;
+        set
+        {
+            m_isSaturated = value;
+            if (value) Content.style.backgroundColor = ColorSaturation;
+            else Content.style.backgroundColor = ContentValue <= this.value ? ColorBeforeThreshold : ColorAfterThreshold;
+        }
+    }
+
+    public virtual Color ColorBeforeThreshold
+    {
+        get => m_colorBeforeThreshold;
+        set => m_colorBeforeThreshold = value;
+    }
+
+    public virtual Color ColorAfterThreshold
+    {
+        get => m_colorAfterThreshold;
+        set => m_colorAfterThreshold = value;
+    }
+
+    public virtual Color ColorSaturation
+    {
+        get => m_colorSaturation;
+        set => m_colorSaturation = value;
     }
 
     public virtual string USSCustomClassThreshold => $"{USSCustomClassName}-threshold";
@@ -54,9 +128,20 @@ public class CustomThresholdSlider : CustomSlider
 
     public VisualElement Content = new VisualElement { name = "content" };
 
-    public override void Set()
+    protected float m_contentValue;
+    protected bool m_isSaturated;
+    protected Color m_colorBeforeThreshold;
+    protected Color m_colorAfterThreshold;
+    protected Color m_colorSaturation;
+
+    public virtual void Set(ElementCategory category, ElementSize size, ElemnetDirection direction, float contentValue, bool isSaturated, Color colorBeforeThreshold, Color colorAfterThreshold, Color colorSaturation)
     {
-        base.Set();
+        base.Set(category, size, direction);
+        ColorBeforeThreshold = colorBeforeThreshold;
+        ColorAfterThreshold = colorAfterThreshold;
+        ColorSaturation = colorSaturation;
+        IsSaturated = isSaturated;
+        ContentValue = contentValue;
     }
 
     public override void InitElement()
