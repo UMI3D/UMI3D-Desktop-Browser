@@ -24,6 +24,10 @@ using UnityEngine.UIElements;
 public abstract class CustomUser : VisualElement, ICustomElement
 {
     const float userVolumeRangePercent = 3;
+    const float logBase = 1.5f;
+    const float factor = 5f / 2f;
+    const float factor2 = 5f / 2f;
+
 
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
@@ -77,7 +81,6 @@ public abstract class CustomUser : VisualElement, ICustomElement
         get => m_isMute;
         set
         {
-            UnityEngine.Debug.Log($"mute {value}");
             m_isMute = value;
             if (value)
             {
@@ -97,7 +100,6 @@ public abstract class CustomUser : VisualElement, ICustomElement
         get => m_isMute ? 0f : m_volume;
         set
         {
-            UnityEngine.Debug.Log($"volume {value}");
             value = Mathf.Clamp(value, 0f, 100f * userVolumeRangePercent);
             m_volume = value;
             User_Audio_Slider.style.width = Length.Percent(value / userVolumeRangePercent);
@@ -140,8 +142,6 @@ public abstract class CustomUser : VisualElement, ICustomElement
                 var vg = UserVolumeToVG(value);
                 AudioManager.Instance.SetGainForUser(User, vg.gain);
                 AudioManager.Instance.SetVolumeForUser(User, vg.volume);
-
-                UnityEngine.Debug.Log(value + " -> " + m_volume);
             }
         }
     }
@@ -249,11 +249,11 @@ public abstract class CustomUser : VisualElement, ICustomElement
     float VGToUserVolume(float volume, float gain)
     {
         if (volume < 1)
-            return volume / userVolumeRangePercent * 100f;
-        return InvertGainFactor(gain) *100;
+            return volume * 100f;
+        return InvertGainFactor(gain) * 100;
     }
 
-    float GainFactor(float gain) { return Mathf.Pow(10, gain / 20); }
+    float GainFactor(float gain) { return (Mathf.Pow(logBase, (gain - 1) * factor) - 1) * factor2 + 1; }
 
-    float InvertGainFactor(float gain) { return 20 * MathF.Log10(gain); }
+    float InvertGainFactor(float gain) { return (Mathf.Log((gain - 1) / factor2 + 1, logBase) / factor) + 1; }
 }
