@@ -29,7 +29,7 @@ public class CustomSettingsGeneral : CustomSettingScreen
     {
         base.InitElement();
 
-        LanguageDropdown.label = "language";
+        LanguageDropdown.label = "Language";
         LanguageDropdown.choices = new List<string>() { "English" };
         LanguageDropdown.value = "English";
 
