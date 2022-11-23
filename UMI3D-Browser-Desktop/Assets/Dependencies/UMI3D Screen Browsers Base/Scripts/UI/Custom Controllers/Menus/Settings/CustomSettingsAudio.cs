@@ -31,16 +31,33 @@ public class CustomSettingsAudio : CustomSettingScreen
     public CustomSegmentedPicker<MicModeEnum> MicModeSegmentedPicker;
     public CustomThresholdSlider AmplitudeSlider;
     public CustomDropdown PushToTalkKeyDropdown;
+    public CustomButton LoopBackButton;
+
+    protected bool m_loopBack;
 
     public override void InitElement()
     {
         base.InitElement();
 
+        RegisterCallback<AttachToPanelEvent>(ce =>
+        {
+            if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+                umi3d.cdk.collaboration.MicrophoneListener.Instance.debugSampling = true;
+            OnLoopBackValueChanged(true);
+        });
+
+        RegisterCallback<DetachFromPanelEvent>(ce =>
+        {
+            if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+                umi3d.cdk.collaboration.MicrophoneListener.Instance.debugSampling = false;
+        });
+
         this.schedule.Execute(() =>
         {
             MicDropdown.choices = umi3d.cdk.collaboration.MicrophoneListener.GetMicrophonesNames().ToList();
             if (MicModeSegmentedPicker.ValueEnum != MicModeEnum.Amplitude) return;
-            AmplitudeSlider.ContentValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.rms;
+            if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+                AmplitudeSlider.ContentValue = umi3d.cdk.collaboration.MicrophoneListener.Instance.rms;
         }).Every(1000);
 
         GeneralVolume_Visual.label = "General volume";
@@ -61,6 +78,7 @@ public class CustomSettingsAudio : CustomSettingScreen
         ScrollView.Add(MicModeSegmentedPicker);
 
         AmplitudeSlider.label = "Noise Threshold";
+        AmplitudeSlider.DirectionDisplayer = ElemnetDirection.Leading;
         AmplitudeSlider.RegisterValueChangedCallback(ce => OnAmplitudeValueChanged(ce.newValue));
         AmplitudeSlider.lowValue = 0f;
         AmplitudeSlider.highValue = 1f;
@@ -70,6 +88,9 @@ public class CustomSettingsAudio : CustomSettingScreen
         PushToTalkKeyDropdown.RegisterValueChangedCallback(ce => OnPushToTalkValueChanged(ce.newValue));
         PushToTalkKeyDropdown.choices = Enum.GetNames(typeof(KeyCode)).ToList();
         ScrollView.Add(PushToTalkKeyDropdown);
+
+        LoopBackButton.ClickedDown += () => OnLoopBackValueChanged(!m_loopBack);
+        ScrollView.Add(LoopBackButton);
 
         if (TryGetAudiorData(out Data))
         {
@@ -106,10 +127,14 @@ public class CustomSettingsAudio : CustomSettingScreen
         }
         else
         {
-            var mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
-            if (mics.Contains(mic)) OnMicDropdownValueChanged(mic);
+            if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+            {
+                var mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
+                if (mics.Contains(mic)) OnMicDropdownValueChanged(mic);
+            }
+            else OnMicDropdownValueChanged(null);
             OnMicModeValueChanged(MicModeEnum.AlwaysSend);
-            OnAmplitudeValueChanged(umi3d.cdk.collaboration.MicrophoneListener.Instance.minAmplitudeToSend);
+            OnAmplitudeValueChanged(0f);
             OnPushToTalkValueChanged(KeyCode.M.ToString());
         }
     }
@@ -165,11 +190,12 @@ public class CustomSettingsAudio : CustomSettingScreen
         if (!Enum.TryParse<umi3d.cdk.collaboration.MicrophoneMode>(value.ToString(), out var valueEnum))
             return;
 
-        if (valueEnum == umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneMode()) 
-            return;
-
         if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+        {
+            if (valueEnum == umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneMode())
+                return;
             umi3d.cdk.collaboration.MicrophoneListener.Instance.SetCurrentMicrophoneMode(valueEnum);
+        }
 
         Data.Mode = value;
         StoreAudioData(Data);
@@ -197,6 +223,14 @@ public class CustomSettingsAudio : CustomSettingScreen
 
         Data.PushToTalkKey = valueEnum;
         StoreAudioData(Data);
+    }
+
+    protected void OnLoopBackValueChanged(bool value)
+    {
+        m_loopBack = value;
+        LoopBackButton.text = m_loopBack ? "Loop back off" : "Loop back on";
+        if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+            umi3d.cdk.collaboration.MicrophoneListener.Instance.useLocalLoopback = m_loopBack;
     }
 
     #endregion

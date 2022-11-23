@@ -33,6 +33,7 @@ namespace umi3d.commonScreen.menu
             if (MicModeSegmentedPicker == null) MicModeSegmentedPicker = new Displayer.SegmentedPicker_C<MicModeEnum>();
             if (AmplitudeSlider == null) AmplitudeSlider = new Displayer.ThresholdSlider_C();
             if (PushToTalkKeyDropdown == null) PushToTalkKeyDropdown = new Displayer.Dropdown_C();
+            if (LoopBackButton == null) LoopBackButton = new Displayer.Button_C();
 
             base.InitElement();
         }

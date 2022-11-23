@@ -34,7 +34,6 @@ namespace BrowserDesktop.Menu
     /// </summary>
     public class SessionInformationMenu : SingleBehaviour<SessionInformationMenu>
     {
-        const string MicrophoneKey = "last_microphone_used_by_user"; 
 
         #region Fields
 
@@ -51,8 +50,6 @@ namespace BrowserDesktop.Menu
         #region Bottom Bar
 
         FloatField_E TimeToShut;
-
-        bool displayMicrophoneSlider = true;
 
         #endregion
 
@@ -73,30 +70,15 @@ namespace BrowserDesktop.Menu
             InitMicrophoneSlider(microphoneSetter);
         }
 
-        private void Update()
-        {
-            
-
-            if (Input.GetKeyDown(KeyCode.F8))
-            {
-                if (microphoneSetterContainer.resolvedStyle.display == DisplayStyle.Flex)
-                    HideMicrophoneSettingsPopUp();
-                else
-                    DisplayMicrophoneSettingsPopUp();
-            }
-        }
-
         private void HideMicrophoneSettingsPopUp()
         {
             microphoneSetterContainer.style.display = DisplayStyle.None;
-            umi3d.cdk.collaboration.MicrophoneListener.Instance.debugSampling = false;
         }
 
         private void DisplayMicrophoneSettingsPopUp()
         {
             TimeToShut.value = umi3d.cdk.collaboration.MicrophoneListener.Instance.voiceStopingDelaySeconds.ToString();
             microphoneSetterContainer.style.display = DisplayStyle.Flex;
-            umi3d.cdk.collaboration.MicrophoneListener.Instance.debugSampling = true;
 
         }
 
@@ -124,18 +106,6 @@ namespace BrowserDesktop.Menu
             //        else
             //            saturatedColors.Startvalue = 0.9f;
             //    });
-
-            /// Add Loop back
-
-            var LoopBack = new Button_E("MicrophoneDropdown", StyleKeys.Text_Bg("button"));
-            LoopBack.InsertRootAtTo(index, root);
-            LoopBack.Text = "LoopBack Off";
-
-            LoopBack.ClickedDown += () =>
-            {
-                umi3d.cdk.collaboration.MicrophoneListener.Instance.useLocalLoopback = !umi3d.cdk.collaboration.MicrophoneListener.Instance.useLocalLoopback;
-                LoopBack.Text = (umi3d.cdk.collaboration.MicrophoneListener.Instance.useLocalLoopback) ? "LoopBack On" : "LoopBack Off";
-            };
 
             /// Add Mode Amplitude info
 
