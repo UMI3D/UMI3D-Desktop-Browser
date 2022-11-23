@@ -21,7 +21,7 @@ namespace umi3d.commonScreen.Displayer
     {
         public new class UxmlFactory : UxmlFactory<Slider_C, UxmlTraits> { }
 
-        public Slider_C() => Set(ElementCategory.Menu, ElementSize.Medium, ElemnetDirection.Top);
+        public Slider_C() => Set();
 
         public Slider_C(ElementCategory category, ElementSize size, ElemnetDirection direction) => Set(category, size, direction);
 

@@ -83,7 +83,7 @@ public class CustomThresholdSlider : CustomSlider
         get => m_contentValue;
         set
         {
-            UnityEngine.Debug.Log($"content value {value} {Mathf.Clamp(value, lowValue, highValue)}");
+            UnityEngine.Debug.Log($"content value {value} {Mathf.Clamp(value, lowValue, highValue)}, {ColorBeforeThreshold}, {ColorAfterThreshold}");
             value = Mathf.Clamp(value, lowValue, highValue);
             m_contentValue = value;
 
@@ -134,6 +134,8 @@ public class CustomThresholdSlider : CustomSlider
     protected Color m_colorBeforeThreshold;
     protected Color m_colorAfterThreshold;
     protected Color m_colorSaturation;
+
+    public override void Set() => Set(ElementCategory.Menu, ElementSize.Medium, ElemnetDirection.Leading, 0f, false, new Color(255, 128, 0), Color.green, Color.red);
 
     public virtual void Set(ElementCategory category, ElementSize size, ElemnetDirection direction, float contentValue, bool isSaturated, Color colorBeforeThreshold, Color colorAfterThreshold, Color colorSaturation)
     {

@@ -297,31 +297,51 @@ namespace umi3d.baseBrowser.connection
 
             BaseController.SecondActionClicked += () =>
             {
+                if 
+                (
+                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
+                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
+                ) return;
+
                 if (ObjectMenuDisplay.menu.Count > 0)
                 {
                     if (ObjectMenuDisplay.isDisplaying)
                     {
                         ObjectMenuDisplay.Collapse(true);
-                        umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Center);
+                        SetMovement(this, BaseCursor.CursorMovement.Center);
                     }
-                    else ObjectMenuDisplay.Expand(false);
+                    else
+                    {
+                        ObjectMenuDisplay.Expand(false);
+                        BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
+                    }
                 }
                 else
                 {
-                    if (BaseCursor.Movement != CursorMovement.Free)
+                    if (BaseCursor.Movement == CursorMovement.Free)
                     {
                         Game.BottomArea.DisplayNotifUsersArea = false;
-                        umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Center);
+                        BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
                     }
-                    else Game.BottomArea.DisplayNotifUsersArea = true;
+                    else
+                    {
+                        Game.BottomArea.DisplayNotifUsersArea = true;
+                        BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
+                    }
                 }
             };
 
             BaseController.MainActionClicked += () =>
             {
+                if
+                (
+                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
+                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
+                ) return;
+
                 if (ObjectMenuDisplay.menu.Count != 1) return;
                 if (!(ObjectMenu.m_displayers[0] is TextfieldDisplayer textfield)) return;
-                umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
+                BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
                 if (!ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Expand(false);
                 textfield.Focus();
             };
@@ -412,6 +432,7 @@ namespace umi3d.baseBrowser.connection
                 Loader.Form.SubmitClicked += () => send.NotifyValueChange(true);
                 Loader.Form.Buttond_Submit.Focus();
                 Loader.Form.Buttond_Submit.Blur();
+                if (FormContainer.m_displayers.Count >= 1 && FormContainer.m_displayers[0] is TextfieldDisplayer textfield) textfield.Focus();
             }
         }
 
