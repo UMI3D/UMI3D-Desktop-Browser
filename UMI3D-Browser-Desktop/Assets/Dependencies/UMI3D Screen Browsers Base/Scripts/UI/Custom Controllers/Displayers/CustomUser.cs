@@ -28,7 +28,6 @@ public abstract class CustomUser : VisualElement, ICustomElement
     const float factor = 5f / 2f;
     const float factor2 = 5f / 2f;
 
-
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
         protected UxmlStringAttributeDescription m_name = new UxmlStringAttributeDescription
@@ -253,6 +252,9 @@ public abstract class CustomUser : VisualElement, ICustomElement
         return InvertGainFactor(gain) * 100;
     }
 
+    /// <summary>
+    /// Applying both GainFactor and InvertGainFactor should return the identity in any order.
+    /// </summary>
     float GainFactor(float gain) { return (Mathf.Pow(logBase, (gain - 1) * factor) - 1) * factor2 + 1; }
 
     float InvertGainFactor(float gain) { return (Mathf.Log((gain - 1) / factor2 + 1, logBase) / factor) + 1; }
