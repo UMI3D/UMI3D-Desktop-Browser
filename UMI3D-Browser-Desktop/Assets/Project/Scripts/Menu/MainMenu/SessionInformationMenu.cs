@@ -34,61 +34,8 @@ namespace BrowserDesktop.Menu
     /// </summary>
     public class SessionInformationMenu : SingleBehaviour<SessionInformationMenu>
     {
-
-        #region Fields
-
-        public UIDocument uiDocument;
-        VisualElement root;
-
-        #region Top Bar
-
-        VisualElement microphoneSetterContainer;
-        VisualElement microphoneSetter;
-
-        #endregion
-
-        #region Bottom Bar
-
-        FloatField_E TimeToShut;
-
-        #endregion
-
-        #endregion
-
-        /// <summary>
-        /// Binds the UI
-        /// </summary>
-        void Start()
-        {
-            UnityEngine.Debug.Assert(uiDocument != null);
-            root = uiDocument.rootVisualElement;
-
-            //Bottom Bar
-            microphoneSetterContainer = root.Q<VisualElement>("microphone-setter-container");
-            microphoneSetter = microphoneSetterContainer.Q<VisualElement>("microphone-setter");
-            HideMicrophoneSettingsPopUp();
-            InitMicrophoneSlider(microphoneSetter);
-        }
-
-        private void HideMicrophoneSettingsPopUp()
-        {
-            microphoneSetterContainer.style.display = DisplayStyle.None;
-        }
-
-        private void DisplayMicrophoneSettingsPopUp()
-        {
-            TimeToShut.value = umi3d.cdk.collaboration.MicrophoneListener.Instance.voiceStopingDelaySeconds.ToString();
-            microphoneSetterContainer.style.display = DisplayStyle.Flex;
-
-        }
-
-        int _i;
-        int index { get => _i++; set => _i = value; }
         void InitMicrophoneSlider(VisualElement root)
         {
-            index = 0;
-
-
             //var okColors = new MicrophoneSliderColor(0.5f, new UnityEngine.Color(0f, 1f, 0f));
             //var saturatedColors = new MicrophoneSliderColor(0.9f, new UnityEngine.Color(1f, 0f, 0f));
             //var colors = new List<MicrophoneSliderColor>()
@@ -117,24 +64,6 @@ namespace BrowserDesktop.Menu
             //    (f) => { return (f * 100).ToString(); },
             //    umi3d.cdk.collaboration.MicrophoneListener.Instance.minAmplitudeToSend, 0f, 0f, 1f, 0.01f, colors
             //    );
-
-
-            var TimeToShutLabel = new Label_E("Corps", StyleKeys.Text("primaryLight"), $"Delay before stopping the microphone (second) :");
-            //TimeToShutLabel.InsertRootTo(Amplitude);
-
-            TimeToShut = new FloatField_E("UI/Style/Displayers/InputFloatField",null);
-            //TimeToShut.InsertRootTo(Amplitude);
-            TimeToShut.ValueChanged += (oldValue, newValue) =>
-            {
-                //To be changed when floatField will be use in runtime.
-                if (float.TryParse(newValue,out float value))
-                {
-                    if (value > 0f)
-                        umi3d.cdk.collaboration.MicrophoneListener.Instance.voiceStopingDelaySeconds = value;
-                    else
-                        TimeToShut.value = "0";
-                }
-            };
         }
     }
 }

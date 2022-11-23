@@ -83,6 +83,7 @@ public class CustomThresholdSlider : CustomSlider
         get => m_contentValue;
         set
         {
+            UnityEngine.Debug.Log($"content value {value} {Mathf.Clamp(value, lowValue, highValue)}");
             value = Mathf.Clamp(value, lowValue, highValue);
             m_contentValue = value;
 
