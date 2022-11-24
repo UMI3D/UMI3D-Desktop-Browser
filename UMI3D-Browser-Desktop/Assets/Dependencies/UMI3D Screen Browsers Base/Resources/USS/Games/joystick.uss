@@ -1,0 +1,42 @@
+.joystick {
+	overflow: hidden;
+	width: var(--size-joystick__background);
+	height: var(--size-joystick__background);
+	border-left-color: var(--border-color-joystick__background);
+	border-right-color: var(--border-color-joystick__background);
+	border-top-color: var(--border-color-joystick__background);
+	border-bottom-color: var(--border-color-joystick__background);
+	border-left-width: var(--border-width-joystick__background);
+	border-right-width: var(--border-width-joystick__background);
+	border-top-width: var(--border-width-joystick__background);
+	border-bottom-width: var(--border-width-joystick__background);
+	border-top-left-radius: 100%;
+	border-top-right-radius: 100%;
+	border-bottom-left-radius: 100%;
+	border-bottom-right-radius: 100%;
+}
+
+.joystick__foreground {
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}
+
+.joystick__foreground__icon {
+	width: var(--size-joystick__foreground__icon);
+	height: var(--size-joystick__foreground__icon);
+	background-color: var(--background-color-joystick__foreground__icon);
+	border-left-color: var(--border-color-joystick__foreground__icon);
+	border-right-color: var(--border-color-joystick__foreground__icon);
+	border-top-color: var(--border-color-joystick__foreground__icon);
+	border-bottom-color: var(--border-color-joystick__foreground__icon);
+	border-left-width: var(--border-width-joystick__foreground__icon);
+	border-right-width: var(--border-width-joystick__foreground__icon);
+	border-top-width: var(--border-width-joystick__foreground__icon);
+	border-bottom-width: var(--border-width-joystick__foreground__icon);
+	border-top-left-radius: 100%;
+	border-top-right-radius: 100%;
+	border-bottom-left-radius: 100%;
+	border-bottom-right-radius: 100%;
+}

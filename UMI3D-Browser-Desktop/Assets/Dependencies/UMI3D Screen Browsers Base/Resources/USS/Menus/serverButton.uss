@@ -1,0 +1,25 @@
+.server-button {
+    padding-top: 14px;
+    transition: scale 1s ease-in-out;
+}
+
+.server-button:active {
+    scale: 1.2;
+    transition: scale 1s ease-in-out;
+}
+
+.server-button__icon {
+    width: var(--size-server);
+    height: var(--size-server);
+    background-image: var(--image-server__enable);
+}
+
+.server-button:active .server-button__icon {
+    width: var(--size-server);
+    height: var(--size-server);
+    background-image: var(--image-server__active);
+}
+
+.server-button__server-name {
+    -unity-text-align: middle-center;
+}

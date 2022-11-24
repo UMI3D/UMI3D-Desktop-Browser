@@ -1,0 +1,15 @@
+.leading__area,
+.leading__area_reverse {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 50%;
+}
+
+.leading__area {
+	left: 0;
+}
+
+.leading__area-reverse {
+	right: 0;
+}

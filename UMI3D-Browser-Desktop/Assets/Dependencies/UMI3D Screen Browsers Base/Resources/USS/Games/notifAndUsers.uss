@@ -1,0 +1,20 @@
+.notif__users {
+	position: absolute;
+	background-color: var(--background-color-transparent-game);
+	border-top-left-radius: var(--border-radius-game);
+	border-bottom-left-radius: var(--border-radius-game);
+}
+
+.notif__users.notif__users-mouseandkeyboard {
+	right: 0;
+	top: 0;
+	bottom: 2;
+}
+
+.notif__users.notif__users-touch {
+	flex-direction: row;
+	left: 0;	
+	right: 0;
+	top: 90;
+	bottom: 0;
+}

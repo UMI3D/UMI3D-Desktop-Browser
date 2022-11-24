@@ -68,6 +68,14 @@ namespace BrowserDesktop.Controller
 
         #endregion
 
+        #region Emote
+
+        public KeyCode Emote1;
+        public KeyCode Emote2;
+        public KeyCode Emote3;
+
+        #endregion
+
 
         public void Set(InputLayout layout)
         {
@@ -94,6 +102,9 @@ namespace BrowserDesktop.Controller
             Action4 = layout.Action4;
             Action5 = layout.Action5;
             Action6 = layout.Action6;
+            Emote1 = layout.Emote1;
+            Emote2 = layout.Emote2;
+            Emote3 = layout.Emote3;
         }
     }
 }

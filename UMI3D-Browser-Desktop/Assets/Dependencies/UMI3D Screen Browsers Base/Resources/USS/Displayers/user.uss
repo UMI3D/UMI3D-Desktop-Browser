@@ -1,0 +1,80 @@
+.user {
+	flex-direction: row;
+
+	margin-left: var(--margin_padding-displayer);
+	margin-right: var(--margin_padding-displayer);
+	margin-top: var(--margin_padding-displayer);
+	margin-bottom: var(--margin_padding-displayer);
+
+	border-left-color: var(--color-border-menu-displayer);
+	border-right-color: var(--color-border-menu-displayer);
+	border-top-color: var(--color-border-menu-displayer);
+	border-bottom-color: var(--color-border-menu-displayer);
+
+	border-left-width: var(--border-width-displayer);
+	border-right-width: var(--border-width-displayer);
+	border-top-width: var(--border-width-displayer);
+	border-bottom-width: var(--border-width-displayer);
+
+	border-top-left-radius: var(--border-radius-displayer);
+	border-top-right-radius: var(--border-radius-displayer);
+	border-bottom-left-radius: var(--border-radius-displayer);
+	border-bottom-right-radius: var(--border-radius-displayer);
+}
+
+.user__name-background {
+	overflow: hidden;
+	
+	flex-grow: 1;
+
+	background-color: var(--color-background-displayer);
+
+	margin-left: var(--margin_padding-displayer);
+	margin-right: var(--margin_padding-displayer);
+	margin-top: var(--margin_padding-displayer);
+	margin-bottom: var(--margin_padding-displayer);
+
+	border-top-left-radius: var(--border-radius-displayer);
+	border-top-right-radius: var(--border-radius-displayer);
+	border-bottom-left-radius: var(--border-radius-displayer);
+	border-bottom-right-radius: var(--border-radius-displayer);
+}
+
+.user__name-audio-slider {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	background-color: var(--color-border-menu-displayer);
+}
+
+.user__name.text.unity-label {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	-unity-text-align: middle-center;
+	
+	
+}
+
+.user__mute-background {
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	background-color: var(--color-background-displayer);
+}
+
+.user__mute-icon {
+	width: 70%;
+	height: 70%;
+}
+
+.user__mute-icon__on {
+	background-image: var(--background-image-mic-off);
+}
+
+.user__mute-icon__off {
+	background-image: var(--background-image-mic-on);
+}

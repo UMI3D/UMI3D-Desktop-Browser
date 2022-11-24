@@ -1,0 +1,34 @@
+:root {
+	--border-color-game: rgb(0, 193, 216);
+	--background-color-game: rgb(38, 38, 38);
+	--size-margin-and-padding-game: 7px;
+	--background-color-transparent-game: rgba(38, 38, 38, 0.90);
+	--border-radius-game : 11px;
+
+	--size-cursor__target-enabled: 40px;
+	--background-image-cursor__target-enabled: resource('Icons/Cursor/cursor-default');
+	--background-image-cursor__target-hover: resource('Icons/Cursor/cursor-hover');
+
+	--size-joystick__background: 300px;
+	--border-color-joystick__background: var(--border-color-game);
+	--border-width-joystick__background: 3px;
+	--size-joystick__foreground__icon: 30%;
+	--background-color-joystick__foreground__icon: var(--background-color-game);
+	--border-color-joystick__foreground__icon: var(--border-color-game);
+	--border-width-joystick__foreground__icon: 3px;
+
+	--size-mic__sound: 50px;
+	--left-mic: -50px;
+	--padding-short-inf: 120px;
+	--background-image-avatar-on: resource('Icons/Avatar/AVATAR_ON');
+	--background-image-avatar-off: resource('Icons/Avatar/AVATAR_OFF');
+	--background-image-mic-on: resource('Icons/Mic/MIC_ON');
+	--background-image-mic-off: resource('Icons/Mic/MIC_OFF');
+	--background-image-sound-on: resource('Icons/Sound/SOUND_ON');
+	--background-image-sound-off: resource('Icons/Sound/SOUND_OFF');
+	--background-image-emote: resource('Icons/Emote/EMOTE');
+	--size__width-short-inf: 40%;
+	--size__height-short-inf: 76px;
+
+	--background-image-pause: resource('Icons/pause-icon');
+}

@@ -1,0 +1,20 @@
+.joystick-area,
+.joystick-area_reverse {
+	position: absolute;
+	left: 0;
+	right:0;
+	bottom: 0;
+	height: 70%;
+}
+
+.joystick-area > .joystick {
+	position : absolute;
+	left: 0;
+	bottom: 0;
+}
+
+.joystick-area_reverse > .joystick {
+	position : absolute;
+	right: 0;
+	bottom: 0;
+}

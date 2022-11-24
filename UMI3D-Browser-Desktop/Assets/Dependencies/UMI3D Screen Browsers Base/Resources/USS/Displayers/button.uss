@@ -1,0 +1,321 @@
+Button {
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.unity-button {
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.button {
+    align-items: center;
+    justify-content: space-between;
+    color: transparent;
+}
+
+.button__front {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.button:hover > .button__body > .button__front {
+    background-color: var(--color-background-hover-button__front);
+}
+
+.button:active > .button__body > .button__front {
+    background-color: var(--color-background-active-button__front);
+}
+
+.button__label, .button__body {
+    margin-left: var(--margin_padding-displayer);
+    margin-right: var(--margin_padding-displayer);
+    margin-top: var(--margin_padding-displayer);
+    margin-bottom: var(--margin_padding-displayer);
+}
+
+.button__label {
+    min-width: var(--size-min_width-label-displayer);
+    -unity-text-align: upper-left;
+}
+
+.button__body {
+    overflow: hidden;
+    flex-shrink: 0;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    border-left-width: var(--border-width-displayer);
+    border-right-width: var(--border-width-displayer);
+    border-top-width: var(--border-width-displayer);
+    border-bottom-width: var(--border-width-displayer);
+}
+
+.button__text {
+    position: absolute;
+}
+
+.button__content-container {
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.button-leading-direction {
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.button-trailing-direction {
+    flex-direction: row-reverse;
+    align-items: stretch;
+}
+
+.button-top-direction {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.button-bottom-direction {
+    flex-direction: column-reverse;
+    align-items: stretch;
+}
+
+.button-leading-alignment > .button__body > #content-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 20%;
+}
+
+.button-trailing-alignment > .button__body > #content-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 20%;
+    right: 0;
+}
+
+.button-center-alignment > .button__body > #content-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.button-top-alignment > .button__body > #content-container {
+    position: absolute;
+    top: 0;
+    width: 20%;
+    height: 35%;
+}
+
+.button-bottom-alignment > .button__body > #content-container {
+    position: absolute;
+    bottom: 0;
+    width: 20%;
+    height: 35%;
+}
+
+.button-menu > .button__body {
+    border-left-color: var(--color-border-menu-displayer);
+    border-right-color: var(--color-border-menu-displayer);
+    border-top-color: var(--color-border-menu-displayer);
+    border-bottom-color: var(--color-border-menu-displayer);
+}
+
+.button-game > .button__body {
+    border-left-color: var(--color-border-game-displayer);
+    border-right-color: var(--color-border-game-displayer);
+    border-top-color: var(--color-border-game-displayer);
+    border-bottom-color: var(--color-border-game-displayer);
+}
+
+.button-round > .button__body {
+    border-top-left-radius: 100%;
+    border-bottom-left-radius: 100%;
+    border-top-right-radius: 100%;
+    border-bottom-right-radius: 100%;
+}
+
+.button-square > .button__body {
+    border-top-left-radius: var(--border-radius-displayer);
+    border-bottom-left-radius: var(--border-radius-displayer);
+    border-top-right-radius: var(--border-radius-displayer);
+    border-bottom-right-radius: var(--border-radius-displayer);
+}
+
+.button-default > .button__body {
+    background-color: var(--color-background-displayer);
+}
+
+.button-buttongroupenable > .button__body {
+    background-color: var(--color-background-displayer);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.button-buttongroupselected > .button__body {
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.button-menu.button-buttongroupselected > .button__body {
+    background-color: var(--color-background-primary-menu-displayer);
+}
+
+.button-game.button-buttongroupselected > .button__body {
+    background-color: var(--color-background-primary-game-displayer);
+}
+
+.button-menu.button-primary > .button__body {
+    background-color: var(--color-background-primary-menu-displayer);
+}
+
+.button-game.button-primary > .button__body {
+    background-color: var(--color-background-primary-game-displayer);
+}
+
+.button-danger > .button__body {
+    background-color: var(--color-background-danger-displayer);
+    border-left-color: var(--color-border-danger-displayer);
+    border-right-color: var(--color-border-danger-displayer);
+    border-top-color: var(--color-border-danger-displayer);
+    border-bottom-color: var(--color-border-danger-displayer);
+}
+
+.button-navigation > .button__body{
+    background-color: transparent;
+    border-left-color: var(--color-navigation-menu-displayer);
+    border-right-color: var(--color-navigation-menu-displayer);
+    border-top-color: var(--color-navigation-menu-displayer);
+    border-bottom-color: var(--color-navigation-menu-displayer);
+}
+
+.button-invisible > .button__body {
+    background-color: transparent;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.button-menu.button-navigation > .button__body > .button__text {
+    color: var(--color-navigation-menu-displayer);
+}
+
+.button-game.button-navigation > .button__body > .button__text {
+    color: var(--color-navigation-game-displayer);
+}
+
+.button-menu.button-invisible > .button__body {
+    -unity-background-image-tint-color: var(--color-border-menu-displayer);
+}
+
+.button-game.button-invisible > .button__body {
+    -unity-background-image-tint-color: var(--color-border-game-displayer);
+}
+
+.button-small.button-round > .button__body {
+    width: var(--size-small-displayer);
+    max-width: var(--size-small-displayer);
+}
+
+.button-medium.button-round > .button__body {
+    width: var(--size-medium-displayer);
+    max-width: var(--size-medium-displayer);
+}
+
+.button-large.button-round > .button__body {
+    width: var(--size-large-displayer);
+    max-width: var(--size-large-displayer);
+}
+
+.button-small.button-square > .button__body,
+.button-small.button-round > .button__body
+{
+    height: var(--size-small-displayer);
+    max-height: var(--size-small-displayer);
+}
+
+.button-medium.button-square > .button__body,
+.button-medium.button-round > .button__body
+{
+    height: var(--size-medium-displayer);
+    max-height: var(--size-medium-displayer);
+}
+
+.button-large.button-square > .button__body,
+.button-large.button-round > .button__body
+{
+    height: var(--size-large-displayer);
+    max-height: var(--size-large-displayer);
+}
+
+.button-custom.button-leading-direction > .button__body,
+.button-custom.button-trailing-direction > .button__body
+{
+    height: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.button-leading-direction > .button__label {
+    -unity-text-align: middle-left;
+}
+
+.button-trailing-direction > .button__label {
+    -unity-text-align: middle-right;
+}

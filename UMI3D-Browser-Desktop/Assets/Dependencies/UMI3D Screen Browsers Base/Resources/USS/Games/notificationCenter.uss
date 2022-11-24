@@ -1,0 +1,13 @@
+.notification__center {
+	flex-grow: 1;
+	padding-left: var(--size-margin-and-padding-game);
+	padding-right: var(--size-margin-and-padding-game);
+}
+
+.notification__center-no__notif__text {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 50%;
+	-unity-text-align: middle-center;
+}

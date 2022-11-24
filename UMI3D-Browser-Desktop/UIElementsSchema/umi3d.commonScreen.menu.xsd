@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.Overlays" elementFormDefault="qualified" targetNamespace="umi3d.commonScreen.menu" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
+  <xs:simpleType name="GameMenu_C_current-screen_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Data" />
+      <xs:enumeration value="Libraries" />
+      <xs:enumeration value="Settings" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="GameMenu_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="display-header" type="xs:boolean" use="optional" />
+        <xs:attribute name="version" type="xs:string" use="optional" />
+        <xs:attribute default="Data" name="current-screen" xmlns:q1="umi3d.commonScreen.menu" type="q1:GameMenu_C_current-screen_Type" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GameMenu_C" substitutionGroup="engine:VisualElement" xmlns:q2="umi3d.commonScreen.menu" type="q2:GameMenu_CType" />
+  <xs:complexType name="FormScreen_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute name="title" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="FormScreen_C" substitutionGroup="engine:VisualElement" xmlns:q3="umi3d.commonScreen.menu" type="q3:FormScreen_CType" />
+  <xs:simpleType name="Loader_C_current-screen_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Loading" />
+      <xs:enumeration value="Form" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="Loader_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="display-header" type="xs:boolean" use="optional" />
+        <xs:attribute name="version" type="xs:string" use="optional" />
+        <xs:attribute default="Loading" name="current-screen" xmlns:q4="umi3d.commonScreen.menu" type="q4:Loader_C_current-screen_Type" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Loader_C" substitutionGroup="engine:VisualElement" xmlns:q5="umi3d.commonScreen.menu" type="q5:Loader_CType" />
+  <xs:complexType name="LoadingScreen_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute name="title" type="xs:string" use="optional" />
+        <xs:attribute name="message" type="xs:string" use="optional" />
+        <xs:attribute default="0" name="value" type="xs:float" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LoadingScreen_C" substitutionGroup="engine:VisualElement" xmlns:q6="umi3d.commonScreen.menu" type="q6:LoadingScreen_CType" />
+  <xs:complexType name="AdvConnection_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute name="title" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AdvConnection_C" substitutionGroup="engine:VisualElement" xmlns:q7="umi3d.commonScreen.menu" type="q7:AdvConnection_CType" />
+  <xs:complexType name="HomeScreen_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute name="title" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="display-saved-servers" type="xs:boolean" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="HomeScreen_C" substitutionGroup="engine:VisualElement" xmlns:q8="umi3d.commonScreen.menu" type="q8:HomeScreen_CType" />
+  <xs:simpleType name="ServerButton_C_category_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Menu" />
+      <xs:enumeration value="Game" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ServerButton_C_size_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Small" />
+      <xs:enumeration value="Medium" />
+      <xs:enumeration value="Large" />
+      <xs:enumeration value="Custom" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ServerButton_C_shape_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Square" />
+      <xs:enumeration value="Round" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ServerButton_C_type_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Default" />
+      <xs:enumeration value="ButtonGroupEnable" />
+      <xs:enumeration value="ButtonGroupSelected" />
+      <xs:enumeration value="Navigation" />
+      <xs:enumeration value="Primary" />
+      <xs:enumeration value="Danger" />
+      <xs:enumeration value="Invisible" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ServerButton_C_label-direction_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Leading" />
+      <xs:enumeration value="Trailing" />
+      <xs:enumeration value="Top" />
+      <xs:enumeration value="Bottom" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ServerButton_C_icon-alignment_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Top" />
+      <xs:enumeration value="Leading" />
+      <xs:enumeration value="Center" />
+      <xs:enumeration value="Trailing" />
+      <xs:enumeration value="Bottom" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ServerButton_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="true" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enable-rich-text" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="display-tooltip-when-elided" type="xs:boolean" use="optional" />
+        <xs:attribute default="Menu" name="category" xmlns:q9="umi3d.commonScreen.menu" type="q9:ServerButton_C_category_Type" use="optional" />
+        <xs:attribute default="Medium" name="size" xmlns:q10="umi3d.commonScreen.menu" type="q10:ServerButton_C_size_Type" use="optional" />
+        <xs:attribute default="Square" name="shape" xmlns:q11="umi3d.commonScreen.menu" type="q11:ServerButton_C_shape_Type" use="optional" />
+        <xs:attribute default="Default" name="type" xmlns:q12="umi3d.commonScreen.menu" type="q12:ServerButton_C_type_Type" use="optional" />
+        <xs:attribute name="label" type="xs:string" use="optional" />
+        <xs:attribute default="Leading" name="label-direction" xmlns:q13="umi3d.commonScreen.menu" type="q13:ServerButton_C_label-direction_Type" use="optional" />
+        <xs:attribute default="Center" name="icon-alignment" xmlns:q14="umi3d.commonScreen.menu" type="q14:ServerButton_C_icon-alignment_Type" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ServerButton_C" substitutionGroup="engine:VisualElement" xmlns:q15="umi3d.commonScreen.menu" type="q15:ServerButton_CType" />
+  <xs:simpleType name="Launcher_C_current-screen_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Home" />
+      <xs:enumeration value="Libraries" />
+      <xs:enumeration value="Settings" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="Launcher_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="display-header" type="xs:boolean" use="optional" />
+        <xs:attribute name="version" type="xs:string" use="optional" />
+        <xs:attribute default="Home" name="current-screen" xmlns:q16="umi3d.commonScreen.menu" type="q16:Launcher_C_current-screen_Type" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Launcher_C" substitutionGroup="engine:VisualElement" xmlns:q17="umi3d.commonScreen.menu" type="q17:Launcher_CType" />
+  <xs:simpleType name="LibraryHeader_C_header-sort_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AscendingName" />
+      <xs:enumeration value="DescendingName" />
+      <xs:enumeration value="AscendingSize" />
+      <xs:enumeration value="DescendingSize" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="LibraryHeader_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute name="title" type="xs:string" use="optional" />
+        <xs:attribute name="size" type="xs:string" use="optional" />
+        <xs:attribute name="date" type="xs:string" use="optional" />
+        <xs:attribute name="message" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="display-message" type="xs:boolean" use="optional" />
+        <xs:attribute default="AscendingName" name="header-sort" xmlns:q18="umi3d.commonScreen.menu" type="q18:LibraryHeader_C_header-sort_Type" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LibraryHeader_C" substitutionGroup="engine:VisualElement" xmlns:q19="umi3d.commonScreen.menu" type="q19:LibraryHeader_CType" />
+  <xs:simpleType name="LibraryScreen_C_sort-by_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AscendingName" />
+      <xs:enumeration value="DescendingName" />
+      <xs:enumeration value="AscendingSize" />
+      <xs:enumeration value="DescendingSize" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="LibraryScreen_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute name="title" type="xs:string" use="optional" />
+        <xs:attribute default="AscendingName" name="sort-by" xmlns:q20="umi3d.commonScreen.menu" type="q20:LibraryScreen_C_sort-by_Type" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LibraryScreen_C" substitutionGroup="engine:VisualElement" xmlns:q21="umi3d.commonScreen.menu" type="q21:LibraryScreen_CType" />
+  <xs:complexType name="Library_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute name="title" type="xs:string" use="optional" />
+        <xs:attribute name="size" type="xs:string" use="optional" />
+        <xs:attribute name="date" type="xs:string" use="optional" />
+        <xs:attribute name="message" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="display-message" type="xs:boolean" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Library_C" substitutionGroup="engine:VisualElement" xmlns:q22="umi3d.commonScreen.menu" type="q22:Library_CType" />
+  <xs:complexType name="SessionHeader_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute name="title" type="xs:string" use="optional" />
+        <xs:attribute name="participants-count" type="xs:string" use="optional" />
+        <xs:attribute name="max-participants" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="is-selected" type="xs:boolean" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SessionHeader_C" substitutionGroup="engine:VisualElement" xmlns:q23="umi3d.commonScreen.menu" type="q23:SessionHeader_CType" />
+  <xs:complexType name="SessionScreen_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute name="title" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SessionScreen_C" substitutionGroup="engine:VisualElement" xmlns:q24="umi3d.commonScreen.menu" type="q24:SessionScreen_CType" />
+  <xs:complexType name="Session_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute name="title" type="xs:string" use="optional" />
+        <xs:attribute name="participants-count" type="xs:string" use="optional" />
+        <xs:attribute name="max-participants" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="is-selected" type="xs:boolean" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Session_C" substitutionGroup="engine:VisualElement" xmlns:q25="umi3d.commonScreen.menu" type="q25:Session_CType" />
+  <xs:simpleType name="SettingsContainer_C_current-screen_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FirstScreen" />
+      <xs:enumeration value="General" />
+      <xs:enumeration value="Resolution" />
+      <xs:enumeration value="Player" />
+      <xs:enumeration value="Controller" />
+      <xs:enumeration value="Audio" />
+      <xs:enumeration value="Notification" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="SettingsContainer_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute name="title" type="xs:string" use="optional" />
+        <xs:attribute default="FirstScreen" name="current-screen" xmlns:q26="umi3d.commonScreen.menu" type="q26:SettingsContainer_C_current-screen_Type" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SettingsContainer_C" substitutionGroup="engine:VisualElement" xmlns:q27="umi3d.commonScreen.menu" type="q27:SettingsContainer_CType" />
+  <xs:complexType name="SettingsFirstScreen_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute name="title" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SettingsFirstScreen_C" substitutionGroup="engine:VisualElement" xmlns:q28="umi3d.commonScreen.menu" type="q28:SettingsFirstScreen_CType" />
+</xs:schema>
