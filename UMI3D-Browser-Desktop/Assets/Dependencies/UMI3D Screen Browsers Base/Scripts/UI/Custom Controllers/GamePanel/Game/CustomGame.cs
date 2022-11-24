@@ -78,15 +78,15 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
 
     public virtual bool DisplayNotifUsersArea
     {
-        get => m_displayNotifUserArea;
+        get => S_displayNotifUserArea;
         set
         {
-            if (m_displayNotifUserArea == value) return;
-            m_displayNotifUserArea = value;
+            if (S_displayNotifUserArea == value) return;
+            S_displayNotifUserArea = value;
             switch (m_controller)
             {
                 case ControllerEnum.MouseAndKeyboard:
-                    BottomArea.DisplayNotifUsersArea = value;
+                    DisplayMouseAndKeyboardNotifAndUsers(value);
                     break;
                 case ControllerEnum.Touch:
                     DisplayTouchNotifAndUsers(value);
@@ -125,10 +125,12 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
     public VisualElement LeadingAndTrailingBox = new VisualElement { name = "leading-trailing-area" };
 
     public CustomNotifAndUsersArea NotifAndUserArea;
+    public CustomEmoteWindow EmoteWindow;
+
+    public static bool S_displayNotifUserArea;
 
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
-    protected bool m_displayNotifUserArea;
     public static System.Action LeftHandModeUpdated;
     protected bool m_leftHand;
 
@@ -148,13 +150,13 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
 
         TopArea.InformationArea.NotificationTitleClicked += () =>
         {
-            if (!BottomArea.DisplayNotifUsersArea) BottomArea.DisplayNotifUsersArea = true;
-            TrailingArea.NotifAndUserArea.AreaPanel = CustomNotifAndUsersArea.NotificationsOrUsers.Notifications;
-            TrailingArea.NotifAndUserArea.notificationCenter.Filter = NotificationFilter.New;
+            DisplayNotifUsersArea = true;
+            NotifAndUserArea.AreaPanel = CustomNotifAndUsersArea.NotificationsOrUsers.Notifications;
+            NotifAndUserArea.notificationCenter.Filter = NotificationFilter.New;
         };
-        BottomArea.NotifUsersValueChanged = value => TrailingArea.DisplayNotifUsersArea = value;
-
+        BottomArea.NotifUsersValueChanged = value => DisplayNotifUsersArea = value;
         TopArea.InformationArea.ExpandUpdate += value => DisplayNotifUsersArea = value;
+
         LeftHandModeUpdated = () => LeftHand = !LeftHand;
 
         Add(Cursor);
@@ -164,7 +166,7 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         LeadingAndTrailingBox.Add(TrailingArea);
     }
 
-    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, m_displayNotifUserArea, false);
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, S_displayNotifUserArea, false);
 
     public virtual void Set(ControllerEnum controller, bool displayNotifUserArea, bool leftHand)
     {
@@ -199,6 +201,12 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         );
     }
 
+    protected void DisplayMouseAndKeyboardNotifAndUsers(bool value)
+    {
+        BottomArea.DisplayNotifUsersArea = value;
+        TrailingArea.DisplayNotifUsersArea = value;
+    }
+
     protected void DisplayTouchNotifAndUsers(bool value)
     {
         if (value)
@@ -218,8 +226,8 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
                 () => NotifAndUserArea.style.opacity = 1f,
                 "opacity",
                 0.5f,
-                revert: !m_displayNotifUserArea,
-                callback: m_displayNotifUserArea ? null : NotifAndUserArea.RemoveFromHierarchy
+                revert: !value,
+                callback: value ? null : NotifAndUserArea.RemoveFromHierarchy
             );
         });
     }

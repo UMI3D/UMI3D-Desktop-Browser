@@ -331,12 +331,12 @@ namespace umi3d.baseBrowser.connection
                 {
                     if (BaseCursor.Movement == CursorMovement.Free)
                     {
-                        Game.BottomArea.DisplayNotifUsersArea = false;
+                        Game.DisplayNotifUsersArea = false;
                         BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
                     }
                     else
                     {
-                        Game.BottomArea.DisplayNotifUsersArea = true;
+                        Game.DisplayNotifUsersArea = true;
                         BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
                     }
                 }
