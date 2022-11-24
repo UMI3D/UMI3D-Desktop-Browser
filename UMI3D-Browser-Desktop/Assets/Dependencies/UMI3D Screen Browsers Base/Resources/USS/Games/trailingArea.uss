@@ -31,8 +31,7 @@
 .trailing__area-object__menu {
 	position: absolute;
 	left: 5%;
-	/*top: 0;
-	bottom: 0;*/
+	max-height: 100%;
 }
 
 .trailing__area-emote__window {
