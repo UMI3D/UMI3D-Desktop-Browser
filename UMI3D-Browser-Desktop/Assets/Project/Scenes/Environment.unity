@@ -582,7 +582,7 @@ MonoBehaviour:
   - {fileID: 907048298}
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
   maxNeckAngle: 50
-  maxStepHeight: 0.2
+  maxStepHeight: 0.4
   maxSlopeAngle: 45
   navigation: 0
   obstacleLayer:
