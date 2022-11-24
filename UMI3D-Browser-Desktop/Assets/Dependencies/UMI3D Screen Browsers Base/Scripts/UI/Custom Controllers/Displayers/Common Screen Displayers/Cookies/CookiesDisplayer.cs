@@ -88,6 +88,7 @@ namespace umi3d.commonScreen.Displayer
             m_WriteToggles.label = "Write access";
             m_WriteToggles.RegisterValueChangedCallback(OnWriteValueChanged);
 
+            m_box.Add(m_description);
             m_box.Add(m_readToggles);
             m_box.Add(m_WriteToggles);
         }
