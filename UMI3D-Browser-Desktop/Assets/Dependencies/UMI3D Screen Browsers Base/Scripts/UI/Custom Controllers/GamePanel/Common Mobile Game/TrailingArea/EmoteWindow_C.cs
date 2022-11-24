@@ -16,8 +16,24 @@ limitations under the License.
 
 namespace umi3d.commonMobile.game
 {
-    public sealed class EmoteWindow_C : CustomEmoteWindow
+    public class EmoteWindow_C : CustomEmoteWindow
     {
+        public static EmoteWindow_C Instance
+        {
+            get
+            {
+                if (s_instance != null) return s_instance;
+
+                s_instance = new EmoteWindow_C();
+                return s_instance;
+            }
+            set
+            {
+                s_instance = value;
+            }
+        }
+        protected static EmoteWindow_C s_instance;
+
         public EmoteWindow_C() => Set();
 
         public override void InitElement()

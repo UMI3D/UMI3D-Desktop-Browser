@@ -99,6 +99,29 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         }
     }
 
+    public virtual bool DisplayEmoteWindow
+    {
+        get => S_displayEmoteWindow;
+        set
+        {
+            if (S_displayEmoteWindow == value) return;
+            S_displayEmoteWindow = value;
+            switch (m_controller)
+            {
+                case ControllerEnum.MouseAndKeyboard:
+                    DisplayMouseAndKeyboardEmoteWindow(value);
+                    break;
+                case ControllerEnum.Touch:
+                    DisplayTouchEmoteWindow(value);
+                    break;
+                case ControllerEnum.GameController:
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     public bool LeftHand
     {
         get => m_leftHand;
@@ -125,9 +148,9 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
     public VisualElement LeadingAndTrailingBox = new VisualElement { name = "leading-trailing-area" };
 
     public CustomNotifAndUsersArea NotifAndUserArea;
-    public CustomEmoteWindow EmoteWindow;
 
     public static bool S_displayNotifUserArea;
+    public static bool S_displayEmoteWindow;
 
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
@@ -230,5 +253,15 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
                 callback: value ? null : NotifAndUserArea.RemoveFromHierarchy
             );
         });
+    }
+
+    protected void DisplayMouseAndKeyboardEmoteWindow(bool value)
+    {
+
+    }
+
+    protected void DisplayTouchEmoteWindow(bool value)
+    {
+
     }
 }
