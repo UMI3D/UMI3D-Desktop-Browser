@@ -17,6 +17,7 @@ using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
+using umi3d.common.interaction;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,18 +25,22 @@ namespace umi3d.commonScreen.Displayer
 {
     public class CookiesDisplayer : AbstractDisplayer, baseBrowser.Menu.IDisplayerElement
     {
+        public string DescriptionLabel;
         public ElementCategory Category;
         public ElementSize Size = ElementSize.Medium;
         public ElemnetDirection Direction = ElemnetDirection.Leading;
 
         protected LocalInfoRequestInputMenuItem menuItem;
         protected VisualElement m_box;
+        protected Text_C m_description;
         protected Toggle_C m_readToggles;
         protected Toggle_C m_WriteToggles;
 
         private void OnValidate()
         {
-            if (m_readToggles == null || m_WriteToggles == null) return;
+            if (m_description == null || m_readToggles == null || m_WriteToggles == null) return;
+            m_description.text = DescriptionLabel;
+
             m_readToggles.Category = Category;
             m_readToggles.Size = Size;
             m_readToggles.Direction = Direction;
@@ -60,6 +65,12 @@ namespace umi3d.commonScreen.Displayer
             if (m_box != null || m_readToggles != null || m_WriteToggles != null) return;
 
             m_box = new VisualElement { name = "cookies-box" };
+
+            m_description = new Text_C();
+            var dto = (LocalInfoRequestParameterDto)menuItem.dto;
+            DescriptionLabel = $"Server {dto.serverName} requests acces to local data : {dto.key}.\n";
+            DescriptionLabel += $"{dto.reason}";
+            m_description.text = DescriptionLabel;
 
             m_readToggles = new Toggle_C();
             m_readToggles.Category = Category;
