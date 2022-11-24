@@ -72,8 +72,16 @@ public class CustomTopArea : VisualElement, ICustomElement
         set
         {
             m_displayHeader = value;
-            if (value) Insert(0, AppHeader);
-            else AppHeader.RemoveFromHierarchy();
+            if (value)
+            {
+                Insert(0, AppHeader);
+                AppHeader.Add(Main);
+            }
+            else
+            {
+                AppHeader.RemoveFromHierarchy();
+                Add(Main);
+            }
         }
     }
 
@@ -120,7 +128,6 @@ public class CustomTopArea : VisualElement, ICustomElement
         Menu.name = "menu";
         Menu.Category = ElementCategory.Game;
 
-        Add(Main);
         Main.Add(InformationArea);
         Main.Add(Menu);
     }

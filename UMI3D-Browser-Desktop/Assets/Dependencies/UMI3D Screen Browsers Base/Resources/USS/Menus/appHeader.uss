@@ -1,9 +1,17 @@
 .app__header {
 	flex-direction: row;
-	justify-content: flex-end;
 	background-color: var(--color-background_transparent-menu);
 	width: 100%;
 	min-height: 54px;
+}
+
+.app__header-buttons__box {
+	flex-direction: row;
+}
+
+.app__header-container {
+	flex-direction: row;
+	flex-grow: 1;
 }
 
 .app__header-window__button.button-small.button-square > .button__body {
