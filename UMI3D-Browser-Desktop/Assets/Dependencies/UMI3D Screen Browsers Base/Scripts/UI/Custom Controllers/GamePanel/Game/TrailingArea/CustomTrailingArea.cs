@@ -285,7 +285,7 @@ public class CustomTrailingArea : VisualElement, ICustomElement
 
         ObjectMenu.name = "object-menu";
         ObjectMenu.Category = ElementCategory.Game;
-        ObjectMenu.Title = "Object Menu";
+        ObjectMenu.Title = "Contextual Menu";
     }
 
     public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false, false, false, false);
