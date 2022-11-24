@@ -215,13 +215,11 @@ public class CustomBottomArea : VisualElement, ICustomElement
 
     public virtual bool DisplayNotifUsersArea
     {
-        get => CustomTrailingArea.S_displayNotifUsersArea;
+        get => CustomGame.S_displayNotifUserArea;
         set
         {
-            if (CustomTrailingArea.S_displayNotifUsersArea == value) return;
             if (value) NotifAndUsers.AddToClassList(USSCustomClassButtonSelected);
             else NotifAndUsers.RemoveFromClassList(USSCustomClassButtonSelected);
-            NotifUsersValueChanged?.Invoke(value);
         }
     }
 
@@ -310,7 +308,7 @@ public class CustomBottomArea : VisualElement, ICustomElement
         Sound.Type = ButtonType.Invisible;
         NotifAndUsers.Type = ButtonType.Invisible;
 
-        NotifAndUsers.clicked += () => DisplayNotifUsersArea = !DisplayNotifUsersArea;
+        NotifAndUsers.clicked += () => NotifUsersValueChanged?.Invoke(!CustomGame.S_displayNotifUserArea);
 
         Add(BottomBar);
 

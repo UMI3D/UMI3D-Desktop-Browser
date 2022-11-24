@@ -100,12 +100,9 @@ public class CustomTrailingArea : VisualElement, ICustomElement
 
     public virtual bool DisplayNotifUsersArea
     {
-        get => S_displayNotifUsersArea;
+        get => CustomGame.S_displayNotifUserArea;
         set
         {
-            if (S_displayNotifUsersArea == value) return;
-            if (value && m_controller != ControllerEnum.MouseAndKeyboard) return;
-            S_displayNotifUsersArea = value;
             if (value)
             {
                 this.AddIfNotInHierarchy(NotifAndUserArea);
@@ -123,8 +120,8 @@ public class CustomTrailingArea : VisualElement, ICustomElement
                     () => NotifAndUserArea.style.width = Length.Percent(60),
                     "width",
                     0.5f,
-                    revert: !S_displayNotifUsersArea,
-                    callback: S_displayNotifUsersArea ? null : NotifAndUserArea.RemoveFromHierarchy
+                    revert: !value,
+                    callback: value ? null : NotifAndUserArea.RemoveFromHierarchy
                 );
             });
         }
@@ -234,8 +231,6 @@ public class CustomTrailingArea : VisualElement, ICustomElement
             return m_direction;
         }
     }
-
-    public static bool S_displayNotifUsersArea;
 
     public static System.Action LeftHandModeUpdated;
     protected bool m_leftHand;
