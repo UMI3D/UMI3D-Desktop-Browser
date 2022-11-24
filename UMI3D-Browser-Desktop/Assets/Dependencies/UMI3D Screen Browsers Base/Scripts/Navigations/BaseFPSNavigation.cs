@@ -349,7 +349,7 @@ namespace umi3d.baseBrowser.Navigation
         /// <returns></returns>
         protected Vector3 CheckCollision(Vector3 direction)
         {
-            if (Physics.CapsuleCast(currentCapsuleBase, currentCapsuleEnd, playerRadius, direction, out var hit, IsGrounded ? .2f : 1f, obstacleLayer))
+            if (Physics.CapsuleCast(currentCapsuleBase, currentCapsuleEnd, playerRadius, direction, out var hit, IsGrounded ? direction.magnitude * 1.01f : 1f, obstacleLayer))
             {
 
 #if UNITY_EDITOR
