@@ -1,0 +1,41 @@
+.menu-screen {
+	position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-background-menu);
+}
+
+.menu-screen__header {
+    flex-shrink: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.menu-screen__title,
+.menu-screen__header__left,
+.menu-screen__header__right {
+    padding-left: var(--margin_padding-displayer-menu);
+    padding-right: var(--margin_padding-displayer-menu);
+}
+
+.menu-screen__title {
+    overflow: hidden;
+    flex-grow: 1;
+    width: 50%;
+    -unity-text-align: middle-center;
+}
+
+.menu-screen__header__left,
+.menu-screen__header__right {
+    width: 25%;
+}
+
+.menu-screen__button__back__icon {
+    width: 40px;
+    height: 40px;
+    background-image: var(--image-arrow__ligth-displayer-menu);
+    -unity-background-image-tint-color: var(--color-navigation-menu-displayer);
+    rotate: -90deg;
+}

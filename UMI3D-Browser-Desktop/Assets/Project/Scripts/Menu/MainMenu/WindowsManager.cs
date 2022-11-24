@@ -15,13 +15,10 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
-using BrowserDesktop.Menu;
 using System;
 using System.Runtime.InteropServices;
-using UnityEngine;
-using UnityEngine.UIElements;
 using umi3dDesktopBrowser.ui.viewController;
-using BrowserDesktop.Cursor;
+using UnityEngine;
 
 /// <summary>
 /// This class removes the default Windows title bar and set up a custom one.
@@ -30,7 +27,8 @@ public class WindowsManager : MonoBehaviour
 {
     #region Fields
 
-    public UIDocument uiDocument;
+    public Action<bool> FullScreenEnabled;
+    public Action DisplayDialogueBoxToQuit;
 
     private bool isZoomed = false;
     private bool isFullScreen = false;
@@ -50,24 +48,6 @@ public class WindowsManager : MonoBehaviour
 
     IntPtr hWnd;
 
-
-    [Header("Custom title bar")]
-
-    [Tooltip("Tag name of the minimize window button UXML element")]
-    [SerializeField]
-    private readonly string minimizeTagName = "minimize-window-btn";
-    [Tooltip("Tag name of the maximize window button UXML element")]
-    [SerializeField]
-    private readonly string maximizeTagName = "fullscreen-btn";
-    [Tooltip("Tag name of the close window button UXML element")]
-    [SerializeField]
-    private readonly string closeTagName = "close-window-btn";
-
-    VisualElement root;
-    Button minimize_B;
-    Button maximize_B;
-    Button close_B;
-
     #endregion
 
     #endregion
@@ -78,9 +58,6 @@ public class WindowsManager : MonoBehaviour
 
     void Start()
     {
-        Debug.Assert(uiDocument != null);
-        SetUpCustomTitleBar();
-
         hWnd = GetActiveWindow();
         isZoomed = IsZoomed(hWnd);
         isFullScreen = Screen.fullScreen;
@@ -88,39 +65,6 @@ public class WindowsManager : MonoBehaviour
 
         Application.wantsToQuit += WantsToQuit;
         QuittingManager.ShouldWaitForApplicationToQuit = true;
-        DialogueBox_E
-            .SetCursorMovementActions
-            (
-                    (o) => { umi3d.baseBrowser.Controller.BaseCursor.SetMovement(o, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free); },
-                    (o) => { umi3d.baseBrowser.Controller.BaseCursor.UnSetMovement(o); }
-            );
-    }
-
-    /// <summary>
-    /// Bind the UI of the title bar.
-    /// </summary>
-    private void SetUpCustomTitleBar()
-    {
-        root = uiDocument.rootVisualElement;
-
-        minimize_B = root.Q<Button>(minimizeTagName);
-        minimize_B.clickable.clicked += () =>
-        {
-            ShowWindow(hWnd, 2);
-        };
-
-        maximize_B = uiDocument.rootVisualElement.Q<Button>(maximizeTagName);
-        maximize_B.clickable.clicked += () =>
-        {
-            SwitchFullScreen(false);
-        };
-
-        close_B = root.Q<Button>(closeTagName);
-        close_B.clickable.clicked += () =>
-        {
-            //This will raise the Application.WantsToQuit event and show a dialogue box.
-            Application.Quit();
-        };
     }
 
     private void OnDestroy()
@@ -144,8 +88,7 @@ public class WindowsManager : MonoBehaviour
     private bool WantsToQuit()
     {
         bool wantsToQuit = QuittingManager.ApplicationIsQuitting;
-        if (!wantsToQuit && !DialogueBox_E.Instance.IsDisplaying)
-            ShowDialogueBoxToQuit();
+        if (!wantsToQuit && !DialogueBox_E.Instance.IsDisplaying) DisplayDialogueBoxToQuit?.Invoke();
         return wantsToQuit;
     }
 
@@ -157,15 +100,16 @@ public class WindowsManager : MonoBehaviour
         DialogueBox_E.Instance.Setup("Close application", "Are you sure ...?", "YES", "NO", (b) => 
         { 
             QuittingManager.ApplicationIsQuitting = b;
-            if (b) 
-                Application.Quit(); 
+            if (b) Application.Quit(); 
         });
-        DialogueBox_E.Instance.DisplayFrom(uiDocument);
     }
 
     #endregion
 
     #region Window resizement
+
+    public void Minimize() => ShowWindow(hWnd, 2);
+    public void Maximize() => SwitchFullScreen(false);
 
     /// <summary>
     /// Check if the widow is being zoomed or unzoomed, in fullscreen or not.
@@ -176,10 +120,7 @@ public class WindowsManager : MonoBehaviour
             (!IsZoomed(hWnd) && isZoomed)) //Check if the window is being resized (zoomed or unzoomed)
         {
             isZoomed = IsZoomed(hWnd);
-            if (isZoomed)
-            {
-                SwitchFullScreen(true);
-            }
+            if (isZoomed) SwitchFullScreen(true);
         }
         else //The window has been resized with a shortcut
         {
@@ -189,10 +130,7 @@ public class WindowsManager : MonoBehaviour
                 SwitchFullScreen(true);
             }
 
-            else if (!Screen.fullScreen && isFullScreen)
-            {
-                SwitchFullScreen(false);
-            }
+            else if (!Screen.fullScreen && isFullScreen) SwitchFullScreen(false);
         }
 
         if (!isFullScreen && !isZoomed)
@@ -207,23 +145,8 @@ public class WindowsManager : MonoBehaviour
     /// </summary>
     private void UpdateWindowWhenResize()
     {
-        if (isZoomed) //The window is in Zoomed
-        {
-            Screen.SetResolution(Screen.width, Screen.height, FullScreenMode.FullScreenWindow);
-        }
-
-        if (isFullScreen) //The window is in fullscreen
-        {
-            maximize_B.visible = true;
-            minimize_B.visible = true;
-            close_B.visible = true;
-        }
-        else
-        {
-            maximize_B.visible = false;
-            minimize_B.visible = false;
-            close_B.visible = false;
-        }
+        if (isZoomed) Screen.SetResolution(Screen.width, Screen.height, FullScreenMode.FullScreenWindow);
+        FullScreenEnabled?.Invoke(isFullScreen);
     }
 
     /// <summary>
@@ -236,17 +159,13 @@ public class WindowsManager : MonoBehaviour
         {
             Screen.SetResolution(Screen.width, Screen.height, FullScreenMode.FullScreenWindow);
             isFullScreen = true;
-            maximize_B.visible = true;
-            minimize_B.visible = true;
-            close_B.visible = true;
+            FullScreenEnabled?.Invoke(true);
         }
         else
         {
             Screen.SetResolution(widthWindow, heightWindow, false);
             isFullScreen = false;
-            maximize_B.visible = false;
-            minimize_B.visible = false;
-            close_B.visible = false;
+            FullScreenEnabled?.Invoke(false);
         }
     }
 

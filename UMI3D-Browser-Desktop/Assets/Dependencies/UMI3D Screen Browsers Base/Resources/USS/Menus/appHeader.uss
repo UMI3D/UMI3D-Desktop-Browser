@@ -1,0 +1,31 @@
+.app__header {
+	flex-direction: row;
+	justify-content: flex-end;
+	background-color: var(--color-background_transparent-menu);
+	width: 100%;
+	min-height: 54px;
+}
+
+.app__header-window__button.button-small.button-square > .button__body {
+	width: 70px;
+	height: 40px;
+}
+
+.app__header-minimize__icon,
+.app__header-maximize__icon,
+.app__header-close__icon {
+	width: 40px;
+	height: 40px;
+}
+
+.app__header-minimize__icon {
+	background-image: var(--image-minimize-window);
+}
+
+.app__header-maximize__icon {
+	background-image: var(--image-maximize-window);
+}
+
+.app__header-close__icon {
+	background-image: var(--image-close-window);
+}

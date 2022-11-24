@@ -1,0 +1,67 @@
+.buttons-area {
+	position: absolute;
+	flex-direction: row;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+.buttons-area__crouch,
+.buttons-area__jump,
+.buttons-area__action,
+.buttons-area__emote,
+.buttons-area__crouch_reverse,
+.buttons-area__jump_reverse,
+.buttons-area__action_reverse,
+.buttons-area__emote_reverse {
+	width: 100px;
+	height: 100px;
+}
+
+.buttons-area__crouch {
+	position: absolute;
+	right: 250px;
+	bottom: 10px;
+}
+
+.buttons-area__jump {
+	position: absolute;
+	right: 150px;
+	bottom: 100px;
+}
+
+.buttons-area__action {
+	position: absolute;
+	right: 25px;
+	bottom: 150px;
+}
+
+.buttons-area__emote {
+	position: absolute;
+	right: 75px;
+	bottom: 10px;
+}
+
+.buttons-area__crouch_reverse {
+	position: absolute;
+	left: 250px;
+	bottom: 10px;
+}
+
+.buttons-area__jump_reverse {
+	position: absolute;
+	left: 150px;
+	bottom: 100px;
+}
+
+.buttons-area__action_reverse {
+	position: absolute;
+	left: 25px;
+	bottom: 150px;
+}
+
+.buttons-area__emote_reverse {
+	position: absolute;
+	left: 75px;
+	bottom: 10px;
+}

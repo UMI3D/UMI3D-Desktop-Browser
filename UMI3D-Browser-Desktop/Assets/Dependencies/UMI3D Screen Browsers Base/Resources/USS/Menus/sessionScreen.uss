@@ -1,0 +1,9 @@
+.session-screen__pin.textfield {
+    margin-left: 7px;
+	margin-right: 51px;
+    margin-bottom: 50px
+}
+
+.session-screen__button__navigation {
+    width: 100%;
+}

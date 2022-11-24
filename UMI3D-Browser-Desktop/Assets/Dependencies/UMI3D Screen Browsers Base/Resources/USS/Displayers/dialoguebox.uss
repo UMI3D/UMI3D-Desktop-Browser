@@ -1,0 +1,89 @@
+.dialoguebox {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-background-dialogueBox);
+}
+
+.dialoguebox__body {
+    border-left-width: var(--border-width-displayer);
+    border-right-width: var(--border-width-displayer);
+    border-top-width: var(--border-width-displayer);
+    border-bottom-width: var(--border-width-displayer);
+    border-top-left-radius: var(--border-radius-displayer);
+    border-bottom-left-radius: var(--border-radius-displayer);
+    border-top-right-radius: var(--border-radius-displayer);
+    border-bottom-right-radius: var(--border-radius-displayer);
+    background-color: var(--color-background-displayer);
+}
+
+.dialoguebox__main,
+.dialoguebox__choices-container {
+    margin-left: var(--margin-dialogueBox);
+    margin-right: var(--margin-dialogueBox);
+    margin-top: var(--margin-dialogueBox);
+    margin-bottom: var(--margin-dialogueBox);
+}
+
+.dialoguebox__title {
+    -unity-text-align: upper-center;
+    margin-left: var(--margin-dialogueBox);
+    margin-right: var(--margin-dialogueBox);
+    margin-top: var(--margin-dialogueBox);
+    margin-bottom: 0;
+}
+
+.dialoguebox__main {
+    flex-shrink: 1;
+    align-items: stretch;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.dialoguebox__message {
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.dialoguebox__choices-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialoguebox__choice {
+    width: var(--size-dialogueBox__choices);
+    margin-left: var(--margin-dialogueBox__choices);
+    margin-right: var(--margin-dialogueBox__choices);
+}
+
+.dialoguebox-menu .dialoguebox__body {
+    border-left-color: var(--color-border-menu-displayer);
+    border-right-color: var(--color-border-menu-displayer);
+    border-top-color: var(--color-border-menu-displayer);
+    border-bottom-color: var(--color-border-menu-displayer);
+}
+
+.dialoguebox-game .dialoguebox__body {
+    border-left-color: var(--color-border-game-displayer);
+    border-right-color: var(--color-border-game-displayer);
+    border-top-color: var(--color-border-game-displayer);
+    border-bottom-color: var(--color-border-game-displayer);
+}
+
+.dialoguebox-small .dialoguebox__body {
+    width: var(--size-small-dialogueBox);
+    height: var(--size-small-dialogueBox);
+}
+
+.dialoguebox-medium .dialoguebox__body {
+    width: var(--size-medium-dialogueBox);
+    height: var(--size-medium-dialogueBox);
+}
+
+.dialoguebox-large .dialoguebox__body {
+    width: var(--size-large-dialogueBox);
+    height: var(--size-large-dialogueBox);
+}

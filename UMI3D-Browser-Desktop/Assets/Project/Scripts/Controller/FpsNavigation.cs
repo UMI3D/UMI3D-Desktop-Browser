@@ -28,6 +28,16 @@ public class FpsNavigation : umi3d.baseBrowser.Navigation.BaseFPSNavigation
     {
         if (!isActive) return;
 
+        if (vehicleFreeHead)
+        {
+            state = State.FreeHead;
+
+            if (!(umi3d.baseBrowser.Controller.BaseCursor.Movement == umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free || umi3d.baseBrowser.Controller.BaseCursor.Movement == umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.FreeHidden))
+                HandleView();
+
+            return;
+        }
+
         (currentCapsuleBase, currentCapsuleEnd) = GetCapsuleSphereCenters();
 
         float height = transform.position.y;
@@ -69,22 +79,22 @@ public class FpsNavigation : umi3d.baseBrowser.Navigation.BaseFPSNavigation
     {
         float height = transform.position.y;
 
-        Vector2 move = Vector2.zero;
+        Movement = Vector2.zero;
 
         if (navigateTo)
         {
             var delta = navigationDestination - transform.position;
-            move = delta.normalized;
+            Movement = delta.normalized;
 
             if (Vector3.Distance(transform.position, navigationDestination) < .5f)
                 navigateTo = false;
         }
         else
         {
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Forward))) { move.x += 1; }
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Backward))) { move.x -= 1; }
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))) { move.y += 1; }
-            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Left))) { move.y -= 1; }
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Forward))) { Movement.x += 1; }
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Backward))) { Movement.x -= 1; }
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))) { Movement.y += 1; }
+            if (Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Left))) { Movement.y -= 1; }
             if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Forward))
                 || Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Backward))
                 || Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Right))
@@ -97,16 +107,16 @@ public class FpsNavigation : umi3d.baseBrowser.Navigation.BaseFPSNavigation
         switch (navigation)
         {
             case Navigation.Walking:
-                Walk(ref move, ref height);
+                Walk(ref Movement, ref height);
                 break;
             case Navigation.Flying:
-                Fly(ref move, ref height);
+                Fly(ref Movement, ref height);
                 break;
         }
 
-        move *= Time.deltaTime;
+        Movement *= Time.deltaTime;
 
-        Vector3 pos = transform.rotation * new Vector3(move.y, 0, move.x);
+        Vector3 pos = transform.rotation * new Vector3(Movement.y, 0, Movement.x);
         pos = ComputeMovement(pos);
         pos += transform.position;
         pos.y = height;

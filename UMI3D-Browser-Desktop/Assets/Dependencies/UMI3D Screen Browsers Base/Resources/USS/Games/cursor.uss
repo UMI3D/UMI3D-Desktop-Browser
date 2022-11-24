@@ -1,0 +1,22 @@
+.cursor {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	align-items: center;
+	justify-content: center;
+}
+
+.cursor > .cursor__target {
+	width: var(--size-cursor__target-enabled);
+	height: var(--size-cursor__target-enabled);
+}
+
+.cursor.cursor-enabled > .cursor__target {
+	background-image: var(--background-image-cursor__target-enabled);
+}
+
+.cursor.cursor-hover > .cursor__target {
+	background-image: var(--background-image-cursor__target-hover);
+}

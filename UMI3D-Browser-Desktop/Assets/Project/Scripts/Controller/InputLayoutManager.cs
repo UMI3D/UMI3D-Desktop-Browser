@@ -66,7 +66,10 @@ namespace BrowserDesktop.Controller
             Action5,
             Action6,
             Actions,
-               MuteAllMicrophone
+            MuteAllMicrophone,
+            Emote1,
+            Emote2,
+            Emote3
         }
 
         protected void Start()
@@ -129,6 +132,12 @@ namespace BrowserDesktop.Controller
                         return Instance.CurrentLayout.Action5;
                     case Input.Action6:
                         return Instance.CurrentLayout.Action6;
+                    case Input.Emote1:
+                        return Instance.CurrentLayout.Emote1;
+                    case Input.Emote2:
+                        return Instance.CurrentLayout.Emote2;
+                    case Input.Emote3:
+                        return Instance.CurrentLayout.Emote3;
                 }
             }
             return KeyCode.None;

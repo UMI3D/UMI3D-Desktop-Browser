@@ -90,7 +90,7 @@ namespace BrowserDesktop.Interaction
 
         protected virtual void Update()
         {
-            if (ConnectionMenu.Instance.isDisplayed || BaseCursor.Movement == BaseCursor.CursorMovement.Free)
+            if (/*ConnectionMenu.Instance.isDisplayed ||*/ BaseCursor.Movement == BaseCursor.CursorMovement.Free)
                 return;
 
             if (LastFrameButton != InputLayoutManager.GetInputCode(activationButton))
@@ -146,7 +146,7 @@ namespace BrowserDesktop.Interaction
                 };
                 UMI3DClientServer.SendData(eventdto, true);
                 risingEdgeEventSent = val;
-                DesktopController.IsInputHold = val;
+                //DesktopController.IsInputHold = val;
             }
             else if (typeof(T).IsAssignableFrom(typeof(EventTriggeredDto)))
             {

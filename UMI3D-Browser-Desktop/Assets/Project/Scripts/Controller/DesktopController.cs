@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using umi3d.cdk.interaction;
 using umi3d.cdk.userCapture;
 using umi3d.common.interaction;
-using umi3dDesktopBrowser.emotes;
 using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 
@@ -37,7 +36,7 @@ namespace BrowserDesktop.Controller
             get
             {
                 List<AbstractUMI3DInput> list = new List<AbstractUMI3DInput>();
-                list.AddRange(ManipulationInputs);
+                //list.AddRange(ManipulationInputs);
                 list.AddRange(KeyInputs);
                 list.AddRange(KeyMenuInputs);
                 list.AddRange(floatParameterInputs);
@@ -70,12 +69,31 @@ namespace BrowserDesktop.Controller
         protected override void Update()
         {
             base.Update();
-            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)) 
-                ||
-                Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
+            if 
+            (
+                Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)) 
+                || Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle))
+            )
             {
                 if (m_isCursorMovementFree) CloseMainMenu();
                 else OpenMainMenu();
+                OnSecondActionClicked();
+            }
+
+            if
+            (
+                Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainActionKey))
+            )
+            {
+                OnMainActionClicked();
+            }
+
+            if
+            (
+                Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)
+            )
+            {
+                OnEnterKeyPressed();
             }
 
             if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationDirect)) || Input.mouseScrollDelta.y < 0)
@@ -84,28 +102,26 @@ namespace BrowserDesktop.Controller
         }
         #endregion
 
-        protected override void OnMenuObjectContentChange()
-        {
-            if (m_objectMenu?.menu.Count > 0)
-            {
-                CursorDisplayer.DisplaySettingsCursor(true);
-                if (!s_isRightClickAdded)
-                {
-                    Shortcutbox_E.Instance.AddRightClickShortcut("Object menu");
-                    s_isRightClickAdded = true;
-                }
-            }
-            else
-            {
-                if (s_isRightClickAdded)
-                {
-                    Shortcutbox_E.Instance.RemoveRightClickShortcut();
-                    s_isRightClickAdded = false;
-                }
-                CursorDisplayer.DisplaySettingsCursor(false);
-                m_objectMenu.Collapse(true);
-            }
-        }
+        //protected override void OnMenuObjectContentChange()
+        //{
+        //    if (m_objectMenu?.menu.Count > 0)
+        //    {
+        //        if (!s_isRightClickAdded)
+        //        {
+        //            Shortcutbox_E.Instance.AddRightClickShortcut("Object menu");
+        //            s_isRightClickAdded = true;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (s_isRightClickAdded)
+        //        {
+        //            Shortcutbox_E.Instance.RemoveRightClickShortcut();
+        //            s_isRightClickAdded = false;
+        //        }
+        //        m_objectMenu.Collapse(true);
+        //    }
+        //}
 
         #region Menu handler
         /// <summary>
@@ -113,14 +129,14 @@ namespace BrowserDesktop.Controller
         /// </summary>
         public void OpenMainMenu()
         {
-            umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
+            //umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
             if (MenuBar_E.AreThereToolboxes) MenuBar_E.Instance.Display();
             Settingbox_E.Instance.Display();
-            if (m_objectMenu.menu.Count > 0)
-            {
-                m_objectMenu.Expand(true);
-                IsFreeAndHovering = true;
-            }
+            //if (m_objectMenu.menu.Count > 0)
+            //{
+            //    m_objectMenu.Expand(true);
+            //    IsFreeAndHovering = true;
+            //}
         }
 
         /// <summary>
@@ -128,7 +144,7 @@ namespace BrowserDesktop.Controller
         /// </summary>
         public void CloseMainMenu()
         {
-            umi3d.baseBrowser.Controller.BaseCursor.UnSetMovement(this);
+            //umi3d.baseBrowser.Controller.BaseCursor.UnSetMovement(this);
             if (MenuBar_E.Instance.IsDisplaying) MenuBar_E.Instance.Hide();
             if (Settingbox_E.Instance.IsDisplaying) Settingbox_E.Instance.Hide();
             if (EmoteWindow_E.Instance.IsDisplaying) EmoteWindow_E.Instance.Hide();
@@ -139,20 +155,22 @@ namespace BrowserDesktop.Controller
         #region Input
         public override AbstractUMI3DInput FindInput(ManipulationDto manip, DofGroupDto dof, bool unused = true)
         {
-            ManipulationGroup group = ManipulationInputs.Find(i => i.IsAvailableFor(manip));
-            if (group == null)
-            {
-                group = ManipulationGroup.Instanciate(this, ManipulationActionInput, dofGroups, transform);
-                if (group == null)
-                {
-                    Debug.LogWarning("find manip input FAILED");
-                    return null;
-                }
-                group.bone = interactionBoneType;
-                ManipulationInputs.Add(group);
-            }
-            group.Menu = m_objectMenu?.menu;
-            return group;
+            Debug.Log("TODO : Find input for manipulation dto");
+            //ManipulationGroup group = ManipulationInputs.Find(i => i.IsAvailableFor(manip));
+            //if (group == null)
+            //{
+            //    group = ManipulationGroup.Instanciate(this, ManipulationActionInput, dofGroups, transform);
+            //    if (group == null)
+            //    {
+            //        Debug.LogWarning("find manip input FAILED");
+            //        return null;
+            //    }
+            //    group.bone = interactionBoneType;
+            //    ManipulationInputs.Add(group);
+            //}
+            //group.Menu = m_objectMenu?.menu;
+            //return group;
+            return null;
         }
 
         public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)

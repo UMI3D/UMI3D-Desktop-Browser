@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.PackageManager.UI" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.Overlays" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
-  <xs:complexType name="DropdownElementType">
+  <xs:complexType name="TabbedViewType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
@@ -21,7 +21,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="DropdownElement" substitutionGroup="engine:VisualElement" type="DropdownElementType" />
+  <xs:element name="TabbedView" substitutionGroup="engine:VisualElement" type="TabbedViewType" />
   <xs:complexType name="TabButtonType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -45,7 +45,7 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="TabButton" substitutionGroup="engine:VisualElement" type="TabButtonType" />
-  <xs:complexType name="TabbedViewType">
+  <xs:complexType name="DropdownElementType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
@@ -65,5 +65,5 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="TabbedView" substitutionGroup="engine:VisualElement" type="TabbedViewType" />
+  <xs:element name="DropdownElement" substitutionGroup="engine:VisualElement" type="DropdownElementType" />
 </xs:schema>

@@ -1,0 +1,4 @@
+.game__data__screen-box__displayer {
+	flex-direction: row;
+	justify-content: space-between;
+}
