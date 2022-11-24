@@ -330,7 +330,7 @@ public class CustomSettingsResolution : CustomSettingScreen
         switch (value)
         {
             case UIZoom.Small:
-                DPIValueChanged(120f);
+                DPIValueChanged(170f);
                 DPISlider.Hide();
                 break;
             case UIZoom.Medium:
@@ -338,7 +338,7 @@ public class CustomSettingsResolution : CustomSettingScreen
                 DPISlider.Hide();
                 break;
             case UIZoom.Large:
-                DPIValueChanged(170f);
+                DPIValueChanged(120f);
                 DPISlider.Hide();
                 break;
             case UIZoom.Custom:

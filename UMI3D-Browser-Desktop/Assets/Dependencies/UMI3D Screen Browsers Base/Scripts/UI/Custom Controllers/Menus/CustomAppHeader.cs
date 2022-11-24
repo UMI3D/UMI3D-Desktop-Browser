@@ -24,19 +24,24 @@ public class CustomAppHeader : VisualElement, ICustomElement
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetMenusFolderPath}/appHeader";
     public virtual string USSCustomClassName => "app__header";
 
+    public virtual string USSCustomClassButtonsBox => $"{USSCustomClassName}-buttons__box";
     public virtual string USSCustomClassWindowButton => $"{USSCustomClassName}-window__button";
     public virtual string USSCustomClassMinimize => $"{USSCustomClassName}-minimize__icon";
     public virtual string USSCustomClassMaximize => $"{USSCustomClassName}-maximize__icon";
     public virtual string USSCustomClassClose => $"{USSCustomClassName}-close__icon";
+    public virtual string USSCustomClassContainer => $"{USSCustomClassName}-container";
 
+    public VisualElement AppButtonsBox = new VisualElement { name = "app-button-box" };
     public CustomButton Minimize;
     public VisualElement Minimize_Icon = new VisualElement { name = "mimimize-icon" };
     public CustomButton Maximize;
     public VisualElement Maximize_Icon = new VisualElement { name = "maximize-icon" };
     public CustomButton Close;
     public VisualElement Close_Icon = new VisualElement { name = "close-icon" };
+    public VisualElement Container = new VisualElement { name = "container" };
 
     protected bool m_hasBeenInitialized;
+    protected bool m_isSet = false;
 
     public virtual void InitElement()
     {
@@ -51,12 +56,14 @@ public class CustomAppHeader : VisualElement, ICustomElement
         }
         AddToClassList(USSCustomClassName);
 
+        AppButtonsBox.AddToClassList(USSCustomClassButtonsBox);
         Minimize.AddToClassList(USSCustomClassWindowButton);
         Maximize.AddToClassList(USSCustomClassWindowButton);
         Close.AddToClassList(USSCustomClassWindowButton);
         Minimize_Icon.AddToClassList(USSCustomClassMinimize);
         Maximize_Icon.AddToClassList(USSCustomClassMaximize);
         Close_Icon.AddToClassList(USSCustomClassClose);
+        Container.AddToClassList(USSCustomClassContainer);
 
         Minimize.Size = ElementSize.Small;
         Maximize.Size = ElementSize.Small;
@@ -64,20 +71,28 @@ public class CustomAppHeader : VisualElement, ICustomElement
 
         Close.Type = ButtonType.Danger;
 
-        Add(Minimize);
+        Add(Container);
+        Add(AppButtonsBox);
+        AppButtonsBox.Add(Minimize);
         Minimize.Add(Minimize_Icon);
-        Add(Maximize);
+        AppButtonsBox.Add(Maximize);
         Maximize.Add(Maximize_Icon);
-        Add(Close);
+        AppButtonsBox.Add(Close);
         Close.Add(Close_Icon);
     }
 
     public virtual void Set()
     {
+        m_isSet = false;
+
         if (!m_hasBeenInitialized)
         {
             InitElement();
             m_hasBeenInitialized = true;
         }
+
+        m_isSet = true;
     }
+
+    public override VisualElement contentContainer => m_isSet ? Container : this;
 }
