@@ -215,9 +215,14 @@ public class CustomBottomArea : VisualElement, ICustomElement
 
     public virtual bool DisplayNotifUsersArea
     {
-        get => CustomGame.S_displayNotifUserArea;
+        get
+        {
+            if (Application.isPlaying) return CustomGame.S_displayNotifUserArea;
+            else return m_displayNotifAndUserArea;
+        }
         set
         {
+            if (!Application.isPlaying) m_displayNotifAndUserArea = value;
             if (value) NotifAndUsers.AddToClassList(USSCustomClassButtonSelected);
             else NotifAndUsers.RemoveFromClassList(USSCustomClassButtonSelected);
         }
@@ -266,7 +271,7 @@ public class CustomBottomArea : VisualElement, ICustomElement
     protected bool m_isMicSettingsOpen;
     protected bool m_isSoundSettingsOpen;
     protected bool m_isEmoteOpen;
-
+    protected bool m_displayNotifAndUserArea;
     protected bool m_displayEmoteWindow;
 
     public virtual void InitElement()

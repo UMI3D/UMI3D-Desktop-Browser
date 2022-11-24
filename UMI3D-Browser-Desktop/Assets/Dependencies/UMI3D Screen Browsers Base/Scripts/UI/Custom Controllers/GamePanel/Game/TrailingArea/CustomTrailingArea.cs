@@ -100,9 +100,14 @@ public class CustomTrailingArea : VisualElement, ICustomElement
 
     public virtual bool DisplayNotifUsersArea
     {
-        get => CustomGame.S_displayNotifUserArea;
+        get
+        {
+            if (Application.isPlaying) return CustomGame.S_displayNotifUserArea;
+            else return m_displayNotifAndUserArea;
+        }
         set
         {
+            if (!Application.isPlaying) m_displayNotifAndUserArea = value;
             if (value)
             {
                 this.AddIfNotInHierarchy(NotifAndUserArea);
@@ -238,6 +243,7 @@ public class CustomTrailingArea : VisualElement, ICustomElement
     protected ControllerEnum m_controller;
     protected bool m_displayObjectMenu;
     protected bool m_displayEmoteWindow;
+    protected bool m_displayNotifAndUserArea;
     protected Vector2 m_initialDownPosition;
     protected Vector2 m_localPosition;
     protected bool m_cameraMoved;
