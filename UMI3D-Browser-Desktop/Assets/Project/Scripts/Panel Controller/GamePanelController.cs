@@ -46,6 +46,7 @@ public class GamePanelController : umi3d.baseBrowser.connection.BaseGamePanelCon
         Windows_Manager.DisplayDialogueBoxToQuit = () =>
         {
             var dialogueBox = new umi3d.commonScreen.Displayer.Dialoguebox_C();
+            dialogueBox.Size = ElementSize.Small;
             dialogueBox.Type = DialogueboxType.Confirmation;
             dialogueBox.Title = "Close application";
             dialogueBox.Message = "Do you want to close the application?";
