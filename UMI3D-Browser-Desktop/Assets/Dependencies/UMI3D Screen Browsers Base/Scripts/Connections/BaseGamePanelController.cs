@@ -25,6 +25,7 @@ using umi3d.commonScreen.Displayer;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static umi3d.baseBrowser.Controller.BaseCursor;
+using static umi3d.baseBrowser.emotes.EmoteManager;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -289,7 +290,6 @@ namespace umi3d.baseBrowser.connection
             };
             BaseConnectionProcess.Instance.UserCountUpdated += count =>
             {
-                UnityEngine.Debug.Log($"user compte update {count}");
                 Game.NotifAndUserArea.UserList.RefreshList();
                 Game.NotifAndUserArea.OnUserCountUpdated(count);
                 Menu.GameData.ParticipantCount = count;
@@ -347,6 +347,20 @@ namespace umi3d.baseBrowser.connection
             };
 
             BaseController.EnterKeyPressed += () => m_next?.Invoke();
+
+            BaseController.EmoteKeyPressed += index =>
+            {
+                if
+                (
+                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
+                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
+                    || BaseCursor.Movement == CursorMovement.Free
+                ) return;
+
+                if (Game.BottomArea.EmoteWindow.Emotes == null || Game.BottomArea.EmoteWindow.Emotes.Count <= index) return;
+                var emote = Game.BottomArea.EmoteWindow.Emotes[index];
+                emote.PlayEmote(emote);
+            };
         }
 
         float fps = 30;

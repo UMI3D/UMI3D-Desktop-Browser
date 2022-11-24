@@ -85,7 +85,6 @@ public abstract class CustomUserList : VisualElement, ICustomElement
 
     public virtual void RefreshList()
     {
-        UnityEngine.Debug.Log($"refresh");
         m_users = UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList
             .Where(u => !u.isClient)
             .Select(u => CreateUser(u))
