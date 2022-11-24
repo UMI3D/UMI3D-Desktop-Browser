@@ -79,6 +79,7 @@ namespace umi3d.baseBrowser.Controller
         public static event System.Action MainActionClicked;
         public static event System.Action SecondActionClicked;
         public static event System.Action EnterKeyPressed;
+        public static event System.Action<int> EmoteKeyPressed;
 
         //[SerializeField]
         //protected cdk.menu.view.MenuDisplayManager m_objectMenu;
@@ -147,6 +148,7 @@ namespace umi3d.baseBrowser.Controller
         public static void OnMainActionClicked() => MainActionClicked?.Invoke();
         public static void OnSecondActionClicked() => SecondActionClicked?.Invoke();
         public static void OnEnterKeyPressed() => EnterKeyPressed?.Invoke();
+        public static void OnEmoteKeyPressed(int value) => EmoteKeyPressed?.Invoke(value);
 
         #region Monobehaviour Life Cycle
         protected virtual void Awake()

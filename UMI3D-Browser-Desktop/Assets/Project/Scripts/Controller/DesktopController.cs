@@ -96,6 +96,13 @@ namespace BrowserDesktop.Controller
                 OnEnterKeyPressed();
             }
 
+            if(Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Emote1)))
+                OnEmoteKeyPressed(0);
+            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Emote2)))
+                OnEmoteKeyPressed(1);
+            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Emote3)))
+                OnEmoteKeyPressed(2);
+
             if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationDirect)) || Input.mouseScrollDelta.y < 0)
                 m_navigationDirect++;
             else if (Input.mouseScrollDelta.y > 0) m_navigationDirect--;

@@ -142,7 +142,6 @@ namespace umi3d.commonScreen.Displayer
             {
                 textfield.schedule.Execute(() =>
                 {
-                    UnityEngine.Debug.Log($"{!textfield.canGrabFocus} {textfield.hierarchy.parent != null}");
                     textfield.Focus();
                 });
             });
