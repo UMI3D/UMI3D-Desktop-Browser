@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
@@ -30,7 +31,11 @@ namespace umi3d.commonScreen.game
             if (TrailingArea == null) TrailingArea = new TrailingArea_C();
             if (TopArea == null) TopArea = new TopArea_C();
             if (BottomArea == null) BottomArea = new commonDesktop.game.BottomArea_C();
-            if (NotifAndUserArea == null) NotifAndUserArea = TrailingArea.NotifAndUserArea;
+            if (NotifAndUserArea == null)
+            {
+                if (Application.isPlaying) NotifAndUserArea = NotifAndUsersArea_C.Instance;
+                else NotifAndUserArea = new NotifAndUsersArea_C();
+            }
 
             base.InitElement();
         }

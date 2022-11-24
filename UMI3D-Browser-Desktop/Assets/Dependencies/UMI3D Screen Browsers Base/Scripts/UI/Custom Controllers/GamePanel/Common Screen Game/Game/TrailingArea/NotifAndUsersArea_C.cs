@@ -23,6 +23,22 @@ namespace umi3d.commonScreen.game
 {
     public class NotifAndUsersArea_C : CustomNotifAndUsersArea
     {
+        public static NotifAndUsersArea_C Instance
+        {
+            get
+            {
+                if (s_instance != null) return s_instance;
+                
+                s_instance = new NotifAndUsersArea_C();
+                return s_instance;
+            }
+            set
+            {
+                s_instance = value;
+            }
+        }
+        protected static NotifAndUsersArea_C s_instance;
+
         public class NotifAndUsersSegmentedPicker: Displayer.SegmentedPicker_C<NotificationsOrUsers>
         {
             public override string Value 
