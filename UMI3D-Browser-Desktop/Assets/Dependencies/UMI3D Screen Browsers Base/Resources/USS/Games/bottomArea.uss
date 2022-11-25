@@ -1,61 +1,73 @@
-.bottom-area,
-.bottom-area__bar {
+.bottom__area,
+.bottom__area-bar {
 	left: 0;
 	right: 0;
 	bottom: 0;
 }
 
-.bottom-area__bar {
+.bottom__area-bar {
 	flex-direction: row-reverse;
 	background-color: var(--background-color-game);
 }
 
-.bottom-area__right-box {
+.bottom__area-right__box {
 	flex-direction: row;
 	right: var(--size-margin-and-padding-game);
 }
 
-.bottom-area__avatar > .button__body,
-.bottom-area__emote > .button__body,
-.bottom-area__mic > .button__body,
-.bottom-area__sound > .button__body,
-.bottom-area__notif-users > .button__body {
+.bottom__area-avatar > .button__body,
+.bottom__area-emote > .button__body,
+.bottom__area-mic > .button__body,
+.bottom__area-sound > .button__body,
+.bottom__area-notif__users > .button__body {
 	width: 52px;
+	margin-left: 0;
+	margin-right: 0;
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
-.bottom-area__avatar-icon__on {
+.bottom__area-avatar__icon-on {
 	background-image: var(--background-image-avatar-on);
 }
 
-.bottom-area__avatar-icon__off {
+.bottom__area-avatar__icon-off {
 	background-image: var(--background-image-avatar-off);
 }
 
-.bottom-area__emote-icon {
+.bottom__area-emote {
 	background-image: var(--background-image-emote);
 }
 
-.bottom-area__mic-icon__on {
+.bottom__area-mic__icon-on {
 	background-image: var(--background-image-mic-on);
 }
 
-.bottom-area__mic-icon__off {
+.bottom__area-mic__icon-off {
 	background-image: var(--background-image-mic-off);
 }
 
-.bottom-area__sound-icon__on {
+.bottom__area-sound__icon-on {
 	background-image: var(--background-image-sound-on);
 }
 
-.bottom-area__sound-icon__off {
+.bottom__area-sound__icon-off {
 	background-image: var(--background-image-sound-off);
 }
 
-.bottom-area__button-selected.button {
+.bottom__area-notif__users__icon-on {
+	background-image: var(--background-image-notif__users-on);
+}
+
+.bottom__area-notif__users__icon-off {
+	background-image: var(--background-image-notif__users-off);
+}
+
+.bottom__area-button__selected.button {
 	background-color: var(--border-color-game);
 }
 
-.bottom-area__emote-window {
+.bottom__area-emote__window {
 	position: absolute;
 	right: 0;
 	bottom: 70px;
