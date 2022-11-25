@@ -63,10 +63,14 @@ namespace umi3d.baseBrowser.Navigation
 
         private void OnDisable()
         {
-            UMI3DEnvironmentLoader.Instance.onNodePartOfNavmeshSet -= SetPartOfNavmesh;
-            UMI3DEnvironmentLoader.Instance.onNodeTraversableSet -= SetTraversable;
+            if (UMI3DEnvironmentLoader.Exists)
+                UMI3DEnvironmentLoader.Instance.onNodePartOfNavmeshSet -= SetPartOfNavmesh;
 
-            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnLeaving.RemoveListener(Reset);
+            if (UMI3DEnvironmentLoader.Exists)
+                UMI3DEnvironmentLoader.Instance.onNodeTraversableSet -= SetTraversable;
+
+            if (cdk.collaboration.UMI3DCollaborationClientServer.Exists)
+                cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnLeaving.RemoveListener(Reset);
 
             VolumePrimitiveManager.UnsubscribeToPrimitiveCreation(OnPrimitiveCreated);
             VolumePrimitiveManager.UnsubscribeToPrimitiveDelete(OnPrimitiveDeleted);
