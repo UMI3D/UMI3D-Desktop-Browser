@@ -37,6 +37,9 @@ public class BuildHelper : EditorWindow
     const string scriptablePath = scriptablePathNoExt + ".asset";
     //static string scriptablePath => Application.dataPath + _scriptablePath;
 
+    const string owner = "UMI3D";
+    const string repo = "UMI3D-Desktop-Browser";
+
     BuildHelperData _data;
 
     public string old => BrowserVersion.Version;
@@ -115,6 +118,13 @@ public class BuildHelper : EditorWindow
 
         _data = GetScriptable();
         GetEditor();
+
+        RefreshBranch();
+    }
+
+    async void RefreshBranch()
+    {
+        _data.Branch = await GetBranchName();
     }
 
     void OnGUI()
@@ -126,6 +136,15 @@ public class BuildHelper : EditorWindow
         UnityEngine.Debug.Assert(editor != null);
 
         editor?.OnInspectorGUI();
+
+        EditorGUILayout.BeginHorizontal();
+
+        EditorGUILayout.LabelField("Current Branch");
+        EditorGUILayout.LabelField(_data.Branch);
+        if (GUILayout.Button("Refresh Branch"))
+            RefreshBranch();
+
+        EditorGUILayout.EndHorizontal();
 
         GUILayout.Label("Build Version", EditorStyles.boldLabel);
 
@@ -172,8 +191,6 @@ public class BuildHelper : EditorWindow
         if (GUILayout.Button("Clean All And Build"))
             CleanComputeBuild(true);
         EditorGUILayout.EndHorizontal();
-        if (GUILayout.Button("Test"))
-            Test();
 
         GUI.enabled = true;
         ScrollPos = EditorGUILayout.BeginScrollView(ScrollPos);
@@ -181,11 +198,6 @@ public class BuildHelper : EditorWindow
         EditorGUILayout.TextArea(info);
         GUI.enabled = true;
         EditorGUILayout.EndScrollView();
-    }
-
-    async void Test()
-    {
-
     }
 
     async void CleanComputeBuild(bool cleanAll, bool comit = true)
@@ -206,10 +218,13 @@ public class BuildHelper : EditorWindow
 
             await ExecuteISCC(_data.InstallerFilePath);
 
-            if(comit)
-            await CommitAll();
+            if (comit)
+            {
+                await CommitAll();
+                ReleaseGithub.Release(_data.Token, newVersion, _data.Branch, new System.Collections.Generic.List<(string path, string name)> { outputFile }, CompatibleUmi3dVersion, owner, repo);
+            }
             //Open folder
-            OpenFile(outputFile);
+            OpenFile(outputFile.path);
         }
         catch (Exception e)
         {
@@ -239,6 +254,17 @@ public class BuildHelper : EditorWindow
     #endregion
 
     #region BuildUtils
+
+    async Task<string> GetBranchName()
+    {
+        string gitCommand = "git";
+        string gitAddArgument = @"branch --show-current";
+        string answer = null;
+
+        await ExecuteCommand(gitCommand, gitAddArgument, (s) => answer += s, (s) => answer += s);
+
+        return answer;
+    }
 
     async Task CommitAll()
     {
@@ -282,7 +308,7 @@ public class BuildHelper : EditorWindow
         File.Copy(_data.LicenseFilePath, buildFolder + "/license.txt", true);
     }
 
-    private string UpdateInstaller()
+    private (string path,string name) UpdateInstaller()
     {
         var InstallerPath = _data.InstallerFilePath;
         string setupText = File.ReadAllText(InstallerPath);
@@ -294,7 +320,7 @@ public class BuildHelper : EditorWindow
         Regex DirReg = new Regex(patternOutputDir, RegexOptions.Multiline | RegexOptions.Singleline);
         var md = DirReg.Match(setupText);
         string path = md.Groups[1].Captures[0].Value + "\\" + md.Groups[2].Captures[0].Value + ".exe";
-        return path;
+        return (path, md.Groups[2].Captures[0].Value + ".exe");
     }
 
     async Task Build(string buildFolder)

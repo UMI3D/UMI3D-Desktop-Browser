@@ -25,6 +25,8 @@ using static UnityEngine.GraphicsBuffer;
 //[CreateAssetMenu(fileName = "BuildHelperData", menuName = "Build Helper/Build Helper Data", order = 1)]
 public class BuildHelperData : ScriptableObject
 {
+    public string Branch;
+    public string Token;
     public string BuildFolderPath;
     public string InstallerFilePath;
     public string LicenseFilePath;
@@ -49,6 +51,12 @@ public class BuildHelperDataEditor : Editor
         if (data.display)
         {
             bool changed = false;
+
+            EditorGUILayout.LabelField("Token");
+            EditorGUILayout.BeginHorizontal();
+            data.Token = TextField(data.Token, ref changed);
+            EditorGUILayout.EndHorizontal();
+
             EditorGUILayout.LabelField("Build Folder");
             EditorGUILayout.BeginHorizontal();
             data.BuildFolderPath = TextField(data.BuildFolderPath, ref changed);
