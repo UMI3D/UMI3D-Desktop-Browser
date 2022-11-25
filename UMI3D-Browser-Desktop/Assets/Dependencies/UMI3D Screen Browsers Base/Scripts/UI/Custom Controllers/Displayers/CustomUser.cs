@@ -185,21 +185,20 @@ public abstract class CustomUser : VisualElement, ICustomElement
                 revert: isRevert
             );
         };
-        m_manipulator.ClickedDown += () =>
-        {
-            AnimateInOutSlider(false);
-        };
-        m_manipulator.ClickedUp += () =>
-        {
-            AnimateInOutSlider(true);
-        };
-        m_manipulator.MovedWithInfo += (evnt, localPosition) =>
+        void ComputeVolume(Vector2 localPosition)
         {
             var xPercent = localPosition.x * 100f / User_Background.layout.width;
             xPercent = Mathf.Clamp(xPercent, 0, 100) * userVolumeRangePercent;
             Volume = xPercent;
             UserNameVisual.text = $"{m_volume.ToString("0.00")} %";
+        }
+        m_manipulator.ClickedDownWithInfo += (evnt, localPosition) =>
+        {
+            AnimateInOutSlider(false);
+            ComputeVolume(localPosition);
         };
+        m_manipulator.ClickedUp += () => AnimateInOutSlider(true);
+        m_manipulator.MovedWithInfo += (evnt, localPosition) => ComputeVolume(localPosition);
         User_Audio_Slider.style.height = Length.Percent(10);
 
         Mute.Type = ButtonType.Invisible;
