@@ -30,6 +30,8 @@ public abstract class CustomEmoteWindow : CustomForm
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomEmoteWindow;
 
@@ -45,18 +47,31 @@ public abstract class CustomEmoteWindow : CustomForm
     public virtual string USSCustomClassEmote => "emote__window";
     public virtual string USSCustomClassEmoteIcon => $"{USSCustomClassEmote}-icon";
 
-    public List<Emote> Emotes;
-    public List<CustomButton> EmoteButtons = new List<CustomButton>();
+    public static List<Emote> Emotes;
+    public static List<CustomButton> EmoteButtons = new List<CustomButton>();
 
     public override void InitElement()
     {
         base.InitElement();
         AddToClassList(USSCustomClassEmote);
+
+        WillUpdateFilter += UpdateFilter;
     }
 
     public override void Set() => Set(ElementCategory.Game, "Emotes", null);
 
-    public void OnEmoteReceived(List<Emote> emotes)
+    ~CustomEmoteWindow()
+    {
+        WillUpdateFilter = null;
+    }
+
+    protected static System.Func<CustomButton> CreateButton;
+
+    #region Implementation
+
+    public static event System.Action WillUpdateFilter;
+
+    public static void OnEmoteReceived(List<Emote> emotes)
     {
         Reset();
         Emotes = emotes;
@@ -73,12 +88,10 @@ public abstract class CustomEmoteWindow : CustomForm
             emoteButton.Type = ButtonType.Invisible;
 
             var icon = new VisualElement { name = "icon" };
-            icon.AddToClassList(USSCustomClassEmoteIcon);
             icon.style.backgroundImage = new StyleBackground(emote.icon);
             emoteButton.Add(icon);
 
-            Add(emoteButton);
-            if (!emote.available) emoteButton.Hide();
+            WillUpdateFilter?.Invoke();
 
             emoteButton.Body.RegisterCallback<GeometryChangedEvent>(evt => emoteButton.Body.style.width = emoteButton.layout.height);
 
@@ -86,19 +99,31 @@ public abstract class CustomEmoteWindow : CustomForm
         }
     }
 
-    public void Reset()
+    public static void Reset()
     {
         Emotes = null;
         EmoteButtons.ForEach(emote => emote.RemoveFromHierarchy());
         EmoteButtons.Clear();
     }
 
-    public void OnUpdateEmote(Emote emote)
+    public static void OnUpdateEmote(Emote emote)
     {
         var emoteButton = EmoteButtons.Find(button => (Emote)button.userData == emote);
         if (emote.available) emoteButton.Display();
         else emoteButton.Hide();
     }
 
-    protected abstract CustomButton CreateButton();
+    public virtual void UpdateFilter()
+    {
+        if (this.FindRoot() == null) return;
+        foreach (var emoteButton in EmoteButtons)
+        {
+            var emote = (Emote)emoteButton.userData;
+            Add(emoteButton);
+            if (!emote.available) emoteButton.Hide();
+            emoteButton.Q("icon").AddToClassList(USSCustomClassEmoteIcon);
+        }
+    }
+
+    #endregion
 }

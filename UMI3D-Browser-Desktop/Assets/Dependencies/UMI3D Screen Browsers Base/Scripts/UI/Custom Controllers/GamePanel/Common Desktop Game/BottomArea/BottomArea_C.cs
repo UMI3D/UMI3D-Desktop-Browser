@@ -37,7 +37,11 @@ namespace umi3d.commonDesktop.game
             if (Sound == null) Sound = new commonScreen.Displayer.Button_C();
             if (NotifAndUsers == null) NotifAndUsers = new commonScreen.Displayer.Button_C();
 
-            if (EmoteWindow == null) EmoteWindow = new EmoteWindow_C();
+            if (EmoteWindow == null)
+            {
+                if (Application.isPlaying) EmoteWindow = EmoteWindow_C.Instance;
+                else EmoteWindow = new EmoteWindow_C();
+            }
 
             base.InitElement();
         }
