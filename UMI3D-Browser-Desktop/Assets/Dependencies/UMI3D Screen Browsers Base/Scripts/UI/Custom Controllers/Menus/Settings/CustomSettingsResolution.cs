@@ -84,9 +84,6 @@ public class CustomSettingsResolution : CustomSettingScreen
 
     public CustomToggle ReduceAnimation;
 
-    
-    
-
     public override void InitElement()
     {
         base.InitElement();
@@ -155,14 +152,10 @@ public class CustomSettingsResolution : CustomSettingScreen
         #endregion
 #endif
 
-
         ReduceAnimation.label = "Reduce animation";
         ReduceAnimation.value = false;
         ReduceAnimation.RegisterValueChangedCallback((ce_value) => ReduceAnimationValueChanged(ce_value.newValue));
         ScrollView.Add(ReduceAnimation);
-
-        
-
 
         if (TryGetResolutionData(out Data))
         {
