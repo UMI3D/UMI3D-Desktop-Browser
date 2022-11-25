@@ -13,6 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using umi3d.commonMobile.game;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
@@ -25,10 +27,19 @@ namespace umi3d.commonScreen.game
 
         public override void InitElement()
         {
-            if (NotifAndUserArea == null) NotifAndUserArea = new NotifAndUsersArea_C();
+            if (NotifAndUserArea == null)
+            {
+                if (Application.isPlaying) NotifAndUserArea = NotifAndUsersArea_C.Instance;
+                else NotifAndUserArea = new NotifAndUsersArea_C();
+            }
             if (ObjectMenu == null) ObjectMenu = new Container.Form_C();
-            if (EmoteWindow == null) EmoteWindow = new commonMobile.game.EmoteWindow_C();
             if (ButtonsArea == null) ButtonsArea = new commonMobile.game.ButtonArea_C();
+
+            if (EmoteWindow == null)
+            {
+                if (Application.isPlaying) EmoteWindow = EmoteWindow_C.Instance;
+                else EmoteWindow = new EmoteWindow_C();
+            }
 
             base.InitElement();
         }
