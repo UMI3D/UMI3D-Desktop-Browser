@@ -41,10 +41,9 @@ namespace umi3d.commonMobile.game
             if (TitleLabel == null) TitleLabel = new commonScreen.Displayer.Text_C();
             if (VScroll == null) VScroll = new commonScreen.Container.ScrollView_C();
 
+            CreateButton = () => new commonScreen.Displayer.Button_C();
+
             base.InitElement();
         }
-
-        protected override CustomButton CreateButton()
-            => new commonScreen.Displayer.Button_C();
     }
 }

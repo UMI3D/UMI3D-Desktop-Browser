@@ -257,11 +257,11 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
 
     protected void DisplayMouseAndKeyboardEmoteWindow(bool value)
     {
-
+        BottomArea.ButtonSelected = value ? CustomBottomArea.BottomBarButton.Emote : CustomBottomArea.BottomBarButton.None;
     }
 
     protected void DisplayTouchEmoteWindow(bool value)
     {
-
+        TrailingArea.DisplayEmoteWindow = value;
     }
 }
