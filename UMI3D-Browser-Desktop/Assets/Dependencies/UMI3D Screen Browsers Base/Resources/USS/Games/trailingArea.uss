@@ -40,12 +40,3 @@
 	top: 0;
 	bottom: 0;
 }
-
-.ttrailing__area-emote__window.emote__window .button__body {
-	flex-grow: 0;
-}
-
-.trailing__area-emote__window.emote__window .emote__window-icon {
-	width: 100%;
-	height: 100%;
-}
