@@ -53,6 +53,9 @@ public abstract class CustomUser : VisualElement, ICustomElement
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying)
+                return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomUser;
 
@@ -102,8 +105,6 @@ public abstract class CustomUser : VisualElement, ICustomElement
             value = Mathf.Clamp(value, 0f, 100f * userVolumeRangePercent);
             m_volume = value;
             User_Audio_Slider.style.width = Length.Percent(value / userVolumeRangePercent);
-            if (value == 0f) MuteValueChanged?.Invoke(true);
-            else if (m_isMute) MuteValueChanged?.Invoke(true);
         }
     }
 
@@ -201,7 +202,7 @@ public abstract class CustomUser : VisualElement, ICustomElement
         Mute.Shape = ButtonShape.Round;
         Mute.clicked += () => MuteValueChanged?.Invoke(!m_isMute);
 
-        MuteValueChanged += value => User?.SetMicrophoneStatus(value);
+        MuteValueChanged += value => User?.SetMicrophoneStatus(!value);
 
         Add(User_Background);
         User_Background.Add(User_Audio_Slider);
