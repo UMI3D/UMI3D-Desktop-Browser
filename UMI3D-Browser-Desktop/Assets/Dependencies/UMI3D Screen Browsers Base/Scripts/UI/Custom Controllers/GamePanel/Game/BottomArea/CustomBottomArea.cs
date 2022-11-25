@@ -231,30 +231,41 @@ public class CustomBottomArea : VisualElement, ICustomElement
         set
         {
             if (!Application.isPlaying) m_displayNotifAndUserArea = value;
-            if (value) NotifAndUsers.AddToClassList(USSCustomClassButtonSelected);
-            else NotifAndUsers.RemoveFromClassList(USSCustomClassButtonSelected);
+            if (value)
+            {
+                NotifAndUsers.AddToClassList(USSCustomClassButtonSelected);
+                NotifAndUsers.RemoveFromClassList(USSCustomClassNotifAndUsers_Icon_Off);
+                NotifAndUsers.AddToClassList(USSCustomClassNotifAndUsers_Icon_On);
+            }
+            else
+            {
+                NotifAndUsers.RemoveFromClassList(USSCustomClassButtonSelected);
+                NotifAndUsers.RemoveFromClassList(USSCustomClassNotifAndUsers_Icon_On);
+                NotifAndUsers.AddToClassList(USSCustomClassNotifAndUsers_Icon_Off);
+            }
         }
     }
 
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/bottomArea";
-    public virtual string USSCustomClassName => "bottom-area";
-    public virtual string USSCustomClassBar => $"{USSCustomClassName}__bar";
-    public virtual string USSCustomClassRightBox => $"{USSCustomClassName}__right-box";
-    public virtual string USSCustomClassAvatar => $"{USSCustomClassName}__avatar";
-    public virtual string USSCustomClassEmote => $"{USSCustomClassName}__emote";
-    public virtual string USSCustomClassMic => $"{USSCustomClassName}__mic";
-    public virtual string USSCustomClassSound => $"{USSCustomClassName}__sound";
-    public virtual string USSCustomClassNotifAndUsers => $"{USSCustomClassName}__notif-users";
-    public virtual string USSCustomClassAvatar_Icon_on => $"{USSCustomClassName}__avatar-icon__on";
-    public virtual string USSCustomClassEmote_Icon => $"{USSCustomClassName}__emote-icon";
-    public virtual string USSCustomClassMic_Icon_on => $"{USSCustomClassName}__mic-icon__on";
-    public virtual string USSCustomClassSound_Icon_on => $"{USSCustomClassName}__sound-icon__on";
-    public virtual string USSCustomClassAvatar_Icon_off => $"{USSCustomClassName}__avatar-icon__off";
-    public virtual string USSCustomClassMic_Icon_off => $"{USSCustomClassName}__mic-icon__off";
-    public virtual string USSCustomClassSound_Icon_off => $"{USSCustomClassName}__sound-icon__off";
-    public virtual string USSCustomClassButtonSelected => $"{USSCustomClassName}__button-selected";
-    public virtual string USSCustomClassEmote_Window => $"{USSCustomClassName}__emote-window";
+    public virtual string USSCustomClassName => "bottom__area";
+    public virtual string USSCustomClassBar => $"{USSCustomClassName}-bar";
+    public virtual string USSCustomClassRightBox => $"{USSCustomClassName}-right__box";
+    public virtual string USSCustomClassAvatar => $"{USSCustomClassName}-avatar";
+    public virtual string USSCustomClassEmote => $"{USSCustomClassName}-emote";
+    public virtual string USSCustomClassMic => $"{USSCustomClassName}-mic";
+    public virtual string USSCustomClassSound => $"{USSCustomClassName}-sound";
+    public virtual string USSCustomClassNotifAndUsers => $"{USSCustomClassName}-notif__users";
+    public virtual string USSCustomClassNotifAndUsers_Icon_On => $"{USSCustomClassName}-notif__users__icon-on";
+    public virtual string USSCustomClassNotifAndUsers_Icon_Off => $"{USSCustomClassName}-notif__users__icon-off";
+    public virtual string USSCustomClassAvatar_Icon_on => $"{USSCustomClassName}-avatar__icon-on";
+    public virtual string USSCustomClassMic_Icon_on => $"{USSCustomClassName}-mic__icon-on";
+    public virtual string USSCustomClassSound_Icon_on => $"{USSCustomClassName}-sound__icon-on";
+    public virtual string USSCustomClassAvatar_Icon_off => $"{USSCustomClassName}-avatar__icon-off";
+    public virtual string USSCustomClassMic_Icon_off => $"{USSCustomClassName}-mic__icon-off";
+    public virtual string USSCustomClassSound_Icon_off => $"{USSCustomClassName}-sound__icon-off";
+    public virtual string USSCustomClassButtonSelected => $"{USSCustomClassName}-button__selected";
+    public virtual string USSCustomClassEmote_Window => $"{USSCustomClassName}-emote__window";
 
     public System.Action<bool> NotifUsersValueChanged;
 
@@ -301,7 +312,6 @@ public class CustomBottomArea : VisualElement, ICustomElement
         Mic.AddToClassList(USSCustomClassMic);
         Sound.AddToClassList(USSCustomClassSound);
         NotifAndUsers.AddToClassList(USSCustomClassNotifAndUsers);
-        Emote.AddToClassList(USSCustomClassEmote_Icon);
         EmoteWindow.AddToClassList(USSCustomClassEmote_Window);
 
         Avatar.name = "avatar";
