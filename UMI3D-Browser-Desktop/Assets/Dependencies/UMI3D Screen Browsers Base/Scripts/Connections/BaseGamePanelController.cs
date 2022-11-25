@@ -25,7 +25,6 @@ using umi3d.commonScreen.Displayer;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static umi3d.baseBrowser.Controller.BaseCursor;
-using static umi3d.baseBrowser.emotes.EmoteManager;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -63,7 +62,11 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void InitLoader()
         {
-            Loader.Version = UMI3DVersion.version;
+#if UNITY_STANDALONE
+            Loader.Version = BrowserDesktop.BrowserVersion.Version;
+#else
+            Loader.Version = Application.version;
+#endif
             Loader.Loading.Title = "Connection";
             Loader.Loading.BackText = "Leave";
             Loader.Loading.Button_Back.clicked += BaseConnectionProcess.Instance.Leave;
@@ -143,26 +146,18 @@ namespace umi3d.baseBrowser.connection
                     }).Every(60000);
                 }).ExecuteLater(60000);
             };
-
-            Game.TrailingArea.ButtonsArea.Emote.clicked += () => Game.TrailingArea.DisplayEmoteWindow = !Game.TrailingArea.DisplayEmoteWindow;
-            Game.BottomArea.Emote.clicked += () => Game.BottomArea.ButtonSelected = CustomBottomArea.BottomBarButton.Emote;
+            
             EmoteManager.Instance.EmoteReceived += emotes => 
             {
                 Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
-                Game.TrailingArea.EmoteWindow.OnEmoteReceived(emotes);
-                Game.BottomArea.EmoteWindow.OnEmoteReceived(emotes);
+                CustomEmoteWindow.OnEmoteReceived(emotes);
             };
             EmoteManager.Instance.NoEmoteReeived += () => 
             {
                 Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
-                Game.TrailingArea.EmoteWindow.Reset();
-                Game.BottomArea.EmoteWindow.Reset();
+                CustomEmoteWindow.Reset();
             };
-            EmoteManager.Instance.EmoteUpdated += emote =>
-            {
-                Game.TrailingArea.EmoteWindow.OnUpdateEmote(emote);
-                Game.BottomArea.EmoteWindow.OnUpdateEmote(emote);
-            };
+            EmoteManager.Instance.EmoteUpdated += emote => CustomEmoteWindow.OnUpdateEmote(emote);
 
             ObjectMenu.GetContainer = () => Game.TrailingArea.ObjectMenu;
             ObjectMenu.DisplayObjectMenu = value =>
@@ -172,8 +167,14 @@ namespace umi3d.baseBrowser.connection
             };
             ObjectMenu.InsertDisplayer = (index, displayer) => Game.TrailingArea.ObjectMenu.Insert(index, displayer);
             ObjectMenu.RemoveDisplayer = displayer => Game.TrailingArea.ObjectMenu.Remove(displayer);
+
+#if UNITY_STANDALONE
+            Menu.Version = BrowserDesktop.BrowserVersion.Version;
+#else
+            Menu.Version = Application.version;
+#endif
         }
-        
+
         protected override void Awake()
         {
             base.Awake();
@@ -320,12 +321,12 @@ namespace umi3d.baseBrowser.connection
                 {
                     if (BaseCursor.Movement == CursorMovement.Free)
                     {
-                        Game.BottomArea.DisplayNotifUsersArea = false;
+                        Game.DisplayNotifUsersArea = false;
                         BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
                     }
                     else
                     {
-                        Game.BottomArea.DisplayNotifUsersArea = true;
+                        Game.DisplayNotifUsersArea = true;
                         BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
                     }
                 }
@@ -357,8 +358,8 @@ namespace umi3d.baseBrowser.connection
                     || BaseCursor.Movement == CursorMovement.Free
                 ) return;
 
-                if (Game.BottomArea.EmoteWindow.Emotes == null || Game.BottomArea.EmoteWindow.Emotes.Count <= index) return;
-                var emote = Game.BottomArea.EmoteWindow.Emotes[index];
+                if (CustomEmoteWindow.Emotes == null || CustomEmoteWindow.Emotes.Count <= index) return;
+                var emote = CustomEmoteWindow.Emotes[index];
                 emote.PlayEmote(emote);
             };
         }

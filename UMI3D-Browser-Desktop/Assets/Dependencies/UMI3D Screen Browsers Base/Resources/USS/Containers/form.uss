@@ -34,3 +34,17 @@
 .form.form-game > .form__title {
     background-color: var(--color-border-game-container);
 }
+
+.form.emote__window .button__label {
+	min-width: auto;
+	flex-grow: 1;
+}
+
+.form.emote__window .button__body {
+	flex-grow: 0;
+}
+
+.form.emote__window .emote__window-icon {
+	width: 100%;
+	height: 100%;
+}

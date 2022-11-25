@@ -100,12 +100,14 @@ public class CustomTrailingArea : VisualElement, ICustomElement
 
     public virtual bool DisplayNotifUsersArea
     {
-        get => S_displayNotifUsersArea;
+        get
+        {
+            if (Application.isPlaying) return CustomGame.S_displayNotifUserArea;
+            else return m_displayNotifAndUserArea;
+        }
         set
         {
-            if (S_displayNotifUsersArea == value) return;
-            if (value && m_controller != ControllerEnum.MouseAndKeyboard) return;
-            S_displayNotifUsersArea = value;
+            if (!Application.isPlaying) m_displayNotifAndUserArea = value;
             if (value)
             {
                 this.AddIfNotInHierarchy(NotifAndUserArea);
@@ -123,8 +125,8 @@ public class CustomTrailingArea : VisualElement, ICustomElement
                     () => NotifAndUserArea.style.width = Length.Percent(60),
                     "width",
                     0.5f,
-                    revert: !S_displayNotifUsersArea,
-                    callback: S_displayNotifUsersArea ? null : NotifAndUserArea.RemoveFromHierarchy
+                    revert: !value,
+                    callback: value ? null : NotifAndUserArea.RemoveFromHierarchy
                 );
             });
         }
@@ -160,14 +162,19 @@ public class CustomTrailingArea : VisualElement, ICustomElement
 
     public virtual bool DisplayEmoteWindow
     {
-        get => m_displayEmoteWindow;
+        get
+        {
+            if (Application.isPlaying) return CustomGame.S_displayEmoteWindow;
+            else return m_displayEmoteWindow;
+        }
         set
         {
-            m_displayEmoteWindow = value;
+            if (!Application.isPlaying) m_displayEmoteWindow = value;
             if (value)
             {
                 this.AddIfNotInHierarchy(EmoteWindow);
                 EmoteWindow.style.visibility = Visibility.Hidden;
+                EmoteWindow.UpdateFilter();
             }
             EmoteWindow.schedule.Execute(() =>
             {
@@ -179,8 +186,8 @@ public class CustomTrailingArea : VisualElement, ICustomElement
                     () => EmoteWindow.style.width = Length.Percent(70),
                     "width",
                     0.5f,
-                    revert: !m_displayEmoteWindow,
-                    callback: m_displayEmoteWindow ? null : EmoteWindow.RemoveFromHierarchy
+                    revert: !value,
+                    callback: value ? null : EmoteWindow.RemoveFromHierarchy
                 );
             });
         }
@@ -235,14 +242,13 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         }
     }
 
-    public static bool S_displayNotifUsersArea;
-
     public static System.Action LeftHandModeUpdated;
     protected bool m_leftHand;
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
     protected bool m_displayObjectMenu;
     protected bool m_displayEmoteWindow;
+    protected bool m_displayNotifAndUserArea;
     protected Vector2 m_initialDownPosition;
     protected Vector2 m_localPosition;
     protected bool m_cameraMoved;
@@ -285,7 +291,9 @@ public class CustomTrailingArea : VisualElement, ICustomElement
 
         ObjectMenu.name = "object-menu";
         ObjectMenu.Category = ElementCategory.Game;
-        ObjectMenu.Title = "Object Menu";
+        ObjectMenu.Title = "Contextual Menu";
+
+        ButtonsArea.Emote.clicked += () => DisplayEmoteWindow = !DisplayEmoteWindow;
     }
 
     public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false, false, false, false);
