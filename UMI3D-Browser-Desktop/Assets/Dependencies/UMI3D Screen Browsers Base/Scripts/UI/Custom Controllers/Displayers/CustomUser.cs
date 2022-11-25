@@ -97,6 +97,10 @@ public abstract class CustomUser : VisualElement, ICustomElement
         }
     }
 
+    /// <summary>
+    /// Volume is between 0 and userVolumeRangePercent * 100.
+    /// <see cref="userVolumeRangePercent"/>
+    /// </summary>
     public virtual float Volume
     {
         get => m_isMute ? 0f : m_volume;
@@ -213,7 +217,7 @@ public abstract class CustomUser : VisualElement, ICustomElement
         Mute_Background.Add(Mute_Icon);
     }
 
-    public virtual void Set() => Set(null, false, 0f);
+    public virtual void Set() => Set(null, false, 100f);
 
     public virtual void Set(string name, bool isMute, float volume)
     {

@@ -37,6 +37,8 @@ namespace umi3d.commonScreen.game
             var newUser = new Displayer.User_C();
             newUser.User = user;
             newUser.UserName = user.login;
+            newUser.IsMute = !user.microphoneStatus;
+            newUser.Volume = 100f;
             return newUser;
         }
     }
