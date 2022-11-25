@@ -159,6 +159,7 @@ public class CustomBottomArea : VisualElement, ICustomElement
                     Emote.RemoveFromClassList(USSCustomClassButtonSelected);
                     Mic.RemoveFromClassList(USSCustomClassButtonSelected);
                     Sound.RemoveFromClassList(USSCustomClassButtonSelected);
+                    DisplayEmoteWindow = false;
                     break;
                 case BottomBarButton.Emote:
                     Avatar.RemoveFromClassList(USSCustomClassButtonSelected);
@@ -172,12 +173,14 @@ public class CustomBottomArea : VisualElement, ICustomElement
                     Emote.RemoveFromClassList(USSCustomClassButtonSelected);
                     Mic.AddToClassList(USSCustomClassButtonSelected);
                     Sound.RemoveFromClassList(USSCustomClassButtonSelected);
+                    DisplayEmoteWindow = false;
                     break;
                 case BottomBarButton.Sound:
                     Avatar.RemoveFromClassList(USSCustomClassButtonSelected);
                     Emote.RemoveFromClassList(USSCustomClassButtonSelected);
                     Mic.RemoveFromClassList(USSCustomClassButtonSelected);
                     Sound.AddToClassList(USSCustomClassButtonSelected);
+                    DisplayEmoteWindow = false;
                     break;
                 default:
                     break;
@@ -187,14 +190,19 @@ public class CustomBottomArea : VisualElement, ICustomElement
 
     protected virtual bool DisplayEmoteWindow
     {
-        get => m_displayEmoteWindow;
+        get
+        {
+            if (Application.isPlaying) return CustomGame.S_displayEmoteWindow;
+            else return m_displayEmoteWindow;
+        }
         set
         {
-            m_displayEmoteWindow = value;
+            if (!Application.isPlaying) m_displayEmoteWindow = value;
             if (value)
             {
                 this.AddIfNotInHierarchy(EmoteWindow);
                 EmoteWindow.style.visibility = Visibility.Hidden;
+                EmoteWindow.UpdateFilter();
             }
             EmoteWindow.schedule.Execute(() =>
             {
@@ -206,8 +214,8 @@ public class CustomBottomArea : VisualElement, ICustomElement
                     () => EmoteWindow.style.width = 400,
                     "width",
                     0.5f,
-                    revert: !m_displayEmoteWindow,
-                    callback: m_displayEmoteWindow ? null : EmoteWindow.RemoveFromHierarchy
+                    revert: !value,
+                    callback: value ? null : EmoteWindow.RemoveFromHierarchy
                 );
             });
         }
@@ -313,6 +321,7 @@ public class CustomBottomArea : VisualElement, ICustomElement
         Sound.Type = ButtonType.Invisible;
         NotifAndUsers.Type = ButtonType.Invisible;
 
+        Emote.clicked += () => ButtonSelected = BottomBarButton.Emote;
         NotifAndUsers.clicked += () => NotifUsersValueChanged?.Invoke(!CustomGame.S_displayNotifUserArea);
 
         Add(BottomBar);
