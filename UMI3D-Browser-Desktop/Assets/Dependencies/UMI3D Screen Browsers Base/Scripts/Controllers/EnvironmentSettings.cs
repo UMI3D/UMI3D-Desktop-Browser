@@ -83,19 +83,28 @@ public class AvatarSetting : ISetting
     public bool IsOn
     {
         get => (userTracking != null) ? userTracking.SendTracking : false;
-        private set
+        set
         {
             userTracking?.SetTrackingSending(value);
-            UMI3DCollaborationEnvironmentLoader.Instance.GetClientUser()?.SetAvatarStatus(value);
+
+            if (UMI3DCollaborationEnvironmentLoader.Exists)
+                UMI3DCollaborationEnvironmentLoader.Instance.GetClientUser()?.SetAvatarStatus(value);
         }
     }
     public event Action<bool> StatusChanged;
 
-    private UMI3DClientUserTracking userTracking => UMI3DClientUserTracking.Instance;
+    private UMI3DClientUserTracking userTracking {
+        get
+        {
+            if (UMI3DClientUserTracking.Exists)
+                return UMI3DClientUserTracking.Instance;
+            else
+                return null;
+        }
+    }
 
     public AvatarSetting()
     {
-        IsOn = true;
         Start();
     }
 
@@ -321,6 +330,8 @@ public sealed class EnvironmentSettings : inetum.unityUtils.SingleBehaviour<Envi
     void Start()
     {
         UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => {
+            AvatarSetting.IsOn = true;
+
             m_environmentLoaded = true;
         });
         initialized = true;
