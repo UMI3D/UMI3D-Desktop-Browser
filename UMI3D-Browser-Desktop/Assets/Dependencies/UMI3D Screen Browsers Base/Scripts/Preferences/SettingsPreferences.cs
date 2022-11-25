@@ -65,6 +65,7 @@ namespace umi3d.baseBrowser.preferences
             public bool HDR;
             public float RenderScale;
             public UIZoom UISize;
+            public float DPI;
             public bool ReduceAnimation;
         }
 

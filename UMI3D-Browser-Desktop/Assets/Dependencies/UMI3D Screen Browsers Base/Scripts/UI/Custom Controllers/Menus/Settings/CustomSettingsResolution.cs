@@ -170,6 +170,7 @@ public class CustomSettingsResolution : CustomSettingScreen
                 ReduceAnimationValueChanged(Data.ReduceAnimation);
             }
             UISizeValueChanged(Data.UISize);
+            if (Data.UISize == UIZoom.Custom) DPIValueChanged(Data.DPI);
         }
         else
         {
@@ -350,8 +351,8 @@ public class CustomSettingsResolution : CustomSettingScreen
     {
         DPISlider.SetValueWithoutNotify(value);
         UIPanelSettings.referenceDpi = value;
-        //Data.RenderScale = value;
-        //StoreResolutionData(Data);
+        Data.DPI = value;
+        StoreResolutionData(Data);
     }
 
     public void ReduceAnimationValueChanged(bool value)
