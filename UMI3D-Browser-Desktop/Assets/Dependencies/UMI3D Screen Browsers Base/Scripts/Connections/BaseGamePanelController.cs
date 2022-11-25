@@ -361,7 +361,6 @@ namespace umi3d.baseBrowser.connection
                 ) return;
 
                 if (CustomEmoteWindow.Emotes == null || CustomEmoteWindow.Emotes.Count <= index) return;
-                UnityEngine.Debug.Log($"emote {index}");
                 var emote = CustomEmoteWindow.Emotes[index];
                 emote.PlayEmote(emote);
             };
