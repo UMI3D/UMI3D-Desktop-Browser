@@ -148,26 +148,18 @@ namespace umi3d.baseBrowser.connection
                     }).Every(60000);
                 }).ExecuteLater(60000);
             };
-
-            Game.TrailingArea.ButtonsArea.Emote.clicked += () => Game.TrailingArea.DisplayEmoteWindow = !Game.TrailingArea.DisplayEmoteWindow;
-            Game.BottomArea.Emote.clicked += () => Game.BottomArea.ButtonSelected = CustomBottomArea.BottomBarButton.Emote;
+            
             EmoteManager.Instance.EmoteReceived += emotes => 
             {
                 Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
-                Game.TrailingArea.EmoteWindow.OnEmoteReceived(emotes);
-                Game.BottomArea.EmoteWindow.OnEmoteReceived(emotes);
+                CustomEmoteWindow.OnEmoteReceived(emotes);
             };
             EmoteManager.Instance.NoEmoteReeived += () => 
             {
                 Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
-                Game.TrailingArea.EmoteWindow.Reset();
-                Game.BottomArea.EmoteWindow.Reset();
+                CustomEmoteWindow.Reset();
             };
-            EmoteManager.Instance.EmoteUpdated += emote =>
-            {
-                Game.TrailingArea.EmoteWindow.OnUpdateEmote(emote);
-                Game.BottomArea.EmoteWindow.OnUpdateEmote(emote);
-            };
+            EmoteManager.Instance.EmoteUpdated += emote => CustomEmoteWindow.OnUpdateEmote(emote);
 
             ObjectMenu.GetContainer = () => Game.TrailingArea.ObjectMenu;
             ObjectMenu.DisplayObjectMenu = value =>
@@ -331,12 +323,12 @@ namespace umi3d.baseBrowser.connection
                 {
                     if (BaseCursor.Movement == CursorMovement.Free)
                     {
-                        Game.BottomArea.DisplayNotifUsersArea = false;
+                        Game.DisplayNotifUsersArea = false;
                         BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
                     }
                     else
                     {
-                        Game.BottomArea.DisplayNotifUsersArea = true;
+                        Game.DisplayNotifUsersArea = true;
                         BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
                     }
                 }
@@ -368,8 +360,8 @@ namespace umi3d.baseBrowser.connection
                     || BaseCursor.Movement == CursorMovement.Free
                 ) return;
 
-                if (Game.BottomArea.EmoteWindow.Emotes == null || Game.BottomArea.EmoteWindow.Emotes.Count <= index) return;
-                var emote = Game.BottomArea.EmoteWindow.Emotes[index];
+                if (CustomEmoteWindow.Emotes == null || CustomEmoteWindow.Emotes.Count <= index) return;
+                var emote = CustomEmoteWindow.Emotes[index];
                 emote.PlayEmote(emote);
             };
         }
