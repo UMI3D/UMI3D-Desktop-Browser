@@ -95,7 +95,6 @@ public abstract class CustomUserList : VisualElement, ICustomElement
 
     public virtual void UpdateUser(UMI3DUser user)
     {
-        UnityEngine.Debug.Log($"update User {user.login} {user.microphoneStatus}");
         var _u = m_users.FirstOrDefault(U => (U.User == user));
         if (_u == null) RefreshList();
         else _u.IsMute = !user.microphoneStatus;
