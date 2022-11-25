@@ -43,13 +43,14 @@ public class CustomSettingsAudio : CustomSettingScreen
         {
             if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
                 umi3d.cdk.collaboration.MicrophoneListener.Instance.debugSampling = true;
-            OnLoopBackValueChanged(true);
+            OnLoopBackValueChanged(false);
         });
 
         RegisterCallback<DetachFromPanelEvent>(ce =>
         {
             if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
                 umi3d.cdk.collaboration.MicrophoneListener.Instance.debugSampling = false;
+            OnLoopBackValueChanged(false);
         });
 
         this.schedule.Execute(() =>
@@ -102,15 +103,6 @@ public class CustomSettingsAudio : CustomSettingScreen
 
         LoopBackButton.ClickedDown += () => OnLoopBackValueChanged(!m_loopBack);
         ScrollView.Add(LoopBackButton);
-
-        if (TryGetAudiorData(out Data))
-        {
-            OnGeneralVolumeValueChanged(Data.GeneralVolume);
-        }
-        else
-        {
-            OnGeneralVolumeValueChanged(10f);
-        }
     }
 
     public override void Set() => Set("Audio");
@@ -134,6 +126,7 @@ public class CustomSettingsAudio : CustomSettingScreen
 
         if (TryGetAudiorData(out Data))
         {
+            OnGeneralVolumeValueChanged(Data.GeneralVolume);
             if (mics.Contains(Data.CurrentMic)) OnMicDropdownValueChanged(Data.CurrentMic);
             OnNoiseReductionValueChanged(Data.NoiseReduction);
             OnMicModeValueChanged(Data.Mode);
@@ -143,12 +136,11 @@ public class CustomSettingsAudio : CustomSettingScreen
         }
         else
         {
-            if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
-            {
-                var mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
-                if (mics.Contains(mic)) OnMicDropdownValueChanged(mic);
-            }
-            else OnMicDropdownValueChanged(null);
+            OnGeneralVolumeValueChanged(10f);
+            string mic;
+            if (umi3d.cdk.collaboration.MicrophoneListener.Exists) mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
+            else mic = MicDropdown.choices.FirstOrDefault();
+            OnMicDropdownValueChanged(mic);
             OnNoiseReductionValueChanged(true);
             OnMicModeValueChanged(MicModeEnum.AlwaysSend);
             OnAmplitudeValueChanged(0f);
@@ -286,7 +278,7 @@ public class CustomSettingsAudio : CustomSettingScreen
     protected void OnLoopBackValueChanged(bool value)
     {
         m_loopBack = value;
-        LoopBackButton.text = m_loopBack ? "Loop back off" : "Loop back on";
+        LoopBackButton.text = m_loopBack ? "Loop back on" : "Loop back off";
         if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
             umi3d.cdk.collaboration.MicrophoneListener.Instance.useLocalLoopback = m_loopBack;
     }

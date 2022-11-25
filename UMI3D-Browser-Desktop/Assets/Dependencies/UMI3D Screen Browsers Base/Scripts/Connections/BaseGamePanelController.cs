@@ -24,9 +24,7 @@ using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEngine.WSA;
 using static umi3d.baseBrowser.Controller.BaseCursor;
-using static umi3d.baseBrowser.emotes.EmoteManager;
 
 namespace umi3d.baseBrowser.connection
 {
