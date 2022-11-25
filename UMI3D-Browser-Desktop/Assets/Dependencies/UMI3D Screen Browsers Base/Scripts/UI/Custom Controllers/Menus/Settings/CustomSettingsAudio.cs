@@ -13,10 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using BeardedManStudios.Threading;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -182,7 +179,7 @@ public class CustomSettingsAudio : CustomSettingScreen
         NoiseReductionToggle.SetValueWithoutNotify(value);
 
         if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"connect noise reduction toggle");
+            umi3d.cdk.collaboration.MicrophoneListener.Instance.UseNoiseReduction = value;
 
         Data.NoiseReduction = value;
         StoreAudioData(Data);

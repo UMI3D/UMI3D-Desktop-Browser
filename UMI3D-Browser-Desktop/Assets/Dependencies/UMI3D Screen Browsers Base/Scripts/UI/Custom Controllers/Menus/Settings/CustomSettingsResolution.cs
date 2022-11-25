@@ -78,7 +78,7 @@ public class CustomSettingsResolution : CustomSettingScreen
     public ResolutionDisplayer UISize;
 
     public CustomSlider DPISlider;
-    //public ResolutionDisplayer RenderScale;
+    public ResolutionDisplayer DPI;
 
     #endregion
 
@@ -147,7 +147,8 @@ public class CustomSettingsResolution : CustomSettingScreen
         DPISlider.value = UIPanelSettings.referenceDpi;
         DPISlider.showInputField = true;
         DPISlider.RegisterValueChangedCallback(value => DPIValueChanged(value.newValue));
-        ScrollView.Add(DPISlider);
+        DPI = new ResolutionDisplayer(DPISlider, "Dots per inch: Lower means the UI will be larger.");
+        ScrollView.Add(DPI.Box);
 
         #endregion
 #endif
@@ -169,6 +170,7 @@ public class CustomSettingsResolution : CustomSettingScreen
                 ReduceAnimationValueChanged(Data.ReduceAnimation);
             }
             UISizeValueChanged(Data.UISize);
+            if (Data.UISize == UIZoom.Custom) DPIValueChanged(Data.DPI);
         }
         else
         {
@@ -324,18 +326,18 @@ public class CustomSettingsResolution : CustomSettingScreen
         {
             case UIZoom.Small:
                 DPIValueChanged(170f);
-                DPISlider.Hide();
+                DPI.Box.Hide();
                 break;
             case UIZoom.Medium:
                 DPIValueChanged(150f);
-                DPISlider.Hide();
+                DPI.Box.Hide();
                 break;
             case UIZoom.Large:
                 DPIValueChanged(120f);
-                DPISlider.Hide();
+                DPI.Box.Hide();
                 break;
             case UIZoom.Custom:
-                DPISlider.Display();
+                DPI.Box.Display();
                 break;
             default:
                 break;
@@ -349,8 +351,8 @@ public class CustomSettingsResolution : CustomSettingScreen
     {
         DPISlider.SetValueWithoutNotify(value);
         UIPanelSettings.referenceDpi = value;
-        //Data.RenderScale = value;
-        //StoreResolutionData(Data);
+        Data.DPI = value;
+        StoreResolutionData(Data);
     }
 
     public void ReduceAnimationValueChanged(bool value)
