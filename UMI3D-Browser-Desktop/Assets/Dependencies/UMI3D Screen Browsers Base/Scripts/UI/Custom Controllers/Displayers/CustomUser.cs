@@ -97,6 +97,10 @@ public abstract class CustomUser : VisualElement, ICustomElement
         }
     }
 
+    /// <summary>
+    /// Volume is between 0 and userVolumeRangePercent * 100.
+    /// <see cref="userVolumeRangePercent"/>
+    /// </summary>
     public virtual float Volume
     {
         get => m_isMute ? 0f : m_volume;
@@ -181,21 +185,20 @@ public abstract class CustomUser : VisualElement, ICustomElement
                 revert: isRevert
             );
         };
-        m_manipulator.ClickedDown += () =>
-        {
-            AnimateInOutSlider(false);
-        };
-        m_manipulator.ClickedUp += () =>
-        {
-            AnimateInOutSlider(true);
-        };
-        m_manipulator.MovedWithInfo += (evnt, localPosition) =>
+        void ComputeVolume(Vector2 localPosition)
         {
             var xPercent = localPosition.x * 100f / User_Background.layout.width;
             xPercent = Mathf.Clamp(xPercent, 0, 100) * userVolumeRangePercent;
             Volume = xPercent;
             UserNameVisual.text = $"{m_volume.ToString("0.00")} %";
+        }
+        m_manipulator.ClickedDownWithInfo += (evnt, localPosition) =>
+        {
+            AnimateInOutSlider(false);
+            ComputeVolume(localPosition);
         };
+        m_manipulator.ClickedUp += () => AnimateInOutSlider(true);
+        m_manipulator.MovedWithInfo += (evnt, localPosition) => ComputeVolume(localPosition);
         User_Audio_Slider.style.height = Length.Percent(10);
 
         Mute.Type = ButtonType.Invisible;
@@ -213,7 +216,7 @@ public abstract class CustomUser : VisualElement, ICustomElement
         Mute_Background.Add(Mute_Icon);
     }
 
-    public virtual void Set() => Set(null, false, 0f);
+    public virtual void Set() => Set(null, false, 100f);
 
     public virtual void Set(string name, bool isMute, float volume)
     {
