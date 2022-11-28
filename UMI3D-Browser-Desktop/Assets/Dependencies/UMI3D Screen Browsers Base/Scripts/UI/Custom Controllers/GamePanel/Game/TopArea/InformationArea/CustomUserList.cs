@@ -91,10 +91,14 @@ public abstract class CustomUserList : VisualElement, ICustomElement
 
     public virtual void RefreshList()
     {
-        m_users = UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList
+        var usersList = UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList
             .Where(u => !u.isClient)
             .Select(u => CreateUser(u))
-            .ToArray();
+            .ToList();
+
+        usersList.Sort((user0, user1) => string.Compare(user0.UserName, user1.UserName));
+            
+        m_users = usersList.ToArray();
 
         Filter();
     }
