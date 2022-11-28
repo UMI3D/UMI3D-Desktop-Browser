@@ -76,6 +76,7 @@ namespace umi3d.baseBrowser.Controller
         public MenuAsset ObjectMenu;
         public MouseData mouseData;
 
+        public static event System.Action EscClicked;
         public static event System.Action MainActionClicked;
         public static event System.Action SecondActionClicked;
         public static event System.Action EnterKeyPressed;
@@ -145,6 +146,7 @@ namespace umi3d.baseBrowser.Controller
         public static bool CanProcess = false;
         #endregion
 
+        public static void OnEscClicked() => EscClicked?.Invoke();
         public static void OnMainActionClicked() => MainActionClicked?.Invoke();
         public static void OnSecondActionClicked() => SecondActionClicked?.Invoke();
         public static void OnEnterKeyPressed() => EnterKeyPressed?.Invoke();
@@ -153,6 +155,7 @@ namespace umi3d.baseBrowser.Controller
         #region Monobehaviour Life Cycle
         protected virtual void Awake()
         {
+            EscClicked = null;
             MainActionClicked = null;
             SecondActionClicked = null;
             EnterKeyPressed = null;

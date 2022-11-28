@@ -67,7 +67,6 @@ public abstract class CustomGamePanel : VisualElement, ICustomElement
         get => m_currentGameView;
         set
         {
-            UnSetMovement?.Invoke(this);
             m_currentGameView = value;
             ViewStack.Clear();
             ViewStack.Push(value);
@@ -145,7 +144,6 @@ public abstract class CustomGamePanel : VisualElement, ICustomElement
         }
     }
 
-    public System.Action<object> UnSetMovement;
     public CustomLoader Loader;
     public CustomGameMenu Menu;
     public CustomGame Game;
@@ -205,13 +203,9 @@ public abstract class CustomGamePanel : VisualElement, ICustomElement
                 break;
             case GameViews.GameMenu:
                 gameView = Menu;
-                if (setMovement) Menu.SetMovement?.Invoke(this);
-                if (!setMovement) Menu.UnSetMovement?.Invoke(this);
                 break;
             case GameViews.Game:
                 gameView = Game;
-                if (setMovement) Game.SetMovement?.Invoke(this);
-                if (!setMovement) Game.UnSetMovement?.Invoke(this);
                 break;
             default:
                 gameView = null;
