@@ -109,6 +109,8 @@ public abstract class CustomUser : VisualElement, ICustomElement
             value = Mathf.Clamp(value, 0f, 100f * userVolumeRangePercent);
             m_volume = value;
             User_Audio_Slider.style.width = Length.Percent(value / userVolumeRangePercent);
+            if (value == 0f) IsMute = true;
+            else IsMute = false;
         }
     }
 
@@ -124,7 +126,7 @@ public abstract class CustomUser : VisualElement, ICustomElement
     public virtual string USSCustomClassMute_On => $"{USSCustomClassName}__mute-icon__on";
     public virtual string USSCustomClassMute_Off => $"{USSCustomClassName}__mute-icon__off";
 
-    public event System.Action<bool> MuteValueChanged;
+    public event System.Action<bool> LocalMuteValueChanged;
     public UMI3DUser User;
     public CustomText UserNameVisual;
     public VisualElement User_Background = new VisualElement { name = "user-background" };
@@ -143,12 +145,14 @@ public abstract class CustomUser : VisualElement, ICustomElement
         {
             if (AudioManager.Exists)
             {
+                if (value != 0f) m_volumeWhenMute = value;
                 var vg = UserVolumeToVG(value);
                 AudioManager.Instance.SetGainForUser(User, vg.gain);
                 AudioManager.Instance.SetVolumeForUser(User, vg.volume);
             }
         }
     }
+    protected float m_volumeWhenMute;
 
     protected TouchManipulator2 m_manipulator = new TouchManipulator2(null, 0, 0);
 
@@ -203,9 +207,17 @@ public abstract class CustomUser : VisualElement, ICustomElement
 
         Mute.Type = ButtonType.Invisible;
         Mute.Shape = ButtonShape.Round;
-        Mute.clicked += () => MuteValueChanged?.Invoke(!m_isMute);
+        Mute.clicked += () => LocalMuteValueChanged?.Invoke(!m_isMute);
 
-        MuteValueChanged += value => User?.SetMicrophoneStatus(!value);
+        ///Globaly mute: to implement in the future.
+        //MuteValueChanged += value => User?.SetMicrophoneStatus(!value);
+        LocalMuteValueChanged += value =>
+        {
+            if (value) Volume = 0f;
+            else if (m_volumeWhenMute < 10f) Volume = 50f;
+            else Volume = m_volumeWhenMute;
+            IsMute = value;
+        };
 
         Add(User_Background);
         User_Background.Add(User_Audio_Slider);

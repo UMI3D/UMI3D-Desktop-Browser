@@ -147,12 +147,12 @@ namespace umi3d.baseBrowser.connection
                 }).ExecuteLater(60000);
             };
             
-            EmoteManager.Instance.EmoteReceived += emotes => 
+            EmoteManager.Instance.EmoteConfigReceived += emotes => 
             {
                 Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
-                CustomEmoteWindow.OnEmoteReceived(emotes);
+                CustomEmoteWindow.OnEmoteConfigReceived(emotes);
             };
-            EmoteManager.Instance.NoEmoteReeived += () => 
+            EmoteManager.Instance.NoEmoteConfigReeived += () => 
             {
                 Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
                 CustomEmoteWindow.Reset();
