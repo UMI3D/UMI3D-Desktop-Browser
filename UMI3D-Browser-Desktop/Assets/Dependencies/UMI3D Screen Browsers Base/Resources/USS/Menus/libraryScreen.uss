@@ -1,4 +1,4 @@
-.library-screen__header {
+.library__screen-header {
     width: 100%;
     padding-left: 15px;
     padding-right: 60px;
@@ -7,15 +7,7 @@
     justify-content: space-between;
 }
 
-.library-screen__header__name {
-    width: 60%;
-}
-
-.library-screen__header__size {
-    width: 40%;
-}
-
-.library-screen__scroll-view {
+.library__screen-scroll__view {
     width: 100%;
     border-top-left-radius: 11px;
     border-bottom-left-radius: 11px;

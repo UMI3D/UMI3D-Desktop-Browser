@@ -1,4 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Dependencies/UMI3D%20Screen%20Browsers%20Base/Scripts/UI/Custom%20Controllers/Resources/USS/Menus/library.uss?fileID=7433441132597879392&amp;guid=200e81bc6975dcd41a74882710d404de&amp;type=3#library" />
-    <umi3d.commonScreen.menu.Library_C />
+    <Style src="project://database/Assets/Dependencies/UMI3D%20Screen%20Browsers%20Base/Resources/USS/Menus/library.uss?fileID=7433441132597879392&amp;guid=200e81bc6975dcd41a74882710d404de&amp;type=3#library" />
+    <umi3d.commonScreen.menu.Library_C allow-deletion="false" title="Title" size="20mo" />
 </ui:UXML>

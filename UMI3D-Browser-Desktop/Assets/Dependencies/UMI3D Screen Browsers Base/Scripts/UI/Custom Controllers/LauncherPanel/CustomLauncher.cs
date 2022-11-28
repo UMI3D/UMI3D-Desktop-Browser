@@ -77,6 +77,7 @@ public abstract class CustomLauncher : CustomMenuContainer<LauncherScreens>
         Libraries.BackButtonCkicked = () => RemoveScreenFromStack();
         Settings.BackButtonCkicked = () => RemoveScreenFromStack();
 
+        Libraries.AllowDeletion = true;
         Libraries.WrongLibraryPathFound += (pathes) =>
         {
             var dialogueBox = CreateDialogueBox();

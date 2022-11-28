@@ -48,6 +48,11 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
             name = "display-message",
             defaultValue = false
         };
+        protected UxmlBoolAttributeDescription m_allowDeletion = new UxmlBoolAttributeDescription
+        {
+            name = "allow-deletion",
+            defaultValue = false
+        };
 
         public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
         {
@@ -56,6 +61,8 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomLibrary;
 
@@ -65,7 +72,8 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
                     m_size.GetValueFromBag(bag, cc),
                     m_date.GetValueFromBag(bag, cc),
                     m_message.GetValueFromBag(bag, cc),
-                    m_displayMessage.GetValueFromBag(bag, cc)
+                    m_displayMessage.GetValueFromBag(bag, cc),
+                    m_allowDeletion.GetValueFromBag(bag, cc)
                  );
         }
     }
@@ -73,20 +81,20 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
     public virtual string StyleSheetMenuPath => $"USS/menu";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetMenusFolderPath}/library";
     public virtual string USSCustomClassName => "library";
-    public virtual string USSCustomClassOverlay => $"{USSCustomClassName}__overlay";
-    public virtual string USSCustomClassMain => $"{USSCustomClassName}__main";
-    public virtual string USSCustomClassDropDown_Button => $"{USSCustomClassName}__drop-down__button";
-    public virtual string USSCustomClassDropDown_Button_background => $"{USSCustomClassName}__drop-down__button__background";
-    public virtual string USSCustomClassDropDown_Button_Icon_Background => $"{USSCustomClassName}__drop-down__button__icon__background";
-    public virtual string USSCustomClassDropDown_Button_Icon => $"{USSCustomClassName}__drop-down__button__icon";
-    public virtual string USSCustomClassTitle => $"{USSCustomClassName}__title";
-    public virtual string USSCustomClassSize => $"{USSCustomClassName}__size";
-    public virtual string USSCustomClassDelete => $"{USSCustomClassName}__delete";
-    public virtual string USSCustomClassDelete_Background => $"{USSCustomClassName}__delete__background";
-    public virtual string USSCustomClassDelete_Icon => $"{USSCustomClassName}__delete__icon";
-    public virtual string USSCustomClassDropDown_Field => $"{USSCustomClassName}__drop-down__field";
-    public virtual string USSCustomClassDropDown_Date => $"{USSCustomClassName}__drop-down__date";
-    public virtual string USSCustomClassDropDown_Message => $"{USSCustomClassName}__drop-down__message";
+    public virtual string USSCustomClassOverlay => $"{USSCustomClassName}-overlay";
+    public virtual string USSCustomClassMain => $"{USSCustomClassName}-main";
+    public virtual string USSCustomClassDropDown_Button => $"{USSCustomClassName}-drop_down__button";
+    public virtual string USSCustomClassDropDown_Button_background => $"{USSCustomClassName}-drop_down__button__background";
+    public virtual string USSCustomClassDropDown_Button_Icon_Background => $"{USSCustomClassName}-drop_down__button__icon__background";
+    public virtual string USSCustomClassDropDown_Button_Icon => $"{USSCustomClassName}-drop_down__button__icon";
+    public virtual string USSCustomClassTitle => $"{USSCustomClassName}-title";
+    public virtual string USSCustomClassSize => $"{USSCustomClassName}-size";
+    public virtual string USSCustomClassDelete => $"{USSCustomClassName}-delete";
+    public virtual string USSCustomClassDelete_Background => $"{USSCustomClassName}-delete__background";
+    public virtual string USSCustomClassDelete_Icon => $"{USSCustomClassName}-delete__icon";
+    public virtual string USSCustomClassDropDown_Field => $"{USSCustomClassName}-drop_down__field";
+    public virtual string USSCustomClassDropDown_Date => $"{USSCustomClassName}-drop_down__date";
+    public virtual string USSCustomClassDropDown_Message => $"{USSCustomClassName}-drop_down__message";
 
     public VisualElement Overlay = new VisualElement { name = "overlay" };
     public VisualElement Main = new VisualElement { name = "main" };
@@ -104,6 +112,7 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
     public CustomText DropDown_Message;
 
     protected bool m_displayMessage;
+    protected bool m_allowDeletion;
     protected bool m_hasBeenInitialized;
 
     public virtual string Title
@@ -207,9 +216,20 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
         }
     }
 
-    public virtual void Set() => Set(null, null, null, null, false);
+    public virtual bool AllowDeletion
+    {
+        get => m_allowDeletion;
+        set 
+        {
+            m_allowDeletion = value;
+            if (value) Main.Add(Delete);
+            else Delete.RemoveFromHierarchy();
+        }
+    }
 
-    public virtual void Set(string title, string size, string date, string message, bool displayMessage)
+    public virtual void Set() => Set(null, null, null, null, false, false);
+
+    public virtual void Set(string title, string size, string date, string message, bool displayMessage, bool allowDeletion)
     {
         if (!m_hasBeenInitialized)
         {
@@ -222,6 +242,7 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
         Date = date;
         Message = message;
         DisplayMessage = displayMessage;
+        AllowDeletion = allowDeletion;
     }
 
     public virtual void InitElement()
@@ -256,7 +277,7 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
         DropDown_Button.Add(DropDown_Button_Icon_Background);
         DropDown_Button_Icon_Background.Add(DropDown_Button_Icon);
         DropDown_Button.Add(DropDown_Button_Background);
-        Main.Add(Delete);
+        
         Delete.Add(Delete_Background);
         Delete_Background.Add(Delete_Icon);
         Overlay.Add(DropDown_Field);
