@@ -251,7 +251,7 @@ public abstract class CustomHomeScreen : CustomMenuScreen
 
     protected void TryToConnect(ServerPreferences.ServerData data, bool saveServer = false)
     {
-        if (Application.internetReachability == NetworkReachability.NotReachable)
+        if (Application.internetReachability == NetworkReachability.NotReachable && !data.serverUrl.Contains("localhost"))
         {
             var dialogueBox = CreateDialogueBox();
             dialogueBox.Title = "No internet connection";
