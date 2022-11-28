@@ -70,7 +70,7 @@ public abstract class CustomGameMenu : CustomMenuContainer<GameMenuScreens>, IGa
 
         Leave.Type = ButtonType.Danger;
 
-        Resume.text = "Resume";
+        Resume.text = "Close Menu";
         Leave.text = "Leave environmnent";
 
         NavigationButtons.ValueEnumChanged += value => CurrentScreen = value;
@@ -80,7 +80,7 @@ public abstract class CustomGameMenu : CustomMenuContainer<GameMenuScreens>, IGa
         Navigation_ScrollView.Add(Leave);
     }
 
-    public override void Set() => Set(GameMenuScreens.Data, false, null);
+    public override void Set() => Set(GameMenuScreens.Settings, false, null);
 
     public virtual void Set(GameMenuScreens screen, bool displayHeader, string version)
     {

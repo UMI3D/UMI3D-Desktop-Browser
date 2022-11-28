@@ -300,10 +300,10 @@ public abstract class CustomMenuContainer<MenuScreenEnum> : CustomMenuContainer
 public enum LauncherScreens
 {
     Home,
+    Settings,
     //ConnectionSettings,
     //Session,
-    Libraries,
-    Settings
+    Libraries
 }
 
 public enum LoaderScreens
@@ -314,7 +314,7 @@ public enum LoaderScreens
 
 public enum GameMenuScreens
 {
+    Settings,
     Data,
-    Libraries,
-    Settings
+    Libraries
 }
