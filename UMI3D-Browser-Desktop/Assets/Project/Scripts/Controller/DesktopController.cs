@@ -69,34 +69,27 @@ namespace BrowserDesktop.Controller
         protected override void Update()
         {
             base.Update();
-            if 
-            (
-                Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)) 
-                || Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle))
-            )
+            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
             {
-                if (m_isCursorMovementFree) CloseMainMenu();
-                else OpenMainMenu();
+                if (m_isCursorMovementFree) IsFreeAndHovering = false;
+                else if (ObjectMenu.menu.Count > 0) IsFreeAndHovering = true;
+                OnEscClicked();
+            }
+            
+            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
+            {
+                if (m_isCursorMovementFree) IsFreeAndHovering = false;
+                else if (ObjectMenu.menu.Count > 0) IsFreeAndHovering = true;
                 OnSecondActionClicked();
             }
 
-            if
-            (
-                Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainActionKey))
-            )
-            {
+            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainActionKey)))
                 OnMainActionClicked();
-            }
 
-            if
-            (
-                Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)
-            )
-            {
+            if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
                 OnEnterKeyPressed();
-            }
 
-            if(Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Emote1)))
+            if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Emote1)))
                 OnEmoteKeyPressed(0);
             if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Emote2)))
                 OnEmoteKeyPressed(1);
@@ -109,36 +102,13 @@ namespace BrowserDesktop.Controller
         }
         #endregion
 
-        //protected override void OnMenuObjectContentChange()
-        //{
-        //    if (m_objectMenu?.menu.Count > 0)
-        //    {
-        //        if (!s_isRightClickAdded)
-        //        {
-        //            Shortcutbox_E.Instance.AddRightClickShortcut("Object menu");
-        //            s_isRightClickAdded = true;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (s_isRightClickAdded)
-        //        {
-        //            Shortcutbox_E.Instance.RemoveRightClickShortcut();
-        //            s_isRightClickAdded = false;
-        //        }
-        //        m_objectMenu.Collapse(true);
-        //    }
-        //}
-
         #region Menu handler
         /// <summary>
         /// Open the main menu and free the mouse cursor
         /// </summary>
         public void OpenMainMenu()
         {
-            //umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
-            if (MenuBar_E.AreThereToolboxes) MenuBar_E.Instance.Display();
-            Settingbox_E.Instance.Display();
+            
             //if (m_objectMenu.menu.Count > 0)
             //{
             //    m_objectMenu.Expand(true);
@@ -151,11 +121,7 @@ namespace BrowserDesktop.Controller
         /// </summary>
         public void CloseMainMenu()
         {
-            //umi3d.baseBrowser.Controller.BaseCursor.UnSetMovement(this);
-            if (MenuBar_E.Instance.IsDisplaying) MenuBar_E.Instance.Hide();
-            if (Settingbox_E.Instance.IsDisplaying) Settingbox_E.Instance.Hide();
-            if (EmoteWindow_E.Instance.IsDisplaying) EmoteWindow_E.Instance.Hide();
-            IsFreeAndHovering = false;
+            
         }
         #endregion
 
