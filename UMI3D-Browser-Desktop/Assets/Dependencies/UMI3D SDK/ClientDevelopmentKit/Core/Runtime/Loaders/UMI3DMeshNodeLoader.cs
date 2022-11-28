@@ -36,6 +36,10 @@ namespace umi3d.cdk
         }
         public UMI3DMeshNodeLoader() { }
 
+        public override bool CanReadUMI3DExtension(ReadUMI3DExtensionData data)
+        {
+            return data.dto is UMI3DMeshNodeDto && base.CanReadUMI3DExtension(data);
+        }
 
         /// <summary>
         /// Load a mesh node.
@@ -44,18 +48,18 @@ namespace umi3d.cdk
         /// <param name="node">gameObject on which the abstract node will be loaded.</param>
         /// <param name="finished">Finish callback.</param>
         /// <param name="failed">error callback.</param>
-        public override async Task ReadUMI3DExtension(UMI3DDto dto, GameObject node)
+        public override async Task ReadUMI3DExtension(ReadUMI3DExtensionData data)
         {
-            var nodeDto = dto as UMI3DAbstractNodeDto;
-            if (node == null)
+            var nodeDto = data.dto as UMI3DMeshNodeDto;
+            if (data.node == null)
             {
                 throw (new Umi3dException("Dto should be an UMI3DAbstractNodeDto"));
             }
 
-            await base.ReadUMI3DExtension(dto, node);
+            await base.ReadUMI3DExtension(data);
 
-
-            FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariant(((UMI3DMeshNodeDto)dto).mesh.variants);  // Peut etre ameliore
+            //MeshRenderer nodeMesh = node.AddComponent<MeshRenderer>();
+            FileDto fileToLoad = UMI3DEnvironmentLoader.Parameters.ChooseVariant(nodeDto.mesh.variants);  // Peut etre ameliore
             string url = fileToLoad.url;
             string ext = fileToLoad.extension;
             string authorization = fileToLoad.authorization;
@@ -67,10 +71,10 @@ namespace umi3d.cdk
             if (loader != null)
             {
                 var o = await UMI3DResourcesManager.LoadFile(nodeDto.id, fileToLoad, loader);
-                if (o is GameObject g && dto is UMI3DMeshNodeDto meshDto)
-                    await CallbackAfterLoadingForMesh(g, meshDto, node.transform, offset);
+                if (o is GameObject g && data.dto is UMI3DMeshNodeDto meshDto)
+                    await CallbackAfterLoadingForMesh(g, meshDto, data.node.transform, offset);
                 else
-                    throw (new Umi3dException($"Cast not valid for {o.GetType()} into GameObject or {dto.GetType()} into UMI3DMeshNodeDto"));
+                    throw (new Umi3dException($"Cast not valid for {o.GetType()} into GameObject or {data.dto.GetType()} into UMI3DMeshNodeDto"));
             }
             else
                 throw (new Umi3dException($"No loader found for {ext}"));
@@ -82,24 +86,26 @@ namespace umi3d.cdk
         /// <param name="entity"></param>
         /// <param name="property"></param>
         /// <returns></returns>
-        public override bool SetUMI3DProperty(UMI3DEntityInstance entity, SetEntityPropertyDto property)
+        public override async Task<bool> SetUMI3DProperty(SetUMI3DPropertyData data)
         {
-            if (base.SetUMI3DProperty(entity, property)) return true;
+            if (await base.SetUMI3DProperty(data))
+                return true;
 
-            var extension = (entity?.dto as GlTFNodeDto)?.extensions?.umi3d as UMI3DMeshNodeDto;
-            if (extension == null || entity as UMI3DNodeInstance == null) return false;
+            var extension = (data.entity?.dto as GlTFNodeDto)?.extensions?.umi3d as UMI3DMeshNodeDto;
+            if (extension == null || data.entity as UMI3DNodeInstance == null) return false;
 
-            switch (property.property)
+            switch (data.property.property)
             {
                 case UMI3DPropertyKeys.IsPartOfNavmesh:
-                    (entity as UMI3DNodeInstance).IsPartOfNavmesh = (bool)property.value;
+                    (data.entity as UMI3DNodeInstance).IsPartOfNavmesh = (bool)data.property.value;
                     return true;
                 case UMI3DPropertyKeys.IsTraversable:
-                    (entity as UMI3DNodeInstance).IsTraversable = (bool)property.value;
+                    (data.entity as UMI3DNodeInstance).IsTraversable = (bool)data.property.value;
                     return true;
                 default:
                     return false;
             }
+
         }
 
         /// <summary>
@@ -110,21 +116,22 @@ namespace umi3d.cdk
         /// <param name="propertyKey"></param>
         /// <param name="container"></param>
         /// <returns></returns>
-        public override bool SetUMI3DProperty(UMI3DEntityInstance entity, uint operationId, uint propertyKey, ByteContainer container)
+        public override async Task<bool> SetUMI3DProperty(SetUMI3DPropertyContainerData data)
         {
-            if (base.SetUMI3DProperty(entity, operationId, propertyKey, container)) return true;
+            if (await base.SetUMI3DProperty(data))
+                return true;
 
-            var extension = (entity?.dto as GlTFNodeDto)?.extensions?.umi3d as UMI3DMeshNodeDto;
+            var extension = (data.entity?.dto as GlTFNodeDto)?.extensions?.umi3d as UMI3DMeshNodeDto;
             if (extension == null) return false;
-            var node = entity as UMI3DNodeInstance;
+            var node = data.entity as UMI3DNodeInstance;
 
-            switch (propertyKey)
+            switch (data.propertyKey)
             {
                 case UMI3DPropertyKeys.IsPartOfNavmesh:
-                    (entity as UMI3DNodeInstance).IsPartOfNavmesh = UMI3DNetworkingHelper.Read<bool>(container);
+                    (data.entity as UMI3DNodeInstance).IsPartOfNavmesh = UMI3DNetworkingHelper.Read<bool>(data.container);
                     return true;
                 case UMI3DPropertyKeys.IsTraversable:
-                    (entity as UMI3DNodeInstance).IsTraversable = UMI3DNetworkingHelper.Read<bool>(container);
+                    (data.entity as UMI3DNodeInstance).IsTraversable = UMI3DNetworkingHelper.Read<bool>(data.container);
                     return true;
                 default:
                     return false;
@@ -229,7 +236,7 @@ namespace umi3d.cdk
             if (dto.areSubobjectsTracked)
             {
                 nodeInstance.mainInstance = instance;
-                if(instance.GetComponent<Animator>())
+                if (instance.GetComponent<Animator>())
                 {
                     modelTracker.animatorsToRebind.Add(instance.GetComponent<Animator>());
                 }
@@ -281,5 +288,7 @@ namespace umi3d.cdk
 
             data.Init();
         }
+
+
     }
 }

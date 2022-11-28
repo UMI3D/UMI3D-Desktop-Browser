@@ -18,12 +18,13 @@ using umi3d.common;
 using umi3d.cdk.menu;
 using UnityEngine;
 using UnityEngine.Events;
+using System;
 
 /// <summary>
 /// Button menu item.
 /// </summary>
 /// <see cref="BooleanMenuItem"/>
-public class HoldableButtonMenuItem : MenuItem, IObservable<bool>
+public class HoldableButtonMenuItem : MenuItem, umi3d.common.IObservable<bool>
 {
     /// <summary>
     /// If true, the button will stay pressed on selection.
@@ -41,7 +42,7 @@ public class HoldableButtonMenuItem : MenuItem, IObservable<bool>
     /// <summary>
     /// Subscribers on value change
     /// </summary>
-    private List<UnityAction<bool>> subscribers = new List<UnityAction<bool>>();
+    private List<Action<bool>> subscribers = new List<Action<bool>>();
 
 
 
@@ -49,21 +50,23 @@ public class HoldableButtonMenuItem : MenuItem, IObservable<bool>
     /// Subscribe a callback for button press.
     /// </summary>
     /// <param name="callback">Callback to invoke on button press</param>
-    public virtual void Subscribe(UnityAction<bool> callback)
+    public virtual bool Subscribe(Action<bool> callback)
     {
         if (!subscribers.Contains(callback))
         {
             subscribers.Add(callback);
+            return true;
         }
+        return false;
     }
 
     /// <summary>
     /// Unsubscribe a callback from the value change.
     /// </summary>
     /// <param name="callback"></param>
-    public virtual void UnSubscribe(UnityAction<bool> callback)
+    public virtual bool UnSubscribe(Action<bool> callback)
     {
-        subscribers.Remove(callback);
+        return subscribers.Remove(callback);
     }
 
     public override string ToString()
@@ -81,7 +84,7 @@ public class HoldableButtonMenuItem : MenuItem, IObservable<bool>
         buttonDown = down;
 
         if (Holdable || buttonDown)
-            foreach (UnityAction<bool> sub in subscribers)
+            foreach (Action<bool> sub in subscribers)
             {
                 sub.Invoke(buttonDown);
             }

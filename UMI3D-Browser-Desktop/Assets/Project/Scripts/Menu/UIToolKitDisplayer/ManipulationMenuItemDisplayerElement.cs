@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using System.Collections.Generic;
 using umi3d.baseBrowser.Menu;
 using umi3d.cdk.menu.view;
@@ -29,7 +30,7 @@ namespace BrowserDesktop.Menu
         /// <summary>
         /// Selection event subscribers.
         /// </summary>
-        private List<UnityAction<bool>> subscribers = new List<UnityAction<bool>>();
+        private List<Action<bool>> subscribers = new List<Action<bool>>();
 
         public bool select = false;
 
@@ -66,13 +67,13 @@ namespace BrowserDesktop.Menu
         /// </summary>
         public override void Select()
         {
-            foreach (UnityAction<bool> sub in subscribers)
+            foreach (Action<bool> sub in subscribers)
                 sub.Invoke(true);
         }
 
         public override void Deselect()
         {
-            foreach (UnityAction<bool> sub in subscribers)
+            foreach (Action<bool> sub in subscribers)
                 sub.Invoke(false);
         }
 
@@ -93,20 +94,21 @@ namespace BrowserDesktop.Menu
         /// Subscribe a callback to the selection event.
         /// </summary>
         /// <param name="callback">Callback to raise on selection</param>
-        /// <see cref="UnSubscribe(UnityAction)"/>
-        public override void Subscribe(UnityAction<bool> callback)
+        /// <see cref="UnSubscribe(Action)"/>
+        public override bool Subscribe(Action<bool> callback)
         {
             subscribers.Add(callback);
+            return true;
         }
 
         /// <summary>
         /// Unsubscribe a callback from the selection event.
         /// </summary>
         /// <param name="callback">Callback to unsubscribe</param>
-        /// <see cref="Subscribe(UnityAction)"/>
-        public override void UnSubscribe(UnityAction<bool> callback)
+        /// <see cref="Subscribe(Action)"/>
+        public override bool UnSubscribe(Action<bool> callback)
         {
-            subscribers.Remove(callback);
+           return subscribers.Remove(callback);
         }
 
         public VisualElement GetUXMLContent()

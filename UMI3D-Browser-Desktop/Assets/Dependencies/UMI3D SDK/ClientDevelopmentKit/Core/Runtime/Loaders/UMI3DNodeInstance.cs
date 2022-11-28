@@ -16,6 +16,7 @@ limitations under the License.
 
 using System;
 using System.Collections.Generic;
+using umi3d.common;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -75,6 +76,13 @@ namespace umi3d.cdk
         public UnityEvent OnPoseUpdated = new UnityEvent();
 
         public void SendOnPoseUpdated() { OnPoseUpdated.Invoke(); }
+
+        public override string ToString()
+        {
+            if(dto is GlTFNodeDto gltf)
+                return $"UMI3DNodeInstance [{dto} : {gltf.name} : {gltf.extensions?.umi3d} : {Object} : {gameObject}]";
+            return $"UMI3DNodeInstance [{dto} : {Object} : {gameObject}]";
+        }
 
         public bool updatePose = true;
 

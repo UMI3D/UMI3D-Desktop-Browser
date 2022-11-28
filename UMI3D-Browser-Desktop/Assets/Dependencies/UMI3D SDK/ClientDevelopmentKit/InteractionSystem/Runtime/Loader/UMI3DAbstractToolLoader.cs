@@ -16,51 +16,59 @@ limitations under the License.
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.interaction;
+using UnityEngine;
 
 namespace umi3d.cdk.interaction
 {
     /// <summary>
     /// Helper class that manages the loading of <see cref="AbstractTool"/> entities.
     /// </summary>
-    public static class UMI3DAbstractToolLoader
+    public class UMI3DAbstractToolLoader : AbstractLoader
     {
-        /// <summary>
-        /// Set the value of a <see cref="UMI3DEntityInstance"/> based on a received <see cref="SetEntityPropertyDto"/>.
-        /// </summary>
-        /// <param name="entity">Entity to update</param>
-        /// <param name="property">Operation dto</param>
-        /// <returns></returns>
-        public static bool SetUMI3DProperty(UMI3DEntityInstance entity, SetEntityPropertyDto property)
+
+        public override bool CanReadUMI3DExtension(ReadUMI3DExtensionData data)
         {
-            var dto = entity.dto as AbstractToolDto;
+            return false;
+        }
+
+        public override Task ReadUMI3DExtension(ReadUMI3DExtensionData value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override async Task<bool> SetUMI3DProperty(SetUMI3DPropertyData value)
+        {
+            var dto = value.entity.dto as AbstractToolDto;
             if (dto == null) return false;
-            var tool = entity.Object as AbstractTool;
-            switch (property.property)
+            var tool = value.entity.Object as AbstractTool;
+            switch (value.property.property)
             {
                 case UMI3DPropertyKeys.AbstractToolName:
-                    dto.name = (string)property.value;
+                    dto.name = (string)value.property.value;
                     break;
                 case UMI3DPropertyKeys.AbstractToolDescription:
-                    dto.description = (string)property.value;
+                    dto.description = (string)value.property.value;
                     break;
                 case UMI3DPropertyKeys.AbstractToolIcon2D:
-                    dto.icon2D = (ResourceDto)property.value;
+                    dto.icon2D = (ResourceDto)value.property.value;
                     break;
                 case UMI3DPropertyKeys.AbstractToolIcon3D:
-                    dto.icon3D = (ResourceDto)property.value;
+                    dto.icon3D = (ResourceDto)value.property.value;
                     break;
                 case UMI3DPropertyKeys.AbstractToolInteractions:
-                    return SetInteractions(dto, tool, property);
+                    return SetInteractions(dto, tool, value.property);
                 case UMI3DPropertyKeys.AbstractToolActive:
-                    dto.active = (bool)property.value;
+                    dto.active = (bool)value.property.value;
                     break;
                 case UMI3DPropertyKeys.EventTriggerAnimation:
-                    (dto.interactions.Find(evt => evt.id.Equals(property.entityId)) as EventDto).TriggerAnimationId = (ulong)property.value;
+                    (dto.interactions.Find(evt => evt.id.Equals(value.property.entityId)) as EventDto).TriggerAnimationId = (ulong)value.property.value;
                     break;
                 case UMI3DPropertyKeys.EventReleaseAnimation:
-                    (dto.interactions.Find(evt => evt.id.Equals(property.entityId)) as EventDto).ReleaseAnimationId = (ulong)property.value;
+                    (dto.interactions.Find(evt => evt.id.Equals(value.property.entityId)) as EventDto).ReleaseAnimationId = (ulong)value.property.value;
                     break;
                 default:
                     return false;
@@ -68,38 +76,29 @@ namespace umi3d.cdk.interaction
             return true;
         }
 
-        /// <summary>
-        /// Set the value of a <see cref="UMI3DEntityInstance"/> based on a received <see cref="ByteContainer"/>. 
-        /// <br/> Part of the bytes networking workflow.
-        /// </summary>
-        /// <param name="entity">Entity to update</param>
-        /// <param name="operationId"></param>
-        /// <param name="propertyKey">Property to update key in <see cref="UMI3DPropertyKeys"/></param>
-        /// <param name="container">Received byte container</param>
-        /// <returns>True if property setting was successful</returns>
-        public static bool SetUMI3DProperty(UMI3DEntityInstance entity, uint operationId, uint propertyKey, ByteContainer container)
+        public override async Task<bool> SetUMI3DProperty(SetUMI3DPropertyContainerData value)
         {
-            var dto = entity.dto as AbstractToolDto;
+            var dto = value.entity.dto as AbstractToolDto;
             if (dto == null) return false;
-            var tool = entity.Object as AbstractTool;
-            switch (propertyKey)
+            var tool = value.entity.Object as AbstractTool;
+            switch (value.propertyKey)
             {
                 case UMI3DPropertyKeys.AbstractToolName:
-                    dto.name = UMI3DNetworkingHelper.Read<string>(container);
+                    dto.name = UMI3DNetworkingHelper.Read<string>(value.container);
                     break;
                 case UMI3DPropertyKeys.AbstractToolDescription:
-                    dto.description = UMI3DNetworkingHelper.Read<string>(container);
+                    dto.description = UMI3DNetworkingHelper.Read<string>(value.container);
                     break;
                 case UMI3DPropertyKeys.AbstractToolIcon2D:
-                    dto.icon2D = UMI3DNetworkingHelper.Read<ResourceDto>(container);
+                    dto.icon2D = UMI3DNetworkingHelper.Read<ResourceDto>(value.container);
                     break;
                 case UMI3DPropertyKeys.AbstractToolIcon3D:
-                    dto.icon3D = UMI3DNetworkingHelper.Read<ResourceDto>(container);
+                    dto.icon3D = UMI3DNetworkingHelper.Read<ResourceDto>(value.container);
                     break;
                 case UMI3DPropertyKeys.AbstractToolInteractions:
-                    return SetInteractions(dto, tool, operationId, propertyKey, container);
+                    return SetInteractions(dto, tool, value.operationId, value.propertyKey, value.container);
                 case UMI3DPropertyKeys.AbstractToolActive:
-                    dto.active = UMI3DNetworkingHelper.Read<bool>(container);
+                    dto.active = UMI3DNetworkingHelper.Read<bool>(value.container);
                     break;
                 default:
                     return false;
@@ -115,26 +114,26 @@ namespace umi3d.cdk.interaction
         /// <param name="propertyKey">Property to update key in <see cref="UMI3DPropertyKeys"/></param>
         /// <param name="container">Received byte container</param>
         /// <returns>True if property setting was successful</returns>
-        public static bool ReadUMI3DProperty(ref object value, uint propertyKey, ByteContainer container)
+        public override async Task<bool> ReadUMI3DProperty(ReadUMI3DPropertyData data)
         {
-            switch (propertyKey)
+            switch (data.propertyKey)
             {
                 case UMI3DPropertyKeys.AbstractToolName:
-                    value = UMI3DNetworkingHelper.Read<string>(container);
+                    data.result = UMI3DNetworkingHelper.Read<string>(data.container);
                     break;
                 case UMI3DPropertyKeys.AbstractToolDescription:
-                    value = UMI3DNetworkingHelper.Read<string>(container);
+                    data.result = UMI3DNetworkingHelper.Read<string>(data.container);
                     break;
                 case UMI3DPropertyKeys.AbstractToolIcon2D:
-                    value = UMI3DNetworkingHelper.Read<ResourceDto>(container);
+                    data.result = UMI3DNetworkingHelper.Read<ResourceDto>(data.container);
                     break;
                 case UMI3DPropertyKeys.AbstractToolIcon3D:
-                    value = UMI3DNetworkingHelper.Read<ResourceDto>(container);
+                    data.result = UMI3DNetworkingHelper.Read<ResourceDto>(data.container);
                     break;
                 case UMI3DPropertyKeys.AbstractToolInteractions:
-                    return ReadInteractions(ref value, propertyKey, container);
+                    return ReadInteractions(data);
                 case UMI3DPropertyKeys.AbstractToolActive:
-                    value = UMI3DNetworkingHelper.Read<bool>(container);
+                    data.result = UMI3DNetworkingHelper.Read<bool>(data.container);
                     break;
                 default:
                     return false;
@@ -235,9 +234,9 @@ namespace umi3d.cdk.interaction
         /// <param name="propertyKey">Property to update key in <see cref="UMI3DPropertyKeys"/></param>
         /// <param name="container">Received container</param>
         /// <returns>Always true</returns>
-        private static bool ReadInteractions(ref object value, uint propertyKey, ByteContainer container)
+        private static bool ReadInteractions(ReadUMI3DPropertyData data)
         {
-            value = UMI3DNetworkingHelper.ReadList<AbstractInteractionDto>(container);
+            data.result = UMI3DNetworkingHelper.ReadList<AbstractInteractionDto>(data.container);
             return true;
         }
 
@@ -283,30 +282,50 @@ namespace umi3d.cdk.interaction
                     break;
                 case UMI3DInteractionKeys.BooleanParameter:
                     var Bool = new BooleanParameterDto();
-                    ReadAbstractInteractionDto(Bool, container);
-                    Bool.privateParameter = UMI3DNetworkingHelper.Read<bool>(container);
+                    ReadAbstractParameterDto(Bool, container);
                     Bool.value = UMI3DNetworkingHelper.Read<bool>(container);
                     interaction = Bool;
                     break;
+                case UMI3DInteractionKeys.ColorParameter:
+                    var Color = new ColorParameterDto();
+                    ReadAbstractParameterDto(Color, container);
+                    Color.value = UMI3DNetworkingHelper.Read<Color>(container);
+                    interaction = Color;
+                    break;
+                case UMI3DInteractionKeys.Vector2Parameter:
+                    var Vector2 = new Vector2ParameterDto();
+                    ReadAbstractParameterDto(Vector2, container);
+                    Vector2.value = UMI3DNetworkingHelper.Read<Vector2>(container);
+                    interaction = Vector2;
+                    break;
+                case UMI3DInteractionKeys.Vector3Parameter:
+                    var Vector3 = new Vector3ParameterDto();
+                    ReadAbstractParameterDto(Vector3, container);
+                    Vector3.value = UMI3DNetworkingHelper.Read<Vector3>(container);
+                    interaction = Vector3;
+                    break;
+                case UMI3DInteractionKeys.Vector4Parameter:
+                    var Vector4 = new Vector4ParameterDto();
+                    ReadAbstractParameterDto(Vector4, container);
+                    Vector4.value = UMI3DNetworkingHelper.Read<Vector4>(container);
+                    interaction = Vector4;
+                    break;
                 case UMI3DInteractionKeys.UploadParameter:
                     var Upload = new UploadFileParameterDto();
-                    ReadAbstractInteractionDto(Upload, container);
-                    Upload.privateParameter = UMI3DNetworkingHelper.Read<bool>(container);
+                    ReadAbstractParameterDto(Upload, container);
                     Upload.value = UMI3DNetworkingHelper.Read<string>(container);
                     Upload.authorizedExtensions = UMI3DNetworkingHelper.Read<List<string>>(container);
                     interaction = Upload;
                     break;
                 case UMI3DInteractionKeys.StringParameter:
                     var String = new StringParameterDto();
-                    ReadAbstractInteractionDto(String, container);
-                    String.privateParameter = UMI3DNetworkingHelper.Read<bool>(container);
+                    ReadAbstractParameterDto(String, container);
                     String.value = UMI3DNetworkingHelper.Read<string>(container);
                     interaction = String;
                     break;
                 case UMI3DInteractionKeys.LocalInfoParameter:
                     var LocalInfo = new LocalInfoRequestParameterDto();
-                    LocalInfo.privateParameter = UMI3DNetworkingHelper.Read<bool>(container);
-                    ReadAbstractInteractionDto(LocalInfo, container);
+                    ReadAbstractParameterDto(LocalInfo, container);
                     LocalInfo.app_id = UMI3DNetworkingHelper.Read<string>(container);
                     LocalInfo.serverName = UMI3DNetworkingHelper.Read<string>(container);
                     LocalInfo.reason = UMI3DNetworkingHelper.Read<string>(container);
@@ -316,16 +335,14 @@ namespace umi3d.cdk.interaction
                     break;
                 case UMI3DInteractionKeys.StringEnumParameter:
                     var EString = new EnumParameterDto<string>();
-                    EString.privateParameter = UMI3DNetworkingHelper.Read<bool>(container);
-                    ReadAbstractInteractionDto(EString, container);
+                    ReadAbstractParameterDto(EString, container);
                     EString.possibleValues = UMI3DNetworkingHelper.ReadList<string>(container);
                     EString.value = UMI3DNetworkingHelper.Read<string>(container);
                     interaction = EString;
                     break;
                 case UMI3DInteractionKeys.FloatRangeParameter:
                     var RFloat = new FloatRangeParameterDto();
-                    RFloat.privateParameter = UMI3DNetworkingHelper.Read<bool>(container);
-                    ReadAbstractInteractionDto(RFloat, container);
+                    ReadAbstractParameterDto(RFloat, container);
                     RFloat.min = UMI3DNetworkingHelper.Read<float>(container);
                     RFloat.max = UMI3DNetworkingHelper.Read<float>(container);
                     RFloat.increment = UMI3DNetworkingHelper.Read<float>(container);
@@ -355,6 +372,21 @@ namespace umi3d.cdk.interaction
             interactionDto.icon2D = UMI3DNetworkingHelper.Read<ResourceDto>(container);
             interactionDto.icon3D = UMI3DNetworkingHelper.Read<ResourceDto>(container);
             interactionDto.description = UMI3DNetworkingHelper.Read<string>(container);
+            
+        }
+
+        /// <summary>
+        /// Reads an <see cref="AbstractParameterDto"/> from a received <see cref="ByteContainer"/> and updates it.
+        /// <br/> Part of the bytes networking workflow.
+        /// </summary>
+        ///  <param name="ParameterDto">interaction dto to update.</param>
+        /// <param name="container">Byte container</param>
+        /// <returns></returns>
+        private static void ReadAbstractParameterDto(AbstractParameterDto ParameterDto, ByteContainer container)
+        {
+            ReadAbstractParameterDto(ParameterDto, container);
+            ParameterDto.privateParameter = UMI3DNetworkingHelper.Read<bool>(container);
+            ParameterDto.isDisplayer = UMI3DNetworkingHelper.Read<bool>(container);
         }
     }
 }

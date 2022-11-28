@@ -36,7 +36,7 @@ namespace umi3d.baseBrowser.parameters
         /// Associated callback
         /// </summary>
         /// <see cref="Associate(AbstractInteractionDto)"/>
-        protected UnityEngine.Events.UnityAction<ValueType> callback;
+        protected System.Action<ValueType> callback;
 
         protected ulong hoveredObjectId { get; private set; }
         protected ulong GetCurrentHoveredObjectID() => hoveredObjectId;

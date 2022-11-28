@@ -555,7 +555,7 @@ namespace umi3d.baseBrowser.Controller
             OldHoverExit();
             CurrentHoverEnter();
         }
-        private void OldHoverExit()
+        private async void OldHoverExit()
         {
             if (mouseData.OldHovered == null) return;
 
@@ -568,19 +568,19 @@ namespace umi3d.baseBrowser.Controller
             {
                 cdk.UMI3DAbstractAnimation anim = cdk.UMI3DAbstractAnimation.Get(hoverExitAnimationId);
 
-                anim.SetUMI3DProperty(UMI3DEnvironmentLoader.GetEntity(hoverExitAnimationId), new SetEntityPropertyDto()
+                await anim.SetUMI3DProperty(new SetUMI3DPropertyData( new SetEntityPropertyDto()
                 {
                     entityId = hoverExitAnimationId,
                     property = UMI3DPropertyKeys.AnimationPlaying,
                     value = true
-                });
+                }, UMI3DEnvironmentLoader.GetEntity(hoverExitAnimationId)));
 
                 HoverExit.Invoke(lastHoverId);
                 if (anim != null) anim.Start();
             }
             mouseData.OldHovered = null;
         }
-        private void CurrentHoverEnter()
+        private async void CurrentHoverEnter()
         {
             if (mouseData.CurrentHovered == null) return;
 
@@ -593,12 +593,12 @@ namespace umi3d.baseBrowser.Controller
             {
                 cdk.UMI3DAbstractAnimation anim = cdk.UMI3DAbstractAnimation.Get(hoverEnterAnimationId);
 
-                anim.SetUMI3DProperty(UMI3DEnvironmentLoader.GetEntity(hoverEnterAnimationId), new SetEntityPropertyDto()
+                await anim.SetUMI3DProperty(new SetUMI3DPropertyData( new SetEntityPropertyDto()
                 {
                     entityId = hoverEnterAnimationId,
                     property = UMI3DPropertyKeys.AnimationPlaying,
                     value = true
-                });
+                }, UMI3DEnvironmentLoader.GetEntity(hoverEnterAnimationId)));
 
                 HoverEnter.Invoke(currentHoverId);
                 if (anim != null) anim.Start();

@@ -93,17 +93,19 @@ namespace umi3d.baseBrowser.inputs.interactions
             risingEdgeEventSent = false;
         }
 
-        private void StartAnim(ulong id)
+        private async void StartAnim(ulong id)
         {
             var anim = UMI3DAbstractAnimation.Get(id);
             if (anim != null)
             {
-                anim.SetUMI3DProperty(UMI3DEnvironmentLoader.GetEntity(id), new SetEntityPropertyDto()
-                {
-                    entityId = id,
-                    property = UMI3DPropertyKeys.AnimationPlaying,
-                    value = true
-                });
+                await anim.SetUMI3DProperty(new SetUMI3DPropertyData( new SetEntityPropertyDto()
+                    {
+                        entityId = id,
+                        property = UMI3DPropertyKeys.AnimationPlaying,
+                        value = true
+                    },
+                    UMI3DEnvironmentLoader.GetEntity(id))
+                    );
                 anim.Start();
             }
         }
