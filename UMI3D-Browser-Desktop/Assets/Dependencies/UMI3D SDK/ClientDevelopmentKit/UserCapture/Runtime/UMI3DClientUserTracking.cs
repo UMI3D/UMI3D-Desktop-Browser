@@ -188,7 +188,7 @@ namespace umi3d.cdk.userCapture
         {
             var otherUserAvatar = embodimentDict[userId];
             var animators = otherUserAvatar.GetComponentsInChildren<Animator>();
-            var emoteAnimator = animators.Where(animator => animator.runtimeAnimatorController != null).FirstOrDefault();
+            var emoteAnimator = animators.Where(animator => animator.runtimeAnimatorController != null).LastOrDefault();
 
             if (emoteAnimator == null || emoteConfig == null)
                 return;
