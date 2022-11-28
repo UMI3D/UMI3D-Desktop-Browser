@@ -73,6 +73,8 @@ public abstract class CustomGameMenu : CustomMenuContainer<GameMenuScreens>, IGa
 
         NavigationButtons.ValueEnumChanged += value => CurrentScreen = value;
 
+        Libraries.AllowDeletion = false;
+
         Navigation_ScrollView.Add(Resume);
         Navigation_ScrollView.Add(NavigationButtons);
         Navigation_ScrollView.Add(Leave);

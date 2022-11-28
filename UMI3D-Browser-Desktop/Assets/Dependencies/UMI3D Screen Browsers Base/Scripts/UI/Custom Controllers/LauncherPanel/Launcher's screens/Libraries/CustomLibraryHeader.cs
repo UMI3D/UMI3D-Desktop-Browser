@@ -116,7 +116,7 @@ public abstract class CustomLibraryHeader : CustomLibrary
 
     public virtual void Set(LibrarySort sort, bool displayMessage)
     {
-        Set("Name", "Size", null, null, displayMessage);
+        Set("Name", "Size", null, null, displayMessage, true);
 
         HeaderSort = sort;
     }

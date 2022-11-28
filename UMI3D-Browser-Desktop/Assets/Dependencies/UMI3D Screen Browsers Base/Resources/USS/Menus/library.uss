@@ -17,7 +17,7 @@
 }
 
 .library-drop_down__button {
-    flex-grow: 0.9;
+    flex-grow: 1;
 }
 
 .library-drop_down__button__background,

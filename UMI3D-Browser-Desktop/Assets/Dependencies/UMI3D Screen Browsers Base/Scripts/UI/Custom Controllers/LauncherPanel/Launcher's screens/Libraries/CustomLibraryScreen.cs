@@ -37,6 +37,11 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
             name = "sort-by",
             defaultValue = LibrarySort.AscendingName
         };
+        protected UxmlBoolAttributeDescription m_allowDeletion = new UxmlBoolAttributeDescription
+        {
+            name = "allow-deletion",
+            defaultValue = false
+        };
 
         public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
         {
@@ -52,7 +57,8 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
 
             custom.Set
                 (
-                    m_sort.GetValueFromBag(bag, cc)
+                    m_sort.GetValueFromBag(bag, cc),
+                    m_allowDeletion.GetValueFromBag(bag, cc)
                  );
         }
     }
@@ -73,11 +79,18 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
         }
     }
 
+    public virtual bool AllowDeletion
+    {
+        get => m_allowDeletion;
+        set => m_allowDeletion = value;
+    }
+
     public override string ShortScreenTitle => "libraries";
     public CustomLibraryHeader Header;
     public CustomScrollView Libraries_SV;
 
     protected LibrarySort m_sort;
+    protected bool m_allowDeletion;
 
     public override void InitElement()
     {
@@ -96,15 +109,18 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
         Libraries_SV.verticalScrollerVisibility = ScrollerVisibility.AlwaysVisible;
     }
 
-    public override void Set() => Set(LibrarySort.AscendingName);
+    public override void Set() => Set(LibrarySort.AscendingName, false);
 
-    public virtual void Set(LibrarySort sort)
+    public virtual void Set(LibrarySort sort, bool allowDeletion)
     {
         m_isSet = false;
+
         Set("Libraries");
 
         SortBy = sort;
         Header.HeaderSort = sort;
+        AllowDeletion = allowDeletion;
+
         m_isSet = true;
     }
 
@@ -133,6 +149,7 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
         {
             // 1. Diplay lib name
             var library = CreateLibrary();
+            library.AllowDeletion = m_allowDeletion;
             library.Path = lib.path;
             library.Title = lib.key;
 
