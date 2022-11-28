@@ -48,6 +48,11 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
             name = "display-message",
             defaultValue = false
         };
+        protected UxmlBoolAttributeDescription m_allowDeletion = new UxmlBoolAttributeDescription
+        {
+            name = "allow-deletion",
+            defaultValue = false
+        };
 
         public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
         {
@@ -67,7 +72,8 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
                     m_size.GetValueFromBag(bag, cc),
                     m_date.GetValueFromBag(bag, cc),
                     m_message.GetValueFromBag(bag, cc),
-                    m_displayMessage.GetValueFromBag(bag, cc)
+                    m_displayMessage.GetValueFromBag(bag, cc),
+                    m_allowDeletion.GetValueFromBag(bag, cc)
                  );
         }
     }
@@ -106,6 +112,7 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
     public CustomText DropDown_Message;
 
     protected bool m_displayMessage;
+    protected bool m_allowDeletion;
     protected bool m_hasBeenInitialized;
 
     public virtual string Title
@@ -209,9 +216,20 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
         }
     }
 
-    public virtual void Set() => Set(null, null, null, null, false);
+    public virtual bool AllowDeletion
+    {
+        get => m_allowDeletion;
+        set 
+        {
+            m_allowDeletion = value;
+            if (value) Main.Add(Delete);
+            else Delete.RemoveFromHierarchy();
+        }
+    }
 
-    public virtual void Set(string title, string size, string date, string message, bool displayMessage)
+    public virtual void Set() => Set(null, null, null, null, false, false);
+
+    public virtual void Set(string title, string size, string date, string message, bool displayMessage, bool allowDeletion)
     {
         if (!m_hasBeenInitialized)
         {
@@ -224,6 +242,7 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
         Date = date;
         Message = message;
         DisplayMessage = displayMessage;
+        AllowDeletion = allowDeletion;
     }
 
     public virtual void InitElement()
@@ -258,7 +277,7 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
         DropDown_Button.Add(DropDown_Button_Icon_Background);
         DropDown_Button_Icon_Background.Add(DropDown_Button_Icon);
         DropDown_Button.Add(DropDown_Button_Background);
-        Main.Add(Delete);
+        
         Delete.Add(Delete_Background);
         Delete_Background.Add(Delete_Icon);
         Overlay.Add(DropDown_Field);
