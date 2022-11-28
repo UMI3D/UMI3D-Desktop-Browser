@@ -27,6 +27,7 @@ namespace umi3d.commonScreen.game
         public override void InitElement()
         {
             if (FilterTextField == null) FilterTextField = new Displayer.Textfield_C();
+            if (FilterLabel == null) FilterLabel = new Displayer.Text_C();
             if (ScrollView == null) ScrollView = new Container.ScrollView_C();
 
             base.InitElement();
