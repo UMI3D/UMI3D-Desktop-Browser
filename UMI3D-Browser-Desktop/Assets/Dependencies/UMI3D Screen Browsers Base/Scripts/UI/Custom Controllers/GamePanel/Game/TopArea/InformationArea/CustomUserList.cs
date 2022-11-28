@@ -25,9 +25,11 @@ public abstract class CustomUserList : VisualElement, ICustomElement
 {
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/userList";
-    public virtual string USSCustomClassName => "user-list";
+    public virtual string USSCustomClassName => "user__list";
+    public virtual string USSCustomClassFilterLabel => $"{USSCustomClassName}-filter__label";
 
     public CustomTextfield FilterTextField;
+    public CustomText FilterLabel;
     public CustomScrollView ScrollView;
 
     protected bool m_hasBeenInitialized;
@@ -47,6 +49,7 @@ public abstract class CustomUserList : VisualElement, ICustomElement
             throw e;
         }
         AddToClassList(USSCustomClassName);
+        FilterLabel.AddToClassList(USSCustomClassFilterLabel);
 
         UMI3DUser.OnUserMicrophoneStatusUpdated.AddListener(UpdateUser);
         UMI3DUser.OnUserAvatarStatusUpdated.AddListener(UpdateUser);
@@ -60,7 +63,10 @@ public abstract class CustomUserList : VisualElement, ICustomElement
         FilterTextField.Category = ElementCategory.Game;
         FilterTextField.RegisterValueChangedCallback(ce => Filter());
 
+        FilterLabel.text = "Search user name:";
+
         Add(FilterTextField);
+        FilterTextField.Add(FilterLabel);
         Add(ScrollView);
     }
 
@@ -85,10 +91,14 @@ public abstract class CustomUserList : VisualElement, ICustomElement
 
     public virtual void RefreshList()
     {
-        m_users = UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList
+        var usersList = UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList
             .Where(u => !u.isClient)
             .Select(u => CreateUser(u))
-            .ToArray();
+            .ToList();
+
+        usersList.Sort((user0, user1) => string.Compare(user0.UserName, user1.UserName));
+            
+        m_users = usersList.ToArray();
 
         Filter();
     }
@@ -104,6 +114,11 @@ public abstract class CustomUserList : VisualElement, ICustomElement
     {
         ScrollView.Clear();
         m_filteredUser.Clear();
+
+        if (string.IsNullOrEmpty(FilterTextField.value)) FilterTextField.Add(FilterLabel);
+        else FilterLabel.RemoveFromHierarchy();
+
+        if (m_users == null) return;
 
         foreach (var user in m_users) if (user.UserName.Contains(FilterTextField.value)) m_filteredUser.Add(user);
 

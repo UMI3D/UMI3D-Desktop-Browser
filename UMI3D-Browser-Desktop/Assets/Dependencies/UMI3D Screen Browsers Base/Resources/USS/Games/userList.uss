@@ -1,5 +1,11 @@
-.user-list {
+.user__list {
 	flex-grow: 1;
 	padding-left: var(--size-margin-and-padding-game);
 	padding-right: var(--size-margin-and-padding-game);
+}
+
+.user__list-filter__label.text.unity-label {
+	position: absolute;
+	margin-top: 30px;
+	margin-left: 25px;
 }
