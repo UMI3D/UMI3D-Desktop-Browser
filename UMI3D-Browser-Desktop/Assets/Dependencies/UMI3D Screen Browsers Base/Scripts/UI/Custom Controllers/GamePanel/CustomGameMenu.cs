@@ -44,8 +44,6 @@ public abstract class CustomGameMenu : CustomMenuContainer<GameMenuScreens>, IGa
     public virtual string StyleSheetGameMenuPath => $"{ElementExtensions.StyleSheetMenusFolderPath}/gameMenu";
     public virtual string USSCustomClassGameMenu => "game-menu";
 
-    public System.Action<object> SetMovement;
-    public System.Action<object> UnSetMovement;
     public CustomGameData GameData;
     public CustomLibraryScreen Libraries;
     public CustomSettingsContainer Settings;

@@ -138,8 +138,6 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
     public virtual string USSCustomClassName => "game";
     public virtual string USSCustomClassLeadingAndTrailingBox => "game-leading__trailing__box";
 
-    public System.Action<object> SetMovement;
-    public System.Action<object> UnSetMovement;
     public CustomCursor Cursor;
     public CustomTopArea TopArea;
     public CustomLeadingArea LeadingArea;

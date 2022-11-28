@@ -296,6 +296,20 @@ namespace umi3d.baseBrowser.connection
                 Menu.GameData.ParticipantCount = count;
             };
 
+            BaseController.EscClicked += () =>
+            {
+                if (GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu)
+                {
+                    GamePanel.AddScreenToStack = CustomGamePanel.GameViews.Game;
+                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
+                }
+                else
+                {
+                    GamePanel.AddScreenToStack = CustomGamePanel.GameViews.GameMenu;
+                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
+                }
+            };
+
             BaseController.SecondActionClicked += () =>
             {
                 if 
