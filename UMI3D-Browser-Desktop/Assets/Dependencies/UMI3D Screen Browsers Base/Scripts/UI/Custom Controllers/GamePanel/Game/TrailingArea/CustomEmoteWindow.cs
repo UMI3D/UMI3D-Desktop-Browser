@@ -71,7 +71,7 @@ public abstract class CustomEmoteWindow : CustomForm
 
     public static event System.Action WillUpdateFilter;
 
-    public static void OnEmoteReceived(List<Emote> emotes)
+    public static void OnEmoteConfigReceived(List<Emote> emotes)
     {
         Reset();
         Emotes = emotes;

@@ -31,8 +31,8 @@ namespace umi3d.baseBrowser.emotes
     {
         #region Fields
         #region Events
-        public event System.Action<List<Emote>> EmoteReceived;
-        public event System.Action NoEmoteReeived;
+        public event System.Action<List<Emote>> EmoteConfigReceived;
+        public event System.Action NoEmoteConfigReeived;
         public event System.Action<Emote> EmoteUpdated;
         #endregion
 
@@ -182,7 +182,7 @@ namespace umi3d.baseBrowser.emotes
                 emoteFromBundleAnimator.enabled = false; //disabled because it causes interferences with avatar bindings
                 if (emoteFromBundleAnimator.runtimeAnimatorController == null)
                 {
-                    NoEmoteReeived?.Invoke(); //no emotes support in the scene
+                    NoEmoteConfigReeived?.Invoke(); //no emotes support in the scene
                     yield break;
                 }
                 var i = 0;
@@ -205,10 +205,10 @@ namespace umi3d.baseBrowser.emotes
                 }
                 emoteAnimatorController = emoteFromBundleAnimator.runtimeAnimatorController;
                 hasReceivedEmotes = true;
-                EmoteReceived?.Invoke(Emotes); //Display the Emote Button and add emotes in windows.
+                EmoteConfigReceived?.Invoke(Emotes); //Display the Emote Button and add emotes in windows.
                 UMI3DClientUserTracking.Instance.EmoteChangedEvent.AddListener(UpdateEmote);
             }
-            if (Emotes.Count == 0) NoEmoteReeived?.Invoke();
+            if (Emotes.Count == 0) NoEmoteConfigReeived?.Invoke();
         }
         async void LoadFile(UMI3DEmoteDto emoteRefInConfig, Emote emote)
         {
@@ -231,7 +231,7 @@ namespace umi3d.baseBrowser.emotes
         {
             if (!hasReceivedEmotes) return;
 
-            NoEmoteReeived?.Invoke();
+            NoEmoteConfigReeived?.Invoke();
             Emotes.Clear();
             emoteConfigDto = null;
             emoteAnimatorController = null;
