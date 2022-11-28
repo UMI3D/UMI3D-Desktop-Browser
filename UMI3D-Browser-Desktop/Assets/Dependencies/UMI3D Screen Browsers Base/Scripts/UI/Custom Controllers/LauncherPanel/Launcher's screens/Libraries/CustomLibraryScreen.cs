@@ -45,6 +45,8 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomLibraryScreen;
 
@@ -56,9 +58,9 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
     }
 
     public override string StyleSheetPath => $"{ElementExtensions.StyleSheetMenusFolderPath}/libraryScreen";
-    public override string USSCustomClassName => "library-screen";
-    public virtual string USSCustomClassHeader => $"{USSCustomClassName}__header";
-    public virtual string USSCustomClassScrollView => $"{USSCustomClassName}__scroll-view";
+    public override string USSCustomClassName => "library__screen";
+    public virtual string USSCustomClassHeader => $"{USSCustomClassName}-header";
+    public virtual string USSCustomClassScrollView => $"{USSCustomClassName}-scroll__view";
 
     public virtual LibrarySort SortBy
     {

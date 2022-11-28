@@ -56,6 +56,8 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomLibrary;
 
@@ -73,20 +75,20 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
     public virtual string StyleSheetMenuPath => $"USS/menu";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetMenusFolderPath}/library";
     public virtual string USSCustomClassName => "library";
-    public virtual string USSCustomClassOverlay => $"{USSCustomClassName}__overlay";
-    public virtual string USSCustomClassMain => $"{USSCustomClassName}__main";
-    public virtual string USSCustomClassDropDown_Button => $"{USSCustomClassName}__drop-down__button";
-    public virtual string USSCustomClassDropDown_Button_background => $"{USSCustomClassName}__drop-down__button__background";
-    public virtual string USSCustomClassDropDown_Button_Icon_Background => $"{USSCustomClassName}__drop-down__button__icon__background";
-    public virtual string USSCustomClassDropDown_Button_Icon => $"{USSCustomClassName}__drop-down__button__icon";
-    public virtual string USSCustomClassTitle => $"{USSCustomClassName}__title";
-    public virtual string USSCustomClassSize => $"{USSCustomClassName}__size";
-    public virtual string USSCustomClassDelete => $"{USSCustomClassName}__delete";
-    public virtual string USSCustomClassDelete_Background => $"{USSCustomClassName}__delete__background";
-    public virtual string USSCustomClassDelete_Icon => $"{USSCustomClassName}__delete__icon";
-    public virtual string USSCustomClassDropDown_Field => $"{USSCustomClassName}__drop-down__field";
-    public virtual string USSCustomClassDropDown_Date => $"{USSCustomClassName}__drop-down__date";
-    public virtual string USSCustomClassDropDown_Message => $"{USSCustomClassName}__drop-down__message";
+    public virtual string USSCustomClassOverlay => $"{USSCustomClassName}-overlay";
+    public virtual string USSCustomClassMain => $"{USSCustomClassName}-main";
+    public virtual string USSCustomClassDropDown_Button => $"{USSCustomClassName}-drop_down__button";
+    public virtual string USSCustomClassDropDown_Button_background => $"{USSCustomClassName}-drop_down__button__background";
+    public virtual string USSCustomClassDropDown_Button_Icon_Background => $"{USSCustomClassName}-drop_down__button__icon__background";
+    public virtual string USSCustomClassDropDown_Button_Icon => $"{USSCustomClassName}-drop_down__button__icon";
+    public virtual string USSCustomClassTitle => $"{USSCustomClassName}-title";
+    public virtual string USSCustomClassSize => $"{USSCustomClassName}-size";
+    public virtual string USSCustomClassDelete => $"{USSCustomClassName}-delete";
+    public virtual string USSCustomClassDelete_Background => $"{USSCustomClassName}-delete__background";
+    public virtual string USSCustomClassDelete_Icon => $"{USSCustomClassName}-delete__icon";
+    public virtual string USSCustomClassDropDown_Field => $"{USSCustomClassName}-drop_down__field";
+    public virtual string USSCustomClassDropDown_Date => $"{USSCustomClassName}-drop_down__date";
+    public virtual string USSCustomClassDropDown_Message => $"{USSCustomClassName}-drop_down__message";
 
     public VisualElement Overlay = new VisualElement { name = "overlay" };
     public VisualElement Main = new VisualElement { name = "main" };
