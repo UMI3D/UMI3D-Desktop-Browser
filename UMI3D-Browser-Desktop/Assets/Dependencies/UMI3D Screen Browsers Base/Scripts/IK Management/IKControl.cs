@@ -49,6 +49,9 @@ public class IKControl : MonoBehaviour
     private float rightAnimation = 0f;
     private float leftAnimation = 0f;
 
+    private (Vector3 localPosition, Quaternion localRotation) rightRestFoot;
+    private (Vector3 localPosition, Quaternion localRotation) leftRestFoot;
+
     public class BodyInteractionHelper
     {
         public class PoseSyncData
@@ -167,9 +170,20 @@ public class IKControl : MonoBehaviour
 
     float rightInitDist;
 
+    public void ResetFeet()
+    {
+        RightFoot.transform.localPosition = rightRestFoot.localPosition;
+        RightFoot.transform.localRotation = rightRestFoot.localRotation;
+        LeftFoot.transform.localPosition = leftRestFoot.localPosition;
+        LeftFoot.transform.localRotation = leftRestFoot.localRotation;
+    }
+
     void Start()
     {
         animator = GetComponent<Animator>();
+
+        rightRestFoot = (RightFoot.transform.localPosition, RightFoot.transform.localRotation);
+        leftRestFoot = (LeftFoot.transform.localPosition, LeftFoot.transform.localRotation);
 
         //rightInitDist = Vector3.Distance(RightBodyInteraction.transform.position, animator.GetBoneTransform(HumanBodyBones.RightShoulder).position);
 
