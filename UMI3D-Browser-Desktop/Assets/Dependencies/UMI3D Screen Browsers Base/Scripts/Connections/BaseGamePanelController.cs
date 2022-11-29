@@ -296,12 +296,35 @@ namespace umi3d.baseBrowser.connection
                 Menu.GameData.ParticipantCount = count;
             };
 
+            Game.LeadingAndTrailingAreaClicked += worldPosition =>
+            {
+                if (ObjectMenuDisplay.isDisplaying)
+                {
+                    ObjectMenuDisplay.Collapse(true);
+                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
+                    CloseEmoteWindowAndNotifAndUseresArea();
+                }
+                else if (ObjectMenuDisplay.menu.Count > 0)
+                {
+                    if (BaseCursor.Movement == CursorMovement.Free) return;
+                    ObjectMenuDisplay.Expand(false);
+                    
+                    if
+                    (
+                        ObjectMenuDisplay.menu.Count == 1
+                        && ObjectMenu.m_displayers[0] is TextfieldDisplayer textfield
+                    ) textfield.Focus();
+                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
+                }
+            };
+
             BaseController.EscClicked += () =>
             {
                 if (GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu)
                 {
                     GamePanel.AddScreenToStack = CustomGamePanel.GameViews.Game;
                     BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
+                    CloseEmoteWindowAndNotifAndUseresArea();
                 }
                 else
                 {
@@ -318,47 +341,19 @@ namespace umi3d.baseBrowser.connection
                     || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
                 ) return;
 
-                if (ObjectMenuDisplay.menu.Count > 0)
+                if (ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Collapse(true);
+                if (BaseCursor.Movement == CursorMovement.Free)
                 {
-                    if (ObjectMenuDisplay.isDisplaying)
-                    {
-                        ObjectMenuDisplay.Collapse(true);
-                        SetMovement(this, BaseCursor.CursorMovement.Center);
-                    }
-                    else
-                    {
-                        ObjectMenuDisplay.Expand(false);
-                        BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
-                    }
+                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
+                    CloseEmoteWindowAndNotifAndUseresArea();
                 }
-                else
+                else if (BaseCursor.Movement == CursorMovement.Center)
                 {
-                    if (BaseCursor.Movement == CursorMovement.Free)
-                    {
-                        Game.DisplayNotifUsersArea = false;
-                        BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
-                    }
-                    else
-                    {
-                        Game.DisplayNotifUsersArea = true;
-                        BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
-                    }
+                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
+                    if (!Game.DisplayNotifUsersArea) Game.DisplayNotifUsersArea = true;
                 }
-            };
 
-            BaseController.MainActionClicked += () =>
-            {
-                if
-                (
-                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
-                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
-                ) return;
-
-                if (ObjectMenuDisplay.menu.Count != 1) return;
-                if (!(ObjectMenu.m_displayers[0] is TextfieldDisplayer textfield)) return;
-                BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
-                if (!ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Expand(false);
-                textfield.Focus();
+               
             };
 
             BaseController.EnterKeyPressed += () => m_next?.Invoke();
@@ -376,6 +371,12 @@ namespace umi3d.baseBrowser.connection
                 var emote = CustomEmoteWindow.Emotes[index];
                 emote.PlayEmote(emote);
             };
+        }
+
+        protected void CloseEmoteWindowAndNotifAndUseresArea()
+        {
+            if (Game.DisplayNotifUsersArea) Game.DisplayNotifUsersArea = false;
+            if (Game.DisplayEmoteWindow) Game.DisplayEmoteWindow = false;
         }
 
         float fps = 30;
@@ -403,6 +404,15 @@ namespace umi3d.baseBrowser.connection
         }
 
         public abstract CustomDialoguebox CreateDialogueBox();
+
+        protected void CloseObjectMenu()
+        {
+            if (BaseCursor.Movement != CursorMovement.Free) return;
+            if (ObjectMenuDisplay.menu.Count == 0) return;
+
+            BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
+            if (ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Collapse(true);
+        }
 
         /// <summary>
         /// Asks users some parameters when they join the environment.
