@@ -22,5 +22,12 @@ namespace umi3d.commonScreen.game
         public new class UxmlFactory : UxmlFactory<Cursor_C, UxmlTraits> { }
 
         public Cursor_C() => Set();
+
+        public override void InitElement()
+        {
+            if (ActionText == null) ActionText = new Displayer.Text_C();
+
+            base.InitElement();
+        }
     }
 }
