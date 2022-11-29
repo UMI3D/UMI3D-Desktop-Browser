@@ -22,8 +22,6 @@ public class FpsNavigation : umi3d.baseBrowser.Navigation.BaseFPSNavigation
 {
     #region Methods
 
-   public bool Squatting { get; private set; } = false;
-
     private void Update()
     {
         if (!isActive) return;
@@ -130,9 +128,9 @@ public class FpsNavigation : umi3d.baseBrowser.Navigation.BaseFPSNavigation
     /// <param name="move"></param>
     private void Walk(ref Vector2 move, ref float height)
     {
-        Squatting = Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat)) || (Squatting && !CanJump());
+        IsCrouching = Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Squat)) || (IsCrouching && !CanJump());
 
-        if (Squatting)
+        if (IsCrouching)
         {
             move.x *= (move.x > 0) ? data.forwardSpeed.y : data.backwardSpeed.y;
             move.y *= data.lateralSpeed.y;
@@ -148,7 +146,7 @@ public class FpsNavigation : umi3d.baseBrowser.Navigation.BaseFPSNavigation
             move.y *= data.lateralSpeed.x;
         }
 
-        skeleton.transform.localPosition = new Vector3(0, Mathf.Lerp(skeleton.transform.localPosition.y, (Squatting) ? data.squatHeight : data.standHeight, data.squatSpeed == 0 ? 1000000 : Time.deltaTime / data.squatSpeed), 0);
+        skeleton.transform.localPosition = new Vector3(0, Mathf.Lerp(skeleton.transform.localPosition.y, (IsCrouching) ? data.squatHeight : data.standHeight, data.squatSpeed == 0 ? 1000000 : Time.deltaTime / data.squatSpeed), 0);
 
         ComputeGravity(Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Jump)), ref height);
     }
