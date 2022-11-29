@@ -268,6 +268,7 @@ public class CustomBottomArea : VisualElement, ICustomElement
     public virtual string USSCustomClassEmote_Window => $"{USSCustomClassName}-emote__window";
 
     public System.Action<bool> NotifUsersValueChanged;
+    public System.Action EmoteClicked;
 
     public VisualElement BottomBar = new VisualElement { name = "bottom-bar" };
     public VisualElement LeftBox = new VisualElement { name = "left-box" };
@@ -331,7 +332,7 @@ public class CustomBottomArea : VisualElement, ICustomElement
         Sound.Type = ButtonType.Invisible;
         NotifAndUsers.Type = ButtonType.Invisible;
 
-        Emote.clicked += () => ButtonSelected = BottomBarButton.Emote;
+        Emote.clicked += () => EmoteClicked?.Invoke();
         NotifAndUsers.clicked += () => NotifUsersValueChanged?.Invoke(!CustomGame.S_displayNotifUserArea);
 
         Add(BottomBar);

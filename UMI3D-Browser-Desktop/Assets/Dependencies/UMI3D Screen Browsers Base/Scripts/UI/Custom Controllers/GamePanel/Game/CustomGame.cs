@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.baseBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -138,6 +139,12 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
     public virtual string USSCustomClassName => "game";
     public virtual string USSCustomClassLeadingAndTrailingBox => "game-leading__trailing__box";
 
+    /// <summary>
+    /// Event raised if the if the user clicke on the trailing and leading area but not in the objectMenu.
+    /// Take in parameter the world position of the click.
+    /// </summary>
+    public event System.Action<Vector2> LeadingAndTrailingAreaClicked;
+
     public CustomCursor Cursor;
     public CustomTopArea TopArea;
     public CustomLeadingArea LeadingArea;
@@ -149,6 +156,8 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
 
     public static bool S_displayNotifUserArea;
     public static bool S_displayEmoteWindow;
+
+    public TouchManipulator2 TouchManipulator = new TouchManipulator2(null, 0, 0);
 
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
@@ -176,9 +185,31 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
             NotifAndUserArea.notificationCenter.Filter = NotificationFilter.New;
         };
         BottomArea.NotifUsersValueChanged = value => DisplayNotifUsersArea = value;
+        BottomArea.EmoteClicked += () => DisplayEmoteWindow = !DisplayEmoteWindow;
         TopArea.InformationArea.ExpandUpdate += value => DisplayNotifUsersArea = value;
 
         LeftHandModeUpdated = () => LeftHand = !LeftHand;
+
+        this.AddManipulator(TouchManipulator);
+        TouchManipulator.ClickedDownWithInfo += (evnt, localPosition) =>
+        {
+            var worldPosition = this.LocalToWorld(localPosition);
+
+            var leadingAndTrailingLocal =  LeadingAndTrailingBox.WorldToLocal(worldPosition);
+            if (LeadingAndTrailingBox.ContainsPoint(leadingAndTrailingLocal))
+            {
+                var objectMenuLocal = TrailingArea.ObjectMenu.WorldToLocal(worldPosition);
+                if (TrailingArea.ObjectMenu.ContainsPoint(objectMenuLocal)) return;
+                LeadingAndTrailingAreaClicked?.Invoke(worldPosition);
+                return;
+            }
+
+            var topAreaLocal = TopArea.WorldToLocal(worldPosition);
+            if (TopArea.ContainsPoint(topAreaLocal))
+            {
+                return;
+            }
+        };
 
         Add(Cursor);
         Add(TopArea);
