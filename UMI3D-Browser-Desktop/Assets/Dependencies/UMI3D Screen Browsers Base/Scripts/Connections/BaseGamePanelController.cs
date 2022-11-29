@@ -505,11 +505,15 @@ namespace umi3d.baseBrowser.connection
 
             if (count == 0)
             {
+                Game.Cursor.Action = null;
                 ObjectMenuDisplay.Collapse(false);
                 if (Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed) Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed = false;
             }
             else
             {
+                if (count == 1 && ObjectMenu.m_displayers[0] is TextfieldDisplayer textfield) Game.Cursor.Action = "Edit Text";
+                else Game.Cursor.Action = "Display contextual menu";
+
                 if (!Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed) Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed = true;
                 if (Game.TrailingArea.ButtonsArea.MainActionUp != null) return;
                 Game.TrailingArea.ButtonsArea.MainActionUp = () =>
