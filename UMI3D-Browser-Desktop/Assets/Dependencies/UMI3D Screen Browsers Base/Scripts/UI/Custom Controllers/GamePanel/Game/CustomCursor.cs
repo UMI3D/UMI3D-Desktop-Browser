@@ -27,6 +27,11 @@ public class CustomCursor : VisualElement, ICustomElement
             name = "state",
             defaultValue = ElementPseudoState.Enabled
         };
+        protected UxmlStringAttributeDescription m_action = new UxmlStringAttributeDescription
+        {
+            name = "action",
+            defaultValue = null
+        };
 
         public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
         {
@@ -35,12 +40,15 @@ public class CustomCursor : VisualElement, ICustomElement
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomCursor;
 
             custom.Set
                 (
-                    m_state.GetValueFromBag(bag, cc)
+                    m_state.GetValueFromBag(bag, cc),
+                    m_action.GetValueFromBag(bag, cc)
                 );
         }
     }
@@ -57,14 +65,34 @@ public class CustomCursor : VisualElement, ICustomElement
             else this.SetEnabled(true);
         }
     }
+    public virtual string Action
+    {
+        get => ActionText.text;
+        set
+        {
+            ActionText.text = value;
+            if (string.IsNullOrEmpty(value)) ActionText.RemoveFromHierarchy();
+            else
+            {
+                Add(ActionText);
+                ActionText.schedule.Execute(() =>
+                {
+                    var halfWidth = ActionText.layout.width / 2f;
+                    ActionText.style.right = halfWidth + 40f;
+                });
+            }
+        }
+    }
 
     public virtual string StyleSheetGamePath => $"USS/game";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/cursor";
     public virtual string USSCustomClassName => "cursor";
-    public virtual string USSCustomClassTarget => $"{USSCustomClassName}__target";
+    public virtual string USSCustomClassTarget => $"{USSCustomClassName}-target";
+    public virtual string USSCustomClassAction => $"{USSCustomClassName}-action";
     public virtual string USSCustomClassState(ElementPseudoState state) => $"{USSCustomClassName}-{state}".ToLower();
 
     public VisualElement Target = new VisualElement { name = "target" };
+    public CustomText ActionText;
 
     protected ElementPseudoState m_state;
     protected bool m_hasBeenInitialized;
@@ -82,13 +110,14 @@ public class CustomCursor : VisualElement, ICustomElement
         }
         AddToClassList(USSCustomClassName);
         Target.AddToClassList(USSCustomClassTarget);
+        ActionText.AddToClassList(USSCustomClassAction);
 
         Add(Target);
     }
 
-    public virtual void Set() => Set(ElementPseudoState.Enabled);
+    public virtual void Set() => Set(ElementPseudoState.Enabled, null);
 
-    public virtual void Set(ElementPseudoState state)
+    public virtual void Set(ElementPseudoState state, string action)
     {
         if (!m_hasBeenInitialized)
         {
@@ -97,5 +126,6 @@ public class CustomCursor : VisualElement, ICustomElement
         }
 
         State = state;
+        Action = action;
     }
 }
