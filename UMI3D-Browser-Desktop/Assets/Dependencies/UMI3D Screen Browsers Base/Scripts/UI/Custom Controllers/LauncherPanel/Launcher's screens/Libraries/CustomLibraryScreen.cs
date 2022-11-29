@@ -143,6 +143,7 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
         UpdateFilterdList(null);
 
         libraries.Clear();
+        m_librariesFiltered.Clear();
         bool isThereWrongLibrariesPath = false;
         List<string> PathWrong = new List<string>();
         foreach (var lib in m_libraries)
