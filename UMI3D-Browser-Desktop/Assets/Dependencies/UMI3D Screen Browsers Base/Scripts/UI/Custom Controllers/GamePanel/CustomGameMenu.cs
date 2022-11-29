@@ -68,7 +68,7 @@ public abstract class CustomGameMenu : CustomMenuContainer<GameMenuScreens>, IGa
 
         Leave.Type = ButtonType.Danger;
 
-        Resume.text = "Close Menu";
+        Resume.text = "Close menu";
         Leave.text = "Leave environmnent";
 
         NavigationButtons.ValueEnumChanged += value => CurrentScreen = value;
