@@ -63,7 +63,7 @@ public abstract class CustomUserList : VisualElement, ICustomElement
         FilterTextField.Category = ElementCategory.Game;
         FilterTextField.RegisterValueChangedCallback(ce => Filter());
 
-        FilterLabel.text = "Search user name:";
+        FilterLabel.text = "Search by user name:";
 
         Add(FilterTextField);
         FilterTextField.Add(FilterLabel);
