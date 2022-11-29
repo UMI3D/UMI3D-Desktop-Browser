@@ -17,6 +17,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -37,6 +38,16 @@ public abstract class CustomUserList : VisualElement, ICustomElement
     protected CustomUser[] m_users;
     protected List<CustomUser> m_filteredUser = new List<CustomUser>();
 
+    /// <summary>
+    /// Stores all audio settings set for each users (memory for a same environment).
+    /// </summary>
+    protected Dictionary<ulong, CustomUser> intraUserAudioSettingsMemory = new Dictionary<ulong, CustomUser>();
+
+    /// <summary>
+    /// Stores all audio settings set for each users (memory between environments).
+    /// </summary>
+    protected Dictionary<string, CustomUser> interUserAudioSettingsMemory = new Dictionary<string, CustomUser>();
+
     public virtual void InitElement()
     {
         try
@@ -48,9 +59,10 @@ public abstract class CustomUserList : VisualElement, ICustomElement
         {
             throw e;
         }
+
         AddToClassList(USSCustomClassName);
         FilterLabel.AddToClassList(USSCustomClassFilterLabel);
-
+        UMI3DEnvironmentClient.EnvironementJoinned.AddListener(OnEnvironmentChanged);
         UMI3DUser.OnUserMicrophoneStatusUpdated.AddListener(UpdateUser);
         UMI3DUser.OnUserAvatarStatusUpdated.AddListener(UpdateUser);
         UMI3DUser.OnUserAttentionStatusUpdated.AddListener(UpdateUser);
@@ -89,8 +101,29 @@ public abstract class CustomUserList : VisualElement, ICustomElement
 
     #region Implementation
 
+    private void OnEnvironmentChanged()
+    {
+        interUserAudioSettingsMemory = new Dictionary<string, CustomUser>();
+
+        foreach(var u in intraUserAudioSettingsMemory.Values)
+        {
+            if (!string.IsNullOrEmpty(u.User.login))
+                interUserAudioSettingsMemory[u.User.login] = u;
+        }
+
+        intraUserAudioSettingsMemory.Clear();
+    }
+
     public virtual void RefreshList()
     {
+        if (m_users != null)
+        {
+            foreach (var u in m_users)
+            {
+                intraUserAudioSettingsMemory[u.User.id] = u;
+            }
+        }
+
         var usersList = UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList
             .Where(u => !u.isClient)
             .Select(u => CreateUser(u))
@@ -107,7 +140,7 @@ public abstract class CustomUserList : VisualElement, ICustomElement
     {
         var _u = m_users.FirstOrDefault(U => (U.User == user));
         if (_u == null) RefreshList();
-        else _u.IsMute = !user.microphoneStatus;
+        //else _u.IsMute = !user.microphoneStatus;
     }
 
     protected virtual void Filter()

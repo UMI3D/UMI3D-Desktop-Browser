@@ -338,6 +338,8 @@ namespace umi3d.baseBrowser.connection
         [HideInInspector]
         public event System.Action ConnectionLost;
         [HideInInspector]
+        public event System.Action EnvironmentLeave;
+        [HideInInspector]
         public event System.Action<string> ForcedLeave;
         [HideInInspector]
         public event System.Action<float> LoadingLauncher;
@@ -417,6 +419,7 @@ namespace umi3d.baseBrowser.connection
             RedirectionStarted = null;
             RedirectionEnded = null;
             ConnectionLost = null;
+            EnvironmentLeave = null;
             ForcedLeave = null;
             AskForDownloadingLibraries = null;
             GetParameterDtos = null;
@@ -446,6 +449,8 @@ namespace umi3d.baseBrowser.connection
             //Destroy(cdk.UMI3DClientServer.Instance.gameObject);
 
             Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Free);
+
+            EnvironmentLeave?.Invoke();
 
             LoadLauncher();
         }

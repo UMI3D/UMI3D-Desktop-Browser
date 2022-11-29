@@ -22,6 +22,7 @@ using umi3d.baseBrowser.notification;
 using umi3d.cdk.collaboration;
 using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
+using umi3d.commonScreen.game;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static umi3d.baseBrowser.Controller.BaseCursor;
@@ -371,6 +372,8 @@ namespace umi3d.baseBrowser.connection
                 var emote = CustomEmoteWindow.Emotes[index];
                 emote.PlayEmote(emote);
             };
+
+            BaseConnectionProcess.Instance.EnvironmentLeave += () => NotifAndUsersArea_C.Instance = null;
         }
 
         protected void CloseEmoteWindowAndNotifAndUseresArea()
