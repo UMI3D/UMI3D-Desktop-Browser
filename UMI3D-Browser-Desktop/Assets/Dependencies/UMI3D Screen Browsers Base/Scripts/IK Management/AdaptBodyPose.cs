@@ -121,6 +121,8 @@ public class AdaptBodyPose : MonoBehaviour
             {
                 currentPose = null;
                 IKControl.leftIkActive = IKControl.rightIkActive = IKControl.overrideFeetIk = false;
+                StopCoroutine(bodyPlacement);
+                IKControl.ResetFeet();
             }
         }
     }
