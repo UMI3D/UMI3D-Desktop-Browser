@@ -68,7 +68,12 @@ public abstract class CustomUserList : VisualElement, ICustomElement
         UMI3DUser.OnUserAttentionStatusUpdated.AddListener(UpdateUser);
         UMI3DUser.OnRemoveUser.AddListener((u) => 
         {
-            m_users.FirstOrDefault(U => (U.User == u))?.RemoveFromHierarchy();
+            m_users.FirstOrDefault
+            (U =>
+            {
+                if (U == null) return false;
+                return U.User == u;
+            })?.RemoveFromHierarchy();
             Filter();
         });
 
