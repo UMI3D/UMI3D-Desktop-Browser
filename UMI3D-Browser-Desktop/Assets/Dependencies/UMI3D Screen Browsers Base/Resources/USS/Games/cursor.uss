@@ -8,15 +8,21 @@
 	justify-content: center;
 }
 
-.cursor > .cursor__target {
+.cursor > .cursor-target {
+	position: absolute;
 	width: var(--size-cursor__target-enabled);
 	height: var(--size-cursor__target-enabled);
 }
 
-.cursor.cursor-enabled > .cursor__target {
+.cursor.cursor-enabled > .cursor-target {
 	background-image: var(--background-image-cursor__target-enabled);
 }
 
-.cursor.cursor-hover > .cursor__target {
+.cursor.cursor-hover > .cursor-target {
 	background-image: var(--background-image-cursor__target-hover);
+}
+
+.cursor-action {
+	max-width: 35%;
+	background-color: var(--background-color-transparent-game);
 }

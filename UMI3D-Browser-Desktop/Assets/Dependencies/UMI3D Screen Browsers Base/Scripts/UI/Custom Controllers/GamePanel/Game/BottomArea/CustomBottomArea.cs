@@ -340,7 +340,7 @@ public class CustomBottomArea : VisualElement, ICustomElement
         BottomBar.Add(LeftBox);
 
         BottomBar.Add(RightBox);
-        RightBox.Add(Avatar);
+        //RightBox.Add(Avatar);
         RightBox.Add(Emote);
         RightBox.Add(Mic);
         RightBox.Add(Sound);
