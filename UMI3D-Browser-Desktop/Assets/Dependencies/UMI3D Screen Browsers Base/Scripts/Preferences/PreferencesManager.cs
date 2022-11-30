@@ -23,9 +23,17 @@ namespace umi3d.baseBrowser.preferences
 {
     public static class PreferencesManager
     {
-        public static void StoreData<T>(T data, string dataType)
+        public static void StoreData<T>(T data, string dataType, string directories = null)
         {
-            string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, dataType);
+            string path;
+
+            if (!string.IsNullOrEmpty(directories))
+            {
+                string directoriesPath = inetum.unityUtils.Path.Combine(Application.persistentDataPath, directories);
+                if (!Directory.Exists(directoriesPath)) Directory.CreateDirectory(directoriesPath);
+                path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, $"{directories}/{dataType}");
+            }
+            else path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, dataType);
 
             FileStream file;
             if (File.Exists(path)) file = File.OpenWrite(path);
@@ -37,9 +45,13 @@ namespace umi3d.baseBrowser.preferences
             file.Close();
         }
 
-        public static bool TryGet<T>(out T data, string dataType) where T : new()
+        public static bool TryGet<T>(out T data, string dataType, string directories = null) where T : new()
         {
-            string path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, dataType);
+            string path;
+
+            if (!string.IsNullOrEmpty(directories))
+                path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, $"{directories}/{dataType}");
+            else path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, dataType);
 
             if (!File.Exists(path))
             {
