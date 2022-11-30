@@ -21,12 +21,11 @@ public enum SettingsScreensEnum
 {
     FirstScreen,
     General,
-    Resolution,
+    Graphics,
 
-    Player,
-    Controller,
+    Controls,
     Audio,
-    Notification
+    Notifications
 }
 
 public class CustomSettingsContainer : CustomMenuScreen<SettingsScreensEnum>
@@ -38,7 +37,6 @@ public class CustomSettingsContainer : CustomMenuScreen<SettingsScreensEnum>
     public CustomSettingsGeneral General;
     public CustomSettingsResolution Resolution;
 
-    public CustomSettingsPlayer Player;
     public CustomSettingsController Controller;
     public CustomSettingsAudio Audio;
     public CustomSettingsNotification Notification;
@@ -63,7 +61,6 @@ public class CustomSettingsContainer : CustomMenuScreen<SettingsScreensEnum>
 
         General.BackButtonCkicked = () => RemoveScreenFromStack();
         Resolution.BackButtonCkicked = () => RemoveScreenFromStack();
-        Player.BackButtonCkicked = () => RemoveScreenFromStack();
         Controller.BackButtonCkicked = () => RemoveScreenFromStack();
         Audio.BackButtonCkicked = () => RemoveScreenFromStack();
         Notification.BackButtonCkicked = () => RemoveScreenFromStack();
@@ -81,19 +78,16 @@ public class CustomSettingsContainer : CustomMenuScreen<SettingsScreensEnum>
             case SettingsScreensEnum.General:
                 screen = General;
                 break;
-            case SettingsScreensEnum.Resolution:
+            case SettingsScreensEnum.Graphics:
                 screen = Resolution;
                 break;
-            case SettingsScreensEnum.Player:
-                screen = Player;
-                break;
-            case SettingsScreensEnum.Controller:
+            case SettingsScreensEnum.Controls:
                 screen = Controller;
                 break;
             case SettingsScreensEnum.Audio:
                 screen = Audio;
                 break;
-            case SettingsScreensEnum.Notification:
+            case SettingsScreensEnum.Notifications:
                 screen = Notification;
                 break;
             default:
@@ -107,7 +101,6 @@ public class CustomSettingsContainer : CustomMenuScreen<SettingsScreensEnum>
         FirstScreen.RemoveFromHierarchy();
         General.RemoveFromHierarchy();
         Resolution.RemoveFromHierarchy();
-        Player.RemoveFromHierarchy();
         Controller.RemoveFromHierarchy();
         Audio.RemoveFromHierarchy();
         Notification.RemoveFromHierarchy();

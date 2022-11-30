@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.baseBrowser.Navigation;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static umi3d.baseBrowser.preferences.SettingsPreferences;
@@ -35,6 +36,8 @@ public class CustomSettingsController : CustomSettingScreen
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomSettingsController;
 
@@ -70,6 +73,8 @@ public class CustomSettingsController : CustomSettingScreen
 
     public override string USSCustomClassName => "setting-controller";
 
+    public CustomSlider CamreraSensibility;
+
     public CustomToggle JoystickStaticToggle;
     public CustomToggle LeftHandToggle;
 
@@ -78,6 +83,16 @@ public class CustomSettingsController : CustomSettingScreen
     public override void InitElement()
     {
         base.InitElement();
+
+        fpsData = Resources.Load<BaseFPSData>("Scriptables/GamePanel/FPSData");
+
+        CamreraSensibility.label = "Camera sensibility";
+        CamreraSensibility.lowValue = 2f;
+        CamreraSensibility.highValue = 10f;
+        CamreraSensibility.showInputField = true;
+        CamreraSensibility.RegisterValueChangedCallback(ce => OnCameraSensibilityValueChanged(ce.newValue));
+
+        ScrollView.Add(CamreraSensibility);
 
         JoystickStaticToggle.label = "Static joystick";
         JoystickStaticToggle.RegisterValueChangedCallback(ce =>
@@ -98,21 +113,33 @@ public class CustomSettingsController : CustomSettingScreen
         
         if (TryGetControllerData(out Data))
         {
+            OnCameraSensibilityValueChanged(Data.CameraSensibility);
             JoystickStaticToggle.value = Data.JoystickStatic;
             LeftHandToggle.value = Data.LeftHand;
         }
         else
         {
+            OnCameraSensibilityValueChanged(5f);
             JoystickStaticToggle.value = false;
             LeftHandToggle.value = false;
         }
     }
 
-    public override void Set() => Set("Controller");
+    public override void Set() => Set("Controls");
 
     #region Implementation
 
     public ControllerData Data;
+    public BaseFPSData fpsData;
+
+    public virtual void OnCameraSensibilityValueChanged(float value)
+    {
+        value = (int)value;
+        CamreraSensibility.SetValueWithoutNotify(value);
+        fpsData.AngularViewSpeed = new Vector2(value, value);
+        Data.CameraSensibility = (int)value;
+        StoreControllerrData(Data);
+    }
 
     #endregion
 }

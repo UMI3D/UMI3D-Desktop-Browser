@@ -31,7 +31,6 @@ namespace umi3d.commonScreen.menu
             if (FirstScreen == null) FirstScreen = new SettingsFirstScreen_C();
             if (General == null) General = new SettingsGeneral_C();
             if (Resolution == null) Resolution = new SettingsResolution_C();
-            if (Player == null) Player = new SettingsPlayer_C();
             if (Controller == null) Controller = new SettingsController_C();
             if (Audio == null) Audio = new SettingsAudio_C();
             if (Notification == null) Notification = new SettingsNotification_C();

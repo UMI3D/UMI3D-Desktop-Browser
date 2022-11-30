@@ -179,7 +179,7 @@ public class CustomSettingsResolution : CustomSettingScreen
         }
     }
 
-    public override void Set() => Set("Resolution");
+    public override void Set() => Set("Graphics");
 
 
     #region Implementation
