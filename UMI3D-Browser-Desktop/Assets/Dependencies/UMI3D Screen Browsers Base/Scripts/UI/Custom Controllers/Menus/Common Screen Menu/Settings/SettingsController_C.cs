@@ -29,8 +29,9 @@ namespace umi3d.commonScreen.menu
 
             if (ScrollView == null) ScrollView = new Container.ScrollView_C();
 
-            if (JoystickStaticToggle == null) JoystickStaticToggle = new Displayer.Toggle_C();
+            if (CamreraSensibility == null) CamreraSensibility = new Displayer.Slider_C();
 
+            if (JoystickStaticToggle == null) JoystickStaticToggle = new Displayer.Toggle_C();
             if (LeftHandToggle == null) LeftHandToggle = new Displayer.Toggle_C();
 
             base.InitElement();
