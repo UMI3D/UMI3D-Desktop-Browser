@@ -66,8 +66,8 @@ public class CustomSettingsFirstScreen : CustomMenuScreen
 
         ShortScreenTitle = "Settings";
 
-        AppSettingsButtonGroup.Options = $"{SettingsScreensEnum.General}, {SettingsScreensEnum.Resolution}";
-        GameSettingsButtonGroup.Options = $"{SettingsScreensEnum.Player}, {SettingsScreensEnum.Controller}, {SettingsScreensEnum.Audio}, {SettingsScreensEnum.Notification}";
+        AppSettingsButtonGroup.Options = $"{SettingsScreensEnum.General}, {SettingsScreensEnum.Graphics}";
+        GameSettingsButtonGroup.Options = $"{SettingsScreensEnum.Controls}, {SettingsScreensEnum.Audio}, {SettingsScreensEnum.Notifications}";
 
         Add(ScrollView);
         ScrollView.Add(AppSettingsButtonGroup);
