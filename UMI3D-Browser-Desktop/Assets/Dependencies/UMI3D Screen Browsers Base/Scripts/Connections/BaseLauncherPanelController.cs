@@ -33,9 +33,7 @@ namespace umi3d.baseBrowser.connection
             Debug.Assert(document != null);
 
             Launcher = root.Q<CustomLauncher>();
-#if UNITY_STANDALONE
-            Launcher.Version = BrowserDesktop.BrowserVersion.Version;
-#else
+#if !UNITY_STANDALONE
             Launcher.Version = Application.version;
 #endif
             Launcher.Connect = async (value) => await BaseConnectionProcess.Instance.InitConnect(value);
