@@ -50,16 +50,6 @@ public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncher
         }
     }
 
-    ///// <summary>
-    ///// Allows users to use escape and return keys to navigate through the launcher.
-    ///// </summary>
-    //private void CheckShortcuts()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Return) && !DialogueBox_E.Instance.IsDisplaying)
-    //        nextStep?.Invoke();
-    //    else if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)) && !DialogueBox_E.Instance.IsDisplaying)
-    //        previousStep?.Invoke();
-    //}
     #endregion
 
     protected override void Start()
@@ -92,5 +82,7 @@ public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncher
         };
 
         SetUpKeyboardConfiguration();
+
+        Launcher.Version = BrowserDesktop.BrowserVersion.Version;
     }
 }

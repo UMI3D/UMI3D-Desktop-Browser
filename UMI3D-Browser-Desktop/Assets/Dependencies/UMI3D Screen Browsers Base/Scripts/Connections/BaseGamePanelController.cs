@@ -63,9 +63,7 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void InitLoader()
         {
-#if UNITY_STANDALONE
-            Loader.Version = BrowserDesktop.BrowserVersion.Version;
-#else
+#if !UNITY_STANDALONE
             Loader.Version = Application.version;
 #endif
             Loader.Loading.Title = "Connection";
@@ -169,9 +167,7 @@ namespace umi3d.baseBrowser.connection
             ObjectMenu.InsertDisplayer = (index, displayer) => Game.TrailingArea.ObjectMenu.Insert(index, displayer);
             ObjectMenu.RemoveDisplayer = displayer => Game.TrailingArea.ObjectMenu.Remove(displayer);
 
-#if UNITY_STANDALONE
-            Menu.Version = BrowserDesktop.BrowserVersion.Version;
-#else
+#if !UNITY_STANDALONE
             Menu.Version = Application.version;
 #endif
         }
