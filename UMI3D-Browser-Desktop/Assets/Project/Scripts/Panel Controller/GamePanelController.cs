@@ -62,6 +62,20 @@ public class GamePanelController : umi3d.baseBrowser.connection.BaseGamePanelCon
         };
     }
 
+    protected override void InitLoader()
+    {
+        base.InitLoader();
+
+        Loader.Version = BrowserDesktop.BrowserVersion.Version;
+    }
+
+    protected override void InitGame()
+    {
+        base.InitGame();
+
+        Menu.Version = BrowserDesktop.BrowserVersion.Version;
+    }
+
     public override CustomDialoguebox CreateDialogueBox()
         => new umi3d.commonScreen.Displayer.Dialoguebox_C();
 }
