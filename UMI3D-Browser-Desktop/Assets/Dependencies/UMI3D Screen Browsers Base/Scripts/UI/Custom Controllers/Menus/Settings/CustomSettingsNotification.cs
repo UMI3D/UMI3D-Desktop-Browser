@@ -49,7 +49,7 @@ public class CustomSettingsNotification : CustomSettingScreen
         }
     }
 
-    public override void Set() => Set("Notification");
+    public override void Set() => Set("Notifications");
 
     #region Implementation
 

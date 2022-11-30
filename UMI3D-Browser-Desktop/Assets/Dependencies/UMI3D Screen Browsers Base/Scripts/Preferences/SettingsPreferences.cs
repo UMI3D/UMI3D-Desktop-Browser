@@ -24,6 +24,7 @@ namespace umi3d.baseBrowser.preferences
 {
     public class SettingsPreferences
     {
+        public const string c_dataFolderPath = "BrowserData";
         [Serializable]
         public struct GeneralData
         {
@@ -69,22 +70,8 @@ namespace umi3d.baseBrowser.preferences
             public bool ReduceAnimation;
         }
 
-        public static bool TryGetResolutionData(out ResolutionData data) => PreferencesManager.TryGet(out data, c_resolutionPath);
-        public static void StoreResolutionData(ResolutionData data) => PreferencesManager.StoreData(data, c_resolutionPath);
-
-        #endregion
-
-        #region Player
-
-        public const string c_playerPath = "playerData";
-        [Serializable]
-        public struct PlayerData
-        {
-            public int CameraSensibility;
-        }
-
-        public static bool TryGetPlayerData(out PlayerData data) => PreferencesManager.TryGet(out data, c_playerPath);
-        public static void StorePlayerData(PlayerData data) => PreferencesManager.StoreData(data, c_playerPath);
+        public static bool TryGetResolutionData(out ResolutionData data) => PreferencesManager.TryGet(out data, c_resolutionPath, c_dataFolderPath);
+        public static void StoreResolutionData(ResolutionData data) => PreferencesManager.StoreData(data, c_resolutionPath, c_dataFolderPath);
 
         #endregion
 
@@ -94,12 +81,14 @@ namespace umi3d.baseBrowser.preferences
         [Serializable]
         public struct ControllerData
         {
+            public int CameraSensibility;
+
             public bool JoystickStatic;
             public bool LeftHand;
         }
 
-        public static bool TryGetControllerData(out ControllerData data) => PreferencesManager.TryGet(out data, c_controllerPath);
-        public static void StoreControllerrData(ControllerData data) => PreferencesManager.StoreData(data, c_controllerPath);
+        public static bool TryGetControllerData(out ControllerData data) => PreferencesManager.TryGet(out data, c_controllerPath, c_dataFolderPath);
+        public static void StoreControllerrData(ControllerData data) => PreferencesManager.StoreData(data, c_controllerPath, c_dataFolderPath);
 
         #endregion
 
@@ -124,8 +113,8 @@ namespace umi3d.baseBrowser.preferences
             public KeyCode PushToTalkKey;
         }
 
-        public static bool TryGetAudiorData(out AudioData data) => PreferencesManager.TryGet(out data, c_audioPath);
-        public static void StoreAudioData(AudioData data) => PreferencesManager.StoreData(data, c_audioPath);
+        public static bool TryGetAudiorData(out AudioData data) => PreferencesManager.TryGet(out data, c_audioPath, c_dataFolderPath);
+        public static void StoreAudioData(AudioData data) => PreferencesManager.StoreData(data, c_audioPath, c_dataFolderPath);
 
         #endregion
 
@@ -138,8 +127,8 @@ namespace umi3d.baseBrowser.preferences
             public bool HideNotification;
         }
 
-        public static bool TryGetNotificationData(out NotificationData data) => PreferencesManager.TryGet(out data, c_notificationPath);
-        public static void StoreNotificationData(NotificationData data) => PreferencesManager.StoreData(data, c_notificationPath);
+        public static bool TryGetNotificationData(out NotificationData data) => PreferencesManager.TryGet(out data, c_notificationPath, c_dataFolderPath);
+        public static void StoreNotificationData(NotificationData data) => PreferencesManager.StoreData(data, c_notificationPath, c_dataFolderPath);
 
         #endregion
     }
