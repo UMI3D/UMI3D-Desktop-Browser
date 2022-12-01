@@ -742,54 +742,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 907048296}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &818131976 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3040778117414742077, guid: da6d27ee883946e46a8d6c30cad5b8a6,
-    type: 3}
-  m_PrefabInstance: {fileID: 907048296}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 312994988544e9549a46b379bfeb873b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &818131977 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3040778117430130126, guid: da6d27ee883946e46a8d6c30cad5b8a6,
-    type: 3}
-  m_PrefabInstance: {fileID: 907048296}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 312994988544e9549a46b379bfeb873b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &818131978 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8365892399841508373, guid: da6d27ee883946e46a8d6c30cad5b8a6,
-    type: 3}
-  m_PrefabInstance: {fileID: 907048296}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 312994988544e9549a46b379bfeb873b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &818131979 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5353366839291765893, guid: da6d27ee883946e46a8d6c30cad5b8a6,
-    type: 3}
-  m_PrefabInstance: {fileID: 907048296}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 312994988544e9549a46b379bfeb873b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &907048296
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -797,21 +749,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 498482121}
     m_Modifications:
-    - target: {fileID: 3040778117293250659, guid: da6d27ee883946e46a8d6c30cad5b8a6,
-        type: 3}
-      propertyPath: inputType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9168339693674874673, guid: da6d27ee883946e46a8d6c30cad5b8a6,
-        type: 3}
-      propertyPath: LeftHand
-      value: 
-      objectReference: {fileID: 818131979}
-    - target: {fileID: 9168339693674874673, guid: da6d27ee883946e46a8d6c30cad5b8a6,
-        type: 3}
-      propertyPath: RightHand
-      value: 
-      objectReference: {fileID: 818131978}
     - target: {fileID: 9168339693674874674, guid: da6d27ee883946e46a8d6c30cad5b8a6,
         type: 3}
       propertyPath: m_Name
@@ -946,48 +883,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 907048296}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &936305817 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8555382647405730931, guid: da6d27ee883946e46a8d6c30cad5b8a6,
-    type: 3}
-  m_PrefabInstance: {fileID: 907048296}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &936305818 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3714778082766431342, guid: da6d27ee883946e46a8d6c30cad5b8a6,
-    type: 3}
-  m_PrefabInstance: {fileID: 907048296}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 773cf0b54c5ca3d478a37265631a5a24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &936305819 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9168339693674874674, guid: da6d27ee883946e46a8d6c30cad5b8a6,
-    type: 3}
-  m_PrefabInstance: {fileID: 907048296}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &936305820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 936305819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21edf01dedf4f864fb11020850509022, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IKControl: {fileID: 936305818}
-  RightHand: {fileID: 818131978}
-  LeftHand: {fileID: 818131979}
-  RightFoot: {fileID: 818131976}
-  LeftFoot: {fileID: 818131977}
-  Hips: {fileID: 936305817}
 --- !u!1001 &1099525716
 PrefabInstance:
   m_ObjectHideFlags: 0
