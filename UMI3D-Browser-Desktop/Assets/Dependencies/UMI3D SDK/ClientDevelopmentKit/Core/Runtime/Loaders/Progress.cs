@@ -49,7 +49,7 @@ namespace umi3d.cdk
 
         public MultiProgress(string state, IEnumerable<Progress> progresses) : this(state)
         {
-            progressList.AddRange(progresses);
+            AddRange(progresses);
         }
         public MultiProgress(string state) : base(0, state)
         {
