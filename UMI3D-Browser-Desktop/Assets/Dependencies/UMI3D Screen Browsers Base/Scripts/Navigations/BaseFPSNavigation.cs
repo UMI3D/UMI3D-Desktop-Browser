@@ -271,8 +271,8 @@ namespace umi3d.baseBrowser.Navigation
                 return false;
             }
 
-            //TODO I Don't know what to do with that
-            //(currentCapsuleBase, currentCapsuleEnd) = GetCapsuleSphereCenters();
+            //Mandatory for colision.
+            (currentCapsuleBase, currentCapsuleEnd) = GetCapsuleSphereCenters();
 
             if
             (
@@ -434,8 +434,11 @@ namespace umi3d.baseBrowser.Navigation
         }
         protected (Vector3, Vector3) GetCapsuleSphereCenters()
         {
-            return (transform.position + transform.up * (playerRadius + maxStepHeight + stepEpsilon),
-                topHead.position - transform.up * playerRadius);
+            return 
+            (
+                transform.position + transform.up * (playerRadius + maxStepHeight + stepEpsilon),
+                topHead.position - transform.up * playerRadius
+            );
         }
 #if UNITY_EDITOR
         private void OnDrawGizmos()
