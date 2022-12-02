@@ -60,7 +60,6 @@ public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncher
         Launcher.Header.Minimize.clicked += Windows_Manager.Minimize;
         Launcher.Header.Maximize.clicked += Windows_Manager.Maximize;
         Launcher.Header.Close.clicked += Application.Quit;
-        Launcher.Settings.Audio.SetMic();
 
         Windows_Manager.FullScreenEnabled = value => Launcher.DisplayHeader = value;
         Windows_Manager.DisplayDialogueBoxToQuit = () =>

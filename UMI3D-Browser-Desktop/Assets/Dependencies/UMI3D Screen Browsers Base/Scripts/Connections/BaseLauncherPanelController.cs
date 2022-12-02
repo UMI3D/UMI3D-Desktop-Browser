@@ -36,6 +36,7 @@ namespace umi3d.baseBrowser.connection
 #if !UNITY_STANDALONE
             Launcher.Version = Application.version;
 #endif
+            Launcher.Settings.Audio.SetAudio();
             Launcher.Connect = async (value) => await BaseConnectionProcess.Instance.InitConnect(value);
             Launcher.StoreCurrentConnectionDataAndConnect = (ip, port) => BaseConnectionProcess.Instance.ConnectWithMediaDto(ip, port);
             Launcher.CurrentServer = BaseConnectionProcess.Instance.currentServer;
