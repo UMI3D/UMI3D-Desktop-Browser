@@ -82,6 +82,9 @@ namespace umi3d.commonScreen.Displayer
             textfield.label = menuItem.ToString();
             textfield.isDelayed = true;
             textfield.RegisterValueChangedCallback(OnValueChanged);
+            textfield.value = menuItem.GetValue();
+
+            textfield.isReadOnly = menuItem.dto.isDisplayer;
 
             if (menuItem.dto.privateParameter)
             {
