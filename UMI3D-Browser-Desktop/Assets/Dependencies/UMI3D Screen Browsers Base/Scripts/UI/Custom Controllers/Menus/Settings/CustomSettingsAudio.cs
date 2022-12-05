@@ -73,30 +73,42 @@ public class CustomSettingsAudio : CustomSettingScreen
 
         MicDropdown.label = "Microphone";
         MicDropdown.RegisterValueChangedCallback(ce => OnMicDropdownValueChanged(ce.newValue));
+#if UNITY_STANDALONE
         ScrollView.Add(MicDropdown);
+#endif
 
         NoiseReductionToggle.label = "Use noise reduction";
         NoiseReductionToggle.RegisterValueChangedCallback(ce => OnNoiseReductionValueChanged(ce.newValue));
+#if UNITY_STANDALONE
         ScrollView.Add(NoiseReductionToggle);
+#endif
 
         MicModeSegmentedPicker.Label = "Mode";
         MicModeSegmentedPicker.ValueEnumChanged += value => OnMicModeValueChanged(value);
+#if UNITY_STANDALONE
         ScrollView.Add(MicModeSegmentedPicker);
+#endif
 
         AmplitudeSlider.label = "Noise Threshold";
         AmplitudeSlider.RegisterValueChangedCallback(ce => OnAmplitudeValueChanged(ce.newValue));
         AmplitudeSlider.lowValue = 0f;
         AmplitudeSlider.highValue = 1f;
+#if UNITY_STANDALONE
         ScrollView.Add(AmplitudeSlider);
+#endif
 
         DelayBeaforeShutingMicTextfield.label = "Delay before mute mic when lower than threshold";
         DelayBeaforeShutingMicTextfield.RegisterValueChangedCallback(ce => OnDelayBeforeShutingMicValueChanged(ce.newValue));
+#if UNITY_STANDALONE
         ScrollView.Add(DelayBeaforeShutingMicTextfield);
+#endif
 
         PushToTalkKeyDropdown.label = "Push to talk key";
         PushToTalkKeyDropdown.RegisterValueChangedCallback(ce => OnPushToTalkValueChanged(ce.newValue));
         PushToTalkKeyDropdown.choices = Enum.GetNames(typeof(KeyCode)).ToList();
+#if UNITY_STANDALONE
         ScrollView.Add(PushToTalkKeyDropdown);
+#endif
 
         LoopBackButton.ClickedDown += () => OnLoopBackValueChanged(!m_loopBack);
         ScrollView.Add(LoopBackButton);
@@ -114,7 +126,11 @@ public class CustomSettingsAudio : CustomSettingScreen
 
     protected bool m_loopBack;
 
-    public void SetMic()
+#if UNITY_STANDALONE
+    /// <summary>
+    /// Set the audio for a desktop browser.
+    /// </summary>
+    public void SetAudio()
     {
         var mics = umi3d.cdk.collaboration.MicrophoneListener.GetMicrophonesNames().ToList();
         MicDropdown.choices = mics;
@@ -145,6 +161,16 @@ public class CustomSettingsAudio : CustomSettingScreen
             OnPushToTalkValueChanged(KeyCode.M.ToString());
         }
     }
+#else
+    /// <summary>
+    /// Set the audio for a mobile browser.
+    /// </summary>
+    public void SetAudio()
+    {
+        if (TryGetAudiorData(out Data)) OnGeneralVolumeValueChanged(Data.GeneralVolume);
+        else OnGeneralVolumeValueChanged(10f);
+    }
+#endif
 
     public void OnGeneralVolumeValueChanged(float value)
     {
@@ -163,8 +189,8 @@ public class CustomSettingsAudio : CustomSettingScreen
     {
         MicDropdown.SetValueWithoutNotify(value);
 
-        if(!MicDropdown.choices.Contains(value)
-            || (umi3d.cdk.collaboration.MicrophoneListener.Exists && value == umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName())) 
+        if (!MicDropdown.choices.Contains(value)
+            || (umi3d.cdk.collaboration.MicrophoneListener.Exists && value == umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName()))
             return;
 
         if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
@@ -174,12 +200,15 @@ public class CustomSettingsAudio : CustomSettingScreen
         StoreAudioData(Data);
     }
 
+
     public void OnNoiseReductionValueChanged(bool value)
     {
         NoiseReductionToggle.SetValueWithoutNotify(value);
 
+#if UNITY_STANDALONE
         if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
             umi3d.cdk.collaboration.MicrophoneListener.Instance.UseNoiseReduction = value;
+#endif
 
         Data.NoiseReduction = value;
         StoreAudioData(Data);

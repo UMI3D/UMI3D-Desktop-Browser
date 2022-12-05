@@ -145,13 +145,13 @@ namespace umi3d.baseBrowser.connection
                     }).Every(60000);
                 }).ExecuteLater(60000);
             };
-            
-            EmoteManager.Instance.EmoteConfigReceived += emotes => 
+
+            EmoteManager.Instance.EmoteConfigReceived += emotes =>
             {
                 Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
                 CustomEmoteWindow.OnEmoteConfigReceived(emotes);
             };
-            EmoteManager.Instance.NoEmoteConfigReeived += () => 
+            EmoteManager.Instance.NoEmoteConfigReeived += () =>
             {
                 Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
                 CustomEmoteWindow.Reset();
@@ -170,6 +170,7 @@ namespace umi3d.baseBrowser.connection
 #if !UNITY_STANDALONE
             Menu.Version = Application.version;
 #endif
+            Menu.Settings.Audio.SetAudio();
         }
 
         protected override void Awake()
@@ -305,7 +306,7 @@ namespace umi3d.baseBrowser.connection
                 {
                     if (BaseCursor.Movement == CursorMovement.Free) return;
                     ObjectMenuDisplay.Expand(false);
-                    
+
                     if
                     (
                         ObjectMenuDisplay.menu.Count == 1
@@ -332,7 +333,7 @@ namespace umi3d.baseBrowser.connection
 
             BaseController.SecondActionClicked += () =>
             {
-                if 
+                if
                 (
                     GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
                     || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
@@ -350,7 +351,7 @@ namespace umi3d.baseBrowser.connection
                     if (!Game.DisplayNotifUsersArea) Game.DisplayNotifUsersArea = true;
                 }
 
-               
+
             };
 
             BaseController.EnterKeyPressed += () => m_next?.Invoke();
@@ -494,7 +495,7 @@ namespace umi3d.baseBrowser.connection
                     break;
             }
         }
-        
+
         protected virtual void OnMenuObjectContentChange()
         {
             var count = ObjectMenuDisplay.menu.Count;
