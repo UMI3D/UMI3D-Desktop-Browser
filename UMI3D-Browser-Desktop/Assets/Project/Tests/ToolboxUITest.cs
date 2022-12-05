@@ -24,16 +24,7 @@ public class ToolboxUITest : MonoBehaviour
 {
     public UIDocument UIDoc;
     public MenuDisplayManager DisplayManager;
-    private VisualElement mainView;
 
-    void Start()
-    {
-        mainView = UIDoc.rootVisualElement.Q("mainView");
-
-        ObjectMenuWindow_E.Instance.InsertRootTo(mainView);
-
-        //ToolboxWindow_E.Instance.InsertRootTo(mainView);
-    }
 
     #region Toolboxes tests
 
@@ -54,17 +45,6 @@ public class ToolboxUITest : MonoBehaviour
     private void StartToolboxTest()
     {
         Close();
-
-        MenuBar_E
-            .Instance
-            .InsertRootTo(UIDoc.rootVisualElement.Q("top"));
-
-        MenuBar_E.Instance.ToolboxButton.Clicked += () => DisplayManager.CreateMenuAndDisplay(true, false);
-
-        ToolboxWindow_E
-            .Instance
-            .InsertRootTo(UIDoc.rootVisualElement.Q("mainView"));
-
 
         ///FAKE DATA
 
