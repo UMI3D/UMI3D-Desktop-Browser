@@ -1,7 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement style="flex-direction: row; flex-grow: 1;">
-        <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" show-vertical-scroller="true" vertical-scroller-visibility="AlwaysVisible" style="flex-grow: 1;" />
-        <ui:Scroller high-value="100" direction="Vertical" value="42" />
-        <ui:VisualElement name="ScrollerContainer" />
-    </ui:VisualElement>
-</ui:UXML>
