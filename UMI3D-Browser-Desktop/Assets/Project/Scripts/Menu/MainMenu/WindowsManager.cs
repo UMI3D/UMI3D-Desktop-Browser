@@ -88,20 +88,8 @@ public class WindowsManager : MonoBehaviour
     private bool WantsToQuit()
     {
         bool wantsToQuit = QuittingManager.ApplicationIsQuitting;
-        if (!wantsToQuit && !DialogueBox_E.Instance.IsDisplaying) DisplayDialogueBoxToQuit?.Invoke();
+        if (!wantsToQuit) DisplayDialogueBoxToQuit?.Invoke();
         return wantsToQuit;
-    }
-
-    /// <summary>
-    /// Show dialogue box to quit when the user whant to quit.
-    /// </summary>
-    private void ShowDialogueBoxToQuit()
-    {
-        DialogueBox_E.Instance.Setup("Close application", "Are you sure ...?", "YES", "NO", (b) => 
-        { 
-            QuittingManager.ApplicationIsQuitting = b;
-            if (b) Application.Quit(); 
-        });
     }
 
     #endregion
