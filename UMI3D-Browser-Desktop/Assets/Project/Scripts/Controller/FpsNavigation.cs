@@ -27,8 +27,6 @@ public class FpsNavigation : umi3d.baseBrowser.Navigation.BaseFPSNavigation
     {
         if (!base.OnUpdate()) return false;
 
-        if (TextInputDisplayerElement.isTyping) return false;
-
         if (state == State.Default && Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView))) state = State.FreeHead;
         else if (state == State.FreeHead && !Input.GetKey(InputLayoutManager.GetInputCode(InputLayoutManager.Input.FreeView)))
         {
