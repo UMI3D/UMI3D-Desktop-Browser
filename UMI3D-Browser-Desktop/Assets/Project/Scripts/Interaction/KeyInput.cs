@@ -182,7 +182,7 @@ namespace BrowserDesktop.Interaction
         {
             if (icon != null)
                 throw new System.Exception("Not implemented yet");
-            Shortcutbox_E.Instance.AddShortcut(label, inputName);
+            //Shortcutbox_E.Instance.AddShortcut(label, inputName);
         }
 
         #region Associate and Dissociate
@@ -257,7 +257,7 @@ namespace BrowserDesktop.Interaction
             if (Down) onInputUp.Invoke();
             ResetButton();
             associatedInteraction = null;
-            Shortcutbox_E.Instance.ClearShortcutExceptRightClick();
+            //Shortcutbox_E.Instance.ClearShortcutExceptRightClick();
         }
 
         void ResetButton()
