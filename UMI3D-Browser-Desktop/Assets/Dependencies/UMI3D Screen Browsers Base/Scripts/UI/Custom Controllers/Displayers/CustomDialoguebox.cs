@@ -277,12 +277,14 @@ public abstract class CustomDialoguebox : VisualElement, ICustomElement
         {
             Callback?.Invoke(0);
             this.RemoveFromHierarchy();
+            DisplayNextDialogueBox();
         };
 
         ChoiceB.clicked += () =>
         {
             Callback?.Invoke(1);
             this.RemoveFromHierarchy();
+            DisplayNextDialogueBox();
         };
 
         Add(Body);
@@ -291,13 +293,98 @@ public abstract class CustomDialoguebox : VisualElement, ICustomElement
         Body.Add(ChoicesContainer);
     }
 
-    public virtual void AddToTheRoot(VisualElement element)
+    public override VisualElement contentContainer => m_isSet ? Container.contentContainer : this;
+
+    #region Implementation
+
+    public Action<int> Callback;
+    public static Queue<(CustomDialoguebox, VisualElement)> Queue = new Queue<(CustomDialoguebox, VisualElement)>();
+    public static Queue<(CustomDialoguebox, VisualElement)> PriorityQueue = new Queue<(CustomDialoguebox, VisualElement)>();
+
+    /// <summary>
+    /// Enqueue this. It will then be displayed at the root of this visual [element].
+    /// </summary>
+    /// <param name="element"></param>
+    public virtual void Enqueue(VisualElement element)
     {
+        Queue.Enqueue((this, element));
+        if (Queue.Count > 1 || PriorityQueue.Count > 1) return;
+
+        AddToTheRoot(element);
+    }
+
+    /// <summary>
+    /// Enqueue this. It will be displayed before the simple dialogue box and after the priority dialogue box that have beeen added earlyer.
+    /// </summary>
+    /// <param name="element"></param>
+    public virtual void EnqueuePriority(VisualElement element)
+    {
+        PriorityQueue.Enqueue((this, element));
+        if (PriorityQueue.Count > 1) return;
+
+        if (Queue.Count > 0)
+        {
+            var (currentDialogueBox, elt) = Queue.Peek();
+            currentDialogueBox.RemoveFromHierarchy();
+        }
+
+        AddToTheRoot(element);
+    }
+
+    /// <summary>
+    /// Add this to the root of the visual [element].
+    /// </summary>
+    /// <param name="element"></param>
+    protected virtual void AddToTheRoot(VisualElement element)
+    {
+        if (element == null) return;
         var root = element.FindRoot();
         root.Add(this);
     }
 
-    public Action<int> Callback;
+    /// <summary>
+    /// Display the first simple dialogue box in the [Queue].
+    /// <see cref="Queue"/>
+    /// </summary>
+    protected virtual void DisplayFirstInQueue()
+    {
+        if (Queue.Count == 0) return;
+        var (nextDialogueBox, elt) = Queue.Peek();
+        if (nextDialogueBox != null) nextDialogueBox.AddToTheRoot(elt);
+    }
 
-    public override VisualElement contentContainer => m_isSet ? Container.contentContainer : this;
+    /// <summary>
+    /// Display the first priority dialogue box in the [PriorityQueue].
+    /// <see cref="PriorityQueue"/>
+    /// </summary>
+    protected virtual void DisplayFirstInPriorityQueue()
+    {
+        if (PriorityQueue.Count == 0) return;
+        var (nextDialogueBox, elt) = PriorityQueue.Peek();
+        if (nextDialogueBox != null) nextDialogueBox.AddToTheRoot(elt);
+    }
+
+    /// <summary>
+    /// Remove the current dialogue box from the right Queue ([Queue] or [PriorityQueue]). Then display the next dialogue box (eather a priority one if any or a simple one).
+    /// </summary>
+    protected virtual void DisplayNextDialogueBox()
+    {
+        if (PriorityQueue.Count > 0)
+        {
+            //Dequeue the current dialogue box.
+            PriorityQueue.Dequeue();
+
+            if (PriorityQueue.Count > 0) DisplayFirstInPriorityQueue();
+            else if (Queue.Count > 0) DisplayFirstInQueue();
+        }
+        else if (Queue.Count > 0)
+        {
+            //Dequeue the current dialogue box.
+            Queue.Dequeue();
+
+            if (Queue.Count > 0) DisplayFirstInQueue();
+        }
+    }
+
+    #endregion
 }

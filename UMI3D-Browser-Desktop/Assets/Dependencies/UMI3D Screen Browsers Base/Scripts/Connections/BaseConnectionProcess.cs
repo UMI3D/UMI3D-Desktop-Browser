@@ -94,6 +94,8 @@ namespace umi3d.baseBrowser.connection
                 return p;
             };
 
+            UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.AddListener(() => LeaveWithoutNotify());
+
             cdk.collaboration.UMI3DEnvironmentClient.EnvironementLoaded.AddListener(() => EnvironmentLoaded?.Invoke());
 
             UMI3DCollaborationEnvironmentLoader.OnUpdateJoinnedUserList += () => UserCountUpdated?.Invoke(UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList.Count());
@@ -401,7 +403,7 @@ namespace umi3d.baseBrowser.connection
             UnityEngine.Debug.Log(title + " \n" + message + " \n" + "Ignore and resume loading ? ");
 
             bool? choise = null;
-            System.Action<int> action = (index) => { choise = index == 1; };
+            System.Action<int> action = (index) => { choise = index == 0; };
 
             DisplayPopUpAfterLoadingFailed?.Invoke(title, message, action);
 
@@ -443,10 +445,15 @@ namespace umi3d.baseBrowser.connection
         /// </summary>
         public void Leave()
         {
+            cdk.collaboration.UMI3DCollaborationClientServer.Logout();
+
+            LeaveWithoutNotify();
+        }
+
+        public void LeaveWithoutNotify()
+        {
             cdk.UMI3DEnvironmentLoader.Clear();
             cdk.UMI3DResourcesManager.Instance.ClearCache();
-            cdk.collaboration.UMI3DCollaborationClientServer.Logout();
-            //Destroy(cdk.UMI3DClientServer.Instance.gameObject);
 
             Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Free);
 

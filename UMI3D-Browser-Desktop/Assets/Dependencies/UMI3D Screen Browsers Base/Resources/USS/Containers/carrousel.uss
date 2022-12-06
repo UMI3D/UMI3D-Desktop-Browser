@@ -1,0 +1,57 @@
+.carrousel {
+    padding-left: var(--margin_padding-container);
+    padding-right: var(--margin_padding-container);
+    padding-top: var(--margin_padding-container);
+    padding-bottom: var(--margin_padding-container);
+    flex-direction: row;
+    justify-content: center;
+}
+
+.carrousel-button {
+    width: var(--size-medium-displayer);
+    justify-content: center;
+}
+
+.carrousel-box_elts {
+    flex-direction: row;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.carrousel-container_box {
+    flex-grow: 1;
+}
+
+.carrousel-bottom_buttons {
+    flex-direction: row;
+    justify-content: center;
+}
+
+.carrousel-prev_icon {
+    background-image: var(--image-arrow_carrousel);
+    height: 90%;
+    width: 90%;
+    rotate: 180deg;
+}
+
+.carrousel-next_icon {
+    background-image: var(--image-arrow_carrousel);
+    height: 90%;
+    width: 90%;
+}
+
+.carrousel-select_hover {
+    background-image: var(--image-select_hover);
+    width: 10px;
+    height: 10px;
+    margin-left: var(--margin_padding-container);
+    margin-right: var(--margin_padding-container);
+}
+
+.carrousel-select_active {
+    background-image: var(--image-select_active);
+    width: 10px;
+    height: 10px;
+    margin-left: var(--margin_padding-container);
+    margin-right: var(--margin_padding-container);
+}

@@ -20,7 +20,6 @@ using umi3d.common;
 using umi3d.common.userCapture;
 using UnityEngine;
 using UnityEngine.Events;
-using static umi3d.baseBrowser.emotes.EmoteManager;
 
 namespace umi3d.baseBrowser.emotes
 {
@@ -37,15 +36,20 @@ namespace umi3d.baseBrowser.emotes
         #endregion
 
         #region AnimatorManagement
-        /// <summary>
-        /// AnimatorController that manages emotes from a bundle
-        /// </summary>
-        [HideInInspector]
-        public RuntimeAnimatorController emoteAnimatorController;
+        ///// <summary>
+        ///// AnimatorController that manages emotes from a bundle
+        ///// </summary>
+        //[HideInInspector]
+        //public RuntimeAnimatorController emoteAnimatorController;
+        private UserAvatar avatar;
         /// <summary>
         /// Cache to keep previous animator controller during emote animation
         /// </summary>
         private RuntimeAnimatorController cachedAnimatorController;
+        /// <summary>
+        /// Reference to the skeleton animator
+        /// </summary>
+        private Animator skeletonAnimator;
         /// <summary>
         /// Reference to the avatar animator
         /// </summary>
@@ -168,19 +172,21 @@ namespace umi3d.baseBrowser.emotes
                 }
                 yield return new WaitForSeconds(0.5f);
             }
-            var avatar = UMI3DClientUserTracking.Instance.embodimentDict[id];
+            avatar = UMI3DClientUserTracking.Instance.embodimentDict[id];
             while (avatar.transform.childCount == 0
                 || (avatar.transform.childCount == 1 && avatar.transform.GetChild(0).transform.childCount == 0)) //wait for bundle loading
             {
                 yield return null;
             }
-            var emoteFromBundleAnimator = avatar.GetComponentInChildren<Animator>();
-            if (emoteFromBundleAnimator == null && transform.parent != null)
-                emoteFromBundleAnimator = transform.parent.GetComponent<Animator>();
-            if (emoteFromBundleAnimator != null)
+
+            skeletonAnimator = UMI3DCollaborationClientUserTracking.Instance.GetComponentInChildren<Animator>();
+            avatarAnimator = avatar.GetComponentInChildren<Animator>();
+            if (avatarAnimator == null && transform.parent != null)
+                avatarAnimator = transform.parent.GetComponent<Animator>();
+            if (avatarAnimator != null)
             {
-                emoteFromBundleAnimator.enabled = false; //disabled because it causes interferences with avatar bindings
-                if (emoteFromBundleAnimator.runtimeAnimatorController == null)
+                avatarAnimator.enabled = false; //disabled because it causes interferences with avatar bindings
+                if (avatarAnimator.runtimeAnimatorController == null)
                 {
                     NoEmoteConfigReeived?.Invoke(); //no emotes support in the scene
                     yield break;
@@ -203,7 +209,7 @@ namespace umi3d.baseBrowser.emotes
                     }
                     i++;
                 }
-                emoteAnimatorController = emoteFromBundleAnimator.runtimeAnimatorController;
+                //emoteAnimatorController = avatarAnimator.runtimeAnimatorController;
                 hasReceivedEmotes = true;
                 EmoteConfigReceived?.Invoke(Emotes); //Display the Emote Button and add emotes in windows.
                 UMI3DClientUserTracking.Instance.EmoteChangedEvent.AddListener(UpdateEmote);
@@ -234,7 +240,7 @@ namespace umi3d.baseBrowser.emotes
             NoEmoteConfigReeived?.Invoke();
             Emotes.Clear();
             emoteConfigDto = null;
-            emoteAnimatorController = null;
+            //emoteAnimatorController = null;
             hasReceivedEmotes = false;
         }
         #endregion UI-related
@@ -245,17 +251,26 @@ namespace umi3d.baseBrowser.emotes
         /// </summary>
         private void LoadEmotes()
         {
-            cachedAnimatorController = avatarAnimator.runtimeAnimatorController;
-            avatarAnimator.runtimeAnimatorController = emoteAnimatorController;
+            //cachedAnimatorController = avatarAnimator.runtimeAnimatorController;
+            //avatarAnimator.runtimeAnimatorController = emoteAnimatorController;
+            skeletonAnimator.enabled = false;
+            avatarAnimator.enabled = true;
+            skeletonAnimator.Update(0);
             avatarAnimator.Update(0);
+            avatar.ForceDisablingBinding = true;
         }
         /// <summary>
         /// Put back the normal animator of the avatar
         /// </summary>
         private void UnloadEmotes()
         {
-            avatarAnimator.runtimeAnimatorController = cachedAnimatorController;
+            //avatarAnimator.runtimeAnimatorController = cachedAnimatorController;
+            skeletonAnimator.enabled = true;
+            skeletonAnimator.Play("Idle");
+            avatarAnimator.enabled = false;
+            skeletonAnimator.Update(0);
             avatarAnimator.Update(0);
+            avatar.ForceDisablingBinding = false;
         }
         private UnityAction currentInterruptionAction;
         /// <summary>
@@ -274,6 +289,7 @@ namespace umi3d.baseBrowser.emotes
                 sendingUserId = UMI3DClientServer.Instance.GetUserId()
             };
             UMI3DClientServer.SendData(emoteRequest, true);
+
             LoadEmotes();
             currentInterruptionAction = new UnityAction(delegate { InterruptEmote(emote); });
             BaseFPSNavigation.PlayerMoved.AddListener(currentInterruptionAction);
@@ -282,6 +298,8 @@ namespace umi3d.baseBrowser.emotes
             yield return new WaitWhile(() => avatarAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1); //wait for emote end of animation
             //? Possible to improve using a StateMachineBehaviour attached to the EmoteController & trigger events on OnStateExit on anim/OnStateEnter on AnyState
             StopEmotePlayMode();
+
+            yield break;
         }
         /// <summary>
         /// Stop the emote playing process.

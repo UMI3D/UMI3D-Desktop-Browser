@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d
+namespace umi3d.common
 {
-    /// <summary>
-    /// Contains the current UMI3D version number.
-    /// </summary>
-    public static class UMI3DVersion
+    public enum SkyboxType
     {
-        /// <summary>
-        /// Current UMI3D SDK full version number.
-        /// </summary>
-        public static string version => major + "." + minor + "." + status + "." + date;
-        public static readonly string major = "2";
-        public static readonly string minor = "5";
-        public static readonly string status = "b";
-        public static readonly string date = "221205";
+        Equirectangular,
+        Cubemap
     }
 }

@@ -113,10 +113,18 @@ public class CustomTrailingArea : VisualElement, ICustomElement
                 this.AddIfNotInHierarchy(NotifAndUserArea);
                 NotifAndUserArea.style.visibility = Visibility.Hidden;
                 NotifAndUserArea.notificationCenter.UpdateFilter();
+                NotifAndUserArea.style.opacity = StyleKeyword.Null;
             }
             else NotifAndUserArea.notificationCenter.ResetNewNotificationFilter();
+
+            if
+            (
+                !value
+                && NotifAndUserArea.FindRoot() == null
+            ) return;
+
             NotifAndUserArea.schedule.Execute(() =>
-            {
+            {   
                 NotifAndUserArea.style.visibility = StyleKeyword.Null;
                 NotifAndUserArea.AddAnimation
                 (
@@ -143,6 +151,13 @@ public class CustomTrailingArea : VisualElement, ICustomElement
                 this.AddIfNotInHierarchy(ObjectMenu);
                 ObjectMenu.style.visibility = Visibility.Hidden;
             }
+
+            if
+            (
+                !value
+                && ObjectMenu.FindRoot() == null
+            ) return;
+
             ObjectMenu.schedule.Execute(() =>
             {
                 ObjectMenu.style.visibility = StyleKeyword.Null;
@@ -176,6 +191,13 @@ public class CustomTrailingArea : VisualElement, ICustomElement
                 EmoteWindow.style.visibility = Visibility.Hidden;
                 EmoteWindow.UpdateFilter();
             }
+
+            if
+            (
+                !value
+                && EmoteWindow.FindRoot() == null
+            ) return;
+
             EmoteWindow.schedule.Execute(() =>
             {
                 EmoteWindow.style.visibility = StyleKeyword.Null;
@@ -292,11 +314,9 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         ObjectMenu.name = "object-menu";
         ObjectMenu.Category = ElementCategory.Game;
         ObjectMenu.Title = "Contextual Menu";
-
-        ButtonsArea.Emote.clicked += () => DisplayEmoteWindow = !DisplayEmoteWindow;
     }
 
-    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false, false, false, false);
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false, false, false, m_leftHand);
 
     public virtual void Set(ControllerEnum controller, bool displayNotifUsersArea, bool displayObjectMenu, bool displayEmoteWindow, bool leftHand)
     {

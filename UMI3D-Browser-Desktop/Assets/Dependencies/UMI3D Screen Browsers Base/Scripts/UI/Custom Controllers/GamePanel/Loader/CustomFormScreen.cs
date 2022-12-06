@@ -35,6 +35,8 @@ public class CustomFormScreen : CustomMenuScreen
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomFormScreen;
 

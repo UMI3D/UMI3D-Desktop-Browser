@@ -114,7 +114,7 @@ namespace umi3d.baseBrowser.connection
                 {
                     if (index != 0) BaseConnectionProcess.Instance.Leave();
                 };
-                dialoguebox.AddToTheRoot(root);
+                dialoguebox.EnqueuePriority(root);
             };
             var envAudioSettings = EnvironmentSettings.Instance.AudioSetting;
             Menu.Settings.Audio.GeneralVolumeValeChanged += value => envAudioSettings.GeneralVolume = value;
@@ -210,7 +210,7 @@ namespace umi3d.baseBrowser.connection
                 dialoguebox.Message = message;
                 dialoguebox.ChoiceAText = "Leave";
                 dialoguebox.Callback = (index) => BaseConnectionProcess.Instance.Leave();
-                dialoguebox.AddToTheRoot(root);
+                dialoguebox.Enqueue(root);
             };
             BaseConnectionProcess.Instance.LoadedEnvironment += () => GamePanel.AddScreenToStack = CustomGamePanel.GameViews.Game;
             BaseConnectionProcess.Instance.Connecting += (state) => Loader.Loading.Message = state;
@@ -237,7 +237,7 @@ namespace umi3d.baseBrowser.connection
                     if (index == 0) cdk.collaboration.UMI3DCollaborationClientServer.Reconnect();
                     else BaseConnectionProcess.Instance.Leave();
                 };
-                dialoguebox.AddToTheRoot(root);
+                dialoguebox.Enqueue(root);
             };
             BaseConnectionProcess.Instance.ForcedLeave += (message) =>
             {
@@ -247,7 +247,7 @@ namespace umi3d.baseBrowser.connection
                 dialoguebox.Message = message;
                 dialoguebox.ChoiceAText = "Leave";
                 dialoguebox.Callback = (index) => BaseConnectionProcess.Instance.Leave();
-                dialoguebox.AddToTheRoot(root);
+                dialoguebox.Enqueue(root);
             };
             BaseConnectionProcess.Instance.AskForDownloadingLibraries += (count, callback) =>
             {
@@ -260,7 +260,7 @@ namespace umi3d.baseBrowser.connection
                 dialoguebox.ChoiceB.Type = ButtonType.Default;
                 dialoguebox.ChoiceBText = "Deny";
                 dialoguebox.Callback = (index) => callback?.Invoke(index == 0);
-                dialoguebox.AddToTheRoot(root);
+                dialoguebox.Enqueue(root);
             };
             BaseConnectionProcess.Instance.GetParameterDtos += GetParameterDtos;
             BaseConnectionProcess.Instance.LoadingLauncher += (value) =>
@@ -280,7 +280,7 @@ namespace umi3d.baseBrowser.connection
                 dialoguebox.ChoiceA.Type = ButtonType.Default;
                 dialoguebox.ChoiceBText = "Stop";
                 dialoguebox.Callback = action;
-                dialoguebox.AddToTheRoot(root);
+                dialoguebox.Enqueue(root);
             };
             BaseConnectionProcess.Instance.EnvironmentLoaded += () =>
             {
@@ -509,6 +509,7 @@ namespace umi3d.baseBrowser.connection
             else
             {
                 if (count == 1 && ObjectMenu.m_displayers[0] is TextfieldDisplayer textfield) Game.Cursor.Action = "Edit Text";
+                else if (count == 1 && ObjectMenu.m_displayers[0] is ButtonDisplayer button) Game.Cursor.Action = button.Text;
                 else Game.Cursor.Action = "Display contextual menu";
 
                 if (!Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed) Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed = true;

@@ -93,7 +93,7 @@ public abstract class CustomLauncher : CustomMenuContainer<LauncherScreens>
             {
                 AddScreenToStack = LauncherScreens.Libraries;
             };
-            dialogueBox.AddToTheRoot(this);
+            dialogueBox.Enqueue(this);
         };
 
         Navigation_ScrollView.Add(NavigationButtons);
