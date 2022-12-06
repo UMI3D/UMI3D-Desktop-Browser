@@ -1,8 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="emoteWindow" style="justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0); flex-direction: column; height: auto; max-height: none; right: 0; bottom: 0; position: absolute;">
-        <ui:Label text="BoxName" display-tooltip-when-elided="true" name="windowName" style="-unity-text-align: upper-left;" />
-        <ui:VisualElement name="mainBox" style="flex-direction: row;">
-            <ui:VisualElement name="buttonBox" style="flex-direction: row;" />
-        </ui:VisualElement>
-    </ui:VisualElement>
-</ui:UXML>
