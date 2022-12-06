@@ -440,16 +440,12 @@ namespace umi3d.baseBrowser.connection
             else AskForDownloadingLibraries?.Invoke(ids.Count, callback);
         }
 
+        
+        public void Leave() => UMI3DCollaborationClientServer.Logout();
+
         /// <summary>
         /// Clears the environment and goes back to the launcher.
         /// </summary>
-        public void Leave()
-        {
-            cdk.collaboration.UMI3DCollaborationClientServer.Logout();
-
-            LeaveWithoutNotify();
-        }
-
         public void LeaveWithoutNotify()
         {
             cdk.UMI3DEnvironmentLoader.Clear();
