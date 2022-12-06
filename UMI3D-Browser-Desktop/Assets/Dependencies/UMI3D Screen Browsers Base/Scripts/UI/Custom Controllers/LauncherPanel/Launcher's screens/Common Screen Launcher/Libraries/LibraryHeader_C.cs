@@ -36,6 +36,7 @@ namespace umi3d.commonScreen.menu
             if (DropDown_Message == null) DropDown_Message = new Displayer.Text_C();
             if (SearchField == null) SearchField = new Displayer.Textfield_C();
             if (FilterField == null) FilterField = new Displayer.Dropdown_C();
+            if (DeleteField == null) DeleteField = new Displayer.Button_C();
 
             base.InitElement();
         }

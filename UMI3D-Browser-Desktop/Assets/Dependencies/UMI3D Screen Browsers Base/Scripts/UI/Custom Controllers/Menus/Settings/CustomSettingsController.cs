@@ -95,33 +95,22 @@ public class CustomSettingsController : CustomSettingScreen
         ScrollView.Add(CamreraSensibility);
 
         JoystickStaticToggle.label = "Static joystick";
-        JoystickStaticToggle.RegisterValueChangedCallback(ce =>
-        {
-            CustomJoystickArea.IsJoystickStatic = !CustomJoystickArea.IsJoystickStatic;
-            CustomJoystickArea.JoystickStaticModeUpdated?.Invoke();
-            Data.JoystickStatic = ce.newValue;
-            StoreControllerrData(Data);
-        });
+        JoystickStaticToggle.RegisterValueChangedCallback(ce => JoystickStaticUpdated(ce.newValue));
 
         LeftHandToggle.label = "Left hand interface";
-        LeftHandToggle.RegisterValueChangedCallback(ce =>
-        {
-            CustomGame.LeftHandModeUpdated?.Invoke();
-            Data.LeftHand = ce.newValue;
-            StoreControllerrData(Data);
-        });
+        LeftHandToggle.RegisterValueChangedCallback(ce => LeftHandUpdated(ce.newValue));
         
         if (TryGetControllerData(out Data))
         {
             OnCameraSensibilityValueChanged(Data.CameraSensibility);
-            JoystickStaticToggle.value = Data.JoystickStatic;
-            LeftHandToggle.value = Data.LeftHand;
+            JoystickStaticUpdated(Data.JoystickStatic);
+            LeftHandUpdated(Data.LeftHand);
         }
         else
         {
             OnCameraSensibilityValueChanged(5f);
-            JoystickStaticToggle.value = false;
-            LeftHandToggle.value = false;
+            JoystickStaticUpdated(false);
+            LeftHandUpdated(false);
         }
     }
 
@@ -138,6 +127,23 @@ public class CustomSettingsController : CustomSettingScreen
         CamreraSensibility.SetValueWithoutNotify(value);
         fpsData.AngularViewSpeed = new Vector2(value, value);
         Data.CameraSensibility = (int)value;
+        StoreControllerrData(Data);
+    }
+
+    protected void JoystickStaticUpdated(bool value)
+    {
+        JoystickStaticToggle.SetValueWithoutNotify(value);
+        CustomJoystickArea.IsJoystickStatic = value;
+        CustomJoystickArea.JoystickStaticModeUpdated?.Invoke();
+        Data.JoystickStatic = value;
+        StoreControllerrData(Data);
+    }
+
+    protected void LeftHandUpdated(bool value)
+    {
+        LeftHandToggle.SetValueWithoutNotify(value);
+        CustomGame.LeftHand = value;
+        Data.LeftHand = value;
         StoreControllerrData(Data);
     }
 

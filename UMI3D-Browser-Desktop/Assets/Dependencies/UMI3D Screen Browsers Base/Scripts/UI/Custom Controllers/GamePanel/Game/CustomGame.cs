@@ -123,14 +123,13 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         }
     }
 
-    public bool LeftHand
+    public static bool LeftHand
     {
         get => m_leftHand;
         set
         {
             m_leftHand = value;
-            LeadingArea.LeftHand = value;
-            TrailingArea.LeftHand = value;
+            LeftHandModeUpdated?.Invoke(value);
         }
     }
 
@@ -161,8 +160,8 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
 
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
-    public static System.Action LeftHandModeUpdated;
-    protected bool m_leftHand;
+    public static System.Action<bool> LeftHandModeUpdated;
+    protected static bool m_leftHand;
 
     public virtual void InitElement()
     {
@@ -187,8 +186,14 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         BottomArea.NotifUsersValueChanged = value => DisplayNotifUsersArea = value;
         BottomArea.EmoteClicked += () => DisplayEmoteWindow = !DisplayEmoteWindow;
         TopArea.InformationArea.ExpandUpdate += value => DisplayNotifUsersArea = value;
+        TrailingArea.ButtonsArea.Emote.clicked += () => DisplayEmoteWindow = !DisplayEmoteWindow;
 
-        LeftHandModeUpdated = () => LeftHand = !LeftHand;
+        LeftHandModeUpdated = (value) =>
+        {
+            LeadingArea.LeftHand = value;
+            TrailingArea.LeftHand = value;
+        };
+        LeftHandModeUpdated(m_leftHand);
 
         this.AddManipulator(TouchManipulator);
         TouchManipulator.ClickedDownWithInfo += (evnt, localPosition) =>
@@ -218,7 +223,7 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         LeadingAndTrailingBox.Add(TrailingArea);
     }
 
-    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, S_displayNotifUserArea, false);
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, S_displayNotifUserArea, m_leftHand);
 
     public virtual void Set(ControllerEnum controller, bool displayNotifUserArea, bool leftHand)
     {
@@ -266,8 +271,16 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
             this.AddIfNotInHierarchy(NotifAndUserArea);
             NotifAndUserArea.style.visibility = Visibility.Hidden;
             NotifAndUserArea.notificationCenter.UpdateFilter();
+            NotifAndUserArea.style.width = StyleKeyword.Null;
         }
         else NotifAndUserArea.notificationCenter.ResetNewNotificationFilter();
+
+        if
+        (
+            !value
+            && NotifAndUserArea.FindRoot() == null
+        ) return;
+
         NotifAndUserArea.schedule.Execute(() =>
         {
             NotifAndUserArea.style.visibility = StyleKeyword.Null;

@@ -89,6 +89,7 @@ public class CustomSettingsResolution : CustomSettingScreen
         base.InitElement();
 
         UIPanelSettings = Resources.Load<PanelSettings>("PanelSettings");
+        Debug.Assert(UIPanelSettings != null, "Make sure to have a PanelSettings file at the root of Resources folder in your project");
         RenderPipeline_Low = Resources.Load<UniversalRenderPipelineAsset>("Scriptables/Rendering/UniversalRenderPipelineAsset_low");
         RenderPipeline_Medium = Resources.Load<UniversalRenderPipelineAsset>("Scriptables/Rendering/UniversalRenderPipelineAsset_medium");
         RenderPipeline_High = Resources.Load<UniversalRenderPipelineAsset>("Scriptables/Rendering/UniversalRenderPipelineAsset_high");
@@ -132,13 +133,11 @@ public class CustomSettingsResolution : CustomSettingScreen
 
         #endregion
 
-#if UNITY_STANDALONE
         #region UI Resolution
 
         UISizeSegmentedPicker.Label = "UI Size";
         UISizeSegmentedPicker.ValueEnumChanged += value => UISizeValueChanged(value);
         UISize = new ResolutionDisplayer(UISizeSegmentedPicker, "Size of the user interface");
-        ScrollView.Add(UISize.Box);
 
         DPISlider.label = "DPI";
         DPISlider.DirectionDisplayer = ElemnetDirection.Leading;
@@ -148,10 +147,11 @@ public class CustomSettingsResolution : CustomSettingScreen
         DPISlider.showInputField = true;
         DPISlider.RegisterValueChangedCallback(value => DPIValueChanged(value.newValue));
         DPI = new ResolutionDisplayer(DPISlider, "Dots per inch: Lower means the UI will be larger.");
+#if UNITY_STANDALONE
+        ScrollView.Add(UISize.Box);
         ScrollView.Add(DPI.Box);
-
-        #endregion
 #endif
+        #endregion
 
         ReduceAnimation.label = "Reduce animation";
         ReduceAnimation.value = false;
@@ -163,26 +163,33 @@ public class CustomSettingsResolution : CustomSettingScreen
             GameResolutionValueChanged(Data.GameResolution);
             if (Data.GameResolution == ResolutionEnum.Custom)
             {
+#if UNITY_STANDALONE
                 FullScreenResolutionValueChanged(Data.FullScreenResolution);
+#endif
                 QualitySettingsValueChanged(Data.Quality);
                 HDRValueChanged(Data.HDR);
                 RenderScaleValueChanged(Data.RenderScale);
-                ReduceAnimationValueChanged(Data.ReduceAnimation);
             }
+            ReduceAnimationValueChanged(Data.ReduceAnimation);
+#if UNITY_STANDALONE
             UISizeValueChanged(Data.UISize);
             if (Data.UISize == UIZoom.Custom) DPIValueChanged(Data.DPI);
+#endif
         }
         else
         {
             GameResolutionValueChanged(ResolutionEnum.Medium);
+            ReduceAnimationValueChanged(false);
+#if UNITY_STANDALONE
             UISizeValueChanged(UIZoom.Medium);
+#endif
         }
     }
 
     public override void Set() => Set("Graphics");
 
 
-    #region Implementation
+#region Implementation
 
     public PanelSettings UIPanelSettings;
     public UniversalRenderPipelineAsset RenderPipeline;
@@ -201,7 +208,9 @@ public class CustomSettingsResolution : CustomSettingScreen
                 Application.targetFrameRate = TargetFPS;
                 GameResolution.Description.text = $"Low resolution is targetting {TargetFPS}fps with lower rendering";
 
+#if UNITY_STANDALONE
                 FullScreenResolutionValueChanged(FullScreenResolutionList[0]);
+#endif
                 QualitySettingsValueChanged(QualityEnum.Low);
                 HDRValueChanged(false);
                 RenderScaleValueChanged(0.7f);
@@ -217,7 +226,9 @@ public class CustomSettingsResolution : CustomSettingScreen
                 Application.targetFrameRate = TargetFPS;
                 GameResolution.Description.text = $"Medium resolution is targetting {TargetFPS}fps with midium rendering";
 
+#if UNITY_STANDALONE
                 FullScreenResolutionValueChanged(FullScreenResolutionList[0]);
+#endif
                 QualitySettingsValueChanged(QualityEnum.Medium);
                 HDRValueChanged(false);
                 RenderScaleValueChanged(1f);
@@ -233,7 +244,9 @@ public class CustomSettingsResolution : CustomSettingScreen
                 Application.targetFrameRate = TargetFPS;
                 GameResolution.Description.text = $"High resolution is targetting {TargetFPS}fps with higher rendering";
 
+#if UNITY_STANDALONE
                 FullScreenResolutionValueChanged(FullScreenResolutionList[0]);
+#endif
                 QualitySettingsValueChanged(QualityEnum.High);
                 HDRValueChanged(true);
                 RenderScaleValueChanged(1.3f);
@@ -363,5 +376,5 @@ public class CustomSettingsResolution : CustomSettingScreen
         StoreResolutionData(Data);
     }
 
-    #endregion
+#endregion
 }

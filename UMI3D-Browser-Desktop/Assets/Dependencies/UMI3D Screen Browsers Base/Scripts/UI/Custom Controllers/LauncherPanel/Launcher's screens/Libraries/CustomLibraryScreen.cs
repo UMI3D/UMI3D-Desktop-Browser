@@ -105,6 +105,7 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
         Header.Sorted = (sort) => SortBy = sort;
         Header.Searched = Searched;
         Header.Filtered = Filtered;
+        Header.DeleteField.clicked += DeleteFilteredLibraries;
 
         Libraries_SV.verticalScrollerVisibility = ScrollerVisibility.AlwaysVisible;
     }
@@ -198,7 +199,7 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
                     UpdateFilterdList(Header.FilterField.value);
                 };
                 dialogueBox.ChoiceA.Type = ButtonType.Default;
-                dialogueBox.AddToTheRoot(this);
+                dialogueBox.Enqueue(this);
             };
 
             libraries.Add(library);
@@ -257,6 +258,35 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
     {
         m_filteredValue = ce.newValue == "All" ? "" : ce.newValue;
         UpdateSelection();
+        Header.DeleteField.text = $"Delete {ce.newValue} libraries";
+    }
+
+    protected void DeleteFilteredLibraries()
+    {
+        var dialogueBox = CreateDialogueBox();
+        dialogueBox.Set
+            (
+                ElementCategory.Menu,
+                ElementSize.Medium,
+                DialogueboxType.Confirmation,
+                $"Uninstall filtered libraries",
+                $"Do you want to uninstall all {m_librariesFiltered.Count} filtered libraries ?",
+                "Cancel",
+                "Delete"
+            );
+        dialogueBox.Callback += (index) =>
+        {
+            if (index != 1) return;
+            foreach (var lib in m_librariesFiltered)
+            {
+                umi3d.cdk.UMI3DResourcesManager.RemoveLibrary(lib.Title);
+                lib.RemoveFromHierarchy();
+                libraries.Remove(lib);
+                UpdateFilterdList(Header.FilterField.value);
+            }
+        };
+        dialogueBox.ChoiceA.Type = ButtonType.Default;
+        dialogueBox.Enqueue(this);
     }
 
     protected void UpdateSelection()

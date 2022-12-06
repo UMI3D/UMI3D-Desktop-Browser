@@ -77,7 +77,7 @@ public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncher
                 QuittingManager.ApplicationIsQuitting = index == 1;
                 if (index == 1) Application.Quit();
             };
-            dialogueBox.AddToTheRoot(Launcher);
+            dialogueBox.EnqueuePriority(Launcher);
         };
 
         SetUpKeyboardConfiguration();

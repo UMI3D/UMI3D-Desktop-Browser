@@ -18,7 +18,9 @@ MonoBehaviour:
   - fbx
   - png
   - jpg
-  - unity_android_urp
+  - unity_standalone_urp
   maximumResolution: 0
   notificationLoader: {fileID: 11400000, guid: ac8ff0a36de4f9546b9facb0633729df, type: 2}
   _skyboxMaterial: {fileID: 2100000, guid: dfb4cc00185bacc43b3d69539f922c99, type: 2}
+  _skyboxEquirectangularMaterial: {fileID: 2100000, guid: 550ddc5eab91acd47adeb9d3fd1b2ff8,
+    type: 2}

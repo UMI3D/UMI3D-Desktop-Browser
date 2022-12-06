@@ -43,7 +43,7 @@ public static class AnimatorManager
         {
             if (!revert) setEndValue?.Invoke();
             else setInitialValue?.Invoke();
-            callback?.Invoke();
+            persistentVisual.schedule.Execute(() => callback?.Invoke());
             return;
         }
 

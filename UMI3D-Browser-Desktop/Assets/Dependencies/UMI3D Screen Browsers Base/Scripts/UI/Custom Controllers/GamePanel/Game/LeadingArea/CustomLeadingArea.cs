@@ -41,6 +41,8 @@ public class CustomLeadingArea : VisualElement, ICustomElement
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomLeadingArea;
 
@@ -119,7 +121,7 @@ public class CustomLeadingArea : VisualElement, ICustomElement
         }
     }
 
-    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false);
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, m_leftHand);
 
     public virtual void Set(ControllerEnum controller, bool leftHand)
     {

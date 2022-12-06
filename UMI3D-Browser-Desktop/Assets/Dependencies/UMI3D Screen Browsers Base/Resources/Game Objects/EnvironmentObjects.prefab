@@ -182,10 +182,10 @@ MonoBehaviour:
     m_Bits: 1
   navmeshLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 512
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 1024
   invisibleMaterial: {fileID: 0}
 --- !u!1 &1098573999302734066
 GameObject:

@@ -265,7 +265,7 @@ public abstract class CustomHomeScreen : CustomMenuScreen
             {
                 if (index == 1) TryToConnect(data, saveServer);
             };
-            dialogueBox.AddToTheRoot(this);
+            dialogueBox.Enqueue(this);
         }
         else if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork)
         {
@@ -282,7 +282,7 @@ public abstract class CustomHomeScreen : CustomMenuScreen
                 if (index == 1) TryToConnect(data, saveServer);
                 else Connect(data, saveServer);
             };
-            dialogueBox.AddToTheRoot(this);
+            dialogueBox.Enqueue(this);
         }
         else Connect(data, saveServer);
     }
@@ -317,7 +317,7 @@ public abstract class CustomHomeScreen : CustomMenuScreen
             ServerPreferences.StoreRegisteredServerData(savedServers);
             SavedServers__ScrollView.Remove(item);
         };
-        dialogueBox.AddToTheRoot(item);
+        dialogueBox.Enqueue(item);
     }
 
     protected void UpdateSavedServer(CustomServerButton item, ServerPreferences.ServerData data, bool displayDeleteButton, Action<int, ServerPreferences.ServerData> callback)
@@ -356,7 +356,7 @@ public abstract class CustomHomeScreen : CustomMenuScreen
                 dialogueBox.RemoveFromHierarchy();
                 DeleteSavedServer(item, data, (index) =>
                 {
-                    if (index == 0) dialogueBox.AddToTheRoot(item);
+                    if (index == 0) dialogueBox.Enqueue(item);
                 });
             };
             dialogueBox.Add(delete); 
@@ -373,7 +373,7 @@ public abstract class CustomHomeScreen : CustomMenuScreen
 
             ServerPreferences.StoreRegisteredServerData(savedServers);
         };
-        dialogueBox.AddToTheRoot(item);
+        dialogueBox.Enqueue(item);
     }
 
     protected void AddNewSavedServer(CustomServerButton item, ServerPreferences.ServerData data, Action<int, ServerPreferences.ServerData> callback)
@@ -427,7 +427,7 @@ public abstract class CustomHomeScreen : CustomMenuScreen
 
             ServerPreferences.StoreRegisteredServerData(savedServers);
         };
-        dialogueBox.AddToTheRoot(item);
+        dialogueBox.Enqueue(item);
     }
 
     protected abstract CustomServerButton CreateServerItem();

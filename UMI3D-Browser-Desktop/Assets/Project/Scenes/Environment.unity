@@ -590,7 +590,7 @@ MonoBehaviour:
     m_Bits: 1536
   navmeshLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 512
   state: 0
 --- !u!114 &498482123
 MonoBehaviour:

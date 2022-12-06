@@ -1,5 +1,5 @@
 .leading__area,
-.leading__area_reverse {
+.leading__area-reverse {
 	position: absolute;
 	top: 0;
 	bottom: 0;

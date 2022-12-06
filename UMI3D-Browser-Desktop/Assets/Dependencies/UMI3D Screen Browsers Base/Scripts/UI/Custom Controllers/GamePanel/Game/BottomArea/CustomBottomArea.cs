@@ -204,6 +204,13 @@ public class CustomBottomArea : VisualElement, ICustomElement
                 EmoteWindow.style.visibility = Visibility.Hidden;
                 EmoteWindow.UpdateFilter();
             }
+
+            if
+            (
+                !value
+                && EmoteWindow.FindRoot() == null
+            ) return;
+
             EmoteWindow.schedule.Execute(() =>
             {
                 EmoteWindow.style.visibility = StyleKeyword.Null;

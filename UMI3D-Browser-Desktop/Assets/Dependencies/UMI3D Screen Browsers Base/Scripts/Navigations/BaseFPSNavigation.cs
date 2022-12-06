@@ -239,7 +239,7 @@ namespace umi3d.baseBrowser.Navigation
 
         #endregion
 
-        void Start()
+        private void Start()
         {
             if (s_instance == null) s_instance = this;
             else Destroy(this.gameObject);
@@ -434,7 +434,7 @@ namespace umi3d.baseBrowser.Navigation
         }
         protected (Vector3, Vector3) GetCapsuleSphereCenters()
         {
-            return 
+            return
             (
                 transform.position + transform.up * (playerRadius + maxStepHeight + stepEpsilon),
                 topHead.position - transform.up * playerRadius
@@ -492,12 +492,11 @@ namespace umi3d.baseBrowser.Navigation
         /// Update <see cref="Movement"/> field.
         /// </summary>
         protected abstract void UpdateMovement();
-        
+
         /// <summary>
-        /// Computes <paramref name="move"/> vector to perform a walk movement and applies gravity.
+        /// Computes <paramref name="move"/> vector to perform a walk movement and applies gravitu.
         /// </summary>
         /// <param name="move"></param>
-        /// <param name="height"></param>
         protected abstract void Walk(ref Vector2 move, ref float height);
 
         /// <summary>

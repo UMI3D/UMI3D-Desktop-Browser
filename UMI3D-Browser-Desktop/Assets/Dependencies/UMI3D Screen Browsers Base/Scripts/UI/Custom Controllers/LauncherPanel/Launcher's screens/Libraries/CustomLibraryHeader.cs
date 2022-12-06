@@ -69,6 +69,7 @@ public abstract class CustomLibraryHeader : CustomLibrary
     public VisualElement SizeSort_Icon = new VisualElement();
     public CustomTextfield SearchField;
     public CustomDropdown FilterField;
+    public CustomButton DeleteField;
 
     public override void InitElement()
     {
@@ -92,6 +93,7 @@ public abstract class CustomLibraryHeader : CustomLibrary
         SizeLabel.Add(SizeSort_Icon);
         DropDown_Field.Add(SearchField);
         DropDown_Field.Add(FilterField);
+        DropDown_Field.Add(DeleteField);
 
         DropDown_Button.ClickedDownWithInfo += (evt, localPosition) =>
         {
@@ -108,6 +110,9 @@ public abstract class CustomLibraryHeader : CustomLibrary
 
         FilterField.label = "Filter";
         FilterField.RegisterValueChangedCallback(value => Filtered?.Invoke(value));
+
+        DeleteField.text = "Delete All libraries";
+        DeleteField.Type = ButtonType.Danger;
 
         Delete.clicked += () => DisplayMessage = !m_displayMessage;
     }

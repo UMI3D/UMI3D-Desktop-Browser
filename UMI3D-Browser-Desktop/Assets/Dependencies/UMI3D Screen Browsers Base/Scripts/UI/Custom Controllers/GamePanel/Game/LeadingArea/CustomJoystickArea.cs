@@ -31,11 +31,13 @@ public class CustomJoystickArea : VisualElement, ICustomElement
             {
                 RemoveFromClassList(USSCustomClassName);
                 AddToClassList(USSCustomClassNameReverse);
+                UpdateStaticMode();
             }
             else
             {
                 RemoveFromClassList(USSCustomClassNameReverse);
                 AddToClassList(USSCustomClassName);
+                UpdateStaticMode();
             }
         }
     }
@@ -96,9 +98,13 @@ public class CustomJoystickArea : VisualElement, ICustomElement
         var joystickLocal = Joystick.WorldToLocal(worldPosition);
 
         var left = joystickLocal.x - Joystick.layout.width / 2f;
+        var right = -joystickLocal.x + Joystick.layout.width / 2f;
         var bottom = -joystickLocal.y + Joystick.layout.height / 2f;
 
-        Joystick.style.left = Mathf.Clamp(left, 0, layout.width - Joystick.layout.width);
+        if (m_leftHand)
+            Joystick.style.right = Mathf.Clamp(right, 0, layout.width - Joystick.layout.width);
+        else
+            Joystick.style.left = Mathf.Clamp(left, 0, layout.width - Joystick.layout.width);
         Joystick.style.bottom = Mathf.Clamp(bottom, 0, layout.height - Joystick.layout.height);
     }
 
@@ -115,7 +121,7 @@ public class CustomJoystickArea : VisualElement, ICustomElement
                 Mathf.Clamp(joystickLocal.x - joystickWidthHalf, -joystickWidthHalf, joystickWidthHalf) / joystickWidthHalf, 
                 Mathf.Clamp(joystickLocal.y - joystickHeighHalf, -joystickHeighHalf, joystickHeighHalf) / joystickHeighHalf
             );
-
+        
         Joystick.Magnitude = Mathf.Clamp(Vector2.SqrMagnitude(joystickLocalCenter), 0, 1);
         Joystick.Angle = -Mathf.Sign(joystickLocalCenter.y) * Vector2.Angle(Vector2.right, joystickLocalCenter);
     }
@@ -126,12 +132,14 @@ public class CustomJoystickArea : VisualElement, ICustomElement
         Joystick.Magnitude = 0;
         if (IsJoystickStatic) return;
         Joystick.style.left = StyleKeyword.Null;
+        Joystick.style.right = StyleKeyword.Null;
         Joystick.style.bottom = StyleKeyword.Null;
     }
 
     protected virtual void UpdateStaticMode()
     {
-        Joystick.style.left = IsJoystickStatic ? 100f : StyleKeyword.Null;
+        Joystick.style.right = IsJoystickStatic && m_leftHand ? 100f : StyleKeyword.Null;
+        Joystick.style.left = IsJoystickStatic && !m_leftHand ? 100f : StyleKeyword.Null;
         Joystick.style.bottom = IsJoystickStatic ? 100f : StyleKeyword.Null;
     }
 }
