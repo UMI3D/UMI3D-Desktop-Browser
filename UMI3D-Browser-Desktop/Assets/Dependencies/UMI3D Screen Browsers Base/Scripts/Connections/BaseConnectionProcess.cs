@@ -224,7 +224,7 @@ namespace umi3d.baseBrowser.connection
 
         protected void StoreServer()
         {
-            if (savedServers.Find((server) => server.serverName == currentServer.serverName) == null) 
+            if (savedServers.Find((server) => server.serverName == currentServer.serverName) == null)
                 savedServers.Add(currentServer);
             preferences.ServerPreferences.StoreRegisteredServerData(savedServers);
         }
@@ -237,7 +237,7 @@ namespace umi3d.baseBrowser.connection
             {
                 return await cdk.collaboration.UMI3DCollaborationClientServer.GetMedia
                 (
-                    url, 
+                    url,
                     (e) => url == curentUrl && e.count < 3
                 );
             }
@@ -440,7 +440,7 @@ namespace umi3d.baseBrowser.connection
             else AskForDownloadingLibraries?.Invoke(ids.Count, callback);
         }
 
-        
+
         public void Leave() => UMI3DCollaborationClientServer.Logout();
 
         /// <summary>

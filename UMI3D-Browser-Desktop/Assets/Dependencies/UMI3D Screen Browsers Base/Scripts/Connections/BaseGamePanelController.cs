@@ -23,6 +23,8 @@ using umi3d.cdk.collaboration;
 using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.game;
+using umi3d.mobileBrowser.Controller;
+using umi3d.mobileBrowser.interactions;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static umi3d.baseBrowser.Controller.BaseCursor;
@@ -310,7 +312,7 @@ namespace umi3d.baseBrowser.connection
                     if
                     (
                         ObjectMenuDisplay.menu.Count == 1
-                        && ObjectMenu.m_displayers[0] is TextfieldDisplayer textfield
+                        && ObjectMenu[0] is TextfieldDisplayer textfield
                     ) textfield.Focus();
                     BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
                 }
@@ -371,6 +373,9 @@ namespace umi3d.baseBrowser.connection
             };
 
             BaseConnectionProcess.Instance.EnvironmentLeave += () => NotifAndUsersArea_C.Instance = null;
+
+            Game.TrailingArea.ButtonsArea.MainActionDown = MainMobileAction.OnClickedDown;
+            Game.TrailingArea.ButtonsArea.MainActionUp = MainMobileAction.OnClickedUp;
         }
 
         protected void CloseEmoteWindowAndNotifAndUseresArea()
@@ -471,7 +476,7 @@ namespace umi3d.baseBrowser.connection
                 Loader.Form.SubmitClicked += () => send.NotifyValueChange(true);
                 Loader.Form.Buttond_Submit.Focus();
                 Loader.Form.Buttond_Submit.Blur();
-                if (FormContainer.m_displayers.Count >= 1 && FormContainer.m_displayers[0] is TextfieldDisplayer textfield) textfield.Focus();
+                if (FormContainer.Count() >= 1 && FormContainer[0] is TextfieldDisplayer textfield) textfield.Focus();
             }
         }
 
@@ -499,27 +504,69 @@ namespace umi3d.baseBrowser.connection
         protected virtual void OnMenuObjectContentChange()
         {
             var count = ObjectMenuDisplay.menu.Count;
+            MainMobileAction.MenuCount = count;
 
             if (count == 0)
             {
+                if (Game.TrailingArea.ButtonsArea.IsMainActionDown) return;
+                
                 Game.Cursor.Action = null;
                 ObjectMenuDisplay.Collapse(false);
                 if (Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed) Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed = false;
+                UpdateMainActionUp(false);
+            }
+            else if (count == 1)
+            {
+                if (Game.TrailingArea.ButtonsArea.IsMainActionDown) return;
+                
+                if (ObjectMenu[0] is TextfieldDisplayer textfield)
+                {
+                    Game.Cursor.Action = "Edit Text";
+                    UpdateMainActionUp(false);
+                }
+                else if (ObjectMenu[0] is ButtonDisplayer button)
+                {
+                    Game.Cursor.Action = button.Text;
+                    UpdateMainActionUp(false);
+                }
+                else UpdateMainActionUp(true);
+
+                if (!Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed) Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed = true;
             }
             else
             {
-                if (count == 1 && ObjectMenu.m_displayers[0] is TextfieldDisplayer textfield) Game.Cursor.Action = "Edit Text";
-                else if (count == 1 && ObjectMenu.m_displayers[0] is ButtonDisplayer button) Game.Cursor.Action = button.Text;
-                else Game.Cursor.Action = "Display contextual menu";
+                if (Game.TrailingArea.ButtonsArea.IsMainActionDown) return;
+
+                string CursorAction = null;
+                if 
+                (
+                    MobileController.Exists 
+                    && MobileController.Instance.mouseData.CurrentHovered != null
+                ) CursorAction = MobileController.Instance.mouseData.CurrentHovered.dto.name;
+                if 
+                (
+                    string.IsNullOrEmpty(CursorAction) 
+                    || CursorAction == "new tool"
+                ) CursorAction = $"Display interactions menu";
+                Game.Cursor.Action = CursorAction;
 
                 if (!Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed) Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed = true;
-                if (Game.TrailingArea.ButtonsArea.MainActionUp != null) return;
-                Game.TrailingArea.ButtonsArea.MainActionUp = () =>
+
+                UpdateMainActionUp(true);
+            }
+        }
+
+        protected void UpdateMainActionUp(bool value)
+        {
+            if (value)
+            {
+                Game.TrailingArea.ButtonsArea.MainActionOpenOrCloseContextualMenu = () =>
                 {
                     if (ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Collapse(true);
                     else ObjectMenuDisplay.Expand(false);
                 };
             }
+            else Game.TrailingArea.ButtonsArea.MainActionOpenOrCloseContextualMenu = null;
         }
     }
 }
