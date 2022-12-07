@@ -116,8 +116,10 @@ public class CustomButtonsArea : VisualElement, ICustomElement
     public virtual string USSCustomClassActionReverse => $"{USSCustomClassName}__action_reverse";
     public virtual string USSCustomClassEmoteReverse => $"{USSCustomClassName}__emote_reverse";
 
+    public bool IsMainActionDown { get; protected set; }
     public System.Action MainActionDown;
     public System.Action MainActionUp;
+    public System.Action MainActionOpenOrCloseContextualMenu;
     public CustomButton Crouch;
     public CustomButton Jump;
     public CustomButton Action;
@@ -172,6 +174,9 @@ public class CustomButtonsArea : VisualElement, ICustomElement
 
         Action.ClickedDown += () => MainActionDown?.Invoke();
         Action.ClickedUp += () => MainActionUp?.Invoke();
+        Action.ClickedDown += () => IsMainActionDown = true;
+        Action.ClickedUp += () => IsMainActionDown = false;
+        Action.ClickedUp += () => MainActionOpenOrCloseContextualMenu?.Invoke();
 
         Crouch.ClickedDownWithInfo += (evt, localposition) => ClickedDown?.Invoke(evt, Crouch.LocalToWorld(localposition));
         Jump.ClickedDownWithInfo += (evt, localposition) => ClickedDown?.Invoke(evt, Jump.LocalToWorld(localposition));
