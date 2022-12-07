@@ -1,8 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:VisualElement name="simpleUIScrollContainer" style="flex-grow: 1;">
-        <Style src="/Assets/Project/UI/UXML/main-style.uss" />
-        <ui:Button text="Button" name="container-select-btn" class="medium-size-txt btn-blue-bck" style="height: 45px; color: rgb(255, 255, 255);" />
-        <ui:ScrollView name="container-scrollview" text="Back" show-horizontal-scroller="false" show-vertical-scroller="true" style="flex-grow: 1; margin-top: 10px; margin-bottom: 10px; height: 100%;" />
-        <ui:Button text="Back" name="container-back-btn" class="medium-size-txt btn-red-bck" style="height: 45px; color: rgb(255, 255, 255);" />
-    </ui:VisualElement>
-</ui:UXML>

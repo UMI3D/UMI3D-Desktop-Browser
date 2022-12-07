@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="pop-up-background" style="background-color: rgba(67, 67, 67, 0.49); align-items: center; justify-content: center; position: absolute; width: 100%; height: 100%; top: 0; left: -1px;">
+        <ui:VisualElement name="bug-report-pop-up" style="width: 600px; height: 680px; padding-left: 20px; padding-right: 20px; padding-top: 30px; padding-bottom: 20px;">
+            <ui:Button display-tooltip-when-elided="true" name="close-bug-report-pop-up" style="background-image: url(&apos;project://database/Assets/Project/UI/Icons/windows/win_toolbox/icon_close.png?fileID=21300000&amp;guid=675ce11ae2117cf4fb0cf3cfa86ff2eb&amp;type=3#icon_close&apos;); width: 20px; height: 20px; background-color: rgba(88, 88, 88, 0); position: absolute; top: 10px; right: 10px;" />
+            <ui:Label text="You found a bug ? To help us fix it, can you generate a report by filling this form ?&#10;(A screenshot will be included in the report so, if it&apos;s relevant, make sure to face what you want to show us before clicking on generate)" display-tooltip-when-elided="true" style="white-space: normal; color: rgb(212, 212, 212);" />
+            <ui:TextField picking-mode="Ignore" label="Name or email" name="name-input" text="John Doe; john.doe@example.com" style="margin-top: 20px;" />
+            <ui:TextField picking-mode="Ignore" label="Title" text="Short description of the problem" name="title-input" style="margin-top: 20px;" />
+            <ui:TextField picking-mode="Ignore" label="Details" name="repro-steps-input" multiline="true" text="Describe what happened and what you did to encounter the problem." style="margin-top: 20px;" />
+            <ui:Button text="Generate bug report" display-tooltip-when-elided="true" name="generate-report-btn" style="width: 200px; height: 40px; margin-left: auto; margin-right: auto; margin-top: 20px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
