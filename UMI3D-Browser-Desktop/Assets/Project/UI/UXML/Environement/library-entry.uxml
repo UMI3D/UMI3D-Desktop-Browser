@@ -1,6 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-  <ui:VisualElement name="library-entry" class="list-entry" style="border-left-color: rgb(52, 133, 153); border-right-color: rgb(52, 133, 153); border-top-color: rgb(52, 133, 153); border-bottom-color: rgb(52, 133, 153); justify-content: center; border-bottom-width: 1px; flex-direction: row; align-items: center;">
-    <ui:Label text="Summer furniture pack" name="library-name" style="-unity-text-align: middle-left; right: 0; height: 90%; width: 80%; justify-content: center; border-right-width: 1px; padding-left: 5px; font-size: 16px; border-left-color: rgb(52, 133, 153); border-right-color: rgb(52, 133, 153); border-top-color: rgb(52, 133, 153); border-bottom-color: rgb(52, 133, 153);" />
-    <ui:Label text="Download" name="library-status" class="text-red" style="-unity-text-align: middle-left; right: 0; height: 90%; width: 20%; justify-content: center; border-left-color: rgb(52, 133, 153); border-right-color: rgb(52, 133, 153); border-top-color: rgb(52, 133, 153); border-bottom-color: rgb(52, 133, 153); padding-left: 5px; font-size: 16px;" />
-  </ui:VisualElement>
-</ui:UXML>
