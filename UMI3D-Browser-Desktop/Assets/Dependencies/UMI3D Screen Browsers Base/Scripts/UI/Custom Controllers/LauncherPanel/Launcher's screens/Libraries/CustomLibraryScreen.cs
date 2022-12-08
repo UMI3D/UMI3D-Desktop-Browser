@@ -82,7 +82,11 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
     public virtual bool AllowDeletion
     {
         get => m_allowDeletion;
-        set => m_allowDeletion = value;
+        set
+        {
+            m_allowDeletion = value;
+            Header.AllowDeletion = value;
+        }
     }
 
     public override string ShortScreenTitle => "libraries";
@@ -340,7 +344,7 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
             UnityEngine.Debug.Log($"Libraries path not valide");
             return false;
         }
-        
+
         return true;
     }
 

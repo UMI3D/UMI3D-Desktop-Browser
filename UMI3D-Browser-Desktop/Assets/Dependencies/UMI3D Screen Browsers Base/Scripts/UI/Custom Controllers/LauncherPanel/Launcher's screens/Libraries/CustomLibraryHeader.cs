@@ -50,8 +50,20 @@ public abstract class CustomLibraryHeader : CustomLibrary
             custom.Set
                 (
                     m_sort.GetValueFromBag(bag, cc),
-                    m_displayMessage.GetValueFromBag(bag, cc)
+                    m_displayMessage.GetValueFromBag(bag, cc),
+                    m_allowDeletion.GetValueFromBag(bag, cc)
                  );
+        }
+    }
+
+    public new virtual bool AllowDeletion
+    {
+        get => m_allowDeletion;
+        set
+        {
+            m_allowDeletion = value;
+            if (value) DropDown_Field.Add(DeleteField);
+            else DeleteField.RemoveFromHierarchy();
         }
     }
 
@@ -117,13 +129,14 @@ public abstract class CustomLibraryHeader : CustomLibrary
         Delete.clicked += () => DisplayMessage = !m_displayMessage;
     }
 
-    public override void Set() => Set(LibrarySort.AscendingName, false);
+    public override void Set() => Set(LibrarySort.AscendingName, false, false);
 
-    public virtual void Set(LibrarySort sort, bool displayMessage)
+    public virtual void Set(LibrarySort sort, bool displayMessage, bool allowDeletion)
     {
-        Set("Name", "Size", null, null, displayMessage, true);
+        base.Set("Name", "Size", null, null, displayMessage, true);
 
         HeaderSort = sort;
+        AllowDeletion = allowDeletion;
     }
 
     public LibrarySort HeaderSort
