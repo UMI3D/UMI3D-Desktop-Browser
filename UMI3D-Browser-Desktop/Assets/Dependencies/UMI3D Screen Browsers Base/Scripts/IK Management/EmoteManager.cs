@@ -126,9 +126,13 @@ namespace umi3d.baseBrowser.emotes
         private void ConfigEmotes(UMI3DEmotesConfigDto dto)
         {
             emoteConfigDto = dto;
-            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
+            if (!UMI3DEnvironmentLoader.Instance.isEnvironmentLoaded)
+                UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
+            else
+                OnEnvironmentLoaded();
             UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(OnRedirection);
         }
+
         private void OnEnvironmentLoaded()
         {
             avatarAnimator = GetComponentInChildren<Animator>();
@@ -136,6 +140,7 @@ namespace umi3d.baseBrowser.emotes
                 avatarAnimator = transform.parent.GetComponent<Animator>();
             StartCoroutine(GetEmotes());
         }
+
         private void OnRedirection()
         {
             StopAllCoroutines();
@@ -143,6 +148,7 @@ namespace umi3d.baseBrowser.emotes
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.RemoveListener(OnEnvironmentLoaded);
             UMI3DCollaborationClientServer.Instance.OnRedirection.RemoveListener(OnRedirection);
         }
+
         /// <summary>
         /// Change the availability of an emote based on the received <see cref="UMI3DEmoteDto"/>
         /// </summary>
@@ -209,7 +215,6 @@ namespace umi3d.baseBrowser.emotes
                     }
                     i++;
                 }
-                //emoteAnimatorController = avatarAnimator.runtimeAnimatorController;
                 hasReceivedEmotes = true;
                 EmoteConfigReceived?.Invoke(Emotes); //Display the Emote Button and add emotes in windows.
                 UMI3DClientUserTracking.Instance.EmoteChangedEvent.AddListener(UpdateEmote);
@@ -251,28 +256,28 @@ namespace umi3d.baseBrowser.emotes
         /// </summary>
         private void LoadEmotes()
         {
-            //cachedAnimatorController = avatarAnimator.runtimeAnimatorController;
-            //avatarAnimator.runtimeAnimatorController = emoteAnimatorController;
             skeletonAnimator.enabled = false;
             avatarAnimator.enabled = true;
             skeletonAnimator.Update(0);
             avatarAnimator.Update(0);
             avatar.ForceDisablingBinding = true;
         }
+
         /// <summary>
         /// Put back the normal animator of the avatar
         /// </summary>
         private void UnloadEmotes()
         {
-            //avatarAnimator.runtimeAnimatorController = cachedAnimatorController;
             skeletonAnimator.enabled = true;
-            skeletonAnimator.Play("Idle");
+            skeletonAnimator.Play("Idle", layer:0);
             avatarAnimator.enabled = false;
             skeletonAnimator.Update(0);
             avatarAnimator.Update(0);
             avatar.ForceDisablingBinding = false;
         }
+
         private UnityAction currentInterruptionAction;
+
         /// <summary>
         /// Play the emote
         /// </summary>
@@ -293,7 +298,7 @@ namespace umi3d.baseBrowser.emotes
             LoadEmotes();
             currentInterruptionAction = new UnityAction(delegate { InterruptEmote(emote); });
             BaseFPSNavigation.PlayerMoved.AddListener(currentInterruptionAction);
-            avatarAnimator.Play(emote.dto.stateName);
+            avatarAnimator.Play(emote.dto.stateName, layer: 0);
             UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.AddListener(currentInterruptionAction); //used if another emote is played in the meanwhile
             yield return new WaitWhile(() => avatarAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1); //wait for emote end of animation
             //? Possible to improve using a StateMachineBehaviour attached to the EmoteController & trigger events on OnStateExit on anim/OnStateEnter on AnyState
@@ -301,6 +306,7 @@ namespace umi3d.baseBrowser.emotes
 
             yield break;
         }
+
         /// <summary>
         /// Stop the emote playing process.
         /// </summary>
@@ -316,6 +322,7 @@ namespace umi3d.baseBrowser.emotes
             UnloadEmotes();
             UMI3DClientUserTracking.Instance.EmoteEndedSelfEvent.Invoke();
         }
+
         /// <summary>
         /// Interrupts an emote animation
         /// </summary>
