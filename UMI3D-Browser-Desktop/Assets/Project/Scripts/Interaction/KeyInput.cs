@@ -99,7 +99,7 @@ namespace BrowserDesktop.Interaction
                 LastFrameButton = InputLayoutManager.GetInputCode(activationButton);
             }
             
-            if (associatedInteraction != null && !DesktopController.IsFreeAndHovering)
+            if (associatedInteraction != null /*&& !DesktopController.IsFreeAndHovering*/)
             {
                 if (Input.GetKeyDown(InputLayoutManager.GetInputCode(activationButton)))
                 {

@@ -2,6 +2,7 @@
     "name": "UMI3D.BaseBrowser.Controller",
     "rootNamespace": "",
     "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c",
         "GUID:d0bf4ea2ef3a7c74e9160b8995fd902b",
         "GUID:aebbed5eed3757846bab9faf35cac448",
         "GUID:8537d47cf9ea6504d84cf56365c6d93b",
