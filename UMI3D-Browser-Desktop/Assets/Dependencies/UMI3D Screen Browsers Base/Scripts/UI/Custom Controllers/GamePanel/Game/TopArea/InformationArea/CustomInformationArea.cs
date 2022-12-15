@@ -112,7 +112,7 @@ public class CustomInformationArea : VisualElement, ICustomElement
     public virtual string ShortText
     {
         get => ShortInf.text;
-        set 
+        set
         {
             if (value == ShortInf.text) return;
             var color = ShortInf.resolvedStyle.color;
@@ -249,11 +249,16 @@ public class CustomInformationArea : VisualElement, ICustomElement
         });
 
         this.AddManipulator(InfManipulator);
-        InfManipulator.ClickedDownWithInfo += (evt, locaPosition) => m_initialManipulatedPosition = locaPosition;
+        InfManipulator.ClickedDownWithInfo += (evt, locaPosition) =>
+        {
+            if (Controller != ControllerEnum.Touch) return;
+            m_initialManipulatedPosition = locaPosition;
+            if (IsExpanded) IsExpanded = false;
+        };
         InfManipulator.MovedWithInfo += (evt, localPosition) =>
         {
+            if (Controller != ControllerEnum.Touch) return;
             if (!IsExpanded && 10f < localPosition.y - m_initialManipulatedPosition.y) IsExpanded = true;
-            if (IsExpanded && -10f > localPosition.y - m_initialManipulatedPosition.y) IsExpanded = false;
         };
 
         ShortInf.name = "short-inf";
@@ -273,8 +278,19 @@ public class CustomInformationArea : VisualElement, ICustomElement
             }
             if (ShortInf.text != "" && !ShortInf.text.Equals(EnvironmentName))
             {
+                m_isExplanded = true;
                 NotificationTitleClicked?.Invoke();
                 return;
+            }
+            else if (!IsExpanded)
+            {
+                if (Controller != ControllerEnum.Touch) return;
+                IsExpanded = true;
+            }
+            else
+            {
+                if (Controller != ControllerEnum.Touch) return;
+                IsExpanded = false;
             }
         };
 
