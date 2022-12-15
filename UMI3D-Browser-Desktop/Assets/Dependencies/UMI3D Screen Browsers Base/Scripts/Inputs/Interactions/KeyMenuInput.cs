@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,7 +26,10 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// True if an Abstract Input is currently hold by a user.
         /// </summary>
         public static bool IsInputHold;
-        private bool risingEdgeEventSent;
+        /// <summary>
+        /// True if the rising edge event has been sent through network (to avoid sending falling edge only).
+        /// </summary>
+        protected bool risingEdgeEventSent;
 
         protected void Awake()
         {
@@ -93,7 +96,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             risingEdgeEventSent = false;
         }
 
-        private void StartAnim(ulong id)
+        protected void StartAnim(ulong id)
         {
             var anim = UMI3DAbstractAnimation.Get(id);
             if (anim != null)

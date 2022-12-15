@@ -51,9 +51,8 @@ namespace BrowserDesktop.Cursor
 
         List<Transform> ignore;
         Transform lasthit;
-        protected override void Update()
+        protected void Update()
         {
-            base.Update();
 
             //Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
             if (/*!CircularMenu.Exists || !CircularMenu.Instance.IsExpanded*/true)
