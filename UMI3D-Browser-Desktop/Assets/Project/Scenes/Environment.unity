@@ -620,8 +620,16 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  activationButton: 2
   bone: 3
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 5ddddb94-94d2-4eaf-9c82-22593936d9fe
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   Cursor: {fileID: 780486094}
   AvatarParent: {fileID: 907048297}
   Head: {fileID: 907048308}
@@ -974,8 +982,16 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  activationButton: 18
   bone: 3
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 1646fb89-b33d-4a10-9079-ea1741aaf078
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!114 &1202536836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -994,8 +1010,16 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  activationButton: 17
   bone: 3
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: f189a185-f55b-4385-b413-8acb2ac3b3da
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!114 &1202536837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1014,8 +1038,16 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  activationButton: 16
   bone: 3
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 4f7b0144-e13a-424e-9d24-52ecf9df10cb
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!114 &1202536838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1034,8 +1066,16 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  activationButton: 21
   bone: 0
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: e6c9012f-6ab5-4ead-ae2a-d4cf6a188a9d
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!114 &1202536839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1054,8 +1094,16 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  activationButton: 20
   bone: 3
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: d2ea904e-adbb-4c83-a8a6-0260671e9729
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!114 &1202536840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1074,8 +1122,16 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  activationButton: 19
   bone: 3
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: bda10299-4f37-479f-8f9a-a75cffb5db20
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!1001 &1635769818
 PrefabInstance:
   m_ObjectHideFlags: 0
