@@ -20,7 +20,7 @@ using umi3d.common;
 namespace umi3d.baseBrowser.inputs.interactions
 {
     [System.Serializable]
-    public class KeyMenuInput : BaseTouchInteraction<common.interaction.EventDto>
+    public class EventInteraction : BaseTouchInteraction<common.interaction.EventDto>
     {
         /// <summary>
         /// True if an Abstract Input is currently hold by a user.

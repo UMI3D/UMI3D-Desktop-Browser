@@ -18,7 +18,7 @@ using UnityEngine;
 
 namespace umi3d.mobileBrowser.interactions
 {
-    public class MainMobileAction : baseBrowser.inputs.interactions.KeyMenuInput
+    public class MainMobileAction : baseBrowser.inputs.interactions.EventInteraction
     {
         public static int MenuCount;
         public static event System.Action Down;
