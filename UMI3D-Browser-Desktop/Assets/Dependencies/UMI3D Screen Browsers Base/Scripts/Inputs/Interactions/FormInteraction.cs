@@ -19,7 +19,7 @@ using System.Linq;
 namespace umi3d.baseBrowser.inputs.interactions
 {
     [System.Serializable]
-    public class FormInput : BaseTouchInteraction<common.interaction.FormDto>
+    public class FormInteraction : BaseTouchInteraction<common.interaction.FormDto>
     {
         protected override void CreateMenuItem()
         {

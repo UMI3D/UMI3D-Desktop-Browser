@@ -19,7 +19,7 @@ using UnityEngine;
 namespace umi3d.baseBrowser.inputs.interactions
 {
     [System.Serializable]
-    public class LinkInput : BaseTouchInteraction<common.interaction.LinkDto>
+    public class LinkInteraction : BaseTouchInteraction<common.interaction.LinkDto>
     {
         protected void Awake()
         {
