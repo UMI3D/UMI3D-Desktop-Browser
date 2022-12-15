@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.baseBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -104,6 +105,8 @@ public class CustomLeadingArea : VisualElement, ICustomElement
 
     public CustomJoystickArea JoystickArea;
 
+    public TouchManipulator2 LeadingAreaManipulator = new TouchManipulator2(null, 0, 0);
+
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
     protected bool m_leftHand;
@@ -119,6 +122,9 @@ public class CustomLeadingArea : VisualElement, ICustomElement
         {
             throw e;
         }
+
+        this.AddManipulator(LeadingAreaManipulator);
+        //TODO improve camera navigation with double click.
     }
 
     public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, m_leftHand);

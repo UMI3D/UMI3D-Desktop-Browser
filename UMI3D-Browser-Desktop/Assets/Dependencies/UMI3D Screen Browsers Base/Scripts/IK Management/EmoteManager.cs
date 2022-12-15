@@ -269,7 +269,7 @@ namespace umi3d.baseBrowser.emotes
         private void UnloadEmotes()
         {
             skeletonAnimator.enabled = true;
-            skeletonAnimator.Play("Idle", layer:0);
+            skeletonAnimator.Play("Idle", layer: 0);
             avatarAnimator.enabled = false;
             skeletonAnimator.Update(0);
             avatarAnimator.Update(0);

@@ -28,6 +28,7 @@ namespace umi3d.commonScreen.Displayer
         public override void InitElement()
         {
             if (SampleTextLabel == null) SampleTextLabel = new Text_C();
+            if (SampleTextItem == null) SampleTextItem = new Text_C();
 
             base.InitElement();
         }

@@ -34,6 +34,10 @@ namespace umi3d.baseBrowser.ui.viewController
         /// </summary>
         public event Action<EventBase, Vector2> ClickedLongWithInfo;
         /// <summary>
+        /// Double Clicked with eventBase and localPosition.
+        /// </summary>
+        public event Action<EventBase, Vector2> DoubleClickedWithInfo;
+        /// <summary>
         /// Moved with eventBase and localPosition.
         /// </summary>
         public event Action<EventBase, Vector2> MovedWithInfo;
@@ -41,6 +45,7 @@ namespace umi3d.baseBrowser.ui.viewController
         public event Action ClickedDown;
         public event Action ClickedUp;
         public event Action ClickedLong;
+        public event Action DoubleClicked;
         public event Action Moved;
         public long LongPressDelay;
 
@@ -70,6 +75,10 @@ namespace umi3d.baseBrowser.ui.viewController
         /// </summary>
         public void OnClickedLong() => ClickedLong?.Invoke();
         /// <summary>
+        /// Invoke double clicked event.
+        /// </summary>
+        public void OnDoubleClicked() => DoubleClicked?.Invoke();
+        /// <summary>
         /// Invoke moved event.
         /// </summary>
         public void OnMoved() => Moved?.Invoke();
@@ -86,17 +95,33 @@ namespace umi3d.baseBrowser.ui.viewController
         /// </summary>
         public void OnClickedLongWithInf(EventBase evt, Vector2 localPosition) => ClickedLongWithInfo?.Invoke(evt, localPosition);
         /// <summary>
+        /// Invoke double clicked event with information.
+        /// </summary>
+        public void OnDoubleClickedWithInf(EventBase evt, Vector2 localPosition) => DoubleClickedWithInfo?.Invoke(evt, localPosition);
+        /// <summary>
         /// Invoke moved event with information.
         /// </summary>
         public void OnMovedWithInf(EventBase evt, Vector2 localPosition) => MovedWithInfo?.Invoke(evt, localPosition);
 
+        protected IVisualElementScheduledItem m_longPressScheduledItem;
+
         protected override void ProcessDownEvent(EventBase evt, Vector2 localPosition, int pointerId)
         {
-            ClickedDown?.Invoke();
-            ClickedDownWithInfo?.Invoke(evt, localPosition);
+            if (evt is MouseDownEvent mouseEvt && mouseEvt.clickCount == 2)
+            {
+                DoubleClicked?.Invoke();
+                DoubleClickedWithInfo?.Invoke(evt, localPosition);
+            }
+            else
+            {
+                ClickedDown?.Invoke();
+                ClickedDownWithInfo?.Invoke(evt, localPosition);
+                m_longPressScheduledItem = base.target.schedule.Execute(() => LongPressed(evt, localPosition));
+                m_longPressScheduledItem.StartingIn(LongPressDelay);
+            }
+
             m_pointerId = pointerId;
             base.ProcessDownEvent(evt, localPosition, pointerId);
-            base.target.schedule.Execute(() => LongPressed(evt, localPosition)).StartingIn(LongPressDelay);
         }
 
         protected override void ProcessMoveEvent(EventBase evt, Vector2 localPosition)
@@ -110,6 +135,11 @@ namespace umi3d.baseBrowser.ui.viewController
         {
             ClickedUp?.Invoke();
             ClickedUpWithInfo?.Invoke(evt, localPosition);
+            if (m_longPressScheduledItem != null)
+            {
+                m_longPressScheduledItem.Pause();
+                m_longPressScheduledItem = null;
+            }
             base.ProcessUpEvent(evt, localPosition, pointerId);
         }
 
@@ -120,6 +150,8 @@ namespace umi3d.baseBrowser.ui.viewController
 
         protected virtual void LongPressed(EventBase evt, Vector2 localPosition)
         {
+            m_longPressScheduledItem.Pause();
+            m_longPressScheduledItem = null;
             if (!active) return;
             ClickedLong?.Invoke();
             ClickedLongWithInfo?.Invoke(evt, localPosition);

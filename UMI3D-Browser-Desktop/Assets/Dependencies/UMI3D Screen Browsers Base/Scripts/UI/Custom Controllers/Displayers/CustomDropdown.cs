@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public abstract class CustomDropdown : DropdownField, ICustomElement
@@ -31,6 +32,8 @@ public abstract class CustomDropdown : DropdownField, ICustomElement
 
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
+            if (Application.isPlaying) return;
+
             base.Init(ve, bag, cc);
             var custom = ve as CustomDropdown;
 
@@ -47,6 +50,9 @@ public abstract class CustomDropdown : DropdownField, ICustomElement
     public virtual string USSCustomClassDirection(ElemnetDirection direction) => $"{USSCustomClassName}-{direction}".ToLower();
     public virtual string USSCustomClassLabel => $"{USSCustomClassName}__label";
     public virtual string USSClassText => $"unity-base-popup-field__text";
+
+    public virtual string USSCustomClassScrollview(ElementCategory category) => $"{USSCustomClassName}-scrollview-{category}".ToLower();
+    public virtual string USSCustomClassItemLabel => $"{USSCustomClassName}-item__label";
 
     public virtual ElementCategory Category
     {
@@ -86,6 +92,7 @@ public abstract class CustomDropdown : DropdownField, ICustomElement
     protected bool m_hasBeenInitialized;
 
     public CustomText SampleTextLabel;
+    public CustomText SampleTextItem;
 
     public virtual void Set() => Set(ElementCategory.Menu, ElementSize.Medium, ElemnetDirection.Leading);
     public virtual void Set(ElementCategory category, ElementSize size, ElemnetDirection direction)
@@ -125,5 +132,52 @@ public abstract class CustomDropdown : DropdownField, ICustomElement
 
         textElement.ClearAndCopyStyleClasses(SampleTextLabel);
         textElement.AddToClassList(USSClassText);
+    }
+
+    protected override void ExecuteDefaultActionAtTarget(EventBase evt)
+    {
+        base.ExecuteDefaultActionAtTarget(evt);
+
+        if (evt is not MouseDownEvent mde) return;
+
+        var container = FoundBaseDropdownContainer();
+        if (container == null) return;
+
+        InitBaseDropdownContainer(container);
+    }
+
+    protected virtual VisualElement FoundBaseDropdownContainer()
+    {
+        var root = this.FindRoot();
+        if (root == null) return null;
+
+        var parent = root.parent;
+        if (parent == null) return null;
+
+        return parent.Q(className: "unity-base-dropdown__container-outer");
+    }
+
+    protected virtual void InitBaseDropdownContainer(VisualElement container)
+    {
+        try
+        {
+            container.AddStyleSheetFromPath(StyleSheetDisplayerPath);
+            container.AddStyleSheetFromPath(StyleSheetTextPath);
+            container.AddStyleSheetFromPath(StyleSheetPath);
+        }
+        catch (System.Exception e)
+        {
+            UnityEngine.Debug.LogError($"{e}");
+        }
+
+        var scrollview = container.Q(className: "unity-base-dropdown__container-inner");
+        scrollview.AddToClassList(USSCustomClassScrollview(m_category));
+
+        var scrollviewContentContainer = container.Q(className: "unity-scroll-view__content-container");
+        foreach (var item in scrollviewContentContainer.Children())
+        {
+            item.Q<Label>().ClearAndCopyStyleClasses(SampleTextItem);
+            item.Q<Label>().AddToClassList(USSCustomClassItemLabel);
+        }
     }
 }

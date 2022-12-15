@@ -27,11 +27,11 @@ namespace umi3d.baseBrowser
         /// <summary>
         /// Build count, to be increament by 1.
         /// </summary>
-        public readonly static string buildCount = "2";
+        public readonly static string buildCount = "4";
         /// <summary>
         /// Year-Month-Day.
         /// </summary>
-        public readonly static string date = "221207";
+        public readonly static string date = "221215";
     }
 }
 

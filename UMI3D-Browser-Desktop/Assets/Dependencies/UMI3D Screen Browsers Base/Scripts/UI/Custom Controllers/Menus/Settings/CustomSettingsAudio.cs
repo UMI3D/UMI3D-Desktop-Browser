@@ -132,7 +132,8 @@ public class CustomSettingsAudio : CustomSettingScreen
     /// </summary>
     public void SetAudio()
     {
-        if (umi3d.cdk.collaboration.MicrophoneListener.Exists) umi3d.cdk.collaboration.MicrophoneListener.Instance.inputType = umi3d.cdk.collaboration.MicrophoneInputType.NAudio;
+        if (umi3d.cdk.collaboration.MicrophoneListener.Exists)
+            umi3d.cdk.collaboration.MicrophoneListener.Instance.inputType = umi3d.cdk.collaboration.MicrophoneInputType.NAudio;
 
         var mics = umi3d.cdk.collaboration.MicrophoneListener.GetMicrophonesNames().ToList();
         MicDropdown.choices = mics;

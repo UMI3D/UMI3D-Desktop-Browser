@@ -43,12 +43,12 @@
 }
 
 .information__area-mic__on {
-	right: 70;
+	right: 80;
 	background-image: var(--background-image-mic-on);
 }
 
 .information__area-mic__off {
-	right: 65;
+	right: 80;
 	background-image: var(--background-image-mic-off);
 }
 
