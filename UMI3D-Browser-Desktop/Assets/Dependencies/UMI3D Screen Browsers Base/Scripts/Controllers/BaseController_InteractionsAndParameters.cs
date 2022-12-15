@@ -41,9 +41,9 @@ namespace umi3d.baseBrowser.Controller
         }
 
         //protected List<ManipulationGroup> ManipulationInputs = new List<ManipulationGroup>();
-        protected List<inputs.interactions.KeyMenuInput> KeyMenuInputs = new List<inputs.interactions.KeyMenuInput>();
-        protected List<inputs.interactions.FormInput> FormInputs = new List<inputs.interactions.FormInput>();
-        protected List<inputs.interactions.LinkInput> LinkInputs = new List<inputs.interactions.LinkInput>();
+        protected List<inputs.interactions.EventInteraction> KeyMenuInputs = new List<inputs.interactions.EventInteraction>();
+        protected List<inputs.interactions.FormInteraction> FormInputs = new List<inputs.interactions.FormInteraction>();
+        protected List<inputs.interactions.LinkInteraction> LinkInputs = new List<inputs.interactions.LinkInteraction>();
         /// <summary>
         /// Instantiated float parameter inputs.
         /// </summary>
@@ -124,9 +124,9 @@ namespace umi3d.baseBrowser.Controller
             if (gO != null) input = gO.AddComponent<T>();
             else input = new T();
 
-            if (input is inputs.interactions.KeyMenuInput keyMenuInput) keyMenuInput.bone = interactionBoneType;
-            else if (input is inputs.interactions.FormInput formInput) formInput.bone = interactionBoneType;
-            else if (input is inputs.interactions.LinkInput linkInput) linkInput.bone = interactionBoneType;
+            if (input is inputs.interactions.EventInteraction keyMenuInput) keyMenuInput.bone = interactionBoneType;
+            else if (input is inputs.interactions.FormInteraction formInput) formInput.bone = interactionBoneType;
+            else if (input is inputs.interactions.LinkInteraction linkInput) linkInput.bone = interactionBoneType;
             input.Menu = ObjectMenu.menu;
             inputs.Add(input);
         }

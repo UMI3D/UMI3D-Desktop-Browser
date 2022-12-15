@@ -323,7 +323,7 @@ namespace umi3d.baseBrowser.Controller
                 if (mouseData.LastProjected != null) ReleaseAutoProjection();
                 bool isInteractionsEmpty = mouseData.CurrentHovered.dto.interactions.Count == 0;
                 bool isCompatible = IsCompatibleWith(mouseData.CurrentHovered);
-                if (!isInteractionsEmpty && isCompatible && !baseBrowser.inputs.interactions.KeyMenuInput.IsInputHold) SetAutoProjection();
+                if (!isInteractionsEmpty && isCompatible && !baseBrowser.inputs.interactions.EventInteraction.IsInputHold) SetAutoProjection();
             }
             else if (mouseData.LastProjected != null) ReleaseAutoProjection();
         }
