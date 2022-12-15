@@ -14,11 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
-using umi3d.common;
-using umi3d.commonMobile.game;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -246,6 +243,7 @@ public class CustomInformationArea : VisualElement, ICustomElement
             this.TryGetCustomStyle("--size__width-short-inf", out m_shortInfWidthgLength);
             this.TryGetCustomStyle("--size-margin-and-padding-game", out m_gameMargin_Padding);
             this.TryGetCustomStyle("--padding-short-inf", out m_shortInf_Padding);
+            Controller = Controller;
         });
 
         this.AddManipulator(InfManipulator);

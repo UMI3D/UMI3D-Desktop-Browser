@@ -104,6 +104,10 @@ namespace umi3d.baseBrowser.connection
         #region Launcher
 
         [HideInInspector]
+        public event System.Action<string> ConnectionInitialized;
+        [HideInInspector]
+        public event System.Action<string> ConnectionInitializationFailled;
+        [HideInInspector]
         public event System.Action DisplaySessions;
         [HideInInspector]
         public event System.Action<float> LoadingEnvironment;
@@ -129,6 +133,8 @@ namespace umi3d.baseBrowser.connection
 
         public void ResetLauncherEvent()
         {
+            ConnectionInitialized = null;
+            ConnectionInitializationFailled = null;
             DisplaySessions = null;
             LoadingEnvironment = null;
             LoadedLauncher = null;
@@ -144,6 +150,7 @@ namespace umi3d.baseBrowser.connection
                 Debug.Log("Only one connection at a time");
                 return;
             }
+            ConnectionInitialized?.Invoke(currentServer.serverUrl);
             await ConnectWithMasterServerOrMediaDto(saveInfo);
             while (onlyOneConnection) await UMI3DAsyncManager.Yield();
         }
@@ -252,10 +259,10 @@ namespace umi3d.baseBrowser.connection
             while (onlyOneConnection)
             {
                 await UMI3DAsyncManager.Yield();
-                if (masterServerFound || mediaDtoFound)
-                    return;
+                if (masterServerFound || mediaDtoFound) return;
                 if (_masterServerFound != null && _mediaDtoFound != null)
                 {
+                    ConnectionInitializationFailled?.Invoke(currentServer.serverUrl);
                     onlyOneConnection = false;
                     return;
                 }

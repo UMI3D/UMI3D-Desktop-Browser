@@ -63,140 +63,10 @@ namespace umi3d.baseBrowser.connection
 
         #endregion
 
-        protected virtual void InitLoader()
+        #region Initialization of the Connection Process
+
+        protected virtual void InitConnectionProcess()
         {
-#if !UNITY_STANDALONE
-            Loader.Version = Application.version;
-#endif
-            Loader.Loading.Title = "Connection";
-            Loader.Loading.BackText = "Leave";
-            Loader.Loading.Button_Back.clicked += BaseConnectionProcess.Instance.Leave;
-            Loader.Loading.LoadingBar.highValue = 1;
-            Loader.Form.BackText = "Leave";
-            Loader.Form.Button_Back.clicked += BaseConnectionProcess.Instance.Leave;
-            Loader.CurrentScreen = LoaderScreens.Loading;
-            Loader.ControllerCanProcess = (value) => BaseController.CanProcess = value;
-            Loader.SetMovement = (value) => SetMovement(value, CursorMovement.Free);
-            Loader.UnSetMovement = (value) => UnSetMovement(value);
-
-            umi3d.cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded?.AddListener(() =>
-            {
-                Loader.ControllerCanProcess?.Invoke(true);
-                Game.TopArea.InformationArea.EnvironmentName = UMI3DCollaborationClientServer.Instance.environementName;
-                Menu.GameData.EnvironmentName = UMI3DCollaborationClientServer.Instance.environementName;
-            });
-
-            FormContainer.GetContainer = () => Loader.Form.ScrollView;
-            FormContainer.InsertDisplayer = (index, displayer) => Loader.Form.Insert(index, displayer);
-            FormContainer.RemoveDisplayer = displayer => Loader.Form.Remove(displayer);
-
-            ObjectMenuDisplay.menu.onContentChange.AddListener(OnMenuObjectContentChange);
-        }
-
-        protected virtual void InitGame()
-        {
-            BaseCursor.Instance.UpdateCursor += UpdateCursor;
-
-            var buttonsArea = Game.TrailingArea.ButtonsArea;
-            buttonsArea.Jump.ClickedDown += () => BaseFPSNavigation.Instance.IsJumping = true;
-            buttonsArea.Jump.ClickedUp += () => BaseFPSNavigation.Instance.IsJumping = false;
-            buttonsArea.Crouch.ClickedDown += () => BaseFPSNavigation.Instance.WantToCrouch = true;
-            buttonsArea.Crouch.ClickedUp += () => BaseFPSNavigation.Instance.WantToCrouch = false;
-
-            Menu.Leave.clicked += () =>
-            {
-                var dialoguebox = CreateDialogueBox();
-                dialoguebox.Type = DialogueboxType.Confirmation;
-                dialoguebox.Title = "Do you want to leave the environment ?";
-                dialoguebox.Message = "";
-                dialoguebox.ChoiceAText = "Stay";
-                dialoguebox.ChoiceBText = "Leave";
-                dialoguebox.ChoiceA.Type = ButtonType.Default;
-                dialoguebox.Callback = (index) =>
-                {
-                    if (index != 0) BaseConnectionProcess.Instance.Leave();
-                };
-                dialoguebox.EnqueuePriority(root);
-            };
-            var envAudioSettings = EnvironmentSettings.Instance.AudioSetting;
-            Menu.Settings.Audio.GeneralVolumeValeChanged += value => envAudioSettings.GeneralVolume = value;
-            envAudioSettings.StatusChanged += isOn => Menu.Settings.Audio.SetGeneralVolumeValueWithoutNotify(envAudioSettings.GeneralVolume * 10f);
-
-            var infArea = Game.TopArea.InformationArea;
-            EnvironmentSettings.Instance.AudioSetting.StatusChanged += (value) => infArea.IsSoundOn = value;
-            EnvironmentSettings.Instance.MicSetting.StatusChanged += (value) => infArea.IsMicOn = value;
-            infArea.SoundStatusChanged += () => EnvironmentSettings.Instance.AudioSetting.Toggle();
-            infArea.MicStatusChanged += () => EnvironmentSettings.Instance.MicSetting.Toggle();
-
-            EnvironmentSettings.Instance.AudioSetting.StatusChanged += (value) => Game.BottomArea.IsSoundOn = value;
-            EnvironmentSettings.Instance.MicSetting.StatusChanged += (value) => Game.BottomArea.IsMicOn = value;
-            Game.BottomArea.Sound.clicked += () => EnvironmentSettings.Instance.AudioSetting.Toggle();
-            Game.BottomArea.Mic.clicked += () => EnvironmentSettings.Instance.MicSetting.Toggle();
-
-            NotificationLoader.Notification2DReceived += dto =>
-            {
-                var notification = CustomNotificationCenter.AddNotification(dto);
-
-                root.schedule.Execute(() =>
-                {
-                    notification.Timestamp = "0min";
-                    root.schedule.Execute(() =>
-                    {
-                        var time = notification.Timestamp.Substring(0, notification.Timestamp.Length - 3);
-                        notification.Timestamp = $"{int.Parse(time) + 1}min";
-                    }).Every(60000);
-                }).ExecuteLater(60000);
-            };
-
-            EmoteManager.Instance.EmoteConfigReceived += emotes =>
-            {
-                Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
-                CustomEmoteWindow.OnEmoteConfigReceived(emotes);
-            };
-            EmoteManager.Instance.NoEmoteConfigReeived += () =>
-            {
-                Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
-                CustomEmoteWindow.Reset();
-            };
-            EmoteManager.Instance.EmoteUpdated += emote => CustomEmoteWindow.OnUpdateEmote(emote);
-
-            ObjectMenu.GetContainer = () => Game.TrailingArea.ObjectMenu;
-            ObjectMenu.DisplayObjectMenu = value =>
-            {
-                if (GamePanel.CurrentView != CustomGamePanel.GameViews.Game) return;
-                Game.TrailingArea.DisplayObjectMenu = value;
-            };
-            ObjectMenu.InsertDisplayer = (index, displayer) => Game.TrailingArea.ObjectMenu.Insert(index, displayer);
-            ObjectMenu.RemoveDisplayer = displayer => Game.TrailingArea.ObjectMenu.Remove(displayer);
-
-#if !UNITY_STANDALONE
-            Menu.Version = Application.version;
-#endif
-            Menu.Settings.Audio.SetAudio();
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            Debug.Assert(document != null);
-            Debug.Assert(FormMenu != null);
-            Debug.Assert(formMenuDisplay != null);
-
-            NotificationLoader = Resources.Load<NotificationLoader>("Scriptables/GamePanel/NotificationLoader");
-            m_time_Start = DateTime.Now;
-        }
-
-        protected virtual void Start()
-        {
-            BaseConnectionProcess.Instance.ResetEnvironmentEvents();
-
-            GamePanel = root.Q<CustomGamePanel>();
-
-            InitLoader();
-            InitGame();
-
-            GamePanel.CurrentView = CustomGamePanel.GameViews.Loader;
-
             BaseConnectionProcess.Instance.ConnectionSucces += (media) =>
             {
                 GamePanel.CurrentView = CustomGamePanel.GameViews.Loader;
@@ -295,9 +165,168 @@ namespace umi3d.baseBrowser.connection
                 Game.NotifAndUserArea.OnUserCountUpdated(count);
                 Menu.GameData.ParticipantCount = count;
             };
+        }
+
+        #endregion
+
+        #region Initialization of the Loader
+
+        protected virtual void InitLoader()
+        {
+            Loader.CurrentScreen = LoaderScreens.Loading;
+            Loader.ControllerCanProcess = (value) => BaseController.CanProcess = value;
+            Loader.SetMovement = (value) => SetMovement(value, CursorMovement.Free);
+            Loader.UnSetMovement = (value) => UnSetMovement(value);
+
+            umi3d.cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded?.AddListener(() =>
+            {
+                Loader.ControllerCanProcess?.Invoke(true);
+                Game.TopArea.InformationArea.EnvironmentName = UMI3DCollaborationClientServer.Instance.environementName;
+                Menu.GameData.EnvironmentName = UMI3DCollaborationClientServer.Instance.environementName;
+            });
+
+            InitLoader_Loading();
+            InitiLoader_FormMenu();
+        }
+
+        protected virtual void InitLoader_Loading()
+        {
+            Loader.Loading.Title = "Connection";
+            // TODO : for leaving is not working when the environment is loading.
+            //Loader.Loading.BackText = "Leave";
+            //Loader.Loading.Button_Back.clicked += BaseConnectionProcess.Instance.Leave;
+            Loader.Loading.LoadingBar.highValue = 1;
+        }
+
+        protected virtual void InitiLoader_FormMenu()
+        {
+            Loader.Form.BackText = "Leave";
+            Loader.Form.Button_Back.clicked += BaseConnectionProcess.Instance.Leave;
+
+            FormContainer.GetContainer = () => Loader.Form.ScrollView;
+            FormContainer.InsertDisplayer = (index, displayer) => Loader.Form.Insert(index, displayer);
+            FormContainer.RemoveDisplayer = displayer => Loader.Form.Remove(displayer);
+        }
+
+        #endregion
+
+        #region Initialization of the Menu UI
+
+        protected virtual void InitMenu()
+        {
+            Menu.Leave.clicked += () =>
+            {
+                var dialoguebox = CreateDialogueBox();
+                dialoguebox.Type = DialogueboxType.Confirmation;
+                dialoguebox.Title = "Do you want to leave the environment ?";
+                dialoguebox.Message = "";
+                dialoguebox.ChoiceAText = "Stay";
+                dialoguebox.ChoiceBText = "Leave";
+                dialoguebox.ChoiceA.Type = ButtonType.Default;
+                dialoguebox.Callback = (index) =>
+                {
+                    if (index != 0) BaseConnectionProcess.Instance.Leave();
+                };
+                dialoguebox.EnqueuePriority(root);
+            };
+
+            InitMenu_Audio();
+        }
+
+        protected virtual void InitMenu_Audio()
+        {
+            var envAudioSettings = EnvironmentSettings.Instance.AudioSetting;
+            var menuAudioSettings = Menu.Settings.Audio;
+            menuAudioSettings.GeneralVolumeValeChanged += value => envAudioSettings.GeneralVolume = value;
+            envAudioSettings.StatusChanged += isOn => menuAudioSettings.SetGeneralVolumeValueWithoutNotify(envAudioSettings.GeneralVolume * 10f);
+
+            Menu.Settings.Audio.SetAudio();
+        }
+
+        #endregion
+
+        #region Initialization of the Game UI
+
+        protected virtual void InitGame()
+        {
+            BaseCursor.Instance.UpdateCursor += UpdateCursor;
+
+            InitGame_Audio();
+            InitGame_ButtonsArea();
+            InitGame_UserList();
+            InitGame_Notification();
+            InitGame_Emote();
+            InitGame_ObjectMenu();
+        }
+
+        protected virtual void InitGame_ButtonsArea()
+        {
+            var buttonsArea = Game.TrailingArea.ButtonsArea;
+            buttonsArea.Jump.ClickedDown += () => BaseFPSNavigation.Instance.IsJumping = true;
+            buttonsArea.Jump.ClickedUp += () => BaseFPSNavigation.Instance.IsJumping = false;
+            buttonsArea.Crouch.ClickedDown += () => BaseFPSNavigation.Instance.WantToCrouch = true;
+            buttonsArea.Crouch.ClickedUp += () => BaseFPSNavigation.Instance.WantToCrouch = false;
+        }
+
+        protected virtual void InitGame_UserList()
+        {
+            UMI3DEnvironmentClient.EnvironementJoinned.AddListener(Game.NotifAndUserArea.UserList.OnEnvironmentChanged);
+            UMI3DUser.OnUserMicrophoneStatusUpdated.AddListener(Game.NotifAndUserArea.UserList.UpdateUser);
+            UMI3DUser.OnUserAvatarStatusUpdated.AddListener(Game.NotifAndUserArea.UserList.UpdateUser);
+            UMI3DUser.OnUserAttentionStatusUpdated.AddListener(Game.NotifAndUserArea.UserList.UpdateUser);
+            UMI3DUser.OnRemoveUser.AddListener(Game.NotifAndUserArea.UserList.RemoveUser);
+        }
+
+        protected virtual void InitGame_Notification()
+        {
+            NotificationLoader.Notification2DReceived += dto =>
+            {
+                var notification = CustomNotificationCenter.AddNotification(dto);
+
+                root.schedule.Execute(() =>
+                {
+                    notification.Timestamp = "0min";
+                    root.schedule.Execute(() =>
+                    {
+                        var time = notification.Timestamp.Substring(0, notification.Timestamp.Length - 3);
+                        notification.Timestamp = $"{int.Parse(time) + 1}min";
+                    }).Every(60000);
+                }).ExecuteLater(60000);
+            };
+        }
+
+        protected virtual void InitGame_Emote()
+        {
+            EmoteManager.Instance.EmoteConfigReceived += emotes =>
+            {
+                Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
+                CustomEmoteWindow.OnEmoteConfigReceived(emotes);
+            };
+            EmoteManager.Instance.NoEmoteConfigReeived += () =>
+            {
+                Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
+                CustomEmoteWindow.Reset();
+            };
+            EmoteManager.Instance.EmoteUpdated += CustomEmoteWindow.OnUpdateEmote;
+        }
+
+        protected virtual void InitGame_ObjectMenu()
+        {
+            ObjectMenuDisplay.menu.onContentChange.AddListener(OnMenuObjectContentChange);
+
+            ObjectMenu.GetContainer = () => Game.TrailingArea.ObjectMenu;
+            ObjectMenu.DisplayObjectMenu = value =>
+            {
+                if (GamePanel.CurrentView != CustomGamePanel.GameViews.Game) return;
+                Game.TrailingArea.DisplayObjectMenu = value;
+            };
+            ObjectMenu.InsertDisplayer = (index, displayer) => Game.TrailingArea.ObjectMenu.Insert(index, displayer);
+            ObjectMenu.RemoveDisplayer = displayer => Game.TrailingArea.ObjectMenu.Remove(displayer);
 
             Game.LeadingAndTrailingAreaClicked += worldPosition =>
             {
+                if (Game.Controller != ControllerEnum.MouseAndKeyboard) return;
+
                 if (ObjectMenuDisplay.isDisplaying)
                 {
                     ObjectMenuDisplay.Collapse(true);
@@ -317,7 +346,32 @@ namespace umi3d.baseBrowser.connection
                     BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
                 }
             };
+        }
 
+        protected virtual void InitGame_Audio()
+        {
+            var envAudio = EnvironmentSettings.Instance.AudioSetting;
+            var envMic = EnvironmentSettings.Instance.MicSetting;
+
+            var infArea = Game.TopArea.InformationArea;
+            envAudio.StatusChanged += (value) => infArea.IsSoundOn = value;
+            envMic.StatusChanged += (value) => infArea.IsMicOn = value;
+            infArea.SoundStatusChanged += () => envAudio.Toggle();
+            infArea.MicStatusChanged += () => envMic.Toggle();
+
+            var bottomArea = Game.BottomArea;
+            envAudio.StatusChanged += (value) => bottomArea.IsSoundOn = value;
+            envMic.StatusChanged += (value) => bottomArea.IsMicOn = value;
+            bottomArea.Sound.clicked += () => envAudio.Toggle();
+            bottomArea.Mic.clicked += () => envMic.Toggle();
+        }
+
+        #endregion
+
+        #region Initialization of the Controls
+
+        protected virtual void InitControls()
+        {
             BaseController.EscClicked += () =>
             {
                 if (GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu)
@@ -352,8 +406,6 @@ namespace umi3d.baseBrowser.connection
                     BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
                     if (!Game.DisplayNotifUsersArea) Game.DisplayNotifUsersArea = true;
                 }
-
-
             };
 
             BaseController.EnterKeyPressed += () => m_next?.Invoke();
@@ -377,6 +429,57 @@ namespace umi3d.baseBrowser.connection
             Game.TrailingArea.ButtonsArea.MainActionDown = MainMobileAction.OnClickedDown;
             Game.TrailingArea.ButtonsArea.MainActionUp = MainMobileAction.OnClickedUp;
         }
+
+        #endregion
+
+        protected override void Awake()
+        {
+            base.Awake();
+            Debug.Assert(document != null);
+            Debug.Assert(FormMenu != null);
+            Debug.Assert(formMenuDisplay != null);
+
+            Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
+            NotificationLoader = Resources.Load<NotificationLoader>("Scriptables/GamePanel/NotificationLoader");
+            m_time_Start = DateTime.Now;
+        }
+
+        protected virtual void Start()
+        {
+            BaseConnectionProcess.Instance.ResetEnvironmentEvents();
+
+            GamePanel = root.Q<CustomGamePanel>();
+
+            InitConnectionProcess();
+
+            InitLoader();
+            InitMenu();
+            InitGame();
+
+            InitControls();
+
+            GamePanel.CurrentView = CustomGamePanel.GameViews.Loader;
+        }
+
+        #region OnDestroy
+
+        protected virtual void ConcludeGame_UserList()
+        {
+            UMI3DEnvironmentClient.EnvironementJoinned.RemoveListener(Game.NotifAndUserArea.UserList.OnEnvironmentChanged);
+            UMI3DUser.OnUserMicrophoneStatusUpdated.RemoveListener(Game.NotifAndUserArea.UserList.UpdateUser);
+            UMI3DUser.OnUserAvatarStatusUpdated.RemoveListener(Game.NotifAndUserArea.UserList.UpdateUser);
+            UMI3DUser.OnUserAttentionStatusUpdated.RemoveListener(Game.NotifAndUserArea.UserList.UpdateUser);
+            UMI3DUser.OnRemoveUser.RemoveListener(Game.NotifAndUserArea.UserList.RemoveUser);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            ConcludeGame_UserList();
+        }
+
+        #endregion
 
         protected void CloseEmoteWindowAndNotifAndUseresArea()
         {
@@ -509,7 +612,7 @@ namespace umi3d.baseBrowser.connection
             if (count == 0)
             {
                 if (Game.TrailingArea.ButtonsArea.IsMainActionDown) return;
-                
+
                 Game.Cursor.Action = null;
                 ObjectMenuDisplay.Collapse(false);
                 if (Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed) Game.TrailingArea.ButtonsArea.IsActionButtonDisplayed = false;
@@ -518,11 +621,12 @@ namespace umi3d.baseBrowser.connection
             else if (count == 1)
             {
                 if (Game.TrailingArea.ButtonsArea.IsMainActionDown) return;
-                
+
                 if (ObjectMenu[0] is TextfieldDisplayer textfield)
                 {
                     Game.Cursor.Action = "Edit Text";
-                    UpdateMainActionUp(false);
+                    UpdateMainActionUp(true);
+                    textfield.Focus();
                 }
                 else if (ObjectMenu[0] is ButtonDisplayer button)
                 {
@@ -538,14 +642,14 @@ namespace umi3d.baseBrowser.connection
                 if (Game.TrailingArea.ButtonsArea.IsMainActionDown) return;
 
                 string CursorAction = null;
-                if 
+                if
                 (
-                    MobileController.Exists 
+                    MobileController.Exists
                     && MobileController.Instance.mouseData.CurrentHovered != null
                 ) CursorAction = MobileController.Instance.mouseData.CurrentHovered.dto.name;
-                if 
+                if
                 (
-                    string.IsNullOrEmpty(CursorAction) 
+                    string.IsNullOrEmpty(CursorAction)
                     || CursorAction == "new tool"
                 ) CursorAction = $"Display interactions menu";
                 Game.Cursor.Action = CursorAction;

@@ -25,7 +25,7 @@ namespace umi3d.baseBrowser.inputs.interactions
         {
             associatedInteraction = null;
             Menu?.Remove(menuItem);
-            menuItem.UnSubscribe(Pressed);
+            menuItem?.UnSubscribe(Pressed);
             menuItem = null;
         }
 
