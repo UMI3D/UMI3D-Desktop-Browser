@@ -13,10 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using BrowserDesktop.Controller;
 using BrowserDesktop.Interaction;
 using BrowserDesktop.Menu;
 using System.Collections.Generic;
+using umi3d.baseBrowser.Controller;
 using UnityEngine;
 
 namespace BrowserDesktop.Cursor
@@ -67,7 +67,7 @@ namespace BrowserDesktop.Cursor
 
             ignore = new List<Transform>();
             ignore.AddRange(AvatarParent.gameObject.GetComponentsInChildren<Transform>());
-            lastObject = (controller as DesktopController)?.mouseData.CurrentHoveredTransform;
+            lastObject = (controller as BaseController)?.mouseData.CurrentHoveredTransform;
             if (lastObject != null)
                 ignore.AddRange(lastObject.gameObject.GetComponentsInChildren<Transform>());
             bool ok = false;
