@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using System.Linq;
+using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
@@ -37,6 +39,16 @@ namespace umi3d.baseBrowser.Controller
         #endregion
 
         #region Fields
+        [SerializeField]
+        protected InteractionMapper InteractionMapper;
+        [SerializeField]
+        protected Transform CameraTransform;
+
+        [Header("Actions' parents")]
+        public GameObject ParameterActions;
+        public GameObject EventActions;
+
+
         [HideInInspector]
         public MenuAsset ObjectMenu;
         public CursorData mouseData;
@@ -53,20 +65,17 @@ namespace umi3d.baseBrowser.Controller
 
         protected List<IConcreteController> m_controllers = new List<IConcreteController>();
 
-        [SerializeField]
-        protected Transform CameraTransform;
-        [SerializeField]
-        protected InteractionMapper InteractionMapper;
-        [Header("Degrees Of Freedom")]
-        [SerializeField]
-        protected List<DofGroupEnum> dofGroups = new List<DofGroupEnum>();
+        
+        
+        
+        
         [Header("Bone Type")]
         /// <summary>
         /// Avatar bone linked to this input.
         /// </summary>
         [SerializeField]
         [inetum.unityUtils.ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
-        protected uint interactionBoneType = common.userCapture.BoneType.RightHand;
+        public uint interactionBoneType = common.userCapture.BoneType.RightHand;
         [SerializeField]
         [inetum.unityUtils.ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
         protected uint hoverBoneType = common.userCapture.BoneType.Head;
@@ -108,11 +117,24 @@ namespace umi3d.baseBrowser.Controller
             ObjectMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ObjectMenu");
 
             //TODO instantiate concrete controllers.
-            m_controllers.Add(new desktopBrowser.Controller.DesktopController());
+            m_controllers.Add
+            (
+                new DesktopController() 
+                { 
+                    Controller = this,
+                    ObjectMenu = ObjectMenu,
+                }
+            );
             m_controllers.ForEach(controller => controller?.Awake());
+            KeyboardInteraction.S_Interactions.AddRange(GetComponentsInChildren<KeyboardInteraction>());
 
             //TODO for now CurrentController is the desktop one.
             CurrentController = m_controllers.Find(controller => controller is DesktopController);
+        }
+
+        protected virtual void Start()
+        {
+            m_controllers.ForEach(controller => controller?.Start());
         }
 
         protected virtual void LateUpdate()

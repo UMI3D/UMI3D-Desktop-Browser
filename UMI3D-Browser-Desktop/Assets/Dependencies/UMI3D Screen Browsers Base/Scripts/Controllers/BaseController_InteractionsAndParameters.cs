@@ -23,25 +23,28 @@ namespace umi3d.baseBrowser.Controller
 {
     public partial class BaseController
     {
+        [Header("Degrees Of Freedom")]
+        [SerializeField]
+        protected List<DofGroupEnum> dofGroups = new List<DofGroupEnum>();
         public override List<AbstractUMI3DInput> inputs
         {
             get
             {
                 List<AbstractUMI3DInput> list = new List<AbstractUMI3DInput>();
-                list.AddRange(KeyMenuInputs);
+                if (CurrentController != null) list.AddRange(CurrentController.Inputs);
+                list.AddRange(EventInputs);
                 list.AddRange(floatParameterInputs);
                 list.AddRange(floatRangeParameterInputs);
                 list.AddRange(intParameterInputs);
                 list.AddRange(boolParameterInputs);
                 list.AddRange(stringParameterInputs);
                 list.AddRange(stringEnumParameterInputs);
-                if (CurrentController != null) list.AddRange(CurrentController.Inputs);
                 return list;
             }
         }
 
         //protected List<ManipulationGroup> ManipulationInputs = new List<ManipulationGroup>();
-        protected List<inputs.interactions.EventInteraction> KeyMenuInputs = new List<inputs.interactions.EventInteraction>();
+        protected List<inputs.interactions.EventInteraction> EventInputs = new List<inputs.interactions.EventInteraction>();
         protected List<inputs.interactions.FormInteraction> FormInputs = new List<inputs.interactions.FormInteraction>();
         protected List<inputs.interactions.LinkInteraction> LinkInputs = new List<inputs.interactions.LinkInteraction>();
         /// <summary>
@@ -94,7 +97,7 @@ namespace umi3d.baseBrowser.Controller
                 Destroy(input);
             };
 
-            ClearInputs(ref KeyMenuInputs, action);
+            ClearInputs(ref EventInputs, action);
             ClearInputs(ref floatParameterInputs, action);
             ClearInputs(ref floatRangeParameterInputs, action);
             ClearInputs(ref intParameterInputs, action);
@@ -136,14 +139,14 @@ namespace umi3d.baseBrowser.Controller
         #region Find Interactions
 
         public override AbstractUMI3DInput FindInput(FormDto form, bool unused = true)
-            => FindInput(FormInputs, i => i.IsAvailable() || !unused, this.gameObject);
+            => FindInput(FormInputs, i => i.IsAvailable() || !unused, EventActions);
         public override AbstractUMI3DInput FindInput(LinkDto link, bool unused = true)
-            => FindInput(LinkInputs, i => i.IsAvailable() || !unused, this.gameObject);
+            => FindInput(LinkInputs, i => i.IsAvailable() || !unused, EventActions);
         public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
         {
             AbstractUMI3DInput input = null;
             if (CurrentController != null) input = CurrentController?.FindInput(evt, unused, tryToFindInputForHoldableEvent);
-            if (input == null) input = FindInput(KeyMenuInputs, i => i.IsAvailable() || !unused, this.gameObject);
+            if (input == null) input = FindInput(EventInputs, i => i.IsAvailable() || !unused, EventActions);
             return input;
         }
 
@@ -158,13 +161,13 @@ namespace umi3d.baseBrowser.Controller
         /// <exception cref="System.NotImplementedException"></exception>
         public override AbstractUMI3DInput FindInput(AbstractParameterDto param, bool unused = true)
         {
-            if (param is FloatRangeParameterDto) return FindInput(floatRangeParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is FloatParameterDto) return FindInput(floatParameterInputs, i => i.IsAvailable(), this.gameObject);
+            if (param is FloatRangeParameterDto) return FindInput(floatRangeParameterInputs, i => i.IsAvailable(), ParameterActions);
+            else if (param is FloatParameterDto) return FindInput(floatParameterInputs, i => i.IsAvailable(), ParameterActions);
             else if (param is IntegerParameterDto) return FindInput(intParameterInputs, i => i.IsAvailable());
             else if (param is IntegerRangeParameterDto) throw new System.NotImplementedException();
-            else if (param is BooleanParameterDto) return FindInput(boolParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is StringParameterDto) return FindInput(stringParameterInputs, i => i.IsAvailable(), this.gameObject);
-            else if (param is EnumParameterDto<string>) return FindInput(stringEnumParameterInputs, i => i.IsAvailable(), this.gameObject);
+            else if (param is BooleanParameterDto) return FindInput(boolParameterInputs, i => i.IsAvailable(), ParameterActions);
+            else if (param is StringParameterDto) return FindInput(stringParameterInputs, i => i.IsAvailable(), ParameterActions);
+            else if (param is EnumParameterDto<string>) return FindInput(stringEnumParameterInputs, i => i.IsAvailable(), ParameterActions);
             else return null;
         }
 

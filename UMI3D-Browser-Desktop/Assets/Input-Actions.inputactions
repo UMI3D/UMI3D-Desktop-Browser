@@ -42,24 +42,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "PressSecond",
-                    "type": "Button",
-                    "id": "e61ace11-8647-4f44-8c24-6207d6495c3e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "PressThird",
-                    "type": "Button",
-                    "id": "69f8cbcf-5618-458e-b40e-30a458878ba0",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "PressMic",
                     "type": "Button",
                     "id": "43caa0f9-0665-4d84-9a52-e0e832904416",
@@ -81,33 +63,6 @@
                     "name": "PressAudio",
                     "type": "Button",
                     "id": "1cd06e28-08b0-413d-a0fa-1e2d727b96c2",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "PressEmote1",
-                    "type": "Button",
-                    "id": "072d9f0b-f1c0-42d5-80bf-ec68d570f439",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "PressEmote2",
-                    "type": "Button",
-                    "id": "440aece4-ec3d-440e-b8d7-dffa96a28017",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "PressEmote3",
-                    "type": "Button",
-                    "id": "7df869f6-e88b-4bc8-8e68-b1e6681472fc",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -352,61 +307,6 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "PressFirst",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7b4afdd3-6be1-43df-89c3-67e33730f022",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "PressSecond",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e2682dc9-82ec-4bc8-ba4b-f7a4d74faab9",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "PressThird",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ac97f398-50f1-4a99-89f1-ba726dd5b751",
-                    "path": "<Keyboard>/#(V)",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "PressEmote1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7d0fe08d-8e6a-4309-b3bb-dfe8cff2a70d",
-                    "path": "<Keyboard>/#(B)",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "PressEmote2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1ffe5282-c85a-4fec-a9d1-bd44cf799ce9",
-                    "path": "<Keyboard>/#(N)",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "PressEmote3",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

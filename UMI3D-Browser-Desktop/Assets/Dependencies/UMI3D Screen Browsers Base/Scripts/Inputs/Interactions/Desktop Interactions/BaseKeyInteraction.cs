@@ -27,7 +27,9 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         protected virtual void Start()
         {
-            Key.performed += KeyPressed;
+            Key.started += KeyStarted;
+            Key.canceled += KeyCanceled;
+            Key.Enable();
 
             //Todo change cursor state when key press
             //onInputDown.AddListener(() =>
@@ -54,12 +56,24 @@ namespace umi3d.baseBrowser.inputs.interactions
             //Shortcutbox_E.Instance.AddShortcut(label, inputName);
         }
 
-        protected virtual void KeyPressed(InputAction.CallbackContext context)
+        /// <summary>
+        /// Callback when the key is pressed down.
+        /// </summary>
+        /// <param name="context"></param>
+        protected virtual void KeyStarted(InputAction.CallbackContext context)
         {
             //todo check if key is allow to be watch (cursor free, etc.)
-
-            if (context.started) Pressed(true);
-            else if (context.canceled) Pressed(false);
+            Pressed(true);
+        }
+        
+        /// <summary>
+        /// Callback when the key is pressed up.
+        /// </summary>
+        /// <param name="context"></param>
+        protected virtual void KeyCanceled(InputAction.CallbackContext context)
+        {
+            //todo check if key is allow to be watch (cursor free, etc.)
+            Pressed(false);
         }
     }
 }

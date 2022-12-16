@@ -39,7 +39,7 @@ namespace umi3d.mobileBrowser.Controller
             get {
                 List<AbstractUMI3DInput> list = new List<AbstractUMI3DInput>();
                 //list.AddRange(ManipulationInputs);
-                list.AddRange(KeyMenuInputs);
+                list.AddRange(EventInputs);
                 list.AddRange(floatParameterInputs);
                 list.AddRange(floatRangeParameterInputs);
                 list.AddRange(intParameterInputs);
@@ -57,7 +57,7 @@ namespace umi3d.mobileBrowser.Controller
             s_instance = this;
 
             interactions.MainMobileAction mainAction = GetComponentInChildren<interactions.MainMobileAction>();
-            KeyMenuInputs.Add(mainAction);
+            EventInputs.Add(mainAction);
             mainAction.Init(this);
             mainAction.bone = interactionBoneType;
             mainAction.Menu = ObjectMenu.menu;
@@ -82,7 +82,7 @@ namespace umi3d.mobileBrowser.Controller
         }
 
         public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
-            => FindInput(KeyMenuInputs, i => i.IsAvailable() || !unused, this.gameObject);
+            => FindInput(EventInputs, i => i.IsAvailable() || !unused, this.gameObject);
 
         /// <summary>
         /// <inheritdoc/>
@@ -95,7 +95,7 @@ namespace umi3d.mobileBrowser.Controller
         {
             if (reason is RequestedByEnvironment)
             {
-                interactions.MainMobileAction mainAction = KeyMenuInputs.Find(i => i is umi3d.mobileBrowser.interactions.MainMobileAction) as umi3d.mobileBrowser.interactions.MainMobileAction;
+                interactions.MainMobileAction mainAction = EventInputs.Find(i => i is umi3d.mobileBrowser.interactions.MainMobileAction) as umi3d.mobileBrowser.interactions.MainMobileAction;
                 if (mainAction != null) mainAction.ForceDissociate();
             }
             base.Project(tool, releasable, reason, hoveredObjectId);

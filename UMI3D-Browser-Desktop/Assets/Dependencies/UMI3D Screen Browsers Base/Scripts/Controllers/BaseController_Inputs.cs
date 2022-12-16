@@ -27,11 +27,6 @@ namespace umi3d.baseBrowser.Controller
             UnityEngine.Debug.Log($"is pressed {value.isPressed}");
         }
 
-        public void OnPressSecond(InputValue value)
-        {
-            UnityEngine.Debug.Log($"is pressed {value.isPressed}");
-        }
-
         public void OnPressMic(InputValue value)
         {
             UnityEngine.Debug.Log($"Mic is pressed {value.isPressed}");
@@ -53,25 +48,11 @@ namespace umi3d.baseBrowser.Controller
             OnEnterKeyPressed();
         }
 
-        public void OnPressEmote1(InputValue value)
-        {
-            UnityEngine.Debug.Log($"Emote1 is pressed {value.isPressed}");
-        }
-        public void OnPressEmote2(InputValue value)
-        {
-            UnityEngine.Debug.Log($"Emote2 is pressed {value.isPressed}");
-        }
-        public void OnPressEmote3(InputValue value)
-        {
-            UnityEngine.Debug.Log($"Emote3 is pressed {value.isPressed}");
-        }
-
         public void OnMove(InputValue value)
         {
             // Read value from control. The type depends on what type of controls.
             // the action is bound to.
             var v = value.Get<Vector2>();
-            UnityEngine.Debug.Log($"on move = {v}");
             // IMPORTANT: The given InputValue is only valid for the duration of the callback.
             //            Storing the InputValue references somewhere and calling Get<T>()
             //            later does not work correctly.
