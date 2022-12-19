@@ -1225,6 +1225,7 @@ GameObject:
   - component: {fileID: 1316567789}
   - component: {fileID: 1316567790}
   - component: {fileID: 1316567788}
+  - component: {fileID: 1316567795}
   m_Layer: 0
   m_Name: KeyboardNavigations
   m_TagString: Untagged
@@ -1538,6 +1539,43 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
   Navigation: 0
+--- !u!114 &1316567795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316567786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 023a56c4c36e8814db66e4dbd1af0c39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onInputDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onInputUp:
+    m_PersistentCalls:
+      m_Calls: []
+  bone: 0
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 39e63e9e-4d5b-45ff-b7c4-30e2d6de8615
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 925963aa-2b1d-4e47-a1da-63039a70ec18
+      m_Path: <Keyboard>/alt
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Key
+      m_Flags: 0
+    m_Flags: 0
+  Navigation: 7
 --- !u!1 &1800526323
 GameObject:
   m_ObjectHideFlags: 0
