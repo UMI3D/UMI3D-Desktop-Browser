@@ -13,15 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using BrowserDesktop.Interaction;
-using BrowserDesktop.Menu;
 using System.Collections.Generic;
 using umi3d.baseBrowser.Controller;
+using umi3d.baseBrowser.inputs.interactions;
 using UnityEngine;
 
 namespace BrowserDesktop.Cursor
 {
-    public class CursorKeyInput : KeyInput
+    public class CursorKeyInput : BaseKeyInteraction
     {
         private bool constrainDistanceChange = false;
         public Transform Cursor;

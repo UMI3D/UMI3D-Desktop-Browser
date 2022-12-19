@@ -31,7 +31,7 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// </summary>
         protected bool risingEdgeEventSent;
 
-        protected void Awake()
+        protected virtual void Awake()
         {
             bone = common.userCapture.BoneType.RightHand;
         }
@@ -48,6 +48,9 @@ namespace umi3d.baseBrowser.inputs.interactions
         protected override void PressedDown()
         {
             onInputDown.Invoke();
+
+            if (associatedInteraction == null) return;
+
             if (associatedInteraction.hold)
             {
                 var eventdto = new common.interaction.EventStateChangedDto
@@ -80,6 +83,9 @@ namespace umi3d.baseBrowser.inputs.interactions
         protected override void PressedUp()
         {
             onInputUp.Invoke();
+
+            if (associatedInteraction == null) return;
+
             if (associatedInteraction.ReleaseAnimationId != 0) StartAnim(associatedInteraction.ReleaseAnimationId);
             if (!associatedInteraction.hold || !risingEdgeEventSent) return;
             

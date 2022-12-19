@@ -14,25 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using umi3d.baseBrowser.Controller;
+using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk.interaction;
+using umi3d.cdk.menu;
 using umi3d.common.interaction;
 using UnityEngine;
 
 namespace umi3d.desktopBrowser.Controller
 {
-    public class DesktopController : umi3d.baseBrowser.Controller.IConcreteController
+    public class DesktopController : IConcreteController
     {
+        public BaseController Controller;
+        public MenuAsset ObjectMenu;
         //[Header("Input Action")]
         //[SerializeField]
         //protected List<CursorKeyInput> ManipulationActionInput = new List<CursorKeyInput>();
-        //protected List<KeyInput> KeyInputs = new List<KeyInput>();
+        protected List<KeyboardInteraction> KeyboardInteractions = new List<KeyboardInteraction>();
 
         public List<AbstractUMI3DInput> Inputs
         {
             get
             {
                 List<AbstractUMI3DInput> list = new List<AbstractUMI3DInput>();
-                //list.AddRange(KeyInputs);
+                list.AddRange(KeyboardInteractions);
                 //list.AddRange(ManipulationInputs);
                 return list;
             }
@@ -45,12 +50,17 @@ namespace umi3d.desktopBrowser.Controller
         #region Monobehaviour Life Cycle
         public void Awake()
         {
-            //foreach (KeyInput input in GetComponentsInChildren<KeyInput>())
-            //{
-            //    KeyInputs.Add(input);
-            //    input.Init(this);
-            //    input.bone = interactionBoneType;
-            //}
+            
+        }
+        public void Start()
+        {
+            KeyboardInteraction.S_Interactions?.ForEach(interaction =>
+            {
+                KeyboardInteractions.Add(interaction);
+                interaction.Init(Controller);
+                interaction.bone = Controller.interactionBoneType;
+                interaction.Menu = ObjectMenu.menu;
+            });
         }
         public void Update()
         {
@@ -85,6 +95,6 @@ namespace umi3d.desktopBrowser.Controller
         #endregion
 
         public AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
-            => /*KeyInputs.Find(i => i.IsAvailable() || !unused);*/ null;
+            => KeyboardInteractions.Find(i => i.IsAvailable() || !unused);
     }
 }

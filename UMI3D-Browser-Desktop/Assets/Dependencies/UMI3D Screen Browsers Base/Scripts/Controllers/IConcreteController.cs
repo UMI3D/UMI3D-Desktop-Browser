@@ -26,6 +26,7 @@ namespace umi3d.baseBrowser.Controller
         List<AbstractUMI3DInput> Inputs { get; }
 
         void Awake();
+        void Start();
         void Update();
         AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false);
     }
