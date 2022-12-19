@@ -16,6 +16,7 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace umi3d.baseBrowser.inputs.interactions
 {
@@ -24,6 +25,8 @@ namespace umi3d.baseBrowser.inputs.interactions
         Emote1, Emote2, Emote3,
         MuteUnmute, PushToTalk,
         GeneraVolume, DeacreaseVolue, IncreaseVolume,
+        Cancel, Submit,
+        GameMenu, ObjectMenu
     }
 
     public class KeyboardShortcut : BaseKeyInteraction
@@ -31,5 +34,43 @@ namespace umi3d.baseBrowser.inputs.interactions
         public static List<KeyboardShortcut> S_Shortcuts = new List<KeyboardShortcut>();
 
         public ShortcutEnum Shortcut;
+
+        public static bool IsPressed(ShortcutEnum shortcut)
+        {
+            var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
+            return _key != null ? _key.m_isDown : false;
+        }
+
+        public static void AddDownListener(ShortcutEnum shortcut, UnityAction action)
+        {
+            var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
+            if (_key == null) return;
+
+            _key.onInputDown.AddListener(action);
+        }
+
+        public static void RemoveDownListener(ShortcutEnum shortcut, UnityAction action)
+        {
+            var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
+            if (_key == null) return;
+
+            _key.onInputDown.RemoveListener(action);
+        }
+
+        public static void AddUpListener(ShortcutEnum shortcut, UnityAction action)
+        {
+            var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
+            if (_key == null) return;
+
+            _key.onInputUp.AddListener(action);
+        }
+
+        public static void RemoveUpListener(ShortcutEnum shortcut, UnityAction action)
+        {
+            var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
+            if (_key == null) return;
+
+            _key.onInputUp.RemoveListener(action);
+        }
     }
 }

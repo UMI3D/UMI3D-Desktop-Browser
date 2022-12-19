@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
-using System.Linq;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
@@ -48,15 +47,14 @@ namespace umi3d.baseBrowser.Controller
         public GameObject ParameterActions;
         public GameObject EventActions;
 
-
         [HideInInspector]
         public MenuAsset ObjectMenu;
         public CursorData mouseData;
 
-        public static event System.Action EscClicked;
+        public static event System.Action CancelKeyPressed;
+        public static event System.Action GameMenuClicked;
         public static event System.Action MainActionClicked;
         public static event System.Action SecondActionClicked;
-        public static event System.Action EnterKeyPressed;
         public static event System.Action<int> EmoteKeyPressed;
 
         public IConcreteController CurrentController;
@@ -74,8 +72,6 @@ namespace umi3d.baseBrowser.Controller
         [inetum.unityUtils.ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
         protected uint hoverBoneType = common.userCapture.BoneType.Head;
 
-        
-
         protected int m_navigationDirect = 0;
         protected AutoProjectOnHover reason = new AutoProjectOnHover();
 
@@ -85,19 +81,17 @@ namespace umi3d.baseBrowser.Controller
         public static bool CanProcess = false;
         #endregion
 
-        public static void OnEscClicked() => EscClicked?.Invoke();
+        public static void OnGameMenuKeyPressed() => GameMenuClicked?.Invoke();
         public static void OnMainActionClicked() => MainActionClicked?.Invoke();
         public static void OnSecondActionClicked() => SecondActionClicked?.Invoke();
-        public static void OnEnterKeyPressed() => EnterKeyPressed?.Invoke();
         public static void OnEmoteKeyPressed(int value) => EmoteKeyPressed?.Invoke(value);
 
         #region Monobehaviour Life Cycle
         protected virtual void Awake()
         {
-            EscClicked = null;
+            GameMenuClicked = null;
             MainActionClicked = null;
             SecondActionClicked = null;
-            EnterKeyPressed = null;
 
             UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Add manipulator in android browser and reactivate it in desktop browser");
             mouseData.ForceProjectionReleasableButton = new ButtonMenuItem

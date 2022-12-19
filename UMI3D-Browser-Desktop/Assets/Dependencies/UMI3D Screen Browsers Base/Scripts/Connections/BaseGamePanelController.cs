@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using umi3d.baseBrowser.Controller;
 using umi3d.baseBrowser.emotes;
+using umi3d.baseBrowser.inputs.interactions;
 using umi3d.baseBrowser.Navigation;
 using umi3d.baseBrowser.notification;
 using umi3d.cdk.collaboration;
@@ -372,7 +373,12 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void InitControls()
         {
-            BaseController.EscClicked += () =>
+            KeyboardShortcut.AddUpListener(ShortcutEnum.Submit, () => 
+            {
+                m_next?.Invoke();
+            });
+
+            KeyboardShortcut.AddUpListener(ShortcutEnum.GameMenu, () =>
             {
                 if (GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu)
                 {
@@ -385,7 +391,7 @@ namespace umi3d.baseBrowser.connection
                     GamePanel.AddScreenToStack = CustomGamePanel.GameViews.GameMenu;
                     BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
                 }
-            };
+            });
 
             BaseController.SecondActionClicked += () =>
             {
@@ -407,8 +413,6 @@ namespace umi3d.baseBrowser.connection
                     if (!Game.DisplayNotifUsersArea) Game.DisplayNotifUsersArea = true;
                 }
             };
-
-            BaseController.EnterKeyPressed += () => m_next?.Invoke();
 
             BaseController.EmoteKeyPressed += index =>
             {

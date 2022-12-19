@@ -33,12 +33,6 @@ namespace umi3d.baseBrowser.Controller
         }
 
 
-        public void OnSubmit(InputValue value)
-        {
-            UnityEngine.Debug.Log($"Enter is pressed {value.isPressed}");
-            OnEnterKeyPressed();
-        }
-
         public void OnMove(InputValue value)
         {
             // Read value from control. The type depends on what type of controls.
