@@ -23,7 +23,7 @@ using UnityEngine;
 
 namespace umi3d.desktopBrowser.Controller
 {
-    public class DesktopController : IConcreteController
+    public class KeyboardAndMouseController : IConcreteController
     {
         public BaseController Controller;
         public MenuAsset ObjectMenu;

@@ -32,15 +32,6 @@ namespace umi3d.baseBrowser.Controller
             UnityEngine.Debug.Log($"Mic is pressed {value.isPressed}");
         }
 
-        public void OnPushToTalk(InputValue value)
-        {
-            UnityEngine.Debug.Log($"Push to talck is pressed {value.isPressed}");
-        }
-
-        public void OnPressAudio(InputValue value)
-        {
-            UnityEngine.Debug.Log($"Audio is pressed {value.isPressed}");
-        }
 
         public void OnSubmit(InputValue value)
         {

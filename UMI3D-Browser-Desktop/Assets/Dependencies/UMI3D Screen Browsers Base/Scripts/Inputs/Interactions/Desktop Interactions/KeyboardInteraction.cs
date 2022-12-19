@@ -18,23 +18,9 @@ using UnityEngine.InputSystem;
 
 namespace umi3d.baseBrowser.inputs.interactions
 {
-    public enum KeyboardInteractionType
-    {
-        /// <summary>
-        /// Action is for key that can be associated to an interaction
-        /// </summary>
-        Action,
-        /// <summary>
-        /// Shortcut is for key that cannot be associated to an interaction
-        /// </summary>
-        Shortcut
-    }
-
     public class KeyboardInteraction : BaseKeyInteraction
     {
         public static List<KeyboardInteraction> S_Interactions = new List<KeyboardInteraction>();
-
-        public KeyboardInteractionType Type = KeyboardInteractionType.Shortcut;
 
         protected override void Awake()
         {
@@ -54,8 +40,5 @@ namespace umi3d.baseBrowser.inputs.interactions
 
             UnityEngine.Debug.Log($"key canceled : {context.control.displayName}");
         }
-
-        public override bool IsAvailable()
-            => base.IsAvailable() && Type != KeyboardInteractionType.Shortcut;
     }
 }
