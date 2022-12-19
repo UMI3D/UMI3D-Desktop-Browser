@@ -19,23 +19,23 @@ using UnityEngine;
 
 namespace umi3d.baseBrowser.Navigation
 {
-    public interface IConcreteFPSNavigation
+    public struct JumpData
     {
-        /// <summary>
-        /// Rotates camera.
-        /// </summary>
-        void HandleView();
-        /// <summary>
-        /// Update <paramref name="move"/> field according to player input.
-        /// </summary>
-        void UpdateMovement(ref Vector2 move);
-        /// <summary>
-        /// Computes <paramref name="move"/> vector to perform a walk movement and applies gravity.
-        /// </summary>
-        /// <param name="move"></param>
-        /// <param name="height"></param>
-        void Walk(ref Vector2 move, ref float height);
+        public BaseFPSData data;
+        public bool IsJumping;
+        public float velocity, maxJumpVelocity;
 
-        bool Update();
+        public void ComputeVelocity(float time, float deltaTime, bool canJump)
+        {
+            IsJumping = canJump;
+            if (IsJumping) ComputeJumpVelocity(time);
+            ComputeFallVelocity(deltaTime);
+        }
+
+        private void ComputeJumpVelocity(float time)
+            => velocity = maxJumpVelocity;
+
+        private void ComputeFallVelocity(float deltaTime)
+            => velocity += data.gravity * deltaTime;
     }
 }

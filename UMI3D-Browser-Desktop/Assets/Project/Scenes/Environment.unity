@@ -334,6 +334,8 @@ GameObject:
   - component: {fileID: 200932040}
   - component: {fileID: 200932041}
   - component: {fileID: 200932042}
+  - component: {fileID: 200932044}
+  - component: {fileID: 200932043}
   m_Layer: 0
   m_Name: Controllers
   m_TagString: Untagged
@@ -403,8 +405,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef9afd125ba6a146a1f78de411a6729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectionMemory: {fileID: 498482125}
-  InteractionMapper: {fileID: 498482124}
+  projectionMemory: {fileID: 200932044}
+  InteractionMapper: {fileID: 200932043}
   CameraTransform: {fileID: 907048306}
   ParameterActions: {fileID: 2041372829}
   EventActions: {fileID: 1996871902}
@@ -412,6 +414,33 @@ MonoBehaviour:
   interactionBoneType: 58
   hoverBoneType: 58
   dofGroups: 04000000050000000600000001000000020000000300000008000000090000000a000000
+--- !u!114 &200932043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200932039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e23b1f9aea016c24893b78dae2088329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controllers:
+  - {fileID: 200932042}
+  shouldProjectHoldableEventOnSpecificInput: 0
+--- !u!114 &200932044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200932039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf7b820e5feb6524089c63d3b45c3f96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &395169811
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,9 +495,7 @@ GameObject:
   m_Component:
   - component: {fileID: 498482121}
   - component: {fileID: 498482123}
-  - component: {fileID: 498482122}
-  - component: {fileID: 498482125}
-  - component: {fileID: 498482124}
+  - component: {fileID: 498482126}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -493,46 +520,6 @@ Transform:
   m_Father: {fileID: 1800526325}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &498482122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 498482120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83761c411af74f04eb4787a5e97f291e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsJumping: 0
-  IsCrouching: 0
-  WantToCrouch: 0
-  Movement: {x: 0, y: 0}
-  viewpoint: {fileID: 907048305}
-  neckPivot: {fileID: 907048304}
-  head: {fileID: 907048308}
-  topHead: {fileID: 907048307}
-  skeleton: {fileID: 907048303}
-  playerRadius: 0.2
-  feetRaycastOrigin:
-  - {fileID: 907048302}
-  - {fileID: 907048301}
-  - {fileID: 907048300}
-  - {fileID: 907048299}
-  - {fileID: 907048298}
-  data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
-  maxNeckAngle: 50
-  maxStepHeight: 0.4
-  maxSlopeAngle: 45
-  navigation: 0
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 1536
-  navmeshLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  state: 0
 --- !u!114 &498482123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -546,8 +533,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navigations:
-  - {fileID: 498482122}
---- !u!114 &498482124
+  - {fileID: 498482126}
+--- !u!114 &498482126
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -556,24 +543,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 498482120}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e23b1f9aea016c24893b78dae2088329, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a4c551e3678feb4c979adeebe131355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controllers:
-  - {fileID: 200932042}
-  shouldProjectHoldableEventOnSpecificInput: 0
---- !u!114 &498482125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 498482120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf7b820e5feb6524089c63d3b45c3f96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  skeleton: {fileID: 907048303}
+  viewpoint: {fileID: 907048305}
+  neckPivot: {fileID: 907048304}
+  head: {fileID: 907048308}
+  maxNeckAngle: 50
+  state: 0
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 1536
+  navmeshLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  topHead: {fileID: 907048307}
+  feetRaycastOrigin:
+  - {fileID: 907048302}
+  - {fileID: 907048301}
+  - {fileID: 907048300}
+  - {fileID: 907048299}
+  - {fileID: 907048298}
+  playerRadius: 0.2
+  maxSlopeAngle: 45
+  maxStepHeight: 0.4
+  WantToJump: 0
+  IsCrouching: 0
+  WantToCrouch: 0
+  Movement: {x: 0, y: 0}
+  data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
+  navigation: 0
 --- !u!1001 &631588434
 PrefabInstance:
   m_ObjectHideFlags: 0

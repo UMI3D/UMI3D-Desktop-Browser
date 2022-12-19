@@ -26,29 +26,33 @@ namespace umi3d.baseBrowser.Navigation
         #region Fields
 
         [Header("Camera")]
-        [SerializeField]
-        protected Transform viewpoint;
+        public Transform viewpoint;
         [SerializeField]
         protected Transform neckPivot;
         [SerializeField]
         protected Transform head;
+        [SerializeField]
+        protected float maxNeckAngle;
         public State state;
 
         protected Vector3 lastAngleView;
+        [HideInInspector]
+        public bool changeToDefault = false;
 
         #endregion
 
         /// <summary>
         /// Rotates camera.
         /// </summary>
-        protected abstract void HandleView();
+        protected virtual void HandleView()
+            => CurrentNavigation?.HandleView();
 
         /// <summary>
         /// Common part of the HandleView method.
         /// </summary>
         /// <param name="angleView"></param>
         /// <param name="angularSpeed"></param>
-        protected void BaseHandleView(Vector3 angleView, Vector2 angularSpeed)
+        public void BaseHandleView(Vector3 angleView, Vector2 angularSpeed)
         {
             Vector3 result = angleView + ((Vector3)angularSpeed).NormalizeAngle();
             if (changeToDefault)

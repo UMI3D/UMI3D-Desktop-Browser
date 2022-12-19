@@ -262,8 +262,8 @@ namespace umi3d.baseBrowser.connection
         protected virtual void InitGame_ButtonsArea()
         {
             var buttonsArea = Game.TrailingArea.ButtonsArea;
-            buttonsArea.Jump.ClickedDown += () => BaseFPSNavigation.Instance.IsJumping = true;
-            buttonsArea.Jump.ClickedUp += () => BaseFPSNavigation.Instance.IsJumping = false;
+            buttonsArea.Jump.ClickedDown += () => BaseFPSNavigation.Instance.WantToJump = true;
+            buttonsArea.Jump.ClickedUp += () => BaseFPSNavigation.Instance.WantToJump = false;
             buttonsArea.Crouch.ClickedDown += () => BaseFPSNavigation.Instance.WantToCrouch = true;
             buttonsArea.Crouch.ClickedUp += () => BaseFPSNavigation.Instance.WantToCrouch = false;
         }

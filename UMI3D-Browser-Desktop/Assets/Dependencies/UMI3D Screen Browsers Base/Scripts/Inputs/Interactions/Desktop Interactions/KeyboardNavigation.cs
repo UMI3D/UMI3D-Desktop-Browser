@@ -16,6 +16,7 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace umi3d.baseBrowser.inputs.interactions
 {
@@ -36,5 +37,11 @@ namespace umi3d.baseBrowser.inputs.interactions
         public static List<KeyboardNavigation> S_Navigations = new List<KeyboardNavigation>();
 
         public NavigationEnum Navigation;
+
+        public static bool IsPressed(NavigationEnum navigation)
+        {
+            var _key = S_Navigations.Find(key => key.Navigation == navigation);
+            return _key != null ? _key.m_isDown : false;
+        }
     }
 }

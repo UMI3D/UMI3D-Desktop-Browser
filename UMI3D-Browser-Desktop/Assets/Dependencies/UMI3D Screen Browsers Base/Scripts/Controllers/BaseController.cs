@@ -61,13 +61,7 @@ namespace umi3d.baseBrowser.Controller
 
         public IConcreteController CurrentController;
 
-       
-
         protected List<IConcreteController> m_controllers = new List<IConcreteController>();
-
-        
-        
-        
         
         [Header("Bone Type")]
         /// <summary>
@@ -127,6 +121,8 @@ namespace umi3d.baseBrowser.Controller
             );
             m_controllers.ForEach(controller => controller?.Awake());
             KeyboardInteraction.S_Interactions.AddRange(GetComponentsInChildren<KeyboardInteraction>());
+            KeyboardShortcut.S_Shortcuts.AddRange(GetComponentsInChildren<KeyboardShortcut>());
+            KeyboardNavigation.S_Navigations.AddRange(GetComponentsInChildren<KeyboardNavigation>());
 
             //TODO for now CurrentController is the desktop one.
             CurrentController = m_controllers.Find(controller => controller is KeyboardAndMouseController);

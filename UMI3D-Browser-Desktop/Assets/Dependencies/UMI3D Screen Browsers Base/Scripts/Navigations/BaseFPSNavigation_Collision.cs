@@ -30,6 +30,16 @@ namespace umi3d.baseBrowser.Navigation
         public LayerMask navmeshLayer;
         [SerializeField]
         protected Transform topHead;
+        [SerializeField]
+        [Tooltip("List of point which from rays will be created to check if there is a navmesh under player's feet")]
+        protected List<Transform> feetRaycastOrigin;
+        [SerializeField]
+        [Tooltip("Radius used from player center to raycast")]
+        protected float playerRadius = .3f;
+        [SerializeField]
+        protected float maxSlopeAngle = 45f;
+        [SerializeField]
+        protected float maxStepHeight = .2f;
 
         /// <summary>
         /// Is player currently grounded ?
@@ -46,6 +56,7 @@ namespace umi3d.baseBrowser.Navigation
         /// </summary>
         protected bool hasGroundHeightChangedLastFrame = false;
         protected Vector3 currentCapsuleBase, currentCapsuleEnd;
+        protected float stepEpsilon = 0.05f;
 
 #if UNITY_EDITOR
 
@@ -139,7 +150,7 @@ namespace umi3d.baseBrowser.Navigation
         /// Checks if player can jump.
         /// </summary>
         /// <returns></returns>
-        protected bool CanJump()
+        public bool CanJump()
         {
             if (!IsGrounded)
                 return false;
