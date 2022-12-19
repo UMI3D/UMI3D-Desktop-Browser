@@ -119,7 +119,7 @@ namespace umi3d.baseBrowser.Controller
             //TODO instantiate concrete controllers.
             m_controllers.Add
             (
-                new DesktopController() 
+                new KeyboardAndMouseController() 
                 { 
                     Controller = this,
                     ObjectMenu = ObjectMenu,
@@ -129,7 +129,7 @@ namespace umi3d.baseBrowser.Controller
             KeyboardInteraction.S_Interactions.AddRange(GetComponentsInChildren<KeyboardInteraction>());
 
             //TODO for now CurrentController is the desktop one.
-            CurrentController = m_controllers.Find(controller => controller is DesktopController);
+            CurrentController = m_controllers.Find(controller => controller is KeyboardAndMouseController);
         }
 
         protected virtual void Start()
