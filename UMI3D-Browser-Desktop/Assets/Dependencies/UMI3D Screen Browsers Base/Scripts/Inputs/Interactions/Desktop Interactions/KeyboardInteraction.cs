@@ -22,17 +22,6 @@ namespace umi3d.baseBrowser.inputs.interactions
     {
         public static List<KeyboardInteraction> S_Interactions = new List<KeyboardInteraction>();
 
-        protected override void Awake()
-        {
-            base.Awake();
-        }
-
-        protected override void KeyStarted(InputAction.CallbackContext context)
-        {
-            base.KeyStarted(context);
-
-            UnityEngine.Debug.Log($"key started : {context.control.aliases}");
-        }
 
         protected override void KeyCanceled(InputAction.CallbackContext context)
         {

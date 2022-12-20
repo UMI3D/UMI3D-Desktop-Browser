@@ -61,16 +61,18 @@ namespace umi3d.desktopBrowser.Controller
                 interaction.bone = Controller.interactionBoneType;
                 interaction.Menu = ObjectMenu.menu;
             });
+
+            //KeyboardShortcut.AddUpListener
         }
         public void Update()
         {
-            //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainMenuToggle)))
+            //if (KeyboardShortcut.IsPressed(ShortcutEnum.GameMenu))
             //{
             //    if (m_isCursorMovementFree) IsFreeAndHovering = false;
             //    else if (ObjectMenu.menu.Count > 0) IsFreeAndHovering = true;
-            //    OnEscClicked();
+            //    BaseController.OnGameMenuKeyPressed();
             //}
-            
+
             //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
             //{
             //    if (m_isCursorMovementFree) IsFreeAndHovering = false;
@@ -80,13 +82,6 @@ namespace umi3d.desktopBrowser.Controller
 
             //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainActionKey)))
             //    OnMainActionClicked();
-
-            //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Emote1)))
-            //    OnEmoteKeyPressed(0);
-            //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Emote2)))
-            //    OnEmoteKeyPressed(1);
-            //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.Emote3)))
-            //    OnEmoteKeyPressed(2);
 
             //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationDirect)) || Input.mouseScrollDelta.y < 0)
             //    m_navigationDirect++;
