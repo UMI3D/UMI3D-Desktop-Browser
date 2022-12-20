@@ -26,7 +26,8 @@ namespace umi3d.baseBrowser.inputs.interactions
         GeneraVolume, DeacreaseVolue, IncreaseVolume,
         Cancel, Submit,
         GameMenu, 
-        ContextualMenu, Notification, UserList, EmoteWindow
+        ContextualMenu, 
+        Notification, UserList, EmoteWindow
     }
 
     public class KeyboardShortcut : BaseKeyInteraction
