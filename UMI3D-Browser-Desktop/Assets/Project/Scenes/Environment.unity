@@ -932,6 +932,148 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 907048296}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1061146789
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1061146790}
+  - component: {fileID: 1061146793}
+  - component: {fileID: 1061146792}
+  - component: {fileID: 1061146791}
+  m_Layer: 0
+  m_Name: KeyboardEmote
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1061146790
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061146789}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2096641627}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1061146791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061146789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59dc60bc578993743a945794a55c24eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onInputDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onInputUp:
+    m_PersistentCalls:
+      m_Calls: []
+  bone: 0
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 832524cf-e869-46ba-b109-e00be4699751
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 04f85fe5-57fd-425f-b906-e78cddf60620
+      m_Path: <Keyboard>/3
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Key
+      m_Flags: 0
+    m_Flags: 0
+--- !u!114 &1061146792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061146789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59dc60bc578993743a945794a55c24eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onInputDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onInputUp:
+    m_PersistentCalls:
+      m_Calls: []
+  bone: 0
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 4bfbad01-0a21-4e3d-be50-31c8a6f515e6
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: bc87fa89-b64b-4e16-8823-8a342a189e99
+      m_Path: <Keyboard>/2
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Key
+      m_Flags: 0
+    m_Flags: 0
+--- !u!114 &1061146793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061146789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59dc60bc578993743a945794a55c24eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onInputDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onInputUp:
+    m_PersistentCalls:
+      m_Calls: []
+  bone: 0
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 6801c10d-ebaf-41d9-a2ce-6ca512c8b8aa
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 45023a0c-8ae2-4e4c-bb81-01219d88e4ba
+      m_Path: <Keyboard>/1
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Key
+      m_Flags: 0
+    m_Flags: 0
 --- !u!1001 &1099525716
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1247,7 +1389,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2096641627}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1316567788
 MonoBehaviour:
@@ -1654,9 +1796,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1823676127}
-  - component: {fileID: 1823676135}
-  - component: {fileID: 1823676134}
-  - component: {fileID: 1823676133}
   - component: {fileID: 1823676132}
   - component: {fileID: 1823676131}
   - component: {fileID: 1823676130}
@@ -1665,6 +1804,9 @@ GameObject:
   - component: {fileID: 1823676136}
   - component: {fileID: 1823676138}
   - component: {fileID: 1823676137}
+  - component: {fileID: 1823676139}
+  - component: {fileID: 1823676141}
+  - component: {fileID: 1823676140}
   m_Layer: 0
   m_Name: KeyboardShortcuts
   m_TagString: Untagged
@@ -1739,7 +1881,7 @@ MonoBehaviour:
       m_Action: Key
       m_Flags: 8
     m_Flags: 0
-  Shortcut: 7
+  Shortcut: 4
 --- !u!114 &1823676129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1792,7 +1934,7 @@ MonoBehaviour:
       m_Action: Key
       m_Flags: 8
     m_Flags: 0
-  Shortcut: 6
+  Shortcut: 3
 --- !u!114 &1823676130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1829,7 +1971,7 @@ MonoBehaviour:
       m_Action: Key
       m_Flags: 0
     m_Flags: 0
-  Shortcut: 5
+  Shortcut: 2
 --- !u!114 &1823676131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1866,7 +2008,7 @@ MonoBehaviour:
       m_Action: Key
       m_Flags: 0
     m_Flags: 0
-  Shortcut: 4
+  Shortcut: 1
 --- !u!114 &1823676132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1897,117 +2039,6 @@ MonoBehaviour:
     - m_Name: 
       m_Id: 97b89460-8d4b-49c6-8619-bcaed0962408
       m_Path: <Keyboard>/#(M)
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Key
-      m_Flags: 0
-    m_Flags: 0
-  Shortcut: 3
---- !u!114 &1823676133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1823676126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 857f4032b11f03049ba61f0dc1ee285b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onInputDown:
-    m_PersistentCalls:
-      m_Calls: []
-  onInputUp:
-    m_PersistentCalls:
-      m_Calls: []
-  bone: 0
-  Key:
-    m_Name: Key
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 264d04da-b445-47de-8c9a-672613c364bd
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 7e7b2141-45e6-4c71-86e0-997096519444
-      m_Path: <Keyboard>/3
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Key
-      m_Flags: 0
-    m_Flags: 0
-  Shortcut: 2
---- !u!114 &1823676134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1823676126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 857f4032b11f03049ba61f0dc1ee285b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onInputDown:
-    m_PersistentCalls:
-      m_Calls: []
-  onInputUp:
-    m_PersistentCalls:
-      m_Calls: []
-  bone: 0
-  Key:
-    m_Name: Key
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 9f7fdf26-6545-496a-be19-d5d8ce9d25cb
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 8cf8c746-3b09-4468-a4c7-89a20ea82c6f
-      m_Path: <Keyboard>/2
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Key
-      m_Flags: 0
-    m_Flags: 0
-  Shortcut: 1
---- !u!114 &1823676135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1823676126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 857f4032b11f03049ba61f0dc1ee285b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onInputDown:
-    m_PersistentCalls:
-      m_Calls: []
-  onInputUp:
-    m_PersistentCalls:
-      m_Calls: []
-  bone: 0
-  Key:
-    m_Name: Key
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 91d9b8b7-590f-4a29-b72a-d0c40c29631d
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: af13290e-4dc3-4487-87ab-024267d12394
-      m_Path: <Keyboard>/1
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -2051,7 +2082,7 @@ MonoBehaviour:
       m_Action: Key
       m_Flags: 0
     m_Flags: 0
-  Shortcut: 8
+  Shortcut: 5
 --- !u!114 &1823676137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2088,7 +2119,7 @@ MonoBehaviour:
       m_Action: Key
       m_Flags: 0
     m_Flags: 0
-  Shortcut: 10
+  Shortcut: 7
 --- !u!114 &1823676138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2119,6 +2150,117 @@ MonoBehaviour:
     - m_Name: 
       m_Id: 4f5eee48-933b-4007-a1a7-826f7a1b8aed
       m_Path: <Keyboard>/enter
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Key
+      m_Flags: 0
+    m_Flags: 0
+  Shortcut: 6
+--- !u!114 &1823676139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823676126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 857f4032b11f03049ba61f0dc1ee285b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onInputDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onInputUp:
+    m_PersistentCalls:
+      m_Calls: []
+  bone: 0
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: ccb8be21-cc3d-46ce-bb15-8698e42f36ae
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: f85429c7-5e30-4d9e-8400-e7e4c76ee8a6
+      m_Path: <Mouse>/leftButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Key
+      m_Flags: 0
+    m_Flags: 0
+  Shortcut: 8
+--- !u!114 &1823676140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823676126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 857f4032b11f03049ba61f0dc1ee285b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onInputDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onInputUp:
+    m_PersistentCalls:
+      m_Calls: []
+  bone: 0
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: c1cd457b-a819-48c9-b036-a9f0a719f7c0
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 4731b56e-4d5d-4fff-a7f6-82c23c61c534
+      m_Path: <Keyboard>/u
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Key
+      m_Flags: 0
+    m_Flags: 0
+  Shortcut: 10
+--- !u!114 &1823676141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823676126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 857f4032b11f03049ba61f0dc1ee285b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onInputDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onInputUp:
+    m_PersistentCalls:
+      m_Calls: []
+  bone: 0
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 1afe4c7f-6c78-4486-9713-dc56467fc4b1
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: d4aac661-06ea-4174-b39a-9284beab53c9
+      m_Path: <Mouse>/rightButton
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -2343,6 +2485,7 @@ Transform:
   - {fileID: 647256036}
   - {fileID: 1202536834}
   - {fileID: 1823676127}
+  - {fileID: 1061146790}
   - {fileID: 1316567787}
   m_Father: {fileID: 200932040}
   m_RootOrder: 2

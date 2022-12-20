@@ -21,6 +21,7 @@ using umi3d.cdk.menu;
 using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.desktopBrowser.Controller;
+using umi3d.mobileBrowser.Controller;
 using UnityEngine;
 
 namespace umi3d.baseBrowser.Controller
@@ -38,6 +39,19 @@ namespace umi3d.baseBrowser.Controller
         #endregion
 
         #region Fields
+
+        public static bool Exists => s_instance != null;
+        public static BaseController Instance
+        {
+            get => s_instance;
+            set
+            {
+                if (Exists) return;
+                s_instance = value;
+            }
+        }
+        protected static BaseController s_instance;
+
         [SerializeField]
         protected InteractionMapper InteractionMapper;
         [SerializeField]
@@ -50,12 +64,6 @@ namespace umi3d.baseBrowser.Controller
         [HideInInspector]
         public MenuAsset ObjectMenu;
         public CursorData mouseData;
-
-        public static event System.Action CancelKeyPressed;
-        public static event System.Action GameMenuClicked;
-        public static event System.Action MainActionClicked;
-        public static event System.Action SecondActionClicked;
-        public static event System.Action<int> EmoteKeyPressed;
 
         public IConcreteController CurrentController;
 
@@ -81,17 +89,10 @@ namespace umi3d.baseBrowser.Controller
         public static bool CanProcess = false;
         #endregion
 
-        public static void OnGameMenuKeyPressed() => GameMenuClicked?.Invoke();
-        public static void OnMainActionClicked() => MainActionClicked?.Invoke();
-        public static void OnSecondActionClicked() => SecondActionClicked?.Invoke();
-        public static void OnEmoteKeyPressed(int value) => EmoteKeyPressed?.Invoke(value);
-
         #region Monobehaviour Life Cycle
         protected virtual void Awake()
         {
-            GameMenuClicked = null;
-            MainActionClicked = null;
-            SecondActionClicked = null;
+            s_instance = this;
 
             UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Add manipulator in android browser and reactivate it in desktop browser");
             mouseData.ForceProjectionReleasableButton = new ButtonMenuItem
@@ -116,6 +117,7 @@ namespace umi3d.baseBrowser.Controller
             m_controllers.ForEach(controller => controller?.Awake());
             KeyboardInteraction.S_Interactions.AddRange(GetComponentsInChildren<KeyboardInteraction>());
             KeyboardShortcut.S_Shortcuts.AddRange(GetComponentsInChildren<KeyboardShortcut>());
+            KeyboardEmote.S_Emotes.AddRange(GetComponentsInChildren<KeyboardEmote>());
             KeyboardNavigation.S_Navigations.AddRange(GetComponentsInChildren<KeyboardNavigation>());
 
             //TODO for now CurrentController is the desktop one.

@@ -83,10 +83,6 @@ namespace umi3d.desktopBrowser.Controller
             //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainActionKey)))
             //    OnMainActionClicked();
 
-            if (KeyboardShortcut.IsPressed(ShortcutEnum.Emote1)) BaseController.OnEmoteKeyPressed(0);
-            if (KeyboardShortcut.IsPressed(ShortcutEnum.Emote2)) BaseController.OnEmoteKeyPressed(1);
-            if (KeyboardShortcut.IsPressed(ShortcutEnum.Emote3)) BaseController.OnEmoteKeyPressed(2);
-
             //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationDirect)) || Input.mouseScrollDelta.y < 0)
             //    m_navigationDirect++;
             //else if (Input.mouseScrollDelta.y > 0) m_navigationDirect--;

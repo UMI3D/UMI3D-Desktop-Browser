@@ -22,25 +22,6 @@ namespace umi3d.baseBrowser.Controller
 {
     public partial class BaseController
     {
-        public void OnPressFirst(InputValue value)
-        {
-            UnityEngine.Debug.Log($"is pressed {value.isPressed}");
-        }
-
-        public void OnPressMic(InputValue value)
-        {
-            UnityEngine.Debug.Log($"Mic is pressed {value.isPressed}");
-        }
-
-
-        public void OnMove(InputValue value)
-        {
-            // Read value from control. The type depends on what type of controls.
-            // the action is bound to.
-            var v = value.Get<Vector2>();
-            // IMPORTANT: The given InputValue is only valid for the duration of the callback.
-            //            Storing the InputValue references somewhere and calling Get<T>()
-            //            later does not work correctly.
-        }
+        
     }
 }
