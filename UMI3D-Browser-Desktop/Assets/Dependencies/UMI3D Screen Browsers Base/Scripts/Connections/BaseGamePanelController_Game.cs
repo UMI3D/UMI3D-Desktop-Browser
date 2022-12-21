@@ -39,7 +39,9 @@ namespace umi3d.baseBrowser.connection
         public CustomLeadingArea LeadingArea => Game.LeadingArea;
         public CustomTrailingArea TrailingArea => Game.TrailingArea;
 
-        protected System.Action m_contextualMenuAction;
+        protected System.Action m_contextualMenuActionUp;
+        protected System.Action m_contextualMenuActionDown;
+        protected bool m_isContextualMenuDown;
 
         protected virtual void InitGame()
         {
@@ -119,26 +121,27 @@ namespace umi3d.baseBrowser.connection
 
             Game.LeadingAndTrailingAreaClicked += worldPosition =>
             {
-                UnityEngine.Debug.Log($"click");
                 if (Game.Controller != ControllerEnum.MouseAndKeyboard) return;
 
-                if (ObjectMenuDisplay.isDisplaying)
-                {
-                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
-                    CloseGameWindows();
-                }
-                else if (ObjectMenuDisplay.menu.Count > 0)
-                {
-                    if (BaseCursor.Movement == CursorMovement.Free) return;
-                    ObjectMenuDisplay.Expand(false);
+                //UnityEngine.Debug.Log($"click 1");
 
-                    if
-                    (
-                        ObjectMenuDisplay.menu.Count == 1
-                        && ObjectMenu[0] is TextfieldDisplayer textfield
-                    ) textfield.Focus();
-                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
-                }
+                //if (ObjectMenuDisplay.isDisplaying)
+                //{
+                //    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
+                //    CloseGameWindows();
+                //}
+                //else if (ObjectMenuDisplay.menu.Count > 0)
+                //{
+                //    if (BaseCursor.Movement == CursorMovement.Free) return;
+                //    ObjectMenuDisplay.Expand(false);
+
+                //    if
+                //    (
+                //        ObjectMenuDisplay.menu.Count == 1
+                //        && ObjectMenu[0] is TextfieldDisplayer textfield
+                //    ) textfield.Focus();
+                //    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
+                //}
             };
         }
 
@@ -180,23 +183,35 @@ namespace umi3d.baseBrowser.connection
         }
 
         protected enum ContextualMenuEnum { Open, Close, OpenOrClose }
-        protected void OpenOrCloseContextualMenu(ContextualMenuEnum value = ContextualMenuEnum.OpenOrClose, bool forceUpdate = false)
+        protected void OpenOrCloseContextualMenu(ContextualMenuEnum value = ContextualMenuEnum.OpenOrClose, bool forceUpdate = false, System.Action callbackOpen = null)
         {
             switch (value)
             {
                 case ContextualMenuEnum.Open:
-                    if (!ObjectMenuDisplay.isDisplaying || forceUpdate)  ObjectMenuDisplay.Expand(false);
+                    if (!ObjectMenuDisplay.isDisplaying || forceUpdate) OpenContextualMenu(callbackOpen);
                     break;
                 case ContextualMenuEnum.Close:
-                    if (ObjectMenuDisplay.isDisplaying || forceUpdate) ObjectMenuDisplay.Collapse(true);
+                    if (ObjectMenuDisplay.isDisplaying || forceUpdate) CloseContextualMenu();
                     break;
                 case ContextualMenuEnum.OpenOrClose:
-                    if (ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Collapse(true);
-                    else ObjectMenuDisplay.Expand(false);
+                    if (ObjectMenuDisplay.isDisplaying) CloseContextualMenu();
+                    else OpenContextualMenu(callbackOpen);
                     break;
                 default:
                     break;
             }
+        }
+        protected void OpenContextualMenu(System.Action callbackOpen = null)
+        {
+            BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
+            CloseGameWindows();
+            ObjectMenuDisplay.Expand(false);
+            callbackOpen?.Invoke();
+        }
+        protected void CloseContextualMenu()
+        {
+            ObjectMenuDisplay.Collapse(true);
+            BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
         }
 
         protected virtual void OnMenuObjectContentChange()
@@ -206,28 +221,38 @@ namespace umi3d.baseBrowser.connection
 
             var ButtonsArea = TrailingArea.ButtonsArea;
             // If action is down don't update.
-            if (ButtonsArea.IsMainActionDown) return;
+            if (m_isContextualMenuDown) return;
 
             if (count == 0)
             {
                 Game.Cursor.Action = null;
                 ObjectMenuDisplay.Collapse(false);
                 if (ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = false;
-                UpdateMainActionUp(false);
+                UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
             }
             else if (count == 1)
             {
                 if (ObjectMenu[0] is TextfieldDisplayer textfield)
                 {
                     Game.Cursor.Action = "Edit Text";
-                    UpdateMainActionUp(true, () => textfield.Focus());
+                    UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose, () => textfield.Focus());
                 }
                 else if (ObjectMenu[0] is ButtonDisplayer button)
                 {
                     Game.Cursor.Action = button.Text;
-                    UpdateMainActionUp(false);
+                    UpdateContextualMenuActions(ContextualMenuActionEnum.UpAndDown, null,
+                    () =>
+                    {
+                        m_isContextualMenuDown = true;
+                        button.menuItem.NotifyValueChange(true);
+                    },
+                    () =>
+                    {
+                        m_isContextualMenuDown = false;
+                        button.menuItem.NotifyValueChange(false);
+                    });
                 }
-                else UpdateMainActionUp(true);
+                else UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
 
                 if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;
             }
@@ -248,24 +273,37 @@ namespace umi3d.baseBrowser.connection
 
                 if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;
 
-                UpdateMainActionUp(true);
+                UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
             }
         }
 
-        protected void UpdateMainActionUp(bool value, System.Action callback = null)
+        protected void t(bool value, System.Action callback = null)
         {
-            if (value)
-            {
-                m_contextualMenuAction = () =>
-                {
-                    if (ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Collapse(true);
-                    else ObjectMenuDisplay.Expand(false);
-                    callback?.Invoke();
-                };
-            }
-            else m_contextualMenuAction = null;
 
-            Game.TrailingArea.ButtonsArea.MainActionOpenOrCloseContextualMenu = m_contextualMenuAction;
+            //Game.TrailingArea.ButtonsArea.MainActionOpenOrCloseContextualMenu = m_contextualMenuAction;
+        }
+
+        protected enum ContextualMenuActionEnum { OpenOrClose, UpAndDown, Null }
+        protected void UpdateContextualMenuActions(ContextualMenuActionEnum value, System.Action callbackOpen = null, System.Action callbackDown = null, System.Action callbackUp = null)
+        {
+            switch (value)
+            {
+                case ContextualMenuActionEnum.OpenOrClose:
+                    m_contextualMenuActionDown = null;
+                    m_contextualMenuActionUp = () 
+                        => OpenOrCloseContextualMenu(ContextualMenuEnum.OpenOrClose, false, callbackOpen);
+                    break;
+                case ContextualMenuActionEnum.UpAndDown:
+                    m_contextualMenuActionDown = callbackDown;
+                    m_contextualMenuActionUp = callbackUp;
+                    break;
+                    case ContextualMenuActionEnum.Null:
+                    m_contextualMenuActionDown = null;
+                    m_contextualMenuActionUp = null;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

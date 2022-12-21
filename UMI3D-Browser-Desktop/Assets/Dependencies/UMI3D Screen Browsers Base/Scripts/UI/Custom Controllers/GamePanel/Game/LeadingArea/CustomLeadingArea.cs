@@ -123,7 +123,7 @@ public class CustomLeadingArea : VisualElement, ICustomElement
             throw e;
         }
 
-        this.AddManipulator(LeadingAreaManipulator);
+        //this.AddManipulator(LeadingAreaManipulator);
         //TODO improve camera navigation with double click.
     }
 

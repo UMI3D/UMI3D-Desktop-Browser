@@ -27,6 +27,7 @@ using umi3d.commonScreen.game;
 using umi3d.mobileBrowser.Controller;
 using umi3d.mobileBrowser.interactions;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using static umi3d.baseBrowser.Controller.BaseCursor;
 
@@ -221,15 +222,31 @@ namespace umi3d.baseBrowser.connection
                     || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
                 ) return;
 
-                if (BaseCursor.Movement == CursorMovement.Free || m_contextualMenuAction == null) return;
-                BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
+                //if (BaseCursor.Movement == CursorMovement.Free ) return;
+                if (!Game.IsLeadingAndtrailingClicked(Mouse.current.position.ReadValue())) return;
 
-                CloseGameWindows();
+                UnityEngine.Debug.Log($"click down");
 
-                m_contextualMenuAction?.Invoke();
+                m_contextualMenuActionDown?.Invoke();
+            });
+            KeyboardShortcut.AddUpListener(ShortcutEnum.ContextualMenu, () =>
+            {
+                if
+                (
+                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
+                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
+                ) return;
+
+                //if (BaseCursor.Movement == CursorMovement.Free) return;
+
+                if (!Game.IsLeadingAndtrailingClicked(Mouse.current.position.ReadValue())) return;
+
+                UnityEngine.Debug.Log($"click up");
+
+                m_contextualMenuActionUp?.Invoke();
             });
 
-            KeyboardShortcut.AddDownListener(ShortcutEnum.Notification, () =>
+            KeyboardShortcut.AddUpListener(ShortcutEnum.Notification, () =>
             {
                 if
                 (
@@ -254,7 +271,7 @@ namespace umi3d.baseBrowser.connection
                 }
             });
 
-            KeyboardShortcut.AddDownListener(ShortcutEnum.UserList, () =>
+            KeyboardShortcut.AddUpListener(ShortcutEnum.UserList, () =>
             {
                 if
                 (
