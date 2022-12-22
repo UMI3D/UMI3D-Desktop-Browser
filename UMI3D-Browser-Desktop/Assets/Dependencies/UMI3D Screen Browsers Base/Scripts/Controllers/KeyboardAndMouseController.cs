@@ -61,8 +61,6 @@ namespace umi3d.desktopBrowser.Controller
                 interaction.bone = Controller.interactionBoneType;
                 interaction.Menu = ObjectMenu.menu;
             });
-
-            //KeyboardShortcut.AddUpListener
         }
         public void Update()
         {
@@ -79,9 +77,6 @@ namespace umi3d.desktopBrowser.Controller
             //    else if (ObjectMenu.menu.Count > 0) IsFreeAndHovering = true;
             //    OnSecondActionClicked();
             //}
-
-            //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MainActionKey)))
-            //    OnMainActionClicked();
 
             //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationDirect)) || Input.mouseScrollDelta.y < 0)
             //    m_navigationDirect++;

@@ -114,6 +114,10 @@ namespace umi3d.baseBrowser.Controller
                     ObjectMenu = ObjectMenu,
                 }
             );
+            m_controllers.Add
+            (
+                new MobileController()
+            );
             m_controllers.ForEach(controller => controller?.Awake());
             KeyboardInteraction.S_Interactions.AddRange(GetComponentsInChildren<KeyboardInteraction>());
             KeyboardShortcut.S_Shortcuts.AddRange(GetComponentsInChildren<KeyboardShortcut>());

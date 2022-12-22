@@ -21,13 +21,5 @@ namespace umi3d.baseBrowser.inputs.interactions
     public class KeyboardInteraction : BaseKeyInteraction
     {
         public static List<KeyboardInteraction> S_Interactions = new List<KeyboardInteraction>();
-
-
-        protected override void KeyCanceled(InputAction.CallbackContext context)
-        {
-            base.KeyCanceled(context);
-
-            UnityEngine.Debug.Log($"key canceled : {context.control.displayName}");
-        }
     }
 }

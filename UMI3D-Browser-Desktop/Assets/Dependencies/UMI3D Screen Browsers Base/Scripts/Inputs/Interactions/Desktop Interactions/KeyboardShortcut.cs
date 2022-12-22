@@ -53,7 +53,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
             if (_key == null)
             {
-                UnityEngine.Debug.LogError($"No key shortcut found");
+                UnityEngine.Debug.LogError($"No key shortcut found for {shortcut.ToString()}");
                 return;
             }
 
@@ -65,7 +65,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
             if (_key == null)
             {
-                UnityEngine.Debug.LogError($"No key shortcut found");
+                UnityEngine.Debug.LogError($"No key shortcut found for {shortcut.ToString()}");
                 return;
             }
 
@@ -77,7 +77,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
             if (_key == null)
             {
-                UnityEngine.Debug.LogError($"No key shortcut found");
+                UnityEngine.Debug.LogError($"No key shortcut found for {shortcut.ToString()}");
                 return;
             }
 
@@ -89,7 +89,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
             if (_key == null)
             {
-                UnityEngine.Debug.LogError($"No key shortcut found");
+                UnityEngine.Debug.LogError($"No key shortcut found for {shortcut.ToString()}");
                 return;
             }
 

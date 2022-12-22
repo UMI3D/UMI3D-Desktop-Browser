@@ -54,6 +54,7 @@ namespace umi3d.baseBrowser.inputs.interactions
         protected virtual void DisplayInput(string label, string inputName)
         {
             //Shortcutbox_E.Instance.AddShortcut(label, inputName);
+            //Key.activeControl.displayName;
         }
 
         /// <summary>
