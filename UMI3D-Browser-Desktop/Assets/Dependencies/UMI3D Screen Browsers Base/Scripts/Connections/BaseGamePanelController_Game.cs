@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using umi3d.baseBrowser.Controller;
+using umi3d.baseBrowser.cursor;
 using umi3d.baseBrowser.emotes;
 using umi3d.baseBrowser.Navigation;
 using umi3d.cdk.collaboration;
@@ -21,7 +22,6 @@ using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
 using umi3d.mobileBrowser.interactions;
 using UnityEngine;
-using static umi3d.baseBrowser.Controller.BaseCursor;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -169,15 +169,6 @@ namespace umi3d.baseBrowser.connection
             if (ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Collapse(true);
             if (Game.DisplayNotifUsersArea) Game.DisplayNotifUsersArea = false;
             if (Game.DisplayEmoteWindow) Game.DisplayEmoteWindow = false;
-        }
-
-        protected void CloseObjectMenu()
-        {
-            if (BaseCursor.Movement != CursorMovement.Free) return;
-            if (ObjectMenuDisplay.menu.Count == 0) return;
-
-            BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
-            if (ObjectMenuDisplay.isDisplaying) ObjectMenuDisplay.Collapse(true);
         }
 
         protected enum ContextualMenuEnum { Open, Close, OpenOrClose }

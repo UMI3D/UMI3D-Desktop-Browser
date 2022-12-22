@@ -13,10 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using umi3d.mobileBrowser.interactions;
 using ccs = umi3d.cdk.collaboration.UMI3DCollaborationClientServer;
 
-namespace umi3d.baseBrowser.Controller
+namespace umi3d.baseBrowser.cursor
 {
     public class BaseCursor : inetum.unityUtils.SingleBehaviour<BaseCursor>
     {
@@ -69,9 +68,6 @@ namespace umi3d.baseBrowser.Controller
         protected virtual void Start()
         {
             if (ccs.Exists) ccs.Instance.OnLeavingEnvironment.AddListener(Clear);
-
-            MainMobileAction.Down += () => State = CursorState.Clicked;
-            MainMobileAction.Up += () => State = CursorState.Default;
         }
 
         protected virtual void Update()

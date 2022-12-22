@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using umi3d.baseBrowser.cursor;
 using UnityEngine;
 
 namespace umi3d.baseBrowser.Navigation
@@ -137,8 +138,8 @@ namespace umi3d.baseBrowser.Navigation
 
                 if
                 (
-                    !(Controller.BaseCursor.Movement == Controller.BaseCursor.CursorMovement.Free
-                    || Controller.BaseCursor.Movement == Controller.BaseCursor.CursorMovement.FreeHidden)
+                    !(BaseCursor.Movement == BaseCursor.CursorMovement.Free
+                    || BaseCursor.Movement == BaseCursor.CursorMovement.FreeHidden)
                 ) HandleView();
 
                 return false;
@@ -149,8 +150,8 @@ namespace umi3d.baseBrowser.Navigation
 
             if
             (
-                (Controller.BaseCursor.Movement == Controller.BaseCursor.CursorMovement.Free
-                || Controller.BaseCursor.Movement == Controller.BaseCursor.CursorMovement.FreeHidden)
+                (BaseCursor.Movement == BaseCursor.CursorMovement.Free
+                || BaseCursor.Movement == BaseCursor.CursorMovement.FreeHidden)
                 && navigation != Navigation.Flying
             )
             {

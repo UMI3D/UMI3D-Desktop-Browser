@@ -19,7 +19,7 @@ using umi3d.baseBrowser.notification;
 using umi3d.cdk.collaboration;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static umi3d.baseBrowser.Controller.BaseCursor;
+using static umi3d.baseBrowser.cursor.BaseCursor;
 
 namespace umi3d.baseBrowser.connection
 {

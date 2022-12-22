@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections.Generic;
 using umi3d.baseBrowser.Controller;
+using umi3d.baseBrowser.cursor;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
@@ -42,7 +43,7 @@ namespace umi3d.desktopBrowser.Controller
                 return list;
             }
         }
-        private bool m_isCursorMovementFree => umi3d.baseBrowser.Controller.BaseCursor.Movement == umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free;
+        private bool m_isCursorMovementFree => BaseCursor.Movement == BaseCursor.CursorMovement.Free;
 
         public static bool IsFreeAndHovering = false;
         private static bool s_isRightClickAdded = false;

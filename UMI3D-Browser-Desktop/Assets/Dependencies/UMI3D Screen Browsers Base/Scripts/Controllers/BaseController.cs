@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using umi3d.baseBrowser.cursor;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
@@ -28,16 +29,6 @@ namespace umi3d.baseBrowser.Controller
 {
     public partial class BaseController : AbstractController
     {
-        #region Types
-        
-        public enum HoverState
-        {
-            None, //No hovering 
-            Hovering, //Cursor is hovering an object
-            AutoProjected //The projection is auto.
-        }
-        #endregion
-
         #region Fields
 
         public static bool Exists => s_instance != null;

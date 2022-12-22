@@ -15,10 +15,16 @@ limitations under the License.
 */
 using umi3d.cdk.interaction;
 using UnityEngine;
-using static umi3d.baseBrowser.Controller.BaseController;
 
-namespace umi3d.baseBrowser.Controller
+namespace umi3d.baseBrowser.cursor
 {
+    public enum HoverState
+    {
+        None, //No hovering 
+        Hovering, //Cursor is hovering an object
+        AutoProjected //The projection is auto.
+    }
+
     public struct CursorData
     {
         public bool ForceProjection, ForceProjectionReleasable;

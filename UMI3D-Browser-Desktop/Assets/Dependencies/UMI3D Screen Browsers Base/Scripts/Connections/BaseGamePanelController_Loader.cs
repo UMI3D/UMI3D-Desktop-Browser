@@ -16,11 +16,12 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.Controller;
+using umi3d.baseBrowser.cursor;
 using umi3d.cdk.collaboration;
 using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
 using UnityEngine;
-using static umi3d.baseBrowser.Controller.BaseCursor;
+using static umi3d.baseBrowser.cursor.BaseCursor;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -110,7 +111,7 @@ namespace umi3d.baseBrowser.connection
                     formMenuDisplay.Hide(false);
                     FormMenu.menu.RemoveAll();
                     callback.Invoke(answer);
-                    Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Center);
+                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
                     LocalInfoSender.CheckFormToUpdateAuthorizations(form);
                     m_next = null;
                     Form.ResetSubmitEvent();
