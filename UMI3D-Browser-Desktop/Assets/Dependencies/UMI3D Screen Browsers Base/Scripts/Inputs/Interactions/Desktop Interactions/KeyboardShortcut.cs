@@ -26,7 +26,8 @@ namespace umi3d.baseBrowser.inputs.interactions
         GeneraVolume, DeacreaseVolue, IncreaseVolume,
         Cancel, Submit,
         GameMenu, 
-        ContextualMenu, Notification, UserList, EmoteWindow
+        ContextualMenu, 
+        Notification, UserList, EmoteWindow
     }
 
     public class KeyboardShortcut : BaseKeyInteraction
@@ -41,10 +42,20 @@ namespace umi3d.baseBrowser.inputs.interactions
             return _key != null ? _key.m_isDown : false;
         }
 
+        public static bool WasPressedThisFrame(ShortcutEnum shortcut)
+        {
+            var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
+            return _key != null ? _key.Key.WasPressedThisFrame() : false;
+        }
+
         public static void AddDownListener(ShortcutEnum shortcut, UnityAction action)
         {
             var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
-            if (_key == null) return;
+            if (_key == null)
+            {
+                UnityEngine.Debug.LogError($"No key shortcut found");
+                return;
+            }
 
             _key.onInputDown.AddListener(action);
         }
@@ -52,7 +63,11 @@ namespace umi3d.baseBrowser.inputs.interactions
         public static void RemoveDownListener(ShortcutEnum shortcut, UnityAction action)
         {
             var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
-            if (_key == null) return;
+            if (_key == null)
+            {
+                UnityEngine.Debug.LogError($"No key shortcut found");
+                return;
+            }
 
             _key.onInputDown.RemoveListener(action);
         }
@@ -60,7 +75,11 @@ namespace umi3d.baseBrowser.inputs.interactions
         public static void AddUpListener(ShortcutEnum shortcut, UnityAction action)
         {
             var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
-            if (_key == null) return;
+            if (_key == null)
+            {
+                UnityEngine.Debug.LogError($"No key shortcut found");
+                return;
+            }
 
             _key.onInputUp.AddListener(action);
         }
@@ -68,7 +87,11 @@ namespace umi3d.baseBrowser.inputs.interactions
         public static void RemoveUpListener(ShortcutEnum shortcut, UnityAction action)
         {
             var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
-            if (_key == null) return;
+            if (_key == null)
+            {
+                UnityEngine.Debug.LogError($"No key shortcut found");
+                return;
+            }
 
             _key.onInputUp.RemoveListener(action);
         }

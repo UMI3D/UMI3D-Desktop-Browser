@@ -36,7 +36,7 @@ namespace umi3d.commonScreen.Displayer
         /// <summary>
         /// Button menu item to display.
         /// </summary>
-        protected ButtonMenuItem menuItem;
+        public ButtonMenuItem menuItem;
         /// <summary>
         /// A button that display a text.
         /// </summary>
