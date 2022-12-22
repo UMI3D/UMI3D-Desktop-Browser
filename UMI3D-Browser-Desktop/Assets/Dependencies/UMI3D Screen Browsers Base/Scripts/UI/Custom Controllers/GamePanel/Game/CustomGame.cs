@@ -17,6 +17,7 @@ using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class CustomGame : VisualElement, ICustomElement, IGameView
@@ -227,7 +228,6 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
 
     public bool IsLeadingAndtrailingClicked(Vector2 worldPosition)
     {
-        UnityEngine.Debug.Log($"position = {worldPosition}");
         var leadingAndTrailingLocal = LeadingAndTrailingBox.WorldToLocal(worldPosition);
         if (!LeadingAndTrailingBox.ContainsPoint(leadingAndTrailingLocal)) return false;
 

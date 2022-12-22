@@ -14,20 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using System.Collections.Generic;
 using umi3d.baseBrowser.Controller;
-using umi3d.baseBrowser.emotes;
-using umi3d.baseBrowser.inputs.interactions;
-using umi3d.baseBrowser.Navigation;
 using umi3d.baseBrowser.notification;
 using umi3d.cdk.collaboration;
-using umi3d.commonScreen.Container;
-using umi3d.commonScreen.Displayer;
-using umi3d.commonScreen.game;
-using umi3d.mobileBrowser.Controller;
-using umi3d.mobileBrowser.interactions;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using static umi3d.baseBrowser.Controller.BaseCursor;
 
@@ -38,6 +28,8 @@ namespace umi3d.baseBrowser.connection
         #region Field
 
         public UIDocument document;
+        [HideInInspector]
+        public PanelSettings PanelSettings;
 
         [HideInInspector]
         public NotificationLoader NotificationLoader;
@@ -51,7 +43,6 @@ namespace umi3d.baseBrowser.connection
 
         protected System.Action m_next;
         
-
         #endregion
 
         #region Initialization of the Connection Process
@@ -160,164 +151,6 @@ namespace umi3d.baseBrowser.connection
 
         #endregion
 
-        #region Initialization of the Controls
-
-        protected virtual void InitControls()
-        {
-            KeyboardShortcut.AddUpListener(ShortcutEnum.MuteUnmute, () =>
-            {
-                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"mute unmute");
-            });
-
-            KeyboardShortcut.AddUpListener(ShortcutEnum.PushToTalk, () =>
-            {
-                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"push to talk");
-            });
-
-            KeyboardShortcut.AddUpListener(ShortcutEnum.GeneraVolume, () =>
-            {
-                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"GeneraVolume");
-            });
-
-            KeyboardShortcut.AddUpListener(ShortcutEnum.IncreaseVolume, () =>
-            {
-                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"IncreaseVolume");
-            });
-
-            KeyboardShortcut.AddUpListener(ShortcutEnum.DeacreaseVolue, () =>
-            {
-                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"DeacreaseVolue");
-            });
-
-            KeyboardShortcut.AddUpListener(ShortcutEnum.Cancel, () =>
-            {
-                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Cancel");
-            });
-
-            KeyboardShortcut.AddUpListener(ShortcutEnum.Submit, () => 
-            {
-                m_next?.Invoke();
-            });
-
-            KeyboardShortcut.AddUpListener(ShortcutEnum.GameMenu, () =>
-            {
-                if (GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu)
-                {
-                    GamePanel.AddScreenToStack = CustomGamePanel.GameViews.Game;
-                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
-                    CloseGameWindows();
-                }
-                else
-                {
-                    GamePanel.AddScreenToStack = CustomGamePanel.GameViews.GameMenu;
-                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
-                }
-            });
-
-            KeyboardShortcut.AddDownListener(ShortcutEnum.ContextualMenu, () =>
-            {
-                if
-                (
-                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
-                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
-                ) return;
-
-                //if (BaseCursor.Movement == CursorMovement.Free ) return;
-                if (!Game.IsLeadingAndtrailingClicked(Mouse.current.position.ReadValue())) return;
-
-                UnityEngine.Debug.Log($"click down");
-
-                m_contextualMenuActionDown?.Invoke();
-            });
-            KeyboardShortcut.AddUpListener(ShortcutEnum.ContextualMenu, () =>
-            {
-                if
-                (
-                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
-                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
-                ) return;
-
-                //if (BaseCursor.Movement == CursorMovement.Free) return;
-
-                if (!Game.IsLeadingAndtrailingClicked(Mouse.current.position.ReadValue())) return;
-
-                UnityEngine.Debug.Log($"click up");
-
-                m_contextualMenuActionUp?.Invoke();
-            });
-
-            KeyboardShortcut.AddUpListener(ShortcutEnum.Notification, () =>
-            {
-                if
-                (
-                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
-                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
-                ) return;
-
-                if
-                (
-                    !Game.DisplayNotifUsersArea
-                    || Game.NotifAndUserArea.AreaPanel != CustomNotifAndUsersArea.NotificationsOrUsers.Notifications)
-                {
-                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
-
-                    if (!Game.DisplayNotifUsersArea) Game.DisplayNotifUsersArea = true;
-                    Game.NotifAndUserArea.AreaPanel = CustomNotifAndUsersArea.NotificationsOrUsers.Notifications;
-                }
-                else
-                {
-                    CloseGameWindows();
-                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
-                }
-            });
-
-            KeyboardShortcut.AddUpListener(ShortcutEnum.UserList, () =>
-            {
-                if
-                (
-                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
-                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
-                ) return;
-
-                if 
-                (
-                    !Game.DisplayNotifUsersArea 
-                    || Game.NotifAndUserArea.AreaPanel != CustomNotifAndUsersArea.NotificationsOrUsers.Users)
-                {
-                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
-
-                    if (!Game.DisplayNotifUsersArea) Game.DisplayNotifUsersArea = true;
-                    Game.NotifAndUserArea.AreaPanel = CustomNotifAndUsersArea.NotificationsOrUsers.Users;
-                }
-                else
-                {
-                    CloseGameWindows();
-                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
-                }
-            });
-
-            KeyboardEmote.EmotePressed += index =>
-            {
-                if
-                (
-                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
-                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
-                    || BaseCursor.Movement == CursorMovement.Free
-                ) return;
-
-                if (CustomEmoteWindow.Emotes == null || CustomEmoteWindow.Emotes.Count <= index) return;
-                var emote = CustomEmoteWindow.Emotes[index];
-                emote.PlayEmote(emote);
-            };
-
-            BaseConnectionProcess.Instance.EnvironmentLeave += () => NotifAndUsersArea_C.Instance = null;
-
-            Game.TrailingArea.ButtonsArea.MainActionDown = MainMobileAction.OnClickedDown;
-            Game.TrailingArea.ButtonsArea.MainActionUp = MainMobileAction.OnClickedUp;
-        }
-
-        #endregion
-
         protected override void Awake()
         {
             base.Awake();
@@ -327,6 +160,7 @@ namespace umi3d.baseBrowser.connection
 
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
+            PanelSettings = Resources.Load<PanelSettings>("PanelSettings");
             NotificationLoader = Resources.Load<NotificationLoader>("Scriptables/GamePanel/NotificationLoader");
             m_time_Start = DateTime.Now;
         }

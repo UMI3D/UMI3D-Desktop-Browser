@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
+using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.userCapture;
@@ -61,13 +62,21 @@ public class AudioSetting : ISetting
         StatusChanged?.Invoke(IsOn);
     }
 
+    public void IncreaseVolume()
+    {
+        UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Increase volume");
+    }
+
+    public void DecreaseVolume()
+    {
+        UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Decrease volume");
+    }
+
     public void Update()
     {
-        //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ToggleAudio)) &&
-        //    !TextInputDisplayerElement.isTyping)
-        //{
-        //    Toggle();
-        //}
+        if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.GeneraVolume)) Toggle();
+        if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.IncreaseVolume)) IncreaseVolume();
+        if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.DeacreaseVolue)) DecreaseVolume();
     }
 
     public void SetGeneralVolumeWithoutNotify(float value)
@@ -142,7 +151,11 @@ public class MicSetting : ISetting
     public bool IsOn
     {
         get => !MicrophoneListener.mute;
-        private set => MicrophoneListener.mute = !value;
+        private set
+        {
+            if (!MicrophoneListener.Exists) return;
+            MicrophoneListener.mute = !value;
+        }
     }
     public event Action<bool> StatusChanged;
 
@@ -165,19 +178,32 @@ public class MicSetting : ISetting
         StatusChanged?.Invoke(IsOn);
     }
 
-    public void Toggle()
+    public void InitShortcut()
     {
-        IsOn = !IsOn;
+        KeyboardShortcut.AddDownListener(ShortcutEnum.PushToTalk, () =>
+        {
+            UnityEngine.Debug.Log($"down");
+            Set(true);
+        });
+
+        KeyboardShortcut.AddUpListener(ShortcutEnum.PushToTalk, () =>
+        {
+            UnityEngine.Debug.Log($"up");
+            Set(false);
+        });
+    }
+
+    public void Toggle() => Set(!IsOn);
+
+    public void Set(bool value)
+    {
+        IsOn = value;
         StatusChanged?.Invoke(IsOn);
     }
 
     public void Update()
     {
-        //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ToggleMicrophone)) &&
-        //    !TextInputDisplayerElement.isTyping)
-        //{
-        //    Toggle();
-        //}
+        if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.MuteUnmute)) Toggle();
     }
 }
 
@@ -329,7 +355,9 @@ public sealed class EnvironmentSettings : inetum.unityUtils.SingleBehaviour<Envi
 
     void Start()
     {
-        UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => {
+        UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => 
+        {
+            MicSetting.InitShortcut();
             AvatarSetting.IsOn = true;
 
             m_environmentLoaded = true;

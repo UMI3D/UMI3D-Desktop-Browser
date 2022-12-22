@@ -13,8 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
-using System.Collections.Generic;
 using umi3d.baseBrowser.Controller;
 using umi3d.baseBrowser.emotes;
 using umi3d.baseBrowser.Navigation;
@@ -275,12 +273,6 @@ namespace umi3d.baseBrowser.connection
 
                 UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
             }
-        }
-
-        protected void t(bool value, System.Action callback = null)
-        {
-
-            //Game.TrailingArea.ButtonsArea.MainActionOpenOrCloseContextualMenu = m_contextualMenuAction;
         }
 
         protected enum ContextualMenuActionEnum { OpenOrClose, UpAndDown, Null }
