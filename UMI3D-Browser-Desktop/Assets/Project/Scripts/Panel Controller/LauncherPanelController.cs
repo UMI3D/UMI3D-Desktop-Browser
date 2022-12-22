@@ -14,10 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using BrowserDesktop.Controller;
 using inetum.unityUtils;
-using System.Runtime.InteropServices;
-using System.Text;
 using UnityEngine;
 
 public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncherPanelController
