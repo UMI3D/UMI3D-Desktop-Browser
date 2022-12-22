@@ -36,6 +36,8 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public ShortcutEnum Shortcut;
 
+        public override bool CanProces() => true;
+
         public static bool IsPressed(ShortcutEnum shortcut)
         {
             var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);

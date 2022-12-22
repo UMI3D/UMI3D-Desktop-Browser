@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d.cdk;
-using umi3d.common;
-using UnityEngine;
+using umi3d.baseBrowser.cursor;
 using UnityEngine.InputSystem;
 
 namespace umi3d.baseBrowser.inputs.interactions
@@ -24,6 +22,9 @@ namespace umi3d.baseBrowser.inputs.interactions
     public abstract class BaseKeyInteraction : EventInteraction
     {
         public InputAction Key;
+        protected bool m_wasHoverBeforeClicked;
+
+        public virtual bool CanProces() => BaseCursor.Movement != BaseCursor.CursorMovement.Free;
 
         protected virtual void Start()
         {
@@ -31,17 +32,16 @@ namespace umi3d.baseBrowser.inputs.interactions
             Key.canceled += KeyCanceled;
             Key.Enable();
 
-            //Todo change cursor state when key press
-            //onInputDown.AddListener(() =>
-            //{
-            //    SwichOnDown = (BaseCursor.State == BaseCursor.CursorState.Hover);
-            //    if (SwichOnDown) BaseCursor.State = BaseCursor.CursorState.Clicked;
-            //});
-            //onInputUp.AddListener(() =>
-            //{
-            //    if (SwichOnDown && BaseCursor.State == BaseCursor.CursorState.Clicked)
-            //        BaseCursor.State = BaseCursor.CursorState.Hover;
-            //});
+            onInputDown.AddListener(() =>
+            {
+                m_wasHoverBeforeClicked = BaseCursor.State == BaseCursor.CursorState.Hover;
+                if (m_wasHoverBeforeClicked) BaseCursor.State = BaseCursor.CursorState.Clicked;
+            });
+            onInputUp.AddListener(() =>
+            {
+                if (m_wasHoverBeforeClicked && BaseCursor.State == BaseCursor.CursorState.Clicked)
+                    BaseCursor.State = BaseCursor.CursorState.Hover;
+            });
         }
 
         protected override void CreateMenuItem()
@@ -64,6 +64,8 @@ namespace umi3d.baseBrowser.inputs.interactions
         protected virtual void KeyStarted(InputAction.CallbackContext context)
         {
             //todo check if key is allow to be watch (cursor free, etc.)
+            if (!CanProces()) return;
+
             Pressed(true);
         }
         
@@ -74,6 +76,8 @@ namespace umi3d.baseBrowser.inputs.interactions
         protected virtual void KeyCanceled(InputAction.CallbackContext context)
         {
             //todo check if key is allow to be watch (cursor free, etc.)
+            if (!CanProces()) return;
+
             Pressed(false);
         }
     }
