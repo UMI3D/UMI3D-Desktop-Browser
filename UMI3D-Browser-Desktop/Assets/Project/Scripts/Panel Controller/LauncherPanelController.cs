@@ -24,34 +24,6 @@ public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncher
 {
     public WindowsManager Windows_Manager;
 
-    #region Keyboard
-    [DllImport("user32.dll")]
-    private static extern long GetKeyboardLayoutName(StringBuilder pwszKLID);
-
-    /// <summary>
-    /// Sets up the inputs according to the user's keyboard layout.
-    /// For now, if the keyboard is a 'fr-FR', go for an azerty configuration otherwise a qwerty config.
-    /// </summary>
-    void SetUpKeyboardConfiguration()
-    {
-        StringBuilder name = new StringBuilder(9);
-
-        GetKeyboardLayoutName(name);
-
-        string str = name.ToString();
-
-        if (str == InputLayoutManager.FR_Fr_KeyboardLayout || str == InputLayoutManager.FR_Be_KeyboardLayout)
-        {
-            InputLayoutManager.SetCurrentInputLayout("AzertyLayout");
-        }
-        else
-        {
-            InputLayoutManager.SetCurrentInputLayout("QwertyLayout");
-        }
-    }
-
-    #endregion
-
     protected override void Start()
     {
         base.Start();
@@ -79,8 +51,6 @@ public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncher
             };
             dialogueBox.EnqueuePriority(Launcher);
         };
-
-        SetUpKeyboardConfiguration();
 
         Launcher.Version = BrowserDesktop.BrowserVersion.Version;
     }
