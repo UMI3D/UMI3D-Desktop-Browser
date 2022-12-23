@@ -172,6 +172,8 @@ public class CustomSettingsController : CustomSettingScreen
         ScrollView.Add(Crouch.Box);
         ScrollView.Add(FreeHead.Box);
 
+        DefaultBindings(ControllerInputEnum.Keyboard, ControllerInputEnum.Mouse);
+
         if (TryGetControllerData(out Data))
         {
             OnCameraSensibilityValueChanged(Data.CameraSensibility);
@@ -252,15 +254,15 @@ public class CustomSettingsController : CustomSettingScreen
         NavigationBindingsUpdated(NavigationEnum.Jump, jump, controllers);
 
         var crouch = new InputAction("crouch");
-        crouch.AddBinding("<Keyboard>/c");
+        //crouch.AddBinding("<Keyboard>/c");
+        crouch.AddCompositeBinding("ButtonWithOneModifier")
+            .With("Button", "<Keyboard>/c")
+            .With("Modifier", "<Keyboard>/leftCtrl");
         NavigationBindingsUpdated(NavigationEnum.Crouch, crouch, controllers);
 
         var freeHead = new InputAction("freeHead");
         freeHead.AddBinding("<Keyboard>/alt");
         NavigationBindingsUpdated(NavigationEnum.FreeView, freeHead, controllers);
-
-        //input.ChangeBinding(0).Erase();
-
     }
 
     public void InitBindings(params ControllerInputEnum[] controllers)
@@ -277,6 +279,24 @@ public class CustomSettingsController : CustomSettingScreen
 
     public void NavigationBindingsUpdated(NavigationEnum command, InputAction action, params ControllerInputEnum[] controllers)
     {
+        //UnityEngine.Debug.Log($"------------------------bindings = {action.bindings.Count}");
+        //for (int i = 0; i < action.bindings.Count; i++)
+        //{
+        //    action.ChangeBinding(i).Erase();
+        //}
+        //UnityEngine.Debug.Log($"bindings = {action.bindings.Count}-------------------------");
+
+        //action.ChangeBinding(1).WithPath("<Keyboard>/alt");
+        
+        if (action.bindings[0].isComposite)
+        {
+            UnityEngine.Debug.Log($"{action.bindings[0].path}");
+        }
+        if (action.bindings.Count > 1 && action.bindings[1].isPartOfComposite)
+        {
+            UnityEngine.Debug.Log($"is part of composit {action.bindings[1].ToDisplayString()}");
+        }
+
         var controls = action.controls;
         int currentIndex = -1;
         FindControl(controls, ref currentIndex, out string control1, controllers);
@@ -340,7 +360,6 @@ public class CustomSettingsController : CustomSettingScreen
 
         var inputControl = controls.FirstOrDefault(_control =>
         {
-            UnityEngine.Debug.Log($"device = {_control.device.displayName}, control = {_control.displayName}");
             if (controls.IndexOf(item => item == _control) <= lowIndex) return false;
 
             bool matchController = false;

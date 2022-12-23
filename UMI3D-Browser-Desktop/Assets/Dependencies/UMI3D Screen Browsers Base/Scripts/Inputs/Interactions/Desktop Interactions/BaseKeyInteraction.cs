@@ -16,8 +16,6 @@ limitations under the License.
 
 using umi3d.baseBrowser.cursor;
 using UnityEngine.InputSystem;
-using UnityEngine;
-using System.Windows.Forms;
 
 namespace umi3d.baseBrowser.inputs.interactions
 {
@@ -34,6 +32,36 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// </summary>
         /// <returns></returns>
         public virtual bool CanProces() => BaseCursor.Movement != BaseCursor.CursorMovement.Free && !IsEditingTextField;
+
+        public virtual void UpdateKey(InputAction action)
+        {
+            if (action.bindings.Count == 0)
+            {
+                for (int i = 0; i < Key.bindings.Count; i++) Key.ChangeBinding(i).Erase();
+            }
+            else if (action.bindings.Count == 1)
+            {
+                for (int i = 1; i < Key.bindings.Count; i++) Key.ChangeBinding(i).Erase();
+
+                UpdateBinding(0, action.bindings[0]);
+            }
+            else if (action.bindings.Count == 2)
+            {
+                UpdateBinding(0, action.bindings[0]);
+            }
+
+            if (action.bindings.Count > 1) Key.ChangeBinding(1).WithPath(action.bindings[1].path);
+        }
+
+        protected virtual void UpdateBinding(int index, InputBinding binding)
+        {
+            if (binding.isComposite)
+            {
+
+            }
+            if (Key.bindings.Count <= index) Key.AddBinding(binding.path);
+            else Key.ChangeBinding(index).WithPath(binding.path);
+        }
 
         protected virtual void Start()
         {
@@ -72,16 +100,6 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// <param name="context"></param>
         protected virtual void KeyStarted(InputAction.CallbackContext context)
         {
-            //foreach (var binding in Key.bindings)
-            //{
-            //    UnityEngine.Debug.Log($"binding action: {binding.action};  {binding.}");
-            //}
-            foreach (var control in Key.controls)
-            {
-                UnityEngine.Debug.Log($"control device: {control.device.displayName}, key : {control.displayName}");
-            }
-            UnityEngine.Debug.Log($"{Key.activeControl.displayName}");
-
             if (!CanProces()) return;
 
             Pressed(true);
