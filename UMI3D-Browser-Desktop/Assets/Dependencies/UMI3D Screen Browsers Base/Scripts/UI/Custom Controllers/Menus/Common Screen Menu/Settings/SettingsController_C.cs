@@ -34,6 +34,10 @@ namespace umi3d.commonScreen.menu
             if (JoystickStaticToggle == null) JoystickStaticToggle = new Displayer.Toggle_C();
             if (LeftHandToggle == null) LeftHandToggle = new Displayer.Toggle_C();
 
+            KeyBindingDisplayer.CreateText = () => new Displayer.Text_C();
+            KeyBindingDisplayer.CreateButton = () => new Displayer.Button_C();
+            KeyBindingDisplayer.USSCustomClassBox = () => USSCustomClassBox;
+
             base.InitElement();
         }
     }

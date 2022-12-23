@@ -1,4 +1,17 @@
-.setting__resolution-box {
+.setting-resolution-box {
 	margin-top: var(--margin_padding-menu);
 	margin-bottom: var(--margin_padding-menu);
+}
+
+.setting-controller-box {
+	flex-direction: row;
+}
+
+.setting-controller-box > .text {
+	width: 30%;
+	-unity-text-align: middle-left;
+}
+
+.setting-controller-box > .button {
+	flex-grow: 1;
 }

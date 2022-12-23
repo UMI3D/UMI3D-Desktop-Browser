@@ -17,6 +17,7 @@ limitations under the License.
 using umi3d.baseBrowser.cursor;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using System.Windows.Forms;
 
 namespace umi3d.baseBrowser.inputs.interactions
 {
@@ -71,11 +72,21 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// <param name="context"></param>
         protected virtual void KeyStarted(InputAction.CallbackContext context)
         {
+            //foreach (var binding in Key.bindings)
+            //{
+            //    UnityEngine.Debug.Log($"binding action: {binding.action};  {binding.}");
+            //}
+            foreach (var control in Key.controls)
+            {
+                UnityEngine.Debug.Log($"control device: {control.device.displayName}, key : {control.displayName}");
+            }
+            UnityEngine.Debug.Log($"{Key.activeControl.displayName}");
+
             if (!CanProces()) return;
 
             Pressed(true);
         }
-        
+
         /// <summary>
         /// Callback when the key is pressed up.
         /// </summary>
