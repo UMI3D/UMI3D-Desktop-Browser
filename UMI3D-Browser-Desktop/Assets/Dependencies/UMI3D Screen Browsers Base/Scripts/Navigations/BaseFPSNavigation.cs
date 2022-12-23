@@ -421,6 +421,8 @@ namespace umi3d.baseBrowser.Navigation
         /// </summary>
         protected void UpdateBaseHeight()
         {
+            (currentCapsuleBase, currentCapsuleEnd) = GetCapsuleSphereCenters();
+
             RaycastHit foundHit = new RaycastHit { distance = Mathf.Infinity };
             RaycastHit[] hits = Physics.CapsuleCastAll(currentCapsuleBase, currentCapsuleEnd, playerRadius, Vector3.down, 100, navmeshLayer);
             foreach (RaycastHit hit in hits)
