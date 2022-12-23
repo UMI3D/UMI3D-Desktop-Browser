@@ -16,15 +16,19 @@ limitations under the License.
 
 using umi3d.baseBrowser.cursor;
 using UnityEngine.InputSystem;
+using UnityEngine;
 
 namespace umi3d.baseBrowser.inputs.interactions
 {
     public abstract class BaseKeyInteraction : EventInteraction
     {
+        public static bool IsEditingTextField;
+
         public InputAction Key;
+
         protected bool m_wasHoverBeforeClicked;
 
-        public virtual bool CanProces() => BaseCursor.Movement != BaseCursor.CursorMovement.Free;
+        public virtual bool CanProces() => BaseCursor.Movement != BaseCursor.CursorMovement.Free && !IsEditingTextField;
 
         protected virtual void Start()
         {

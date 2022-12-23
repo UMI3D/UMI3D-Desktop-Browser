@@ -36,18 +36,34 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public ShortcutEnum Shortcut;
 
-        public override bool CanProces() => true;
+        public override bool CanProces() => !IsEditingTextField;
 
         public static bool IsPressed(ShortcutEnum shortcut)
         {
             var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
-            return _key != null ? _key.m_isDown : false;
+
+            if (_key == null)
+            {
+                UnityEngine.Debug.LogError($"No key shortcut found for {shortcut.ToString()}");
+                return false;
+            }
+            else if (!_key.CanProces()) return false;
+
+            return _key.m_isDown;
         }
 
         public static bool WasPressedThisFrame(ShortcutEnum shortcut)
         {
             var _key = S_Shortcuts.Find(key => key.Shortcut == shortcut);
-            return _key != null ? _key.Key.WasPressedThisFrame() : false;
+
+            if (_key == null)
+            {
+                UnityEngine.Debug.LogError($"No key shortcut found for {shortcut.ToString()}");
+                return false;
+            }
+            else if (!_key.CanProces()) return false;
+
+            return _key.Key.WasPressedThisFrame();
         }
 
         public static void AddDownListener(ShortcutEnum shortcut, UnityAction action)

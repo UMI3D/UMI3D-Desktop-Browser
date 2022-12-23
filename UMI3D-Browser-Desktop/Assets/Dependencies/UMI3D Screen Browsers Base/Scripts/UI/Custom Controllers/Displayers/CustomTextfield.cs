@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using umi3d.baseBrowser.inputs.interactions;
 using UnityEngine.UIElements;
 
 public abstract class CustomTextfield : TextField, ICustomElement
@@ -145,6 +146,7 @@ public abstract class CustomTextfield : TextField, ICustomElement
     public CustomText SampleTextLabel;
     public CustomToggle MaskToggle;
     public CustomButton SubmitButton;
+    public static bool HasFocused;
 
     protected TextInputBase TextInput;
 
@@ -182,6 +184,16 @@ public abstract class CustomTextfield : TextField, ICustomElement
 
         TextInput = this.Q<TextInputBase>("unity-text-input");
         m_textInputOriginalClassStyle = new List<string>(TextInput.GetClasses());
+        TextInput.RegisterCallback<FocusInEvent>(focus =>
+        {
+            HasFocused = true;
+            BaseKeyInteraction.IsEditingTextField = true;
+        });
+        TextInput.RegisterCallback<FocusOutEvent>(focus =>
+        {
+            HasFocused = false;
+            BaseKeyInteraction.IsEditingTextField = false;
+        });
 
         UpdateLabelStyle();
     }
