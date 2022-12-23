@@ -28,6 +28,10 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         protected bool m_wasHoverBeforeClicked;
 
+        /// <summary>
+        /// check if key is allow to be watch (cursor free, etc.)
+        /// </summary>
+        /// <returns></returns>
         public virtual bool CanProces() => BaseCursor.Movement != BaseCursor.CursorMovement.Free && !IsEditingTextField;
 
         protected virtual void Start()
@@ -67,7 +71,6 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// <param name="context"></param>
         protected virtual void KeyStarted(InputAction.CallbackContext context)
         {
-            //todo check if key is allow to be watch (cursor free, etc.)
             if (!CanProces()) return;
 
             Pressed(true);
@@ -79,7 +82,6 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// <param name="context"></param>
         protected virtual void KeyCanceled(InputAction.CallbackContext context)
         {
-            //todo check if key is allow to be watch (cursor free, etc.)
             if (!CanProces()) return;
 
             Pressed(false);
