@@ -17,6 +17,7 @@ limitations under the License.
 #if UNITY_EDITOR
 
 using BrowserDesktop;
+using inetum.unityUtils;
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -30,7 +31,7 @@ using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-public class BuildHelper : EditorWindow
+public class BuildHelper : InitedWindow<BuildHelper>
 {
     const string _scriptableFolderPath = "EXCLUDED";
     const string scriptablePathNoExt = "Assets/" + _scriptableFolderPath + "/BuildHelperData";
@@ -41,53 +42,13 @@ public class BuildHelper : EditorWindow
     const string repo = "UMI3D-Desktop-Browser";
 
     BuildHelperData _data;
-
-    public string old => BrowserVersion.Version;
-    public int major = 1;
-    public int minor = 2;
-    public int count = 3;
-    public DateTime _date;
-    public string date => _date.ToString("yyMMdd");
-
-    class VersionRegex {
-        Regex reg;
-        string pattern;
-        Func<string> replacement;
-
-        public VersionRegex(string part1, string part2, Func<object> content)
-        {
-            pattern = part1 + "(.*)" + part2;
-            replacement = () =>
-            {
-                var c = content();
-                return part1 + c.ToString() + part2;
-            };
-            reg = new Regex(pattern);
-        }
-
-        public string Replace(string text)
-        {
-            return Regex.Replace(text, pattern, replacement());
-        }
-    }
-
-    public string newVersion => $"{major}.{minor}.{count}.{date}";
-
-
+    VersionGUI version;
     const string browserVersionPath = @"\Project\Scripts\BrowserVersion.cs";
-
-    VersionRegex patternMajor ;
-    VersionRegex patternMinor ;
-    VersionRegex patternCount ;
-    VersionRegex patternDate ;
-
 
     string patternOutputDir = @"OutputDir=(.*)..^OutputBaseFilename=(.*).^Compression=";
 
-    string CommitMessage => $"Build v{newVersion}";
+    string CommitMessage => $"Build v{version.version}";
     string CompatibleUmi3dVersion = $"Compatible with UMI3D SDK {UMI3DVersion.version}";
-
-
 
     string info = "";
     Vector2 ScrollPos;
@@ -98,23 +59,22 @@ public class BuildHelper : EditorWindow
     [MenuItem("Browser/Build")]
     static void Open()
     {
-
-        // \Assets\Scripts\UI\UXML\
-        // Get existing open window or if none, make a new one :
-        BuildHelper window = (BuildHelper)EditorWindow.GetWindow(typeof(BuildHelper));
-        window.Init();
-        window.Show();
+        OpenWindow();
     }
 
-    void Init()
+    protected override void Init()
     {
         Debug.Log("Init");
-         patternMajor = new VersionRegex("string major = \"", "\";", () => major);
-         patternMinor = new VersionRegex("string minor = \"", "\";", () => minor);
-         patternCount = new VersionRegex("string buildCount = \"", "\";", () => count);
-         patternDate = new VersionRegex("string date = \"", "\";", () => date);
 
-        ResetVersion();
+        version = new VersionGUI(
+            Application.dataPath + browserVersionPath,
+            "I.I.I.yyMMdd",
+            () => BrowserVersion.Version,
+            ("major",() => BrowserVersion.major),
+            ("minor", () => BrowserVersion.minor),
+            ("buildCount", () => BrowserVersion.buildCount),
+            ("date", () => BrowserVersion.date)
+            );
 
         _data = GetScriptable();
         GetEditor();
@@ -122,12 +82,7 @@ public class BuildHelper : EditorWindow
         RefreshBranch();
     }
 
-    async void RefreshBranch()
-    {
-        _data.Branch = await GetBranchName();
-    }
-
-    void OnGUI()
+    protected override void Draw()
     {
         GUI.enabled = !isBuilding;
 
@@ -151,31 +106,7 @@ public class BuildHelper : EditorWindow
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.Space();
 
-        EditorGUILayout.LabelField("Old version");
-        EditorGUILayout.LabelField(old);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("New version");
-        int.TryParse(EditorGUILayout.TextField(major.ToString()), out major);
-        int.TryParse(EditorGUILayout.TextField(minor.ToString()), out minor);
-        int.TryParse(EditorGUILayout.TextField(count.ToString()), out count);
-        var _day = EditorGUILayout.TextField(date);
-        SetDate(_day);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Reset Version"))
-            ResetVersion();
-        if (GUILayout.Button("Major +1"))
-            major += 1;
-        if (GUILayout.Button("Minor +1"))
-            minor += 1;
-        if (GUILayout.Button("Count +1"))
-            count += 1;
-        if (GUILayout.Button("Set To Now"))
-            _date = DateTime.Now;
-        EditorGUILayout.EndHorizontal();
+        version.Draw();
 
         EditorGUILayout.Separator();
         EditorGUILayout.LabelField(CommitMessage);
@@ -185,7 +116,7 @@ public class BuildHelper : EditorWindow
         EditorGUILayout.Space();
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Build but not push"))
-            CleanComputeBuild(false,false);
+            CleanComputeBuild(false, false);
         if (GUILayout.Button("Update StandardAsset And Build"))
             CleanComputeBuild(false);
         if (GUILayout.Button("Clean All And Build"))
@@ -200,13 +131,18 @@ public class BuildHelper : EditorWindow
         EditorGUILayout.EndScrollView();
     }
 
+    async void RefreshBranch()
+    {
+        _data.Branch = await GetBranchName();
+    }
+
     async void CleanComputeBuild(bool cleanAll, bool comit = true)
     {
         isBuilding = true;
         try
         {
             info = "";
-            UpdateVersion();
+            version.UpdateVersion();
 
             CleanAndCopyBuildFolder(cleanAll, _data.BuildFolderPath);
 
@@ -221,7 +157,7 @@ public class BuildHelper : EditorWindow
             if (comit)
             {
                 await CommitAll();
-                ReleaseGithub.Release(_data.Token, newVersion, _data.Branch, new System.Collections.Generic.List<(string path, string name)> { outputFile }, CompatibleUmi3dVersion, owner, repo);
+                ReleaseBrowser.Release(_data.Token, version.version, _data.Branch, new System.Collections.Generic.List<(string path, string name)> { outputFile }, CompatibleUmi3dVersion, owner, repo);
             }
             //Open folder
             OpenFile(outputFile.path);
@@ -232,26 +168,6 @@ public class BuildHelper : EditorWindow
         }
         isBuilding = false;
     }
-
-    #region OnGUI Utils
-    void SetDate(string date)
-    {
-        if (!DateTime.TryParseExact($"{date}", "yyMMdd", System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out _date))
-        {
-            UnityEngine.Debug.Log($"Error in pasing date : {date} with yyMMdd");
-        };
-    }
-
-    void ResetVersion()
-    {
-            int.TryParse(BrowserVersion.major, out major);
-            int.TryParse(BrowserVersion.minor, out minor);
-            int.TryParse(BrowserVersion.buildCount, out count);
-            SetDate(BrowserVersion.date);
-        
-    }
-
-    #endregion
 
     #region BuildUtils
 
@@ -271,7 +187,7 @@ public class BuildHelper : EditorWindow
         string gitCommand = "git";
         string gitAddArgument = @"add .";
         string gitCommitArgument = $"commit -m \"{CommitMessage} {CompatibleUmi3dVersion} \"";
-        string gitTagArgument = $"tag -a {newVersion} -m \"{CompatibleUmi3dVersion}\"";
+        string gitTagArgument = $"tag -a {version.version} -m \"{CompatibleUmi3dVersion}\"";
         string gitPushArgument = @"push --follow-tags";
 
         await ExecuteCommand(gitCommand, gitAddArgument, (s) => info += $"\n{s}", (s) => info += $"\nError : {s}");
@@ -279,19 +195,6 @@ public class BuildHelper : EditorWindow
         await ExecuteCommand(gitCommand, gitTagArgument, (s) => info += $"\n{s}", (s) => info += $"\nError : {s}");
         await ExecuteCommand(gitCommand, gitPushArgument, (s) => info += $"\n{s}", (s) => info += $"\nError : {s}");
 
-    }
-
-    void UpdateVersion()
-    {
-        UnityEngine.Debug.Log(Application.dataPath + browserVersionPath);
-        string text = File.ReadAllText(Application.dataPath + browserVersionPath);
-        UnityEngine.Debug.Log(patternMajor != null);
-        text = patternMajor.Replace(text);
-        text = patternMinor.Replace(text);
-        text = patternCount.Replace(text);
-        text = patternDate.Replace(text);
-
-        File.WriteAllText(Application.dataPath + browserVersionPath, text);
     }
 
     void CleanAndCopyBuildFolder(bool cleanAll, string buildFolder)
@@ -312,8 +215,8 @@ public class BuildHelper : EditorWindow
     {
         var InstallerPath = _data.InstallerFilePath;
         string setupText = File.ReadAllText(InstallerPath);
-        setupText = Regex.Replace(setupText, "#define MyAppVersion \"(.*)?\"", $"#define MyAppVersion \"{newVersion}\"");
-        setupText = Regex.Replace(setupText, "OutputBaseFilename=Setup_UMI3D_Browser_(.*)?", $"OutputBaseFilename=Setup_UMI3D_Browser_{newVersion}");
+        setupText = Regex.Replace(setupText, "#define MyAppVersion \"(.*)?\"", $"#define MyAppVersion \"{version.version}\"");
+        setupText = Regex.Replace(setupText, "OutputBaseFilename=Setup_UMI3D_Browser_(.*)?", $"OutputBaseFilename=Setup_UMI3D_Browser_{version.version}");
         File.WriteAllText(InstallerPath, setupText);
 
 

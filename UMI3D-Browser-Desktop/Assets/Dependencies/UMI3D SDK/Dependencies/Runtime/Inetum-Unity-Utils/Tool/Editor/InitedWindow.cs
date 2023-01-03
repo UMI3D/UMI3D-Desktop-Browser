@@ -31,9 +31,9 @@ namespace inetum.unityUtils
         /// <summary>
         /// Open T window.
         /// </summary>
-        static protected void OpenWindow(bool canReload = true)
+        static protected void OpenWindow(string name = null,bool canReload = true)
         {
-            T window = (T)EditorWindow.GetWindow(typeof(T));
+            T window = (T)EditorWindow.GetWindow(typeof(T), false, name ?? typeof(T).Name);
             window.data = new ScriptableLoader<InitedWindowData>(filename);
 
             var type = typeof(T).FullName;
