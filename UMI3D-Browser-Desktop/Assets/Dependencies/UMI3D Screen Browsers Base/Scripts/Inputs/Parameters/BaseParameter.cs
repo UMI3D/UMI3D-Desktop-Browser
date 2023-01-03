@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
+
 namespace umi3d.baseBrowser.parameters
 {
     public abstract class BaseParameter<InputMenuItem, ParameterType, ValueType> : umi3d.cdk.interaction.AbstractUMI3DInput
@@ -36,7 +38,7 @@ namespace umi3d.baseBrowser.parameters
         /// Associated callback
         /// </summary>
         /// <see cref="Associate(AbstractInteractionDto)"/>
-        protected UnityEngine.Events.UnityAction<ValueType> callback;
+        protected Action<ValueType> callback;
 
         protected ulong hoveredObjectId { get; private set; }
         protected ulong GetCurrentHoveredObjectID() => hoveredObjectId;

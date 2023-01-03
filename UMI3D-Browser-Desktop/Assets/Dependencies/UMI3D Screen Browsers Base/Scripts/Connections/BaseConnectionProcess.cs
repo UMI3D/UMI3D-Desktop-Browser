@@ -331,7 +331,7 @@ namespace umi3d.baseBrowser.connection
         [HideInInspector]
         public event System.Action<int, System.Action<bool>> AskForDownloadingLibraries;
         [HideInInspector]
-        public event System.Action<common.interaction.FormDto, System.Action<common.interaction.FormAnswerDto>> GetParameterDtos;
+        public event System.Action<common.interaction.ConnectionFormDto, System.Action<common.interaction.FormAnswerDto>> GetParameterDtos;
         [HideInInspector]
         public event System.Action<common.MediaDto> ConnectionSucces;
         [HideInInspector]

@@ -13,6 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System.Collections.Specialized;
+using System.Threading.Tasks;
+using umi3d.cdk;
+using umi3d.common;
 using UnityEngine;
 
 namespace umi3d.baseBrowser.notification
@@ -23,24 +27,42 @@ namespace umi3d.baseBrowser.notification
         public Notification3D notification3DPrefab;
         public event System.Action<common.NotificationDto> Notification2DReceived;
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="dto"></param>
-        public override void Load(common.NotificationDto dto)
+        public override AbstractLoader GetNotificationLoader()
         {
-            if (dto is common.NotificationOnObjectDto dto3D)
+            return new InternalNotificationLoader(this);
+        }
+
+        public void Notify(common.NotificationDto dto) { Notification2DReceived?.Invoke(dto); }
+    }
+
+    public class InternalNotificationLoader : cdk.InternalNotificationLoader
+    {
+        NotificationLoader loader;
+
+        public InternalNotificationLoader(NotificationLoader loader)
+        {
+            this.loader = loader;
+        }
+
+        public override async Task ReadUMI3DExtension(ReadUMI3DExtensionData value)
+        {
+            if (value.dto is common.NotificationOnObjectDto dto3D)
             {
-                var notif3d = Instantiate(notification3DPrefab);
+                var notif3d = GameObject.Instantiate(loader.notification3DPrefab);
                 notif3d.Parent = cdk.UMI3DEnvironmentLoader.GetNode(dto3D.objectId)?.gameObject.transform;
 
                 notif3d.Title = dto3D.title;
                 notif3d.Content = dto3D.content;
                 notif3d.SetNotificationTime(dto3D.duration);
 
-                cdk.UMI3DEnvironmentLoader.RegisterNodeInstance(dto.id, dto, notif3d.gameObject).NotifyLoaded();
+                cdk.UMI3DEnvironmentLoader.RegisterNodeInstance(dto3D.id, dto3D, notif3d.gameObject).NotifyLoaded();
+                return;
             }
-            else Notification2DReceived?.Invoke(dto);
+            else
+            {
+                await base.ReadUMI3DExtension(value);
+                loader.Notify(value.dto as NotificationDto);
+            }
         }
     }
 }

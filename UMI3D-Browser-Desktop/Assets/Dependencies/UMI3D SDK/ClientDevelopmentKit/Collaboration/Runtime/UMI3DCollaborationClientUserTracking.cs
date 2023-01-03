@@ -68,7 +68,7 @@ namespace umi3d.cdk.collaboration
                 }
             }
         }
-            
+
         /// <inheritdoc/>
         protected override IEnumerator DispatchCamera()
         {
@@ -92,20 +92,19 @@ namespace umi3d.cdk.collaboration
         {
             var otherUserAvatar = embodimentDict[userId];
             var animators = otherUserAvatar.GetComponentsInChildren<Animator>();
-            var emoteAnimator = animators.Where(animator => animator.runtimeAnimatorController != null).LastOrDefault();
+            var emoteAnimator = animators.Where(animator => animator.runtimeAnimatorController != null).FirstOrDefault();
 
             if (emoteAnimator == null || emoteConfig == null)
                 return;
             var emoteToPlay = emoteConfig.emotes.Find(x => x.id == emoteId);
-            if (emoteCoroutineDict.ContainsKey(userId)) //an Emote is playing, need to interrupt it
+            if (emoteCoroutineDict.ContainsKey(userId) && emoteCoroutineDict[userId] != null) //an Emote is playing, need to interrupt it
             {
-                if (emoteCoroutineDict[userId] != null)
-                    StopCoroutine(emoteCoroutineDict[userId]);
-                emoteAnimator.Play(emoteConfig.defaultStateName, layer: 0);
-                emoteCoroutineDict[userId] = null;
+                StopCoroutine(emoteCoroutineDict[userId]);
+                emoteAnimator.enabled = false;
+                emoteAnimator.Update(0);
             }
 
-            var coroutine = StartCoroutine(PlayEmote(userId, emoteAnimator, emoteToPlay));
+            var coroutine = StartCoroutine(PlayEmote(emoteAnimator, emoteToPlay));
             if (emoteCoroutineDict.ContainsKey(userId))
                 emoteCoroutineDict[userId] = coroutine;
             else
@@ -118,24 +117,19 @@ namespace umi3d.cdk.collaboration
         /// <param name="animator">Animator to play the emote on.</param>
         /// <param name="emote">Emote to play.</param>
         /// <returns></returns>
-        protected IEnumerator PlayEmote(ulong userId, Animator animator, UMI3DEmoteDto emote)
+        protected IEnumerator PlayEmote(Animator animator, UMI3DEmoteDto emote)
         {
-            embodimentDict[userId].ForceDisablingBinding = true;
             animator.enabled = true;
-            animator.Play(emote.stateName, layer: 0);
+            animator.Play(emote.stateName);
             animator.Update(0);
             yield return new WaitWhile(() =>
             {
-                if (animator == null) return false;  // happens when a user leaves the scene when playing an emote
+                if (animator == null) return false;  // heppens when a user leaves the scene when playing an emote
                 return animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1;
             });
             if (animator == null) // heppens when a user leaves the scene when playing an emote
                 yield break;
-            animator.Play(emoteConfig.defaultStateName, layer: 0);
             animator.enabled = false;
-            animator.Update(0);
-            emoteCoroutineDict.Remove(userId);
-            embodimentDict[userId].ForceDisablingBinding = false;
         }
 
         /// <summary>
@@ -153,10 +147,9 @@ namespace umi3d.cdk.collaboration
                 && emoteCoroutineDict[userId] != null)
             {
                 StopCoroutine(emoteCoroutineDict[userId]);
-                emoteCoroutineDict.Remove(userId);
-                embodimentDict[userId].ForceDisablingBinding = false;
+                emoteCoroutineDict[userId] = null;
 
-                if (embodimentDict.TryGetValue(userId, out UserAvatar otherUserAvatar))
+                if (UMI3DClientUserTracking.Instance.embodimentDict.TryGetValue(userId, out UserAvatar otherUserAvatar))
                 {
                     if (otherUserAvatar == null) //the embodiment system lost the avatar
                         return;
@@ -165,7 +158,7 @@ namespace umi3d.cdk.collaboration
                     if (animators == null) //no animator to desactive found on the avatar
                         return;
 
-                    var emoteAnimator = animators.Where(animator => animator.runtimeAnimatorController != null).LastOrDefault();
+                    var emoteAnimator = animators.Where(animator => animator.runtimeAnimatorController != null).FirstOrDefault();
                     if (emoteAnimator == null) //no animator to desactive found on the avatar
                         return;
 
@@ -173,9 +166,8 @@ namespace umi3d.cdk.collaboration
                     if (emoteAnimator == null) //the emote to stop doesn't exist
                         throw new Umi3dException("The emote to stop does not exist in emote configuration file.");
 
-                    
-                    emoteAnimator.enabled = false;
                     emoteAnimator.Update(0);
+                    emoteAnimator.enabled = false;
                 }
             }
         }

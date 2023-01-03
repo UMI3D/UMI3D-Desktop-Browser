@@ -362,7 +362,7 @@ namespace umi3d.baseBrowser.Controller
         /// <returns></returns>
         public override bool IsCompatibleWith(AbstractTool tool)
         {
-            foreach (var man in tool.interactions.FindAll(x => x is ManipulationDto))
+            foreach (var man in tool.interactionsLoaded.FindAll(x => x is ManipulationDto))
             {
                 System.Predicate<DofGroupOptionDto> predicat = (sep) =>
                 {
@@ -382,9 +382,9 @@ namespace umi3d.baseBrowser.Controller
         /// <returns></returns>
         public override bool RequiresMenu(AbstractTool tool)
         {
-            List<AbstractInteractionDto> interactions = tool.interactions;
-            List<AbstractInteractionDto> manips = interactions.FindAll(x => x is ManipulationDto);
-            List<AbstractInteractionDto> events = interactions.FindAll(x => x is EventDto);
+            //List<AbstractInteractionDto> interactions = tool.interactions;
+            //List<AbstractInteractionDto> manips = interactions.FindAll(x => x is ManipulationDto);
+            //List<AbstractInteractionDto> events = interactions.FindAll(x => x is EventDto);
             //List<AbstractInteractionDto> parameters = tool.Interactions.FindAll(x => x is AbstractParameterDto);
             // return ((events.Count > 7 || manips.Count > 0) && (events.Count > 6 || manips.Count > 1));
             return false; // (/*(parameters.Count > 0) ||*/ (events.Count > 7) || (manips.Count > 1) || ((manips.Count > 0) && (events.Count > 6)));
@@ -558,7 +558,7 @@ namespace umi3d.baseBrowser.Controller
             OldHoverExit();
             CurrentHoverEnter();
         }
-        private void OldHoverExit()
+        private async void OldHoverExit()
         {
             if (mouseData.OldHovered == null) return;
 
@@ -571,19 +571,24 @@ namespace umi3d.baseBrowser.Controller
             {
                 cdk.UMI3DAbstractAnimation anim = cdk.UMI3DAbstractAnimation.Get(hoverExitAnimationId);
 
-                anim.SetUMI3DProperty(UMI3DEnvironmentLoader.GetEntity(hoverExitAnimationId), new SetEntityPropertyDto()
-                {
-                    entityId = hoverExitAnimationId,
-                    property = UMI3DPropertyKeys.AnimationPlaying,
-                    value = true
-                });
+                await anim.SetUMI3DProperty(
+                    new SetUMI3DPropertyData( 
+                        new SetEntityPropertyDto()
+                            {
+                                entityId = hoverExitAnimationId,
+                                property = UMI3DPropertyKeys.AnimationPlaying,
+                                value = true
+                            },
+                        UMI3DEnvironmentLoader.GetEntity(hoverExitAnimationId)
+                        )
+                    );
 
                 HoverExit.Invoke(lastHoverId);
                 if (anim != null) anim.Start();
             }
             mouseData.OldHovered = null;
         }
-        private void CurrentHoverEnter()
+        private async void CurrentHoverEnter()
         {
             if (mouseData.CurrentHovered == null) return;
 
@@ -596,12 +601,17 @@ namespace umi3d.baseBrowser.Controller
             {
                 cdk.UMI3DAbstractAnimation anim = cdk.UMI3DAbstractAnimation.Get(hoverEnterAnimationId);
 
-                anim.SetUMI3DProperty(UMI3DEnvironmentLoader.GetEntity(hoverEnterAnimationId), new SetEntityPropertyDto()
-                {
-                    entityId = hoverEnterAnimationId,
-                    property = UMI3DPropertyKeys.AnimationPlaying,
-                    value = true
-                });
+                await anim.SetUMI3DProperty(
+                    new SetUMI3DPropertyData(
+                        new SetEntityPropertyDto()
+                        {
+                            entityId = hoverEnterAnimationId,
+                            property = UMI3DPropertyKeys.AnimationPlaying,
+                            value = true
+                        },
+                        UMI3DEnvironmentLoader.GetEntity(hoverEnterAnimationId)
+                        )
+                    );
 
                 HoverEnter.Invoke(currentHoverId);
                 if (anim != null) anim.Start();

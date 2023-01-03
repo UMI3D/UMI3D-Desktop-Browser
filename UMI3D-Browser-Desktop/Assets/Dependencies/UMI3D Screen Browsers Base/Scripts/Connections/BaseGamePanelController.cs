@@ -527,7 +527,7 @@ namespace umi3d.baseBrowser.connection
         /// </summary>
         /// <param name="form"></param>
         /// <param name="callback"></param>
-        protected void GetParameterDtos(common.interaction.FormDto form, System.Action<common.interaction.FormAnswerDto> callback)
+        protected void GetParameterDtos(common.interaction.ConnectionFormDto form, System.Action<common.interaction.FormAnswerDto> callback)
         {
             Loader.CurrentScreen = LoaderScreens.Form;
 
@@ -555,7 +555,7 @@ namespace umi3d.baseBrowser.connection
                 }
 
                 ButtonMenuItem send = new ButtonMenuItem() { Name = "Join" };
-                UnityEngine.Events.UnityAction<bool> action = (bool b) =>
+                Action<bool> action = (bool b) =>
                 {
                     formMenuDisplay.Hide(false);
                     FormMenu.menu.RemoveAll();
