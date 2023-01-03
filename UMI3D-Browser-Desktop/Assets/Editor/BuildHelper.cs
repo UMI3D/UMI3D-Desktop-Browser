@@ -41,21 +41,17 @@ public class BuildHelper : InitedWindow<BuildHelper>
     const string owner = "UMI3D";
     const string repo = "UMI3D-Desktop-Browser";
 
-    BuildHelperData _data;
+    const string filename = "BuildHelperData";
+    ScriptableLoader<BuildHelperData> _data;
     VersionGUI version;
     const string browserVersionPath = @"\Project\Scripts\BrowserVersion.cs";
-
-    string patternOutputDir = @"OutputDir=(.*)..^OutputBaseFilename=(.*).^Compression=";
 
     string CommitMessage => $"Build v{version.version}";
     string CompatibleUmi3dVersion = $"Compatible with UMI3D SDK {UMI3DVersion.version}";
 
-    string info = "";
-    Vector2 ScrollPos;
+    LogScrollView info;
     bool isBuilding = false;
-    //\StandardAssets\Changelog
 
-    // Add menu named "My Window" to the Window menu
     [MenuItem("Browser/Build")]
     static void Open()
     {
@@ -64,8 +60,6 @@ public class BuildHelper : InitedWindow<BuildHelper>
 
     protected override void Init()
     {
-        Debug.Log("Init");
-
         version = new VersionGUI(
             Application.dataPath + browserVersionPath,
             "I.I.I.yyMMdd",
@@ -76,40 +70,42 @@ public class BuildHelper : InitedWindow<BuildHelper>
             ("date", () => BrowserVersion.date)
             );
 
-        _data = GetScriptable();
-        GetEditor();
-
+        _data = new ScriptableLoader<BuildHelperData>(filename);
+        info = new LogScrollView();
         RefreshBranch();
     }
 
     protected override void Draw()
     {
+        
         GUI.enabled = !isBuilding;
 
-        var editor = GetEditor();
-        UnityEngine.Debug.Assert(_data != null);
-        UnityEngine.Debug.Assert(editor != null);
+        _data.editor?.OnInspectorGUI();
 
-        editor?.OnInspectorGUI();
 
+        
         EditorGUILayout.BeginHorizontal();
 
         EditorGUILayout.LabelField("Current Branch");
-        EditorGUILayout.LabelField(_data.Branch);
+        EditorGUILayout.LabelField(_data.data.Branch);
         if (GUILayout.Button("Refresh Branch"))
             RefreshBranch();
 
         EditorGUILayout.EndHorizontal();
 
+
+
         GUILayout.Label("Build Version", EditorStyles.boldLabel);
 
-        EditorGUILayout.BeginHorizontal();
         EditorGUILayout.Space();
-
         version.Draw();
 
         EditorGUILayout.Separator();
-        EditorGUILayout.LabelField(CommitMessage);
+        try
+        {
+            EditorGUILayout.LabelField(CommitMessage);
+        }
+        catch(Exception e) { UnityEngine.Debug.LogException(e); }
         EditorGUILayout.LabelField(CompatibleUmi3dVersion);
         EditorGUILayout.Separator();
 
@@ -124,16 +120,13 @@ public class BuildHelper : InitedWindow<BuildHelper>
         EditorGUILayout.EndHorizontal();
 
         GUI.enabled = true;
-        ScrollPos = EditorGUILayout.BeginScrollView(ScrollPos);
-        GUI.enabled = false;
-        EditorGUILayout.TextArea(info);
-        GUI.enabled = true;
-        EditorGUILayout.EndScrollView();
+
+        info.Draw();
     }
 
     async void RefreshBranch()
     {
-        _data.Branch = await GetBranchName();
+        _data.data.Branch = await Git.GetBranchName();
     }
 
     async void CleanComputeBuild(bool cleanAll, bool comit = true)
@@ -141,26 +134,34 @@ public class BuildHelper : InitedWindow<BuildHelper>
         isBuilding = true;
         try
         {
-            info = "";
+            info.Clear();
+            info.NewTitle($"Build Browser");
             version.UpdateVersion();
 
-            CleanAndCopyBuildFolder(cleanAll, _data.BuildFolderPath);
+            CleanAndCopyBuildFolder(cleanAll, _data.data.BuildFolderPath);
 
             //update Setup
-            var outputFile = UpdateInstaller();
+            var outputFile = Iscc.UpdateInstaller(_data.data.InstallerFilePath, version.version, "Setup_UMI3D_Browser_(.*)?", $"Setup_UMI3D_Browser_{version.version}");
 
             // Build player.
-            await Build(_data.BuildFolderPath);
+            await Build(_data.data.BuildFolderPath);
 
-            await ExecuteISCC(_data.InstallerFilePath);
+            info.NewTitle($"Create Installer");
+
+            await Iscc.ExecuteISCC("C:/Program Files (x86)/Inno Setup 6/ISCC.exe", _data.data.InstallerFilePath, info.NewLine, info.NewError);
 
             if (comit)
             {
-                await CommitAll();
-                ReleaseBrowser.Release(_data.Token, version.version, _data.Branch, new System.Collections.Generic.List<(string path, string name)> { outputFile }, CompatibleUmi3dVersion, owner, repo);
+                info.NewTitle($"Commit");
+
+                await Git.CommitAll($"{CommitMessage} {CompatibleUmi3dVersion}", info.NewLine, info.NewError);
+
+                info.NewTitle($"Release");
+
+                ReleaseBrowser.Release(_data.data.Token, version.version, _data.data.Branch, new System.Collections.Generic.List<(string path, string name)> { outputFile }, CompatibleUmi3dVersion, owner, repo);
             }
             //Open folder
-            OpenFile(outputFile.path);
+            Command.OpenFile(outputFile.path);
         }
         catch (Exception e)
         {
@@ -171,59 +172,15 @@ public class BuildHelper : InitedWindow<BuildHelper>
 
     #region BuildUtils
 
-    async Task<string> GetBranchName()
-    {
-        string gitCommand = "git";
-        string gitAddArgument = @"branch --show-current";
-        string answer = null;
-
-        await ExecuteCommand(gitCommand, gitAddArgument, (s) => answer += s, (s) => answer += s);
-
-        return answer;
-    }
-
-    async Task CommitAll()
-    {
-        string gitCommand = "git";
-        string gitAddArgument = @"add .";
-        string gitCommitArgument = $"commit -m \"{CommitMessage} {CompatibleUmi3dVersion} \"";
-        string gitTagArgument = $"tag -a {version.version} -m \"{CompatibleUmi3dVersion}\"";
-        string gitPushArgument = @"push --follow-tags";
-
-        await ExecuteCommand(gitCommand, gitAddArgument, (s) => info += $"\n{s}", (s) => info += $"\nError : {s}");
-        await ExecuteCommand(gitCommand, gitCommitArgument, (s) => info += $"\n{s}", (s) => info += $"\nError : {s}");
-        await ExecuteCommand(gitCommand, gitTagArgument, (s) => info += $"\n{s}", (s) => info += $"\nError : {s}");
-        await ExecuteCommand(gitCommand, gitPushArgument, (s) => info += $"\n{s}", (s) => info += $"\nError : {s}");
-
-    }
-
     void CleanAndCopyBuildFolder(bool cleanAll, string buildFolder)
     {
-        //clean folder
         if (cleanAll)
         {
             if (Directory.Exists(buildFolder))
                 Directory.Delete(buildFolder, true);
             Directory.CreateDirectory(buildFolder);
         }
-
-        //copy license
-        File.Copy(_data.LicenseFilePath, buildFolder + "/license.txt", true);
-    }
-
-    private (string path,string name) UpdateInstaller()
-    {
-        var InstallerPath = _data.InstallerFilePath;
-        string setupText = File.ReadAllText(InstallerPath);
-        setupText = Regex.Replace(setupText, "#define MyAppVersion \"(.*)?\"", $"#define MyAppVersion \"{version.version}\"");
-        setupText = Regex.Replace(setupText, "OutputBaseFilename=Setup_UMI3D_Browser_(.*)?", $"OutputBaseFilename=Setup_UMI3D_Browser_{version.version}");
-        File.WriteAllText(InstallerPath, setupText);
-
-
-        Regex DirReg = new Regex(patternOutputDir, RegexOptions.Multiline | RegexOptions.Singleline);
-        var md = DirReg.Match(setupText);
-        string path = md.Groups[1].Captures[0].Value + "\\" + md.Groups[2].Captures[0].Value + ".exe";
-        return (path, md.Groups[2].Captures[0].Value + ".exe");
+        File.Copy(_data.data.LicenseFilePath, buildFolder + "/license.txt", true);
     }
 
     async Task Build(string buildFolder)
@@ -235,144 +192,6 @@ public class BuildHelper : InitedWindow<BuildHelper>
             await Task.Yield();
     }
 
-    static void OpenFile(string path)
-    {
-        path = path.Replace('/', '\\');
-
-        if (File.Exists(path))
-        {
-            FileAttributes attr = File.GetAttributes(path);
-            //detect whether its a directory or file
-            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-            {
-                OpenFileWith("explorer.exe", path, "/root,");
-            }
-            else
-            {
-                OpenFileWith("explorer.exe", path, "/select,");
-            }
-        }
-        else
-            UnityEngine.Debug.LogError("no file at "+path);
-    }
-
-    static void OpenFileWith(string exePath, string path, string arguments)
-    {
-        if (path == null)
-            return;
-
-        try
-        {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(path);
-            if (exePath != null)
-            {
-                process.StartInfo.FileName = exePath;
-                //Pre-post insert quotes for fileNames with spaces.
-                process.StartInfo.Arguments = string.Format("{0}\"{1}\"", arguments, path);
-            }
-            else
-            {
-                process.StartInfo.FileName = path;
-                process.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(path);
-            }
-            if (!path.Equals(process.StartInfo.WorkingDirectory))
-            {
-                process.Start();
-            }
-        }
-        catch (System.ComponentModel.Win32Exception ex)
-        {
-            UnityEngine.Debug.LogException(ex);
-        }
-    }
-
-    #endregion
-
-    #region Scriptable Handler
-
-    Editor ScriptableEditor;
-    Editor GetEditor()
-    {
-        if (ScriptableEditor == null)
-            ScriptableEditor = Editor.CreateEditor(_data);
-        return ScriptableEditor;
-    }
-
-    static BuildHelperData GetScriptable() => LoadScriptable() ?? CreateScriptable();
-
-    static BuildHelperData CreateScriptable()
-    {
-        CreateFolder();
-        BuildHelperData asset = ScriptableObject.CreateInstance<BuildHelperData>();
-        AssetDatabase.CreateAsset(asset, scriptablePath);
-        AssetDatabase.SaveAssets();
-        return asset;
-    }
-
-    static void CreateFolder()
-    {
-        if (!System.IO.Directory.Exists(Application.dataPath + System.IO.Path.GetDirectoryName(scriptablePath).TrimStart("Assets".ToCharArray())))
-        {
-            AssetDatabase.CreateFolder("Assets", _scriptableFolderPath);
-        }
-
-    }
-
-    static BuildHelperData LoadScriptable()
-    {
-        var asset = AssetDatabase.LoadAssetAtPath<BuildHelperData>(scriptablePath);
-        UnityEngine.Debug.Assert(asset != null, scriptablePath);
-        return asset;
-    }
-
-    #endregion
-
-    //
-    #region Command
-    public async Task ExecuteISCC(string command)
-    {
-        command = command.Replace('/', '\\');
-        string exe = "\"C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe\"";
-        //ExecuteCommandSync(exe + " " + command);
-        await ExecuteCommand(exe, $"\"{command}\"", (s)=>info +=$"\n{s}", (s) => info += $"\nError : {s}");
-    }
-
-    public static async Task ExecuteCommand(string command, string args, Action<string> output, Action<string> error)
-    {
-        var processInfo = new ProcessStartInfo(command, args)
-        {
-            CreateNoWindow = true,
-            UseShellExecute = false,
-            RedirectStandardError = true,
-            RedirectStandardOutput = true,
-        };
-
-        var process = Process.Start(processInfo);
-
-        if (output != null)
-            process.OutputDataReceived += (object sender, DataReceivedEventArgs e) => output(e.Data);
-        else
-            process.OutputDataReceived += (object sender, DataReceivedEventArgs e) =>
-            UnityEngine.Debug.Log("Information while executing command { <i>" + command + " " + args + "</i> } : <b>D>" + e.Data + "</b>");
-
-        process.BeginOutputReadLine();
-
-        if (error != null)
-            process.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => error(e.Data);
-        else
-            process.ErrorDataReceived += (object sender, DataReceivedEventArgs e) =>
-            UnityEngine.Debug.Log("Error while executing command { <i>" + command + " " + args + "</i> } : <b>E>" + e.Data + "</b>");
-
-        process.BeginErrorReadLine();
-
-        while (!process.HasExited)
-        {
-            await Task.Yield();
-        }
-
-        process.Close();
-    }
     #endregion
 }
 #endif

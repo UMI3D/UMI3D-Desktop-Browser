@@ -18,8 +18,6 @@ limitations under the License.
 
 namespace inetum.unityUtils
 {
-
-    using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
 
@@ -106,12 +104,6 @@ namespace inetum.unityUtils
         /// This is called by OnGUI.
         /// </summary>
         protected abstract void Draw();
-    }
-
-    public class InitedWindowData : ScriptableObject
-    {
-        public Dictionary<string, (bool canReload, bool showMessage, bool lastShowMessageValue)> dontShowCantreloadMessage = new Dictionary<string, (bool, bool, bool)>();
-
     }
 }
 #endif
