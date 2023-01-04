@@ -243,14 +243,18 @@ namespace inetum.unityUtils
                 foreach (var version in versions)
                     version.Draw();
             }
-            catch (Exception e){ Debug.LogException(e); }
+            catch{  }
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Reset Version"))
                 ResetVersion();
-            foreach (var version in versions)
+            try
+            {
+                foreach (var version in versions)
                 version.DrawButton();
+            }
+            catch { }
             EditorGUILayout.EndHorizontal();
         }
 
