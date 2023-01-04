@@ -137,7 +137,7 @@ namespace umi3d.cdk.collaboration
                 // Create the get request with the desired filters
                 var sendData = JSONNode.Parse("{}");
                 var getData = new JSONClass();
-                sendData.Add("info", getData);
+                sendData.Add("text", getData);
 
                 // Send the request to the server
                 client.textMessageReceived += (player, frame, sender) => { ReceiveMasterInfo(player, frame, sender, UIcallback); };

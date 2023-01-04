@@ -22,8 +22,8 @@ using UnityEditor;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-//[CreateAssetMenu(fileName = "BuildHelperData", menuName = "Build Helper/Build Helper Data", order = 1)]
-public class BuildHelperData : ScriptableObject
+//[CreateAssetMenu(fileName = "BrowserBuilderData", menuName = "Build Helper/Build Helper Data", order = 1)]
+public class BrowserBuilderData : ScriptableObject
 {
     public string Branch;
     public string Token;
@@ -33,16 +33,14 @@ public class BuildHelperData : ScriptableObject
     public bool display;
 }
 
-[CustomEditor(typeof(BuildHelperData))]
+[CustomEditor(typeof(BrowserBuilderData))]
 public class BuildHelperDataEditor : Editor
 {
-
-    BuildHelperData data;
-    static bool showTileEditor = false;
+    BrowserBuilderData data;
 
     public void OnEnable()
     {
-        data = (BuildHelperData)target;
+        data = (BrowserBuilderData)target;
     }
 
     public override void OnInspectorGUI()
@@ -104,7 +102,5 @@ public class BuildHelperDataEditor : Editor
             changed = true;
         return _text;
     }
-
 }
-
 #endif

@@ -238,8 +238,12 @@ namespace inetum.unityUtils
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("New version");
-            foreach (var version in versions)
-                version.Draw();
+            try
+            {
+                foreach (var version in versions)
+                    version.Draw();
+            }
+            catch (Exception e){ Debug.LogException(e); }
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();

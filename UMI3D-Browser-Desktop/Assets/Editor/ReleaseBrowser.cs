@@ -26,12 +26,13 @@ public class ReleaseBrowser
 
     static string getUrl(string owner, string repo, string endpoint) => apiUrl+owner+"/"+repo+endpoint;
 
-    public static async void Release(string token,string version, string branch, List<(string path,string name)> files, string changelog, string owner, string repo)
+    public static async Task<string> Release(string token,string version, string branch, List<(string path,string name)> files, string changelog, string owner, string repo)
     {
         changelog += await ComputeChangeLog(branch, version, token, owner, repo);
         var release = await Release(branch, version, changelog, true, false, token, owner, repo);
         foreach(var file in files)
             await Github.AddFileToRelease(release, file.path, file.name, token);
+        return release.html_url;
     }
 
     static async Task<release> Release(string branch, string Version, string changeLog, bool preRelease, bool draft, string token, string owner, string repo)

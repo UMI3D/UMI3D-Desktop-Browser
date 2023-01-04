@@ -609,7 +609,7 @@ namespace umi3d.cdk.collaboration
             }
             catch (Exception e)
             {
-                UMI3DLogger.Log("error on get local info : " + key, scope);
+                UMI3DLogger.Log("error on get local text : " + key, scope);
                 UMI3DLogger.LogException(e, scope);
             }
         }

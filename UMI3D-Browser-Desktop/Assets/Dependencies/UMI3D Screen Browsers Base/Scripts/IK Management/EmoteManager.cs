@@ -286,7 +286,7 @@ namespace umi3d.baseBrowser.emotes
         public IEnumerator PlayEmoteAnimation(Emote emote)
         {
             UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.Invoke();
-            // send the emote triggerring info to other browsers through the server
+            // send the emote triggerring text to other browsers through the server
             var emoteRequest = new EmoteRequest()
             {
                 emoteId = emote.dto.id,
@@ -331,7 +331,7 @@ namespace umi3d.baseBrowser.emotes
         {
             StopCoroutine(PlayEmoteAnimation(emote));
             StopEmotePlayMode();
-            // send the emote interruption info to other browsers through the server
+            // send the emote interruption text to other browsers through the server
             var emoteRequest = new EmoteRequest()
             {
                 emoteId = emote.dto.id,

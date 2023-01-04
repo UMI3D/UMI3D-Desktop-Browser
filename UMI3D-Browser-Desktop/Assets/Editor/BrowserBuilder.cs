@@ -31,18 +31,18 @@ using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-public class BuildHelper : InitedWindow<BuildHelper>
+public class BrowserBuilder : InitedWindow<BrowserBuilder>
 {
     const string _scriptableFolderPath = "EXCLUDED";
-    const string scriptablePathNoExt = "Assets/" + _scriptableFolderPath + "/BuildHelperData";
+    const string scriptablePathNoExt = "Assets/" + _scriptableFolderPath + "/BrowserBuilderData";
     const string scriptablePath = scriptablePathNoExt + ".asset";
     //static string scriptablePath => Application.dataPath + _scriptablePath;
 
     const string owner = "UMI3D";
     const string repo = "UMI3D-Desktop-Browser";
 
-    const string filename = "BuildHelperData";
-    ScriptableLoader<BuildHelperData> _data;
+    const string filename = "BrowserBuilderData";
+    ScriptableLoader<BrowserBuilderData> data;
     VersionGUI version;
     const string browserVersionPath = @"\Project\Scripts\BrowserVersion.cs";
 
@@ -70,53 +70,58 @@ public class BuildHelper : InitedWindow<BuildHelper>
             ("date", () => BrowserVersion.date)
             );
 
-        _data = new ScriptableLoader<BuildHelperData>(filename);
+        data = new ScriptableLoader<BrowserBuilderData>(filename);
         info = new LogScrollView();
         RefreshBranch();
     }
 
     protected override void Draw()
     {
-        
         GUI.enabled = !isBuilding;
+        data?.editor?.OnInspectorGUI();
 
-        _data.editor?.OnInspectorGUI();
-
-
-        
         EditorGUILayout.BeginHorizontal();
-
         EditorGUILayout.LabelField("Current Branch");
-        EditorGUILayout.LabelField(_data.data.Branch);
+        try
+        {
+            EditorGUILayout.LabelField(data.data.Branch);
+        }
+        catch { }
         if (GUILayout.Button("Refresh Branch"))
             RefreshBranch();
-
         EditorGUILayout.EndHorizontal();
 
-
-
         GUILayout.Label("Build Version", EditorStyles.boldLabel);
-
         EditorGUILayout.Space();
-        version.Draw();
+        try
+        {
+            version.Draw();
+        }
+        catch { }
 
         EditorGUILayout.Separator();
         try
         {
             EditorGUILayout.LabelField(CommitMessage);
+            EditorGUILayout.LabelField(CompatibleUmi3dVersion);
         }
-        catch(Exception e) { UnityEngine.Debug.LogException(e); }
-        EditorGUILayout.LabelField(CompatibleUmi3dVersion);
+        catch { }
+
         EditorGUILayout.Separator();
+
 
         EditorGUILayout.Space();
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Build but not push"))
-            CleanComputeBuild(false, false);
-        if (GUILayout.Button("Update StandardAsset And Build"))
-            CleanComputeBuild(false);
-        if (GUILayout.Button("Clean All And Build"))
-            CleanComputeBuild(true);
+        try
+        {
+            if (GUILayout.Button("Build but don't push"))
+                CleanComputeBuild(false, false);
+            if (GUILayout.Button($"Build and push on {data.data.Branch}"))
+                CleanComputeBuild(false);
+            if (GUILayout.Button($"Clean All, Build and push on {data.data.Branch}"))
+                CleanComputeBuild(true);
+        }
+        catch { }
         EditorGUILayout.EndHorizontal();
 
         GUI.enabled = true;
@@ -126,7 +131,7 @@ public class BuildHelper : InitedWindow<BuildHelper>
 
     async void RefreshBranch()
     {
-        _data.data.Branch = await Git.GetBranchName();
+        data.data.Branch = await Git.GetBranchName();
     }
 
     async void CleanComputeBuild(bool cleanAll, bool comit = true)
@@ -138,17 +143,21 @@ public class BuildHelper : InitedWindow<BuildHelper>
             info.NewTitle($"Build Browser");
             version.UpdateVersion();
 
-            CleanAndCopyBuildFolder(cleanAll, _data.data.BuildFolderPath);
+            CleanAndCopyBuildFolder(cleanAll, data.data.BuildFolderPath);
 
             //update Setup
-            var outputFile = Iscc.UpdateInstaller(_data.data.InstallerFilePath, version.version, "Setup_UMI3D_Browser_(.*)?", $"Setup_UMI3D_Browser_{version.version}");
+            var outputFile = Iscc.UpdateInstaller(data.data.InstallerFilePath, version.version, "Setup_UMI3D_Browser_(.*)?", $"Setup_UMI3D_Browser_{version.version}");
 
+            var text = info.text;
             // Build player.
-            await Build(_data.data.BuildFolderPath);
+            await Build(data.data.BuildFolderPath);
+
+            ReInit();
+            info.text = text;
 
             info.NewTitle($"Create Installer");
 
-            await Iscc.ExecuteISCC("C:/Program Files (x86)/Inno Setup 6/ISCC.exe", _data.data.InstallerFilePath, info.NewLine, info.NewError);
+            await Iscc.ExecuteISCC("C:/Program Files (x86)/Inno Setup 6/ISCC.exe", data.data.InstallerFilePath, info.NewLine, info.NewError);
 
             if (comit)
             {
@@ -158,7 +167,9 @@ public class BuildHelper : InitedWindow<BuildHelper>
 
                 info.NewTitle($"Release");
 
-                ReleaseBrowser.Release(_data.data.Token, version.version, _data.data.Branch, new System.Collections.Generic.List<(string path, string name)> { outputFile }, CompatibleUmi3dVersion, owner, repo);
+                var url = await ReleaseBrowser.Release(data.data.Token, version.version, data.data.Branch, new System.Collections.Generic.List<(string path, string name)> { outputFile }, CompatibleUmi3dVersion, owner, repo);
+
+                Application.OpenURL(url);
             }
             //Open folder
             Command.OpenFile(outputFile.path);
@@ -180,7 +191,7 @@ public class BuildHelper : InitedWindow<BuildHelper>
                 Directory.Delete(buildFolder, true);
             Directory.CreateDirectory(buildFolder);
         }
-        File.Copy(_data.data.LicenseFilePath, buildFolder + "/license.txt", true);
+        File.Copy(data.data.LicenseFilePath, buildFolder + "/license.txt", true);
     }
 
     async Task Build(string buildFolder)

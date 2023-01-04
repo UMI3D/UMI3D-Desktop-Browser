@@ -34,7 +34,7 @@ namespace umi3d.cdk.collaboration
         private static readonly Dictionary<string, LocalInfoRequestParameterValue> autorizations = new Dictionary<string, LocalInfoRequestParameterValue>();
 
         /// <summary>
-        /// Read local info in order to send to server.
+        /// Read local text in order to send to server.
         /// </summary>
         /// <param name="key"> local identifier file </param>
         /// <returns></returns>
@@ -61,7 +61,7 @@ namespace umi3d.cdk.collaboration
 
 
         /// <summary>
-        /// Write local info in persistentDataPath from data sent by the server.
+        /// Write local text in persistentDataPath from data sent by the server.
         /// </summary>
         /// <param name="key">local identifier file </param>
         /// <param name="bytesToWrite"></param>
@@ -85,7 +85,7 @@ namespace umi3d.cdk.collaboration
         /// Check if the form contains a localInfoRequest and save the authorization in the dictionnary.
         /// </summary>
         /// <param name="form"></param>
-        /// <param name="sendLocalInfo">If true and if read access is true, Send the local info to server by http POST request.</param>
+        /// <param name="sendLocalInfo">If true and if read access is true, Send the local text to server by http POST request.</param>
         public static void CheckFormToUpdateAuthorizations(ConnectionFormDto form, bool sendLocalInfo = true)
         {
             form.fields.ForEach(async param => 

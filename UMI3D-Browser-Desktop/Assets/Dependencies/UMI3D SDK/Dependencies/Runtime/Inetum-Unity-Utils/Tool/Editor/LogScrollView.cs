@@ -24,14 +24,14 @@ namespace inetum.unityUtils
 
     public class LogScrollView
     {
-        string info = "";
+        public string text;
         Vector2 ScrollPos;
         bool lockDown;
         float? lastValue = null;
         bool expand;
         public LogScrollView(bool expand = true)
         {
-            info = "";
+            text = "";
             ScrollPos = Vector2.zero;
             lockDown = true;
             this.expand = expand;
@@ -39,26 +39,26 @@ namespace inetum.unityUtils
 
         public void Clear()
         {
-            info = "";
+            text = "";
         }
 
         public void NewLine(string line)
         {
-            info += line + "\n";
+            text += line + "\n";
         }
 
         public void NewError(string line)
         {
-            info += $"<color=red>Error : {line}</color>\n";
+            text += $"<color=red>Error : {line}</color>\n";
         }
 
         public void NewTitle(string line)
         {
-            info += "\n";
-            info += "-------------------------------------\n";
-            info += line + "\n";
-            info += "-------------------------------------\n";
-            info += "\n";
+            text += "\n";
+            text += "-------------------------------------\n";
+            text += line + "\n";
+            text += "-------------------------------------\n";
+            text += "\n";
         }
 
         public void Draw()
@@ -84,7 +84,7 @@ namespace inetum.unityUtils
             //Debug.Log($"B {ScrollPos.x} {ScrollPos.y} {lastValue} {lockDown}");
 
             GUI.enabled = false;
-            EditorGUILayout.TextArea(info, GUILayout.ExpandHeight(true));
+            EditorGUILayout.TextArea(text, GUILayout.ExpandHeight(true));
             GUI.enabled = true;
             EditorGUILayout.EndScrollView();
         }

@@ -18,7 +18,7 @@ using System;
 namespace umi3d.common.collaboration
 {
     /// <summary>
-    /// DTO describing an identity, a set of identifying info of the user.
+    /// DTO describing an identity, a set of identifying text of the user.
     /// </summary>
     [Serializable]
     public class IdentityDto : PublicIdentityDto

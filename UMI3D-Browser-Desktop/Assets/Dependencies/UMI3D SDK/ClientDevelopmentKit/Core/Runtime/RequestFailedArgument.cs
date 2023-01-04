@@ -50,11 +50,11 @@ namespace umi3d.cdk
         {
             if (request != null)
             {
-                return $"Request failed [count:{count}, date:{date.ToString("G")}, code:{request.responseCode}, url:{request.url}, info:{info}], header:{request?.GetResponseHeaders()?.ToString(e => $"{{{e.Key}:{e.Value}}}")} ";
+                return $"Request failed [count:{count}, date:{date.ToString("G")}, code:{request.responseCode}, url:{request.url}, text:{info}], header:{request?.GetResponseHeaders()?.ToString(e => $"{{{e.Key}:{e.Value}}}")} ";
             }
             else
             {
-                return $"Request failed [count:{count}, date:{date.ToString("G")}, code:{responseCode}, info:{info}]";
+                return $"Request failed [count:{count}, date:{date.ToString("G")}, code:{responseCode}, text:{info}]";
             }
         }
 
