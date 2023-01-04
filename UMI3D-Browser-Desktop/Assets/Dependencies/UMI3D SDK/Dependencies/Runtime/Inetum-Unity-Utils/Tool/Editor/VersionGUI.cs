@@ -131,7 +131,7 @@ namespace inetum.unityUtils
                                     GUI.enabled = enable;
                                 }
                             );
-                        ComputeVersion = () => tmpCompute() + data.data.versions[j].ToString();
+                        ComputeVersion = () => tmpCompute() + data.data.versions[k].ToString();
                         j++;
                         i++;
                         break;
