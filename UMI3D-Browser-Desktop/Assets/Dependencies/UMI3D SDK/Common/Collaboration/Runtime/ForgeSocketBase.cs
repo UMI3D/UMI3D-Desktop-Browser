@@ -120,7 +120,7 @@ namespace umi3d.common.collaboration
         }
 
         /// <summary>
-        /// Should Forge text pannel should be displayed in top left corner?
+        /// Should Forge info pannel should be displayed in top left corner?
         /// </summary>
         public bool DisplayForgeInfo = false;
 

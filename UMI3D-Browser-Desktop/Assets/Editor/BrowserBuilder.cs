@@ -33,11 +33,6 @@ using Debug = UnityEngine.Debug;
 
 public class BrowserBuilder : InitedWindow<BrowserBuilder>
 {
-    const string _scriptableFolderPath = "EXCLUDED";
-    const string scriptablePathNoExt = "Assets/" + _scriptableFolderPath + "/BrowserBuilderData";
-    const string scriptablePath = scriptablePathNoExt + ".asset";
-    //static string scriptablePath => Application.dataPath + _scriptablePath;
-
     const string owner = "UMI3D";
     const string repo = "UMI3D-Desktop-Browser";
 
@@ -64,10 +59,10 @@ public class BrowserBuilder : InitedWindow<BrowserBuilder>
             Application.dataPath + browserVersionPath,
             "I.I.I.yyMMdd",
             () => BrowserVersion.Version,
-            ("major",() => BrowserVersion.major),
-            ("minor", () => BrowserVersion.minor),
-            ("buildCount", () => BrowserVersion.buildCount),
-            ("date", () => BrowserVersion.date)
+            ("major",(s) => BrowserVersion.major),
+            ("minor", (s) => BrowserVersion.minor),
+            ("buildCount", (s) => BrowserVersion.buildCount),
+            ("date", (s) => BrowserVersion.date)
             );
 
         data = new ScriptableLoader<BrowserBuilderData>(filename);

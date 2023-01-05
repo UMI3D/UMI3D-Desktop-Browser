@@ -169,7 +169,7 @@ namespace umi3d.cdk.collaboration
         }
 
         /// <summary>
-        /// Logout from the World Controller server and clear text.
+        /// Logout from the World Controller server and clear infos.
         /// </summary>
         public void Clear()
         {

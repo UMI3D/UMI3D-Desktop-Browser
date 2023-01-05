@@ -54,7 +54,7 @@ namespace inetum.unityUtils
 
 
         /// <summary>
-        /// call init.
+        /// force call of Init.
         /// </summary>
         public bool ReInit()
         {
