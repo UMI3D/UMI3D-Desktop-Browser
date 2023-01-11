@@ -24,7 +24,8 @@ namespace umi3d.cdk.userCapture
     /// </summary>
     public class UMI3DEmoteLoader : AbstractLoader
     {
-
+        UMI3DVersion.VersionCompatibility _version = new UMI3DVersion.VersionCompatibility("2.6", "*");
+        public override UMI3DVersion.VersionCompatibility version => _version;
         public override bool CanReadUMI3DExtension(ReadUMI3DExtensionData data)
         {
             return data.dto is UMI3DEmoteDto;
@@ -61,7 +62,7 @@ namespace umi3d.cdk.userCapture
             switch (value.propertyKey)
             {
                 case UMI3DPropertyKeys.ActiveEmote:
-                    dto.available = UMI3DNetworkingHelper.Read<bool>(value.container);
+                    dto.available = UMI3DSerializer.Read<bool>(value.container);
                     UMI3DClientUserTracking.Instance.EmoteChangedEvent.Invoke(dto);
                     break;
 
@@ -83,7 +84,7 @@ namespace umi3d.cdk.userCapture
             switch (data.propertyKey)
             {
                 case UMI3DPropertyKeys.ActiveEmote:
-                    data.result = UMI3DNetworkingHelper.Read<UMI3DEmoteDto>(data.container);
+                    data.result = UMI3DSerializer.Read<UMI3DEmoteDto>(data.container);
 
                     UMI3DClientUserTracking.Instance.EmoteChangedEvent.Invoke(data.result as UMI3DEmoteDto);
                     break;

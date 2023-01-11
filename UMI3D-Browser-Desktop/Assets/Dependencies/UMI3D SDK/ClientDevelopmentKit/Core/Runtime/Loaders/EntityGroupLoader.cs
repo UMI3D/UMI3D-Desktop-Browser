@@ -28,6 +28,9 @@ namespace umi3d.cdk
     /// </summary>
     public class EntityGroupLoader : AbstractLoader
     {
+        UMI3DVersion.VersionCompatibility _version = new UMI3DVersion.VersionCompatibility("2.6", "*");
+        public override UMI3DVersion.VersionCompatibility version => _version;
+
         private const DebugScope scope = DebugScope.CDK | DebugScope.Core | DebugScope.Loading;
 
         public override bool CanReadUMI3DExtension(ReadUMI3DExtensionData data)
@@ -122,7 +125,7 @@ namespace umi3d.cdk
         {
             if (groupDto.entitiesId == null)
                 groupDto.entitiesId = new List<ulong>();
-            UMI3DNetworkingHelper.ReadList(operationId, container, groupDto.entitiesId);
+            UMI3DSerializer.ReadList(operationId, container, groupDto.entitiesId);
         }
     }
 }

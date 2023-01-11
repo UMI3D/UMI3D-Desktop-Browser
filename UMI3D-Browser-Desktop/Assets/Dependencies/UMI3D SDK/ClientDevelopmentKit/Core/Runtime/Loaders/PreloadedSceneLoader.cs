@@ -29,6 +29,9 @@ namespace umi3d.cdk
     /// </summary>
     public class PreloadedSceneLoader : AbstractLoader
     {
+        UMI3DVersion.VersionCompatibility _version = new UMI3DVersion.VersionCompatibility("2.6", "*");
+        public override UMI3DVersion.VersionCompatibility version => _version;
+
         private const DebugScope scope = DebugScope.CDK | DebugScope.Core | DebugScope.Loading;
 
         public override bool CanReadUMI3DExtension(ReadUMI3DExtensionData data)
@@ -122,7 +125,7 @@ namespace umi3d.cdk
                         UMI3DLogger.Log($"Case not handled {value.operationId}", scope);
                         break;
                     default:
-                        List<PreloadedSceneDto> newList = UMI3DNetworkingHelper.ReadList<PreloadedSceneDto>(value.container);
+                        List<PreloadedSceneDto> newList = UMI3DSerializer.ReadList<PreloadedSceneDto>(value.container);
                         List<PreloadedSceneDto> oldList = dto.preloadedScenes;
                         var scenesToUnload = new List<PreloadedSceneDto>();
                         var scenesToLoad = new List<PreloadedSceneDto>();

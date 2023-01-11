@@ -27,7 +27,8 @@ namespace umi3d.cdk
     /// </summary>
     public class UMI3DHandPoseLoader : AbstractLoader
     {
-
+        UMI3DVersion.VersionCompatibility _version = new UMI3DVersion.VersionCompatibility("2.6", "*");
+        public override UMI3DVersion.VersionCompatibility version => _version;
         public override bool CanReadUMI3DExtension(ReadUMI3DExtensionData data)
         {
             return data.dto is UMI3DHandPoseDto;
@@ -62,7 +63,7 @@ namespace umi3d.cdk
             switch (value.propertyKey)
             {
                 case UMI3DPropertyKeys.ActiveHandPose:
-                    dto.IsActive = UMI3DNetworkingHelper.Read<bool>(value.container);
+                    dto.IsActive = UMI3DSerializer.Read<bool>(value.container);
                     UMI3DClientUserTracking.Instance.handPoseEvent.Invoke(dto);
                     break;
                 default:
@@ -83,7 +84,7 @@ namespace umi3d.cdk
             switch (data.propertyKey)
             {
                 case UMI3DPropertyKeys.ActiveHandPose:
-                    data.result = UMI3DNetworkingHelper.Read<bool>(data.container);
+                    data.result = UMI3DSerializer.Read<bool>(data.container);
                     break;
 
                 default:
