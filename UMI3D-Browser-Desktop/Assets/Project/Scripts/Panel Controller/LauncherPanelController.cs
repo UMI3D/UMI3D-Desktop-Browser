@@ -50,5 +50,6 @@ public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncher
         };
 
         Launcher.Version = BrowserDesktop.BrowserVersion.Version;
+        Launcher.Settings.Controller.Controller = ControllerEnum.MouseAndKeyboard;
     }
 }

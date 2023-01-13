@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using umi3d.baseBrowser.inputs.interactions;
@@ -97,6 +96,14 @@ public class CustomSettingsController : CustomSettingScreen
                 case ControllerEnum.MouseAndKeyboard:
                     JoystickStaticToggle.RemoveFromHierarchy();
                     LeftHandToggle.RemoveFromHierarchy();
+                    ScrollView.Add(Forward.Box);
+                    ScrollView.Add(Backward.Box);
+                    ScrollView.Add(Left.Box);
+                    ScrollView.Add(Right.Box);
+                    ScrollView.Add(Sprint.Box);
+                    ScrollView.Add(Jump.Box);
+                    ScrollView.Add(Crouch.Box);
+                    ScrollView.Add(FreeHead.Box);
                     break;
                 case ControllerEnum.Touch:
                     ScrollView.Add(JoystickStaticToggle);
@@ -105,6 +112,14 @@ public class CustomSettingsController : CustomSettingScreen
                 case ControllerEnum.GameController:
                     JoystickStaticToggle.RemoveFromHierarchy();
                     LeftHandToggle.RemoveFromHierarchy();
+                    ScrollView.Add(Forward.Box);
+                    ScrollView.Add(Backward.Box);
+                    ScrollView.Add(Left.Box);
+                    ScrollView.Add(Right.Box);
+                    ScrollView.Add(Sprint.Box);
+                    ScrollView.Add(Jump.Box);
+                    ScrollView.Add(Crouch.Box);
+                    ScrollView.Add(FreeHead.Box);
                     break;
                 default:
                     break;
@@ -163,16 +178,6 @@ public class CustomSettingsController : CustomSettingScreen
         Jump = new KeyBindingDisplayer("Jump");
         Crouch = new KeyBindingDisplayer("Crouch");
         FreeHead = new KeyBindingDisplayer("Free Head");
-        ScrollView.Add(Forward.Box);
-        ScrollView.Add(Backward.Box);
-        ScrollView.Add(Left.Box);
-        ScrollView.Add(Right.Box);
-        ScrollView.Add(Sprint.Box);
-        ScrollView.Add(Jump.Box);
-        ScrollView.Add(Crouch.Box);
-        ScrollView.Add(FreeHead.Box);
-
-        DefaultBindings(ControllerInputEnum.Keyboard, ControllerInputEnum.Mouse);
 
         if (TryGetControllerData(out Data))
         {
@@ -223,6 +228,10 @@ public class CustomSettingsController : CustomSettingScreen
         StoreControllerrData(Data);
     }
 
+    /// <summary>
+    /// Reset to the default bindings.
+    /// </summary>
+    /// <param name="controllers"></param>
     public void DefaultBindings(params ControllerInputEnum[] controllers)
     {
         var forward = new InputAction("forward");
@@ -254,10 +263,7 @@ public class CustomSettingsController : CustomSettingScreen
         NavigationBindingsUpdated(NavigationEnum.Jump, jump, controllers);
 
         var crouch = new InputAction("crouch");
-        //crouch.AddBinding("<Keyboard>/c");
-        crouch.AddCompositeBinding("ButtonWithOneModifier")
-            .With("Button", "<Keyboard>/c")
-            .With("Modifier", "<Keyboard>/leftCtrl");
+        crouch.AddBinding("<Keyboard>/c");
         NavigationBindingsUpdated(NavigationEnum.Crouch, crouch, controllers);
 
         var freeHead = new InputAction("freeHead");
@@ -265,6 +271,10 @@ public class CustomSettingsController : CustomSettingScreen
         NavigationBindingsUpdated(NavigationEnum.FreeView, freeHead, controllers);
     }
 
+    /// <summary>
+    /// Initialize the bindings.
+    /// </summary>
+    /// <param name="controllers"></param>
     public void InitBindings(params ControllerInputEnum[] controllers)
     {
         NavigationBindingsUpdated(NavigationEnum.Forward, Data.Forward, controllers);
@@ -279,28 +289,11 @@ public class CustomSettingsController : CustomSettingScreen
 
     public void NavigationBindingsUpdated(NavigationEnum command, InputAction action, params ControllerInputEnum[] controllers)
     {
-        //UnityEngine.Debug.Log($"------------------------bindings = {action.bindings.Count}");
-        //for (int i = 0; i < action.bindings.Count; i++)
-        //{
-        //    action.ChangeBinding(i).Erase();
-        //}
-        //UnityEngine.Debug.Log($"bindings = {action.bindings.Count}-------------------------");
-
-        //action.ChangeBinding(1).WithPath("<Keyboard>/alt");
-        
-        if (action.bindings[0].isComposite)
-        {
-            UnityEngine.Debug.Log($"{action.bindings[0].path}");
-        }
-        if (action.bindings.Count > 1 && action.bindings[1].isPartOfComposite)
-        {
-            UnityEngine.Debug.Log($"is part of composit {action.bindings[1].ToDisplayString()}");
-        }
-
+        var bindings = action.bindings;
         var controls = action.controls;
-        int currentIndex = -1;
-        FindControl(controls, ref currentIndex, out string control1, controllers);
-        FindControl(controls, ref currentIndex, out string control2, controllers);
+        int currentIndex = 0;
+        FindControl(bindings, controls, ref currentIndex, out string control1, controllers);
+        FindControl(bindings, controls, ref currentIndex, out string control2, controllers);
 
         switch (command)
         {
@@ -351,32 +344,130 @@ public class CustomSettingsController : CustomSettingScreen
         StoreControllerrData(Data);
     }
 
-    protected bool FindControl(ReadOnlyArray<InputControl> controls, ref int index, out string control, params ControllerInputEnum[] controllers)
+    protected bool FindControl(ReadOnlyArray<InputBinding> bindings, ReadOnlyArray<InputControl> controls, ref int index, out string control, params ControllerInputEnum[] controllers)
     {
         var lowIndex = index;
         control = "No binding";
 
         if (controllers == null) return false;
 
-        var inputControl = controls.FirstOrDefault(_control =>
+        int currentIndex = 0;
+        var inputBindings = bindings.FirstOrDefault(_binding =>
         {
-            if (controls.IndexOf(item => item == _control) <= lowIndex) return false;
+            currentIndex = bindings.IndexOf(item => item == _binding);
+            if (currentIndex < lowIndex) return false;
 
-            bool matchController = false;
-            foreach (var controller in controllers)
+            if (_binding.isComposite)
             {
-                if (_control.device.displayName == controller.ToString()) matchController = true;
+                if (_binding.path == "ButtonWithOneModifier")
+                {
+                    bool matchController1 = false;
+                    foreach (var controller in controllers)
+                        if (bindings[currentIndex + 1].path.Contains(controller.ToString())) matchController1 = true;
+                    bool matchController2 = false;
+                    foreach (var controller in controllers)
+                        if (bindings[currentIndex + 2].path.Contains(controller.ToString())) matchController2 = true;
+                    var result = matchController1 && matchController2;
+
+                    if (!result) lowIndex = currentIndex + 3;
+
+                    return result;
+                }
+                else if (_binding.path == "ButtonWithTwoModifier")
+                {
+                    bool matchController1 = false;
+                    foreach (var controller in controllers)
+                        if (bindings[currentIndex + 1].path.Contains(controller.ToString())) matchController1 = true;
+                    bool matchController2 = false;
+                    foreach (var controller in controllers)
+                        if (bindings[currentIndex + 2].path.Contains(controller.ToString())) matchController2 = true;
+                    bool matchController3 = false;
+                    foreach (var controller in controllers)
+                        if (bindings[currentIndex + 2].path.Contains(controller.ToString())) matchController3 = true;
+                    var result = matchController1 && matchController2 && matchController3;
+
+                    if (!result) lowIndex = currentIndex + 4;
+
+                    return result;
+                }
+                else return false;
             }
-            if (!matchController) return false;
-            
-            return true;
+            else
+            {
+                bool matchController = false;
+                foreach (var controller in controllers)
+                    if (_binding.path.Contains(controller.ToString())) matchController = true;
+
+                return matchController;
+            }
         });
 
-        if (inputControl == null) return false;
+        if (string.IsNullOrEmpty(inputBindings.path) && string.IsNullOrEmpty(inputBindings.ToDisplayString())) return false;
+        index = currentIndex;
+        if (inputBindings.isComposite) return FindCompositControl(inputBindings, controls, ref index, GetControlIndex(bindings, index), out control);
+        else return FindSimpleControl(controls[GetControlIndex(bindings, index)], ref index, out control);
+    }
 
+    /// <summary>
+    /// Get the composit contol display names and update the index.
+    /// </summary>
+    /// <param name="binding"></param>
+    /// <param name="ControlBinding"></param>
+    /// <param name="index"></param>
+    /// <param name="controlIndex"></param>
+    /// <param name="control"></param>
+    /// <returns></returns>
+    protected bool FindCompositControl(InputBinding binding, ReadOnlyArray<InputControl> ControlBinding, ref int index, int controlIndex, out string control)
+    {
+        if (binding.path == "ButtonWithOneModifier")
+        {
+            control = $"{ControlBinding[controlIndex + 1].displayName} + {ControlBinding[controlIndex].displayName}";
+            index += 3;
+            return true;
+        } 
+        else if (binding.path == "ButtonWithTwoModifier")
+        {
+            control = $"{ControlBinding[controlIndex + 1].displayName} + {ControlBinding[controlIndex + 2].displayName} + {ControlBinding[controlIndex].displayName}";
+            index += 4;
+            return true;
+        }
+
+        control = "No binding";
+        return false;
+    }
+
+    /// <summary>
+    /// Get the simple control diplay name and update the index.
+    /// </summary>
+    /// <param name="inputControl"></param>
+    /// <param name="index"></param>
+    /// <param name="control"></param>
+    /// <returns></returns>
+    protected bool FindSimpleControl(InputControl inputControl, ref int index, out string control)
+    {
         control = inputControl.displayName;
-        index = controls.IndexOf(item => item == inputControl);
+        ++index;
+
         return true;
+    }
+
+    /// <summary>
+    /// Find the index of the corresponding InputControl in the ReadOnlyArray<InputControl> array.
+    /// </summary>
+    /// <param name="bindings"></param>
+    /// <param name="bindingsIndex"></param>
+    /// <returns></returns>
+    protected int GetControlIndex(ReadOnlyArray<InputBinding> bindings, int bindingsIndex)
+    {
+        int result = -1;
+
+        for (int i = 0; i <= bindingsIndex; i++)
+        {
+            result++;
+            if (i > 0 && bindings[i - 1].isComposite) result--;
+        }
+
+        return result;
     }
 
     #endregion
