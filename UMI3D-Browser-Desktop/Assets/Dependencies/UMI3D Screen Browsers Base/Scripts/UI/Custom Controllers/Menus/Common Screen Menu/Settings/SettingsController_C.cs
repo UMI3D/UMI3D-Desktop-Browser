@@ -37,6 +37,8 @@ namespace umi3d.commonScreen.menu
             KeyBindingDisplayer.CreateText = () => new Displayer.Text_C();
             KeyBindingDisplayer.CreateButton = () => new Displayer.Button_C();
             KeyBindingDisplayer.USSCustomClassBox = () => USSCustomClassBox;
+            if (NavigationLabel == null) NavigationLabel = new Displayer.Text_C();
+            if (ShortcutLabel == null) ShortcutLabel = new Displayer.Text_C();
 
             base.InitElement();
         }

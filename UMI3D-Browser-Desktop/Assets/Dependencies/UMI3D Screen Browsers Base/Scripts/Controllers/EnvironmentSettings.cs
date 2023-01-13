@@ -74,9 +74,9 @@ public class AudioSetting : ISetting
 
     public void Update()
     {
-        if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.GeneraVolume)) Toggle();
+        if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.MuteUnmuteGeneraVolume)) Toggle();
         if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.IncreaseVolume)) IncreaseVolume();
-        if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.DeacreaseVolue)) DecreaseVolume();
+        if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.DecreaseVolue)) DecreaseVolume();
     }
 
     public void SetGeneralVolumeWithoutNotify(float value)
@@ -203,7 +203,7 @@ public class MicSetting : ISetting
 
     public void Update()
     {
-        if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.MuteUnmute)) Toggle();
+        if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.MuteUnmuteMic)) Toggle();
     }
 }
 

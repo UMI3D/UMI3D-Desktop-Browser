@@ -99,6 +99,23 @@ namespace umi3d.baseBrowser.preferences
             public InputAction FreeHead;
 
             #endregion
+
+            #region Shortcut
+
+            public InputAction MuteUnmuteMic;
+            public InputAction PushToTalk;
+            public InputAction MuteUnmuteGeneralVolume;
+            public InputAction DecreaseGeneralVolume;
+            public InputAction IncreaseGeneralVolume;
+            public InputAction Cancel;
+            public InputAction Submit;
+            public InputAction DisplayHideGameMenu;
+            public InputAction DisplayHideContextualMenu;
+            public InputAction DisplayHideNotifications;
+            public InputAction DisplayHideUsersList;
+            public InputAction DisplayHideEmotesWindow;
+
+            #endregion
         }
 
         public static bool TryGetControllerData(out ControllerData data) => PreferencesManager.TryGet(out data, c_controllerPath, c_dataFolderPath);

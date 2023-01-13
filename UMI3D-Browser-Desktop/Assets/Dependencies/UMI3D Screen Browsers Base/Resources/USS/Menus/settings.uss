@@ -3,6 +3,10 @@
 	margin-bottom: var(--margin_padding-menu);
 }
 
+.setting-controller-controls-section.unity-label.text {
+	margin-top: var(--margin_padding-menu);
+}
+
 .setting-controller-box {
 	flex-direction: row;
 }

@@ -90,20 +90,43 @@ public class CustomSettingsController : CustomSettingScreen
         get => m_controller;
         set
         {
+            void AddNavigationControls()
+            {
+                ScrollView.Add(NavigationLabel);
+                ScrollView.Add(Forward.Box);
+                ScrollView.Add(Backward.Box);
+                ScrollView.Add(Left.Box);
+                ScrollView.Add(Right.Box);
+                ScrollView.Add(Sprint.Box);
+                ScrollView.Add(Jump.Box);
+                ScrollView.Add(Crouch.Box);
+                ScrollView.Add(FreeHead.Box);
+            }
+
+            void AddShortcutControls()
+            {
+                ScrollView.Add(ShortcutLabel);
+                ScrollView.Add(Mute.Box);
+                ScrollView.Add(PushToTalk.Box);
+                ScrollView.Add(GeneralVolume.Box);
+                ScrollView.Add(DecreaseVolume.Box);
+                ScrollView.Add(IncreaseVolume.Box);
+                ScrollView.Add(Cancel.Box);
+                ScrollView.Add(Submit.Box);
+                ScrollView.Add(GameMenu.Box);
+                ScrollView.Add(ContextualMenu.Box);
+                ScrollView.Add(Notification.Box);
+                ScrollView.Add(UserList.Box);
+            }
+
             m_controller = value;
             switch (value)
             {
                 case ControllerEnum.MouseAndKeyboard:
                     JoystickStaticToggle.RemoveFromHierarchy();
                     LeftHandToggle.RemoveFromHierarchy();
-                    ScrollView.Add(Forward.Box);
-                    ScrollView.Add(Backward.Box);
-                    ScrollView.Add(Left.Box);
-                    ScrollView.Add(Right.Box);
-                    ScrollView.Add(Sprint.Box);
-                    ScrollView.Add(Jump.Box);
-                    ScrollView.Add(Crouch.Box);
-                    ScrollView.Add(FreeHead.Box);
+                    AddNavigationControls();
+                    AddShortcutControls();
                     break;
                 case ControllerEnum.Touch:
                     ScrollView.Add(JoystickStaticToggle);
@@ -112,14 +135,7 @@ public class CustomSettingsController : CustomSettingScreen
                 case ControllerEnum.GameController:
                     JoystickStaticToggle.RemoveFromHierarchy();
                     LeftHandToggle.RemoveFromHierarchy();
-                    ScrollView.Add(Forward.Box);
-                    ScrollView.Add(Backward.Box);
-                    ScrollView.Add(Left.Box);
-                    ScrollView.Add(Right.Box);
-                    ScrollView.Add(Sprint.Box);
-                    ScrollView.Add(Jump.Box);
-                    ScrollView.Add(Crouch.Box);
-                    ScrollView.Add(FreeHead.Box);
+                    AddNavigationControls();
                     break;
                 default:
                     break;
@@ -129,6 +145,7 @@ public class CustomSettingsController : CustomSettingScreen
 
     public override string USSCustomClassName => "setting-controller";
     public virtual string USSCustomClassBox => $"{USSCustomClassName}-box";
+    public virtual string USSCustomClassControlsSection => $"{USSCustomClassName}-controls-section";
 
     public CustomSlider CamreraSensibility;
 
@@ -137,6 +154,7 @@ public class CustomSettingsController : CustomSettingScreen
 
     #region Navigation key
 
+    public CustomText NavigationLabel;
     public KeyBindingDisplayer Forward;
     public KeyBindingDisplayer Backward;
     public KeyBindingDisplayer Left;
@@ -145,6 +163,23 @@ public class CustomSettingsController : CustomSettingScreen
     public KeyBindingDisplayer Jump;
     public KeyBindingDisplayer Crouch;
     public KeyBindingDisplayer FreeHead;
+
+    #endregion
+
+    #region Shortcuts key
+
+    public CustomText ShortcutLabel;
+    public KeyBindingDisplayer Mute;
+    public KeyBindingDisplayer PushToTalk;
+    public KeyBindingDisplayer GeneralVolume;
+    public KeyBindingDisplayer DecreaseVolume;
+    public KeyBindingDisplayer IncreaseVolume;
+    public KeyBindingDisplayer Cancel;
+    public KeyBindingDisplayer Submit;
+    public KeyBindingDisplayer GameMenu;
+    public KeyBindingDisplayer ContextualMenu;
+    public KeyBindingDisplayer Notification;
+    public KeyBindingDisplayer UserList;
 
     #endregion
 
@@ -170,6 +205,8 @@ public class CustomSettingsController : CustomSettingScreen
         LeftHandToggle.label = "Left hand interface";
         LeftHandToggle.RegisterValueChangedCallback(ce => LeftHandUpdated(ce.newValue));
 
+        NavigationLabel.text = "Navigations";
+        NavigationLabel.AddToClassList(USSCustomClassControlsSection);
         Forward = new KeyBindingDisplayer("Forward");
         Backward = new KeyBindingDisplayer("Backward");
         Left = new KeyBindingDisplayer("Left");
@@ -178,6 +215,20 @@ public class CustomSettingsController : CustomSettingScreen
         Jump = new KeyBindingDisplayer("Jump");
         Crouch = new KeyBindingDisplayer("Crouch");
         FreeHead = new KeyBindingDisplayer("Free Head");
+
+        ShortcutLabel.text = "Shortcuts";
+        ShortcutLabel.AddToClassList(USSCustomClassControlsSection);
+        Mute = new KeyBindingDisplayer("Mute/Unmute mic");
+        PushToTalk = new KeyBindingDisplayer("Push to talk");
+        GeneralVolume = new KeyBindingDisplayer("Mute/Unmute General volume");
+        DecreaseVolume = new KeyBindingDisplayer("Decrease general volume");
+        IncreaseVolume = new KeyBindingDisplayer("Increase general volume");
+        Cancel = new KeyBindingDisplayer("Cancel");
+        Submit = new KeyBindingDisplayer("Submit");
+        GameMenu = new KeyBindingDisplayer("Display/Hide game menu");
+        ContextualMenu = new KeyBindingDisplayer("Display/Hide contextual menu");
+        Notification = new KeyBindingDisplayer("Display/Hide notifications");
+        UserList = new KeyBindingDisplayer("Display/Hide users list");
 
         if (TryGetControllerData(out Data))
         {
@@ -234,6 +285,8 @@ public class CustomSettingsController : CustomSettingScreen
     /// <param name="controllers"></param>
     public void DefaultBindings(params ControllerInputEnum[] controllers)
     {
+        #region Navigation
+
         var forward = new InputAction("forward");
         forward.AddBinding("<Keyboard>/w");
         forward.AddBinding("<Keyboard>/upArrow");
@@ -269,6 +322,60 @@ public class CustomSettingsController : CustomSettingScreen
         var freeHead = new InputAction("freeHead");
         freeHead.AddBinding("<Keyboard>/alt");
         NavigationBindingsUpdated(NavigationEnum.FreeView, freeHead, controllers);
+
+        #endregion
+
+        #region Shortcut
+
+        var muteUnmuteMic = new InputAction("muteUnmuteMic");
+        muteUnmuteMic.AddBinding("<Keyboard>/#(m)");
+        ShortcutBindingsUpdated(ShortcutEnum.MuteUnmuteMic, muteUnmuteMic, controllers);
+
+        var pushToTalk = new InputAction("pushToTalk");
+        pushToTalk.AddBinding("<Keyboard>/b");
+        ShortcutBindingsUpdated(ShortcutEnum.PushToTalk, pushToTalk, controllers);
+
+        var muteUnmuteGeneralVolume = new InputAction("muteUnmuteGeneralVolume");
+        muteUnmuteGeneralVolume.AddBinding("<Keyboard>/l");
+        ShortcutBindingsUpdated(ShortcutEnum.MuteUnmuteGeneraVolume, muteUnmuteGeneralVolume, controllers);
+
+        var decreaseGeneralVolume = new InputAction("decreaseGeneralVolume");
+        decreaseGeneralVolume.AddCompositeBinding("ButtonWithOneModifier")
+            .With("Button", "<Keyboard>/#(-)")
+            .With("Modifier", "<Keyboard>/ctrl");
+        ShortcutBindingsUpdated(ShortcutEnum.DecreaseVolue, decreaseGeneralVolume, controllers);
+
+        var increaseGeneralVolume = new InputAction("increaseGeneralVolume");
+        increaseGeneralVolume.AddCompositeBinding("ButtonWithOneModifier")
+            .With("Button", "<Keyboard>/#(+)")
+            .With("Modifier", "<Keyboard>/ctrl");
+        ShortcutBindingsUpdated(ShortcutEnum.IncreaseVolume, increaseGeneralVolume, controllers);
+
+        var cancel = new InputAction("cancel");
+        cancel.AddBinding("<Keyboard>/escape");
+        ShortcutBindingsUpdated(ShortcutEnum.Cancel, cancel, controllers);
+
+        var submit = new InputAction("submit");
+        submit.AddBinding("<Keyboard>/enter");
+        ShortcutBindingsUpdated(ShortcutEnum.Submit, submit, controllers);
+
+        var displayHideGameMenu = new InputAction("displayHideGameMenu");
+        displayHideGameMenu.AddBinding("<Keyboard>/escape");
+        ShortcutBindingsUpdated(ShortcutEnum.DisplayHideGameMenu, displayHideGameMenu, controllers);
+
+        var displayHideContextualMenu = new InputAction("displayHideContextualMenu");
+        displayHideContextualMenu.AddBinding("<Mouse>/leftButton");
+        ShortcutBindingsUpdated(ShortcutEnum.DisplayHideContextualMenu, displayHideContextualMenu, controllers);
+
+        var displayHideNotifications = new InputAction("displayHideNotifications");
+        displayHideNotifications.AddBinding("<Mouse>/rightButton");
+        ShortcutBindingsUpdated(ShortcutEnum.DisplayHideNotifications, displayHideNotifications, controllers);
+
+        var displayHideUsersList = new InputAction("displayHideUsersList");
+        displayHideUsersList.AddBinding("<Keyboard>/u");
+        ShortcutBindingsUpdated(ShortcutEnum.DisplayHideUsersList, displayHideUsersList, controllers);
+
+        #endregion
     }
 
     /// <summary>
@@ -285,6 +392,18 @@ public class CustomSettingsController : CustomSettingScreen
         NavigationBindingsUpdated(NavigationEnum.Jump, Data.Jump, controllers);
         NavigationBindingsUpdated(NavigationEnum.Crouch, Data.Crouch, controllers);
         NavigationBindingsUpdated(NavigationEnum.FreeView, Data.FreeHead, controllers);
+
+        ShortcutBindingsUpdated(ShortcutEnum.MuteUnmuteMic, Data.MuteUnmuteMic, controllers);
+        ShortcutBindingsUpdated(ShortcutEnum.PushToTalk, Data.PushToTalk, controllers);
+        ShortcutBindingsUpdated(ShortcutEnum.MuteUnmuteGeneraVolume, Data.MuteUnmuteGeneralVolume, controllers);
+        ShortcutBindingsUpdated(ShortcutEnum.DecreaseVolue, Data.DecreaseGeneralVolume, controllers);
+        ShortcutBindingsUpdated(ShortcutEnum.IncreaseVolume, Data.IncreaseGeneralVolume, controllers);
+        ShortcutBindingsUpdated(ShortcutEnum.Cancel, Data.Cancel, controllers);
+        ShortcutBindingsUpdated(ShortcutEnum.Submit, Data.Submit, controllers);
+        ShortcutBindingsUpdated(ShortcutEnum.DisplayHideGameMenu, Data.DisplayHideGameMenu, controllers);
+        ShortcutBindingsUpdated(ShortcutEnum.DisplayHideContextualMenu, Data.DisplayHideContextualMenu, controllers);
+        ShortcutBindingsUpdated(ShortcutEnum.DisplayHideNotifications, Data.DisplayHideNotifications, controllers);
+        ShortcutBindingsUpdated(ShortcutEnum.DisplayHideUsersList, Data.DisplayHideUsersList, controllers);
     }
 
     public void NavigationBindingsUpdated(NavigationEnum command, InputAction action, params ControllerInputEnum[] controllers)
@@ -336,6 +455,80 @@ public class CustomSettingsController : CustomSettingScreen
                 FreeHead.Key1.text = control1;
                 FreeHead.Key2.text = control2;
                 Data.FreeHead = action;
+                break;
+            default:
+                break;
+        }
+
+        StoreControllerrData(Data);
+    }
+
+    public void ShortcutBindingsUpdated(ShortcutEnum command, InputAction action, params ControllerInputEnum[] controllers)
+    {
+        var bindings = action.bindings;
+        var controls = action.controls;
+        int currentIndex = 0;
+        FindControl(bindings, controls, ref currentIndex, out string control1, controllers);
+        FindControl(bindings, controls, ref currentIndex, out string control2, controllers);
+
+        switch (command)
+        {
+            case ShortcutEnum.MuteUnmuteMic:
+                Mute.Key1.text = control1;
+                Mute.Key2.text = control2;
+                Data.MuteUnmuteMic = action;
+                break;
+            case ShortcutEnum.PushToTalk:
+                PushToTalk.Key1.text = control1;
+                PushToTalk.Key2.text = control2;
+                Data.PushToTalk = action;
+                break;
+            case ShortcutEnum.MuteUnmuteGeneraVolume:
+                GeneralVolume.Key1.text = control1;
+                GeneralVolume.Key2.text = control2;
+                Data.MuteUnmuteGeneralVolume = action;
+                break;
+            case ShortcutEnum.DecreaseVolue:
+                DecreaseVolume.Key1.text = control1;
+                DecreaseVolume.Key2.text = control2;
+                Data.DecreaseGeneralVolume = action;
+                break;
+            case ShortcutEnum.IncreaseVolume:
+                IncreaseVolume.Key1.text = control1;
+                IncreaseVolume.Key2.text = control2;
+                Data.IncreaseGeneralVolume = action;
+                break;
+            case ShortcutEnum.Cancel:
+                Cancel.Key1.text = control1;
+                Cancel.Key2.text = control2;
+                Data.Cancel = action;
+                break;
+            case ShortcutEnum.Submit:
+                Submit.Key1.text = control1;
+                Submit.Key2.text = control2;
+                Data.Submit = action;
+                break;
+            case ShortcutEnum.DisplayHideGameMenu:
+                GameMenu.Key1.text = control1;
+                GameMenu.Key2.text = control2;
+                Data.DisplayHideGameMenu = action;
+                break;
+            case ShortcutEnum.DisplayHideContextualMenu:
+                ContextualMenu.Key1.text = control1;
+                ContextualMenu.Key2.text = control2;
+                Data.DisplayHideContextualMenu = action;
+                break;
+            case ShortcutEnum.DisplayHideNotifications:
+                Notification.Key1.text = control1;
+                Notification.Key2.text = control2;
+                Data.DisplayHideNotifications = action;
+                break;
+            case ShortcutEnum.DisplayHideUsersList:
+                UserList.Key1.text = control1;
+                UserList.Key2.text = control2;
+                Data.DisplayHideUsersList = action;
+                break;
+            case ShortcutEnum.DisplayHideEmoteWindow:
                 break;
             default:
                 break;
@@ -421,13 +614,13 @@ public class CustomSettingsController : CustomSettingScreen
     {
         if (binding.path == "ButtonWithOneModifier")
         {
-            control = $"{ControlBinding[controlIndex + 1].displayName} + {ControlBinding[controlIndex].displayName}";
+            control = $"{ControlBinding[controlIndex + 1].displayName} and {ControlBinding[controlIndex].displayName}";
             index += 3;
             return true;
         } 
         else if (binding.path == "ButtonWithTwoModifier")
         {
-            control = $"{ControlBinding[controlIndex + 1].displayName} + {ControlBinding[controlIndex + 2].displayName} + {ControlBinding[controlIndex].displayName}";
+            control = $"{ControlBinding[controlIndex + 1].displayName} and {ControlBinding[controlIndex + 2].displayName} and {ControlBinding[controlIndex].displayName}";
             index += 4;
             return true;
         }

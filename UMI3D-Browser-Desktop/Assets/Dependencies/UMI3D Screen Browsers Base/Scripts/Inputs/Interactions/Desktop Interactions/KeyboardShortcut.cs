@@ -22,12 +22,14 @@ namespace umi3d.baseBrowser.inputs.interactions
 {
     public enum ShortcutEnum
     {
-        MuteUnmute, PushToTalk,
-        GeneraVolume, DeacreaseVolue, IncreaseVolume,
+        MuteUnmuteMic, PushToTalk,
+        MuteUnmuteGeneraVolume, DecreaseVolue, IncreaseVolume,
         Cancel, Submit,
-        GameMenu, 
-        ContextualMenu, 
-        Notification, UserList, EmoteWindow
+        DisplayHideGameMenu, 
+        DisplayHideContextualMenu, 
+        DisplayHideNotifications, 
+        DisplayHideUsersList, 
+        DisplayHideEmoteWindow
     }
 
     public class KeyboardShortcut : BaseKeyInteraction
