@@ -32,7 +32,7 @@ namespace umi3d.commonScreen.menu
             if (TitleLabel == null) TitleLabel = new Displayer.Text_C();
             if (SizeLabel == null) SizeLabel = new Displayer.Text_C();
             if (Delete == null) Delete = new Displayer.Button_C();
-            if (DropDown_Date == null) DropDown_Date = new Displayer.Text_C();
+            if (DropDown_Version == null) DropDown_Version = new Displayer.Text_C();
             if (DropDown_Message == null) DropDown_Message = new Displayer.Text_C();
             if (SearchField == null) SearchField = new Displayer.Textfield_C();
             if (FilterField == null) FilterField = new Displayer.Dropdown_C();

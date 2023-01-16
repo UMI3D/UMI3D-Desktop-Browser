@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using inetum.unityUtils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,9 +29,7 @@ using umi3d.common;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
-using UnityEngine.SocialPlatforms;
 using WebSocketSharp;
-using static BeardedManStudios.Forge.Networking.MasterServerResponse;
 using Path = inetum.unityUtils.Path;
 
 namespace umi3d.cdk
@@ -56,19 +53,15 @@ namespace umi3d.cdk
             public List<Data> files;
             public string path;
             public string key;
-            public string date;
-            public string culture;
-            public string dateformat;
+            public string version;
             public List<string> applications = new List<string>();
 
 
-            public DataFile(string key, string path, List<string> applications, string date, string format, string culture)
+            public DataFile(string key, string path, List<string> applications, string version)
             {
                 this.path = path;
                 this.key = key;
-                this.date = date;
-                this.dateformat = format;
-                this.culture = culture;
+                this.version = version;
                 files = new List<Data>();
                 this.applications = applications;
             }
@@ -735,12 +728,9 @@ namespace umi3d.cdk
                         if (libraries.ContainsKey(assetLibrary.libraryId))
                         {
                             DataFile dt = libraries[assetLibrary.libraryId].Key;
-                            var info = new CultureInfo(assetLibrary.culture);
-                            var dtInfo = new CultureInfo(dt.culture);
-                            if (DateTime.TryParseExact(dt.date, dt.dateformat, dtInfo, DateTimeStyles.None, out DateTime local) && DateTime.TryParseExact(assetLibrary.date, assetLibrary.format, info, DateTimeStyles.None, out DateTime server))
+                            if (dt.version == assetLibrary.version)
                             {
-                                if (local.Ticks >= server.Ticks)
-                                    continue;
+                                continue;
                             }
                         }
                     }
@@ -748,9 +738,6 @@ namespace umi3d.cdk
                     toDownload.Add(assetLibrary.libraryId);
                 }
             }
-
-            toDownload.Debug();
-
             return toDownload;
         }
 
@@ -801,7 +788,7 @@ namespace umi3d.cdk
             progress.Add(progress1);
             progress.Add(progress2);
             progress.Add(progress3);
-            UnityEngine.Debug.Log(assetLibrary.libraryId);
+
             try
             {
                 progress1.AddComplete();
@@ -813,28 +800,21 @@ namespace umi3d.cdk
                     try
                     {
                         DataFile dt = Instance.libraries[assetLibrary.libraryId].Key;
-                        var info = new CultureInfo(assetLibrary.culture);
-                        var dtInfo = new CultureInfo(dt.culture);
-                        if (DateTime.TryParseExact(dt.date, dt.dateformat, dtInfo, DateTimeStyles.None, out DateTime local) && DateTime.TryParseExact(assetLibrary.date, assetLibrary.format, info, DateTimeStyles.None, out DateTime server))
+                        if (dt.applications == null)
+                            dt.applications = new List<string>();
+                        if (dt.version == assetLibrary.version)
                         {
-                            UnityEngine.Debug.Log(local.Ticks +" "+ server.Ticks);
-
-                            if (dt.applications == null)
-                                dt.applications = new List<string>();
-                            if (local.Ticks >= server.Ticks)
+                            if (!dt.applications.Contains(application))
                             {
-                                if (!dt.applications.Contains(application))
-                                {
-                                    dt.applications.Add(application);
-                                    SetData(dt, directoryPath);
-                                }
-                                progress.SetAsCompleted();
-                                return;
+                                dt.applications.Add(application);
+                                SetData(dt, directoryPath);
                             }
-                            applications = dt.applications;
-                            if (!applications.Contains(application))
-                                applications.Add(application);
+                            progress.SetAsCompleted();
+                            return;
                         }
+                        applications = dt.applications;
+                        if (!applications.Contains(application))
+                            applications.Add(application);
                     }
                     catch (Exception e)
                     {
@@ -858,9 +838,7 @@ namespace umi3d.cdk
                             directoryPath,
                             assetDirectoryPath,
                             applications,
-                            assetLibrary.date,
-                            assetLibrary.format,
-                            assetLibrary.culture,
+                            assetLibrary.version,
                             dto as FileListDto,
                             progress2
                             );
@@ -936,9 +914,9 @@ namespace umi3d.cdk
 
         #endregion
         #region file downloading
-        private async Task<DataFile> DownloadFiles(string key, string rootDirectoryPath, string directoryPath, List<string> applications, string date, string format, string culture, FileListDto list, Progress progress)
+        private async Task<DataFile> DownloadFiles(string key, string rootDirectoryPath, string directoryPath, List<string> applications, string version, FileListDto list, Progress progress)
         {
-            var data = new DataFile(key, rootDirectoryPath, applications, date, format, culture);
+            var data = new DataFile(key, rootDirectoryPath, applications, version);
             progress.SetTotal(list.files.Count);
             foreach (string name in list.files)
             {

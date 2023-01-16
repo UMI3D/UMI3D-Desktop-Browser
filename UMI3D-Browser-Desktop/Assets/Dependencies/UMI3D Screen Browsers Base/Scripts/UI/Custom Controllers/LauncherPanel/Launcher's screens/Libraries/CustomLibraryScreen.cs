@@ -160,7 +160,7 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
             library.Title = lib.key;
 
             //2. Display environments which use this lib
-            library.Date = lib.date.Substring(0, 10);
+            library.Version = lib.version;
             library.Message = "Used by:\n\n";
             library.Message += string.Join('\n', lib.applications);
             //UnityEngine.Debug.Log($"{lib.culture}, {lib.date}, {lib.dateformat}");

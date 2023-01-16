@@ -33,9 +33,9 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
             name = "size",
             defaultValue = null
         };
-        UxmlStringAttributeDescription m_date = new UxmlStringAttributeDescription
+        UxmlStringAttributeDescription m_version = new UxmlStringAttributeDescription
         {
-            name = "date",
+            name = "version",
             defaultValue = null
         };
         UxmlStringAttributeDescription m_message = new UxmlStringAttributeDescription
@@ -70,7 +70,7 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
                 (
                     m_title.GetValueFromBag(bag, cc),
                     m_size.GetValueFromBag(bag, cc),
-                    m_date.GetValueFromBag(bag, cc),
+                    m_version.GetValueFromBag(bag, cc),
                     m_message.GetValueFromBag(bag, cc),
                     m_displayMessage.GetValueFromBag(bag, cc),
                     m_allowDeletion.GetValueFromBag(bag, cc)
@@ -108,7 +108,7 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
     public VisualElement Delete_Background = new VisualElement { name = "delete-background" };
     public VisualElement Delete_Icon = new VisualElement { name = "delete-icon" };
     public VisualElement DropDown_Field = new VisualElement { name = "field" };
-    public CustomText DropDown_Date;
+    public CustomText DropDown_Version;
     public CustomText DropDown_Message;
 
     protected bool m_displayMessage;
@@ -141,17 +141,17 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
             }
         }
     }
-    public virtual string Date
+    public virtual string Version
     {
-        get => DropDown_Date.text;
+        get => DropDown_Version.text;
         set
         {
-            if (string.IsNullOrEmpty(value)) DropDown_Date.RemoveFromHierarchy();
+            if (string.IsNullOrEmpty(value)) DropDown_Version.RemoveFromHierarchy();
             else
             {
-                DropDown_Field.Insert(0, DropDown_Date);
-                DropDown_Date.text = value;
-                if (DropDown_Field.Contains(DropDown_Message)) DropDown_Date.PlaceBehind(DropDown_Message);
+                DropDown_Field.Insert(0, DropDown_Version);
+                DropDown_Version.text = value;
+                if (DropDown_Field.Contains(DropDown_Message)) DropDown_Version.PlaceBehind(DropDown_Message);
             }
         }
     }
@@ -165,7 +165,7 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
             {
                 DropDown_Field.Insert(0, DropDown_Message);
                 DropDown_Message.text = value;
-                if (DropDown_Field.Contains(DropDown_Date)) DropDown_Message.PlaceInFront(DropDown_Date);
+                if (DropDown_Field.Contains(DropDown_Version)) DropDown_Message.PlaceInFront(DropDown_Version);
             }
         }
     }
@@ -229,7 +229,7 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
 
     public virtual void Set() => Set(null, null, null, null, false, false);
 
-    public virtual void Set(string title, string size, string date, string message, bool displayMessage, bool allowDeletion)
+    public virtual void Set(string title, string size, string version, string message, bool displayMessage, bool allowDeletion)
     {
         if (!m_hasBeenInitialized)
         {
@@ -239,7 +239,7 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
 
         Title = title;
         Size = size;
-        Date = date;
+        Version = version;
         Message = message;
         DisplayMessage = displayMessage;
         AllowDeletion = allowDeletion;
@@ -269,7 +269,7 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
         Delete_Background.AddToClassList(USSCustomClassDelete_Background);
         Delete_Icon.AddToClassList(USSCustomClassDelete_Icon);
         DropDown_Field.AddToClassList(USSCustomClassDropDown_Field);
-        DropDown_Date.AddToClassList(USSCustomClassDropDown_Date);
+        DropDown_Version.AddToClassList(USSCustomClassDropDown_Date);
         DropDown_Message.AddToClassList(USSCustomClassDropDown_Message);
 
         Add(Main);
@@ -281,7 +281,7 @@ public abstract class CustomLibrary : VisualElement, ICustomElement
         Delete.Add(Delete_Background);
         Delete_Background.Add(Delete_Icon);
         Overlay.Add(DropDown_Field);
-        DropDown_Field.Add(DropDown_Date);
+        DropDown_Field.Add(DropDown_Version);
 
         DropDown_Button.Size = ElementSize.Small;
         DropDown_Button.Type = ButtonType.Invisible;
