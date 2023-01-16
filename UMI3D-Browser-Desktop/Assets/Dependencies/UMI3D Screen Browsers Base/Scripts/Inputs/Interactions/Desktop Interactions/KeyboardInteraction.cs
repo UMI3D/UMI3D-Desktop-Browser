@@ -21,5 +21,22 @@ namespace umi3d.baseBrowser.inputs.interactions
     public class KeyboardInteraction : BaseKeyInteraction
     {
         public static List<KeyboardInteraction> S_Interactions = new List<KeyboardInteraction>();
+
+        protected override void CreateMenuItem()
+        {
+            base.CreateMenuItem();
+
+            Mapped?.Invoke(this, menuItem.Name, null);
+        }
+
+        public override void Dissociate()
+        {
+            base.Dissociate();
+
+            Unmapped?.Invoke(this);
+        }
+
+        public static System.Action<KeyboardInteraction, string, List<(string, MappingType)>> Mapped;
+        public static System.Action<KeyboardInteraction> Unmapped;
     }
 }

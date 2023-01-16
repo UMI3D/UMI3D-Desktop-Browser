@@ -1,0 +1,16 @@
+.interactable__mapping {
+	width: 50%;
+	height: 100%;
+	flex-direction: column-reverse;
+}
+
+.interactable__mapping-main {
+	background-color: var(--background-color-transparent-game);
+}
+
+.interactable__mapping-interactable__name.unity-label.text {
+	margin-left: var(--size-margin-and-padding-game);
+	margin-right: var(--size-margin-and-padding-game);
+	margin-top: var(--size-margin-and-padding-game);
+	margin-bottom: var(--size-margin-and-padding-game);
+}

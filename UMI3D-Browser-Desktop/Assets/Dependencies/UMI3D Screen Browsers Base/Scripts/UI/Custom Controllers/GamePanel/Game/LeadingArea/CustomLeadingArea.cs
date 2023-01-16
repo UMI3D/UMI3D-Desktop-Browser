@@ -64,12 +64,15 @@ public class CustomLeadingArea : VisualElement, ICustomElement
             switch (value)
             {
                 case ControllerEnum.MouseAndKeyboard:
+                    Add(InteractableMapping);
                     JoystickArea.RemoveFromHierarchy();
                     break;
                 case ControllerEnum.Touch:
                     Add(JoystickArea);
+                    InteractableMapping.RemoveFromHierarchy();
                     break;
                 case ControllerEnum.GameController:
+                    Add(InteractableMapping);
                     JoystickArea.RemoveFromHierarchy();
                     break;
                 default:
@@ -103,6 +106,7 @@ public class CustomLeadingArea : VisualElement, ICustomElement
     public virtual string USSCustomClassName => "leading__area";
     public virtual string USSCustomClassNameReverse => "leading__area-reverse";
 
+    public CustomInteractableMapping InteractableMapping;
     public CustomJoystickArea JoystickArea;
 
     public TouchManipulator2 LeadingAreaManipulator = new TouchManipulator2(null, 0, 0);

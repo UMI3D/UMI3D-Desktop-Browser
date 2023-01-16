@@ -1,0 +1,25 @@
+.interactable__mapping__row {
+	flex-direction: row;
+	justify-content: space-between;
+
+	padding-left: var(--margin_padding-displayer);
+	padding-right: var(--margin_padding-displayer);
+	padding-top: var(--margin_padding-displayer);
+	padding-bottom: var(--margin_padding-displayer);
+
+	height: var(--size-large-displayer);
+}
+
+.interactable__mapping__row-action__name.unity-label.text {
+	flex-grow: 1;
+	flex-shrink: 1;
+
+	-unity-text-align: middle-left;
+}
+
+.interactable__mapping__row-main {
+	flex-grow: 2;
+
+	flex-direction: row-reverse;
+	align-items: center;
+}
