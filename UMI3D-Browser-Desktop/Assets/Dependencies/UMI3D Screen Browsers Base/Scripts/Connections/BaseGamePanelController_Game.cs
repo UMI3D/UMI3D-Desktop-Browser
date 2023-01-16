@@ -120,26 +120,6 @@ namespace umi3d.baseBrowser.connection
             Game.LeadingAndTrailingAreaClicked += worldPosition =>
             {
                 if (Game.Controller != ControllerEnum.MouseAndKeyboard) return;
-
-                //UnityEngine.Debug.Log($"click 1");
-
-                //if (ObjectMenuDisplay.isDisplaying)
-                //{
-                //    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
-                //    CloseGameWindows();
-                //}
-                //else if (ObjectMenuDisplay.menu.Count > 0)
-                //{
-                //    if (BaseCursor.Movement == CursorMovement.Free) return;
-                //    ObjectMenuDisplay.Expand(false);
-
-                //    if
-                //    (
-                //        ObjectMenuDisplay.menu.Count == 1
-                //        && ObjectMenu[0] is TextfieldDisplayer textfield
-                //    ) textfield.Focus();
-                //    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
-                //}
             };
         }
 

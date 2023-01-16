@@ -56,17 +56,26 @@ public class AudioSetting : ISetting
 
     public void Start() => StatusChanged?.Invoke(IsOn);
 
+    /// <summary>
+    /// Mute unmute general volume
+    /// </summary>
     public void Toggle()
     {
         SetGeneralVolumeWithoutNotify(IsOn ? 0f : m_generalVolume);
         StatusChanged?.Invoke(IsOn);
     }
 
+    /// <summary>
+    /// Increase general volume.
+    /// </summary>
     public void IncreaseVolume()
     {
         UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Increase volume");
     }
 
+    /// <summary>
+    /// Decrease general volume.
+    /// </summary>
     public void DecreaseVolume()
     {
         UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Decrease volume");
@@ -79,6 +88,10 @@ public class AudioSetting : ISetting
         if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.DecreaseVolume)) DecreaseVolume();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public void SetGeneralVolumeWithoutNotify(float value)
     {
         if (value != 0f) m_generalVolume = value;
@@ -130,6 +143,9 @@ public class AvatarSetting : ISetting
         StatusChanged?.Invoke(IsOn);
     }
 
+    /// <summary>
+    /// Send or not avatar tracking.
+    /// </summary>
     public void Toggle()
     {
         IsOn = !IsOn;
@@ -138,11 +154,6 @@ public class AvatarSetting : ISetting
 
     public void Update()
     {
-        //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ToggleAvatar)) &&
-        //    !TextInputDisplayerElement.isTyping)
-        //{
-        //    Toggle();
-        //}
     }
 }
 
@@ -178,23 +189,31 @@ public class MicSetting : ISetting
         StatusChanged?.Invoke(IsOn);
     }
 
+    /// <summary>
+    /// Initialize the mic shortcuts. Bind the keys to the right methods.
+    /// </summary>
     public void InitShortcut()
     {
         KeyboardShortcut.AddDownListener(ShortcutEnum.PushToTalk, () =>
         {
-            UnityEngine.Debug.Log($"down");
             Set(true);
         });
 
         KeyboardShortcut.AddUpListener(ShortcutEnum.PushToTalk, () =>
         {
-            UnityEngine.Debug.Log($"up");
             Set(false);
         });
     }
 
+    /// <summary>
+    /// Mute unmute mic.
+    /// </summary>
     public void Toggle() => Set(!IsOn);
 
+    /// <summary>
+    /// if <paramref name="value"/> is true then unmute mic, if false then mute.
+    /// </summary>
+    /// <param name="value"></param>
     public void Set(bool value)
     {
         IsOn = value;
@@ -235,98 +254,9 @@ public class AllMicSetting : ISetting
 
     public void Update()
     {
-        //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.MuteAllMicrophone)) &&
-        //    !TextInputDisplayerElement.isTyping)
-        //{
-        //    Toggle();
-        //}
+        
     }
 }
-
-
-//public class UserListSetting
-//{
-//    public Action<bool> m_statusChanged { get; private set; }
-
-//    public class User : User_item_E
-//    {
-//        public UMI3DUser user { get; }
-
-//        public User(UMI3DUser user)
-//        {
-//            this.user = user;
-//        }
-
-//        public void ToggleMic()
-//        {
-//            user.SetMicrophoneStatus(!user.microphoneStatus);
-//        }
-
-//        public void ToggleAvatar()
-//        {
-//            user.SetAvatarStatus(!user.avatarStatus);
-//        }
-
-//        public void setValue()
-//        {
-//            Avatar?.Toggle(user.avatarStatus);
-//            Mic?.Toggle(user.microphoneStatus);
-//            Sound?.Toggle(true);
-//        }
-
-
-//        public override void Bind(VisualElement element)
-//        {
-//            base.Bind(element);
-//            setValue();
-//            Mic.Clicked += ToggleMic;
-//            element.Q<Label>("userLabel").text = user.login;
-//        }
-
-//        public override void Unbind(VisualElement element)
-//        {
-//            Mic.Clicked -= ToggleMic;
-//            base.Unbind(element);
-//        }
-//    }
-
-//    User[] Users;
-
-//    public UserListSetting()
-//    {
-//        UMI3DCollaborationEnvironmentLoader.OnUpdateJoinnedUserList += RefreshList;
-
-//        UMI3DUser.OnUserMicrophoneStatusUpdated.AddListener(UpdateUser);
-//        UMI3DUser.OnUserAvatarStatusUpdated.AddListener(UpdateUser);
-//        UMI3DUser.OnUserAttentionStatusUpdated.AddListener(UpdateUser);
-
-//        UMI3DUser.OnRemoveUser.AddListener((u) => { Users.FirstOrDefault(U => (U.user == u))?.Unbind(null); });
-
-//        RefreshList();
-//    }
-
-//    void UpdateUser(UMI3DUser user)
-//    {
-//        var _u = Users.FirstOrDefault(U => (U.user == user));
-//        if (_u == null)
-//            RefreshList();
-//        else
-//            _u.setValue();
-//    }
-
-//    void RefreshList()
-//    {
-//        Settingbox_E.Instance.UserList.Clear();
-//        InitUsers();
-//        Settingbox_E.Instance.UserList.AddRange(Users);
-//    }
-
-
-//    void InitUsers()
-//    {
-//        Users = UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList.Where(u => !u.isClient).Select(u => new User(u)).ToArray();
-//    }
-//}
 
 public sealed class EnvironmentSettings : inetum.unityUtils.SingleBehaviour<EnvironmentSettings>
 {
@@ -335,8 +265,6 @@ public sealed class EnvironmentSettings : inetum.unityUtils.SingleBehaviour<Envi
     public AvatarSetting AvatarSetting;
     public MicSetting MicSetting;
     public AllMicSetting AllMicSetting;
-
-    //private UserListSetting userListSetting;
 
     private bool m_environmentLoaded { get; set; } = false;
     private bool initialized = false;
@@ -349,8 +277,6 @@ public sealed class EnvironmentSettings : inetum.unityUtils.SingleBehaviour<Envi
         AudioSetting = new AudioSetting();
         MicSetting = new MicSetting();
         AllMicSetting = new AllMicSetting();
-
-        //userListSetting = new UserListSetting();
     }
 
     void Start()

@@ -27,18 +27,13 @@ namespace umi3d.mobileBrowser.Controller
         {
             get {
                 List<AbstractUMI3DInput> list = new List<AbstractUMI3DInput>();
-                //list.AddRange(ManipulationInputs);
                 return list;
             }
         }
 
         public void Awake()
         {
-            //interactions.MainMobileAction mainAction = GetComponentInChildren<interactions.MainMobileAction>();
-            //EventInputs.Add(mainAction);
-            //mainAction.Init(this);
-            //mainAction.bone = interactionBoneType;
-            //mainAction.Menu = ObjectMenu.menu;
+
         }
         public void Start()
         {
@@ -49,42 +44,7 @@ namespace umi3d.mobileBrowser.Controller
 
         }
 
-        //public AbstractUMI3DInput FindInput(ManipulationDto manip, DofGroupDto dof, bool unused = true)
-        //{
-        //    Debug.Log("TODO : Find input for manipulation dto");
-        //    //ManipulationGroup group = ManipulationInputs.Find(i => i.IsAvailableFor(manip));
-        //    //if (group == null)
-        //    //{
-        //    //    group = ManipulationGroup.Instanciate(this, ManipulationActionInput, dofGroups, transform);
-        //    //    if (group == null)
-        //    //    {
-        //    //        Debug.LogWarning("find manip input FAILED");
-        //    //        return null;
-        //    //    }
-        //    //    group.bone = interactionBoneType;
-        //    //    ManipulationInputs.Add(group);
-        //    //}
-        //    return null;
-        //}
-
         public AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
             => null;
-
-        ///// <summary>
-        ///// <inheritdoc/>
-        ///// </summary>
-        ///// <param name="tool"></param>
-        ///// <param name="releasable"></param>
-        ///// <param name="reason"></param>
-        ///// <param name="hoveredObjectId"></param>
-        //public override void Project(AbstractTool tool, bool releasable, InteractionMappingReason reason, ulong hoveredObjectId)
-        //{
-        //    if (reason is RequestedByEnvironment)
-        //    {
-        //        interactions.MainMobileAction mainAction = EventInputs.Find(i => i is umi3d.mobileBrowser.interactions.MainMobileAction) as umi3d.mobileBrowser.interactions.MainMobileAction;
-        //        if (mainAction != null) mainAction.ForceDissociate();
-        //    }
-        //    base.Project(tool, releasable, reason, hoveredObjectId);
-        //}
     }
 }

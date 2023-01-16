@@ -202,20 +202,6 @@ namespace umi3d.baseBrowser.Controller
         public override AbstractUMI3DInput FindInput(ManipulationDto manip, DofGroupDto dof, bool unused = true)
         {
             Debug.Log("TODO : Find input for manipulation dto");
-            //ManipulationGroup group = ManipulationInputs.Find(i => i.IsAvailableFor(manip));
-            //if (group == null)
-            //{
-            //    group = ManipulationGroup.Instanciate(this, ManipulationActionInput, dofGroups, transform);
-            //    if (group == null)
-            //    {
-            //        Debug.LogWarning("find manip input FAILED");
-            //        return null;
-            //    }
-            //    group.bone = interactionBoneType;
-            //    ManipulationInputs.Add(group);
-            //}
-            //group.Menu = m_objectMenu?.menu;
-            //return group;
             return null;
         }
 

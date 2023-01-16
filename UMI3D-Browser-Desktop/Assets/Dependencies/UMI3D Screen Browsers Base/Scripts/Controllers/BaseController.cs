@@ -128,8 +128,6 @@ namespace umi3d.baseBrowser.Controller
         {
             if (!CanProcess) return;
 
-            //if (m_navigationDirect > 0) ManipulationInput.NextManipulation();
-            //else if (m_navigationDirect < 0) ManipulationInput.PreviousManipulation();
             m_navigationDirect = 0;
             MouseHandler();
         }
