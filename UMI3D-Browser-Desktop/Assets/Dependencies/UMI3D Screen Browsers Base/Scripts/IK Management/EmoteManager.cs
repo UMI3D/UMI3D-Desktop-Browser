@@ -293,7 +293,8 @@ namespace umi3d.baseBrowser.emotes
                 shouldTrigger = true,
                 sendingUserId = UMI3DClientServer.Instance.GetUserId()
             };
-            UMI3DClientServer.SendData(emoteRequest, true);
+            UnityEngine.Debug.LogError("EmoteRequest not send to server");
+            //UMI3DClientServer.SendData(emoteRequest, true);
 
             LoadEmotes();
             currentInterruptionAction = new UnityAction(delegate { InterruptEmote(emote); });
@@ -338,7 +339,8 @@ namespace umi3d.baseBrowser.emotes
                 shouldTrigger = false,
                 sendingUserId = UMI3DClientServer.Instance.GetUserId()
             };
-            UMI3DClientServer.SendData(emoteRequest, true);
+            //UMI3DClientServer.SendData(emoteRequest, true);
+            UnityEngine.Debug.LogError("EmoteRequest not send to server");
         }
         #endregion Emote Playing
     }

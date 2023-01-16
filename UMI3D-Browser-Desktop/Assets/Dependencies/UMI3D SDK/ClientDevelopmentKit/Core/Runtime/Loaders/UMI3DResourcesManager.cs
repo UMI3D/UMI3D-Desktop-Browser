@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using inetum.unityUtils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,7 +30,9 @@ using umi3d.common;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
+using UnityEngine.SocialPlatforms;
 using WebSocketSharp;
+using static BeardedManStudios.Forge.Networking.MasterServerResponse;
 using Path = inetum.unityUtils.Path;
 
 namespace umi3d.cdk
@@ -745,6 +748,9 @@ namespace umi3d.cdk
                     toDownload.Add(assetLibrary.libraryId);
                 }
             }
+
+            toDownload.Debug();
+
             return toDownload;
         }
 
@@ -795,7 +801,7 @@ namespace umi3d.cdk
             progress.Add(progress1);
             progress.Add(progress2);
             progress.Add(progress3);
-
+            UnityEngine.Debug.Log(assetLibrary.libraryId);
             try
             {
                 progress1.AddComplete();
@@ -811,6 +817,8 @@ namespace umi3d.cdk
                         var dtInfo = new CultureInfo(dt.culture);
                         if (DateTime.TryParseExact(dt.date, dt.dateformat, dtInfo, DateTimeStyles.None, out DateTime local) && DateTime.TryParseExact(assetLibrary.date, assetLibrary.format, info, DateTimeStyles.None, out DateTime server))
                         {
+                            UnityEngine.Debug.Log(local.Ticks +" "+ server.Ticks);
+
                             if (dt.applications == null)
                                 dt.applications = new List<string>();
                             if (local.Ticks >= server.Ticks)

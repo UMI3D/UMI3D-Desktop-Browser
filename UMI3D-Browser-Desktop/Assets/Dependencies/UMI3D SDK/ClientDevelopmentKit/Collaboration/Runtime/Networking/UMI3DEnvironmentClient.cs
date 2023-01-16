@@ -460,7 +460,7 @@ namespace umi3d.cdk.collaboration
                 bool librariesUpdated = UserDto.answerDto.librariesUpdated;
 
                 //UMI3DLogger.Log($"Somthing to update {UserDto.formdto != null} {!UserDto.answerDto.librariesUpdated} ", scope | DebugScope.Connection);
-
+                UnityEngine.Debug.Log("dl lib ? "+UserDto.answerDto.librariesUpdated);
                 if (!UserDto.answerDto.librariesUpdated)
                 {
                     LibrariesDto LibrariesDto = await HttpClient.SendGetLibraries();
