@@ -293,7 +293,7 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         EmoteWindow.AddToClassList(USSCustomClassEmoteWindow);
         CameraLayer.AddToClassList(USSCustomClassCameraLayer);
 
-        this.AddManipulator(TrailingAreaManipulator);
+        //this.AddManipulator(TrailingAreaManipulator);
         //TODO improve camera navigation with double click.
 
         CameraLayer.AddManipulator(CameraManipulator);

@@ -53,10 +53,9 @@ public class AdaptHandPose : MonoBehaviour
     void Start()
     {
         UMI3DClientUserTracking.Instance.handPoseEvent.AddListener((dto) => SetupHandPose(dto));
-        BaseController.HoverEnter.AddListener(id => {
-            currentHoverId = id;
-        });
-        BaseController.HoverExit.AddListener(id => {
+        BaseController.HoverEnter += id => currentHoverId = id;
+        BaseController.HoverExit += id => 
+        {
             if (currentHoverId != 0 && id.Equals(currentHoverId))
             {
                 currentHoverId = 0;
@@ -64,7 +63,7 @@ public class AdaptHandPose : MonoBehaviour
                 RightFreeAnchor.transform.localRotation = Quaternion.identity;
                 LeftFreeAnchor.transform.localRotation = Quaternion.identity;
             }
-        });
+        };
     }
 
     private void Update()

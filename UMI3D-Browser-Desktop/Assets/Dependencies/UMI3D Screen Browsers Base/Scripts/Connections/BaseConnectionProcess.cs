@@ -20,6 +20,7 @@ using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.common;
 using UnityEngine;
+using umi3d.baseBrowser.cursor;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -458,7 +459,7 @@ namespace umi3d.baseBrowser.connection
             cdk.UMI3DEnvironmentLoader.Clear();
             cdk.UMI3DResourcesManager.Instance.ClearCache();
 
-            Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Free);
+            BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
 
             EnvironmentLeave?.Invoke();
 
