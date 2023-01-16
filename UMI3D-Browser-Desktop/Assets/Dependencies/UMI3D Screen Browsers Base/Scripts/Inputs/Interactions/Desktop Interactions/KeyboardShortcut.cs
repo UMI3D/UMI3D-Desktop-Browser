@@ -23,7 +23,7 @@ namespace umi3d.baseBrowser.inputs.interactions
     public enum ShortcutEnum
     {
         MuteUnmuteMic, PushToTalk,
-        MuteUnmuteGeneraVolume, DecreaseVolue, IncreaseVolume,
+        MuteUnmuteGeneralVolume, DecreaseVolume, IncreaseVolume,
         Cancel, Submit,
         DisplayHideGameMenu, 
         DisplayHideContextualMenu, 

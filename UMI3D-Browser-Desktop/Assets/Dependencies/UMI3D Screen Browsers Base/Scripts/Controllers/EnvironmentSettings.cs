@@ -74,9 +74,9 @@ public class AudioSetting : ISetting
 
     public void Update()
     {
-        if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.MuteUnmuteGeneraVolume)) Toggle();
+        if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.MuteUnmuteGeneralVolume)) Toggle();
         if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.IncreaseVolume)) IncreaseVolume();
-        if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.DecreaseVolue)) DecreaseVolume();
+        if (KeyboardShortcut.WasPressedThisFrame(ShortcutEnum.DecreaseVolume)) DecreaseVolume();
     }
 
     public void SetGeneralVolumeWithoutNotify(float value)

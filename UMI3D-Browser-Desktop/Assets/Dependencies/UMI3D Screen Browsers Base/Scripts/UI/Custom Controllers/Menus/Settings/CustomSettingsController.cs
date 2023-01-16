@@ -337,13 +337,13 @@ public class CustomSettingsController : CustomSettingScreen
 
         var muteUnmuteGeneralVolume = new InputAction("muteUnmuteGeneralVolume");
         muteUnmuteGeneralVolume.AddBinding("<Keyboard>/l");
-        ShortcutBindingsUpdated(ShortcutEnum.MuteUnmuteGeneraVolume, muteUnmuteGeneralVolume, controllers);
+        ShortcutBindingsUpdated(ShortcutEnum.MuteUnmuteGeneralVolume, muteUnmuteGeneralVolume, controllers);
 
         var decreaseGeneralVolume = new InputAction("decreaseGeneralVolume");
         decreaseGeneralVolume.AddCompositeBinding("ButtonWithOneModifier")
             .With("Button", "<Keyboard>/#(-)")
             .With("Modifier", "<Keyboard>/ctrl");
-        ShortcutBindingsUpdated(ShortcutEnum.DecreaseVolue, decreaseGeneralVolume, controllers);
+        ShortcutBindingsUpdated(ShortcutEnum.DecreaseVolume, decreaseGeneralVolume, controllers);
 
         var increaseGeneralVolume = new InputAction("increaseGeneralVolume");
         increaseGeneralVolume.AddCompositeBinding("ButtonWithOneModifier")
@@ -395,8 +395,8 @@ public class CustomSettingsController : CustomSettingScreen
 
         ShortcutBindingsUpdated(ShortcutEnum.MuteUnmuteMic, Data.MuteUnmuteMic, controllers);
         ShortcutBindingsUpdated(ShortcutEnum.PushToTalk, Data.PushToTalk, controllers);
-        ShortcutBindingsUpdated(ShortcutEnum.MuteUnmuteGeneraVolume, Data.MuteUnmuteGeneralVolume, controllers);
-        ShortcutBindingsUpdated(ShortcutEnum.DecreaseVolue, Data.DecreaseGeneralVolume, controllers);
+        ShortcutBindingsUpdated(ShortcutEnum.MuteUnmuteGeneralVolume, Data.MuteUnmuteGeneralVolume, controllers);
+        ShortcutBindingsUpdated(ShortcutEnum.DecreaseVolume, Data.DecreaseGeneralVolume, controllers);
         ShortcutBindingsUpdated(ShortcutEnum.IncreaseVolume, Data.IncreaseGeneralVolume, controllers);
         ShortcutBindingsUpdated(ShortcutEnum.Cancel, Data.Cancel, controllers);
         ShortcutBindingsUpdated(ShortcutEnum.Submit, Data.Submit, controllers);
@@ -483,12 +483,12 @@ public class CustomSettingsController : CustomSettingScreen
                 PushToTalk.Key2.text = control2;
                 Data.PushToTalk = action;
                 break;
-            case ShortcutEnum.MuteUnmuteGeneraVolume:
+            case ShortcutEnum.MuteUnmuteGeneralVolume:
                 GeneralVolume.Key1.text = control1;
                 GeneralVolume.Key2.text = control2;
                 Data.MuteUnmuteGeneralVolume = action;
                 break;
-            case ShortcutEnum.DecreaseVolue:
+            case ShortcutEnum.DecreaseVolume:
                 DecreaseVolume.Key1.text = control1;
                 DecreaseVolume.Key2.text = control2;
                 Data.DecreaseGeneralVolume = action;
