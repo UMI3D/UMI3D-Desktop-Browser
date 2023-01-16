@@ -30,7 +30,7 @@ namespace umi3d.baseBrowser.connection
             InitControls_ContextualMenu();
             InitControls_CancelAndSubmit();
 
-            KeyboardShortcut.AddUpListener(ShortcutEnum.GameMenu, () =>
+            KeyboardShortcut.AddUpListener(ShortcutEnum.DisplayHideGameMenu, () =>
             {
                 if (GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu)
                 {
@@ -45,7 +45,7 @@ namespace umi3d.baseBrowser.connection
                 }
             });
 
-            KeyboardShortcut.AddUpListener(ShortcutEnum.Notification, () =>
+            KeyboardShortcut.AddUpListener(ShortcutEnum.DisplayHideNotifications, () =>
             {
                 if
                 (
@@ -70,7 +70,7 @@ namespace umi3d.baseBrowser.connection
                 }
             });
 
-            KeyboardShortcut.AddUpListener(ShortcutEnum.UserList, () =>
+            KeyboardShortcut.AddUpListener(ShortcutEnum.DisplayHideUsersList, () =>
             {
                 if
                 (
@@ -114,7 +114,7 @@ namespace umi3d.baseBrowser.connection
 
         protected void InitControls_ContextualMenu()
         {
-            KeyboardShortcut.AddDownListener(ShortcutEnum.ContextualMenu, () =>
+            KeyboardShortcut.AddDownListener(ShortcutEnum.DisplayHideContextualMenu, () =>
             {
                 if
                 (
@@ -126,7 +126,7 @@ namespace umi3d.baseBrowser.connection
 
                 m_contextualMenuActionDown?.Invoke();
             });
-            KeyboardShortcut.AddUpListener(ShortcutEnum.ContextualMenu, () =>
+            KeyboardShortcut.AddUpListener(ShortcutEnum.DisplayHideContextualMenu, () =>
             {
                 if
                 (

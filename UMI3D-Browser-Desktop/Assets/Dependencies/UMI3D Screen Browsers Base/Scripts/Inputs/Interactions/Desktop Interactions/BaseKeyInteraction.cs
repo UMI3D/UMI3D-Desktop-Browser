@@ -21,10 +21,47 @@ namespace umi3d.baseBrowser.inputs.interactions
 {
     public abstract class BaseKeyInteraction : EventInteraction
     {
+        public static bool IsEditingTextField;
+
         public InputAction Key;
+
         protected bool m_wasHoverBeforeClicked;
 
-        public virtual bool CanProces() => BaseCursor.Movement != BaseCursor.CursorMovement.Free;
+        /// <summary>
+        /// check if key is allow to be watch (cursor free, etc.)
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool CanProces() => BaseCursor.Movement != BaseCursor.CursorMovement.Free && !IsEditingTextField;
+
+        public virtual void UpdateKey(InputAction action)
+        {
+            if (action.bindings.Count == 0)
+            {
+                for (int i = 0; i < Key.bindings.Count; i++) Key.ChangeBinding(i).Erase();
+            }
+            else if (action.bindings.Count == 1)
+            {
+                for (int i = 1; i < Key.bindings.Count; i++) Key.ChangeBinding(i).Erase();
+
+                UpdateBinding(0, action.bindings[0]);
+            }
+            else if (action.bindings.Count == 2)
+            {
+                UpdateBinding(0, action.bindings[0]);
+            }
+
+            if (action.bindings.Count > 1) Key.ChangeBinding(1).WithPath(action.bindings[1].path);
+        }
+
+        protected virtual void UpdateBinding(int index, InputBinding binding)
+        {
+            if (binding.isComposite)
+            {
+
+            }
+            if (Key.bindings.Count <= index) Key.AddBinding(binding.path);
+            else Key.ChangeBinding(index).WithPath(binding.path);
+        }
 
         protected virtual void Start()
         {
@@ -63,19 +100,17 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// <param name="context"></param>
         protected virtual void KeyStarted(InputAction.CallbackContext context)
         {
-            //todo check if key is allow to be watch (cursor free, etc.)
             if (!CanProces()) return;
 
             Pressed(true);
         }
-        
+
         /// <summary>
         /// Callback when the key is pressed up.
         /// </summary>
         /// <param name="context"></param>
         protected virtual void KeyCanceled(InputAction.CallbackContext context)
         {
-            //todo check if key is allow to be watch (cursor free, etc.)
             if (!CanProces()) return;
 
             Pressed(false);

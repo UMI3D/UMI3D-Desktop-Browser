@@ -47,7 +47,7 @@ public class CustomSettingsResolution : CustomSettingScreen
         public static System.Func<string> USSCustomClassBox;
     }
 
-    public override string USSCustomClassName => "setting__resolution";
+    public override string USSCustomClassName => "setting-resolution";
     public virtual string USSCustomClassBox => $"{USSCustomClassName}-box";
 
     #region Game Resolution
