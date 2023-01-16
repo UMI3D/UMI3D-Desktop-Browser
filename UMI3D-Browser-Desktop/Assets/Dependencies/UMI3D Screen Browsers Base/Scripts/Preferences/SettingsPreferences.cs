@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace umi3d.baseBrowser.preferences
 {
@@ -85,6 +86,36 @@ namespace umi3d.baseBrowser.preferences
 
             public bool JoystickStatic;
             public bool LeftHand;
+
+            #region Navigation
+
+            public InputAction Forward;
+            public InputAction Backward;
+            public InputAction Left;
+            public InputAction Right;
+            public InputAction Sprint;
+            public InputAction Jump;
+            public InputAction Crouch;
+            public InputAction FreeHead;
+
+            #endregion
+
+            #region Shortcut
+
+            public InputAction MuteUnmuteMic;
+            public InputAction PushToTalk;
+            public InputAction MuteUnmuteGeneralVolume;
+            public InputAction DecreaseGeneralVolume;
+            public InputAction IncreaseGeneralVolume;
+            public InputAction Cancel;
+            public InputAction Submit;
+            public InputAction DisplayHideGameMenu;
+            public InputAction DisplayHideContextualMenu;
+            public InputAction DisplayHideNotifications;
+            public InputAction DisplayHideUsersList;
+            public InputAction DisplayHideEmotesWindow;
+
+            #endregion
         }
 
         public static bool TryGetControllerData(out ControllerData data) => PreferencesManager.TryGet(out data, c_controllerPath, c_dataFolderPath);

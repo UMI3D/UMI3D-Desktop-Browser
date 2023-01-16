@@ -27,6 +27,7 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// <summary>
         /// Avatar bone linked to this input.
         /// </summary>
+        [inetum.unityUtils.ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
         public uint bone = common.userCapture.BoneType.None;
         protected ulong toolId, hoveredObjectId;
         public override void UpdateHoveredObjectId(ulong hoveredObjectId) => this.hoveredObjectId = hoveredObjectId;

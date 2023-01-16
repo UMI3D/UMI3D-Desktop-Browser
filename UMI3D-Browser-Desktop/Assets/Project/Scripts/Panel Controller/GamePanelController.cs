@@ -74,6 +74,13 @@ public class GamePanelController : umi3d.baseBrowser.connection.BaseGamePanelCon
         Menu.Version = BrowserDesktop.BrowserVersion.Version;
     }
 
+    protected override void InitControls()
+    {
+        base.InitControls();
+
+        Menu.Settings.Controller.Controller = ControllerEnum.MouseAndKeyboard;
+    }
+
     public override CustomDialoguebox CreateDialogueBox()
         => new umi3d.commonScreen.Displayer.Dialoguebox_C();
 }
