@@ -262,5 +262,16 @@ namespace umi3d.baseBrowser.inputs.interactions
 
             return result;
         }
+
+        public static List<(ControllerInputEnum, string)> GetFirstMappingFromController(this InputAction action, params ControllerInputEnum[] controllers)
+        {
+            int bindingIndex = action.FirstBindingIndex(out var binding, 0, controllers);
+            List<(ControllerInputEnum, string)> result = new List<(ControllerInputEnum, string)>();
+
+            if (binding.isComposite) result.AddRange(action.GetCompositMappingFromBindingIndex(bindingIndex));
+            else result.Add(action.GetSimpleMappingFromBindingIndex(bindingIndex));
+
+            return result;
+        }
     }
 }

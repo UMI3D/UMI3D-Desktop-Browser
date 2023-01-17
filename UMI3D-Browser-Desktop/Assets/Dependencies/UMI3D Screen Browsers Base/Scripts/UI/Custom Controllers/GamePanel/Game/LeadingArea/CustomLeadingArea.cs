@@ -78,6 +78,7 @@ public class CustomLeadingArea : VisualElement, ICustomElement
                 default:
                     break;
             }
+            InteractableMapping.Controller = value;
         }
     }
 

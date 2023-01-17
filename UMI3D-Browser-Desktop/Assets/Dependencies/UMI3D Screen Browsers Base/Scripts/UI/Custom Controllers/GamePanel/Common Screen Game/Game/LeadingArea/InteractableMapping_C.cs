@@ -45,6 +45,7 @@ namespace umi3d.commonScreen.game
                 WaitingRows.RemoveAt(WaitingRows.Count - 1);
             }
             ActiveRows.Add(row);
+            ScrollView.Add(row);
 
             return row;
         }
@@ -53,6 +54,8 @@ namespace umi3d.commonScreen.game
             if (row == null) return;
             ActiveRows.Remove(row);
             WaitingRows.Add(row);
+            row.RemoveFromHierarchy();
+            row.RemoveAllMapping();
         }
     }
 }

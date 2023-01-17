@@ -16,10 +16,14 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using umi3d.baseBrowser.inputs.interactions;
+using umi3d.commonScreen.Displayer;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using static umi3d.baseBrowser.inputs.interactions.BaseKeyInteraction;
 
-public class CustomInteractableMappingRow : VisualElement, ICustomElement
+public abstract class CustomInteractableMappingRow : VisualElement, ICustomElement
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
@@ -103,4 +107,61 @@ public class CustomInteractableMappingRow : VisualElement, ICustomElement
     }
 
     public override VisualElement contentContainer => m_isSet ? Main : this;
+
+    #region Implementation
+
+    public List<VisualElement> MappingChildren = new List<VisualElement>();
+
+    public void AddMapping(string name, ControllerEnum controller, InputAction action)
+    {
+        ActionName = name;
+
+        List<(ControllerInputEnum, string)> mappings = null;
+        switch (controller)
+        {
+            case ControllerEnum.MouseAndKeyboard:
+                mappings = action.GetFirstMappingFromController(ControllerInputEnum.Keyboard, ControllerInputEnum.Mouse);
+                foreach (var mapping in mappings)
+                {
+                    var map = CreateMapping();
+                    if (mapping.Item1 == ControllerInputEnum.Keyboard)
+                    {
+                        map.MappingName = mapping.Item2;
+                        map.Type = MappingType.Keyboard;
+                    }
+                    else
+                    {
+                        //TODO for manipulation
+                    }
+
+                    Add(map);
+                    MappingChildren.Add(map);
+                }
+                break;
+            case ControllerEnum.Touch:
+                //TODO
+                break;
+            case ControllerEnum.GameController:
+                mappings = action.GetFirstMappingFromController(ControllerInputEnum.Gamepad);
+                //TODO
+                break;
+            default:
+                break;
+        }
+    }
+    public void RemoveAllMapping()
+    {
+        for (int i = 0; i < MappingChildren.Count; i++)
+        {
+            var child = MappingChildren[i];
+            child.RemoveFromHierarchy();
+            if (child is not CustomMapping mapping) return;
+            RemoveMapping(mapping);
+        }
+    }
+
+    protected abstract CustomMapping CreateMapping();
+    protected abstract void RemoveMapping(CustomMapping mapping);
+
+    #endregion
 }

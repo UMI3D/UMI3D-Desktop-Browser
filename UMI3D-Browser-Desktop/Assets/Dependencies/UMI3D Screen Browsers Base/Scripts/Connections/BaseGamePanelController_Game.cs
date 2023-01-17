@@ -51,6 +51,15 @@ namespace umi3d.baseBrowser.connection
             InitGame_Notification();
             InitGame_Emote();
             InitGame_ObjectMenu();
+
+            LeadingArea.InteractableMapping.MappingAdded += () =>
+            {
+                LeadingArea.InteractableMapping.InteractableName = BaseController.Instance.mouseData.CurrentHovered.name;
+            };
+            LeadingArea.InteractableMapping.MappingRemoved += () =>
+            {
+                LeadingArea.InteractableMapping.InteractableName = null;
+            };
         }
 
         protected virtual void InitGame_ButtonsArea()

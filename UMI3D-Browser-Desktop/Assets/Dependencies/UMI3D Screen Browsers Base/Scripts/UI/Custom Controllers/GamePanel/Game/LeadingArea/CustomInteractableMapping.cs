@@ -17,7 +17,10 @@ using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.commonMobile.game;
+using umi3d.commonScreen.game;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.UIElements;
 using static umi3d.baseBrowser.inputs.interactions.BaseKeyInteraction;
 
@@ -25,6 +28,12 @@ public abstract class CustomInteractableMapping : VisualElement, ICustomElement
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
+        protected UxmlEnumAttributeDescription<ControllerEnum> m_controller = new UxmlEnumAttributeDescription<ControllerEnum>
+        {
+            name = "controller",
+            defaultValue = ControllerEnum.MouseAndKeyboard
+        };
+
         protected UxmlStringAttributeDescription m_interactableName = new UxmlStringAttributeDescription
         {
             name = "interactable-name",
@@ -45,11 +54,17 @@ public abstract class CustomInteractableMapping : VisualElement, ICustomElement
 
             custom.Set
                 (
+                    m_controller.GetValueFromBag(bag, cc),
                     m_interactableName.GetValueFromBag(bag, cc)
                 );
         }
     }
 
+    public ControllerEnum Controller
+    {
+        get => m_controller;
+        set => m_controller = value;
+    }
     public string InteractableName
     {
         get => InteractableNameText.text;
@@ -67,6 +82,7 @@ public abstract class CustomInteractableMapping : VisualElement, ICustomElement
     public CustomScrollView ScrollView;
 
     protected bool m_hasBeenInitialized;
+    protected ControllerEnum m_controller;
 
     public virtual void InitElement()
     {
@@ -91,9 +107,9 @@ public abstract class CustomInteractableMapping : VisualElement, ICustomElement
         Main.Add(ScrollView);
     }
 
-    public virtual void Set() => Set(null);
+    public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, null);
 
-    public virtual void Set(string interactableName)
+    public virtual void Set(ControllerEnum controller, string interactableName)
     {
         if (!m_hasBeenInitialized)
         {
@@ -101,28 +117,31 @@ public abstract class CustomInteractableMapping : VisualElement, ICustomElement
             m_hasBeenInitialized = true;
         }
 
+        Controller = controller;
         InteractableName = interactableName;
     }
 
     #region Implementation
 
+    public event System.Action MappingAdded;
+    public event System.Action MappingRemoved;
     public static Dictionary<KeyboardInteraction, CustomInteractableMappingRow> S_interactionMapping = new Dictionary<KeyboardInteraction, CustomInteractableMappingRow>();
 
-    public void AddMapping(KeyboardInteraction interaction, string name, List<(string, MappingType)> mapping)
+    public void AddMapping(KeyboardInteraction interaction, string name, InputAction action)
     {
         var row = CreateMappingRow();
-        row.ActionName = name;
+        row.AddMapping(name, Controller, action);
 
         S_interactionMapping.Add(interaction, row);
-        ScrollView.Add(row);
+        MappingAdded?.Invoke();
     }
 
     public void RemoveMapping(KeyboardInteraction interaction)
     {
         if (!S_interactionMapping.ContainsKey(interaction)) return;
-        S_interactionMapping[interaction].RemoveFromHierarchy();
         RemoveMappingRow(S_interactionMapping[interaction]);
         S_interactionMapping.Remove(interaction);
+        if (S_interactionMapping.Count == 0) MappingRemoved?.Invoke();
     }
 
     protected abstract CustomInteractableMappingRow CreateMappingRow();

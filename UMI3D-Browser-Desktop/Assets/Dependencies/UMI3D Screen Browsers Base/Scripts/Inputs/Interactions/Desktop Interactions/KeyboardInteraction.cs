@@ -26,7 +26,7 @@ namespace umi3d.baseBrowser.inputs.interactions
         {
             base.CreateMenuItem();
 
-            Mapped?.Invoke(this, menuItem.Name, null);
+            Mapped?.Invoke(this, menuItem.Name, Key);
         }
 
         public override void Dissociate()
@@ -36,7 +36,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             Unmapped?.Invoke(this);
         }
 
-        public static System.Action<KeyboardInteraction, string, List<(string, MappingType)>> Mapped;
+        public static System.Action<KeyboardInteraction, string, InputAction> Mapped;
         public static System.Action<KeyboardInteraction> Unmapped;
     }
 }

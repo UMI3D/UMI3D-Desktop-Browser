@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System.Collections.Generic;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Displayer
@@ -28,6 +29,29 @@ namespace umi3d.commonScreen.Displayer
             if (ActionNameText == null) ActionNameText = new Text_C();
 
             base.InitElement();
+        }
+
+        protected List<CustomMapping> WaitingMappings = new List<CustomMapping>();
+        protected List<CustomMapping> ActiveMappings = new List<CustomMapping>();
+
+        protected override CustomMapping CreateMapping()
+        {
+            CustomMapping mapping = null;
+            if (WaitingMappings.Count == 0) mapping = new Mapping_C();
+            else
+            {
+                mapping = WaitingMappings[WaitingMappings.Count - 1];
+                WaitingMappings.RemoveAt(WaitingMappings.Count - 1);
+            }
+            ActiveMappings.Add(mapping);
+
+            return mapping;
+        }
+        protected override void RemoveMapping(CustomMapping mapping)
+        {
+            if (mapping == null) return;
+            ActiveMappings.Remove(mapping);
+            WaitingMappings.Add(mapping);
         }
     }
 }

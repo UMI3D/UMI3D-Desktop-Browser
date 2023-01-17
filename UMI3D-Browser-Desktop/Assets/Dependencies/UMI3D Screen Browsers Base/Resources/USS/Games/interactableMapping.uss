@@ -9,8 +9,10 @@
 }
 
 .interactable__mapping-interactable__name.unity-label.text {
-	margin-left: var(--size-margin-and-padding-game);
-	margin-right: var(--size-margin-and-padding-game);
-	margin-top: var(--size-margin-and-padding-game);
-	margin-bottom: var(--size-margin-and-padding-game);
+	padding-left: var(--size-margin-and-padding-game);
+	padding-right: var(--size-margin-and-padding-game);
+	padding-top: var(--size-margin-and-padding-game);
+	padding-bottom: var(--size-margin-and-padding-game);
+
+	background-color: var(--background-color-game);
 }
