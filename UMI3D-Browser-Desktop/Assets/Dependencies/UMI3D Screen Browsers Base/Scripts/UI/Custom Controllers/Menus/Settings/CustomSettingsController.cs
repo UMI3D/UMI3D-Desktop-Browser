@@ -14,19 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
-using System.Linq;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.baseBrowser.Navigation;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
 using UnityEngine.UIElements;
+using static umi3d.baseBrowser.inputs.interactions.BaseKeyInteraction;
 using static umi3d.baseBrowser.preferences.SettingsPreferences;
 
 public class CustomSettingsController : CustomSettingScreen
 {
-    public enum ControllerInputEnum { Gamepad, Keyboard, Mouse}
-
     public struct KeyBindingDisplayer
     {
         public CustomText Command;
@@ -85,6 +82,9 @@ public class CustomSettingsController : CustomSettingScreen
         }
     }
 
+    /// <summary>
+    /// Current controller used with this browser.
+    /// </summary>
     public ControllerEnum Controller
     {
         get => m_controller;
@@ -102,6 +102,18 @@ public class CustomSettingsController : CustomSettingScreen
                 ScrollView.Add(Crouch.Box);
                 ScrollView.Add(FreeHead.Box);
             }
+            void RemoveNavigationControls()
+            {
+                NavigationLabel.RemoveFromHierarchy();
+                Forward.Box.RemoveFromHierarchy();
+                Backward.Box.RemoveFromHierarchy();
+                Left.Box.RemoveFromHierarchy();
+                Right.Box.RemoveFromHierarchy();
+                Sprint.Box.RemoveFromHierarchy();
+                Jump.Box.RemoveFromHierarchy();
+                Crouch.Box.RemoveFromHierarchy();
+                FreeHead.Box.RemoveFromHierarchy();
+            }
 
             void AddShortcutControls()
             {
@@ -118,6 +130,21 @@ public class CustomSettingsController : CustomSettingScreen
                 ScrollView.Add(Notification.Box);
                 ScrollView.Add(UserList.Box);
             }
+            void RemoveShortcutControls()
+            {
+                ShortcutLabel.RemoveFromHierarchy();
+                Mute.Box.RemoveFromHierarchy();
+                PushToTalk.Box.RemoveFromHierarchy();
+                GeneralVolume.Box.RemoveFromHierarchy();
+                DecreaseVolume.Box.RemoveFromHierarchy();
+                IncreaseVolume.Box.RemoveFromHierarchy();
+                Cancel.Box.RemoveFromHierarchy();
+                Submit.Box.RemoveFromHierarchy();
+                GameMenu.Box.RemoveFromHierarchy();
+                ContextualMenu.Box.RemoveFromHierarchy();
+                Notification.Box.RemoveFromHierarchy();
+                UserList.Box.RemoveFromHierarchy();
+            }
 
             m_controller = value;
             switch (value)
@@ -131,11 +158,14 @@ public class CustomSettingsController : CustomSettingScreen
                 case ControllerEnum.Touch:
                     ScrollView.Add(JoystickStaticToggle);
                     ScrollView.Add(LeftHandToggle);
+                    RemoveNavigationControls();
+                    RemoveShortcutControls();
                     break;
                 case ControllerEnum.GameController:
                     JoystickStaticToggle.RemoveFromHierarchy();
                     LeftHandToggle.RemoveFromHierarchy();
                     AddNavigationControls();
+                    AddShortcutControls();
                     break;
                 default:
                     break;
@@ -185,6 +215,9 @@ public class CustomSettingsController : CustomSettingScreen
 
     protected ControllerEnum m_controller;
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public override void InitElement()
     {
         base.InitElement();
@@ -253,6 +286,10 @@ public class CustomSettingsController : CustomSettingScreen
     public ControllerData Data;
     public BaseFPSData fpsData;
 
+    /// <summary>
+    /// Called when the camera sensibility changed.
+    /// </summary>
+    /// <param name="value"></param>
     public virtual void OnCameraSensibilityValueChanged(float value)
     {
         value = (int)value;
@@ -262,6 +299,10 @@ public class CustomSettingsController : CustomSettingScreen
         StoreControllerrData(Data);
     }
 
+    /// <summary>
+    /// Called when joystick static has been updated.
+    /// </summary>
+    /// <param name="value"></param>
     protected void JoystickStaticUpdated(bool value)
     {
         JoystickStaticToggle.SetValueWithoutNotify(value);
@@ -271,6 +312,10 @@ public class CustomSettingsController : CustomSettingScreen
         StoreControllerrData(Data);
     }
 
+    /// <summary>
+    /// Called when the left hand or right hand status has been updated.
+    /// </summary>
+    /// <param name="value"></param>
     protected void LeftHandUpdated(bool value)
     {
         LeftHandToggle.SetValueWithoutNotify(value);
@@ -406,13 +451,17 @@ public class CustomSettingsController : CustomSettingScreen
         ShortcutBindingsUpdated(ShortcutEnum.DisplayHideUsersList, Data.DisplayHideUsersList, controllers);
     }
 
+    /// <summary>
+    /// Called when navigation mapping has been updated.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="action"></param>
+    /// <param name="controllers"></param>
     public void NavigationBindingsUpdated(NavigationEnum command, InputAction action, params ControllerInputEnum[] controllers)
     {
-        var bindings = action.bindings;
-        var controls = action.controls;
         int currentIndex = 0;
-        FindControl(bindings, controls, ref currentIndex, out string control1, controllers);
-        FindControl(bindings, controls, ref currentIndex, out string control2, controllers);
+        FindControl(action, ref currentIndex, out string control1, controllers);
+        FindControl(action, ref currentIndex, out string control2, controllers);
 
         switch (command)
         {
@@ -463,13 +512,17 @@ public class CustomSettingsController : CustomSettingScreen
         StoreControllerrData(Data);
     }
 
+    /// <summary>
+    /// Called when a shortcut mapping has been updated.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="action"></param>
+    /// <param name="controllers"></param>
     public void ShortcutBindingsUpdated(ShortcutEnum command, InputAction action, params ControllerInputEnum[] controllers)
     {
-        var bindings = action.bindings;
-        var controls = action.controls;
         int currentIndex = 0;
-        FindControl(bindings, controls, ref currentIndex, out string control1, controllers);
-        FindControl(bindings, controls, ref currentIndex, out string control2, controllers);
+        FindControl(action, ref currentIndex, out string control1, controllers);
+        FindControl(action, ref currentIndex, out string control2, controllers);
 
         switch (command)
         {
@@ -537,130 +590,34 @@ public class CustomSettingsController : CustomSettingScreen
         StoreControllerrData(Data);
     }
 
-    protected bool FindControl(ReadOnlyArray<InputBinding> bindings, ReadOnlyArray<InputControl> controls, ref int index, out string control, params ControllerInputEnum[] controllers)
+    protected bool FindControl(InputAction action, ref int index, out string control, params ControllerInputEnum[] controllers)
     {
-        var lowIndex = index;
         control = "No binding";
 
         if (controllers == null) return false;
 
-        int currentIndex = 0;
-        var inputBindings = bindings.FirstOrDefault(_binding =>
-        {
-            currentIndex = bindings.IndexOf(item => item == _binding);
-            if (currentIndex < lowIndex) return false;
+        int currentIndex = action.FirstBindingIndex(out InputBinding binding, index, controllers);
+        if (currentIndex == -1) return false;
 
-            if (_binding.isComposite)
+        control = "";
+        if (binding.isComposite)
+        {
+            var mapping = action.GetCompositMappingFromBindingIndex(currentIndex);
+            for (int i = 0; i < mapping.Count; i++)
             {
-                if (_binding.path == "ButtonWithOneModifier")
-                {
-                    bool matchController1 = false;
-                    foreach (var controller in controllers)
-                        if (bindings[currentIndex + 1].path.Contains(controller.ToString())) matchController1 = true;
-                    bool matchController2 = false;
-                    foreach (var controller in controllers)
-                        if (bindings[currentIndex + 2].path.Contains(controller.ToString())) matchController2 = true;
-                    var result = matchController1 && matchController2;
-
-                    if (!result) lowIndex = currentIndex + 3;
-
-                    return result;
-                }
-                else if (_binding.path == "ButtonWithTwoModifier")
-                {
-                    bool matchController1 = false;
-                    foreach (var controller in controllers)
-                        if (bindings[currentIndex + 1].path.Contains(controller.ToString())) matchController1 = true;
-                    bool matchController2 = false;
-                    foreach (var controller in controllers)
-                        if (bindings[currentIndex + 2].path.Contains(controller.ToString())) matchController2 = true;
-                    bool matchController3 = false;
-                    foreach (var controller in controllers)
-                        if (bindings[currentIndex + 2].path.Contains(controller.ToString())) matchController3 = true;
-                    var result = matchController1 && matchController2 && matchController3;
-
-                    if (!result) lowIndex = currentIndex + 4;
-
-                    return result;
-                }
-                else return false;
+                if (i > 0 && i < mapping.Count) control += " + ";
+                control += $"[{mapping[i].Item2}]";
             }
-            else
-            {
-                bool matchController = false;
-                foreach (var controller in controllers)
-                    if (_binding.path.Contains(controller.ToString())) matchController = true;
-
-                return matchController;
-            }
-        });
-
-        if (string.IsNullOrEmpty(inputBindings.path) && string.IsNullOrEmpty(inputBindings.ToDisplayString())) return false;
-        index = currentIndex;
-        if (inputBindings.isComposite) return FindCompositControl(inputBindings, controls, ref index, GetControlIndex(bindings, index), out control);
-        else return FindSimpleControl(controls[GetControlIndex(bindings, index)], ref index, out control);
-    }
-
-    /// <summary>
-    /// Get the composit contol display names and update the index.
-    /// </summary>
-    /// <param name="binding"></param>
-    /// <param name="ControlBinding"></param>
-    /// <param name="index"></param>
-    /// <param name="controlIndex"></param>
-    /// <param name="control"></param>
-    /// <returns></returns>
-    protected bool FindCompositControl(InputBinding binding, ReadOnlyArray<InputControl> ControlBinding, ref int index, int controlIndex, out string control)
-    {
-        if (binding.path == "ButtonWithOneModifier")
-        {
-            control = $"{ControlBinding[controlIndex + 1].displayName} and {ControlBinding[controlIndex].displayName}";
-            index += 3;
-            return true;
-        } 
-        else if (binding.path == "ButtonWithTwoModifier")
-        {
-            control = $"{ControlBinding[controlIndex + 1].displayName} and {ControlBinding[controlIndex + 2].displayName} and {ControlBinding[controlIndex].displayName}";
-            index += 4;
-            return true;
+            if (mapping.Count == 2) index = currentIndex + 3;
+            else index = currentIndex + 4;
         }
-
-        control = "No binding";
-        return false;
-    }
-
-    /// <summary>
-    /// Get the simple control diplay name and update the index.
-    /// </summary>
-    /// <param name="inputControl"></param>
-    /// <param name="index"></param>
-    /// <param name="control"></param>
-    /// <returns></returns>
-    protected bool FindSimpleControl(InputControl inputControl, ref int index, out string control)
-    {
-        control = inputControl.displayName;
-        ++index;
-
+        else
+        {
+            control = $"[{action.GetSimpleMappingFromBindingIndex(currentIndex).Item2}]";
+            index = currentIndex + 1;
+        }
+            
         return true;
-    }
-
-    /// <summary>
-    /// Find the index of the corresponding InputControl in the ReadOnlyArray<InputControl> array.
-    /// </summary>
-    /// <param name="bindings"></param>
-    /// <param name="bindingsIndex"></param>
-    /// <returns></returns>
-    protected int GetControlIndex(ReadOnlyArray<InputBinding> bindings, int bindingsIndex)
-    {
-        int result = -1;
-
-        for (int i = 0; i <= bindingsIndex; i++)
-        {
-            result++;
-            if (i > 0 && bindings[i - 1].isComposite) result--;
-        }
-
-        return result;
     }
 
     #endregion

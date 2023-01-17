@@ -25,6 +25,7 @@ namespace umi3d.commonScreen.game
 
         public override void InitElement()
         {
+            if (InteractableMapping == null) InteractableMapping = new InteractableMapping_C();
             if (JoystickArea == null) JoystickArea = new commonMobile.game.JoystickArea_C();
     
             base.InitElement();
