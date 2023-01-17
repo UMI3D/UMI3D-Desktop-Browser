@@ -151,6 +151,7 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
         m_librariesFiltered.Clear();
         bool isThereWrongLibrariesPath = false;
         List<string> PathWrong = new List<string>();
+
         foreach (var lib in m_libraries)
         {
             // 1. Diplay lib name
@@ -197,7 +198,7 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
                 dialogueBox.Callback += (index) =>
                 {
                     if (index != 1) return;
-                    umi3d.cdk.UMI3DResourcesManager.RemoveLibrary(lib.key);
+                    umi3d.cdk.UMI3DResourcesManager.RemoveLibrary(lib.library);
                     library.RemoveFromHierarchy();
                     libraries.Remove(library);
                     UpdateFilterdList(Header.FilterField.value);
@@ -283,7 +284,7 @@ public abstract class CustomLibraryScreen : CustomMenuScreen
             if (index != 1) return;
             foreach (var lib in m_librariesFiltered)
             {
-                umi3d.cdk.UMI3DResourcesManager.RemoveLibrary(lib.Title);
+                umi3d.cdk.UMI3DResourcesManager.RemoveLibrary(new umi3d.cdk.UMI3DResourcesManager.Library( lib.Title, lib.Version));
                 lib.RemoveFromHierarchy();
                 libraries.Remove(lib);
                 UpdateFilterdList(Header.FilterField.value);
