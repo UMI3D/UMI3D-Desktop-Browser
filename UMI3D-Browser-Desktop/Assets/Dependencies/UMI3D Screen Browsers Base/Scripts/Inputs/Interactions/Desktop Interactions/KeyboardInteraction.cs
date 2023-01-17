@@ -36,7 +36,13 @@ namespace umi3d.baseBrowser.inputs.interactions
             Unmapped?.Invoke(this);
         }
 
+        /// <summary>
+        /// Action raised when this interaction has been associated with a menu item.
+        /// </summary>
         public static System.Action<KeyboardInteraction, string, InputAction> Mapped;
+        /// <summary>
+        /// Action raised when this interaction has been dissociated.
+        /// </summary>
         public static System.Action<KeyboardInteraction> Unmapped;
     }
 }

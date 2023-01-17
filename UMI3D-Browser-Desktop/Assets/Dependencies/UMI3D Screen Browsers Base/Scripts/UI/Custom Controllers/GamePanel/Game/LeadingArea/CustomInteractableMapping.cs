@@ -13,16 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.inputs.interactions;
-using umi3d.commonMobile.game;
-using umi3d.commonScreen.game;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XR;
 using UnityEngine.UIElements;
-using static umi3d.baseBrowser.inputs.interactions.BaseKeyInteraction;
 
 public abstract class CustomInteractableMapping : VisualElement, ICustomElement
 {
@@ -60,12 +55,18 @@ public abstract class CustomInteractableMapping : VisualElement, ICustomElement
         }
     }
 
-    public ControllerEnum Controller
+    /// <summary>
+    /// The current controller use with this browser.
+    /// </summary>
+    public virtual ControllerEnum Controller
     {
         get => m_controller;
         set => m_controller = value;
     }
-    public string InteractableName
+    /// <summary>
+    /// Name of the interactable currently hovered (by default : "Interactable mapping"). This text will be displayed at the top.
+    /// </summary>
+    public virtual string InteractableName
     {
         get => InteractableNameText.text;
         set => InteractableNameText.text = string.IsNullOrEmpty(value) ? "Interactable mapping" : value;
@@ -84,6 +85,9 @@ public abstract class CustomInteractableMapping : VisualElement, ICustomElement
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public virtual void InitElement()
     {
         try
@@ -107,8 +111,16 @@ public abstract class CustomInteractableMapping : VisualElement, ICustomElement
         Main.Add(ScrollView);
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, null);
 
+    /// <summary>
+    /// Set the UI element.
+    /// </summary>
+    /// <param name="controller"></param>
+    /// <param name="interactableName"></param>
     public virtual void Set(ControllerEnum controller, string interactableName)
     {
         if (!m_hasBeenInitialized)
@@ -123,10 +135,25 @@ public abstract class CustomInteractableMapping : VisualElement, ICustomElement
 
     #region Implementation
 
+    /// <summary>
+    /// Event raised when an interaction has been mapped.
+    /// </summary>
     public event System.Action MappingAdded;
+    /// <summary>
+    /// Event raised when all interactions have been unmapped.
+    /// </summary>
     public event System.Action MappingRemoved;
+    /// <summary>
+    /// Key: Keyboard interaction. Value: the customInteractableMappingRow corresponding to this interaction.
+    /// </summary>
     public static Dictionary<KeyboardInteraction, CustomInteractableMappingRow> S_interactionMapping = new Dictionary<KeyboardInteraction, CustomInteractableMappingRow>();
 
+    /// <summary>
+    /// Add a mapping for this <paramref name="interaction"/> with this <paramref name="action"/>
+    /// </summary>
+    /// <param name="interaction"></param>
+    /// <param name="name"></param>
+    /// <param name="action"></param>
     public void AddMapping(KeyboardInteraction interaction, string name, InputAction action)
     {
         var row = CreateMappingRow();
@@ -136,6 +163,10 @@ public abstract class CustomInteractableMapping : VisualElement, ICustomElement
         MappingAdded?.Invoke();
     }
 
+    /// <summary>
+    /// Remove the mapping corresponding to the <paramref name="interaction"/>.
+    /// </summary>
+    /// <param name="interaction"></param>
     public void RemoveMapping(KeyboardInteraction interaction)
     {
         if (!S_interactionMapping.ContainsKey(interaction)) return;

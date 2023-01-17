@@ -14,12 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
-using System.Linq;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.baseBrowser.Navigation;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
 using UnityEngine.UIElements;
 using static umi3d.baseBrowser.inputs.interactions.BaseKeyInteraction;
 using static umi3d.baseBrowser.preferences.SettingsPreferences;
@@ -84,6 +82,9 @@ public class CustomSettingsController : CustomSettingScreen
         }
     }
 
+    /// <summary>
+    /// Current controller used with this browser.
+    /// </summary>
     public ControllerEnum Controller
     {
         get => m_controller;
@@ -101,6 +102,18 @@ public class CustomSettingsController : CustomSettingScreen
                 ScrollView.Add(Crouch.Box);
                 ScrollView.Add(FreeHead.Box);
             }
+            void RemoveNavigationControls()
+            {
+                NavigationLabel.RemoveFromHierarchy();
+                Forward.Box.RemoveFromHierarchy();
+                Backward.Box.RemoveFromHierarchy();
+                Left.Box.RemoveFromHierarchy();
+                Right.Box.RemoveFromHierarchy();
+                Sprint.Box.RemoveFromHierarchy();
+                Jump.Box.RemoveFromHierarchy();
+                Crouch.Box.RemoveFromHierarchy();
+                FreeHead.Box.RemoveFromHierarchy();
+            }
 
             void AddShortcutControls()
             {
@@ -117,6 +130,21 @@ public class CustomSettingsController : CustomSettingScreen
                 ScrollView.Add(Notification.Box);
                 ScrollView.Add(UserList.Box);
             }
+            void RemoveShortcutControls()
+            {
+                ShortcutLabel.RemoveFromHierarchy();
+                Mute.Box.RemoveFromHierarchy();
+                PushToTalk.Box.RemoveFromHierarchy();
+                GeneralVolume.Box.RemoveFromHierarchy();
+                DecreaseVolume.Box.RemoveFromHierarchy();
+                IncreaseVolume.Box.RemoveFromHierarchy();
+                Cancel.Box.RemoveFromHierarchy();
+                Submit.Box.RemoveFromHierarchy();
+                GameMenu.Box.RemoveFromHierarchy();
+                ContextualMenu.Box.RemoveFromHierarchy();
+                Notification.Box.RemoveFromHierarchy();
+                UserList.Box.RemoveFromHierarchy();
+            }
 
             m_controller = value;
             switch (value)
@@ -130,11 +158,14 @@ public class CustomSettingsController : CustomSettingScreen
                 case ControllerEnum.Touch:
                     ScrollView.Add(JoystickStaticToggle);
                     ScrollView.Add(LeftHandToggle);
+                    RemoveNavigationControls();
+                    RemoveShortcutControls();
                     break;
                 case ControllerEnum.GameController:
                     JoystickStaticToggle.RemoveFromHierarchy();
                     LeftHandToggle.RemoveFromHierarchy();
                     AddNavigationControls();
+                    AddShortcutControls();
                     break;
                 default:
                     break;
@@ -184,6 +215,9 @@ public class CustomSettingsController : CustomSettingScreen
 
     protected ControllerEnum m_controller;
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public override void InitElement()
     {
         base.InitElement();
@@ -252,6 +286,10 @@ public class CustomSettingsController : CustomSettingScreen
     public ControllerData Data;
     public BaseFPSData fpsData;
 
+    /// <summary>
+    /// Called when the camera sensibility changed.
+    /// </summary>
+    /// <param name="value"></param>
     public virtual void OnCameraSensibilityValueChanged(float value)
     {
         value = (int)value;
@@ -261,6 +299,10 @@ public class CustomSettingsController : CustomSettingScreen
         StoreControllerrData(Data);
     }
 
+    /// <summary>
+    /// Called when joystick static has been updated.
+    /// </summary>
+    /// <param name="value"></param>
     protected void JoystickStaticUpdated(bool value)
     {
         JoystickStaticToggle.SetValueWithoutNotify(value);
@@ -270,6 +312,10 @@ public class CustomSettingsController : CustomSettingScreen
         StoreControllerrData(Data);
     }
 
+    /// <summary>
+    /// Called when the left hand or right hand status has been updated.
+    /// </summary>
+    /// <param name="value"></param>
     protected void LeftHandUpdated(bool value)
     {
         LeftHandToggle.SetValueWithoutNotify(value);
@@ -405,6 +451,12 @@ public class CustomSettingsController : CustomSettingScreen
         ShortcutBindingsUpdated(ShortcutEnum.DisplayHideUsersList, Data.DisplayHideUsersList, controllers);
     }
 
+    /// <summary>
+    /// Called when navigation mapping has been updated.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="action"></param>
+    /// <param name="controllers"></param>
     public void NavigationBindingsUpdated(NavigationEnum command, InputAction action, params ControllerInputEnum[] controllers)
     {
         int currentIndex = 0;
@@ -460,6 +512,12 @@ public class CustomSettingsController : CustomSettingScreen
         StoreControllerrData(Data);
     }
 
+    /// <summary>
+    /// Called when a shortcut mapping has been updated.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="action"></param>
+    /// <param name="controllers"></param>
     public void ShortcutBindingsUpdated(ShortcutEnum command, InputAction action, params ControllerInputEnum[] controllers)
     {
         int currentIndex = 0;

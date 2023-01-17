@@ -24,6 +24,9 @@ namespace umi3d.commonScreen.game
 
         public InteractableMapping_C() => Set();
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void InitElement()
         {
             if (InteractableNameText == null) InteractableNameText = new Displayer.Text_C();

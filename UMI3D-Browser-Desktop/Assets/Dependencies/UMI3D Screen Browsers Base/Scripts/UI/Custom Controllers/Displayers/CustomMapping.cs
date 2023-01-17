@@ -55,6 +55,9 @@ public class CustomMapping : VisualElement, ICustomElement
         }
     }
 
+    /// <summary>
+    /// Name of the mapping (it is basicly the name of the key).
+    /// </summary>
     public virtual string MappingName
     {
         get => MappingNameText.text;
@@ -67,6 +70,9 @@ public class CustomMapping : VisualElement, ICustomElement
             m_isSet = true;
         }
     }
+    /// <summary>
+    /// Type of the mapping.
+    /// </summary>
     public virtual MappingType Type
     {
         get => m_type;
@@ -89,6 +95,9 @@ public class CustomMapping : VisualElement, ICustomElement
     protected bool m_hasBeenInitialized;
     protected MappingType m_type;
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public virtual void InitElement()
     {
         try
@@ -103,8 +112,16 @@ public class CustomMapping : VisualElement, ICustomElement
         AddToClassList(USSCustomClassName);
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public virtual void Set() => Set(null, MappingType.Keyboard);
 
+    /// <summary>
+    /// Set this UI element.
+    /// </summary>
+    /// <param name="mappingName"></param>
+    /// <param name="type"></param>
     public virtual void Set(string mappingName, MappingType type)
     {
         m_isSet = false;

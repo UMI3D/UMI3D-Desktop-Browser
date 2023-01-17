@@ -13,11 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using umi3d.baseBrowser.inputs.interactions;
-using umi3d.commonScreen.Displayer;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -52,7 +49,10 @@ public abstract class CustomInteractableMappingRow : VisualElement, ICustomEleme
         }
     }
 
-    public string ActionName
+    /// <summary>
+    /// Name of the action.
+    /// </summary>
+    public virtual string ActionName
     {
         get => ActionNameText.text;
         set => ActionNameText.text = value;
@@ -70,6 +70,9 @@ public abstract class CustomInteractableMappingRow : VisualElement, ICustomEleme
     protected bool m_hasBeenInitialized;
     protected bool m_isSet = false;
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public virtual void InitElement()
     {
         try
@@ -89,8 +92,15 @@ public abstract class CustomInteractableMappingRow : VisualElement, ICustomEleme
         Add(Main);
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public virtual void Set() => Set(null);
 
+    /// <summary>
+    /// Set this UI element
+    /// </summary>
+    /// <param name="actionName"></param>
     public virtual void Set(string actionName)
     {
         m_isSet = false;
@@ -106,12 +116,24 @@ public abstract class CustomInteractableMappingRow : VisualElement, ICustomEleme
         m_isSet = true;
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public override VisualElement contentContainer => m_isSet ? Main : this;
 
     #region Implementation
 
+    /// <summary>
+    /// List of the children corresponding of the mapping (CustomMapping and CustomText).
+    /// </summary>
     public List<VisualElement> MappingChildren = new List<VisualElement>();
 
+    /// <summary>
+    /// Add the mapping for this interaction.
+    /// </summary>
+    /// <param name="name">Name of the action</param>
+    /// <param name="controller"></param>
+    /// <param name="action"></param>
     public void AddMapping(string name, ControllerEnum controller, InputAction action)
     {
         ActionName = name;
@@ -149,6 +171,9 @@ public abstract class CustomInteractableMappingRow : VisualElement, ICustomEleme
                 break;
         }
     }
+    /// <summary>
+    /// Remove all mapping.
+    /// </summary>
     public void RemoveAllMapping()
     {
         for (int i = 0; i < MappingChildren.Count; i++)

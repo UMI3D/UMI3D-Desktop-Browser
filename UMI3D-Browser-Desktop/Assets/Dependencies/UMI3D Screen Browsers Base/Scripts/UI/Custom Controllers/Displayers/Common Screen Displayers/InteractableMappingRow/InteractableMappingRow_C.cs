@@ -24,6 +24,9 @@ namespace umi3d.commonScreen.Displayer
 
         public InteractableMappingRow_C() => Set();
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void InitElement()
         {
             if (ActionNameText == null) ActionNameText = new Text_C();
