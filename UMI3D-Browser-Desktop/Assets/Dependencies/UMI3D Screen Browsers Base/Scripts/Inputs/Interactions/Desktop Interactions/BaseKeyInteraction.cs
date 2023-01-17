@@ -263,6 +263,12 @@ namespace umi3d.baseBrowser.inputs.interactions
             return result;
         }
 
+        /// <summary>
+        /// Get the first mapping that match <paramref name="controllers"/>
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="controllers"></param>
+        /// <returns></returns>
         public static List<(ControllerInputEnum, string)> GetFirstMappingFromController(this InputAction action, params ControllerInputEnum[] controllers)
         {
             int bindingIndex = action.FirstBindingIndex(out var binding, 0, controllers);
