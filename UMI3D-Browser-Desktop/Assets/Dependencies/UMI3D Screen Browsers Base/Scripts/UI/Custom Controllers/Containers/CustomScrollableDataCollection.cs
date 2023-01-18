@@ -21,7 +21,7 @@ using umi3d.baseBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public abstract class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
+public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
     {

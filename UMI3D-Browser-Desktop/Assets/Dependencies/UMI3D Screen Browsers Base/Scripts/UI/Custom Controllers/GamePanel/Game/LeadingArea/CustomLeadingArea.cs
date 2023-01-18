@@ -107,6 +107,7 @@ public class CustomLeadingArea : VisualElement, ICustomElement
     public virtual string USSCustomClassName => "leading__area";
     public virtual string USSCustomClassNameReverse => "leading__area-reverse";
 
+    public CustomPinnedToolsArea PinnedToolsArea;
     public CustomInteractableMapping InteractableMapping;
     public CustomJoystickArea JoystickArea;
 
@@ -116,6 +117,9 @@ public class CustomLeadingArea : VisualElement, ICustomElement
     protected ControllerEnum m_controller;
     protected bool m_leftHand;
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public virtual void InitElement()
     {
         try
@@ -128,12 +132,22 @@ public class CustomLeadingArea : VisualElement, ICustomElement
             throw e;
         }
 
+        Add(PinnedToolsArea);
+
         //this.AddManipulator(LeadingAreaManipulator);
         //TODO improve camera navigation with double click.
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, m_leftHand);
 
+    /// <summary>
+    /// set this UI element.
+    /// </summary>
+    /// <param name="controller"></param>
+    /// <param name="leftHand"></param>
     public virtual void Set(ControllerEnum controller, bool leftHand)
     {
         if (!m_hasBeenInitialized)

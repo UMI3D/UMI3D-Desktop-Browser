@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.cdk.menu;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,10 +23,10 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
-        protected UxmlEnumAttributeDescription<ControllerEnum> m_controller = new UxmlEnumAttributeDescription<ControllerEnum>
+        protected UxmlEnumAttributeDescription<ScrollViewMode> m_mode = new UxmlEnumAttributeDescription<ScrollViewMode>
         {
-            name = "controller",
-            defaultValue = ControllerEnum.MouseAndKeyboard
+            name = "mode",
+            defaultValue = ScrollViewMode.Vertical
         };
 
         public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
@@ -40,20 +41,81 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
             base.Init(ve, bag, cc);
             var custom = ve as CustomPinnedToolsArea;
 
-            //custom.Set
-            //    (
-            //        m_controller.GetValueFromBag(bag, cc)
-            //    );
+            custom.Set
+                (
+                    m_mode.GetValueFromBag(bag, cc)
+                );
         }
     }
 
-    public void InitElement()
+    public virtual ScrollViewMode Mode
     {
-        throw new System.NotImplementedException();
+        get => SDC.Mode;
+        set
+        {
+            RemoveFromClassList(USSCustomClassMode(SDC.Mode));
+            AddToClassList(USSCustomClassMode(value));
+            SDC.Mode = value;
+
+        }
     }
 
-    public void Set()
+    public virtual string StyleSheetGamePath => $"USS/game";
+    public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/pinnedTools";
+    public virtual string USSCustomClassName => "pinned__tools__area";
+    public virtual string USSCustomClassMode(ScrollViewMode mode) => $"{USSCustomClassName}-{mode}".ToLower();
+    public virtual string USSCustomClassSDC => $"{USSCustomClassName}-sdc";
+
+    public CustomScrollableDataCollection<AbstractMenuItem> SDC;
+
+    protected bool m_hasBeenInitialized;
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public virtual void InitElement()
     {
-        throw new System.NotImplementedException();
+        try
+        {
+            this.AddStyleSheetFromPath(StyleSheetGamePath);
+            this.AddStyleSheetFromPath(StyleSheetPath);
+        }
+        catch (System.Exception e)
+        {
+            throw e;
+        }
+        AddToClassList(USSCustomClassName);
+        SDC.AddToClassList(USSCustomClassSDC);
+
+        SDC.BindItem = (datum, item) =>
+        {
+            if (datum is MenuItem menuItem) UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"menu item = {menuItem.Name}");
+            else if (datum is Menu menu) UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"menu {menu.Name}");
+        };
+        SDC.Size = 200f;
+
+        Add(SDC);
+    }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public virtual void Set() => Set(ScrollViewMode.Vertical);
+
+    /// <summary>
+    /// Set this UI element.
+    /// </summary>
+    /// <param name="mode"></param>
+    public virtual void Set(ScrollViewMode mode)
+    {
+        if (!m_hasBeenInitialized)
+        {
+            InitElement();
+            m_hasBeenInitialized = true;
+        }
+
+        Mode = mode;
     }
 }
