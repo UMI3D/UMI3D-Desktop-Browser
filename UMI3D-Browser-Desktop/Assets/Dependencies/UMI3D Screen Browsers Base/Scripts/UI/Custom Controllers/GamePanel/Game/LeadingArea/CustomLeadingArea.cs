@@ -132,7 +132,8 @@ public class CustomLeadingArea : VisualElement, ICustomElement
             throw e;
         }
 
-        Add(PinnedToolsArea);
+        //TODO add pinned tools area.
+        //Add(PinnedToolsArea);
 
         //this.AddManipulator(LeadingAreaManipulator);
         //TODO improve camera navigation with double click.
