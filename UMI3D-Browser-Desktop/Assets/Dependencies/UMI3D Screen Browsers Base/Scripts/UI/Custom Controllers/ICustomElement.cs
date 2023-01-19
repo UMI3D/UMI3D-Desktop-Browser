@@ -123,6 +123,12 @@ public enum ToolType
     Tool, //A tool display or hide parameters.
     Toolbox //A toolbox display or hide subtools.
 }
+public enum ToolboxType
+{
+    Unknown, //unknown type.
+    Main, //Toolbox displayed in the toolsWindow.
+    Pinned //Toolbox displayed in the pinnedToolsArea.
+}
 
 public static class ElementExtensions
 {
