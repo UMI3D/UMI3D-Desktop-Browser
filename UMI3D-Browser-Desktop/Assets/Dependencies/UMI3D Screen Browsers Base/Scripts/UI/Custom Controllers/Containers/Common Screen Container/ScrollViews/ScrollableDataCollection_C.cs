@@ -27,6 +27,9 @@ namespace umi3d.commonScreen.Container
 
         public ScrollableDataCollection_C() => Set();
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void InitElement()
         {
             if (ScrollView == null) ScrollView = new ScrollView_C();

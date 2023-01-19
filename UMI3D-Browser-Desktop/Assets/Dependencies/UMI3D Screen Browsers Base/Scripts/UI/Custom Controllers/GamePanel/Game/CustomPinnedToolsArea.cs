@@ -48,6 +48,9 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
         }
     }
 
+    /// <summary>
+    /// Mode of the Scrollview (Vertical, Horizontal, Both).
+    /// </summary>
     public virtual ScrollViewMode Mode
     {
         get => SDC.Mode;

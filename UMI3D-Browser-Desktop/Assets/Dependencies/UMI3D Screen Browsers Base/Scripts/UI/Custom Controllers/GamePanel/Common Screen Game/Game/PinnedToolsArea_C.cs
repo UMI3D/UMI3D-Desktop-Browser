@@ -24,6 +24,9 @@ namespace umi3d.commonScreen.game
 {
     public class PinnedToolsArea_C : CustomPinnedToolsArea
     {
+        /// <summary>
+        /// Current instance of this ui element. If there is no instance a new one is created.
+        /// </summary>
         public static PinnedToolsArea_C Instance
         {
             get
@@ -44,6 +47,9 @@ namespace umi3d.commonScreen.game
 
         public PinnedToolsArea_C() => Set();
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void InitElement()
         {
             if (SDC == null) SDC = new Container.ScrollableDataCollection_C<AbstractMenuItem>();

@@ -24,6 +24,9 @@ namespace umi3d.commonScreen.game
 
         public LeadingArea_C() => Set();
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void InitElement()
         {
             if (PinnedToolsArea == null)
