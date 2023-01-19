@@ -116,6 +116,14 @@ public enum NotificationFilter
     New
 }
 
+public enum ToolType
+{
+    Unknown, //unknown type.
+    ToolboxMenu, //A tool that display or hide the ToolsWindow.
+    Tool, //A tool display or hide parameters.
+    Toolbox //A toolbox display or hide subtools.
+}
+
 public static class ElementExtensions
 {
     public static string StyleSheetContainersFolderPath => "USS/Containers";

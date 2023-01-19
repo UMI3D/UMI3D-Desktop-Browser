@@ -22,7 +22,8 @@
 	--color-border-game-displayer: rgb(0, 193, 216);
 
 	--image-arrow__ligth-displayer: resource("Icons/arrow_light");
-	--image-arrow__ligth-displayer: resource("Icons/arrow_light");
+	--image-toolbox-menu-displayer: resource("Icons/TOOLBOXES/TOOLBOX_MENU");
+	--image-toolbox-displayer: resource("Icons/TOOLBOXES/TOOLBOX");
 
 	--background-image-mic-on: resource('Icons/Mic/MIC_ON');
 	--background-image-mic-off: resource('Icons/Mic/MIC_OFF');
