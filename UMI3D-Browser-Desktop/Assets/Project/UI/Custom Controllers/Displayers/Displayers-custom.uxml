@@ -13,4 +13,5 @@
         <umi3d.commonScreen.Displayer.Mapping_C mapping-name="M" />
         <umi3d.commonScreen.Displayer.Mapping_C mapping-name="Ctrl" />
     </umi3d.commonScreen.Displayer.InteractableMappingRow_C>
+    <umi3d.commonScreen.Displayer.Tool_C is-selected="false" label="Label" tool-type="ToolboxMenu" />
 </ui:UXML>
