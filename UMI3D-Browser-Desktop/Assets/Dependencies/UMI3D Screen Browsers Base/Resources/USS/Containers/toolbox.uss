@@ -27,3 +27,11 @@
     border-top-color: var(--color-border-game-container);
     border-bottom-color: var(--color-border-game-container);
 }
+
+.toolbox-vertical {
+    width: 100%;
+}
+
+.toolbox-horizontal {
+    height: 100%;
+}
