@@ -118,26 +118,7 @@ public class CustomTool : CustomButton
         Icon.AddToClassList(USSCustomClassIcon);
     }
 
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
-    /// <param name="category"></param>
-    /// <param name="size"></param>
-    /// <param name="shape"></param>
-    /// <param name="type"></param>
-    /// <param name="label"></param>
-    /// <param name="direction"></param>
-    /// <param name="alignment"></param>
-    public override void Set(ElementCategory category, ElementSize size, ButtonShape shape, ButtonType type, string label, ElemnetDirection direction, ElementAlignment alignment)
-    {
-        base.Set(category, size, shape, type, label, direction, alignment);
-
-        Add(Icon);
-
-        LabelDirection = ElemnetDirection.Bottom;
-
-        IsSelected = false;
-    }
+    public override void Set() => Set(ElementCategory.Game, ElementSize.Medium, ButtonShape.Square, ButtonType.Default, null, ElemnetDirection.Bottom, ElementAlignment.Center, ToolType.Unknown, false);
 
     /// <summary>
     /// Set this ui element.
@@ -161,4 +142,36 @@ public class CustomTool : CustomButton
         ToolType = toolType;
         IsSelected = isSelected;
     }
+
+    #region Implementation
+
+    /// <summary>
+    /// Set the icon of this tool.
+    /// </summary>
+    /// <param name="value"></param>
+    public virtual void SetToolIcon(Texture2D value)
+    {
+        if (value == null) Icon.style.backgroundImage = StyleKeyword.Null;
+        else Icon.style.backgroundImage = value;
+    }
+    /// <summary>
+    /// Set the icon of this tool.
+    /// </summary>
+    /// <param name="value"></param>
+    public virtual void SetToolIcon(VectorImage value)
+    {
+        if (value == null) Icon.style.backgroundImage = StyleKeyword.Null;
+        else Icon.style.backgroundImage = new StyleBackground(value);
+    }
+    /// <summary>
+    /// Set the icon of this tool.
+    /// </summary>
+    /// <param name="value"></param>
+    public virtual void SetToolIcon(Sprite value)
+    {
+        if (value == null) Icon.style.backgroundImage = StyleKeyword.Null;
+        else Icon.style.backgroundImage = new StyleBackground(value);
+    }
+
+    #endregion
 }
