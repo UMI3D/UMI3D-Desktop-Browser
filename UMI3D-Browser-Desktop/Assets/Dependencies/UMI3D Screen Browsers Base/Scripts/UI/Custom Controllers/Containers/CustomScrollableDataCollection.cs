@@ -456,7 +456,7 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
     /// <summary>
     /// 1) create a draggerManipulator.
     /// 2) create a draggerData add add it to <paramref name="dragger"/>.
-    /// 3) implement the click down and click up phase.
+    /// 3) implement the click down, click up and move phase.
     /// </summary>
     /// <param name="datum"></param>
     /// <param name="dragger"></param>
