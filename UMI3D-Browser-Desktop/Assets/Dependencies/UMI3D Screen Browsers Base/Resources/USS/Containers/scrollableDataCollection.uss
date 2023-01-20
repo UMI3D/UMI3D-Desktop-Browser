@@ -35,6 +35,8 @@
 }
 
 .sdc-box {
+    justify-content: center;
+
 	padding-left: var(--margin_padding-container);
     padding-right: var(--margin_padding-container);
     padding-top: var(--margin_padding-container);

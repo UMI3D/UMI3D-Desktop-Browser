@@ -174,7 +174,7 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         get => m_isReorderable;
         set
         {
-            m_isReorderable = value;
+            m_isReorderable = Data.Count < 2 ? false : value;
             UpdateReorderableState();
         }
     }
@@ -242,10 +242,10 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         switch (Mode)
         {
             case ScrollViewMode.Vertical:
-                box.style.height = Size;
+                if (Size != 0) box.style.height = Size;
                 break;
             case ScrollViewMode.Horizontal:
-                box.style.width = Size;
+                if (Size != 0) box.style.width = Size;
                 break;
             case ScrollViewMode.VerticalAndHorizontal:
                 break;
@@ -338,10 +338,10 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
             switch (Mode)
             {
                 case ScrollViewMode.Vertical:
-                    box.style.height = Size;
+                    if (Size != 0) box.style.height = Size;
                     break;
                 case ScrollViewMode.Horizontal:
-                    box.style.width = Size;
+                    if (Size != 0) box.style.width = Size;
                     break;
                 case ScrollViewMode.VerticalAndHorizontal:
                     break;
@@ -396,6 +396,7 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
             };
             draggerManipulator.MovedWithInfo += (evt, localPosition) => {
                 var draggerData = dragger.userData as DraggerData;
+                var box = dragger.parent;
                 Vector3 delta = localPosition - draggerData.startPosition;
                 switch (Mode)
                 {
@@ -410,33 +411,39 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
                     default:
                         break;
                 }
-                dragger.parent.transform.position = dragger.parent.transform.position + delta;
+                box.transform.position = box.transform.position + delta;
 
+                var oldindex = Data.IndexOf(datum);
                 float position = 0;
+                float previousSize = 0;
+                float nextSize = 0;
                 switch (Mode)
                 {
                     case ScrollViewMode.Vertical:
-                        position = dragger.parent.transform.position.y;
+                        position = box.transform.position.y;
+                        if (oldindex != 0) previousSize = DataToItem[Data[oldindex - 1]].parent.resolvedStyle.height;
+                        if (oldindex != Data.Count - 1) nextSize = DataToItem[Data[oldindex + 1]].parent.resolvedStyle.height;
                         break;
                     case ScrollViewMode.Horizontal:
-                        position = dragger.parent.transform.position.x;
+                        position = box.transform.position.x;
+                        if (oldindex != 0) previousSize = DataToItem[Data[oldindex - 1]].parent.resolvedStyle.width;
+                        if (oldindex != Data.Count - 1) nextSize = DataToItem[Data[oldindex + 1]].parent.resolvedStyle.width;
                         break;
                     case ScrollViewMode.VerticalAndHorizontal:
                         break;
                     default:
                         break;
                 }
-                if (Math.Sign(position) < 0 && Math.Abs(position) > Size / 2f)
+                
+                if (oldindex != 0 && Math.Sign(position) < 0 && Math.Abs(position) > previousSize / 2f)
                 {
-                    dragger.parent.transform.position = Vector3.zero;
-                    var oldindex = Data.IndexOf(datum);
-                    if (oldindex != 0) ReorderedDatum(oldindex - 1, datum);
+                    box.transform.position = Vector3.zero;
+                    ReorderedDatum(oldindex - 1, datum);
                 }
-                else if (Math.Sign(position) > 0 && Math.Abs(position) > Size / 2f)
+                else if (oldindex != Data.Count - 1 && Math.Sign(position) > 0 && Math.Abs(position) > nextSize / 2f)
                 {
-                    dragger.parent.transform.position = Vector3.zero;
-                    var oldindex = Data.IndexOf(datum);
-                    if (oldindex != Data.Count - 1) ReorderedDatum(oldindex + 1, datum);
+                    box.transform.position = Vector3.zero;
+                    ReorderedDatum(oldindex + 1, datum);
                 }
             };
         }

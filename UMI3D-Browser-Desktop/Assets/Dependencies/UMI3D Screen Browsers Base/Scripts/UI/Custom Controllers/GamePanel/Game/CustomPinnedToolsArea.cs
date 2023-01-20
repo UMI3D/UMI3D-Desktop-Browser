@@ -59,7 +59,7 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
             RemoveFromClassList(USSCustomClassMode(SDC.Mode));
             AddToClassList(USSCustomClassMode(value));
             SDC.Mode = value;
-
+            ModeUpdated();
         }
     }
 
@@ -93,10 +93,20 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
 
         SDC.BindItem = (datum, item) =>
         {
-            if (datum is MenuItem menuItem) UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"menu item = {menuItem.Name}");
-            else if (datum is Menu menu) UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"menu {menu.Name}");
+            var toolbox = item as CustomToolbox;
+            if (datum is MenuItem menuItem)
+            {
+                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"menu item = {menuItem.Name}");
+
+            }
+            else if (datum is Menu menu)
+            {
+                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"menu {menu.Name}");
+                toolbox.AddMenu(datum);
+                toolbox.Mode = Mode;
+                toolbox.ToolboxType = ToolboxType.Main;
+            }
         };
-        SDC.Size = 200f;
 
         Add(SDC);
     }
@@ -121,4 +131,20 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
 
         Mode = mode;
     }
+
+    #region Implementation
+
+    public virtual void AreToolboxReorderable(bool value)
+    {
+        foreach (var item in SDC.DataToItem.Values)
+            (item as CustomToolbox).SDC.IsReorderable = value;
+    }
+
+    protected virtual void ModeUpdated()
+    {
+        foreach (var item in SDC.DataToItem.Values)
+            (item as CustomToolbox).Mode = Mode;
+    }
+
+    #endregion
 }

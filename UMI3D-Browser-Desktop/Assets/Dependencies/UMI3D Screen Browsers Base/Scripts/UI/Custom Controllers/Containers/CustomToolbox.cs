@@ -244,4 +244,23 @@ public class CustomToolbox : VisualElement, ICustomElement
         Mode = mode;
         DisplayToolsName = displayToolsName;
     }
+
+    #region Implementation
+
+    public AbstractMenuItem ToolboxMenu;
+
+    public void AddMenu(AbstractMenuItem item)
+    {
+        ToolboxMenu = item;
+
+        ToolboxName = item.Name;
+
+        if (item is Menu menu && menu.SubMenu.Count > 0)
+        {
+            foreach (var subMenu in menu.SubMenu) SDC.AddDatum(subMenu);
+        }
+        else if (item is Menu || item is MenuItem) SDC.AddDatum(item);
+    }
+
+    #endregion
 }

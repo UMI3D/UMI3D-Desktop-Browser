@@ -2,7 +2,7 @@
 	max-height: 70%;
 }
 
-.pinned__tools__area-vertical .sdc {
+.pinned__tools__area-vertical > .sdc {
 	width: 25%;
 }
 

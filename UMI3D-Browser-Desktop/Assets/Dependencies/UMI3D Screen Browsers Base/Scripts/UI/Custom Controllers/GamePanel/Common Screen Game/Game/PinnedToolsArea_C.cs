@@ -54,6 +54,8 @@ namespace umi3d.commonScreen.game
         {
             if (SDC == null) SDC = new Container.ScrollableDataCollection_C<AbstractMenuItem>();
 
+            SDC.MakeItem = () => new Container.Toolbox_C();
+
             base.InitElement();
         }
     }
