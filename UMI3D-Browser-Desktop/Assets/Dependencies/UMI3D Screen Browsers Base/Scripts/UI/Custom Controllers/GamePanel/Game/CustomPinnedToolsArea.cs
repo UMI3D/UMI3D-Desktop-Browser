@@ -68,8 +68,10 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
     public virtual string USSCustomClassName => "pinned__tools__area";
     public virtual string USSCustomClassMode(ScrollViewMode mode) => $"{USSCustomClassName}-{mode}".ToLower();
     public virtual string USSCustomClassSDC => $"{USSCustomClassName}-sdc";
+    public virtual string USSCustomClassSub_SDC => $"{USSCustomClassName}-sub__sdc";
 
     public CustomScrollableDataCollection<AbstractMenuItem> SDC;
+    public CustomScrollableDataCollection<AbstractMenuItem> Sub_SDC;
 
     protected bool m_hasBeenInitialized;
 
@@ -90,6 +92,20 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
         }
         AddToClassList(USSCustomClassName);
         SDC.AddToClassList(USSCustomClassSDC);
+        Sub_SDC.AddToClassList(USSCustomClassSub_SDC);
+
+        void ToolboxClicked(bool isSelected)
+        {
+            if (isSelected)
+            {
+                Add(Sub_SDC);
+            }
+            else
+            {
+                Sub_SDC.RemoveFromHierarchy();
+                Sub_SDC.ClearSDC();
+            }
+        }
 
         SDC.BindItem = (datum, item) =>
         {
@@ -104,12 +120,64 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
                 toolbox.AddMenu(datum);
                 toolbox.Mode = Mode;
                 toolbox.ToolboxType = ToolboxType.Main;
+                toolbox.ToolClicked += ToolClicked;
+                toolbox.ToolboxClicked += ToolboxClicked;
             }
+        };
+        SDC.UnbindItem = (datum, item) =>
+        {
+            var toolbox = item as CustomToolbox;
+            toolbox.ClearToolbox();
+            toolbox.ToolboxType = ToolboxType.Unknown;
+            toolbox.ToolClicked -= ToolClicked;
+            toolbox.ToolboxClicked -= ToolboxClicked;
         };
         SDC.ReorderableMode = ReorderableMode.Element;
         SDC.IsReorderable = true;
 
+        void SubToolboxClicked(bool isSelected)
+        {
+            if (isSelected)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+
+        Sub_SDC.BindItem = (datum, item) =>
+        {
+            var toolbox = item as CustomToolbox;
+            if (datum is MenuItem menuItem)
+            {
+                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"menu item = {menuItem.Name}");
+
+            }
+            else if (datum is Menu menu)
+            {
+                toolbox.AddMenu(datum);
+                toolbox.Mode = ScrollViewMode.Horizontal;
+                toolbox.ToolboxType = ToolboxType.Main;
+                toolbox.ToolClicked += ToolClicked;
+                toolbox.ToolboxClicked += SubToolboxClicked;
+            }
+        };
+        Sub_SDC.UnbindItem = (datum, item) =>
+        {
+            var toolbox = item as CustomToolbox;
+            toolbox.ClearToolbox();
+            toolbox.ToolboxType = ToolboxType.Unknown;
+            toolbox.ToolClicked -= ToolClicked;
+            toolbox.ToolboxClicked -= SubToolboxClicked;
+        };
+        Sub_SDC.Mode = ScrollViewMode.Vertical;
+        Sub_SDC.ReorderableMode = ReorderableMode.Element;
+        Sub_SDC.IsReorderable = true;
+
         Add(SDC);
+        Add(Sub_SDC);
     }
 
     /// <summary>
@@ -152,6 +220,11 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
     {
         foreach (var item in SDC.DataToItem.Values)
             (item as CustomToolbox).Mode = Mode;
+    }
+
+    protected virtual void ToolClicked(bool isSelected)
+    {
+        UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"");
     }
 
     #endregion

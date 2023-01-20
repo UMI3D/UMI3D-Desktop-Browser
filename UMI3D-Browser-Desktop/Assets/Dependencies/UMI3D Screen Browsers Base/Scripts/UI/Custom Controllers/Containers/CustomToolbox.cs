@@ -199,17 +199,33 @@ public class CustomToolbox : VisualElement, ICustomElement
             var tool = item as CustomTool;
             if (datum is Menu menu)
             {
-                if (menu.MenuItems.Count > 0) tool.ToolType = ToolType.Tool;
-                else tool.ToolType = ToolType.Toolbox;
+                if (menu.MenuItems.Count > 0)
+                {
+                    tool.ToolType = ToolType.Tool;
+                    tool.clicked += () =>
+                    {
+                        tool.IsSelected = !tool.IsSelected;
+                        ToolClicked?.Invoke(tool.IsSelected);
+                    };
+                }
+                else
+                {
+                    tool.ToolType = ToolType.Toolbox;
+                    tool.clicked += () =>
+                    {
+                        tool.IsSelected = !tool.IsSelected;
+                        ToolboxClicked?.Invoke(tool.IsSelected);
+                    };
+                }
                 if (DisplayToolsName) tool.Label = menu.Name;
                 if (menu.icon2D != null) tool.SetToolIcon(menu.icon2D);
             }
             else if (datum is MenuItem menuItem)
             {
-
+                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"");
             }
         };
-        SDC.UnbindItem = item =>
+        SDC.UnbindItem = (datum, item) =>
         {
 
         };
@@ -250,20 +266,37 @@ public class CustomToolbox : VisualElement, ICustomElement
     public AbstractMenuItem ToolboxMenu;
 
     /// <summary>
+    /// Action raised when a tool is clicked (param is whether or not the tool is selected).
+    /// </summary>
+    public System.Action<bool> ToolClicked;
+    /// <summary>
+    /// Action raised when a tool as a toolbox is clicked (param is whether or not the tool is selected).
+    /// </summary>
+    public System.Action<bool> ToolboxClicked;
+
+    /// <summary>
     /// Add a menu item in the Toolbox.
     /// </summary>
     /// <param name="item"></param>
     public void AddMenu(AbstractMenuItem item)
     {
         ToolboxMenu = item;
-
         ToolboxName = item.Name;
 
         if (item is Menu menu && menu.SubMenu.Count > 0)
-        {
             foreach (var subMenu in menu.SubMenu) SDC.AddDatum(subMenu);
-        }
         else if (item is Menu || item is MenuItem) SDC.AddDatum(item);
+    }
+
+    /// <summary>
+    /// Clear this toolbox. Set menu to null, name to null, clear SDC.
+    /// </summary>
+    public void ClearToolbox()
+    {
+        ToolboxMenu = null;
+        ToolboxName = null;
+
+        SDC.Clear();
     }
 
     #endregion

@@ -209,7 +209,7 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
     /// <summary>
     /// Unbind a visualElement from its datum.
     /// </summary>
-    public virtual Action<VisualElement> UnbindItem { get; set; }
+    public virtual Action<D, VisualElement> UnbindItem { get; set; }
 
     /// <summary>
     /// Add this <paramref name="datum"/> at the end of the collection of data and make an item and add it in the scroll view.
@@ -307,18 +307,21 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         if (!Data.Contains(datum)) return;
         if (UnbindItem == null) throw new NullReferenceException("UnbindItem is null");
 
-        Data.Remove(datum);
         var item = DataToItem[datum];
         var box = item.parent;
+
+        RemoveDragger(box);
+        RemoveDraggerAsElement(item);
 
         box.RemoveFromHierarchy();
         m_waintingBoxes.Add(box);
         item.RemoveFromHierarchy();
         m_waitingItems.Add(item);
 
-        UnbindItem(item);
+        UnbindItem(datum, item);
 
         DataToItem.Remove(datum);
+        Data.Remove(datum);
     }
 
     /// <summary>
@@ -357,9 +360,18 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
     }
 
     /// <summary>
+    /// Clear data, remove item from scrollview, unbind item.
+    /// </summary>
+    public virtual void ClearSDC()
+    {
+        for (int i = Data.Count - 1; i >= 0 ; i--)
+            RemoveDatum(Data[i]);
+    }
+
+    /// <summary>
     /// Update the size of all items.
     /// </summary>
-    public virtual void UpdateSize()
+    protected virtual void UpdateSize()
     {
         foreach (var item in DataToItem.Values)
         {
@@ -383,7 +395,7 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         }
     }
 
-    public virtual void UpdateReorderableState()
+    protected virtual void UpdateReorderableState()
     {
         if (IsReorderable && Data.Count >= 2)
         {
@@ -409,14 +421,10 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
                 switch (ReorderableMode)
                 {
                     case ReorderableMode.Dragger:
-                        var dragger = DataAnditem.Value.parent.Query("dragger").Last();
-                        if (dragger == null) return;
-                        dragger.RemoveFromHierarchy();
-                        m_waintingDragger.Add(dragger);
+                        RemoveDragger(DataAnditem.Value.parent);
                         break;
                     case ReorderableMode.Element:
-                        var manipulator = (DataAnditem.Value.userData as DraggerData).manipulator;
-                        DataAnditem.Value.RemoveManipulator(manipulator);
+                        RemoveDraggerAsElement(DataAnditem.Value);
                         break;
                     default:
                         break;
@@ -451,6 +459,21 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         if (item.userData == null || item.userData is not DraggerData draggerData)
             CreateDraggerData(datum, item);
         else item.AddManipulator(draggerData.manipulator);
+    }
+
+    protected virtual void RemoveDragger(VisualElement box)
+    {
+        var dragger = box.Query("dragger").Last();
+        if (dragger == null) return;
+        dragger.RemoveFromHierarchy();
+        m_waintingDragger.Add(dragger);
+    }
+
+    protected virtual void RemoveDraggerAsElement(VisualElement item)
+    {
+        if (item.userData == null) return;
+        var manipulator = (item.userData as DraggerData).manipulator;
+        item.RemoveManipulator(manipulator);
     }
 
     /// <summary>

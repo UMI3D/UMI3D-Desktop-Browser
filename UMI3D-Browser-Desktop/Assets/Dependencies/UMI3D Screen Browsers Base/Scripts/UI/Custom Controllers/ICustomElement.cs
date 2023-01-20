@@ -135,6 +135,12 @@ public enum ReorderableMode
     Element, //Use the element as a dragger to drag&drop the elements.
 }
 
+public enum ExpansionMode
+{
+    Vertical,
+    Horizontal
+}
+
 public static class ElementExtensions
 {
     public static string StyleSheetContainersFolderPath => "USS/Containers";

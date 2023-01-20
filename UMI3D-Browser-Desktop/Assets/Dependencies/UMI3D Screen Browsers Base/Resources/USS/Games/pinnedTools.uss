@@ -1,9 +1,17 @@
 .pinned__tools__area-vertical {
+	flex-direction: row;
+
 	max-height: 70%;
 }
 
-.pinned__tools__area-vertical > .sdc {
+.pinned__tools__area-vertical > .pinned__tools__area-sdc {
 	width: 25%;
+}
+
+.pinned__tools__area-vertical > .pinned__tools__area-sub__sdc {
+	left: 7px;
+
+	width: 35%;
 }
 
 .sdc {
