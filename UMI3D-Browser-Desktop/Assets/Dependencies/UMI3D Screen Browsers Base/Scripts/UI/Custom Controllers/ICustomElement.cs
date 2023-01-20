@@ -129,6 +129,11 @@ public enum ToolboxType
     Main, //Toolbox displayed in the toolsWindow.
     Pinned //Toolbox displayed in the pinnedToolsArea.
 }
+public enum ReorderableMode
+{
+    Dragger, //Add a dragger to drag&drop the elements.
+    Element, //Use the element as a dragger to drag&drop the elements.
+}
 
 public static class ElementExtensions
 {

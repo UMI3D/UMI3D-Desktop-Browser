@@ -249,6 +249,10 @@ public class CustomToolbox : VisualElement, ICustomElement
 
     public AbstractMenuItem ToolboxMenu;
 
+    /// <summary>
+    /// Add a menu item in the Toolbox.
+    /// </summary>
+    /// <param name="item"></param>
     public void AddMenu(AbstractMenuItem item)
     {
         ToolboxMenu = item;

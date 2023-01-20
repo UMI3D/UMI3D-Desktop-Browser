@@ -101,12 +101,13 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
             }
             else if (datum is Menu menu)
             {
-                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"menu {menu.Name}");
                 toolbox.AddMenu(datum);
                 toolbox.Mode = Mode;
                 toolbox.ToolboxType = ToolboxType.Main;
             }
         };
+        SDC.ReorderableMode = ReorderableMode.Element;
+        SDC.IsReorderable = true;
 
         Add(SDC);
     }
@@ -133,6 +134,13 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
     }
 
     #region Implementation
+
+    /// <summary>
+    /// Add a menu to the pinned tools area.
+    /// </summary>
+    /// <param name="menu"></param>
+    public virtual void AddMenu(AbstractMenuItem menu)
+        => SDC.AddDatum(menu);
 
     public virtual void AreToolboxReorderable(bool value)
     {

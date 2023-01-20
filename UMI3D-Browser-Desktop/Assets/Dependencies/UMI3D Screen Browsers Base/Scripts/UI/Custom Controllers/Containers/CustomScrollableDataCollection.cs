@@ -18,6 +18,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.cdk.volumes;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -132,6 +134,7 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
 
     class DraggerData
     {
+        public D Datum;
         public TouchManipulator2 manipulator;
         public Vector2 startPosition;
     }
@@ -151,6 +154,7 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
 
     protected float m_size;
     protected bool m_isReorderable;
+    protected ReorderableMode m_reorderableMode;
 
     /// <summary>
     /// If <see cref="Mode"/> is Vertical : width of each element. Else heigth.
@@ -174,7 +178,20 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         get => m_isReorderable;
         set
         {
-            m_isReorderable = Data.Count < 2 ? false : value;
+            m_isReorderable = value;
+            UpdateReorderableState();
+        }
+    }
+
+    /// <summary>
+    /// Whether or not a dragger should be added to drag&drop.
+    /// </summary>
+    public virtual ReorderableMode ReorderableMode
+    {
+        get => m_reorderableMode;
+        set
+        {
+            m_reorderableMode = value;
             UpdateReorderableState();
         }
     }
@@ -254,12 +271,27 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         }
         box.Add(item);
 
-        if (IsReorderable) AddDragger(datum, box);
+        if (IsReorderable)
+        {
+            switch (ReorderableMode)
+            {
+                case ReorderableMode.Dragger:
+                    AddDragger(datum, box);
+                    break;
+                case ReorderableMode.Element:
+                    AddDraggerAsElement(datum, item);
+                    break;
+                default:
+                    break;
+            }
+        }
 
         Data.Insert(index, datum);
         DataToItem.Add(datum, item);
 
         ScrollView.Insert(index, box);
+
+        if (Data.Count == 2) UpdateReorderableState();
     }
 
     /// <summary>
@@ -353,17 +385,42 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
 
     public virtual void UpdateReorderableState()
     {
-        foreach (var DataAnditem in DataToItem)
+        if (IsReorderable && Data.Count >= 2)
         {
-            var box = DataAnditem.Value.parent;
-
-            if (IsReorderable) AddDragger(DataAnditem.Key, box);
-            else
+            foreach (var DataAnditem in DataToItem)
             {
-                var dragger = box.Q("dragger");
-                if (dragger == null) return;
-                dragger.RemoveFromHierarchy();
-                m_waintingDragger.Add(dragger);
+                switch (ReorderableMode)
+                {
+                    case ReorderableMode.Dragger:
+                        AddDragger(DataAnditem.Key, DataAnditem.Value.parent);
+                        break;
+                    case ReorderableMode.Element:
+                        AddDraggerAsElement(DataAnditem.Key, DataAnditem.Value);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        else
+        {
+            foreach (var DataAnditem in DataToItem)
+            {
+                switch (ReorderableMode)
+                {
+                    case ReorderableMode.Dragger:
+                        var dragger = DataAnditem.Value.parent.Query("dragger").Last();
+                        if (dragger == null) return;
+                        dragger.RemoveFromHierarchy();
+                        m_waintingDragger.Add(dragger);
+                        break;
+                    case ReorderableMode.Element:
+                        var manipulator = (DataAnditem.Value.userData as DraggerData).manipulator;
+                        DataAnditem.Value.RemoveManipulator(manipulator);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -375,85 +432,116 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         {
             dragger = new VisualElement { name = "dragger" };
             dragger.AddToClassList(USSCustomClassDragger);
-            TouchManipulator2 draggerManipulator = new TouchManipulator2();
-            dragger.AddManipulator(draggerManipulator);
 
-            dragger.userData = new DraggerData { manipulator = draggerManipulator };
-
-            draggerManipulator.ClickedDownWithInfo += (evt, localPosition) =>
-            {
-                var draggerData = dragger.userData as DraggerData;
-                draggerData.startPosition = localPosition;
-                dragger.userData = draggerData;
-            };
-            draggerManipulator.ClickedUp += () =>
-            {
-                var draggerData = dragger.userData as DraggerData;
-                draggerData.startPosition = Vector2.zero;
-                dragger.userData = draggerData;
-
-                dragger.parent.transform.position = Vector3.zero;
-            };
-            draggerManipulator.MovedWithInfo += (evt, localPosition) => {
-                var draggerData = dragger.userData as DraggerData;
-                var box = dragger.parent;
-                Vector3 delta = localPosition - draggerData.startPosition;
-                switch (Mode)
-                {
-                    case ScrollViewMode.Vertical:
-                        delta.x = 0;
-                        break;
-                    case ScrollViewMode.Horizontal:
-                        delta.y = 0;
-                        break;
-                    case ScrollViewMode.VerticalAndHorizontal:
-                        break;
-                    default:
-                        break;
-                }
-                box.transform.position = box.transform.position + delta;
-
-                var oldindex = Data.IndexOf(datum);
-                float position = 0;
-                float previousSize = 0;
-                float nextSize = 0;
-                switch (Mode)
-                {
-                    case ScrollViewMode.Vertical:
-                        position = box.transform.position.y;
-                        if (oldindex != 0) previousSize = DataToItem[Data[oldindex - 1]].parent.resolvedStyle.height;
-                        if (oldindex != Data.Count - 1) nextSize = DataToItem[Data[oldindex + 1]].parent.resolvedStyle.height;
-                        break;
-                    case ScrollViewMode.Horizontal:
-                        position = box.transform.position.x;
-                        if (oldindex != 0) previousSize = DataToItem[Data[oldindex - 1]].parent.resolvedStyle.width;
-                        if (oldindex != Data.Count - 1) nextSize = DataToItem[Data[oldindex + 1]].parent.resolvedStyle.width;
-                        break;
-                    case ScrollViewMode.VerticalAndHorizontal:
-                        break;
-                    default:
-                        break;
-                }
-                
-                if (oldindex != 0 && Math.Sign(position) < 0 && Math.Abs(position) > previousSize / 2f)
-                {
-                    box.transform.position = Vector3.zero;
-                    ReorderedDatum(oldindex - 1, datum);
-                }
-                else if (oldindex != Data.Count - 1 && Math.Sign(position) > 0 && Math.Abs(position) > nextSize / 2f)
-                {
-                    box.transform.position = Vector3.zero;
-                    ReorderedDatum(oldindex + 1, datum);
-                }
-            };
+            CreateDraggerData(datum, dragger);
         }
         else
         {
             dragger = m_waintingDragger[0];
             m_waintingDragger.RemoveAt(0);
+
+            (dragger.userData as DraggerData).Datum = datum;
         }
 
         box.Add(dragger);
+    }
+
+    protected virtual void AddDraggerAsElement(D datum, VisualElement item)
+    {
+        if (item.userData == null || item.userData is not DraggerData draggerData)
+            CreateDraggerData(datum, item);
+        else item.AddManipulator(draggerData.manipulator);
+    }
+
+    /// <summary>
+    /// 1) create a draggerManipulator.
+    /// 2) create a draggerData add add it to <paramref name="dragger"/>.
+    /// 3) implement the click down and click up phase.
+    /// </summary>
+    /// <param name="datum"></param>
+    /// <param name="dragger"></param>
+    /// <returns></returns>
+    protected virtual TouchManipulator2 CreateDraggerData(D datum, VisualElement dragger)
+    {
+        TouchManipulator2 draggerManipulator = new TouchManipulator2();
+        dragger.AddManipulator(draggerManipulator);
+
+        dragger.userData = new DraggerData 
+        {
+            Datum = datum,
+            manipulator = draggerManipulator 
+        };
+
+        draggerManipulator.ClickedDownWithInfo += (evt, localPosition) =>
+        {
+            var draggerData = dragger.userData as DraggerData;
+            draggerData.startPosition = localPosition;
+        };
+        draggerManipulator.ClickedUp += () =>
+        {
+            var draggerData = dragger.userData as DraggerData;
+            draggerData.startPosition = Vector2.zero;
+
+            dragger.parent.transform.position = Vector3.zero;
+        };
+        draggerManipulator.MovedWithInfo += (evt, localPosition) => {
+            var draggerData = dragger.userData as DraggerData;
+            var box = dragger.parent;
+
+            //Update the position of the box.
+            Vector3 delta = localPosition - draggerData.startPosition;
+            switch (Mode)
+            {
+                case ScrollViewMode.Vertical:
+                    delta.x = 0;
+                    break;
+                case ScrollViewMode.Horizontal:
+                    delta.y = 0;
+                    break;
+                case ScrollViewMode.VerticalAndHorizontal:
+                    break;
+                default:
+                    break;
+            }
+            box.transform.position = box.transform.position + delta;
+
+            //Reorder the item if needed.
+            var draggerDatum = draggerData.Datum;
+            var oldindex = Data.IndexOf(draggerDatum);
+            float position = 0;
+            float previousSize = 0;
+            float nextSize = 0;
+            switch (Mode)
+            {
+                case ScrollViewMode.Vertical:
+                    position = box.transform.position.y;
+                    if (oldindex != 0) previousSize = DataToItem[Data[oldindex - 1]].parent.resolvedStyle.height;
+                    if (oldindex != Data.Count - 1) nextSize = DataToItem[Data[oldindex + 1]].parent.resolvedStyle.height;
+                    break;
+                case ScrollViewMode.Horizontal:
+                    position = box.transform.position.x;
+                    if (oldindex != 0) previousSize = DataToItem[Data[oldindex - 1]].parent.resolvedStyle.width;
+                    if (oldindex != Data.Count - 1) nextSize = DataToItem[Data[oldindex + 1]].parent.resolvedStyle.width;
+                    break;
+                case ScrollViewMode.VerticalAndHorizontal:
+                    break;
+                default:
+                    break;
+            }
+
+            if (oldindex != 0 && Math.Sign(position) < 0 && Math.Abs(position) > previousSize / 2f)
+            {
+                box.transform.position = Vector3.zero;
+                ReorderedDatum(oldindex - 1, draggerDatum);
+            }
+            else if (oldindex != Data.Count - 1 && Math.Sign(position) > 0 && Math.Abs(position) > nextSize / 2f)
+            {
+                box.transform.position = Vector3.zero;
+                ReorderedDatum(oldindex + 1, draggerDatum);
+            }
+        };
+
+        return draggerManipulator;
     }
 
     #endregion
