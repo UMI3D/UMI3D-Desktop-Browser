@@ -1,0 +1,16 @@
+.pinned__tools__area-vertical {
+	max-height: 70%;
+}
+
+.pinned__tools__area-vertical .sdc {
+	width: 25%;
+}
+
+.sdc {
+	background-color: var(--background-color-transparent-game);
+
+	border-top-left-radius: var(--border-radius-game);
+	border-top-right-radius: var(--border-radius-game);
+	border-bottom-left-radius: var(--border-radius-game);
+	border-bottom-right-radius: var(--border-radius-game);
+}

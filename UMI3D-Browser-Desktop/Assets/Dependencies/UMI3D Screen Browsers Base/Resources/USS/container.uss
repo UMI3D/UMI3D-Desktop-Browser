@@ -21,4 +21,7 @@
 	--image-arrow_carrousel: resource("Icons/arrow");
 	--image-select_hover: resource("Icons/PageSelect/select_hover");
 	--image-select_active: resource("Icons/PageSelect/select_active");
+
+	--size-dragger-sdc : 45px;
+	--border-width-displayer : 3px;
 }

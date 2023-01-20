@@ -3,9 +3,9 @@
   <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
   <xs:simpleType name="GameMenu_C_current-screen_Type">
     <xs:restriction base="xs:string">
+      <xs:enumeration value="Settings" />
       <xs:enumeration value="Data" />
       <xs:enumeration value="Libraries" />
-      <xs:enumeration value="Settings" />
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="GameMenu_CType">
@@ -23,7 +23,7 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="false" name="display-header" type="xs:boolean" use="optional" />
         <xs:attribute name="version" type="xs:string" use="optional" />
-        <xs:attribute default="Data" name="current-screen" xmlns:q1="umi3d.commonScreen.menu" type="q1:GameMenu_C_current-screen_Type" use="optional" />
+        <xs:attribute default="Settings" name="current-screen" xmlns:q1="umi3d.commonScreen.menu" type="q1:GameMenu_C_current-screen_Type" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
@@ -43,6 +43,7 @@
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute name="title" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="display-submit-button" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
@@ -215,8 +216,8 @@
   <xs:simpleType name="Launcher_C_current-screen_Type">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Home" />
-      <xs:enumeration value="Libraries" />
       <xs:enumeration value="Settings" />
+      <xs:enumeration value="Libraries" />
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="Launcher_CType">
@@ -266,6 +267,7 @@
         <xs:attribute name="date" type="xs:string" use="optional" />
         <xs:attribute name="message" type="xs:string" use="optional" />
         <xs:attribute default="false" name="display-message" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="allow-deletion" type="xs:boolean" use="optional" />
         <xs:attribute default="AscendingName" name="header-sort" xmlns:q18="umi3d.commonScreen.menu" type="q18:LibraryHeader_C_header-sort_Type" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
@@ -295,6 +297,7 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute name="title" type="xs:string" use="optional" />
         <xs:attribute default="AscendingName" name="sort-by" xmlns:q20="umi3d.commonScreen.menu" type="q20:LibraryScreen_C_sort-by_Type" use="optional" />
+        <xs:attribute default="false" name="allow-deletion" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
@@ -318,6 +321,7 @@
         <xs:attribute name="date" type="xs:string" use="optional" />
         <xs:attribute name="message" type="xs:string" use="optional" />
         <xs:attribute default="false" name="display-message" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="allow-deletion" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
@@ -390,11 +394,10 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="FirstScreen" />
       <xs:enumeration value="General" />
-      <xs:enumeration value="Resolution" />
-      <xs:enumeration value="Player" />
-      <xs:enumeration value="Controller" />
+      <xs:enumeration value="Graphics" />
+      <xs:enumeration value="Controls" />
       <xs:enumeration value="Audio" />
-      <xs:enumeration value="Notification" />
+      <xs:enumeration value="Notifications" />
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="SettingsContainer_CType">

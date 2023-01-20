@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2022 Inetum
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,30 +13,27 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System.Collections;
+using System.Collections.Generic;
+using umi3d.commonScreen.Container;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace umi3d.commonScreen.game
+namespace umi3d.commonScreen.Container
 {
-    public sealed class LeadingArea_C : CustomLeadingArea
+    public class ScrollableDataCollection_C<D> : CustomScrollableDataCollection<D>
     {
-        public new class UxmlFactory : UxmlFactory<LeadingArea_C, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<ScrollableDataCollection_C<D>, UxmlTraits> { }
 
-        public LeadingArea_C() => Set();
+        public ScrollableDataCollection_C() => Set();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         public override void InitElement()
         {
-            if (PinnedToolsArea == null)
-            {
-                if (Application.isPlaying) PinnedToolsArea = PinnedToolsArea_C.Instance;
-                else PinnedToolsArea = new PinnedToolsArea_C();
-            }
-            if (InteractableMapping == null) InteractableMapping = new InteractableMapping_C();
-            if (JoystickArea == null) JoystickArea = new commonMobile.game.JoystickArea_C();
-    
+            if (ScrollView == null) ScrollView = new ScrollView_C();
+
             base.InitElement();
         }
     }
