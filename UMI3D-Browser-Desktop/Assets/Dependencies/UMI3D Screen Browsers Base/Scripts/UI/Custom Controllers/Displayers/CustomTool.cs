@@ -16,6 +16,7 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using umi3d.cdk.menu;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -66,6 +67,9 @@ public class CustomTool : CustomButton
         }
     }
 
+    /// <summary>
+    /// Type of the tool
+    /// </summary>
     public virtual ToolType ToolType
     {
         get => m_toolType;
@@ -116,8 +120,13 @@ public class CustomTool : CustomButton
         }
         AddToClassList(USSCustomClassTool);
         Icon.AddToClassList(USSCustomClassIcon);
+
+        clicked += () => ToolClicked?.Invoke(IsSelected, Menu);
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public override void Set() => Set(ElementCategory.Game, ElementSize.Medium, ButtonShape.Square, ButtonType.Default, null, ElemnetDirection.Bottom, ElementAlignment.Center, ToolType.Unknown, false);
 
     /// <summary>
@@ -144,6 +153,12 @@ public class CustomTool : CustomButton
     }
 
     #region Implementation
+
+    public AbstractMenuItem Menu;
+    /// <summary>
+    /// Action raised when this tool is clicked.
+    /// </summary>
+    public System.Action<bool, AbstractMenuItem> ToolClicked;
 
     /// <summary>
     /// Set the icon of this tool.

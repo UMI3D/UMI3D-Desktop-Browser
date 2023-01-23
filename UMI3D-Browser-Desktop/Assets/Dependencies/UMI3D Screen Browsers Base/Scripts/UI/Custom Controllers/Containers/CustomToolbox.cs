@@ -197,26 +197,17 @@ public class CustomToolbox : VisualElement, ICustomElement
         SDC.BindItem = (datum, item) =>
         {
             var tool = item as CustomTool;
+            tool.Menu = datum;
+            tool.ToolClicked = (isSelected, datum) =>
+            {
+                if (isSelected) SDC.Select(datum);
+                else SDC.Unselect(datum);
+            };
+
             if (datum is Menu menu)
             {
-                if (menu.MenuItems.Count > 0)
-                {
-                    tool.ToolType = ToolType.Tool;
-                    tool.clicked += () =>
-                    {
-                        tool.IsSelected = !tool.IsSelected;
-                        ToolClicked?.Invoke(tool.IsSelected);
-                    };
-                }
-                else
-                {
-                    tool.ToolType = ToolType.Toolbox;
-                    tool.clicked += () =>
-                    {
-                        tool.IsSelected = !tool.IsSelected;
-                        ToolboxClicked?.Invoke(tool.IsSelected);
-                    };
-                }
+                if (menu.MenuItems.Count > 0) tool.ToolType = ToolType.Tool;
+                else tool.ToolType = ToolType.Toolbox;
                 if (DisplayToolsName) tool.Label = menu.Name;
                 if (menu.icon2D != null) tool.SetToolIcon(menu.icon2D);
             }
@@ -227,9 +218,30 @@ public class CustomToolbox : VisualElement, ICustomElement
         };
         SDC.UnbindItem = (datum, item) =>
         {
-
+            var tool = item as CustomTool;
+            tool.Menu = null;
+            tool.ToolClicked = null;
+            tool.Label = null;
+            tool.SetToolIcon(null as Texture2D);
         };
         SDC.Size = 104f;
+        SDC.SelectionType = SelectionType.Single;
+        SDC.SelectItem = (datum, item) =>
+        {
+            var tool = item as CustomTool;
+
+            tool.IsSelected = true;
+            if (tool.ToolType == ToolType.Tool) ToolClicked?.Invoke(true, datum);
+            else if (tool.ToolType == ToolType.Toolbox) ToolboxClicked?.Invoke(true, datum);
+        };
+        SDC.UnselectItem = (datum, item) =>
+        {
+            var tool = item as CustomTool;
+
+            tool.IsSelected = false;
+            if (tool.ToolType == ToolType.Tool) ToolClicked?.Invoke(false, datum);
+            else if (tool.ToolType == ToolType.Toolbox) ToolboxClicked?.Invoke(false, datum);
+        };
 
         Add(SDC);
     }
@@ -268,11 +280,11 @@ public class CustomToolbox : VisualElement, ICustomElement
     /// <summary>
     /// Action raised when a tool is clicked (param is whether or not the tool is selected).
     /// </summary>
-    public System.Action<bool> ToolClicked;
+    public System.Action<bool, AbstractMenuItem> ToolClicked;
     /// <summary>
     /// Action raised when a tool as a toolbox is clicked (param is whether or not the tool is selected).
     /// </summary>
-    public System.Action<bool> ToolboxClicked;
+    public System.Action<bool, AbstractMenuItem> ToolboxClicked;
 
     /// <summary>
     /// Add a menu item in the Toolbox.
@@ -296,7 +308,7 @@ public class CustomToolbox : VisualElement, ICustomElement
         ToolboxMenu = null;
         ToolboxName = null;
 
-        SDC.Clear();
+        SDC.ClearSDC();
     }
 
     #endregion

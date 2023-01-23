@@ -94,16 +94,17 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
         SDC.AddToClassList(USSCustomClassSDC);
         Sub_SDC.AddToClassList(USSCustomClassSub_SDC);
 
-        void ToolboxClicked(bool isSelected)
+        void ToolboxClicked(bool isSelected, AbstractMenuItem menu)
         {
+            Sub_SDC.ClearSDC();
             if (isSelected)
             {
                 Add(Sub_SDC);
+                Sub_SDC.AddDatum(menu);
             }
             else
             {
                 Sub_SDC.RemoveFromHierarchy();
-                Sub_SDC.ClearSDC();
             }
         }
 
@@ -135,7 +136,8 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
         SDC.ReorderableMode = ReorderableMode.Element;
         SDC.IsReorderable = true;
 
-        void SubToolboxClicked(bool isSelected)
+        //Sub tools
+        void SubToolboxClicked(bool isSelected, AbstractMenuItem menu)
         {
             if (isSelected)
             {
@@ -146,7 +148,7 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
 
             }
         }
-
+        
         Sub_SDC.BindItem = (datum, item) =>
         {
             var toolbox = item as CustomToolbox;
@@ -177,7 +179,6 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
         Sub_SDC.IsReorderable = true;
 
         Add(SDC);
-        Add(Sub_SDC);
     }
 
     /// <summary>
@@ -222,7 +223,7 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
             (item as CustomToolbox).Mode = Mode;
     }
 
-    protected virtual void ToolClicked(bool isSelected)
+    protected virtual void ToolClicked(bool isSelected, AbstractMenuItem menu)
     {
         UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"");
     }
