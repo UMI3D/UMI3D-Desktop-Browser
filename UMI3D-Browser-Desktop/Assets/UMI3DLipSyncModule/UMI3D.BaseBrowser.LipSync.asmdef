@@ -1,0 +1,27 @@
+{
+    "name": "UMI3D.BaseBrowser.LipSync",
+    "rootNamespace": "",
+    "references": [
+        "UMI3D.Dependencies",
+        "UMI3D.Common.Core",
+        "UMI3D.CDK.Core",
+        "UMI3D.Common.UserCapture",
+        "UMI3D.CDK.UserCapture",
+        "UMI3D.Common.Collaboration",
+        "UMI3D.CDK.Collaboration.dependencies",
+        "UMI3D.CDK.Collaboration",
+        "inetum.unityUtils",
+        "glTFast",
+        "Oculus.LipSync",
+        "Oculus.LipSync.Editor"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
