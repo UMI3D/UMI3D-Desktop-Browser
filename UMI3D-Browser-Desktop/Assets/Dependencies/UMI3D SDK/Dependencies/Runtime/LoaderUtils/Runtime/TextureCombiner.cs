@@ -126,6 +126,7 @@ namespace MrtkShader
 
         public static Texture2D InverseMap(Texture2D map)
         {
+            return map;
             if (map == null)
                 return null;
             Texture2D res = new Texture2D(map.width, map.height);
