@@ -1923,13 +1923,6 @@ namespace GLTFast {
                 
                 var goName = nodeNames==null ? node.name : nodeNames[nodeIndex];
 
-                Debug.Log("<color=purple>" + node.name + "</color>");
-
-                foreach (var item in gltfRoot.nodes)
-                {
-                    Debug.Log("<color=yellow>" + item.name + "</color>");
-                }
-
                 if (node.mesh>=0) {
                     var end = meshPrimitiveIndex[node.mesh+1];
                     var primitiveCount = 0;
@@ -2017,7 +2010,6 @@ namespace GLTFast {
                     }
                 }
 
-                Debug.Log("SETNAME");
                 instantiator.SetNodeName(nodeIndex,goName);
 
                 if (node.camera >= 0

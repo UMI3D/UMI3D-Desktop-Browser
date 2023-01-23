@@ -148,7 +148,6 @@ namespace GLTFast {
         /// <inheritdoc />
         public virtual void SetNodeName(uint nodeIndex, string name) {
             nodes[nodeIndex].name = name ?? $"Node-{nodeIndex}";
-            Debug.Log("<color=orange>" + nodes[nodeIndex].name + "</color>");
         }
 
         /// <inheritdoc />
