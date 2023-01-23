@@ -48,6 +48,7 @@ namespace umi3d.baseBrowser.connection
             InitGame_Notification();
             InitGame_Emote();
             InitGame_ObjectMenu();
+            InitGame_InteractableMapping();
         }
 
         protected virtual void InitGame_ButtonsArea()
@@ -136,6 +137,18 @@ namespace umi3d.baseBrowser.connection
             envMic.StatusChanged += (value) => bottomArea.IsMicOn = value;
             bottomArea.Sound.clicked += () => envAudio.Toggle();
             bottomArea.Mic.clicked += () => envMic.Toggle();
+        }
+
+        protected virtual void InitGame_InteractableMapping()
+        {
+            LeadingArea.InteractableMapping.MappingAdded += () =>
+            {
+                LeadingArea.InteractableMapping.InteractableName = BaseController.Instance.mouseData.CurrentHovered.name;
+            };
+            LeadingArea.InteractableMapping.MappingRemoved += () =>
+            {
+                LeadingArea.InteractableMapping.InteractableName = null;
+            };
         }
 
         /// <summary>

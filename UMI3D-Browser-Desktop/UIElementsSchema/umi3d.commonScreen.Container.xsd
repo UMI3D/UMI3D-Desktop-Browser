@@ -38,6 +38,43 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ButtonGroup_C" substitutionGroup="engine:VisualElement" xmlns:q3="umi3d.commonScreen.Container" type="q3:ButtonGroup_CType" />
+  <xs:simpleType name="Carrousel_C_category_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Menu" />
+      <xs:enumeration value="Game" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Carrousel_C_elements-size_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Minimun" />
+      <xs:enumeration value="Maximum" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="Carrousel_CType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute default="Menu" name="category" xmlns:q4="umi3d.commonScreen.Container" type="q4:Carrousel_C_category_Type" use="optional" />
+        <xs:attribute default="3" name="number-of-elements" type="xs:int" use="optional" />
+        <xs:attribute default="0" name="min-margin" type="xs:float" use="optional" />
+        <xs:attribute default="Maximum" name="elements-size" xmlns:q5="umi3d.commonScreen.Container" type="q5:Carrousel_C_elements-size_Type" use="optional" />
+        <xs:attribute default="true" name="scroll-all" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="loop-scroll" type="xs:boolean" use="optional" />
+        <xs:attribute default="0" name="speed-auto-scroll" type="xs:int" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Carrousel_C" substitutionGroup="engine:VisualElement" xmlns:q6="umi3d.commonScreen.Container" type="q6:Carrousel_CType" />
   <xs:simpleType name="Form_C_category_Type">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Menu" />
@@ -57,14 +94,14 @@
         <xs:attribute default="" name="class" type="xs:string" use="optional" />
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
-        <xs:attribute default="Menu" name="category" xmlns:q4="umi3d.commonScreen.Container" type="q4:Form_C_category_Type" use="optional" />
+        <xs:attribute default="Menu" name="category" xmlns:q7="umi3d.commonScreen.Container" type="q7:Form_C_category_Type" use="optional" />
         <xs:attribute name="title" type="xs:string" use="optional" />
         <xs:attribute name="icon-path" type="xs:string" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="Form_C" substitutionGroup="engine:VisualElement" xmlns:q5="umi3d.commonScreen.Container" type="q5:Form_CType" />
+  <xs:element name="Form_C" substitutionGroup="engine:VisualElement" xmlns:q8="umi3d.commonScreen.Container" type="q8:Form_CType" />
   <xs:simpleType name="ScrollView_C_mode_Type">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Vertical" />
@@ -119,21 +156,21 @@
         <xs:attribute default="" name="class" type="xs:string" use="optional" />
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
-        <xs:attribute default="Vertical" name="mode" xmlns:q6="umi3d.commonScreen.Container" type="q6:ScrollView_C_mode_Type" use="optional" />
-        <xs:attribute default="Default" name="nested-interaction-kind" xmlns:q7="umi3d.commonScreen.Container" type="q7:ScrollView_C_nested-interaction-kind_Type" use="optional" />
+        <xs:attribute default="Vertical" name="mode" xmlns:q9="umi3d.commonScreen.Container" type="q9:ScrollView_C_mode_Type" use="optional" />
+        <xs:attribute default="Default" name="nested-interaction-kind" xmlns:q10="umi3d.commonScreen.Container" type="q10:ScrollView_C_nested-interaction-kind_Type" use="optional" />
         <xs:attribute default="false" name="show-horizontal-scroller" type="xs:boolean" use="optional" />
         <xs:attribute default="false" name="show-vertical-scroller" type="xs:boolean" use="optional" />
-        <xs:attribute default="Auto" name="horizontal-scroller-visibility" xmlns:q8="umi3d.commonScreen.Container" type="q8:ScrollView_C_horizontal-scroller-visibility_Type" use="optional" />
-        <xs:attribute default="Auto" name="vertical-scroller-visibility" xmlns:q9="umi3d.commonScreen.Container" type="q9:ScrollView_C_vertical-scroller-visibility_Type" use="optional" />
+        <xs:attribute default="Auto" name="horizontal-scroller-visibility" xmlns:q11="umi3d.commonScreen.Container" type="q11:ScrollView_C_horizontal-scroller-visibility_Type" use="optional" />
+        <xs:attribute default="Auto" name="vertical-scroller-visibility" xmlns:q12="umi3d.commonScreen.Container" type="q12:ScrollView_C_vertical-scroller-visibility_Type" use="optional" />
         <xs:attribute default="-1" name="horizontal-page-size" type="xs:float" use="optional" />
         <xs:attribute default="-1" name="vertical-page-size" type="xs:float" use="optional" />
-        <xs:attribute default="Clamped" name="touch-scroll-type" xmlns:q10="umi3d.commonScreen.Container" type="q10:ScrollView_C_touch-scroll-type_Type" use="optional" />
+        <xs:attribute default="Clamped" name="touch-scroll-type" xmlns:q13="umi3d.commonScreen.Container" type="q13:ScrollView_C_touch-scroll-type_Type" use="optional" />
         <xs:attribute default="0.135" name="scroll-deceleration-rate" type="xs:float" use="optional" />
         <xs:attribute default="0.1" name="elasticity" type="xs:float" use="optional" />
-        <xs:attribute default="Menu" name="category" xmlns:q11="umi3d.commonScreen.Container" type="q11:ScrollView_C_category_Type" use="optional" />
+        <xs:attribute default="Menu" name="category" xmlns:q14="umi3d.commonScreen.Container" type="q14:ScrollView_C_category_Type" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ScrollView_C" substitutionGroup="engine:VisualElement" xmlns:q12="umi3d.commonScreen.Container" type="q12:ScrollView_CType" />
+  <xs:element name="ScrollView_C" substitutionGroup="engine:VisualElement" xmlns:q15="umi3d.commonScreen.Container" type="q15:ScrollView_CType" />
 </xs:schema>

@@ -27,6 +27,7 @@
         <xs:attribute default="false" name="is-mic-on" type="xs:boolean" use="optional" />
         <xs:attribute default="true" name="is-sound-on" type="xs:boolean" use="optional" />
         <xs:attribute default="None" name="button-selected" xmlns:q1="umi3d.commonDesktop.game" type="q1:BottomArea_C_button-selected_Type" use="optional" />
+        <xs:attribute default="false" name="display-notif-users-area" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.UIElements;
 
 public abstract class CustomScrollView : ScrollView, ICustomElement
@@ -75,6 +76,7 @@ public abstract class CustomScrollView : ScrollView, ICustomElement
     protected ScrollViewMode m_mode;
     protected ElementCategory m_category;
     protected bool m_hasBeenInitialized;
+    protected Length m_containerPadding = float.NaN;
 
     public virtual void Set() => Set(ScrollViewMode.Vertical, ElementCategory.Menu);
     public virtual void Set(ScrollViewMode mode, ElementCategory category)
@@ -100,5 +102,22 @@ public abstract class CustomScrollView : ScrollView, ICustomElement
             throw e;
         }
         AddToClassList(USSCustomClassName);
+
+        this.RegisterCallback<CustomStyleResolvedEvent>((evt) =>
+        {
+            this.TryGetCustomStyle("--padding-container-scrollview", out m_containerPadding);
+        });
+
+        horizontalScroller.RegisterCallback<GeometryChangedEvent>((evt) =>
+        {
+            if (evt.newRect.height > 0) horizontalScroller.style.marginTop = m_containerPadding;
+            else horizontalScroller.style.marginTop = StyleKeyword.Null;
+        });
+
+        verticalScroller.RegisterCallback<GeometryChangedEvent>((evt) =>
+        {
+            if (evt.newRect.width > 0) verticalScroller.style.marginLeft = m_containerPadding;
+            else verticalScroller.style.marginLeft = StyleKeyword.Null;
+        });
     }
 }

@@ -6,6 +6,7 @@
   <xs:import schemaLocation="UnityEditor.ShaderGraph.Drawing.xsd" namespace="UnityEditor.ShaderGraph.Drawing" />
   <xs:include schemaLocation="GlobalNamespace.xsd" />
   <xs:import schemaLocation="umi3d.commonMobile.game.xsd" namespace="umi3d.commonMobile.game" />
+  <xs:import schemaLocation="umi3d.commonDesktop.menu.xsd" namespace="umi3d.commonDesktop.menu" />
   <xs:import schemaLocation="umi3d.commonDesktop.game.xsd" namespace="umi3d.commonDesktop.game" />
   <xs:import schemaLocation="umi3d.commonScreen.menu.xsd" namespace="umi3d.commonScreen.menu" />
   <xs:import schemaLocation="umi3d.commonScreen.game.xsd" namespace="umi3d.commonScreen.game" />
