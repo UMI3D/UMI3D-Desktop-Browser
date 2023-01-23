@@ -200,7 +200,7 @@ public class CustomToolbox : VisualElement, ICustomElement
             tool.Menu = datum;
             tool.ToolClicked = (isSelected, datum) =>
             {
-                if (isSelected) SDC.Select(datum);
+                if (!isSelected) SDC.Select(datum);
                 else SDC.Unselect(datum);
             };
 

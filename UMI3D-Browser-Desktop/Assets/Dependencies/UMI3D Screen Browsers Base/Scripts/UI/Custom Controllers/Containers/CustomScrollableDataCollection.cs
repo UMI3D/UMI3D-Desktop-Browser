@@ -435,9 +435,9 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
     {
         if (datum == null || !Data.Contains(datum) || !SelectedData.Contains(datum)) return;
 
-        UnselectItem?.Invoke(datum, DataToItem[datum]);
-
         SelectedData.Remove(datum);
+
+        UnselectItem?.Invoke(datum, DataToItem[datum]);
     }
 
     public virtual void Unselect(List<D> data)

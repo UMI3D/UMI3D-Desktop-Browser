@@ -156,7 +156,7 @@ public class CustomTool : CustomButton
 
     public AbstractMenuItem Menu;
     /// <summary>
-    /// Action raised when this tool is clicked.
+    /// Action raised when this tool is clicked. The first argument is the current selection status.
     /// </summary>
     public System.Action<bool, AbstractMenuItem> ToolClicked;
 
