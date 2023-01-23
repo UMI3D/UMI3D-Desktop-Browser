@@ -156,6 +156,7 @@ namespace umi3d.baseBrowser.connection
             };
             BaseConnectionProcess.Instance.EnvironmentLoaded += () =>
             {
+                Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Center);
                 Menu.Libraries.InitLibraries();
                 EnvironmentSettings.Instance.AudioSetting.GeneralVolume = ((int)Menu.Settings.Audio.Data.GeneralVolume) / 10f;
             };
