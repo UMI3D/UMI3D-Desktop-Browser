@@ -43,6 +43,7 @@ namespace umi3d.baseBrowser.connection
 
             umi3d.cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded?.AddListener(() =>
             {
+                BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
                 Loader.ControllerCanProcess?.Invoke(true);
                 TopArea.InformationArea.EnvironmentName = UMI3DCollaborationClientServer.Instance.environementName;
                 Menu.GameData.EnvironmentName = UMI3DCollaborationClientServer.Instance.environementName;

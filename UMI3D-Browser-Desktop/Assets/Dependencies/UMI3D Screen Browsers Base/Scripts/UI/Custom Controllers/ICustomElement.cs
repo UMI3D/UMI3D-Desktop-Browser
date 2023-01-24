@@ -116,6 +116,25 @@ public enum NotificationFilter
     New
 }
 
+public enum ToolType
+{
+    Unknown, //unknown type.
+    ToolboxMenu, //A tool that display or hide the ToolsWindow.
+    Tool, //A tool display or hide parameters.
+    Toolbox //A toolbox display or hide subtools.
+}
+public enum ToolboxType
+{
+    Unknown, //unknown type.
+    Main, //Toolbox displayed in the toolsWindow.
+    Pinned //Toolbox displayed in the pinnedToolsArea.
+}
+public enum ReorderableMode
+{
+    Dragger, //Add a dragger to drag&drop the elements.
+    Element, //Use the element as a dragger to drag&drop the elements.
+}
+
 public static class ElementExtensions
 {
     public static string StyleSheetContainersFolderPath => "USS/Containers";

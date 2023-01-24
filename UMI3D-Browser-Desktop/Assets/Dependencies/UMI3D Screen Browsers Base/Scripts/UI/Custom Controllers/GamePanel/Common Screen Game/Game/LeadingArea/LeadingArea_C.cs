@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
@@ -23,8 +24,17 @@ namespace umi3d.commonScreen.game
 
         public LeadingArea_C() => Set();
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void InitElement()
         {
+            if (PinnedToolsArea == null)
+            {
+                if (Application.isPlaying) PinnedToolsArea = PinnedToolsArea_C.Instance;
+                else PinnedToolsArea = new PinnedToolsArea_C();
+            }
+            if (InteractableMapping == null) InteractableMapping = new InteractableMapping_C();
             if (JoystickArea == null) JoystickArea = new commonMobile.game.JoystickArea_C();
     
             base.InitElement();

@@ -117,7 +117,6 @@ public abstract class CustomDropdown : DropdownField, ICustomElement
         }
         catch (System.Exception e)
         {
-
             throw e;
         }
         AddToClassList(USSCustomClassName);
