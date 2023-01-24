@@ -65,6 +65,9 @@ namespace umi3d.commonScreen.Displayer
             else throw new System.Exception("MenuItem must be a ButtonInput");
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void InitAndBindUI()
         {
             if (button != null) return;
@@ -72,39 +75,59 @@ namespace umi3d.commonScreen.Displayer
             button = new Button_C(Category, Size, Shape, Type, Label, LabelDirection, IconAlignment);
             button.name = gameObject.name;
             button.text = Text;
-            if (menuItem.IsHoldable)
-            {
-                button.ClickedDown += OnClickedDown;
-                button.ClickedUp += OnClickedUp;
-            }
-            else button.clicked += OnClicked;
+            button.ClickedDown += OnClickedDown;
+            button.ClickedUp += OnClickedUp;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void Clear()
         {
             base.Clear();
-            if (menuItem.IsHoldable)
-            {
-                button.ClickedDown -= OnClickedDown;
-                button.ClickedUp -= OnClickedUp;
-            }
-            else button.clicked -= OnClicked;
+            button.ClickedDown -= OnClickedDown;
+            button.ClickedUp -= OnClickedUp;
             button.RemoveFromHierarchy();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="forceUpdate"></param>
         public override void Display(bool forceUpdate = false) => button.Display();
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void Hide() => button.Hide();
 
+        /// <summary>
+        /// return the button UI element.
+        /// </summary>
+        /// <returns></returns>
         public VisualElement GetUXMLContent() => button;
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="menu"></param>
+        /// <returns></returns>
         public override int IsSuitableFor(AbstractMenuItem menu)
         {
             return (menu is ButtonMenuItem) ? 2 : 0;
         }
 
+        /// <summary>
+        /// Notify that the menu item is down.
+        /// </summary>
         public void OnClickedDown() => menuItem.NotifyValueChange(true);
+        /// <summary>
+        /// Notify that the menu item is up.
+        /// </summary>
         public void OnClickedUp() => menuItem.NotifyValueChange(false);
+        /// <summary>
+        /// Notify that the menu item has been clicked and that its status changed.
+        /// </summary>
         public void OnClicked() => menuItem.NotifyValueChange(!menuItem.GetValue());
 
         private void OnDestroy()

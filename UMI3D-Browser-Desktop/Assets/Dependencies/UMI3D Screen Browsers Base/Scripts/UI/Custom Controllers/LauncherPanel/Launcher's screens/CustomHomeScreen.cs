@@ -224,6 +224,7 @@ public abstract class CustomHomeScreen : CustomMenuScreen
             {
                 if (!m_isEditingSavedServers) TryToConnect(item.Data);
                 else UpdateSavedServer(item, item.Data, true, null);
+                item.Blur();
             };
             SavedServers__ScrollView.Add(item);
         }
