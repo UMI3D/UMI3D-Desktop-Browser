@@ -17,6 +17,7 @@ using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class CustomGame : VisualElement, ICustomElement, IGameView
@@ -200,20 +201,7 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         {
             var worldPosition = this.LocalToWorld(localPosition);
 
-            var leadingAndTrailingLocal =  LeadingAndTrailingBox.WorldToLocal(worldPosition);
-            if (LeadingAndTrailingBox.ContainsPoint(leadingAndTrailingLocal))
-            {
-                var objectMenuLocal = TrailingArea.ObjectMenu.WorldToLocal(worldPosition);
-                if (TrailingArea.ObjectMenu.ContainsPoint(objectMenuLocal)) return;
-                LeadingAndTrailingAreaClicked?.Invoke(worldPosition);
-                return;
-            }
-
-            var topAreaLocal = TopArea.WorldToLocal(worldPosition);
-            if (TopArea.ContainsPoint(topAreaLocal))
-            {
-                return;
-            }
+            //if (IsLeadingAndtrailingClicked(worldPosition)) LeadingAndTrailingAreaClicked?.Invoke(worldPosition);
         };
 
         Add(Cursor);
@@ -236,6 +224,17 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
         Controller = controller;
         DisplayNotifUsersArea = displayNotifUserArea;
         LeftHand = leftHand;
+    }
+
+    public bool IsLeadingAndtrailingClicked(Vector2 worldPosition)
+    {
+        var leadingAndTrailingLocal = LeadingAndTrailingBox.WorldToLocal(worldPosition);
+        if (!LeadingAndTrailingBox.ContainsPoint(leadingAndTrailingLocal)) return false;
+
+        var objectMenuLocal = TrailingArea.ObjectMenu.WorldToLocal(worldPosition);
+        if (TrailingArea.ObjectMenu.ContainsPoint(objectMenuLocal)) return false;
+        
+        return true;
     }
 
     public void TransitionIn(VisualElement persistentVisual)

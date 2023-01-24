@@ -21,30 +21,30 @@ public abstract class CustomDialoguebox : VisualElement, ICustomElement
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
-        UxmlEnumAttributeDescription<ElementCategory> m_category = new UxmlEnumAttributeDescription<ElementCategory> 
-        { 
-            name = "category", 
-            defaultValue = ElementCategory.Menu 
+        UxmlEnumAttributeDescription<ElementCategory> m_category = new UxmlEnumAttributeDescription<ElementCategory>
+        {
+            name = "category",
+            defaultValue = ElementCategory.Menu
         };
-        UxmlEnumAttributeDescription<ElementSize> m_size = new UxmlEnumAttributeDescription<ElementSize> 
-        { 
-            name = "size", 
-            defaultValue = ElementSize.Medium 
+        UxmlEnumAttributeDescription<ElementSize> m_size = new UxmlEnumAttributeDescription<ElementSize>
+        {
+            name = "size",
+            defaultValue = ElementSize.Medium
         };
-        UxmlEnumAttributeDescription<DialogueboxType> m_type = new UxmlEnumAttributeDescription<DialogueboxType> 
-        { 
-            name = "type", 
-            defaultValue = DialogueboxType.Default 
+        UxmlEnumAttributeDescription<DialogueboxType> m_type = new UxmlEnumAttributeDescription<DialogueboxType>
+        {
+            name = "type",
+            defaultValue = DialogueboxType.Default
         };
-        UxmlStringAttributeDescription m_title = new UxmlStringAttributeDescription 
-        { 
-            name = "title", 
-            defaultValue = null 
+        UxmlStringAttributeDescription m_title = new UxmlStringAttributeDescription
+        {
+            name = "title",
+            defaultValue = null
         };
-        UxmlStringAttributeDescription m_message = new UxmlStringAttributeDescription 
-        { 
-            name = "message", 
-            defaultValue = null 
+        UxmlStringAttributeDescription m_message = new UxmlStringAttributeDescription
+        {
+            name = "message",
+            defaultValue = null
         };
         UxmlStringAttributeDescription m_choiceA = new UxmlStringAttributeDescription
         {
@@ -300,6 +300,15 @@ public abstract class CustomDialoguebox : VisualElement, ICustomElement
     public Action<int> Callback;
     public static Queue<(CustomDialoguebox, VisualElement)> Queue = new Queue<(CustomDialoguebox, VisualElement)>();
     public static Queue<(CustomDialoguebox, VisualElement)> PriorityQueue = new Queue<(CustomDialoguebox, VisualElement)>();
+
+    /// <summary>
+    /// Clear Queue and PriorityQueue.
+    /// </summary>
+    public static void ResetAllQueue()
+    {
+        Queue.Clear();
+        PriorityQueue.Clear();
+    }
 
     /// <summary>
     /// Enqueue this. It will then be displayed at the root of this visual [element].

@@ -124,7 +124,7 @@ public class CustomTrailingArea : VisualElement, ICustomElement
             ) return;
 
             NotifAndUserArea.schedule.Execute(() =>
-            {   
+            {
                 NotifAndUserArea.style.visibility = StyleKeyword.Null;
                 NotifAndUserArea.AddAnimation
                 (
@@ -249,7 +249,8 @@ public class CustomTrailingArea : VisualElement, ICustomElement
     public CustomButtonsArea ButtonsArea;
     public VisualElement CameraLayer = new VisualElement { name = "camera-layer" };
 
-    public TouchManipulator2 m_touchManipulator = new TouchManipulator2(null, 0, 0);
+    public TouchManipulator2 TrailingAreaManipulator = new TouchManipulator2(null, 0, 0);
+    public TouchManipulator2 CameraManipulator = new TouchManipulator2(null, 0, 0);
     /// <summary>
     /// Direction of the swipe.
     /// </summary>
@@ -292,9 +293,12 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         EmoteWindow.AddToClassList(USSCustomClassEmoteWindow);
         CameraLayer.AddToClassList(USSCustomClassCameraLayer);
 
-        CameraLayer.AddManipulator(m_touchManipulator);
-        m_touchManipulator.ClickedDownWithInfo += (evt, localposition) => m_initialDownPosition = localposition;
-        m_touchManipulator.MovedWithInfo += (evt, localposition) =>
+        //this.AddManipulator(TrailingAreaManipulator);
+        //TODO improve camera navigation with double click.
+
+        CameraLayer.AddManipulator(CameraManipulator);
+        CameraManipulator.ClickedDownWithInfo += (evt, localposition) => m_initialDownPosition = localposition;
+        CameraManipulator.MovedWithInfo += (evt, localposition) =>
         {
             m_localPosition = localposition;
             m_direction = localposition - m_initialDownPosition;
@@ -303,13 +307,9 @@ public class CustomTrailingArea : VisualElement, ICustomElement
             m_direction *= 50;
             m_cameraMoved = true;
         };
-        m_touchManipulator.ClickedUpWithInfo += (evt, localposition) =>
-        {
 
-        };
-
-        ButtonsArea.ClickedDown = (evt, worldPosition) => m_touchManipulator.OnClickedDownWithInf(evt, CameraLayer.WorldToLocal(worldPosition));
-        ButtonsArea.Moved = (evt, worldPosition) => m_touchManipulator.OnMovedWithInf(evt, CameraLayer.WorldToLocal(worldPosition));
+        ButtonsArea.ClickedDown = (evt, worldPosition) => CameraManipulator.OnClickedDownWithInf(evt, CameraLayer.WorldToLocal(worldPosition));
+        ButtonsArea.Moved = (evt, worldPosition) => CameraManipulator.OnMovedWithInf(evt, CameraLayer.WorldToLocal(worldPosition));
 
         ObjectMenu.name = "object-menu";
         ObjectMenu.Category = ElementCategory.Game;

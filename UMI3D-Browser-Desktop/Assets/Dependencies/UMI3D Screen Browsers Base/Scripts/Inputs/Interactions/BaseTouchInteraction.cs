@@ -20,12 +20,14 @@ namespace umi3d.baseBrowser.inputs.interactions
         where InteractionType : common.interaction.AbstractInteractionDto
     {
         protected ButtonMenuItem menuItem;
+        protected bool m_isDown;
 
         public override void Dissociate()
         {
+            if (m_isDown) Pressed(false);
             associatedInteraction = null;
             Menu?.Remove(menuItem);
-            menuItem.UnSubscribe(Pressed);
+            menuItem?.UnSubscribe(Pressed);
             menuItem = null;
         }
 
@@ -43,8 +45,9 @@ namespace umi3d.baseBrowser.inputs.interactions
             Menu?.Add(menuItem);
         }
         
-        private void Pressed(bool down)
+        protected void Pressed(bool down)
         {
+            m_isDown = down;
             if (down) PressedDown();
             else PressedUp();
         }

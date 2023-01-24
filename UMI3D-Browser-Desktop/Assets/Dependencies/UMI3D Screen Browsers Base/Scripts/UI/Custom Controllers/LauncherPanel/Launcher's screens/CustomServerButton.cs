@@ -52,9 +52,12 @@ public abstract class CustomServerButton : CustomButton
     public virtual string USSCutomClassIcon => $"{USSCustomClassServerButton}__icon";
     public virtual string USSCustomClassServerName => $"{USSCustomClassServerButton}__server-name";
 
-    public VisualElement Icon = new VisualElement();
+    public VisualElement Icon = new VisualElement { name = "icon" };
     public ServerPreferences.ServerData Data;
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public override void InitElement()
     {
         base.InitElement();
@@ -75,6 +78,16 @@ public abstract class CustomServerButton : CustomButton
         Front.RemoveFromHierarchy();
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <param name="category"></param>
+    /// <param name="size"></param>
+    /// <param name="shape"></param>
+    /// <param name="type"></param>
+    /// <param name="label"></param>
+    /// <param name="direction"></param>
+    /// <param name="alignment"></param>
     public override void Set(ElementCategory category, ElementSize size, ButtonShape shape, ButtonType type, string label, ElemnetDirection direction, ElementAlignment alignment)
     {
         base.Set(category, size, shape, type, label, direction, alignment);

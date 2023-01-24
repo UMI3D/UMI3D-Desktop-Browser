@@ -62,20 +62,6 @@ public abstract class CustomUserList : VisualElement, ICustomElement
 
         AddToClassList(USSCustomClassName);
         FilterLabel.AddToClassList(USSCustomClassFilterLabel);
-        UMI3DEnvironmentClient.EnvironementJoinned.AddListener(OnEnvironmentChanged);
-        UMI3DUser.OnUserMicrophoneStatusUpdated.AddListener(UpdateUser);
-        UMI3DUser.OnUserAvatarStatusUpdated.AddListener(UpdateUser);
-        UMI3DUser.OnUserAttentionStatusUpdated.AddListener(UpdateUser);
-        UMI3DUser.OnRemoveUser.AddListener((u) => 
-        {
-            m_users.FirstOrDefault
-            (U =>
-            {
-                if (U == null) return false;
-                return U.User == u;
-            })?.RemoveFromHierarchy();
-            Filter();
-        });
 
         FilterTextField.Category = ElementCategory.Game;
         FilterTextField.RegisterValueChangedCallback(ce => Filter());
@@ -106,11 +92,11 @@ public abstract class CustomUserList : VisualElement, ICustomElement
 
     #region Implementation
 
-    private void OnEnvironmentChanged()
+    public virtual void OnEnvironmentChanged()
     {
         interUserAudioSettingsMemory = new Dictionary<string, CustomUser>();
 
-        foreach(var u in intraUserAudioSettingsMemory.Values)
+        foreach (var u in intraUserAudioSettingsMemory.Values)
         {
             if (!string.IsNullOrEmpty(u.User.login))
                 interUserAudioSettingsMemory[u.User.login] = u;
@@ -135,7 +121,7 @@ public abstract class CustomUserList : VisualElement, ICustomElement
             .ToList();
 
         usersList.Sort((user0, user1) => string.Compare(user0.UserName, user1.UserName));
-            
+
         m_users = usersList.ToArray();
 
         Filter();
@@ -146,6 +132,17 @@ public abstract class CustomUserList : VisualElement, ICustomElement
         var _u = m_users.FirstOrDefault(U => (U.User == user));
         if (_u == null) RefreshList();
         //else _u.IsMute = !user.microphoneStatus;
+    }
+
+    public virtual void RemoveUser(UMI3DUser u)
+    {
+        m_users.FirstOrDefault
+        (U =>
+        {
+            if (U == null) return false;
+            return U.User == u;
+        })?.RemoveFromHierarchy();
+        Filter();
     }
 
     protected virtual void Filter()

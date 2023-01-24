@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.baseBrowser.ui.viewController;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -63,17 +64,21 @@ public class CustomLeadingArea : VisualElement, ICustomElement
             switch (value)
             {
                 case ControllerEnum.MouseAndKeyboard:
+                    Add(InteractableMapping);
                     JoystickArea.RemoveFromHierarchy();
                     break;
                 case ControllerEnum.Touch:
                     Add(JoystickArea);
+                    InteractableMapping.RemoveFromHierarchy();
                     break;
                 case ControllerEnum.GameController:
+                    Add(InteractableMapping);
                     JoystickArea.RemoveFromHierarchy();
                     break;
                 default:
                     break;
             }
+            InteractableMapping.Controller = value;
         }
     }
 
@@ -102,12 +107,19 @@ public class CustomLeadingArea : VisualElement, ICustomElement
     public virtual string USSCustomClassName => "leading__area";
     public virtual string USSCustomClassNameReverse => "leading__area-reverse";
 
+    public CustomPinnedToolsArea PinnedToolsArea;
+    public CustomInteractableMapping InteractableMapping;
     public CustomJoystickArea JoystickArea;
+
+    public TouchManipulator2 LeadingAreaManipulator = new TouchManipulator2(null, 0, 0);
 
     protected bool m_hasBeenInitialized;
     protected ControllerEnum m_controller;
     protected bool m_leftHand;
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public virtual void InitElement()
     {
         try
@@ -119,10 +131,24 @@ public class CustomLeadingArea : VisualElement, ICustomElement
         {
             throw e;
         }
+
+        //TODO add pinned tools area.
+        //Add(PinnedToolsArea);
+
+        //this.AddManipulator(LeadingAreaManipulator);
+        //TODO improve camera navigation with double click.
     }
 
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, m_leftHand);
 
+    /// <summary>
+    /// set this UI element.
+    /// </summary>
+    /// <param name="controller"></param>
+    /// <param name="leftHand"></param>
     public virtual void Set(ControllerEnum controller, bool leftHand)
     {
         if (!m_hasBeenInitialized)

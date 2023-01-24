@@ -27,10 +27,13 @@ namespace umi3d.baseBrowser.connection
         [SerializeField]
         protected UIDocument document;
         protected VisualElement root => document.rootVisualElement;
+        protected CustomDialoguebox m_connectionDialoguebox;
 
         protected virtual void Start()
         {
             Debug.Assert(document != null);
+
+            Screen.sleepTimeout = SleepTimeout.SystemSetting;
 
             Launcher = root.Q<CustomLauncher>();
 #if !UNITY_STANDALONE
@@ -47,6 +50,33 @@ namespace umi3d.baseBrowser.connection
 
             BaseConnectionProcess.Instance.ResetLauncherEvent();
             //BaseConnectionProcess.Instance.DisplaySessions += () => Launcher.AddScreenToStack = LauncherScreens.Session;
+
+            m_connectionDialoguebox = new commonScreen.Displayer.Dialoguebox_C();
+            m_connectionDialoguebox.Type = DialogueboxType.Default;
+            m_connectionDialoguebox.Size = ElementSize.Small;
+            BaseConnectionProcess.Instance.ConnectionInitialized += ConnectionInitialized;
+            BaseConnectionProcess.Instance.ConnectionInitializationFailled += ConnectionFailled;
+        }
+
+        private void OnDestroy()
+        {
+            CustomDialoguebox.ResetAllQueue();
+        }
+
+        protected virtual void ConnectionInitialized(string url)
+        {
+            m_connectionDialoguebox.Title = "Connection to a server:";
+            m_connectionDialoguebox.Message = $"Try connecting to \n\n\"{url}\" \n\nIt may take some time.";
+            m_connectionDialoguebox.ChoicesContainer.style.display = DisplayStyle.None;
+            m_connectionDialoguebox.Enqueue(root);
+        }
+
+        protected virtual void ConnectionFailled(string url)
+        {
+            m_connectionDialoguebox.Title = "Failled to connect to server";
+            m_connectionDialoguebox.Message = $"Browser was not able to connect to \n\n\"{url}\"";
+            m_connectionDialoguebox.ChoicesContainer.style.display = DisplayStyle.Flex;
+            m_connectionDialoguebox.ChoiceAText = "Ok";
         }
     }
 }
