@@ -20,9 +20,11 @@ namespace umi3d.cdk.userCapture
 {
     public interface ISubSkeleton
     {
-        public void Update(UserTrackingFrameDto trackingFrame);
-        public PoseDto GetPose();
-        public void WriteTrackingFrame(UserTrackingFrameDto trackingFrame);
+        void Update(UserTrackingFrameDto trackingFrame);
+        PoseDto GetPose();
+        void WriteTrackingFrame(UserTrackingFrameDto trackingFrame, TrackingOption option);
+
+        UserCameraPropertiesDto GetCameraDto(); 
     }
 
 }
