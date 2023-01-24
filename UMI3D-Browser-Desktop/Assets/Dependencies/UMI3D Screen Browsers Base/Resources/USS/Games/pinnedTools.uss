@@ -6,6 +6,7 @@
 
 .pinned__tools__area-vertical > .pinned__tools__area-sdc {
 	width: 25%;
+	max-width: 200px;
 }
 
 .pinned__tools__area-vertical > .pinned__tools__area-sub__sdc {

@@ -135,11 +135,14 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
         SDC.SelectionType = SelectionType.Single;
         SDC.SelectItem = (datum, item) =>
         {
+            var toolbox = item as CustomToolbox;
+            toolbox.IsSelected = true;
         };
         SDC.UnselectItem = (datum, item) =>
         {
             var toolbox = item as CustomToolbox;
             toolbox.SDC.UnselectAll();
+            toolbox.IsSelected = false;
         };
         SDC.ReorderableMode = ReorderableMode.Element;
         SDC.IsReorderable = true;
