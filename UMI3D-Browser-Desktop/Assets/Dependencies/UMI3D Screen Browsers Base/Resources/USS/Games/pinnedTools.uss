@@ -22,3 +22,8 @@
 	border-bottom-left-radius: var(--border-radius-game);
 	border-bottom-right-radius: var(--border-radius-game);
 }
+
+.pinned__tools__area-sub__sdc {
+	align-self: flex-start;
+	flex-direction: row;
+}

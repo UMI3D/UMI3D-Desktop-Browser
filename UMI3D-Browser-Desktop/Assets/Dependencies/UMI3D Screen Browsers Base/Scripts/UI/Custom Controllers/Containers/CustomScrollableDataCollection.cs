@@ -354,6 +354,7 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
 
         DataToItem.Remove(datum);
         Data.Remove(datum);
+        SelectedData.Remove(datum);
     }
 
     /// <summary>
@@ -396,12 +397,16 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
     /// </summary>
     public virtual void ClearSDC()
     {
+        UnselectAll();
         for (int i = Data.Count - 1; i >= 0 ; i--)
             RemoveDatum(Data[i]);
     }
 
-    
 
+    /// <summary>
+    /// Select <paramref name="datum"/> if <see cref="SelectionType"/> is <see cref="SelectionType.Single"/> or <see cref="SelectionType.Multiple"/>.
+    /// </summary>
+    /// <param name="datum"></param>
     public virtual void Select(D datum)
     {
         if (datum == null || !Data.Contains(datum)) return;
@@ -424,6 +429,11 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         SelectedData.Add(datum);
     }
 
+    /// <summary>
+    /// Select the collection <paramref name="data"/> if <see cref="SelectionType"/> is <see cref="SelectionType.Multiple"/>.
+    /// </summary>
+    /// <param name="data"></param>
+    /// <exception cref="Exception"></exception>
     public virtual void Select(List<D> data)
     {
         if (SelectionType != SelectionType.Multiple) throw new Exception("Selection type is not set to Multiple");
@@ -431,6 +441,10 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         foreach (var datum in data) Select(datum);
     }
 
+    /// <summary>
+    /// Unselect <paramref name="datum"/>.
+    /// </summary>
+    /// <param name="datum"></param>
     public virtual void Unselect(D datum)
     {
         if (datum == null || !Data.Contains(datum) || !SelectedData.Contains(datum)) return;
@@ -439,12 +453,21 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
 
         UnselectItem?.Invoke(datum, DataToItem[datum]);
     }
-
+    
+    /// <summary>
+    /// Unselect the collection <paramref name="data"/>.
+    /// </summary>
+    /// <param name="data"></param>
     public virtual void Unselect(List<D> data)
     {
         foreach (var datum in data) Unselect(datum);
     }
 
+    /// <summary>
+    /// Select all the <see cref="Data"/> except <paramref name="exceptions"/> if <see cref="SelectionType"/> is <see cref="SelectionType.Multiple"/>.
+    /// </summary>
+    /// <param name="exceptions"></param>
+    /// <exception cref="Exception"></exception>
     public virtual void SelectAll(params D[] exceptions)
     {
         if (SelectionType != SelectionType.Multiple) throw new Exception("Selection type is not set to Multiple");
@@ -461,6 +484,10 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         }
     }
 
+    /// <summary>
+    /// Unselect all the <see cref="Data"/> except <paramref name="exceptions"/>
+    /// </summary>
+    /// <param name="exceptions"></param>
     public virtual void UnselectAll(params D[] exceptions)
     {
         foreach (var datum in Data)

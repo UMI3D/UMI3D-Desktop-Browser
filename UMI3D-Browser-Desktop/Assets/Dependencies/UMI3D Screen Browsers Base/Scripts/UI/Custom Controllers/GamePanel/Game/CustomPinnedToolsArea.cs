@@ -103,23 +103,22 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
             }
             else if (datum is Menu menu)
             {
-                UnityEngine.Debug.Log($"bind {datum.Name}");
                 toolbox.AddMenu(datum);
                 toolbox.Mode = Mode;
                 toolbox.ToolboxType = ToolboxType.Main;
                 toolbox.ToolClicked = ToolClicked;
-                toolbox.ToolboxClicked = (isSelected, menu) =>
+                toolbox.ToolboxClicked = (isSelected, toolboxMenu, toolMenu) =>
                 {
                     Sub_SDC.ClearSDC();
                     if (isSelected)
                     {
-                        SDC.Select(datum);
+                        SDC.Select(toolboxMenu);
                         Add(Sub_SDC);
-                        Sub_SDC.AddDatum(menu);
+                        Sub_SDC.AddDatum(toolMenu);
                     }
                     else
                     {
-                        SDC.Unselect(datum);
+                        SDC.Unselect(toolboxMenu);
                         Sub_SDC.RemoveFromHierarchy();
                     }
                 };
@@ -136,7 +135,6 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
         SDC.SelectionType = SelectionType.Single;
         SDC.SelectItem = (datum, item) =>
         {
-            UnityEngine.Debug.Log($"select {datum.Name}");
         };
         SDC.UnselectItem = (datum, item) =>
         {
@@ -147,25 +145,12 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
         SDC.IsReorderable = true;
 
         //Sub tools
-        void SubToolboxClicked(bool isSelected, AbstractMenuItem menu)
-        {
-            if (isSelected)
-            {
-
-            }
-            else
-            {
-
-            }
-        }
-        
         Sub_SDC.BindItem = (datum, item) =>
         {
             var toolbox = item as CustomToolbox;
             if (datum is MenuItem menuItem)
             {
                 UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"menu item = {menuItem.Name}");
-
             }
             else if (datum is Menu menu)
             {
@@ -173,7 +158,11 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
                 toolbox.Mode = ScrollViewMode.Horizontal;
                 toolbox.ToolboxType = ToolboxType.Main;
                 toolbox.ToolClicked += ToolClicked;
-                toolbox.ToolboxClicked += SubToolboxClicked;
+                toolbox.ToolboxClicked = (isSelected, toolboxMenu, toolMenu) =>
+                {
+                    if (isSelected) Sub_SDC.AddDatum(toolMenu);
+                    else Sub_SDC.RemoveDatum(toolMenu);
+                };
             }
         };
         Sub_SDC.UnbindItem = (datum, item) =>
@@ -181,12 +170,11 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
             var toolbox = item as CustomToolbox;
             toolbox.ClearToolbox();
             toolbox.ToolboxType = ToolboxType.Unknown;
-            toolbox.ToolClicked -= ToolClicked;
-            toolbox.ToolboxClicked -= SubToolboxClicked;
+            toolbox.ToolClicked = null;
+            toolbox.ToolboxClicked = null;
         };
         Sub_SDC.Mode = ScrollViewMode.Vertical;
-        Sub_SDC.ReorderableMode = ReorderableMode.Element;
-        Sub_SDC.IsReorderable = true;
+        Sub_SDC.IsReorderable = false;
 
         Add(SDC);
     }
@@ -237,18 +225,18 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
             (item as CustomToolbox).Mode = Mode;
     }
 
-    protected virtual void ToolClicked(bool isSelected, AbstractMenuItem menu)
+    protected virtual void ToolClicked(bool isSelected, AbstractMenuItem toolboxMenu, AbstractMenuItem toolMenu)
     {
         Sub_SDC.ClearSDC();
         Sub_SDC.RemoveFromHierarchy();
         if (isSelected)
         {
-            SDC.Select(menu);
+            SDC.Select(toolboxMenu);
             //TODO
         }
         else
         {
-            SDC.Unselect(menu);
+            SDC.Unselect(toolboxMenu);
             //TODO
         }
     }

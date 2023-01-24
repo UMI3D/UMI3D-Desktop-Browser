@@ -13,12 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk.menu;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 public class CustomToolbox : VisualElement, ICustomElement
 {
@@ -231,16 +229,16 @@ public class CustomToolbox : VisualElement, ICustomElement
             var tool = item as CustomTool;
 
             tool.IsSelected = true;
-            if (tool.ToolType == ToolType.Tool) ToolClicked?.Invoke(true, datum);
-            else if (tool.ToolType == ToolType.Toolbox) ToolboxClicked?.Invoke(true, datum);
+            if (tool.ToolType == ToolType.Tool) ToolClicked?.Invoke(true, ToolboxMenu, datum);
+            else if (tool.ToolType == ToolType.Toolbox) ToolboxClicked?.Invoke(true, ToolboxMenu, datum);
         };
         SDC.UnselectItem = (datum, item) =>
         {
             var tool = item as CustomTool;
 
             tool.IsSelected = false;
-            if (tool.ToolType == ToolType.Tool) ToolClicked?.Invoke(false, datum);
-            else if (tool.ToolType == ToolType.Toolbox) ToolboxClicked?.Invoke(false, datum);
+            if (tool.ToolType == ToolType.Tool) ToolClicked?.Invoke(false, ToolboxMenu, datum);
+            else if (tool.ToolType == ToolType.Toolbox) ToolboxClicked?.Invoke(false, ToolboxMenu, datum);
         };
 
         Add(SDC);
@@ -278,13 +276,13 @@ public class CustomToolbox : VisualElement, ICustomElement
     public AbstractMenuItem ToolboxMenu;
 
     /// <summary>
-    /// Action raised when a tool is clicked (param is whether or not the tool is selected).
+    /// Action raised when a tool is clicked (first param is whether or not the tool is selected, second is <see cref="ToolboxMenu"/>, third is toolMenu).
     /// </summary>
-    public System.Action<bool, AbstractMenuItem> ToolClicked;
+    public System.Action<bool, AbstractMenuItem, AbstractMenuItem> ToolClicked;
     /// <summary>
-    /// Action raised when a tool as a toolbox is clicked (param is whether or not the tool is selected).
+    /// Action raised when a tool as a toolbox is clicked (first param is whether or not the tool is selected, second is <see cref="ToolboxMenu"/>, third is toolMenu).
     /// </summary>
-    public System.Action<bool, AbstractMenuItem> ToolboxClicked;
+    public System.Action<bool, AbstractMenuItem, AbstractMenuItem> ToolboxClicked;
 
     /// <summary>
     /// Add a menu item in the Toolbox.
@@ -294,10 +292,12 @@ public class CustomToolbox : VisualElement, ICustomElement
     {
         ToolboxMenu = item;
         ToolboxName = item.Name;
-
-        if (item is Menu menu && menu.SubMenu.Count > 0)
-            foreach (var subMenu in menu.SubMenu) SDC.AddDatum(subMenu);
-        else if (item is Menu || item is MenuItem) SDC.AddDatum(item);
+        
+        if (item is Menu menu)
+        {
+            if (menu.SubMenu.Count > 0) foreach (var subMenu in menu.SubMenu) SDC.AddDatum(subMenu);
+        }
+        else if (item is MenuItem) SDC.AddDatum(item); //TO test
     }
 
     /// <summary>
