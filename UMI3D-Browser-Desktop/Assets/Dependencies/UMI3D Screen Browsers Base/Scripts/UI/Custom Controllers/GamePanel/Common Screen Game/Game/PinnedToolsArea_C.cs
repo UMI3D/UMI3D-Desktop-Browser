@@ -53,8 +53,10 @@ namespace umi3d.commonScreen.game
         public override void InitElement()
         {
             if (SDC == null) SDC = new Container.ScrollableDataCollection_C<AbstractMenuItem>();
-
             SDC.MakeItem = () => new Container.Toolbox_C();
+
+            if (Sub_SDC == null) Sub_SDC = new Container.ScrollableDataCollection_C<AbstractMenuItem>();
+            Sub_SDC.MakeItem = () => new Container.Toolbox_C();
 
             base.InitElement();
         }

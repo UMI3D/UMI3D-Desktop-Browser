@@ -39,6 +39,12 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
             defaultValue = ScrollViewMode.Vertical
         };
 
+        protected UxmlEnumAttributeDescription<SelectionType> m_selectionType = new UxmlEnumAttributeDescription<SelectionType>
+        {
+            name = "selection-type",
+            defaultValue = SelectionType.None
+        };
+
         public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
         {
             get { yield break; }
@@ -52,7 +58,8 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
             custom.Set
                 (
                     m_category.GetValueFromBag(bag, cc),
-                    m_ScrollViewMode.GetValueFromBag(bag, cc)
+                    m_ScrollViewMode.GetValueFromBag(bag, cc),
+                    m_selectionType.GetValueFromBag(bag, cc)
                  );
         }
     }
@@ -79,6 +86,15 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
             UpdateSize();
         }
     }
+    public virtual SelectionType SelectionType
+    {
+        get => m_selectionType;
+        set
+        {
+            m_selectionType = value;
+            //TODO update selected data collection when updated.
+        }
+    }
 
     public virtual string StyleSheetContainerPath => $"USS/container";
     public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetContainersFolderPath}/scrollableDataCollection";
@@ -92,6 +108,7 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
 
     protected ElementCategory m_category;
     protected bool m_hasBeenInitialized;
+    protected SelectionType m_selectionType;
 
     /// <summary>
     /// <inheritdoc/>
@@ -116,9 +133,9 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
     /// <inheritdoc/>
     /// </summary>
     /// <exception cref="System.NotImplementedException"></exception>
-    public virtual void Set() => Set(ElementCategory.Menu, ScrollViewMode.Vertical);
+    public virtual void Set() => Set(ElementCategory.Menu, ScrollViewMode.Vertical, SelectionType.None);
 
-    public virtual void Set(ElementCategory category, ScrollViewMode mode)
+    public virtual void Set(ElementCategory category, ScrollViewMode mode, SelectionType selectionType)
     {
         if (!m_hasBeenInitialized)
         {
@@ -128,6 +145,7 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
 
         Category = category;
         Mode = mode;
+        SelectionType = selectionType;
     }
 
     #region Implementation
@@ -147,6 +165,10 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
     /// Collection of the Data and its corresponding visualElement in the scroll view.
     /// </summary>
     public Dictionary<D, VisualElement> DataToItem = new Dictionary<D, VisualElement>();
+    /// <summary>
+    /// Collection of all the data that are selected.
+    /// </summary>
+    public List<D> SelectedData = new List<D>();
 
     protected List<VisualElement> m_waitingItems = new List<VisualElement>();
     protected List<VisualElement> m_waintingBoxes = new List<VisualElement>();
@@ -209,7 +231,17 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
     /// <summary>
     /// Unbind a visualElement from its datum.
     /// </summary>
-    public virtual Action<VisualElement> UnbindItem { get; set; }
+    public virtual Action<D, VisualElement> UnbindItem { get; set; }
+
+    /// <summary>
+    /// Action raised when a datum is selected.
+    /// </summary>
+    public virtual System.Action<D, VisualElement> SelectItem { get; set; }
+
+    /// <summary>
+    /// Action raised when a datum is unselected.
+    /// </summary>
+    public virtual System.Action<D, VisualElement> UnselectItem { get; set; }
 
     /// <summary>
     /// Add this <paramref name="datum"/> at the end of the collection of data and make an item and add it in the scroll view.
@@ -307,18 +339,22 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         if (!Data.Contains(datum)) return;
         if (UnbindItem == null) throw new NullReferenceException("UnbindItem is null");
 
-        Data.Remove(datum);
         var item = DataToItem[datum];
         var box = item.parent;
+
+        RemoveDragger(box);
+        RemoveDraggerAsElement(item);
 
         box.RemoveFromHierarchy();
         m_waintingBoxes.Add(box);
         item.RemoveFromHierarchy();
         m_waitingItems.Add(item);
 
-        UnbindItem(item);
+        UnbindItem(datum, item);
 
         DataToItem.Remove(datum);
+        Data.Remove(datum);
+        SelectedData.Remove(datum);
     }
 
     /// <summary>
@@ -357,9 +393,119 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
     }
 
     /// <summary>
+    /// Clear data, remove item from scrollview, unbind item.
+    /// </summary>
+    public virtual void ClearSDC()
+    {
+        UnselectAll();
+        for (int i = Data.Count - 1; i >= 0 ; i--)
+            RemoveDatum(Data[i]);
+    }
+
+
+    /// <summary>
+    /// Select <paramref name="datum"/> if <see cref="SelectionType"/> is <see cref="SelectionType.Single"/> or <see cref="SelectionType.Multiple"/>.
+    /// </summary>
+    /// <param name="datum"></param>
+    public virtual void Select(D datum)
+    {
+        if (datum == null || !Data.Contains(datum)) return;
+
+        switch (SelectionType)
+        {
+            case SelectionType.None:
+                return;
+            case SelectionType.Single:
+                UnselectAll(datum);
+                break;
+            case SelectionType.Multiple:
+                break;
+            default:
+                break;
+        }
+
+        SelectItem?.Invoke(datum, DataToItem[datum]);
+
+        SelectedData.Add(datum);
+    }
+
+    /// <summary>
+    /// Select the collection <paramref name="data"/> if <see cref="SelectionType"/> is <see cref="SelectionType.Multiple"/>.
+    /// </summary>
+    /// <param name="data"></param>
+    /// <exception cref="Exception"></exception>
+    public virtual void Select(List<D> data)
+    {
+        if (SelectionType != SelectionType.Multiple) throw new Exception("Selection type is not set to Multiple");
+
+        foreach (var datum in data) Select(datum);
+    }
+
+    /// <summary>
+    /// Unselect <paramref name="datum"/>.
+    /// </summary>
+    /// <param name="datum"></param>
+    public virtual void Unselect(D datum)
+    {
+        if (datum == null || !Data.Contains(datum) || !SelectedData.Contains(datum)) return;
+
+        SelectedData.Remove(datum);
+
+        UnselectItem?.Invoke(datum, DataToItem[datum]);
+    }
+    
+    /// <summary>
+    /// Unselect the collection <paramref name="data"/>.
+    /// </summary>
+    /// <param name="data"></param>
+    public virtual void Unselect(List<D> data)
+    {
+        foreach (var datum in data) Unselect(datum);
+    }
+
+    /// <summary>
+    /// Select all the <see cref="Data"/> except <paramref name="exceptions"/> if <see cref="SelectionType"/> is <see cref="SelectionType.Multiple"/>.
+    /// </summary>
+    /// <param name="exceptions"></param>
+    /// <exception cref="Exception"></exception>
+    public virtual void SelectAll(params D[] exceptions)
+    {
+        if (SelectionType != SelectionType.Multiple) throw new Exception("Selection type is not set to Multiple");
+
+        foreach (var datum in Data)
+        {
+            bool isException = false;
+            foreach (var exception in exceptions)
+            {
+                if (datum.Equals(exception)) isException = true;
+                break;
+            }
+            if (!isException) Select(datum);
+        }
+    }
+
+    /// <summary>
+    /// Unselect all the <see cref="Data"/> except <paramref name="exceptions"/>
+    /// </summary>
+    /// <param name="exceptions"></param>
+    public virtual void UnselectAll(params D[] exceptions)
+    {
+        foreach (var datum in Data)
+        {
+            bool isException = false;
+            foreach (var exception in exceptions)
+            {
+                if (datum.Equals(exception)) isException = true;
+                break;
+            }
+            if (!isException) Unselect(datum);
+        }
+    }
+
+    /// <summary>
     /// Update the size of all items.
     /// </summary>
-    public virtual void UpdateSize()
+    protected virtual void UpdateSize()
     {
         foreach (var item in DataToItem.Values)
         {
@@ -383,7 +529,7 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         }
     }
 
-    public virtual void UpdateReorderableState()
+    protected virtual void UpdateReorderableState()
     {
         if (IsReorderable && Data.Count >= 2)
         {
@@ -409,14 +555,10 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
                 switch (ReorderableMode)
                 {
                     case ReorderableMode.Dragger:
-                        var dragger = DataAnditem.Value.parent.Query("dragger").Last();
-                        if (dragger == null) return;
-                        dragger.RemoveFromHierarchy();
-                        m_waintingDragger.Add(dragger);
+                        RemoveDragger(DataAnditem.Value.parent);
                         break;
                     case ReorderableMode.Element:
-                        var manipulator = (DataAnditem.Value.userData as DraggerData).manipulator;
-                        DataAnditem.Value.RemoveManipulator(manipulator);
+                        RemoveDraggerAsElement(DataAnditem.Value);
                         break;
                     default:
                         break;
@@ -451,6 +593,21 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         if (item.userData == null || item.userData is not DraggerData draggerData)
             CreateDraggerData(datum, item);
         else item.AddManipulator(draggerData.manipulator);
+    }
+
+    protected virtual void RemoveDragger(VisualElement box)
+    {
+        var dragger = box.Query("dragger").Last();
+        if (dragger == null) return;
+        dragger.RemoveFromHierarchy();
+        m_waintingDragger.Add(dragger);
+    }
+
+    protected virtual void RemoveDraggerAsElement(VisualElement item)
+    {
+        if (item.userData == null) return;
+        var manipulator = (item.userData as DraggerData).manipulator;
+        item.RemoveManipulator(manipulator);
     }
 
     /// <summary>
