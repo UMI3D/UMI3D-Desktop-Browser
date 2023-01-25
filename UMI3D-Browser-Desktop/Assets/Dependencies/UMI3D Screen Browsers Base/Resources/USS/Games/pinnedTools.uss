@@ -1,9 +1,18 @@
 .pinned__tools__area-vertical {
+	flex-direction: row;
+
 	max-height: 70%;
 }
 
-.pinned__tools__area-vertical > .sdc {
+.pinned__tools__area-vertical > .pinned__tools__area-sdc {
 	width: 25%;
+	max-width: 200px;
+}
+
+.pinned__tools__area-vertical > .pinned__tools__area-sub__sdc {
+	left: 7px;
+
+	width: 35%;
 }
 
 .sdc {
@@ -13,4 +22,9 @@
 	border-top-right-radius: var(--border-radius-game);
 	border-bottom-left-radius: var(--border-radius-game);
 	border-bottom-right-radius: var(--border-radius-game);
+}
+
+.pinned__tools__area-sub__sdc {
+	align-self: flex-start;
+	flex-direction: row;
 }
