@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2022 Inetum
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,11 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public abstract class CustomForm : CustomAbstractScrollableContainer
+public class CustomFormSDC<D> : CustomAbstractScrollableContainer
 {
     /// <summary>
     /// <inheritdoc/>
@@ -28,13 +29,13 @@ public abstract class CustomForm : CustomAbstractScrollableContainer
         set
         {
             base.Category = value;
-            VScroll.Category = value;
+            SDC.Category = value;
         }
     }
 
-    public virtual string USSCustomClassForm => "form";
+    public virtual string USSCustomClassFormSDC => "form__sdc";
 
-    public CustomScrollView VScroll;
+    public CustomScrollableDataCollection<D> SDC;
 
     /// <summary>
     /// <inheritdoc/>
@@ -42,13 +43,8 @@ public abstract class CustomForm : CustomAbstractScrollableContainer
     public override void InitElement()
     {
         base.InitElement();
-        AddToClassList(USSCustomClassForm);
+        AddToClassList(USSCustomClassFormSDC);
 
-        Add(VScroll);
+        Add(SDC);
     }
-
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
-    public override VisualElement contentContainer => m_isSet && VScroll != null ? VScroll.contentContainer : this;
 }

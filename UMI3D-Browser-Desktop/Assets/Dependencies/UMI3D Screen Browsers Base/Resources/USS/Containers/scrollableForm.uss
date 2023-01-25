@@ -1,4 +1,4 @@
-.form {
+.scrollable__form {
     overflow: hidden;
     flex-grow: 1;
     border-top-left-radius: var(--border-radius-container);
@@ -8,14 +8,14 @@
     background-color: var(--background-color-container);
 }
 
-.form > .form__title {
+.scrollable__form > .scrollable__form-title {
     justify-content: center;
     padding-top: var(--margin_padding-container);
     padding-bottom: var(--margin_padding-container);
     -unity-text-align: middle-center;
 }
 
-.form > .form__icon {
+.scrollable__form > .scrollable__form-icon {
     position: absolute;
     left: 0;
     top: 0;
@@ -27,24 +27,24 @@
     margin-bottom: var(--margin_padding-container);
 }
 
-.form.form-menu > .form__title {
+.scrollable__form.scrollable__form-menu > .scrollable__form-title {
     background-color: var(--color-border-menu-container);
 }
 
-.form.form-game > .form__title {
+.scrollable__form.scrollable__form-game > .scrollable__form-title {
     background-color: var(--color-border-game-container);
 }
 
-.form.emote__window .button__label {
+.scrollable__form.emote__window .button__label {
 	min-width: auto;
 	flex-grow: 1;
 }
 
-.form.emote__window .button__body {
+.scrollable__form.emote__window .button__body {
 	flex-grow: 0;
 }
 
-.form.emote__window .emote__window-icon {
+.scrollable__form.emote__window .emote__window-icon {
 	width: 100%;
 	height: 100%;
 }

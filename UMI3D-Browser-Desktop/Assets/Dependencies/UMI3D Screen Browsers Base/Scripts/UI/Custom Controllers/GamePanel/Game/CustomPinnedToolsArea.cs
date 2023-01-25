@@ -68,8 +68,10 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
     public virtual string USSCustomClassName => "pinned__tools__area";
     public virtual string USSCustomClassMode(ScrollViewMode mode) => $"{USSCustomClassName}-{mode}".ToLower();
     public virtual string USSCustomClassSDC => $"{USSCustomClassName}-sdc";
+    public virtual string USSCustomClassSub_SDC => $"{USSCustomClassName}-sub__sdc";
 
     public CustomScrollableDataCollection<AbstractMenuItem> SDC;
+    public CustomScrollableDataCollection<AbstractMenuItem> Sub_SDC;
 
     protected bool m_hasBeenInitialized;
 
@@ -90,6 +92,7 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
         }
         AddToClassList(USSCustomClassName);
         SDC.AddToClassList(USSCustomClassSDC);
+        Sub_SDC.AddToClassList(USSCustomClassSub_SDC);
 
         SDC.BindItem = (datum, item) =>
         {
@@ -97,17 +100,84 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
             if (datum is MenuItem menuItem)
             {
                 UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"menu item = {menuItem.Name}");
-
             }
             else if (datum is Menu menu)
             {
                 toolbox.AddMenu(datum);
                 toolbox.Mode = Mode;
                 toolbox.ToolboxType = ToolboxType.Main;
+                toolbox.ToolClicked = ToolClicked;
+                toolbox.ToolboxClicked = (isSelected, toolboxMenu, toolMenu) =>
+                {
+                    Sub_SDC.ClearSDC();
+                    if (isSelected)
+                    {
+                        SDC.Select(toolboxMenu);
+                        Add(Sub_SDC);
+                        Sub_SDC.AddDatum(toolMenu);
+                    }
+                    else
+                    {
+                        SDC.Unselect(toolboxMenu);
+                        Sub_SDC.RemoveFromHierarchy();
+                    }
+                };
             }
+        };
+        SDC.UnbindItem = (datum, item) =>
+        {
+            var toolbox = item as CustomToolbox;
+            toolbox.ClearToolbox();
+            toolbox.ToolboxType = ToolboxType.Unknown;
+            toolbox.ToolClicked = null;
+            toolbox.ToolboxClicked = null;
+        };
+        SDC.SelectionType = SelectionType.Single;
+        SDC.SelectItem = (datum, item) =>
+        {
+            var toolbox = item as CustomToolbox;
+            toolbox.IsSelected = true;
+        };
+        SDC.UnselectItem = (datum, item) =>
+        {
+            var toolbox = item as CustomToolbox;
+            toolbox.SDC.UnselectAll();
+            toolbox.IsSelected = false;
         };
         SDC.ReorderableMode = ReorderableMode.Element;
         SDC.IsReorderable = true;
+
+        //Sub tools
+        Sub_SDC.BindItem = (datum, item) =>
+        {
+            var toolbox = item as CustomToolbox;
+            if (datum is MenuItem menuItem)
+            {
+                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"menu item = {menuItem.Name}");
+            }
+            else if (datum is Menu menu)
+            {
+                toolbox.AddMenu(datum);
+                toolbox.Mode = ScrollViewMode.Horizontal;
+                toolbox.ToolboxType = ToolboxType.Main;
+                toolbox.ToolClicked += ToolClicked;
+                toolbox.ToolboxClicked = (isSelected, toolboxMenu, toolMenu) =>
+                {
+                    if (isSelected) Sub_SDC.AddDatum(toolMenu);
+                    else Sub_SDC.RemoveDatum(toolMenu);
+                };
+            }
+        };
+        Sub_SDC.UnbindItem = (datum, item) =>
+        {
+            var toolbox = item as CustomToolbox;
+            toolbox.ClearToolbox();
+            toolbox.ToolboxType = ToolboxType.Unknown;
+            toolbox.ToolClicked = null;
+            toolbox.ToolboxClicked = null;
+        };
+        Sub_SDC.Mode = ScrollViewMode.Vertical;
+        Sub_SDC.IsReorderable = false;
 
         Add(SDC);
     }
@@ -142,6 +212,10 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
     public virtual void AddMenu(AbstractMenuItem menu)
         => SDC.AddDatum(menu);
 
+    /// <summary>
+    /// Whether or not the tools inside the toolbox are reorderable.
+    /// </summary>
+    /// <param name="value"></param>
     public virtual void AreToolboxReorderable(bool value)
     {
         foreach (var item in SDC.DataToItem.Values)
@@ -152,6 +226,22 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
     {
         foreach (var item in SDC.DataToItem.Values)
             (item as CustomToolbox).Mode = Mode;
+    }
+
+    protected virtual void ToolClicked(bool isSelected, AbstractMenuItem toolboxMenu, AbstractMenuItem toolMenu)
+    {
+        Sub_SDC.ClearSDC();
+        Sub_SDC.RemoveFromHierarchy();
+        if (isSelected)
+        {
+            SDC.Select(toolboxMenu);
+            //TODO
+        }
+        else
+        {
+            SDC.Unselect(toolboxMenu);
+            //TODO
+        }
     }
 
     #endregion
