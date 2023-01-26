@@ -146,9 +146,15 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// </summary>
         /// <param name="action"></param>
         /// <param name="bindingIndex"></param>
+        /// <exception cref="System.IndexOutOfRangeException"></exception>
         /// <returns></returns>
         public static InputControl GetControlFromBindingIndex(this InputAction action, int bindingIndex)
-            => action.controls[action.GetControlIndexFromBindingIndex(bindingIndex)];
+        {
+            int controlIndex = action.GetControlIndexFromBindingIndex(bindingIndex);
+            if (action.controls.Count <= controlIndex) 
+                throw new System.IndexOutOfRangeException($"Action [{action.name}]: control index out of range");
+            return action.controls[controlIndex];
+        }
 
         /// <summary>
         /// return the first binding index after <paramref name="lowIndex"/> that match <paramref name="controllers"/> and set <paramref name="inputBinding"/> as this binging. If there is no match return -1 and set <paramref name="inputBinding"/> equals new InputBinding.
@@ -220,10 +226,19 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// </summary>
         /// <param name="action"></param>
         /// <param name="bindingIndex"></param>
+        /// <exception cref="System.IndexOutOfRangeException"></exception>
         /// <returns></returns>
         public static (ControllerInputEnum, string) GetSimpleMappingFromBindingIndex(this InputAction action, int bindingIndex)
         {
-            InputControl inputControl = action.GetControlFromBindingIndex(bindingIndex);
+            InputControl inputControl = null;
+            try
+            {
+                inputControl = action.GetControlFromBindingIndex(bindingIndex);
+            }
+            catch (System.IndexOutOfRangeException e)
+            {
+                throw e;
+            }
 
             if (inputControl.path.Contains(ControllerInputEnum.Keyboard.ToString())) 
                 return (ControllerInputEnum.Keyboard, inputControl.displayName);
@@ -240,24 +255,30 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// <param name="index"></param>
         /// <param name="controlIndex"></param>
         /// <param name="control"></param>
+        /// <exception cref="System.IndexOutOfRangeException"></exception>
         /// <returns></returns>
         public static List<(ControllerInputEnum, string)> GetCompositMappingFromBindingIndex(this InputAction action, int bindingIndex)
         {
             InputBinding binding = action.bindings[bindingIndex];
-            ReadOnlyArray<InputControl> controls = action.controls;
-
             List<(ControllerInputEnum, string)> result = new List<(ControllerInputEnum, string)>();
 
-            if (binding.path == "ButtonWithOneModifier")
+            try
             {
-                result.Add(action.GetSimpleMappingFromBindingIndex(bindingIndex + 2));
-                result.Add(action.GetSimpleMappingFromBindingIndex(bindingIndex));
+                if (binding.path == "ButtonWithOneModifier")
+                {
+                    result.Add(action.GetSimpleMappingFromBindingIndex(bindingIndex + 2));
+                    result.Add(action.GetSimpleMappingFromBindingIndex(bindingIndex));
+                }
+                else if (binding.path == "ButtonWithTwoModifier")
+                {
+                    result.Add(action.GetSimpleMappingFromBindingIndex(bindingIndex + 2));
+                    result.Add(action.GetSimpleMappingFromBindingIndex(bindingIndex + 3));
+                    result.Add(action.GetSimpleMappingFromBindingIndex(bindingIndex));
+                }
             }
-            else if (binding.path == "ButtonWithTwoModifier")
+            catch (System.IndexOutOfRangeException e)
             {
-                result.Add(action.GetSimpleMappingFromBindingIndex(bindingIndex + 2));
-                result.Add(action.GetSimpleMappingFromBindingIndex(bindingIndex + 3));
-                result.Add(action.GetSimpleMappingFromBindingIndex(bindingIndex));
+                throw e;
             }
 
             return result;
