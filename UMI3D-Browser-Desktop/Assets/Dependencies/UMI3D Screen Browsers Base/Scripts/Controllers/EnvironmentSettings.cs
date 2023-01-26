@@ -104,13 +104,13 @@ public class AvatarSetting : ISetting
 {
     public bool IsOn
     {
-        get => (userTracking != null) ? userTracking.SendTracking : false;
+        get => /*(userTracking != null) ? userTracking.SendTracking : false*/ true;
         set
         {
-            userTracking?.SetTrackingSending(value);
+            //userTracking?.SetTrackingSending(value);
 
-            if (UMI3DCollaborationEnvironmentLoader.Exists)
-                UMI3DCollaborationEnvironmentLoader.Instance.GetClientUser()?.SetAvatarStatus(value);
+            //if (UMI3DCollaborationEnvironmentLoader.Exists)
+            //    UMI3DCollaborationEnvironmentLoader.Instance.GetClientUser()?.SetAvatarStatus(value);
         }
     }
     public event Action<bool> StatusChanged;
