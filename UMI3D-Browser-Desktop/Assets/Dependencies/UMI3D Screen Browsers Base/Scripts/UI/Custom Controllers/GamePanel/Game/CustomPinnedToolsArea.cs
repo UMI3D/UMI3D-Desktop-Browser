@@ -106,7 +106,7 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
                 toolbox.AddMenu(datum);
                 toolbox.Mode = Mode;
                 toolbox.ToolboxType = ToolboxType.Main;
-                toolbox.ToolClicked = ToolClicked;
+                toolbox.ToolClicked = OnToolClicked;
                 toolbox.ToolboxClicked = (isSelected, toolboxMenu, toolMenu) =>
                 {
                     Sub_SDC.ClearSDC();
@@ -160,7 +160,7 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
                 toolbox.AddMenu(datum);
                 toolbox.Mode = ScrollViewMode.Horizontal;
                 toolbox.ToolboxType = ToolboxType.Main;
-                toolbox.ToolClicked += ToolClicked;
+                toolbox.ToolClicked += OnToolClicked;
                 toolbox.ToolboxClicked = (isSelected, toolboxMenu, toolMenu) =>
                 {
                     if (isSelected) Sub_SDC.AddDatum(toolMenu);
@@ -206,6 +206,11 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
     #region Implementation
 
     /// <summary>
+    /// Event raised when a tool is clicked. First argument is whether or not it is selected. Second is the menu of this tool.
+    /// </summary>
+    public System.Action<bool, AbstractMenuItem> ToolClicked;
+
+    /// <summary>
     /// Add a menu to the pinned tools area.
     /// </summary>
     /// <param name="menu"></param>
@@ -228,20 +233,13 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
             (item as CustomToolbox).Mode = Mode;
     }
 
-    protected virtual void ToolClicked(bool isSelected, AbstractMenuItem toolboxMenu, AbstractMenuItem toolMenu)
+    protected virtual void OnToolClicked(bool isSelected, AbstractMenuItem toolboxMenu, AbstractMenuItem toolMenu)
     {
         Sub_SDC.ClearSDC();
         Sub_SDC.RemoveFromHierarchy();
-        if (isSelected)
-        {
-            SDC.Select(toolboxMenu);
-            //TODO
-        }
-        else
-        {
-            SDC.Unselect(toolboxMenu);
-            //TODO
-        }
+        if (isSelected) SDC.Select(toolboxMenu);
+        else SDC.Unselect(toolboxMenu);
+        ToolClicked?.Invoke(isSelected, toolMenu);
     }
 
     #endregion

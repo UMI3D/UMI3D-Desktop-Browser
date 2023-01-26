@@ -14,12 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Net;
+using System.Linq;
 using umi3d.baseBrowser.ui.viewController;
-using umi3d.cdk.volumes;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -221,7 +218,12 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
     /// <summary>
     /// Make a VisualElement to add to the scroll view.
     /// </summary>
-    public virtual Func<VisualElement> MakeItem { get; set; }
+    public virtual Func<D, VisualElement> MakeItem { get; set; }
+
+    /// <summary>
+    /// Predicate use to find available item matching this datum.
+    /// </summary>
+    public virtual Predicate<(D, VisualElement)> FindItem { get; set; }
 
     /// <summary>
     /// Bind a datum to a visualElement.
@@ -268,11 +270,21 @@ public class CustomScrollableDataCollection<D> : VisualElement, ICustomElement
         if (BindItem == null) throw new NullReferenceException("BindItem is null");
 
         VisualElement item;
-        if (m_waitingItems.Count == 0) item = MakeItem();
+        if (m_waitingItems.Count == 0) item = MakeItem(datum);
         else
         {
-            item = m_waitingItems[0];
-            m_waitingItems.RemoveAt(0);
+            int i = -1;
+            bool isFound = false;
+            bool find(VisualElement v)
+            {
+                i++;
+                isFound = FindItem == null ? true : FindItem.Invoke((datum, v));
+                return isFound;
+            }
+            
+            item = m_waitingItems.Find(find);
+            if (isFound) m_waitingItems.RemoveAt(i);
+            else item = MakeItem(datum);
         }
 
         BindItem(datum, item);

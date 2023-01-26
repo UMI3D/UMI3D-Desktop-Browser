@@ -15,25 +15,22 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.cdk.menu;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-namespace umi3d.commonScreen.Container
+public class CustomToolsWindow : CustomFormSDC<AbstractMenuItem>
 {
-    public class Toolbox_C : CustomToolbox
+    public override void InitElement()
     {
-        public new class UxmlFactory : UxmlFactory<Toolbox_C, UxmlTraits> { }
+        base.InitElement();
 
-        public Toolbox_C() => Set();
-
-        public override void InitElement()
+        SDC.BindItem = (datum, item) =>
         {
-            if (ToolboxNameText == null) ToolboxNameText = new Displayer.Text_C();
-            if (SDC == null) SDC = new ScrollableDataCollection_C<cdk.menu.AbstractMenuItem>();
 
-            SDC.MakeItem = datum => new Displayer.Tool_C();
+        };
+        SDC.UnbindItem = (datum, item) =>
+        {
 
-            base.InitElement();
-        }
+        };
     }
 }
