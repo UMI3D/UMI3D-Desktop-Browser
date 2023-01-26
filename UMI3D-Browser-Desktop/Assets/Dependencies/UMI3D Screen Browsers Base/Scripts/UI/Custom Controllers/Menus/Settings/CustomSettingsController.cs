@@ -429,26 +429,34 @@ public class CustomSettingsController : CustomSettingScreen
     /// <param name="controllers"></param>
     public void InitBindings(params ControllerInputEnum[] controllers)
     {
-        NavigationBindingsUpdated(NavigationEnum.Forward, Data.Forward, controllers);
-        NavigationBindingsUpdated(NavigationEnum.Backward, Data.Backward, controllers);
-        NavigationBindingsUpdated(NavigationEnum.Left, Data.Left, controllers);
-        NavigationBindingsUpdated(NavigationEnum.Right, Data.Right, controllers);
-        NavigationBindingsUpdated(NavigationEnum.sprint, Data.Sprint, controllers);
-        NavigationBindingsUpdated(NavigationEnum.Jump, Data.Jump, controllers);
-        NavigationBindingsUpdated(NavigationEnum.Crouch, Data.Crouch, controllers);
-        NavigationBindingsUpdated(NavigationEnum.FreeView, Data.FreeHead, controllers);
+        try
+        {
+            NavigationBindingsUpdated(NavigationEnum.Forward, Data.Forward, controllers);
+            NavigationBindingsUpdated(NavigationEnum.Backward, Data.Backward, controllers);
+            NavigationBindingsUpdated(NavigationEnum.Left, Data.Left, controllers);
+            NavigationBindingsUpdated(NavigationEnum.Right, Data.Right, controllers);
+            NavigationBindingsUpdated(NavigationEnum.sprint, Data.Sprint, controllers);
+            NavigationBindingsUpdated(NavigationEnum.Jump, Data.Jump, controllers);
+            NavigationBindingsUpdated(NavigationEnum.Crouch, Data.Crouch, controllers);
+            NavigationBindingsUpdated(NavigationEnum.FreeView, Data.FreeHead, controllers);
 
-        ShortcutBindingsUpdated(ShortcutEnum.MuteUnmuteMic, Data.MuteUnmuteMic, controllers);
-        ShortcutBindingsUpdated(ShortcutEnum.PushToTalk, Data.PushToTalk, controllers);
-        ShortcutBindingsUpdated(ShortcutEnum.MuteUnmuteGeneralVolume, Data.MuteUnmuteGeneralVolume, controllers);
-        ShortcutBindingsUpdated(ShortcutEnum.DecreaseVolume, Data.DecreaseGeneralVolume, controllers);
-        ShortcutBindingsUpdated(ShortcutEnum.IncreaseVolume, Data.IncreaseGeneralVolume, controllers);
-        ShortcutBindingsUpdated(ShortcutEnum.Cancel, Data.Cancel, controllers);
-        ShortcutBindingsUpdated(ShortcutEnum.Submit, Data.Submit, controllers);
-        ShortcutBindingsUpdated(ShortcutEnum.DisplayHideGameMenu, Data.DisplayHideGameMenu, controllers);
-        ShortcutBindingsUpdated(ShortcutEnum.DisplayHideContextualMenu, Data.DisplayHideContextualMenu, controllers);
-        ShortcutBindingsUpdated(ShortcutEnum.DisplayHideNotifications, Data.DisplayHideNotifications, controllers);
-        ShortcutBindingsUpdated(ShortcutEnum.DisplayHideUsersList, Data.DisplayHideUsersList, controllers);
+            ShortcutBindingsUpdated(ShortcutEnum.MuteUnmuteMic, Data.MuteUnmuteMic, controllers);
+            ShortcutBindingsUpdated(ShortcutEnum.PushToTalk, Data.PushToTalk, controllers);
+            ShortcutBindingsUpdated(ShortcutEnum.MuteUnmuteGeneralVolume, Data.MuteUnmuteGeneralVolume, controllers);
+            ShortcutBindingsUpdated(ShortcutEnum.DecreaseVolume, Data.DecreaseGeneralVolume, controllers);
+            ShortcutBindingsUpdated(ShortcutEnum.IncreaseVolume, Data.IncreaseGeneralVolume, controllers);
+            ShortcutBindingsUpdated(ShortcutEnum.Cancel, Data.Cancel, controllers);
+            ShortcutBindingsUpdated(ShortcutEnum.Submit, Data.Submit, controllers);
+            ShortcutBindingsUpdated(ShortcutEnum.DisplayHideGameMenu, Data.DisplayHideGameMenu, controllers);
+            ShortcutBindingsUpdated(ShortcutEnum.DisplayHideContextualMenu, Data.DisplayHideContextualMenu, controllers);
+            ShortcutBindingsUpdated(ShortcutEnum.DisplayHideNotifications, Data.DisplayHideNotifications, controllers);
+            ShortcutBindingsUpdated(ShortcutEnum.DisplayHideUsersList, Data.DisplayHideUsersList, controllers);
+        }
+        catch (System.NullReferenceException e)
+        {
+            DefaultBindings(controllers);
+        }
+        
     }
 
     /// <summary>
@@ -457,8 +465,11 @@ public class CustomSettingsController : CustomSettingScreen
     /// <param name="command"></param>
     /// <param name="action"></param>
     /// <param name="controllers"></param>
+    /// <exception cref="System.NullReferenceException"></exception>
     public void NavigationBindingsUpdated(NavigationEnum command, InputAction action, params ControllerInputEnum[] controllers)
     {
+        if (action == null) throw new System.NullReferenceException($"Action null for {command}");
+
         int currentIndex = 0;
         FindControl(action, ref currentIndex, out string control1, controllers);
         FindControl(action, ref currentIndex, out string control2, controllers);
@@ -600,23 +611,31 @@ public class CustomSettingsController : CustomSettingScreen
         if (currentIndex == -1) return false;
 
         control = "";
-        if (binding.isComposite)
+
+        try
         {
-            var mapping = action.GetCompositMappingFromBindingIndex(currentIndex);
-            for (int i = 0; i < mapping.Count; i++)
+            if (binding.isComposite)
             {
-                if (i > 0 && i < mapping.Count) control += " + ";
-                control += $"[{mapping[i].Item2}]";
+                var mapping = action.GetCompositMappingFromBindingIndex(currentIndex);
+                for (int i = 0; i < mapping.Count; i++)
+                {
+                    if (i > 0 && i < mapping.Count) control += " + ";
+                    control += $"[{mapping[i].Item2}]";
+                }
+                if (mapping.Count == 2) index = currentIndex + 3;
+                else index = currentIndex + 4;
             }
-            if (mapping.Count == 2) index = currentIndex + 3;
-            else index = currentIndex + 4;
+            else
+            {
+                control = $"[{action.GetSimpleMappingFromBindingIndex(currentIndex).Item2}]";
+                index = currentIndex + 1;
+            }
         }
-        else
+        catch (System.IndexOutOfRangeException e)
         {
-            control = $"[{action.GetSimpleMappingFromBindingIndex(currentIndex).Item2}]";
-            index = currentIndex + 1;
+            control = "undef";
         }
-            
+
         return true;
     }
 
