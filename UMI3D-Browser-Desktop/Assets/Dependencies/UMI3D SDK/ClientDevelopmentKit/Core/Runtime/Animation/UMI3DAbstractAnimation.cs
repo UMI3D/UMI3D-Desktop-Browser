@@ -165,6 +165,8 @@ namespace umi3d.cdk
         /// </summary>
         protected UMI3DAbstractAnimationDto dto { get; set; }
 
+        public ulong Id => dto.id;
+
         public UMI3DAbstractAnimation(UMI3DAbstractAnimationDto dto)
         {
             this.dto = dto;

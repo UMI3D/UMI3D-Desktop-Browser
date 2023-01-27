@@ -22,30 +22,53 @@ using umi3d.common.userCapture;
 namespace umi3d.cdk.userCapture
 {
 
-    public class AnimatedSkeleton : ISubSkeleton
+    public class AnimationSkeleton : ISubSkeleton //todo: rename filename to AnimationSkeleton.cs
     {
         public SkeletonMapper mapper;
 
         public UserCameraPropertiesDto GetCameraDto()
         {
-            return null;
+            return null; //to implement only in TrackedAvatar
         }
 
         public PoseDto GetPose()
         {
-            if (!mapper.animations.Select(id => UMI3DAnimatorAnimation.Get(id)).Any(a => a?.IsPlayin() ?? false))
+            if (!mapper.animations.Select(id => UMI3DAnimatorAnimation.Get(id)).Any(a => a?.IsPlaying() ?? false))
                 return null;
             return mapper.GetPose();
         }
 
         public void Update(UserTrackingFrameDto trackingFrame)
         {
-            throw new System.NotImplementedException();
+            var animations = from animId in mapper.animations select UMI3DAnimatorAnimation.Get(animId);
+
+            foreach (var anim in animations)
+            {
+                if (trackingFrame.animationsPlaying.FirstOrDefault(x=>x.id == anim.Id) != default)
+                {
+                    if (!anim.IsPlaying())
+                        anim.Start();
+                }
+                else
+                {
+                    if (anim.IsPlaying())
+                        anim.Stop();
+                }
+            }
         }
 
         public void WriteTrackingFrame(UserTrackingFrameDto trackingFrame, TrackingOption option)
         {
-            throw new System.NotImplementedException();
+            var activeAnimations = from animId in mapper.animations
+                                   select UMI3DAnimatorAnimation.Get(animId)
+                                   into anim
+                                   where anim.IsPlaying()
+                                   select anim;
+
+            foreach (var activeAnimation in activeAnimations)
+            {
+                trackingFrame.animationsPlaying.Add(activeAnimation.dto);
+            }
         }
     }
 }
