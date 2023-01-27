@@ -81,7 +81,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: a2485643ea696914d9ca5fb4ef918f73, type: 2}
+      objectReference: {fileID: 2100000, guid: 033a1545ec36004418d3844dc6ada006, type: 2}
+    - target: {fileID: -7813590141776298306, guid: da6770c40c5dded4a94522b1d0ad2d86,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 57bbc2fd9d036ab4a9e9c0df4c6c1253, type: 2}
     - target: {fileID: 919132149155446097, guid: da6770c40c5dded4a94522b1d0ad2d86,
         type: 3}
       propertyPath: m_Name
@@ -91,7 +96,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 0e7a9e82aa4ba664f94349fd6f5aaaad, type: 2}
+      objectReference: {fileID: 2100000, guid: 033a1545ec36004418d3844dc6ada006, type: 2}
+    - target: {fileID: 5822821947120931875, guid: da6770c40c5dded4a94522b1d0ad2d86,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 745fcb1e77d0a414496d63c8aac1e90f, type: 2}
     - target: {fileID: 5866666021909216657, guid: da6770c40c5dded4a94522b1d0ad2d86,
         type: 3}
       propertyPath: m_Controller
@@ -537,6 +547,7 @@ MonoBehaviour:
   leftIkActive: 0
   rightIkActive: 0
   headIkActive: 1
+  overrideFeetIk: 0
   feetIkActive: 0
   lookObj: {fileID: 0}
   animationSpeed: 1
