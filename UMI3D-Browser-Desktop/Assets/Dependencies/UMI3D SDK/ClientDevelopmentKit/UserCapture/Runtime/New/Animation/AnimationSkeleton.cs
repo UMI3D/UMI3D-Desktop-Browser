@@ -22,7 +22,7 @@ using umi3d.common.userCapture;
 namespace umi3d.cdk.userCapture
 {
 
-    public class AnimationSkeleton : ISubSkeleton //todo: rename filename to AnimationSkeleton.cs
+    public class AnimationSkeleton : ISubSkeleton
     {
         public SkeletonMapper mapper;
 
