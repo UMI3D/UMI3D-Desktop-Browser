@@ -16,6 +16,7 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk.menu;
+using umi3d.commonScreen.Container;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -70,8 +71,8 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
     public virtual string USSCustomClassSDC => $"{USSCustomClassName}-sdc";
     public virtual string USSCustomClassSub_SDC => $"{USSCustomClassName}-sub__sdc";
 
-    public CustomScrollableDataCollection<AbstractMenuItem> SDC;
-    public CustomScrollableDataCollection<AbstractMenuItem> Sub_SDC;
+    public ScrollableDataCollection_C<AbstractMenuItem> SDC;
+    public ScrollableDataCollection_C<AbstractMenuItem> Sub_SDC;
 
     protected bool m_hasBeenInitialized;
 
@@ -96,7 +97,7 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
 
         SDC.BindItem = (datum, item) =>
         {
-            var toolbox = item as CustomToolbox;
+            var toolbox = item as Toolbox_C;
             if (datum is MenuItem menuItem)
             {
                 UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"menu item = {menuItem.Name}");
@@ -126,7 +127,7 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
         };
         SDC.UnbindItem = (datum, item) =>
         {
-            var toolbox = item as CustomToolbox;
+            var toolbox = item as Toolbox_C;
             toolbox.ClearToolbox();
             toolbox.ToolboxType = ToolboxType.Unknown;
             toolbox.ToolClicked = null;
@@ -135,12 +136,12 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
         SDC.SelectionType = SelectionType.Single;
         SDC.SelectItem = (datum, item) =>
         {
-            var toolbox = item as CustomToolbox;
+            var toolbox = item as Toolbox_C;
             toolbox.IsSelected = true;
         };
         SDC.UnselectItem = (datum, item) =>
         {
-            var toolbox = item as CustomToolbox;
+            var toolbox = item as Toolbox_C;
             toolbox.SDC.UnselectAll();
             toolbox.IsSelected = false;
         };
@@ -150,7 +151,7 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
         //Sub tools
         Sub_SDC.BindItem = (datum, item) =>
         {
-            var toolbox = item as CustomToolbox;
+            var toolbox = item as Toolbox_C;
             if (datum is MenuItem menuItem)
             {
                 UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"menu item = {menuItem.Name}");
@@ -170,7 +171,7 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
         };
         Sub_SDC.UnbindItem = (datum, item) =>
         {
-            var toolbox = item as CustomToolbox;
+            var toolbox = item as Toolbox_C;
             toolbox.ClearToolbox();
             toolbox.ToolboxType = ToolboxType.Unknown;
             toolbox.ToolClicked = null;
@@ -224,13 +225,13 @@ public class CustomPinnedToolsArea : VisualElement, ICustomElement
     public virtual void AreToolboxReorderable(bool value)
     {
         foreach (var item in SDC.DataToItem.Values)
-            (item as CustomToolbox).SDC.IsReorderable = value;
+            (item as Toolbox_C).SDC.IsReorderable = value;
     }
 
     protected virtual void ModeUpdated()
     {
         foreach (var item in SDC.DataToItem.Values)
-            (item as CustomToolbox).Mode = Mode;
+            (item as Toolbox_C).Mode = Mode;
     }
 
     protected virtual void OnToolClicked(bool isSelected, AbstractMenuItem toolboxMenu, AbstractMenuItem toolMenu)

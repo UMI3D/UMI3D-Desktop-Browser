@@ -175,6 +175,13 @@ public static class ElementExtensions
         if (visualTA == null) throw new System.NullReferenceException($"[{resourcePath}] return a null visual tree asset.");
         return visualTA.CloneTree();
     }
+    /// <summary>
+    /// Add the style sheet located at <paramref name="resourcePath"/> to <paramref name="ve"/>
+    /// </summary>
+    /// <param name="ve"></param>
+    /// <param name="resourcePath"></param>
+    /// <exception cref="System.Exception"></exception>
+    /// <exception cref="System.NullReferenceException"></exception>
     public static void AddStyleSheetFromPath(this VisualElement ve, string resourcePath)
     {
         if (string.IsNullOrEmpty(resourcePath)) throw new System.Exception("resourcePath null or empty");
@@ -203,6 +210,11 @@ public static class ElementExtensions
         foreach (var style in from.GetClasses()) ve.AddToClassList(style);
     }
 
+    /// <summary>
+    /// Find the root visualElement of <paramref name="ve"/>. If the root is not found return null.
+    /// </summary>
+    /// <param name="ve"></param>
+    /// <returns></returns>
     public static VisualElement FindRoot(this VisualElement ve)
     {
         var parent = ve;
@@ -213,6 +225,12 @@ public static class ElementExtensions
         return parent;
     }
 
+    /// <summary>
+    /// Wait until <paramref name="condition"/> is true before doing <paramref name="action"/>.
+    /// </summary>
+    /// <param name="ve"></param>
+    /// <param name="condition"></param>
+    /// <param name="action"></param>
     public static void WaitUntil(this VisualElement ve, System.Func<bool> condition, System.Action action)
     {
         if (condition())
@@ -228,6 +246,12 @@ public static class ElementExtensions
         }).Until(condition);
     }
 
+    /// <summary>
+    /// Try to get the length <paramref name="value"/> custom style with the name <paramref name="propertyName"/> from <paramref name="ve"/>.
+    /// </summary>
+    /// <param name="ve"></param>
+    /// <param name="propertyName"></param>
+    /// <param name="value"></param>
     public static void TryGetCustomStyle(this VisualElement ve, string propertyName, out Length value)
     {
         ve.customStyle.TryGetValue(new CustomStyleProperty<string>(propertyName), out var stringValue);
@@ -252,15 +276,36 @@ public static class ElementExtensions
         }
     }
 
+    /// <summary>
+    /// Add <paramref name="child"/> visualElement to <paramref name="parent"/> if <paramref name="parent"/> doesn't contain already <paramref name="child"/>.
+    /// </summary>
+    /// <param name="parent"></param>
+    /// <param name="child"></param>
     public static void AddIfNotInHierarchy(this VisualElement parent, VisualElement child)
     {
         if (parent.Contains(child)) return;
         parent.Add(child);
     }
 
+    /// <summary>
+    /// Insert <paramref name="child"/> visualElement to <paramref name="parent"/> at index <paramref name="index"/> if <paramref name="parent"/> doesn't contain already <paramref name="child"/>.
+    /// </summary>
+    /// <param name="parent"></param>
+    /// <param name="index"></param>
+    /// <param name="child"></param>
     public static void InsertIfNotInHierarchy(this VisualElement parent, int index, VisualElement child)
     {
         if (parent.Contains(child)) return;
         parent.Insert(index, child);
+    }
+
+    /// <summary>
+    /// Remove <paramref name="ve"/> from the hierarchy if <paramref name="ve"/> is in the hierarchy.
+    /// </summary>
+    /// <param name="ve"></param>
+    public static void RemoveIfIsInHierarchy(this VisualElement ve)
+    {
+        if (ve.parent == null) return; 
+        ve.RemoveFromHierarchy();
     }
 }

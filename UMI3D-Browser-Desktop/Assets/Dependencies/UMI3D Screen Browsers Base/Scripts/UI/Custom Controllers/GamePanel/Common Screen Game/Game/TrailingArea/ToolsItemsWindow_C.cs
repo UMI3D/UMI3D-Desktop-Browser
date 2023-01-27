@@ -22,7 +22,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class ToolsItemsWindow_C : CustomFormSDC<AbstractMenuItem>
+    public class ToolsItemsWindow_C : Container.FormSDC_C<AbstractMenuItem>
     {
         public virtual string USSCustomClassToolsItemsWindow => "tools__items__window";
 

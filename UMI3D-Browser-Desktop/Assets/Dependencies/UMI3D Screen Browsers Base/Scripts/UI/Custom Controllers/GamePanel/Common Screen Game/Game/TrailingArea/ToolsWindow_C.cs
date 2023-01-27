@@ -22,7 +22,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class ToolsWindow_C : CustomFormSDC<AbstractMenuItem>
+    public class ToolsWindow_C : Container.FormSDC_C<AbstractMenuItem>
     {
         public ToolsWindow_C() => Set();
 
@@ -83,7 +83,7 @@ namespace umi3d.UiPreview.commonScreen.game
             /// <returns></returns>
             public override VisualElement Create(IUxmlAttributes bag, CreationContext cc)
             {
-                ToolsWindow_C item = base.Create(bag, cc) as ToolsWindow_C;
+                ToolsWindow_C previewItem = base.Create(bag, cc) as ToolsWindow_C;
 
                 //Root
                 Menu root = new Menu { Name = "root" };
@@ -128,10 +128,10 @@ namespace umi3d.UiPreview.commonScreen.game
                 tool4.Add(item5);
                 toolbox3.Add(tool4);
 
-                item.Title = "Toolbox";
-                item.RootMenu = root;
+                previewItem.Title = "Toolbox";
+                previewItem.RootMenu = root;
 
-                return item;
+                return previewItem;
             }
         }
     }
