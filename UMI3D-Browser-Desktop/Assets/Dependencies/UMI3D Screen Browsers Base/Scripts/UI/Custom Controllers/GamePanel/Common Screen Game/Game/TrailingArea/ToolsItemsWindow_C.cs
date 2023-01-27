@@ -23,6 +23,8 @@ namespace umi3d.commonScreen.game
 {
     public class ToolsItemsWindow_C : CustomFormSDC<AbstractMenuItem>
     {
+        public virtual string USSCustomClassToolsItemsWindow => "tools__items__window";
+
         public new class UxmlFactory : UxmlFactory<ToolsItemsWindow_C, UxmlTraits> { }
 
         public ToolsItemsWindow_C() => Set();
@@ -33,6 +35,7 @@ namespace umi3d.commonScreen.game
             if (SDC == null) SDC = new Container.ScrollableDataCollection_C<AbstractMenuItem>();
 
             base.InitElement();
+            AddToClassList(USSCustomClassToolsItemsWindow);
 
             SDC.MakeItem = datum => DisplayerManager.MakeDisplayer(datum);
             SDC.BindItem = (datum, item) =>
@@ -41,7 +44,7 @@ namespace umi3d.commonScreen.game
             };
             SDC.UnbindItem = (datum, item) =>
             {
-
+                DisplayerManager.UnbindItem(item);
             };
         }
 
