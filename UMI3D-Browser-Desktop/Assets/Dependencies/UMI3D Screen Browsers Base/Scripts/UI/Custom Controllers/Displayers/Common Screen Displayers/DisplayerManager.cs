@@ -76,16 +76,16 @@ public static class DisplayerManager
 
         if (menuItem is ButtonMenuItem buttonMenuItem && item is IDisplayer<ButtonMenuItem> buttonDisplayer) 
             BindDisplayer(buttonMenuItem, buttonDisplayer);
-        if (menuItem is DropDownInputMenuItem dropdownMenuItem && item is IDisplayer<DropDownInputMenuItem> dropdownDisplayer)
+        else if (menuItem is DropDownInputMenuItem dropdownMenuItem && item is IDisplayer<DropDownInputMenuItem> dropdownDisplayer)
             BindDisplayer(dropdownMenuItem, dropdownDisplayer);
-        if (menuItem is FloatRangeInputMenuItem sliderMenuItem && item is IDisplayer<FloatRangeInputMenuItem> sliderDisplayer)
+        else if (menuItem is FloatRangeInputMenuItem sliderMenuItem && item is IDisplayer<FloatRangeInputMenuItem> sliderDisplayer)
             BindDisplayer(sliderMenuItem, sliderDisplayer);
-        if (menuItem is TextInputMenuItem textfieldMenuItem && item is IDisplayer<TextInputMenuItem> textfieldDisplayer)
+        else if (menuItem is TextInputMenuItem textfieldMenuItem && item is IDisplayer<TextInputMenuItem> textfieldDisplayer)
             BindDisplayer(textfieldMenuItem, textfieldDisplayer);
-        if (menuItem is BooleanInputMenuItem toggleMenuItem && item is IDisplayer<BooleanInputMenuItem> toggleDisplayer)
+        else if (menuItem is BooleanInputMenuItem toggleMenuItem && item is IDisplayer<BooleanInputMenuItem> toggleDisplayer)
             BindDisplayer(toggleMenuItem, toggleDisplayer);
-
-        throw new Exception($"Menu {menuItem.GetType()} and Item {item.GetType()} are not compatible or are not recognized");
+        else 
+            throw new Exception($"Menu {menuItem.GetType()} and Item {item.GetType()} are not compatible or are not recognized");
     }
 
     /// <summary>
@@ -115,12 +115,12 @@ public static class DisplayerManager
         if (item == null) new NullReferenceException($"Item is null");
 
         if (item is IDisplayer<ButtonMenuItem> buttonDisplayer) UnbindDisplayer(buttonDisplayer);
-        if (item is IDisplayer<DropDownInputMenuItem> dropdownDisplayer) UnbindDisplayer(dropdownDisplayer);
-        if (item is IDisplayer<FloatRangeInputMenuItem> sliderDisplayer) UnbindDisplayer(sliderDisplayer);
-        if (item is IDisplayer<TextInputMenuItem> textfieldDisplayer) UnbindDisplayer(textfieldDisplayer);
-        if (item is IDisplayer<BooleanInputMenuItem> toggleDisplayer) UnbindDisplayer(toggleDisplayer);
-
-        throw new Exception($"Item {item.GetType()} is not recognized");
+        else if (item is IDisplayer<DropDownInputMenuItem> dropdownDisplayer) UnbindDisplayer(dropdownDisplayer);
+        else if (item is IDisplayer<FloatRangeInputMenuItem> sliderDisplayer) UnbindDisplayer(sliderDisplayer);
+        else if (item is IDisplayer<TextInputMenuItem> textfieldDisplayer) UnbindDisplayer(textfieldDisplayer);
+        else if (item is IDisplayer<BooleanInputMenuItem> toggleDisplayer) UnbindDisplayer(toggleDisplayer);
+        else 
+            throw new Exception($"Item {item.GetType()} is not recognized");
     }
 
     /// <summary>

@@ -16,6 +16,7 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk.menu;
+using umi3d.commonScreen.game;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,8 +25,6 @@ namespace umi3d.commonScreen.game
     public class ToolsItemsWindow_C : CustomFormSDC<AbstractMenuItem>
     {
         public virtual string USSCustomClassToolsItemsWindow => "tools__items__window";
-
-        public new class UxmlFactory : UxmlFactory<ToolsItemsWindow_C, UxmlTraits> { }
 
         public ToolsItemsWindow_C() => Set();
 
@@ -71,5 +70,49 @@ namespace umi3d.commonScreen.game
         }
 
         #endregion
+    }
+}
+
+namespace umi3d.UiPreview.commonScreen.game
+{
+    public class ToolsItemsWindow_Preview : ToolsItemsWindow_C
+    {
+        public new class UxmlFactory : UxmlFactory<ToolsItemsWindow_Preview, UxmlTraits> 
+        {
+            /// <summary>
+            /// <inheritdoc/>
+            /// </summary>
+            /// <param name="bag"></param>
+            /// <param name="cc"></param>
+            /// <returns></returns>
+            public override VisualElement Create(IUxmlAttributes bag, CreationContext cc)
+            {
+                ToolsItemsWindow_C item = base.Create(bag, cc) as ToolsItemsWindow_C;
+
+                Menu tool = new Menu { Name = "tool" };
+
+                MenuItem item1 = new ButtonMenuItem { Name = "Button Item1" };
+                tool.Add(item1);
+
+                DropDownInputMenuItem item2 = new DropDownInputMenuItem { Name = "Enum Item2", options = new List<string>() { "un", "deux", "trois" } };
+
+                item2.NotifyValueChange("un");
+                tool.Add(item2);
+
+                MenuItem item3 = new BooleanInputMenuItem { Name = "Toggle Item3" };
+                tool.Add(item3);
+
+                MenuItem item4 = new FloatRangeInputMenuItem { Name = "Slider Item4", min = 0f, max = 50f, value = 0f };
+                tool.Add(item4);
+
+                MenuItem item5 = new TextInputMenuItem { Name = "Text Item5" };
+                tool.Add(item5);
+
+                item.Title = tool.Name;
+                item.AddMenu(tool);
+
+                return item;
+            }
+        }
     }
 }
