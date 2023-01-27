@@ -16,21 +16,33 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk.menu;
+using umi3d.commonScreen.game;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class CustomToolsWindow : CustomFormSDC<AbstractMenuItem>
+namespace umi3d.commonScreen.game
 {
-    public override void InitElement()
+    public class ToolsWindow_C : CustomFormSDC<AbstractMenuItem>
     {
-        base.InitElement();
+        public new class UxmlFactory : UxmlFactory<ToolsWindow_C, UxmlTraits> { }
 
-        SDC.BindItem = (datum, item) =>
+        public ToolsWindow_C() => Set();
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public override void InitElement()
         {
+            base.InitElement();
 
-        };
-        SDC.UnbindItem = (datum, item) =>
-        {
+            SDC.BindItem = (datum, item) =>
+            {
 
-        };
+            };
+            SDC.UnbindItem = (datum, item) =>
+            {
+
+            };
+        }
     }
 }

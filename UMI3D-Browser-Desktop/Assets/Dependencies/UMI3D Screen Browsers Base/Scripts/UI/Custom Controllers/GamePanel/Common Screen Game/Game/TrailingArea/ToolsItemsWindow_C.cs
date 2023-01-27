@@ -29,6 +29,9 @@ namespace umi3d.commonScreen.game
 
         public ToolsItemsWindow_C() => Set();
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void InitElement()
         {
             if (TitleLabel == null) TitleLabel = new Displayer.Text_C();
@@ -52,6 +55,10 @@ namespace umi3d.commonScreen.game
 
         public AbstractMenuItem ToolMenu;
 
+        /// <summary>
+        /// Add a menu to this tools items window.
+        /// </summary>
+        /// <param name="menu"></param>
         public virtual void AddMenu(AbstractMenuItem menu)
         {
             ToolMenu = menu;

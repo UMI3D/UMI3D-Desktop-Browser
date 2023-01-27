@@ -13,8 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using umi3d.cdk.menu;
 using UnityEditor;
 using UnityEngine;
@@ -38,20 +40,40 @@ public interface IDisplayer<M> where M: AbstractMenuItem
 
 public static class DisplayerManager
 {
+    /// <summary>
+    /// Make the visual displayer according to <paramref name="menuItem"/>.
+    /// </summary>
+    /// <param name="menuItem"></param>
+    /// <returns></returns>
+    /// <exception cref="NullReferenceException"></exception>
+    /// <exception cref="Exception"></exception>
     public static VisualElement MakeDisplayer(AbstractMenuItem menuItem)
     {
+        if (menuItem == null) new NullReferenceException($"Menu is null");
+
         if (menuItem is ButtonMenuItem) return new umi3d.commonScreen.Displayer.ButtonDisplayer_C();
         if (menuItem is DropDownInputMenuItem) return new umi3d.commonScreen.Displayer.DropdownDisplayer_C();
         if (menuItem is FloatRangeInputMenuItem) return new umi3d.commonScreen.Displayer.SliderDisplayer_C();
         if (menuItem is TextInputMenuItem) return new umi3d.commonScreen.Displayer.TextfieldDisplayer_C();
         if (menuItem is BooleanInputMenuItem) return new umi3d.commonScreen.Displayer.ToggleDisplayer_C();
-        //if (menuItem is LocalInfoRequestInputMenuItem) return new umi3d.commonScreen.Displayer.Button_C();
 
-        return null;
+
+        throw new Exception($"Menu {menuItem.GetType()} is not recognized");
     }
 
+    /// <summary>
+    /// Bind the menu <paramref name="menuItem"/> to the visualElement <paramref name="item"/>.
+    /// </summary>
+    /// <typeparam name="M"></typeparam>
+    /// <param name="menuItem"></param>
+    /// <param name="item"></param>
+    /// <exception cref="NullReferenceException"></exception>
+    /// <exception cref="Exception"></exception>
     public static void BindItem<M>(M menuItem, VisualElement item) where M : AbstractMenuItem
     {
+        if (menuItem == null) new NullReferenceException($"Menu is null");
+        if (item == null) new NullReferenceException($"Item is null");
+
         if (menuItem is ButtonMenuItem buttonMenuItem && item is IDisplayer<ButtonMenuItem> buttonDisplayer) 
             BindDisplayer(buttonMenuItem, buttonDisplayer);
         if (menuItem is DropDownInputMenuItem dropdownMenuItem && item is IDisplayer<DropDownInputMenuItem> dropdownDisplayer)
@@ -62,25 +84,54 @@ public static class DisplayerManager
             BindDisplayer(textfieldMenuItem, textfieldDisplayer);
         if (menuItem is BooleanInputMenuItem toggleMenuItem && item is IDisplayer<BooleanInputMenuItem> toggleDisplayer)
             BindDisplayer(toggleMenuItem, toggleDisplayer);
+
+        throw new Exception($"Menu {menuItem.GetType()} and Item {item.GetType()} are not compatible or are not recognized");
     }
 
+    /// <summary>
+    /// Bind the menu <paramref name="menuItem"/> to the displayer <paramref name="displayer"/>.
+    /// </summary>
+    /// <typeparam name="M"></typeparam>
+    /// <param name="menuItem"></param>
+    /// <param name="displayer"></param>
+    /// <exception cref="NullReferenceException"></exception>
     public static void BindDisplayer<M>(M menuItem, IDisplayer<M> displayer) where M : AbstractMenuItem
     {
+        if (menuItem == null) new NullReferenceException($"Menu is null");
+        if (displayer == null) new NullReferenceException($"Displayer is null");
+
         displayer.DisplayerMenu = menuItem;
         displayer.BindDisplayer();
     }
 
+    /// <summary>
+    /// Unbind the visualElement from its menu. Basicly reset this element.
+    /// </summary>
+    /// <param name="item"></param>
+    /// <exception cref="NullReferenceException"></exception>
+    /// <exception cref="Exception"></exception>
     public static void UnbindItem(VisualElement item)
     {
+        if (item == null) new NullReferenceException($"Item is null");
+
         if (item is IDisplayer<ButtonMenuItem> buttonDisplayer) UnbindDisplayer(buttonDisplayer);
         if (item is IDisplayer<DropDownInputMenuItem> dropdownDisplayer) UnbindDisplayer(dropdownDisplayer);
         if (item is IDisplayer<FloatRangeInputMenuItem> sliderDisplayer) UnbindDisplayer(sliderDisplayer);
         if (item is IDisplayer<TextInputMenuItem> textfieldDisplayer) UnbindDisplayer(textfieldDisplayer);
         if (item is IDisplayer<BooleanInputMenuItem> toggleDisplayer) UnbindDisplayer(toggleDisplayer);
+
+        throw new Exception($"Item {item.GetType()} is not recognized");
     }
 
+    /// <summary>
+    /// Unbind the displayer from its menu. Basicly reset this element.
+    /// </summary>
+    /// <typeparam name="M"></typeparam>
+    /// <param name="displayer"></param>
     public static void UnbindDisplayer<M>(IDisplayer<M> displayer) where M : AbstractMenuItem
     {
+        if (displayer == null) new NullReferenceException($"Item is null");
+
         displayer.DisplayerMenu = null;
         displayer.UnbindDisplayer();
     }
