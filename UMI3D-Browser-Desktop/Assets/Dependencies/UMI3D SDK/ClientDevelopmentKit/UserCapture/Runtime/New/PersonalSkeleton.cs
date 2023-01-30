@@ -45,6 +45,7 @@ namespace umi3d.cdk.userCapture
                 position = transform.position,
                 rotation = transform.rotation,
                 skeletonHighOffset = skeletonHighOffset,
+                animationsPlaying = new ()
             };
 
             foreach (var skeleton in Skeletons)

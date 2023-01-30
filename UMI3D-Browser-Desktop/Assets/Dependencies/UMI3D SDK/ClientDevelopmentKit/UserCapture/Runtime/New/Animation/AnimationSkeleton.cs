@@ -17,6 +17,7 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using umi3d.common;
 using umi3d.common.userCapture;
 
 namespace umi3d.cdk.userCapture
@@ -24,6 +25,8 @@ namespace umi3d.cdk.userCapture
 
     public class AnimationSkeleton : ISubSkeleton
     {
+        private const DebugScope debugScope =  DebugScope.CDK | DebugScope.Animation | DebugScope.UserCapture;
+
         public SkeletonMapper mapper;
 
         public UserCameraPropertiesDto GetCameraDto()
@@ -40,19 +43,24 @@ namespace umi3d.cdk.userCapture
 
         public void Update(UserTrackingFrameDto trackingFrame)
         {
-            var animations = from animId in mapper.animations select UMI3DAnimatorAnimation.Get(animId);
+            var animations = from animId in mapper.animations select (id: animId, UMI3DAnimation: UMI3DAnimatorAnimation.Get(animId));
 
             foreach (var anim in animations)
             {
-                if (trackingFrame.animationsPlaying.FirstOrDefault(x=>x.id == anim.Id) != default)
+                if (anim.UMI3DAnimation == null) // animation could not be found
                 {
-                    if (!anim.IsPlaying())
-                        anim.Start();
+                    UMI3DLogger.LogWarning($"Trying to play/stop a unreferenced animation. ID : {anim.id}", debugScope);
+                    continue;
+                }
+                if (trackingFrame.animationsPlaying.FirstOrDefault(animId=> animId == anim.id) != default)
+                {
+                    if (!anim.UMI3DAnimation.IsPlaying())
+                        anim.UMI3DAnimation.Start();
                 }
                 else
                 {
-                    if (anim.IsPlaying())
-                        anim.Stop();
+                    if (anim.UMI3DAnimation.IsPlaying())
+                        anim.UMI3DAnimation.Stop();
                 }
             }
         }
@@ -67,7 +75,7 @@ namespace umi3d.cdk.userCapture
 
             foreach (var activeAnimation in activeAnimations)
             {
-                trackingFrame.animationsPlaying.Add(activeAnimation.dto);
+                trackingFrame.animationsPlaying.Add(activeAnimation.dto.id);
             }
         }
     }
