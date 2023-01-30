@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.commonScreen.Container;
+using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.game;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -65,11 +66,6 @@ namespace umi3d.commonScreen.Container
                 name = "is-selected",
                 defaultValue = false,
             };
-
-            public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
-            {
-                get { yield break; }
-            }
 
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
@@ -201,39 +197,30 @@ namespace umi3d.commonScreen.Container
             SDC.MakeItem = datum => new Displayer.Tool_C();
             SDC.BindItem = (datum, item) =>
             {
-                var tool = item as CustomTool;
-                tool.Menu = datum;
+                var tool = item as Tool_C;
+
                 tool.ToolClicked = (isSelected, datum) =>
                 {
                     if (!isSelected) SDC.Select(datum);
                     else SDC.Unselect(datum);
                 };
 
-                if (datum is Menu menu)
-                {
-                    if (menu.MenuItems.Count > 0) tool.ToolType = ToolType.Tool;
-                    else tool.ToolType = ToolType.Toolbox;
-                    if (DisplayToolsName) tool.Label = menu.Name;
-                    if (menu.icon2D != null) tool.SetToolIcon(menu.icon2D);
-                }
-                else if (datum is MenuItem menuItem)
-                {
-                    UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"");
-                }
+                tool.AddMenu(datum);
+
+                if (DisplayToolsName) tool.Label = datum.Name;
             };
             SDC.UnbindItem = (datum, item) =>
             {
-                var tool = item as CustomTool;
-                tool.Menu = null;
+                var tool = item as Tool_C;
+                tool.ClearTool();
                 tool.ToolClicked = null;
                 tool.Label = null;
-                tool.SetToolIcon(null as Texture2D);
             };
             SDC.Size = 104f;
             SDC.SelectionType = SelectionType.Single;
             SDC.SelectItem = (datum, item) =>
             {
-                var tool = item as CustomTool;
+                var tool = item as Tool_C;
 
                 tool.IsSelected = true;
                 if (tool.ToolType == ToolType.Tool) ToolClicked?.Invoke(true, ToolboxMenu, datum);
@@ -241,7 +228,7 @@ namespace umi3d.commonScreen.Container
             };
             SDC.UnselectItem = (datum, item) =>
             {
-                var tool = item as CustomTool;
+                var tool = item as Tool_C;
 
                 tool.IsSelected = false;
                 if (tool.ToolType == ToolType.Tool) ToolClicked?.Invoke(false, ToolboxMenu, datum);
@@ -365,6 +352,7 @@ namespace umi3d.UiPreview.commonScreen.Container
                 tool4.Add(item5);
                 toolbox2.Add(tool4);
 
+                previewItem.ToolboxType = ToolboxType.Main;
                 previewItem.AddMenu(toolbox1);
 
                 return previewItem;
