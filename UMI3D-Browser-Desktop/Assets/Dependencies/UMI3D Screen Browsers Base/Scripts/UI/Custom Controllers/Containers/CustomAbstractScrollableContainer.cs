@@ -46,7 +46,7 @@ public abstract class CustomAbstractScrollableContainer : VisualElement, ICustom
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);
-            var custom = ve as CustomForm;
+            var custom = ve as CustomAbstractScrollableContainer;
 
             custom.Set
                 (
