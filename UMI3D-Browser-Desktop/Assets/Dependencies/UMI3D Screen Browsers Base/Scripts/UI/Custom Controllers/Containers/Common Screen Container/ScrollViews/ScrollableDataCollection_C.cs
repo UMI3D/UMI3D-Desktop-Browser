@@ -324,8 +324,6 @@ namespace umi3d.commonScreen.Container
                 else item = MakeItem(datum);
             }
 
-            BindItem(datum, item);
-
             VisualElement box;
             if (m_waintingBoxes.Count == 0)
             {
@@ -373,6 +371,8 @@ namespace umi3d.commonScreen.Container
             ScrollView.Insert(index, box);
 
             if (Data.Count == 2) UpdateReorderableState();
+
+            BindItem(datum, item);
         }
 
         /// <summary>
@@ -399,11 +399,11 @@ namespace umi3d.commonScreen.Container
             item.RemoveFromHierarchy();
             m_waitingItems.Add(item);
 
-            UnbindItem(datum, item);
-
             DataToItem.Remove(datum);
             Data.Remove(datum);
             SelectedData.Remove(datum);
+
+            UnbindItem(datum, item);
         }
 
         /// <summary>
@@ -473,9 +473,9 @@ namespace umi3d.commonScreen.Container
                     break;
             }
 
-            SelectItem?.Invoke(datum, DataToItem[datum]);
-
             SelectedData.Add(datum);
+
+            SelectItem?.Invoke(datum, DataToItem[datum]);
         }
 
         /// <summary>
@@ -539,8 +539,11 @@ namespace umi3d.commonScreen.Container
         /// <param name="exceptions"></param>
         public virtual void UnselectAll(params D[] exceptions)
         {
+            if (SelectedData.Count == 0) return;
+
             foreach (var datum in Data)
             {
+                if (!SelectedData.Contains(datum)) continue;
                 bool isException = false;
                 foreach (var exception in exceptions)
                 {
@@ -580,7 +583,7 @@ namespace umi3d.commonScreen.Container
 
         protected virtual void UpdateReorderableState()
         {
-            if (Data.Count <= 2)
+            if (Data.Count < 2)
             {
                 RemoveAllDraggerAsElement();
                 RemoveAllDragger();

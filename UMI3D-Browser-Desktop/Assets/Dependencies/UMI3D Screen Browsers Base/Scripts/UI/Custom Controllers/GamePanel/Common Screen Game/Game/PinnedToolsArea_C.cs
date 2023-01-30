@@ -170,7 +170,7 @@ namespace umi3d.commonScreen.game
             SDC.IsReorderable = true;
 
             //Sub tools
-            Sub_SDC.MakeItem = datum => new Container.Toolbox_C();
+            Sub_SDC.MakeItem = datum => new Toolbox_C();
             Sub_SDC.BindItem = (datum, item) =>
             {
                 var toolbox = item as Toolbox_C;
@@ -183,7 +183,7 @@ namespace umi3d.commonScreen.game
                     toolbox.AddMenu(datum);
                     toolbox.Mode = ScrollViewMode.Horizontal;
                     toolbox.ToolboxType = ToolboxType.Main;
-                    toolbox.ToolClicked += OnToolClicked;
+                    toolbox.ToolClicked = OnToolClicked;
                     toolbox.ToolboxClicked = (isSelected, toolboxMenu, toolMenu) =>
                     {
                         if (isSelected) Sub_SDC.AddDatum(toolMenu);
