@@ -1,0 +1,11 @@
+.edc-content__viewport {
+	overflow: hidden;
+
+	flex-shrink: 1;
+	flex-grow: 1;
+}
+
+.edc-content__container {
+	flex-shrink: 0;
+	flex-grow: 0;
+}
