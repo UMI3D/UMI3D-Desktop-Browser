@@ -16,6 +16,7 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.commonScreen.game;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -107,7 +108,7 @@ public class CustomLeadingArea : VisualElement, ICustomElement
     public virtual string USSCustomClassName => "leading__area";
     public virtual string USSCustomClassNameReverse => "leading__area-reverse";
 
-    public CustomPinnedToolsArea PinnedToolsArea;
+    public PinnedToolsArea_C PinnedToolsArea;
     public CustomInteractableMapping InteractableMapping;
     public CustomJoystickArea JoystickArea;
 
