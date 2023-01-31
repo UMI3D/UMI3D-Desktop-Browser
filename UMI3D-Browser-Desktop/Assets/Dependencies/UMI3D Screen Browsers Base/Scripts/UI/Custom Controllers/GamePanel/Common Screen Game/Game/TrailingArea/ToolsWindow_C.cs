@@ -16,6 +16,7 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk.menu;
+using umi3d.commonScreen.Container;
 using umi3d.commonScreen.game;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -36,6 +37,23 @@ namespace umi3d.commonScreen.game
 
             base.InitElement();
 
+            SDC.MakeItem = datum =>
+            {
+                ExpandableDataCollection_C<AbstractMenuItem> edc = new ExpandableDataCollection_C<AbstractMenuItem>();
+                edc.MakeItem = datum =>
+                {
+                    return null;
+                };
+                edc.BindItem = (datum, item) =>
+                {
+
+                };
+                edc.UnbindItem = (datum, item) =>
+                {
+
+                };
+                return null;
+            };
             SDC.BindItem = (datum, item) =>
             {
 

@@ -192,12 +192,12 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
     public virtual Predicate<(D, VisualElement)> FindItem { get; set; }
 
     /// <summary>
-    /// Bind a datum to a visualElement.
+    /// Bind a datum to a visualElement. This action is called after the datum is added to the collection
     /// </summary>
     public virtual Action<D, VisualElement> BindItem { get; set; }
 
     /// <summary>
-    /// Unbind a visualElement from its datum.
+    /// Unbind a visualElement from its datum. This action is called before the datum is removed from the collection.
     /// </summary>
     public virtual Action<D, VisualElement> UnbindItem { get; set; }
 
@@ -210,6 +210,15 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
     /// Action raised when a datum is unselected.
     /// </summary>
     public virtual System.Action<D, VisualElement> UnselectItem { get; set; }
+
+    /// <summary>
+    /// Whether or not this collection is being cleared. When true calling <see cref="ClearDC"/> will do nothing.
+    /// </summary>
+    public virtual bool IsBeingCleared { get; protected set; }
+    /// <summary>
+    /// Whether or not all selected item are being unselected. When true calling <see cref="UnselectAll(D[])"/> and <see cref="Unselect(List{D})"/> will do nothing.
+    /// </summary>
+    public bool IsBeingUnselected { get; set; }
 
     /// <summary>
     /// Add this <paramref name="datum"/> at the end of the collection of data and make an item and add it to the view.
@@ -320,19 +329,19 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
         var item = DataToItem[datum];
         var box = item.parent;
 
+        box.RemoveFromHierarchy();
+        m_waintingBoxes.Add(box);
+
         RemoveDragger(box);
         RemoveDraggerAsElement(item);
 
-        box.RemoveFromHierarchy();
-        m_waintingBoxes.Add(box);
+        UnbindItem(datum, item);
         item.RemoveFromHierarchy();
         m_waitingItems.Add(item);
 
         DataToItem.Remove(datum);
         Data.Remove(datum);
         SelectedData.Remove(datum);
-
-        UnbindItem(datum, item);
     }
 
     /// <summary>
@@ -371,13 +380,20 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
     }
 
     /// <summary>
-    /// Clear data, remove item from scrollview, unbind item.
+    /// Clear data, remove item from <see cref="DataContainer"/>, unbind item.
     /// </summary>
-    public virtual void ClearSDC()
+    /// <remarks>Before clearing make sure to not have side effect in the <see cref="UnselectItem"/> action.</remarks>
+    public virtual void ClearDC()
     {
+        if (IsBeingCleared) return;
+
+        IsBeingCleared = true;
+
         UnselectAll();
         for (int i = Data.Count - 1; i >= 0; i--)
             RemoveDatum(Data[i]);
+
+        IsBeingCleared = false;
     }
 
 
@@ -438,6 +454,8 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
     /// <param name="data"></param>
     public virtual void Unselect(List<D> data)
     {
+        if (IsBeingUnselected) return;
+
         foreach (var datum in data) Unselect(datum);
     }
 
@@ -468,7 +486,9 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
     /// <param name="exceptions"></param>
     public virtual void UnselectAll(params D[] exceptions)
     {
-        if (SelectedData.Count == 0) return;
+        if (IsBeingUnselected || SelectedData.Count == 0) return;
+
+        IsBeingUnselected = true;
 
         foreach (var datum in Data)
         {
@@ -481,6 +501,8 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
             }
             if (!isException) Unselect(datum);
         }
+
+        IsBeingUnselected = false;
     }
 
     /// <summary>

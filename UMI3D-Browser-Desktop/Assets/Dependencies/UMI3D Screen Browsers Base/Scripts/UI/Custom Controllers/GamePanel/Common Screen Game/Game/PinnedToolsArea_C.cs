@@ -131,7 +131,7 @@ namespace umi3d.commonScreen.game
                     toolbox.ToolClicked = OnToolClicked;
                     toolbox.ToolboxClicked = (isSelected, toolboxMenu, toolMenu) =>
                     {
-                        Sub_SDC.ClearSDC();
+                        Sub_SDC.ClearDC();
                         if (isSelected)
                         {
                             SDC.Select(toolboxMenu);
@@ -194,10 +194,10 @@ namespace umi3d.commonScreen.game
             Sub_SDC.UnbindItem = (datum, item) =>
             {
                 var toolbox = item as Toolbox_C;
-                toolbox.ClearToolbox();
                 toolbox.ToolboxType = ToolboxType.Unknown;
                 toolbox.ToolClicked = null;
                 toolbox.ToolboxClicked = null;
+                toolbox.ClearToolbox();
             };
             Sub_SDC.Mode = ScrollViewMode.Vertical;
             Sub_SDC.IsReorderable = false;
@@ -243,7 +243,7 @@ namespace umi3d.commonScreen.game
 
         protected virtual void OnToolClicked(bool isSelected, AbstractMenuItem toolboxMenu, AbstractMenuItem toolMenu)
         {
-            Sub_SDC.ClearSDC();
+            Sub_SDC.ClearDC();
             Sub_SDC.RemoveFromHierarchy();
             if (isSelected) SDC.Select(toolboxMenu);
             else SDC.Unselect(toolboxMenu);

@@ -29,9 +29,14 @@ namespace umi3d.commonScreen.Container
     {
         public new class UxmlTraits : AbstractDataCollection_C<D>.UxmlTraits
         {
-            protected UxmlFloatAttributeDescription m_animationTime = new UxmlFloatAttributeDescription
+            protected UxmlFloatAttributeDescription m_animationTimeIn = new UxmlFloatAttributeDescription
             {
-                name = "animation-time",
+                name = "animation-time-in",
+                defaultValue = 0f
+            };
+            protected UxmlFloatAttributeDescription m_animationTimeOut = new UxmlFloatAttributeDescription
+            {
+                name = "animation-time-out",
                 defaultValue = 0f
             };
 
@@ -51,15 +56,19 @@ namespace umi3d.commonScreen.Container
                 custom.Size = m_size.GetValueFromBag(bag, cc);
                 custom.IsReorderable = m_isReorderable.GetValueFromBag(bag, cc);
                 custom.ReorderableMode = m_reorderableMode.GetValueFromBag(bag, cc);
-                custom.AnimationTime = m_animationTime.GetValueFromBag(bag, cc);
+                custom.AnimationTimeIn = m_animationTimeIn.GetValueFromBag(bag, cc);
+                custom.AnimationTimeOut = m_animationTimeOut.GetValueFromBag(bag, cc);
             }
         }
 
-        public float AnimationTime
-        {
-            get => m_animationTime;
-            set => m_animationTime = value;
-        }
+        /// <summary>
+        /// Animation time when add an item
+        /// </summary>
+        public virtual float AnimationTimeIn { get; set; }
+        /// <summary>
+        /// Animation time when remove an item
+        /// </summary>
+        public virtual float AnimationTimeOut { get; set; }
 
         public virtual string StyleSheetContainerPath => $"USS/container";
         public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetContainersFolderPath}/expandableDataCollection";
@@ -97,13 +106,14 @@ namespace umi3d.commonScreen.Container
 
             ContentContainer.RegisterCallback<GeometryChangedEvent>(ce =>
             {
+                bool isAnimationIn = ce.newRect.height > ce.oldRect.height;
                 ContentVieport.AddAnimation
                 (
                     this,
                     () => ContentVieport.style.height = ContentVieport.resolvedStyle.height,
                     () => ContentVieport.style.height = ContentContainer.resolvedStyle.height,
                     "height",
-                    AnimationTime
+                    isAnimationIn ? AnimationTimeIn : AnimationTimeOut
                 );
             });
 
@@ -133,22 +143,46 @@ namespace umi3d.UiPreview.commonScreen.Container
             {
                 ExpandableDataCollection_C<int> previewItem = base.Create(bag, cc) as ExpandableDataCollection_C<int>;
 
+                void removeClick()
+                {
+                    previewItem.RemoveDatum(previewItem.Data[previewItem.Data.Count - 1]);
+                }
+
+                void addClick()
+                {
+                    previewItem.AddDatum(previewItem.Data.Count);
+                }
+
                 previewItem.MakeItem = datum => new umi3d.commonScreen.Displayer.Button_C();
                 previewItem.BindItem = (datum, item) =>
                 {
                     var button = item as umi3d.commonScreen.Displayer.Button_C;
-                    button.text = $"item {datum}";
-                    button.clicked += () =>
+                    button.Label = $"item {datum}";
+
+                    if (previewItem.Data.IndexOf(datum) == 0)
                     {
-                        previewItem.AddDatum(previewItem.Data.Count);
-                    };
+                        button.text = $"delete last item";
+                        button.Type = ButtonType.Danger;
+                        button.clicked += removeClick;
+                    }
+                    else
+                    {
+                        button.text = $"add new item";
+                        button.Type = ButtonType.Primary;
+                        button.clicked += addClick;
+                    }
                 };
                 previewItem.UnbindItem = (datum, item) =>
                 {
                     var button = item as umi3d.commonScreen.Displayer.Button_C;
                     button.text = null;
+                    button.Type = ButtonType.Default;
+
+                    if (previewItem.Data.IndexOf(datum) == 0) button.clicked -= removeClick;
+                    else button.clicked -= addClick;
                 };
-                previewItem.AnimationTime = 2f;
+                previewItem.AnimationTimeIn = 1f;
+                previewItem.AnimationTimeOut = 1f;
 
                 for (int i = 0; i < 3; i++) previewItem.AddDatum(i);
 

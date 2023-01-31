@@ -212,9 +212,9 @@ namespace umi3d.commonScreen.Container
             SDC.UnbindItem = (datum, item) =>
             {
                 var tool = item as Tool_C;
-                tool.ClearTool();
                 tool.ToolClicked = null;
                 tool.Label = null;
+                tool.ClearTool();
             };
             SDC.Size = 104f;
             SDC.SelectionType = SelectionType.Single;
@@ -300,7 +300,7 @@ namespace umi3d.commonScreen.Container
             ToolboxMenu = null;
             ToolboxName = null;
 
-            SDC.ClearSDC();
+            SDC.ClearDC();
         }
 
         #endregion
