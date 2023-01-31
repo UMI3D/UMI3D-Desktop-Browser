@@ -31,31 +31,31 @@ namespace umi3d.commonScreen.Container
 
         public new class UxmlTraits : VisualElement.UxmlTraits
         {
-            UxmlEnumAttributeDescription<ToolboxType> m_toolboxType = new UxmlEnumAttributeDescription<ToolboxType>
+            protected UxmlEnumAttributeDescription<ToolboxType> m_toolboxType = new UxmlEnumAttributeDescription<ToolboxType>
             {
                 name = "toolbox-type",
                 defaultValue = ToolboxType.Unknown
             };
 
-            UxmlEnumAttributeDescription<ElementCategory> m_category = new UxmlEnumAttributeDescription<ElementCategory>
+            protected UxmlEnumAttributeDescription<ElementCategory> m_category = new UxmlEnumAttributeDescription<ElementCategory>
             {
                 name = "category",
                 defaultValue = ElementCategory.Game
             };
 
-            UxmlStringAttributeDescription m_toolboxName = new UxmlStringAttributeDescription
+            protected UxmlStringAttributeDescription m_toolboxName = new UxmlStringAttributeDescription
             {
                 name = "toolbox-name",
                 defaultValue = null
             };
 
-            UxmlEnumAttributeDescription<ScrollViewMode> m_mode = new UxmlEnumAttributeDescription<ScrollViewMode>
+            protected UxmlEnumAttributeDescription<ScrollViewMode> m_mode = new UxmlEnumAttributeDescription<ScrollViewMode>
             {
                 name = "mode",
                 defaultValue = ScrollViewMode.Horizontal
             };
 
-            UxmlBoolAttributeDescription m_displayToolsName = new UxmlBoolAttributeDescription
+            protected UxmlBoolAttributeDescription m_displayToolsName = new UxmlBoolAttributeDescription
             {
                 name = "display-tools-name",
                 defaultValue = false
@@ -72,15 +72,13 @@ namespace umi3d.commonScreen.Container
                 base.Init(ve, bag, cc);
                 var custom = ve as Toolbox_C;
 
-                custom.Set
-                    (
-                        m_toolboxType.GetValueFromBag(bag, cc),
-                        m_category.GetValueFromBag(bag, cc),
-                        m_toolboxName.GetValueFromBag(bag, cc),
-                        m_mode.GetValueFromBag(bag, cc),
-                        m_displayToolsName.GetValueFromBag(bag, cc),
-                        m_isSelected.GetValueFromBag(bag, cc)
-                     );
+                custom.ToolboxType = m_toolboxType.GetValueFromBag(bag, cc);
+                custom.Category = m_category.GetValueFromBag(bag, cc);
+                custom.ToolboxName = m_toolboxName.GetValueFromBag(bag, cc);
+                custom.Mode = m_mode.GetValueFromBag(bag, cc);
+                custom.DisplayToolsName = m_displayToolsName.GetValueFromBag(bag, cc);
+                custom.IsSelected = m_isSelected.GetValueFromBag(bag, cc);
+                custom.ToolboxType = m_toolboxType.GetValueFromBag(bag, cc);
             }
         }
 
@@ -132,7 +130,7 @@ namespace umi3d.commonScreen.Container
             set
             {
                 RemoveFromClassList(USSCustomClassMode(SDC.Mode));
-                AddToClassList(USSCustomClassMode(SDC.Mode));
+                AddToClassList(USSCustomClassMode(value));
                 SDC.Mode = value;
             }
         }
@@ -170,8 +168,12 @@ namespace umi3d.commonScreen.Container
         public virtual string USSCustomClassMode(ScrollViewMode mode) => $"{USSCustomClassName}-{mode}".ToLower();
         public virtual string USSCustomClassSelected => $"{USSCustomClassName}-selected";
         public virtual string USSCustomClassToolboxName => $"{USSCustomClassName}-name";
+        public virtual string USSCustomClassPinned => $"{USSCustomClassName}-pinned";
+        public virtual string USSCustomClassEdit => $"{USSCustomClassName}-edit";
 
-        public CustomText ToolboxNameText = new Displayer.Text_C { name = "toolbox-name" };
+        public Text_C ToolboxNameText = new Text_C { name = "toolbox-name" };
+        public Button_C PinnedButton = new Button_C { name = "pinned" };
+        public Button_C EditButton = new Button_C { name = "edit" };
         public ScrollableDataCollection_C<AbstractMenuItem> SDC = new ScrollableDataCollection_C<AbstractMenuItem> { name = "sdc" };
 
         protected ToolboxType m_ToolboxType;
@@ -193,8 +195,10 @@ namespace umi3d.commonScreen.Container
             }
             AddToClassList(USSCustomClassName);
             ToolboxNameText.AddToClassList(USSCustomClassToolboxName);
+            PinnedButton.AddToClassList(USSCustomClassPinned);
+            EditButton.AddToClassList(USSCustomClassEdit);
 
-            SDC.MakeItem = datum => new Displayer.Tool_C();
+            SDC.MakeItem = datum => new Tool_C();
             SDC.BindItem = (datum, item) =>
             {
                 var tool = item as Tool_C;
@@ -235,6 +239,23 @@ namespace umi3d.commonScreen.Container
                 else if (tool.ToolType == ToolType.Toolbox) ToolboxClicked?.Invoke(false, ToolboxMenu, datum);
             };
 
+            PinnedButton.Category = ElementCategory.Game;
+            PinnedButton.Size = ElementSize.Small;
+            PinnedButton.Shape = ButtonShape.Round;
+            PinnedButton.text = "p";
+
+            EditButton.Category = ElementCategory.Game;
+            EditButton.Size = ElementSize.Small;
+            EditButton.Shape = ButtonShape.Round;
+            EditButton.text = "···";
+
+            EditButton.clicked += () =>
+            {
+                SDC.IsReorderable = !SDC.IsReorderable;
+            };
+
+            ToolboxNameText.Add(PinnedButton);
+            ToolboxNameText.Add(EditButton);
             Add(SDC);
         }
 
@@ -245,22 +266,6 @@ namespace umi3d.commonScreen.Container
         public virtual void Set()
         {
             InitElement();
-        }
-
-        /// <summary>
-        /// set this UI element.
-        /// </summary>
-        /// <param name="category"></param>
-        /// <param name="name"></param>
-        /// <param name="mode"></param>
-        public virtual void Set(ToolboxType type, ElementCategory category, string name, ScrollViewMode mode, bool displayToolsName, bool isSelected)
-        {
-            ToolboxType = type;
-            Category = category;
-            ToolboxName = name;
-            Mode = mode;
-            DisplayToolsName = displayToolsName;
-            IsSelected = isSelected;
         }
 
         #region Implementation
