@@ -144,7 +144,8 @@ namespace umi3dbrowser.module.lipsync
                 if (!lipsInfo.isSpeaking // only analyse phonemes when speaking
                     || (Vector3.Distance(userCamera.transform.position, lipsInfo.viewTransform.position) > maxDistance && maxDistance > 0) // user is not too far
                     || Vector3.Dot(userCamera.transform.forward, lipsInfo.viewTransform.forward) > Mathf.Cos(Mathf.Deg2Rad * (180f - maxAngle)) // face should be looking to the other face
-                    || IsOutsideOfCamera(userCamera, lipsInfo.viewTransform.position)) // point should be in the view frustum
+                    || IsOutsideOfCamera(userCamera, lipsInfo.viewTransform.position) // point should be in the view frustum
+                    || IsSoundNeglectable(lipsInfo?.audioSource)) // the user must be speaking above the minimum level
                 {
                     if (!lipsInfo.controller.IsLipSyncPaused())
                         lipsInfo.controller.PauseLipSync();
@@ -197,6 +198,39 @@ namespace umi3dbrowser.module.lipsync
             return projected.x < 0 || projected.x > 1
                     || projected.y < 0 || projected.y > 1
                     || projected.z < 0;
+        }
+
+        /// <summary>
+        /// Above this threshold the received sound is considered as intended sound0.
+        /// </summary>
+        /// Determined empirically.
+        public float SOUND_THRESHOLD = 0.507f;
+
+        /// <summary>
+        /// Compute a metric of the volume emitted by an audio source
+        /// </summary>
+        /// The metric is between 0.5 and 1 and corresponds to the max value of samples
+        /// <param name="audioSource"></param>
+        /// <returns></returns>
+        private float GetMaxAmplitude(AudioSource audioSource)
+        {
+            var samples = new float[1024];
+            audioSource.GetOutputData(samples, 0);
+            float maxAmplitude = 0f;
+            foreach (var sample in samples)
+            {
+                var samplePos = (sample + 1f) / 2f;
+                if (samplePos > maxAmplitude) maxAmplitude = samplePos;
+            }
+            return maxAmplitude;
+        }
+
+        private bool IsSoundNeglectable(AudioSource audioSource)
+        {
+            if (audioSource == null)
+                return true;
+            else
+                return GetMaxAmplitude(audioSource) < SOUND_THRESHOLD;
         }
 
         #region avatarLoading
