@@ -15,7 +15,8 @@
 	width: 35%;
 }
 
-.sdc {
+.sdc,
+.edc {
 	background-color: var(--background-color-transparent-game);
 
 	border-top-left-radius: var(--border-radius-game);
