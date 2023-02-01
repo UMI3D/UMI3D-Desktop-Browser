@@ -112,7 +112,6 @@ public class CustomLeadingArea : VisualElement, ICustomElement
     public PinnedToolsArea_C PinnedToolsArea = new PinnedToolsArea_C { name = "pinned-tools" };
     public CustomInteractableMapping InteractableMapping;
     public CustomJoystickArea JoystickArea;
-    public MenuAsset GlobalToolsMenu;
 
     public TouchManipulator2 LeadingAreaManipulator = new TouchManipulator2(null, 0, 0);
 
@@ -135,16 +134,13 @@ public class CustomLeadingArea : VisualElement, ICustomElement
             throw e;
         }
 
-        GlobalToolsMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/GlobalToolsMenu");
-        GlobalToolsMenu.menu.onContentChange.AddListener(() =>
-        {
-            if (GlobalToolsMenu.menu.Count == 1) Insert(0, PinnedToolsArea);
-            else if (GlobalToolsMenu.menu.Count == 0) PinnedToolsArea.RemoveFromHierarchy();
-        });
-
         PinnedToolsArea.Mode = ScrollViewMode.Vertical;
+        PinnedToolsArea.SDC.ContentChanged += count =>
+        {
+            if (count == 1) Insert(0, PinnedToolsArea);
+            else if (count == 0) PinnedToolsArea.RemoveFromHierarchy();
+        };
         
-
         //this.AddManipulator(LeadingAreaManipulator);
         //TODO improve camera navigation with double click.
     }

@@ -325,7 +325,6 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         ToolsWindow.Title = "Toolbox";
         ToolsWindow.Category = ElementCategory.Game;
         ToolsWindow.AddRoot(GlobalToolsMenu.menu);
-        Add(ToolsWindow);
     }
 
     public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false, false, false, m_leftHand);
