@@ -1,12 +1,11 @@
 .pinned__tools__area-vertical {
 	flex-direction: row;
-
-	max-height: 70%;
 }
 
 .pinned__tools__area-vertical > .pinned__tools__area-sdc {
-	width: 25%;
-	max-width: 250px;
+	flex-grow: 1;
+	min-width: 270px;
+	max-width: 290px;
 }
 
 .pinned__tools__area-vertical > .pinned__tools__area-sub__sdc {

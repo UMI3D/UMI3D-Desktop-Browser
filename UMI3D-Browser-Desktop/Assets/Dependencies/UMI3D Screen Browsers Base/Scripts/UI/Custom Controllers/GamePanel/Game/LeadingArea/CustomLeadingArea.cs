@@ -16,6 +16,7 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.cdk.menu;
 using umi3d.commonScreen.game;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -108,9 +109,10 @@ public class CustomLeadingArea : VisualElement, ICustomElement
     public virtual string USSCustomClassName => "leading__area";
     public virtual string USSCustomClassNameReverse => "leading__area-reverse";
 
-    public PinnedToolsArea_C PinnedToolsArea;
+    public PinnedToolsArea_C PinnedToolsArea = new PinnedToolsArea_C { name = "pinned-tools" };
     public CustomInteractableMapping InteractableMapping;
     public CustomJoystickArea JoystickArea;
+    public MenuAsset GlobalToolsMenu;
 
     public TouchManipulator2 LeadingAreaManipulator = new TouchManipulator2(null, 0, 0);
 
@@ -133,8 +135,15 @@ public class CustomLeadingArea : VisualElement, ICustomElement
             throw e;
         }
 
-        //TODO add pinned tools area.
-        //Add(PinnedToolsArea);
+        GlobalToolsMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/GlobalToolsMenu");
+        GlobalToolsMenu.menu.onContentChange.AddListener(() =>
+        {
+            if (GlobalToolsMenu.menu.Count == 1) Insert(0, PinnedToolsArea);
+            else if (GlobalToolsMenu.menu.Count == 0) PinnedToolsArea.RemoveFromHierarchy();
+        });
+
+        PinnedToolsArea.Mode = ScrollViewMode.Vertical;
+        
 
         //this.AddManipulator(LeadingAreaManipulator);
         //TODO improve camera navigation with double click.

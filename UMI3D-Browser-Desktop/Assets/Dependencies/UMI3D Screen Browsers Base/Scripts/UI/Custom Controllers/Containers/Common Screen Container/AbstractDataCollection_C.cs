@@ -182,6 +182,20 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
     protected List<VisualElement> m_waintingDragger = new List<VisualElement>();
 
     /// <summary>
+    /// Event raised when a new item is added.
+    /// </summary>
+    public event Action<D> ItemAdded;
+    /// <summary>
+    /// Event raised when an item is removed.
+    /// </summary>
+    public event Action<D> ItemRemoved;
+    /// <summary>
+    /// Event raised when a new item is added or when an item is removed. 
+    /// <para>Param: nb of items after change.</para>
+    /// </summary>
+    public event Action<int> ContentChanged;
+
+    /// <summary>
     /// Make a VisualElement to add to the collection.
     /// </summary>
     public virtual Func<D, VisualElement> MakeItem { get; set; }
@@ -311,6 +325,9 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
         if (Data.Count == 2) UpdateReorderableState();
 
         BindItem(datum, item);
+
+        ItemAdded?.Invoke(datum);
+        ContentChanged?.Invoke(Data.Count);
     }
 
     /// <summary>
@@ -342,6 +359,9 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
         DataToItem.Remove(datum);
         Data.Remove(datum);
         SelectedData.Remove(datum);
+
+        ItemRemoved?.Invoke(datum);
+        ContentChanged?.Invoke(Data.Count);
     }
 
     /// <summary>
@@ -653,6 +673,8 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
             dragger.parent.transform.position = Vector3.zero;
         };
         draggerManipulator.MovedWithInfo += (evt, localPosition) => {
+            UnityEngine.Debug.Log($"{datum}");
+
             var draggerData = dragger.userData as DraggerData;
             var box = dragger.parent;
 

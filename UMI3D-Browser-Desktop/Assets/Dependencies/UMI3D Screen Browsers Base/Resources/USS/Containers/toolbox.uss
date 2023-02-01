@@ -64,8 +64,10 @@
 
 .toolbox-vertical {
     height: 100%;
+    width: 100%;
 }
 
 .toolbox-horizontal {
+    height: 100%;
     width: 100%;
 }

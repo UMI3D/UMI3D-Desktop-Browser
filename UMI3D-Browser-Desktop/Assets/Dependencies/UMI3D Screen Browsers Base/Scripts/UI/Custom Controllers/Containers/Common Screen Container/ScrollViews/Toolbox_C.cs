@@ -159,6 +159,11 @@ namespace umi3d.commonScreen.Container
                 else RemoveFromClassList(USSCustomClassSelected);
             }
         }
+        public virtual bool IsPinned
+        {
+            get => m_isPinned;
+            set => m_isPinned = value;
+        }
 
         public virtual string StyleSheetContainerPath => $"USS/container";
         public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetContainersFolderPath}/toolbox";
@@ -179,6 +184,7 @@ namespace umi3d.commonScreen.Container
         protected ToolboxType m_ToolboxType;
         protected bool m_displayToolsName;
         protected bool m_isSelected;
+        protected bool m_isPinned;
 
         public Toolbox_C() => Set();
 
@@ -292,6 +298,9 @@ namespace umi3d.commonScreen.Container
             if (item is Menu menu)
             {
                 if (menu.SubMenu.Count > 0) foreach (var subMenu in menu.SubMenu) SDC.AddDatum(subMenu);
+
+                menu.onAbstractMenuItemAdded.AddListener(SDC.AddDatum);
+                menu.OnAbstractMenuItemRemoved.AddListener(SDC.RemoveDatum);
             }
             else if (item is MenuItem) SDC.AddDatum(item); //TO test
         }
@@ -301,6 +310,12 @@ namespace umi3d.commonScreen.Container
         /// </summary>
         public void ClearToolbox()
         {
+            if (ToolboxMenu is Menu menu)
+            {
+                menu.onAbstractMenuItemAdded.RemoveListener(SDC.AddDatum);
+                menu.OnAbstractMenuItemRemoved.RemoveListener(SDC.RemoveDatum);
+            }
+
             ToolboxMenu = null;
             ToolboxName = null;
 

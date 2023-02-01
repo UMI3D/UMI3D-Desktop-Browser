@@ -16,7 +16,9 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.cdk.menu;
 using umi3d.commonMobile.game;
+using umi3d.commonScreen.game;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -241,13 +243,16 @@ public class CustomTrailingArea : VisualElement, ICustomElement
     public virtual string USSCustomClassNameReverse => "trailing__area-reverse";
     public virtual string USSCustomClassObjectMenu => $"{USSCustomClassName}-object__menu";
     public virtual string USSCustomClassEmoteWindow => $"{USSCustomClassName}-emote__window";
+    public virtual string USSCustomClassToolsWindow => $"{USSCustomClassName}-tools__window";
     public virtual string USSCustomClassCameraLayer => $"{USSCustomClassName}-camera__layer";
 
+    public ToolsWindow_C ToolsWindow = new ToolsWindow_C { name = "tools-window" };
     public CustomNotifAndUsersArea NotifAndUserArea;
     public CustomForm ObjectMenu;
     public CustomEmoteWindow EmoteWindow;
     public CustomButtonsArea ButtonsArea;
     public VisualElement CameraLayer = new VisualElement { name = "camera-layer" };
+    public MenuAsset GlobalToolsMenu;
 
     public TouchManipulator2 TrailingAreaManipulator = new TouchManipulator2(null, 0, 0);
     public TouchManipulator2 CameraManipulator = new TouchManipulator2(null, 0, 0);
@@ -291,6 +296,7 @@ public class CustomTrailingArea : VisualElement, ICustomElement
 
         ObjectMenu.AddToClassList(USSCustomClassObjectMenu);
         EmoteWindow.AddToClassList(USSCustomClassEmoteWindow);
+        ToolsWindow.AddToClassList(USSCustomClassToolsWindow);
         CameraLayer.AddToClassList(USSCustomClassCameraLayer);
 
         //this.AddManipulator(TrailingAreaManipulator);
@@ -314,6 +320,12 @@ public class CustomTrailingArea : VisualElement, ICustomElement
         ObjectMenu.name = "object-menu";
         ObjectMenu.Category = ElementCategory.Game;
         ObjectMenu.Title = "Contextual Menu";
+
+        GlobalToolsMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/GlobalToolsMenu");
+        ToolsWindow.Title = "Toolbox";
+        ToolsWindow.Category = ElementCategory.Game;
+        ToolsWindow.AddRoot(GlobalToolsMenu.menu);
+        Add(ToolsWindow);
     }
 
     public virtual void Set() => Set(ControllerEnum.MouseAndKeyboard, false, false, false, m_leftHand);
