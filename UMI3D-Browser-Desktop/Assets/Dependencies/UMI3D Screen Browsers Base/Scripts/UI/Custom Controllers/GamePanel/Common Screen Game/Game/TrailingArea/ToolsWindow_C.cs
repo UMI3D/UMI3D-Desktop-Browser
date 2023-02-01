@@ -49,7 +49,17 @@ namespace umi3d.commonScreen.game
             SDC.BindItem = BindSDC;
             SDC.UnbindItem = (datum, item) =>
             {
+                ExpandableDataCollection_C<AbstractMenuItem> edc = item as ExpandableDataCollection_C<AbstractMenuItem>;
 
+                edc.AnimationTimeIn = 0f;
+                edc.AnimationTimeOut = 0f;
+
+                edc.ClearDC();
+
+                edc.MakeItem = null;
+                edc.BindItem = null;
+                edc.UnbindItem = null;
+                edc.FindItem = null;
             };
         }
 
@@ -94,10 +104,7 @@ namespace umi3d.commonScreen.game
                 }
             };
             edc.BindItem = (edcDatum, edcItem) => BindEDC(edc, edcDatum, edcItem);
-            edc.UnbindItem = (edcDatum, edcItem) =>
-            {
-
-            };
+            edc.UnbindItem = UnbindEDC;
             edc.FindItem = param =>
             {
                 if (param.Item1 is Menu menu)
@@ -141,7 +148,10 @@ namespace umi3d.commonScreen.game
                     }
                     else
                     {
-                        edc.RemoveDatum(toolMenu);
+                        int index = edc.Data.IndexOf(toolMenu);
+                        var range = edc.Data.GetRange(index, edc.Data.Count - index);
+                        range.ForEach(e => edc.RemoveDatum(e));
+                        
                     }
                 };
             }
@@ -159,8 +169,27 @@ namespace umi3d.commonScreen.game
                 {
                     DisplayerManager.UnbindItem(inputsItem);
                 };
+                inputs.FindItem = param => DisplayerManager.IsCompatible(param.Item1, param.Item2);
 
                 foreach (var menuItem in menu.MenuItems) inputs.AddDatum(menuItem);
+            }
+        }
+
+        protected virtual void UnbindEDC(AbstractMenuItem datum, VisualElement item)
+        {
+            if (item is Toolbox_C toolbox)
+            {
+                toolbox.ToolboxType = ToolboxType.Unknown;
+                toolbox.ToolClicked = null;
+                toolbox.ToolboxClicked = null;
+                toolbox.ClearToolbox();
+            }
+            else if (item is ExpandableDataCollection_C<AbstractMenuItem> inputs)
+            {
+                inputs.ClearDC();
+                inputs.MakeItem = null;
+                inputs.BindItem = null;
+                inputs.UnbindItem = null;
             }
         }
 

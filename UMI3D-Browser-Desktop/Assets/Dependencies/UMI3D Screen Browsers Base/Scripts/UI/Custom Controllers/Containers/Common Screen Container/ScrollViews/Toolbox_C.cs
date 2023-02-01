@@ -242,7 +242,7 @@ namespace umi3d.commonScreen.Container
             PinnedButton.Category = ElementCategory.Game;
             PinnedButton.Size = ElementSize.Small;
             PinnedButton.Shape = ButtonShape.Round;
-            PinnedButton.text = "p";
+            //PinnedButton.text = "p";
 
             EditButton.Category = ElementCategory.Game;
             EditButton.Size = ElementSize.Small;

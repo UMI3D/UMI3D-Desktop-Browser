@@ -135,4 +135,25 @@ public static class DisplayerManager
         displayer.DisplayerMenu = null;
         displayer.UnbindDisplayer();
     }
+
+    /// <summary>
+    /// Whether or not <paramref name="menuItem"/> is compatible with <paramref name="item"/>.
+    /// </summary>
+    /// <typeparam name="M"></typeparam>
+    /// <param name="menuItem"></param>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    /// <exception cref="NullReferenceException"></exception>
+    public static bool IsCompatible<M>(M menuItem, VisualElement item) where M : AbstractMenuItem
+    {
+        if (menuItem == null) new NullReferenceException($"Menu is null");
+        if (item == null) new NullReferenceException($"Item is null");
+
+        if (menuItem is ButtonMenuItem && item is IDisplayer<ButtonMenuItem>) return true;
+        else if (menuItem is DropDownInputMenuItem && item is IDisplayer<DropDownInputMenuItem>) return true;
+        else if (menuItem is FloatRangeInputMenuItem && item is IDisplayer<FloatRangeInputMenuItem>) return true;
+        else if (menuItem is TextInputMenuItem && item is IDisplayer<TextInputMenuItem>) return true;
+        else if (menuItem is BooleanInputMenuItem && item is IDisplayer<BooleanInputMenuItem>) return true;
+        else return false;
+    }
 }

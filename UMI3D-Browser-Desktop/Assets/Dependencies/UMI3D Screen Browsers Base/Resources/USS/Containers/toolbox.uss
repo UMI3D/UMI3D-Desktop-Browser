@@ -32,6 +32,10 @@
     border-bottom-color: transparent;
 }
 
+.toolbox-pinned .button__content-container {
+    background-image: var(--image-pin);
+}
+
 .toolbox-type__main,
 .toolbox-type__sub {
 	background-color: var(--background-color-container);
@@ -59,9 +63,9 @@
 }
 
 .toolbox-vertical {
-    width: 100%;
+    height: 100%;
 }
 
 .toolbox-horizontal {
-    height: 100%;
+    width: 100%;
 }
