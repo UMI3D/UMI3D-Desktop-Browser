@@ -6,7 +6,7 @@
 
 .pinned__tools__area-vertical > .pinned__tools__area-sdc {
 	width: 25%;
-	max-width: 200px;
+	max-width: 250px;
 }
 
 .pinned__tools__area-vertical > .pinned__tools__area-sub__sdc {
@@ -15,7 +15,8 @@
 	width: 35%;
 }
 
-.sdc {
+.sdc,
+.edc {
 	background-color: var(--background-color-transparent-game);
 
 	border-top-left-radius: var(--border-radius-game);

@@ -1,13 +1,43 @@
 .toolbox-name.unity-label.text {
     -unity-text-align: middle-center;
 
+    flex-direction: row;
+
+    justify-content: space-between;
+
     padding-left: var(--margin_padding-container);
     padding-right: var(--margin_padding-container);
     padding-top: var(--margin_padding-container);
     padding-bottom: var(--margin_padding-container);
 }
 
-.toolbox-type__main {
+.toolbox-pinned,
+.toolbox-edit {
+    top: -15;
+}
+
+.toolbox-pinned {
+    left: -15;
+}
+
+.toolbox-edit {
+    right: -15;
+}
+
+.toolbox-pinned.button-game .button__body,
+.toolbox-edit.button-game .button__body {
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+}
+
+.toolbox-pinned .button__content-container {
+    background-image: var(--image-pin);
+}
+
+.toolbox-type__main,
+.toolbox-type__sub {
 	background-color: var(--background-color-container);
 
 	border-top-left-radius: var(--border-radius-container);
@@ -21,6 +51,10 @@
     border-bottom-width: var(--border-width-displayer);
 }
 
+.toolbox-type__sub {
+    margin-left: 20%;
+}
+
 .toolbox-selected {
     border-left-color: var(--color-border-game-container);
     border-right-color: var(--color-border-game-container);
@@ -29,9 +63,9 @@
 }
 
 .toolbox-vertical {
-    width: 100%;
+    height: 100%;
 }
 
 .toolbox-horizontal {
-    height: 100%;
+    width: 100%;
 }

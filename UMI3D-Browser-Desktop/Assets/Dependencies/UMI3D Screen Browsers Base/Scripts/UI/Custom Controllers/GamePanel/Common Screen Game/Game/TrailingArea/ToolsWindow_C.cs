@@ -16,14 +16,18 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk.menu;
+using umi3d.commonScreen.Container;
 using umi3d.commonScreen.game;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class ToolsWindow_C : Container.FormSDC_C<AbstractMenuItem>
+    public class ToolsWindow_C : FormSDC_C<AbstractMenuItem>
     {
+        public virtual string USSCustomClassToolsWindow => "tools__window";
+        public virtual string USSCustomClassInputsBox => $"{USSCustomClassToolsWindow}-inputs__box";
+
         public ToolsWindow_C() => Set();
 
         /// <summary>
@@ -32,17 +36,30 @@ namespace umi3d.commonScreen.game
         public override void InitElement()
         {
             if (TitleLabel == null) TitleLabel = new Displayer.Text_C();
-            if (SDC == null) SDC = new Container.ScrollableDataCollection_C<AbstractMenuItem>();
+            if (SDC == null) SDC = new ScrollableDataCollection_C<AbstractMenuItem>();
 
             base.InitElement();
+            AddToClassList(USSCustomClassToolsWindow);
 
-            SDC.BindItem = (datum, item) =>
-            {
-
-            };
+            /// Scrollable data collection.
+            /// Items: Expandable data collection.
+            /// 
+            /// Each item caontains Toolboxes and/or EDC (Inputs box).
+            SDC.MakeItem = datum => new ExpandableDataCollection_C<AbstractMenuItem>();
+            SDC.BindItem = BindSDC;
             SDC.UnbindItem = (datum, item) =>
             {
+                ExpandableDataCollection_C<AbstractMenuItem> edc = item as ExpandableDataCollection_C<AbstractMenuItem>;
 
+                edc.AnimationTimeIn = 0f;
+                edc.AnimationTimeOut = 0f;
+
+                edc.ClearDC();
+
+                edc.MakeItem = null;
+                edc.BindItem = null;
+                edc.UnbindItem = null;
+                edc.FindItem = null;
             };
         }
 
@@ -58,11 +75,122 @@ namespace umi3d.commonScreen.game
         {
             RootMenu = menu;
 
-            if (menu is Menu _menu && _menu.MenuItems.Count > 0)
+            if (menu is Menu _menu && _menu.SubMenu.Count > 0)
             {
-                foreach (var menuItem in _menu.MenuItems) SDC.AddDatum(menuItem);
+                foreach (var subMenu in _menu.SubMenu) SDC.AddDatum(subMenu);
             }
             else if (menu is MenuItem menuItem) SDC.AddDatum(menuItem);
+        }
+
+        protected virtual void BindSDC(AbstractMenuItem datum, VisualElement item)
+        {
+            /// Expandable data collection.
+            /// Items: Toolboxes and/or EDC
+            /// 
+            /// The first item is alwayse a Toolbox. The last item is always an EDC.
+            ExpandableDataCollection_C<AbstractMenuItem> edc = item as ExpandableDataCollection_C<AbstractMenuItem>;
+
+            edc.MakeItem = edcDatum =>
+            {
+                if (edcDatum is Menu menu)
+                {
+                    if (menu.SubMenu.Count > 0) return new Toolbox_C();
+                    else return new ExpandableDataCollection_C<AbstractMenuItem>();
+                }
+                else
+                {
+                    UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"");
+                    return null;
+                }
+            };
+            edc.BindItem = (edcDatum, edcItem) => BindEDC(edc, edcDatum, edcItem);
+            edc.UnbindItem = UnbindEDC;
+            edc.FindItem = param =>
+            {
+                if (param.Item1 is Menu menu)
+                {
+                    if (menu.SubMenu.Count > 0 && param.Item2 is Toolbox_C) return true;
+                    else if (menu.MenuItems.Count > 0 && param.Item2 is ExpandableDataCollection_C<AbstractMenuItem>) return true;
+                }
+                return false;
+            };
+
+            edc.AnimationTimeIn = 1f;
+            edc.AnimationTimeOut = 0.5f;
+
+            edc.AddDatum(datum);
+        }
+
+        protected virtual void BindEDC(ExpandableDataCollection_C<AbstractMenuItem> edc, AbstractMenuItem datum, VisualElement item)
+        {
+            if (item is Toolbox_C toolbox)
+            {
+                toolbox.AddMenu(datum);
+                toolbox.Mode = ScrollViewMode.Horizontal;
+                if (edc.Data.IndexOf(datum) == 0) toolbox.ToolboxType = ToolboxType.Main;
+                else toolbox.ToolboxType = ToolboxType.Sub;
+                toolbox.ToolClicked = (isSelected, toolboxMenu, toolMenu) =>
+                {
+                    if (isSelected)
+                    {
+                        edc.AddDatum(toolMenu);
+                    }
+                    else
+                    {
+                        edc.RemoveDatum(toolMenu);
+                    }
+                };
+                toolbox.ToolboxClicked = (isSelected, toolboxMenu, toolMenu) =>
+                {
+                    if (isSelected)
+                    {
+                        edc.AddDatum(toolMenu);
+                    }
+                    else
+                    {
+                        int index = edc.Data.IndexOf(toolMenu);
+                        var range = edc.Data.GetRange(index, edc.Data.Count - index);
+                        range.ForEach(e => edc.RemoveDatum(e));
+                        
+                    }
+                };
+            }
+            else if (item is ExpandableDataCollection_C<AbstractMenuItem> inputs)
+            {
+                var menu = datum as Menu;
+
+                inputs.AddToClassList(USSCustomClassInputsBox);
+                inputs.MakeItem = inputsDatum => DisplayerManager.MakeDisplayer(inputsDatum);
+                inputs.BindItem = (inputsDatum, inputsItem) =>
+                {
+                    DisplayerManager.BindItem(inputsDatum, inputsItem);
+                };
+                inputs.UnbindItem = (inputsDatum, inputsItem) =>
+                {
+                    DisplayerManager.UnbindItem(inputsItem);
+                };
+                inputs.FindItem = param => DisplayerManager.IsCompatible(param.Item1, param.Item2);
+
+                foreach (var menuItem in menu.MenuItems) inputs.AddDatum(menuItem);
+            }
+        }
+
+        protected virtual void UnbindEDC(AbstractMenuItem datum, VisualElement item)
+        {
+            if (item is Toolbox_C toolbox)
+            {
+                toolbox.ToolboxType = ToolboxType.Unknown;
+                toolbox.ToolClicked = null;
+                toolbox.ToolboxClicked = null;
+                toolbox.ClearToolbox();
+            }
+            else if (item is ExpandableDataCollection_C<AbstractMenuItem> inputs)
+            {
+                inputs.ClearDC();
+                inputs.MakeItem = null;
+                inputs.BindItem = null;
+                inputs.UnbindItem = null;
+            }
         }
 
         #endregion
@@ -128,8 +256,9 @@ namespace umi3d.UiPreview.commonScreen.game
                 tool4.Add(item5);
                 toolbox3.Add(tool4);
 
+                previewItem.Category = ElementCategory.Game;
                 previewItem.Title = "Toolbox";
-                previewItem.RootMenu = root;
+                previewItem.AddMenu(root);
 
                 return previewItem;
             }

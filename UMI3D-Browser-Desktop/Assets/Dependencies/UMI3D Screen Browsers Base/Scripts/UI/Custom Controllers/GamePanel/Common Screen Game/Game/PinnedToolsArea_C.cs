@@ -93,7 +93,7 @@ namespace umi3d.commonScreen.game
         public virtual string USSCustomClassSub_SDC => $"{USSCustomClassName}-sub__sdc";
 
         public ScrollableDataCollection_C<AbstractMenuItem> SDC = new ScrollableDataCollection_C<AbstractMenuItem> { name = "sdc" };
-        public ScrollableDataCollection_C<AbstractMenuItem> Sub_SDC = new ScrollableDataCollection_C<AbstractMenuItem> { name = "sub-sdc" };
+        public ScrollableExpandableDataCollection_C<AbstractMenuItem> Sub_SDC = new ScrollableExpandableDataCollection_C<AbstractMenuItem> { name = "sub-sdc" };
 
         public PinnedToolsArea_C() => Set();
 
@@ -131,7 +131,7 @@ namespace umi3d.commonScreen.game
                     toolbox.ToolClicked = OnToolClicked;
                     toolbox.ToolboxClicked = (isSelected, toolboxMenu, toolMenu) =>
                     {
-                        Sub_SDC.ClearSDC();
+                        Sub_SDC.ClearDC();
                         if (isSelected)
                         {
                             SDC.Select(toolboxMenu);
@@ -168,6 +168,7 @@ namespace umi3d.commonScreen.game
             };
             SDC.ReorderableMode = ReorderableMode.Element;
             SDC.IsReorderable = true;
+            SDC.Category = ElementCategory.Game;
 
             //Sub tools
             Sub_SDC.MakeItem = datum => new Toolbox_C();
@@ -194,13 +195,16 @@ namespace umi3d.commonScreen.game
             Sub_SDC.UnbindItem = (datum, item) =>
             {
                 var toolbox = item as Toolbox_C;
-                toolbox.ClearToolbox();
                 toolbox.ToolboxType = ToolboxType.Unknown;
                 toolbox.ToolClicked = null;
                 toolbox.ToolboxClicked = null;
+                toolbox.ClearToolbox();
             };
             Sub_SDC.Mode = ScrollViewMode.Vertical;
             Sub_SDC.IsReorderable = false;
+            Sub_SDC.AnimationTimeIn = 1f;
+            Sub_SDC.AnimationTimeOut = .5f;
+            Sub_SDC.Category = ElementCategory.Game;
 
             Add(SDC);
         }
@@ -243,7 +247,7 @@ namespace umi3d.commonScreen.game
 
         protected virtual void OnToolClicked(bool isSelected, AbstractMenuItem toolboxMenu, AbstractMenuItem toolMenu)
         {
-            Sub_SDC.ClearSDC();
+            Sub_SDC.ClearDC();
             Sub_SDC.RemoveFromHierarchy();
             if (isSelected) SDC.Select(toolboxMenu);
             else SDC.Unselect(toolboxMenu);
@@ -301,6 +305,17 @@ namespace umi3d.UiPreview.commonScreen.game
                 MenuItem item5 = new TextInputMenuItem { Name = "Text Item5" };
                 tool4.Add(item5);
                 toolbox3.Add(tool4);
+
+                //Toolbox4
+                Menu toolbox4 = new Menu { Name = "toolbox4" };
+                toolbox3.Add(toolbox4);
+
+                //Tool5
+                Menu tool5 = new Menu { Name = "tool5" };
+                //Item5
+                MenuItem item6 = new TextInputMenuItem { Name = "Text Item6" };
+                tool5.Add(item6);
+                toolbox4.Add(tool5);
 
                 previewItem.AddMenu(toolbox1);
                 previewItem.AddMenu(toolbox2);
