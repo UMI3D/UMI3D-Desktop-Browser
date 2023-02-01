@@ -16,6 +16,7 @@ limitations under the License.
 using System;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.cdk.volumes;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -160,6 +161,7 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
     protected class DraggerData
     {
         public D Datum;
+        public VisualElement Dragger;
         public TouchManipulator2 manipulator;
         public Vector2 startPosition;
     }
@@ -307,7 +309,7 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
             switch (ReorderableMode)
             {
                 case ReorderableMode.Dragger:
-                    AddDragger(datum, box);
+                    AddDragger(datum, item);
                     break;
                 case ReorderableMode.Element:
                     AddDraggerAsElement(datum, item);
@@ -350,7 +352,6 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
         m_waintingBoxes.Add(box);
 
         RemoveDragger(box);
-        RemoveDraggerAsElement(item);
 
         UnbindItem(datum, item);
         item.RemoveFromHierarchy();
@@ -556,7 +557,6 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
     {
         if (Data.Count < 2)
         {
-            RemoveAllDraggerAsElement();
             RemoveAllDragger();
             return;
         }
@@ -564,12 +564,10 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
         switch (ReorderableMode)
         {
             case ReorderableMode.Dragger:
-                RemoveAllDraggerAsElement();
                 RemoveAllDragger();
                 if (IsReorderable) AddAllDragger();
                 break;
             case ReorderableMode.Element:
-                RemoveAllDraggerAsElement();
                 RemoveAllDragger();
                 if (IsReorderable) AddAllDraggerAsElement();
                 break;
@@ -578,52 +576,79 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
         }
     }
 
-    protected virtual void AddDragger(D datum, VisualElement box)
+    protected virtual void AddDragger(D datum, VisualElement item)
     {
+        if (item == null) throw new NullReferenceException($"{item} is null");
+
         VisualElement dragger;
         if (m_waintingDragger.Count == 0)
         {
             dragger = new VisualElement { name = "dragger" };
             dragger.AddToClassList(USSCustomClassDragger);
-
-            CreateDraggerData(datum, dragger);
         }
         else
         {
             dragger = m_waintingDragger[0];
             m_waintingDragger.RemoveAt(0);
-
-            (dragger.userData as DraggerData).Datum = datum;
         }
 
+        var box = item.parent;
+        if (box == null) throw new NullReferenceException($"Box, parent of {item} is null");
+        GetOrCreateDraggerData(datum, box, dragger, out TouchManipulator2 manipulator);
+
+        dragger.AddManipulator(manipulator);
         box.Add(dragger);
     }
 
     protected virtual void AddDraggerAsElement(D datum, VisualElement item)
     {
-        if (item.userData == null || item.userData is not DraggerData draggerData)
-            CreateDraggerData(datum, item);
-        else item.AddManipulator(draggerData.manipulator);
+        if (item == null) throw new NullReferenceException($"{item} is null");
+
+        var box = item.parent;
+        if (box == null) throw new NullReferenceException($"Box, parent of {item} is null");
+        GetOrCreateDraggerData(datum, box, item, out TouchManipulator2 manipulator);
+
+        item.AddManipulator(manipulator);
+    }
+
+    protected virtual void GetOrCreateDraggerData(D datum, VisualElement box, VisualElement dragger, out TouchManipulator2 manipulator)
+    {
+        if (box.userData == null || box.userData is not DraggerData draggerData)
+            manipulator = CreateDraggerData(datum, box, dragger);
+        else
+        {
+            manipulator = draggerData.manipulator;
+            draggerData.Datum = datum;
+            draggerData.Dragger = dragger;
+        }
     }
 
     protected virtual void RemoveDragger(VisualElement box)
     {
-        var dragger = box.Query("dragger").Last();
-        if (dragger == null) return;
+        var dragger = _RemoveDragger(box);
+
+        if (dragger == null || dragger.name != "dragger") return;
         dragger.RemoveFromHierarchy();
         m_waintingDragger.Add(dragger);
     }
 
-    protected virtual void RemoveDraggerAsElement(VisualElement item)
+    protected virtual VisualElement _RemoveDragger(VisualElement box)
     {
-        if (item.userData == null) return;
-        var manipulator = (item.userData as DraggerData).manipulator;
-        item.RemoveManipulator(manipulator);
+        if (box == null) throw new NullReferenceException($"Box null when removing dragger");
+
+        var draggerData = box.userData as DraggerData;
+        if (draggerData == null) return null;
+
+        var dragger = draggerData.Dragger;
+        
+        dragger.RemoveManipulator(draggerData.manipulator);
+        
+        return dragger;
     }
 
     protected virtual void AddAllDragger()
     {
-        foreach (var DataAnditem in DataToItem) AddDragger(DataAnditem.Key, DataAnditem.Value.parent);
+        foreach (var DataAnditem in DataToItem) AddDragger(DataAnditem.Key, DataAnditem.Value);
     }
 
     protected virtual void AddAllDraggerAsElement()
@@ -636,47 +661,39 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
         foreach (var DataAnditem in DataToItem) RemoveDragger(DataAnditem.Value.parent);
     }
 
-    protected virtual void RemoveAllDraggerAsElement()
-    {
-        foreach (var DataAnditem in DataToItem) RemoveDraggerAsElement(DataAnditem.Value);
-    }
-
     /// <summary>
     /// 1) create a draggerManipulator.
-    /// 2) create a draggerData add add it to <paramref name="dragger"/>.
+    /// 2) create a draggerData add add it to <paramref name="box0"/>.
     /// 3) implement the click down, click up and move phase.
     /// </summary>
     /// <param name="datum"></param>
-    /// <param name="dragger"></param>
+    /// <param name="box0"></param>
     /// <returns></returns>
-    protected virtual TouchManipulator2 CreateDraggerData(D datum, VisualElement dragger)
+    protected virtual TouchManipulator2 CreateDraggerData(D datum, VisualElement box0, VisualElement dragger)
     {
         TouchManipulator2 draggerManipulator = new TouchManipulator2();
-        dragger.AddManipulator(draggerManipulator);
 
-        dragger.userData = new DraggerData
+        box0.userData = new DraggerData
         {
             Datum = datum,
+            Dragger = dragger,
             manipulator = draggerManipulator
         };
 
         draggerManipulator.ClickedDownWithInfo += (evt, localPosition) =>
         {
-            var draggerData = dragger.userData as DraggerData;
+            var draggerData = box0.userData as DraggerData;
             draggerData.startPosition = localPosition;
         };
         draggerManipulator.ClickedUp += () =>
         {
-            var draggerData = dragger.userData as DraggerData;
+            var draggerData = box0.userData as DraggerData;
             draggerData.startPosition = Vector2.zero;
 
-            dragger.parent.transform.position = Vector3.zero;
+            box0.transform.position = Vector3.zero;
         };
         draggerManipulator.MovedWithInfo += (evt, localPosition) => {
-            UnityEngine.Debug.Log($"{datum}");
-
-            var draggerData = dragger.userData as DraggerData;
-            var box = dragger.parent;
+            var draggerData = box0.userData as DraggerData;
 
             //Update the position of the box.
             Vector3 delta = localPosition - draggerData.startPosition;
@@ -693,7 +710,7 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
                 default:
                     break;
             }
-            box.transform.position = box.transform.position + delta;
+            box0.transform.position = box0.transform.position + delta;
 
             //Reorder the item if needed.
             var draggerDatum = draggerData.Datum;
@@ -704,12 +721,12 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
             switch (Mode)
             {
                 case ScrollViewMode.Vertical:
-                    position = box.transform.position.y;
+                    position = box0.transform.position.y;
                     if (oldindex != 0) previousSize = DataToItem[Data[oldindex - 1]].parent.resolvedStyle.height;
                     if (oldindex != Data.Count - 1) nextSize = DataToItem[Data[oldindex + 1]].parent.resolvedStyle.height;
                     break;
                 case ScrollViewMode.Horizontal:
-                    position = box.transform.position.x;
+                    position = box0.transform.position.x;
                     if (oldindex != 0) previousSize = DataToItem[Data[oldindex - 1]].parent.resolvedStyle.width;
                     if (oldindex != Data.Count - 1) nextSize = DataToItem[Data[oldindex + 1]].parent.resolvedStyle.width;
                     break;
@@ -721,12 +738,12 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
 
             if (oldindex != 0 && Math.Sign(position) < 0 && Math.Abs(position) > previousSize / 2f)
             {
-                box.transform.position = Vector3.zero;
+                box0.transform.position = Vector3.zero;
                 ReorderedDatum(oldindex - 1, draggerDatum);
             }
             else if (oldindex != Data.Count - 1 && Math.Sign(position) > 0 && Math.Abs(position) > nextSize / 2f)
             {
-                box.transform.position = Vector3.zero;
+                box0.transform.position = Vector3.zero;
                 ReorderedDatum(oldindex + 1, draggerDatum);
             }
         };
