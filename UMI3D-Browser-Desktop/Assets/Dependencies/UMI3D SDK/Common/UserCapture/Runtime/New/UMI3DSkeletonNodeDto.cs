@@ -14,34 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+
+using System;
 using System.Collections.Generic;
 using umi3d.common;
-using umi3d.common.userCapture;
+using UnityEditor;
 using UnityEngine;
 
-namespace umi3d.cdk.userCapture
+namespace umi3d.common.userCapture
 {
-    public interface ISkeleton
+    public class UMI3DSkeletonNodeDto : UMI3DMeshNodeDto
     {
-        Dictionary<uint, Transform> Bones { get; set; }
-        List<ISubSkeleton> Skeletons { get; set; }
 
-        public abstract void UpdateFrame(UserTrackingFrameDto frame);
-
-        public ISkeleton Compute()
-        {
-            for (int i = Skeletons.Count - 1; i > 0; i--)
-            {
-                ISubSkeleton skeleton = Skeletons[i];
-                skeleton.GetPose();
-            }
-
-            //TODO
-
-            return this;
-        }
-
-        public void Bind(BoneBindingDto boneBinding) { }
 
 
     }

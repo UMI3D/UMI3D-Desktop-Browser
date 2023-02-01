@@ -14,36 +14,51 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using umi3d.common;
 using umi3d.common.userCapture;
 
 namespace umi3d.cdk.userCapture
 {
-
     public class AnimationSkeleton : ISubSkeleton
     {
-        private const DebugScope debugScope =  DebugScope.CDK | DebugScope.Animation | DebugScope.UserCapture;
+        private const DebugScope debugScope = DebugScope.CDK | DebugScope.Animation | DebugScope.UserCapture;
 
-        public SkeletonMapper mapper;
+        /// <summary>
+        /// Reference to the skeleton mapper that computes related links into a pose.
+        /// </summary>
+        public SkeletonMapper Mapper { get; protected set; }
 
+        public AnimationSkeleton(SkeletonMapper mapper)
+        {
+            Mapper = mapper;
+        }
+
+        ///<inheritdoc/>
+        /// Always returns null for AnimatonSkeleton.
         public UserCameraPropertiesDto GetCameraDto()
         {
-            return null; //to implement only in TrackedAvatar
+            return null; //! to implement only in TrackedAvatar
         }
 
+        /// <summary>
+        /// Get the skeleton pose based on the position of this AnimationSkeleton.
+        /// </summary>
+        /// <returns></returns>
         public PoseDto GetPose()
         {
-            if (!mapper.animations.Select(id => UMI3DAnimatorAnimation.Get(id)).Any(a => a?.IsPlaying() ?? false))
+            if (!Mapper.animations.Select(id => UMI3DAnimatorAnimation.Get(id)).Any(a => a?.IsPlaying() ?? false))
                 return null;
-            return mapper.GetPose();
+            return Mapper.GetPose();
         }
 
+        /// <summary>
+        /// Activate / Deactivate animations accordingly to the <paramref name="trackingFrame"/>.
+        /// </summary>
+        /// <param name="trackingFrame"></param>
         public void Update(UserTrackingFrameDto trackingFrame)
         {
-            var animations = from animId in mapper.animations select (id: animId, UMI3DAnimation: UMI3DAnimatorAnimation.Get(animId));
+            var animations = from animId in Mapper.animations select (id: animId, UMI3DAnimation: UMI3DAnimatorAnimation.Get(animId));
 
             foreach (var anim in animations)
             {
@@ -52,7 +67,7 @@ namespace umi3d.cdk.userCapture
                     UMI3DLogger.LogWarning($"Trying to play/stop a unreferenced animation. ID : {anim.id}", debugScope);
                     continue;
                 }
-                if (trackingFrame.animationsPlaying.FirstOrDefault(animId=> animId == anim.id) != default)
+                if (trackingFrame.animationsPlaying.Any(animId => animId == anim.id))
                 {
                     if (!anim.UMI3DAnimation.IsPlaying())
                         anim.UMI3DAnimation.Start();
@@ -65,9 +80,14 @@ namespace umi3d.cdk.userCapture
             }
         }
 
+        /// <summary>
+        /// Fill out <paramref name="trackingFrame"/> with currently playing animations.
+        /// </summary>
+        /// <param name="trackingFrame"></param>
+        /// <param name="option"></param>
         public void WriteTrackingFrame(UserTrackingFrameDto trackingFrame, TrackingOption option)
         {
-            var activeAnimations = from animId in mapper.animations
+            var activeAnimations = from animId in Mapper.animations
                                    select UMI3DAnimatorAnimation.Get(animId)
                                    into anim
                                    where anim.IsPlaying()
