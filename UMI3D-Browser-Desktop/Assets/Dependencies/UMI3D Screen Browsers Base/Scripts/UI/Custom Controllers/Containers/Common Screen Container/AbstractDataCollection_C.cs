@@ -16,7 +16,6 @@ limitations under the License.
 using System;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
-using umi3d.cdk.volumes;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -663,17 +662,17 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
 
     /// <summary>
     /// 1) create a draggerManipulator.
-    /// 2) create a draggerData add add it to <paramref name="box0"/>.
+    /// 2) create a draggerData add add it to <paramref name="box"/>.
     /// 3) implement the click down, click up and move phase.
     /// </summary>
     /// <param name="datum"></param>
-    /// <param name="box0"></param>
+    /// <param name="box"></param>
     /// <returns></returns>
-    protected virtual TouchManipulator2 CreateDraggerData(D datum, VisualElement box0, VisualElement dragger)
+    protected virtual TouchManipulator2 CreateDraggerData(D datum, VisualElement box, VisualElement dragger)
     {
         TouchManipulator2 draggerManipulator = new TouchManipulator2();
 
-        box0.userData = new DraggerData
+        box.userData = new DraggerData
         {
             Datum = datum,
             Dragger = dragger,
@@ -682,18 +681,18 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
 
         draggerManipulator.ClickedDownWithInfo += (evt, localPosition) =>
         {
-            var draggerData = box0.userData as DraggerData;
+            var draggerData = box.userData as DraggerData;
             draggerData.startPosition = localPosition;
         };
         draggerManipulator.ClickedUp += () =>
         {
-            var draggerData = box0.userData as DraggerData;
+            var draggerData = box.userData as DraggerData;
             draggerData.startPosition = Vector2.zero;
 
-            box0.transform.position = Vector3.zero;
+            box.transform.position = Vector3.zero;
         };
         draggerManipulator.MovedWithInfo += (evt, localPosition) => {
-            var draggerData = box0.userData as DraggerData;
+            var draggerData = box.userData as DraggerData;
 
             //Update the position of the box.
             Vector3 delta = localPosition - draggerData.startPosition;
@@ -710,7 +709,7 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
                 default:
                     break;
             }
-            box0.transform.position = box0.transform.position + delta;
+            box.transform.position = box.transform.position + delta;
 
             //Reorder the item if needed.
             var draggerDatum = draggerData.Datum;
@@ -721,12 +720,12 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
             switch (Mode)
             {
                 case ScrollViewMode.Vertical:
-                    position = box0.transform.position.y;
+                    position = box.transform.position.y;
                     if (oldindex != 0) previousSize = DataToItem[Data[oldindex - 1]].parent.resolvedStyle.height;
                     if (oldindex != Data.Count - 1) nextSize = DataToItem[Data[oldindex + 1]].parent.resolvedStyle.height;
                     break;
                 case ScrollViewMode.Horizontal:
-                    position = box0.transform.position.x;
+                    position = box.transform.position.x;
                     if (oldindex != 0) previousSize = DataToItem[Data[oldindex - 1]].parent.resolvedStyle.width;
                     if (oldindex != Data.Count - 1) nextSize = DataToItem[Data[oldindex + 1]].parent.resolvedStyle.width;
                     break;
@@ -738,12 +737,12 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
 
             if (oldindex != 0 && Math.Sign(position) < 0 && Math.Abs(position) > previousSize / 2f)
             {
-                box0.transform.position = Vector3.zero;
+                box.transform.position = Vector3.zero;
                 ReorderedDatum(oldindex - 1, draggerDatum);
             }
             else if (oldindex != Data.Count - 1 && Math.Sign(position) > 0 && Math.Abs(position) > nextSize / 2f)
             {
-                box0.transform.position = Vector3.zero;
+                box.transform.position = Vector3.zero;
                 ReorderedDatum(oldindex + 1, draggerDatum);
             }
         };

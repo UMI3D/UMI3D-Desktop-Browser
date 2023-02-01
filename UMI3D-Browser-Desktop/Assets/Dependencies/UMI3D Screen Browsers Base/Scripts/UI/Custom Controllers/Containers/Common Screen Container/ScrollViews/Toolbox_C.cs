@@ -13,14 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
 using System.Collections.Generic;
-using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
-using umi3d.commonScreen.game;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Container
@@ -147,7 +143,7 @@ namespace umi3d.commonScreen.Container
             }
         }
         /// <summary>
-        /// Whether or not the tool is selected.
+        /// Whether or not the toolbox is selected.
         /// </summary>
         public virtual bool IsSelected
         {
@@ -159,6 +155,9 @@ namespace umi3d.commonScreen.Container
                 else RemoveFromClassList(USSCustomClassSelected);
             }
         }
+        /// <summary>
+        /// Whether or not the toolbox is pinned.
+        /// </summary>
         public virtual bool IsPinned
         {
             get => m_isPinned;
