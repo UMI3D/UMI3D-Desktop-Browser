@@ -126,8 +126,8 @@ public enum ToolType
 public enum ToolboxType
 {
     Unknown, //unknown type.
-    Main, //Toolbox displayed in the toolsWindow.
-    Sub //Toolbox displayed in the pinnedToolsArea.
+    Main, //Toolbox displayed in the toolsWindow and pinned area.
+    Sub //Toolbox displayed in as sub toolbox in the toolsWindow.
 }
 
 public enum ReorderableMode
