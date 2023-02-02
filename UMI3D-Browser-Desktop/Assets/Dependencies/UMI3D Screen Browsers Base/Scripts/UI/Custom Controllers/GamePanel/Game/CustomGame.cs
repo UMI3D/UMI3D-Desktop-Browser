@@ -204,6 +204,12 @@ public class CustomGame : VisualElement, ICustomElement, IGameView
             //if (IsLeadingAndtrailingClicked(worldPosition)) LeadingAndTrailingAreaClicked?.Invoke(worldPosition);
         };
 
+        TrailingArea.ToolsWindow.Pinned = (isPinned, menu) =>
+        {
+            if (isPinned) LeadingArea.PinnedToolsArea.AddMenu(menu);
+            else LeadingArea.PinnedToolsArea.RemoveMenu(menu);
+        };
+
         Add(Cursor);
         Add(TopArea);
         Add(LeadingAndTrailingBox);

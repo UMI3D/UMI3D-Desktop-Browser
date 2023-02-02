@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk.menu;
@@ -61,6 +62,8 @@ namespace umi3d.commonScreen.game
                 edc.UnbindItem = null;
                 edc.FindItem = null;
             };
+
+            Title = "Toolbox";
         }
 
         #region Implementation
@@ -68,18 +71,26 @@ namespace umi3d.commonScreen.game
         public AbstractMenuItem RootMenu;
 
         /// <summary>
-        /// Add a menu to this tools items window.
+        /// Action raised when the pin status of a menu change.
+        /// </summary>
+        public Action<bool, AbstractMenuItem> Pinned;
+
+        /// <summary>
+        /// Add the root menu to this tools items window.
         /// </summary>
         /// <param name="menu"></param>
-        public virtual void AddMenu(AbstractMenuItem menu)
+        public virtual void AddRoot(AbstractMenuItem menu)
         {
             RootMenu = menu;
 
-            if (menu is Menu _menu && _menu.SubMenu.Count > 0)
+            if (menu is Menu _menu)
             {
-                foreach (var subMenu in _menu.SubMenu) SDC.AddDatum(subMenu);
+                if (_menu.SubMenu.Count > 0) foreach (var subMenu in _menu.SubMenu) SDC.AddDatum(subMenu);
+
+                _menu.onAbstractMenuItemAdded.AddListener(SDC.AddDatum);
+                _menu.OnAbstractMenuItemRemoved.AddListener(SDC.RemoveDatum);
             }
-            else if (menu is MenuItem menuItem) SDC.AddDatum(menuItem);
+            else if (menu is MenuItem menuItem) throw new System.Exception("Should not happen");
         }
 
         protected virtual void BindSDC(AbstractMenuItem datum, VisualElement item)
@@ -95,7 +106,8 @@ namespace umi3d.commonScreen.game
                 if (edcDatum is Menu menu)
                 {
                     if (menu.SubMenu.Count > 0) return new Toolbox_C();
-                    else return new ExpandableDataCollection_C<AbstractMenuItem>();
+                    else if (menu.MenuItems.Count > 0) return new ExpandableDataCollection_C<AbstractMenuItem>();
+                    else throw new System.Exception("menu empty");
                 }
                 else
                 {
@@ -103,8 +115,9 @@ namespace umi3d.commonScreen.game
                     return null;
                 }
             };
-            edc.BindItem = (edcDatum, edcItem) => BindEDC(edc, edcDatum, edcItem);
-            edc.UnbindItem = UnbindEDC;
+            Action pinned = null;
+            edc.BindItem = (edcDatum, edcItem) => BindEDC(edc, edcDatum, edcItem, ref pinned);
+            edc.UnbindItem = (edcDatum, edcItem) => UnbindEDC(edcDatum, edcItem, pinned);
             edc.FindItem = param =>
             {
                 if (param.Item1 is Menu menu)
@@ -118,10 +131,17 @@ namespace umi3d.commonScreen.game
             edc.AnimationTimeIn = 1f;
             edc.AnimationTimeOut = 0.5f;
 
-            edc.AddDatum(datum);
+            if (datum is Menu menu)
+            {
+                menu.onContentChange.AddListener(() =>
+                {
+                    if (menu.Count == 1) edc.AddDatum(datum);
+                    else if (menu.Count == 0) edc.RemoveDatum(datum);
+                });
+            }
         }
 
-        protected virtual void BindEDC(ExpandableDataCollection_C<AbstractMenuItem> edc, AbstractMenuItem datum, VisualElement item)
+        protected virtual void BindEDC(ExpandableDataCollection_C<AbstractMenuItem> edc, AbstractMenuItem datum, VisualElement item, ref Action pinned)
         {
             if (item is Toolbox_C toolbox)
             {
@@ -151,9 +171,14 @@ namespace umi3d.commonScreen.game
                         int index = edc.Data.IndexOf(toolMenu);
                         var range = edc.Data.GetRange(index, edc.Data.Count - index);
                         range.ForEach(e => edc.RemoveDatum(e));
-                        
                     }
                 };
+                pinned = () =>
+                {
+                    toolbox.IsPinned = !toolbox.IsPinned;
+                    Pinned?.Invoke(toolbox.IsPinned, datum);
+                };
+                toolbox.PinnedButton.clicked += pinned;
             }
             else if (item is ExpandableDataCollection_C<AbstractMenuItem> inputs)
             {
@@ -175,13 +200,14 @@ namespace umi3d.commonScreen.game
             }
         }
 
-        protected virtual void UnbindEDC(AbstractMenuItem datum, VisualElement item)
+        protected virtual void UnbindEDC(AbstractMenuItem datum, VisualElement item, Action pinned)
         {
             if (item is Toolbox_C toolbox)
             {
                 toolbox.ToolboxType = ToolboxType.Unknown;
                 toolbox.ToolClicked = null;
                 toolbox.ToolboxClicked = null;
+                toolbox.PinnedButton.clicked -= pinned;
                 toolbox.ClearToolbox();
             }
             else if (item is ExpandableDataCollection_C<AbstractMenuItem> inputs)
@@ -258,7 +284,7 @@ namespace umi3d.UiPreview.commonScreen.game
 
                 previewItem.Category = ElementCategory.Game;
                 previewItem.Title = "Toolbox";
-                previewItem.AddMenu(root);
+                previewItem.AddRoot(root);
 
                 return previewItem;
             }

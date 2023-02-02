@@ -144,15 +144,25 @@ namespace umi3d.commonScreen.game
                             Sub_SDC.RemoveFromHierarchy();
                         }
                     };
+                    toolbox.PinnedButton.clicked += () =>
+                    {
+                        SDC.RemoveDatum(datum);
+                    };
                 }
             };
             SDC.UnbindItem = (datum, item) =>
             {
                 var toolbox = item as Toolbox_C;
-                toolbox.ClearToolbox();
                 toolbox.ToolboxType = ToolboxType.Unknown;
                 toolbox.ToolClicked = null;
                 toolbox.ToolboxClicked = null;
+                if (toolbox.IsSelected)
+                {
+                    toolbox.IsSelected = false;
+                    Sub_SDC.ClearDC();
+                    Sub_SDC.RemoveFromHierarchy();
+                }
+                toolbox.ClearToolbox();
             };
             SDC.SelectionType = SelectionType.Single;
             SDC.SelectItem = (datum, item) =>
@@ -228,6 +238,13 @@ namespace umi3d.commonScreen.game
         /// <param name="menu"></param>
         public virtual void AddMenu(AbstractMenuItem menu)
             => SDC.AddDatum(menu);
+
+        /// <summary>
+        /// Remove a menu from the pinned tools area.
+        /// </summary>
+        /// <param name="menu"></param>
+        public virtual void RemoveMenu(AbstractMenuItem menu)
+            => SDC.RemoveDatum(menu);
 
         /// <summary>
         /// Whether or not the tools inside the toolbox are reorderable.

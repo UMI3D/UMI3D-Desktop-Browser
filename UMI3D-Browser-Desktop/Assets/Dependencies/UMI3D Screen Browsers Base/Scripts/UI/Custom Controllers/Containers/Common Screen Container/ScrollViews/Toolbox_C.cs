@@ -13,14 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
 using System.Collections.Generic;
-using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
-using umi3d.commonScreen.game;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Container
@@ -147,7 +143,7 @@ namespace umi3d.commonScreen.Container
             }
         }
         /// <summary>
-        /// Whether or not the tool is selected.
+        /// Whether or not the toolbox is selected.
         /// </summary>
         public virtual bool IsSelected
         {
@@ -158,6 +154,14 @@ namespace umi3d.commonScreen.Container
                 if (value) AddToClassList(USSCustomClassSelected);
                 else RemoveFromClassList(USSCustomClassSelected);
             }
+        }
+        /// <summary>
+        /// Whether or not the toolbox is pinned.
+        /// </summary>
+        public virtual bool IsPinned
+        {
+            get => m_isPinned;
+            set => m_isPinned = value;
         }
 
         public virtual string StyleSheetContainerPath => $"USS/container";
@@ -179,6 +183,7 @@ namespace umi3d.commonScreen.Container
         protected ToolboxType m_ToolboxType;
         protected bool m_displayToolsName;
         protected bool m_isSelected;
+        protected bool m_isPinned;
 
         public Toolbox_C() => Set();
 
@@ -292,6 +297,9 @@ namespace umi3d.commonScreen.Container
             if (item is Menu menu)
             {
                 if (menu.SubMenu.Count > 0) foreach (var subMenu in menu.SubMenu) SDC.AddDatum(subMenu);
+
+                menu.onAbstractMenuItemAdded.AddListener(SDC.AddDatum);
+                menu.OnAbstractMenuItemRemoved.AddListener(SDC.RemoveDatum);
             }
             else if (item is MenuItem) SDC.AddDatum(item); //TO test
         }
@@ -301,6 +309,12 @@ namespace umi3d.commonScreen.Container
         /// </summary>
         public void ClearToolbox()
         {
+            if (ToolboxMenu is Menu menu)
+            {
+                menu.onAbstractMenuItemAdded.RemoveListener(SDC.AddDatum);
+                menu.OnAbstractMenuItemRemoved.RemoveListener(SDC.RemoveDatum);
+            }
+
             ToolboxMenu = null;
             ToolboxName = null;
 
