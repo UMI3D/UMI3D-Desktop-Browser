@@ -23,10 +23,13 @@ using UnityEngine;
 
 namespace umi3d.common.userCapture
 {
+    /// <summary>
+    /// DTO describing a subskeleton used for animation.
+    /// </summary>
+    /// A Skeleton node is a subskeleton with a Unity Animator
+    /// that is packaged in a bundle. It is loaded the same way as a Mesh.
     public class UMI3DSkeletonNodeDto : UMI3DMeshNodeDto
     {
-
-
 
     }
 }
