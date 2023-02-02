@@ -376,7 +376,7 @@ public abstract class CustomDialoguebox : VisualElement, ICustomElement
     /// <summary>
     /// Remove the current dialogue box from the right Queue ([Queue] or [PriorityQueue]). Then display the next dialogue box (eather a priority one if any or a simple one).
     /// </summary>
-    protected virtual void DisplayNextDialogueBox()
+    public virtual void DisplayNextDialogueBox()
     {
         if (PriorityQueue.Count > 0)
         {

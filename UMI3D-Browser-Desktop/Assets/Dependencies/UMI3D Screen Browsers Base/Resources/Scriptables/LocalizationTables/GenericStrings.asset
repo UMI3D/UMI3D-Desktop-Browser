@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: GenericStrings
+  m_EditorClassIdentifier: 
+  Title: GenericStrings
+  Items:
+  - Key: Retry
+    English: Retry
+    French: "R\xE9essayer"
+    Spanish: Reintentar
+  - Key: Save
+    English: Save
+    French: Sauvegarder
+    Spanish: Guardar
+  - Key: General
+    English: General
+    French: "G\xE9n\xE9ral"
+    Spanish: General
+  - Key: Graphics
+    English: Graphics
+    French: Graphiques
+    Spanish: "Gr\xE1ficos"
+  - Key: Controls
+    English: Controls
+    French: "Contr\xF4les"
+    Spanish: Controla
+  - Key: Audio
+    English: Audio
+    French: Audio
+    Spanish: Audio
+  - Key: Notifications
+    English: Notifications
+    French: Notifications
+    Spanish: Notificaciones
+  - Key: Connect
+    English: Connect
+    French: Se connecter
+    Spanish: Conectar
+  - Key: Edit
+    English: Edit
+    French: Modifier
+    Spanish: Editar
+  - Key: New
+    English: New
+    French: Nouveau
+    Spanish: Nuevo
+  - Key: Default
+    English: Default
+    French: "D\xE9faut"
+    Spanish: Defecto
+  - Key: Cancel
+    English: Cancel
+    French: Annuler
+    Spanish: Cancelar
+  - Key: Delete
+    English: Delete
+    French: Supprimer
+    Spanish: Borrar
+  - Key: Sessions
+    English: Sessions
+    French: Sessions
+    Spanish: Sesiones
+  - Key: Name
+    English: Name
+    French: Nom
+    Spanish: Nombre
+  - Key: Resume
+    English: Resume
+    French: Reprendre
+    Spanish: Retomar
+  - Key: Stop
+    English: Stop
+    French: "Arr\xEAter"
+    Spanish: Parada
+  - Key: Leave
+    English: Leave
+    French: Quitter
+    Spanish: Deja
+  - Key: Reconnect
+    English: Reconnect
+    French: Reconnecter
+    Spanish: Reconectar
+  - Key: Accept
+    English: Accept
+    French: Accepter
+    Spanish: Acepte
+  - Key: Deny
+    English: Deny
+    French: Refuser
+    Spanish: Denegar
+  - Key: Connection
+    English: Connection
+    French: Connexion
+    Spanish: "Conexi\xF3n"
+  - Key: Stay
+    English: Stay
+    French: Rester
+    Spanish: Quedarse
+  - Key: Join
+    English: Join
+    French: Rejoindre
+    Spanish: Entrar

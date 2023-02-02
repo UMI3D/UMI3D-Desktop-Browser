@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: ErrorStrings
+  m_EditorClassIdentifier: 
+  Title: ErrorStrings
+  Items:
+  - Key: Error
+    English: Error
+    French: Erreur
+    Spanish: Error
+  - Key: OtherError
+    English: Other error
+    French: Autre erreur
+    Spanish: Otro error
+  - Key: LoadError
+    English: Loading error
+    French: Erreur de chargement
+    Spanish: Error de carga
+  - Key: NetworkError
+    English: Networking error {0}
+    French: "Erreur de mise en r\xE9seau {0}"
+    Spanish: Error de red {0}
+  - Key: ResourcesDenied
+    English: Resources acess was denied
+    French: "L'acc\xE8s aux ressources a \xE9t\xE9 refus\xE9"
+    Spanish: "L'acc\xE8s aux ressources a \xE9t\xE9 refus\xE9"
+  - Key: ResourcesEmpty
+    English: Resources Downloaded was empty
+    French: "Les ressources t\xE9l\xE9charg\xE9es \xE9taient vides"
+    Spanish: "Los recursos descargados estaban vac\xEDos"
+  - Key: ServerError
+    English: Server error
+    French: Erreur de serveur
+    Spanish: Error del servidor
+  - Key: ConnectionLost
+    English: Connection to the server lost
+    French: Perte de la connexion au serveur
+    Spanish: Perte de la connexion au serveur
+  - Key: LeaveOrTry
+    English: Leave the environment or try to reconnect ?
+    French: Quitter l'environnement ou essayer de se reconnecter ?
+    Spanish: "\xBFSalir del entorno o intentar volver a conectarse?"
+  - Key: ForcedDeco
+    English: Forced Deconnection
+    French: "D\xE9connexion forc\xE9e"
+    Spanish: "Desconexi\xF3n forzada"
+  - Key: AssetsLibRequired1
+    English: One assets library is required
+    French: "Une biblioth\xE8que de ressources est n\xE9cessaire"
+    Spanish: Se necesita una biblioteca de activos
+  - Key: AssetsLibRequired
+    English: '{0} assets libraries are required'
+    French: "{0} biblioth\xE8ques de ressources sont n\xE9cessaires"
+    Spanish: Se necesitan {0} bibliotecas de activos
+  - Key: DownloadAndConnect
+    English: Download libraries and connect to the server ?
+    French: "T\xE9l\xE9charger les biblioth\xE8ques et se connecter au serveur ?"
+    Spanish: Descargar bibliotecas y conectarse al servidor ?
+  - Key: LeaveEnv?
+    English: Do you want to leave the environment ?
+    French: Voulez-vous quitter l'environnement ?
+    Spanish: "\xBFQuiere abandonar el medio ambiente?"
