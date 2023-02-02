@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: ControlsSettings
+  m_EditorClassIdentifier: 
+  Title: ControlsSettings
+  Items:
+  - Key: CameraSensibility
+    English: Camera sensibility
+    French: "Sensibilit\xE9 de la cam\xE9ra"
+    Spanish: "Sensibilidad de la c\xE1mara"
+  - Key: JoystickStatic_Label
+    English: Static joystick
+    French: Joystick statique
+    Spanish: "Joystick est\xE1tico"
+  - Key: LeftHand_Label
+    English: Left hand interface
+    French: Interface gaucher
+    Spanish: Interfaz zurdos

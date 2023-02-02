@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: AudioSettings
+  m_EditorClassIdentifier: 
+  Title: AudioSettings
+  Items:
+  - Key: LoopBack_on
+    English: Loop back on
+    French: "Bouclage activ\xE9"
+    Spanish: Bucle activado
+  - Key: LoopBack_off
+    English: Loop back off
+    French: "Bouclage d\xE9sactiv\xE9"
+    Spanish: "Desactivaci\xF3n de bucles"
+  - Key: AmplitudeSlider
+    English: Noise Threshold
+    French: Seuil de bruit
+    Spanish: Umbral de ruido
+  - Key: DelayShutMic
+    English: Delay before mute mic when lower than threshold
+    French: "D\xE9lai avant la mise en sourdine du micro lorsqu'il est inf\xE9rieur
+      au seuil"
+    Spanish: "Retardo antes de silenciar el micr\xF3fono cuando es inferior al umbral"
+  - Key: GeneralVolume
+    English: General volume
+    French: "Volume g\xE9n\xE9ral"
+    Spanish: Volumen general
+  - Key: Mic_Label
+    English: Microphone
+    French: Microphone
+    Spanish: "Micr\xF3fono"
+  - Key: MicMode_AlwaysSend
+    English: AlwaysSend
+    French: Toujours envoyer
+    Spanish: Enviar siempre
+  - Key: MicMode_Amplitude
+    English: Amplitude
+    French: Amplitude
+    Spanish: Amplitud
+  - Key: MicMode_PushToTalk
+    English: PushToTalk
+    French: PushToTalk
+    Spanish: PushToTalk
+  - Key: MicMode_Label
+    English: Mode
+    French: Mode
+    Spanish: Modo
+  - Key: NoiseReduc_Label
+    English: Use noise reduction
+    French: "Utiliser la r\xE9duction du bruit"
+    Spanish: Reducir el ruido
+  - Key: PushToTalk_Label
+    English: Push to talk key
+    French: Touche "Push to talk"
+    Spanish: "Bot\xF3n \"Push to talk\""

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: GeneralSettings
+  m_EditorClassIdentifier: 
+  Title: GeneralSettings
+  Items:
+  - Key: Language
+    English: Language
+    French: Langage
+    Spanish: Idioma
+  - Key: English
+    English: English
+    French: Anglais
+    Spanish: "Ingl\xE9s"
+  - Key: French
+    English: French
+    French: "Fran\xE7ais"
+    Spanish: "Franc\xE9s"
+  - Key: Spanish
+    English: Spanish
+    French: Espagnol
+    Spanish: "Espa\xF1ol"
+  - Key: Theme_Titre
+    English: Theme
+    French: "Th\xE8me"
+    Spanish: Tema
+  - Key: Theme_Default
+    English: Default
+    French: "D\xE9faut"
+    Spanish: Defecto

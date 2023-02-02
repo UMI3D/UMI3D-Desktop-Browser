@@ -157,6 +157,7 @@ public abstract class CustomHomeScreen : CustomMenuScreen
         DirectConnect__TextField.SubmitButton.text = "Connect";
         DirectConnect__TextField.SubmitButton.clicked += () => SetCurrentServerAndConnect();
         DirectConnect__Toggle.label = "Remember this server";
+        DirectConnect__Toggle.value = true;
         DirectConnect__Toggle.Direction = ElemnetDirection.Trailing;
 
         Button_SwitchBoxes.clicked += () => DisplaySavedServers = !DisplaySavedServers;
@@ -355,6 +356,7 @@ public abstract class CustomHomeScreen : CustomMenuScreen
             delete.clicked += () =>
             {
                 dialogueBox.RemoveFromHierarchy();
+                dialogueBox.DisplayNextDialogueBox();
                 DeleteSavedServer(item, data, (index) =>
                 {
                     if (index == 0) dialogueBox.Enqueue(item);
