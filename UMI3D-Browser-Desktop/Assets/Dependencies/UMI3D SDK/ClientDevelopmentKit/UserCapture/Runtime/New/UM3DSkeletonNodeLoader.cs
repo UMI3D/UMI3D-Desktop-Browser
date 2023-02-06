@@ -39,7 +39,7 @@ namespace umi3d.cdk.userCapture
         public override async Task ReadUMI3DExtension(ReadUMI3DExtensionData data)
         {
             if (data.dto is not UMI3DSkeletonNodeDto nodeDto)
-                throw new Umi3dException($"DTO should be an {GetType()}");
+                throw new Umi3dException("DTO should be an UM3DSkeletonNodeDto");
 
             await base.ReadUMI3DExtension(data);
 
@@ -54,10 +54,10 @@ namespace umi3d.cdk.userCapture
                     {
                         var modelTracker = data.node.GetOrAddComponent<ModelTracker>();
 
-                        SkeletonMapper skeletonMapper = go.GetComponent<SkeletonMapper>();
+                        SkeletonMapper skeletonMapper = go.GetComponentInChildren<SkeletonMapper>();
                         if (skeletonMapper == null) //? hopefully not necessary because it would imply to rebind everything
                         {
-                            skeletonMapper = go.GetComponent<SkeletonMapper>();
+                            skeletonMapper = go.AddComponent<SkeletonMapper>();
                             skeletonMapper.BoneAnchor = go.GetComponent<UMI3DClientUserTrackingBone>().boneType;
                         }
 
