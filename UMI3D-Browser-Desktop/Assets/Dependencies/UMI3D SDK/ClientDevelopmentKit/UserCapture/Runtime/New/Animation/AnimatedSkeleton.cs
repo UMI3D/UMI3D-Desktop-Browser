@@ -20,7 +20,7 @@ using umi3d.common.userCapture;
 
 namespace umi3d.cdk.userCapture
 {
-    public class AnimationSkeleton : ISubSkeleton
+    public class AnimatedSkeleton : ISubSkeleton
     {
         private const DebugScope debugScope = DebugScope.CDK | DebugScope.Animation | DebugScope.UserCapture;
 
@@ -29,7 +29,7 @@ namespace umi3d.cdk.userCapture
         /// </summary>
         public SkeletonMapper Mapper { get; protected set; }
 
-        public AnimationSkeleton(SkeletonMapper mapper)
+        public AnimatedSkeleton(SkeletonMapper mapper)
         {
             Mapper = mapper;
         }
