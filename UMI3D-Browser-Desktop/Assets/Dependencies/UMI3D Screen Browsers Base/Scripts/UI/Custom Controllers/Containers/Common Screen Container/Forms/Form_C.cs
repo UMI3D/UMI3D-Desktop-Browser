@@ -17,20 +17,42 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Container
 {
-    public class Form_C : CustomForm
+    public class Form_C : BaseScrollableForm_C
     {
         public new class UxmlFactory : UxmlFactory<Form_C, UxmlTraits> { }
 
-        public Form_C() => Set();
-
-        public Form_C(ElementCategory category, string title, string iconPath) => Set(category, title, iconPath);
-
-        public override void InitElement()
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public override ElementCategory Category
         {
-            if (TitleLabel == null) TitleLabel = new Displayer.Text_C();
-            if (VScroll == null) VScroll = new ScrollView_C();
-
-            base.InitElement();
+            get => base.Category;
+            set
+            {
+                base.Category = value;
+                VScroll.Category = value;
+            }
         }
+
+        public virtual string USSCustomClassForm => "form";
+
+        public ScrollView_C VScroll = new ScrollView_C { name = "scroll-view" };
+
+        protected override void AttachUssClass()
+        {
+            base.AttachUssClass();
+            AddToClassList(USSCustomClassForm);
+        }
+
+        protected override void InitElement()
+        {
+            base.InitElement();
+            Add(VScroll);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public override VisualElement contentContainer => IsSet && VScroll != null ? VScroll.contentContainer : this;
     }
 }

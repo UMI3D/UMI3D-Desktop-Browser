@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Container
 {
-    public class Toolbox_C : VisualElement, ICustomElement
+    public class Toolbox_C : Visual_C
     {
         public new class UxmlFactory : UxmlFactory<Toolbox_C, UxmlTraits> { }
 
@@ -39,10 +39,9 @@ namespace umi3d.commonScreen.Container
                 defaultValue = ElementCategory.Game
             };
 
-            protected UxmlStringAttributeDescription m_toolboxName = new UxmlStringAttributeDescription
+            protected UxmlLocaliseAttributeDescription m_toolboxName = new UxmlLocaliseAttributeDescription
             {
-                name = "toolbox-name",
-                defaultValue = null
+                name = "toolbox-name"
             };
 
             protected UxmlEnumAttributeDescription<ScrollViewMode> m_mode = new UxmlEnumAttributeDescription<ScrollViewMode>
@@ -107,14 +106,14 @@ namespace umi3d.commonScreen.Container
         /// <summary>
         /// Set the name of this toolbox.
         /// </summary>
-        public virtual string ToolboxName
+        public virtual LocalisationAttribute ToolboxName
         {
-            get => ToolboxNameText.text;
+            get => ToolboxNameText.LocaliseText;
             set
             {
-                if (string.IsNullOrEmpty(value)) ToolboxNameText.RemoveIfIsInHierarchy();
+                if (value.IsEmpty) ToolboxNameText.RemoveIfIsInHierarchy();
                 else this.InsertIfNotInHierarchy(0, ToolboxNameText);
-                ToolboxNameText.text = value;
+                ToolboxNameText.LocaliseText = value;
             }
         }
         /// <summary>
@@ -164,16 +163,17 @@ namespace umi3d.commonScreen.Container
             set => m_isPinned = value;
         }
 
-        public virtual string StyleSheetContainerPath => $"USS/container";
-        public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetContainersFolderPath}/toolbox";
-        public virtual string USSCustomClassName => "toolbox";
-        public virtual string USSCustomClassType(ToolboxType type) => $"{USSCustomClassName}-type__{type}".ToLower();
-        public virtual string USSCustomClassCategory(ElementCategory category) => $"{USSCustomClassName}-{category}".ToLower();
-        public virtual string USSCustomClassMode(ScrollViewMode mode) => $"{USSCustomClassName}-{mode}".ToLower();
-        public virtual string USSCustomClassSelected => $"{USSCustomClassName}-selected";
-        public virtual string USSCustomClassToolboxName => $"{USSCustomClassName}-name";
-        public virtual string USSCustomClassPinned => $"{USSCustomClassName}-pinned";
-        public virtual string USSCustomClassEdit => $"{USSCustomClassName}-edit";
+        public override string StyleSheetPath_MainTheme => $"USS/container";
+        public static string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetContainersFolderPath}/toolbox";
+
+        public override string UssCustomClass_Emc => "toolbox";
+        public virtual string USSCustomClassType(ToolboxType type) => $"{UssCustomClass_Emc}-type__{type}".ToLower();
+        public virtual string USSCustomClassCategory(ElementCategory category) => $"{UssCustomClass_Emc}-{category}".ToLower();
+        public virtual string USSCustomClassMode(ScrollViewMode mode) => $"{UssCustomClass_Emc}-{mode}".ToLower();
+        public virtual string USSCustomClassSelected => $"{UssCustomClass_Emc}-selected";
+        public virtual string USSCustomClassToolboxName => $"{UssCustomClass_Emc}-name";
+        public virtual string USSCustomClassPinned => $"{UssCustomClass_Emc}-pinned";
+        public virtual string USSCustomClassEdit => $"{UssCustomClass_Emc}-edit";
 
         public Text_C ToolboxNameText = new Text_C { name = "toolbox-name" };
         public Button_C PinnedButton = new Button_C { name = "pinned" };
@@ -185,24 +185,23 @@ namespace umi3d.commonScreen.Container
         protected bool m_isSelected;
         protected bool m_isPinned;
 
-        public Toolbox_C() => Set();
-
-        public virtual void InitElement()
+        protected override void AttachStyleSheet()
         {
-            try
-            {
-                this.AddStyleSheetFromPath(StyleSheetContainerPath);
-                this.AddStyleSheetFromPath(StyleSheetPath);
-            }
-            catch (System.Exception e)
-            {
-                throw e;
-            }
-            AddToClassList(USSCustomClassName);
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
+        }
+
+        protected override void AttachUssClass()
+        {
+            base.AttachUssClass();
             ToolboxNameText.AddToClassList(USSCustomClassToolboxName);
             PinnedButton.AddToClassList(USSCustomClassPinned);
             EditButton.AddToClassList(USSCustomClassEdit);
+        }
 
+        protected override void InitElement()
+        {
+            base.InitElement();
             SDC.MakeItem = datum => new Tool_C();
             SDC.BindItem = (datum, item) =>
             {
@@ -216,13 +215,13 @@ namespace umi3d.commonScreen.Container
 
                 tool.AddMenu(datum);
 
-                if (DisplayToolsName) tool.Label = datum.Name;
+                if (DisplayToolsName) tool.LocaliseLabel = datum.Name;
             };
             SDC.UnbindItem = (datum, item) =>
             {
                 var tool = item as Tool_C;
                 tool.ToolClicked = null;
-                tool.Label = null;
+                tool.LocaliseLabel = null;
                 tool.ClearTool();
             };
             SDC.Size = 104f;
@@ -251,7 +250,7 @@ namespace umi3d.commonScreen.Container
             EditButton.Category = ElementCategory.Game;
             EditButton.Size = ElementSize.Small;
             EditButton.Shape = ButtonShape.Round;
-            EditButton.text = "···";
+            EditButton.LocaliseText = "···";
 
             EditButton.clicked += () =>
             {
@@ -261,15 +260,6 @@ namespace umi3d.commonScreen.Container
             ToolboxNameText.Add(PinnedButton);
             ToolboxNameText.Add(EditButton);
             Add(SDC);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public virtual void Set()
-        {
-            InitElement();
         }
 
         #region Implementation

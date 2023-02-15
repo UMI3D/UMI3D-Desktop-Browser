@@ -17,9 +17,12 @@ using System;
 using umi3d.baseBrowser.Controller;
 using umi3d.baseBrowser.notification;
 using umi3d.cdk.collaboration;
+using umi3d.commonScreen.Displayer;
+using umi3d.commonScreen.game;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static umi3d.baseBrowser.cursor.BaseCursor;
+using static umi3d.commonScreen.game.GamePanel_C;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -34,7 +37,7 @@ namespace umi3d.baseBrowser.connection
         [HideInInspector]
         public NotificationLoader NotificationLoader;
 
-        public CustomGamePanel GamePanel;
+        public GamePanel_C GamePanel;
 
         protected VisualElement root => document.rootVisualElement;
         protected VisualElement logo;
@@ -51,40 +54,44 @@ namespace umi3d.baseBrowser.connection
         {
             BaseConnectionProcess.Instance.ConnectionSucces += (media) =>
             {
-                GamePanel.CurrentView = CustomGamePanel.GameViews.Loader;
-                Loader.Loading.Title = "Loading environment";
+                GamePanel.CurrentView = GameViews.Loader;
+                Loader.Loading.TitleLabel.LocaliseText = new LocalisationAttribute("Loading environment","Other", "LoadingEnv");
                 Loader.Loading.Value = 0;
                 Menu.GameData.WorldName = media.name;
             };
             BaseConnectionProcess.Instance.ConnectionFail += (message) =>
             {
-                var dialoguebox = CreateDialogueBox();
+                var dialoguebox = new Dialoguebox_C();
                 dialoguebox.Type = DialogueboxType.Default;
-                dialoguebox.Title = "Server error";
+                dialoguebox.Title = new LocalisationAttribute("Server error", "ErrorStrings", "ServerError");
                 dialoguebox.Message = message;
-                dialoguebox.ChoiceAText = "Leave";
+                dialoguebox.ChoiceAText = new LocalisationAttribute("Leave", "GenericStrings", "Leave");
                 dialoguebox.Callback = (index) => BaseConnectionProcess.Instance.Leave();
                 dialoguebox.Enqueue(root);
             };
-            BaseConnectionProcess.Instance.LoadedEnvironment += () => GamePanel.AddScreenToStack = CustomGamePanel.GameViews.Game;
+            BaseConnectionProcess.Instance.LoadedEnvironment += () => GamePanel.AddScreenToStack = GameViews.Game;
             BaseConnectionProcess.Instance.Connecting += (state) => Loader.Loading.Message = state;
             BaseConnectionProcess.Instance.RedirectionStarted += () =>
             {
-                GamePanel.AddScreenToStack = CustomGamePanel.GameViews.Loader;
+                GamePanel.AddScreenToStack = GameViews.Loader;
                 Loader.CurrentScreen = LoaderScreens.Loading;
             };
-            BaseConnectionProcess.Instance.RedirectionEnded += () => GamePanel.AddScreenToStack = CustomGamePanel.GameViews.Game;
+            BaseConnectionProcess.Instance.RedirectionEnded += () => GamePanel.AddScreenToStack = GameViews.Game;
             BaseConnectionProcess.Instance.ConnectionLost += () =>
             {
                 BaseController.CanProcess = false;
 
-                var dialoguebox = CreateDialogueBox();
+                var dialoguebox = new Dialoguebox_C();
                 dialoguebox.Type = DialogueboxType.Confirmation;
-                dialoguebox.Title = "Connection to the server lost";
-                dialoguebox.Message = "Leave the environment or try to reconnect ?";
-                dialoguebox.ChoiceAText = "Reconnect";
+                dialoguebox.Title = new LocalisationAttribute("Connection to the server lost", "ErrorStrings", "ConnectionLost");
+                dialoguebox.Message = new LocalisationAttribute
+                (
+                    "Leave the environment or try to reconnect ?",
+                    "ErrorStrings", "LeaveOrTry"
+                );
+                dialoguebox.ChoiceAText = new LocalisationAttribute("Reconnect", "GenericStrings", "Reconnect");
                 dialoguebox.ChoiceA.Type = ButtonType.Default;
-                dialoguebox.ChoiceBText = "Leave";
+                dialoguebox.ChoiceBText = new LocalisationAttribute("Leave", "GenericStrings", "Leave");
                 dialoguebox.Callback = (index) =>
                 {
                     BaseController.CanProcess = true;
@@ -95,44 +102,50 @@ namespace umi3d.baseBrowser.connection
             };
             BaseConnectionProcess.Instance.ForcedLeave += (message) =>
             {
-                var dialoguebox = CreateDialogueBox();
+                var dialoguebox = new Dialoguebox_C();
                 dialoguebox.Type = DialogueboxType.Default;
-                dialoguebox.Title = "Forced Deconnection";
+                dialoguebox.Title = new LocalisationAttribute("Forced Deconnection", "ErrorStrings", "ForcedDeco");
                 dialoguebox.Message = message;
-                dialoguebox.ChoiceAText = "Leave";
+                dialoguebox.ChoiceAText = new LocalisationAttribute("Leave", "GenericStrings", "Leave");
                 dialoguebox.Callback = (index) => BaseConnectionProcess.Instance.Leave();
                 dialoguebox.Enqueue(root);
             };
             BaseConnectionProcess.Instance.AskForDownloadingLibraries += (count, callback) =>
             {
-                var dialoguebox = CreateDialogueBox();
+                var dialoguebox = new Dialoguebox_C();
                 dialoguebox.Type = DialogueboxType.Confirmation;
-                dialoguebox.Title = (count == 1) ? $"One assets library is required" : $"{count} assets libraries are required";
-                dialoguebox.Message = "Download libraries and connect to the server ?";
+                dialoguebox.Title = new LocalisationAttribute
+                (
+                    (count == 1) ? $"One assets library is required" : $"{count} assets libraries are required",
+                    "ErrorStrings", 
+                    (count == 1) ? "AssetsLibRequired1" : "AssetsLibRequired", 
+                    (count == 1) ? null : new string[1] { count.ToString() }
+                );
+                dialoguebox.Message = new LocalisationAttribute("Download libraries and connect to the server ?", "ErrorStrings", "DownloadAndConnect");
                 dialoguebox.ChoiceA.Type = ButtonType.Default;
-                dialoguebox.ChoiceAText = "Accept";
+                dialoguebox.ChoiceAText = new LocalisationAttribute("Accept", "GenericStrings", "Accept");
                 dialoguebox.ChoiceB.Type = ButtonType.Default;
-                dialoguebox.ChoiceBText = "Deny";
+                dialoguebox.ChoiceBText = new LocalisationAttribute("Deny", "GenericStrings", "Deny");
                 dialoguebox.Callback = (index) => callback?.Invoke(index == 0);
                 dialoguebox.Enqueue(root);
             };
             BaseConnectionProcess.Instance.GetParameterDtos += GetParameterDtos;
             BaseConnectionProcess.Instance.LoadingLauncher += (value) =>
             {
-                GamePanel.AddScreenToStack = CustomGamePanel.GameViews.Loader;
+                GamePanel.AddScreenToStack = GameViews.Loader;
                 Loader.CurrentScreen = LoaderScreens.Loading;
-                Loader.Loading.Title = "Leaving environment";
+                Loader.Loading.Title = new LocalisationAttribute("Leave environment", "Other", "LeaveEnvironment");
                 Loader.Loading.Value = value / 100f;
             };
             BaseConnectionProcess.Instance.DisplayPopUpAfterLoadingFailed += (title, message, action) =>
             {
-                var dialoguebox = CreateDialogueBox();
+                var dialoguebox = new Dialoguebox_C();
                 dialoguebox.Type = DialogueboxType.Confirmation;
                 dialoguebox.Title = title;
                 dialoguebox.Message = message;
-                dialoguebox.ChoiceAText = "Resume";
+                dialoguebox.ChoiceAText = new LocalisationAttribute("Resume", "GenericStrings", "Resume");
                 dialoguebox.ChoiceA.Type = ButtonType.Default;
-                dialoguebox.ChoiceBText = "Stop";
+                dialoguebox.ChoiceBText = new LocalisationAttribute("Stop", "GenericStrings", "Stop");
                 dialoguebox.Callback = action;
                 dialoguebox.Enqueue(root);
             };
@@ -169,7 +182,7 @@ namespace umi3d.baseBrowser.connection
         {
             BaseConnectionProcess.Instance.ResetEnvironmentEvents();
 
-            GamePanel = root.Q<CustomGamePanel>();
+            GamePanel = root.Q<GamePanel_C>();
 
             InitConnectionProcess();
 
@@ -179,7 +192,7 @@ namespace umi3d.baseBrowser.connection
 
             InitControls();
 
-            GamePanel.CurrentView = CustomGamePanel.GameViews.Loader;
+            GamePanel.CurrentView = GameViews.Loader;
         }
 
         #region OnDestroy
@@ -217,15 +230,13 @@ namespace umi3d.baseBrowser.connection
 
             UnityEngine.Debug.Log($"fps = {fps}, {Menu.Settings.Resolution.RenderScaleSlider.value}, {QualitySettings.names[QualitySettings.GetQualityLevel()]}");
 
-            if (GamePanel.CurrentView != CustomGamePanel.GameViews.Game || Menu.Settings.Resolution.GameResolutionSegmentedPicker.ValueEnum == preferences.SettingsPreferences.ResolutionEnum.Custom) return;
+            if (GamePanel.CurrentView != GameViews.Game || Menu.Settings.Resolution.GameResolutionSegmentedPicker.ValueEnum == preferences.SettingsPreferences.ResolutionEnum.Custom) return;
 
             var renderScaleValue = Menu.Settings.Resolution.RenderScaleSlider.value;
 
             if (fps < Menu.Settings.Resolution.TargetFPS - 20 && renderScaleValue > 0.01) Menu.Settings.Resolution.RenderScaleValueChanged(renderScaleValue * 0.95f);
             else if (fps > Menu.Settings.Resolution.TargetFPS - 5) Menu.Settings.Resolution.RenderScaleValueChanged(renderScaleValue * 1.05f);
         }
-
-        public abstract CustomDialoguebox CreateDialogueBox();
 
         public void UpdateCursor(CursorState state)
         {

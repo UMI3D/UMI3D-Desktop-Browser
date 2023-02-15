@@ -13,6 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System.Drawing;
+using System.Reflection.Emit;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using UnityEngine.UIElements;
@@ -45,8 +47,15 @@ namespace umi3d.commonScreen.Displayer
         private void OnValidate()
         {
             if (button == null) return;
-            button.Set(Category, Size, Shape, Type, Label, LabelDirection, IconAlignment);
-            button.text = Text;
+
+            button.Category = Category;
+            button.Size = Size;
+            button.Shape = Shape;
+            button.Type = Type;
+            button.LocaliseLabel = Label;
+            button.LabelDirection = LabelDirection;
+            button.IconAlignment = IconAlignment;
+            button.LocaliseText = Text;
         }
 
         /// <summary>
@@ -72,9 +81,18 @@ namespace umi3d.commonScreen.Displayer
         {
             if (button != null) return;
 
-            button = new Button_C(Category, Size, Shape, Type, Label, LabelDirection, IconAlignment);
+            button = new Button_C
+            {
+                Category = Category,
+                Size = Size,
+                Shape = Shape,
+                Type = Type,
+                LocaliseLabel = Label,
+                LabelDirection = LabelDirection,
+                IconAlignment = IconAlignment,
+                LocaliseText = Text
+            };
             button.name = gameObject.name;
-            button.text = Text;
             button.ClickedDown += OnClickedDown;
             button.ClickedUp += OnClickedUp;
         }

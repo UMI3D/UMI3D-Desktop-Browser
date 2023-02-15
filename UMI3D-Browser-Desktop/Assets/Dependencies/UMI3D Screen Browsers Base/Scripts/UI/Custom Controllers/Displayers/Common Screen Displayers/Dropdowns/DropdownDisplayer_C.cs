@@ -33,11 +33,9 @@ namespace umi3d.commonScreen.Displayer
         /// </summary>
         public virtual void BindDisplayer()
         {
-            label = DisplayerMenu.ToString();
-            choices = DisplayerMenu.options;
+            LocalisedLabel = DisplayerMenu.ToString();
+            LocalisedOptions = DisplayerMenu.options;
             index = DisplayerMenu.options.IndexOf(DisplayerMenu.GetValue());
-            if (!DisplayerMenu.options.Contains(DisplayerMenu.GetValue())) value = "...";
-            else value = DisplayerMenu.GetValue();
             this.RegisterValueChangedCallback(OnValueChanged);
         }
 
@@ -46,10 +44,9 @@ namespace umi3d.commonScreen.Displayer
         /// </summary>
         public virtual void UnbindDisplayer()
         {
-            label = null;
-            choices = null;
-            index = 0;
-            value = null;
+            LocalisedLabel = null;
+            LocalisedOptions = (string)null;
+            index = -1;
             this.UnregisterValueChangedCallback(OnValueChanged);
         }
 

@@ -24,7 +24,7 @@ namespace umi3d.commonScreen.Container
     /// A formulaire container for scrollable data collection. See <see cref="ScrollableDataCollection_C{D}"/>
     /// </summary>
     /// <typeparam name="D"></typeparam>
-    public class FormSDC_C<D> : CustomAbstractScrollableContainer
+    public class FormSDC_C<D> : BaseScrollableForm_C
     {
         /// <summary>
         /// <inheritdoc/>
@@ -43,14 +43,15 @@ namespace umi3d.commonScreen.Container
 
         public ScrollableDataCollection_C<D> SDC = new ScrollableDataCollection_C<D> { name = "sdc" };
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public override void InitElement()
+        protected override void AttachUssClass()
+        {
+            base.AttachUssClass();
+            AddToClassList(USSCustomClassFormSDC);
+        }
+
+        protected override void InitElement()
         {
             base.InitElement();
-            AddToClassList(USSCustomClassFormSDC);
-
             Add(SDC);
         }
     }

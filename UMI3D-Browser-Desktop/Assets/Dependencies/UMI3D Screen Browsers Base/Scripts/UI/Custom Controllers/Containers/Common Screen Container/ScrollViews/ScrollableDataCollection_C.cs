@@ -86,7 +86,7 @@ namespace umi3d.commonScreen.Container
         public override string USSCustomClassName => "sdc";
         public virtual string USSCustomClassCategory(ElementCategory category) => $"{USSCustomClassName}-{category}".ToLower();
         
-        public CustomScrollView ScrollView = new ScrollView_C();
+        public ScrollView_C ScrollView = new ScrollView_C { name = "scroll-view" };
 
         public override VisualElement DataContainer => ScrollView;
 
@@ -154,12 +154,12 @@ namespace umi3d.UiPreview.commonScreen.Container
                 previewItem.BindItem = (datum, item) =>
                 {
                     var text = item as umi3d.commonScreen.Displayer.Text_C;
-                    text.text = $"item {datum}";
+                    text.LocaliseText = $"item {datum}";
                 };
                 previewItem.UnbindItem = (datum, item) =>
                 {
                     var text = item as umi3d.commonScreen.Displayer.Text_C;
-                    text.text = null;
+                    text.LocaliseText = null;
                 };
 
                 for (int i = 0; i < 100; i++) previewItem.AddDatum(i);

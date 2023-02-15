@@ -30,14 +30,6 @@ MonoBehaviour:
     English: 'Search by user name:'
     French: 'Recherche par nom d''utilisateur :'
     Spanish: "B\xFAsqueda por nombre de usuario:"
-  - Key: ZeroNotif
-    English: 'Notifications: 0'
-    French: 'Notifications : 0'
-    Spanish: 'Notificaciones: 0'
-  - Key: ZeroUser
-    English: 'Users: 0'
-    French: 'Utilisateurs : 0'
-    Spanish: 'Usuarios: 0'
   - Key: NbNotifs
     English: 'Notifications: {0}'
     French: 'Notifications : {0}'

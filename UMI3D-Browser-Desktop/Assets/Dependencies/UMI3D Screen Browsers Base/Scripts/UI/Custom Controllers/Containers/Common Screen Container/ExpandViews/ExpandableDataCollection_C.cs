@@ -158,17 +158,17 @@ namespace umi3d.UiPreview.commonScreen.Container
                 {
                     var button = item as umi3d.commonScreen.Displayer.Button_C;
                     button.style.width = Length.Percent(100);
-                    button.Label = $"item {datum}";
+                    button.LocaliseLabel = $"item {datum}";
 
                     if (previewItem.Data.IndexOf(datum) == 0)
                     {
-                        button.text = $"delete last item";
+                        button.LocaliseText = $"delete last item";
                         button.Type = ButtonType.Danger;
                         button.clicked += removeClick;
                     }
                     else
                     {
-                        button.text = $"add new item";
+                        button.LocaliseText = $"add new item";
                         button.Type = ButtonType.Primary;
                         button.clicked += addClick;
                     }
@@ -176,7 +176,7 @@ namespace umi3d.UiPreview.commonScreen.Container
                 previewItem.UnbindItem = (datum, item) =>
                 {
                     var button = item as umi3d.commonScreen.Displayer.Button_C;
-                    button.text = null;
+                    button.LocaliseText = null;
                     button.Type = ButtonType.Default;
 
                     if (previewItem.Data.IndexOf(datum) == 0) button.clicked -= removeClick;

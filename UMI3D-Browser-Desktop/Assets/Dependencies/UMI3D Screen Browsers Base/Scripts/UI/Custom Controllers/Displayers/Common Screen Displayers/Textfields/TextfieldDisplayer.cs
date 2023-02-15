@@ -60,9 +60,18 @@ namespace umi3d.commonScreen.Displayer
         private void OnValidate()
         {
             if (textfield == null) return;
-            textfield.Set(Category, Size, Direction, MaskToggle, SubmitButton);
+            textfield.Category = Category;
+            textfield.Size = Size;
+            textfield.Direction = Direction;
+            textfield.DisplayMaskToggle = MaskToggle;
+            textfield.DisplaySubmitButton = SubmitButton;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="item"></param>
+        /// <exception cref="System.Exception"></exception>
         public override void SetMenuItem(AbstractMenuItem item)
         {
             if (item is TextInputMenuItem)
@@ -73,13 +82,23 @@ namespace umi3d.commonScreen.Displayer
             else throw new System.Exception("MenuItem must be a TextInput");
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void InitAndBindUI()
         {
             if (textfield != null) return;
 
-            textfield = new Textfield_C(Category, Size, Direction, MaskToggle, SubmitButton);
+            textfield = new Textfield_C
+            {
+                Category = Category,
+                Size = Size,
+                Direction = Direction,
+                DisplayMaskToggle = MaskToggle,
+                DisplaySubmitButton = SubmitButton
+            };
             textfield.name = gameObject.name;
-            textfield.label = menuItem.ToString();
+            textfield.LocaliseLabel = menuItem.ToString();
             textfield.isDelayed = true;
             textfield.RegisterValueChangedCallback(OnValueChanged);
 
@@ -90,6 +109,9 @@ namespace umi3d.commonScreen.Displayer
             }
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void Clear()
         {
             base.Clear();
@@ -99,6 +121,10 @@ namespace umi3d.commonScreen.Displayer
             StopAllCoroutines();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="forceUpdate"></param>
         public override void Display(bool forceUpdate = false)
         {
             textfield.Display();
@@ -109,6 +135,9 @@ namespace umi3d.commonScreen.Displayer
 
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void Hide()
         {
             textfield.Hide();
@@ -116,8 +145,17 @@ namespace umi3d.commonScreen.Displayer
             //StopCoroutine(NetworkMessageSender());
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
         public VisualElement GetUXMLContent() => textfield;
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="menu"></param>
+        /// <returns></returns>
         public override int IsSuitableFor(umi3d.cdk.menu.AbstractMenuItem menu)
         {
             return (menu is TextInputMenuItem) ? 2 : 0;
@@ -135,6 +173,9 @@ namespace umi3d.commonScreen.Displayer
             textfield?.RemoveFromHierarchy();
         }
 
+        /// <summary>
+        /// Get the focus of this element.
+        /// </summary>
         public void Focus() 
         {
             
@@ -146,6 +187,9 @@ namespace umi3d.commonScreen.Displayer
                 });
             });
         }
+        /// <summary>
+        /// Unfocus this element.
+        /// </summary>
         public void Blur()
         {
             textfield.Blur();

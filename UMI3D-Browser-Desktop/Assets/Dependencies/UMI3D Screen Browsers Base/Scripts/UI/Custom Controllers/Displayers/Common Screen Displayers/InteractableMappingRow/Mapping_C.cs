@@ -13,21 +13,97 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using UnityEngine;
 using UnityEngine.UIElements;
+using static umi3d.baseBrowser.inputs.interactions.BaseKeyInteraction;
 
 namespace umi3d.commonScreen.Displayer
 {
-    public class Mapping_C : CustomMapping
+    public class Mapping_C : Visual_C
     {
         public new class UxmlFactory : UxmlFactory<Mapping_C, UxmlTraits> { }
 
-        public Mapping_C() => Set();
-
-        public override void InitElement()
+        public new class UxmlTraits : VisualElement.UxmlTraits
         {
-            if (MappingNameText == null) MappingNameText = new Text_C();
+            protected UxmlLocaliseAttributeDescription m_mappingName = new UxmlLocaliseAttributeDescription
+            {
+                name = "mapping-name"
+            };
 
-            base.InitElement();
+            protected UxmlEnumAttributeDescription<MappingType> m_type = new UxmlEnumAttributeDescription<MappingType>
+            {
+                name = "type",
+                defaultValue = MappingType.Keyboard
+            };
+
+            /// <summary>
+            /// <inheritdoc/>
+            /// </summary>
+            /// <param name="ve"></param>
+            /// <param name="bag"></param>
+            /// <param name="cc"></param>
+            public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
+            {
+                if (Application.isPlaying) return;
+
+                base.Init(ve, bag, cc);
+                var custom = ve as Mapping_C;
+
+                custom.MappingName = m_mappingName.GetValueFromBag(bag, cc);
+                custom.Type = m_type.GetValueFromBag(bag, cc);
+            }
+        }
+
+        /// <summary>
+        /// Name of the mapping (it is basicly the name of the key).
+        /// </summary>
+        public virtual LocalisationAttribute MappingName
+        {
+            get => MappingNameText.LocaliseText;
+            set
+            {
+                IsSet = false;
+                if (value.IsEmpty) MappingNameText.RemoveFromHierarchy();
+                else Insert(0, MappingNameText);
+                MappingNameText.LocaliseText = value;
+                IsSet = true;
+            }
+        }
+        /// <summary>
+        /// Type of the mapping.
+        /// </summary>
+        public virtual MappingType Type
+        {
+            get => m_type;
+            set
+            {
+                RemoveFromClassList(USSCustomClassType(m_type));
+                AddToClassList(USSCustomClassType(value));
+                m_type = value;
+            }
+        }
+
+        public override string StyleSheetPath_MainTheme => $"USS/displayer";
+        public virtual string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetDisplayersFolderPath}/mapping";
+
+        public override string UssCustomClass_Emc => "mapping";
+        public virtual string USSCustomClassType(MappingType type) => $"{UssCustomClass_Emc}-{type}".ToLower();
+
+        public Text_C MappingNameText = new Text_C { name = "mapping-name" };
+
+        protected MappingType m_type;
+
+        protected override void AttachStyleSheet()
+        {
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
+        }
+
+        protected override void SetProperties()
+        {
+            base.SetProperties();
+            MappingName = null;
+            Type = MappingType.Keyboard;
         }
     }
 }

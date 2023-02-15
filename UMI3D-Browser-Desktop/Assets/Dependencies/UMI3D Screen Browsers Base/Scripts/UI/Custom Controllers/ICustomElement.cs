@@ -184,9 +184,9 @@ public static class ElementExtensions
     /// <exception cref="System.NullReferenceException"></exception>
     public static void AddStyleSheetFromPath(this VisualElement ve, string resourcePath)
     {
-        if (string.IsNullOrEmpty(resourcePath)) throw new System.Exception("resourcePath null or empty");
+        if (string.IsNullOrEmpty(resourcePath)) throw new System.Exception($"resourcePath null or empty for visual {ve.GetType()}");
         StyleSheet styleSheet = UnityEngine.Resources.Load<StyleSheet>(resourcePath);
-        if (styleSheet == null) throw new System.NullReferenceException($"[{resourcePath}] return a null Style Sheet.");
+        if (styleSheet == null) throw new System.NullReferenceException($"[{resourcePath}] return a null Style Sheet for visual {ve.GetType()}.");
         ve.styleSheets.Add(styleSheet);
     }
     /// <summary>

@@ -36,8 +36,10 @@ namespace umi3d.commonScreen.Displayer
         {
             if (toggle != null)
             {
-                toggle.Set(Category, Size, Direction);
-                toggle.label = LabelText;
+                toggle.Category = Category;
+                toggle.Size = Size;
+                toggle.Direction = Direction;
+                toggle.LocaliseLabel = LabelText;
             }
         }
 
@@ -56,9 +58,14 @@ namespace umi3d.commonScreen.Displayer
         {
             if (toggle != null) return;
 
-            toggle = new Toggle_C(Category, Size, Direction);
+            toggle = new Toggle_C 
+            { 
+                Category = Category, 
+                Size = Size, 
+                Direction = Direction 
+            };
             toggle.name = gameObject.name;
-            toggle.label = LabelText;
+            toggle.LocaliseLabel = LabelText;
             toggle.RegisterValueChangedCallback(OnValueChanged);
         }
 

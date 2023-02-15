@@ -35,7 +35,7 @@ namespace umi3d.commonScreen.Displayer
         /// <exception cref="System.NotImplementedException"></exception>
         public void BindDisplayer()
         {
-            label = DisplayerMenu.Name;
+            LocaliseLabel = DisplayerMenu.Name;
             lowValue = DisplayerMenu.min;
             highValue = DisplayerMenu.max;
             value = DisplayerMenu.value;
@@ -48,7 +48,7 @@ namespace umi3d.commonScreen.Displayer
         /// <exception cref="System.NotImplementedException"></exception>
         public void UnbindDisplayer()
         {
-            label = null;
+            LocaliseLabel = null;
             lowValue = 0;
             highValue = 0;
             value = 0;
