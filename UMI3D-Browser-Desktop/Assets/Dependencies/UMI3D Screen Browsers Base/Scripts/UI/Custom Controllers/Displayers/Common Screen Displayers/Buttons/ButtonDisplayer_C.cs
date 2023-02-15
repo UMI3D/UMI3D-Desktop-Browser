@@ -31,7 +31,7 @@ namespace umi3d.commonScreen.Displayer
         /// </summary>
         public virtual void BindDisplayer()
         {
-            text = DisplayerMenu.Name;
+            LocaliseText = DisplayerMenu.Name;
             ClickedDown += OnClickedDown;
             ClickedUp += OnClickedUp;
         }
@@ -41,7 +41,7 @@ namespace umi3d.commonScreen.Displayer
         /// </summary>
         public virtual void UnbindDisplayer()
         {
-            text = null;
+            LocaliseText = null;
             ClickedDown -= OnClickedDown;
             ClickedUp -= OnClickedUp;
         }

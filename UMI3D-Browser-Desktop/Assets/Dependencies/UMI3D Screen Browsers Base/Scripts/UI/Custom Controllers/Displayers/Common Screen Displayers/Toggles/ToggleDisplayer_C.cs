@@ -35,7 +35,7 @@ namespace umi3d.commonScreen.Displayer
         /// <exception cref="System.NotImplementedException"></exception>
         public void BindDisplayer()
         {
-            label = DisplayerMenu.Name;
+            LocaliseLabel = DisplayerMenu.Name;
             this.RegisterValueChangedCallback(OnValueChanged);
         }
 
@@ -45,7 +45,7 @@ namespace umi3d.commonScreen.Displayer
         /// <exception cref="System.NotImplementedException"></exception>
         public void UnbindDisplayer()
         {
-            label = null;
+            LocaliseLabel = null;
             this.UnregisterValueChangedCallback(OnValueChanged);
         }
 

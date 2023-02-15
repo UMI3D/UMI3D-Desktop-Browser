@@ -26,3 +26,11 @@ MonoBehaviour:
     English: Left hand interface
     French: Interface gaucher
     Spanish: Interfaz zurdos
+  - Key: Navigations
+    English: Navigations
+    French: "D\xE9placement"
+    Spanish: Navigations
+  - Key: Shortcuts
+    English: Shortcuts
+    French: Raccourcis
+    Spanish: Shortcuts

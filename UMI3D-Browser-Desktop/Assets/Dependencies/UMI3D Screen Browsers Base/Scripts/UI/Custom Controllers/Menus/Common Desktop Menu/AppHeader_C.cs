@@ -13,28 +13,82 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using umi3d.commonScreen.menu;
-using UnityEngine;
+using umi3d.commonScreen.Displayer;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonDesktop.menu
 {
-    public class AppHeader_C : CustomAppHeader
+    public class AppHeader_C : VisualElement
     {
         public new class UxmlFactory : UxmlFactory<AppHeader_C, UxmlTraits> { }
 
-        public AppHeader_C() => Set();
+        public virtual string StyleSheetMenuPath => $"USS/menu";
+        public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetMenusFolderPath}/appHeader";
+        public virtual string USSCustomClassName => "app__header";
 
-        public override void InitElement()
+        public virtual string USSCustomClassButtonsBox => $"{USSCustomClassName}-buttons__box";
+        public virtual string USSCustomClassWindowButton => $"{USSCustomClassName}-window__button";
+        public virtual string USSCustomClassMinimize => $"{USSCustomClassName}-minimize__icon";
+        public virtual string USSCustomClassMaximize => $"{USSCustomClassName}-maximize__icon";
+        public virtual string USSCustomClassClose => $"{USSCustomClassName}-close__icon";
+        public virtual string USSCustomClassContainer => $"{USSCustomClassName}-container";
+
+        public VisualElement AppButtonsBox = new VisualElement { name = "app-button-box" };
+        public Button_C Minimize = new Button_C { name = "minimize" };
+        public VisualElement Minimize_Icon = new VisualElement { name = "mimimize-icon" };
+        public Button_C Maximize = new Button_C { name = "maximize" };
+        public VisualElement Maximize_Icon = new VisualElement { name = "maximize-icon" };
+        public Button_C Close = new Button_C { name = "close" };
+        public VisualElement Close_Icon = new VisualElement { name = "close-icon" };
+        public VisualElement Container = new VisualElement { name = "container" };
+
+        protected bool m_isSet = false;
+
+        public AppHeader_C() => InitElement();
+
+        protected virtual void InitElement()
         {
-            if (Minimize == null) Minimize = new commonScreen.Displayer.Button_C();
-            if (Maximize == null) Maximize = new commonScreen.Displayer.Button_C();
-            if (Close == null) Close = new commonScreen.Displayer.Button_C();
+            try
+            {
+                this.AddStyleSheetFromPath(StyleSheetMenuPath);
+                this.AddStyleSheetFromPath(StyleSheetPath);
+            }
+            catch (System.Exception e)
+            {
+                throw e;
+            }
+            AddToClassList(USSCustomClassName);
 
-            base.InitElement();
+            AppButtonsBox.AddToClassList(USSCustomClassButtonsBox);
+            Minimize.AddToClassList(USSCustomClassWindowButton);
+            Maximize.AddToClassList(USSCustomClassWindowButton);
+            Close.AddToClassList(USSCustomClassWindowButton);
+            Minimize_Icon.AddToClassList(USSCustomClassMinimize);
+            Maximize_Icon.AddToClassList(USSCustomClassMaximize);
+            Close_Icon.AddToClassList(USSCustomClassClose);
+            Container.AddToClassList(USSCustomClassContainer);
+
+            Minimize.Size = ElementSize.Small;
+            Maximize.Size = ElementSize.Small;
+            Close.Size = ElementSize.Small;
+
+            Close.Type = ButtonType.Danger;
+
+            Add(Container);
+            Add(AppButtonsBox);
+            AppButtonsBox.Add(Minimize);
+            Minimize.Add(Minimize_Icon);
+            AppButtonsBox.Add(Maximize);
+            Maximize.Add(Maximize_Icon);
+            AppButtonsBox.Add(Close);
+            Close.Add(Close_Icon);
+
+            m_isSet = true;
         }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public override VisualElement contentContainer => m_isSet ? Container : this;
     }
 }

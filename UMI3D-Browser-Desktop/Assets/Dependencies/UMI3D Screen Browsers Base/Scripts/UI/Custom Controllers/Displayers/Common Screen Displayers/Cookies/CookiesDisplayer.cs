@@ -39,7 +39,7 @@ namespace umi3d.commonScreen.Displayer
         private void OnValidate()
         {
             if (m_description == null || m_readToggles == null || m_WriteToggles == null) return;
-            m_description.text = DescriptionLabel;
+            m_description.LocaliseText = DescriptionLabel;
 
             m_readToggles.Category = Category;
             m_readToggles.Size = Size;
@@ -70,14 +70,14 @@ namespace umi3d.commonScreen.Displayer
             var dto = (LocalInfoRequestParameterDto)menuItem.dto;
             DescriptionLabel = $"Server {dto.serverName} requests acces to local data : {dto.key}.\n";
             DescriptionLabel += $"{dto.reason}";
-            m_description.text = DescriptionLabel;
+            m_description.LocaliseText = DescriptionLabel;
 
             m_readToggles = new Toggle_C();
             m_readToggles.Category = Category;
             m_readToggles.Size = Size;
             m_readToggles.Direction = Direction;
             m_readToggles.name = gameObject.name;
-            m_readToggles.label = "Read access";
+            m_readToggles.LocaliseLabel = "Read access";
             m_readToggles.RegisterValueChangedCallback(OnReadValueChanged);
 
             m_WriteToggles = new Toggle_C();
@@ -85,7 +85,7 @@ namespace umi3d.commonScreen.Displayer
             m_WriteToggles.Size = Size;
             m_WriteToggles.Direction = Direction;
             m_WriteToggles.name = gameObject.name;
-            m_WriteToggles.label = "Write access";
+            m_WriteToggles.LocaliseLabel = "Write access";
             m_WriteToggles.RegisterValueChangedCallback(OnWriteValueChanged);
 
             m_box.Add(m_description);

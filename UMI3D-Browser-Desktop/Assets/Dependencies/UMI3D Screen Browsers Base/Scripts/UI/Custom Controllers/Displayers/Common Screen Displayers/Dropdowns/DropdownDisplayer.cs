@@ -43,13 +43,16 @@ namespace umi3d.commonScreen.Displayer
         {
             if (dropdown != null) return;
 
-            dropdown = new Dropdown_C(Category, Size, Direction);
+            dropdown = new Dropdown_C
+            {
+                Category = Category,
+                Size = Size,
+                Direction = Direction
+            };
             dropdown.name = gameObject.name;
-            dropdown.label = menuItem.ToString();
-            dropdown.choices = menuItem.options;
+            dropdown.LocalisedLabel = menuItem.ToString();
+            dropdown.LocalisedOptions = menuItem.options;
             dropdown.index = menuItem.options.IndexOf(menuItem.GetValue());
-            if (!menuItem.options.Contains(menuItem.GetValue())) dropdown.value = "...";
-            else dropdown.value = menuItem.GetValue();
             dropdown.RegisterValueChangedCallback(OnValueChanged);
         }
 

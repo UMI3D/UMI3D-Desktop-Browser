@@ -40,7 +40,7 @@ MonoBehaviour:
     French: Microphone
     Spanish: "Micr\xF3fono"
   - Key: MicMode_AlwaysSend
-    English: AlwaysSend
+    English: Always send
     French: Toujours envoyer
     Spanish: Enviar siempre
   - Key: MicMode_Amplitude
@@ -48,9 +48,9 @@ MonoBehaviour:
     French: Amplitude
     Spanish: Amplitud
   - Key: MicMode_PushToTalk
-    English: PushToTalk
-    French: PushToTalk
-    Spanish: PushToTalk
+    English: Push to talk
+    French: Push to talk
+    Spanish: Push to talk
   - Key: MicMode_Label
     English: Mode
     French: Mode

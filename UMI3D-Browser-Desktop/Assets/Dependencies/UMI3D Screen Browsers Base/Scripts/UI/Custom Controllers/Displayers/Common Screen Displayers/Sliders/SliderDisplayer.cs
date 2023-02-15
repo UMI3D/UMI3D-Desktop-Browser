@@ -32,46 +32,20 @@ namespace umi3d.commonScreen.Displayer
         protected FloatRangeInputMenuItem menuItem;
         protected Slider_C slider;
 
-
-        ///// <summary>
-        ///// Frame rate applied to message emission through network (high values can cause network flood).
-        ///// </summary>
-        //public float networkFrameRate = 30;
-
-        ///// <summary>
-        ///// Launched coroutine for network message sending (if any).
-        ///// </summary>
-        ///// <see cref="networkMessageSender"/>
-        //protected Coroutine messageSenderCoroutine;
-
-        //protected bool valueChanged = false;
-
-        //protected IEnumerator networkMessageSender()
-        //{
-        //    while (true)
-        //    {
-        //        if (valueChanged)
-        //        {
-        //            var newValue = menuItem.continuousRange ? slider.value : (int)slider.value;
-        //            NotifyValueChange(slider.value);
-        //            valueChanged = false;
-        //        }
-        //        yield return new WaitForSeconds(1f / networkFrameRate);
-        //    }
-        //}
-
-        //string FormatValue(float f)
-        //{
-        //    return string.Format("{0:###0.##}", f);
-        //}
-
         private void OnValidate()
         {
             if (slider == null) return;
-            slider.Set(Category, Size, Direction);
-            slider.label = LabelText;
+            slider.Category = Category;
+            slider.Size = Size;
+            slider.DirectionDisplayer = Direction;
+            slider.LocaliseLabel = LabelText;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="item"></param>
+        /// <exception cref="System.Exception"></exception>
         public override void SetMenuItem(AbstractMenuItem item)
         {
             if (item is FloatRangeInputMenuItem)
@@ -83,19 +57,30 @@ namespace umi3d.commonScreen.Displayer
             else throw new System.Exception("MenuItem must be a Range Input");
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void InitAndBindUI()
         {
             if (slider != null) return;
 
-            slider = new Slider_C(Category, Size, Direction);
+            slider = new Slider_C
+            {
+                Category = Category,
+                Size = Size,
+                DirectionDisplayer = Direction
+            };
             slider.name = gameObject.name;
-            slider.label = LabelText;
+            slider.LocaliseLabel = LabelText;
             slider.lowValue = menuItem.min;
             slider.highValue = menuItem.max;
             slider.value = menuItem.value;
             slider.RegisterValueChangedCallback(SliderOnValueChanged);
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void Clear()
         {
             base.Clear();
@@ -104,11 +89,27 @@ namespace umi3d.commonScreen.Displayer
             StopAllCoroutines();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="forceUpdate"></param>
         public override void Display(bool forceUpdate = false) => slider.Display();
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override void Hide() => slider.Hide();
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
         public VisualElement GetUXMLContent() => slider;
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="menu"></param>
+        /// <returns></returns>
         public override int IsSuitableFor(umi3d.cdk.menu.AbstractMenuItem menu)
         {
             return (menu is FloatRangeInputMenuItem) ? 2 : 0;

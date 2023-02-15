@@ -18,10 +18,13 @@ using umi3d.baseBrowser.cursor;
 using umi3d.baseBrowser.emotes;
 using umi3d.baseBrowser.Navigation;
 using umi3d.cdk.collaboration;
+using umi3d.commonDesktop.game;
 using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
+using umi3d.commonScreen.game;
 using umi3d.mobileBrowser.interactions;
 using UnityEngine;
+using static umi3d.commonScreen.game.GamePanel_C;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -31,11 +34,11 @@ namespace umi3d.baseBrowser.connection
         public ObjectMenuFormContainer ObjectMenu;
         public cdk.menu.view.MenuDisplayManager ObjectMenuDisplay;
 
-        public CustomGame Game => GamePanel.Game;
-        public CustomTopArea TopArea => Game.TopArea;
-        public CustomBottomArea BottomArea => Game.BottomArea;
-        public CustomLeadingArea LeadingArea => Game.LeadingArea;
-        public CustomTrailingArea TrailingArea => Game.TrailingArea;
+        public Game_C Game => GamePanel.Game;
+        public TopArea_C TopArea => Game.TopArea;
+        public BottomArea_C BottomArea => Game.BottomArea;
+        public LeadingArea_C LeadingArea => Game.LeadingArea;
+        public TrailingArea_C TrailingArea => Game.TrailingArea;
 
         protected System.Action m_contextualMenuActionUp;
         protected System.Action m_contextualMenuActionDown;
@@ -76,14 +79,15 @@ namespace umi3d.baseBrowser.connection
         {
             NotificationLoader.Notification2DReceived += dto =>
             {
-                var notification = CustomNotificationCenter.AddNotification(dto);
+                var notification = NotificationCenter_C.AddNotification(dto);
 
                 root.schedule.Execute(() =>
                 {
                     notification.Timestamp = "0min";
                     root.schedule.Execute(() =>
                     {
-                        var time = notification.Timestamp.Substring(0, notification.Timestamp.Length - 3);
+                        var value = notification.Timestamp.Value;
+                        var time = value.Substring(0, value.Length - 3);
                         notification.Timestamp = $"{int.Parse(time) + 1}min";
                     }).Every(60000);
                 }).ExecuteLater(60000);
@@ -95,14 +99,14 @@ namespace umi3d.baseBrowser.connection
             EmoteManager.Instance.EmoteConfigReceived += emotes =>
             {
                 Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
-                CustomEmoteWindow.OnEmoteConfigReceived(emotes);
+                EmoteWindow_C.OnEmoteConfigReceived(emotes);
             };
             EmoteManager.Instance.NoEmoteConfigReeived += () =>
             {
                 Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
-                CustomEmoteWindow.Reset();
+                EmoteWindow_C.Reset();
             };
-            EmoteManager.Instance.EmoteUpdated += CustomEmoteWindow.OnUpdateEmote;
+            EmoteManager.Instance.EmoteUpdated += EmoteWindow_C.OnUpdateEmote;
         }
 
         protected virtual void InitGame_ObjectMenu()
@@ -112,7 +116,7 @@ namespace umi3d.baseBrowser.connection
             ObjectMenu.GetContainer = () => TrailingArea.ObjectMenu;
             ObjectMenu.DisplayObjectMenu = value =>
             {
-                if (GamePanel.CurrentView != CustomGamePanel.GameViews.Game) return;
+                if (GamePanel.CurrentView != GameViews.Game) return;
                 TrailingArea.DisplayObjectMenu = value;
             };
             ObjectMenu.InsertDisplayer = (index, displayer) => TrailingArea.ObjectMenu.Insert(index, displayer);
@@ -216,7 +220,7 @@ namespace umi3d.baseBrowser.connection
             {
                 if (ObjectMenu[0] is TextfieldDisplayer textfield)
                 {
-                    Game.Cursor.Action = "Edit Text";
+                    Game.Cursor.ActionText.LocaliseText = new LocalisationAttribute("Edit text", "Other", "EditText");
                     UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose, () => textfield.Focus());
                 }
                 else if (ObjectMenu[0] is ButtonDisplayer button)
@@ -250,8 +254,8 @@ namespace umi3d.baseBrowser.connection
                 (
                     string.IsNullOrEmpty(CursorAction)
                     || CursorAction == "new tool"
-                ) CursorAction = $"Display interactions menu";
-                Game.Cursor.Action = CursorAction;
+                ) Game.Cursor.ActionText.LocaliseText = new LocalisationAttribute("Display contextual Menu", "Other", "DisplayInteractionsMenu");
+                else Game.Cursor.Action = CursorAction;
 
                 if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;
 
