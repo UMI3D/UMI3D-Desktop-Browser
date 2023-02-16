@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class Game_C : VisualElement, IGameView
+    public class Game_C : Visual_C, IGameView
     {
         public new class UxmlFactory : UxmlFactory<Game_C, UxmlTraits> { }
 
@@ -134,10 +134,11 @@ namespace umi3d.commonScreen.game
             }
         }
 
-        public virtual string StyleSheetGamePath => $"USS/game";
-        public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/game";
-        public virtual string USSCustomClassName => "game";
-        public virtual string USSCustomClassLeadingAndTrailingBox => "game-leading__trailing__box";
+        public override string StyleSheetPath_MainTheme => $"USS/game";
+        public static string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetGamesFolderPath}/game";
+
+        public override string UssCustomClass_Emc => "game";
+        public virtual string USSCustomClassLeadingAndTrailingBox => $"{UssCustomClass_Emc}-leading__trailing__box";
 
         /// <summary>
         /// Event raised if the if the user clicke on the trailing and leading area but not in the objectMenu.
@@ -163,32 +164,32 @@ namespace umi3d.commonScreen.game
         public static System.Action<bool> LeftHandModeUpdated;
         protected static bool m_leftHand;
 
-        public Game_C() => InitElement();
-
-        /// <summary>
-        /// Initialize this element.
-        /// </summary>
-        public virtual void InitElement()
+        protected override void InstanciateChildren()
         {
+            base.InstanciateChildren();
             if (NotifAndUserArea == null)
             {
                 if (Application.isPlaying) NotifAndUserArea = NotifAndUsersArea_C.Instance;
                 else NotifAndUserArea = new NotifAndUsersArea_C();
                 NotifAndUserArea.name = "notif-and-user-area";
             }
+        }
 
-            try
-            {
-                this.AddStyleSheetFromPath(StyleSheetGamePath);
-                this.AddStyleSheetFromPath(StyleSheetPath);
-            }
-            catch (System.Exception e)
-            {
-                throw e;
-            }
-            AddToClassList(USSCustomClassName);
+        protected override void AttachStyleSheet()
+        {
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
+        }
+
+        protected override void AttachUssClass()
+        {
+            base.AttachUssClass();
             LeadingAndTrailingBox.AddToClassList(USSCustomClassLeadingAndTrailingBox);
+        }
 
+        protected override void InitElement()
+        {
+            base.InitElement();
             TopArea.InformationArea.NotificationTitleClicked += () =>
             {
                 DisplayNotifUsersArea = true;
@@ -226,7 +227,11 @@ namespace umi3d.commonScreen.game
             Add(LeadingAndTrailingBox);
             LeadingAndTrailingBox.Add(LeadingArea);
             LeadingAndTrailingBox.Add(TrailingArea);
+        }
 
+        protected override void SetProperties()
+        {
+            base.SetProperties();
             Controller = ControllerEnum.MouseAndKeyboard;
             DisplayNotifUsersArea = S_displayNotifUserArea;
             LeftHand = m_leftHand;
