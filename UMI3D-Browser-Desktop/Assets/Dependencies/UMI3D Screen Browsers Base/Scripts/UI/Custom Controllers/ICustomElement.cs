@@ -309,3 +309,16 @@ public static class ElementExtensions
         ve.RemoveFromHierarchy();
     }
 }
+
+public static class FloatExtentions
+{
+    /// <summary>
+    /// Whether or not <paramref name="f1"/> equals <paramref name="f2"/> with an approximation of <paramref name="e"/>.
+    /// </summary>
+    /// <param name="f1"></param>
+    /// <param name="f2"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    public static bool EqualsEpsilone(this float f1, float f2, float e = .01f)
+        => Mathf.Abs(f1 - f2) <= e;
+}
