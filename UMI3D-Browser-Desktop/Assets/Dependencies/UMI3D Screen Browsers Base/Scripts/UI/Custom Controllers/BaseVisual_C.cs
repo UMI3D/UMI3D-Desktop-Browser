@@ -18,10 +18,8 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen
 {
-    public class Visual_C : VisualElement
+    public abstract class BaseVisual_C : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<Visual_C, UxmlTraits> { }
-
         /// <summary>
         /// Event raised when a property changed, if this element is attached to a panel.
         /// </summary>
@@ -46,7 +44,7 @@ namespace umi3d.commonScreen
         /// </summary>
         public virtual string UssCustomClass_Emc => "";
 
-        public Visual_C()
+        public BaseVisual_C()
         {
             this.RegisterCallback<AttachToPanelEvent>(AttachedToPanel);
             this.RegisterCallback<DetachFromPanelEvent>(DetachedFromPanel);
@@ -103,7 +101,7 @@ namespace umi3d.commonScreen
         /// <summary>
         /// Initialise this element.
         /// </summary>
-        /// <remarks>This methode is called by the base class <see cref="Visual_C"/>. This methode is in the range of <see cref="IsSet"/> equals to false.</remarks>
+        /// <remarks>This methode is called by the base class <see cref="BaseVisual_C"/>. This methode is in the range of <see cref="IsSet"/> equals to false.</remarks>
         protected virtual void InitElement()
         {
         }

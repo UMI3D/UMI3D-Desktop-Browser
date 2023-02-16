@@ -22,7 +22,7 @@ using static umi3d.baseBrowser.inputs.interactions.BaseKeyInteraction;
 
 namespace umi3d.commonScreen.Displayer
 {
-    public class InteractableMappingRow_C : Visual_C
+    public class InteractableMappingRow_C : BaseVisual_C
     {
         public new class UxmlFactory : UxmlFactory<InteractableMappingRow_C, UxmlTraits> { }
 

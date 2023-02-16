@@ -19,7 +19,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class Cursor_C : Visual_C
+    public class Cursor_C : BaseVisual_C
     {
         public new class UxmlFactory : UxmlFactory<Cursor_C, UxmlTraits> { }
 

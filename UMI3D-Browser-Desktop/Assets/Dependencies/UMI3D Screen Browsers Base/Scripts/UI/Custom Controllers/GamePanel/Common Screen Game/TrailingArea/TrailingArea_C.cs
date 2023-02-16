@@ -22,7 +22,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class TrailingArea_C : Visual_C
+    public class TrailingArea_C : BaseVisual_C
     {
         public enum WindowsEnum
         {

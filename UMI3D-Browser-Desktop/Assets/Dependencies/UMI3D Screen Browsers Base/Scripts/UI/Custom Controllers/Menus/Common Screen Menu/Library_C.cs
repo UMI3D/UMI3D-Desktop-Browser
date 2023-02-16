@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.menu
 {
-    public class Library_C : Visual_C
+    public class Library_C : BaseVisual_C
     {
         public new class UxmlFactory : UxmlFactory<Library_C, UxmlTraits> { }
 

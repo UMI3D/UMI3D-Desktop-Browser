@@ -19,7 +19,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Displayer
 {
-    public class Notification_C : Visual_C
+    public class Notification_C : BaseVisual_C
     {
         public new class UxmlFactory : UxmlFactory<Notification_C, UxmlTraits> { }
 

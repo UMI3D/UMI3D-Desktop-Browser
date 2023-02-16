@@ -23,7 +23,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class UserList_C : Visual_C
+    public class UserList_C : BaseVisual_C
     {
         public new class UxmlFactory : UxmlFactory<UserList_C, UxmlTraits> { }
 

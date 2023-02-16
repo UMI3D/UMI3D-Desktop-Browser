@@ -230,7 +230,7 @@ namespace umi3d.commonScreen.Displayer
         /// <summary>
         /// Initialise this element.
         /// </summary>
-        /// <remarks>This methode is called by the base class <see cref="Visual_C"/>. This methode is in the range of <see cref="IsSet"/> equals to false.</remarks>
+        /// <remarks>This methode is called by the base class <see cref="BaseVisual_C"/>. This methode is in the range of <see cref="IsSet"/> equals to false.</remarks>
         protected virtual void InitElement()
         {
             SampleTitleLabel.TextStyle = TextStyle.Subtitle;

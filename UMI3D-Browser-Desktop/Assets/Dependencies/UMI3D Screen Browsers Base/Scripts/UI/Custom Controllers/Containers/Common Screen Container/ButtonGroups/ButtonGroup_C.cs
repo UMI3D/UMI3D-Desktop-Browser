@@ -22,7 +22,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Container
 {
-    public class ButtonGroup_C : Visual_C
+    public class ButtonGroup_C : BaseVisual_C
     {
         public new class UxmlFactory : UxmlFactory<ButtonGroup_C, UxmlTraits> { }
 

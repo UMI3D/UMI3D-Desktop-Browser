@@ -19,7 +19,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class GamePanel_C : Visual_C
+    public class GamePanel_C : BaseVisual_C
     {
         public enum GameViews
         {
