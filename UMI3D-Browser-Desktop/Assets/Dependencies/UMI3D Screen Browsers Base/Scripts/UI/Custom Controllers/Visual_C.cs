@@ -56,6 +56,7 @@ namespace umi3d.commonScreen
             this.RegisterCallback<AttachToPanelEvent>(AttachedToPanel);
             this.RegisterCallback<DetachFromPanelEvent>(DetachedFromPanel);
             this.RegisterCallback<CustomStyleResolvedEvent>(CustomStyleResolved);
+            this.RegisterCallback<GeometryChangedEvent>(GeometryChanged);
             IsSet = false;
             InstanciateChildren();
             _AttachStyleSheet();
@@ -143,6 +144,15 @@ namespace umi3d.commonScreen
         /// </summary>
         /// <param name="evt"></param>
         protected virtual void CustomStyleResolved(CustomStyleResolvedEvent evt)
+        {
+
+        }
+
+        /// <summary>
+        /// Method called when this element geometry changed.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void GeometryChanged(GeometryChangedEvent evt)
         {
 
         }
