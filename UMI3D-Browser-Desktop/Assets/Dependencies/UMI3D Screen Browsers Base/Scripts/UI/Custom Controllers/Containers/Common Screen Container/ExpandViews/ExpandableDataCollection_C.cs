@@ -13,14 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
 using umi3d.commonScreen.Container;
-using umi3d.commonScreen.game;
-using umi3d.UiPreview.commonScreen.game;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Container
@@ -106,16 +99,34 @@ namespace umi3d.commonScreen.Container
 
             ContentContainer.RegisterCallback<GeometryChangedEvent>(ce =>
             {
+                if (!canRaiseAnimation) return;
+                canRaiseAnimation = false;
+
                 bool isAnimationIn = ce.newRect.height > ce.oldRect.height;
                 ContentVieport.AddAnimation
                 (
                     this,
-                    () => ContentVieport.style.height = ContentVieport.resolvedStyle.height,
+                    () => ContentVieport.style.height = m_lastHeight,
                     () => ContentVieport.style.height = ContentContainer.resolvedStyle.height,
                     "height",
-                    isAnimationIn ? AnimationTimeIn : AnimationTimeOut
+                    isAnimationIn ? AnimationTimeIn : AnimationTimeOut,
+                    callback: () =>
+                    {
+                        m_lastHeight = ContentVieport.resolvedStyle.height;
+                        ContentVieport.style.height = StyleKeyword.Null;
+                    }
                 );
             });
+
+            ItemAdded += datum =>
+            {
+                canRaiseAnimation = true;
+            };
+
+            ItemRemoved += datum =>
+            {
+                canRaiseAnimation = true;
+            };
 
             Add(ContentVieport);
             ContentVieport.Add(ContentContainer);
@@ -128,6 +139,15 @@ namespace umi3d.commonScreen.Container
         public override void Set() => InitElement();
 
         #region Implementation
+
+        /// <summary>
+        /// Last height of the <see cref="ContentVieport"/> after the animation
+        /// </summary>
+        protected float m_lastHeight;
+        /// <summary>
+        /// Whether or not the animation can be raised.
+        /// </summary>
+        protected bool canRaiseAnimation;
 
         #endregion
     }

@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class LeadingArea_C : VisualElement
+    public class LeadingArea_C : Visual_C
     {
         public new class UxmlFactory : UxmlFactory<LeadingArea_C, UxmlTraits> { }
 
@@ -91,22 +91,15 @@ namespace umi3d.commonScreen.game
             {
                 m_leftHand = value;
                 JoystickArea.LeftHand = value;
-                if (value)
-                {
-                    RemoveFromClassList(USSCustomClassName);
-                    AddToClassList(USSCustomClassNameReverse);
-                }
-                else
-                {
-                    RemoveFromClassList(USSCustomClassNameReverse);
-                    AddToClassList(USSCustomClassName);
-                }
+                if (value) AddToClassList(USSCustomClassNameReverse);
+                else RemoveFromClassList(USSCustomClassNameReverse);
             }
         }
 
-        public virtual string StyleSheetGamePath => $"USS/game";
-        public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/leadingArea";
-        public virtual string USSCustomClassName => "leading__area";
+        public override string StyleSheetPath_MainTheme => $"USS/game";
+        public static string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetGamesFolderPath}/leadingArea";
+
+        public override string UssCustomClass_Emc => "leading__area";
         public virtual string USSCustomClassNameReverse => "leading__area-reverse";
 
         public PinnedToolsArea_C PinnedToolsArea;
@@ -116,39 +109,56 @@ namespace umi3d.commonScreen.game
         protected ControllerEnum m_controller;
         protected bool m_leftHand;
 
-        public LeadingArea_C() => InitElement();
-
-        /// <summary>
-        /// Initialize this element.
-        /// </summary>
-        public virtual void InitElement()
+        protected override void InstanciateChildren()
         {
+            base.InstanciateChildren();
             if (PinnedToolsArea == null)
             {
                 if (Application.isPlaying) PinnedToolsArea = PinnedToolsArea_C.Instance;
                 else PinnedToolsArea = new PinnedToolsArea_C();
                 PinnedToolsArea.name = "pinned-tools";
             }
+        }
 
-            try
-            {
-                this.AddStyleSheetFromPath(StyleSheetGamePath);
-                this.AddStyleSheetFromPath(StyleSheetPath);
-            }
-            catch (System.Exception e)
-            {
-                throw e;
-            }
+        protected override void AttachStyleSheet()
+        {
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
+        }
 
+        protected override void InitElement()
+        {
+            base.InitElement();
             PinnedToolsArea.Mode = ScrollViewMode.Vertical;
-            PinnedToolsArea.SDC.ContentChanged += count =>
-            {
-                if (count == 1) Insert(0, PinnedToolsArea);
-                else if (count == 0) PinnedToolsArea.RemoveFromHierarchy();
-            };
+        }
 
+        protected override void SetProperties()
+        {
+            base.SetProperties();
             Controller = ControllerEnum.MouseAndKeyboard;
             LeftHand = m_leftHand;
         }
+
+        protected override void AttachedToPanel(AttachToPanelEvent evt)
+        {
+            base.AttachedToPanel(evt);
+            PinnedToolsArea.SDC.ContentChanged += PinnedToolsAreaContentChanged;
+        }
+
+        protected override void DetachedFromPanel(DetachFromPanelEvent evt)
+        {
+            base.DetachedFromPanel(evt);
+            PinnedToolsArea.SDC.ContentChanged -= PinnedToolsAreaContentChanged;
+        }
+
+        #region Implementation
+
+        protected virtual void PinnedToolsAreaContentChanged(int count)
+        {
+            if (count == 1) Insert(0, PinnedToolsArea);
+            else if (count == 0) PinnedToolsArea.RemoveFromHierarchy();
+        }
+
+        #endregion
     }
 }

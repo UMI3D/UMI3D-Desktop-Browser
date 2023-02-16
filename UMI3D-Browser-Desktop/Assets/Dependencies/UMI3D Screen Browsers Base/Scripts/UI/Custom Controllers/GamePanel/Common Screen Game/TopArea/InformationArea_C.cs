@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System;
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.cdk.menu;
 using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.game;
 using UnityEngine;
@@ -197,16 +198,20 @@ namespace umi3d.commonScreen.game
         public virtual string USSCustomClassSound_On => $"{UssCustomClass_Emc}-sound__on";
         public virtual string USSCustomClassMic_Off => $"{UssCustomClass_Emc}-mic__off";
         public virtual string USSCustomClassSound_Off => $"{UssCustomClass_Emc}-sound__off";
+        public virtual string USSCustomToolbox => $"{UssCustomClass_Emc}-toolbox";
 
         public event Action<bool> ExpandUpdate;
         public event Action MicStatusChanged;
         public event Action SoundStatusChanged;
-
         public event Action NotificationTitleClicked;
+
         public string EnvironmentName;
+
         public Text_C ShortInf = new Text_C { name = "short-inf" };
         public VisualElement Mic = new VisualElement { name = "mic-icon" };
         public VisualElement Sound = new VisualElement { name = "sound-icon" };
+        public Button_C Toolbox = new Button_C { name = "toolbox" };
+
         public TouchManipulator2 InfManipulator = new TouchManipulator2(null, 0, 0);
         public TouchManipulator2 ShortInfManipulator = new TouchManipulator2(null, 0, 0);
         public TouchManipulator2 MicManipulator = new TouchManipulator2(null, 0, 0);
@@ -235,11 +240,14 @@ namespace umi3d.commonScreen.game
             ShortInf.AddToClassList(USSCustomClassShortInf);
             Mic.AddToClassList(USSCustomClassMic_Sound);
             Sound.AddToClassList(USSCustomClassMic_Sound);
+            Toolbox.AddToClassList(USSCustomToolbox);
         }
 
         protected override void InitElement()
         {
             base.InitElement();
+            GlobalToolsMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/GlobalToolsMenu");
+
             this.AddManipulator(InfManipulator);
             InfManipulator.ClickedDownWithInfo += (evt, locaPosition) =>
             {
@@ -317,6 +325,19 @@ namespace umi3d.commonScreen.game
             IsSoundOn = false;
         }
 
+        protected override void AttachedToPanel(AttachToPanelEvent evt)
+        {
+            base.AttachedToPanel(evt);
+            GlobalToolsMenu.menu.onContentChange.AddListener(ToolsMenuContentChanged);
+            ToolsMenuContentChanged();
+        }
+
+        protected override void DetachedFromPanel(DetachFromPanelEvent evt)
+        {
+            base.DetachedFromPanel(evt);
+            GlobalToolsMenu.menu.onContentChange.RemoveListener(ToolsMenuContentChanged);
+        }
+
         protected override void CustomStyleResolved(CustomStyleResolvedEvent evt)
         {
             base.CustomStyleResolved(evt);
@@ -330,6 +351,8 @@ namespace umi3d.commonScreen.game
         #region Implementation
 
         public static bool HideNotification;
+
+        public MenuAsset GlobalToolsMenu;
 
         protected void AnimateShortInf(bool isRevert)
         {
@@ -345,6 +368,12 @@ namespace umi3d.commonScreen.game
                 revert: isRevert,
                 callback: () => m_shortInfExpended = !isRevert
             );
+        }
+
+        protected void ToolsMenuContentChanged()
+        {
+            if (GlobalToolsMenu.menu.Count > 0) this.AddIfNotInHierarchy(Toolbox);
+            else if (GlobalToolsMenu.menu.Count == 0) Toolbox.RemoveFromHierarchy();
         }
 
         #endregion

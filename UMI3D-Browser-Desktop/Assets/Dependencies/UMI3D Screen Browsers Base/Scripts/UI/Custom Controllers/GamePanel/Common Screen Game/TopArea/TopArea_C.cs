@@ -13,13 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using umi3d.cdk.menu;
 using umi3d.commonDesktop.menu;
 using umi3d.commonScreen.Displayer;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class TopArea_C : VisualElement
+    public class TopArea_C : Visual_C
     {
         public new class UxmlFactory : UxmlFactory<TopArea_C, UxmlTraits> { }
 
@@ -93,49 +95,50 @@ namespace umi3d.commonScreen.game
             set => InformationArea.IsExpanded = value;
         }
 
-        public virtual string StyleSheetGamePath => $"USS/game";
-        public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/topArea";
-        public virtual string USSCustomClassName => "top__area";
-        public virtual string USSCustomClassMain => $"{USSCustomClassName}-main";
-        public virtual string USSCustomClassMenu => $"{USSCustomClassName}-menu";
-        public virtual string USSCustomClassButton => $"{USSCustomClassName}-button";
+        public override string StyleSheetPath_MainTheme => $"USS/game";
+        public static string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetGamesFolderPath}/topArea";
+
+        public override string UssCustomClass_Emc => "top__area";
+        public virtual string USSCustomClassMain => $"{UssCustomClass_Emc}-main";
+        public virtual string USSCustomClassMenu => $"{UssCustomClass_Emc}-menu";
+        public virtual string USSCustomClassButton => $"{UssCustomClass_Emc}-button";
 
         public AppHeader_C AppHeader = new AppHeader_C { name = "app-header" };
         public VisualElement Main = new VisualElement { name = "main" };
         public InformationArea_C InformationArea = new InformationArea_C { name = "information-area" };
         public Button_C Menu = new Button_C { name = "menu" };
+        
 
         protected ControllerEnum m_controller;
         protected bool m_displayHeader;
         protected bool m_isExplanded;
 
-        public TopArea_C() => InitElement();
-
-        /// <summary>
-        /// Initialize this element.
-        /// </summary>
-        public virtual void InitElement()
+        protected override void AttachStyleSheet()
         {
-            try
-            {
-                this.AddStyleSheetFromPath(StyleSheetGamePath);
-                this.AddStyleSheetFromPath(StyleSheetPath);
-            }
-            catch (System.Exception e)
-            {
-                throw e;
-            }
-            AddToClassList(USSCustomClassName);
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
+        }
+
+        protected override void AttachUssClass()
+        {
+            base.AttachUssClass();
             Main.AddToClassList(USSCustomClassMain);
             Menu.AddToClassList(USSCustomClassMenu);
             Menu.AddToClassList(USSCustomClassButton);
+        }
 
-            Menu.name = "menu";
+        protected override void InitElement()
+        {
+            base.InitElement();
             Menu.Category = ElementCategory.Game;
 
             Main.Add(InformationArea);
             Main.Add(Menu);
+        }
 
+        protected override void SetProperties()
+        {
+            base.SetProperties();
             Controller = ControllerEnum.MouseAndKeyboard;
             DisplayHeader = false;
             IsExpanded = false;

@@ -22,8 +22,17 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class TrailingArea_C : VisualElement
+    public class TrailingArea_C : Visual_C
     {
+        public enum WindowsEnum
+        {
+            None,
+            ContextualMenu,
+            EmoteWindow,
+            ToolsWindow,
+            ToolsItemsWindow
+        }
+
         public new class UxmlFactory : UxmlFactory<TrailingArea_C, UxmlTraits> { }
 
         public new class UxmlTraits : VisualElement.UxmlTraits
@@ -38,15 +47,9 @@ namespace umi3d.commonScreen.game
                 name = "display-notif-users-area",
                 defaultValue = false
             };
-            protected UxmlBoolAttributeDescription m_displayObjectMenu = new UxmlBoolAttributeDescription
+            protected UxmlEnumAttributeDescription<WindowsEnum> m_activeWindow = new UxmlEnumAttributeDescription<WindowsEnum>
             {
-                name = "display-object-menu",
-                defaultValue = false
-            };
-            protected UxmlBoolAttributeDescription m_displayEmoteWindow = new UxmlBoolAttributeDescription
-            {
-                name = "display-emote-window",
-                defaultValue = false
+                name = "active-window",
             };
             protected UxmlBoolAttributeDescription m_leftHand = new UxmlBoolAttributeDescription
             {
@@ -69,8 +72,7 @@ namespace umi3d.commonScreen.game
 
                 custom.Controller = m_controller.GetValueFromBag(bag, cc);
                 custom.DisplayNotifUsersArea = m_displayNotifAndUsersArea.GetValueFromBag(bag, cc);
-                custom.DisplayObjectMenu = m_displayObjectMenu.GetValueFromBag(bag, cc);
-                custom.DisplayEmoteWindow = m_displayEmoteWindow.GetValueFromBag(bag, cc);
+                custom.ActiveWindow = m_activeWindow.GetValueFromBag(bag, cc);
                 custom.LeftHand = m_leftHand.GetValueFromBag(bag, cc);
             }
         }
@@ -137,84 +139,60 @@ namespace umi3d.commonScreen.game
                         "width",
                         0.5f,
                         revert: !value,
-                        callback: value ? null : NotifAndUserArea.RemoveFromHierarchy
+                        callback: value ? null : NotifAndUserArea.RemoveIfIsInHierarchy
                     );
                 });
             }
         }
 
-        public virtual bool DisplayObjectMenu
+        public virtual WindowsEnum ActiveWindow
         {
-            get => m_displayObjectMenu;
+            get => m_activeWindow;
             set
             {
-                m_displayObjectMenu = value;
-                if (value)
+                if (m_activeWindow == value) return;
+                UnityEngine.Debug.Log($"{m_activeWindow}, {value}");
+                switch (m_activeWindow)
                 {
-                    this.AddIfNotInHierarchy(ObjectMenu);
-                    ObjectMenu.style.visibility = Visibility.Hidden;
+                    case WindowsEnum.None:
+                        break;
+                    case WindowsEnum.ContextualMenu:
+                        DisplayObjectMenu = false;
+                        break;
+                    case WindowsEnum.EmoteWindow:
+                        DisplayEmoteWindow = false;
+                        break;
+                    case WindowsEnum.ToolsWindow:
+                        DisplayToolsWindow = false;
+                        break;
+                    case WindowsEnum.ToolsItemsWindow:
+                        DisplayToolsItemsWindow = false;
+                        break;
+                    default:
+                        break;
                 }
 
-                if
-                (
-                    !value
-                    && ObjectMenu.FindRoot() == null
-                ) return;
-
-                ObjectMenu.schedule.Execute(() =>
+                switch (value)
                 {
-                    ObjectMenu.style.visibility = StyleKeyword.Null;
-                    ObjectMenu.AddAnimation
-                    (
-                        this,
-                        () => ObjectMenu.style.width = Length.Percent(0),
-                        () => ObjectMenu.style.width = Length.Percent(70),
-                        "width",
-                        0.5f,
-                        revert: !m_displayObjectMenu,
-                        callback: m_displayObjectMenu ? null : ObjectMenu.RemoveFromHierarchy
-                    );
-                });
-            }
-        }
-
-        public virtual bool DisplayEmoteWindow
-        {
-            get
-            {
-                if (Application.isPlaying) return Game_C.S_displayEmoteWindow;
-                else return m_displayEmoteWindow;
-            }
-            set
-            {
-                if (!Application.isPlaying) m_displayEmoteWindow = value;
-                if (value)
-                {
-                    this.AddIfNotInHierarchy(EmoteWindow);
-                    EmoteWindow.style.visibility = Visibility.Hidden;
-                    EmoteWindow.UpdateFilter();
+                    case WindowsEnum.None:
+                        break;
+                    case WindowsEnum.ContextualMenu:
+                        DisplayObjectMenu = true;
+                        break;
+                    case WindowsEnum.EmoteWindow:
+                        DisplayEmoteWindow = true;
+                        break;
+                    case WindowsEnum.ToolsWindow:
+                        DisplayToolsWindow = true;
+                        break;
+                    case WindowsEnum.ToolsItemsWindow:
+                        DisplayToolsItemsWindow = true;
+                        break;
+                    default:
+                        break;
                 }
 
-                if
-                (
-                    !value
-                    && EmoteWindow.FindRoot() == null
-                ) return;
-
-                EmoteWindow.schedule.Execute(() =>
-                {
-                    EmoteWindow.style.visibility = StyleKeyword.Null;
-                    EmoteWindow.AddAnimation
-                    (
-                        this,
-                        () => EmoteWindow.style.width = Length.Percent(0),
-                        () => EmoteWindow.style.width = Length.Percent(70),
-                        "width",
-                        0.5f,
-                        revert: !value,
-                        callback: value ? null : EmoteWindow.RemoveFromHierarchy
-                    );
-                });
+                m_activeWindow = value;
             }
         }
 
@@ -227,94 +205,85 @@ namespace umi3d.commonScreen.game
                 ButtonsArea.LeftHand = value;
                 if (value)
                 {
-                    RemoveFromClassList(USSCustomClassName);
+                    RemoveFromClassList(UssCustomClass_Emc);
                     AddToClassList(USSCustomClassNameReverse);
                 }
                 else
                 {
                     RemoveFromClassList(USSCustomClassNameReverse);
-                    AddToClassList(USSCustomClassName);
+                    AddToClassList(UssCustomClass_Emc);
                 }
             }
         }
 
-        public virtual string StyleSheetGamePath => $"USS/game";
-        public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/trailingArea";
-        public virtual string USSCustomClassName => "trailing__area";
+        public override string StyleSheetPath_MainTheme => $"USS/game";
+        public static string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetGamesFolderPath}/trailingArea";
+
+        public override string UssCustomClass_Emc => "trailing__area";
         public virtual string USSCustomClassNameReverse => "trailing__area-reverse";
-        public virtual string USSCustomClassObjectMenu => $"{USSCustomClassName}-object__menu";
-        public virtual string USSCustomClassEmoteWindow => $"{USSCustomClassName}-emote__window";
-        public virtual string USSCustomClassToolsWindow => $"{USSCustomClassName}-tools__window";
-        public virtual string USSCustomClassCameraLayer => $"{USSCustomClassName}-camera__layer";
+        public virtual string USSCustomClassObjectMenu => $"{UssCustomClass_Emc}-object__menu";
+        public virtual string USSCustomClassEmoteWindow => $"{UssCustomClass_Emc}-emote__window";
+        public virtual string USSCustomClassToolsWindow => $"{UssCustomClass_Emc}-tools__window";
+        public virtual string USSCustomClassCameraLayer => $"{UssCustomClass_Emc}-camera__layer";
+        public virtual string USSCustomClassWindowContainer => $"{UssCustomClass_Emc}-window__container";
 
         public ToolsWindow_C ToolsWindow = new ToolsWindow_C { name = "tools-window" };
-        public NotifAndUsersArea_C NotifAndUserArea;
-        public Form_C ObjectMenu;
-        public EmoteWindow_C EmoteWindow;
+        public ToolsItemsWindow_C ToolsItemsWindow = new ToolsItemsWindow_C { name = "tools-items-window" };
+        public Form_C ObjectMenu = new Form_C { name = "contextual-menu" };
         public ButtonArea_C ButtonsArea = new ButtonArea_C { name = "buttons-area" };
         public VisualElement CameraLayer = new VisualElement { name = "camera-layer" };
-        public MenuAsset GlobalToolsMenu;
+        public ExpandableDataCollection_C<VisualElement> WindowContainer = new ExpandableDataCollection_C<VisualElement> { name = "window-container" };
+
+        public NotifAndUsersArea_C NotifAndUserArea;
+        public EmoteWindow_C EmoteWindow;
 
         public TouchManipulator2 CameraManipulator = new TouchManipulator2(null, 0, 0);
-        /// <summary>
-        /// Direction of the swipe.
-        /// </summary>
-        public Vector2 Direction
-        {
-            get
-            {
-                if (!m_cameraMoved) return Vector2.zero;
-                m_cameraMoved = false;
-                m_initialDownPosition = m_localPosition;
-                return m_direction;
-            }
-        }
-
+        
         public static System.Action LeftHandModeUpdated;
         protected bool m_leftHand;
-        protected bool m_hasBeenInitialized;
         protected ControllerEnum m_controller;
-        protected bool m_displayObjectMenu;
-        protected bool m_displayEmoteWindow;
+        protected WindowsEnum m_activeWindow;
+        
         protected bool m_displayNotifAndUserArea;
         protected Vector2 m_initialDownPosition;
         protected Vector2 m_localPosition;
         protected bool m_cameraMoved;
         protected Vector2 m_direction;
 
-        public TrailingArea_C() => InitElement();
-
-        public virtual void InitElement()
+        protected override void InstanciateChildren()
         {
+            base.InstanciateChildren();
             if (NotifAndUserArea == null)
             {
                 if (Application.isPlaying) NotifAndUserArea = NotifAndUsersArea_C.Instance;
                 else NotifAndUserArea = new NotifAndUsersArea_C();
             }
-            if (ObjectMenu == null) ObjectMenu = new Container.Form_C();
-            if (ButtonsArea == null) ButtonsArea = new commonMobile.game.ButtonArea_C();
-
             if (EmoteWindow == null)
             {
                 if (Application.isPlaying) EmoteWindow = EmoteWindow_C.Instance;
                 else EmoteWindow = new EmoteWindow_C();
             }
+        }
 
-            try
-            {
-                this.AddStyleSheetFromPath(StyleSheetGamePath);
-                this.AddStyleSheetFromPath(StyleSheetPath);
-            }
-            catch (System.Exception e)
-            {
-                throw e;
-            }
+        protected override void AttachStyleSheet()
+        {
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
+        }
 
+        protected override void AttachUssClass()
+        {
+            base.AttachUssClass();
             ObjectMenu.AddToClassList(USSCustomClassObjectMenu);
             EmoteWindow.AddToClassList(USSCustomClassEmoteWindow);
             ToolsWindow.AddToClassList(USSCustomClassToolsWindow);
             CameraLayer.AddToClassList(USSCustomClassCameraLayer);
+            WindowContainer.AddToClassList(USSCustomClassWindowContainer);
+        }
 
+        protected override void InitElement()
+        {
+            base.InitElement();
             CameraLayer.AddManipulator(CameraManipulator);
             CameraManipulator.ClickedDownWithInfo += (evt, localposition) => m_initialDownPosition = localposition;
             CameraManipulator.MovedWithInfo += (evt, localposition) =>
@@ -330,7 +299,6 @@ namespace umi3d.commonScreen.game
             ButtonsArea.ClickedDown = (evt, worldPosition) => CameraManipulator.OnClickedDownWithInf(evt, CameraLayer.WorldToLocal(worldPosition));
             ButtonsArea.Moved = (evt, worldPosition) => CameraManipulator.OnMovedWithInf(evt, CameraLayer.WorldToLocal(worldPosition));
 
-            ObjectMenu.name = "object-menu";
             ObjectMenu.Category = ElementCategory.Game;
             ObjectMenu.Title = "Contextual Menu";
 
@@ -339,11 +307,109 @@ namespace umi3d.commonScreen.game
             ToolsWindow.Category = ElementCategory.Game;
             ToolsWindow.AddRoot(GlobalToolsMenu.menu);
 
+            WindowContainer.MakeItem = datum => datum;
+            WindowContainer.BindItem = (datum, element) => { };
+            WindowContainer.UnbindItem = (datum, element) => { };
+            WindowContainer.FindItem = param => param.Item1.name == param.Item2.name;
+            WindowContainer.AnimationTimeIn = 1f;
+            WindowContainer.AnimationTimeOut = .5f;
+
+            Add(WindowContainer);
+        }
+
+        protected override void SetProperties()
+        {
+            base.SetProperties();
             Controller = ControllerEnum.MouseAndKeyboard;
             DisplayNotifUsersArea = false;
-            DisplayObjectMenu = false;
-            DisplayEmoteWindow = false;
             LeftHand = m_leftHand;
         }
+
+        protected override void GeometryChanged(GeometryChangedEvent evt)
+        {
+            base.GeometryChanged(evt);
+
+            if (evt.newRect.height.EqualsEpsilone(evt.oldRect.height, .5f)) return;
+            ObjectMenu.style.maxHeight = evt.newRect.height;
+            EmoteWindow.style.maxHeight = evt.newRect.height;
+            ToolsWindow.style.maxHeight = evt.newRect.height;
+        }
+
+        #region Implementation
+
+        public MenuAsset GlobalToolsMenu;
+
+        protected bool m_displayObjectMenu;
+        protected bool m_displayEmoteWindow;
+        protected bool m_displayToolsWindow;
+        protected bool m_displayToolsItemsWindow;
+
+        /// <summary>
+        /// Direction of the swipe.
+        /// </summary>
+        public Vector2 Direction
+        {
+            get
+            {
+                if (!m_cameraMoved) return Vector2.zero;
+                m_cameraMoved = false;
+                m_initialDownPosition = m_localPosition;
+                return m_direction;
+            }
+        }
+
+        protected virtual bool DisplayObjectMenu
+        {
+            get => m_displayObjectMenu;
+            set
+            {
+                m_displayObjectMenu = value;
+                if (value) WindowContainer.AddDatum(ObjectMenu);
+                else WindowContainer.RemoveDatum(ObjectMenu);
+            }
+        }
+
+        protected virtual bool DisplayEmoteWindow
+        {
+            get
+            {
+                if (Application.isPlaying) return Game_C.S_displayEmoteWindow;
+                else return m_displayEmoteWindow;
+            }
+            set
+            {
+                if (!Application.isPlaying) m_displayEmoteWindow = value;
+                if (value)
+                {
+                    WindowContainer.AddDatum(EmoteWindow);
+                    EmoteWindow.UpdateFilter();
+                }
+                else WindowContainer.RemoveDatum(EmoteWindow);
+            }
+        }
+
+        protected virtual bool DisplayToolsWindow
+        {
+            get => m_displayToolsWindow;
+            set
+            {
+                m_displayToolsWindow = value;
+                if (value) WindowContainer.AddDatum(ToolsWindow);
+                else WindowContainer.RemoveDatum(ToolsWindow);
+            }
+        }
+
+        protected virtual bool DisplayToolsItemsWindow
+        {
+            get => m_displayToolsItemsWindow;
+            set
+            {
+                m_displayToolsItemsWindow = value;
+                if (value) WindowContainer.AddDatum(ToolsItemsWindow);
+                else WindowContainer.RemoveDatum(ToolsItemsWindow);
+            }
+        }
+
+        #endregion
     }
 }

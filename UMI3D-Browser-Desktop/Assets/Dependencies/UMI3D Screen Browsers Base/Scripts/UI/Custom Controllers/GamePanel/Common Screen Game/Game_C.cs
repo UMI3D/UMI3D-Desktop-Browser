@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.cdk.menu;
 using umi3d.commonDesktop.game;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -237,6 +238,22 @@ namespace umi3d.commonScreen.game
             LeftHand = m_leftHand;
         }
 
+        protected override void AttachedToPanel(AttachToPanelEvent evt)
+        {
+            base.AttachedToPanel(evt);
+            TopArea.InformationArea.Toolbox.clicked += ToolboxButtonClicked;
+
+            LeadingArea.PinnedToolsArea.ToolClicked += PinnedToolClicked;
+        }
+
+        protected override void DetachedFromPanel(DetachFromPanelEvent evt)
+        {
+            base.DetachedFromPanel(evt);
+            TopArea.InformationArea.Toolbox.clicked -= ToolboxButtonClicked;
+
+            LeadingArea.PinnedToolsArea.ToolClicked -= PinnedToolClicked;
+        }
+
         #region Implementation
 
         /// <summary>
@@ -329,7 +346,20 @@ namespace umi3d.commonScreen.game
 
         protected void DisplayTouchEmoteWindow(bool value)
         {
-            TrailingArea.DisplayEmoteWindow = value;
+            TrailingArea.ActiveWindow = value ? TrailingArea_C.WindowsEnum.EmoteWindow : TrailingArea_C.WindowsEnum.None;
+        }
+
+        protected virtual void ToolboxButtonClicked()
+        {
+            TrailingArea.ActiveWindow = TrailingArea.ActiveWindow != TrailingArea_C.WindowsEnum.ToolsWindow 
+                ? TrailingArea_C.WindowsEnum.ToolsWindow
+                : TrailingArea.ActiveWindow = TrailingArea_C.WindowsEnum.None;
+        }
+
+        protected virtual void PinnedToolClicked(bool isSelected, AbstractMenuItem menu)
+        {
+            TrailingArea.ToolsItemsWindow.AddMenu(menu);
+            TrailingArea.ActiveWindow = isSelected ? TrailingArea_C.WindowsEnum.ToolsItemsWindow : TrailingArea_C.WindowsEnum.None;
         }
 
         #endregion
