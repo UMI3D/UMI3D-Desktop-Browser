@@ -117,7 +117,7 @@ namespace umi3d.baseBrowser.connection
             ObjectMenu.DisplayObjectMenu = value =>
             {
                 if (GamePanel.CurrentView != GameViews.Game) return;
-                TrailingArea.DisplayObjectMenu = value;
+                TrailingArea.ActiveWindow = value ? TrailingArea_C.WindowsEnum.ContextualMenu : TrailingArea_C.WindowsEnum.None;
             };
             ObjectMenu.InsertDisplayer = (index, displayer) => TrailingArea.ObjectMenu.Insert(index, displayer);
             ObjectMenu.RemoveDisplayer = displayer => TrailingArea.ObjectMenu.Remove(displayer);

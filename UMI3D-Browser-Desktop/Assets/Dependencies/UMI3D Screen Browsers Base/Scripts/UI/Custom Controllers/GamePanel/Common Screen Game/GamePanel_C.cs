@@ -19,7 +19,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class GamePanel_C : VisualElement
+    public class GamePanel_C : Visual_C
     {
         public enum GameViews
         {
@@ -59,10 +59,6 @@ namespace umi3d.commonScreen.game
             }
         }
 
-        public virtual string StyleSheetGamePath => $"USS/game";
-        public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/gamePanel";
-        public virtual string USSCustomClassName => "game-panel";
-
         /// <summary>
         /// Set: Clear stack and display the new screen.
         /// </summary>
@@ -77,8 +73,7 @@ namespace umi3d.commonScreen.game
                 ViewStack.Push(value);
                 RemoveAllView();
 
-                VisualElement view;
-                GetView(value, out view, true);
+                GetView(value, out VisualElement view, true);
                 Add(view);
             }
         }
@@ -92,11 +87,9 @@ namespace umi3d.commonScreen.game
                 if (ViewStack.TryPeek(out var lastScreen) && lastScreen.Equals(value)) return;
                 ViewStack.Push(value);
 
-                VisualElement backgroundView;
-                GetView(m_currentGameView, out backgroundView, false);
+                GetView(m_currentGameView, out VisualElement backgroundView, false);
 
-                VisualElement foregroundView;
-                GetView(value, out foregroundView, true);
+                GetView(value, out VisualElement foregroundView, true);
                 Add(foregroundView);
                 foregroundView.style.visibility = Visibility.Hidden;
 
@@ -127,11 +120,9 @@ namespace umi3d.commonScreen.game
             if (!ViewStack.TryPop(out var menuScreen)) return null;
             if (!ViewStack.TryPeek(out m_currentGameView)) return null;
 
-            VisualElement backgroundView;
-            GetView(m_currentGameView, out backgroundView, true);
+            GetView(m_currentGameView, out VisualElement backgroundView, true);
 
-            VisualElement foregroundView;
-            GetView(menuScreen, out foregroundView, false);
+            GetView(menuScreen, out VisualElement foregroundView, false);
             Add(backgroundView);
             backgroundView.PlaceBehind(foregroundView);
 
@@ -158,6 +149,11 @@ namespace umi3d.commonScreen.game
             }
         }
 
+        public override string StyleSheetPath_MainTheme => $"USS/game";
+        public static string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetGamesFolderPath}/gamePanel";
+
+        public override string UssCustomClass_Emc => "game-panel";
+
         public Loader_C Loader = new Loader_C { name = "loader" };
         public GameMenu_C Menu = new GameMenu_C { name = "game-menu" };
         public Game_C Game = new Game_C { name = "game" };
@@ -166,27 +162,22 @@ namespace umi3d.commonScreen.game
         protected GameViews m_currentGameView;
         protected bool m_displayHeader;
 
-        public GamePanel_C() => InitElement();
-
-        /// <summary>
-        /// Initialize this element.
-        /// </summary>
-        public virtual void InitElement()
+        protected override void AttachStyleSheet()
         {
-            try
-            {
-                this.AddStyleSheetFromPath(StyleSheetGamePath);
-                this.AddStyleSheetFromPath(StyleSheetPath);
-            }
-            catch (System.Exception e)
-            {
-                throw e;
-            }
-            AddToClassList(USSCustomClassName);
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
+        }
 
+        protected override void InitElement()
+        {
+            base.InitElement();
             Game.TopArea.Menu.clicked += () => AddScreenToStack = GameViews.GameMenu;
             Menu.Resume.clicked += () => AddScreenToStack = GameViews.Game;
+        }
 
+        protected override void SetProperties()
+        {
+            base.SetProperties();
             CurrentView = GameViews.Game;
             DisplayHeader = false;
         }

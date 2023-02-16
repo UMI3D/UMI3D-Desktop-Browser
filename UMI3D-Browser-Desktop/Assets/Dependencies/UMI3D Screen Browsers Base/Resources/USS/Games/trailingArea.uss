@@ -28,14 +28,8 @@
 	bottom: 0;
 }
 
-.trailing__area-object__menu,
-.trailing__area-emote__window,
-.trailing__area-tools__window {
-	position: absolute;
-	left: 5%;
-	max-height: 100%;
-}
-
-.trailing__area-tools__window {
+.trailing__area-window__container {
 	width: 70%;
+
+	justify-content: center;
 }

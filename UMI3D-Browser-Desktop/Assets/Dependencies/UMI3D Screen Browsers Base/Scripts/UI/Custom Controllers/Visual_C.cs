@@ -13,12 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using umi3d.commonScreen.Displayer;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen
@@ -56,6 +51,11 @@ namespace umi3d.commonScreen
             this.RegisterCallback<AttachToPanelEvent>(AttachedToPanel);
             this.RegisterCallback<DetachFromPanelEvent>(DetachedFromPanel);
             this.RegisterCallback<CustomStyleResolvedEvent>(CustomStyleResolved);
+            this.RegisterCallback<GeometryChangedEvent>(GeometryChanged);
+            this.RegisterCallback<TransitionRunEvent>(TransitionRun);
+            this.RegisterCallback<TransitionStartEvent>(TransitionStarted);
+            this.RegisterCallback<TransitionEndEvent>(TransitionEnded);
+            this.RegisterCallback<TransitionCancelEvent>(TransitionCanceled);
             IsSet = false;
             InstanciateChildren();
             _AttachStyleSheet();
@@ -145,6 +145,51 @@ namespace umi3d.commonScreen
         protected virtual void CustomStyleResolved(CustomStyleResolvedEvent evt)
         {
 
+        }
+
+        /// <summary>
+        /// Method called when this element geometry changed.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void GeometryChanged(GeometryChangedEvent evt)
+        {
+
+        }
+
+        /// <summary>
+        /// Method called when a transition is created.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void TransitionRun(TransitionRunEvent evt)
+        {
+            evt.StopPropagation();
+        }
+
+        /// <summary>
+        /// Method called when a transition start. (after transition'delay end)
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void TransitionStarted(TransitionStartEvent evt)
+        {
+            evt.StopPropagation();
+        }
+
+        /// <summary>
+        /// Method called when a transition end properly without being canceled.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void TransitionEnded(TransitionEndEvent evt)
+        {
+            evt.StopPropagation();
+        }
+
+        /// <summary>
+        /// Method called when a transition is canceled.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void TransitionCanceled(TransitionCancelEvent evt)
+        {
+            evt.StopPropagation();
         }
 
         /// <summary>
