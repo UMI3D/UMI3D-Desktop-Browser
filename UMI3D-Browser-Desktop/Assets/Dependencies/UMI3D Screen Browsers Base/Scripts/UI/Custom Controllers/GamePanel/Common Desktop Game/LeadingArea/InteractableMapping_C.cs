@@ -24,7 +24,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonDesktop.game
 {
-    public class InteractableMapping_C : Visual_C
+    public class InteractableMapping_C : BaseVisual_C
     {
         public new class UxmlFactory : UxmlFactory<InteractableMapping_C, UxmlTraits> { }
 

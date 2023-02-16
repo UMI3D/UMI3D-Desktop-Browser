@@ -19,7 +19,7 @@ using umi3d.commonScreen.Displayer;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public abstract class BaseMenuScreen_C : Visual_C
+public abstract class BaseMenuScreen_C : BaseVisual_C
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
     {

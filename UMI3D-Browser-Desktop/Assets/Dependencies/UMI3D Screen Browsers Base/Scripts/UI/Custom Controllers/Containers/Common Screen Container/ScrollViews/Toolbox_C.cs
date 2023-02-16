@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Container
 {
-    public class Toolbox_C : Visual_C
+    public class Toolbox_C : BaseVisual_C
     {
         public new class UxmlFactory : UxmlFactory<Toolbox_C, UxmlTraits> { }
 

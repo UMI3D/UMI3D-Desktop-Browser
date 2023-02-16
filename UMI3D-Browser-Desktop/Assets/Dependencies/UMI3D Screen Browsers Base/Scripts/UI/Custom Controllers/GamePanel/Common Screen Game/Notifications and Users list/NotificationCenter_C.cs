@@ -24,7 +24,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class NotificationCenter_C : Visual_C
+    public class NotificationCenter_C : BaseVisual_C
     {
         public new class UxmlFactory : UxmlFactory<NotificationCenter_C, UxmlTraits> { }
 

@@ -19,7 +19,7 @@ using static umi3d.baseBrowser.inputs.interactions.BaseKeyInteraction;
 
 namespace umi3d.commonScreen.Displayer
 {
-    public class Mapping_C : Visual_C
+    public class Mapping_C : BaseVisual_C
     {
         public new class UxmlFactory : UxmlFactory<Mapping_C, UxmlTraits> { }
 

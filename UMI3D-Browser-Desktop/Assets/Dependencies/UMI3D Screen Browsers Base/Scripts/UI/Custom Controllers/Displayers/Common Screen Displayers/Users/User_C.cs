@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Displayer
 {
-    public class User_C : Visual_C
+    public class User_C : BaseVisual_C
     {
         const float userVolumeRangePercent = 3;
         const float logBase = 1.5f;

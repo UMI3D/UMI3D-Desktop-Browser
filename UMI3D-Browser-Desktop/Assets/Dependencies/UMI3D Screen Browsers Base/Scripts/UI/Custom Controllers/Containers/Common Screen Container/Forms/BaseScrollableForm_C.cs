@@ -19,7 +19,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Container
 {
-    public abstract class BaseScrollableForm_C : Visual_C
+    public abstract class BaseScrollableForm_C : BaseVisual_C
     {
         public new class UxmlTraits : VisualElement.UxmlTraits
         {

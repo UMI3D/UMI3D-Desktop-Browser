@@ -23,7 +23,7 @@ using Newtonsoft.Json.Linq;
 
 namespace umi3d.commonScreen.Displayer
 {
-    public class SegmentedPicker_C : Visual_C
+    public class SegmentedPicker_C : BaseVisual_C
     {
         public new class UxmlFactory : UxmlFactory<SegmentedPicker_C, UxmlTraits> { }
 

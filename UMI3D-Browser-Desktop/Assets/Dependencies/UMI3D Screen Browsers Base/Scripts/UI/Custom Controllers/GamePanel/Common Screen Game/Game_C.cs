@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class Game_C : Visual_C, IGameView
+    public class Game_C : BaseVisual_C, IGameView
     {
         public new class UxmlFactory : UxmlFactory<Game_C, UxmlTraits> { }
 

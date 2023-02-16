@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class TopArea_C : Visual_C
+    public class TopArea_C : BaseVisual_C
     {
         public new class UxmlFactory : UxmlFactory<TopArea_C, UxmlTraits> { }
 
