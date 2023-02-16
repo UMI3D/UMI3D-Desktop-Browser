@@ -174,12 +174,12 @@ namespace umi3d.commonScreen.Displayer
         public virtual string USSCustomClassSelectedValue => $"{UssCustomClass_Emc}__selected-value";
 
         public Text_C LabelVisual = new Text_C { name = "label" };
-        public VisualElement Input = new VisualElement { name = "Input" };
+        public Visual_C Input = new Visual_C { name = "Input" };
         public List<Text_C> PickeValues = new List<Text_C>();
         public List<VisualElement> Separators = new List<VisualElement>();
-        public VisualElement SeparatorBox = new VisualElement { name = "separator-box" };
-        public VisualElement SelectedValueBox = new VisualElement { name = "selected-value-box" };
-        public VisualElement SelectedValue = new VisualElement { name = "selected-value" };
+        public Visual_C SeparatorBox = new Visual_C { name = "separator-box" };
+        public Visual_C SelectedValueBox = new Visual_C { name = "selected-value-box" };
+        public Visual_C SelectedValue = new Visual_C { name = "selected-value" };
 
         protected ElementCategory m_category;
         protected ElementSize m_size;
@@ -209,12 +209,6 @@ namespace umi3d.commonScreen.Displayer
         protected override void InitElement()
         {
             base.InitElement();
-            this.RegisterCallback<CustomStyleResolvedEvent>((evt) =>
-            {
-                this.TryGetCustomStyle("--size-separator-picker", out var length);
-                m_separatorLength = length;
-            });
-
             SelectedValueBox.style.left = 0f;
 
             Add(Input);
@@ -253,6 +247,13 @@ namespace umi3d.commonScreen.Displayer
             base.DetachedFromPanel(evt);
 
             LanguageChanged -= UpdateTranslation;
+        }
+
+        protected override void CustomStyleResolved(CustomStyleResolvedEvent evt)
+        {
+            base.CustomStyleResolved(evt);
+            this.TryGetCustomStyle("--size-separator-picker", out var length);
+            m_separatorLength = length;
         }
 
         #region Implementation

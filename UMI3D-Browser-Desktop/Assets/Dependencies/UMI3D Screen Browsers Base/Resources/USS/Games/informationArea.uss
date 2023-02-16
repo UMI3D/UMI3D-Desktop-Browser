@@ -1,6 +1,5 @@
 .information__area {
 	position: absolute;
-	/*align-items: center;*/
 
 	flex-direction: row-reverse;
 
@@ -9,7 +8,6 @@
 }
 
 .information__area-short__inf.text.unity-label {
-	/*position: absolute;*/
 	right: 0;
 
 	flex-direction: row;

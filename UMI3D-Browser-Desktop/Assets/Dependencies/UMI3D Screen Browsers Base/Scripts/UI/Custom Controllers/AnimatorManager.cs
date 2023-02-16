@@ -71,13 +71,13 @@ public static class AnimatorManager
             Delay = delay,
         };
 
-        var delayBeforeCallback = (long)(duration.value * 1000 + (delay == null ? 0 : delay.value * 1000) + CallbackDelay);
         var scheduledItem = persistentVisual.schedule.Execute(() =>
         {
             callback?.Invoke();
             ve.RemoveAnimation(animation);
         });
-        scheduledItem.ExecuteLater(delayBeforeCallback);
+        // Will be resume when animation end event will be trigger.
+        scheduledItem.Pause();
         animation.Callback = scheduledItem;
 
         if (!Animations.TryGetValue(ve, out var animations))
@@ -146,6 +146,14 @@ public static class AnimatorManager
         if (!animations.Exists(animation => animation.PropertyName == propertyName)) return;
         var animation = animations.Find(animation => animation.PropertyName == propertyName);
         ve.RemoveAnimation(animation);
+    }
+
+    public static void TriggerAnimationCallback(this VisualElement ve, StylePropertyName property)
+    {
+        if (!Animations.TryGetValue(ve, out var animations)) return;
+
+        var animation = animations.Find(_animation => _animation.PropertyName == property);
+        animation.Callback.Resume();
     }
 
     private static void UpdateTransitionList(this VisualElement ve, List<Animation> animations)

@@ -114,6 +114,7 @@ namespace umi3d.commonScreen.game
             get => ShortInf.LocaliseText;
             set
             {
+                UnityEngine.Debug.Log($"value = {value}, {ShortInf.IsAttachedToPanel}");
                 if (value == ShortInf.LocaliseText) return;
                 var color = ShortInf.resolvedStyle.color;
                 ShortInf.AddAnimation

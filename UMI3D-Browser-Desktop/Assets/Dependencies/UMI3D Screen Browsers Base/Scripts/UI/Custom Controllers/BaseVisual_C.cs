@@ -179,6 +179,10 @@ namespace umi3d.commonScreen
         protected virtual void TransitionEnded(TransitionEndEvent evt)
         {
             evt.StopPropagation();
+            foreach (var property in evt.stylePropertyNames)
+            {
+                this.TriggerAnimationCallback(property);
+            }
         }
 
         /// <summary>
