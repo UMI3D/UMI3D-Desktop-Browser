@@ -16,10 +16,11 @@ limitations under the License.
 using System;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.commonScreen;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElement
+public abstract class BaseDataCollection_C<D> : BaseVisual_C
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
@@ -62,7 +63,7 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
             base.Init(ve, bag, cc);
-            var custom = ve as AbstractDataCollection_C<D>;
+            var custom = ve as BaseDataCollection_C<D>;
 
             custom.Mode = m_ScrollViewMode.GetValueFromBag(bag, cc);
             custom.SelectionType = m_selectionType.GetValueFromBag(bag, cc);
@@ -136,10 +137,9 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
         }
     }
 
-    public virtual string USSCustomClassName => null;
-    public virtual string USSCustomClassMode(ScrollViewMode mode) => $"{USSCustomClassName}-{mode}".ToLower();
-    public virtual string USSCustomClassBox => $"{USSCustomClassName}-box";
-    public virtual string USSCustomClassDragger => $"{USSCustomClassName}-dragger";
+    public virtual string USSCustomClassMode(ScrollViewMode mode) => $"{UssCustomClass_Emc}-{mode}".ToLower();
+    public virtual string USSCustomClassBox => $"{UssCustomClass_Emc}-box";
+    public virtual string USSCustomClassDragger => $"{UssCustomClass_Emc}-dragger";
 
     /// <summary>
     /// The VisualElement that contains the data.
@@ -151,9 +151,6 @@ public abstract class AbstractDataCollection_C<D> : VisualElement, ICustomElemen
     protected float m_size;
     protected bool m_isReorderable;
     protected ReorderableMode m_reorderableMode;
-
-    public abstract void InitElement();
-    public abstract void Set();
 
     #region Implementation
 

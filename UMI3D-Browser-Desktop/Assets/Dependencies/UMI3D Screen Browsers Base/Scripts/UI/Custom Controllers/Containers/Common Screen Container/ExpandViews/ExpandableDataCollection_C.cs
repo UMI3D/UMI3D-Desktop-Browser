@@ -18,9 +18,9 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Container
 {
-    public class ExpandableDataCollection_C<D> : AbstractDataCollection_C<D>
+    public class ExpandableDataCollection_C<D> : BaseDataCollection_C<D>
     {
-        public new class UxmlTraits : AbstractDataCollection_C<D>.UxmlTraits
+        public new class UxmlTraits : BaseDataCollection_C<D>.UxmlTraits
         {
             protected UxmlFloatAttributeDescription m_animationTimeIn = new UxmlFloatAttributeDescription
             {
@@ -44,11 +44,6 @@ namespace umi3d.commonScreen.Container
                 base.Init(ve, bag, cc);
                 var custom = ve as ExpandableDataCollection_C<D>;
 
-                custom.Mode = m_ScrollViewMode.GetValueFromBag(bag, cc);
-                custom.SelectionType = m_selectionType.GetValueFromBag(bag, cc);
-                custom.Size = m_size.GetValueFromBag(bag, cc);
-                custom.IsReorderable = m_isReorderable.GetValueFromBag(bag, cc);
-                custom.ReorderableMode = m_reorderableMode.GetValueFromBag(bag, cc);
                 custom.AnimationTimeIn = m_animationTimeIn.GetValueFromBag(bag, cc);
                 custom.AnimationTimeOut = m_animationTimeOut.GetValueFromBag(bag, cc);
             }
@@ -63,40 +58,36 @@ namespace umi3d.commonScreen.Container
         /// </summary>
         public virtual float AnimationTimeOut { get; set; }
 
-        public virtual string StyleSheetContainerPath => $"USS/container";
-        public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetContainersFolderPath}/expandableDataCollection";
-        public override string USSCustomClassName => "edc";
-        public virtual string USSCustomClassContentViewport => $"{USSCustomClassName}-content__viewport";
-        public virtual string USSCustomClassContentContainer => $"{USSCustomClassName}-content__container";
+        public override string StyleSheetPath_MainTheme => $"USS/container";
+        public static string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetContainersFolderPath}/expandableDataCollection";
 
-        public VisualElement ContentVieport = new VisualElement { name = "content-viewport" };
-        public VisualElement ContentContainer = new VisualElement { name = "content-container" };
+        public override string UssCustomClass_Emc => "edc";
+        public virtual string USSCustomClassContentViewport => $"{UssCustomClass_Emc}-content__viewport";
+        public virtual string USSCustomClassContentContainer => $"{UssCustomClass_Emc}-content__container";
+
+        public Visual_C ContentVieport = new Visual_C { name = "content-viewport" };
+        public Visual_C ContentContainer = new Visual_C { name = "content-container" };
 
         public override VisualElement DataContainer => ContentContainer;
 
         protected float m_animationTime;
 
-        public ExpandableDataCollection_C() => InitElement();
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public override void InitElement()
+        protected override void AttachStyleSheet()
         {
-            try
-            {
-                this.AddStyleSheetFromPath(StyleSheetContainerPath);
-                this.AddStyleSheetFromPath(StyleSheetPath);
-            }
-            catch (System.Exception e)
-            {
-                throw e;
-            }
-            AddToClassList(USSCustomClassName);
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
+        }
+
+        protected override void AttachUssClass()
+        {
+            base.AttachUssClass();
             ContentVieport.AddToClassList(USSCustomClassContentViewport);
             ContentContainer.AddToClassList(USSCustomClassContentContainer);
+        }
 
+        protected override void InitElement()
+        {
+            base.InitElement();
             ContentContainer.RegisterCallback<GeometryChangedEvent>(ce =>
             {
                 if (!canRaiseAnimation) return;
@@ -131,12 +122,6 @@ namespace umi3d.commonScreen.Container
             Add(ContentVieport);
             ContentVieport.Add(ContentContainer);
         }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public override void Set() => InitElement();
 
         #region Implementation
 
