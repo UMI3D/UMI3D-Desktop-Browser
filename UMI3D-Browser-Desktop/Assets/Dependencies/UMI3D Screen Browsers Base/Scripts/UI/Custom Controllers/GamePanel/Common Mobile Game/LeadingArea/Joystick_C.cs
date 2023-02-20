@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using umi3d.commonScreen;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonMobile.game
 {
-    public class Joystick_C : VisualElement
+    public class Joystick_C : BaseVisual_C
     {
         public new class UxmlFactory : UxmlFactory<Joystick_C, UxmlTraits> { }
 
@@ -114,52 +115,53 @@ namespace umi3d.commonMobile.game
             }
         }
 
-        public virtual string StyleSheetGamePath => $"USS/game";
-        public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/joystick";
-        public virtual string USSCustomClassName => "joystick";
-        public virtual string USSCustomClassState(ElementPseudoState state) => $"{USSCustomClassName}-{state}".ToLower();
-        public virtual string USSCustomClassForeground => $"{USSCustomClassName}__foreground";
-        public virtual string USSCustomClassForegroundIcon => $"{USSCustomClassName}__foreground__icon";
+        public override string StyleSheetPath_MainTheme => $"USS/game";
+        public static string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetGamesFolderPath}/joystick";
 
-        public virtual Vector2 Direction => new Vector2(Magnitude * Mathf.Cos(Radian), Magnitude * Mathf.Sin(Radian));
-        public float Radian => Angle * Mathf.Deg2Rad;
+        public override string UssCustomClass_Emc => "joystick";
+        public virtual string USSCustomClassState(ElementPseudoState state) => $"{UssCustomClass_Emc}-{state}".ToLower();
+        public virtual string USSCustomClassForeground => $"{UssCustomClass_Emc}__foreground";
+        public virtual string USSCustomClassForegroundIcon => $"{UssCustomClass_Emc}__foreground__icon";
+
         public VisualElement Foreground = new VisualElement { name = "foreground" };
         public VisualElement ForegroundIcon = new VisualElement { name = "foreground-icon" };
 
-        protected bool m_hasBeenInitialized;
         protected float m_magnitude;
         protected float m_angle;
         protected ElementPseudoState m_state;
 
-        public Joystick_C() => InitElement();
-
-        /// <summary>
-        /// Initialize this element.
-        /// </summary>
-        public virtual void InitElement()
+        protected override void AttachStyleSheet()
         {
-            try
-            {
-                this.AddStyleSheetFromPath(StyleSheetGamePath);
-                this.AddStyleSheetFromPath(StyleSheetPath);
-            }
-            catch (System.Exception e)
-            {
-                throw e;
-            }
-            AddToClassList(USSCustomClassName);
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
+        }
+
+        protected override void AttachUssClass()
+        {
+            base.AttachUssClass();
             Foreground.AddToClassList(USSCustomClassForeground);
             ForegroundIcon.AddToClassList(USSCustomClassForegroundIcon);
+        }
 
+        protected override void InitElement()
+        {
+            base.InitElement();
             Add(Foreground);
             Foreground.Add(ForegroundIcon);
+        }
 
+        protected override void SetProperties()
+        {
+            base.SetProperties();
             Magnitude = 0f;
             Angle = 0f;
             State = ElementPseudoState.Enabled;
         }
 
         #region Implementation
+
+        public virtual Vector2 Direction => new Vector2(Magnitude * Mathf.Cos(Radian), Magnitude * Mathf.Sin(Radian));
+        public float Radian => Angle * Mathf.Deg2Rad;
 
         /// <summary>
         /// Set the position of the foreground element.

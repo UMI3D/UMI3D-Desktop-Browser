@@ -128,11 +128,11 @@ namespace umi3d.commonScreen.Displayer
         public event System.Action<bool> LocalMuteValueChanged;
         public UMI3DUser User;
         public Text_C UserNameVisual = new Text_C { name = "user-name" };
-        public VisualElement User_Background = new VisualElement { name = "user-background" };
-        public VisualElement User_Audio_Slider = new VisualElement { name = "user-audio-slider" };
+        public Visual_C User_Background = new Visual_C { name = "user-background" };
+        public Visual_C User_Audio_Slider = new Visual_C { name = "user-audio-slider" };
         public Button_C Mute = new Button_C { name = "mute" };
-        public VisualElement Mute_Background = new VisualElement { name = "mute-background" };
-        public VisualElement Mute_Icon = new VisualElement { name = "mute-icon" };
+        public Visual_C Mute_Background = new Visual_C { name = "mute-background" };
+        public Visual_C Mute_Icon = new Visual_C { name = "mute-icon" };
 
         protected LocalisationAttribute m_userName;
         protected bool m_isMute;
