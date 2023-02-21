@@ -115,7 +115,8 @@ namespace umi3d.commonScreen.game
             set
             {
                 if (value == ShortInf.LocaliseText) return;
-                var color = ShortInf.resolvedStyle.color;
+
+                var color = new Color();
                 ShortInf.AddAnimation
                 (
                     this,
@@ -123,6 +124,7 @@ namespace umi3d.commonScreen.game
                     () => ShortInf.style.color = new Color(color.r, color.g, color.b, 0),
                     "color",
                     AnimatorManager.TextFadeDuration,
+                    callin: () => color = ShortInf.resolvedStyle.color,
                     callback: () =>
                     {
                         ShortInf.LocaliseText = value;
@@ -297,9 +299,12 @@ namespace umi3d.commonScreen.game
             MicManipulator.clicked += () => MicStatusChanged?.Invoke();
             Sound.AddManipulator(SoundManipulator);
             SoundManipulator.clicked += () => SoundStatusChanged?.Invoke();
+
+            Toolbox.Category = ElementCategory.Game;
+
             Add(ShortInf);
 
-            ShortInf.schedule.Execute(() =>
+            this.schedule.Execute(() =>
             {
                 if (!NotificationCenter_C.NotificationTitleStack.TryPeek(out var title))
                 {

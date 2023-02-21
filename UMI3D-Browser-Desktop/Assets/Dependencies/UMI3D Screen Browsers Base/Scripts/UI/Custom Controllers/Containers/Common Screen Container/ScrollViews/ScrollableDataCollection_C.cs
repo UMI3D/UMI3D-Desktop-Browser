@@ -24,11 +24,11 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Container
 {
-    public class ScrollableDataCollection_C<D> : AbstractDataCollection_C<D>
+    public class ScrollableDataCollection_C<D> : BaseDataCollection_C<D>
     {
         public new class UxmlFactory : UxmlFactory<ScrollableDataCollection_C<D>, UxmlTraits> { }
 
-        public new class UxmlTraits : AbstractDataCollection_C<D>.UxmlTraits
+        public new class UxmlTraits : BaseDataCollection_C<D>.UxmlTraits
         {
             protected UxmlEnumAttributeDescription<ElementCategory> m_category = new UxmlEnumAttributeDescription<ElementCategory>
             {
@@ -47,11 +47,6 @@ namespace umi3d.commonScreen.Container
                 base.Init(ve, bag, cc);
                 var custom = ve as ScrollableDataCollection_C<D>;
 
-                custom.Mode = m_ScrollViewMode.GetValueFromBag(bag, cc);
-                custom.SelectionType = m_selectionType.GetValueFromBag(bag, cc);
-                custom.Size = m_size.GetValueFromBag(bag, cc);
-                custom.IsReorderable = m_isReorderable.GetValueFromBag(bag, cc);
-                custom.ReorderableMode = m_reorderableMode.GetValueFromBag(bag, cc);
                 custom.Category = m_category.GetValueFromBag(bag, cc);
             }
         }
@@ -81,61 +76,28 @@ namespace umi3d.commonScreen.Container
             }
         }
         
-        public virtual string StyleSheetContainerPath => $"USS/container";
-        public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetContainersFolderPath}/scrollableDataCollection";
-        public override string USSCustomClassName => "sdc";
-        public virtual string USSCustomClassCategory(ElementCategory category) => $"{USSCustomClassName}-{category}".ToLower();
+        public override string StyleSheetPath_MainTheme => $"USS/container";
+        public static string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetContainersFolderPath}/scrollableDataCollection";
+
+        public override string UssCustomClass_Emc => "sdc";
+        public virtual string USSCustomClassCategory(ElementCategory category) => $"{UssCustomClass_Emc}-{category}".ToLower();
         
         public ScrollView_C ScrollView = new ScrollView_C { name = "scroll-view" };
 
         public override VisualElement DataContainer => ScrollView;
 
         protected ElementCategory m_category;
-        
-        public ScrollableDataCollection_C() => InitElement();
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public override void InitElement()
+        protected override void AttachStyleSheet()
         {
-            try
-            {
-                this.AddStyleSheetFromPath(StyleSheetContainerPath);
-                this.AddStyleSheetFromPath(StyleSheetPath);
-            }
-            catch (System.Exception e)
-            {
-                throw e;
-            }
-            AddToClassList(USSCustomClassName);
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
+        }
 
+        protected override void InitElement()
+        {
+            base.InitElement();
             Add(ScrollView);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public override void Set()
-        {
-            InitElement();
-            Set(ElementCategory.Menu, ScrollViewMode.Vertical, SelectionType.None, 0, false, ReorderableMode.Dragger);
-        }
-
-        /// <summary>
-        /// Set the properties of this Element.
-        /// </summary>
-        /// <param name="category"></param>
-        /// <param name="mode"></param>
-        /// <param name="selectionType"></param>
-        public virtual void Set(ElementCategory category, ScrollViewMode mode, SelectionType selectionType, float size, bool isReorderable, ReorderableMode reorderableMode)
-        {
-            Category = category;
-            Mode = mode;
-            SelectionType = selectionType;
-            Size = size;
-            IsReorderable = isReorderable;
-            ReorderableMode = reorderableMode;
         }
     }
 }

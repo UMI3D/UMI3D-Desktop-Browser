@@ -199,18 +199,18 @@ namespace umi3d.commonScreen.menu
         public virtual string USSCustomClassDropDown_Date => $"{UssCustomClass_Emc}-drop_down__date";
         public virtual string USSCustomClassDropDown_Message => $"{UssCustomClass_Emc}-drop_down__message";
 
-        public VisualElement Overlay = new VisualElement { name = "overlay" };
-        public VisualElement Main = new VisualElement { name = "main" };
+        public Visual_C Overlay = new Visual_C { name = "overlay" };
+        public Visual_C Main = new Visual_C { name = "main" };
         public Button_C DropDown_Button = new Button_C { name = "dropdown" };
-        public VisualElement DropDown_Button_Icon_Background = new VisualElement { name = "dropdown-icon-background" };
-        public VisualElement DropDown_Button_Icon = new VisualElement { name = "dropdown-icon" };
-        public VisualElement DropDown_Button_Background = new VisualElement { name = "dropdown-background" };
+        public Visual_C DropDown_Button_Icon_Background = new Visual_C { name = "dropdown-icon-background" };
+        public Visual_C DropDown_Button_Icon = new Visual_C { name = "dropdown-icon" };
+        public Visual_C DropDown_Button_Background = new Visual_C { name = "dropdown-background" };
         public Text_C TitleLabel = new Text_C { name = "title" };
         public Text_C SizeLabel = new Text_C { name = "size" };
         public Button_C Delete = new Button_C { name = "delete" };
-        public VisualElement Delete_Background = new VisualElement { name = "delete-background" };
-        public VisualElement Delete_Icon = new VisualElement { name = "delete-icon" };
-        public VisualElement DropDown_Field = new VisualElement { name = "field" };
+        public Visual_C Delete_Background = new Visual_C { name = "delete-background" };
+        public Visual_C Delete_Icon = new Visual_C { name = "delete-icon" };
+        public Visual_C DropDown_Field = new Visual_C { name = "field" };
         public Text_C DropDown_Date = new Text_C { name = "date" };
         public Text_C DropDown_Message = new Text_C { name = "message" };
 

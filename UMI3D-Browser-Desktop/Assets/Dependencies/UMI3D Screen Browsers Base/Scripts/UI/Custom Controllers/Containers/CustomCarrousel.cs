@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 using System.Linq;
 using umi3d.commonScreen.Displayer;
 
-public abstract class CustomCarrousel : VisualElement, ICustomElement
+public abstract class CustomCarrousel : VisualElement
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
     {

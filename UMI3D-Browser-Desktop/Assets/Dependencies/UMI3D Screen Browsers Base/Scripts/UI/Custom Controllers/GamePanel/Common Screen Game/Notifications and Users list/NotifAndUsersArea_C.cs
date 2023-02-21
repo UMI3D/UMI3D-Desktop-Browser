@@ -21,7 +21,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.game
 {
-    public class NotifAndUsersArea_C : VisualElement
+    public class NotifAndUsersArea_C : BaseVisual_C
     {
         public enum NotificationsOrUsers { Notifications, Users }
 
@@ -135,10 +135,11 @@ namespace umi3d.commonScreen.game
             }
         }
 
-        public virtual string StyleSheetGamePath => $"USS/game";
-        public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetGamesFolderPath}/notifAndUsers";
-        public virtual string USSCustomClassName => "notif__users";
-        public virtual string USSCustomClassController(ControllerEnum controller) => $"{USSCustomClassName}-{controller.ToString().ToLower()}";
+        public override string StyleSheetPath_MainTheme => $"USS/game";
+        public static string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetGamesFolderPath}/notifAndUsers";
+
+        public override string UssCustomClass_Emc => "notif__users";
+        public virtual string USSCustomClassController(ControllerEnum controller) => $"{UssCustomClass_Emc}-{controller.ToString().ToLower()}";
 
         public SegmentedPicker_C<NotificationsOrUsers> SegmentedPicker = new NotifAndUsersSegmentedPicker();
         public NotificationCenter_C notificationCenter = new NotificationCenter_C { name = "notification-center" };
@@ -147,23 +148,15 @@ namespace umi3d.commonScreen.game
         protected ControllerEnum m_controller;
         protected NotificationsOrUsers m_panel;
 
-        public NotifAndUsersArea_C() => InitElement();
-
-        /// <summary>
-        /// Initialize this element.
-        /// </summary>
-        public virtual void InitElement()
+        protected override void AttachStyleSheet()
         {
-            try
-            {
-                this.AddStyleSheetFromPath(StyleSheetGamePath);
-                this.AddStyleSheetFromPath(StyleSheetPath);
-            }
-            catch (System.Exception e)
-            {
-                throw e;
-            }
-            AddToClassList(USSCustomClassName);
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
+        }
+
+        protected override void InitElement()
+        {
+            base.InitElement();
 
             SegmentedPicker.Category = ElementCategory.Game;
             SegmentedPicker.LocalisedOptions = new List<LocalisationAttribute>
@@ -179,7 +172,11 @@ namespace umi3d.commonScreen.game
                 SegmentedPicker.UpdateTranslation();
             };
             Add(SegmentedPicker);
+        }
 
+        protected override void SetProperties()
+        {
+            base.SetProperties();
             Controller = ControllerEnum.MouseAndKeyboard;
             AreaPanel = NotificationsOrUsers.Notifications;
         }

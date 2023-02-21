@@ -46,11 +46,11 @@ public static class DisplayerManager
     {
         if (menuItem == null) new NullReferenceException($"Menu is null");
 
-        if (menuItem is ButtonMenuItem) return new umi3d.commonScreen.Displayer.ButtonDisplayer_C();
-        if (menuItem is DropDownInputMenuItem) return new umi3d.commonScreen.Displayer.DropdownDisplayer_C();
-        if (menuItem is FloatRangeInputMenuItem) return new umi3d.commonScreen.Displayer.SliderDisplayer_C();
-        if (menuItem is TextInputMenuItem) return new umi3d.commonScreen.Displayer.TextfieldDisplayer_C();
-        if (menuItem is BooleanInputMenuItem) return new umi3d.commonScreen.Displayer.ToggleDisplayer_C();
+        if (menuItem is ButtonMenuItem) return new umi3d.commonScreen.Displayer.ButtonDisplayer_C { Category = ElementCategory.Game };
+        if (menuItem is DropDownInputMenuItem) return new umi3d.commonScreen.Displayer.DropdownDisplayer_C { Category = ElementCategory.Game };
+        if (menuItem is FloatRangeInputMenuItem) return new umi3d.commonScreen.Displayer.SliderDisplayer_C { Category = ElementCategory.Game };
+        if (menuItem is TextInputMenuItem) return new umi3d.commonScreen.Displayer.TextfieldDisplayer_C { Category = ElementCategory.Game };
+        if (menuItem is BooleanInputMenuItem) return new umi3d.commonScreen.Displayer.ToggleDisplayer_C { Category = ElementCategory.Game };
 
 
         throw new Exception($"Menu {menuItem.GetType()} is not recognized");

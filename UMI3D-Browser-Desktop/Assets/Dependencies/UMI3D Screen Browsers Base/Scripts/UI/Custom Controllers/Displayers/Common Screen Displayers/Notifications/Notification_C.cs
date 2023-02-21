@@ -219,13 +219,13 @@ namespace umi3d.commonScreen.Displayer
         public virtual string USSCustomClassChoicesContainer => $"{UssCustomClass_Emc}__choices-container";
         public virtual string USSCustomClassChoice => $"{UssCustomClass_Emc}__choice";
 
-        public VisualElement Header = new VisualElement { name = "header" };
+        public Visual_C Header = new Visual_C { name = "header" };
         public Text_C TitleLabel = new Text_C { name = "title" };
         public Text_C AuthorLabel = new Text_C { name = "author" };
         public Text_C TimestampLabel = new Text_C { name = "timestamp" };
-        public VisualElement Main = new VisualElement { name = "main" };
+        public Visual_C Main = new Visual_C { name = "main" };
         public Text_C MessageLabel = new Text_C { name = "message" };
-        public VisualElement ChoicesContainer = new VisualElement { name = "choices-container" };
+        public Visual_C ChoicesContainer = new Visual_C { name = "choices-container" };
         /// <summary>
         /// Primary button.
         /// </summary>

@@ -1,6 +1,5 @@
 .information__area {
 	position: absolute;
-	/*align-items: center;*/
 
 	flex-direction: row-reverse;
 
@@ -9,7 +8,6 @@
 }
 
 .information__area-short__inf.text.unity-label {
-	/*position: absolute;*/
 	right: 0;
 
 	flex-direction: row;
@@ -68,4 +66,6 @@
 .information__area-toolbox.button-medium > .button__body {
 	width: var(--size-medium-displayer);
 	max-width: var(--size-medium-displayer);
+
+	background-image: var(--background-image-toolbox);
 }

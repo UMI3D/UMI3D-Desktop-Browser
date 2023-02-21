@@ -1,3 +1,7 @@
+.toolbox {
+    height: 100%;
+}
+
 .toolbox-name.unity-label.text {
     -unity-text-align: middle-center;
 
@@ -51,8 +55,14 @@
     border-bottom-width: var(--border-width-displayer);
 }
 
+.toolbox-type__main {
+    width: 100%;
+}
+
 .toolbox-type__sub {
     margin-left: 20%;
+
+    width: 80%;
 }
 
 .toolbox-selected {
@@ -60,14 +70,4 @@
     border-right-color: var(--color-border-game-container);
     border-top-color: var(--color-border-game-container);
     border-bottom-color: var(--color-border-game-container);
-}
-
-.toolbox-vertical {
-    height: 100%;
-    width: 100%;
-}
-
-.toolbox-horizontal {
-    height: 100%;
-    width: 100%;
 }

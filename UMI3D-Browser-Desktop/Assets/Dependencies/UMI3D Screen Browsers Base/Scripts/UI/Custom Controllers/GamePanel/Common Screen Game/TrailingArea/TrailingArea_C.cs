@@ -151,7 +151,6 @@ namespace umi3d.commonScreen.game
             set
             {
                 if (m_activeWindow == value) return;
-                UnityEngine.Debug.Log($"{m_activeWindow}, {value}");
                 switch (m_activeWindow)
                 {
                     case WindowsEnum.None:
@@ -306,6 +305,8 @@ namespace umi3d.commonScreen.game
             ToolsWindow.Title = "Toolbox";
             ToolsWindow.Category = ElementCategory.Game;
             ToolsWindow.AddRoot(GlobalToolsMenu.menu);
+
+            ToolsItemsWindow.Category = ElementCategory.Game;
 
             WindowContainer.MakeItem = datum => datum;
             WindowContainer.BindItem = (datum, element) => { };

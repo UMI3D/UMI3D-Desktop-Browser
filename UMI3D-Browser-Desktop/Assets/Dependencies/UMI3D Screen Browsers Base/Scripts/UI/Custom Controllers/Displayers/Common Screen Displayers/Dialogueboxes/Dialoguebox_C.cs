@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Displayer
 {
-    public class Dialoguebox_C : VisualElement
+    public class Dialoguebox_C : BaseVisual_C
     {
         public new class UxmlFactory : UxmlFactory<Dialoguebox_C, UxmlTraits> { }
 
@@ -79,22 +79,22 @@ namespace umi3d.commonScreen.Displayer
             }
         }
 
-        public virtual string StyleSheetDisplayerPath => $"USS/displayer";
-        public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetDisplayersFolderPath}/dialogueBox";
-        public virtual string USSCustomClassName => "dialoguebox";
-        public virtual string USSCustomClassCategory(ElementCategory category) => $"{USSCustomClassName}-{category}".ToLower();
-        public virtual string USSCustomClassSize(ElementSize size) => $"{USSCustomClassName}-{size}".ToLower();
-        public virtual string USSCustomClassType(DialogueboxType type) => $"{USSCustomClassName}-{type}".ToLower();
+        public override string StyleSheetPath_MainTheme => $"USS/displayer";
+        public static string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetDisplayersFolderPath}/dialogueBox";
 
-        public virtual string USSCustomClassBody => $"{USSCustomClassName}__body".ToLower();
-        public virtual string USSCustomClassTitle => $"{USSCustomClassName}__title".ToLower();
-        public virtual string USSCustomClassMain => $"{USSCustomClassName}__main".ToLower();
-        public virtual string USSCustomClassMessage => $"{USSCustomClassName}__message".ToLower();
-        public virtual string USSCustomClassContainer => $"{USSCustomClassName}__container".ToLower();
-        public virtual string USSCustomClassChoiceContainer => $"{USSCustomClassName}__choices-container".ToLower();
-        public virtual string USSCustomClassChoice => $"{USSCustomClassName}__choice".ToLower();
-        public virtual string USSCustomClassChoiceA => $"{USSCustomClassName}__choice-a".ToLower();
-        public virtual string USSCustomClassChoiceB => $"{USSCustomClassName}__choice-b".ToLower();
+        public override string UssCustomClass_Emc => "dialoguebox";
+        public virtual string USSCustomClassCategory(ElementCategory category) => $"{UssCustomClass_Emc}-{category}".ToLower();
+        public virtual string USSCustomClassSize(ElementSize size) => $"{UssCustomClass_Emc}-{size}".ToLower();
+        public virtual string USSCustomClassType(DialogueboxType type) => $"{UssCustomClass_Emc}-{type}".ToLower();
+        public virtual string USSCustomClassBody => $"{UssCustomClass_Emc}__body".ToLower();
+        public virtual string USSCustomClassTitle => $"{UssCustomClass_Emc}__title".ToLower();
+        public virtual string USSCustomClassMain => $"{UssCustomClass_Emc}__main".ToLower();
+        public virtual string USSCustomClassMessage => $"{UssCustomClass_Emc}__message".ToLower();
+        public virtual string USSCustomClassContainer => $"{UssCustomClass_Emc}__container".ToLower();
+        public virtual string USSCustomClassChoiceContainer => $"{UssCustomClass_Emc}__choices-container".ToLower();
+        public virtual string USSCustomClassChoice => $"{UssCustomClass_Emc}__choice".ToLower();
+        public virtual string USSCustomClassChoiceA => $"{UssCustomClass_Emc}__choice-a".ToLower();
+        public virtual string USSCustomClassChoiceB => $"{UssCustomClass_Emc}__choice-b".ToLower();
 
         public virtual ElementCategory Category
         {
@@ -173,11 +173,11 @@ namespace umi3d.commonScreen.Displayer
             get => TitleLabel.LocaliseText;
             set
             {
-                m_isSet = false;
+                IsSet = false;
                 if (value.IsEmpty) TitleLabel.RemoveFromHierarchy();
                 else Body.Insert(0, TitleLabel);
                 TitleLabel.LocaliseText = value;
-                m_isSet = true;
+                IsSet = true;
             }
         }
         public virtual LocalisationAttribute Message
@@ -185,11 +185,11 @@ namespace umi3d.commonScreen.Displayer
             get => MessageLabel.LocaliseText;
             set
             {
-                m_isSet = false;
-                if (string.IsNullOrEmpty(value)) MessageLabel.RemoveFromHierarchy();
+                IsSet = false;
+                if (value.IsEmpty) MessageLabel.RemoveFromHierarchy();
                 else Container.Insert(0, MessageLabel);
                 MessageLabel.LocaliseText = value;
-                m_isSet = true;
+                IsSet = true;
             }
         }
         public virtual LocalisationAttribute ChoiceAText
@@ -206,33 +206,25 @@ namespace umi3d.commonScreen.Displayer
         protected ElementCategory m_category;
         protected ElementSize m_size;
         protected DialogueboxType m_type;
-        protected bool m_isSet;
 
-        public VisualElement Body = new VisualElement { name = "body" };
+        public Visual_C Body = new Visual_C { name = "body" };
         public Text_C TitleLabel = new Text_C { name = "title" };
-        public VisualElement Main = new VisualElement { name = "main" };
+        public Visual_C Main = new Visual_C { name = "main" };
         public Text_C MessageLabel = new Text_C { name = "message" };
         public ScrollView_C Container = new ScrollView_C { name = "container" };
-        public VisualElement ChoicesContainer = new VisualElement { name = "choice-container" };
+        public Visual_C ChoicesContainer = new Visual_C { name = "choice-container" };
         public Button_C ChoiceA = new Button_C { name = "choice-a" };
         public Button_C ChoiceB = new Button_C { name = "choice-b" };
 
-        public Dialoguebox_C() => InitElement();
-
-        public virtual void InitElement()
+        protected override void AttachStyleSheet()
         {
-            m_isSet = false;
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
+        }
 
-            try
-            {
-                this.AddStyleSheetFromPath(StyleSheetDisplayerPath);
-                this.AddStyleSheetFromPath(StyleSheetPath);
-            }
-            catch (System.Exception e)
-            {
-                throw e;
-            }
-            AddToClassList(USSCustomClassName);
+        protected override void AttachUssClass()
+        {
+            base.AttachUssClass();
             Body.AddToClassList(USSCustomClassBody);
             TitleLabel.AddToClassList(USSCustomClassTitle);
             Main.AddToClassList(USSCustomClassMain);
@@ -243,12 +235,11 @@ namespace umi3d.commonScreen.Displayer
             ChoiceB.AddToClassList(USSCustomClassChoice);
             ChoiceA.AddToClassList(USSCustomClassChoiceA);
             ChoiceB.AddToClassList(USSCustomClassChoiceB);
+        }
 
-            TitleLabel.name = "title";
-            MessageLabel.name = "message";
-            ChoiceA.name = "choice-a";
-            ChoiceB.name = "choice-b";
-
+        protected override void InitElement()
+        {
+            base.InitElement();
             ChoiceA.clicked += () =>
             {
                 Callback?.Invoke(0);
@@ -267,9 +258,11 @@ namespace umi3d.commonScreen.Displayer
             Body.Add(Main);
             Main.Add(Container);
             Body.Add(ChoicesContainer);
+        }
 
-            m_isSet = true;
-
+        protected override void SetProperties()
+        {
+            base.SetProperties();
             Category = ElementCategory.Menu;
             Size = ElementSize.Medium;
             Type = DialogueboxType.Default;
@@ -279,7 +272,7 @@ namespace umi3d.commonScreen.Displayer
             ChoiceBText = null;
         }
 
-        public override VisualElement contentContainer => m_isSet ? Container.contentContainer : this;
+        public override VisualElement contentContainer => IsSet ? Container.contentContainer : this;
 
         #region Implementation
 
