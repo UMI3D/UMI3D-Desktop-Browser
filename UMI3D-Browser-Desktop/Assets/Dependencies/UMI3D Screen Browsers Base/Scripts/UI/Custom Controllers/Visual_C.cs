@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen
 {
-    public class Visual_C : BaseVisual_C
+    public sealed class Visual_C : BaseVisual_C
     {
         protected override void AttachStyleSheet()
         {

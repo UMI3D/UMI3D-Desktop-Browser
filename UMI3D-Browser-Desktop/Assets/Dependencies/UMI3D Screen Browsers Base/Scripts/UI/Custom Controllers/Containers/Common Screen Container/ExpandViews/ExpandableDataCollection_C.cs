@@ -90,22 +90,27 @@ namespace umi3d.commonScreen.Container
             base.InitElement();
             ContentContainer.RegisterCallback<GeometryChangedEvent>(ce =>
             {
+                if (ce.newRect.height.EqualsEpsilone(ce.oldRect.height)) return;
+
                 if (!canRaiseAnimation) return;
                 canRaiseAnimation = false;
 
                 bool isAnimationIn = ce.newRect.height > ce.oldRect.height;
+                float newHeight = ce.newRect.height;
                 ContentVieport.AddAnimation
                 (
                     this,
                     () => ContentVieport.style.height = m_lastHeight,
-                    () => ContentVieport.style.height = ContentContainer.resolvedStyle.height,
+                    () => ContentVieport.style.height = newHeight,
                     "height",
                     isAnimationIn ? AnimationTimeIn : AnimationTimeOut,
+                    callin: () => canRaiseAnimation = false,
                     callback: () =>
                     {
-                        m_lastHeight = ContentVieport.resolvedStyle.height;
+                        m_lastHeight = newHeight;
                         ContentVieport.style.height = StyleKeyword.Null;
-                    }
+                    },
+                    callcancel: () => ContentVieport.style.height = StyleKeyword.Null
                 );
             });
 

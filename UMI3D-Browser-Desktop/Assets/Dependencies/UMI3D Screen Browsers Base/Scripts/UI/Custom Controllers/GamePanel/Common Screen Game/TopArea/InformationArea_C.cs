@@ -114,9 +114,9 @@ namespace umi3d.commonScreen.game
             get => ShortInf.LocaliseText;
             set
             {
-                UnityEngine.Debug.Log($"value = {value}, {ShortInf.IsAttachedToPanel}");
                 if (value == ShortInf.LocaliseText) return;
-                var color = ShortInf.resolvedStyle.color;
+
+                var color = new Color();
                 ShortInf.AddAnimation
                 (
                     this,
@@ -124,6 +124,7 @@ namespace umi3d.commonScreen.game
                     () => ShortInf.style.color = new Color(color.r, color.g, color.b, 0),
                     "color",
                     AnimatorManager.TextFadeDuration,
+                    callin: () => color = ShortInf.resolvedStyle.color,
                     callback: () =>
                     {
                         ShortInf.LocaliseText = value;
@@ -300,7 +301,7 @@ namespace umi3d.commonScreen.game
             SoundManipulator.clicked += () => SoundStatusChanged?.Invoke();
             Add(ShortInf);
 
-            ShortInf.schedule.Execute(() =>
+            this.schedule.Execute(() =>
             {
                 if (!NotificationCenter_C.NotificationTitleStack.TryPeek(out var title))
                 {
