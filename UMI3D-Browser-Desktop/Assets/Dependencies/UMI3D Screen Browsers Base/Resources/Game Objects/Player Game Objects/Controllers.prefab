@@ -87,6 +87,8 @@ MonoBehaviour:
   CameraTransform: {fileID: 0}
   ParameterActions: {fileID: 5737028901877809136}
   EventActions: {fileID: 5737028902039734195}
+  ManipulationGroupActions: {fileID: 4228215839669697670}
+  ManipulationActions: {fileID: 3124953298458936600}
   ObjectMenu: {fileID: 0}
   interactionBoneType: 58
   hoverBoneType: 58
@@ -1449,10 +1451,22 @@ PrefabInstance:
     - target: {fileID: 900517824931067971, guid: d2e57c484e053d94eba781435f279f12,
         type: 3}
       propertyPath: m_Name
-      value: Manipulations
+      value: ManipulationManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d2e57c484e053d94eba781435f279f12, type: 3}
+--- !u!1 &3124953298458936600 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7259825776030081731, guid: d2e57c484e053d94eba781435f279f12,
+    type: 3}
+  m_PrefabInstance: {fileID: 5737028901854242779}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4228215839669697670 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8445276814600493917, guid: d2e57c484e053d94eba781435f279f12,
+    type: 3}
+  m_PrefabInstance: {fileID: 5737028901854242779}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4891275689946750873 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 900517824931067970, guid: d2e57c484e053d94eba781435f279f12,

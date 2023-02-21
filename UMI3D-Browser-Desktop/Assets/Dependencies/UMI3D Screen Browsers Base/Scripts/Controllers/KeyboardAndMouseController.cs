@@ -43,16 +43,19 @@ namespace umi3d.desktopBrowser.Controller
                 return list;
             }
         }
-        private bool m_isCursorMovementFree => BaseCursor.Movement == BaseCursor.CursorMovement.Free;
-
-        public static bool IsFreeAndHovering = false;
-        private static bool s_isRightClickAdded = false;
 
         #region Monobehaviour Life Cycle
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void Awake()
         {
             
         }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void Start()
         {
             KeyboardInteraction.S_Interactions?.ForEach(interaction =>
@@ -63,29 +66,34 @@ namespace umi3d.desktopBrowser.Controller
                 interaction.Menu = ObjectMenu.menu;
             });
         }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void Update()
         {
-            //if (KeyboardShortcut.IsPressed(ShortcutEnum.GameMenu))
-            //{
-            //    if (m_isCursorMovementFree) IsFreeAndHovering = false;
-            //    else if (ObjectMenu.menu.Count > 0) IsFreeAndHovering = true;
-            //    BaseController.OnGameMenuKeyPressed();
-            //}
-
-            //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationBack)))
-            //{
-            //    if (m_isCursorMovementFree) IsFreeAndHovering = false;
-            //    else if (ObjectMenu.menu.Count > 0) IsFreeAndHovering = true;
-            //    OnSecondActionClicked();
-            //}
-
             //if (Input.GetKeyDown(InputLayoutManager.GetInputCode(InputLayoutManager.Input.ContextualMenuNavigationDirect)) || Input.mouseScrollDelta.y < 0)
             //    m_navigationDirect++;
             //else if (Input.mouseScrollDelta.y > 0) m_navigationDirect--;
         }
+
         #endregion
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <param name="unused"></param>
+        /// <param name="tryToFindInputForHoldableEvent"></param>
+        /// <returns></returns>
         public AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
             => KeyboardInteractions.Find(i => i.IsAvailable() || !unused);
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void ClearInputs()
+        {
+            foreach (KeyboardInteraction input in KeyboardInteractions) if (!input.IsAvailable()) input.Dissociate();
+        }
     }
 }

@@ -31,12 +31,12 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// DofGroup of the Manipulation.
         /// </summary>
         public DofGroupEnum DofGroup;
-        public umi3d.baseBrowser.Cursor.FrameIndicator frameIndicator;
+        public Cursor.FrameIndicator frameIndicator;
         /// <summary>
         /// Button to activate this input.
         /// </summary>
         public BaseInteraction<EventDto> activationButton;
-        protected bool Active;
+        
         protected bool manipulated = false;
         /// <summary>
         /// Launched coroutine for network message sending (if any).
@@ -56,9 +56,79 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// </summary>
         public float strength = 1;
 
-        #region Instances List
+        #region Instances
 
-        protected static int currentInstance;
+        protected static int s_currentIndex;
+
+        #region Incrementation and decrementation
+
+        /// <summary>
+        /// Deactivate current manipulation and activate next one.
+        /// </summary>
+        public static void NextManipulation() => SwitchManipulation(s_currentIndex + 1);
+
+        /// <summary>
+        /// Deactivate current manipulation and activate previous one.
+        /// </summary>
+        public static void PreviousManipulation() => SwitchManipulation(s_currentIndex - 1);
+
+        /// <summary>
+        /// Update the current selected manipulation.
+        /// </summary>
+        /// <param name="i"></param>
+        public static void SwitchManipulation(int i)
+        {
+            List<BaseManipulation> instances = BaseManipulationGroup.CurrentManipulations;
+
+            if (instances == null || instances.Count == 0) return;
+
+            if (s_currentIndex < instances.Count && s_currentIndex >= 0) instances[s_currentIndex].Deactivate();
+
+            if (i < 0) s_currentIndex = instances.Count - 1;
+            else if (i >= instances.Count) s_currentIndex = 0;
+
+            instances[s_currentIndex].Activate();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Activation, Deactivation, Select
+
+        public virtual bool IsActive { get; protected set; }
+
+        protected virtual void Activate()
+        {
+            IsActive = true;
+        }
+        /// <summary>
+        /// Deactivate this manipulation.
+        /// </summary>
+        public virtual void Deactivate()
+        {
+            IsActive = false;
+            manipulated = false;
+            frameIndicator.gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Select the first manipulation.
+        /// </summary>
+        public static void SelectFirst() => SwitchManipulation(0);
+
+        /// <summary>
+        /// Unselect all manipulations.
+        /// </summary>
+        public static void UnSelectAll()
+        {
+            List<BaseManipulation> instances = BaseManipulationGroup.CurrentManipulations;
+
+            if (instances == null || instances.Count == 0) return;
+
+            if (s_currentIndex < instances.Count && s_currentIndex >= 0) instances[s_currentIndex].Deactivate();
+            s_currentIndex = -1;
+        }
 
         #endregion
 
@@ -136,37 +206,6 @@ namespace umi3d.baseBrowser.inputs.interactions
             => base.IsAvailable() && activationButton.IsAvailable();
 
         public bool IsCompatibleWith(DofGroupEnum dofGroup) => dofGroup == DofGroup;
-
-        public static void SelectFirst() => SwicthManipulation(0);
-
-        public static void NextManipulation() => SwicthManipulation(currentInstance + 1);
-
-        public static void PreviousManipulation() => SwicthManipulation(currentInstance - 1);
-
-        public static void SwicthManipulation(int i)
-        {
-            List<BaseManipulation> instances = BaseManipulationGroup.GetManipulations();
-
-            if (instances == null || instances.Count == 0) return;
-
-            if (currentInstance < instances.Count) instances[currentInstance].Deactivate();
-
-            currentInstance = i;
-            if (currentInstance < 0) currentInstance = instances.Count - 1;
-            else if (currentInstance >= instances.Count) currentInstance = 0;
-            if (currentInstance < instances.Count) instances[currentInstance].Activate();
-        }
-
-        public void Activate()
-        {
-            Active = true;
-        }
-        public void Deactivate()
-        {
-            Active = false;
-            manipulated = false;
-            frameIndicator.gameObject.SetActive(false);
-        }
 
         protected IEnumerator SetFrameOFReference()
         {

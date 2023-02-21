@@ -51,6 +51,8 @@ namespace umi3d.baseBrowser.Controller
         [Header("Actions' parents")]
         public GameObject ParameterActions;
         public GameObject EventActions;
+        public GameObject ManipulationGroupActions;
+        public GameObject ManipulationActions;
 
         [HideInInspector]
         public MenuAsset ObjectMenu;
@@ -85,7 +87,6 @@ namespace umi3d.baseBrowser.Controller
         {
             s_instance = this;
 
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Add manipulator in android browser and reactivate it in desktop browser");
             mouseData.ForceProjectionReleasableButton = new ButtonMenuItem
             {
                 Name = "Release",
@@ -240,7 +241,7 @@ namespace umi3d.baseBrowser.Controller
                 System.Predicate<DofGroupOptionDto> predicat = (sep) =>
                 {
                     foreach (DofGroupDto dof in sep.separations)
-                        if (!dofGroups.Contains(dof.dofs)) return false;
+                        if (!BaseManipulationGroup.DofGroups.Contains(dof.dofs)) return false;
                     return true;
                 };
 
