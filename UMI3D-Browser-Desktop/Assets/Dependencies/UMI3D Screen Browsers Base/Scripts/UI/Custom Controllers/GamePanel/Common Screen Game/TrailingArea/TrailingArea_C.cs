@@ -306,6 +306,8 @@ namespace umi3d.commonScreen.game
             ToolsWindow.Category = ElementCategory.Game;
             ToolsWindow.AddRoot(GlobalToolsMenu.menu);
 
+            ToolsItemsWindow.Category = ElementCategory.Game;
+
             WindowContainer.MakeItem = datum => datum;
             WindowContainer.BindItem = (datum, element) => { };
             WindowContainer.UnbindItem = (datum, element) => { };

@@ -43,6 +43,7 @@ namespace umi3d.commonScreen.game
             {
                 DisplayerManager.UnbindItem(item);
             };
+            SDC.FindItem = param => DisplayerManager.IsCompatible(param.Item1, param.Item2);
         }
 
         #region Implementation
@@ -55,7 +56,9 @@ namespace umi3d.commonScreen.game
         /// <param name="menu"></param>
         public virtual void AddMenu(AbstractMenuItem menu)
         {
+            SDC.ClearDC();
             ToolMenu = menu;
+            Title = menu.Name;
 
             if (menu is Menu _menu && _menu.MenuItems.Count > 0)
             {

@@ -358,7 +358,7 @@ namespace umi3d.commonScreen.game
 
         protected virtual void PinnedToolClicked(bool isSelected, AbstractMenuItem menu)
         {
-            TrailingArea.ToolsItemsWindow.AddMenu(menu);
+            if (isSelected) TrailingArea.ToolsItemsWindow.AddMenu(menu);
             TrailingArea.ActiveWindow = isSelected ? TrailingArea_C.WindowsEnum.ToolsItemsWindow : TrailingArea_C.WindowsEnum.None;
         }
 
