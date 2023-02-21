@@ -175,6 +175,7 @@ namespace umi3d.commonScreen.game
                 pinned = () =>
                 {
                     toolbox.IsPinned = !toolbox.IsPinned;
+                    toolbox.IsSelected = toolbox.IsPinned;
                     Pinned?.Invoke(toolbox.IsPinned, datum);
                 };
                 toolbox.PinnedButton.clicked += pinned;
