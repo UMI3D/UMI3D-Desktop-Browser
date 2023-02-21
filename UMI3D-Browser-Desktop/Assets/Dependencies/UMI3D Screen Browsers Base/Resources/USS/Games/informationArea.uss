@@ -66,4 +66,6 @@
 .information__area-toolbox.button-medium > .button__body {
 	width: var(--size-medium-displayer);
 	max-width: var(--size-medium-displayer);
+
+	background-image: var(--background-image-toolbox);
 }

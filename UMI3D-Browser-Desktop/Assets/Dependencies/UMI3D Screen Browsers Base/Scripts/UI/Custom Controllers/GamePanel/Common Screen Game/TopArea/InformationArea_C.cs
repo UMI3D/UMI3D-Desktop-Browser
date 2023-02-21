@@ -299,6 +299,9 @@ namespace umi3d.commonScreen.game
             MicManipulator.clicked += () => MicStatusChanged?.Invoke();
             Sound.AddManipulator(SoundManipulator);
             SoundManipulator.clicked += () => SoundStatusChanged?.Invoke();
+
+            Toolbox.Category = ElementCategory.Game;
+
             Add(ShortInf);
 
             this.schedule.Execute(() =>
