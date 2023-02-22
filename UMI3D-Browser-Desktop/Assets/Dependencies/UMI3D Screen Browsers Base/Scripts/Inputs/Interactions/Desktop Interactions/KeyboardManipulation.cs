@@ -15,22 +15,21 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
-using umi3d.baseBrowser.inputs.interactions;
-using umi3d.cdk.interaction;
-using umi3d.common.interaction;
 using UnityEngine;
 
-namespace umi3d.baseBrowser.Controller
+namespace umi3d.baseBrowser.inputs.interactions
 {
-    public interface IConcreteController
+    public class KeyboardManipulation : BaseKeyInteraction
     {
-        List<AbstractUMI3DInput> Inputs { get; }
-        List<BaseInteraction<EventDto>> Manipulations { get; }
+        public static List<KeyboardManipulation> S_Manipulations = new List<KeyboardManipulation>();
 
-        void Awake();
-        void Start();
-        void Update();
-        AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false);
-        void ClearInputs();
+        /// <summary>
+        /// Root of the avatar that will be ignore by raycast.
+        /// </summary>
+        public Transform AvatarParent;
+        /// <summary>
+        /// Head of the avatar.
+        /// </summary>
+        public Transform Head;
     }
 }

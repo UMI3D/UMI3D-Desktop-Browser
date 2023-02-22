@@ -96,7 +96,13 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         #region Activation, Deactivation, Select
 
-        public virtual bool IsActive { get; protected set; }
+        /// <summary>
+        /// Whether or not this manipulation is active.
+        /// </summary>
+        public bool IsActive { get => m_isActive; protected set => m_isActive = value; }
+        [SerializeField]
+        [Header("Do not update this value in the inspector.")]
+        private bool m_isActive;
 
         protected virtual void Activate()
         {

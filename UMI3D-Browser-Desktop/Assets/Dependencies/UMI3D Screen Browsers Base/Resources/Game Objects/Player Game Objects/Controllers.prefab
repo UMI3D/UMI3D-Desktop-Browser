@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5544760081601926436
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2035608180051076259}
+  m_Layer: 0
+  m_Name: KeyboardManipulations
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2035608180051076259
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5544760081601926436}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5737028901965113654}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5737028900505413034
 GameObject:
   m_ObjectHideFlags: 0
@@ -89,10 +120,14 @@ MonoBehaviour:
   EventActions: {fileID: 5737028902039734195}
   ManipulationGroupActions: {fileID: 4228215839669697670}
   ManipulationActions: {fileID: 3124953298458936600}
+  KeyboardActions: {fileID: 5737028901777104620}
+  KeyboardShortcuts: {fileID: 5737028902229674419}
+  KeyboardEmotes: {fileID: 5737028900827975624}
+  KeyboardNavigations: {fileID: 5737028901654668679}
+  KeyboardManipulations: {fileID: 5544760081601926436}
   ObjectMenu: {fileID: 0}
   interactionBoneType: 58
   hoverBoneType: 58
-  dofGroups: 04000000050000000600000001000000020000000300000008000000090000000a000000
 --- !u!114 &5737028900505413025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,7 +168,7 @@ GameObject:
   - component: {fileID: 5737028900827975621}
   - component: {fileID: 5737028900827975626}
   m_Layer: 0
-  m_Name: KeyboardEmote
+  m_Name: KeyboardEmotes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -871,6 +906,7 @@ Transform:
   - {fileID: 5737028902229674418}
   - {fileID: 5737028900827975627}
   - {fileID: 5737028901654668678}
+  - {fileID: 2035608180051076259}
   m_Father: {fileID: 5737028900505413029}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

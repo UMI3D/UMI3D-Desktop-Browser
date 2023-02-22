@@ -128,7 +128,10 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// <summary>
         /// Whether or not this group is active.
         /// </summary>
-        public bool IsActive { get; protected set; }
+        public bool IsActive { get => m_isActive; protected set => m_isActive = value; }
+        [SerializeField]
+        [Header("Do not update this value in the inspector.")]
+        private bool m_isActive;
 
         protected void Activate()
         {
@@ -189,7 +192,8 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
-            if (associatedInteraction != null) throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
+            UnityEngine.Debug.Log("<color=blue>TODO: </color>" + $"associate");
+            if (!IsAvailableFor(manipulation)) throw new System.Exception($"This input is not available for {manipulation}");
 
             if (!IsCompatibleWith(manipulation)) throw new System.Exception("Trying to associate an uncompatible interaction !");
 
@@ -233,7 +237,6 @@ namespace umi3d.baseBrowser.inputs.interactions
             if (s_manipulationsByGroup[this].Contains(input)) return;
 
             s_manipulationsByGroup[this].Add(input);
-            //manipulationInputs.Add(input);
         }
 
         #endregion
@@ -242,6 +245,7 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public override void Dissociate()
         {
+            UnityEngine.Debug.Log("<color=orange>TODO: </color>" + $"dissociate, {associatedInteraction == null}");
             if (IsActive) PreviousGroup();
 
             var manipulations = s_manipulationsByGroup[this];

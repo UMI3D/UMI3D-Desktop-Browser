@@ -54,6 +54,13 @@ namespace umi3d.baseBrowser.Controller
         public GameObject ManipulationGroupActions;
         public GameObject ManipulationActions;
 
+        [Header("Keyboard' parents")]
+        public GameObject KeyboardActions;
+        public GameObject KeyboardShortcuts;
+        public GameObject KeyboardEmotes;
+        public GameObject KeyboardNavigations;
+        public GameObject KeyboardManipulations;
+
         [HideInInspector]
         public MenuAsset ObjectMenu;
         public CursorData mouseData;
@@ -111,10 +118,11 @@ namespace umi3d.baseBrowser.Controller
                 new MobileController()
             );
             m_controllers.ForEach(controller => controller?.Awake());
-            KeyboardInteraction.S_Interactions.AddRange(GetComponentsInChildren<KeyboardInteraction>());
-            KeyboardShortcut.S_Shortcuts.AddRange(GetComponentsInChildren<KeyboardShortcut>());
-            KeyboardEmote.S_Emotes.AddRange(GetComponentsInChildren<KeyboardEmote>());
-            KeyboardNavigation.S_Navigations.AddRange(GetComponentsInChildren<KeyboardNavigation>());
+            KeyboardInteraction.S_Interactions.AddRange(KeyboardActions.GetComponents<KeyboardInteraction>());
+            KeyboardShortcut.S_Shortcuts.AddRange(KeyboardShortcuts.GetComponents<KeyboardShortcut>());
+            KeyboardEmote.S_Emotes.AddRange(KeyboardEmotes.GetComponents<KeyboardEmote>());
+            KeyboardNavigation.S_Navigations.AddRange(KeyboardNavigations.GetComponents<KeyboardNavigation>());
+            KeyboardManipulation.S_Manipulations.AddRange(KeyboardManipulations.GetComponents<KeyboardManipulation>());
 
             //TODO for now CurrentController is the desktop one.
             CurrentController = m_controllers.Find(controller => controller is KeyboardAndMouseController);

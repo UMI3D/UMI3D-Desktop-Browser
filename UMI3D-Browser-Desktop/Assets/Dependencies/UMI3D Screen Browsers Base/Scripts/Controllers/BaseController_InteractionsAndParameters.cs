@@ -237,8 +237,7 @@ namespace umi3d.baseBrowser.Controller
 
             if (input == null)
             {
-                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"input list");
-                input = BaseManipulationGroup.Instanciate(this, new List<BaseInteraction<EventDto>>(), ManipulationGroupActions);
+                input = BaseManipulationGroup.Instanciate(this, CurrentController.Manipulations, ManipulationGroupActions);
                 input.bone = interactionBoneType;
                 input.Menu = ObjectMenu.menu;
                 ManipulationGroupInputs.Add(input);

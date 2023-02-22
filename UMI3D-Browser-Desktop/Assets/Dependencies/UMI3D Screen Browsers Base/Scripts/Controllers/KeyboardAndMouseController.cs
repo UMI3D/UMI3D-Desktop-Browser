@@ -28,10 +28,9 @@ namespace umi3d.desktopBrowser.Controller
     {
         public BaseController Controller;
         public MenuAsset ObjectMenu;
-        //[Header("Input Action")]
-        //[SerializeField]
-        //protected List<CursorKeyInput> ManipulationActionInput = new List<CursorKeyInput>();
+
         protected List<KeyboardInteraction> KeyboardInteractions = new List<KeyboardInteraction>();
+        protected List<KeyboardManipulation> KeyboardManipulations = new List<KeyboardManipulation>();
 
         public List<AbstractUMI3DInput> Inputs
         {
@@ -39,7 +38,16 @@ namespace umi3d.desktopBrowser.Controller
             {
                 List<AbstractUMI3DInput> list = new List<AbstractUMI3DInput>();
                 list.AddRange(KeyboardInteractions);
-                //list.AddRange(ManipulationInputs);
+                return list;
+            }
+        }
+
+        public List<BaseInteraction<EventDto>> Manipulations
+        {
+            get
+            {
+                List<BaseInteraction<EventDto>> list = new List<BaseInteraction<EventDto>>();
+                list.AddRange(KeyboardManipulations);
                 return list;
             }
         }
@@ -64,6 +72,14 @@ namespace umi3d.desktopBrowser.Controller
                 interaction.Init(Controller);
                 interaction.bone = Controller.interactionBoneType;
                 interaction.Menu = ObjectMenu.menu;
+            });
+
+            KeyboardManipulation.S_Manipulations?.ForEach(manipulation =>
+            {
+                KeyboardManipulations.Add(manipulation);
+                manipulation.Init(Controller);
+                manipulation.bone = Controller.interactionBoneType;
+                manipulation.Menu = ObjectMenu.menu;
             });
         }
         /// <summary>

@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 Gfi Informatique
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,12 +20,11 @@ using UnityEngine;
 
 namespace BrowserDesktop.Cursor
 {
-    public class CursorKeyInput : BaseKeyInteraction
+    public class CursorKeyInput : KeyboardManipulation
     {
         private bool constrainDistanceChange = false;
         public Transform Cursor;
-        public Transform AvatarParent;
-        public Transform Head;
+        
         public float distCursor = 1;
         public float MaxDistCursorDelta = 0.3f;
         public float MinimumCursorDistance = 0.5f;

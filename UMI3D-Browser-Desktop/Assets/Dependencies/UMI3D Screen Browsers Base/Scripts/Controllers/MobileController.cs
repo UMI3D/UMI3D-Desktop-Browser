@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections.Generic;
 using umi3d.baseBrowser.Controller;
+using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk.interaction;
 using umi3d.common.interaction;
 using UnityEngine;
@@ -33,6 +34,8 @@ namespace umi3d.mobileBrowser.Controller
                 return list;
             }
         }
+
+        public List<BaseInteraction<EventDto>> Manipulations => throw new System.NotImplementedException();
 
         /// <summary>
         /// <inheritdoc/>
