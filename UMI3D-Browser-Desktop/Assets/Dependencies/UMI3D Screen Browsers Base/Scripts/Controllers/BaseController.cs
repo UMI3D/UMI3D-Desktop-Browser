@@ -63,6 +63,7 @@ namespace umi3d.baseBrowser.Controller
 
         [HideInInspector]
         public MenuAsset ObjectMenu;
+        public MenuAsset ManipulationMenu;
         public CursorData mouseData;
 
         public IConcreteController CurrentController;
@@ -103,6 +104,7 @@ namespace umi3d.baseBrowser.Controller
 
             mouseData.saveDelay = 0;
             ObjectMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ObjectMenu");
+            ManipulationMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ManipulationMenu");
 
             //TODO instantiate concrete controllers.
             m_controllers.Add

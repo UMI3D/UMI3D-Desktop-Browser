@@ -18,6 +18,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using umi3d.cdk;
+using umi3d.cdk.menu.interaction;
 using umi3d.common.interaction;
 using UnityEngine;
 
@@ -25,6 +26,12 @@ namespace umi3d.baseBrowser.inputs.interactions
 {
     public class BaseManipulation : BaseInteraction<ManipulationDto>
     {
+        public ManipulationMenuItem menuItem;
+
+
+
+
+
         public Sprite Icon;
         public Transform manipulationCursor;
         /// <summary>
@@ -38,19 +45,7 @@ namespace umi3d.baseBrowser.inputs.interactions
         public BaseInteraction<EventDto> activationButton;
         
         protected bool manipulated = false;
-        /// <summary>
-        /// Launched coroutine for network message sending (if any).
-        /// </summary>
-        /// <see cref="networkMessageSender"/>
-        protected Coroutine messageSenderCoroutine;
-        /// <summary>
-        /// Frame of reference of the <see cref="associatedInteraction"/> (if any).
-        /// </summary>
-        protected Transform frameOfReference;
-        /// <summary>
-        /// Frame rate applied to message emission through network (high values can cause network flood).
-        /// </summary>
-        public float networkFrameRate = 30;
+        
         /// <summary>
         /// Input multiplicative strength.
         /// </summary>
@@ -124,6 +119,11 @@ namespace umi3d.baseBrowser.inputs.interactions
         public static void SelectFirst() => SwitchManipulation(0);
 
         /// <summary>
+        /// Select this manipulation.
+        /// </summary>
+        public virtual void Select() => SwitchManipulation(BaseManipulationGroup.CurrentManipulations.IndexOf(this));
+
+        /// <summary>
         /// Unselect all manipulations.
         /// </summary>
         public static void UnSelectAll()
@@ -139,47 +139,30 @@ namespace umi3d.baseBrowser.inputs.interactions
         #endregion
 
         public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
-        {
-            if (associatedInteraction != null)
-                throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
-
-            if (!IsCompatibleWith(interaction))
-                throw new System.Exception("Trying to associate an uncompatible interaction !");
-
-            this.toolId = toolId;
-            foreach (DofGroupOptionDto group in (interaction as ManipulationDto).dofSeparationOptions)
-            {
-                foreach (DofGroupDto sep in group.separations)
-                {
-                    if (sep.dofs == DofGroup)
-                    {
-                        Associate(interaction as ManipulationDto, sep.dofs, toolId, hoveredObjectId);
-                        return;
-                    }
-                }
-            }
-        }
+            => throw new System.NotImplementedException();
 
         public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
+            UnityEngine.Debug.Log("<color=yellow>TODO: </color>" + $"");
             if (associatedInteraction != null)
                 throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
 
-            if (dofs != DofGroup)
-                throw new System.Exception("Trying to associate an uncompatible interaction !");
+            if (!IsCompatibleWith(dofs)) throw new System.Exception("Trying to associate an uncompatible interaction !");
 
             this.hoveredObjectId = hoveredObjectId;
+            this.toolId = toolId;
             associatedInteraction = manipulation;
 
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Create displayer");
-            //if (manipulationDisplayer == null)
-            //{
-            //    manipulationDisplayer = ManipulationDisplayerManager.CreateDisplayer();
-            //}
-            //if (manipulationDisplayer != null)
-            //{
-            //    manipulationDisplayer.SetUp(associatedInteraction.name, Icon);
-            //}
+            menuItem = new ManipulationMenuItem
+            {
+                Name = associatedInteraction.name,
+                dof = new DofGroupDto
+                {
+                    dofs = dofs,
+                }
+            };
+            menuItem.Subscribe(Select);
+            Menu?.Add(menuItem);
 
             StartCoroutine(SetFrameOFReference());
             messageSenderCoroutine = StartCoroutine(networkMessageSender());
@@ -193,9 +176,10 @@ namespace umi3d.baseBrowser.inputs.interactions
                 messageSenderCoroutine = null;
             }
 
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"remove Displayer");
-
             associatedInteraction = null;
+            Menu?.Remove(menuItem);
+            menuItem?.UnSubscribe(Select);
+            menuItem = null;
         }
 
         public override bool IsCompatibleWith(AbstractInteractionDto interaction)
@@ -212,6 +196,23 @@ namespace umi3d.baseBrowser.inputs.interactions
             => base.IsAvailable() && activationButton.IsAvailable();
 
         public bool IsCompatibleWith(DofGroupEnum dofGroup) => dofGroup == DofGroup;
+
+
+
+
+        /// <summary>
+        /// Launched coroutine for network message sending (if any).
+        /// </summary>
+        /// <see cref="networkMessageSender"/>
+        protected Coroutine messageSenderCoroutine;
+        /// <summary>
+        /// Frame of reference of the <see cref="associatedInteraction"/> (if any).
+        /// </summary>
+        protected Transform frameOfReference;
+        /// <summary>
+        /// Frame rate applied to message emission through network (high values can cause network flood).
+        /// </summary>
+        public float networkFrameRate = 30;
 
         protected IEnumerator SetFrameOFReference()
         {

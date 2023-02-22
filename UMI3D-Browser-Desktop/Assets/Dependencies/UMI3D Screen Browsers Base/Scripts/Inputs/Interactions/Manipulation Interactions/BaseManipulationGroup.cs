@@ -48,8 +48,6 @@ namespace umi3d.baseBrowser.inputs.interactions
             DofGroupEnum.RZ
         };
 
-        protected ButtonMenuItem menuItem;
-
         #region Static methods and properties
 
         #region Instances
@@ -203,14 +201,8 @@ namespace umi3d.baseBrowser.inputs.interactions
             this.toolId = toolId;
             associatedInteraction = manipulation;
 
-            menuItem = new ButtonMenuItem()
-            {
-                Name = associatedInteraction.name
-            };
-            menuItem.Subscribe(Select);
-            Menu?.Add(menuItem);
-
             BaseManipulation input = ManipulationInputGenerator.Instanciate(controller, m_inputs.Find(a => a.IsAvailable()), dofs);
+            input.Menu = Menu;
             input.bone = bone;
             input.Associate(manipulation, dofs, toolId, hoveredObjectId);
             input.Deactivate();
@@ -259,12 +251,6 @@ namespace umi3d.baseBrowser.inputs.interactions
 
             RemoveGroup();
             associatedInteraction = null;
-            if (menuItem != null)
-            {
-                Menu?.Remove(menuItem);
-                menuItem.UnSubscribe(Select);
-                menuItem = null;
-            }
         }
 
         protected void RemoveGroup()

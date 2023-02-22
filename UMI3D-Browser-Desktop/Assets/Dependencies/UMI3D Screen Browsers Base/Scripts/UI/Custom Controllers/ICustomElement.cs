@@ -246,7 +246,6 @@ public static class ElementExtensions
         ve.ClearClassList();
         foreach (var style in from.GetClasses()) ve.AddToClassList(style);
     }
-
     /// <summary>
     /// Copy and add the style classes from [ve] to [this]
     /// </summary>
@@ -255,6 +254,17 @@ public static class ElementExtensions
     {
         if (from == null) return;
         foreach (var style in from.GetClasses()) ve.AddToClassList(style);
+    }
+    /// <summary>
+    /// Remove <paramref name="from"/> from the list of style classes and add <paramref name="to"/>.
+    /// </summary>
+    /// <param name="ve"></param>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    public static void SwitchStyleclasses(this VisualElement ve, string from, string to)
+    {
+        ve.RemoveFromClassList(from);
+        ve.AddToClassList(to);
     }
 
     /// <summary>

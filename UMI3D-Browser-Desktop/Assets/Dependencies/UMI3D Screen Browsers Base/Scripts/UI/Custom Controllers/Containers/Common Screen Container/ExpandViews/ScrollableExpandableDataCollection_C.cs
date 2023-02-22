@@ -57,6 +57,24 @@ namespace umi3d.commonScreen.Container
             }
         }
 
+        public override ScrollViewMode Mode { get => base.Mode;
+            set
+            {
+                ContentVieport.SwitchStyleclasses
+                (
+                    USSCustomClassMode(m_mode),
+                    USSCustomClassMode(value)
+                );
+                ContentContainer.SwitchStyleclasses
+                (
+                    USSCustomClassMode(m_mode),
+                    USSCustomClassMode(value)
+                );
+                base.Mode = value;
+                Scrollview.mode = value;
+            }
+        }
+
         public virtual string USSCustomClassCategory(ElementCategory category) => $"{UssCustomClass_Emc}-{category}".ToLower();
 
         public ScrollView_C Scrollview = new ScrollView_C { name = "scrollview" };
@@ -70,6 +88,15 @@ namespace umi3d.commonScreen.Container
             Add(Scrollview);
             Scrollview.Add(ContentVieport);
         }
+
+        #region Implementation
+
+        protected virtual void UpdateMode()
+        {
+
+        }
+
+        #endregion
     }
 }
 

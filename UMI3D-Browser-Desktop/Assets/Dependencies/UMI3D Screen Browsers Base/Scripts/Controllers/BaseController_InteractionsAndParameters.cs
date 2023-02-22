@@ -239,7 +239,7 @@ namespace umi3d.baseBrowser.Controller
             {
                 input = BaseManipulationGroup.Instanciate(this, CurrentController.Manipulations, ManipulationGroupActions);
                 input.bone = interactionBoneType;
-                input.Menu = ObjectMenu.menu;
+                input.Menu = ManipulationMenu.menu;
                 ManipulationGroupInputs.Add(input);
             }
 

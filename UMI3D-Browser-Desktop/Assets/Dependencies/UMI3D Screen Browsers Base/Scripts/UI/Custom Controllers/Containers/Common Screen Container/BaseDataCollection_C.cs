@@ -83,6 +83,7 @@ public abstract class BaseDataCollection_C<D> : BaseVisual_C
         {
             RemoveFromClassList(USSCustomClassMode(m_mode));
             AddToClassList(USSCustomClassMode(value));
+            UpdateMode(m_mode, value);
             m_mode = value;
             UpdateSize();
         }
@@ -745,6 +746,11 @@ public abstract class BaseDataCollection_C<D> : BaseVisual_C
         };
 
         return draggerManipulator;
+    }
+
+    protected virtual void UpdateMode(ScrollViewMode from, ScrollViewMode to)
+    {
+
     }
 
     #endregion

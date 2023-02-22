@@ -10,6 +10,29 @@
 	flex-grow: 0;
 }
 
+.edc-box {
+    justify-content: center;
+
+	padding-left: var(--margin_padding-container);
+    padding-right: var(--margin_padding-container);
+    padding-top: var(--margin_padding-container);
+    padding-bottom: var(--margin_padding-container);
+}
+
+.edc-dragger {
+	background-color: var(--background-color-container);
+
+	border-top-left-radius: var(--border-radius-container);
+    border-bottom-left-radius: var(--border-radius-container);
+    border-top-right-radius: var(--border-radius-container);
+    border-bottom-right-radius: var(--border-radius-container);
+
+	border-left-width: var(--border-width-displayer);
+    border-right-width: var(--border-width-displayer);
+    border-top-width: var(--border-width-displayer);
+    border-bottom-width: var(--border-width-displayer);
+}
+
 .edc-menu .edc-dragger {
 	border-left-color: var(--color-border-menu-container);
     border-right-color: var(--color-border-menu-container);
@@ -35,6 +58,15 @@
     margin-top: var(--margin_padding-container);
 }
 
+.edc-horizontal.edc-content__container,
+.edc-horizontal.edc-content__viewport {
+    flex-direction: row;
+}
+.edc-vertical.edc-content__container,
+.edc-vertical.edc-content__viewport {
+    flex-direction: column;
+}
+
 .edc-vertical .edc-box {
 	flex-direction: row-reverse;
 }
@@ -46,25 +78,3 @@
     margin-right: var(--margin_padding-container);
 }
 
-.edc-box {
-    justify-content: center;
-
-	padding-left: var(--margin_padding-container);
-    padding-right: var(--margin_padding-container);
-    padding-top: var(--margin_padding-container);
-    padding-bottom: var(--margin_padding-container);
-}
-
-.edc-dragger {
-	background-color: var(--background-color-container);
-
-	border-top-left-radius: var(--border-radius-container);
-    border-bottom-left-radius: var(--border-radius-container);
-    border-top-right-radius: var(--border-radius-container);
-    border-bottom-right-radius: var(--border-radius-container);
-
-	border-left-width: var(--border-width-displayer);
-    border-right-width: var(--border-width-displayer);
-    border-top-width: var(--border-width-displayer);
-    border-bottom-width: var(--border-width-displayer);
-}

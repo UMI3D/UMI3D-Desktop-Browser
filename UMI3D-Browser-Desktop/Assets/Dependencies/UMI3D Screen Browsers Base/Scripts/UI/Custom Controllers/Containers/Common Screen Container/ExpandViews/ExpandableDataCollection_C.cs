@@ -90,28 +90,21 @@ namespace umi3d.commonScreen.Container
             base.InitElement();
             ContentContainer.RegisterCallback<GeometryChangedEvent>(ce =>
             {
-                if (ce.newRect.height.EqualsEpsilone(ce.oldRect.height)) return;
-
-                if (!canRaiseAnimation) return;
-                canRaiseAnimation = false;
-
-                bool isAnimationIn = ce.newRect.height > ce.oldRect.height;
-                float newHeight = ce.newRect.height;
-                ContentVieport.AddAnimation
-                (
-                    this,
-                    () => ContentVieport.style.height = m_lastHeight,
-                    () => ContentVieport.style.height = newHeight,
-                    "height",
-                    isAnimationIn ? AnimationTimeIn : AnimationTimeOut,
-                    callin: () => canRaiseAnimation = false,
-                    callback: () =>
-                    {
-                        m_lastHeight = newHeight;
-                        ContentVieport.style.height = StyleKeyword.Null;
-                    },
-                    callcancel: () => ContentVieport.style.height = StyleKeyword.Null
-                );
+                switch (Mode)
+                {
+                    case ScrollViewMode.Vertical:
+                        ContentContainerHeigthChanged(ce.oldRect.height, ce.newRect.height);
+                        break;
+                    case ScrollViewMode.Horizontal:
+                        ContentContainerWidthChanged(ce.oldRect.width, ce.newRect.width);
+                        break;
+                    case ScrollViewMode.VerticalAndHorizontal:
+                        ContentContainerHeigthChanged(ce.oldRect.height, ce.newRect.height);
+                        ContentContainerWidthChanged(ce.oldRect.width, ce.newRect.width);
+                        break;
+                    default:
+                        break;
+                }
             });
 
             ItemAdded += datum =>
@@ -135,9 +128,63 @@ namespace umi3d.commonScreen.Container
         /// </summary>
         protected float m_lastHeight;
         /// <summary>
+        /// Last width of the <see cref="ContentVieport"/> after the animation
+        /// </summary>
+        protected float m_lastWidth;
+        /// <summary>
         /// Whether or not the animation can be raised.
         /// </summary>
         protected bool canRaiseAnimation;
+
+        protected virtual void ContentContainerHeigthChanged(float oldValue, float newValue)
+        {
+            if (newValue.EqualsEpsilone(oldValue)) return;
+
+            if (!canRaiseAnimation) return;
+            canRaiseAnimation = false;
+
+            bool isAnimationIn = newValue > oldValue;
+            ContentVieport.AddAnimation
+            (
+                this,
+                () => ContentVieport.style.height = m_lastHeight,
+                () => ContentVieport.style.height = newValue,
+                "height",
+                isAnimationIn ? AnimationTimeIn : AnimationTimeOut,
+                callin: () => canRaiseAnimation = false,
+                callback: () =>
+                {
+                    m_lastHeight = newValue;
+                    ContentVieport.style.height = StyleKeyword.Null;
+                },
+                callcancel: () => ContentVieport.style.height = StyleKeyword.Null
+            );
+        }
+
+        protected virtual void ContentContainerWidthChanged(float oldValue, float newValue)
+        {
+            if (newValue.EqualsEpsilone(oldValue)) return;
+
+            if (!canRaiseAnimation) return;
+            canRaiseAnimation = false;
+
+            bool isAnimationIn = newValue > oldValue;
+            ContentVieport.AddAnimation
+            (
+                this,
+                () => ContentVieport.style.width = m_lastWidth,
+                () => ContentVieport.style.width = newValue,
+                "width",
+                isAnimationIn ? AnimationTimeIn : AnimationTimeOut,
+                callin: () => canRaiseAnimation = false,
+                callback: () =>
+                {
+                    m_lastWidth = newValue;
+                    ContentVieport.style.width = StyleKeyword.Null;
+                },
+                callcancel: () => ContentVieport.style.width = StyleKeyword.Null
+            );
+        }
 
         #endregion
     }
