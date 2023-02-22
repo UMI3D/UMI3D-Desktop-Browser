@@ -47,15 +47,24 @@
     border-bottom-color: var(--color-border-game-container);
 }
 
-.edc-horizontal .edc-box {
+.edc-horizontal.edc-box {
 	flex-direction: column;
 }
+.edc-vertical.edc-box {
+	flex-direction: row-reverse;
+}
 
-.edc-horizontal .edc-dragger {
+.edc-horizontal.edc-dragger {
 	width: 100%;
 	height: var(--size-dragger-sdc);
 
     margin-top: var(--margin_padding-container);
+}
+.edc-vertical.edc-dragger {
+	height: 100%;
+	width: var(--size-dragger-sdc);
+
+    margin-right: var(--margin_padding-container);
 }
 
 .edc-horizontal.edc-content__container,
@@ -67,14 +76,5 @@
     flex-direction: column;
 }
 
-.edc-vertical .edc-box {
-	flex-direction: row-reverse;
-}
 
-.edc-vertical .edc-dragger {
-	height: 100%;
-	width: var(--size-dragger-sdc);
-
-    margin-right: var(--margin_padding-container);
-}
 

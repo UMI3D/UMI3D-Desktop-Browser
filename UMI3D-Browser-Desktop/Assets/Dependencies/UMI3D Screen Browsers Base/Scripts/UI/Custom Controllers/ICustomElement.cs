@@ -76,6 +76,27 @@ public interface ITransitionable
     void TransitionCanceled(TransitionCancelEvent evt);
 }
 
+public interface IDisplayer
+{
+    /// <summary>
+    /// Height size of this element.
+    /// </summary>
+    ElementSize HeightSize { get; set; }
+    /// <summary>
+    /// Width size of this element.
+    /// </summary>
+    ElementSize WidthSize { get; set; }
+
+    /// <summary>
+    /// Direction of the label and the input.
+    /// </summary>
+    ElemnetDirection LabelAndInputDirection { get; set; }
+    /// <summary>
+    /// Alignment of the text of the lable.
+    /// </summary>
+    ElementAlignment LabelAlignment { get; set; }
+}
+
 public interface IGameView
 {
     void TransitionIn(VisualElement persistentVisual);

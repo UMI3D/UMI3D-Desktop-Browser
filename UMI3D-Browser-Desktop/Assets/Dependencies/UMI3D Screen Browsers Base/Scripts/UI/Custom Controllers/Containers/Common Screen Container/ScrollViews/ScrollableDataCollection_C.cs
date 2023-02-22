@@ -51,19 +51,6 @@ namespace umi3d.commonScreen.Container
             }
         }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public override ScrollViewMode Mode 
-        { 
-            get => base.Mode; 
-            set
-            {
-                base.Mode = value;
-                ScrollView.mode = value;
-            }
-        }
-
         public virtual ElementCategory Category
         {
             get => m_category;
@@ -72,7 +59,7 @@ namespace umi3d.commonScreen.Container
                 RemoveFromClassList(USSCustomClassCategory(m_category));
                 AddToClassList(USSCustomClassCategory(value));
                 m_category = value;
-                ScrollView.Category = m_category;
+                Scrollview.Category = m_category;
             }
         }
         
@@ -82,9 +69,9 @@ namespace umi3d.commonScreen.Container
         public override string UssCustomClass_Emc => "sdc";
         public virtual string USSCustomClassCategory(ElementCategory category) => $"{UssCustomClass_Emc}-{category}".ToLower();
         
-        public ScrollView_C ScrollView = new ScrollView_C { name = "scroll-view" };
+        public ScrollView_C Scrollview = new ScrollView_C { name = "scroll-view" };
 
-        public override VisualElement DataContainer => ScrollView;
+        public override VisualElement DataContainer => Scrollview;
 
         protected ElementCategory m_category;
 
@@ -97,7 +84,13 @@ namespace umi3d.commonScreen.Container
         protected override void InitElement()
         {
             base.InitElement();
-            Add(ScrollView);
+            Add(Scrollview);
+        }
+
+        protected override void UpdateMode(ChangeEvent<ScrollViewMode> e)
+        {
+            base.UpdateMode(e);
+            Scrollview.mode = e.newValue;
         }
     }
 }
