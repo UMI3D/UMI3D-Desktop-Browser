@@ -70,6 +70,23 @@ namespace umi3d.commonScreen.Container
             Add(Scrollview);
             Scrollview.Add(ContentVieport);
         }
+
+        protected override void UpdateMode(ChangeEvent<ScrollViewMode> e)
+        {
+            base.UpdateMode(e);
+            ContentVieport.SwitchStyleclasses
+                (
+                    USSCustomClassMode(e.previousValue),
+                    USSCustomClassMode(e.newValue)
+                );
+            ContentContainer.SwitchStyleclasses
+            (
+                USSCustomClassMode(e.previousValue),
+                USSCustomClassMode(e.newValue)
+            );
+
+            Scrollview.mode = e.newValue;
+        }
     }
 }
 

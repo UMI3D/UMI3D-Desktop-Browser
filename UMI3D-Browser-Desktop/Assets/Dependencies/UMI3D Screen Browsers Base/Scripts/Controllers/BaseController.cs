@@ -51,9 +51,19 @@ namespace umi3d.baseBrowser.Controller
         [Header("Actions' parents")]
         public GameObject ParameterActions;
         public GameObject EventActions;
+        public GameObject ManipulationGroupActions;
+        public GameObject ManipulationActions;
+
+        [Header("Keyboard' parents")]
+        public GameObject KeyboardActions;
+        public GameObject KeyboardShortcuts;
+        public GameObject KeyboardEmotes;
+        public GameObject KeyboardNavigations;
+        public GameObject KeyboardManipulations;
 
         [HideInInspector]
         public MenuAsset ObjectMenu;
+        public MenuAsset ManipulationMenu;
         public CursorData mouseData;
 
         public IConcreteController CurrentController;
@@ -85,7 +95,6 @@ namespace umi3d.baseBrowser.Controller
         {
             s_instance = this;
 
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Add manipulator in android browser and reactivate it in desktop browser");
             mouseData.ForceProjectionReleasableButton = new ButtonMenuItem
             {
                 Name = "Release",
@@ -95,6 +104,7 @@ namespace umi3d.baseBrowser.Controller
 
             mouseData.saveDelay = 0;
             ObjectMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ObjectMenu");
+            ManipulationMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ManipulationMenu");
 
             //TODO instantiate concrete controllers.
             m_controllers.Add
@@ -110,10 +120,11 @@ namespace umi3d.baseBrowser.Controller
                 new MobileController()
             );
             m_controllers.ForEach(controller => controller?.Awake());
-            KeyboardInteraction.S_Interactions.AddRange(GetComponentsInChildren<KeyboardInteraction>());
-            KeyboardShortcut.S_Shortcuts.AddRange(GetComponentsInChildren<KeyboardShortcut>());
-            KeyboardEmote.S_Emotes.AddRange(GetComponentsInChildren<KeyboardEmote>());
-            KeyboardNavigation.S_Navigations.AddRange(GetComponentsInChildren<KeyboardNavigation>());
+            KeyboardInteraction.S_Interactions.AddRange(KeyboardActions.GetComponents<KeyboardInteraction>());
+            KeyboardShortcut.S_Shortcuts.AddRange(KeyboardShortcuts.GetComponents<KeyboardShortcut>());
+            KeyboardEmote.S_Emotes.AddRange(KeyboardEmotes.GetComponents<KeyboardEmote>());
+            KeyboardNavigation.S_Navigations.AddRange(KeyboardNavigations.GetComponents<KeyboardNavigation>());
+            KeyboardManipulation.S_Manipulations.AddRange(KeyboardManipulations.GetComponents<KeyboardManipulation>());
 
             //TODO for now CurrentController is the desktop one.
             CurrentController = m_controllers.Find(controller => controller is KeyboardAndMouseController);
@@ -240,7 +251,7 @@ namespace umi3d.baseBrowser.Controller
                 System.Predicate<DofGroupOptionDto> predicat = (sep) =>
                 {
                     foreach (DofGroupDto dof in sep.separations)
-                        if (!dofGroups.Contains(dof.dofs)) return false;
+                        if (!BaseManipulationGroup.DofGroups.Contains(dof.dofs)) return false;
                     return true;
                 };
 

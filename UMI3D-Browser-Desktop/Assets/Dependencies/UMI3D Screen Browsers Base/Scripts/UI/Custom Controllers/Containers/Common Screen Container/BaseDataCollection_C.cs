@@ -16,6 +16,7 @@ limitations under the License.
 using System;
 using System.Collections.Generic;
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.baseBrowser.utils;
 using umi3d.commonScreen;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -76,16 +77,10 @@ public abstract class BaseDataCollection_C<D> : BaseVisual_C
     /// <summary>
     /// Direction in wich the items are added.
     /// </summary>
-    public virtual ScrollViewMode Mode
+    public ScrollViewMode Mode
     {
         get => m_mode;
-        set
-        {
-            RemoveFromClassList(USSCustomClassMode(m_mode));
-            AddToClassList(USSCustomClassMode(value));
-            m_mode = value;
-            UpdateSize();
-        }
+        set => m_mode.Value = value;
     }
     /// <summary>
     /// Mode of seletion see: <see cref="SelectionType.SelectionType"/>
@@ -146,11 +141,18 @@ public abstract class BaseDataCollection_C<D> : BaseVisual_C
     /// </summary>
     public abstract VisualElement DataContainer { get; }
 
-    protected ScrollViewMode m_mode;
+    protected readonly Source<ScrollViewMode> m_mode = ScrollViewMode.Vertical;
     protected SelectionType m_selectionType;
     protected float m_size;
     protected bool m_isReorderable;
     protected ReorderableMode m_reorderableMode;
+
+    protected override void InitElement()
+    {
+        base.InitElement();
+
+        m_mode.ValueChanged += UpdateMode;
+    }
 
     #region Implementation
 
@@ -176,8 +178,8 @@ public abstract class BaseDataCollection_C<D> : BaseVisual_C
     public List<D> SelectedData = new List<D>();
 
     protected List<VisualElement> m_waitingItems = new List<VisualElement>();
-    protected List<VisualElement> m_waintingBoxes = new List<VisualElement>();
-    protected List<VisualElement> m_waintingDragger = new List<VisualElement>();
+    protected List<Visual_C> m_waintingBoxes = new List<Visual_C>();
+    protected List<Visual_C> m_waintingDragger = new List<Visual_C>();
 
     /// <summary>
     /// Event raised when a new item is added.
@@ -274,11 +276,19 @@ public abstract class BaseDataCollection_C<D> : BaseVisual_C
             else item = MakeItem(datum);
         }
 
-        VisualElement box;
+        Visual_C box;
         if (m_waintingBoxes.Count == 0)
         {
-            box = new VisualElement { name = "box-item" };
+            box = new Visual_C { name = "box-item" };
             box.AddToClassList(USSCustomClassBox);
+            m_mode.ValueChanged += e =>
+            {
+                box.SwitchStyleclasses
+                (
+                    USSCustomClassMode(e.previousValue),
+                    USSCustomClassMode(e.newValue)
+                );
+            };
         }
         else
         {
@@ -342,7 +352,7 @@ public abstract class BaseDataCollection_C<D> : BaseVisual_C
         if (UnbindItem == null) throw new NullReferenceException("UnbindItem is null");
 
         var item = DataToItem[datum];
-        var box = item.parent;
+        var box = item.parent as Visual_C;
 
         box.RemoveFromHierarchy();
         m_waintingBoxes.Add(box);
@@ -576,11 +586,19 @@ public abstract class BaseDataCollection_C<D> : BaseVisual_C
     {
         if (item == null) throw new NullReferenceException($"{item} is null");
 
-        VisualElement dragger;
+        Visual_C dragger;
         if (m_waintingDragger.Count == 0)
         {
-            dragger = new VisualElement { name = "dragger" };
+            dragger = new Visual_C { name = "dragger" };
             dragger.AddToClassList(USSCustomClassDragger);
+            m_mode.ValueChanged += e =>
+            {
+                dragger.SwitchStyleclasses
+                (
+                    USSCustomClassMode(e.previousValue),
+                    USSCustomClassMode(e.newValue)
+                );
+            };
         }
         else
         {
@@ -621,7 +639,7 @@ public abstract class BaseDataCollection_C<D> : BaseVisual_C
 
     protected virtual void RemoveDragger(VisualElement box)
     {
-        var dragger = _RemoveDragger(box);
+        var dragger = _RemoveDragger(box) as Visual_C;
 
         if (dragger == null || dragger.name != "dragger") return;
         dragger.RemoveFromHierarchy();
@@ -745,6 +763,16 @@ public abstract class BaseDataCollection_C<D> : BaseVisual_C
         };
 
         return draggerManipulator;
+    }
+
+    protected virtual void UpdateMode(ChangeEvent<ScrollViewMode> e)
+    {
+        this.SwitchStyleclasses
+        (
+            USSCustomClassMode(e.previousValue),
+            USSCustomClassMode(e.newValue)
+        );
+        UpdateSize();
     }
 
     #endregion

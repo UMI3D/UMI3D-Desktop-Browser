@@ -23,8 +23,17 @@ namespace umi3d.baseBrowser.inputs.interactions
 {
     public class ManipulationInputGenerator : SingleBehaviour<ManipulationInputGenerator>
     {
+        /// <summary>
+        /// <see cref="BaseManipulation.strength"/>
+        /// </summary>
         public float strength;
+        /// <summary>
+        /// Reference to the <see cref="Cursor.FrameIndicator"/>
+        /// </summary>
         public Cursor.FrameIndicator frameIndicator;
+        /// <summary>
+        /// TODO: not define
+        /// </summary>
         public Transform manipulationCursor;
 
         public Sprite X;
@@ -42,22 +51,30 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// </summary>
         /// <param name="controller"></param>
         /// <param name="manipulationInputs"></param>
-        static public BaseManipulation Instanciate(AbstractController controller, BaseInteraction<EventDto> Input, DofGroupEnum dofGroup, ref List<BaseManipulation> manipulationInputs)
-        {
-            return (Exists) ? Instance._Instanciate(controller, Input, dofGroup, ref manipulationInputs) : null;
-        }
+        static public BaseManipulation Instanciate
+        (
+            AbstractController controller, 
+            BaseInteraction<EventDto> Input, 
+            DofGroupEnum dofGroup
+        ) => (Exists) ? Instance._Instanciate(controller, Input, dofGroup) : null;
 
-        BaseManipulation _Instanciate(AbstractController controller, BaseInteraction<EventDto> input, DofGroupEnum dofGroup, ref List<BaseManipulation> manipulationInputs)
+        protected virtual BaseManipulation _Instanciate
+        (
+            AbstractController controller, 
+            BaseInteraction<EventDto> input, 
+            DofGroupEnum dofGroup
+        )
         {
             var inputInstance = gameObject.AddComponent<BaseManipulation>();
+
             inputInstance.activationButton = input;
             inputInstance.DofGroup = dofGroup;
-            manipulationInputs.Add(inputInstance);
             inputInstance.Init(controller);
             inputInstance.strength = strength;
             inputInstance.frameIndicator = frameIndicator;
             inputInstance.Icon = FindSprite(dofGroup);
             inputInstance.manipulationCursor = manipulationCursor;
+
             return inputInstance;
         }
 

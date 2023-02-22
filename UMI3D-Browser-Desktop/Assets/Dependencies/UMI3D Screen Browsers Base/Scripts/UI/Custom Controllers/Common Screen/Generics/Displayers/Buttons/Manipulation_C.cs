@@ -15,22 +15,13 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
-using umi3d.baseBrowser.inputs.interactions;
-using umi3d.cdk.interaction;
 using umi3d.common.interaction;
 using UnityEngine;
 
-namespace umi3d.baseBrowser.Controller
+namespace umi3d.commonScreen.Displayer
 {
-    public interface IConcreteController
+    public class Manipulation_C : Button_C
     {
-        List<AbstractUMI3DInput> Inputs { get; }
-        List<BaseInteraction<EventDto>> Manipulations { get; }
-
-        void Awake();
-        void Start();
-        void Update();
-        AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false);
-        void ClearInputs();
+        public DofGroupDto dofGroup;
     }
 }

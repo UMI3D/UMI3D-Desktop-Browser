@@ -18,6 +18,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using umi3d.cdk;
+using umi3d.cdk.menu.interaction;
 using umi3d.common.interaction;
 using UnityEngine;
 
@@ -25,85 +26,143 @@ namespace umi3d.baseBrowser.inputs.interactions
 {
     public class BaseManipulation : BaseInteraction<ManipulationDto>
     {
+        public ManipulationMenuItem menuItem;
+
+
+
+
+
         public Sprite Icon;
         public Transform manipulationCursor;
         /// <summary>
         /// DofGroup of the Manipulation.
         /// </summary>
         public DofGroupEnum DofGroup;
-        public umi3d.baseBrowser.Cursor.FrameIndicator frameIndicator;
+        public Cursor.FrameIndicator frameIndicator;
         /// <summary>
         /// Button to activate this input.
         /// </summary>
         public BaseInteraction<EventDto> activationButton;
-        protected bool Active;
+        
         protected bool manipulated = false;
-        /// <summary>
-        /// Launched coroutine for network message sending (if any).
-        /// </summary>
-        /// <see cref="networkMessageSender"/>
-        protected Coroutine messageSenderCoroutine;
-        /// <summary>
-        /// Frame of reference of the <see cref="associatedInteraction"/> (if any).
-        /// </summary>
-        protected Transform frameOfReference;
-        /// <summary>
-        /// Frame rate applied to message emission through network (high values can cause network flood).
-        /// </summary>
-        public float networkFrameRate = 30;
+        
         /// <summary>
         /// Input multiplicative strength.
         /// </summary>
         public float strength = 1;
 
-        #region Instances List
+        #region Instances
 
-        protected static int currentInstance;
+        protected static int s_currentIndex;
+
+        #region Incrementation and decrementation
+
+        /// <summary>
+        /// Deactivate current manipulation and activate next one.
+        /// </summary>
+        public static void NextManipulation() => SwitchManipulation(s_currentIndex + 1);
+
+        /// <summary>
+        /// Deactivate current manipulation and activate previous one.
+        /// </summary>
+        public static void PreviousManipulation() => SwitchManipulation(s_currentIndex - 1);
+
+        /// <summary>
+        /// Update the current selected manipulation.
+        /// </summary>
+        /// <param name="i"></param>
+        public static void SwitchManipulation(int i)
+        {
+            List<BaseManipulation> instances = BaseManipulationGroup.CurrentManipulations;
+
+            if (instances == null || instances.Count == 0) return;
+
+            if (s_currentIndex < instances.Count && s_currentIndex >= 0) instances[s_currentIndex].Deactivate();
+
+            if (i < 0) s_currentIndex = instances.Count - 1;
+            else if (i >= instances.Count) s_currentIndex = 0;
+
+            instances[s_currentIndex].Activate();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Activation, Deactivation, Select
+
+        /// <summary>
+        /// Whether or not this manipulation is active.
+        /// </summary>
+        public bool IsActive { get => m_isActive; protected set => m_isActive = value; }
+        [SerializeField]
+        [Header("Do not update this value in the inspector.")]
+        private bool m_isActive;
+
+        protected virtual void Activate()
+        {
+            IsActive = true;
+        }
+        /// <summary>
+        /// Deactivate this manipulation.
+        /// </summary>
+        public virtual void Deactivate()
+        {
+            IsActive = false;
+            manipulated = false;
+            frameIndicator.gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Select the first manipulation.
+        /// </summary>
+        public static void SelectFirst() => SwitchManipulation(0);
+
+        /// <summary>
+        /// Select this manipulation.
+        /// </summary>
+        public virtual void Select() => SwitchManipulation(BaseManipulationGroup.CurrentManipulations.IndexOf(this));
+
+        /// <summary>
+        /// Unselect all manipulations.
+        /// </summary>
+        public static void UnSelectAll()
+        {
+            List<BaseManipulation> instances = BaseManipulationGroup.CurrentManipulations;
+
+            if (instances == null || instances.Count == 0) return;
+
+            if (s_currentIndex < instances.Count && s_currentIndex >= 0) instances[s_currentIndex].Deactivate();
+            s_currentIndex = -1;
+        }
 
         #endregion
 
         public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
-        {
-            if (associatedInteraction != null)
-                throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
-
-            if (!IsCompatibleWith(interaction))
-                throw new System.Exception("Trying to associate an uncompatible interaction !");
-
-            this.toolId = toolId;
-            foreach (DofGroupOptionDto group in (interaction as ManipulationDto).dofSeparationOptions)
-            {
-                foreach (DofGroupDto sep in group.separations)
-                {
-                    if (sep.dofs == DofGroup)
-                    {
-                        Associate(interaction as ManipulationDto, sep.dofs, toolId, hoveredObjectId);
-                        return;
-                    }
-                }
-            }
-        }
+            => throw new System.NotImplementedException();
 
         public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
+            UnityEngine.Debug.Log("<color=yellow>TODO: </color>" + $"");
             if (associatedInteraction != null)
                 throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
 
-            if (dofs != DofGroup)
-                throw new System.Exception("Trying to associate an uncompatible interaction !");
+            if (!IsCompatibleWith(dofs)) throw new System.Exception("Trying to associate an uncompatible interaction !");
 
             this.hoveredObjectId = hoveredObjectId;
+            this.toolId = toolId;
             associatedInteraction = manipulation;
 
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Create displayer");
-            //if (manipulationDisplayer == null)
-            //{
-            //    manipulationDisplayer = ManipulationDisplayerManager.CreateDisplayer();
-            //}
-            //if (manipulationDisplayer != null)
-            //{
-            //    manipulationDisplayer.SetUp(associatedInteraction.name, Icon);
-            //}
+            menuItem = new ManipulationMenuItem
+            {
+                Name = associatedInteraction.name,
+                dof = new DofGroupDto
+                {
+                    dofs = dofs,
+                }
+            };
+            menuItem.Subscribe(Select);
+            Menu?.Add(menuItem);
 
             StartCoroutine(SetFrameOFReference());
             messageSenderCoroutine = StartCoroutine(networkMessageSender());
@@ -117,9 +176,10 @@ namespace umi3d.baseBrowser.inputs.interactions
                 messageSenderCoroutine = null;
             }
 
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"remove Displayer");
-
             associatedInteraction = null;
+            Menu?.Remove(menuItem);
+            menuItem?.UnSubscribe(Select);
+            menuItem = null;
         }
 
         public override bool IsCompatibleWith(AbstractInteractionDto interaction)
@@ -137,36 +197,22 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public bool IsCompatibleWith(DofGroupEnum dofGroup) => dofGroup == DofGroup;
 
-        public static void SelectFirst() => SwicthManipulation(0);
 
-        public static void NextManipulation() => SwicthManipulation(currentInstance + 1);
 
-        public static void PreviousManipulation() => SwicthManipulation(currentInstance - 1);
 
-        public static void SwicthManipulation(int i)
-        {
-            List<BaseManipulation> instances = BaseManipulationGroup.GetManipulations();
-
-            if (instances == null || instances.Count == 0) return;
-
-            if (currentInstance < instances.Count) instances[currentInstance].Deactivate();
-
-            currentInstance = i;
-            if (currentInstance < 0) currentInstance = instances.Count - 1;
-            else if (currentInstance >= instances.Count) currentInstance = 0;
-            if (currentInstance < instances.Count) instances[currentInstance].Activate();
-        }
-
-        public void Activate()
-        {
-            Active = true;
-        }
-        public void Deactivate()
-        {
-            Active = false;
-            manipulated = false;
-            frameIndicator.gameObject.SetActive(false);
-        }
+        /// <summary>
+        /// Launched coroutine for network message sending (if any).
+        /// </summary>
+        /// <see cref="networkMessageSender"/>
+        protected Coroutine messageSenderCoroutine;
+        /// <summary>
+        /// Frame of reference of the <see cref="associatedInteraction"/> (if any).
+        /// </summary>
+        protected Transform frameOfReference;
+        /// <summary>
+        /// Frame rate applied to message emission through network (high values can cause network flood).
+        /// </summary>
+        public float networkFrameRate = 30;
 
         protected IEnumerator SetFrameOFReference()
         {

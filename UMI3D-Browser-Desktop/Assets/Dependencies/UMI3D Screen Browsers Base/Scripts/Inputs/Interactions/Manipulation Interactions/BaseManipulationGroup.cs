@@ -22,52 +22,145 @@ using UnityEngine;
 
 namespace umi3d.baseBrowser.inputs.interactions
 {
+    /// <summary>
+    /// Group of manipulations.
+    /// </summary>
     public class BaseManipulationGroup : BaseInteraction<ManipulationDto>
     {
+        /// <summary>
+        /// List of inputs that will be used to manipulate an interactable.
+        /// </summary>
         [SerializeField]
-        protected List<BaseInteraction<EventDto>> Inputs = new List<BaseInteraction<EventDto>>();
+        protected List<BaseInteraction<EventDto>> m_inputs = new List<BaseInteraction<EventDto>>();
         [SerializeField]
-        protected List<DofGroupEnum> dofGroups = new List<DofGroupEnum>();
-
-        protected ButtonMenuItem menuItem;
-        protected bool Active;
-        protected List<BaseManipulation> manipulationInputs = new List<BaseManipulation>();
-
-        #region Instances List
-
-        protected static List<BaseManipulationGroup> instances = new List<BaseManipulationGroup>();
-        protected static Dictionary<BaseManipulationGroup, List<BaseManipulation>> InputInstances = new Dictionary<BaseManipulationGroup, List<BaseManipulation>>();
-        protected static int currentInstance;
-
-        public static BaseManipulationGroup CurrentManipulationGroup
-            => instances.Count > 0 ? instances[currentInstance] : null;
-
-        public static BaseManipulationGroup Instanciate(AbstractController controller, List<BaseInteraction<EventDto>> Inputs, List<DofGroupEnum> dofGroups, Transform parent)
+        public static List<DofGroupEnum> DofGroups = new List<DofGroupEnum>
         {
-            BaseManipulationGroup group = parent.gameObject.AddComponent<BaseManipulationGroup>();
-            group.Inputs = Inputs;
-            group.dofGroups = dofGroups;
-            group.controller = controller;
+            DofGroupEnum.XY,
+            DofGroupEnum.XZ,
+            DofGroupEnum.YZ,
+
+            DofGroupEnum.X,
+            DofGroupEnum.Y,
+            DofGroupEnum.Z,
+
+            DofGroupEnum.RX,
+            DofGroupEnum.RY,
+            DofGroupEnum.RZ
+        };
+
+        #region Static methods and properties
+
+        #region Instances
+
+        protected static List<BaseManipulationGroup> s_instances = new List<BaseManipulationGroup>();
+        protected static Dictionary<BaseManipulationGroup, List<BaseManipulation>> s_manipulationsByGroup = new Dictionary<BaseManipulationGroup, List<BaseManipulation>>();
+        protected static int s_currentIndex;
+
+        /// <summary>
+        /// Current manipulation group.
+        /// </summary>
+        public static BaseManipulationGroup CurrentGroup
+            => s_instances.Count > 0 ? s_instances[s_currentIndex] : null;
+
+        public static BaseManipulationGroup Instanciate
+        (
+            AbstractController controller,
+            List<BaseInteraction<EventDto>> Inputs,
+            GameObject gO
+        )
+        {
+            BaseManipulationGroup group = gO.AddComponent<BaseManipulationGroup>();
+            group.Init(controller);
+            group.m_inputs = Inputs;
             return group;
         }
 
-        public static List<BaseManipulation> GetManipulations()
-        {
-            if
-            (
-                CurrentManipulationGroup == null
-                || InputInstances == null
-                || !InputInstances.ContainsKey(CurrentManipulationGroup)
-            )
-                return null;
+        /// <summary>
+        /// Current list of manipulations associated with the <see cref="CurrentGroup"/>
+        /// </summary>
+        public static List<BaseManipulation> CurrentManipulations
+            => CurrentGroup == null
+                || s_manipulationsByGroup == null
+                || !s_manipulationsByGroup.ContainsKey(CurrentGroup)
+            ? null
+            : s_manipulationsByGroup[CurrentGroup];
 
-            return InputInstances[CurrentManipulationGroup];
+        #endregion
+
+        #region Incrementation and decrementation
+
+        /// <summary>
+        /// Deactivate current group and activate next one.
+        /// </summary>
+        public static void NextGroup() => SwicthGroup(s_currentIndex + 1);
+
+        /// <summary>
+        /// Deactivate current group and activate previous one.
+        /// </summary>
+        public static void PreviousGroup() => SwicthGroup(s_currentIndex - 1);
+
+        protected static void SwicthGroup(int i)
+        {
+            if (s_instances.Count == 0) return;
+
+            if (s_currentIndex < s_instances.Count && s_currentIndex >= 0) s_instances[s_currentIndex].Deactivate();
+
+            if (s_instances.Count == 1 && i != 1)
+            {
+                s_currentIndex = -1;
+                return;
+            }
+
+            if (i < 0) s_currentIndex = s_instances.Count - 1;
+            else if (i >= s_instances.Count) s_currentIndex = 0;
+
+            s_instances[s_currentIndex].Activate();
         }
 
         #endregion
 
+        #endregion
+
+        #region Activation, Deactivation, Select
+
+        /// <summary>
+        /// Whether or not this group is active.
+        /// </summary>
+        public bool IsActive { get => m_isActive; protected set => m_isActive = value; }
+        [SerializeField]
+        [Header("Do not update this value in the inspector.")]
+        private bool m_isActive;
+
+        protected void Activate()
+        {
+            IsActive = true;
+            BaseManipulation.SelectFirst();
+
+            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"displayer");
+            //foreach (BaseManipulation mainipulation in s_manipulationsByGroup[this])
+            //    mainipulation.DisplayDisplayer(true);
+        }
+        protected void Deactivate()
+        {
+            IsActive = false;
+            
+            foreach (BaseManipulation input in s_manipulationsByGroup[this])
+            {
+                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"displayer");
+                //input.DisplayDisplayer(false);
+                input.Deactivate();
+            }
+        }
+
+        protected void Select() => SwicthGroup(s_instances.FindIndex(a => a == this));
+
+        #endregion
+
+        #region Associate
+
         public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
+            UnityEngine.Debug.Log($"pommmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmme");
             if (associatedInteraction != null)
                 throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
 
@@ -80,7 +173,7 @@ namespace umi3d.baseBrowser.inputs.interactions
                 bool ok = true;
                 foreach (DofGroupDto sep in group.separations)
                 {
-                    if (!dofGroups.Contains(sep.dofs))
+                    if (!DofGroups.Contains(sep.dofs))
                     {
                         ok = false;
                         break;
@@ -97,38 +190,90 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
-            if 
-            (
-                (associatedInteraction != null && associatedInteraction != manipulation) 
-                || !dofGroups.Contains(dofs)
-            )
-                throw new System.Exception("Trying to associate an uncompatible interaction !");
+            UnityEngine.Debug.Log("<color=blue>TODO: </color>" + $"associate");
+            if (!IsAvailableFor(manipulation)) throw new System.Exception($"This input is not available for {manipulation}");
 
-            associatedInteraction = manipulation;
+            if (!IsCompatibleWith(manipulation)) throw new System.Exception("Trying to associate an uncompatible interaction !");
+
+            AddGroup();
+
             this.hoveredObjectId = hoveredObjectId;
-            Add();
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"instanciate with a.locked ?");
-            BaseManipulation input = ManipulationInputGenerator.Instanciate(controller, Inputs.Find(a => a.IsAvailable()), dofs, ref manipulationInputs);
+            this.toolId = toolId;
+            associatedInteraction = manipulation;
+
+            BaseManipulation input = ManipulationInputGenerator.Instanciate(controller, m_inputs.Find(a => a.IsAvailable()), dofs);
+            input.Menu = Menu;
             input.bone = bone;
             input.Associate(manipulation, dofs, toolId, hoveredObjectId);
-            Add(input);
+            input.Deactivate();
+            AddManipulation(input);
+
+            if (s_instances.Count == 1)
+            {
+                s_currentIndex = 0;
+                Activate();
+            }
+            else Deactivate();
         }
+
+        protected void AddGroup()
+        {
+            if (s_instances.Contains(this)) return;
+
+            s_instances.Add(this);
+            s_manipulationsByGroup.Add(this, new List<BaseManipulation>());
+        }
+
+        protected void AddManipulation(BaseManipulation input)
+        {
+            if (s_manipulationsByGroup[this].Contains(input)) return;
+
+            s_manipulationsByGroup[this].Add(input);
+        }
+
+        #endregion
+
+        #region Dissociate
 
         public override void Dissociate()
         {
-            foreach (BaseManipulation input in manipulationInputs)
+            UnityEngine.Debug.Log("<color=orange>TODO: </color>" + $"dissociate, {associatedInteraction == null}");
+            if (IsActive) PreviousGroup();
+
+            var manipulations = s_manipulationsByGroup[this];
+            for (int i = manipulations.Count - 1; i >= 0; i--)
             {
+                var input = manipulations[i];
                 input.Dissociate();
-                Remove(input);
+                RemoveManipulation(input);
                 Destroy(input);
             }
-            Remove();
-            manipulationInputs.Clear();
+
+            RemoveGroup();
             associatedInteraction = null;
         }
 
+        protected void RemoveGroup()
+        {
+            if (!s_instances.Contains(this)) return;
+
+            s_instances.Remove(this);
+            s_manipulationsByGroup.Remove(this);
+        }
+
+        protected void RemoveManipulation(BaseManipulation input)
+        {
+            if (!s_manipulationsByGroup[this].Contains(input)) return;
+
+            s_manipulationsByGroup[this].Remove(input);
+        }
+
+        #endregion
+
+
+
         public override bool IsAvailable()
-            => base.IsAvailable() && Inputs.Exists(activationButton => activationButton.IsAvailable());
+            => base.IsAvailable() && m_inputs.Exists(activationButton => activationButton.IsAvailable());
 
         public bool IsAvailableFor(ManipulationDto manipulation)
             => manipulation == associatedInteraction || IsAvailable();
@@ -143,7 +288,7 @@ namespace umi3d.baseBrowser.inputs.interactions
                 {
                     foreach (DofGroupDto dof in sep.separations)
                     {
-                        if (!dofGroups.Contains(dof.dofs)) return false;
+                        if (!DofGroups.Contains(dof.dofs)) return false;
                     }
                     return true;
                 }
@@ -153,114 +298,7 @@ namespace umi3d.baseBrowser.inputs.interactions
         public override void UpdateHoveredObjectId(ulong hoveredObjectId)
         {
             base.UpdateHoveredObjectId(hoveredObjectId);
-            foreach (var input in InputInstances[this]) input.UpdateHoveredObjectId(hoveredObjectId);
-        }
-
-        public static void NextManipulation() => SwicthManipulation(currentInstance + 1);
-
-        public static void PreviousManipulation() => SwicthManipulation(currentInstance - 1);
-
-        protected static void SwicthManipulation(int i)
-        {
-            if (instances.Count == 0) return;
-
-            if (currentInstance < instances.Count) instances[currentInstance].Deactivate();
-
-            currentInstance = i;
-            if (currentInstance < 0) currentInstance = instances.Count - 1;
-            else if (currentInstance >= instances.Count) currentInstance = 0;
-
-            instances[currentInstance].Activate();
-        }
-
-        protected void Add()
-        {
-            if (instances.Contains(this)) return;
-
-            instances.Add(this);
-            InputInstances.Add(this, new List<BaseManipulation>());
-            menuItem = new ButtonMenuItem()
-            {
-                Name = associatedInteraction.name
-            };
-            menuItem.Subscribe(Select);
-            if (instances.Count == 1)
-            {
-                currentInstance = 0;
-                Activate();
-            }
-            else Deactivate();
-        }
-
-        protected void Remove()
-        {
-            if (!instances.Contains(this)) return;
-
-            if (Active) PreviousManipulation();
-            instances.Remove(this);
-            InputInstances.Remove(this);
-            if (instances.Count == 0)
-            {
-                currentInstance = 0;
-                //umi3d.baseBrowser.Controller.BaseCursor.State = umi3d.baseBrowser.Controller.BaseCursor.CursorState.Hover;
-            } 
-            if (menuItem != null)
-            {
-                Menu.Remove(menuItem);
-                menuItem.UnSubscribe(Select);
-                menuItem = null;
-            }
-        }
-
-        protected void Activate()
-        {
-            Active = true;
-            if (menuItem != null) Menu.Remove(menuItem);
-            BaseManipulation.SelectFirst();
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"displayer");
-            //foreach (BaseManipulation mainipulation in manipulationInputs)
-            //    mainipulation.DisplayDisplayer(true);
-        }
-        protected void Deactivate()
-        {
-            Active = false;
-            Menu.Add(menuItem);
-            foreach (BaseManipulation input in manipulationInputs)
-            {
-                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"displayer");
-                //input.DisplayDisplayer(false);
-                input.Deactivate();
-            }
-        }
-
-        protected void Select() => SwicthManipulation(instances.FindIndex(a => a == this));
-
-        protected void Add(BaseManipulation input)
-        {
-            if (InputInstances[this].Contains(input)) return;
-
-            InputInstances[this].Add(input);
-            if (Active && InputInstances[this].Count == 1)
-            {
-                currentInstance = 0;
-                input.Activate();
-            }
-            else input.Deactivate();
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"displayer");
-            //input.DisplayDisplayer(active);
-        }
-
-        protected void Remove(BaseManipulation input)
-        {
-            if (!InputInstances[this].Contains(input)) return;
-
-            if (Active) PreviousManipulation();
-            InputInstances[this].Remove(input);
-            if (Active && InputInstances[this].Count == 0)
-            {
-                currentInstance = 0;
-                //umi3d.baseBrowser.Controller.BaseCursor.State = umi3d.baseBrowser.Controller.BaseCursor.CursorState.Hover;
-            }
+            foreach (var input in s_manipulationsByGroup[this]) input.UpdateHoveredObjectId(hoveredObjectId);
         }
     }
 }

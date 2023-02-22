@@ -16,12 +16,20 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-namespace umi3d.baseBrowser.Controller
+namespace umi3d.baseBrowser.inputs.interactions
 {
-    public partial class BaseController
+    public class KeyboardManipulation : BaseKeyInteraction
     {
-        
+        public static List<KeyboardManipulation> S_Manipulations = new List<KeyboardManipulation>();
+
+        /// <summary>
+        /// Root of the avatar that will be ignore by raycast.
+        /// </summary>
+        public Transform AvatarParent;
+        /// <summary>
+        /// Head of the avatar.
+        /// </summary>
+        public Transform Head;
     }
 }

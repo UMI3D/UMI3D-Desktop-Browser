@@ -13,8 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections.Generic;
-using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -22,7 +20,7 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Displayer
 {
-    public class Toggle_C : Toggle
+    public class Toggle_C : Toggle, IPanelBindable, ITransitionable
     {
         public new class UxmlFactory : UxmlFactory<Toggle_C, UxmlTraits> { }
 
@@ -132,7 +130,6 @@ namespace umi3d.commonScreen.Displayer
         /// Whether or not this element has been set.
         /// </summary>
         public bool IsSet { get; protected set; }
-        public bool IsAttachedToPanel { get; protected set; }
 
         public Text_C SampleTextLabel = new Text_C();
 
@@ -144,6 +141,12 @@ namespace umi3d.commonScreen.Displayer
         {
             this.RegisterCallback<AttachToPanelEvent>(AttachedToPanel);
             this.RegisterCallback<DetachFromPanelEvent>(DetachedFromPanel);
+            this.RegisterCallback<CustomStyleResolvedEvent>(CustomStyleResolved);
+            this.RegisterCallback<GeometryChangedEvent>(GeometryChanged);
+            this.RegisterCallback<TransitionRunEvent>(TransitionRun);
+            this.RegisterCallback<TransitionStartEvent>(TransitionStarted);
+            this.RegisterCallback<TransitionEndEvent>(TransitionEnded);
+            this.RegisterCallback<TransitionCancelEvent>(TransitionCanceled);
             IsSet = false;
             InstanciateChildren();
             _AttachStyleSheet();
@@ -210,6 +213,25 @@ namespace umi3d.commonScreen.Displayer
             Direction = ElemnetDirection.Leading;
         }
 
+        #region Panel Bindable
+
+        /// <summary>
+        /// Whether or not this element is attached to a panel.
+        /// </summary>
+        public bool IsAttachedToPanel { get; protected set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="evt"></param>
+        void IPanelBindable.AttachedToPanel(AttachToPanelEvent evt) => AttachedToPanel(evt);
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="evt"></param>
+        void IPanelBindable.DetachedFromPanel(DetachFromPanelEvent evt) => DetachedFromPanel(evt);
+
         /// <summary>
         /// Methode called when this element is attached to a panel.
         /// </summary>
@@ -217,11 +239,22 @@ namespace umi3d.commonScreen.Displayer
         /// <remarks>If you want to register to an event you should use this methode.</remarks>
         protected virtual void AttachedToPanel(AttachToPanelEvent evt)
         {
+            evt.StopPropagation();
             IsAttachedToPanel = true;
             PropertyChangedEvent += PropertyChanged;
 
             LanguageChanged += ChangedLanguage;
             OnLanguageChanged();
+
+            m_transitionScheduledItem = this.WaitUntil
+            (
+                () => this.CanBeConsiderAsListeningForTransition(),
+                () =>
+                {
+                    IsListeningForTransition = true;
+                    if (this.AreAnimationsWaiting()) this.PlayAllAnimations();
+                }
+            );
         }
 
         /// <summary>
@@ -231,11 +264,110 @@ namespace umi3d.commonScreen.Displayer
         /// <remarks>If you want to unregister to an event you should use this methode.</remarks>
         protected virtual void DetachedFromPanel(DetachFromPanelEvent evt)
         {
-            PropertyChangedEvent -= PropertyChanged;
+            evt.StopPropagation();
             IsAttachedToPanel = false;
+            IsListeningForTransition = false;
 
+            m_transitionScheduledItem?.Pause();
+            m_transitionScheduledItem = null;
+            PropertyChangedEvent -= PropertyChanged;
             LanguageChanged -= ChangedLanguage;
         }
+
+        #endregion
+
+        /// <summary>
+        /// Method called when a custom style sheet is resolved.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void CustomStyleResolved(CustomStyleResolvedEvent evt)
+        {
+            evt.StopPropagation();
+        }
+
+        /// <summary>
+        /// Method called when this element geometry changed.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void GeometryChanged(GeometryChangedEvent evt)
+        {
+            evt.StopPropagation();
+        }
+
+        #region Transitions
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public bool IsListeningForTransition { get; protected set; }
+
+        IVisualElementScheduledItem m_transitionScheduledItem;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="evt"></param>
+        void ITransitionable.TransitionRun(TransitionRunEvent evt) => TransitionRun(evt);
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="evt"></param>
+        void ITransitionable.TransitionStarted(TransitionStartEvent evt) => TransitionStarted(evt);
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="evt"></param>
+        void ITransitionable.TransitionEnded(TransitionEndEvent evt) => TransitionEnded(evt);
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="evt"></param>
+        void ITransitionable.TransitionCanceled(TransitionCancelEvent evt) => TransitionCanceled(evt);
+
+        /// <summary>
+        /// Method called when a transition is created.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void TransitionRun(TransitionRunEvent evt)
+        {
+            evt.StopPropagation();
+        }
+
+        /// <summary>
+        /// Method called when a transition start. (after transition'delay end)
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void TransitionStarted(TransitionStartEvent evt)
+        {
+            evt.StopPropagation();
+        }
+
+        /// <summary>
+        /// Method called when a transition end properly without being canceled.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void TransitionEnded(TransitionEndEvent evt)
+        {
+            evt.StopPropagation();
+            foreach (var property in evt.stylePropertyNames)
+            {
+                this.TriggerAnimationCallback(property);
+            }
+        }
+
+        /// <summary>
+        /// Method called when a transition is canceled.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void TransitionCanceled(TransitionCancelEvent evt)
+        {
+            evt.StopPropagation();
+        }
+
+        #endregion
 
         /// <summary>
         /// Raise the <see cref="PropertyChangedEvent"/> event if this elemnet is attached to a panel, else call <see cref="PropertyChanged(object, object, string)"/>
