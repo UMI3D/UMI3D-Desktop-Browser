@@ -119,7 +119,7 @@ namespace umi3d.commonScreen.Displayer
         {
             base.SetProperties();
             Category = ElementCategory.Game;
-            LabelDirection = ElemnetDirection.Bottom;
+            LabelAndInputDirection = ElementAlignment.Bottom;
             ToolType = ToolType.Unknown;
             IsSelected = false;
         }

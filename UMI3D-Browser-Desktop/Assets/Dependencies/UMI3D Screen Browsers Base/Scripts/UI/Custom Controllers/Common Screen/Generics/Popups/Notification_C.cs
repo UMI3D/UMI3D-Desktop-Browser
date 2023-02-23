@@ -145,17 +145,17 @@ namespace umi3d.commonScreen.Displayer
         }
         public virtual LocalisationAttribute Title
         {
-            get => TitleLabel.LocaliseText;
+            get => TitleLabel.LocalisedText;
             set
             {
                 if (value.IsEmpty) TitleLabel.RemoveFromHierarchy();
                 else Header.Insert(0, TitleLabel);
-                TitleLabel.LocaliseText = value;
+                TitleLabel.LocalisedText = value;
             }
         }
         public virtual LocalisationAttribute Author
         {
-            get => AuthorLabel.LocaliseText;
+            get => AuthorLabel.LocalisedText;
             set
             {
                 if (value.IsEmpty) AuthorLabel.RemoveFromHierarchy();
@@ -164,12 +164,12 @@ namespace umi3d.commonScreen.Displayer
                     Header.Insert(0, AuthorLabel);
                     if (Header.Contains(TitleLabel)) AuthorLabel.PlaceInFront(TitleLabel);
                 }
-                AuthorLabel.LocaliseText = value;
+                AuthorLabel.LocalisedText = value;
             }
         }
         public virtual LocalisationAttribute Timestamp
         {
-            get => TimestampLabel.LocaliseText;
+            get => TimestampLabel.LocalisedText;
             set
             {
                 if (value.IsEmpty) TimestampLabel.RemoveFromHierarchy();
@@ -179,17 +179,17 @@ namespace umi3d.commonScreen.Displayer
                     if (Header.Contains(AuthorLabel)) TimestampLabel.PlaceInFront(AuthorLabel);
                     else if (Header.Contains(TitleLabel)) TimestampLabel.PlaceInFront(TitleLabel);
                 }
-                TimestampLabel.LocaliseText = value;
+                TimestampLabel.LocalisedText = value;
             }
         }
         public virtual LocalisationAttribute Message
         {
-            get => MessageLabel.LocaliseText;
+            get => MessageLabel.LocalisedText;
             set
             {
                 if (value.IsEmpty) MessageLabel.RemoveFromHierarchy();
                 else Main.Insert(0, MessageLabel);
-                MessageLabel.LocaliseText = value;
+                MessageLabel.LocalisedText = value;
             }
         }
         public virtual LocalisationAttribute ChoiceALabel
@@ -272,8 +272,8 @@ namespace umi3d.commonScreen.Displayer
             Add(Main);
             Add(ChoicesContainer);
 
-            ChoiceA.Size = ElementSize.Small;
-            ChoiceB.Size = ElementSize.Small;
+            ChoiceA.Height = ElementSize.Small;
+            ChoiceB.Height = ElementSize.Small;
 
             ChoiceA.clicked += () =>
             {

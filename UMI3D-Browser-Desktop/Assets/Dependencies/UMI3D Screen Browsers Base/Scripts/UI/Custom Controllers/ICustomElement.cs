@@ -79,22 +79,27 @@ public interface ITransitionable
 public interface IDisplayer
 {
     /// <summary>
-    /// Height size of this element.
+    /// Height of this element.
     /// </summary>
-    ElementSize HeightSize { get; set; }
+    ElementSize Height { get; set; }
     /// <summary>
-    /// Width size of this element.
+    /// Width of this element.
     /// </summary>
-    ElementSize WidthSize { get; set; }
+    ElementSize Width { get; set; }
 
     /// <summary>
     /// Direction of the label and the input.
+    /// (Top means the label is above the input. Leading means the label is in front of the input).
     /// </summary>
-    ElemnetDirection LabelAndInputDirection { get; set; }
+    ElementAlignment LabelAndInputDirection { get; set; }
     /// <summary>
     /// Alignment of the text of the lable.
     /// </summary>
     ElementAlignment LabelAlignment { get; set; }
+    /// <summary>
+    /// Localised text of the label.
+    /// </summary>
+    LocalisationAttribute LocalisedLabel { get; set; }
 }
 
 public interface IGameView
@@ -119,15 +124,16 @@ public enum ElementPseudoState
     Focus
 }
 public enum ElementCategory { Menu, Game }
+public enum ElementDimension { Width, Height }
 public enum ElementSize { Small, Medium, Large, Custom }
-public enum ElemnetDirection { Leading, Trailing, Top, Bottom }
+public enum ElementDirection { Leading, Trailing, Top, Bottom, Center }
 public enum ElementVerticalAlignment { Top, Center, Bottom }
 public enum ElementHorizontalAlignment { Leading, Center, Trailing }
 public enum ElementAlignment
 {
-    Top,
+    LeadingTop, Top, TrailingTop,
     Leading, Center, Trailing,
-    Bottom
+    LeadingBottom, Bottom, TrailingBottom
 }
 
 public enum TextStyle

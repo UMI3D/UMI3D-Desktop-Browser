@@ -56,10 +56,10 @@ namespace umi3d.commonScreen.Displayer
             {
                 name = "localised-label"
             };
-            protected UxmlEnumAttributeDescription<ElemnetDirection> m_labelDirection = new UxmlEnumAttributeDescription<ElemnetDirection>
+            protected UxmlEnumAttributeDescription<ElementDirection> m_labelDirection = new UxmlEnumAttributeDescription<ElementDirection>
             {
                 name = "label-direction",
-                defaultValue = ElemnetDirection.Leading
+                defaultValue = ElementDirection.Leading
             };
 
             /// <summary>
@@ -136,15 +136,15 @@ namespace umi3d.commonScreen.Displayer
         }
         public virtual LocalisationAttribute LocalisedLabel
         {
-            get => LabelVisual.LocaliseText;
+            get => LabelVisual.LocalisedText;
             set
             {
                 if (value.IsEmpty) LabelVisual.RemoveFromHierarchy();
                 else Insert(0, LabelVisual);
-                LabelVisual.LocaliseText = value;
+                LabelVisual.LocalisedText = value;
             }
         }
-        public ElemnetDirection LabelDirection
+        public ElementDirection LabelDirection
         {
             get => m_labelDirection;
             set
@@ -164,7 +164,7 @@ namespace umi3d.commonScreen.Displayer
         public override string UssCustomClass_Emc => "segmented-picker";
         public virtual string USSCustomClassCategory(ElementCategory category) => $"{UssCustomClass_Emc}-{category}".ToLower();
         public virtual string USSCustomClassSize(ElementSize size) => $"{UssCustomClass_Emc}-{size}".ToLower();
-        public virtual string USSCustomClassDirection(ElemnetDirection direction) => $"{UssCustomClass_Emc}-{direction}-direction".ToLower();
+        public virtual string USSCustomClassDirection(ElementDirection direction) => $"{UssCustomClass_Emc}-{direction}-direction".ToLower();
         public virtual string USSCustomClassLabel => $"{UssCustomClass_Emc}__label";
         public virtual string USSCustomClassInput => $"{UssCustomClass_Emc}__input";
         public virtual string USSCustomClassValue => $"{UssCustomClass_Emc}__value";
@@ -184,11 +184,9 @@ namespace umi3d.commonScreen.Displayer
         protected ElementCategory m_category;
         protected ElementSize m_size;
         protected List<string> m_options = new List<string>();
-        protected ElemnetDirection m_labelDirection;
+        protected ElementDirection m_labelDirection;
         protected Length m_textWidth => Length.Percent(100f / (float)m_options.Count);
         protected Length m_separatorLength = float.NaN;
-
-        public SegmentedPicker_C() { }
 
         protected override void AttachStyleSheet()
         {
@@ -231,7 +229,7 @@ namespace umi3d.commonScreen.Displayer
             LocalisedOptions = (string)null;
             LocalisedValue = null;
             LocalisedLabel = null;
-            LabelDirection = ElemnetDirection.Leading;
+            LabelDirection = ElementDirection.Leading;
         }
 
         protected override void AttachedToPanel(AttachToPanelEvent evt)
@@ -339,11 +337,12 @@ namespace umi3d.commonScreen.Displayer
                 var text = new Text_C();
                 text.AddToClassList(USSCustomClassValue);
                 text.name = m_localisationOptions[i].DefaultText;
-                text.LocaliseText = m_localisationOptions[i];
+                text.LocalisedText = m_localisationOptions[i];
                 text.style.width = m_textWidth;
+                text.TextAlignment = ElementAlignment.Center;
                 PickeValues.Add(text);
                 var touchManip = new TouchManipulator2(null, 0, 0);
-                touchManip.clicked += () => LocalisedValue = text.LocaliseText;
+                touchManip.clicked += () => LocalisedValue = text.LocalisedText;
                 text.AddManipulator(touchManip);
                 Input.Add(text);
 

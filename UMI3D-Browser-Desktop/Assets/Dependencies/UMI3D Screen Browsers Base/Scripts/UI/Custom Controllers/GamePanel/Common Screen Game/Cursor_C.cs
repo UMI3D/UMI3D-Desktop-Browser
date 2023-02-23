@@ -67,10 +67,10 @@ namespace umi3d.commonScreen.game
         }
         public virtual LocalisationAttribute Action
         {
-            get => ActionText.LocaliseText;
+            get => ActionText.LocalisedText;
             set
             {
-                ActionText.LocaliseText = value;
+                ActionText.LocalisedText = value;
                 if (value.IsEmpty) ActionText.RemoveFromHierarchy();
                 else
                 {

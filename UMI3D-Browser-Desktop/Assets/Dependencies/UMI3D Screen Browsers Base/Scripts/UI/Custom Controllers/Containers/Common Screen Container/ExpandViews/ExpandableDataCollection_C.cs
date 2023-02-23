@@ -215,7 +215,7 @@ namespace umi3d.UiPreview.commonScreen.Container
                 {
                     var button = item as umi3d.commonScreen.Displayer.Button_C;
                     button.style.width = Length.Percent(100);
-                    button.LocaliseLabel = $"item {datum}";
+                    button.LocalisedLabel = $"item {datum}";
 
                     if (previewItem.Data.IndexOf(datum) == 0)
                     {

@@ -47,13 +47,13 @@ public abstract class BaseMenuScreen_C : BaseVisual_C
 
     public virtual LocalisationAttribute Title
     {
-        get => TitleLabel.LocaliseText;
+        get => TitleLabel.LocalisedText;
         set
         {
             IsSet = false;
             if (value.IsEmpty) TitleLabel.RemoveFromHierarchy();
             else Header_.Insert(1, TitleLabel);
-            TitleLabel.LocaliseText = value;
+            TitleLabel.LocalisedText = value;
             IsSet = true;
         }
     }

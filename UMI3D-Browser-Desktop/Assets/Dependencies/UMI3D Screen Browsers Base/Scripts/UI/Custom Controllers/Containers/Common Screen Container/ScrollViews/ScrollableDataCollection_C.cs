@@ -109,12 +109,12 @@ namespace umi3d.UiPreview.commonScreen.Container
                 previewItem.BindItem = (datum, item) =>
                 {
                     var text = item as umi3d.commonScreen.Displayer.Text_C;
-                    text.LocaliseText = $"item {datum}";
+                    text.LocalisedText = $"item {datum}";
                 };
                 previewItem.UnbindItem = (datum, item) =>
                 {
                     var text = item as umi3d.commonScreen.Displayer.Text_C;
-                    text.LocaliseText = null;
+                    text.LocalisedText = null;
                 };
 
                 for (int i = 0; i < 100; i++) previewItem.AddDatum(i);

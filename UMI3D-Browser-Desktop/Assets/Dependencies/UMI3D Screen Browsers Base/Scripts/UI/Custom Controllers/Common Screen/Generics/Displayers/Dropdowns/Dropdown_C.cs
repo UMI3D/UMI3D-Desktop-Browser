@@ -37,10 +37,10 @@ namespace umi3d.commonScreen.Displayer
                 name = "size",
                 defaultValue = ElementSize.Medium
             };
-            UxmlEnumAttributeDescription<ElemnetDirection> m_direction = new UxmlEnumAttributeDescription<ElemnetDirection>
+            UxmlEnumAttributeDescription<ElementDirection> m_direction = new UxmlEnumAttributeDescription<ElementDirection>
             {
                 name = "direction",
-                defaultValue = ElemnetDirection.Leading
+                defaultValue = ElementDirection.Leading
             };
             UxmlLocaliseAttributeDescription m_localisedLabel = new UxmlLocaliseAttributeDescription
             {
@@ -123,7 +123,7 @@ namespace umi3d.commonScreen.Displayer
                 m_size = value;
             }
         }
-        public virtual ElemnetDirection Direction
+        public virtual ElementDirection Direction
         {
             get => m_direction;
             set
@@ -174,7 +174,7 @@ namespace umi3d.commonScreen.Displayer
         public virtual string UssCustomClass_Emc => "dropdown";
         public virtual string USSCustomClassCategory(ElementCategory category) => $"{UssCustomClass_Emc}-{category}".ToLower();
         public virtual string USSCustomClassSize(ElementSize size) => $"{UssCustomClass_Emc}-{size}".ToLower();
-        public virtual string USSCustomClassDirection(ElemnetDirection direction) => $"{UssCustomClass_Emc}-{direction}".ToLower();
+        public virtual string USSCustomClassDirection(ElementDirection direction) => $"{UssCustomClass_Emc}-{direction}".ToLower();
         public virtual string USSCustomClassLabel => $"{UssCustomClass_Emc}__label";
         public virtual string USSClassText => $"unity-base-popup-field__text";
 
@@ -191,7 +191,7 @@ namespace umi3d.commonScreen.Displayer
 
         protected ElementCategory m_category;
         protected ElementSize m_size;
-        protected ElemnetDirection m_direction;
+        protected ElementDirection m_direction;
         protected bool m_showLabel;
 
         public Dropdown_C()
@@ -267,7 +267,7 @@ namespace umi3d.commonScreen.Displayer
         {
             Category = ElementCategory.Menu;
             Size = ElementSize.Medium;
-            Direction = ElemnetDirection.Leading;
+            Direction = ElementDirection.Leading;
         }
 
         #region Panel Bindable

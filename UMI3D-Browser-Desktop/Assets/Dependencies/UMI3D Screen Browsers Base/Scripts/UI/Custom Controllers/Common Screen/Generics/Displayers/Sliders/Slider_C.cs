@@ -36,10 +36,10 @@ namespace umi3d.commonScreen.Displayer
                 name = "size",
                 defaultValue = ElementSize.Medium
             };
-            protected UxmlEnumAttributeDescription<ElemnetDirection> m_direction = new UxmlEnumAttributeDescription<ElemnetDirection>
+            protected UxmlEnumAttributeDescription<ElementDirection> m_direction = new UxmlEnumAttributeDescription<ElementDirection>
             {
                 name = "direction-displayer",
-                defaultValue = ElemnetDirection.Leading
+                defaultValue = ElementDirection.Leading
             };
             protected UxmlLocaliseAttributeDescription m_localiseLabel = new UxmlLocaliseAttributeDescription
             {
@@ -104,7 +104,7 @@ namespace umi3d.commonScreen.Displayer
                 UpdateTextFieldStyle();
             }
         }
-        public ElemnetDirection DirectionDisplayer
+        public ElementDirection DirectionDisplayer
         {
             get => m_direction;
             set
@@ -116,10 +116,10 @@ namespace umi3d.commonScreen.Displayer
         }
         public LocalisationAttribute LocaliseLabel
         {
-            get => SampleTextLabel.LocaliseText;
+            get => SampleTextLabel.LocalisedText;
             set
             {
-                SampleTextLabel.LocaliseText = value;
+                SampleTextLabel.LocalisedText = value;
                 ChangedLanguage();
             }
         }
@@ -136,7 +136,7 @@ namespace umi3d.commonScreen.Displayer
         public virtual string UssCustomClass_Emc => "slider";
         public virtual string USSCustomClassCategory(ElementCategory category) => $"{UssCustomClass_Emc}-{category}".ToLower();
         public virtual string USSCustomClassSize(ElementSize size) => $"{UssCustomClass_Emc}-{size}".ToLower();
-        public virtual string USSCustomClassDirection(ElemnetDirection direction) => $"{UssCustomClass_Emc}-{direction}".ToLower();
+        public virtual string USSCustomClassDirection(ElementDirection direction) => $"{UssCustomClass_Emc}-{direction}".ToLower();
         public virtual string USSCustomClassLabel => $"{UssCustomClass_Emc}-label";
         public virtual string USSCustomClassTextField => $"{UssCustomClass_Emc}-text__field";
 
@@ -151,7 +151,7 @@ namespace umi3d.commonScreen.Displayer
 
         protected ElementCategory m_category;
         protected ElementSize m_size;
-        protected ElemnetDirection m_direction;
+        protected ElementDirection m_direction;
 
         public Slider_C()
         {
@@ -227,7 +227,7 @@ namespace umi3d.commonScreen.Displayer
         {
             Category = ElementCategory.Menu;
             Size = ElementSize.Medium;
-            DirectionDisplayer = ElemnetDirection.Leading;
+            DirectionDisplayer = ElementDirection.Leading;
         }
 
         #region Panel Bindable
@@ -424,13 +424,13 @@ namespace umi3d.commonScreen.Displayer
 
         protected virtual async Task _ChangedLanguage()
         {
-            label = SampleTextLabel.LocaliseText.DefaultText;
+            label = SampleTextLabel.LocalisedText.DefaultText;
 
-            if (SampleTextLabel.LocaliseText.CanBeLocalised)
+            if (SampleTextLabel.LocalisedText.CanBeLocalised)
             {
                 while (!LocalisationManager.Exists) await UMI3DAsyncManager.Yield();
 
-                label = LocalisationManager.Instance.GetTranslation(SampleTextLabel.LocaliseText);
+                label = LocalisationManager.Instance.GetTranslation(SampleTextLabel.LocalisedText);
             }
         }
 

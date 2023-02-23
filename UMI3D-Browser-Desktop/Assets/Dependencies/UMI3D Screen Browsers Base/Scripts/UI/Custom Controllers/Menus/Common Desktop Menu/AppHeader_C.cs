@@ -68,9 +68,9 @@ namespace umi3d.commonDesktop.menu
             Close_Icon.AddToClassList(USSCustomClassClose);
             Container.AddToClassList(USSCustomClassContainer);
 
-            Minimize.Size = ElementSize.Small;
-            Maximize.Size = ElementSize.Small;
-            Close.Size = ElementSize.Small;
+            Minimize.Height = ElementSize.Small;
+            Maximize.Height = ElementSize.Small;
+            Close.Height = ElementSize.Small;
 
             Close.Type = ButtonType.Danger;
 

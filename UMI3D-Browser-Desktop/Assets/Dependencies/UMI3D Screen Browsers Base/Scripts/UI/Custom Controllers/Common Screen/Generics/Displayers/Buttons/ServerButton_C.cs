@@ -31,8 +31,6 @@ namespace umi3d.commonScreen.Displayer
 
         public VisualElement Icon = new VisualElement { name = "icon" };
 
-        public ServerButton_C() { }
-
         protected override void AttachStyleSheet()
         {
             base.AttachStyleSheet();
@@ -52,7 +50,6 @@ namespace umi3d.commonScreen.Displayer
         {
             base.InitElement();
             Front.RemoveFromHierarchy();
-            Add(Icon);
         }
 
         protected override void StartElement()
@@ -63,7 +60,10 @@ namespace umi3d.commonScreen.Displayer
         protected override void SetProperties()
         {
             base.SetProperties();
-            LabelDirection = ElemnetDirection.Bottom;
+            Height = ElementSize.Large;
+            Width = ElementSize.Large;
+            LabelAndInputDirection = ElementAlignment.Bottom;
+            LabelAlignment = ElementAlignment.Center;
             Type = ButtonType.Invisible;
         }
 

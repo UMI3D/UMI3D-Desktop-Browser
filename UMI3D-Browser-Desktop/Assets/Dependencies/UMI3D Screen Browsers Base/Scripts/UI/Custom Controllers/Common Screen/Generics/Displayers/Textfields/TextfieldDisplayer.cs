@@ -26,7 +26,7 @@ namespace umi3d.commonScreen.Displayer
 
         public ElementCategory Category;
         public ElementSize Size = ElementSize.Medium;
-        public ElemnetDirection Direction = ElemnetDirection.Leading;
+        public ElementDirection Direction = ElementDirection.Leading;
         public bool MaskToggle;
         public bool SubmitButton;
 

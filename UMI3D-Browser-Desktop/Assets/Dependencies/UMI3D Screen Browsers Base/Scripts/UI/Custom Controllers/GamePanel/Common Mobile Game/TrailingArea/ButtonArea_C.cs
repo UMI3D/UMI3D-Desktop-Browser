@@ -163,10 +163,10 @@ namespace umi3d.commonMobile.game
             Action.Category = ElementCategory.Game;
             Emote.Category = ElementCategory.Game;
 
-            Crouch.Size = ElementSize.Custom;
-            Jump.Size = ElementSize.Custom;
-            Action.Size = ElementSize.Custom;
-            Emote.Size = ElementSize.Custom;
+            Crouch.Height = ElementSize.Custom;
+            Jump.Height = ElementSize.Custom;
+            Action.Height = ElementSize.Custom;
+            Emote.Height = ElementSize.Custom;
 
             Crouch.Shape = ButtonShape.Round;
             Jump.Shape = ButtonShape.Round;

@@ -13,8 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using MathNet.Numerics;
 using System;
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.game;
@@ -111,10 +113,10 @@ namespace umi3d.commonScreen.game
 
         public virtual LocalisationAttribute ShortText
         {
-            get => ShortInf.LocaliseText;
+            get => ShortInf.LocalisedText;
             set
             {
-                if (value == ShortInf.LocaliseText) return;
+                if (value == ShortInf.LocalisedText) return;
 
                 var color = new Color();
                 ShortInf.AddAnimation
@@ -127,7 +129,7 @@ namespace umi3d.commonScreen.game
                     callin: () => color = ShortInf.resolvedStyle.color,
                     callback: () =>
                     {
-                        ShortInf.LocaliseText = value;
+                        ShortInf.LocalisedText = value;
                         ShortInf.AddAnimation
                         (
                             this,
@@ -263,6 +265,7 @@ namespace umi3d.commonScreen.game
                 if (!IsExpanded && 10f < localPosition.y - m_initialManipulatedPosition.y) IsExpanded = true;
             };
 
+            ShortInf.TextAlignment = ElementAlignment.Center;
             ShortInf.AddManipulator(ShortInfManipulator);
             ShortInfManipulator.ClickedDownWithInfo += (e, localPosition) =>
             {
@@ -300,6 +303,7 @@ namespace umi3d.commonScreen.game
             Sound.AddManipulator(SoundManipulator);
             SoundManipulator.clicked += () => SoundStatusChanged?.Invoke();
 
+            Toolbox.Width = ElementSize.Medium;
             Toolbox.Category = ElementCategory.Game;
 
             Add(ShortInf);

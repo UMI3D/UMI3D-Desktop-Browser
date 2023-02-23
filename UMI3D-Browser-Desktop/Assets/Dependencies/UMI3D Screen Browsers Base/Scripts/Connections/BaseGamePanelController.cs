@@ -55,7 +55,7 @@ namespace umi3d.baseBrowser.connection
             BaseConnectionProcess.Instance.ConnectionSucces += (media) =>
             {
                 GamePanel.CurrentView = GameViews.Loader;
-                Loader.Loading.TitleLabel.LocaliseText = new LocalisationAttribute("Loading environment","Other", "LoadingEnv");
+                Loader.Loading.TitleLabel.LocalisedText = new LocalisationAttribute("Loading environment","Other", "LoadingEnv");
                 Loader.Loading.Value = 0;
                 Menu.GameData.WorldName = media.name;
             };

@@ -39,13 +39,13 @@ namespace umi3d.commonScreen.menu
             public KeyBindingDisplayer(string command)
             {
                 Command = new Text_C() { name = "command" };
-                Command.LocaliseText = command;
+                Command.LocalisedText = command;
                 Command.Color = TextColor.Menu;
 
                 Key1 = new Button_C { name = "key-1" };
-                Key1.Size = ElementSize.Small;
+                Key1.Height = ElementSize.Small;
                 Key2 = new Button_C { name = "key-2" };
-                Key2.Size = ElementSize.Small;
+                Key2.Height = ElementSize.Small;
 
                 Box = new VisualElement { name = "box-displayer" };
                 Box.AddToClassList(USSCustomClassBox());
@@ -244,7 +244,7 @@ namespace umi3d.commonScreen.menu
             LeftHandToggle.LocaliseLabel = new LocalisationAttribute("Left hand interface", "ControlsSettings", "LeftHand_Label");
             LeftHandToggle.RegisterValueChangedCallback(ce => LeftHandUpdated(ce.newValue));
 
-            NavigationLabel.LocaliseText = new LocalisationAttribute("Navigations", "ControlsSettings", "Navigations");
+            NavigationLabel.LocalisedText = new LocalisationAttribute("Navigations", "ControlsSettings", "Navigations");
             Forward = new KeyBindingDisplayer("Forward");
             Backward = new KeyBindingDisplayer("Backward");
             Left = new KeyBindingDisplayer("Left");
@@ -254,7 +254,7 @@ namespace umi3d.commonScreen.menu
             Crouch = new KeyBindingDisplayer("Crouch");
             FreeHead = new KeyBindingDisplayer("Free Head");
 
-            ShortcutLabel.LocaliseText = new LocalisationAttribute("Shortcuts", "ControlsSettings", "Shortcuts");
+            ShortcutLabel.LocalisedText = new LocalisationAttribute("Shortcuts", "ControlsSettings", "Shortcuts");
             Mute = new KeyBindingDisplayer("Mute/Unmute mic");
             PushToTalk = new KeyBindingDisplayer("Push to talk");
             GeneralVolume = new KeyBindingDisplayer("Mute/Unmute General volume");

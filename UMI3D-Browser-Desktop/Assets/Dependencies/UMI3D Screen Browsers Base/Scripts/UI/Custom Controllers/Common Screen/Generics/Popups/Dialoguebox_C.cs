@@ -117,8 +117,8 @@ namespace umi3d.commonScreen.Displayer
                 RemoveFromClassList(USSCustomClassSize(m_size));
                 AddToClassList(USSCustomClassSize(value));
                 m_size = value;
-                ChoiceA.Size = value;
-                ChoiceB.Size = value;
+                ChoiceA.Height = value;
+                ChoiceB.Height = value;
                 switch (value)
                 {
                     case ElementSize.Small:
@@ -170,25 +170,25 @@ namespace umi3d.commonScreen.Displayer
         }
         public virtual LocalisationAttribute Title
         {
-            get => TitleLabel.LocaliseText;
+            get => TitleLabel.LocalisedText;
             set
             {
                 IsSet = false;
                 if (value.IsEmpty) TitleLabel.RemoveFromHierarchy();
                 else Body.Insert(0, TitleLabel);
-                TitleLabel.LocaliseText = value;
+                TitleLabel.LocalisedText = value;
                 IsSet = true;
             }
         }
         public virtual LocalisationAttribute Message
         {
-            get => MessageLabel.LocaliseText;
+            get => MessageLabel.LocalisedText;
             set
             {
                 IsSet = false;
                 if (value.IsEmpty) MessageLabel.RemoveFromHierarchy();
                 else Container.Insert(0, MessageLabel);
-                MessageLabel.LocaliseText = value;
+                MessageLabel.LocalisedText = value;
                 IsSet = true;
             }
         }
@@ -240,6 +240,8 @@ namespace umi3d.commonScreen.Displayer
         protected override void InitElement()
         {
             base.InitElement();
+            TitleLabel.TextAlignment = ElementAlignment.Center;
+
             ChoiceA.clicked += () =>
             {
                 Callback?.Invoke(0);

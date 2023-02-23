@@ -7,7 +7,7 @@
 	height: 100%;
 }
 
-.information__area-short__inf.text.unity-label {
+.information__area-short__inf.text {
 	right: 0;
 
 	flex-direction: row;
@@ -23,7 +23,6 @@
 	border-bottom-right-radius: var(--border-radius-game);
 
 	background-color: var(--background-color-game);
-	-unity-text-align: middle-center;
 
 	padding-top: var(--size-margin-and-padding-game);
 	padding-bottom: var(--size-margin-and-padding-game);
@@ -63,9 +62,6 @@
 	background-image: var(--background-image-sound-off);
 }
 
-.information__area-toolbox.button-medium > .button__body {
-	width: var(--size-medium-displayer);
-	max-width: var(--size-medium-displayer);
-
+.information__area-toolbox > .button-body {
 	background-image: var(--background-image-toolbox);
 }

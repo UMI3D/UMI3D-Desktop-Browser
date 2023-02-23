@@ -220,7 +220,7 @@ namespace umi3d.baseBrowser.connection
             {
                 if (ObjectMenu[0] is TextfieldDisplayer textfield)
                 {
-                    Game.Cursor.ActionText.LocaliseText = new LocalisationAttribute("Edit text", "Other", "EditText");
+                    Game.Cursor.ActionText.LocalisedText = new LocalisationAttribute("Edit text", "Other", "EditText");
                     UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose, () => textfield.Focus());
                 }
                 else if (ObjectMenu[0] is ButtonDisplayer button)
@@ -254,7 +254,7 @@ namespace umi3d.baseBrowser.connection
                 (
                     string.IsNullOrEmpty(CursorAction)
                     || CursorAction == "new tool"
-                ) Game.Cursor.ActionText.LocaliseText = new LocalisationAttribute("Display contextual Menu", "Other", "DisplayInteractionsMenu");
+                ) Game.Cursor.ActionText.LocalisedText = new LocalisationAttribute("Display contextual Menu", "Other", "DisplayInteractionsMenu");
                 else Game.Cursor.Action = CursorAction;
 
                 if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;

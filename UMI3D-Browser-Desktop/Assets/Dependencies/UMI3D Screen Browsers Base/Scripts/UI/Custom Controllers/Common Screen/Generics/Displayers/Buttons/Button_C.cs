@@ -13,13 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Runtime.CompilerServices;
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.baseBrowser.utils;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Displayer
 {
-    public class Button_C : Button, IPanelBindable, ITransitionable
+    public class Button_C : Button, IPanelBindable, ITransitionable, IDisplayer
     {
         public new class UxmlFactory : UxmlFactory<Button_C, UxmlTraits> { }
 
@@ -30,11 +30,32 @@ namespace umi3d.commonScreen.Displayer
                 name = "category",
                 defaultValue = ElementCategory.Menu
             };
-            protected UxmlEnumAttributeDescription<ElementSize> m_size = new UxmlEnumAttributeDescription<ElementSize>
+
+            protected UxmlEnumAttributeDescription<ElementSize> m_height = new UxmlEnumAttributeDescription<ElementSize>
             {
-                name = "size",
+                name = "height",
                 defaultValue = ElementSize.Medium
             };
+            protected UxmlEnumAttributeDescription<ElementSize> m_width = new UxmlEnumAttributeDescription<ElementSize>
+            {
+                name = "width",
+                defaultValue = ElementSize.Custom
+            };
+            protected UxmlEnumAttributeDescription<ElementAlignment> m_labelAndInputDirection = new UxmlEnumAttributeDescription<ElementAlignment>
+            {
+                name = "label-and-input-direction",
+                defaultValue = ElementAlignment.Leading
+            };
+            protected UxmlEnumAttributeDescription<ElementAlignment> m_labelAlignment = new UxmlEnumAttributeDescription<ElementAlignment>
+            {
+                name = "label-alignment",
+                defaultValue = ElementAlignment.Leading
+            };
+            protected UxmlLocaliseAttributeDescription m_localisedLabel = new UxmlLocaliseAttributeDescription
+            {
+                name = "localised-label"
+            };
+
             protected UxmlEnumAttributeDescription<ButtonShape> m_shape = new UxmlEnumAttributeDescription<ButtonShape>
             {
                 name = "shape",
@@ -45,15 +66,8 @@ namespace umi3d.commonScreen.Displayer
                 name = "type",
                 defaultValue = ButtonType.Default
             };
-            protected UxmlLocaliseAttributeDescription m_localiseLabel = new UxmlLocaliseAttributeDescription
-            {
-                name = "localise-label"
-            };
-            protected UxmlEnumAttributeDescription<ElemnetDirection> m_labelDirection = new UxmlEnumAttributeDescription<ElemnetDirection>
-            {
-                name = "label-direction",
-                defaultValue = ElemnetDirection.Leading
-            };
+            
+            
             protected UxmlEnumAttributeDescription<ElementAlignment> m_iconAlignment = new UxmlEnumAttributeDescription<ElementAlignment>
             {
                 name = "icon-alignment",
@@ -76,20 +90,21 @@ namespace umi3d.commonScreen.Displayer
                 var custom = ve as Button_C;
 
                 custom.Category = m_category.GetValueFromBag(bag, cc);
-                custom.Size = m_size.GetValueFromBag(bag, cc);
+
+                custom.Height = m_height.GetValueFromBag(bag, cc);
+                custom.Width = m_width.GetValueFromBag(bag, cc);
+                custom.LabelAndInputDirection = m_labelAndInputDirection.GetValueFromBag(bag, cc);
+                custom.LabelAlignment = m_labelAlignment.GetValueFromBag(bag, cc);
+                custom.LocalisedLabel = m_localisedLabel.GetValueFromBag(bag, cc);
+
                 custom.Shape = m_shape.GetValueFromBag(bag, cc);
                 custom.Type = m_type.GetValueFromBag(bag, cc);
-                custom.LocaliseLabel = m_localiseLabel.GetValueFromBag(bag, cc);
-                custom.LabelDirection = m_labelDirection.GetValueFromBag(bag, cc);
+                
+                
                 custom.IconAlignment = m_iconAlignment.GetValueFromBag(bag, cc);
                 custom.LocaliseText = m_localiseText.GetValueFromBag(bag, cc);
             }
         }
-
-        /// <summary>
-        /// Event raised when a property changed, if this element is attached to a panel.
-        /// </summary>
-        public event System.Action<object, object, string> PropertyChangedEvent;
 
         public virtual ElementCategory Category
         {
@@ -101,26 +116,76 @@ namespace umi3d.commonScreen.Displayer
                 m_category = value;
             }
         }
-        public virtual ElementSize Size
+
+        #region Displayer properties
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public virtual ElementSize Height
         {
-            get => m_size;
+            get => m_height;
+            set => m_height.Value = value;
+        }
+        protected readonly Source<ElementSize> m_height = ElementSize.Medium;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public virtual ElementSize Width
+        {
+            get => m_width;
+            set => m_width.Value = value;
+        }
+        protected readonly Source<ElementSize> m_width = ElementSize.Custom;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public ElementAlignment LabelAndInputDirection
+        {
+            get => m_labelAndInputDirection;
+            set => m_labelAndInputDirection.Value = value;
+        }
+        protected readonly Source<ElementAlignment> m_labelAndInputDirection = ElementAlignment.Leading;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public ElementAlignment LabelAlignment
+        {
+            get => m_labelAlignment;
+            set => m_labelAlignment.Value = value;
+        }
+        protected readonly Source<ElementAlignment> m_labelAlignment = ElementAlignment.Leading;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public virtual LocalisationAttribute LocalisedLabel
+        {
+            get => LabelVisual.LocalisedText;
             set
             {
-                RemoveFromClassList(USSCustomClassSize(m_size));
-                AddToClassList(USSCustomClassSize(value));
-                m_size = value;
+                IsSet = false;
+                if (value.IsEmpty) LabelVisual.RemoveFromHierarchy();
+                else Insert(0, LabelVisual);
+                LabelVisual.LocalisedText = value;
+                IsSet = true;
             }
         }
+
+        #endregion
+
+        #region Button properties
+
         public virtual ButtonShape Shape
         {
             get => m_shape;
-            set
-            {
-                RemoveFromClassList(USSCustomClassShape(m_shape));
-                AddToClassList(USSCustomClassShape(value));
-                m_shape = value;
-            }
+            set => m_shape.Value = value;
         }
+        protected readonly Source<ButtonShape> m_shape = ButtonShape.Square;
+
         public virtual ButtonType Type
         {
             get => m_type;
@@ -131,33 +196,16 @@ namespace umi3d.commonScreen.Displayer
                 m_type = value;
             }
         }
+
+        #endregion
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <remarks> Use <see cref="LocaliseText"/> instead. </remarks>
         public override string text { get => base.text; set => base.text = value; }
-        public virtual LocalisationAttribute LocaliseLabel
-        {
-            get => LabelVisual.LocaliseText;
-            set
-            {
-                IsSet = false;
-                if (value.IsEmpty) LabelVisual.RemoveFromHierarchy();
-                else Insert(0, LabelVisual);
-                LabelVisual.LocaliseText = value;
-                IsSet = true;
-            }
-        }
-        public ElemnetDirection LabelDirection
-        {
-            get => m_labelDirection;
-            set
-            {
-                RemoveFromClassList(USSCustomClassDirection(m_labelDirection));
-                AddToClassList(USSCustomClassDirection(value));
-                m_labelDirection = value;
-            }
-        }
+       
+        
         public ElementAlignment IconAlignment
         {
             get => m_iconAlignment;
@@ -170,13 +218,13 @@ namespace umi3d.commonScreen.Displayer
         }
         public virtual LocalisationAttribute LocaliseText
         {
-            get => TextVisual.LocaliseText;
+            get => TextVisual.LocalisedText;
             set
             {
                 IsSet = false;
                 if (value.IsEmpty) TextVisual.RemoveFromHierarchy();
                 else Body.Insert(1, TextVisual);
-                TextVisual.LocaliseText = value;
+                TextVisual.LocalisedText = value;
                 IsSet = true;
             }
         }
@@ -192,16 +240,16 @@ namespace umi3d.commonScreen.Displayer
         /// </summary>
         public virtual string UssCustomClass_Emc => "button";
         public virtual string USSCustomClassCategory(ElementCategory category) => $"{UssCustomClass_Emc}-{category}".ToLower();
-        public virtual string USSCustomClassSize(ElementSize size) => $"{UssCustomClass_Emc}-{size}".ToLower();
+        public virtual string USSCustomClassSize(ElementDimension dimension, ElementSize size) => $"{UssCustomClass_Emc}-{dimension}-{size}".ToLower();
         public virtual string USSCustomClassShape(ButtonShape shape) => $"{UssCustomClass_Emc}-{shape}".ToLower();
         public virtual string USSCustomClassType(ButtonType type) => $"{UssCustomClass_Emc}-{type}".ToLower();
-        public virtual string USSCustomClassDirection(ElemnetDirection direction) => $"{UssCustomClass_Emc}-{direction}-direction".ToLower();
+        public virtual string USSCustomClassDirection(ElementAlignment direction) => $"{UssCustomClass_Emc}-direction-{direction}".ToLower();
         public virtual string USSCustomClassAlignment(ElementAlignment alignment) => $"{UssCustomClass_Emc}-{alignment}-alignment".ToLower();
-        public virtual string USSCustomClassLabel => $"{UssCustomClass_Emc}__label";
-        public virtual string USSCustomClassBody => $"{UssCustomClass_Emc}__body";
-        public virtual string USSCustomClassText => $"{UssCustomClass_Emc}__text";
-        public virtual string USSCustomClassContainer => $"{UssCustomClass_Emc}__content-container";
-        public virtual string USSCustomClassFront => $"{UssCustomClass_Emc}__front";
+        public virtual string USSCustomClassLabel => $"{UssCustomClass_Emc}-label";
+        public virtual string USSCustomClassBody => $"{UssCustomClass_Emc}-body";
+        public virtual string USSCustomClassText => $"{UssCustomClass_Emc}-text";
+        public virtual string USSCustomClassContainer => $"{UssCustomClass_Emc}-content__container";
+        public virtual string USSCustomClassFront => $"{UssCustomClass_Emc}-front";
 
         /// <summary>
         /// Whether or not this element has been set.
@@ -215,10 +263,10 @@ namespace umi3d.commonScreen.Displayer
         public Visual_C Front = new Visual_C { name = "front" };
 
         protected ElementCategory m_category;
-        protected ElementSize m_size;
-        protected ButtonShape m_shape;
+        
+        
         protected ButtonType m_type;
-        protected ElemnetDirection m_labelDirection;
+        
         protected ElementAlignment m_iconAlignment;
 
         
@@ -276,6 +324,7 @@ namespace umi3d.commonScreen.Displayer
         /// </summary>
         protected virtual void AttachUssClass()
         {
+            RemoveFromClassList("unity-button");
             AddToClassList(UssCustomClass_Emc);
             LabelVisual.AddToClassList(USSCustomClassLabel);
             Body.AddToClassList(USSCustomClassBody);
@@ -291,6 +340,64 @@ namespace umi3d.commonScreen.Displayer
         protected virtual void InitElement()
         {
             clickable = TouchManipulator;
+
+            m_height.ValueChanged += e =>
+            {
+                this.SwitchStyleclasses
+                (
+                    USSCustomClassSize(ElementDimension.Height, e.previousValue),
+                    USSCustomClassSize(ElementDimension.Height, e.newValue)
+                );
+                Body.SwitchStyleclasses
+                (
+                    USSCustomClassSize(ElementDimension.Height, e.previousValue),
+                    USSCustomClassSize(ElementDimension.Height, e.newValue)
+                );
+            };
+            m_width.ValueChanged += e =>
+            {
+                this.SwitchStyleclasses
+                (
+                    USSCustomClassSize(ElementDimension.Width, e.previousValue),
+                    USSCustomClassSize(ElementDimension.Width, e.newValue)
+                );
+                Body.SwitchStyleclasses
+                (
+                    USSCustomClassSize(ElementDimension.Width, e.previousValue),
+                    USSCustomClassSize(ElementDimension.Width, e.newValue)
+                );
+            };
+            m_labelAndInputDirection.ValueChanged += e =>
+            {
+                this.SwitchStyleclasses
+                (
+                    USSCustomClassDirection(e.previousValue),
+                    USSCustomClassDirection(e.newValue)
+                );
+                Body.SwitchStyleclasses
+                (
+                    USSCustomClassDirection(e.previousValue),
+                    USSCustomClassDirection(e.newValue)
+                );
+            };
+            m_labelAlignment.ValueChanged += e =>
+            {
+                LabelVisual.TextAlignment = e.newValue;
+            };
+
+            m_shape.ValueChanged += e =>
+            {
+                this.SwitchStyleclasses
+                (
+                    USSCustomClassShape(e.previousValue),
+                    USSCustomClassShape(e.newValue)
+                );
+                Body.SwitchStyleclasses
+                (
+                    USSCustomClassShape(e.previousValue),
+                    USSCustomClassShape(e.newValue)
+                );
+            };
 
             Add(Body);
             Body.Add(Container);
@@ -312,11 +419,11 @@ namespace umi3d.commonScreen.Displayer
         protected virtual void SetProperties()
         {
             Category = ElementCategory.Menu;
-            Size = ElementSize.Medium;
+            Height = ElementSize.Medium;
             Shape = ButtonShape.Square;
             Type = ButtonType.Default;
-            LocaliseLabel = null;
-            LabelDirection = ElemnetDirection.Leading;
+            LocalisedLabel = null;
+            LabelAndInputDirection = ElementAlignment.Leading;
             IconAlignment = ElementAlignment.Center;
             LocaliseText = null;
         }
@@ -349,7 +456,6 @@ namespace umi3d.commonScreen.Displayer
         {
             evt.StopPropagation();
             IsAttachedToPanel = true;
-            PropertyChangedEvent += PropertyChanged;
 
             m_transitionScheduledItem = this.WaitUntil
             (
@@ -375,7 +481,6 @@ namespace umi3d.commonScreen.Displayer
 
             m_transitionScheduledItem?.Pause();
             m_transitionScheduledItem = null;
-            PropertyChangedEvent -= PropertyChanged;
         }
 
         #endregion
@@ -473,31 +578,9 @@ namespace umi3d.commonScreen.Displayer
 
         #endregion
 
-        /// <summary>
-        /// Raise the <see cref="PropertyChangedEvent"/> event if this elemnet is attached to a panel, else call <see cref="PropertyChanged(object, object, string)"/>
-        /// </summary>
-        /// <param name="oldValue"></param>
-        /// <param name="newValue"></param>
-        /// <param name="callerName"></param>
-        protected void OnPropertyChanged(object oldValue, object newValue, [CallerMemberName] string callerName = "")
-        {
-            if (IsAttachedToPanel) PropertyChangedEvent?.Invoke(oldValue, newValue, callerName);
-            else PropertyChanged(oldValue, newValue, callerName);
-        }
-
-        protected virtual void PropertyChanged(object oldValue, object newValue, [CallerMemberName] string callerName = "")
-        {
-        }
-
         public override VisualElement contentContainer => IsSet ? Container : this;
 
         #region Implementation
-
-        #region Localisation
-
-
-
-        #endregion
 
         #region Manipulator and event
 
@@ -528,11 +611,17 @@ namespace umi3d.commonScreen.Displayer
             add => TouchManipulator.ClickedUpWithInfo += value;
             remove => TouchManipulator.ClickedUpWithInfo -= value;
         }
+        /// <summary>
+        /// Event raised when the interaction is long pressed.
+        /// </summary>
         public event System.Action<EventBase, UnityEngine.Vector2> ClickedLongWithInfo
         {
             add => TouchManipulator.ClickedLongWithInfo += value;
             remove => TouchManipulator.ClickedLongWithInfo -= value;
         }
+        /// <summary>
+        /// Event raised when the interaction is clicked and the cursor moved.
+        /// </summary>
         public event System.Action<EventBase, UnityEngine.Vector2> MovedWithInfo
         {
             add => TouchManipulator.MovedWithInfo += value;
@@ -563,11 +652,17 @@ namespace umi3d.commonScreen.Displayer
             add => TouchManipulator.ClickedUp += value;
             remove => TouchManipulator.ClickedUp -= value;
         }
+        /// <summary>
+        /// Event raised when the interaction is long pressed.
+        /// </summary>
         public event System.Action ClickedLong
         {
             add => TouchManipulator.ClickedLong += value;
             remove => TouchManipulator.ClickedLong -= value;
         }
+        /// <summary>
+        /// Event raised when the interaction is clicked and the cursor moved.
+        /// </summary>
         public event System.Action Moved
         {
             add => TouchManipulator.Moved += value;

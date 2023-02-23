@@ -56,9 +56,9 @@ namespace umi3d.commonScreen.game
         {
             base.InitElement();
             FilterTextField.Category = ElementCategory.Game;
-            FilterTextField.RegisterValueChangedCallback(ce => Filter());
+            FilterTextField.ValueChanged += ce => Filter();
 
-            FilterLabel.LocaliseText = new LocalisationAttribute("Search by user name:", "NotificationCenter", "UserList_FilterLabel");
+            FilterLabel.LocalisedText = new LocalisationAttribute("Search by user name:", "NotificationCenter", "UserList_FilterLabel");
 
             Add(FilterTextField);
             FilterTextField.Add(FilterLabel);
