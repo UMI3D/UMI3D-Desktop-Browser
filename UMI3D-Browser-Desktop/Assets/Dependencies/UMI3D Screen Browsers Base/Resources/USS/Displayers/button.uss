@@ -1,3 +1,4 @@
+/*------------- Simple visual -------------*/
 .button {
     align-items: center;
     justify-content: space-between;
@@ -54,6 +55,7 @@
     flex-direction: row;
 }
 
+/*------------- direction -------------*/
 .button.button-direction-leading,
 .button.button-direction-leadingtop,
 .button.button-direction-leadingbottom {
@@ -105,6 +107,7 @@
     align-self: auto;
 }
 
+/*------------- alignment -------------*/
 .button-leading-alignment > .button-body > #content-container {
     position: absolute;
     left: 0;
@@ -112,7 +115,6 @@
     bottom: 0;
     width: 20%;
 }
-
 .button-trailing-alignment > .button-body > #content-container {
     position: absolute;
     top: 0;
@@ -120,7 +122,6 @@
     width: 20%;
     right: 0;
 }
-
 .button-center-alignment > .button-body > #content-container {
     position: absolute;
     top: 0;
@@ -128,14 +129,12 @@
     left: 0;
     right: 0;
 }
-
 .button-top-alignment > .button-body > #content-container {
     position: absolute;
     top: 0;
     width: 20%;
     height: 35%;
 }
-
 .button-bottom-alignment > .button-body > #content-container {
     position: absolute;
     bottom: 0;
@@ -143,6 +142,7 @@
     height: 35%;
 }
 
+/*------------- category -------------*/
 .button-menu > .button-body {
     border-left-color: var(--color-border-menu-displayer);
     border-right-color: var(--color-border-menu-displayer);
@@ -156,6 +156,7 @@
     border-bottom-color: var(--color-border-game-displayer);
 }
 
+/*------------- shape -------------*/
 .button-round.button-body {
     border-top-left-radius: 100%;
     border-bottom-left-radius: 100%;
@@ -169,10 +170,10 @@
     border-bottom-right-radius: var(--border-radius-displayer);
 }
 
+/*------------- type -------------*/
 .button-default > .button-body {
     background-color: var(--color-background-displayer);
 }
-
 .button-buttongroupenable > .button-body {
     background-color: var(--color-background-displayer);
     border-left-width: 0;
@@ -256,16 +257,7 @@
     -unity-background-image-tint-color: var(--color-border-game-displayer);
 }
 
-.button-custom.button-direction-leading > .button-body,
-.button-custom.button-direction-trailing > .button-body
-{
-    height: 100%;
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
+/*------------- size -------------*/
 .button-body.button-height-small {
     height: var(--size-small-displayer);
 }
