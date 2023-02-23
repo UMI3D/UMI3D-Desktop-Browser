@@ -14,12 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Net;
 using umi3d.baseBrowser.ui.viewController;
-using umi3d.cdk.volumes;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
