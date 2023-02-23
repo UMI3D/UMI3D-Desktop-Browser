@@ -55,8 +55,8 @@ namespace umi3d.commonScreen.Displayer
         /// </summary>
         public virtual LocalisationAttribute ActionName
         {
-            get => ActionNameText.LocaliseText;
-            set => ActionNameText.LocaliseText = value;
+            get => ActionNameText.LocalisedText;
+            set => ActionNameText.LocalisedText = value;
         }
 
         public override string StyleSheetPath_MainTheme => "USS/displayer";

@@ -66,13 +66,13 @@ namespace umi3d.commonScreen.menu
         }
         public virtual LocalisationAttribute Version
         {
-            get => VersionLabel.LocaliseText;
+            get => VersionLabel.LocalisedText;
             set
             {
                 IsSet = false;
                 if (value.IsEmpty) VersionLabel.RemoveFromHierarchy();
                 else Footer.Add(VersionLabel);
-                VersionLabel.LocaliseText = value;
+                VersionLabel.LocalisedText = value;
                 IsSet = true;
             }
         }

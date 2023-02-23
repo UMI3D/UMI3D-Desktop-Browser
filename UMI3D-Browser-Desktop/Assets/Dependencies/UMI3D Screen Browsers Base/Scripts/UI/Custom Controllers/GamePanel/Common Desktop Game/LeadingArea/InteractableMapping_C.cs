@@ -72,8 +72,8 @@ namespace umi3d.commonDesktop.game
         /// </summary>
         public virtual LocalisationAttribute InteractableName
         {
-            get => InteractableNameText.LocaliseText;
-            set => InteractableNameText.LocaliseText = value.IsEmpty ? "Interactable mapping" : value;
+            get => InteractableNameText.LocalisedText;
+            set => InteractableNameText.LocalisedText = value.IsEmpty ? "Interactable mapping" : value;
         }
 
         public override string StyleSheetPath_MainTheme => $"USS/game";

@@ -101,6 +101,8 @@ namespace umi3d.commonScreen.game
             };
             FilterPicker.ValueEnumChanged += (value) => Filter = value;
 
+            NoNotificationVisual.TextAlignment = ElementAlignment.Center;
+
             ScrollView.Category = ElementCategory.Game;
 
             Add(FilterPicker);
@@ -213,13 +215,13 @@ namespace umi3d.commonScreen.game
             {
                 case NotificationFilter.All:
                     FilteredNotifications.AddRange(Notifications);
-                    NoNotificationVisual.LocaliseText = new LocalisationAttribute("No notification", "NotificationCenter", "No_Notif");
+                    NoNotificationVisual.LocalisedText = new LocalisationAttribute("No notification", "NotificationCenter", "No_Notif");
                     if (m_notificationDtos.Count > 0) NoNotificationVisual.RemoveFromHierarchy();
                     else Insert(0, NoNotificationVisual);
                     break;
                 case NotificationFilter.New:
                     FilteredNotifications = Notifications.FindAll(notification => m_newNotificationDtos.Contains(notification.DTO));
-                    NoNotificationVisual.LocaliseText = new LocalisationAttribute("No new notification", "NotificationCenter", "No_NewNotif");
+                    NoNotificationVisual.LocalisedText = new LocalisationAttribute("No new notification", "NotificationCenter", "No_NewNotif");
                     if (m_newNotificationDtos.Count > 0) NoNotificationVisual.RemoveFromHierarchy();
                     else Insert(0, NoNotificationVisual);
                     break;

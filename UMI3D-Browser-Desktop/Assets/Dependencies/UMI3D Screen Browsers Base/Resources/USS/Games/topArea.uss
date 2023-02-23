@@ -10,15 +10,10 @@
 	min-height: 90px;
 }
 
-.top__area .top__area-main > .top__area-button.button-medium > .button__body {
-	width: var(--size-medium-displayer);
-	max-width: var(--size-medium-displayer);
-}
-
 .top__area .top__area-main > .top__area-button {
 	position: absolute;
 }
 
-.top__area .top__area-main > .top__area-button > .button__body > .button__content-container {
+.top__area .top__area-main > .top__area-button > .button-body > .button-content__container {
 	background-image: var(--background-image-pause);
 }

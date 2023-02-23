@@ -13,8 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using umi3d.baseBrowser.utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -26,10 +26,12 @@ namespace umi3d.commonScreen.Displayer
 
         public new class UxmlTraits : Label.UxmlTraits
         {
-            UxmlLocaliseAttributeDescription m_localiseText = new UxmlLocaliseAttributeDescription
+            UxmlEnumAttributeDescription<ElementAlignment> m_textAlignment = new UxmlEnumAttributeDescription<ElementAlignment>
             {
-                name = "localise-text"
+                name = "text-alignment",
+                defaultValue = ElementAlignment.Leading
             };
+
             UxmlEnumAttributeDescription<TextStyle> m_style = new UxmlEnumAttributeDescription<TextStyle>
             {
                 name = "text-style",
@@ -40,6 +42,11 @@ namespace umi3d.commonScreen.Displayer
             {
                 name = "color",
                 defaultValue = TextColor.White
+            };
+
+            UxmlLocaliseAttributeDescription m_localisedText = new UxmlLocaliseAttributeDescription
+            {
+                name = "localised-text"
             };
 
             /// <summary>
@@ -53,13 +60,24 @@ namespace umi3d.commonScreen.Displayer
                 base.Init(ve, bag, cc);
                 var custom = ve as Text_C;
 
-                custom.LocaliseText = m_localiseText.GetValueFromBag(bag, cc);
+                custom.TextAlignment = m_textAlignment.GetValueFromBag(bag, cc);
+                custom.LocalisedText = m_localisedText.GetValueFromBag(bag, cc);
                 custom.TextStyle = m_style.GetValueFromBag(bag, cc);
                 custom.Color = m_color.GetValueFromBag(bag, cc);
             }
         }
 
-        public virtual LocalisationAttribute LocaliseText
+        /// <summary>
+        /// Alignment of the text
+        /// </summary>
+        public ElementAlignment TextAlignment
+        {
+            get => m_textAlignment;
+            set => m_textAlignment.Value = value;
+        }
+        protected readonly Source<ElementAlignment> m_textAlignment = ElementAlignment.Leading;
+
+        public virtual LocalisationAttribute LocalisedText
         {
             get => m_localisation;
             set
@@ -95,18 +113,13 @@ namespace umi3d.commonScreen.Displayer
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <remarks>!! Use <see cref="LocaliseText"/> instead</remarks>
+        /// <remarks>!! Use <see cref="LocalisedText"/> instead</remarks>
         public override string text { get => base.text; set => base.text = value; }
-
-        /// <summary>
-        /// Event raised when a property changed, if this element is attached to a panel.
-        /// </summary>
-        public event System.Action<object, object, string> PropertyChangedEvent;
 
         /// <summary>
         /// Style sheet dedicated to the main theme.
         /// </summary>
-        public virtual string StyleSheetPath_MainTheme => $"";
+        public virtual string StyleSheetPath_MainTheme => $"USS/displayer";
         /// <summary>
         /// Style sheet dedicated to the main style of this element.
         /// </summary>
@@ -116,6 +129,7 @@ namespace umi3d.commonScreen.Displayer
         /// Element main Uss class.
         /// </summary>
         public virtual string UssCustomClass_Emc => "text";
+        public virtual string USSCustomClassAlignment(ElementAlignment alignment) => $"{UssCustomClass_Emc}-alignment-{alignment}".ToLower();
         public virtual string USSCustomClassStyle(TextStyle style) => $"{UssCustomClass_Emc}-{style}".ToLower();
         public virtual string USSCustomClassColor(TextColor color) => $"{UssCustomClass_Emc}-{color}".ToLower();
 
@@ -158,7 +172,7 @@ namespace umi3d.commonScreen.Displayer
         /// </summary>
         protected virtual void AttachStyleSheet()
         {
-            //this.AddStyleSheetFromPath(StyleSheetPath_MainTheme);
+            this.AddStyleSheetFromPath(StyleSheetPath_MainTheme);
             this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
         }
 
@@ -179,6 +193,7 @@ namespace umi3d.commonScreen.Displayer
         /// </summary>
         protected virtual void AttachUssClass()
         {
+            RemoveFromClassList("unity-label");
             AddToClassList(UssCustomClass_Emc);
         }
 
@@ -187,6 +202,14 @@ namespace umi3d.commonScreen.Displayer
         /// </summary>
         protected virtual void InitElement()
         {
+            m_textAlignment.ValueChanged += e =>
+            {
+                this.SwitchStyleclasses
+                (
+                    USSCustomClassAlignment(e.previousValue),
+                    USSCustomClassAlignment(e.newValue)
+                );
+            };
         }
 
         /// <summary>
@@ -227,7 +250,6 @@ namespace umi3d.commonScreen.Displayer
         {
             evt.StopPropagation();
             IsAttachedToPanel = true;
-            PropertyChangedEvent += PropertyChanged;
 
             LanguageChanged += ChangedLanguage;
             ChangedLanguage();
@@ -256,7 +278,6 @@ namespace umi3d.commonScreen.Displayer
 
             m_transitionScheduledItem?.Pause();
             m_transitionScheduledItem = null;
-            PropertyChangedEvent -= PropertyChanged;
             LanguageChanged -= ChangedLanguage;
         }
 
@@ -350,22 +371,6 @@ namespace umi3d.commonScreen.Displayer
         }
 
         #endregion
-
-        /// <summary>
-        /// Raise the <see cref="PropertyChangedEvent"/> event if this elemnet is attached to a panel, else call <see cref="PropertyChanged(object, object, string)"/>
-        /// </summary>
-        /// <param name="oldValue"></param>
-        /// <param name="newValue"></param>
-        /// <param name="callerName"></param>
-        protected void OnPropertyChanged(object oldValue, object newValue, [CallerMemberName] string callerName = "")
-        {
-            if (IsAttachedToPanel) PropertyChangedEvent?.Invoke(oldValue, newValue, callerName);
-            else PropertyChanged(oldValue, newValue, callerName);
-        }
-
-        protected virtual void PropertyChanged(object oldValue, object newValue, [CallerMemberName] string callerName = "")
-        {
-        }
 
         #region Localisation
 

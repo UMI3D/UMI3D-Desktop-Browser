@@ -32,7 +32,7 @@ namespace umi3d.commonScreen.Displayer
         public ElementSize Size = ElementSize.Medium;
         public ButtonShape Shape = ButtonShape.Square;
         public ButtonType Type = ButtonType.Default;
-        public ElemnetDirection LabelDirection = ElemnetDirection.Leading;
+        public ElementAlignment LabelDirection = ElementAlignment.Leading;
         public ElementAlignment IconAlignment = ElementAlignment.Center;
 
         /// <summary>
@@ -49,11 +49,11 @@ namespace umi3d.commonScreen.Displayer
             if (button == null) return;
 
             button.Category = Category;
-            button.Size = Size;
+            button.Height = Size;
             button.Shape = Shape;
             button.Type = Type;
-            button.LocaliseLabel = Label;
-            button.LabelDirection = LabelDirection;
+            button.LocalisedLabel = Label;
+            button.LabelAndInputDirection = LabelDirection;
             button.IconAlignment = IconAlignment;
             button.LocaliseText = Text;
         }
@@ -84,11 +84,11 @@ namespace umi3d.commonScreen.Displayer
             button = new Button_C
             {
                 Category = Category,
-                Size = Size,
+                Height = Size,
                 Shape = Shape,
                 Type = Type,
-                LocaliseLabel = Label,
-                LabelDirection = LabelDirection,
+                LocalisedLabel = Label,
+                LabelAndInputDirection = LabelDirection,
                 IconAlignment = IconAlignment,
                 LocaliseText = Text
             };

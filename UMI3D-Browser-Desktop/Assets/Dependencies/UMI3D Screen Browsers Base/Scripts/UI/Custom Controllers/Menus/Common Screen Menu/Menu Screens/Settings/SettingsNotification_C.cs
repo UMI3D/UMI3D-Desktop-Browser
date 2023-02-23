@@ -34,7 +34,7 @@ namespace umi3d.commonScreen.menu
         {
             base.InitElement();
             HideNotification.LocaliseLabel = new LocalisationAttribute("Hide notifications", "NotificationSettings", "Hide_Label");
-            HideNotification.Direction = ElemnetDirection.Leading;
+            HideNotification.Direction = ElementDirection.Leading;
             HideNotification.RegisterValueChangedCallback(ce => HideNotificationValueChanged(ce.newValue));
 
             HideNotificationDescription.Color = TextColor.Menu;
@@ -69,7 +69,7 @@ namespace umi3d.commonScreen.menu
         public void HideNotificationValueChanged(bool value)
         {
             HideNotification.SetValueWithoutNotify(value);
-            HideNotificationDescription.LocaliseText = value 
+            HideNotificationDescription.LocalisedText = value 
             ? new LocalisationAttribute("Notification will still be availlable in the notification center but you won't be notified when you recieve them.", "NotificationSettings", "Hide_On") 
             : new LocalisationAttribute("You will be notified when you receive a notification.", "NotificationSettings", "Hide_Off");
             InformationArea_C.HideNotification = value;

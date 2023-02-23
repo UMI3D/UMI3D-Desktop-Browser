@@ -70,7 +70,7 @@ namespace umi3d.commonScreen.menu
             }).Every(200);
 
             GeneralVolume_Visual.LocaliseLabel = new LocalisationAttribute("General volume", "AudioSettings", "GeneralVolume");
-            GeneralVolume_Visual.DirectionDisplayer = ElemnetDirection.Leading;
+            GeneralVolume_Visual.DirectionDisplayer = ElementDirection.Leading;
             GeneralVolume_Visual.lowValue = 0f;
             GeneralVolume_Visual.highValue = 10f;
             GeneralVolume_Visual.showInputField = true;

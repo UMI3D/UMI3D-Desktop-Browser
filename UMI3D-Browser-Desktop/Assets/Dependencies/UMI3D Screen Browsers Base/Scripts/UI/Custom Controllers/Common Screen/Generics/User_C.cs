@@ -72,7 +72,7 @@ namespace umi3d.commonScreen.Displayer
             set
             {
                 m_userName = value;
-                UserNameVisual.LocaliseText = value;
+                UserNameVisual.LocalisedText = value;
             }
         }
 
@@ -183,7 +183,7 @@ namespace umi3d.commonScreen.Displayer
                     () => User_Audio_Slider.style.height = Length.Percent(100),
                     "height",
                     1f,
-                    callback: () => UserNameVisual.LocaliseText = isRevert ? m_userName : $"{m_volume.ToString("0.00")} %",
+                    callback: () => UserNameVisual.LocalisedText = isRevert ? m_userName : $"{m_volume.ToString("0.00")} %",
                     revert: isRevert
                 );
             };
@@ -192,7 +192,7 @@ namespace umi3d.commonScreen.Displayer
                 var xPercent = localPosition.x * 100f / User_Background.layout.width;
                 xPercent = Mathf.Clamp(xPercent, 0, 100) * userVolumeRangePercent;
                 Volume = xPercent;
-                UserNameVisual.LocaliseText = $"{m_volume.ToString("0.00")} %";
+                UserNameVisual.LocalisedText = $"{m_volume.ToString("0.00")} %";
             }
             m_manipulator.ClickedDownWithInfo += (evnt, localPosition) =>
             {

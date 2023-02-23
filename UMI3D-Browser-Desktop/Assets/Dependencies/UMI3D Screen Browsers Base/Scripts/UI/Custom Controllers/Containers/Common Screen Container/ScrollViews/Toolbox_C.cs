@@ -108,12 +108,12 @@ namespace umi3d.commonScreen.Container
         /// </summary>
         public virtual LocalisationAttribute ToolboxName
         {
-            get => ToolboxNameText.LocaliseText;
+            get => ToolboxNameText.LocalisedText;
             set
             {
                 if (value.IsEmpty) ToolboxNameText.RemoveIfIsInHierarchy();
                 else this.InsertIfNotInHierarchy(0, ToolboxNameText);
-                ToolboxNameText.LocaliseText = value;
+                ToolboxNameText.LocalisedText = value;
             }
         }
         /// <summary>
@@ -215,13 +215,13 @@ namespace umi3d.commonScreen.Container
 
                 tool.AddMenu(datum);
 
-                if (DisplayToolsName) tool.LocaliseLabel = datum.Name;
+                if (DisplayToolsName) tool.LocalisedLabel = datum.Name;
             };
             SDC.UnbindItem = (datum, item) =>
             {
                 var tool = item as Tool_C;
                 tool.ToolClicked = null;
-                tool.LocaliseLabel = null;
+                tool.LocalisedLabel = null;
                 tool.ClearTool();
             };
             SDC.Size = 104f;
@@ -244,11 +244,11 @@ namespace umi3d.commonScreen.Container
             };
 
             PinnedButton.Category = ElementCategory.Game;
-            PinnedButton.Size = ElementSize.Small;
+            PinnedButton.Height = ElementSize.Small;
             PinnedButton.Shape = ButtonShape.Round;
 
             EditButton.Category = ElementCategory.Game;
-            EditButton.Size = ElementSize.Small;
+            EditButton.Height = ElementSize.Small;
             EditButton.Shape = ButtonShape.Round;
             EditButton.LocaliseText = "···";
 

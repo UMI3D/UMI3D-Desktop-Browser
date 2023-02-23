@@ -27,7 +27,7 @@ namespace umi3d.commonScreen.Displayer
         public string LabelText;
         public ElementCategory Category;
         public ElementSize Size = ElementSize.Medium;
-        public ElemnetDirection Direction = ElemnetDirection.Leading;
+        public ElementDirection Direction = ElementDirection.Leading;
 
         protected BooleanInputMenuItem menuItem;
         protected Toggle_C toggle;

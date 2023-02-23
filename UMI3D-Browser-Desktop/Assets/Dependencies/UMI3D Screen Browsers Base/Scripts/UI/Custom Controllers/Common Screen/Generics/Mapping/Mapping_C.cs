@@ -59,13 +59,13 @@ namespace umi3d.commonScreen.Displayer
         /// </summary>
         public virtual LocalisationAttribute MappingName
         {
-            get => MappingNameText.LocaliseText;
+            get => MappingNameText.LocalisedText;
             set
             {
                 IsSet = false;
                 if (value.IsEmpty) MappingNameText.RemoveFromHierarchy();
                 else Insert(0, MappingNameText);
-                MappingNameText.LocaliseText = value;
+                MappingNameText.LocalisedText = value;
                 IsSet = true;
             }
         }

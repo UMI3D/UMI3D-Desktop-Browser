@@ -77,27 +77,27 @@ namespace umi3d.commonScreen.menu
 
         public virtual LocalisationAttribute Title
         {
-            get => TitleLabel.LocaliseText;
+            get => TitleLabel.LocalisedText;
             set
             {
                 if (value.IsEmpty) TitleLabel.RemoveFromHierarchy();
                 else DropDown_Button_Background.Insert(0, TitleLabel);
-                TitleLabel.LocaliseText = value;
+                TitleLabel.LocalisedText = value;
             }
         }
         public virtual LocalisationAttribute Size
         {
-            get => SizeLabel.LocaliseText;
+            get => SizeLabel.LocalisedText;
             set
             {
                 if (value.IsEmpty) SizeLabel.RemoveFromHierarchy();
                 else DropDown_Button_Background.Insert(1, SizeLabel);
-                SizeLabel.LocaliseText = value;
+                SizeLabel.LocalisedText = value;
             }
         }
         public virtual LocalisationAttribute Date
         {
-            get => DropDown_Date.LocaliseText;
+            get => DropDown_Date.LocalisedText;
             set
             {
                 if (value.IsEmpty) DropDown_Date.RemoveFromHierarchy();
@@ -106,12 +106,12 @@ namespace umi3d.commonScreen.menu
                     DropDown_Field.Insert(0, DropDown_Date);
                     if (DropDown_Field.Contains(DropDown_Message)) DropDown_Date.PlaceBehind(DropDown_Message);
                 }
-                DropDown_Date.LocaliseText = value;
+                DropDown_Date.LocalisedText = value;
             }
         }
         public virtual LocalisationAttribute Message
         {
-            get => DropDown_Message.LocaliseText;
+            get => DropDown_Message.LocalisedText;
             set
             {
                 if (value.IsEmpty) DropDown_Message.RemoveFromHierarchy();
@@ -120,7 +120,7 @@ namespace umi3d.commonScreen.menu
                     DropDown_Field.Insert(0, DropDown_Message);
                     if (DropDown_Field.Contains(DropDown_Date)) DropDown_Message.PlaceInFront(DropDown_Date);
                 }
-                DropDown_Message.LocaliseText = value;
+                DropDown_Message.LocalisedText = value;
             }
         }
         public virtual string Path
@@ -245,12 +245,13 @@ namespace umi3d.commonScreen.menu
         protected override void InitElement()
         {
             base.InitElement();
-            DropDown_Button.Size = ElementSize.Small;
+            DropDown_Button.Height = ElementSize.Small;
             DropDown_Button.Type = ButtonType.Invisible;
             DropDown_Button.clicked += DropDownClicked;
             DropDown_Button.Front.RemoveFromHierarchy();
-            Delete.Size = ElementSize.Small;
+            Delete.Height = ElementSize.Small;
             Delete.Type = ButtonType.Invisible;
+            DropDown_Date.TextAlignment = ElementAlignment.TrailingTop;
 
             Add(Main);
             Main.Add(DropDown_Button);

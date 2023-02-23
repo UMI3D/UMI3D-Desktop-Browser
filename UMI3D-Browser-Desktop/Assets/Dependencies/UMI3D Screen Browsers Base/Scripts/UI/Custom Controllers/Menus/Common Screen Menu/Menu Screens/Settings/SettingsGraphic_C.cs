@@ -35,7 +35,7 @@ namespace umi3d.commonScreen.menu
                 Displayer = displayer;
 
                 Description = new Text_C();
-                Description.LocaliseText = text;
+                Description.LocalisedText = text;
                 Description.Color = TextColor.Menu;
 
                 Box = new VisualElement { name = "box-displayer" };
@@ -155,7 +155,7 @@ namespace umi3d.commonScreen.menu
             ScrollView.Add(HDR.Box);
 
             RenderScaleSlider.LocaliseLabel = new LocalisationAttribute("Render Scale", "GraphicSettings", "RenderScale_Label");
-            RenderScaleSlider.DirectionDisplayer = ElemnetDirection.Leading;
+            RenderScaleSlider.DirectionDisplayer = ElementDirection.Leading;
             RenderScaleSlider.lowValue = 0f;
             RenderScaleSlider.highValue = 2f;
             RenderScaleSlider.showInputField = true;
@@ -187,7 +187,7 @@ namespace umi3d.commonScreen.menu
             );
 
             DPISlider.LocaliseLabel = "DPI";
-            DPISlider.DirectionDisplayer = ElemnetDirection.Leading;
+            DPISlider.DirectionDisplayer = ElementDirection.Leading;
             DPISlider.lowValue = 90f;
             DPISlider.highValue = 200f;
             DPISlider.value = UIPanelSettings?.referenceDpi ?? 100f;
@@ -265,7 +265,7 @@ namespace umi3d.commonScreen.menu
                 case ResolutionEnum.Low:
                     TargetFPS = MaxFPS;
                     Application.targetFrameRate = TargetFPS;
-                    GameResolution.Description.LocaliseText = new LocalisationAttribute
+                    GameResolution.Description.LocalisedText = new LocalisationAttribute
                     (
                         $"Low resolution is targetting {TargetFPS}fps with lower rendering",
                         "GraphicSettings",
@@ -289,7 +289,7 @@ namespace umi3d.commonScreen.menu
                 case ResolutionEnum.Medium:
                     TargetFPS = MaxFPS / 2;
                     Application.targetFrameRate = TargetFPS;
-                    GameResolution.Description.LocaliseText = new LocalisationAttribute
+                    GameResolution.Description.LocalisedText = new LocalisationAttribute
                     (
                         $"Medium resolution is targetting {TargetFPS}fps with midium rendering",
                         "GraphicSettings",
@@ -313,7 +313,7 @@ namespace umi3d.commonScreen.menu
                 case ResolutionEnum.High:
                     TargetFPS = MaxFPS / 3;
                     Application.targetFrameRate = TargetFPS;
-                    GameResolution.Description.LocaliseText = new LocalisationAttribute
+                    GameResolution.Description.LocalisedText = new LocalisationAttribute
                     (
                         $"High resolution is targetting {TargetFPS}fps with higher rendering",
                         "GraphicSettings",
@@ -335,7 +335,7 @@ namespace umi3d.commonScreen.menu
                     RenderScale.Box.Hide();
                     break;
                 case ResolutionEnum.Custom:
-                    GameResolution.Description.LocaliseText = new LocalisationAttribute
+                    GameResolution.Description.LocalisedText = new LocalisationAttribute
                     (
                         $"Custom resolution let you choose your settings",
                         "GraphicSettings",

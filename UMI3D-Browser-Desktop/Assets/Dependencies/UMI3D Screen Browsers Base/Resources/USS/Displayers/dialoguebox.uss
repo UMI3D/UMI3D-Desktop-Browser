@@ -27,7 +27,7 @@
     margin-bottom: var(--margin-dialogueBox);
 }
 
-.dialoguebox__title.unity-label.text {
+.dialoguebox__title.text {
     -unity-text-align: upper-center;
     margin-left: var(--margin-dialogueBox);
     margin-right: var(--margin-dialogueBox);

@@ -338,11 +338,16 @@ namespace umi3d.commonDesktop.game
             Mic.name = "mic";
             Sound.name = "sound";
 
-            Avatar.Size = ElementSize.Small;
-            Emote.Size = ElementSize.Small;
-            Mic.Size = ElementSize.Small;
-            Sound.Size = ElementSize.Small;
-            NotifAndUsers.Size = ElementSize.Small;
+            Avatar.Height = ElementSize.Small;
+            Emote.Height = ElementSize.Small;
+            Mic.Height = ElementSize.Small;
+            Sound.Height = ElementSize.Small;
+            NotifAndUsers.Height = ElementSize.Small;
+            Avatar.Width = ElementSize.Small;
+            Emote.Width = ElementSize.Small;
+            Mic.Width = ElementSize.Small;
+            Sound.Width = ElementSize.Small;
+            NotifAndUsers.Width = ElementSize.Small;
 
             Avatar.Type = ButtonType.Invisible;
             Emote.Type = ButtonType.Invisible;

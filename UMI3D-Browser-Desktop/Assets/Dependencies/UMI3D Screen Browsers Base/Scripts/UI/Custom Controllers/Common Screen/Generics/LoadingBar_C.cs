@@ -118,22 +118,22 @@ namespace umi3d.commonScreen.Displayer
 
         public virtual LocalisationAttribute LocalisedTitle
         {
-            get => SampleTitleLabel.LocaliseText;
+            get => SampleTitleLabel.LocalisedText;
             set
             {
-                SampleTitleLabel.LocaliseText = value;
+                SampleTitleLabel.LocalisedText = value;
                 UpdateTranslation();
             }
         }
 
         public virtual LocalisationAttribute LocalisedMessage
         {
-            get => MessageLabel.LocaliseText;
+            get => MessageLabel.LocalisedText;
             set
             {
                 if (value.IsEmpty) MessageLabel.RemoveFromHierarchy();
                 else Add(MessageLabel);
-                MessageLabel.LocaliseText = value;
+                MessageLabel.LocalisedText = value;
             }
         }
 
@@ -460,13 +460,13 @@ namespace umi3d.commonScreen.Displayer
         /// <returns></returns>
         public virtual async Task UpdateLabelTranslation()
         {
-            title = SampleTitleLabel.LocaliseText.DefaultText;
+            title = SampleTitleLabel.LocalisedText.DefaultText;
 
-            if (SampleTitleLabel.LocaliseText.CanBeLocalised)
+            if (SampleTitleLabel.LocalisedText.CanBeLocalised)
             {
                 while (!LocalisationManager.Exists) await UMI3DAsyncManager.Yield();
 
-                title = SampleTitleLabel.LocaliseText.Value;
+                title = SampleTitleLabel.LocalisedText.Value;
             }
         }
 

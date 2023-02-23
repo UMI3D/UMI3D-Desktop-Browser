@@ -28,7 +28,7 @@ namespace umi3d.commonScreen.Displayer
         public string DescriptionLabel;
         public ElementCategory Category;
         public ElementSize Size = ElementSize.Medium;
-        public ElemnetDirection Direction = ElemnetDirection.Leading;
+        public ElementDirection Direction = ElementDirection.Leading;
 
         protected LocalInfoRequestInputMenuItem menuItem;
         protected VisualElement m_box;
@@ -39,7 +39,7 @@ namespace umi3d.commonScreen.Displayer
         private void OnValidate()
         {
             if (m_description == null || m_readToggles == null || m_WriteToggles == null) return;
-            m_description.LocaliseText = DescriptionLabel;
+            m_description.LocalisedText = DescriptionLabel;
 
             m_readToggles.Category = Category;
             m_readToggles.Size = Size;
@@ -70,7 +70,7 @@ namespace umi3d.commonScreen.Displayer
             var dto = (LocalInfoRequestParameterDto)menuItem.dto;
             DescriptionLabel = $"Server {dto.serverName} requests acces to local data : {dto.key}.\n";
             DescriptionLabel += $"{dto.reason}";
-            m_description.LocaliseText = DescriptionLabel;
+            m_description.LocalisedText = DescriptionLabel;
 
             m_readToggles = new Toggle_C();
             m_readToggles.Category = Category;
