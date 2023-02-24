@@ -45,7 +45,7 @@ namespace umi3d.baseBrowser.connection
         protected DateTime m_time_Start;
 
         protected System.Action m_next;
-        
+
         #endregion
 
         #region Initialization of the Connection Process
@@ -55,7 +55,7 @@ namespace umi3d.baseBrowser.connection
             BaseConnectionProcess.Instance.ConnectionSucces += (media) =>
             {
                 GamePanel.CurrentView = GameViews.Loader;
-                Loader.Loading.TitleLabel.LocalisedText = new LocalisationAttribute("Loading environment","Other", "LoadingEnv");
+                Loader.Loading.TitleLabel.LocalisedText = new LocalisationAttribute("Loading environment", "Other", "LoadingEnv");
                 Loader.Loading.Value = 0;
                 Menu.GameData.WorldName = media.name;
             };
@@ -117,8 +117,8 @@ namespace umi3d.baseBrowser.connection
                 dialoguebox.Title = new LocalisationAttribute
                 (
                     (count == 1) ? $"One assets library is required" : $"{count} assets libraries are required",
-                    "ErrorStrings", 
-                    (count == 1) ? "AssetsLibRequired1" : "AssetsLibRequired", 
+                    "ErrorStrings",
+                    (count == 1) ? "AssetsLibRequired1" : "AssetsLibRequired",
                     (count == 1) ? null : new string[1] { count.ToString() }
                 );
                 dialoguebox.Message = new LocalisationAttribute("Download libraries and connect to the server ?", "ErrorStrings", "DownloadAndConnect");
@@ -151,7 +151,6 @@ namespace umi3d.baseBrowser.connection
             };
             BaseConnectionProcess.Instance.EnvironmentLoaded += () =>
             {
-                Controller.BaseCursor.SetMovement(this, Controller.BaseCursor.CursorMovement.Center);
                 Menu.Libraries.InitLibraries();
                 EnvironmentSettings.Instance.AudioSetting.GeneralVolume = ((int)Menu.Settings.Audio.Data.GeneralVolume) / 10f;
             };
@@ -260,6 +259,6 @@ namespace umi3d.baseBrowser.connection
             }
         }
 
-        
+
     }
 }
