@@ -110,6 +110,15 @@ namespace umi3d.commonScreen.Displayer
                     1f,
                     revert: e.newValue
                 );
+
+                //Body
+                //    .WithAnimation(150f, AnimatorManager.EaseIn)
+                //    .SetWidth(90f)
+                //    .Delay(100)
+                //    .Callin()
+                //    .Callback()
+                //    .Callcancel()
+                //    .IsReverted(e.newValue);
             };
             LabelVisual.style.minWidth = 105f;
         }

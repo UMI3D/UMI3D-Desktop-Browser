@@ -16,11 +16,8 @@ limitations under the License.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using umi3d.commonScreen;
-using UnityEngine;
 using UnityEngine.UIElements;
-using static AnimatorManager;
 
 public static class AnimatorManager
 {
@@ -74,6 +71,24 @@ public static class AnimatorManager
         /// Whether or not this animation should play when <see cref="ReduceAnimation"/> is true.
         /// </summary>
         public bool IsForcedAnimation;
+
+        /// <summary>
+        /// Copy animation properties from <paramref name="other"/> to this.
+        /// </summary>
+        /// <param name="other"></param>
+        public void Copy(Animation other)
+        {
+            Duration = other.Duration;
+            EasingMode = other.EasingMode;
+            Delay = other.Delay;
+            SetInitialValue = other.SetInitialValue;
+            SetEndValue = other.SetEndValue;
+            Callin = other.Callin;
+            Callback = other.Callback;
+            Callcancel = other.Callcancel;
+            IsReverted = other.IsReverted;
+            IsForcedAnimation = other.IsForcedAnimation;
+        }
     }
 
     /// <summary>
@@ -226,7 +241,7 @@ public static class AnimatorManager
     {
         if (!ve.IsListeningForTransition) return;
 
-        animation.IsPlaying = true;
+        // Raise the callin action. This action should not update the property that is animated.
         animation.Callin?.Invoke();
 
         if (ReduceAnimation && !animation.IsForcedAnimation)
@@ -240,6 +255,7 @@ public static class AnimatorManager
 
         if (isNew)
         {
+            animation.IsPlaying = true;
             if (!animation.IsReverted) animation.SetInitialValue?.Invoke();
             else animation.SetEndValue?.Invoke();
         }
@@ -298,7 +314,7 @@ public static class AnimatorManager
                 if (animations[i].PropertyName != animation.PropertyName) continue;
 
                 isNew = !animations[i].IsPlaying;
-                animations[i] = animation;
+                animations[i].Copy(animation);
                 return;
             }
             animations.Add(animation);
