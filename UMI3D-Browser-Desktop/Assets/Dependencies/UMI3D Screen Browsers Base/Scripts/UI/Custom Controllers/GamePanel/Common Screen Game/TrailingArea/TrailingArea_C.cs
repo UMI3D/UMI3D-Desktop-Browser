@@ -226,6 +226,7 @@ namespace umi3d.commonScreen.game
         public virtual string USSCustomClassObjectMenu => $"{UssCustomClass_Emc}-object__menu";
         public virtual string USSCustomClassEmoteWindow => $"{UssCustomClass_Emc}-emote__window";
         public virtual string USSCustomClassToolsWindow => $"{UssCustomClass_Emc}-tools__window";
+        public virtual string USSCustomClassManipulations => $"{UssCustomClass_Emc}-manipulations";
         public virtual string USSCustomClassCameraLayer => $"{UssCustomClass_Emc}-camera__layer";
         public virtual string USSCustomClassWindowContainer => $"{UssCustomClass_Emc}-window__container";
 
@@ -280,6 +281,7 @@ namespace umi3d.commonScreen.game
             ObjectMenu.AddToClassList(USSCustomClassObjectMenu);
             EmoteWindow.AddToClassList(USSCustomClassEmoteWindow);
             ToolsWindow.AddToClassList(USSCustomClassToolsWindow);
+            ManipulationContainer.AddToClassList(USSCustomClassManipulations);
             CameraLayer.AddToClassList(USSCustomClassCameraLayer);
             WindowContainer.AddToClassList(USSCustomClassWindowContainer);
         }
@@ -321,12 +323,12 @@ namespace umi3d.commonScreen.game
 
             ManipulationMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ManipulationMenu");
             ManipulationContainer.Mode = ScrollViewMode.Horizontal;
-            ManipulationContainer.MakeItem = datum => new Button_C();
+            ManipulationContainer.MakeItem = datum => new Manipulation_C();
             ManipulationContainer.BindItem = (datum, element) =>
             {
-                var button = element as Button_C;
-                
-                button.LocaliseText = datum.dof.dofs.ToString();
+                var manipulation = element as Manipulation_C;
+
+                manipulation.Dof = datum.dof.dofs;
             };
             ManipulationContainer.UnbindItem = (datum, element) =>
             {
@@ -344,6 +346,8 @@ namespace umi3d.commonScreen.game
 
                 ManipulationContainer.RemoveDatum(manip);
             });
+            ManipulationContainer.AnimationTimeIn = 1f;
+            ManipulationContainer.AnimationTimeOut = .5f;
 
             WindowContainer.AddDatum(ManipulationContainer);
 

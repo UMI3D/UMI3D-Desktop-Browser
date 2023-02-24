@@ -28,6 +28,12 @@
 	bottom: 0;
 }
 
+.trailing__area-manipulations {
+	height: 245px;
+
+	background-color: black;
+}
+
 .trailing__area-window__container {
 	width: 70%;
 

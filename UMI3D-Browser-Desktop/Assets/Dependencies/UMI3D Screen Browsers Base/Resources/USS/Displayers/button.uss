@@ -94,10 +94,10 @@
 .button-body.button-direction-trailingbottom {
     align-self: flex-end;
 }
-.button-body.button-direction-top.button-width-custom,
+/*.button-body.button-direction-top.button-width-custom,
 .button-body.button-direction-bottom.button-width-custom {
-    align-self: auto;
-}
+    align-self: null;
+}*/
 .button-body.button-direction-leading.button-height-custom,
 .button-body.button-direction-trailing.button-height-custom,
 .button-body.button-direction-leadingtop.button-height-custom,

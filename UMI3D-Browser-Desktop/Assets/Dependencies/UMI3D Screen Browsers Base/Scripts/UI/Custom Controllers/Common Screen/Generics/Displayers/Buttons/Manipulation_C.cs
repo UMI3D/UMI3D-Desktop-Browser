@@ -13,10 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
-using System.Collections.Generic;
+using umi3d.baseBrowser.utils;
 using umi3d.common.interaction;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Displayer
@@ -27,26 +25,16 @@ namespace umi3d.commonScreen.Displayer
 
         public new class UxmlTraits : VisualElement.UxmlTraits
         {
-            
-            protected UxmlLocaliseAttributeDescription m_localisedLabel = new UxmlLocaliseAttributeDescription
-            {
-                name = "localised-label"
-            };
-
-            protected UxmlBoolAttributeDescription m_isToggle = new UxmlBoolAttributeDescription
-            {
-                name = "is-toggle",
-                defaultValue = false
-            };
             protected UxmlBoolAttributeDescription m_toogleValue = new UxmlBoolAttributeDescription
             {
                 name = "toggle-value",
                 defaultValue = false
             };
 
-            protected UxmlLocaliseAttributeDescription m_localiseText = new UxmlLocaliseAttributeDescription
+            protected UxmlEnumAttributeDescription<DofGroupEnum> m_dof = new UxmlEnumAttributeDescription<DofGroupEnum>
             {
-                name = "localise-text"
+                name = "dof",
+                defaultValue = DofGroupEnum.X
             };
 
             /// <summary>
@@ -60,24 +48,92 @@ namespace umi3d.commonScreen.Displayer
                 base.Init(ve, bag, cc);
                 var custom = ve as Manipulation_C;
 
-                custom.LocalisedLabel = m_localisedLabel.GetValueFromBag(bag, cc);
-                custom.LocaliseText = m_localiseText.GetValueFromBag(bag, cc);
+                custom.Dof = m_dof.GetValueFromBag(bag, cc);
             }
         }
 
-        public DofGroupDto dofGroup;
+        public DofGroupEnum Dof
+        {
+            get => m_dof;
+            set => m_dof.Value = value;
+        }
+        protected Source<DofGroupEnum> m_dof = DofGroupEnum.X;
+
+        public static string StyleSheetPath_ManipulationStyle => $"{ElementExtensions.StyleSheetDisplayersFolderPath}/manipulation";
+
+        public virtual string USSCustomClassIcon => $"{UssCustomClass_Emc}-icon";
+        public virtual string USSCustomClassDof(DofGroupEnum dof) => $"{UssCustomClass_Emc}-dof-{dof}".ToLower();
+
+        public Visual_C Icon = new Visual_C { name = "icon" };
+
+        protected override void AttachStyleSheet()
+        {
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_ManipulationStyle);
+        }
+
+        protected override void AttachUssClass()
+        {
+            base.AttachUssClass();
+            Icon.AddToClassList(USSCustomClassIcon);
+        }
+
+        protected override void InitElement()
+        {
+            base.InitElement();
+            m_dof.ValueChanged += e =>
+            {
+                Icon.SwitchStyleclasses
+                (
+                    USSCustomClassDof(e.previousValue),
+                    USSCustomClassDof(e.newValue)
+                );
+                LocalisedLabel = e.newValue.ToString();
+            };
+            m_toggleValue.ValueChanged += e =>
+            {
+                Body.AddAnimation
+                (
+                    this,
+                    () => Body.style.width = 150f,
+                    () => Body.style.width = 90f,
+                    "width",
+                    1f,
+                    revert: e.newValue
+                );
+                Body.AddAnimation
+                (
+                    this,
+                    () => Body.style.height = 150f,
+                    () => Body.style.height = 90f,
+                    "height",
+                    1f,
+                    revert: e.newValue
+                );
+            };
+            LabelVisual.style.minWidth = 105f;
+        }
+
+        protected override void StartElement()
+        {
+            base.StartElement();
+            Add(Icon);
+        }
 
         protected override void SetProperties()
         {
             base.SetProperties();
             IsToggle = true;
-            Height = ElementSize.Large;
-            Width = ElementSize.Large;
+            Height = ElementSize.Custom;
+            Width = ElementSize.Custom;
+            LabelAndInputDirection = ElementAlignment.Bottom;
+            LabelAlignment = ElementAlignment.Center;
+            Type = ButtonType.Invisible;
         }
 
         #region Implementation
 
-
+        public DofGroupDto dofGroup;
 
         #endregion
     }
