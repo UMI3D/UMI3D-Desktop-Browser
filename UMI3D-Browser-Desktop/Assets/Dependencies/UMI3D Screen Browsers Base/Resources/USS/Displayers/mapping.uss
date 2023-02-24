@@ -1,0 +1,29 @@
+.mapping {
+	align-items: center;
+	justify-content: center;
+
+	min-width: var(--size-medium-displayer);
+	height: var(--size-medium-displayer);
+
+	padding-left: var(--margin_padding-displayer);
+	padding-right: var(--margin_padding-displayer);
+	padding-top: var(--margin_padding-displayer);
+	padding-bottom: var(--margin_padding-displayer);
+
+	margin-left: var(--margin_padding-displayer);
+	margin-right: var(--margin_padding-displayer);
+
+	border-left-width: var(--border-width-displayer);
+	border-top-width: var(--border-width-displayer);
+	border-right-width: var(--border-width-displayer);
+	border-bottom-width: var(--border-width-displayer);
+}
+
+.mapping-keyboard {
+	border-top-left-radius: var(--border-radius-displayer);
+	border-top-right-radius: var(--border-radius-displayer);
+	border-bottom-left-radius: var(--border-radius-displayer);
+	border-bottom-right-radius: var(--border-radius-displayer);
+
+	border-color: white;
+}

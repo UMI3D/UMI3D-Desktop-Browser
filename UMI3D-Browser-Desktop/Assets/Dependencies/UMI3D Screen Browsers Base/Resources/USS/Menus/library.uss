@@ -94,11 +94,11 @@
 
 .library-drop_down__field,
 .library-drop_down__date,
-.library-drop_down__message {
-    padding-left: var(--margin_padding-displayer-menu);
-    padding-right: var(--margin_padding-displayer-menu);
-    padding-top: var(--margin_padding-displayer-menu);
-    padding-bottom: var(--margin_padding-displayer-menu);
+.library-drop_down__message.text {
+    padding-left: var(--margin_padding-displayer);
+    padding-right: var(--margin_padding-displayer);
+    padding-top: var(--margin_padding-displayer);
+    padding-bottom: var(--margin_padding-displayer);
 }
 
 .library-drop_down__field {

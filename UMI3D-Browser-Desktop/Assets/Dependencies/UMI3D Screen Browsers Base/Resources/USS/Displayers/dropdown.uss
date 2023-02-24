@@ -9,7 +9,7 @@
     padding-bottom: 0;
 }
 
-.dropdown > .unity-popup-field__input > .unity-base-popup-field__text.unity-label {
+.dropdown > .unity-popup-field__input > .unity-base-popup-field__text.text {
     flex-grow: 1;
 }
 
@@ -123,7 +123,7 @@
     flex-direction: column-reverse;
 }
 
-.dropdown-item__label.text.unity-label {
+.dropdown-item__label.text {
     padding-top: var(--margin_padding-displayer);
     padding-bottom: var(--margin_padding-displayer);
 }

@@ -88,13 +88,6 @@
 
 .scrollview-vertical 
 > .unity-scroll-view__content-and-vertical-scroll-container 
-> .unity-scroll-view__content-viewport
-> .unity-scroll-view__content-container {
-    padding-right: var(--padding-container-scrollview);
-}
-
-.scrollview-vertical 
-> .unity-scroll-view__content-and-vertical-scroll-container 
 > .unity-scroller {
     width: var(--size-scroller-scrollview);
 }
@@ -130,13 +123,6 @@
     margin-right: auto;
     margin-top: var(--margin-slider_dragger-scrollview);
     margin-bottom: var(--margin-slider_dragger-scrollview);
-}
-
-.scrollview-horizontal 
-> .unity-scroll-view__content-and-vertical-scroll-container 
-> .unity-scroll-view__content-viewport
-> .unity-scroll-view__content-container {
-    padding-bottom: var(--padding-container-scrollview);
 }
 
 .scrollview-horizontal 

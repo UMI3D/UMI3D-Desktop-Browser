@@ -15,6 +15,8 @@ limitations under the License.
 */
 using System.Linq;
 using System.Threading.Tasks;
+using umi3d.commonScreen.Displayer;
+using umi3d.commonScreen.menu;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,12 +24,12 @@ namespace umi3d.baseBrowser.connection
 {
     public abstract class BaseLauncherPanelController : MonoBehaviour
     {
-        public CustomLauncher Launcher;
+        public Launcher_C Launcher;
 
         [SerializeField]
         protected UIDocument document;
         protected VisualElement root => document.rootVisualElement;
-        protected CustomDialoguebox m_connectionDialoguebox;
+        protected Dialoguebox_C m_connectionDialoguebox;
 
         protected virtual void Start()
         {
@@ -35,13 +37,12 @@ namespace umi3d.baseBrowser.connection
 
             Screen.sleepTimeout = SleepTimeout.SystemSetting;
 
-            Launcher = root.Q<CustomLauncher>();
+            Launcher = root.Q<Launcher_C>();
 #if !UNITY_STANDALONE
             Launcher.Version = Application.version;
 #endif
             Launcher.Settings.Audio.SetAudio();
             Launcher.Connect = async (value) => await BaseConnectionProcess.Instance.InitConnect(value);
-            Launcher.StoreCurrentConnectionDataAndConnect = (ip, port) => BaseConnectionProcess.Instance.ConnectWithMediaDto(ip, port);
             Launcher.CurrentServer = BaseConnectionProcess.Instance.currentServer;
             Launcher.SavedServers = BaseConnectionProcess.Instance.savedServers;
             Launcher.CurrentConnectionData = BaseConnectionProcess.Instance.currentConnectionData;
@@ -51,7 +52,7 @@ namespace umi3d.baseBrowser.connection
             BaseConnectionProcess.Instance.ResetLauncherEvent();
             //BaseConnectionProcess.Instance.DisplaySessions += () => Launcher.AddScreenToStack = LauncherScreens.Session;
 
-            m_connectionDialoguebox = new commonScreen.Displayer.Dialoguebox_C();
+            m_connectionDialoguebox = new Dialoguebox_C();
             m_connectionDialoguebox.Type = DialogueboxType.Default;
             m_connectionDialoguebox.Size = ElementSize.Small;
             BaseConnectionProcess.Instance.ConnectionInitialized += ConnectionInitialized;
@@ -60,7 +61,7 @@ namespace umi3d.baseBrowser.connection
 
         private void OnDestroy()
         {
-            CustomDialoguebox.ResetAllQueue();
+            Dialoguebox_C.ResetAllQueue();
         }
 
         protected virtual void ConnectionInitialized(string url)
