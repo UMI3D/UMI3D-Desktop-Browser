@@ -16,6 +16,8 @@ limitations under the License.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using umi3d.commonScreen;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static AnimatorManager;
@@ -243,6 +245,13 @@ public static class AnimatorManager
         }
 
         ve.UpdateTransitionList(Animations[ve]);
+
+        UIManager.StartCoroutine(ve.WaitOneFrameAndSetEndValue(animation));
+    }
+
+    private static IEnumerator WaitOneFrameAndSetEndValue(this VisualElement ve, Animation animation)
+    {
+        yield return null;
 
         // Set the end value.
         if (!animation.IsReverted) animation.SetEndValue?.Invoke();
