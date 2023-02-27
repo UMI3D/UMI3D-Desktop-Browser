@@ -17,12 +17,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.commonScreen;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public static class AnimatorManager
 {
     public class Animation
     {
+        public VisualElement Visual;
+
         /// <summary>
         /// Is this animation currently playing.
         /// </summary>
@@ -71,6 +74,7 @@ public static class AnimatorManager
         /// Whether or not this animation should play when <see cref="ReduceAnimation"/> is true.
         /// </summary>
         public bool IsForcedAnimation;
+        public Coroutine Coroutine;
 
         /// <summary>
         /// Copy animation properties from <paramref name="other"/> to this.
@@ -88,6 +92,7 @@ public static class AnimatorManager
             Callcancel = other.Callcancel;
             IsReverted = other.IsReverted;
             IsForcedAnimation = other.IsForcedAnimation;
+            Coroutine = other.Coroutine;
         }
     }
 
@@ -258,11 +263,20 @@ public static class AnimatorManager
             animation.IsPlaying = true;
             if (!animation.IsReverted) animation.SetInitialValue?.Invoke();
             else animation.SetEndValue?.Invoke();
+
+            ve.UpdateTransitionList(Animations[ve]);
+
+            animation.Coroutine = UIManager.StartCoroutine(ve.WaitOneFrameAndSetEndValue(animation));
         }
+        else
+        {
+            //if (!animation.IsReverted) animation.SetInitialValue?.Invoke();
+            //else animation.SetEndValue?.Invoke();
+            ////ve.UpdateTransitionList(Animations[ve]);
 
-        ve.UpdateTransitionList(Animations[ve]);
-
-        UIManager.StartCoroutine(ve.WaitOneFrameAndSetEndValue(animation));
+            //if (animation.Coroutine != null) UIManager.StopCoroutine(animation.Coroutine);
+            //animation.Coroutine = UIManager.StartCoroutine(ve.WaitOneFrameAndSetEndValue(animation));
+        }
     }
 
     private static IEnumerator WaitOneFrameAndSetEndValue(this VisualElement ve, Animation animation)
@@ -343,4 +357,77 @@ public static class AnimatorManager
         ve.style.transitionTimingFunction = easingModes;
         ve.style.transitionDelay = delays;
     }
+
+    #region Set Properties
+
+    private static Animation AddAnimation<T>
+    (
+        this T ve,
+        Action setInitialValue,
+        Action setEndValue,
+        StylePropertyName propertyName
+    ) where T : VisualElement, IPanelBindable, ITransitionable
+    {
+        var animation = new Animation()
+        {
+            Visual = ve,
+            PropertyName = propertyName,
+            SetInitialValue = setInitialValue,
+            SetEndValue = setEndValue,
+        };
+
+        var scheduledItemBack = ve.schedule.Execute(() =>
+        {
+            //callback?.Invoke();
+            ve.RemoveAnimation(animation);
+        });
+        // Will be resume when animation end event will be trigger.
+        scheduledItemBack.Pause();
+        animation.Callback = scheduledItemBack;
+
+        var scheduledItemCancel = ve.schedule.Execute(() =>
+        {
+            //callcancel?.Invoke();
+            //ve.RemoveAnimation(animation);
+        });
+        // Will be resume when animation end event will be trigger.
+        scheduledItemCancel.Pause();
+        animation.Callcancel = scheduledItemCancel;
+
+        ve.InsertAnimationInAnimationsList(animation, out bool isNew);
+        if (ve.IsListeningForTransition) ve.PlayAnimation(animation, isNew);
+
+        return animation;
+    }
+
+    public static Animation WithAnimation(this Animation animation, int duration = 1, EasingMode easingMode = EasingMode.EaseInOut)
+    {
+        animation.Duration = duration;
+        animation.EasingMode = easingMode;
+
+        animation.Visual.UpdateTransitionList(Animations[animation.Visual]);
+
+        return animation;
+    }
+
+    public static Animation SetWidth<T>(this T ve, StyleLength width)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () =>
+            {
+                if (width.value.unit == LengthUnit.Pixel) ve.style.width = ve.resolvedStyle.width;
+                else
+                {
+                    var parentWidth = ve.parent.resolvedStyle.width;
+                    var currentWidth = ve.resolvedStyle.width;
+
+                    ve.style.width = Length.Percent(currentWidth * 100f / parentWidth);
+                }
+            },
+            setEndValue: () => ve.style.width = width,
+            propertyName: "width"
+        );
+
+    #endregion
 }
