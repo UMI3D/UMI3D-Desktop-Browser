@@ -35,9 +35,13 @@ public static class AnimatorManager
         /// </summary>
         public StylePropertyName PropertyName;
         /// <summary>
-        /// Duration time of this animation. (In second).
+        /// Duration time of the previous animation that has been canceled. (in second).
         /// </summary>
-        public TimeValue Duration;
+        public float PreviousDuration;
+        /// <summary>
+        /// Duration time of this animation. (in second).
+        /// </summary>
+        public float Duration;
         /// <summary>
         /// Easing mode of this animation.
         /// </summary>
@@ -59,13 +63,21 @@ public static class AnimatorManager
         /// </summary>
         public Action Callin;
         /// <summary>
-        /// Action raised just after playin this animation. (If this animaiton was not canceled).
+        /// Action raised just after playing this animation. (If this animaiton was not canceled).
         /// </summary>
-        public IVisualElementScheduledItem Callback;
+        public Action Callback;
         /// <summary>
         /// Action raised just after playin this animation. (If this animaiton was canceled).
         /// </summary>
-        public IVisualElementScheduledItem Callcancel;
+        public Action Callcancel;
+        /// <summary>
+        /// Action raised just after playin this animation. (If this animaiton was not canceled).
+        /// </summary>
+        public IVisualElementScheduledItem ScheduledCallback;
+        /// <summary>
+        /// Action raised just after playin this animation. (If this animaiton was canceled).
+        /// </summary>
+        public IVisualElementScheduledItem ScheduledCallcancel;
         /// <summary>
         /// Whether or not this initial and end values should be inverted.
         /// </summary>
@@ -74,27 +86,13 @@ public static class AnimatorManager
         /// Whether or not this animation should play when <see cref="ReduceAnimation"/> is true.
         /// </summary>
         public bool IsForcedAnimation;
-        public Coroutine Coroutine;
-
         /// <summary>
-        /// Copy animation properties from <paramref name="other"/> to this.
+        /// The Coroutine that set the end value.
         /// </summary>
-        /// <param name="other"></param>
-        public void Copy(Animation other)
-        {
-            Duration = other.Duration;
-            EasingMode = other.EasingMode;
-            Delay = other.Delay;
-            SetInitialValue = other.SetInitialValue;
-            SetEndValue = other.SetEndValue;
-            Callin = other.Callin;
-            Callback = other.Callback;
-            Callcancel = other.Callcancel;
-            IsReverted = other.IsReverted;
-            IsForcedAnimation = other.IsForcedAnimation;
-            Coroutine = other.Coroutine;
-        }
+        public Coroutine Coroutine;
     }
+
+    public class AnimationSet: List<Animation> { }
 
     /// <summary>
     /// Whether or not the animations should play.
@@ -143,7 +141,7 @@ public static class AnimatorManager
         var animation = new Animation()
         {
             PropertyName = propertyName,
-            Duration = duration,
+            Duration = duration.value,
             EasingMode = easingMode,
             Delay = delay,
             SetInitialValue = setInitialValue,
@@ -160,7 +158,7 @@ public static class AnimatorManager
         });
         // Will be resume when animation end event will be trigger.
         scheduledItemBack.Pause();
-        animation.Callback = scheduledItemBack;
+        animation.ScheduledCallback = scheduledItemBack;
 
         var scheduledItemCancel = persistentVisual.schedule.Execute(() =>
         {
@@ -169,9 +167,9 @@ public static class AnimatorManager
         });
         // Will be resume when animation end event will be trigger.
         scheduledItemCancel.Pause();
-        animation.Callcancel = scheduledItemCancel;
+        animation.ScheduledCallcancel = scheduledItemCancel;
 
-        ve.InsertAnimationInAnimationsList(animation, out bool isNew);
+        ve.InsertAnimationInAnimationsList(propertyName, out animation, out bool isNew);
 
         if (ve.IsListeningForTransition) ve.PlayAnimation(animation, isNew);
     }
@@ -254,28 +252,20 @@ public static class AnimatorManager
             // Play this action without animation and call the callback
             if (!animation.IsReverted) animation.SetEndValue?.Invoke();
             else animation.SetInitialValue?.Invoke();
-            animation.Callback.Resume();
+            animation.ScheduledCallback.Resume();
             return;
         }
 
-        if (isNew)
+        if (!animation.IsReverted) animation.SetInitialValue?.Invoke();
+        else animation.SetEndValue?.Invoke();
+
+        ve.UpdateTransitionList(Animations[ve]);
+
+        if (isNew || animation.PreviousDuration == 0)
         {
             animation.IsPlaying = true;
-            if (!animation.IsReverted) animation.SetInitialValue?.Invoke();
-            else animation.SetEndValue?.Invoke();
-
-            ve.UpdateTransitionList(Animations[ve]);
 
             animation.Coroutine = UIManager.StartCoroutine(ve.WaitOneFrameAndSetEndValue(animation));
-        }
-        else
-        {
-            //if (!animation.IsReverted) animation.SetInitialValue?.Invoke();
-            //else animation.SetEndValue?.Invoke();
-            ////ve.UpdateTransitionList(Animations[ve]);
-
-            //if (animation.Coroutine != null) UIManager.StopCoroutine(animation.Coroutine);
-            //animation.Coroutine = UIManager.StartCoroutine(ve.WaitOneFrameAndSetEndValue(animation));
         }
     }
 
@@ -298,7 +288,7 @@ public static class AnimatorManager
         if (!Animations.TryGetValue(ve, out var animations)) return;
 
         var animation = animations.Find(_animation => _animation.PropertyName == property);
-        animation.Callback?.Resume();
+        animation.ScheduledCallback?.Resume();
     }
 
     /// <summary>
@@ -306,18 +296,34 @@ public static class AnimatorManager
     /// </summary>
     /// <param name="ve"></param>
     /// <param name="property"></param>
-    public static void TriggerAnimationCallcancel(this VisualElement ve, StylePropertyName property)
+    public static void TriggerAnimationCallcancel(this VisualElement ve, StylePropertyName property, TransitionCancelEvent evt)
     {
         if (!Animations.TryGetValue(ve, out var animations)) return;
 
         var animation = animations.Find(_animation => _animation.PropertyName == property);
-        animation.Callcancel?.Resume();
+        animation.ScheduledCallcancel?.Resume();
+
+        if (animation.PreviousDuration != 0)
+        {
+            float previousDurationPercentage = (float)evt.elapsedTime * 100f / animation.PreviousDuration;
+            animation.Duration = previousDurationPercentage * animation.Duration / 100f;
+            ve.UpdateTransitionList(Animations[ve]);
+        }
+
+        if (animation.Coroutine != null) UIManager.StopCoroutine(animation.Coroutine);
+        animation.Coroutine = UIManager.StartCoroutine(ve.WaitOneFrameAndSetEndValue(animation));
     }
 
-    private static void InsertAnimationInAnimationsList(this VisualElement ve, Animation animation, out bool isNew)
+    private static void InsertAnimationInAnimationsList(this VisualElement ve, StylePropertyName propertyName, out Animation animation, out bool isNew)
     {
         if (!Animations.TryGetValue(ve, out var animations))
         {
+            animation = new Animation
+            {
+                Visual = ve,
+                PropertyName = propertyName
+            };
+
             Animations.Add(ve, new List<Animation> { animation });
             isNew = true;
         }
@@ -325,12 +331,18 @@ public static class AnimatorManager
         {
             for (int i = 0; i < animations.Count; ++i)
             {
-                if (animations[i].PropertyName != animation.PropertyName) continue;
+                if (animations[i].PropertyName != propertyName) continue;
 
                 isNew = !animations[i].IsPlaying;
-                animations[i].Copy(animation);
+                animation = animations[i];
                 return;
             }
+
+            animation = new Animation
+            {
+                Visual = ve,
+                PropertyName = propertyName
+            };
             animations.Add(animation);
             isNew = true;
         }
@@ -360,6 +372,10 @@ public static class AnimatorManager
 
     #region Set Properties
 
+    public enum BorderColorAndWidthEnum { All, Left, Right, Top, Bottom }
+    public enum BorderRadiusEnum { All, TopLeft, TopRight, BottomLeft, BottomRight }
+    public enum MarginAndPaddingEnum { All, Left, Right, Top, Bottom }
+
     private static Animation AddAnimation<T>
     (
         this T ve,
@@ -368,33 +384,35 @@ public static class AnimatorManager
         StylePropertyName propertyName
     ) where T : VisualElement, IPanelBindable, ITransitionable
     {
-        var animation = new Animation()
-        {
-            Visual = ve,
-            PropertyName = propertyName,
-            SetInitialValue = setInitialValue,
-            SetEndValue = setEndValue,
-        };
+        ve.InsertAnimationInAnimationsList(propertyName, out Animation animation, out bool isNew);
 
-        var scheduledItemBack = ve.schedule.Execute(() =>
+        animation.PreviousDuration = animation.Duration;
+        animation.Duration = 0;
+        animation.EasingMode = EasingMode.EaseInOut;
+        animation.Delay = 0;
+        animation.SetInitialValue = setInitialValue;
+        animation.SetEndValue = setEndValue;
+        if (isNew)
         {
-            //callback?.Invoke();
-            ve.RemoveAnimation(animation);
-        });
-        // Will be resume when animation end event will be trigger.
-        scheduledItemBack.Pause();
-        animation.Callback = scheduledItemBack;
+            var scheduledItemBack = ve.schedule.Execute(() =>
+            {
+                animation.Callback?.Invoke();
+                ve.RemoveAnimation(animation);
+            });
+            // Will be resume when animation end event will be trigger.
+            scheduledItemBack.Pause();
+            animation.ScheduledCallback = scheduledItemBack;
 
-        var scheduledItemCancel = ve.schedule.Execute(() =>
-        {
-            //callcancel?.Invoke();
-            //ve.RemoveAnimation(animation);
-        });
-        // Will be resume when animation end event will be trigger.
-        scheduledItemCancel.Pause();
-        animation.Callcancel = scheduledItemCancel;
+            var scheduledItemCancel = ve.schedule.Execute(() =>
+            {
+                animation.Callcancel?.Invoke();
+            });
+            // Will be resume when animation end event will be trigger.
+            scheduledItemCancel.Pause();
+            animation.ScheduledCallcancel = scheduledItemCancel;
+        }
+        else ve.UpdateTransitionList(Animations[ve]);
 
-        ve.InsertAnimationInAnimationsList(animation, out bool isNew);
         if (ve.IsListeningForTransition) ve.PlayAnimation(animation, isNew);
 
         return animation;
@@ -409,6 +427,240 @@ public static class AnimatorManager
 
         return animation;
     }
+
+    #region Color
+
+    public static Animation SetBackgroundColor<T>(this T ve, Color color)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.backgroundColor = ve.resolvedStyle.backgroundColor,
+            setEndValue: () => ve.style.backgroundColor = color,
+            propertyName: "background-color"
+        );
+
+    public static Animation SetColor<T>(this T ve, Color color)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.color = ve.resolvedStyle.color,
+            setEndValue: () => ve.style.color = color,
+            propertyName: "color"
+        );
+
+    #endregion
+
+    #region Border color
+
+    public static AnimationSet SetBorderColor<T>(this T ve, Color color, BorderColorAndWidthEnum border)
+        where T : VisualElement, IPanelBindable, ITransitionable
+    {
+        var animations = new AnimationSet();
+        switch (border)
+        {
+            case BorderColorAndWidthEnum.All:
+                animations.Add(ve.SetBorderLeftColor(color));
+                animations.Add(ve.SetBorderRightColor(color));
+                animations.Add(ve.SetBorderTopColor(color));
+                animations.Add(ve.SetBorderBottomColor(color));
+                break;
+            case BorderColorAndWidthEnum.Left:
+                animations.Add(ve.SetBorderLeftColor(color));
+                break;
+            case BorderColorAndWidthEnum.Right:
+                animations.Add(ve.SetBorderRightColor(color));
+                break;
+            case BorderColorAndWidthEnum.Top:
+                animations.Add(ve.SetBorderTopColor(color));
+                break;
+            case BorderColorAndWidthEnum.Bottom:
+                animations.Add(ve.SetBorderBottomColor(color));
+                break;
+            default:
+                break;
+        }
+        return animations;
+    }
+
+    private static Animation SetBorderLeftColor<T>(this T ve, Color color)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.borderLeftColor = ve.resolvedStyle.borderLeftColor,
+            setEndValue: () => ve.style.borderLeftColor = color,
+            propertyName: "border-left-color"
+        );
+
+    private static Animation SetBorderRightColor<T>(this T ve, Color color)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.borderRightColor = ve.resolvedStyle.borderRightColor,
+            setEndValue: () => ve.style.borderRightColor = color,
+            propertyName: "border-right-color"
+        );
+
+    private static Animation SetBorderTopColor<T>(this T ve, Color color)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.borderTopColor = ve.resolvedStyle.borderTopColor,
+            setEndValue: () => ve.style.borderTopColor = color,
+            propertyName: "border-top-color"
+        );
+
+    private static Animation SetBorderBottomColor<T>(this T ve, Color color)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.borderBottomColor = ve.resolvedStyle.borderBottomColor,
+            setEndValue: () => ve.style.borderBottomColor = color,
+            propertyName: "border-bottom-color"
+        );
+
+    #endregion
+
+    #region Border width
+
+    public static AnimationSet SetBorderWidth<T>(this T ve, StyleFloat length, BorderColorAndWidthEnum border)
+        where T : VisualElement, IPanelBindable, ITransitionable
+    {
+        var animations = new AnimationSet();
+        switch (border)
+        {
+            case BorderColorAndWidthEnum.All:
+                animations.Add(ve.SetBorderLeftWidth(length));
+                animations.Add(ve.SetBorderRightWidth(length));
+                animations.Add(ve.SetBorderTopWidth(length));
+                animations.Add(ve.SetBorderBottomWidth(length));
+                break;
+            case BorderColorAndWidthEnum.Left:
+                animations.Add(ve.SetBorderLeftWidth(length));
+                break;
+            case BorderColorAndWidthEnum.Right:
+                animations.Add(ve.SetBorderRightWidth(length));
+                break;
+            case BorderColorAndWidthEnum.Top:
+                animations.Add(ve.SetBorderTopWidth(length));
+                break;
+            case BorderColorAndWidthEnum.Bottom:
+                animations.Add(ve.SetBorderBottomWidth(length));
+                break;
+            default:
+                break;
+        }
+        return animations;
+    }
+
+    private static Animation SetBorderLeftWidth<T>(this T ve, StyleFloat length)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.borderLeftWidth = ve.resolvedStyle.borderLeftWidth,
+            setEndValue: () => ve.style.borderLeftWidth = length,
+            propertyName: "border-left-width"
+        );
+
+    private static Animation SetBorderRightWidth<T>(this T ve, StyleFloat length)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.borderRightWidth = ve.resolvedStyle.borderRightWidth,
+            setEndValue: () => ve.style.borderRightWidth = length,
+            propertyName: "border-right-width"
+        );
+
+    private static Animation SetBorderTopWidth<T>(this T ve, StyleFloat length)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.borderTopWidth = ve.resolvedStyle.borderTopWidth,
+            setEndValue: () => ve.style.borderTopWidth = length,
+            propertyName: "border-top-width"
+        );
+
+    private static Animation SetBorderBottomWidth<T>(this T ve, StyleFloat length)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.borderBottomWidth = ve.resolvedStyle.borderBottomWidth,
+            setEndValue: () => ve.style.borderBottomWidth = length,
+            propertyName: "border-bottom-width"
+        );
+
+    #endregion
+
+    #region Border radius
+
+    public static AnimationSet SetBorderRadius<T>(this T ve, StyleLength length, BorderRadiusEnum border)
+        where T : VisualElement, IPanelBindable, ITransitionable
+    {
+        var animations = new AnimationSet();
+        switch (border)
+        {
+            case BorderRadiusEnum.All:
+                animations.Add(ve.SetBorderTopLeftRadius(length));
+                animations.Add(ve.SetBorderTopRightRadius(length));
+                animations.Add(ve.SetBorderBottomLeftRadius(length));
+                animations.Add(ve.SetBorderBottomRightRadius(length));
+                break;
+            case BorderRadiusEnum.TopLeft:
+                animations.Add(ve.SetBorderTopLeftRadius(length));
+                break;
+            case BorderRadiusEnum.TopRight:
+                animations.Add(ve.SetBorderTopRightRadius(length));
+                break;
+            case BorderRadiusEnum.BottomLeft:
+                animations.Add(ve.SetBorderBottomLeftRadius(length));
+                break;
+            case BorderRadiusEnum.BottomRight:
+                animations.Add(ve.SetBorderBottomRightRadius(length));
+                break;
+            default:
+                break;
+        }
+        return animations;
+    }
+
+    private static Animation SetBorderTopLeftRadius<T>(this T ve, StyleLength length)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.borderTopLeftRadius = ve.resolvedStyle.borderTopLeftRadius,
+            setEndValue: () => ve.style.borderTopLeftRadius = length,
+            propertyName: "border-top-left-radius"
+        );
+
+    private static Animation SetBorderTopRightRadius<T>(this T ve, StyleLength length)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.borderTopRightRadius = ve.resolvedStyle.borderTopRightRadius,
+            setEndValue: () => ve.style.borderTopRightRadius = length,
+            propertyName: "border-top-right-radius"
+        );
+
+    private static Animation SetBorderBottomLeftRadius<T>(this T ve, StyleLength length)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.borderBottomLeftRadius = ve.resolvedStyle.borderBottomLeftRadius,
+            setEndValue: () => ve.style.borderBottomLeftRadius = length,
+            propertyName: "border-bottom-left-radius"
+        );
+
+    private static Animation SetBorderBottomRightRadius<T>(this T ve, StyleLength length)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.borderBottomRightRadius = ve.resolvedStyle.borderBottomRightRadius,
+            setEndValue: () => ve.style.borderBottomRightRadius = length,
+            propertyName: "border-top-right-radius"
+        );
+
+    #endregion
+
+    #region Size
 
     public static Animation SetWidth<T>(this T ve, StyleLength width)
         where T : VisualElement, IPanelBindable, ITransitionable
@@ -428,6 +680,257 @@ public static class AnimatorManager
             setEndValue: () => ve.style.width = width,
             propertyName: "width"
         );
+
+    public static Animation SetHeight<T>(this T ve, StyleLength height)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () =>
+            {
+                if (height.value.unit == LengthUnit.Pixel) ve.style.height = ve.resolvedStyle.height;
+                else
+                {
+                    var parentHeight = ve.parent.resolvedStyle.height;
+                    var currentHeight = ve.resolvedStyle.height;
+
+                    ve.style.height = Length.Percent(currentHeight * 100f / parentHeight);
+                }
+            },
+            setEndValue: () => ve.style.height = height,
+            propertyName: "height"
+        );
+
+    #endregion
+
+    #region Position
+
+    public static Animation SetLeft<T>(this T ve, StyleLength left)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () =>
+            {
+                if (left.value.unit == LengthUnit.Pixel) ve.style.left = ve.resolvedStyle.left;
+                else
+                {
+                    var parentWidth = ve.parent.resolvedStyle.width;
+                    var currentLeft = ve.resolvedStyle.left;
+
+                    ve.style.left = Length.Percent(currentLeft * 100f / parentWidth);
+                }
+            },
+            setEndValue: () => ve.style.left = left,
+            propertyName: "left"
+        );
+
+    public static Animation SetRight<T>(this T ve, StyleLength right)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () =>
+            {
+                if (right.value.unit == LengthUnit.Pixel) ve.style.right = ve.resolvedStyle.right;
+                else
+                {
+                    var parentWidth = ve.parent.resolvedStyle.width;
+                    var currentRight = ve.resolvedStyle.right;
+
+                    ve.style.right = Length.Percent(currentRight * 100f / parentWidth);
+                }
+            },
+            setEndValue: () => ve.style.right = right,
+            propertyName: "right"
+        );
+
+    public static Animation SetTop<T>(this T ve, StyleLength top)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () =>
+            {
+                if (top.value.unit == LengthUnit.Pixel) ve.style.top = ve.resolvedStyle.top;
+                else
+                {
+                    var parentHeight = ve.parent.resolvedStyle.height;
+                    var currentTop = ve.resolvedStyle.top;
+
+                    ve.style.top = Length.Percent(currentTop * 100f / parentHeight);
+                }
+            },
+            setEndValue: () => ve.style.top = top,
+            propertyName: "top"
+        );
+
+    public static Animation SetBottom<T>(this T ve, StyleLength bottom)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () =>
+            {
+                if (bottom.value.unit == LengthUnit.Pixel) ve.style.bottom = ve.resolvedStyle.bottom;
+                else
+                {
+                    var parentHeight = ve.parent.resolvedStyle.height;
+                    var currentBottom = ve.resolvedStyle.bottom;
+
+                    ve.style.bottom = Length.Percent(currentBottom * 100f / parentHeight);
+                }
+            },
+            setEndValue: () => ve.style.bottom = bottom,
+            propertyName: "bottom"
+        );
+
+    #endregion
+
+    #region Margin & Padding
+
+    public static AnimationSet SetMargin<T>(this T ve, StyleLength length, MarginAndPaddingEnum border)
+        where T : VisualElement, IPanelBindable, ITransitionable
+    {
+        var animations = new AnimationSet();
+        switch (border)
+        {
+            case MarginAndPaddingEnum.All:
+                animations.Add(ve.SetMarginLeft(length));
+                animations.Add(ve.SetMarginRight(length));
+                animations.Add(ve.SetMarginTop(length));
+                animations.Add(ve.SetMarginBottom(length));
+                break;
+            case MarginAndPaddingEnum.Left:
+                animations.Add(ve.SetMarginLeft(length));
+                break;
+            case MarginAndPaddingEnum.Right:
+                animations.Add(ve.SetMarginRight(length));
+                break;
+            case MarginAndPaddingEnum.Top:
+                animations.Add(ve.SetMarginTop(length));
+                break;
+            case MarginAndPaddingEnum.Bottom:
+                animations.Add(ve.SetMarginBottom(length));
+                break;
+            default:
+                break;
+        }
+        return animations;
+    }
+
+    private static Animation SetMarginLeft<T>(this T ve, StyleLength length)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () =>
+            {
+                if (length.value.unit == LengthUnit.Pixel) ve.style.marginLeft = ve.resolvedStyle.marginLeft;
+                else
+                {
+                    var parentWidth = ve.parent.resolvedStyle.width;
+                    var currentMargLeft = ve.resolvedStyle.marginLeft;
+
+                    ve.style.marginLeft = Length.Percent(currentMargLeft * 100f / parentWidth);
+                }
+            },
+            setEndValue: () => ve.style.marginLeft = length,
+            propertyName: "margin-left"
+        );
+
+    private static Animation SetMarginRight<T>(this T ve, StyleLength length)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () =>
+            {
+                if (length.value.unit == LengthUnit.Pixel) ve.style.marginRight = ve.resolvedStyle.marginRight;
+                else
+                {
+                    var parentWidth = ve.parent.resolvedStyle.width;
+                    var currentMargRight = ve.resolvedStyle.marginRight;
+
+                    ve.style.marginRight = Length.Percent(currentMargRight * 100f / parentWidth);
+                }
+            },
+            setEndValue: () => ve.style.marginRight = length,
+            propertyName: "margin-right"
+        );
+
+    private static Animation SetMarginTop<T>(this T ve, StyleLength length)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () =>
+            {
+                if (length.value.unit == LengthUnit.Pixel) ve.style.marginTop = ve.resolvedStyle.marginTop;
+                else
+                {
+                    var parentHeigth = ve.parent.resolvedStyle.height;
+                    var currentMargTop = ve.resolvedStyle.marginTop;
+
+                    ve.style.marginTop = Length.Percent(currentMargTop * 100f / parentHeigth);
+                }
+            },
+            setEndValue: () => ve.style.marginTop = length,
+            propertyName: "margin-top"
+        );
+
+    private static Animation SetMarginBottom<T>(this T ve, StyleLength length)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () =>
+            {
+                if (length.value.unit == LengthUnit.Pixel) ve.style.marginBottom = ve.resolvedStyle.marginBottom;
+                else
+                {
+                    var parentHeigth = ve.parent.resolvedStyle.height;
+                    var currentMargBottom = ve.resolvedStyle.marginBottom;
+
+                    ve.style.marginBottom = Length.Percent(currentMargBottom * 100f / parentHeigth);
+                }
+            },
+            setEndValue: () => ve.style.marginBottom = length,
+            propertyName: "margin-bottom"
+        );
+
+    #endregion
+
+    #region Rotate & Scale
+
+    public static Animation SetRotate<T>(this T ve, StyleRotate rotate)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () =>
+            {
+                switch (rotate.value.angle.unit)
+                {
+                    case AngleUnit.Degree:
+                        ve.style.rotate = ve.resolvedStyle.rotate;
+                        break;
+                    case AngleUnit.Gradian:
+                        UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"convert gradian to degree");
+                        break;
+                    case AngleUnit.Radian:
+                        UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"convert radian to degree");
+                        break;
+                    case AngleUnit.Turn:
+                        break;
+                    default:
+                        break;
+                }
+            },
+            setEndValue: () => ve.style.rotate = rotate,
+            propertyName: "rotate"
+        );
+
+    public static Animation SetScale<T>(this T ve, StyleScale scale)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.scale = ve.resolvedStyle.scale,
+            setEndValue: () => ve.style.scale = scale,
+            propertyName: "scale"
+        );
+
+    #endregion
 
     #endregion
 }

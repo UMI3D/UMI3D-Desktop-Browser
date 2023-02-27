@@ -29,23 +29,5 @@ namespace umi3d.commonScreen
         protected override void AttachUssClass()
         {
         }
-
-        protected override void TransitionCanceled(TransitionCancelEvent evt)
-        {
-            base.TransitionCanceled(evt);
-            UnityEngine.Debug.Log($"cancel");
-        }
-
-        protected override void TransitionEnded(TransitionEndEvent evt)
-        {
-            base.TransitionEnded(evt);
-            UnityEngine.Debug.Log($"end");
-        }
-
-        protected override void TransitionRun(TransitionRunEvent evt)
-        {
-            base.TransitionRun(evt);
-            UnityEngine.Debug.Log($"run");
-        }
     }
 }
