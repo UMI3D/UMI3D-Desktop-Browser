@@ -63,6 +63,10 @@ public static class AnimatorManager
         /// </summary>
         public Action SetEndValue;
         /// <summary>
+        /// Check if current value is equal to end value.
+        /// </summary>
+        public Func<bool> IsCurrentValueEqualsToEndValue;
+        /// <summary>
         /// Action raised just before playing this animation.
         /// </summary>
         public Action Callin;
@@ -213,7 +217,8 @@ public static class AnimatorManager
         ve.UpdateTransitionList(Animations[ve]);
 
         // Set the end value.
-         animation.SetEndValue?.Invoke();
+        if (!animation.IsCurrentValueEqualsToEndValue()) animation.SetEndValue?.Invoke();
+        else animation.ScheduledCallback?.Resume();
     }
 
     /// <summary>
@@ -321,10 +326,12 @@ public static class AnimatorManager
         this T ve,
         Action setInitialValue,
         Action setEndValue,
-        //Action<bool> checkIfCurrentValueIsEndValue,
+        Func<bool> checkIfCurrentValueIsEndValue,
         StylePropertyName propertyName
     ) where T : VisualElement, IPanelBindable, ITransitionable
     {
+        if (checkIfCurrentValueIsEndValue()) return new Animation();
+
         ve.InsertAnimationInAnimationsList(propertyName, out Animation animation, out bool isNew, out bool isAnimated);
 
         animation.IsAnimating = false;
@@ -332,6 +339,10 @@ public static class AnimatorManager
         animation.Duration = 0;
         animation.EasingMode = EasingMode.EaseInOut;
         animation.Delay = 0;
+
+        if (animation.InitialValueCoroutine != null) UIManager.StopCoroutine(animation.InitialValueCoroutine);
+        if (animation.EndValueCoroutine != null) UIManager.StopCoroutine(animation.EndValueCoroutine);
+
         // Is new if this animation was not previously in the list or if the previous animation was animated and not playing.
         if (isNew)
         {
@@ -354,16 +365,10 @@ public static class AnimatorManager
             scheduledItemCancel.Pause();
             animation.ScheduledCallcancel = scheduledItemCancel;
 
-            animation.SetInitialValue = setInitialValue;
-            animation.SetEndValue = setEndValue;
-
             animation.InitialValueCoroutine = UIManager.StartCoroutine(ve.PlayAnimation(animation, isNew));
         }
         else
         {
-            if (animation.InitialValueCoroutine != null) UIManager.StopCoroutine(animation.InitialValueCoroutine);
-            if (animation.EndValueCoroutine != null) UIManager.StopCoroutine(animation.EndValueCoroutine);
-
             ve.UpdateTransitionList(Animations[ve]);
 
             if (!isAnimated)
@@ -376,11 +381,15 @@ public static class AnimatorManager
                 animation.InitialValueCoroutine = UIManager.StartCoroutine(ve.PlayAnimation(animation, isNew));
             }
             else setInitialValue?.Invoke();
-
-            animation.SetInitialValue = setInitialValue;
-            animation.SetEndValue = setEndValue;
         }
-        
+
+        animation.SetInitialValue = setInitialValue;
+        animation.SetEndValue = setEndValue;
+        animation.IsCurrentValueEqualsToEndValue = checkIfCurrentValueIsEndValue;
+        animation.Callin = null;
+        animation.Callcancel = null;
+        animation.Callback = null;
+
         return animation;
     }
 
@@ -421,6 +430,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.opacity = ve.resolvedStyle.opacity,
             setEndValue: () => ve.style.opacity = opacity,
+            checkIfCurrentValueIsEndValue: () => ve.style.opacity == opacity,
             propertyName: "opacity"
         );
 
@@ -432,6 +442,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.backgroundColor = ve.resolvedStyle.backgroundColor,
             setEndValue: () => ve.style.backgroundColor = color,
+            checkIfCurrentValueIsEndValue: () => ve.style.backgroundColor == color,
             propertyName: "background-color"
         );
 
@@ -441,6 +452,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.color = ve.resolvedStyle.color,
             setEndValue: () => ve.style.color = color,
+            checkIfCurrentValueIsEndValue: () => ve.style.color == color,
             propertyName: "color"
         );
 
@@ -484,6 +496,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderLeftColor = ve.resolvedStyle.borderLeftColor,
             setEndValue: () => ve.style.borderLeftColor = color,
+            checkIfCurrentValueIsEndValue: () => ve.style.borderLeftColor == color,
             propertyName: "border-left-color"
         );
 
@@ -493,6 +506,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderRightColor = ve.resolvedStyle.borderRightColor,
             setEndValue: () => ve.style.borderRightColor = color,
+            checkIfCurrentValueIsEndValue: () => ve.style.borderRightColor == color,
             propertyName: "border-right-color"
         );
 
@@ -502,6 +516,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderTopColor = ve.resolvedStyle.borderTopColor,
             setEndValue: () => ve.style.borderTopColor = color,
+            checkIfCurrentValueIsEndValue: () => ve.style.borderTopColor == color,
             propertyName: "border-top-color"
         );
 
@@ -511,6 +526,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderBottomColor = ve.resolvedStyle.borderBottomColor,
             setEndValue: () => ve.style.borderBottomColor = color,
+            checkIfCurrentValueIsEndValue: () => ve.style.borderBottomColor == color,
             propertyName: "border-bottom-color"
         );
 
@@ -554,6 +570,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderLeftWidth = ve.resolvedStyle.borderLeftWidth,
             setEndValue: () => ve.style.borderLeftWidth = length,
+            checkIfCurrentValueIsEndValue: () => ve.style.borderLeftWidth == length,
             propertyName: "border-left-width"
         );
 
@@ -563,6 +580,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderRightWidth = ve.resolvedStyle.borderRightWidth,
             setEndValue: () => ve.style.borderRightWidth = length,
+            checkIfCurrentValueIsEndValue: () => ve.style.borderRightWidth == length,
             propertyName: "border-right-width"
         );
 
@@ -572,6 +590,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderTopWidth = ve.resolvedStyle.borderTopWidth,
             setEndValue: () => ve.style.borderTopWidth = length,
+            checkIfCurrentValueIsEndValue: () => ve.style.borderTopWidth == length,
             propertyName: "border-top-width"
         );
 
@@ -581,6 +600,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderBottomWidth = ve.resolvedStyle.borderBottomWidth,
             setEndValue: () => ve.style.borderBottomWidth = length,
+            checkIfCurrentValueIsEndValue: () => ve.style.borderBottomWidth == length,
             propertyName: "border-bottom-width"
         );
 
@@ -624,6 +644,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderTopLeftRadius = ve.resolvedStyle.borderTopLeftRadius,
             setEndValue: () => ve.style.borderTopLeftRadius = length,
+            checkIfCurrentValueIsEndValue: () => ve.style.borderTopLeftRadius == length,
             propertyName: "border-top-left-radius"
         );
 
@@ -633,6 +654,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderTopRightRadius = ve.resolvedStyle.borderTopRightRadius,
             setEndValue: () => ve.style.borderTopRightRadius = length,
+            checkIfCurrentValueIsEndValue: () => ve.style.borderTopRightRadius == length,
             propertyName: "border-top-right-radius"
         );
 
@@ -642,6 +664,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderBottomLeftRadius = ve.resolvedStyle.borderBottomLeftRadius,
             setEndValue: () => ve.style.borderBottomLeftRadius = length,
+            checkIfCurrentValueIsEndValue: () => ve.style.borderBottomLeftRadius == length,
             propertyName: "border-bottom-left-radius"
         );
 
@@ -651,6 +674,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderBottomRightRadius = ve.resolvedStyle.borderBottomRightRadius,
             setEndValue: () => ve.style.borderBottomRightRadius = length,
+            checkIfCurrentValueIsEndValue: () => ve.style.borderBottomRightRadius == length,
             propertyName: "border-top-right-radius"
         );
 
@@ -674,6 +698,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.width = width,
+            checkIfCurrentValueIsEndValue: () => ve.style.width == width,
             propertyName: "width"
         );
 
@@ -693,6 +718,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.height = height,
+            checkIfCurrentValueIsEndValue: () => ve.style.height == height,
             propertyName: "height"
         );
 
@@ -716,6 +742,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.left = left,
+            checkIfCurrentValueIsEndValue: () => ve.style.left == left,
             propertyName: "left"
         );
 
@@ -735,6 +762,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.right = right,
+            checkIfCurrentValueIsEndValue: () => ve.style.right == right,
             propertyName: "right"
         );
 
@@ -754,6 +782,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.top = top,
+            checkIfCurrentValueIsEndValue: () => ve.style.top == top,
             propertyName: "top"
         );
 
@@ -773,6 +802,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.bottom = bottom,
+            checkIfCurrentValueIsEndValue: () => ve.style.bottom == bottom,
             propertyName: "bottom"
         );
 
@@ -826,6 +856,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.marginLeft = length,
+            checkIfCurrentValueIsEndValue: () => ve.style.marginLeft == length,
             propertyName: "margin-left"
         );
 
@@ -845,6 +876,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.marginRight = length,
+            checkIfCurrentValueIsEndValue: () => ve.style.marginRight == length,
             propertyName: "margin-right"
         );
 
@@ -864,6 +896,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.marginTop = length,
+            checkIfCurrentValueIsEndValue: () => ve.style.marginTop == length,
             propertyName: "margin-top"
         );
 
@@ -883,6 +916,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.marginBottom = length,
+            checkIfCurrentValueIsEndValue: () => ve.style.marginBottom == length,
             propertyName: "margin-bottom"
         );
 
@@ -914,6 +948,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.rotate = rotate,
+            checkIfCurrentValueIsEndValue: () => ve.style.rotate == rotate,
             propertyName: "rotate"
         );
 
@@ -923,6 +958,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.scale = ve.resolvedStyle.scale,
             setEndValue: () => ve.style.scale = scale,
+            checkIfCurrentValueIsEndValue: () => ve.style.scale == scale,
             propertyName: "scale"
         );
     public static Animation SetScale<T>(this T ve, Vector3 scale)
@@ -931,6 +967,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.scale = ve.resolvedStyle.scale,
             setEndValue: () => ve.style.scale = new Scale(scale),
+            checkIfCurrentValueIsEndValue: () => ve.style.scale == new Scale(scale),
             propertyName: "scale"
         );
 

@@ -140,9 +140,26 @@ namespace umi3d.commonScreen.menu
                     .SetRotate(m_displayMessage ? new Rotate(180) : new Rotate(90))
                     .WithAnimation(AnimatorManager.DropdownDuration);
 
-                Overlay.schedule.Execute(() =>
-                {
-                    Overlay.WaitUntil
+                //this.schedule.Execute(() =>
+                //{
+                //    this.WaitUntil
+                //    (
+                //        () => !float.IsNaN(DropDown_Field.layout.height),
+                //        () =>
+                //        {
+                //            var fieldTotalHeight = DropDown_Field.layout.height + DropDown_Field.resolvedStyle.marginTop + DropDown_Field.resolvedStyle.marginBottom;
+
+                //            Overlay
+                //                .SetHeight(m_displayMessage ? 0f : fieldTotalHeight);
+                //            Overlay
+                //                .SetHeight(m_displayMessage ? fieldTotalHeight : 0f)
+                //                .WithAnimation(AnimatorManager.DropdownDuration)
+                //                .SetCallback(m_displayMessage ? null : Overlay.RemoveFromHierarchy);
+                //        }
+                //    );
+                //});
+
+                this.WaitUntil
                     (
                         () => !float.IsNaN(DropDown_Field.layout.height),
                         () =>
@@ -150,12 +167,13 @@ namespace umi3d.commonScreen.menu
                             var fieldTotalHeight = DropDown_Field.layout.height + DropDown_Field.resolvedStyle.marginTop + DropDown_Field.resolvedStyle.marginBottom;
 
                             Overlay
+                                .SetHeight(m_displayMessage ? 0f : fieldTotalHeight);
+                            Overlay
                                 .SetHeight(m_displayMessage ? fieldTotalHeight : 0f)
                                 .WithAnimation(AnimatorManager.DropdownDuration)
                                 .SetCallback(m_displayMessage ? null : Overlay.RemoveFromHierarchy);
                         }
                     );
-                });
             }
         }
 
