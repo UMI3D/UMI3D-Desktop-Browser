@@ -127,36 +127,25 @@ namespace umi3d.commonScreen.menu
 
         protected virtual void Transition(VisualElement persistentVisual, bool revert)
         {
-            this.AddAnimation
-            (
-                persistentVisual,
-                () => style.opacity = 0,
-                () => style.opacity = 1,
-                "opacity",
-                0.5f,
-                revert: revert
-            );
+            this.SetOpacity(revert ? 1 : 0)
+                .WithAnimation(.5f);
 
-            this.AddAnimation
-            (
-                persistentVisual,
-                () => style.scale = new Scale(new Vector3(0.1f, 0.1f, 1)),
-                () => style.scale = new Scale(Vector3.one),
-                "scale",
-                0.5f,
-                revert: revert
-            );
+            this.SetScale(revert ? new Scale(Vector3.one) : new Scale(new Vector3(0.1f, 0.1f, 1)))
+                .WithAnimation(.5f);
 
-            this.AddAnimation
-            (
-                persistentVisual,
-                () => style.translate = new Translate(Length.Percent(-50), Length.Percent(-50), 0),
-                () => style.translate = new Translate(Length.Percent(0), Length.Percent(0), 0),
-                "translate",
-                0.5f,
-                revert: revert,
-                callback: revert ? RemoveFromHierarchy : null
-            );
+            this.SetOpacity(revert ? 1 : 0)
+                .WithAnimation(.5f);
+
+            //this.AddAnimation
+            //(
+            //    persistentVisual,
+            //    () => style.translate = new Translate(Length.Percent(-50), Length.Percent(-50), 0),
+            //    () => style.translate = new Translate(Length.Percent(0), Length.Percent(0), 0),
+            //    "translate",
+            //    0.5f,
+            //    revert: revert,
+            //    callback: revert ? RemoveFromHierarchy : null
+            //);
         }
 
         #endregion

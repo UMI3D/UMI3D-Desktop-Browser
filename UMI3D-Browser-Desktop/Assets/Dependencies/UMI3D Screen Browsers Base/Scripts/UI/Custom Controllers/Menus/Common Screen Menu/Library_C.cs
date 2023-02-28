@@ -136,15 +136,9 @@ namespace umi3d.commonScreen.menu
                 m_displayMessage = value;
                 if (m_displayMessage) this.AddIfNotInHierarchy(Overlay);
 
-                DropDown_Button_Icon.AddAnimation
-                (
-                    this,
-                    () => DropDown_Button_Icon.style.rotate = new Rotate(90),
-                    () => DropDown_Button_Icon.style.rotate = new Rotate(180),
-                    "rotate",
-                    AnimatorManager.DropdownDuration,
-                    revert: !m_displayMessage
-                );
+                DropDown_Button_Icon
+                    .SetRotate(m_displayMessage ? new Rotate(180) : new Rotate(90))
+                    .WithAnimation(AnimatorManager.DropdownDuration);
 
                 Overlay.schedule.Execute(() =>
                 {
@@ -154,16 +148,11 @@ namespace umi3d.commonScreen.menu
                         () =>
                         {
                             var fieldTotalHeight = DropDown_Field.layout.height + DropDown_Field.resolvedStyle.marginTop + DropDown_Field.resolvedStyle.marginBottom;
-                            Overlay.AddAnimation
-                            (
-                                this,
-                                () => Overlay.style.height = 0f,
-                                () => Overlay.style.height = fieldTotalHeight,
-                                "height",
-                                AnimatorManager.DropdownDuration,
-                                revert: !m_displayMessage,
-                                callback: m_displayMessage ? null : Overlay.RemoveFromHierarchy
-                            );
+
+                            Overlay
+                                .SetHeight(m_displayMessage ? fieldTotalHeight : 0f)
+                                .WithAnimation(AnimatorManager.DropdownDuration)
+                                .SetCallback(m_displayMessage ? null : Overlay.RemoveFromHierarchy);
                         }
                     );
                 });
@@ -252,6 +241,8 @@ namespace umi3d.commonScreen.menu
             Delete.Height = ElementSize.Small;
             Delete.Type = ButtonType.Invisible;
             DropDown_Date.TextAlignment = ElementAlignment.TrailingTop;
+
+            DropDown_Button_Icon.style.rotate = new Rotate(90);
 
             Add(Main);
             Main.Add(DropDown_Button);

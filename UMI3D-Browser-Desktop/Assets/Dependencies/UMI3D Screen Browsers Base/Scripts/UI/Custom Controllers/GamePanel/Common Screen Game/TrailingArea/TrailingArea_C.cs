@@ -134,16 +134,10 @@ namespace umi3d.commonScreen.game
                 NotifAndUserArea.schedule.Execute(() =>
                 {
                     NotifAndUserArea.style.visibility = StyleKeyword.Null;
-                    NotifAndUserArea.AddAnimation
-                    (
-                        this,
-                        () => NotifAndUserArea.style.width = Length.Percent(0),
-                        () => NotifAndUserArea.style.width = Length.Percent(60),
-                        "width",
-                        0.5f,
-                        revert: !value,
-                        callback: value ? null : NotifAndUserArea.RemoveIfIsInHierarchy
-                    );
+                    NotifAndUserArea
+                        .SetWidth(value ? Length.Percent(60) : Length.Percent(0))
+                        .WithAnimation(.5f)
+                        .SetCallback(value ? null : NotifAndUserArea.RemoveIfIsInHierarchy);
                 });
             }
         }

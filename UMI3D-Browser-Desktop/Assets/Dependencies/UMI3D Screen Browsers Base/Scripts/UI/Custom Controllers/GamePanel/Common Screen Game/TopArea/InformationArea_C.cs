@@ -119,28 +119,18 @@ namespace umi3d.commonScreen.game
                 if (value == ShortInf.LocalisedText) return;
 
                 var color = new Color();
-                ShortInf.AddAnimation
-                (
-                    this,
-                    () => ShortInf.style.color = new Color(color.r, color.g, color.b, color.a),
-                    () => ShortInf.style.color = new Color(color.r, color.g, color.b, 0),
-                    "color",
-                    AnimatorManager.TextFadeDuration,
-                    callin: () => color = ShortInf.resolvedStyle.color,
-                    callback: () =>
+
+                ShortInf
+                    .SetColor(new Color(color.r, color.g, color.b, 0))
+                    .WithAnimation(AnimatorManager.TextFadeDuration)
+                    .SetCallback(() =>
                     {
                         ShortInf.LocalisedText = value;
-                        ShortInf.AddAnimation
-                        (
-                            this,
-                            () => ShortInf.style.color = new Color(color.r, color.g, color.b, 0),
-                            () => ShortInf.style.color = new Color(color.r, color.g, color.b, color.a),
-                            "color",
-                            AnimatorManager.TextFadeDuration,
-                            callback: () => ShortInf.style.color = StyleKeyword.Null
-                        );
-                    }
-                );
+                        ShortInf
+                            .SetColor(new Color(color.r, color.g, color.b, color.a))
+                            .WithAnimation(AnimatorManager.TextFadeDuration)
+                            .SetCallback(() => ShortInf.style.color = StyleKeyword.Null);
+                    });
             }
         }
 
@@ -366,17 +356,17 @@ namespace umi3d.commonScreen.game
         protected void AnimateShortInf(bool isRevert)
         {
             if (isRevert != m_shortInfExpended) return;
-            ShortInf.AddAnimation
-            (
-                this,
-                () => ShortInf.style.width = Length.Percent(10),
-                () => ShortInf.style.width = Length.Percent(40),
-                "width",
-                0.5f,
-                delay: isRevert ? 0.5f : 0f,
-                revert: isRevert,
-                callback: () => m_shortInfExpended = !isRevert
-            );
+            //ShortInf.AddAnimation
+            //(
+            //    this,
+            //    () => ShortInf.style.width = Length.Percent(10),
+            //    () => ShortInf.style.width = Length.Percent(40),
+            //    "width",
+            //    0.5f,
+            //    delay: isRevert ? 0.5f : 0f,
+            //    revert: isRevert,
+            //    callback: () => m_shortInfExpended = !isRevert
+            //);
         }
 
         protected void ToolsMenuContentChanged()

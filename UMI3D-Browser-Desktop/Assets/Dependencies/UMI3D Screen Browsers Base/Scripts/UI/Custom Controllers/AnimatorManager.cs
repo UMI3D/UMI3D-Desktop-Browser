@@ -31,6 +31,10 @@ public static class AnimatorManager
         /// </summary>
         public bool IsPlaying;
         /// <summary>
+        /// Is this animation animated.
+        /// </summary>
+        public bool IsAnimating;
+        /// <summary>
         /// Name of the property to animate.
         /// </summary>
         public StylePropertyName PropertyName;
@@ -79,17 +83,17 @@ public static class AnimatorManager
         /// </summary>
         public IVisualElementScheduledItem ScheduledCallcancel;
         /// <summary>
-        /// Whether or not this initial and end values should be inverted.
-        /// </summary>
-        public bool IsReverted;
-        /// <summary>
         /// Whether or not this animation should play when <see cref="ReduceAnimation"/> is true.
         /// </summary>
         public bool IsForcedAnimation;
         /// <summary>
+        /// The Coroutine that set the initial value.
+        /// </summary>
+        public Coroutine InitialValueCoroutine;
+        /// <summary>
         /// The Coroutine that set the end value.
         /// </summary>
-        public Coroutine Coroutine;
+        public Coroutine EndValueCoroutine;
     }
 
     public class AnimationSet: List<Animation> { }
@@ -104,75 +108,6 @@ public static class AnimatorManager
     public const float TextFadeDuration = 1f;
 
     public static Dictionary<VisualElement, List<Animation>> Animations = new Dictionary<VisualElement, List<Animation>>();
-
-    /// <summary>
-    /// Add an animation.
-    /// </summary>
-    /// <param name="ve">The visual that will have an animation.</param>
-    /// <param name="persistentVisual">The visual that should be attached to a panel until the end of the animation.</param>
-    /// <param name="setInitialValue">The initial value.</param>
-    /// <param name="setEndValue">The end value.</param>
-    /// <param name="propertyName">Name of the property that will be animated.</param>
-    /// <param name="duration">Duration of the animation, in second.</param>
-    /// <param name="easingMode">Animation easing mode.</param>
-    /// <param name="delay">Delay before playing the animation, in second.</param>
-    /// <param name="callin">Action raised just before playing this animation.</param>
-    /// <param name="callcancel">Action raised just after playing this animation. (If this animaiton was canceled)</param>
-    /// <param name="callback">Callback raised when the animation end. This callback is raised only when the animation end properly.</param>
-    /// <param name="forceAnimation">Whether or not playing this animation when <see cref="ReduceAnimation"/> is true.</param>
-    /// <param name="revert">Should the animation be played reverted.</param>
-    public static void AddAnimation<T>
-    (
-        this T ve,
-        VisualElement persistentVisual,
-        Action setInitialValue, 
-        Action setEndValue, 
-        StylePropertyName propertyName, 
-        TimeValue duration,
-        EasingMode easingMode = EasingMode.EaseInOut, 
-        TimeValue delay = new TimeValue(), 
-        Action callin = null,
-        Action callback = null, 
-        Action callcancel = null,
-        bool forceAnimation = false,
-        bool revert = false
-    ) where T: VisualElement, IPanelBindable, ITransitionable
-    {
-        var animation = new Animation()
-        {
-            PropertyName = propertyName,
-            Duration = duration.value,
-            EasingMode = easingMode,
-            Delay = delay,
-            SetInitialValue = setInitialValue,
-            SetEndValue = setEndValue,
-            Callin = callin,
-            IsReverted = revert,
-            IsForcedAnimation = forceAnimation,
-        };
-
-        var scheduledItemBack = persistentVisual.schedule.Execute(() =>
-        {
-            callback?.Invoke();
-            ve.RemoveAnimation(animation);
-        });
-        // Will be resume when animation end event will be trigger.
-        scheduledItemBack.Pause();
-        animation.ScheduledCallback = scheduledItemBack;
-
-        var scheduledItemCancel = persistentVisual.schedule.Execute(() =>
-        {
-            callcancel?.Invoke();
-            ve.RemoveAnimation(animation);
-        });
-        // Will be resume when animation end event will be trigger.
-        scheduledItemCancel.Pause();
-        animation.ScheduledCallcancel = scheduledItemCancel;
-
-        ve.InsertAnimationInAnimationsList(propertyName, out animation, out bool isNew);
-
-        if (ve.IsListeningForTransition) ve.PlayAnimation(animation, isNew);
-    }
 
     /// <summary>
     /// Remove <paramref name="animation"/> from the list of animations.
@@ -229,7 +164,11 @@ public static class AnimatorManager
         if (!Animations.TryGetValue(ve, out var animations)) return;
 
         if (!ve.IsListeningForTransition) return;
-        for (int i = animations.Count - 1; i >= 0 ; i--) ve.PlayAnimation(animations[i]);
+        for (int i = animations.Count - 1; i >= 0; i--)
+        {
+            if (animations[i].InitialValueCoroutine != null) UIManager.StopCoroutine(animations[i].InitialValueCoroutine);
+            animations[i].InitialValueCoroutine = UIManager.StartCoroutine(ve.PlayAnimation(animations[i]));
+        }
     }
 
     /// <summary>
@@ -239,10 +178,12 @@ public static class AnimatorManager
     /// <param name="ve"></param>
     /// <param name="animation"></param>
     /// <param name="isNew"></param>
-    public static void PlayAnimation<T>(this T ve, Animation animation, bool isNew = true)
+    public static IEnumerator PlayAnimation<T>(this T ve, Animation animation, bool isNew = true)
         where T : VisualElement, IPanelBindable, ITransitionable
     {
-        if (!ve.IsListeningForTransition) return;
+        yield return null;
+
+        if (!ve.IsListeningForTransition) yield break;
 
         // Raise the callin action. This action should not update the property that is animated.
         animation.Callin?.Invoke();
@@ -250,22 +191,18 @@ public static class AnimatorManager
         if (ReduceAnimation && !animation.IsForcedAnimation)
         {
             // Play this action without animation and call the callback
-            if (!animation.IsReverted) animation.SetEndValue?.Invoke();
-            else animation.SetInitialValue?.Invoke();
-            animation.ScheduledCallback.Resume();
-            return;
+            animation.SetEndValue?.Invoke();
+            animation.ScheduledCallback?.Resume();
+            yield break;
         }
 
-        if (!animation.IsReverted) animation.SetInitialValue?.Invoke();
-        else animation.SetEndValue?.Invoke();
-
-        ve.UpdateTransitionList(Animations[ve]);
+        animation.SetInitialValue?.Invoke();
 
         if (isNew || animation.PreviousDuration == 0)
         {
             animation.IsPlaying = true;
 
-            animation.Coroutine = UIManager.StartCoroutine(ve.WaitOneFrameAndSetEndValue(animation));
+            animation.EndValueCoroutine = UIManager.StartCoroutine(ve.WaitOneFrameAndSetEndValue(animation));
         }
     }
 
@@ -273,9 +210,10 @@ public static class AnimatorManager
     {
         yield return null;
 
+        ve.UpdateTransitionList(Animations[ve]);
+
         // Set the end value.
-        if (!animation.IsReverted) animation.SetEndValue?.Invoke();
-        else animation.SetInitialValue?.Invoke();
+         animation.SetEndValue?.Invoke();
     }
 
     /// <summary>
@@ -307,14 +245,13 @@ public static class AnimatorManager
         {
             float previousDurationPercentage = (float)evt.elapsedTime * 100f / animation.PreviousDuration;
             animation.Duration = previousDurationPercentage * animation.Duration / 100f;
-            ve.UpdateTransitionList(Animations[ve]);
         }
 
-        if (animation.Coroutine != null) UIManager.StopCoroutine(animation.Coroutine);
-        animation.Coroutine = UIManager.StartCoroutine(ve.WaitOneFrameAndSetEndValue(animation));
+        if (animation.EndValueCoroutine != null) UIManager.StopCoroutine(animation.EndValueCoroutine);
+        animation.EndValueCoroutine = UIManager.StartCoroutine(ve.WaitOneFrameAndSetEndValue(animation));
     }
 
-    private static void InsertAnimationInAnimationsList(this VisualElement ve, StylePropertyName propertyName, out Animation animation, out bool isNew)
+    private static void InsertAnimationInAnimationsList(this VisualElement ve, StylePropertyName propertyName, out Animation animation, out bool isNew, out bool isAnimated)
     {
         if (!Animations.TryGetValue(ve, out var animations))
         {
@@ -326,6 +263,7 @@ public static class AnimatorManager
 
             Animations.Add(ve, new List<Animation> { animation });
             isNew = true;
+            isAnimated = false;
         }
         else
         {
@@ -333,7 +271,8 @@ public static class AnimatorManager
             {
                 if (animations[i].PropertyName != propertyName) continue;
 
-                isNew = !animations[i].IsPlaying;
+                isAnimated = animations[i].IsAnimating;
+                isNew = isAnimated && !animations[i].IsPlaying;
                 animation = animations[i];
                 return;
             }
@@ -345,6 +284,7 @@ public static class AnimatorManager
             };
             animations.Add(animation);
             isNew = true;
+            isAnimated = false;
         }
     }
 
@@ -381,23 +321,25 @@ public static class AnimatorManager
         this T ve,
         Action setInitialValue,
         Action setEndValue,
+        //Action<bool> checkIfCurrentValueIsEndValue,
         StylePropertyName propertyName
     ) where T : VisualElement, IPanelBindable, ITransitionable
     {
-        ve.InsertAnimationInAnimationsList(propertyName, out Animation animation, out bool isNew);
+        ve.InsertAnimationInAnimationsList(propertyName, out Animation animation, out bool isNew, out bool isAnimated);
 
+        animation.IsAnimating = false;
         animation.PreviousDuration = animation.Duration;
         animation.Duration = 0;
         animation.EasingMode = EasingMode.EaseInOut;
         animation.Delay = 0;
-        animation.SetInitialValue = setInitialValue;
-        animation.SetEndValue = setEndValue;
+        // Is new if this animation was not previously in the list or if the previous animation was animated and not playing.
         if (isNew)
         {
             var scheduledItemBack = ve.schedule.Execute(() =>
             {
                 animation.Callback?.Invoke();
                 ve.RemoveAnimation(animation);
+                animation.ScheduledCallback.Pause();
             });
             // Will be resume when animation end event will be trigger.
             scheduledItemBack.Pause();
@@ -406,27 +348,81 @@ public static class AnimatorManager
             var scheduledItemCancel = ve.schedule.Execute(() =>
             {
                 animation.Callcancel?.Invoke();
+                animation.ScheduledCallcancel.Pause();
             });
             // Will be resume when animation end event will be trigger.
             scheduledItemCancel.Pause();
             animation.ScheduledCallcancel = scheduledItemCancel;
+
+            animation.SetInitialValue = setInitialValue;
+            animation.SetEndValue = setEndValue;
+
+            animation.InitialValueCoroutine = UIManager.StartCoroutine(ve.PlayAnimation(animation, isNew));
         }
-        else ve.UpdateTransitionList(Animations[ve]);
+        else
+        {
+            if (animation.InitialValueCoroutine != null) UIManager.StopCoroutine(animation.InitialValueCoroutine);
+            if (animation.EndValueCoroutine != null) UIManager.StopCoroutine(animation.EndValueCoroutine);
 
-        if (ve.IsListeningForTransition) ve.PlayAnimation(animation, isNew);
+            ve.UpdateTransitionList(Animations[ve]);
 
+            if (!isAnimated)
+            {
+                animation.Callin?.Invoke();
+                animation.SetEndValue?.Invoke();
+                animation.Callcancel?.Invoke();
+                animation.Callback?.Invoke();
+
+                animation.InitialValueCoroutine = UIManager.StartCoroutine(ve.PlayAnimation(animation, isNew));
+            }
+            else setInitialValue?.Invoke();
+
+            animation.SetInitialValue = setInitialValue;
+            animation.SetEndValue = setEndValue;
+        }
+        
         return animation;
     }
 
-    public static Animation WithAnimation(this Animation animation, int duration = 1, EasingMode easingMode = EasingMode.EaseInOut)
+    #region Modificators
+
+    public static Animation WithAnimation(this Animation animation, float duration = 1, EasingMode easingMode = EasingMode.EaseInOut)
     {
+        animation.IsAnimating = true;
         animation.Duration = duration;
         animation.EasingMode = easingMode;
 
-        animation.Visual.UpdateTransitionList(Animations[animation.Visual]);
-
         return animation;
     }
+
+    public static Animation SetCallin(this Animation animation, Action callin)
+    {
+        animation.Callin = callin;
+        return animation;
+    }
+
+    public static Animation SetCallcancel(this Animation animation, Action callcancel)
+    {
+        animation.Callcancel = callcancel;
+        return animation;
+    }
+
+    public static Animation SetCallback(this Animation animation, Action callback)
+    {
+        animation.Callback = callback;
+        return animation;
+    }
+
+    #endregion
+
+    public static Animation SetOpacity<T>(this T ve, StyleFloat opacity)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.opacity = ve.resolvedStyle.opacity,
+            setEndValue: () => ve.style.opacity = opacity,
+            propertyName: "opacity"
+        );
 
     #region Color
 
@@ -927,6 +923,14 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.scale = ve.resolvedStyle.scale,
             setEndValue: () => ve.style.scale = scale,
+            propertyName: "scale"
+        );
+    public static Animation SetScale<T>(this T ve, Vector3 scale)
+        where T : VisualElement, IPanelBindable, ITransitionable
+        => ve.AddAnimation
+        (
+            setInitialValue: () => ve.style.scale = ve.resolvedStyle.scale,
+            setEndValue: () => ve.style.scale = new Scale(scale),
             propertyName: "scale"
         );
 

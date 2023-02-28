@@ -154,16 +154,10 @@ namespace umi3d.commonScreen.menu
 
         protected virtual void Transition(VisualElement persistentVisual, bool revert)
         {
-            this.AddAnimation
-            (
-                persistentVisual,
-                () => style.opacity = 0,
-                () => style.opacity = 1,
-                "opacity",
-                0.5f,
-                revert: revert,
-                callback: revert ? RemoveFromHierarchy : null
-            );
+            this
+                .SetOpacity(!revert ? 1 : 0)
+                .WithAnimation(.5f)
+                .SetCallback(revert ? RemoveFromHierarchy : null);
         }
 
         #endregion

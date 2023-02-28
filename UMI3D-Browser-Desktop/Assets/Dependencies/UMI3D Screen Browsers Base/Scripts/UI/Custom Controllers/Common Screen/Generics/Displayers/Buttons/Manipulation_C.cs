@@ -92,33 +92,12 @@ namespace umi3d.commonScreen.Displayer
             };
             m_toggleValue.ValueChanged += e =>
             {
-                Body.AddAnimation
-                (
-                    this,
-                    () => Body.style.width = 150f,
-                    () => Body.style.width = 90f,
-                    "width",
-                    1f,
-                    revert: e.newValue
-                );
-                Body.AddAnimation
-                (
-                    this,
-                    () => Body.style.height = 150f,
-                    () => Body.style.height = 90f,
-                    "height",
-                    1f,
-                    revert: e.newValue
-                );
-
-                //Body
-                //    .WithAnimation(150f, AnimatorManager.EaseIn)
-                //    .SetWidth(90f)
-                //    .Delay(100)
-                //    .Callin()
-                //    .Callback()
-                //    .Callcancel()
-                //    .IsReverted(e.newValue);
+                Body
+                    .SetWidth(e.newValue ? 150f : 90f)
+                    .WithAnimation();
+                Body
+                    .SetHeight(e.newValue ? 150f : 90f)
+                    .WithAnimation();
             };
             LabelVisual.style.minWidth = 105f;
         }

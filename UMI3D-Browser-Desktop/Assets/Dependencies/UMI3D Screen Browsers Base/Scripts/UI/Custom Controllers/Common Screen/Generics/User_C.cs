@@ -176,16 +176,13 @@ namespace umi3d.commonScreen.Displayer
             User_Background.AddManipulator(m_manipulator);
             void AnimateInOutSlider(bool isRevert)
             {
-                User_Audio_Slider.AddAnimation
-                (
-                    this,
-                    () => User_Audio_Slider.style.height = Length.Percent(10),
-                    () => User_Audio_Slider.style.height = Length.Percent(100),
-                    "height",
-                    1f,
-                    callback: () => UserNameVisual.LocalisedText = isRevert ? m_userName : $"{m_volume.ToString("0.00")} %",
-                    revert: isRevert
-                );
+                User_Audio_Slider
+                    .SetHeight(!isRevert ? Length.Percent(100) : Length.Percent(10))
+                    .WithAnimation()
+                    .SetCallback(() =>
+                    {
+                        UserNameVisual.LocalisedText = isRevert ? m_userName : $"{m_volume.ToString("0.00")} %";
+                    });
             };
             void ComputeVolume(Vector2 localPosition)
             {

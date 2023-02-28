@@ -265,14 +265,9 @@ namespace umi3d.commonScreen.Displayer
             if (!m_options.Contains(newValue.DefaultText)) return;
 
             var index = m_options.IndexOf(newValue.DefaultText);
-            SelectedValueBox.AddAnimation
-            (
-                this,
-                () => SelectedValueBox.style.left = SelectedValueBox.style.left,
-                () => SelectedValueBox.style.left = Length.Percent(m_textWidth.value * index),
-                "left",
-                0.5f
-            );
+            SelectedValueBox
+                .SetLeft(Length.Percent(m_textWidth.value * index))
+                .WithAnimation(.5f);
         }
 
         protected void SetSeparator(VisualElement ve, int index)

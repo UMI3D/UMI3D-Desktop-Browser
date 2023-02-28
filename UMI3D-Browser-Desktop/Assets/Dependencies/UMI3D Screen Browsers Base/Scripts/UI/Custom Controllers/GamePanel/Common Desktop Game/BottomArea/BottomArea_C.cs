@@ -217,16 +217,10 @@ namespace umi3d.commonDesktop.game
                 EmoteWindow.schedule.Execute(() =>
                 {
                     EmoteWindow.style.visibility = StyleKeyword.Null;
-                    EmoteWindow.AddAnimation
-                    (
-                        this,
-                        () => EmoteWindow.style.width = 0,
-                        () => EmoteWindow.style.width = 400,
-                        "width",
-                        0.5f,
-                        revert: !value,
-                        callback: value ? null : EmoteWindow.RemoveFromHierarchy
-                    );
+                    EmoteWindow
+                        .SetWidth(value ? 400 : 0)
+                        .WithAnimation(.5f)
+                        .SetCallback(value ? null : EmoteWindow.RemoveFromHierarchy);
                 });
             }
         }
