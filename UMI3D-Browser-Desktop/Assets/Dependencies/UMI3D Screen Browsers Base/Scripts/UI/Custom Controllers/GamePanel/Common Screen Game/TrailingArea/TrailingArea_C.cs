@@ -230,7 +230,7 @@ namespace umi3d.commonScreen.game
         public ButtonArea_C ButtonsArea = new ButtonArea_C { name = "buttons-area" };
         public VisualElement CameraLayer = new VisualElement { name = "camera-layer" };
         public ExpandableDataCollection_C<VisualElement> WindowContainer = new ExpandableDataCollection_C<VisualElement> { name = "window-container" };
-        public ScrollableExpandableDataCollection_C<ManipulationMenuItem> ManipulationContainer = new ScrollableExpandableDataCollection_C<ManipulationMenuItem> { name = "manipulation-container" };
+        public ManipulationWindow_C ManipulationContainer = new ManipulationWindow_C { name = "manipulation-container" };
 
         public NotifAndUsersArea_C NotifAndUserArea;
         public EmoteWindow_C EmoteWindow;
@@ -315,34 +315,6 @@ namespace umi3d.commonScreen.game
             WindowContainer.AnimationTimeIn = 1f;
             WindowContainer.AnimationTimeOut = .5f;
 
-            ManipulationMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ManipulationMenu");
-            ManipulationContainer.Mode = ScrollViewMode.Horizontal;
-            ManipulationContainer.MakeItem = datum => new Manipulation_C();
-            ManipulationContainer.BindItem = (datum, element) =>
-            {
-                var manipulation = element as Manipulation_C;
-
-                manipulation.Dof = datum.dof.dofs;
-            };
-            ManipulationContainer.UnbindItem = (datum, element) =>
-            {
-
-            };
-            ManipulationMenu.menu.onAbstractMenuItemAdded.AddListener(menu =>
-            {
-                if (menu is not ManipulationMenuItem manip) return;
-
-                ManipulationContainer.AddDatum(manip);
-            });
-            ManipulationMenu.menu.OnAbstractMenuItemRemoved.AddListener(menu =>
-            {
-                if (menu is not ManipulationMenuItem manip) return;
-
-                ManipulationContainer.RemoveDatum(manip);
-            });
-            ManipulationContainer.AnimationTimeIn = 1f;
-            ManipulationContainer.AnimationTimeOut = .5f;
-
             WindowContainer.AddDatum(ManipulationContainer);
 
             Add(WindowContainer);
@@ -369,7 +341,7 @@ namespace umi3d.commonScreen.game
         #region Implementation
 
         public MenuAsset GlobalToolsMenu;
-        public MenuAsset ManipulationMenu;
+        
 
         protected bool m_displayObjectMenu;
         protected bool m_displayEmoteWindow;

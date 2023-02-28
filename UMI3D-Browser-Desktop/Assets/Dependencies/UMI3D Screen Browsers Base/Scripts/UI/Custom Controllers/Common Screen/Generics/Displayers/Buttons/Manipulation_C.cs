@@ -81,6 +81,10 @@ namespace umi3d.commonScreen.Displayer
         protected override void InitElement()
         {
             base.InitElement();
+
+            Body.SetWidth(90f);
+            Body.SetHeight(90f);
+
             m_dof.ValueChanged += e =>
             {
                 Icon.SwitchStyleclasses
@@ -98,6 +102,7 @@ namespace umi3d.commonScreen.Displayer
                 Body
                     .SetHeight(e.newValue ? 150f : 90f)
                     .WithAnimation();
+                this.SetOpacity(e.newValue ? 1 : .5f);
             };
             LabelVisual.style.minWidth = 105f;
         }

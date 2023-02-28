@@ -29,9 +29,10 @@
 }
 
 .trailing__area-manipulations {
-	height: 245px;
+	/*height: 245px;*/
 
-	background-color: black;
+
+	/*background-color: black;*/
 }
 
 .trailing__area-window__container {

@@ -213,6 +213,7 @@ public static class AnimatorManager
     private static IEnumerator WaitOneFrameAndSetEndValue(this VisualElement ve, Animation animation)
     {
         yield return null;
+        if (!Animations.ContainsKey(ve)) yield break;
 
         ve.UpdateTransitionList(Animations[ve]);
 
@@ -231,6 +232,9 @@ public static class AnimatorManager
         if (!Animations.TryGetValue(ve, out var animations)) return;
 
         var animation = animations.Find(_animation => _animation.PropertyName == property);
+
+        if (animation.InitialValueCoroutine != null) UIManager.StopCoroutine(animation.InitialValueCoroutine);
+        if (animation.EndValueCoroutine != null) UIManager.StopCoroutine(animation.EndValueCoroutine);
         animation.ScheduledCallback?.Resume();
     }
 
@@ -369,8 +373,6 @@ public static class AnimatorManager
         }
         else
         {
-            ve.UpdateTransitionList(Animations[ve]);
-
             if (!isAnimated)
             {
                 animation.Callin?.Invoke();
@@ -380,7 +382,11 @@ public static class AnimatorManager
 
                 animation.InitialValueCoroutine = UIManager.StartCoroutine(ve.PlayAnimation(animation, isNew));
             }
-            else setInitialValue?.Invoke();
+            else
+            {
+                ve.UpdateTransitionList(Animations[ve]);
+                setInitialValue?.Invoke();
+            }
         }
 
         animation.SetInitialValue = setInitialValue;
