@@ -63,9 +63,9 @@ public static class AnimatorManager
         /// </summary>
         public Action SetEndValue;
         /// <summary>
-        /// Check if current value is equal to end value.
+        /// Check if current value equals to end value.
         /// </summary>
-        public Func<bool> IsCurrentValueEqualsToEndValue;
+        public Func<bool> IsCurrentValueEqualToEndValue;
         /// <summary>
         /// Action raised just before playing this animation.
         /// </summary>
@@ -217,7 +217,7 @@ public static class AnimatorManager
         ve.UpdateTransitionList(Animations[ve]);
 
         // Set the end value.
-        if (!animation.IsCurrentValueEqualsToEndValue()) animation.SetEndValue?.Invoke();
+        if (!animation.IsCurrentValueEqualToEndValue()) animation.SetEndValue?.Invoke();
         else animation.ScheduledCallback?.Resume();
     }
 
@@ -326,11 +326,11 @@ public static class AnimatorManager
         this T ve,
         Action setInitialValue,
         Action setEndValue,
-        Func<bool> checkIfCurrentValueIsEndValue,
+        Func<bool> isCurrentValueEqualToEndValue,
         StylePropertyName propertyName
     ) where T : VisualElement, IPanelBindable, ITransitionable
     {
-        if (checkIfCurrentValueIsEndValue()) return new Animation();
+        if (isCurrentValueEqualToEndValue()) return new Animation();
 
         ve.InsertAnimationInAnimationsList(propertyName, out Animation animation, out bool isNew, out bool isAnimated);
 
@@ -385,7 +385,7 @@ public static class AnimatorManager
 
         animation.SetInitialValue = setInitialValue;
         animation.SetEndValue = setEndValue;
-        animation.IsCurrentValueEqualsToEndValue = checkIfCurrentValueIsEndValue;
+        animation.IsCurrentValueEqualToEndValue = isCurrentValueEqualToEndValue;
         animation.Callin = null;
         animation.Callcancel = null;
         animation.Callback = null;
@@ -395,6 +395,13 @@ public static class AnimatorManager
 
     #region Modificators
 
+    /// <summary>
+    /// Set the animation properties.
+    /// </summary>
+    /// <param name="animation"></param>
+    /// <param name="duration"></param>
+    /// <param name="easingMode"></param>
+    /// <returns></returns>
     public static Animation WithAnimation(this Animation animation, float duration = 1, EasingMode easingMode = EasingMode.EaseInOut)
     {
         animation.IsAnimating = true;
@@ -404,18 +411,36 @@ public static class AnimatorManager
         return animation;
     }
 
+    /// <summary>
+    /// Set the call in action.
+    /// </summary>
+    /// <param name="animation"></param>
+    /// <param name="callin"></param>
+    /// <returns></returns>
     public static Animation SetCallin(this Animation animation, Action callin)
     {
         animation.Callin = callin;
         return animation;
     }
 
+    /// <summary>
+    /// Set the call cancel action.
+    /// </summary>
+    /// <param name="animation"></param>
+    /// <param name="callcancel"></param>
+    /// <returns></returns>
     public static Animation SetCallcancel(this Animation animation, Action callcancel)
     {
         animation.Callcancel = callcancel;
         return animation;
     }
 
+    /// <summary>
+    /// Set the call back action.
+    /// </summary>
+    /// <param name="animation"></param>
+    /// <param name="callback"></param>
+    /// <returns></returns>
     public static Animation SetCallback(this Animation animation, Action callback)
     {
         animation.Callback = callback;
@@ -424,35 +449,56 @@ public static class AnimatorManager
 
     #endregion
 
+    /// <summary>
+    /// Set the opacity.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="opacity"></param>
+    /// <returns></returns>
     public static Animation SetOpacity<T>(this T ve, StyleFloat opacity)
         where T : VisualElement, IPanelBindable, ITransitionable
         => ve.AddAnimation
         (
             setInitialValue: () => ve.style.opacity = ve.resolvedStyle.opacity,
             setEndValue: () => ve.style.opacity = opacity,
-            checkIfCurrentValueIsEndValue: () => ve.style.opacity == opacity,
+            isCurrentValueEqualToEndValue: () => ve.style.opacity == opacity,
             propertyName: "opacity"
         );
 
     #region Color
 
+    /// <summary>
+    /// Set the background color.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="color"></param>
+    /// <returns></returns>
     public static Animation SetBackgroundColor<T>(this T ve, Color color)
         where T : VisualElement, IPanelBindable, ITransitionable
         => ve.AddAnimation
         (
             setInitialValue: () => ve.style.backgroundColor = ve.resolvedStyle.backgroundColor,
             setEndValue: () => ve.style.backgroundColor = color,
-            checkIfCurrentValueIsEndValue: () => ve.style.backgroundColor == color,
+            isCurrentValueEqualToEndValue: () => ve.style.backgroundColor == color,
             propertyName: "background-color"
         );
 
+    /// <summary>
+    /// Set the text color.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="color"></param>
+    /// <returns></returns>
     public static Animation SetColor<T>(this T ve, Color color)
         where T : VisualElement, IPanelBindable, ITransitionable
         => ve.AddAnimation
         (
             setInitialValue: () => ve.style.color = ve.resolvedStyle.color,
             setEndValue: () => ve.style.color = color,
-            checkIfCurrentValueIsEndValue: () => ve.style.color == color,
+            isCurrentValueEqualToEndValue: () => ve.style.color == color,
             propertyName: "color"
         );
 
@@ -460,6 +506,14 @@ public static class AnimatorManager
 
     #region Border color
 
+    /// <summary>
+    /// Set the border Color of <paramref name="border"/>.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="color"></param>
+    /// <param name="border"></param>
+    /// <returns></returns>
     public static AnimationSet SetBorderColor<T>(this T ve, Color color, BorderColorAndWidthEnum border)
         where T : VisualElement, IPanelBindable, ITransitionable
     {
@@ -496,7 +550,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderLeftColor = ve.resolvedStyle.borderLeftColor,
             setEndValue: () => ve.style.borderLeftColor = color,
-            checkIfCurrentValueIsEndValue: () => ve.style.borderLeftColor == color,
+            isCurrentValueEqualToEndValue: () => ve.style.borderLeftColor == color,
             propertyName: "border-left-color"
         );
 
@@ -506,7 +560,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderRightColor = ve.resolvedStyle.borderRightColor,
             setEndValue: () => ve.style.borderRightColor = color,
-            checkIfCurrentValueIsEndValue: () => ve.style.borderRightColor == color,
+            isCurrentValueEqualToEndValue: () => ve.style.borderRightColor == color,
             propertyName: "border-right-color"
         );
 
@@ -516,7 +570,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderTopColor = ve.resolvedStyle.borderTopColor,
             setEndValue: () => ve.style.borderTopColor = color,
-            checkIfCurrentValueIsEndValue: () => ve.style.borderTopColor == color,
+            isCurrentValueEqualToEndValue: () => ve.style.borderTopColor == color,
             propertyName: "border-top-color"
         );
 
@@ -526,7 +580,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderBottomColor = ve.resolvedStyle.borderBottomColor,
             setEndValue: () => ve.style.borderBottomColor = color,
-            checkIfCurrentValueIsEndValue: () => ve.style.borderBottomColor == color,
+            isCurrentValueEqualToEndValue: () => ve.style.borderBottomColor == color,
             propertyName: "border-bottom-color"
         );
 
@@ -534,6 +588,14 @@ public static class AnimatorManager
 
     #region Border width
 
+    /// <summary>
+    /// Set the border width of <paramref name="border"/>.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="length"></param>
+    /// <param name="border"></param>
+    /// <returns></returns>
     public static AnimationSet SetBorderWidth<T>(this T ve, StyleFloat length, BorderColorAndWidthEnum border)
         where T : VisualElement, IPanelBindable, ITransitionable
     {
@@ -570,7 +632,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderLeftWidth = ve.resolvedStyle.borderLeftWidth,
             setEndValue: () => ve.style.borderLeftWidth = length,
-            checkIfCurrentValueIsEndValue: () => ve.style.borderLeftWidth == length,
+            isCurrentValueEqualToEndValue: () => ve.style.borderLeftWidth == length,
             propertyName: "border-left-width"
         );
 
@@ -580,7 +642,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderRightWidth = ve.resolvedStyle.borderRightWidth,
             setEndValue: () => ve.style.borderRightWidth = length,
-            checkIfCurrentValueIsEndValue: () => ve.style.borderRightWidth == length,
+            isCurrentValueEqualToEndValue: () => ve.style.borderRightWidth == length,
             propertyName: "border-right-width"
         );
 
@@ -590,7 +652,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderTopWidth = ve.resolvedStyle.borderTopWidth,
             setEndValue: () => ve.style.borderTopWidth = length,
-            checkIfCurrentValueIsEndValue: () => ve.style.borderTopWidth == length,
+            isCurrentValueEqualToEndValue: () => ve.style.borderTopWidth == length,
             propertyName: "border-top-width"
         );
 
@@ -600,7 +662,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderBottomWidth = ve.resolvedStyle.borderBottomWidth,
             setEndValue: () => ve.style.borderBottomWidth = length,
-            checkIfCurrentValueIsEndValue: () => ve.style.borderBottomWidth == length,
+            isCurrentValueEqualToEndValue: () => ve.style.borderBottomWidth == length,
             propertyName: "border-bottom-width"
         );
 
@@ -608,6 +670,14 @@ public static class AnimatorManager
 
     #region Border radius
 
+    /// <summary>
+    /// Set the border radius of <paramref name="border"/>.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="length"></param>
+    /// <param name="border"></param>
+    /// <returns></returns>
     public static AnimationSet SetBorderRadius<T>(this T ve, StyleLength length, BorderRadiusEnum border)
         where T : VisualElement, IPanelBindable, ITransitionable
     {
@@ -644,7 +714,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderTopLeftRadius = ve.resolvedStyle.borderTopLeftRadius,
             setEndValue: () => ve.style.borderTopLeftRadius = length,
-            checkIfCurrentValueIsEndValue: () => ve.style.borderTopLeftRadius == length,
+            isCurrentValueEqualToEndValue: () => ve.style.borderTopLeftRadius == length,
             propertyName: "border-top-left-radius"
         );
 
@@ -654,7 +724,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderTopRightRadius = ve.resolvedStyle.borderTopRightRadius,
             setEndValue: () => ve.style.borderTopRightRadius = length,
-            checkIfCurrentValueIsEndValue: () => ve.style.borderTopRightRadius == length,
+            isCurrentValueEqualToEndValue: () => ve.style.borderTopRightRadius == length,
             propertyName: "border-top-right-radius"
         );
 
@@ -664,7 +734,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderBottomLeftRadius = ve.resolvedStyle.borderBottomLeftRadius,
             setEndValue: () => ve.style.borderBottomLeftRadius = length,
-            checkIfCurrentValueIsEndValue: () => ve.style.borderBottomLeftRadius == length,
+            isCurrentValueEqualToEndValue: () => ve.style.borderBottomLeftRadius == length,
             propertyName: "border-bottom-left-radius"
         );
 
@@ -674,7 +744,7 @@ public static class AnimatorManager
         (
             setInitialValue: () => ve.style.borderBottomRightRadius = ve.resolvedStyle.borderBottomRightRadius,
             setEndValue: () => ve.style.borderBottomRightRadius = length,
-            checkIfCurrentValueIsEndValue: () => ve.style.borderBottomRightRadius == length,
+            isCurrentValueEqualToEndValue: () => ve.style.borderBottomRightRadius == length,
             propertyName: "border-top-right-radius"
         );
 
@@ -682,6 +752,13 @@ public static class AnimatorManager
 
     #region Size
 
+    /// <summary>
+    /// Set the width.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="width"></param>
+    /// <returns></returns>
     public static Animation SetWidth<T>(this T ve, StyleLength width)
         where T : VisualElement, IPanelBindable, ITransitionable
         => ve.AddAnimation
@@ -698,10 +775,17 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.width = width,
-            checkIfCurrentValueIsEndValue: () => ve.style.width == width,
+            isCurrentValueEqualToEndValue: () => ve.style.width == width,
             propertyName: "width"
         );
 
+    /// <summary>
+    /// Set the height.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="height"></param>
+    /// <returns></returns>
     public static Animation SetHeight<T>(this T ve, StyleLength height)
         where T : VisualElement, IPanelBindable, ITransitionable
         => ve.AddAnimation
@@ -718,7 +802,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.height = height,
-            checkIfCurrentValueIsEndValue: () => ve.style.height == height,
+            isCurrentValueEqualToEndValue: () => ve.style.height == height,
             propertyName: "height"
         );
 
@@ -726,6 +810,13 @@ public static class AnimatorManager
 
     #region Position
 
+    /// <summary>
+    /// Set the left position.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="left"></param>
+    /// <returns></returns>
     public static Animation SetLeft<T>(this T ve, StyleLength left)
         where T : VisualElement, IPanelBindable, ITransitionable
         => ve.AddAnimation
@@ -742,10 +833,17 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.left = left,
-            checkIfCurrentValueIsEndValue: () => ve.style.left == left,
+            isCurrentValueEqualToEndValue: () => ve.style.left == left,
             propertyName: "left"
         );
 
+    /// <summary>
+    /// Set the right position.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="right"></param>
+    /// <returns></returns>
     public static Animation SetRight<T>(this T ve, StyleLength right)
         where T : VisualElement, IPanelBindable, ITransitionable
         => ve.AddAnimation
@@ -762,10 +860,17 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.right = right,
-            checkIfCurrentValueIsEndValue: () => ve.style.right == right,
+            isCurrentValueEqualToEndValue: () => ve.style.right == right,
             propertyName: "right"
         );
 
+    /// <summary>
+    /// Set the top position.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="top"></param>
+    /// <returns></returns>
     public static Animation SetTop<T>(this T ve, StyleLength top)
         where T : VisualElement, IPanelBindable, ITransitionable
         => ve.AddAnimation
@@ -782,10 +887,17 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.top = top,
-            checkIfCurrentValueIsEndValue: () => ve.style.top == top,
+            isCurrentValueEqualToEndValue: () => ve.style.top == top,
             propertyName: "top"
         );
 
+    /// <summary>
+    /// Set the bottom position.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="bottom"></param>
+    /// <returns></returns>
     public static Animation SetBottom<T>(this T ve, StyleLength bottom)
         where T : VisualElement, IPanelBindable, ITransitionable
         => ve.AddAnimation
@@ -802,7 +914,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.bottom = bottom,
-            checkIfCurrentValueIsEndValue: () => ve.style.bottom == bottom,
+            isCurrentValueEqualToEndValue: () => ve.style.bottom == bottom,
             propertyName: "bottom"
         );
 
@@ -810,11 +922,19 @@ public static class AnimatorManager
 
     #region Margin & Padding
 
-    public static AnimationSet SetMargin<T>(this T ve, StyleLength length, MarginAndPaddingEnum border)
+    /// <summary>
+    /// Set the margin of <paramref name="margin"/>.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="length"></param>
+    /// <param name="margin"></param>
+    /// <returns></returns>
+    public static AnimationSet SetMargin<T>(this T ve, StyleLength length, MarginAndPaddingEnum margin)
         where T : VisualElement, IPanelBindable, ITransitionable
     {
         var animations = new AnimationSet();
-        switch (border)
+        switch (margin)
         {
             case MarginAndPaddingEnum.All:
                 animations.Add(ve.SetMarginLeft(length));
@@ -856,7 +976,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.marginLeft = length,
-            checkIfCurrentValueIsEndValue: () => ve.style.marginLeft == length,
+            isCurrentValueEqualToEndValue: () => ve.style.marginLeft == length,
             propertyName: "margin-left"
         );
 
@@ -876,7 +996,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.marginRight = length,
-            checkIfCurrentValueIsEndValue: () => ve.style.marginRight == length,
+            isCurrentValueEqualToEndValue: () => ve.style.marginRight == length,
             propertyName: "margin-right"
         );
 
@@ -896,7 +1016,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.marginTop = length,
-            checkIfCurrentValueIsEndValue: () => ve.style.marginTop == length,
+            isCurrentValueEqualToEndValue: () => ve.style.marginTop == length,
             propertyName: "margin-top"
         );
 
@@ -916,7 +1036,7 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.marginBottom = length,
-            checkIfCurrentValueIsEndValue: () => ve.style.marginBottom == length,
+            isCurrentValueEqualToEndValue: () => ve.style.marginBottom == length,
             propertyName: "margin-bottom"
         );
 
@@ -924,6 +1044,13 @@ public static class AnimatorManager
 
     #region Rotate & Scale
 
+    /// <summary>
+    /// Set the rotate property.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="rotate"></param>
+    /// <returns></returns>
     public static Animation SetRotate<T>(this T ve, StyleRotate rotate)
         where T : VisualElement, IPanelBindable, ITransitionable
         => ve.AddAnimation
@@ -948,26 +1075,40 @@ public static class AnimatorManager
                 }
             },
             setEndValue: () => ve.style.rotate = rotate,
-            checkIfCurrentValueIsEndValue: () => ve.style.rotate == rotate,
+            isCurrentValueEqualToEndValue: () => ve.style.rotate == rotate,
             propertyName: "rotate"
         );
 
+    /// <summary>
+    /// Set the scale property.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="scale"></param>
+    /// <returns></returns>
     public static Animation SetScale<T>(this T ve, StyleScale scale)
         where T : VisualElement, IPanelBindable, ITransitionable
         => ve.AddAnimation
         (
             setInitialValue: () => ve.style.scale = ve.resolvedStyle.scale,
             setEndValue: () => ve.style.scale = scale,
-            checkIfCurrentValueIsEndValue: () => ve.style.scale == scale,
+            isCurrentValueEqualToEndValue: () => ve.style.scale == scale,
             propertyName: "scale"
         );
+    /// <summary>
+    /// Set the scale property.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="ve"></param>
+    /// <param name="scale"></param>
+    /// <returns></returns>
     public static Animation SetScale<T>(this T ve, Vector3 scale)
         where T : VisualElement, IPanelBindable, ITransitionable
         => ve.AddAnimation
         (
             setInitialValue: () => ve.style.scale = ve.resolvedStyle.scale,
             setEndValue: () => ve.style.scale = new Scale(scale),
-            checkIfCurrentValueIsEndValue: () => ve.style.scale == new Scale(scale),
+            isCurrentValueEqualToEndValue: () => ve.style.scale == new Scale(scale),
             propertyName: "scale"
         );
 

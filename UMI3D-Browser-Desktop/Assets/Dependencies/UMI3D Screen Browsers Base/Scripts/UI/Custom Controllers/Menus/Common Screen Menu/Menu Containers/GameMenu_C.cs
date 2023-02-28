@@ -135,17 +135,6 @@ namespace umi3d.commonScreen.menu
 
             this.SetOpacity(isTransitionIn ? 1 : 0)
                 .WithAnimation(.5f);
-
-            //this.AddAnimation
-            //(
-            //    persistentVisual,
-            //    () => style.translate = new Translate(Length.Percent(-50), Length.Percent(-50), 0),
-            //    () => style.translate = new Translate(Length.Percent(0), Length.Percent(0), 0),
-            //    "translate",
-            //    0.5f,
-            //    revert: revert,
-            //    callback: revert ? RemoveFromHierarchy : null
-            //);
         }
 
         #endregion

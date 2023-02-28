@@ -302,13 +302,11 @@ namespace umi3d.commonScreen.game
             {
                 if (!NotificationCenter_C.NotificationTitleStack.TryPeek(out var title))
                 {
-                    //AnimateShortInf(true);
                     ShortText = EnvironmentName;
                 }
                 else if (!HideNotification)
                 {
                     NotificationCenter_C.NotificationTitleStack.Pop();
-                    //AnimateShortInf(false);
                     ShortText = $"Notif: {title}";
                 }
             }).Every(3000);
@@ -352,22 +350,6 @@ namespace umi3d.commonScreen.game
         public static bool HideNotification;
 
         public MenuAsset GlobalToolsMenu;
-
-        protected void AnimateShortInf(bool isRevert)
-        {
-            if (isRevert != m_shortInfExpended) return;
-            //ShortInf.AddAnimation
-            //(
-            //    this,
-            //    () => ShortInf.style.width = Length.Percent(10),
-            //    () => ShortInf.style.width = Length.Percent(40),
-            //    "width",
-            //    0.5f,
-            //    delay: isRevert ? 0.5f : 0f,
-            //    revert: isRevert,
-            //    callback: () => m_shortInfExpended = !isRevert
-            //);
-        }
 
         protected void ToolsMenuContentChanged()
         {
