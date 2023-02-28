@@ -116,24 +116,24 @@ namespace umi3d.commonScreen.menu
         /// </summary>
         /// <param name="persistentVisual"></param>
         public void TransitionIn(VisualElement persistentVisual)
-        => Transition(persistentVisual, false);
+        => Transition(persistentVisual, true);
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="persistentVisual"></param>
         public void TransitionOut(VisualElement persistentVisual)
-            => Transition(persistentVisual, true);
+            => Transition(persistentVisual, false);
 
-        protected virtual void Transition(VisualElement persistentVisual, bool revert)
+        protected virtual void Transition(VisualElement persistentVisual, bool isTransitionIn)
         {
-            this.SetOpacity(revert ? 1 : 0)
+            this.SetOpacity(isTransitionIn ? 1 : 0)
                 .WithAnimation(.5f);
 
-            this.SetScale(revert ? new Scale(Vector3.one) : new Scale(new Vector3(0.1f, 0.1f, 1)))
+            this.SetScale(isTransitionIn ? Vector3.one : new Vector3(0.1f, 0.1f, 1))
                 .WithAnimation(.5f);
 
-            this.SetOpacity(revert ? 1 : 0)
+            this.SetOpacity(isTransitionIn ? 1 : 0)
                 .WithAnimation(.5f);
 
             //this.AddAnimation
