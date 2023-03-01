@@ -36,16 +36,6 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// </summary>
         public Transform manipulationCursor;
 
-        public Sprite X;
-        public Sprite Y;
-        public Sprite Z;
-        public Sprite XY;
-        public Sprite XZ;
-        public Sprite YZ;
-        public Sprite RX;
-        public Sprite RY;
-        public Sprite RZ;
-
         /// <summary>
         /// instanciate and init Manipulation according to dofGroups and Inputs
         /// </summary>
@@ -72,37 +62,9 @@ namespace umi3d.baseBrowser.inputs.interactions
             inputInstance.Init(controller);
             inputInstance.strength = strength;
             inputInstance.frameIndicator = frameIndicator;
-            inputInstance.Icon = FindSprite(dofGroup);
             inputInstance.manipulationCursor = manipulationCursor;
 
             return inputInstance;
-        }
-
-
-        Sprite FindSprite(DofGroupEnum dof)
-        {
-            switch (dof)
-            {
-                case DofGroupEnum.X:
-                    return X;
-                case DofGroupEnum.Y:
-                    return Y;
-                case DofGroupEnum.Z:
-                    return Z;
-                case DofGroupEnum.XY:
-                    return XY;
-                case DofGroupEnum.XZ:
-                    return XZ;
-                case DofGroupEnum.YZ:
-                    return YZ;
-                case DofGroupEnum.RX:
-                    return RX;
-                case DofGroupEnum.RY:
-                    return RY;
-                case DofGroupEnum.RZ:
-                    return RZ;
-            }
-            return null;
         }
     }
 }

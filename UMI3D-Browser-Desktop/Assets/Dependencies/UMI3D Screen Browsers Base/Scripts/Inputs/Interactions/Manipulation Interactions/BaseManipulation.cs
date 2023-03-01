@@ -28,7 +28,6 @@ namespace umi3d.baseBrowser.inputs.interactions
     {
         public ManipulationMenuItem menuItem;
 
-        public Sprite Icon;
         public Transform manipulationCursor;
         /// <summary>
         /// DofGroup of the Manipulation.
@@ -75,8 +74,16 @@ namespace umi3d.baseBrowser.inputs.interactions
 
             if (s_currentIndex < instances.Count && s_currentIndex >= 0) instances[s_currentIndex].Deactivate();
 
+            if (instances.Count == 0)
+            {
+                s_currentIndex = -1;
+                UnityEngine.Debug.Log($"switch group {i}, {s_currentIndex}");
+                return;
+            }
+
             if (i < 0) s_currentIndex = instances.Count - 1;
             else if (i >= instances.Count) s_currentIndex = 0;
+            else s_currentIndex = i;
 
             instances[s_currentIndex].Activate();
         }

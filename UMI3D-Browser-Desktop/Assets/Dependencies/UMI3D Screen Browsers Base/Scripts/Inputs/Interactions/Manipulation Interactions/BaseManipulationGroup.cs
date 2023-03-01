@@ -105,14 +105,18 @@ namespace umi3d.baseBrowser.inputs.interactions
 
             if (s_currentIndex < s_instances.Count && s_currentIndex >= 0) s_instances[s_currentIndex].Deactivate();
 
-            if (s_instances.Count == 1 && i != 1)
+            if (s_instances.Count == 0)
             {
                 s_currentIndex = -1;
+                UnityEngine.Debug.Log($"switch group {i}, {s_currentIndex}");
                 return;
             }
 
             if (i < 0) s_currentIndex = s_instances.Count - 1;
             else if (i >= s_instances.Count) s_currentIndex = 0;
+            else s_currentIndex = i;
+
+            UnityEngine.Debug.Log($"switch group {i}, {s_currentIndex}");
 
             s_instances[s_currentIndex].Activate();
         }

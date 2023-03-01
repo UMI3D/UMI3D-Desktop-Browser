@@ -443,6 +443,10 @@ namespace umi3d.commonScreen.Displayer
         protected virtual void TransitionCanceled(TransitionCancelEvent evt)
         {
             evt.StopPropagation();
+            foreach (var property in evt.stylePropertyNames)
+            {
+                this.TriggerAnimationCallcancel(property, evt);
+            }
         }
 
         #endregion
