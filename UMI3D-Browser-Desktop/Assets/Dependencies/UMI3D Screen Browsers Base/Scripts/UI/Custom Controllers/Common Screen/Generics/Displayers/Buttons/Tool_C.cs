@@ -94,8 +94,6 @@ namespace umi3d.commonScreen.Displayer
         protected ToolType m_toolType;
         protected bool m_isSelected;
 
-        public Tool_C() { }
-
         protected override void AttachStyleSheet()
         {
             base.AttachStyleSheet();
@@ -119,6 +117,8 @@ namespace umi3d.commonScreen.Displayer
         {
             base.SetProperties();
             Category = ElementCategory.Game;
+            Height = ElementSize.Medium;
+            Width = ElementSize.Medium;
             LabelAndInputDirection = ElementAlignment.Bottom;
             ToolType = ToolType.Unknown;
             IsSelected = false;

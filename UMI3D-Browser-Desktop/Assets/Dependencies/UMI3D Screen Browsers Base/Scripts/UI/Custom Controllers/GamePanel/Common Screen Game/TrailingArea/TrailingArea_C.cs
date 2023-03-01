@@ -315,7 +315,7 @@ namespace umi3d.commonScreen.game
             WindowContainer.AnimationTimeIn = 1f;
             WindowContainer.AnimationTimeOut = .5f;
 
-            WindowContainer.AddDatum(ManipulationContainer);
+            //WindowContainer.AddDatum(ManipulationContainer);
 
             Add(WindowContainer);
         }
@@ -333,9 +333,12 @@ namespace umi3d.commonScreen.game
             base.GeometryChanged(evt);
 
             if (evt.newRect.height.EqualsEpsilone(evt.oldRect.height, .5f)) return;
-            ObjectMenu.style.maxHeight = evt.newRect.height;
-            EmoteWindow.style.maxHeight = evt.newRect.height;
-            ToolsWindow.style.maxHeight = evt.newRect.height;
+            //ObjectMenu.style.maxHeight = evt.newRect.height;
+            //EmoteWindow.style.maxHeight = evt.newRect.height;
+            //ToolsWindow.style.maxHeight = evt.newRect.height;
+
+            // 14 is 7 * 2 paddings.
+            WindowContainer.ContentContainer.style.maxHeight = evt.newRect.height - 14f;
         }
 
         #region Implementation

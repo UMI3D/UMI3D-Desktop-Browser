@@ -144,6 +144,7 @@ namespace umi3d.commonScreen.Container
             canRaiseAnimation = false;
 
             bool isAnimationIn = newValue > oldValue;
+            ContentVieport.SetHeight(oldValue);
             ContentVieport
                 .SetHeight(newValue)
                 .WithAnimation(isAnimationIn ? AnimationTimeIn : AnimationTimeOut)
@@ -158,6 +159,7 @@ namespace umi3d.commonScreen.Container
             canRaiseAnimation = false;
 
             bool isAnimationIn = newValue > oldValue;
+            ContentVieport.SetWidth(oldValue);
             ContentVieport
                 .SetWidth(newValue)
                 .WithAnimation(isAnimationIn ? AnimationTimeIn : AnimationTimeOut)

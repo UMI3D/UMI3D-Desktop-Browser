@@ -12,22 +12,22 @@
     border-bottom-color: var(--color-border-game-container);
 }
 
-.sdc-horizontal .sdc-box {
+.sdc-horizontal.sdc-box {
 	flex-direction: column;
 }
 
-.sdc-horizontal .sdc-dragger {
+.sdc-horizontal.sdc-dragger {
 	width: 100%;
 	height: var(--size-dragger-sdc);
 
     margin-top: var(--margin_padding-container);
 }
 
-.sdc-vertical .sdc-box {
+.sdc-vertical.sdc-box {
 	flex-direction: row-reverse;
 }
 
-.sdc-vertical .sdc-dragger {
+.sdc-vertical.sdc-dragger {
 	height: 100%;
 	width: var(--size-dragger-sdc);
 

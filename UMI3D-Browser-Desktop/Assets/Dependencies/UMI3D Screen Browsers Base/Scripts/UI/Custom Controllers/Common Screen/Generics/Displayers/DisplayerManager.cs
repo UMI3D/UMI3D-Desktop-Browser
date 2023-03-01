@@ -81,6 +81,8 @@ public static class DisplayerManager
             BindDisplayer(toggleMenuItem, toggleDisplayer);
         else 
             throw new Exception($"Menu {menuItem.GetType()} and Item {item.GetType()} are not compatible or are not recognized");
+
+        item.style.flexGrow = 1;
     }
 
     /// <summary>

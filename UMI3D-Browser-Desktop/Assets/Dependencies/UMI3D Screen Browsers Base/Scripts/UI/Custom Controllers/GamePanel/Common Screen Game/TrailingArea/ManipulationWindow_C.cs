@@ -33,7 +33,7 @@ namespace umi3d.commonScreen.game
             base.InitElement();
             ManipulationMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ManipulationMenu");
 
-            this.SetHeight(245f);
+            this.SetHeight(285f);
 
             SEDC.Mode = ScrollViewMode.Horizontal;
             SEDC.MakeItem = datum =>
@@ -94,14 +94,10 @@ namespace umi3d.commonScreen.game
 
             Manipulations.ForEach(manipulation =>
             {
-                if (manipulation == manip)
-                {
-                    UnityEngine.Debug.Log($"test");
-                    manip.IsToggle = false;
-                    return;
-                }
+                if (manipulation == manip) return;
 
-                manip.IsToggle = true;
+                manip.IsToggle = false;
+                manipulation.IsToggle = true;
                 manipulation.ToggleValue = false;
             });
         }
