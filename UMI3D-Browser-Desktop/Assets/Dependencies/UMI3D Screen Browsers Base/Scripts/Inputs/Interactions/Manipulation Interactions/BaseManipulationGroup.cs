@@ -135,21 +135,12 @@ namespace umi3d.baseBrowser.inputs.interactions
         {
             IsActive = true;
             BaseManipulation.SelectFirst();
-
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"displayer");
-            //foreach (BaseManipulation mainipulation in s_manipulationsByGroup[this])
-            //    mainipulation.DisplayDisplayer(true);
         }
         protected void Deactivate()
         {
             IsActive = false;
             
-            foreach (BaseManipulation input in s_manipulationsByGroup[this])
-            {
-                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"displayer");
-                //input.DisplayDisplayer(false);
-                input.Deactivate();
-            }
+            foreach (BaseManipulation input in s_manipulationsByGroup[this]) input.Deactivate();
         }
 
         protected void Select() => SwicthGroup(s_instances.FindIndex(a => a == this));
@@ -190,7 +181,7 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
-            UnityEngine.Debug.Log("<color=blue>TODO: </color>" + $"associate");
+            UnityEngine.Debug.Log("<color=blue>TODO: </color>" + $"associate groupe");
             if (!IsAvailableFor(manipulation)) throw new System.Exception($"This input is not available for {manipulation}");
 
             if (!IsCompatibleWith(manipulation)) throw new System.Exception("Trying to associate an uncompatible interaction !");
@@ -237,7 +228,7 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public override void Dissociate()
         {
-            UnityEngine.Debug.Log("<color=orange>TODO: </color>" + $"dissociate, {associatedInteraction == null}");
+            UnityEngine.Debug.Log("<color=orange>TODO: </color>" + $"dissociate groupe, {associatedInteraction == null}");
             if (IsActive) PreviousGroup();
 
             var manipulations = s_manipulationsByGroup[this];

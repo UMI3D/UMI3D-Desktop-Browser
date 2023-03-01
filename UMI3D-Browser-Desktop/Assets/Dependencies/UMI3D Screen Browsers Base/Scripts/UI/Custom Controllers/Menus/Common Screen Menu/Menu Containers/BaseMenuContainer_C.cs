@@ -219,25 +219,17 @@ namespace umi3d.commonScreen.menu
 
                 foregroundScreen.schedule.Execute(() =>
                 {
-                    backgroundScreen.AddAnimation
-                    (
-                        this,
-                        () => backgroundScreen.style.left = 0f,
-                        () => backgroundScreen.style.left = -50f,
-                        "left",
-                        AnimatorManager.NavigationScreenDuration,
-                        callback: backgroundScreen.RemoveFromHierarchy
-                    );
+                    backgroundScreen.SetLeft(0f);
+                    backgroundScreen
+                        .SetLeft(-50f)
+                        .WithAnimation(AnimatorManager.NavigationScreenDuration)
+                        .SetCallback(backgroundScreen.RemoveFromHierarchy);
 
                     foregroundScreen.style.visibility = Visibility.Visible;
-                    foregroundScreen.AddAnimation
-                    (
-                        this,
-                        () => foregroundScreen.style.left = foregroundScreen.resolvedStyle.width,
-                        () => foregroundScreen.style.left = 0f,
-                        "left",
-                        AnimatorManager.NavigationScreenDuration
-                    );
+                    foregroundScreen.SetLeft(foregroundScreen.resolvedStyle.width);
+                    foregroundScreen
+                        .SetLeft(0)
+                        .WithAnimation(AnimatorManager.NavigationScreenDuration);
                 });
 
                 m_currentScreen = value;
@@ -267,28 +259,20 @@ namespace umi3d.commonScreen.menu
 
             backgroungScreen.schedule.Execute(() =>
             {
-                backgroungScreen.AddAnimation
-                (
-                    this,
-                    () => backgroungScreen.style.left = -50f,
-                    () => backgroungScreen.style.left = 0f,
-                    "left",
-                    AnimatorManager.NavigationScreenDuration
-                );
+                backgroungScreen.SetLeft(-50f);
+                backgroungScreen
+                    .SetLeft(0f)
+                    .WithAnimation(AnimatorManager.NavigationScreenDuration);
 
-                foregroundScreen.AddAnimation
-                (
-                    this,
-                    () => foregroundScreen.style.left = 0,
-                    () => foregroundScreen.style.left = foregroundScreen.resolvedStyle.width,
-                    "left",
-                    AnimatorManager.NavigationScreenDuration,
-                    callback: () =>
+                foregroundScreen.SetLeft(0f);
+                foregroundScreen
+                    .SetLeft(foregroundScreen.resolvedStyle.width)
+                    .WithAnimation(AnimatorManager.NavigationScreenDuration)
+                    .SetCallback(() =>
                     {
                         foregroundScreen.BackText = null;
                         foregroundScreen.RemoveFromHierarchy();
-                    }
-                );
+                    });
             });
 
             return menuScreen;

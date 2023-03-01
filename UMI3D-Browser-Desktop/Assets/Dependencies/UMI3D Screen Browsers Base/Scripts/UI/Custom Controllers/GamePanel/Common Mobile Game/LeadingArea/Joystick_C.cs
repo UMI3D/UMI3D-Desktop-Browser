@@ -97,14 +97,9 @@ namespace umi3d.commonMobile.game
                     this.SetEnabled(false);
                     Foreground.style.left = StyleKeyword.Null;
                     Foreground.style.bottom = StyleKeyword.Null;
-                    this.AddAnimation
-                    (
-                        this,
-                        () => style.scale = new Scale(Vector3.one),
-                        () => style.scale = new Scale(new Vector3(0.5f, 0.5f, 1)),
-                        "scale",
-                        0.5f
-                    );
+                    this
+                        .SetScale(new Vector3(0.5f, 0.5f, 1))
+                        .WithAnimation(.5f);
                 }
                 else
                 {

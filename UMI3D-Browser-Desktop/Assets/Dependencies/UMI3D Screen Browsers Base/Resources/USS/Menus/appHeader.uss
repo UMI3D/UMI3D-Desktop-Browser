@@ -14,7 +14,7 @@
 	flex-grow: 1;
 }
 
-.app__header-window__button.button-small.button-square > .button__body {
+.app__header-window__button.button-small.button-square > .button-body {
 	width: 70px;
 	height: 40px;
 }

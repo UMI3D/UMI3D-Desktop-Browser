@@ -116,47 +116,25 @@ namespace umi3d.commonScreen.menu
         /// </summary>
         /// <param name="persistentVisual"></param>
         public void TransitionIn(VisualElement persistentVisual)
-        => Transition(persistentVisual, false);
+        => Transition(persistentVisual, true);
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="persistentVisual"></param>
         public void TransitionOut(VisualElement persistentVisual)
-            => Transition(persistentVisual, true);
+            => Transition(persistentVisual, false);
 
-        protected virtual void Transition(VisualElement persistentVisual, bool revert)
+        protected virtual void Transition(VisualElement persistentVisual, bool isTransitionIn)
         {
-            this.AddAnimation
-            (
-                persistentVisual,
-                () => style.opacity = 0,
-                () => style.opacity = 1,
-                "opacity",
-                0.5f,
-                revert: revert
-            );
+            this.SetOpacity(isTransitionIn ? 1 : 0)
+                .WithAnimation(.5f);
 
-            this.AddAnimation
-            (
-                persistentVisual,
-                () => style.scale = new Scale(new Vector3(0.1f, 0.1f, 1)),
-                () => style.scale = new Scale(Vector3.one),
-                "scale",
-                0.5f,
-                revert: revert
-            );
+            this.SetScale(isTransitionIn ? Vector3.one : new Vector3(0.1f, 0.1f, 1))
+                .WithAnimation(.5f);
 
-            this.AddAnimation
-            (
-                persistentVisual,
-                () => style.translate = new Translate(Length.Percent(-50), Length.Percent(-50), 0),
-                () => style.translate = new Translate(Length.Percent(0), Length.Percent(0), 0),
-                "translate",
-                0.5f,
-                revert: revert,
-                callback: revert ? RemoveFromHierarchy : null
-            );
+            this.SetOpacity(isTransitionIn ? 1 : 0)
+                .WithAnimation(.5f);
         }
 
         #endregion

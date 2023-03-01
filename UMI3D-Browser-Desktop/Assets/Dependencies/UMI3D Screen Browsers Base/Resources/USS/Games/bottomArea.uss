@@ -15,11 +15,11 @@
 	right: var(--size-margin-and-padding-game);
 }
 
-.bottom__area-avatar > .button__body,
-.bottom__area-emote > .button__body,
-.bottom__area-mic > .button__body,
-.bottom__area-sound > .button__body,
-.bottom__area-notif__users > .button__body {
+.bottom__area-avatar > .button-body,
+.bottom__area-emote > .button-body,
+.bottom__area-mic > .button-body,
+.bottom__area-sound > .button-body,
+.bottom__area-notif__users > .button-body {
 	width: 52px;
 	margin-left: 0;
 	margin-right: 0;

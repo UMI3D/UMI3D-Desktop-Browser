@@ -35,12 +35,12 @@
     background-color: var(--color-border-game-container);
 }
 
-.scrollable__form.emote__window .button__label {
+.scrollable__form.emote__window .button-label {
 	min-width: auto;
 	flex-grow: 1;
 }
 
-.scrollable__form.emote__window .button__body {
+.scrollable__form.emote__window .button-body {
 	flex-grow: 0;
 }
 
@@ -53,10 +53,7 @@
     width: 99%;
 }
 
-/*.scrollable__form.tools__window .edc > * {
-    background-color: var(--background-color-transparent-game);
-}*/
-
+/* tools__window */
 .tools__window .tools__window-inputs__box {
     margin-left: 20%;
 
@@ -71,4 +68,9 @@
     border-right-width: var(--border-width-displayer);
     border-top-width: var(--border-width-displayer);
     border-bottom-width: var(--border-width-displayer);
+
+    width: 80%;
+}
+.tools__window-edc {
+    width: 100%;
 }
