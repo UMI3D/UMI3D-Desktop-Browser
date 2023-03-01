@@ -92,11 +92,11 @@ namespace umi3d.commonScreen.game
         {
             if (!evt.newValue) return;
 
+            manip.IsToggle = false;
             Manipulations.ForEach(manipulation =>
             {
-                if (manipulation == manip) return;
+                if (manipulation.Dof == manip.Dof) return;
 
-                manip.IsToggle = false;
                 manipulation.IsToggle = true;
                 manipulation.ToggleValue = false;
             });

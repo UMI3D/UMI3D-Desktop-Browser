@@ -309,13 +309,18 @@ namespace umi3d.commonScreen.game
             ToolsItemsWindow.Category = ElementCategory.Game;
 
             WindowContainer.MakeItem = datum => datum;
-            WindowContainer.BindItem = (datum, element) => { };
-            WindowContainer.UnbindItem = (datum, element) => { };
+            WindowContainer.BindItem = (datum, element) => UpdateWindowsHeight(this.resolvedStyle.height);
+            WindowContainer.UnbindItem = (datum, element) => UpdateWindowsHeight(this.resolvedStyle.height);
             WindowContainer.FindItem = param => param.Item1.name == param.Item2.name;
             WindowContainer.AnimationTimeIn = 1f;
             WindowContainer.AnimationTimeOut = .5f;
 
-            //WindowContainer.AddDatum(ManipulationContainer);
+            
+            ManipulationContainer.ManipulationMenu.menu.onContentChange.AddListener(() =>
+            {
+                if (ManipulationContainer.ManipulationMenu.menu.Count == 1) WindowContainer.AddDatum(ManipulationContainer);
+                else if (ManipulationContainer.ManipulationMenu.menu.Count == 0) WindowContainer.RemoveDatum(ManipulationContainer);
+            });
 
             Add(WindowContainer);
         }
@@ -333,12 +338,8 @@ namespace umi3d.commonScreen.game
             base.GeometryChanged(evt);
 
             if (evt.newRect.height.EqualsEpsilone(evt.oldRect.height, .5f)) return;
-            //ObjectMenu.style.maxHeight = evt.newRect.height;
-            //EmoteWindow.style.maxHeight = evt.newRect.height;
-            //ToolsWindow.style.maxHeight = evt.newRect.height;
 
-            // 14 is 7 * 2 paddings.
-            WindowContainer.ContentContainer.style.maxHeight = evt.newRect.height - 14f;
+            UpdateWindowsHeight(evt.newRect.height);
         }
 
         #region Implementation
@@ -415,6 +416,19 @@ namespace umi3d.commonScreen.game
                 if (value) WindowContainer.AddDatum(ToolsItemsWindow);
                 else WindowContainer.RemoveDatum(ToolsItemsWindow);
             }
+        }
+
+        protected virtual void UpdateWindowsHeight(float newValue)
+        {
+            // 14 is 7 * 2 paddings.
+            var maxHeight = newValue - 14f;
+            var nb = WindowContainer.Data.Count == 0 ? 1 : WindowContainer.Data.Count;
+            var padding = 7f * (nb - 1);
+
+            WindowContainer.ContentContainer.style.maxHeight = maxHeight;
+            ObjectMenu.style.maxHeight = maxHeight / nb - padding;
+            EmoteWindow.style.maxHeight = maxHeight / nb - padding;
+            ToolsWindow.style.maxHeight = maxHeight / nb - padding;
         }
 
         #endregion

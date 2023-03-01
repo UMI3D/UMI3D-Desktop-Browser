@@ -28,10 +28,6 @@ namespace umi3d.baseBrowser.inputs.interactions
     {
         public ManipulationMenuItem menuItem;
 
-
-
-
-
         public Sprite Icon;
         public Transform manipulationCursor;
         /// <summary>
@@ -143,7 +139,7 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
-            UnityEngine.Debug.Log("<color=yellow>TODO: </color>" + $"");
+            UnityEngine.Debug.Log("<color=yellow>TODO: </color>" + $"associate manip");
             if (associatedInteraction != null)
                 throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
 
@@ -196,9 +192,6 @@ namespace umi3d.baseBrowser.inputs.interactions
             => base.IsAvailable() && activationButton.IsAvailable();
 
         public bool IsCompatibleWith(DofGroupEnum dofGroup) => dofGroup == DofGroup;
-
-
-
 
         /// <summary>
         /// Launched coroutine for network message sending (if any).
