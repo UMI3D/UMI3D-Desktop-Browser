@@ -66,6 +66,16 @@ namespace umi3d.commonScreen.Displayer
                 name = "type",
                 defaultValue = ButtonType.Default
             };
+            protected UxmlBoolAttributeDescription m_isToggle = new UxmlBoolAttributeDescription
+            {
+                name = "is-toggle",
+                defaultValue = false
+            };
+            protected UxmlBoolAttributeDescription m_toogleValue = new UxmlBoolAttributeDescription
+            {
+                name = "toggle-value",
+                defaultValue = false
+            };
             
             
             protected UxmlEnumAttributeDescription<ElementAlignment> m_iconAlignment = new UxmlEnumAttributeDescription<ElementAlignment>
@@ -99,7 +109,8 @@ namespace umi3d.commonScreen.Displayer
 
                 custom.Shape = m_shape.GetValueFromBag(bag, cc);
                 custom.Type = m_type.GetValueFromBag(bag, cc);
-                
+                custom.IsToggle = m_isToggle.GetValueFromBag(bag, cc);
+                custom.ToggleValue = m_toogleValue.GetValueFromBag(bag, cc);
                 
                 custom.IconAlignment = m_iconAlignment.GetValueFromBag(bag, cc);
                 custom.LocaliseText = m_localiseText.GetValueFromBag(bag, cc);
@@ -179,23 +190,37 @@ namespace umi3d.commonScreen.Displayer
 
         #region Button properties
 
-        public virtual ButtonShape Shape
+        public ButtonShape Shape
         {
             get => m_shape;
             set => m_shape.Value = value;
         }
         protected readonly Source<ButtonShape> m_shape = ButtonShape.Square;
 
-        public virtual ButtonType Type
+        public ButtonType Type
         {
             get => m_type;
-            set
-            {
-                RemoveFromClassList(USSCustomClassType(m_type));
-                AddToClassList(USSCustomClassType(value));
-                m_type = value;
-            }
+            set => m_type.Value = value;
         }
+        protected readonly Source<ButtonType> m_type = ButtonType.Default;
+
+        public bool IsToggle
+        {
+            get => m_isToggle;
+            set => m_isToggle.Value = value;
+        }
+        protected readonly Source<bool> m_isToggle = false;
+        public bool ToggleValue
+        {
+            get => m_toggleValue;
+            set => m_toggleValue.Value = value;
+        }
+        protected readonly Source<bool> m_toggleValue = false;
+        /// <summary>
+        /// Bind <see cref="ToggleValue"/> source data.
+        /// </summary>
+        /// <param name="toggleValue"></param>
+        public void BindSourceToggleValue(out Derive<bool> toggleValue) => toggleValue = m_toggleValue;
 
         #endregion
 
@@ -263,13 +288,7 @@ namespace umi3d.commonScreen.Displayer
         public Visual_C Front = new Visual_C { name = "front" };
 
         protected ElementCategory m_category;
-        
-        
-        protected ButtonType m_type;
-        
         protected ElementAlignment m_iconAlignment;
-
-        
 
         public Button_C()
         {
@@ -398,6 +417,18 @@ namespace umi3d.commonScreen.Displayer
                     USSCustomClassShape(e.newValue)
                 );
             };
+            m_type.ValueChanged += e =>
+            {
+                this.SwitchStyleclasses
+                (
+                    USSCustomClassType(e.previousValue),
+                    USSCustomClassType(e.newValue)
+                );
+            };
+            clicked += () =>
+            {
+                if (IsToggle) ToggleValue = !ToggleValue;
+            };
 
             Add(Body);
             Body.Add(Container);
@@ -419,11 +450,7 @@ namespace umi3d.commonScreen.Displayer
         protected virtual void SetProperties()
         {
             Category = ElementCategory.Menu;
-            Height = ElementSize.Medium;
-            Shape = ButtonShape.Square;
-            Type = ButtonType.Default;
             LocalisedLabel = null;
-            LabelAndInputDirection = ElementAlignment.Leading;
             IconAlignment = ElementAlignment.Center;
             LocaliseText = null;
         }

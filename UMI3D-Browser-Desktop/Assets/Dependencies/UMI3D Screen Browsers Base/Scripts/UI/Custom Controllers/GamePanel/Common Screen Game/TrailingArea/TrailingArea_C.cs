@@ -134,16 +134,10 @@ namespace umi3d.commonScreen.game
                 NotifAndUserArea.schedule.Execute(() =>
                 {
                     NotifAndUserArea.style.visibility = StyleKeyword.Null;
-                    NotifAndUserArea.AddAnimation
-                    (
-                        this,
-                        () => NotifAndUserArea.style.width = Length.Percent(0),
-                        () => NotifAndUserArea.style.width = Length.Percent(60),
-                        "width",
-                        0.5f,
-                        revert: !value,
-                        callback: value ? null : NotifAndUserArea.RemoveIfIsInHierarchy
-                    );
+                    NotifAndUserArea
+                        .SetWidth(value ? Length.Percent(60) : Length.Percent(0))
+                        .WithAnimation(.5f)
+                        .SetCallback(value ? null : NotifAndUserArea.RemoveIfIsInHierarchy);
                 });
             }
         }
@@ -226,6 +220,7 @@ namespace umi3d.commonScreen.game
         public virtual string USSCustomClassObjectMenu => $"{UssCustomClass_Emc}-object__menu";
         public virtual string USSCustomClassEmoteWindow => $"{UssCustomClass_Emc}-emote__window";
         public virtual string USSCustomClassToolsWindow => $"{UssCustomClass_Emc}-tools__window";
+        public virtual string USSCustomClassManipulations => $"{UssCustomClass_Emc}-manipulations";
         public virtual string USSCustomClassCameraLayer => $"{UssCustomClass_Emc}-camera__layer";
         public virtual string USSCustomClassWindowContainer => $"{UssCustomClass_Emc}-window__container";
 
@@ -235,7 +230,7 @@ namespace umi3d.commonScreen.game
         public ButtonArea_C ButtonsArea = new ButtonArea_C { name = "buttons-area" };
         public VisualElement CameraLayer = new VisualElement { name = "camera-layer" };
         public ExpandableDataCollection_C<VisualElement> WindowContainer = new ExpandableDataCollection_C<VisualElement> { name = "window-container" };
-        public ScrollableExpandableDataCollection_C<ManipulationMenuItem> ManipulationContainer = new ScrollableExpandableDataCollection_C<ManipulationMenuItem> { name = "manipulation-container" };
+        public ManipulationWindow_C ManipulationContainer = new ManipulationWindow_C { name = "manipulation-container" };
 
         public NotifAndUsersArea_C NotifAndUserArea;
         public EmoteWindow_C EmoteWindow;
@@ -280,6 +275,7 @@ namespace umi3d.commonScreen.game
             ObjectMenu.AddToClassList(USSCustomClassObjectMenu);
             EmoteWindow.AddToClassList(USSCustomClassEmoteWindow);
             ToolsWindow.AddToClassList(USSCustomClassToolsWindow);
+            ManipulationContainer.AddToClassList(USSCustomClassManipulations);
             CameraLayer.AddToClassList(USSCustomClassCameraLayer);
             WindowContainer.AddToClassList(USSCustomClassWindowContainer);
         }
@@ -313,39 +309,18 @@ namespace umi3d.commonScreen.game
             ToolsItemsWindow.Category = ElementCategory.Game;
 
             WindowContainer.MakeItem = datum => datum;
-            WindowContainer.BindItem = (datum, element) => { };
-            WindowContainer.UnbindItem = (datum, element) => { };
+            WindowContainer.BindItem = (datum, element) => UpdateWindowsHeight(this.resolvedStyle.height);
+            WindowContainer.UnbindItem = (datum, element) => UpdateWindowsHeight(this.resolvedStyle.height);
             WindowContainer.FindItem = param => param.Item1.name == param.Item2.name;
             WindowContainer.AnimationTimeIn = 1f;
             WindowContainer.AnimationTimeOut = .5f;
 
-            ManipulationMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ManipulationMenu");
-            ManipulationContainer.Mode = ScrollViewMode.Horizontal;
-            ManipulationContainer.MakeItem = datum => new Button_C();
-            ManipulationContainer.BindItem = (datum, element) =>
+            
+            ManipulationContainer.ManipulationMenu.menu.onContentChange.AddListener(() =>
             {
-                var button = element as Button_C;
-                
-                button.LocaliseText = datum.dof.dofs.ToString();
-            };
-            ManipulationContainer.UnbindItem = (datum, element) =>
-            {
-
-            };
-            ManipulationMenu.menu.onAbstractMenuItemAdded.AddListener(menu =>
-            {
-                if (menu is not ManipulationMenuItem manip) return;
-
-                ManipulationContainer.AddDatum(manip);
+                if (ManipulationContainer.ManipulationMenu.menu.Count == 1) WindowContainer.AddDatum(ManipulationContainer);
+                else if (ManipulationContainer.ManipulationMenu.menu.Count == 0) WindowContainer.RemoveDatum(ManipulationContainer);
             });
-            ManipulationMenu.menu.OnAbstractMenuItemRemoved.AddListener(menu =>
-            {
-                if (menu is not ManipulationMenuItem manip) return;
-
-                ManipulationContainer.RemoveDatum(manip);
-            });
-
-            WindowContainer.AddDatum(ManipulationContainer);
 
             Add(WindowContainer);
         }
@@ -363,15 +338,14 @@ namespace umi3d.commonScreen.game
             base.GeometryChanged(evt);
 
             if (evt.newRect.height.EqualsEpsilone(evt.oldRect.height, .5f)) return;
-            ObjectMenu.style.maxHeight = evt.newRect.height;
-            EmoteWindow.style.maxHeight = evt.newRect.height;
-            ToolsWindow.style.maxHeight = evt.newRect.height;
+
+            UpdateWindowsHeight(evt.newRect.height);
         }
 
         #region Implementation
 
         public MenuAsset GlobalToolsMenu;
-        public MenuAsset ManipulationMenu;
+        
 
         protected bool m_displayObjectMenu;
         protected bool m_displayEmoteWindow;
@@ -442,6 +416,19 @@ namespace umi3d.commonScreen.game
                 if (value) WindowContainer.AddDatum(ToolsItemsWindow);
                 else WindowContainer.RemoveDatum(ToolsItemsWindow);
             }
+        }
+
+        protected virtual void UpdateWindowsHeight(float newValue)
+        {
+            // 14 is 7 * 2 paddings.
+            var maxHeight = newValue - 14f;
+            var nb = WindowContainer.Data.Count == 0 ? 1 : WindowContainer.Data.Count;
+            var padding = 7f * (nb - 1);
+
+            WindowContainer.ContentContainer.style.maxHeight = maxHeight;
+            ObjectMenu.style.maxHeight = maxHeight / nb - padding;
+            EmoteWindow.style.maxHeight = maxHeight / nb - padding;
+            ToolsWindow.style.maxHeight = maxHeight / nb - padding;
         }
 
         #endregion

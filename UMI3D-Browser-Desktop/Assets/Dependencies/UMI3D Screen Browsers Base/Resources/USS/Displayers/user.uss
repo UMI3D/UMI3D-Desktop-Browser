@@ -47,7 +47,7 @@
 	background-color: var(--color-border-menu-displayer);
 }
 
-.user__name.text.unity-label {
+.user__name.text {
 	position: absolute;
 	left: 0;
 	right: 0;

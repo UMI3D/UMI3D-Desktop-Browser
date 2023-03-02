@@ -3,7 +3,7 @@
 	margin-bottom: var(--margin_padding-menu);
 }
 
-.setting-controller-controls-section.unity-label.text {
+.setting-controller-controls-section.text {
 	margin-top: var(--margin_padding-menu);
 }
 

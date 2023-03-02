@@ -25,6 +25,7 @@ namespace umi3d.commonScreen.game
     public class ToolsWindow_C : FormSDC_C<AbstractMenuItem>
     {
         public virtual string USSCustomClassToolsWindow => "tools__window";
+        public virtual string USSCustomClassEdc => $"{USSCustomClassToolsWindow}-edc";
         public virtual string USSCustomClassInputsBox => $"{USSCustomClassToolsWindow}-inputs__box";
 
         protected override void AttachUssClass()
@@ -99,6 +100,7 @@ namespace umi3d.commonScreen.game
             /// 
             /// The first item is alwayse a Toolbox. The last item is always an EDC.
             ExpandableDataCollection_C<AbstractMenuItem> edc = item as ExpandableDataCollection_C<AbstractMenuItem>;
+            edc.AddToClassList(USSCustomClassEdc);
 
             edc.MakeItem = edcDatum =>
             {

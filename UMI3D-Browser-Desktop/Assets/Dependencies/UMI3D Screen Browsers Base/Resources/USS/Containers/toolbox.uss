@@ -2,7 +2,7 @@
     height: 100%;
 }
 
-.toolbox-name.unity-label.text {
+.toolbox-name.text {
     -unity-text-align: middle-center;
 
     flex-direction: row;
@@ -28,15 +28,15 @@
     right: -15;
 }
 
-.toolbox-pinned.button-game .button__body,
-.toolbox-edit.button-game .button__body {
+.toolbox-pinned.button-game .button-body,
+.toolbox-edit.button-game .button-body {
     border-left-color: transparent;
     border-right-color: transparent;
     border-top-color: transparent;
     border-bottom-color: transparent;
 }
 
-.toolbox-pinned .button__content-container {
+.toolbox-pinned .button-content__container {
     background-image: var(--image-pin);
 }
 

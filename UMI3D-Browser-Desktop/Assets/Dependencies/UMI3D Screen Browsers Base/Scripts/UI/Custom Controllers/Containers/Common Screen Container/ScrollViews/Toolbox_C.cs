@@ -243,12 +243,16 @@ namespace umi3d.commonScreen.Container
                 else if (tool.ToolType == ToolType.Toolbox) ToolboxClicked?.Invoke(false, ToolboxMenu, datum);
             };
 
+            ToolboxNameText.TextAlignment = ElementAlignment.Center;
+
             PinnedButton.Category = ElementCategory.Game;
             PinnedButton.Height = ElementSize.Small;
+            PinnedButton.Width = ElementSize.Small;
             PinnedButton.Shape = ButtonShape.Round;
 
             EditButton.Category = ElementCategory.Game;
             EditButton.Height = ElementSize.Small;
+            EditButton.Width = ElementSize.Small;
             EditButton.Shape = ButtonShape.Round;
             EditButton.LocaliseText = "···";
 

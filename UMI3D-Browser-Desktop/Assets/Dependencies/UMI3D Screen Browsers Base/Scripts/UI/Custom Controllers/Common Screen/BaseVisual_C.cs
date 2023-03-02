@@ -262,7 +262,7 @@ namespace umi3d.commonScreen
             evt.StopPropagation();
             foreach (var property in evt.stylePropertyNames)
             {
-                this.TriggerAnimationCallcancel(property);
+                this.TriggerAnimationCallcancel(property, evt);
             }
         }
 

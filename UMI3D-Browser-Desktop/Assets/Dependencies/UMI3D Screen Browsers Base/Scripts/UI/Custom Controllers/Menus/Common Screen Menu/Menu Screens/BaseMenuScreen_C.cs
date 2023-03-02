@@ -128,6 +128,7 @@ public abstract class BaseMenuScreen_C : BaseVisual_C
     {
         base.InitElement();
         TitleLabel.TextStyle = TextStyle.LowTitle;
+        TitleLabel.TextAlignment = ElementAlignment.Center;
 
         Button_Back.Type = ButtonType.Navigation;
         Button_Back.IconAlignment = ElementAlignment.Leading;
@@ -216,25 +217,17 @@ public abstract class BaseMenuScreen_C<MenuScreenEnum> : BaseMenuScreen_C
 
             foregroundScreen.schedule.Execute(() =>
             {
-                backgroundScreen.AddAnimation
-                (
-                    this,
-                    () => backgroundScreen.style.left = 0f,
-                    () => backgroundScreen.style.left = -50f,
-                    "left",
-                    AnimatorManager.NavigationScreenDuration,
-                    callback: backgroundScreen.RemoveFromHierarchy
-                );
+                backgroundScreen.SetLeft(0f);
+                backgroundScreen
+                    .SetLeft(-50f)
+                    .WithAnimation(AnimatorManager.NavigationScreenDuration)
+                    .SetCallback(backgroundScreen.RemoveFromHierarchy);
 
                 foregroundScreen.style.visibility = Visibility.Visible;
-                foregroundScreen.AddAnimation
-                (
-                    this,
-                    () => foregroundScreen.style.left = foregroundScreen.resolvedStyle.width,
-                    () => foregroundScreen.style.left = 0f,
-                    "left",
-                    AnimatorManager.NavigationScreenDuration
-                );
+                foregroundScreen.SetLeft(foregroundScreen.resolvedStyle.width);
+                foregroundScreen
+                    .SetLeft(0)
+                    .WithAnimation(AnimatorManager.NavigationScreenDuration);
             });
 
             m_currentScreen = value;
@@ -249,43 +242,35 @@ public abstract class BaseMenuScreen_C<MenuScreenEnum> : BaseMenuScreen_C
         if (!ScreenStack.TryPop(out var menuScreen)) return null;
         if (!ScreenStack.TryPop(out m_currentScreen)) return null;
 
-        GetScreen(m_currentScreen, out BaseMenuScreen_C backgroungScreen);
-        Add(backgroungScreen);
+        GetScreen(m_currentScreen, out BaseMenuScreen_C backgroundScreen);
+        Add(backgroundScreen);
         if (ScreenStack.TryPeek(out var previousMenuScreen))
         {
             GetScreen(previousMenuScreen, out BaseMenuScreen_C previousScreen);
-            backgroungScreen.BackText = previousScreen.ShortScreenTitle;
+            backgroundScreen.BackText = previousScreen.ShortScreenTitle;
         }
         ScreenStack.Push(m_currentScreen);
 
         GetScreen(menuScreen, out BaseMenuScreen_C foregroundScreen);
-        backgroungScreen.PlaceBehind(foregroundScreen);
+        backgroundScreen.PlaceBehind(foregroundScreen);
 
-        backgroungScreen.schedule.Execute(() =>
+        backgroundScreen.schedule.Execute(() =>
         {
-            backgroungScreen.AddAnimation
-            (
-                this,
-                () => backgroungScreen.style.left = -50f,
-                () => backgroungScreen.style.left = 0f,
-                "left",
-                AnimatorManager.NavigationScreenDuration
-            );
+            backgroundScreen.SetLeft(-50f);
+            backgroundScreen
+                    .SetLeft(0)
+                    .WithAnimation(AnimatorManager.NavigationScreenDuration);
 
-            foregroundScreen.AddAnimation
-            (
-                this,
-                () => foregroundScreen.style.left = 0,
-                () => foregroundScreen.style.left = foregroundScreen.resolvedStyle.width,
-                "left",
-                AnimatorManager.NavigationScreenDuration,
-                callback: () =>
-                {
-                    foregroundScreen.BackText = null;
-                    foregroundScreen.RemoveFromHierarchy();
-                    ResetButton();
-                }
-            );
+            foregroundScreen.SetLeft(0f);
+            foregroundScreen
+                    .SetLeft(foregroundScreen.resolvedStyle.width)
+                    .WithAnimation(AnimatorManager.NavigationScreenDuration)
+                    .SetCallback(() =>
+                    {
+                        foregroundScreen.BackText = null;
+                        foregroundScreen.RemoveFromHierarchy();
+                        ResetButton();
+                    });
         });
 
         return menuScreen;

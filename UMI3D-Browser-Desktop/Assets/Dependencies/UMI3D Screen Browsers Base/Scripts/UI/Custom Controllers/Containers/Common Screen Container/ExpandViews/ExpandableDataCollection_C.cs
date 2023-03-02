@@ -144,21 +144,11 @@ namespace umi3d.commonScreen.Container
             canRaiseAnimation = false;
 
             bool isAnimationIn = newValue > oldValue;
-            ContentVieport.AddAnimation
-            (
-                this,
-                () => ContentVieport.style.height = m_lastHeight,
-                () => ContentVieport.style.height = newValue,
-                "height",
-                isAnimationIn ? AnimationTimeIn : AnimationTimeOut,
-                callin: () => canRaiseAnimation = false,
-                callback: () =>
-                {
-                    m_lastHeight = newValue;
-                    ContentVieport.style.height = StyleKeyword.Null;
-                },
-                callcancel: () => ContentVieport.style.height = StyleKeyword.Null
-            );
+            ContentVieport.SetHeight(oldValue);
+            ContentVieport
+                .SetHeight(newValue)
+                .WithAnimation(isAnimationIn ? AnimationTimeIn : AnimationTimeOut)
+                .SetCallback(() => ContentVieport.style.height = StyleKeyword.Null);
         }
 
         protected virtual void ContentContainerWidthChanged(float oldValue, float newValue)
@@ -169,21 +159,11 @@ namespace umi3d.commonScreen.Container
             canRaiseAnimation = false;
 
             bool isAnimationIn = newValue > oldValue;
-            ContentVieport.AddAnimation
-            (
-                this,
-                () => ContentVieport.style.width = m_lastWidth,
-                () => ContentVieport.style.width = newValue,
-                "width",
-                isAnimationIn ? AnimationTimeIn : AnimationTimeOut,
-                callin: () => canRaiseAnimation = false,
-                callback: () =>
-                {
-                    m_lastWidth = newValue;
-                    ContentVieport.style.width = StyleKeyword.Null;
-                },
-                callcancel: () => ContentVieport.style.width = StyleKeyword.Null
-            );
+            ContentVieport.SetWidth(oldValue);
+            ContentVieport
+                .SetWidth(newValue)
+                .WithAnimation(isAnimationIn ? AnimationTimeIn : AnimationTimeOut)
+                .SetCallback(() => ContentVieport.style.width = StyleKeyword.Null);
         }
 
         #endregion
