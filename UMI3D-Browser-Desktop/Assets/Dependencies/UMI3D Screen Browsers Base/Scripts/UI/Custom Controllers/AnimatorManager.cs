@@ -189,8 +189,6 @@ public static class AnimatorManager
 
         if (!ve.IsListeningForTransition) yield break;
 
-        if (ve.name == "body") UnityEngine.Debug.Log($"play body");
-
         // Raise the callin action. This action should not update the property that is animated.
         animation.Callin?.Invoke();
 
@@ -240,8 +238,6 @@ public static class AnimatorManager
 
         var animation = animations.Find(_animation => _animation.PropertyName == property);
 
-        if (ve.name == "body") UnityEngine.Debug.Log($"trigger callbac body");
-
         if (animation.InitialValueCoroutine != null) UIManager.StopCoroutine(animation.InitialValueCoroutine);
         if (animation.EndValueCoroutine != null) UIManager.StopCoroutine(animation.EndValueCoroutine);
         animation.ScheduledCallback?.Resume();
@@ -258,7 +254,7 @@ public static class AnimatorManager
 
         var animation = animations.Find(_animation => _animation.PropertyName == property);
         animation.ScheduledCallcancel?.Resume();
-        if (ve.name == "body") UnityEngine.Debug.Log($"trigger call cancel body");
+
         if (animation.PreviousDuration != 0)
         {
             float previousDurationPercentage = (float)evt.elapsedTime * 100f / animation.PreviousDuration;
@@ -343,8 +339,6 @@ public static class AnimatorManager
         StylePropertyName propertyName
     ) where T : VisualElement, IPanelBindable, ITransitionable
     {
-        if (isCurrentValueEqualToEndValue()) return new Animation();
-
         ve.InsertAnimationInAnimationsList(propertyName, out Animation animation, out bool isNew, out bool isAnimated);
 
         animation.IsAnimating = false;
@@ -359,14 +353,11 @@ public static class AnimatorManager
         // Is new if this animation was not previously in the list or if the previous animation was animated and not playing.
         if (isNew)
         {
-            if (ve.name == "body") UnityEngine.Debug.Log($"body new");
-
             var scheduledItemBack = ve.schedule.Execute(() =>
             {
                 animation.Callback?.Invoke();
                 ve.RemoveAnimation(animation);
                 animation.ScheduledCallback.Pause();
-                if (ve.name == "body") UnityEngine.Debug.Log($"call back");
             });
             // Will be resume when animation end event will be trigger.
             scheduledItemBack.Pause();
@@ -385,8 +376,6 @@ public static class AnimatorManager
         }
         else
         {
-            if (ve.name == "body") UnityEngine.Debug.Log($"body not new");
-
             if (!isAnimated)
             {
                 animation.Callin?.Invoke();
