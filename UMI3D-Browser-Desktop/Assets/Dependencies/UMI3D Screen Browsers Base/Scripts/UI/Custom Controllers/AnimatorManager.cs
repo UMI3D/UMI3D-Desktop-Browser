@@ -856,11 +856,11 @@ public static class AnimatorManager
         (
             setInitialValue: () =>
             {
-                if (right.value.unit == LengthUnit.Pixel) ve.style.right = ve.resolvedStyle.right;
+                if (right.value.unit == LengthUnit.Pixel) ve.style.right = -ve.resolvedStyle.right;
                 else
                 {
                     var parentWidth = ve.parent.resolvedStyle.width;
-                    var currentRight = ve.resolvedStyle.right;
+                    var currentRight = -ve.resolvedStyle.right;
 
                     ve.style.right = Length.Percent(currentRight * 100f / parentWidth);
                 }
