@@ -97,7 +97,7 @@ namespace umi3d.commonScreen.Displayer
             };
             m_toggleValue.ValueChanged += e =>
             {
-                UnityEngine.Debug.Log($"toggle {e.newValue}");
+                UnityEngine.Debug.Log($"toggle value changed = {e.newValue}");
                 Body
                     .SetWidth(e.newValue ? 150f : 90f)
                     .WithAnimation();

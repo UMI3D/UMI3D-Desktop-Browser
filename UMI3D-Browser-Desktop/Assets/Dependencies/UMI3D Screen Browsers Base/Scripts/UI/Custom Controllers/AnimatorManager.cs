@@ -17,7 +17,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.commonScreen;
-using umi3d.commonScreen.Displayer;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -190,7 +189,7 @@ public static class AnimatorManager
 
         if (!ve.IsListeningForTransition) yield break;
 
-        if (ve.GetType() == typeof(Manipulation_C)) UnityEngine.Debug.Log($"play manipulation");
+        if (ve.name == "body") UnityEngine.Debug.Log($"play body");
 
         // Raise the callin action. This action should not update the property that is animated.
         animation.Callin?.Invoke();
@@ -205,6 +204,7 @@ public static class AnimatorManager
 
         animation.SetInitialValue?.Invoke();
 
+        // Do not start end value coroutine if the previous animation was animated.
         if (isNew || animation.PreviousDuration == 0)
         {
             animation.IsPlaying = true;
@@ -220,9 +220,13 @@ public static class AnimatorManager
 
         ve.UpdateTransitionList(Animations[ve]);
 
+        var isEndValueEqualToEnd = animation.IsCurrentValueEqualToEndValue();
+
         // Set the end value.
-        if (!animation.IsCurrentValueEqualToEndValue()) animation.SetEndValue?.Invoke();
-        else animation.ScheduledCallback?.Resume();
+        // If the current value is equal to the end value then no need to play the animaiton.
+        if (!isEndValueEqualToEnd) animation.SetEndValue?.Invoke();
+        // If the current value is equal to the end value or if it is not animated then callback.
+        if (isEndValueEqualToEnd || !animation.IsAnimating) animation.ScheduledCallback?.Resume();
     }
 
     /// <summary>
@@ -235,6 +239,8 @@ public static class AnimatorManager
         if (!Animations.TryGetValue(ve, out var animations)) return;
 
         var animation = animations.Find(_animation => _animation.PropertyName == property);
+
+        if (ve.name == "body") UnityEngine.Debug.Log($"trigger callbac body");
 
         if (animation.InitialValueCoroutine != null) UIManager.StopCoroutine(animation.InitialValueCoroutine);
         if (animation.EndValueCoroutine != null) UIManager.StopCoroutine(animation.EndValueCoroutine);
@@ -252,7 +258,7 @@ public static class AnimatorManager
 
         var animation = animations.Find(_animation => _animation.PropertyName == property);
         animation.ScheduledCallcancel?.Resume();
-
+        if (ve.name == "body") UnityEngine.Debug.Log($"trigger call cancel body");
         if (animation.PreviousDuration != 0)
         {
             float previousDurationPercentage = (float)evt.elapsedTime * 100f / animation.PreviousDuration;
@@ -353,13 +359,14 @@ public static class AnimatorManager
         // Is new if this animation was not previously in the list or if the previous animation was animated and not playing.
         if (isNew)
         {
-            if (ve.GetType() == typeof(Manipulation_C)) UnityEngine.Debug.Log($"manipulation new");
+            if (ve.name == "body") UnityEngine.Debug.Log($"body new");
 
             var scheduledItemBack = ve.schedule.Execute(() =>
             {
                 animation.Callback?.Invoke();
                 ve.RemoveAnimation(animation);
                 animation.ScheduledCallback.Pause();
+                if (ve.name == "body") UnityEngine.Debug.Log($"call back");
             });
             // Will be resume when animation end event will be trigger.
             scheduledItemBack.Pause();
@@ -378,7 +385,7 @@ public static class AnimatorManager
         }
         else
         {
-            if (ve.GetType() == typeof(Manipulation_C)) UnityEngine.Debug.Log($"manipulation not new");
+            if (ve.name == "body") UnityEngine.Debug.Log($"body not new");
 
             if (!isAnimated)
             {
