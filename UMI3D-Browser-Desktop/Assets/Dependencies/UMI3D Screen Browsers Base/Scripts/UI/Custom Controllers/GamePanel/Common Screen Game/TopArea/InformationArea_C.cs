@@ -118,8 +118,6 @@ namespace umi3d.commonScreen.game
             {
                 if (value == ShortInf.LocalisedText) return;
 
-                //var color = new Color();
-
                 ShortInf
                     .SetColor(new Color(Color.white.r, Color.white.r, Color.white.r, 0))
                     .WithAnimation(AnimatorManager.TextFadeDuration)
