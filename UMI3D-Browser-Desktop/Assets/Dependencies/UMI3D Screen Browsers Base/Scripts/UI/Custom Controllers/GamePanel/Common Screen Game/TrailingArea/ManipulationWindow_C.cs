@@ -60,6 +60,7 @@ namespace umi3d.commonScreen.game
                 var manipulation = element as Manipulation_C;
 
                 manipulation.ToggleValue = false;
+                manipulation.IsToggle = true;
                 Manipulations.Remove(manipulation);
             };
             SEDC.AnimationTimeIn = 1f;

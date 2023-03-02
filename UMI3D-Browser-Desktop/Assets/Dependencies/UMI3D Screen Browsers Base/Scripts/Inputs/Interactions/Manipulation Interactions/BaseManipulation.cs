@@ -141,6 +141,8 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         #endregion
 
+        #region Association and dissociation
+
         public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
             => throw new System.NotImplementedException();
 
@@ -185,6 +187,10 @@ namespace umi3d.baseBrowser.inputs.interactions
             menuItem = null;
         }
 
+        #endregion
+
+        #region Is compatible or is availlable
+
         public override bool IsCompatibleWith(AbstractInteractionDto interaction)
         {
             if (!(interaction is ManipulationDto manipulationDto)) return false;
@@ -199,6 +205,8 @@ namespace umi3d.baseBrowser.inputs.interactions
             => base.IsAvailable() && activationButton.IsAvailable();
 
         public bool IsCompatibleWith(DofGroupEnum dofGroup) => dofGroup == DofGroup;
+
+        #endregion
 
         /// <summary>
         /// Launched coroutine for network message sending (if any).
@@ -240,10 +248,10 @@ namespace umi3d.baseBrowser.inputs.interactions
             yield return null;
             //while (true)
             //{
-            //    if 
+            //    if
             //    (
-            //        Active 
-            //        && associatedInteraction != null 
+            //        IsActive
+            //        && associatedInteraction != null
             //    )
             //    {
             //        if (Input.GetKey(InputLayoutManager.GetInputCode(activationButton.activationButton)))
@@ -262,8 +270,9 @@ namespace umi3d.baseBrowser.inputs.interactions
             //                    boneType = bone,
             //                    id = associatedInteraction.id,
             //                    toolId = this.toolId,
-            //                    hoveredObjectId = GetCurrentHoveredObjectId()
+            //                    hoveredObjectId = hoveredObjectId
             //                };
+                            
             //                MapDistanceWithDof(distanceInFrame, ref pararmeterDto);
             //                UMI3DClientServer.SendData(pararmeterDto, true);
             //            }
