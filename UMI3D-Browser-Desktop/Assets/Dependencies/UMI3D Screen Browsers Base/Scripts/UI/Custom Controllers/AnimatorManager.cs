@@ -17,6 +17,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using umi3d.commonScreen;
+using umi3d.commonScreen.Displayer;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -189,6 +190,8 @@ public static class AnimatorManager
 
         if (!ve.IsListeningForTransition) yield break;
 
+        if (ve.GetType() == typeof(Manipulation_C)) UnityEngine.Debug.Log($"play manipulation");
+
         // Raise the callin action. This action should not update the property that is animated.
         animation.Callin?.Invoke();
 
@@ -350,6 +353,8 @@ public static class AnimatorManager
         // Is new if this animation was not previously in the list or if the previous animation was animated and not playing.
         if (isNew)
         {
+            if (ve.GetType() == typeof(Manipulation_C)) UnityEngine.Debug.Log($"manipulation new");
+
             var scheduledItemBack = ve.schedule.Execute(() =>
             {
                 animation.Callback?.Invoke();
@@ -373,6 +378,8 @@ public static class AnimatorManager
         }
         else
         {
+            if (ve.GetType() == typeof(Manipulation_C)) UnityEngine.Debug.Log($"manipulation not new");
+
             if (!isAnimated)
             {
                 animation.Callin?.Invoke();
