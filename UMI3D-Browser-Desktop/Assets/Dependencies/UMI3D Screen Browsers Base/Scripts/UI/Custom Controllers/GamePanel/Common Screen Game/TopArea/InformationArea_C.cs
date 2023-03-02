@@ -118,16 +118,16 @@ namespace umi3d.commonScreen.game
             {
                 if (value == ShortInf.LocalisedText) return;
 
-                var color = new Color();
+                //var color = new Color();
 
                 ShortInf
-                    .SetColor(new Color(color.r, color.g, color.b, 0))
+                    .SetColor(new Color(Color.white.r, Color.white.r, Color.white.r, 0))
                     .WithAnimation(AnimatorManager.TextFadeDuration)
                     .SetCallback(() =>
                     {
                         ShortInf.LocalisedText = value;
                         ShortInf
-                            .SetColor(new Color(color.r, color.g, color.b, color.a))
+                            .SetColor(Color.white)
                             .WithAnimation(AnimatorManager.TextFadeDuration)
                             .SetCallback(() => ShortInf.style.color = StyleKeyword.Null);
                     });
@@ -309,14 +309,15 @@ namespace umi3d.commonScreen.game
                     NotificationCenter_C.NotificationTitleStack.Pop();
                     ShortText = $"Notif: {title}";
                 }
-            }).Every(3000);
+            })
+                .Every(3000)
+                .ExecuteLater(3000);
         }
 
         protected override void SetProperties()
         {
             base.SetProperties();
             Controller = ControllerEnum.MouseAndKeyboard;
-            ShortText = null;
             IsExpanded = false;
             IsMicOn = false;
             IsSoundOn = false;

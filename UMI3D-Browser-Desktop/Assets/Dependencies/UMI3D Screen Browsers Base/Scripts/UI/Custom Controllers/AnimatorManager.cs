@@ -352,8 +352,8 @@ public static class AnimatorManager
         {
             var scheduledItemBack = ve.schedule.Execute(() =>
             {
-                animation.Callback?.Invoke();
                 ve.RemoveAnimation(animation);
+                animation.Callback?.Invoke();
                 animation.ScheduledCallback.Pause();
             });
             // Will be resume when animation end event will be trigger.
