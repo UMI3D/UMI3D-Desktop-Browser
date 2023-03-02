@@ -71,6 +71,9 @@ namespace umi3d.commonDesktop.menu
             Minimize.Height = ElementSize.Small;
             Maximize.Height = ElementSize.Small;
             Close.Height = ElementSize.Small;
+            Minimize.Width = ElementSize.Large;
+            Maximize.Width = ElementSize.Large;
+            Close.Width = ElementSize.Large;
 
             Close.Type = ButtonType.Danger;
 
