@@ -30,6 +30,7 @@ namespace umi3d.baseBrowser.inputs.interactions
         DisplayHideNotifications, 
         DisplayHideUsersList, 
         DisplayHideEmoteWindow,
+        FreeCursor,
         SwitchNextManipulation
     }
 
