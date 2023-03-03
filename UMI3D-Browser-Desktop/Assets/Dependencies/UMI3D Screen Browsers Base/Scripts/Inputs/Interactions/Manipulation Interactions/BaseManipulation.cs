@@ -17,6 +17,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using umi3d.baseBrowser.cursor;
 using umi3d.cdk;
 using umi3d.cdk.menu.interaction;
 using umi3d.common.interaction;
@@ -24,22 +25,16 @@ using UnityEngine;
 
 namespace umi3d.baseBrowser.inputs.interactions
 {
-    public class BaseManipulation : BaseInteraction<ManipulationDto>
+    public abstract class BaseManipulation : BaseInteraction<ManipulationDto>
     {
         public ManipulationMenuItem menuItem;
 
-        public Transform manipulationCursor;
         /// <summary>
         /// DofGroup of the Manipulation.
         /// </summary>
         public DofGroupEnum DofGroup;
-        public Cursor.FrameIndicator frameIndicator;
-        /// <summary>
-        /// Button to activate this input.
-        /// </summary>
-        public BaseInteraction<EventDto> activationButton;
         
-        protected bool manipulated = false;
+        
         
         /// <summary>
         /// Input multiplicative strength.
@@ -170,7 +165,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             Menu?.Add(menuItem);
 
             StartCoroutine(SetFrameOFReference());
-            messageSenderCoroutine = StartCoroutine(networkMessageSender());
+            messageSenderCoroutine = StartCoroutine(NetworkMessageSender());
         }
 
         public override void Dissociate()
@@ -201,27 +196,17 @@ namespace umi3d.baseBrowser.inputs.interactions
             );
         }
 
-        public override bool IsAvailable()
-            => base.IsAvailable() && activationButton.IsAvailable();
+        
 
         public bool IsCompatibleWith(DofGroupEnum dofGroup) => dofGroup == DofGroup;
 
         #endregion
 
         /// <summary>
-        /// Launched coroutine for network message sending (if any).
-        /// </summary>
-        /// <see cref="networkMessageSender"/>
-        protected Coroutine messageSenderCoroutine;
-        /// <summary>
         /// Frame of reference of the <see cref="associatedInteraction"/> (if any).
         /// </summary>
         protected Transform frameOfReference;
-        /// <summary>
-        /// Frame rate applied to message emission through network (high values can cause network flood).
-        /// </summary>
-        public float networkFrameRate = 30;
-
+        
         protected IEnumerator SetFrameOFReference()
         {
             var wait = new WaitForFixedUpdate();
@@ -242,71 +227,22 @@ namespace umi3d.baseBrowser.inputs.interactions
             }
         }
 
-        protected IEnumerator networkMessageSender()
-        {
-            UnityEngine.Debug.Log("TODO");
-            yield return null;
-            //while (true)
-            //{
-            //    if
-            //    (
-            //        IsActive
-            //        && associatedInteraction != null
-            //    )
-            //    {
-            //        if (Input.GetKey(InputLayoutManager.GetInputCode(activationButton.activationButton)))
-            //        {
-            //            if (manipulated)
-            //            {
-            //                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        /// <summary>
+        /// Launched coroutine for network message sending (if any).
+        /// </summary>
+        /// <see cref="NetworkMessageSender"/>
+        protected Coroutine messageSenderCoroutine;
+        protected bool manipulated = false;
+        public Transform manipulationCursor;
+        public Cursor.FrameIndicator frameIndicator;
+        /// <summary>
+        /// Frame rate applied to message emission through network (high values can cause network flood).
+        /// </summary>
+        public float networkFrameRate = 30;
 
-            //                manipulationCursor.position = frameIndicator.Project(ray, DofGroup);
+        protected abstract IEnumerator NetworkMessageSender();
 
-            //                Vector3 distanceInWorld = manipulationCursor.position - StartPosition;
-            //                Vector3 distanceInFrame = frameOfReference.InverseTransformDirection(distanceInWorld);
-
-            //                var pararmeterDto = new ManipulationRequestDto()
-            //                {
-            //                    boneType = bone,
-            //                    id = associatedInteraction.id,
-            //                    toolId = this.toolId,
-            //                    hoveredObjectId = hoveredObjectId
-            //                };
-                            
-            //                MapDistanceWithDof(distanceInFrame, ref pararmeterDto);
-            //                UMI3DClientServer.SendData(pararmeterDto, true);
-            //            }
-            //            else
-            //            {
-            //                if (DoesPerformRotation())
-            //                {
-            //                    umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
-            //                }
-
-            //                manipulated = true;
-
-            //                StartPosition = frameOfReference.position;
-            //                manipulationCursor.position = StartPosition;
-            //                frameIndicator.gameObject.SetActive(true);
-            //                frameIndicator.DofGroup = DofGroup;
-            //                frameIndicator.Frame = frameOfReference;
-            //                umi3d.baseBrowser.Controller.BaseCursor.State = umi3d.baseBrowser.Controller.BaseCursor.CursorState.Clicked;
-            //            }
-            //        }
-            //        else if (manipulated)
-            //        {
-            //            manipulated = false;
-            //            umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Center);
-            //            frameIndicator.gameObject.SetActive(false);
-            //            umi3d.baseBrowser.Controller.BaseCursor.State = umi3d.baseBrowser.Controller.BaseCursor.CursorState.Hover;
-            //        }
-            //    }
-
-            //    yield return new WaitForSeconds(1f / networkFrameRate);
-            //}
-        }
-
-        void MapDistanceWithDof(Vector3 distance, ref ManipulationRequestDto Manipulation)
+        protected void MapDistanceWithDof(Vector3 distance, ref ManipulationRequestDto Manipulation)
         {
             switch (DofGroup)
             {

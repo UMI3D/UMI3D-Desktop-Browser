@@ -15,12 +15,13 @@ limitations under the License.
 */
 using System.Collections.Generic;
 using umi3d.baseBrowser.Controller;
-using umi3d.baseBrowser.cursor;
+using umi3d.baseBrowser.Cursor;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.common.interaction;
 using UnityEngine;
+using UnityEngine.Windows;
 
 namespace umi3d.desktopBrowser.Controller
 {
@@ -52,6 +53,8 @@ namespace umi3d.desktopBrowser.Controller
             }
         }
 
+        public BaseManipulationGroup ManipulationGroup { get; set; }
+
         #region Monobehaviour Life Cycle
 
         /// <summary>
@@ -81,6 +84,11 @@ namespace umi3d.desktopBrowser.Controller
                 manipulation.bone = Controller.interactionBoneType;
                 manipulation.Menu = ObjectMenu.menu;
             });
+
+            (ManipulationGroup as ManipulationGroupeForDesktop).Bind(Controller, KeyboardManipulations);
+            ManipulationGroup.bone = Controller.interactionBoneType;
+            ManipulationGroup.Menu = Controller.ManipulationMenu.menu;
+            ManipulationGroup.InstanciateManipulation = InstanciateManipulation;
         }
         /// <summary>
         /// <inheritdoc/>
@@ -110,6 +118,21 @@ namespace umi3d.desktopBrowser.Controller
         public void ClearInputs()
         {
             foreach (KeyboardInteraction input in KeyboardInteractions) if (!input.IsAvailable()) input.Dissociate();
+        }
+
+        protected BaseManipulation InstanciateManipulation(DofGroupEnum dofGroup, float strength, FrameIndicator frameIndicator, Transform manipulationCursor)
+        {
+            var manip = Controller.ManipulationActions.AddComponent<ManipulationForDesktop>();
+
+            manip.Init(Controller);
+            manip.activationButton = KeyboardManipulations.Find(a => a.IsAvailable());
+            if (manip.activationButton == null) UnityEngine.Debug.LogError($"Can't find keyboard manipulation.");
+            manip.DofGroup = dofGroup;
+            manip.strength = strength;
+            manip.frameIndicator = frameIndicator;
+            manip.manipulationCursor = manipulationCursor;
+
+            return manip;
         }
     }
 }

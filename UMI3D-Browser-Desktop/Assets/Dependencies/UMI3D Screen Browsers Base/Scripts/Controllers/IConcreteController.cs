@@ -26,6 +26,7 @@ namespace umi3d.baseBrowser.Controller
     {
         List<AbstractUMI3DInput> Inputs { get; }
         List<BaseInteraction<EventDto>> Manipulations { get; }
+        BaseManipulationGroup ManipulationGroup { get; set; }
 
         void Awake();
         void Start();

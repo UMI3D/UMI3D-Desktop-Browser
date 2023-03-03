@@ -57,7 +57,7 @@ namespace umi3d.baseBrowser.inputs.interactions
         {
             var inputInstance = gameObject.AddComponent<BaseManipulation>();
 
-            inputInstance.activationButton = input;
+            //inputInstance.activationButton = input;
             inputInstance.DofGroup = dofGroup;
             inputInstance.Init(controller);
             inputInstance.strength = strength;

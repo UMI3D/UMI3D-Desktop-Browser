@@ -16,6 +16,7 @@ limitations under the License.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.baseBrowser.Cursor;
 using umi3d.cdk.interaction;
 using umi3d.common.interaction;
 using UnityEngine;
@@ -25,23 +26,30 @@ namespace umi3d.baseBrowser.inputs.interactions
     /// <summary>
     /// Group of manipulations.
     /// </summary>
-    public class BaseManipulationGroup : BaseInteraction<ManipulationDto>
+    public abstract class BaseManipulationGroup : BaseInteraction<ManipulationDto>
     {
         /// <summary>
-        /// List of inputs that will be used to manipulate an interactable.
+        /// <see cref="BaseManipulation.strength"/>
         /// </summary>
-        [SerializeField]
-        protected List<BaseInteraction<EventDto>> m_inputs = new List<BaseInteraction<EventDto>>();
-        [SerializeField]
+        public float strength;
+        /// <summary>
+        /// Reference to the <see cref="Cursor.FrameIndicator"/>
+        /// </summary>
+        public Cursor.FrameIndicator frameIndicator;
+        /// <summary>
+        /// TODO: not define
+        /// </summary>
+        public Transform manipulationCursor;
+
         public static List<DofGroupEnum> DofGroups = new List<DofGroupEnum>
         {
-            DofGroupEnum.XY,
-            DofGroupEnum.XZ,
-            DofGroupEnum.YZ,
-
             DofGroupEnum.X,
             DofGroupEnum.Y,
             DofGroupEnum.Z,
+
+            DofGroupEnum.XY,
+            DofGroupEnum.XZ,
+            DofGroupEnum.YZ,
 
             DofGroupEnum.RX,
             DofGroupEnum.RY,
@@ -61,19 +69,6 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// </summary>
         public static BaseManipulationGroup CurrentGroup
             => s_instances.Count > 0 ? s_instances[s_currentIndex] : null;
-
-        public static BaseManipulationGroup Instanciate
-        (
-            AbstractController controller,
-            List<BaseInteraction<EventDto>> Inputs,
-            GameObject gO
-        )
-        {
-            BaseManipulationGroup group = gO.AddComponent<BaseManipulationGroup>();
-            group.Init(controller);
-            group.m_inputs = Inputs;
-            return group;
-        }
 
         /// <summary>
         /// Current list of manipulations associated with the <see cref="CurrentGroup"/>
@@ -150,6 +145,8 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         #region Associate
 
+        public Func<DofGroupEnum, float, FrameIndicator, Transform, BaseManipulation> InstanciateManipulation;
+
         public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
             UnityEngine.Debug.Log($"pommmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmme");
@@ -193,7 +190,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             this.toolId = toolId;
             associatedInteraction = manipulation;
 
-            BaseManipulation input = ManipulationInputGenerator.Instanciate(controller, m_inputs.Find(a => a.IsAvailable()), dofs);
+            BaseManipulation input = InstanciateManipulation(dofs, strength, frameIndicator, manipulationCursor);
             input.Menu = Menu;
             input.bone = bone;
             input.Associate(manipulation, dofs, toolId, hoveredObjectId);
@@ -261,11 +258,6 @@ namespace umi3d.baseBrowser.inputs.interactions
         }
 
         #endregion
-
-
-
-        public override bool IsAvailable()
-            => base.IsAvailable() && m_inputs.Exists(activationButton => activationButton.IsAvailable());
 
         public bool IsAvailableFor(ManipulationDto manipulation)
             => manipulation == associatedInteraction || IsAvailable();
