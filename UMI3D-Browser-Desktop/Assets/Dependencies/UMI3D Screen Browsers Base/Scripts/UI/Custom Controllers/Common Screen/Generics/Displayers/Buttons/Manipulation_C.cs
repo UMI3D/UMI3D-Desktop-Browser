@@ -129,6 +129,8 @@ namespace umi3d.commonScreen.Displayer
 
         public ManipulationMenuItem MenuItem;
 
+        public virtual void Select() => ToggleValue = true;
+
         #endregion
     }
 }

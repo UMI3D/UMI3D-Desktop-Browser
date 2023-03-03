@@ -34,8 +34,6 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// </summary>
         public DofGroupEnum DofGroup;
         
-        
-        
         /// <summary>
         /// Input multiplicative strength.
         /// </summary>
@@ -100,6 +98,9 @@ namespace umi3d.baseBrowser.inputs.interactions
         protected virtual void Activate()
         {
             IsActive = true;
+            menuItem.UnSubscribe(Select);
+            menuItem.Select();
+            menuItem.Subscribe(Select);
         }
         /// <summary>
         /// Deactivate this manipulation.
