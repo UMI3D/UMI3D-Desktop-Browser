@@ -121,7 +121,7 @@ namespace umi3d.baseBrowser.Controller
             (
                 new MobileController()
             );
-            UnityEngine.Debug.Log($"here");
+
             m_controllers.ForEach(controller => controller?.Awake());
             KeyboardInteraction.S_Interactions.AddRange(KeyboardActions.GetComponents<KeyboardInteraction>());
             KeyboardShortcut.S_Shortcuts.AddRange(KeyboardShortcuts.GetComponents<KeyboardShortcut>());

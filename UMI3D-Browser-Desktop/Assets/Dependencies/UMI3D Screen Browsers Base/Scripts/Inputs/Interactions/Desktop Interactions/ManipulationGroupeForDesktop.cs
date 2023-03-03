@@ -29,6 +29,11 @@ namespace umi3d.baseBrowser.inputs.interactions
         [SerializeField]
         protected List<KeyboardManipulation> m_inputs = new List<KeyboardManipulation>();
 
+        private void Start()
+        {
+            KeyboardShortcut.AddUpListener(ShortcutEnum.SwitchNextManipulation, () => ManipulationForDesktop.NextManipulation());
+        }
+
         /// <summary>
         /// Bind this manipulation group.
         /// </summary>
