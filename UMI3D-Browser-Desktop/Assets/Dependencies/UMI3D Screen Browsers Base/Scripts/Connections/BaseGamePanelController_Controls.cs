@@ -105,13 +105,7 @@ namespace umi3d.baseBrowser.connection
                     || GamePanel.CurrentView == GameViews.Loader
                 ) return;
 
-                if
-                (
-                    !Game.DisplayNotifUsersArea
-                    || Game.NotifAndUserArea.AreaPanel != NotificationsOrUsers.Users)
-                {
-                    BaseCursor.SetMovement(this, CursorMovement.Free);
-                }
+                if (BaseCursor.Movement == CursorMovement.Center) BaseCursor.SetMovement(this, CursorMovement.Free);
                 else
                 {
                     CloseGameWindows();
