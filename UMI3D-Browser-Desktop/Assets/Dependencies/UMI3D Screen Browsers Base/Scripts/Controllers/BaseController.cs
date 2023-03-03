@@ -121,6 +121,7 @@ namespace umi3d.baseBrowser.Controller
             (
                 new MobileController()
             );
+            UnityEngine.Debug.Log($"here");
             m_controllers.ForEach(controller => controller?.Awake());
             KeyboardInteraction.S_Interactions.AddRange(KeyboardActions.GetComponents<KeyboardInteraction>());
             KeyboardShortcut.S_Shortcuts.AddRange(KeyboardShortcuts.GetComponents<KeyboardShortcut>());
@@ -147,6 +148,15 @@ namespace umi3d.baseBrowser.Controller
         protected virtual void Update() 
         {
             CurrentController?.Update();
+        }
+
+        private void OnDisable()
+        {
+            KeyboardInteraction.S_Interactions.Clear();
+            KeyboardShortcut.S_Shortcuts.Clear();
+            KeyboardEmote.S_Emotes.Clear();
+            KeyboardNavigation.S_Navigations.Clear();
+            KeyboardManipulation.S_Manipulations.Clear();
         }
         #endregion
 
