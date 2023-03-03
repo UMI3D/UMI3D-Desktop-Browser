@@ -130,6 +130,9 @@ namespace umi3d.commonScreen.game
         {
             base.InitElement();
             PinnedToolsArea.Mode = ScrollViewMode.Vertical;
+
+            InteractableMapping
+                .SetLeft(Length.Percent(-50f));
         }
 
         protected override void SetProperties()

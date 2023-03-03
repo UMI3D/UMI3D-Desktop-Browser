@@ -352,8 +352,8 @@ public static class AnimatorManager
         {
             var scheduledItemBack = ve.schedule.Execute(() =>
             {
-                animation.Callback?.Invoke();
                 ve.RemoveAnimation(animation);
+                animation.Callback?.Invoke();
                 animation.ScheduledCallback.Pause();
             });
             // Will be resume when animation end event will be trigger.
@@ -856,11 +856,11 @@ public static class AnimatorManager
         (
             setInitialValue: () =>
             {
-                if (right.value.unit == LengthUnit.Pixel) ve.style.right = ve.resolvedStyle.right;
+                if (right.value.unit == LengthUnit.Pixel) ve.style.right = -ve.resolvedStyle.right;
                 else
                 {
                     var parentWidth = ve.parent.resolvedStyle.width;
-                    var currentRight = ve.resolvedStyle.right;
+                    var currentRight = -ve.resolvedStyle.right;
 
                     ve.style.right = Length.Percent(currentRight * 100f / parentWidth);
                 }

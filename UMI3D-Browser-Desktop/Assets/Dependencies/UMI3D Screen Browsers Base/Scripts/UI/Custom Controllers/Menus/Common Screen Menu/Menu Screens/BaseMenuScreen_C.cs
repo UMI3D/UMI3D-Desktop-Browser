@@ -128,6 +128,7 @@ public abstract class BaseMenuScreen_C : BaseVisual_C
     {
         base.InitElement();
         TitleLabel.TextStyle = TextStyle.LowTitle;
+        TitleLabel.TextAlignment = ElementAlignment.Center;
 
         Button_Back.Type = ButtonType.Navigation;
         Button_Back.IconAlignment = ElementAlignment.Leading;
