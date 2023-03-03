@@ -31,5 +31,30 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// Head of the avatar.
         /// </summary>
         public Transform Head;
+        public Transform Cursor;
+
+        public float distCursor = 1;
+        public float MaxDistCursorDelta = 0.3f;
+        public float MinimumCursorDistance = 0.5f;
+        public float ScrollToDistSpeed = 20f;
+
+        protected bool constrainDistanceChange = false;
+        protected Transform lastObject;
+        protected List<Transform> ignore;
+
+        protected override void Start()
+        {
+            base.Start();
+            onInputDown.AddListener(() =>
+            {
+                lastObject = null;
+                constrainDistanceChange = true;
+            });
+            onInputUp.AddListener(() =>
+            {
+                constrainDistanceChange = false;
+            });
+
+        }
     }
 }

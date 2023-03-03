@@ -152,7 +152,6 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
-            UnityEngine.Debug.Log("<color=blue>TODO: </color>" + $"associate groupe");
             if (!IsAvailableFor(manipulation)) throw new System.Exception($"This input is not available for {manipulation}");
 
             if (!IsCompatibleWith(manipulation)) throw new System.Exception("Trying to associate an uncompatible interaction !");

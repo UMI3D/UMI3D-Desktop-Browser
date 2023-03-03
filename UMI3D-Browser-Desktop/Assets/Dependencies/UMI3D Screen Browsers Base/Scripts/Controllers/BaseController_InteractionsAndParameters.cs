@@ -20,7 +20,6 @@ using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk.interaction;
 using umi3d.common.interaction;
 using UnityEngine;
-using UnityEngine.Windows;
 
 namespace umi3d.baseBrowser.Controller
 {

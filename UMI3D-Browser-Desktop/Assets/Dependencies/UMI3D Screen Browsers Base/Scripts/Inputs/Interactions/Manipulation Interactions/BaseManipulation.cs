@@ -143,7 +143,6 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
-            UnityEngine.Debug.Log("<color=yellow>TODO: </color>" + $"associate manip");
             if (associatedInteraction != null)
                 throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
 
@@ -174,12 +173,21 @@ namespace umi3d.baseBrowser.inputs.interactions
             {
                 StopCoroutine(messageSenderCoroutine);
                 messageSenderCoroutine = null;
+                LeaveManipulation();
             }
 
             associatedInteraction = null;
             Menu?.Remove(menuItem);
             menuItem?.UnSubscribe(Select);
             menuItem = null;
+        }
+
+        protected virtual void LeaveManipulation()
+        {
+            manipulated = false;
+            BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
+            frameIndicator.gameObject.SetActive(false);
+            BaseCursor.State = BaseCursor.CursorState.Hover;
         }
 
         #endregion

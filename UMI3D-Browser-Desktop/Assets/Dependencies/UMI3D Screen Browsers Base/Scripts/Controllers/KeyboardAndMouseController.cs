@@ -21,7 +21,6 @@ using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.common.interaction;
 using UnityEngine;
-using UnityEngine.Windows;
 
 namespace umi3d.desktopBrowser.Controller
 {
@@ -125,8 +124,8 @@ namespace umi3d.desktopBrowser.Controller
             var manip = Controller.ManipulationActions.AddComponent<ManipulationForDesktop>();
 
             manip.Init(Controller);
-            manip.activationButton = KeyboardManipulations.Find(a => a.IsAvailable());
-            if (manip.activationButton == null) UnityEngine.Debug.LogError($"Can't find keyboard manipulation.");
+            manip.ManipulationInput = KeyboardManipulations.Find(a => a.IsAvailable());
+            if (manip.ManipulationInput == null) UnityEngine.Debug.LogError($"Can't find keyboard manipulation.");
             manip.DofGroup = dofGroup;
             manip.strength = strength;
             manip.frameIndicator = frameIndicator;

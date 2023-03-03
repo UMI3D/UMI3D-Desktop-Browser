@@ -27,14 +27,13 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// <summary>
         /// Button to activate this input.
         /// </summary>
-        public KeyboardManipulation activationButton;
+        public KeyboardManipulation ManipulationInput;
 
         public override bool IsAvailable()
-            => base.IsAvailable() && activationButton.IsAvailable();
+            => base.IsAvailable() && ManipulationInput.IsAvailable();
 
         protected override IEnumerator NetworkMessageSender()
         {
-            UnityEngine.Debug.Log("TODO");
             yield return null;
 
             Vector3 StartPosition = new Vector3();
@@ -47,7 +46,7 @@ namespace umi3d.baseBrowser.inputs.interactions
                     && associatedInteraction != null
                 )
                 {
-                    if (activationButton.Key.IsPressed())
+                    if (ManipulationInput.Key.IsPressed())
                     {
                         if (manipulated)
                         {
@@ -83,13 +82,7 @@ namespace umi3d.baseBrowser.inputs.interactions
                             BaseCursor.State = BaseCursor.CursorState.Clicked;
                         }
                     }
-                    else if (manipulated)
-                    {
-                        manipulated = false;
-                        BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
-                        frameIndicator.gameObject.SetActive(false);
-                        BaseCursor.State = BaseCursor.CursorState.Hover;
-                    }
+                    else if (manipulated) LeaveManipulation();
                 }
 
                 yield return new WaitForSeconds(1f / networkFrameRate);
