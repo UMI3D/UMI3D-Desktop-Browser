@@ -20,7 +20,6 @@ using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk.interaction;
 using umi3d.common.interaction;
 using UnityEngine;
-using UnityEngine.Windows;
 
 namespace umi3d.baseBrowser.Controller
 {
@@ -103,8 +102,6 @@ namespace umi3d.baseBrowser.Controller
                 input.Dissociate();
                 Destroy(input);
             };
-
-            //foreach (ManipulationGroup input in ManipulationInputs) if (!input.IsAvailable()) input.Dissociate();
 
             CurrentController?.ClearInputs();
             ClearInputs(ref ManipulationGroupInputs, input =>
@@ -232,16 +229,9 @@ namespace umi3d.baseBrowser.Controller
         /// <returns></returns>
         public override AbstractUMI3DInput FindInput(ManipulationDto manip, DofGroupDto dof, bool unused = true)
         {
-            BaseManipulationGroup input = null;
-            input = ManipulationGroupInputs.Find(group => group.IsAvailableFor(manip));
+            BaseManipulationGroup input = CurrentController.ManipulationGroup;
 
-            if (input == null)
-            {
-                input = BaseManipulationGroup.Instanciate(this, CurrentController.Manipulations, ManipulationGroupActions);
-                input.bone = interactionBoneType;
-                input.Menu = ManipulationMenu.menu;
-                ManipulationGroupInputs.Add(input);
-            }
+            if (input == null) UnityEngine.Debug.LogError($"Couln't find a manipulation group.");
 
             return input;
         }

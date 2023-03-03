@@ -16,6 +16,7 @@ limitations under the License.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.baseBrowser.Cursor;
 using umi3d.cdk.interaction;
 using umi3d.common.interaction;
 using UnityEngine;
@@ -25,23 +26,30 @@ namespace umi3d.baseBrowser.inputs.interactions
     /// <summary>
     /// Group of manipulations.
     /// </summary>
-    public class BaseManipulationGroup : BaseInteraction<ManipulationDto>
+    public abstract class BaseManipulationGroup : BaseInteraction<ManipulationDto>
     {
         /// <summary>
-        /// List of inputs that will be used to manipulate an interactable.
+        /// <see cref="BaseManipulation.strength"/>
         /// </summary>
-        [SerializeField]
-        protected List<BaseInteraction<EventDto>> m_inputs = new List<BaseInteraction<EventDto>>();
-        [SerializeField]
+        public float strength;
+        /// <summary>
+        /// Reference to the <see cref="Cursor.FrameIndicator"/>
+        /// </summary>
+        public Cursor.FrameIndicator frameIndicator;
+        /// <summary>
+        /// TODO: not define
+        /// </summary>
+        public Transform manipulationCursor;
+
         public static List<DofGroupEnum> DofGroups = new List<DofGroupEnum>
         {
-            DofGroupEnum.XY,
-            DofGroupEnum.XZ,
-            DofGroupEnum.YZ,
-
             DofGroupEnum.X,
             DofGroupEnum.Y,
             DofGroupEnum.Z,
+
+            DofGroupEnum.XY,
+            DofGroupEnum.XZ,
+            DofGroupEnum.YZ,
 
             DofGroupEnum.RX,
             DofGroupEnum.RY,
@@ -61,19 +69,6 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// </summary>
         public static BaseManipulationGroup CurrentGroup
             => s_instances.Count > 0 ? s_instances[s_currentIndex] : null;
-
-        public static BaseManipulationGroup Instanciate
-        (
-            AbstractController controller,
-            List<BaseInteraction<EventDto>> Inputs,
-            GameObject gO
-        )
-        {
-            BaseManipulationGroup group = gO.AddComponent<BaseManipulationGroup>();
-            group.Init(controller);
-            group.m_inputs = Inputs;
-            return group;
-        }
 
         /// <summary>
         /// Current list of manipulations associated with the <see cref="CurrentGroup"/>
@@ -105,7 +100,7 @@ namespace umi3d.baseBrowser.inputs.interactions
 
             if (s_currentIndex < s_instances.Count && s_currentIndex >= 0) s_instances[s_currentIndex].Deactivate();
 
-            if (s_instances.Count == 1 && i != 1)
+            if (s_instances.Count == 0)
             {
                 s_currentIndex = -1;
                 return;
@@ -113,6 +108,7 @@ namespace umi3d.baseBrowser.inputs.interactions
 
             if (i < 0) s_currentIndex = s_instances.Count - 1;
             else if (i >= s_instances.Count) s_currentIndex = 0;
+            else s_currentIndex = i;
 
             s_instances[s_currentIndex].Activate();
         }
@@ -149,39 +145,13 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         #region Associate
 
+        public Func<DofGroupEnum, float, FrameIndicator, Transform, BaseManipulation> InstanciateManipulation;
+
         public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
-        {
-            UnityEngine.Debug.Log($"pommmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmme");
-            if (associatedInteraction != null)
-                throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
-
-            if (!IsCompatibleWith(interaction))
-                throw new System.Exception("Trying to associate an uncompatible interaction !");
-
-            this.hoveredObjectId = hoveredObjectId;
-            foreach (DofGroupOptionDto group in (interaction as ManipulationDto).dofSeparationOptions)
-            {
-                bool ok = true;
-                foreach (DofGroupDto sep in group.separations)
-                {
-                    if (!DofGroups.Contains(sep.dofs))
-                    {
-                        ok = false;
-                        break;
-                    }
-                }
-                if (!ok) continue;
-                foreach (DofGroupDto sep in group.separations)
-                {
-                    Associate(interaction as ManipulationDto, sep.dofs, toolId, hoveredObjectId);
-                }
-                return;
-            }
-        }
+            => throw new System.NotImplementedException();
 
         public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
-            UnityEngine.Debug.Log("<color=blue>TODO: </color>" + $"associate groupe");
             if (!IsAvailableFor(manipulation)) throw new System.Exception($"This input is not available for {manipulation}");
 
             if (!IsCompatibleWith(manipulation)) throw new System.Exception("Trying to associate an uncompatible interaction !");
@@ -192,7 +162,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             this.toolId = toolId;
             associatedInteraction = manipulation;
 
-            BaseManipulation input = ManipulationInputGenerator.Instanciate(controller, m_inputs.Find(a => a.IsAvailable()), dofs);
+            BaseManipulation input = InstanciateManipulation(dofs, strength, frameIndicator, manipulationCursor);
             input.Menu = Menu;
             input.bone = bone;
             input.Associate(manipulation, dofs, toolId, hoveredObjectId);
@@ -228,9 +198,6 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public override void Dissociate()
         {
-            UnityEngine.Debug.Log("<color=orange>TODO: </color>" + $"dissociate groupe, {associatedInteraction == null}");
-            if (IsActive) PreviousGroup();
-
             var manipulations = s_manipulationsByGroup[this];
             for (int i = manipulations.Count - 1; i >= 0; i--)
             {
@@ -260,11 +227,6 @@ namespace umi3d.baseBrowser.inputs.interactions
         }
 
         #endregion
-
-
-
-        public override bool IsAvailable()
-            => base.IsAvailable() && m_inputs.Exists(activationButton => activationButton.IsAvailable());
 
         public bool IsAvailableFor(ManipulationDto manipulation)
             => manipulation == associatedInteraction || IsAvailable();

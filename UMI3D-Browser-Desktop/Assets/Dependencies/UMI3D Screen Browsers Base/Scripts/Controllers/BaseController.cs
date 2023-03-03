@@ -106,6 +106,7 @@ namespace umi3d.baseBrowser.Controller
             ObjectMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ObjectMenu");
             ManipulationMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ManipulationMenu");
 
+            ManipulationGroupInputs.AddRange(ManipulationGroupActions.GetComponents<BaseManipulationGroup>());
             //TODO instantiate concrete controllers.
             m_controllers.Add
             (
@@ -113,6 +114,7 @@ namespace umi3d.baseBrowser.Controller
                 { 
                     Controller = this,
                     ObjectMenu = ObjectMenu,
+                    ManipulationGroup = ManipulationGroupInputs.Find(a => a is ManipulationGroupeForDesktop)
                 }
             );
             m_controllers.Add
@@ -157,8 +159,6 @@ namespace umi3d.baseBrowser.Controller
             KeyboardManipulation.S_Manipulations.Clear();
         }
         #endregion
-
-
 
         #region Projection
         protected void ReleaseForceProjection(bool _)

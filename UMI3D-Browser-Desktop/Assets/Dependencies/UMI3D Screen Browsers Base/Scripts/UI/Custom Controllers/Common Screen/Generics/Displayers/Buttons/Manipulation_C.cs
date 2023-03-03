@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using umi3d.baseBrowser.utils;
+using umi3d.cdk.menu.interaction;
 using umi3d.common.interaction;
 using UnityEngine.UIElements;
 
@@ -126,7 +127,7 @@ namespace umi3d.commonScreen.Displayer
 
         #region Implementation
 
-        public DofGroupDto dofGroup;
+        public ManipulationMenuItem MenuItem;
 
         #endregion
     }
