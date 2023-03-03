@@ -148,34 +148,7 @@ namespace umi3d.baseBrowser.inputs.interactions
         public Func<DofGroupEnum, float, FrameIndicator, Transform, BaseManipulation> InstanciateManipulation;
 
         public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
-        {
-            UnityEngine.Debug.Log($"pommmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmme");
-            if (associatedInteraction != null)
-                throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
-
-            if (!IsCompatibleWith(interaction))
-                throw new System.Exception("Trying to associate an uncompatible interaction !");
-
-            this.hoveredObjectId = hoveredObjectId;
-            foreach (DofGroupOptionDto group in (interaction as ManipulationDto).dofSeparationOptions)
-            {
-                bool ok = true;
-                foreach (DofGroupDto sep in group.separations)
-                {
-                    if (!DofGroups.Contains(sep.dofs))
-                    {
-                        ok = false;
-                        break;
-                    }
-                }
-                if (!ok) continue;
-                foreach (DofGroupDto sep in group.separations)
-                {
-                    Associate(interaction as ManipulationDto, sep.dofs, toolId, hoveredObjectId);
-                }
-                return;
-            }
-        }
+            => throw new System.NotImplementedException();
 
         public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
@@ -226,9 +199,6 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public override void Dissociate()
         {
-            UnityEngine.Debug.Log("<color=orange>TODO: </color>" + $"dissociate groupe, {associatedInteraction == null}");
-            if (IsActive) PreviousGroup();
-
             var manipulations = s_manipulationsByGroup[this];
             for (int i = manipulations.Count - 1; i >= 0; i--)
             {

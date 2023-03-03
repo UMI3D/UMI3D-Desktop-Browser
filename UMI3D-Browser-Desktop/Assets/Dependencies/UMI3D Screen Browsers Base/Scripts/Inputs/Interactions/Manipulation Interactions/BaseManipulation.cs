@@ -242,6 +242,8 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         protected abstract IEnumerator NetworkMessageSender();
 
+        protected abstract bool DoesPerformRotation();
+
         protected void MapDistanceWithDof(Vector3 distance, ref ManipulationRequestDto Manipulation)
         {
             switch (DofGroup)

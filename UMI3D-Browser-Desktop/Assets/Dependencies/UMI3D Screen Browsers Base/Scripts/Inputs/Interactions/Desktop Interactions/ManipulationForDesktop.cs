@@ -71,7 +71,7 @@ namespace umi3d.baseBrowser.inputs.interactions
                         }
                         else
                         {
-                            //if (DoesPerformRotation()) BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
+                            if (DoesPerformRotation()) BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
 
                             manipulated = true;
 
@@ -95,5 +95,10 @@ namespace umi3d.baseBrowser.inputs.interactions
                 yield return new WaitForSeconds(1f / networkFrameRate);
             }
         }
+
+        protected override bool DoesPerformRotation()
+            => DofGroup == DofGroupEnum.RX
+            || DofGroup == DofGroupEnum.RY
+            || DofGroup == DofGroupEnum.RZ;
     }
 }
