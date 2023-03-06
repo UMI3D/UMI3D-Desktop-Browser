@@ -189,6 +189,8 @@ namespace umi3d.commonScreen.Displayer
         public Text_C SampleTextLabel = new Text_C();
         public Text_C SampleTextItem = new Text_C();
 
+        public TooltipManipulator TooltipManipulator = new TooltipManipulator();
+
         protected ElementCategory m_category;
         protected ElementSize m_size;
         protected ElementDirection m_direction;
@@ -204,6 +206,7 @@ namespace umi3d.commonScreen.Displayer
             this.RegisterCallback<TransitionStartEvent>(TransitionStarted);
             this.RegisterCallback<TransitionEndEvent>(TransitionEnded);
             this.RegisterCallback<TransitionCancelEvent>(TransitionCanceled);
+            this.AddManipulator(TooltipManipulator);
             IsSet = false;
             InstanciateChildren();
             _AttachStyleSheet();

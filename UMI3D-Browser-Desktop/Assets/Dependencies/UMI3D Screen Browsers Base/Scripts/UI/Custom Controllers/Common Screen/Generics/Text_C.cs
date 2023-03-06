@@ -133,6 +133,8 @@ namespace umi3d.commonScreen.Displayer
         public virtual string USSCustomClassStyle(TextStyle style) => $"{UssCustomClass_Emc}-{style}".ToLower();
         public virtual string USSCustomClassColor(TextColor color) => $"{UssCustomClass_Emc}-{color}".ToLower();
 
+        public TooltipManipulator TooltipManipulator = new TooltipManipulator();
+
         /// <summary>
         /// Whether or not this element has been set.
         /// </summary>
@@ -151,6 +153,7 @@ namespace umi3d.commonScreen.Displayer
             this.RegisterCallback<TransitionStartEvent>(TransitionStarted);
             this.RegisterCallback<TransitionEndEvent>(TransitionEnded);
             this.RegisterCallback<TransitionCancelEvent>(TransitionCanceled);
+            this.AddManipulator(TooltipManipulator);
             IsSet = false;
             InstanciateChildren();
             _AttachStyleSheet();

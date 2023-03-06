@@ -287,6 +287,8 @@ namespace umi3d.commonScreen.Displayer
         public Visual_C Container = new Visual_C { name = "content-container" };
         public Visual_C Front = new Visual_C { name = "front" };
 
+        public TooltipManipulator TooltipManipulator = new TooltipManipulator();
+
         protected ElementCategory m_category;
         protected ElementAlignment m_iconAlignment;
 
@@ -296,10 +298,13 @@ namespace umi3d.commonScreen.Displayer
             this.RegisterCallback<DetachFromPanelEvent>(DetachedFromPanel);
             this.RegisterCallback<CustomStyleResolvedEvent>(CustomStyleResolved);
             this.RegisterCallback<GeometryChangedEvent>(GeometryChanged);
+            this.RegisterCallback<MouseEnterEvent>(MouseEntered);
+            this.RegisterCallback<MouseLeaveEvent>(MouseLeft);
             this.RegisterCallback<TransitionRunEvent>(TransitionRun);
             this.RegisterCallback<TransitionStartEvent>(TransitionStarted);
             this.RegisterCallback<TransitionEndEvent>(TransitionEnded);
             this.RegisterCallback<TransitionCancelEvent>(TransitionCanceled);
+            this.AddManipulator(TooltipManipulator);
             IsSet = false;
             InstanciateChildren();
             _AttachStyleSheet();
@@ -526,6 +531,24 @@ namespace umi3d.commonScreen.Displayer
         /// </summary>
         /// <param name="evt"></param>
         protected virtual void GeometryChanged(GeometryChangedEvent evt)
+        {
+            evt.StopPropagation();
+        }
+
+        /// <summary>
+        /// Method called when a mouse enter this element bound.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void MouseEntered(MouseEnterEvent evt)
+        {
+            evt.StopPropagation();
+        }
+
+        /// <summary>
+        /// Method called when a mouse leave this element bound.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void MouseLeft(MouseLeaveEvent evt)
         {
             evt.StopPropagation();
         }

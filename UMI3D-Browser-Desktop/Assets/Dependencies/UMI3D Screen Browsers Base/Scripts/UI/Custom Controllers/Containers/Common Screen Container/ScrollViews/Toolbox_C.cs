@@ -215,6 +215,7 @@ namespace umi3d.commonScreen.Container
 
                 tool.AddMenu(datum);
 
+                tool.tooltip = datum.Name;
                 if (DisplayToolsName) tool.LocalisedLabel = datum.Name;
             };
             SDC.UnbindItem = (datum, item) =>
