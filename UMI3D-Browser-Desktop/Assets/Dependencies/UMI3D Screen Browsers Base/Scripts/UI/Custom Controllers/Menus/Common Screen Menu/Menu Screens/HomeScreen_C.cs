@@ -107,8 +107,6 @@ namespace umi3d.commonScreen.menu
         protected bool m_displaySavedServers;
         protected bool m_isEditingSavedServers = false;
 
-        public HomeScreen_C() { }
-
         protected override void AttachUssClass()
         {
             base.AttachUssClass();

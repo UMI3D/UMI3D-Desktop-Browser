@@ -41,16 +41,21 @@ namespace umi3d.commonScreen
         /// </summary>
         public virtual string UssCustomClass_Emc => "";
 
+        public TooltipManipulator TooltipManipulator = new TooltipManipulator();
+
         public BaseVisual_C()
         {
             this.RegisterCallback<AttachToPanelEvent>(AttachedToPanel);
             this.RegisterCallback<DetachFromPanelEvent>(DetachedFromPanel);
             this.RegisterCallback<CustomStyleResolvedEvent>(CustomStyleResolved);
             this.RegisterCallback<GeometryChangedEvent>(GeometryChanged);
+            this.RegisterCallback<MouseEnterEvent>(MouseEntered);
+            this.RegisterCallback<MouseLeaveEvent>(MouseLeft);
             this.RegisterCallback<TransitionRunEvent>(TransitionRun);
             this.RegisterCallback<TransitionStartEvent>(TransitionStarted);
             this.RegisterCallback<TransitionEndEvent>(TransitionEnded);
             this.RegisterCallback<TransitionCancelEvent>(TransitionCanceled);
+            this.AddManipulator(TooltipManipulator);
             IsSet = false;
             InstanciateChildren();
             _AttachStyleSheet();
@@ -185,6 +190,24 @@ namespace umi3d.commonScreen
         /// </summary>
         /// <param name="evt"></param>
         protected virtual void GeometryChanged(GeometryChangedEvent evt)
+        {
+            evt.StopPropagation();
+        }
+
+        /// <summary>
+        /// Method called when a mouse enter this element bound.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void MouseEntered(MouseEnterEvent evt)
+        {
+            evt.StopPropagation();
+        }
+
+        /// <summary>
+        /// Method called when a mouse leave this element bound.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected virtual void MouseLeft(MouseLeaveEvent evt)
         {
             evt.StopPropagation();
         }
