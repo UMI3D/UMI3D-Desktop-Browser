@@ -113,7 +113,6 @@ namespace AsImpL
         {
             string mtlPath;
             string basePath = GetDirName(absolutePath);
-            UnityEngine.Debug.Log($"mtlPath 0 = {absolutePath}");
 
             if (absolutePath.Contains("//"))
             {
@@ -151,13 +150,12 @@ namespace AsImpL
                     mtlPath = "file:///" + basePath + mtlLib;
                 }
             }
-            UnityEngine.Debug.Log($"mtlPath 1 = {mtlPath}");
+
             yield return LoadOrDownloadText(mtlPath, false);
             if (loadedText == null)
             {
                 mtlLib = Path.GetFileName(mtlLib);
                 mtlPath = "file:///" + basePath + mtlLib;
-                UnityEngine.Debug.Log($"mtlPath 2 = {mtlPath}");
                 //Debug.LogWarningFormat("Material library {0} loaded from the same directory as the OBJ file.\n", mtlLib);
 
                 yield return LoadOrDownloadText(mtlPath);
