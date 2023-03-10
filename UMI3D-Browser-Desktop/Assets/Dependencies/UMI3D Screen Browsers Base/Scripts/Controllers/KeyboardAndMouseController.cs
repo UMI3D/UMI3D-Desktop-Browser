@@ -61,7 +61,11 @@ namespace umi3d.desktopBrowser.Controller
         /// </summary>
         public void Awake()
         {
-            
+            KeyboardInteraction.S_Interactions.AddRange(Controller.KeyboardActions.GetComponents<KeyboardInteraction>());
+            KeyboardShortcut.S_Shortcuts.AddRange(Controller.KeyboardShortcuts.GetComponents<KeyboardShortcut>());
+            KeyboardEmote.S_Emotes.AddRange(Controller.KeyboardEmotes.GetComponents<KeyboardEmote>());
+            KeyboardNavigation.S_Navigations.AddRange(Controller.KeyboardNavigations.GetComponents<KeyboardNavigation>());
+            KeyboardManipulation.S_Manipulations.AddRange(Controller.KeyboardManipulations.GetComponents<KeyboardManipulation>());
         }
         /// <summary>
         /// <inheritdoc/>
@@ -132,6 +136,19 @@ namespace umi3d.desktopBrowser.Controller
             manip.manipulationCursor = manipulationCursor;
 
             return manip;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public void ResetInputsWhenEnvironmentLaunch()
+        {
+            KeyboardInteraction.S_Interactions.ForEach(interaction => interaction.ResetTouchInteraction());
+            KeyboardShortcut.S_Shortcuts.ForEach(interaction => interaction.ResetTouchInteraction());
+            KeyboardEmote.S_Emotes.ForEach(interaction => interaction.ResetTouchInteraction());
+            KeyboardNavigation.S_Navigations.ForEach(interaction => interaction.ResetTouchInteraction());
+            KeyboardManipulation.S_Manipulations.ForEach(interaction => interaction.ResetTouchInteraction());
         }
     }
 }

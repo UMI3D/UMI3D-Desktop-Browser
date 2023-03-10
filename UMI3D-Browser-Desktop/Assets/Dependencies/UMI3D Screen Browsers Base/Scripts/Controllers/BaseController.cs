@@ -123,11 +123,6 @@ namespace umi3d.baseBrowser.Controller
             );
 
             m_controllers.ForEach(controller => controller?.Awake());
-            KeyboardInteraction.S_Interactions.AddRange(KeyboardActions.GetComponents<KeyboardInteraction>());
-            KeyboardShortcut.S_Shortcuts.AddRange(KeyboardShortcuts.GetComponents<KeyboardShortcut>());
-            KeyboardEmote.S_Emotes.AddRange(KeyboardEmotes.GetComponents<KeyboardEmote>());
-            KeyboardNavigation.S_Navigations.AddRange(KeyboardNavigations.GetComponents<KeyboardNavigation>());
-            KeyboardManipulation.S_Manipulations.AddRange(KeyboardManipulations.GetComponents<KeyboardManipulation>());
 
             //TODO for now CurrentController is the desktop one.
             CurrentController = m_controllers.Find(controller => controller is KeyboardAndMouseController);
