@@ -22,42 +22,10 @@ namespace BrowserDesktop.Cursor
 {
     public class CursorKeyInput : KeyboardManipulation
     {
-        private bool constrainDistanceChange = false;
-        public Transform Cursor;
-        
-        public float distCursor = 1;
-        public float MaxDistCursorDelta = 0.3f;
-        public float MinimumCursorDistance = 0.5f;
-        public float ScrollToDistSpeed = 20f;
-        Transform lastObject;
-
-        protected override void Start()
-        {
-            base.Start();
-            onInputDown.AddListener(() =>
-            {
-                lastObject = null;
-                constrainDistanceChange = true;
-            });
-            onInputUp.AddListener(() =>
-            {
-                constrainDistanceChange = false;
-                //sdistCursor = 1;
-            });
-
-        }
-
-        List<Transform> ignore;
-        Transform lasthit;
         protected void Update()
         {
-
-            //Debug.Log("<color=green>TODO: </color>" + $"CircularMenu");
-            if (/*!CircularMenu.Exists || !CircularMenu.Instance.IsExpanded*/true)
-            {
-                distCursor += Input.mouseScrollDelta.y * Time.deltaTime * ScrollToDistSpeed;
-                if (distCursor < MinimumCursorDistance) distCursor = MinimumCursorDistance;
-            }
+            distCursor += Input.mouseScrollDelta.y * Time.deltaTime * ScrollToDistSpeed;
+            if (distCursor < MinimumCursorDistance) distCursor = MinimumCursorDistance;
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit[] hits = umi3d.common.Physics.RaycastAll(ray, constrainDistanceChange ? distCursor + MaxDistCursorDelta : 100);
@@ -76,7 +44,6 @@ namespace BrowserDesktop.Cursor
                     {
                         Cursor.position = hit.point;
                         distCursor = hit.distance;
-                        lasthit = hit.transform;
                         ok = true;
                         break;
                     }

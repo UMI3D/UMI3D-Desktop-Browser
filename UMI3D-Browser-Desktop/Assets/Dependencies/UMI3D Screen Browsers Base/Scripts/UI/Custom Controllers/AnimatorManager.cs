@@ -202,6 +202,7 @@ public static class AnimatorManager
 
         animation.SetInitialValue?.Invoke();
 
+        // Do not start end value coroutine if the previous animation was animated.
         if (isNew || animation.PreviousDuration == 0)
         {
             animation.IsPlaying = true;
@@ -217,9 +218,13 @@ public static class AnimatorManager
 
         ve.UpdateTransitionList(Animations[ve]);
 
+        var isEndValueEqualToEnd = animation.IsCurrentValueEqualToEndValue();
+
         // Set the end value.
-        if (!animation.IsCurrentValueEqualToEndValue()) animation.SetEndValue?.Invoke();
-        else animation.ScheduledCallback?.Resume();
+        // If the current value is equal to the end value then no need to play the animaiton.
+        if (!isEndValueEqualToEnd) animation.SetEndValue?.Invoke();
+        // If the current value is equal to the end value or if it is not animated then callback.
+        if (isEndValueEqualToEnd || !animation.IsAnimating) animation.ScheduledCallback?.Resume();
     }
 
     /// <summary>
@@ -334,8 +339,6 @@ public static class AnimatorManager
         StylePropertyName propertyName
     ) where T : VisualElement, IPanelBindable, ITransitionable
     {
-        if (isCurrentValueEqualToEndValue()) return new Animation();
-
         ve.InsertAnimationInAnimationsList(propertyName, out Animation animation, out bool isNew, out bool isAnimated);
 
         animation.IsAnimating = false;

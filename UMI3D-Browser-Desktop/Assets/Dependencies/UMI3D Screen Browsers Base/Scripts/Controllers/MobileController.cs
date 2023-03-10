@@ -37,6 +37,8 @@ namespace umi3d.mobileBrowser.Controller
 
         public List<BaseInteraction<EventDto>> Manipulations => throw new System.NotImplementedException();
 
+        public BaseManipulationGroup ManipulationGroup { get; set; }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -73,6 +75,13 @@ namespace umi3d.mobileBrowser.Controller
         /// <inheritdoc/>
         /// </summary>
         public void ClearInputs()
+        {
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void ResetInputsWhenEnvironmentLaunch()
         {
         }
     }

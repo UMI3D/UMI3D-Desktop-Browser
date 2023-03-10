@@ -106,6 +106,7 @@ namespace umi3d.baseBrowser.Controller
             ObjectMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ObjectMenu");
             ManipulationMenu = Resources.Load<MenuAsset>("Scriptables/GamePanel/ManipulationMenu");
 
+            ManipulationGroupInputs.AddRange(ManipulationGroupActions.GetComponents<BaseManipulationGroup>());
             //TODO instantiate concrete controllers.
             m_controllers.Add
             (
@@ -113,19 +114,15 @@ namespace umi3d.baseBrowser.Controller
                 { 
                     Controller = this,
                     ObjectMenu = ObjectMenu,
+                    ManipulationGroup = ManipulationGroupInputs.Find(a => a is ManipulationGroupeForDesktop)
                 }
             );
             m_controllers.Add
             (
                 new MobileController()
             );
-            UnityEngine.Debug.Log($"here");
+
             m_controllers.ForEach(controller => controller?.Awake());
-            KeyboardInteraction.S_Interactions.AddRange(KeyboardActions.GetComponents<KeyboardInteraction>());
-            KeyboardShortcut.S_Shortcuts.AddRange(KeyboardShortcuts.GetComponents<KeyboardShortcut>());
-            KeyboardEmote.S_Emotes.AddRange(KeyboardEmotes.GetComponents<KeyboardEmote>());
-            KeyboardNavigation.S_Navigations.AddRange(KeyboardNavigations.GetComponents<KeyboardNavigation>());
-            KeyboardManipulation.S_Manipulations.AddRange(KeyboardManipulations.GetComponents<KeyboardManipulation>());
 
             //TODO for now CurrentController is the desktop one.
             CurrentController = m_controllers.Find(controller => controller is KeyboardAndMouseController);
@@ -157,8 +154,6 @@ namespace umi3d.baseBrowser.Controller
             KeyboardManipulation.S_Manipulations.Clear();
         }
         #endregion
-
-
 
         #region Projection
         protected void ReleaseForceProjection(bool _)

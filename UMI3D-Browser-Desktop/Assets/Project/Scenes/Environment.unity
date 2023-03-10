@@ -839,7 +839,15 @@ MonoBehaviour:
     m_Id: e2011505-9cda-4ca4-bfa1-68a3f62b5cf9
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 6f863cdb-9eed-4f67-9c0d-43a603c64adb
+      m_Path: <Mouse>/leftButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Key
+      m_Flags: 0
     m_Flags: 0
   AvatarParent: {fileID: 6287099825144105987}
   Head: {fileID: 6287099825144105988}

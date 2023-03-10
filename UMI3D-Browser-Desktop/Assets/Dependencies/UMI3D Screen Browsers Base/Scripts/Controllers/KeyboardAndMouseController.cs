@@ -15,7 +15,7 @@ limitations under the License.
 */
 using System.Collections.Generic;
 using umi3d.baseBrowser.Controller;
-using umi3d.baseBrowser.cursor;
+using umi3d.baseBrowser.Cursor;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
@@ -52,6 +52,8 @@ namespace umi3d.desktopBrowser.Controller
             }
         }
 
+        public BaseManipulationGroup ManipulationGroup { get; set; }
+
         #region Monobehaviour Life Cycle
 
         /// <summary>
@@ -59,7 +61,11 @@ namespace umi3d.desktopBrowser.Controller
         /// </summary>
         public void Awake()
         {
-            
+            KeyboardInteraction.S_Interactions.AddRange(Controller.KeyboardActions.GetComponents<KeyboardInteraction>());
+            KeyboardShortcut.S_Shortcuts.AddRange(Controller.KeyboardShortcuts.GetComponents<KeyboardShortcut>());
+            KeyboardEmote.S_Emotes.AddRange(Controller.KeyboardEmotes.GetComponents<KeyboardEmote>());
+            KeyboardNavigation.S_Navigations.AddRange(Controller.KeyboardNavigations.GetComponents<KeyboardNavigation>());
+            KeyboardManipulation.S_Manipulations.AddRange(Controller.KeyboardManipulations.GetComponents<KeyboardManipulation>());
         }
         /// <summary>
         /// <inheritdoc/>
@@ -81,6 +87,11 @@ namespace umi3d.desktopBrowser.Controller
                 manipulation.bone = Controller.interactionBoneType;
                 manipulation.Menu = ObjectMenu.menu;
             });
+
+            (ManipulationGroup as ManipulationGroupeForDesktop).Bind(Controller, KeyboardManipulations);
+            ManipulationGroup.bone = Controller.interactionBoneType;
+            ManipulationGroup.Menu = Controller.ManipulationMenu.menu;
+            ManipulationGroup.InstanciateManipulation = InstanciateManipulation;
         }
         /// <summary>
         /// <inheritdoc/>
@@ -110,6 +121,34 @@ namespace umi3d.desktopBrowser.Controller
         public void ClearInputs()
         {
             foreach (KeyboardInteraction input in KeyboardInteractions) if (!input.IsAvailable()) input.Dissociate();
+        }
+
+        protected BaseManipulation InstanciateManipulation(DofGroupEnum dofGroup, float strength, FrameIndicator frameIndicator, Transform manipulationCursor)
+        {
+            var manip = Controller.ManipulationActions.AddComponent<ManipulationForDesktop>();
+
+            manip.Init(Controller);
+            manip.ManipulationInput = KeyboardManipulations.Find(a => a.IsAvailable());
+            if (manip.ManipulationInput == null) UnityEngine.Debug.LogError($"Can't find keyboard manipulation.");
+            manip.DofGroup = dofGroup;
+            manip.strength = strength;
+            manip.frameIndicator = frameIndicator;
+            manip.manipulationCursor = manipulationCursor;
+
+            return manip;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public void ResetInputsWhenEnvironmentLaunch()
+        {
+            KeyboardInteraction.S_Interactions.ForEach(interaction => interaction.ResetTouchInteraction());
+            KeyboardShortcut.S_Shortcuts.ForEach(interaction => interaction.ResetTouchInteraction());
+            KeyboardEmote.S_Emotes.ForEach(interaction => interaction.ResetTouchInteraction());
+            KeyboardNavigation.S_Navigations.ForEach(interaction => interaction.ResetTouchInteraction());
+            KeyboardManipulation.S_Manipulations.ForEach(interaction => interaction.ResetTouchInteraction());
         }
     }
 }

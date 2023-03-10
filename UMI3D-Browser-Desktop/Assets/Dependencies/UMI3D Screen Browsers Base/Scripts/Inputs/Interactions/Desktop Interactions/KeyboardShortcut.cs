@@ -29,7 +29,9 @@ namespace umi3d.baseBrowser.inputs.interactions
         DisplayHideContextualMenu, 
         DisplayHideNotifications, 
         DisplayHideUsersList, 
-        DisplayHideEmoteWindow
+        DisplayHideEmoteWindow,
+        FreeCursor,
+        SwitchNextManipulation
     }
 
     public class KeyboardShortcut : BaseKeyInteraction

@@ -44,7 +44,12 @@ namespace umi3d.baseBrowser.inputs.interactions
             menuItem.Subscribe(Pressed);
             Menu?.Add(menuItem);
         }
-        
+
+        /// <summary>
+        /// Set the state of the touch to not pressed.
+        /// </summary>
+        public void ResetTouchInteraction() => m_isDown = false;
+
         protected void Pressed(bool down)
         {
             m_isDown = down;

@@ -168,6 +168,8 @@ namespace umi3d.commonScreen.Displayer
         public Label TitleLabel;
         public Text_C MessageLabel = new Text_C { name = "message" };
 
+        public TooltipManipulator TooltipManipulator = new TooltipManipulator();
+
         protected ElementCategory m_category;
         protected ElementSize m_size;
 
@@ -181,6 +183,7 @@ namespace umi3d.commonScreen.Displayer
             this.RegisterCallback<TransitionStartEvent>(TransitionStarted);
             this.RegisterCallback<TransitionEndEvent>(TransitionEnded);
             this.RegisterCallback<TransitionCancelEvent>(TransitionCanceled);
+            this.AddManipulator(TooltipManipulator);
             IsSet = false;
             InstanciateChildren();
             _AttachStyleSheet();
@@ -402,6 +405,10 @@ namespace umi3d.commonScreen.Displayer
         protected virtual void TransitionCanceled(TransitionCancelEvent evt)
         {
             evt.StopPropagation();
+            foreach (var property in evt.stylePropertyNames)
+            {
+                this.TriggerAnimationCallcancel(property, evt);
+            }
         }
 
         #endregion

@@ -126,6 +126,7 @@ MonoBehaviour:
   KeyboardNavigations: {fileID: 5737028901654668679}
   KeyboardManipulations: {fileID: 5544760081601926436}
   ObjectMenu: {fileID: 0}
+  ManipulationMenu: {fileID: 0}
   interactionBoneType: 58
   hoverBoneType: 58
 --- !u!114 &5737028900505413025
@@ -961,6 +962,8 @@ GameObject:
   - component: {fileID: 5737028902229674374}
   - component: {fileID: 5737028902229674368}
   - component: {fileID: 5737028902229674369}
+  - component: {fileID: 4812332198388984163}
+  - component: {fileID: 6513054768274407813}
   m_Layer: 0
   m_Name: KeyboardShortcuts
   m_TagString: Untagged
@@ -1377,7 +1380,7 @@ MonoBehaviour:
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: d4aac661-06ea-4174-b39a-9284beab53c9
-      m_Path: <Mouse>/rightButton
+      m_Path: <Keyboard>/n
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -1422,6 +1425,80 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
   Shortcut: 10
+--- !u!114 &4812332198388984163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5737028902229674419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 857f4032b11f03049ba61f0dc1ee285b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onInputDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onInputUp:
+    m_PersistentCalls:
+      m_Calls: []
+  bone: 0
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 929bce0c-4fbc-4883-b815-6db2e4d02d9b
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: e2826b1a-518b-420c-8e00-399bc49a79fd
+      m_Path: <Mouse>/rightButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Key
+      m_Flags: 0
+    m_Flags: 0
+  Shortcut: 12
+--- !u!114 &6513054768274407813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5737028902229674419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 857f4032b11f03049ba61f0dc1ee285b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onInputDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onInputUp:
+    m_PersistentCalls:
+      m_Calls: []
+  bone: 0
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a0b56b44-670a-40eb-9d6c-54020a0f678e
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 76f6a551-a84e-4c16-9cb7-b3013997bfe3
+      m_Path: <Keyboard>/tab
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Key
+      m_Flags: 0
+    m_Flags: 0
+  Shortcut: 13
 --- !u!1001 &5737028901854242779
 PrefabInstance:
   m_ObjectHideFlags: 0

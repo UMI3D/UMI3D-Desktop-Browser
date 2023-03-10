@@ -50,13 +50,22 @@ namespace umi3d.commonScreen.game
                 var manipulation = element as Manipulation_C;
 
                 manipulation.Dof = datum.dof.dofs;
+                manipulation.MenuItem = datum;
+                datum.Subscribe(manipulation.Select);
+
                 Manipulations.Add(manipulation);
+
+                if (SEDC.Data.Count == 1) manipulation.ToggleValue = true;
             };
             SEDC.UnbindItem = (datum, element) =>
             {
                 var manipulation = element as Manipulation_C;
 
                 manipulation.ToggleValue = false;
+                manipulation.IsToggle = true;
+                manipulation.MenuItem = null;
+                datum.UnSubscribe(manipulation.Select);
+
                 Manipulations.Remove(manipulation);
             };
             SEDC.AnimationTimeIn = 1f;
@@ -93,6 +102,9 @@ namespace umi3d.commonScreen.game
             if (!evt.newValue) return;
 
             manip.IsToggle = false;
+            manip.MenuItem.UnSubscribe(manip.Select);
+            manip.MenuItem.Select();
+            manip.MenuItem.Subscribe(manip.Select);
             Manipulations.ForEach(manipulation =>
             {
                 if (manipulation.Dof == manip.Dof) return;
