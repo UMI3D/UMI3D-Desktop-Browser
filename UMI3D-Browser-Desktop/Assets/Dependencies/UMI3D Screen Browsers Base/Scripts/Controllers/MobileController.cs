@@ -77,5 +77,12 @@ namespace umi3d.mobileBrowser.Controller
         public void ClearInputs()
         {
         }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void ResetInputsWhenEnvironmentLaunch()
+        {
+        }
     }
 }

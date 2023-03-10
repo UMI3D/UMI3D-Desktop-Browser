@@ -74,6 +74,7 @@ namespace umi3d.baseBrowser.connection
             {
                 GamePanel.AddScreenToStack = GameViews.Game;
                 m_isContextualMenuDown = false;
+                BaseController.Instance.CurrentController.ResetInputsWhenEnvironmentLaunch();
                 OnMenuObjectContentChange();
             };
             BaseConnectionProcess.Instance.Connecting += (state) => Loader.Loading.Message = state;
