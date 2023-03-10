@@ -70,7 +70,12 @@ namespace umi3d.baseBrowser.connection
                 dialoguebox.Callback = (index) => BaseConnectionProcess.Instance.Leave();
                 dialoguebox.Enqueue(root);
             };
-            BaseConnectionProcess.Instance.LoadedEnvironment += () => GamePanel.AddScreenToStack = GameViews.Game;
+            BaseConnectionProcess.Instance.LoadedEnvironment += () =>
+            {
+                GamePanel.AddScreenToStack = GameViews.Game;
+                m_isContextualMenuDown = false;
+                OnMenuObjectContentChange();
+            };
             BaseConnectionProcess.Instance.Connecting += (state) => Loader.Loading.Message = state;
             BaseConnectionProcess.Instance.RedirectionStarted += () =>
             {
