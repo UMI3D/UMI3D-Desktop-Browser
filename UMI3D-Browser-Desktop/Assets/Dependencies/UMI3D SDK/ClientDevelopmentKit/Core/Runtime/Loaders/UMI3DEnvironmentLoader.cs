@@ -784,6 +784,7 @@ namespace umi3d.cdk
                 case UMI3DPropertyKeys.AmbientSkyboxImage:
                     if (dto.skybox != null)
                     {
+                        Parameters.LoadSkybox(dto.skybox, dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
                         Parameters.SetSkyboxProperties(dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
                     }
                     return true;
@@ -828,7 +829,12 @@ namespace umi3d.cdk
                     return Parameters.SetSkyboxProperties(dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
                 case UMI3DPropertyKeys.AmbientSkyboxImage:
                     dto.skybox = UMI3DSerializer.Read<ResourceDto>(data.container);
-                    return Parameters.SetSkyboxProperties(dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
+                    if (dto.skybox != null)
+                    {
+                        Parameters.LoadSkybox(dto.skybox, dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
+                        Parameters.SetSkyboxProperties(dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
+                    }
+                    return true;
                 case UMI3DPropertyKeys.AmbientSkyboxRotation:
                     dto.skyboxRotation = UMI3DSerializer.Read<float>(data.container);
                     return Parameters.SetSkyboxProperties(dto.skyboxType, dto.skyboxRotation, RenderSettings.ambientIntensity);
@@ -1010,7 +1016,7 @@ namespace umi3d.cdk
 
 
 
-        private readonly Dictionary<ulong, Dictionary<ulong, AbstractExtrapolator>> entityFilters = new Dictionary<ulong, Dictionary<ulong, AbstractExtrapolator>>();
+        private readonly Dictionary<ulong, Dictionary<ulong, IExtrapolator>> entityFilters = new Dictionary<ulong, Dictionary<ulong, IExtrapolator>>();
 
         private void Update()
         {
@@ -1019,15 +1025,15 @@ namespace umi3d.cdk
                 foreach (ulong property in Instance.entityFilters[entityId].Keys)
                 {
                     UMI3DEntityInstance node = UMI3DEnvironmentLoader.GetEntity(entityId);
-                    AbstractExtrapolator extrapolator = Instance.entityFilters[entityId][property];
+                    IExtrapolator extrapolator = Instance.entityFilters[entityId][property];
 
-                    extrapolator.UpdateRegressedValue();
+                    extrapolator.ComputeExtrapolatedValue();
 
                     var entityPropertyDto = new SetEntityPropertyDto()
                     {
-                        entityId = extrapolator.entityId,
-                        property = extrapolator.property,
-                        value = extrapolator.GetRegressedValue().ToSerializable()
+                        entityId = entityId,
+                        property = property,
+                        value = extrapolator.ExtrapolatedValue.ToSerializable()
                     };
 
                     SimulatedSetEntity(new SetUMI3DPropertyData(entityPropertyDto, node));
@@ -1068,28 +1074,16 @@ namespace umi3d.cdk
         {
             if (!entityFilters.ContainsKey(entityId))
             {
-                entityFilters.Add(entityId, new Dictionary<ulong, AbstractExtrapolator>());
+                entityFilters.Add(entityId, new Dictionary<ulong, IExtrapolator>());
             }
 
             if (!entityFilters[entityId].ContainsKey(propertyKey))
             {
-                AbstractExtrapolator newExtrapolator;
+                IExtrapolator newExtrapolator;
                 if (propertyKey == UMI3DPropertyKeys.Rotation)
-                {
-                    newExtrapolator = new QuaternionLinearDelayedExtrapolator()
-                    {
-                        entityId = entityId,
-                        property = propertyKey
-                    };
-                }
+                    newExtrapolator = new QuaternionLinearDelayedExtrapolator();
                 else
-                {
-                    newExtrapolator = new Vector3LinearDelayedExtrapolator()
-                    {
-                        entityId = entityId,
-                        property = propertyKey
-                    };
-                }
+                    newExtrapolator = new Vector3LinearDelayedExtrapolator();
 
                 entityFilters[entityId].Add(propertyKey, newExtrapolator);
 
