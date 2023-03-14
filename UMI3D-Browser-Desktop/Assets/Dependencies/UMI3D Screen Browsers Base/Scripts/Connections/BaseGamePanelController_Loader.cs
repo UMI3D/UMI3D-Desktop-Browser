@@ -18,6 +18,7 @@ using umi3d.baseBrowser.cursor;
 using umi3d.cdk.collaboration;
 using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
+using umi3d.commonScreen.menu;
 using UnityEngine;
 using static umi3d.baseBrowser.cursor.BaseCursor;
 
@@ -30,9 +31,9 @@ namespace umi3d.baseBrowser.connection
         public cdk.menu.view.MenuDisplayManager formMenuDisplay;
         public LoaderFormContainer FormContainer;
 
-        public CustomLoader Loader => GamePanel.Loader;
-        public CustomFormScreen Form => Loader.Form;
-        public CustomLoadingScreen Loading => Loader.Loading;
+        public Loader_C Loader => GamePanel.Loader;
+        public FormScreen_C Form => Loader.Form;
+        public LoadingScreen_C Loading => Loader.Loading;
 
         protected virtual void InitLoader()
         {
@@ -55,7 +56,7 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void InitLoader_Loading()
         {
-            Loading.Title = "Connection";
+            Loader.Loading.Title = new LocalisationAttribute("Loading environment", "Other", "LoadingEnv");
             // TODO : for leaving is not working when the environment is loading.
             //Loader.Loading.BackText = "Leave";
             //Loader.Loading.Button_Back.clicked += BaseConnectionProcess.Instance.Leave;
@@ -64,7 +65,7 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void InitiLoader_FormMenu()
         {
-            Form.BackText = "Leave";
+            Form.Button_Back.LocaliseText = new LocalisationAttribute("Leave", "GenericStrings", "Leave");
             Form.Button_Back.clicked += BaseConnectionProcess.Instance.Leave;
 
             FormContainer.GetContainer = () => Loader.Form.ScrollView;
@@ -125,7 +126,7 @@ namespace umi3d.baseBrowser.connection
                 };
 
                 Form.DisplaySubmitButton = true;
-                Form.Buttond_Submit.text = "Join";
+                Form.Buttond_Submit.LocaliseText = new LocalisationAttribute("Join", "GenericStrings", "Join");
                 Form.SubmitClicked += () => send.NotifyValueChange(true);
                 Form.Buttond_Submit.Focus();
                 Form.Buttond_Submit.Blur();

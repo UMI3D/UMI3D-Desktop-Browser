@@ -12,25 +12,27 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.commonScreen.Displayer;
+using umi3d.commonScreen.menu;
 using UnityEngine;
 
 namespace umi3d.baseBrowser.connection
 {
     public partial class BaseGamePanelController
     {
-        public CustomGameMenu Menu => GamePanel.Menu;
-        public CustomSettingsContainer Settings => Menu.Settings;
+        public GameMenu_C Menu => GamePanel.Menu;
+        public SettingsContainer_C Settings => Menu.Settings;
 
         protected virtual void InitMenu()
         {
             Menu.Leave.clicked += () =>
             {
-                var dialoguebox = CreateDialogueBox();
+                var dialoguebox = new Dialoguebox_C();
                 dialoguebox.Type = DialogueboxType.Confirmation;
-                dialoguebox.Title = "Do you want to leave the environment ?";
+                dialoguebox.Title = new LocalisationAttribute("Do you want to leave the environment ?", "ErrorStrings", "LeaveEnv?");
                 dialoguebox.Message = "";
-                dialoguebox.ChoiceAText = "Stay";
-                dialoguebox.ChoiceBText = "Leave";
+                dialoguebox.ChoiceAText = new LocalisationAttribute("Stay", "GenericStrings", "Stay");
+                dialoguebox.ChoiceBText = new LocalisationAttribute("Leave", "GenericStrings", "Leave");
                 dialoguebox.ChoiceA.Type = ButtonType.Default;
                 dialoguebox.Callback = (index) =>
                 {

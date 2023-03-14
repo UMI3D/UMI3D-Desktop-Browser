@@ -1,6 +1,8 @@
 .interactable__mapping {
+	flex-grow: 1;
+	flex-shrink: 0;
+
 	width: 50%;
-	height: 100%;
 	flex-direction: column-reverse;
 }
 

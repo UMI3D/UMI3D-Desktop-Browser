@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c9cbf8f6bd8ba40a8703dac592a3db, type: 3}
+  m_Name: LauncherScreen
+  m_EditorClassIdentifier: 
+  Title: LauncherScreen
+  Items:
+  - Key: Home
+    English: Home
+    French: Accueil
+    Spanish: Inicio
+  - Key: Settings
+    English: Settings
+    French: "Param\xE8tres"
+    Spanish: "Configuraci\xF3n"
+  - Key: Data
+    English: Data
+    French: "Donn\xE9es"
+    Spanish: Datos
+  - Key: Libraries
+    English: Libraries
+    French: "Biblioth\xE8ques"
+    Spanish: Bibliotecas
+  - Key: No_Connection_Tile
+    English: No internet connection
+    French: Pas de connexion internet
+    Spanish: "Sin conexi\xF3n a Internet"
+  - Key: NoConnection_Description
+    English: Connect your device to load {0}
+    French: Connectez votre appareil pour charger {0}
+    Spanish: Conecta tu dispositivo para cargar {0}
+  - Key: WeakConnection_Title
+    English: You are connected to internet via carrier data network
+    French: "Vous \xEAtes connect\xE9 \xE0 l'internet via le r\xE9seau de donn\xE9es
+      de l'op\xE9rateur"
+    Spanish: "Est\xE1s conectado a Internet a trav\xE9s de la red de datos del operador"
+  - Key: WeakConnection_Description
+    English: You are trying to load {0} via carrier data network. \nLoading environment
+      use a lot of data, if you can you should connect via wifi or cable and retry
+    French: "Vous essayez de charger {0} via un r\xE9seau de donn\xE9es porteur.
+      \\nL'environnement de chargement consomme beaucoup de donn\xE9es, si vous le
+      pouvez, connectez-vous en wifi ou par c\xE2ble et r\xE9essayez."
+    Spanish: "Est\xE1 intentando cargar {0} a trav\xE9s de la red de datos del operador.
+      \\nEl entorno de carga consume muchos datos, si puede con\xE9ctese por wifi
+      o cable y vuelva a intentarlo."
+  - Key: WeakConnection_ConnectAnyway
+    English: Connect anyway
+    French: "Connectez-vous quand m\xEAme"
+    Spanish: "Con\xE9ctate de todos modos"
+  - Key: DeleteServer_Description
+    English: Delete this server from registered ?
+    French: Supprimer ce serveur de l'enregistrement ?
+    Spanish: "\xBFBorrar este servidor de los registrados?"
+  - Key: UpdateServer_Description
+    English: Update saved server
+    French: "Mise \xE0 jour du serveur sauvegard\xE9"
+    Spanish: Actualizar servidor guardado
+  - Key: ConnectNewServer
+    English: Connect to a new server
+    French: "Se connecter \xE0 un nouveau serveur"
+    Spanish: Conectarse a un nuevo servidor
+  - Key: DisplaySavedServer
+    English: Display saved servers
+    French: "Afficher les serveurs sauvegard\xE9s"
+    Spanish: Mostrar servidores guardados
+  - Key: RememberServer
+    English: Remember this server
+    French: Enregistre ce serveur
+    Spanish: Recuerde este servidor
+  - Key: SavedServers
+    English: Saved Servers
+    French: "Serveurs sauvegard\xE9s"
+    Spanish: Servidores guardados
+  - Key: ServerURL
+    English: Server URL
+    French: URL du serveur
+    Spanish: URL del servidor
+  - Key: CloseMenu
+    English: Close menu
+    French: Fermer le menu
+    Spanish: "Cerrar men\xFA"
+  - Key: LeaveEnvironment
+    English: Leave environment
+    French: Quitter l'environnement
+    Spanish: Salir del entorno
+  - Key: SessionCountLabel
+    English: Participants/Capacity
+    French: "Participants/Capacit\xE9"
+    Spanish: Participantes/Capacidad
+  - Key: ConnectionSettings
+    English: Connection settings
+    French: "Param\xE8tres de connexion"
+    Spanish: "Ajustes de conexi\xF3n"
+  - Key: IPAdress
+    English: IP adress
+    French: Adresse IP
+    Spanish: "Direcci\xF3n IP"
+  - Key: HttpPort
+    English: Http port
+    French: Port Http
+    Spanish: Puerto http
+  - Key: NewServer
+    English: New server
+    French: Nouveau serveur
+    Spanish: Nuevo servidor
+  - Key: EnterNewServer
+    English: Enter a server url here
+    French: Entrez l'URL du serveur ici
+    Spanish: "Introduzca aqu\xED la url del servidor"
+  - Key: ConnectionHistory
+    English: Connection history
+    French: Historique des connexions
+    Spanish: Historial de conexiones
+  - Key: DeleteServerHistory_Description
+    English: Delete this server from the history ?
+    French: Supprimer ce serveur de l'historique ?
+    Spanish: "\xBF Borrar este servidor del historial ?"

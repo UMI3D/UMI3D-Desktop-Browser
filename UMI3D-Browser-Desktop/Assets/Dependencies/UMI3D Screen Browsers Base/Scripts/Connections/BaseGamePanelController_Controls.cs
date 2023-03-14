@@ -16,6 +16,8 @@ using umi3d.commonScreen.game;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static umi3d.baseBrowser.cursor.BaseCursor;
+using static umi3d.commonScreen.game.GamePanel_C;
+using static umi3d.commonScreen.game.NotifAndUsersArea_C;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -29,16 +31,16 @@ namespace umi3d.baseBrowser.connection
 
             KeyboardShortcut.AddUpListener(ShortcutEnum.DisplayHideGameMenu, () =>
             {
-                if (GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu)
+                if (GamePanel.CurrentView == GameViews.GameMenu)
                 {
-                    GamePanel.AddScreenToStack = CustomGamePanel.GameViews.Game;
-                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
+                    GamePanel.AddScreenToStack = GameViews.Game;
+                    BaseCursor.SetMovement(this, CursorMovement.Center);
                     CloseGameWindows();
                 }
                 else
                 {
-                    GamePanel.AddScreenToStack = CustomGamePanel.GameViews.GameMenu;
-                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
+                    GamePanel.AddScreenToStack = GameViews.GameMenu;
+                    BaseCursor.SetMovement(this, CursorMovement.Free);
                 }
             });
 
@@ -46,24 +48,24 @@ namespace umi3d.baseBrowser.connection
             {
                 if
                 (
-                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
-                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
+                    GamePanel.CurrentView == GameViews.GameMenu
+                    || GamePanel.CurrentView == GameViews.Loader
                 ) return;
 
                 if
                 (
                     !Game.DisplayNotifUsersArea
-                    || Game.NotifAndUserArea.AreaPanel != CustomNotifAndUsersArea.NotificationsOrUsers.Notifications)
+                    || Game.NotifAndUserArea.AreaPanel != NotificationsOrUsers.Notifications)
                 {
-                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
+                    BaseCursor.SetMovement(this, CursorMovement.Free);
 
                     if (!Game.DisplayNotifUsersArea) Game.DisplayNotifUsersArea = true;
-                    Game.NotifAndUserArea.AreaPanel = CustomNotifAndUsersArea.NotificationsOrUsers.Notifications;
+                    Game.NotifAndUserArea.AreaPanel = NotificationsOrUsers.Notifications;
                 }
                 else
                 {
                     CloseGameWindows();
-                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
+                    BaseCursor.SetMovement(this, CursorMovement.Center);
                 }
             });
 
@@ -71,24 +73,24 @@ namespace umi3d.baseBrowser.connection
             {
                 if
                 (
-                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
-                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
+                    GamePanel.CurrentView == GameViews.GameMenu
+                    || GamePanel.CurrentView == GameViews.Loader
                 ) return;
 
                 if
                 (
                     !Game.DisplayNotifUsersArea
-                    || Game.NotifAndUserArea.AreaPanel != CustomNotifAndUsersArea.NotificationsOrUsers.Users)
+                    || Game.NotifAndUserArea.AreaPanel != NotificationsOrUsers.Users)
                 {
-                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Free);
+                    BaseCursor.SetMovement(this, CursorMovement.Free);
 
                     if (!Game.DisplayNotifUsersArea) Game.DisplayNotifUsersArea = true;
-                    Game.NotifAndUserArea.AreaPanel = CustomNotifAndUsersArea.NotificationsOrUsers.Users;
+                    Game.NotifAndUserArea.AreaPanel = NotificationsOrUsers.Users;
                 }
                 else
                 {
                     CloseGameWindows();
-                    BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
+                    BaseCursor.SetMovement(this, CursorMovement.Center);
                 }
             });
 
@@ -96,13 +98,13 @@ namespace umi3d.baseBrowser.connection
             {
                 if
                 (
-                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
-                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
+                    GamePanel.CurrentView == GameViews.GameMenu
+                    || GamePanel.CurrentView == GameViews.Loader
                     || BaseCursor.Movement == CursorMovement.Free
                 ) return;
 
-                if (CustomEmoteWindow.Emotes == null || CustomEmoteWindow.Emotes.Count <= index) return;
-                var emote = CustomEmoteWindow.Emotes[index];
+                if (EmoteWindow_C.Emotes == null || EmoteWindow_C.Emotes.Count <= index) return;
+                var emote = EmoteWindow_C.Emotes[index];
                 emote.PlayEmote(emote);
             };
 
@@ -115,8 +117,8 @@ namespace umi3d.baseBrowser.connection
             {
                 if
                 (
-                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
-                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
+                    GamePanel.CurrentView == GameViews.GameMenu
+                    || GamePanel.CurrentView == GameViews.Loader
                 ) return;
 
                 if (!Game.IsLeadingAndtrailingClicked(GetMouseWorldPosition())) return;
@@ -127,8 +129,8 @@ namespace umi3d.baseBrowser.connection
             {
                 if
                 (
-                    GamePanel.CurrentView == CustomGamePanel.GameViews.GameMenu
-                    || GamePanel.CurrentView == CustomGamePanel.GameViews.Loader
+                    GamePanel.CurrentView == GameViews.GameMenu
+                    || GamePanel.CurrentView == GameViews.Loader
                 ) return;
 
                 if (!Game.IsLeadingAndtrailingClicked(GetMouseWorldPosition())) return;

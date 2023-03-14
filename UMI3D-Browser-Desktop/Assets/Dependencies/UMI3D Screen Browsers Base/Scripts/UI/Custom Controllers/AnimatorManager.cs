@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static AnimatorManager;
 
 public static class AnimatorManager
 {
@@ -20,10 +21,24 @@ public static class AnimatorManager
     public const float DropdownDuration = 0.5f;
     public const float MainDuration = 1f;
     public const float TextFadeDuration = 1f;
-
+    public const float CallbackDelay = .1f;
 
     public static Dictionary<VisualElement, List<Animation>> Animations = new Dictionary<VisualElement, List<Animation>>();
 
+    /// <summary>
+    /// Add an animation.
+    /// </summary>
+    /// <param name="ve">The visual that will have an animation.</param>
+    /// <param name="persistentVisual">The visual that should be attached to a panel until the end of the animation.</param>
+    /// <param name="setInitialValue">The initial value.</param>
+    /// <param name="setEndValue">The end value.</param>
+    /// <param name="propertyName">Name of the property that will be animated.</param>
+    /// <param name="duration">Duration of the animation, in second.</param>
+    /// <param name="easingMode">Animation easing mode.</param>
+    /// <param name="delay">Delay before playing the animation, in second.</param>
+    /// <param name="callback">Callback raised when the animation end. This callback is raised only when the animation end properly.</param>
+    /// <param name="forceAnimation">Whether or not playing this animation when <see cref="ReduceAnimation"/> is true.</param>
+    /// <param name="revert">Should the animation be played reverted.</param>
     public static void AddAnimation
     (
         this VisualElement ve,
@@ -41,6 +56,7 @@ public static class AnimatorManager
     {
         if (ReduceAnimation && !forceAnimation)
         {
+            // Play this action without animation and call the callback
             if (!revert) setEndValue?.Invoke();
             else setInitialValue?.Invoke();
             persistentVisual.schedule.Execute(() => callback?.Invoke());
@@ -55,7 +71,7 @@ public static class AnimatorManager
             Delay = delay,
         };
 
-        var delayBeforeCallback = (long)(duration.value * 1000 + (delay == null ? 0 : delay.value * 1000));
+        var delayBeforeCallback = (long)(duration.value * 1000 + (delay == null ? 0 : delay.value * 1000) + CallbackDelay);
         var scheduledItem = persistentVisual.schedule.Execute(() =>
         {
             callback?.Invoke();
@@ -64,8 +80,9 @@ public static class AnimatorManager
         scheduledItem.ExecuteLater(delayBeforeCallback);
         animation.Callback = scheduledItem;
 
-        if (!Animations.TryGetValue(ve, out var oldAnimations))
+        if (!Animations.TryGetValue(ve, out var animations))
         {
+            // Add this animation.
             if (!revert) setInitialValue?.Invoke();
             else setEndValue?.Invoke();
             ve.style.transitionProperty = new List<StylePropertyName> { propertyName };
@@ -76,46 +93,37 @@ public static class AnimatorManager
             else setInitialValue?.Invoke();
 
             Animations.Add(ve, new List<Animation> { animation });
-
-            return;
         }
-
-        var isNew = true;
-        for (int i = 0; i < oldAnimations.Count; ++i)
+        else
         {
-            if (oldAnimations[i].PropertyName != propertyName) continue;
+            // Check if there is a similar animation.
+            var isNew = true;
+            for (int i = 0; i < animations.Count; ++i)
+            {
+                if (animations[i].PropertyName != propertyName) continue;
 
-            oldAnimations[i].Callback?.Pause();
-            oldAnimations[i] = animation;
-            isNew = false;
-            break;
+                // if not new: Pause the old animation callback as we don't want it to be called.
+                animations[i].Callback?.Pause();
+                animations[i] = animation;
+                isNew = false;
+                break;
+            }
+            if (isNew)
+            {
+                // Set the initial value.
+                if (!revert) setInitialValue();
+                else setEndValue?.Invoke();
+
+                animations.Add(animation);
+
+                // Insert this animation among the others.
+                ve.UpdateTransitionList(animations);
+            }
+
+            // Set the end value.
+            if (!revert) setEndValue?.Invoke();
+            else setInitialValue?.Invoke();
         }
-        if (isNew)
-        {
-            if (!revert) setInitialValue();
-            else setEndValue?.Invoke();
-            oldAnimations.Add(animation);
-        }
-
-        var properties = new List<StylePropertyName>();
-        var durations = new List<TimeValue>();
-        var easingModes = new List<EasingFunction>();
-        var delays = new List<TimeValue>();
-        foreach (var animation_ in oldAnimations)
-        {
-            properties.Add(animation_.PropertyName);
-            durations.Add(animation_.Duration);
-            easingModes.Add(animation_.EasingMode);
-            delays.Add(animation_.Delay);
-        }
-
-        ve.style.transitionProperty = properties;
-        ve.style.transitionDuration = durations;
-        ve.style.transitionTimingFunction = easingModes;
-        ve.style.transitionDelay = delays;
-
-        if (!revert) setEndValue?.Invoke();
-        else setInitialValue?.Invoke();
     }
 
     public static void RemoveAnimation(this VisualElement ve, Animation animation)
@@ -126,22 +134,7 @@ public static class AnimatorManager
 
         animations.Remove(animation);
 
-        var properties = new List<StylePropertyName>();
-        var durations = new List<TimeValue>();
-        var easingModes = new List<EasingFunction>();
-        var delays = new List<TimeValue>();
-        foreach (var animation_ in animations)
-        {
-            properties.Add(animation.PropertyName);
-            durations.Add(animation_.Duration);
-            easingModes.Add(animation_.EasingMode);
-            delays.Add(animation_.Delay);
-        }
-
-        ve.style.transitionProperty = properties;
-        ve.style.transitionDuration = durations;
-        ve.style.transitionTimingFunction = easingModes;
-        ve.style.transitionDelay = delays;
+        ve.UpdateTransitionList(animations);
 
         if (animations.Count == 0) Animations.Remove(ve);
     }
@@ -153,5 +146,25 @@ public static class AnimatorManager
         if (!animations.Exists(animation => animation.PropertyName == propertyName)) return;
         var animation = animations.Find(animation => animation.PropertyName == propertyName);
         ve.RemoveAnimation(animation);
+    }
+
+    private static void UpdateTransitionList(this VisualElement ve, List<Animation> animations)
+    {
+        var properties = new List<StylePropertyName>();
+        var durations = new List<TimeValue>();
+        var easingModes = new List<EasingFunction>();
+        var delays = new List<TimeValue>();
+        foreach (var animation_ in animations)
+        {
+            properties.Add(animation_.PropertyName);
+            durations.Add(animation_.Duration);
+            easingModes.Add(animation_.EasingMode);
+            delays.Add(animation_.Delay);
+        }
+
+        ve.style.transitionProperty = properties;
+        ve.style.transitionDuration = durations;
+        ve.style.transitionTimingFunction = easingModes;
+        ve.style.transitionDelay = delays;
     }
 }

@@ -10,6 +10,7 @@
 	--padding-container-scrollview: 22px;
 
 	--color-background-container: transparent;
+	--background-color-transparent-game: rgba(38, 38, 38, 0.90);
 	--color-border-menu-container: rgb(205, 154, 79);
 	--color-border-game-container: rgb(0, 193, 216);
 
@@ -21,6 +22,7 @@
 	--image-arrow_carrousel: resource("Icons/arrow");
 	--image-select_hover: resource("Icons/PageSelect/select_hover");
 	--image-select_active: resource("Icons/PageSelect/select_active");
+	--image-pin: resource("Icons/pin");
 
 	--size-dragger-sdc : 45px;
 	--border-width-displayer : 3px;

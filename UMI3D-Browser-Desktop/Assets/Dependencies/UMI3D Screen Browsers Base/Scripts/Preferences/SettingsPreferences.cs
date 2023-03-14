@@ -26,11 +26,26 @@ namespace umi3d.baseBrowser.preferences
     public class SettingsPreferences
     {
         public const string c_dataFolderPath = "BrowserData";
+
+        #region General
+
+        public const string c_generalPath = "generalData";
+        public enum Language
+        {
+            English,
+            French,
+            Spanish
+        }
         [Serializable]
         public struct GeneralData
         {
-
+            public Language LanguageChoice;
         }
+
+        public static bool TryGetGeneralData(out GeneralData data) => PreferencesManager.TryGet(out data, c_generalPath, c_dataFolderPath);
+        public static void StoreGeneralData(GeneralData data) => PreferencesManager.StoreData(data, c_generalPath, c_dataFolderPath);
+
+        #endregion
 
         #region Resolution
 

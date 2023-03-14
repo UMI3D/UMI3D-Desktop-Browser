@@ -17,7 +17,6 @@ limitations under the License.
 using inetum.unityUtils;
 using System;
 using System.Runtime.InteropServices;
-using umi3dDesktopBrowser.ui.viewController;
 using UnityEngine;
 
 /// <summary>

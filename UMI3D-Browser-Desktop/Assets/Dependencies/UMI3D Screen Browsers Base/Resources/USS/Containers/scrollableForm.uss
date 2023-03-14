@@ -5,7 +5,7 @@
     border-top-right-radius: var(--border-radius-container);
     border-bottom-left-radius: var(--border-radius-container);
     border-bottom-right-radius: var(--border-radius-container);
-    background-color: var(--background-color-container);
+    background-color: var(--background-color-transparent-game);
 }
 
 .scrollable__form > .scrollable__form-title {
@@ -47,4 +47,28 @@
 .scrollable__form.emote__window .emote__window-icon {
 	width: 100%;
 	height: 100%;
+}
+
+.scrollable__form.tools__items__window .sdc-box > * {
+    width: 99%;
+}
+
+/*.scrollable__form.tools__window .edc > * {
+    background-color: var(--background-color-transparent-game);
+}*/
+
+.tools__window .tools__window-inputs__box {
+    margin-left: 20%;
+
+    background-color: var(--background-color-container);
+
+	border-top-left-radius: var(--border-radius-container);
+    border-bottom-left-radius: var(--border-radius-container);
+    border-top-right-radius: var(--border-radius-container);
+    border-bottom-right-radius: var(--border-radius-container);
+
+    border-left-width: var(--border-width-displayer);
+    border-right-width: var(--border-width-displayer);
+    border-top-width: var(--border-width-displayer);
+    border-bottom-width: var(--border-width-displayer);
 }
