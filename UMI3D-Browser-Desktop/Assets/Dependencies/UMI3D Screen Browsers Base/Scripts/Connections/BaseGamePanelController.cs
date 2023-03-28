@@ -14,6 +14,7 @@ using System;
 using umi3d.baseBrowser.Controller;
 using umi3d.baseBrowser.notification;
 using umi3d.cdk.collaboration;
+using umi3d.commonScreen;
 using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.game;
 using UnityEngine;
@@ -52,7 +53,7 @@ namespace umi3d.baseBrowser.connection
             BaseConnectionProcess.Instance.ConnectionSucces += (media) =>
             {
                 GamePanel.CurrentView = GameViews.Loader;
-                Loader.Loading.TitleLabel.LocaliseText = new LocalisationAttribute("Loading environment","Other", "LoadingEnv");
+                Loader.Loading.TitleLabel.LocalisedText = new LocalisationAttribute("Loading environment","Other", "LoadingEnv");
                 Loader.Loading.Value = 0;
                 Menu.GameData.WorldName = media.name;
             };
@@ -66,7 +67,13 @@ namespace umi3d.baseBrowser.connection
                 dialoguebox.Callback = (index) => BaseConnectionProcess.Instance.Leave();
                 dialoguebox.Enqueue(root);
             };
-            BaseConnectionProcess.Instance.LoadedEnvironment += () => GamePanel.AddScreenToStack = GameViews.Game;
+            BaseConnectionProcess.Instance.LoadedEnvironment += () =>
+            {
+                GamePanel.AddScreenToStack = GameViews.Game;
+                m_isContextualMenuDown = false;
+                BaseController.Instance.CurrentController.ResetInputsWhenEnvironmentLaunch();
+                OnMenuObjectContentChange();
+            };
             BaseConnectionProcess.Instance.Connecting += (state) => Loader.Loading.Message = state;
             BaseConnectionProcess.Instance.RedirectionStarted += () =>
             {
@@ -179,6 +186,7 @@ namespace umi3d.baseBrowser.connection
         {
             BaseConnectionProcess.Instance.ResetEnvironmentEvents();
 
+            root.Add(TooltipsLayer_C.Instance);
             GamePanel = root.Q<GamePanel_C>();
 
             InitConnectionProcess();

@@ -33,7 +33,7 @@ namespace umi3d.commonScreen.menu
                 Label = new Text_C();
                 Text = new Text_C();
 
-                Label.LocaliseText = label;
+                Label.LocalisedText = label;
 
                 Text.Color = TextColor.Menu;
 
@@ -95,19 +95,19 @@ namespace umi3d.commonScreen.menu
         public virtual string WorldName
         {
             get => WorldName_Displayer.Text.text;
-            set => WorldName_Displayer.Text.LocaliseText = value;
+            set => WorldName_Displayer.Text.LocalisedText = value;
         }
 
         public virtual string EnvironmentName
         {
             get => EnvironmentName_Displayer.Text.text;
-            set => EnvironmentName_Displayer.Text.LocaliseText = value;
+            set => EnvironmentName_Displayer.Text.LocalisedText = value;
         }
 
         public virtual string Time
         {
             get => TimeInTheEnvironment_Displayer.Text.text;
-            set => TimeInTheEnvironment_Displayer.Text.LocaliseText = value.ToString();
+            set => TimeInTheEnvironment_Displayer.Text.LocalisedText = value.ToString();
         }
 
         public virtual int ParticipantCount
@@ -117,7 +117,7 @@ namespace umi3d.commonScreen.menu
                 if (!int.TryParse(ParticipantCount_Displayer.Text.text, out var count)) return 0;
                 return count;
             }
-            set => ParticipantCount_Displayer.Text.LocaliseText = value.ToString();
+            set => ParticipantCount_Displayer.Text.LocalisedText = value.ToString();
         }
 
         public override string StyleSheetPath => $"{ElementExtensions.StyleSheetMenusFolderPath}/gameDataScreen";

@@ -86,9 +86,9 @@ namespace umi3d.commonScreen.game
                 emoteButton.userData = emote;
 
                 emoteButton.name = emote.Label.ToLower();
-                emoteButton.LocaliseLabel = string.IsNullOrEmpty(emote.Label) ? " " : emote.Label;
+                emoteButton.LocalisedLabel = string.IsNullOrEmpty(emote.Label) ? " " : emote.Label;
 
-                emoteButton.LabelDirection = ElemnetDirection.Trailing;
+                emoteButton.LabelAndInputDirection = ElementAlignment.Trailing;
                 emoteButton.Type = ButtonType.Invisible;
 
                 var icon = new VisualElement { name = "icon" };

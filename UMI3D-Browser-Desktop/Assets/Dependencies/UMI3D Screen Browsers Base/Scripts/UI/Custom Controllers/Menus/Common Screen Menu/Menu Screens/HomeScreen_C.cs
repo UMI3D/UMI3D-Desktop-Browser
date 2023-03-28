@@ -107,8 +107,6 @@ namespace umi3d.commonScreen.menu
         protected bool m_displaySavedServers;
         protected bool m_isEditingSavedServers = false;
 
-        public HomeScreen_C() { }
-
         protected override void AttachUssClass()
         {
             base.AttachUssClass();
@@ -130,10 +128,10 @@ namespace umi3d.commonScreen.menu
         protected override void InitElement()
         {
             base.InitElement();
-            SavedServers__Title.LocaliseText = new LocalisationAttribute("Saved Servers", "LauncherScreen", "SavedServers");
+            SavedServers__Title.LocalisedText = new LocalisationAttribute("Saved Servers", "LauncherScreen", "SavedServers");
             SavedServers__Title.TextStyle = TextStyle.Subtitle;
             SavedServers__Edit.LocaliseText = new LocalisationAttribute("Edit", "GenericStrings", "Edit");
-            SavedServers__Edit.Size = ElementSize.Small;
+            SavedServers__Edit.Height = ElementSize.Small;
             SavedServers__Edit.clicked += () =>
             {
                 m_isEditingSavedServers = !m_isEditingSavedServers;
@@ -149,7 +147,7 @@ namespace umi3d.commonScreen.menu
                 }
             };
             SavedServers__ScrollView.mode = ScrollViewMode.Horizontal;
-            SavedServers_NewServer.LocaliseLabel = new LocalisationAttribute("New", "GenericStrings", "New");
+            SavedServers_NewServer.LocalisedLabel = new LocalisationAttribute("New", "GenericStrings", "New");
             SavedServers_NewServer.clicked += ()
                 => AddNewSavedServer(SavedServers_NewServer, new ServerPreferences.ServerData(), (index, data) =>
                 {
@@ -157,7 +155,7 @@ namespace umi3d.commonScreen.menu
                     savedServers.Add(data);
                 });
 
-            DirectConnect__Title.LocaliseText = new LocalisationAttribute("Server URL", "LauncherScreen", "ServerURL");
+            DirectConnect__Title.LocalisedText = new LocalisationAttribute("Server URL", "LauncherScreen", "ServerURL");
             DirectConnect__Title.TextStyle = TextStyle.Subtitle;
             DirectConnect__TextField.Size = ElementSize.Large;
             DirectConnect__TextField.DisplaySubmitButton = true;
@@ -166,7 +164,7 @@ namespace umi3d.commonScreen.menu
             DirectConnect__TextField.SubmitButton.clicked += () => SetCurrentServerAndConnect();
             DirectConnect__Toggle.LocaliseLabel = new LocalisationAttribute("Remember this server", "LauncherScreen", "RememberServer");
             DirectConnect__Toggle.value = true;
-            DirectConnect__Toggle.Direction = ElemnetDirection.Trailing;
+            DirectConnect__Toggle.Direction = ElementDirection.Trailing;
 
             Button_SwitchBoxes.clicked += () => DisplaySavedServers = !DisplaySavedServers;
 
@@ -261,7 +259,7 @@ namespace umi3d.commonScreen.menu
                 }
                 catch { }
             }
-            item.LocaliseLabel = data.serverName ?? data.serverUrl;
+            item.LocalisedLabel = data.serverName ?? data.serverUrl;
             item.TouchManipulator.LongPressDelay = 1000;
             item.Data = data;
         }

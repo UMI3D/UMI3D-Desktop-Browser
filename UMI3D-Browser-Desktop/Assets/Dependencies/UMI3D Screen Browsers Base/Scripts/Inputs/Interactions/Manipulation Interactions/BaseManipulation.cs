@@ -17,96 +17,155 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using umi3d.baseBrowser.cursor;
 using umi3d.cdk;
+using umi3d.cdk.menu.interaction;
 using umi3d.common.interaction;
 using UnityEngine;
 
 namespace umi3d.baseBrowser.inputs.interactions
 {
-    public class BaseManipulation : BaseInteraction<ManipulationDto>
+    public abstract class BaseManipulation : BaseInteraction<ManipulationDto>
     {
-        public Sprite Icon;
-        public Transform manipulationCursor;
+        public ManipulationMenuItem menuItem;
+
         /// <summary>
         /// DofGroup of the Manipulation.
         /// </summary>
         public DofGroupEnum DofGroup;
-        public umi3d.baseBrowser.Cursor.FrameIndicator frameIndicator;
-        /// <summary>
-        /// Button to activate this input.
-        /// </summary>
-        public BaseInteraction<EventDto> activationButton;
-        protected bool Active;
-        protected bool manipulated = false;
-        /// <summary>
-        /// Launched coroutine for network message sending (if any).
-        /// </summary>
-        /// <see cref="networkMessageSender"/>
-        protected Coroutine messageSenderCoroutine;
-        /// <summary>
-        /// Frame of reference of the <see cref="associatedInteraction"/> (if any).
-        /// </summary>
-        protected Transform frameOfReference;
-        /// <summary>
-        /// Frame rate applied to message emission through network (high values can cause network flood).
-        /// </summary>
-        public float networkFrameRate = 30;
+        
         /// <summary>
         /// Input multiplicative strength.
         /// </summary>
         public float strength = 1;
 
-        #region Instances List
+        #region Instances
 
-        protected static int currentInstance;
+        protected static int s_currentIndex;
+
+        #region Incrementation and decrementation
+
+        /// <summary>
+        /// Deactivate current manipulation and activate next one.
+        /// </summary>
+        public static void NextManipulation() => SwitchManipulation(s_currentIndex + 1);
+
+        /// <summary>
+        /// Deactivate current manipulation and activate previous one.
+        /// </summary>
+        public static void PreviousManipulation() => SwitchManipulation(s_currentIndex - 1);
+
+        /// <summary>
+        /// Update the current selected manipulation.
+        /// </summary>
+        /// <param name="i"></param>
+        public static void SwitchManipulation(int i)
+        {
+            List<BaseManipulation> instances = BaseManipulationGroup.CurrentManipulations;
+
+            if (instances == null || instances.Count == 0) return;
+
+            if (s_currentIndex < instances.Count && s_currentIndex >= 0) instances[s_currentIndex].Deactivate();
+
+            if (instances.Count == 0)
+            {
+                s_currentIndex = -1;
+                UnityEngine.Debug.Log($"switch group {i}, {s_currentIndex}");
+                return;
+            }
+
+            if (i < 0) s_currentIndex = instances.Count - 1;
+            else if (i >= instances.Count) s_currentIndex = 0;
+            else s_currentIndex = i;
+
+            instances[s_currentIndex].Activate();
+        }
 
         #endregion
 
-        public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
+        #endregion
+
+        #region Activation, Deactivation, Select
+
+        /// <summary>
+        /// Whether or not this manipulation is active.
+        /// </summary>
+        public bool IsActive { get => m_isActive; protected set => m_isActive = value; }
+        [SerializeField]
+        [Header("Do not update this value in the inspector.")]
+        private bool m_isActive;
+
+        protected virtual void Activate()
         {
-            if (associatedInteraction != null)
-                throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
-
-            if (!IsCompatibleWith(interaction))
-                throw new System.Exception("Trying to associate an uncompatible interaction !");
-
-            this.toolId = toolId;
-            foreach (DofGroupOptionDto group in (interaction as ManipulationDto).dofSeparationOptions)
-            {
-                foreach (DofGroupDto sep in group.separations)
-                {
-                    if (sep.dofs == DofGroup)
-                    {
-                        Associate(interaction as ManipulationDto, sep.dofs, toolId, hoveredObjectId);
-                        return;
-                    }
-                }
-            }
+            IsActive = true;
+            menuItem.UnSubscribe(Select);
+            menuItem.Select();
+            menuItem.Subscribe(Select);
         }
+        /// <summary>
+        /// Deactivate this manipulation.
+        /// </summary>
+        public virtual void Deactivate()
+        {
+            IsActive = false;
+            manipulated = false;
+            frameIndicator.gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Select the first manipulation.
+        /// </summary>
+        public static void SelectFirst() => SwitchManipulation(0);
+
+        /// <summary>
+        /// Select this manipulation.
+        /// </summary>
+        public virtual void Select() => SwitchManipulation(BaseManipulationGroup.CurrentManipulations.IndexOf(this));
+
+        /// <summary>
+        /// Unselect all manipulations.
+        /// </summary>
+        public static void UnSelectAll()
+        {
+            List<BaseManipulation> instances = BaseManipulationGroup.CurrentManipulations;
+
+            if (instances == null || instances.Count == 0) return;
+
+            if (s_currentIndex < instances.Count && s_currentIndex >= 0) instances[s_currentIndex].Deactivate();
+            s_currentIndex = -1;
+        }
+
+        #endregion
+
+        #region Association and dissociation
+
+        public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
+            => throw new System.NotImplementedException();
 
         public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
             if (associatedInteraction != null)
                 throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
 
-            if (dofs != DofGroup)
-                throw new System.Exception("Trying to associate an uncompatible interaction !");
+            if (!IsCompatibleWith(dofs)) throw new System.Exception("Trying to associate an uncompatible interaction !");
 
             this.hoveredObjectId = hoveredObjectId;
+            this.toolId = toolId;
             associatedInteraction = manipulation;
 
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Create displayer");
-            //if (manipulationDisplayer == null)
-            //{
-            //    manipulationDisplayer = ManipulationDisplayerManager.CreateDisplayer();
-            //}
-            //if (manipulationDisplayer != null)
-            //{
-            //    manipulationDisplayer.SetUp(associatedInteraction.name, Icon);
-            //}
+            menuItem = new ManipulationMenuItem
+            {
+                Name = associatedInteraction.name,
+                dof = new DofGroupDto
+                {
+                    dofs = dofs,
+                }
+            };
+            menuItem.Subscribe(Select);
+            Menu?.Add(menuItem);
 
             StartCoroutine(SetFrameOFReference());
-            messageSenderCoroutine = StartCoroutine(networkMessageSender());
+            messageSenderCoroutine = StartCoroutine(NetworkMessageSender());
         }
 
         public override void Dissociate()
@@ -115,12 +174,26 @@ namespace umi3d.baseBrowser.inputs.interactions
             {
                 StopCoroutine(messageSenderCoroutine);
                 messageSenderCoroutine = null;
+                LeaveManipulation();
             }
 
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"remove Displayer");
-
             associatedInteraction = null;
+            Menu?.Remove(menuItem);
+            menuItem?.UnSubscribe(Select);
+            menuItem = null;
         }
+
+        protected virtual void LeaveManipulation()
+        {
+            manipulated = false;
+            BaseCursor.SetMovement(this, BaseCursor.CursorMovement.Center);
+            frameIndicator.gameObject.SetActive(false);
+            BaseCursor.State = BaseCursor.CursorState.Hover;
+        }
+
+        #endregion
+
+        #region Is compatible or is availlable
 
         public override bool IsCompatibleWith(AbstractInteractionDto interaction)
         {
@@ -132,42 +205,17 @@ namespace umi3d.baseBrowser.inputs.interactions
             );
         }
 
-        public override bool IsAvailable()
-            => base.IsAvailable() && activationButton.IsAvailable();
+        
 
         public bool IsCompatibleWith(DofGroupEnum dofGroup) => dofGroup == DofGroup;
 
-        public static void SelectFirst() => SwicthManipulation(0);
+        #endregion
 
-        public static void NextManipulation() => SwicthManipulation(currentInstance + 1);
-
-        public static void PreviousManipulation() => SwicthManipulation(currentInstance - 1);
-
-        public static void SwicthManipulation(int i)
-        {
-            List<BaseManipulation> instances = BaseManipulationGroup.GetManipulations();
-
-            if (instances == null || instances.Count == 0) return;
-
-            if (currentInstance < instances.Count) instances[currentInstance].Deactivate();
-
-            currentInstance = i;
-            if (currentInstance < 0) currentInstance = instances.Count - 1;
-            else if (currentInstance >= instances.Count) currentInstance = 0;
-            if (currentInstance < instances.Count) instances[currentInstance].Activate();
-        }
-
-        public void Activate()
-        {
-            Active = true;
-        }
-        public void Deactivate()
-        {
-            Active = false;
-            manipulated = false;
-            frameIndicator.gameObject.SetActive(false);
-        }
-
+        /// <summary>
+        /// Frame of reference of the <see cref="associatedInteraction"/> (if any).
+        /// </summary>
+        protected Transform frameOfReference;
+        
         protected IEnumerator SetFrameOFReference()
         {
             var wait = new WaitForFixedUpdate();
@@ -188,70 +236,24 @@ namespace umi3d.baseBrowser.inputs.interactions
             }
         }
 
-        protected IEnumerator networkMessageSender()
-        {
-            UnityEngine.Debug.Log("TODO");
-            yield return null;
-            //while (true)
-            //{
-            //    if 
-            //    (
-            //        Active 
-            //        && associatedInteraction != null 
-            //    )
-            //    {
-            //        if (Input.GetKey(InputLayoutManager.GetInputCode(activationButton.activationButton)))
-            //        {
-            //            if (manipulated)
-            //            {
-            //                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        /// <summary>
+        /// Launched coroutine for network message sending (if any).
+        /// </summary>
+        /// <see cref="NetworkMessageSender"/>
+        protected Coroutine messageSenderCoroutine;
+        protected bool manipulated = false;
+        public Transform manipulationCursor;
+        public Cursor.FrameIndicator frameIndicator;
+        /// <summary>
+        /// Frame rate applied to message emission through network (high values can cause network flood).
+        /// </summary>
+        public float networkFrameRate = 30;
 
-            //                manipulationCursor.position = frameIndicator.Project(ray, DofGroup);
+        protected abstract IEnumerator NetworkMessageSender();
 
-            //                Vector3 distanceInWorld = manipulationCursor.position - StartPosition;
-            //                Vector3 distanceInFrame = frameOfReference.InverseTransformDirection(distanceInWorld);
+        protected abstract bool DoesPerformRotation();
 
-            //                var pararmeterDto = new ManipulationRequestDto()
-            //                {
-            //                    boneType = bone,
-            //                    id = associatedInteraction.id,
-            //                    toolId = this.toolId,
-            //                    hoveredObjectId = GetCurrentHoveredObjectId()
-            //                };
-            //                MapDistanceWithDof(distanceInFrame, ref pararmeterDto);
-            //                UMI3DClientServer.SendData(pararmeterDto, true);
-            //            }
-            //            else
-            //            {
-            //                if (DoesPerformRotation())
-            //                {
-            //                    umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Free);
-            //                }
-
-            //                manipulated = true;
-
-            //                StartPosition = frameOfReference.position;
-            //                manipulationCursor.position = StartPosition;
-            //                frameIndicator.gameObject.SetActive(true);
-            //                frameIndicator.DofGroup = DofGroup;
-            //                frameIndicator.Frame = frameOfReference;
-            //                umi3d.baseBrowser.Controller.BaseCursor.State = umi3d.baseBrowser.Controller.BaseCursor.CursorState.Clicked;
-            //            }
-            //        }
-            //        else if (manipulated)
-            //        {
-            //            manipulated = false;
-            //            umi3d.baseBrowser.Controller.BaseCursor.SetMovement(this, umi3d.baseBrowser.Controller.BaseCursor.CursorMovement.Center);
-            //            frameIndicator.gameObject.SetActive(false);
-            //            umi3d.baseBrowser.Controller.BaseCursor.State = umi3d.baseBrowser.Controller.BaseCursor.CursorState.Hover;
-            //        }
-            //    }
-
-            //    yield return new WaitForSeconds(1f / networkFrameRate);
-            //}
-        }
-
-        void MapDistanceWithDof(Vector3 distance, ref ManipulationRequestDto Manipulation)
+        protected void MapDistanceWithDof(Vector3 distance, ref ManipulationRequestDto Manipulation)
         {
             switch (DofGroup)
             {

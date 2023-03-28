@@ -36,7 +36,7 @@
     right: 0;
 }
 
-.notification__author.unity-label.text {
+.notification__author.text {
     margin-left: 7px;
     margin-right: 7px;
     margin-top: 2%;
@@ -49,7 +49,7 @@
     left: 0;
 }
 
-.notification__timestamp.unity-label.text {
+.notification__timestamp.text {
     margin-left: 7px;
     margin-right: 7px;
     margin-top: 2%;
@@ -69,7 +69,7 @@
     flex-grow: 1;
 }
 
-.notification__message.unity-label.text {
+.notification__message.text {
     margin-left: 7px;
     margin-right: 7px;
     margin-top: 7px;

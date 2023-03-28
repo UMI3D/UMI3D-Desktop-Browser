@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Linq;
 using System.Threading.Tasks;
+using umi3d.commonScreen;
 using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.menu;
 using UnityEngine;
@@ -36,6 +37,8 @@ namespace umi3d.baseBrowser.connection
             Debug.Assert(document != null);
 
             Screen.sleepTimeout = SleepTimeout.SystemSetting;
+
+            root.Add(TooltipsLayer_C.Instance);
 
             Launcher = root.Q<Launcher_C>();
 #if !UNITY_STANDALONE

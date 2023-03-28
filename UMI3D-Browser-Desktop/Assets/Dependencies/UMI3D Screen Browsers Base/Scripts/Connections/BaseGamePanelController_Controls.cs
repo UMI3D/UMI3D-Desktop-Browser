@@ -94,6 +94,22 @@ namespace umi3d.baseBrowser.connection
                 }
             });
 
+            KeyboardShortcut.AddUpListener(ShortcutEnum.FreeCursor, () =>
+            {
+                if
+                (
+                    GamePanel.CurrentView == GameViews.GameMenu
+                    || GamePanel.CurrentView == GameViews.Loader
+                ) return;
+
+                if (BaseCursor.Movement == CursorMovement.Center) BaseCursor.SetMovement(this, CursorMovement.Free);
+                else
+                {
+                    CloseGameWindows();
+                    BaseCursor.SetMovement(this, CursorMovement.Center);
+                }
+            });
+
             KeyboardEmote.EmotePressed += index =>
             {
                 if

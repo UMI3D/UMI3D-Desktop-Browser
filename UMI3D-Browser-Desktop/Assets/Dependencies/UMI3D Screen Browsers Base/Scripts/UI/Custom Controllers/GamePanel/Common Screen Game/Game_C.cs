@@ -288,16 +288,10 @@ namespace umi3d.commonScreen.game
 
         protected virtual void Transition(VisualElement persistentVisual, bool revert)
         {
-            this.AddAnimation
-            (
-                persistentVisual,
-                () => style.opacity = 0,
-                () => style.opacity = 1,
-                "opacity",
-                0.5f,
-                revert: revert,
-                callback: revert ? RemoveFromHierarchy : null
-            );
+            this
+                .SetOpacity(!revert ? 1 : 0)
+                .WithAnimation(.5f)
+                .SetCallback(revert ? RemoveFromHierarchy : null);
         }
 
         protected void DisplayMouseAndKeyboardNotifAndUsers(bool value)
@@ -326,16 +320,10 @@ namespace umi3d.commonScreen.game
             NotifAndUserArea.schedule.Execute(() =>
             {
                 NotifAndUserArea.style.visibility = StyleKeyword.Null;
-                NotifAndUserArea.AddAnimation
-                (
-                    this,
-                    () => NotifAndUserArea.style.opacity = 0f,
-                    () => NotifAndUserArea.style.opacity = 1f,
-                    "opacity",
-                    0.5f,
-                    revert: !value,
-                    callback: value ? null : NotifAndUserArea.RemoveFromHierarchy
-                );
+                this
+                   .SetOpacity(value ? 1 : 0)
+                   .WithAnimation(.5f)
+                   .SetCallback(value ? null : NotifAndUserArea.RemoveFromHierarchy);
             });
         }
 
@@ -358,7 +346,7 @@ namespace umi3d.commonScreen.game
 
         protected virtual void PinnedToolClicked(bool isSelected, AbstractMenuItem menu)
         {
-            TrailingArea.ToolsItemsWindow.AddMenu(menu);
+            if (isSelected) TrailingArea.ToolsItemsWindow.AddMenu(menu);
             TrailingArea.ActiveWindow = isSelected ? TrailingArea_C.WindowsEnum.ToolsItemsWindow : TrailingArea_C.WindowsEnum.None;
         }
 

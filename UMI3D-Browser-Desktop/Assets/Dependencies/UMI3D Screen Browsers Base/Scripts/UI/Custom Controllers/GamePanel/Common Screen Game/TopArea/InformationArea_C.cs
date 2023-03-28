@@ -13,8 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using MathNet.Numerics;
 using System;
 using umi3d.baseBrowser.ui.viewController;
+using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.game;
@@ -111,32 +113,22 @@ namespace umi3d.commonScreen.game
 
         public virtual LocalisationAttribute ShortText
         {
-            get => ShortInf.LocaliseText;
+            get => ShortInf.LocalisedText;
             set
             {
-                if (value == ShortInf.LocaliseText) return;
-                var color = ShortInf.resolvedStyle.color;
-                ShortInf.AddAnimation
-                (
-                    this,
-                    () => ShortInf.style.color = new Color(color.r, color.g, color.b, color.a),
-                    () => ShortInf.style.color = new Color(color.r, color.g, color.b, 0),
-                    "color",
-                    AnimatorManager.TextFadeDuration,
-                    callback: () =>
+                if (value == ShortInf.LocalisedText) return;
+
+                ShortInf
+                    .SetColor(new Color(Color.white.r, Color.white.r, Color.white.r, 0))
+                    .WithAnimation(AnimatorManager.TextFadeDuration)
+                    .SetCallback(() =>
                     {
-                        ShortInf.LocaliseText = value;
-                        ShortInf.AddAnimation
-                        (
-                            this,
-                            () => ShortInf.style.color = new Color(color.r, color.g, color.b, 0),
-                            () => ShortInf.style.color = new Color(color.r, color.g, color.b, color.a),
-                            "color",
-                            AnimatorManager.TextFadeDuration,
-                            callback: () => ShortInf.style.color = StyleKeyword.Null
-                        );
-                    }
-                );
+                        ShortInf.LocalisedText = value;
+                        ShortInf
+                            .SetColor(Color.white)
+                            .WithAnimation(AnimatorManager.TextFadeDuration)
+                            .SetCallback(() => ShortInf.style.color = StyleKeyword.Null);
+                    });
             }
         }
 
@@ -261,6 +253,7 @@ namespace umi3d.commonScreen.game
                 if (!IsExpanded && 10f < localPosition.y - m_initialManipulatedPosition.y) IsExpanded = true;
             };
 
+            ShortInf.TextAlignment = ElementAlignment.Center;
             ShortInf.AddManipulator(ShortInfManipulator);
             ShortInfManipulator.ClickedDownWithInfo += (e, localPosition) =>
             {
@@ -297,29 +290,32 @@ namespace umi3d.commonScreen.game
             MicManipulator.clicked += () => MicStatusChanged?.Invoke();
             Sound.AddManipulator(SoundManipulator);
             SoundManipulator.clicked += () => SoundStatusChanged?.Invoke();
+
+            Toolbox.Width = ElementSize.Medium;
+            Toolbox.Category = ElementCategory.Game;
+
             Add(ShortInf);
 
-            ShortInf.schedule.Execute(() =>
+            this.schedule.Execute(() =>
             {
                 if (!NotificationCenter_C.NotificationTitleStack.TryPeek(out var title))
                 {
-                    //AnimateShortInf(true);
                     ShortText = EnvironmentName;
                 }
                 else if (!HideNotification)
                 {
                     NotificationCenter_C.NotificationTitleStack.Pop();
-                    //AnimateShortInf(false);
                     ShortText = $"Notif: {title}";
                 }
-            }).Every(3000);
+            })
+                .Every(3000)
+                .ExecuteLater(3000);
         }
 
         protected override void SetProperties()
         {
             base.SetProperties();
             Controller = ControllerEnum.MouseAndKeyboard;
-            ShortText = null;
             IsExpanded = false;
             IsMicOn = false;
             IsSoundOn = false;
@@ -353,22 +349,6 @@ namespace umi3d.commonScreen.game
         public static bool HideNotification;
 
         public MenuAsset GlobalToolsMenu;
-
-        protected void AnimateShortInf(bool isRevert)
-        {
-            if (isRevert != m_shortInfExpended) return;
-            ShortInf.AddAnimation
-            (
-                this,
-                () => ShortInf.style.width = Length.Percent(10),
-                () => ShortInf.style.width = Length.Percent(40),
-                "width",
-                0.5f,
-                delay: isRevert ? 0.5f : 0f,
-                revert: isRevert,
-                callback: () => m_shortInfExpended = !isRevert
-            );
-        }
 
         protected void ToolsMenuContentChanged()
         {

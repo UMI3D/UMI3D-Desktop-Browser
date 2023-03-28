@@ -1,0 +1,32 @@
+.button-icon {
+	width: 100%;
+	height: 100%;
+}
+
+.button-dof-x {
+	background-image: var(--image-dof-x); 
+}
+.button-dof-y {
+	background-image: var(--image-dof-y); 
+}
+.button-dof-z {
+	background-image: var(--image-dof-z); 
+}
+.button-dof-xy {
+	background-image: var(--image-dof-xy); 
+}
+.button-dof-xz {
+	background-image: var(--image-dof-xz); 
+}
+.button-dof-yz {
+	background-image: var(--image-dof-yz); 
+}
+.button-dof-rx {
+	background-image: var(--image-dof-rx); 
+}
+.button-dof-ry {
+	background-image: var(--image-dof-ry); 
+}
+.button-dof-rz {
+	background-image: var(--image-dof-rz); 
+}

@@ -78,27 +78,27 @@ namespace umi3d.commonScreen.menu
 
         public virtual LocalisationAttribute Title
         {
-            get => TitleLabel.LocaliseText;
+            get => TitleLabel.LocalisedText;
             set
             {
                 if (value.IsEmpty) TitleLabel.RemoveFromHierarchy();
                 else DropDown_Button_Background.Insert(0, TitleLabel);
-                TitleLabel.LocaliseText = value;
+                TitleLabel.LocalisedText = value;
             }
         }
         public virtual LocalisationAttribute Size
         {
-            get => SizeLabel.LocaliseText;
+            get => SizeLabel.LocalisedText;
             set
             {
                 if (value.IsEmpty) SizeLabel.RemoveFromHierarchy();
                 else DropDown_Button_Background.Insert(1, SizeLabel);
-                SizeLabel.LocaliseText = value;
+                SizeLabel.LocalisedText = value;
             }
         }
         public virtual LocalisationAttribute Date
         {
-            get => DropDown_Date.LocaliseText;
+            get => DropDown_Date.LocalisedText;
             set
             {
                 if (value.IsEmpty) DropDown_Date.RemoveFromHierarchy();
@@ -107,12 +107,12 @@ namespace umi3d.commonScreen.menu
                     DropDown_Field.Insert(0, DropDown_Date);
                     if (DropDown_Field.Contains(DropDown_Message)) DropDown_Date.PlaceBehind(DropDown_Message);
                 }
-                DropDown_Date.LocaliseText = value;
+                DropDown_Date.LocalisedText = value;
             }
         }
         public virtual LocalisationAttribute Message
         {
-            get => DropDown_Message.LocaliseText;
+            get => DropDown_Message.LocalisedText;
             set
             {
                 if (value.IsEmpty) DropDown_Message.RemoveFromHierarchy();
@@ -121,7 +121,7 @@ namespace umi3d.commonScreen.menu
                     DropDown_Field.Insert(0, DropDown_Message);
                     if (DropDown_Field.Contains(DropDown_Date)) DropDown_Message.PlaceInFront(DropDown_Date);
                 }
-                DropDown_Message.LocaliseText = value;
+                DropDown_Message.LocalisedText = value;
             }
         }
         public virtual string Path
@@ -137,37 +137,23 @@ namespace umi3d.commonScreen.menu
                 m_displayMessage = value;
                 if (m_displayMessage) this.AddIfNotInHierarchy(Overlay);
 
-                DropDown_Button_Icon.AddAnimation
-                (
-                    this,
-                    () => DropDown_Button_Icon.style.rotate = new Rotate(90),
-                    () => DropDown_Button_Icon.style.rotate = new Rotate(180),
-                    "rotate",
-                    AnimatorManager.DropdownDuration,
-                    revert: !m_displayMessage
-                );
+                DropDown_Button_Icon
+                    .SetRotate(m_displayMessage ? new Rotate(180) : new Rotate(90))
+                    .WithAnimation(AnimatorManager.DropdownDuration);
 
-                Overlay.schedule.Execute(() =>
-                {
-                    Overlay.WaitUntil
+                this.WaitUntil
                     (
                         () => !float.IsNaN(DropDown_Field.layout.height),
                         () =>
                         {
                             var fieldTotalHeight = DropDown_Field.layout.height + DropDown_Field.resolvedStyle.marginTop + DropDown_Field.resolvedStyle.marginBottom;
-                            Overlay.AddAnimation
-                            (
-                                this,
-                                () => Overlay.style.height = 0f,
-                                () => Overlay.style.height = fieldTotalHeight,
-                                "height",
-                                AnimatorManager.DropdownDuration,
-                                revert: !m_displayMessage,
-                                callback: m_displayMessage ? null : Overlay.RemoveFromHierarchy
-                            );
+
+                            Overlay
+                                .SetHeight(m_displayMessage ? fieldTotalHeight : 0f)
+                                .WithAnimation(AnimatorManager.DropdownDuration)
+                                .SetCallback(m_displayMessage ? null : Overlay.RemoveFromHierarchy);
                         }
                     );
-                });
             }
         }
 
@@ -200,18 +186,18 @@ namespace umi3d.commonScreen.menu
         public virtual string USSCustomClassDropDown_Date => $"{UssCustomClass_Emc}-drop_down__date";
         public virtual string USSCustomClassDropDown_Message => $"{UssCustomClass_Emc}-drop_down__message";
 
-        public VisualElement Overlay = new VisualElement { name = "overlay" };
-        public VisualElement Main = new VisualElement { name = "main" };
+        public Visual_C Overlay = new Visual_C { name = "overlay" };
+        public Visual_C Main = new Visual_C { name = "main" };
         public Button_C DropDown_Button = new Button_C { name = "dropdown" };
-        public VisualElement DropDown_Button_Icon_Background = new VisualElement { name = "dropdown-icon-background" };
-        public VisualElement DropDown_Button_Icon = new VisualElement { name = "dropdown-icon" };
-        public VisualElement DropDown_Button_Background = new VisualElement { name = "dropdown-background" };
+        public Visual_C DropDown_Button_Icon_Background = new Visual_C { name = "dropdown-icon-background" };
+        public Visual_C DropDown_Button_Icon = new Visual_C { name = "dropdown-icon" };
+        public Visual_C DropDown_Button_Background = new Visual_C { name = "dropdown-background" };
         public Text_C TitleLabel = new Text_C { name = "title" };
         public Text_C SizeLabel = new Text_C { name = "size" };
         public Button_C Delete = new Button_C { name = "delete" };
-        public VisualElement Delete_Background = new VisualElement { name = "delete-background" };
-        public VisualElement Delete_Icon = new VisualElement { name = "delete-icon" };
-        public VisualElement DropDown_Field = new VisualElement { name = "field" };
+        public Visual_C Delete_Background = new Visual_C { name = "delete-background" };
+        public Visual_C Delete_Icon = new Visual_C { name = "delete-icon" };
+        public Visual_C DropDown_Field = new Visual_C { name = "field" };
         public Text_C DropDown_Date = new Text_C { name = "date" };
         public Text_C DropDown_Message = new Text_C { name = "message" };
 
@@ -246,12 +232,15 @@ namespace umi3d.commonScreen.menu
         protected override void InitElement()
         {
             base.InitElement();
-            DropDown_Button.Size = ElementSize.Small;
+            DropDown_Button.Height = ElementSize.Small;
             DropDown_Button.Type = ButtonType.Invisible;
             DropDown_Button.clicked += DropDownClicked;
             DropDown_Button.Front.RemoveFromHierarchy();
-            Delete.Size = ElementSize.Small;
+            Delete.Height = ElementSize.Small;
             Delete.Type = ButtonType.Invisible;
+            DropDown_Date.TextAlignment = ElementAlignment.TrailingTop;
+
+            DropDown_Button_Icon.style.rotate = new Rotate(90);
 
             Add(Main);
             Main.Add(DropDown_Button);

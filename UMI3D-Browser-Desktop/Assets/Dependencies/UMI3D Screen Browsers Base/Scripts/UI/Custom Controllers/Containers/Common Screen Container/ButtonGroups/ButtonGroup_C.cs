@@ -91,7 +91,7 @@ namespace umi3d.commonScreen.Container
             {
                 RemoveFromClassList(USSCustomClassSize(m_size));
                 AddToClassList(USSCustomClassSize(value));
-                foreach (var button in Buttons) button.Size = value;
+                foreach (var button in Buttons) button.Height = value;
                 m_size = value;
             }
         }

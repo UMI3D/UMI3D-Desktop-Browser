@@ -13,10 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
-using System.Collections.Generic;
 using umi3d.commonScreen.Container;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Container
@@ -44,13 +41,6 @@ namespace umi3d.commonScreen.Container
                 base.Init(ve, bag, cc);
                 var custom = ve as ScrollableExpandableDataCollection_C<D>;
 
-                custom.Mode = m_ScrollViewMode.GetValueFromBag(bag, cc);
-                custom.SelectionType = m_selectionType.GetValueFromBag(bag, cc);
-                custom.Size = m_size.GetValueFromBag(bag, cc);
-                custom.IsReorderable = m_isReorderable.GetValueFromBag(bag, cc);
-                custom.ReorderableMode = m_reorderableMode.GetValueFromBag(bag, cc);
-                custom.AnimationTimeIn = m_animationTimeIn.GetValueFromBag(bag, cc);
-                custom.AnimationTimeOut = m_animationTimeOut.GetValueFromBag(bag, cc);
                 custom.Category = m_category.GetValueFromBag(bag, cc);
             }
         }
@@ -67,18 +57,35 @@ namespace umi3d.commonScreen.Container
             }
         }
 
-        public virtual string USSCustomClassCategory(ElementCategory category) => $"{USSCustomClassName}-{category}".ToLower();
+        public virtual string USSCustomClassCategory(ElementCategory category) => $"{UssCustomClass_Emc}-{category}".ToLower();
 
         public ScrollView_C Scrollview = new ScrollView_C { name = "scrollview" };
 
         protected ElementCategory m_category;
 
-        public override void InitElement()
+        protected override void InitElement()
         {
             base.InitElement();
 
             Add(Scrollview);
             Scrollview.Add(ContentVieport);
+        }
+
+        protected override void UpdateMode(ChangeEvent<ScrollViewMode> e)
+        {
+            base.UpdateMode(e);
+            ContentVieport.SwitchStyleclasses
+                (
+                    USSCustomClassMode(e.previousValue),
+                    USSCustomClassMode(e.newValue)
+                );
+            ContentContainer.SwitchStyleclasses
+            (
+                USSCustomClassMode(e.previousValue),
+                USSCustomClassMode(e.newValue)
+            );
+
+            Scrollview.mode = e.newValue;
         }
     }
 }
@@ -108,7 +115,7 @@ namespace umi3d.UiPreview.commonScreen.Container
                 {
                     var button = item as umi3d.commonScreen.Displayer.Button_C;
                     button.style.width = Length.Percent(100);
-                    button.LocaliseLabel = $"item {datum}";
+                    button.LocalisedLabel = $"item {datum}";
 
                     if (previewItem.Data.IndexOf(datum) == 0)
                     {

@@ -74,13 +74,13 @@ namespace umi3d.commonScreen.Container
         /// </summary>
         public virtual LocalisationAttribute Title
         {
-            get => TitleLabel.LocaliseText;
+            get => TitleLabel.LocalisedText;
             set
             {
                 IsSet = false;
                 if (value.IsEmpty) TitleLabel.RemoveFromHierarchy();
                 else Insert(0, TitleLabel);
-                TitleLabel.LocaliseText = value;
+                TitleLabel.LocalisedText = value;
                 IsSet = true;
             }
         }

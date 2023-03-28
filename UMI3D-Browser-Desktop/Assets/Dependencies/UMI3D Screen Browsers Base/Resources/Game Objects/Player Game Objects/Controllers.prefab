@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5544760081601926436
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2035608180051076259}
+  m_Layer: 0
+  m_Name: KeyboardManipulations
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2035608180051076259
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5544760081601926436}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5737028901965113654}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5737028900505413034
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,10 +118,17 @@ MonoBehaviour:
   CameraTransform: {fileID: 0}
   ParameterActions: {fileID: 5737028901877809136}
   EventActions: {fileID: 5737028902039734195}
+  ManipulationGroupActions: {fileID: 4228215839669697670}
+  ManipulationActions: {fileID: 3124953298458936600}
+  KeyboardActions: {fileID: 5737028901777104620}
+  KeyboardShortcuts: {fileID: 5737028902229674419}
+  KeyboardEmotes: {fileID: 5737028900827975624}
+  KeyboardNavigations: {fileID: 5737028901654668679}
+  KeyboardManipulations: {fileID: 5544760081601926436}
   ObjectMenu: {fileID: 0}
+  ManipulationMenu: {fileID: 0}
   interactionBoneType: 58
   hoverBoneType: 58
-  dofGroups: 04000000050000000600000001000000020000000300000008000000090000000a000000
 --- !u!114 &5737028900505413025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,7 +169,7 @@ GameObject:
   - component: {fileID: 5737028900827975621}
   - component: {fileID: 5737028900827975626}
   m_Layer: 0
-  m_Name: KeyboardEmote
+  m_Name: KeyboardEmotes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -869,6 +907,7 @@ Transform:
   - {fileID: 5737028902229674418}
   - {fileID: 5737028900827975627}
   - {fileID: 5737028901654668678}
+  - {fileID: 2035608180051076259}
   m_Father: {fileID: 5737028900505413029}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -923,6 +962,8 @@ GameObject:
   - component: {fileID: 5737028902229674374}
   - component: {fileID: 5737028902229674368}
   - component: {fileID: 5737028902229674369}
+  - component: {fileID: 4812332198388984163}
+  - component: {fileID: 6513054768274407813}
   m_Layer: 0
   m_Name: KeyboardShortcuts
   m_TagString: Untagged
@@ -1339,7 +1380,7 @@ MonoBehaviour:
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: d4aac661-06ea-4174-b39a-9284beab53c9
-      m_Path: <Mouse>/rightButton
+      m_Path: <Keyboard>/n
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -1384,6 +1425,80 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
   Shortcut: 10
+--- !u!114 &4812332198388984163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5737028902229674419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 857f4032b11f03049ba61f0dc1ee285b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onInputDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onInputUp:
+    m_PersistentCalls:
+      m_Calls: []
+  bone: 0
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 929bce0c-4fbc-4883-b815-6db2e4d02d9b
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: e2826b1a-518b-420c-8e00-399bc49a79fd
+      m_Path: <Mouse>/rightButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Key
+      m_Flags: 0
+    m_Flags: 0
+  Shortcut: 12
+--- !u!114 &6513054768274407813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5737028902229674419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 857f4032b11f03049ba61f0dc1ee285b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onInputDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onInputUp:
+    m_PersistentCalls:
+      m_Calls: []
+  bone: 0
+  Key:
+    m_Name: Key
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a0b56b44-670a-40eb-9d6c-54020a0f678e
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 76f6a551-a84e-4c16-9cb7-b3013997bfe3
+      m_Path: <Keyboard>/tab
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Key
+      m_Flags: 0
+    m_Flags: 0
+  Shortcut: 13
 --- !u!1001 &5737028901854242779
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1449,10 +1564,22 @@ PrefabInstance:
     - target: {fileID: 900517824931067971, guid: d2e57c484e053d94eba781435f279f12,
         type: 3}
       propertyPath: m_Name
-      value: Manipulations
+      value: ManipulationManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d2e57c484e053d94eba781435f279f12, type: 3}
+--- !u!1 &3124953298458936600 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7259825776030081731, guid: d2e57c484e053d94eba781435f279f12,
+    type: 3}
+  m_PrefabInstance: {fileID: 5737028901854242779}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4228215839669697670 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8445276814600493917, guid: d2e57c484e053d94eba781435f279f12,
+    type: 3}
+  m_PrefabInstance: {fileID: 5737028901854242779}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4891275689946750873 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 900517824931067970, guid: d2e57c484e053d94eba781435f279f12,

@@ -21,6 +21,7 @@ using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.game;
 using umi3d.mobileBrowser.interactions;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static umi3d.commonScreen.game.GamePanel_C;
 
 namespace umi3d.baseBrowser.connection
@@ -148,10 +149,16 @@ namespace umi3d.baseBrowser.connection
             LeadingArea.InteractableMapping.MappingAdded += () =>
             {
                 LeadingArea.InteractableMapping.InteractableName = BaseController.Instance.mouseData.CurrentHovered.name;
+                LeadingArea.InteractableMapping
+                    .SetLeft(0)
+                    .WithAnimation();
             };
             LeadingArea.InteractableMapping.MappingRemoved += () =>
             {
-                LeadingArea.InteractableMapping.InteractableName = null;
+                LeadingArea.InteractableMapping
+                    .SetLeft(Length.Percent(-50f))
+                    .WithAnimation()
+                    .SetCallback(() => LeadingArea.InteractableMapping.InteractableName = null);
             };
         }
 
@@ -217,7 +224,7 @@ namespace umi3d.baseBrowser.connection
             {
                 if (ObjectMenu[0] is TextfieldDisplayer textfield)
                 {
-                    Game.Cursor.ActionText.LocaliseText = new LocalisationAttribute("Edit text", "Other", "EditText");
+                    Game.Cursor.ActionText.LocalisedText = new LocalisationAttribute("Edit text", "Other", "EditText");
                     UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose, () => textfield.Focus());
                 }
                 else if (ObjectMenu[0] is ButtonDisplayer button)
@@ -251,7 +258,7 @@ namespace umi3d.baseBrowser.connection
                 (
                     string.IsNullOrEmpty(CursorAction)
                     || CursorAction == "new tool"
-                ) Game.Cursor.ActionText.LocaliseText = new LocalisationAttribute("Display contextual Menu", "Other", "DisplayInteractionsMenu");
+                ) Game.Cursor.ActionText.LocalisedText = new LocalisationAttribute("Display contextual Menu", "Other", "DisplayInteractionsMenu");
                 else Game.Cursor.Action = CursorAction;
 
                 if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;

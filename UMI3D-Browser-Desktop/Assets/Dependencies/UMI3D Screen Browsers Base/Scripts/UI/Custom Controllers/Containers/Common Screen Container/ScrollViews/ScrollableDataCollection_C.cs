@@ -24,11 +24,11 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Container
 {
-    public class ScrollableDataCollection_C<D> : AbstractDataCollection_C<D>
+    public class ScrollableDataCollection_C<D> : BaseDataCollection_C<D>
     {
         public new class UxmlFactory : UxmlFactory<ScrollableDataCollection_C<D>, UxmlTraits> { }
 
-        public new class UxmlTraits : AbstractDataCollection_C<D>.UxmlTraits
+        public new class UxmlTraits : BaseDataCollection_C<D>.UxmlTraits
         {
             protected UxmlEnumAttributeDescription<ElementCategory> m_category = new UxmlEnumAttributeDescription<ElementCategory>
             {
@@ -47,25 +47,7 @@ namespace umi3d.commonScreen.Container
                 base.Init(ve, bag, cc);
                 var custom = ve as ScrollableDataCollection_C<D>;
 
-                custom.Mode = m_ScrollViewMode.GetValueFromBag(bag, cc);
-                custom.SelectionType = m_selectionType.GetValueFromBag(bag, cc);
-                custom.Size = m_size.GetValueFromBag(bag, cc);
-                custom.IsReorderable = m_isReorderable.GetValueFromBag(bag, cc);
-                custom.ReorderableMode = m_reorderableMode.GetValueFromBag(bag, cc);
                 custom.Category = m_category.GetValueFromBag(bag, cc);
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public override ScrollViewMode Mode 
-        { 
-            get => base.Mode; 
-            set
-            {
-                base.Mode = value;
-                ScrollView.mode = value;
             }
         }
 
@@ -77,65 +59,38 @@ namespace umi3d.commonScreen.Container
                 RemoveFromClassList(USSCustomClassCategory(m_category));
                 AddToClassList(USSCustomClassCategory(value));
                 m_category = value;
-                ScrollView.Category = m_category;
+                Scrollview.Category = m_category;
             }
         }
         
-        public virtual string StyleSheetContainerPath => $"USS/container";
-        public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetContainersFolderPath}/scrollableDataCollection";
-        public override string USSCustomClassName => "sdc";
-        public virtual string USSCustomClassCategory(ElementCategory category) => $"{USSCustomClassName}-{category}".ToLower();
-        
-        public ScrollView_C ScrollView = new ScrollView_C { name = "scroll-view" };
+        public override string StyleSheetPath_MainTheme => $"USS/container";
+        public static string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetContainersFolderPath}/scrollableDataCollection";
 
-        public override VisualElement DataContainer => ScrollView;
+        public override string UssCustomClass_Emc => "sdc";
+        public virtual string USSCustomClassCategory(ElementCategory category) => $"{UssCustomClass_Emc}-{category}".ToLower();
+        
+        public ScrollView_C Scrollview = new ScrollView_C { name = "scroll-view" };
+
+        public override VisualElement DataContainer => Scrollview;
 
         protected ElementCategory m_category;
-        
-        public ScrollableDataCollection_C() => InitElement();
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public override void InitElement()
+        protected override void AttachStyleSheet()
         {
-            try
-            {
-                this.AddStyleSheetFromPath(StyleSheetContainerPath);
-                this.AddStyleSheetFromPath(StyleSheetPath);
-            }
-            catch (System.Exception e)
-            {
-                throw e;
-            }
-            AddToClassList(USSCustomClassName);
-
-            Add(ScrollView);
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
         }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public override void Set()
+        protected override void InitElement()
         {
-            InitElement();
-            Set(ElementCategory.Menu, ScrollViewMode.Vertical, SelectionType.None, 0, false, ReorderableMode.Dragger);
+            base.InitElement();
+            Add(Scrollview);
         }
 
-        /// <summary>
-        /// Set the properties of this Element.
-        /// </summary>
-        /// <param name="category"></param>
-        /// <param name="mode"></param>
-        /// <param name="selectionType"></param>
-        public virtual void Set(ElementCategory category, ScrollViewMode mode, SelectionType selectionType, float size, bool isReorderable, ReorderableMode reorderableMode)
+        protected override void UpdateMode(ChangeEvent<ScrollViewMode> e)
         {
-            Category = category;
-            Mode = mode;
-            SelectionType = selectionType;
-            Size = size;
-            IsReorderable = isReorderable;
-            ReorderableMode = reorderableMode;
+            base.UpdateMode(e);
+            Scrollview.mode = e.newValue;
         }
     }
 }
@@ -154,12 +109,12 @@ namespace umi3d.UiPreview.commonScreen.Container
                 previewItem.BindItem = (datum, item) =>
                 {
                     var text = item as umi3d.commonScreen.Displayer.Text_C;
-                    text.LocaliseText = $"item {datum}";
+                    text.LocalisedText = $"item {datum}";
                 };
                 previewItem.UnbindItem = (datum, item) =>
                 {
                     var text = item as umi3d.commonScreen.Displayer.Text_C;
-                    text.LocaliseText = null;
+                    text.LocalisedText = null;
                 };
 
                 for (int i = 0; i < 100; i++) previewItem.AddDatum(i);

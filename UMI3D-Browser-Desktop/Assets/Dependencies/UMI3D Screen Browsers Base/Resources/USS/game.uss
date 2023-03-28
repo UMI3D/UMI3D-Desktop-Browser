@@ -29,6 +29,7 @@
 	--background-image-notif__users-on: resource('Icons/NotifAndUsers/Arrow_Left');
 	--background-image-notif__users-off: resource('Icons/NotifAndUsers/Arrow_Right');
 	--background-image-emote: resource('Icons/Emote/Smile');
+	--background-image-toolbox: resource('Icons/Toolboxes/TOOLBOX_MENU');
 	--size__width-short-inf: 40%;
 	--size__height-short-inf: 76px;
 

@@ -10,11 +10,9 @@
 	height: var(--size-large-displayer);
 }
 
-.interactable__mapping__row-action__name.unity-label.text {
+.interactable__mapping__row-action__name.text {
 	flex-grow: 1;
 	flex-shrink: 1;
-
-	-unity-text-align: middle-left;
 }
 
 .interactable__mapping__row-main {

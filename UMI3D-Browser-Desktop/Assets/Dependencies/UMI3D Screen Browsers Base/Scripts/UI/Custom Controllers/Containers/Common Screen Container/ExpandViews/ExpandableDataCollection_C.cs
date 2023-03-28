@@ -18,9 +18,9 @@ using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.Container
 {
-    public class ExpandableDataCollection_C<D> : AbstractDataCollection_C<D>
+    public class ExpandableDataCollection_C<D> : BaseDataCollection_C<D>
     {
-        public new class UxmlTraits : AbstractDataCollection_C<D>.UxmlTraits
+        public new class UxmlTraits : BaseDataCollection_C<D>.UxmlTraits
         {
             protected UxmlFloatAttributeDescription m_animationTimeIn = new UxmlFloatAttributeDescription
             {
@@ -44,11 +44,6 @@ namespace umi3d.commonScreen.Container
                 base.Init(ve, bag, cc);
                 var custom = ve as ExpandableDataCollection_C<D>;
 
-                custom.Mode = m_ScrollViewMode.GetValueFromBag(bag, cc);
-                custom.SelectionType = m_selectionType.GetValueFromBag(bag, cc);
-                custom.Size = m_size.GetValueFromBag(bag, cc);
-                custom.IsReorderable = m_isReorderable.GetValueFromBag(bag, cc);
-                custom.ReorderableMode = m_reorderableMode.GetValueFromBag(bag, cc);
                 custom.AnimationTimeIn = m_animationTimeIn.GetValueFromBag(bag, cc);
                 custom.AnimationTimeOut = m_animationTimeOut.GetValueFromBag(bag, cc);
             }
@@ -63,59 +58,53 @@ namespace umi3d.commonScreen.Container
         /// </summary>
         public virtual float AnimationTimeOut { get; set; }
 
-        public virtual string StyleSheetContainerPath => $"USS/container";
-        public virtual string StyleSheetPath => $"{ElementExtensions.StyleSheetContainersFolderPath}/expandableDataCollection";
-        public override string USSCustomClassName => "edc";
-        public virtual string USSCustomClassContentViewport => $"{USSCustomClassName}-content__viewport";
-        public virtual string USSCustomClassContentContainer => $"{USSCustomClassName}-content__container";
+        public override string StyleSheetPath_MainTheme => $"USS/container";
+        public static string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetContainersFolderPath}/expandableDataCollection";
 
-        public VisualElement ContentVieport = new VisualElement { name = "content-viewport" };
-        public VisualElement ContentContainer = new VisualElement { name = "content-container" };
+        public override string UssCustomClass_Emc => "edc";
+        public virtual string USSCustomClassContentViewport => $"{UssCustomClass_Emc}-content__viewport";
+        public virtual string USSCustomClassContentContainer => $"{UssCustomClass_Emc}-content__container";
+
+        public Visual_C ContentVieport = new Visual_C { name = "content-viewport" };
+        public Visual_C ContentContainer = new Visual_C { name = "content-container" };
 
         public override VisualElement DataContainer => ContentContainer;
 
         protected float m_animationTime;
 
-        public ExpandableDataCollection_C() => InitElement();
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public override void InitElement()
+        protected override void AttachStyleSheet()
         {
-            try
-            {
-                this.AddStyleSheetFromPath(StyleSheetContainerPath);
-                this.AddStyleSheetFromPath(StyleSheetPath);
-            }
-            catch (System.Exception e)
-            {
-                throw e;
-            }
-            AddToClassList(USSCustomClassName);
+            base.AttachStyleSheet();
+            this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
+        }
+
+        protected override void AttachUssClass()
+        {
+            base.AttachUssClass();
             ContentVieport.AddToClassList(USSCustomClassContentViewport);
             ContentContainer.AddToClassList(USSCustomClassContentContainer);
+        }
 
+        protected override void InitElement()
+        {
+            base.InitElement();
             ContentContainer.RegisterCallback<GeometryChangedEvent>(ce =>
             {
-                if (!canRaiseAnimation) return;
-                canRaiseAnimation = false;
-
-                bool isAnimationIn = ce.newRect.height > ce.oldRect.height;
-                ContentVieport.AddAnimation
-                (
-                    this,
-                    () => ContentVieport.style.height = m_lastHeight,
-                    () => ContentVieport.style.height = ContentContainer.resolvedStyle.height,
-                    "height",
-                    isAnimationIn ? AnimationTimeIn : AnimationTimeOut,
-                    callback: () =>
-                    {
-                        m_lastHeight = ContentVieport.resolvedStyle.height;
-                        ContentVieport.style.height = StyleKeyword.Null;
-                    }
-                );
+                switch (Mode)
+                {
+                    case ScrollViewMode.Vertical:
+                        ContentContainerHeigthChanged(ce.oldRect.height, ce.newRect.height);
+                        break;
+                    case ScrollViewMode.Horizontal:
+                        ContentContainerWidthChanged(ce.oldRect.width, ce.newRect.width);
+                        break;
+                    case ScrollViewMode.VerticalAndHorizontal:
+                        ContentContainerHeigthChanged(ce.oldRect.height, ce.newRect.height);
+                        ContentContainerWidthChanged(ce.oldRect.width, ce.newRect.width);
+                        break;
+                    default:
+                        break;
+                }
             });
 
             ItemAdded += datum =>
@@ -132,12 +121,6 @@ namespace umi3d.commonScreen.Container
             ContentVieport.Add(ContentContainer);
         }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public override void Set() => InitElement();
-
         #region Implementation
 
         /// <summary>
@@ -145,9 +128,43 @@ namespace umi3d.commonScreen.Container
         /// </summary>
         protected float m_lastHeight;
         /// <summary>
+        /// Last width of the <see cref="ContentVieport"/> after the animation
+        /// </summary>
+        protected float m_lastWidth;
+        /// <summary>
         /// Whether or not the animation can be raised.
         /// </summary>
         protected bool canRaiseAnimation;
+
+        protected virtual void ContentContainerHeigthChanged(float oldValue, float newValue)
+        {
+            if (newValue.EqualsEpsilone(oldValue)) return;
+
+            if (!canRaiseAnimation) return;
+            canRaiseAnimation = false;
+
+            bool isAnimationIn = newValue > oldValue;
+            ContentVieport.SetHeight(oldValue);
+            ContentVieport
+                .SetHeight(newValue)
+                .WithAnimation(isAnimationIn ? AnimationTimeIn : AnimationTimeOut)
+                .SetCallback(() => ContentVieport.style.height = StyleKeyword.Null);
+        }
+
+        protected virtual void ContentContainerWidthChanged(float oldValue, float newValue)
+        {
+            if (newValue.EqualsEpsilone(oldValue)) return;
+
+            if (!canRaiseAnimation) return;
+            canRaiseAnimation = false;
+
+            bool isAnimationIn = newValue > oldValue;
+            ContentVieport.SetWidth(oldValue);
+            ContentVieport
+                .SetWidth(newValue)
+                .WithAnimation(isAnimationIn ? AnimationTimeIn : AnimationTimeOut)
+                .SetCallback(() => ContentVieport.style.width = StyleKeyword.Null);
+        }
 
         #endregion
     }
@@ -178,7 +195,7 @@ namespace umi3d.UiPreview.commonScreen.Container
                 {
                     var button = item as umi3d.commonScreen.Displayer.Button_C;
                     button.style.width = Length.Percent(100);
-                    button.LocaliseLabel = $"item {datum}";
+                    button.LocalisedLabel = $"item {datum}";
 
                     if (previewItem.Data.IndexOf(datum) == 0)
                     {

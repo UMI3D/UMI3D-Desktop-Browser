@@ -13,8 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk.interaction;
 using umi3d.common.interaction;
 using UnityEngine;
@@ -23,9 +25,6 @@ namespace umi3d.baseBrowser.Controller
 {
     public partial class BaseController
     {
-        [Header("Degrees Of Freedom")]
-        [SerializeField]
-        protected List<DofGroupEnum> dofGroups = new List<DofGroupEnum>();
         public override List<AbstractUMI3DInput> inputs
         {
             get
@@ -43,10 +42,10 @@ namespace umi3d.baseBrowser.Controller
             }
         }
 
-        //protected List<ManipulationGroup> ManipulationInputs = new List<ManipulationGroup>();
-        protected List<inputs.interactions.EventInteraction> EventInputs = new List<inputs.interactions.EventInteraction>();
-        protected List<inputs.interactions.FormInteraction> FormInputs = new List<inputs.interactions.FormInteraction>();
-        protected List<inputs.interactions.LinkInteraction> LinkInputs = new List<inputs.interactions.LinkInteraction>();
+        protected List<BaseManipulationGroup> ManipulationGroupInputs = new List<BaseManipulationGroup>();
+        protected List<EventInteraction> EventInputs = new List<EventInteraction>();
+        protected List<FormInteraction> FormInputs = new List<FormInteraction>();
+        protected List<LinkInteraction> LinkInputs = new List<LinkInteraction>();
         /// <summary>
         /// Instantiated float parameter inputs.
         /// </summary>
@@ -81,23 +80,39 @@ namespace umi3d.baseBrowser.Controller
         #region Clear
 
         /// <summary>
+        /// Clear <paramref name="inputs"/> and apply <paramref name="action"/> on each element of <paramref name="inputs"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="inputs"></param>
+        /// <param name="action"></param>
+        public static void ClearInputs<T>(ref List<T> inputs, Action<T> action)
+            where T : AbstractUMI3DInput
+        {
+            inputs.ForEach(action);
+            inputs = new List<T>();
+        }
+
+        /// <summary>
         /// Clear Interactions and Parameters Inputs.
         /// </summary>
         public override void Clear()
         {
-            //foreach (ManipulationGroup input in ManipulationInputs) if (!input.IsAvailable()) input.Dissociate();
-            //foreach (KeyInput input in KeyInputs) if (!input.IsAvailable()) input.Dissociate();
-            ClearParameters();
-        }
-        protected void ClearParameters()
-        {
-            System.Action<AbstractUMI3DInput> action = (input) =>
+            Action<AbstractUMI3DInput> action = (input) =>
             {
                 input.Dissociate();
                 Destroy(input);
             };
 
+            CurrentController?.ClearInputs();
+            ClearInputs(ref ManipulationGroupInputs, input =>
+            {
+                if (!input.IsAvailable()) input.Dissociate();
+            });
             ClearInputs(ref EventInputs, action);
+            ClearParameters(action);
+        }
+        protected void ClearParameters(Action<AbstractUMI3DInput> action)
+        {
             ClearInputs(ref floatParameterInputs, action);
             ClearInputs(ref floatRangeParameterInputs, action);
             ClearInputs(ref intParameterInputs, action);
@@ -105,13 +120,7 @@ namespace umi3d.baseBrowser.Controller
             ClearInputs(ref stringParameterInputs, action);
             ClearInputs(ref stringEnumParameterInputs, action);
         }
-        protected void ClearInputs<T>(ref List<T> inputs, System.Action<T> action)
-            where T : AbstractUMI3DInput
-        {
-            inputs.ForEach(action);
-            inputs = new List<T>();
-        }
-
+        
         #endregion
 
         #region Find Inputs
@@ -127,9 +136,9 @@ namespace umi3d.baseBrowser.Controller
             if (gO != null) input = gO.AddComponent<T>();
             else input = new T();
 
-            if (input is inputs.interactions.EventInteraction keyMenuInput) keyMenuInput.bone = interactionBoneType;
-            else if (input is inputs.interactions.FormInteraction formInput) formInput.bone = interactionBoneType;
-            else if (input is inputs.interactions.LinkInteraction linkInput) linkInput.bone = interactionBoneType;
+            if (input is EventInteraction keyMenuInput) keyMenuInput.bone = interactionBoneType;
+            else if (input is FormInteraction formInput) formInput.bone = interactionBoneType;
+            else if (input is LinkInteraction linkInput) linkInput.bone = interactionBoneType;
             input.Menu = ObjectMenu.menu;
             inputs.Add(input);
         }
@@ -137,11 +146,30 @@ namespace umi3d.baseBrowser.Controller
         #endregion
 
         #region Find Interactions
-
+        
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="unused"></param>
+        /// <returns></returns>
         public override AbstractUMI3DInput FindInput(FormDto form, bool unused = true)
             => FindInput(FormInputs, i => i.IsAvailable() || !unused, EventActions);
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="link"></param>
+        /// <param name="unused"></param>
+        /// <returns></returns>
         public override AbstractUMI3DInput FindInput(LinkDto link, bool unused = true)
             => FindInput(LinkInputs, i => i.IsAvailable() || !unused, EventActions);
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <param name="unused"></param>
+        /// <param name="tryToFindInputForHoldableEvent"></param>
+        /// <returns></returns>
         public override AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
         {
             AbstractUMI3DInput input = null;
@@ -153,7 +181,7 @@ namespace umi3d.baseBrowser.Controller
         #endregion
 
         /// <summary>
-        /// Find the right Parameter Input.
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="param"></param>
         /// <param name="unused"></param>
@@ -180,7 +208,7 @@ namespace umi3d.baseBrowser.Controller
                 bool ok = true;
                 foreach (DofGroupDto dof in GroupOption.separations)
                 {
-                    if (!dofGroups.Contains(dof.dofs))
+                    if (!BaseManipulationGroup.DofGroups.Contains(dof.dofs))
                     {
                         ok = false;
                         break;
@@ -193,7 +221,7 @@ namespace umi3d.baseBrowser.Controller
         }
 
         /// <summary>
-        /// Find the right Manipulation Input.
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="manip"></param>
         /// <param name="dof"></param>
@@ -201,8 +229,11 @@ namespace umi3d.baseBrowser.Controller
         /// <returns></returns>
         public override AbstractUMI3DInput FindInput(ManipulationDto manip, DofGroupDto dof, bool unused = true)
         {
-            Debug.Log("TODO : Find input for manipulation dto");
-            return null;
+            BaseManipulationGroup input = CurrentController.ManipulationGroup;
+
+            if (input == null) UnityEngine.Debug.LogError($"Couln't find a manipulation group.");
+
+            return input;
         }
 
         #endregion

@@ -70,7 +70,7 @@ namespace umi3d.commonScreen.menu
                 dialogueBox.Title = new LocalisationAttribute("Some libraries are not found", "LibrariesScreen", "Library_WrongPath_Title");
                 dialogueBox.Message = new LocalisationAttribute("Here is the list of the path that are not found:", "LibrariesScreen", "Library_WrongPath_Description");
                 var pathList = new Text_C();
-                pathList.LocaliseText = "\"" + string.Join("\"\n\"", pathes);
+                pathList.LocalisedText = "\"" + string.Join("\"\n\"", pathes);
                 pathList.style.whiteSpace = WhiteSpace.Normal;
                 dialogueBox.Add(pathList);
                 dialogueBox.ChoiceAText = new LocalisationAttribute("Show me", "LibrariesScreen", "Library_WrongPath_ShowMe");

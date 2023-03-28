@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections.Generic;
 using umi3d.baseBrowser.Controller;
+using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk.interaction;
 using umi3d.common.interaction;
 using UnityEngine;
@@ -23,6 +24,9 @@ namespace umi3d.mobileBrowser.Controller
 {
     public class MobileController : IConcreteController
     {
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public List<AbstractUMI3DInput> Inputs
         {
             get {
@@ -31,20 +35,54 @@ namespace umi3d.mobileBrowser.Controller
             }
         }
 
+        public List<BaseInteraction<EventDto>> Manipulations => throw new System.NotImplementedException();
+
+        public BaseManipulationGroup ManipulationGroup { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void Awake()
         {
 
         }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void Start()
         {
 
         }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void Update()
         {
 
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <param name="unused"></param>
+        /// <param name="tryToFindInputForHoldableEvent"></param>
+        /// <returns></returns>
         public AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
             => null;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void ClearInputs()
+        {
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void ResetInputsWhenEnvironmentLaunch()
+        {
+        }
     }
 }

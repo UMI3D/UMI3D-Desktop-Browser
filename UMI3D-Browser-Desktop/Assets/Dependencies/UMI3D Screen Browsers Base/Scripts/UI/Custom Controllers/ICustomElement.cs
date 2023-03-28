@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -27,6 +28,78 @@ public interface ICustomElement
     /// Should be call just once.
     /// </summary>
     void InitElement();
+}
+
+public interface IPanelBindable
+{
+    /// <summary>
+    /// Whether or not this element is attached to a panel.
+    /// </summary>
+    bool IsAttachedToPanel { get; }
+    /// <summary>
+    /// Method called when this element is attached to a panel.
+    /// </summary>
+    /// <param name="evt"></param>
+    void AttachedToPanel(AttachToPanelEvent evt);
+    /// <summary>
+    /// Method called when this element is detached from a panel.
+    /// </summary>
+    /// <param name="evt"></param>
+    void DetachedFromPanel(DetachFromPanelEvent evt);
+}
+
+public interface ITransitionable
+{
+    /// <summary>
+    /// Whether or not this visual is listening for transition.
+    /// </summary>
+    bool IsListeningForTransition { get; }
+    /// <summary>
+    /// Method called when a property of this element will be animated.
+    /// </summary>
+    /// <param name="evt"></param>
+    void TransitionRun(TransitionRunEvent evt);
+    /// <summary>
+    /// Method called when a property of this element has started to be animated.
+    /// </summary>
+    /// <param name="evt"></param>
+    void TransitionStarted(TransitionStartEvent evt);
+    /// <summary>
+    /// Method called when a property of this element has finished to be animated. (End properly without being canceled).
+    /// </summary>
+    /// <param name="evt"></param>
+    void TransitionEnded(TransitionEndEvent evt);
+    /// <summary>
+    /// Method called when a property of this element has finished to be animated. (When canceled).
+    /// </summary>
+    /// <param name="evt"></param>
+    void TransitionCanceled(TransitionCancelEvent evt);
+}
+
+public interface IDisplayer
+{
+    /// <summary>
+    /// Height of this element.
+    /// </summary>
+    ElementSize Height { get; set; }
+    /// <summary>
+    /// Width of this element.
+    /// </summary>
+    ElementSize Width { get; set; }
+
+    /// <summary>
+    /// Direction of the label and the input.
+    /// (Top means the label is above the input. Leading means the label is in front of the input).
+    /// </summary>
+    ElementAlignment LabelAndInputDirection { get; set; }
+    /// <summary>
+    /// Alignment of the text of the lable.
+    /// </summary>
+    ElementAlignment LabelAlignment { get; set; }
+    /// <summary>
+    /// Localised text of the label.
+    /// </summary>
+    LocalisationAttribute LocalisedLabel { get; set; }
 }
 
 public interface IGameView
@@ -51,15 +124,16 @@ public enum ElementPseudoState
     Focus
 }
 public enum ElementCategory { Menu, Game }
+public enum ElementDimension { Width, Height }
 public enum ElementSize { Small, Medium, Large, Custom }
-public enum ElemnetDirection { Leading, Trailing, Top, Bottom }
+public enum ElementDirection { Leading, Trailing, Top, Bottom, Center }
 public enum ElementVerticalAlignment { Top, Center, Bottom }
 public enum ElementHorizontalAlignment { Leading, Center, Trailing }
 public enum ElementAlignment
 {
-    Top,
+    LeadingTop, Top, TrailingTop,
     Leading, Center, Trailing,
-    Bottom
+    LeadingBottom, Bottom, TrailingBottom
 }
 
 public enum TextStyle
@@ -199,7 +273,6 @@ public static class ElementExtensions
         ve.ClearClassList();
         foreach (var style in from.GetClasses()) ve.AddToClassList(style);
     }
-
     /// <summary>
     /// Copy and add the style classes from [ve] to [this]
     /// </summary>
@@ -208,6 +281,17 @@ public static class ElementExtensions
     {
         if (from == null) return;
         foreach (var style in from.GetClasses()) ve.AddToClassList(style);
+    }
+    /// <summary>
+    /// Remove <paramref name="from"/> from the list of style classes and add <paramref name="to"/>.
+    /// </summary>
+    /// <param name="ve"></param>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    public static void SwitchStyleclasses(this VisualElement ve, string from, string to)
+    {
+        ve.RemoveFromClassList(from);
+        ve.AddToClassList(to);
     }
 
     /// <summary>
@@ -231,19 +315,21 @@ public static class ElementExtensions
     /// <param name="ve"></param>
     /// <param name="condition"></param>
     /// <param name="action"></param>
-    public static void WaitUntil(this VisualElement ve, System.Func<bool> condition, System.Action action)
+    public static IVisualElementScheduledItem WaitUntil(this VisualElement ve, System.Func<bool> condition, System.Action action)
     {
         if (condition())
         {
             action();
-            return;
+            return null;
         }
 
-        ve.schedule.Execute(() =>
+        var scheduleItem = ve.schedule.Execute(() =>
         {
             if (!condition()) return;
             action();
         }).Until(condition);
+
+        return scheduleItem;
     }
 
     /// <summary>
@@ -308,6 +394,16 @@ public static class ElementExtensions
         if (ve.parent == null) return; 
         ve.RemoveFromHierarchy();
     }
+
+    /// <summary>
+    /// Whether or not this visual can be consider as listening for transition.
+    /// </summary>
+    /// <remarks>To be sure if this visual is listening for transition check <see cref="ITransitionable.IsListeningForTransition"/></remarks>
+    /// <param name="ve"></param>
+    /// <returns></returns>
+    public static bool CanBeConsiderAsListeningForTransition(this VisualElement ve)
+        => !float.IsNaN(ve.resolvedStyle.width) 
+            && !float.IsNaN(ve.resolvedStyle.height);
 }
 
 public static class FloatExtentions

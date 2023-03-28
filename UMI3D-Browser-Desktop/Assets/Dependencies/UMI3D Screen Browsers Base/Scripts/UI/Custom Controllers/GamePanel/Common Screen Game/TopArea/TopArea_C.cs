@@ -130,6 +130,7 @@ namespace umi3d.commonScreen.game
         protected override void InitElement()
         {
             base.InitElement();
+            Menu.Width = ElementSize.Medium;
             Menu.Category = ElementCategory.Game;
 
             Main.Add(InformationArea);
