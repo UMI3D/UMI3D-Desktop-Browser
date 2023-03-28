@@ -157,6 +157,16 @@ PrefabInstance:
       propertyPath: CameraTransform
       value: 
       objectReference: {fileID: 2917276593979797959}
+    - target: {fileID: 5737028900505413031, guid: f4d8c12ad9571464087a7bb922bc48bb,
+        type: 3}
+      propertyPath: hoverBoneTransform
+      value: 
+      objectReference: {fileID: 3866976804092458281}
+    - target: {fileID: 5737028900505413031, guid: f4d8c12ad9571464087a7bb922bc48bb,
+        type: 3}
+      propertyPath: interactionTransform
+      value: 
+      objectReference: {fileID: 3866976804092458281}
     - target: {fileID: 5737028900505413034, guid: f4d8c12ad9571464087a7bb922bc48bb,
         type: 3}
       propertyPath: m_Name

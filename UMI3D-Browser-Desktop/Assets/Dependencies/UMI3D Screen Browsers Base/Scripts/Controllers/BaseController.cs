@@ -67,9 +67,11 @@ namespace umi3d.baseBrowser.Controller
         [SerializeField]
         [inetum.unityUtils.ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
         public uint interactionBoneType = common.userCapture.BoneType.RightHand;
+
         [SerializeField]
         [inetum.unityUtils.ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
         protected uint hoverBoneType = common.userCapture.BoneType.Head;
+        public Transform hoverBoneTransform;
 
         protected int m_navigationDirect = 0;
         protected AutoProjectOnHover reason = new AutoProjectOnHover();
@@ -423,7 +425,8 @@ namespace umi3d.baseBrowser.Controller
                         input.UpdateHoveredObjectId(mouseData.CurrentHoveredId);
                 }
 
-                mouseData.CurrentHovered.Hovered(hoverBoneType, mouseData.CurrentHoveredId, mouseData.Position, mouseData.Normal, mouseData.Direction);
+                var v = new Vector4(hoverBoneTransform.rotation.x, hoverBoneTransform.rotation.y, hoverBoneTransform.rotation.z, hoverBoneTransform.rotation.w);
+                mouseData.CurrentHovered.Hovered(hoverBoneType,hoverBoneTransform.position,v, mouseData.CurrentHoveredId, mouseData.Position, mouseData.Normal, mouseData.Direction);
             }
         }
         private void OldHoverExitAndCurrentHoverEnter()
@@ -436,8 +439,9 @@ namespace umi3d.baseBrowser.Controller
             if (mouseData.OldHovered == null) return;
 
             ulong lastHoverId = mouseData.LastHoveredId;
+            var v = new Vector4(hoverBoneTransform.rotation.x, hoverBoneTransform.rotation.y, hoverBoneTransform.rotation.z, hoverBoneTransform.rotation.w);
             mouseData.OldHovered
-                .HoverExit(hoverBoneType, lastHoverId, mouseData.LastPosition, mouseData.LastNormal, mouseData.LastDirection);
+                .HoverExit(hoverBoneType,hoverBoneTransform.position,v, lastHoverId, mouseData.LastPosition, mouseData.LastNormal, mouseData.LastDirection);
 
             ulong hoverExitAnimationId = mouseData.OldHovered.dto.HoverExitAnimationId;
             if (hoverExitAnimationId != 0)
@@ -466,8 +470,9 @@ namespace umi3d.baseBrowser.Controller
             if (mouseData.CurrentHovered == null) return;
 
             ulong currentHoverId = mouseData.CurrentHoveredId;
+            var v = new Vector4(hoverBoneTransform.rotation.x, hoverBoneTransform.rotation.y, hoverBoneTransform.rotation.z, hoverBoneTransform.rotation.w);
             mouseData.CurrentHovered
-                .HoverEnter(hoverBoneType, currentHoverId, mouseData.Position, mouseData.Normal, mouseData.Direction);
+                .HoverEnter(hoverBoneType,hoverBoneTransform.position,v, currentHoverId, mouseData.Position, mouseData.Normal, mouseData.Direction);
 
             ulong hoverEnterAnimationId = mouseData.CurrentHovered.dto.HoverEnterAnimationId;
             if (hoverEnterAnimationId != 0)
