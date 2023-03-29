@@ -17,6 +17,7 @@ using System.Collections;
 using System.Collections.Generic;
 using umi3d.baseBrowser.cursor;
 using umi3d.cdk;
+using umi3d.common;
 using umi3d.common.interaction;
 using UnityEngine;
 
@@ -62,7 +63,9 @@ namespace umi3d.baseBrowser.inputs.interactions
                                 boneType = bone,
                                 id = associatedInteraction.id,
                                 toolId = this.toolId,
-                                hoveredObjectId = hoveredObjectId
+                                hoveredObjectId = hoveredObjectId,
+                                bonePosition = (SerializableVector3)boneTransform.position,
+                                boneRotation = (SerializableVector4)boneTransform.rotation
                             };
 
                             MapDistanceWithDof(distanceInFrame, ref pararmeterDto);

@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using umi3d.common;
+
 namespace umi3d.baseBrowser.parameters
 {
     public abstract class AbstractRangeParameterInput<InputMenuItem, ParameterType, ValueType> : BaseParameter<InputMenuItem, ParameterType, ValueType>
@@ -51,7 +53,10 @@ namespace umi3d.baseBrowser.parameters
                         id = currentInteraction.id,
                         toolId = toolId,
                         parameter = dto,
-                        hoveredObjectId = hoveredObjectId
+                        hoveredObjectId = hoveredObjectId,
+                        boneType = bone,
+                        bonePosition = (SerializableVector3)boneTransform.position,
+                        boneRotation = (SerializableVector4)boneTransform.rotation
                     };
                     cdk.UMI3DClientServer.SendData(pararmeterDto, true);
                 }

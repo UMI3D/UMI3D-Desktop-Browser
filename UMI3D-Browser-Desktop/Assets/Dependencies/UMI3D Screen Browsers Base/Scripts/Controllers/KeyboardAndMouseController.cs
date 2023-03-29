@@ -78,6 +78,7 @@ namespace umi3d.desktopBrowser.Controller
                 interaction.Init(Controller);
                 interaction.bone = Controller.interactionBoneType;
                 interaction.Menu = ObjectMenu.menu;
+                interaction.boneTransform = Controller.hoverBoneTransform;
             });
 
             KeyboardManipulation.S_Manipulations?.ForEach(manipulation =>
@@ -86,6 +87,7 @@ namespace umi3d.desktopBrowser.Controller
                 manipulation.Init(Controller);
                 manipulation.bone = Controller.interactionBoneType;
                 manipulation.Menu = ObjectMenu.menu;
+                manipulation.boneTransform = Controller.hoverBoneTransform;
             });
 
             (ManipulationGroup as ManipulationGroupeForDesktop).Bind(Controller, KeyboardManipulations);

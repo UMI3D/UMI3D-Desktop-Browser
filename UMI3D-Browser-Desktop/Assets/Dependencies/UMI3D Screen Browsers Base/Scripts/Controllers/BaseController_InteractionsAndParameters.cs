@@ -136,9 +136,12 @@ namespace umi3d.baseBrowser.Controller
             if (gO != null) input = gO.AddComponent<T>();
             else input = new T();
 
-            if (input is EventInteraction keyMenuInput) keyMenuInput.bone = interactionBoneType;
-            else if (input is FormInteraction formInput) formInput.bone = interactionBoneType;
-            else if (input is LinkInteraction linkInput) linkInput.bone = interactionBoneType;
+            if (input is IInteractionWithBone interactionWithBone)
+            {
+                interactionWithBone.bone = interactionBoneType;
+                interactionWithBone.boneTransform = hoverBoneTransform;
+            }
+
             input.Menu = ObjectMenu.menu;
             inputs.Add(input);
         }
