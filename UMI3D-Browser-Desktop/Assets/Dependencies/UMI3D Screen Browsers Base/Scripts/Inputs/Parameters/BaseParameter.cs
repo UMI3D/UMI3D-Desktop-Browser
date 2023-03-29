@@ -15,10 +15,13 @@ limitations under the License.
 */
 
 using System;
+using umi3d.baseBrowser.inputs.interactions;
+using umi3d.common;
+using UnityEngine;
 
 namespace umi3d.baseBrowser.parameters
 {
-    public abstract class BaseParameter<InputMenuItem, ParameterType, ValueType> : umi3d.cdk.interaction.AbstractUMI3DInput
+    public abstract class BaseParameter<InputMenuItem, ParameterType, ValueType> : umi3d.cdk.interaction.AbstractUMI3DInput, IInteractionWithBone
         where InputMenuItem : umi3d.cdk.menu.AbstractInputMenuItem<ValueType>, new()
         where ParameterType : umi3d.common.interaction.AbstractParameterDto<ValueType>
     {
@@ -41,6 +44,16 @@ namespace umi3d.baseBrowser.parameters
         protected Action<ValueType> callback;
 
         protected ulong hoveredObjectId { get; private set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public Transform boneTransform { get; set; }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public uint bone { get; set; }
+
         protected ulong GetCurrentHoveredObjectID() => hoveredObjectId;
 
         private void OnDestroy() => Dissociate();
@@ -74,7 +87,10 @@ namespace umi3d.baseBrowser.parameters
                     id = currentInteraction.id,
                     toolId = toolId,
                     parameter = dto,
-                    hoveredObjectId = GetCurrentHoveredObjectID()
+                    hoveredObjectId = GetCurrentHoveredObjectID(),
+                    boneType = bone,
+                    bonePosition = (SerializableVector3)boneTransform.position,
+                    boneRotation = (SerializableVector4)boneTransform.rotation
                 };
                 umi3d.cdk.UMI3DClientServer.SendData(pararmeterDto, true);
             };

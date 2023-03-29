@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using System.Linq;
+using umi3d.common;
 
 namespace umi3d.baseBrowser.inputs.interactions
 {
@@ -47,7 +48,9 @@ namespace umi3d.baseBrowser.inputs.interactions
                         id = a.id,
                         boneType = bone,
                         hoveredObjectId = hoveredObjectId,
-                        parameter = a.GetValue()
+                        parameter = a.GetValue(),
+                        bonePosition = (SerializableVector3) boneTransform.position,
+                        boneRotation = (SerializableVector4)boneTransform.rotation
                     }).ToList(),
                 hoveredObjectId = hoveredObjectId
             };

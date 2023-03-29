@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using umi3d.common;
 using UnityEngine;
 
 namespace umi3d.baseBrowser.inputs.interactions
@@ -45,6 +46,8 @@ namespace umi3d.baseBrowser.inputs.interactions
                 id = associatedInteraction.id,
                 toolId = this.toolId,
                 hoveredObjectId = hoveredObjectId,
+                bonePosition = (SerializableVector3)boneTransform.position,
+                boneRotation = (SerializableVector4)boneTransform.rotation
             };
             cdk.UMI3DClientServer.SendData(formAnswer, true);
         }

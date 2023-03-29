@@ -15,7 +15,9 @@ limitations under the License.
 */
 
 using umi3d.cdk;
+using umi3d.cdk.interaction;
 using umi3d.common;
+using UnityEngine;
 
 namespace umi3d.baseBrowser.inputs.interactions
 {
@@ -33,7 +35,7 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         protected virtual void Awake()
         {
-            bone = common.userCapture.BoneType.RightHand;
+            bone = common.userCapture.BoneType.Viewpoint;
         }
 
         protected override void CreateMenuItem()
@@ -59,7 +61,9 @@ namespace umi3d.baseBrowser.inputs.interactions
                     boneType = bone,
                     id = associatedInteraction.id,
                     toolId = this.toolId,
-                    hoveredObjectId = hoveredObjectId
+                    hoveredObjectId = hoveredObjectId,
+                    bonePosition = (SerializableVector3) boneTransform.position,
+                    boneRotation = (SerializableVector4) boneTransform.rotation
                 };
                 cdk.UMI3DClientServer.SendData(eventdto, true);
                 risingEdgeEventSent = true;
@@ -72,7 +76,9 @@ namespace umi3d.baseBrowser.inputs.interactions
                     boneType = bone,
                     id = associatedInteraction.id,
                     toolId = this.toolId,
-                    hoveredObjectId = hoveredObjectId
+                    hoveredObjectId = hoveredObjectId,
+                    bonePosition = (SerializableVector3)boneTransform.position,
+                    boneRotation = (SerializableVector4)boneTransform.rotation
                 };
                 cdk.UMI3DClientServer.SendData(eventdto, true);
             }
@@ -95,7 +101,9 @@ namespace umi3d.baseBrowser.inputs.interactions
                 boneType = bone,
                 id = associatedInteraction.id,
                 toolId = this.toolId,
-                hoveredObjectId = hoveredObjectId
+                hoveredObjectId = hoveredObjectId,
+                bonePosition = (SerializableVector3)boneTransform.position,
+                boneRotation = (SerializableVector4)boneTransform.rotation
             };
             cdk.UMI3DClientServer.SendData(eventdto, true);
             IsInputHold = false;

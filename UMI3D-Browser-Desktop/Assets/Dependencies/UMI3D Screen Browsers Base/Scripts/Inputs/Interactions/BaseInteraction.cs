@@ -14,9 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using UnityEngine;
+
 namespace umi3d.baseBrowser.inputs.interactions
 {
-    public abstract class BaseInteraction<InteractionType> : cdk.interaction.AbstractUMI3DInput
+    public abstract class BaseInteraction<InteractionType> : cdk.interaction.AbstractUMI3DInput, IInteractionWithBone
         where InteractionType : common.interaction.AbstractInteractionDto
     {
         /// <summary>
@@ -24,11 +26,18 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// </summary>
         public InteractionType associatedInteraction { get; protected set; }
         public override common.interaction.AbstractInteractionDto CurrentInteraction() => associatedInteraction;
+
         /// <summary>
-        /// Avatar bone linked to this input.
+        /// <inheritdoc/>
         /// </summary>
-        [inetum.unityUtils.ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
-        public uint bone = common.userCapture.BoneType.None;
+        public Transform boneTransform { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public uint bone { get; set; }
+
+
         protected ulong toolId, hoveredObjectId;
         public override void UpdateHoveredObjectId(ulong hoveredObjectId) => this.hoveredObjectId = hoveredObjectId;
 
