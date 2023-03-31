@@ -87,9 +87,10 @@ namespace umi3d.baseBrowser.emotes
             /// Emote dto
             /// </summary>
             public UMI3DEmoteDto dto;
-
-            public System.Func<Emote, Coroutine> PlayEmote;
         }
+
+        public Dictionary<Emote, Coroutine> runningCoroutines = new();
+
         /// <summary>
         /// Available emotes from bundle
         /// </summary>
@@ -188,7 +189,7 @@ namespace umi3d.baseBrowser.emotes
             skeletonAnimator = UMI3DCollaborationClientUserTracking.Instance.GetComponentInChildren<Animator>();
             avatarAnimator = avatar.GetComponentInChildren<Animator>();
             if (avatarAnimator == null && transform.parent != null)
-                avatarAnimator = transform.parent.GetComponent<Animator>();
+                avatarAnimator = transform.GetComponentInParent<Animator>();
             if (avatarAnimator != null)
             {
                 avatarAnimator.enabled = false; //disabled because it causes interferences with avatar bindings
@@ -207,8 +208,7 @@ namespace umi3d.baseBrowser.emotes
                             available = emoteConfigDto.allAvailableByDefault ? true : emoteRefInConfig.available,
                             icon = defaultIcon,
                             uiOrder = i,
-                            dto = emoteRefInConfig,
-                            PlayEmote = _emote => StartCoroutine(PlayEmoteAnimation(_emote))
+                            dto = emoteRefInConfig
                         };
                         if (emoteRefInConfig.iconResource != null) LoadFile(emoteRefInConfig, emote);
                         Emotes.Add(emote);
@@ -269,7 +269,7 @@ namespace umi3d.baseBrowser.emotes
         private void UnloadEmotes()
         {
             skeletonAnimator.enabled = true;
-            skeletonAnimator.Play("Idle", layer: 0);
+            skeletonAnimator.Play("Movement", layer: 0, 0f);
             avatarAnimator.enabled = false;
             skeletonAnimator.Update(0);
             avatarAnimator.Update(0);
@@ -277,6 +277,11 @@ namespace umi3d.baseBrowser.emotes
         }
 
         private UnityAction currentInterruptionAction;
+
+        public void PlayEmote(Emote emote)
+        {
+            runningCoroutines[emote] = StartCoroutine(PlayEmoteAnimation(emote));
+        }
 
         /// <summary>
         /// Play the emote
@@ -296,13 +301,30 @@ namespace umi3d.baseBrowser.emotes
             UMI3DClientServer.SendData(emoteRequest, true);
 
             LoadEmotes();
+
             currentInterruptionAction = new UnityAction(delegate { InterruptEmote(emote); });
             BaseFPSNavigation.PlayerMoved.AddListener(currentInterruptionAction);
-            avatarAnimator.Play(emote.dto.stateName, layer: 0);
             UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.AddListener(currentInterruptionAction); //used if another emote is played in the meanwhile
-            yield return new WaitWhile(() => avatarAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1); //wait for emote end of animation
+            avatarAnimator.Play(emote.dto.stateName, layer: 0, 0f);
+
+            float startTime = Time.time;
+            float expectedLength = default;
+            yield return new WaitUntil(() =>
+            {
+                var stateInfo = avatarAnimator.GetCurrentAnimatorStateInfo(0);
+                if (stateInfo.IsName(emote.dto.stateName)) // the animation state is not transitionned to the played one directly
+                {
+                    if (stateInfo.normalizedTime >= 1)
+                        return true;
+                    else if (expectedLength == default)
+                        expectedLength = stateInfo.length;
+                }
+                else if (expectedLength != default && Time.time - startTime > expectedLength) //we are in another state but we went through the one we intended to
+                    return true;
+                return false;
+            }); //wait for emote end of animation
             //? Possible to improve using a StateMachineBehaviour attached to the EmoteController & trigger events on OnStateExit on anim/OnStateEnter on AnyState
-            StopEmotePlayMode();
+            StopEmotePlayMode(emote);
 
             yield break;
         }
@@ -311,9 +333,15 @@ namespace umi3d.baseBrowser.emotes
         /// Stop the emote playing process.
         /// </summary>
         /// <param name="emote"></param>
-        private void StopEmotePlayMode()
+        private void StopEmotePlayMode(Emote emote)
         {
-            if (UMI3DClientUserTracking.Instance.IsEmotePlaying)
+            if (runningCoroutines.ContainsKey(emote))
+            {
+                StopCoroutine(runningCoroutines[emote]);
+                runningCoroutines.Remove(emote);
+            }
+            
+            if (currentInterruptionAction is not null)
             {
                 BaseFPSNavigation.PlayerMoved.RemoveListener(currentInterruptionAction);
                 UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.RemoveListener(currentInterruptionAction);
@@ -321,16 +349,7 @@ namespace umi3d.baseBrowser.emotes
             }
             UnloadEmotes();
             UMI3DClientUserTracking.Instance.EmoteEndedSelfEvent.Invoke();
-        }
 
-        /// <summary>
-        /// Interrupts an emote animation
-        /// </summary>
-        /// <param name="emote"></param>
-        private void InterruptEmote(Emote emote)
-        {
-            StopCoroutine(PlayEmoteAnimation(emote));
-            StopEmotePlayMode();
             // send the emote interruption text to other browsers through the server
             var emoteRequest = new EmoteRequest()
             {
@@ -340,6 +359,16 @@ namespace umi3d.baseBrowser.emotes
             };
             UMI3DClientServer.SendData(emoteRequest, true);
         }
+
+        /// <summary>
+        /// Interrupts an emote animation
+        /// </summary>
+        /// <param name="emote"></param>
+        private void InterruptEmote(Emote emote)
+        {
+            StopEmotePlayMode(emote);
+        }
+        
         #endregion Emote Playing
     }
 }
