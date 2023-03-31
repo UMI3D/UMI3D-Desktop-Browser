@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using UnityEngine.UIElements;
 using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.Container;
+using umi3d.baseBrowser.emotes;
 
 namespace umi3d.commonScreen.game
 {
@@ -99,7 +100,7 @@ namespace umi3d.commonScreen.game
 
                 emoteButton.Body.RegisterCallback<GeometryChangedEvent>(evt => emoteButton.Body.style.width = emoteButton.layout.height);
 
-                emoteButton.clicked += () => emote.PlayEmote(emote);
+                emoteButton.clicked += () => EmoteManager.Instance.PlayEmote(emote);
             }
         }
 

@@ -11,6 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using umi3d.baseBrowser.cursor;
+using umi3d.baseBrowser.emotes;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.commonScreen.game;
 using UnityEngine;
@@ -121,7 +122,7 @@ namespace umi3d.baseBrowser.connection
 
                 if (EmoteWindow_C.Emotes == null || EmoteWindow_C.Emotes.Count <= index) return;
                 var emote = EmoteWindow_C.Emotes[index];
-                emote.PlayEmote(emote);
+                EmoteManager.Instance.PlayEmote(emote);
             };
 
             BaseConnectionProcess.Instance.EnvironmentLeave += () => NotifAndUsersArea_C.Instance = null;
