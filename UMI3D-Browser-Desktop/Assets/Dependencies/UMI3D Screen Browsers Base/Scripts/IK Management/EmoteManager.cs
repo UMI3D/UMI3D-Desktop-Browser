@@ -23,10 +23,45 @@ using UnityEngine.Events;
 
 namespace umi3d.baseBrowser.emotes
 {
+    public interface IEmoteManager
+    {
+        public void PlayEmote(Emote emote);
+
+        public void StopEmote(Emote emote);
+    }
+
+    /// <summary>
+    /// Describes an emote from the client side
+    /// </summary>
+    [System.Serializable]
+    public class Emote
+    {
+        /// <summary>
+        /// Emote's label
+        /// </summary>
+        public string Label => dto.label;
+        /// <summary>
+        /// Icon of the emote in the UI
+        /// </summary>
+        public Sprite icon;
+        /// <summary>
+        /// Should the emote be available or not
+        /// </summary>
+        public bool available;
+        /// <summary>
+        /// Emote order in UI
+        /// </summary>
+        public int uiOrder;
+        /// <summary>
+        /// Emote dto
+        /// </summary>
+        public UMI3DEmoteDto dto;
+    }
+
     /// <summary>
     /// Manager that handles emotes
     /// </summary>
-    public class EmoteManager : inetum.unityUtils.SingleBehaviour<EmoteManager>
+    public class EmoteManager : inetum.unityUtils.SingleBehaviour<EmoteManager>, IEmoteManager
     {
         #region Fields
         #region Events
@@ -61,33 +96,6 @@ namespace umi3d.baseBrowser.emotes
         #endregion AnimatorManagement
 
         #region EmotesConfigManagement
-        /// <summary>
-        /// Describes an emote from the client side
-        /// </summary>
-        [System.Serializable]
-        public class Emote
-        {
-            /// <summary>
-            /// Emote's label
-            /// </summary>
-            public string Label => dto.label;
-            /// <summary>
-            /// Icon of the emote in the UI
-            /// </summary>
-            public Sprite icon;
-            /// <summary>
-            /// Should the emote be available or not
-            /// </summary>
-            public bool available;
-            /// <summary>
-            /// Emote order in UI
-            /// </summary>
-            public int uiOrder;
-            /// <summary>
-            /// Emote dto
-            /// </summary>
-            public UMI3DEmoteDto dto;
-        }
 
         public Dictionary<Emote, Coroutine> runningCoroutines = new();
 
@@ -359,7 +367,7 @@ namespace umi3d.baseBrowser.emotes
             }
             
             //? Possible to improve using a StateMachineBehaviour attached to the EmoteController & trigger events on OnStateExit on anim/OnStateEnter on AnyState
-            StopEmotePlayMode(emote);
+            StopEmote(emote);
 
             yield break;
         }
@@ -368,7 +376,7 @@ namespace umi3d.baseBrowser.emotes
         /// Stop the emote playing process.
         /// </summary>
         /// <param name="emote"></param>
-        private void StopEmotePlayMode(Emote emote)
+        public void StopEmote(Emote emote)
         {
             if (runningCoroutines.ContainsKey(emote))
             {
@@ -404,7 +412,7 @@ namespace umi3d.baseBrowser.emotes
         /// <param name="emote"></param>
         private void InterruptEmote(Emote emote)
         {
-            StopEmotePlayMode(emote);
+            StopEmote(emote);
         }
         
         #endregion Emote Playing
