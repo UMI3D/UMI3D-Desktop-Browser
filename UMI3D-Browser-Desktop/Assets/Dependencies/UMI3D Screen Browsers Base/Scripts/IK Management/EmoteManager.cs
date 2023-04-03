@@ -30,8 +30,8 @@ namespace umi3d.baseBrowser.emotes
     {
         #region Fields
         #region Events
-        public event System.Action<List<Emote>> EmoteConfigReceived;
-        public event System.Action NoEmoteConfigReeived;
+        public event System.Action<List<Emote>> EmotesLoaded;
+        public event System.Action NoEmotesLoaded;
         public event System.Action<Emote> EmoteUpdated;
         #endregion
 
@@ -128,13 +128,13 @@ namespace umi3d.baseBrowser.emotes
         {
             emoteConfigDto = dto;
             if (!UMI3DEnvironmentLoader.Instance.isEnvironmentLoaded)
-                UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(OnEnvironmentLoaded);
+                UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(StartGetEmotes);
             else
-                OnEnvironmentLoaded();
+                StartGetEmotes();
             UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(OnRedirection);
         }
 
-        private void OnEnvironmentLoaded()
+        private void StartGetEmotes()
         {
             StartCoroutine(GetEmotes());
         }
@@ -143,7 +143,7 @@ namespace umi3d.baseBrowser.emotes
         {
             StopAllCoroutines();
             ResetEmoteSystem();
-            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.RemoveListener(OnEnvironmentLoaded);
+            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.RemoveListener(StartGetEmotes);
             UMI3DCollaborationClientServer.Instance.OnRedirection.RemoveListener(OnRedirection);
         }
 
@@ -171,6 +171,7 @@ namespace umi3d.baseBrowser.emotes
         /// <returns></returns>
         private IEnumerator GetEmotes()
         {
+            Debug.Log("Get emotes");
             var id = UMI3DClientServer.Instance.GetUserId();
             float failTime = Time.time + 30f;
             while (!UMI3DClientUserTracking.Instance.embodimentDict.ContainsKey(id))
@@ -182,19 +183,18 @@ namespace umi3d.baseBrowser.emotes
                 }
                 yield return new WaitForSeconds(0.5f);
             }
-
-            avatar = UMI3DClientUserTracking.Instance.embodimentDict[id];
-            while (avatar.transform.childCount == 0
-                || (avatar.transform.childCount == 1 && avatar.transform.GetChild(0).transform.childCount == 0)) //wait for bundle loading
+            Debug.Log("Ended waiting");
+            if (!dirtyMode)
             {
-                yield return null;
+                avatar = UMI3DClientUserTracking.Instance.embodimentDict[id];
+                while (avatar.transform.childCount == 0
+                    || (avatar.transform.childCount == 1 && avatar.transform.GetChild(0).transform.childCount == 0)) //wait for bundle loading
+                {
+                    yield return null;
+                }
+                Debug.Log("Got bundle");
             }
 
-            if (Emotes.Count == 0)
-            {
-                NoEmoteConfigReeived?.Invoke();
-                yield break;
-            }
 
             var i = 0;
             foreach (UMI3DEmoteDto emoteRefInConfig in emoteConfigDto.emotes)
@@ -213,9 +213,19 @@ namespace umi3d.baseBrowser.emotes
                 }
                 i++;
             }
+
+            if (Emotes.Count == 0)
+            {
+                NoEmotesLoaded?.Invoke();
+                yield break;
+            }
+
             hasReceivedEmotes = true;
-            EmoteConfigReceived?.Invoke(Emotes); //Display the Emote Button and add emotes in windows.
+            EmotesLoaded?.Invoke(Emotes); //Display the Emote Button and add emotes in windows.
             UMI3DClientUserTracking.Instance.EmoteChangedEvent.AddListener(UpdateEmote);
+
+            if (dirtyMode)
+                yield break;
 
             skeletonAnimator = UMI3DCollaborationClientUserTracking.Instance.GetComponentInChildren<Animator>();
 
@@ -227,7 +237,7 @@ namespace umi3d.baseBrowser.emotes
                 avatarAnimator.enabled = false; //disabled because it causes interferences with avatar bindings
                 if (avatarAnimator.runtimeAnimatorController == null)
                 {
-                    NoEmoteConfigReeived?.Invoke(); //no emotes support in the scene
+                    NoEmotesLoaded?.Invoke(); //no emotes support in the scene
                     yield break;
                 }
             }
@@ -256,7 +266,7 @@ namespace umi3d.baseBrowser.emotes
         {
             if (!hasReceivedEmotes) return;
 
-            NoEmoteConfigReeived?.Invoke();
+            NoEmotesLoaded?.Invoke();
             Emotes.Clear();
             emoteConfigDto = null;
             //emoteAnimatorController = null;
