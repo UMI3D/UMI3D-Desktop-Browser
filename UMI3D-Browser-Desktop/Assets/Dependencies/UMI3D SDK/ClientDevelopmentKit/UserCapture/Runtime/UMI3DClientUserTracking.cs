@@ -230,12 +230,13 @@ namespace umi3d.cdk.userCapture
             EmotesLoadedEvent.AddListener((UMI3DEmotesConfigDto dto) => { emoteConfig = dto; });
             EmotePlayedSelfEvent.AddListener(delegate
             {
-                IgnoreBones = true;
+                //todo: to put back again
+                //IgnoreBones = true; 
                 IsEmotePlaying = true;
             });
             EmoteEndedSelfEvent.AddListener(delegate
             {
-                IgnoreBones = false;
+                //IgnoreBones = false;
                 IsEmotePlaying = false;
             });
         }

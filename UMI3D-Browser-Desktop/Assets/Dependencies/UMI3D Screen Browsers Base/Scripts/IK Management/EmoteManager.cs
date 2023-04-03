@@ -136,9 +136,6 @@ namespace umi3d.baseBrowser.emotes
 
         private void OnEnvironmentLoaded()
         {
-            avatarAnimator = GetComponentInChildren<Animator>();
-            if (avatarAnimator == null && transform.parent != null)
-                avatarAnimator = transform.parent.GetComponent<Animator>();
             StartCoroutine(GetEmotes());
         }
 
@@ -162,6 +159,12 @@ namespace umi3d.baseBrowser.emotes
             emote.dto = dto;
             EmoteUpdated?.Invoke(emote);
         }
+
+        /// <summary>
+        /// True if emote are supported without any animation. To remove.
+        /// </summary>
+        bool dirtyMode = true;
+
         /// <summary>
         /// Waits bundle loading attached to avatar, retreives emotes and their icon
         /// </summary>
@@ -179,6 +182,7 @@ namespace umi3d.baseBrowser.emotes
                 }
                 yield return new WaitForSeconds(0.5f);
             }
+
             avatar = UMI3DClientUserTracking.Instance.embodimentDict[id];
             while (avatar.transform.childCount == 0
                 || (avatar.transform.childCount == 1 && avatar.transform.GetChild(0).transform.childCount == 0)) //wait for bundle loading
@@ -186,7 +190,35 @@ namespace umi3d.baseBrowser.emotes
                 yield return null;
             }
 
+            if (Emotes.Count == 0)
+            {
+                NoEmoteConfigReeived?.Invoke();
+                yield break;
+            }
+
+            var i = 0;
+            foreach (UMI3DEmoteDto emoteRefInConfig in emoteConfigDto.emotes)
+            {
+                if (emoteRefInConfig != null)
+                {
+                    var emote = new Emote()
+                    {
+                        available = emoteConfigDto.allAvailableByDefault ? true : emoteRefInConfig.available,
+                        icon = defaultIcon,
+                        uiOrder = i,
+                        dto = emoteRefInConfig
+                    };
+                    if (emoteRefInConfig.iconResource != null) LoadFile(emoteRefInConfig, emote);
+                    Emotes.Add(emote);
+                }
+                i++;
+            }
+            hasReceivedEmotes = true;
+            EmoteConfigReceived?.Invoke(Emotes); //Display the Emote Button and add emotes in windows.
+            UMI3DClientUserTracking.Instance.EmoteChangedEvent.AddListener(UpdateEmote);
+
             skeletonAnimator = UMI3DCollaborationClientUserTracking.Instance.GetComponentInChildren<Animator>();
+
             avatarAnimator = avatar.GetComponentInChildren<Animator>();
             if (avatarAnimator == null && transform.parent != null)
                 avatarAnimator = transform.GetComponentInParent<Animator>();
@@ -198,29 +230,11 @@ namespace umi3d.baseBrowser.emotes
                     NoEmoteConfigReeived?.Invoke(); //no emotes support in the scene
                     yield break;
                 }
-                var i = 0;
-                foreach (UMI3DEmoteDto emoteRefInConfig in emoteConfigDto.emotes)
-                {
-                    if (emoteRefInConfig != null)
-                    {
-                        var emote = new Emote()
-                        {
-                            available = emoteConfigDto.allAvailableByDefault ? true : emoteRefInConfig.available,
-                            icon = defaultIcon,
-                            uiOrder = i,
-                            dto = emoteRefInConfig
-                        };
-                        if (emoteRefInConfig.iconResource != null) LoadFile(emoteRefInConfig, emote);
-                        Emotes.Add(emote);
-                    }
-                    i++;
-                }
-                hasReceivedEmotes = true;
-                EmoteConfigReceived?.Invoke(Emotes); //Display the Emote Button and add emotes in windows.
-                UMI3DClientUserTracking.Instance.EmoteChangedEvent.AddListener(UpdateEmote);
             }
-            if (Emotes.Count == 0) NoEmoteConfigReeived?.Invoke();
+
+            dirtyMode = skeletonAnimator == null || avatarAnimator == null;
         }
+
         async void LoadFile(UMI3DEmoteDto emoteRefInConfig, Emote emote)
         {
             IResourcesLoader loader = UMI3DEnvironmentLoader.Parameters.SelectLoader(emoteRefInConfig.iconResource.extension);
@@ -300,29 +314,40 @@ namespace umi3d.baseBrowser.emotes
             };
             UMI3DClientServer.SendData(emoteRequest, true);
 
-            LoadEmotes();
+
+            if (!dirtyMode)
+                LoadEmotes();
 
             currentInterruptionAction = new UnityAction(delegate { InterruptEmote(emote); });
-            BaseFPSNavigation.PlayerMoved.AddListener(currentInterruptionAction);
             UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.AddListener(currentInterruptionAction); //used if another emote is played in the meanwhile
-            avatarAnimator.Play(emote.dto.stateName, layer: 0, 0f);
 
-            float startTime = Time.time;
-            float expectedLength = default;
-            yield return new WaitUntil(() =>
+            if (dirtyMode)
             {
-                var stateInfo = avatarAnimator.GetCurrentAnimatorStateInfo(0);
-                if (stateInfo.IsName(emote.dto.stateName)) // the animation state is not transitionned to the played one directly
+                yield return new WaitForSecondsRealtime(3);
+            }
+            else
+            {
+                BaseFPSNavigation.PlayerMoved.AddListener(currentInterruptionAction);
+                avatarAnimator.Play(emote.dto.stateName, layer: 0, 0f);
+
+                float startTime = Time.time;
+                float expectedLength = default;
+                yield return new WaitUntil(() =>
                 {
-                    if (stateInfo.normalizedTime >= 1)
+                    var stateInfo = avatarAnimator.GetCurrentAnimatorStateInfo(0);
+                    if (stateInfo.IsName(emote.dto.stateName)) // the animation state is not transitionned to the played one directly
+                    {
+                        if (stateInfo.normalizedTime >= 1)
+                            return true;
+                        else if (expectedLength == default)
+                            expectedLength = stateInfo.length;
+                    }
+                    else if (expectedLength != default && Time.time - startTime > expectedLength) //we are in another state but we went through the one we intended to
                         return true;
-                    else if (expectedLength == default)
-                        expectedLength = stateInfo.length;
-                }
-                else if (expectedLength != default && Time.time - startTime > expectedLength) //we are in another state but we went through the one we intended to
-                    return true;
-                return false;
-            }); //wait for emote end of animation
+                    return false;
+                }); //wait for emote end of animation
+            }
+            
             //? Possible to improve using a StateMachineBehaviour attached to the EmoteController & trigger events on OnStateExit on anim/OnStateEnter on AnyState
             StopEmotePlayMode(emote);
 
@@ -347,7 +372,10 @@ namespace umi3d.baseBrowser.emotes
                 UMI3DClientUserTracking.Instance.EmotePlayedSelfEvent.RemoveListener(currentInterruptionAction);
                 currentInterruptionAction = null;
             }
-            UnloadEmotes();
+            if (!dirtyMode)
+            {
+                UnloadEmotes();
+            }
             UMI3DClientUserTracking.Instance.EmoteEndedSelfEvent.Invoke();
 
             // send the emote interruption text to other browsers through the server
