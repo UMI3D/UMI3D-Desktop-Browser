@@ -94,12 +94,12 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void InitGame_Emote()
         {
-            EmoteManager.Instance.EmoteConfigReceived += emotes =>
+            EmoteManager.Instance.EmotesLoaded += emotes =>
             {
                 Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
                 EmoteWindow_C.OnEmoteConfigReceived(emotes);
             };
-            EmoteManager.Instance.NoEmoteConfigReeived += () =>
+            EmoteManager.Instance.NoEmotesLoaded += () =>
             {
                 Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
                 EmoteWindow_C.Reset();
