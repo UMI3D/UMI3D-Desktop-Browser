@@ -325,7 +325,7 @@ namespace umi3d.commonScreen.menu
         {
             m_libraries = umi3d.cdk.UMI3DResourcesManager.Libraries;
             m_environments.Clear();
-            Header.FilterField.LocalisedOptions = (string)null;
+            Header.FilterField.LocalisedOptions = new List<string>();
             foreach (var lib in m_libraries)
             {
                 if (lib.applications == null) return;
