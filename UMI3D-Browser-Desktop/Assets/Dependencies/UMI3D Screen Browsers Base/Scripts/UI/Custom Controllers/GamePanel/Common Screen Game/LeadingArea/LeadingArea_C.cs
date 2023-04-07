@@ -131,8 +131,9 @@ namespace umi3d.commonScreen.game
             base.InitElement();
             PinnedToolsArea.Mode = ScrollViewMode.Vertical;
 
-            InteractableMapping
-                .SetLeft(Length.Percent(-50f));
+            //InteractableMapping
+            //    .SetLeft(Length.Percent(-50f));
+            UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
         }
 
         protected override void SetProperties()

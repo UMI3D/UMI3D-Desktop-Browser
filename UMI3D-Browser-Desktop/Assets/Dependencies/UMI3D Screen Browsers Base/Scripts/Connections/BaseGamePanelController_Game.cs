@@ -149,16 +149,21 @@ namespace umi3d.baseBrowser.connection
             LeadingArea.InteractableMapping.MappingAdded += () =>
             {
                 LeadingArea.InteractableMapping.InteractableName = BaseController.Instance.mouseData.CurrentHovered.name;
-                LeadingArea.InteractableMapping
-                    .SetLeft(0)
-                    .WithAnimation();
+                //LeadingArea.InteractableMapping
+                //    .SetLeft(0)
+                //    .WithAnimation();
+                UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                LeadingArea.InteractableMapping.Display();
             };
             LeadingArea.InteractableMapping.MappingRemoved += () =>
             {
-                LeadingArea.InteractableMapping
-                    .SetLeft(Length.Percent(-50f))
-                    .WithAnimation()
-                    .SetCallback(() => LeadingArea.InteractableMapping.InteractableName = null);
+                //LeadingArea.InteractableMapping
+                //    .SetLeft(Length.Percent(-50f))
+                //    .WithAnimation()
+                //    .SetCallback(() => LeadingArea.InteractableMapping.InteractableName = null);
+                UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                LeadingArea.InteractableMapping.Hide();
+                LeadingArea.InteractableMapping.InteractableName = null;
             };
         }
 
@@ -224,7 +229,8 @@ namespace umi3d.baseBrowser.connection
             {
                 if (ObjectMenu[0] is TextfieldDisplayer textfield)
                 {
-                    Game.Cursor.ActionText.LocalisedText = new LocalisationAttribute("Edit text", "Other", "EditText");
+                    UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"here");
+                    Game.Cursor.Action = new LocalisationAttribute("Edit text", "Other", "EditText");
                     UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose, () => textfield.Focus());
                 }
                 else if (ObjectMenu[0] is ButtonDisplayer button)
@@ -242,28 +248,38 @@ namespace umi3d.baseBrowser.connection
                         button.menuItem.NotifyValueChange(false);
                     });
                 }
-                else UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
+                //else UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
+                else
+                {
+                    UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                    Game.Cursor.Action = null;
+                    UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
+                }
 
                 if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;
             }
             else
             {
-                string CursorAction = null;
-                if
-                (
-                    BaseController.Exists
-                    && BaseController.Instance.mouseData.CurrentHovered != null
-                ) CursorAction = BaseController.Instance.mouseData.CurrentHovered.dto.name;
-                if
-                (
-                    string.IsNullOrEmpty(CursorAction)
-                    || CursorAction == "new tool"
-                ) Game.Cursor.ActionText.LocalisedText = new LocalisationAttribute("Display contextual Menu", "Other", "DisplayInteractionsMenu");
-                else Game.Cursor.Action = CursorAction;
+                //string CursorAction = null;
+                //if
+                //(
+                //    BaseController.Exists
+                //    && BaseController.Instance.mouseData.CurrentHovered != null
+                //) CursorAction = BaseController.Instance.mouseData.CurrentHovered.dto.name;
+                //if
+                //(
+                //    string.IsNullOrEmpty(CursorAction)
+                //    || CursorAction == "new tool"
+                //) Game.Cursor.ActionText.LocalisedText = new LocalisationAttribute("Display contextual Menu", "Other", "DisplayInteractionsMenu");
+                //else Game.Cursor.Action = CursorAction;
 
-                if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;
+                //if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;
 
-                UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
+                //UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
+
+                UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                Game.Cursor.Action = null;
+                UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
             }
         }
 
