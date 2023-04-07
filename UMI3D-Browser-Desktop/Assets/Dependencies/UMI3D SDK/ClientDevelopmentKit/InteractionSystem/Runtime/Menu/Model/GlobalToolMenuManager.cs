@@ -235,7 +235,6 @@ namespace umi3d.cdk.interaction
                 return eventMenuItem;
             }
 
-
             if (interactionDto is FormDto form)
                 return new FormMenuItem()
                 {
@@ -251,7 +250,6 @@ namespace umi3d.cdk.interaction
 
             if (interactionDto is AbstractParameterDto param)
                 return _GetInteractionItem(param);
-
 
             throw new System.Exception("Unknown dto !");
         }
