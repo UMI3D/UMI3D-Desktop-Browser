@@ -230,12 +230,13 @@ namespace umi3d.cdk.userCapture
             EmotesLoadedEvent.AddListener((UMI3DEmotesConfigDto dto) => { emoteConfig = dto; });
             EmotePlayedSelfEvent.AddListener(delegate
             {
-                //todo: to put back again
-                //IgnoreBones = true; 
+                //todo: re-enable emote dispatch when emote animations are supported on VR and RPM
+                //IgnoreBones = true;
                 IsEmotePlaying = true;
             });
             EmoteEndedSelfEvent.AddListener(delegate
             {
+                //todo: re-enable emote dispatch when emote animations are supported on VR and RPM
                 //IgnoreBones = false;
                 IsEmotePlaying = false;
             });
