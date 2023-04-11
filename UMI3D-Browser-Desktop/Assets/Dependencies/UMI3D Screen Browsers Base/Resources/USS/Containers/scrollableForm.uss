@@ -45,8 +45,8 @@
 }
 
 .scrollable__form.emote__window .emote__window-icon {
-	width: 100%;
-	height: 100%;
+	width: 75px;
+	height: 75px;
 }
 
 .scrollable__form.tools__items__window .sdc-box > * {

@@ -90,6 +90,7 @@ namespace umi3d.commonScreen.game
                 emoteButton.LocalisedLabel = string.IsNullOrEmpty(emote.Label) ? " " : emote.Label;
 
                 emoteButton.LabelAndInputDirection = ElementAlignment.Trailing;
+                emoteButton.LabelAlignment = ElementAlignment.Trailing;
                 emoteButton.Type = ButtonType.Invisible;
 
                 var icon = new VisualElement { name = "icon" };
@@ -126,6 +127,7 @@ namespace umi3d.commonScreen.game
                 var emote = (Emote)emoteButton.userData;
                 Add(emoteButton);
                 if (!emote.available) emoteButton.Hide();
+                UnityEngine.Debug.Log("<color=green>Fix for Laval: </color>" + $"Fix width and height of the emote to be a square.");
                 emoteButton.Q("icon").AddToClassList(USSCustomClassEmoteIcon);
             }
         }
