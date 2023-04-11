@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda69d6602aa3f44e99c0700f3af9310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputType: 0
+  inputType: 1
   debugSampling: 0
 --- !u!81 &3040778117293250658
 AudioListener:
@@ -338,7 +338,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 751d19592effcfe4796258eb97eaeb0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emoteAnimatorController: {fileID: 0}
   idleAnimation: {fileID: -203655887218126122, guid: 68661901237200744b2d85059f35e890,
     type: 3}
   Emotes: []
