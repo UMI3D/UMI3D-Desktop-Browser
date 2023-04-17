@@ -34,3 +34,7 @@ MonoBehaviour:
     English: Display interactions menu
     French: Afficher le menu des interactions
     Spanish: "Mostrar men\xFA de interacciones"
+  - Key: LeaveEnvironment
+    English: Leave  the environment
+    French: Quitter l'environnement
+    Spanish: Salir del entorno

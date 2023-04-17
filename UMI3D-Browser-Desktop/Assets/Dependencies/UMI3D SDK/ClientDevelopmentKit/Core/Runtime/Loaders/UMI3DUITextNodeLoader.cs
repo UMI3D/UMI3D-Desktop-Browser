@@ -60,9 +60,6 @@ namespace umi3d.cdk
             text.resizeTextMinSize = dto.resizeTextMinSize;
             text.supportRichText = dto.supportRichText;
             text.text = dto.text;
-
-            Debug.LogError("TODO : to remove, UI render queue");
-            text.material.renderQueue = 5000;
         }
 
         /// <summary>

@@ -65,9 +65,6 @@ namespace umi3d.cdk
                 else
                     UMI3DLogger.LogWarning($"invalid cast from {o.GetType()} to {typeof(Texture2D)}", scope);
             }
-
-            Debug.LogError("TODO : to remove, UI render queue");
-            image.material.renderQueue = 5000;
         }
 
         /// <summary>
