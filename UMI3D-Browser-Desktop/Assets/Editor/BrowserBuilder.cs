@@ -155,8 +155,6 @@ public class BrowserBuilder : InitedWindow<BrowserBuilder>
 
             var update = version.UpdateVersion();
 
-
-
             await Task.Yield();
             AssetDatabase.Refresh();
 
@@ -164,7 +162,12 @@ public class BrowserBuilder : InitedWindow<BrowserBuilder>
             await Task.Yield();
             await Task.Yield();
 
+            UnityEngine.Debug.Log("here");
+
             SetWaitForReinit(false);
+
+            await Task.Yield();
+
             CleanComputeBuild2(cleanAll, comit);
         }
         catch (Exception e)
