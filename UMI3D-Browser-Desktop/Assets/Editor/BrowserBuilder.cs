@@ -145,23 +145,24 @@ public class BrowserBuilder : InitedWindow<BrowserBuilder>
         {
             info.Clear();
             info.NewTitle($"Build Browser");
-            
+
             data.data.cleanAll = cleanAll;
             data.data.comitAll = comit;
-            
+
             SetWaitForReinit();
 
             await Task.Yield();
 
             var update = version.UpdateVersion();
 
-           
-            if (update)
-            {
-                await Task.Yield();
-                AssetDatabase.Refresh();
-                return;
-            }
+
+
+            await Task.Yield();
+            AssetDatabase.Refresh();
+
+            //should not go there when rebuild.
+            await Task.Yield();
+            await Task.Yield();
 
             SetWaitForReinit(false);
             CleanComputeBuild2(cleanAll, comit);
