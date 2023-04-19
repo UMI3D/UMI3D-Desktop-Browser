@@ -31,6 +31,8 @@ public class BrowserBuilderData : ScriptableObject
     public string InstallerFilePath;
     public string LicenseFilePath;
     public bool display;
+
+    public bool cleanAll, comitAll;
 }
 
 [CustomEditor(typeof(BrowserBuilderData))]
