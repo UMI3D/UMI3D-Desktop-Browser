@@ -28,6 +28,11 @@ namespace inetum.unityUtils
         [SerializeField]
         private List<data> dataList = new();
 
+        public void Debug()
+        {
+            dataList.Debug();
+        }
+
         public data FromNameOrNew(string name, bool canReload, bool showMessage, bool lastShowMessageValue, bool waitForRebuild)
         {
             var d = FromName(name);

@@ -131,14 +131,53 @@ public class BrowserBuilder : InitedWindow<BrowserBuilder>
     }
 
 
-    protected async override void Reinit()
+    protected override void Reinit()
     {
-        
         base.Reinit();
+        bool cleanAll = data.data.cleanAll, comit = data.data.comitAll;
+        CleanComputeBuild2(cleanAll, comit);
+    }
+
+    async void CleanComputeBuild(bool cleanAll, bool comit = true)
+    {
+        isBuilding = true;
         try
         {
-            bool cleanAll = data.data.cleanAll, comit = data.data.comitAll;
+            info.Clear();
+            info.NewTitle($"Build Browser");
+            
+            data.data.cleanAll = cleanAll;
+            data.data.comitAll = comit;
+            
+            SetWaitForReinit();
 
+            await Task.Yield();
+
+            var update = version.UpdateVersion();
+
+           
+            if (update)
+            {
+                await Task.Yield();
+                AssetDatabase.Refresh();
+                return;
+            }
+
+            SetWaitForReinit(false);
+            CleanComputeBuild2(cleanAll, comit);
+        }
+        catch (Exception e)
+        {
+            UnityEngine.Debug.LogException(e);
+        }
+        isBuilding = false;
+    }
+
+    async void CleanComputeBuild2(bool cleanAll, bool comit = true)
+    {
+        isBuilding = true;
+        try
+        {
             CleanAndCopyBuildFolder(cleanAll, data.data.BuildFolderPath);
 
             //update Setup
@@ -169,66 +208,6 @@ public class BrowserBuilder : InitedWindow<BrowserBuilder>
             }
             //Open folder
             Command.OpenFile(outputFile.path);
-        }
-        catch (Exception e)
-        {
-            UnityEngine.Debug.LogException(e);
-        }
-        isBuilding = false;
-    }
-
-    async void CleanComputeBuild(bool cleanAll, bool comit = true)
-    {
-        isBuilding = true;
-        try
-        {
-            info.Clear();
-            info.NewTitle($"Build Browser");
-            
-            data.data.cleanAll = cleanAll;
-            data.data.comitAll = comit;
-            
-            SetWaitForReinit();
-            version.UpdateVersion();
-
-
-
-            AssetDatabase.Refresh();
-            //-to remove
-            //isBuilding = false;
-            return;
-            //-to remove end
-
-            //CleanAndCopyBuildFolder(cleanAll, data.data.BuildFolderPath);
-
-            ////update Setup
-            //var outputFile = Iscc.UpdateInstaller(data.data.InstallerFilePath, version.version, "Setup_UMI3D_Browser_(.*)?", $"Setup_UMI3D_Browser_{version.version}");
-
-            //var text = info.text;
-            //// Build player.
-            //await Build(data.data.BuildFolderPath);
-
-            //ReInit();
-            //info.text = text;
-
-            //info.NewTitle($"Create Installer");
-
-            //await Iscc.ExecuteISCC("C:/Program Files (x86)/Inno Setup 6/ISCC.exe", data.data.InstallerFilePath, info.NewLine, info.NewError);
-
-            //if (comit)
-            //{
-            //    info.NewTitle($"Commit");
-
-            //    await Git.CommitAll($"{CommitMessage} {CompatibleUmi3dVersion}", info.NewLine, info.NewError);
-
-            //    info.NewTitle($"Release");
-
-            //    var url = await ReleaseBrowser.Release(data.data.Token, version.version, data.data.Branch, new System.Collections.Generic.List<(string path, string name)> { outputFile }, CompatibleUmi3dVersion, owner, repo);
-
-            //    Application.OpenURL(url);
-            //}
-            ////Open folder
-            //Command.OpenFile(outputFile.path);
         }
         catch (Exception e)
         {

@@ -64,7 +64,6 @@ namespace inetum.unityUtils
             InitedWindowData.data memory = null;
             if (!inited || data == null)
             {
-                Debug.Log("init");
 
                 data = new ScriptableLoader<InitedWindowData>(filename);
                 var type = typeof(T).FullName;
@@ -73,8 +72,6 @@ namespace inetum.unityUtils
 
                 if (memory != null)
                 {
-                    Debug.Log(memory.waitForInit);
-
                     if (!memory.canReload)
                     {
                         if (memory.lastShowMessageValue)
@@ -92,6 +89,7 @@ namespace inetum.unityUtils
                 Init();
                 if(memory != null && memory.waitForInit)
                 {
+                    memory.waitForInit = false;
                     Reinit();
                 }
                 inited = true;
@@ -143,6 +141,8 @@ namespace inetum.unityUtils
             if (_Init())
             {
                 var type = typeof(T).FullName;
+                Debug.Log(type);
+                data.data.Debug();
                 var memory = data.data.FromName(type);
                 if (memory != null)
                 {
@@ -151,7 +151,8 @@ namespace inetum.unityUtils
                 else
                     Debug.LogError("SetWaitForReinit failed because memory not inited");
             }
-            Debug.LogError("SetWaitForReinit failed because init failed");
+            else
+                Debug.LogError("SetWaitForReinit failed because init failed");
         }
 
         /// <summary>
