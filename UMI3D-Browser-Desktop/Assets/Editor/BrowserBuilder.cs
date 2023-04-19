@@ -158,10 +158,13 @@ public class BrowserBuilder : InitedWindow<BrowserBuilder>
             await Task.Yield();
             AssetDatabase.Refresh();
 
-            //should not go there when rebuild.
             await Task.Yield();
             await Task.Yield();
 
+            if (EditorApplication.isCompiling)
+                return;
+
+            //should not go there when rebuild.
             UnityEngine.Debug.Log("here");
 
             SetWaitForReinit(false);
