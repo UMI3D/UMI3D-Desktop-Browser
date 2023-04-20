@@ -18,6 +18,7 @@ limitations under the License.
 
 using BrowserDesktop;
 using inetum.unityUtils;
+using inetum.unityUtils.editor;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;

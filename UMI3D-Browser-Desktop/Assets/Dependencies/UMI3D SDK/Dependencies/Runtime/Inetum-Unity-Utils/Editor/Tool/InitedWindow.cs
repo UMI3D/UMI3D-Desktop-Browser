@@ -16,7 +16,7 @@ limitations under the License.
 
 #if UNITY_EDITOR
 
-namespace inetum.unityUtils
+namespace inetum.unityUtils.editor
 {
     using UnityEditor;
     using UnityEngine;
@@ -38,6 +38,7 @@ namespace inetum.unityUtils
             var memory = window.data.data.FromNameOrNew(type, true, true, true, false);
             memory.lastShowMessageValue = memory.showMessage;
             memory.canReload = canReload;
+            memory.waitForInit = false;
             window.Show();
         }
 
