@@ -22,43 +22,45 @@ namespace umi3d.baseBrowser.Navigation
     public partial class BaseFPSNavigation
     {
         protected bool vehicleFreeHead = false;
-        protected cdk.UMI3DNodeInstance globalVehicle;
+        protected cdk.UMI3DNodeInstance globalFrame;
+
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="data"></param>
-        public override void Embark(common.VehicleDto data)
+        public override void UpdateFrame(common.FrameRequestDto data)
         {
-            vehicleFreeHead = data.StopNavigation;
+            //vehicleFreeHead = data.StopNavigation;
 
-            if (data.VehicleId == 0)
+            if (data.FrameId == 0)
             {
                 this.transform.SetParent(cdk.UMI3DEnvironmentLoader.Instance.transform, true);
-                this.transform.localPosition = data.position;
-                this.transform.localRotation = data.rotation;
+                //this.transform.localPosition = data.position;
+                //this.transform.localRotation = data.rotation;
                 DontDestroyOnLoad(cdk.UMI3DNavigation.Instance);
-                globalVehicle.Delete -= new System.Action(() => {
-                    cdk.UMI3DNavigation.Instance.transform.SetParent(cdk.UMI3DEnvironmentLoader.Instance.transform, true);
-                    DontDestroyOnLoad(cdk.UMI3DNavigation.Instance);
-                });
-                globalVehicle = null;
+                globalFrame.Delete -= GlobalFrameDeleted;
+                globalFrame = null;
             }
             else
             {
-                cdk.UMI3DNodeInstance vehicle = cdk.UMI3DEnvironmentLoader.GetNode(data.VehicleId);
-                if (vehicle != null)
+                cdk.UMI3DNodeInstance Frame = cdk.UMI3DEnvironmentLoader.GetNode(data.FrameId);
+                if (Frame != null)
                 {
-                    globalVehicle = vehicle;
-                    this.transform.SetParent(vehicle.transform, true);
-                    this.transform.localPosition = data.position;
-                    this.transform.localRotation = data.rotation;
-                    globalVehicle.Delete += new System.Action(() => {
-                        cdk.UMI3DNavigation.Instance.transform.SetParent(cdk.UMI3DEnvironmentLoader.Instance.transform, true);
-                        DontDestroyOnLoad(cdk.UMI3DNavigation.Instance);
-                    });
+                    globalFrame = Frame;
+                    this.transform.SetParent(Frame.transform, true);
+                    //this.transform.localPosition = data.position;
+                    //this.transform.localRotation = data.rotation;
+                    globalFrame.Delete += GlobalFrameDeleted;
                 }
             }
         }
+
+        void GlobalFrameDeleted()
+        {
+            cdk.UMI3DNavigation.Instance.transform.SetParent(cdk.UMI3DEnvironmentLoader.Instance.transform, true);
+            DontDestroyOnLoad(cdk.UMI3DNavigation.Instance);
+        }
+
     }
 }

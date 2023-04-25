@@ -1067,7 +1067,6 @@ namespace umi3d.cdk
         private async Task DownloadFile(Library key, string directoryPath, string filePath, string url, string fileRelativePath, bool force = false)
         {
             Match matchUrl = ObjectData.rx.Match(url);
-            UnityEngine.Debug.Log($"find {url} {key.id} {key.version}");
             ObjectData objectData = force ? null : CacheCollection.Find((o) =>
             {
                 return o.MatchUrl(matchUrl, url, key);
