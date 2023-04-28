@@ -142,6 +142,7 @@ namespace umi3d.common
         public static List<T> ReadList<T>(ByteContainer container)
         {
             byte listType = UMI3DSerializer.Read<byte>(container);
+
             switch (listType)
             {
                 case UMI3DObjectKeys.CountArray:

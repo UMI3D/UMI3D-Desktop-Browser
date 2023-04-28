@@ -1,0 +1,105 @@
+﻿/*
+Copyright 2019 - 2023 Inetum
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+using inetum.unityUtils;
+using System.Collections.Generic;
+using System.Linq;
+using umi3d.cdk.utils.extrapolation;
+using umi3d.common;
+using umi3d.common.userCapture;
+using UnityEngine;
+using UnityEngine.Assertions.Must;
+
+namespace umi3d.cdk.userCapture
+{
+
+    public class PersonalSkeleton : SingleBehaviour<PersonalSkeleton>, ISkeleton
+    {
+        protected const DebugScope scope = DebugScope.CDK | DebugScope.UserCapture;
+        #region fields
+        #region interface Fields
+        public Dictionary<uint, ISkeleton.s_Transform> Bones { get; protected set; }
+
+        List<ISubSkeleton> ISkeleton.Skeletons { get => skeletons; set => skeletons = value; }
+        ulong ISkeleton.userId { get => userId; set => userId = value; }
+        Vector3LinearDelayedExtrapolator ISkeleton.nodePositionExtrapolator { get => nodePositionExtrapolator; set => nodePositionExtrapolator = value; }
+        QuaternionLinearDelayedExtrapolator ISkeleton.nodeRotationExtrapolator { get => nodeRotationExtrapolator; set => nodeRotationExtrapolator = value; }
+        Dictionary<ulong, ISkeleton.SavedTransform> ISkeleton.savedTransforms { get => savedTransforms; set => savedTransforms = value; }
+        Dictionary<uint, (uint, Vector3)> ISkeleton.SkeletonHierarchy { get => skeletonHierarchy; set => skeletonHierarchy = value; }
+        Transform ISkeleton.HipsAnchor { get => hipsAnchor; set => hipsAnchor = value; }
+
+        #endregion
+        protected Dictionary<uint, ISkeleton.s_Transform> bones = new Dictionary<uint, ISkeleton.s_Transform>();
+        public List<ISubSkeleton> skeletons = new List<ISubSkeleton>();
+        protected ulong userId;
+        protected Vector3LinearDelayedExtrapolator nodePositionExtrapolator;
+        protected QuaternionLinearDelayedExtrapolator nodeRotationExtrapolator;
+        protected Dictionary<ulong, ISkeleton.SavedTransform> savedTransforms = new Dictionary<ulong, ISkeleton.SavedTransform>();
+        protected Dictionary<uint, (uint, Vector3)> skeletonHierarchy = new Dictionary<uint, (uint, Vector3)>();
+        [SerializeField]
+        protected Transform hipsAnchor;
+        #endregion
+        public TrackedSkeleton TrackedSkeleton;
+        public PoseSkeleton poseSkeleton = new PoseSkeleton();
+
+        public Dictionary<uint, float> BonesAsyncFPS { get; protected set; }
+
+        public Vector3 worldSize => TrackedSkeleton.transform.lossyScale;
+
+        public void Start()
+        {
+            skeletons = new List<ISubSkeleton>
+            {
+                TrackedSkeleton, poseSkeleton
+            };
+
+            BonesAsyncFPS = new Dictionary<uint, float>();
+        }
+
+        public UserTrackingFrameDto GetFrame(TrackingOption option)
+        {
+            var frame = new UserTrackingFrameDto()
+            {
+                position = transform.position,
+                rotation = transform.rotation,
+            };
+
+            foreach (ISubWritableSkeleton skeleton in skeletons.OfType<ISubWritableSkeleton>())
+                skeleton.WriteTrackingFrame(frame, option);
+
+            return frame;
+        }
+
+        public UserCameraPropertiesDto GetCameraProperty()
+        {
+            //The first skeleton is the TrackedSkeleton
+            foreach (var skeleton in skeletons)
+            {
+                var c = skeleton.GetCameraDto();
+                if (c != null)
+                    return c;
+            }
+            return null;
+        }
+
+        public void UpdateFrame(UserTrackingFrameDto frame)
+        {
+            if (skeletons != null)
+                foreach (ISubWritableSkeleton skeleton in skeletons.OfType<ISubWritableSkeleton>())
+                    skeleton.UpdateFrame(frame);
+        }
+    }
+}

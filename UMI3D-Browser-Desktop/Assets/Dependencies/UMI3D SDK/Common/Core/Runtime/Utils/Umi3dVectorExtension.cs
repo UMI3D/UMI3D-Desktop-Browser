@@ -54,5 +54,15 @@ namespace umi3d.common
         {
             return (SerializableVector4)((Vector4)v4).Scaled(scale);
         }
+
+        public static SerializableVector4 FromQuaternion(this SerializableVector4 v4, Quaternion q)
+        {
+            return (SerializableVector4)((Vector4)v4).FromQuaternion(q);
+        }
+
+        public static SerializableVector4 ToQuaternion(this SerializableVector4 v4)
+        {
+            return (SerializableVector4)((Vector4)v4).ToQuaternion();
+        }
     }
 }

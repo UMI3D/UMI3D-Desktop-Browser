@@ -37,6 +37,7 @@ namespace umi3d.common.interaction
         /// </summary>
         public ulong ReleaseAnimationId;
 
+
         public EventDto() : base() { }
     }
 }

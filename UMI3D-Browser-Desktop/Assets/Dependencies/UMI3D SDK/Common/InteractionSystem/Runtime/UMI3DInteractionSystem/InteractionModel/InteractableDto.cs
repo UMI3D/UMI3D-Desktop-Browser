@@ -47,6 +47,7 @@ namespace umi3d.common.interaction
         /// </summary>
         public float interactionDistance = -1;
 
+
         /// <summary>
         /// Animation id of the animation triggered when the interactable starts being hovered.
         /// </summary>

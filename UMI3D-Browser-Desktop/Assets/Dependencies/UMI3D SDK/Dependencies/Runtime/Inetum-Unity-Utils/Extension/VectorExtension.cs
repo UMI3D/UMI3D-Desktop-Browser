@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace inetum.unityUtils
 {
@@ -62,6 +63,16 @@ namespace inetum.unityUtils
         public static Vector4 Scaled(this Vector4 v4, Vector4 scale)
         {
             return new Vector4(v4.x * scale.x, v4.y * scale.y, v4.z * scale.z, v4.w * scale.w);
+        }
+
+        public static Vector4 FromQuaternion(this Vector4 v4, Quaternion q)
+        {
+            return new Vector4(q.x, q.y, q.z, q.w);
+        }
+
+        public static Quaternion ToQuaternion(this Vector4 v4)
+        {
+            return new Quaternion(v4.x, v4.y, v4.z, v4.w);
         }
     }
 }

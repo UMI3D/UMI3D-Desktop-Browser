@@ -32,7 +32,7 @@ namespace umi3d.common.userCapture
         public uint boneType;
 
         /// <summary>
-        /// Rotation of the bone relative to the parent
+        /// Rotation of the bone in world space
         /// </summary>
         public SerializableVector4 rotation;
 
@@ -47,7 +47,7 @@ namespace umi3d.common.userCapture
         {
             return
                 UMI3DSerializer.Write(boneType)
-                + UMI3DSerializer.Write(rotation);
+                + UMI3DSerializer.Write(rotation ?? new SerializableVector4());
         }
     }
 }

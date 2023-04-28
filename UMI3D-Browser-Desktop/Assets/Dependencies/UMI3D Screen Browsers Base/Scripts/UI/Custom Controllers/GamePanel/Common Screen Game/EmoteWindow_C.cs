@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using static umi3d.baseBrowser.emotes.EmoteManager;
+//using static umi3d.baseBrowser.emotes.EmoteManager;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.Container;
-using umi3d.baseBrowser.emotes;
+//using umi3d.baseBrowser.emotes;
 
 namespace umi3d.commonScreen.game
 {
@@ -44,7 +44,7 @@ namespace umi3d.commonScreen.game
         public virtual string USSCustomClassEmote => "emote__window";
         public virtual string USSCustomClassEmoteIcon => $"{USSCustomClassEmote}-icon";
 
-        public static List<Emote> Emotes;
+        //public static List<Emote> Emotes;
         public static List<Button_C> EmoteButtons = new List<Button_C>();
 
         protected override void AttachUssClass()
@@ -76,59 +76,59 @@ namespace umi3d.commonScreen.game
 
         public static event System.Action WillUpdateFilter;
 
-        public static void OnEmoteConfigReceived(List<Emote> emotes)
-        {
-            Reset();
-            Emotes = emotes;
-            foreach (var emote in Emotes)
-            {
-                var emoteButton = new Button_C();
-                EmoteButtons.Add(emoteButton);
-                emoteButton.userData = emote;
+        //public static void OnEmoteConfigReceived(List<Emote> emotes)
+        //{
+        //    Reset();
+        //    Emotes = emotes;
+        //    foreach (var emote in Emotes)
+        //    {
+        //        var emoteButton = new Button_C();
+        //        EmoteButtons.Add(emoteButton);
+        //        emoteButton.userData = emote;
 
-                emoteButton.name = emote.Label.ToLower();
-                emoteButton.LocalisedLabel = string.IsNullOrEmpty(emote.Label) ? " " : emote.Label;
+        //        emoteButton.name = emote.Label.ToLower();
+        //        emoteButton.LocalisedLabel = string.IsNullOrEmpty(emote.Label) ? " " : emote.Label;
 
-                emoteButton.LabelAndInputDirection = ElementAlignment.Trailing;
-                emoteButton.LabelAlignment = ElementAlignment.Trailing;
-                emoteButton.Type = ButtonType.Invisible;
+        //        emoteButton.LabelAndInputDirection = ElementAlignment.Trailing;
+        //        emoteButton.LabelAlignment = ElementAlignment.Trailing;
+        //        emoteButton.Type = ButtonType.Invisible;
 
-                var icon = new VisualElement { name = "icon" };
-                icon.style.backgroundImage = new StyleBackground(emote.icon);
-                emoteButton.Add(icon);
+        //        var icon = new VisualElement { name = "icon" };
+        //        icon.style.backgroundImage = new StyleBackground(emote.icon);
+        //        emoteButton.Add(icon);
 
-                WillUpdateFilter?.Invoke();
+        //        WillUpdateFilter?.Invoke();
 
-                emoteButton.Body.RegisterCallback<GeometryChangedEvent>(evt => emoteButton.Body.style.width = emoteButton.layout.height);
+        //        emoteButton.Body.RegisterCallback<GeometryChangedEvent>(evt => emoteButton.Body.style.width = emoteButton.layout.height);
 
-                emoteButton.clicked += () => EmoteManager.Instance.PlayEmote(emote);
-            }
-        }
+        //        emoteButton.clicked += () => EmoteManager.Instance.PlayEmote(emote);
+        //    }
+        //}
 
         public static void Reset()
         {
-            Emotes = null;
-            EmoteButtons.ForEach(emote => emote.RemoveFromHierarchy());
-            EmoteButtons.Clear();
+            //Emotes = null;
+            //EmoteButtons.ForEach(emote => emote.RemoveFromHierarchy());
+            //EmoteButtons.Clear();
         }
 
-        public static void OnUpdateEmote(Emote emote)
-        {
-            var emoteButton = EmoteButtons.Find(button => (Emote)button.userData == emote);
-            if (emote.available) emoteButton.Display();
-            else emoteButton.Hide();
-        }
+        //public static void OnUpdateEmote(Emote emote)
+        //{
+        //    var emoteButton = EmoteButtons.Find(button => (Emote)button.userData == emote);
+        //    if (emote.available) emoteButton.Display();
+        //    else emoteButton.Hide();
+        //}
 
         public virtual void UpdateFilter()
         {
             if (this.FindRoot() == null) return;
             foreach (var emoteButton in EmoteButtons)
             {
-                var emote = (Emote)emoteButton.userData;
-                Add(emoteButton);
-                if (!emote.available) emoteButton.Hide();
-                UnityEngine.Debug.Log("<color=green>Fix for Laval: </color>" + $"Fix width and height of the emote to be a square.");
-                emoteButton.Q("icon").AddToClassList(USSCustomClassEmoteIcon);
+                //var emote = (Emote)emoteButton.userData;
+                //Add(emoteButton);
+                //if (!emote.available) emoteButton.Hide();
+                //UnityEngine.Debug.Log("<color=green>Fix for Laval: </color>" + $"Fix width and height of the emote to be a square.");
+                //emoteButton.Q("icon").AddToClassList(USSCustomClassEmoteIcon);
             }
         }
 

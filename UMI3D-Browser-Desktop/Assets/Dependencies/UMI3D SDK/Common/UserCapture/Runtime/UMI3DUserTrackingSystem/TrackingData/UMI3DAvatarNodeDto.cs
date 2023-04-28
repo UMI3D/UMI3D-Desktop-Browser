@@ -25,7 +25,7 @@ namespace umi3d.common.userCapture
     /// An avatar is the virtual representation of the user in the virtual environment. 
     /// UMI3D avatars a constructed upon a skeleton composed of bones (see <seealso cref="BoneDto"/>).
     /// The visual representation could be achieved either by mapping an avatar to the skeletton globally, or just
-    /// by binding model parts to each desired bone of the skeleton. (see <see cref="BoneBindingDto"/>).
+    /// by binding model parts to each desired bone of the skeleton. (see <see cref="BoneBindingDataDto"/>).
     [Serializable]
     public class UMI3DAvatarNodeDto : UMI3DNodeDto
     {
@@ -47,7 +47,7 @@ namespace umi3d.common.userCapture
         /// <summary>
         /// A list of bindings between the user's bones and their representations.
         /// </summary>
-        public List<BoneBindingDto> bindings;
+        public List<BoneBindingDataDto> bindings;
 
         /// <summary>
         /// List of availables hand poses for the avatar.
@@ -60,10 +60,5 @@ namespace umi3d.common.userCapture
         /// </summary>
         /// Note that this field is empty for other avatars than the target user's one.
         public List<UMI3DBodyPoseDto> bodyPoses;
-
-        /// <summary>
-        /// Emotes configuration to manage available emotes
-        /// </summary>
-        public UMI3DEmotesConfigDto emotesConfigDto;
     }
 }

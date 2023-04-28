@@ -547,8 +547,8 @@ namespace umi3d.cdk.collaboration
 
             var joinDto = new JoinDto()
             {
-                trackedBonetypes = UMI3DClientUserTrackingBone.instances.Values.Select(trackingBone => new KeyValuePair<uint, bool>(trackingBone.boneType, trackingBone.isTracked)).ToDictionary(x => x.Key, x => x.Value),
-                userSize = UMI3DClientUserTracking.Instance.skeletonContainer.localScale,
+                clientLocalPoses = PoseManager.Instance.localPoses.ToList(),
+                userSize = PersonalSkeleton.Instance.TrackedSkeleton.transform.lossyScale,
             };
             try
             {

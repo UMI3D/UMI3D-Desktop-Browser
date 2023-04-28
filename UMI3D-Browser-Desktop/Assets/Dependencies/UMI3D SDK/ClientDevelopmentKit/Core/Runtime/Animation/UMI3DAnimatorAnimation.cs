@@ -1,5 +1,6 @@
 ﻿/*
 Copyright 2019 - 2023 Inetum
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -89,15 +90,14 @@ namespace umi3d.cdk
         }
 
         #region DI
-
-        private UMI3DEnvironmentLoader coroutineService;
+        private UMI3DLoadingHandler coroutineService;
 
         public UMI3DAnimatorAnimation(UMI3DAnimatorAnimationDto dto) : base(dto)
         {
-            coroutineService = UMI3DEnvironmentLoader.Instance;
+            coroutineService = UMI3DLoadingHandler.Instance;
         }
 
-        public UMI3DAnimatorAnimation(UMI3DAnimatorAnimationDto dto, UMI3DEnvironmentLoader coroutineService) : base(dto)
+        public UMI3DAnimatorAnimation(UMI3DAnimatorAnimationDto dto, UMI3DLoadingHandler coroutineService) : base(dto)
         {
             this.coroutineService = coroutineService;
         }
@@ -164,7 +164,7 @@ namespace umi3d.cdk
         /// </summary>
         public void Play()
         {
-            if (!started)
+            if (!started) 
                 Start();
             Play(IsPaused ? lastPauseTime : 0);
         }
@@ -175,14 +175,14 @@ namespace umi3d.cdk
         /// <param name="atTime">Resume time in ms.</param>
         public void Play(float atTime)
         {
-            var nTime = atTime / Duration;
-
+            var nTime = dto.normalizedTime + atTime / Duration;
+            
             if (animator == null)
                 UMI3DLogger.LogError($"No animator on node {node}", DebugScope.CDK | DebugScope.Animation);
 
             animator.Play(dto.stateName, layer: 0, normalizedTime: nTime);
             IsPaused = false;
-            trackingAnimationCoroutine ??= UMI3DEnvironmentLoader.StartCoroutine(TrackEnd());
+            trackingAnimationCoroutine ??= coroutineService.AttachCoroutine(TrackEnd());
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace umi3d.cdk
         {
             lastPauseTime = GetProgress() * Duration;
             IsPaused = true;
-            UMI3DEnvironmentLoader.StopCoroutine(trackingAnimationCoroutine);
+            coroutineService.DettachCoroutine(trackingAnimationCoroutine);
             trackingAnimationCoroutine = null;
             animator.Play(dto.stateName, layer: 0, normalizedTime: 1);
         }
@@ -257,6 +257,10 @@ namespace umi3d.cdk
                 case UMI3DPropertyKeys.AnimationStateName:
                     dto.stateName = (string)value.property.value;
                     break;
+                
+                case UMI3DPropertyKeys.AnimationAnimatorNormalizedTime:
+                    dto.normalizedTime = (float)value.property.value;
+                    break;
 
                 case UMI3DPropertyKeys.AnimationAnimatorParameters:
                     switch (value.property)
@@ -288,7 +292,7 @@ namespace umi3d.cdk
             return true;
         }
 
-
+       
         public override async Task<bool> SetUMI3DProperty(SetUMI3DPropertyContainerData value)
         {
             if (await base.SetUMI3DProperty(value)) return true;
@@ -301,6 +305,10 @@ namespace umi3d.cdk
 
                 case UMI3DPropertyKeys.AnimationStateName:
                     dto.stateName = UMI3DSerializer.Read<string>(value.container);
+                    break;
+
+                case UMI3DPropertyKeys.AnimationAnimatorNormalizedTime:
+                    dto.normalizedTime = UMI3DSerializer.Read<float>(value.container);
                     break;
 
                 case UMI3DPropertyKeys.AnimationAnimatorParameters:
@@ -382,7 +390,7 @@ namespace umi3d.cdk
             UMI3DEnvironmentLoader.WaitForAnEntityToBeLoaded(nodeId, (n) =>
             {
                 node = n as UMI3DNodeInstance;
-                if (node is not null)
+                if(node is not null)
                     animator = node.gameObject.GetComponentInChildren<Animator>();
                 if (animator != null && dto.playing)
                     Start();

@@ -15,9 +15,12 @@ limitations under the License.
 */
 
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using umi3d.cdk.userCapture;
 using umi3d.common;
 using umi3d.common.collaboration;
+using umi3d.common.userCapture;
 using UnityEngine.Events;
 
 namespace umi3d.cdk.collaboration
@@ -66,11 +69,6 @@ namespace umi3d.cdk.collaboration
         /// Video player attached to the user.
         /// </summary>
         public UMI3DVideoPlayer videoPlayer => UMI3DVideoPlayer.Get(dto.videoSourceId);
-
-        /// <summary>
-        /// Virtual representation of the user in the media.
-        /// </summary>
-        public UserAvatar avatar => UMI3DEnvironmentLoader.GetEntity(dto.id)?.Object as UserAvatar;
 
         /// <summary>
         /// See <see cref="UserDto.microphoneStatus"/>.
@@ -163,7 +161,7 @@ namespace umi3d.cdk.collaboration
         public void Update(UserDto user)
         {
             bool statusUpdate = dto.status != user.status;
-            bool avatarUpdate = dto.avatarId != user.avatarId;
+            //bool avatarUpdate = dto.avatarId != user.avatarId;
             bool audioUpdate = dto.audioSourceId != user.audioSourceId;
             bool videoUpdate = dto.videoSourceId != user.videoSourceId;
             bool audioFrequencyUpdate = dto.audioFrequency != user.audioFrequency;
@@ -190,7 +188,7 @@ namespace umi3d.cdk.collaboration
             }
 
             if (statusUpdate) OnUserStatusUpdated.Invoke(this);
-            if (avatarUpdate) OnUserAvatarUpdated.Invoke(this);
+            //if (avatarUpdate) OnUserAvatarUpdated.Invoke(this);
             if (audioUpdate) OnUserAudioUpdated.Invoke(this);
             if (videoUpdate) OnUserVideoUpdated.Invoke(this);
             if (audioFrequencyUpdate) OnUserAudioFrequencyUpdated.Invoke(this);
@@ -232,7 +230,6 @@ namespace umi3d.cdk.collaboration
                     OnUserMicrophoneUseMumbleUpdated.Invoke(this);
                     return true;
 
-
                 case UMI3DPropertyKeys.UserAudioPassword:
                     audioPassword = (string)value;
                     OnUserMicrophoneIdentityUpdated.Invoke(this);
@@ -260,10 +257,11 @@ namespace umi3d.cdk.collaboration
                 case UMI3DPropertyKeys.UserOnStopSpeakingAnimationId:
                     dto.onStopSpeakingAnimationId = (ulong)value;
                     return true;
+                default:
+                    return false;
             }
             return false;
         }
-
 
         public void SetMicrophoneStatus(bool microphoneStatus)
         {

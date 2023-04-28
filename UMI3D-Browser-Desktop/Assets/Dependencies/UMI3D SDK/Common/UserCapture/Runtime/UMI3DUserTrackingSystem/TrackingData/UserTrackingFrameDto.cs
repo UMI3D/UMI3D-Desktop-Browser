@@ -38,13 +38,17 @@ namespace umi3d.common.userCapture
         /// <summary>
         /// Bones information of the user
         /// </summary>
-        public List<BoneDto> bones;
+        public List<ControllerDto> trackedBones;
+
+        public List<int> playerServerPoses = new List<int>();
+
+        public List<int> playerUserPoses = new List<int>();
 
         /// <summary>
         /// Current jump height of the avatar.
         /// </summary>
         /// Probably obsolete with the new navigation system.
-        public float skeletonHighOffset;
+        //public float skeletonHighOffset;
 
         /// <summary>
         /// Current position of the user.
@@ -56,10 +60,12 @@ namespace umi3d.common.userCapture
         /// </summary>
         public SerializableVector4 rotation;
 
+        //public ulong[] animationsPlaying;
+
         /// <summary>
         /// Frequency in frame per second (FPS) at which the user tracking is sent to the server.
         /// </summary>
-        public float refreshFrequency;
+        //public float refreshFrequency;
 
         /// <inheritdoc/>
         protected override uint GetOperationId() { return UMI3DOperationKeys.UserTrackingFrame; }
@@ -70,11 +76,11 @@ namespace umi3d.common.userCapture
             return base.ToBytableArray(parameters)
                 + UMI3DSerializer.Write(userId)
                 + UMI3DSerializer.Write(parentId)
-                + UMI3DSerializer.Write(skeletonHighOffset)
                 + UMI3DSerializer.Write(position)
                 + UMI3DSerializer.Write(rotation)
-                + UMI3DSerializer.Write(refreshFrequency)
-                + UMI3DSerializer.WriteIBytableCollection(bones);
+                + UMI3DSerializer.WriteCollection(trackedBones)
+                + UMI3DSerializer.WriteCollection(playerServerPoses)
+                + UMI3DSerializer.WriteCollection(playerUserPoses);
         }
     }
 }
