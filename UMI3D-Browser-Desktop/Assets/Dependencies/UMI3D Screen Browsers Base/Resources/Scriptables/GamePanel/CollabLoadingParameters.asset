@@ -22,5 +22,12 @@ MonoBehaviour:
   maximumResolution: 0
   notificationLoader: {fileID: 11400000, guid: ac8ff0a36de4f9546b9facb0633729df, type: 2}
   _skyboxMaterial: {fileID: 2100000, guid: dfb4cc00185bacc43b3d69539f922c99, type: 2}
+  defaultMat: {fileID: -3033667219593020291, guid: 39c6d47b1a4d6104ca879e04a32cfe56,
+    type: 3}
   _skyboxEquirectangularMaterial: {fileID: 2100000, guid: 550ddc5eab91acd47adeb9d3fd1b2ff8,
     type: 2}
+  CollaborationUserCaptureActivated: 1
+  CollabTrackedSkeleton: {fileID: 3328692698567505491, guid: d35b455ecdb2f7e49bed74b7ffa742b9,
+    type: 3}
+  areEmotesSupported: 1
+  defaultEmoteIcon: {fileID: 21300000, guid: 17e1536176d5f10478e7b7a0f3236bb4, type: 3}
