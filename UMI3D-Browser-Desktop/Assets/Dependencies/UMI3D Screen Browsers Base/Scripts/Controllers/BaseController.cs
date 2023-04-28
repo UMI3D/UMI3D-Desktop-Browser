@@ -365,7 +365,7 @@ namespace umi3d.baseBrowser.Controller
             List<(RaycastHit, InteractableContainer)> interactables = new List<(RaycastHit, InteractableContainer)>();
             foreach (RaycastHit hit in hits)
             {
-                if (hit.collider.gameObject.GetComponentInParent<cdk.UMI3DEnvironmentLoader>() == null) continue;
+                if (hit.collider.gameObject.GetComponentInParent<cdk.UMI3DLoadingHandler>() == null) continue;
                 var interactable = hit.collider.gameObject.GetComponent<InteractableContainer>();
                 if (interactable == null) interactable = hit.collider.gameObject.GetComponentInParent<InteractableContainer>();
                 if (interactable != null) interactables.Add((hit, interactable));
