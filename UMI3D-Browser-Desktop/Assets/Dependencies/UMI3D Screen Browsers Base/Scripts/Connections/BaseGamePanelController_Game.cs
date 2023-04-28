@@ -12,7 +12,6 @@ limitations under the License.
 */
 using umi3d.baseBrowser.Controller;
 using umi3d.baseBrowser.cursor;
-//using umi3d.baseBrowser.emotes;
 using umi3d.baseBrowser.Navigation;
 using umi3d.cdk.collaboration;
 using umi3d.commonDesktop.game;
@@ -94,17 +93,20 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void InitGame_Emote()
         {
-            //EmoteManager.Instance.EmotesLoaded += emotes =>
-            //{
-            //    Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
-            //    EmoteWindow_C.OnEmoteConfigReceived(emotes);
-            //};
-            //EmoteManager.Instance.NoEmotesLoaded += () =>
-            //{
-            //    Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
-            //    EmoteWindow_C.Reset();
-            //};
-            //EmoteManager.Instance.EmoteUpdated += EmoteWindow_C.OnUpdateEmote;
+            EmoteManager.Instance.EmotesLoaded += emotes =>
+            {
+                if (emotes is not null && emotes.Count > 0)
+                {
+                    Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
+                    EmoteWindow_C.OnEmoteConfigReceived(emotes);
+                }
+                else
+                {
+                    Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
+                    EmoteWindow_C.Reset();
+                }
+            };
+            EmoteManager.Instance.EmoteUpdated += EmoteWindow_C.OnUpdateEmote;
         }
 
         protected virtual void InitGame_ObjectMenu()
