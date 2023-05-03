@@ -136,6 +136,7 @@ namespace umi3d.desktopBrowser.Controller
             manip.strength = strength;
             manip.frameIndicator = frameIndicator;
             manip.manipulationCursor = manipulationCursor;
+            manip.boneTransform = Controller.hoverBoneTransform;
 
             return manip;
         }
