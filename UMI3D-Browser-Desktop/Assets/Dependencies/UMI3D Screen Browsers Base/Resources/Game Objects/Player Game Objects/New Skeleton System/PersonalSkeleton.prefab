@@ -210,8 +210,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6d17de7534d4c4c8b15bbafc5e08a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hipsAnchor: {fileID: 3858088601635835181}
+  serializedSkeletonHierarchy: {fileID: 11400000, guid: 074ed831a79810c45a664c9b0968209f,
+    type: 2}
   TrackedSkeleton: {fileID: 3620641808951049925}
+  hipsAnchor: {fileID: 3858088601635835181}
 --- !u!1 &7567031998026320185
 GameObject:
   m_ObjectHideFlags: 0
