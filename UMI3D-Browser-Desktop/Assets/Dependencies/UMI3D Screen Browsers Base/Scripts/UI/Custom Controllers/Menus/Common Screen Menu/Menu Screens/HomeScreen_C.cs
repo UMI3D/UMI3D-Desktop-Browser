@@ -20,11 +20,14 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.Container;
+using System.Net;
+using umi3d.common;
 
 namespace umi3d.commonScreen.menu
 {
     public class HomeScreen_C : BaseMenuScreen_C
     {
+        private const DebugScope scope = DebugScope.CDK | DebugScope.Collaboration | DebugScope.Networking;
         public new class UxmlFactory : UxmlFactory<HomeScreen_C, UxmlTraits> { }
 
         public new class UxmlTraits : BaseMenuScreen_C.UxmlTraits
@@ -214,6 +217,9 @@ namespace umi3d.commonScreen.menu
             string serverUrl = DirectConnect__TextField.value;
             if (string.IsNullOrEmpty(serverUrl)) return;
 
+            // Get local address if localhost is enterd
+            serverUrl.Replace("localhost", GetLocalIPAddress());
+
             TryToConnect(new ServerPreferences.ServerData { serverUrl = serverUrl.Trim() }, DirectConnect__Toggle.value);
         }
 
@@ -266,7 +272,7 @@ namespace umi3d.commonScreen.menu
 
         protected void TryToConnect(ServerPreferences.ServerData data, bool saveServer = false)
         {
-            if (Application.internetReachability == NetworkReachability.NotReachable)
+            if (Application.internetReachability == NetworkReachability.NotReachable && data.serverUrl.StartsWith(GetLocalIPAddress()))
             {
                 var dialogueBox = new Dialoguebox_C();
                 dialogueBox.Title = new LocalisationAttribute("No internet connection", "LauncherScreen", "NoConnection_Title");
@@ -317,6 +323,28 @@ namespace umi3d.commonScreen.menu
                 dialogueBox.Enqueue(this);
             }
             else Connect(data, saveServer);
+        }
+
+        private static string GetLocalIPAddress()
+        {
+            IPHostEntry host = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName());
+            foreach (IPAddress ip in host.AddressList)
+            {
+                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork && !ip.ToString().EndsWith(".1"))
+                {
+                    return ip.ToString();
+                }
+            }
+            //if offline. 
+            UMI3DLogger.LogWarning("No public IP found. This computer seems to be offline.", scope);
+            foreach (IPAddress ip in host.AddressList)
+            {
+                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("Local IP Address Not Found!");
         }
 
         protected void Connect(ServerPreferences.ServerData data, bool saveServer = false)
