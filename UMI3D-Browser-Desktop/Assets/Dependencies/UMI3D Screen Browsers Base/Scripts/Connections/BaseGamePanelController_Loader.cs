@@ -65,7 +65,7 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void InitiLoader_FormMenu()
         {
-            Form.Button_Back.LocaliseText = new LocalisationAttribute("Leave", "GenericStrings", "Leave");
+            Form.BackText = new LocalisationAttribute("Leave", "GenericStrings", "Leave");
             Form.Button_Back.clicked += BaseConnectionProcess.Instance.Leave;
 
             FormContainer.GetContainer = () => Loader.Form.ScrollView;
