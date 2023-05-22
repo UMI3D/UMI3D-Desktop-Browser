@@ -12,6 +12,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using inetum.unityUtils;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -90,14 +92,14 @@ namespace umi3d.cdk
         }
 
         #region DI
-        private UMI3DLoadingHandler coroutineService;
+        private ICoroutineService coroutineService;
 
         public UMI3DAnimatorAnimation(UMI3DAnimatorAnimationDto dto) : base(dto)
         {
-            coroutineService = UMI3DLoadingHandler.Instance;
+            coroutineService = CoroutineManager.Instance;
         }
 
-        public UMI3DAnimatorAnimation(UMI3DAnimatorAnimationDto dto, UMI3DLoadingHandler coroutineService) : base(dto)
+        public UMI3DAnimatorAnimation(UMI3DAnimatorAnimationDto dto, ICoroutineService coroutineService) : base(dto)
         {
             this.coroutineService = coroutineService;
         }
@@ -120,7 +122,7 @@ namespace umi3d.cdk
 
                         foreach (var entry in dto.parameters)
                         {
-                            UMI3DAnimatorParameterDto param = new UMI3DAnimatorParameterDto(entry.Value);
+                            UMI3DAnimatorParameterDto param = UMI3DAnimatorParameter.Create(entry.Value);
                             ApplyParameter(entry.Key, param);
                         }
 

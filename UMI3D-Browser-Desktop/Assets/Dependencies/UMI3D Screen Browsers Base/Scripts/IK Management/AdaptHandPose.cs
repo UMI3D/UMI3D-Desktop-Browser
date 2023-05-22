@@ -255,7 +255,7 @@ using UnityEngine;
 //        }
 //    }
 
-//    private Dictionary<uint, Quaternion> GetHandedRotations(Dictionary<uint, SerializableVector3> PhalanxRotations)
+//    private Dictionary<uint, Quaternion> GetHandedRotations(Dictionary<uint, Vector3Dto> PhalanxRotations)
 //    {
 //        Dictionary<uint, Quaternion> handedPhalanxRotations = new Dictionary<uint, Quaternion>();
 
