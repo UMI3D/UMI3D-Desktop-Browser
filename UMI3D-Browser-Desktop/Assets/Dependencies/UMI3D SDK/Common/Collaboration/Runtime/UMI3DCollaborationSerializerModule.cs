@@ -27,7 +27,7 @@ namespace umi3d.common.collaboration
     public class UMI3DCollaborationSerializerModule : UMI3DSerializerModule
     {
         /// <inheritdoc/>
-        public override bool Read<T>(ByteContainer container, out bool readable, out T result)
+        public bool Read<T>(ByteContainer container, out bool readable, out T result)
         {
             ulong id;
             switch (true)
@@ -346,72 +346,7 @@ namespace umi3d.common.collaboration
                         readable = false;
                     }
                     return true;
-                case true when typeof(T) == typeof(UMI3DEmotesConfigDto):
-                    bool allAvailableByDefault;
-                    result = default(T);
-
-                    readable = UMI3DSerializer.TryRead(container, out id);
-                    readable &= UMI3DSerializer.TryRead(container, out allAvailableByDefault);
-
-                    if (readable)
-                    {
-
-                        var conf = new UMI3DEmotesConfigDto()
-                        {
-                            allAvailableByDefault = allAvailableByDefault,
-                            id = id
-                        };
-
-                        readable = UMI3DSerializer.TryRead(container, out int nbEmotes);
-                        if (readable)
-                        {
-                            for (uint i = 0; i < nbEmotes; i++)
-                            {
-                                Read(container, out readable, out UMI3DEmoteDto emote);
-                                if (!readable)
-                                    break;
-                                else
-                                    conf.emotes.Add(emote);
-                            }
-                            result = (T)Convert.ChangeType(conf, typeof(T));
-                        }
-                    }
-                    return true;
-
-                case true when typeof(T) == typeof(UMI3DEmoteDto):
-                    {
-
-                        result = default(T);
-
-                        ulong animationId;
-                        string label;
-                        bool available;
-                        FileDto iconResource;
-
-                        readable = UMI3DSerializer.TryRead(container, out id);
-                        readable &= UMI3DSerializer.TryRead(container, out label);
-                        readable &= UMI3DSerializer.TryRead(container, out animationId);
-                        readable &= UMI3DSerializer.TryRead(container, out available);
-                        readable &= UMI3DSerializer.TryRead(container, out iconResource);
-
-                        if (!readable)
-                            return false;
-
-                        var e = new UMI3DEmoteDto()
-                        {
-                            id = id,
-                            label = label,
-                            animationId = animationId,
-                            available = available,
-                            iconResource = iconResource
-                        };
-
-                        result = (T)Convert.ChangeType(e, typeof(T));
-                        return true;
-                    }
                 case true when typeof(T) == typeof(MaterialOverrideDto):
-                    
-                    
                     readable = UMI3DSerializer.TryRead<ulong>(container, out id);
                     if (readable)
                     {
@@ -965,7 +900,7 @@ namespace umi3d.common.collaboration
 
 
         /// <inheritdoc/>
-        public override bool Write<T>(T value, out Bytable bytable, params object[] parameters)
+        public bool Write<T>(T value, out Bytable bytable, params object[] parameters)
         {
             switch (value)
             {
@@ -1172,7 +1107,7 @@ namespace umi3d.common.collaboration
             return true;
         }
 
-        public override bool? IsCountable<T>()
+        public bool? IsCountable<T>()
         {
             return true switch
             {

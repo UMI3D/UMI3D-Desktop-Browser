@@ -57,7 +57,8 @@ namespace umi3d.common
         public static void AddModule(List<UMI3DSerializerModule> moduleList)
         {
             foreach (UMI3DSerializerModule module in moduleList)
-                modules.Add(module);
+                if(module != null)
+                    modules.Add(module);
         }
 
         /// <summary>
@@ -410,7 +411,10 @@ namespace umi3d.common
 
             if (value.Count() > 0)
             {
-                if (!IsCountable<T>() || value.Any(e => !IsCountable(e))) return ListToIndexesBytable(value, parameters);
+                if (typeof(T) == typeof(DictionaryEntryBytable) && value.Cast<DictionaryEntryBytable>().Any(e => !e.IsCountable()))
+                    return ListToIndexesBytable(value, parameters);
+                else if (!IsCountable<T>() || value.Any(e => !IsCountable(e)))
+                    return ListToIndexesBytable(value, parameters);
             }
             Bytable b = Write(UMI3DObjectKeys.CountArray) + Write(value.Count());
             foreach (T v in value)
@@ -425,7 +429,7 @@ namespace umi3d.common
         /// <returns></returns>
         static Bytable WriteCollectionIDictionary(IDictionary value, params object[] parameters)
         {
-            if (value.Count > 0 && value.Entries().Any(e => !IsCountable(e)))
+            if (value.Count > 0 && value.Entries().Any(e => !IsCountable(e.Key) || !IsCountable(e.Value)))
             {
                 return WriteCollection(value.Entries().Select((e) => new DictionaryEntryBytable(e)), parameters);
             }
@@ -459,6 +463,34 @@ namespace umi3d.common
             public Bytable ToBytableArray(params object[] parameters)
             {
                 return Write(key, parameters) + Write(value, parameters);
+            }
+        }
+
+        private class DictionaryEntryBytableSerializerModule : UMI3DSerializerModule
+        {
+            public bool? IsCountable<T>()
+            {
+                return null; // not possible to knwo without looking at the value
+            }
+
+            public bool Read<T>(ByteContainer container, out bool readable, out T result)
+            {
+                readable = false;
+                result = default;
+                return false;
+            }
+
+            public bool Write<T>(T value, out Bytable bytable, params object[] parameters)
+            {
+                if (value is not DictionaryEntryBytable dictionaryEntryBytable)
+                {
+                    bytable = default;
+                    return false;
+                }
+
+                bytable = dictionaryEntryBytable.ToBytableArray(parameters);
+
+                return true;
             }
         }
 
