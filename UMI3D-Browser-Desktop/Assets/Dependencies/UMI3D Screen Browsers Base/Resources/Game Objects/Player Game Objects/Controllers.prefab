@@ -129,6 +129,7 @@ MonoBehaviour:
   ManipulationMenu: {fileID: 0}
   interactionBoneType: 58
   hoverBoneType: 58
+  hoverBoneTransform: {fileID: 0}
 --- !u!114 &5737028900505413025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,7 +209,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -244,7 +244,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -280,7 +279,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -355,7 +353,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -400,7 +397,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -445,7 +441,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -490,7 +485,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -535,7 +529,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -572,7 +565,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -609,7 +601,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -620,7 +611,7 @@ MonoBehaviour:
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: c3fb9595-6136-4d67-97ef-c4bc3b7d5d8d
-      m_Path: <Keyboard>/c
+      m_Path: <Keyboard>/leftCtrl
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -646,7 +637,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -718,7 +708,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 3
   Key:
     m_Name: Key
     m_Type: 0
@@ -754,7 +743,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 3
   Key:
     m_Name: Key
     m_Type: 0
@@ -790,7 +778,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 3
   Key:
     m_Name: Key
     m_Type: 0
@@ -826,7 +813,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 3
   Key:
     m_Name: Key
     m_Type: 0
@@ -1004,7 +990,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1041,7 +1026,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1078,7 +1062,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1115,7 +1098,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1168,7 +1150,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1221,7 +1202,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1258,7 +1238,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1295,7 +1274,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1332,7 +1310,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1369,7 +1346,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1406,7 +1382,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1443,7 +1418,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1480,7 +1454,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
