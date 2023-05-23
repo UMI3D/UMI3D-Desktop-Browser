@@ -85,6 +85,7 @@ namespace umi3d.commonScreen.game
             set
             {
                 if (ViewStack.TryPeek(out var lastScreen) && lastScreen.Equals(value)) return;
+                if (lastScreen == GameViews.Loader && value == GameViews.GameMenu) return;
                 ViewStack.Push(value);
 
                 GetView(m_currentGameView, out VisualElement backgroundView, false);
