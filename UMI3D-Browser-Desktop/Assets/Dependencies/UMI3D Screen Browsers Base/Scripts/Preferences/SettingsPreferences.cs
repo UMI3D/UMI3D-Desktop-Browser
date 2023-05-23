@@ -151,6 +151,7 @@ namespace umi3d.baseBrowser.preferences
         public struct AudioData
         {
             public float GeneralVolume;
+            public float LastGeneralVolumeNotZero;
             public string CurrentMic;
             public bool NoiseReduction;
             public MicModeEnum Mode;

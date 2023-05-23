@@ -74,7 +74,7 @@ namespace umi3d.commonScreen.menu
             GeneralVolume_Visual.lowValue = 0f;
             GeneralVolume_Visual.highValue = 10f;
             GeneralVolume_Visual.showInputField = true;
-            GeneralVolume_Visual.RegisterValueChangedCallback(ce => OnGeneralVolumeValueChanged(ce.newValue));
+            GeneralVolume_Visual.RegisterValueChangedCallback(ce => OnGeneralVolumeValueChanged(ce.newValue, ce.newValue));
             GeneralVolume_Visual.RegisterCallback<AttachToPanelEvent>(callback => GeneralVolume_Visual.SetValueWithoutNotify(Data.GeneralVolume));
             ScrollView.Add(GeneralVolume_Visual);
 
@@ -145,6 +145,7 @@ namespace umi3d.commonScreen.menu
         /// Value is between 0 and 1
         /// </summary>
         public event System.Action<float> GeneralVolumeValeChanged;
+        public event System.Action<float> LastGeneralVolumeNotZeroLoaded;
         public AudioData Data;
 
         protected bool m_loopBack;
@@ -165,7 +166,7 @@ namespace umi3d.commonScreen.menu
 
             if (TryGetAudiorData(out Data))
             {
-                OnGeneralVolumeValueChanged(Data.GeneralVolume);
+                OnGeneralVolumeValueChanged(Data.GeneralVolume, Data.LastGeneralVolumeNotZero);
                 if (mics.Contains(Data.CurrentMic)) OnMicDropdownValueChanged(Data.CurrentMic);
                 OnNoiseReductionValueChanged(Data.NoiseReduction);
                 OnMicModeValueChanged(Data.Mode);
@@ -175,7 +176,7 @@ namespace umi3d.commonScreen.menu
             }
             else
             {
-                OnGeneralVolumeValueChanged(10f);
+                OnGeneralVolumeValueChanged(10f, 10f);
                 string mic;
                 if (umi3d.cdk.collaboration.MicrophoneListener.Exists) mic = umi3d.cdk.collaboration.MicrophoneListener.Instance.GetCurrentMicrophoneName();
                 else mic = MicDropdown.choices.FirstOrDefault();
@@ -193,8 +194,8 @@ namespace umi3d.commonScreen.menu
     /// </summary>
     public void SetAudio()
     {
-        if (TryGetAudiorData(out Data)) OnGeneralVolumeValueChanged(Data.GeneralVolume);
-        else OnGeneralVolumeValueChanged(10f);
+        if (TryGetAudiorData(out Data)) OnGeneralVolumeValueChanged(Data.GeneralVolume, Data.LastGeneralVolumeNotZero);
+        else OnGeneralVolumeValueChanged(10f, 10f);
     }
 #endif
 
@@ -202,10 +203,11 @@ namespace umi3d.commonScreen.menu
         /// Update the value of the general volume and notify.
         /// </summary>
         /// <param name="value"></param>
-        public void OnGeneralVolumeValueChanged(float value)
+        public void OnGeneralVolumeValueChanged(float value, float valueNotZero)
         {
             SetGeneralVolumeValueWithoutNotify(value);
             GeneralVolumeValeChanged?.Invoke(((int)value) / 10f);
+            if (valueNotZero != 0) LastGeneralVolumeNotZeroLoaded?.Invoke(((int)valueNotZero) / 10f);
         }
         /// <summary>
         /// Update the value of the general volume and without notifying.
@@ -216,6 +218,7 @@ namespace umi3d.commonScreen.menu
             value = (int)value;
             GeneralVolume_Visual.SetValueWithoutNotify(value);
             Data.GeneralVolume = value;
+            if (value != 0f) Data.LastGeneralVolumeNotZero = value;
             StoreAudioData(Data);
         }
 
