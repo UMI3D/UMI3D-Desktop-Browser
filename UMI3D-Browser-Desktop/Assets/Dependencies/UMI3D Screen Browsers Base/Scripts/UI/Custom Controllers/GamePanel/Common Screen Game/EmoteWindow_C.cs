@@ -40,6 +40,13 @@ namespace umi3d.commonScreen.game
         }
         protected static EmoteWindow_C s_instance;
 
+        protected readonly IEmoteService emoteService;
+
+        public EmoteWindow_C() : base()
+        {
+            emoteService = EmoteManager.Instance;
+        }
+
         public virtual string USSCustomClassEmote => "emote__window";
         public virtual string USSCustomClassEmoteIcon => $"{USSCustomClassEmote}-icon";
 
@@ -75,7 +82,7 @@ namespace umi3d.commonScreen.game
 
         public static event System.Action WillUpdateFilter;
 
-        public static void OnEmoteConfigReceived(List<Emote> emotes)
+        public void OnEmoteConfigReceived(List<Emote> emotes)
         {
             Reset();
             Emotes = emotes;
@@ -100,7 +107,7 @@ namespace umi3d.commonScreen.game
 
                 emoteButton.Body.RegisterCallback<GeometryChangedEvent>(evt => emoteButton.Body.style.width = emoteButton.layout.height);
 
-                emoteButton.clicked += () => EmoteManager.Instance.PlayEmote(emote);
+                emoteButton.clicked += () => emoteService.PlayEmote(emote);
             }
         }
 

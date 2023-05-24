@@ -98,7 +98,7 @@ namespace umi3d.baseBrowser.connection
                 if (emotes is not null && emotes.Count > 0)
                 {
                     Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
-                    EmoteWindow_C.OnEmoteConfigReceived(emotes);
+                    EmoteWindow_C.Instance.OnEmoteConfigReceived(emotes);
                 }
                 else
                 {
