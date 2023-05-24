@@ -98,6 +98,8 @@ public class AudioSetting : ISetting
         AudioListener.volume = value;
         IsOn = value != 0f;
     }
+
+    public void SetGeneralVolumeWithoutNotifyAndEvents(float value) => m_generalVolume = value;
 }
 
 public class AvatarSetting : ISetting
