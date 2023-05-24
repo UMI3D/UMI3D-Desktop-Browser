@@ -20,6 +20,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using umi3d.baseBrowser.extension;
 
 namespace umi3d.commonScreen.Displayer
 {
@@ -406,7 +407,13 @@ namespace umi3d.commonScreen.Displayer
             => m_localisationOptions.Options.Find(option => option.DefaultText == enumValue.ToString());
 
         protected virtual bool TryGetEnumValue(LocalisationAttribute value, out PickerEnum result)
-            => Enum.TryParse<PickerEnum>(value.DefaultText, out result);
+        {
+            if (value.DefaultText != null)
+            {
+                return Enum.TryParse<PickerEnum>(value.DefaultText.CapitalizeAndRemoveSpace(), out result);
+            }
+            return Enum.TryParse<PickerEnum>(value.DefaultText, out result);
+        }
 
         #endregion
     }
