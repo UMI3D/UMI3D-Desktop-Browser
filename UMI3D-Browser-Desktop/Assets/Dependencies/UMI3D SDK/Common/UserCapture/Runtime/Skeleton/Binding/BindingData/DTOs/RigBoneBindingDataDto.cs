@@ -14,17 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common
+namespace umi3d.common.userCapture
 {
     /// <summary>
-    /// Multibinding data, required to bind a same node to various parents.
+    /// Rig-Bone binding data, required to load a binding between a bone and a model rig.
     /// </summary>
     [System.Serializable]
-    public class MultiBindingDataDto : AbstractBindingDataDto
+    public class RigBoneBindingDataDto : BoneBindingDataDto
     {
         /// <summary>
-        /// List Of all the simple bindings to apply
+        /// Name of the rig
         /// </summary>
-        public AbstractSimpleBindingDataDto[] Bindings { get; set; }
+        public string rigName { get; set; }
     }
 }
