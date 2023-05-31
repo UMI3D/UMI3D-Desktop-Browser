@@ -148,7 +148,16 @@ namespace umi3d.baseBrowser.connection
         {
             LeadingArea.InteractableMapping.MappingAdded += () =>
             {
-                LeadingArea.InteractableMapping.InteractableName = BaseController.Instance.mouseData.CurrentHovered.name;
+
+                if (string.IsNullOrEmpty(BaseController.Instance?.mouseData.CurrentHovered?.name))
+                {
+                    LeadingArea.InteractableMapping.InteractableName = BaseController.Instance?.mouseData.OldHovered?.name?? "Interaction";
+                }
+                else
+                {
+                    LeadingArea.InteractableMapping.InteractableName = BaseController.Instance.mouseData.CurrentHovered.name;
+
+                }
                 //LeadingArea.InteractableMapping
                 //    .SetLeft(0)
                 //    .WithAnimation();
