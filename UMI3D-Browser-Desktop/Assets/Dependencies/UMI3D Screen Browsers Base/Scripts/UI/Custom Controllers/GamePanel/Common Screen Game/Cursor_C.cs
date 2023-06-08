@@ -92,8 +92,8 @@ namespace umi3d.commonScreen.game
         public virtual string USSCustomClassAction => $"{UssCustomClass_Emc}-action";
         public virtual string USSCustomClassState(ElementPseudoState state) => $"{UssCustomClass_Emc}-{state}".ToLower();
 
-        public VisualElement Target = new VisualElement { name = "target" };
-        public Text_C ActionText = new Text_C { name = "action" };
+        public VisualElement Target = new VisualElement { name = "target" , pickingMode = PickingMode.Ignore};
+        public Text_C ActionText = new Text_C { name = "action", pickingMode = PickingMode.Ignore };
 
         protected ElementPseudoState m_state;
 
@@ -114,6 +114,8 @@ namespace umi3d.commonScreen.game
         {
             base.InitElement();
             Add(Target);
+
+            pickingMode = PickingMode.Ignore;
         }
 
         protected override void SetProperties()

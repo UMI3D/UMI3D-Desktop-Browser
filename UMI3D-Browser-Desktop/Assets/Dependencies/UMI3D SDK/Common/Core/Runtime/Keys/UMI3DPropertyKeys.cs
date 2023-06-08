@@ -237,6 +237,7 @@ namespace umi3d.common
         public const uint AnimationNodeId = 13401;
         public const uint AnimationStateName = 13402;
         public const uint AnimationAnimatorParameters = 13403;
+        public const uint AnimationAnimatorNormalizedTime = 13404;
 
         #endregion
 
@@ -280,6 +281,16 @@ namespace umi3d.common
         #region Interaction
         //16000-16999
         public const uint Interaction_UI_Link = 16001;
+
+        #endregion
+
+        #region WebView
+        //17000-17999
+        public const uint WebViewCanInteract = 17001;
+        public const uint WebViewSize = 17002;
+        public const uint WebViewTextureSize = 17003;
+        public const uint WebViewUrl = 17004;
+        public const uint WebViewSyncView = 17005;
 
         #endregion
 

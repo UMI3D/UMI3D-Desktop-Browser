@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.common;
 using UnityEngine;
 
 namespace umi3d.baseBrowser.Navigation
@@ -24,11 +25,16 @@ namespace umi3d.baseBrowser.Navigation
         protected bool vehicleFreeHead = false;
         protected cdk.UMI3DNodeInstance globalVehicle;
 
+        public override void UpdateFrame(FrameRequestDto data)
+        {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="data"></param>
-        public override void Embark(common.VehicleDto data)
+        /*public override void Embark(common.VehicleDto data)
         {
             vehicleFreeHead = data.StopNavigation;
 
@@ -59,6 +65,6 @@ namespace umi3d.baseBrowser.Navigation
                     });
                 }
             }
-        }
+        }*/
     }
 }
