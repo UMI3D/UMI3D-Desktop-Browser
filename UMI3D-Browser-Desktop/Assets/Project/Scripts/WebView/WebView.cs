@@ -16,11 +16,14 @@ limitations under the License.
 
 using System.Drawing;
 using umi3d.cdk;
+using umi3d.common;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using VoltstroStudios.UnityWebBrowser;
+using VoltstroStudios.UnityWebBrowser.Communication;
+using VoltstroStudios.UnityWebBrowser.Shared.Communications;
 //using VoltstroStudios.UnityWebBrowser;
 //using VoltstroStudios.UnityWebBrowser.Input;
 
@@ -33,11 +36,20 @@ namespace BrowserDesktop
 
         private WebBrowserUIBasic browser;
 
-        private bool ready = false;
+        int templateId = 0;
 
         protected virtual void Awake()
         {
-            GameObject canvas = Instantiate((WebViewFactory.Instance as WebViewFactory).template, transform);
+            var template = (WebViewFactory.Instance as WebViewFactory).GetTemplate();
+
+            if (template == null)
+            {
+                Debug.LogError("Impossible to load web view.");
+            }
+
+            templateId = template.GetInstanceID();
+
+            GameObject canvas = Instantiate(template, transform);
             canvas.GetComponent<Canvas>().worldCamera = Camera.main;
             canvas.transform.localRotation = Quaternion.identity;
             canvas.transform.localPosition = Vector3.zero;
@@ -47,19 +59,10 @@ namespace BrowserDesktop
             texture = canvas.GetComponentInChildren<RawImage>();
         }
 
-        private void Update()
-        {
-        }
-
         protected override void OnCanInteractChanged(bool canInteract)
         {
             browser.disableMouseInputs = !canInteract;
             browser.disableKeyboardInputs = !canInteract;
-        }
-
-        protected override void OnSizeChanged(Vector2 size)
-        {
-            transform.localScale = new Vector3(size.x, size.y, 1);
         }
 
         protected override void OnSyncViewChanged(bool syncView)
@@ -73,6 +76,9 @@ namespace BrowserDesktop
             {
                 await UMI3DAsyncManager.Yield();
             }
+
+            await UMI3DAsyncManager.Yield();
+
             browser.browserClient.Resize(new VoltstroStudios.UnityWebBrowser.Shared.Resolution ((uint) size.x, (uint) size.y));
         }
 
@@ -82,7 +88,15 @@ namespace BrowserDesktop
             {
                 await UMI3DAsyncManager.Yield();
             }
+
+            await UMI3DAsyncManager.Yield();
+
             browser.browserClient.LoadUrl(url);
+        }
+
+        private void OnDestroy()
+        {
+            (WebViewFactory.Instance as WebViewFactory).ReleaseObject(templateId);
         }
     }
 }

@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Collections.Generic;
+using System.Linq;
 using umi3d.cdk;
 using UnityEngine;
 
@@ -21,12 +23,46 @@ namespace BrowserDesktop
 {
     public class WebViewFactory : AbstractWebViewFactory
     {
-        public GameObject template;
+        public List<GameObject> templates = new();
+
+        public Dictionary<int, (GameObject, bool)> templatesQueue = new();
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            foreach (var template in templates)
+            {
+                templatesQueue.Add(template.GetInstanceID(), (template, true));
+            }
+        }
 
         protected override AbstractUMI3DWebView CreateWebView()
         {
             GameObject go = new GameObject("WebView");
             return go.AddComponent<WebView>();
+        }
+
+        public GameObject GetTemplate()
+        {
+            foreach (var entry in templatesQueue)
+            {
+                if (entry.Value.Item2)
+                {
+                    templatesQueue[entry.Key] = (entry.Value.Item1, false);
+                    return entry.Value.Item1;
+                }
+            }
+
+            return null;
+        }
+
+        public void ReleaseObject(int templateId)
+        {
+            if (templatesQueue.ContainsKey(templateId))
+            {
+                templatesQueue[templateId] = (templatesQueue[templateId].Item1, true);
+            }
         }
     }
 }

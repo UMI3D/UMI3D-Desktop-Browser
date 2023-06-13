@@ -358,8 +358,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d960d1c649d4bb42ad3f18795493b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  template: {fileID: 2637901191890785828, guid: 2780d03c8ff68c24a900d5c15a193405,
-    type: 3}
+  templates:
+  - {fileID: 2637901191890785828, guid: 2780d03c8ff68c24a900d5c15a193405, type: 3}
+  - {fileID: 2637901191890785828, guid: b1c4339fa1261da4484ce7655df0b8bd, type: 3}
+  - {fileID: 2637901191890785828, guid: f07f34854e234ea40b79c298e5f034ca, type: 3}
+  - {fileID: 2637901191890785828, guid: e75139e4b243cba4cba5913d5a7a63c8, type: 3}
+  - {fileID: 2637901191890785828, guid: f3f2e9d7fc43e6b4b9050ed63b901ed6, type: 3}
 --- !u!1 &8356627420397312014
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,10 +24,14 @@ namespace umi3d.cdk
         #region Fields
 
         private bool _canInteract;
+
+        /// <summary>
+        /// Can user interact with webview.
+        /// </summary>
         public bool canInteract
         {
             get => canInteract;
-            protected set
+            set
             {
                 if (_canInteract != value)
                 {
@@ -38,24 +42,32 @@ namespace umi3d.cdk
         }
 
         private string _url;
+        /// <summary>
+        /// Web view url
+        /// </summary>
         public string url
         {
             get => _url;
-            protected set
+            set
             {
                 if (_url != value)
                 {
                     _url = value;
-                    OnUrlChanged(value);
+
+                    if(!string.IsNullOrEmpty(_url))
+                        OnUrlChanged(value);
                 }
             }
         }
 
         private bool _syncView;
+        /// <summary>
+        /// Sync webview from webview master.
+        /// </summary>
         public bool syncView
         {
             get => syncView;
-            protected set
+            set
             {
                 if (_syncView != value)
                 {
@@ -65,25 +77,14 @@ namespace umi3d.cdk
             }
         }
 
-        private Vector2 _size;
-        public Vector2 size
-        {
-            get => _size;
-            protected set
-            {
-                if (_size != value)
-                {
-                    _size = value;
-                    OnSizeChanged(value);
-                }
-            }
-        }
-
         private Vector2 _textureSize;
+        /// <summary>
+        /// Webview texture dimension.
+        /// </summary>
         public Vector2 textureSize
         {
             get => _textureSize;
-            protected set
+            set
             {
                 if (_textureSize != value)
                 {
@@ -100,14 +101,12 @@ namespace umi3d.cdk
         public virtual void Init(UMI3DWebViewDto dto)
         {
             url = dto.url;
-            size = dto.size;
             textureSize = dto.textureSize;
             canInteract = dto.canInteract;
             syncView = dto.syncView;
         }
 
         protected abstract void OnUrlChanged(string url);
-        protected abstract void OnSizeChanged(Vector2 size);
         protected abstract void OnTextureSizeChanged(Vector2 size);
         protected abstract void OnCanInteractChanged(bool canInteract);
         protected abstract void OnSyncViewChanged(bool syncView);

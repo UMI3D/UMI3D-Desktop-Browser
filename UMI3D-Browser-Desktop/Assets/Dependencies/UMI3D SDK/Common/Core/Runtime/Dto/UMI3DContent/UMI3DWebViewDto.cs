@@ -24,11 +24,6 @@ namespace umi3d.common
         /// </summary>
         public bool canInteract { get; set; }
 
-        /// <summary>
-        /// Webview dimensions.
-        /// </summary>
-        public SerializableVector2 size { get; set; }
-
         /// Webview texture dimensions.
         public SerializableVector2 textureSize { get; set; }
 

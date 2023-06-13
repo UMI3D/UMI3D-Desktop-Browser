@@ -287,10 +287,9 @@ namespace umi3d.common
         #region WebView
         //17000-17999
         public const uint WebViewCanInteract = 17001;
-        public const uint WebViewSize = 17002;
-        public const uint WebViewTextureSize = 17003;
-        public const uint WebViewUrl = 17004;
-        public const uint WebViewSyncView = 17005;
+        public const uint WebViewTextureSize = 17002;
+        public const uint WebViewUrl = 17003;
+        public const uint WebViewSyncView = 17004;
 
         #endregion
 

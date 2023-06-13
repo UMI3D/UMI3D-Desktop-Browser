@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9198614726081947398}
   - component: {fileID: 6411633321121793821}
   m_Layer: 5
-  m_Name: CanvasWebViewTemplate
+  m_Name: CanvasWebViewTemplate 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -127,14 +127,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4055744786056512765}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2378676742503220083}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -189,10 +189,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   browserClient:
     engine: {fileID: 11400000, guid: 649ce3cfdf00ca615abcf2bb62227f5c, type: 2}
-    initialUrl: https://voltstro.dev
+    initialUrl: https://github.com/UMI3D
     resolution:
-      Width: 1920
-      Height: 1080
+      Width: 1280
+      Height: 720
     backgroundColor:
       serializedVersion: 2
       rgba: 4294967295
@@ -207,9 +207,9 @@ MonoBehaviour:
       ProxyServer: 0
     remoteDebugging: 0
     remoteDebuggingPort: 9022
-    communicationLayer: {fileID: 11400000, guid: 05fef73d64ae908d1b4ec02a676d1ccc,
+    communicationLayer: {fileID: 11400000, guid: ed89e8844c7c83346bd693b00da4fbde,
       type: 2}
-    engineStartupTimeout: 4000
+    engineStartupTimeout: 10000
     logSeverity: 1
   inputHandler: {fileID: 11400000, guid: 565be9a8022a65c7288f47df26d5fe7f, type: 2}
   disableMouseInputs: 0
