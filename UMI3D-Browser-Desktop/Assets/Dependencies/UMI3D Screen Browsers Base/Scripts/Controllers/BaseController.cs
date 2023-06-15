@@ -61,8 +61,12 @@ namespace umi3d.baseBrowser.Controller
         public GameObject KeyboardNavigations;
         public GameObject KeyboardManipulations;
 
+        [Header("Mobile' parents")]
+        public GameObject MobileAction;
+
         [HideInInspector]
         public MenuAsset ObjectMenu;
+        [Space(15)]
         public MenuAsset ManipulationMenu;
         public CursorData mouseData;
 
@@ -122,6 +126,10 @@ namespace umi3d.baseBrowser.Controller
             m_controllers.Add
             (
                 new MobileController()
+                {
+                    Controller = this,
+                    ObjectMenu = ObjectMenu,
+                }
             );
 
             m_controllers.ForEach(controller => controller?.Awake());

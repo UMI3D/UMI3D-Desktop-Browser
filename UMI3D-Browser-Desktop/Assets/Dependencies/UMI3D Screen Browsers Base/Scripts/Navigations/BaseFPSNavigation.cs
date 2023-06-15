@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections.Generic;
 using umi3d.baseBrowser.cursor;
+using umi3d.mobileBrowser.Controller;
 using UnityEngine;
 
 namespace umi3d.baseBrowser.Navigation
@@ -29,6 +30,7 @@ namespace umi3d.baseBrowser.Navigation
         public IConcreteFPSNavigation CurrentNavigation;
 
         protected List<IConcreteFPSNavigation> m_navigations = new List<IConcreteFPSNavigation>();
+        public List<IConcreteFPSNavigation> Navigations => m_navigations;
 
         /// <summary>
         /// Is player active ?
@@ -103,6 +105,14 @@ namespace umi3d.baseBrowser.Navigation
             m_navigations.Add
             (
                 new KeyboardAndMouseFpsNavigation()
+                {
+                    FPSNavigation = this,
+                    data = data,
+                }
+            );
+            m_navigations.Add
+            (
+                new MobileFpsNavigation()
                 {
                     FPSNavigation = this,
                     data = data,
