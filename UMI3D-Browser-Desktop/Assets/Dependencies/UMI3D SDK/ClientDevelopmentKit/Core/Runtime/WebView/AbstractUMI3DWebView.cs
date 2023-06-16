@@ -77,6 +77,23 @@ namespace umi3d.cdk
             }
         }
 
+        private Vector2 _size;
+        /// <summary>
+        /// Webview size.
+        /// </summary>
+        public Vector2 size
+        {
+            get => _size;
+            set
+            {
+                if (_size != value)
+                {
+                    _size = value;
+                    OnSizeChanged(value);
+                }
+            }
+        }
+
         private Vector2 _textureSize;
         /// <summary>
         /// Webview texture dimension.
@@ -101,12 +118,14 @@ namespace umi3d.cdk
         public virtual void Init(UMI3DWebViewDto dto)
         {
             url = dto.url;
+            size = dto.size;
             textureSize = dto.textureSize;
             canInteract = dto.canInteract;
             syncView = dto.syncView;
         }
 
         protected abstract void OnUrlChanged(string url);
+        protected abstract void OnSizeChanged(Vector2 size);
         protected abstract void OnTextureSizeChanged(Vector2 size);
         protected abstract void OnCanInteractChanged(bool canInteract);
         protected abstract void OnSyncViewChanged(bool syncView);

@@ -14,55 +14,83 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Drawing;
+using System;
+using System.Collections.Generic;
 using umi3d.cdk;
-using umi3d.common;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 using VoltstroStudios.UnityWebBrowser;
-using VoltstroStudios.UnityWebBrowser.Communication;
-using VoltstroStudios.UnityWebBrowser.Shared.Communications;
-//using VoltstroStudios.UnityWebBrowser;
-//using VoltstroStudios.UnityWebBrowser.Input;
 
 namespace BrowserDesktop
 {
-
-    public class WebView : AbstractUMI3DWebView
+    public class WebView : AbstractUMI3DWebView, IPointerEnterHandler, IPointerExitHandler
     {
-        private RawImage texture;
+        public static bool IsWebViewFocused { get; private set; } = false;
 
-        private WebBrowserUIBasic browser;
+        #region Fields
 
-        int templateId = 0;
+        [SerializeField]
+        private RectTransform textureTransform = null;
+
+        [SerializeField]
+        public RuntimeWebBrowserBasic browser = null;
+
+        [SerializeField]
+        private RectTransform container = null;
+
+        [SerializeField]
+        private RectTransform bottomBarContainer = null;
+
+        [SerializeField]
+        private RectTransform topBarContainer = null;
+
+        [SerializeField]
+        Canvas canvas = null;
+
+        [SerializeField]
+        private InputField urlText = null;
+
+        #endregion
+
+        #region Methods
 
         protected virtual void Awake()
         {
-            var template = (WebViewFactory.Instance as WebViewFactory).GetTemplate();
-
-            if (template == null)
-            {
-                Debug.LogError("Impossible to load web view.");
-            }
-
-            templateId = template.GetInstanceID();
-
-            GameObject canvas = Instantiate(template, transform);
-            canvas.GetComponent<Canvas>().worldCamera = Camera.main;
+            canvas.worldCamera = Camera.main;
             canvas.transform.localRotation = Quaternion.identity;
             canvas.transform.localPosition = Vector3.zero;
 
-            browser = GetComponentInChildren<WebBrowserUIBasic>();
+            canvas.GetComponent<CanvasScaler>().dynamicPixelsPerUnit = 3;
 
-            texture = canvas.GetComponentInChildren<RawImage>();
+            browser.browserClient.OnUrlChanged += (url) => urlText.text = url;
         }
 
         protected override void OnCanInteractChanged(bool canInteract)
         {
             browser.disableMouseInputs = !canInteract;
             browser.disableKeyboardInputs = !canInteract;
+
+            bottomBarContainer.gameObject.SetActive(canInteract);
+            topBarContainer.gameObject.SetActive(canInteract);
+        }
+
+        protected override void OnSizeChanged(Vector2 size)
+        {
+            container.localScale = new Vector3(size.x, size.y, 1);
+
+            Vector3[] corners = new Vector3[4];
+
+            textureTransform.GetWorldCorners(corners);
+
+            bottomBarContainer.position = (corners[0] + corners[3]) / 2f;
+            topBarContainer.position = (corners[1] + corners[2]) / 2f;
+
+            topBarContainer.localScale = new Vector3(topBarContainer.localScale.x,
+                topBarContainer.localScale.y / container.localScale.y, topBarContainer.localScale.z);
+
+            bottomBarContainer.localScale = new Vector3(bottomBarContainer.localScale.x,
+                bottomBarContainer.localScale.y / container.localScale.y, bottomBarContainer.localScale.z);
         }
 
         protected override void OnSyncViewChanged(bool syncView)
@@ -79,7 +107,14 @@ namespace BrowserDesktop
 
             await UMI3DAsyncManager.Yield();
 
-            browser.browserClient.Resize(new VoltstroStudios.UnityWebBrowser.Shared.Resolution ((uint) size.x, (uint) size.y));
+            try
+            {
+                browser.browserClient.Resize(new VoltstroStudios.UnityWebBrowser.Shared.Resolution((uint)size.x, (uint)size.y));
+            } catch (Exception ex)
+            {
+                Debug.LogError("Impossible to resize WebView.");
+                Debug.LogException(ex);
+            }
         }
 
         protected override async void OnUrlChanged(string url)
@@ -91,12 +126,31 @@ namespace BrowserDesktop
 
             await UMI3DAsyncManager.Yield();
 
-            browser.browserClient.LoadUrl(url);
+            try
+            {
+                browser.browserClient.LoadUrl(url);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Impossible to load url " + url);
+                Debug.LogException(ex);
+
+                await UMI3DAsyncManager.Delay(5000);
+
+                browser.browserClient.LoadUrl(url);
+            }
         }
 
-        private void OnDestroy()
+        public void OnPointerEnter(PointerEventData eventData)
         {
-            (WebViewFactory.Instance as WebViewFactory).ReleaseObject(templateId);
+            IsWebViewFocused = true;
         }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            IsWebViewFocused = false;
+        }
+
+        #endregion
     }
 }

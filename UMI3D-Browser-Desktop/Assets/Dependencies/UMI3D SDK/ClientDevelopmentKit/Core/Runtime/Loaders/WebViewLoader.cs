@@ -37,7 +37,7 @@ namespace umi3d.cdk
 
             if (AbstractWebViewFactory.Exists)
             {
-                AbstractUMI3DWebView webView = AbstractWebViewFactory.Instance.GetWebView();
+                AbstractUMI3DWebView webView = await AbstractWebViewFactory.Instance.CreateWebView();
                 webView.Init(data.dto as UMI3DWebViewDto);
                 webView.transform.SetParent(data.node.transform);
                 webView.transform.localPosition = UnityEngine.Vector3.zero;
@@ -66,6 +66,9 @@ namespace umi3d.cdk
             {
                 case UMI3DPropertyKeys.WebViewCanInteract:
                     webView.canInteract = dto.canInteract = (bool)data.property.value;
+                    break;
+                case UMI3DPropertyKeys.WebViewSize:
+                    webView.size = dto.size = (SerializableVector2)data.property.value;
                     break;
                 case UMI3DPropertyKeys.WebViewTextureSize:
                     webView.textureSize = dto.textureSize = (SerializableVector2)data.property.value;
@@ -101,6 +104,9 @@ namespace umi3d.cdk
             {
                 case UMI3DPropertyKeys.WebViewCanInteract:
                     webView.canInteract = dto.canInteract = UMI3DSerializer.Read<bool>(data.container);
+                    break;
+                case UMI3DPropertyKeys.WebViewSize:
+                    webView.size = dto.size = UMI3DSerializer.Read<SerializableVector2>(data.container);
                     break;
                 case UMI3DPropertyKeys.WebViewTextureSize:
                     webView.textureSize = dto.textureSize = UMI3DSerializer.Read<SerializableVector2>(data.container);

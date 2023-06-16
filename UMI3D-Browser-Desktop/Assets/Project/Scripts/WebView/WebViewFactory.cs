@@ -15,54 +15,53 @@ limitations under the License.
 */
 
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using umi3d.cdk;
 using UnityEngine;
+using VoltstroStudios.UnityWebBrowser.Core.Engines;
 
 namespace BrowserDesktop
 {
     public class WebViewFactory : AbstractWebViewFactory
     {
-        public List<GameObject> templates = new();
+        public GameObject template = null;
 
-        public Dictionary<int, (GameObject, bool)> templatesQueue = new();
+        private static int inPort = 5560;
+        private static int outPort = 5561;
 
-        protected override void Awake()
+        private static float lastTimeWebViewCreated = 0;
+
+        /// <summary>
+        /// Delay in seconds between web view creation.
+        /// </summary>
+        private readonly float creationDelay = 3f;
+
+        public override async Task<AbstractUMI3DWebView> CreateWebView()
         {
-            base.Awake();
-
-            foreach (var template in templates)
+            while (lastTimeWebViewCreated != 0 && lastTimeWebViewCreated + creationDelay > Time.time)
             {
-                templatesQueue.Add(template.GetInstanceID(), (template, true));
+                await UMI3DAsyncManager.Yield();
+            }
+
+            lock (this)
+            {
+                lastTimeWebViewCreated = Time.time;
+
+                GameObject go = Instantiate(template);
+                WebView view = go.GetComponent<WebView>();
+
+                return view;
             }
         }
 
-        protected override AbstractUMI3DWebView CreateWebView()
+        /// <summary>
+        /// Returns unique in and out ports for WebViews.
+        /// </summary>
+        /// <returns></returns>
+        public (int, int) GetPorts()
         {
-            GameObject go = new GameObject("WebView");
-            return go.AddComponent<WebView>();
-        }
-
-        public GameObject GetTemplate()
-        {
-            foreach (var entry in templatesQueue)
-            {
-                if (entry.Value.Item2)
-                {
-                    templatesQueue[entry.Key] = (entry.Value.Item1, false);
-                    return entry.Value.Item1;
-                }
-            }
-
-            return null;
-        }
-
-        public void ReleaseObject(int templateId)
-        {
-            if (templatesQueue.ContainsKey(templateId))
-            {
-                templatesQueue[templateId] = (templatesQueue[templateId].Item1, true);
-            }
+            return (inPort+=2, outPort+=2);
         }
     }
 }

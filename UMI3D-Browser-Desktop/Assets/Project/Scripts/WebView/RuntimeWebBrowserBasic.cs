@@ -14,18 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using inetum.unityUtils;
-using System.Threading.Tasks;
+using VoltstroStudios.UnityWebBrowser.Communication;
+using VoltstroStudios.UnityWebBrowser.Core;
 
-namespace umi3d.cdk
+namespace BrowserDesktop
 {
-    /// <summary>
-    /// Creates <see cref="AbstractUMI3DWebView"/>.
-    /// </summary>
-    public abstract class AbstractWebViewFactory : SingleBehaviour<AbstractWebViewFactory>
+    public class RuntimeWebBrowserBasic : RawImageUwbClientInputHandler
     {
-        public abstract Task<AbstractUMI3DWebView> CreateWebView();
+        void Awake()
+        {
+            TCPCommunicationLayer layer = new TCPCommunicationLayer();
+
+            var ports = (WebViewFactory.Instance as WebViewFactory).GetPorts();
+            layer.inPort = ports.Item1;
+            layer.outPort = ports.Item2;
+
+            browserClient.communicationLayer = layer;
+        }
     }
-
 }
-
