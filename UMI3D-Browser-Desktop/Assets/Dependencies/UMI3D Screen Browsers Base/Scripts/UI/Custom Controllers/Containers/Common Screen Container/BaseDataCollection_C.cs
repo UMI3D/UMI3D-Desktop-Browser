@@ -140,6 +140,8 @@ public abstract class BaseDataCollection_C<D> : BaseVisual_C
     /// The VisualElement that contains the data.
     /// </summary>
     public abstract VisualElement DataContainer { get; }
+    public Visual_C ContentQuit = new Visual_C { name = "content-quit" };
+    public Action ContentQuitted;
 
     protected readonly Source<ScrollViewMode> m_mode = ScrollViewMode.Vertical;
     protected SelectionType m_selectionType;
@@ -152,6 +154,13 @@ public abstract class BaseDataCollection_C<D> : BaseVisual_C
         base.InitElement();
 
         m_mode.ValueChanged += UpdateMode;
+
+        ContentQuit.style.position = Position.Absolute;
+        ContentQuit.style.top = -Screen.height / 2 + 89; // 89 is top area height
+        ContentQuit.style.left = -Screen.width / 2;
+        ContentQuit.style.width = Screen.width;
+        ContentQuit.style.height = Screen.height;
+        ContentQuit.AddManipulator(new Clickable(() => ContentQuitted?.Invoke()));
     }
 
     #region Implementation
@@ -336,6 +345,8 @@ public abstract class BaseDataCollection_C<D> : BaseVisual_C
 
         ItemAdded?.Invoke(datum);
         ContentChanged?.Invoke(Data.Count);
+
+        Insert(0, ContentQuit);
     }
 
     /// <summary>
@@ -369,6 +380,8 @@ public abstract class BaseDataCollection_C<D> : BaseVisual_C
 
         ItemRemoved?.Invoke(datum);
         ContentChanged?.Invoke(Data.Count);
+
+        ContentQuit.RemoveFromHierarchy();
     }
 
     /// <summary>

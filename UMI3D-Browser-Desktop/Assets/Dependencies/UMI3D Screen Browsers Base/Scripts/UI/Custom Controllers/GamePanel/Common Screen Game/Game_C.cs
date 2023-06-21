@@ -319,8 +319,8 @@ namespace umi3d.commonScreen.game
 
             NotifAndUserArea.schedule.Execute(() =>
             {
-                NotifAndUserArea.style.visibility = StyleKeyword.Null;
-                this
+                NotifAndUserArea.style.visibility = Visibility.Visible;
+                NotifAndUserArea
                    .SetOpacity(value ? 1 : 0)
                    .WithAnimation(.5f)
                    .SetCallback(value ? null : NotifAndUserArea.RemoveFromHierarchy);
@@ -341,7 +341,7 @@ namespace umi3d.commonScreen.game
         {
             TrailingArea.ActiveWindow = TrailingArea.ActiveWindow != TrailingArea_C.WindowsEnum.ToolsWindow 
                 ? TrailingArea_C.WindowsEnum.ToolsWindow
-                : TrailingArea.ActiveWindow = TrailingArea_C.WindowsEnum.None;
+                : TrailingArea_C.WindowsEnum.None;
         }
 
         protected virtual void PinnedToolClicked(bool isSelected, AbstractMenuItem menu)

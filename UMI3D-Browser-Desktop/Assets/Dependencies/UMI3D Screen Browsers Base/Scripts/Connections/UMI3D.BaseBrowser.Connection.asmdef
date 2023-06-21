@@ -1,0 +1,33 @@
+{
+    "name": "UMI3D.BaseBrowser.Connection",
+    "rootNamespace": "",
+    "references": [
+        "GUID:29a403b1410bc9e44b9b0cbcfde58e71",
+        "GUID:6e34c4b4c3202a14eb95e0a784041765",
+        "GUID:8ab383a2396734d448f79f61be487229",
+        "GUID:5fcc83811144000419d9262c4c25c3e8",
+        "GUID:7ea11358bc3dfcc4e96d3ee9b43d17a5",
+        "GUID:9676dca0f2ab9ae46b47b75cad2558ad",
+        "GUID:3e1a4018e38b946479f8359b70bb0faf",
+        "GUID:379812115ad52434f9cabb9fc78512c0",
+        "GUID:007a934ecc176214d9afb0acb90820b8",
+        "GUID:8537d47cf9ea6504d84cf56365c6d93b",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:d0bf4ea2ef3a7c74e9160b8995fd902b",
+        "GUID:aebbed5eed3757846bab9faf35cac448",
+        "GUID:7327fa65186fcae48a47f124a7edf5ef",
+        "GUID:50d2c75c8b4b23c46b62e4aa00c597c7",
+        "GUID:86623230113704741b2575414446f181",
+        "GUID:289e6060f23453d4aafb1bfe56cbf3b9",
+        "GUID:004e1a03c4400ad46befe89b3eb0c978"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

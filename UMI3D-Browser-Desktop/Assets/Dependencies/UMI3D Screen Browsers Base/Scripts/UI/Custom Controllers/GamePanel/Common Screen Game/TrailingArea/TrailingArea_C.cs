@@ -95,6 +95,7 @@ namespace umi3d.commonScreen.game
                     case ControllerEnum.Touch:
                         Add(CameraLayer);
                         Add(ButtonsArea);
+                        WindowContainer.BringToFront();
                         break;
                     case ControllerEnum.GameController:
                         CameraLayer.RemoveFromHierarchy();
@@ -314,8 +315,8 @@ namespace umi3d.commonScreen.game
             WindowContainer.FindItem = param => param.Item1.name == param.Item2.name;
             WindowContainer.AnimationTimeIn = 1f;
             WindowContainer.AnimationTimeOut = .5f;
+            WindowContainer.ContentQuitted += () => ActiveWindow = WindowsEnum.None;
 
-            
             ManipulationContainer.ManipulationMenu.menu.onContentChange.AddListener(() =>
             {
                 if (ManipulationContainer.ManipulationMenu.menu.Count == 1) WindowContainer.AddDatum(ManipulationContainer);
