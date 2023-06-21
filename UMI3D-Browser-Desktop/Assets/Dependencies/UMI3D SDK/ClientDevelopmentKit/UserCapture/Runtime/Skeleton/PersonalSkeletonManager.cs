@@ -29,7 +29,7 @@ namespace umi3d.cdk.userCapture
             {
                 if (_skeleton == null)
                 {
-                    _skeleton = loadingServiceAnchor.GetComponentInChildren<PersonalSkeleton>();
+                    _skeleton = loadingAnchorService.GetComponentInChildren<PersonalSkeleton>();
                     return _skeleton;
                 }
                 else
@@ -40,20 +40,24 @@ namespace umi3d.cdk.userCapture
         private PersonalSkeleton _skeleton;
 
         #region Dependency Injection
-        private readonly UMI3DLoadingHandler loadingServiceAnchor;
+        private UMI3DLoadingHandler loadingAnchorService;
+        private readonly UMI3DEnvironmentLoader environmentLoaderService;
 
         public PersonalSkeletonManager()
         {
+            loadingAnchorService = UMI3DLoadingHandler.Instance;
+            environmentLoaderService = UMI3DEnvironmentLoader.Instance;
             Init();
-            loadingServiceAnchor = UMI3DLoadingHandler.Instance;
         }
         #endregion Dependency Injection
 
         protected virtual void Init()
         {
-            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() =>
+            environmentLoaderService.onEnvironmentLoaded.AddListener(() =>
             {
-                personalSkeleton = loadingServiceAnchor.GetComponentInChildren<PersonalSkeleton>();
+                if (loadingAnchorService == null)
+                    loadingAnchorService = UMI3DLoadingHandler.Instance;
+                personalSkeleton = loadingAnchorService.GetComponentInChildren<PersonalSkeleton>();
             });
         }
     }

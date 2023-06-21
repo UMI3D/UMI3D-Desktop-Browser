@@ -14,17 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common
+namespace umi3d.common.userCapture
 {
     /// <summary>
-    /// Multibinding data, required to bind a same node to various parents.
+    /// Bone binding data dto, required to load a bone binding.
     /// </summary>
     [System.Serializable]
-    public class MultiBindingDataDto : AbstractBindingDataDto
+    public class BoneBindingDataDto : AbstractSimpleBindingDataDto
     {
         /// <summary>
-        /// List Of all the simple bindings to apply
+        /// The user to which the object i going to be binded ID
         /// </summary>
-        public AbstractSimpleBindingDataDto[] Bindings { get; set; }
+        public ulong userId { get; set; }
+
+        /// <summary>
+        /// The bone to which the object is going to be binded
+        /// </summary>
+        public uint boneType { get; set; }
     }
 }

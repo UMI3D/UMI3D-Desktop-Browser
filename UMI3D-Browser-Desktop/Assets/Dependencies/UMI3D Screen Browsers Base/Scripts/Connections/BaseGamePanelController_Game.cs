@@ -154,7 +154,7 @@ namespace umi3d.baseBrowser.connection
                 //LeadingArea.InteractableMapping
                 //    .SetLeft(0)
                 //    .WithAnimation();
-                UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                //UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
                 LeadingArea.InteractableMapping.Display();
             };
             LeadingArea.InteractableMapping.MappingRemoved += () =>
@@ -163,7 +163,7 @@ namespace umi3d.baseBrowser.connection
                 //    .SetLeft(Length.Percent(-50f))
                 //    .WithAnimation()
                 //    .SetCallback(() => LeadingArea.InteractableMapping.InteractableName = null);
-                UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                //UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
                 LeadingArea.InteractableMapping.Hide();
                 LeadingArea.InteractableMapping.InteractableName = null;
             };
