@@ -14,8 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d.common;
 using inetum.unityUtils;
+using System.Collections;
+using umi3d.common;
+using umi3d.common.userCapture;
 
 namespace umi3d.cdk.userCapture
 {
@@ -29,7 +31,7 @@ namespace umi3d.cdk.userCapture
             {
                 if (_skeleton == null)
                 {
-                    _skeleton = loadingAnchorService.GetComponentInChildren<PersonalSkeleton>();
+                    InitPersonalSkeleton();
                     return _skeleton;
                 }
                 else
@@ -37,28 +39,63 @@ namespace umi3d.cdk.userCapture
             }
             protected set => _skeleton = value;
         }
+
+        public UMI3DSkeletonHierarchy StandardHierarchy
+        {
+            get
+            {
+                _standardHierarchy ??= new UMI3DSkeletonHierarchy((environmentLoaderService.LoadingParameters as UMI3DUserCaptureLoadingParameters).SkeletonHierarchyDefinition);
+                return _standardHierarchy;
+            }
+        }
+        private UMI3DSkeletonHierarchy _standardHierarchy;
+
+
         private PersonalSkeleton _skeleton;
 
         #region Dependency Injection
-        private UMI3DLoadingHandler loadingAnchorService;
+
+        private readonly UMI3DLoadingHandler loadingServiceAnchor;
         private readonly UMI3DEnvironmentLoader environmentLoaderService;
+        private readonly ILateRoutineService lateRoutineService;
 
         public PersonalSkeletonManager()
         {
-            loadingAnchorService = UMI3DLoadingHandler.Instance;
+            loadingServiceAnchor = UMI3DLoadingHandler.Instance;
             environmentLoaderService = UMI3DEnvironmentLoader.Instance;
+            lateRoutineService = CoroutineManager.Instance;
             Init();
         }
+
+        public PersonalSkeletonManager(UMI3DLoadingHandler loadingServiceAnchor, UMI3DEnvironmentLoader environmentLoaderService, ILateRoutineService lateRoutineService)
+        {
+            this.loadingServiceAnchor = loadingServiceAnchor;
+            this.environmentLoaderService = environmentLoaderService;
+            this.lateRoutineService = lateRoutineService;
+            Init();
+        }
+
         #endregion Dependency Injection
 
         protected virtual void Init()
         {
-            environmentLoaderService.onEnvironmentLoaded.AddListener(() =>
+            environmentLoaderService.onEnvironmentLoaded.AddListener(InitPersonalSkeleton);
+        }
+
+        private void InitPersonalSkeleton()
+        {
+            personalSkeleton = loadingServiceAnchor.GetComponentInChildren<PersonalSkeleton>();
+            personalSkeleton.SkeletonHierarchy = StandardHierarchy;
+            lateRoutineService.AttachLateRoutine(ComputeCoroutine());
+        }
+
+        private IEnumerator ComputeCoroutine()
+        {
+            while (personalSkeleton != null)
             {
-                if (loadingAnchorService == null)
-                    loadingAnchorService = UMI3DLoadingHandler.Instance;
-                personalSkeleton = loadingAnchorService.GetComponentInChildren<PersonalSkeleton>();
-            });
+                personalSkeleton.Compute();
+                yield return null;
+            }
         }
     }
 }
