@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -492,12 +493,10 @@ namespace umi3d.cdk
             else
                 CacheCollection = new List<ObjectData>();
 
-            foreach (var item in subModelsCache.Values)
+            foreach (var item in NsubModelsCache.Values)
             {
                 item.Destroy();
             }
-
-            subModelsCache = NsubModelsCache;
 
             StopAllCoroutines();
             libraries = new Dictionary<Library, KeyValuePair<DataFile, HashSet<ulong>>>();
@@ -629,6 +628,7 @@ namespace umi3d.cdk
                             if (id == null)
                                 throw new Exception("id should never be null");
                             var obj = await LoadFile(id ?? 0, data, loader);
+                            Debug.Log("load " + data.libraryIds.ToString(l => l.id) + " " + data.url);
                         }
                         progress.AddComplete();
                     }
