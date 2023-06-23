@@ -136,7 +136,7 @@ namespace umi3d.cdk
             if (!started)
                 return 0;
             if (IsPaused)
-                return lastPauseTime;
+                return lastPauseTime/Duration;
 
             var progress = animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
             if (progress >= 1)
@@ -175,8 +175,8 @@ namespace umi3d.cdk
         /// <param name="atTime">Resume time in ms.</param>
         public void Play(float atTime)
         {
-            var nTime = atTime / Duration;
-
+            var nTime = dto.normalizedTime + atTime / Duration;
+            
             if (animator == null)
                 UMI3DLogger.LogError($"No animator on node {node}", DebugScope.CDK | DebugScope.Animation);
 
@@ -208,8 +208,13 @@ namespace umi3d.cdk
         public override void OnEnd()
         {
             started = false;
+            
             if (trackingAnimationCoroutine != null)
+            {
+                UMI3DEnvironmentLoader.StopCoroutine(trackingAnimationCoroutine);
                 trackingAnimationCoroutine = null;
+            }
+                
             base.OnEnd();
         }
 
@@ -257,6 +262,10 @@ namespace umi3d.cdk
                 case UMI3DPropertyKeys.AnimationStateName:
                     dto.stateName = (string)value.property.value;
                     break;
+                
+                case UMI3DPropertyKeys.AnimationAnimatorNormalizedTime:
+                    dto.normalizedTime = (float)value.property.value;
+                    break;
 
                 case UMI3DPropertyKeys.AnimationAnimatorParameters:
                     switch (value.property)
@@ -301,6 +310,10 @@ namespace umi3d.cdk
 
                 case UMI3DPropertyKeys.AnimationStateName:
                     dto.stateName = UMI3DSerializer.Read<string>(value.container);
+                    break;
+
+                case UMI3DPropertyKeys.AnimationAnimatorNormalizedTime:
+                    dto.normalizedTime = UMI3DSerializer.Read<float>(value.container);
                     break;
 
                 case UMI3DPropertyKeys.AnimationAnimatorParameters:
