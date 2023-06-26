@@ -496,6 +496,7 @@ namespace umi3d.cdk
             {
                 item.Destroy();
             }
+            Resources.UnloadUnusedAssets();
 
             StopAllCoroutines();
             libraries = new Dictionary<Library, KeyValuePair<DataFile, HashSet<ulong>>>();
