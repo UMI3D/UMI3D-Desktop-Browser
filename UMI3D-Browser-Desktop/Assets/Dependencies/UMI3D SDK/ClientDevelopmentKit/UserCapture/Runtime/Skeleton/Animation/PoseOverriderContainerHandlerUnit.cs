@@ -141,7 +141,7 @@ namespace umi3d.cdk.userCapture
         /// <summary>
         /// Activated if the Hover Enter is triggered
         /// </summary>
-        public bool OnHoverEnter()
+        public bool CheckHoverEnterConditions()
         {
             foreach (PoseOverriderDto poseOverrider in nonEnvirnmentalPoseOverriders)
             {
@@ -163,7 +163,7 @@ namespace umi3d.cdk.userCapture
         /// <summary>
         /// Activated if the Hover Exit is triggered
         /// </summary>
-        public bool OnHoverExit()
+        public bool CheckHoverExitConditions()
         {
             foreach (PoseOverriderDto poseOverrider in nonEnvirnmentalPoseOverriders)
             {
@@ -185,7 +185,7 @@ namespace umi3d.cdk.userCapture
         /// <summary>
         /// Activated if the Trigger is triggered
         /// </summary>
-        public bool OnTrigger()
+        public bool CheckTriggerConditions()
         {
             foreach (PoseOverriderDto poseOverrider in nonEnvirnmentalPoseOverriders)
             {
@@ -207,7 +207,7 @@ namespace umi3d.cdk.userCapture
         /// <summary>
         /// Activated if the Release Enter is triggered
         /// </summary>
-        public bool OnRelease()
+        public bool CheckReleaseConditions()
         {
             foreach (PoseOverriderDto poseOverrider in nonEnvirnmentalPoseOverriders)
             {
@@ -236,7 +236,7 @@ namespace umi3d.cdk.userCapture
             if (!isActive)
             {
                 isActive = true;
-                UMI3DResourcesManager.StartCoroutine(LaunchCheck());
+                CoroutineManager.Instance.AttachCoroutine(LaunchCheck());
             }
         }
 
@@ -328,8 +328,8 @@ namespace umi3d.cdk.userCapture
 
 
             Vector3 bonePosition = (trackedSkeletonService as TrackedSkeleton).GetBonePosition(magnitudeConditionDto.BoneOrigine);
-            if (bonePosition == Vector3.zero) return false;
-
+            
+            
             float distance = Vector3.Distance(targetPosition, bonePosition);
 
             if (distance < magnitudeConditionDto.Magnitude)
