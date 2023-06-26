@@ -98,6 +98,8 @@ namespace umi3d.cdk.collaboration
         {
             UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += () => UpdateSkeletons(collaborativeLoaderService.JoinnedUserList);
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => { skeletons.Clear(); InitSkeletons(); SetTrackingSending(ShouldSendTracking); });
+            UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.AddListener(() => { skeletons.Clear(); });
+            UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(() => { skeletons.Clear(); });
         }
 
         public void InitSkeletons()
@@ -308,8 +310,8 @@ namespace umi3d.cdk.collaboration
             skeletons.TryGetValue(playPoseDto.userID, out ISkeleton skeleton);
             if (playPoseDto.stopPose)
             {
-                (skeleton as PersonalSkeleton)?.poseSkeleton.StopPose(false, new List<PoseDto> { poseDto });
-                (skeleton as CollaborativeSkeleton)?.poseSkeleton.StopPose(false, new List<PoseDto> { poseDto });
+                (skeleton as PersonalSkeleton)?.poseSkeleton.StopPose(new List<PoseDto> { poseDto });
+                (skeleton as CollaborativeSkeleton)?.poseSkeleton.StopPose(new List<PoseDto> { poseDto });
             }
             else
             {

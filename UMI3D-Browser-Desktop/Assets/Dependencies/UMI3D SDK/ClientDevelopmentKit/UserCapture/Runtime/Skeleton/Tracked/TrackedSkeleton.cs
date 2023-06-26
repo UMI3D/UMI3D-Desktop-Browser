@@ -79,6 +79,20 @@ namespace umi3d.cdk.userCapture
             };
         }
 
+        public virtual Vector3 GetBonePosition(uint index)
+        {
+            bones.TryGetValue(index, out var boneTransform);
+            if (boneTransform == null) return Vector3.zero;
+            return boneTransform.transform.position;
+        }
+
+        public virtual Quaternion GetBoneRotation(uint index)
+        {
+            bones.TryGetValue(index, out var boneTransform);
+            if (boneTransform == null) return Quaternion.identity;
+            return boneTransform.transform.rotation;
+        }
+
         public void UpdateFrame(UserTrackingFrameDto trackingFrame)
         {
             types.Clear();
@@ -165,7 +179,7 @@ namespace umi3d.cdk.userCapture
                         LookAt(controller);
                         break;
                     default:
-                        SetControl(controller, BoneTypeConverter.ConvertToBoneType(controller.boneType).Value);
+                        SetControl(controller, BoneTypeConvertingExtensions.ConvertToBoneType(controller.boneType).Value);
                         break;
                 }
             }
@@ -207,7 +221,7 @@ namespace umi3d.cdk.userCapture
                         LookAt(controller);
                         break;
                     default:
-                        SetControl(controller, BoneTypeConverter.ConvertToBoneType(controller.boneType).Value);
+                        SetControl(controller, BoneTypeConvertingExtensions.ConvertToBoneType(controller.boneType).Value);
                         break;
                 }
                 controller.Destroy();
