@@ -101,6 +101,9 @@ namespace umi3d.baseBrowser.Navigation
 
         private void Awake()
         {
+            if (s_instance == null) s_instance = this;
+            else Destroy(this.gameObject);
+
             //TODO instantiate concrete navigations.
             m_navigations.Add
             (
@@ -121,12 +124,6 @@ namespace umi3d.baseBrowser.Navigation
 
             //TODO for now CurrentNavigation is the desktop one.
             CurrentNavigation = m_navigations.Find(navigation => navigation is KeyboardAndMouseFpsNavigation);
-        }
-
-        private void Start()
-        {
-            if (s_instance == null) s_instance = this;
-            else Destroy(this.gameObject);
         }
 
         private void Update()

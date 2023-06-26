@@ -58,14 +58,26 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void InitGame_ButtonsArea()
         {
+            Debug.Assert(TrailingArea != null, "TrailingArea null");
             var buttonsArea = TrailingArea.ButtonsArea;
+            Debug.Assert(buttonsArea != null, "buttonsArea null");
+
+            Debug.Assert(BaseFPSNavigation.Instance != null, "BaseFPSNavigation.Instance null");
+
+            Debug.Assert(buttonsArea.Jump != null, "buttonsArea.Jump null");
             buttonsArea.Jump.ClickedDown += () => BaseFPSNavigation.Instance.WantToJump = true;
             buttonsArea.Jump.ClickedUp += () => BaseFPSNavigation.Instance.WantToJump = false;
+
+            Debug.Assert(buttonsArea.Crouch != null, "buttonsArea.Crouch null");
             buttonsArea.Crouch.ClickedDown += () => BaseFPSNavigation.Instance.WantToCrouch = true;
             buttonsArea.Crouch.ClickedUp += () => BaseFPSNavigation.Instance.WantToCrouch = false;
 
             var mobileNavigation = BaseFPSNavigation.Instance.Navigations.Find(navigation => navigation is MobileFpsNavigation) as MobileFpsNavigation;
+            Debug.Assert(mobileNavigation != null, "mobileNavigation.Crouch null");
+            Debug.Assert(Game != null, "Game null");
+            Debug.Assert(Game.TrailingArea != null, "Game.TrailingArea null");
             mobileNavigation.CameraDirection = () => Game.TrailingArea.Direction;
+            Debug.Assert(Game.LeadingArea != null, "Game.LeadingArea null");
             mobileNavigation.MoveDirection = () => Game.LeadingArea.JoystickArea.Joystick.Direction;
         }
 
