@@ -1,0 +1,13 @@
+Key,English,French,Spanish
+LoopBack_ont,Loop back on,Bouclage activé,Bucle activado
+LoopBack_off,Loop back off,Bouclage désactivé,Desactivación de bucles
+AmplitudeSlider,Noise Threshold,Seuil de bruit,Umbral de ruido
+DelayShutMic,Delay before mute mic when lower than threshold,Délai avant la mise en sourdine du micro lorsqu'il est inférieur au seuil,Retardo antes de silenciar el micrófono cuando es inferior al umbral
+GeneralVolume,General volume,Volume général,Volumen general
+Mic_Label,Microphone,Microphone,Micrófono
+MicMode_AlwaysSend,Always send,Toujours envoyer,Enviar siempre
+MicMode_Amplitude,Amplitude,Amplitude,Amplitud
+MicMode_PushToTalk,Push to talk,Push to talk,Push to talk
+MicMode_Label,Mode,Mode,Modo
+NoiseReduc_Label,Use noise reduction,Utiliser la réduction du bruit,Reducir el ruido
+PushToTalk_Label,Push to talk key,Touche "Push to talk",Botón "Push to talk"
