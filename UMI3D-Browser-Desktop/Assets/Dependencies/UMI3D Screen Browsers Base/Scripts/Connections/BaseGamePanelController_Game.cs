@@ -14,6 +14,7 @@ using umi3d.baseBrowser.Controller;
 using umi3d.baseBrowser.cursor;
 using umi3d.baseBrowser.Navigation;
 using umi3d.cdk.collaboration;
+using umi3d.cdk.collaboration.emotes;
 using umi3d.commonDesktop.game;
 using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
