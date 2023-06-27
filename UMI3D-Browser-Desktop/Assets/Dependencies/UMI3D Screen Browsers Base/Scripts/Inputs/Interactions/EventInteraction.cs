@@ -16,6 +16,7 @@ limitations under the License.
 
 using umi3d.cdk;
 using umi3d.cdk.interaction;
+using umi3d.cdk.userCapture;
 using umi3d.common;
 using UnityEngine;
 
@@ -32,6 +33,8 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// True if the rising edge event has been sent through network (to avoid sending falling edge only).
         /// </summary>
         protected bool risingEdgeEventSent;
+
+        private IPoseManager poseManagerService;
 
         protected virtual void Awake()
         {
@@ -84,6 +87,8 @@ namespace umi3d.baseBrowser.inputs.interactions
             }
             if (associatedInteraction.TriggerAnimationId != 0)
                 StartAnim(associatedInteraction.TriggerAnimationId);
+
+            poseManagerService.OnTrigger(hoveredObjectId);
         }
 
         protected override void PressedUp()
@@ -108,6 +113,8 @@ namespace umi3d.baseBrowser.inputs.interactions
             cdk.UMI3DClientServer.SendData(eventdto, true);
             IsInputHold = false;
             risingEdgeEventSent = false;
+
+            poseManagerService.OnRelease(hoveredObjectId);
         }
 
         protected async void StartAnim(ulong id)
