@@ -615,6 +615,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewpoint: {fileID: 287653166641702419}
+  Hips: {fileID: 308574267299679471}
   trackedAnimator: {fileID: 287653166641708546}
 --- !u!1001 &3357643348234176254
 PrefabInstance:
@@ -1003,6 +1004,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneType: 23
+--- !u!4 &308574267299679471 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5465940246521907071, guid: da6770c40c5dded4a94522b1d0ad2d86,
+    type: 3}
+  m_PrefabInstance: {fileID: 5733835596339235728}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &348880153378904326 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3799395697873186154, guid: da6770c40c5dded4a94522b1d0ad2d86,

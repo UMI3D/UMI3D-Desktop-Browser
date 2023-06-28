@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,23 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common.userCapture
+namespace umi3d.cdk
 {
-    [System.Serializable]
-    public class DurationDto : UMI3DDto
+    public interface INavMeshManager
     {
-        public DurationDto() { }
+        void SetNodePartOfNavmesh(UMI3DNodeInstance node);
 
-        public DurationDto(ulong duration, ulong? min, ulong? max)
-        {
-            this.duration = duration;
-            this.min = min; 
-            this.max = max;
-        }
-
-        public ulong duration { get; set; }
-        public ulong? min { get; set; } 
-        public ulong? max { get; set;}
+        void SetNodeTraversable(UMI3DNodeInstance node);
     }
 }
-
