@@ -614,7 +614,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1809d8680b4ed46a67c7dce68a18fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewpoint: {fileID: 287653166641702419}
+  Viewpoint: {fileID: 287653166641702419}
   Hips: {fileID: 308574267299679471}
   trackedAnimator: {fileID: 287653166641708546}
 --- !u!1001 &3357643348234176254
