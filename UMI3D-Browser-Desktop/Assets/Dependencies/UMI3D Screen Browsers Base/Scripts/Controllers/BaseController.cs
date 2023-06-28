@@ -20,6 +20,7 @@ using umi3d.cdk;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.cdk.userCapture;
+using umi3d.cdk.userCapture.pose;
 using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.desktopBrowser.Controller;
