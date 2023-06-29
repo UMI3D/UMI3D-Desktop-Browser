@@ -16,7 +16,7 @@ using UnityEditor;
 using System.IO;
 using System.Linq;
 
-[CustomEditor(typeof(LocalisationTable))]
+//[CustomEditor(typeof(LocalisationTable))]
 public class LocalizationTableEditor : Editor
 {
     const string k_path = "./Localization/";

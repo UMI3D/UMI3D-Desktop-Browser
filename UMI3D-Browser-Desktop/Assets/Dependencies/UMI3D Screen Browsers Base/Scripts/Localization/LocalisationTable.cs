@@ -10,6 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -18,6 +19,7 @@ using UnityEngine;
 public class LocalisationTable : ScriptableObject
 {
     public string Title;
+    [TableList]
     public List<LocalisationTableItem> Items;
 
     /// <summary>
