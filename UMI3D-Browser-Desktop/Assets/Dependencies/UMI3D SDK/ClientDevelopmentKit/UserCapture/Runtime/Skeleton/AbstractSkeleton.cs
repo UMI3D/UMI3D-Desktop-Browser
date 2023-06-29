@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 using System;
 using System.Collections.Generic;
 using umi3d.cdk.userCapture.pose;
+using umi3d.cdk.userCapture.tracking;
 using umi3d.cdk.utils.extrapolation;
 using umi3d.common;
 using umi3d.common.userCapture;
-
-using UnityEditor;
+using umi3d.common.userCapture.description;
+using umi3d.common.userCapture.tracking;
 
 using UnityEngine;
 
@@ -120,7 +120,7 @@ namespace umi3d.cdk.userCapture
                 else
                     Bones[bone] = new ISkeleton.s_Transform();
             }
-                
+
             // for each subskeleton, in descending order (lastest has lowest priority),
             // get the relative orientation of all available bones
             for (int i = Skeletons.Count - 1; 0 <= i; i--)

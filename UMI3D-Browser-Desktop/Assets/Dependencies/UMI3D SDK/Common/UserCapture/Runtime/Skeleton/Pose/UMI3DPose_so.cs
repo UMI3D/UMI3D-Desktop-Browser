@@ -16,6 +16,7 @@ limitations under the License.
 
 using System;
 using System.Collections.Generic;
+using umi3d.common.userCapture.description;
 using UnityEngine;
 
 namespace umi3d.common.userCapture.pose
@@ -41,7 +42,7 @@ namespace umi3d.common.userCapture.pose
 
         public void Init(List<BoneDto> bonePoses, BonePoseDto bonePoseDto)
         {
-            this.boneDtos = bonePoses;
+            this.boneDtos.AddRange(bonePoses);
             this.bonePoseDto = bonePoseDto;
         }
 
