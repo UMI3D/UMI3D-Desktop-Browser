@@ -96,12 +96,28 @@ namespace umi3d.cdk.collaboration.userCapture
 
         #endregion Dependency Injection
 
+        private bool canClearSkeletons = false;
+
         public void Init()
         {
             UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += () => UpdateSkeletons(collaborativeLoaderService.JoinnedUserList);
-            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => { InitSkeletons(); SetTrackingSending(ShouldSendTracking); });
-            UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.AddListener(() => { skeletons.Clear(); });
-            UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(() => { skeletons.Clear(); });
+            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => { InitSkeletons(); SetTrackingSending(ShouldSendTracking); canClearSkeletons = true; });
+            UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.AddListener(() => 
+            { 
+                if (canClearSkeletons)
+                {
+                    skeletons.Clear();
+                    canClearSkeletons = false;
+                }
+            });
+            UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(() => 
+            {
+                if (canClearSkeletons)
+                {
+                    skeletons.Clear();
+                    canClearSkeletons = false;
+                } 
+            });
         }
 
         public void InitSkeletons()
@@ -147,6 +163,15 @@ namespace umi3d.cdk.collaboration.userCapture
             cs.SkeletonHierarchy = skeletonHierarchy;
             cs.SetSubSkeletons();
 
+            // consider all bones we should have according to the hierarchy, and set all values to identity
+            foreach (var bone in skeletonHierarchy.HierarchyDict.Keys)
+            {
+                if (cs.Bones.ContainsKey(bone))
+                    cs.Bones[bone].s_Rotation = Quaternion.identity;
+                else
+                    cs.Bones[bone] = new ISkeleton.s_Transform() { s_Rotation = Quaternion.identity };
+            }
+
             return cs;
         }
 
@@ -186,7 +211,7 @@ namespace umi3d.cdk.collaboration.userCapture
         {
             if (!skeletons.TryGetValue(frame.userId, out ISkeleton skeleton))
             {
-                UMI3DLogger.LogWarning($"Skeleton of used {frame.userId} not found. Cannot apply skeleton frame update.", scope);
+                UMI3DLogger.LogWarning($"Skeleton of user {frame.userId} not found. Cannot apply skeleton frame update.", scope);
                 return;
             }
 
