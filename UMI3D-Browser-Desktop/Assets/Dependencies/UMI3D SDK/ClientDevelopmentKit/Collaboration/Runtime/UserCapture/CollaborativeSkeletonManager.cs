@@ -48,7 +48,10 @@ namespace umi3d.cdk.collaboration.userCapture
 
         public virtual CollaborativeSkeletonsScene collabScene => CollaborativeSkeletonsScene.Exists ? CollaborativeSkeletonsScene.Instance : null;
 
-        public event Action<ulong> skeletonEvent;
+        /// <summary>
+        /// Invoked when a <see cref="CollaborativeSkeleton"/> is created. Parameter is the correspondig user id.
+        /// </summary>
+        public event Action<ulong> CollaborativeSkeletonCreated;
 
         /// <summary>
         /// If true the avatar tracking is sent.
@@ -100,7 +103,7 @@ namespace umi3d.cdk.collaboration.userCapture
 
         public void Init()
         {
-            UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += () => UpdateSkeletons(collaborativeLoaderService.JoinnedUserList);
+            UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += () => UpdateSkeletons(collaborativeLoaderService.UserList);
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => { InitSkeletons(); SetTrackingSending(ShouldSendTracking); canClearSkeletons = true; });
             UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.AddListener(() => 
             { 
@@ -128,11 +131,11 @@ namespace umi3d.cdk.collaboration.userCapture
 
         protected void UpdateSkeletons(List<UMI3DUser> usersList)
         {
-            List<ulong> idList = usersList.Select(u => u.id).ToList();
-            idList.Remove(UMI3DClientServer.Instance.GetUserId());
+            List<ulong> readyUserIdList = usersList.Where(u => u.status >= StatusType.READY).Select(u => u.id).ToList();
+            readyUserIdList.Remove(UMI3DClientServer.Instance.GetUserId());
 
-            var joinnedUsersId = idList.Except(skeletons.Keys).ToList();
-            var deletedUsersId = skeletons.Keys.Except(idList).ToList();
+            var joinnedUsersId = readyUserIdList.Except(skeletons.Keys).ToList();
+            var deletedUsersId = skeletons.Keys.Except(readyUserIdList).ToList();
 
             foreach (var userId in deletedUsersId)
             {
@@ -148,7 +151,7 @@ namespace umi3d.cdk.collaboration.userCapture
                 if (userId != UMI3DClientServer.Instance.GetUserId())
                 {
                     skeletons[userId] = CreateSkeleton(userId, collabScene.transform, StandardHierarchy);
-                    skeletonEvent?.Invoke(userId);
+                    CollaborativeSkeletonCreated?.Invoke(userId);
                 }
             }
         }

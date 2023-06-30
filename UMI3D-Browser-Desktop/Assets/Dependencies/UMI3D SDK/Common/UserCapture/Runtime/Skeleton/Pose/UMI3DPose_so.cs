@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using umi3d.common.userCapture.description;
@@ -25,13 +27,13 @@ namespace umi3d.common.userCapture.pose
     /// Scriptable object to contains data for PoseDto
     /// </summary>
     [Serializable]
-    public class UMI3DPose_so : ScriptableObject
+    public class UMI3DPose_so : ScriptableObject, IJsonSerializer
     {
-        [SerializeField] private List<BoneDto> boneDtos = new List<BoneDto>();
-        [SerializeField] private BonePoseDto bonePoseDto;
+        [SerializeField] private List<Bone> bones = new List<Bone>();
+        [SerializeField] private BonePose bonePose;
 
-        public List<BoneDto> BoneDtos { get => boneDtos; }
-        public BonePoseDto BonePoseDto { get => bonePoseDto; }
+        public List<Bone> BoneDtos { get => bones; }
+        public BonePose BonePoseDto { get => bonePose; }
 
         /// <summary>
         /// An event thats called when the PoseManager has played his Start() method
@@ -40,10 +42,23 @@ namespace umi3d.common.userCapture.pose
 
         public int poseRef { get; private set; }
 
-        public void Init(List<BoneDto> bonePoses, BonePoseDto bonePoseDto)
+        public void Init(List<BoneDto> bones, BonePoseDto bonePoseDto)
         {
-            this.boneDtos.AddRange(bonePoses);
-            this.bonePoseDto = bonePoseDto;
+            bones.ForEach(bp =>
+            {
+                this.bones.Add(new Bone()
+                {
+                    boneType = bp.boneType,
+                    rotation = new p_Quat() { x = bp.rotation.X, y = bp.rotation.Y, z = bp.rotation.Z, w = bp.rotation.W }
+                });
+            });
+
+            this.bonePose = new BonePose()
+            {
+                boneType = bonePoseDto.Bone,
+                position = new float3() { x = bonePoseDto.Position.X, y = bonePoseDto.Position.Y, z = bonePoseDto.Position.Z },
+                rotation = new p_Quat() { x = bonePoseDto.Rotation.X, y = bonePoseDto.Rotation.Y, z = bonePoseDto.Rotation.Z, w = bonePoseDto.Rotation.W }
+            };
         }
 
         public void SendPoseIndexationEvent(int i)
@@ -68,12 +83,12 @@ namespace umi3d.common.userCapture.pose
         public List<BoneDto> GetBonesCopy()
         {
             List<BoneDto> copy = new List<BoneDto>();
-            boneDtos.ForEach(b =>
+            bones.ForEach(b =>
             {
                 copy.Add(new BoneDto()
                 {
                     boneType = b.boneType,
-                    rotation = new Vector4Dto() { X = b.rotation.X, Y = b.rotation.Y, Z = b.rotation.Z, W = b.rotation.W }
+                    rotation = new Vector4Dto() { X = b.rotation.x, Y = b.rotation.y, Z = b.rotation.z, W = b.rotation.w }
                 });
             });
             return copy;
@@ -87,12 +102,56 @@ namespace umi3d.common.userCapture.pose
         {
             BonePoseDto copy = new BonePoseDto()
             {
-                Bone = bonePoseDto.Bone,
-                Position = new Vector3Dto() { X = bonePoseDto.Position.X, Y = bonePoseDto.Position.Y, Z = bonePoseDto.Position.Z },
-                Rotation = new Vector4Dto() { X = bonePoseDto.Rotation.X, Y = bonePoseDto.Rotation.Y, Z = bonePoseDto.Rotation.Z, W = bonePoseDto.Rotation.W }
+                Bone = bonePose.boneType,
+                Position = new Vector3Dto() { X = bonePose.position.x, Y = bonePose.position.y, Z = bonePose.position.z },
+                Rotation = new Vector4Dto() { X = bonePose.rotation.x, Y = bonePose.rotation.y, Z = bonePose.rotation.z, W = bonePose.rotation.w }
             };
 
             return copy;
+        }
+
+        [Serializable]
+        public struct Bone
+        {
+            public uint boneType;
+            public p_Quat rotation;
+        }
+
+        [Serializable]
+        public struct BonePose
+        {
+            public uint boneType;
+            public float3 position;
+            public p_Quat rotation;
+        }
+
+        [Serializable]
+        public struct p_Quat
+        {
+            public float x, y, z, w;
+        }
+
+        [Serializable]
+        public struct float3
+        {
+            public float x, y, z;
+        }
+
+        public string JsonSerialize()
+        {
+            PoseDto poseDto = ToDTO();
+            JsonSerializerSettings settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Formatting = Formatting.Indented };
+            string json = JsonConvert.SerializeObject(poseDto, settings);
+            return json;
+        }
+
+        public ScriptableObject JsonDeserializeScriptableObject(string data)
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Formatting = Formatting.Indented };
+            PoseDto poseDto = JsonConvert.DeserializeObject(data, settings) as PoseDto;
+            UMI3DPose_so poseSo = CreateInstance<UMI3DPose_so>();
+            poseSo.Init(poseDto.bones, poseDto.boneAnchor);
+            return poseSo;           
         }
     }
 }
