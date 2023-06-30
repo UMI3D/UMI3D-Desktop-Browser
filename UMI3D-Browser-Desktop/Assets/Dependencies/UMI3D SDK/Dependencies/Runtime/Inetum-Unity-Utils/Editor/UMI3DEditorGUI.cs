@@ -14,7 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 #if UNITY_EDITOR
+using System.Collections;
+using System.Linq;
+using System.Reflection;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace inetum.unityUtils.editor
@@ -62,8 +66,45 @@ namespace inetum.unityUtils.editor
 					// TODO : value changed callback
 				}
 			}
-			
 		}
+        public static void Button(UnityEngine.Object target, MethodInfo methodInfo)
+        {
+            if (methodInfo.GetParameters().All(p => p.IsOptional))
+            {
+                ButtonAttribute buttonAttribute = (ButtonAttribute)methodInfo.GetCustomAttributes(typeof(ButtonAttribute), true)[0];
+                string buttonText = string.IsNullOrEmpty(buttonAttribute.Text) ? ObjectNames.NicifyVariableName(methodInfo.Name) : buttonAttribute.Text;
+
+                if (GUILayout.Button(buttonText, GUI.skin.button))
+                {
+                    object[] defaultParams = methodInfo.GetParameters().Select(p => p.DefaultValue).ToArray();
+                    IEnumerator methodResult = methodInfo.Invoke(target, defaultParams) as IEnumerator;
+
+                    if (!Application.isPlaying)
+                    {
+                        EditorUtility.SetDirty(target);
+
+                        PrefabStage stage = PrefabStageUtility.GetCurrentPrefabStage();
+                        if (stage != null)
+                        {
+                            EditorSceneManager.MarkSceneDirty(stage.scene); // Prefabs mode
+                        }
+                        else
+                        {
+                            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene()); // Scene Mode
+                        }
+                    }
+                    else if (methodResult != null && target is MonoBehaviour behaviour)
+                    {
+                        behaviour.StartCoroutine(methodResult);
+                    }
+                }
+            }
+            else
+            {
+                string warning = typeof(ButtonAttribute).Name + " works only on methods with no parameters";
+                Debug.LogWarning(warning);
+            }
+        }
     }
 }
 #endif

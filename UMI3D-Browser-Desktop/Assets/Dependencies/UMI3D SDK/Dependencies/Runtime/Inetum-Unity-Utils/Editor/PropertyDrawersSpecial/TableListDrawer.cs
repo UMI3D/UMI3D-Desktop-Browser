@@ -45,6 +45,11 @@ namespace inetum.unityUtils.editor
                 {
                     Initialize(property);
                 }
+                _properties = new List<SerializedProperty>();
+                for (int i = 0; i < property.arraySize; i++)
+                {
+                    _properties.Add(property.GetArrayElementAtIndex(i));
+                }
                 bool mustBorder = false;
 
                 EditorGUILayout.BeginVertical(GUI.skin.box);
@@ -102,7 +107,6 @@ namespace inetum.unityUtils.editor
         private void Initialize(SerializedProperty property)
         {
             _sectionNames = new List<string>();
-            _properties = new List<SerializedProperty>();
 
             _headerStyle = new GUIStyle();
             _rowStyle = new GUIStyle();
@@ -117,10 +121,6 @@ namespace inetum.unityUtils.editor
             {
                 if (!arg.IsPublic && !arg.CustomAttributes.Any(p => p.AttributeType.Equals(typeof(SerializeField)))) continue;
                 _sectionNames.Add(arg.Name);
-            }
-            for (int i = 0; i < property.arraySize; i++)
-            {
-                _properties.Add(property.GetArrayElementAtIndex(i));
             }
 
             _cellWidth = (EditorGUIUtility.currentViewWidth - 40 - 20) / _sectionNames.Count - 2;

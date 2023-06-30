@@ -16,6 +16,7 @@ limitations under the License.
 #if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -26,6 +27,13 @@ namespace inetum.unityUtils.editor
     public class UMI3DInspector : Editor
     {
         private List<SerializedProperty> _serializedProperties = new List<SerializedProperty>();
+        private IEnumerable<MethodInfo> _methods;
+
+        protected virtual void OnEnable()
+        {
+            _methods = ReflectionUtility.GetAllMethods(
+                target, m => m.GetCustomAttributes(typeof(ButtonAttribute), true).Length > 0);
+        }
 
         public override void OnInspectorGUI()
         {
@@ -36,6 +44,8 @@ namespace inetum.unityUtils.editor
                 DrawSerializedProperties();
             else
                 DrawDefaultInspector();
+
+            DrawButtons();
         }
 
         private void OnDisable()
@@ -75,6 +85,17 @@ namespace inetum.unityUtils.editor
             }
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawButtons()
+        {
+            if (_methods.Any())
+            {
+                foreach (var method in _methods)
+                {
+                    UMI3DEditorGUI.Button(serializedObject.targetObject, method);
+                }
+            }
         }
     }
 }
