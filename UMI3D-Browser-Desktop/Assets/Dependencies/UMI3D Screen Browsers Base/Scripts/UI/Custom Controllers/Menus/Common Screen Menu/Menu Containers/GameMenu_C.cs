@@ -30,6 +30,7 @@ namespace umi3d.commonScreen.menu
 
         public GameData_C GameData = new GameData_C { name = "game-data" };
         public LibraryScreen_C Libraries = new LibraryScreen_C { name = "libraries" };
+        public TipsScreen_C Tips = new TipsScreen_C { name = "tips" };
         public SettingsContainer_C Settings = new SettingsContainer_C { name = "settings" };
 
         public Button_C Resume = new Button_C { name = "resume" };
@@ -90,6 +91,9 @@ namespace umi3d.commonScreen.menu
                 case GameMenuScreens.Libraries:
                     screen = Libraries;
                     break;
+                case GameMenuScreens.Tips:
+                    screen = Tips;
+                    break;
                 case GameMenuScreens.Settings:
                     screen = Settings;
                     break;
@@ -108,6 +112,7 @@ namespace umi3d.commonScreen.menu
         protected override void RemoveAllScreen()
         {
             Libraries.RemoveFromHierarchy();
+            Tips.RemoveFromHierarchy();
             Settings.RemoveFromHierarchy();
         }
 

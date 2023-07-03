@@ -124,3 +124,7 @@ MonoBehaviour:
     English: Delete this server from the history ?
     French: Supprimer ce serveur de l'historique ?
     Spanish: "\xBF Borrar este servidor del historial ?"
+  - Key: Tips
+    English: Tips
+    French: Aide
+    Spanish: Consejos
