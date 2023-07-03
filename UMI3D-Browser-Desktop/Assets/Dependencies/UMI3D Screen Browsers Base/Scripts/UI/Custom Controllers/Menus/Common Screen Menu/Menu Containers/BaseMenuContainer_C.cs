@@ -294,7 +294,8 @@ public enum LauncherScreens
 {
     Home,
     Settings,
-    Libraries
+    Libraries,
+    Tips
 }
 
 public enum LoaderScreens
@@ -307,5 +308,6 @@ public enum GameMenuScreens
 {
     Settings,
     Data,
-    Libraries
+    Libraries,
+    Tips
 }

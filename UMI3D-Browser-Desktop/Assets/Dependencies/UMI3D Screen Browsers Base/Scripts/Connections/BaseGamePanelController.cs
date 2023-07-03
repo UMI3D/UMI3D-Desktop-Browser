@@ -156,6 +156,7 @@ namespace umi3d.baseBrowser.connection
             BaseConnectionProcess.Instance.EnvironmentLoaded += () =>
             {
                 Menu.Libraries.InitLibraries();
+                Menu.Tips.InitTips();
                 EnvironmentSettings.Instance.AudioSetting.GeneralVolume = ((int)Menu.Settings.Audio.Data.GeneralVolume) / 10f;
             };
             BaseConnectionProcess.Instance.UserCountUpdated += count =>
