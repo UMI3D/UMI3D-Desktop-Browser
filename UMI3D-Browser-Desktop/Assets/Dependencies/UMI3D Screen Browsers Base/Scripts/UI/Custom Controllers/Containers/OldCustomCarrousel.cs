@@ -20,7 +20,7 @@ using UnityEngine.UIElements;
 using System.Linq;
 using umi3d.commonScreen.Displayer;
 
-public abstract class CustomCarrousel : VisualElement
+public abstract class OldCustomCarrousel : VisualElement
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
@@ -74,7 +74,7 @@ public abstract class CustomCarrousel : VisualElement
         {
             if (Application.isPlaying) return;
             base.Init(ve, bag, cc);
-            var custom = ve as CustomCarrousel;
+            var custom = ve as OldCustomCarrousel;
 
             custom.Set
                 (
@@ -211,27 +211,27 @@ public abstract class CustomCarrousel : VisualElement
 
             throw e;
         }
+        Next.AddToClassList(USSCustomClassButton);
+        Next_Icon.AddToClassList(USSCustomClassNextIcon);
+        PageSelectIcon.AddToClassList(USSCustomClassSelectActive);
+        Container_Box.AddToClassList(USSCustomClassContainerBox);
+        Box_Elts.AddToClassList(USSCustomClassBoxElts);
+        Prev_Icon.AddToClassList(USSCustomClassPrevIcon);
+        Prev.AddToClassList(USSCustomClassButton);
+        Bottom_Buttons.AddToClassList(USSCustomClassBottomButtons);
         AddToClassList(USSCustomClassName);
 
         Add(Prev);
-        Prev.AddToClassList(USSCustomClassButton);
         Prev.ClickedUp += () => ChangeScrollPrev(m_scroll_all ? -m_nb_elts : -1);
         Prev.Type = ButtonType.Invisible;
-        Prev_Icon.AddToClassList(USSCustomClassPrevIcon);
         Prev.Add(Prev_Icon);
         Add(Container_Box);
-        Container_Box.AddToClassList(USSCustomClassContainerBox);
         Container_Box.Add(Box_Elts);
-        Box_Elts.AddToClassList(USSCustomClassBoxElts);
         Container_Box.Add(Bottom_Buttons);
-        Bottom_Buttons.AddToClassList(USSCustomClassBottomButtons);
         Bottom_Buttons.Add(PageSelectIcon);
-        PageSelectIcon.AddToClassList(USSCustomClassSelectActive);
         Add(Next);
-        Next.AddToClassList(USSCustomClassButton);
         Next.ClickedUp += () => ChangeScrollNext(m_scroll_all ? m_nb_elts : 1);
         Next.Type = ButtonType.Invisible;
-        Next_Icon.AddToClassList(USSCustomClassNextIcon);
         Next.Add(Next_Icon);
 
         this.RegisterCallback<GeometryChangedEvent>((ec) =>
@@ -384,7 +384,6 @@ public abstract class CustomCarrousel : VisualElement
         
         if (new_elt == 0) return;
 
-        var tmp_size_elts = Box_Elts.childCount;
         var border_max = Box_Elts.childCount >= -new_elt ? new_elt : -Box_Elts.childCount;
         for (var toSupp = 0; toSupp > border_max; toSupp--)
             Box_Elts.RemoveAt(Box_Elts.childCount - 1);
@@ -392,7 +391,6 @@ public abstract class CustomCarrousel : VisualElement
         var modulo = (curr_elt + new_elt + Carrousel_Elts.Count) % Carrousel_Elts.Count;
         curr_elt = modulo;
         wanted_elt = curr_elt;
-        
 
         var border_min = -new_elt > m_nb_elts ? -m_nb_elts : new_elt;
         for (var toAdd = border_min + 1; toAdd <= 0; toAdd++)
@@ -403,25 +401,13 @@ public abstract class CustomCarrousel : VisualElement
 
     protected void ChangeScrollNext(int new_elt)
     {
-        var tmp_size_box = m_nb_elts;
-        if (m_scroll_all)
+        if (!m_loop_scroll)
+            new_elt = curr_elt + new_elt > m_nb_elts-1 ? curr_elt : new_elt;
+        if (m_scroll_all && curr_elt == m_nb_elts-1)
         {
-            if (curr_elt + new_elt > Carrousel_Elts.Count - m_nb_elts)
-            {
-                if (curr_elt + new_elt < Carrousel_Elts.Count)
-                    tmp_size_box = Carrousel_Elts.Count - (curr_elt + new_elt);
-                else
-                {
-                    if (m_loop_scroll)
-                        ChangeScrollPrev(-curr_elt);
-                    return;
-                }
-            }
-        }
-        else
-        {
-            if (!m_loop_scroll)
-                new_elt = curr_elt + new_elt > Carrousel_Elts.Count - m_nb_elts ? Carrousel_Elts.Count - m_nb_elts - curr_elt : new_elt;
+            if (m_loop_scroll)
+                ChangeScrollPrev(-(nb_pages - 1) * m_nb_elts);
+            return;
         }
         if (new_elt == 0) return;
 
@@ -429,14 +415,13 @@ public abstract class CustomCarrousel : VisualElement
         for (var toSupp = 0; toSupp < border_max; toSupp++)
             Box_Elts.RemoveAt(0);
         
-        var modulo = (curr_elt + new_elt) % Carrousel_Elts.Count;
+        var modulo = (curr_elt + new_elt + Carrousel_Elts.Count) % Carrousel_Elts.Count;
         curr_elt = modulo;
         wanted_elt = curr_elt;
-        var tmp_size_box2 = Box_Elts.childCount;
 
-        border_max = border_max > tmp_size_box ? tmp_size_box : border_max;
+        border_max = border_max > m_nb_elts ? m_nb_elts : border_max;
         for (var toAdd = 0; toAdd < border_max; toAdd++)
-            Box_Elts.Add(Carrousel_Elts.ElementAt((curr_elt + tmp_size_box2 + toAdd) % Carrousel_Elts.Count));
+            Box_Elts.Add(Carrousel_Elts.ElementAt((curr_elt + toAdd) % Carrousel_Elts.Count));
                 
         CalculateSizes(Box_Elts.childCount);
     }

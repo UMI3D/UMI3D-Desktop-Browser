@@ -10,15 +10,17 @@
 .carrousel-button {
     width: var(--size-medium-displayer);
     justify-content: center;
+    min-width: 75px;
 }
 
 .carrousel-box_elts {
     flex-direction: row;
     flex-grow: 1;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .carrousel-container_box {
+    overflow: hidden;
     flex-grow: 1;
 }
 

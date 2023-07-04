@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9376bfd3760afe4ab98b817b9269dba, type: 3}
-  m_Name: TipsTable
+  m_Name: TipsTable 1
   m_EditorClassIdentifier: 
   _name: Main Menu
   _tips:
