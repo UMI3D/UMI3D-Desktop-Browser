@@ -4,8 +4,6 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using umi3d.common.userCapture.pose;
 using System.IO;
-using System.Linq;
-using System;
 
 public class json_exporter : EditorWindow
 {

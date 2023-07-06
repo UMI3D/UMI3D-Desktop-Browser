@@ -65,7 +65,7 @@ namespace umi3d.cdk.userCapture.tracking
             var dto = new PoseDto();
             dto?.SetBonePoseDtoArray(bones
                 .Select(kp => kp.Value)
-                .Where(x => x is IController)
+                .Where(x => controllers.Exists(y => y.boneType.Equals(x.boneType)))
                 .Select(tb => tb.ToBoneDto()).ToList());
             return dto;
         }
@@ -112,6 +112,15 @@ namespace umi3d.cdk.userCapture.tracking
                 vc.rotation = bone.rotation.Quaternion();
 
                 types.Add(bone.boneType);
+
+                if (bones.TryGetValue(bone.boneType, out var boneTransform) && bone.boneType.Equals(BoneType.Head))
+                {
+                    boneTransform.transform.rotation = vc.rotation;
+                }
+                else
+                {
+                    // SETUP IK
+                }
             }
             foreach (var dc in controllers.Where(c => c is DistantController && !types.Contains(c.boneType)).ToList())
             {

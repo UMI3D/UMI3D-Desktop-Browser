@@ -17,12 +17,22 @@ limitations under the License.
 using umi3d.cdk.userCapture;
 using umi3d.cdk.userCapture.pose;
 using umi3d.cdk.userCapture.tracking;
+using umi3d.cdk.utils.extrapolation;
 using umi3d.common.userCapture.tracking;
 
 namespace umi3d.cdk.collaboration.userCapture
 {
     public class CollaborativeSkeleton : AbstractSkeleton
     {
+        protected Vector3LinearDelayedExtrapolator posExtrapolator = new();
+        protected QuaternionLinearDelayedExtrapolator rotExtrapolator = new();
+
+        private void Update()
+        {
+            transform.position = posExtrapolator.Extrapolate();
+            transform.rotation = rotExtrapolator.Extrapolate();
+        }
+
         public override void UpdateFrame(UserTrackingFrameDto frame)
         {
             if (Skeletons != null)
@@ -34,17 +44,17 @@ namespace umi3d.cdk.collaboration.userCapture
                 }
             }
 
-            this.transform.position = frame.position.Struct();
-            this.transform.rotation = frame.rotation.Quaternion();
+            posExtrapolator.AddMeasure(frame.position.Struct());
+            rotExtrapolator.AddMeasure(frame.rotation.Quaternion());
         }
 
         public void SetSubSkeletons()
         {
             TrackedSkeleton = Instantiate((UMI3DEnvironmentLoader.Parameters as UMI3DCollabLoadingParameters).CollabTrackedSkeleton, this.transform).GetComponent<TrackedSkeleton>();
-            this.HipsAnchor = TrackedSkeleton.Hips;
+            HipsAnchor = TrackedSkeleton.Hips;
             PoseSkeleton = new PoseSkeleton();
             Skeletons.Add(TrackedSkeleton);
-            base.Skeletons.Add(PoseSkeleton);
+            Skeletons.Add(PoseSkeleton);
         }
     }
 }

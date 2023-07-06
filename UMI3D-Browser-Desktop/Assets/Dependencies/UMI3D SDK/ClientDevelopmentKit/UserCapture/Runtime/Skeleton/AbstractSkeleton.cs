@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using umi3d.cdk.userCapture.pose;
 using umi3d.cdk.userCapture.tracking;
-using umi3d.cdk.utils.extrapolation;
 using umi3d.common;
 using umi3d.common.userCapture;
 using umi3d.common.userCapture.description;
@@ -41,10 +40,6 @@ namespace umi3d.cdk.userCapture
         public virtual Transform HipsAnchor { get => hipsAnchor; set => hipsAnchor = value; }
 
         public virtual ulong UserId { get; set; }
-
-        protected Vector3LinearDelayedExtrapolator nodePositionExtrapolator = new();
-
-        protected QuaternionLinearDelayedExtrapolator nodeRotationExtrapolator = new();
 
         public TrackedSkeleton TrackedSkeleton;
         public PoseSkeleton PoseSkeleton = null;
@@ -88,6 +83,12 @@ namespace umi3d.cdk.userCapture
         private Dictionary<uint, bool> alreadyComputedBonesCache = new();
 
         /// <summary>
+        /// Containing id of the bones set by the TrackedSkeleton in <see cref="RetrieveBonesRotation(UMI3DSkeletonHierarchy)"/> method.
+        /// Preventing from the application of the Hips rotation to these bones in <see cref="ComputeBonePosition(uint)"/> method.
+        /// </summary>
+        private List<uint> bonesSetByTrackedSkeleton = new();
+
+        /// <summary>
         /// Compute the final position of each bone, and their parents recursively if not already computed
         /// </summary>
         /// <param name="boneType"></param>
@@ -101,7 +102,10 @@ namespace umi3d.cdk.userCapture
                     ComputeBonePosition(boneRelation.boneTypeParent);
 
                 Bones[boneType].s_Position = Bones[boneRelation.boneTypeParent].s_Position + Bones[boneRelation.boneTypeParent].s_Rotation * boneRelation.relativePosition;
-                Bones[boneType].s_Rotation = Bones[BoneType.Hips].s_Rotation * Bones[boneType].s_Rotation; // all global bones rotations should be turned the same way as the anchor
+
+                if (!bonesSetByTrackedSkeleton.Contains(boneType))
+                    Bones[boneType].s_Rotation = Bones[BoneType.Hips].s_Rotation * Bones[boneType].s_Rotation; // all global bones rotations should be turned the same way as the anchor
+                
                 alreadyComputedBonesCache[boneType] = true;
             }
         }
@@ -120,6 +124,8 @@ namespace umi3d.cdk.userCapture
                 else
                     Bones[bone] = new ISkeleton.s_Transform() { s_Rotation = Quaternion.identity };
             }
+
+            bonesSetByTrackedSkeleton.Clear();
 
             // for each subskeleton, in descending order (lastest has lowest priority),
             // get the relative orientation of all available bones
@@ -150,6 +156,14 @@ namespace umi3d.cdk.userCapture
                         Bones[b.boneType].s_Rotation = b.rotation.Quaternion();
                     else
                         Bones.Add(b.boneType, new ISkeleton.s_Transform() { s_Rotation = b.rotation.Quaternion() });
+                }
+
+                if (i == 0) //the TrackedSkeleton is the first SubSkeleton
+                {
+                    foreach (var b in bones)
+                    {
+                        bonesSetByTrackedSkeleton.Add(b.boneType);
+                    }
                 }
             }
         }

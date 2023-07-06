@@ -16,6 +16,7 @@ limitations under the License.
 
 using inetum.unityUtils;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using umi3d.cdk.userCapture;
@@ -35,7 +36,7 @@ namespace umi3d.cdk.collaboration.userCapture
 
         CollaborativeSkeletonsScene collabScene { get; }
 
-        ISkeleton GetSkeletonById(ulong userId);
+        ISkeleton TryGetSkeletonById(ulong userId);
     }
 
     public class CollaborativeSkeletonManager : Singleton<CollaborativeSkeletonManager>, ISkeletonManager, ICollaborativeSkeletonsManager
@@ -105,22 +106,20 @@ namespace umi3d.cdk.collaboration.userCapture
         {
             UMI3DCollaborationEnvironmentLoader.OnUpdateUserList += () => UpdateSkeletons(collaborativeLoaderService.UserList);
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => { InitSkeletons(); SetTrackingSending(ShouldSendTracking); canClearSkeletons = true; });
-            UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.AddListener(() => 
-            { 
-                if (canClearSkeletons)
-                {
-                    skeletons.Clear();
-                    canClearSkeletons = false;
-                }
-            });
-            UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(() => 
+            UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.AddListener(Clear);
+            UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(Clear);
+        }
+
+        public void Clear()
+        {
+            if (canClearSkeletons)
             {
-                if (canClearSkeletons)
-                {
-                    skeletons.Clear();
-                    canClearSkeletons = false;
-                } 
-            });
+                skeletons.Clear();
+                canClearSkeletons = false;
+            }
+
+            if (computeCoroutine != null)
+                CoroutineManager.Instance.DettachLateRoutine(computeCoroutine);
         }
 
         public void InitSkeletons()
@@ -175,6 +174,8 @@ namespace umi3d.cdk.collaboration.userCapture
                     cs.Bones[bone] = new ISkeleton.s_Transform() { s_Rotation = Quaternion.identity };
             }
 
+            computeCoroutine ??= CoroutineManager.Instance.AttachLateRoutine(ComputeCoroutine());
+
             return cs;
         }
 
@@ -189,7 +190,7 @@ namespace umi3d.cdk.collaboration.userCapture
             return skeletons.Values.Where(x => x is CollaborativeSkeleton).Select(x => x as CollaborativeSkeleton).ToList();
         }
 
-        public ISkeleton GetSkeletonById(ulong userId)
+        public ISkeleton TryGetSkeletonById(ulong userId)
         {
             if (skeletons.ContainsKey(userId))
                 return skeletons[userId];
@@ -219,7 +220,23 @@ namespace umi3d.cdk.collaboration.userCapture
             }
 
             skeleton.UpdateFrame(frame);
-            skeleton.Compute();
+        }
+
+        private IEnumerator computeCoroutine;
+
+        private IEnumerator ComputeCoroutine()
+        {
+            while (skeletons.Count > 1)
+            {
+                foreach (var skeleton in skeletons)
+                {
+                    if (skeleton.Key != personalSkeleton.UserId)
+                    {
+                        skeleton.Value.Compute();
+                    }
+                }
+                yield return null;
+            }
         }
 
         public UserCameraPropertiesDto GetCameraProperty()
