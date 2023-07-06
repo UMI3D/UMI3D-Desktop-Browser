@@ -7,3 +7,20 @@
 	flex-grow: 1;
 	justify-content: center;
 }
+
+.tip-carousel {
+	border-top-width: 2px;
+	border-bottom-width: 2px;
+	align-self: center;
+	align-items: center;
+	border-color: white;
+	height: 60%;
+	width: 100%;
+}
+
+.tip-carousel-container {
+	align-self: center;
+	align-items: center;
+	width: 100%;
+	justify-content: center;
+}

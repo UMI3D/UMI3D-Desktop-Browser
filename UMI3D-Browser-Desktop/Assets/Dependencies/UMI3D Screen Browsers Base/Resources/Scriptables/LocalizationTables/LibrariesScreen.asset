@@ -14,63 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: LibrariesScreen
   Items:
-  - Key: Library_UsedBy
-    English: Used by:\n\n{0}
-    French: "Utilis\xE9 par:\\n\\n{0}"
-    Spanish: Utilizado por:\n\n{0}
-  - Key: Search_Label
-    English: Search
-    French: Recherche
-    Spanish: Buscar en
-  - Key: Filter_Label
-    English: Filter
-    French: Filtre
-    Spanish: Filtro
-  - Key: Sort_Name
-    English: Name
-    French: Nom
-    Spanish: Nombre
-  - Key: Sort_Size
-    English: Size
-    French: Taille
-    Spanish: Talla
-  - Key: Delete_library_Title
-    English: Do you want to uninstall this library ?
-    French: "Voulez-vous d\xE9sinstaller cette biblioth\xE8que ?"
-    Spanish: "\xBFDesea desinstalar esta biblioteca?"
-  - Key: Delete_Library_Description
-    English: '''{0}'' is required by {1} environments'
-    French: '''{0}'' est requis par {1} environnements.'
-    Spanish: '{0}'' es requerido por {1} entornos'
-  - Key: Delete_All_libraries
-    English: Delete All libraries
-    French: "Supprimer toutes les biblioth\xE8ques"
-    Spanish: Borrar todas las bibliotecas
-  - Key: Delete_Filtered_libraries
-    English: Delete libraries from {0}
-    French: "Supprimer les biblioth\xE8ques de {0}"
-    Spanish: Borrar bibliotecas de {0}
-  - Key: Filter_All
-    English: All
-    French: Tout
-    Spanish: Todos
-  - Key: Delete_Filteredlibraries_Title
-    English: Uninstall filtered libraries
-    French: "D\xE9sinstaller les biblioth\xE8ques filtr\xE9es"
-    Spanish: Desinstalar bibliotecas filtradas
-  - Key: Delete_Filteredlibraries_Description
-    English: Do you want to uninstall the {0} filtered libraries ?
-    French: "Voulez-vous d\xE9sinstaller les {0} biblioth\xE8ques filtr\xE9es ?"
-    Spanish: "\xBFDesea desinstalar las {0} bibliotecas filtradas?"
-  - Key: Library_WrongPath_Title
-    English: Some libraries are not found
-    French: "Certaines biblioth\xE8ques ne sont pas trouv\xE9es"
-    Spanish: Algunas bibliotecas no se encuentran
-  - Key: Library_WrongPath_Description
-    English: 'Here is the list of the path that are not found:'
-    French: "Voici la liste des chemins qui ne sont pas trouv\xE9s :"
-    Spanish: "Aqu\xED est\xE1 la lista de la ruta que no se encuentran:"
-  - Key: Library_WrongPath_ShowMe
-    English: Show me
-    French: Montre-moi
-    Spanish: "Mu\xE9strame"
+  - Key: CameraSensibility
+    English: Camera sensibility
+    French: "Sensibilit\xE9 de la cam\xE9ra"
+    Spanish: "Sensibilidad de la c\xE1mara"
+  - Key: JoystickStatic_Label
+    English: Static joystick
+    French: Joystick statique
+    Spanish: "Joystick est\xE1tico"
+  - Key: LeftHand_Label
+    English: Left hand interface
+    French: Interface gaucher
+    Spanish: Interfaz zurdos
+  - Key: Navigations
+    English: Navigations
+    French: "D\xE9placement"
+    Spanish: Navigations
+  - Key: Shortcuts
+    English: Shortcuts
+    French: Raccourcis
+    Spanish: Shortcuts

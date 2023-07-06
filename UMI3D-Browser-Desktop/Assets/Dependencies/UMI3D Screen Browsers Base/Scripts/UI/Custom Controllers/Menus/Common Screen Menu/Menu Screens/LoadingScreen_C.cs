@@ -13,7 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using Mono.Cecil;
+using System.Collections.Generic;
+using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace umi3d.commonScreen.menu
@@ -55,9 +59,14 @@ namespace umi3d.commonScreen.menu
         public override string UssCustomClass_Emc => "loading-screen";
         public virtual string USSCustomClassMain => $"{UssCustomClass_Emc}__main";
         public virtual string USSCustomClassLoadingBar => $"{UssCustomClass_Emc}__loading-bar";
+        public virtual string USSCustomClassTipCarousel => $"tip-carousel";
+        public virtual string USSCustomClassTipCarouselContainer => $"tip-carousel-container";
 
         public VisualElement Main = new VisualElement();
         public LoadingBar_C LoadingBar = new LoadingBar_C();
+
+        public VisualElement TipCarouselContainer = new VisualElement();
+        public Carousel_C TipCarousel = new Carousel_C();
 
         public virtual LocalisationAttribute Message
         {
@@ -71,20 +80,48 @@ namespace umi3d.commonScreen.menu
             set => LoadingBar.value = value;
         }
 
-        public LoadingScreen_C() { }
+        public LoadingScreen_C()
+        {
+            var tipsElements = new List<VisualElement>();
+            var tipsTables = Resources.LoadAll<TipsTable>("");
+            foreach (var tables in tipsTables)
+            {
+                foreach (var tip in tables.Tips)
+                {
+                    var element = new CarouselTip_C();
+                    element.Setup(tip.Title, tip.Message);
+
+                    tipsElements.Add(element);
+                }
+            }
+
+            TipCarousel.Setup(tipsElements);
+            TipCarousel.SetAnimationActive(false);
+        }
 
         protected override void AttachUssClass()
         {
             base.AttachUssClass();
             Main.AddToClassList(USSCustomClassMain);
             LoadingBar.AddToClassList(USSCustomClassLoadingBar);
+            TipCarousel.AddToClassList(USSCustomClassTipCarousel);
+            TipCarouselContainer.AddToClassList(USSCustomClassTipCarouselContainer);
         }
 
         protected override void InitElement()
         {
             base.InitElement();
-            Add(Main);
+            TipCarouselContainer.Add(TipCarousel);
+
+            Main.Add(TipCarouselContainer);
             Main.Add(LoadingBar);
+
+            Add(Main);
+
+            LoadingBar.RegisterCallback<GeometryChangedEvent>((ec) =>
+            {
+                TipCarouselContainer.style.height = Main.resolvedStyle.height - ec.newRect.height;
+            });
         }
 
         protected override void SetProperties()
