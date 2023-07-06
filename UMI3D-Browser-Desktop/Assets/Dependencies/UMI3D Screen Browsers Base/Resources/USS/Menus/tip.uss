@@ -1,0 +1,22 @@
+.tip-carousel-main {
+	align-self: center;
+	align-items: center;
+	width: 75%;
+	border-width: 0px;
+	height: 100%;
+	justify-content: center;
+}
+
+.tip-carousel-title {
+    color: var(--color-navigation-game-displayer);
+	margin-bottom: 30px;
+    -unity-font-style: bold;
+	width: 100%;
+}
+
+.tip-carousel-message {
+	border-width: 2px;
+	border-color: black;
+	padding: 12px;
+	width: 50%;
+}

@@ -31,29 +31,29 @@
 
 .carrousel-prev_icon {
     background-image: var(--image-arrow_carrousel);
-    height: 90%;
-    width: 90%;
+    height: 50%;
+    width: 50%;
     rotate: 180deg;
 }
 
 .carrousel-next_icon {
     background-image: var(--image-arrow_carrousel);
-    height: 90%;
-    width: 90%;
+    height: 50%;
+    width: 50%;
 }
 
 .carrousel-select_hover {
     background-image: var(--image-select_hover);
-    width: 10px;
-    height: 10px;
+    width: 20px;
+    height: 20px;
     margin-left: var(--margin_padding-container);
     margin-right: var(--margin_padding-container);
 }
 
 .carrousel-select_active {
     background-image: var(--image-select_active);
-    width: 10px;
-    height: 10px;
+    width: 20px;
+    height: 20px;
     margin-left: var(--margin_padding-container);
     margin-right: var(--margin_padding-container);
 }
