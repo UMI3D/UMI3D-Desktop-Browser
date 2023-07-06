@@ -793,12 +793,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PersonalSkeletonContainer
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8675927111129787877, guid: 29302a75356134040aac5a7d0d21d2f2, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29302a75356134040aac5a7d0d21d2f2, type: 3}
 --- !u!1 &677918340615927782 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 4255139954138875787, guid: 29302a75356134040aac5a7d0d21d2f2,
+  m_CorrespondingSourceObject: {fileID: 8675927111129791007, guid: 29302a75356134040aac5a7d0d21d2f2,
     type: 3}
   m_PrefabInstance: {fileID: 677918340615927781}
   m_PrefabAsset: {fileID: 0}
@@ -811,7 +810,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 677918340615927782}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boneType: 58
+--- !u!1 &677918340615927784 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6003036889062742757, guid: 29302a75356134040aac5a7d0d21d2f2,
+    type: 3}
+  m_PrefabInstance: {fileID: 677918340615927781}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &677918340615927785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677918340615927784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 07998d91489b7224eb4dc0020d36b280, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneType: 13
+  boneType: 3

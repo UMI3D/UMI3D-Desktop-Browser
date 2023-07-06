@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 287653166641701394}
   - component: {fileID: 287653166641707055}
-  - component: {fileID: 287653166641708624}
   m_Layer: 0
   m_Name: ViewpointPivot
   m_TagString: Untagged
@@ -47,19 +46,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frameRate: 30
---- !u!114 &287653166641708624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 287653166641702926}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07998d91489b7224eb4dc0020d36b280, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boneType: 58
 --- !u!1 &287653166641702927
 GameObject:
   m_ObjectHideFlags: 0
@@ -1181,25 +1167,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneType: 51
---- !u!1 &2942526782114695412 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -1781356600409242780, guid: da6770c40c5dded4a94522b1d0ad2d86,
-    type: 3}
-  m_PrefabInstance: {fileID: 5733835596339235728}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &287653166641707288
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2942526782114695412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boneType: 3
 --- !u!1 &3000233268456238640 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7363479242261063072, guid: da6770c40c5dded4a94522b1d0ad2d86,
