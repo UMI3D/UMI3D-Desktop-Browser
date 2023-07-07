@@ -93,6 +93,15 @@ namespace umi3d.commonScreen.menu
 
                     _tips.Add(myTip);
                     _tipsTables_SV.Add(myTip);
+
+                    myTip.Activated += () =>
+                    {
+                        foreach (var tip in _tips)
+                        {
+                            if (myTip == tip) continue;
+                            tip.DisplayMessage = false;
+                        }
+                    };
                 }
             }
         }

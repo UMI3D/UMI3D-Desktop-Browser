@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using umi3d.commonScreen.Displayer;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -87,8 +88,20 @@ namespace umi3d.commonScreen.menu
             get => m_displayMessage;
             set
             {
+                if (m_displayMessage == value) return;
                 m_displayMessage = value;
-                if (m_displayMessage) this.AddIfNotInHierarchy(Overlay);
+                if (m_displayMessage)
+                {
+                    this.AddIfNotInHierarchy(Overlay);
+                    DropDown_Button_Background.AddToClassList(USSCustomClassDropDown_Active); 
+                    DropDown_Button_Icon_Background.AddToClassList(USSCustomClassDropDown_Active);
+                    Activated?.Invoke();
+                } 
+                else
+                {
+                    DropDown_Button_Background.RemoveFromClassList(USSCustomClassDropDown_Active);
+                    DropDown_Button_Icon_Background.RemoveFromClassList(USSCustomClassDropDown_Active);
+                }
 
                 DropDown_Button_Icon
                     .SetRotate(m_displayMessage ? new Rotate(180) : new Rotate(90))
@@ -109,6 +122,8 @@ namespace umi3d.commonScreen.menu
                     );
             }
         }
+        public Action Activated;
+
         public override string StyleSheetPath_MainTheme => $"USS/menu";
         public static string StyleSheetPath_MainStyle => $"{ElementExtensions.StyleSheetMenusFolderPath}/library";
 
@@ -122,6 +137,7 @@ namespace umi3d.commonScreen.menu
         public virtual string USSCustomClassTitle => $"{UssCustomClass_Emc}-title";
         public virtual string USSCustomClassDropDown_Field => $"{UssCustomClass_Emc}-drop_down__field";
         public virtual string USSCustomClassDropDown_Message => $"{UssCustomClass_Emc}-drop_down__message";
+        public virtual string USSCustomClassDropDown_Active => $"{UssCustomClass_Emc}-dropdown-active";
 
         public Visual_C Overlay = new Visual_C { name = "overlay" }; public Text_C TitleLabel = new Text_C { name = "title" };
         public Visual_C Main = new Visual_C { name = "main" }; 
@@ -171,6 +187,7 @@ namespace umi3d.commonScreen.menu
             DropDown_Button.Add(DropDown_Button_Background);
 
             Overlay.Add(DropDown_Field);
+
         }
 
         protected override void SetProperties()

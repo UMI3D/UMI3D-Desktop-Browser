@@ -99,6 +99,7 @@
     padding-right: var(--margin_padding-displayer);
     padding-top: var(--margin_padding-displayer);
     padding-bottom: var(--margin_padding-displayer);
+    -unity-font-style: italic;
 }
 
 .library-drop_down__field {
@@ -108,9 +109,11 @@
     flex-shrink: 0;
     background-color: var(--color-background-library-field);
     margin-left: var(--margin_padding-displayer-menu);
-    margin-right: var(--margin_padding-displayer-menu);
+    margin-right: 20%;
     margin-top: 0;
     margin-bottom: var(--margin_padding-displayer-menu);
+    
+    width: 80%;
 }
 
 .library-drop_down__date {
@@ -119,4 +122,8 @@
     position: absolute;
     left: var(--margin_padding-displayer-menu);
     right: var(--margin_padding-displayer-menu);
+}
+
+.library-dropdown-active {
+    background-color: var(--color-selected-menu);
 }
