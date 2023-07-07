@@ -159,7 +159,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1433665921482339848}
   - component: {fileID: 1433665921482339847}
-  - component: {fileID: 5337037464207691861}
+  - component: {fileID: 3389035553845364196}
   m_Layer: 0
   m_Name: ViewpointPivot
   m_TagString: Untagged
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frameRate: 30
---- !u!114 &5337037464207691861
+--- !u!114 &3389035553845364196
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -205,7 +205,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1433665921482339849}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07998d91489b7224eb4dc0020d36b280, type: 3}
+  m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   boneType: 58
@@ -385,7 +385,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1809d8680b4ed46a67c7dce68a18fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewpoint: {fileID: 0}
+  Viewpoint: {fileID: 0}
+  Hips: {fileID: 555549891016304186}
   trackedAnimator: {fileID: 5788377252427408587}
 --- !u!1 &4398068943549228801
 GameObject:
@@ -920,6 +921,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneType: 42
+--- !u!4 &555549891016304186 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5465940246521907071, guid: da6770c40c5dded4a94522b1d0ad2d86,
+    type: 3}
+  m_PrefabInstance: {fileID: 5507724358421553477}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1130539977869609997 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -4332706925441422008, guid: da6770c40c5dded4a94522b1d0ad2d86,

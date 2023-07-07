@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d.common.userCapture;
-
+using System.Collections.Generic;
+using umi3d.common.userCapture.description;
+using umi3d.common.userCapture.pose;
 using UnityEngine;
 
 namespace umi3d.cdk.userCapture
@@ -24,5 +25,8 @@ namespace umi3d.cdk.userCapture
     {
         [Header("User Capture")]
         public UMI3DSkeletonHierarchyDefinition SkeletonHierarchyDefinition;
+
+        [Header("Poses")]
+        public List<UMI3DPose_so> clientPoses = new List<UMI3DPose_so>();
     }
 }

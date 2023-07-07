@@ -19,6 +19,7 @@ using UnityEngine.UIElements;
 using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.Container;
 using umi3d.cdk.collaboration;
+using umi3d.cdk.collaboration.emotes;
 
 namespace umi3d.commonScreen.game
 {

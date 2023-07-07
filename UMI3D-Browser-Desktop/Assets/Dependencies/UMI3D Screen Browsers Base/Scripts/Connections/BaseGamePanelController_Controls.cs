@@ -13,6 +13,7 @@ limitations under the License.
 using umi3d.baseBrowser.cursor;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk.collaboration;
+using umi3d.cdk.collaboration.emotes;
 using umi3d.commonScreen.game;
 using UnityEngine;
 using UnityEngine.InputSystem;
