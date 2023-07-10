@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b68490867691549beb2de405ead8f6, type: 3}
   m_Name: LocalisationSettings
   m_EditorClassIdentifier: 
-  _languages: []
-  _baseLanguage:
-    Name: 
-    IsActive: 0
+  _languages:
+  - Name: Spanish
+    IsActive: 1
+  - Name: French
+    IsActive: 1
+  - Name: English
+    IsActive: 1
+  _baseLanguageIndex: 2

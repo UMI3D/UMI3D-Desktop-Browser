@@ -15,12 +15,42 @@ MonoBehaviour:
   Title: ControlsSettings
   Items:
   - Key: CameraSensibility
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: JoystickStatic_Label
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: LeftHand_Label
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Navigations
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Shortcuts
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1

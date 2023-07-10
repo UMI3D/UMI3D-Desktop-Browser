@@ -15,56 +15,218 @@ MonoBehaviour:
   Title: LauncherScreen
   Items:
   - Key: Home
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Settings
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Data
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Libraries
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: No_Connection_Tile
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: NoConnection_Description
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: WeakConnection_Title
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: WeakConnection_Description
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: WeakConnection_ConnectAnyway
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: DeleteServer_Description
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: UpdateServer_Description
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: ConnectNewServer
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: DisplaySavedServer
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: RememberServer
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: SavedServers
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: ServerURL
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: CloseMenu
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: LeaveEnvironment
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: SessionCountLabel
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: ConnectionSettings
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: IPAdress
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: HttpPort
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: NewServer
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: EnterNewServer
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: ConnectionHistory
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: DeleteServerHistory_Description
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Tips
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1

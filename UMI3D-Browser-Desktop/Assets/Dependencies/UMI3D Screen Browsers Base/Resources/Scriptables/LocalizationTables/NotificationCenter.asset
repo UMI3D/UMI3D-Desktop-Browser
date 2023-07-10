@@ -15,14 +15,50 @@ MonoBehaviour:
   Title: NotificationCenter
   Items:
   - Key: Timestamp_Now
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: No_Notif
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: No_NewNotif
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: UserList_FilterLabel
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: NbNotifs
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: NbUsers
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1

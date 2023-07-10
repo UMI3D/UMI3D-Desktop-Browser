@@ -15,50 +15,194 @@ MonoBehaviour:
   Title: GenericStrings
   Items:
   - Key: Retry
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Save
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: General
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Graphics
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Controls
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Audio
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Notifications
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Connect
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Edit
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: New
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Default
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Cancel
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Delete
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Sessions
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Name
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Resume
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Stop
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Leave
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Reconnect
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Accept
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Deny
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Connection
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Stay
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: Join
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1

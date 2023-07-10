@@ -15,30 +15,114 @@ MonoBehaviour:
   Title: ErrorStrings
   Items:
   - Key: Error
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: OtherError
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: LoadError
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: NetworkError
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: ResourcesDenied
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: ResourcesEmpty
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: ServerError
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: ConnectionLost
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: LeaveOrTry
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: ForcedDeco
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: AssetsLibRequired1
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: AssetsLibRequired
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: DownloadAndConnect
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1
   - Key: LeaveEnv?
-    _languagesIndex: []
+    _languagesIndex:
+    - Name: English
+      IsActive: 1
+    - Name: French
+      IsActive: 1
+    - Name: Spanish
+      IsActive: 1

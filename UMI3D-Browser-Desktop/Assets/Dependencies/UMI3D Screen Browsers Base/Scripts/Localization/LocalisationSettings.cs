@@ -23,10 +23,10 @@ public class LocalisationSettings : ScriptableObject
 
     [SerializeField] private List<Language> _languages;
 
-    [SerializeField] private Language _baseLanguage;
+    [SerializeField] private int _baseLanguageIndex;
 
     public List<Language> Languages => _languages.Where(e => e.IsActive).ToList();
-    public Language BaseLanguage => _baseLanguage;
+    public Language BaseLanguage => _languages[_baseLanguageIndex];
 
     private static LocalisationSettings _instance;
     public static LocalisationSettings Instance
@@ -35,12 +35,11 @@ public class LocalisationSettings : ScriptableObject
         {
             if (_instance != null) return _instance;
             _instance = AssetDatabase.LoadAssetAtPath<LocalisationSettings>(k_LocalisationSettingsPath);
-            _instance._languages.Clear();
             if (_instance != null) return _instance;
 
             _instance = CreateInstance<LocalisationSettings>();
             _instance._languages = new List<Language>();
-            _instance._baseLanguage = new Language();
+            _instance._baseLanguageIndex = 0;
             AssetDatabase.CreateAsset(_instance, k_LocalisationSettingsPath);
             AssetDatabase.SaveAssets();
 
@@ -129,16 +128,19 @@ class LocalisationSettingsProvider : SettingsProvider
 
         DrawLanguages();
 
-        /*var test = new List<string>();
+        var test = new List<LocalisationSettings.Language>();
+        var test2 = new List<string>();
         for (int i = 0; i < _settings.FindProperty("_languages").arraySize; i++)
         {
-            test.Add(_settings.FindProperty("_languages").GetArrayElementAtIndex(i).stringValue);
+            var settings = (LocalisationSettings)_settings.targetObject;
+            test.Add(settings.Languages[i]);
+            test2.Add(settings.Languages[i].Name);
         }
         if (test.Count > 0)
         {
-            _languageIndex = EditorGUILayout.Popup("Base Language", _languageIndex, test.ToArray());
-            _settings.FindProperty("_baseLanguage").stringValue = test[_languageIndex];
-        }*/
+            _settings.FindProperty("_baseLanguageIndex").intValue = EditorGUILayout.Popup("Base Language", _settings.FindProperty("_baseLanguageIndex").intValue, test2.ToArray());
+        }
+
         _settings.ApplyModifiedProperties();
     }
 

@@ -65,11 +65,9 @@ public class LocalisationTableItem
 
     public void AddLanguageIfNotExist(LocalisationSettings.Language language)
     {
-        _languagesIndex = new List<LocalisationSettings.Language>(); _values = new List<string>();
+        if (_languagesIndex == null) _languagesIndex = new List<LocalisationSettings.Language>(); _values = new List<string>();
 
-        Debug.Log(Key);
         if (_languagesIndex.Contains(language)) return;
-        Debug.Log(language.Name + " Added!");
         _languagesIndex.Add(language);
         _values.Add("");
     }
