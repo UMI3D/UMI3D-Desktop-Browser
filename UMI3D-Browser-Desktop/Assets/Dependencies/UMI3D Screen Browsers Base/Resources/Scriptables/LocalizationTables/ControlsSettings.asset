@@ -15,22 +15,12 @@ MonoBehaviour:
   Title: ControlsSettings
   Items:
   - Key: CameraSensibility
-    English: Camera sensibility
-    French: "Sensibilit\xE9 de la cam\xE9ra"
-    Spanish: "Sensibilidad de la c\xE1mara"
+    _languagesIndex: []
   - Key: JoystickStatic_Label
-    English: Static joystick
-    French: Joystick statique
-    Spanish: "Joystick est\xE1tico"
+    _languagesIndex: []
   - Key: LeftHand_Label
-    English: Left hand interface
-    French: Interface gaucher
-    Spanish: Interfaz zurdos
+    _languagesIndex: []
   - Key: Navigations
-    English: Navigations
-    French: "D\xE9placement"
-    Spanish: Navigations
+    _languagesIndex: []
   - Key: Shortcuts
-    English: Shortcuts
-    French: Raccourcis
-    Spanish: Shortcuts
+    _languagesIndex: []

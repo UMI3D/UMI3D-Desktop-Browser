@@ -15,26 +15,14 @@ MonoBehaviour:
   Title: Other
   Items:
   - Key: LoadingPercent
-    English: 'Total loading : {0} %'
-    French: 'Charge totale : {0} %.'
-    Spanish: 'Carga total : {0} %'
+    _languagesIndex: []
   - Key: LoadingEnv
-    English: Loading environment
-    French: Chargement de l'environnement
-    Spanish: Cargar el entorno
+    _languagesIndex: []
   - Key: LeavingEnv
-    English: Leaving environment
-    French: Quitter l'environnement
-    Spanish: Abandonar el entorno
+    _languagesIndex: []
   - Key: EditText
-    English: Edit Text
-    French: Modifier le texte
-    Spanish: Editar texto
+    _languagesIndex: []
   - Key: DisplayInteractionsMenu
-    English: Display interactions menu
-    French: Afficher le menu des interactions
-    Spanish: "Mostrar men\xFA de interacciones"
+    _languagesIndex: []
   - Key: LeaveEnvironment
-    English: Leave  the environment
-    French: Quitter l'environnement
-    Spanish: Salir del entorno
+    _languagesIndex: []

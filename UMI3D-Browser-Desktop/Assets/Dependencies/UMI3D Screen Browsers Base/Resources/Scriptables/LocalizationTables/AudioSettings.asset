@@ -15,51 +15,26 @@ MonoBehaviour:
   Title: AudioSettings
   Items:
   - Key: LoopBack_on
-    English: Loop back on
-    French: "Bouclage activ\xE9"
-    Spanish: Bucle activado
+    _languagesIndex: []
   - Key: LoopBack_off
-    English: Loop back off
-    French: "Bouclage d\xE9sactiv\xE9"
-    Spanish: "Desactivaci\xF3n de bucles"
+    _languagesIndex: []
   - Key: AmplitudeSlider
-    English: Noise Threshold
-    French: Seuil de bruit
-    Spanish: Umbral de ruido
+    _languagesIndex: []
   - Key: DelayShutMic
-    English: Delay before mute mic when lower than threshold
-    French: "D\xE9lai avant la mise en sourdine du micro lorsqu'il est inf\xE9rieur
-      au seuil"
-    Spanish: "Retardo antes de silenciar el micr\xF3fono cuando es inferior al umbral"
+    _languagesIndex: []
   - Key: GeneralVolume
-    English: General volume
-    French: "Volume g\xE9n\xE9ral"
-    Spanish: Volumen general
+    _languagesIndex: []
   - Key: Mic_Label
-    English: Microphone
-    French: Microphone
-    Spanish: "Micr\xF3fono"
+    _languagesIndex: []
   - Key: MicMode_AlwaysSend
-    English: Always send
-    French: Toujours envoyer
-    Spanish: Enviar siempre
+    _languagesIndex: []
   - Key: MicMode_Amplitude
-    English: Amplitude
-    French: Amplitude
-    Spanish: Amplitud
+    _languagesIndex: []
   - Key: MicMode_PushToTalk
-    English: Push to talk
-    French: Push to talk
-    Spanish: Push to talk
+    _languagesIndex: []
   - Key: MicMode_Label
-    English: Mode
-    French: Mode
-    Spanish: Modo
+    _languagesIndex: []
   - Key: NoiseReduc_Label
-    English: Use noise reduction
-    French: "Utiliser la r\xE9duction du bruit"
-    Spanish: Reducir el ruido
+    _languagesIndex: []
   - Key: PushToTalk_Label
-    English: Push to talk key
-    French: Touche "Push to talk"
-    Spanish: "Bot\xF3n \"Push to talk\""
+    _languagesIndex: []

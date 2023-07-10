@@ -15,58 +15,30 @@ MonoBehaviour:
   Title: ErrorStrings
   Items:
   - Key: Error
-    English: Error
-    French: Erreur
-    Spanish: Error
+    _languagesIndex: []
   - Key: OtherError
-    English: Other error
-    French: Autre erreur
-    Spanish: Otro error
+    _languagesIndex: []
   - Key: LoadError
-    English: Loading error
-    French: Erreur de chargement
-    Spanish: Error de carga
+    _languagesIndex: []
   - Key: NetworkError
-    English: Networking error {0}
-    French: "Erreur de mise en r\xE9seau {0}"
-    Spanish: Error de red {0}
+    _languagesIndex: []
   - Key: ResourcesDenied
-    English: Resources acess was denied
-    French: "L'acc\xE8s aux ressources a \xE9t\xE9 refus\xE9"
-    Spanish: "L'acc\xE8s aux ressources a \xE9t\xE9 refus\xE9"
+    _languagesIndex: []
   - Key: ResourcesEmpty
-    English: Resources Downloaded was empty
-    French: "Les ressources t\xE9l\xE9charg\xE9es \xE9taient vides"
-    Spanish: "Los recursos descargados estaban vac\xEDos"
+    _languagesIndex: []
   - Key: ServerError
-    English: Server error
-    French: Erreur de serveur
-    Spanish: Error del servidor
+    _languagesIndex: []
   - Key: ConnectionLost
-    English: Connection to the server lost
-    French: Perte de la connexion au serveur
-    Spanish: Perte de la connexion au serveur
+    _languagesIndex: []
   - Key: LeaveOrTry
-    English: Leave the environment or try to reconnect ?
-    French: Quitter l'environnement ou essayer de se reconnecter ?
-    Spanish: "\xBFSalir del entorno o intentar volver a conectarse?"
+    _languagesIndex: []
   - Key: ForcedDeco
-    English: Forced Deconnection
-    French: "D\xE9connexion forc\xE9e"
-    Spanish: "Desconexi\xF3n forzada"
+    _languagesIndex: []
   - Key: AssetsLibRequired1
-    English: One assets library is required
-    French: "Une biblioth\xE8que de ressources est n\xE9cessaire"
-    Spanish: Se necesita una biblioteca de activos
+    _languagesIndex: []
   - Key: AssetsLibRequired
-    English: '{0} assets libraries are required'
-    French: "{0} biblioth\xE8ques de ressources sont n\xE9cessaires"
-    Spanish: Se necesitan {0} bibliotecas de activos
+    _languagesIndex: []
   - Key: DownloadAndConnect
-    English: Download libraries and connect to the server ?
-    French: "T\xE9l\xE9charger les biblioth\xE8ques et se connecter au serveur ?"
-    Spanish: Descargar bibliotecas y conectarse al servidor ?
+    _languagesIndex: []
   - Key: LeaveEnv?
-    English: Do you want to leave the environment ?
-    French: Voulez-vous quitter l'environnement ?
-    Spanish: "\xBFQuiere abandonar el medio ambiente?"
+    _languagesIndex: []

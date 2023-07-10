@@ -26,8 +26,8 @@ namespace inetum.unityUtils.editor
     [CustomEditor(typeof(Object), true)]
     public class UMI3DInspector : Editor
     {
-        private List<SerializedProperty> _serializedProperties = new List<SerializedProperty>();
-        private IEnumerable<MethodInfo> _methods;
+        protected List<SerializedProperty> _serializedProperties = new List<SerializedProperty>();
+        protected IEnumerable<MethodInfo> _methods;
 
         protected virtual void OnEnable()
         {
@@ -48,7 +48,7 @@ namespace inetum.unityUtils.editor
             DrawButtons();
         }
 
-        private void OnDisable()
+        protected void OnDisable()
         {
             TableListDrawer.Instance.ClearCache();
         }
@@ -67,7 +67,7 @@ namespace inetum.unityUtils.editor
             }
         }
 
-        private void DrawSerializedProperties()
+        protected void DrawSerializedProperties()
         {
             serializedObject.Update();
 
@@ -87,7 +87,7 @@ namespace inetum.unityUtils.editor
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawButtons()
+        protected void DrawButtons()
         {
             if (_methods.Any())
             {

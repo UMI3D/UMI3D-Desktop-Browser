@@ -15,26 +15,14 @@ MonoBehaviour:
   Title: GeneralSettings
   Items:
   - Key: Language
-    English: Language
-    French: Langage
-    Spanish: Idioma
+    _languagesIndex: []
   - Key: English
-    English: English
-    French: Anglais
-    Spanish: "Ingl\xE9s"
+    _languagesIndex: []
   - Key: French
-    English: French
-    French: "Fran\xE7ais"
-    Spanish: "Franc\xE9s"
+    _languagesIndex: []
   - Key: Spanish
-    English: Spanish
-    French: Espagnol
-    Spanish: "Espa\xF1ol"
+    _languagesIndex: []
   - Key: Theme_Titre
-    English: Theme
-    French: "Th\xE8me"
-    Spanish: Tema
+    _languagesIndex: []
   - Key: Theme_Default
-    English: Default
-    French: "D\xE9faut"
-    Spanish: Defecto
+    _languagesIndex: []

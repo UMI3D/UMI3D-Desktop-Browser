@@ -15,22 +15,12 @@ MonoBehaviour:
   Title: GameDataScreen
   Items:
   - Key: GameData
-    English: Game Data
-    French: "Donn\xE9es du jeu"
-    Spanish: Datos del juego
+    _languagesIndex: []
   - Key: WorldName
-    English: 'World name:'
-    French: 'Nom du monde :'
-    Spanish: 'Nombre del mundo:'
+    _languagesIndex: []
   - Key: EnvironmentName
-    English: 'Environment name:'
-    French: 'Nom de l''environnement :'
-    Spanish: 'Nombre del entorno:'
+    _languagesIndex: []
   - Key: TimeSpent
-    English: 'Time spent in the environment:'
-    French: "Temps pass\xE9 dans l'environnement :"
-    Spanish: 'Tiempo pasado en el entorno:'
+    _languagesIndex: []
   - Key: NbParticipants
-    English: 'Number of participants in the environment:'
-    French: 'Nombre de participants dans l''environnement :'
-    Spanish: "N\xFAmero de participantes en el entorno:"
+    _languagesIndex: []

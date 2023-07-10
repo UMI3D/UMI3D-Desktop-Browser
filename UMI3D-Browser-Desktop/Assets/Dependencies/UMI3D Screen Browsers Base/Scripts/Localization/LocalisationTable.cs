@@ -12,16 +12,14 @@ limitations under the License.
 */
 using inetum.unityUtils;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewTableLocalization", menuName = "ScriptableObjects/LocalizationTable")]
 public class LocalisationTable : ScriptableObject
 {
     public string Title;
-    [TableList]
+    //[TableList]
     public List<LocalisationTableItem> Items;
 
     /// <summary>
@@ -37,54 +35,54 @@ public class LocalisationTable : ScriptableObject
         Debug.Log("table: "+Title+", key not found: "+key);
         return null;
     }
+    /*
+    #if UNITY_EDITOR
+        const string k_path = "./Localization/";
 
-#if UNITY_EDITOR
-    const string k_path = "./Localization/";
-
-    [Button("Import from csv")]
-    public void Import()
-    {
-        var path = EditorUtility.OpenFilePanel("test", k_path, "*.*");
-
-        if (!path.EndsWith(".csv"))
+        [Button("Import from csv")]
+        public void Import()
         {
-            Debug.LogError(path + " must be a .csv file!");
-            return;
-        }
+            var path = EditorUtility.OpenFilePanel("test", k_path, "*.*");
 
-        Items = new List<LocalisationTableItem>();
-        var lines = File.ReadLines(path).ToList();
-        for (int i = 1; i < lines.Count; i++)
-        {
-            var element = lines[i].Split(",");
-            Items.Add(new LocalisationTableItem()
+            if (!path.EndsWith(".csv"))
             {
-                Key = element[0],
-                English = element[1],
-                French = element[2],
-                Spanish = element[3]
-            });
-        }
-    }
+                Debug.LogError(path + " must be a .csv file!");
+                return;
+            }
 
-    [Button("Export to csv")]
-    public void Export()
-    {
-        string t = "Key,English,French,Spanish";
-        for (int i = 0; i < Items.Count; i++)
-        {
-            var item = Items[i];
-            t += $"\n{item.Key}," +
-                $"{item.English}," +
-                $"{item.French}," +
-                $"{item.Spanish}";
+            Items = new List<LocalisationTableItem>();
+            var lines = File.ReadLines(path).ToList();
+            for (int i = 1; i < lines.Count; i++)
+            {
+                var element = lines[i].Split(",");
+                Items.Add(new LocalisationTableItem()
+                {
+                    Key = element[0],
+                    English = element[1],
+                    French = element[2],
+                    Spanish = element[3]
+                });
+            }
         }
 
-        using (StreamWriter sw = File.CreateText(k_path + Title + ".csv"))
+        [Button("Export to csv")]
+        public void Export()
         {
-            sw.Write(t);
+            string t = "Key,English,French,Spanish";
+            for (int i = 0; i < Items.Count; i++)
+            {
+                var item = Items[i];
+                t += $"\n{item.Key}," +
+                    $"{item.English}," +
+                    $"{item.French}," +
+                    $"{item.Spanish}";
+            }
+
+            using (StreamWriter sw = File.CreateText(k_path + Title + ".csv"))
+            {
+                sw.Write(t);
+            }
+            Debug.Log($"Saved {Title} as CSV");
         }
-        Debug.Log($"Saved {Title} as CSV");
-    }
-#endif
+    #endif*/
 }

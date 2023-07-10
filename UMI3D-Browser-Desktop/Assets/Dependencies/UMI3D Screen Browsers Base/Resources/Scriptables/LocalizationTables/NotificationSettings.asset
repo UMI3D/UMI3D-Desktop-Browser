@@ -15,17 +15,8 @@ MonoBehaviour:
   Title: NotificationSettings
   Items:
   - Key: Hide_Label
-    English: Hide notifications
-    French: Cacher les notifications
-    Spanish: Ocultar notificaciones
+    _languagesIndex: []
   - Key: Hide_Off
-    English: You will be notified when you receive a notification.
-    French: "Vous serez inform\xE9 lorsque vous recevrez une notification."
-    Spanish: "Se le avisar\xE1 cuando reciba una notificaci\xF3n."
+    _languagesIndex: []
   - Key: Hide_On
-    English: Notification will still be availlable in the notification center but
-      you won't be notified when you recieve them.
-    French: Les notifications seront toujours disponibles dans le centre de notification
-      mais vous ne serez pas averti lorsque vous les recevrez.
-    Spanish: "Las notificaciones seguir\xE1n estando disponibles en el centro de
-      notificaciones, pero no recibir\xE1s una notificaci\xF3n cuando las recibas."
+    _languagesIndex: []

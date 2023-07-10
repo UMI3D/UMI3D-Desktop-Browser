@@ -15,26 +15,14 @@ MonoBehaviour:
   Title: NotificationCenter
   Items:
   - Key: Timestamp_Now
-    English: Now
-    French: Maintenant
-    Spanish: Ahora
+    _languagesIndex: []
   - Key: No_Notif
-    English: No notification
-    French: Pas de notification
-    Spanish: "Sin notificaci\xF3n"
+    _languagesIndex: []
   - Key: No_NewNotif
-    English: No new notification
-    French: Pas de nouvelle notification
-    Spanish: "Ninguna nueva notificaci\xF3n"
+    _languagesIndex: []
   - Key: UserList_FilterLabel
-    English: 'Search by user name:'
-    French: 'Recherche par nom d''utilisateur :'
-    Spanish: "B\xFAsqueda por nombre de usuario:"
+    _languagesIndex: []
   - Key: NbNotifs
-    English: 'Notifications: {0}'
-    French: 'Notifications : {0}'
-    Spanish: 'Notificaciones: {0}'
+    _languagesIndex: []
   - Key: NbUsers
-    English: 'Users: {0}'
-    French: 'Utilisateurs : {0}'
-    Spanish: 'Usuarios: {0}'
+    _languagesIndex: []

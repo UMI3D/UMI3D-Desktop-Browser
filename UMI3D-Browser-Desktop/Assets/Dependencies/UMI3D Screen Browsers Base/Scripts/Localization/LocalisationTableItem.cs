@@ -10,19 +10,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static umi3d.baseBrowser.preferences.SettingsPreferences;
 
 [System.Serializable]
-public struct LocalisationTableItem
+public class LocalisationTableItem
 {
     public string Key;
-    public string English;
-    public string French;
-    public string Spanish;
+    private List<string> _values;
+    [SerializeField] private List<LocalisationSettings.Language> _languagesIndex;
 
     /// <summary>
     /// Get the translation of a text with arguments <paramref name="args"/>.
@@ -31,7 +29,18 @@ public struct LocalisationTableItem
     /// <returns></returns>
     public string GetTranslation(string[] args = null)
     {
-        switch (LocalisationManager.Instance.curr_language)
+        var language = LocalisationSettings.Instance.BaseLanguage;
+        if (_languagesIndex.Contains(language))
+        {
+            string tmpFr = String.Copy(_values[_languagesIndex.IndexOf(language)]);
+            for (int i = 0; i < args.Length; i++) tmpFr = tmpFr.Replace($"{{{i}}}", args[i]);
+            return tmpFr;
+        }
+
+        Debug.LogError("Missing Language on " + Key);
+        return Key;
+
+        /*switch (LocalisationManager.Instance.curr_language)
         {
             case Language.French:
                 if (args == null)
@@ -51,6 +60,27 @@ public struct LocalisationTableItem
                 string tmpEn = String.Copy(English);
                 for (int i = 0; i < args.Length; i++) tmpEn = tmpEn.Replace($"{{{i}}}", args[i]);
                 return tmpEn;
-        }
+        }*/
     }
+
+    public void AddLanguageIfNotExist(LocalisationSettings.Language language)
+    {
+        _languagesIndex = new List<LocalisationSettings.Language>(); _values = new List<string>();
+
+        Debug.Log(Key);
+        if (_languagesIndex.Contains(language)) return;
+        Debug.Log(language.Name + " Added!");
+        _languagesIndex.Add(language);
+        _values.Add("");
+    }
+    public void RemoveLanguageIfExist(LocalisationSettings.Language language)
+    {
+        if (_languagesIndex == null) _languagesIndex = new List<LocalisationSettings.Language>(); _values = new List<string>();
+
+        if (!_languagesIndex.Contains(language)) return;
+        
+        _languagesIndex.Remove(language);
+    }
+
+    public string GetValue(LocalisationSettings.Language language) => _languagesIndex.Contains(language) ? _values[_languagesIndex.IndexOf(language)] : null;
 }
