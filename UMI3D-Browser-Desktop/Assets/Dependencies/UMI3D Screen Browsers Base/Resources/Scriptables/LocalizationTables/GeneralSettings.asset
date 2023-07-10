@@ -15,50 +15,62 @@ MonoBehaviour:
   Title: GeneralSettings
   Items:
   - Key: Language
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: English
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: French
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Spanish
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Theme_Titre
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Theme_Default
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 

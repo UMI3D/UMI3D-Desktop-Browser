@@ -15,202 +15,252 @@ MonoBehaviour:
   Title: GraphicSettings
   Items:
   - Key: Quality_Label
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Description_Low
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Description_Medium
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Description_High
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Description_Custom
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: DPI_Description
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: FullScreenResolution_Label
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: FullScreenResolution_description
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: HDR_Label
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: HDR_Description
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: VLow
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Low
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Medium
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: High
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: VHigh
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Ultra
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Custom
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Small
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Large
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: ReduceAnimation
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: RenderScale_Label
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: RenderScale_Description
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Resolution_Label
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: UISize_Label
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: UISize_Description
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 

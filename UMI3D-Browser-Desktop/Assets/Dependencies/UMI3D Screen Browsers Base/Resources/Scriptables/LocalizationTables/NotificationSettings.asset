@@ -15,26 +15,32 @@ MonoBehaviour:
   Title: NotificationSettings
   Items:
   - Key: Hide_Label
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Hide_Off
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Hide_On
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 

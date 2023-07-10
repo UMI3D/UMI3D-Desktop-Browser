@@ -10,17 +10,29 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
 public class LocalisationTableItem
 {
+    [Serializable]
+    private struct Trad
+    {
+        public LocalisationSettings.Language Key;
+        public string Value;
+
+        public Trad(LocalisationSettings.Language key, string value)
+        {
+            Key = key;
+            Value = value;
+        }
+    }
+
     public string Key;
-    private List<string> _values;
-    [SerializeField] private List<LocalisationSettings.Language> _languagesIndex;
+    [SerializeField] private List<Trad> _trads;
 
     /// <summary>
     /// Get the translation of a text with arguments <paramref name="args"/>.
@@ -29,7 +41,7 @@ public class LocalisationTableItem
     /// <returns></returns>
     public string GetTranslation(string[] args = null)
     {
-        var language = LocalisationSettings.Instance.BaseLanguage;
+        /*var language = LocalisationSettings.Instance.BaseLanguage;
         if (_languagesIndex.Contains(language))
         {
             string tmpFr = String.Copy(_values[_languagesIndex.IndexOf(language)]);
@@ -37,7 +49,7 @@ public class LocalisationTableItem
             return tmpFr;
         }
 
-        Debug.LogError("Missing Language on " + Key);
+        Debug.LogError("Missing Language on " + Key);*/
         return Key;
 
         /*switch (LocalisationManager.Instance.curr_language)
@@ -65,20 +77,17 @@ public class LocalisationTableItem
 
     public void AddLanguageIfNotExist(LocalisationSettings.Language language)
     {
-        if (_languagesIndex == null) _languagesIndex = new List<LocalisationSettings.Language>(); _values = new List<string>();
+        if (_trads == null) _trads = new List<Trad>();
 
-        if (_languagesIndex.Contains(language)) return;
-        _languagesIndex.Add(language);
-        _values.Add("");
+        if (_trads.Any(e => e.Key.Equals(language))) return;
+        _trads.Add(new Trad(language, ""));
     }
     public void RemoveLanguageIfExist(LocalisationSettings.Language language)
     {
-        if (_languagesIndex == null) _languagesIndex = new List<LocalisationSettings.Language>(); _values = new List<string>();
+        if (_trads == null) _trads = new List<Trad>();
 
-        if (!_languagesIndex.Contains(language)) return;
-        
-        _languagesIndex.Remove(language);
+        if (!_trads.Any(e => e.Key.Equals(language))) return;
+
+        _trads.Remove(_trads.Find(e => e.Key.Equals(language)));
     }
-
-    public string GetValue(LocalisationSettings.Language language) => _languagesIndex.Contains(language) ? _values[_languagesIndex.IndexOf(language)] : null;
 }

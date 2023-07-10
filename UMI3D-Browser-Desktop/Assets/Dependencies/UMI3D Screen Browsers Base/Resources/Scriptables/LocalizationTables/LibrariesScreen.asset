@@ -15,122 +15,152 @@ MonoBehaviour:
   Title: LibrariesScreen
   Items:
   - Key: Library_UsedBy
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Search_Label
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Filter_Label
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Sort_Name
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Sort_Size
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Delete_library_Title
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Delete_Library_Description
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Delete_All_libraries
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Delete_Filtered_libraries
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Filter_All
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Delete_Filteredlibraries_Title
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Delete_Filteredlibraries_Description
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Library_WrongPath_Title
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Library_WrongPath_Description
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: Library_WrongPath_ShowMe
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 

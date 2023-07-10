@@ -15,42 +15,52 @@ MonoBehaviour:
   Title: GameDataScreen
   Items:
   - Key: GameData
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: WorldName
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: EnvironmentName
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: TimeSpent
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
   - Key: NbParticipants
-    _languagesIndex:
-    - Name: English
-      IsActive: 1
-    - Name: French
-      IsActive: 1
-    - Name: Spanish
-      IsActive: 1
+    _trads:
+    - Key:
+        Name: English
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: Spanish
+        IsActive: 1
+      Value: 
