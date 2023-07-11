@@ -1,0 +1,15 @@
+Key,English,French,Spanish
+Error,Error,Erreur,Error
+OtherError,Other error,Autre erreur,Otro error
+LoadError,Loading error,Erreur de chargement,Error de carga
+NetworkError,Networking error {0},Erreur de mise en réseau {0},Error de red {0}
+ResourcesDenied,Resources acess was denied,L'accès aux ressources a été refusé,L'accès aux ressources a été refusé
+ResourcesEmpty,Resources Downloaded was empty,Les ressources téléchargées étaient vides,Los recursos descargados estaban vacíos
+ServerError,Server error,Erreur de serveur,Error del servidor
+ConnectionLost,Connection to the server lost,Perte de la connexion au serveur,Perte de la connexion au serveur
+LeaveOrTry,Leave the environment or try to reconnect ?,Quitter l'environnement ou essayer de se reconnecter ?,¿Salir del entorno o intentar volver a conectarse?
+ForcedDeco,Forced Deconnection,Déconnexion forcée,Desconexión forzada
+AssetsLibRequired1,One assets library is required,Une bibliothèque de ressources est nécessaire,Se necesita una biblioteca de activos
+AssetsLibRequired,{0} assets libraries are required,{0} bibliothèques de ressources sont nécessaires,Se necesitan {0} bibliotecas de activos
+DownloadAndConnect,Download libraries and connect to the server ?,Télécharger les bibliothèques et se connecter au serveur ?,Descargar bibliotecas y conectarse al servidor ?
+LeaveEnv?,Do you want to leave the environment ?,Voulez-vous quitter l'environnement ?,¿Quiere abandonar el medio ambiente?

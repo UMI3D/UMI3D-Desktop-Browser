@@ -1,5 +1,5 @@
 Key,English,French,Spanish
-LoopBack_ont,Loop back on,Bouclage activé,Bucle activado
+LoopBack_on,Loop back on,Bouclage activé,Bucle activado
 LoopBack_off,Loop back off,Bouclage désactivé,Desactivación de bucles
 AmplitudeSlider,Noise Threshold,Seuil de bruit,Umbral de ruido
 DelayShutMic,Delay before mute mic when lower than threshold,Délai avant la mise en sourdine du micro lorsqu'il est inférieur au seuil,Retardo antes de silenciar el micrófono cuando es inferior al umbral
