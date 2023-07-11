@@ -17,44 +17,55 @@ MonoBehaviour:
   - Key: GameData
     _trads:
     - Key:
-        Name: English
-      Value: 
+        Name: French
+      Value: "Donn\xE9es du jeu"
     - Key:
         Name: Spanish
-      Value: 
+      Value: Datos del juego
     - Key:
-        Name: French
-      Value: 
+        Name: English
+      Value: Game Data
   - Key: WorldName
     _trads:
     - Key:
-        Name: English
-      Value: 
+        Name: French
+      Value: 'Nom du monde :'
     - Key:
         Name: Spanish
-      Value: 
+      Value: 'Nombre del mundo:'
     - Key:
-        Name: French
-      Value: 
+        Name: English
+      Value: 'World name:'
   - Key: EnvironmentName
     _trads:
     - Key:
-        Name: English
-      Value: 
+        Name: French
+      Value: 'Nom de l''environnement :'
     - Key:
         Name: Spanish
-      Value: 
+      Value: 'Nombre del entorno:'
     - Key:
-        Name: French
-      Value: 
+        Name: English
+      Value: 'Environment name:'
   - Key: TimeSpent
     _trads:
     - Key:
-        Name: English
-      Value: 
+        Name: French
+      Value: "Temps pass\xE9 dans l'environnement :"
     - Key:
         Name: Spanish
-      Value: 
+      Value: 'Tiempo pasado en el entorno:'
+    - Key:
+        Name: English
+      Value: 'Time spent in the environment:'
+  - Key: NbParticipants
+    _trads:
     - Key:
         Name: French
-      Value: 
+      Value: 'Nombre de participants dans l''environnement :'
+    - Key:
+        Name: Spanish
+      Value: "N\xFAmero de participantes en el entorno:"
+    - Key:
+        Name: English
+      Value: 'Number of participants in the environment:'

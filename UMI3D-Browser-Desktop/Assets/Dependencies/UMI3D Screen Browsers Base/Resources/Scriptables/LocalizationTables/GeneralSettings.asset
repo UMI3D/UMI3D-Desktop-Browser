@@ -17,84 +17,66 @@ MonoBehaviour:
   - Key: Language
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Langage
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Idioma
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Language
   - Key: English
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Anglais
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Ingl\xE9s"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: English
   - Key: French
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Fran\xE7ais"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Franc\xE9s"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: French
   - Key: Spanish
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Espagnol
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Espa\xF1ol"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Spanish
   - Key: Theme_Titre
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Th\xE8me"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Tema
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Theme
   - Key: Theme_Default
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "D\xE9faut"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Defecto
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Default

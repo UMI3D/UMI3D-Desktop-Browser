@@ -17,56 +17,44 @@ MonoBehaviour:
   - Key: Crouch
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: S'accroupir
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Agazaparse
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Crouch
   - Key: Jump
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Sauter
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Saltar
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Jump
   - Key: Action
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Action
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Acci\xF3n"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Action
   - Key: ContextualMenu
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Menu contextuel
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Men\xFA contextual"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Contextual Menu

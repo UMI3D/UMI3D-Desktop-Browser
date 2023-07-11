@@ -17,196 +17,154 @@ MonoBehaviour:
   - Key: Error
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Erreur
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Error
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Error
   - Key: OtherError
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Autre erreur
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Otro error
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Other error
   - Key: LoadError
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Erreur de chargement
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Error de carga
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Loading error
   - Key: NetworkError
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Erreur de mise en r\xE9seau {0}"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Error de red {0}
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Networking error {0}
   - Key: ResourcesDenied
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "L'acc\xE8s aux ressources a \xE9t\xE9 refus\xE9"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "L'acc\xE8s aux ressources a \xE9t\xE9 refus\xE9"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Resources acess was denied
   - Key: ResourcesEmpty
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Les ressources t\xE9l\xE9charg\xE9es \xE9taient vides"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Los recursos descargados estaban vac\xEDos"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Resources Downloaded was empty
   - Key: ServerError
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Erreur de serveur
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Error del servidor
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Server error
   - Key: ConnectionLost
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Perte de la connexion au serveur
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Perte de la connexion au serveur
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Connection to the server lost
   - Key: LeaveOrTry
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Quitter l'environnement ou essayer de se reconnecter ?
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "\xBFSalir del entorno o intentar volver a conectarse?"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Leave the environment or try to reconnect ?
   - Key: ForcedDeco
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "D\xE9connexion forc\xE9e"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Desconexi\xF3n forzada"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Forced Deconnection
   - Key: AssetsLibRequired1
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Une biblioth\xE8que de ressources est n\xE9cessaire"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Se necesita una biblioteca de activos
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: One assets library is required
   - Key: AssetsLibRequired
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "{0} biblioth\xE8ques de ressources sont n\xE9cessaires"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Se necesitan {0} bibliotecas de activos
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: '{0} assets libraries are required'
   - Key: DownloadAndConnect
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "T\xE9l\xE9charger les biblioth\xE8ques et se connecter au serveur ?"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Descargar bibliotecas y conectarse al servidor ?
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Download libraries and connect to the server ?
   - Key: LeaveEnv?
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Voulez-vous quitter l'environnement ?
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "\xBFQuiere abandonar el medio ambiente?"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Do you want to leave the environment ?

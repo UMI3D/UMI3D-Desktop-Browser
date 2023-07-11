@@ -17,336 +17,264 @@ MonoBehaviour:
   - Key: Retry
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "R\xE9essayer"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Reintentar
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Retry
   - Key: Save
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Sauvegarder
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Guardar
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Save
   - Key: General
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "G\xE9n\xE9ral"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: General
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: General
   - Key: Graphics
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Graphiques
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Gr\xE1ficos"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Graphics
   - Key: Controls
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Contr\xF4les"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Controla
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Controls
   - Key: Audio
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Audio
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Audio
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Audio
   - Key: Notifications
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Notifications
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Notificaciones
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Notifications
   - Key: Connect
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Se connecter
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Conectar
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Connect
   - Key: Edit
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Modifier
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Editar
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Edit
   - Key: New
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Nouveau
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Nuevo
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: New
   - Key: Default
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "D\xE9faut"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Defecto
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Default
   - Key: Cancel
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Annuler
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Cancelar
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Cancel
   - Key: Delete
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Supprimer
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Borrar
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Delete
   - Key: Sessions
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Sessions
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Sesiones
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Sessions
   - Key: Name
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Nom
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Nombre
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Name
   - Key: Resume
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Reprendre
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Retomar
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Resume
   - Key: Stop
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Arr\xEAter"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Parada
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Stop
   - Key: Leave
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Quitter
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Deja
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Leave
   - Key: Reconnect
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Reconnecter
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Reconectar
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Reconnect
   - Key: Accept
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Accepter
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Acepte
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Accept
   - Key: Deny
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Refuser
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Denegar
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Deny
   - Key: Connection
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Connexion
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Conexi\xF3n"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Connection
   - Key: Stay
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Rester
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Quedarse
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Stay
   - Key: Join
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Rejoindre
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Entrar
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Join

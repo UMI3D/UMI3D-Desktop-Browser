@@ -17,84 +17,66 @@ MonoBehaviour:
   - Key: LoadingPercent
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: 'Charge totale : {0} %.'
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: 'Carga total : {0} %'
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: 'Total loading : {0} %'
   - Key: LoadingEnv
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Chargement de l'environnement
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Cargar el entorno
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Loading environment
   - Key: LeavingEnv
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Quitter l'environnement
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Abandonar el entorno
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Leaving environment
   - Key: EditText
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Modifier le texte
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Editar texto
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Edit Text
   - Key: DisplayInteractionsMenu
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Afficher le menu des interactions
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Mostrar men\xFA de interacciones"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Display interactions menu
   - Key: LeaveEnvironment
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Quitter l'environnement
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Salir del entorno
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Leave  the environment

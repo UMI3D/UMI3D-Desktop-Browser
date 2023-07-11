@@ -17,42 +17,36 @@ MonoBehaviour:
   - Key: Hide_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Cacher les notifications
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Ocultar notificaciones
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Hide notifications
   - Key: Hide_Off
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Vous serez inform\xE9 lorsque vous recevrez une notification."
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Se le avisar\xE1 cuando reciba una notificaci\xF3n."
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: You will be notified when you receive a notification.
   - Key: Hide_On
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Les notifications seront toujours disponibles dans le centre de notification
+        mais vous ne serez pas averti lorsque vous les recevrez.
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Las notificaciones seguir\xE1n estando disponibles en el centro de
+        notificaciones"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Notification will still be availlable in the notification center but
+        you won't be notified when you recieve them.

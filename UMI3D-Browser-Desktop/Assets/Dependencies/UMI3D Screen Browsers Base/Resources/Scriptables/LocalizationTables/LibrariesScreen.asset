@@ -17,210 +17,165 @@ MonoBehaviour:
   - Key: Library_UsedBy
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Utilis\xE9 par:\\n\\n{0}"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Utilizado por:\n\n{0}
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Used by:\n\n{0}
   - Key: Search_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Recherche
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Buscar en
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Search
   - Key: Filter_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Filtre
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Filtro
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Filter
   - Key: Sort_Name
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Nom
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Nombre
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Name
   - Key: Sort_Size
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Taille
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Talla
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Size
   - Key: Delete_library_Title
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Voulez-vous d\xE9sinstaller cette biblioth\xE8que ?"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "\xBFDesea desinstalar esta biblioteca?"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Do you want to uninstall this library ?
   - Key: Delete_Library_Description
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: '''{0}'' est requis par {1} environnements.'
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: '{0}'' es requerido por {1} entornos'
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: '''{0}'' is required by {1} environments'
   - Key: Delete_All_libraries
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Supprimer toutes les biblioth\xE8ques"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Borrar todas las bibliotecas
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Delete All libraries
   - Key: Delete_Filtered_libraries
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Supprimer les biblioth\xE8ques de {0}"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Borrar bibliotecas de {0}
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Delete libraries from {0}
   - Key: Filter_All
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Tout
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Todos
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: All
   - Key: Delete_Filteredlibraries_Title
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "D\xE9sinstaller les biblioth\xE8ques filtr\xE9es"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Desinstalar bibliotecas filtradas
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Uninstall filtered libraries
   - Key: Delete_Filteredlibraries_Description
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Voulez-vous d\xE9sinstaller les {0} biblioth\xE8ques filtr\xE9es ?"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "\xBFDesea desinstalar las {0} bibliotecas filtradas?"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Do you want to uninstall the {0} filtered libraries ?
   - Key: Library_WrongPath_Title
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Certaines biblioth\xE8ques ne sont pas trouv\xE9es"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Algunas bibliotecas no se encuentran
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Some libraries are not found
   - Key: Library_WrongPath_Description
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Voici la liste des chemins qui ne sont pas trouv\xE9s :"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Aqu\xED est\xE1 la lista de la ruta que no se encuentran:"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: 'Here is the list of the path that are not found:'
   - Key: Library_WrongPath_ShowMe
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Montre-moi
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Mu\xE9strame"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Show me

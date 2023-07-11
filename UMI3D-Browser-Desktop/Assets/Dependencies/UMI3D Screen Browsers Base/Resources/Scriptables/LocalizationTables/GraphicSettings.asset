@@ -17,350 +17,278 @@ MonoBehaviour:
   - Key: Quality_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Param\xE8tres de qualit\xE9"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Ajustes de calidad
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Quality Settings
   - Key: Description_Low
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "La basse r\xE9solution vise {0}fps avec un rendu plus faible."
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "La baja resoluci\xF3n tiene como objetivo {0}fps con menor renderizado"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Low resolution is targetting {0}fps with lower rendering
   - Key: Description_Medium
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "La r\xE9solution moyenne vise {0}fps avec un rendu moyen."
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "La resoluci\xF3n media tiene como objetivo {0}fps con un renderizado
+        medio."
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Medium resolution is targetting {0}fps with midium rendering
   - Key: Description_High
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "La haute r\xE9solution vise {0}fps avec un rendu plus \xE9lev\xE9."
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "La alta resoluci\xF3n tiene como objetivo {0}fps con un mayor renderizado"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: High resolution is targetting {0}fps with higher rendering
   - Key: Description_Custom
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "La r\xE9solution personnalis\xE9e vous permet de choisir vos param\xE8tres"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "La resoluci\xF3n personalizada te permite elegir tus ajustes"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Custom resolution let you choose your settings
   - Key: DPI_Description
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: 'Dots per inch (Points par pouce) : Plus bas signifie que l''interface
+        utilisateur sera plus grande.'
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Dots per inch (Puntos por pulgada): M\xE1s bajo significa que la IU
+        ser\xE1 m\xE1s grande."
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: 'Dots per inch: Lower means the UI will be larger.'
   - Key: FullScreenResolution_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "R\xE9solution plein \xE9cran"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Resoluci\xF3n de pantalla completa"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Full screen resolution
   - Key: FullScreenResolution_description
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Aura un impact sur les r\xE9solutions des jeux et de l'interface utilisateur"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Afectar\xE1 a las resoluciones del juego y de la interfaz de usuario"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Will impact Game and UI Resolutions
   - Key: HDR_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Activer HDR
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Activar HDR
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Enable HDR
   - Key: HDR_Description
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "High Dynamic Range (Plage dynamique sup\xE9rieure)"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "High Dynamic Range (Alto rango din\xE1mico)"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: High Dynamic Range
   - Key: VLow
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: TBas
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: MBajo
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: VLow
   - Key: Low
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Bas
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Bajo
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Low
   - Key: Medium
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Moyen
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Medio
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Medium
   - Key: High
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Haut
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Alta
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: High
   - Key: VHigh
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: THaut
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: MAlto
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: VHigh
   - Key: Ultra
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Ultra
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Ultra
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Ultra
   - Key: Custom
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Personnalis\xE9"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Personalizado
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Custom
   - Key: Small
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Petit
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Peque\xF1o"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Small
   - Key: Large
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Large
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Grande
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Large
   - Key: ReduceAnimation
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "R\xE9duire l'animation"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Reducir la animaci\xF3n"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Reduce Animation
   - Key: RenderScale_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "\xC9chelle de rendu"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Nivel de rendimiento
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Render Scale
   - Key: RenderScale_Description
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Plus bas signifie moins de r\xE9solution et plus de FPS."
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "M\xE1s bajo significa menos resoluci\xF3n y m\xE1s FPS."
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Lower means less resolution and more FPS.
   - Key: Resolution_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "R\xE9solution du jeu"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Resoluci\xF3n del juego"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Game resolution
   - Key: UISize_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Taille de l'IU
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Tama\xF1o de la IU"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: UI Size
   - Key: UISize_Description
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Taille de l'interface utilisateur
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Tama\xF1o de la interfaz de usuario"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Size of the user interface

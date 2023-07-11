@@ -17,70 +17,55 @@ MonoBehaviour:
   - Key: CameraSensibility
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Sensibilit\xE9 de la cam\xE9ra"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Sensibilidad de la c\xE1mara"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Camera sensibility
   - Key: JoystickStatic_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Joystick statique
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Joystick est\xE1tico"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Static joystick
   - Key: LeftHand_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Interface gaucher
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Interfaz zurdos
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Left hand interface
   - Key: Navigations
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "D\xE9placement"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Navigations
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Navigations
   - Key: Shortcuts
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Raccourcis
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Shortcuts
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Shortcuts

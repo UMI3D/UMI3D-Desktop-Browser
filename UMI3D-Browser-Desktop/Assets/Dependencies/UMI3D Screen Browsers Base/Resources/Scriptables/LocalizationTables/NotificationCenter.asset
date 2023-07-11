@@ -17,84 +17,66 @@ MonoBehaviour:
   - Key: Timestamp_Now
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Maintenant
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Ahora
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Now
   - Key: No_Notif
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Pas de notification
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Sin notificaci\xF3n"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: No notification
   - Key: No_NewNotif
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Pas de nouvelle notification
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Ninguna nueva notificaci\xF3n"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: No new notification
   - Key: UserList_FilterLabel
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: 'Recherche par nom d''utilisateur :'
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "B\xFAsqueda por nombre de usuario:"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: 'Search by user name:'
   - Key: NbNotifs
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: 'Notifications : {0}'
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: 'Notificaciones: {0}'
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: 'Notifications: {0}'
   - Key: NbUsers
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: 'Utilisateurs : {0}'
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: 'Usuarios: {0}'
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: 'Users: {0}'

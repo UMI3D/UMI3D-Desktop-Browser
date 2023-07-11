@@ -17,168 +17,133 @@ MonoBehaviour:
   - Key: LoopBack_on
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Bouclage activ\xE9"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Bucle activado
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Loop back on
   - Key: LoopBack_off
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Bouclage d\xE9sactiv\xE9"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Desactivaci\xF3n de bucles"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Loop back off
   - Key: AmplitudeSlider
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Seuil de bruit
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Umbral de ruido
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Noise Threshold
   - Key: DelayShutMic
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "D\xE9lai avant la mise en sourdine du micro lorsqu'il est inf\xE9rieur
+        au seuil"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Retardo antes de silenciar el micr\xF3fono cuando es inferior al umbral"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Delay before mute mic when lower than threshold
   - Key: GeneralVolume
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Volume g\xE9n\xE9ral"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Volumen general
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: General volume
   - Key: Mic_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Microphone
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Micr\xF3fono"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Microphone
   - Key: MicMode_AlwaysSend
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Toujours envoyer
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Enviar siempre
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Always send
   - Key: MicMode_Amplitude
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Amplitude
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Amplitud
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Amplitude
   - Key: MicMode_PushToTalk
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Push to talk
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Push to talk
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Push to talk
   - Key: MicMode_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Mode
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Modo
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Mode
   - Key: NoiseReduc_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Utiliser la r\xE9duction du bruit"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Reducir el ruido
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Use noise reduction
   - Key: PushToTalk_Label
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Touche "Push to talk"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Bot\xF3n \"Push to talk\""
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Push to talk key

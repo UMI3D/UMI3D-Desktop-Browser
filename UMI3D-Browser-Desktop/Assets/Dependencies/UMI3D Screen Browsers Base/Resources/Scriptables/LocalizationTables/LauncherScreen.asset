@@ -17,378 +17,300 @@ MonoBehaviour:
   - Key: Home
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Accueil
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Inicio
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Home
   - Key: Settings
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Param\xE8tres"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Configuraci\xF3n"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Settings
   - Key: Data
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Donn\xE9es"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Datos
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Data
   - Key: Libraries
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Biblioth\xE8ques"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Bibliotecas
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Libraries
   - Key: No_Connection_Tile
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Pas de connexion internet
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Sin conexi\xF3n a Internet"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: No internet connection
   - Key: NoConnection_Description
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Connectez votre appareil pour charger {0}
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Conecta tu dispositivo para cargar {0}
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Connect your device to load {0}
   - Key: WeakConnection_Title
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Vous \xEAtes connect\xE9 \xE0 l'internet via le r\xE9seau de donn\xE9es
+        de l'op\xE9rateur"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Est\xE1s conectado a Internet a trav\xE9s de la red de datos del operador"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: You are connected to internet via carrier data network
   - Key: WeakConnection_Description
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: ' if you can you should connect via wifi or cable and retry'
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Vous essayez de charger {0} via un r\xE9seau de donn\xE9es porteur.
+        \\nL'environnement de chargement consomme beaucoup de donn\xE9es"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: You are trying to load {0} via carrier data network. \nLoading environment
+        use a lot of data
   - Key: WeakConnection_ConnectAnyway
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Connectez-vous quand m\xEAme"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Con\xE9ctate de todos modos"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Connect anyway
   - Key: DeleteServer_Description
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Supprimer ce serveur de l'enregistrement ?
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "\xBFBorrar este servidor de los registrados?"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Delete this server from registered ?
   - Key: UpdateServer_Description
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Mise \xE0 jour du serveur sauvegard\xE9"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Actualizar servidor guardado
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Update saved server
   - Key: ConnectNewServer
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Se connecter \xE0 un nouveau serveur"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Conectarse a un nuevo servidor
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Connect to a new server
   - Key: DisplaySavedServer
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Afficher les serveurs sauvegard\xE9s"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Mostrar servidores guardados
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Display saved servers
   - Key: RememberServer
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Enregistre ce serveur
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Recuerde este servidor
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Remember this server
   - Key: SavedServers
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Serveurs sauvegard\xE9s"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Servidores guardados
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Saved Servers
   - Key: ServerURL
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: URL du serveur
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: URL del servidor
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Server URL
   - Key: CloseMenu
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Fermer le menu
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Cerrar men\xFA"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Close menu
   - Key: LeaveEnvironment
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Quitter l'environnement
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Salir del entorno
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Leave environment
   - Key: SessionCountLabel
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Participants/Capacit\xE9"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Participantes/Capacidad
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Participants/Capacity
   - Key: ConnectionSettings
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: "Param\xE8tres de connexion"
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Ajustes de conexi\xF3n"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Connection settings
   - Key: IPAdress
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Adresse IP
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Direcci\xF3n IP"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: IP adress
   - Key: HttpPort
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Port Http
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Puerto http
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Http port
   - Key: NewServer
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Nouveau serveur
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Nuevo servidor
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: New server
   - Key: EnterNewServer
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Entrez l'URL du serveur ici
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "Introduzca aqu\xED la url del servidor"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Enter a server url here
   - Key: ConnectionHistory
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Historique des connexions
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Historial de conexiones
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Connection history
   - Key: DeleteServerHistory_Description
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Supprimer ce serveur de l'historique ?
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: "\xBF Borrar este servidor del historial ?"
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Delete this server from the history ?
   - Key: Tips
     _trads:
     - Key:
-        Name: English
-        IsActive: 1
-      Value: 
+        Name: French
+      Value: Aide
     - Key:
         Name: Spanish
-        IsActive: 1
-      Value: 
+      Value: Consejos
     - Key:
-        Name: French
-        IsActive: 1
-      Value: 
+        Name: English
+      Value: Tips
