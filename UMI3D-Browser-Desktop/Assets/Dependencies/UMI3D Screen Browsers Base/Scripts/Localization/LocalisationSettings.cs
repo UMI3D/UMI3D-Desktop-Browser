@@ -18,14 +18,13 @@ public class LocalisationSettings : ScriptableObject
     public struct Language
     {
         public string Name;
-        public bool IsActive;
     }
 
     [SerializeField] private List<Language> _languages;
 
     [SerializeField] private int _baseLanguageIndex;
 
-    public List<Language> Languages => _languages.Where(e => e.IsActive).ToList();
+    public List<Language> Languages => _languages;
     public Language BaseLanguage => _languages[_baseLanguageIndex];
 
     private static LocalisationSettings _instance;
@@ -205,7 +204,6 @@ class LocalisationSettingsProvider : SettingsProvider
             {
                 _languagesProperty.InsertArrayElementAtIndex(0);
                 _languagesProperty.GetArrayElementAtIndex(0).FindPropertyRelative("Name").stringValue = _newLanguageName;
-                _languagesProperty.GetArrayElementAtIndex(0).FindPropertyRelative("IsActive").boolValue = true;
                 _newLanguageName = "";
                 _settings.ApplyModifiedProperties();
 
