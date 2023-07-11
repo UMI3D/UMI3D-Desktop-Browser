@@ -16,6 +16,7 @@ limitations under the License.
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using umi3d.baseBrowser.preferences;
 using umi3d.commonScreen.Displayer;
 using UnityEngine.UIElements;
 using static umi3d.baseBrowser.preferences.SettingsPreferences;
@@ -36,12 +37,13 @@ namespace umi3d.commonScreen.menu
             base.InitElement();
 
             LanguageDropdown.LocalisedLabel = new LocalisationAttribute("Language", "GeneralSettings", "Language");
-            LanguageDropdown.LocalisedOptions = new List<LocalisationAttribute>
+            var localisedOptions = new List<LocalisationAttribute>();
+            var languages = LocalisationSettings.Instance.Languages;
+            foreach (var language in languages)
             {
-                ( "English", "GeneralSettings", "English" ),
-                ( "French", "GeneralSettings", "French" ),
-                ( "Spanish", "GeneralSettings", "Spanish" )
-            };
+                localisedOptions.Add(new LocalisationAttribute(language.Name, "GeneralSettings", language.Name));
+            }
+            LanguageDropdown.LocalisedOptions = localisedOptions;
 
             LanguageDropdown.ValueChanged += (index, newValue) => _ = LanguageValueChanged(index);
 
@@ -52,7 +54,7 @@ namespace umi3d.commonScreen.menu
             ScrollView.Add(LanguageDropdown);
             ScrollView.Add(ThemeDropdown);
 
-            if (TryGetGeneralData(out Data)) _ = LanguageValueChanged((int)Data.LanguageChoice);
+            if (TryGetGeneralData(out Data)) _ = LanguageValueChanged(languages.IndexOf(Data.LanguageChoice));
             else _ = LanguageValueChanged(1);
         }
 
@@ -72,9 +74,9 @@ namespace umi3d.commonScreen.menu
 
             while (!LocalisationManager.Exists) await UMI3DAsyncManager.Yield();
 
-            var currentLanguage = index > -1 ? (Language)index : Language.English;
-            LocalisationManager.Instance.curr_language = currentLanguage;
-            Data.LanguageChoice = currentLanguage;
+            var currentLanguage = index > -1 ? index : 0;
+            LocalisationSettings.Instance.CurrentLanguageIndex = currentLanguage;
+            Data.LanguageChoice = LocalisationSettings.Instance.Languages[index];
             StoreGeneralData(Data);
 
             Text_C.OnLanguageChanged();

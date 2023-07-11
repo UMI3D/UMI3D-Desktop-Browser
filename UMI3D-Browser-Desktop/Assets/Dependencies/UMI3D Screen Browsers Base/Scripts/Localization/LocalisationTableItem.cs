@@ -13,6 +13,7 @@ limitations under the License.
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using umi3d.baseBrowser.preferences;
 using UnityEngine;
 
 [System.Serializable]
@@ -21,10 +22,10 @@ public class LocalisationTableItem
     [Serializable]
     private class Trad
     {
-        public LocalisationSettings.Language Key;
+        public Language Key;
         public string Value;
 
-        public Trad(LocalisationSettings.Language key, string value)
+        public Trad(Language key, string value)
         {
             Key = key;
             Value = value;
@@ -41,15 +42,17 @@ public class LocalisationTableItem
     /// <returns></returns>
     public string GetTranslation(string[] args = null)
     {
-        /*var language = LocalisationSettings.Instance.BaseLanguage;
-        if (_languagesIndex.Contains(language))
+        var language = LocalisationSettings.Instance.CurrentLanguage;
+        var trad = _trads.Where(e => e.Key.Name == language.Name).ToList()[0];
+        if (trad != null)
         {
-            string tmpFr = String.Copy(_values[_languagesIndex.IndexOf(language)]);
-            for (int i = 0; i < args.Length; i++) tmpFr = tmpFr.Replace($"{{{i}}}", args[i]);
+            string tmpFr = String.Copy(trad.Value);
+            if (args != null)
+                for (int i = 0; i < args.Length; i++) tmpFr = tmpFr.Replace($"{{{i}}}", args[i]);
             return tmpFr;
         }
 
-        Debug.LogError("Missing Language on " + Key);*/
+        Debug.LogError("Missing Language on " + Key);
         return Key;
 
         /*switch (LocalisationManager.Instance.curr_language)
@@ -75,14 +78,14 @@ public class LocalisationTableItem
         }*/
     }
 
-    public void AddLanguageIfNotExist(LocalisationSettings.Language language, string value = "")
+    public void AddLanguageIfNotExist(Language language, string value = "")
     {
         if (_trads == null) _trads = new List<Trad>();
 
         if (_trads.Any(e => e.Key.Equals(language))) return;
         _trads.Add(new Trad(language, value));
     }
-    public void RemoveLanguageIfExist(LocalisationSettings.Language language)
+    public void RemoveLanguageIfExist(Language language)
     {
         if (_trads == null) _trads = new List<Trad>();
 

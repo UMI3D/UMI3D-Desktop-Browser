@@ -33,7 +33,6 @@ public class LocalisationTable : ScriptableObject
     {
         if (Items.Any(x => x.Key == key))
             return Items.Find(x => x.Key == key).GetTranslation(args);
-        Debug.Log("table: "+Title+", key not found: "+key);
         return null;
     }
     

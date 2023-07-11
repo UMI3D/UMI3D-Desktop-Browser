@@ -407,7 +407,6 @@ namespace umi3d.commonScreen.Displayer
             if (m_localisation.CanBeLocalised)
             {
                 while (!LocalisationManager.Exists) await UMI3DAsyncManager.Yield();
-
                 text = LocalisationManager.Instance.GetTranslation(m_localisation);
             }
         }

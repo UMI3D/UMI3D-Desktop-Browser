@@ -2,6 +2,7 @@ using inetum.unityUtils.editor;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using umi3d.baseBrowser.preferences;
 using UnityEditor;
 using UnityEngine;
 
@@ -89,7 +90,7 @@ public class LocalisationTableEditor : UMI3DInspector
         DrawButtons();
     }
 
-    private void Initialize(List<LocalisationSettings.Language> languages)
+    private void Initialize(List<Language> languages)
     {
         _sectionNames = new List<string> { "Key" };
         _sectionNames.AddRange(languages.Select(e => e.Name));

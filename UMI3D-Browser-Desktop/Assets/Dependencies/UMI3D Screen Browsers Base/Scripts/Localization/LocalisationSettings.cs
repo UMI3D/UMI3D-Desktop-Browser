@@ -1,31 +1,29 @@
-using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Forms;
+using umi3d.baseBrowser.preferences;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-
 
 public class LocalisationSettings : ScriptableObject
 {
     public const string k_LocalisationSettingsPath = "Assets/LocalisationSettings.asset";
 
-    [Serializable]
-    public struct Language
-    {
-        public string Name;
-    }
 
     [SerializeField] private List<Language> _languages;
 
     [SerializeField] private int _baseLanguageIndex;
 
     public List<Language> Languages => _languages;
-    public Language BaseLanguage => _languages[_baseLanguageIndex];
+    public Language CurrentLanguage => _languages[_baseLanguageIndex];
+    public int CurrentLanguageIndex
+    {
+        get { return _baseLanguageIndex; }
+        set { _baseLanguageIndex = value; }
+    }
 
     private static LocalisationSettings _instance;
     public static LocalisationSettings Instance
@@ -54,8 +52,6 @@ public class LocalisationSettings : ScriptableObject
 class LocalisationSettingsProvider : SettingsProvider
 {
     private SerializedObject _settings;
-
-    private int _languageIndex = 0;
 
     List<string> _sectionNames;
     SerializedProperty _languagesProperty;
@@ -125,7 +121,7 @@ class LocalisationSettingsProvider : SettingsProvider
 
         DrawLanguages();
 
-        var test = new List<LocalisationSettings.Language>();
+        var test = new List<Language>();
         var test2 = new List<string>();
         for (int i = 0; i < _settings.FindProperty("_languages").arraySize; i++)
         {

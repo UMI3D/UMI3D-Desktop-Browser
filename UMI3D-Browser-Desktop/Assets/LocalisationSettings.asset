@@ -14,9 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _languages:
   - Name: French
-    IsActive: 1
   - Name: Spanish
-    IsActive: 1
   - Name: English
-    IsActive: 1
-  _baseLanguageIndex: 2
+  _baseLanguageIndex: 0
