@@ -1,5 +1,7 @@
 using inetum.unityUtils.editor;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,12 +19,22 @@ public class LocalisationTableEditor : UMI3DInspector
         }
     }
 
+    List<string> _sectionNames;
+
+    GUIStyle _headerStyle;
+    GUIStyle _rowStyle;
+    GUIStyle _row2Style;
+
+    float _cellWidth;
+
     public override void OnInspectorGUI()
     {
         EditorGUILayout.PropertyField(serializedObject.FindProperty("Title"));
 
         var languages = LocalisationSettings.Instance.Languages;
         languages.Reverse();
+
+        if (_sectionNames == null) Initialize(languages);
 
         var elements = new List<Element>();
         var items = serializedObject.FindProperty("Items");
@@ -39,27 +51,34 @@ public class LocalisationTableEditor : UMI3DInspector
             }
             elements.Add(element);
         }
-
-        var cellWidth = (EditorGUIUtility.currentViewWidth - 40 - 20) / (languages.Count + 1) - 2;
+        var mustBorder = false;
 
         EditorGUILayout.BeginVertical();
         // Header
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Keys", GUILayout.Width(cellWidth));
-        foreach (var language in languages) 
+        EditorGUILayout.BeginHorizontal(_headerStyle);
+        foreach (var section in _sectionNames) 
         {
-            EditorGUILayout.LabelField(language.Name, GUILayout.Width(cellWidth));
+            EditorGUILayout.LabelField(section, GUILayout.Width(_cellWidth));
+        }
+        if (GUILayout.Button("+", GUILayout.Width(20)))
+        {
+            items.InsertArrayElementAtIndex(0);
         }
         EditorGUILayout.EndHorizontal();
 
         // Element
-        foreach (var element in elements)
+        for (int i = elements.Count - 1; i >= 0; i--)
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.TextField(element.Key, GUILayout.Width(cellWidth));
+            EditorGUILayout.BeginHorizontal(mustBorder ? _rowStyle : _row2Style);
+            mustBorder = !mustBorder;
+            EditorGUILayout.TextField(elements[i].Key, GUILayout.Width(_cellWidth));
             foreach (var language in languages)
             {
-                EditorGUILayout.PropertyField(element.Trad[language.Name], GUIContent.none, GUILayout.Width(cellWidth));
+                EditorGUILayout.PropertyField(elements[i].Trad[language.Name], GUIContent.none, GUILayout.Width(_cellWidth));
+            }
+            if (GUILayout.Button("-", GUILayout.Width(20)))
+            {
+                items.DeleteArrayElementAtIndex(i);
             }
             EditorGUILayout.EndHorizontal();
         }
@@ -68,5 +87,34 @@ public class LocalisationTableEditor : UMI3DInspector
         serializedObject.ApplyModifiedProperties();
 
         DrawButtons();
+    }
+
+    private void Initialize(List<LocalisationSettings.Language> languages)
+    {
+        _sectionNames = new List<string> { "Key" };
+        _sectionNames.AddRange(languages.Select(e => e.Name));
+
+        _cellWidth = (EditorGUIUtility.currentViewWidth - 40 - 20) / (languages.Count + 1) - 2;
+
+        _headerStyle = new GUIStyle();
+        _rowStyle = new GUIStyle();
+        _row2Style = new GUIStyle();
+
+        _headerStyle.normal.background = MakeTex((int)_cellWidth, 20, new Color(.3f, .3f, .3f));
+        _row2Style.normal.background = MakeTex((int)_cellWidth, 20, new Color(.2f, .2f, .2f));
+        _rowStyle.normal.background = MakeTex((int)_cellWidth, 20, new Color(.15f, .15f, .15f));
+    }
+
+    private Texture2D MakeTex(int width, int height, Color col)
+    {
+        Color[] pix = new Color[width * height];
+        for (int i = 0; i < pix.Length; ++i)
+        {
+            pix[i] = col;
+        }
+        Texture2D result = new Texture2D(width, height);
+        result.SetPixels(pix);
+        result.Apply();
+        return result;
     }
 }

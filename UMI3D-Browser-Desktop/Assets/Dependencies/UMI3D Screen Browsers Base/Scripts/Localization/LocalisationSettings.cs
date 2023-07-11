@@ -119,8 +119,6 @@ class LocalisationSettingsProvider : SettingsProvider
         _rowStyle.normal.background = MakeTex((int)_cellWidth, 20, new Color(.15f, .15f, .15f));
     }
 
-    private string t = "";
-
     public override void OnGUI(string searchContext)
     {
         _settings.Update();

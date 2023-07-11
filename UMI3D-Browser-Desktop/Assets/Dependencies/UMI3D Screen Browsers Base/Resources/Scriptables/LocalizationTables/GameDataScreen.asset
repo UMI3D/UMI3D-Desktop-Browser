@@ -18,69 +18,43 @@ MonoBehaviour:
     _trads:
     - Key:
         Name: English
-        IsActive: 1
       Value: 
     - Key:
         Name: Spanish
-        IsActive: 1
       Value: 
     - Key:
         Name: French
-        IsActive: 1
       Value: 
   - Key: WorldName
     _trads:
     - Key:
         Name: English
-        IsActive: 1
       Value: 
     - Key:
         Name: Spanish
-        IsActive: 1
       Value: 
     - Key:
         Name: French
-        IsActive: 1
       Value: 
   - Key: EnvironmentName
     _trads:
     - Key:
         Name: English
-        IsActive: 1
       Value: 
     - Key:
         Name: Spanish
-        IsActive: 1
       Value: 
     - Key:
         Name: French
-        IsActive: 1
       Value: 
   - Key: TimeSpent
     _trads:
     - Key:
         Name: English
-        IsActive: 1
       Value: 
     - Key:
         Name: Spanish
-        IsActive: 1
       Value: 
     - Key:
         Name: French
-        IsActive: 1
-      Value: 
-  - Key: NbParticipants
-    _trads:
-    - Key:
-        Name: English
-        IsActive: 1
-      Value: 
-    - Key:
-        Name: Spanish
-        IsActive: 1
-      Value: 
-    - Key:
-        Name: French
-        IsActive: 1
       Value: 
