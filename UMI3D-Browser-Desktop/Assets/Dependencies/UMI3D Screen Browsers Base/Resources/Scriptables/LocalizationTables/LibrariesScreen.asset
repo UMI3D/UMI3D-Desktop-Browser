@@ -24,6 +24,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Search_Label
     _trads:
     - Key:
@@ -32,6 +36,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Filter_Label
@@ -44,6 +52,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Sort_Name
     _trads:
     - Key:
@@ -52,6 +64,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Sort_Size
@@ -64,6 +80,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Delete_library_Title
     _trads:
     - Key:
@@ -72,6 +92,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Delete_Library_Description
@@ -84,6 +108,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Delete_All_libraries
     _trads:
     - Key:
@@ -92,6 +120,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Delete_Filtered_libraries
@@ -104,6 +136,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Filter_All
     _trads:
     - Key:
@@ -112,6 +148,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Delete_Filteredlibraries_Title
@@ -124,6 +164,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Delete_Filteredlibraries_Description
     _trads:
     - Key:
@@ -132,6 +176,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Library_WrongPath_Title
@@ -144,6 +192,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Library_WrongPath_Description
     _trads:
     - Key:
@@ -154,6 +206,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Library_WrongPath_ShowMe
     _trads:
     - Key:
@@ -162,5 +218,9 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 

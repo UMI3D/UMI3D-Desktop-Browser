@@ -24,6 +24,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: No_Notif
     _trads:
     - Key:
@@ -32,6 +36,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: No_NewNotif
@@ -44,6 +52,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: UserList_FilterLabel
     _trads:
     - Key:
@@ -52,6 +64,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: NbNotifs
@@ -64,6 +80,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: NbUsers
     _trads:
     - Key:
@@ -72,5 +92,9 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 

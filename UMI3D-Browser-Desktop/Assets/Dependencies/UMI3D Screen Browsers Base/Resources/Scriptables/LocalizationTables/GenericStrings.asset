@@ -24,6 +24,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Save
     _trads:
     - Key:
@@ -32,6 +36,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: General
@@ -44,6 +52,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Graphics
     _trads:
     - Key:
@@ -52,6 +64,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Controls
@@ -64,6 +80,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Audio
     _trads:
     - Key:
@@ -72,6 +92,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Notifications
@@ -84,6 +108,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Connect
     _trads:
     - Key:
@@ -92,6 +120,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Edit
@@ -104,6 +136,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: New
     _trads:
     - Key:
@@ -112,6 +148,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Default
@@ -124,6 +164,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Cancel
     _trads:
     - Key:
@@ -132,6 +176,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Delete
@@ -144,6 +192,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Sessions
     _trads:
     - Key:
@@ -152,6 +204,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Name
@@ -164,6 +220,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Resume
     _trads:
     - Key:
@@ -172,6 +232,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Stop
@@ -184,6 +248,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Leave
     _trads:
     - Key:
@@ -192,6 +260,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Reconnect
@@ -204,6 +276,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Accept
     _trads:
     - Key:
@@ -212,6 +288,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Deny
@@ -224,6 +304,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Connection
     _trads:
     - Key:
@@ -232,6 +316,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Stay
@@ -244,6 +332,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Join
     _trads:
     - Key:
@@ -252,5 +344,9 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 

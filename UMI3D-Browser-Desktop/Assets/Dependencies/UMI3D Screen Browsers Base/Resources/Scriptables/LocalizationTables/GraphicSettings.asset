@@ -24,6 +24,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Description_Low
     _trads:
     - Key:
@@ -32,6 +36,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Description_Medium
@@ -44,6 +52,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Description_High
     _trads:
     - Key:
@@ -52,6 +64,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Description_Custom
@@ -64,6 +80,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: DPI_Description
     _trads:
     - Key:
@@ -72,6 +92,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: FullScreenResolution_Label
@@ -84,6 +108,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: FullScreenResolution_description
     _trads:
     - Key:
@@ -92,6 +120,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: HDR_Label
@@ -104,6 +136,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: HDR_Description
     _trads:
     - Key:
@@ -112,6 +148,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: VLow
@@ -124,6 +164,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Low
     _trads:
     - Key:
@@ -132,6 +176,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Medium
@@ -144,6 +192,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: High
     _trads:
     - Key:
@@ -152,6 +204,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: VHigh
@@ -164,6 +220,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Ultra
     _trads:
     - Key:
@@ -172,6 +232,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Custom
@@ -184,6 +248,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: Small
     _trads:
     - Key:
@@ -192,6 +260,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Large
@@ -204,6 +276,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: ReduceAnimation
     _trads:
     - Key:
@@ -212,6 +288,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: RenderScale_Label
@@ -224,6 +304,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: RenderScale_Description
     _trads:
     - Key:
@@ -232,6 +316,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: Resolution_Label
@@ -244,6 +332,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: UISize_Label
     _trads:
     - Key:
@@ -254,6 +346,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: UISize_Description
     _trads:
     - Key:
@@ -262,5 +358,9 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 

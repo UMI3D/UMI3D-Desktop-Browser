@@ -24,6 +24,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: WorldName
     _trads:
     - Key:
@@ -32,6 +36,10 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 
   - Key: EnvironmentName
@@ -44,6 +52,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: TimeSpent
     _trads:
     - Key:
@@ -54,6 +66,10 @@ MonoBehaviour:
         Name: Spanish
         IsActive: 1
       Value: 
+    - Key:
+        Name: French
+        IsActive: 1
+      Value: 
   - Key: NbParticipants
     _trads:
     - Key:
@@ -62,5 +78,9 @@ MonoBehaviour:
       Value: 
     - Key:
         Name: Spanish
+        IsActive: 1
+      Value: 
+    - Key:
+        Name: French
         IsActive: 1
       Value: 

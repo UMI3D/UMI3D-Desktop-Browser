@@ -12,14 +12,15 @@ limitations under the License.
 */
 using inetum.unityUtils;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewTableLocalization", menuName = "ScriptableObjects/LocalizationTable")]
 public class LocalisationTable : ScriptableObject
 {
     public string Title;
-    //[TableList]
     public List<LocalisationTableItem> Items;
 
     /// <summary>
@@ -35,54 +36,79 @@ public class LocalisationTable : ScriptableObject
         Debug.Log("table: "+Title+", key not found: "+key);
         return null;
     }
-    /*
+    
     #if UNITY_EDITOR
-        const string k_path = "./Localization/";
+    const string k_path = "./Localization/";
 
-        [Button("Import from csv")]
-        public void Import()
+    [Button("Import from csv (refresh inspector to see changes)")]
+    public void Import()
+    {
+        var languages = LocalisationSettings.Instance.Languages;
+        var path = EditorUtility.OpenFilePanel("Import CSV", k_path, "*.*");
+
+        if (!path.EndsWith(".csv"))
         {
-            var path = EditorUtility.OpenFilePanel("test", k_path, "*.*");
+            Debug.LogError(path + " must be a .csv file!");
+            return;
+        }
 
-            if (!path.EndsWith(".csv"))
-            {
-                Debug.LogError(path + " must be a .csv file!");
-                return;
-            }
+        Items = new List<LocalisationTableItem>();
+        var lines = File.ReadLines(path).ToList();
 
-            Items = new List<LocalisationTableItem>();
-            var lines = File.ReadLines(path).ToList();
-            for (int i = 1; i < lines.Count; i++)
+        var elements = lines[0].Split(",");
+        var indexes = new List<string>();
+        foreach (var e in elements) 
+        {
+            if (e == "Key") continue;
+            indexes.Add(e);
+        }
+
+        for (int i = 1; i < lines.Count; i++)
+        {
+            var element = lines[i].Split(",");
+            var item = new LocalisationTableItem()
             {
-                var element = lines[i].Split(",");
-                Items.Add(new LocalisationTableItem()
+                Key = element[0],
+            };
+            foreach (var language in languages) 
+            {
+                if (!indexes.Contains(language.Name))
                 {
-                    Key = element[0],
-                    English = element[1],
-                    French = element[2],
-                    Spanish = element[3]
-                });
+                    Debug.LogWarning(element[0] + "does not have a traduction in : " +  language.Name);
+                    continue;
+                }
+                item.AddLanguageIfNotExist(language, element[indexes.IndexOf(language.Name)+1]);
             }
+            Items.Add(item);
         }
+        Debug.Log($"Loaded {Title} from csv " + path);
+    }
 
-        [Button("Export to csv")]
-        public void Export()
+    [Button("Export to csv")]
+    public void Export()
+    {
+        var languages = LocalisationSettings.Instance.Languages;
+        string t = "Key";
+        foreach (var language in languages)
         {
-            string t = "Key,English,French,Spanish";
-            for (int i = 0; i < Items.Count; i++)
-            {
-                var item = Items[i];
-                t += $"\n{item.Key}," +
-                    $"{item.English}," +
-                    $"{item.French}," +
-                    $"{item.Spanish}";
-            }
-
-            using (StreamWriter sw = File.CreateText(k_path + Title + ".csv"))
-            {
-                sw.Write(t);
-            }
-            Debug.Log($"Saved {Title} as CSV");
+            t += "," + language.Name;
         }
-    #endif*/
+        for (int i = 0; i < Items.Count; i++)
+        {
+            var item = Items[i];
+            var trads = item.GetTradDictionary();
+            t += $"\n{item.Key}";
+            foreach (var language in languages)
+            {
+                t += "," + trads[language.Name];
+            }
+        }
+
+        using (StreamWriter sw = File.CreateText(k_path + Title + ".csv"))
+        {
+            sw.Write(t);
+        }
+        Debug.Log($"Saved {Title} as CSV");
+    }
+    #endif
 }

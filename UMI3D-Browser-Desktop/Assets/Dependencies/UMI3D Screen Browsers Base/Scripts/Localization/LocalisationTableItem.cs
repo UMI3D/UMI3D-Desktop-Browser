@@ -19,7 +19,7 @@ using UnityEngine;
 public class LocalisationTableItem
 {
     [Serializable]
-    private struct Trad
+    private class Trad
     {
         public LocalisationSettings.Language Key;
         public string Value;
@@ -75,12 +75,12 @@ public class LocalisationTableItem
         }*/
     }
 
-    public void AddLanguageIfNotExist(LocalisationSettings.Language language)
+    public void AddLanguageIfNotExist(LocalisationSettings.Language language, string value = "")
     {
         if (_trads == null) _trads = new List<Trad>();
 
         if (_trads.Any(e => e.Key.Equals(language))) return;
-        _trads.Add(new Trad(language, ""));
+        _trads.Add(new Trad(language, value));
     }
     public void RemoveLanguageIfExist(LocalisationSettings.Language language)
     {
@@ -89,5 +89,15 @@ public class LocalisationTableItem
         if (!_trads.Any(e => e.Key.Equals(language))) return;
 
         _trads.Remove(_trads.Find(e => e.Key.Equals(language)));
+    }
+
+    public Dictionary<string, string> GetTradDictionary()
+    {
+        var dictionary = new Dictionary<string, string>();
+        foreach (var trad in _trads) 
+        {
+            dictionary.Add(trad.Key.Name, trad.Value);
+        }
+        return dictionary;
     }
 }

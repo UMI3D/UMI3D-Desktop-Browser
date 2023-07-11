@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: LocalisationSettings
   m_EditorClassIdentifier: 
   _languages:
-  - Name: Spanish
-    IsActive: 1
   - Name: French
+    IsActive: 1
+  - Name: Spanish
     IsActive: 1
   - Name: English
     IsActive: 1

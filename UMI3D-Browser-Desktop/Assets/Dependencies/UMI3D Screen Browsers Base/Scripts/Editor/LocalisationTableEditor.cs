@@ -19,7 +19,8 @@ public class LocalisationTableEditor : UMI3DInspector
 
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("Title"));
+
         var languages = LocalisationSettings.Instance.Languages;
         languages.Reverse();
 
@@ -65,5 +66,7 @@ public class LocalisationTableEditor : UMI3DInspector
         EditorGUILayout.EndVertical();
 
         serializedObject.ApplyModifiedProperties();
+
+        DrawButtons();
     }
 }
