@@ -14,6 +14,7 @@ using inetum.unityUtils;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using umi3d.baseBrowser.preferences;
 using UnityEditor;
 using UnityEngine;
 
@@ -42,7 +43,6 @@ public class LocalisationTable : ScriptableObject
     [Button("Import from csv (refresh inspector to see changes)")]
     public void Import()
     {
-        var languages = LocalisationSettings.Instance.Languages;
         var path = EditorUtility.OpenFilePanel("Import CSV", k_path, "*.*");
 
         if (!path.EndsWith(".csv"))
@@ -51,12 +51,18 @@ public class LocalisationTable : ScriptableObject
             return;
         }
 
+        ImportCSV(path);
+    }
+
+    public void ImportCSV(string path)
+    {
+        var languages = LocalisationSettings.Instance.Languages;
         Items = new List<LocalisationTableItem>();
         var lines = File.ReadLines(path).ToList();
 
         var elements = lines[0].Split(",");
         var indexes = new List<string>();
-        foreach (var e in elements) 
+        foreach (var e in elements)
         {
             if (e == "Key") continue;
             indexes.Add(e);
@@ -69,15 +75,15 @@ public class LocalisationTable : ScriptableObject
             {
                 Key = element[0],
             };
-            foreach (var language in languages) 
+            foreach (var language in languages)
             {
                 if (!indexes.Contains(language.Name))
                 {
-                    Debug.LogWarning(element[0] + " does not have a traduction in : " +  language.Name);
+                    Debug.LogWarning(element[0] + " does not have a traduction in : " + language.Name);
                     item.AddLanguageIfNotExist(language, "");
                     continue;
                 }
-                item.AddLanguageIfNotExist(language, element[indexes.IndexOf(language.Name)+1]);
+                item.AddLanguageIfNotExist(language, element[indexes.IndexOf(language.Name) + 1]);
             }
             Items.Add(item);
         }
