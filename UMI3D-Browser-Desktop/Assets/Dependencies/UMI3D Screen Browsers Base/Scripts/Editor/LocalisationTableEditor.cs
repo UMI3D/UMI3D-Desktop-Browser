@@ -24,9 +24,9 @@ public class LocalisationTableEditor : UMI3DInspector
 
     public struct Element
     {
-        public string Key;
+        public SerializedProperty Key;
         public Dictionary<string, SerializedProperty> Trad;
-        public Element(string key)
+        public Element(SerializedProperty key)
         {
             Key = key;
             Trad = new Dictionary<string, SerializedProperty>();
@@ -93,7 +93,7 @@ public class LocalisationTableEditor : UMI3DInspector
         for (int i = 0; i < _items.arraySize; i++)
         {
             var trads = _items.GetArrayElementAtIndex(i).FindPropertyRelative("_trads");
-            var key = _items.GetArrayElementAtIndex(i).FindPropertyRelative("Key").stringValue;
+            var key = _items.GetArrayElementAtIndex(i).FindPropertyRelative("Key");
             var element = new Element(key);
             for (int j = 0; j < trads.arraySize; j++)
             {
@@ -124,7 +124,7 @@ public class LocalisationTableEditor : UMI3DInspector
         {
             EditorGUILayout.BeginHorizontal(mustBorder ? _rowStyle : _row2Style);
             mustBorder = !mustBorder;
-            EditorGUILayout.TextField(_elements[i].Key, GUILayout.Width(_cellWidth));
+            EditorGUILayout.PropertyField(_elements[i].Key, GUIContent.none, GUILayout.Width(_cellWidth));
             foreach (var language in _languages)
             {
                 EditorGUILayout.PropertyField(_elements[i].Trad[language.Name], GUIContent.none, GUILayout.Width(_cellWidth));
