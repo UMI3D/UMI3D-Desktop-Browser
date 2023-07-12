@@ -21,7 +21,6 @@ using UnityEngine;
 public class LocalisationTable : ScriptableObject
 {
     public string Title;
-    [TableList]
     public List<LocalisationTableItem> Items;
 
     /// <summary>
@@ -34,17 +33,17 @@ public class LocalisationTable : ScriptableObject
     {
         if (Items.Any(x => x.Key == key))
             return Items.Find(x => x.Key == key).GetTranslation(args);
-        Debug.Log("table: "+Title+", key not found: "+key);
         return null;
     }
-
-#if UNITY_EDITOR
+    
+    #if UNITY_EDITOR
     const string k_path = "./Localization/";
 
-    [Button("Import from csv")]
+    [Button("Import from csv (refresh inspector to see changes)")]
     public void Import()
     {
-        var path = EditorUtility.OpenFilePanel("test", k_path, "*.*");
+        var languages = LocalisationSettings.Instance.Languages;
+        var path = EditorUtility.OpenFilePanel("Import CSV", k_path, "*.*");
 
         if (!path.EndsWith(".csv"))
         {
@@ -54,30 +53,55 @@ public class LocalisationTable : ScriptableObject
 
         Items = new List<LocalisationTableItem>();
         var lines = File.ReadLines(path).ToList();
+
+        var elements = lines[0].Split(",");
+        var indexes = new List<string>();
+        foreach (var e in elements) 
+        {
+            if (e == "Key") continue;
+            indexes.Add(e);
+        }
+
         for (int i = 1; i < lines.Count; i++)
         {
             var element = lines[i].Split(",");
-            Items.Add(new LocalisationTableItem()
+            var item = new LocalisationTableItem()
             {
                 Key = element[0],
-                English = element[1],
-                French = element[2],
-                Spanish = element[3]
-            });
+            };
+            foreach (var language in languages) 
+            {
+                if (!indexes.Contains(language.Name))
+                {
+                    Debug.LogWarning(element[0] + " does not have a traduction in : " +  language.Name);
+                    item.AddLanguageIfNotExist(language, "");
+                    continue;
+                }
+                item.AddLanguageIfNotExist(language, element[indexes.IndexOf(language.Name)+1]);
+            }
+            Items.Add(item);
         }
+        Debug.Log($"Loaded {Title} from csv " + path);
     }
 
     [Button("Export to csv")]
     public void Export()
     {
-        string t = "Key,English,French,Spanish";
+        var languages = LocalisationSettings.Instance.Languages;
+        string t = "Key";
+        foreach (var language in languages)
+        {
+            t += "," + language.Name;
+        }
         for (int i = 0; i < Items.Count; i++)
         {
             var item = Items[i];
-            t += $"\n{item.Key}," +
-                $"{item.English}," +
-                $"{item.French}," +
-                $"{item.Spanish}";
+            var trads = item.GetTradDictionary();
+            t += $"\n{item.Key}";
+            foreach (var language in languages)
+            {
+                t += "," + trads[language.Name];
+            }
         }
 
         using (StreamWriter sw = File.CreateText(k_path + Title + ".csv"))
@@ -86,5 +110,5 @@ public class LocalisationTable : ScriptableObject
         }
         Debug.Log($"Saved {Title} as CSV");
     }
-#endif
+    #endif
 }

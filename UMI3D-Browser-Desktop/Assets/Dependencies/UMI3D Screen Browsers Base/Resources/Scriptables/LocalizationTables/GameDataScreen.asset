@@ -15,22 +15,57 @@ MonoBehaviour:
   Title: GameDataScreen
   Items:
   - Key: GameData
-    English: Game Data
-    French: "Donn\xE9es du jeu"
-    Spanish: Datos del juego
+    _trads:
+    - Key:
+        Name: French
+      Value: "Donn\xE9es du jeu"
+    - Key:
+        Name: Spanish
+      Value: Datos del juego
+    - Key:
+        Name: English
+      Value: Game Data
   - Key: WorldName
-    English: 'World name:'
-    French: 'Nom du monde :'
-    Spanish: 'Nombre del mundo:'
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Nom du monde :'
+    - Key:
+        Name: Spanish
+      Value: 'Nombre del mundo:'
+    - Key:
+        Name: English
+      Value: 'World name:'
   - Key: EnvironmentName
-    English: 'Environment name:'
-    French: 'Nom de l''environnement :'
-    Spanish: 'Nombre del entorno:'
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Nom de l''environnement :'
+    - Key:
+        Name: Spanish
+      Value: 'Nombre del entorno:'
+    - Key:
+        Name: English
+      Value: 'Environment name:'
   - Key: TimeSpent
-    English: 'Time spent in the environment:'
-    French: "Temps pass\xE9 dans l'environnement :"
-    Spanish: 'Tiempo pasado en el entorno:'
+    _trads:
+    - Key:
+        Name: French
+      Value: "Temps pass\xE9 dans l'environnement :"
+    - Key:
+        Name: Spanish
+      Value: 'Tiempo pasado en el entorno:'
+    - Key:
+        Name: English
+      Value: 'Time spent in the environment:'
   - Key: NbParticipants
-    English: 'Number of participants in the environment:'
-    French: 'Nombre de participants dans l''environnement :'
-    Spanish: "N\xFAmero de participantes en el entorno:"
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Nombre de participants dans l''environnement :'
+    - Key:
+        Name: Spanish
+      Value: "N\xFAmero de participantes en el entorno:"
+    - Key:
+        Name: English
+      Value: 'Number of participants in the environment:'

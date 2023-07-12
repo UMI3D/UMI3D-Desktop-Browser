@@ -15,105 +15,280 @@ MonoBehaviour:
   Title: GraphicSettings
   Items:
   - Key: Quality_Label
-    English: Quality Settings
-    French: "Param\xE8tres de qualit\xE9"
-    Spanish: Ajustes de calidad
+    _trads:
+    - Key:
+        Name: French
+      Value: "Param\xE8tres de qualit\xE9"
+    - Key:
+        Name: Spanish
+      Value: Ajustes de calidad
+    - Key:
+        Name: English
+      Value: Quality Settings
   - Key: Description_Low
-    English: Low resolution is targetting {0}fps with lower rendering
-    French: "La basse r\xE9solution vise {0}fps avec un rendu plus faible."
-    Spanish: "La baja resoluci\xF3n tiene como objetivo {0}fps con menor renderizado"
+    _trads:
+    - Key:
+        Name: French
+      Value: "La basse r\xE9solution vise {0}fps avec un rendu plus faible."
+    - Key:
+        Name: Spanish
+      Value: "La baja resoluci\xF3n tiene como objetivo {0}fps con menor renderizado"
+    - Key:
+        Name: English
+      Value: Low resolution is targetting {0}fps with lower rendering
   - Key: Description_Medium
-    English: Medium resolution is targetting {0}fps with midium rendering
-    French: "La r\xE9solution moyenne vise {0}fps avec un rendu moyen."
-    Spanish: "La resoluci\xF3n media tiene como objetivo {0}fps con un renderizado
-      medio."
+    _trads:
+    - Key:
+        Name: French
+      Value: "La r\xE9solution moyenne vise {0}fps avec un rendu moyen."
+    - Key:
+        Name: Spanish
+      Value: "La resoluci\xF3n media tiene como objetivo {0}fps con un renderizado
+        medio."
+    - Key:
+        Name: English
+      Value: Medium resolution is targetting {0}fps with midium rendering
   - Key: Description_High
-    English: High resolution is targetting {0}fps with higher rendering
-    French: "La haute r\xE9solution vise {0}fps avec un rendu plus \xE9lev\xE9."
-    Spanish: "La alta resoluci\xF3n tiene como objetivo {0}fps con un mayor renderizado"
+    _trads:
+    - Key:
+        Name: French
+      Value: "La haute r\xE9solution vise {0}fps avec un rendu plus \xE9lev\xE9."
+    - Key:
+        Name: Spanish
+      Value: "La alta resoluci\xF3n tiene como objetivo {0}fps con un mayor renderizado"
+    - Key:
+        Name: English
+      Value: High resolution is targetting {0}fps with higher rendering
   - Key: Description_Custom
-    English: Custom resolution let you choose your settings
-    French: "La r\xE9solution personnalis\xE9e vous permet de choisir vos param\xE8tres"
-    Spanish: "La resoluci\xF3n personalizada te permite elegir tus ajustes"
+    _trads:
+    - Key:
+        Name: French
+      Value: "La r\xE9solution personnalis\xE9e vous permet de choisir vos param\xE8tres"
+    - Key:
+        Name: Spanish
+      Value: "La resoluci\xF3n personalizada te permite elegir tus ajustes"
+    - Key:
+        Name: English
+      Value: Custom resolution let you choose your settings
   - Key: DPI_Description
-    English: 'Dots per inch: Lower means the UI will be larger.'
-    French: 'Dots per inch (Points par pouce) : Plus bas signifie que l''interface
-      utilisateur sera plus grande.'
-    Spanish: "Dots per inch (Puntos por pulgada): M\xE1s bajo significa que la IU
-      ser\xE1 m\xE1s grande."
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Dots per inch (Points par pouce) : Plus bas signifie que l''interface
+        utilisateur sera plus grande.'
+    - Key:
+        Name: Spanish
+      Value: "Dots per inch (Puntos por pulgada): M\xE1s bajo significa que la IU
+        ser\xE1 m\xE1s grande."
+    - Key:
+        Name: English
+      Value: 'Dots per inch: Lower means the UI will be larger.'
   - Key: FullScreenResolution_Label
-    English: Full screen resolution
-    French: "R\xE9solution plein \xE9cran"
-    Spanish: "Resoluci\xF3n de pantalla completa"
+    _trads:
+    - Key:
+        Name: French
+      Value: "R\xE9solution plein \xE9cran"
+    - Key:
+        Name: Spanish
+      Value: "Resoluci\xF3n de pantalla completa"
+    - Key:
+        Name: English
+      Value: Full screen resolution
   - Key: FullScreenResolution_description
-    English: Will impact Game and UI Resolutions
-    French: "Aura un impact sur les r\xE9solutions des jeux et de l'interface utilisateur"
-    Spanish: "Afectar\xE1 a las resoluciones del juego y de la interfaz de usuario"
+    _trads:
+    - Key:
+        Name: French
+      Value: "Aura un impact sur les r\xE9solutions des jeux et de l'interface utilisateur"
+    - Key:
+        Name: Spanish
+      Value: "Afectar\xE1 a las resoluciones del juego y de la interfaz de usuario"
+    - Key:
+        Name: English
+      Value: Will impact Game and UI Resolutions
   - Key: HDR_Label
-    English: Enable HDR
-    French: Activer HDR
-    Spanish: Activar HDR
+    _trads:
+    - Key:
+        Name: French
+      Value: Activer HDR
+    - Key:
+        Name: Spanish
+      Value: Activar HDR
+    - Key:
+        Name: English
+      Value: Enable HDR
   - Key: HDR_Description
-    English: High Dynamic Range
-    French: "High Dynamic Range (Plage dynamique sup\xE9rieure)"
-    Spanish: "High Dynamic Range (Alto rango din\xE1mico)"
+    _trads:
+    - Key:
+        Name: French
+      Value: "High Dynamic Range (Plage dynamique sup\xE9rieure)"
+    - Key:
+        Name: Spanish
+      Value: "High Dynamic Range (Alto rango din\xE1mico)"
+    - Key:
+        Name: English
+      Value: High Dynamic Range
   - Key: VLow
-    English: VLow
-    French: TBas
-    Spanish: MBajo
+    _trads:
+    - Key:
+        Name: French
+      Value: TBas
+    - Key:
+        Name: Spanish
+      Value: MBajo
+    - Key:
+        Name: English
+      Value: VLow
   - Key: Low
-    English: Low
-    French: Bas
-    Spanish: Bajo
+    _trads:
+    - Key:
+        Name: French
+      Value: Bas
+    - Key:
+        Name: Spanish
+      Value: Bajo
+    - Key:
+        Name: English
+      Value: Low
   - Key: Medium
-    English: Medium
-    French: Moyen
-    Spanish: Medio
+    _trads:
+    - Key:
+        Name: French
+      Value: Moyen
+    - Key:
+        Name: Spanish
+      Value: Medio
+    - Key:
+        Name: English
+      Value: Medium
   - Key: High
-    English: High
-    French: Haut
-    Spanish: Alta
+    _trads:
+    - Key:
+        Name: French
+      Value: Haut
+    - Key:
+        Name: Spanish
+      Value: Alta
+    - Key:
+        Name: English
+      Value: High
   - Key: VHigh
-    English: VHigh
-    French: THaut
-    Spanish: MAlto
+    _trads:
+    - Key:
+        Name: French
+      Value: THaut
+    - Key:
+        Name: Spanish
+      Value: MAlto
+    - Key:
+        Name: English
+      Value: VHigh
   - Key: Ultra
-    English: Ultra
-    French: Ultra
-    Spanish: Ultra
+    _trads:
+    - Key:
+        Name: French
+      Value: Ultra
+    - Key:
+        Name: Spanish
+      Value: Ultra
+    - Key:
+        Name: English
+      Value: Ultra
   - Key: Custom
-    English: Custom
-    French: "Personnalis\xE9"
-    Spanish: Personalizado
+    _trads:
+    - Key:
+        Name: French
+      Value: "Personnalis\xE9"
+    - Key:
+        Name: Spanish
+      Value: Personalizado
+    - Key:
+        Name: English
+      Value: Custom
   - Key: Small
-    English: Small
-    French: Petit
-    Spanish: "Peque\xF1o"
+    _trads:
+    - Key:
+        Name: French
+      Value: Petit
+    - Key:
+        Name: Spanish
+      Value: "Peque\xF1o"
+    - Key:
+        Name: English
+      Value: Small
   - Key: Large
-    English: Large
-    French: Large
-    Spanish: Grande
+    _trads:
+    - Key:
+        Name: French
+      Value: Large
+    - Key:
+        Name: Spanish
+      Value: Grande
+    - Key:
+        Name: English
+      Value: Large
   - Key: ReduceAnimation
-    English: Reduce Animation
-    French: "R\xE9duire l'animation"
-    Spanish: "Reducir la animaci\xF3n"
+    _trads:
+    - Key:
+        Name: French
+      Value: "R\xE9duire l'animation"
+    - Key:
+        Name: Spanish
+      Value: "Reducir la animaci\xF3n"
+    - Key:
+        Name: English
+      Value: Reduce Animation
   - Key: RenderScale_Label
-    English: Render Scale
-    French: "\xC9chelle de rendu"
-    Spanish: Nivel de rendimiento
+    _trads:
+    - Key:
+        Name: French
+      Value: "\xC9chelle de rendu"
+    - Key:
+        Name: Spanish
+      Value: Nivel de rendimiento
+    - Key:
+        Name: English
+      Value: Render Scale
   - Key: RenderScale_Description
-    English: Lower means less resolution and more FPS.
-    French: "Plus bas signifie moins de r\xE9solution et plus de FPS."
-    Spanish: "M\xE1s bajo significa menos resoluci\xF3n y m\xE1s FPS."
+    _trads:
+    - Key:
+        Name: French
+      Value: "Plus bas signifie moins de r\xE9solution et plus de FPS."
+    - Key:
+        Name: Spanish
+      Value: "M\xE1s bajo significa menos resoluci\xF3n y m\xE1s FPS."
+    - Key:
+        Name: English
+      Value: Lower means less resolution and more FPS.
   - Key: Resolution_Label
-    English: Game resolution
-    French: "R\xE9solution du jeu"
-    Spanish: "Resoluci\xF3n del juego"
+    _trads:
+    - Key:
+        Name: French
+      Value: "R\xE9solution du jeu"
+    - Key:
+        Name: Spanish
+      Value: "Resoluci\xF3n del juego"
+    - Key:
+        Name: English
+      Value: Game resolution
   - Key: UISize_Label
-    English: UI Size
-    French: Taille de l'IU
-    Spanish: "Tama\xF1o de la IU"
+    _trads:
+    - Key:
+        Name: French
+      Value: Taille de l'IU
+    - Key:
+        Name: Spanish
+      Value: "Tama\xF1o de la IU"
+    - Key:
+        Name: English
+      Value: UI Size
   - Key: UISize_Description
-    English: Size of the user interface
-    French: Taille de l'interface utilisateur
-    Spanish: "Tama\xF1o de la interfaz de usuario"
+    _trads:
+    - Key:
+        Name: French
+      Value: Taille de l'interface utilisateur
+    - Key:
+        Name: Spanish
+      Value: "Tama\xF1o de la interfaz de usuario"
+    - Key:
+        Name: English
+      Value: Size of the user interface

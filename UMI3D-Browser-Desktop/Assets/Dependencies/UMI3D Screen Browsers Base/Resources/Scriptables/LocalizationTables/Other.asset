@@ -15,26 +15,68 @@ MonoBehaviour:
   Title: Other
   Items:
   - Key: LoadingPercent
-    English: 'Total loading : {0} %'
-    French: 'Charge totale : {0} %.'
-    Spanish: 'Carga total : {0} %'
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Charge totale : {0} %.'
+    - Key:
+        Name: Spanish
+      Value: 'Carga total : {0} %'
+    - Key:
+        Name: English
+      Value: 'Total loading : {0} %'
   - Key: LoadingEnv
-    English: Loading environment
-    French: Chargement de l'environnement
-    Spanish: Cargar el entorno
+    _trads:
+    - Key:
+        Name: French
+      Value: Chargement de l'environnement
+    - Key:
+        Name: Spanish
+      Value: Cargar el entorno
+    - Key:
+        Name: English
+      Value: Loading environment
   - Key: LeavingEnv
-    English: Leaving environment
-    French: Quitter l'environnement
-    Spanish: Abandonar el entorno
+    _trads:
+    - Key:
+        Name: French
+      Value: Quitter l'environnement
+    - Key:
+        Name: Spanish
+      Value: Abandonar el entorno
+    - Key:
+        Name: English
+      Value: Leaving environment
   - Key: EditText
-    English: Edit Text
-    French: Modifier le texte
-    Spanish: Editar texto
+    _trads:
+    - Key:
+        Name: French
+      Value: Modifier le texte
+    - Key:
+        Name: Spanish
+      Value: Editar texto
+    - Key:
+        Name: English
+      Value: Edit Text
   - Key: DisplayInteractionsMenu
-    English: Display interactions menu
-    French: Afficher le menu des interactions
-    Spanish: "Mostrar men\xFA de interacciones"
+    _trads:
+    - Key:
+        Name: French
+      Value: Afficher le menu des interactions
+    - Key:
+        Name: Spanish
+      Value: "Mostrar men\xFA de interacciones"
+    - Key:
+        Name: English
+      Value: Display interactions menu
   - Key: LeaveEnvironment
-    English: Leave  the environment
-    French: Quitter l'environnement
-    Spanish: Salir del entorno
+    _trads:
+    - Key:
+        Name: French
+      Value: Quitter l'environnement
+    - Key:
+        Name: Spanish
+      Value: Salir del entorno
+    - Key:
+        Name: English
+      Value: Leave  the environment

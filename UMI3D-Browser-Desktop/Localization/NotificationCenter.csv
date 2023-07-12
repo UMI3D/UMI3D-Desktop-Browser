@@ -1,0 +1,7 @@
+Key,English,French,Spanish
+Timestamp_Now,Now,Maintenant,Ahora
+No_Notif,No notification,Pas de notification,Sin notificación
+No_NewNotif,No new notification,Pas de nouvelle notification,Ninguna nueva notificación
+UserList_FilterLabel,Search by user name:,Recherche par nom d'utilisateur :,Búsqueda por nombre de usuario:
+NbNotifs,Notifications: {0},Notifications : {0},Notificaciones: {0}
+NbUsers,Users: {0},Utilisateurs : {0},Usuarios: {0}

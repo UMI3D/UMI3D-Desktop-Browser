@@ -15,18 +15,46 @@ MonoBehaviour:
   Title: UIInGame
   Items:
   - Key: Crouch
-    English: Crouch
-    French: S'accroupir
-    Spanish: Agazaparse
+    _trads:
+    - Key:
+        Name: French
+      Value: S'accroupir
+    - Key:
+        Name: Spanish
+      Value: Agazaparse
+    - Key:
+        Name: English
+      Value: Crouch
   - Key: Jump
-    English: Jump
-    French: Sauter
-    Spanish: Saltar
+    _trads:
+    - Key:
+        Name: French
+      Value: Sauter
+    - Key:
+        Name: Spanish
+      Value: Saltar
+    - Key:
+        Name: English
+      Value: Jump
   - Key: Action
-    English: Action
-    French: Action
-    Spanish: "Acci\xF3n"
+    _trads:
+    - Key:
+        Name: French
+      Value: Action
+    - Key:
+        Name: Spanish
+      Value: "Acci\xF3n"
+    - Key:
+        Name: English
+      Value: Action
   - Key: ContextualMenu
-    English: Contextual Menu
-    French: Menu contextuel
-    Spanish: "Men\xFA contextual"
+    _trads:
+    - Key:
+        Name: French
+      Value: Menu contextuel
+    - Key:
+        Name: Spanish
+      Value: "Men\xFA contextual"
+    - Key:
+        Name: English
+      Value: Contextual Menu

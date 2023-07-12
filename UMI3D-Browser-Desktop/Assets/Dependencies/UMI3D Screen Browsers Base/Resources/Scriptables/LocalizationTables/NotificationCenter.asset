@@ -15,26 +15,68 @@ MonoBehaviour:
   Title: NotificationCenter
   Items:
   - Key: Timestamp_Now
-    English: Now
-    French: Maintenant
-    Spanish: Ahora
+    _trads:
+    - Key:
+        Name: French
+      Value: Maintenant
+    - Key:
+        Name: Spanish
+      Value: Ahora
+    - Key:
+        Name: English
+      Value: Now
   - Key: No_Notif
-    English: No notification
-    French: Pas de notification
-    Spanish: "Sin notificaci\xF3n"
+    _trads:
+    - Key:
+        Name: French
+      Value: Pas de notification
+    - Key:
+        Name: Spanish
+      Value: "Sin notificaci\xF3n"
+    - Key:
+        Name: English
+      Value: No notification
   - Key: No_NewNotif
-    English: No new notification
-    French: Pas de nouvelle notification
-    Spanish: "Ninguna nueva notificaci\xF3n"
+    _trads:
+    - Key:
+        Name: French
+      Value: Pas de nouvelle notification
+    - Key:
+        Name: Spanish
+      Value: "Ninguna nueva notificaci\xF3n"
+    - Key:
+        Name: English
+      Value: No new notification
   - Key: UserList_FilterLabel
-    English: 'Search by user name:'
-    French: 'Recherche par nom d''utilisateur :'
-    Spanish: "B\xFAsqueda por nombre de usuario:"
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Recherche par nom d''utilisateur :'
+    - Key:
+        Name: Spanish
+      Value: "B\xFAsqueda por nombre de usuario:"
+    - Key:
+        Name: English
+      Value: 'Search by user name:'
   - Key: NbNotifs
-    English: 'Notifications: {0}'
-    French: 'Notifications : {0}'
-    Spanish: 'Notificaciones: {0}'
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Notifications : {0}'
+    - Key:
+        Name: Spanish
+      Value: 'Notificaciones: {0}'
+    - Key:
+        Name: English
+      Value: 'Notifications: {0}'
   - Key: NbUsers
-    English: 'Users: {0}'
-    French: 'Utilisateurs : {0}'
-    Spanish: 'Usuarios: {0}'
+    _trads:
+    - Key:
+        Name: French
+      Value: 'Utilisateurs : {0}'
+    - Key:
+        Name: Spanish
+      Value: 'Usuarios: {0}'
+    - Key:
+        Name: English
+      Value: 'Users: {0}'
