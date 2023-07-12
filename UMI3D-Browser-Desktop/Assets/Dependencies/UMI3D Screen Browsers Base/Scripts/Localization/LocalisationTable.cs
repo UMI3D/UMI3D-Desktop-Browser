@@ -73,7 +73,8 @@ public class LocalisationTable : ScriptableObject
             {
                 if (!indexes.Contains(language.Name))
                 {
-                    Debug.LogWarning(element[0] + "does not have a traduction in : " +  language.Name);
+                    Debug.LogWarning(element[0] + " does not have a traduction in : " +  language.Name);
+                    item.AddLanguageIfNotExist(language, "");
                     continue;
                 }
                 item.AddLanguageIfNotExist(language, element[indexes.IndexOf(language.Name)+1]);
