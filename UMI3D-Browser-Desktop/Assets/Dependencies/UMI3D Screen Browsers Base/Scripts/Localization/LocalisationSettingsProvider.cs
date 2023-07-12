@@ -10,6 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +29,7 @@ class LocalisationSettingsProvider : SettingsProvider
     SerializedProperty _languagesProperty;
     List<SerializedProperty> _properties;
     string _newLanguageName;
+    string _pathLocalisationTable = "Assets/Dependencies/UMI3D Screen Browsers Base/Resources/Scriptables/LocalizationTables/";
 
     GUIStyle _headerStyle;
     GUIStyle _rowStyle;
@@ -103,6 +105,9 @@ class LocalisationSettingsProvider : SettingsProvider
         DrawLanguages();
         DrawDropdownCurrentLanguage();
 
+        EditorGUILayout.Space(20);
+        DrawCreateFromCSV();
+
         _settings.ApplyModifiedProperties();
     }
 
@@ -117,7 +122,6 @@ class LocalisationSettingsProvider : SettingsProvider
 
     private void DrawLanguages()
     {
-
         EditorGUILayout.BeginVertical(GUI.skin.box);
         DrawLanguageHeader();
         DrawLanguageTable();
@@ -243,6 +247,32 @@ class LocalisationSettingsProvider : SettingsProvider
             languages.Add(settings.Languages[i]);
             languageNames.Add(settings.Languages[i].Name);
         }
+    }
+
+    private void DrawCreateFromCSV()
+    {
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.BeginVertical();
+        EditorGUILayout.LabelField("Path to Localisation table objects :");
+        _pathLocalisationTable = EditorGUILayout.TextField(_pathLocalisationTable);
+        EditorGUILayout.EndVertical();
+        if (GUILayout.Button("Create table from csv", GUILayout.Height(40)))
+        {
+            var path = EditorUtility.OpenFilePanel("Import CSV", "", "*.*");
+
+            if (!path.EndsWith(".csv"))
+            {
+                Debug.LogError(path + " must be a .csv file!");
+                return;
+            }
+
+            var table = ScriptableObject.CreateInstance<LocalisationTable>();
+            table.Title = path.Split("/").Last().Split(".").First();
+            table.ImportCSV(path);
+            AssetDatabase.CreateAsset(table, _pathLocalisationTable + table.Title.Replace(" ", "") + ".asset");
+            AssetDatabase.SaveAssets();
+        }
+        EditorGUILayout.EndHorizontal();
     }
 
     private Texture2D MakeTex(int width, int height, Color col)
