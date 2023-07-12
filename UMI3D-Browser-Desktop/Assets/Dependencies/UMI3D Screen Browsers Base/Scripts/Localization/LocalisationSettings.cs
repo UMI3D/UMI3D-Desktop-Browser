@@ -165,7 +165,8 @@ class LocalisationSettingsProvider : SettingsProvider
             EditorGUILayout.EndHorizontal();
 
             // Elements
-            for (int i = _properties.Count - 1; i >= 0; i--)
+            var indexToRemove = -1;
+            for (int i = 0; i < _properties.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal(mustBorder ? _rowStyle : _row2Style);
                 mustBorder = !mustBorder;
@@ -175,29 +176,38 @@ class LocalisationSettingsProvider : SettingsProvider
                 }
                 if (GUILayout.Button("-", GUILayout.Width(20)))
                 {
-                    var tables = Resources.LoadAll<LocalisationTable>("");
-                    foreach (var table in tables)
-                    {
-                        EditorUtility.SetDirty(table);
-                        foreach (var item in table.Items) 
-                        {
-                            var settings = (LocalisationSettings)_settings.targetObject;
-                            item.RemoveLanguageIfExist(settings.Languages[i]);
-                        }
-                    }
-
-                    _languagesProperty.DeleteArrayElementAtIndex(i);
-                    _settings.ApplyModifiedProperties();
+                    indexToRemove = i;
                 }
                 EditorGUILayout.EndHorizontal();
+            }
+            if (indexToRemove != -1)
+            {
+                var tables = Resources.LoadAll<LocalisationTable>("");
+                foreach (var table in tables)
+                {
+                    EditorUtility.SetDirty(table);
+                    foreach (var item in table.Items)
+                    {
+                        var settings = (LocalisationSettings)_settings.targetObject;
+                        item.RemoveLanguageIfExist(settings.Languages[indexToRemove]);
+                    }
+                }
+                if (indexToRemove == _languagesProperty.arraySize - 1)
+                {
+                    _settings.FindProperty("_baseLanguageIndex").intValue = 0;
+                }
+
+                _languagesProperty.DeleteArrayElementAtIndex(indexToRemove);
+                _settings.ApplyModifiedProperties();
             }
 
             EditorGUILayout.BeginHorizontal(mustBorder ? _rowStyle : _row2Style);
             _newLanguageName = EditorGUILayout.TextField(_newLanguageName);
             if (GUILayout.Button("+") && _newLanguageName != "")
             {
-                _languagesProperty.InsertArrayElementAtIndex(0);
-                _languagesProperty.GetArrayElementAtIndex(0).FindPropertyRelative("Name").stringValue = _newLanguageName;
+                var index = _languagesProperty.arraySize;
+                _languagesProperty.InsertArrayElementAtIndex(index);
+                _languagesProperty.GetArrayElementAtIndex(index).FindPropertyRelative("Name").stringValue = _newLanguageName;
                 _newLanguageName = "";
                 _settings.ApplyModifiedProperties();
 
@@ -208,7 +218,7 @@ class LocalisationSettingsProvider : SettingsProvider
                     foreach (var item in table.Items)
                     {
                         var settings = (LocalisationSettings)_settings.targetObject;
-                        item.AddLanguageIfNotExist(settings.Languages[0]);
+                        item.AddLanguageIfNotExist(settings.Languages[index]);
                     }
                 }
                 _newLanguageName = "";

@@ -9,6 +9,8 @@ using UnityEngine;
 [CustomEditor(typeof(LocalisationTable))]
 public class LocalisationTableEditor : UMI3DInspector
 {
+    float k_minElementWidth = 200;
+
     public struct Element
     {
         public string Key;
@@ -28,12 +30,13 @@ public class LocalisationTableEditor : UMI3DInspector
 
     float _cellWidth;
 
+    Vector2 _scrollPosition;
+
     public override void OnInspectorGUI()
     {
         EditorGUILayout.PropertyField(serializedObject.FindProperty("Title"));
 
         var languages = LocalisationSettings.Instance.Languages;
-        languages.Reverse();
 
         if (_sectionNames == null) Initialize(languages);
 
@@ -54,6 +57,8 @@ public class LocalisationTableEditor : UMI3DInspector
         }
         var mustBorder = false;
 
+        EditorGUILayout.Space(15);
+        _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
         EditorGUILayout.BeginVertical();
         // Header
         EditorGUILayout.BeginHorizontal(_headerStyle);
@@ -84,6 +89,8 @@ public class LocalisationTableEditor : UMI3DInspector
             EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.EndVertical();
+        EditorGUILayout.EndScrollView();
+        EditorGUILayout.Space(15);
 
         serializedObject.ApplyModifiedProperties();
 
@@ -96,6 +103,7 @@ public class LocalisationTableEditor : UMI3DInspector
         _sectionNames.AddRange(languages.Select(e => e.Name));
 
         _cellWidth = (EditorGUIUtility.currentViewWidth - 40 - 20) / (languages.Count + 1) - 2;
+        if (_cellWidth < k_minElementWidth) _cellWidth = k_minElementWidth;
 
         _headerStyle = new GUIStyle();
         _rowStyle = new GUIStyle();

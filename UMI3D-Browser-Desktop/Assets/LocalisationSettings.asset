@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LocalisationSettings
   m_EditorClassIdentifier: 
   _languages:
+  - Name: English
   - Name: French
   - Name: Spanish
-  - Name: English
   _baseLanguageIndex: 0
