@@ -105,7 +105,7 @@ namespace umi3d.baseBrowser.connection
 
             cdk.collaboration.UMI3DEnvironmentClient.EnvironementLoaded.AddListener(() => EnvironmentLoaded?.Invoke());
 
-            UMI3DCollaborationEnvironmentLoader.OnUpdateJoinnedUserList += () => UserCountUpdated?.Invoke(UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList.Count());
+            UMI3DCollaborationEnvironmentLoader.Instance.OnUpdateJoinnedUserList += () => UserCountUpdated?.Invoke(UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList.Count());
         }
 
         #region Launcher
