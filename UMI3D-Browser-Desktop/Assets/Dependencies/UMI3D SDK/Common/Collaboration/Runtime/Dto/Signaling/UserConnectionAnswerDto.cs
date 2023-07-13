@@ -14,16 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common.collaboration
+using System;
+using umi3d.common.interaction;
+
+namespace umi3d.common.collaboration.dto.signaling
 {
     /// <summary>
-    /// DTO describing a request from the server to know the current status of the browser's client.
+    /// DTO describing the browser answer to connection requirements.
     /// </summary>
-    public class StatusRequestDto : UMI3DDto
+    [Serializable]
+    public class UserConnectionAnswerDto : UserDto
     {
         /// <summary>
-        /// Browser's client status.
+        /// Answers to the connection form.
         /// </summary>
-        public StatusType CurrentStatus { get; set; }
+        /// Not null if the received <see cref="UserConnectionDto"/> contained a form.
+        public FormAnswerDto parameters { get; set; }
+
+        /// <summary>
+        /// State if the libraries have been updated
+        /// </summary>
+        public bool librariesUpdated { get; set; } = false;
     }
 }

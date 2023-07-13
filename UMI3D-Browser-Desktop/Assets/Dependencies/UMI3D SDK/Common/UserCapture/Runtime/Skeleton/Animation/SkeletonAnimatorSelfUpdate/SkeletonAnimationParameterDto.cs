@@ -16,18 +16,47 @@ limitations under the License.
 
 namespace umi3d.common.userCapture.animation
 {
+    /// <summary>
+    /// DTO for properties of a parameter that is self-computed by the browsers based on the skeleton movement.
+    /// </summary>
     public class SkeletonAnimationParameterDto
     {
-        public uint parameterKey;
+        /// <summary>
+        /// Key of the parameter to compute in <see cref="SkeletonAnimatorParameterKeys"/>. <br/>
+        /// Each key result in a different computation in browsers.
+        /// </summary>
+        public uint parameterKey { get; set; }
 
-        public RangeDto[] ranges;
+        /// <summary>
+        /// Ranges to clamp value to a constant result when in an interval. <br/>
+        /// "If no range is defined, the parameter value is directly given to the animator.
+        /// </summary>
+        public RangeDto[] ranges { get; set; }
 
+        /// <summary>
+        ///  Ranges to clamp value to a certain result when in an interval.
+        /// </summary>
         public class RangeDto
         {
-            public float startBound;
-            public float endBound;
-            public float result;
-            public bool rawValue;
+            /// <summary>
+            /// Start value of range
+            /// </summary>
+            public float startBound { get; set; }
+
+            /// <summary>
+            /// End value of range
+            /// </summary>
+            public float endBound { get; set; }
+
+            /// <summary>
+            /// Resulting value if the computed value is within <see cref="startBound"/> and <see cref="endBound"/>.
+            /// </summary>
+            public float result { get; set; }
+
+            /// <summary>
+            /// If true, raw value is used as result if computed value is within <see cref="startBound"/> and <see cref="endBound"/>.
+            /// </summary>
+            public bool rawValue { get; set; }
         }
     }
 }

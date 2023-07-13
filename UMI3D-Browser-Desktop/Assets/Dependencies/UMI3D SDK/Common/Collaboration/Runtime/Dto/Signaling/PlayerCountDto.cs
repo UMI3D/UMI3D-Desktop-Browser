@@ -14,27 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System;
-using umi3d.common.interaction;
-
-namespace umi3d.common.collaboration
+namespace umi3d.common.collaboration.dto.signaling
 {
     /// <summary>
-    /// DTO describing user requirements for a connection.
+    /// DTO describing the number of users in an environment at a given time.
     /// </summary>
-    /// Typically sent by a server during the connection process.
-    [Serializable]
-    public class UserConnectionDto : UserDto
+    public class PlayerCountDto : UMI3DDto
     {
         /// <summary>
-        /// Connection form as a set of parameters.
+        /// Connected player count
         /// </summary>
-        public ConnectionFormDto parameters { get; set; }
-        public bool librariesUpdated { get; set; } = false;
+        public int count { get; set; }
 
         /// <summary>
-        /// Password to use to connect to the vocal server.
+        /// Last change date with format "MM:dd:yyyy:HH:mm:ss";
         /// </summary>
-        public string audioPassword { get; set; }
+        public string lastUpdate { get; set; }
     }
 }

@@ -16,7 +16,7 @@ limitations under the License.
 
 using System.Collections.Generic;
 using System.Linq;
-using umi3d.common.binding;
+using umi3d.common.dto.binding;
 using UnityEngine;
 
 namespace umi3d.cdk.binding
@@ -26,6 +26,9 @@ namespace umi3d.cdk.binding
     /// </summary>
     public class MultiBinding : AbstractBinding
     {
+        /// <summary>
+        /// Cache of bindings on the node ordered by descending priority.
+        /// </summary>
         protected AbstractSimpleBinding[] orderedBindings;
 
         public List<AbstractSimpleBinding> Bindings => orderedBindings.ToList();

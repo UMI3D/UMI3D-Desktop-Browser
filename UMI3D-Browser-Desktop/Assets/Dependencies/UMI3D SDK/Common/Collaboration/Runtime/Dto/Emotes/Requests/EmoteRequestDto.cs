@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2022 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,23 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System;
-using umi3d.common.interaction;
-
-namespace umi3d.common.collaboration
+namespace umi3d.common.collaboration.dto.emotes
 {
     /// <summary>
-    /// DTO describing the browser answer to connection requirements.
+    /// Request from a browser to trigger an emote for its user on user browsers.
     /// </summary>
-    [Serializable]
-    public class UserConnectionAnswerDto : UserDto
+    public class EmoteRequestDto : AbstractBrowserRequestDto
     {
         /// <summary>
-        /// Answers to the connection form.
+        /// UMI3D id of the emote to trigger/interrupt.
         /// </summary>
-        /// Not null if the received <see cref="UserConnectionDto"/> contained a form.
-        public FormAnswerDto parameters { get; set; }
+        public ulong emoteId { get; set; }
 
-        public bool librariesUpdated { get; set; } = false;
+        /// <summary>
+        /// If true, the emote sould be triggered. Otherwise, it should be interrupted.
+        /// </summary>
+        public bool shouldTrigger { get; set; } = true;
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 - 2023 Inetum
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,38 +14,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common.userCapture.animation
+namespace umi3d.common.collaboration.dto.voip
 {
     /// <summary>
-    /// Keys used to request browsers to compute themselves the animator parameters for a skeleton. <br/>
-    /// Each key result in a different computation formula in browsers.
+    /// DTO describing a vocal server configuration.
     /// </summary>
-    /// It ensure smooth animations on clients.
-    public enum SkeletonAnimatorParameterKeys : uint
+    /// This server can be a Murmur server, for example.
+    public class VoiceDto
     {
         /// <summary>
-        /// Magnitude of the speed on all axes.
+        /// URL of the vocal server.
         /// </summary>
-        SPEED,
+        public string url { get; set; }
 
         /// <summary>
-        /// Magnitude of the speed on the X axis.
+        /// Login credential to connect to the vocal server.
         /// </summary>
-        SPEED_X,
+        public string login { get; set; }
 
         /// <summary>
-        /// Magnitude of the speed on the Y axis.
+        /// Password credential to connect to the vocal server.
         /// </summary>
-        SPEED_Y,
+        public string password { get; set; }
 
         /// <summary>
-        /// Magnitude of the speed on the Z axis.
+        /// Name of the channel to join in the server.
         /// </summary>
-        SPEED_Z,
-
-        /// <summary>
-        /// Magnitude of the speed on the XY plane.
-        /// </summary>
-        SPEED_X_Y
+        public string channelName { get; set; }
     }
 }

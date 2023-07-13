@@ -17,12 +17,13 @@ limitations under the License.
 using System.Linq;
 using System.Threading.Tasks;
 using umi3d.common;
-using umi3d.common.binding;
+using umi3d.common.dto.binding;
 
 namespace umi3d.cdk.binding
 {
     /// <summary>
-    /// Loader for bindings.
+    /// Loader for bindings.<br/>
+    /// See <see cref="BindingDto"/>.
     /// </summary>
     public class BindingLoader : AbstractLoader
     {

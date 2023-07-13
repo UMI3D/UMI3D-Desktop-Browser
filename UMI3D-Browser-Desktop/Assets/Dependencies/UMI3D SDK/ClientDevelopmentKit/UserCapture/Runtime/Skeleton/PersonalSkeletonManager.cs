@@ -16,15 +16,21 @@ limitations under the License.
 
 using inetum.unityUtils;
 using System.Collections;
+using System.Collections.Generic;
 using umi3d.common;
 using umi3d.common.userCapture.description;
+using UnityEngine;
 
 namespace umi3d.cdk.userCapture
 {
+    /// <summary>
+    /// User's skeleton manager.
+    /// </summary>
     public class PersonalSkeletonManager : Singleton<PersonalSkeletonManager>, ISkeletonManager
     {
         private const DebugScope scope = DebugScope.CDK | DebugScope.UserCapture;
 
+        /// <inheritdoc/>
         public PersonalSkeleton personalSkeleton
         {
             get
@@ -40,6 +46,7 @@ namespace umi3d.cdk.userCapture
             protected set => _skeleton = value;
         }
 
+        /// <inheritdoc/>
         public UMI3DSkeletonHierarchy StandardHierarchy
         {
             get
@@ -48,6 +55,10 @@ namespace umi3d.cdk.userCapture
                 return _standardHierarchy;
             }
         }
+
+        public IDictionary<uint, float> BonesAsyncFPS => personalSkeleton.BonesAsyncFPS;
+
+        public Vector3 worldSize => personalSkeleton.worldSize;
 
         private UMI3DSkeletonHierarchy _standardHierarchy;
 

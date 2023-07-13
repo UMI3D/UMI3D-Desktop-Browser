@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 - 2022 Inetum
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,21 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common.collaboration.emotes
+namespace umi3d.common.collaboration.dto.signaling
 {
     /// <summary>
-    /// Request from a browser to trigger an emote for its user on user browsers.
+    /// DTO describing the current status of the user from the server point of view.
     /// </summary>
-    public class EmoteRequestDto : AbstractBrowserRequestDto
+    /// Receiving on a browser this DTO should set the user status to the attributed one.
+    public class StatusDto : UMI3DDto
     {
         /// <summary>
-        /// UMI3D id of the emote to trigger/interrupt.
+        /// Attributed user status.
         /// </summary>
-        public ulong emoteId { get; set; }
-
-        /// <summary>
-        /// If true, the emote sould be triggered. Otherwise, it should be interrupted.
-        /// </summary>
-        public bool shouldTrigger { get; set; } = true;
+        public StatusType status { get; set; }
     }
 }

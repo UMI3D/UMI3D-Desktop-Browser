@@ -13,21 +13,32 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System;
 
-namespace umi3d.common.collaboration
+using System;
+using umi3d.common.interaction;
+
+namespace umi3d.common.collaboration.dto.signaling
 {
     /// <summary>
-    /// DTO describing an identity sent to the UMI3D server.
+    /// DTO describing user requirements for a connection.
     /// </summary>
-    /// Same than <see cref="IdentityDto"/> but with customizable metadata.
+    /// Typically sent by a server during the connection process.
     [Serializable]
-    public class RegisterIdentityDto : IdentityDto
+    public class UserConnectionDto : UserDto
     {
         /// <summary>
-        /// Customizable data as a byte array. 
+        /// Connection form as a set of parameters.
         /// </summary>
-        /// The server should know how to parse them.
-        public byte[] metaData { get; set; }
+        public ConnectionFormDto parameters { get; set; }
+
+        /// <summary>
+        /// State if the libraries have been updated
+        /// </summary>
+        public bool librariesUpdated { get; set; } = false;
+
+        /// <summary>
+        /// Password to use to connect to the vocal server.
+        /// </summary>
+        public string audioPassword { get; set; }
     }
 }

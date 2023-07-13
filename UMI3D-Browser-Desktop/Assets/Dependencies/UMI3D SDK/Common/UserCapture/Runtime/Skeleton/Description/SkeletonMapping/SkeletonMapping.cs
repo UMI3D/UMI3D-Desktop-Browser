@@ -14,16 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using UnityEngine;
 
 namespace umi3d.common.userCapture.description
 {
+    /// <summary>
+    /// Mapping between a UMI3D and other objects, based on links.
+    /// </summary>
     [System.Serializable]
     public class SkeletonMapping
     {
-        [inetum.unityUtils.ConstEnum(typeof(BoneType), typeof(uint))]
+        private const DebugScope DEBUG_SCOPE = DebugScope.Common | DebugScope.UserCapture;
+
+        /// <summary>
+        /// Mapped UMI3D bone.
+        /// </summary>
         public uint BoneType;
 
+        /// <summary>
+        /// Rule to compute the mapping between the bone and other objects.
+        /// </summary>
         public ISkeletonMappingLink Link;
 
         public SkeletonMapping(uint boneType, ISkeletonMappingLink link)
@@ -32,19 +41,28 @@ namespace umi3d.common.userCapture.description
             this.Link = link;
         }
 
-        public BoneDto GetPose()
+        /// <summary>
+        /// Get pose of the bone after computing links.
+        /// </summary>
+        /// <returns></returns>
+        public virtual BoneDto GetPose()
         {
+            if (Link == null)
+                UMI3DLogger.LogWarning("Skeleton Mapping Link is null.", DEBUG_SCOPE);
+
             var computed = Link.Compute();
-            Quaternion rotation = new Quaternion(computed.rotation.x,
-                                                computed.rotation.y,
-                                                computed.rotation.z,
-                                                computed.rotation.w
-            );
+            Vector4Dto rotation = new Vector4Dto()
+            {
+                X = computed.rotation.x,
+                Y = computed.rotation.y,
+                Z = computed.rotation.z,
+                W = computed.rotation.w
+            };
 
             return new BoneDto()
             {
                 boneType = BoneType,
-                rotation = rotation.Dto()
+                rotation = rotation
             };
         }
     }

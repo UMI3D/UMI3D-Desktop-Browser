@@ -13,26 +13,30 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
+using System;
 using System.Collections.Generic;
-using umi3d.common.userCapture;
-using umi3d.common.userCapture.pose;
 
-namespace umi3d.common.collaboration
+namespace umi3d.common.collaboration.dto.signaling
 {
     /// <summary>
-    /// DTO describing user configuration when joining an environment.
+    /// DTO describing idnetifiers that are known only from the user and the media.
     /// </summary>
-    public class JoinDto : UMI3DDto
+    [Serializable]
+    public class PrivateIdentityDto : IdentityDto
     {
         /// <summary>
-        /// The local poses from the client
+        /// Global token of the user.
         /// </summary>
-        public List<PoseDto> clientLocalPoses { get; set; }
+        public string globalToken { get; set; }
 
         /// <summary>
-        /// User size scale relative to the environment.
+        /// Essential data to enable the connection to an environment using a Forge server.
         /// </summary>
-        public Vector3Dto userSize { get; set; }
+        public EnvironmentConnectionDto connectionDto { get; set; }
+
+        /// <summary>
+        /// Libraries possessed by the user.
+        /// </summary>
+        public List<LibrariesDto> libraries { get; set; }
     }
 }

@@ -13,29 +13,27 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System;
 
-namespace umi3d.common.collaboration
+namespace umi3d.common.collaboration.dto.voip
 {
     /// <summary>
-    /// DTO describing a publicly visible identity. All browsers can see this identity.
+    /// DTO describing a vocal message sent through the UMI3D server.
     /// </summary>
-    [Serializable]
-    public class PublicIdentityDto : UMI3DDto
+    public class VoiceDataDto : UMI3DDto
     {
         /// <summary>
-        /// 
+        /// Forge ID of the sending browser.
         /// </summary>
-        public ulong userId { get; set; } = 0;
+        public uint senderId { get; set; }
 
         /// <summary>
-        /// Public login attributed to the user.
+        /// Length of the message in bytes.
         /// </summary>
-        public string login { get; set; } = null;
+        public int length { get; set; }
 
         /// <summary>
-        /// Public name attributed to the user and that should be displayed on browsers.
+        /// Message as a byte array.
         /// </summary>
-        public string displayName { get; set; } = null;
+        public byte[] data { get; set; }
     }
 }

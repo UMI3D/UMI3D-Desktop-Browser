@@ -13,30 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System;
-using System.Collections.Generic;
 
-namespace umi3d.common.collaboration
+namespace umi3d.common.collaboration.dto.signaling
 {
     /// <summary>
-    /// DTO describing idnetifiers that are known only from the user and the media.
+    /// DTO describing a request from the server to know the current status of the browser's client.
     /// </summary>
-    [Serializable]
-    public class PrivateIdentityDto : IdentityDto
+    public class StatusRequestDto : UMI3DDto
     {
         /// <summary>
-        /// Global token of the user.
+        /// Browser's client status.
         /// </summary>
-        public string GlobalToken { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public EnvironmentConnectionDto connectionDto { get; set; }
-
-        /// <summary>
-        /// Libraries possessed by the user.
-        /// </summary>
-        public List<LibrariesDto> libraries { get; set; }
+        public StatusType status { get; set; }
     }
 }

@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common.binding
+namespace umi3d.common.dto.binding
 {
     /// <summary>
     /// Abstract binding data.
     /// </summary>
+    /// See <see cref="BindingDto"/>.
     [System.Serializable]
     public abstract class AbstractBindingDataDto : UMI3DDto
     {

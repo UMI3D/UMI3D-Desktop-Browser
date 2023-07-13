@@ -13,22 +13,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 
-namespace umi3d.common.collaboration
+namespace umi3d.common.collaboration.dto.signaling
 {
     /// <summary>
-    /// DTO describing the number of users in an environment at a given time.
+    /// DTO describing an identity sent to the UMI3D server.
     /// </summary>
-    public class PlayerCountDto : UMI3DDto
+    /// Same than <see cref="IdentityDto"/> but with customizable metadata.
+    [Serializable]
+    public class RegisterIdentityDto : IdentityDto
     {
         /// <summary>
-        /// Connected player count
+        /// Customizable data as a byte array. 
         /// </summary>
-        public int count { get; set; }
-
-        /// <summary>
-        /// Last change date with format "MM:dd:yyyy:HH:mm:ss";
-        /// </summary>
-        public string lastUpdate { get; set; }
+        /// The server should know how to parse them.
+        public byte[] metaData { get; set; }
     }
 }

@@ -51,7 +51,7 @@ namespace umi3d.commonScreen.game
         public virtual string USSCustomClassEmote => "emote__window";
         public virtual string USSCustomClassEmoteIcon => $"{USSCustomClassEmote}-icon";
 
-        public static List<Emote> Emotes;
+        public static IReadOnlyList<Emote> Emotes;
         public static List<Button_C> EmoteButtons = new List<Button_C>();
 
         protected override void AttachUssClass()
@@ -83,7 +83,7 @@ namespace umi3d.commonScreen.game
 
         public static event System.Action WillUpdateFilter;
 
-        public void OnEmoteConfigReceived(List<Emote> emotes)
+        public void OnEmoteConfigReceived(IReadOnlyList<Emote> emotes)
         {
             Reset();
             Emotes = emotes;

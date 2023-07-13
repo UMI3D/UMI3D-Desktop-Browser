@@ -14,19 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System;
+using System.Collections.Generic;
+using umi3d.common.userCapture.pose;
 
-namespace umi3d.common.collaboration
+namespace umi3d.common.collaboration.dto.signaling
 {
     /// <summary>
-    /// DTO to describe an update of a token.
+    /// DTO describing user configuration when joining an environment.
     /// </summary>
-    [Serializable]
-    public class TokenDto : UMI3DDto
+    public class JoinDto : UMI3DDto
     {
         /// <summary>
-        /// Token to update.
+        /// The local poses from the client
         /// </summary>
-        public string token { get; set; } = null;
+        public List<PoseDto> clientLocalPoses { get; set; }
+
+        /// <summary>
+        /// User size scale relative to the environment.
+        /// </summary>
+        public Vector3Dto userSize { get; set; }
     }
 }

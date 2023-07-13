@@ -14,42 +14,44 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+
+using umi3d.common.collaboration.dto.emotes;
+
 namespace umi3d.common.collaboration.emotes
 {
     /// <summary>
-    /// Serializer module for <see cref="UMI3DEmotesConfigDto"/>.
+    /// Serializer for <see cref="EmoteRequestDto"/>.
     /// </summary>
-    public class UMI3DEmotesConfigSerializerModule : UMI3DSerializerModule<UMI3DEmotesConfigDto>
+    public class EmoteRequestSerializerModule : UMI3DSerializerModule<EmoteRequestDto>
     {
         /// <inheritdoc/>
-        public bool Read(ByteContainer container, out bool readable, out UMI3DEmotesConfigDto result)
+        public bool Read(ByteContainer container, out bool readable, out EmoteRequestDto result)
         {
             readable = true;
             result = default;
 
-            readable &= UMI3DSerializer.TryRead(container, out ulong id);
-            readable &= UMI3DSerializer.TryRead(container, out bool allAvailableByDefault);
+            readable &= UMI3DSerializer.TryRead(container, out ulong emoteId);
+            readable &= UMI3DSerializer.TryRead(container, out bool shouldTrigger);
 
             if (readable)
             {
-                UMI3DEmotesConfigDto conf = new()
+                var request = new EmoteRequestDto()
                 {
-                    emotes = UMI3DSerializer.ReadList<UMI3DEmoteDto>(container),
-                    id = id,
-                    allAvailableByDefault = allAvailableByDefault
+                    emoteId = emoteId,
+                    shouldTrigger = shouldTrigger
                 };
-                result = conf;
+                result = request;
             }
 
             return readable;
         }
 
         /// <inheritdoc/>
-        public bool Write(UMI3DEmotesConfigDto dto, out Bytable bytable, params object[] parameters)
+        public bool Write(EmoteRequestDto dto, out Bytable bytable, params object[] parameters)
         {
-            bytable = UMI3DSerializer.Write(dto.id)
-                             + UMI3DSerializer.Write(dto.allAvailableByDefault)
-                             + UMI3DSerializer.WriteCollection(dto.emotes);
+            bytable = UMI3DSerializer.Write(UMI3DOperationKeys.EmoteRequest)
+                        + UMI3DSerializer.Write(dto.emoteId)
+                        + UMI3DSerializer.Write(dto.shouldTrigger);
             return true;
         }
 

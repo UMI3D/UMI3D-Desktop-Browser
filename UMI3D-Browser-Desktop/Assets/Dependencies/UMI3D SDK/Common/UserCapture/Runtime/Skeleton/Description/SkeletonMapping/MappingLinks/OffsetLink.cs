@@ -26,16 +26,14 @@ namespace umi3d.common.userCapture.description
         public Vector3 positionOffset;
         public Vector3 rotationOffset;
 
-        public bool isPositionOffsetLocal;
-        public bool isRotationOffsetLocal;
-
         public ISkeletonMappingLink node;
 
         public OffsetLink(ISkeletonMappingLink node)
         {
-            this.node = node;
+            this.node = node ?? throw new System.ArgumentNullException("SkeletonMappingLink is null");
         }
 
+        /// <inheritdoc/>
         public virtual (Vector3 position, Quaternion rotation) Compute()
         {
             var computed = node.Compute();

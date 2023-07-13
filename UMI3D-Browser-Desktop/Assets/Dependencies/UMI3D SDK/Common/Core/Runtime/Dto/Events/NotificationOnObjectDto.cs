@@ -13,34 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System;
 
-namespace umi3d.common.collaboration
+namespace umi3d.common
 {
     /// <summary>
-    /// DTO describing an identity, a set of identifying info of the user.
+    /// Notification concerning a UMI3D scene object.
     /// </summary>
-    [Serializable]
-    public class IdentityDto : PublicIdentityDto
+    public class NotificationOnObjectDto : NotificationDto
     {
         /// <summary>
-        /// Local token of the user.
+        /// UMI3D id of the concerned object.
         /// </summary>
-        public string localToken { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string headerToken { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string key { get; set; }
-
-        /// <summary>
-        /// id of the user;
-        /// </summary>
-        public string guid { get; set; }
+        public ulong objectId { get; set; }
     }
 }
