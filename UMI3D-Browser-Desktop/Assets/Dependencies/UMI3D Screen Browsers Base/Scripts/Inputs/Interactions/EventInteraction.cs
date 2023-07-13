@@ -35,10 +35,11 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// </summary>
         protected bool risingEdgeEventSent;
 
-        private IPoseManager poseManagerService;
+        private IPoseManager poseManagerService => PoseManager.Instance;
 
         protected virtual void Awake()
         {
+            //poseManagerService = PoseManager.Instance;
             bone = common.userCapture.BoneType.Viewpoint;
         }
 
