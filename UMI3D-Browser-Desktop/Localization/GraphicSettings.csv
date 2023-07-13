@@ -1,0 +1,26 @@
+Key,English,French,Spanish
+Quality_Label,Quality Settings,Paramètres de qualité,Ajustes de calidad
+Description_Low,Low resolution is targetting {0}fps with lower rendering,La basse résolution vise {0}fps avec un rendu plus faible.,La baja resolución tiene como objetivo {0}fps con menor renderizado
+Description_Medium,Medium resolution is targetting {0}fps with midium rendering,La résolution moyenne vise {0}fps avec un rendu moyen.,La resolución media tiene como objetivo {0}fps con un renderizado medio.
+Description_High,High resolution is targetting {0}fps with higher rendering,La haute résolution vise {0}fps avec un rendu plus élevé.,La alta resolución tiene como objetivo {0}fps con un mayor renderizado
+Description_Custom,Custom resolution let you choose your settings,La résolution personnalisée vous permet de choisir vos paramètres,La resolución personalizada te permite elegir tus ajustes
+DPI_Description,Dots per inch: Lower means the UI will be larger.,Dots per inch (Points par pouce) : Plus bas signifie que l'interface utilisateur sera plus grande.,Dots per inch (Puntos por pulgada): Más bajo significa que la IU será más grande.
+FullScreenResolution_Label,Full screen resolution,Résolution plein écran,Resolución de pantalla completa
+FullScreenResolution_description,Will impact Game and UI Resolutions,Aura un impact sur les résolutions des jeux et de l'interface utilisateur,Afectará a las resoluciones del juego y de la interfaz de usuario
+HDR_Label,Enable HDR,Activer HDR,Activar HDR
+HDR_Description,High Dynamic Range,High Dynamic Range (Plage dynamique supérieure),High Dynamic Range (Alto rango dinámico)
+VLow,VLow,TBas,MBajo
+Low,Low,Bas,Bajo
+Medium,Medium,Moyen,Medio
+High,High,Haut,Alta
+VHigh,VHigh,THaut,MAlto
+Ultra,Ultra,Ultra,Ultra
+Custom,Custom,Personnalisé,Personalizado
+Small,Small,Petit,Pequeño
+Large,Large,Large,Grande
+ReduceAnimation,Reduce Animation,Réduire l'animation,Reducir la animación
+RenderScale_Label,Render Scale,Échelle de rendu,Nivel de rendimiento
+RenderScale_Description,Lower means less resolution and more FPS.,Plus bas signifie moins de résolution et plus de FPS.,Más bajo significa menos resolución y más FPS.
+Resolution_Label,Game resolution,Résolution du jeu,Resolución del juego
+UISize_Label,UI Size,Taille de l'IU,Tamaño de la IU
+UISize_Description,Size of the user interface,Taille de l'interface utilisateur,Tamaño de la interfaz de usuario

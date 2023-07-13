@@ -1,0 +1,16 @@
+Key,English,French,Spanish
+Library_UsedBy,Used by:\n\n{0},Utilisé par:\n\n{0},Utilizado por:\n\n{0}
+Search_Label,Search,Recherche,Buscar en
+Filter_Label,Filter,Filtre,Filtro
+Sort_Name,Name,Nom,Nombre
+Sort_Size,Size,Taille,Talla
+Delete_library_Title,Do you want to uninstall this library ?,Voulez-vous désinstaller cette bibliothèque ?,¿Desea desinstalar esta biblioteca?
+Delete_Library_Description,'{0}' is required by {1} environments,'{0}' est requis par {1} environnements.,{0}' es requerido por {1} entornos
+Delete_All_libraries,Delete All libraries,Supprimer toutes les bibliothèques,Borrar todas las bibliotecas
+Delete_Filtered_libraries,Delete libraries from {0},Supprimer les bibliothèques de {0},Borrar bibliotecas de {0}
+Filter_All,All,Tout,Todos
+Delete_Filteredlibraries_Title,Uninstall filtered libraries,Désinstaller les bibliothèques filtrées,Desinstalar bibliotecas filtradas
+Delete_Filteredlibraries_Description,Do you want to uninstall the {0} filtered libraries ?,Voulez-vous désinstaller les {0} bibliothèques filtrées ?,¿Desea desinstalar las {0} bibliotecas filtradas?
+Library_WrongPath_Title,Some libraries are not found,Certaines bibliothèques ne sont pas trouvées,Algunas bibliotecas no se encuentran
+Library_WrongPath_Description,Here is the list of the path that are not found:,Voici la liste des chemins qui ne sont pas trouvés :,Aquí está la lista de la ruta que no se encuentran:
+Library_WrongPath_ShowMe,Show me,Montre-moi,Muéstrame

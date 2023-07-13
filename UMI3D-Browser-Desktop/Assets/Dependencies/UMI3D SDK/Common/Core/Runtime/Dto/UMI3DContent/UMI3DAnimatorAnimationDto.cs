@@ -40,6 +40,11 @@ namespace umi3d.common
         public float normalizedTime { get; set; } = 0f;
 
         /// <summary>
+        /// Animation normalized time at start. 
+        /// </summary>
+        public float normalizedTime = 0f;
+
+        /// <summary>
         /// Animator parameters.
         /// </summary>
         public Dictionary<string, object> parameters { get; set; } = new Dictionary<string, object>();

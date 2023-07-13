@@ -50,6 +50,7 @@ namespace umi3d.baseBrowser.connection
             Launcher.SavedServers = BaseConnectionProcess.Instance.savedServers;
             Launcher.CurrentConnectionData = BaseConnectionProcess.Instance.currentConnectionData;
             Launcher.InitLibraries();
+            Launcher.InitTips();
             Launcher.CurrentScreen = LauncherScreens.Home;
 
             BaseConnectionProcess.Instance.ResetLauncherEvent();

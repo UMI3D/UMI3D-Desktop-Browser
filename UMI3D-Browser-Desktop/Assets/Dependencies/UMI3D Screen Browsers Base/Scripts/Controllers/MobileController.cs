@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using umi3d.baseBrowser.Controller;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk.interaction;
+using umi3d.cdk.menu;
 using umi3d.common.interaction;
 using UnityEngine;
 
@@ -24,6 +25,11 @@ namespace umi3d.mobileBrowser.Controller
 {
     public class MobileController : IConcreteController
     {
+        public BaseController Controller;
+        public MenuAsset ObjectMenu;
+
+        protected interactions.MainMobileAction m_mainAction;
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -44,14 +50,18 @@ namespace umi3d.mobileBrowser.Controller
         /// </summary>
         public void Awake()
         {
-
+            m_mainAction = Controller.MobileAction.GetComponent<interactions.MainMobileAction>();
         }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         public void Start()
         {
-
+            Inputs.Add(m_mainAction);
+            m_mainAction.Init(Controller);
+            m_mainAction.bone = Controller.interactionBoneType;
+            m_mainAction.Menu = ObjectMenu.menu;
+            m_mainAction.boneTransform = Controller.hoverBoneTransform;
         }
         /// <summary>
         /// <inheritdoc/>
@@ -69,7 +79,7 @@ namespace umi3d.mobileBrowser.Controller
         /// <param name="tryToFindInputForHoldableEvent"></param>
         /// <returns></returns>
         public AbstractUMI3DInput FindInput(EventDto evt, bool unused = true, bool tryToFindInputForHoldableEvent = false)
-            => null;
+            => m_mainAction.IsAvailable() || !unused ? m_mainAction : null;
 
         /// <summary>
         /// <inheritdoc/>

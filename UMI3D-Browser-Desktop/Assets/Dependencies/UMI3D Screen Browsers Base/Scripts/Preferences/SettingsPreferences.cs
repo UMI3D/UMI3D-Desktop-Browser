@@ -23,6 +23,12 @@ using UnityEngine.InputSystem;
 
 namespace umi3d.baseBrowser.preferences
 {
+    [Serializable]
+    public struct Language
+    {
+        public string Name;
+    }
+
     public class SettingsPreferences
     {
         public const string c_dataFolderPath = "BrowserData";
@@ -30,12 +36,6 @@ namespace umi3d.baseBrowser.preferences
         #region General
 
         public const string c_generalPath = "generalData";
-        public enum Language
-        {
-            English,
-            French,
-            Spanish
-        }
         [Serializable]
         public struct GeneralData
         {
@@ -151,6 +151,7 @@ namespace umi3d.baseBrowser.preferences
         public struct AudioData
         {
             public float GeneralVolume;
+            public float LastGeneralVolumeNotZero;
             public string CurrentMic;
             public bool NoiseReduction;
             public MicModeEnum Mode;

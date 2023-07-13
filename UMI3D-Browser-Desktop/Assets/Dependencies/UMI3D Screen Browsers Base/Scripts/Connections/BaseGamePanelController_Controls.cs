@@ -15,6 +15,7 @@ using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.collaboration.emotes;
 using umi3d.commonScreen.game;
+using umi3d.mobileBrowser.interactions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static umi3d.baseBrowser.cursor.BaseCursor;
@@ -127,6 +128,9 @@ namespace umi3d.baseBrowser.connection
             };
 
             BaseConnectionProcess.Instance.EnvironmentLeave += () => NotifAndUsersArea_C.Instance = null;
+
+            Game.TrailingArea.ButtonsArea.MainActionDown = MainMobileAction.OnClickedDown;
+            Game.TrailingArea.ButtonsArea.MainActionUp = MainMobileAction.OnClickedUp;
         }
 
         protected void InitControls_ContextualMenu()
@@ -156,8 +160,8 @@ namespace umi3d.baseBrowser.connection
                 m_contextualMenuActionUp?.Invoke();
             });
 
-            Game.TrailingArea.ButtonsArea.MainActionDown = m_contextualMenuActionDown;
-            Game.TrailingArea.ButtonsArea.MainActionUp = m_contextualMenuActionUp;
+            MainMobileAction.Down += () => m_contextualMenuActionDown?.Invoke();
+            MainMobileAction.Up += () => m_contextualMenuActionUp?.Invoke();
         }
 
         protected void InitControls_CancelAndSubmit()

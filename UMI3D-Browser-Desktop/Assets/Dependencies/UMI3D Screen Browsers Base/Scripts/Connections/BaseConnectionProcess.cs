@@ -90,7 +90,13 @@ namespace umi3d.baseBrowser.connection
             cdk.collaboration.UMI3DCollaborationClientServer.EnvironmentProgress = () =>
             {
                 var p = new MultiProgress("Join Environement");
-                p.ResumeAfterFail = ResumeAfterFail;
+                //p.ResumeAfterFail = ResumeAfterFail;
+                p.ResumeAfterFail = async (e) =>
+                {
+                    await Task.Delay(10000);
+                    UnityEngine.Debug.Log("<color=Orange>Join environment fail: </color>" + $"{e}");
+                    return true;
+                };
 
                 return p;
             };

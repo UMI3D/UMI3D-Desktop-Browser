@@ -1,0 +1,28 @@
+Key,English,French,Spanish
+Home,Home,Accueil,Inicio
+Settings,Settings,Paramètres,Configuración
+Data,Data,Données,Datos
+Libraries,Libraries,Bibliothèques,Bibliotecas
+No_Connection_Tile,No internet connection,Pas de connexion internet,Sin conexión a Internet
+NoConnection_Description,Connect your device to load {0},Connectez votre appareil pour charger {0},Conecta tu dispositivo para cargar {0}
+WeakConnection_Title,You are connected to internet via carrier data network,Vous êtes connecté à l'internet via le réseau de données de l'opérateur,Estás conectado a Internet a través de la red de datos del operador
+WeakConnection_Description,You are trying to load {0} via carrier data network. \nLoading environment use a lot of data, if you can you should connect via wifi or cable and retry,Vous essayez de charger {0} via un réseau de données porteur. \nL'environnement de chargement consomme beaucoup de données, si vous le pouvez, connectez-vous en wifi ou par câble et réessayez.,Está intentando cargar {0} a través de la red de datos del operador. \nEl entorno de carga consume muchos datos, si puede conéctese por wifi o cable y vuelva a intentarlo.
+WeakConnection_ConnectAnyway,Connect anyway,Connectez-vous quand même,Conéctate de todos modos
+DeleteServer_Description,Delete this server from registered ?,Supprimer ce serveur de l'enregistrement ?,¿Borrar este servidor de los registrados?
+UpdateServer_Description,Update saved server,Mise à jour du serveur sauvegardé,Actualizar servidor guardado
+ConnectNewServer,Connect to a new server,Se connecter à un nouveau serveur,Conectarse a un nuevo servidor
+DisplaySavedServer,Display saved servers,Afficher les serveurs sauvegardés,Mostrar servidores guardados
+RememberServer,Remember this server,Enregistre ce serveur,Recuerde este servidor
+SavedServers,Saved Servers,Serveurs sauvegardés,Servidores guardados
+ServerURL,Server URL,URL du serveur,URL del servidor
+CloseMenu,Close menu,Fermer le menu,Cerrar menú
+LeaveEnvironment,Leave environment,Quitter l'environnement,Salir del entorno
+SessionCountLabel,Participants/Capacity,Participants/Capacité,Participantes/Capacidad
+ConnectionSettings,Connection settings,Paramètres de connexion,Ajustes de conexión
+IPAdress,IP adress,Adresse IP,Dirección IP
+HttpPort,Http port,Port Http,Puerto http
+NewServer,New server,Nouveau serveur,Nuevo servidor
+EnterNewServer,Enter a server url here,Entrez l'URL du serveur ici,Introduzca aquí la url del servidor
+ConnectionHistory,Connection history,Historique des connexions,Historial de conexiones
+DeleteServerHistory_Description,Delete this server from the history ?,Supprimer ce serveur de l'historique ?,¿ Borrar este servidor del historial ?
+Tips,Tips,Aide,Consejos
