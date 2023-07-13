@@ -26,11 +26,11 @@ MonoBehaviour:
     type: 3}
   _skyboxEquirectangularMaterial: {fileID: 2100000, guid: 550ddc5eab91acd47adeb9d3fd1b2ff8,
     type: 2}
-  SkeletonHierarchyDefinition: {fileID: 11400000, guid: e4facea53a30b4c40aa447fc608d5c8a,
+  skeletonHierarchyDefinition: {fileID: 11400000, guid: e4facea53a30b4c40aa447fc608d5c8a,
     type: 2}
   clientPoses: []
-  CollaborationUserCaptureActivated: 1
-  CollabTrackedSkeleton: {fileID: 3328692698567505491, guid: d35b455ecdb2f7e49bed74b7ffa742b9,
+  collaborationUserCaptureActivated: 0
+  collabTrackedSkeleton: {fileID: 3328692698567505491, guid: d35b455ecdb2f7e49bed74b7ffa742b9,
     type: 3}
   areEmotesSupported: 1
   defaultEmoteIcon: {fileID: 21300000, guid: 17e1536176d5f10478e7b7a0f3236bb4, type: 3}
