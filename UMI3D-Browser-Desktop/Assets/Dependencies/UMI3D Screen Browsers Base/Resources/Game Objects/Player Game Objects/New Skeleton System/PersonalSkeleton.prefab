@@ -511,8 +511,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tracked Skeleton
       objectReference: {fileID: 0}
+    - target: {fileID: 287653166641708807, guid: e5f62eeeb2a9a3942b978d209caaca85,
+        type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 3403262525583620035}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5f62eeeb2a9a3942b978d209caaca85, type: 3}
+--- !u!95 &3403262525583620035 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2231595950295152129, guid: e5f62eeeb2a9a3942b978d209caaca85,
+    type: 3}
+  m_PrefabInstance: {fileID: 3585685045698200002}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3620641808951042890 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 287653166641701512, guid: e5f62eeeb2a9a3942b978d209caaca85,
