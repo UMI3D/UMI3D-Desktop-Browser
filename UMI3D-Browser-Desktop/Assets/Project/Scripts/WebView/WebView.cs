@@ -15,12 +15,10 @@ limitations under the License.
 */
 
 using System;
-using System.Collections.Generic;
 using umi3d.cdk;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using VoltstroStudios.UnityWebBrowser;
 
 namespace BrowserDesktop
 {

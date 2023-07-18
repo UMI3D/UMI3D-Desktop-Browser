@@ -14,12 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using umi3d.cdk;
 using UnityEngine;
-using VoltstroStudios.UnityWebBrowser.Core.Engines;
 
 namespace BrowserDesktop
 {
