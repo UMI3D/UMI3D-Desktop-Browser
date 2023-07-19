@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,15 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common.userCapture.pose
+namespace umi3d.cdk.userCapture.pose
 {
-    /// <summary>
-    /// A condition that can be set to conditionate the activation of a pose
-    /// </summary>
-    [System.Serializable]
-    public class PoseConditionDto : UMI3DDto
+    public interface IPoseCondition
     {
-        public PoseConditionDto()
-        { }
+        public bool Check();
     }
 }

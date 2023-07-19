@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,31 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using umi3d.common.userCapture.description;
 
 namespace umi3d.common.userCapture.pose
 {
-    /// <summary>
-    /// A dto that describes a pose
-    /// </summary>
-    [Serializable]
-    public class PoseDto : UMI3DDto
+    public class UMI3DPoseOverriderContainerDto : UMI3DDto, IEntity
     {
         /// <summary>
-        /// all the bone pose that are composing the current pose
+        /// The id of the entity
         /// </summary>
-        public List<BoneDto> bones { get; set; }
+        public ulong id { get; set; }
 
         /// <summary>
-        /// Where the pose starts on the skeleotn
+        /// Id the corresponding node in the scene
         /// </summary>
-        public BonePoseDto boneAnchor { get; set; }
+        public ulong relatedNodeId { get; set; }
 
         /// <summary>
-        /// Position in the list of poses of the related user
+        /// All the pose overriders of the linked container
         /// </summary>
-        public int index { get; set; }
+        public PoseOverriderDto[] poseOverriderDtos { get; set; }
     }
 }

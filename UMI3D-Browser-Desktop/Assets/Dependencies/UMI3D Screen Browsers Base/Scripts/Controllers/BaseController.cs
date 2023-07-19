@@ -493,7 +493,7 @@ namespace umi3d.baseBrowser.Controller
                 if (anim != null) anim.Start();
             }
             mouseData.OldHovered = null;
-            poseManagerService.OnHoverExit(lastHoverId);
+            poseManagerService.TryActivatePose(lastHoverId, common.userCapture.pose.PoseActivationMode.HOVER_EXIT);
         }
         private async void CurrentHoverEnter()
         {
@@ -524,7 +524,7 @@ namespace umi3d.baseBrowser.Controller
                 HoverEnter.Invoke(currentHoverId);
                 if (anim != null) anim.Start();
             }
-            poseManagerService.OnHoverEnter(currentHoverId);
+            poseManagerService.TryActivatePose(currentHoverId, common.userCapture.pose.PoseActivationMode.HOVER_ENTER);
         }
 
         #endregion

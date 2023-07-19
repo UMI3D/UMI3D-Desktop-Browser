@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2021 Inetum
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,31 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using umi3d.common.userCapture.description;
-
 namespace umi3d.common.userCapture.pose
 {
     /// <summary>
-    /// A dto that describes a pose
+    /// <inheritdoc/>
+    /// A condition to check the rotation of a bone 
     /// </summary>
-    [Serializable]
-    public class PoseDto : UMI3DDto
+    [System.Serializable]
+    public class BoneRotationConditionDto : PoseConditionDto
     {
         /// <summary>
-        /// all the bone pose that are composing the current pose
+        /// Related bone
         /// </summary>
-        public List<BoneDto> bones { get; set; }
+        public uint BoneId { get; set; }
 
         /// <summary>
-        /// Where the pose starts on the skeleotn
+        /// Rotation to validate the condition
         /// </summary>
-        public BonePoseDto boneAnchor { get; set; }
+        public Vector4Dto Rotation { get; set; }
 
-        /// <summary>
-        /// Position in the list of poses of the related user
-        /// </summary>
-        public int index { get; set; }
+        public float AcceptanceRange { get; set; }
     }
 }
