@@ -15,7 +15,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using umi3d.baseBrowser.preferences;
-using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewTableLocalization", menuName = "ScriptableObjects/LocalizationTable")]
@@ -43,7 +42,7 @@ public class LocalisationTable : ScriptableObject
     [Button("Import from csv (refresh inspector to see changes)")]
     public void Import()
     {
-        var path = EditorUtility.OpenFilePanel("Import CSV", k_path, "*.*");
+        var path = UnityEditor.EditorUtility.OpenFilePanel("Import CSV", k_path, "*.*");
 
         if (!path.EndsWith(".csv"))
         {

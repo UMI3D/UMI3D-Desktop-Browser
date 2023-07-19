@@ -10,15 +10,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-#if UNITY_EDITOR
 using System.Collections.Generic;
 using umi3d.baseBrowser.preferences;
-using UnityEditor;
 using UnityEngine;
 
 public class LocalisationSettings : ScriptableObject
 {
-    public const string k_LocalisationSettingsPath = "Assets/LocalisationSettings.asset";
+    public const string k_LocalisationSettingsPath = "Assets/Editor/LocalisationSettings.asset";
 
 
     [SerializeField] private List<Language> _languages;
@@ -39,9 +37,10 @@ public class LocalisationSettings : ScriptableObject
         get
         {
             if (_instance != null) return _instance;
-            _instance = AssetDatabase.LoadAssetAtPath<LocalisationSettings>(k_LocalisationSettingsPath);
+#if UNITY_EDITOR
+            _instance = UnityEditor.AssetDatabase.LoadAssetAtPath<LocalisationSettings>(k_LocalisationSettingsPath);
             if (_instance != null) return _instance;
-
+#endif
             _instance = Create();
 
             return _instance;
@@ -53,13 +52,14 @@ public class LocalisationSettings : ScriptableObject
         var settings = CreateInstance<LocalisationSettings>();
         settings._languages = new List<Language>();
         settings._baseLanguageIndex = 0;
-        AssetDatabase.CreateAsset(settings, k_LocalisationSettingsPath);
-        AssetDatabase.SaveAssets();
+#if UNITY_EDITOR
+        UnityEditor.AssetDatabase.CreateAsset(settings, k_LocalisationSettingsPath);
+        UnityEditor.AssetDatabase.SaveAssets();
+#endif
         return settings;
     }
 
-    internal static SerializedObject GetSerializedSettings() => new SerializedObject(Instance);
-
-
-}
+#if UNITY_EDITOR
+    public static UnityEditor.SerializedObject GetSerializedSettings() => new UnityEditor.SerializedObject(Instance);
 #endif
+}
