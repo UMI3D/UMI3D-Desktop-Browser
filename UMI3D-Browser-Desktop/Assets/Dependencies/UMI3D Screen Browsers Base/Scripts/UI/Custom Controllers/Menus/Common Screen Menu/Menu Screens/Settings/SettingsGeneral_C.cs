@@ -38,7 +38,8 @@ namespace umi3d.commonScreen.menu
 
             LanguageDropdown.LocalisedLabel = new LocalisationAttribute("Language", "GeneralSettings", "Language");
             var localisedOptions = new List<LocalisationAttribute>();
-            var languages = LocalisationSettings.Instance.Languages;
+            //List<Language> languages = LocalisationSettings.Instance.Languages;
+            List<Language> languages = new List<Language> { };
             foreach (var language in languages)
             {
                 localisedOptions.Add(new LocalisationAttribute(language.Name, "GeneralSettings", language.Name));
