@@ -13,25 +13,18 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-
 namespace umi3d.common.userCapture.pose
 {
-    public class UMI3DPoseOverriderContainerDto : UMI3DDto, IEntity
+    /// <summary>
+    /// <inheritdoc/>
+    /// A condition is the conditions are not valid
+    /// </summary>
+    [System.Serializable]
+    public class NotConditionDto : PoseConditionDto
     {
         /// <summary>
-        /// The id of the entity
+        /// List of conditions to be false
         /// </summary>
-        public ulong id { get; set; }
-
-        /// <summary>
-        /// Id the corresponding node in the scene
-        /// </summary>
-        public ulong relatedNodeId { get; set; }
-
-        /// <summary>
-        /// All the pose ovveriders of the linked container
-        /// </summary>
-        public PoseOverriderDto[] poseOverriderDtos { get; set; }
+        public PoseConditionDto[] Conditions { get; set; }
     }
 }

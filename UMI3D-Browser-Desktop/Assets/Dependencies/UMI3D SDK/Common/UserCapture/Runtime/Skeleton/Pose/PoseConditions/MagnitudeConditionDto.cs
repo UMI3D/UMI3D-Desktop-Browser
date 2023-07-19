@@ -18,32 +18,25 @@ namespace umi3d.common.userCapture.pose
 {
     /// <summary>
     /// <inheritdoc/>
-    /// A condition to check the rotation of a bone 
+    /// A condition to check the distance from a bone to a node
     /// </summary>
     [System.Serializable]
-    public class BoneRotationConditionDto : PoseConditionDto
+    public class MagnitudeConditionDto : PoseConditionDto
     {
-        public BoneRotationConditionDto() { }
-
-        public BoneRotationConditionDto(uint boneId, Vector4Dto rotation)
-        {
-            BoneId = boneId;
-            Rotation = rotation;
-        }
-
-        private uint boneId;
         /// <summary>
-        /// Related bone
+        /// distance
         /// </summary>
-        public uint BoneId { get => boneId; set => boneId = value; }
+        public float Magnitude { get; set; }
 
-        private Vector4Dto rotation;
         /// <summary>
-        /// Rotation to validate the condititon
+        /// bone id 
         /// </summary>
-        public Vector4Dto Rotation { get => rotation; set => rotation = value; }
+        public uint BoneOrigin { get; set; }
 
-        private float acceptanceRange;
-        public float AcceptanceRange { get => acceptanceRange; set => acceptanceRange = value; }
+        /// <summary>
+        /// Id of the target object 
+        /// </summary>
+        public ulong TargetNodeId { get; set; }
     }
 }
+

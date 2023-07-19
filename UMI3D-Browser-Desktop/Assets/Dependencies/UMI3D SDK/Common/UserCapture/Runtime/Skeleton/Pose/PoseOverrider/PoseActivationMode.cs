@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,21 +16,12 @@ limitations under the License.
 
 namespace umi3d.common.userCapture.pose
 {
-    [System.Serializable]
-    public class RangeConditionDto : PoseConditionDto
+    public enum PoseActivationMode : ushort
     {
-        public RangeConditionDto() { } 
-
-        public RangeConditionDto(PoseConditionDto conditionA, PoseConditionDto conditionB)
-        {
-            this.ConditionA = conditionA;
-            this.ConditionB = conditionB;
-        }
-
-        private PoseConditionDto conditionA;
-        public PoseConditionDto ConditionA { get => conditionA; set => conditionA = value; }
-
-        private PoseConditionDto conditionB;
-        public PoseConditionDto ConditionB { get => conditionB; set => conditionB = value; }
+        NONE,
+        TRIGGER,
+        RELEASE,
+        HOVER_ENTER,
+        HOVER_EXIT
     }
 }
