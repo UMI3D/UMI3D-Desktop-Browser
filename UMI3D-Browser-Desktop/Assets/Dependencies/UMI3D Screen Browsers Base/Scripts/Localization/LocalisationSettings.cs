@@ -16,7 +16,7 @@ using UnityEngine;
 
 public class LocalisationSettings : ScriptableObject
 {
-    public const string k_LocalisationSettingsPath = "Assets/Editor/LocalisationSettings.asset";
+    public const string k_LocalisationSettingsPath = "Assets/Dependencies/UMI3D Screen Browsers Base/Resources/Scriptables/LocalisationSettings.asset";
 
 
     [SerializeField] private List<Language> _languages;
@@ -37,10 +37,8 @@ public class LocalisationSettings : ScriptableObject
         get
         {
             if (_instance != null) return _instance;
-#if UNITY_EDITOR
-            _instance = UnityEditor.AssetDatabase.LoadAssetAtPath<LocalisationSettings>(k_LocalisationSettingsPath);
+            _instance = Resources.Load<LocalisationSettings>("Scriptables/LocalisationSettings");
             if (_instance != null) return _instance;
-#endif
             _instance = Create();
 
             return _instance;
