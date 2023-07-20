@@ -14,7 +14,6 @@ using inetum.unityUtils;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using umi3d.baseBrowser.preferences;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewTableLocalization", menuName = "ScriptableObjects/LocalizationTable")]
