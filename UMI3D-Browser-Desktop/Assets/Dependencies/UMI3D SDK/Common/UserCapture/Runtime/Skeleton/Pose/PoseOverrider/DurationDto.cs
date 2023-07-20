@@ -13,26 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 namespace umi3d.common.userCapture.pose
 {
-    /// <summary>
-    /// <inheritdoc/>
-    /// A condition is the conditions are not valid
-    /// </summary>
     [System.Serializable]
-    public class NotConditionDto : PoseConditionDto
+    public class DurationDto : UMI3DDto
     {
-        public NotConditionDto() { }
-
-        public NotConditionDto(PoseConditionDto[] conditions)
-        {
-            this.Conditions = conditions;
-        }
-
-        PoseConditionDto[] conditions;
-        /// <summary>
-        /// Lis of the condition to be not valid
-        /// </summary>
-        public PoseConditionDto[] Conditions { get => conditions; set => conditions = value; }
+        public ulong duration { get; set; }
+        public ulong? min { get; set; } 
+        public ulong? max { get; set;}
     }
 }
+

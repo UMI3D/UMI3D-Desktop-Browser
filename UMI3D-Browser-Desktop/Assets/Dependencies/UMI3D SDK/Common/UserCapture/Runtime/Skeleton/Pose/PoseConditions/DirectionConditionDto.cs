@@ -16,21 +16,13 @@ limitations under the License.
 
 namespace umi3d.common.userCapture.pose
 {
+    /// <summary>
+    /// <inheritdoc/>
+    /// A condition to check the direction
+    /// </summary>
     [System.Serializable]
-    public class DurationDto : UMI3DDto
+    public class DirectionConditionDto : PoseConditionDto
     {
-        public DurationDto() { }
-
-        public DurationDto(ulong duration, ulong? min, ulong? max)
-        {
-            this.duration = duration;
-            this.min = min; 
-            this.max = max;
-        }
-
-        public ulong duration { get; set; }
-        public ulong? min { get; set; } 
-        public ulong? max { get; set;}
+        public Vector3Dto Direction { get; set; }
     }
 }
-

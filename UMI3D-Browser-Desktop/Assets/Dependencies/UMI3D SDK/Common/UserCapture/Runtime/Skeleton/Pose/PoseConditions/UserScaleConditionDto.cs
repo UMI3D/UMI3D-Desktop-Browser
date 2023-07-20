@@ -18,25 +18,12 @@ namespace umi3d.common.userCapture.pose
 {
     /// <summary>
     /// <inheritdoc/>
-    /// A condition to check thescale of an object
+    /// A condition to check the scale of the user
     /// </summary>
     [System.Serializable]
-    public class ScaleConditionDto : PoseConditionDto
+    public class UserScaleConditionDto : PoseConditionDto
     {
-        public ScaleConditionDto() { }  
-
-        public ScaleConditionDto(Vector3Dto scale)
-        {
-            this.Scale = scale;
-        }
-
-        private Vector3Dto scale;
-        public Vector3Dto Scale { get => scale; set => scale = value; }
-
-        private uint targetId;
-        /// <summary>
-        /// Id of the target object
-        /// </summary>
-        public uint TargetId { get => targetId; set => targetId = value; }
+        public Vector3Dto Scale { get; set; }
     }
 }
+
