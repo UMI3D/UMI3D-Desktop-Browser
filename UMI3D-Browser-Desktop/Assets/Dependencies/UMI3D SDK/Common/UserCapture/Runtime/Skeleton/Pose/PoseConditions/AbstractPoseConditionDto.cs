@@ -14,24 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 namespace umi3d.common.userCapture.pose
 {
-    public class UMI3DPoseOverriderContainerDto : UMI3DDto, IEntity
+    /// <summary>
+    /// A condition that can be set to conditionate the activation of a pose
+    /// </summary>
+    [System.Serializable]
+    public abstract class AbstractPoseConditionDto : UMI3DDto
     {
-        /// <summary>
-        /// The id of the entity
-        /// </summary>
-        public ulong id { get; set; }
 
-        /// <summary>
-        /// Id the corresponding node in the scene
-        /// </summary>
-        public ulong relatedNodeId { get; set; }
-
-        /// <summary>
-        /// All the pose overriders of the linked container
-        /// </summary>
-        public PoseOverriderDto[] poseOverriderDtos { get; set; }
     }
 }

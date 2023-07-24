@@ -27,10 +27,19 @@ namespace umi3d.cdk.userCapture.pose
     {
         private PoseDto dto;
 
+        /// <summary>
+        /// See <see cref="PoseDto.index"/>.
+        /// </summary>
         public int Index => dto.index;
 
-        public BonePoseDto BonePose => dto.boneAnchor;
+        /// <summary>
+        /// See <see cref="PoseDto.boneAnchor"/>.
+        /// </summary>
+        public BonePoseDto BoneAnchor => dto.boneAnchor;
 
+        /// <summary>
+        /// See <see cref="PoseDto.bones"/>.
+        /// </summary>
         public List<BoneDto> Bones => dto.bones;
 
         /// <summary>

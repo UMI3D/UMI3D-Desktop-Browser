@@ -31,20 +31,22 @@ namespace umi3d.common.userCapture.pose
         /// <summary>
         /// All the bones that describe the pose
         /// </summary>
-        [SerializeField] private List<Bone> bones = new List<Bone>();
+        [SerializeField]
+        private List<BoneField> bones = new ();
         /// <summary>
         /// The bone that anchor the pose
         /// </summary>
-        [SerializeField] private BonePose bonePose;
+        [SerializeField]
+        private BonePoseField boneAnchor;
 
         /// <summary>
         /// Get the bones composing the pose
         /// </summary>
-        public List<Bone> BoneDtos { get => bones; }
+        public List<BoneField> BoneDtos { get => bones; }
         /// <summary>
         /// Gets the bone anchor
         /// </summary>
-        public BonePose BonePoseDto { get => bonePose; }
+        public BonePoseField boneAnchorDto { get => boneAnchor; }
 
         /// <summary>
         /// Pose index
@@ -60,18 +62,18 @@ namespace umi3d.common.userCapture.pose
         {
             bones.ForEach(bp =>
             {
-                this.bones.Add(new Bone()
+                this.bones.Add(new BoneField()
                 {
                     boneType = bp.boneType,
                     rotation = bp.rotation.Quaternion()
                 });
             });
 
-            this.bonePose = new BonePose()
+            this.boneAnchor = new BonePoseField()
             {
-                boneType = bonePoseDto.Bone,
-                position = bonePoseDto.Position.Struct(),
-                rotation = bonePoseDto.Rotation.Quaternion()
+                boneType = bonePoseDto.bone,
+                position = bonePoseDto.position.Struct(),
+                rotation = bonePoseDto.rotation.Quaternion()
             };
         }
 
@@ -110,23 +112,23 @@ namespace umi3d.common.userCapture.pose
         {
             BonePoseDto copy = new BonePoseDto()
             {
-                Bone = bonePose.boneType,
-                Position = bonePose.position.Dto(),
-                Rotation = bonePose.rotation.Dto()
+                bone = boneAnchor.boneType,
+                position = boneAnchor.position.Dto(),
+                rotation = boneAnchor.rotation.Dto()
             };
 
             return copy;
         }
 
         [Serializable]
-        public struct Bone
+        public struct BoneField
         {
             public uint boneType;
             public Quaternion rotation;
         }
 
         [Serializable]
-        public struct BonePose
+        public struct BonePoseField
         {
             public uint boneType;
             public Vector3 position;

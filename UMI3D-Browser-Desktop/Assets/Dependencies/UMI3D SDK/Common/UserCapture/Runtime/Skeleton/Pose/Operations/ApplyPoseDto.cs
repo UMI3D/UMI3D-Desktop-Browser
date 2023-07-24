@@ -23,7 +23,8 @@ namespace umi3d.common.userCapture.pose
     public class ApplyPoseDto : AbstractOperationDto
     {
         /// <summary>
-        /// Id of the user to apply the pose to
+        /// Id of the user to apply the pose to. 
+        /// Specify <see cref="UMI3DGlobalID.EnvironementId"/> to set an environment pose.
         /// </summary>
         public ulong userID { get; set; }
 
@@ -35,6 +36,6 @@ namespace umi3d.common.userCapture.pose
         /// <summary>
         /// Is it a message to stop or to start the related pose
         /// </summary>
-        public bool stopPose { get; set; } = false;
+        public bool stopPose { get; set; }
     }
 }

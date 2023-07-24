@@ -20,6 +20,9 @@ using UnityEngine;
 
 namespace umi3d.cdk.userCapture.pose
 {
+    /// <summary>
+    /// Wrapper for <see cref="BoneRotationConditionDto"/>.
+    /// </summary>
     public class BoneRotationPoseCondition : IPoseCondition
     {
         protected BoneRotationConditionDto boneRotationConditionDto;
@@ -32,15 +35,16 @@ namespace umi3d.cdk.userCapture.pose
             this.trackedSkeleton = trackedSkeleton;
         }
 
+        /// <inheritdoc/>
         public bool Check()
         {
             Quaternion boneRotation;
-            if (trackedSkeleton.TrackedBones.TryGetValue(boneRotationConditionDto.BoneId, out TrackedSkeletonBone bone))
+            if (trackedSkeleton.TrackedBones.TryGetValue(boneRotationConditionDto.BoneId, out TrackedSubskeletonBone bone))
                 boneRotation = bone.transform.rotation;
             else
                 return false;
 
-            return Quaternion.Angle(boneRotation, boneRotationConditionDto.Rotation.Quaternion()) < boneRotationConditionDto.AcceptanceRange;
+            return Quaternion.Angle(boneRotation, boneRotationConditionDto.Rotation.Quaternion()) < boneRotationConditionDto.Threshold;
         }
     }
 }

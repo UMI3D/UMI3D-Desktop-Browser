@@ -25,6 +25,7 @@ namespace umi3d.common.userCapture.pose
     /// A pose overrider description as a scriptable object
     /// </summary>
     [Serializable]
+    [CreateAssetMenu(menuName ="UMI3D/Pose/Overrider")]
     public class UMI3DPoseOverrider_so : ScriptableObject
     {
         public UMI3DPose_so pose;
@@ -33,7 +34,7 @@ namespace umi3d.common.userCapture.pose
         /// The different condition that are needed for the overrider to get activated
         /// </summary>
         [SerializeReference, HideInInspector] 
-        public PoseConditionDto[] poseConditions;
+        public AbstractPoseConditionDto[] poseConditions;
 
         [System.Serializable]
         public struct Duration
@@ -59,10 +60,17 @@ namespace umi3d.common.userCapture.pose
             }
         }
 
+        [Tooltip("Expected duration of the pose.")]
         public Duration duration;
+
+        [Tooltip("Can the pose be interpolated when it is applied?")]
+        [HideInInspector]
         public bool interpolable;
+
+        [Tooltip("Can the pose be composed with another pose?")]
         public bool composable;
 
+        [Tooltip("How the pose could be activated by the user.")]
         public PoseActivationMode activationMode;
 
         // HACK: Workaround not to fix pose setter
@@ -113,9 +121,9 @@ namespace umi3d.common.userCapture.pose
             };
         }
 
-        public PoseConditionDto[] GetPoseConditionsCopy() //? why ?
+        public AbstractPoseConditionDto[] GetPoseConditionsCopy() //? why ?
         {
-            List<PoseConditionDto> copy = new();
+            List<AbstractPoseConditionDto> copy = new();
 
             if (HasMagnitudeCondition)
             {

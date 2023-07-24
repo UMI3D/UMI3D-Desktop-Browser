@@ -18,17 +18,23 @@ using umi3d.common.userCapture.pose;
 
 namespace umi3d.cdk.userCapture.pose
 {
-    public class PoseOverriderContainer
+    public class PoseOverridersContainer
     {
-        private UMI3DPoseOverriderContainerDto dto;
+        private UMI3DPoseOverridersContainerDto dto;
 
         public PoseOverrider[] PoseOverriders { get; private set; }
 
+        /// <summary>
+        /// UMI3D ID.
+        /// </summary>
         public ulong Id => dto.id;
 
+        /// <summary>
+        /// See <see cref="UMI3DPoseOverridersContainerDto.relatedNodeId"/>.
+        /// </summary>
         public ulong NodeId => dto.relatedNodeId;
 
-        public PoseOverriderContainer(UMI3DPoseOverriderContainerDto dto, PoseOverrider[] poseOverriders)
+        public PoseOverridersContainer(UMI3DPoseOverridersContainerDto dto, PoseOverrider[] poseOverriders)
         {
             this.dto = dto;
             PoseOverriders = poseOverriders;

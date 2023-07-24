@@ -92,7 +92,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             if (associatedInteraction.TriggerAnimationId != 0)
                 StartAnim(associatedInteraction.TriggerAnimationId);
 
-            poseManagerService.TryActivatePose(hoveredObjectId, PoseActivationMode.TRIGGER);
+            poseManagerService.TryActivatePoseOverriders(hoveredObjectId, PoseActivationMode.TRIGGER);
         }
 
         protected override void PressedUp()
@@ -118,7 +118,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             IsInputHold = false;
             risingEdgeEventSent = false;
 
-            poseManagerService.TryActivatePose(hoveredObjectId, PoseActivationMode.RELEASE);
+            poseManagerService.TryActivatePoseOverriders(hoveredObjectId, PoseActivationMode.RELEASE);
         }
 
         protected async void StartAnim(ulong id)

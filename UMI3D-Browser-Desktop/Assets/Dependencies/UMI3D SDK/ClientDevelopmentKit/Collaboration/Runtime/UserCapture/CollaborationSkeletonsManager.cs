@@ -208,7 +208,7 @@ namespace umi3d.cdk.collaboration.userCapture
             cs.SkeletonHierarchy = skeletonHierarchy;
 
             var trackedSkeletonPrefab = (collaborativeLoaderService.AbstractLoadingParameters as IUMI3DCollabLoadingParameters).CollabTrackedSkeleton;
-            var trackedSkeleton = UnityEngine.Object.Instantiate(trackedSkeletonPrefab, cs.transform).GetComponent<TrackedSkeleton>();
+            var trackedSkeleton = UnityEngine.Object.Instantiate(trackedSkeletonPrefab, cs.transform).GetComponent<TrackedSubskeleton>();
             
             var poseSkeleton = new PoseSubskeleton(poseManager);
 
@@ -218,9 +218,9 @@ namespace umi3d.cdk.collaboration.userCapture
             foreach (var bone in skeletonHierarchy.Relations.Keys)
             {
                 if (cs.Bones.ContainsKey(bone))
-                    cs.Bones[bone].s_Rotation = Quaternion.identity;
+                    cs.Bones[bone].Rotation = Quaternion.identity;
                 else
-                    cs.Bones[bone] = new ISkeleton.s_Transform() { s_Rotation = Quaternion.identity };
+                    cs.Bones[bone] = new ISkeleton.Transformation() { Rotation = Quaternion.identity };
             }
 
             skeletons[userId] = cs;
@@ -381,7 +381,7 @@ namespace umi3d.cdk.collaboration.userCapture
 
         #region Pose
 
-        public void HandlePoseRequest(ApplyPoseDto playPoseDto)
+        public void ApplyPoseRequest(ApplyPoseDto playPoseDto)
         {
             SkeletonPose pose = PoseManager.Instance.Poses[playPoseDto.userID][playPoseDto.indexInList];
 
