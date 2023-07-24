@@ -21,6 +21,7 @@ using umi3d.cdk.collaboration;
 using umi3d.common;
 using UnityEngine;
 using umi3d.baseBrowser.cursor;
+using System.Threading;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -147,34 +148,110 @@ namespace umi3d.baseBrowser.connection
             LoadedLauncher = null;
         }
 
+        public bool ConnectionProcessInProgress;
+        CancellationTokenSource connectionTokenSource;
+        CancellationToken connectionToken;
+        CancellationTokenSource masterServerTokenSource;
+        CancellationToken masterServerToken;
+        CancellationTokenSource mediaDtoTokenSource;
+        CancellationToken mediaDtoToken;
+
         /// <summary>
         /// Initiates the connection, if a connection is already in process return.
         /// </summary>
         public async Task InitConnect(bool saveInfo = false)
         {
-            if (onlyOneConnection)
-            {
-                Debug.Log("Only one connection at a time");
-                return;
-            }
-            ConnectionInitialized?.Invoke(currentServer.serverUrl);
-            await ConnectWithMasterServerOrMediaDto(saveInfo);
-            while (onlyOneConnection) await UMI3DAsyncManager.Yield();
-        }
+            UnityEngine.Debug.Log($"init on thread {Thread.CurrentThread.ManagedThreadId}");
 
-        protected async Task ConnectWithMasterServerOrMediaDto(bool saveInfo = false)
-        {
-            if (onlyOneConnection)
+            if (connectionTokenSource == null)
             {
-                Debug.Log("Only one connection at a time");
-                return;
+                connectionTokenSource = new CancellationTokenSource();
+                connectionToken = connectionTokenSource.Token;
             }
+
+            if (ConnectionProcessInProgress)
+            {
+                connectionTokenSource.Cancel();
+                connectionTokenSource = new CancellationTokenSource();
+                connectionToken = connectionTokenSource.Token;
+            }
+
+            var connectionTask = Task.Factory.StartNew(() =>
+            {
+                UnityEngine.Debug.Log($"task on thread {Thread.CurrentThread.ManagedThreadId}");
+
+                // Connection to the master server.
+                var masterServerTask = Task.Factory.StartNew(async () =>
+                {
+
+                }).Unwrap();
+
+                // Connection via mediaDto.
+                var mediaDtoTask = Task.Factory.StartNew(async () =>
+                {
+                    var curentUrl = currentServer.serverUrl + UMI3DNetworkingKeys.media;
+
+                    if (!curentUrl.StartsWith("http://") && !curentUrl.StartsWith("https://"))
+                    {
+                        curentUrl = "http://" + curentUrl;
+                    }
+
+                    url = curentUrl;
+                    try
+                    {
+                        mediaDto = await UMI3DCollaborationClientServer.GetMedia
+                        (
+                            url,
+                            e => url == curentUrl && e.count < 3
+                        );
+                    }
+                    catch
+                    {
+                        mediaDto = null;
+                    }
+                }).Unwrap();
+
+                masterServerTask.ContinueWith(taskInfo =>
+                {
+
+                });
+                mediaDtoTask.ContinueWith(taskInfo =>
+                {
+
+                });
+
+                if (connectionTokenSource.IsCancellationRequested)
+                {
+                    UnityEngine.Debug.Log($"task cancelled on thread {Thread.CurrentThread.ManagedThreadId}");
+                }
+
+            },
+            connectionToken)
+            .ContinueWith(taskInfo =>
+            {
+                UnityEngine.Debug.Log($"continue with on thread {Thread.CurrentThread.ManagedThreadId}");
+                ConnectionProcessInProgress = false;
+            });
+
+            ConnectionInitialized?.Invoke(currentServer.serverUrl);
+
+
+
 
             onlyOneConnection = true;
             _mediaDtoFound = null;
             _masterServerFound = null;
 
-            WaitForError();
+            while (onlyOneConnection)
+            {
+                await UMI3DAsyncManager.Yield();
+                if (masterServerFound || mediaDtoFound) return;
+                if (_masterServerFound != null && _mediaDtoFound != null)
+                {
+                    ConnectionInitializationFailled?.Invoke(currentServer.serverUrl);
+                    onlyOneConnection = false;
+                }
+            }
 
             //1. Try to find a master server, if it found show sessions.
             masterServer.ConnectToMasterServer
@@ -205,88 +282,24 @@ namespace umi3d.baseBrowser.connection
             );
 
             //2. try to get a mediaDto
-            mediaDto = await GetMediaDto();
             if (mediaDto == null || masterServerFound)
             {
                 mediaDtoFound = false;
                 return;
             }
             mediaDtoFound = true;
-            ConnectWithMediaDto(mediaDto, saveInfo);
-        }
 
-        public void ConnectWithMediaDto(string ip, string port)
-        {
-            var curentUrl = FormatUrl(currentServer.serverUrl, null) + common.UMI3DNetworkingKeys.media;
-            ConnectWithMediaDto(new common.MediaDto { url = curentUrl }, false);
-        }
-
-        protected void ConnectWithMediaDto(common.MediaDto media, bool saveInfo)
-        {
-            mediaDto = media;
-
-            currentServer.serverName = media.name;
-            currentServer.serverIcon = media?.icon2D?.variants?.FirstOrDefault()?.url;
+            currentServer.serverName = mediaDto.name;
+            currentServer.serverIcon = mediaDto?.icon2D?.variants?.FirstOrDefault()?.url;
             preferences.ServerPreferences.StoreUserData(currentServer);
             if (saveInfo) StoreServer();
 
-            currentConnectionData.environmentName = media.name;
-            currentConnectionData.ip = media.url;
+            currentConnectionData.environmentName = mediaDto.name;
+            currentConnectionData.ip = mediaDto.url;
             currentConnectionData.port = null;
-            StoreCurrentConnectionDataAndConnect();
-        }
 
-        protected void StoreServer()
-        {
-            if (savedServers.Find((server) => server.serverName == currentServer.serverName) == null)
-                savedServers.Add(currentServer);
-            preferences.ServerPreferences.StoreRegisteredServerData(savedServers);
-        }
-
-        public async Task<common.MediaDto> GetMediaDto()
-        {
-            var curentUrl = FormatUrl(currentServer.serverUrl, null) + common.UMI3DNetworkingKeys.media;
-            url = curentUrl;
-            try
-            {
-                return await cdk.collaboration.UMI3DCollaborationClientServer.GetMedia
-                (
-                    url,
-                    (e) => url == curentUrl && e.count < 3
-                );
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private async void WaitForError()
-        {
-            while (onlyOneConnection)
-            {
-                await UMI3DAsyncManager.Yield();
-                if (masterServerFound || mediaDtoFound) return;
-                if (_masterServerFound != null && _mediaDtoFound != null)
-                {
-                    ConnectionInitializationFailled?.Invoke(currentServer.serverUrl);
-                    onlyOneConnection = false;
-                    return;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Store current connection data and Load environment.
-        /// </summary>
-        protected void StoreCurrentConnectionDataAndConnect()
-        {
             preferences.ServerPreferences.StoreUserData(currentConnectionData);
-            LoadEnvironment();
-        }
 
-        protected async void LoadEnvironment()
-        {
             var loadAsync = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(GamePanelScene, UnityEngine.SceneManagement.LoadSceneMode.Additive);
 
             while (!loadAsync.isDone || !cdk.collaboration.UMI3DCollaborationClientServer.Exists)
@@ -298,18 +311,7 @@ namespace umi3d.baseBrowser.connection
             cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => LoadedEnvironment?.Invoke());
 
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.Clear();
-            Connect();
 
-            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(LauncherPanelScene);
-            onlyOneConnection = false;
-        }
-
-        /// <summary>
-        /// Uses the connection data to connect to te server.
-        /// </summary>
-        /// <param name="connectionData"></param>
-        protected void Connect()
-        {
             try
             {
                 //succes
@@ -320,16 +322,22 @@ namespace umi3d.baseBrowser.connection
             {
                 ConnectionFail?.Invoke(e.Message);
             }
+
+            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(LauncherPanelScene);
+            onlyOneConnection = false;
+
+            while (onlyOneConnection) await UMI3DAsyncManager.Yield();
         }
 
-        protected static string FormatUrl(string ip, string port)
+        protected void StoreServer()
         {
-            string url = ip + (string.IsNullOrEmpty(port) ? "" : (":" + port));
-
-            if (!url.StartsWith("http://") && !url.StartsWith("https://"))
-                return "http://" + url;
-            return url;
+            if (savedServers.Find((server) => server.serverName == currentServer.serverName) == null)
+                savedServers.Add(currentServer);
+            preferences.ServerPreferences.StoreRegisteredServerData(savedServers);
         }
+
+
+        
 
         #endregion
 
