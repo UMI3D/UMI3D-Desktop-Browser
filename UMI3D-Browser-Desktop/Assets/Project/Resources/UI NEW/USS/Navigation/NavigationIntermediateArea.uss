@@ -1,0 +1,78 @@
+.intermediate-area {
+    width: 1099px;
+    min-height: 68px;
+    max-height: 68px;
+    overflow: visible;
+    height: auto;
+}
+
+.intermediate-area .url-field {
+    width: 709px;
+    height: 68px;
+    flex-direction: row;
+    border-width: 1px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    border-color: grey;
+    align-items: center;
+    justify-content: center;
+}
+
+.intermediate-area .unity-image {
+    height: 46.5px;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.intermediate-area .unity-text-field {
+    flex-grow: 1;
+    margin-left: 83px;
+    margin-right: 57px;
+}
+
+.intermediate-area .unity-text-field__input {
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+    font-size: 21px;
+    -unity-font-style: italic;
+}
+
+.intermediate-area .icon {
+    padding-right: 15px;
+    border-right-width:1px;
+    border-color: grey;
+    left: 0;
+    position: absolute;
+}
+
+.intermediate-area .submit {
+    right: 0;
+    position: absolute;
+}
+
+.account {
+    position: absolute;
+    top: 64px;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.account > .unity-image {
+    min-width: 54px;
+    max-width: 54px;
+    min-height: 54px;
+    max-height: 54px;
+    background-color: black;
+    border-radius: 27px;
+    margin: 0;
+    margin-right: 7px;
+}
+
+.account-info {
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+.account-info .unity-text-element {
+    font-size: 12px;
+}

@@ -1,0 +1,50 @@
+.connection {
+	width: 709px;
+	align-items: flex-start;
+}
+
+.back-section {
+	flex-direction: row;
+	align-items: center;
+	margin-top: 56px;
+	margin-bottom: 26px;
+}
+
+.back-section > .unity-text-element {
+	font-size: 20px;
+}
+
+.connection .form {
+	height: 307px;
+	justify-content: center;
+}
+
+.submit {
+	width: 95px;
+	height: 54px;
+	font-size: 27px;
+	margin: auto;
+}
+
+.unity-text-field {
+	flex-direction: column;
+	width: 100%;
+	margin: 0;
+}
+
+.unity-text-field .unity-label {
+	font-size: 16px;
+	margin-bottom: 16px;
+}
+
+.unity-text-field__input {
+	width: 705px;
+	height: 68px;
+	margin-bottom: 22px;
+	font-size: 21px;
+	background-color: rgba(0, 0, 0, 0);
+	border-radius: 8px;
+	border-width: 2px;
+	border-color: gray;
+	padding-left: 12px;
+}

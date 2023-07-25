@@ -1,0 +1,21 @@
+.navigation-item {
+    -unity-text-align: upper-left;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 6px;
+    height: 293px;
+}
+
+.navigation-item .button {
+    background-image: none;
+    width: 347px;
+    height: 266px;
+    background-color: rgb(38, 38, 38);
+    border-radius: 32px;
+    align-items: center;
+    justify-content: center;
+}
+
+.navigation-item .unity-text-element {
+    margin-top: 10px;
+}

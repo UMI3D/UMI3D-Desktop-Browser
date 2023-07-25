@@ -1,0 +1,150 @@
+:root {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(47, 47, 47);
+    color: rgb(255, 255, 255);
+}
+
+.footer {
+    align-items: center;
+    justify-content: flex-start;
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    height: 32px;
+    flex-direction: row;
+}
+
+.logo {
+    background-image: url('project://database/Assets/Project/Resources/UI%20NEW/Icons/logoUMI3D_2@2x.png?fileID=2800000&guid=f68004efddd38084c8ec929e8d254595&type=3#logoUMI3D_2@2x');
+    width: 128px;
+    height: 152px;
+    margin: 8px;
+}
+
+.button-base {
+	width: 68px;
+	height: 29px;
+	-unity-font-style: bold;
+	background-color: gray;
+	border-radius: 8px;
+	margin-right: 22px;
+	font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}
+
+.unity-text-element {
+    color: rgb(255, 255, 255);
+}
+
+.text-important {
+    color: rgb(111, 202, 209);
+    -unity-font-style: bold;
+}
+
+.unity-text-field__placeholder > .unity-base-text-field__input {
+    color: #969696
+}
+
+.button {
+	align-items: center;
+	justify-content: center;
+}
+
+.menu-navigation {
+    margin: auto;
+}
+
+.menu-navigation .unity-radio-button {
+    border-color: rgba(0, 0, 0, 0);
+    background-color: rgba(7, 7, 7, 0);
+    font-size: 16px;
+    height: 30px;
+    border-radius: 0;
+    border-width: 0;
+    padding: 0;
+    margin: 8px;
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+    transition-property: all;
+    transition-duration: .5s;
+}
+
+.menu-navigation .unity-radio-button:hover {
+    border-color: rgb(111, 202, 209);
+    border-bottom-width: 2px;
+}
+
+.menu-navigation .unity-radio-button:checked {
+    border-color: rgb(111, 202, 209);
+    border-bottom-width: 2px;
+}
+
+.menu-navigation.unity-radio-button-group {
+    height: 46px;
+}
+
+.menu-navigation .unity-base-field__input {
+    display: none;
+}
+
+.menu-navigation .unity-radio-button .unity-label {
+    min-width: auto;
+    color: gray;
+    transition-property: all;
+    transition-duration: .25s;
+}
+
+.menu-navigation .unity-radio-button:checked .unity-label {
+    color: white; 
+}
+
+.toggle-button {
+    height: 25px;
+    align-items: center;
+}
+
+.toggle-button .unity-label {
+    margin-left: 74px;
+    font-size: 16px;
+    -unity-text-align: middle-left;
+}
+
+.toggle-button .toggle-button-background {
+    width: 63px;
+    height: 23px;
+    position: absolute;
+    left: 0;
+    border-color: gray;
+    border-width: 1px;
+    border-radius: 12px;
+    justify-content: center;
+    transition-property: all;
+    transition-delay: .25s;
+    transition-duration: .5s;
+}
+
+.toggle-button .toggle-button-circle {
+    width: 18px;
+    height: 18px;
+    background-color: rgb(111, 202, 209);
+    border-radius: 9px;
+    margin-left: 2px;
+    transition-property: all;
+    transition-duration: .5s;
+}
+
+.toggle-button:checked .toggle-button-background {
+    background-color: rgb(111, 202, 209);
+    border-color: rgb(111, 202, 209);
+}
+
+.toggle-button:checked .toggle-button-circle {
+    background-color: rgb(47, 47, 47);
+    margin-left: 41px;
+}
