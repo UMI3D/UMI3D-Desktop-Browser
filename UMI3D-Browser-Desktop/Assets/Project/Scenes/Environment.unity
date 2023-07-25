@@ -837,16 +837,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PersonalSkeletonContainer
       objectReference: {fileID: 0}
-    - target: {fileID: 8675927111129787670, guid: 29302a75356134040aac5a7d0d21d2f2,
-        type: 3}
-      propertyPath: hips
-      value: 
-      objectReference: {fileID: 677918340615927787}
-    - target: {fileID: 8675927111129787670, guid: 29302a75356134040aac5a7d0d21d2f2,
-        type: 3}
-      propertyPath: viewpoint
-      value: 
-      objectReference: {fileID: 677918340615927786}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29302a75356134040aac5a7d0d21d2f2, type: 3}
 --- !u!1 &677918340615927782 stripped
@@ -887,15 +877,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneType: 3
---- !u!20 &677918340615927786 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 8675927111129789442, guid: 29302a75356134040aac5a7d0d21d2f2,
-    type: 3}
-  m_PrefabInstance: {fileID: 677918340615927781}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &677918340615927787 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9210600191946317566, guid: 29302a75356134040aac5a7d0d21d2f2,
-    type: 3}
-  m_PrefabInstance: {fileID: 677918340615927781}
-  m_PrefabAsset: {fileID: 0}
