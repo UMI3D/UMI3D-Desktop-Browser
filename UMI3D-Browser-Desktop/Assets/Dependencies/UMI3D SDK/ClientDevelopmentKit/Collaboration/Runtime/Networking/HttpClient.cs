@@ -665,35 +665,57 @@ namespace umi3d.cdk.collaboration
         /// <param name="callback">Action to be call when the request succeed.</param>
         /// <param name="onError">Action to be call when the request fail.</param>
         /// <returns></returns>
-        private static async Task<UnityWebRequest> _GetRequest(string HeaderToken, string url, Func<RequestFailedArgument, bool> ShouldTryAgain, bool UseCredential = false, List<(string, string)> headers = null, int tryCount = 0)
+        private static async Task<UnityWebRequest> _GetRequest(
+            string HeaderToken, 
+            string url, 
+            Func<RequestFailedArgument, bool> ShouldTryAgain, 
+            bool UseCredential = false, 
+            List<(string, string)> headers = null, 
+            int tryCount = 0
+        )
         {
-            var www = UnityWebRequest.Get(url);
-            if (UseCredential) www.SetRequestHeader(UMI3DNetworkingKeys.Authorization, HeaderToken);
+            var uwr = UnityWebRequest.Get(url);
+            if (UseCredential)
+            {
+                uwr.SetRequestHeader(UMI3DNetworkingKeys.Authorization, HeaderToken);
+            }
             if (headers != null)
             {
-                foreach ((string, string) item in headers)
+                foreach ((string name, string value) item in headers)
                 {
-                    www.SetRequestHeader(item.Item1, item.Item2);
+                    uwr.SetRequestHeader(item.name, item.value);
                 }
             }
+
             DateTime date = DateTime.UtcNow;
-            UnityWebRequestAsyncOperation operation = www.SendWebRequest();
-            while (!operation.isDone)
-                await UMI3DAsyncManager.Yield();
-
-#if UNITY_2020_1_OR_NEWER
-            if (www.result > UnityWebRequest.Result.Success)
-#else
-            if (www.isNetworkError || www.isHttpError)
-#endif
+            
+            UnityWebRequestAsyncOperation operation = uwr.SendWebRequest();
+            operation.completed += op =>
             {
+#if UNITY_2020_1_OR_NEWER
+                if (uwr.result > UnityWebRequest.Result.Success)
+#else
+                if (uwr.isNetworkError || uwr.isHttpError)
+#endif
+                {
+                    if (!UMI3DClientServer.Exists)
+                    {
+                        throw new Umi3dException($"{nameof(UMI3DClientServer)} does not exist when trying to get request.");
+                    }
 
-                if (UMI3DClientServer.Exists && await UMI3DClientServer.Instance.TryAgainOnHttpFail(new RequestFailedArgument(www, tryCount, date, ShouldTryAgain)))
-                    return await _GetRequest(HeaderToken, url, ShouldTryAgain, UseCredential, headers, tryCount + 1);
-                else
-                    throw new Umi3dNetworkingException(www, "Failed to get ");
-            }
-            return www;
+
+                    if (UMI3DClientServer.Instance.TryAgainOnHttpFail(new RequestFailedArgument(uwr, tryCount, date, ShouldTryAgain)))
+                    {
+                        _GetRequest(HeaderToken, url, ShouldTryAgain, UseCredential, headers, tryCount + 1);
+                    }
+                    else
+                    {
+                        throw new Umi3dNetworkingException(uwr, $"Failed to get with error: {uwr.result}");
+                    }
+                }
+            };
+
+            return uwr;
         }
 
         /// <summary>

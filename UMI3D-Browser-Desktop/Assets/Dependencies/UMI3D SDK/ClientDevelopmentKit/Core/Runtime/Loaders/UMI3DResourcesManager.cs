@@ -279,10 +279,10 @@ namespace umi3d.cdk
 
             private bool MatchServerUrl()
             {
-                if (UMI3DClientServer.Environement == null)
+                if (UMI3DClientServer.Environment == null)
                     return false;
 
-                string url = UMI3DClientServer.Environement.resourcesUrl + '/';
+                string url = UMI3DClientServer.Environment.resourcesUrl + '/';
 
                 if (url == this.url) return true;
 

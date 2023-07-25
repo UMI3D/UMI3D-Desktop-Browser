@@ -17,6 +17,7 @@ limitations under the License.
 using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.collaboration;
@@ -304,9 +305,9 @@ namespace umi3d.cdk.collaboration
 
 
         /// <summary>
-        /// Retry a failed http request
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="argument">failed request argument</param>
+        /// <param name="argument"></param>
         /// <returns></returns>
         public override async Task<bool> TryAgainOnHttpFail(RequestFailedArgument argument)
         {
@@ -320,20 +321,33 @@ namespace umi3d.cdk.collaboration
         }
 
         /// <summary>
-        /// launch a new request
+        /// launch a new request.
         /// </summary>
         /// <param name="argument">argument used in the request</param>
         /// <returns></returns>
         private async Task<bool> TryAgain(RequestFailedArgument argument)
         {
-            bool needNewToken = environmentClient != null && environmentClient.IsConnected() && argument.GetRespondCode() == 401 && (environmentClient.lastTokenUpdate - argument.date).TotalMilliseconds < 0;
+            bool needNewToken = 
+                environmentClient != null 
+                && environmentClient.IsConnected() 
+                && argument.GetRespondCode() == 401 
+                && (environmentClient.lastTokenUpdate - argument.date).TotalMilliseconds < 0;
+
             if (needNewToken)
             {
                 UnityAction a = () => needNewToken = false;
-                UMI3DCollaborationClientServer.Instance.OnNewToken.AddListener(a);
-                while (environmentClient != null && environmentClient.IsConnected() && needNewToken && !((DateTime.UtcNow - argument.date).TotalMilliseconds > environmentClient.maxMillisecondToWait))
+                Instance.OnNewToken.AddListener(a);
+
+                while (
+                    environmentClient != null 
+                    && environmentClient.IsConnected() 
+                    && needNewToken 
+                    && !((DateTime.UtcNow - argument.date).TotalMilliseconds > environmentClient.maxMillisecondToWait)
+                )
                     await UMI3DAsyncManager.Yield();
-                UMI3DCollaborationClientServer.Instance.OnNewToken.RemoveListener(a);
+
+                Instance.OnNewToken.RemoveListener(a);
+
                 return environmentClient != null && environmentClient.IsConnected();
             }
             return false;
@@ -347,8 +361,16 @@ namespace umi3d.cdk.collaboration
         /// <seealso cref="UMI3DCollaborationClientServer.Media"/>
         public static async Task<MediaDto> GetMedia(string url, Func<RequestFailedArgument, bool> shouldTryAgain = null)
         {
-            UMI3DLogger.Log($"Get media at {url}", scope | DebugScope.Connection);
-            return await HttpClient.SendGetMedia(url, shouldTryAgain);
+            try
+            {
+                UMI3DLogger.Log($"Get media at {url}", scope | DebugScope.Connection);
+                return await HttpClient.SendGetMedia(url, shouldTryAgain);
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.Log($"exception : {e} on thread : {Thread.CurrentThread.ManagedThreadId}");
+                return null;
+            }
         }
 
         /// <summary>
