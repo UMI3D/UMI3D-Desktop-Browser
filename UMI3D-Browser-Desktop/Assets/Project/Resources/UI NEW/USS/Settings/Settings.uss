@@ -1,0 +1,108 @@
+.settings {
+	flex-direction: row;
+}
+
+.panel {
+	background-color: rgb(38, 38, 38);
+	border-radius: 32px;
+	margin: 8px;
+	align-items: center;
+}
+
+.panel.left {
+	width: 269.5px;
+	height: 425.5px;
+	padding: 24px;
+}
+
+.panel.right {
+	width: 809px;
+	height: 425.5px;
+	padding: 69.5px;
+}
+
+.panel .unity-image {
+	min-height: 32px;
+	max-height: 32px;
+}
+
+.panel .title {
+	font-size: 30px;
+	-unity-font-style: bold;
+}
+
+.back {
+	position: absolute;
+	top: 32px;
+	left: -16px;
+}
+
+.panel.left .unity-radio-button-group {
+	flex-direction: column;
+	margin-top: 24px;
+}
+
+.panel.left .unity-radio-button {
+	width: 282px;
+	height: 54px;
+	align-items: center;
+	border-radius: 10px;
+}
+
+.panel.left .unity-radio-button:checked {
+	background-color: rgb(39, 172, 198);
+}
+
+.panel.left .unity-base-field__input {
+    display: none;
+}
+
+.panel.left .unity-radio-button .unity-label {
+	font-size: 25px;
+	margin-left: 48px;
+}
+
+.settings-panel {
+	background-color: rgba(0, 0, 0, 0);
+	justify-content: flex-start;
+}
+
+.unity-popup-field {
+	margin: 0;
+	padding: 0;
+	border-width: 0;
+	border-radius: 16px;
+}
+
+.panel.right .unity-label {
+	width: 335px;
+	height: 49px;
+	margin: 0;
+	padding: 0;
+	-unity-text-align: middle-left;
+	padding-left: 19px;
+	font-size: 20px;
+	background-color: darkgray;
+}
+
+.unity-popup-field__input {
+	width: 335px;
+	height: 49px;
+	margin: 0;
+	padding: 0;
+	border-width: 0;
+	font-size: 20px;
+	background-color: gray;
+}
+
+.unity-popup-field__input .unity-text-element {
+	margin-left: 25px;
+}
+
+.unity-popup-field__input .unity-base-popup-field__arrow {
+	position: absolute;
+	top: 21px;
+	right: 25px;
+	min-height: 8px;
+	max-height: 8px;
+}

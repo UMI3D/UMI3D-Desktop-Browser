@@ -3,9 +3,9 @@ using umi3d.commonScreen;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class HomeIntermediateArea : BaseVisual_C
+public class HomeIntermediateArea_C : BaseVisual_C
 {
-    public new class UxmlFactory : UxmlFactory<HomeIntermediateArea, UxmlTraits> { }
+    public new class UxmlFactory : UxmlFactory<HomeIntermediateArea_C, UxmlTraits> { }
 
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
@@ -20,7 +20,7 @@ public class HomeIntermediateArea : BaseVisual_C
             if (Application.isPlaying) return;
 
             base.Init(ve, bag, cc);
-            var custom = ve as HomeIntermediateArea;
+            var custom = ve as HomeIntermediateArea_C;
         }
     }
 

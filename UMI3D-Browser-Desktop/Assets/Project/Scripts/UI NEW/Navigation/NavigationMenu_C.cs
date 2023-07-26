@@ -33,7 +33,7 @@ public class NavigationMenu_C : BaseVisual_C
         Spawns
     }
 
-    private VisualElement _intermediateArea = new HomeIntermediateArea() { name = "IntermediateArea" };
+    private VisualElement _intermediateArea = new IntermediateArea_C() { name = "IntermediateArea" };
     private VisualElement _mainArea = new VisualElement() { name = "MainArea" };
     private NavigationCentralArea_C _centralArea = new NavigationCentralArea_C() { name = "CentralArea" };
     private Button_C _buttonSettings = new Button_C() { name = "Settings" };

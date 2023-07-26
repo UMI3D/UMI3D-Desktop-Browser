@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static umi3d.cdk.collaboration.UMI3DEnvironmentClient;
 
-public class IntermediateArea : BaseVisual_C
+public class IntermediateArea_C : BaseVisual_C
 {
-    public new class UxmlFactory : UxmlFactory<IntermediateArea, UxmlTraits> { }
+    public new class UxmlFactory : UxmlFactory<IntermediateArea_C, UxmlTraits> { }
 
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
@@ -21,7 +21,7 @@ public class IntermediateArea : BaseVisual_C
             if (Application.isPlaying) return;
 
             base.Init(ve, bag, cc);
-            var custom = ve as IntermediateArea;
+            var custom = ve as IntermediateArea_C;
         }
     }
 
