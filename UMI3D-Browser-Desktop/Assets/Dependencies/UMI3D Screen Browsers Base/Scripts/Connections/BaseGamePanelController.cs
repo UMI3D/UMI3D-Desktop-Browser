@@ -199,6 +199,14 @@ namespace umi3d.baseBrowser.connection
             InitControls();
 
             GamePanel.CurrentView = GameViews.Loader;
+
+            BaseConnectionProcess.Instance.EnvironmentLeave += () =>
+            {
+                UnityEngine.Debug.Log($"leave");
+                var clh = UMI3DCollaborationLoadingHandler.Instance;
+                UMI3DCollaborationLoadingHandler.Instance = null;
+                Destroy(clh.gameObject);
+            };
         }
 
         #region OnDestroy
