@@ -35,13 +35,11 @@ public class IntermediateArea_C : BaseVisual_C
     private Button_C _logout = new Button_C();
 
     #region USS
-    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Base";
-    public string StyleSheetPath_MainStyle => $"UI NEW/USS/Navigation/NavigationIntermediateArea";
+    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Navigation/NavigationIntermediateArea";
 
     protected override void AttachStyleSheet()
     {
         base.AttachStyleSheet();
-        this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
     }
 
     protected override void AttachUssClass()

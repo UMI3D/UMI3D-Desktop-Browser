@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="BaseScreen" src="project://database/Assets/Project/Resources/UI%20NEW/BaseScreen.uxml?fileID=9197481963319205126&amp;guid=623a89fef465cfe409bbb262e330de5d&amp;type=3#BaseScreen" />
+    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Base.uss?fileID=7433441132597879392&amp;guid=e32d8e46f465ff446bbd9cce72b7e655&amp;type=3#Base" />
     <ui:Instance template="BaseScreen" name="BaseScreen">
         <SettingsMenu_C />
     </ui:Instance>

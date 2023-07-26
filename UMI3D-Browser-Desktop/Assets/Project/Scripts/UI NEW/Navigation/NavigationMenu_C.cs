@@ -42,13 +42,11 @@ public class NavigationMenu_C : BaseVisual_C
     private Dictionary<Menu, Tuple<VisualElement, NavigationCentralArea_C>> _menus;
 
     #region USS
-    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Base";
-    public string StyleSheetPath_MainStyle => $"UI NEW/USS/Navigation/Navigation";
+    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Navigation/Navigation";
 
     protected override void AttachStyleSheet()
     {
         base.AttachStyleSheet();
-        this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
     }
 
     protected override void AttachUssClass()

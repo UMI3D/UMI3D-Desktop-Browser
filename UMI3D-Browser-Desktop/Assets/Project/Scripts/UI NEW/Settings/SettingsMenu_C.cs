@@ -37,13 +37,11 @@ public class SettingsMenu_C : BaseVisual_C
     private Dictionary<RadioButton, VisualElement> _sections = new ();
 
     #region USS
-    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Base";
-    public string StyleSheetPath_MainStyle => $"UI NEW/USS/Settings/Settings";
+    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Settings/Settings";
 
     protected override void AttachStyleSheet()
     {
         base.AttachStyleSheet();
-        this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
     }
 
     protected override void AttachUssClass()

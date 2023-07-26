@@ -44,13 +44,11 @@ public class ConnectionMenu_C : BaseVisual_C
     private Button_C _submit = new Button_C() { name = "Submit" };
 
     #region USS
-    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Base";
-    public string StyleSheetPath_MainStyle => $"UI NEW/USS/Connection/Connection";
+    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Connection/Connection";
 
     protected override void AttachStyleSheet()
     {
         base.AttachStyleSheet();
-        this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
     }
 
     protected override void AttachUssClass()

@@ -28,7 +28,7 @@ public class NavigationItem_C : BaseVisual_C
     protected Text_C _name = new Text_C() { name = "Name" };
 
     #region USS
-    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Base";
+    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Navigation/NavigationItem";
     public string StyleSheetPath_MainStyle => $"UI NEW/USS/Navigation/NavigationItem";
 
     protected override void AttachStyleSheet()

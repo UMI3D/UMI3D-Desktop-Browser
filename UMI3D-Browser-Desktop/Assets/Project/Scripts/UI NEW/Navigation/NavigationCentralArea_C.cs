@@ -31,13 +31,11 @@ public class NavigationCentralArea_C : BaseVisual_C
     protected List<RadioButton> _navigationButtons = new List<RadioButton>();
 
     #region USS
-    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Base";
-    public string StyleSheetPath_MainStyle => $"UI NEW/USS/Navigation/NavigationCentralArea";
+    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Navigation/NavigationCentralArea";
 
     protected override void AttachStyleSheet()
     {
         base.AttachStyleSheet();
-        this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
     }
 
     protected override void AttachUssClass()

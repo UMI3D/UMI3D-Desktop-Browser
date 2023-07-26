@@ -145,3 +145,7 @@
     background-color: rgb(47, 47, 47);
     margin-left: 41px;
 }
+
+.unity-base-dropdown__container-outer {
+    margin: 0;
+}

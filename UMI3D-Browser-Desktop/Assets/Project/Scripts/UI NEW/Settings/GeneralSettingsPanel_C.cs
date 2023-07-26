@@ -24,17 +24,15 @@ public class GeneralSettingsPanel_C : BaseVisual_C
         }
     }
 
-    private DropdownField _languages = new DropdownField();
-    private DropdownField _theme = new DropdownField();
+    private Dropdown_C _languages = new Dropdown_C();
+    private Dropdown_C _theme = new Dropdown_C();
 
     #region USS
-    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Base";
-    public string StyleSheetPath_MainStyle => $"UI NEW/USS/Settings/Settings";
+    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Settings/Settings";
 
     protected override void AttachStyleSheet()
     {
         base.AttachStyleSheet();
-        this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
     }
 
     protected override void AttachUssClass()

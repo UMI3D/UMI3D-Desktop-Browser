@@ -30,13 +30,11 @@ public class HomeIntermediateArea_C : BaseVisual_C
     protected Button_C _submit = new Button_C();
 
     #region USS
-    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Base";
-    public string StyleSheetPath_MainStyle => $"UI NEW/USS/Navigation/NavigationIntermediateArea";
+    public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Navigation/NavigationIntermediateArea";
 
     protected override void AttachStyleSheet()
     {
         base.AttachStyleSheet();
-        this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
     }
 
     protected override void AttachUssClass()
