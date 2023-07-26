@@ -207,6 +207,9 @@ namespace umi3d.cdk.collaboration.userCapture
 
             cs.transform.localScale = UMI3DCollaborationEnvironmentLoader.Instance.UserList.First(u => u.id == userId).userSize.Struct();
 
+            if (cs.transform.localScale.y == 0)
+                cs.transform.localScale = Vector3.one * 1.8f;
+
             cs.SkeletonHierarchy = skeletonHierarchy;
 
             var trackedSkeletonPrefab = (collaborativeLoaderService.AbstractLoadingParameters as IUMI3DCollabLoadingParameters).CollabTrackedSkeleton;
