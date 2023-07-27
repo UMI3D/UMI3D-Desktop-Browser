@@ -143,7 +143,7 @@ namespace umi3d.cdk.collaboration.userCapture
 
         private void Init()
         {
-            collaborativeEnvironmentManagementService.OnUpdateUserList += () => UpdateSkeletons(collaborativeEnvironmentManagementService.UserList);
+            collaborativeEnvironmentManagementService.OnUpdateJoinnedUserList += () => UpdateSkeletons(collaborativeEnvironmentManagementService.UserList);
             collaborativeLoaderService.onEnvironmentLoaded.AddListener(() => { InitSkeletons(); if (ShouldSendTracking) SendTrackingLoop(); canClearSkeletons = true; });
             collaborationClientServerService.OnLeavingEnvironment.AddListener(Clear);
             collaborationClientServerService.OnRedirection.AddListener(Clear);
@@ -206,9 +206,6 @@ namespace umi3d.cdk.collaboration.userCapture
                 cs.transform.SetParent(CollabSkeletonsScene.transform);
 
             cs.transform.localScale = UMI3DCollaborationEnvironmentLoader.Instance.UserList.First(u => u.id == userId).userSize.Struct();
-
-            if (cs.transform.localScale.y == 0)
-                cs.transform.localScale = Vector3.one * 1.8f;
 
             cs.SkeletonHierarchy = skeletonHierarchy;
 

@@ -93,7 +93,7 @@ namespace umi3d.cdk.userCapture
         {
             environmentLoaderService.onEnvironmentLoaded.AddListener(InitPersonalSkeleton);
         }
-        
+
         private void InitPersonalSkeleton()
         {
             PersonalSkeleton = environmentManager.gameObject.GetComponentInChildren<PersonalSkeleton>();
