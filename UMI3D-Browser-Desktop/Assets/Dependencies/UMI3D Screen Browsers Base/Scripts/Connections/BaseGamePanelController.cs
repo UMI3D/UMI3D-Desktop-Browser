@@ -203,9 +203,11 @@ namespace umi3d.baseBrowser.connection
             BaseConnectionProcess.Instance.EnvironmentLeave += () =>
             {
                 UnityEngine.Debug.Log($"leave");
-                var clh = UMI3DCollaborationLoadingHandler.Instance;
-                UMI3DCollaborationLoadingHandler.Instance = null;
-                Destroy(clh.gameObject);
+                var clhGameObject = UMI3DCollaborationLoadingHandler.Instance.gameObject;
+                //UMI3DCollaborationLoadingHandler.Instance = null;
+                //DestroyImmediate(clh.gameObject);
+                UMI3DCollaborationLoadingHandler.Destroy();
+                Destroy(clhGameObject);
             };
         }
 
