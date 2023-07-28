@@ -77,7 +77,7 @@ public class SettingsMenu_C : BaseVisual_C
         Add(_rightPanel);
 
         AddSection("General", new GeneralSettingsPanel_C());
-        AddSection("Audio", new GeneralSettingsPanel_C());
+        AddSection("Audio", new AudioSettingsPanel_C());
         AddSection("Graphics", new GeneralSettingsPanel_C());
         AddSection("Controls", new GeneralSettingsPanel_C());
         AddSection("Notifications", new GeneralSettingsPanel_C());

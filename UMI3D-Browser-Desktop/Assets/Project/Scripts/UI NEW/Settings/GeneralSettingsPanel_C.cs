@@ -39,6 +39,8 @@ public class GeneralSettingsPanel_C : BaseVisual_C
     {
         base.AttachUssClass();
         AddToClassList("settings-panel");
+        _languages.AddToClassList("setting");
+        _theme.AddToClassList("setting");
     }
     #endregion
 

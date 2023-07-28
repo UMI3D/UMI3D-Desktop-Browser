@@ -7,15 +7,6 @@ public class PercentageSlider_C : SliderInt
 {
     public new class UxmlFactory : UxmlFactory<PercentageSlider_C, UxmlTraits> { }
 
-    public new class UxmlTraits : Label.UxmlTraits
-    {
-        public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
-        {
-            base.Init(ve, bag, cc);
-            var custom = ve as PercentageSlider_C;
-
-        }
-    }
 
     public override int value { 
         get => base.value;
@@ -82,6 +73,7 @@ public class PercentageSlider_C : SliderInt
         _percentageText.value = "0";
         _percentageText.RegisterValueChangedCallback(e =>
         {
+            // Check if is a number
             var r = "";
             foreach (var str in e.newValue)
             {
@@ -94,12 +86,14 @@ public class PercentageSlider_C : SliderInt
                 return;
             }
 
+            // Max 3 number
             if (e.newValue.Count() > 3) 
             {
                 _percentageText.value = e.newValue.Substring(0, 3);
                 return;
             }
 
+            // Between 0 and 100
             var v = Int32.Parse(e.newValue);
             if (v > 100)
             {
@@ -112,6 +106,7 @@ public class PercentageSlider_C : SliderInt
                 return;
             }
 
+            // Apply value
             value = v;
         });
 

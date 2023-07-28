@@ -29,12 +29,10 @@ public class NavigationItem_C : BaseVisual_C
 
     #region USS
     public override string StyleSheetPath_MainTheme => $"UI NEW/USS/Navigation/NavigationItem";
-    public string StyleSheetPath_MainStyle => $"UI NEW/USS/Navigation/NavigationItem";
 
     protected override void AttachStyleSheet()
     {
         base.AttachStyleSheet();
-        this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
     }
 
     protected override void AttachUssClass()
