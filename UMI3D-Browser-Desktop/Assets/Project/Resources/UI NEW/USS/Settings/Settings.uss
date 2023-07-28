@@ -112,45 +112,62 @@
 
 .panel.right .unity-radio-button {
 	margin: 0;
-	flex-grow: 1;
+}
+
+.panel.right .unity-radio-button .unity-label {
+	padding: 0;
+	-unity-text-align: middle-center;
+	background-color: gray;
 }
 
 .panel.right .unity-radio-button__input {
 	display: none;
 }
-
 	
 .panel.right .radio-3-elements .unity-label  {
 	width: 167.5px;
 }
 
-.panel.right .radio-2-elements .unity-radio-button  {
+.panel.right .radio-2-elements .unity-radio-button .unity-label  {
+	width: 167.5px;
+}
+	
+.panel.right .radio-4-elements .unity-label  {
 	width: 167.5px;
 }
 
-.unity-base-slider__input {
+.panel.right .radio-4-elements .unity-radio-button .unity-label  {
+	width: 125.625px;
+}
+
+.setting.unity-base-slider .percentage {
+	position: absolute;
+	right: 0px;
+	flex-direction: row;
+	font-size: 15px;
+	background-color: gray;
+}
+
+.setting.unity-base-slider .unity-base-slider__input {
 	align-items: center;
 	padding-left: 10px;
 	padding-right: 80px;
-}
-
-.unity-base-slider .percentage {
-	position: absolute;
-	right: 20px;
-	flex-direction: row;
-	font-size: 15px;
+	background-color: rgba(0, 0, 0, 0);
+	background-color: gray;
 }
 
 .unity-base-slider .percentage .unity-text-field__input {
 	width: 30px;
 	background-color: rgba(0, 0, 0, 0);
 	border-color: rgba(0, 0, 0, 0);
+	color: white;
 	-unity-text-align: middle-right;
 }
 
 .unity-base-slider .percentage .unity-label {
-	width: 20px;
+	width: 40px;
 	padding: 0;
 	background-color: rgba(0, 0, 0, 0);
+	-unity-text-align: middle-left;
 
 }

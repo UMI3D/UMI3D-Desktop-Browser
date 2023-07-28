@@ -78,9 +78,9 @@ public class SettingsMenu_C : BaseVisual_C
 
         AddSection("General", new GeneralSettingsPanel_C());
         AddSection("Audio", new AudioSettingsPanel_C());
-        AddSection("Graphics", new GeneralSettingsPanel_C());
+        AddSection("Graphics", new GraphicsSettingsPanel_C());
         AddSection("Controls", new GeneralSettingsPanel_C());
-        AddSection("Notifications", new GeneralSettingsPanel_C());
+        AddSection("Notifications", new NotificationSettingsPanel_C());
     }
 
     private void AddSection(string sectionName, VisualElement panel)
