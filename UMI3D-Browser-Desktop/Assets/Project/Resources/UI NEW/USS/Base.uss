@@ -1,10 +1,14 @@
+.unity-builder-tooltip-preview {
+    display: none;
+}
+
 :root {
     width: 100%;
     height: 100%;
     align-items: center;
     justify-content: center;
-    background-color: rgb(47, 47, 47);
-    color: rgb(255, 255, 255);
+    background-color: var(--color-background);
+    color: var(--text-color-base);
 }
 
 .footer {
@@ -24,13 +28,18 @@
     margin: 8px;
 }
 
+
+
+
+
+
 .button-base {
-	width: 68px;
-	height: 29px;
-	-unity-font-style: bold;
-	background-color: gray;
-	border-radius: 8px;
-	font-size: 14px;
+    width: 68px;
+    height: 29px;
+    -unity-font-style: bold;
+    background-color: gray;
+    border-radius: 8px;
+    font-size: 14px;
 }
 
 .hidden {
@@ -47,12 +56,12 @@
 }
 
 .unity-text-field__placeholder > .unity-base-text-field__input {
-    color: #969696
+    color: rgb(150, 150, 150);
 }
 
 .button {
-	align-items: center;
-	justify-content: center;
+    align-items: center;
+    justify-content: center;
 }
 
 .menu-navigation {
@@ -69,7 +78,7 @@
     -unity-font-style: bold;
     -unity-text-align: upper-center;
     transition-property: all;
-    transition-duration: .5s;
+    transition-duration: 0.5s;
 }
 
 .menu-navigation .unity-radio-button:hover {
@@ -94,11 +103,11 @@
     min-width: auto;
     color: gray;
     transition-property: all;
-    transition-duration: .25s;
+    transition-duration: 0.25s;
 }
 
 .menu-navigation .unity-radio-button:checked .unity-label {
-    color: white; 
+    color: white;
 }
 
 .toggle-button {
@@ -122,8 +131,8 @@
     border-radius: 12px;
     justify-content: center;
     transition-property: all;
-    transition-delay: .25s;
-    transition-duration: .5s;
+    transition-delay: 0.25s;
+    transition-duration: 0.5s;
 }
 
 .toggle-button .toggle-button-circle {
@@ -133,7 +142,7 @@
     border-radius: 9px;
     margin-left: 2px;
     transition-property: all;
-    transition-duration: .5s;
+    transition-duration: 0.5s;
 }
 
 .toggle-button:checked .toggle-button-background {
@@ -149,8 +158,6 @@
 .unity-base-dropdown__container-outer {
     margin: 0;
 }
-
-
 
 .unity-scroller--horizontal {
     width: 25%;
@@ -185,7 +192,7 @@
     border-width: 0;
     max-width: 50%;
     min-width: 50%;
-    top: 0px;
+    top: 0;
 }
 
 .unity-scroller--vertical .unity-scroller__slider {
@@ -197,13 +204,11 @@
     margin: 0;
 }
 
-
 .unity-scroller--vertical .unity-base-slider__dragger {
     background-color: rgb(42, 112, 106);
     width: 4px;
     padding: 0;
-    border-width: 0;   
+    border-width: 0;
     max-height: 50%;
     min-height: 50%;
 }
-
