@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Navigation/NavigationItem.uss?fileID=7433441132597879392&amp;guid=8dc718800e53e5e4bb7ffd70fa0de9c3&amp;type=3#NavigationItem" />
+    <ui:VisualElement name="Element" class="navigation-item">
+        <ui:Button display-tooltip-when-elided="true" name="ButtonElement" style="background-image: none;">
+            <ui:VisualElement style="background-image: resource(&apos;UI NEW/Icons/picto_meta_world&apos;); width: 150px; height: 150px;" />
+        </ui:Button>
+        <ui:Label text="Tutorial" display-tooltip-when-elided="true" name="Name" />
+    </ui:VisualElement>
+</ui:UXML>

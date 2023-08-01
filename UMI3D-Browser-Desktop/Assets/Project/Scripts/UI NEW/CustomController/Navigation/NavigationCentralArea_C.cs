@@ -35,7 +35,7 @@ public class NavigationCentralArea_C : BaseVisual_C
 
     protected override void AttachStyleSheet()
     {
-        base.AttachStyleSheet();
+
     }
 
     protected override void AttachUssClass()

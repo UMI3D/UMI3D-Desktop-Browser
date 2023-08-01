@@ -4,16 +4,6 @@ public class ToggleButton_C : BaseBoolField
 {
     public new class UxmlFactory : UxmlFactory<ToggleButton_C, UxmlTraits> { }
 
-    public new class UxmlTraits : Button.UxmlTraits
-    {
-
-        public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
-        {
-            base.Init(ve, bag, cc);
-            var custom = ve as ToggleButton_C;
-        }
-    }
-
     private VisualElement _background = new VisualElement();
     private VisualElement _circle = new VisualElement();
 

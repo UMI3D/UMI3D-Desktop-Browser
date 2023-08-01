@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/NavigationCentralArea.uss?fileID=7433441132597879392&amp;guid=b1f186ed39f877e45902c91fe988c3c2&amp;type=3#NavigationCentralArea" />
-    <ui:Scroller high-value="3" direction="Horizontal" value="0.36" style="border-left-color: rgba(0, 0, 0, 255); border-right-color: rgba(0, 0, 0, 255); border-top-color: rgba(0, 0, 0, 255); border-bottom-color: rgba(0, 0, 0, 255); border-top-width: 0;" />
+    <ui:Template name="BaseScreen" src="project://database/Assets/Project/Resources/UI%20NEW/BaseScreen.uxml?fileID=9197481963319205126&amp;guid=623a89fef465cfe409bbb262e330de5d&amp;type=3#BaseScreen" />
+    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Navigation/NavigationCentralArea.uss?fileID=7433441132597879392&amp;guid=b1f186ed39f877e45902c91fe988c3c2&amp;type=3#NavigationCentralArea" />
+    <ui:Instance template="BaseScreen" name="BaseScreen" />
 </ui:UXML>

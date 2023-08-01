@@ -1,0 +1,179 @@
+.button-base {
+    width: 68px;
+    height: 29px;
+    -unity-font-style: bold;
+    background-color: gray;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}
+
+.unity-text-element {
+    color: rgb(255, 255, 255);
+}
+
+.text-important {
+    color: rgb(111, 202, 209);
+    -unity-font-style: bold;
+}
+
+.unity-text-field__placeholder > .unity-base-text-field__input {
+    color: rgb(150, 150, 150);
+}
+
+.button {
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-navigation {
+    margin: auto;
+}
+
+.menu-navigation .unity-radio-button {
+    font-size: 16px;
+    height: 30px;
+    border-radius: 0;
+    border-width: 0;
+    padding: 0;
+    margin: 8px;
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+    transition-property: all;
+    transition-duration: 0.5s;
+}
+
+.menu-navigation .unity-radio-button:hover {
+    border-color: rgb(111, 202, 209);
+    border-bottom-width: 2px;
+}
+
+.menu-navigation .unity-radio-button:checked {
+    border-color: rgb(111, 202, 209);
+    border-bottom-width: 2px;
+}
+
+.menu-navigation.unity-radio-button-group {
+    height: 46px;
+}
+
+.menu-navigation .unity-base-field__input {
+    display: none;
+}
+
+.menu-navigation .unity-radio-button .unity-label {
+    min-width: auto;
+    color: gray;
+    transition-property: all;
+    transition-duration: 0.25s;
+}
+
+.menu-navigation .unity-radio-button:checked .unity-label {
+    color: white;
+}
+
+.toggle-button {
+    height: 25px;
+    align-items: center;
+}
+
+.toggle-button .unity-label {
+    margin-left: 74px;
+    font-size: 16px;
+    -unity-text-align: middle-left;
+}
+
+.toggle-button .toggle-button-background {
+    width: 63px;
+    height: 23px;
+    position: absolute;
+    left: 0;
+    border-color: gray;
+    border-width: 1px;
+    border-radius: 12px;
+    justify-content: center;
+    transition-property: all;
+    transition-delay: 0.25s;
+    transition-duration: 0.5s;
+}
+
+.toggle-button .toggle-button-circle {
+    width: 18px;
+    height: 18px;
+    background-color: rgb(111, 202, 209);
+    border-radius: 9px;
+    margin-left: 2px;
+    transition-property: all;
+    transition-duration: 0.5s;
+}
+
+.toggle-button:checked .toggle-button-background {
+    background-color: rgb(111, 202, 209);
+    border-color: rgb(111, 202, 209);
+}
+
+.toggle-button:checked .toggle-button-circle {
+    background-color: rgb(47, 47, 47);
+    margin-left: 41px;
+}
+
+.unity-base-dropdown__container-outer {
+    margin: 0;
+}
+
+.unity-scroller--horizontal {
+    width: 25%;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.unity-scroller--vertical {
+    position: absolute;
+    height: 50%;
+    background-color: rgba(0, 0, 0, 0);
+    top: 25%;
+    right: -41px;
+}
+
+.unity-scroller .unity-text-element {
+    display: none;
+}
+
+.unity-scroller--horizontal .unity-scroller__slider {
+    -unity-text-outline-color: rgb(0, 0, 0);
+    background-color: rgb(73, 73, 73);
+    border-radius: 8px;
+    height: 4px;
+    min-height: 4px;
+    max-height: 4px;
+}
+
+.unity-scroller--horizontal .unity-base-slider__dragger {
+    background-color: rgb(42, 112, 106);
+    height: 4px;
+    padding: 0;
+    border-width: 0;
+    max-width: 50%;
+    min-width: 50%;
+    top: 0;
+}
+
+.unity-scroller--vertical .unity-scroller__slider {
+    background-color: rgb(73, 73, 73);
+    border-radius: 8px;
+    width: 4px;
+    min-width: 4px;
+    max-width: 4px;
+    margin: 0;
+}
+
+.unity-scroller--vertical .unity-base-slider__dragger {
+    background-color: rgb(42, 112, 106);
+    width: 4px;
+    padding: 0;
+    border-width: 0;
+    max-height: 50%;
+    min-height: 50%;
+}

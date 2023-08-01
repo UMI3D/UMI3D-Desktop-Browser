@@ -1,3 +1,18 @@
 :root {
+	--color-background: white;
 
+	--color-primary: #5EE3F0;
+	--color-secondary: #25B1A5;
+	--color-info: #25B1A5;
+	--color-hover: #6FCAD1;
+
+	--text-color-base: #FFFFFF;
+	--text-color-label: #97979C;
+	--text-color-disable: #727272;
+	
+	--color-background-button: #727272;
+	--color-background-button-menu: #262626;
+
+    --font-noto-sans: resource('UI NEW/Fonts/NotoSans');
+    --font-segoe-ui: resource('UI NEW/Fonts/Segoe UI');
 }

@@ -3,7 +3,9 @@
     min-height: 68px;
     max-height: 68px;
     overflow: visible;
-    height: auto;
+    height: 68px;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 .intermediate-area .url-field {
@@ -39,7 +41,7 @@
 
 .intermediate-area .icon {
     padding-right: 15px;
-    border-right-width:1px;
+    border-right-width: 1px;
     border-color: grey;
     left: 0;
     position: absolute;

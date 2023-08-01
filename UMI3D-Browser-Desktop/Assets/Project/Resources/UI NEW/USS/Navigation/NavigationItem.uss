@@ -6,16 +6,32 @@
     height: 293px;
 }
 
-.navigation-item .button {
-    background-image: none;
+.navigation-item .unity-text-element {
+    margin-top: 10px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.navigation-item .unity-button {
+    background-image: resource('UI NEW/Icons/picto_meta_world');
     width: 347px;
     height: 266px;
     background-color: rgb(38, 38, 38);
     border-radius: 32px;
     align-items: center;
     justify-content: center;
-}
-
-.navigation-item .unity-text-element {
-    margin-top: 10px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
 }
