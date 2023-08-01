@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
 
     private NavigationScreen _navigationScreen;
     private ConnectionScreen _connectionScreen;
+    private VisualElement _errorBox;
 
     public NavigationScreen NavigationScreen => _navigationScreen;
     public ConnectionScreen ConnectionScreen => _connectionScreen;
@@ -35,6 +36,9 @@ public class MainMenu : MonoBehaviour
         _navigationScreen.Hide();
         _connectionScreen = new ConnectionScreen(_uiDocument.rootVisualElement.Q("Connection"));
         _connectionScreen.Hide();
+        _errorBox = _uiDocument.rootVisualElement.Q("ErrorBox");
+        _errorBox.Q<Button>("ButtonOk").clicked += () => _errorBox.AddToClassList("hidden");
+        _errorBox.AddToClassList("hidden");
 
         _homeState = new HomeState(this);
         _loginState = new LoginState(this);
@@ -63,5 +67,12 @@ public class MainMenu : MonoBehaviour
         _currentState = newState;
 
         _currentState.Enter();
+    }
+
+    public void OpenErrorBox(string message)
+    {
+        Debug.Log(message);
+        _errorBox.Q<TextElement>("Message").text = message;
+        _errorBox.RemoveFromClassList("hidden");
     }
 }

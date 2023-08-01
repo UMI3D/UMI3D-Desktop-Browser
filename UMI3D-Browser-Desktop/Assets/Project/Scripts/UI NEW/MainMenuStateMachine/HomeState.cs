@@ -1,3 +1,5 @@
+using System.Security.Policy;
+using umi3d.baseBrowser.connection;
 using UnityEngine;
 
 public class HomeState : MenuState
@@ -13,8 +15,20 @@ public class HomeState : MenuState
 
         _machine.NavigationScreen.Next.clicked += _machine.ToLogin;
 
+        var worlds = BaseConnectionProcess.Instance.savedServers;
         _machine.NavigationScreen.Elements.Clear();
-        _machine.NavigationScreen.AddElement("Tutorials", _machine.ToLogin);
+        foreach (var world in worlds)
+        {
+            _machine.NavigationScreen.AddElement(world.serverName, async () =>
+            {
+                BaseConnectionProcess.Instance.currentServer = world;
+                BaseConnectionProcess.Instance.ConnectionSucces += e => _machine.ToLogin();
+                BaseConnectionProcess.Instance.ConnectionInitializationFailled += 
+                    url => _machine.OpenErrorBox($"Browser was not able to connect to \n\n\"{url}\"");
+
+                await BaseConnectionProcess.Instance.InitConnect(true);
+            });
+        }
     }
 
     public override void Exit()
