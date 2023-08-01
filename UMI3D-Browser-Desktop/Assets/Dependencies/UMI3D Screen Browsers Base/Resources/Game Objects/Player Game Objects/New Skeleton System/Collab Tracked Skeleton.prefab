@@ -835,6 +835,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7813590141776298306, guid: da6770c40c5dded4a94522b1d0ad2d86,
         type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7813590141776298306, guid: da6770c40c5dded4a94522b1d0ad2d86,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: a2485643ea696914d9ca5fb4ef918f73, type: 2}
@@ -842,6 +847,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Unit ybot
+      objectReference: {fileID: 0}
+    - target: {fileID: 5822821947120931875, guid: da6770c40c5dded4a94522b1d0ad2d86,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5822821947120931875, guid: da6770c40c5dded4a94522b1d0ad2d86,
         type: 3}
