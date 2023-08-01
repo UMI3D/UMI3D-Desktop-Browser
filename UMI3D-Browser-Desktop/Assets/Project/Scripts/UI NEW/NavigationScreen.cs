@@ -1,4 +1,7 @@
+using inetum.unityUtils;
 using System;
+using System.Security.Policy;
+using umi3d.common;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,6 +12,7 @@ public class NavigationScreen : BaseScreen
 
     private VisualElement _homeIntermediateArea;
     private VisualElement _intermediateArea;
+    private TextField _portalUrl;
     private TextElement _title;
     private VisualElement _elements;
 
@@ -16,6 +20,7 @@ public class NavigationScreen : BaseScreen
 
     public TextElement Title => _title;
     public VisualElement Elements => _elements;
+    public TextField PortalUrl => _portalUrl;
 
     public bool IsHome
     {
@@ -40,6 +45,8 @@ public class NavigationScreen : BaseScreen
     {
         _homeIntermediateArea = _root.Q("HomeIntermediateArea");
         _intermediateArea = _root.Q("IntermediateArea");
+        _portalUrl = _homeIntermediateArea.Q<TextField>("Url");
+        _portalUrl.SetPlaceholderText("example.fr");
 
         _title = _root.Q<TextElement>("Title");
         _elements = _root.Q("Elements");

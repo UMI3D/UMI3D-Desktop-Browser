@@ -71,7 +71,6 @@ public class MainMenu : MonoBehaviour
 
     public void OpenErrorBox(string message)
     {
-        Debug.Log(message);
         _errorBox.Q<TextElement>("Message").text = message;
         _errorBox.RemoveFromClassList("hidden");
     }
