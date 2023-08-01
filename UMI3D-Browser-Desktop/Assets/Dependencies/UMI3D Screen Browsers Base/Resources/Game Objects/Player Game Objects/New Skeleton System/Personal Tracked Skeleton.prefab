@@ -159,6 +159,7 @@ GameObject:
   - component: {fileID: 287653166641707027}
   - component: {fileID: 287653166641707037}
   - component: {fileID: 287653166641707026}
+  - component: {fileID: 5432481562530371265}
   m_Layer: 0
   m_Name: viewpoint
   m_TagString: MainCamera
@@ -297,6 +298,19 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 4aa65abac68f7ef459a0563c829036a2, type: 2}
+--- !u!114 &5432481562530371265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 287653166641702987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boneType: 58
 --- !u!1 &287653166641703184
 GameObject:
   m_ObjectHideFlags: 0
