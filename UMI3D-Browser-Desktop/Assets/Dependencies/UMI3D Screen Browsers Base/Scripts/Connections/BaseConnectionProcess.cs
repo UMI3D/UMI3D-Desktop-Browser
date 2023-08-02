@@ -32,6 +32,9 @@ namespace umi3d.baseBrowser.connection
         protected const string LauncherPanelScene = "Connection";
         protected const string GamePanelScene = "Environment";
 
+        [SerializeField]
+        UMI3DClientLogger logger;
+
         #region Data
         [HideInInspector]
         public preferences.ServerPreferences.ServerData currentServer;
@@ -53,6 +56,8 @@ namespace umi3d.baseBrowser.connection
         protected override void Awake()
         {
             base.Awake();
+            logger = new UMI3DClientLogger(mainTag: nameof(BaseConnectionProcess), mainContext: Instance, isThreadDisplayed: true);
+            logger.Debug($"{nameof(Awake)}", $"Awake");
 
             currentServer = preferences.ServerPreferences.GetPreviousServerData() ?? new preferences.ServerPreferences.ServerData();
             currentConnectionData = preferences.ServerPreferences.GetPreviousConnectionData() ?? new preferences.ServerPreferences.Data();
@@ -75,8 +80,8 @@ namespace umi3d.baseBrowser.connection
 #elif UNITY_ANDROID
             LoadingParameters.supportedformats.Add(UMI3DAssetFormat.unity_android_urp);
 #endif
-            Debug.Log("TODO : Not force mono speaker mode. For now forced for bluetooth headset.");
 
+            logger.DebugTodo($"{nameof(Awake)}", $"Not force mono speaker mode. For now forced for bluetooth headset.");
             var settings = AudioSettings.GetConfiguration();
             settings.speakerMode = AudioSpeakerMode.Mono;
             AudioSettings.Reset(settings);
@@ -84,20 +89,25 @@ namespace umi3d.baseBrowser.connection
 
         void Start()
         {
-            cdk.collaboration.UMI3DEnvironmentClient.ConnectionState.AddListener((state) => Connecting?.Invoke(state));
-            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnRedirectionStarted.AddListener(() => RedirectionStarted?.Invoke());
-            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnRedirectionAborted.AddListener(() => RedirectionEnded?.Invoke());
-            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(() => ConnectionLost?.Invoke());
-            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnForceLogoutMessage.AddListener((s) => ForcedLeave?.Invoke(s));
+            logger.Debug($"{nameof(Start)}", $"Start");
 
-            cdk.collaboration.UMI3DCollaborationClientServer.EnvironmentProgress = () =>
+            UMI3DEnvironmentClient.ConnectionState.AddListener((state) => Connecting?.Invoke(state));
+            UMI3DCollaborationClientServer.Instance.OnRedirectionStarted.AddListener(() => RedirectionStarted?.Invoke());
+            UMI3DCollaborationClientServer.Instance.OnRedirectionAborted.AddListener(() => RedirectionEnded?.Invoke());
+            UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(() => ConnectionLost?.Invoke());
+            UMI3DCollaborationClientServer.Instance.OnForceLogoutMessage.AddListener((s) => ForcedLeave?.Invoke(s));
+
+            UMI3DCollaborationClientServer.EnvironmentProgress = () =>
             {
+                logger.Debug($"{nameof(UMI3DCollaborationClientServer.EnvironmentProgress)}", $"Progess of joining an environment.");
+
                 var p = new MultiProgress("Join Environement");
+
                 //p.ResumeAfterFail = ResumeAfterFail;
                 p.ResumeAfterFail = async (e) =>
                 {
                     await Task.Delay(10000);
-                    UnityEngine.Debug.Log("<color=Orange>Join environment fail: </color>" + $"{e}");
+                    logger.DebugHack($"{nameof(UMI3DCollaborationClientServer.EnvironmentProgress)}", $"Join environment fail: {e}");
                     return true;
                 };
 
@@ -106,7 +116,7 @@ namespace umi3d.baseBrowser.connection
 
             UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.AddListener(() => LeaveWithoutNotify());
 
-            cdk.collaboration.UMI3DEnvironmentClient.EnvironementLoaded.AddListener(() => EnvironmentLoaded?.Invoke());
+            UMI3DEnvironmentClient.EnvironementLoaded.AddListener(() => EnvironmentLoaded?.Invoke());
 
             UMI3DCollaborationEnvironmentLoader.OnUpdateJoinnedUserList += () => UserCountUpdated?.Invoke(UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList.Count());
         }
@@ -114,15 +124,15 @@ namespace umi3d.baseBrowser.connection
         #region Launcher
 
         [HideInInspector]
-        public event System.Action<string> ConnectionInitialized;
+        public event Action<string> ConnectionInitialized;
         [HideInInspector]
-        public event System.Action<string> ConnectionInitializationFailled;
+        public event Action<string> ConnectionInitializationFailled;
         [HideInInspector]
-        public event System.Action DisplaySessions;
+        public event Action DisplaySessions;
         [HideInInspector]
-        public event System.Action<float> LoadingEnvironment;
+        public event Action<float> LoadingEnvironment;
         [HideInInspector]
-        public event System.Action LoadedLauncher;
+        public event Action LoadedLauncher;
 
         static string url = null;
 
@@ -162,10 +172,17 @@ namespace umi3d.baseBrowser.connection
         /// </summary>
         public void InitConnect(bool saveInfo = false)
         {
-            UnityEngine.Debug.Log($"init on thread {Thread.CurrentThread.ManagedThreadId}");
+            logger.Debug($"{nameof(InitConnect)}", $"Init connection, save info: {saveInfo}");
+
+            StartCoroutine(UMI3DWorldControllerClient.RequestMediaDto(currentServer.serverUrl, mediaDto => this.mediaDto = mediaDto));
+
+            return;
+
+            #region Multi-Thread
 
             if (IsConnectionProcessInProgress)
             {
+                logger.Debug($"{nameof(InitConnect)}", $"Connection process is already in progress.");
                 // Cancel the previous connection token sources.
                 connectionTokenSource.Cancel();
                 masterServerTokenSource.Cancel();
@@ -229,8 +246,7 @@ namespace umi3d.baseBrowser.connection
                 // Connection via mediaDto.
                 var mediaDtoTask = Task.Factory.StartNew(async () =>
                 {
-                    UnityEngine.Debug.Log($"mediaDtoTask task on thread {Thread.CurrentThread.ManagedThreadId}");
-
+                    logger.Debug($"{nameof(InitConnect)}", $"Start looking for a media dto.");
                     var curentUrl = currentServer.serverUrl + UMI3DNetworkingKeys.media;
 
                     if (!curentUrl.StartsWith("http://") && !curentUrl.StartsWith("https://"))
@@ -242,7 +258,8 @@ namespace umi3d.baseBrowser.connection
                     try
                     {
                         Debug.Assert(UMI3DCollaborationClientServer.Exists, "UMI3DCollaborationClientServer does not exist when trying to connect via media dto.");
-                        var _mediaDto = await UMI3DCollaborationClientServer.GetMedia
+
+                        var _mediaDto = await HttpClient.SendGetMedia
                         (
                             url,
                             e => url == curentUrl && e.count < 3
@@ -305,6 +322,8 @@ namespace umi3d.baseBrowser.connection
             },
             connectionToken);
 
+            #endregion
+
             LoadGameSceneCoroutine = StartCoroutine(LoadGameScene());
 
             //while (onlyOneConnection)
@@ -329,37 +348,49 @@ namespace umi3d.baseBrowser.connection
 
         IEnumerator LoadGameScene()
         {
-            UnityEngine.Debug.Log($"is connection is progress = {IsConnectionProcessInProgress}");
+            logger.Debug($"{nameof(LoadGameScene)}", $"Start {nameof(LoadGameScene)}.");
+
             while (IsConnectionProcessInProgress)
             {
                 yield return null;
             }
-            UnityEngine.Debug.Log($"master server = {masterServerTokenSource.IsCancellationRequested}, media dto = {mediaDtoTokenSource.IsCancellationRequested}");
 
-            Debug.Assert(masterServerTokenSource != null, "Master server token source null when loading game scene.");
-            Debug.Assert(mediaDtoTokenSource != null, "Media dto token source null when loading game scene.");
+            logger.Assert(masterServerTokenSource != null, $"{nameof(LoadGameScene)}", "Master server token source null when loading game scene.");
+            logger.Assert(mediaDtoTokenSource != null, $"{nameof(LoadGameScene)}", "Media dto token source null when loading game scene.");
             if (masterServerTokenSource.IsCancellationRequested && mediaDtoTokenSource.IsCancellationRequested)
             {
+                logger.Assertion($"{nameof(LoadGameScene)}", $"No connection process have been found.");
                 yield break;
+            }
+            else if (masterServerTokenSource.IsCancellationRequested)
+            {
+                logger.Debug($"{nameof(LoadGameScene)}", $"Connection to a worldController via media dto.");
+            }
+            else
+            {
+                logger.Debug($"{nameof(LoadGameScene)}", $"Connection to a master server.");
             }
 
             ConnectionInitialized?.Invoke(currentServer.serverUrl);
 
             var loadAsync = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(GamePanelScene, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+            logger.Debug($"{nameof(LoadGameScene)}", $"Start to load game scene async.");
             while (!loadAsync.isDone || !UMI3DCollaborationClientServer.Exists)
             {
                 LoadingEnvironment?.Invoke(loadAsync.progress);
                 yield return null;
             }
+            logger.Debug($"{nameof(LoadGameScene)}", $"Game scene has finished loaded.");
 
-            Debug.Assert(UMI3DEnvironmentLoader.Exists, "UMI3DEnvironmentLoader does not exist when loading game scene.");
+            logger.Assert(UMI3DEnvironmentLoader.Exists, $"{nameof(LoadGameScene)}", $"UMI3DEnvironmentLoader does not exist.");
             UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => LoadedEnvironment?.Invoke());
-            Debug.Assert(UMI3DCollaborationClientServer.Exists, "UMI3DCollaborationClientServer does not exist when loading game scene.");
+
+            logger.Assert(UMI3DCollaborationClientServer.Exists, $"{nameof(LoadGameScene)}", $"UMI3DCollaborationClientServer does not exist.");
             UMI3DCollaborationClientServer.Instance.Clear();
 
             try
             {
-                Debug.Assert(mediaDto != null, "Media dto null when loading game scene.");
+                logger.Assert(mediaDto != null, $"{nameof(LoadGameScene)}", "Media dto null when loading game scene.");
                 UMI3DCollaborationClientServer.Connect(mediaDto, s => ConnectionFail?.Invoke(s));
                 ConnectionSucces?.Invoke(mediaDto);
             }

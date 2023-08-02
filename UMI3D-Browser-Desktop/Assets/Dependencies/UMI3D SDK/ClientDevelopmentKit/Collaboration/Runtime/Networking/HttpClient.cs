@@ -35,6 +35,8 @@ namespace umi3d.cdk.collaboration
     public class HttpClient
     {
         private const DebugScope scope = DebugScope.CDK | DebugScope.Collaboration | DebugScope.Networking;
+        private UMI3DClientLogger logger;
+        private static UMI3DClientLogger s_logger = new UMI3DClientLogger(mainTag: $"static_{nameof(HttpClient)}", isThreadDisplayed: true);
 
         internal string HeaderToken;
 
@@ -49,13 +51,18 @@ namespace umi3d.cdk.collaboration
         /// <param name="UMI3DClientServer"></param>
         public HttpClient(UMI3DEnvironmentClient environmentClient)
         {
-            this.environmentClient = environmentClient;
+            logger = new UMI3DClientLogger(isThreadDisplayed: true, mainTag: nameof(HttpClient));
+            logger.Debug("Constructor", "");
             UMI3DLogger.Log($"Init HttpClient", scope | DebugScope.Connection);
+
+            this.environmentClient = environmentClient;
             deserializer = new ThreadDeserializer();
         }
 
         public void Stop()
         {
+            logger.Debug($"{nameof(Stop)}", "");
+
             deserializer?.Stop();
         }
 
@@ -65,12 +72,17 @@ namespace umi3d.cdk.collaboration
         /// <param name="token"></param>
         public void SetToken(string token)
         {
+            logger.Debug($"{nameof(SetToken)}", $"{token}");
             UMI3DLogger.Log($"SetToken {token}", scope | DebugScope.Connection);
+
             HeaderToken = UMI3DNetworkingKeys.bearer + token;
         }
 
         private static bool DefaultShouldTryAgain(RequestFailedArgument argument)
         {
+            var logger = new UMI3DClientLogger(mainTag: nameof(HttpClient), isThreadDisplayed: true);
+            logger.Debug($"{nameof(DefaultShouldTryAgain)}", $"arg: {argument.count}");
+
             return argument.count < 3;
         }
 
@@ -82,6 +94,9 @@ namespace umi3d.cdk.collaboration
         /// <param name="connectionDto"></param>
         public static async Task<UMI3DDto> Connect(ConnectionDto connectionDto, string MasterUrl, Func<RequestFailedArgument, bool> shouldTryAgain = null)
         {
+            var logger = new UMI3DClientLogger(mainTag: nameof(HttpClient), isThreadDisplayed: true);
+            logger.Debug($"{nameof(Connect)}", $"url: {MasterUrl}");
+
             UMI3DDto ReadConnectAnswer(string text)
             {
                 PrivateIdentityDto dto1 = null;
@@ -431,6 +446,7 @@ namespace umi3d.cdk.collaboration
         #endregion
 
         #region media
+
         /// <summary>
         /// Send request using GET method to get the server Media.
         /// </summary>
@@ -454,6 +470,7 @@ namespace umi3d.cdk.collaboration
             using (UnityWebRequest uwr = await _GetRequest(null, url, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e)))
             {
                 UMI3DLogger.Log($"Received GetMedia", scope | DebugScope.Connection);
+
                 if (uwr?.downloadHandler.data == null) return null;
                 string json = System.Text.Encoding.UTF8.GetString(uwr.downloadHandler.data);
                 return UMI3DDto.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None);
@@ -657,6 +674,95 @@ namespace umi3d.cdk.collaboration
         #endregion
 
         #region utils
+
+        static bool isRequestHeaderDispalyed = false;
+
+        static void DisplayRequestHeader()
+        {
+            if (!isRequestHeaderDispalyed)
+            {
+                s_logger.Debug(
+                    $"{nameof(DisplayRequestHeader)}",
+                    $"headerToken:".FormatString(20, UMI3DStringAlignment.Left)
+                    + "    "
+                    + "url:".FormatString(40, UMI3DStringAlignment.Left)
+                    + "    "
+                    + "contentType".FormatString(20)
+                    + "    "
+                    + "tryCount"
+                );
+
+                isRequestHeaderDispalyed = true;
+            }
+        }
+
+        public static System.Collections.IEnumerator RequestGet(
+            (string token, List<(string, string)> headers) credentials,
+            string url,
+            Action<UnityWebRequestAsyncOperation> onCompleteSuccess,
+            Action<UnityWebRequestAsyncOperation> onCompleteFail
+        )
+        {
+            s_logger.DebugTab(
+                "Request",
+                new[]
+                {
+                    new UMI3DLogCell(
+                        "headerToken",
+                        credentials.token,
+                        20
+                    ),
+                    new UMI3DLogCell(
+                        "url",
+                        url,
+                        40
+                    ),
+                    new UMI3DLogCell(
+                        "contentType",
+                        null,
+                        20
+                    )
+                }
+            );
+
+            using (var uwr = UnityWebRequest.Get(url))
+            {
+                if (!string.IsNullOrEmpty(credentials.token))
+                {
+                    uwr.SetRequestHeader(UMI3DNetworkingKeys.Authorization, credentials.token);
+                }
+                if (credentials.headers != null)
+                {
+                    foreach ((string name, string value) item in credentials.headers)
+                    {
+                        uwr.SetRequestHeader(item.name, item.value);
+                    }
+                }
+
+                DateTime date = DateTime.UtcNow;
+
+                UnityWebRequestAsyncOperation operation = uwr.SendWebRequest();
+
+                while (!operation.isDone)
+                {
+                    yield return null;
+                }
+
+#if UNITY_2020_1_OR_NEWER
+                if (uwr.result > UnityWebRequest.Result.Success)
+#else
+                if (uwr.isNetworkError || uwr.isHttpError)
+#endif
+                {
+                    onCompleteFail?.Invoke(operation);
+                }
+                else
+                {
+                    onCompleteSuccess?.Invoke(operation);
+                }
+            }
+        }
+
         /// <summary>
         /// Ienumerator to send GET request.
         /// </summary>
@@ -673,7 +779,19 @@ namespace umi3d.cdk.collaboration
             int tryCount = 0
         )
         {
+            DisplayRequestHeader();
+            s_logger.Debug($"{nameof(_GetRequest)}", 
+                $"{HeaderToken}".FormatString(20)
+                + "    "
+                + $"{url}".FormatString(40)
+                + "    "
+                + "".FormatString(20)
+                + "    "
+                + $"{tryCount}"
+            );
+
             var uwr = UnityWebRequest.Get(url);
+
             if (UseCredential)
             {
                 uwr.SetRequestHeader(UMI3DNetworkingKeys.Authorization, HeaderToken);
@@ -687,7 +805,7 @@ namespace umi3d.cdk.collaboration
             }
 
             DateTime date = DateTime.UtcNow;
-            
+
             UnityWebRequestAsyncOperation operation = uwr.SendWebRequest();
             operation.completed += op =>
             {
@@ -703,14 +821,14 @@ namespace umi3d.cdk.collaboration
                     }
 
 
-                    if (UMI3DClientServer.Instance.TryAgainOnHttpFail(new RequestFailedArgument(uwr, tryCount, date, ShouldTryAgain)))
-                    {
-                        _GetRequest(HeaderToken, url, ShouldTryAgain, UseCredential, headers, tryCount + 1);
-                    }
-                    else
-                    {
-                        throw new Umi3dNetworkingException(uwr, $"Failed to get with error: {uwr.result}");
-                    }
+                    //if (UMI3DClientServer.Instance.TryAgainOnHttpFail(new RequestFailedArgument(uwr, tryCount, date, ShouldTryAgain)))
+                    //{
+                    //    _GetRequest(HeaderToken, url, ShouldTryAgain, UseCredential, headers, tryCount + 1);
+                    //}
+                    //else
+                    //{
+                    //    throw new Umi3dNetworkingException(uwr, $"Failed to get with error: {uwr.result}");
+                    //}
                 }
             };
 
@@ -727,6 +845,16 @@ namespace umi3d.cdk.collaboration
         /// <returns></returns>
         private static async Task<UnityWebRequest> _PostRequest(string HeaderToken, string url, string contentType, byte[] bytes, Func<RequestFailedArgument, bool> ShouldTryAgain, bool UseCredential = false, List<(string, string)> headers = null, int tryCount = 0)
         {
+            DisplayRequestHeader();
+            s_logger.Debug($"{nameof(_PostRequest)}",
+                $"{HeaderToken}".FormatString(20)
+                + "    "
+                + $"{url}".FormatString(40)
+                + "    "
+                + $"{contentType}".FormatString(20)
+                + "    "
+                + $"{tryCount}"
+            );
 
             UnityWebRequest www = CreatePostRequest(url, bytes, contentType, true);
             if (UseCredential) www.SetRequestHeader(UMI3DNetworkingKeys.Authorization, HeaderToken);

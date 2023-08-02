@@ -55,6 +55,8 @@ namespace umi3d.cdk.collaboration
 
         public static Func<MultiProgress> EnvironmentProgress = null;
 
+        #region Events
+
         public UnityEvent OnLeaving = new UnityEvent();
         public UnityEvent OnLeavingEnvironment = new UnityEvent();
 
@@ -71,6 +73,8 @@ namespace umi3d.cdk.collaboration
         static public OnProgressEvent onProgress = new OnProgressEvent();
 
         public OnForceLogoutEvent OnForceLogoutMessage = new OnForceLogoutEvent();
+
+        #endregion
 
         public ClientIdentifierApi Identifier;
 
@@ -175,7 +179,7 @@ namespace umi3d.cdk.collaboration
                 if (Exists)
                 {
                     Instance.status = StatusType.AWAY;
-                    UMI3DWorldControllerClient wc = worldControllerClient?.Redirection(redirection) ?? new UMI3DWorldControllerClient(redirection);
+                    UMI3DWorldControllerClient wc = worldControllerClient?.Redirection(redirection) ?? new UMI3DWorldControllerClient(redirection.media, redirection.gate);
                     if (await wc.Connect())
                     {
                         Instance.OnRedirection.Invoke();
@@ -351,26 +355,6 @@ namespace umi3d.cdk.collaboration
                 return environmentClient != null && environmentClient.IsConnected();
             }
             return false;
-        }
-
-        /// <summary>
-        /// Get a media dto at a raw url using a get http request.
-        /// The result is store in UMI3DClientServer.Media.
-        /// </summary>
-        /// <param name="url">Url used for the get request.</param>
-        /// <seealso cref="UMI3DCollaborationClientServer.Media"/>
-        public static async Task<MediaDto> GetMedia(string url, Func<RequestFailedArgument, bool> shouldTryAgain = null)
-        {
-            try
-            {
-                UMI3DLogger.Log($"Get media at {url}", scope | DebugScope.Connection);
-                return await HttpClient.SendGetMedia(url, shouldTryAgain);
-            }
-            catch (Exception e)
-            {
-                UnityEngine.Debug.Log($"exception : {e} on thread : {Thread.CurrentThread.ManagedThreadId}");
-                return null;
-            }
         }
 
         /// <summary>

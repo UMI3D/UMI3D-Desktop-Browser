@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
+using System.Collections;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.collaboration;
@@ -27,6 +30,9 @@ namespace umi3d.cdk.collaboration
     /// Creates the <see cref="UMI3DEnvironmentClient"/>.
     public class UMI3DWorldControllerClient
     {
+        UMI3DClientLogger logger;
+        static UMI3DClientLogger s_logger = new UMI3DClientLogger(mainTag: $"{nameof(UMI3DWorldControllerClient)}");
+
         private readonly MediaDto media;
         public string name => media?.name;
 
@@ -66,26 +72,60 @@ namespace umi3d.cdk.collaboration
             return isConnected;
         }
 
-        public UMI3DWorldControllerClient(MediaDto media)
+        public UMI3DWorldControllerClient(MediaDto media, GateDto gate = null, string globalToken = null)
         {
+            logger = new UMI3DClientLogger(mainTag: nameof(UMI3DWorldControllerClient));
+            logger.Debug($"{nameof(UMI3DWorldControllerClient)}", $"Creation of a {nameof(UMI3DWorldControllerClient)}.");
+
             this.media = media;
+            this.gate = gate;
+            this.globalToken = globalToken;
+
             isConnecting = false;
             isConnected = false;
             privateIdentity = null;
         }
 
-        public UMI3DWorldControllerClient(MediaDto media, GateDto gate) : this(media)
-        {
-            this.gate = gate;
-        }
+        static string mediaDtoURL;
 
-        public UMI3DWorldControllerClient(RedirectionDto redirection) : this(redirection.media, redirection.gate)
+        public static IEnumerator RequestMediaDto(string RawURL, Action<MediaDto> setMediaDto)
         {
-        }
+            string curentUrl = RawURL;
+            
+            if (!curentUrl.EndsWith(UMI3DNetworkingKeys.media))
+            {
+                curentUrl += UMI3DNetworkingKeys.media;
+            }
 
-        public UMI3DWorldControllerClient(RedirectionDto redirection, string globalToken) : this(redirection)
-        {
-            this.globalToken = globalToken;
+            if (!curentUrl.StartsWith("http://") && !curentUrl.StartsWith("https://"))
+            {
+                curentUrl = "http://" + curentUrl;
+            }
+
+            mediaDtoURL = curentUrl;
+
+            yield return HttpClient.RequestGet(
+                (null, null),
+                mediaDtoURL,
+                op =>
+                {
+                    var uwr = op.webRequest;
+
+                    if (uwr?.downloadHandler.data == null)
+                    {
+                        s_logger.DebugAssertion($"{nameof(RequestMediaDto)}", $"downloadHandler.data == null.");
+                        return;
+                    }
+
+                    string json = System.Text.Encoding.UTF8.GetString(uwr.downloadHandler.data);
+                    setMediaDto(UMI3DDto.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None));
+                    s_logger.Debug($"{nameof(RequestMediaDto)}", $"Request is a success.");
+                },
+                op =>
+                {
+                    s_logger.DebugAssertion($"{nameof(RequestMediaDto)}", $"Request failled.");
+                }
+            );
         }
 
         public ulong GetUserID() { return environment?.GetUserID() ?? 0; }
@@ -143,9 +183,9 @@ namespace umi3d.cdk.collaboration
         public UMI3DWorldControllerClient Redirection(RedirectionDto redirection)
         {
             if (media.url == redirection.media.url)
-                return new UMI3DWorldControllerClient(redirection, globalToken);
+                return new UMI3DWorldControllerClient(redirection.media, redirection.gate, globalToken);
             else
-                return new UMI3DWorldControllerClient(redirection);
+                return new UMI3DWorldControllerClient(redirection.media, redirection.gate);
         }
 
         public async Task<UMI3DEnvironmentClient> ConnectToEnvironment(MultiProgress progress)

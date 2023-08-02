@@ -168,7 +168,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e689d2ddec318694e8c180d7057ddca0, type: 2}
   - {fileID: 11400000, guid: e6decc6c755d2214293b88299db3a4b5, type: 2}
   - {fileID: 11400000, guid: a9cc9c10345dd1146986e6bb5a80330e, type: 2}
-  curr_language: 0
 --- !u!4 &14984307
 Transform:
   m_ObjectHideFlags: 0
@@ -453,7 +452,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d21ea716276c1d14cba8775a85338cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _logScope: -1
+  _logScope: 0
   _logLevel: 14
   logPath: 
   log: 0
