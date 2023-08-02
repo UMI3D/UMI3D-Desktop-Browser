@@ -19,7 +19,7 @@
         </ui:VisualElement>
         <ui:Button display-tooltip-when-elided="true" name="ButtonStorage" class="menu-button">
             <ui:VisualElement name="Icon" class="unity-image" style="background-image: resource(&apos;UI NEW/Icons/storage4&apos;);" />
-            <ui:Label text="Storage&#10;" display-tooltip-when-elided="true" name="Text" />
+            <ui:Label text="Storage" display-tooltip-when-elided="true" name="Text" />
         </ui:Button>
     </ui:VisualElement>
 </ui:UXML>

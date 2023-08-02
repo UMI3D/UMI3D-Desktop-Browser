@@ -1,6 +1,5 @@
-using System;
-using System.Xml.Serialization;
-using umi3d.common.collaboration;
+using GLTFast.Schema;
+using umi3d.baseBrowser.connection;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -32,14 +31,30 @@ public class MainMenu : MonoBehaviour
 
         _uiDocument.rootVisualElement.Q<Label>("Version").text = BrowserDesktop.BrowserVersion.Version;
 
+        InitUiElements();
+        InitStateMachine();
+        InitLocalisation();
+    }
+
+    private void InitUiElements()
+    {
         _navigationScreen = new NavigationScreen(_uiDocument.rootVisualElement.Q("Navigation"));
+        _navigationScreen.Root.Q<Button>("ButtonLogOut").clicked += () => {
+            BaseConnectionProcess.Instance.Leave();
+            ToHome();
+        };
         _navigationScreen.Hide();
+
         _connectionScreen = new ConnectionScreen(_uiDocument.rootVisualElement.Q("Connection"));
         _connectionScreen.Hide();
+
         _errorBox = _uiDocument.rootVisualElement.Q("ErrorBox");
         _errorBox.Q<Button>("ButtonOk").clicked += () => _errorBox.AddToClassList("hidden");
         _errorBox.AddToClassList("hidden");
+    }
 
+    private void InitStateMachine()
+    {
         _homeState = new HomeState(this);
         _loginState = new LoginState(this);
         _organisationState = new OrganisationState(this);
@@ -73,5 +88,18 @@ public class MainMenu : MonoBehaviour
     {
         _errorBox.Q<TextElement>("Message").text = message;
         _errorBox.RemoveFromClassList("hidden");
+    }
+
+    private void InitLocalisation()
+    {
+        var labels = _uiDocument.rootVisualElement.Query<TextElement>().ToList();
+
+        foreach (var label in labels)
+        {
+            if (label.text == "") continue;
+            var trad = LocalisationManager.Instance.GetTranslation(label.text);
+            if (trad != null)
+                label.text = trad;
+        }
     }
 }

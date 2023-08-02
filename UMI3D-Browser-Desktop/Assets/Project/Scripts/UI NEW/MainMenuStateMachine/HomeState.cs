@@ -4,7 +4,6 @@ using umi3d.baseBrowser.connection;
 using umi3d.baseBrowser.preferences;
 using umi3d.common;
 using UnityEngine;
-using System.Threading.Tasks;
 
 public class HomeState : MenuState
 {

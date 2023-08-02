@@ -15,6 +15,10 @@
     color: rgb(255, 255, 255);
 }
 
+.unity-base-field:focus > .unity-base-field__label {
+    color: rgb(255, 255, 255);
+}
+
 .text-important {
     color: rgb(111, 202, 209);
     -unity-font-style: bold;

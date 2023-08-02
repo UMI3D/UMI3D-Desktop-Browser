@@ -11,11 +11,11 @@
             <ui:RadioButton label="Pin" name="Pin" />
         </ui:RadioButtonGroup>
         <ui:VisualElement name="Forms" class="form">
-            <ui:VisualElement name="FormLogin">
+            <ui:VisualElement name="FormLogin" class="form-elements">
                 <ui:TextField picking-mode="Ignore" label="Mail" name="Mail" />
                 <ui:TextField picking-mode="Ignore" label="Password" name="Password" password="true" />
             </ui:VisualElement>
-            <ui:VisualElement name="FormPin" class="hidden">
+            <ui:VisualElement name="FormPin" class="hidden form-elements">
                 <ui:TextField picking-mode="Ignore" label="Pin" name="Pin" />
             </ui:VisualElement>
             <ToggleButton_C label="Remember me" />

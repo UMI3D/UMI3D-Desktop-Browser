@@ -14,6 +14,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: LauncherScreen
   Items:
+  - Key: Submit
+    _trads:
+    - Key:
+        Name: French
+      Value: Soumettre
+    - Key:
+        Name: Spanish
+      Value: Entregar
+    - Key:
+        Name: English
+      Value: Submit
+  - Key: < Back
+    _trads:
+    - Key:
+        Name: French
+      Value: < Retour
+    - Key:
+        Name: Spanish
+      Value: < Volver
+    - Key:
+        Name: English
+      Value: < Back
+  - Key: Favorite
+    _trads:
+    - Key:
+        Name: French
+      Value: Favori
+    - Key:
+        Name: Spanish
+      Value: Favorito
+    - Key:
+        Name: English
+      Value: Favorite
+  - Key: Last
+    _trads:
+    - Key:
+        Name: French
+      Value: "R\xE9cent"
+    - Key:
+        Name: Spanish
+      Value: Reciente
+    - Key:
+        Name: English
+      Value: Last
+  - Key: Storage
+    _trads:
+    - Key:
+        Name: French
+      Value: Stockage
+    - Key:
+        Name: Spanish
+      Value: Almacenamiento
+    - Key:
+        Name: English
+      Value: Storage
   - Key: Home
     _trads:
     - Key:

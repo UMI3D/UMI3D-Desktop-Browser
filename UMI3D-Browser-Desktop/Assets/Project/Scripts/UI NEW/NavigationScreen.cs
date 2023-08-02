@@ -1,14 +1,12 @@
 using inetum.unityUtils;
 using System;
-using System.Security.Policy;
-using umi3d.common;
-using UnityEditor;
+using umi3d.baseBrowser.connection;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class NavigationScreen : BaseScreen
 {
-    private const string k_navigationItemPath = "Assets/Project/Resources/UI NEW/NavigationItem.uxml";
+    private const string k_navigationItemPath = "UI NEW/NavigationItem";
 
     private VisualElement _homeIntermediateArea;
     private VisualElement _intermediateArea;
@@ -56,7 +54,7 @@ public class NavigationScreen : BaseScreen
 
     public void AddElement(string name, Action callback)
     {
-        var itemAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(k_navigationItemPath);
+        var itemAsset = Resources.Load<VisualTreeAsset>(k_navigationItemPath);
         var item = itemAsset.Instantiate();
 
         item.Q<TextElement>("Name").text = name;
