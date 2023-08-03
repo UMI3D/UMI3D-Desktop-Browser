@@ -11,8 +11,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using umi3d.baseBrowser.cursor;
-using umi3d.baseBrowser.emotes;
 using umi3d.baseBrowser.inputs.interactions;
+using umi3d.cdk.collaboration;
+using umi3d.cdk.collaboration.emotes;
 using umi3d.commonScreen.game;
 using umi3d.mobileBrowser.interactions;
 using UnityEngine;

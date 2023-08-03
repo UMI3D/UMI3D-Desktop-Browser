@@ -19,7 +19,8 @@ using System.Collections;
 using System.Security.Policy;
 using System.Threading.Tasks;
 using umi3d.common;
-using umi3d.common.collaboration;
+using umi3d.common.collaboration.dto.networking;
+using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.interaction;
 
 namespace umi3d.cdk.collaboration
@@ -118,7 +119,7 @@ namespace umi3d.cdk.collaboration
                     }
 
                     string json = System.Text.Encoding.UTF8.GetString(uwr.downloadHandler.data);
-                    setMediaDto(UMI3DDto.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None));
+                    setMediaDto(UMI3DDtoSerializer.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None));
                     s_logger.Debug($"{nameof(RequestMediaDto)}", $"Request is a success.");
                 },
                 op =>
@@ -171,7 +172,7 @@ namespace umi3d.cdk.collaboration
 
         private void Connected(PrivateIdentityDto identity)
         {
-            globalToken = identity.GlobalToken;
+            globalToken = identity.globalToken;
             privateIdentity = identity;
         }
 
