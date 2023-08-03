@@ -700,10 +700,17 @@ namespace umi3d.cdk.collaboration
         public static System.Collections.IEnumerator RequestGet(
             (string token, List<(string, string)> headers) credentials,
             string url,
+            Func<bool> shouldCleanAbort,
             Action<UnityWebRequestAsyncOperation> onCompleteSuccess,
             Action<UnityWebRequestAsyncOperation> onCompleteFail
         )
         {
+            if (shouldCleanAbort())
+            {
+                s_logger.Debug($"{nameof(RequestGet)}", $"Caller requests to abort the GetRequest in a clean way.");
+                yield break;
+            }
+
             s_logger.DebugTab(
                 "Request",
                 new[]
@@ -746,6 +753,11 @@ namespace umi3d.cdk.collaboration
 
                 while (!operation.isDone)
                 {
+                    if (shouldCleanAbort())
+                    {
+                        s_logger.Debug($"{nameof(RequestGet)}", $"Caller requests to abort the GetRequest in a clean way.");
+                        yield break;
+                    }
                     yield return null;
                 }
 

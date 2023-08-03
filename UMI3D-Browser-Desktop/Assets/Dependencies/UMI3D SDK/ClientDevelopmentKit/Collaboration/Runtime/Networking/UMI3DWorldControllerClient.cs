@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using inetum.unityUtils;
 using System;
 using System.Collections;
 using System.Security.Policy;
@@ -89,8 +90,14 @@ namespace umi3d.cdk.collaboration
 
         static string mediaDtoURL;
 
-        public static IEnumerator RequestMediaDto(string RawURL, Action<MediaDto> setMediaDto)
+        public static IEnumerator RequestMediaDto(string RawURL, Action<MediaDto> setMediaDto, Func<bool> shouldCleanAbort, int tryCount = 0)
         {
+            if (shouldCleanAbort())
+            {
+                s_logger.Debug($"{nameof(RequestMediaDto)}", $"Caller requests to abort the connection with MediaDto in a clean way.");
+                yield break;
+            }
+
             string curentUrl = RawURL;
             
             if (!curentUrl.EndsWith(UMI3DNetworkingKeys.media))
@@ -108,6 +115,7 @@ namespace umi3d.cdk.collaboration
             yield return HttpClient.RequestGet(
                 (null, null),
                 mediaDtoURL,
+                shouldCleanAbort,
                 op =>
                 {
                     var uwr = op.webRequest;
@@ -120,11 +128,34 @@ namespace umi3d.cdk.collaboration
 
                     string json = System.Text.Encoding.UTF8.GetString(uwr.downloadHandler.data);
                     setMediaDto(UMI3DDtoSerializer.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None));
-                    s_logger.Debug($"{nameof(RequestMediaDto)}", $"Request is a success.");
+                    s_logger.Default($"{nameof(RequestMediaDto)}", $"Request is a success.");
                 },
                 op =>
                 {
-                    s_logger.DebugAssertion($"{nameof(RequestMediaDto)}", $"Request failled.");
+                    if (shouldCleanAbort())
+                    {
+                        s_logger.Debug($"{nameof(RequestMediaDto)}", $"Caller requests to abort the connection with MediaDto in a clean way.");
+                        return;
+                    }
+
+                    if (tryCount < 3)
+                    {
+                        s_logger.Assertion(
+                            $"{nameof(RequestMediaDto)}",
+                            $"MediaDto failled:   " +
+                            $"{op.webRequest.result}".FormatString(19) +
+                            "   " +
+                            $"{mediaDtoURL}".FormatString(40) +
+                            "   " +
+                            $"{tryCount}"
+                        );
+
+                        CoroutineManager.Instance.AttachCoroutine(RequestMediaDto(RawURL, setMediaDto, shouldCleanAbort, tryCount + 1));
+                    }
+                    else
+                    {
+                        s_logger.Error($"{nameof(RequestMediaDto)}", $"MediaDto failled more than 3 times. Connection has been aborted.");
+                    }
                 }
             );
         }

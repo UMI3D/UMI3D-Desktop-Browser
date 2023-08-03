@@ -159,6 +159,8 @@ namespace umi3d.baseBrowser.connection
         Coroutine LoadGameSceneCoroutine;
         readonly object lockObj = new object();
 
+        Coroutine requestMediaDtoCoroutine;
+
         /// <summary>
         /// Initiates the connection, if a connection is already in process return.
         /// 
@@ -172,9 +174,46 @@ namespace umi3d.baseBrowser.connection
         /// </summary>
         public void InitConnect(bool saveInfo = false)
         {
-            logger.Debug($"{nameof(InitConnect)}", $"Init connection, save info: {saveInfo}");
+            logger.DebugTab(
+                "InitConnection",
+                new[]
+                {
+                    new UMI3DLogCell(
+                        "URL",
+                        currentServer.serverUrl,
+                        40
+                    ),
+                    new UMI3DLogCell(
+                        "SaveInfo",
+                        saveInfo,
+                        10
+                    ),
+                }
+            );
 
-            StartCoroutine(UMI3DWorldControllerClient.RequestMediaDto(currentServer.serverUrl, mediaDto => this.mediaDto = mediaDto));
+            if (requestMediaDtoCoroutine != null)
+            {
+                mediaDtoTokenSource.Cancel();
+            }
+
+            mediaDtoTokenSource = new CancellationTokenSource();
+            CancellationToken mediaDtoToken = mediaDtoTokenSource.Token;
+            masterServerTokenSource = new CancellationTokenSource();
+            CancellationToken masterServerToken = masterServerTokenSource.Token;
+
+            requestMediaDtoCoroutine = StartCoroutine(UMI3DWorldControllerClient.RequestMediaDto(
+                currentServer.serverUrl, 
+                mediaDto =>
+                {
+                    masterServerTokenSource.Cancel();
+                    this.mediaDto = mediaDto;
+                },
+                () =>
+                {
+                    return mediaDtoToken.IsCancellationRequested;
+                }
+            ));
+            // Start master server.
 
             return;
 
