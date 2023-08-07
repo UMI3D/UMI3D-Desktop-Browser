@@ -90,9 +90,9 @@ namespace umi3d.cdk.collaboration
 
         static string mediaDtoURL;
 
-        public static IEnumerator RequestMediaDto(string RawURL, Action<MediaDto> setMediaDto, Func<bool> shouldCleanAbort, int tryCount = 0)
+        public static IEnumerator RequestMediaDto(string RawURL, Action<MediaDto> requestSucced, Action<int> requestFailed, Func<bool> shouldCleanAbort, int tryCount = 0)
         {
-            if (shouldCleanAbort())
+            if (shouldCleanAbort?.Invoke() ?? false)
             {
                 s_logger.Debug($"{nameof(RequestMediaDto)}", $"Caller requests to abort the connection with MediaDto in a clean way.");
                 yield break;
@@ -112,6 +112,9 @@ namespace umi3d.cdk.collaboration
 
             mediaDtoURL = curentUrl;
 
+            var tabReporter = s_logger.GetReporter("RequestMediaDTOTab");
+            var assertReporter = s_logger.GetReporter("RequestMediaDTOAssert");
+
             yield return HttpClient.RequestGet(
                 (null, null),
                 mediaDtoURL,
@@ -127,36 +130,61 @@ namespace umi3d.cdk.collaboration
                     }
 
                     string json = System.Text.Encoding.UTF8.GetString(uwr.downloadHandler.data);
-                    setMediaDto(UMI3DDtoSerializer.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None));
+                    requestSucced?.Invoke(UMI3DDtoSerializer.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None));
                     s_logger.Default($"{nameof(RequestMediaDto)}", $"Request is a success.");
+                    tabReporter.Clear();
+                    assertReporter.Clear();
                 },
                 op =>
                 {
-                    if (shouldCleanAbort())
+                    if (shouldCleanAbort?.Invoke() ?? false)
                     {
                         s_logger.Debug($"{nameof(RequestMediaDto)}", $"Caller requests to abort the connection with MediaDto in a clean way.");
                         return;
                     }
 
-                    if (tryCount < 3)
-                    {
-                        s_logger.Assertion(
+                    s_logger.Assertion(
                             $"{nameof(RequestMediaDto)}",
-                            $"MediaDto failled:   " +
+                            $"MediaDto failed:   " +
                             $"{op.webRequest.result}".FormatString(19) +
                             "   " +
                             $"{mediaDtoURL}".FormatString(40) +
                             "   " +
-                            $"{tryCount}"
+                            $"{tryCount}" +
+                            $"\n{op.webRequest.error}",
+                            report: assertReporter
                         );
 
-                        CoroutineManager.Instance.AttachCoroutine(RequestMediaDto(RawURL, setMediaDto, shouldCleanAbort, tryCount + 1));
+                    switch (op.webRequest.result)
+                    {
+                        case UnityEngine.Networking.UnityWebRequest.Result.InProgress:
+                        case UnityEngine.Networking.UnityWebRequest.Result.Success:
+                            break;
+                        case UnityEngine.Networking.UnityWebRequest.Result.ConnectionError:
+                            break;
+                        case UnityEngine.Networking.UnityWebRequest.Result.ProtocolError:
+                            break;
+                        case UnityEngine.Networking.UnityWebRequest.Result.DataProcessingError:
+                            s_logger.Error($"{nameof(RequestMediaDto)}", $"{nameof(UnityEngine.Networking.UnityWebRequest.Result.DataProcessingError)}:   {op.webRequest.url.FormatString(40)}   \n{op.webRequest.error}.");
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (tryCount < 3)
+                    {
+                        CoroutineManager.Instance.AttachCoroutine(RequestMediaDto(RawURL, requestSucced, requestFailed, shouldCleanAbort, tryCount + 1));
                     }
                     else
                     {
-                        s_logger.Error($"{nameof(RequestMediaDto)}", $"MediaDto failled more than 3 times. Connection has been aborted.");
+                        s_logger.Error($"{nameof(RequestMediaDto)}", $"MediaDto failed more than 3 times. Connection has been aborted.");
+                        tabReporter.Report();
+                        assertReporter.Report();
                     }
-                }
+
+                    requestFailed?.Invoke(tryCount);
+                },
+                tabReporter
             );
         }
 

@@ -17,7 +17,6 @@
 //using System.Collections.Generic;
 //using System.Diagnostics;
 //using System.Globalization;
-//using System.Linq;
 //using System.Threading;
 //using UnityEngine;
 
@@ -254,6 +253,175 @@
 //    }
 
 //    /// <summary>
+//    /// The data display in the log.
+//    /// </summary>
+//    public struct UMI3DLog
+//    {
+//        /// <summary>
+//        /// Type of log.
+//        /// </summary>
+//        public UMI3DLogType Type;
+//        /// <summary>
+//        /// The main tag.
+//        /// 
+//        /// <para>
+//        /// Usualy the type name of a logger's master.
+//        /// </para>
+//        /// </summary>
+//        public string MainTag;
+//        /// <summary>
+//        /// The tag.
+//        /// 
+//        /// <para>
+//        /// Used to identify the source of a log message. It usually identifies the method where the log call occurs.
+//        /// </para>
+//        /// </summary>
+//        public string Tag;
+//        /// <summary>
+//        /// Color of the log in the Unity console.
+//        /// </summary>
+//        public UMI3DLogColor Color;
+//        /// <summary>
+//        /// The message.
+//        /// </summary>
+//        public object Message;
+//        /// <summary>
+//        /// The call trace.
+//        /// </summary>
+//        public UMI3DCallTrace Trace;
+
+//        /// <summary>
+//        /// Get a formated log.
+//        /// </summary>
+//        public string FormatedLog
+//        {
+//            get
+//            {
+//                return Message.FormatLog(Type, MainTag, Tag, Color, false, trace: Trace);
+//            }
+//        }
+
+//        /// <summary>
+//        /// Create a <see cref="UMI3DLog"/>.
+//        /// </summary>
+//        /// <param name="type"></param>
+//        /// <param name="mainTag"></param>
+//        /// <param name="tag"></param>
+//        /// <param name="color"></param>
+//        /// <param name="message"></param>
+//        /// <param name="trace"></param>
+//        public UMI3DLog(
+//            UMI3DLogType type,
+//            string mainTag,
+//            string tag,
+//            UMI3DLogColor color,
+//            object message,
+//            UMI3DCallTrace trace
+//        )
+//        {
+//            this.Type = type;
+//            this.MainTag = mainTag;
+//            this.Tag = tag;
+//            this.Color = color;
+//            this.Message = message;
+//            this.Trace = trace;
+//        }
+//    }
+
+//    /// <summary>
+//    /// A log reporter.
+//    /// 
+//    /// <para>
+//    /// It is <see cref="UMI3DLog"/> queue that will display its logs when ask.
+//    /// </para>
+//    /// </summary>
+//    public class UMI3DLogReport : Queue<UMI3DLog>
+//    {
+//        /// <summary>
+//        /// The Id of this log report.
+//        /// </summary>
+//        public string ID;
+//        /// <summary>
+//        /// Maximum number of logs in this report.
+//        /// </summary>
+//        public int MaxNumberOfLogs;
+//        /// <summary>
+//        /// The main context of this logger.
+//        /// 
+//        /// <para>
+//        /// Usualy the instance of the logger's master if it is a <see cref="UnityEngine.Object"/>.
+//        /// </para>
+//        /// </summary>
+//        public UnityEngine.Object MainContext;
+//        /// <summary>
+//        /// The logger.
+//        /// </summary>
+//        public UMI3DClientLogger Logger;
+
+//        /// <summary>
+//        /// Create a log reporter.
+//        /// </summary>
+//        /// <param name="id"></param>
+//        /// <param name="maxNumberOfLogs"></param>
+//        /// <param name="mainContext"></param>
+//        /// <param name="logger"></param>
+//        public UMI3DLogReport(string id, int maxNumberOfLogs = 10, UnityEngine.Object mainContext = null, UMI3DClientLogger logger = null)
+//        {
+//            this.ID = id;
+//            MaxNumberOfLogs = maxNumberOfLogs;
+//            MainContext = mainContext;
+//            Logger = logger;
+//        }
+
+//        /// <summary>
+//        /// Add a report at the end of the report.
+//        /// </summary>
+//        /// <param name="log"></param>
+//        public new void Enqueue(UMI3DLog log)
+//        {
+//            if (this.Count >= MaxNumberOfLogs)
+//            {
+//                Report();
+//            }
+
+//            base.Enqueue(log);
+//        }
+
+//        /// <summary>
+//        /// Report the stored logs.
+//        /// </summary>
+//        public void Report()
+//        {
+//            string message = "";
+
+//            message += $"Report [{ID}] start: {'-'.Repeat(10)}";
+
+//#if DEBUG
+//            message += $"\n\n";
+//#else
+//            message += $"\n";
+//#endif
+
+//            while (this.Count > 0)
+//            {
+//                var log = Dequeue();
+//                message += log.FormatedLog;
+//            }
+
+//            message += $"Report [{ID}] end. {'-'.Repeat(10)}";
+//            message += "\n";
+
+//            var stackTraceType = Application.GetStackTraceLogType(UnityEngine.LogType.Log);
+//            Application.SetStackTraceLogType(UnityEngine.LogType.Log, StackTraceLogType.None);
+
+//            Logger.LogHandler.LogFormat(UnityEngine.LogType.Log, MainContext, message);
+
+//            Application.SetStackTraceLogType(UnityEngine.LogType.Log, stackTraceType);
+//        }
+//    }
+
+
+//    /// <summary>
 //    /// A Logger for UMI3D client.
 //    /// 
 //    /// <para>
@@ -328,6 +496,8 @@
 //        /// </summary>
 //        Dictionary<string, (string[] headers, int cellIndex)> tabHeaders;
 
+//        Dictionary<string, UMI3DLogReport> reporter;
+
 //        /// <summary>
 //        /// Create a client logger by defining all of its properties.
 //        /// </summary>
@@ -363,68 +533,29 @@
 
 //        }
 
-//        private string FormatLog(
-//            UMI3DLogType logType, string tag, UMI3DLogColor color, object message,
-//            string headerMessage = null, UMI3DCallTrace trace = null
-//        )
+//        /// <summary>
+//        /// Get a log reporter.
+//        /// </summary>
+//        /// <param name="reportId"></param>
+//        /// <param name="maxNumberOfLogs"></param>
+//        /// <returns></returns>
+//        public UMI3DLogReport GetReporter(string reportId, int maxNumberOfLogs = 10)
 //        {
-//            string result = "";
-
-//#if DEBUG
-//            result = result.AddLogType(logType);
-
-//            result = result.AddThreadID(IsThreadDisplayed);
-
-//            result = result.AddTags(MainTag, tag);
-
-//            if (!string.IsNullOrEmpty(headerMessage))
+//            if (reporter == null)
 //            {
-//                result += $"{headerMessage} ";
-//                result += $"{message.GetString()}";
-//                result += $"{LogExtensions.spacing}";
+//                reporter = new Dictionary<string, UMI3DLogReport>();
+//            }
+
+//            if (reporter.ContainsKey(reportId))
+//            {
+//                return reporter[reportId];
 //            }
 //            else
 //            {
-//                result += message.GetString();
-//                result += $"{LogExtensions.spacing}";
+//                var report = new UMI3DLogReport(reportId, maxNumberOfLogs, MainContext, this);
+//                reporter.Add(reportId, report);
+//                return report;
 //            }
-
-//            result.AddColor(color, _result =>
-//            {
-//                result = _result;
-//            });
-
-//            result = result.AddTrace(trace);
-//#else
-//            result += "\n";
-
-//            result = result.AddLogType(logType);
-
-//            if (!string.IsNullOrEmpty(headerMessage))
-//            {
-//                result += $"{headerMessage} ";
-//                result += $"{message.GetString()}";
-//                result += $"{LogExtensions.spacing}";
-//            }
-//            else
-//            {
-//                result += message.GetString();
-//                result += $"{LogExtensions.spacing}";
-//            }
-
-//            result += $"\n";
-
-//            result += $"{LogExtensions.spacing}";
-//            result = result.AddTags(MainTag, tag);
-
-//            result = result.AddThreadID(IsThreadDisplayed);
-
-//            result = result.AddTrace(trace);
-//#endif
-
-//            result += "\n\n";
-
-//            return result;
 //        }
 
 //        /// <summary>
@@ -445,7 +576,7 @@
 //        /// <param name="memberName">The name of the caller.</param>
 //        /// <param name="sourceFilePath">File path of the caller.</param>
 //        /// <param name="sourceLineNumber">Line number in the file where of the caller.</param>
-//        [Conditional("UMI3D_DEBUG"), Conditional("UNITY_EDITOR")]
+//        [Conditional("UNITY_EDITOR")]
 //        public void DebugTodo(
 //            string tag, object message,
 //            UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.Cyan,
@@ -462,7 +593,7 @@
 //            var stackTraceType = Application.GetStackTraceLogType(UnityEngine.LogType.Log);
 //            Application.SetStackTraceLogType(UnityEngine.LogType.Log, StackTraceLogType.None);
 
-//            LogHandler.LogFormat(UnityEngine.LogType.Log, context ?? MainContext, FormatLog(UMI3DLogType.DebugTodo, tag, color, message, "TODO:", new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)));
+//            LogHandler.LogFormat(UnityEngine.LogType.Log, context ?? MainContext, message.FormatLog(UMI3DLogType.DebugTodo, MainTag, tag, color, IsThreadDisplayed, "TODO:", new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)));
 
 //            Application.SetStackTraceLogType(UnityEngine.LogType.Log, stackTraceType);
 //        }
@@ -485,7 +616,7 @@
 //        /// <param name="memberName">The name of the caller.</param>
 //        /// <param name="sourceFilePath">File path of the caller.</param>
 //        /// <param name="sourceLineNumber">Line number in the file where of the caller.</param>
-//        [Conditional("UMI3D_DEBUG"), Conditional("UNITY_EDITOR")]
+//        [Conditional("UNITY_EDITOR")]
 //        public void DebugHack(
 //            string tag, object message,
 //            UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.Orange,
@@ -502,7 +633,7 @@
 //            var stackTraceType = Application.GetStackTraceLogType(UnityEngine.LogType.Log);
 //            Application.SetStackTraceLogType(UnityEngine.LogType.Log, StackTraceLogType.None);
 
-//            LogHandler.LogFormat(UnityEngine.LogType.Log, context ?? MainContext, FormatLog(UMI3DLogType.DebugHack, tag, color, message, "HACK:", new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)));
+//            LogHandler.LogFormat(UnityEngine.LogType.Log, context ?? MainContext, message.FormatLog(UMI3DLogType.DebugHack, MainTag, tag, color, IsThreadDisplayed, "HACK:", new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)));
 
 //            Application.SetStackTraceLogType(UnityEngine.LogType.Log, stackTraceType);
 //        }
@@ -529,6 +660,7 @@
 //        public void DebugTab(
 //            string tabName, UMI3DLogCell[] cells,
 //            UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.White,
+//            UMI3DLogReport report = null,
 //            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
 //            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
 //            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0
@@ -538,9 +670,6 @@
 //            {
 //                return;
 //            }
-
-//            UnityEngine.Debug.Assert(cells != null, $"Cells are null when trying to {nameof(DebugTab)}");
-//            UnityEngine.Debug.Assert(cells.Length == 0, $"Cells length == 0 when trying to {nameof(DebugTab)}");
 
 //            var headers = new string[cells.Length];
 //            var messages = new string[cells.Length];
@@ -553,18 +682,6 @@
 //                messages[i] = cells[i].Message.GetString().FormatString(size, alignment);
 //            }
 
-//            Predicate<string[]> predicate = _headers =>
-//            {
-//                if (_headers.Length != headers.Length)
-//                {
-//                    return false;
-//                }
-//                else
-//                {
-//                    return Enumerable.SequenceEqual(_headers, headers);
-//                }
-//            };
-
 //            var stackTraceType = Application.GetStackTraceLogType(UnityEngine.LogType.Log);
 //            Application.SetStackTraceLogType(UnityEngine.LogType.Log, StackTraceLogType.None);
 
@@ -573,12 +690,43 @@
 //            if (tabHeaders == null)
 //            {
 //                tabHeaders = new Dictionary<string, (string[], int)>() { { tabName, (headers, cellIndex) } };
-//                LogHandler.LogFormat(UnityEngine.LogType.Log, context ?? MainContext, FormatLog(UMI3DLogType.Debug, $"Tab: {tabName}", color, headerMessage, trace: new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)));
+
+//                if (report != null)
+//                {
+//                    report.Enqueue(new UMI3DLog(
+//                            UMI3DLogType.Debug,
+//                            MainTag,
+//                            $"Tab: {tabName}",
+//                            color,
+//                            headerMessage,
+//                            null
+//                    ));
+//                }
+//                else
+//                {
+//                    LogHandler.LogFormat(UnityEngine.LogType.Log, context ?? MainContext, headerMessage.FormatLog(UMI3DLogType.Debug, MainTag, $"Tab: {tabName}", color, false));
+//                }
+
 //            }
 //            else if (!tabHeaders.ContainsKey(tabName))
 //            {
 //                tabHeaders.Add(tabName, (headers, cellIndex));
-//                LogHandler.LogFormat(UnityEngine.LogType.Log, context ?? MainContext, FormatLog(UMI3DLogType.Debug, $"Tab: {tabName}", color, headerMessage, trace: new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)));
+
+//                if (report != null)
+//                {
+//                    report.Enqueue(new UMI3DLog(
+//                            UMI3DLogType.Debug,
+//                            MainTag,
+//                            $"Tab: {tabName}",
+//                            color,
+//                            headerMessage,
+//                            null
+//                    ));
+//                }
+//                else
+//                {
+//                    LogHandler.LogFormat(UnityEngine.LogType.Log, context ?? MainContext, headerMessage.FormatLog(UMI3DLogType.Debug, MainTag, $"Tab: {tabName}", color, false));
+//                }
 //            }
 //            else
 //            {
@@ -587,7 +735,21 @@
 //            }
 
 //            var message = $"{cellIndex}".FormatString(6) + " | " + string.Join(" | ", messages);
-//            LogHandler.LogFormat(UnityEngine.LogType.Log, context ?? MainContext, FormatLog(UMI3DLogType.Debug, $"Tab: {tabName}", color, message, trace: new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)));
+//            if (report != null)
+//            {
+//                report.Enqueue(new UMI3DLog(
+//                        UMI3DLogType.Debug,
+//                        MainTag,
+//                        $"Tab: {tabName}",
+//                        color,
+//                        message,
+//                        new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)
+//                ));
+//            }
+//            else
+//            {
+//                LogHandler.LogFormat(UnityEngine.LogType.Log, context ?? MainContext, message.FormatLog(UMI3DLogType.Debug, MainTag, $"Tab: {tabName}", color, IsThreadDisplayed, trace: new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)));
+//            }
 
 //            Application.SetStackTraceLogType(UnityEngine.LogType.Log, stackTraceType);
 //        }
@@ -614,6 +776,7 @@
 //        public void Debug(
 //            string tag, object message,
 //            UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.White,
+//            UMI3DLogReport report = null,
 //            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
 //            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
 //            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0
@@ -624,12 +787,28 @@
 //                return;
 //            }
 
-//            var stackTraceType = Application.GetStackTraceLogType(UnityEngine.LogType.Log);
-//            Application.SetStackTraceLogType(UnityEngine.LogType.Log, StackTraceLogType.None);
+//            UMI3DCallTrace trace = new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber);
 
-//            LogHandler.LogFormat(UnityEngine.LogType.Log, context ?? MainContext, FormatLog(UMI3DLogType.Debug, tag, color, message, trace: new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)));
+//            if (report != null)
+//            {
+//                report.Enqueue(new UMI3DLog(
+//                        UMI3DLogType.Debug,
+//                        MainTag,
+//                        tag,
+//                        color,
+//                        message,
+//                        trace
+//                ));
+//            }
+//            else
+//            {
+//                var stackTraceType = Application.GetStackTraceLogType(UnityEngine.LogType.Log);
+//                Application.SetStackTraceLogType(UnityEngine.LogType.Log, StackTraceLogType.None);
 
-//            Application.SetStackTraceLogType(UnityEngine.LogType.Log, stackTraceType);
+//                LogHandler.LogFormat(UnityEngine.LogType.Log, context ?? MainContext, message.FormatLog(UMI3DLogType.Debug, MainTag, tag, color, IsThreadDisplayed, trace: trace));
+
+//                Application.SetStackTraceLogType(UnityEngine.LogType.Log, stackTraceType);
+//            }
 //        }
 
 //        /// <summary>
@@ -644,14 +823,35 @@
 //        /// <param name="context">Object to which the message applies.</param>
 //        /// <param name="color">The color of the log in the Unity console.</param>
 //        [Conditional("UMI3D_DEBUG")]
-//        public void DebugAssertion(string tag, object message, UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.Orange)
+//        public void DebugAssertion(
+//            string tag, object message,
+//            UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.Orange,
+//            UMI3DLogReport report = null,
+//            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
+//            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+//            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0
+//        )
 //        {
 //            if (!GeneralLogType.HasFlag(UMI3DLogType.Assert) || !LogType.HasFlag(UMI3DLogType.Assert))
 //            {
 //                return;
 //            }
 
-//            LogHandler.LogFormat(UnityEngine.LogType.Assert, context ?? MainContext, FormatLog(UMI3DLogType.Assert, tag, color, message));
+//            if (report != null)
+//            {
+//                report.Enqueue(new UMI3DLog(
+//                        UMI3DLogType.Assert,
+//                        MainTag,
+//                        tag,
+//                        color,
+//                        message,
+//                        new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)
+//                ));
+//            }
+//            else
+//            {
+//                LogHandler.LogFormat(UnityEngine.LogType.Assert, context ?? MainContext, message.FormatLog(UMI3DLogType.Assert, MainTag, tag, color, IsThreadDisplayed));
+//            }
 //        }
 
 //        /// <summary>
@@ -667,7 +867,14 @@
 //        /// <param name="context">Object to which the message applies.</param>
 //        /// <param name="color">The color of the log in the Unity console.</param>
 //        [Conditional("UMI3D_DEBUG")]
-//        public void DebugAssert(bool condition, string tag, object message = null, UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.Orange)
+//        public void DebugAssert(
+//            bool condition, string tag, object message = null,
+//            UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.Orange,
+//            UMI3DLogReport report = null,
+//            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
+//            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+//            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0
+//        )
 //        {
 //            if (condition) return;
 
@@ -676,7 +883,21 @@
 //                return;
 //            }
 
-//            LogHandler.LogFormat(UnityEngine.LogType.Assert, context ?? MainContext, FormatLog(UMI3DLogType.Assert, tag, color, message));
+//            if (report != null)
+//            {
+//                report.Enqueue(new UMI3DLog(
+//                        UMI3DLogType.Assert,
+//                        MainTag,
+//                        tag,
+//                        color,
+//                        message,
+//                        new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)
+//                ));
+//            }
+//            else
+//            {
+//                LogHandler.LogFormat(UnityEngine.LogType.Assert, context ?? MainContext, message.FormatLog(UMI3DLogType.Assert, MainTag, tag, color, IsThreadDisplayed));
+//            }
 //        }
 
 //        /// <summary>
@@ -696,6 +917,7 @@
 //        public void Default(
 //            string tag, object message,
 //            UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.White,
+//            UMI3DLogReport report = null,
 //            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
 //            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
 //            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0
@@ -706,12 +928,28 @@
 //                return;
 //            }
 
-//            var stackTraceType = Application.GetStackTraceLogType(UnityEngine.LogType.Log);
-//            Application.SetStackTraceLogType(UnityEngine.LogType.Log, StackTraceLogType.None);
+//            UMI3DCallTrace trace = new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber);
 
-//            LogHandler.LogFormat(UnityEngine.LogType.Log, context ?? MainContext, FormatLog(UMI3DLogType.Default, tag, color, message, trace: new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)));
+//            if (report != null)
+//            {
+//                report.Enqueue(new UMI3DLog(
+//                        UMI3DLogType.Default,
+//                        MainTag,
+//                        tag,
+//                        color,
+//                        message,
+//                        trace
+//                ));
+//            }
+//            else
+//            {
+//                var stackTraceType = Application.GetStackTraceLogType(UnityEngine.LogType.Log);
+//                Application.SetStackTraceLogType(UnityEngine.LogType.Log, StackTraceLogType.None);
 
-//            Application.SetStackTraceLogType(UnityEngine.LogType.Log, stackTraceType);
+//                LogHandler.LogFormat(UnityEngine.LogType.Log, context ?? MainContext, message.FormatLog(UMI3DLogType.Default, MainTag, tag, color, IsThreadDisplayed, trace: trace));
+
+//                Application.SetStackTraceLogType(UnityEngine.LogType.Log, stackTraceType);
+//            }
 //        }
 
 //        /// <summary>
@@ -731,6 +969,7 @@
 //        public void Warning(
 //            string tag, object message,
 //            UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.Yellow,
+//            UMI3DLogReport report = null,
 //            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
 //            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
 //            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0
@@ -741,12 +980,28 @@
 //                return;
 //            }
 
-//            var stackTraceType = Application.GetStackTraceLogType(UnityEngine.LogType.Warning);
-//            Application.SetStackTraceLogType(UnityEngine.LogType.Warning, StackTraceLogType.None);
+//            UMI3DCallTrace trace = new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber);
 
-//            LogHandler.LogFormat(UnityEngine.LogType.Warning, context ?? MainContext, FormatLog(UMI3DLogType.Warning, tag, color, message, trace: new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)));
+//            if (report != null)
+//            {
+//                report.Enqueue(new UMI3DLog(
+//                        UMI3DLogType.Warning,
+//                        MainTag,
+//                        tag,
+//                        color,
+//                        message,
+//                        trace
+//                ));
+//            }
+//            else
+//            {
+//                var stackTraceType = Application.GetStackTraceLogType(UnityEngine.LogType.Warning);
+//                Application.SetStackTraceLogType(UnityEngine.LogType.Warning, StackTraceLogType.None);
 
-//            Application.SetStackTraceLogType(UnityEngine.LogType.Warning, stackTraceType);
+//                LogHandler.LogFormat(UnityEngine.LogType.Warning, context ?? MainContext, message.FormatLog(UMI3DLogType.Warning, MainTag, tag, color, IsThreadDisplayed, trace: trace));
+
+//                Application.SetStackTraceLogType(UnityEngine.LogType.Warning, stackTraceType);
+//            }
 //        }
 
 //        /// <summary>
@@ -756,14 +1011,35 @@
 //        /// <param name="message">String or object to be converted to string representation for display.</param>
 //        /// <param name="context">Object to which the message applies.</param>
 //        /// <param name="color">The color of the log in the Unity console.</param>
-//        public void Assertion(string tag, object message, UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.Orange)
+//        public void Assertion(
+//            string tag, object message,
+//            UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.Orange,
+//            UMI3DLogReport report = null,
+//            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
+//            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+//            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0
+//        )
 //        {
 //            if (!GeneralLogType.HasFlag(UMI3DLogType.Assert) || !LogType.HasFlag(UMI3DLogType.Assert))
 //            {
 //                return;
 //            }
 
-//            LogHandler.LogFormat(UnityEngine.LogType.Assert, context ?? MainContext, FormatLog(UMI3DLogType.Assert, tag, color, message));
+//            if (report != null)
+//            {
+//                report.Enqueue(new UMI3DLog(
+//                        UMI3DLogType.Assert,
+//                        MainTag,
+//                        tag,
+//                        color,
+//                        message,
+//                        new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)
+//                ));
+//            }
+//            else
+//            {
+//                LogHandler.LogFormat(UnityEngine.LogType.Assert, context ?? MainContext, message.FormatLog(UMI3DLogType.Assert, MainTag, tag, color, IsThreadDisplayed));
+//            }
 //        }
 
 //        /// <summary>
@@ -774,7 +1050,14 @@
 //        /// <param name="message">String or object to be converted to string representation for display.</param>
 //        /// <param name="context">Object to which the message applies.</param>
 //        /// <param name="color">The color of the log in the Unity console.</param>
-//        public void Assert(bool condition, string tag, object message = null, UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.Orange)
+//        public void Assert(
+//            bool condition, string tag, object message = null,
+//            UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.Orange,
+//            UMI3DLogReport report = null,
+//            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
+//            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+//            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0
+//        )
 //        {
 //            if (condition) return;
 
@@ -783,7 +1066,21 @@
 //                return;
 //            }
 
-//            LogHandler.LogFormat(UnityEngine.LogType.Assert, context ?? MainContext, FormatLog(UMI3DLogType.Assert, tag, color, message));
+//            if (report != null)
+//            {
+//                report.Enqueue(new UMI3DLog(
+//                        UMI3DLogType.Assert,
+//                        MainTag,
+//                        tag,
+//                        color,
+//                        message,
+//                        new UMI3DCallTrace(memberName, sourceFilePath, sourceLineNumber)
+//                ));
+//            }
+//            else
+//            {
+//                LogHandler.LogFormat(UnityEngine.LogType.Assert, context ?? MainContext, message.FormatLog(UMI3DLogType.Assert, MainTag, tag, color, IsThreadDisplayed));
+//            }
 //        }
 
 //        /// <summary>
@@ -800,7 +1097,7 @@
 //                return;
 //            }
 
-//            LogHandler.LogFormat(UnityEngine.LogType.Error, context ?? MainContext, FormatLog(UMI3DLogType.Error, tag, color, message));
+//            LogHandler.LogFormat(UnityEngine.LogType.Error, context ?? MainContext, message.FormatLog(UMI3DLogType.Error, MainTag, tag, color, IsThreadDisplayed));
 //        }
 
 //        /// <summary>
@@ -817,7 +1114,7 @@
 //                return;
 //            }
 
-//            LogHandler.LogFormat(UnityEngine.LogType.Exception, context ?? MainContext, FormatLog(UMI3DLogType.Exception, tag, color, exception.Message));
+//            LogHandler.LogFormat(UnityEngine.LogType.Exception, context ?? MainContext, exception.Message.FormatLog(UMI3DLogType.Exception, MainTag, tag, color, IsThreadDisplayed));
 //        }
 
 //        /// <summary>
@@ -910,6 +1207,22 @@
 //                default:
 //                    return s;
 //            }
+//        }
+
+//        /// <summary>
+//        /// Repeat <paramref name="c"/> <paramref name="repeatCount"/>.
+//        /// </summary>
+//        /// <param name="c"></param>
+//        /// <param name="repeatCount"></param>
+//        /// <returns></returns>
+//        public static string Repeat(this char c, int repeatCount)
+//        {
+//            string result = "";
+//            for (int i = 0; i < repeatCount; i++)
+//            {
+//                result += c;
+//            }
+//            return result;
 //        }
 
 //        /// <summary>
@@ -1062,6 +1375,83 @@
 //            }
 
 //            return message;
+//        }
+
+//        /// <summary>
+//        /// Format a log to display.
+//        /// </summary>
+//        /// <param name="message"></param>
+//        /// <param name="logType"></param>
+//        /// <param name="MainTag"></param>
+//        /// <param name="tag"></param>
+//        /// <param name="color"></param>
+//        /// <param name="IsThreadDisplayed"></param>
+//        /// <param name="headerMessage"></param>
+//        /// <param name="trace"></param>
+//        /// <returns></returns>
+//        public static string FormatLog(
+//            this object message,
+//            UMI3DLogType logType, string MainTag, string tag, UMI3DLogColor color, bool IsThreadDisplayed,
+//            string headerMessage = null, UMI3DCallTrace trace = null
+//        )
+//        {
+//            string result = "";
+
+//#if DEBUG
+//            result = result.AddLogType(logType);
+
+//            result = result.AddThreadID(IsThreadDisplayed);
+
+//            result = result.AddTags(MainTag, tag);
+
+//            if (!string.IsNullOrEmpty(headerMessage))
+//            {
+//                result += $"{headerMessage} ";
+//                result += $"{message.GetString()}";
+//                result += $"{LogExtensions.spacing}";
+//            }
+//            else
+//            {
+//                result += message.GetString();
+//                result += $"{LogExtensions.spacing}";
+//            }
+
+//            result.AddColor(color, _result =>
+//            {
+//                result = _result;
+//            });
+
+//            result = result.AddTrace(trace);
+//#else
+//            result += "\n";
+
+//            result = result.AddLogType(logType);
+
+//            if (!string.IsNullOrEmpty(headerMessage))
+//            {
+//                result += $"{headerMessage} ";
+//                result += $"{message.GetString()}";
+//                result += $"{LogExtensions.spacing}";
+//            }
+//            else
+//            {
+//                result += message.GetString();
+//                result += $"{LogExtensions.spacing}";
+//            }
+
+//            result += $"\n";
+
+//            result += $"{LogExtensions.spacing}";
+//            result = result.AddTags(MainTag, tag);
+
+//            result = result.AddThreadID(IsThreadDisplayed);
+
+//            result = result.AddTrace(trace);
+//#endif
+
+//            result += "\n\n";
+
+//            return result;
 //        }
 //    }
 //}

@@ -34,6 +34,7 @@ namespace umi3d.baseBrowser.connection
 
         [SerializeField]
         UMI3DClientLogger logger;
+        UMI3DLogReport initConnectionReport;
 
         #region Data
         [HideInInspector]
@@ -57,7 +58,7 @@ namespace umi3d.baseBrowser.connection
         {
             base.Awake();
             logger = new UMI3DClientLogger(mainTag: nameof(BaseConnectionProcess), mainContext: Instance, isThreadDisplayed: true);
-            logger.Debug($"{nameof(Awake)}", $"Awake");
+            initConnectionReport = logger.GetReporter("InitConnection");
 
             currentServer = preferences.ServerPreferences.GetPreviousServerData() ?? new preferences.ServerPreferences.ServerData();
             currentConnectionData = preferences.ServerPreferences.GetPreviousConnectionData() ?? new preferences.ServerPreferences.Data();
@@ -89,8 +90,6 @@ namespace umi3d.baseBrowser.connection
 
         void Start()
         {
-            logger.Debug($"{nameof(Start)}", $"Start");
-
             UMI3DEnvironmentClient.ConnectionState.AddListener((state) => Connecting?.Invoke(state));
             UMI3DCollaborationClientServer.Instance.OnRedirectionStarted.AddListener(() => RedirectionStarted?.Invoke());
             UMI3DCollaborationClientServer.Instance.OnRedirectionAborted.AddListener(() => RedirectionEnded?.Invoke());
@@ -146,20 +145,21 @@ namespace umi3d.baseBrowser.connection
         }
 
         public bool IsConnectionProcessInProgress = false;
-        // Base connection token.
+
+        // Connection token.
         CancellationTokenSource connectionTokenSource;
-        CancellationToken connectionToken;
-        // Master server token
-        CancellationTokenSource masterServerTokenSource;
-        CancellationToken masterServerToken;
+
         // Media dto token.
         CancellationTokenSource mediaDtoTokenSource;
-        CancellationToken mediaDtoToken;
+        // Media dto coroutine.
+        Coroutine requestMediaDtoCoroutine;
+
+        // Master server token
+        CancellationTokenSource masterServerTokenSource;
+
         // Scene coroutine
         Coroutine LoadGameSceneCoroutine;
         readonly object lockObj = new object();
-
-        Coroutine requestMediaDtoCoroutine;
 
         /// <summary>
         /// Initiates the connection, if a connection is already in process return.
@@ -188,99 +188,104 @@ namespace umi3d.baseBrowser.connection
                         saveInfo,
                         10
                     ),
-                }
+                },
+                report: initConnectionReport
             );
 
-            if (requestMediaDtoCoroutine != null)
-            {
-                mediaDtoTokenSource.Cancel();
-            }
+            // Generic connection data.
+            connectionTokenSource?.Cancel();
+
+            IsConnectionProcessInProgress = true;
+            connectionTokenSource = new CancellationTokenSource();
+            var connectionToken = connectionTokenSource.Token;
+
+            // Media dto data and request.
+            mediaDtoTokenSource?.Cancel();
 
             mediaDtoTokenSource = new CancellationTokenSource();
             CancellationToken mediaDtoToken = mediaDtoTokenSource.Token;
-            masterServerTokenSource = new CancellationTokenSource();
-            CancellationToken masterServerToken = masterServerTokenSource.Token;
-
+            
             requestMediaDtoCoroutine = StartCoroutine(UMI3DWorldControllerClient.RequestMediaDto(
                 currentServer.serverUrl, 
                 mediaDto =>
                 {
                     masterServerTokenSource.Cancel();
+                    IsConnectionProcessInProgress = false;
                     this.mediaDto = mediaDto;
+                },
+                tryCount =>
+                {
+                    if (tryCount >= 3)
+                    {
+                        mediaDtoTokenSource.Cancel();
+                    }
                 },
                 () =>
                 {
-                    return mediaDtoToken.IsCancellationRequested;
+                    return mediaDtoToken.IsCancellationRequested || connectionToken.IsCancellationRequested;
                 }
             ));
-            // Start master server.
+
+            // Master server data and request.
+            masterServerTokenSource?.Cancel();
+
+            masterServerTokenSource = new CancellationTokenSource();
+            CancellationToken masterServerToken = masterServerTokenSource.Token;
+
+
+            //masterServer.ConnectToMasterServer(
+            //    () =>
+            //    {
+            //        if (masterServerTokenSource.IsCancellationRequested)
+            //        {
+            //            return;
+            //        }
+
+            //        masterServer.RequestInfo
+            //        (
+            //            (name, icon) =>
+            //            {
+            //                if (masterServerTokenSource.IsCancellationRequested)
+            //                {
+            //                    return;
+            //                }
+
+            //                mediaDtoTokenSource.Cancel();
+
+            //                currentServer.serverName = name;
+            //                currentServer.serverIcon = icon;
+            //                preferences.ServerPreferences.StoreUserData(currentServer);
+            //                if (saveInfo)
+            //                {
+            //                    StoreServer();
+            //                }
+            //            },
+            //            () => masterServerTokenSource.Cancel()
+            //        );
+
+            //        DisplaySessions?.Invoke();
+            //    },
+            //    currentServer.serverUrl,
+            //    () => masterServerTokenSource.Cancel()
+            //);
+
+            //if (LoadGameSceneCoroutine != null)
+            //{
+            //    StopCoroutine(LoadGameSceneCoroutine);
+            //}
+
+            LoadGameSceneCoroutine = StartCoroutine(LoadGameScene(() =>
+            {
+                return connectionToken.IsCancellationRequested || (mediaDtoToken.IsCancellationRequested && masterServerToken.IsCancellationRequested);
+            }));
 
             return;
 
             #region Multi-Thread
 
-            if (IsConnectionProcessInProgress)
-            {
-                logger.Debug($"{nameof(InitConnect)}", $"Connection process is already in progress.");
-                // Cancel the previous connection token sources.
-                connectionTokenSource.Cancel();
-                masterServerTokenSource.Cancel();
-                mediaDtoTokenSource.Cancel();
-            }
-
-            // Start or Restart token for new connection.
-            connectionTokenSource = new CancellationTokenSource();
-            connectionToken = connectionTokenSource.Token;
-            masterServerTokenSource = new CancellationTokenSource();
-            masterServerToken = masterServerTokenSource.Token;
-            mediaDtoTokenSource = new CancellationTokenSource();
-            mediaDtoToken = mediaDtoTokenSource.Token;
-            IsConnectionProcessInProgress = true;
-
             var connectionTask = Task.Factory.StartNew(async () =>
             {
                 UnityEngine.Debug.Log($"connection task on thread {Thread.CurrentThread.ManagedThreadId}");
-
-                // Connection to the master server.
-                var masterServerTask = Task.Factory.StartNew(async () =>
-                {
-                    UnityEngine.Debug.Log($"masterServerTask task on thread {Thread.CurrentThread.ManagedThreadId}");
-
-                    masterServer.ConnectToMasterServer(() =>
-                    {
-                        if (masterServerTokenSource.IsCancellationRequested)
-                        {
-                            return;
-                        }
-
-                        masterServer.RequestInfo
-                        (
-                            (name, icon) =>
-                            {
-                                if (masterServerTokenSource.IsCancellationRequested)
-                                {
-                                    return;
-                                }
-
-                                mediaDtoTokenSource.Cancel();
-
-                                currentServer.serverName = name;
-                                currentServer.serverIcon = icon;
-                                preferences.ServerPreferences.StoreUserData(currentServer);
-                                if (saveInfo)
-                                {
-                                    StoreServer();
-                                }
-                            },
-                            () => masterServerTokenSource.Cancel()
-                        );
-
-                        DisplaySessions?.Invoke();
-                    },
-                    currentServer.serverUrl,
-                    () => masterServerTokenSource.Cancel());
-                },
-                masterServerToken).Unwrap();
 
                 // Connection via mediaDto.
                 var mediaDtoTask = Task.Factory.StartNew(async () =>
@@ -344,26 +349,9 @@ namespace umi3d.baseBrowser.connection
                 },
                 mediaDtoToken).Unwrap();
 
-                Task processes = Task.WhenAll(new[] { masterServerTask, mediaDtoTask });
-                await processes;
-
-                if (connectionTokenSource.IsCancellationRequested)
-                {
-                    UnityEngine.Debug.Log($"connection task cancelled on thread {Thread.CurrentThread.ManagedThreadId}");
-                    return;
-                }
-                else
-                {
-                    UnityEngine.Debug.Log($"connection task finish on thread {Thread.CurrentThread.ManagedThreadId}");
-                }
-
-                IsConnectionProcessInProgress = false;
-            },
-            connectionToken);
+            });
 
             #endregion
-
-            LoadGameSceneCoroutine = StartCoroutine(LoadGameScene());
 
             //while (onlyOneConnection)
             //{
@@ -385,12 +373,18 @@ namespace umi3d.baseBrowser.connection
             preferences.ServerPreferences.StoreRegisteredServerData(savedServers);
         }
 
-        IEnumerator LoadGameScene()
+        IEnumerator LoadGameScene(Func<bool> shouldStopLoading)
         {
-            logger.Debug($"{nameof(LoadGameScene)}", $"Start {nameof(LoadGameScene)}.");
+            logger.Debug($"{nameof(LoadGameScene)}", $"Start.");
 
             while (IsConnectionProcessInProgress)
             {
+                if (shouldStopLoading?.Invoke() ?? false)
+                {
+                    logger.Debug($"{nameof(LoadGameScene)}", $"Stop loading before it started.");
+                    yield break;
+                }
+
                 yield return null;
             }
 
@@ -399,6 +393,7 @@ namespace umi3d.baseBrowser.connection
             if (masterServerTokenSource.IsCancellationRequested && mediaDtoTokenSource.IsCancellationRequested)
             {
                 logger.Assertion($"{nameof(LoadGameScene)}", $"No connection process have been found.");
+                initConnectionReport.Report();
                 yield break;
             }
             else if (masterServerTokenSource.IsCancellationRequested)

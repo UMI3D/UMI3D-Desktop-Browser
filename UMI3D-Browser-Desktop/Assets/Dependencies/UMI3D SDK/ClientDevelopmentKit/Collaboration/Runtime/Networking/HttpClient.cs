@@ -702,7 +702,8 @@ namespace umi3d.cdk.collaboration
             string url,
             Func<bool> shouldCleanAbort,
             Action<UnityWebRequestAsyncOperation> onCompleteSuccess,
-            Action<UnityWebRequestAsyncOperation> onCompleteFail
+            Action<UnityWebRequestAsyncOperation> onCompleteFail,
+            UMI3DLogReport report = null
         )
         {
             if (shouldCleanAbort())
@@ -730,7 +731,8 @@ namespace umi3d.cdk.collaboration
                         null,
                         20
                     )
-                }
+                },
+                report: report
             );
 
             using (var uwr = UnityWebRequest.Get(url))

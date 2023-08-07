@@ -167,6 +167,118 @@
             <param name="sourceFilePath"></param>
             <param name="sourceLineNumber"></param>
         </member>
+        <member name="T:umi3d.common.UMI3DLog">
+            <summary>
+            The data display in the log.
+            </summary>
+        </member>
+        <member name="F:umi3d.common.UMI3DLog.Type">
+            <summary>
+            Type of log.
+            </summary>
+        </member>
+        <member name="F:umi3d.common.UMI3DLog.MainTag">
+            <summary>
+            The main tag.
+            
+            <para>
+            Usualy the type name of a logger's master.
+            </para>
+            </summary>
+        </member>
+        <member name="F:umi3d.common.UMI3DLog.Tag">
+            <summary>
+            The tag.
+            
+            <para>
+            Used to identify the source of a log message. It usually identifies the method where the log call occurs.
+            </para>
+            </summary>
+        </member>
+        <member name="F:umi3d.common.UMI3DLog.Color">
+            <summary>
+            Color of the log in the Unity console.
+            </summary>
+        </member>
+        <member name="F:umi3d.common.UMI3DLog.Message">
+            <summary>
+            The message.
+            </summary>
+        </member>
+        <member name="F:umi3d.common.UMI3DLog.Trace">
+            <summary>
+            The call trace.
+            </summary>
+        </member>
+        <member name="P:umi3d.common.UMI3DLog.FormatedLog">
+            <summary>
+            Get a formated log.
+            </summary>
+        </member>
+        <member name="M:umi3d.common.UMI3DLog.#ctor(umi3d.common.UMI3DLogType,System.String,System.String,umi3d.common.UMI3DLogColor,System.Object,umi3d.common.UMI3DCallTrace)">
+            <summary>
+            Create a <see cref="T:umi3d.common.UMI3DLog"/>.
+            </summary>
+            <param name="type"></param>
+            <param name="mainTag"></param>
+            <param name="tag"></param>
+            <param name="color"></param>
+            <param name="message"></param>
+            <param name="trace"></param>
+        </member>
+        <member name="T:umi3d.common.UMI3DLogReport">
+            <summary>
+            A log reporter.
+            
+            <para>
+            It is <see cref="T:umi3d.common.UMI3DLog"/> queue that will display its logs when ask.
+            </para>
+            </summary>
+        </member>
+        <member name="F:umi3d.common.UMI3DLogReport.ID">
+            <summary>
+            The Id of this log report.
+            </summary>
+        </member>
+        <member name="F:umi3d.common.UMI3DLogReport.MaxNumberOfLogs">
+            <summary>
+            Maximum number of logs in this report.
+            </summary>
+        </member>
+        <member name="F:umi3d.common.UMI3DLogReport.MainContext">
+            <summary>
+            The main context of this logger.
+            
+            <para>
+            Usualy the instance of the logger's master if it is a <see cref="T:UnityEngine.Object"/>.
+            </para>
+            </summary>
+        </member>
+        <member name="F:umi3d.common.UMI3DLogReport.Logger">
+            <summary>
+            The logger.
+            </summary>
+        </member>
+        <member name="M:umi3d.common.UMI3DLogReport.#ctor(System.String,System.Int32,UnityEngine.Object,umi3d.common.UMI3DClientLogger)">
+            <summary>
+            Create a log reporter.
+            </summary>
+            <param name="id"></param>
+            <param name="maxNumberOfLogs"></param>
+            <param name="mainContext"></param>
+            <param name="logger"></param>
+        </member>
+        <member name="M:umi3d.common.UMI3DLogReport.Enqueue(umi3d.common.UMI3DLog)">
+            <summary>
+            Add a report at the end of the report.
+            </summary>
+            <param name="log"></param>
+        </member>
+        <member name="M:umi3d.common.UMI3DLogReport.Report">
+            <summary>
+            Report the stored logs.
+            </summary>
+        </member>
         <member name="T:umi3d.common.UMI3DClientLogger">
             <summary>
             A Logger for UMI3D client.
@@ -254,6 +366,14 @@
             <param name="mainContext"></param>
             <param name="isThreadDisplayed"></param>
         </member>
+        <member name="M:umi3d.common.UMI3DClientLogger.GetReporter(System.String,System.Int32)">
+            <summary>
+            Get a log reporter.
+            </summary>
+            <param name="reportId"></param>
+            <param name="maxNumberOfLogs"></param>
+            <returns></returns>
+        </member>
         <member name="M:umi3d.common.UMI3DClientLogger.DebugTodo(System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor,System.String,System.String,System.Int32)">
             <summary>
             A variant of Log that logs an DebugTodo message.
@@ -294,7 +414,7 @@
             <param name="sourceFilePath">File path of the caller.</param>
             <param name="sourceLineNumber">Line number in the file where of the caller.</param>
         </member>
-        <member name="M:umi3d.common.UMI3DClientLogger.DebugTab(System.String,umi3d.common.UMI3DLogCell[],UnityEngine.Object,umi3d.common.UMI3DLogColor,System.String,System.String,System.Int32)">
+        <member name="M:umi3d.common.UMI3DClientLogger.DebugTab(System.String,umi3d.common.UMI3DLogCell[],UnityEngine.Object,umi3d.common.UMI3DLogColor,umi3d.common.UMI3DLogReport,System.String,System.String,System.Int32)">
             <summary>
             A variant of Log that logs a DebugTab message.
             
@@ -314,7 +434,7 @@
             <param name="sourceFilePath">File path of the caller.</param>
             <param name="sourceLineNumber">Line number in the file where of the caller.</param>
         </member>
-        <member name="M:umi3d.common.UMI3DClientLogger.Debug(System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor,System.String,System.String,System.Int32)">
+        <member name="M:umi3d.common.UMI3DClientLogger.Debug(System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor,umi3d.common.UMI3DLogReport,System.String,System.String,System.Int32)">
             <summary>
             A variant of Log that logs an Debug message.
             
@@ -334,7 +454,7 @@
             <param name="sourceFilePath">File path of the caller.</param>
             <param name="sourceLineNumber">Line number in the file where of the caller.</param>
         </member>
-        <member name="M:umi3d.common.UMI3DClientLogger.DebugAssertion(System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor)">
+        <member name="M:umi3d.common.UMI3DClientLogger.DebugAssertion(System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor,umi3d.common.UMI3DLogReport,System.String,System.String,System.Int32)">
             <summary>
             A variant of Log that logs a DebugAssertion message.
             
@@ -347,7 +467,7 @@
             <param name="context">Object to which the message applies.</param>
             <param name="color">The color of the log in the Unity console.</param>
         </member>
-        <member name="M:umi3d.common.UMI3DClientLogger.DebugAssert(System.Boolean,System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor)">
+        <member name="M:umi3d.common.UMI3DClientLogger.DebugAssert(System.Boolean,System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor,umi3d.common.UMI3DLogReport,System.String,System.String,System.Int32)">
             <summary>
             A variant of Log that logs a DebugAssertion message if <paramref name="condition"/> is false.
             
@@ -361,7 +481,7 @@
             <param name="context">Object to which the message applies.</param>
             <param name="color">The color of the log in the Unity console.</param>
         </member>
-        <member name="M:umi3d.common.UMI3DClientLogger.Default(System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor,System.String,System.String,System.Int32)">
+        <member name="M:umi3d.common.UMI3DClientLogger.Default(System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor,umi3d.common.UMI3DLogReport,System.String,System.String,System.Int32)">
             <summary>
             A variant of Log that logs an Default message.
             
@@ -377,7 +497,7 @@
             <param name="sourceFilePath">File path of the caller.</param>
             <param name="sourceLineNumber">Line number in the file where of the caller.</param>
         </member>
-        <member name="M:umi3d.common.UMI3DClientLogger.Warning(System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor,System.String,System.String,System.Int32)">
+        <member name="M:umi3d.common.UMI3DClientLogger.Warning(System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor,umi3d.common.UMI3DLogReport,System.String,System.String,System.Int32)">
             <summary>
             A variant of Log that logs an Warning message.
             
@@ -393,7 +513,7 @@
             <param name="sourceFilePath">File path of the caller.</param>
             <param name="sourceLineNumber">Line number in the file where of the caller.</param>
         </member>
-        <member name="M:umi3d.common.UMI3DClientLogger.Assertion(System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor)">
+        <member name="M:umi3d.common.UMI3DClientLogger.Assertion(System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor,umi3d.common.UMI3DLogReport,System.String,System.String,System.Int32)">
             <summary>
             A variant of Log that logs an Assertion message.
             </summary>
@@ -402,7 +522,7 @@
             <param name="context">Object to which the message applies.</param>
             <param name="color">The color of the log in the Unity console.</param>
         </member>
-        <member name="M:umi3d.common.UMI3DClientLogger.Assert(System.Boolean,System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor)">
+        <member name="M:umi3d.common.UMI3DClientLogger.Assert(System.Boolean,System.String,System.Object,UnityEngine.Object,umi3d.common.UMI3DLogColor,umi3d.common.UMI3DLogReport,System.String,System.String,System.Int32)">
             <summary>
             A variant of Log that logs an Assertion message if <paramref name="condition"/> is false.
             </summary>
@@ -470,6 +590,14 @@
             <param name="alignment"></param>
             <returns></returns>
         </member>
+        <member name="M:umi3d.common.LogExtensions.Repeat(System.Char,System.Int32)">
+            <summary>
+            Repeat <paramref name="c"/> <paramref name="repeatCount"/>.
+            </summary>
+            <param name="c"></param>
+            <param name="repeatCount"></param>
+            <returns></returns>
+        </member>
         <member name="M:umi3d.common.LogExtensions.AddLogType(System.String,umi3d.common.UMI3DLogType)">
             <summary>
             Add the log type after the message.
@@ -508,6 +636,20 @@
             Add the caller trace at the end of the message.
             </summary>
             <param name="message"></param>
+            <param name="trace"></param>
+            <returns></returns>
+        </member>
+        <member name="M:umi3d.common.LogExtensions.FormatLog(System.Object,umi3d.common.UMI3DLogType,System.String,System.String,umi3d.common.UMI3DLogColor,System.Boolean,System.String,umi3d.common.UMI3DCallTrace)">
+            <summary>
+            Format a log to display.
+            </summary>
+            <param name="message"></param>
+            <param name="logType"></param>
+            <param name="MainTag"></param>
+            <param name="tag"></param>
+            <param name="color"></param>
+            <param name="IsThreadDisplayed"></param>
+            <param name="headerMessage"></param>
             <param name="trace"></param>
             <returns></returns>
         </member>
