@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using umi3d.common.interaction;
+using UnityEngine.UIElements;
+
 public abstract class MenuState
 {
     protected MainMenu _machine;
@@ -9,4 +14,5 @@ public abstract class MenuState
 
     public abstract void Enter();
     public abstract void Exit();
+    public virtual void SetData(List<VisualElement> elements, Action callback) { }
 }

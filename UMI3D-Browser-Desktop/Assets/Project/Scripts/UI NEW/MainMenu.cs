@@ -1,7 +1,11 @@
-using GLTFast.Schema;
+using System;
+using System.Collections.Generic;
 using umi3d.baseBrowser.connection;
+using umi3d.common.interaction;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEditor.Rendering.FilterWindow;
 
 public class MainMenu : MonoBehaviour
 {
@@ -67,7 +71,11 @@ public class MainMenu : MonoBehaviour
     }
 
     public void ToHome() => ChangeState(_homeState);
-    public void ToLogin() => ChangeState(_loginState);
+    public void ToLogin(List<VisualElement> elements, Action callback)
+    {
+        ChangeState(_loginState);
+        _loginState.SetData(elements, callback);
+    }
     public void ToOrganisation() => ChangeState(_organisationState);
     public void ToHighLevelLogin() => ChangeState(_highLevelLoginState);
     public void ToWorld() => ChangeState(_worldState);
@@ -84,12 +92,6 @@ public class MainMenu : MonoBehaviour
         _currentState.Enter();
     }
 
-    public void OpenErrorBox(string message)
-    {
-        _errorBox.Q<TextElement>("Message").text = message;
-        _errorBox.RemoveFromClassList("hidden");
-    }
-
     private void InitLocalisation()
     {
         var labels = _uiDocument.rootVisualElement.Query<TextElement>().ToList();
@@ -101,5 +103,96 @@ public class MainMenu : MonoBehaviour
             if (trad != null)
                 label.text = trad;
         }
+    }
+
+    public void OpenErrorBox(string message)
+    {
+        _errorBox.Q<TextElement>("Message").text = message;
+        _errorBox.RemoveFromClassList("hidden");
+    }
+
+    public void GetParameterDtos(ConnectionFormDto form, Action<FormAnswerDto> callback)
+    {
+        if (form == null)
+        {
+            callback.Invoke(null);
+            return;
+        }
+
+        Debug.Log("===== NEW FORM RECEIVED =====");
+        Debug.Log("Form name : " + form.name);
+
+        FormAnswerDto answer = new FormAnswerDto()
+        {
+            boneType = 0,
+            hoveredObjectId = 0,
+            id = form.id,
+            toolId = 0,
+            answers = new List<ParameterSettingRequestDto>()
+        };
+
+        if (form.name == "Connection")
+        {
+            ToLogin(GetVisualElements(form, answer), () => callback?.Invoke(answer));
+        }
+    }
+
+    private List<VisualElement> GetVisualElements(ConnectionFormDto form, FormAnswerDto to)
+    {
+        var result = new List<VisualElement>();
+        foreach (var item in form.fields)
+        {
+            var requestDto = new ParameterSettingRequestDto()
+            {
+                toolId = form.id,
+                id = item.id,
+                parameter = item.GetValue(),
+                hoveredObjectId = 0
+            };
+
+            switch (item)
+            {
+                case BooleanParameterDto booleanParameterDto:
+                    var toggle = new ToggleButton_C();
+                    toggle.name = item.name;
+                    toggle.label = item.name;
+                    toggle.RegisterValueChangedCallback(e =>
+                    {
+                        booleanParameterDto.value = e.newValue;
+                        requestDto.parameter = e.newValue;
+                    });
+                    result.Add(toggle);
+                    break;
+                case FloatRangeParameterDto floatRangeParameterDto:
+                    Debug.LogWarning("TODO Field : " + item.name + "(floatRange)");
+                    break;
+                case EnumParameterDto<string> enumParameterDto:
+                    Debug.LogWarning("TODO Field : " + item.name + "(enum)");
+                    break;
+                case StringParameterDto stringParameterDto:
+                    var text = new TextField();
+                    text.name = item.name;
+                    text.label = item.name;
+                    text.RegisterValueChangedCallback(e =>
+                    {
+                        stringParameterDto.value = e.newValue;
+                        requestDto.parameter = e.newValue;
+                    });
+                    if (text.name == "Password")
+                    {
+                        text.isPasswordField = true;
+                    }
+                    result.Add(text);
+                    break;
+                case LocalInfoRequestParameterDto localInfoRequestParameterDto:
+                    Debug.LogWarning("TODO Field : " + item.name + "(localInfo)");
+                    break;
+                default:
+                    Debug.LogError("Field not recognized : " + item.name);
+                    break;
+            }
+            to.answers.Add(requestDto);
+        }
+        return result;
     }
 }

@@ -1,5 +1,9 @@
+using System;
+using System.Collections.Generic;
 using umi3d.baseBrowser.connection;
 using umi3d.cdk.menu;
+using umi3d.common.interaction;
+using UnityEngine.UIElements;
 
 public class LoginState : MenuState
 {
@@ -14,7 +18,6 @@ public class LoginState : MenuState
         _machine.ConnectionScreen.Show();
 
         _machine.ConnectionScreen.Back.clicked += Back;
-        _machine.ConnectionScreen.Next.clicked += _machine.ToOrganisation;
     }
 
     private void Back()
@@ -28,6 +31,23 @@ public class LoginState : MenuState
         _machine.ConnectionScreen.Hide();
 
         _machine.ConnectionScreen.Back.clicked -= Back;
-        _machine.ConnectionScreen.Next.clicked -= _machine.ToOrganisation;
+    }
+
+    public override void SetData(List<VisualElement> elements, Action callback)
+    {
+        _machine.ConnectionScreen.Clear();
+        var currentForm = _machine.ConnectionScreen.LoginForm;
+        _machine.ConnectionScreen.PinButton.AddToClassList("hidden");
+        foreach (var element in elements)
+        {
+            if (element.name.ToLower() == "or") 
+            {
+                currentForm = _machine.ConnectionScreen.PinForm;
+                _machine.ConnectionScreen.PinButton.RemoveFromClassList("hidden");
+                continue;
+            }
+            currentForm.Add(element);
+        }
+        _machine.ConnectionScreen.Next.clicked += callback;
     }
 }

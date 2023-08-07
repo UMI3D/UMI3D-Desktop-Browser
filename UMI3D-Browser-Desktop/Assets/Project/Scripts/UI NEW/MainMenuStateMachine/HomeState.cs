@@ -18,7 +18,7 @@ public class HomeState : MenuState
         _machine.NavigationScreen.Show();
         _machine.NavigationScreen.IsHome = true;
 
-        _machine.NavigationScreen.Next.clicked += () => SetCurrentServerAndConnect(_machine.NavigationScreen.PortalUrl.text);
+        _machine.NavigationScreen.Next.clicked += ConnectWithUrl;
 
         var worlds = BaseConnectionProcess.Instance.savedServers;
         _machine.NavigationScreen.Elements.Clear();
@@ -28,10 +28,15 @@ public class HomeState : MenuState
         }
     }
 
+    private void ConnectWithUrl()
+    {
+        SetCurrentServerAndConnect(_machine.NavigationScreen.PortalUrl.text);
+    }
+
     private async void Connect(ServerPreferences.ServerData world)
     {
         BaseConnectionProcess.Instance.currentServer = world;
-        BaseConnectionProcess.Instance.ConnectionSucces += e => _machine.ToLogin();
+        BaseConnectionProcess.Instance.ConnectionSucces += e => BaseConnectionProcess.Instance.GetParameterDtos += _machine.GetParameterDtos;
         BaseConnectionProcess.Instance.ConnectionInitializationFailled +=
             url => _machine.OpenErrorBox($"Browser was not able to connect to \n\n\"{url}\"");
 
@@ -42,7 +47,7 @@ public class HomeState : MenuState
     {
         _machine.NavigationScreen.Hide();
 
-        _machine.NavigationScreen.Next.clicked -= _machine.ToLogin;
+        _machine.NavigationScreen.Next.clicked -= ConnectWithUrl;
     }
     public void SetCurrentServerAndConnect(string url)
     {
