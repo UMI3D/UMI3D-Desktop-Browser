@@ -1,25 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Connection/Connection.uss?fileID=7433441132597879392&amp;guid=6e4a8985874120d4fb75813415c14e95&amp;type=3#Connection" />
-    <ui:VisualElement name="Connection" class="connection">
-        <ui:VisualElement name="Header" class="header">
-            <ui:Button text="&lt; Back" display-tooltip-when-elided="true" name="ButtonBack" class="button-base" />
-            <ui:Label text="Connected to " display-tooltip-when-elided="true" />
-            <ui:Label text="..." display-tooltip-when-elided="true" name="ConnectedTo" class="text-important" />
-        </ui:VisualElement>
-        <ui:RadioButtonGroup value="0" name="NavigationButton" class="menu-navigation">
-            <ui:RadioButton label="Login" name="Login" value="true" />
-            <ui:RadioButton label="Pin" name="Pin" />
-        </ui:RadioButtonGroup>
-        <ui:VisualElement name="Forms" class="form">
-            <ui:VisualElement name="FormLogin" class="form-elements">
-                <ui:TextField picking-mode="Ignore" label="Mail" name="Mail" />
-                <ui:TextField picking-mode="Ignore" label="Password" name="Password" password="true" />
-            </ui:VisualElement>
-            <ui:VisualElement name="FormPin" class="hidden form-elements">
-                <ui:TextField picking-mode="Ignore" label="Pin" name="Pin" />
-            </ui:VisualElement>
-            <ToggleButton_C label="Remember me" />
-        </ui:VisualElement>
-        <ui:Button text="Submit" display-tooltip-when-elided="true" name="ButtonSubmit" class="button-base submit" />
-    </ui:VisualElement>
+    <ui:VisualElement name="Connection" class="connection" />
 </ui:UXML>

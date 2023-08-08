@@ -14,5 +14,5 @@ public abstract class MenuState
 
     public abstract void Enter();
     public abstract void Exit();
-    public virtual void SetData(List<VisualElement> elements, Action callback) { }
+    public virtual void SetData(VisualElement elements, Action callback) { }
 }

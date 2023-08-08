@@ -111,7 +111,7 @@ namespace umi3d.cdk.collaboration
                 dto2 = UMI3DDtoSerializer.FromJson<FakePrivateIdentityDto>(text, Newtonsoft.Json.TypeNameHandling.None);
             }
 
-            Form dto3 = UMI3DDtoSerializer.FromJson<Form>(text, Newtonsoft.Json.TypeNameHandling.None, new List<JsonConverter>() { new ParameterConverter() });
+            Form dto3 = UMI3DDtoSerializer.FromJson<Form>(text, Newtonsoft.Json.TypeNameHandling.All, new List<JsonConverter>() { new ParameterConverter() });
 
             if (dto1 != null && dto1?.globalToken != null && dto1?.connectionDto != null)
                 return dto1;

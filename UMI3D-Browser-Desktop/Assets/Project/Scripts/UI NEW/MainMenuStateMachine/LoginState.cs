@@ -16,31 +16,17 @@ public class LoginState : MenuState
     public override void Enter()
     {
         _machine.ConnectionScreen.Show();
-
-        _machine.ConnectionScreen.Back.clicked += Back;
-    }
-
-    private void Back()
-    {
-        BaseConnectionProcess.Instance.Leave();
-        _machine.ToHome();
     }
 
     public override void Exit()
     {
         _machine.ConnectionScreen.Hide();
 
-        _machine.ConnectionScreen.Back.clicked -= Back;
     }
 
-    public override void SetData(List<VisualElement> elements, Action callback)
+    public override void SetData(VisualElement elements, Action callback)
     {
         _machine.ConnectionScreen.Clear();
-        _machine.ConnectionScreen.PinButton.AddToClassList("hidden");
-        foreach (var element in elements)
-        {
-            _machine.ConnectionScreen.LoginForm.Add(element);
-        }
-        _machine.ConnectionScreen.Next.clicked += callback;
+        _machine.ConnectionScreen.Root.Add(elements);
     }
 }

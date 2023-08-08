@@ -75,7 +75,7 @@ public class MainMenu : MonoBehaviour
     }
 
     public void ToHome() => ChangeState(_homeState);
-    public void ToLogin(List<VisualElement> elements, Action callback)
+    public void ToLogin(VisualElement elements, Action callback)
     {
         ChangeState(_loginState);
         _loginState.SetData(elements, callback);
@@ -120,11 +120,10 @@ public class MainMenu : MonoBehaviour
         Debug.Log("===== NEW FORM RECEIVED =====");
         if (form == null)
         {
+            OpenErrorBox("Empty form received : Form Null!");
             callback.Invoke(null);
-            Debug.Log("Form is null");
             return;
         }
-        Debug.Log("Form name : " + form.Name);
 
         FormAnswerDto answer = new FormAnswerDto()
         {
@@ -138,18 +137,48 @@ public class MainMenu : MonoBehaviour
         ToLogin(GetVisualElements(form, answer), () => callback?.Invoke(answer));
     }
 
-    private List<VisualElement> GetVisualElements(umi3d.common.interaction.form.Form form, FormAnswerDto to)
+    private VisualElement GetVisualElements(umi3d.common.interaction.form.Form form, FormAnswerDto to)
     {
-        var result = new List<VisualElement>();
-        foreach (var page in form.Pages)
+        var formElement = new VisualElement() { name = "form" };
+        if (form.Pages.Count == 0)
         {
-            var pageView = new VisualElement() { name = page.Name };
-            Debug.Log("== Page : " + page.Name);
-            pageView.Add(GroupToVisualElement(page.Group));
-
-            result.Add(pageView);
+            OpenErrorBox("Empty form received : No Page!");
         }
-        return result;
+        else if (form.Pages.Count == 1)
+        {
+            formElement = GroupToVisualElement(form.Pages[0].Group);
+        }
+        else
+        {
+            var radioButtonGroup = new RadioButtonGroup();
+            radioButtonGroup.AddToClassList("menu-navigation");
+            formElement.Add(radioButtonGroup);
+
+            for (int i = 0; i < form.Pages.Count; i++)
+            {
+                umi3d.common.interaction.form.Page page = form.Pages[i];
+                var pageView = new VisualElement() { name = page.Name };
+                pageView.Add(GroupToVisualElement(page.Group));
+                formElement.Add(pageView);
+
+                var radioButton = new RadioButton(page.Name);
+                radioButton.RegisterValueChangedCallback(e =>
+                {
+                    if (e.newValue)
+                        pageView.RemoveFromClassList("hidden");
+                    else
+                        pageView.AddToClassList("hidden");
+                });
+                radioButtonGroup.Add(radioButton);
+
+                if (i == 0)
+                    radioButton.value = true;
+                else
+                    pageView.AddToClassList("hidden");
+
+            }
+        }
+        return formElement;
     }
 
     private VisualElement GroupToVisualElement(Group group)
