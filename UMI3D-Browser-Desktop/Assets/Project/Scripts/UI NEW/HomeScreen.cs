@@ -1,54 +1,52 @@
-using System.Net;
+using inetum.unityUtils;
 using System;
+using System.Net;
 using umi3d.baseBrowser.connection;
 using umi3d.baseBrowser.preferences;
 using umi3d.common;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class HomeState : MenuState
+public class HomeScreen : BaseScreen
 {
     private const DebugScope scope = DebugScope.CDK | DebugScope.Collaboration | DebugScope.Networking;
+    private const string k_navigationItemPath = "UI NEW/NavigationItem";
 
-    public HomeState(MainMenu machine) : base(machine)
+    private TextField _portalUrl;
+    public event Action<ServerPreferences.ServerData> OnConnect;
+
+    public HomeScreen(VisualElement element) : base(element)
     {
-    }
-
-    public override void Enter()
-    {
-        _machine.NavigationScreen.Show();
-        _machine.NavigationScreen.IsHome = true;
-
-        _machine.NavigationScreen.Next.clicked += ConnectWithUrl;
+        _portalUrl = _root.Q<TextField>("Url");
+        _portalUrl.SetPlaceholderText("example.fr");
+        var elements = _root.Q("Elements");
 
         var worlds = BaseConnectionProcess.Instance.savedServers;
-        _machine.NavigationScreen.Elements.Clear();
+        elements.Clear();
         foreach (var world in worlds)
         {
-            _machine.NavigationScreen.AddElement(world.serverName, () => Connect(world));
+            elements.Add(GetItemElement(world.serverName, () => OnConnect?.Invoke(world)));
         }
+    }
+
+    public TemplateContainer GetItemElement(string name, Action callback)
+    {
+        var itemAsset = Resources.Load<VisualTreeAsset>(k_navigationItemPath);
+        var item = itemAsset.Instantiate();
+
+        item.Q<TextElement>("Name").text = name;
+
+        if (callback != null)
+            item.Q<Button>("ButtonElement").clicked += callback;
+
+        return item;
     }
 
     private void ConnectWithUrl()
     {
-        SetCurrentServerAndConnect(_machine.NavigationScreen.PortalUrl.text);
+        SetCurrentServerAndConnect(_portalUrl.text);
     }
 
-    private async void Connect(ServerPreferences.ServerData world)
-    {
-        BaseConnectionProcess.Instance.currentServer = world;
-        BaseConnectionProcess.Instance.ConnectionSucces += e => BaseConnectionProcess.Instance.GetParameterDtos += _machine.GetParameterDtos;
-        BaseConnectionProcess.Instance.ConnectionInitializationFailled +=
-            url => _machine.OpenErrorBox($"Browser was not able to connect to \n\n\"{url}\"");
-
-        await BaseConnectionProcess.Instance.InitConnect(true);
-    }
-
-    public override void Exit()
-    {
-        _machine.NavigationScreen.Hide();
-
-        _machine.NavigationScreen.Next.clicked -= ConnectWithUrl;
-    }
     public void SetCurrentServerAndConnect(string url)
     {
         string serverUrl = url;
@@ -70,7 +68,7 @@ public class HomeState : MenuState
         {
             Debug.Log("TODO: INTERNETREACHABILITY CASE !");
         }
-        else Connect(data);
+        else OnConnect?.Invoke(data);
     }
 
     private static string GetLocalIPAddress()

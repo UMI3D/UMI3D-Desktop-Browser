@@ -115,9 +115,8 @@ namespace umi3d.cdk.collaboration
                     Connected(identity);
                     return true;
                 }
-                else if (answerDto is umi3d.common.interaction.form.Form form)
+                else if (answerDto is umi3d.common.interaction.form.FormDto form)
                 {
-                    Debug.Log(form.Pages[0].Group.Children[0].Id);
                     FormAnswerDto answer = await GetFormAnswer(form);
                     var _answer = new FormConnectionAnswerDto()
                     {
@@ -139,7 +138,7 @@ namespace umi3d.cdk.collaboration
             privateIdentity = identity;
         }
 
-        private async Task<FormAnswerDto> GetFormAnswer(umi3d.common.interaction.form.Form form)
+        private async Task<FormAnswerDto> GetFormAnswer(umi3d.common.interaction.form.FormDto form)
         {
             return await UMI3DCollaborationClientServer.Instance.Identifier.GetParameterDtos(form);
         }

@@ -1,6 +1,6 @@
 namespace umi3d.common.interaction.form
 {
-    public class Button : BaseInput
+    public class ButtonDto : BaseInputDto
     {
         public ButtonType Type { get; set; }
     }

@@ -2,12 +2,12 @@ using System.Collections.Generic;
 
 namespace umi3d.common.interaction.form
 {
-    public class Form : Item
+    public class FormDto : ItemDto
     {
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public List<Page> Pages { get; set; }
+        public List<PageDto> Pages { get; set; }
 
         /// <summary>
         /// Globaltoken previously used in the media the client want to connect to.

@@ -164,14 +164,14 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         public class UserInfo
         {
-            public common.interaction.form.Form formdto;
+            public common.interaction.form.FormDto formdto;
             public UserConnectionAnswerDto answerDto;
 
             public string AudioPassword;
 
             public UserInfo()
             {
-                formdto = new common.interaction.form.Form();
+                formdto = new common.interaction.form.FormDto();
                 answerDto = new UserConnectionAnswerDto();
                 AudioPassword = null;
 

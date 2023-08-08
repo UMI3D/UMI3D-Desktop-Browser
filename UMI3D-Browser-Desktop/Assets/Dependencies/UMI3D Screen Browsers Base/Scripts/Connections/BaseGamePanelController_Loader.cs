@@ -78,7 +78,7 @@ namespace umi3d.baseBrowser.connection
         /// </summary>
         /// <param name="form"></param>
         /// <param name="callback"></param>
-        protected void GetParameterDtos(umi3d.common.interaction.form.Form form, System.Action<common.interaction.FormAnswerDto> callback)
+        protected void GetParameterDtos(umi3d.common.interaction.form.FormDto form, System.Action<common.interaction.FormAnswerDto> callback)
         {
             Debug.LogError("Changed of form");
             /*

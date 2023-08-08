@@ -91,8 +91,6 @@ namespace umi3d.cdk.collaboration
                 UMI3DLogger.Log($"Received answer to Connect : \n " + uwr?.downloadHandler?.text, scope | DebugScope.Connection);
 
                 UMI3DDto dto = uwr?.downloadHandler.data != null ? ReadConnectAnswer(System.Text.Encoding.UTF8.GetString(uwr?.downloadHandler.data)) : null;
-                Debug.Log(uwr?.downloadHandler.data);
-                Debug.Log(System.Text.Encoding.UTF8.GetString(uwr?.downloadHandler.data));
                 return dto;
             }
         }
@@ -111,7 +109,7 @@ namespace umi3d.cdk.collaboration
                 dto2 = UMI3DDtoSerializer.FromJson<FakePrivateIdentityDto>(text, Newtonsoft.Json.TypeNameHandling.None);
             }
 
-            Form dto3 = UMI3DDtoSerializer.FromJson<Form>(text, Newtonsoft.Json.TypeNameHandling.All, new List<JsonConverter>() { new ParameterConverter() });
+            common.interaction.form.FormDto dto3 = UMI3DDtoSerializer.FromJson<common.interaction.form.FormDto>(text, Newtonsoft.Json.TypeNameHandling.All, new List<JsonConverter>() { new ParameterConverter() });
 
             if (dto1 != null && dto1?.globalToken != null && dto1?.connectionDto != null)
                 return dto1;

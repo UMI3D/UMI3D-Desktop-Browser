@@ -1,6 +1,6 @@
 namespace umi3d.common.interaction.form
 {
-    public class Range<T> : BaseInput
+    public class RangeDto<T> : BaseInputDto
     {
         public T Min { get; set; }
         public T Max { get; set; }

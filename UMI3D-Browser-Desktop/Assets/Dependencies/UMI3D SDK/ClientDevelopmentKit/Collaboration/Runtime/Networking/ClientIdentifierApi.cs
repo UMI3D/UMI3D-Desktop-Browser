@@ -33,7 +33,7 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         /// <param name="parameter">FormDto to be filled.</param>
         /// <param name="callback">Action to return the completed FormDto.</param>
-        public virtual async Task<FormAnswerDto> GetParameterDtos(common.interaction.form.Form parameter)
+        public virtual async Task<FormAnswerDto> GetParameterDtos(common.interaction.form.FormDto parameter)
         {
             var answers = new List<ParameterSettingRequestDto>();
             parameter.Pages.ForEach(page =>
@@ -50,16 +50,16 @@ namespace umi3d.cdk.collaboration
             });
         }
 
-        private List<ParameterSettingRequestDto> GroupToParameterSettingRequestDto(Group pGroup)
+        private List<ParameterSettingRequestDto> GroupToParameterSettingRequestDto(GroupDto pGroup)
         {
             var result = new List<ParameterSettingRequestDto>();
 
             pGroup.Children.ForEach(div =>
             {
-                var groupChild = div as Group;
+                var groupChild = div as GroupDto;
                 if (groupChild != null) result.AddRange(GroupToParameterSettingRequestDto(groupChild));
 
-                var input = div as BaseInput;
+                var input = div as BaseInputDto;
                 if (input != null)
                 {
                     var value = input.GetValue();

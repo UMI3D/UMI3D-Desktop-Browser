@@ -1,35 +1,17 @@
 using System;
-using System.Collections.Generic;
 using umi3d.baseBrowser.connection;
 using umi3d.common.interaction;
-using umi3d.common.interaction.form;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using Button = UnityEngine.UIElements.Button;
-using Label = UnityEngine.UIElements.Label;
-using inetum.unityUtils;
+using umi3d.baseBrowser.preferences;
 
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private UIDocument _uiDocument;
 
-    private NavigationScreen _navigationScreen;
-    private ConnectionScreen _connectionScreen;
+    private HomeScreen _navigationScreen;
+    private FormScreen _connectionScreen;
     private VisualElement _errorBox;
-
-    public NavigationScreen NavigationScreen => _navigationScreen;
-    public ConnectionScreen ConnectionScreen => _connectionScreen;
-
-    private MenuState _currentState;
-    private MenuState _homeState;
-    private MenuState _loginState;
-    private MenuState _organisationState;
-    private MenuState _highLevelLoginState;
-    private MenuState _worldState;
-    private MenuState _placeSpawnState;
-    private MenuState _spawnState;
 
     private void Start()
     {
@@ -40,60 +22,21 @@ public class MainMenu : MonoBehaviour
         _uiDocument.rootVisualElement.Q<Label>("Version").text = BrowserDesktop.BrowserVersion.Version;
 
         InitUiElements();
-        InitStateMachine();
         InitLocalisation();
     }
 
     private void InitUiElements()
     {
-        _navigationScreen = new NavigationScreen(_uiDocument.rootVisualElement.Q("Navigation"));
-        _navigationScreen.Root.Q<Button>("ButtonLogOut").clicked += () => {
-            BaseConnectionProcess.Instance.Leave();
-            ToHome();
-        };
-        _navigationScreen.Hide();
+        _navigationScreen = new HomeScreen(_uiDocument.rootVisualElement.Q("Navigation"));
+        _navigationScreen.OnConnect += Connect;
+        _navigationScreen.Show();
 
-        _connectionScreen = new ConnectionScreen(_uiDocument.rootVisualElement.Q("Connection"));
+        _connectionScreen = new FormScreen(_uiDocument.rootVisualElement.Q("Connection"));
         _connectionScreen.Hide();
 
         _errorBox = _uiDocument.rootVisualElement.Q("ErrorBox");
         _errorBox.Q<Button>("ButtonOk").clicked += () => _errorBox.AddToClassList("hidden");
         _errorBox.AddToClassList("hidden");
-    }
-
-    private void InitStateMachine()
-    {
-        _homeState = new HomeState(this);
-        _loginState = new LoginState(this);
-        _organisationState = new OrganisationState(this);
-        _highLevelLoginState = new HighLevelLoginState(this);
-        _worldState = new WorldState(this);
-        _placeSpawnState = new PlaceSpawnState(this);
-        _spawnState = new SpawnState(this);
-
-        ChangeState(_homeState);
-    }
-
-    public void ToHome() => ChangeState(_homeState);
-    public void ToLogin(VisualElement elements, Action callback)
-    {
-        ChangeState(_loginState);
-        _loginState.SetData(elements, callback);
-    }
-    public void ToOrganisation() => ChangeState(_organisationState);
-    public void ToHighLevelLogin() => ChangeState(_highLevelLoginState);
-    public void ToWorld() => ChangeState(_worldState);
-    public void ToPlaceSpawn() => ChangeState(_placeSpawnState);
-    public void ToSpawn() => ChangeState(_spawnState);
-
-    private void ChangeState(MenuState newState)
-    {
-        if (_currentState != null)
-            _currentState.Exit();
-
-        _currentState = newState;
-
-        _currentState.Enter();
     }
 
     private void InitLocalisation()
@@ -115,118 +58,20 @@ public class MainMenu : MonoBehaviour
         _errorBox.RemoveFromClassList("hidden");
     }
 
-    public void GetParameterDtos(umi3d.common.interaction.form.Form form, Action<FormAnswerDto> callback)
+    private async void Connect(ServerPreferences.ServerData world)
     {
-        Debug.Log("===== NEW FORM RECEIVED =====");
-        if (form == null)
-        {
-            OpenErrorBox("Empty form received : Form Null!");
-            callback.Invoke(null);
-            return;
-        }
+        BaseConnectionProcess.Instance.currentServer = world;
+        BaseConnectionProcess.Instance.ConnectionSucces += e => BaseConnectionProcess.Instance.GetParameterDtos += GetParameterDtos;
+        BaseConnectionProcess.Instance.ConnectionInitializationFailled +=
+            url => OpenErrorBox($"Browser was not able to connect to \n\n\"{url}\"");
 
-        FormAnswerDto answer = new FormAnswerDto()
-        {
-            boneType = 0,
-            hoveredObjectId = 0,
-            id = form.Id,
-            toolId = 0,
-            answers = new List<ParameterSettingRequestDto>()
-        };
-
-        ToLogin(GetVisualElements(form, answer), () => callback?.Invoke(answer));
+        await BaseConnectionProcess.Instance.InitConnect(true);
     }
 
-    private VisualElement GetVisualElements(umi3d.common.interaction.form.Form form, FormAnswerDto to)
+    public void GetParameterDtos(umi3d.common.interaction.form.FormDto form, Action<FormAnswerDto> callback)
     {
-        var formElement = new VisualElement() { name = "form" };
-        if (form.Pages.Count == 0)
-        {
-            OpenErrorBox("Empty form received : No Page!");
-        }
-        else if (form.Pages.Count == 1)
-        {
-            formElement = GroupToVisualElement(form.Pages[0].Group);
-        }
-        else
-        {
-            var radioButtonGroup = new RadioButtonGroup();
-            radioButtonGroup.AddToClassList("menu-navigation");
-            formElement.Add(radioButtonGroup);
-
-            for (int i = 0; i < form.Pages.Count; i++)
-            {
-                umi3d.common.interaction.form.Page page = form.Pages[i];
-                var pageView = new VisualElement() { name = page.Name };
-                pageView.Add(GroupToVisualElement(page.Group));
-                formElement.Add(pageView);
-
-                var radioButton = new RadioButton(page.Name);
-                radioButton.RegisterValueChangedCallback(e =>
-                {
-                    if (e.newValue)
-                        pageView.RemoveFromClassList("hidden");
-                    else
-                        pageView.AddToClassList("hidden");
-                });
-                radioButtonGroup.Add(radioButton);
-
-                if (i == 0)
-                    radioButton.value = true;
-                else
-                    pageView.AddToClassList("hidden");
-
-            }
-        }
-        return formElement;
-    }
-
-    private VisualElement GroupToVisualElement(Group group)
-    {
-        var result = new VisualElement();
-        if (group == null) return new VisualElement() { name = "Group null" };
-        var children = group.Children;
-        if (children == null) return new VisualElement() { name = "Group Empty" };
-
-        foreach (var div in group.Children)
-        {
-            // Label
-            var label = div as umi3d.common.interaction.form.Label;
-            if (label != null)
-            {
-                result.Add(new Label(label.Text));
-                continue;
-            }
-
-            // Group
-            var childGroup = div as Group;
-            if (childGroup != null)
-                result.Add(GroupToVisualElement(childGroup));
-
-            // Inputs
-            switch (div)
-            {
-                case umi3d.common.interaction.form.Text text:
-                    var textElement = new TextField(text.Label);
-                    textElement.value = text.Value;
-                    textElement.SetPlaceholderText(text.PlaceHolder);
-                    textElement.isPasswordField = text.Type == TextType.Password;
-                    result.Add(textElement);
-                    break;
-                case umi3d.common.interaction.form.Button button:
-                    var buttonElement = new Button();
-                    buttonElement.text = button.Label;
-                    result.Add(buttonElement);
-                    break;
-                case umi3d.common.interaction.form.Range<int> rangeInt:
-                    break;
-                case umi3d.common.interaction.form.Range<float> rangeFloat:
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        return result;
+        _connectionScreen.GetParameterDtos(form, callback);
+        _navigationScreen.Hide();
+        _connectionScreen.Show();
     }
 }

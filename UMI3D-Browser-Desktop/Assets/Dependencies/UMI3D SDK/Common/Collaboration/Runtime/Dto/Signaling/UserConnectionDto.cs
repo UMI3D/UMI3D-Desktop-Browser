@@ -30,7 +30,7 @@ namespace umi3d.common.collaboration.dto.signaling
         /// <summary>
         /// Connection form as a set of parameters.
         /// </summary>
-        public interaction.form.Form parameters { get; set; }
+        public interaction.form.FormDto parameters { get; set; }
 
         /// <summary>
         /// State if the libraries have been updated

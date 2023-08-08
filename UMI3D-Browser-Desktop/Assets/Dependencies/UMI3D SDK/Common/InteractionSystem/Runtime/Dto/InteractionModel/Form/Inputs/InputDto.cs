@@ -1,6 +1,6 @@
 namespace umi3d.common.interaction.form
 {
-    public class Input<T> : BaseInput
+    public class InputDto<T> : BaseInputDto
     {
         public T Value { get; set; }
 

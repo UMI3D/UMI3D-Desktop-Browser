@@ -1,6 +1,6 @@
 namespace umi3d.common.interaction.form
 {
-    public class BaseInput : Div
+    public class BaseInputDto : DivDto
     {
         public string Label { get; set; }
 

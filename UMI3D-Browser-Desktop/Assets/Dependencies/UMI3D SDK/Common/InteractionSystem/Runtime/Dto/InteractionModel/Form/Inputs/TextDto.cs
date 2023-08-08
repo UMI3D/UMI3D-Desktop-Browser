@@ -1,6 +1,6 @@
 namespace umi3d.common.interaction.form
 {
-    public class Text : Input<string>
+    public class TextDto : InputDto<string>
     {
         public TextType Type { get; set; }
         public string PlaceHolder { get; set; }

@@ -87,7 +87,7 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         /// <param name="form"></param>
         /// <param name="sendLocalInfo">If true and if read access is true, Send the local info to server by http POST request.</param>
-        public static void CheckFormToUpdateAuthorizations(Form form, bool sendLocalInfo = true)
+        public static void CheckFormToUpdateAuthorizations(common.interaction.form.FormDto form, bool sendLocalInfo = true)
         {/*
             form.fields.ForEach(async param => 
                     {
