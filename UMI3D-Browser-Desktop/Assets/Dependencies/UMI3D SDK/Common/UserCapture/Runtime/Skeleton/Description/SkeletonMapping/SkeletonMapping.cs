@@ -15,8 +15,6 @@ limitations under the License.
 */
 
 
-using UnityEngine;
-
 namespace umi3d.common.userCapture.description
 {
     /// <summary>
@@ -52,15 +50,6 @@ namespace umi3d.common.userCapture.description
             if (Link == null)
                 UMI3DLogger.LogWarning("Skeleton Mapping Link is null.", DEBUG_SCOPE);
 
-           // Debug.Log((Link as GameNodeLink).transform != null);
-            if (((Link as GameNodeLink).transform) == null)
-            {
-                return new BoneDto()
-                {
-                    boneType = BoneType,
-                    rotation = Quaternion.identity.Dto()
-                };
-            }
             var computed = Link.Compute();
             Vector4Dto rotation = new Vector4Dto()
             {

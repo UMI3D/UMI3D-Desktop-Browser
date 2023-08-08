@@ -24,6 +24,7 @@ using umi3d.cdk.userCapture.pose;
 using umi3d.common;
 using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.interaction;
+using umi3d.common.interaction.form;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -163,14 +164,14 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         public class UserInfo
         {
-            public ConnectionFormDto formdto;
+            public common.interaction.form.Form formdto;
             public UserConnectionAnswerDto answerDto;
 
             public string AudioPassword;
 
             public UserInfo()
             {
-                formdto = new ConnectionFormDto();
+                formdto = new common.interaction.form.Form();
                 answerDto = new UserConnectionAnswerDto();
                 AudioPassword = null;
 

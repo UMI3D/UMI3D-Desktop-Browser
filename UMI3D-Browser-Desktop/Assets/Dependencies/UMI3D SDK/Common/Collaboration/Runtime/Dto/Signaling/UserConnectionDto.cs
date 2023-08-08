@@ -16,6 +16,7 @@ limitations under the License.
 
 using System;
 using umi3d.common.interaction;
+using umi3d.common.interaction.form;
 
 namespace umi3d.common.collaboration.dto.signaling
 {
@@ -29,7 +30,7 @@ namespace umi3d.common.collaboration.dto.signaling
         /// <summary>
         /// Connection form as a set of parameters.
         /// </summary>
-        public ConnectionFormDto parameters { get; set; }
+        public interaction.form.Form parameters { get; set; }
 
         /// <summary>
         /// State if the libraries have been updated

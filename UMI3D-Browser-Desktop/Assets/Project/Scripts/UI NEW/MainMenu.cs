@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using umi3d.baseBrowser.connection;
 using umi3d.common.interaction;
-using Unity.Burst.Intrinsics;
+using umi3d.common.interaction.form;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.Rendering.FilterWindow;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Button = UnityEngine.UIElements.Button;
+using Label = UnityEngine.UIElements.Label;
+using inetum.unityUtils;
 
 public class MainMenu : MonoBehaviour
 {
@@ -111,88 +115,89 @@ public class MainMenu : MonoBehaviour
         _errorBox.RemoveFromClassList("hidden");
     }
 
-    public void GetParameterDtos(ConnectionFormDto form, Action<FormAnswerDto> callback)
+    public void GetParameterDtos(umi3d.common.interaction.form.Form form, Action<FormAnswerDto> callback)
     {
+        Debug.Log("===== NEW FORM RECEIVED =====");
         if (form == null)
         {
             callback.Invoke(null);
+            Debug.Log("Form is null");
             return;
         }
-
-        Debug.Log("===== NEW FORM RECEIVED =====");
-        Debug.Log("Form name : " + form.name);
+        Debug.Log("Form name : " + form.Name);
 
         FormAnswerDto answer = new FormAnswerDto()
         {
             boneType = 0,
             hoveredObjectId = 0,
-            id = form.id,
+            id = form.Id,
             toolId = 0,
             answers = new List<ParameterSettingRequestDto>()
         };
 
-        if (form.name == "Connection")
-        {
-            ToLogin(GetVisualElements(form, answer), () => callback?.Invoke(answer));
-        }
+        ToLogin(GetVisualElements(form, answer), () => callback?.Invoke(answer));
     }
 
-    private List<VisualElement> GetVisualElements(ConnectionFormDto form, FormAnswerDto to)
+    private List<VisualElement> GetVisualElements(umi3d.common.interaction.form.Form form, FormAnswerDto to)
     {
         var result = new List<VisualElement>();
-        foreach (var item in form.fields)
+        foreach (var page in form.Pages)
         {
-            var requestDto = new ParameterSettingRequestDto()
-            {
-                toolId = form.id,
-                id = item.id,
-                parameter = item.GetValue(),
-                hoveredObjectId = 0
-            };
+            var pageView = new VisualElement() { name = page.Name };
+            Debug.Log("== Page : " + page.Name);
+            pageView.Add(GroupToVisualElement(page.Group));
 
-            switch (item)
+            result.Add(pageView);
+        }
+        return result;
+    }
+
+    private VisualElement GroupToVisualElement(Group group)
+    {
+        var result = new VisualElement();
+        if (group == null) return new VisualElement() { name = "Group null" };
+        var children = group.Children;
+        if (children == null) return new VisualElement() { name = "Group Empty" };
+
+        foreach (var div in group.Children)
+        {
+            // Label
+            var label = div as umi3d.common.interaction.form.Label;
+            if (label != null)
             {
-                case BooleanParameterDto booleanParameterDto:
-                    var toggle = new ToggleButton_C();
-                    toggle.name = item.name;
-                    toggle.label = item.name;
-                    toggle.RegisterValueChangedCallback(e =>
-                    {
-                        booleanParameterDto.value = e.newValue;
-                        requestDto.parameter = e.newValue;
-                    });
-                    result.Add(toggle);
+                result.Add(new Label(label.Text));
+                continue;
+            }
+
+            // Group
+            var childGroup = div as Group;
+            if (childGroup != null)
+                result.Add(GroupToVisualElement(childGroup));
+
+            // Inputs
+            switch (div)
+            {
+                case umi3d.common.interaction.form.Text text:
+                    var textElement = new TextField(text.Label);
+                    textElement.value = text.Value;
+                    textElement.SetPlaceholderText(text.PlaceHolder);
+                    textElement.isPasswordField = text.Type == TextType.Password;
+                    result.Add(textElement);
                     break;
-                case FloatRangeParameterDto floatRangeParameterDto:
-                    Debug.LogWarning("TODO Field : " + item.name + "(floatRange)");
+                case umi3d.common.interaction.form.Button button:
+                    var buttonElement = new Button();
+                    buttonElement.text = button.Label;
+                    result.Add(buttonElement);
                     break;
-                case EnumParameterDto<string> enumParameterDto:
-                    Debug.LogWarning("TODO Field : " + item.name + "(enum)");
+                case umi3d.common.interaction.form.Range<int> rangeInt:
                     break;
-                case StringParameterDto stringParameterDto:
-                    var text = new TextField();
-                    text.name = item.name;
-                    text.label = item.name;
-                    text.RegisterValueChangedCallback(e =>
-                    {
-                        stringParameterDto.value = e.newValue;
-                        requestDto.parameter = e.newValue;
-                    });
-                    if (text.name == "Password")
-                    {
-                        text.isPasswordField = true;
-                    }
-                    result.Add(text);
-                    break;
-                case LocalInfoRequestParameterDto localInfoRequestParameterDto:
-                    Debug.LogWarning("TODO Field : " + item.name + "(localInfo)");
+                case umi3d.common.interaction.form.Range<float> rangeFloat:
                     break;
                 default:
-                    Debug.LogError("Field not recognized : " + item.name);
                     break;
             }
-            to.answers.Add(requestDto);
         }
+
         return result;
     }
 }

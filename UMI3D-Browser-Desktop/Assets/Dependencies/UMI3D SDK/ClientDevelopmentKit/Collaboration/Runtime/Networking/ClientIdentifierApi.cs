@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using umi3d.common.interaction;
+using umi3d.common.interaction.form;
 using UnityEngine;
 
 namespace umi3d.cdk.collaboration
@@ -32,16 +33,41 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         /// <param name="parameter">FormDto to be filled.</param>
         /// <param name="callback">Action to return the completed FormDto.</param>
-        public virtual async Task<FormAnswerDto> GetParameterDtos(ConnectionFormDto parameter)
+        public virtual async Task<FormAnswerDto> GetParameterDtos(common.interaction.form.Form parameter)
         {
+            var answers = new List<ParameterSettingRequestDto>();
+            parameter.Pages.ForEach(page =>
+            {
+                answers.AddRange(GroupToParameterSettingRequestDto(page.Group));
+            });
             return await Task.FromResult(new FormAnswerDto()
             {
-                id = parameter.id,
+                id = parameter.Id,
                 toolId = 0,
                 boneType = 0,
                 hoveredObjectId = 0,
-                answers = parameter.fields.Select(a => new ParameterSettingRequestDto() { toolId = 0, id = a.id, boneType = 0, hoveredObjectId = 0, parameter = a.GetValue() }).ToList()
+                answers = answers
             });
+        }
+
+        private List<ParameterSettingRequestDto> GroupToParameterSettingRequestDto(Group pGroup)
+        {
+            var result = new List<ParameterSettingRequestDto>();
+
+            pGroup.Children.ForEach(div =>
+            {
+                var groupChild = div as Group;
+                if (groupChild != null) result.AddRange(GroupToParameterSettingRequestDto(groupChild));
+
+                var input = div as BaseInput;
+                if (input != null)
+                {
+                    var value = input.GetValue();
+                    result.Add(new ParameterSettingRequestDto() { id = input.Id, parameter = value });
+                }
+            });
+
+            return result;
         }
 
         /// <summary>

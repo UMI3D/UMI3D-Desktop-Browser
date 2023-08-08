@@ -16,7 +16,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace umi3d.common
@@ -144,6 +143,7 @@ namespace umi3d.common
         public static List<T> ReadList<T>(ByteContainer container)
         {
             byte listType = UMI3DSerializer.Read<byte>(container);
+
             switch (listType)
             {
                 case UMI3DObjectKeys.CountArray:
@@ -343,32 +343,6 @@ namespace umi3d.common
             yield break;
         }
 
-
-        static System.Reflection.MethodInfo _WriteIEnumerableMethodInfo;
-
-
-        static bool IsGenericIEnumerable(Type type)
-        {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-            {
-                return true;
-            }
-
-            var interfaces = type.GetInterfaces();
-            return interfaces.Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
-        }
-
-        static Type GetGenericTypeOfIEnumerable(Type type)
-        {
-            if (IsGenericIEnumerable(type))
-            {
-                return type.GetGenericArguments().Last();
-            }
-
-            var enumerableInterface = type.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
-            return enumerableInterface?.GetGenericArguments().Last();
-        }
-
         /// <summary>
         /// Get a bytable from a enumerable set of values of unknown type.
         /// </summary>
@@ -376,24 +350,7 @@ namespace umi3d.common
         /// <returns></returns>
         static Bytable WriteIEnumerable(IEnumerable value, params object[] parameters)
         {
-            if(_WriteIEnumerableMethodInfo == null)
-                _WriteIEnumerableMethodInfo = typeof(UMI3DSerializer).GetMethod("_WriteIEnumerable");
-
-            Type typeToPass = GetGenericTypeOfIEnumerable(value.GetType());
-            var genericMethod = _WriteIEnumerableMethodInfo.MakeGenericMethod(typeToPass);
-            return genericMethod.Invoke(null, new[] { value, parameters }) as Bytable;
-        }
-
-        /// <summary>
-        /// Call by reflection by the method above
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public static Bytable _WriteIEnumerable<T>(IEnumerable value, params object[] parameters)
-        {
-            return WriteCollection(value.Cast<T>(), parameters);
+            return WriteCollection(value.Cast<object>(), parameters);
         }
 
         /// <summary>
@@ -459,7 +416,6 @@ namespace umi3d.common
                 else if (!IsCountable<T>() || value.Any(e => !IsCountable(e)))
                     return ListToIndexesBytable(value, parameters);
             }
-
             Bytable b = Write(UMI3DObjectKeys.CountArray) + Write(value.Count());
             foreach (T v in value)
                 b += Write(v, parameters);

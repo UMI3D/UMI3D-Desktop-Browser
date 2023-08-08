@@ -24,9 +24,9 @@ namespace umi3d.baseBrowser.connection
     public class BaseClientIdentifier : cdk.collaboration.ClientIdentifierApi
     {
         public Action<List<string>, Action<bool>> ShouldDownloadLib;
-        public Action<common.interaction.ConnectionFormDto, Action<common.interaction.FormAnswerDto>> GetParameters;
+        public Action<umi3d.common.interaction.form.Form, Action<common.interaction.FormAnswerDto>> GetParameters;
 
-        public override async Task<common.interaction.FormAnswerDto> GetParameterDtos(common.interaction.ConnectionFormDto parameter)
+        public override async Task<common.interaction.FormAnswerDto> GetParameterDtos(umi3d.common.interaction.form.Form parameter)
         {
             bool b = true;
             common.interaction.FormAnswerDto form = null;

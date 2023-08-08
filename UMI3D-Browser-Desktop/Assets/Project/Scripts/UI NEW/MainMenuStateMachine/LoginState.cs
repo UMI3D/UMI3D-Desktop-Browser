@@ -36,17 +36,10 @@ public class LoginState : MenuState
     public override void SetData(List<VisualElement> elements, Action callback)
     {
         _machine.ConnectionScreen.Clear();
-        var currentForm = _machine.ConnectionScreen.LoginForm;
         _machine.ConnectionScreen.PinButton.AddToClassList("hidden");
         foreach (var element in elements)
         {
-            if (element.name.ToLower() == "or") 
-            {
-                currentForm = _machine.ConnectionScreen.PinForm;
-                _machine.ConnectionScreen.PinButton.RemoveFromClassList("hidden");
-                continue;
-            }
-            currentForm.Add(element);
+            _machine.ConnectionScreen.LoginForm.Add(element);
         }
         _machine.ConnectionScreen.Next.clicked += callback;
     }

@@ -78,8 +78,10 @@ namespace umi3d.baseBrowser.connection
         /// </summary>
         /// <param name="form"></param>
         /// <param name="callback"></param>
-        protected void GetParameterDtos(common.interaction.ConnectionFormDto form, System.Action<common.interaction.FormAnswerDto> callback)
+        protected void GetParameterDtos(umi3d.common.interaction.form.Form form, System.Action<common.interaction.FormAnswerDto> callback)
         {
+            Debug.LogError("Changed of form");
+            /*
             Loader.CurrentScreen = LoaderScreens.Form;
 
             if (form == null) callback.Invoke(null);
@@ -131,7 +133,7 @@ namespace umi3d.baseBrowser.connection
                 Form.Buttond_Submit.Focus();
                 Form.Buttond_Submit.Blur();
                 if (FormContainer.Count() >= 1 && FormContainer[0] is TextfieldDisplayer textfield) textfield.Focus();
-            }
+            }*/
         }
     }
 }

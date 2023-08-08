@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using umi3d.common;
 using umi3d.common.interaction;
+using umi3d.common.interaction.form;
 using UnityEngine;
 
 
@@ -86,8 +87,8 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         /// <param name="form"></param>
         /// <param name="sendLocalInfo">If true and if read access is true, Send the local info to server by http POST request.</param>
-        public static void CheckFormToUpdateAuthorizations(ConnectionFormDto form, bool sendLocalInfo = true)
-        {
+        public static void CheckFormToUpdateAuthorizations(Form form, bool sendLocalInfo = true)
+        {/*
             form.fields.ForEach(async param => 
                     {
                         if (param is LocalInfoRequestParameterDto)
@@ -119,7 +120,7 @@ namespace umi3d.cdk.collaboration
                                 }
                             }
                         }
-                    });
+                    });*/
         }
     }
 }
