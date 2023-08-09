@@ -4,6 +4,7 @@ using umi3d.common.interaction;
 using UnityEngine;
 using UnityEngine.UIElements;
 using umi3d.baseBrowser.preferences;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
@@ -64,6 +65,12 @@ public class MainMenu : MonoBehaviour
         BaseConnectionProcess.Instance.ConnectionSucces += e => BaseConnectionProcess.Instance.GetParameterDtos += GetParameterDtos;
         BaseConnectionProcess.Instance.ConnectionInitializationFailled +=
             url => OpenErrorBox($"Browser was not able to connect to \n\n\"{url}\"");
+
+        BaseConnectionProcess.Instance.LoadingLauncher += (media) =>
+        {
+            Debug.Log("LOADING");
+            SceneManager.LoadScene("Environment");
+        };
 
         await BaseConnectionProcess.Instance.InitConnect(true);
     }
