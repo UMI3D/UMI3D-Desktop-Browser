@@ -77,7 +77,6 @@ namespace umi3d.cdk.collaboration
         public UMI3DWorldControllerClient(MediaDto media, GateDto gate = null, string globalToken = null)
         {
             logger = new UMI3DClientLogger(mainTag: nameof(UMI3DWorldControllerClient));
-            logger.Debug($"{nameof(UMI3DWorldControllerClient)}", $"Creation of a {nameof(UMI3DWorldControllerClient)}.");
 
             this.media = media;
             this.gate = gate;
@@ -90,7 +89,11 @@ namespace umi3d.cdk.collaboration
 
         static string mediaDtoURL;
 
-        public static IEnumerator RequestMediaDto(string RawURL, Action<MediaDto> requestSucced, Action<int> requestFailed, Func<bool> shouldCleanAbort, int tryCount = 0)
+        public static IEnumerator RequestMediaDto(
+            string RawURL, 
+            Action<MediaDto> requestSucced, Action<int> requestFailed, Func<bool> shouldCleanAbort, 
+            int tryCount = 0
+        )
         {
             if (shouldCleanAbort?.Invoke() ?? false)
             {
@@ -131,7 +134,7 @@ namespace umi3d.cdk.collaboration
 
                     string json = System.Text.Encoding.UTF8.GetString(uwr.downloadHandler.data);
                     requestSucced?.Invoke(UMI3DDtoSerializer.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None));
-                    s_logger.Default($"{nameof(RequestMediaDto)}", $"Request is a success.");
+                    s_logger.Default($"{nameof(RequestMediaDto)}", $"Request at: {RawURL} is a success.");
                     tabReporter.Clear();
                     assertReporter.Clear();
                 },
