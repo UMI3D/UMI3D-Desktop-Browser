@@ -36,7 +36,7 @@ namespace umi3d.baseBrowser.connection
 
         [SerializeField]
         UMI3DClientLogger logger;
-        UMI3DLogReport initConnectionReport;
+        //UMI3DLogReport initConnectionReport;
 
         #region Data
         [HideInInspector]
@@ -45,10 +45,10 @@ namespace umi3d.baseBrowser.connection
         public List<preferences.ServerPreferences.ServerData> savedServers;
         [HideInInspector]
         public preferences.ServerPreferences.Data currentConnectionData;
-        [HideInInspector]
-        public cdk.collaboration.MasterServerLauncher masterServer;
-        [HideInInspector]
-        public common.MediaDto mediaDto;
+        //[HideInInspector]
+        //public MasterServerLauncher masterServer;
+        //[HideInInspector]
+        //public MediaDto mediaDto;
 
         [HideInInspector]
         public BaseClientIdentifier Identifier;
@@ -60,24 +60,24 @@ namespace umi3d.baseBrowser.connection
         {
             base.Awake();
             logger = new UMI3DClientLogger(mainTag: nameof(BaseConnectionProcess), mainContext: Instance, isThreadDisplayed: true);
-            initConnectionReport = logger.GetReporter("InitConnection");
+            //initConnectionReport = logger.GetReporter("InitConnection");
 
             currentServer = preferences.ServerPreferences.GetPreviousServerData() ?? new preferences.ServerPreferences.ServerData();
             currentConnectionData = preferences.ServerPreferences.GetPreviousConnectionData() ?? new preferences.ServerPreferences.Data();
             savedServers = preferences.ServerPreferences.GetRegisteredServerData() ?? new List<preferences.ServerPreferences.ServerData>();
-            masterServer = new MasterServerLauncher();
-            masterServer.requestInfSucceded += info =>
-            {
-                if (connectionTokenSource.IsCancellationRequested)
-                {
-                    return;
-                }
+            //masterServer = new MasterServerLauncher();
+            //masterServer.requestInfSucceded += info =>
+            //{
+            //    if (connectionTokenSource.IsCancellationRequested)
+            //    {
+            //        return;
+            //    }
 
-                currentServer.serverName = info.serverName;
-                currentServer.serverIcon = info.icon;
-                preferences.ServerPreferences.StoreUserData(currentServer);
-                StoreServer();
-            };
+            //    currentServer.serverName = info.serverName;
+            //    currentServer.serverIcon = info.icon;
+            //    preferences.ServerPreferences.StoreUserData(currentServer);
+            //    StoreServer();
+            //};
 
             Identifier = Resources.Load<BaseClientIdentifier>("Scriptables/Connections/BaseClientIdentifier");
             Identifier.ShouldDownloadLib = ShouldDownloadLibraries;
@@ -158,152 +158,151 @@ namespace umi3d.baseBrowser.connection
             LoadedLauncher = null;
         }
 
-        enum ConnectionState
-        {
-            Iddle,
-            Processing,
-            Succes,
-            Fail
-        }
+        //enum ConnectionState
+        //{
+        //    Iddle,
+        //    Processing,
+        //    Succes,
+        //    Fail
+        //}
 
-        // Connection token.
-        CancellationTokenSource connectionTokenSource;
+        //// Connection token.
+        //CancellationTokenSource connectionTokenSource;
 
-        ConnectionState mediaDtoState;
-        // Media dto token.
-        CancellationTokenSource mediaDtoTokenSource;
-        // Media dto coroutine.
-        Coroutine requestMediaDtoCoroutine;
+        //ConnectionState mediaDtoState;
+        //// Media dto token.
+        //CancellationTokenSource mediaDtoTokenSource;
+        //// Media dto coroutine.
+        //Coroutine requestMediaDtoCoroutine;
 
-        ConnectionState masterServerState;
-        // Master server token
-        CancellationTokenSource masterServerTokenSource;
+        //ConnectionState masterServerState;
+        //// Master server token
+        //CancellationTokenSource masterServerTokenSource;
 
         // Scene coroutine
-        Coroutine LoadGameSceneCoroutine;
-        readonly object lockObj = new object();
+        //Coroutine LoadGameSceneCoroutine;
 
-        /// <summary>
-        /// Initiates the connection, if a connection is already in process return.
-        /// 
-        /// <para>
-        /// There is two types of connection to an environment in UMI3D for now:
-        /// <list type="bullet">
-        /// <item>Via a master server.</item>
-        /// <item>Via a world controller.</item>
-        /// </list>
-        /// </para>
-        /// </summary>
-        public void InitConnect(bool saveInfo = false)
-        {
-            logger.DebugTab(
-                "InitConnection",
-                new[]
-                {
-                    new UMI3DLogCell(
-                        "URL",
-                        currentServer.serverUrl,
-                        40
-                    ),
-                    new UMI3DLogCell(
-                        "SaveInfo",
-                        saveInfo,
-                        10
-                    ),
-                },
-                report: initConnectionReport
-            );
+        ///// <summary>
+        ///// Initiates the connection, if a connection is already in process return.
+        ///// 
+        ///// <para>
+        ///// There is two types of connection to an environment in UMI3D for now:
+        ///// <list type="bullet">
+        ///// <item>Via a master server.</item>
+        ///// <item>Via a world controller.</item>
+        ///// </list>
+        ///// </para>
+        ///// </summary>
+        //public void InitConnect(bool saveInfo = false)
+        //{
+        //    logger.DebugTab(
+        //        "InitConnection",
+        //        new[]
+        //        {
+        //            new UMI3DLogCell(
+        //                "URL",
+        //                currentServer.serverUrl,
+        //                40
+        //            ),
+        //            new UMI3DLogCell(
+        //                "SaveInfo",
+        //                saveInfo,
+        //                10
+        //            ),
+        //        },
+        //        report: initConnectionReport
+        //    );
 
-            // Generic connection data.
-            connectionTokenSource?.Cancel();
+        //    // Generic connection data.
+        //    connectionTokenSource?.Cancel();
 
-            connectionTokenSource = new CancellationTokenSource();
-            var connectionToken = connectionTokenSource.Token;
+        //    connectionTokenSource = new CancellationTokenSource();
+        //    var connectionToken = connectionTokenSource.Token;
 
-            // Media dto data and request.
-            mediaDtoTokenSource?.Cancel();
+        //    // Media dto data and request.
+        //    mediaDtoTokenSource?.Cancel();
 
-            mediaDtoState = ConnectionState.Processing;
-            mediaDtoTokenSource = new CancellationTokenSource();
-            CancellationToken mediaDtoToken = mediaDtoTokenSource.Token;
+        //    mediaDtoState = ConnectionState.Processing;
+        //    mediaDtoTokenSource = new CancellationTokenSource();
+        //    CancellationToken mediaDtoToken = mediaDtoTokenSource.Token;
             
-            requestMediaDtoCoroutine = StartCoroutine(UMI3DWorldControllerClient.RequestMediaDto(
-                currentServer.serverUrl, 
-                requestSucced: mediaDto =>
-                {
-                    mediaDtoState = ConnectionState.Succes;
-                    masterServerTokenSource.Cancel();
-                    this.mediaDto = mediaDto;
-                },
-                requestFailed: tryCount =>
-                {
-                    if (tryCount >= 3)
-                    {
-                        mediaDtoTokenSource.Cancel();
-                        mediaDtoState = ConnectionState.Fail;
-                    }
-                },
-                shouldCleanAbort: () =>
-                {
-                    return mediaDtoToken.IsCancellationRequested || connectionToken.IsCancellationRequested;
-                }
-            ));
+        //    requestMediaDtoCoroutine = StartCoroutine(UMI3DWorldControllerClient.RequestMediaDto(
+        //        currentServer.serverUrl, 
+        //        requestSucced: mediaDto =>
+        //        {
+        //            mediaDtoState = ConnectionState.Succes;
+        //            masterServerTokenSource.Cancel();
+        //            this.mediaDto = mediaDto;
+        //        },
+        //        requestFailed: tryCount =>
+        //        {
+        //            if (tryCount >= 3)
+        //            {
+        //                mediaDtoTokenSource.Cancel();
+        //                mediaDtoState = ConnectionState.Fail;
+        //            }
+        //        },
+        //        shouldCleanAbort: () =>
+        //        {
+        //            return mediaDtoToken.IsCancellationRequested || connectionToken.IsCancellationRequested;
+        //        }
+        //    ));
 
-            // Master server data and request.
-            masterServerTokenSource?.Cancel();
+        //    // Master server data and request.
+        //    masterServerTokenSource?.Cancel();
 
-            masterServerState = ConnectionState.Processing;
-            masterServerTokenSource = new CancellationTokenSource();
-            CancellationToken masterServerToken = masterServerTokenSource.Token;
+        //    masterServerState = ConnectionState.Processing;
+        //    masterServerTokenSource = new CancellationTokenSource();
+        //    CancellationToken masterServerToken = masterServerTokenSource.Token;
 
-            masterServerState = ConnectionState.Processing;
-            masterServer.connectFailed += () =>
-            {
-                masterServerState = ConnectionState.Fail;
-                masterServerTokenSource.Cancel();
-            };
-            masterServer.connectSucceded += () =>
-            {
-                masterServerState = ConnectionState.Succes;
-                mediaDtoTokenSource.Cancel();
+        //    masterServerState = ConnectionState.Processing;
+        //    masterServer.connectFailed += () =>
+        //    {
+        //        masterServerState = ConnectionState.Fail;
+        //        masterServerTokenSource.Cancel();
+        //    };
+        //    masterServer.connectSucceded += () =>
+        //    {
+        //        masterServerState = ConnectionState.Succes;
+        //        mediaDtoTokenSource.Cancel();
 
-                masterServer.RequestInfo(
-                    requestFailed: () =>
-                    {
-                        masterServerTokenSource.Cancel();
-                    }
-                );
+        //        masterServer.RequestInfo(
+        //            requestFailed: () =>
+        //            {
+        //                masterServerTokenSource.Cancel();
+        //            }
+        //        );
 
-                DisplaySessions?.Invoke();
-            };
-            masterServer.ConnectAsync(
-                currentServer.serverUrl
-            );
+        //        DisplaySessions?.Invoke();
+        //    };
+        //    masterServer.ConnectAsync(
+        //        currentServer.serverUrl
+        //    );
 
-            var loadingReport = logger.GetReporter("loading");
-            loadingReport.Clear();
-            LoadGameSceneCoroutine = CoroutineManager.Instance.AttachCoroutine(LoadGameScene(
-                isConnectionInProgress: () =>
-                {
-                    bool result = mediaDtoState != ConnectionState.Succes;
+        //    var loadingReport = logger.GetReporter("loading");
+        //    loadingReport.Clear();
+        //    LoadGameSceneCoroutine = CoroutineManager.Instance.AttachCoroutine(LoadGameScene(
+        //        isConnectionInProgress: () =>
+        //        {
+        //            bool result = mediaDtoState != ConnectionState.Succes;
 
-                    if (!result)
-                    {
-                        mediaDtoState = ConnectionState.Iddle;
-                        masterServerState = ConnectionState.Iddle;
-                        ConnectionInitialized?.Invoke(currentServer.serverUrl);
-                    }
+        //            if (!result)
+        //            {
+        //                mediaDtoState = ConnectionState.Iddle;
+        //                masterServerState = ConnectionState.Iddle;
+        //                ConnectionInitialized?.Invoke(currentServer.serverUrl);
+        //            }
 
-                    return result;
-                },
+        //            return result;
+        //        },
 
-                shouldStopLoading: () =>
-                {
-                    return connectionToken.IsCancellationRequested || mediaDtoState == ConnectionState.Fail;
-                },
-                report: loadingReport
-            ));
-        }
+        //        shouldStopLoading: () =>
+        //        {
+        //            return connectionToken.IsCancellationRequested || mediaDtoState == ConnectionState.Fail;
+        //        },
+        //        report: loadingReport
+        //    ));
+        //}
 
         protected void StoreServer()
         {
@@ -312,72 +311,72 @@ namespace umi3d.baseBrowser.connection
             preferences.ServerPreferences.StoreRegisteredServerData(savedServers);
         }
 
-        IEnumerator LoadGameScene(
-            Func<bool> isConnectionInProgress, Func<bool> shouldStopLoading,
-            UMI3DLogReport report = null
-        )
-        {
-            logger.Debug($"{nameof(LoadGameScene)}", $"Start {nameof(LoadGameScene)}: wait until media dto or master server is found.", report: report);
-            while (isConnectionInProgress?.Invoke() ?? false)
-            {
-                if (shouldStopLoading?.Invoke() ?? false)
-                {
-                    logger.Debug($"{nameof(LoadGameScene)}", $"Stop loading before it started.");
-                    ConnectionInitializationFailled?.Invoke(currentServer.serverUrl);
-                    yield break;
-                }
+        //IEnumerator LoadGameScene(
+        //    Func<bool> isConnectionInProgress, Func<bool> shouldStopLoading,
+        //    UMI3DLogReport report = null
+        //)
+        //{
+        //    logger.Debug($"{nameof(LoadGameScene)}", $"Start {nameof(LoadGameScene)}: wait until media dto or master server is found.", report: report);
+        //    while (isConnectionInProgress?.Invoke() ?? false)
+        //    {
+        //        if (shouldStopLoading?.Invoke() ?? false)
+        //        {
+        //            logger.Debug($"{nameof(LoadGameScene)}", $"Stop loading before it started.");
+        //            ConnectionInitializationFailled?.Invoke(currentServer.serverUrl);
+        //            yield break;
+        //        }
 
-                yield return null;
-            }
+        //        yield return null;
+        //    }
 
-            var progressReport = logger.GetReporter("progress");
-            UMI3DClientSceneManager.LoadSceneAsync(
-                GamePanelScene,
+        //    var progressReport = logger.GetReporter("progress");
+        //    UMI3DClientSceneManager.LoadSceneAsync(
+        //        GamePanelScene,
 
-                shouldStopLoading,
+        //        shouldStopLoading,
 
-                loadingProgress: LoadingEnvironment != null
-                ? LoadingEnvironment
-                : progress =>
-                {
-                    logger.Debug($"{nameof(UMI3DClientSceneManager.LoadSceneAsync)}", $"Loading progress: {progress}", report: progressReport);
-                },
+        //        loadingProgress: LoadingEnvironment != null
+        //        ? LoadingEnvironment
+        //        : progress =>
+        //        {
+        //            logger.Debug($"{nameof(UMI3DClientSceneManager.LoadSceneAsync)}", $"Loading progress: {progress}", report: progressReport);
+        //        },
 
-                loadingSucced: () =>
-                {
-                    UMI3DClientSceneManager.UnloadSceneAsync(
-                        LauncherPanelScene,
-                        unloadingProgress: null,
-                        unloadingSucced: null
-                    );
+        //        loadingSucced: () =>
+        //        {
+        //            UMI3DClientSceneManager.UnloadSceneAsync(
+        //                LauncherPanelScene,
+        //                unloadingProgress: null,
+        //                unloadingSucced: null
+        //            );
 
-                    logger.Assert(UMI3DEnvironmentLoader.Exists, $"{nameof(LoadGameScene)}", $"UMI3DEnvironmentLoader does not exist.");
-                    UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => LoadedEnvironment?.Invoke());
+        //            logger.Assert(UMI3DEnvironmentLoader.Exists, $"{nameof(LoadGameScene)}", $"UMI3DEnvironmentLoader does not exist.");
+        //            UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => LoadedEnvironment?.Invoke());
 
-                    logger.Assert(UMI3DCollaborationClientServer.Exists, $"{nameof(LoadGameScene)}", $"UMI3DCollaborationClientServer does not exist.");
-                    UMI3DCollaborationClientServer.Instance.Clear();
+        //            logger.Assert(UMI3DCollaborationClientServer.Exists, $"{nameof(LoadGameScene)}", $"UMI3DCollaborationClientServer does not exist.");
+        //            UMI3DCollaborationClientServer.Instance.Clear();
 
-                    try
-                    {
-                        logger.Assert(mediaDto != null, $"{nameof(LoadGameScene)}", "Media dto null when loading game scene.");
-                        UMI3DCollaborationClientServer.Connect(mediaDto, s => ConnectionFail?.Invoke(s));
-                        ConnectionSucces?.Invoke(mediaDto);
-                    }
-                    catch (System.Exception e)
-                    {
-                        ConnectionFail?.Invoke(e.Message);
-                    }
-                },
+        //            try
+        //            {
+        //                logger.Assert(mediaDto != null, $"{nameof(LoadGameScene)}", "Media dto null when loading game scene.");
+        //                UMI3DCollaborationClientServer.Connect(mediaDto, s => ConnectionFail?.Invoke(s));
+        //                ConnectionSucces?.Invoke(mediaDto);
+        //            }
+        //            catch (System.Exception e)
+        //            {
+        //                ConnectionFail?.Invoke(e.Message);
+        //            }
+        //        },
 
-                loadingFail: () =>
-                {
-                    report.Report();
-                    progressReport.Report();
-                },
-                report: report
-            );
+        //        loadingFail: () =>
+        //        {
+        //            report.Report();
+        //            progressReport.Report();
+        //        },
+        //        report: report
+        //    );
 
-        }
+        //}
 
         #endregion
 
