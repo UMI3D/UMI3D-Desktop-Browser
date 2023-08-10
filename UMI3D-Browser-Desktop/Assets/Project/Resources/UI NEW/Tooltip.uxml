@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Tooltip" style="background-color: rgba(31, 31, 31, 255); flex-grow: 0; flex-shrink: 1; position: absolute;">
+        <ui:VisualElement style="width: 24px; height: 24px; position: absolute; rotate: 45deg; top: 24px; left: 12px; background-color: rgb(31, 31, 31);" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" name="Message" style="font-size: 16px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 8px; margin-right: 8px; margin-top: 8px; margin-bottom: 8px;" />
+    </ui:VisualElement>
+</ui:UXML>

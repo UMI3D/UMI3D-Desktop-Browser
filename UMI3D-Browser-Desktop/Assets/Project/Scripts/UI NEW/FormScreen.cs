@@ -88,7 +88,7 @@ public class FormScreen : BaseScreen
         if (group == null) return new VisualElement() { name = "Group null" };
         if (group.Children == null) return new VisualElement() { name = "Group Empty" };
 
-        VisualElement result = CreateGroupe(group, answers, callback);
+        VisualElement result = CreateGroup(group, answers, callback);
 
         foreach (var div in group.Children)
         {
@@ -98,7 +98,7 @@ public class FormScreen : BaseScreen
         return result;
     }
 
-    private VisualElement CreateGroupe(GroupDto group, FormAnswerDto answers, Action<FormAnswerDto> callback)
+    private VisualElement CreateGroup(GroupDto group, FormAnswerDto answers, Action<FormAnswerDto> callback)
     {
         var result = new VisualElement();
         switch (group)
@@ -201,6 +201,17 @@ public class FormScreen : BaseScreen
                 break;
             default:
                 break;
+        }
+        if (baseInput.Tooltip != null) 
+        {
+            result.RegisterCallback<MouseEnterEvent>(e =>
+            {
+                ShowTooltip(result, baseInput.Tooltip);
+            });
+            result.RegisterCallback<MouseLeaveEvent>(e =>
+            {
+                HideTooltip();
+            });
         }
 
         answers.answers.Add(requestDto);

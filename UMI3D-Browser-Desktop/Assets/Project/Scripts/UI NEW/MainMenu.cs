@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using umi3d.baseBrowser.preferences;
 using UnityEngine.SceneManagement;
+using inetum.unityUtils;
 
 public class MainMenu : MonoBehaviour
 {
