@@ -6,6 +6,7 @@ namespace umi3d.common.interaction.form
     }
     public enum ButtonType
     {
+        None,
         Submit,
         Reset,
         Cancel,

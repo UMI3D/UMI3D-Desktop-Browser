@@ -84,67 +84,122 @@ public class FormScreen : BaseScreen
         if (group == null) return new VisualElement() { name = "Group null" };
         if (group.Children == null) return new VisualElement() { name = "Group Empty" };
 
-        var result = new VisualElement();
+        VisualElement result = CreateGroupe(group);
+
         foreach (var div in group.Children)
         {
-            // Label
-            if (div is LabelDto label)
-            {
-                result.Add(new Label(label.Text));
-                continue;
-            }
-
-            // Group
-            if (div is GroupDto childGroup)
-                result.Add(GetGroupVisualElement(childGroup, answers, callback));
-
-            // Inputs
-            if (div is BaseInputDto baseInputDto)
-            {
-                var requestDto = new ParameterSettingRequestDto()
-                {
-                    toolId = baseInputDto.Id,
-                    id = baseInputDto.Id,
-                    parameter = baseInputDto.GetValue()
-                };
-                switch (baseInputDto)
-                {
-                    case TextDto text:
-                        // Field
-                        var textElement = new TextField(text.Label);
-                        textElement.value = text.Value;
-                        textElement.SetPlaceholderText(text.PlaceHolder);
-                        textElement.isPasswordField = text.Type == TextType.Password;
-                        result.Add(textElement);
-                        // Answer
-                        textElement.RegisterValueChangedCallback(e =>
-                        {
-                            requestDto.parameter = text.Value;
-                        });
-                        break;
-                    case ButtonDto button:
-                        var buttonElement = new Button
-                        {
-                            text = button.Label
-                        };
-                        result.Add(buttonElement);
-                        if (button.Type == umi3d.common.interaction.form.ButtonType.Submit)
-                        {
-                            buttonElement.clicked += () => callback(answers);
-                            break;
-                        }
-                        break;
-                    case RangeDto<int> rangeInt:
-                        break;
-                    case RangeDto<float> rangeFloat:
-                        break;
-                    default:
-                        break;
-                }
-                answers.answers.Add(requestDto);
-            }
+            result.Add(CreateGroupElement(div, answers, callback));
         }
 
         return result;
+    }
+
+    private static VisualElement CreateGroupe(GroupDto group)
+    {
+        switch (group)
+        {
+            case GroupScrollViewDto scrollView:
+                var scrollViewElement = new ScrollView();
+                scrollViewElement.mode = scrollView.Mode;
+                return scrollViewElement;
+            default:
+                return new VisualElement();
+        }
+    }
+
+    private VisualElement CreateGroupElement(DivDto div, FormAnswerDto answers, Action<FormAnswerDto> callback)
+    {
+        var result = new VisualElement();
+        switch (div)
+        {
+            case LabelDto label:
+                var labelElement = new Label(label.Text);
+                result = labelElement;
+                SetServerStyle(labelElement, label.Styles);
+                break;
+            case GroupDto childGroup:
+                result.Add(GetGroupVisualElement(childGroup, answers, callback));
+                break;
+            case BaseInputDto baseInput:
+                result = CreateInputElement(baseInput, answers, callback);
+                break;
+            default:
+                break;
+        }
+        return result;
+    }
+
+    private VisualElement CreateInputElement(BaseInputDto baseInput, FormAnswerDto answers, Action<FormAnswerDto> callback)
+    {
+        VisualElement result = new VisualElement();
+        var requestDto = new ParameterSettingRequestDto()
+        {
+            toolId = baseInput.Id,
+            id = baseInput.Id,
+            parameter = baseInput.GetValue()
+        };
+        switch (baseInput)
+        {
+            case TextDto text:
+                // Field
+                var textElement = new TextField(text.Label);
+                SetServerStyle(textElement, text.Styles);
+                textElement.value = text.Value;
+                textElement.SetPlaceholderText(text.PlaceHolder);
+                textElement.isPasswordField = text.Type == TextType.Password;
+                result = textElement;
+                // Answer
+                textElement.RegisterValueChangedCallback(e =>
+                {
+                    requestDto.parameter = text.Value;
+                });
+                break;
+            case ButtonDto button:
+                var buttonElement = new Button
+                {
+                    text = button.Label
+                };
+                SetServerStyle(buttonElement, button.Styles);
+                if (button.Type == umi3d.common.interaction.form.ButtonType.Submit)
+                {
+                    buttonElement.clicked += () => callback(answers);
+                    break;
+                }
+                result = buttonElement;
+                break;
+            case RangeDto<int> rangeInt:
+                break;
+            case RangeDto<float> rangeFloat:
+                break;
+            default:
+                break;
+        }
+
+        answers.answers.Add(requestDto);
+        return result;
+    }
+
+    private void SetServerStyle(VisualElement element, List<StyleDto> styles) 
+    {
+        if (styles == null) return;
+
+        foreach (var style in styles)
+        {
+            switch (style)
+            {
+                case FlexStyleDto flex:
+                    element.style.flexDirection = flex.Direction;
+                    break;
+                case PositionStyleDto position:
+                    element.style.position = position.Position;
+                    element.style.top = position.Top;
+                    element.style.bottom = position.Bottom;
+                    element.style.right = position.Right;
+                    element.style.left = position.Left;
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
