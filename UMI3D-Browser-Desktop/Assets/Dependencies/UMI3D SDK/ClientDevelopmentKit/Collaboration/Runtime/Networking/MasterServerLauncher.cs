@@ -18,6 +18,8 @@ using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.SimpleJSON;
 using inetum.unityUtils;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using umi3d.common;
 
 namespace umi3d.cdk.collaboration
@@ -27,6 +29,8 @@ namespace umi3d.cdk.collaboration
     /// </summary>
     public class MasterServerLauncher
     {
+        const string requestInfoKey = "info";
+
         private const DebugScope scope = DebugScope.CDK | DebugScope.Collaboration;
         UMI3DClientLogger logger = new UMI3DClientLogger(mainTag: $"{nameof(MasterServerLauncher)}");
 
@@ -35,64 +39,54 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         private static TCPMasterClient client = new TCPMasterClient();
 
+        #region Events
+
         /// <summary>
-        /// Event raise when the connection fail.
+        /// Event raise when the connection failed.
         /// </summary>
         public event Action connectFailed;
 
         /// <summary>
-        /// Event raise when the connection succed.
+        /// Event raise when the connection succeeded.
         /// </summary>
-        public event Action connectSucceded;
+        public event Action connectSucceeded;
 
         /// <summary>
-        /// Event raise when a request info succed.
+        /// Event raise when a request info has succeeded.
         /// </summary>
-        public event Action<(string serverName, string icon)> requestInfSucceded;
+        public event Action<(string serverName, string icon)> requestInfSucceeded;
+
+        #endregion
+
+        Dictionary<string, (NetworkingPlayer player, BeardedManStudios.Forge.Networking.Frame.Text frame, NetWorker sender)> request = new Dictionary<string, (NetworkingPlayer player, BeardedManStudios.Forge.Networking.Frame.Text frame, NetWorker sender)>();
 
         public MasterServerLauncher()
         {
-            // Send the request to the server
-            client.textMessageReceived += (NetworkingPlayer player, BeardedManStudios.Forge.Networking.Frame.Text frame, NetWorker sender) =>
-            {
-                try
-                {
-                    // Get the list of hosts to iterate through from the frame payload
-                    var data = JSONNode.Parse(frame.ToString());
-                    if (data["name"] != null)
-                    {
-                        requestInfSucceded.Invoke((
-                                serverName: data["name"], 
-                                icon: data["icon"]
-                        ));
-                    }
-                }
-                catch (Exception e)
-                {
-                    UMI3DLogger.LogException(e, scope);
-                    client?.Disconnect(true);
-                }
-            };
         }
 
         /// <summary>
         /// Try to connect to a master server asyncronously.
         /// 
         /// <para>
-        /// The connection is established in another thread. The <see cref="connectFailed"/> and <see cref="connectSucceded"/> events are raised in the main-thread.
+        /// The connection is established in another thread. The <see cref="connectFailed"/> and <see cref="connectSucceeded"/> events are raised in the main-thread.
         /// </para>
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
         public AsyncOperation ConnectAsync(string url)
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                return null;
+            }
+
             var asyncOperation = new AsyncOperation();
 
             asyncOperation.completed += operation =>
             {
                 if (client.IsConnected)
                 {
-                    connectSucceded?.Invoke();
+                    connectSucceeded?.Invoke();
                 }
                 else
                 {
@@ -126,7 +120,7 @@ namespace umi3d.cdk.collaboration
         }
 
         /// <summary>
-        /// Get the requested information about this master server.
+        /// Get the requested information about this master server asyncronously.
         /// 
         /// <para>
         /// The request is performed in another thread.
@@ -141,12 +135,53 @@ namespace umi3d.cdk.collaboration
             }
 
             var asyncOperation = new AsyncOperation();
+
+            asyncOperation.completed += asyncOp =>
+            {
+                try
+                {
+                    if (!request.TryGetValue(requestInfoKey, out var response))
+                    {
+
+                    }
+
+                    // Get the list of hosts to iterate through from the frame payload
+                    var data = JSONNode.Parse(response.frame.ToString());
+                    if (data["name"] != null)
+                    {
+                        requestInfSucceeded.Invoke((
+                                serverName: data["name"],
+                                icon: data["icon"]
+                        ));
+                    }
+                }
+                catch (Exception e)
+                {
+                    UMI3DLogger.LogException(e, scope);
+                    client?.Disconnect(true);
+                    MasterServerException.LogException(
+                        "Trying to get the received information cause an exception.", 
+                        inner: e, 
+                        MasterServerException.ExceptionTypeEnum.ReceiveEcxeption
+                    );
+                }
+            };
+
             asyncOperation.Start(
-                () =>
+                async () =>
                 {
                     // Create the get request with the desired filters
                     var sendData = JSONNode.Parse("{}");
-                    sendData.Add(aKey: "info", aItem: new JSONClass());
+                    sendData.Add(requestInfoKey, aItem: new JSONClass());
+
+                    bool hasReceivedInfo = false;
+                    void textMessageReceived(NetworkingPlayer player, BeardedManStudios.Forge.Networking.Frame.Text frame, NetWorker sender)
+                    {
+                        hasReceivedInfo = true;
+                        request.Add(requestInfoKey, (player, frame, sender));
+                    };
+
+                    client.textMessageReceived += textMessageReceived;
 
                     try
                     {
@@ -160,19 +195,34 @@ namespace umi3d.cdk.collaboration
                                 isStream: true
                             )
                         );
+
+                        float delay = 0;
+                        while (!hasReceivedInfo)
+                        {
+                            await Task.Delay(25);
+                            delay += 25;
+
+                            if (delay > 1000)
+                            {
+                                break;
+                            }
+                        }
                     }
                     catch (Exception e)
                     {
-                        UMI3DLogger.LogException(e, scope);
                         client?.Disconnect(true);
-                        requestFailed.Invoke();
+                        requestFailed?.Invoke();
+                        MasterServerException.LogException(
+                        "Trying to send a request for information cause an exception.",
+                        inner: e,
+                        MasterServerException.ExceptionTypeEnum.SendException
+                    );
                     }
+
+                    client.textMessageReceived -= textMessageReceived;
                 }
             );
         }
-
-
-
 
         public void SendDataSession(string sessionId, Action<MasterServerResponse.Server> UIcallback)
         {
@@ -255,6 +305,45 @@ namespace umi3d.cdk.collaboration
                 // If anything fails, then this client needs to be disconnected
                 client.Disconnect(true);
                 client = null;
+            }
+        }
+    }
+
+    /// <summary>
+    /// An exception class to deal with <see cref="MasterServerLauncher"/> issues.
+    /// </summary>
+    [Serializable]
+    public class MasterServerException : Exception
+    {
+        static UMI3DClientLogger logger = new UMI3DClientLogger(mainTag: $"{nameof(MasterServerException)}");
+
+        public enum ExceptionTypeEnum
+        {
+            Unknown,
+            SendException,
+            ReceiveEcxeption
+        }
+
+        public ExceptionTypeEnum exceptionType;
+
+        public MasterServerException(string message, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown) : base($"{exceptionType}: {message}") 
+        {
+            this.exceptionType = exceptionType;
+        }
+        public MasterServerException(string message, Exception inner, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown) : base($"{exceptionType}: {message}", inner) 
+        {
+            this.exceptionType = exceptionType;
+        }
+
+        public static void LogException(string message, Exception inner, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown)
+        {
+            try
+            {
+                throw new MasterServerException(message, inner, exceptionType);
+            }
+            catch (Exception e)
+            {
+                logger.Exception(null, e);
             }
         }
     }

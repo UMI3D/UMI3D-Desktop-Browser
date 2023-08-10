@@ -39,6 +39,10 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         public string icon;
         /// <summary>
+        /// Whether or not this connection is marked as favorite by the user.
+        /// </summary>
+        public bool isFavorite;
+        /// <summary>
         /// The date of the first connection.
         /// </summary>
         public DateTime firstConnection;
@@ -51,12 +55,13 @@ namespace umi3d.cdk.collaboration
         /// </summary>
         public int numberOfConnection;
 
-        public UMI3DConnectionData(string name, string nickname, string url, string icon, DateTime firstConnection, DateTime lastConnection, int numberOfConnection)
+        public UMI3DConnectionData(string name, string nickname, string url, string icon, bool isFavorite, DateTime firstConnection, DateTime lastConnection, int numberOfConnection)
         {
             this.name = name;
             this.nickname = nickname;
             this.url = url;
             this.icon = icon;
+            this.isFavorite = isFavorite;
             this.firstConnection = firstConnection;
             this.lastConnection = lastConnection;
             this.numberOfConnection = numberOfConnection;

@@ -91,7 +91,7 @@ namespace umi3d.cdk.collaboration
 
         public static IEnumerator RequestMediaDto(
             string RawURL, 
-            Action<MediaDto> requestSucced, Action<int> requestFailed, Func<bool> shouldCleanAbort, 
+            Action<MediaDto> requestSucceeded, Action<int> requestFailed, Func<bool> shouldCleanAbort, 
             int tryCount = 0
         )
         {
@@ -133,7 +133,7 @@ namespace umi3d.cdk.collaboration
                     }
 
                     string json = System.Text.Encoding.UTF8.GetString(uwr.downloadHandler.data);
-                    requestSucced?.Invoke(UMI3DDtoSerializer.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None));
+                    requestSucceeded?.Invoke(UMI3DDtoSerializer.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None));
                     s_logger.Default($"{nameof(RequestMediaDto)}", $"Request at: {RawURL} is a success.");
                     tabReporter.Clear();
                     assertReporter.Clear();
@@ -176,7 +176,7 @@ namespace umi3d.cdk.collaboration
 
                     if (tryCount < 3)
                     {
-                        CoroutineManager.Instance.AttachCoroutine(RequestMediaDto(RawURL, requestSucced, requestFailed, shouldCleanAbort, tryCount + 1));
+                        CoroutineManager.Instance.AttachCoroutine(RequestMediaDto(RawURL, requestSucceeded, requestFailed, shouldCleanAbort, tryCount + 1));
                     }
                     else
                     {

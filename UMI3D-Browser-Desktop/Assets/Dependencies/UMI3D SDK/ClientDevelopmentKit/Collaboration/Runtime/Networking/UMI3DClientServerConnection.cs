@@ -25,15 +25,34 @@ using UnityEngine;
 namespace umi3d.cdk.collaboration
 {
     /// <summary>
+    /// Class responsible to connect the client to a server.
     /// 
+    /// <para>
+    /// When the connection succeed the active scene should switch from the <see cref="launcherScene"/> to the <see cref="environmentScene"/>.
+    /// </para>
     /// </summary>
     public class UMI3DClientServerConnection
     {
+        /// <summary>
+        /// The state of the connection process.
+        /// </summary>
         enum ConnectionState
         {
+            /// <summary>
+            /// No connection is currently in progress.
+            /// </summary>
             Iddle,
+            /// <summary>
+            /// A connection is currently in progress.
+            /// </summary>
             Processing,
+            /// <summary>
+            /// A connection has been established.
+            /// </summary>
             Succes,
+            /// <summary>
+            /// A connection has failed.
+            /// </summary>
             Fail
         }
 
@@ -43,39 +62,52 @@ namespace umi3d.cdk.collaboration
 
         [Header("Scene names")]
         [SerializeField]
-        string launcherScene = "Connection";
+        string launcherScene = "LauncherScene";
         [SerializeField]
-        string environmentScene = "Environment";
+        string environmentScene = "EnvironmentScene";
+
+        /// <summary>
+        /// The <see cref="UMI3DConnectionData"/> of the current succeeded connection.
+        /// </summary>
+        public UMI3DConnectionData currentConnection { get; protected set; }
+        /// <summary>
+        /// The <see cref="MediaDto"/> of the current succeeded connection.
+        /// </summary>
+        public MediaDto currentMediaDto { get; protected set; }
 
         #region Connection events
 
-        // master server found
+        /// <summary>
+        /// Event raise when a master server has been found.
+        /// </summary>
         public event Action<UMI3DClientServerConnection> masterServerFound;
-
-        // media dto found
+        /// <summary>
+        /// Event raise when a media dto has been found.
+        /// </summary>
+        public event Action<UMI3DClientServerConnection> mediaDtoFound;
 
         /// <summary>
         /// Event raise when the environment scene start loading.
         /// </summary>
         public event Action<UMI3DClientServerConnection> environmentSceneStartLoading;
+        /// <summary>
+        /// Event raise when the loading of the environment scene progresses.
+        /// </summary>
         public event Action<float> environmentSceneLoadingProgress;
 
         public event Action<UMI3DClientServerConnection> connectionSucceeded;
         public event Action<UMI3DClientServerConnection> connectionFailed;
 
-        #endregion
-
-        #region Connection data
-
-        public UMI3DConnectionData connectionData { get; protected set; }
-
+        /// <summary>
+        /// Event raise when the connection process has been aborted.
+        /// </summary>
+        public event Action<UMI3DClientServerConnection> connectionAborted;
 
         #endregion
-
 
         #region Connection life cycle data
 
-        MasterServerLauncher masterServer;
+        //MasterServerLauncher masterServer;
         UMI3DWorldControllerClient worldController;
 
         // Connection token.
@@ -96,47 +128,54 @@ namespace umi3d.cdk.collaboration
         {
             logger = new UMI3DClientLogger(mainTag: nameof(UMI3DClientServerConnection), mainContext: context, isThreadDisplayed: true);
             initConnectionReport = logger.GetReporter("InitConnection");
+        }
 
-            masterServer = new MasterServerLauncher();
-            worldController = new UMI3DWorldControllerClient(null);
-
-            masterServer.requestInfSucceded += info =>
+        public void Connect(string url, bool isFavorite)
+        {
+            if (string.IsNullOrEmpty(url))
             {
-                if (connectionTokenSource.IsCancellationRequested)
-                {
-                    return;
-                }
+                throw new ClientServerConnectionException(
+                    $"URL is null when trying to connect.",
+                ClientServerConnectionException.ExceptionTypeEnum.URLNullOrEmptyException
+                );
+            }
 
-                if (connectionData != null)
-                {
-                    connectionData.name = info.serverName;
-                    connectionData.icon = info.icon;
-                }
+            UMI3DConnectionData connection = UMI3DConnectionDataCollection.FindConnection(url);
 
-                preferences.ServerPreferences.StoreUserData(currentServer);
-                StoreServer();
-            };
+            if (connection == null)
+            {
+                connection = new UMI3DConnectionData()
+                {
+                    url = url,
+                    isFavorite = isFavorite
+                };
+
+                UMI3DConnectionDataCollection.Add(connection);
+            }
+            else
+            {
+                connection.isFavorite = isFavorite;
+                UMI3DConnectionDataCollection.Update(connection);
+            }
+
+            InitConnect(connection);
         }
 
         public void Connect(UMI3DConnectionData connectionData)
         {
-            this.connectionData = connectionData;
-
-            InitConnect(connectionData.url);
-        }
-
-        public void Connect(string url)
-        {
-            this.connectionData = new UMI3DConnectionData()
+            if (connectionData == null)
             {
-                url = url
-            };
+                throw new ClientServerConnectionException(
+                    $"Connection data is null when trying to connect.", 
+                ClientServerConnectionException.ExceptionTypeEnum.ConnectionNullException
+                );
+            }
 
-            Connect(connectionData);
+            InitConnect(connectionData);
         }
 
         /// <summary>
-        /// Initiates the connection, if a connection is already in process return.
+        /// Initiates the connection to a server.
         /// 
         /// <para>
         /// There is two types of connection to an environment in UMI3D for now:
@@ -146,21 +185,26 @@ namespace umi3d.cdk.collaboration
         /// </list>
         /// </para>
         /// </summary>
-        public void InitConnect(string url)
+        void InitConnect(UMI3DConnectionData connectionData)
         {
             logger.DebugTab(
-                tabName: "InitConnection",
+                tabName: $"{nameof(InitConnect)}",
                 new[]
                 {
                     new UMI3DLogCell(
                         header: "URL",
-                        message: url,
+                        message: connectionData.url,
                         stringFormatSize: 40
                     ),
                     new UMI3DLogCell(
-                        header: "SaveInfo",
-                        message: saveInfo,
-                        stringFormatSize: 10
+                        header: "Name",
+                        message: connectionData.name,
+                        stringFormatSize: 20
+                    ),
+                    new UMI3DLogCell(
+                        header: "Is Favorite",
+                        message: connectionData.isFavorite,
+                        stringFormatSize: 13
                     ),
                 },
                 report: initConnectionReport
@@ -181,11 +225,18 @@ namespace umi3d.cdk.collaboration
 
             CoroutineManager.Instance.AttachCoroutine(
                 UMI3DWorldControllerClient.RequestMediaDto(
-                    url,
-                    requestSucced: mediaDto =>
+                    connectionData.url,
+                    requestSucceeded: mediaDto =>
                     {
                         mediaDtoState = ConnectionState.Succes;
                         masterServerTokenSource.Cancel();
+                        connectionData.name = mediaDto.name;
+
+                        currentConnection = connectionData;
+                        UMI3DConnectionDataCollection.Update(connectionData);
+                        UMI3DConnectionDataCollection.Save();
+
+                        mediaDtoFound?.Invoke(this);
                     },
                     requestFailed: tryCount =>
                     {
@@ -205,6 +256,7 @@ namespace umi3d.cdk.collaboration
             masterServerTokenSource?.Cancel();
 
             masterServerState = ConnectionState.Processing;
+            MasterServerLauncher masterServer = new MasterServerLauncher();
             masterServerTokenSource = new CancellationTokenSource();
             CancellationToken masterServerToken = masterServerTokenSource.Token;
 
@@ -214,10 +266,29 @@ namespace umi3d.cdk.collaboration
                 masterServerState = ConnectionState.Fail;
                 masterServerTokenSource.Cancel();
             };
-            masterServer.connectSucceded += () =>
+            masterServer.connectSucceeded += () =>
             {
                 masterServerState = ConnectionState.Succes;
                 mediaDtoTokenSource.Cancel();
+
+                masterServer.requestInfSucceeded += info =>
+                {
+                    if (connectionTokenSource.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    connectionData.name = info.serverName;
+                    connectionData.icon = info.icon;
+                    connectionData.lastConnection = DateTime.Now;
+                    connectionData.numberOfConnection = connectionData.numberOfConnection + 1;
+
+                    currentConnection = connectionData;
+                    UMI3DConnectionDataCollection.Update(connectionData);
+                    UMI3DConnectionDataCollection.Save();
+                    
+                    masterServerFound?.Invoke(this);
+                };
 
                 masterServer.RequestInfo(
                     requestFailed: () =>
@@ -225,10 +296,8 @@ namespace umi3d.cdk.collaboration
                         masterServerTokenSource.Cancel();
                     }
                 );
-
-                masterServerFound?.Invoke(this);
             };
-            masterServer.ConnectAsync(url);
+            masterServer.ConnectAsync(connectionData.url);
 
             var loadingReport = logger.GetReporter("loading");
             loadingReport.Clear();
@@ -241,7 +310,6 @@ namespace umi3d.cdk.collaboration
                     {
                         mediaDtoState = ConnectionState.Iddle;
                         masterServerState = ConnectionState.Iddle;
-                        ConnectionInitialized?.Invoke(url);
                     }
 
                     return result;
@@ -266,7 +334,7 @@ namespace umi3d.cdk.collaboration
                 if (shouldStopLoading?.Invoke() ?? false)
                 {
                     logger.Debug($"{nameof(LoadGameScene)}", $"Stop loading before it started.");
-                    ConnectionInitializationFailled?.Invoke(currentServer.serverUrl);
+                    connectionAborted?.Invoke(this);
                     yield break;
                 }
 
@@ -303,14 +371,21 @@ namespace umi3d.cdk.collaboration
 
                     try
                     {
-                        logger.Assert(mediaDto != null, $"{nameof(LoadGameScene)}", "Media dto null when loading game scene.");
-                        UMI3DCollaborationClientServer.Connect(mediaDto, s => ConnectionFail?.Invoke(s));
-                        ConnectionSucces?.Invoke(mediaDto);
+                        logger.Assert(currentMediaDto != null, $"{nameof(LoadGameScene)}", "Media dto null when loading environment scene.");
+                        UMI3DCollaborationClientServer.Connect(currentMediaDto, s =>
+                        {
+                            logger.Error($"{nameof(InitConnect)}", $"{s}");
+                            connectionFailed?.Invoke(this);
+                        });
                     }
-                    catch (System.Exception e)
+                    catch (Exception e)
                     {
-                        ConnectionFail?.Invoke(e.Message);
+                        logger.Exception($"{nameof(InitConnect)}", e);
+                        connectionFailed?.Invoke(this);
+                        return;
                     }
+
+                    connectionSucceeded?.Invoke(this);
                 },
 
                 loadingFail: () =>
@@ -322,5 +397,44 @@ namespace umi3d.cdk.collaboration
             );
 
         }
-    } 
+    }
+
+    /// <summary>
+    /// An exception class to deal with <see cref="UMI3DClientServerConnection"/> issues.
+    /// </summary>
+    [Serializable]
+    public class ClientServerConnectionException : Exception
+    {
+        static UMI3DClientLogger logger = new UMI3DClientLogger(mainTag: $"{nameof(ClientServerConnectionException)}");
+
+        public enum ExceptionTypeEnum
+        {
+            Unknown,
+            ConnectionNullException,
+            URLNullOrEmptyException
+        }
+
+        public ExceptionTypeEnum exceptionType;
+
+        public ClientServerConnectionException(string message, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown) : base($"{exceptionType}: {message}")
+        {
+            this.exceptionType = exceptionType;
+        }
+        public ClientServerConnectionException(string message, Exception inner, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown) : base($"{exceptionType}: {message}", inner)
+        {
+            this.exceptionType = exceptionType;
+        }
+
+        public static void LogException(string message, Exception inner, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown)
+        {
+            try
+            {
+                throw new ClientServerConnectionException(message, inner, exceptionType);
+            }
+            catch (Exception e)
+            {
+                logger.Exception(null, e);
+            }
+        }
+    }
 }
