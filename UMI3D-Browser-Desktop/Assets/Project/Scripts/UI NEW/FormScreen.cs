@@ -2,6 +2,7 @@ using GLTFast.Schema;
 using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using umi3d.common.interaction;
 using umi3d.common.interaction.form;
 using UnityEngine;
@@ -9,6 +10,9 @@ using UnityEngine.UIElements;
 
 public class FormScreen : BaseScreen
 {
+    private const int k_buttonCooldown = 1500;
+    private bool _isAButtonAlreadyPressed;
+
     public FormScreen(VisualElement element) : base(element)
     {
 
@@ -84,7 +88,7 @@ public class FormScreen : BaseScreen
         if (group == null) return new VisualElement() { name = "Group null" };
         if (group.Children == null) return new VisualElement() { name = "Group Empty" };
 
-        VisualElement result = CreateGroupe(group);
+        VisualElement result = CreateGroupe(group, answers, callback);
 
         foreach (var div in group.Children)
         {
@@ -94,17 +98,31 @@ public class FormScreen : BaseScreen
         return result;
     }
 
-    private static VisualElement CreateGroupe(GroupDto group)
+    private VisualElement CreateGroupe(GroupDto group, FormAnswerDto answers, Action<FormAnswerDto> callback)
     {
+        var result = new VisualElement();
         switch (group)
         {
             case GroupScrollViewDto scrollView:
                 var scrollViewElement = new ScrollView();
                 scrollViewElement.mode = scrollView.Mode;
-                return scrollViewElement;
+                result = scrollViewElement;
+                break;
             default:
-                return new VisualElement();
+                break;
         }
+        if (group.SubmitOnValidate)
+            result.RegisterCallback<ClickEvent>(e =>
+            {
+                Debug.Log(_isAButtonAlreadyPressed);
+                if (!_isAButtonAlreadyPressed)
+                {
+                    ButtonActivated();
+                    callback?.Invoke(answers);
+                }
+            });
+
+        return result;
     }
 
     private VisualElement CreateGroupElement(DivDto div, FormAnswerDto answers, Action<FormAnswerDto> callback)
@@ -162,8 +180,18 @@ public class FormScreen : BaseScreen
                 SetServerStyle(buttonElement, button.Styles);
                 if (button.Type == umi3d.common.interaction.form.ButtonType.Submit)
                 {
-                    buttonElement.clicked += () => callback(answers);
-                    break;
+                    if (!_isAButtonAlreadyPressed)
+                    {
+                        ButtonActivated();
+                        buttonElement.clicked += () => callback?.Invoke(answers);
+                    }
+                } else
+                {
+                    if (!_isAButtonAlreadyPressed)
+                    {
+                        ButtonActivated();
+                        buttonElement.clicked += () => Debug.LogWarning("Not Implemented");
+                    }
                 }
                 result = buttonElement;
                 break;
@@ -201,5 +229,12 @@ public class FormScreen : BaseScreen
                     break;
             }
         }
+    }
+
+    private async void ButtonActivated()
+    {
+        _isAButtonAlreadyPressed = true;
+        await Task.Delay(k_buttonCooldown);
+        _isAButtonAlreadyPressed = false;
     }
 }
