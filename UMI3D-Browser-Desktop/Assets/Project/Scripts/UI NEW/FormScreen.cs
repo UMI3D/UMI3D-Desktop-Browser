@@ -99,6 +99,20 @@ public class FormScreen : BaseScreen
             result.Add(CreateGroupElement(div, answers, callback));
         }
 
+        if (group.CanRemember)
+        {
+            var rememberElement = new ToggleButton_C();
+            rememberElement.label = "Remember me!";
+            callback += answers =>
+            {
+                Debug.Log("TODO : REMEMBER FORM");
+            };
+
+            var submit = result.Q(className: "submit");
+            if (submit != null)
+                result.Insert(result.IndexOf(submit), rememberElement);
+        }
+
         return result;
     }
 
@@ -204,6 +218,7 @@ public class FormScreen : BaseScreen
                 SetServerStyle(buttonElement, button.Styles);
                 if (button.Type == umi3d.common.interaction.form.ButtonType.Submit)
                 {
+                    buttonElement.AddToClassList("submit");
                     if (!_isAButtonAlreadyPressed)
                     {
                         ButtonActivated();
