@@ -91,11 +91,6 @@ namespace BrowserDesktop
                 bottomBarContainer.localScale.y / container.localScale.y, bottomBarContainer.localScale.z);
         }
 
-        protected override void OnSyncViewChanged(bool syncView)
-        {
-            Debug.Log("TODO");
-        }
-
         protected override async void OnTextureSizeChanged(Vector2 size)
         {
             while (!browser.browserClient.ReadySignalReceived && !browser.browserClient.IsConnected)

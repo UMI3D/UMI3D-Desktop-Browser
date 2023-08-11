@@ -13,7 +13,6 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static umi3d.baseBrowser.preferences.SettingsPreferences;
 using System.Linq;
 using inetum.unityUtils;
 using System.Threading.Tasks;
@@ -264,7 +263,6 @@ public struct LocalisationForOptionsAttribute
 public class LocalisationManager : PersistentSingleBehaviour<LocalisationManager>
 {
     public List<LocalisationTable> Tables;
-    public Language curr_language = Language.English;
 
     /// <summary>
     /// Get the translation of a text located in the table <paramref name="title"/> with the key <paramref name="key"/> and arguments <paramref name="args"/>.
@@ -275,8 +273,9 @@ public class LocalisationManager : PersistentSingleBehaviour<LocalisationManager
     /// <returns></returns>
     public string GetTranslation(string title, string key, string[] args = null)
     {
+
         if (Tables.Any(x => x.Title == title))
-        return Tables.Find(x => x.Title == title).GetTranslation(key, args);
+            return Tables.Find(x => x.Title == title).GetTranslation(key, args);
         Debug.Log("table not found: "+title+", key: "+key);
         return null;
     }

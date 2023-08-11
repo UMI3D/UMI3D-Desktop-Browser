@@ -15,58 +15,156 @@ MonoBehaviour:
   Title: ErrorStrings
   Items:
   - Key: Error
-    English: Error
-    French: Erreur
-    Spanish: Error
+    _trads:
+    - Key:
+        Name: French
+      Value: Erreur
+    - Key:
+        Name: Spanish
+      Value: Error
+    - Key:
+        Name: English
+      Value: Error
   - Key: OtherError
-    English: Other error
-    French: Autre erreur
-    Spanish: Otro error
+    _trads:
+    - Key:
+        Name: French
+      Value: Autre erreur
+    - Key:
+        Name: Spanish
+      Value: Otro error
+    - Key:
+        Name: English
+      Value: Other error
   - Key: LoadError
-    English: Loading error
-    French: Erreur de chargement
-    Spanish: Error de carga
+    _trads:
+    - Key:
+        Name: French
+      Value: Erreur de chargement
+    - Key:
+        Name: Spanish
+      Value: Error de carga
+    - Key:
+        Name: English
+      Value: Loading error
   - Key: NetworkError
-    English: Networking error {0}
-    French: "Erreur de mise en r\xE9seau {0}"
-    Spanish: Error de red {0}
+    _trads:
+    - Key:
+        Name: French
+      Value: "Erreur de mise en r\xE9seau {0}"
+    - Key:
+        Name: Spanish
+      Value: Error de red {0}
+    - Key:
+        Name: English
+      Value: Networking error {0}
   - Key: ResourcesDenied
-    English: Resources acess was denied
-    French: "L'acc\xE8s aux ressources a \xE9t\xE9 refus\xE9"
-    Spanish: "L'acc\xE8s aux ressources a \xE9t\xE9 refus\xE9"
+    _trads:
+    - Key:
+        Name: French
+      Value: "L'acc\xE8s aux ressources a \xE9t\xE9 refus\xE9"
+    - Key:
+        Name: Spanish
+      Value: "L'acc\xE8s aux ressources a \xE9t\xE9 refus\xE9"
+    - Key:
+        Name: English
+      Value: Resources acess was denied
   - Key: ResourcesEmpty
-    English: Resources Downloaded was empty
-    French: "Les ressources t\xE9l\xE9charg\xE9es \xE9taient vides"
-    Spanish: "Los recursos descargados estaban vac\xEDos"
+    _trads:
+    - Key:
+        Name: French
+      Value: "Les ressources t\xE9l\xE9charg\xE9es \xE9taient vides"
+    - Key:
+        Name: Spanish
+      Value: "Los recursos descargados estaban vac\xEDos"
+    - Key:
+        Name: English
+      Value: Resources Downloaded was empty
   - Key: ServerError
-    English: Server error
-    French: Erreur de serveur
-    Spanish: Error del servidor
+    _trads:
+    - Key:
+        Name: French
+      Value: Erreur de serveur
+    - Key:
+        Name: Spanish
+      Value: Error del servidor
+    - Key:
+        Name: English
+      Value: Server error
   - Key: ConnectionLost
-    English: Connection to the server lost
-    French: Perte de la connexion au serveur
-    Spanish: Perte de la connexion au serveur
+    _trads:
+    - Key:
+        Name: French
+      Value: Perte de la connexion au serveur
+    - Key:
+        Name: Spanish
+      Value: Perte de la connexion au serveur
+    - Key:
+        Name: English
+      Value: Connection to the server lost
   - Key: LeaveOrTry
-    English: Leave the environment or try to reconnect ?
-    French: Quitter l'environnement ou essayer de se reconnecter ?
-    Spanish: "\xBFSalir del entorno o intentar volver a conectarse?"
+    _trads:
+    - Key:
+        Name: French
+      Value: Quitter l'environnement ou essayer de se reconnecter ?
+    - Key:
+        Name: Spanish
+      Value: "\xBFSalir del entorno o intentar volver a conectarse?"
+    - Key:
+        Name: English
+      Value: Leave the environment or try to reconnect ?
   - Key: ForcedDeco
-    English: Forced Deconnection
-    French: "D\xE9connexion forc\xE9e"
-    Spanish: "Desconexi\xF3n forzada"
+    _trads:
+    - Key:
+        Name: French
+      Value: "D\xE9connexion forc\xE9e"
+    - Key:
+        Name: Spanish
+      Value: "Desconexi\xF3n forzada"
+    - Key:
+        Name: English
+      Value: Forced Deconnection
   - Key: AssetsLibRequired1
-    English: One assets library is required
-    French: "Une biblioth\xE8que de ressources est n\xE9cessaire"
-    Spanish: Se necesita una biblioteca de activos
+    _trads:
+    - Key:
+        Name: French
+      Value: "Une biblioth\xE8que de ressources est n\xE9cessaire"
+    - Key:
+        Name: Spanish
+      Value: Se necesita una biblioteca de activos
+    - Key:
+        Name: English
+      Value: One assets library is required
   - Key: AssetsLibRequired
-    English: '{0} assets libraries are required'
-    French: "{0} biblioth\xE8ques de ressources sont n\xE9cessaires"
-    Spanish: Se necesitan {0} bibliotecas de activos
+    _trads:
+    - Key:
+        Name: French
+      Value: "{0} biblioth\xE8ques de ressources sont n\xE9cessaires"
+    - Key:
+        Name: Spanish
+      Value: Se necesitan {0} bibliotecas de activos
+    - Key:
+        Name: English
+      Value: '{0} assets libraries are required'
   - Key: DownloadAndConnect
-    English: Download libraries and connect to the server ?
-    French: "T\xE9l\xE9charger les biblioth\xE8ques et se connecter au serveur ?"
-    Spanish: Descargar bibliotecas y conectarse al servidor ?
+    _trads:
+    - Key:
+        Name: French
+      Value: "T\xE9l\xE9charger les biblioth\xE8ques et se connecter au serveur ?"
+    - Key:
+        Name: Spanish
+      Value: Descargar bibliotecas y conectarse al servidor ?
+    - Key:
+        Name: English
+      Value: Download libraries and connect to the server ?
   - Key: LeaveEnv?
-    English: Do you want to leave the environment ?
-    French: Voulez-vous quitter l'environnement ?
-    Spanish: "\xBFQuiere abandonar el medio ambiente?"
+    _trads:
+    - Key:
+        Name: French
+      Value: Voulez-vous quitter l'environnement ?
+    - Key:
+        Name: Spanish
+      Value: "\xBFQuiere abandonar el medio ambiente?"
+    - Key:
+        Name: English
+      Value: Do you want to leave the environment ?

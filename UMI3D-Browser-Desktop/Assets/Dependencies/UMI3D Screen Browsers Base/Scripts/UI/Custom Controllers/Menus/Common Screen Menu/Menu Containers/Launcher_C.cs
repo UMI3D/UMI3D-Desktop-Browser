@@ -30,6 +30,7 @@ namespace umi3d.commonScreen.menu
 
         public HomeScreen_C Home = new HomeScreen_C { name = "home-screen" };
         public LibraryScreen_C Libraries = new LibraryScreen_C();
+        public TipsScreen_C Tips = new TipsScreen_C();
         public SettingsContainer_C Settings = new SettingsContainer_C { name = "settings" };
 
         public ButtonGroup_C<LauncherScreens> NavigationButtons = new ButtonGroup_C<LauncherScreens> { name = "navigation-buttons" };
@@ -53,13 +54,15 @@ namespace umi3d.commonScreen.menu
             {
                 new LocalisationAttribute("Home", "LauncherScreen", "Home"),
                 new LocalisationAttribute("Settings", "LauncherScreen", "Settings"),
-                new LocalisationAttribute("Libraries", "LauncherScreen", "Libraries")
+                new LocalisationAttribute("Libraries", "LauncherScreen", "Libraries"),
+                new LocalisationAttribute("Tips", "LauncherScreen", "Tips"),
             };
             NavigationButtons.ValueEnumChanged += value => CurrentScreen = value;
             NavigationButtons.EnumValue = LauncherScreens.Home;
 
             Home.BackButtonCkicked = () => RemoveScreenFromStack();
             Libraries.BackButtonCkicked = () => RemoveScreenFromStack();
+            Tips.BackButtonCkicked = () => RemoveScreenFromStack();
             Settings.BackButtonCkicked = () => RemoveScreenFromStack();
 
             Libraries.AllowDeletion = true;
@@ -96,6 +99,7 @@ namespace umi3d.commonScreen.menu
         {
             Home.RemoveFromHierarchy();
             Libraries.RemoveFromHierarchy();
+            Tips.RemoveFromHierarchy();
             Settings.RemoveFromHierarchy();
         }
 
@@ -108,6 +112,9 @@ namespace umi3d.commonScreen.menu
                     break;
                 case LauncherScreens.Libraries:
                     screen = Libraries;
+                    break;
+                case LauncherScreens.Tips:
+                    screen = Tips;
                     break;
                 case LauncherScreens.Settings:
                     screen = Settings;
@@ -155,6 +162,7 @@ namespace umi3d.commonScreen.menu
             }
         }
         public void InitLibraries() => Libraries.InitLibraries();
+        public void InitTips() => Tips.InitTips();
 
         protected umi3d.baseBrowser.preferences.ServerPreferences.Data currentConnectionData;
 

@@ -1,0 +1,7 @@
+Key,English,French,Spanish
+LoadingPercent,Total loading : {0} %,Charge totale : {0} %.,Carga total : {0} %
+LoadingEnv,Loading environment,Chargement de l'environnement,Cargar el entorno
+LeavingEnv,Leaving environment,Quitter l'environnement,Abandonar el entorno
+EditText,Edit Text,Modifier le texte,Editar texto
+DisplayInteractionsMenu,Display interactions menu,Afficher le menu des interactions,Mostrar menú de interacciones
+LeaveEnvironment,Leave  the environment,Quitter l'environnement,Salir del entorno

@@ -15,62 +15,167 @@ MonoBehaviour:
   Title: LibrariesScreen
   Items:
   - Key: Library_UsedBy
-    English: Used by:\n\n{0}
-    French: "Utilis\xE9 par:\\n\\n{0}"
-    Spanish: Utilizado por:\n\n{0}
+    _trads:
+    - Key:
+        Name: French
+      Value: "Utilis\xE9 par:\\n\\n{0}"
+    - Key:
+        Name: Spanish
+      Value: Utilizado por:\n\n{0}
+    - Key:
+        Name: English
+      Value: Used by:\n\n{0}
   - Key: Search_Label
-    English: Search
-    French: Recherche
-    Spanish: Buscar en
+    _trads:
+    - Key:
+        Name: French
+      Value: Recherche
+    - Key:
+        Name: Spanish
+      Value: Buscar en
+    - Key:
+        Name: English
+      Value: Search
   - Key: Filter_Label
-    English: Filter
-    French: Filtre
-    Spanish: Filtro
+    _trads:
+    - Key:
+        Name: French
+      Value: Filtre
+    - Key:
+        Name: Spanish
+      Value: Filtro
+    - Key:
+        Name: English
+      Value: Filter
   - Key: Sort_Name
-    English: Name
-    French: Nom
-    Spanish: Nombre
+    _trads:
+    - Key:
+        Name: French
+      Value: Nom
+    - Key:
+        Name: Spanish
+      Value: Nombre
+    - Key:
+        Name: English
+      Value: Name
   - Key: Sort_Size
-    English: Size
-    French: Taille
-    Spanish: Talla
+    _trads:
+    - Key:
+        Name: French
+      Value: Taille
+    - Key:
+        Name: Spanish
+      Value: Talla
+    - Key:
+        Name: English
+      Value: Size
   - Key: Delete_library_Title
-    English: Do you want to uninstall this library ?
-    French: "Voulez-vous d\xE9sinstaller cette biblioth\xE8que ?"
-    Spanish: "\xBFDesea desinstalar esta biblioteca?"
+    _trads:
+    - Key:
+        Name: French
+      Value: "Voulez-vous d\xE9sinstaller cette biblioth\xE8que ?"
+    - Key:
+        Name: Spanish
+      Value: "\xBFDesea desinstalar esta biblioteca?"
+    - Key:
+        Name: English
+      Value: Do you want to uninstall this library ?
   - Key: Delete_Library_Description
-    English: '''{0}'' is required by {1} environments'
-    French: '''{0}'' est requis par {1} environnements.'
-    Spanish: '{0}'' es requerido por {1} entornos'
+    _trads:
+    - Key:
+        Name: French
+      Value: '''{0}'' est requis par {1} environnements.'
+    - Key:
+        Name: Spanish
+      Value: '{0}'' es requerido por {1} entornos'
+    - Key:
+        Name: English
+      Value: '''{0}'' is required by {1} environments'
   - Key: Delete_All_libraries
-    English: Delete All libraries
-    French: "Supprimer toutes les biblioth\xE8ques"
-    Spanish: Borrar todas las bibliotecas
+    _trads:
+    - Key:
+        Name: French
+      Value: "Supprimer toutes les biblioth\xE8ques"
+    - Key:
+        Name: Spanish
+      Value: Borrar todas las bibliotecas
+    - Key:
+        Name: English
+      Value: Delete All libraries
   - Key: Delete_Filtered_libraries
-    English: Delete libraries from {0}
-    French: "Supprimer les biblioth\xE8ques de {0}"
-    Spanish: Borrar bibliotecas de {0}
+    _trads:
+    - Key:
+        Name: French
+      Value: "Supprimer les biblioth\xE8ques de {0}"
+    - Key:
+        Name: Spanish
+      Value: Borrar bibliotecas de {0}
+    - Key:
+        Name: English
+      Value: Delete libraries from {0}
   - Key: Filter_All
-    English: All
-    French: Tout
-    Spanish: Todos
+    _trads:
+    - Key:
+        Name: French
+      Value: Tout
+    - Key:
+        Name: Spanish
+      Value: Todos
+    - Key:
+        Name: English
+      Value: All
   - Key: Delete_Filteredlibraries_Title
-    English: Uninstall filtered libraries
-    French: "D\xE9sinstaller les biblioth\xE8ques filtr\xE9es"
-    Spanish: Desinstalar bibliotecas filtradas
+    _trads:
+    - Key:
+        Name: French
+      Value: "D\xE9sinstaller les biblioth\xE8ques filtr\xE9es"
+    - Key:
+        Name: Spanish
+      Value: Desinstalar bibliotecas filtradas
+    - Key:
+        Name: English
+      Value: Uninstall filtered libraries
   - Key: Delete_Filteredlibraries_Description
-    English: Do you want to uninstall the {0} filtered libraries ?
-    French: "Voulez-vous d\xE9sinstaller les {0} biblioth\xE8ques filtr\xE9es ?"
-    Spanish: "\xBFDesea desinstalar las {0} bibliotecas filtradas?"
+    _trads:
+    - Key:
+        Name: French
+      Value: "Voulez-vous d\xE9sinstaller les {0} biblioth\xE8ques filtr\xE9es ?"
+    - Key:
+        Name: Spanish
+      Value: "\xBFDesea desinstalar las {0} bibliotecas filtradas?"
+    - Key:
+        Name: English
+      Value: Do you want to uninstall the {0} filtered libraries ?
   - Key: Library_WrongPath_Title
-    English: Some libraries are not found
-    French: "Certaines biblioth\xE8ques ne sont pas trouv\xE9es"
-    Spanish: Algunas bibliotecas no se encuentran
+    _trads:
+    - Key:
+        Name: French
+      Value: "Certaines biblioth\xE8ques ne sont pas trouv\xE9es"
+    - Key:
+        Name: Spanish
+      Value: Algunas bibliotecas no se encuentran
+    - Key:
+        Name: English
+      Value: Some libraries are not found
   - Key: Library_WrongPath_Description
-    English: 'Here is the list of the path that are not found:'
-    French: "Voici la liste des chemins qui ne sont pas trouv\xE9s :"
-    Spanish: "Aqu\xED est\xE1 la lista de la ruta que no se encuentran:"
+    _trads:
+    - Key:
+        Name: French
+      Value: "Voici la liste des chemins qui ne sont pas trouv\xE9s :"
+    - Key:
+        Name: Spanish
+      Value: "Aqu\xED est\xE1 la lista de la ruta que no se encuentran:"
+    - Key:
+        Name: English
+      Value: 'Here is the list of the path that are not found:'
   - Key: Library_WrongPath_ShowMe
-    English: Show me
-    French: Montre-moi
-    Spanish: "Mu\xE9strame"
+    _trads:
+    - Key:
+        Name: French
+      Value: Montre-moi
+    - Key:
+        Name: Spanish
+      Value: "Mu\xE9strame"
+    - Key:
+        Name: English
+      Value: Show me

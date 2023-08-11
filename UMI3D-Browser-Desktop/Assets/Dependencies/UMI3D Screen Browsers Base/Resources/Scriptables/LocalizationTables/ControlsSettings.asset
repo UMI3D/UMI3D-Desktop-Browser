@@ -15,22 +15,57 @@ MonoBehaviour:
   Title: ControlsSettings
   Items:
   - Key: CameraSensibility
-    English: Camera sensibility
-    French: "Sensibilit\xE9 de la cam\xE9ra"
-    Spanish: "Sensibilidad de la c\xE1mara"
+    _trads:
+    - Key:
+        Name: French
+      Value: "Sensibilit\xE9 de la cam\xE9ra"
+    - Key:
+        Name: Spanish
+      Value: "Sensibilidad de la c\xE1mara"
+    - Key:
+        Name: English
+      Value: Camera sensibility
   - Key: JoystickStatic_Label
-    English: Static joystick
-    French: Joystick statique
-    Spanish: "Joystick est\xE1tico"
+    _trads:
+    - Key:
+        Name: French
+      Value: Joystick statique
+    - Key:
+        Name: Spanish
+      Value: "Joystick est\xE1tico"
+    - Key:
+        Name: English
+      Value: Static joystick
   - Key: LeftHand_Label
-    English: Left hand interface
-    French: Interface gaucher
-    Spanish: Interfaz zurdos
+    _trads:
+    - Key:
+        Name: French
+      Value: Interface gaucher
+    - Key:
+        Name: Spanish
+      Value: Interfaz zurdos
+    - Key:
+        Name: English
+      Value: Left hand interface
   - Key: Navigations
-    English: Navigations
-    French: "D\xE9placement"
-    Spanish: Navigations
+    _trads:
+    - Key:
+        Name: French
+      Value: "D\xE9placement"
+    - Key:
+        Name: Spanish
+      Value: Navigations
+    - Key:
+        Name: English
+      Value: Navigations
   - Key: Shortcuts
-    English: Shortcuts
-    French: Raccourcis
-    Spanish: Shortcuts
+    _trads:
+    - Key:
+        Name: French
+      Value: Raccourcis
+    - Key:
+        Name: Spanish
+      Value: Shortcuts
+    - Key:
+        Name: English
+      Value: Shortcuts

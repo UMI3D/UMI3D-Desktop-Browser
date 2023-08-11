@@ -15,51 +15,135 @@ MonoBehaviour:
   Title: AudioSettings
   Items:
   - Key: LoopBack_on
-    English: Loop back on
-    French: "Bouclage activ\xE9"
-    Spanish: Bucle activado
+    _trads:
+    - Key:
+        Name: French
+      Value: "Bouclage activ\xE9"
+    - Key:
+        Name: Spanish
+      Value: Bucle activado
+    - Key:
+        Name: English
+      Value: Loop back on
   - Key: LoopBack_off
-    English: Loop back off
-    French: "Bouclage d\xE9sactiv\xE9"
-    Spanish: "Desactivaci\xF3n de bucles"
+    _trads:
+    - Key:
+        Name: French
+      Value: "Bouclage d\xE9sactiv\xE9"
+    - Key:
+        Name: Spanish
+      Value: "Desactivaci\xF3n de bucles"
+    - Key:
+        Name: English
+      Value: Loop back off
   - Key: AmplitudeSlider
-    English: Noise Threshold
-    French: Seuil de bruit
-    Spanish: Umbral de ruido
+    _trads:
+    - Key:
+        Name: French
+      Value: Seuil de bruit
+    - Key:
+        Name: Spanish
+      Value: Umbral de ruido
+    - Key:
+        Name: English
+      Value: Noise Threshold
   - Key: DelayShutMic
-    English: Delay before mute mic when lower than threshold
-    French: "D\xE9lai avant la mise en sourdine du micro lorsqu'il est inf\xE9rieur
-      au seuil"
-    Spanish: "Retardo antes de silenciar el micr\xF3fono cuando es inferior al umbral"
+    _trads:
+    - Key:
+        Name: French
+      Value: "D\xE9lai avant la mise en sourdine du micro lorsqu'il est inf\xE9rieur
+        au seuil"
+    - Key:
+        Name: Spanish
+      Value: "Retardo antes de silenciar el micr\xF3fono cuando es inferior al umbral"
+    - Key:
+        Name: English
+      Value: Delay before mute mic when lower than threshold
   - Key: GeneralVolume
-    English: General volume
-    French: "Volume g\xE9n\xE9ral"
-    Spanish: Volumen general
+    _trads:
+    - Key:
+        Name: French
+      Value: "Volume g\xE9n\xE9ral"
+    - Key:
+        Name: Spanish
+      Value: Volumen general
+    - Key:
+        Name: English
+      Value: General volume
   - Key: Mic_Label
-    English: Microphone
-    French: Microphone
-    Spanish: "Micr\xF3fono"
+    _trads:
+    - Key:
+        Name: French
+      Value: Microphone
+    - Key:
+        Name: Spanish
+      Value: "Micr\xF3fono"
+    - Key:
+        Name: English
+      Value: Microphone
   - Key: MicMode_AlwaysSend
-    English: Always send
-    French: Toujours envoyer
-    Spanish: Enviar siempre
+    _trads:
+    - Key:
+        Name: French
+      Value: Toujours envoyer
+    - Key:
+        Name: Spanish
+      Value: Enviar siempre
+    - Key:
+        Name: English
+      Value: Always send
   - Key: MicMode_Amplitude
-    English: Amplitude
-    French: Amplitude
-    Spanish: Amplitud
+    _trads:
+    - Key:
+        Name: French
+      Value: Amplitude
+    - Key:
+        Name: Spanish
+      Value: Amplitud
+    - Key:
+        Name: English
+      Value: Amplitude
   - Key: MicMode_PushToTalk
-    English: Push to talk
-    French: Push to talk
-    Spanish: Push to talk
+    _trads:
+    - Key:
+        Name: French
+      Value: Push to talk
+    - Key:
+        Name: Spanish
+      Value: Push to talk
+    - Key:
+        Name: English
+      Value: Push to talk
   - Key: MicMode_Label
-    English: Mode
-    French: Mode
-    Spanish: Modo
+    _trads:
+    - Key:
+        Name: French
+      Value: Mode
+    - Key:
+        Name: Spanish
+      Value: Modo
+    - Key:
+        Name: English
+      Value: Mode
   - Key: NoiseReduc_Label
-    English: Use noise reduction
-    French: "Utiliser la r\xE9duction du bruit"
-    Spanish: Reducir el ruido
+    _trads:
+    - Key:
+        Name: French
+      Value: "Utiliser la r\xE9duction du bruit"
+    - Key:
+        Name: Spanish
+      Value: Reducir el ruido
+    - Key:
+        Name: English
+      Value: Use noise reduction
   - Key: PushToTalk_Label
-    English: Push to talk key
-    French: Touche "Push to talk"
-    Spanish: "Bot\xF3n \"Push to talk\""
+    _trads:
+    - Key:
+        Name: French
+      Value: Touche "Push to talk"
+    - Key:
+        Name: Spanish
+      Value: "Bot\xF3n \"Push to talk\""
+    - Key:
+        Name: English
+      Value: Push to talk key

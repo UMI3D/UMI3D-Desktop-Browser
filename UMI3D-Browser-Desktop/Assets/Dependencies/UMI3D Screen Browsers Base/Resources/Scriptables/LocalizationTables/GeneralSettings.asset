@@ -15,26 +15,68 @@ MonoBehaviour:
   Title: GeneralSettings
   Items:
   - Key: Language
-    English: Language
-    French: Langage
-    Spanish: Idioma
+    _trads:
+    - Key:
+        Name: French
+      Value: Langage
+    - Key:
+        Name: Spanish
+      Value: Idioma
+    - Key:
+        Name: English
+      Value: Language
   - Key: English
-    English: English
-    French: Anglais
-    Spanish: "Ingl\xE9s"
+    _trads:
+    - Key:
+        Name: French
+      Value: Anglais
+    - Key:
+        Name: Spanish
+      Value: "Ingl\xE9s"
+    - Key:
+        Name: English
+      Value: English
   - Key: French
-    English: French
-    French: "Fran\xE7ais"
-    Spanish: "Franc\xE9s"
+    _trads:
+    - Key:
+        Name: French
+      Value: "Fran\xE7ais"
+    - Key:
+        Name: Spanish
+      Value: "Franc\xE9s"
+    - Key:
+        Name: English
+      Value: French
   - Key: Spanish
-    English: Spanish
-    French: Espagnol
-    Spanish: "Espa\xF1ol"
+    _trads:
+    - Key:
+        Name: French
+      Value: Espagnol
+    - Key:
+        Name: Spanish
+      Value: "Espa\xF1ol"
+    - Key:
+        Name: English
+      Value: Spanish
   - Key: Theme_Titre
-    English: Theme
-    French: "Th\xE8me"
-    Spanish: Tema
+    _trads:
+    - Key:
+        Name: French
+      Value: "Th\xE8me"
+    - Key:
+        Name: Spanish
+      Value: Tema
+    - Key:
+        Name: English
+      Value: Theme
   - Key: Theme_Default
-    English: Default
-    French: "D\xE9faut"
-    Spanish: Defecto
+    _trads:
+    - Key:
+        Name: French
+      Value: "D\xE9faut"
+    - Key:
+        Name: Spanish
+      Value: Defecto
+    - Key:
+        Name: English
+      Value: Default

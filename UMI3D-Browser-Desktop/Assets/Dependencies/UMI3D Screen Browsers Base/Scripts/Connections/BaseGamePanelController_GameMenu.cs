@@ -49,6 +49,7 @@ namespace umi3d.baseBrowser.connection
             var envAudioSettings = EnvironmentSettings.Instance.AudioSetting;
             var menuAudioSettings = Settings.Audio;
             menuAudioSettings.GeneralVolumeValeChanged += value => envAudioSettings.GeneralVolume = value;
+            menuAudioSettings.LastGeneralVolumeNotZeroLoaded += value => envAudioSettings.SetGeneralVolumeWithoutNotifyAndEvents(value);
             envAudioSettings.StatusChanged += isOn => menuAudioSettings.SetGeneralVolumeValueWithoutNotify(envAudioSettings.GeneralVolume * 10f);
 
             Menu.Settings.Audio.SetAudio();

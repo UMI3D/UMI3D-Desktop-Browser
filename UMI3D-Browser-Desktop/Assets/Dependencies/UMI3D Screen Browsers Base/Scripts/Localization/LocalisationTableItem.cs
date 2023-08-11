@@ -11,18 +11,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using umi3d.baseBrowser.preferences;
 using UnityEngine;
-using static umi3d.baseBrowser.preferences.SettingsPreferences;
 
 [System.Serializable]
-public struct LocalisationTableItem
+public class LocalisationTableItem
 {
+    [Serializable]
+    private class Trad
+    {
+        public Language Key;
+        public string Value;
+
+        public Trad(Language key, string value)
+        {
+            Key = key;
+            Value = value;
+        }
+    }
+
     public string Key;
-    public string English;
-    public string French;
-    public string Spanish;
+    [SerializeField] private List<Trad> _trads;
 
     /// <summary>
     /// Get the translation of a text with arguments <paramref name="args"/>.
@@ -31,7 +42,20 @@ public struct LocalisationTableItem
     /// <returns></returns>
     public string GetTranslation(string[] args = null)
     {
-        switch (LocalisationManager.Instance.curr_language)
+        var language = LocalisationSettings.Instance.CurrentLanguage;
+        var trad = _trads.Where(e => e.Key.Name == language.Name).ToList()[0];
+        if (trad != null)
+        {
+            string tmpFr = String.Copy(trad.Value);
+            if (args != null)
+                for (int i = 0; i < args.Length; i++) tmpFr = tmpFr.Replace($"{{{i}}}", args[i]);
+            return tmpFr;
+        }
+
+        Debug.LogError("Missing Language on " + Key);
+        return Key;
+
+        /*switch (LocalisationManager.Instance.curr_language)
         {
             case Language.French:
                 if (args == null)
@@ -51,6 +75,32 @@ public struct LocalisationTableItem
                 string tmpEn = String.Copy(English);
                 for (int i = 0; i < args.Length; i++) tmpEn = tmpEn.Replace($"{{{i}}}", args[i]);
                 return tmpEn;
+        }*/
+    }
+
+    public void AddLanguageIfNotExist(Language language, string value = "")
+    {
+        if (_trads == null) _trads = new List<Trad>();
+
+        if (_trads.Any(e => e.Key.Equals(language))) return;
+        _trads.Add(new Trad(language, value));
+    }
+    public void RemoveLanguageIfExist(Language language)
+    {
+        if (_trads == null) _trads = new List<Trad>();
+
+        if (!_trads.Any(e => e.Key.Equals(language))) return;
+
+        _trads.Remove(_trads.Find(e => e.Key.Equals(language)));
+    }
+
+    public Dictionary<string, string> GetTradDictionary()
+    {
+        var dictionary = new Dictionary<string, string>();
+        foreach (var trad in _trads) 
+        {
+            dictionary.Add(trad.Key.Name, trad.Value);
         }
+        return dictionary;
     }
 }

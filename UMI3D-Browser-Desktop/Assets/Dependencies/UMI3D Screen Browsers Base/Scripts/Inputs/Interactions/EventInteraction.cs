@@ -16,7 +16,11 @@ limitations under the License.
 
 using umi3d.cdk;
 using umi3d.cdk.interaction;
+using umi3d.cdk.userCapture;
+using umi3d.cdk.userCapture.pose;
 using umi3d.common;
+using umi3d.common.userCapture.pose;
+
 using UnityEngine;
 
 namespace umi3d.baseBrowser.inputs.interactions
@@ -33,8 +37,11 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// </summary>
         protected bool risingEdgeEventSent;
 
+        private IPoseManager poseManagerService => PoseManager.Instance;
+
         protected virtual void Awake()
         {
+            //poseManagerService = PoseManager.Instance;
             bone = common.userCapture.BoneType.Viewpoint;
         }
 
@@ -62,8 +69,8 @@ namespace umi3d.baseBrowser.inputs.interactions
                     id = associatedInteraction.id,
                     toolId = this.toolId,
                     hoveredObjectId = hoveredObjectId,
-                    bonePosition = (SerializableVector3) boneTransform.position,
-                    boneRotation = (SerializableVector4) boneTransform.rotation
+                    bonePosition = (Vector3Dto) boneTransform.position.Dto(),
+                    boneRotation = (Vector4Dto) boneTransform.rotation.Dto()
                 };
                 cdk.UMI3DClientServer.SendData(eventdto, true);
                 risingEdgeEventSent = true;
@@ -77,13 +84,15 @@ namespace umi3d.baseBrowser.inputs.interactions
                     id = associatedInteraction.id,
                     toolId = this.toolId,
                     hoveredObjectId = hoveredObjectId,
-                    bonePosition = (SerializableVector3)boneTransform.position,
-                    boneRotation = (SerializableVector4)boneTransform.rotation
+                    bonePosition = boneTransform.position.Dto(),
+                    boneRotation = boneTransform.rotation.Dto()
                 };
                 cdk.UMI3DClientServer.SendData(eventdto, true);
             }
             if (associatedInteraction.TriggerAnimationId != 0)
                 StartAnim(associatedInteraction.TriggerAnimationId);
+
+            poseManagerService.TryActivatePoseOverriders(hoveredObjectId, PoseActivationMode.TRIGGER);
         }
 
         protected override void PressedUp()
@@ -102,12 +111,14 @@ namespace umi3d.baseBrowser.inputs.interactions
                 id = associatedInteraction.id,
                 toolId = this.toolId,
                 hoveredObjectId = hoveredObjectId,
-                bonePosition = (SerializableVector3)boneTransform.position,
-                boneRotation = (SerializableVector4)boneTransform.rotation
+                bonePosition = boneTransform.position.Dto(),
+                boneRotation = boneTransform.rotation.Dto()
             };
             cdk.UMI3DClientServer.SendData(eventdto, true);
             IsInputHold = false;
             risingEdgeEventSent = false;
+
+            poseManagerService.TryActivatePoseOverriders(hoveredObjectId, PoseActivationMode.RELEASE);
         }
 
         protected async void StartAnim(ulong id)

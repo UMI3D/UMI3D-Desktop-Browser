@@ -12,13 +12,14 @@ limitations under the License.
 */
 using umi3d.baseBrowser.Controller;
 using umi3d.baseBrowser.cursor;
-using umi3d.baseBrowser.emotes;
 using umi3d.baseBrowser.Navigation;
 using umi3d.cdk.collaboration;
+using umi3d.cdk.collaboration.emotes;
 using umi3d.commonDesktop.game;
 using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.game;
+using umi3d.mobileBrowser.Controller;
 using umi3d.mobileBrowser.interactions;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -57,11 +58,27 @@ namespace umi3d.baseBrowser.connection
 
         protected virtual void InitGame_ButtonsArea()
         {
+            Debug.Assert(TrailingArea != null, "TrailingArea null");
             var buttonsArea = TrailingArea.ButtonsArea;
+            Debug.Assert(buttonsArea != null, "buttonsArea null");
+
+            Debug.Assert(BaseFPSNavigation.Instance != null, "BaseFPSNavigation.Instance null");
+
+            Debug.Assert(buttonsArea.Jump != null, "buttonsArea.Jump null");
             buttonsArea.Jump.ClickedDown += () => BaseFPSNavigation.Instance.WantToJump = true;
             buttonsArea.Jump.ClickedUp += () => BaseFPSNavigation.Instance.WantToJump = false;
+
+            Debug.Assert(buttonsArea.Crouch != null, "buttonsArea.Crouch null");
             buttonsArea.Crouch.ClickedDown += () => BaseFPSNavigation.Instance.WantToCrouch = true;
             buttonsArea.Crouch.ClickedUp += () => BaseFPSNavigation.Instance.WantToCrouch = false;
+
+            var mobileNavigation = BaseFPSNavigation.Instance.Navigations.Find(navigation => navigation is MobileFpsNavigation) as MobileFpsNavigation;
+            Debug.Assert(mobileNavigation != null, "mobileNavigation.Crouch null");
+            Debug.Assert(Game != null, "Game null");
+            Debug.Assert(Game.TrailingArea != null, "Game.TrailingArea null");
+            mobileNavigation.CameraDirection = () => Game.TrailingArea.Direction;
+            Debug.Assert(Game.LeadingArea != null, "Game.LeadingArea null");
+            mobileNavigation.MoveDirection = () => Game.LeadingArea.JoystickArea.Joystick.Direction;
         }
 
         protected virtual void InitGame_UserList()
@@ -96,13 +113,16 @@ namespace umi3d.baseBrowser.connection
         {
             EmoteManager.Instance.EmotesLoaded += emotes =>
             {
-                Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
-                EmoteWindow_C.OnEmoteConfigReceived(emotes);
-            };
-            EmoteManager.Instance.NoEmotesLoaded += () =>
-            {
-                Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
-                EmoteWindow_C.Reset();
+                if (emotes is not null && emotes.Count > 0)
+                {
+                    Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
+                    EmoteWindow_C.Instance.OnEmoteConfigReceived(emotes);
+                }
+                else
+                {
+                    Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
+                    EmoteWindow_C.Reset();
+                }
             };
             EmoteManager.Instance.EmoteUpdated += EmoteWindow_C.OnUpdateEmote;
         }
@@ -148,11 +168,20 @@ namespace umi3d.baseBrowser.connection
         {
             LeadingArea.InteractableMapping.MappingAdded += () =>
             {
-                LeadingArea.InteractableMapping.InteractableName = BaseController.Instance.mouseData.CurrentHovered.name;
+
+                if (string.IsNullOrEmpty(BaseController.Instance?.mouseData.CurrentHovered?.name))
+                {
+                    LeadingArea.InteractableMapping.InteractableName = BaseController.Instance?.mouseData.OldHovered?.name?? "Interaction";
+                }
+                else
+                {
+                    LeadingArea.InteractableMapping.InteractableName = BaseController.Instance.mouseData.CurrentHovered.name;
+
+                }
                 //LeadingArea.InteractableMapping
                 //    .SetLeft(0)
                 //    .WithAnimation();
-                UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                //UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
                 LeadingArea.InteractableMapping.Display();
             };
             LeadingArea.InteractableMapping.MappingRemoved += () =>
@@ -161,7 +190,7 @@ namespace umi3d.baseBrowser.connection
                 //    .SetLeft(Length.Percent(-50f))
                 //    .WithAnimation()
                 //    .SetCallback(() => LeadingArea.InteractableMapping.InteractableName = null);
-                UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                //UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
                 LeadingArea.InteractableMapping.Hide();
                 LeadingArea.InteractableMapping.InteractableName = null;
             };
@@ -183,13 +212,13 @@ namespace umi3d.baseBrowser.connection
             switch (value)
             {
                 case ContextualMenuEnum.Open:
-                    if (!ObjectMenuDisplay.isDisplaying || forceUpdate) OpenContextualMenu(callbackOpen);
+                    if (TrailingArea.ActiveWindow != TrailingArea_C.WindowsEnum.ContextualMenu || forceUpdate) OpenContextualMenu(callbackOpen);
                     break;
                 case ContextualMenuEnum.Close:
-                    if (ObjectMenuDisplay.isDisplaying || forceUpdate) CloseContextualMenu();
+                    if (TrailingArea.ActiveWindow == TrailingArea_C.WindowsEnum.ContextualMenu || forceUpdate) CloseContextualMenu();
                     break;
                 case ContextualMenuEnum.OpenOrClose:
-                    if (ObjectMenuDisplay.isDisplaying) CloseContextualMenu();
+                    if (TrailingArea.ActiveWindow == TrailingArea_C.WindowsEnum.ContextualMenu) CloseContextualMenu();
                     else OpenContextualMenu(callbackOpen);
                     break;
                 default:
@@ -248,38 +277,34 @@ namespace umi3d.baseBrowser.connection
                         button.menuItem.NotifyValueChange(false);
                     });
                 }
-                //else UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
-                else
-                {
-                    UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
-                    Game.Cursor.Action = null;
-                    UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
-                }
+                else UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
+                //else
+                //{
+                //    UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                //    Game.Cursor.Action = null;
+                //    UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
+                //}
 
                 if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;
             }
             else
             {
-                //string CursorAction = null;
-                //if
-                //(
-                //    BaseController.Exists
-                //    && BaseController.Instance.mouseData.CurrentHovered != null
-                //) CursorAction = BaseController.Instance.mouseData.CurrentHovered.dto.name;
-                //if
-                //(
-                //    string.IsNullOrEmpty(CursorAction)
-                //    || CursorAction == "new tool"
-                //) Game.Cursor.ActionText.LocalisedText = new LocalisationAttribute("Display contextual Menu", "Other", "DisplayInteractionsMenu");
-                //else Game.Cursor.Action = CursorAction;
+                string CursorAction = null;
+                if (BaseController.Exists && BaseController.Instance.mouseData.CurrentHovered != null) 
+                    CursorAction = BaseController.Instance.mouseData.CurrentHovered.dto.name;
 
-                //if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;
+                if (string.IsNullOrEmpty(CursorAction) || CursorAction == "new tool") 
+                    Game.Cursor.ActionText.LocalisedText = new LocalisationAttribute("Display contextual Menu", "Other", "DisplayInteractionsMenu");
+                else 
+                    Game.Cursor.Action = CursorAction;
 
-                //UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
+                if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;
 
-                UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
-                Game.Cursor.Action = null;
-                UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
+                UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
+
+                //UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                //Game.Cursor.Action = null;
+                //UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
             }
         }
 

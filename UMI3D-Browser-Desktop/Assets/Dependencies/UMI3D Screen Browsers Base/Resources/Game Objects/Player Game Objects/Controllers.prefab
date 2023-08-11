@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4961771076093077964
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4304136304215375691}
+  m_Layer: 0
+  m_Name: Mobile Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4304136304215375691
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4961771076093077964}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3437024025467046420}
+  m_Father: {fileID: 5737028900505413029}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5544760081601926436
 GameObject:
   m_ObjectHideFlags: 0
@@ -66,6 +98,7 @@ Transform:
   - {fileID: 5737028901877809139}
   - {fileID: 5737028902039734194}
   - {fileID: 5737028901965113654}
+  - {fileID: 4304136304215375691}
   - {fileID: 4891275689946750873}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -125,10 +158,12 @@ MonoBehaviour:
   KeyboardEmotes: {fileID: 5737028900827975624}
   KeyboardNavigations: {fileID: 5737028901654668679}
   KeyboardManipulations: {fileID: 5544760081601926436}
+  MobileAction: {fileID: 6903327770410949538}
   ObjectMenu: {fileID: 0}
-  ManipulationMenu: {fileID: 0}
+  ManipulationMenu: {fileID: 11400000, guid: 55f6abd47af8d764eb2709ef7830c073, type: 2}
   interactionBoneType: 58
   hoverBoneType: 58
+  hoverBoneTransform: {fileID: 0}
 --- !u!114 &5737028900505413025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,7 +243,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -244,7 +278,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -280,7 +313,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -355,7 +387,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -400,7 +431,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -445,7 +475,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -490,7 +519,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -535,7 +563,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -572,7 +599,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -609,7 +635,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -620,7 +645,7 @@ MonoBehaviour:
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: c3fb9595-6136-4d67-97ef-c4bc3b7d5d8d
-      m_Path: <Keyboard>/c
+      m_Path: <Keyboard>/leftCtrl
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -646,7 +671,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -718,7 +742,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 3
   Key:
     m_Name: Key
     m_Type: 0
@@ -754,7 +777,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 3
   Key:
     m_Name: Key
     m_Type: 0
@@ -790,7 +812,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 3
   Key:
     m_Name: Key
     m_Type: 0
@@ -826,7 +847,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 3
   Key:
     m_Name: Key
     m_Type: 0
@@ -1004,7 +1024,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1041,7 +1060,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1078,7 +1096,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1115,7 +1132,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1168,7 +1184,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1221,7 +1236,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1258,7 +1272,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1295,7 +1308,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1332,7 +1344,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1369,7 +1380,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1406,7 +1416,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1443,7 +1452,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1480,7 +1488,6 @@ MonoBehaviour:
   onInputUp:
     m_PersistentCalls:
       m_Calls: []
-  bone: 0
   Key:
     m_Name: Key
     m_Type: 0
@@ -1499,6 +1506,56 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
   Shortcut: 13
+--- !u!1 &6903327770410949538
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3437024025467046420}
+  - component: {fileID: 142750175894710949}
+  m_Layer: 0
+  m_Name: MobileActions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3437024025467046420
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6903327770410949538}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4304136304215375691}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &142750175894710949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6903327770410949538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36602a6f5e7b8af44a3987965b3b8cfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onInputDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onInputUp:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &5737028901854242779
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1509,7 +1566,7 @@ PrefabInstance:
     - target: {fileID: 900517824931067970, guid: d2e57c484e053d94eba781435f279f12,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 900517824931067970, guid: d2e57c484e053d94eba781435f279f12,
         type: 3}

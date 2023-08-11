@@ -1,0 +1,20 @@
+{
+    "name": "umi3d.localization.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d0bf4ea2ef3a7c74e9160b8995fd902b",
+        "GUID:007a934ecc176214d9afb0acb90820b8",
+        "GUID:50d2c75c8b4b23c46b62e4aa00c597c7"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

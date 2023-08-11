@@ -259,35 +259,35 @@ namespace umi3d.baseBrowser.inputs.interactions
             {
                 //dof 2
                 case DofGroupEnum.XY:
-                    Manipulation.translation = new Vector3(distance.x, distance.y, 0) * strength;
+                    Manipulation.translation = (new Vector3(distance.x, distance.y, 0) * strength).Dto();
                     break;
                 case DofGroupEnum.XZ:
-                    Manipulation.translation = new Vector3(distance.x, 0, distance.z) * strength;
+                    Manipulation.translation = (new Vector3(distance.x, 0, distance.z) * strength).Dto();
                     break;
                 case DofGroupEnum.YZ:
-                    Manipulation.translation = new Vector3(0, distance.y, distance.z) * strength;
+                    Manipulation.translation = (new Vector3(0, distance.y, distance.z) * strength).Dto();
                     break;
                 //dof 1
                 case DofGroupEnum.X:
-                    Manipulation.translation = new Vector3(distance.x, 0, 0) * strength;
+                    Manipulation.translation = (new Vector3(distance.x, 0, 0) * strength).Dto();
                     break;
                 case DofGroupEnum.Y:
-                    Manipulation.translation = new Vector3(0, distance.y, 0) * strength;
+                    Manipulation.translation = (new Vector3(0, distance.y, 0) * strength).Dto();
                     break;
                 case DofGroupEnum.Z:
-                    Manipulation.translation = new Vector3(0, 0, distance.z) * strength;
+                    Manipulation.translation = (new Vector3(0, 0, distance.z) * strength).Dto();
                     break;
                 case DofGroupEnum.RX:
                     if (Radius(distance.y, distance.z) > 0.1f)
-                        Manipulation.rotation = Quaternion.Euler(AngleMod(Mathf.Rad2Deg * Mathf.Atan2(distance.z, distance.y)) * strength, 0, 0);
+                        Manipulation.rotation = Quaternion.Euler(AngleMod(Mathf.Rad2Deg * Mathf.Atan2(distance.z, distance.y)) * strength, 0, 0).Dto();
                     break;
                 case DofGroupEnum.RY:
                     if (Radius(distance.z, distance.x) > 0.1f)
-                        Manipulation.rotation = Quaternion.Euler(0, AngleMod(Mathf.Rad2Deg * Mathf.Atan2(distance.x, distance.z)) * strength, 0);
+                        Manipulation.rotation = Quaternion.Euler(0, AngleMod(Mathf.Rad2Deg * Mathf.Atan2(distance.x, distance.z)) * strength, 0).Dto();
                     break;
                 case DofGroupEnum.RZ:
                     if (Radius(distance.x, distance.y) > 0.1f)
-                        Manipulation.rotation = Quaternion.Euler(0, 0, AngleMod(Mathf.Rad2Deg * Mathf.Atan2(distance.y, distance.x) - 90) * strength);
+                        Manipulation.rotation = Quaternion.Euler(0, 0, AngleMod(Mathf.Rad2Deg * Mathf.Atan2(distance.y, distance.x) - 90) * strength).Dto();
                     break;
             }
         }

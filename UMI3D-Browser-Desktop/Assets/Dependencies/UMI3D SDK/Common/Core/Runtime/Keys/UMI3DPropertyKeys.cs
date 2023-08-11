@@ -192,14 +192,18 @@ namespace umi3d.common
 
         #region UserTracking
         // 11000-11999
-        public const uint UserBindings = 11001;
+        public const uint Bindings = 11001;
         public const uint ActiveBindings = 11002;
 
-        public const uint ActiveHandPose = 11003;
-        public const uint ActiveBodyPose = 11004;
+        public const uint ActivePoseOverrider = 11003;
+        public const uint UserSize = 11004;
 
         public const uint ChangeEmoteConfig = 11005;
         public const uint ActiveEmote = 11006;
+        public const uint AnimationEmote = 11007;
+
+        public const uint Poses = 11008;
+        public const uint AllPoseOverriderContainers = 11009;
         #endregion
 
         #region notification
@@ -290,7 +294,6 @@ namespace umi3d.common
         public const uint WebViewSize = 17002;
         public const uint WebViewTextureSize = 17003;
         public const uint WebViewUrl = 17004;
-        public const uint WebViewSyncView = 17005;
 
         #endregion
 
