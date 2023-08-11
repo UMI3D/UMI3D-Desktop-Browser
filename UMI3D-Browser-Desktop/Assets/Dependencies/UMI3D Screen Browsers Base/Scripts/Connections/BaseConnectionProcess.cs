@@ -282,9 +282,7 @@ namespace umi3d.baseBrowser.connection
         protected void StoreCurrentConnectionDataAndConnect()
         {
             preferences.ServerPreferences.StoreUserData(currentConnectionData);
-            //LoadEnvironment();
-            Connect();
-            onlyOneConnection = false;
+            LoadEnvironment();
         }
 
         protected async void LoadEnvironment()

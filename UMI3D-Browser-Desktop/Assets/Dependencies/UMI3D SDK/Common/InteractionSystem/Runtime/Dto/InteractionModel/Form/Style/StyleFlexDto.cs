@@ -1,6 +1,6 @@
 using UnityEngine.UIElements;
 
-public class FlexStyleDto : StyleDto
+public class FlexStyleDto : VariantStyleDto
 {
     public FlexDirection Direction { get; set; }
 }

@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="ErrorBox" src="project://database/Assets/Project/Resources/UI%20NEW/ErrorBox.uxml?fileID=9197481963319205126&amp;guid=adbcfdaaf5e391442a39eb28e9161cd3&amp;type=3#ErrorBox" />
     <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Base.uss?fileID=7433441132597879392&amp;guid=e32d8e46f465ff446bbd9cce72b7e655&amp;type=3#Base" />
     <ui:Button name="Help" style="position: absolute; left: auto; top: 48px; right: 32px; width: 24px; height: 24px; background-image: url(&apos;project://database/Assets/Project/Resources/UI%20NEW/Icons/help2.svg?fileID=7388822144124034973&amp;guid=4043726880b431e4f996b598f5bb08f9&amp;type=3#help2&apos;); background-color: rgba(88, 88, 88, 0); -unity-background-image-tint-color: rgb(255, 255, 255); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0;" />
     <ui:VisualElement name="Footer" class="footer">
@@ -6,4 +7,5 @@
         <ui:Label text="0.0.0.000000" name="Version" style="height: 22px; font-size: 16px; -unity-text-align: middle-center; -unity-font-style: normal;" />
     </ui:VisualElement>
     <ui:VisualElement name="Logo" class="logo" />
+    <ui:Instance template="ErrorBox" name="ErrorBox" class="hidden" />
 </ui:UXML>

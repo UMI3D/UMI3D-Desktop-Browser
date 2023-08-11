@@ -1,8 +1,12 @@
 using GLTFast.Schema;
 using inetum.unityUtils;
+using Mono.Cecil;
+using NAudio.MediaFoundation;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using umi3d.cdk;
+using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.common.interaction.form;
 using UnityEngine;
@@ -130,13 +134,20 @@ public class FormScreen : BaseScreen
         var result = new VisualElement();
         switch (div)
         {
+            case GroupDto childGroup:
+                result.Add(GetGroupVisualElement(childGroup, answers, callback));
+                break;
             case LabelDto label:
                 var labelElement = new Label(label.Text);
                 result = labelElement;
                 SetServerStyle(labelElement, label.Styles);
                 break;
-            case GroupDto childGroup:
-                result.Add(GetGroupVisualElement(childGroup, answers, callback));
+            case ImageDto image:
+                if (image.Resource == null) break;
+                if (image.Resource.variants == null) break;
+                if (image.Resource.variants.Count == 0) break;
+                SetImage(image, result);
+                SetServerStyle(result, image.Styles);
                 break;
             case BaseInputDto baseInput:
                 result = CreateInputElement(baseInput, answers, callback);
@@ -145,6 +156,19 @@ public class FormScreen : BaseScreen
                 break;
         }
         return result;
+    }
+
+    private static async void SetImage(ImageDto image, VisualElement element)
+    {
+        FileDto fileToLoad = UMI3DEnvironmentLoader.AbstractParameters.ChooseVariant(image.Resource.variants);
+        IResourcesLoader loader = UMI3DEnvironmentLoader.AbstractParameters.SelectLoader(fileToLoad.extension);
+        if (loader == null) return;
+
+        var fileLoaded = await UMI3DResourcesManager.LoadFile(image.Id, fileToLoad, loader);
+        var texture = fileLoaded as Texture2D;
+        if (texture == null) return;
+
+        element.style.backgroundImage = texture;
     }
 
     private VisualElement CreateInputElement(BaseInputDto baseInput, FormAnswerDto answers, Action<FormAnswerDto> callback)
@@ -224,20 +248,27 @@ public class FormScreen : BaseScreen
 
         foreach (var style in styles)
         {
-            switch (style)
+            foreach (var variant in style.Variants)
             {
-                case FlexStyleDto flex:
-                    element.style.flexDirection = flex.Direction;
-                    break;
-                case PositionStyleDto position:
-                    element.style.position = position.Position;
-                    element.style.top = position.Top;
-                    element.style.bottom = position.Bottom;
-                    element.style.right = position.Right;
-                    element.style.left = position.Left;
-                    break;
-                default:
-                    break;
+                switch (variant)
+                {
+                    case FlexStyleDto flex:
+                        element.style.flexDirection = flex.Direction;
+                        break;
+                    case PositionStyleDto position:
+                        element.style.position = position.Position;
+                        element.style.top = position.Top;
+                        element.style.bottom = position.Bottom;
+                        element.style.right = position.Right;
+                        element.style.left = position.Left;
+                        break;
+                    case SizeStyleDto size:
+                        element.style.width = size.Width;
+                        element.style.height = size.Height;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

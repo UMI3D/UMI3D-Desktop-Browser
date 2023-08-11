@@ -1,6 +1,6 @@
 using UnityEngine.UIElements;
 
-public class PositionStyleDto : StyleDto
+public class PositionStyleDto : VariantStyleDto
 {
     public Position Position { get; set; }
 

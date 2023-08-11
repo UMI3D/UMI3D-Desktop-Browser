@@ -1,0 +1,37 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="BaseMenu" src="project://database/Assets/Project/Resources/UI%20NEW/MenuBase.uxml?fileID=9197481963319205126&amp;guid=623a89fef465cfe409bbb262e330de5d&amp;type=3#MenuBase" />
+    <ui:Instance template="BaseMenu" name="BaseMenu">
+        <ui:VisualElement name="Navigation">
+            <ui:VisualElement name="HomeIntermediateArea">
+                <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Navigation/NavigationIntermediateArea.uss?fileID=7433441132597879392&amp;guid=5980de27232d7b944b88b0e2f44b2932&amp;type=3#NavigationIntermediateArea" />
+                <ui:VisualElement name="IntermediateArea" class="intermediate-area" style="justify-content: center; align-items: center;">
+                    <ui:VisualElement name="Body" class="url-field">
+                        <ui:VisualElement name="Icon" class="unity-image icon" style="background-image: resource(&apos;UI NEW/Icons/world mini&apos;); width: 54px; padding-right: 15px;" />
+                        <ui:Button display-tooltip-when-elided="true" name="ButtonSubmit" class="submit" style="background-image: resource(&apos;UI NEW/Icons/validation_button_arrow 1&apos;); background-color: rgba(255, 255, 255, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); width: 43px;" />
+                        <ui:TextField picking-mode="Ignore" name="Url" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="MainArea">
+                <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Navigation/MainArea.uss?fileID=7433441132597879392&amp;guid=b1f186ed39f877e45902c91fe988c3c2&amp;type=3#MainArea" />
+                <ui:VisualElement name="MainArea" class="main-area">
+                    <ui:Button display-tooltip-when-elided="true" name="ButtonSettings" class="menu-button">
+                        <ui:VisualElement name="Icon" class="unity-image" style="background-image: resource(&apos;UI NEW/Icons/settings&apos;);" />
+                        <ui:Label text="Settings" display-tooltip-when-elided="true" name="Text" />
+                    </ui:Button>
+                    <ui:VisualElement name="CentralArea" class="central-area">
+                        <ui:RadioButtonGroup value="0" name="NavigationsButtons" class="menu-navigation">
+                            <ui:RadioButton label="Last" value="true" />
+                            <ui:RadioButton label="Favorite" />
+                        </ui:RadioButtonGroup>
+                        <ui:ScrollView name="Elements" mode="Horizontal" />
+                    </ui:VisualElement>
+                    <ui:Button display-tooltip-when-elided="true" name="ButtonStorage" class="menu-button">
+                        <ui:VisualElement name="Icon" class="unity-image" style="background-image: resource(&apos;UI NEW/Icons/storage4&apos;);" />
+                        <ui:Label text="Storage" display-tooltip-when-elided="true" name="Text" />
+                    </ui:Button>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:Instance>
+</ui:UXML>
