@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 
-public class StyleDto
+namespace umi3d.common.interaction.form
 {
-    public List<VariantStyleDto> Variants { get; set; }
+    public class StyleDto
+    {
+        public List<VariantStyleDto> Variants { get; set; }
+    }
 }

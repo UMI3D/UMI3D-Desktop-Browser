@@ -248,27 +248,24 @@ public class FormScreen : BaseScreen
 
         foreach (var style in styles)
         {
-            foreach (var variant in style.Variants)
+            switch (style.Variants.Find(v => v.DeviceType.HasFlag(umi3d.common.interaction.form.DeviceType.Screen)))
             {
-                switch (variant)
-                {
-                    case FlexStyleDto flex:
-                        element.style.flexDirection = flex.Direction;
-                        break;
-                    case PositionStyleDto position:
-                        element.style.position = position.Position;
-                        element.style.top = position.Top;
-                        element.style.bottom = position.Bottom;
-                        element.style.right = position.Right;
-                        element.style.left = position.Left;
-                        break;
-                    case SizeStyleDto size:
-                        element.style.width = size.Width;
-                        element.style.height = size.Height;
-                        break;
-                    default:
-                        break;
-                }
+                case FlexStyleDto flex:
+                    element.style.flexDirection = flex.Direction;
+                    break;
+                case PositionStyleDto position:
+                    element.style.position = position.Position;
+                    element.style.top = position.Top;
+                    element.style.bottom = position.Bottom;
+                    element.style.right = position.Right;
+                    element.style.left = position.Left;
+                    break;
+                case SizeStyleDto size:
+                    element.style.width = size.Width;
+                    element.style.height = size.Height;
+                    break;
+                default:
+                    break;
             }
         }
     }

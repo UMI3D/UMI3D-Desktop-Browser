@@ -1,6 +1,9 @@
 using UnityEngine.UIElements;
 
-public class FlexStyleDto : VariantStyleDto
+namespace umi3d.common.interaction.form
 {
-    public FlexDirection Direction { get; set; }
+    public class FlexStyleDto : VariantStyleDto
+    {
+        public FlexDirection Direction { get; set; }
+    }
 }

@@ -1,7 +1,10 @@
 using UnityEngine.UIElements;
 
-public class SizeStyleDto : VariantStyleDto
+namespace umi3d.common.interaction.form
 {
-    public StyleLength Width { get; set; }
-    public StyleLength Height { get; set; }
+    public class SizeStyleDto : VariantStyleDto
+    {
+        public StyleLength Width { get; set; }
+        public StyleLength Height { get; set; }
+    }
 }
