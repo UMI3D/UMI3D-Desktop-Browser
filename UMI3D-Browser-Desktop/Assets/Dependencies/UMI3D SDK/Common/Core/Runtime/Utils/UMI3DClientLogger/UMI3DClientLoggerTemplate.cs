@@ -392,6 +392,11 @@
 //        /// </summary>
 //        public void Report()
 //        {
+//            if (this.Count == 0)
+//            {
+//                return;
+//            }
+
 //            string message = "";
 
 //            message += $"Report [{ID}] start: {'-'.Repeat(10)}";
@@ -653,6 +658,7 @@
 //        /// <param name="cells">The collection of cells in a line.</param>
 //        /// <param name="context">Object to which the message applies.</param>
 //        /// <param name="color">The color of the log in the Unity console.</param>
+//        /// <param name="report">A report to wich this log will be added.</param>
 //        /// <param name="memberName">The name of the caller.</param>
 //        /// <param name="sourceFilePath">File path of the caller.</param>
 //        /// <param name="sourceLineNumber">Line number in the file where of the caller.</param>
@@ -769,6 +775,7 @@
 //        /// <param name="message">String or object to be converted to string representation for display.</param>
 //        /// <param name="context">Object to which the message applies.</param>
 //        /// <param name="color">The color of the log in the Unity console.</param>
+//        /// <param name="report">A report to wich this log will be added.</param>
 //        /// <param name="memberName">The name of the caller.</param>
 //        /// <param name="sourceFilePath">File path of the caller.</param>
 //        /// <param name="sourceLineNumber">Line number in the file where of the caller.</param>
@@ -822,6 +829,10 @@
 //        /// <param name="message">String or object to be converted to string representation for display.</param>
 //        /// <param name="context">Object to which the message applies.</param>
 //        /// <param name="color">The color of the log in the Unity console.</param>
+//        /// <param name="report">A report to wich this log will be added.</param>
+//        /// <param name="memberName">The name of the caller.</param>
+//        /// <param name="sourceFilePath">File path of the caller.</param>
+//        /// <param name="sourceLineNumber">Line number in the file where of the caller.</param>
 //        [Conditional("UMI3D_DEBUG")]
 //        public void DebugAssertion(
 //            string tag, object message,
@@ -866,6 +877,10 @@
 //        /// <param name="message">String or object to be converted to string representation for display.</param>
 //        /// <param name="context">Object to which the message applies.</param>
 //        /// <param name="color">The color of the log in the Unity console.</param>
+//        /// <param name="report">A report to wich this log will be added.</param>
+//        /// <param name="memberName">The name of the caller.</param>
+//        /// <param name="sourceFilePath">File path of the caller.</param>
+//        /// <param name="sourceLineNumber">Line number in the file where of the caller.</param>
 //        [Conditional("UMI3D_DEBUG")]
 //        public void DebugAssert(
 //            bool condition, string tag, object message = null,
@@ -911,6 +926,7 @@
 //        /// <param name="message">String or object to be converted to string representation for display.</param>
 //        /// <param name="context">Object to which the message applies.</param>
 //        /// <param name="color">The color of the log in the Unity console.</param>
+//        /// <param name="report">A report to wich this log will be added.</param>
 //        /// <param name="memberName">The name of the caller.</param>
 //        /// <param name="sourceFilePath">File path of the caller.</param>
 //        /// <param name="sourceLineNumber">Line number in the file where of the caller.</param>
@@ -963,6 +979,7 @@
 //        /// <param name="message">String or object to be converted to string representation for display.</param>
 //        /// <param name="context">Object to which the message applies.</param>
 //        /// <param name="color">The color of the log in the Unity console.</param>
+//        /// <param name="report">A report to wich this log will be added.</param>
 //        /// <param name="memberName">The name of the caller.</param>
 //        /// <param name="sourceFilePath">File path of the caller.</param>
 //        /// <param name="sourceLineNumber">Line number in the file where of the caller.</param>
@@ -1011,6 +1028,10 @@
 //        /// <param name="message">String or object to be converted to string representation for display.</param>
 //        /// <param name="context">Object to which the message applies.</param>
 //        /// <param name="color">The color of the log in the Unity console.</param>
+//        /// <param name="report">A report to wich this log will be added.</param>
+//        /// <param name="memberName">The name of the caller.</param>
+//        /// <param name="sourceFilePath">File path of the caller.</param>
+//        /// <param name="sourceLineNumber">Line number in the file where of the caller.</param>
 //        public void Assertion(
 //            string tag, object message,
 //            UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.Orange,
@@ -1038,7 +1059,12 @@
 //            }
 //            else
 //            {
+//                var stackTraceType = Application.GetStackTraceLogType(UnityEngine.LogType.Assert);
+//                Application.SetStackTraceLogType(UnityEngine.LogType.Assert, StackTraceLogType.ScriptOnly);
+
 //                LogHandler.LogFormat(UnityEngine.LogType.Assert, context ?? MainContext, message.FormatLog(UMI3DLogType.Assert, MainTag, tag, color, IsThreadDisplayed));
+
+//                Application.SetStackTraceLogType(UnityEngine.LogType.Assert, stackTraceType);
 //            }
 //        }
 
@@ -1050,6 +1076,10 @@
 //        /// <param name="message">String or object to be converted to string representation for display.</param>
 //        /// <param name="context">Object to which the message applies.</param>
 //        /// <param name="color">The color of the log in the Unity console.</param>
+//        /// <param name="report">A report to wich this log will be added.</param>
+//        /// <param name="memberName">The name of the caller.</param>
+//        /// <param name="sourceFilePath">File path of the caller.</param>
+//        /// <param name="sourceLineNumber">Line number in the file where of the caller.</param>
 //        public void Assert(
 //            bool condition, string tag, object message = null,
 //            UnityEngine.Object context = null, UMI3DLogColor color = UMI3DLogColor.Orange,
@@ -1079,7 +1109,12 @@
 //            }
 //            else
 //            {
+//                var stackTraceType = Application.GetStackTraceLogType(UnityEngine.LogType.Assert);
+//                Application.SetStackTraceLogType(UnityEngine.LogType.Assert, StackTraceLogType.ScriptOnly);
+
 //                LogHandler.LogFormat(UnityEngine.LogType.Assert, context ?? MainContext, message.FormatLog(UMI3DLogType.Assert, MainTag, tag, color, IsThreadDisplayed));
+
+//                Application.SetStackTraceLogType(UnityEngine.LogType.Assert, stackTraceType);
 //            }
 //        }
 
@@ -1097,7 +1132,12 @@
 //                return;
 //            }
 
+//            var stackTraceType = Application.GetStackTraceLogType(UnityEngine.LogType.Error);
+//            Application.SetStackTraceLogType(UnityEngine.LogType.Error, StackTraceLogType.ScriptOnly);
+
 //            LogHandler.LogFormat(UnityEngine.LogType.Error, context ?? MainContext, message.FormatLog(UMI3DLogType.Error, MainTag, tag, color, IsThreadDisplayed));
+
+//            Application.SetStackTraceLogType(UnityEngine.LogType.Error, stackTraceType);
 //        }
 
 //        /// <summary>
@@ -1114,35 +1154,27 @@
 //                return;
 //            }
 
-//            LogHandler.LogFormat(UnityEngine.LogType.Exception, context ?? MainContext, exception.Message.FormatLog(UMI3DLogType.Exception, MainTag, tag, color, IsThreadDisplayed));
-//        }
+//            string message = "";
 
-//        /// <summary>
-//        /// A simple method to let you preview the logs.
-//        /// 
-//        /// <para>
-//        /// <list type="bullet">
-//        /// <item>Create a client logger.</item>
-//        /// <item>Assign or not a main tag and a main context.</item>
-//        /// <item>Choose to display or not the thread id.</item>
-//        /// <item>Call this method.</item>
-//        /// </list>
-//        /// </para>
-//        /// </summary>
-//        [Conditional("UNITY_ASSERTIONS")]
-//        public void Preview()
-//        {
-//            Debug("Preview", "A debug message");
-//            DebugAssertion("Preview", "A debugAssertion message");
-//            DebugTodo("Preview", "A Todo message");
-//            DebugHack("Preview", "A Hack message");
+//            message += exception.Message;
 
-//            Default("Preview", "A default message");
-//            Warning("Preview", "A warning message");
-//            Assertion("Preview", "An assertion message");
-//            Error("Preview", "An error message");
+//            if (exception.InnerException != null)
+//            {
+//                message += "\n\n";
+//                message += "Inner ex: ";
+//                message += exception.InnerException.Message;
+//            }
 
-//            Exception("Preview", new Exception("An exception message"));
+//            var stackTraceType = Application.GetStackTraceLogType(UnityEngine.LogType.Exception);
+//            Application.SetStackTraceLogType(UnityEngine.LogType.Exception, StackTraceLogType.ScriptOnly);
+
+//            LogHandler.LogFormat(
+//                UnityEngine.LogType.Exception,
+//                context ?? MainContext,
+//                message.FormatLog(UMI3DLogType.Exception, MainTag, tag, color, IsThreadDisplayed)
+//            );
+
+//            Application.SetStackTraceLogType(UnityEngine.LogType.Exception, stackTraceType);
 //        }
 //    }
 
@@ -1311,7 +1343,19 @@
 //        /// <returns></returns>
 //        public static string AddTags(this string message, string MainTag, string tag)
 //        {
-//            if (!string.IsNullOrEmpty(MainTag))
+//            if (string.IsNullOrEmpty(MainTag) && string.IsNullOrEmpty(tag))
+//            {
+//                message += $"".FormatString(41);
+//            }
+//            else if (string.IsNullOrEmpty(MainTag) && !string.IsNullOrEmpty(tag))
+//            {
+//                message += $"{tag}".FormatString(41);
+//            }
+//            else if (!string.IsNullOrEmpty(MainTag) && string.IsNullOrEmpty(tag))
+//            {
+//                message += $"{MainTag}".FormatString(41);
+//            }
+//            else if (!string.IsNullOrEmpty(MainTag) && !string.IsNullOrEmpty(tag))
 //            {
 //                if (MainTag.Length > 20 && MainTag.Length + tag.Length > 40)
 //                {
@@ -1323,13 +1367,9 @@
 //                {
 //                    message += $"{MainTag}-{tag}".FormatString(41);
 //                }
-//                message += $"{spacing}";
 //            }
-//            else
-//            {
-//                message += $"{tag}".FormatString(41);
-//                message += $"{spacing}";
-//            }
+
+//            message += $"{spacing}";
 
 //            return message;
 //        }
