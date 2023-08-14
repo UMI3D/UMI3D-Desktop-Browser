@@ -304,7 +304,7 @@ namespace umi3d.cdk.collaboration
         {
             if (connections == null)
             {
-                connections = Fetch();
+                connections = fetch();
             }
         }
 
@@ -482,7 +482,7 @@ namespace umi3d.cdk.collaboration
                 UMI3DClientDataPersistence.directory
              ))
             {
-                return null;
+                return new List<UMI3DConnectionData>();
             }
 
             return connections;

@@ -40,6 +40,12 @@ namespace umi3d.cdk
         /// <param name="directories">The possible directories from <see cref="Application.persistentDataPath"/> to <paramref name="fileName"/>.</param>
         public static void StoreData<T>(T data, string fileName, string directories = null)
         {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                ClientDataPersistenceException.LogException($"File name is null or empty.", null, ClientDataPersistenceException.ExceptionTypeEnum.IncorrectFileName);
+                return;
+            }
+
             string path;
 
             if (!string.IsNullOrEmpty(directories))
@@ -96,6 +102,13 @@ namespace umi3d.cdk
         public static bool TryGet<T>(out T data, string fileName, string directories = null) 
             where T : new()
         {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                ClientDataPersistenceException.LogException($"File name is null or empty.", null, ClientDataPersistenceException.ExceptionTypeEnum.IncorrectFileName);
+                data = new T();
+                return false;
+            }
+
             string path;
 
             if (!string.IsNullOrEmpty(directories))
@@ -109,7 +122,6 @@ namespace umi3d.cdk
 
             if (!File.Exists(path))
             {
-                ClientDataPersistenceException.LogException($"File not found at [{path}]", null, ClientDataPersistenceException.ExceptionTypeEnum.FileNotFount);
                 data = new T();
                 return false;
             }
@@ -143,7 +155,7 @@ namespace umi3d.cdk
         public enum ExceptionTypeEnum
         {
             Unknown,
-            FileNotFount,
+            IncorrectFileName,
             DeserializationFailed
         }
 
@@ -160,14 +172,7 @@ namespace umi3d.cdk
 
         public static void LogException(string message, Exception inner, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown)
         {
-            try
-            {
-                throw new ClientDataPersistenceException(message, inner, exceptionType);
-            }
-            catch (Exception e)
-            {
-                logger.Exception(null, e);
-            }
+            logger.Exception(null, new ClientDataPersistenceException(message, inner, exceptionType));
         }
     }
 }

@@ -22,8 +22,17 @@ using UnityEngine;
 
 namespace umi3d.cdk.collaboration
 {
-    public partial class UMI3DClientServerConnection
+    /// <summary>
+    /// Class responsible to connect the client to a server.
+    /// 
+    /// <para>
+    /// When the connection succeed the active scene should switch from the <see cref="launcherScene"/> to the <see cref="environmentScene"/>.
+    /// </para>
+    /// </summary>
+    public class UMI3DClientServerConnection
     {
+        #region Public
+
         #region Connection events
 
         /// <summary>
@@ -115,18 +124,12 @@ namespace umi3d.cdk.collaboration
         {
             this.connect(connectionData);
         }
-    }
+
+        #endregion
 
 
-    /// <summary>
-    /// Class responsible to connect the client to a server.
-    /// 
-    /// <para>
-    /// When the connection succeed the active scene should switch from the <see cref="launcherScene"/> to the <see cref="environmentScene"/>.
-    /// </para>
-    /// </summary>
-    public partial class UMI3DClientServerConnection
-    {
+        #region Private or Protected
+
         /// <summary>
         /// The state of the connection process.
         /// </summary>
@@ -210,7 +213,7 @@ namespace umi3d.cdk.collaboration
             if (connectionData == null)
             {
                 throw new ClientServerConnectionException(
-                    $"Connection data is null when trying to connect.", 
+                    $"Connection data is null when trying to connect.",
                 ClientServerConnectionException.ExceptionTypeEnum.ConnectionNullException
                 );
             }
@@ -319,7 +322,7 @@ namespace umi3d.cdk.collaboration
                     connection = connectionData;
                     UMI3DConnectionDataCollection.Update(connectionData);
                     UMI3DConnectionDataCollection.Save();
-                    
+
                     masterServerFound?.Invoke(this);
                 };
 
@@ -430,7 +433,10 @@ namespace umi3d.cdk.collaboration
             );
 
         }
+
+        #endregion
     }
+
 
     /// <summary>
     /// An exception class to deal with <see cref="UMI3DClientServerConnection"/> issues.

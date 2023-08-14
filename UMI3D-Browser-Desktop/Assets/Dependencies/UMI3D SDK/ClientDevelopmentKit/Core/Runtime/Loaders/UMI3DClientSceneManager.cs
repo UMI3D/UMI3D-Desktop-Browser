@@ -25,58 +25,7 @@ using UnityEngine;
 /// </summary>
 public static class UMI3DClientSceneManager
 {
-    static UMI3DClientLogger logger = new UMI3DClientLogger(mainTag: $"{nameof(UMI3DClientSceneManager)}");
-
-    static Dictionary<string, Coroutine> loadings = new Dictionary<string, Coroutine>();
-    static Dictionary<string, Coroutine> unloadings = new Dictionary<string, Coroutine>();
-
-    /// <summary>
-    /// Whether or not <paramref name="sceneName"/> is currently active or will be active after loading.
-    /// </summary>
-    /// <param name="sceneName"></param>
-    /// <returns></returns>
-    static bool IsOrWillBeLoaded(string sceneName)
-    {
-        if (loadings.ContainsKey(sceneName))
-        {
-            return true;
-        }
-
-        var sceneCount = UnityEngine.SceneManagement.SceneManager.sceneCount;
-        for (int i = 0; i < sceneCount; i++)
-        {
-            if (UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).name == sceneName)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Whether or not <paramref name="sceneName"/> is currently unactive or will be unactive after unloading.
-    /// </summary>
-    /// <param name="sceneName"></param>
-    /// <returns></returns>
-    static bool IsOrWillBeUnloaded(string sceneName)
-    {
-        if (unloadings.ContainsKey(sceneName))
-        {
-            return true;
-        }
-
-        var sceneCount = UnityEngine.SceneManagement.SceneManager.sceneCount;
-        for (int i = 0; i < sceneCount; i++)
-        {
-            if (UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).name == sceneName)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
+    #region public
 
     /// <summary>
     /// Load a scene asyncronously.
@@ -95,7 +44,7 @@ public static class UMI3DClientSceneManager
     /// <returns></returns>
     public static Coroutine LoadSceneAsync(
         string sceneToLoad,
-        Func<bool> shouldStopLoading, Action<float> loadingProgress, 
+        Func<bool> shouldStopLoading, Action<float> loadingProgress,
         Action loadingSucced, Action loadingFail,
         UnityEngine.SceneManagement.LoadSceneMode loadMode = UnityEngine.SceneManagement.LoadSceneMode.Additive,
         UMI3DLogReport report = null
@@ -109,12 +58,12 @@ public static class UMI3DClientSceneManager
 
         var result = CoroutineManager.Instance.AttachCoroutine(_LoadSceneAsync(
             sceneToLoad,
-            shouldStopLoading, loadingProgress, 
+            shouldStopLoading, loadingProgress,
             loadingSucced: () =>
             {
                 loadings.Remove(sceneToLoad);
                 loadingSucced.Invoke();
-            }, 
+            },
             loadingFail: () =>
             {
                 loadings.Remove(sceneToLoad);
@@ -172,9 +121,67 @@ public static class UMI3DClientSceneManager
         return result;
     }
 
-    private static IEnumerator _LoadSceneAsync(
-        string toScene, 
-        Func<bool> shouldStopLoading, Action<float> loadingProgress, 
+    #endregion
+
+
+    #region Private
+
+    static UMI3DClientLogger logger = new UMI3DClientLogger(mainTag: $"{nameof(UMI3DClientSceneManager)}");
+
+    static Dictionary<string, Coroutine> loadings = new Dictionary<string, Coroutine>();
+    static Dictionary<string, Coroutine> unloadings = new Dictionary<string, Coroutine>();
+
+    /// <summary>
+    /// Whether or not <paramref name="sceneName"/> is currently active or will be active after loading.
+    /// </summary>
+    /// <param name="sceneName"></param>
+    /// <returns></returns>
+    static bool IsOrWillBeLoaded(string sceneName)
+    {
+        if (loadings.ContainsKey(sceneName))
+        {
+            return true;
+        }
+
+        var sceneCount = UnityEngine.SceneManagement.SceneManager.sceneCount;
+        for (int i = 0; i < sceneCount; i++)
+        {
+            if (UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).name == sceneName)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Whether or not <paramref name="sceneName"/> is currently unactive or will be unactive after unloading.
+    /// </summary>
+    /// <param name="sceneName"></param>
+    /// <returns></returns>
+    static bool IsOrWillBeUnloaded(string sceneName)
+    {
+        if (unloadings.ContainsKey(sceneName))
+        {
+            return true;
+        }
+
+        var sceneCount = UnityEngine.SceneManagement.SceneManager.sceneCount;
+        for (int i = 0; i < sceneCount; i++)
+        {
+            if (UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).name == sceneName)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    static IEnumerator _LoadSceneAsync(
+        string toScene,
+        Func<bool> shouldStopLoading, Action<float> loadingProgress,
         Action loadingSucced, Action loadingFail,
         UnityEngine.SceneManagement.LoadSceneMode loadMode,
         UMI3DLogReport report
@@ -200,7 +207,7 @@ public static class UMI3DClientSceneManager
         loadingSucced?.Invoke();
     }
 
-    private static IEnumerator _UnloadSceneAsync(
+    static IEnumerator _UnloadSceneAsync(
         string sceneToUnload,
         Action<float> unloadingProgress, Action unloadingSucced,
         UnityEngine.SceneManagement.UnloadSceneOptions unloadMode,
@@ -217,4 +224,6 @@ public static class UMI3DClientSceneManager
         logger.Debug($"{nameof(_UnloadSceneAsync)}", $"[{sceneToUnload}] has finished to unload.", report: report);
         unloadingSucced?.Invoke();
     }
+
+    #endregion
 }
