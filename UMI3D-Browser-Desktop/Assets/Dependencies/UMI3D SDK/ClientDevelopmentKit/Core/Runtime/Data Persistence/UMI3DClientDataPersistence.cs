@@ -27,6 +27,11 @@ namespace umi3d.cdk
     public static class UMI3DClientDataPersistence
     {
         /// <summary>
+        /// Persistent data directory. 
+        /// </summary>
+        public const string directory = "Data Persistence";
+
+        /// <summary>
         /// Stores <paramref name="data"/> in the file <paramref name="fileName"/> at <see cref="Application.persistentDataPath"/>/<paramref name="directories"/>/<paramref name="fileName"/>.
         /// </summary>
         /// <typeparam name="T">The type of data to store.</typeparam>

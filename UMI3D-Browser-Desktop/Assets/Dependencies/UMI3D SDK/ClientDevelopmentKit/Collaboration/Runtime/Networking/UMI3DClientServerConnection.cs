@@ -16,14 +16,108 @@ limitations under the License.
 using inetum.unityUtils;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Data;
 using System.Threading;
 using umi3d.common;
 using UnityEngine;
 
 namespace umi3d.cdk.collaboration
 {
+    public partial class UMI3DClientServerConnection
+    {
+        #region Connection events
+
+        /// <summary>
+        /// Event raise when a master server has been found.
+        /// </summary>
+        public static event Action<UMI3DClientServerConnection> masterServerFound;
+        /// <summary>
+        /// Event raise when a media dto has been found.
+        /// </summary>
+        public static event Action<UMI3DClientServerConnection> mediaDtoFound;
+
+        /// <summary>
+        /// Event raise when the environment scene start loading.
+        /// </summary>
+        public static event Action<UMI3DClientServerConnection> environmentSceneStartLoading;
+        /// <summary>
+        /// Event raise when the loading of the environment scene progresses.
+        /// </summary>
+        public static event Action<float> environmentSceneLoadingProgress;
+
+        public static event Action<UMI3DClientServerConnection> connectionSucceeded;
+        public static event Action<UMI3DClientServerConnection> connectionFailed;
+
+        /// <summary>
+        /// Event raise when the connection process has been aborted.
+        /// </summary>
+        public static event Action<UMI3DClientServerConnection> connectionAborted;
+
+        #endregion
+
+        [Header("Scene names")]
+        /// <summary>
+        /// The launcher scene name.
+        /// </summary>
+        public string launcherScene = "LauncherScene";
+        /// <summary>
+        /// The environment scene name.
+        /// </summary>
+        public string environmentScene = "EnvironmentScene";
+
+        /// <summary>
+        /// The <see cref="UMI3DConnectionData"/> of the current succeeded connection.
+        /// </summary>
+        public UMI3DConnectionData currentConnection
+        {
+            get
+            {
+                return connection;
+            }
+        }
+        /// <summary>
+        /// The <see cref="MediaDto"/> of the current succeeded connection.
+        /// </summary>
+        public MediaDto currentMediaDto
+        {
+            get
+            {
+                return mediaDto;
+            }
+        }
+
+        /// <summary>
+        /// Create a <see cref="UMI3DClientServerConnection"/> with a context.
+        /// </summary>
+        /// <param name="context"></param>
+        public UMI3DClientServerConnection(UnityEngine.Object context = null)
+        {
+            logger = new UMI3DClientLogger(mainTag: nameof(UMI3DClientServerConnection), mainContext: context, isThreadDisplayed: true);
+            ConnectionReport = logger.GetReporter("InitConnection");
+        }
+
+        /// <summary>
+        /// Connect with a <paramref name="url"/> and a <paramref name="isFavorite"/> connection parameters.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="isFavorite"></param>
+        /// <exception cref="ClientServerConnectionException"></exception>
+        public void Connect(string url, bool isFavorite)
+        {
+            this.connect(url, isFavorite);
+        }
+
+        /// <summary>
+        /// Connect with stored <paramref name="connectionData"/>.
+        /// </summary>
+        /// <param name="connectionData"></param>
+        /// <exception cref="ClientServerConnectionException"></exception>
+        public void Connect(UMI3DConnectionData connectionData)
+        {
+            this.connect(connectionData);
+        }
+    }
+
+
     /// <summary>
     /// Class responsible to connect the client to a server.
     /// 
@@ -31,7 +125,7 @@ namespace umi3d.cdk.collaboration
     /// When the connection succeed the active scene should switch from the <see cref="launcherScene"/> to the <see cref="environmentScene"/>.
     /// </para>
     /// </summary>
-    public class UMI3DClientServerConnection
+    public partial class UMI3DClientServerConnection
     {
         /// <summary>
         /// The state of the connection process.
@@ -58,56 +152,13 @@ namespace umi3d.cdk.collaboration
 
         [SerializeField]
         UMI3DClientLogger logger;
-        UMI3DLogReport initConnectionReport;
+        UMI3DLogReport ConnectionReport;
 
-        [Header("Scene names")]
-        [SerializeField]
-        string launcherScene = "LauncherScene";
-        [SerializeField]
-        string environmentScene = "EnvironmentScene";
-
-        /// <summary>
-        /// The <see cref="UMI3DConnectionData"/> of the current succeeded connection.
-        /// </summary>
-        public UMI3DConnectionData currentConnection { get; protected set; }
-        /// <summary>
-        /// The <see cref="MediaDto"/> of the current succeeded connection.
-        /// </summary>
-        public MediaDto currentMediaDto { get; protected set; }
-
-        #region Connection events
-
-        /// <summary>
-        /// Event raise when a master server has been found.
-        /// </summary>
-        public event Action<UMI3DClientServerConnection> masterServerFound;
-        /// <summary>
-        /// Event raise when a media dto has been found.
-        /// </summary>
-        public event Action<UMI3DClientServerConnection> mediaDtoFound;
-
-        /// <summary>
-        /// Event raise when the environment scene start loading.
-        /// </summary>
-        public event Action<UMI3DClientServerConnection> environmentSceneStartLoading;
-        /// <summary>
-        /// Event raise when the loading of the environment scene progresses.
-        /// </summary>
-        public event Action<float> environmentSceneLoadingProgress;
-
-        public event Action<UMI3DClientServerConnection> connectionSucceeded;
-        public event Action<UMI3DClientServerConnection> connectionFailed;
-
-        /// <summary>
-        /// Event raise when the connection process has been aborted.
-        /// </summary>
-        public event Action<UMI3DClientServerConnection> connectionAborted;
-
-        #endregion
+        UMI3DConnectionData connection;
+        MediaDto mediaDto;
 
         #region Connection life cycle data
 
-        //MasterServerLauncher masterServer;
         UMI3DWorldControllerClient worldController;
 
         // Connection token.
@@ -123,14 +174,7 @@ namespace umi3d.cdk.collaboration
 
         #endregion
 
-
-        public UMI3DClientServerConnection(UnityEngine.Object context = null)
-        {
-            logger = new UMI3DClientLogger(mainTag: nameof(UMI3DClientServerConnection), mainContext: context, isThreadDisplayed: true);
-            initConnectionReport = logger.GetReporter("InitConnection");
-        }
-
-        public void Connect(string url, bool isFavorite)
+        void connect(string url, bool isFavorite)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -161,7 +205,7 @@ namespace umi3d.cdk.collaboration
             InitConnect(connection);
         }
 
-        public void Connect(UMI3DConnectionData connectionData)
+        void connect(UMI3DConnectionData connectionData)
         {
             if (connectionData == null)
             {
@@ -174,17 +218,6 @@ namespace umi3d.cdk.collaboration
             InitConnect(connectionData);
         }
 
-        /// <summary>
-        /// Initiates the connection to a server.
-        /// 
-        /// <para>
-        /// There is two types of connection to an environment in UMI3D for now:
-        /// <list type="bullet">
-        /// <item>Via a master server.</item>
-        /// <item>Via a world controller.</item>
-        /// </list>
-        /// </para>
-        /// </summary>
         void InitConnect(UMI3DConnectionData connectionData)
         {
             logger.DebugTab(
@@ -207,7 +240,7 @@ namespace umi3d.cdk.collaboration
                         stringFormatSize: 13
                     ),
                 },
-                report: initConnectionReport
+                report: ConnectionReport
             );
 
             // Generic connection data.
@@ -232,7 +265,7 @@ namespace umi3d.cdk.collaboration
                         masterServerTokenSource.Cancel();
                         connectionData.name = mediaDto.name;
 
-                        currentConnection = connectionData;
+                        connection = connectionData;
                         UMI3DConnectionDataCollection.Update(connectionData);
                         UMI3DConnectionDataCollection.Save();
 
@@ -283,7 +316,7 @@ namespace umi3d.cdk.collaboration
                     connectionData.lastConnection = DateTime.Now;
                     connectionData.numberOfConnection = connectionData.numberOfConnection + 1;
 
-                    currentConnection = connectionData;
+                    connection = connectionData;
                     UMI3DConnectionDataCollection.Update(connectionData);
                     UMI3DConnectionDataCollection.Save();
                     
@@ -301,7 +334,7 @@ namespace umi3d.cdk.collaboration
 
             var loadingReport = logger.GetReporter("loading");
             loadingReport.Clear();
-            CoroutineManager.Instance.AttachCoroutine(LoadGameScene(
+            CoroutineManager.Instance.AttachCoroutine(LoadEnvironmentScene(
                 isConnectionInProgress: () =>
                 {
                     bool result = mediaDtoState != ConnectionState.Succes;
@@ -323,17 +356,17 @@ namespace umi3d.cdk.collaboration
             ));
         }
 
-        IEnumerator LoadGameScene(
+        IEnumerator LoadEnvironmentScene(
             Func<bool> isConnectionInProgress, Func<bool> shouldStopLoading,
             UMI3DLogReport report = null
         )
         {
-            logger.Debug($"{nameof(LoadGameScene)}", $"Start {nameof(LoadGameScene)}: wait until media dto or master server is found.", report: report);
+            logger.Debug($"{nameof(LoadEnvironmentScene)}", $"Start {nameof(LoadEnvironmentScene)}: wait until media dto or master server is found.", report: report);
             while (isConnectionInProgress?.Invoke() ?? false)
             {
                 if (shouldStopLoading?.Invoke() ?? false)
                 {
-                    logger.Debug($"{nameof(LoadGameScene)}", $"Stop loading before it started.");
+                    logger.Debug($"{nameof(LoadEnvironmentScene)}", $"Stop loading before it started.");
                     connectionAborted?.Invoke(this);
                     yield break;
                 }
@@ -352,7 +385,7 @@ namespace umi3d.cdk.collaboration
                 ? environmentSceneLoadingProgress
                 : progress =>
                 {
-                    logger.Debug($"{nameof(LoadGameScene)}", $"Loading progress: {progress}", report: progressReport);
+                    logger.Debug($"{nameof(LoadEnvironmentScene)}", $"Loading progress: {progress}", report: progressReport);
                 },
 
                 loadingSucced: () =>
@@ -366,12 +399,12 @@ namespace umi3d.cdk.collaboration
                     //logger.Assert(UMI3DEnvironmentLoader.Exists, $"{nameof(LoadGameScene)}", $"UMI3DEnvironmentLoader does not exist.");
                     //UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => LoadedEnvironment?.Invoke());
 
-                    logger.Assert(UMI3DCollaborationClientServer.Exists, $"{nameof(LoadGameScene)}", $"UMI3DCollaborationClientServer does not exist.");
+                    logger.Assert(UMI3DCollaborationClientServer.Exists, $"{nameof(LoadEnvironmentScene)}", $"UMI3DCollaborationClientServer does not exist.");
                     UMI3DCollaborationClientServer.Instance.Clear();
 
                     try
                     {
-                        logger.Assert(currentMediaDto != null, $"{nameof(LoadGameScene)}", "Media dto null when loading environment scene.");
+                        logger.Assert(currentMediaDto != null, $"{nameof(LoadEnvironmentScene)}", "Media dto null when loading environment scene.");
                         UMI3DCollaborationClientServer.Connect(currentMediaDto, s =>
                         {
                             logger.Error($"{nameof(InitConnect)}", $"{s}");
