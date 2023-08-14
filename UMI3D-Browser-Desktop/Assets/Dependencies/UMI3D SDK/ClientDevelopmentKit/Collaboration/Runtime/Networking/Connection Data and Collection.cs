@@ -20,6 +20,79 @@ using umi3d.common;
 namespace umi3d.cdk.collaboration
 {
     /// <summary>
+    /// A data wrapper for the connection process.
+    /// </summary>
+    public class UMI3DConnectionData
+    {
+        /// <summary>
+        /// The url of this connection.
+        /// </summary>
+        public string url;
+        /// <summary>
+        /// The name of this connection (received from the server).
+        /// </summary>
+        public string name;
+        /// <summary>
+        /// The name of this connection (chose by the user).
+        /// </summary>
+        public string nickname;
+        /// <summary>
+        /// The icon of this connection.
+        /// </summary>
+        public string icon;
+        /// <summary>
+        /// Whether or not this connection is marked as favorite by the user.
+        /// </summary>
+        public bool isFavorite;
+        /// <summary>
+        /// The date of the first connection.
+        /// </summary>
+        public DateTime firstConnection;
+        /// <summary>
+        /// The date of the last connection.
+        /// </summary>
+        public DateTime lastConnection;
+        /// <summary>
+        /// The number of succeeded connection.
+        /// </summary>
+        public int numberOfConnection;
+
+        public UMI3DConnectionData()
+        {
+        }
+
+        /// <summary>
+        /// The ip part of the <see cref="url"/>
+        /// </summary>
+        public string ip
+        {
+            get
+            {
+                return url.Split(':')[0];
+            }
+        }
+
+        /// <summary>
+        /// The port part of the <see cref="url"/>
+        /// </summary>
+        public ushort? port
+        {
+            get
+            {
+                if (ushort.TryParse(url.Split(':')[1], out ushort port))
+                {
+                    return port;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+    }
+
+
+    /// <summary>
     /// The collection of <see cref="UMI3DConnectionData"/>.
     /// 
     /// <para>
@@ -29,8 +102,10 @@ namespace umi3d.cdk.collaboration
     /// There is an internal connection collection that is saved on disk only when the <see cref="UMI3DConnectionDataCollection.save"/> method is called.
     /// </para>
     /// </summary>
-    public static partial class UMI3DConnectionDataCollection
+    public static class UMI3DConnectionDataCollection
     {
+        #region Public
+
         /// <summary>
         /// Whether or not the internal connection collection has been modified without beeing saved.
         /// </summary>
@@ -208,10 +283,12 @@ namespace umi3d.cdk.collaboration
         }
 
         #endregion
-    }
 
-    public static partial class UMI3DConnectionDataCollection
-    {
+        #endregion
+
+
+        #region Private
+
         const string connectionFile = "Connections";
 
         static UMI3DClientLogger logger = new UMI3DClientLogger(mainTag: $"{nameof(UMI3DConnectionDataCollection)}");
@@ -417,7 +494,10 @@ namespace umi3d.cdk.collaboration
 
             hasUnsavedModifications = false;
         }
+
+        #endregion
     }
+
 
     /// <summary>
     /// An exception class to deal with <see cref="UMI3DConnectionDataCollection"/> issues.
