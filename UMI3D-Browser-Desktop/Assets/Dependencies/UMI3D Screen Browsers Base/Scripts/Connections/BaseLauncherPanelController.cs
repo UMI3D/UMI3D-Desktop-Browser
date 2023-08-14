@@ -45,7 +45,6 @@ namespace umi3d.baseBrowser.connection
             Launcher.Version = Application.version;
 #endif
             Launcher.Settings.Audio.SetAudio();
-            Launcher.Connect = value => BaseConnectionProcess.Instance.InitConnect(value);
             Launcher.CurrentServer = BaseConnectionProcess.Instance.currentServer;
             Launcher.SavedServers = BaseConnectionProcess.Instance.savedServers;
             Launcher.CurrentConnectionData = BaseConnectionProcess.Instance.currentConnectionData;
