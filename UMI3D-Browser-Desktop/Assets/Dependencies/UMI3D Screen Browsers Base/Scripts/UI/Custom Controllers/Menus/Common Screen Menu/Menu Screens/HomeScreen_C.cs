@@ -22,6 +22,7 @@ using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.Container;
 using System.Net;
 using umi3d.common;
+using umi3d.cdk.collaboration;
 
 namespace umi3d.commonScreen.menu
 {
@@ -220,7 +221,10 @@ namespace umi3d.commonScreen.menu
             // Get local address if localhost is enterd
             serverUrl.Replace("localhost", GetLocalIPAddress());
 
-            TryToConnect(new ServerPreferences.ServerData { serverUrl = serverUrl.Trim() }, DirectConnect__Toggle.value);
+            //TryToConnect(new ServerPreferences.ServerData { serverUrl = serverUrl.Trim() }, DirectConnect__Toggle.value);
+
+            var connectionProcess = new UMI3DClientServerConnection();
+            connectionProcess.Connect(serverUrl, isFavorite: DirectConnect__Toggle.value);
         }
 
         /// <summary>

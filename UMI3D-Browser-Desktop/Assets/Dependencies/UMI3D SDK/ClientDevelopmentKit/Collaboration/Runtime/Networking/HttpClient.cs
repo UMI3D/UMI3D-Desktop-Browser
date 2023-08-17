@@ -676,27 +676,6 @@ namespace umi3d.cdk.collaboration
 
         #region utils
 
-        static bool isRequestHeaderDispalyed = false;
-
-        static void DisplayRequestHeader()
-        {
-            if (!isRequestHeaderDispalyed)
-            {
-                s_logger.Debug(
-                    $"{nameof(DisplayRequestHeader)}",
-                    $"headerToken:".FormatString(20, UMI3DStringAlignment.Left)
-                    + "    "
-                    + "url:".FormatString(40, UMI3DStringAlignment.Left)
-                    + "    "
-                    + "contentType".FormatString(20)
-                    + "    "
-                    + "tryCount"
-                );
-
-                isRequestHeaderDispalyed = true;
-            }
-        }
-
         public static System.Collections.IEnumerator RequestGet(
             (string token, List<(string, string)> headers) credentials,
             string url,
@@ -794,7 +773,6 @@ namespace umi3d.cdk.collaboration
             int tryCount = 0
         )
         {
-            DisplayRequestHeader();
             s_logger.Debug($"{nameof(_GetRequest)}", 
                 $"{HeaderToken}".FormatString(20)
                 + "    "
@@ -860,7 +838,6 @@ namespace umi3d.cdk.collaboration
         /// <returns></returns>
         private static async Task<UnityWebRequest> _PostRequest(string HeaderToken, string url, string contentType, byte[] bytes, Func<RequestFailedArgument, bool> ShouldTryAgain, bool UseCredential = false, List<(string, string)> headers = null, int tryCount = 0)
         {
-            DisplayRequestHeader();
             s_logger.Debug($"{nameof(_PostRequest)}",
                 $"{HeaderToken}".FormatString(20)
                 + "    "

@@ -13,8 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using umi3d.cdk.collaboration;
 using umi3d.commonScreen;
 using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.menu;
@@ -32,9 +34,13 @@ namespace umi3d.baseBrowser.connection
         protected VisualElement root => document.rootVisualElement;
         protected Dialoguebox_C m_connectionDialoguebox;
 
+        List<UMI3DConnectionData> favoriteConnections;
+
         protected virtual void Start()
         {
             Debug.Assert(document != null);
+
+            favoriteConnections = UMI3DConnectionDataCollection.GetFavorites();
 
             Screen.sleepTimeout = SleepTimeout.SystemSetting;
 
@@ -45,9 +51,9 @@ namespace umi3d.baseBrowser.connection
             Launcher.Version = Application.version;
 #endif
             Launcher.Settings.Audio.SetAudio();
-            Launcher.CurrentServer = BaseConnectionProcess.Instance.currentServer;
-            Launcher.SavedServers = BaseConnectionProcess.Instance.savedServers;
-            Launcher.CurrentConnectionData = BaseConnectionProcess.Instance.currentConnectionData;
+            //Launcher.CurrentServer = BaseConnectionProcess.Instance.currentServer;
+            //Launcher.SavedServers = BaseConnectionProcess.Instance.savedServers;
+            //Launcher.CurrentConnectionData = BaseConnectionProcess.Instance.currentConnectionData;
             Launcher.InitLibraries();
             Launcher.InitTips();
             Launcher.CurrentScreen = LauncherScreens.Home;
