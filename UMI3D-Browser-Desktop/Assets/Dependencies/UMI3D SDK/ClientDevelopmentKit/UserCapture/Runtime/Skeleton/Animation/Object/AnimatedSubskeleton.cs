@@ -208,7 +208,7 @@ namespace umi3d.cdk.userCapture.animation
             unityMainThreadDispatcher.Enqueue(() =>
             {
                 if (updateParameterRoutine is not null)
-                    coroutineService.DettachCoroutine(updateParameterRoutine);
+                    coroutineService.DetachCoroutine(updateParameterRoutine);
 
                 UMI3DClientServer.Instance.OnLeavingEnvironment.RemoveListener(StopParameterSelfUpdate);
             });
@@ -224,7 +224,7 @@ namespace umi3d.cdk.userCapture.animation
             Vector3 previousPosition = Vector3.zero;
             Dictionary<uint, float> previousValues = new();
 
-            while (true)
+            while (skeleton != null && skeleton.HipsAnchor != null)
             {
                 foreach (var parameter in SelfUpdatedAnimatorParameters)
                 {

@@ -163,7 +163,7 @@ namespace inetum.unityUtils
             }
 
             tokenSource?.Cancel();
-            CoroutineManager.Instance.DettachCoroutine(coroutine);
+            CoroutineManager.Instance.DetachCoroutine(coroutine);
             Aborted();
         }
     }
