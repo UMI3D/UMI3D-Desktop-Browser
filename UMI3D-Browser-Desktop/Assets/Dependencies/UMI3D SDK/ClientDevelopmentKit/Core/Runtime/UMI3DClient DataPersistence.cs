@@ -16,7 +16,7 @@ limitations under the License.
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using umi3d.common;
+using umi3d.debug;
 using UnityEngine;
 
 namespace umi3d.cdk
@@ -24,7 +24,7 @@ namespace umi3d.cdk
     /// <summary>
     /// Class responsible for persistently storing data in the UMI3D browser so that it can be retrieved later.
     /// </summary>
-    public static class UMI3DClientDataPersistence
+    internal static class UMI3DDataPersistence
     {
         /// <summary>
         /// Persistent data directory. 
@@ -99,7 +99,7 @@ namespace umi3d.cdk
         /// <param name="fileName">The name of the file.</param>
         /// <param name="directories">The possible directories from <see cref="Application.persistentDataPath"/> to <paramref name="fileName"/>.</param>
         /// <returns></returns>
-        public static bool TryGet<T>(out T data, string fileName, string directories = null) 
+        public static bool TryGetData<T>(out T data, string fileName, string directories = null)
             where T : new()
         {
             if (string.IsNullOrEmpty(fileName))
@@ -142,37 +142,38 @@ namespace umi3d.cdk
             }
             return true;
         }
-    }
 
-    /// <summary>
-    /// An exception class to deal with <see cref="UMI3DClientServerConnection"/> issues.
-    /// </summary>
-    [Serializable]
-    public class ClientDataPersistenceException : Exception
-    {
-        static UMI3DClientLogger logger = new UMI3DClientLogger(mainTag: $"{nameof(ClientDataPersistenceException)}");
 
-        public enum ExceptionTypeEnum
+        /// <summary>
+        /// An exception class to deal with <see cref="UMI3DClientServerConnection"/> issues.
+        /// </summary>
+        [Serializable]
+        private class ClientDataPersistenceException : Exception
         {
-            Unknown,
-            IncorrectFileName,
-            DeserializationFailed
-        }
+            static UMI3DLogger logger = new UMI3DLogger(mainTag: $"{nameof(ClientDataPersistenceException)}");
 
-        public ExceptionTypeEnum exceptionType;
+            public enum ExceptionTypeEnum
+            {
+                Unknown,
+                IncorrectFileName,
+                DeserializationFailed
+            }
 
-        public ClientDataPersistenceException(string message, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown) : base($"{exceptionType}: {message}")
-        {
-            this.exceptionType = exceptionType;
-        }
-        public ClientDataPersistenceException(string message, Exception inner, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown) : base($"{exceptionType}: {message}", inner)
-        {
-            this.exceptionType = exceptionType;
-        }
+            public ExceptionTypeEnum exceptionType;
 
-        public static void LogException(string message, Exception inner, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown)
-        {
-            logger.Exception(null, new ClientDataPersistenceException(message, inner, exceptionType));
+            public ClientDataPersistenceException(string message, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown) : base($"{exceptionType}: {message}")
+            {
+                this.exceptionType = exceptionType;
+            }
+            public ClientDataPersistenceException(string message, Exception inner, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown) : base($"{exceptionType}: {message}", inner)
+            {
+                this.exceptionType = exceptionType;
+            }
+
+            public static void LogException(string message, Exception inner, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown)
+            {
+                logger.Exception(null, new ClientDataPersistenceException(message, inner, exceptionType));
+            }
         }
     }
 }
