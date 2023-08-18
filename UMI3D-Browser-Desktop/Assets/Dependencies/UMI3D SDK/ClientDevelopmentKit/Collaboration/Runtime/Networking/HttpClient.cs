@@ -99,7 +99,7 @@ namespace umi3d.cdk.collaboration
         {
             PrivateIdentityDto dto1 = null;
             FakePrivateIdentityDto dto2 = null;
-
+            
             try
             {
                 dto1 = UMI3DDtoSerializer.FromJson<PrivateIdentityDto>(text, Newtonsoft.Json.TypeNameHandling.None);
@@ -109,15 +109,14 @@ namespace umi3d.cdk.collaboration
                 dto2 = UMI3DDtoSerializer.FromJson<FakePrivateIdentityDto>(text, Newtonsoft.Json.TypeNameHandling.None);
             }
 
-            common.interaction.form.FormDto dto3 = UMI3DDtoSerializer.FromJson<common.interaction.form.FormDto>(text, Newtonsoft.Json.TypeNameHandling.All, new List<JsonConverter>() { new ParameterConverter() });
 
             if (dto1 != null && dto1?.globalToken != null && dto1?.connectionDto != null)
                 return dto1;
             else if (dto2 != null && dto2?.GlobalToken != null && dto2?.connectionDto != null)
                 return dto2.ToPrivateIdentity();
-            else
-                return dto3;
 
+            common.interaction.form.FormDto dto3 = UMI3DDtoSerializer.FromJson<common.interaction.form.FormDto>(text, Newtonsoft.Json.TypeNameHandling.All, new List<JsonConverter>() { new ParameterConverter() });
+            return dto3;
         }
 
         public class ParameterConverter : Newtonsoft.Json.JsonConverter
@@ -708,7 +707,6 @@ namespace umi3d.cdk.collaboration
         /// <returns></returns>
         private static async Task<UnityWebRequest> _PostRequest(string HeaderToken, string url, string contentType, byte[] bytes, Func<RequestFailedArgument, bool> ShouldTryAgain, bool UseCredential = false, List<(string, string)> headers = null, int tryCount = 0)
         {
-
             UnityWebRequest www = CreatePostRequest(url, bytes, contentType, true);
             if (UseCredential) www.SetRequestHeader(UMI3DNetworkingKeys.Authorization, HeaderToken);
             if (headers != null)

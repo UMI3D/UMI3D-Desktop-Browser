@@ -68,6 +68,7 @@ namespace umi3d.baseBrowser.preferences
             catch
             {
                 data = new T();
+                file.Close();
                 return false;
             }
 
