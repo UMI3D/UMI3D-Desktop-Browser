@@ -15,7 +15,9 @@ using UnityEngine.UIElements;
 public class FormScreen : BaseScreen
 {
     private const int k_buttonCooldown = 1500;
-    private bool _isAButtonAlreadyPressed;
+    private bool m_IsAButtonAlreadyPressed;
+
+    private RememberForm m_RemeberForm = new RememberForm();
 
     public FormScreen(VisualElement element) : base(element)
     {
@@ -101,16 +103,7 @@ public class FormScreen : BaseScreen
 
         if (group.CanRemember)
         {
-            var rememberElement = new ToggleButton_C();
-            rememberElement.label = "Remember me!";
-            callback += answers =>
-            {
-                Debug.Log("TODO : REMEMBER FORM");
-            };
-
-            var submit = result.Q(className: "submit");
-            if (submit != null)
-                result.Insert(result.IndexOf(submit), rememberElement);
+            AddRememberMe(result, answers, callback);
         }
 
         return result;
@@ -132,8 +125,8 @@ public class FormScreen : BaseScreen
         if (group.SubmitOnValidate)
             result.RegisterCallback<ClickEvent>(e =>
             {
-                Debug.Log(_isAButtonAlreadyPressed);
-                if (!_isAButtonAlreadyPressed)
+                Debug.Log(m_IsAButtonAlreadyPressed);
+                if (!m_IsAButtonAlreadyPressed)
                 {
                     ButtonActivated();
                     callback?.Invoke(answers);
@@ -170,6 +163,29 @@ public class FormScreen : BaseScreen
                 break;
         }
         return result;
+    }
+
+    private void AddRememberMe(VisualElement result, FormAnswerDto answers, Action<FormAnswerDto> callback)
+    {
+        var rememberElement = new ToggleButton_C();
+        rememberElement.label = "Remember me!";
+
+        var submit = result.Q<Button>(className: "submit");
+        if (submit != null)
+        {
+            submit.clicked += () =>
+            {
+                if (!rememberElement.value) return;
+                m_RemeberForm.SaveAnswer(answers);
+            };
+            result.Insert(result.IndexOf(submit), rememberElement);
+        }
+
+        var rememberedAnswer = m_RemeberForm.GetAnswer(answers);
+        if (rememberedAnswer != null)
+        {
+            callback?.Invoke(rememberedAnswer);
+        }
     }
 
     private static async void SetImage(ImageDto image, VisualElement element)
@@ -219,14 +235,17 @@ public class FormScreen : BaseScreen
                 if (button.Type == umi3d.common.interaction.form.ButtonType.Submit)
                 {
                     buttonElement.AddToClassList("submit");
-                    if (!_isAButtonAlreadyPressed)
+                    if (!m_IsAButtonAlreadyPressed)
                     {
                         ButtonActivated();
-                        buttonElement.clicked += () => callback?.Invoke(answers);
+                        buttonElement.clicked += () =>
+                        {
+                            callback?.Invoke(answers);
+                        };
                     }
                 } else
                 {
-                    if (!_isAButtonAlreadyPressed)
+                    if (!m_IsAButtonAlreadyPressed)
                     {
                         ButtonActivated();
                         buttonElement.clicked += () => Debug.LogWarning("Not Implemented");
@@ -287,8 +306,8 @@ public class FormScreen : BaseScreen
 
     private async void ButtonActivated()
     {
-        _isAButtonAlreadyPressed = true;
+        m_IsAButtonAlreadyPressed = true;
         await Task.Delay(k_buttonCooldown);
-        _isAButtonAlreadyPressed = false;
+        m_IsAButtonAlreadyPressed = false;
     }
 }
