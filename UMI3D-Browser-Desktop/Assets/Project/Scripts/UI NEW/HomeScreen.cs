@@ -1,5 +1,6 @@
 using inetum.unityUtils;
 using System;
+using System.Linq;
 using System.Net;
 using umi3d.baseBrowser.connection;
 using umi3d.baseBrowser.preferences;
@@ -19,9 +20,10 @@ public class HomeScreen : BaseScreen
     {
         _portalUrl = _root.Q<TextField>("Url");
         _portalUrl.SetPlaceholderText("example.fr");
-        var elements = _root.Q("Elements");
+        _root.Q<Button>("ButtonSubmit").clicked += ConnectWithUrl;
 
-        var worlds = BaseConnectionProcess.Instance.savedServers;
+        var elements = _root.Q("Elements");
+        var worlds = BaseConnectionProcess.Instance.savedServers.OrderBy(w => w.dateLastConnection).Reverse();
         elements.Clear();
         foreach (var world in worlds)
         {

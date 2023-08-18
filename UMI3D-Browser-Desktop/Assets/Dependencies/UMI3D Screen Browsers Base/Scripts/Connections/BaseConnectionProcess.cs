@@ -21,6 +21,7 @@ using umi3d.cdk.collaboration;
 using umi3d.common;
 using UnityEngine;
 using umi3d.baseBrowser.cursor;
+using System;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -238,8 +239,18 @@ namespace umi3d.baseBrowser.connection
 
         protected void StoreServer()
         {
-            if (savedServers.Find((server) => server.serverName == currentServer.serverName) == null)
+
+            if (savedServers.Find((server) => server.serverName == currentServer.serverName) is var server && server != null)
+            {
+                server.dateLastConnection = DateTime.UtcNow.ToString();
+            }
+            else 
+            {
+                currentServer.dateFirstConnection = DateTime.UtcNow.ToString();
+                currentServer.dateLastConnection = DateTime.UtcNow.ToString();
                 savedServers.Add(currentServer);
+            }
+
             preferences.ServerPreferences.StoreRegisteredServerData(savedServers);
         }
 
