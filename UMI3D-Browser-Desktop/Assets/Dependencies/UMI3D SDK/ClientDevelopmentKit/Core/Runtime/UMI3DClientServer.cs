@@ -28,15 +28,10 @@ namespace umi3d.cdk
     public class UMI3DClientServer : inetum.unityUtils.PersistentSingleBehaviour<UMI3DClientServer>, IUMI3DClientServer
     {
         private const DebugScope scope = DebugScope.CDK | DebugScope.Core | DebugScope.Networking;
-
         /// <summary>
         /// Environment connected to.
         /// </summary>
         protected MediaDto _media;
-        /// <summary>
-        /// Environment connected to.
-        /// </summary>
-        public static MediaDto Media => Exists ? Instance._media : null;
 
         public UnityEvent OnLeaving { get; } = new UnityEvent();
         public UnityEvent OnLeavingEnvironment { get; } = new UnityEvent();
@@ -61,10 +56,6 @@ namespace umi3d.cdk
         /// Environment connected to.
         /// </summary>
         protected virtual EnvironmentConnectionDto connectionDto { get; }
-        /// <summary>
-        /// Environment connected to.
-        /// </summary>
-        public static EnvironmentConnectionDto Environment => Exists ? Instance.connectionDto : null;
 
         public virtual UMI3DVersion.Version version { get; }
 
@@ -72,7 +63,15 @@ namespace umi3d.cdk
         /// If true, authorizations must be set in headers.
         /// </summary>
         public bool AuthorizationInHeader => connectionDto?.authorizationInHeader ?? false;
-        
+
+        /// <summary>
+        /// Environment connected to.
+        /// </summary>
+        public static MediaDto Media => Exists ? Instance._media : null;
+        /// <summary>
+        /// Environment connected to.
+        /// </summary>
+        public static EnvironmentConnectionDto Environement => Exists ? Instance.connectionDto : null;
 
         // Enable to access the Collaboration implementation. Should not be there and will be reworked.
         public static string getAuthorization()

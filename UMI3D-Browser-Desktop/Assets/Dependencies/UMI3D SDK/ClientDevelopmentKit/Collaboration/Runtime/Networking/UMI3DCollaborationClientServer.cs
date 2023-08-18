@@ -17,7 +17,6 @@ limitations under the License.
 using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Linq;
 using System.Threading.Tasks;
 using umi3d.common;
@@ -311,9 +310,9 @@ namespace umi3d.cdk.collaboration
 
 
         /// <summary>
-        /// <inheritdoc/>
+        /// Retry a failed http request
         /// </summary>
-        /// <param name="argument"></param>
+        /// <param name="argument">failed request argument</param>
         /// <returns></returns>
         public override async Task<bool> TryAgainOnHttpFail(RequestFailedArgument argument)
         {
@@ -333,27 +332,14 @@ namespace umi3d.cdk.collaboration
         /// <returns></returns>
         private async Task<bool> TryAgain(RequestFailedArgument argument)
         {
-            bool needNewToken = 
-                environmentClient != null 
-                && environmentClient.IsConnected() 
-                && argument.GetRespondCode() == 401 
-                && (environmentClient.lastTokenUpdate - argument.date).TotalMilliseconds < 0;
-
+            bool needNewToken = environmentClient != null && environmentClient.IsConnected() && argument.GetRespondCode() == 401 && (environmentClient.lastTokenUpdate - argument.date).TotalMilliseconds < 0;
             if (needNewToken)
             {
                 UnityAction a = () => needNewToken = false;
-                Instance.OnNewToken.AddListener(a);
-
-                while (
-                    environmentClient != null 
-                    && environmentClient.IsConnected() 
-                    && needNewToken 
-                    && !((DateTime.UtcNow - argument.date).TotalMilliseconds > environmentClient.maxMillisecondToWait)
-                )
+                UMI3DCollaborationClientServer.Instance.OnNewToken.AddListener(a);
+                while (environmentClient != null && environmentClient.IsConnected() && needNewToken && !((DateTime.UtcNow - argument.date).TotalMilliseconds > environmentClient.maxMillisecondToWait))
                     await UMI3DAsyncManager.Yield();
-
-                Instance.OnNewToken.RemoveListener(a);
-
+                UMI3DCollaborationClientServer.Instance.OnNewToken.RemoveListener(a);
                 return environmentClient != null && environmentClient.IsConnected();
             }
             return false;

@@ -23,6 +23,7 @@ using umi3d.common;
 using umi3d.common.collaboration.dto.networking;
 using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.interaction;
+using umi3d.debug;
 
 namespace umi3d.cdk.collaboration
 {
@@ -32,8 +33,7 @@ namespace umi3d.cdk.collaboration
     /// Creates the <see cref="UMI3DEnvironmentClient"/>.
     public class UMI3DWorldControllerClient
     {
-        UMI3DClientLogger logger;
-        static UMI3DClientLogger s_logger = new UMI3DClientLogger(mainTag: $"{nameof(UMI3DWorldControllerClient)}");
+        static debug.UMI3DLogger logger = new debug.UMI3DLogger(mainTag: $"{nameof(UMI3DWorldControllerClient)}");
 
         private readonly MediaDto media;
         public string name => media?.name;
@@ -76,8 +76,6 @@ namespace umi3d.cdk.collaboration
 
         public UMI3DWorldControllerClient(MediaDto media, GateDto gate = null, string globalToken = null)
         {
-            logger = new UMI3DClientLogger(mainTag: nameof(UMI3DWorldControllerClient));
-
             this.media = media;
             this.gate = gate;
             this.globalToken = globalToken;
@@ -97,7 +95,7 @@ namespace umi3d.cdk.collaboration
         {
             if (shouldCleanAbort?.Invoke() ?? false)
             {
-                s_logger.Debug($"{nameof(RequestMediaDto)}", $"Caller requests to abort the connection with MediaDto in a clean way.");
+                logger.Debug($"{nameof(RequestMediaDto)}", $"Caller requests to abort the connection with MediaDto in a clean way.");
                 yield break;
             }
 
@@ -115,10 +113,10 @@ namespace umi3d.cdk.collaboration
 
             mediaDtoURL = curentUrl;
 
-            var tabReporter = s_logger.GetReporter("RequestMediaDTOTab");
-            var assertReporter = s_logger.GetReporter("RequestMediaDTOAssert");
+            var tabReporter = logger.GetReporter("RequestMediaDTOTab");
+            var assertReporter = logger.GetReporter("RequestMediaDTOAssert");
 
-            yield return HttpClient.RequestGet(
+            yield return UMI3DNetworking.Get_WR(
                 (null, null),
                 mediaDtoURL,
                 shouldCleanAbort,
@@ -128,13 +126,13 @@ namespace umi3d.cdk.collaboration
 
                     if (uwr?.downloadHandler.data == null)
                     {
-                        s_logger.DebugAssertion($"{nameof(RequestMediaDto)}", $"downloadHandler.data == null.");
+                        logger.DebugAssertion($"{nameof(RequestMediaDto)}", $"downloadHandler.data == null.");
                         return;
                     }
 
                     string json = System.Text.Encoding.UTF8.GetString(uwr.downloadHandler.data);
                     requestSucceeded?.Invoke(UMI3DDtoSerializer.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None));
-                    s_logger.Default($"{nameof(RequestMediaDto)}", $"Request at: {RawURL} is a success.");
+                    logger.Default($"{nameof(RequestMediaDto)}", $"Request at: {RawURL} is a success.");
                     tabReporter.Clear();
                     assertReporter.Clear();
                 },
@@ -142,11 +140,11 @@ namespace umi3d.cdk.collaboration
                 {
                     if (shouldCleanAbort?.Invoke() ?? false)
                     {
-                        s_logger.Debug($"{nameof(RequestMediaDto)}", $"Caller requests to abort the connection with MediaDto in a clean way.");
+                        logger.Debug($"{nameof(RequestMediaDto)}", $"Caller requests to abort the connection with MediaDto in a clean way.");
                         return;
                     }
 
-                    s_logger.Assertion(
+                    logger.Assertion(
                             $"{nameof(RequestMediaDto)}",
                             $"MediaDto failed:   " +
                             $"{op.webRequest.result}".FormatString(19) +
@@ -168,7 +166,7 @@ namespace umi3d.cdk.collaboration
                         case UnityEngine.Networking.UnityWebRequest.Result.ProtocolError:
                             break;
                         case UnityEngine.Networking.UnityWebRequest.Result.DataProcessingError:
-                            s_logger.Error($"{nameof(RequestMediaDto)}", $"{nameof(UnityEngine.Networking.UnityWebRequest.Result.DataProcessingError)}:   {op.webRequest.url.FormatString(40)}   \n{op.webRequest.error}.");
+                            logger.Error($"{nameof(RequestMediaDto)}", $"{nameof(UnityEngine.Networking.UnityWebRequest.Result.DataProcessingError)}:   {op.webRequest.url.FormatString(40)}   \n{op.webRequest.error}.");
                             break;
                         default:
                             break;
@@ -180,7 +178,7 @@ namespace umi3d.cdk.collaboration
                     }
                     else
                     {
-                        s_logger.Error($"{nameof(RequestMediaDto)}", $"MediaDto failed more than 3 times. Connection has been aborted.");
+                        logger.Error($"{nameof(RequestMediaDto)}", $"MediaDto failed more than 3 times. Connection has been aborted.");
                         tabReporter.Report();
                         assertReporter.Report();
                     }
