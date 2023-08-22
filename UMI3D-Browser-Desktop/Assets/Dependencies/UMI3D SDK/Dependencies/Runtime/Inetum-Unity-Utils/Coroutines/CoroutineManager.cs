@@ -29,31 +29,86 @@ namespace inetum.unityUtils
     {
         #region Dependency Injection
 
-        private readonly CoroutineManagerMono coroutineManagerMono;
-        private readonly PersistentCoroutineManagerMono persistentCoroutineManagerMono;
+        private CoroutineManagerMono coroutineManagerMono;
+        private PersistentCoroutineManagerMono persistentCoroutineManagerMono;
 
         private Dictionary<Coroutine, bool> coroutines = new();
         private Dictionary<IEnumerator, bool> lateRoutines = new();
 
         public CoroutineManager() : base()
         {
-            coroutineManagerMono = CoroutineManagerMono.Instance;
-            persistentCoroutineManagerMono = PersistentCoroutineManagerMono.Instance;
+            LazyInitialisationCoroutineManager();
+            LazyInitialisationPersistentCoroutineManager();
         }
 
         internal CoroutineManager(CoroutineManagerMono coroutineManagerMono, PersistentCoroutineManagerMono persistentCoroutineManagerMono) : base()
         {
-            this.coroutineManagerMono = coroutineManagerMono;
-            this.persistentCoroutineManagerMono = persistentCoroutineManagerMono;
+            LazyInitialisationCoroutineManager(coroutineManagerMono);
+            LazyInitialisationPersistentCoroutineManager(persistentCoroutineManagerMono);
         }
 
         #endregion Dependency Injection
 
+        /// <summary>
+        /// Set <see cref="coroutineManagerMono"/> in a lazy way.
+        /// </summary>
+        /// <param name="coroutineManagerMono"></param>
+        void LazyInitialisationCoroutineManager(CoroutineManagerMono coroutineManagerMono = null)
+        {
+            if (this.coroutineManagerMono != null)
+            {
+                return;
+            }
+
+            if (coroutineManagerMono != null)
+            {
+                this.coroutineManagerMono = coroutineManagerMono;
+            }
+            else
+            {
+                this.coroutineManagerMono = CoroutineManagerMono.Instance;
+            }
+        }
+
+        /// <summary>
+        /// Set <see cref="persistentCoroutineManagerMono"/> in a lazy way.
+        /// </summary>
+        /// <param name="persistentCoroutineManagerMono"></param>
+        void LazyInitialisationPersistentCoroutineManager(PersistentCoroutineManagerMono persistentCoroutineManagerMono = null)
+        {
+            if (this.persistentCoroutineManagerMono != null)
+            {
+                return;
+            }
+
+            if (persistentCoroutineManagerMono != null)
+            {
+                this.persistentCoroutineManagerMono = persistentCoroutineManagerMono;
+            }
+            else
+            {
+                this.persistentCoroutineManagerMono = PersistentCoroutineManagerMono.Instance;
+            }
+        }
+
         /// <inheritdoc/>
         public virtual Coroutine AttachCoroutine(IEnumerator coroutine, bool isPersistent = false)
         {
+            LazyInitialisationCoroutineManager();
+            LazyInitialisationPersistentCoroutineManager();
+
+            Debug.Assert(coroutine != null, "Coroutine null when trying to attache");
             ICoroutineService routineService = isPersistent ? persistentCoroutineManagerMono : coroutineManagerMono;
             var resRoutine = routineService.AttachCoroutine(coroutine);
+            if (isPersistent)
+            {
+                Debug.Assert(resRoutine != null, $"resRoutine null when trying to attache a persistent coroutine");
+            }
+            else
+            {
+                Debug.Assert(CoroutineManagerMono.Exists, "CoroutineManagerMono does not exist.");
+                Debug.Assert(resRoutine != null, $"resRoutine null when trying to attache a non persistent coroutine");
+            }
             coroutines.Add(resRoutine, isPersistent);
             return resRoutine;
         }
@@ -61,6 +116,9 @@ namespace inetum.unityUtils
         /// <inheritdoc/>
         public virtual void DetachCoroutine(Coroutine coroutine)
         {
+            LazyInitialisationCoroutineManager();
+            LazyInitialisationPersistentCoroutineManager();
+
             if (coroutines.TryGetValue(coroutine, out bool isPersistent))
             {
                 ICoroutineService routineService = isPersistent ? persistentCoroutineManagerMono : coroutineManagerMono;
@@ -72,6 +130,9 @@ namespace inetum.unityUtils
 
         public virtual IEnumerator AttachLateRoutine(IEnumerator routine, bool isPersistent = false)
         {
+            LazyInitialisationCoroutineManager();
+            LazyInitialisationPersistentCoroutineManager();
+
             ILateRoutineService routineService = isPersistent ? persistentCoroutineManagerMono : coroutineManagerMono;
             lateRoutines.Add(routine, isPersistent);
             return routineService.AttachLateRoutine(routine);
@@ -79,6 +140,9 @@ namespace inetum.unityUtils
 
         public virtual void DetachLateRoutine(IEnumerator routine)
         {
+            LazyInitialisationCoroutineManager();
+            LazyInitialisationPersistentCoroutineManager();
+
             if (lateRoutines.TryGetValue(routine, out bool isPersistent))
             {
                 ILateRoutineService routineService = isPersistent ? persistentCoroutineManagerMono : coroutineManagerMono;
