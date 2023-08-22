@@ -60,7 +60,7 @@ namespace umi3d.baseBrowser.connection
             Identifier.ShouldDownloadLib = ShouldDownloadLibraries;
             Identifier.GetParameters = (form, callback) => GetParameterDtos?.Invoke(form, callback);
 
-            LoadingParameters = Resources.Load<UMI3DCollabLoadingParameters>("Scriptables/GamePanel/CollabLoadingParameters");
+            LoadingParameters =  Resources.Load<UMI3DCollabLoadingParameters>("Scriptables/GamePanel/CollabLoadingParameters");
             LoadingParameters.supportedformats.Clear();
             LoadingParameters.supportedformats.Add(UMI3DAssetFormat.gltf);
             LoadingParameters.supportedformats.Add(UMI3DAssetFormat.obj);
@@ -105,7 +105,7 @@ namespace umi3d.baseBrowser.connection
 
             cdk.collaboration.UMI3DEnvironmentClient.EnvironementLoaded.AddListener(() => EnvironmentLoaded?.Invoke());
 
-            UMI3DCollaborationEnvironmentLoader.OnUpdateJoinnedUserList += () => UserCountUpdated?.Invoke(UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList.Count());
+            UMI3DCollaborationEnvironmentLoader.Instance.OnUpdateJoinnedUserList += () => UserCountUpdated?.Invoke(UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList.Count());
         }
 
         #region Launcher

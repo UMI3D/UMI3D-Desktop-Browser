@@ -72,7 +72,10 @@ namespace umi3d.baseBrowser.cursor
 
         protected virtual void Update()
         {
-            transform.position = UnityEngine.Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
+            if (UnityEngine.Camera.main != null)
+            {
+                transform.position = UnityEngine.Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition); 
+            }
         }
 
         protected override void OnDestroy()

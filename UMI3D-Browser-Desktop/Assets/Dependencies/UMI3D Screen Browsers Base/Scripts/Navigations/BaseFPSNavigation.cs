@@ -82,7 +82,7 @@ namespace umi3d.baseBrowser.Navigation
         public override void Navigate(common.NavigateDto data)
         {
             navigateTo = true;
-            navigationDestination = transform.parent.position + data.position;
+            navigationDestination = transform.parent.position + data.position.Struct();
         }
 
         /// <summary>
@@ -91,9 +91,9 @@ namespace umi3d.baseBrowser.Navigation
         /// <param name="data"></param>
         public override void Teleport(common.TeleportDto data)
         {
-            transform.localPosition = data.position;
+            transform.localPosition = data.position.Struct();
             groundHeight = data.position.Y;
-            transform.localRotation = data.rotation;
+            transform.localRotation = data.rotation.Quaternion();
             UpdateBaseHeight();
         }
 

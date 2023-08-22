@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using static umi3d.baseBrowser.emotes.EmoteManager;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 using umi3d.commonScreen.Displayer;
 using umi3d.commonScreen.Container;
-using umi3d.baseBrowser.emotes;
+using umi3d.cdk.collaboration;
+using umi3d.cdk.collaboration.emotes;
 
 namespace umi3d.commonScreen.game
 {
@@ -41,10 +41,17 @@ namespace umi3d.commonScreen.game
         }
         protected static EmoteWindow_C s_instance;
 
+        protected readonly IEmoteService emoteService;
+
+        public EmoteWindow_C() : base()
+        {
+            emoteService = EmoteManager.Instance;
+        }
+
         public virtual string USSCustomClassEmote => "emote__window";
         public virtual string USSCustomClassEmoteIcon => $"{USSCustomClassEmote}-icon";
 
-        public static List<Emote> Emotes;
+        public static IReadOnlyList<Emote> Emotes;
         public static List<Button_C> EmoteButtons = new List<Button_C>();
 
         protected override void AttachUssClass()
@@ -76,7 +83,7 @@ namespace umi3d.commonScreen.game
 
         public static event System.Action WillUpdateFilter;
 
-        public static void OnEmoteConfigReceived(List<Emote> emotes)
+        public void OnEmoteConfigReceived(IReadOnlyList<Emote> emotes)
         {
             Reset();
             Emotes = emotes;
@@ -101,7 +108,7 @@ namespace umi3d.commonScreen.game
 
                 emoteButton.Body.RegisterCallback<GeometryChangedEvent>(evt => emoteButton.Body.style.width = emoteButton.layout.height);
 
-                emoteButton.clicked += () => EmoteManager.Instance.PlayEmote(emote);
+                emoteButton.clicked += () => emoteService.PlayEmote(emote);
             }
         }
 

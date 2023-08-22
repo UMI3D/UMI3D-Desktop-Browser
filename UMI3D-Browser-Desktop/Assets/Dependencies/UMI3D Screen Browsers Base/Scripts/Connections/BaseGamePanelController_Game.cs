@@ -12,9 +12,9 @@ limitations under the License.
 */
 using umi3d.baseBrowser.Controller;
 using umi3d.baseBrowser.cursor;
-using umi3d.baseBrowser.emotes;
 using umi3d.baseBrowser.Navigation;
 using umi3d.cdk.collaboration;
+using umi3d.cdk.collaboration.emotes;
 using umi3d.commonDesktop.game;
 using umi3d.commonScreen.Container;
 using umi3d.commonScreen.Displayer;
@@ -113,13 +113,16 @@ namespace umi3d.baseBrowser.connection
         {
             EmoteManager.Instance.EmotesLoaded += emotes =>
             {
-                Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
-                EmoteWindow_C.OnEmoteConfigReceived(emotes);
-            };
-            EmoteManager.Instance.NoEmotesLoaded += () =>
-            {
-                Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
-                EmoteWindow_C.Reset();
+                if (emotes is not null && emotes.Count > 0)
+                {
+                    Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = true;
+                    EmoteWindow_C.Instance.OnEmoteConfigReceived(emotes);
+                }
+                else
+                {
+                    Game.TrailingArea.ButtonsArea.IsEmoteButtonDisplayed = false;
+                    EmoteWindow_C.Reset();
+                }
             };
             EmoteManager.Instance.EmoteUpdated += EmoteWindow_C.OnUpdateEmote;
         }
@@ -178,7 +181,7 @@ namespace umi3d.baseBrowser.connection
                 //LeadingArea.InteractableMapping
                 //    .SetLeft(0)
                 //    .WithAnimation();
-                UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                //UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
                 LeadingArea.InteractableMapping.Display();
             };
             LeadingArea.InteractableMapping.MappingRemoved += () =>
@@ -187,7 +190,7 @@ namespace umi3d.baseBrowser.connection
                 //    .SetLeft(Length.Percent(-50f))
                 //    .WithAnimation()
                 //    .SetCallback(() => LeadingArea.InteractableMapping.InteractableName = null);
-                UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                //UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
                 LeadingArea.InteractableMapping.Hide();
                 LeadingArea.InteractableMapping.InteractableName = null;
             };

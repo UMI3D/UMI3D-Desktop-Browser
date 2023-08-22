@@ -16,9 +16,9 @@ MonoBehaviour:
   XDisplayAngleRange: {x: -60, y: 70}
   YAngleRange: {x: -90, y: 90}
   forwardSpeed: {x: 3, y: 1, z: 10}
-  lateralSpeed: {x: 1, y: 1, z: 3}
+  lateralSpeed: {x: 1, y: 1, z: 7}
   backwardSpeed: {x: 3, y: 1, z: 10}
-  AngularViewSpeed: {x: 4, y: 4}
+  AngularViewSpeed: {x: 5, y: 5}
   gravity: -9.807
   MaxJumpHeight: 1
   MinJumpHeight: 0.3
