@@ -18,10 +18,10 @@
             <ui:RadioButtonGroup label="Micro Mode" value="0" name="Mode" class="unity-radio-button-3 item2">
                 <ui:RadioButton label="Always Send" name="AlwaysSend" value="true" />
                 <ui:RadioButton label="Amplitude" name="Amplitude" />
-                <ui:RadioButton label="Push To Talk" name="Pushtotalk" />
+                <ui:RadioButton label="Push To Talk" name="PushToTalk" />
             </ui:RadioButtonGroup>
-            <SliderFloat_C focusable="true" label="Amplitude" highValue="1" value="0.5" class="item2" />
-            <Numeral_C value="10" type="Second" label="Delay before mute mic" name="DelayBeforeMuteMic" class="item2" />
+            <SliderFloat_C focusable="true" label="Amplitude" highValue="1" value="0.5" name="AmplitudeValue" class="item2 hidden" />
+            <Numeral_C value="10" type="Second" label="Delay before mute mic" name="DelayBeforeMuteMic" class="item2 hidden" />
             <SliderInt_C focusable="true" name="Volume" highValue="100" value="100" type="Percentage" label="Volume" class="item1" />
             <ui:RadioButtonGroup label="Use Noise Reduction" value="0" name="UseNoiseReduction" class="unity-radio-button-2 item2">
                 <ui:RadioButton label="On" name="UseNoiseReductionOn" value="true" />

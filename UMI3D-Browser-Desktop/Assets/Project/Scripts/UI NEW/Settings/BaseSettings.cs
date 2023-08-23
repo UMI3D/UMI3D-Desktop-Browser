@@ -2,9 +2,9 @@ using UnityEngine.UIElements;
 
 public class BaseSettings
 {
-    private VisualElement m_Root;
+    protected VisualElement m_Root;
 
-    private string m_Name;
+    protected string m_Name;
 
     public string Name => m_Name;
 

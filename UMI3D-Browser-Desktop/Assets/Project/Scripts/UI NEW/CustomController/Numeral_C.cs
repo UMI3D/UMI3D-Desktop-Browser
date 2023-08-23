@@ -39,8 +39,6 @@ public class Numeral_C : TextField
         /// <param name="cc"></param>
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
-            if (Application.isPlaying) return;
-
             base.Init(ve, bag, cc);
             var custom = ve as Numeral_C;
             custom.label = m_Label.GetValueFromBag(bag, cc);

@@ -41,9 +41,8 @@ public class SliderInt_C : SliderInt
         /// <param name="cc"></param>
         public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
         {
-            if (Application.isPlaying) return;
-
             base.Init(ve, bag, cc);
+
             var custom = ve as SliderInt_C;
             custom.label = m_Label.GetValueFromBag(bag, cc);
             custom.value = m_Value.GetValueFromBag(bag, cc);
