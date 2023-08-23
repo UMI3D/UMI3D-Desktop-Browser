@@ -27,7 +27,7 @@
                 <ui:RadioButton label="Off" name="UseNoiseReductionOff" />
             </ui:RadioButtonGroup>
         </ui:VisualElement>
-        <ui:VisualElement name="Graphics" class="panel">
+        <ui:VisualElement name="Graphics" class="panel hidden">
             <ui:RadioButtonGroup label="Game Resolution" value="0" name="GameResolution" class="unity-radio-button-4 item1">
                 <ui:RadioButton label="High" value="true" name="High" />
                 <ui:RadioButton label="Medium" name="Medium" />
@@ -54,7 +54,7 @@
             </ui:RadioButtonGroup>
         </ui:VisualElement>
         <ui:VisualElement name="Controls" class="panel hidden" />
-        <ui:VisualElement name="Notification" class="panel hidden">
+        <ui:VisualElement name="Notification" class="panel">
             <ui:RadioButtonGroup label="Hide Notification" value="0" name="HideNotification" class="item1 unity-radio-button-2">
                 <ui:RadioButton label="On" name="On" value="true" />
                 <ui:RadioButton label="Off" name="Off" />
