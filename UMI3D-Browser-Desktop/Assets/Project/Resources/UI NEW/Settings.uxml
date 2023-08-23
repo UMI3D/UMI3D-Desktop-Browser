@@ -47,6 +47,7 @@
                 <ui:RadioButton label="Low" name="Low" />
                 <ui:RadioButton label="Custom" name="Custom" />
             </ui:RadioButtonGroup>
+            <SliderInt_C focusable="true" label="Zoom" name="Zoom" highValue="200" value="100" lowValue="90" class="item2 hidden" />
             <ui:RadioButtonGroup label="Reduce Animation" value="0" name="ReduceAnimation" class="item1 unity-radio-button-2">
                 <ui:RadioButton label="On" name="On" value="true" />
                 <ui:RadioButton label="Off" name="Off" />

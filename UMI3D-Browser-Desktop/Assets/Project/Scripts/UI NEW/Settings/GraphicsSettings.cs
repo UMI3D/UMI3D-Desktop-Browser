@@ -21,17 +21,28 @@ public class GraphicsSettings : BaseSettings
     private RadioButton m_UnableHdrOff;
     private SliderFloat_C m_RenderScale;
 
+    private RadioButton m_UiSizeHigh;
+    private RadioButton m_UiSizeMedium;
+    private RadioButton m_UiSizeLow;
+    private RadioButton m_UiSizeCustom;
+    private SliderInt_C m_Zoom;
+
     private ResolutionData m_ResolutionData;
     private List<string> m_Resolutions;
     private UniversalRenderPipelineAsset m_RenderPipeline;
+    public PanelSettings m_UiPanelSettings;
 
     public GraphicsSettings(VisualElement pRoot) : base(pRoot)
     {
+        m_UiPanelSettings = Resources.Load<PanelSettings>("PanelSettings");
+
         SetupFullScrernResolution();
         SetupQualitySettings();
         SetupUnableHdr();
         SetupRenderScale();
         SetupGameResolution();
+
+        SetupUiSize();
 
         SetValues();
     }
@@ -40,6 +51,7 @@ public class GraphicsSettings : BaseSettings
     {
         if (TryGetResolutionData(out m_ResolutionData))
         {
+            // Game Resolution
             if (m_ResolutionData.GameResolution == ResolutionEnum.Custom)
             {
                 m_FullScreenResolution.value = m_ResolutionData.FullScreenResolution;
@@ -71,14 +83,41 @@ public class GraphicsSettings : BaseSettings
                 default:
                     break;
             }
+            // Ui Size
+            if (m_ResolutionData.UISize == UIZoom.Custom)
+                m_Zoom.value = (int)m_ResolutionData.DPI;
+            switch (m_ResolutionData.UISize)
+            {
+                case UIZoom.Small:
+                    m_UiSizeLow.value = true;
+                    OnUiSizeChanged(true, UIZoom.Small);
+                    break;
+                case UIZoom.Medium:
+                    m_UiSizeMedium.value = true;
+                    OnUiSizeChanged(true, UIZoom.Medium);
+                    break;
+                case UIZoom.Large:
+                    m_UiSizeHigh.value = true;
+                    OnUiSizeChanged(true, UIZoom.Large);
+                    break;
+                case UIZoom.Custom:
+                    m_UiSizeCustom.value = true;
+                    OnUiSizeChanged(true, UIZoom.Custom);
+                    break;
+                default:
+                    break;
+            }
         }
         else
         {
             m_GameResolutionMedium.value = true;
             OnGameResolutionChanged(true, ResolutionEnum.Medium);
+            m_UiSizeMedium.value = true;
+            OnUiSizeChanged(true, UIZoom.Medium);
         }
     }
 
+    #region Game Resolution
     private void SetupFullScrernResolution()
     {
         m_FullScreenResolution = m_Root.Q<Dropdown_C>("FullScreenResolution");
@@ -252,6 +291,65 @@ public class GraphicsSettings : BaseSettings
         m_ResolutionData.GameResolution = pResolution;
         StoreResolutionData(m_ResolutionData);
     }
+    #endregion
+
+    #region UI Size
+    private void SetupUiSize()
+    {
+        m_UiSizeHigh = m_Root.Q("UISize").Q<RadioButton>("High");
+        m_UiSizeMedium = m_Root.Q("UISize").Q<RadioButton>("Medium");
+        m_UiSizeLow = m_Root.Q("UISize").Q<RadioButton>("Low");
+        m_UiSizeCustom = m_Root.Q("UISize").Q<RadioButton>("Custom");
+
+        m_UiSizeHigh.RegisterValueChangedCallback(e 
+            => OnUiSizeChanged(e.newValue, UIZoom.Large));
+        m_UiSizeMedium.RegisterValueChangedCallback(e
+            => OnUiSizeChanged(e.newValue, UIZoom.Medium));
+        m_UiSizeLow.RegisterValueChangedCallback(e
+            => OnUiSizeChanged(e.newValue, UIZoom.Small));
+        m_UiSizeCustom.RegisterValueChangedCallback(e
+            => OnUiSizeChanged(e.newValue, UIZoom.Custom));
+
+        m_Zoom = m_Root.Q<SliderInt_C>("Zoom");
+
+        m_Zoom.RegisterValueChangedCallback(e => OnDpiValueChanged(e.newValue));
+    }
+
+    private void OnUiSizeChanged(bool pValue, UIZoom pZoom)
+    {
+        if (!pValue) return;
+        switch (pZoom)
+        {
+            case UIZoom.Small:
+                OnDpiValueChanged(170f);
+                m_Zoom.AddToClassList("hidden");
+                break;
+            case UIZoom.Medium:
+                OnDpiValueChanged(150f);
+                m_Zoom.AddToClassList("hidden");
+                break;
+            case UIZoom.Large:
+                OnDpiValueChanged(120f);
+                m_Zoom.AddToClassList("hidden");
+                break;
+            case UIZoom.Custom:
+                m_Zoom.RemoveFromClassList("hidden");
+                break;
+            default:
+                break;
+        }
+
+        m_ResolutionData.UISize = pZoom;
+        StoreResolutionData(m_ResolutionData);
+    }
+
+    private void OnDpiValueChanged(float pValue)
+    {
+        m_UiPanelSettings.referenceDpi = pValue;
+        m_ResolutionData.DPI = pValue;
+        StoreResolutionData(m_ResolutionData);
+    }
+    #endregion
 
     public static bool TryGetResolutionData(out ResolutionData data) => PreferencesManager.TryGet(out data, c_resolutionPath, c_dataFolderPath);
     public static void StoreResolutionData(ResolutionData data) => PreferencesManager.StoreData(data, c_resolutionPath, c_dataFolderPath);
