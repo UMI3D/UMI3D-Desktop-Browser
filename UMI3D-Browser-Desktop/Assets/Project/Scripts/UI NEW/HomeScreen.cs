@@ -18,11 +18,11 @@ public class HomeScreen : BaseScreen
 
     public HomeScreen(VisualElement element) : base(element)
     {
-        _portalUrl = _root.Q<TextField>("Url");
+        _portalUrl = m_Root.Q<TextField>("Url");
         _portalUrl.SetPlaceholderText("example.fr");
-        _root.Q<Button>("ButtonSubmit").clicked += ConnectWithUrl;
+        m_Root.Q<Button>("ButtonSubmit").clicked += ConnectWithUrl;
 
-        var elements = _root.Q("Elements");
+        var elements = m_Root.Q("Elements");
         var worlds = BaseConnectionProcess.Instance.savedServers.OrderBy(w => w.dateLastConnection).Reverse();
         elements.Clear();
         foreach (var world in worlds)

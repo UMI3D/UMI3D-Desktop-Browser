@@ -6,6 +6,7 @@ public class BaseMenu : MonoBehaviour
     [SerializeField] protected UIDocument _uiDocument;
 
     private VisualElement _errorBox;
+    private SettingScreen _settings;
 
     protected virtual void Start()
     {
@@ -17,6 +18,9 @@ public class BaseMenu : MonoBehaviour
         SetupErrorBox();
 
         InitLocalisation();
+
+        // TODO : Clean up
+        _settings = new SettingScreen(_uiDocument.rootVisualElement.Q("Settings"));
     }
 
     protected void InitLocalisation()

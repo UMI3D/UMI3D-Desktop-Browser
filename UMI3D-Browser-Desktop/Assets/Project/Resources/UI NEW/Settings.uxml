@@ -1,6 +1,61 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="BaseScreen" src="project://database/Assets/Project/Resources/UI%20NEW/BaseScreen.uxml?fileID=9197481963319205126&amp;guid=623a89fef465cfe409bbb262e330de5d&amp;type=3#BaseScreen" />
-    <ui:Instance template="BaseScreen" name="BaseScreen">
-        <SettingsMenu_C />
-    </ui:Instance>
+    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Settings/Settings.uss?fileID=7433441132597879392&amp;guid=2c9fb32a9ca1f094f9213dc8764cd893&amp;type=3#Settings" />
+    <ui:Label text="Settings" display-tooltip-when-elided="true" name="Title" class="title" />
+    <ui:VisualElement name="Settings">
+        <ui:RadioButtonGroup value="0" name="Menu" class="menu-navigation" style="margin-bottom: 30px;">
+            <ui:RadioButton label="General" name="ButtonGeneral" value="true" />
+            <ui:RadioButton label="Audio" name="ButtonAudio" />
+            <ui:RadioButton label="Graphics" name="ButtonGraphics" />
+            <ui:RadioButton label="Controls" name="ButtonControls" />
+            <ui:RadioButton label="Notifications" name="ButtonNotification" />
+        </ui:RadioButtonGroup>
+        <ui:VisualElement name="General" class="panel">
+            <Dropdown_C focusable="true" label="Language" name="Language" class="item1" />
+            <Dropdown_C focusable="true" label="Theme" name="Theme" class="item2" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Audio" class="panel hiddein">
+            <Dropdown_C label="Microphone" name="Microphone" class="item1" />
+            <ui:RadioButtonGroup label="Micro Mode" value="0" name="Mode" class="unity-radio-button-3 item2">
+                <ui:RadioButton label="Always Send" name="AlwaysSend" value="true" />
+                <ui:RadioButton label="Amplitude" name="Amplitude" />
+                <ui:RadioButton label="Push To Talk" name="Pushtotalk" />
+            </ui:RadioButtonGroup>
+            <Numeral_C value="10" type="Second" label="Delay before mute mic" name="DelayBeforeMuteMic" class="item2" />
+            <PercentageSlider_C name="Volume" label="Volume " high-value="100" value="50" direction="Horizontal" class="item1" />
+            <ui:RadioButtonGroup label="Use Noise Reduction" value="0" name="UseNoiseReduction" class="unity-radio-button-2 item2">
+                <ui:RadioButton label="On" name="UseNoiseReductionOn" value="true" />
+                <ui:RadioButton label="Off" name="UseNoiseReductionOff" />
+            </ui:RadioButtonGroup>
+            <PercentageSlider_C name="NoiseThreshold" label="Noise Threshold" high-value="100" value="50" direction="Horizontal" class="item1" />
+            <ui:RadioButtonGroup label="Loop Back" value="0" name="LoopBack" class="unity-radio-button-2 item2">
+                <ui:RadioButton label="On" name="LoopBackOn" value="true" />
+                <ui:RadioButton label="Off" name="LoopBackOff" />
+            </ui:RadioButtonGroup>
+        </ui:VisualElement>
+        <ui:VisualElement name="Graphics" class="panel hidden">
+            <ui:RadioButtonGroup label="Game Resolution" value="0" name="GameResolution" class="unity-radio-button-4 item1">
+                <ui:RadioButton label="High" value="true" name="High" />
+                <ui:RadioButton label="Medium" name="Medium" />
+                <ui:RadioButton label="Low" name="Low" />
+                <ui:RadioButton label="Custom" name="Custom" />
+            </ui:RadioButtonGroup>
+            <ui:RadioButtonGroup label="UI SIze" value="0" name="UISize" class="unity-radio-button-4 item2">
+                <ui:RadioButton label="High" value="true" name="High" />
+                <ui:RadioButton label="Medium" name="Medium" />
+                <ui:RadioButton label="Low" name="Low" />
+                <ui:RadioButton label="Custom" name="Custom" />
+            </ui:RadioButtonGroup>
+            <ui:RadioButtonGroup label="Radio Button Group" value="0" name="ReduceAnimation" class="item1 unity-radio-button-2">
+                <ui:RadioButton label="On" name="On" value="true" />
+                <ui:RadioButton label="Off" name="Off" />
+            </ui:RadioButtonGroup>
+        </ui:VisualElement>
+        <ui:VisualElement name="Controls" class="panel hidden" />
+        <ui:VisualElement name="Notification" class="panel hidden">
+            <ui:RadioButtonGroup label="Hide Notification" value="0" name="HideNotification" class="item1 unity-radio-button-2">
+                <ui:RadioButton label="On" name="On" value="true" />
+                <ui:RadioButton label="Off" name="Off" />
+            </ui:RadioButtonGroup>
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

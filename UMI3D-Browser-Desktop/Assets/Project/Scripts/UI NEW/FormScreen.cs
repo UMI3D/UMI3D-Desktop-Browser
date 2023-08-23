@@ -31,8 +31,8 @@ public class FormScreen : BaseScreen
             callback.Invoke(null);
             return;
         }
-        _root.Clear();
-        _root.Add(GetVisualElements(form, callback));
+        m_Root.Clear();
+        m_Root.Add(GetVisualElements(form, callback));
     }
 
     private VisualElement GetVisualElements(umi3d.common.interaction.form.FormDto form, Action<FormAnswerDto> callback)

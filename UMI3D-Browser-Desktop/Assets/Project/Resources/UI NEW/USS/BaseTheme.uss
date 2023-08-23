@@ -64,7 +64,7 @@
     height: 46px;
 }
 
-.menu-navigation .unity-base-field__input {
+.unity-radio-button-group .unity-base-field__input {
     display: none;
 }
 
@@ -180,4 +180,8 @@
     border-width: 0;
     max-height: 50%;
     min-height: 50%;
+}
+
+.unity-base-text-field__input {
+    background-color: rgba(0, 0, 0, 0);
 }

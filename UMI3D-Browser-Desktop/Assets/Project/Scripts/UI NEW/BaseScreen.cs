@@ -1,44 +1,44 @@
 using System.Threading.Tasks;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 public class BaseScreen
 {
-    private const int k_tooltipDelay = 1000;
+    private const int k_TooltipDelay = 1000;
 
-    protected VisualElement _root;
+    protected VisualElement m_Root;
+    private VisualElement m_Tooltip;
 
-    public VisualElement Root => _root;
-    private VisualElement _tooltip;
-    private bool _mustShowTooltip;
+    private bool m_MustShowTooltip;
+
+    public VisualElement Root => m_Root;
 
     public BaseScreen(VisualElement pElement)
     {
-        _root = pElement;
-        _tooltip = _root.parent.Q("Tooltip");
+        m_Root = pElement;
+        m_Tooltip = m_Root.parent.Q("Tooltip");
     }
 
     public async void ShowTooltip(VisualElement pTarget, string pMessage)
     {
-        _mustShowTooltip = true;
+        m_MustShowTooltip = true;
 
-        _tooltip.Q<TextElement>("Message").text = pMessage;
-        _tooltip.style.left = pTarget.worldBound.center.x - 8;
-        _tooltip.style.top = pTarget.worldBound.yMin + 4;
+        m_Tooltip.Q<TextElement>("Message").text = pMessage;
+        m_Tooltip.style.left = pTarget.worldBound.center.x - 8;
+        m_Tooltip.style.top = pTarget.worldBound.yMin + 4;
 
-        await Task.Delay(k_tooltipDelay);
+        await Task.Delay(k_TooltipDelay);
 
-        if (!_mustShowTooltip) return;
+        if (!m_MustShowTooltip) return;
 
-        _tooltip.RemoveFromClassList("hidden");
+        m_Tooltip.RemoveFromClassList("hidden");
     }
 
     public void HideTooltip()
     {
-        _mustShowTooltip = false;
-        _tooltip.AddToClassList("hidden");
+        m_MustShowTooltip = false;
+        m_Tooltip.AddToClassList("hidden");
     }
 
-    public virtual void Hide() => _root.AddToClassList("hidden");
-    public virtual void Show() => _root.RemoveFromClassList("hidden");
+    public virtual void Hide() => m_Root.AddToClassList("hidden");
+    public virtual void Show() => m_Root.RemoveFromClassList("hidden");
 }

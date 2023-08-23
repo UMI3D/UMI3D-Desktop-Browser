@@ -2,20 +2,20 @@
     <ui:Template name="BaseMenu" src="project://database/Assets/Project/Resources/UI%20NEW/MenuBase.uxml?fileID=9197481963319205126&amp;guid=623a89fef465cfe409bbb262e330de5d&amp;type=3#MenuBase" />
     <ui:Template name="NavigationItem" src="project://database/Assets/Project/Resources/UI%20NEW/NavigationItem.uxml?fileID=9197481963319205126&amp;guid=792009c7ca1da1447a0a8ecd3db13c12&amp;type=3#NavigationItem" />
     <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Navigation/NavigationIntermediateArea.uss?fileID=7433441132597879392&amp;guid=5980de27232d7b944b88b0e2f44b2932&amp;type=3#NavigationIntermediateArea" />
-    <ui:Instance template="BaseMenu" name="BaseMenu">
-        <ui:VisualElement name="Navigation" style="width: 709px;">
-            <ui:VisualElement name="Title" style="flex-direction: row; align-items: center; justify-content: center;">
+    <ui:Instance template="BaseMenu" name="MenuBase" style="scale: 1 1;">
+        <ui:VisualElement name="Navigation" class="hidden" style="width: 709px;">
+            <ui:VisualElement name="Title" style="flex-direction: row; align-items: center; justify-content: center; border-bottom-width: 16px;">
                 <ui:Label text="Connect to an" display-tooltip-when-elided="true" style="min-width: auto; font-size: 20px; margin-left: 0; margin-right: 5px; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-end; -unity-text-align: lower-left; height: 91%;" />
                 <ui:Label text="Intraverse Portal" display-tooltip-when-elided="true" class="text-important" style="font-size: 24px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-end; -unity-text-align: lower-left; height: 100%;" />
             </ui:VisualElement>
-            <ui:VisualElement name="IntermediateArea" class="intermediate-area" style="justify-content: center; align-items: center; flex-direction: row; width: auto; margin-top: 26px;">
+            <ui:VisualElement name="IntermediateArea" class="intermediate-area" style="justify-content: center; align-items: center; flex-direction: row; width: auto; margin-top: 36px;">
                 <ui:VisualElement name="Body" class="url-field" style="flex-direction: row;">
                     <ui:VisualElement name="Icon" class="unity-image icon" style="background-image: resource(&apos;UI NEW/Icons/world mini&apos;); width: 54px; padding-right: 15px;" />
                     <ui:Button display-tooltip-when-elided="true" name="ButtonSubmit" class="submit" style="background-image: resource(&apos;UI NEW/Icons/validation_button_arrow 1&apos;); background-color: rgba(255, 255, 255, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); width: 43px;" />
                     <ui:TextField picking-mode="Ignore" name="Url" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="CentralArea" class="central-area" style="margin-top: 30px;">
+            <ui:VisualElement name="CentralArea" class="central-area" style="margin-top: 0;">
                 <ui:RadioButtonGroup value="0" name="NavigationsButtons" class="menu-navigation">
                     <ui:RadioButton label="Last" value="true" />
                     <ui:RadioButton label="Favorite" />

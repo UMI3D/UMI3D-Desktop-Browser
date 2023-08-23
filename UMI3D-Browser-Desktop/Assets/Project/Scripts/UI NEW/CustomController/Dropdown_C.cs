@@ -7,22 +7,12 @@ public class Dropdown_C : DropdownField
 {
     public new class UxmlFactory : UxmlFactory<Dropdown_C, UxmlTraits> { }
 
-    public new class UxmlTraits : VisualElement.UxmlTraits
-    {
-        public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
-        {
-            if (Application.isPlaying) return;
-
-            base.Init(ve, bag, cc);
-            var custom = ve as Dropdown_C;
-        }
-    }
-
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
     /// <remarks> Use <see cref="LocalisedLabel"/> instead. </remarks>
     public new string label { get => base.label; set => base.label = value; }
+
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
@@ -32,10 +22,12 @@ public class Dropdown_C : DropdownField
         set 
         { 
             base.choices = value; 
+            if (_allChoices == null) _allChoices = new List<string>();
             if (_allChoices.Count == 0)
                 _allChoices = value; 
         } 
     }
+
     /// <summary>
     /// <inheritdoc/>
     /// </summary>

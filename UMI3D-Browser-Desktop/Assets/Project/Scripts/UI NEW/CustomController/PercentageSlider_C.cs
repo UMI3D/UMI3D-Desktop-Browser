@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -7,23 +5,16 @@ public class PercentageSlider_C : SliderInt
 {
     public new class UxmlFactory : UxmlFactory<PercentageSlider_C, UxmlTraits> { }
 
-
     public override int value { 
         get => base.value;
         set
         {
             base.value = value;
-            _percentageText.value = value.ToString();
+            _percentage.value = value.ToString();
         }
     }
 
-    private VisualElement _percentage = new VisualElement();
-
-    public TextField _percentageText = new TextField();
-
-    private Label _percentageLabel = new Label();
-
-    private string _integers = "0123456789";
+    private Numeral_C _percentage = new Numeral_C() { name = "Percentage" };
 
     #region USS
     /// <summary>
@@ -69,49 +60,12 @@ public class PercentageSlider_C : SliderInt
     {
         highValue = 100;
 
-        _percentageLabel.text = "%";
-        _percentageText.value = "0";
-        _percentageText.RegisterValueChangedCallback(e =>
+        _percentage.Type = Numeral_C.NumeralType.Percentage;
+
+        _percentage.OnChanged += newValue =>
         {
-            // Check if is a number
-            var r = "";
-            foreach (var str in e.newValue)
-            {
-                if (_integers.Contains(str))
-                    r += str;
-            }
-            if (r != e.newValue)
-            {
-                _percentageText.value = r;
-                return;
-            }
-
-            // Max 3 number
-            if (e.newValue.Count() > 3) 
-            {
-                _percentageText.value = e.newValue.Substring(0, 3);
-                return;
-            }
-
-            // Between 0 and 100
-            var v = Int32.Parse(e.newValue);
-            if (v > 100)
-            {
-                _percentageText.value = "100";
-                return;
-            }
-            if (v < 0)
-            {
-                _percentageText.value = "0";
-                return;
-            }
-
-            // Apply value
-            value = v;
-        });
-
-        _percentage.Add(_percentageText);
-        _percentage.Add(_percentageLabel);
+            value = newValue;
+        };
 
         Add(_percentage);
     }
