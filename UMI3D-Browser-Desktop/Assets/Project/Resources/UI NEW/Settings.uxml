@@ -20,13 +20,14 @@
                 <ui:RadioButton label="Amplitude" name="Amplitude" />
                 <ui:RadioButton label="Push To Talk" name="Pushtotalk" />
             </ui:RadioButtonGroup>
+            <SliderFloat_C focusable="true" label="Amplitude" highValue="1" value="0.5" class="item2" />
             <Numeral_C value="10" type="Second" label="Delay before mute mic" name="DelayBeforeMuteMic" class="item2" />
-            <PercentageSlider_C name="Volume" label="Volume " high-value="100" value="50" direction="Horizontal" class="item1" />
+            <SliderInt_C focusable="true" name="Volume" highValue="100" value="100" type="Percentage" label="Volume" class="item1" />
             <ui:RadioButtonGroup label="Use Noise Reduction" value="0" name="UseNoiseReduction" class="unity-radio-button-2 item2">
                 <ui:RadioButton label="On" name="UseNoiseReductionOn" value="true" />
                 <ui:RadioButton label="Off" name="UseNoiseReductionOff" />
             </ui:RadioButtonGroup>
-            <PercentageSlider_C name="NoiseThreshold" label="Noise Threshold" high-value="100" value="50" direction="Horizontal" class="item1" />
+            <SliderInt_C focusable="true" name="NoiseThreshold" label="Noise Threshold" highValue="100" value="100" type="Percentage" class="item1" />
             <ui:RadioButtonGroup label="Loop Back" value="0" name="LoopBack" class="unity-radio-button-2 item2">
                 <ui:RadioButton label="On" name="LoopBackOn" value="true" />
                 <ui:RadioButton label="Off" name="LoopBackOff" />

@@ -93,7 +93,7 @@ public class Numeral_C : TextField
         }
     }
 
-    public event Action<int> OnChanged;
+    public event Action<float> OnChanged;
 
     #region USS
     /// <summary>
@@ -141,12 +141,26 @@ public class Numeral_C : TextField
         value = "0";
         this.RegisterValueChangedCallback(e =>
         {
+            if (e.newValue == "")
+            {
+                SetValueWithoutNotify("0");
+                OnChanged?.Invoke(0);
+            }
+
             // Check if is a number
             var r = "";
+            var foundDot = false;
             foreach (var str in e.newValue)
             {
                 if (m_Integers.Contains(str))
+                {
+                    if (str == '.')
+                        if (foundDot)
+                            continue;
+                        else
+                            foundDot = true;
                     r += str;
+                }
             }
             if (r != e.newValue)
             {
@@ -154,7 +168,7 @@ public class Numeral_C : TextField
                 return;
             }
 
-            var v = Int32.Parse(e.newValue);
+            var v = float.Parse(e.newValue);
 
             if (m_Type == NumeralType.Percentage)
             {

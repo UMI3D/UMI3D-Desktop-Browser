@@ -28,10 +28,10 @@ public class AudioSettingsPanel_C : BaseVisual_C
 
     private Dropdown_C _micro = new Dropdown_C();
     private RadioButtonGroup _microMode = new RadioButtonGroup();
-    private PercentageSlider_C _volumeEnvironment = new PercentageSlider_C();
-    private PercentageSlider_C _volumeConversation = new PercentageSlider_C();
+    private SliderInt_C _volumeEnvironment = new SliderInt_C();
+    private SliderInt_C _volumeConversation = new SliderInt_C();
     private RadioButtonGroup _useNoiseReduction = new RadioButtonGroup();
-    private PercentageSlider_C _noiseThreshold = new PercentageSlider_C();
+    private SliderInt_C _noiseThreshold = new SliderInt_C();
     //private RadioButtonGroup _delayMuteMicro = new RadioButtonGroup();
     private RadioButtonGroup _loopBack = new RadioButtonGroup();
 
