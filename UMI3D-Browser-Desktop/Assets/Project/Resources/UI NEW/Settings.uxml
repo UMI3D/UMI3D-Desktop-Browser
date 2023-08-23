@@ -11,9 +11,8 @@
         </ui:RadioButtonGroup>
         <ui:VisualElement name="General" class="panel">
             <Dropdown_C focusable="true" label="Language" name="Language" class="item1" />
-            <Dropdown_C focusable="true" label="Theme" name="Theme" class="item2" />
         </ui:VisualElement>
-        <ui:VisualElement name="Audio" class="panel hiddein">
+        <ui:VisualElement name="Audio" class="panel hidden">
             <Dropdown_C label="Microphone" name="Microphone" class="item1" />
             <ui:RadioButtonGroup label="Micro Mode" value="0" name="Mode" class="unity-radio-button-3 item2">
                 <ui:RadioButton label="Always Send" name="AlwaysSend" value="true" />
@@ -26,11 +25,6 @@
             <ui:RadioButtonGroup label="Use Noise Reduction" value="0" name="UseNoiseReduction" class="unity-radio-button-2 item2">
                 <ui:RadioButton label="On" name="UseNoiseReductionOn" value="true" />
                 <ui:RadioButton label="Off" name="UseNoiseReductionOff" />
-            </ui:RadioButtonGroup>
-            <SliderInt_C focusable="true" name="NoiseThreshold" label="Noise Threshold" highValue="100" value="100" type="Percentage" class="item1" />
-            <ui:RadioButtonGroup label="Loop Back" value="0" name="LoopBack" class="unity-radio-button-2 item2">
-                <ui:RadioButton label="On" name="LoopBackOn" value="true" />
-                <ui:RadioButton label="Off" name="LoopBackOff" />
             </ui:RadioButtonGroup>
         </ui:VisualElement>
         <ui:VisualElement name="Graphics" class="panel hidden">

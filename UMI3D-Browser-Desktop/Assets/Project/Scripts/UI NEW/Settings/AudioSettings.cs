@@ -13,6 +13,8 @@ public class AudioSettings : BaseSettings
     private RadioButton m_MicroModeAlwaysSend;
     private RadioButton m_MicroModeAmplitude;
     private RadioButton m_MicroModePushToTalk;
+    private RadioButton m_NoiseReducionOn;
+    private RadioButton m_NoiseReducionOff;
 
     private SliderFloat_C m_AmplitudeValue;
     private Numeral_C m_DelayMuteMic;
@@ -23,6 +25,7 @@ public class AudioSettings : BaseSettings
     {
         SetupMicrophone();
         SetupMicroMode();
+        SetupNoiseReduction();
 
         SetupValues();
     }
@@ -51,6 +54,11 @@ public class AudioSettings : BaseSettings
             OnMicroModeChanged(true, m_AudioData.Mode);
             m_AmplitudeValue.value = m_AudioData.Amplitude;
             m_DelayMuteMic.value = m_AudioData.DelayBeforeShutMic.ToString();
+            // Noise Reduction
+            if (m_AudioData.NoiseReduction)
+                m_NoiseReducionOn.value = true;
+            else
+                m_NoiseReducionOff.value = true;
         }
         else
         {
@@ -61,12 +69,16 @@ public class AudioSettings : BaseSettings
             OnMicroModeChanged(true, MicModeEnum.AlwaysSend);
             m_AmplitudeValue.value = 0f;
             m_DelayMuteMic.value = "0";
+            // Noise Reduction
+            m_NoiseReducionOn.value = true;
         }
 
         OnMicrophoneChanged(m_Microphone.value);
 
         OnAmplitudeChanged(m_AmplitudeValue.value);
         OnDelayMuteMicChanged(m_DelayMuteMic.value);
+
+        OnNoiseReductionChanged(m_NoiseReducionOn.value);
     }
 
     #region Microphone
@@ -112,19 +124,19 @@ public class AudioSettings : BaseSettings
             => OnMicroModeChanged(e.newValue, MicModeEnum.PushToTalk));
     }
 
-    private void OnAmplitudeChanged(float value)
+    private void OnAmplitudeChanged(float pValue)
     {
         if (MicrophoneListener.Exists)
-            MicrophoneListener.Instance.minAmplitudeToSend = value / 10f;
+            MicrophoneListener.Instance.minAmplitudeToSend = pValue / 10f;
 
-        m_AudioData.Amplitude = value;
+        m_AudioData.Amplitude = pValue;
         StoreAudioData(m_AudioData);
     }
 
-    private void OnDelayMuteMicChanged(string value)
+    private void OnDelayMuteMicChanged(string pValue)
     {
-        if (string.IsNullOrEmpty(value)) value = "0";
-        if (float.TryParse(value, out var valueFloat))
+        if (string.IsNullOrEmpty(pValue)) pValue = "0";
+        if (float.TryParse(pValue, out var valueFloat))
         {
             if (MicrophoneListener.Exists)
                 MicrophoneListener.Instance.voiceStopingDelaySeconds = valueFloat;
@@ -168,6 +180,25 @@ public class AudioSettings : BaseSettings
         }
 
         m_AudioData.Mode = pMicroMode;
+        StoreAudioData(m_AudioData);
+    }
+    #endregion
+
+    #region NoiseReduction
+    private void SetupNoiseReduction()
+    {
+        m_NoiseReducionOn = m_Root.Q<RadioButton>("UseNoiseReductionOn");
+        m_NoiseReducionOff = m_Root.Q<RadioButton>("UseNoiseReductionOff");
+
+        m_NoiseReducionOn.RegisterValueChangedCallback(e => OnNoiseReductionChanged(e.newValue));
+    }
+
+    private void OnNoiseReductionChanged(bool pValue)
+    {
+        if (MicrophoneListener.Exists)
+            MicrophoneListener.Instance.UseNoiseReduction = pValue;
+
+        m_AudioData.NoiseReduction = pValue;
         StoreAudioData(m_AudioData);
     }
     #endregion
