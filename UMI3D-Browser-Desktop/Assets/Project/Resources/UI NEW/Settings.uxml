@@ -9,7 +9,7 @@
             <ui:RadioButton label="Controls" name="ButtonControls" />
             <ui:RadioButton label="Notifications" name="ButtonNotification" />
         </ui:RadioButtonGroup>
-        <ui:VisualElement name="General" class="panel">
+        <ui:VisualElement name="General" class="panel hidden">
             <Dropdown_C focusable="true" label="Language" name="Language" class="item1" />
         </ui:VisualElement>
         <ui:VisualElement name="Audio" class="panel hidden">
@@ -27,20 +27,27 @@
                 <ui:RadioButton label="Off" name="UseNoiseReductionOff" />
             </ui:RadioButtonGroup>
         </ui:VisualElement>
-        <ui:VisualElement name="Graphics" class="panel hidden">
+        <ui:VisualElement name="Graphics" class="panel">
             <ui:RadioButtonGroup label="Game Resolution" value="0" name="GameResolution" class="unity-radio-button-4 item1">
                 <ui:RadioButton label="High" value="true" name="High" />
                 <ui:RadioButton label="Medium" name="Medium" />
                 <ui:RadioButton label="Low" name="Low" />
                 <ui:RadioButton label="Custom" name="Custom" />
             </ui:RadioButtonGroup>
+            <Dropdown_C name="FullScreenResolution" label="Full Screen Resolution" class="item1 hidden" />
+            <Dropdown_C name="QualitySettings" label="Quality Settings" class="item1 hidden" />
+            <ui:RadioButtonGroup label="Unable HDR" value="0" name="UnableHDR" class="unity-radio-button-2 item1 hidden">
+                <ui:RadioButton label="On" name="On" value="true" />
+                <ui:RadioButton label="Off" name="Off" />
+            </ui:RadioButtonGroup>
+            <SliderFloat_C focusable="true" name="RenderScale" label="Render Scale" highValue="2" class="item1 hidden" />
             <ui:RadioButtonGroup label="UI SIze" value="0" name="UISize" class="unity-radio-button-4 item2">
                 <ui:RadioButton label="High" value="true" name="High" />
                 <ui:RadioButton label="Medium" name="Medium" />
                 <ui:RadioButton label="Low" name="Low" />
                 <ui:RadioButton label="Custom" name="Custom" />
             </ui:RadioButtonGroup>
-            <ui:RadioButtonGroup label="Radio Button Group" value="0" name="ReduceAnimation" class="item1 unity-radio-button-2">
+            <ui:RadioButtonGroup label="Reduce Animation" value="0" name="ReduceAnimation" class="item1 unity-radio-button-2">
                 <ui:RadioButton label="On" name="On" value="true" />
                 <ui:RadioButton label="Off" name="Off" />
             </ui:RadioButtonGroup>
