@@ -27,6 +27,9 @@ public class GraphicsSettings : BaseSettings
     private RadioButton m_UiSizeCustom;
     private SliderInt_C m_Zoom;
 
+    private RadioButton m_ReduceAnimationOn;
+    private RadioButton m_ReduceAnimationOff;
+
     private ResolutionData m_ResolutionData;
     private List<string> m_Resolutions;
     private UniversalRenderPipelineAsset m_RenderPipeline;
@@ -43,6 +46,8 @@ public class GraphicsSettings : BaseSettings
         SetupGameResolution();
 
         SetupUiSize();
+
+        SetupReduceAnimation();
 
         SetValues();
     }
@@ -107,13 +112,28 @@ public class GraphicsSettings : BaseSettings
                 default:
                     break;
             }
+            // Reduce Animation
+            if (m_ResolutionData.ReduceAnimation)
+            {
+                m_ReduceAnimationOn.value = true;
+                OnReduceAnimationchanged(true);
+            } else
+            {
+                m_ReduceAnimationOff.value = true;
+                OnReduceAnimationchanged(false);
+            }
         }
         else
         {
+            // Game Resolution
             m_GameResolutionMedium.value = true;
             OnGameResolutionChanged(true, ResolutionEnum.Medium);
+            // Ui Size
             m_UiSizeMedium.value = true;
             OnUiSizeChanged(true, UIZoom.Medium);
+            // ReduceAnimation
+            m_ReduceAnimationOff.value = true;
+            OnReduceAnimationchanged(false);
         }
     }
 
@@ -347,6 +367,24 @@ public class GraphicsSettings : BaseSettings
     {
         m_UiPanelSettings.referenceDpi = pValue;
         m_ResolutionData.DPI = pValue;
+        StoreResolutionData(m_ResolutionData);
+    }
+    #endregion
+
+    #region Reduce Animation
+    private void SetupReduceAnimation()
+    {
+        m_ReduceAnimationOn = m_Root.Q("ReduceAnimation").Q<RadioButton>("On");
+        m_ReduceAnimationOff = m_Root.Q("ReduceAnimation").Q<RadioButton>("Off");
+
+        m_ReduceAnimationOn.RegisterValueChangedCallback(e 
+            => OnReduceAnimationchanged(e.newValue));
+    }
+
+    private void OnReduceAnimationchanged(bool pValue)
+    {
+        AnimatorManager.ReduceAnimation = pValue;
+        m_ResolutionData.ReduceAnimation = pValue;
         StoreResolutionData(m_ResolutionData);
     }
     #endregion
