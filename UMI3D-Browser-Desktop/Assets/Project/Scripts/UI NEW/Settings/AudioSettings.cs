@@ -15,6 +15,8 @@ public class AudioSettings : BaseSettings
     private RadioButton m_MicroModePushToTalk;
     private RadioButton m_NoiseReducionOn;
     private RadioButton m_NoiseReducionOff;
+    private RadioButton m_LoopBackOn;
+    private RadioButton m_LoopBackOff;
 
     private SliderFloat_C m_AmplitudeValue;
     private Numeral_C m_DelayMuteMic;
@@ -26,6 +28,7 @@ public class AudioSettings : BaseSettings
         SetupMicrophone();
         SetupMicroMode();
         SetupNoiseReduction();
+        SetupLoopBack();
 
         SetupValues();
     }
@@ -200,6 +203,25 @@ public class AudioSettings : BaseSettings
 
         m_AudioData.NoiseReduction = pValue;
         StoreAudioData(m_AudioData);
+    }
+    #endregion
+
+    #region Loop Back
+    private void SetupLoopBack()
+    {
+        m_LoopBackOn = m_Root.Q("LoopBack").Q<RadioButton>("On");
+        m_LoopBackOff = m_Root.Q("LoopBack").Q<RadioButton>("Off");
+
+        m_LoopBackOn.RegisterValueChangedCallback(e => OnLoopBackChanged(e.newValue));
+
+        m_LoopBackOff.value = true;
+        OnLoopBackChanged(false);
+    }
+
+    private void OnLoopBackChanged(bool pValue)
+    {
+        if (MicrophoneListener.Exists)
+            MicrophoneListener.Instance.useLocalLoopback = pValue;
     }
     #endregion
 

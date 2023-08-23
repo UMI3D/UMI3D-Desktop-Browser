@@ -12,7 +12,7 @@
         <ui:VisualElement name="General" class="panel hidden">
             <Dropdown_C focusable="true" label="Language" name="Language" class="item1" />
         </ui:VisualElement>
-        <ui:VisualElement name="Audio" class="panel hidden">
+        <ui:VisualElement name="Audio" class="panel">
             <Dropdown_C label="Microphone" name="Microphone" class="item1" />
             <ui:RadioButtonGroup label="Micro Mode" value="0" name="Mode" class="unity-radio-button-3 item2">
                 <ui:RadioButton label="Always Send" name="AlwaysSend" value="true" />
@@ -25,6 +25,10 @@
             <ui:RadioButtonGroup label="Use Noise Reduction" value="0" name="UseNoiseReduction" class="unity-radio-button-2 item2">
                 <ui:RadioButton label="On" name="UseNoiseReductionOn" value="true" />
                 <ui:RadioButton label="Off" name="UseNoiseReductionOff" />
+            </ui:RadioButtonGroup>
+            <ui:RadioButtonGroup label="Loop Back" value="0" name="LoopBack" class="unity-radio-button-2 item2">
+                <ui:RadioButton label="On" name="On" value="true" />
+                <ui:RadioButton label="Off" name="Off" />
             </ui:RadioButtonGroup>
         </ui:VisualElement>
         <ui:VisualElement name="Graphics" class="panel hidden">
@@ -54,7 +58,7 @@
             </ui:RadioButtonGroup>
         </ui:VisualElement>
         <ui:VisualElement name="Controls" class="panel hidden" />
-        <ui:VisualElement name="Notification" class="panel">
+        <ui:VisualElement name="Notification" class="panel hidden">
             <ui:RadioButtonGroup label="Hide Notification" value="0" name="HideNotification" class="item1 unity-radio-button-2">
                 <ui:RadioButton label="On" name="On" value="true" />
                 <ui:RadioButton label="Off" name="Off" />
