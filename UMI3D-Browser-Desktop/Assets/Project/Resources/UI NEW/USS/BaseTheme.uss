@@ -185,3 +185,7 @@
 .unity-base-text-field__input {
     background-color: rgba(0, 0, 0, 0);
 }
+
+.key-bind {
+    flex-direction: row;
+}

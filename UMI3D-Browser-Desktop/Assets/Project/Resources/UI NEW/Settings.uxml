@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Settings/Settings.uss?fileID=7433441132597879392&amp;guid=2c9fb32a9ca1f094f9213dc8764cd893&amp;type=3#Settings" />
     <ui:Label text="Settings" display-tooltip-when-elided="true" name="Title" class="title" />
     <ui:VisualElement name="Settings">
-        <ui:RadioButtonGroup value="0" name="Menu" class="menu-navigation" style="margin-bottom: 30px;">
+        <ui:RadioButtonGroup value="0" name="Menu" class="menu-navigation" style="margin-bottom: 8px;">
             <ui:RadioButton label="General" name="ButtonGeneral" value="true" />
             <ui:RadioButton label="Audio" name="ButtonAudio" />
             <ui:RadioButton label="Graphics" name="ButtonGraphics" />
@@ -12,9 +12,9 @@
         <ui:VisualElement name="General" class="panel hidden">
             <Dropdown_C focusable="true" label="Language" name="Language" class="item1" />
         </ui:VisualElement>
-        <ui:VisualElement name="Audio" class="panel">
+        <ui:VisualElement name="Audio" class="panel hidden">
             <Dropdown_C label="Microphone" name="Microphone" class="item1" />
-            <ui:RadioButtonGroup label="Micro Mode" value="0" name="Mode" class="unity-radio-button-3 item2">
+            <ui:RadioButtonGroup label="Micro Mode" value="0" name="Mode" class="unity-radio-button-3 item2 radio-field">
                 <ui:RadioButton label="Always Send" name="AlwaysSend" value="true" />
                 <ui:RadioButton label="Amplitude" name="Amplitude" />
                 <ui:RadioButton label="Push To Talk" name="PushToTalk" />
@@ -22,17 +22,17 @@
             <SliderFloat_C focusable="true" label="Amplitude" highValue="1" value="0.5" name="AmplitudeValue" class="item2 hidden" />
             <Numeral_C value="10" type="Second" label="Delay before mute mic" name="DelayBeforeMuteMic" class="item2 hidden" />
             <SliderInt_C focusable="true" name="Volume" highValue="100" value="100" type="Percentage" label="Volume" class="item1" />
-            <ui:RadioButtonGroup label="Use Noise Reduction" value="0" name="UseNoiseReduction" class="unity-radio-button-2 item2">
+            <ui:RadioButtonGroup label="Use Noise Reduction" value="0" name="UseNoiseReduction" class="unity-radio-button-2 item2 radio-field">
                 <ui:RadioButton label="On" name="UseNoiseReductionOn" value="true" />
                 <ui:RadioButton label="Off" name="UseNoiseReductionOff" />
             </ui:RadioButtonGroup>
-            <ui:RadioButtonGroup label="Loop Back" value="0" name="LoopBack" class="unity-radio-button-2 item2">
+            <ui:RadioButtonGroup label="Loop Back" value="0" name="LoopBack" class="unity-radio-button-2 item1 radio-field">
                 <ui:RadioButton label="On" name="On" value="true" />
                 <ui:RadioButton label="Off" name="Off" />
             </ui:RadioButtonGroup>
         </ui:VisualElement>
         <ui:VisualElement name="Graphics" class="panel hidden">
-            <ui:RadioButtonGroup label="Game Resolution" value="0" name="GameResolution" class="unity-radio-button-4 item1">
+            <ui:RadioButtonGroup label="Game Resolution" value="0" name="GameResolution" class="unity-radio-button-4 item1 radio-field">
                 <ui:RadioButton label="High" value="true" name="High" />
                 <ui:RadioButton label="Medium" name="Medium" />
                 <ui:RadioButton label="Low" name="Low" />
@@ -40,26 +40,33 @@
             </ui:RadioButtonGroup>
             <Dropdown_C name="FullScreenResolution" label="Full Screen Resolution" class="item1 hidden" />
             <Dropdown_C name="QualitySettings" label="Quality Settings" class="item1 hidden" />
-            <ui:RadioButtonGroup label="Unable HDR" value="0" name="UnableHDR" class="unity-radio-button-2 item1 hidden">
+            <ui:RadioButtonGroup label="Unable HDR" value="0" name="UnableHDR" class="unity-radio-button-2 item1 hidden radio-field">
                 <ui:RadioButton label="On" name="On" value="true" />
                 <ui:RadioButton label="Off" name="Off" />
             </ui:RadioButtonGroup>
             <SliderFloat_C focusable="true" name="RenderScale" label="Render Scale" highValue="2" class="item1 hidden" />
-            <ui:RadioButtonGroup label="UI SIze" value="0" name="UISize" class="unity-radio-button-4 item2">
+            <ui:RadioButtonGroup label="UI SIze" value="0" name="UISize" class="unity-radio-button-4 item2 radio-field">
                 <ui:RadioButton label="High" value="true" name="High" />
                 <ui:RadioButton label="Medium" name="Medium" />
                 <ui:RadioButton label="Low" name="Low" />
                 <ui:RadioButton label="Custom" name="Custom" />
             </ui:RadioButtonGroup>
             <SliderInt_C focusable="true" label="Zoom" name="Zoom" highValue="200" value="100" lowValue="90" class="item2 hidden" />
-            <ui:RadioButtonGroup label="Reduce Animation" value="0" name="ReduceAnimation" class="item1 unity-radio-button-2">
+            <ui:RadioButtonGroup label="Reduce Animation" value="0" name="ReduceAnimation" class="item1 unity-radio-button-2 radio-field">
                 <ui:RadioButton label="On" name="On" value="true" />
                 <ui:RadioButton label="Off" name="Off" />
             </ui:RadioButtonGroup>
         </ui:VisualElement>
-        <ui:VisualElement name="Controls" class="panel hidden" />
+        <ui:VisualElement name="Controls" class="panel">
+            <ui:RadioButtonGroup value="0" name="SubMenu" class="menu-navigation" style="margin-bottom: 12px; top: -24px;">
+                <ui:RadioButton label="Navigation" value="true" name="ControlsButtonNavigation" />
+                <ui:RadioButton label="Shortcut" name="ControlsButtonShortcut" />
+            </ui:RadioButtonGroup>
+            <ui:ScrollView name="ControlsNavigation" />
+            <ui:ScrollView name="ControlsShortcut" class="hidden" />
+        </ui:VisualElement>
         <ui:VisualElement name="Notification" class="panel hidden">
-            <ui:RadioButtonGroup label="Hide Notification" value="0" name="HideNotification" class="item1 unity-radio-button-2">
+            <ui:RadioButtonGroup label="Hide Notification" value="0" name="HideNotification" class="item1 unity-radio-button-2 radio-field">
                 <ui:RadioButton label="On" name="On" value="true" />
                 <ui:RadioButton label="Off" name="Off" />
             </ui:RadioButtonGroup>

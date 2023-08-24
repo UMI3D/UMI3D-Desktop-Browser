@@ -60,7 +60,7 @@
     margin-bottom: 0;
 }
 
-.panel .unity-radio-button-group {
+.panel .radio-field {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
 }
@@ -87,7 +87,7 @@
     border-top-right-radius: 10px;
 }
 
-.panel .item1 .unity-radio-button {
+.panel .item1 .radio-field .unity-radio-button {
     border-left-width: 0;
     border-right-width: 0;
     border-top-width: 0;
@@ -99,7 +99,7 @@
     background-color: rgb(51, 51, 51);
 }
 
-.panel .item2 .unity-radio-button {
+.panel .item2 .radio-field .unity-radio-button {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     background-color: rgb(51, 51, 51);
@@ -110,19 +110,19 @@
     margin-right: 10px;
 }
 
-.unity-radio-button .unity-text-element {
+.radio-field .unity-radio-button .unity-text-element {
     padding: 0;
     -unity-text-align: middle-center;
 }
 
-.panel .unity-radio-button {
+.panel .radio-field .unity-radio-button {
     -unity-text-align: middle-center;
     justify-content: center;
     align-items: center;
     border-radius: 0;
 }
 
-.panel .unity-radio-button:checked {
+.panel .radio-field .unity-radio-button:checked {
     background-color: rgb(64, 64, 64);
 }
 
@@ -230,4 +230,62 @@
 
 .panel > .item2.numeral .unit {
     background-color: rgb(51, 51, 51);
+}
+
+.key-bind {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.key-bind__input {
+    width: 25%;
+    max-width: 25%;
+    min-width: 25%;
+    -unity-text-align: middle-center;
+}
+
+.key-bind__input .unity-text-field__input {
+    -unity-text-align: middle-center;
+}
+
+.item1 .key-bind__input {
+    background-color: rgb(46, 46, 46);
+}
+
+.item2 .key-bind__input {
+    background-color: rgb(51, 51, 51);
+}
+
+.menu-navigation {
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.menu-navigation .unity-radio-button {
+    width: auto;
+    max-width: none;
+    min-width: auto;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.menu-navigation .unity-radio-button .unity-text-element {
+    -unity-text-align: middle-center;
+    width: auto;
+    max-width: none;
+    min-width: auto;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-size: 16px;
+    height: auto;
+    min-height: auto;
 }
