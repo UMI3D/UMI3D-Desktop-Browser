@@ -1,18 +1,19 @@
 using umi3d.baseBrowser.connection;
-using UnityEngine;
 using UnityEngine.UIElements;
 using umi3d.baseBrowser.preferences;
 
 public class MainMenu : BaseMenu
 {
-    private HomeScreen _navigationScreen;
+    private HomeScreen m_NavigationScreen;
 
     protected override void Start()
     {
-        base.Start();
+        m_NavigationScreen = new HomeScreen(m_UiDocument.rootVisualElement.Q("Navigation"));
+        m_NavigationScreen.OnConnect += Connect;
+        m_Screens.Add(m_NavigationScreen);
+        m_MainScreen = m_NavigationScreen;
 
-        _navigationScreen = new HomeScreen(_uiDocument.rootVisualElement.Q("Navigation"));
-        _navigationScreen.OnConnect += Connect;
+        base.Start();
     }
 
     private async void Connect(ServerPreferences.ServerData world)

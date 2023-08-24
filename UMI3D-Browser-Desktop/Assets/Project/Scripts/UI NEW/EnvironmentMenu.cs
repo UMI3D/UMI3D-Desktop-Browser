@@ -11,7 +11,7 @@ public class EnvironmentMenu : BaseMenu
     {
         base.Start();
 
-        _connectionScreen = new FormScreen(_uiDocument.rootVisualElement.Q("Form"));
+        _connectionScreen = new FormScreen(m_UiDocument.rootVisualElement.Q("Form"));
 
         BaseConnectionProcess.Instance.ConnectionSucces += e => BaseConnectionProcess.Instance.GetParameterDtos += GetParameterDtos;
     }

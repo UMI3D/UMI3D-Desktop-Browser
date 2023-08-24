@@ -1,31 +1,43 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class BaseMenu : MonoBehaviour
 {
-    [SerializeField] protected UIDocument _uiDocument;
+    [SerializeField] protected UIDocument m_UiDocument;
 
-    private VisualElement _errorBox;
-    private SettingScreen _settings;
+    private VisualElement m_ErrorBox;
+    private SettingScreen m_Settings;
+
+    protected List<BaseScreen> m_Screens = new();
+    protected BaseScreen m_MainScreen;
 
     protected virtual void Start()
     {
-        Debug.Assert(_uiDocument != null);
+        Debug.Assert(m_UiDocument != null, "UI Document null");
 
         Screen.sleepTimeout = SleepTimeout.SystemSetting;
-        _uiDocument.rootVisualElement.Q<Label>("Version").text = BrowserDesktop.BrowserVersion.Version;
+        m_UiDocument.rootVisualElement.Q<Label>("Version").text = BrowserDesktop.BrowserVersion.Version;
 
+        SetupSettings();
         SetupErrorBox();
 
         InitLocalisation();
+    }
 
-        // TODO : Clean up
-        _settings = new SettingScreen(_uiDocument.rootVisualElement.Q("Settings"));
+    private void SetupSettings()
+    {
+        m_Settings = new SettingScreen(m_UiDocument.rootVisualElement.Q("Settings"));
+        m_Screens.Add(m_Settings);
+
+        m_Settings.Back.clicked += () => ShowScreen(m_MainScreen);
+
+        m_UiDocument.rootVisualElement.Q<Button>("ButtonSettings").clicked += () => ShowScreen(m_Settings);
     }
 
     protected void InitLocalisation()
     {
-        var labels = _uiDocument.rootVisualElement.Query<TextElement>().ToList();
+        var labels = m_UiDocument.rootVisualElement.Query<TextElement>().ToList();
 
         foreach (var label in labels)
         {
@@ -36,16 +48,25 @@ public class BaseMenu : MonoBehaviour
         }
     }
 
+    protected void ShowScreen(BaseScreen pScreen)
+    {
+        foreach (var screen in m_Screens)
+        {
+            screen.Hide();
+        }
+        pScreen.Show();
+    }
+
     private void SetupErrorBox()
     {
-        _errorBox = _uiDocument.rootVisualElement.Q("ErrorBox");
-        _errorBox.Q<Button>("ButtonOk").clicked += () => _errorBox.AddToClassList("hidden");
-        _errorBox.AddToClassList("hidden");
+        m_ErrorBox = m_UiDocument.rootVisualElement.Q("ErrorBox");
+        m_ErrorBox.Q<Button>("ButtonOk").clicked += () => m_ErrorBox.AddToClassList("hidden");
+        m_ErrorBox.AddToClassList("hidden");
     }
 
     protected void OpenErrorBox(string message)
     {
-        _errorBox.Q<TextElement>("Message").text = message;
-        _errorBox.RemoveFromClassList("hidden");
+        m_ErrorBox.Q<TextElement>("Message").text = message;
+        m_ErrorBox.RemoveFromClassList("hidden");
     }
 }

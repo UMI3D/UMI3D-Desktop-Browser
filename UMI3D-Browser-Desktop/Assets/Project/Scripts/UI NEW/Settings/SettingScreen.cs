@@ -9,6 +9,10 @@ public class SettingScreen : BaseScreen
     private ControlsSettings m_Controls;
     private NotificationSettings m_Notifications;
 
+    private Button m_Back;
+
+    public Button Back => m_Back;
+
     public SettingScreen(VisualElement pElement) : base(pElement)
     {
         m_General = new GeneralSettings(pElement.Q("General"));
@@ -22,6 +26,8 @@ public class SettingScreen : BaseScreen
         pElement.Q<RadioButton>("ButtonGraphics").RegisterValueChangedCallback(callback => MenuValueChanged(callback, m_Graphics));
         pElement.Q<RadioButton>("ButtonControls").RegisterValueChangedCallback(callback => MenuValueChanged(callback, m_Controls));
         pElement.Q<RadioButton>("ButtonNotification").RegisterValueChangedCallback(callback => MenuValueChanged(callback, m_Notifications));
+
+        m_Back = m_Root.Q<Button>("ButtonBack");
     }
 
     private void MenuValueChanged(ChangeEvent<bool> callback, BaseSettings settings)

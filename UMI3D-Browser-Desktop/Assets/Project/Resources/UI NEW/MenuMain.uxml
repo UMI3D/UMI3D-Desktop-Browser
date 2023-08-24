@@ -3,7 +3,7 @@
     <ui:Template name="NavigationItem" src="project://database/Assets/Project/Resources/UI%20NEW/NavigationItem.uxml?fileID=9197481963319205126&amp;guid=792009c7ca1da1447a0a8ecd3db13c12&amp;type=3#NavigationItem" />
     <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Navigation/NavigationIntermediateArea.uss?fileID=7433441132597879392&amp;guid=5980de27232d7b944b88b0e2f44b2932&amp;type=3#NavigationIntermediateArea" />
     <ui:Instance template="BaseMenu" name="MenuBase" style="scale: 1 1;">
-        <ui:VisualElement name="Navigation" class="hidden" style="width: 709px;">
+        <ui:VisualElement name="Navigation" style="width: 709px;">
             <ui:VisualElement name="Title" style="flex-direction: row; align-items: center; justify-content: center; border-bottom-width: 16px;">
                 <ui:Label text="Connect to an" display-tooltip-when-elided="true" style="min-width: auto; font-size: 20px; margin-left: 0; margin-right: 5px; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-end; -unity-text-align: lower-left; height: 91%;" />
                 <ui:Label text="Intraverse Portal" display-tooltip-when-elided="true" class="text-important" style="font-size: 24px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-end; -unity-text-align: lower-left; height: 100%;" />

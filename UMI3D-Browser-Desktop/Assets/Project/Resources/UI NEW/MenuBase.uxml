@@ -21,5 +21,5 @@
             <ui:VisualElement name="Image" style="background-image: resource(&apos;UI NEW/Icons/settings&apos;); width: 38.4px; height: 33.7px; max-height: 33.7px; min-height: 33.7px; -unity-background-image-tint-color: rgb(130, 130, 130);" />
         </ui:Button>
     </ui:VisualElement>
-    <ui:Instance template="Settings" name="Settings" />
+    <ui:Instance template="Settings" name="Settings" class="hidden" />
 </ui:UXML>

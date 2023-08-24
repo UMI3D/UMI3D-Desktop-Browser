@@ -9,7 +9,7 @@
             <ui:RadioButton label="Controls" name="ButtonControls" />
             <ui:RadioButton label="Notifications" name="ButtonNotification" />
         </ui:RadioButtonGroup>
-        <ui:VisualElement name="General" class="panel hidden">
+        <ui:VisualElement name="General" class="panel">
             <Dropdown_C focusable="true" label="Language" name="Language" class="item1" />
         </ui:VisualElement>
         <ui:VisualElement name="Audio" class="panel hidden">
@@ -57,7 +57,7 @@
                 <ui:RadioButton label="Off" name="Off" />
             </ui:RadioButtonGroup>
         </ui:VisualElement>
-        <ui:VisualElement name="Controls" class="panel">
+        <ui:VisualElement name="Controls" class="panel hidden">
             <ui:RadioButtonGroup value="0" name="SubMenu" class="menu-navigation" style="margin-bottom: 12px; top: -24px;">
                 <ui:RadioButton label="Navigation" value="true" name="ControlsButtonNavigation" />
                 <ui:RadioButton label="Shortcut" name="ControlsButtonShortcut" />
@@ -72,4 +72,5 @@
             </ui:RadioButtonGroup>
         </ui:VisualElement>
     </ui:VisualElement>
+    <ui:Button text="Back" display-tooltip-when-elided="true" name="ButtonBack" class="button-base" style="position: absolute; left: 0; top: 0;" />
 </ui:UXML>
