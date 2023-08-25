@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Element" class="element" style="flex-direction: row; margin-bottom: 16px; align-items: center;">
+        <ui:Toggle style="margin-left: 55px; margin-right: 55px; margin-top: 0; margin-bottom: 0; width: 23px;" />
+        <ui:VisualElement name="WorldInfo">
+            <ui:VisualElement name="Image" style="width: 104px; height: 68px; background-color: rgb(255, 255, 255); border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px;" />
+            <ui:Label text="Tutorial" display-tooltip-when-elided="true" style="-unity-text-align: middle-center;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ProgressBars" style="flex-grow: 1; margin-right: 57px; margin-left: 57px;">
+            <ui:Label text="265 MB/1.54 GB used" display-tooltip-when-elided="true" style="-unity-text-align: upper-right; color: rgb(104, 104, 104); font-size: 12px;" />
+            <ui:ProgressBar value="265" name="Common" high-value="1540" style="flex-grow: 0;">
+                <ui:ProgressBar value="165" name="Used" high-value="1540" class="no-background" style="position: absolute; width: 100%;" />
+            </ui:ProgressBar>
+            <ui:Label text="&lt;color=#5EE3F0&gt;165 MB&lt;/color&gt; used by world    &lt;color=#ffffff&gt;100 MB&lt;/color&gt; in common" display-tooltip-when-elided="true" style="color: rgb(112, 112, 112);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

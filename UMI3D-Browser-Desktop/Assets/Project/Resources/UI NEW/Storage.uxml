@@ -1,0 +1,28 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="StorageElement" src="project://database/Assets/Project/Resources/UI%20NEW/StorageElement.uxml?fileID=9197481963319205126&amp;guid=9a6023a1951d0804f90e2095fcce3669&amp;type=3#StorageElement" />
+    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Storage/Storage.uss?fileID=7433441132597879392&amp;guid=2649e65c546af364a94e08f2f21365d7&amp;type=3#Storage" />
+    <ui:Label text="Storage" display-tooltip-when-elided="true" name="Title" class="title" />
+    <ui:Button text="Back" display-tooltip-when-elided="true" name="ButtonBack" class="button-base" style="position: absolute; left: 0; top: 0;" />
+    <ui:VisualElement name="Storage" style="align-items: center; flex-direction: row; flex-grow: 0; width: 1014px; max-width: 1014px; min-width: 1014px; justify-content: center;">
+        <ui:VisualElement style="flex-grow: 1;">
+            <ui:Toggle label="Select All" name="SelectAll" style="align-items: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; width: 133px;" />
+            <ui:ScrollView style="height: 300px; width: 698px;">
+                <ui:Instance template="StorageElement" name="StorageElement" />
+                <ui:Instance template="StorageElement" name="StorageElement" />
+                <ui:Instance template="StorageElement" name="StorageElement" />
+                <ui:Instance template="StorageElement" name="StorageElement" />
+            </ui:ScrollView>
+            <ui:VisualElement style="width: 133px; align-items: center; justify-content: center;">
+                <ui:Button display-tooltip-when-elided="true" style="min-width: auto; min-height: auto; justify-content: center; align-items: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; background-color: rgba(188, 188, 188, 0);">
+                    <ui:VisualElement style="background-image: resource(&apos;UI NEW/Icons/BinOpen&apos;); width: 23px; height: 35px;" />
+                </ui:Button>
+                <ui:Label text="Delete Selected" display-tooltip-when-elided="true" style="flex-wrap: nowrap; white-space: normal; -unity-text-align: middle-center;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement style="width: 253.5px; max-width: 253.5px; min-width: 253.5px; align-items: center; justify-content: center; height: 308px; border-left-width: 2px; border-left-color: rgba(101, 101, 101, 255); border-right-color: rgba(101, 101, 101, 255); border-top-color: rgba(101, 101, 101, 255); border-bottom-color: rgba(101, 101, 101, 255);">
+            <ui:VisualElement name="Icon" style="background-image: resource(&apos;UI NEW/Icons/Storage&apos;); width: 49px; height: 58px;" />
+            <ui:Label text="1.54 GB" display-tooltip-when-elided="true" name="TotalSpace" style="font-size: 40px; -unity-font-style: bold;" />
+            <ui:Label text="for 5 Worlds" display-tooltip-when-elided="true" style="white-space: normal; font-size: 21px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
