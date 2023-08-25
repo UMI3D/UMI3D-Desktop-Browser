@@ -584,6 +584,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiDocument: {fileID: 1049023334}
+  m_WindowManager: {fileID: 1506163089}
 --- !u!1 &1294132164
 GameObject:
   m_ObjectHideFlags: 0

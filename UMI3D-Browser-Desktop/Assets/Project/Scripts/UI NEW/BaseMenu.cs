@@ -1,11 +1,17 @@
+using inetum.unityUtils;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class BaseMenu : MonoBehaviour
 {
     [SerializeField] protected UIDocument m_UiDocument;
+    [SerializeField] protected WindowsManager m_WindowManager;
 
+    private VisualElement m_WindowBar;
+    private Button m_WindowBarButton;
     private VisualElement m_ErrorBox;
     private SettingScreen m_Settings;
 
@@ -19,10 +25,47 @@ public class BaseMenu : MonoBehaviour
         Screen.sleepTimeout = SleepTimeout.SystemSetting;
         m_UiDocument.rootVisualElement.Q<Label>("Version").text = BrowserDesktop.BrowserVersion.Version;
 
+        SetupWindowBar();
         SetupSettings();
         SetupErrorBox();
 
         InitLocalisation();
+
+        m_WindowManager.FullScreenEnabled = value =>
+        {
+            if (value)
+                m_UiDocument.rootVisualElement.Q("Header").RemoveFromClassList("hidden");
+            else
+                m_UiDocument.rootVisualElement.Q("Header").AddToClassList("hidden");
+        };
+        m_UiDocument.rootVisualElement.Q<Button>("Quit").clicked += () =>
+        {
+            QuittingManager.ApplicationIsQuitting = true;
+            Application.Quit();
+        };
+        m_UiDocument.rootVisualElement.Q<Button>("Minimize").clicked += m_WindowManager.Minimize;
+        m_UiDocument.rootVisualElement.Q<Button>("MinimizeWindow").clicked += m_WindowManager.Maximize;
+    }
+
+    private void SetupWindowBar()
+    {
+        m_WindowBar = m_UiDocument.rootVisualElement.Q("WindowBar");
+
+        m_WindowBarButton = m_UiDocument.rootVisualElement.Q<Button>("DisplayWindowBar");
+        m_WindowBarButton.clicked += () =>
+        {
+            if (m_WindowBar.GetClasses().Contains("hidden"))
+            {
+                m_WindowBarButton.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                m_WindowBar.RemoveFromClassList("hidden");
+            }
+            else
+            {
+                m_WindowBarButton.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
+                m_WindowBar.AddToClassList("hidden");
+            }
+
+        };
     }
 
     private void SetupSettings()
