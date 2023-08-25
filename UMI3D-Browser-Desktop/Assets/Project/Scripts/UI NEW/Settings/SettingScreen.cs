@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine.UIElements;
 
 public class SettingScreen : BaseScreen
@@ -12,6 +12,8 @@ public class SettingScreen : BaseScreen
     private Button m_Back;
 
     public Button Back => m_Back;
+
+    public event Action OnLanguageChanged;
 
     public SettingScreen(VisualElement pElement) : base(pElement)
     {
@@ -28,6 +30,8 @@ public class SettingScreen : BaseScreen
         pElement.Q<RadioButton>("ButtonNotification").RegisterValueChangedCallback(callback => MenuValueChanged(callback, m_Notifications));
 
         m_Back = m_Root.Q<Button>("ButtonBack");
+
+        m_General.OnLanguageChanged += () => OnLanguageChanged?.Invoke();
     }
 
     private void MenuValueChanged(ChangeEvent<bool> callback, BaseSettings settings)

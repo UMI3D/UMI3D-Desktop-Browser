@@ -33,16 +33,75 @@ public class BaseMenu : MonoBehaviour
         m_Settings.Back.clicked += () => ShowScreen(m_MainScreen);
 
         m_UiDocument.rootVisualElement.Q<Button>("ButtonSettings").clicked += () => ShowScreen(m_Settings);
+
+        m_Settings.OnLanguageChanged += InitLocalisation;
+        m_Settings.OnLanguageChanged += () => Debug.Log("test");
     }
 
     protected void InitLocalisation()
     {
+        var textFields = m_UiDocument.rootVisualElement.Query<TextField>().ToList();
+
+        foreach (var textField in textFields)
+        {
+            if (textField.label == "") continue;
+            if (textField.name == "") continue;
+            var trad = LocalisationManager.Instance.GetTranslation(textField.name);
+            if (trad != null)
+                textField.label = trad;
+        }
+
+        var radioButtonGroups = m_UiDocument.rootVisualElement.Query<RadioButtonGroup>().ToList();
+
+        foreach (var radioButtonGroup in radioButtonGroups)
+        {
+            if (radioButtonGroup.label == "") continue;
+            if (radioButtonGroup.name == "") continue;
+            var trad = LocalisationManager.Instance.GetTranslation(radioButtonGroup.name);
+            if (trad != null)
+                radioButtonGroup.label = trad;
+        }
+
+        var sliders = m_UiDocument.rootVisualElement.Query<Slider>().ToList();
+
+        foreach (var slider in sliders)
+        {
+            if (slider.label == "") continue;
+            if (slider.name == "") continue;
+            var trad = LocalisationManager.Instance.GetTranslation(slider.name);
+            if (trad != null)
+                slider.label = trad;
+        }
+
+        var dropdowns = m_UiDocument.rootVisualElement.Query<DropdownField>().ToList();
+
+        foreach (var dropdown in dropdowns)
+        {
+            if (dropdown.label == "") continue;
+            if (dropdown.name == "") continue;
+            var trad = LocalisationManager.Instance.GetTranslation(dropdown.name);
+            if (trad != null)
+                dropdown.label = trad;
+        }
+
+        var radioButtons = m_UiDocument.rootVisualElement.Query<RadioButton>().ToList();
+
+        foreach (var radioButton in radioButtons)
+        {
+            if (radioButton.label == "") continue;
+            if (radioButton.name == "") continue;
+            var trad = LocalisationManager.Instance.GetTranslation(radioButton.name);
+            if (trad != null)
+                radioButton.label = trad;
+        }
+
         var labels = m_UiDocument.rootVisualElement.Query<TextElement>().ToList();
 
         foreach (var label in labels)
         {
             if (label.text == "") continue;
-            var trad = LocalisationManager.Instance.GetTranslation(label.text);
+            if (label.name == "") continue;
+            var trad = LocalisationManager.Instance.GetTranslation(label.name);
             if (trad != null)
                 label.text = trad;
         }

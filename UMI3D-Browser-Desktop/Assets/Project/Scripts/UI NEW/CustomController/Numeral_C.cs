@@ -166,7 +166,7 @@ public class Numeral_C : TextField
                 return;
             }
 
-            var v = float.Parse(e.newValue);
+            float.TryParse(e.newValue, out var v);
 
             if (m_Type == NumeralType.Percentage)
             {

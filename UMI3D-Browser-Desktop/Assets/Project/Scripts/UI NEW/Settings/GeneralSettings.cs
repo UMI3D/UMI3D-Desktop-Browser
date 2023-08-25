@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,6 +6,8 @@ using UnityEngine.UIElements;
 public class GeneralSettings : BaseSettings
 {
     private Dropdown_C m_Language;
+
+    public event Action OnLanguageChanged;
 
     public GeneralSettings(VisualElement pRoot) : base(pRoot)
     {
@@ -21,9 +22,10 @@ public class GeneralSettings : BaseSettings
 
         m_Language.RegisterValueChangedCallback(language =>
         {
-            LocalisationSettings.Instance.CurrentLanguageIndex =
-                LocalisationSettings.Instance.Languages.FindIndex(l => l.Name == language.newValue);
-            Debug.LogWarning("TODO : Correct change of traduciton!");
+            var index = LocalisationSettings.Instance.Languages.FindIndex(l => l.Name == language.newValue);
+            if (index < 0) return;
+            LocalisationSettings.Instance.CurrentLanguageIndex = index;
+            OnLanguageChanged?.Invoke();
         });
     }
 }

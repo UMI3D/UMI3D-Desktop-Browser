@@ -14,29 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: AudioSettings
   Items:
-  - Key: LoopBack_on
+  - Key: LoopBack
     _trads:
     - Key:
         Name: French
-      Value: "Bouclage activ\xE9"
+      Value: Bouclage
     - Key:
         Name: Spanish
-      Value: Bucle activado
+      Value: Bucles
     - Key:
         Name: English
-      Value: Loop back on
-  - Key: LoopBack_off
-    _trads:
-    - Key:
-        Name: French
-      Value: "Bouclage d\xE9sactiv\xE9"
-    - Key:
-        Name: Spanish
-      Value: "Desactivaci\xF3n de bucles"
-    - Key:
-        Name: English
-      Value: Loop back off
-  - Key: AmplitudeSlider
+      Value: Loop back
+  - Key: Amplitude
     _trads:
     - Key:
         Name: French
@@ -47,19 +36,18 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: Noise Threshold
-  - Key: DelayShutMic
+  - Key: DelayBeforeMuteMic
     _trads:
     - Key:
         Name: French
-      Value: "D\xE9lai avant la mise en sourdine du micro lorsqu'il est inf\xE9rieur
-        au seuil"
+      Value: "D\xE9lai avant la mise en sourdine du micro"
     - Key:
         Name: Spanish
-      Value: "Retardo antes de silenciar el micr\xF3fono cuando es inferior al umbral"
+      Value: "Retardo antes de silenciar el micr\xF3fono"
     - Key:
         Name: English
-      Value: Delay before mute mic when lower than threshold
-  - Key: GeneralVolume
+      Value: Delay before mute mic
+  - Key: Volume
     _trads:
     - Key:
         Name: French
@@ -70,7 +58,7 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: General volume
-  - Key: Mic_Label
+  - Key: Microphone
     _trads:
     - Key:
         Name: French
@@ -81,7 +69,7 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: Microphone
-  - Key: MicMode_AlwaysSend
+  - Key: AlwaysSend
     _trads:
     - Key:
         Name: French
@@ -92,7 +80,7 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: Always send
-  - Key: MicMode_Amplitude
+  - Key: Amplitude
     _trads:
     - Key:
         Name: French
@@ -103,7 +91,7 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: Amplitude
-  - Key: MicMode_PushToTalk
+  - Key: PushToTalk
     _trads:
     - Key:
         Name: French
@@ -114,7 +102,7 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: Push to talk
-  - Key: MicMode_Label
+  - Key: Mode
     _trads:
     - Key:
         Name: French
@@ -125,25 +113,14 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: Mode
-  - Key: NoiseReduc_Label
+  - Key: UseNoiseReduction
     _trads:
     - Key:
         Name: French
-      Value: "Utiliser la r\xE9duction du bruit"
+      Value: "R\xE9duction du bruit"
     - Key:
         Name: Spanish
-      Value: Reducir el ruido
+      Value: "Reducci\xF3n del ruido"
     - Key:
         Name: English
-      Value: Use noise reduction
-  - Key: PushToTalk_Label
-    _trads:
-    - Key:
-        Name: French
-      Value: Touche "Push to talk"
-    - Key:
-        Name: Spanish
-      Value: "Bot\xF3n \"Push to talk\""
-    - Key:
-        Name: English
-      Value: Push to talk key
+      Value: Noise reduction

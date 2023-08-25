@@ -14,6 +14,94 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: LauncherScreen
   Items:
+  - Key: Off
+    _trads:
+    - Key:
+        Name: French
+      Value: "D\xE9sactiver"
+    - Key:
+        Name: Spanish
+      Value: Desactivar
+    - Key:
+        Name: English
+      Value: Disable
+  - Key: On
+    _trads:
+    - Key:
+        Name: French
+      Value: Activer
+    - Key:
+        Name: Spanish
+      Value: Permitir
+    - Key:
+        Name: English
+      Value: Enable
+  - Key: ButtonNotification
+    _trads:
+    - Key:
+        Name: French
+      Value: Notification
+    - Key:
+        Name: Spanish
+      Value: "Notificaci\xF3n"
+    - Key:
+        Name: English
+      Value: Notification
+  - Key: ButtonControls
+    _trads:
+    - Key:
+        Name: French
+      Value: "Contr\xF4les"
+    - Key:
+        Name: Spanish
+      Value: Mandos
+    - Key:
+        Name: English
+      Value: Controls
+  - Key: ButtonGraphics
+    _trads:
+    - Key:
+        Name: French
+      Value: Graphiques
+    - Key:
+        Name: Spanish
+      Value: "Gr\xE1ficos"
+    - Key:
+        Name: English
+      Value: Graphics
+  - Key: ButtonAudio
+    _trads:
+    - Key:
+        Name: French
+      Value: Audio
+    - Key:
+        Name: Spanish
+      Value: Audio
+    - Key:
+        Name: English
+      Value: Audio
+  - Key: ButtonGeneral
+    _trads:
+    - Key:
+        Name: French
+      Value: "G\xE9n\xE9ral"
+    - Key:
+        Name: Spanish
+      Value: General
+    - Key:
+        Name: English
+      Value: General
+  - Key: ConnectTo
+    _trads:
+    - Key:
+        Name: French
+      Value: "Connection \xE0 un"
+    - Key:
+        Name: Spanish
+      Value: Conectarse a un
+    - Key:
+        Name: English
+      Value: Connect to an
   - Key: Submit
     _trads:
     - Key:
@@ -25,7 +113,7 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: Submit
-  - Key: < Back
+  - Key: ButtonBack
     _trads:
     - Key:
         Name: French
@@ -336,17 +424,6 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: Enter a server url here
-  - Key: ConnectionHistory
-    _trads:
-    - Key:
-        Name: French
-      Value: Historique des connexions
-    - Key:
-        Name: Spanish
-      Value: Historial de conexiones
-    - Key:
-        Name: English
-      Value: Connection history
   - Key: DeleteServerHistory_Description
     _trads:
     - Key:

@@ -154,6 +154,8 @@ public class GraphicsSettings : BaseSettings
     private void OnFullScreenResolutionChanged(string pValue)
     {
         var resolution = pValue.Split('x');
+        if (resolution.Length != 2) return;
+
         int.TryParse(resolution[0], out var width);
         int.TryParse(resolution[1], out var height);
 
@@ -176,7 +178,7 @@ public class GraphicsSettings : BaseSettings
 
     private void OnQualitySettingsChanged(string pValue)
     {
-        var value = Enum.Parse<QualityEnum>(pValue);
+        Enum.TryParse<QualityEnum>(pValue, true, out var value);
         switch (value)
         {
             case QualityEnum.VLow:
