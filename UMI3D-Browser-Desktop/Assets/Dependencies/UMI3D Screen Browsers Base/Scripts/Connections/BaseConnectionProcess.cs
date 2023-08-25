@@ -13,19 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using umi3d.baseBrowser.cursor;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
-using umi3d.common;
+using umi3d.debug;
 using UnityEngine;
-using umi3d.baseBrowser.cursor;
-using System.Threading;
-using System.Collections;
-using System;
-using inetum.unityUtils;
-using UnityEngine.Networking;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -35,7 +32,7 @@ namespace umi3d.baseBrowser.connection
         protected const string GamePanelScene = "Environment";
 
         [SerializeField]
-        UMI3DClientLogger logger;
+        UMI3DLogger logger;
 
         #region Data
 
@@ -46,12 +43,12 @@ namespace umi3d.baseBrowser.connection
 
         #endregion
 
-        UMI3DClientServerConnection clientServerConnection;
+        //UMI3DClientServerConnection clientServerConnection;
 
         protected override void Awake()
         {
             base.Awake();
-            logger = new UMI3DClientLogger(mainTag: nameof(BaseConnectionProcess), mainContext: Instance, isThreadDisplayed: true);
+            logger = new UMI3DLogger(mainTag: nameof(BaseConnectionProcess), mainContext: Instance, isThreadDisplayed: true);
 
             Identifier = Resources.Load<BaseClientIdentifier>("Scriptables/Connections/BaseClientIdentifier");
             Identifier.ShouldDownloadLib = ShouldDownloadLibraries;
@@ -59,13 +56,13 @@ namespace umi3d.baseBrowser.connection
 
             LoadingParameters =  Resources.Load<UMI3DCollabLoadingParameters>("Scriptables/GamePanel/CollabLoadingParameters");
             LoadingParameters.supportedformats.Clear();
-            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.gltf);
-            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.obj);
-            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.fbx);
-            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.png);
-            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.jpg);
+            LoadingParameters.supportedformats.Add(common.UMI3DAssetFormat.gltf);
+            LoadingParameters.supportedformats.Add(common.UMI3DAssetFormat.obj);
+            LoadingParameters.supportedformats.Add(common.UMI3DAssetFormat.fbx);
+            LoadingParameters.supportedformats.Add(common.UMI3DAssetFormat.png);
+            LoadingParameters.supportedformats.Add(common.UMI3DAssetFormat.jpg);
 #if UNITY_STANDALONE || UNITY_EDITOR
-            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.unity_standalone_urp);
+            LoadingParameters.supportedformats.Add(common.UMI3DAssetFormat.unity_standalone_urp);
 #elif UNITY_ANDROID
             LoadingParameters.supportedformats.Add(UMI3DAssetFormat.unity_android_urp);
 #endif

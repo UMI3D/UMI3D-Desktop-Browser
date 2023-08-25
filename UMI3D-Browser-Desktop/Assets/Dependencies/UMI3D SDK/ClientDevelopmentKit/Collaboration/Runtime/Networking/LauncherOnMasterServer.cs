@@ -27,12 +27,12 @@ namespace umi3d.cdk.collaboration
     /// <summary>
     /// Used to connect to a Master Server, when a World Controller is not used.
     /// </summary>
-    public class MasterServerLauncher
+    public class LauncherOnMasterServer
     {
         const string requestInfoKey = "info";
 
         private const DebugScope scope = DebugScope.CDK | DebugScope.Collaboration;
-        UMI3DClientLogger logger = new UMI3DClientLogger(mainTag: $"{nameof(MasterServerLauncher)}");
+        static debug.UMI3DLogger logger = new debug.UMI3DLogger(mainTag: $"{nameof(LauncherOnMasterServer)}");
 
         /// <summary>
         /// The Master Server communicates over TCP
@@ -60,7 +60,7 @@ namespace umi3d.cdk.collaboration
 
         Dictionary<string, (NetworkingPlayer player, BeardedManStudios.Forge.Networking.Frame.Text frame, NetWorker sender)> request = new Dictionary<string, (NetworkingPlayer player, BeardedManStudios.Forge.Networking.Frame.Text frame, NetWorker sender)>();
 
-        public MasterServerLauncher()
+        public LauncherOnMasterServer()
         {
         }
 
@@ -298,7 +298,7 @@ namespace umi3d.cdk.collaboration
         }
 
         // disconnect TCPMasterClient
-        ~MasterServerLauncher()
+        ~LauncherOnMasterServer()
         {
             if (client != null)
             {
@@ -307,43 +307,37 @@ namespace umi3d.cdk.collaboration
                 client = null;
             }
         }
-    }
 
-    /// <summary>
-    /// An exception class to deal with <see cref="MasterServerLauncher"/> issues.
-    /// </summary>
-    [Serializable]
-    public class MasterServerException : Exception
-    {
-        static UMI3DClientLogger logger = new UMI3DClientLogger(mainTag: $"{nameof(MasterServerException)}");
 
-        public enum ExceptionTypeEnum
+        /// <summary>
+        /// An exception class to deal with <see cref="LauncherOnMasterServer"/> issues.
+        /// </summary>
+        [Serializable]
+        public class MasterServerException : Exception
         {
-            Unknown,
-            SendException,
-            ReceiveEcxeption
-        }
+            static debug.UMI3DLogger logger = new debug.UMI3DLogger(mainTag: $"{nameof(MasterServerException)}");
 
-        public ExceptionTypeEnum exceptionType;
-
-        public MasterServerException(string message, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown) : base($"{exceptionType}: {message}") 
-        {
-            this.exceptionType = exceptionType;
-        }
-        public MasterServerException(string message, Exception inner, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown) : base($"{exceptionType}: {message}", inner) 
-        {
-            this.exceptionType = exceptionType;
-        }
-
-        public static void LogException(string message, Exception inner, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown)
-        {
-            try
+            public enum ExceptionTypeEnum
             {
-                throw new MasterServerException(message, inner, exceptionType);
+                Unknown,
+                SendException,
+                ReceiveEcxeption
             }
-            catch (Exception e)
+
+            public ExceptionTypeEnum exceptionType;
+
+            public MasterServerException(string message, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown) : base($"{exceptionType}: {message}")
             {
-                logger.Exception(null, e);
+                this.exceptionType = exceptionType;
+            }
+            public MasterServerException(string message, Exception inner, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown) : base($"{exceptionType}: {message}", inner)
+            {
+                this.exceptionType = exceptionType;
+            }
+
+            public static void LogException(string message, Exception inner, ExceptionTypeEnum exceptionType = ExceptionTypeEnum.Unknown)
+            {
+                logger.Exception(null, new MasterServerException(message, inner, exceptionType));
             }
         }
     }

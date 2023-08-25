@@ -223,8 +223,8 @@ namespace umi3d.commonScreen.menu
 
             //TryToConnect(new ServerPreferences.ServerData { serverUrl = serverUrl.Trim() }, DirectConnect__Toggle.value);
 
-            var connectionProcess = new UMI3DClientServerConnection();
-            connectionProcess.Connect(serverUrl, isFavorite: DirectConnect__Toggle.value);
+            //var connectionProcess = new UMI3DClientServerConnection();
+            //connectionProcess.Connect(serverUrl, isFavorite: DirectConnect__Toggle.value);
         }
 
         /// <summary>

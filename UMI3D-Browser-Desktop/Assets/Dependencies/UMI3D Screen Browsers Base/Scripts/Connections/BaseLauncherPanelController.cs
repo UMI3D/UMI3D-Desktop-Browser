@@ -16,6 +16,7 @@ limitations under the License.
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.commonScreen;
 using umi3d.commonScreen.Displayer;
@@ -40,7 +41,7 @@ namespace umi3d.baseBrowser.connection
         {
             Debug.Assert(document != null);
 
-            favoriteConnections = UMI3DConnectionDataCollection.GetFavorites();
+            favoriteConnections = UMI3DClient.GetFavorites_CD();
 
             Screen.sleepTimeout = SleepTimeout.SystemSetting;
 
