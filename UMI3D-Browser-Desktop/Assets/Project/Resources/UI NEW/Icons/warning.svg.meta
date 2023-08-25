@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5a6f88770bd95d744bf5e1496f4ae819
+guid: 52dec5f48b7575c4488cfffae8505ba7
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -8,7 +8,7 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: a57477913897c46af95d590f580878bd, type: 3}
-  svgType: 3
+  svgType: 0
   texturedSpriteMeshType: 0
   svgPixelsPerUnit: 100
   gradientResolution: 64
@@ -17,7 +17,7 @@ ScriptedImporter:
   generatePhysicsShape: 0
   viewportOptions: 0
   preserveViewport: 0
-  advancedMode: 1
+  advancedMode: 0
   predefinedResolutionIndex: 1
   targetResolution: 1080
   resolutionMultiplier: 1
@@ -39,16 +39,16 @@ ScriptedImporter:
   spriteData:
     TessellationDetail: 0
     SpriteRect:
-      name: bar_backgroundSprite
+      name: 
       originalName: 
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       alignment: 0
       border: {x: 0, y: 0, z: 0, w: 0}
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 709
-        height: 68
-      spriteID: adee25fcd6b6af74db3713ea7a3b8811
+        width: 0
+        height: 0
+      spriteID: 239597a179d82d04aa83bc65df48daa8
     PhysicsOutlines: []

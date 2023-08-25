@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cc510438411be5d45991834ad75321da
+guid: bd640f15e6503cc449e0e5504a8650ec
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -17,7 +17,7 @@ ScriptedImporter:
   generatePhysicsShape: 0
   viewportOptions: 0
   preserveViewport: 0
-  advancedMode: 1
+  advancedMode: 0
   predefinedResolutionIndex: 1
   targetResolution: 1080
   resolutionMultiplier: 1
@@ -50,5 +50,5 @@ ScriptedImporter:
         y: 0
         width: 0
         height: 0
-      spriteID: 21fe4f692ea4cb845abff1c513016fc1
+      spriteID: 9c76df9ba4e9a36419f335ec9823987e
     PhysicsOutlines: []

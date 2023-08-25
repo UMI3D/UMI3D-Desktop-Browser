@@ -10,8 +10,10 @@
             </ui:VisualElement>
             <ui:VisualElement name="IntermediateArea" class="intermediate-area" style="justify-content: center; align-items: center; flex-direction: row; width: auto; margin-top: 36px;">
                 <ui:VisualElement name="Body" class="url-field" style="flex-direction: row;">
-                    <ui:VisualElement name="Icon" class="unity-image icon" style="background-image: resource(&apos;UI NEW/Icons/world mini&apos;); width: 54px; padding-right: 15px;" />
-                    <ui:Button display-tooltip-when-elided="true" name="ButtonSubmit" class="submit" style="background-image: resource(&apos;UI NEW/Icons/validation_button_arrow 1&apos;); background-color: rgba(255, 255, 255, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); width: 43px;" />
+                    <ui:VisualElement name="Icon" class="unity-image icon" style="width: 54px; padding-right: 15px; align-items: center; justify-content: center;">
+                        <ui:VisualElement name="Icon" style="background-image: resource(&apos;UI NEW/Icons/WorldMini&apos;); width: 36px; height: 28px; -unity-background-image-tint-color: rgba(137, 137, 137, 255);" />
+                    </ui:VisualElement>
+                    <ui:Button display-tooltip-when-elided="true" name="ButtonSubmit" class="submit" style="background-image: resource(&apos;UI NEW/Icons/ValidationArrowRight&apos;); background-color: rgba(255, 255, 255, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); width: 25px; height: 26px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 27px; margin-top: 0; margin-bottom: 0; -unity-background-image-tint-color: rgba(149, 149, 149, 255);" />
                     <ui:TextField picking-mode="Ignore" name="Url" />
                 </ui:VisualElement>
             </ui:VisualElement>
