@@ -44,6 +44,7 @@ namespace umi3d.baseBrowser.preferences
             public string serverIcon;
             public string dateFirstConnection;
             public string dateLastConnection;
+            public bool isFavorite;
         }
 
         public const string registeredServer = "registeredServerData";

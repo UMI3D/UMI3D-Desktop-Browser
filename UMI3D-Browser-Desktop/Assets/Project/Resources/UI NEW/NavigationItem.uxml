@@ -5,5 +5,13 @@
             <ui:VisualElement style="background-image: resource(&apos;UI NEW/Icons/Portal&apos;); width: 210px; height: 209px; -unity-background-image-tint-color: rgb(111, 111, 111);" />
         </ui:Button>
         <ui:Label text="Tutorial" display-tooltip-when-elided="true" name="Name" />
+        <ui:VisualElement name="HoverButtons" class="hidden" style="position: absolute; width: 100%; flex-direction: row; justify-content: flex-start; height: 70px; top: 202px;">
+            <ui:Button display-tooltip-when-elided="true" name="Delete" class="hover-button" style="background-image: none; background-color: rgb(47, 47, 47); margin-left: 16px;">
+                <ui:VisualElement style="width: 19px; height: 21px; background-image: resource(&apos;UI NEW/Icons/BinClosed&apos;); left: 8px;" />
+            </ui:Button>
+            <ui:Button display-tooltip-when-elided="true" name="Favori" class="hover-button" style="background-image: none; background-color: rgb(47, 47, 47); margin-right: 16px; margin-left: 0; right: 0; position: absolute;">
+                <ui:VisualElement style="width: 27px; height: 25px; background-image: resource(&apos;UI NEW/Icons/Heart&apos;); left: 8px;" />
+            </ui:Button>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

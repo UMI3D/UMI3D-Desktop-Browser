@@ -14,14 +14,10 @@ using UnityEngine.UIElements;
 
 public class FormScreen : BaseScreen
 {
-    private const int k_buttonCooldown = 1500;
-    private bool m_IsAButtonAlreadyPressed;
-
     private RememberForm m_RemeberForm = new RememberForm();
 
     public FormScreen(VisualElement element) : base(element)
     {
-
     }
 
     public void GetParameterDtos(umi3d.common.interaction.form.FormDto form, Action<FormAnswerDto> callback)
@@ -302,12 +298,5 @@ public class FormScreen : BaseScreen
                     break;
             }
         }
-    }
-
-    private async void ButtonActivated()
-    {
-        m_IsAButtonAlreadyPressed = true;
-        await Task.Delay(k_buttonCooldown);
-        m_IsAButtonAlreadyPressed = false;
     }
 }

@@ -10,6 +10,9 @@ public class BaseScreen
 
     private bool m_MustShowTooltip;
 
+    private const int k_buttonCooldown = 1500;
+    protected bool m_IsAButtonAlreadyPressed;
+
     public VisualElement Root => m_Root;
 
     public BaseScreen(VisualElement pElement)
@@ -37,6 +40,13 @@ public class BaseScreen
     {
         m_MustShowTooltip = false;
         m_Tooltip.AddToClassList("hidden");
+    }
+
+    protected async void ButtonActivated()
+    {
+        m_IsAButtonAlreadyPressed = true;
+        await Task.Delay(k_buttonCooldown);
+        m_IsAButtonAlreadyPressed = false;
     }
 
     public virtual void Hide() => m_Root.AddToClassList("hidden");
