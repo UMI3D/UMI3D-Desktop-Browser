@@ -153,6 +153,7 @@ public class GraphicsSettings : BaseSettings
 
     private void OnFullScreenResolutionChanged(string pValue)
     {
+        if (pValue == null) return;
         var resolution = pValue.Split('x');
         if (resolution.Length != 2) return;
 

@@ -87,7 +87,7 @@
     border-top-right-radius: 10px;
 }
 
-.panel .item1 .radio-field .unity-radio-button {
+.panel .item1.radio-field .unity-radio-button {
     border-left-width: 0;
     border-right-width: 0;
     border-top-width: 0;
@@ -99,7 +99,7 @@
     background-color: rgb(51, 51, 51);
 }
 
-.panel .item2 .radio-field .unity-radio-button {
+.panel .item2.radio-field .unity-radio-button {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     background-color: rgb(51, 51, 51);
