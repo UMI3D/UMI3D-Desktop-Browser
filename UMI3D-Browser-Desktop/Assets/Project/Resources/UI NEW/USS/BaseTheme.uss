@@ -28,9 +28,16 @@
     color: rgb(150, 150, 150);
 }
 
-.button {
-    align-items: center;
-    justify-content: center;
+.unity-button {
+    width: 84px;
+    height: 29px;
+    background-color: rgba(47, 47, 47, 255);
+    border-color: rgba(114, 114, 114, 255);
+    border-width: 1px;
+    border-radius: 8px;
+    margin-right: 19px;
+    margin-left: 19px;
+    padding: 0;
 }
 
 .menu-navigation {

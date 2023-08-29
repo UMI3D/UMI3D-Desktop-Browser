@@ -1,6 +1,8 @@
 using umi3d.baseBrowser.connection;
 using UnityEngine.UIElements;
 using umi3d.baseBrowser.preferences;
+using System.Security.Policy;
+using System;
 
 public class MainMenu : BaseMenu
 {
@@ -14,14 +16,35 @@ public class MainMenu : BaseMenu
         m_MainScreen = m_NavigationScreen;
 
         base.Start();
+
+        BaseConnectionProcess.Instance.ConnectionInitialized += ConnectionInitilized;
+        BaseConnectionProcess.Instance.ConnectionInitializationFailled += ConnectionFailed;
     }
 
-    private async void Connect(ServerPreferences.ServerData world)
+    private async void Connect(ServerPreferences.ServerData pWorld)
     {
-        BaseConnectionProcess.Instance.currentServer = world;
-        BaseConnectionProcess.Instance.ConnectionInitializationFailled +=
-            url => OpenErrorBox($"Browser was not able to connect to \n\n\"{url}\"");
+        BaseConnectionProcess.Instance.currentServer = pWorld;
 
         await BaseConnectionProcess.Instance.InitConnect(true);
+    }
+
+    private void ConnectionInitilized(string pUrl)
+    {
+        var cancelButton = new Button();
+        cancelButton.text = "Cancel";
+        cancelButton.clicked += () =>
+        {
+            CloseInfoBox();
+            BaseConnectionProcess.Instance.Leave();
+        };
+        OpenInfoBox("Connection to a server",
+            $"Try connecting to \n\n\"{pUrl}\" \n\nIt may take some time.",
+            cancelButton);
+    }
+
+    private void ConnectionFailed(string pUrl)
+    {
+        OpenErrorBox("Failled to connect to server",
+            $"Browser was not able to connect to \n\n\"{pUrl}\".");
     }
 }

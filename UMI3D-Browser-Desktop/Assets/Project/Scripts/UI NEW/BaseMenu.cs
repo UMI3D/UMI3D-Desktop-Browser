@@ -13,6 +13,7 @@ public class BaseMenu : MonoBehaviour
     private VisualElement m_WindowBar;
     private Button m_WindowBarButton;
     private VisualElement m_ErrorBox;
+    private VisualElement m_InfoBox;
     private SettingScreen m_Settings;
 
     protected List<BaseScreen> m_Screens = new();
@@ -27,6 +28,7 @@ public class BaseMenu : MonoBehaviour
 
         SetupWindowBar();
         SetupSettings();
+        SetupInfoBox();
         SetupErrorBox();
         SetupReportBug();
 
@@ -175,16 +177,59 @@ public class BaseMenu : MonoBehaviour
         pScreen.Show();
     }
 
+    private void SetupInfoBox()
+    {
+        m_InfoBox = m_UiDocument.rootVisualElement.Q("InfoBox");
+
+        m_InfoBox.Q<Button>("ButtonClose").clicked += () =>
+        {
+            CloseInfoBox();
+        };
+    }
+
+    public void OpenInfoBox(string pTitle, string pMessage, params Button[] pButtons)
+    {
+        m_InfoBox.Q<TextElement>("Title").text = pTitle;
+        m_InfoBox.Q<TextElement>("Message").text = pMessage;
+
+        var buttons = m_InfoBox.Q("Buttons");
+        buttons.Clear();
+        foreach (var button in pButtons)
+        {
+            buttons.Add(button);
+        }
+
+        CloseErrorBox();
+        m_InfoBox.RemoveFromClassList("hidden");
+    }
+
+    public void CloseInfoBox() => m_InfoBox.AddToClassList("hidden");
+
     private void SetupErrorBox()
     {
         m_ErrorBox = m_UiDocument.rootVisualElement.Q("ErrorBox");
-        m_ErrorBox.Q<Button>("ButtonOk").clicked += () => m_ErrorBox.AddToClassList("hidden");
-        m_ErrorBox.AddToClassList("hidden");
+
+        m_ErrorBox.Q<Button>("ButtonClose").clicked += () =>
+        {
+            CloseErrorBox();
+        };
     }
 
-    protected void OpenErrorBox(string message)
+    protected void OpenErrorBox(string pTitle, string pMessage, params Button[] pButtons)
     {
-        m_ErrorBox.Q<TextElement>("Message").text = message;
+        m_ErrorBox.Q<TextElement>("Title").text = pTitle;
+        m_ErrorBox.Q<TextElement>("Message").text = pMessage;
+
+        var buttons = m_InfoBox.Q("Buttons");
+        buttons.Clear();
+        foreach (var button in pButtons)
+        {
+            buttons.Add(button);
+        }
+
         m_ErrorBox.RemoveFromClassList("hidden");
+        CloseInfoBox();
     }
+
+    public void CloseErrorBox() => m_ErrorBox.AddToClassList("hidden");
 }

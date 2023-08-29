@@ -3,6 +3,7 @@
     <ui:Template name="Tooltip" src="project://database/Assets/Project/Resources/UI%20NEW/Tooltip.uxml?fileID=9197481963319205126&amp;guid=36d50ddd998e8264bb2f58c5a43f8180&amp;type=3#Tooltip" />
     <ui:Template name="Settings" src="project://database/Assets/Project/Resources/UI%20NEW/Settings.uxml?fileID=9197481963319205126&amp;guid=332f2a64186476b4da002cecddcfef45&amp;type=3#Settings" />
     <ui:Template name="ReportBug" src="project://database/Assets/Project/Resources/UI%20NEW/ReportBug.uxml?fileID=9197481963319205126&amp;guid=c47f6aef7c531b0448da158bad4702c2&amp;type=3#ReportBug" />
+    <ui:Template name="InfoBox" src="project://database/Assets/Project/Resources/UI%20NEW/InfoBox.uxml?fileID=9197481963319205126&amp;guid=8885649dc690b16469f13bd7257b021b&amp;type=3#InfoBox" />
     <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Base.uss?fileID=7433441132597879392&amp;guid=e32d8e46f465ff446bbd9cce72b7e655&amp;type=3#Base" />
     <ui:VisualElement name="Header" style="position: absolute; left: 0; top: 0; width: 100%;">
         <ui:VisualElement name="WindowBar" style="position: absolute; top: 0; width: 100%; height: 40px; background-color: rgb(38, 38, 38); flex-direction: row;">
@@ -33,8 +34,9 @@
     </ui:VisualElement>
     <ui:VisualElement name="Logo" class="logo" />
     <ui:VisualElement name="Container" content-container="true" />
-    <ui:Instance template="ErrorBox" name="ErrorBox" class="hidden" />
+    <ui:Instance template="ErrorBox" name="ErrorBox" class="hidden" style="position: absolute; width: 100%; height: 100%;" />
     <ui:Instance template="Tooltip" name="Tooltip" class="hidden" style="position: absolute; transition-duration: 0.5s; transition-property: display;" />
     <ui:Instance template="Settings" name="Settings" class="hidden" />
     <ui:Instance template="ReportBug" name="ReportBug" class="hidden" style="position: absolute;" />
+    <ui:Instance template="InfoBox" name="InfoBox" class="hidden" style="position: absolute; width: 100%; height: 100%;" />
 </ui:UXML>
