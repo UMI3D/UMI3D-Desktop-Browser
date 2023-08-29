@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/ReportBug.uss?fileID=7433441132597879392&amp;guid=5b848a45c083c574891e4a3fbad71624&amp;type=3#ReportBug" />
+    <ui:VisualElement style="position: absolute; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.88);" />
+    <ui:VisualElement name="ReportBug" style="background-color: rgba(38, 38, 38, 0.78); width: 551px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(226, 104, 33); border-right-color: rgb(226, 104, 33); border-top-color: rgb(226, 104, 33); border-bottom-color: rgb(226, 104, 33); border-top-left-radius: 16px; border-bottom-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px; padding-left: 60px; padding-right: 60px; padding-top: 30px; padding-bottom: 30px;">
+        <ui:Label text="Report a bug" display-tooltip-when-elided="true" name="ReportBug" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 38px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; font-size: 25px; -unity-font-style: bold; -unity-font: url(&apos;project://database/Library/unity%20default%20resources?fileID=10102&amp;guid=0000000000000000e000000000000000&amp;type=0#Arial&apos;); -unity-text-align: middle-center;" />
+        <ui:Label text="Reporting a bug when you have encountered a problem with the UMI3D browser allows our developers to improve it and help you." display-tooltip-when-elided="true" name="BugDescription" style="white-space: normal; font-size: 16px; -unity-font: url(&apos;project://database/Library/unity%20default%20resources?fileID=10102&amp;guid=0000000000000000e000000000000000&amp;type=0#Arial&apos;); height: 71px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+        <ui:TextField picking-mode="Ignore" label="Your email address" name="AskMail" />
+        <Dropdown_C name="HowOftenHappen" label="How often does it happen" />
+        <ui:TextField picking-mode="Ignore" label="Title" name="Title" />
+        <ui:TextField picking-mode="Ignore" multiline="true" class="text-area" style="height: 85px; margin-top: 0;" />
+        <ui:VisualElement name="Buttons" style="flex-direction: row; justify-content: center; align-items: center;">
+            <ui:Button text="Cancel" display-tooltip-when-elided="true" name="ButtonCancel" />
+            <ui:Button text="Send" display-tooltip-when-elided="true" name="ButtonSend" />
+        </ui:VisualElement>
+        <ui:Button display-tooltip-when-elided="true" name="ButtonClose" style="width: 27px; height: 27px; position: absolute; right: 8px; top: 8px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; justify-content: center; align-items: center;">
+            <ui:VisualElement style="width: 10px; height: 10px; background-image: resource(&apos;UI NEW/Icons/Cross&apos;);" />
+        </ui:Button>
+    </ui:VisualElement>
+</ui:UXML>

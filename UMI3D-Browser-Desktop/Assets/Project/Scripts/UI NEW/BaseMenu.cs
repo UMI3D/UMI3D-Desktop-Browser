@@ -28,6 +28,7 @@ public class BaseMenu : MonoBehaviour
         SetupWindowBar();
         SetupSettings();
         SetupErrorBox();
+        SetupReportBug();
 
         InitLocalisation();
 
@@ -45,6 +46,21 @@ public class BaseMenu : MonoBehaviour
         };
         m_UiDocument.rootVisualElement.Q<Button>("Minimize").clicked += m_WindowManager.Minimize;
         m_UiDocument.rootVisualElement.Q<Button>("MinimizeWindow").clicked += m_WindowManager.Maximize;
+    }
+
+    private void SetupReportBug()
+    {
+        var reportBug = m_UiDocument.rootVisualElement.Q("ReportBug");
+
+        m_UiDocument.rootVisualElement.Q<Button>("ButtonBug").clicked += () =>
+        {
+            reportBug.RemoveFromClassList("hidden");
+        };
+
+        reportBug.Q<Button>("ButtonClose").clicked += () =>
+        {
+            reportBug.AddToClassList("hidden");
+        };
     }
 
     private void SetupWindowBar()
