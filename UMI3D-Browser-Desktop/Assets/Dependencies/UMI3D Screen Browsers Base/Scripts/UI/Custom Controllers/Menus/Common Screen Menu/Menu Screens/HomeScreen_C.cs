@@ -23,6 +23,7 @@ using umi3d.commonScreen.Container;
 using System.Net;
 using umi3d.common;
 using umi3d.cdk.collaboration;
+using inetum.unityUtils;
 
 namespace umi3d.commonScreen.menu
 {
@@ -220,6 +221,37 @@ namespace umi3d.commonScreen.menu
 
             // Get local address if localhost is enterd
             serverUrl.Replace("localhost", GetLocalIPAddress());
+
+            //CoroutineManager.Instance.AttachCoroutine()
+
+            UMI3DNetworking.RequestMediaDto_LoWC(
+                serverUrl,
+                requestSucceeded: _mediaDto =>
+                {
+                    UMI3DNetworking.Connect(
+                        _mediaDto, null, null,
+                        connectionFormDto =>
+                        {
+                            UnityEngine.Debug.Log($"connection form received.");
+                        },
+                        () =>
+                        {
+                            return null;
+                        },
+                        null,
+                        null,
+                        null
+                    ).AttachCoroutine();
+                },
+                requestFailed: nbTry =>
+                {
+
+                },
+                shouldCleanAbort: () =>
+                {
+                    return false;
+                }
+            ).AttachCoroutine();
 
             //TryToConnect(new ServerPreferences.ServerData { serverUrl = serverUrl.Trim() }, DirectConnect__Toggle.value);
 

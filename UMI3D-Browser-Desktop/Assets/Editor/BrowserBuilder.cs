@@ -68,7 +68,7 @@ public class BrowserBuilder : InitedWindow<BrowserBuilder>
             );
 
         data = new ScriptableLoader<BrowserBuilderData>(filename);
-        info = new LogScrollView();
+        //info = new LogScrollView();
         RefreshBranch();
     }
 

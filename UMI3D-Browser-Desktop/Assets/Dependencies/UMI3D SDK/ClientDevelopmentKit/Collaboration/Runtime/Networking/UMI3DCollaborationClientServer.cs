@@ -102,7 +102,6 @@ namespace umi3d.cdk.collaboration
         {
             if (Exists)
             {
-                worldControllerClient?.Clear();
                 if (environmentClient != null) await environmentClient?.Clear();
                 worldControllerClient = null;
                 environmentClient = null;
@@ -161,25 +160,25 @@ namespace umi3d.cdk.collaboration
         {
             if (!Exists)
             {
-                failed?.Invoke("No Intance of UMI3DCollaborationServer");
+                failed?.Invoke("No Instance of UMI3DCollaborationServer");
                 return;
             }
 
-            if (UMI3DCollaborationClientServer.Instance.IsRedirectionInProgress)
+            if (Instance.IsRedirectionInProgress)
             {
                 failed?.Invoke("Redirection already in progress");
                 return;
             }
             bool aborted = false;
-            UMI3DCollaborationClientServer.Instance.IsRedirectionInProgress = true;
-            Instance.OnRedirectionStarted.Invoke();
+            ////Instance.IsRedirectionInProgress = true;
+            ////Instance.OnRedirectionStarted.Invoke();
 
             try
             {
                 if (Exists)
                 {
-                    Instance.status = StatusType.AWAY;
-                    UMI3DWorldControllerClient wc = worldControllerClient?.Redirection(redirection) ?? new UMI3DWorldControllerClient(redirection.media, redirection.gate);
+                    ////Instance.status = StatusType.AWAY;
+                    UMI3DWorldControllerClient wc = worldControllerClient?.Redirection(redirection) ?? new UMI3DWorldControllerClient(redirection);
                     if (await wc.Connect())
                     {
                         Instance.OnRedirection.Invoke();
@@ -192,8 +191,6 @@ namespace umi3d.cdk.collaboration
 
                         if (env != null)
                             await env.Logout();
-                        if (worldControllerClient != null)
-                            worldControllerClient.Logout();
 
                         //Connection will not restart without this...
                         await Task.Yield();
@@ -203,7 +200,7 @@ namespace umi3d.cdk.collaboration
 
                         worldControllerClient = wc;
                         environmentClient = await wc.ConnectToEnvironment(progress);
-                        environmentClient.status = StatusType.CREATED;
+                        Instance.status = StatusType.CREATED;
                     }
                 }
                 else
@@ -224,14 +221,6 @@ namespace umi3d.cdk.collaboration
                 Instance.OnRedirectionAborted.Invoke();
         }
 
-        public static void Connect(MediaDto dto, Action<string> failed = null)
-        {
-            Connect(new RedirectionDto()
-            {
-                media = dto,
-                gate = null
-            }, failed);
-        }
 
         public static async void Logout()
         {
@@ -241,8 +230,6 @@ namespace umi3d.cdk.collaboration
                 environmentClient = null;
             }
 
-            if (worldControllerClient != null)
-                worldControllerClient.Logout();
             if (Exists)
             {
                 Instance.OnLeavingEnvironment.Invoke();
@@ -326,7 +313,7 @@ namespace umi3d.cdk.collaboration
         }
 
         /// <summary>
-        /// launch a new request.
+        /// launch a new request
         /// </summary>
         /// <param name="argument">argument used in the request</param>
         /// <returns></returns>
@@ -343,6 +330,18 @@ namespace umi3d.cdk.collaboration
                 return environmentClient != null && environmentClient.IsConnected();
             }
             return false;
+        }
+
+        /// <summary>
+        /// Get a media dto at a raw url using a get http request.
+        /// The result is store in UMI3DClientServer.Media.
+        /// </summary>
+        /// <param name="url">Url used for the get request.</param>
+        /// <seealso cref="UMI3DCollaborationClientServer.Media"/>
+        public static async Task<MediaDto> GetMedia(string url, Func<RequestFailedArgument, bool> shouldTryAgain = null)
+        {
+            UMI3DLogger.Log($"Get media at {url}", scope | DebugScope.Connection);
+            return await HttpClient.SendGetMedia(url, shouldTryAgain);
         }
 
         /// <summary>
