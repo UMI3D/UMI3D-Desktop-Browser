@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 52398011}
   - component: {fileID: 52398013}
   - component: {fileID: 52398014}
+  - component: {fileID: 52398016}
   - component: {fileID: 52398015}
   m_Layer: 0
   m_Name: GamePanel
@@ -222,10 +223,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 52398010}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dc922e7be8504344bb058c01dc88b5c, type: 3}
+  m_Script: {fileID: 11500000, guid: 939cce25a9c43b94abba30816cf9ef46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiDocument: {fileID: 52398011}
+  m_UiDocument: {fileID: 52398011}
+--- !u!114 &52398016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52398010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2a7bf43b39cf0643a156c6d0dca9602, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiDocument: {fileID: 52398011}
 --- !u!1001 &102872066
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -305,6 +319,7 @@ GameObject:
   m_Component:
   - component: {fileID: 198329003}
   - component: {fileID: 198329002}
+  - component: {fileID: 198329004}
   m_Layer: 0
   m_Name: WindowsManager
   m_TagString: Untagged
@@ -339,6 +354,20 @@ Transform:
   m_Father: {fileID: 52398012}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &198329004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198329001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eac31cffaa8f1e419386e14892b9fc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiDocument: {fileID: 52398011}
+  m_WindowManager: {fileID: 198329002}
 --- !u!4 &498482121 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 677918340405283884, guid: 29302a75356134040aac5a7d0d21d2f2,

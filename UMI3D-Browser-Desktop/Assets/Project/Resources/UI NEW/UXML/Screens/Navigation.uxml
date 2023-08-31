@@ -1,0 +1,29 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Template name="NavigationItem" src="project://database/Assets/Project/Resources/UI%20NEW/UXML/Elements/NavigationItem.uxml?fileID=9197481963319205126&amp;guid=792009c7ca1da1447a0a8ecd3db13c12&amp;type=3#NavigationItem" />
+    <ui:VisualElement name="Navigation" style="width: 709px;">
+        <ui:VisualElement name="Title" style="flex-direction: row; align-items: center; justify-content: center; border-bottom-width: 16px;">
+            <ui:Label text="Connect to an" display-tooltip-when-elided="true" name="ConnectTo" style="min-width: auto; font-size: 20px; margin-left: 0; margin-right: 5px; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-end; -unity-text-align: lower-left; height: 91%;" />
+            <ui:Label text="Intraverse Portal" display-tooltip-when-elided="true" class="text-important" style="font-size: 24px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: flex-end; -unity-text-align: lower-left; height: 100%;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="IntermediateArea" class="intermediate-area" style="justify-content: center; align-items: center; flex-direction: row; width: auto; margin-top: 36px;">
+            <ui:VisualElement name="Body" class="url-field" style="flex-direction: row;">
+                <ui:VisualElement name="Icon" class="unity-image icon" style="width: 54px; padding-right: 15px; align-items: center; justify-content: center;">
+                    <ui:VisualElement name="Icon" style="background-image: resource(&apos;UI NEW/Icons/WorldMini&apos;); width: 36px; height: 28px; -unity-background-image-tint-color: rgb(137, 137, 137);" />
+                </ui:VisualElement>
+                <ui:Button display-tooltip-when-elided="true" name="ButtonSubmit" class="submit" style="background-image: resource(&apos;UI NEW/Icons/ValidationArrowRight&apos;); background-color: rgba(255, 255, 255, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); width: 25px; height: 26px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 27px; margin-top: 0; margin-bottom: 0; -unity-background-image-tint-color: rgb(149, 149, 149);" />
+                <ui:TextField picking-mode="Ignore" name="Url" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="CentralArea" class="central-area" style="margin-top: 0;">
+            <ui:RadioButtonGroup value="0" name="NavigationsButtons" class="menu-navigation">
+                <ui:RadioButton label="Last" value="true" name="Last" />
+                <ui:RadioButton label="Favorite" name="Favorite" />
+            </ui:RadioButtonGroup>
+            <ui:ScrollView name="Elements" mode="Horizontal" style="align-items: center; margin-top: 5px;">
+                <ui:Instance template="NavigationItem" name="NavigationItem" />
+                <ui:Instance template="NavigationItem" name="NavigationItem" />
+                <ui:Instance template="NavigationItem" name="NavigationItem" />
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

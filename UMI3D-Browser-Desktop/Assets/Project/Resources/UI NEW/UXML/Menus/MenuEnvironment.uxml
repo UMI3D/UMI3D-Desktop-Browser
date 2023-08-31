@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="BaseMenu" src="project://database/Assets/Project/Resources/UI%20NEW/MenuBase.uxml?fileID=9197481963319205126&amp;guid=623a89fef465cfe409bbb262e330de5d&amp;type=3#MenuBase" />
+    <ui:Template name="Form" src="project://database/Assets/Project/Resources/UI%20NEW/Form.uxml?fileID=9197481963319205126&amp;guid=8916325074f1da94eb1ea2581442d1d8&amp;type=3#Form" />
+    <ui:Template name="Loading" src="project://database/Assets/Project/Resources/UI%20NEW/Loading.uxml?fileID=9197481963319205126&amp;guid=db837070a297bc043bac863b570f8e3b&amp;type=3#Loading" />
+    <ui:Instance template="BaseMenu" name="BaseMenu">
+        <ui:Instance template="Form" name="Form" class="hidden" />
+        <ui:Instance template="Loading" name="Loading" class="hidden" />
+    </ui:Instance>
+</ui:UXML>

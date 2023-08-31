@@ -486,6 +486,7 @@ GameObject:
   - component: {fileID: 1049023335}
   - component: {fileID: 1049023336}
   - component: {fileID: 1049023337}
+  - component: {fileID: 1049023338}
   m_Layer: 0
   m_Name: ConnectionUI
   m_TagString: Untagged
@@ -580,11 +581,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1049023328}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a62fff4b8de2fef4c93889d462959b5b, type: 3}
+  m_Script: {fileID: 11500000, guid: cd3497e450389e84ebcce41bd3ca4743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiDocument: {fileID: 1049023334}
-  m_WindowManager: {fileID: 1506163089}
+--- !u!114 &1049023338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1049023328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 939cce25a9c43b94abba30816cf9ef46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiDocument: {fileID: 1049023334}
 --- !u!1 &1294132164
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,6 +728,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1506163088}
   - component: {fileID: 1506163089}
+  - component: {fileID: 1506163090}
   m_Layer: 0
   m_Name: WindowsManager
   m_TagString: Untagged
@@ -749,3 +763,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f5ab6d6d6e24f2499f0107614a6fbf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1506163090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1506163087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eac31cffaa8f1e419386e14892b9fc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiDocument: {fileID: 1049023334}
+  m_WindowManager: {fileID: 1506163089}

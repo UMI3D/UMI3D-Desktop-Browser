@@ -4,8 +4,8 @@ public class ToggleButton_C : BaseBoolField
 {
     public new class UxmlFactory : UxmlFactory<ToggleButton_C, UxmlTraits> { }
 
-    private VisualElement _background = new VisualElement();
-    private VisualElement _circle = new VisualElement();
+    private VisualElement m_Background = new VisualElement();
+    private VisualElement m_Circle = new VisualElement();
 
     #region USS
     public virtual string UssMainClass => $"toggle-button";
@@ -38,8 +38,8 @@ public class ToggleButton_C : BaseBoolField
         RemoveFromClassList("unity-toggle");
         RemoveFromClassList("unity-text-element");
         AddToClassList(UssMainClass);
-        _background.AddToClassList(UssMainClass + "-background");
-        _circle.AddToClassList(UssMainClass + "-circle");
+        m_Background.AddToClassList(UssMainClass + "-background");
+        m_Circle.AddToClassList(UssMainClass + "-circle");
     }
     #endregion
 
@@ -57,8 +57,8 @@ public class ToggleButton_C : BaseBoolField
     {
         m_CheckMark.RemoveFromHierarchy();
 
-        _background.Add(_circle);
+        m_Background.Add(m_Circle);
 
-        Add(_background);
+        Add(m_Background);
     }
 }

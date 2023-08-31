@@ -22,9 +22,9 @@ public class Dropdown_C : DropdownField
         set 
         { 
             base.choices = value; 
-            if (_allChoices == null) _allChoices = new List<string>();
-            if (_allChoices.Count == 0)
-                _allChoices = value; 
+            if (m_AllChoices == null) m_AllChoices = new List<string>();
+            if (m_AllChoices.Count == 0)
+                m_AllChoices = value; 
         } 
     }
 
@@ -39,14 +39,14 @@ public class Dropdown_C : DropdownField
         {
             if (base.value == value || !choices.Contains(value)) return;
 
-            base.choices = new List<string>(_allChoices);
+            base.choices = new List<string>(m_AllChoices);
             base.choices.Remove(value);
 
             base.value = value;
         }
     }
 
-    private List<string> _allChoices = new List<string>();
+    private List<string> m_AllChoices = new List<string>();
 
     public Dropdown_C()
     {
@@ -87,11 +87,6 @@ public class Dropdown_C : DropdownField
     /// Initialise this element.
     /// </summary>
     protected virtual void InitElement()
-    {
-
-    }
-
-    private void UpdateChoices()
     {
 
     }

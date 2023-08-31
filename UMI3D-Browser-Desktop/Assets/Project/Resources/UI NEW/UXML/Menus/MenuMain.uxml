@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="BaseMenu" src="project://database/Assets/Project/Resources/UI%20NEW/UXML/Base.uxml?fileID=9197481963319205126&amp;guid=623a89fef465cfe409bbb262e330de5d&amp;type=3#MenuBase" />
+    <ui:Template name="Navigation" src="project://database/Assets/Project/Resources/UI%20NEW/UXML/Screens/Navigation.uxml?fileID=9197481963319205126&amp;guid=476a74e28b2adb6468d30065f24dffab&amp;type=3#Navigation" />
+    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Screens/Navigation/NavigationIntermediateArea.uss?fileID=7433441132597879392&amp;guid=5980de27232d7b944b88b0e2f44b2932&amp;type=3#NavigationIntermediateArea" />
+    <ui:Instance template="BaseMenu" name="MenuBase" style="scale: 1 1;">
+        <ui:Instance template="Navigation" name="Navigation" />
+    </ui:Instance>
+</ui:UXML>
