@@ -25,13 +25,13 @@ namespace BrowserDesktop
         public readonly static string major = "3";
         public readonly static string minor = "2";
         /// <summary>
-        /// Build count, to be increament by 1.
+        /// Build count, to be increment by 1.
         /// </summary>
-        public readonly static string buildCount = "19";
+        public readonly static string buildCount = "20";
         /// <summary>
         /// Year-Month-Day.
         /// </summary>
-        public readonly static string date = "230823";
+        public readonly static string date = "230831";
     }
 }
 
