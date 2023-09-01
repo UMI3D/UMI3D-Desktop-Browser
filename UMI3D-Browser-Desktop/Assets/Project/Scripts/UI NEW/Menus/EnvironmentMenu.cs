@@ -1,14 +1,18 @@
 using System;
 using umi3d.baseBrowser.connection;
 using umi3d.baseBrowser.Controller;
+using umi3d.cdk;
 using umi3d.cdk.collaboration;
 using umi3d.common.interaction;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public class EnvironmentMenu : BaseMenu
 {
     private FormScreen m_ConnectionScreen;
     private LoadingScreen m_LoadingScreen;
+
+    private Progress m_Progress;
 
     protected override void Start()
     {
@@ -30,19 +34,19 @@ public class EnvironmentMenu : BaseMenu
 
             m_ErrorBox.Show("Server error", message, buttonLeave);
         };
-        /*BaseConnectionProcess.Instance.LoadedEnvironment += () =>
+        BaseConnectionProcess.Instance.LoadedEnvironment += () =>
         {
-            GamePanel.AddScreenToStack = GameViews.Game;
+            /*GamePanel.AddScreenToStack = GameViews.Game;
             m_isContextualMenuDown = false;
             BaseController.Instance.CurrentController.ResetInputsWhenEnvironmentLaunch();
-            OnMenuObjectContentChange();
-        };*/
-        /*BaseConnectionProcess.Instance.Connecting += (state) => Loader.Loading.Message = state;*/
+            OnMenuObjectContentChange();*/
+        };
+        BaseConnectionProcess.Instance.Connecting += (state) => m_LoadingScreen.Message = state;
         BaseConnectionProcess.Instance.RedirectionStarted += () =>
         {
             ShowScreen(m_LoadingScreen);
         };
-        /*BaseConnectionProcess.Instance.RedirectionEnded += () => GamePanel.AddScreenToStack = GameViews.Game;*/
+        BaseConnectionProcess.Instance.RedirectionEnded += () => Debug.Log("[Menu] RedirectionEnded (TODO)");
         BaseConnectionProcess.Instance.ConnectionLost += () =>
         {
             BaseController.CanProcess = false;
@@ -78,7 +82,7 @@ public class EnvironmentMenu : BaseMenu
         BaseConnectionProcess.Instance.LoadingLauncher += (value) =>
         {
             ShowScreen(m_LoadingScreen);
-            // TODO : Update Value
+            m_LoadingScreen.ProgressValue = value;
         };
         BaseConnectionProcess.Instance.DisplayPopUpAfterLoadingFailed += (title, message, action) =>
         {
@@ -90,23 +94,56 @@ public class EnvironmentMenu : BaseMenu
 
             m_ErrorBox.Show(title, message, buttonResume, buttonStop);
         };
-        /*BaseConnectionProcess.Instance.EnvironmentLoaded += () =>
-        {
+        BaseConnectionProcess.Instance.EnvironmentLoaded += () =>
+        {/*;
             Menu.Libraries.InitLibraries();
             Menu.Tips.InitTips();
-            EnvironmentSettings.Instance.AudioSetting.GeneralVolume = ((int)Menu.Settings.Audio.Data.GeneralVolume) / 10f;
-        };*/
-        /*BaseConnectionProcess.Instance.UserCountUpdated += count =>
-        {
+            EnvironmentSettings.Instance.AudioSetting.GeneralVolume = ((int)Menu.Settings.Audio.Data.GeneralVolume) / 10f;*/
+        };
+        BaseConnectionProcess.Instance.UserCountUpdated += count =>
+        {/*
             Game.NotifAndUserArea.UserList.RefreshList();
             Game.NotifAndUserArea.OnUserCountUpdated(count);
-            Menu.GameData.ParticipantCount = count;
-        };*/
+            Menu.GameData.ParticipantCount = count;*/
+        };
+
+        UMI3DCollaborationClientServer.onProgress.AddListener(OnProgress);
     }
 
     public void GetParameterDtos(umi3d.common.interaction.form.FormDto pForm, Action<FormAnswerDto> pCallback)
     {
         m_ConnectionScreen.GetParameterDtos(pForm, pCallback);
-        m_ConnectionScreen.Show();
+        ShowScreen(m_ConnectionScreen);
+    }
+
+    void OnProgress(Progress pProgress)
+    {
+        if (m_Progress != null)
+        {
+            m_Progress.OnCompleteUpdated.RemoveListener(OnCompleteUpdated);
+            m_Progress.OnFailedUpdated.RemoveListener(OnFailedUpdated);
+            m_Progress.OnStatusUpdated.RemoveListener(OnStatusUpdated);
+        }
+        m_Progress = pProgress;
+        void OnCompleteUpdated(float i)
+        {
+            ShowScreen(m_LoadingScreen);
+            m_LoadingScreen.ProgressValue = m_Progress.progressPercent;
+            m_LoadingScreen.ProgressValueText = m_Progress.progressPercent.ToString("0.00") + "%";
+        }
+        void OnFailedUpdated(float i)
+        {
+            m_LoadingScreen.ProgressValue = m_Progress.progressPercent;
+        }
+        void OnStatusUpdated(string i)
+        {
+            ShowScreen(m_LoadingScreen);
+            m_LoadingScreen.Message = m_Progress.currentState;
+        }
+        m_Progress.OnCompleteUpdated.AddListener(OnCompleteUpdated);
+        m_Progress.OnFailedUpdated.AddListener(OnFailedUpdated);
+        m_Progress.OnStatusUpdated.AddListener(OnStatusUpdated);
+        m_LoadingScreen.ProgressValue = m_Progress.progressPercent;
+        m_LoadingScreen.Message = m_Progress.currentState;
     }
 }

@@ -1,12 +1,15 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Loading.uss?fileID=7433441132597879392&amp;guid=ef4f9d16da54d3346951e8dd1234dd31&amp;type=3#Loading" />
+    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Screens/Loading.uss?fileID=7433441132597879392&amp;guid=ef4f9d16da54d3346951e8dd1234dd31&amp;type=3#Loading" />
     <ui:VisualElement name="Loading" style="justify-content: flex-start; align-items: center;">
         <ui:VisualElement style="height: 481px; margin-bottom: 60px;" />
         <ui:VisualElement name="LoadingBar" style="width: 600px;">
             <ui:ProgressBar value="53.7" title=" " name="LoadingProgress" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 24px;" />
             <ui:VisualElement name="Info" style="flex-direction: row; flex-grow: 1; justify-content: space-between;">
-                <ui:Label text="Charge total : 75%" display-tooltip-when-elided="true" name="ChargeTotal" style="font-size: 12px; -unity-font-style: bold;" />
-                <ui:Label text="Downloading : 55.64%" display-tooltip-when-elided="true" name="Downloading" style="justify-content: space-between; -unity-text-align: upper-right; font-size: 10px; -unity-font-style: bold;" />
+                <ui:VisualElement style="flex-direction: row;">
+                    <ui:Label text="Charge total :" display-tooltip-when-elided="true" name="ChargeTotal" style="font-size: 12px; -unity-font-style: bold;" />
+                    <ui:Label text="0%" display-tooltip-when-elided="true" name="ProgressText" style="font-size: 12px; -unity-font-style: bold;" />
+                </ui:VisualElement>
+                <ui:Label text="Downloading" display-tooltip-when-elided="true" name="Downloading" style="justify-content: space-between; -unity-text-align: upper-right; font-size: 10px; -unity-font-style: bold;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

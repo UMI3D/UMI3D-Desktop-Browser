@@ -26,9 +26,7 @@ public class RememberForm
         
         if (answer == null) return null;
         if (answer.answers == null) return null;
-        Debug.Log(CheckAnswerValidity(pTemplate, answer));
         if (!CheckAnswerValidity(pTemplate, answer)) return null;
-        Debug.Log(answer);
 
         return answer;
     }
