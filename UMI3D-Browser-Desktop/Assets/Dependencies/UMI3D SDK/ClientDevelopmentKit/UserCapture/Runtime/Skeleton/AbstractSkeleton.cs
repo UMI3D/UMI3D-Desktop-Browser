@@ -170,7 +170,7 @@ namespace umi3d.cdk.userCapture
         /// <param name="hierarchy"></param>
         private void RetrieveBonesRotation(UMI3DSkeletonHierarchy hierarchy)
         {
-            UnityEngine.Debug.Log($"<color=orange>Compute for {UserId}</color>");
+            //UnityEngine.Debug.Log($"<color=orange>Compute for {UserId}</color>");
             // consider all bones we should have according to the hierarchy, and set all values to identity
             foreach (var bone in hierarchy.Relations.Keys)
             {
@@ -196,7 +196,7 @@ namespace umi3d.cdk.userCapture
                     foreach (var b in bones.Where(c => c.boneType != BoneType.Hips))
                     {
                         // if a bone rotation has already been registered, erase it
-                        if(b.boneType == BoneType.Head)
+                        if(b.boneType == BoneType.LeftHip)
                         {
                             deb.Add(skeleton.GetType().Name);
                         }
@@ -224,7 +224,7 @@ namespace umi3d.cdk.userCapture
                     }
                 }
 
-            deb.Debug();
+            //deb.Debug();
         }
 
         /// <inheritdoc/>

@@ -231,10 +231,17 @@ namespace umi3d.cdk.userCapture.animation
                     (string name, UMI3DAnimatorParameterType typeKey, float valueParameter) = parameter.parameterKey switch
                     {
                         (uint)SkeletonAnimatorParameterKeys.SPEED => ("SPEED", UMI3DAnimatorParameterType.Float, (skeleton.HipsAnchor.position - previousPosition).magnitude / Time.deltaTime),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_X => ("SPEED_X", UMI3DAnimatorParameterType.Float, Mathf.Abs(skeleton.HipsAnchor.position.x - previousPosition.x) / Time.deltaTime),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_Y => ("SPEED_Y", UMI3DAnimatorParameterType.Float, Mathf.Abs(skeleton.HipsAnchor.position.y - previousPosition.y) / Time.deltaTime),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_Z => ("SPEED_Z", UMI3DAnimatorParameterType.Float, Mathf.Abs(skeleton.HipsAnchor.position.z - previousPosition.z) / Time.deltaTime),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_X_Y => ("SPEED_X_Y", UMI3DAnimatorParameterType.Float, (Vector3.ProjectOnPlane(skeleton.HipsAnchor.position, Vector3.up) - Vector3.ProjectOnPlane(previousPosition, Vector3.up)).magnitude / Time.deltaTime),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS => ("SPEED_ABS", UMI3DAnimatorParameterType.Float, Mathf.Abs((skeleton.HipsAnchor.position - previousPosition).magnitude) / Time.deltaTime),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_X => ("SPEED_X", UMI3DAnimatorParameterType.Float, (skeleton.HipsAnchor.position.x - previousPosition.x) / Time.deltaTime),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_X => ("SPEED_ABS_X", UMI3DAnimatorParameterType.Float, Mathf.Abs(skeleton.HipsAnchor.position.x - previousPosition.x) / Time.deltaTime),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_Y => ("SPEED_Y", UMI3DAnimatorParameterType.Float, (skeleton.HipsAnchor.position.y - previousPosition.y) / Time.deltaTime),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_Y => ("SPEED_ABS_Y", UMI3DAnimatorParameterType.Float, Mathf.Abs(skeleton.HipsAnchor.position.y - previousPosition.y) / Time.deltaTime),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_Z => ("SPEED_Z", UMI3DAnimatorParameterType.Float, (skeleton.HipsAnchor.position.z - previousPosition.z) / Time.deltaTime),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_Z => ("SPEED_ABS_Z", UMI3DAnimatorParameterType.Float, Mathf.Abs(skeleton.HipsAnchor.position.z - previousPosition.z) / Time.deltaTime),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_X_Z => ("SPEED_X_Z", UMI3DAnimatorParameterType.Float, (Vector3.ProjectOnPlane(skeleton.HipsAnchor.position, Vector3.up) - Vector3.ProjectOnPlane(previousPosition, Vector3.up)).magnitude / Time.deltaTime),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_X_Z => ("SPEED_ABS_X_Z", UMI3DAnimatorParameterType.Float, Mathf.Abs((Vector3.ProjectOnPlane(skeleton.HipsAnchor.position, Vector3.up) - Vector3.ProjectOnPlane(previousPosition, Vector3.up)).magnitude) / Time.deltaTime),
+                        (uint)SkeletonAnimatorParameterKeys.JUMP => ("JUMP", UMI3DAnimatorParameterType.Bool, 0),
+                        (uint)SkeletonAnimatorParameterKeys.CROUCH => ("CROUCH", UMI3DAnimatorParameterType.Bool, 0),
                         _ => default
                     };
 
@@ -321,6 +328,8 @@ namespace umi3d.cdk.userCapture.animation
 
             foreach (var anim in Animations)
             {
+                UnityEngine.Debug.Log($"{name} {value}");
+
                 anim?.ApplyParameter(name, parameterDto);
             }
         }
