@@ -1,4 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Connection/Connection.uss?fileID=7433441132597879392&amp;guid=6e4a8985874120d4fb75813415c14e95&amp;type=3#Connection" />
+    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Screens/Connection/Connection.uss?fileID=7433441132597879392&amp;guid=6e4a8985874120d4fb75813415c14e95&amp;type=3#Connection" />
     <ui:VisualElement name="Connection" class="connection" />
 </ui:UXML>

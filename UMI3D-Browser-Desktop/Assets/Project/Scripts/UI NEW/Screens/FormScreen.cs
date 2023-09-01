@@ -104,12 +104,14 @@ public class FormScreen : BaseScreen
     private VisualElement CreateGroup(GroupDto pGroup, FormAnswerDto pAnswer, Action<FormAnswerDto> pCallback)
     {
         var result = new VisualElement();
+        result.AddToClassList("form-group");
         switch (pGroup)
         {
             case GroupScrollViewDto scrollView:
                 var scrollViewElement = new ScrollView();
                 scrollViewElement.mode = scrollView.Mode;
                 result = scrollViewElement;
+                result.AddToClassList("form-scroll-view");
                 break;
             default:
                 break;
@@ -134,11 +136,12 @@ public class FormScreen : BaseScreen
         switch (pDiv)
         {
             case GroupDto childGroup:
-                result.Add(GetGroupVisualElement(childGroup, pAnswers, pCallback));
+                result = GetGroupVisualElement(childGroup, pAnswers, pCallback);
                 break;
             case LabelDto label:
                 var labelElement = new Label(label.Text);
                 result = labelElement;
+                result.AddToClassList("form-label");
                 SetServerStyle(labelElement, label.Styles);
                 break;
             case ImageDto image:
@@ -146,6 +149,7 @@ public class FormScreen : BaseScreen
                 if (image.Resource.variants == null) break;
                 if (image.Resource.variants.Count == 0) break;
                 SetImage(image, result);
+                result.AddToClassList("form-image");
                 SetServerStyle(result, image.Styles);
                 break;
             case BaseInputDto baseInput:
@@ -212,6 +216,7 @@ public class FormScreen : BaseScreen
                 textElement.SetPlaceholderText(text.PlaceHolder);
                 textElement.isPasswordField = text.Type == TextType.Password;
                 result = textElement;
+                result.AddToClassList("form-text-element");
                 // Answer
                 textElement.RegisterValueChangedCallback(e =>
                 {
@@ -243,6 +248,7 @@ public class FormScreen : BaseScreen
                         buttonElement.clicked += () => Debug.LogWarning("Not Implemented");
                     }
                 }
+                result.AddToClassList("form-button");
                 result = buttonElement;
                 break;
             case RangeDto<int> rangeInt:
@@ -256,6 +262,7 @@ public class FormScreen : BaseScreen
                     requestDto.parameter = e.newValue;
                 });
                 result = sliderInt;
+                result.AddToClassList("form-slider");
                 break;
             case RangeDto<float> rangeFloat:
                 var sliderFloat = new SliderFloat_C();
@@ -268,6 +275,7 @@ public class FormScreen : BaseScreen
                     requestDto.parameter = e.newValue;
                 });
                 result = sliderFloat;
+                result.AddToClassList("form-slider");
                 break;
             default:
                 break;

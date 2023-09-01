@@ -48,3 +48,31 @@
     border-color: gray;
     padding-left: 12px;
 }
+
+.unity-scroll-view .form-group {
+    margin: 4px;
+    justify-content: center;
+    align-items: center;
+    margin-left: 7px;
+    margin-right: 7px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+.unity-scroll-view .form-image {
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+
+.unity-button {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
