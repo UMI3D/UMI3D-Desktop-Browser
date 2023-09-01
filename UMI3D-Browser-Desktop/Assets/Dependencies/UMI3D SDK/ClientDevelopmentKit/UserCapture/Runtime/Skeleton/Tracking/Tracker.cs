@@ -24,6 +24,8 @@ namespace umi3d.cdk.userCapture.tracking
         [EditorReadOnly,SerializeField, ConstEnum(typeof(common.userCapture.BoneType), typeof(uint))]
         private uint boneType;
 
+        public uint Bonetype => boneType;
+
         public bool isActif = true;
 
         public bool isOverrider = true;
