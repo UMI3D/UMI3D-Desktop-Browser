@@ -246,8 +246,28 @@ public class FormScreen : BaseScreen
                 result = buttonElement;
                 break;
             case RangeDto<int> rangeInt:
+                var sliderInt = new SliderInt_C();
+                sliderInt.label = rangeInt.Label;
+                sliderInt.lowValue = rangeInt.Min;
+                sliderInt.highValue = rangeInt.Max;
+                sliderInt.value = rangeInt.Value;
+                sliderInt.RegisterValueChangedCallback(e =>
+                {
+                    requestDto.parameter = e.newValue;
+                });
+                result = sliderInt;
                 break;
             case RangeDto<float> rangeFloat:
+                var sliderFloat = new SliderFloat_C();
+                sliderFloat.label = rangeFloat.Label;
+                sliderFloat.lowValue = rangeFloat.Min;
+                sliderFloat.highValue = rangeFloat.Max;
+                sliderFloat.value = rangeFloat.Value;
+                sliderFloat.RegisterValueChangedCallback(e =>
+                {
+                    requestDto.parameter = e.newValue;
+                });
+                result = sliderFloat;
                 break;
             default:
                 break;

@@ -9,7 +9,7 @@
                     <ui:Label text="Charge total :" display-tooltip-when-elided="true" name="ChargeTotal" style="font-size: 12px; -unity-font-style: bold;" />
                     <ui:Label text="0%" display-tooltip-when-elided="true" name="ProgressText" style="font-size: 12px; -unity-font-style: bold;" />
                 </ui:VisualElement>
-                <ui:Label text="Downloading" display-tooltip-when-elided="true" name="Downloading" style="justify-content: space-between; -unity-text-align: upper-right; font-size: 10px; -unity-font-style: bold;" />
+                <ui:Label text="Downloading" display-tooltip-when-elided="true" name="ProgressInfo" style="justify-content: space-between; -unity-text-align: upper-right; font-size: 10px; -unity-font-style: bold;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
