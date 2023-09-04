@@ -68,6 +68,7 @@ namespace umi3d.cdk.userCapture.animation
         {
             public SkeletonAnimationParameter(SkeletonAnimationParameterDto dto)
             {
+                parameterName = dto.parameterName;
                 parameterKey = dto.parameterKey;
                 ranges = dto.ranges?.Select(dtoRange => new Range()
                 {
@@ -78,6 +79,7 @@ namespace umi3d.cdk.userCapture.animation
                 }).ToArray() ?? new Range[0];
             }
 
+            public string parameterName;
             public uint parameterKey;
 
             public Range[] ranges;
@@ -223,41 +225,43 @@ namespace umi3d.cdk.userCapture.animation
         private IEnumerator UpdateParametersRoutine(ISkeleton skeleton)
         {
             Vector3 previousPosition = Vector3.zero;
-            Dictionary<uint, object> previousValues = new();
+            Dictionary<string, object> previousValues = new();
 
             while (skeleton != null)
             {
                 var lastFrame = skeleton.LastFrame;
                 foreach (var parameter in SelfUpdatedAnimatorParameters)
                 {
-                    (string name, UMI3DAnimatorParameterType typeKey, object valueParameter) = parameter.parameterKey switch
+                    (UMI3DAnimatorParameterType typeKey, object valueParameter) = parameter.parameterKey switch
                     {
-                        (uint)SkeletonAnimatorParameterKeys.SPEED => ("SPEED", UMI3DAnimatorParameterType.Float, lastFrame.speed.Struct().magnitude),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_X => ("SPEED_X", UMI3DAnimatorParameterType.Float, lastFrame.speed.X),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_X => ("SPEED_ABS_X", UMI3DAnimatorParameterType.Float, Mathf.Abs(lastFrame.speed.X)),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_Y => ("SPEED_Y", UMI3DAnimatorParameterType.Float, lastFrame.speed.Y),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_Y => ("SPEED_ABS_Y", UMI3DAnimatorParameterType.Float, Mathf.Abs(lastFrame.speed.Y)),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_Z => ("SPEED_Z", UMI3DAnimatorParameterType.Float, lastFrame.speed.Z),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_Z => ("SPEED_ABS_Z", UMI3DAnimatorParameterType.Float, Mathf.Abs(lastFrame.speed.Z)),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_X_Z => ("SPEED_X_Z", UMI3DAnimatorParameterType.Float, Vector3.ProjectOnPlane(lastFrame.speed.Struct(), Vector3.up).magnitude),
-                        (uint)SkeletonAnimatorParameterKeys.JUMP => ("JUMP", UMI3DAnimatorParameterType.Bool, (object)lastFrame.jumping),
-                        (uint)SkeletonAnimatorParameterKeys.CROUCH => ("CROUCH", UMI3DAnimatorParameterType.Bool, (object)lastFrame.crouching),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED => (UMI3DAnimatorParameterType.Float, lastFrame.speed.Struct().magnitude),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_X => ( UMI3DAnimatorParameterType.Float, lastFrame.speed.X),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_X => ( UMI3DAnimatorParameterType.Float, Mathf.Abs(lastFrame.speed.X)),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_Y => ( UMI3DAnimatorParameterType.Float, lastFrame.speed.Y),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_Y => ( UMI3DAnimatorParameterType.Float, Mathf.Abs(lastFrame.speed.Y)),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_Z => ( UMI3DAnimatorParameterType.Float, lastFrame.speed.Z),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_Z => (UMI3DAnimatorParameterType.Float, Mathf.Abs(lastFrame.speed.Z)),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_X_Z => (  UMI3DAnimatorParameterType.Float, Vector3.ProjectOnPlane(lastFrame.speed.Struct(), Vector3.up).magnitude),
+                        (uint)SkeletonAnimatorParameterKeys.JUMP => ( UMI3DAnimatorParameterType.Bool, (object)lastFrame.jumping),
+                        (uint)SkeletonAnimatorParameterKeys.CROUCH => ( UMI3DAnimatorParameterType.Bool, (object)lastFrame.crouching),
                         _ => default
                     };
 
-                    bool inited = previousValues.TryGetValue(parameter.parameterKey, out object previousValue);
-                    if (name != default
-                                && (!inited || IsChangeSignificant(previousValue, valueParameter, typeKey)))
+                    if (parameter.parameterName != null)
                     {
-                        if (parameter.ranges.Length > 0 && typeKey == UMI3DAnimatorParameterType.Float)
+                        bool inited = previousValues.TryGetValue(parameter.parameterName, out object previousValue);
+                        if (!inited || IsChangeSignificant(previousValue, valueParameter, typeKey))
                         {
-                            valueParameter = ApplyRanges(parameter, (float)valueParameter);
-                        }
+                            if (parameter.ranges.Length > 0 && typeKey == UMI3DAnimatorParameterType.Float)
+                            {
+                                valueParameter = ApplyRanges(parameter, (float)valueParameter);
+                            }
 
-                        if (!inited || valueParameter != previousValues[parameter.parameterKey])
-                        {
-                            UpdateParameter(name, (uint)typeKey, valueParameter);
-                            previousValues[parameter.parameterKey] = valueParameter;
+                            if (!inited || valueParameter != previousValues[parameter.parameterName])
+                            {
+                                UpdateParameter(parameter.parameterName, (uint)typeKey, valueParameter);
+                                previousValues[parameter.parameterName] = valueParameter;
+                            }
                         }
                     }
                 }
