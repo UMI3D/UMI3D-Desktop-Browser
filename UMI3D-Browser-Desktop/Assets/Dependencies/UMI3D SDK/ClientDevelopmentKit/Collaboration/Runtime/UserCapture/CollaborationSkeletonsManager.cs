@@ -39,6 +39,8 @@ namespace umi3d.cdk.collaboration.userCapture
 
         #region Fields
 
+        public AbstractNavigation navigation;
+
         /// <inheritdoc/>
         public virtual IReadOnlyDictionary<ulong, ISkeleton> Skeletons => skeletons;
         protected Dictionary<ulong, ISkeleton> skeletons = new();
@@ -286,6 +288,12 @@ namespace umi3d.cdk.collaboration.userCapture
                 {
                     var frame = PersonalSkeleton.GetFrame(option);
                     frame.userId = PersonalSkeleton.UserId;
+
+                    (Vector3Dto speed, bool jumping, bool crouching) = navigation.GetNaviagtionData();
+
+                    frame.speed = speed;
+                    frame.jumping = jumping;
+                    frame.crouching = crouching;
 
                     if (frame != null && PersonalSkeleton.UserId != 0)
                         collaborationClientServerService.SendTracking(frame);

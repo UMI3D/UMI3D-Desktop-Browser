@@ -35,6 +35,10 @@ namespace umi3d.baseBrowser.Navigation
         [HideInInspector]
         public Vector2 Movement;
 
+        [HideInInspector]
+        public float heightDelta;
+        public float lastHeight;
+
         [Header("Movement")]
         [SerializeField]
         protected BaseFPSData data;
@@ -73,6 +77,10 @@ namespace umi3d.baseBrowser.Navigation
                 jumpData.velocity = 0;
                 height = groundHeight;
             }
+
+
+            heightDelta = (height - lastHeight) * Time.deltaTime;
+            lastHeight = height;
         }
 
         /// <summary>

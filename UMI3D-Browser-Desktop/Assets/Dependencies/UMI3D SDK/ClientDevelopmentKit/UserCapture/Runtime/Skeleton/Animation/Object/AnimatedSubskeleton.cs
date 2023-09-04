@@ -18,6 +18,7 @@ using inetum.unityUtils;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using umi3d.cdk.userCapture.tracking;
 using umi3d.common;
 using umi3d.common.userCapture.animation;
 using umi3d.common.userCapture.description;
@@ -222,36 +223,35 @@ namespace umi3d.cdk.userCapture.animation
         private IEnumerator UpdateParametersRoutine(ISkeleton skeleton)
         {
             Vector3 previousPosition = Vector3.zero;
-            Dictionary<uint, float> previousValues = new();
+            Dictionary<uint, object> previousValues = new();
 
-            while (skeleton != null && skeleton.HipsAnchor != null)
+            while (skeleton != null)
             {
+                var lastFrame = skeleton.LastFrame;
                 foreach (var parameter in SelfUpdatedAnimatorParameters)
                 {
-                    (string name, UMI3DAnimatorParameterType typeKey, float valueParameter) = parameter.parameterKey switch
+                    (string name, UMI3DAnimatorParameterType typeKey, object valueParameter) = parameter.parameterKey switch
                     {
-                        (uint)SkeletonAnimatorParameterKeys.SPEED => ("SPEED", UMI3DAnimatorParameterType.Float, (skeleton.HipsAnchor.position - previousPosition).magnitude / Time.deltaTime),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS => ("SPEED_ABS", UMI3DAnimatorParameterType.Float, Mathf.Abs((skeleton.HipsAnchor.position - previousPosition).magnitude) / Time.deltaTime),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_X => ("SPEED_X", UMI3DAnimatorParameterType.Float, (skeleton.HipsAnchor.position.x - previousPosition.x) / Time.deltaTime),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_X => ("SPEED_ABS_X", UMI3DAnimatorParameterType.Float, Mathf.Abs(skeleton.HipsAnchor.position.x - previousPosition.x) / Time.deltaTime),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_Y => ("SPEED_Y", UMI3DAnimatorParameterType.Float, (skeleton.HipsAnchor.position.y - previousPosition.y) / Time.deltaTime),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_Y => ("SPEED_ABS_Y", UMI3DAnimatorParameterType.Float, Mathf.Abs(skeleton.HipsAnchor.position.y - previousPosition.y) / Time.deltaTime),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_Z => ("SPEED_Z", UMI3DAnimatorParameterType.Float, (skeleton.HipsAnchor.position.z - previousPosition.z) / Time.deltaTime),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_Z => ("SPEED_ABS_Z", UMI3DAnimatorParameterType.Float, Mathf.Abs(skeleton.HipsAnchor.position.z - previousPosition.z) / Time.deltaTime),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_X_Z => ("SPEED_X_Z", UMI3DAnimatorParameterType.Float, (Vector3.ProjectOnPlane(skeleton.HipsAnchor.position, Vector3.up) - Vector3.ProjectOnPlane(previousPosition, Vector3.up)).magnitude / Time.deltaTime),
-                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_X_Z => ("SPEED_ABS_X_Z", UMI3DAnimatorParameterType.Float, Mathf.Abs((Vector3.ProjectOnPlane(skeleton.HipsAnchor.position, Vector3.up) - Vector3.ProjectOnPlane(previousPosition, Vector3.up)).magnitude) / Time.deltaTime),
-                        (uint)SkeletonAnimatorParameterKeys.JUMP => ("JUMP", UMI3DAnimatorParameterType.Bool, 0),
-                        (uint)SkeletonAnimatorParameterKeys.CROUCH => ("CROUCH", UMI3DAnimatorParameterType.Bool, 0),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED => ("SPEED", UMI3DAnimatorParameterType.Float, lastFrame.speed.Struct().magnitude),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_X => ("SPEED_X", UMI3DAnimatorParameterType.Float, lastFrame.speed.X),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_X => ("SPEED_ABS_X", UMI3DAnimatorParameterType.Float, Mathf.Abs(lastFrame.speed.X)),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_Y => ("SPEED_Y", UMI3DAnimatorParameterType.Float, lastFrame.speed.Y),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_Y => ("SPEED_ABS_Y", UMI3DAnimatorParameterType.Float, Mathf.Abs(lastFrame.speed.Y)),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_Z => ("SPEED_Z", UMI3DAnimatorParameterType.Float, lastFrame.speed.Z),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_ABS_Z => ("SPEED_ABS_Z", UMI3DAnimatorParameterType.Float, Mathf.Abs(lastFrame.speed.Z)),
+                        (uint)SkeletonAnimatorParameterKeys.SPEED_X_Z => ("SPEED_X_Z", UMI3DAnimatorParameterType.Float, Vector3.ProjectOnPlane(lastFrame.speed.Struct(), Vector3.up).magnitude),
+                        (uint)SkeletonAnimatorParameterKeys.JUMP => ("JUMP", UMI3DAnimatorParameterType.Bool, (object)lastFrame.jumping),
+                        (uint)SkeletonAnimatorParameterKeys.CROUCH => ("CROUCH", UMI3DAnimatorParameterType.Bool, (object)lastFrame.crouching),
                         _ => default
                     };
 
-                    bool inited = previousValues.TryGetValue(parameter.parameterKey, out float previousValue);
+                    bool inited = previousValues.TryGetValue(parameter.parameterKey, out object previousValue);
                     if (name != default
-                                && (!inited || IsChangeSignificant(previousValue, valueParameter)))
+                                && (!inited || IsChangeSignificant(previousValue, valueParameter, typeKey)))
                     {
-                        if (parameter.ranges.Length > 0)
+                        if (parameter.ranges.Length > 0 && typeKey == UMI3DAnimatorParameterType.Float)
                         {
-                            valueParameter = ApplyRanges(parameter, valueParameter);
+                            valueParameter = ApplyRanges(parameter, (float)valueParameter);
                         }
 
                         if (!inited || valueParameter != previousValues[parameter.parameterKey])
@@ -261,7 +261,6 @@ namespace umi3d.cdk.userCapture.animation
                         }
                     }
                 }
-                previousPosition = skeleton.HipsAnchor.transform.position;
 
                 yield return null;
             }
@@ -276,10 +275,10 @@ namespace umi3d.cdk.userCapture.animation
         private float ApplyRanges(SkeletonAnimationParameter parameter, float value)
         {
             if (value < parameter.MinRange)
-                return parameter.MinRange;
+                return value;
 
             if (value > parameter.MaxRange)
-                return parameter.MaxRange;
+                return value;
 
             foreach (var range in parameter.ranges)
             {
@@ -300,6 +299,35 @@ namespace umi3d.cdk.userCapture.animation
         /// <param name="newValue"></param>
         /// <param name="threshold"></param>
         /// <returns></returns>
+        private bool IsChangeSignificant(object previousValue, object newValue, UMI3DAnimatorParameterType typeKey, float threshold = 0.05f)
+        {
+            if (previousValue == newValue)
+                return false;
+
+            if (typeKey == UMI3DAnimatorParameterType.Float)
+                return IsChangeSignificant((float)previousValue, (float)newValue, threshold);
+            switch (typeKey)
+            {
+                case UMI3DAnimatorParameterType.Bool:
+                    return IsChangeSignificant((bool)previousValue, (bool)newValue);
+                    
+                case UMI3DAnimatorParameterType.Float:
+                    return IsChangeSignificant((float)previousValue, (float)newValue, threshold);
+                    
+                case UMI3DAnimatorParameterType.Integer:
+                    return IsChangeSignificant((int)previousValue, (int)newValue);
+            }
+
+            return true;
+        }
+
+        private bool IsChangeSignificant<T>(T previousValue, T newValue)
+        {
+            if (previousValue.Equals(newValue))
+                return false;
+            return true;
+        }
+
         private bool IsChangeSignificant(float previousValue, float newValue, float threshold = 0.05f)
         {
             if (previousValue == newValue)

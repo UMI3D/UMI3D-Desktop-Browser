@@ -84,6 +84,10 @@ namespace umi3d.cdk.userCapture
         /// </summary>
         public IPoseSubskeleton PoseSubskeleton { get; protected set; }
 
+
+        protected UserTrackingFrameDto lastFrame;
+        public UserTrackingFrameDto LastFrame => lastFrame;
+
         /// <summary>
         /// Anchor of the skeleton hierarchy.
         /// </summary>
