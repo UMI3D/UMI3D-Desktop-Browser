@@ -8,6 +8,8 @@ public class LoadingScreen : BaseScreen
     private TextElement m_ProressText;
     private TextElement m_Message;
 
+    private CarouselTips m_CarouselTips;
+
     public float ProgressValue
     {
         get => m_ProgressBar.value;
@@ -34,5 +36,7 @@ public class LoadingScreen : BaseScreen
         m_ProgressBar = m_Root.Q<ProgressBar>("LoadingProgress");
         m_ProressText = m_Root.Q<TextElement>("ProgressText");
         m_Message = m_Root.Q<TextElement>("ProgressInfo");
+
+        m_CarouselTips = new CarouselTips(m_Root.Q("CarouselTips"));
     }
 }

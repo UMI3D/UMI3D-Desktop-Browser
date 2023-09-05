@@ -1,14 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="CarouselTips" src="project://database/Assets/Project/Resources/UI%20NEW/UXML/Elements/CarouselTips.uxml?fileID=9197481963319205126&amp;guid=5ecc76c6b0c67fe46abd4c577029fc96&amp;type=3#CarouselTips" />
     <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Screens/Loading.uss?fileID=7433441132597879392&amp;guid=ef4f9d16da54d3346951e8dd1234dd31&amp;type=3#Loading" />
     <ui:VisualElement name="Loading" style="justify-content: flex-start; align-items: center;">
-        <ui:VisualElement name="Tips" style="height: 481px;">
-            <ui:VisualElement name="MainTips">
-                <ui:VisualElement name="Image" style="width: 620px; height: 425px; background-color: rgb(31, 31, 31); border-top-left-radius: 32px; border-bottom-left-radius: 32px; border-top-right-radius: 32px; border-bottom-right-radius: 32px; align-items: center;">
-                    <ui:Label text="Label" display-tooltip-when-elided="true" name="Title" style="position: absolute; font-size: 30px; margin-top: 10px; margin-left: 0; margin-right: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
-                </ui:VisualElement>
-                <ui:Label text="Label" display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 0; margin-top: 15px; margin-bottom: 0; padding-left: 60px; padding-right: 60px; padding-top: 0; padding-bottom: 0; -unity-text-align: middle-center;" />
-            </ui:VisualElement>
-        </ui:VisualElement>
+        <ui:Instance template="CarouselTips" name="CarouselTips" />
         <ui:VisualElement name="LoadingBar" style="width: 600px;">
             <ui:ProgressBar value="53.7" title=" " name="LoadingProgress" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 24px;" />
             <ui:VisualElement name="Info" style="flex-direction: row; flex-grow: 1; justify-content: space-between;">

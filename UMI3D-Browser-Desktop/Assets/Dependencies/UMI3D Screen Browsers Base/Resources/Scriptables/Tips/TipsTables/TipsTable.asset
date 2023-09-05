@@ -16,3 +16,7 @@ MonoBehaviour:
   _tips:
   - Title: Libraries
     Message: You can click on the libraries tab to see all downloaded libraries.
+  - Title: Libraries2
+    Message: 2
+  - Title: 3
+    Message: 2
