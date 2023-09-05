@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Settings/Settings.uss?fileID=7433441132597879392&amp;guid=2c9fb32a9ca1f094f9213dc8764cd893&amp;type=3#Settings" />
+    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Screens/Settings/Settings.uss?fileID=7433441132597879392&amp;guid=2c9fb32a9ca1f094f9213dc8764cd893&amp;type=3#Settings" />
+    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Elements/Dropdown.uss?fileID=7433441132597879392&amp;guid=591434bc807b0074f8ca1c92f40b5798&amp;type=3#Dropdown" />
     <ui:Label text="Settings" display-tooltip-when-elided="true" name="Settings" class="title" />
     <ui:VisualElement name="Settings">
         <ui:RadioButtonGroup value="0" name="Menu" class="menu-navigation" style="margin-bottom: 8px;">

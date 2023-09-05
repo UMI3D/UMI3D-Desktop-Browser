@@ -289,3 +289,11 @@
     height: auto;
     min-height: auto;
 }
+
+.unity-popup-field__input {
+    padding-left: 25px;
+}
+
+.unity-base-field:active .unity-popup-field__input {
+    background-color: rgba(46, 46, 46, 255);
+}

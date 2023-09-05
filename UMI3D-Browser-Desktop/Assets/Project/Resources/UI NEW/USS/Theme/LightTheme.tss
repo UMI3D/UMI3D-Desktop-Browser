@@ -1,7 +1,8 @@
 @import url("/Assets/UI Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss");
 
 @import url("LightTheme.uss");
-@import url("BaseTheme.uss");
+@import url("/Assets/Project/Resources/UI NEW/USS/BaseTheme.uss");
+
 
 
 
