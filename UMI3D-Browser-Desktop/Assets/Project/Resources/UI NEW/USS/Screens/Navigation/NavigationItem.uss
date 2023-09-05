@@ -42,7 +42,7 @@
     min-width: 49px;
     min-height: 49px;
     max-height: 49px;
-    background-color: rgba(47, 47, 47, 255);
+    background-color: rgb(47, 47, 47);
     border-top-left-radius: 100px;
     border-bottom-left-radius: 100px;
     border-top-right-radius: 100px;
@@ -53,4 +53,31 @@
     margin-bottom: 0;
     justify-content: center;
     align-items: center;
+}
+
+.unity-text-field__input {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    color: rgba(255, 255, 255, 255);
+}
+
+.unity-text-field {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }

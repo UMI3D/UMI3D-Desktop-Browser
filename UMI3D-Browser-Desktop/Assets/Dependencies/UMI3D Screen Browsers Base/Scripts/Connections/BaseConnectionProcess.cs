@@ -239,7 +239,7 @@ namespace umi3d.baseBrowser.connection
 
         public void StoreServer()
         {
-            if (savedServers.Find((server) => server.serverName == currentServer.serverName) is var server && server != null)
+            if (savedServers.Find((server) => server.serverUrl == currentServer.serverUrl) is var server && server != null)
             {
                 server.dateLastConnection = DateTime.UtcNow.ToString();
             }

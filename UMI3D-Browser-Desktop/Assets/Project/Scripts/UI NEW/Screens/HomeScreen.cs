@@ -67,7 +67,8 @@ public class HomeScreen : BaseScreen
         var itemAsset = Resources.Load<VisualTreeAsset>(k_NavigationItemPath);
         var item = itemAsset.Instantiate();
 
-        item.Q<TextElement>("Name").text = pWorld.serverName;
+        var name = item.Q<TextField>("Name");
+        name.value = pWorld.serverName;
 
         if (pCallback != null)
         {
@@ -82,8 +83,6 @@ public class HomeScreen : BaseScreen
         }
 
         var buttons = item.Q("HoverButtons");
-        item.RegisterCallback<MouseEnterEvent>(e => buttons.RemoveFromClassList("hidden"));
-        item.RegisterCallback<MouseLeaveEvent>(e => buttons.AddToClassList("hidden"));
 
         buttons.Q<Button>("Favori").clicked += () =>
         {
@@ -106,7 +105,36 @@ public class HomeScreen : BaseScreen
             }
         };
 
+        var modifyName = item.Q<Button>("ModifyName");
+        modifyName.clicked += () =>
+        {
+            name.Focus();
+        };
+        name.RegisterValueChangedCallback(e =>
+        {
+            if (e.newValue == "") return;
+
+            pWorld.serverName = e.newValue;
+            BaseConnectionProcess.Instance.StoreServer();
+        });
+
+        item.RegisterCallback<MouseEnterEvent>(e =>
+        {
+            buttons.RemoveFromClassList("hidden");
+            modifyName.RemoveFromClassList("hidden");
+        });
+        item.RegisterCallback<MouseLeaveEvent>(e =>
+        {
+            buttons.AddToClassList("hidden");
+            modifyName.AddToClassList("hidden");
+        });
+
         return item;
+    }
+
+    private void ModifyName_clicked()
+    {
+        throw new NotImplementedException();
     }
 
     private void ConnectWithUrl()
