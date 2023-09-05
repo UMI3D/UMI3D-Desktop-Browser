@@ -360,8 +360,6 @@ namespace umi3d.cdk.userCapture.animation
 
             foreach (var anim in Animations)
             {
-                UnityEngine.Debug.Log($"{name} {value}");
-
                 anim?.ApplyParameter(name, parameterDto);
             }
         }
