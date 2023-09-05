@@ -192,6 +192,7 @@ namespace umi3d.cdk
                 IsPaused = true;
                 return;
             }
+
             animator.Play(dto.stateName, layer: 0, normalizedTime: nTime);
             IsPaused = false;
             trackingAnimationCoroutine ??= coroutineService.AttachCoroutine(TrackEnd());
