@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Elements/CarrouselTips.uss?fileID=7433441132597879392&amp;guid=97408975826a1ff45bbd4e3db7319cf7&amp;type=3#CarrouselTips" />
+    <ui:VisualElement name="Tips" style="height: 481px; align-items: center; justify-content: center; flex-direction: row;">
+        <ui:Button display-tooltip-when-elided="true" name="ButtonPrevious" style="width: 33px; height: 29px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 30px; margin-top: 0; margin-bottom: 0; justify-content: center; align-items: center;">
+            <ui:VisualElement style="background-image: resource(&apos;UI NEW/Icons/ArrowUp&apos;); width: 15px; height: 11px; rotate: -90deg;" />
+        </ui:Button>
+        <ui:VisualElement name="PrevTip" style="width: 460px; height: 310px; background-color: rgb(31, 31, 31); border-top-left-radius: 32px; border-bottom-left-radius: 32px; border-top-right-radius: 32px; border-bottom-right-radius: 32px; align-items: center;" />
+        <ui:VisualElement name="MainTip" style="margin-right: 25px; margin-left: 25px;">
+            <ui:VisualElement name="Image" style="width: 620px; height: 425px; background-color: rgb(31, 31, 31); border-top-left-radius: 32px; border-bottom-left-radius: 32px; border-top-right-radius: 32px; border-bottom-right-radius: 32px; align-items: center;">
+                <ui:Label text="Label" display-tooltip-when-elided="true" name="Title" style="position: absolute; font-size: 30px; margin-top: 10px; margin-left: 0; margin-right: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+            </ui:VisualElement>
+            <ui:Label text="Label" display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 0; margin-top: 15px; margin-bottom: 0; padding-left: 60px; padding-right: 60px; padding-top: 0; padding-bottom: 0; -unity-text-align: middle-center;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="NextTip" style="width: 460px; height: 310px; background-color: rgb(31, 31, 31); border-top-left-radius: 32px; border-bottom-left-radius: 32px; border-top-right-radius: 32px; border-bottom-right-radius: 32px; align-items: center;" />
+        <ui:Button display-tooltip-when-elided="true" name="ButtonNext" style="width: 33px; height: 29px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 30px; margin-right: 0; margin-top: 0; margin-bottom: 0; justify-content: center; align-items: center;">
+            <ui:VisualElement style="background-image: resource(&apos;UI NEW/Icons/ArrowUp&apos;); width: 15px; height: 11px; rotate: 90deg;" />
+        </ui:Button>
+    </ui:VisualElement>
+    <ui:RadioButtonGroup value="0" name="NavigationMenu" style="justify-content: center; align-items: center;">
+        <ui:RadioButton value="true" />
+        <ui:RadioButton />
+        <ui:RadioButton />
+    </ui:RadioButtonGroup>
+</ui:UXML>
