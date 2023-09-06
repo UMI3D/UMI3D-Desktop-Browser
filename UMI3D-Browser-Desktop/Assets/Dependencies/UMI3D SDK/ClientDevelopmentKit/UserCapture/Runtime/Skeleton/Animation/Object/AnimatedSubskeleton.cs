@@ -230,7 +230,7 @@ namespace umi3d.cdk.userCapture.animation
             while (skeleton != null)
             {
                 var lastFrame = skeleton.LastFrame;
-                if (lastFrame == null)
+                if(lastFrame == null)
                 {
                     UnityEngine.Debug.Log("No frame");
                     yield return null;
