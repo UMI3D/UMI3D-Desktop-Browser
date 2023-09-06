@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="PageTooltip" style="width: 301px; height: 168px; background-color: rgb(38, 38, 38); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-left-color: rgb(59, 59, 59); border-right-color: rgb(59, 59, 59); border-top-color: rgb(59, 59, 59); border-bottom-color: rgb(59, 59, 59); border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; padding-left: 15px; padding-right: 15px; padding-top: 28px; padding-bottom: 45px;">
+        <ui:Button display-tooltip-when-elided="true" name="ButtonClose" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 20px; height: 20px; position: absolute; top: 5px; right: 5px; justify-content: center; align-items: center;">
+            <ui:VisualElement style="background-image: resource(&apos;UI NEW/Icons/Cross&apos;); width: 10px; height: 10px;" />
+        </ui:Button>
+        <ui:Button display-tooltip-when-elided="true" name="ButtonNext" style="position: absolute; right: 5px; bottom: 5px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; align-items: center; justify-content: center;">
+            <ui:Label text="Next" display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 5px; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+            <ui:VisualElement style="background-image: resource(&apos;UI NEW/Icons/Arrow&apos;); width: 30px; height: 20px;" />
+        </ui:Button>
+        <ui:Button display-tooltip-when-elided="true" name="ButtonDone" class="hidden" style="position: absolute; right: 5px; bottom: 5px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; align-items: center; justify-content: center;">
+            <ui:Label text="Done" display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 5px; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+            <ui:VisualElement style="background-image: resource(&apos;UI NEW/Icons/Arrow&apos;); width: 30px; height: 20px;" />
+        </ui:Button>
+        <ui:Button display-tooltip-when-elided="true" name="ButtonPrev" style="position: absolute; bottom: 5px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; align-items: center; justify-content: center; width: 47px; left: 5px;">
+            <ui:VisualElement style="background-image: resource(&apos;UI NEW/Icons/Arrow&apos;); width: 30px; height: 20px; rotate: 180deg;" />
+        </ui:Button>
+        <ui:Label text="Message" display-tooltip-when-elided="true" name="Message" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; font-size: 14px; white-space: normal;" />
+    </ui:VisualElement>
+</ui:UXML>

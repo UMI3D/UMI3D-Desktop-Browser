@@ -15,6 +15,8 @@ public class BaseMenu : MonoBehaviour
     protected InfoBox m_InfoBox;
     protected InfoBox m_ErrorBox;
 
+    private ScreenTooltip m_ScreenTooltip;
+
     protected virtual void Start()
     {
         Debug.Assert(m_UiDocument != null, "UI Document null");
@@ -30,7 +32,11 @@ public class BaseMenu : MonoBehaviour
         m_InfoBox.OnOpened += m_ErrorBox.Hide;
         m_ErrorBox.OnOpened += m_InfoBox.Hide;
 
+        m_ScreenTooltip = new ScreenTooltip(m_UiDocument.rootVisualElement.Q("PageTooltip"));
+        m_UiDocument.rootVisualElement.Q<Button>("ButtonHelp").clicked += m_ScreenTooltip.Show;
+
         LocalisationUiToolkit.InitLocalisation(m_UiDocument);
+        ShowScreen(m_MainScreen);
     }
 
     private void SetupSettings()
@@ -51,6 +57,10 @@ public class BaseMenu : MonoBehaviour
         {
             screen.Hide();
         }
+        Debug.Log(m_ScreenTooltip);
+        Debug.Log(m_ScreenTooltip.LstTooltip);
+        Debug.Log(pScreen.LstTooltip);
+        m_ScreenTooltip.LstTooltip = pScreen.LstTooltip;
         pScreen.Show();
     }
 }

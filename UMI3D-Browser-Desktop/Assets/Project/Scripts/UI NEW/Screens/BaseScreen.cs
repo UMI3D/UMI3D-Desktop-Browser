@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine.UIElements;
 
@@ -14,7 +15,11 @@ public class BaseScreen
 
     protected bool m_IsAButtonAlreadyPressed;
 
+    protected List<TooltipElement> m_LstTooltip;
+
     public VisualElement Root => m_Root;
+    public List<TooltipElement> LstTooltip => m_LstTooltip;
+
 
     public BaseScreen(VisualElement pRoot)
     {
@@ -27,6 +32,8 @@ public class BaseScreen
         m_ErrorBox.OnOpened += m_InfoBox.Hide;
 
         m_Tooltip = new Tooltip(m_Root.parent.Q("Tooltip"));
+
+        m_LstTooltip = new();
     }
 
     protected async void ButtonActivated()

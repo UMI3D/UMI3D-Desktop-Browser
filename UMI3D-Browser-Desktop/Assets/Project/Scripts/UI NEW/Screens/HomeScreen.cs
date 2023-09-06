@@ -25,6 +25,9 @@ public class HomeScreen : BaseScreen
         m_PortalUrl = m_Root.Q<TextField>("Url");
         m_PortalUrl.SetPlaceholderText("example.fr");
         m_Root.Q<Button>("ButtonSubmit").clicked += ConnectWithUrl;
+        m_LstTooltip.Add(new TooltipElement(m_PortalUrl, "Here enter a url to accss the world"));
+        m_LstTooltip.Add(new TooltipElement(m_Root.Q("CentralArea"), "Here you can enter an intraverse portal"));
+
         SetupPortals();
     }
 
