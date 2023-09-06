@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using umi3d.commonScreen.Displayer;
-using umi3d.commonScreen.menu;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,6 +9,9 @@ public class CarouselTips
     private RadioButtonGroup m_NavigationButtons;
     private TextElement m_Title;
     private TextElement m_Message;
+    private VisualElement m_PreviousImage;
+    private VisualElement m_MainImage;
+    private VisualElement m_NextImage;
 
     private List<RadioButton> m_NavigationButtonsList;
 
@@ -33,6 +34,9 @@ public class CarouselTips
         m_NavigationButtons = m_Root.Q<RadioButtonGroup>();
         m_Title = m_Root.Q<TextElement>("Title");
         m_Message = m_Root.Q<TextElement>("Message");
+        m_PreviousImage = m_Root.Q("PrevTip").Q("Background");
+        m_MainImage = m_Root.Q("MainTip").Q("Background");
+        m_NextImage = m_Root.Q("NextTip").Q("Background");
 
         InitializeNavigationButtons();
         GoTo(0);
@@ -67,12 +71,17 @@ public class CarouselTips
 
     private void GoTo(int index)
     {
-        Debug.Log("Wanted : " + index);
-        m_CurrentTipIndex = Math.Clamp(index, 0, m_LstTip.Count - 1);
-        Debug.Log(m_CurrentTipIndex);
+        m_CurrentTipIndex = index;
+        if (m_CurrentTipIndex < 0) m_CurrentTipIndex = m_LstTip.Count - 1;
+        if (m_CurrentTipIndex >= m_LstTip.Count) m_CurrentTipIndex = 0;
 
         m_Title.text = m_CurrentTip.Title;
         m_Message.text = m_CurrentTip.Message;
+        m_MainImage.style.backgroundImage = m_CurrentTip.Image;
         m_NavigationButtonsList[m_CurrentTipIndex].value = true;
+
+        Debug.Log(m_PreviousImage);
+        m_PreviousImage.style.backgroundImage = m_CurrentTipIndex > 0 ? m_LstTip[m_CurrentTipIndex-1].Image : null;
+        m_NextImage.style.backgroundImage = m_CurrentTipIndex < m_LstTip.Count - 1 ? m_LstTip[m_CurrentTipIndex+1].Image : null;
     }
 }

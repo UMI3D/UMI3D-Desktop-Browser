@@ -16,7 +16,10 @@ MonoBehaviour:
   _tips:
   - Title: Libraries
     Message: You can click on the libraries tab to see all downloaded libraries.
+    Image: {fileID: 0}
   - Title: Libraries2
     Message: 2
+    Image: {fileID: 2800000, guid: 4e4557392b415144c8d86599412562c0, type: 3}
   - Title: 3
-    Message: 2
+    Message: 564512
+    Image: {fileID: 0}
