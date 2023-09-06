@@ -89,7 +89,7 @@ namespace umi3d.baseBrowser.connection
 
             cdk.collaboration.UMI3DCollaborationClientServer.EnvironmentProgress = () =>
             {
-                var p = new MultiProgress("Join Environement");
+                var p = new MultiProgress("Join Environment");
                 //p.ResumeAfterFail = ResumeAfterFail;
                 p.ResumeAfterFail = async (e) =>
                 {
