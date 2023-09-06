@@ -71,7 +71,7 @@ public static class UMI3DAsyncManager
         }
         catch(UnityException e)
         {
-            UnityEngine.Debug.LogException(e);
+            //UnityEngine.Debug.LogException(e);
         }
 #endif
         TestTokens(tokens);
