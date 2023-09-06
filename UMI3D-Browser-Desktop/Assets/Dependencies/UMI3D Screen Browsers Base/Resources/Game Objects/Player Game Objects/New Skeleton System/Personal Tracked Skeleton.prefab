@@ -499,7 +499,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 287653166641701401}
-  - component: {fileID: 4616646593165726017}
   m_Layer: 0
   m_Name: headNeck
   m_TagString: Untagged
@@ -523,21 +522,6 @@ Transform:
   m_Father: {fileID: 287653166641701458}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4616646593165726017
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 287653166641704161}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2fe94ff0e1453e4689e30b2a6316e14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boneType: 3
-  isActif: 1
-  isOverrider: 1
 --- !u!1 &287653166641704468
 GameObject:
   m_ObjectHideFlags: 0
@@ -632,7 +616,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1809d8680b4ed46a67c7dce68a18fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handtracking: {fileID: 6928724473507675084}
   viewpoint: {fileID: 0}
   hips: {fileID: 308574267299679471}
   animator: {fileID: 2231595950295152129}
