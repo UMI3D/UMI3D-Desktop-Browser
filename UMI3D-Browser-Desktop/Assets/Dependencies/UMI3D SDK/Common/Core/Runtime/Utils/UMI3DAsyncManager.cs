@@ -61,23 +61,19 @@ public static class UMI3DAsyncManager
     {
         if (QuittingManager.ApplicationIsQuitting)
             throw new UMI3DAsyncManagerException("Application is quitting");
-        /*
-         * Comments the above code because of the error:
-         * UnityException: get_isPlaying can only be called from the main thread.
-         */
-        //#if UNITY_EDITOR
-        //        try
-        //        {
-        //            if (!Application.isPlaying)
-        //            {
-        //                throw new UMI3DAsyncManagerException("Application is not playing");
-        //            }
-        //        }
-        //        catch(UnityException e)
-        //        {
-        //            UnityEngine.Debug.LogException(e);
-        //        }
-        //#endif
+#if UNITY_EDITOR
+        try
+        {
+            if (!Application.isPlaying)
+            {
+                throw new UMI3DAsyncManagerException("Application is not playing");
+            }
+        }
+        catch(UnityException e)
+        {
+            UnityEngine.Debug.LogException(e);
+        }
+#endif
         TestTokens(tokens);
     }
 }

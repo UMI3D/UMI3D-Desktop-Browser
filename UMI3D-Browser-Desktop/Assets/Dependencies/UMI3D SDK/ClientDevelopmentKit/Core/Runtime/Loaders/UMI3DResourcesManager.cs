@@ -864,6 +864,10 @@ namespace umi3d.cdk
 
         private async Task DownloadResources(List<AssetLibraryDto> assetlibraries, string applicationName, MultiProgress progress)
         {
+            /* 
+             * Sometimes trying to download libraries just after connection result in a 401 error: Unauthorized.
+             * To fix this issue we will wait 5000ms to be sure that the browser is allowed to download.
+             */
             await UMI3DAsyncManager.Delay(5000);
             if (assetlibraries != null && assetlibraries.Count > 0)
             {
@@ -927,7 +931,7 @@ namespace umi3d.cdk
                             SetData(dt, directoryPath);
                         }
                         progress.SetAsCompleted();
-                        UnityEngine.Debug.Log($"Asset id: {assetLibrary.id}, version: {assetLibrary.version} already in scene");
+                        UnityEngine.Debug.Log($"{assetLibrary.id} {assetLibrary.version} already in scene");
                         return;
                     }
                     catch (Exception e)

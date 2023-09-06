@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections.Generic;
 using umi3d.baseBrowser.cursor;
+using umi3d.common;
 using umi3d.mobileBrowser.Controller;
 using UnityEngine;
 
@@ -169,6 +170,19 @@ namespace umi3d.baseBrowser.Navigation
             }
 
             return true;
+        }
+
+        public override (Vector3Dto speed, bool jumping, bool crouching) GetNaviagtionData()
+        {
+            Vector3Dto speed = new(); bool jumping; bool crouching;
+            jumping = jumpData.IsJumping;
+            crouching = IsCrouching;
+
+            speed.X = Movement.x / Time.deltaTime;
+            speed.Z = Movement.y / Time.deltaTime;
+            speed.Y = heightDelta / Time.deltaTime;
+
+            return (speed, jumping, crouching);
         }
 
         #endregion

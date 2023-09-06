@@ -15,6 +15,7 @@ limitations under the License.
 */
 #if UNITY_EDITOR
 using inetum.unityUtils;
+using inetum.unityUtils.editor;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -23,7 +24,7 @@ using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
 //[CreateAssetMenu(fileName = "BrowserBuilderData", menuName = "Build Helper/Build Helper Data", order = 1)]
-public class BrowserBuilderData : ScriptableObject
+public class BrowserBuilderData : ScriptableObject, ILogScrollViewData
 {
     public string Branch;
     public string Token;
@@ -33,6 +34,9 @@ public class BrowserBuilderData : ScriptableObject
     public bool display;
 
     public bool cleanAll, comitAll;
+
+    public string _text;
+    public string text { get => _text; set => _text = value; }
 }
 
 [CustomEditor(typeof(BrowserBuilderData))]

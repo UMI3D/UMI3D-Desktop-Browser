@@ -17,6 +17,7 @@ limitations under the License.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.debug;
 using UnityEngine;
 
 namespace inetum.unityUtils
@@ -27,6 +28,8 @@ namespace inetum.unityUtils
     /// Easily mock-able for edit mode unit tests.
     public class CoroutineManager : Singleton<CoroutineManager>, ICoroutineService, ILateRoutineService
     {
+        static UMI3DLogger logger = new (mainTag: nameof(CoroutineManager));
+
         #region Dependency Injection
 
         private CoroutineManagerMono coroutineManagerMono;
@@ -43,6 +46,9 @@ namespace inetum.unityUtils
 
         internal CoroutineManager(CoroutineManagerMono coroutineManagerMono, PersistentCoroutineManagerMono persistentCoroutineManagerMono) : base()
         {
+            logger.Assert(coroutineManagerMono != null, $"coroutineManagerMono null when creating a {nameof(CoroutineManager)}");
+            logger.Assert(persistentCoroutineManagerMono != null, $"persistentCoroutineManagerMono null when creating a {nameof(CoroutineManager)}");
+
             LazyInitialisationCoroutineManager(coroutineManagerMono);
             LazyInitialisationPersistentCoroutineManager(persistentCoroutineManagerMono);
         }
@@ -51,6 +57,10 @@ namespace inetum.unityUtils
 
         /// <summary>
         /// Set <see cref="coroutineManagerMono"/> in a lazy way.
+        /// 
+        /// <para>
+        /// If the field is already initialized then it won't be set again.
+        /// </para>
         /// </summary>
         /// <param name="coroutineManagerMono"></param>
         void LazyInitialisationCoroutineManager(CoroutineManagerMono coroutineManagerMono = null)
@@ -72,6 +82,10 @@ namespace inetum.unityUtils
 
         /// <summary>
         /// Set <see cref="persistentCoroutineManagerMono"/> in a lazy way.
+        /// 
+        /// <para>
+        /// If the field is already initialized then it won't be set again.
+        /// </para>
         /// </summary>
         /// <param name="persistentCoroutineManagerMono"></param>
         void LazyInitialisationPersistentCoroutineManager(PersistentCoroutineManagerMono persistentCoroutineManagerMono = null)
@@ -94,21 +108,15 @@ namespace inetum.unityUtils
         /// <inheritdoc/>
         public virtual Coroutine AttachCoroutine(IEnumerator coroutine, bool isPersistent = false)
         {
+            logger.Assert(coroutine != null, $"Coroutine null when trying to {nameof(AttachCoroutine)}.");
+
             LazyInitialisationCoroutineManager();
             LazyInitialisationPersistentCoroutineManager();
-
-            Debug.Assert(coroutine != null, "Coroutine null when trying to attache");
+            
             ICoroutineService routineService = isPersistent ? persistentCoroutineManagerMono : coroutineManagerMono;
             var resRoutine = routineService.AttachCoroutine(coroutine);
-            if (isPersistent)
-            {
-                Debug.Assert(resRoutine != null, $"resRoutine null when trying to attache a persistent coroutine");
-            }
-            else
-            {
-                Debug.Assert(CoroutineManagerMono.Exists, "CoroutineManagerMono does not exist.");
-                Debug.Assert(resRoutine != null, $"resRoutine null when trying to attache a non persistent coroutine");
-            }
+            logger.Assert(resRoutine != null, $"resRoutine null when trying to attache. Is persistent coroutine: {isPersistent}");
+
             coroutines.Add(resRoutine, isPersistent);
             return resRoutine;
         }
@@ -116,6 +124,8 @@ namespace inetum.unityUtils
         /// <inheritdoc/>
         public virtual void DetachCoroutine(Coroutine coroutine)
         {
+            logger.Assert(coroutine != null, $"Coroutine null when trying to {nameof(DetachCoroutine)}.");
+
             LazyInitialisationCoroutineManager();
             LazyInitialisationPersistentCoroutineManager();
 
@@ -130,6 +140,8 @@ namespace inetum.unityUtils
 
         public virtual IEnumerator AttachLateRoutine(IEnumerator routine, bool isPersistent = false)
         {
+            logger.Assert(routine != null, $"Coroutine null when trying to {nameof(AttachLateRoutine)}.");
+
             LazyInitialisationCoroutineManager();
             LazyInitialisationPersistentCoroutineManager();
 
@@ -140,6 +152,8 @@ namespace inetum.unityUtils
 
         public virtual void DetachLateRoutine(IEnumerator routine)
         {
+            logger.Assert(routine != null, $"Coroutine null when trying to {nameof(DetachLateRoutine)}.");
+
             LazyInitialisationCoroutineManager();
             LazyInitialisationPersistentCoroutineManager();
 
