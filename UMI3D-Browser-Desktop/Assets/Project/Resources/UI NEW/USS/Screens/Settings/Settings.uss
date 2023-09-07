@@ -1,10 +1,7 @@
 .title {
     font-size: 30px;
     -unity-font-style: bold;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0;
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;
@@ -17,18 +14,12 @@
 }
 
 .panel .unity-base-field {
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
+    margin: 0;
+    padding: 0;
     height: 49px;
     width: 1014px;
     font-size: 20px;
-    color: rgb(255, 255, 255);
+    color: var(--color-text);
 }
 
 .panel .unity-base-field__label {
@@ -36,10 +27,7 @@
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
+    margin: 0;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     -unity-text-align: middle-left;
@@ -50,14 +38,8 @@
     width: 50%;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
+    border-width: 0;
+    margin: 0;
 }
 
 .panel .radio-field {
@@ -66,23 +48,20 @@
 }
 
 .panel .item1 > .unity-base-field__label {
-    background-color: rgb(51, 51, 51);
+    background-color: var(--color-input-1);
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 }
 
 .panel .item2 > .unity-base-field__label {
-    background-color: rgb(46, 46, 46);
+    background-color: var(--color-input-2);
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 }
 
 .panel .item1 > .unity-base-field__input {
-    background-color: rgb(46, 46, 46);
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
+    background-color: var(--color-input-2);
+    border-width: 0;
     border-bottom-right-radius: 10px;
     border-top-right-radius: 10px;
 }
@@ -92,21 +71,21 @@
     border-right-width: 0;
     border-top-width: 0;
     border-bottom-width: 0;
-    background-color: rgb(46, 46, 46);
+    background-color: var(--color-input-2);
 }
 
 .panel .item2 > .unity-base-field__input {
-    background-color: rgb(51, 51, 51);
+    background-color: var(--color-input-1);
 }
 
 .panel .item2.radio-field .unity-radio-button {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    background-color: rgb(51, 51, 51);
+    background-color: var(--color-input-1);
 }
 
 .unity-base-popup-field__arrow {
-    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-background-image-tint-color: var(--color-text);
     margin-right: 10px;
 }
 
@@ -123,7 +102,7 @@
 }
 
 .panel .radio-field .unity-radio-button:checked {
-    background-color: rgb(64, 64, 64);
+    background-color: var(--color-input-selected);
 }
 
 .unity-radio-button-2 .unity-radio-button {
@@ -142,14 +121,8 @@
     width: 40%;
     max-width: 40%;
     min-width: 40%;
-    margin-left: 0;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
+    margin: 0;
+    border-radius: 0;
     padding-left: 3%;
 }
 
@@ -166,11 +139,11 @@
 }
 
 .item1 .slider-number {
-    background-color: rgb(46, 46, 46);
+    background-color: var(--color-input-2);
 }
 
 .item2 .slider-number {
-    background-color: rgb(51, 51, 51);
+    background-color: var(--color-input-1);
 }
 
 .slider-number .unity-text-field {
@@ -187,25 +160,16 @@
 
 .unity-text-field__input {
     -unity-text-align: middle-right;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0;
 }
 
 .panel > .numeral .unity-text-field__input {
     max-width: 25%;
     flex-grow: 1;
     flex-shrink: 0;
-    padding-right: 0;
+    padding: 0;
     -unity-text-align: middle-right;
-    padding-left: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+    border-radius: 0;
 }
 
 .panel > .numeral .unit {
@@ -215,21 +179,18 @@
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
+    margin: 0;
     -unity-text-align: middle-left;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
 }
 
 .panel > .item1.numeral .unit {
-    background-color: rgb(46, 46, 46);
+    background-color: var(--color-input-2);
 }
 
 .panel > .item2.numeral .unit {
-    background-color: rgb(51, 51, 51);
+    background-color: var(--color-input-1);
 }
 
 .key-bind {
@@ -249,11 +210,11 @@
 }
 
 .item1 .key-bind__input {
-    background-color: rgb(46, 46, 46);
+    background-color: var(--color-input-2);
 }
 
 .item2 .key-bind__input {
-    background-color: rgb(51, 51, 51);
+    background-color: var(--color-input-1);
 }
 
 .menu-navigation {
@@ -266,10 +227,7 @@
     width: auto;
     max-width: none;
     min-width: auto;
-    margin-left: 8px;
-    margin-right: 8px;
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin: 8px;
 }
 
 .menu-navigation .unity-radio-button .unity-text-element {
@@ -281,10 +239,7 @@
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
-    margin-left: 8px;
-    margin-right: 8px;
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin: 8px;
     font-size: 16px;
     height: auto;
     min-height: auto;
@@ -295,5 +250,5 @@
 }
 
 .unity-base-field:active .unity-popup-field__input {
-    background-color: rgba(46, 46, 46, 255);
+    background-color: var(--color-input-2);
 }

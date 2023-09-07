@@ -17,7 +17,7 @@
 .navigation-item .unity-button {
     width: 347px;
     height: 266px;
-    background-color: rgb(38, 38, 38);
+    background-color: var(--color-element-background);
     border-radius: 32px;
     align-items: center;
     justify-content: center;
@@ -68,7 +68,7 @@
     border-right-width: 0;
     border-top-width: 0;
     border-bottom-width: 0;
-    color: rgba(255, 255, 255, 255);
+    color: var(--color-text);
 }
 
 .unity-text-field {
@@ -80,4 +80,8 @@
     margin-right: 0;
     margin-top: 0;
     margin-bottom: 0;
+}
+
+.navigation-item__icon {
+    -unity-background-image-tint-color: var(--color-button-icon);
 }

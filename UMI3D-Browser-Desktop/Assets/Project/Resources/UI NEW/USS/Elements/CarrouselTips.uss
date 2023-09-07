@@ -1,9 +1,6 @@
 .unity-radio-button__input {
     display: flex;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0;
     margin-left: 5px;
     margin-right: 5px;
     margin-top: 0;
@@ -15,26 +12,17 @@
 .unity-radio-button__checkmark-background {
     width: 10px;
     height: 10px;
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
 }
 
 .unity-radio-button__checkmark {
     width: 10px;
     height: 10px;
-    border-left-color: rgba(94, 227, 240, 255);
-    border-right-color: rgba(94, 227, 240, 255);
-    border-top-color: rgba(94, 227, 240, 255);
-    border-bottom-color: rgba(94, 227, 240, 255);
-    background-color: rgba(94, 227, 240, 255);
+    background-color: var(--color-important);
+}
+
+.tip-background {
+    background-color: var(--color-element-background);
 }

@@ -1,0 +1,9 @@
+.info-box__background {
+	border-color: var(--color-important);
+}
+.warning-box__background {
+	border-color: var(--color-warning);
+}
+.error-box__background {
+	border-color: var(--color-error);
+}

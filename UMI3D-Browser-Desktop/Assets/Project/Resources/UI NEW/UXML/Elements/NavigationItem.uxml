@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Screens/Navigation/NavigationItem.uss?fileID=7433441132597879392&amp;guid=8dc718800e53e5e4bb7ffd70fa0de9c3&amp;type=3#NavigationItem" />
     <ui:VisualElement name="Element" class="navigation-item">
         <ui:Button display-tooltip-when-elided="true" name="ButtonElement" style="background-image: none;">
-            <ui:VisualElement style="background-image: resource(&apos;UI NEW/Icons/Portal&apos;); width: 210px; height: 209px; -unity-background-image-tint-color: rgb(111, 111, 111);" />
+            <ui:VisualElement class="navigation-item__icon" style="background-image: resource(&apos;UI NEW/Icons/Portal&apos;); width: 210px; height: 209px;" />
         </ui:Button>
         <ui:VisualElement style="margin-left: 2px; margin-right: 4px; margin-top: 10px; margin-bottom: 2px; justify-content: center; align-items: center; flex-direction: row;">
             <ui:TextField picking-mode="Ignore" value="Tutorial" text="Tutorial" focusable="true" name="Name" />
