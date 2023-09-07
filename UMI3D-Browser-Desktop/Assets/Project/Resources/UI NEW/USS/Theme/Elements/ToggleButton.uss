@@ -1,0 +1,43 @@
+.toggle-button {
+    height: 25px;
+    align-items: center;
+}
+
+.toggle-button .unity-label {
+    margin-left: 74px;
+    font-size: 16px;
+    -unity-text-align: middle-left;
+}
+
+.toggle-button .toggle-button-background {
+    width: 63px;
+    height: 23px;
+    position: absolute;
+    left: 0;
+    border-color: var(--color-border);
+    border-width: 1px;
+    border-radius: 12px;
+    justify-content: center;
+    transition-property: all;
+    transition-delay: 0.25s;
+    transition-duration: 0.5s;
+}
+
+.toggle-button .toggle-button-circle {
+    width: 18px;
+    height: 18px;
+    background-color: var(--color-important);
+    border-radius: 9px;
+    margin-left: 2px;
+    transition-property: all;
+    transition-duration: 0.5s;
+}
+
+.toggle-button:checked .toggle-button-background {
+    background-color: var(--color-important);
+}
+
+.toggle-button:checked .toggle-button-circle {
+    background-color: var(--color-element-background);
+    margin-left: 41px;
+}

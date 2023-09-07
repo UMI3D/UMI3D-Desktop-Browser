@@ -16,16 +16,18 @@ public class EnvironmentMenu : BaseMenu
 
     protected override void Start()
     {
-        base.Start();
-
         m_ConnectionScreen = new FormScreen(m_UiDocument.rootVisualElement.Q("Form"));
         m_LstScreen.Add(m_ConnectionScreen);
         m_LoadingScreen = new LoadingScreen(m_UiDocument.rootVisualElement.Q("Loading"));
         m_LstScreen.Add(m_LoadingScreen);
+        m_MainScreen = m_LoadingScreen;
+
+        base.Start();
 
         BaseConnectionProcess.Instance.ConnectionSucces += (media) =>
         {
             ShowScreen(m_LoadingScreen);
+            m_MainScreen = m_LoadingScreen;
         };
         BaseConnectionProcess.Instance.ConnectionFail += (message) =>
         {
@@ -45,6 +47,7 @@ public class EnvironmentMenu : BaseMenu
         BaseConnectionProcess.Instance.RedirectionStarted += () =>
         {
             ShowScreen(m_LoadingScreen);
+            m_MainScreen = m_LoadingScreen;
         };
         BaseConnectionProcess.Instance.RedirectionEnded += () => Debug.Log("[Menu] RedirectionEnded (TODO)");
         BaseConnectionProcess.Instance.ConnectionLost += () =>
@@ -82,6 +85,7 @@ public class EnvironmentMenu : BaseMenu
         BaseConnectionProcess.Instance.LoadingLauncher += (value) =>
         {
             ShowScreen(m_LoadingScreen);
+            m_MainScreen = m_LoadingScreen;
             m_LoadingScreen.ProgressValue = value;
         };
         BaseConnectionProcess.Instance.DisplayPopUpAfterLoadingFailed += (title, message, action) =>
@@ -114,6 +118,7 @@ public class EnvironmentMenu : BaseMenu
     {
         m_ConnectionScreen.GetParameterDtos(pForm, pCallback);
         ShowScreen(m_ConnectionScreen);
+        m_MainScreen = m_ConnectionScreen;
     }
 
     void OnProgress(Progress pProgress)
@@ -128,6 +133,7 @@ public class EnvironmentMenu : BaseMenu
         void OnCompleteUpdated(float i)
         {
             ShowScreen(m_LoadingScreen);
+            m_MainScreen = m_LoadingScreen;
             m_LoadingScreen.ProgressValue = m_Progress.progressPercent;
             m_LoadingScreen.ProgressValueText = m_Progress.progressPercent.ToString("0.00") + "%";
         }
@@ -138,6 +144,7 @@ public class EnvironmentMenu : BaseMenu
         void OnStatusUpdated(string i)
         {
             ShowScreen(m_LoadingScreen);
+            m_MainScreen = m_LoadingScreen;
             m_LoadingScreen.Message = m_Progress.currentState;
         }
         m_Progress.OnCompleteUpdated.AddListener(OnCompleteUpdated);

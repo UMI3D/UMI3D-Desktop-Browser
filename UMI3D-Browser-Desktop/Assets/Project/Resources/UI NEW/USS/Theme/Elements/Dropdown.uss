@@ -13,9 +13,14 @@
 
 .unity-base-dropdown__item {
     padding-left: 25px;
-    background-color: rgb(51, 51, 51);
+    background-color: var(--color-input-1);
     height: 49px;
     font-size: 20px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
+}
+
+
+.unity-base-dropdown__container-outer {
+    margin: 0;
 }

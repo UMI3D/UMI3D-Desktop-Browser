@@ -57,9 +57,6 @@ public class BaseMenu : MonoBehaviour
         {
             screen.Hide();
         }
-        Debug.Log(m_ScreenTooltip);
-        Debug.Log(m_ScreenTooltip.LstTooltip);
-        Debug.Log(pScreen.LstTooltip);
         m_ScreenTooltip.LstTooltip = pScreen.LstTooltip;
         pScreen.Show();
     }

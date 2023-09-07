@@ -1,18 +1,36 @@
 :root {
-	--color-background: #2F2F2F;
-
-	--color-primary: #5EE3F0;
-	--color-secondary: #25B1A5;
-	--color-info: #25B1A5;
-	--color-hover: #6FCAD1;
-
-	--text-color-base: #FFFFFF;
-	--text-color-label: #97979C;
-	--text-color-disable: #727272;
-	
-	--color-background-button: #727272;
-	--color-background-button-menu: #262626;
-
     --font-noto-sans: resource('UI NEW/Fonts/NotoSans');
     --font-segoe-ui: resource('UI NEW/Fonts/Segoe UI');
+
+	--color-text-secondary: #05CBD7;
+	--color-slider-bar: #27ACC6;
+	--color-element-selected: #6FCAD1;
+	--color-scrollbar-background: #494949;
+	--color-scrollbar: #25B1A5;
+	--color-input-2: #2E2E2E;
+	--color-input-1: #333333;
+	--color-error: #E22121;
+	--color-input-selected: #404040;
+	--color-text-menu-disabled: #97979C;
+	--color-warning: #FFDD00;
+	--color-report-bug: #E26821;
+	--color-slider-background: #707070;
+	--color-checkbox-border: #707070;
+	--color-progress-bar: #707070;
+	--color-text-info: #707070;
+	--color-background: #2F2F2F;
+	--color-text-menu: #F2F3F7;
+	--color-text-disabled: #727272;
+	--color-button-background: #727272;
+	--color-button-icon: #727272;
+	--color-border: #727272;
+	--color-important: #5EE3F0;
+	--color-progress-bar-primary: #5EE3F0;
+	--color-text: #FFFFFF;
+	--color-window-bar-button: #FFFFFF;
+	--color-slider-circle: #FFFFFF;
+	--color-progress-bar-secondary: #FFFFFF;
+	--color-window-bar: #262626;
+	--color-element-background: #262626;
+	--color-button-icon-background: #262626;
 }

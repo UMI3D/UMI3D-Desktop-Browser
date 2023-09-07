@@ -1,8 +1,12 @@
 @import url("/Assets/UI Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss");
 
-@import url("DarkTheme.uss");
 @import url("/Assets/Project/Resources/UI NEW/USS/BaseTheme.uss");
-@import url("/Assets/Project/Resources/UI NEW/USS/Elements/Dropdown.uss");
+@import url("DarkTheme.uss");
+@import url("Elements/Dropdown.uss");
+@import url("Elements/MenuNavigation.uss");
+@import url("Elements/Scroller.uss");
+@import url("Elements/ToggleButton.uss");
+
 
 
 
