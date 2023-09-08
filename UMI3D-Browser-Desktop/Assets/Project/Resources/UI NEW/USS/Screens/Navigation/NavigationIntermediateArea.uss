@@ -15,7 +15,7 @@
     border-width: 1px;
     border-radius: 8px;
     flex-shrink: 0;
-    border-color: grey;
+    border-color: var(--color-border);
     align-items: center;
     justify-content: center;
 }
@@ -42,7 +42,7 @@
 .intermediate-area .icon {
     padding-right: 15px;
     border-right-width: 1px;
-    border-color: grey;
+    border-color: var(--color-border);
     left: 0;
     position: absolute;
 }
@@ -50,31 +50,4 @@
 .intermediate-area .submit {
     right: 0;
     position: absolute;
-}
-
-.account {
-    position: absolute;
-    top: 64px;
-    flex-direction: row;
-    justify-content: center;
-}
-
-.account > .unity-image {
-    min-width: 54px;
-    max-width: 54px;
-    min-height: 54px;
-    max-height: 54px;
-    background-color: black;
-    border-radius: 27px;
-    margin: 0;
-    margin-right: 7px;
-}
-
-.account-info {
-    align-items: flex-start;
-    justify-content: flex-end;
-}
-
-.account-info .unity-text-element {
-    font-size: 12px;
 }
