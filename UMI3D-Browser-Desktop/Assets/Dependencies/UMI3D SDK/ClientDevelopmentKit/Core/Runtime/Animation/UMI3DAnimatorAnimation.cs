@@ -385,28 +385,28 @@ namespace umi3d.cdk
             unityMainThreadDispatcher.Enqueue(() =>
             {
                 UMI3DAnimatorParameterType type = (UMI3DAnimatorParameterType)parameterDto.type;
-                    switch (type)
-                    {
-                        case UMI3DAnimatorParameterType.Bool:
-                            var val = (bool)parameterDto.value;
-                            if (val)
-                            {
-                                animator.SetTrigger(name);
-                            }
-                            animator.SetBool(name, val);
-                            break;
+                switch (type)
+                {
+                    case UMI3DAnimatorParameterType.Bool:
+                        var val = (bool)parameterDto.value;
+                        if (val)
+                        {
+                            animator.SetTrigger(name);
+                        }
+                        animator.SetBool(name, val);
+                        break;
 
-                        case UMI3DAnimatorParameterType.Float:
-                            animator.SetFloat(name, (float)parameterDto.value);
-                            break;
+                    case UMI3DAnimatorParameterType.Float:
+                        animator.SetFloat(name, (float)parameterDto.value);
+                        break;
 
-                        case UMI3DAnimatorParameterType.Integer:
-                            animator.SetInteger(name, (int)parameterDto.value);
-                            break;
+                    case UMI3DAnimatorParameterType.Integer:
+                        animator.SetInteger(name, (int)parameterDto.value);
+                        break;
 
-                        default:
-                            break;
-                    }
+                    default:
+                        break;
+                }
             });
         }
 
