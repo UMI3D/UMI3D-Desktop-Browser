@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 - 2023 Inetum
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,23 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d.common.userCapture.description;
+using System.Collections.Generic;
 
-namespace umi3d.cdk.userCapture
+namespace umi3d.common.userCapture.description
 {
     /// <summary>
-    /// User's skeleton manager.
+    /// Define a UMI3D skeleton hierarchy of bones.
     /// </summary>
-    public interface ISkeletonManager
+    public interface IUMI3DSkeletonHierarchyDefinition
     {
         /// <summary>
-        /// Skeleton of the browser's user.
+        /// Collection of relation between a bone and its parent.
         /// </summary>
-        public IPersonalSkeleton PersonalSkeleton { get; }
-
-        /// <summary>
-        /// Hierarchy used for the skeleton's structure.
-        /// </summary>
-        public UMI3DSkeletonHierarchy StandardHierarchy { get; }
+        IList<UMI3DSkeletonHierarchyDefinition.BoneRelation> Relations { get; }
     }
 }
