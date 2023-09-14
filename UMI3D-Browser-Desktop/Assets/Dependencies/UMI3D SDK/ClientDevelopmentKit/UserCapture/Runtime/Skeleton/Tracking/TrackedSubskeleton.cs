@@ -242,6 +242,11 @@ namespace umi3d.cdk.userCapture.tracking
                         LookAt(controller);
                         break;
 
+                    case BoneType.Viewpoint:
+                        SetComputed(controller.boneType);
+                        LookAt(controller);
+                        break;
+
                     default:
                         SetComputed(controller.boneType);
                         SetControl(controller, BoneTypeConvertingExtensions.ConvertToBoneType(controller.boneType).Value);
@@ -292,6 +297,10 @@ namespace umi3d.cdk.userCapture.tracking
 
                     case BoneType.Head:
                         LookAt(controller);
+                        break;
+
+                    case BoneType.Viewpoint:
+                        ViewPoint.transform.rotation = controller.rotation;
                         break;
 
                     default:
@@ -363,7 +372,7 @@ namespace umi3d.cdk.userCapture.tracking
         {
             if (controller.isActif)
             {
-                var pos = controller.boneType == BoneType.Head ? controller.position + controller.rotation * Vector3.forward : controller.position;
+                var pos = (controller.boneType == BoneType.Head || controller.boneType == BoneType.Viewpoint) ? controller.position + controller.rotation * Vector3.forward : controller.position;
                 animator.SetLookAtPosition(pos);
                 animator.SetLookAtWeight(1);
             }
