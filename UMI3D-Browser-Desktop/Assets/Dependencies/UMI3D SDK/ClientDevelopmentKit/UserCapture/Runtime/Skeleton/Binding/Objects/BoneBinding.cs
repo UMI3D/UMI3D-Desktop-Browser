@@ -16,6 +16,7 @@ limitations under the License.
 
 using umi3d.cdk.binding;
 using umi3d.common;
+using umi3d.common.userCapture;
 using umi3d.common.userCapture.binding;
 using UnityEngine;
 
@@ -29,6 +30,8 @@ namespace umi3d.cdk.userCapture.binding
         public BoneBinding(BoneBindingDataDto dto, Transform boundTransform, ISkeleton skeleton) : base(dto, boundTransform)
         {
             this.skeleton = skeleton;
+
+            Debug.Log("<color=cyan>"+this.BoneType+"</color>");
         }
 
         #region DTO Access
@@ -67,6 +70,14 @@ namespace umi3d.cdk.userCapture.binding
                 UMI3DLogger.LogError($"Bone transform from bone {BoneType} is null. It may have been deleted without removing the binding first.", DebugScope.CDK | DebugScope.Core);
                 success = false;
                 return;
+            }
+
+            if (BoneType == umi3d.common.userCapture.BoneType.Viewpoint)
+            {
+                Transform Viewpoint = skeleton.TrackedSubskeleton.ViewPoint.transform;
+
+                parentBoneTransform.Position = Viewpoint.position;
+                parentBoneTransform.Rotation = Viewpoint.rotation;
             }
 
             Compute((parentBoneTransform.Position, parentBoneTransform.Rotation, Vector3.one));
