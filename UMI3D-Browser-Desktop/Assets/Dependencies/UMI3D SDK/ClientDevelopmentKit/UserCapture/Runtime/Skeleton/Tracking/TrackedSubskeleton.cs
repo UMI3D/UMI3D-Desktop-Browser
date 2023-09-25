@@ -55,24 +55,17 @@ namespace umi3d.cdk.userCapture.tracking
         private int GetPriority()
         {
             AbstractSkeleton skeleton = this.transform.parent.GetComponent<AbstractSkeleton>();
+            UserTrackingFrameDto frame;
+
             if (skeleton is PersonalSkeleton)
-            {
-                UserTrackingFrameDto frame = (skeleton as PersonalSkeleton).GetFrame(new TrackingOption());
-                if (frame != null && (frame.trackedBones.Exists(c => (c.boneType == BoneType.RightHand || c.boneType == BoneType.LeftHand))))
-                    return 101;
-
-                return 0;
-            }
+                frame = (skeleton as PersonalSkeleton).GetFrame(new TrackingOption());
             else
-            {
-                UserTrackingFrameDto frame = skeleton.LastFrame;
-                if (frame != null && (frame.trackedBones.Exists(c => (c.boneType == BoneType.RightHand || c.boneType == BoneType.LeftHand))))
-                    return 101;
+                frame = skeleton.LastFrame;
 
-                Debug.Log(frame == null);
+            if (frame != null && frame.trackedBones.Exists(c => (c.boneType == BoneType.RightHand || c.boneType == BoneType.LeftHand)))
+                return 101;
 
-                return 0;
-            }
+            return 0;
         }
 
         private List<uint> receivedTypes = new List<uint>();

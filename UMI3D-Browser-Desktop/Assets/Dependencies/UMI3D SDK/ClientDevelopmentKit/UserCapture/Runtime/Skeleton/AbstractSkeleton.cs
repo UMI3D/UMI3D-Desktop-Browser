@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using umi3d.cdk.userCapture.animation;
@@ -108,6 +109,16 @@ namespace umi3d.cdk.userCapture
             HipsAnchor = TrackedSubskeleton.Hips;
             PoseSubskeleton = poseSkeleton;
             subskeletons = new List<ISubskeleton> { TrackedSubskeleton };
+            StartCoroutine(InitPoseSubskeleton());
+        }
+
+        private IEnumerator InitPoseSubskeleton()
+        {
+            while (this.lastFrame == null)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+
             subskeletons.AddSorted(PoseSubskeleton);
         }
 
