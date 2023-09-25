@@ -25,7 +25,7 @@ using umi3d.common.userCapture;
 using umi3d.common.userCapture.description;
 using umi3d.common.userCapture.pose;
 using umi3d.common.userCapture.tracking;
-
+using umi3d.common.utils;
 using UnityEngine;
 
 namespace umi3d.cdk.userCapture
@@ -235,7 +235,7 @@ namespace umi3d.cdk.userCapture
 
             lock (SubskeletonsLock) // loader can start parallel async tasks, required to load concurrently
             {
-                subskeletons.AddSorted(animatedSubskeleton);
+                UnityMainThreadDispatcherManager.Instance.Enqueue(() => subskeletons.AddSorted(animatedSubskeleton));
 
                 // if some animator parameters should be updated by the browsers itself, start listening to them
                 if (animatedSubskeleton.SelfUpdatedAnimatorParameters.Count > 0)

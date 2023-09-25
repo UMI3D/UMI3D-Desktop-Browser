@@ -50,7 +50,30 @@ namespace umi3d.cdk.userCapture.tracking
         public Dictionary<uint, TrackedSubskeletonBone> bones = new();
         public IReadOnlyDictionary<uint, TrackedSubskeletonBone> TrackedBones => bones;
 
-        public int Priority => 0;
+        public int Priority => GetPriority();
+
+        private int GetPriority()
+        {
+            AbstractSkeleton skeleton = this.transform.parent.GetComponent<AbstractSkeleton>();
+            if (skeleton is PersonalSkeleton)
+            {
+                UserTrackingFrameDto frame = (skeleton as PersonalSkeleton).GetFrame(new TrackingOption());
+                if (frame != null && (frame.trackedBones.Exists(c => (c.boneType == BoneType.RightHand || c.boneType == BoneType.LeftHand))))
+                    return 101;
+
+                return 0;
+            }
+            else
+            {
+                UserTrackingFrameDto frame = skeleton.LastFrame;
+                if (frame != null && (frame.trackedBones.Exists(c => (c.boneType == BoneType.RightHand || c.boneType == BoneType.LeftHand))))
+                    return 101;
+
+                Debug.Log(frame == null);
+
+                return 0;
+            }
+        }
 
         private List<uint> receivedTypes = new List<uint>();
         private Dictionary<uint, (Vector3LinearDelayedExtrapolator PositionExtrapolator, QuaternionLinearDelayedExtrapolator RotationExtrapolator, IController Controller)> extrapolators = new();
@@ -74,7 +97,7 @@ namespace umi3d.cdk.userCapture.tracking
             {
                 controllers.Add(tracker.distantController);
             }
-        }
+            }
 
         private void Update()
         {
