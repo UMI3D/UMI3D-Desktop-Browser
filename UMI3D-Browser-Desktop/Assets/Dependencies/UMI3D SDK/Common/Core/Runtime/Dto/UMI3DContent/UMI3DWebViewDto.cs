@@ -34,5 +34,10 @@ namespace umi3d.common
         /// Url to load on clients.
         /// </summary>
         public string url { get; set; }
+
+        /// <summary>
+        /// If set to false, when <see cref="url"/> is set, the value will be ignored by the browser.
+        /// </summary>
+        public bool canUrlBeForced { get; set; }
     }
 }

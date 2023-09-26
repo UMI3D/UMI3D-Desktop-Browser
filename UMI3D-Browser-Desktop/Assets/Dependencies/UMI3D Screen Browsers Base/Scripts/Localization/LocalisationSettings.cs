@@ -24,7 +24,7 @@ public class LocalisationSettings : ScriptableObject
     [SerializeField] private int _baseLanguageIndex;
 
     public List<Language> Languages => _languages;
-    public Language CurrentLanguage => _languages[_baseLanguageIndex];
+    public Language CurrentLanguage => _languages.Count > _baseLanguageIndex ?  _languages[_baseLanguageIndex] : default;
     public int CurrentLanguageIndex
     {
         get { return _baseLanguageIndex; }
