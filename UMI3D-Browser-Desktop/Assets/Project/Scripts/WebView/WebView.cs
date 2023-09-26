@@ -16,6 +16,8 @@ limitations under the License.
 
 using System;
 using umi3d.cdk;
+using umi3d.common;
+using umi3d.common.interaction;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -49,6 +51,10 @@ namespace BrowserDesktop
         [SerializeField]
         private InputField urlText = null;
 
+        private ulong id;
+
+        private string previousUrl;
+
         #endregion
 
         #region Methods
@@ -61,7 +67,33 @@ namespace BrowserDesktop
 
             canvas.GetComponent<CanvasScaler>().dynamicPixelsPerUnit = 3;
 
-            browser.browserClient.OnUrlChanged += (url) => urlText.text = url;
+            browser.browserClient.OnUrlChanged += (url) =>
+            {
+                if (url == previousUrl)
+                {
+                    return;
+                }
+
+                previousUrl = url;
+
+                Debug.Log("URL Changed " + url);
+                urlText.text = url;
+
+                var request = new WebViewUrlChangedRequestDto
+                {
+                    url = url,
+                    webViewId = id
+                };
+
+                UMI3DClientServer.SendRequest(request, true);
+            };
+        }
+
+        public override void Init(UMI3DWebViewDto dto)
+        {
+            base.Init(dto);
+
+            id = dto.id;
         }
 
         protected override void OnCanInteractChanged(bool canInteract)
@@ -121,6 +153,7 @@ namespace BrowserDesktop
 
             try
             {
+                Debug.Log("URL " + url);
                 browser.browserClient.LoadUrl(url);
             }
             catch (Exception ex)
