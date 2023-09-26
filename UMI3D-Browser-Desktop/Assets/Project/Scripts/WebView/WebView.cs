@@ -76,7 +76,6 @@ namespace BrowserDesktop
 
                 previousUrl = url;
 
-                Debug.Log("URL Changed " + url);
                 urlText.text = url;
 
                 var request = new WebViewUrlChangedRequestDto
