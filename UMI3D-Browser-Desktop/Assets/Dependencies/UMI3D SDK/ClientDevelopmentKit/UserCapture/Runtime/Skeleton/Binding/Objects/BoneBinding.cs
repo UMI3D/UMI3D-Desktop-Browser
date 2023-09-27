@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 using umi3d.cdk.binding;
+using umi3d.cdk.userCapture.tracking;
 using umi3d.common;
-using umi3d.common.userCapture;
 using umi3d.common.userCapture.binding;
 using UnityEngine;
 
@@ -30,8 +30,6 @@ namespace umi3d.cdk.userCapture.binding
         public BoneBinding(BoneBindingDataDto dto, Transform boundTransform, ISkeleton skeleton) : base(dto, boundTransform)
         {
             this.skeleton = skeleton;
-
-            Debug.Log("<color=cyan>"+this.BoneType+"</color>");
         }
 
         #region DTO Access
@@ -65,19 +63,34 @@ namespace umi3d.cdk.userCapture.binding
                 return;
             }
 
-            if (!skeleton.Bones.TryGetValue(BoneType, out ISkeleton.Transformation parentBoneTransform))
+            ISkeleton.Transformation parentBoneTransform;
+
+            if (BoneBindingDataDto.bindToController)
             {
-                UMI3DLogger.LogError($"Bone transform from bone {BoneType} is null. It may have been deleted without removing the binding first.", DebugScope.CDK | DebugScope.Core);
-                success = false;
-                return;
+                var controller = ((skeleton.TrackedSubskeleton as TrackedSubskeleton).controllers.Find(c => c.boneType == BoneType) as DistantController);
+
+                if (controller != null)
+                    parentBoneTransform = new()
+                    {
+                        Position = controller.position,
+                        Rotation = controller.rotation,
+                    };
+                else
+                {
+                    UMI3DLogger.LogError($"No existing controller for {BoneType}. It may have been deleted without removing the binding first.", DebugScope.CDK | DebugScope.Core);
+                    success = false;
+                    return;
+                }
             }
-
-            if (BoneType == umi3d.common.userCapture.BoneType.Viewpoint)
+            else
             {
-                Transform Viewpoint = skeleton.TrackedSubskeleton.ViewPoint.transform;
+                if (!skeleton.Bones.TryGetValue(BoneType, out parentBoneTransform))
+                {
+                    UMI3DLogger.LogError($"Bone transform from bone {BoneType} is null. It may have been deleted without removing the binding first.", DebugScope.CDK | DebugScope.Core);
+                    success = false;
+                    return;
+                }
 
-                parentBoneTransform.Position = Viewpoint.position;
-                parentBoneTransform.Rotation = Viewpoint.rotation;
             }
 
             Compute((parentBoneTransform.Position, parentBoneTransform.Rotation, Vector3.one));
