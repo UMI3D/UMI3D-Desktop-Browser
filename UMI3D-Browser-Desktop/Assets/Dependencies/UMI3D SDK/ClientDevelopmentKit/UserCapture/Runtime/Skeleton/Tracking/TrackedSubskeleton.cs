@@ -50,14 +50,30 @@ namespace umi3d.cdk.userCapture.tracking
         public Dictionary<uint, TrackedSubskeletonBone> bones = new();
         public IReadOnlyDictionary<uint, TrackedSubskeletonBone> TrackedBones => bones;
 
-        public int Priority => 0;
+        public int Priority => GetPriority();
+
+        private int GetPriority()
+        {
+            AbstractSkeleton skeleton = this.transform.parent.GetComponent<AbstractSkeleton>();
+            UserTrackingFrameDto frame;
+
+            if (skeleton is PersonalSkeleton)
+                frame = (skeleton as PersonalSkeleton).GetFrame(new TrackingOption());
+            else
+                frame = skeleton.LastFrame;
+
+            if (frame != null && frame.trackedBones.Exists(c => (c.boneType == BoneType.RightHand || c.boneType == BoneType.LeftHand)))
+                return 101;
+
+            return 0;
+        }
 
         private List<uint> receivedTypes = new List<uint>();
         private Dictionary<uint, (Vector3LinearDelayedExtrapolator PositionExtrapolator, QuaternionLinearDelayedExtrapolator RotationExtrapolator, IController Controller)> extrapolators = new();
 
         public void Start()
         {
-            if (trackedAnimator == null) 
+            if (trackedAnimator == null)
             {
                 UMI3DLogger.LogWarning("TrackedAnimator was null for TrackedSubskeleton. Generating a new one", DebugScope.CDK);
                 trackedAnimator = gameObject.AddComponent<TrackedAnimator>();
@@ -70,7 +86,7 @@ namespace umi3d.cdk.userCapture.tracking
                     bones.Add(bone.boneType, bone);
             }
 
-            foreach(var tracker in GetComponentsInChildren<Tracker>())
+            foreach (var tracker in GetComponentsInChildren<Tracker>())
             {
                 controllers.Add(tracker.distantController);
             }
@@ -161,7 +177,7 @@ namespace umi3d.cdk.userCapture.tracking
 
             trackingFrame.trackedBones = new(bones.Count);
 
-            foreach(var controller in controllers)
+            foreach (var controller in controllers)
             {
                 trackingFrame.trackedBones.Add(controller.ToControllerDto());
             }
@@ -244,12 +260,16 @@ namespace umi3d.cdk.userCapture.tracking
 
                     case BoneType.Viewpoint:
                         SetComputed(controller.boneType);
-                        LookAt(controller);
+                        this.bones[controller.boneType].transform.rotation = controller.rotation;
                         break;
 
                     default:
-                        SetComputed(controller.boneType);
-                        SetControl(controller, BoneTypeConvertingExtensions.ConvertToBoneType(controller.boneType).Value);
+                        var boneTypeUnity = BoneTypeConvertingExtensions.ConvertToBoneType(controller.boneType);
+                        if (boneTypeUnity.HasValue)
+                        {
+                            SetComputed(controller.boneType);
+                            SetControl(controller, boneTypeUnity.Value);
+                        }
                         break;
                 }
             }
@@ -300,7 +320,7 @@ namespace umi3d.cdk.userCapture.tracking
                         break;
 
                     case BoneType.Viewpoint:
-                        ViewPoint.transform.rotation = controller.rotation;
+                        this.bones[controller.boneType].transform.rotation = controller.rotation;
                         break;
 
                     default:
@@ -372,7 +392,7 @@ namespace umi3d.cdk.userCapture.tracking
         {
             if (controller.isActif)
             {
-                var pos = (controller.boneType == BoneType.Head || controller.boneType == BoneType.Viewpoint) ? controller.position + controller.rotation * Vector3.forward : controller.position;
+                var pos = controller.boneType == BoneType.Head ? controller.position + controller.rotation * Vector3.forward : controller.position;
                 animator.SetLookAtPosition(pos);
                 animator.SetLookAtWeight(1);
             }
