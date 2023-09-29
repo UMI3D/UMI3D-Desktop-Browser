@@ -15,11 +15,13 @@ limitations under the License.
 */
 
 using System;
+using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk;
 using umi3d.common;
 using umi3d.common.interaction;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 namespace BrowserDesktop
@@ -169,11 +171,15 @@ namespace BrowserDesktop
         public void OnPointerEnter(PointerEventData eventData)
         {
             IsWebViewFocused = true;
+
+            BaseKeyInteraction.IsEditingTextField = true;
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
             IsWebViewFocused = false;
+
+            BaseKeyInteraction.IsEditingTextField = false;
         }
 
         #endregion

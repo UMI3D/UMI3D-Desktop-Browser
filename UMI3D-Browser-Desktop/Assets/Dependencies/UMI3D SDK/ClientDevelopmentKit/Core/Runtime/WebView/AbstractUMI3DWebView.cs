@@ -50,7 +50,7 @@ namespace umi3d.cdk
             get => _url;
             set
             {
-                if (!canUrlBeSetForced)
+                if (!canUrlBeForced)
                     return;
 
                 if (_url != value)
@@ -97,18 +97,18 @@ namespace umi3d.cdk
             }
         }
 
-        private bool _canUrlBeSetForced;
+        private bool _canUrlBeForced;
         /// <summary>
         /// Can <see cref="url"/> be forced by the server.
         /// </summary>
-        public bool canUrlBeSetForced
+        public bool canUrlBeForced
         {
-            get => _canUrlBeSetForced;
+            get => _canUrlBeForced;
             set
             {
-                if (_canUrlBeSetForced != value)
+                if (_canUrlBeForced != value)
                 {
-                    _canUrlBeSetForced = value;
+                    _canUrlBeForced = value;
                 }
             }
         }
