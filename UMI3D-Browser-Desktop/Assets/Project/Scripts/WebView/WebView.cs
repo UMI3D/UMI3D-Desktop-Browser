@@ -21,7 +21,6 @@ using umi3d.common;
 using umi3d.common.interaction;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 namespace BrowserDesktop
