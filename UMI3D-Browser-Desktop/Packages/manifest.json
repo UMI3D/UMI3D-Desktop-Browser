@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.feature.development": "1.0.1",
     "com.unity.inputsystem": "1.4.4",
@@ -11,6 +12,7 @@
     "com.unity.ui": "2.0.0",
     "com.unity.ui.builder": "2.0.0",
     "com.unity.vectorgraphics": "2.0.0-preview.20",
+    "dev.voltstro.unitywebbrowser.engine.cef.win.x64": "2.0.2-113.3.1",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -42,5 +44,15 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "Voltstro UPM",
+      "url": "https://upm-pkgs.voltstro.dev",
+      "scopes": [
+        "dev.voltstro",
+        "org.nuget"
+      ]
+    }
+  ]
 }

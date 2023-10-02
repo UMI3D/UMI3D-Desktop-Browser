@@ -152,7 +152,7 @@ namespace umi3d.commonScreen.game
         public LeadingArea_C LeadingArea = new LeadingArea_C { name = "leading-area" };
         public TrailingArea_C TrailingArea = new TrailingArea_C { name = "trailing-area" };
         public BottomArea_C BottomArea = new BottomArea_C { name = "bottom-area" };
-        public VisualElement LeadingAndTrailingBox = new VisualElement { name = "leading-trailing-area" };
+        public VisualElement LeadingAndTrailingBox = new VisualElement { name = "leading-trailing-area", pickingMode = PickingMode.Ignore };
 
         public NotifAndUsersArea_C NotifAndUserArea;
 
@@ -228,6 +228,8 @@ namespace umi3d.commonScreen.game
             Add(LeadingAndTrailingBox);
             LeadingAndTrailingBox.Add(LeadingArea);
             LeadingAndTrailingBox.Add(TrailingArea);
+
+            pickingMode = PickingMode.Ignore;
         }
 
         protected override void SetProperties()

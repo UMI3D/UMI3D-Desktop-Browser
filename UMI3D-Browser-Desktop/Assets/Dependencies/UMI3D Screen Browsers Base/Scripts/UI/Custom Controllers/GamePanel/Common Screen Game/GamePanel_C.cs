@@ -174,6 +174,8 @@ namespace umi3d.commonScreen.game
             base.InitElement();
             Game.TopArea.Menu.clicked += () => AddScreenToStack = GameViews.GameMenu;
             Menu.Resume.clicked += () => AddScreenToStack = GameViews.Game;
+
+            pickingMode = PickingMode.Ignore;
         }
 
         protected override void SetProperties()
