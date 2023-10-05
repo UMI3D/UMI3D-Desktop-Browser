@@ -68,7 +68,7 @@ public class BrowserBuilder : InitedWindow<BrowserBuilder>
             );
 
         data = new ScriptableLoader<BrowserBuilderData>(filename);
-        info = new LogScrollView();
+        info = new LogScrollView(data.data);
         RefreshBranch();
     }
 
@@ -199,8 +199,8 @@ public class BrowserBuilder : InitedWindow<BrowserBuilder>
             info.text = text;
 
             info.NewTitle($"Create Installer");
-
-            await Iscc.ExecuteISCC("C:/Program Files (x86)/Inno Setup 6/ISCC.exe", data.data.InstallerFilePath, info.NewLine, info.NewError);
+            info.NewLine($"Skipped : todo manualy");
+            //await Iscc.ExecuteISCC("C:/Program Files (x86)/Inno Setup 6/ISCC.exe", data.data.InstallerFilePath, info.NewLine, info.NewError);
 
             if (comit)
             {

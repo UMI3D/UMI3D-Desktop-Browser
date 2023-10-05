@@ -231,7 +231,7 @@ namespace umi3d.cdk.collaboration
 
             this.progress = progress;
             this.libraryProgress = new MultiProgress("Download libraries");
-            this.joinProgress = new MultiProgress("Joinning Environment");
+            this.joinProgress = new MultiProgress("Joining Environment");
             progress.Add(libraryProgress);
             progress.Add(joinProgress);
 
@@ -575,7 +575,7 @@ namespace umi3d.cdk.collaboration
             var joinDto = new JoinDto()
             {
                 clientLocalPoses = PoseManager.Instance.localPoses.ToList(),
-                userSize = PersonalSkeletonManager.Instance.PersonalSkeleton.transform.localScale.Dto(),
+                userSize = PersonalSkeletonManager.Instance.PersonalSkeleton.Transform.localScale.Dto(),
             };
             try
             {

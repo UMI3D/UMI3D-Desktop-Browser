@@ -43,7 +43,7 @@ public class LocalisationTableItem
     public string GetTranslation(string[] args = null)
     {
         var language = LocalisationSettings.Instance.CurrentLanguage;
-        var trad = _trads.Where(e => e.Key.Name == language.Name).ToList()[0];
+        var trad = _trads.Where(e => e.Key.Name == language.Name).FirstOrDefault();
         if (trad != null)
         {
             string tmpFr = String.Copy(trad.Value);

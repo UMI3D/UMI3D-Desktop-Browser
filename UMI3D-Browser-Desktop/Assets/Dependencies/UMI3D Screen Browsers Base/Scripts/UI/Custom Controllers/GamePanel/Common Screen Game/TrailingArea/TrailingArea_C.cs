@@ -324,6 +324,8 @@ namespace umi3d.commonScreen.game
             });
 
             Add(WindowContainer);
+
+            pickingMode = PickingMode.Ignore;
         }
 
         protected override void SetProperties()

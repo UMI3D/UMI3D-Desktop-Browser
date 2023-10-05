@@ -134,6 +134,8 @@ namespace umi3d.commonScreen.game
             //InteractableMapping
             //    .SetLeft(Length.Percent(-50f));
             UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+
+            pickingMode = PickingMode.Ignore;
         }
 
         protected override void SetProperties()
