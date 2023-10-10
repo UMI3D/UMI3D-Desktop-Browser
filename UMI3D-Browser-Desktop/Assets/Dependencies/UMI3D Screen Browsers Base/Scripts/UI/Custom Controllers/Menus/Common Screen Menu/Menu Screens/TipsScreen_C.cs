@@ -73,7 +73,8 @@ namespace umi3d.commonScreen.menu
 
         public void InitTips()
         {
-            _tipsTables = Resources.LoadAll<TipsTable>("");
+            /*_tipsTables = Resources.LoadAll<TipsTable>("");
+            _tipsTables = new TipsTable[1];
             _tips.Clear();
             _categories.Clear();
 
@@ -94,7 +95,7 @@ namespace umi3d.commonScreen.menu
                     _tips.Add(myTip);
                     _tipsTables_SV.Add(myTip);
                 }
-            }
+            }*/
         }
     }
 }
