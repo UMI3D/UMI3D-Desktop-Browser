@@ -8,4 +8,6 @@
     margin: 0;
     padding: 0;
     border-radius: 8px;
+    transition-duration: 0.4s;
+    transition-timing-function: linear;
 }

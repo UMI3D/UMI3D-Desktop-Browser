@@ -125,9 +125,9 @@ public class EnvironmentMenu : BaseMenu
     {
         if (m_Progress != null)
         {
-            m_Progress.OnCompleteUpdated.RemoveListener(OnCompleteUpdated);
-            m_Progress.OnFailedUpdated.RemoveListener(OnFailedUpdated);
-            m_Progress.OnStatusUpdated.RemoveListener(OnStatusUpdated);
+            m_Progress.OnCompleteUpdated -= OnCompleteUpdated;
+            m_Progress.OnFailedUpdated -= OnFailedUpdated;
+            m_Progress.OnStatusUpdated -= OnStatusUpdated;
         }
         m_Progress = pProgress;
         void OnCompleteUpdated(float i)
@@ -147,9 +147,11 @@ public class EnvironmentMenu : BaseMenu
             m_MainScreen = m_LoadingScreen;
             m_LoadingScreen.Message = m_Progress.currentState;
         }
-        m_Progress.OnCompleteUpdated.AddListener(OnCompleteUpdated);
-        m_Progress.OnFailedUpdated.AddListener(OnFailedUpdated);
-        m_Progress.OnStatusUpdated.AddListener(OnStatusUpdated);
+
+        m_Progress.OnCompleteUpdated += OnCompleteUpdated;
+        m_Progress.OnFailedUpdated += OnFailedUpdated;
+        m_Progress.OnStatusUpdated += OnStatusUpdated;
+
         m_LoadingScreen.ProgressValue = m_Progress.progressPercent;
         m_LoadingScreen.Message = m_Progress.currentState;
     }

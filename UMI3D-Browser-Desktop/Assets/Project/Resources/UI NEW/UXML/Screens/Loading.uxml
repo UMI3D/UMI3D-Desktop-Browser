@@ -4,7 +4,7 @@
     <ui:VisualElement name="Loading" style="justify-content: flex-start; align-items: center;">
         <ui:Instance template="CarouselTips" name="CarouselTips" />
         <ui:VisualElement name="LoadingBar" style="width: 600px;">
-            <ui:ProgressBar value="53.7" title=" " name="LoadingProgress" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 24px;" />
+            <ui:ProgressBar value="0" title=" " name="LoadingProgress" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 24px; transition-duration: 0.5s; transition-timing-function: linear;" />
             <ui:VisualElement name="Info" style="flex-direction: row; flex-grow: 1; justify-content: space-between;">
                 <ui:VisualElement style="flex-direction: row;">
                     <ui:Label text="Charge total :" display-tooltip-when-elided="true" name="ChargeTotal" style="font-size: 12px; -unity-font-style: bold;" />
