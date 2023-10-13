@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Screens/Navigation/NavigationItem.uss?fileID=7433441132597879392&amp;guid=8dc718800e53e5e4bb7ffd70fa0de9c3&amp;type=3#NavigationItem" />
+    <ui:VisualElement name="Element" class="navigation-item">
+        <ui:Button display-tooltip-when-elided="true" name="ButtonElement" style="background-image: none;">
+            <ui:VisualElement class="navigation-item__icon" style="background-image: resource(&apos;UI NEW/Icons/Portal&apos;); width: 210px; height: 209px;" />
+        </ui:Button>
+        <ui:VisualElement style="margin-left: 2px; margin-right: 4px; margin-top: 10px; margin-bottom: 2px; justify-content: center; align-items: center; flex-direction: row;">
+            <ui:TextField picking-mode="Ignore" value="Tutorial" text="Tutorial" focusable="true" name="Name" />
+            <ui:Button display-tooltip-when-elided="true" name="ModifyName" class="hidden" style="width: 9px; height: 9px; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px; background-color: rgba(56, 56, 56, 0); background-image: resource(&apos;UI NEW/Icons/Pen&apos;);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="HoverButtons" class="hidden" style="position: absolute; width: 100%; flex-direction: row; justify-content: flex-start; height: 70px; top: 202px;">
+            <ui:Button display-tooltip-when-elided="true" name="Delete" class="hover-button" style="background-image: none; background-color: rgb(47, 47, 47); margin-left: 16px;">
+                <ui:VisualElement style="width: 19px; height: 21px; background-image: resource(&apos;UI NEW/Icons/BinClosed&apos;); left: 8px;" />
+            </ui:Button>
+            <ui:Button display-tooltip-when-elided="true" name="Favori" class="hover-button" style="background-image: none; background-color: rgb(47, 47, 47); margin-right: 16px; margin-left: 0; right: 0; position: absolute;">
+                <ui:VisualElement style="width: 27px; height: 25px; background-image: resource(&apos;UI NEW/Icons/Heart&apos;); left: 8px;" />
+            </ui:Button>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

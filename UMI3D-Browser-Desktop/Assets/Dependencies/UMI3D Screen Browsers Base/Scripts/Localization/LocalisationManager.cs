@@ -279,6 +279,23 @@ public class LocalisationManager : PersistentSingleBehaviour<LocalisationManager
         Debug.Log("table not found: "+title+", key: "+key);
         return null;
     }
+    
+    /// <summary>
+    /// Get the translation of a text, searching in all tables.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="args"></param>
+    /// <returns></returns>
+    public string GetTranslation(string key, string[] args = null)
+    {
+        foreach (var table in Tables)
+        {
+            if (table.GetTranslation(key, args) is var trad && trad != null)
+                return trad;
+        }
+        Debug.Log("Traduction not found: (all tables), key: " + key);
+        return null;
+    }
 
     /// <summary>
     /// Get the translation of a text located in <paramref name="localisation"/>.

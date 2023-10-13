@@ -1,0 +1,28 @@
+.unity-radio-button__input {
+    display: flex;
+    padding: 0;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 10px;
+    height: 10px;
+}
+
+.unity-radio-button__checkmark-background {
+    width: 10px;
+    height: 10px;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+}
+
+.unity-radio-button__checkmark {
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-important);
+}
+
+.tip-background {
+    background-color: var(--color-element-background);
+}

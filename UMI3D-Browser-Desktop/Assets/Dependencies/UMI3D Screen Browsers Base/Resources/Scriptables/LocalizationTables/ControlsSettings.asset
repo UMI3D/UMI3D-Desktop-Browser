@@ -47,7 +47,7 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: Left hand interface
-  - Key: Navigations
+  - Key: ControlsButtonNavigation
     _trads:
     - Key:
         Name: French
@@ -58,7 +58,7 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: Navigations
-  - Key: Shortcuts
+  - Key: ControlsButtonShortcut
     _trads:
     - Key:
         Name: French

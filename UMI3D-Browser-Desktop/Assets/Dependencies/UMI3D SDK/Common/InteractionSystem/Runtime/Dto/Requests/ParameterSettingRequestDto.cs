@@ -14,11 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
+
 namespace umi3d.common.interaction
 {
     /// <summary>
     /// Dto to request the setting of one parameter.
     /// </summary>
+    [Serializable]
     public class ParameterSettingRequestDto : InteractionRequestDto
     {
         /// <summary>

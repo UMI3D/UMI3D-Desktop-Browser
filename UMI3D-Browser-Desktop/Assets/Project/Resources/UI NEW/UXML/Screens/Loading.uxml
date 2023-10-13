@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="CarouselTips" src="project://database/Assets/Project/Resources/UI%20NEW/UXML/Elements/CarouselTips.uxml?fileID=9197481963319205126&amp;guid=5ecc76c6b0c67fe46abd4c577029fc96&amp;type=3#CarouselTips" />
+    <Style src="project://database/Assets/Project/Resources/UI%20NEW/USS/Screens/Loading.uss?fileID=7433441132597879392&amp;guid=ef4f9d16da54d3346951e8dd1234dd31&amp;type=3#Loading" />
+    <ui:VisualElement name="Loading" style="justify-content: flex-start; align-items: center;">
+        <ui:Instance template="CarouselTips" name="CarouselTips" />
+        <ui:VisualElement name="LoadingBar" style="width: 600px;">
+            <ui:ProgressBar value="0" title=" " name="LoadingProgress" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 24px; transition-duration: 0.5s; transition-timing-function: linear;" />
+            <ui:VisualElement name="Info" style="flex-direction: row; flex-grow: 1; justify-content: space-between;">
+                <ui:VisualElement style="flex-direction: row;">
+                    <ui:Label text="Charge total :" display-tooltip-when-elided="true" name="ChargeTotal" style="font-size: 12px; -unity-font-style: bold;" />
+                    <ui:Label text="0%" display-tooltip-when-elided="true" name="ProgressText" style="font-size: 12px; -unity-font-style: bold;" />
+                </ui:VisualElement>
+                <ui:Label text="Downloading" display-tooltip-when-elided="true" name="ProgressInfo" style="justify-content: space-between; -unity-text-align: upper-right; font-size: 10px; -unity-font-style: bold;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

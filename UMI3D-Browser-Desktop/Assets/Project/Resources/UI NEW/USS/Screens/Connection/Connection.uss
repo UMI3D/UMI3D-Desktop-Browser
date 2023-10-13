@@ -1,0 +1,78 @@
+.connection {
+    width: 709px;
+    align-items: flex-start;
+}
+
+.header {
+    flex-direction: row;
+    align-items: center;
+    margin-top: 56px;
+    margin-bottom: 26px;
+}
+
+.header > .unity-text-element {
+    font-size: 20px;
+}
+
+.connection .form {
+    height: 307px;
+    justify-content: center;
+}
+
+.submit {
+    width: 95px;
+    height: 54px;
+    font-size: 27px;
+    margin: auto;
+}
+
+.unity-text-field {
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+}
+
+.unity-text-field .unity-label {
+    font-size: 16px;
+    margin-bottom: 16px;
+}
+
+.unity-text-field__input {
+    width: 705px;
+    height: 68px;
+    margin-bottom: 22px;
+    font-size: 21px;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: var(--color-border);
+    padding-left: 12px;
+}
+
+.unity-scroll-view .form-group {
+    margin: 4px;
+    justify-content: center;
+    align-items: center;
+    margin-left: 7px;
+    margin-right: 7px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+.unity-scroll-view .form-image {
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+
+.unity-button {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}

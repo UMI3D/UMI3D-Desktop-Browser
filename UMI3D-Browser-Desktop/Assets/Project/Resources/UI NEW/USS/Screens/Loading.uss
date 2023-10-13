@@ -1,0 +1,13 @@
+.unity-progress-bar__background {
+    border-radius: 8px;
+    background-color: var(--color-element-background);
+}
+
+.unity-progress-bar__progress {
+    background-color: var(--color-important);
+    margin: 0;
+    padding: 0;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+    transition-timing-function: linear;
+}

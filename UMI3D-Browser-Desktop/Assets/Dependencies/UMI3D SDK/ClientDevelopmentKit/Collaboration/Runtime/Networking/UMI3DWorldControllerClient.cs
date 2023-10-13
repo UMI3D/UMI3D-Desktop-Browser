@@ -15,10 +15,12 @@ limitations under the License.
 */
 
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using umi3d.common;
 using umi3d.common.collaboration.dto.networking;
 using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.interaction;
+using UnityEngine;
 
 namespace umi3d.cdk.collaboration
 {
@@ -113,7 +115,7 @@ namespace umi3d.cdk.collaboration
                     Connected(identity);
                     return true;
                 }
-                else if (answerDto is ConnectionFormDto form)
+                else if (answerDto is umi3d.common.interaction.form.FormDto form)
                 {
                     FormAnswerDto answer = await GetFormAnswer(form);
                     var _answer = new FormConnectionAnswerDto()
@@ -136,7 +138,7 @@ namespace umi3d.cdk.collaboration
             privateIdentity = identity;
         }
 
-        private async Task<FormAnswerDto> GetFormAnswer(ConnectionFormDto form)
+        private async Task<FormAnswerDto> GetFormAnswer(umi3d.common.interaction.form.FormDto form)
         {
             return await UMI3DCollaborationClientServer.Instance.Identifier.GetParameterDtos(form);
         }

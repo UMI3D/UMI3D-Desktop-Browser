@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using System.Collections.Generic;
 
 namespace umi3d.common.interaction
@@ -21,6 +22,7 @@ namespace umi3d.common.interaction
     /// <summary>
     /// DTO describing the answer to a form. All answers are available as a list of <see cref="ParameterSettingRequestDto"/>.
     /// </summary>
+    [Serializable]
     public class FormAnswerDto : InteractionRequestDto
     {
         /// <summary>

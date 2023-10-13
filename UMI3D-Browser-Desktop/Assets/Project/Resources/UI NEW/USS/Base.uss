@@ -1,0 +1,25 @@
+:root {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+.footer {
+    align-items: center;
+    justify-content: flex-start;
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    height: 32px;
+    flex-direction: row;
+}
+
+.logo {
+    background-image: url('project://database/Assets/Project/Resources/UI%20NEW/Icons/logoUMI3D_2@2x.png?fileID=2800000&guid=f68004efddd38084c8ec929e8d254595&type=3#logoUMI3D_2@2x');
+    width: 128px;
+    height: 152px;
+    margin: 8px;
+}

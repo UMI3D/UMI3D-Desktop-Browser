@@ -1,0 +1,53 @@
+.hidden {
+    display: none;
+}
+
+.unity-text-element {
+    color: var(--color-text);
+}
+
+.button-base {
+    width: 68px;
+    height: 29px;
+    -unity-font-style: bold;
+    background-color: var(--color-button-background);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.unity-base-field:focus > .unity-base-field__label {
+    color: var(--color-text);
+}
+
+.text-important {
+    color: var(--color-important);
+    -unity-font-style: bold;
+}
+
+.unity-text-field__placeholder > .unity-base-text-field__input {
+    color: var(--color-text-disabled);
+}
+
+.unity-button {
+    width: 84px;
+    height: 29px;
+    background-color: var(--color-button-icon-background);
+    border-color: var(--color-border);
+    border-width: 1px;
+    border-radius: 8px;
+    margin-right: 19px;
+    margin-left: 19px;
+    padding: 0;
+}
+
+.unity-radio-button-group .unity-base-field__input {
+    display: none;
+}
+
+.unity-base-text-field__input {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.key-bind {
+    flex-direction: row;
+}

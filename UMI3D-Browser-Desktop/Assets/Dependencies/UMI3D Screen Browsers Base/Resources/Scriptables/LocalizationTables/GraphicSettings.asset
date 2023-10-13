@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: GraphicSettings
   Items:
-  - Key: Quality_Label
+  - Key: QualitySettings
     _trads:
     - Key:
         Name: French
@@ -105,17 +105,17 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: Will impact Game and UI Resolutions
-  - Key: HDR_Label
+  - Key: UnableHDR
     _trads:
     - Key:
         Name: French
-      Value: Activer HDR
+      Value: HDR
     - Key:
         Name: Spanish
-      Value: Activar HDR
+      Value: HDR
     - Key:
         Name: English
-      Value: Enable HDR
+      Value: HDR
   - Key: HDR_Description
     _trads:
     - Key:
@@ -237,7 +237,7 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: Reduce Animation
-  - Key: RenderScale_Label
+  - Key: RenderScale
     _trads:
     - Key:
         Name: French
@@ -259,7 +259,7 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: Lower means less resolution and more FPS.
-  - Key: Resolution_Label
+  - Key: GameResolution
     _trads:
     - Key:
         Name: French
@@ -270,7 +270,7 @@ MonoBehaviour:
     - Key:
         Name: English
       Value: Game resolution
-  - Key: UISize_Label
+  - Key: UISize
     _trads:
     - Key:
         Name: French

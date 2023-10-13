@@ -1,0 +1,254 @@
+.title {
+    font-size: 30px;
+    -unity-font-style: bold;
+    padding: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 10px;
+    -unity-text-align: middle-center;
+}
+
+.panel .unity-text-element {
+    font-size: 20px;
+}
+
+.panel .unity-base-field {
+    margin: 0;
+    padding: 0;
+    height: 49px;
+    width: 1014px;
+    font-size: 20px;
+    color: var(--color-text);
+}
+
+.panel .unity-base-field__label {
+    padding-left: 32px;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin: 0;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    -unity-text-align: middle-left;
+    width: 50%;
+}
+
+.panel .unity-base-field__input {
+    width: 50%;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-width: 0;
+    margin: 0;
+}
+
+.panel .radio-field {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.panel .item1 > .unity-base-field__label {
+    background-color: var(--color-input-1);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.panel .item2 > .unity-base-field__label {
+    background-color: var(--color-input-2);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.panel .item1 > .unity-base-field__input {
+    background-color: var(--color-input-2);
+    border-width: 0;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.panel .item1.radio-field .unity-radio-button {
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    background-color: var(--color-input-2);
+}
+
+.panel .item2 > .unity-base-field__input {
+    background-color: var(--color-input-1);
+}
+
+.panel .item2.radio-field .unity-radio-button {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    background-color: var(--color-input-1);
+}
+
+.unity-base-popup-field__arrow {
+    -unity-background-image-tint-color: var(--color-text);
+    margin-right: 10px;
+}
+
+.radio-field .unity-radio-button .unity-text-element {
+    padding: 0;
+    -unity-text-align: middle-center;
+}
+
+.panel .radio-field .unity-radio-button {
+    -unity-text-align: middle-center;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0;
+}
+
+.panel .radio-field .unity-radio-button:checked {
+    background-color: var(--color-input-selected);
+}
+
+.unity-radio-button-2 .unity-radio-button {
+    width: 253.5px;
+}
+
+.unity-radio-button-3 .unity-radio-button {
+    width: 169px;
+}
+
+.unity-radio-button-4 .unity-radio-button {
+    width: 126.5px;
+}
+
+.unity-base-slider > .unity-base-field__input.unity-base-slider__input {
+    width: 40%;
+    max-width: 40%;
+    min-width: 40%;
+    margin: 0;
+    border-radius: 0;
+    padding-left: 3%;
+}
+
+.slider-number {
+    width: 10%;
+    max-width: 10%;
+    min-width: 10%;
+    flex-direction: row;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding-right: 3%;
+}
+
+.item1 .slider-number {
+    background-color: var(--color-input-2);
+}
+
+.item2 .slider-number {
+    background-color: var(--color-input-1);
+}
+
+.slider-number .unity-text-field {
+    width: 50%;
+    padding: 0;
+}
+
+.slider-number .unity-label {
+    width: 50%;
+    align-items: center;
+    justify-content: center;
+    -unity-text-align: middle-left;
+}
+
+.unity-text-field__input {
+    -unity-text-align: middle-right;
+    padding: 0;
+}
+
+.panel > .numeral .unity-text-field__input {
+    max-width: 25%;
+    flex-grow: 1;
+    flex-shrink: 0;
+    padding: 0;
+    -unity-text-align: middle-right;
+    border-radius: 0;
+}
+
+.panel > .numeral .unit {
+    flex-grow: 1;
+    flex-shrink: 0;
+    padding-left: 5px;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin: 0;
+    -unity-text-align: middle-left;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.panel > .item1.numeral .unit {
+    background-color: var(--color-input-2);
+}
+
+.panel > .item2.numeral .unit {
+    background-color: var(--color-input-1);
+}
+
+.key-bind {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.key-bind__input {
+    width: 25%;
+    max-width: 25%;
+    min-width: 25%;
+    -unity-text-align: middle-center;
+}
+
+.key-bind__input .unity-text-field__input {
+    -unity-text-align: middle-center;
+}
+
+.item1 .key-bind__input {
+    background-color: var(--color-input-2);
+}
+
+.item2 .key-bind__input {
+    background-color: var(--color-input-1);
+}
+
+.menu-navigation {
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.menu-navigation .unity-radio-button {
+    width: auto;
+    max-width: none;
+    min-width: auto;
+    margin: 8px;
+}
+
+.menu-navigation .unity-radio-button .unity-text-element {
+    -unity-text-align: middle-center;
+    width: auto;
+    max-width: none;
+    min-width: auto;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin: 8px;
+    font-size: 16px;
+    height: auto;
+    min-height: auto;
+}
+
+.unity-popup-field__input {
+    padding-left: 25px;
+}
+
+.unity-base-field:active .unity-popup-field__input {
+    background-color: var(--color-input-2);
+}

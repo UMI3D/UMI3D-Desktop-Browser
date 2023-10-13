@@ -22,6 +22,7 @@ public struct Tip
 {
     public string Title;
     public string Message;
+    public Texture2D Image;
 }
 
 [CreateAssetMenu(fileName = "TipsTable", menuName = "TipsTable")]

@@ -21,6 +21,7 @@ using umi3d.cdk.collaboration;
 using umi3d.common;
 using UnityEngine;
 using umi3d.baseBrowser.cursor;
+using System;
 
 namespace umi3d.baseBrowser.connection
 {
@@ -236,10 +237,26 @@ namespace umi3d.baseBrowser.connection
             StoreCurrentConnectionDataAndConnect();
         }
 
-        protected void StoreServer()
+        public void StoreServer()
         {
-            if (savedServers.Find((server) => server.serverName == currentServer.serverName) == null)
+            if (savedServers.Find((server) => server.serverUrl == currentServer.serverUrl) is var server && server != null)
+            {
+                server.dateLastConnection = DateTime.UtcNow.ToString();
+            }
+            else 
+            {
+                currentServer.dateFirstConnection = DateTime.UtcNow.ToString();
+                currentServer.dateLastConnection = DateTime.UtcNow.ToString();
                 savedServers.Add(currentServer);
+            }
+
+            preferences.ServerPreferences.StoreRegisteredServerData(savedServers);
+        }
+
+        public void DeleteServer(preferences.ServerPreferences.ServerData pServer)
+        {
+            savedServers.Remove(pServer);
+
             preferences.ServerPreferences.StoreRegisteredServerData(savedServers);
         }
 
@@ -338,7 +355,7 @@ namespace umi3d.baseBrowser.connection
         [HideInInspector]
         public event System.Action<int, System.Action<bool>> AskForDownloadingLibraries;
         [HideInInspector]
-        public event System.Action<common.interaction.ConnectionFormDto, System.Action<common.interaction.FormAnswerDto>> GetParameterDtos;
+        public event System.Action<umi3d.common.interaction.form.FormDto, System.Action<common.interaction.FormAnswerDto>> GetParameterDtos;
         [HideInInspector]
         public event System.Action<common.MediaDto> ConnectionSucces;
         [HideInInspector]

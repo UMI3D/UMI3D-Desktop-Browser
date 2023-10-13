@@ -63,9 +63,9 @@ namespace umi3d.commonScreen.menu
         {
             if (_progress != null)
             {
-                _progress.OnCompleteUpdated.RemoveListener(OnCompleteUpdated);
-                _progress.OnFailedUpdated.RemoveListener(OnFailedUpdated);
-                _progress.OnStatusUpdated.RemoveListener(OnStatusUpdated);
+                _progress.OnCompleteUpdated -= OnCompleteUpdated;
+                _progress.OnFailedUpdated -= OnFailedUpdated;
+                _progress.OnStatusUpdated -= OnStatusUpdated;
             }
             _progress = progress;
             void OnCompleteUpdated(float i)
@@ -86,9 +86,9 @@ namespace umi3d.commonScreen.menu
                 CurrentScreen = LoaderScreens.Loading;
                 Loading.Message = _progress.currentState;
             }
-            _progress.OnCompleteUpdated.AddListener(OnCompleteUpdated);
-            _progress.OnFailedUpdated.AddListener(OnFailedUpdated);
-            _progress.OnStatusUpdated.AddListener(OnStatusUpdated);
+            _progress.OnCompleteUpdated += OnCompleteUpdated;
+            _progress.OnFailedUpdated += OnFailedUpdated;
+            _progress.OnStatusUpdated += OnStatusUpdated;
             Loading.Value = _progress.progressPercent / 100f;
             Loading.Message = _progress.currentState;
         }

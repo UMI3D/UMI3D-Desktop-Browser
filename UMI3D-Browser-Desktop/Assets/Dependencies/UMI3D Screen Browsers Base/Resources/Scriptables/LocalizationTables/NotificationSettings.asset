@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: NotificationSettings
   Items:
-  - Key: Hide_Label
+  - Key: HideNotification
     _trads:
     - Key:
         Name: French

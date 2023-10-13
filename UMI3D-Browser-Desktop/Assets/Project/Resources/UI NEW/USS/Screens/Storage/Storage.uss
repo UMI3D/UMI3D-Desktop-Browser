@@ -1,0 +1,110 @@
+.title {
+    font-size: 30px;
+    -unity-font-style: bold;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 10px;
+    -unity-text-align: middle-center;
+}
+
+.unity-toggle {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.unity-toggle__label {
+    font-size: 10px;
+    width: auto;
+    max-width: none;
+    min-width: auto;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.unity-toggle__checkmark {
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    width: 23px;
+    height: 23px;
+    max-width: 23px;
+    max-height: 23px;
+    min-height: 23px;
+    min-width: 23px;
+    margin-left: 55px;
+    margin-right: 55px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.element .unity-label {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.unity-progress-bar {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.unity-progress-bar__background {
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    background-color: rgb(112, 112, 112);
+}
+
+.unity-progress-bar__progress {
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    background-color: rgb(255, 255, 255);
+}
+
+.no-background .unity-progress-bar__background {
+    background-color: rgba(56, 56, 56, 0);
+}
+
+.no-background .unity-progress-bar__progress {
+    background-color: rgb(94, 227, 240);
+}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="23.145" height="27.9" viewBox="0 0 23.145 27.9">
+  <g id="bin_1" transform="translate(0.7 0.7)">
+    <path id="Tracé_73" data-name="Tracé 73" d="M3707.889,2161.25v18.834a2.956,2.956,0,0,0,2.905,3h13.223a2.956,2.956,0,0,0,2.9-3V2161.25" transform="translate(-3706.324 -2156.585)" fill="none" stroke="#fff" stroke-width="1.4"/>
+    <path id="Tracé_74" data-name="Tracé 74" d="M3699.282,2148.355H3720.3c.2,0,.361-.114.361-.253v-.6c0-1.031-1.193-1.868-2.668-1.868h-16.41c-1.472,0-2.667.835-2.667,1.868v.6C3698.92,2148.242,3699.082,2148.355,3699.282,2148.355Z" transform="translate(-3698.92 -2143.69)" fill="none" stroke="#fff" stroke-width="1.4"/>
+    <path id="Tracé_75" data-name="Tracé 75" d="M3728.19,2136.452v-.736a1.2,1.2,0,0,1,1.205-1.206h2.915a1.2,1.2,0,0,1,1.206,1.206v.736" transform="translate(-3719.725 -2134.51)" fill="none" stroke="#fff" stroke-width="1.4"/>
+    <line id="Ligne_4" data-name="Ligne 4" x2="0.092" y2="10.598" transform="translate(6.873 10.25)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.4"/>
+    <line id="Ligne_5" data-name="Ligne 5" x2="0.222" y2="10.598" transform="translate(10.873 10.25)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.4"/>
+    <line id="Ligne_6" data-name="Ligne 6" y2="10.6" transform="translate(15.003 10.283)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.4"/>
+  </g>
+</svg>
