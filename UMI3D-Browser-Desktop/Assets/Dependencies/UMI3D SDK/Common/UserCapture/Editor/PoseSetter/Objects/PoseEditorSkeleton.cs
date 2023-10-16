@@ -14,16 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#if UNITY_EDITOR
 using System.Collections.Generic;
-using umi3d.common.userCapture.description;
-using umi3d.common.userCapture.pose;
 
-namespace umi3d.cdk.userCapture
+namespace umi3d.common.userCapture.pose.editor
 {
-    public interface IUMI3DUserCaptureLoadingParameters : IUMI3DLoadingParameters
+    /// <summary>
+    /// Wrapper for skeleton being edited in the <see cref="PoseEditorWindow"/>.
+    /// </summary>
+    public class PoseEditorSkeleton
     {
-        IReadOnlyList<IUMI3DPoseData> ClientPoses { get; }
-        IUMI3DSkeletonHierarchyDefinition SkeletonHierarchyDefinition { get; }
-        IList<uint> BonesWithControllers { get; }
+        /// <summary>
+        /// Pose setter bone components collection defining each bone.
+        /// </summary>
+        public List<PoseSetterBoneComponent> boneComponents = new();
+
+        /// <summary>
+        /// Pose currently edited.
+        /// </summary>
+        public UMI3DPose_so currentPose;
     }
 }
+#endif
