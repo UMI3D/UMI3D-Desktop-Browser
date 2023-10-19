@@ -171,6 +171,8 @@ namespace umi3d.cdk.collaboration
                     UMI3DWorldControllerClient wc = worldControllerClient?.Redirection(redirection) ?? new UMI3DWorldControllerClient(redirection);
                     if (await wc.Connect())
                     {
+                        await wc.DownloadWorldLibraries();
+
                         Instance.OnRedirection.Invoke();
                         loadingEntities.Clear();
                         UMI3DEnvironmentLoader.Clear(false);

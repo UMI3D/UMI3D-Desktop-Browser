@@ -94,6 +94,19 @@ namespace umi3d.cdk.collaboration
             }
         }
 
+        public static async Task<LibrariesDto> SendPostWorldLibraries(string pMasterUrl, EnvironmentConnectionDto pPlace, Func<RequestFailedArgument, bool> pShouldTryAgain = null)
+        {
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(pPlace.ToJson(TypeNameHandling.None));
+            UMI3DLogger.Log($"Send GetLibraries", scope | DebugScope.Connection);
+
+            using (UnityWebRequest uwr = await _PostRequest(null, pMasterUrl + UMI3DNetworkingKeys.libraries + "_world", "application/json", bytes, (e) => pShouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e), false))
+            {
+                UMI3DLogger.Log($"Received GetLibraries", scope | DebugScope.Connection);
+
+                return uwr?.downloadHandler.data != null ? UMI3DDtoSerializer.FromJson<LibrariesDto>(System.Text.Encoding.UTF8.GetString(uwr?.downloadHandler.data), Newtonsoft.Json.TypeNameHandling.None) : null;
+            }
+        }
+
         private static UMI3DDto ReadConnectAnswer(string text)
         {
             PrivateIdentityDto dto1 = null;

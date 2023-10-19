@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.collaboration.dto.networking;
@@ -35,6 +36,8 @@ namespace umi3d.cdk.collaboration
         private string globalToken;
         private UMI3DEnvironmentClient environment;
         private PrivateIdentityDto privateIdentity;
+
+        private readonly ThreadDeserializer deserializer = new ThreadDeserializer();
 
         /// <summary>
         /// Called to create a new Public Identity for this client.
@@ -147,6 +150,31 @@ namespace umi3d.cdk.collaboration
                 return new UMI3DWorldControllerClient(redirection, globalToken);
             else
                 return new UMI3DWorldControllerClient(redirection);
+        }
+
+        public async Task DownloadWorldLibraries()
+        {
+            MultiProgress libraryProgress = new("Download libraries");
+            bool librariesUpdated = false;
+
+            LibrariesDto LibrariesDto = await HttpClient.SendPostWorldLibraries(media.url, privateIdentity.connectionDto);
+            bool shouldDownloadLibraries = await UMI3DCollaborationClientServer.Instance.Identifier.ShouldDownloadLibraries(UMI3DResourcesManager.LibrariesToDownload(LibrariesDto));
+
+            if (!shouldDownloadLibraries) return;
+
+            libraryProgress.SetStatus("Downloading Libraries");
+            try
+            {
+                await UMI3DResourcesManager.DownloadLibraries(LibrariesDto, name, libraryProgress);
+                librariesUpdated = true;
+            }
+            catch (Exception e)
+            {
+                UMI3DLogger.LogException(e, scope);
+            }
+
+            while (!librariesUpdated)
+                await UMI3DAsyncManager.Yield();
         }
 
         public async Task<UMI3DEnvironmentClient> ConnectToEnvironment(MultiProgress progress)
