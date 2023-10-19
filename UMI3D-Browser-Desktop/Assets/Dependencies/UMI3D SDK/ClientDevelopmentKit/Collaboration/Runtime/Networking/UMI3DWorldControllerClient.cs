@@ -29,6 +29,8 @@ namespace umi3d.cdk.collaboration
     /// Creates the <see cref="UMI3DEnvironmentClient"/>.
     public class UMI3DWorldControllerClient
     {
+        private const DebugScope scope = DebugScope.CDK | DebugScope.Collaboration | DebugScope.Networking;
+
         private readonly MediaDto media;
         public string name => media?.name;
 
