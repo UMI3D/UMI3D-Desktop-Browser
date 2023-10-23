@@ -164,6 +164,10 @@ namespace umi3d.cdk.collaboration
 
             if (!shouldDownloadLibraries) return;
 
+            UMI3DCollaborationClientServer.Instance.OnDownloadingLibraries?.Invoke();
+            libraryProgress.OnCompleteUpdated += e =>UMI3DCollaborationClientServer.Instance.OnDownloadingLibrariesUpdateValue?.Invoke(libraryProgress.completedPercent);
+            libraryProgress.OnStatusUpdated += UMI3DCollaborationClientServer.Instance.OnDownloadingLibrariesUpdateMessage;
+
             libraryProgress.SetStatus("Downloading Libraries");
             try
             {

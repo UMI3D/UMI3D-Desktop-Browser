@@ -83,12 +83,16 @@ namespace umi3d.baseBrowser.connection
         {
             cdk.collaboration.UMI3DEnvironmentClient.ConnectionState.AddListener((state) => Connecting?.Invoke(state));
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnRedirectionStarted.AddListener(() => RedirectionStarted?.Invoke());
+            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnDownloadingLibraries.AddListener(() => DownloadingLibraries?.Invoke());
+            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnDownloadingLibrariesUpdateValue += (pValue) => DownloadingLibrariesUpdateValue?.Invoke(pValue);
+            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnDownloadingLibrariesUpdateMessage += (pMessage) => DownloadingLibrariesUpdateMessage?.Invoke(pMessage);
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnRedirectionAborted.AddListener(() => RedirectionEnded?.Invoke());
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(() => ConnectionLost?.Invoke());
             cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnForceLogoutMessage.AddListener((s) => ForcedLeave?.Invoke(s));
 
             cdk.collaboration.UMI3DCollaborationClientServer.EnvironmentProgress = () =>
             {
+                JoinEnvironement?.Invoke();
                 var p = new MultiProgress("Join Environment");
                 //p.ResumeAfterFail = ResumeAfterFail;
                 p.ResumeAfterFail = async (e) =>
@@ -359,6 +363,10 @@ namespace umi3d.baseBrowser.connection
         public event System.Action<string> ForcedLeave;
         [HideInInspector]
         public event System.Action<float> LoadingLauncher;
+        public event System.Action DownloadingLibraries;
+        public event System.Action<float> DownloadingLibrariesUpdateValue;
+        public event System.Action<string> DownloadingLibrariesUpdateMessage;
+        public event System.Action JoinEnvironement;
         [HideInInspector]
         public event System.Action<string, string, System.Action<int>> DisplayPopUpAfterLoadingFailed;
         [HideInInspector]

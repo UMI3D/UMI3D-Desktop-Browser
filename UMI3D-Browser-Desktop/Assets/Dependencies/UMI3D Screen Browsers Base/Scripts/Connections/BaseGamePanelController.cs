@@ -75,6 +75,7 @@ namespace umi3d.baseBrowser.connection
                 OnMenuObjectContentChange();
             };
             BaseConnectionProcess.Instance.Connecting += (state) => Loader.Loading.Message = state;
+            BaseConnectionProcess.Instance.JoinEnvironement += () => Loader.Loading.Title = new LocalisationAttribute("Loading environment", "Other", "LoadingEnv");
             BaseConnectionProcess.Instance.RedirectionStarted += () =>
             {
                 GamePanel.AddScreenToStack = GameViews.Loader;
@@ -141,6 +142,14 @@ namespace umi3d.baseBrowser.connection
                 Loader.Loading.Title = new LocalisationAttribute("Leave environment", "Other", "LeaveEnvironment");
                 Loader.Loading.Value = value / 100f;
             };
+            BaseConnectionProcess.Instance.DownloadingLibraries += () =>
+            {
+                GamePanel.AddScreenToStack = GameViews.Loader;
+                Loader.CurrentScreen = LoaderScreens.Loading;
+                Loader.Loading.Title = new LocalisationAttribute("Downloading Libraries", "Other", "DownloadingLibraries");
+            };
+            BaseConnectionProcess.Instance.DownloadingLibrariesUpdateValue += pValue => Loader.Loading.Value = pValue/100;
+            BaseConnectionProcess.Instance.DownloadingLibrariesUpdateMessage += pMessage => Loader.Loading.Message = pMessage;
             BaseConnectionProcess.Instance.DisplayPopUpAfterLoadingFailed += (title, message, action) =>
             {
                 var dialoguebox = new Dialoguebox_C();

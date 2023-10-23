@@ -14,6 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: Other
   Items:
+  - Key: DownloadingLibraries
+    _trads:
+    - Key:
+        Name: French
+      Value: "T\xE9l\xE9chargement des librairies"
+    - Key:
+        Name: Spanish
+      Value: ' Descargando bibliotecas'
+    - Key:
+        Name: English
+      Value: Downloading Libraries
   - Key: LoadingPercent
     _trads:
     - Key:

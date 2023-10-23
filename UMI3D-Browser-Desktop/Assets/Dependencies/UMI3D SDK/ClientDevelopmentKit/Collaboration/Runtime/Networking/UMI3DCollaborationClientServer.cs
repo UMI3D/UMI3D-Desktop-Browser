@@ -386,7 +386,9 @@ namespace umi3d.cdk.collaboration
         protected override async Task<byte[]> _GetFile(string url, bool useParameterInsteadOfHeader)
         {
             UMI3DLogger.Log($"GetFile {url}", scope);
-            return await (environmentClient?.GetFile(url, useParameterInsteadOfHeader) ?? Task.FromResult<byte[]>(null));
+            if (environmentClient != null)
+                return await (environmentClient?.GetFile(url, useParameterInsteadOfHeader) ?? Task.FromResult<byte[]>(null));
+            return await (HttpClient.SendGetWithoutAuth(url) ?? Task.FromResult<byte[]>(null));
         }
 
         /// <inheritdoc/>

@@ -39,6 +39,9 @@ namespace umi3d.cdk
         public UnityEvent OnNewToken { get; } = new UnityEvent();
         public UnityEvent OnConnectionLost { get; } = new UnityEvent();
         public UnityEvent OnRedirectionStarted { get; } = new UnityEvent();
+        public UnityEvent OnDownloadingLibraries { get; } = new UnityEvent();
+        public Action<float> OnDownloadingLibrariesUpdateValue;
+        public Action<string> OnDownloadingLibrariesUpdateMessage;
         public UnityEvent OnRedirectionAborted { get; } = new UnityEvent();
         public UnityEvent OnRedirection { get; } = new UnityEvent();
         public UnityEvent OnReconnect { get; } = new UnityEvent();
