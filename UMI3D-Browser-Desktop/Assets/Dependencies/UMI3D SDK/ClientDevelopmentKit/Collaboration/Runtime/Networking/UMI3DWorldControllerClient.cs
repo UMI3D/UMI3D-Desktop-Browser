@@ -160,6 +160,7 @@ namespace umi3d.cdk.collaboration
             bool librariesUpdated = false;
 
             LibrariesDto LibrariesDto = await HttpClient.SendPostWorldLibraries(media.url, privateIdentity.connectionDto);
+            UnityEngine.Debug.Log(LibrariesDto);
             bool shouldDownloadLibraries = await UMI3DCollaborationClientServer.Instance.Identifier.ShouldDownloadLibraries(UMI3DResourcesManager.LibrariesToDownload(LibrariesDto));
 
             if (!shouldDownloadLibraries) return;
@@ -209,6 +210,11 @@ namespace umi3d.cdk.collaboration
         public void Clear()
         {
             Logout();
+        }
+
+        public async Task<byte[]> GetFile(string pUrl)
+        {
+            return await HttpClient.SendGetWithoutAuth(pUrl);
         }
     }
 }

@@ -37,6 +37,7 @@ namespace umi3d.common
 
         //RESOURCES
         public const string libraries = "/libraries";
+        public const string librariesWorld = "/libraries_world";
         public const string files = "/file/";
         public const string publicFiles = "/file/public/";
         public const string privateFiles = "/file/private/";

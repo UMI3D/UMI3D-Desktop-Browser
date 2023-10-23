@@ -99,7 +99,7 @@ namespace umi3d.cdk.collaboration
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(pPlace.ToJson(TypeNameHandling.None));
             UMI3DLogger.Log($"Send GetLibraries", scope | DebugScope.Connection);
 
-            using (UnityWebRequest uwr = await _PostRequest(null, pMasterUrl + UMI3DNetworkingKeys.libraries + "_world", "application/json", bytes, (e) => pShouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e), false))
+            using (UnityWebRequest uwr = await _PostRequest(null, pMasterUrl + UMI3DNetworkingKeys.librariesWorld, "application/json", bytes, (e) => pShouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e), false))
             {
                 UMI3DLogger.Log($"Received GetLibraries", scope | DebugScope.Connection);
 
