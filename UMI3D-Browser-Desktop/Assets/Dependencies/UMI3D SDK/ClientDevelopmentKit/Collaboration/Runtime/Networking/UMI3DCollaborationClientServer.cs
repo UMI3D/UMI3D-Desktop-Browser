@@ -171,13 +171,6 @@ namespace umi3d.cdk.collaboration
                     UMI3DWorldControllerClient wc = worldControllerClient?.Redirection(redirection) ?? new UMI3DWorldControllerClient(redirection);
                     if (await wc.Connect())
                     {
-                        if (worldControllerClient != null)
-                            worldControllerClient.Logout();
-
-                        worldControllerClient = wc;
-
-                        await wc.DownloadWorldLibraries();
-
                         Instance.OnRedirection.Invoke();
                         loadingEntities.Clear();
                         UMI3DEnvironmentLoader.Clear(false);
@@ -188,13 +181,17 @@ namespace umi3d.cdk.collaboration
 
                         if (env != null)
                             await env.Logout();
+                        if (worldControllerClient != null)
+                            worldControllerClient.Logout();
 
                         //Connection will not restart without this...
                         await Task.Yield();
 
+                        worldControllerClient = wc;
+                        await wc.DownloadWorldLibraries();
+
                         MultiProgress progress = EnvironmentProgress?.Invoke() ?? new MultiProgress("Joinning Environment");
                         onProgress.Invoke(progress);
-
                         environmentClient = await wc.ConnectToEnvironment(progress);
                         environmentClient.status = StatusType.CREATED;
                     }
@@ -389,7 +386,7 @@ namespace umi3d.cdk.collaboration
         {
             UMI3DLogger.Log($"GetFile {url}", scope);
             if (environmentClient != null)
-                return await environmentClient.GetFile(url, useParameterInsteadOfHeader);
+                return await environmentClient?.GetFile(url, useParameterInsteadOfHeader);
             return await (worldControllerClient?.GetFile(url) ?? Task.FromResult<byte[]>(null));
         }
 
