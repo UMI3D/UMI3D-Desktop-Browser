@@ -14,16 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections.Generic;
-using umi3d.common.userCapture.description;
-using umi3d.common.userCapture.pose;
-
-namespace umi3d.cdk.userCapture
+#if UNITY_EDITOR
+namespace umi3d.common.userCapture.pose.editor
 {
-    public interface IUMI3DUserCaptureLoadingParameters : IUMI3DLoadingParameters
-    {
-        IReadOnlyList<IUMI3DPoseData> ClientPoses { get; }
-        IUMI3DSkeletonHierarchyDefinition SkeletonHierarchyDefinition { get; }
-        IList<uint> BonesWithControllers { get; }
-    }
+    /// <summary>
+    /// Define how the symmetry should be performed.
+    /// </summary>
+    public enum SymmetryTarget
+    { Hands, Arms }
 }
+#endif
