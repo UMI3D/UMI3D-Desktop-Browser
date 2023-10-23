@@ -391,12 +391,12 @@ namespace umi3d.cdk
         /// <summary>
         /// Add a completed task.
         /// </summary>
-        public virtual void AddComplete() { started = true; completed += 1; OnCompleteUpdated.Invoke(completed); }
+        public virtual void AddComplete() { started = true; completed += 1; OnCompleteUpdated?.Invoke(completed); }
 
         /// <summary>
         /// Add a failed task.
         /// </summary>
-        public virtual async Task<bool> AddFailed(Exception e) { started = true; failed += 1; OnFailedUpdated.Invoke(failed); return await (ResumeAfterFail?.Invoke(e) ?? Task.FromResult( true)); }
+        public virtual async Task<bool> AddFailed(Exception e) { started = true; failed += 1; OnFailedUpdated?.Invoke(failed); return await (ResumeAfterFail?.Invoke(e) ?? Task.FromResult( true)); }
 
         /// <summary>
         /// Set directly the current <paramref name="status"/> of the progress.
