@@ -34,7 +34,7 @@ namespace umi3d.cdk.collaboration
     /// Send HTTP requests to the environment server.
     /// </summary>
     /// Usually used before connection or to retrieve DTOs.
-    public class HttpClientWorldController
+    public class HttpClientWorldController : HttpClient
     {
         private const DebugScope k_Scope = DebugScope.CDK | DebugScope.Collaboration | DebugScope.Networking;
 
