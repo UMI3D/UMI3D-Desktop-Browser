@@ -15,11 +15,13 @@ limitations under the License.
 */
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using umi3d.common;
 using umi3d.common.collaboration.dto.networking;
 using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.interaction;
+using UnityEngine.Networking;
 
 namespace umi3d.cdk.collaboration
 {
@@ -112,7 +114,9 @@ namespace umi3d.cdk.collaboration
         {
             if (UMI3DCollaborationClientServer.Exists && !string.IsNullOrEmpty(media.url))
             {
-                UMI3DDto answerDto = await HttpClient.Connect(dto, media.url);
+                UnityEngine.Debug.Log("====== Send " + dto);
+                UMI3DDto answerDto = await HttpClientWorldController.Connect(dto, media.url);
+                UnityEngine.Debug.Log("====== Received " + answerDto);
                 if (answerDto is PrivateIdentityDto identity)
                 {
                     Connected(identity);
@@ -130,6 +134,22 @@ namespace umi3d.cdk.collaboration
                         libraryPreloading = dto.libraryPreloading
                     };
                     return await Connect(_answer);
+                }
+                else if (answerDto is LibrariesToDownloadDto librariesToDownload)
+                {
+                    foreach (var libraries in librariesToDownload.Libraries)
+                    {
+                        await DownloadWorldLibraries(libraries);
+                    }
+
+                    var answer = new ConnectionDto()
+                    {
+                        metadata = librariesToDownload.metadata,
+                        globalToken = librariesToDownload.globalToken,
+                        gate = dto.gate,
+                        libraryPreloading = dto.libraryPreloading
+                    };
+                    return await Connect(answer);
                 }
             }
             return false;
@@ -154,14 +174,12 @@ namespace umi3d.cdk.collaboration
                 return new UMI3DWorldControllerClient(redirection);
         }
 
-        public async Task DownloadWorldLibraries()
+        public async Task DownloadWorldLibraries(LibrariesDto pLibrariesDto)
         {
             MultiProgress libraryProgress = new("Download libraries");
             bool librariesUpdated = false;
 
-            LibrariesDto LibrariesDto = await HttpClient.SendPostWorldLibraries(media.url, privateIdentity.connectionDto);
-            UnityEngine.Debug.Log(LibrariesDto);
-            bool shouldDownloadLibraries = await UMI3DCollaborationClientServer.Instance.Identifier.ShouldDownloadLibraries(UMI3DResourcesManager.LibrariesToDownload(LibrariesDto));
+            bool shouldDownloadLibraries = await UMI3DCollaborationClientServer.Instance.Identifier.ShouldDownloadLibraries(UMI3DResourcesManager.LibrariesToDownload(pLibrariesDto));
 
             if (!shouldDownloadLibraries) return;
 
@@ -172,7 +190,7 @@ namespace umi3d.cdk.collaboration
             libraryProgress.SetStatus("Downloading Libraries");
             try
             {
-                await UMI3DResourcesManager.DownloadLibraries(LibrariesDto, name, libraryProgress);
+                await UMI3DResourcesManager.DownloadLibraries(pLibrariesDto, name, libraryProgress);
                 librariesUpdated = true;
             }
             catch (Exception e)
@@ -214,7 +232,7 @@ namespace umi3d.cdk.collaboration
 
         public async Task<byte[]> GetFile(string pUrl)
         {
-            return await HttpClient.SendGetWithoutAuth(pUrl);
+            return await HttpClientWorldController.SendGetWithoutAuth(pUrl);
         }
     }
 }
