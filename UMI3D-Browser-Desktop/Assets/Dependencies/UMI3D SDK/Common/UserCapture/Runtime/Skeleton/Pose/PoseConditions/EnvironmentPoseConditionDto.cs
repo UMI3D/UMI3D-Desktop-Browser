@@ -1,5 +1,5 @@
-/*
-Copyright 2019 - 2021 Inetum
+﻿/*
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,24 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace BrowserDesktop
+namespace umi3d.common.userCapture.pose
 {
-    static public class BrowserVersion
+    /// <summary>
+    /// Pose condition that can only be validated by the server upon request.
+    /// </summary>
+    public class EnvironmentPoseConditionDto : AbstractPoseConditionDto, IEntity
     {
         /// <summary>
-        /// Return browser version : Major.Minor.BuildCount.Date
+        /// Id of the environment pose condition. Used in requests.
         /// </summary>
-        public static string Version { get { return major + "." + minor + "." + buildCount + "." + date; } }
-        public readonly static string major = "3";
-        public readonly static string minor = "2";
+        public ulong Id { get; set; }
+
         /// <summary>
-        /// Build count, to be increment by 1.
+        /// If true, the environment pose condition is validated.
         /// </summary>
-        public readonly static string buildCount = "29";
-        /// <summary>
-        /// Year-Month-Day.
-        /// </summary>
-        public readonly static string date = "231027";
+        public bool IsValidated {  get; set; }
     }
 }
-
