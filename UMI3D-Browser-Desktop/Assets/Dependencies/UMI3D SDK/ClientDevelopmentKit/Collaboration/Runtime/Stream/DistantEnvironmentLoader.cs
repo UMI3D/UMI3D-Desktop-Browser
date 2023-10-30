@@ -1,4 +1,5 @@
 using Microsoft.SqlServer.Server;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,8 +23,16 @@ public class DistantEnvironmentLoader : AbstractLoader
     {
         if(value.dto is DistantEnvironmentDto distantDto)
         {
-            UnityEngine.Debug.Log("Read a distant Environment");
-            await Task.CompletedTask;
+            UnityEngine.Debug.Log("Read a distant Environment Start");
+            try
+            {
+                await UMI3DEnvironmentLoader.Instance.InstantiateNodes(distantDto.environmentDto.scenes);
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.LogError(e);
+            }
+            UnityEngine.Debug.Log("Read a distant Environment End");
         }
     }
 
