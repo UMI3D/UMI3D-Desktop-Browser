@@ -1,7 +1,9 @@
+using inetum.unityUtils;
 using Microsoft.SqlServer.Server;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using umi3d;
 using umi3d.cdk;
@@ -23,9 +25,10 @@ public class DistantEnvironmentLoader : AbstractLoader
     {
         if(value.dto is DistantEnvironmentDto distantDto)
         {
-            UnityEngine.Debug.Log("Read a distant Environment Start");
+            UnityEngine.Debug.Log($"Read a distant Environment Start {distantDto != null} {distantDto?.environmentDto != null} {distantDto?.environmentDto?.scenes != null}");
             try
             {
+                distantDto.environmentDto.scenes.SelectMany(s => s.nodes).Debug();
                 await UMI3DEnvironmentLoader.Instance.InstantiateNodes(distantDto.environmentDto.scenes);
             }
             catch (Exception e)
