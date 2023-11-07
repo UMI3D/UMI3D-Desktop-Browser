@@ -138,6 +138,9 @@ namespace umi3d.cdk.collaboration
 
         private async Task<FormAnswerDto> GetFormAnswer(ConnectionFormDto form)
         {
+            UnityEngine.Debug.Log($"{form}");
+            UnityEngine.Debug.Log($"{UMI3DCollaborationClientServer.Instance} {UMI3DCollaborationClientServer.Instance?.Identifier} {UMI3DCollaborationClientServer.Instance?.Identifier?.GetParameterDtos(form)}");
+            UnityEngine.Debug.Log($"{UMI3DCollaborationClientServer.Instance?.Identifier?.GetParameterDtos(form)}");
             return await UMI3DCollaborationClientServer.Instance.Identifier.GetParameterDtos(form);
         }
 
