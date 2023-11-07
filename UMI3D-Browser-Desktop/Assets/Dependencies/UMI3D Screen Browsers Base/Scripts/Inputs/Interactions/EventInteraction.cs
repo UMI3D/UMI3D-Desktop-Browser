@@ -90,7 +90,7 @@ namespace umi3d.baseBrowser.inputs.interactions
                 cdk.UMI3DClientServer.SendData(eventdto, true);
             }
             if (associatedInteraction.TriggerAnimationId != 0)
-                StartAnim(associatedInteraction.TriggerAnimationId);
+                StartAnim(environmentId,associatedInteraction.TriggerAnimationId);
 
             poseManagerService.TryActivatePoseOverriders(hoveredObjectId, PoseActivationMode.TRIGGER);
         }
@@ -101,7 +101,7 @@ namespace umi3d.baseBrowser.inputs.interactions
 
             if (associatedInteraction == null) return;
 
-            if (associatedInteraction.ReleaseAnimationId != 0) StartAnim(associatedInteraction.ReleaseAnimationId);
+            if (associatedInteraction.ReleaseAnimationId != 0) StartAnim(environmentId, associatedInteraction.ReleaseAnimationId);
             if (!associatedInteraction.hold || !risingEdgeEventSent) return;
             
             var eventdto = new common.interaction.EventStateChangedDto
@@ -121,20 +121,21 @@ namespace umi3d.baseBrowser.inputs.interactions
             poseManagerService.TryActivatePoseOverriders(hoveredObjectId, PoseActivationMode.RELEASE);
         }
 
-        protected async void StartAnim(ulong id)
+        protected async void StartAnim(ulong environmentId, ulong id)
         {
-            var anim = UMI3DAbstractAnimation.Get(id);
+            var anim = UMI3DAbstractAnimation.Get(environmentId,id);
             if (anim != null)
             {
                 await anim.SetUMI3DProperty(
                     new SetUMI3DPropertyData(
+                         environmentId,
                          new SetEntityPropertyDto()
                             {
                                 entityId = id,
                                 property = UMI3DPropertyKeys.AnimationPlaying,
                                 value = true
                             },
-                        UMI3DEnvironmentLoader.GetEntity(id))
+                        UMI3DEnvironmentLoader.GetEntity(environmentId,id))
                     );
                 anim.Start();
             }

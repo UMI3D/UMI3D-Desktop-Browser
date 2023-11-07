@@ -49,13 +49,13 @@ namespace umi3d.baseBrowser.notification
             if (value.dto is common.NotificationOnObjectDto dto3D)
             {
                 var notif3d = GameObject.Instantiate(loader.notification3DPrefab);
-                notif3d.Parent = cdk.UMI3DEnvironmentLoader.GetNode(dto3D.objectId)?.gameObject.transform;
+                notif3d.Parent = cdk.UMI3DEnvironmentLoader.GetNode(value.environmentId, dto3D.objectId)?.gameObject.transform;
 
                 notif3d.Title = dto3D.title;
                 notif3d.Content = dto3D.content;
                 notif3d.SetNotificationTime(dto3D.duration);
 
-                cdk.UMI3DEnvironmentLoader.RegisterNodeInstance(dto3D.id, dto3D, notif3d.gameObject).NotifyLoaded();
+                cdk.UMI3DEnvironmentLoader.RegisterNodeInstance(value.environmentId, dto3D.id, dto3D, notif3d.gameObject).NotifyLoaded();
                 return;
             }
             else

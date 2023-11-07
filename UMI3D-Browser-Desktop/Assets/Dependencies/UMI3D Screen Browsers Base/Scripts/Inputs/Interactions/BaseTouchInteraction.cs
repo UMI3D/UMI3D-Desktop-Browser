@@ -26,12 +26,13 @@ namespace umi3d.baseBrowser.inputs.interactions
         {
             if (m_isDown) Pressed(false);
             associatedInteraction = null;
+            environmentId = 0;
             Menu?.Remove(menuItem);
             menuItem?.UnSubscribe(Pressed);
             menuItem = null;
         }
 
-        public override void Associate(common.interaction.AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
+        public override void Associate(ulong environmentId, common.interaction.AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
             if (associatedInteraction != null) throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
             
@@ -40,6 +41,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             this.hoveredObjectId = hoveredObjectId;
             this.toolId = toolId;
             associatedInteraction = interaction as InteractionType;
+            this.environmentId = environmentId;
             CreateMenuItem();
             menuItem.Subscribe(Pressed);
             Menu?.Add(menuItem);

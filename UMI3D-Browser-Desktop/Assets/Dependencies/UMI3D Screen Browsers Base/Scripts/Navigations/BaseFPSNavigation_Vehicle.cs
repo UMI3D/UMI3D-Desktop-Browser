@@ -29,7 +29,7 @@ namespace umi3d.baseBrowser.Navigation
         /// <inheritdoc/>
         /// </summary>
         /// <param name="data"></param>
-        public override void UpdateFrame(common.FrameRequestDto data)
+        public override void UpdateFrame(ulong environmentId, common.FrameRequestDto data)
         {
             //vehicleFreeHead = data.StopNavigation;
 
@@ -44,7 +44,7 @@ namespace umi3d.baseBrowser.Navigation
             }
             else
             {
-                cdk.UMI3DNodeInstance Frame = cdk.UMI3DEnvironmentLoader.GetNode(data.FrameId);
+                cdk.UMI3DNodeInstance Frame = cdk.UMI3DEnvironmentLoader.GetNode(environmentId, data.FrameId);
                 if (Frame != null)
                 {
                     globalFrame = Frame;

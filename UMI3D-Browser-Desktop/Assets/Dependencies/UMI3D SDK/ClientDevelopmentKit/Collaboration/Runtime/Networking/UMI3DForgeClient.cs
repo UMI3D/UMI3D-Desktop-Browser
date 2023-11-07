@@ -389,7 +389,7 @@ namespace umi3d.cdk.collaboration
                     case TransactionDto transaction:
                         MainThreadManager.Run(async () =>
                         {
-                            await UMI3DClientServer.transactionDispatcher.PerformTransaction(transaction);
+                            await UMI3DClientServer.transactionDispatcher.PerformTransaction(0, transaction);
                             if(UMI3DCollaborationClientServer.transactionPending != null)
                                 UMI3DCollaborationClientServer.transactionPending.areTransactionPending = false;
                         });
@@ -406,7 +406,7 @@ namespace umi3d.cdk.collaboration
             }
             else
             {
-                var container = new ByteContainer(frame);
+                var container = new ByteContainer(0, frame);
                 uint TransactionId = UMI3DSerializer.Read<uint>(container);
                 switch (TransactionId)
                 {
@@ -456,7 +456,7 @@ namespace umi3d.cdk.collaboration
                     bool waitforreparenting = true;
                     MainThreadManager.Run(async () =>
                     {
-                        UMI3DNavigation.SetFrame(frame);
+                        UMI3DNavigation.SetFrame(0, frame);
                         await UMI3DAsyncManager.Yield();
                         waitforreparenting = false;
                     });
@@ -466,7 +466,7 @@ namespace umi3d.cdk.collaboration
                 case NavigateDto navigate:
                     MainThreadManager.Run(() =>
                     {
-                        StartCoroutine(UMI3DNavigation.Navigate(navigate));
+                        StartCoroutine(UMI3DNavigation.Navigate(0, navigate));
                     });
 
                     break;
@@ -536,7 +536,7 @@ namespace umi3d.cdk.collaboration
                 case ValidateEnvironmentPoseConditionDto validateEnvironmentPoseCondition:
                     MainThreadManager.Run(() =>
                     {
-                        PoseManager.Instance.ChangeEnvironmentPoseCondition(validateEnvironmentPoseCondition.Id, validateEnvironmentPoseCondition.ShouldBeValidated);
+                        PoseManager.Instance.ChangeEnvironmentPoseCondition(operation.environmentId, validateEnvironmentPoseCondition.Id, validateEnvironmentPoseCondition.ShouldBeValidated);
                     });
                     break;
                 default:
@@ -564,7 +564,7 @@ namespace umi3d.cdk.collaboration
                         var nav = new NavigateDto() { position = pos };
                         MainThreadManager.Run(() =>
                         {
-                            StartCoroutine(UMI3DNavigation.Navigate(nav));
+                            StartCoroutine(UMI3DNavigation.Navigate(0, nav));
                         });
                     }
                     break;
@@ -575,7 +575,7 @@ namespace umi3d.cdk.collaboration
                         var nav = new TeleportDto() { position = pos, rotation = rot };
                         MainThreadManager.Run(() =>
                         {
-                            StartCoroutine(UMI3DNavigation.Navigate(nav));
+                            StartCoroutine(UMI3DNavigation.Navigate(0, nav));
 
                         });
                     }
@@ -596,7 +596,7 @@ namespace umi3d.cdk.collaboration
                         {
                             try
                             {
-                                UMI3DNavigation.SetFrame(frame);
+                                UMI3DNavigation.SetFrame(0, frame);
                             }
                             catch (Exception e)
                             {
@@ -692,7 +692,7 @@ namespace umi3d.cdk.collaboration
 
                         MainThreadManager.Run(() =>
                         {
-                            PoseManager.Instance.ChangeEnvironmentPoseCondition(validateEnvironmentPoseConditionDto.Id, validateEnvironmentPoseConditionDto.ShouldBeValidated);
+                            PoseManager.Instance.ChangeEnvironmentPoseCondition(0, validateEnvironmentPoseConditionDto.Id, validateEnvironmentPoseConditionDto.ShouldBeValidated);
                         });
                         break;
                     }
@@ -757,7 +757,7 @@ namespace umi3d.cdk.collaboration
             }
             else
             {
-                var container = new ByteContainer(frame);
+                var container = new ByteContainer(0, frame);
                 try
                 {
                     System.Collections.Generic.List<UserTrackingFrameDto> frames = UMI3DSerializer.ReadList<UserTrackingFrameDto>(container);

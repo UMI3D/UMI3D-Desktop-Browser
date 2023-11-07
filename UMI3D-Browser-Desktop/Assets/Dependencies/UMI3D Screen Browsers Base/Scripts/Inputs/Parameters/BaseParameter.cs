@@ -63,7 +63,7 @@ namespace umi3d.baseBrowser.parameters
             menuItem.UnSubscribe(callback);
             Menu?.Remove(menuItem);
         }
-        public override void Associate(common.interaction.AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
+        public override void Associate(ulong environmentId, common.interaction.AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
             if (currentInteraction != null)
                 throw new System.Exception("This input is already associated to another interaction (" + currentInteraction + ")");
@@ -99,7 +99,7 @@ namespace umi3d.baseBrowser.parameters
             currentInteraction = interaction;
             Menu?.Add(menuItem);
         }
-        public override void Associate(common.interaction.ManipulationDto manipulation, common.interaction.DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
+        public override void Associate(ulong environmentId, common.interaction.ManipulationDto manipulation, common.interaction.DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
             => throw new System.Exception("Incompatible interaction");
         public override bool IsCompatibleWith(common.interaction.AbstractInteractionDto interaction) => interaction is ParameterType;
         public override bool IsAvailable() => currentInteraction == null;

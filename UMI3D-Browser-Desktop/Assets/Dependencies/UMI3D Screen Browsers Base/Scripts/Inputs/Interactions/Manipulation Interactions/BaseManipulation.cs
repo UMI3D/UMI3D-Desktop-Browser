@@ -139,10 +139,10 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         #region Association and dissociation
 
-        public override void Associate(AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
+        public override void Associate(ulong environmentId, AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
             => throw new System.NotImplementedException();
 
-        public override void Associate(ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
+        public override void Associate(ulong environmentId, ManipulationDto manipulation, DofGroupEnum dofs, ulong toolId, ulong hoveredObjectId)
         {
             if (associatedInteraction != null)
                 throw new System.Exception("This input is already binded to a interaction ! (" + associatedInteraction + ")");
@@ -152,6 +152,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             this.hoveredObjectId = hoveredObjectId;
             this.toolId = toolId;
             associatedInteraction = manipulation;
+            this.environmentId = environmentId;
 
             menuItem = new ManipulationMenuItem
             {
@@ -223,7 +224,7 @@ namespace umi3d.baseBrowser.inputs.interactions
             {
                 if (associatedInteraction?.frameOfReference != null)
                 {
-                    GameObject frame = cdk.UMI3DEnvironmentLoader.GetNode(associatedInteraction.frameOfReference).gameObject;
+                    GameObject frame = cdk.UMI3DEnvironmentLoader.GetNode(environmentId, associatedInteraction.frameOfReference).gameObject;
                     if (frame != null)
                     {
                         frameOfReference = frame.transform;

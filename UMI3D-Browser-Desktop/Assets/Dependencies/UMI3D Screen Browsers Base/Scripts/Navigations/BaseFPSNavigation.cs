@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using System.Collections.Generic;
 using umi3d.baseBrowser.cursor;
 using umi3d.common;
@@ -80,7 +81,7 @@ namespace umi3d.baseBrowser.Navigation
         /// <inheritdoc/>
         /// </summary>
         /// <param name="data"></param>
-        public override void Navigate(common.NavigateDto data)
+        public override void Navigate(ulong environmentId, common.NavigateDto data)
         {
             navigateTo = true;
             navigationDestination = transform.parent.position + data.position.Struct();
@@ -90,7 +91,7 @@ namespace umi3d.baseBrowser.Navigation
         /// <inheritdoc/>
         /// </summary>
         /// <param name="data"></param>
-        public override void Teleport(common.TeleportDto data)
+        public override void Teleport(ulong environmentId, common.TeleportDto data)
         {
             transform.localPosition = data.position.Struct();
             groundHeight = data.position.Y;
