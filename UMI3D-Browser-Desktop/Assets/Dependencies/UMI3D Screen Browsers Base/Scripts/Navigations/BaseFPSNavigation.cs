@@ -172,17 +172,20 @@ namespace umi3d.baseBrowser.Navigation
             return true;
         }
 
-        public override (Vector3Dto speed, bool jumping, bool crouching) GetNaviagtionData()
+        public override NavigationData GetNavigationData()
         {
-            Vector3Dto speed = new(); bool jumping; bool crouching;
-            jumping = jumpData.IsJumping;
-            crouching = IsCrouching;
-
-            speed.X = Movement.x / Time.deltaTime;
-            speed.Z = Movement.y / Time.deltaTime;
-            speed.Y = heightDelta / Time.deltaTime;
-
-            return (speed, jumping, crouching);
+            return new NavigationData
+            {
+                speed = new()
+                {
+                    X = Movement.x / Time.deltaTime,
+                    Y = Movement.y / Time.deltaTime,
+                    Z = heightDelta / Time.deltaTime
+                },
+                jumping = jumpData.IsJumping,
+                crouching = IsCrouching,
+                grounded = lastHeight == groundHeight
+            };
         }
 
         #endregion

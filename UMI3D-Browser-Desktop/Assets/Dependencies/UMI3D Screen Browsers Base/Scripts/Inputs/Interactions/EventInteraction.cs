@@ -15,13 +15,8 @@ limitations under the License.
 */
 
 using umi3d.cdk;
-using umi3d.cdk.interaction;
-using umi3d.cdk.userCapture;
 using umi3d.cdk.userCapture.pose;
 using umi3d.common;
-using umi3d.common.userCapture.pose;
-
-using UnityEngine;
 
 namespace umi3d.baseBrowser.inputs.interactions
 {
@@ -91,8 +86,6 @@ namespace umi3d.baseBrowser.inputs.interactions
             }
             if (associatedInteraction.TriggerAnimationId != 0)
                 StartAnim(associatedInteraction.TriggerAnimationId);
-
-            poseManagerService.TryActivatePoseOverriders(hoveredObjectId, PoseActivationMode.TRIGGER);
         }
 
         protected override void PressedUp()
@@ -117,8 +110,6 @@ namespace umi3d.baseBrowser.inputs.interactions
             cdk.UMI3DClientServer.SendData(eventdto, true);
             IsInputHold = false;
             risingEdgeEventSent = false;
-
-            poseManagerService.TryActivatePoseOverriders(hoveredObjectId, PoseActivationMode.RELEASE);
         }
 
         protected async void StartAnim(ulong id)
