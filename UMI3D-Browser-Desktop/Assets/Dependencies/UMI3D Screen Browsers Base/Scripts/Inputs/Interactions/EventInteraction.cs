@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 using umi3d.cdk;
-using umi3d.cdk.userCapture.pose;
 using umi3d.common;
 
 namespace umi3d.baseBrowser.inputs.interactions
@@ -27,12 +26,11 @@ namespace umi3d.baseBrowser.inputs.interactions
         /// True if an Abstract Input is currently hold by a user.
         /// </summary>
         public static bool IsInputHold;
+
         /// <summary>
         /// True if the rising edge event has been sent through network (to avoid sending falling edge only).
         /// </summary>
         protected bool risingEdgeEventSent;
-
-        private IPoseManager poseManagerService => PoseManager.Instance;
 
         protected virtual void Awake()
         {
@@ -64,8 +62,8 @@ namespace umi3d.baseBrowser.inputs.interactions
                     id = associatedInteraction.id,
                     toolId = this.toolId,
                     hoveredObjectId = hoveredObjectId,
-                    bonePosition = (Vector3Dto) boneTransform.position.Dto(),
-                    boneRotation = (Vector4Dto) boneTransform.rotation.Dto()
+                    bonePosition = (Vector3Dto)boneTransform.position.Dto(),
+                    boneRotation = (Vector4Dto)boneTransform.rotation.Dto()
                 };
                 cdk.UMI3DClientServer.SendData(eventdto, true);
                 risingEdgeEventSent = true;
@@ -96,7 +94,7 @@ namespace umi3d.baseBrowser.inputs.interactions
 
             if (associatedInteraction.ReleaseAnimationId != 0) StartAnim(associatedInteraction.ReleaseAnimationId);
             if (!associatedInteraction.hold || !risingEdgeEventSent) return;
-            
+
             var eventdto = new common.interaction.EventStateChangedDto
             {
                 active = false,
@@ -120,11 +118,11 @@ namespace umi3d.baseBrowser.inputs.interactions
                 await anim.SetUMI3DProperty(
                     new SetUMI3DPropertyData(
                          new SetEntityPropertyDto()
-                            {
-                                entityId = id,
-                                property = UMI3DPropertyKeys.AnimationPlaying,
-                                value = true
-                            },
+                         {
+                             entityId = id,
+                             property = UMI3DPropertyKeys.AnimationPlaying,
+                             value = true
+                         },
                         UMI3DEnvironmentLoader.GetEntity(id))
                     );
                 anim.Start();

@@ -19,8 +19,6 @@ using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
-using umi3d.cdk.userCapture;
-using umi3d.cdk.userCapture.pose;
 using umi3d.common;
 using umi3d.common.interaction;
 using umi3d.desktopBrowser.Controller;
@@ -98,8 +96,6 @@ namespace umi3d.baseBrowser.Controller
         public static bool CanProcess = false;
         #endregion
 
-        private IPoseManager poseManagerService;
-
         #region Monobehaviour Life Cycle
         protected virtual void Awake()
         {
@@ -145,7 +141,6 @@ namespace umi3d.baseBrowser.Controller
         protected virtual void Start()
         {
             m_controllers.ForEach(controller => controller?.Start());
-            poseManagerService = PoseManager.Instance;
         }
 
         protected virtual void LateUpdate()
