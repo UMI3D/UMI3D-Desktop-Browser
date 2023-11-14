@@ -41,7 +41,7 @@ namespace umi3d.cdk
     {
         private const DebugScope scope = DebugScope.CDK | DebugScope.Core | DebugScope.Loading;
 
-        private readonly Dictionary<ulong, UMI3DEntities> entitiesCollection = new();
+        private Dictionary<ulong, UMI3DEntities> entitiesCollection = new();
 
         public UMI3DEnvironmentLoader() : base()
         {
@@ -78,6 +78,17 @@ namespace umi3d.cdk
         /// For backwards compatibility only.
         [Obsolete("Use ICoroutineManager instead")]
         public static Coroutine StartCoroutine(IEnumerator enumerator) => CoroutineManager.Instance.AttachCoroutine(enumerator);
+
+
+        public static void DeclareNewEnvironment(ulong id, string url)
+        {
+            Instance.entitiesCollection[id] = new(id,url);
+        }
+
+        public IReadOnlyList<string> GetResourcesUrls()
+        {
+            return entitiesCollection?.Values?.Select(v => v.ReourcesUrl).ToList();
+        }
 
         /// <summary>
         /// Call a callback when an entity is registerd.
@@ -334,6 +345,8 @@ namespace umi3d.cdk
         public async Task Load(GlTFEnvironmentDto dto, MultiProgress LoadProgress)
         {
             ulong mainEnvironmentId = 0;
+            DeclareNewEnvironment(mainEnvironmentId, UMI3DClientServer.Environement.resourcesUrl);
+
             Progress downloadingProgress = new Progress(0, "Downloading");
             Progress ReadingDataProgress = new Progress(2, "Reading Data");
             MultiProgress loadingProgress = new MultiProgress("Loading");

@@ -170,9 +170,7 @@ namespace umi3d.cdk
             var tasks = nodes
                 .Select(n =>
                 {
-                    UnityEngine.Debug.Log($"{n}");
                     var res = CreateNode(enviornmentId, n);
-                    UnityEngine.Debug.Log($"{n} {res.dto} {n == res.dto}");
                     return res;
                 })
                 .Select(async node =>
