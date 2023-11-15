@@ -43,5 +43,12 @@ namespace umi3d.baseBrowser.inputs.interactions
             var _key = S_Navigations.Find(key => key.Navigation == navigation);
             return _key != null ? _key.m_isDown : false;
         }
+
+        protected override void KeyCanceled(InputAction.CallbackContext context)
+        {
+            if (!CanProces() && !m_isDown) return;
+
+            Pressed(false);
+        }
     }
 }

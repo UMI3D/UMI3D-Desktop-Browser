@@ -69,6 +69,7 @@ namespace umi3d.baseBrowser.connection
                 {
                     CloseGameWindows();
                     BaseCursor.SetMovement(this, CursorMovement.Center);
+                    State = CursorState.Default;
                 }
             });
 
@@ -94,6 +95,7 @@ namespace umi3d.baseBrowser.connection
                 {
                     CloseGameWindows();
                     BaseCursor.SetMovement(this, CursorMovement.Center);
+                    State = CursorState.Default;
                 }
             });
 
@@ -110,6 +112,7 @@ namespace umi3d.baseBrowser.connection
                 {
                     CloseGameWindows();
                     BaseCursor.SetMovement(this, CursorMovement.Center);
+                    State = CursorState.Default;
                 }
             });
 
