@@ -26,6 +26,6 @@ namespace inetum.unityUtils
 
 #endif
 
-        public NotifyingVariable<T> action = new();
+        public NotifyingVariable<T> variable = new();
     }
 }
