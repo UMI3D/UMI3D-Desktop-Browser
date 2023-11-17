@@ -9,5 +9,7 @@ namespace umi3d.common
     {
         public GlTFEnvironmentDto environmentDto { get; set; }
         public string resourcesUrl { get; set; }
+        public bool useDto { get; set; }
+        public ulong environmentID { get; set; }
     }
 }

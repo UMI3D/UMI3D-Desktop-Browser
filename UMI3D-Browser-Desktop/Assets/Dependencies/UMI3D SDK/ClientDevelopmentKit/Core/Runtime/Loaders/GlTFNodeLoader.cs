@@ -179,8 +179,6 @@ namespace umi3d.cdk
                     progress.AddTotal();
                     try
                     {
-                        nodes.Debug();
-                        UnityEngine.Debug.Log($"{node.dto} | {dto} {dto?.extensions} {dto?.extensions?.umi3d} | {node} {node?.gameObject}");
                         await UMI3DEnvironmentLoader.AbstractParameters.ReadUMI3DExtension(new ReadUMI3DExtensionData(enviornmentId, dto.extensions.umi3d, node.gameObject));
 
                         ReadLightingExtensions(dto, node.gameObject);
