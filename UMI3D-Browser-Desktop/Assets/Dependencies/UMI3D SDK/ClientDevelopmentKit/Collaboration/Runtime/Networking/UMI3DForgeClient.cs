@@ -390,7 +390,6 @@ namespace umi3d.cdk.collaboration
                     case TransactionDto transaction:
                         MainThreadManager.Run(async () =>
                         {
-                            UnityMainThreadDispatcher.Instance().Enqueue(() => UnityEngine.Debug.Log($"Transaction"));
                             await UMI3DClientServer.transactionDispatcher.PerformTransaction(0, transaction);
                             if(UMI3DCollaborationClientServer.transactionPending != null)
                                 UMI3DCollaborationClientServer.transactionPending.areTransactionPending = false;
