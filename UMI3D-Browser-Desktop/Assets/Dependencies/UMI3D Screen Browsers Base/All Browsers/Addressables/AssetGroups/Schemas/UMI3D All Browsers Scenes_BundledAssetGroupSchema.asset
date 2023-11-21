@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5d17a21594effb4e9591490b009e7aa, type: 3}
-  m_Name: Packed Assets_BundledAssetGroupSchema
+  m_Name: UMI3D All Browsers Scenes_BundledAssetGroupSchema
   m_EditorClassIdentifier: 
-  m_Group: {fileID: 11400000, guid: e5d084a9751b0df49acb6f173a825dfe, type: 2}
+  m_Group: {fileID: 11400000, guid: 4b50053af8f468049adfbb353e1ebd50, type: 2}
   m_InternalBundleIdMode: 1
   m_Compression: 1
   m_IncludeAddressInCatalog: 1

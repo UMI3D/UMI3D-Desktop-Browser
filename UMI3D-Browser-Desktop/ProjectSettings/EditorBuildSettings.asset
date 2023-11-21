@@ -9,6 +9,10 @@ EditorBuildSettings:
     path: Assets/Dependencies/UMI3D SDK/ClientDevelopmentKit/Core/Runtime/Scenes/UMI3D
       Launcher Scene.unity
     guid: dd40b33b821185b43981ba3fa8d7100c
+  - enabled: 0
+    path: Assets/Dependencies/UMI3D Screen Browsers Base/All Browsers/Scenes/UMI3D
+      All Browsers Launcher Scene.unity
+    guid: f8031250d48cfa645a7643ad0a288047
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 241283797b5423f4888ca215e4be339b,
       type: 2}

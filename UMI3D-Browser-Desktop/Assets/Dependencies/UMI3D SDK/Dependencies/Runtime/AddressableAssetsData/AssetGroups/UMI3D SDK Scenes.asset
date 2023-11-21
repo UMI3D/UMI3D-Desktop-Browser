@@ -22,11 +22,6 @@ MonoBehaviour:
       Manager Scene.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: dd40b33b821185b43981ba3fa8d7100c
-    m_Address: Assets/UMI3D SDK/ClientDevelopmentKit/Core/Runtime/Scenes/UMI3D Launcher
-      Scene.unity
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: 53126aea99e7e7641955a95e06b5312e
     m_Address: Assets/UMI3D SDK/ClientDevelopmentKit/Core/Runtime/Scenes/SceneModels/UMI3D
       Launcher.asset
