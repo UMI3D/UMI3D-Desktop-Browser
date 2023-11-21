@@ -14,6 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Title: LauncherScreen
   Items:
+  - Key: LocalisationChoice
+    _trads:
+    - Key:
+        Name: French
+      Value: "S\xE9lectionnez la langue que l'application utilisera."
+    - Key:
+        Name: Spanish
+      Value: "Seleccione el idioma que usar\xE1 la aplicaci\xF3n."
+    - Key:
+        Name: English
+      Value: Select the language the app will use.
   - Key: Home
     _trads:
     - Key:
