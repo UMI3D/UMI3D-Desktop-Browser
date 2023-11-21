@@ -285,7 +285,7 @@ namespace umi3d.cdk.collaboration
                 WaitCoroutine.Remove(user.id);
             }
             MumbleAudioPlayer oldReader = GetMumbleAudioPlayer(user);
-
+            return;
             AudioSource audioPlayer = user?.audioplayer?.audioSource;
             if (audioPlayer != null)
             {

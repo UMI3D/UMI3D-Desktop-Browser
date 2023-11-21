@@ -27,10 +27,6 @@ using UnityEngine.Events;
 using UnityEngine.Rendering;
 using System.Threading;
 using inetum.unityUtils;
-using AsImpL;
-using static UnityEditor.Progress;
-using System.ComponentModel;
-using MainThreadDispatcher;
 
 namespace umi3d.cdk
 {
