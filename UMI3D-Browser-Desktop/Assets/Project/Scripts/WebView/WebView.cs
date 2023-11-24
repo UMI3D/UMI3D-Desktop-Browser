@@ -40,11 +40,31 @@ namespace BrowserDesktop
         [SerializeField]
         private RectTransform container = null;
 
+        [Header("Bottom bar")]
+
         [SerializeField]
         private RectTransform bottomBarContainer = null;
 
         [SerializeField]
+        private RectTransform nextRectTransform = null;
+
+        [SerializeField]
+        private RectTransform previousRectTransform = null;
+
+        [SerializeField]
+        private RectTransform homeRectTransform = null;
+
+        [Header("Top bar")]
+        [SerializeField]
         private RectTransform topBarContainer = null;
+
+        [SerializeField]
+        private RectTransform urlRectTransform = null;
+
+        [SerializeField]
+        private RectTransform searchRectTransform = null;
+
+        [Space]
 
         [SerializeField]
         Canvas canvas = null;
@@ -121,6 +141,21 @@ namespace BrowserDesktop
 
             bottomBarContainer.localScale = new Vector3(bottomBarContainer.localScale.x,
                 bottomBarContainer.localScale.y / container.localScale.y, bottomBarContainer.localScale.z);
+
+            urlRectTransform.localScale = new Vector3(urlRectTransform.localScale.x * topBarContainer.localScale.y,
+                urlRectTransform.localScale.y, urlRectTransform.localScale.z);
+
+            searchRectTransform.localScale = new Vector3(searchRectTransform.localScale.x * topBarContainer.localScale.y,
+                searchRectTransform.localScale.y, searchRectTransform.localScale.z);
+
+            nextRectTransform.localScale = new Vector3(nextRectTransform.localScale.x * bottomBarContainer.localScale.y,
+                nextRectTransform.localScale.y, nextRectTransform.localScale.z);
+
+            previousRectTransform.localScale = new Vector3(previousRectTransform.localScale.x * bottomBarContainer.localScale.y,
+                previousRectTransform.localScale.y, previousRectTransform.localScale.z);
+
+            homeRectTransform.localScale = new Vector3(homeRectTransform.localScale.x * bottomBarContainer.localScale.y,
+                homeRectTransform.localScale.y, homeRectTransform.localScale.z);
         }
 
         protected override async void OnTextureSizeChanged(Vector2 size)
