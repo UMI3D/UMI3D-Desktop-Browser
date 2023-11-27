@@ -14,5 +14,5 @@ EditorBuildSettings:
       All Browsers Launcher Scene.unity
     guid: f8031250d48cfa645a7643ad0a288047
   m_configObjects:
-    com.unity.addressableassets: {fileID: 11400000, guid: 241283797b5423f4888ca215e4be339b,
+    com.unity.addressableassets: {fileID: 11400000, guid: a5bffb7c4945f2f4fb53bf18000f14cd,
       type: 2}

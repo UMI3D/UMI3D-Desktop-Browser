@@ -23,7 +23,7 @@ namespace inetum.unityUtils.editor
     [CustomPropertyDrawer(typeof(ShowWhenEnumAttribute))]
     public class ShowWhenEnum_PropertyDrawer : PropertyDrawer
     {
-        bool showField = false;
+        bool showField = true;
         PropertyDrawer propertyDrawer;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
@@ -47,8 +47,6 @@ namespace inetum.unityUtils.editor
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            EditorGUI.BeginProperty(position, label, property);
-
             ShowWhenEnumAttribute attribute = (ShowWhenEnumAttribute)this.attribute;
 
             var pathToEnum = property.propertyPath.Split(property.name)[0] + attribute.enumFieldName;
@@ -83,8 +81,6 @@ namespace inetum.unityUtils.editor
                     propertyDrawer.OnGUI(position, property, label);
                 }
             }
-
-            EditorGUI.EndProperty();
         }
 
         bool TryGetOriginalPropertyDrawer(out PropertyDrawer propertyDrawer)

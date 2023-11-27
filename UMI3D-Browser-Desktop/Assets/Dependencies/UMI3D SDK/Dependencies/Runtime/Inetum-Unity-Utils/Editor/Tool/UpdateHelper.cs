@@ -441,12 +441,12 @@ namespace inetum.unityUtils.editor
                     string tmpPath = Path.Combine(Application.dataPath, @$"EXCLUDED/__TMP_UPDATE_HELPER_SAVE_{folderName}");
                     try
                     {
-                        //UnityEngine.Debug.Log($"{Directory.Exists(path)}, {Directory.}");
                         Directory.Move(path, tmpPath); // import in project to use API
                     }
                     catch (Exception e)
                     {
                         UnityEngine.Debug.LogError($"{path}, {tmpPath}");
+                        UnityEngine.Debug.LogException(e);
                         //throw e;
                     }
                     return @$"Assets/EXCLUDED/__TMP_UPDATE_HELPER_SAVE_{folderName}";
