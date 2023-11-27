@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
   m_Name: Default Local Group
   m_EditorClassIdentifier: 
-  m_GroupName: Default UMI3D SDK Local Group
+  m_GroupName: Default Local Group
   m_Data:
     m_SerializedData: []
   m_GUID: ab7cde03f6673564386b8d17ec422237
