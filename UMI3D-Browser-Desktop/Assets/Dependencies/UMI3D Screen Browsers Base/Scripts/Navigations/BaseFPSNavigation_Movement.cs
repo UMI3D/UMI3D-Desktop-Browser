@@ -63,7 +63,13 @@ namespace umi3d.baseBrowser.Navigation
             jumpData.ComputeVelocity(Time.time, Time.deltaTime, jumping && CanJump());
 
             height += jumpData.velocity * Time.deltaTime;
-            if (height >= groundHeight) return;
+
+            if (height >= groundHeight)
+            {
+                heightDelta = (height - lastHeight) * Time.deltaTime;
+                lastHeight = height;
+                return;
+            }
 
             float offset = Mathf.Abs(height - groundHeight);
             if

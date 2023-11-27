@@ -15,7 +15,9 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using System;
 using UnityEngine;
+using static umi3d.baseBrowser.preferences.SettingsPreferences;
 
 public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncherPanelController
 {
@@ -51,5 +53,23 @@ public class LauncherPanelController : umi3d.baseBrowser.connection.BaseLauncher
 
         Launcher.Version = BrowserDesktop.BrowserVersion.Version;
         Launcher.Settings.Controller.Controller = ControllerEnum.MouseAndKeyboard;
+
+
+        GeneralData data;
+        if (TryGetGeneralData(out data))
+        {
+            if (!data.HasChosenLanguage)
+                ShowLanguageSelection();
+        } else
+        {
+            Debug.Log("Not Found");
+            ShowLanguageSelection();
+        }
+    }
+
+    private void ShowLanguageSelection()
+    {
+        Debug.Log("Need new Language");
+        Launcher.Main.Add(new LocalisationPopUp_C());
     }
 }

@@ -28,7 +28,7 @@ namespace BrowserDesktop.Cursor
             if (distCursor < MinimumCursorDistance) distCursor = MinimumCursorDistance;
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit[] hits = umi3d.common.Physics.RaycastAll(ray, constrainDistanceChange ? distCursor + MaxDistCursorDelta : 100);
+            var raycastInfo = umi3d.common.Physics.RaycastAll(ray, constrainDistanceChange ? distCursor + MaxDistCursorDelta : 100);
 
             ignore = new List<Transform>();
             ignore.AddRange(AvatarParent.gameObject.GetComponentsInChildren<Transform>());
@@ -36,17 +36,15 @@ namespace BrowserDesktop.Cursor
             if (lastObject != null)
                 ignore.AddRange(lastObject.gameObject.GetComponentsInChildren<Transform>());
             bool ok = false;
-            if (hits.Length > 0)
+            for (int i = 0; i < raycastInfo.hitCount; i++)
             {
-                foreach (var hit in hits)
+                var hit = raycastInfo.hits[i];
+                if (!ignore.Contains(hit.transform))
                 {
-                    if (!ignore.Contains(hit.transform))
-                    {
-                        Cursor.position = hit.point;
-                        distCursor = hit.distance;
-                        ok = true;
-                        break;
-                    }
+                    Cursor.position = hit.point;
+                    distCursor = hit.distance;
+                    ok = true;
+                    break;
                 }
             }
             if (!ok)
