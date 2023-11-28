@@ -79,7 +79,7 @@ namespace umi3d.cdk.scene.sceneController
             for (int i = 1; i < opHandles.Length; i++)
             {
                 var nextOH = opHandles[i];
-                 
+
                 nextOH.NowOrLater(sceneVM =>
                 {
                     scenesHandlers[i - 1] = sceneVM.scene.LoadSceneAsync(LoadSceneMode.Additive);
