@@ -485,14 +485,7 @@ MonoBehaviour:
       m_SubObjectType: 
       m_EditorAssetChanged: 0
     address: 
-  nextScenes:
-  - loadingSource: 0
-    reference:
-      m_AssetGUID: d40cf9915d6a32c498bfd4555d2f912a
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
-    address: 
+  nextScenes: []
   loadMode: 1
 --- !u!4 &1988529126
 Transform:

@@ -170,6 +170,13 @@ MonoBehaviour:
     address: 
   - loadingSource: 0
     reference:
+      m_AssetGUID: d40cf9915d6a32c498bfd4555d2f912a
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    address: 
+  - loadingSource: 0
+    reference:
       m_AssetGUID: 3734661e73b21b74386292d599918f56
       m_SubObjectName: 
       m_SubObjectType: 
