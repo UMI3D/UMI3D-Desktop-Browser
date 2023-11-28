@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UM3D Mobile Computer Scenes
+  m_EditorClassIdentifier: 
+  m_GroupName: UM3D Mobile Computer Scenes
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 50eb41adccfc3964f9a88e2aa4b5dbb3
+  m_SerializeEntries:
+  - m_GUID: a59e713940464ac4b822821c83f5fc5d
+    m_Address: Assets/Dependencies/UMI3D Screen Browsers Base/Android And Windows/Scenes/UMI3D
+      Android And Windows Persistent Manager Scene.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 3734661e73b21b74386292d599918f56
+    m_Address: Assets/Dependencies/UMI3D Screen Browsers Base/Runtime/Mobile and
+      Computer Devices/Scenes/Scene Models/UMI3D Mobile Computer Persistent Manager.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5cc0dd036b560484a9ccb2139ec3adb7
+    m_Address: Assets/Dependencies/UMI3D Screen Browsers Base/Runtime/Android And
+      Windows/Scenes/UMI3D Android And Windows Connection Scene.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d40cf9915d6a32c498bfd4555d2f912a
+    m_Address: Assets/Dependencies/UMI3D Screen Browsers Base/Runtime/Android And
+      Windows/Scenes/Scene Models/UMI3D Android And Windows Connection.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: aae0a48abe9945b488d634146195895c, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 839a031809bb3304a81e0d4fa4eac191, type: 2}
+    - {fileID: 11400000, guid: 5d2eab4fc28083646b1cb364590418de, type: 2}

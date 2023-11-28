@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UMI3D All Browsers Scenes
+  m_EditorClassIdentifier: 
+  m_GroupName: UMI3D All Browsers Scenes
+  m_Data:
+    m_SerializedData: []
+  m_GUID: b24b366537e5a3342a667d868e903476
+  m_SerializeEntries:
+  - m_GUID: f8031250d48cfa645a7643ad0a288047
+    m_Address: Assets/Dependencies/UMI3D Screen Browsers Base/All Browsers/Scenes/UMI3D
+      All Browsers Launcher Scene.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 50e67535f47ec694aa4dbb678033f948
+    m_Address: Assets/Dependencies/UMI3D Screen Browsers Base/All Browsers/Scenes/Scene
+      Models/UMI3D All Browsers Launcher.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: bccc125c86736a54ea23d53a682ccc01, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 8ce1fd8a442ee84458b261d3d1decfee, type: 2}
+    - {fileID: 11400000, guid: 73253338f40e6f54d9c531eaa34ab17a, type: 2}

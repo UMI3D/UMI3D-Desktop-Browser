@@ -20,35 +20,25 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace inetum.unityUtils
 {
-    public enum LoadingSourceEnum
-    {
-        /// <summary>
-        /// Use an <see cref="AssetReference"/> to load the asset.
-        /// </summary>
-        Reference,
-        /// <summary>
-        /// Use the address of the asset to load the asset.
-        /// </summary>
-        Address
-    }
-
+    /// <summary>
+    /// A <see cref="SerializedAddressable"/> is a container for asset that can be load via the Addressables package.
+    /// </summary>
     [Serializable]
-    public struct SerializedAddressable<T>
-        where T: UnityEngine.Object
+    public struct SerializedAddressable
     {
         [Tooltip("Choose how you want to load the asset")]
-        public LoadingSourceEnum loadingSource;
+        public AddressableLoadingSourceEnum loadingSource;
 
-        [ShowWhenEnum(nameof(loadingSource), new[] { (int)LoadingSourceEnum.Reference })]
-        public AssetReferenceT<T> reference;
-        [ShowWhenEnum(nameof(loadingSource), new[] { (int)LoadingSourceEnum.Address })]
+        [ShowWhenEnum(nameof(loadingSource), new[] { (int)AddressableLoadingSourceEnum.Reference })]
+        public AssetReference reference;
+        [ShowWhenEnum(nameof(loadingSource), new[] { (int)AddressableLoadingSourceEnum.Address })]
         public string address;
 
         /// <summary>
         /// The <see cref="AsyncOperationHandle"/> set when the load method is called.
         /// </summary>
         [HideInInspector]
-        public AsyncOperationHandle<T> operationHandler;
+        public AsyncOperationHandle operationHandler;
 
         /// <summary>
         /// Whether or not the handler has been set.
@@ -69,22 +59,46 @@ namespace inetum.unityUtils
         /// Load the asset in an asynchronous way.
         /// </summary>
         /// <exception cref="SerializedAddressableException"></exception>
-        public AsyncOperationHandle<T> LoadAssetAsync()
+        public AsyncOperationHandle LoadAssetAsync<T>()
         {
             switch (loadingSource)
             {
-                case LoadingSourceEnum.Reference:
+                case AddressableLoadingSourceEnum.Reference:
                     if (reference.RuntimeKeyIsValid())
                     {
-                        operationHandler = reference.LoadAssetAsync();
+                        operationHandler = reference.LoadAssetAsync<T>();
                     }
                     else
                     {
                         throw new SerializedAddressableException($"Reference for type [{typeof(T).Name}] has an invalid RuntimeKey");
                     }
                     break;
-                case LoadingSourceEnum.Address:
+                case AddressableLoadingSourceEnum.Address:
                     operationHandler = Addressables.LoadAssetAsync<T>(address);
+                    break;
+                default:
+                    break;
+            }
+
+            return operationHandler;
+        }
+
+        public AsyncOperationHandle LoadSceneAsync()
+        {
+            switch (loadingSource)
+            {
+                case AddressableLoadingSourceEnum.Reference:
+                    if (reference.RuntimeKeyIsValid())
+                    {
+                        operationHandler = reference.LoadSceneAsync();
+                    }
+                    else
+                    {
+                        throw new SerializedAddressableException($"Reference has an invalid RuntimeKey");
+                    }
+                    break;
+                case AddressableLoadingSourceEnum.Address:
+                    operationHandler = Addressables.LoadSceneAsync(address);
                     break;
                 default:
                     break;
@@ -99,15 +113,6 @@ namespace inetum.unityUtils
             {
                 Addressables.Release(operationHandler);
             }
-        }
-
-        public class SerializedAddressableException: Exception
-        {
-            public SerializedAddressableException(string message) : base(message)
-            { }
-
-            public SerializedAddressableException(string message, Exception innerException) : base(message, innerException)
-            { }
         }
     }
 }
