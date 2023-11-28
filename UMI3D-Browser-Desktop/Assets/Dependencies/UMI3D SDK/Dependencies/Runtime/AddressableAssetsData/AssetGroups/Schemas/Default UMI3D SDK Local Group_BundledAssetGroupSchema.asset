@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5d17a21594effb4e9591490b009e7aa, type: 3}
-  m_Name: UM3D Android Windows Scenes_BundledAssetGroupSchema
+  m_Name: Default UMI3D SDK Local Group_BundledAssetGroupSchema
   m_EditorClassIdentifier: 
-  m_Group: {fileID: 11400000, guid: ed9556019d56a4845a28f4199024b595, type: 2}
+  m_Group: {fileID: 11400000, guid: 0c7daf08bd920ac47a355ca5cbdd060e, type: 2}
   m_InternalBundleIdMode: 1
   m_Compression: 1
   m_IncludeAddressInCatalog: 1
@@ -37,7 +37,7 @@ MonoBehaviour:
     m_Id: c23b9cdd3fbdc3944b2518cab50bfb8b
   m_LoadPath:
     m_Id: d87e1b1eab80c584f8240eb2290446fd
-  m_BundleMode: 1
+  m_BundleMode: 0
   m_AssetBundleProviderType:
     m_AssemblyName: Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     m_ClassName: UnityEngine.ResourceManagement.ResourceProviders.AssetBundleProvider
