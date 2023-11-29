@@ -31,63 +31,24 @@ namespace umi3d.baseBrowser.connection
 
         #region Data
         [HideInInspector]
-        public preferences.ServerPreferences.ServerData currentServer;
-        [HideInInspector]
-        public List<preferences.ServerPreferences.ServerData> savedServers;
-        [HideInInspector]
-        public preferences.ServerPreferences.Data currentConnectionData;
-        [HideInInspector]
-        public cdk.collaboration.LaucherOnMasterServer masterServer;
-        [HideInInspector]
         public common.MediaDto mediaDto;
 
-        [HideInInspector]
-        public BaseClientIdentifier Identifier;
-        [HideInInspector]
-        public UMI3DCollabLoadingParameters LoadingParameters;
         #endregion
 
         protected override void Awake()
         {
             base.Awake();
 
-            currentServer = preferences.ServerPreferences.GetPreviousServerData() ?? new preferences.ServerPreferences.ServerData();
-            currentConnectionData = preferences.ServerPreferences.GetPreviousConnectionData() ?? new preferences.ServerPreferences.Data();
-            savedServers = preferences.ServerPreferences.GetRegisteredServerData() ?? new List<preferences.ServerPreferences.ServerData>();
-            masterServer = new cdk.collaboration.LaucherOnMasterServer();
+            //currentConnectionData = preferences.ServerPreferences.GetPreviousConnectionData() ?? new preferences.ServerPreferences.Data();
 
-            Identifier = Resources.Load<BaseClientIdentifier>("Scriptables/Connections/BaseClientIdentifier");
-            Identifier.ShouldDownloadLib = ShouldDownloadLibraries;
-            Identifier.GetParameters = (form, callback) => GetParameterDtos?.Invoke(form, callback);
-
-            LoadingParameters =  Resources.Load<UMI3DCollabLoadingParameters>("Scriptables/GamePanel/CollabLoadingParameters");
-            LoadingParameters.supportedformats.Clear();
-            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.gltf);
-            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.obj);
-            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.fbx);
-            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.png);
-            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.jpg);
-#if UNITY_STANDALONE || UNITY_EDITOR
-            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.unity_standalone_urp);
-#elif UNITY_ANDROID
-            LoadingParameters.supportedformats.Add(UMI3DAssetFormat.unity_android_urp);
-#endif
+            
             Debug.Log("TODO : Not force mono speaker mode. For now forced for bluetooth headset.");
-
-            var settings = AudioSettings.GetConfiguration();
-            settings.speakerMode = AudioSpeakerMode.Mono;
-            AudioSettings.Reset(settings);
         }
 
         void Start()
         {
-            cdk.collaboration.UMI3DEnvironmentClient.ConnectionState.AddListener((state) => Connecting?.Invoke(state));
-            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnRedirectionStarted.AddListener(() => RedirectionStarted?.Invoke());
-            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnRedirectionAborted.AddListener(() => RedirectionEnded?.Invoke());
-            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnConnectionLost.AddListener(() => ConnectionLost?.Invoke());
-            cdk.collaboration.UMI3DCollaborationClientServer.Instance.OnForceLogoutMessage.AddListener((s) => ForcedLeave?.Invoke(s));
 
-            cdk.collaboration.UMI3DCollaborationClientServer.EnvironmentProgress = () =>
+            UMI3DCollaborationClientServer.EnvironmentProgress = () =>
             {
                 var p = new MultiProgress("Join Environment");
                 //p.ResumeAfterFail = ResumeAfterFail;
@@ -103,19 +64,11 @@ namespace umi3d.baseBrowser.connection
 
             UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.AddListener(() => LeaveWithoutNotify());
 
-            cdk.collaboration.UMI3DEnvironmentClient.EnvironementLoaded.AddListener(() => EnvironmentLoaded?.Invoke());
-
-            UMI3DCollaborationEnvironmentLoader.Instance.OnUpdateJoinnedUserList += () => UserCountUpdated?.Invoke(UMI3DCollaborationEnvironmentLoader.Instance.JoinnedUserList.Count());
+            
         }
 
         #region Launcher
 
-        [HideInInspector]
-        public event System.Action<string> ConnectionInitialized;
-        [HideInInspector]
-        public event System.Action<string> ConnectionInitializationFailled;
-        [HideInInspector]
-        public event System.Action DisplaySessions;
         [HideInInspector]
         public event System.Action<float> LoadingEnvironment;
         [HideInInspector]
@@ -140,9 +93,6 @@ namespace umi3d.baseBrowser.connection
 
         public void ResetLauncherEvent()
         {
-            ConnectionInitialized = null;
-            ConnectionInitializationFailled = null;
-            DisplaySessions = null;
             LoadingEnvironment = null;
             LoadedLauncher = null;
         }
@@ -177,32 +127,7 @@ namespace umi3d.baseBrowser.connection
             WaitForError();
 
             //1. Try to find a master server, if it found show sessions.
-            masterServer.ConnectToMasterServer
-            (
-                () =>
-                {
-                    if (mediaDtoFound) return;
-
-                    masterServer.RequestInfo
-                    (
-                        (name, icon) =>
-                        {
-                            if (mediaDtoFound) return;
-                            masterServerFound = true;
-
-                            currentServer.serverName = name;
-                            currentServer.serverIcon = icon;
-                            preferences.ServerPreferences.StoreUserData(currentServer);
-                            if (saveInfo) StoreServer();
-                        },
-                        () => masterServerFound = false
-                    );
-
-                    DisplaySessions?.Invoke();
-                },
-                currentServer.serverUrl,
-                () => masterServerFound = false
-            );
+            
 
             //2. try to get a mediaDto
             mediaDto = await GetMediaDto();
@@ -336,23 +261,7 @@ namespace umi3d.baseBrowser.connection
         #region Environment
 
         [HideInInspector]
-        public event System.Action<int, System.Action<bool>> AskForDownloadingLibraries;
-        [HideInInspector]
-        public event System.Action<common.interaction.ConnectionFormDto, System.Action<common.interaction.FormAnswerDto>> GetParameterDtos;
-        [HideInInspector]
-        public event System.Action<common.MediaDto> ConnectionSucces;
-        [HideInInspector]
-        public event System.Action<string> ConnectionFail;
-        [HideInInspector]
-        public event System.Action<string> Connecting;
-        [HideInInspector]
         public event System.Action LoadedEnvironment;
-        [HideInInspector]
-        public event System.Action RedirectionStarted;
-        [HideInInspector]
-        public event System.Action RedirectionEnded;
-        [HideInInspector]
-        public event System.Action ConnectionLost;
         [HideInInspector]
         public event System.Action EnvironmentLeave;
         [HideInInspector]
@@ -427,31 +336,12 @@ namespace umi3d.baseBrowser.connection
 
         public void ResetEnvironmentEvents()
         {
-            ConnectionSucces = null;
-            ConnectionFail = null;
-            ConnectionSucces = null;
-            Connecting = null;
             LoadedEnvironment = null;
-            RedirectionStarted = null;
-            RedirectionEnded = null;
-            ConnectionLost = null;
             EnvironmentLeave = null;
             ForcedLeave = null;
-            AskForDownloadingLibraries = null;
-            GetParameterDtos = null;
             DisplayPopUpAfterLoadingFailed = null;
             EnvironmentLoaded = null;
             UserCountUpdated = null;
-        }
-
-        /// <summary>
-        /// Checks if users need to download libraries to join the environement.
-        /// If yes, a screen is displayed to explain that.
-        /// </summary>
-        protected void ShouldDownloadLibraries(List<string> ids, System.Action<bool> callback)
-        {
-            if (ids.Count == 0) callback.Invoke(true);
-            else AskForDownloadingLibraries?.Invoke(ids.Count, callback);
         }
 
 
