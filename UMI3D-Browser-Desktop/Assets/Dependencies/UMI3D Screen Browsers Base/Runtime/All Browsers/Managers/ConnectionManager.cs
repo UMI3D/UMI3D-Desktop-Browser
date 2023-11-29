@@ -31,8 +31,8 @@ namespace umi3d.browserRuntime.managers
         public AssetFormat assetFormat;
         public ConnectionEvents connectionEvents;
 
-        [HideInInspector]
-        public LaucherOnMasterServer masterServer;
+        public ConnectionToMasterServer connectionToMasterServer;
+
 
         private void Awake()
         {
@@ -40,8 +40,8 @@ namespace umi3d.browserRuntime.managers
             identifierRef.LoadAssetAsync().Completed += IdentifierLoaded;
             
             worldData = new();
-            
-            masterServer = new();
+
+            //connectionToMasterServer = new(new LaucherOnMasterServer(), worldData, );
         }
 
         private void Start()

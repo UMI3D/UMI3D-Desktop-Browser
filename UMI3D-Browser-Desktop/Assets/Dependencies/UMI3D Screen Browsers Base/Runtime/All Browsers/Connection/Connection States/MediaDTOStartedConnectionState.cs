@@ -16,7 +16,7 @@ limitations under the License.
 
 namespace umi3d.browserRuntime.connection
 {
-    public struct MasterServerConnectionState : IConnectionState
+    public struct MediaDTOStartedConnectionState : IConnectionState
     {
 
     }
