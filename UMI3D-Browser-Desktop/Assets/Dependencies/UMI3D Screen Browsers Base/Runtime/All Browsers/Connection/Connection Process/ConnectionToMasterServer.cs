@@ -21,25 +21,25 @@ namespace umi3d.browserRuntime.connection
     {
         LaucherOnMasterServer masterServer;
         IWorldData worldData;
-        IConnectionData connectionData;
+        IConnectionStateData connectionStateData;
 
-        public ConnectionToMasterServer(LaucherOnMasterServer masterServer, IWorldData worldData, IConnectionData connectionData)
+        public ConnectionToMasterServer(LaucherOnMasterServer masterServer, IWorldData worldData, IConnectionStateData connectionStateData)
         { 
             this.masterServer = masterServer;
             this.worldData = worldData;
-            this.connectionData = connectionData;
+            this.connectionStateData = connectionStateData;
         }
 
         public void TryToConnect()
         {
-            connectionData.States.Add(new MasterServerStartedConnectionState());
+            connectionStateData.Add(new MasterServerStartedConnectionState());
             masterServer.ConnectToMasterServer
             (
                 callback: () =>
                 {
-                    if (connectionData.ContainsState(typeof(MediaDTOFoundConnectionState)))
+                    if (connectionStateData.ContainsStateByType<MediaDTOFoundConnectionState>())
                     {
-                        connectionData.States.Add(new MasterServerStoppedConnectionState());
+                        connectionStateData.Add(new MasterServerStoppedConnectionState());
                         return;
                     }
 
@@ -47,9 +47,9 @@ namespace umi3d.browserRuntime.connection
                     (
                         UIcallback: (name, icon) =>
                         {
-                            if (connectionData.ContainsState(typeof(MediaDTOFoundConnectionState)))
+                            if (connectionStateData.ContainsStateByType<MediaDTOFoundConnectionState>())
                             {
-                                connectionData.States.Add(new MasterServerStoppedConnectionState());
+                                connectionStateData.Add(new MasterServerStoppedConnectionState());
                                 return;
                             }
 
@@ -62,17 +62,17 @@ namespace umi3d.browserRuntime.connection
                         },
                         failed: () =>
                         {
-                            connectionData.States.Add(new MasterServerFailedConnectionState());
+                            connectionStateData.Add(new MasterServerFailedConnectionState());
                         }
                     );
 
-                    connectionData.States.Add(new MasterServerSessionConnectionState());
+                    connectionStateData.Add(new MasterServerSessionConnectionState());
                     //DisplaySessions?.Invoke();
                 },
                 worldData.World.serverUrl,
                 failed: () =>
                 {
-                    connectionData.States.Add(new MasterServerFailedConnectionState());
+                    connectionStateData.Add(new MasterServerFailedConnectionState());
                 }
             );
         }

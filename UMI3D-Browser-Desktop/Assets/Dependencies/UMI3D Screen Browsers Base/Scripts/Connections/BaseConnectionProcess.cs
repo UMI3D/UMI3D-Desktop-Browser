@@ -74,23 +74,6 @@ namespace umi3d.baseBrowser.connection
         [HideInInspector]
         public event System.Action LoadedLauncher;
 
-        static bool onlyOneConnection = false;
-        static bool? _mediaDtoFound = null;
-        static bool? _masterServerFound = null;
-        static string url = null;
-
-        static bool mediaDtoFound
-        {
-            get => _mediaDtoFound ?? false;
-            set => _mediaDtoFound = value;
-        }
-
-        static bool masterServerFound
-        {
-            get => _masterServerFound ?? false;
-            set => _masterServerFound = value;
-        }
-
         public void ResetLauncherEvent()
         {
             LoadingEnvironment = null;
@@ -112,93 +95,11 @@ namespace umi3d.baseBrowser.connection
             while (onlyOneConnection) await UMI3DAsyncManager.Yield();
         }
 
-        protected async Task ConnectWithMasterServerOrMediaDto(bool saveInfo = false)
-        {
-            if (onlyOneConnection)
-            {
-                Debug.Log("Only one connection at a time");
-                return;
-            }
-
-            onlyOneConnection = true;
-            _mediaDtoFound = null;
-            _masterServerFound = null;
-
-            WaitForError();
-
-            //1. Try to find a master server, if it found show sessions.
-            
-
-            //2. try to get a mediaDto
-            mediaDto = await GetMediaDto();
-            if (mediaDto == null || masterServerFound)
-            {
-                mediaDtoFound = false;
-                return;
-            }
-            mediaDtoFound = true;
-            ConnectWithMediaDto(mediaDto, saveInfo);
-        }
-
-        public void ConnectWithMediaDto(string ip, string port)
-        {
-            var curentUrl = FormatUrl(currentServer.serverUrl, null) + common.UMI3DNetworkingKeys.media;
-            ConnectWithMediaDto(new common.MediaDto { url = curentUrl }, false);
-        }
-
-        protected void ConnectWithMediaDto(common.MediaDto media, bool saveInfo)
-        {
-            mediaDto = media;
-
-            currentServer.serverName = media.name;
-            currentServer.serverIcon = media?.icon2D?.variants?.FirstOrDefault()?.url;
-            preferences.ServerPreferences.StoreUserData(currentServer);
-            if (saveInfo) StoreServer();
-
-            currentConnectionData.environmentName = media.name;
-            currentConnectionData.ip = media.url;
-            currentConnectionData.port = null;
-            StoreCurrentConnectionDataAndConnect();
-        }
-
         protected void StoreServer()
         {
             if (savedServers.Find((server) => server.serverName == currentServer.serverName) == null)
                 savedServers.Add(currentServer);
             preferences.ServerPreferences.StoreRegisteredServerData(savedServers);
-        }
-
-        public async Task<common.MediaDto> GetMediaDto()
-        {
-            var curentUrl = FormatUrl(currentServer.serverUrl, null) + common.UMI3DNetworkingKeys.media;
-            url = curentUrl;
-            try
-            {
-                return await cdk.collaboration.UMI3DCollaborationClientServer.GetMedia
-                (
-                    url,
-                    (e) => url == curentUrl && e.count < 3
-                );
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private async void WaitForError()
-        {
-            while (onlyOneConnection)
-            {
-                await UMI3DAsyncManager.Yield();
-                if (masterServerFound || mediaDtoFound) return;
-                if (_masterServerFound != null && _mediaDtoFound != null)
-                {
-                    ConnectionInitializationFailled?.Invoke(currentServer.serverUrl);
-                    onlyOneConnection = false;
-                    return;
-                }
-            }
         }
 
         /// <summary>
@@ -227,33 +128,6 @@ namespace umi3d.baseBrowser.connection
 
             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(LauncherPanelScene);
             onlyOneConnection = false;
-        }
-
-        /// <summary>
-        /// Uses the connection data to connect to te server.
-        /// </summary>
-        /// <param name="connectionData"></param>
-        protected void Connect()
-        {
-            try
-            {
-                //succes
-                cdk.collaboration.UMI3DCollaborationClientServer.Connect(mediaDto, (s) => ConnectionFail?.Invoke(s));
-                ConnectionSucces?.Invoke(mediaDto);
-            }
-            catch (System.Exception e)
-            {
-                ConnectionFail?.Invoke(e.Message);
-            }
-        }
-
-        protected static string FormatUrl(string ip, string port)
-        {
-            string url = ip + (string.IsNullOrEmpty(port) ? "" : (":" + port));
-
-            if (!url.StartsWith("http://") && !url.StartsWith("https://"))
-                return "http://" + url;
-            return url;
         }
 
         #endregion

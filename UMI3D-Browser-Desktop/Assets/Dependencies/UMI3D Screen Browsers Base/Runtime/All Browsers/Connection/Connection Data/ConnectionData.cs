@@ -13,17 +13,27 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace umi3d.browserRuntime.connection
 {
-    public class ConnectionToWorldController
+    public class ConnectionData : IConnectionData
     {
-        public void TryGetMediaDTO()
-        {
+        public IWorldData WorldData { get; private set; }
+        public IConnectionStateData ConnectionStateData { get; private set; }
 
+        public ConnectionData(IWorldData worldData, IConnectionStateData connectionStateData) 
+        {
+            this.WorldData = worldData;
+            this.ConnectionStateData = connectionStateData;
+        }
+
+        public bool ContainsStateByType<T>() where T : IConnectionState
+        {
+            throw new NotImplementedException();
         }
     }
 }

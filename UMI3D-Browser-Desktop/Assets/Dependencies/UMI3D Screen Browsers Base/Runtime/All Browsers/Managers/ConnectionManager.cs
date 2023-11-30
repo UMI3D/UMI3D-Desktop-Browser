@@ -27,11 +27,12 @@ namespace umi3d.browserRuntime.managers
         public SerializedAddressableT<UMI3DCollabLoadingParameters> loadingParametersRef;
         public SerializedAddressableT<BaseClientIdentifier> identifierRef;
 
-        public WorldData worldData;
         public AssetFormat assetFormat;
         public ConnectionEvents connectionEvents;
+        public ConnectionData connectionData;
 
         public ConnectionToMasterServer connectionToMasterServer;
+        public ConnectionToWorldController connectionToWorldController;
 
 
         private void Awake()
@@ -39,9 +40,17 @@ namespace umi3d.browserRuntime.managers
             loadingParametersRef.LoadAssetAsync().Completed += LoadingParametersLoaded;
             identifierRef.LoadAssetAsync().Completed += IdentifierLoaded;
             
-            worldData = new();
+            connectionData = new(new WorldData(), new ConnectionStateData());
 
-            //connectionToMasterServer = new(new LaucherOnMasterServer(), worldData, );
+            connectionToMasterServer = new(
+                new LaucherOnMasterServer(), 
+                connectionData.WorldData, 
+                connectionData.ConnectionStateData
+            );
+            connectionToWorldController = new(
+                connectionData.WorldData, 
+                connectionData.ConnectionStateData
+            );
         }
 
         private void Start()

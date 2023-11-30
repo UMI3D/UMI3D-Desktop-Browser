@@ -19,10 +19,12 @@ using System.Collections.Generic;
 
 namespace umi3d.browserRuntime.connection
 {
+    /// <summary>
+    /// Interface that make the link between connection via master server and connection via world controller, ect.
+    /// </summary>
     public interface IConnectionData
     {
-        List<IConnectionState> States { get; set; }
-
-        bool ContainsState(Type type);
+        IWorldData WorldData { get; }
+        IConnectionStateData ConnectionStateData { get; }
     }
 }
