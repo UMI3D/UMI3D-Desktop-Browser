@@ -28,7 +28,7 @@ namespace umi3d.browserRuntime.connection
         {
             this.worldData = worldData;
             this.connectionStateData = connectionStateData;
-            this.mediaDTOWebRequest = new(connectionData);
+            this.mediaDTOWebRequest = new(connectionStateData);
         }
 
         public async Task TryToConnect()

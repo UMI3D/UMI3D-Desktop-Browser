@@ -13,41 +13,27 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using umi3d.baseBrowser.cursor;
 using umi3d.cdk;
 using umi3d.cdk.collaboration;
-using umi3d.common;
 using UnityEngine;
-using umi3d.baseBrowser.cursor;
 
 namespace umi3d.baseBrowser.connection
 {
     public class BaseConnectionProcess : inetum.unityUtils.PersistentSingleBehaviour<BaseConnectionProcess>
     {
-        protected const string LauncherPanelScene = "Connection";
-        protected const string GamePanelScene = "Environment";
-
-        #region Data
-        [HideInInspector]
-        public common.MediaDto mediaDto;
-
-        #endregion
-
         protected override void Awake()
         {
             base.Awake();
 
             //currentConnectionData = preferences.ServerPreferences.GetPreviousConnectionData() ?? new preferences.ServerPreferences.Data();
 
-            
             Debug.Log("TODO : Not force mono speaker mode. For now forced for bluetooth headset.");
         }
 
         void Start()
         {
-
             UMI3DCollaborationClientServer.EnvironmentProgress = () =>
             {
                 var p = new MultiProgress("Join Environment");
@@ -63,8 +49,6 @@ namespace umi3d.baseBrowser.connection
             };
 
             UMI3DCollaborationClientServer.Instance.OnLeavingEnvironment.AddListener(() => LeaveWithoutNotify());
-
-            
         }
 
         #region Launcher
@@ -80,55 +64,40 @@ namespace umi3d.baseBrowser.connection
             LoadedLauncher = null;
         }
 
-        /// <summary>
-        /// Initiates the connection, if a connection is already in process return.
-        /// </summary>
-        public async Task InitConnect(bool saveInfo = false)
-        {
-            if (onlyOneConnection)
-            {
-                Debug.Log("Only one connection at a time");
-                return;
-            }
-            ConnectionInitialized?.Invoke(currentServer.serverUrl);
-            await ConnectWithMasterServerOrMediaDto(saveInfo);
-            while (onlyOneConnection) await UMI3DAsyncManager.Yield();
-        }
 
-        protected void StoreServer()
-        {
-            if (savedServers.Find((server) => server.serverName == currentServer.serverName) == null)
-                savedServers.Add(currentServer);
-            preferences.ServerPreferences.StoreRegisteredServerData(savedServers);
-        }
+        //protected void StoreServer()
+        //{
+        //    if (savedServers.Find((server) => server.serverName == currentServer.serverName) == null)
+        //        savedServers.Add(currentServer);
+        //    preferences.ServerPreferences.StoreRegisteredServerData(savedServers);
+        //}
 
-        /// <summary>
-        /// Store current connection data and Load environment.
-        /// </summary>
-        protected void StoreCurrentConnectionDataAndConnect()
-        {
-            preferences.ServerPreferences.StoreUserData(currentConnectionData);
-            LoadEnvironment();
-        }
+        ///// <summary>
+        ///// Store current connection data and Load environment.
+        ///// </summary>
+        //protected void StoreCurrentConnectionDataAndConnect()
+        //{
+        //    preferences.ServerPreferences.StoreUserData(currentConnectionData);
+        //    LoadEnvironment();
+        //}
 
-        protected async void LoadEnvironment()
-        {
-            var loadAsync = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(GamePanelScene, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+        //protected async void LoadEnvironment()
+        //{
+        //    var loadAsync = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(GamePanelScene, UnityEngine.SceneManagement.LoadSceneMode.Additive);
 
-            while (!loadAsync.isDone || !cdk.collaboration.UMI3DCollaborationClientServer.Exists)
-            {
-                LoadingEnvironment?.Invoke(loadAsync.progress);
-                await UMI3DAsyncManager.Yield();
-            }
+        //    while (!loadAsync.isDone || !cdk.collaboration.UMI3DCollaborationClientServer.Exists)
+        //    {
+        //        LoadingEnvironment?.Invoke(loadAsync.progress);
+        //        await UMI3DAsyncManager.Yield();
+        //    }
 
-            cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => LoadedEnvironment?.Invoke());
+        //    cdk.UMI3DEnvironmentLoader.Instance.onEnvironmentLoaded.AddListener(() => LoadedEnvironment?.Invoke());
 
-            cdk.collaboration.UMI3DCollaborationClientServer.Instance.Clear();
-            Connect();
+        //    cdk.collaboration.UMI3DCollaborationClientServer.Instance.Clear();
+        //    Connect();
 
-            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(LauncherPanelScene);
-            onlyOneConnection = false;
-        }
+        //    UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(LauncherPanelScene);
+        //}
 
         #endregion
 
@@ -233,23 +202,23 @@ namespace umi3d.baseBrowser.connection
 
             EnvironmentLeave?.Invoke();
 
-            LoadLauncher();
+            //LoadLauncher();
         }
 
         public void TryReconnecting() => cdk.collaboration.UMI3DCollaborationClientServer.Reconnect();
 
-        protected async void LoadLauncher()
-        {
-            var loadAsync = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(LauncherPanelScene, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+        //protected async void LoadLauncher()
+        //{
+        //    var loadAsync = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(LauncherPanelScene, UnityEngine.SceneManagement.LoadSceneMode.Additive);
 
-            while (!loadAsync.isDone)
-            {
-                LoadingLauncher?.Invoke(loadAsync.progress);
-                await UMI3DAsyncManager.Yield();
-            }
+        //    while (!loadAsync.isDone)
+        //    {
+        //        LoadingLauncher?.Invoke(loadAsync.progress);
+        //        await UMI3DAsyncManager.Yield();
+        //    }
 
-            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(GamePanelScene);
-        }
+        //    UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(GamePanelScene);
+        //}
 
         #endregion
     }

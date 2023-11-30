@@ -45,10 +45,10 @@ namespace umi3d.baseBrowser.connection
             Launcher.Version = Application.version;
 #endif
             Launcher.Settings.Audio.SetAudio();
-            Launcher.Connect = async (value) => await BaseConnectionProcess.Instance.InitConnect(value);
-            Launcher.CurrentServer = BaseConnectionProcess.Instance.currentServer;
-            Launcher.SavedServers = BaseConnectionProcess.Instance.savedServers;
-            Launcher.CurrentConnectionData = BaseConnectionProcess.Instance.currentConnectionData;
+            //Launcher.Connect = async (value) => await BaseConnectionProcess.Instance.InitConnect(value);
+            //Launcher.CurrentServer = BaseConnectionProcess.Instance.currentServer;
+            //Launcher.SavedServers = BaseConnectionProcess.Instance.savedServers;
+            //Launcher.CurrentConnectionData = BaseConnectionProcess.Instance.currentConnectionData;
             Launcher.InitLibraries();
             Launcher.InitTips();
             Launcher.CurrentScreen = LauncherScreens.Home;
@@ -59,8 +59,8 @@ namespace umi3d.baseBrowser.connection
             m_connectionDialoguebox = new Dialoguebox_C();
             m_connectionDialoguebox.Type = DialogueboxType.Default;
             m_connectionDialoguebox.Size = ElementSize.Small;
-            BaseConnectionProcess.Instance.ConnectionInitialized += ConnectionInitialized;
-            BaseConnectionProcess.Instance.ConnectionInitializationFailled += ConnectionFailled;
+            //BaseConnectionProcess.Instance.ConnectionInitialized += ConnectionInitialized;
+            //BaseConnectionProcess.Instance.ConnectionInitializationFailled += ConnectionFailled;
         }
 
         private void OnDestroy()
