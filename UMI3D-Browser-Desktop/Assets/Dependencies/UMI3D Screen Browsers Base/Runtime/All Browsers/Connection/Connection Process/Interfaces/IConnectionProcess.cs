@@ -13,27 +13,32 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections.Generic;
-using umi3d.baseBrowser.preferences;
+using System.Threading.Tasks;
 
 namespace umi3d.browserRuntime.connection
 {
-    /// <summary>
-    /// Interface to access world stored data.
-    /// </summary>
-    public interface IWorldData
+    public interface IConnectionProcess
     {
         /// <summary>
-        /// Current World
+        /// Try to connect either via master server or via world controller.
         /// </summary>
-        public ServerPreferences.ServerData World { get; set; }
+        /// <returns></returns>
+        Task ConnectToMasterServerOrWorldController();
         /// <summary>
-        /// List of all the worlds.
+        /// Try to connect via world controller.
         /// </summary>
-        public List<ServerPreferences.ServerData> Worlds { get; set; }
+        /// <returns></returns>
+        Task ConnectToWorldController();
         /// <summary>
-        /// List of the favorite worlds.
+        /// Disconnect from everything.
         /// </summary>
-        public List<ServerPreferences.ServerData> FavoriteWorlds { get; set; }
+        /// <returns></returns>
+        Task Disconnect();
+        /// <summary>
+        /// Disconnect from world controller.<br/>
+        /// If the browser was connected to a master it stays connected.
+        /// </summary>
+        /// <returns></returns>
+        Task DisconnectFromWorldController();
     }
 }

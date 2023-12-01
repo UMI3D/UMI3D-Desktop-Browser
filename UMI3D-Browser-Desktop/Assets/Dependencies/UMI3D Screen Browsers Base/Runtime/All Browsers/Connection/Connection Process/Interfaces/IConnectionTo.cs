@@ -19,13 +19,19 @@ using System.Threading.Tasks;
 namespace umi3d.browserRuntime.connection
 {
     /// <summary>
-    /// Interface for classes that have the purpose of connected this browser to something.
+    /// Interface for classes that have the purpose to connecte this browser to something.
     /// </summary>
     public interface IConnectionTo 
     {
-        IWorldData WorldData { get; }
-        IConnectionStateData ConnectionStateData { get; }
-
+        /// <summary>
+        /// Try to connect.
+        /// </summary>
+        /// <returns></returns>
         Task TryToConnect();
+        /// <summary>
+        /// Disconnect if it was connected.
+        /// </summary>
+        /// <returns></returns>
+        Task Disconnect();
     }
 }

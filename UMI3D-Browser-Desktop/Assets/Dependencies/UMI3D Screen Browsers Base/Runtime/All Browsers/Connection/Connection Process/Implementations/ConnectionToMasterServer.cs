@@ -21,26 +21,26 @@ namespace umi3d.browserRuntime.connection
     public class ConnectionToMasterServer : IConnectionTo
     {
         LaucherOnMasterServer masterServer;
-        public IWorldData WorldData { get; set; }
-        public IConnectionStateData ConnectionStateData { get; set; }
+        IWorldData worldData;
+        IConnectionStateData connectionStateData;
 
         public ConnectionToMasterServer(LaucherOnMasterServer masterServer, IWorldData worldData, IConnectionStateData connectionStateData)
         { 
             this.masterServer = masterServer;
-            this.WorldData = worldData;
-            this.ConnectionStateData = connectionStateData;
+            this.worldData = worldData;
+            this.connectionStateData = connectionStateData;
         }
 
         public Task TryToConnect()
         {
-            ConnectionStateData.Add(new MasterServerStartedConnectionState());
+            connectionStateData.Add(new MasterServerStartedConnectionState());
             masterServer.ConnectToMasterServer
             (
                 callback: () =>
                 {
-                    if (ConnectionStateData.ContainsStateByType<MediaDTOFoundConnectionState>())
+                    if (connectionStateData.ContainsStateByType<MediaDTOFoundConnectionState>())
                     {
-                        ConnectionStateData.Add(new MasterServerStoppedConnectionState());
+                        connectionStateData.Add(new MasterServerStoppedConnectionState());
                         return;
                     }
 
@@ -48,35 +48,40 @@ namespace umi3d.browserRuntime.connection
                     (
                         UIcallback: (name, icon) =>
                         {
-                            if (ConnectionStateData.ContainsStateByType<MediaDTOFoundConnectionState>())
+                            if (connectionStateData.ContainsStateByType<MediaDTOFoundConnectionState>())
                             {
-                                ConnectionStateData.Add(new MasterServerStoppedConnectionState());
+                                connectionStateData.Add(new MasterServerStoppedConnectionState());
                                 return;
                             }
 
-                            WorldData.World = new();
-                            WorldData.World.serverName = name;
-                            WorldData.World.serverIcon = icon;
+                            worldData.World = new();
+                            worldData.World.serverName = name;
+                            worldData.World.serverIcon = icon;
 
                             //preferences.ServerPreferences.StoreUserData(currentServer);
                             //if (saveInfo) StoreServer();
                         },
                         failed: () =>
                         {
-                            ConnectionStateData.Add(new MasterServerFailedConnectionState());
+                            connectionStateData.Add(new MasterServerFailedConnectionState());
                         }
                     );
 
-                    ConnectionStateData.Add(new MasterServerSessionConnectionState());
+                    connectionStateData.Add(new MasterServerSessionConnectionState());
                     //DisplaySessions?.Invoke();
                 },
-                WorldData.World.serverUrl,
+                worldData.World.serverUrl,
                 failed: () =>
                 {
-                    ConnectionStateData.Add(new MasterServerFailedConnectionState());
+                    connectionStateData.Add(new MasterServerFailedConnectionState());
                 }
             );
             return Task.CompletedTask;
+        }
+
+        public Task Disconnect()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

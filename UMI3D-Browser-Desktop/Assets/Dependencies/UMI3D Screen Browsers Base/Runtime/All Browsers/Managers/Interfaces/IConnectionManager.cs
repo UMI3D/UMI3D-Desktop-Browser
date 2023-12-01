@@ -13,16 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Threading.Tasks;
 
-namespace umi3d.browserRuntime.connection
+using umi3d.browserRuntime.connection;
+
+namespace umi3d.browserRuntime.managers
 {
-    public interface IConnectionProcess
+    public interface IConnectionManager 
     {
-        IConnectionTo ConnectionToMasterServer { get; }
-        IConnectionTo ConnectionToWorldController { get; }
-
-        Task ConnectToMasterServerOrWorldController();
-        Task ConnectToWorldController();
+        IConnectionProcess ConnectionProcess { get; }
     }
 }

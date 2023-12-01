@@ -16,15 +16,14 @@ limitations under the License.
 
 using System;
 using System.Threading.Tasks;
-using UnityEngine;
 
 namespace umi3d.browserRuntime.connection
 {
     public class ConnectionProcess : IConnectionProcess
     {
-        public IConnectionTo ConnectionToMasterServer => throw new NotImplementedException();
+        IConnectionTo connectionToMasterServer;
 
-        public IConnectionTo ConnectionToWorldController => throw new NotImplementedException();
+        IConnectionTo connectionToWorldController;
 
         public Task ConnectToMasterServerOrWorldController()
         {
@@ -32,6 +31,16 @@ namespace umi3d.browserRuntime.connection
         }
 
         public Task ConnectToWorldController()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Disconnect()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DisconnectFromWorldController()
         {
             throw new NotImplementedException();
         }

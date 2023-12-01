@@ -29,7 +29,9 @@ namespace umi3d.browserRuntime.managers
 
         public AssetFormat assetFormat;
         public ConnectionEvents connectionEvents;
-        public ConnectionData connectionData;
+
+        public WorldData worldData;
+        public ConnectionStateData connectionStateData;
 
         public ConnectionToMasterServer connectionToMasterServer;
         public ConnectionToWorldController connectionToWorldController;
@@ -38,17 +40,18 @@ namespace umi3d.browserRuntime.managers
         {
             loadingParametersRef.LoadAssetAsync().Completed += LoadingParametersLoaded;
             identifierRef.LoadAssetAsync().Completed += IdentifierLoaded;
-            
-            connectionData = new(new WorldData(), new ConnectionStateData());
+
+            worldData = new WorldData();
+            connectionStateData = new ConnectionStateData();
 
             connectionToMasterServer = new(
-                new LaucherOnMasterServer(), 
-                connectionData.WorldData, 
-                connectionData.ConnectionStateData
+                new LaucherOnMasterServer(),
+                worldData,
+                connectionStateData
             );
             connectionToWorldController = new(
-                connectionData.WorldData, 
-                connectionData.ConnectionStateData
+                worldData,
+                connectionStateData
             );
         }
 

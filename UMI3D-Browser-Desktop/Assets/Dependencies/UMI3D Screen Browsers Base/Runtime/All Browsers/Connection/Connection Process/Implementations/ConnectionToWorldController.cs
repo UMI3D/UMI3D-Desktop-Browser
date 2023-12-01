@@ -20,20 +20,20 @@ namespace umi3d.browserRuntime.connection
 {
     public class ConnectionToWorldController : IConnectionTo
     {
-        public IWorldData WorldData { get; set; }
-        public IConnectionStateData ConnectionStateData { get; set; }
-        public MediaDTOWebRequest mediaDTOWebRequest;
+        IWorldData worldData;
+        IConnectionStateData connectionStateData;
+        MediaDTOWebRequest mediaDTOWebRequest;
 
         public ConnectionToWorldController(IWorldData worldData, IConnectionStateData connectionStateData)
         {
-            this.WorldData = worldData;
-            this.ConnectionStateData = connectionStateData;
+            this.worldData = worldData;
+            this.connectionStateData = connectionStateData;
             this.mediaDTOWebRequest = new(connectionStateData);
         }
 
         public async Task TryToConnect()
         {
-            await mediaDTOWebRequest.RequestMediaDto(WorldData.World.serverUrl);
+            await mediaDTOWebRequest.RequestMediaDto(worldData.World.serverUrl);
 
             if (mediaDTOWebRequest.MediaDTO != null)
             {
@@ -42,6 +42,11 @@ namespace umi3d.browserRuntime.connection
                     //ConnectionFail?.Invoke(s);
                 });
             }
+        }
+
+        public Task Disconnect()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
