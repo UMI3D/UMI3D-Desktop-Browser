@@ -170,7 +170,8 @@ namespace BrowserDesktop
             try
             {
                 browser.browserClient.Resize(new VoltstroStudios.UnityWebBrowser.Shared.Resolution((uint)size.x, (uint)size.y));
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Debug.LogError("Impossible to resize WebView.");
                 Debug.LogException(ex);
@@ -188,7 +189,6 @@ namespace BrowserDesktop
 
             try
             {
-                Debug.Log("URL " + url);
                 browser.browserClient.LoadUrl(url);
             }
             catch (Exception ex)
