@@ -14,20 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using inetum.unityUtils;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace umi3d.browserRuntime.ui
 {
-    public interface IPanelStateData
+    public interface IPanelViewModel
     {
-        NotifyingVariable<IPanelState> CurrentPanel { get; }
-        NotifyingList<IPanelState> States { get; }
-
-        IPanelState this[int index] { get; }
-
-        bool Add<T>(T state) where T : IPanelState;
-        (IPanelState oldLastState, IPanelState newLastState) Pop();
+        NotifyingVariable<string> Title { get; }
+        IPanelStateData StateData { get; }
     }
 }

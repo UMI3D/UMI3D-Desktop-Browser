@@ -18,22 +18,22 @@ using umi3d.cdk.collaboration;
 
 namespace umi3d.browserRuntime.connection
 {
-    public class ConnectionToWorldController
+    public class ConnectionToWorldController : IConnectionTo
     {
-        public IWorldData worldData;
-        public IConnectionStateData connectionStateData;
+        public IWorldData WorldData { get; set; }
+        public IConnectionStateData ConnectionStateData { get; set; }
         public MediaDTOWebRequest mediaDTOWebRequest;
 
         public ConnectionToWorldController(IWorldData worldData, IConnectionStateData connectionStateData)
         {
-            this.worldData = worldData;
-            this.connectionStateData = connectionStateData;
+            this.WorldData = worldData;
+            this.ConnectionStateData = connectionStateData;
             this.mediaDTOWebRequest = new(connectionStateData);
         }
 
         public async Task TryToConnect()
         {
-            await mediaDTOWebRequest.RequestMediaDto(worldData.World.serverUrl);
+            await mediaDTOWebRequest.RequestMediaDto(WorldData.World.serverUrl);
 
             if (mediaDTOWebRequest.MediaDTO != null)
             {

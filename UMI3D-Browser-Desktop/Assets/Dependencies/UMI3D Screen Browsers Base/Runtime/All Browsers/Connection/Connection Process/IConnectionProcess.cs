@@ -13,21 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using inetum.unityUtils;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Threading.Tasks;
 
-namespace umi3d.browserRuntime.ui
+namespace umi3d.browserRuntime.connection
 {
-    public interface IPanelStateData
+    public interface IConnectionProcess
     {
-        NotifyingVariable<IPanelState> CurrentPanel { get; }
-        NotifyingList<IPanelState> States { get; }
+        IConnectionTo ConnectionToMasterServer { get; }
+        IConnectionTo ConnectionToWorldController { get; }
 
-        IPanelState this[int index] { get; }
-
-        bool Add<T>(T state) where T : IPanelState;
-        (IPanelState oldLastState, IPanelState newLastState) Pop();
+        Task ConnectToMasterServerOrWorldController();
+        Task ConnectToWorldController();
     }
 }

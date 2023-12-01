@@ -30,12 +30,37 @@ namespace umi3d.browserRuntime.ui
             }
         }
 
-        public NotifyingVariable<IPanelState> currentPanel { get; }
+        public NotifyingVariable<IPanelState> CurrentPanel { get; }
         public NotifyingList<IPanelState> States { get; }
 
-        public bool Add(IPanelState state)
+        public PanelStateData()
         {
-            throw new System.NotImplementedException();
+            CurrentPanel = new();
+            States = new();
+        }
+
+        public bool Add<T>(T state)
+            where T : IPanelState
+        {
+            if (States.Count == 0)
+            {
+                States.Add(state);
+                CurrentPanel.value = state;
+                return true;
+            }
+            else
+            {
+                if (States[States.Count - 1] is T)
+                {
+                    return false;
+                }
+                else
+                {
+                    States.Add(state);
+                    CurrentPanel.value = state;
+                    return true;
+                }
+            }
         }
 
         public (IPanelState oldLastState, IPanelState newLastState) Pop()

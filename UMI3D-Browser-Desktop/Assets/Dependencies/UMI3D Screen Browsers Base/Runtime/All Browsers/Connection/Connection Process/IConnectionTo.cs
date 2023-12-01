@@ -13,21 +13,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using inetum.unityUtils;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace umi3d.browserRuntime.ui
+using System.Threading.Tasks;
+
+namespace umi3d.browserRuntime.connection
 {
-    public interface IPanelStateData
+    /// <summary>
+    /// Interface for classes that have the purpose of connected this browser to something.
+    /// </summary>
+    public interface IConnectionTo 
     {
-        NotifyingVariable<IPanelState> CurrentPanel { get; }
-        NotifyingList<IPanelState> States { get; }
+        IWorldData WorldData { get; }
+        IConnectionStateData ConnectionStateData { get; }
 
-        IPanelState this[int index] { get; }
-
-        bool Add<T>(T state) where T : IPanelState;
-        (IPanelState oldLastState, IPanelState newLastState) Pop();
+        Task TryToConnect();
     }
 }

@@ -20,9 +20,9 @@ using UnityEngine;
 
 namespace umi3d.browserRuntime.ui
 {
-    public class Panel_VM : MonoBehaviour
+    public class Panel_VM : ScriptableObject, IPanelViewModel
     {
-        public NotifyingVariable<string> title = new();
-        //public 
+        public NotifyingVariable<string> Title { get; private set; }
+        public IPanelStateData StateData { get; private set; }
     }
 }

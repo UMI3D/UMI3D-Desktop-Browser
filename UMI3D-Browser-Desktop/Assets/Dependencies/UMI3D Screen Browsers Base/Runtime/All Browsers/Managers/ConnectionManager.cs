@@ -34,7 +34,6 @@ namespace umi3d.browserRuntime.managers
         public ConnectionToMasterServer connectionToMasterServer;
         public ConnectionToWorldController connectionToWorldController;
 
-
         private void Awake()
         {
             loadingParametersRef.LoadAssetAsync().Completed += LoadingParametersLoaded;
@@ -53,11 +52,6 @@ namespace umi3d.browserRuntime.managers
             );
         }
 
-        private void Start()
-        {
-            StartCoroutine(connectionEvents.SetManagerEvent());
-        }
-
         private void LoadingParametersLoaded(AsyncOperationHandle<UMI3DCollabLoadingParameters> handler)
         {
             if (handler.IsDone && handler.Status == AsyncOperationStatus.Succeeded)
@@ -71,6 +65,7 @@ namespace umi3d.browserRuntime.managers
             if (handler.IsDone && handler.Status == AsyncOperationStatus.Succeeded)
             {
                 connectionEvents = new(handler.Result);
+                StartCoroutine(connectionEvents.SetManagerEvent());
             }
         }
     }
