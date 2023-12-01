@@ -1,0 +1,9 @@
+{
+    "name": "Connection",
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ]
+}

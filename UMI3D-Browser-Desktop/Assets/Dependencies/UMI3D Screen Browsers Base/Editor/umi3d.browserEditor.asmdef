@@ -1,5 +1,5 @@
 {
-    "name": "umi3d.browser.editor",
+    "name": "umi3d.browserEditor",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [
