@@ -52,10 +52,12 @@ namespace umi3d.browserRuntime.connection
             {
                 if (states[states.Count - 1] is T)
                 {
+                    UnityEngine.Debug.Log($"message");
                     return false;
                 }
                 else
                 {
+                    UnityEngine.Debug.Log($"pomme");
                     states.Add(data);
                     return true;
                 }
