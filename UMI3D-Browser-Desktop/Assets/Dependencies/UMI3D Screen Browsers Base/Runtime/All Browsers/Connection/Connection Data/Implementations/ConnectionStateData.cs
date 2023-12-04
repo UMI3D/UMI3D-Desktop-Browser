@@ -13,13 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using System.Collections.Generic;
 
 namespace umi3d.browserRuntime.connection
 {
     public class ConnectionStateData : IConnectionStateData
     {
-        List<IConnectionState> states = new();
+        public event Action StateAdded;
+        public event Action Cleared;
 
         public IConnectionState this[int index]
         {
@@ -37,9 +39,32 @@ namespace umi3d.browserRuntime.connection
             }
         }
 
-        public void Add(IConnectionState data)
+        List<IConnectionState> states = new();
+
+        public bool Add<T>(T data) where T : IConnectionState
         {
-            states.Add(data);
+            if (states.Count == 0)
+            {
+                states.Add(data);
+                return true;
+            }
+            else
+            {
+                if (states[states.Count - 1] is T)
+                {
+                    return false;
+                }
+                else
+                {
+                    states.Add(data);
+                    return true;
+                }
+            }
+        }
+
+        public void Clear()
+        {
+            states.Clear();
         }
 
         public bool ContainsStateByType<T>() where T : IConnectionState

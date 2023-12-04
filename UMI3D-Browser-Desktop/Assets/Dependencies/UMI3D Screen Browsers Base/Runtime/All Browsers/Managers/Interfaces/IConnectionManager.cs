@@ -13,18 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections.Generic;
 
-namespace umi3d.browserRuntime.connection
+using umi3d.browserRuntime.connection;
+
+namespace umi3d.browserRuntime.managers
 {
-    public interface IConnectionStateData
+    public interface IConnectionManager 
     {
-        IEnumerator<IConnectionState> States { get; }
-
-        IConnectionState this[int index] { get; }
-
-        bool ContainsStateByType<T>() where T : IConnectionState;
-
-        void Add(IConnectionState data);
+        IConnectionProcess ConnectionProcess { get; }
     }
 }

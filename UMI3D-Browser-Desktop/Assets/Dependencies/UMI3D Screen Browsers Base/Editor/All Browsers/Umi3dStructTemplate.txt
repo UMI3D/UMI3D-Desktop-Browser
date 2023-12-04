@@ -15,16 +15,11 @@ limitations under the License.
 */
 
 using System;
-using System.Collections.Generic;
+using UnityEngine;
 
-namespace umi3d.browserRuntime.connection
+namespace umi3d
 {
-    /// <summary>
-    /// Interface that make the link between connection via master server and connection via world controller, ect.
-    /// </summary>
-    public interface IConnectionData
+    public struct #SCRIPTNAME# 
     {
-        IWorldData WorldData { get; }
-        IConnectionStateData ConnectionStateData { get; }
     }
 }

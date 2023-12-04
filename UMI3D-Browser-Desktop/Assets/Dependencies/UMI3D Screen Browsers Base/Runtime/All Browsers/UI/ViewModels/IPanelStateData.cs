@@ -13,27 +13,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System;
+using inetum.unityUtils;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace umi3d.browserRuntime.connection
+namespace umi3d.browserRuntime.ui
 {
-    public class ConnectionData : IConnectionData
+    public interface IPanelStateData
     {
-        public IWorldData WorldData { get; private set; }
-        public IConnectionStateData ConnectionStateData { get; private set; }
+        NotifyingVariable<IPanelState> CurrentPanel { get; }
+        NotifyingList<IPanelState> States { get; }
 
-        public ConnectionData(IWorldData worldData, IConnectionStateData connectionStateData) 
-        {
-            this.WorldData = worldData;
-            this.ConnectionStateData = connectionStateData;
-        }
+        IPanelState this[int index] { get; }
 
-        public bool ContainsStateByType<T>() where T : IConnectionState
-        {
-            throw new NotImplementedException();
-        }
+        bool Add<T>(T state) where T : IPanelState;
+        (IPanelState oldLastState, IPanelState newLastState) Pop();
     }
 }

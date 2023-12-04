@@ -53,7 +53,7 @@ namespace umi3d.baseBrowser.connection
             Launcher.InitTips();
             Launcher.CurrentScreen = LauncherScreens.Home;
 
-            BaseConnectionProcess.Instance.ResetLauncherEvent();
+            //BaseConnectionProcess.Instance.ResetLauncherEvent();
             //BaseConnectionProcess.Instance.DisplaySessions += () => Launcher.AddScreenToStack = LauncherScreens.Session;
 
             m_connectionDialoguebox = new Dialoguebox_C();

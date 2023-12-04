@@ -18,31 +18,22 @@ using umi3d.baseBrowser.preferences;
 
 namespace umi3d.browserRuntime.connection
 {
+    /// <summary>
+    /// Interface to access world stored data.
+    /// </summary>
     public interface IWorldData
     {
         /// <summary>
         /// Current World
         /// </summary>
-        public ServerPreferences.ServerData World
-        {
-            get;
-            set;
-        }
+        public ServerPreferences.ServerData World { get; set; }
         /// <summary>
         /// List of all the worlds.
         /// </summary>
-        public List<ServerPreferences.ServerData> Worlds
-        {
-            get;
-            set;
-        }
+        public List<ServerPreferences.ServerData> Worlds { get; set; }
         /// <summary>
         /// List of the favorite worlds.
         /// </summary>
-        public List<ServerPreferences.ServerData> FavoriteWorlds
-        {
-            get;
-            set;
-        }
+        public List<ServerPreferences.ServerData> FavoriteWorlds { get; set; }
     }
 }

@@ -18,11 +18,11 @@ using umi3d.cdk.collaboration;
 
 namespace umi3d.browserRuntime.connection
 {
-    public class ConnectionToWorldController
+    public class ConnectionToWorldController : IConnectionTo
     {
-        public IWorldData worldData;
-        public IConnectionStateData connectionStateData;
-        public MediaDTOWebRequest mediaDTOWebRequest;
+        IWorldData worldData;
+        IConnectionStateData connectionStateData;
+        MediaDTOWebRequest mediaDTOWebRequest;
 
         public ConnectionToWorldController(IWorldData worldData, IConnectionStateData connectionStateData)
         {
@@ -42,6 +42,11 @@ namespace umi3d.browserRuntime.connection
                     //ConnectionFail?.Invoke(s);
                 });
             }
+        }
+
+        public Task Disconnect()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

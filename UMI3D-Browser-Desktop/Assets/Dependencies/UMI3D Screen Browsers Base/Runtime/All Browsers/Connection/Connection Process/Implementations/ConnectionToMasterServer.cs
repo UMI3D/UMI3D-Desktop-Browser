@@ -13,11 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System.Threading.Tasks;
 using umi3d.cdk.collaboration;
 
 namespace umi3d.browserRuntime.connection
 {
-    public class ConnectionToMasterServer
+    public class ConnectionToMasterServer : IConnectionTo
     {
         LaucherOnMasterServer masterServer;
         IWorldData worldData;
@@ -30,7 +31,7 @@ namespace umi3d.browserRuntime.connection
             this.connectionStateData = connectionStateData;
         }
 
-        public void TryToConnect()
+        public Task TryToConnect()
         {
             connectionStateData.Add(new MasterServerStartedConnectionState());
             masterServer.ConnectToMasterServer
@@ -75,6 +76,12 @@ namespace umi3d.browserRuntime.connection
                     connectionStateData.Add(new MasterServerFailedConnectionState());
                 }
             );
+            return Task.CompletedTask;
+        }
+
+        public Task Disconnect()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
