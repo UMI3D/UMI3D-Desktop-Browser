@@ -675,7 +675,7 @@ namespace umi3d.cdk
         public virtual async Task ReadUMI3DExtension(ulong environmentId, GlTFEnvironmentDto dto, GameObject node)
         {
             UMI3DEnvironmentDto extension = dto?.extensions?.umi3d;
-            if (extension != null)
+            if (extension != null && environmentId == 0)
             {
                 if (extension.defaultMaterial != null && extension.defaultMaterial.variants != null && extension.defaultMaterial.variants.Count > 0)
                 {
