@@ -23,7 +23,7 @@ MonoBehaviour:
   MaxJumpHeight: 1
   MinJumpHeight: 0.3
   squatSpeed: 0.2
-  squatHeight: 0
+  squatHeight: -0.4
   standHeight: 0
   squatTorsoAngle: 30
   flyingSpeed: 5
