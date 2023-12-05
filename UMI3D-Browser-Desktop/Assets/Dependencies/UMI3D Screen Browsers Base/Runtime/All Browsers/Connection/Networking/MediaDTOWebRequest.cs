@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System.Security.Policy;
 using System.Threading.Tasks;
 using umi3d.common;
 using UnityEngine.Networking;
@@ -24,22 +25,22 @@ namespace umi3d.browserRuntime.connection
         public IConnectionStateData connectionStateData;
         public int maxCount;
 
-        public MediaDto MediaDTO { get; set; }
-
         public MediaDTOWebRequest(IConnectionStateData connectionStateData, int maxCount = 3)
         {
             this.connectionStateData = connectionStateData;
             this.maxCount = maxCount;
         }
 
-        public async Task RequestMediaDto(string url)
+        public IRequestHandler<MediaDto> RequestMediaDto(string url)
         {
             if (!url.EndsWith(UMI3DNetworkingKeys.media))
             {
                 UnityEngine.Debug.LogError($"url format does not end with {UMI3DNetworkingKeys.media}");
+                return null;
             }
 
-            await TryRequest(url, 0);
+            //await TryRequest(url, 0);
+            return new RequestedHandler<MediaDto>();
         }
 
         bool HasWWWError(UnityWebRequest www)
@@ -51,7 +52,7 @@ namespace umi3d.browserRuntime.connection
 #endif
         }
 
-        async Task TryRequest(string url, int count)
+        async Task<MediaDto> TryRequest(string url, int count)
         {
             if (count >= maxCount)
             {
@@ -67,11 +68,11 @@ namespace umi3d.browserRuntime.connection
                     await UMI3DAsyncManager.Yield();
                 }
 
-                if (connectionStateData.ContainsStateByType<MasterServerSessionConnectionState>())
-                {
-                    connectionStateData.Add(new MediaDTOStoppedConnectionState());
-                    return;
-                }
+                //if (connectionStateData.ContainsStateByType<MasterServerSessionConnectionState>())
+                //{
+                //    connectionStateData.Add(new MediaDTOStoppedConnectionState());
+                //    return;
+                //}
 
                 if (HasWWWError(www))
                 {
@@ -85,7 +86,41 @@ namespace umi3d.browserRuntime.connection
                     }
 
                     string json = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
-                    MediaDTO = UMI3DDtoSerializer.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None);
+                    //MediaDTO = UMI3DDtoSerializer.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None);
+                }
+            }
+        }
+
+        async Task Request(string url)
+        {
+            using (UnityWebRequest www = UnityWebRequest.Get(url))
+            {
+                UnityWebRequestAsyncOperation operation = www.SendWebRequest();
+                while (!operation.isDone)
+                {
+                    await UMI3DAsyncManager.Yield();
+                }
+
+                //if (connectionStateData.ContainsStateByType<MasterServerSessionConnectionState>())
+                //{
+                //    connectionStateData.Add(new MediaDTOStoppedConnectionState());
+                //    return;
+                //}
+
+
+                if (HasWWWError(www))
+                {
+                    await TryRequest(url, count++);
+                }
+                else
+                {
+                    if (www.downloadHandler.data == null)
+                    {
+                        return;
+                    }
+
+                    string json = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
+                    //MediaDTO = UMI3DDtoSerializer.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None);
                 }
             }
         }

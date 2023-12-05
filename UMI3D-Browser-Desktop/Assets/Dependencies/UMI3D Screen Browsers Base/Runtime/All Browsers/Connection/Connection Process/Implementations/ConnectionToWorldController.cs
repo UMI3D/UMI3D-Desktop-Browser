@@ -35,13 +35,13 @@ namespace umi3d.browserRuntime.connection
         {
             await mediaDTOWebRequest.RequestMediaDto(worldData.World.serverUrl);
 
-            if (mediaDTOWebRequest.MediaDTO != null)
-            {
-                UMI3DCollaborationClientServer.Connect(mediaDTOWebRequest.MediaDTO, s =>
-                {
-                    //ConnectionFail?.Invoke(s);
-                });
-            }
+            //if (mediaDTOWebRequest.MediaDTO != null)
+            //{
+            //    UMI3DCollaborationClientServer.Connect(mediaDTOWebRequest.MediaDTO, s =>
+            //    {
+            //        //ConnectionFail?.Invoke(s);
+            //    });
+            //}
         }
 
         public Task Disconnect()

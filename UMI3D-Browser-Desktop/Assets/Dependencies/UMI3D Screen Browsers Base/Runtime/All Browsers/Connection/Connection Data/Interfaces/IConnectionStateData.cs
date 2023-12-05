@@ -26,7 +26,7 @@ namespace umi3d.browserRuntime.connection
         /// <summary>
         /// Event raised when a connection state has been added;
         /// </summary>
-        event Action StateAdded;
+        event Action<IConnectionState> StateAdded;
         /// <summary>
         /// Event raised when the stack has been cleared.
         /// </summary>
@@ -37,19 +37,18 @@ namespace umi3d.browserRuntime.connection
         IConnectionState this[int index] { get; }
 
         /// <summary>
-        /// Return true if a <see cref="IConnectionState"/> of type <typeparamref name="T"/> has already been added to the stack.
+        /// Return true if the state whose Guid is <paramref name="id"/> is present in the collection.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
         /// <returns></returns>
-        bool ContainsStateByType<T>() where T : IConnectionState;
-
+        bool Contains(Guid id);
         /// <summary>
         /// Add a <see cref="IConnectionState"/> to the stack. <br/>
         /// Return true if the item has been added.
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        bool Add<T>(T data) where T : IConnectionState;
+        bool Add(IConnectionState data, Guid id);
         /// <summary>
         /// Clear the stack.
         /// </summary>

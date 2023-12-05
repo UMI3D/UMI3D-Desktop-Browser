@@ -14,25 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using inetum.unityUtils;
 using System;
 
-namespace umi3d.browserRuntime.connection
+namespace inetum.unityUtils
 {
-    public struct MasterServerStartedConnectionState : ISmartEnumeration, IConnectionState
+    public interface ISmartEnumeration
     {
-        public Guid Id
-        {
-            get
-            {
-                return id;
-            }
-        }
-        static Guid id;
-
-        static MasterServerStartedConnectionState()
-        {
-            id = Guid.NewGuid();
-        }
+        /// <summary>
+        /// Unique identifier.
+        /// </summary>
+        Guid Id { get; }
     }
 }
