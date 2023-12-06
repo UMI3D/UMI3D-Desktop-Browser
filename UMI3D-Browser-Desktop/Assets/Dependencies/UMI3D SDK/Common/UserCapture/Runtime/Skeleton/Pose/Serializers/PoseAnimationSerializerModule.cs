@@ -48,13 +48,15 @@ namespace umi3d.common.userCapture.pose
                     {
                         readable = UMI3DSerializer.TryRead(container, out ulong id);
                         readable &= UMI3DSerializer.TryRead(container, out PoseDto pose);
+                        readable &= UMI3DSerializer.TryRead(container, out bool isAnchored);
 
                         if (readable)
                         {
-                            PoseClipDto poseDto = new ()
+                            PoseClipDto poseDto = new()
                             {
                                 id = id,
-                                pose = pose
+                                pose = pose,
+                                isAnchored = isAnchored
                             };
 
                             result = (T)Convert.ChangeType(poseDto, typeof(PoseClipDto));
@@ -76,7 +78,7 @@ namespace umi3d.common.userCapture.pose
 
                         if (readable)
                         {
-                            PoseAnimatorDto poseOverriderDto = new ()
+                            PoseAnimatorDto poseOverriderDto = new()
                             {
                                 id = id,
                                 poseClipId = poseId,
@@ -164,7 +166,8 @@ namespace umi3d.common.userCapture.pose
             {
                 case PoseClipDto poseDto:
                     bytable = UMI3DSerializer.Write(poseDto.id)
-                        + UMI3DSerializer.Write(poseDto.pose);
+                        + UMI3DSerializer.Write(poseDto.pose)
+                        + UMI3DSerializer.Write(poseDto.isAnchored);
                     break;
 
                 case PoseAnimatorDto poseOverriderDto:

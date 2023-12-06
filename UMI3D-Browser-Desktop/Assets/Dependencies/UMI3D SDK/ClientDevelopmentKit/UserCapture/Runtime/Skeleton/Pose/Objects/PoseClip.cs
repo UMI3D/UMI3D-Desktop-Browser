@@ -43,6 +43,11 @@ namespace umi3d.cdk.userCapture.pose
         public List<BoneDto> Bones => dto.pose.bones;
 
         /// <summary>
+        /// See <see cref="PoseClipDto.isAnchored"/>.
+        /// </summary>
+        public bool IsAnchored => dto.isAnchored;
+
+        /// <summary>
         /// Description of the pose animation.
         /// </summary>
         public PoseDto Pose => dto.pose;

@@ -65,10 +65,20 @@ namespace umi3d.cdk.userCapture.pose
         /// <inheritdoc/>
         public void PlayPoseClip(PoseClip poseClip)
         {
+            UnityEngine.Debug.Log("<color=cyan>[SNAP] PLAY CLIP.</color>");
+
             if (poseClip == null)
                 throw new System.ArgumentNullException(nameof(poseClip));
 
             skeletonManager.PersonalSkeleton.PoseSubskeleton.StartPose(poseClip);
+
+            UnityEngine.Debug.Log("<color=cyan>[SNAP] "+ poseClip.IsAnchored +".</color>");
+
+            if (poseClip.IsAnchored)
+            {
+                UnityEngine.Debug.Log("<color=cyan>[SNAP] CLIP ANCHORED.</color>");
+                skeletonManager.PersonalSkeleton.TrackedSubskeleton.EmulateTracker(poseClip.Anchor);
+            }
         }
 
         /// <inheritdoc/>
@@ -78,6 +88,9 @@ namespace umi3d.cdk.userCapture.pose
                 throw new System.ArgumentNullException(nameof(poseClip));
 
             skeletonManager.PersonalSkeleton.PoseSubskeleton.StopPose(poseClip);
+
+            if (poseClip.IsAnchored)
+                skeletonManager.PersonalSkeleton.TrackedSubskeleton.StopTrackerEmulation(poseClip.Anchor);
         }
 
         /// <inheritdoc/>

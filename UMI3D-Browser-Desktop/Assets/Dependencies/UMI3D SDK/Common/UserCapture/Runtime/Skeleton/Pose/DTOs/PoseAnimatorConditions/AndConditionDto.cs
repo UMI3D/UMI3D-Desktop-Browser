@@ -14,23 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d.common.userCapture.description;
-
 namespace umi3d.common.userCapture.pose
 {
     /// <summary>
-    /// A pose animation to apply to a skeleton.
+    /// Condition true when both of the nested conditions are true.
     /// </summary>
-    public class PoseClipDto : AbstractEntityDto, IEntity
+    public class AndConditionDto : AbstractPoseConditionDto
     {
-        /// <summary>
-        /// Pose description for the animation.
-        /// </summary>
-        public PoseDto pose { get; set; }
+        public AbstractPoseConditionDto ConditionA { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool isAnchored { get; set; }
+        public AbstractPoseConditionDto ConditionB { get; set; }
     }
 }

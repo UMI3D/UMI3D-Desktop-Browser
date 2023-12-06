@@ -1,5 +1,5 @@
-﻿/*
-Copyright 2019 - 2023 Inetum
+/*
+Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,23 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using umi3d.common.userCapture.description;
+using inetum.unityUtils;
+using UnityEngine;
 
-namespace umi3d.common.userCapture.pose
+namespace umi3d.cdk.userCapture.tracking
 {
-    /// <summary>
-    /// A pose animation to apply to a skeleton.
-    /// </summary>
-    public class PoseClipDto : AbstractEntityDto, IEntity
+    public interface ISimulatedTracker
     {
-        /// <summary>
-        /// Pose description for the animation.
-        /// </summary>
-        public PoseDto pose { get; set; }
+        uint Bonetype { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool isAnchored { get; set; }
+        Vector3 PositionOffset { get; }
+
+        Quaternion RotationOffset { get; }
+
+        void SimulatePosition();
     }
 }

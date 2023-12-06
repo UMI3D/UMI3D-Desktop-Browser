@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,34 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using System.Collections.Generic;
-using umi3d.cdk.userCapture.tracking;
-using umi3d.common.userCapture.tracking;
-using UnityEngine;
-
-namespace umi3d.cdk.userCapture
+namespace umi3d.common.userCapture.pose
 {
-    public interface IPersonalSkeleton : ISkeleton
+    /// <summary>
+    /// 
+    /// </summary>
+    [System.Serializable]
+    public enum PoseAnchoringType
     {
-        IDictionary<uint, float> BonesAsyncFPS { get; }
-
-        Transform Transform { get; }
+        /// <summary>
+        /// 
+        /// </summary>
+        Node,
 
         /// <summary>
-        /// Size of the skeleton.
+        /// 
         /// </summary>
-        Vector3 worldSize { get; }
+        Bone,
 
         /// <summary>
-        /// Skeleton Initialization.
+        /// 
         /// </summary>
-        public void Init();
-
-        /// <summary>
-        /// Write a tracking frame from all <see cref="IWritableSubskeleton"/>.
-        /// </summary>
-        /// <param name="option"></param>
-        /// <returns></returns>
-        UserTrackingFrameDto GetFrame(TrackingOption option);
+        Floor
     }
 }
