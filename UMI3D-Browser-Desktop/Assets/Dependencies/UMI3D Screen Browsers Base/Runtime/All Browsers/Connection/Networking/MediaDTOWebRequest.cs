@@ -16,6 +16,7 @@ limitations under the License.
 using System.Security.Policy;
 using System.Threading.Tasks;
 using umi3d.common;
+using UnityEngine;
 using UnityEngine.Networking;
 
 namespace umi3d.browserRuntime.connection
@@ -31,7 +32,7 @@ namespace umi3d.browserRuntime.connection
             this.maxCount = maxCount;
         }
 
-        public IRequestHandler<MediaDto> RequestMediaDto(string url)
+        public IAsyncRequestHandler RequestMediaDto(string url)
         {
             if (!url.EndsWith(UMI3DNetworkingKeys.media))
             {
@@ -40,7 +41,8 @@ namespace umi3d.browserRuntime.connection
             }
 
             //await TryRequest(url, 0);
-            return new RequestedHandler<MediaDto>();
+            //return new RequestedHandler<MediaDto>();
+            return null;
         }
 
         bool HasWWWError(UnityWebRequest www)
@@ -54,41 +56,42 @@ namespace umi3d.browserRuntime.connection
 
         async Task<MediaDto> TryRequest(string url, int count)
         {
-            if (count >= maxCount)
-            {
-                UnityEngine.Debug.LogError($"Max count reached");
-                return;
-            }
+            return null;
+            //if (count >= maxCount)
+            //{
+            //    UnityEngine.Debug.LogError($"Max count reached");
+            //    return;
+            //}
 
-            using (UnityWebRequest www = UnityWebRequest.Get(url))
-            {
-                UnityWebRequestAsyncOperation operation = www.SendWebRequest();
-                while (!operation.isDone)
-                {
-                    await UMI3DAsyncManager.Yield();
-                }
+            //using (UnityWebRequest www = UnityWebRequest.Get(url))
+            //{
+            //    UnityWebRequestAsyncOperation operation = www.SendWebRequest();
+            //    while (!operation.isDone)
+            //    {
+            //        await UMI3DAsyncManager.Yield();
+            //    }
 
-                //if (connectionStateData.ContainsStateByType<MasterServerSessionConnectionState>())
-                //{
-                //    connectionStateData.Add(new MediaDTOStoppedConnectionState());
-                //    return;
-                //}
+            //    //if (connectionStateData.ContainsStateByType<MasterServerSessionConnectionState>())
+            //    //{
+            //    //    connectionStateData.Add(new MediaDTOStoppedConnectionState());
+            //    //    return;
+            //    //}
 
-                if (HasWWWError(www))
-                {
-                    await TryRequest(url, count++);
-                }
-                else
-                {
-                    if (www.downloadHandler.data == null)
-                    {
-                        return;
-                    }
+            //    if (HasWWWError(www))
+            //    {
+            //        await TryRequest(url, count++);
+            //    }
+            //    else
+            //    {
+            //        if (www.downloadHandler.data == null)
+            //        {
+            //            return;
+            //        }
 
-                    string json = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
-                    //MediaDTO = UMI3DDtoSerializer.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None);
-                }
-            }
+            //        string json = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
+            //        //MediaDTO = UMI3DDtoSerializer.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None);
+            //    }
+            //}
         }
 
         async Task Request(string url)
@@ -107,10 +110,9 @@ namespace umi3d.browserRuntime.connection
                 //    return;
                 //}
 
-
                 if (HasWWWError(www))
                 {
-                    await TryRequest(url, count++);
+                    //await TryRequest(url, count++);
                 }
                 else
                 {

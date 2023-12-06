@@ -5,7 +5,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "umi3d.browserRuntime",
-        "inetum.unityUtils"
+        "inetum.unityUtils",
+        "UMI3D.Common.Core"
     ],
     "includePlatforms": [
         "Editor"

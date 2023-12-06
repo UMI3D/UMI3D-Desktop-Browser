@@ -23,6 +23,6 @@ namespace umi3d.browserRuntime.connection
 {
     public interface IMediaDTOWebRequest
     {
-        IRequestHandler<MediaDto> RequestMediaDto(string url);
+        IAsyncRequestHandler RequestMediaDto(string url);
     }
 }

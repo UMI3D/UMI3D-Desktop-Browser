@@ -14,19 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace umi3d.browserRuntime.connection
 {
-    public interface IRequestHandler<T> 
+    public interface IAsyncRequestHandler 
     {
         /// <summary>
         /// Event raised when the request is done.
         /// </summary>
-        event Action<IRequestHandler<T>> Completed;
+        event Action<IAsyncRequestHandler> Completed;
 
         /// <summary>
         /// Whether or not this handler is valid.
@@ -37,6 +39,16 @@ namespace umi3d.browserRuntime.connection
         /// Whether or not the request done.
         /// </summary>
         bool IsDone { get; }
+
+        /// <summary>
+        /// Returns a floating-point value between 0.0 and 1.0, indicating the progress of completion.
+        /// </summary>
+        float Progress { get; }
+
+        /// <summary>
+        /// Whether or not the request has been canceled.
+        /// </summary>
+        bool HasBeenCanceled { get; }
 
         /// <summary>
         /// Number of try before abandoning the request.
@@ -78,15 +90,31 @@ namespace umi3d.browserRuntime.connection
         }
         Result Result { get; }
 #endif
+        /// <summary>
+        /// A human-readable string describing any system errors encountered by the requests or responses.
+        /// </summary>
+        string Error { get; }
 
         /// <summary>
-        /// The value of type <typeparamref name="T"/> requested by the request.
+        /// Returns the bytes from data interpreted as a UTF8 string.
         /// </summary>
-        T RequestValue { get; }
+        string DownloadedText { get; }
 
         /// <summary>
-        /// Return a Task object to wait on when using async await.
+        /// Execute the request. This method should only be called once.
         /// </summary>
-        Task<T> Task { get; }
+        /// <returns></returns>
+        Task Execute();
+        /// <summary>
+        /// Abort the request as soon as possible.
+        /// </summary>
+        void Abort();
+        /// <summary>
+        /// Return the downloaded data.
+        /// </summary>
+        /// <param name="typeNameHandling"></param>
+        /// <param name="converters"></param>
+        /// <returns></returns>
+        T GetDownloadedData<T>(TypeNameHandling typeNameHandling = TypeNameHandling.All, IList<JsonConverter> converters = null);
     }
 }
