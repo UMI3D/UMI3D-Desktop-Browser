@@ -31,7 +31,6 @@ public class DistantEnvironmentLoader : AbstractLoader
     {
         if (value.dto is DistantEnvironmentDto distantDto)
         {
-            UnityEngine.Debug.Log($"Read a distant Environment Start {distantDto != null} {distantDto?.environmentDto != null} {distantDto?.environmentDto?.scenes != null}");
             try
             {
                 distantEnvironments[distantDto.id] = distantDto;
@@ -46,14 +45,13 @@ public class DistantEnvironmentLoader : AbstractLoader
 
                 foreach (var item in distantDto.binaries)
                     await ReadBinaryDto(item, 0, distantDto);
-
+                
                 e.NotifyLoaded();
             }
             catch (Exception e)
             {
                 UnityEngine.Debug.LogError(e);
             }
-            UnityEngine.Debug.Log("Read a distant Environment End");
         }
     }
 
@@ -85,7 +83,6 @@ public class DistantEnvironmentLoader : AbstractLoader
     {
         int index;
         BinaryDto obj;
-        await Task.Yield();
         switch (value.operationId)
         {
             case UMI3DOperationKeys.SetEntityListAddProperty:
@@ -111,7 +108,7 @@ public class DistantEnvironmentLoader : AbstractLoader
                 var list = UMI3DSerializer.ReadList<BinaryDto>(value.container);
                 MainThreadManager.Run(async () =>
                 {
-                    foreach (var item in list)
+                   foreach (var item in list)
                         await ReadBinaryDto(item, value.container.timeStep, dto);
                 });
                 break;
