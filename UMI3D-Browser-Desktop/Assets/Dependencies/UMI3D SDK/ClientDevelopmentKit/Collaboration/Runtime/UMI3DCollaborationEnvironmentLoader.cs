@@ -82,13 +82,7 @@ namespace umi3d.cdk.collaboration
 
             var dto = (_dto?.extensions)?.umi3d as UMI3DCollaborationEnvironmentDto;
             if (dto == null)
-            {
-
-                UnityEngine.Debug.Log($"ReadUMI3DExtension {environmentId} failed");
                 return;
-            }
-
-            UnityEngine.Debug.Log($"ReadUMI3DExtension {environmentId} {dto?.userList?.Count()}");
 
             if (userList != null)
             {
@@ -185,7 +179,6 @@ namespace umi3d.cdk.collaboration
         /// <inheritdoc/>
         protected override async Task<bool> _SetUMI3DProperty(SetUMI3DPropertyContainerData data)
         {
-            UnityEngine.Debug.Log($"_SetUMI3DProperty {data.propertyKey} {data.operationId} {data.entity.Id}");
             if (await base._SetUMI3DProperty(data)) return true;
             if (data.entity == null) return false;
             switch (data.propertyKey)
@@ -305,13 +298,10 @@ namespace umi3d.cdk.collaboration
 
         private void InsertUser(ulong environmentId,UMI3DCollaborationEnvironmentDto dto, int index, UserDto userDto)
         {
-            UnityEngine.Debug.Log($"InsertUser {environmentId}");
             if (!userList.ContainsKey(environmentId))
                 userList[environmentId] = new();
 
-            if (userList[environmentId].Exists((user) => user.id == userDto.id)) {
-                UMI3DLogger.LogWarning("Impossible to insert new user into user list, user already exist " + index, DebugScope.CDK);
-                return; }
+            if (userList[environmentId].Exists((user) => user.id == userDto.id)) return;
 
             if (index >= 0 && index <= userList[environmentId].Count)
             {
@@ -364,7 +354,6 @@ namespace umi3d.cdk.collaboration
 
         private void ReplaceAllUser(ulong environmentId, UMI3DCollaborationEnvironmentDto dto, List<UserDto> usersNew)
         {
-            UnityEngine.Debug.Log($"ReplaceAllUser {environmentId} {usersNew.Count()}");
             if (userList != null)
             {
                 if (userList.ContainsKey(environmentId))

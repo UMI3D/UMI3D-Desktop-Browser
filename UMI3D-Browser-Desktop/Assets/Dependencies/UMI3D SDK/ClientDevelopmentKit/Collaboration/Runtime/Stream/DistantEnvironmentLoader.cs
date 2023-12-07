@@ -122,7 +122,7 @@ public class DistantEnvironmentLoader : AbstractLoader
 
     async Task ReadBinaryDto(BinaryDto obj, ulong timeStep, DistantEnvironmentDto dto)
     {
-        Log(obj);
+        //Log(obj);
         ByteContainer container = new ByteContainer(dto.id, timeStep, obj.data);
         uint TransactionId = UMI3DSerializer.Read<uint>(container);
         try
