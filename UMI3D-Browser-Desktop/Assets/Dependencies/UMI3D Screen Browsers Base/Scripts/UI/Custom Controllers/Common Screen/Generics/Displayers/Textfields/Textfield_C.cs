@@ -193,6 +193,11 @@ namespace umi3d.commonScreen.Displayer
         protected List<string> m_textInputOriginalClassStyle;
         protected TextInputBase TextInput;
 
+        public void HideTextInput()
+        {
+            TextInput.style.display = DisplayStyle.None;
+        }
+
         /// <summary>
         /// Event raised when a property changed, if this element is attached to a panel.
         /// </summary>
