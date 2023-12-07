@@ -16,6 +16,7 @@ limitations under the License.
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using umi3d.common;
 using UnityEngine.Networking;
 
@@ -86,6 +87,17 @@ namespace umi3d.browserRuntime.connection
             get
             {
                 return aborted;
+            }
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public int TryCount
+        {
+            get
+            {
+                return tries;
             }
         }
 
@@ -184,26 +196,31 @@ namespace umi3d.browserRuntime.connection
         string error;
         string downloadedText;
 
+        Func<int, Task<UnityWebRequest>> webRequestFactory;
+        int tries = 0;
         Action<IAsyncRequestHandler> completed;
         bool hasBeenExecuted = false;
         bool isBeingExecuted = false;
 
-        public AsyncRequestedHandler(UnityWebRequest webRequest)
+        public AsyncRequestedHandler(Func<int, Task<UnityWebRequest>> webRequestFactory)
         {
-            this.webRequest = webRequest;
+            this.webRequestFactory = webRequestFactory;
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <returns></returns>
-        public void Execute()
+        public async Task Execute()
         {
             if (hasBeenExecuted)
             {
                 UnityEngine.Debug.LogError($"{nameof(Execute)} method can only be called once.");
                 return;
             }
+            tries++;
+            webRequest = await webRequestFactory(tries);
+            aborted = false;
             hasBeenExecuted = true;
             isBeingExecuted = true;
 
@@ -222,6 +239,23 @@ namespace umi3d.browserRuntime.connection
                 completed?.Invoke(this);
                 webRequest.Dispose();
             };
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
+        public async Task<int> Retry()
+        {
+            if (!hasBeenExecuted || isBeingExecuted)
+            {
+                UnityEngine.Debug.Log($"You cannot retry a request that as not been executed or finished.");
+                return -1;
+            }
+
+            hasBeenExecuted = false;
+            await Execute();
+            return tries;
         }
 
         /// <summary>

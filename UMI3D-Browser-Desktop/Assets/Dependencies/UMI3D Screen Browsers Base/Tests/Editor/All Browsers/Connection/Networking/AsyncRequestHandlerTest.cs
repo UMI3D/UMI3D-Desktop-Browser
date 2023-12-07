@@ -15,17 +15,23 @@ limitations under the License.
 */
 using NUnit.Framework;
 using System.Collections;
+using System.Threading.Tasks;
 using umi3d.browserRuntime.connection;
 using umi3d.common;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.TestTools;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class AsyncRequestHandlerTest
 {
     IAsyncRequestHandler GetRequestHandler(string url)
     {
-        return new AsyncRequestedHandler(UnityWebRequest.Get(url));
+        return new AsyncRequestedHandler(webRequestFactory: tries =>
+        {
+            return Task.FromResult(UnityWebRequest.Get(url));
+        });
     }
 
     string ValidURL
@@ -144,5 +150,30 @@ public class AsyncRequestHandlerTest
         {
             yield return null;
         }
+    }
+
+    [Test]
+    public void Retry()
+    {
+        IAsyncRequestHandler requestHandler = GetRequestHandler("failAddress");
+
+        Assert.AreEqual(-1, requestHandler.Retry());
+        UnityEngine.TestTools.LogAssert.Expect(LogType.Error, "You cannot retry a request that as not been executed or finished.");
+
+        requestHandler.Execute();
+        Assert.AreEqual(-1, requestHandler.Retry());
+        UnityEngine.TestTools.LogAssert.Expect(LogType.Error, "You cannot retry a request that as not been executed or finished.");
+
+        requestHandler.Completed += handler =>
+        {
+            if (handler.TryCount == 1)
+            {
+                Assert.AreEqual(2, requestHandler.Retry());
+            }
+            else if (handler.TryCount == 2)
+            {
+
+            }
+        };
     }
 }

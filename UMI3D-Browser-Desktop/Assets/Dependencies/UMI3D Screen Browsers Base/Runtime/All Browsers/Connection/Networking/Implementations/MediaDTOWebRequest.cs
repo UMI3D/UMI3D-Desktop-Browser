@@ -44,7 +44,10 @@ namespace umi3d.browserRuntime.connection
                 UnityEngine.Debug.LogError($"Url [{url}] is not valid");
             }
 
-            return new AsyncRequestedHandler(UnityWebRequest.Get(url));
+            return new AsyncRequestedHandler(webRequestFactory: tries =>
+            {
+                return Task.FromResult(UnityWebRequest.Get(url));
+            });
         }
 
         /// <summary>

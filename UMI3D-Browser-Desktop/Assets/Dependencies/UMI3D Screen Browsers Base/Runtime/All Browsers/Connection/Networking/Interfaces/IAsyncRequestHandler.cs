@@ -17,6 +17,7 @@ limitations under the License.
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine.Networking;
 
 namespace umi3d.browserRuntime.connection
@@ -51,6 +52,11 @@ namespace umi3d.browserRuntime.connection
         /// Whether or not the request has been canceled.
         /// </summary>
         bool HasBeenCanceled { get; }
+
+        /// <summary>
+        /// How many time the request has been send.
+        /// </summary>
+        int TryCount { get; }
 
 #if UNITY_2020_1_OR_NEWER
         /// <summary>
@@ -101,7 +107,17 @@ namespace umi3d.browserRuntime.connection
         /// Execute the request. This method should only be called once.
         /// </summary>
         /// <returns></returns>
-        void Execute();
+        Task Execute();
+        /// <summary>
+        /// Retry the request if it has failed.<br/>
+        /// Return the number of tries.
+        /// 
+        /// <para>
+        /// return -1 if an error happen, like if you try to retry before execution of the request or finishing the request.
+        /// </para>
+        /// </summary>
+        /// <returns></returns>
+        Task<int> Retry();
         /// <summary>
         /// Abort the request as soon as possible.
         /// </summary>
