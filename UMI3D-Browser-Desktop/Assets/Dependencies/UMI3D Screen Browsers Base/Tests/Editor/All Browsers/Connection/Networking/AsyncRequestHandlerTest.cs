@@ -13,9 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
-using System.Collections.Generic;
 using NUnit.Framework;
+using System.Collections;
 using umi3d.browserRuntime.connection;
 using umi3d.common;
 using UnityEngine;
@@ -117,6 +116,7 @@ public class AsyncRequestHandlerTest
     {
         IAsyncRequestHandler requestHandler0 = GetRequestHandler("failAddress");
         IAsyncRequestHandler requestHandler1 = GetRequestHandler($"{URLFormat.URLToMediaURL(ValidURL)}");
+
         Assert.AreEqual(requestHandler0.Result, UnityWebRequest.Result.InProgress);
         requestHandler0.Execute();
         Assert.AreEqual(requestHandler0.Result, UnityWebRequest.Result.InProgress);
@@ -134,7 +134,10 @@ public class AsyncRequestHandlerTest
         requestHandler1.Completed += handler =>
         {
             completed++;
-            Assert.AreEqual(UnityWebRequest.Result.Success, handler.Result);
+            Assert.AreEqual(UnityWebRequest.Result.Success, handler.Result, $"Be sure to have launch a world before testing.");
+            Assert.AreEqual(null, handler.Error);
+            Assert.AreNotEqual(null, handler.DownloadedText);
+            Assert.AreNotEqual(null, handler.GetDownloadedData<MediaDto>());
         };
 
         while (completed < 2)
@@ -142,33 +145,4 @@ public class AsyncRequestHandlerTest
             yield return null;
         }
     }
-
-
-    //[UnityTest]
-    //public IEnumerator RequestSucceeded()
-    //{
-    //    IAsyncRequestHandler requestHandler = null;
-
-    //    while (!requestHandler.IsDone)
-    //    {
-    //        yield return null;
-    //    }
-
-    //    if (requestHandler.Result == UnityEngine.Networking.UnityWebRequest.Result.Success)
-    //    {
-    //        Assert.True(requestHandler.DownloadedData != null);
-    //    }
-    //    else if (requestHandler.Result == UnityEngine.Networking.UnityWebRequest.Result.ConnectionError)
-    //    {
-    //        Assert.Fail("Request has not reached the server");
-    //    }
-    //    else if (requestHandler.Result == UnityEngine.Networking.UnityWebRequest.Result.ProtocolError)
-    //    {
-    //        Assert.Fail("The server returned an error response");
-    //    }
-    //    else
-    //    {
-    //        Assert.Fail("The data was corrupted or not in the correct format");
-    //    }
-    //}
 }

@@ -17,12 +17,14 @@ limitations under the License.
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using UnityEngine;
 using UnityEngine.Networking;
 
 namespace umi3d.browserRuntime.connection
 {
+    /// <summary>
+    /// Asynchronous request handler.<br/>
+    /// You can be notify when the request finished with the <see cref="IAsyncRequestHandler.Completed"/> event.
+    /// </summary>
     public interface IAsyncRequestHandler 
     {
         /// <summary>
@@ -49,11 +51,6 @@ namespace umi3d.browserRuntime.connection
         /// Whether or not the request has been canceled.
         /// </summary>
         bool HasBeenCanceled { get; }
-
-        /// <summary>
-        /// Number of try before abandoning the request.
-        /// </summary>
-        int CountTry { get; set; }
 
 #if UNITY_2020_1_OR_NEWER
         /// <summary>
@@ -104,7 +101,7 @@ namespace umi3d.browserRuntime.connection
         /// Execute the request. This method should only be called once.
         /// </summary>
         /// <returns></returns>
-        Task Execute();
+        void Execute();
         /// <summary>
         /// Abort the request as soon as possible.
         /// </summary>

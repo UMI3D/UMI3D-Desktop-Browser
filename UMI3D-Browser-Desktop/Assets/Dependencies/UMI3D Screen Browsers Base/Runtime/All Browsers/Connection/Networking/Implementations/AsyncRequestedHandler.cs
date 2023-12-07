@@ -15,12 +15,8 @@ limitations under the License.
 */
 using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
 using umi3d.common;
-using UnityEngine;
 using UnityEngine.Networking;
 
 namespace umi3d.browserRuntime.connection
@@ -115,11 +111,6 @@ namespace umi3d.browserRuntime.connection
             }
         }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public int CountTry { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
 #if UNITY_2020_1_OR_NEWER
         public UnityWebRequest.Result Result
         {
@@ -202,7 +193,11 @@ namespace umi3d.browserRuntime.connection
             this.webRequest = webRequest;
         }
 
-        public async Task Execute()
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
+        public void Execute()
         {
             if (hasBeenExecuted)
             {
@@ -229,6 +224,9 @@ namespace umi3d.browserRuntime.connection
             };
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void Abort()
         {
             if (aborted)

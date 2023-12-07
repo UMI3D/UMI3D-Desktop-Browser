@@ -13,16 +13,28 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using umi3d.common;
-using UnityEngine;
 
 namespace umi3d.browserRuntime.connection
 {
     public interface IMediaDTOWebRequest
     {
+        /// <summary>
+        /// Return a <see cref="IAsyncRequestHandler"/> for the request of a MediaDTO.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         IAsyncRequestHandler RequestMediaDto(string url);
+        /// <summary>
+        /// Whether or not the format of <paramref name="url"/> is valid for requesting a mediaDTO.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        bool IsUrlFormatValid(string url);
+        /// <summary>
+        /// Format the url to get a mediaDTO url.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        string URLToMediaURL(string url);
     }
 }
