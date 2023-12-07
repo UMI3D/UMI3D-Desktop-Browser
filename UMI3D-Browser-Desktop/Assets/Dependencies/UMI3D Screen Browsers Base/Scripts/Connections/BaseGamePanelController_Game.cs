@@ -277,13 +277,13 @@ namespace umi3d.baseBrowser.connection
                         button.menuItem.NotifyValueChange(false);
                     });
                 }
-                else UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
-                //else
-                //{
-                //    UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
-                //    Game.Cursor.Action = null;
-                //    UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
-                //}
+                //else UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
+                else
+                {
+                    UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                    Game.Cursor.Action = null;
+                    UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
+                }
 
                 if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;
             }
@@ -300,11 +300,11 @@ namespace umi3d.baseBrowser.connection
 
                 if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;
 
-                UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
+                //UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
 
-                //UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
-                //Game.Cursor.Action = null;
-                //UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
+                UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                Game.Cursor.Action = null;
+                UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
             }
         }
 
