@@ -187,10 +187,10 @@ namespace umi3d.cdk.collaboration
                         //Connection will not restart without this...
                         await Task.Yield();
 
+                        worldControllerClient = wc;
+
                         MultiProgress progress = EnvironmentProgress?.Invoke() ?? new MultiProgress("Joinning Environment");
                         onProgress.Invoke(progress);
-
-                        worldControllerClient = wc;
                         environmentClient = await wc.ConnectToEnvironment(progress);
                         environmentClient.status = StatusType.CREATED;
                     }
@@ -343,7 +343,7 @@ namespace umi3d.cdk.collaboration
         public static async Task<MediaDto> GetMedia(string url, Func<RequestFailedArgument, bool> shouldTryAgain = null)
         {
             UMI3DLogger.Log($"Get media at {url}", scope | DebugScope.Connection);
-            return await HttpClient.SendGetMedia(url, shouldTryAgain);
+            return await HttpClientWorldController.SendGetMedia(url, shouldTryAgain);
         }
 
         /// <summary>
@@ -384,7 +384,9 @@ namespace umi3d.cdk.collaboration
         protected override async Task<byte[]> _GetFile(string url, bool useParameterInsteadOfHeader)
         {
             UMI3DLogger.Log($"GetFile {url}", scope);
-            return await (environmentClient?.GetFile(url, useParameterInsteadOfHeader) ?? Task.FromResult<byte[]>(null));
+            if (environmentClient != null)
+                return await environmentClient?.GetFile(url, useParameterInsteadOfHeader);
+            return await (worldControllerClient?.GetFile(url) ?? Task.FromResult<byte[]>(null));
         }
 
         /// <inheritdoc/>

@@ -86,7 +86,7 @@ namespace umi3d.cdk.collaboration
         /// <summary>
         /// Handles HTTP requests before connection or to retrieve DTOs.
         /// </summary>
-        public HttpClient HttpClient { get; private set; }
+        public HttpClientEnvironment HttpClient { get; private set; }
 
         /// <summary>
         /// Handles most of the transaction-related message after connection.
@@ -235,7 +235,7 @@ namespace umi3d.cdk.collaboration
             progress.Add(joinProgress);
 
             lastTokenUpdate = default;
-            HttpClient = new HttpClient(this);
+            HttpClient = new HttpClientEnvironment(this);
             needToGetFirstConnectionInfo = true;
         }
 
