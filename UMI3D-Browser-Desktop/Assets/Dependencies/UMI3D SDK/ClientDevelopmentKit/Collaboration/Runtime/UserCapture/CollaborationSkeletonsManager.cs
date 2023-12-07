@@ -27,6 +27,7 @@ using umi3d.common.userCapture.description;
 using umi3d.common.userCapture.pose;
 using umi3d.common.userCapture.tracking;
 using UnityEngine;
+using static MumbleProto.UserList;
 
 namespace umi3d.cdk.collaboration.userCapture
 {
@@ -171,6 +172,7 @@ namespace umi3d.cdk.collaboration.userCapture
 
         private void UpdateSkeletons(IEnumerable<UMI3DUser> users)
         {
+            UnityEngine.Debug.Log($"Update skeleton {users.Count()}");
             List<(ulong,ulong)> readyUserIdList = users.Where(u => u.status >= StatusType.READY).Select(u => (u.EnvironmentId, u.id)).ToList();
             readyUserIdList.Remove((0,collaborationClientServerService.GetUserId()));
 
@@ -188,6 +190,7 @@ namespace umi3d.cdk.collaboration.userCapture
 
             foreach (var userId in joinedUsersId)
             {
+                UnityEngine.Debug.Log($"test Add for {userId.Item1} != 0 || {userId.Item2} != {collaborationClientServerService.GetUserId()}");
                 if (userId.Item1 != 0 || userId.Item2 != collaborationClientServerService.GetUserId())
                 {
                     CreateSkeleton(userId.Item1,userId.Item2, CollabSkeletonsScene.transform, StandardHierarchy);
@@ -197,6 +200,7 @@ namespace umi3d.cdk.collaboration.userCapture
 
         public virtual CollaborativeSkeleton CreateSkeleton(ulong environmentId, ulong userId, Transform parent, UMI3DSkeletonHierarchy skeletonHierarchy)
         {
+            UnityEngine.Debug.Log($"Create skelton for ({environmentId},{userId})");
             GameObject go = new GameObject();
             CollaborativeSkeleton cs = go.AddComponent<CollaborativeSkeleton>();
             cs.UserId = userId;
@@ -231,6 +235,7 @@ namespace umi3d.cdk.collaboration.userCapture
 
             skeletons[(environmentId,userId)] = cs;
             CollaborativeSkeletonCreated?.Invoke(userId);
+            UnityEngine.Debug.Log($"Add skelton for ({environmentId},{userId})");
             return cs;
         }
 
