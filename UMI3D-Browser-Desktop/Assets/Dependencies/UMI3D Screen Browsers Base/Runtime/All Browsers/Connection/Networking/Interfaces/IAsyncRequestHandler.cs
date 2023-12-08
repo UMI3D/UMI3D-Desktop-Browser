@@ -32,6 +32,10 @@ namespace umi3d.browserRuntime.connection
         /// Event raised when the request is done.
         /// </summary>
         event Action<IAsyncRequestHandler> Completed;
+        /// <summary>
+        /// Event raised when the request has been aborted.
+        /// </summary>
+        event Action<IAsyncRequestHandler> Aborted;
 
         /// <summary>
         /// Whether or not this handler is valid.

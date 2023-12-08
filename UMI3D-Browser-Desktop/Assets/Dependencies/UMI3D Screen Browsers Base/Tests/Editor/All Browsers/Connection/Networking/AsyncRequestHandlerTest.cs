@@ -18,11 +18,10 @@ using System.Collections;
 using System.Threading.Tasks;
 using umi3d.browserRuntime.connection;
 using umi3d.common;
-using UnityEditor.PackageManager.Requests;
+using Unity.PerformanceTesting;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.TestTools;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class AsyncRequestHandlerTest
 {
@@ -42,6 +41,39 @@ public class AsyncRequestHandlerTest
         }
     }
 
+    void CheckExecutionTime(System.Diagnostics.Stopwatch watch, long ms)
+    {
+        long _ms = watch.ElapsedMilliseconds;
+        if (_ms > ms)
+        {
+            Assert.Fail($"Execution take too long. Requested: {ms}ms but was {_ms}");
+        }
+    }
+
+    [Test, Performance]
+    public void Perf_Execution()
+    {
+        IAsyncRequestHandler requestHandler = null;
+
+        Measure.Method(() =>
+        {
+            requestHandler.Execute();
+        })
+            .WarmupCount(5)
+            .MeasurementCount(20)
+            .SetUp(() =>
+            {
+                requestHandler = GetRequestHandler("failAddress");
+            })
+            .Run();
+
+        PerformanceTest info = PerformanceTest.Active;
+        info.CalculateStatisticalValues();
+
+        var time = info.SampleGroups.Find(s => s.Name == "Time");
+        Assert.LessOrEqual(time.Max, .10f);
+    }
+
     [Test]
     public void DoubleExecution()
     {
@@ -54,6 +86,8 @@ public class AsyncRequestHandlerTest
     [UnityTest]
     public IEnumerator IsDone()
     {
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+
         IAsyncRequestHandler requestHandler = GetRequestHandler("failAddress");
 
         Assert.IsTrue(!requestHandler.IsDone);
@@ -69,13 +103,19 @@ public class AsyncRequestHandlerTest
 
         while (!completed)
         {
+            // Request take usually 3s to be performed.
+            CheckExecutionTime(watch, 3000);
             yield return null;
         }
+
+        watch.Stop();
     }
 
     [UnityTest]
     public IEnumerator HasBeenCanceled()
     {
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+
         IAsyncRequestHandler requestHandler = GetRequestHandler("failAddress");
 
         Assert.IsTrue(!requestHandler.HasBeenCanceled);
@@ -86,19 +126,29 @@ public class AsyncRequestHandlerTest
         bool completed = false;
         requestHandler.Completed += handler =>
         {
+            Assert.Fail("Should not end here.");
+        };
+        requestHandler.Aborted += handler =>
+        {
             completed = true;
             Assert.IsTrue(requestHandler.HasBeenCanceled);
         };
 
         while (!completed)
         {
+            // Request take usually 3s to be performed.
+            CheckExecutionTime(watch, 3000);
             yield return null;
         }
+
+        watch.Stop();
     }
 
     [UnityTest]
     public IEnumerator Progress()
     {
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+
         IAsyncRequestHandler requestHandler = GetRequestHandler(ValidURL);
 
         Assert.AreEqual(0f, requestHandler.Progress);
@@ -113,13 +163,19 @@ public class AsyncRequestHandlerTest
 
         while (!completed)
         {
+            // Request take usually 3s to be performed.
+            CheckExecutionTime(watch, 3000);
             yield return null;
         }
+
+        watch.Stop();
     }
 
     [UnityTest]
     public IEnumerator Result()
     {
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+
         IAsyncRequestHandler requestHandler0 = GetRequestHandler("failAddress");
         IAsyncRequestHandler requestHandler1 = GetRequestHandler($"{URLFormat.URLToMediaURL(ValidURL)}");
 
@@ -148,32 +204,51 @@ public class AsyncRequestHandlerTest
 
         while (completed < 2)
         {
+            // Request take usually 3s to be performed.
+            CheckExecutionTime(watch, 3000);
             yield return null;
         }
+
+        watch.Stop();
     }
 
-    [Test]
-    public void Retry()
+    [UnityTest]
+    public IEnumerator Retry()
     {
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+
         IAsyncRequestHandler requestHandler = GetRequestHandler("failAddress");
 
-        Assert.AreEqual(-1, requestHandler.Retry());
+        Assert.AreEqual(-1, requestHandler.Retry().Result);
         UnityEngine.TestTools.LogAssert.Expect(LogType.Error, "You cannot retry a request that as not been executed or finished.");
 
         requestHandler.Execute();
-        Assert.AreEqual(-1, requestHandler.Retry());
+        Assert.AreEqual(-1, requestHandler.Retry().Result);
         UnityEngine.TestTools.LogAssert.Expect(LogType.Error, "You cannot retry a request that as not been executed or finished.");
 
+        int completed = 0;
         requestHandler.Completed += handler =>
         {
+
             if (handler.TryCount == 1)
             {
-                Assert.AreEqual(2, requestHandler.Retry());
+                Assert.AreEqual(2, requestHandler.Retry().Result);
+                completed++;
             }
-            else if (handler.TryCount == 2)
+            else
             {
-
+                Assert.AreEqual(2, requestHandler.TryCount);
+                completed++;
             }
         };
+
+        while (completed < 2)
+        {
+            // Request take usually 3s to be performed.
+            CheckExecutionTime(watch, 6000);
+            yield return null;
+        }
+
+        watch.Stop();
     }
 }

@@ -35,14 +35,27 @@ namespace umi3d.browserRuntime.connection
                 {
                     value?.Invoke(this);
                 }
-                else
-                {
-                    completed += value;
-                }
+                completed += value;
             } 
             remove 
             {
                 completed -= value;
+            }
+        }
+
+        public event Action<IAsyncRequestHandler> Aborted
+        {
+            add
+            {
+                if (HasBeenCanceled)
+                {
+                    value.Invoke(this);
+                }
+                aborted += value;
+            }
+            remove 
+            {
+                aborted -= value;
             }
         }
 
@@ -86,7 +99,7 @@ namespace umi3d.browserRuntime.connection
         {
             get
             {
-                return aborted;
+                return canceled;
             }
         }
 
@@ -187,7 +200,7 @@ namespace umi3d.browserRuntime.connection
 
         UnityWebRequest webRequest;
         UnityWebRequestAsyncOperation operation;
-        bool aborted = false;
+        bool canceled = false;
 #if UNITY_2020_1_OR_NEWER
         UnityWebRequest.Result result;
 #else
@@ -199,6 +212,7 @@ namespace umi3d.browserRuntime.connection
         Func<int, Task<UnityWebRequest>> webRequestFactory;
         int tries = 0;
         Action<IAsyncRequestHandler> completed;
+        Action<IAsyncRequestHandler> aborted;
         bool hasBeenExecuted = false;
         bool isBeingExecuted = false;
 
@@ -220,24 +234,24 @@ namespace umi3d.browserRuntime.connection
             }
             tries++;
             webRequest = await webRequestFactory(tries);
-            aborted = false;
+            canceled = false;
             hasBeenExecuted = true;
             isBeingExecuted = true;
 
             operation = webRequest.SendWebRequest();
-            operation.completed += _handler =>
+            operation.completed += handler =>
             {
                 error = webRequest.error;
 #if UNITY_2020_1_OR_NEWER
-                result = (_handler as UnityWebRequestAsyncOperation).webRequest.result;
+                result = webRequest.result;
 #else
                 throw new System.NotImplementedException();
 #endif
                 downloadedText = webRequest.downloadHandler.text;
 
                 isBeingExecuted = false;
-                completed?.Invoke(this);
-                webRequest.Dispose();
+                OnCompleted();
+                (handler as UnityWebRequestAsyncOperation).webRequest.Dispose();
             };
         }
 
@@ -249,11 +263,12 @@ namespace umi3d.browserRuntime.connection
         {
             if (!hasBeenExecuted || isBeingExecuted)
             {
-                UnityEngine.Debug.Log($"You cannot retry a request that as not been executed or finished.");
+                UnityEngine.Debug.LogError($"You cannot retry a request that as not been executed or finished.");
                 return -1;
             }
 
             hasBeenExecuted = false;
+            canceled = false;
             await Execute();
             return tries;
         }
@@ -263,13 +278,14 @@ namespace umi3d.browserRuntime.connection
         /// </summary>
         public void Abort()
         {
-            if (aborted)
+            if (canceled)
             {
                 return;
             }
 
-            aborted = true;
+            canceled = true;
             webRequest?.Abort();
+            aborted?.Invoke(this);
         }
 
         /// <summary>
@@ -285,6 +301,15 @@ namespace umi3d.browserRuntime.connection
             {
                 return UMI3DDtoSerializer.FromJson<T>(DownloadedText, typeNameHandling, converters);
             }
+        }
+
+        void OnCompleted()
+        {
+            if (canceled)
+            {
+                return;
+            }
+            completed?.Invoke(this);
         }
     }
 }
