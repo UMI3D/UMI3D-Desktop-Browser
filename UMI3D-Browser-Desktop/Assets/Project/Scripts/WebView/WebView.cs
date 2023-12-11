@@ -23,6 +23,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+
 namespace BrowserDesktop
 {
     public class WebView : AbstractUMI3DWebView, IPointerEnterHandler, IPointerExitHandler
@@ -54,6 +55,12 @@ namespace BrowserDesktop
         [SerializeField]
         private RectTransform homeRectTransform = null;
 
+        [SerializeField]
+        private RectTransform fullScreenRectTransform = null;
+
+        [SerializeField]
+        private RectTransform reduceScreenRectTransform = null;
+
         [Header("Top bar")]
         [SerializeField]
         private RectTransform topBarContainer = null;
@@ -72,9 +79,9 @@ namespace BrowserDesktop
         [SerializeField]
         private InputField urlText = null;
 
-        private ulong id;
-
         private string previousUrl;
+
+        private UMI3DWebViewDto dto;
 
         #endregion
 
@@ -102,7 +109,7 @@ namespace BrowserDesktop
                 var request = new WebViewUrlChangedRequestDto
                 {
                     url = url,
-                    webViewId = id
+                    webViewId = dto.id
                 };
 
                 UMI3DClientServer.SendRequest(request, true);
@@ -113,7 +120,7 @@ namespace BrowserDesktop
         {
             base.Init(dto);
 
-            id = dto.id;
+            this.dto = dto;
         }
 
         protected override void OnCanInteractChanged(bool canInteract)
@@ -127,35 +134,48 @@ namespace BrowserDesktop
 
         protected override void OnSizeChanged(Vector2 size)
         {
-            container.localScale = new Vector3(size.x, size.y, 1);
+            try
+            {
+                container.localScale = new Vector3(size.x, size.y, 1);
 
-            Vector3[] corners = new Vector3[4];
+                Vector3[] corners = new Vector3[4];
 
-            textureTransform.GetWorldCorners(corners);
+                textureTransform.GetWorldCorners(corners);
 
-            bottomBarContainer.position = (corners[0] + corners[3]) / 2f;
-            topBarContainer.position = (corners[1] + corners[2]) / 2f;
+                bottomBarContainer.position = (corners[0] + corners[3]) / 2f;
+                topBarContainer.position = (corners[1] + corners[2]) / 2f;
 
-            topBarContainer.localScale = new Vector3(topBarContainer.localScale.x,
-                topBarContainer.localScale.y / container.localScale.y, topBarContainer.localScale.z);
+                topBarContainer.localScale = new Vector3(topBarContainer.localScale.x,
+                    topBarContainer.localScale.y / container.localScale.y, topBarContainer.localScale.z);
 
-            bottomBarContainer.localScale = new Vector3(bottomBarContainer.localScale.x,
-                bottomBarContainer.localScale.y / container.localScale.y, bottomBarContainer.localScale.z);
+                bottomBarContainer.localScale = new Vector3(bottomBarContainer.localScale.x,
+                    bottomBarContainer.localScale.y / container.localScale.y, bottomBarContainer.localScale.z);
 
-            urlRectTransform.localScale = new Vector3(urlRectTransform.localScale.x * topBarContainer.localScale.y,
-                urlRectTransform.localScale.y, urlRectTransform.localScale.z);
+                urlRectTransform.localScale = new Vector3(urlRectTransform.localScale.x / container.localScale.x,
+                    urlRectTransform.localScale.y, urlRectTransform.localScale.z);
 
-            searchRectTransform.localScale = new Vector3(searchRectTransform.localScale.x * topBarContainer.localScale.y,
-                searchRectTransform.localScale.y, searchRectTransform.localScale.z);
+                searchRectTransform.localScale = new Vector3(searchRectTransform.localScale.x / container.localScale.x,
+                    searchRectTransform.localScale.y, searchRectTransform.localScale.z);
 
-            nextRectTransform.localScale = new Vector3(nextRectTransform.localScale.x * bottomBarContainer.localScale.y,
-                nextRectTransform.localScale.y, nextRectTransform.localScale.z);
+                nextRectTransform.localScale = new Vector3(nextRectTransform.localScale.x / container.localScale.x,
+                    nextRectTransform.localScale.y, nextRectTransform.localScale.z);
 
-            previousRectTransform.localScale = new Vector3(previousRectTransform.localScale.x * bottomBarContainer.localScale.y,
-                previousRectTransform.localScale.y, previousRectTransform.localScale.z);
+                previousRectTransform.localScale = new Vector3(previousRectTransform.localScale.x / container.localScale.x,
+                    previousRectTransform.localScale.y, previousRectTransform.localScale.z);
 
-            homeRectTransform.localScale = new Vector3(homeRectTransform.localScale.x * bottomBarContainer.localScale.y,
-                homeRectTransform.localScale.y, homeRectTransform.localScale.z);
+                homeRectTransform.localScale = new Vector3(homeRectTransform.localScale.x / container.localScale.x,
+                    homeRectTransform.localScale.y, homeRectTransform.localScale.z);
+
+                fullScreenRectTransform.localScale = new Vector3(fullScreenRectTransform.localScale.x / container.localScale.x,
+                    fullScreenRectTransform.localScale.y, fullScreenRectTransform.localScale.z);
+
+                reduceScreenRectTransform.localScale = new Vector3(reduceScreenRectTransform.localScale.x / container.localScale.x,
+                    reduceScreenRectTransform.localScale.y, reduceScreenRectTransform.localScale.z);
+
+            } catch (Exception e)
+            {
+                UMI3DLogger.LogException(e, DebugScope.CDK);
+            }
         }
 
         protected override async void OnTextureSizeChanged(Vector2 size)
@@ -215,6 +235,15 @@ namespace BrowserDesktop
 
             BaseKeyInteraction.IsEditingTextField = false;
         }
+
+        public void SetWorldSpace()
+        {
+            OnSizeChanged(size);
+
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+        }
+
 
         #endregion
     }
