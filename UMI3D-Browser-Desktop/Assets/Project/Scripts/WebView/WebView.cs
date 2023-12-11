@@ -54,6 +54,9 @@ namespace BrowserDesktop
         [SerializeField]
         private RectTransform homeRectTransform = null;
 
+        [SerializeField]
+        private RectTransform fullScreenRectTransform = null;
+
         [Header("Top bar")]
         [SerializeField]
         private RectTransform topBarContainer = null;
@@ -72,9 +75,9 @@ namespace BrowserDesktop
         [SerializeField]
         private InputField urlText = null;
 
-        private ulong id;
-
         private string previousUrl;
+
+        private UMI3DWebViewDto dto;
 
         #endregion
 
@@ -102,7 +105,7 @@ namespace BrowserDesktop
                 var request = new WebViewUrlChangedRequestDto
                 {
                     url = url,
-                    webViewId = id
+                    webViewId = dto.id
                 };
 
                 UMI3DClientServer.SendRequest(request, true);
@@ -113,7 +116,7 @@ namespace BrowserDesktop
         {
             base.Init(dto);
 
-            id = dto.id;
+            this.dto = dto;
         }
 
         protected override void OnCanInteractChanged(bool canInteract)
@@ -156,6 +159,9 @@ namespace BrowserDesktop
 
             homeRectTransform.localScale = new Vector3(homeRectTransform.localScale.x * bottomBarContainer.localScale.y,
                 homeRectTransform.localScale.y, homeRectTransform.localScale.z);
+
+            fullScreenRectTransform.localScale = new Vector3(fullScreenRectTransform.localScale.x * bottomBarContainer.localScale.y,
+                fullScreenRectTransform.localScale.y, fullScreenRectTransform.localScale.z);
         }
 
         protected override async void OnTextureSizeChanged(Vector2 size)
@@ -215,6 +221,15 @@ namespace BrowserDesktop
 
             BaseKeyInteraction.IsEditingTextField = false;
         }
+
+        public void SetWorldSpace()
+        {
+            OnSizeChanged(size);
+
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+        }
+
 
         #endregion
     }

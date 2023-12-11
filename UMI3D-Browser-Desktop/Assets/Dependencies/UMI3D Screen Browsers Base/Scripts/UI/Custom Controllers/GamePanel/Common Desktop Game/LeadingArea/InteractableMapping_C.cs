@@ -110,6 +110,8 @@ namespace umi3d.commonDesktop.game
             Add(Main);
             Main.Add(InteractableNameText);
             Main.Add(ScrollView);
+
+            pickingMode = PickingMode.Ignore;
         }
 
         protected override void SetProperties()
