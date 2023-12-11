@@ -18,7 +18,7 @@ using umi3d.cdk.collaboration;
 
 namespace umi3d.browserRuntime.connection
 {
-    public class ConnectionToWorldController : IConnectionTo
+    public class ConnectionToWorldController /*: IConnectionTo*/
     {
         IWorldData worldData;
         IConnectionStateData connectionStateData;

@@ -18,7 +18,7 @@ using umi3d.cdk.collaboration;
 
 namespace umi3d.browserRuntime.connection
 {
-    public class ConnectionToMasterServer : IConnectionTo
+    public class ConnectionToMasterServer /*: IConnectionTo*/
     {
         LaucherOnMasterServer masterServer;
         IWorldData worldData;

@@ -23,11 +23,32 @@ namespace umi3d.browserRuntime.connection
     /// </summary>
     public interface IConnectionTo 
     {
+        enum ConnectionToResult
+        {
+            /// <summary>
+            /// The 
+            /// </summary>
+            Disconnected,
+            Processing,
+            Connected,
+            Aborted,
+            Error
+        }
+
+        /// <summary>
+        /// Error message.
+        /// </summary>
+        string Error { get; }
+        /// <summary>
+        /// Result of the connection/
+        /// </summary>
+        ConnectionToResult Result { get; }
+
         /// <summary>
         /// Try to connect.
         /// </summary>
         /// <returns></returns>
-        Task TryToConnect();
+        Task TryToConnect(string url);
         /// <summary>
         /// Disconnect if it was connected.
         /// </summary>
