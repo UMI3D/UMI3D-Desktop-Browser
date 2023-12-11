@@ -47,6 +47,8 @@ namespace BrowserDesktop
         [SerializeField]
         List<RectTransformData> overlayLayout = new();
 
+        [SerializeField]
+        private GameObject fullScreenBtn, reduceBtn;
 
         #endregion
 
@@ -110,6 +112,9 @@ namespace BrowserDesktop
                 await UMI3DAsyncManager.Delay(100);
                 SetTextureRatio();
             }
+
+            fullScreenBtn.SetActive(canvas.renderMode == RenderMode.WorldSpace);
+            reduceBtn.SetActive(canvas.renderMode != RenderMode.WorldSpace);
         }
 
         private Vector2 currentResolution = default;

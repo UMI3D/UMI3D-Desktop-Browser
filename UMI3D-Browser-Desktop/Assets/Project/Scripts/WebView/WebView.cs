@@ -58,6 +58,9 @@ namespace BrowserDesktop
         [SerializeField]
         private RectTransform fullScreenRectTransform = null;
 
+        [SerializeField]
+        private RectTransform reduceScreenRectTransform = null;
+
         [Header("Top bar")]
         [SerializeField]
         private RectTransform topBarContainer = null;
@@ -165,6 +168,10 @@ namespace BrowserDesktop
 
                 fullScreenRectTransform.localScale = new Vector3(fullScreenRectTransform.localScale.x / container.localScale.x,
                     fullScreenRectTransform.localScale.y, fullScreenRectTransform.localScale.z);
+
+                reduceScreenRectTransform.localScale = new Vector3(reduceScreenRectTransform.localScale.x / container.localScale.x,
+                    reduceScreenRectTransform.localScale.y, reduceScreenRectTransform.localScale.z);
+
             } catch (Exception e)
             {
                 UMI3DLogger.LogException(e, DebugScope.CDK);
