@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using System;
+using System.Text.RegularExpressions;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk;
 using umi3d.common;
@@ -95,25 +96,42 @@ namespace BrowserDesktop
 
             canvas.GetComponent<CanvasScaler>().dynamicPixelsPerUnit = 3;
 
-            browser.browserClient.OnUrlChanged += (url) =>
+            browser.browserClient.OnUrlChanged += OnUrlLoaded;
+        }
+
+        private void OnUrlLoaded(string url)
+        {
+            if (url == previousUrl)
             {
-                if (url == previousUrl)
+                return;
+            }
+
+            if (CheckIfUrlValid(url))
+            {
+                if (url.StartsWith("data:"))
                 {
-                    return;
+                    string title = Regex.Match(url, @"\<title\b[^>]*\>\s*(?<Title>[\s\S]*?)\</title\>", RegexOptions.IgnoreCase).Groups["Title"].Value;
+
+                    urlText.text = "HTML data:Title : " + title;
+                } else
+                {
+                    previousUrl = url;
+
+                    urlText.text = url;
+
+                    var request = new WebViewUrlChangedRequestDto
+                    {
+                        url = url,
+                        webViewId = dto.id
+                    };
+
+                    UMI3DClientServer.SendRequest(request, true);
                 }
 
-                previousUrl = url;
-
-                urlText.text = url;
-
-                var request = new WebViewUrlChangedRequestDto
-                {
-                    url = url,
-                    webViewId = dto.id
-                };
-
-                UMI3DClientServer.SendRequest(request, true);
-            };
+            } else
+            {
+                LoadNotAccessibleWebPage(url);
+            }
         }
 
         public override void Init(UMI3DWebViewDto dto)
@@ -209,7 +227,10 @@ namespace BrowserDesktop
 
             try
             {
-                browser.browserClient.LoadUrl(url);
+                if (CheckIfUrlValid(url))
+                    browser.browserClient.LoadUrl(url);
+                else
+                    LoadNotAccessibleWebPage(url);
             }
             catch (Exception ex)
             {
@@ -244,6 +265,55 @@ namespace BrowserDesktop
             transform.localRotation = Quaternion.identity;
         }
 
+        /// <summary>
+        /// Check if <paramref name="url"/> is allowed regarding whitelist/blacklist parameter.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public bool CheckIfUrlValid(string url)
+        {
+            if (url.StartsWith("data:"))
+                return true;
+
+            try
+            {
+                Uri uriToCheck = new Uri(url);
+
+                if (useBlackList)
+                {
+                    if (blackList.Contains(uriToCheck.Host))
+                    {
+                        UMI3DLogger.LogError("Trying to load a blacklisted url " + url, DebugScope.Networking);
+
+                        return false;
+                    }
+                }
+
+                if (useWhiteList)
+                {
+                    if (!whiteList.Contains(uriToCheck.Host))
+                    {
+                        UMI3DLogger.LogError("Trying to load an url not whitelisted " + url, DebugScope.Networking);
+
+                        return false;
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Displays a web page explaining that a <paramref name="notAuhtorizedUrl"/> was loaded but it was not allowed.
+        /// </summary>
+        /// <param name="notAuhtorizedUrl"></param>
+        public void LoadNotAccessibleWebPage(string notAuhtorizedUrl)
+        {
+            browser.LoadHtml("<html><head><meta charset=\"utf-8\"><title>Not authorized</title></head><body>Impossible to load " + notAuhtorizedUrl + ", this url is either blacklisted or not white listed. Contact your administrator.</body></html>");
+        }
 
         #endregion
     }

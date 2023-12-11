@@ -89,7 +89,7 @@ namespace umi3d.cdk
                     webView.whiteList = dto.whiteList = (List<string>)data.property.value;
                     break;
                 case UMI3DPropertyKeys.WebViewUseBlackList:
-                    webView.useWhiteList = dto.useWhiteList = (bool)data.property.value;
+                    webView.useBlackList = dto.useBlackList = (bool)data.property.value;
                     break;
                 case UMI3DPropertyKeys.WebViewBlackList:
                     webView.blackList = dto.blackList = (List<string>)data.property.value;
@@ -138,13 +138,13 @@ namespace umi3d.cdk
                     webView.useWhiteList = dto.useWhiteList = UMI3DSerializer.Read<bool>(data.container);
                     break;
                 case UMI3DPropertyKeys.WebViewWhileList:
-                    webView.whiteList = dto.whiteList = UMI3DSerializer.Read<List<string>>(data.container);
+                    webView.whiteList = dto.whiteList = UMI3DSerializer.ReadList<string>(data.container);
                     break;
                 case UMI3DPropertyKeys.WebViewUseBlackList:
-                    webView.useWhiteList = dto.useWhiteList = UMI3DSerializer.Read<bool>(data.container);
+                    webView.useBlackList = dto.useBlackList = UMI3DSerializer.Read<bool>(data.container);
                     break;
                 case UMI3DPropertyKeys.WebViewBlackList:
-                    webView.blackList = dto.blackList = UMI3DSerializer.Read<List<string>>(data.container);
+                    webView.blackList = dto.blackList = UMI3DSerializer.ReadList<string>(data.container);
                     break;
                 default:
                     return false;

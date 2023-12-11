@@ -124,17 +124,17 @@ namespace umi3d.cdk
         public bool useWhiteList { get; set; } = false;
 
         /// <summary>
-        /// Authorized domaines.
+        /// Authorized domains.
         /// </summary>
         public List<string> whiteList { get; set; } = new List<string>();
 
         /// <summary>
-        /// if true, will use <see cref="useBlackList"/> to determine which domains are prohibited.
+        /// If true, will use <see cref="useBlackList"/> to determine which domains are prohibited.
         /// </summary>
         public bool useBlackList { get; set; } = false;
 
         /// <summary>
-        /// Non authorized domaines.
+        /// Not authorized domains.
         /// </summary>
         public List<string> blackList { get; set; } = new List<string>();
 
@@ -145,14 +145,16 @@ namespace umi3d.cdk
         public virtual void Init(UMI3DWebViewDto dto)
         {
             canUrlBeForced = dto.canUrlBeForced;
-            url = dto.url;
-            size = dto.size.Struct();
-            textureSize = dto.textureSize.Struct();
-            canInteract = dto.canInteract;
+
             useWhiteList = dto.useWhiteList;
             whiteList = dto.whiteList;
             useBlackList = dto.useBlackList;
             blackList = dto.blackList;
+
+            url = dto.url;
+            size = dto.size.Struct();
+            textureSize = dto.textureSize.Struct();
+            canInteract = dto.canInteract;
 
             OnCanInteractChanged(canInteract);
         }
