@@ -38,12 +38,17 @@ namespace umi3d.browserRuntime.connection
         event Action<IAsyncRequestHandler> Aborted;
 
         /// <summary>
+        /// Return true if the request has to be aborted.
+        /// </summary>
+        Func<bool> IsCancellationRequired { get; set; }
+
+        /// <summary>
         /// Whether or not this handler is valid.
         /// </summary>
         bool IsValid { get; }
 
         /// <summary>
-        /// Whether or not the request done.
+        /// Whether or not the request is done.
         /// </summary>
         bool IsDone { get; }
 
@@ -106,6 +111,12 @@ namespace umi3d.browserRuntime.connection
         /// Returns the bytes from data interpreted as a UTF8 string.
         /// </summary>
         string DownloadedText { get; }
+
+        /// <summary>
+        /// The requested task.<br/>
+        /// You can wait on it to finish or listen to the <see cref="Completed"/> event.
+        /// </summary>
+        Task RequestTask { get; }
 
         /// <summary>
         /// Execute the request. This method should only be called once.

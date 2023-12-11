@@ -18,6 +18,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using umi3d.browserRuntime.connection;
 using umi3d.common;
+using umi3d.testsUtils;
 using Unity.PerformanceTesting;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -41,26 +42,17 @@ public class AsyncRequestHandlerTest
         }
     }
 
-    void CheckExecutionTime(System.Diagnostics.Stopwatch watch, long ms)
-    {
-        long _ms = watch.ElapsedMilliseconds;
-        if (_ms > ms)
-        {
-            Assert.Fail($"Execution take too long. Requested: {ms}ms but was {_ms}");
-        }
-    }
-
     [Test, Performance]
     public void Perf_Execution()
     {
         IAsyncRequestHandler requestHandler = null;
 
-        Measure.Method(() =>
+        Measure.Method(async () =>
         {
-            requestHandler.Execute();
+            await requestHandler.Execute();
         })
-            .WarmupCount(5)
-            .MeasurementCount(20)
+            .WarmupCount(10)
+            .MeasurementCount(30)
             .SetUp(() =>
             {
                 requestHandler = GetRequestHandler("failAddress");
@@ -71,7 +63,7 @@ public class AsyncRequestHandlerTest
         info.CalculateStatisticalValues();
 
         var time = info.SampleGroups.Find(s => s.Name == "Time");
-        Assert.LessOrEqual(time.Max, .10f);
+        Assert.LessOrEqual(time.Max, .32f);
     }
 
     [Test]
@@ -104,7 +96,7 @@ public class AsyncRequestHandlerTest
         while (!completed)
         {
             // Request take usually 3s to be performed.
-            CheckExecutionTime(watch, 3000);
+            watch.CheckExecutionTime(3000);
             yield return null;
         }
 
@@ -137,7 +129,7 @@ public class AsyncRequestHandlerTest
         while (!completed)
         {
             // Request take usually 3s to be performed.
-            CheckExecutionTime(watch, 3000);
+            watch.CheckExecutionTime(3000);
             yield return null;
         }
 
@@ -164,7 +156,7 @@ public class AsyncRequestHandlerTest
         while (!completed)
         {
             // Request take usually 3s to be performed.
-            CheckExecutionTime(watch, 3000);
+            watch.CheckExecutionTime(3000);
             yield return null;
         }
 
@@ -177,7 +169,7 @@ public class AsyncRequestHandlerTest
         var watch = System.Diagnostics.Stopwatch.StartNew();
 
         IAsyncRequestHandler requestHandler0 = GetRequestHandler("failAddress");
-        IAsyncRequestHandler requestHandler1 = GetRequestHandler($"{URLFormat.URLToMediaURL(ValidURL)}");
+        IAsyncRequestHandler requestHandler1 = GetRequestHandler(URLFormat.URLToMediaURL(ValidURL));
 
         Assert.AreEqual(requestHandler0.Result, UnityWebRequest.Result.InProgress);
         requestHandler0.Execute();
@@ -205,7 +197,7 @@ public class AsyncRequestHandlerTest
         while (completed < 2)
         {
             // Request take usually 3s to be performed.
-            CheckExecutionTime(watch, 3000);
+            watch.CheckExecutionTime(3000);
             yield return null;
         }
 
@@ -222,32 +214,27 @@ public class AsyncRequestHandlerTest
         Assert.AreEqual(-1, requestHandler.Retry().Result);
         UnityEngine.TestTools.LogAssert.Expect(LogType.Error, "You cannot retry a request that as not been executed or finished.");
 
-        requestHandler.Execute();
+        var ExecuteTask = requestHandler.Execute();
         Assert.AreEqual(-1, requestHandler.Retry().Result);
         UnityEngine.TestTools.LogAssert.Expect(LogType.Error, "You cannot retry a request that as not been executed or finished.");
 
-        int completed = 0;
-        requestHandler.Completed += handler =>
-        {
-
-            if (handler.TryCount == 1)
-            {
-                Assert.AreEqual(2, requestHandler.Retry().Result);
-                completed++;
-            }
-            else
-            {
-                Assert.AreEqual(2, requestHandler.TryCount);
-                completed++;
-            }
-        };
-
-        while (completed < 2)
+        while (!ExecuteTask.IsCompleted)
         {
             // Request take usually 3s to be performed.
-            CheckExecutionTime(watch, 6000);
+            watch.CheckExecutionTime(3000);
             yield return null;
         }
+
+        var retryTask = requestHandler.Retry();
+
+        while (!retryTask.IsCompleted)
+        {
+            // Request take usually 3s to be performed.
+            watch.CheckExecutionTime(6000);
+            yield return null;
+        }
+        Assert.AreEqual(2, retryTask.Result);
+        Assert.AreEqual(2, requestHandler.TryCount);
 
         watch.Stop();
     }

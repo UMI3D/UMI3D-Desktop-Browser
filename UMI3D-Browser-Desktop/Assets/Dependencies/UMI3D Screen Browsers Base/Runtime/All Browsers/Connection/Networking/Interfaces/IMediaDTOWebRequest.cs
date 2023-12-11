@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using umi3d.common;
+
 namespace umi3d.browserRuntime.connection
 {
     public interface IMediaDTOWebRequest
@@ -24,6 +26,12 @@ namespace umi3d.browserRuntime.connection
         /// <param name="url"></param>
         /// <returns></returns>
         IAsyncRequestHandler RequestMediaDto(string url);
+        /// <summary>
+        /// Convert an <see cref="IAsyncRequestHandler"/> result in a <see cref="MediaDto"/>.
+        /// </summary>
+        /// <param name="requestHandler"></param>
+        /// <returns></returns>
+        MediaDto ConvertToMediaDTO(IAsyncRequestHandler requestHandler);
         /// <summary>
         /// Whether or not the format of <paramref name="url"/> is valid for requesting a mediaDTO.
         /// </summary>

@@ -13,23 +13,22 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Security.Policy;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using umi3d.common;
-using UnityEngine;
 using UnityEngine.Networking;
 
 namespace umi3d.browserRuntime.connection
 {
     public class MediaDTOWebRequest : IMediaDTOWebRequest
     {
-        public IConnectionStateData connectionStateData;
-        public int maxCount;
+        IConnectionStateData connectionStateData;
+        int maxTryCount;
 
-        public MediaDTOWebRequest(IConnectionStateData connectionStateData, int maxCount = 3)
+        public MediaDTOWebRequest(IConnectionStateData connectionStateData, int maxTryCount = 3)
         {
             this.connectionStateData = connectionStateData;
-            this.maxCount = maxCount;
+            this.maxTryCount = maxTryCount;
         }
 
         /// <summary>
@@ -48,9 +47,43 @@ namespace umi3d.browserRuntime.connection
             {
                 return Task.FromResult(UnityWebRequest.Get(url));
             });
+            requestHandler.IsCancellationRequired = () =>
+            {
+                if (connectionStateData.Contains(new MasterServerSessionConnectionState().Id))
+                {
+                    var stopConnection = new MediaDTOStoppedConnectionState();
+                    connectionStateData.Add(stopConnection, stopConnection.Id);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            };
+            requestHandler.Completed += handler =>
+            {
+                if (handler.Result > UnityWebRequest.Result.Success && handler.TryCount < maxTryCount)
+                {
+                    handler.Retry();
+                }
+                else if (handler.Result > UnityWebRequest.Result.Success && handler.TryCount >= maxTryCount)
+                {
+                    UnityEngine.Debug.LogError($"MediaDTO request failed after {maxTryCount} tries.");
+                }
+            };
             requestHandler.Execute();
 
             return requestHandler;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="requestHandler"></param>
+        /// <returns></returns>
+        public MediaDto ConvertToMediaDTO(IAsyncRequestHandler requestHandler)
+        {
+            return requestHandler.GetDownloadedData<MediaDto>(TypeNameHandling.None);
         }
 
         /// <summary>
@@ -60,7 +93,25 @@ namespace umi3d.browserRuntime.connection
         /// <returns></returns>
         public bool IsUrlFormatValid(string url)
         {
-            return url.EndsWith(UMI3DNetworkingKeys.media);
+            if (string.IsNullOrEmpty(url))
+            {
+                return false;
+            }
+            if (!url.EndsWith(UMI3DNetworkingKeys.media))
+            {
+                return false;
+            }
+            else
+            {
+                if (url.Equals(UMI3DNetworkingKeys.media))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
         }
 
         /// <summary>
@@ -71,55 +122,6 @@ namespace umi3d.browserRuntime.connection
         public string URLToMediaURL(string url)
         {
             return URLFormat.URLToMediaURL(url);
-        }
-
-        async Task<MediaDto> TryRequest(string url, int count)
-        {
-            bool HasWWWError(UnityWebRequest www)
-            {
-#if UNITY_2020_1_OR_NEWER
-                return www.result > UnityWebRequest.Result.Success;
-#else
-            return www.isNetworkError || www.isHttpError;
-#endif
-            }
-
-            return null;
-            //if (count >= maxCount)
-            //{
-            //    UnityEngine.Debug.LogError($"Max count reached");
-            //    return;
-            //}
-
-            //using (UnityWebRequest www = UnityWebRequest.Get(url))
-            //{
-            //    UnityWebRequestAsyncOperation operation = www.SendWebRequest();
-            //    while (!operation.isDone)
-            //    {
-            //        await UMI3DAsyncManager.Yield();
-            //    }
-
-            //    //if (connectionStateData.ContainsStateByType<MasterServerSessionConnectionState>())
-            //    //{
-            //    //    connectionStateData.Add(new MediaDTOStoppedConnectionState());
-            //    //    return;
-            //    //}
-
-            //    if (HasWWWError(www))
-            //    {
-            //        await TryRequest(url, count++);
-            //    }
-            //    else
-            //    {
-            //        if (www.downloadHandler.data == null)
-            //        {
-            //            return;
-            //        }
-
-            //        string json = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
-            //        //MediaDTO = UMI3DDtoSerializer.FromJson<MediaDto>(json, Newtonsoft.Json.TypeNameHandling.None);
-            //    }
-            //}
         }
     }
 }

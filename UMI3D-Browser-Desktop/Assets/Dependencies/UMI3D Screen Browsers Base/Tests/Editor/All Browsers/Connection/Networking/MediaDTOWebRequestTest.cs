@@ -17,24 +17,31 @@ using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using umi3d.browserRuntime.connection;
+using umi3d.testsUtils;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.TestTools;
 
 public class MediaDTOWebRequestTest
 {
-    IMediaDTOWebRequest mediaDTOWebRequest
+    IMediaDTOWebRequest GetMediaDTOWebRequest(IConnectionStateData connectionStateData)
+    {
+        return new MediaDTOWebRequest(connectionStateData);
+    }
+
+    string ValidURL
     {
         get
         {
-            //return new MediaDTOWebRequest();
-            return null;
+            return "https://intraverse-inetum.com";
         }
     }
 
     [Test]
     public void IsUrlFormatValid()
     {
-        IMediaDTOWebRequest mediaDTOWebRequest = null;
+        IMediaDTOWebRequest mediaDTOWebRequest = GetMediaDTOWebRequest(new ConnectionStateData());
 
         Assert.IsFalse(mediaDTOWebRequest.IsUrlFormatValid(null));
         Assert.IsFalse(mediaDTOWebRequest.IsUrlFormatValid("/media"));
@@ -44,21 +51,64 @@ public class MediaDTOWebRequestTest
     [Test]
     public void URLToMediaURL()
     {
-        IMediaDTOWebRequest mediaDTOWebRequest = null;
+        IMediaDTOWebRequest mediaDTOWebRequest = GetMediaDTOWebRequest(new ConnectionStateData());
 
         Assert.AreEqual(null, mediaDTOWebRequest.URLToMediaURL(null));
-        UnityEngine.TestTools.LogAssert.Expect(LogType.Error, "Execute method can only be called once.");
+        UnityEngine.TestTools.LogAssert.Expect(LogType.Error, "url is null or empty.");
 
         Assert.AreEqual("http://1/media", mediaDTOWebRequest.URLToMediaURL("1"));
     }
 
-    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-    // `yield return null;` to skip a frame.
     [UnityTest]
-    public IEnumerator MediaDTOWebRequestTestWithEnumeratorPasses()
+    public IEnumerator RequestMedia()
     {
-        // Use the Assert class to test conditions.
-        // Use yield to skip a frame.
-        yield return null;
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+
+        IConnectionStateData connectionStateData = new ConnectionStateData();
+        IMediaDTOWebRequest mediaDTOWebRequest = GetMediaDTOWebRequest(connectionStateData);
+
+        string mediaURL = null;
+        IAsyncRequestHandler requestHandler = null;
+
+        //------- First ----------------
+        mediaURL = mediaDTOWebRequest.URLToMediaURL("failUrl");
+        requestHandler = mediaDTOWebRequest.RequestMediaDto(mediaURL);
+        UnityEngine.TestTools.LogAssert.Expect(LogType.Error, "MediaDTO request failed after 3 tries.");
+
+        while (!requestHandler.RequestTask.IsCompleted)
+        {
+            // Request take usually 3s to be performed.
+            watch.CheckExecutionTime(11_000);
+            yield return null;
+        }
+        Assert.AreEqual(3, requestHandler.TryCount);
+        Assert.AreEqual(UnityWebRequest.Result.ConnectionError, requestHandler.Result);
+
+        //------- Second ----------------
+        mediaURL = mediaDTOWebRequest.URLToMediaURL(ValidURL);
+        requestHandler = mediaDTOWebRequest.RequestMediaDto(mediaURL);
+
+        while (!requestHandler.RequestTask.IsCompleted)
+        {
+            // Request take usually 3s to be performed.
+            watch.CheckExecutionTime(15_000);
+            yield return null;
+        }
+        Assert.AreEqual(UnityWebRequest.Result.Success, requestHandler.Result);
+
+        //------- Third ----------------
+        mediaURL = mediaDTOWebRequest.URLToMediaURL("failUrl");
+        requestHandler = mediaDTOWebRequest.RequestMediaDto(mediaURL);
+        connectionStateData.Add(new MasterServerSessionConnectionState(), new MasterServerSessionConnectionState().Id);
+
+        while (!requestHandler.RequestTask.IsCompleted)
+        {
+            // Request take usually 3s to be performed.
+            watch.CheckExecutionTime(15_000);
+            yield return null;
+        }
+        Assert.True(requestHandler.HasBeenCanceled);
+        Assert.AreEqual("Request aborted", requestHandler.Error);
+        Assert.AreEqual(UnityWebRequest.Result.ConnectionError, requestHandler.Result);
     }
 }

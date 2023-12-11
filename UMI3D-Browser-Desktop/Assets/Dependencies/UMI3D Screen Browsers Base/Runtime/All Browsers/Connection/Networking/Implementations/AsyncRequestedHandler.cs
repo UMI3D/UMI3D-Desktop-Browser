@@ -59,6 +59,8 @@ namespace umi3d.browserRuntime.connection
             }
         }
 
+        public Func<bool> IsCancellationRequired { get; set; }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -198,6 +200,11 @@ namespace umi3d.browserRuntime.connection
             }
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public Task RequestTask { get; private set; }
+
         UnityWebRequest webRequest;
         UnityWebRequestAsyncOperation operation;
         bool canceled = false;
@@ -232,6 +239,12 @@ namespace umi3d.browserRuntime.connection
                 UnityEngine.Debug.LogError($"{nameof(Execute)} method can only be called once.");
                 return;
             }
+            RequestTask = FactoryRequestTask();
+            await RequestTask;
+        }
+
+        async Task FactoryRequestTask()
+        {
             tries++;
             webRequest = await webRequestFactory(tries);
             canceled = false;
@@ -253,6 +266,15 @@ namespace umi3d.browserRuntime.connection
                 OnCompleted();
                 (handler as UnityWebRequestAsyncOperation).webRequest.Dispose();
             };
+
+            while (!operation.isDone)
+            {
+                if (IsCancellationRequired?.Invoke() ?? false)
+                {
+                    Abort();
+                }
+                await Task.Yield();
+            }
         }
 
         /// <summary>
