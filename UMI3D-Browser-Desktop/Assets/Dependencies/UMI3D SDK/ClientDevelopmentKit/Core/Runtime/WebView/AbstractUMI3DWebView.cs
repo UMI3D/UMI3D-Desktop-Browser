@@ -11,6 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System.Collections.Generic;
 using umi3d.common;
 using UnityEngine;
 
@@ -117,6 +118,26 @@ namespace umi3d.cdk
             }
         }
 
+        /// <summary>
+        /// if true, will use <see cref="whiteList"/> to determine which domains are allowed.
+        /// </summary>
+        public bool useWhiteList { get; set; } = false;
+
+        /// <summary>
+        /// Authorized domaines.
+        /// </summary>
+        public List<string> whiteList { get; set; } = new List<string>();
+
+        /// <summary>
+        /// if true, will use <see cref="useBlackList"/> to determine which domains are prohibited.
+        /// </summary>
+        public bool useBlackList { get; set; } = false;
+
+        /// <summary>
+        /// Non authorized domaines.
+        /// </summary>
+        public List<string> blackList { get; set; } = new List<string>();
+
         #endregion
 
         #region Methods
@@ -128,6 +149,10 @@ namespace umi3d.cdk
             size = dto.size.Struct();
             textureSize = dto.textureSize.Struct();
             canInteract = dto.canInteract;
+            useWhiteList = dto.useWhiteList;
+            whiteList = dto.whiteList;
+            useBlackList = dto.useBlackList;
+            blackList = dto.blackList;
 
             OnCanInteractChanged(canInteract);
         }
