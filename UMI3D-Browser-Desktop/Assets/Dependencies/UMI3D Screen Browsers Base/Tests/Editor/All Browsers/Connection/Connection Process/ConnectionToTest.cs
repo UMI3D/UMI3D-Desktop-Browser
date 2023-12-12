@@ -35,7 +35,7 @@ public class ConnectionToTest
     {
         IConnectionTo connectionTo = null;
 
-        var connectionTask = connectionTo.TryToConnect(url: "failURL");
+        var connectionTask = connectionTo.Connect(url: "failURL");
 
         while (!connectionTask.IsCompleted)
         {

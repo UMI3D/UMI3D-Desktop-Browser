@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using System.Threading.Tasks;
+using URL = System.String;
 
 namespace umi3d.browserRuntime.connection
 {
@@ -26,33 +28,71 @@ namespace umi3d.browserRuntime.connection
         enum ConnectionToResult
         {
             /// <summary>
-            /// The 
+            /// The browser is disconnected from this element.
             /// </summary>
             Disconnected,
+            /// <summary>
+            /// The browser is in the process of being connected.
+            /// </summary>
             Processing,
+            /// <summary>
+            /// The browser is connected to this element.
+            /// </summary>
             Connected,
+            /// <summary>
+            /// The connection to this element has been canceled.
+            /// </summary>
             Aborted,
+            /// <summary>
+            /// An error occurs while trying to connect to this element.
+            /// </summary>
             Error
         }
+
+        const string ConnectionAlreadyInProgress = "Cannot connect when the element is in the process of connecting or already connected.";
+
+        /// <summary>
+        /// Event raised when the connection to this element has succeeded.
+        /// </summary>
+        event Action<IConnectionTo> Connected;
+        /// <summary>
+        /// Event raised when the disconnection to this element has succeeded.
+        /// </summary>
+        event Action<IConnectionTo> Disconnected;
+        /// <summary>
+        /// Event raised when the connection or the disconnection has been canceled.
+        /// </summary>
+        event Action<IConnectionTo> Canceled;
 
         /// <summary>
         /// Error message.
         /// </summary>
         string Error { get; }
         /// <summary>
-        /// Result of the connection/
+        /// Result of the connection.
         /// </summary>
         ConnectionToResult Result { get; }
+        /// <summary>
+        /// The task relative to the connection or disconnection of this element.<br/>
+        /// You can wait for this task to end or listen to <see cref="Connected"/>, <see cref="Disconnected"/> and <see cref="Canceled"/> events.
+        /// </summary>
+        Task ConnectionOrDisconnectionTask { get; }
 
         /// <summary>
-        /// Try to connect.
+        /// connect to this element.
         /// </summary>
         /// <returns></returns>
-        Task TryToConnect(string url);
+        Task Connect(URL url);
         /// <summary>
         /// Disconnect if it was connected.
         /// </summary>
         /// <returns></returns>
         Task Disconnect();
+        /// <summary>
+        /// Format the url.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        URL URLToFormattedURL(URL url);
     }
 }
