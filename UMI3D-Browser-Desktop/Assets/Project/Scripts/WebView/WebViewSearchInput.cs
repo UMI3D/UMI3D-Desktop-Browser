@@ -40,12 +40,23 @@ namespace BrowserDesktop
 
         public void SearchUrl()
         {
-            if (validateDateRegex.IsMatch(url.text))
-                webView.browser.NavigateUrl(url.text);
-            else if (url.text.EndsWith(".com") || url.text.EndsWith(".net") || url.text.EndsWith(".fr") || url.text.EndsWith(".org"))
-                webView.browser.NavigateUrl("http://" + url.text);
-            else
-                webView.browser.NavigateUrl("https://www.google.com/search?q=" + url.text);
+            string uri = url.text;
+
+            if (!validateDateRegex.IsMatch(url.text))
+            {
+                if (url.text.EndsWith(".com") || url.text.EndsWith(".net") || url.text.EndsWith(".fr") || url.text.EndsWith(".org"))
+                    uri = "http://" + uri;
+                else
+                    uri = "https://www.google.com/search?q=" + uri;
+            }
+
+            if (webView.CheckIfUrlValid(uri))
+            {
+                webView.browser.NavigateUrl(uri);
+            } else
+            {
+                webView.LoadNotAccessibleWebPage(uri);
+            }
         }
     }
 }

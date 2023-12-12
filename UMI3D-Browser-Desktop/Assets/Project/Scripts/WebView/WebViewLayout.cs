@@ -32,6 +32,10 @@ namespace BrowserDesktop
         [SerializeField]
         private Canvas canvas;
 
+
+        [SerializeField]
+        private List<RectTransform> containerToStrech = new();
+
         [SerializeField]
         private WebView webView;
 
@@ -59,7 +63,7 @@ namespace BrowserDesktop
         {
             worldLayout.Clear();
 
-            foreach (RectTransform rect in GetComponentsInChildren<RectTransform>())
+            foreach (RectTransform rect in GetComponentsInChildren<RectTransform>(true))
             {
                 worldLayout.Add(new RectTransformData(rect));
             }
@@ -72,7 +76,7 @@ namespace BrowserDesktop
         {
             overlayLayout.Clear();
 
-            foreach (RectTransform rect in GetComponentsInChildren<RectTransform>())
+            foreach (RectTransform rect in GetComponentsInChildren<RectTransform>(true))
             {
                 overlayLayout.Add(new RectTransformData(rect));
             }
@@ -140,7 +144,11 @@ namespace BrowserDesktop
             float height = rawImage.rect.height;
 
             float delta = -ratio * height + width; // Lydie's Formula (thank you very much)
-            rawImage.sizeDelta = new Vector2(rawImage.sizeDelta.x - delta, rawImage.sizeDelta.y);
+
+            containerToStrech.ForEach(c =>
+            {
+                c.sizeDelta = new Vector2(c.sizeDelta.x - delta, c.sizeDelta.y);
+            });
         }
 
         #endregion
