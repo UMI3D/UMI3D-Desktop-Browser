@@ -18,7 +18,6 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using VoltstroStudios.UnityWebBrowser.Shared.Events;
-using static UnityEditor.PlayerSettings;
 
 namespace BrowserDesktop
 {
