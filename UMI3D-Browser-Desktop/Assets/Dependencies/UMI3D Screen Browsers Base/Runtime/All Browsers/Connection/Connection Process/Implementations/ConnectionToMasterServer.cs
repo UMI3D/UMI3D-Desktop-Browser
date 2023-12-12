@@ -33,26 +33,26 @@ namespace umi3d.browserRuntime.connection
 
         public Task TryToConnect()
         {
-            connectionStateData.Add(new MasterServerStartedConnectionState());
+            //connectionStateData.Add(new MasterServerStartedConnectionState());
             masterServer.ConnectToMasterServer
             (
                 callback: () =>
                 {
-                    if (connectionStateData.ContainsStateByType<MediaDTOFoundConnectionState>())
-                    {
-                        connectionStateData.Add(new MasterServerStoppedConnectionState());
-                        return;
-                    }
+                    //if (connectionStateData.ContainsStateByType<MediaDTOFoundConnectionState>())
+                    //{
+                    //    connectionStateData.Add(new MasterServerStoppedConnectionState());
+                    //    return;
+                    //}
 
                     masterServer.RequestInfo
                     (
                         UIcallback: (name, icon) =>
                         {
-                            if (connectionStateData.ContainsStateByType<MediaDTOFoundConnectionState>())
-                            {
-                                connectionStateData.Add(new MasterServerStoppedConnectionState());
-                                return;
-                            }
+                            //if (connectionStateData.ContainsStateByType<MediaDTOFoundConnectionState>())
+                            //{
+                            //    connectionStateData.Add(new MasterServerStoppedConnectionState());
+                            //    return;
+                            //}
 
                             worldData.World = new();
                             worldData.World.serverName = name;
@@ -63,17 +63,17 @@ namespace umi3d.browserRuntime.connection
                         },
                         failed: () =>
                         {
-                            connectionStateData.Add(new MasterServerFailedConnectionState());
+                            //connectionStateData.Add(new MasterServerFailedConnectionState());
                         }
                     );
 
-                    connectionStateData.Add(new MasterServerSessionConnectionState());
+                    //connectionStateData.Add(new MasterServerSessionConnectionState());
                     //DisplaySessions?.Invoke();
                 },
                 worldData.World.serverUrl,
                 failed: () =>
                 {
-                    connectionStateData.Add(new MasterServerFailedConnectionState());
+                    //connectionStateData.Add(new MasterServerFailedConnectionState());
                 }
             );
             return Task.CompletedTask;

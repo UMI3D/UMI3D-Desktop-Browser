@@ -13,18 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using umi3d.common;
-using UnityEngine;
 
-namespace umi3d.browserRuntime.connection
+using System;
+
+namespace inetum.unityUtils
 {
-    public interface IMediaDTOWebRequest
+    public interface ISmartEnumeration
     {
-        MediaDto MediaDTO { get; }
-
-        Task RequestMediaDto(string url);
+        /// <summary>
+        /// Unique identifier.
+        /// </summary>
+        Guid Id { get; }
     }
 }

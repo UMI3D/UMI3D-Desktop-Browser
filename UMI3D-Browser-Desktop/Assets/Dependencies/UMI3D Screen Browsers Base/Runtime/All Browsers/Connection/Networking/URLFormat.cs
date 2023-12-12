@@ -20,11 +20,18 @@ namespace umi3d.browserRuntime.connection
 {
     public static class URLFormat
     {
+        /// <summary>
+        /// Combine Ip and Port to get a URL.
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <param name="port"></param>
+        /// <returns></returns>
         public static string IpPortToURL(string ip, string port)
         {
-            if (string.IsNullOrEmpty(ip) && string.IsNullOrEmpty(port))
+            if (string.IsNullOrEmpty(ip))
             {
-                UnityEngine.Debug.LogError($"Ip and port are empty or null.");
+                UnityEngine.Debug.LogError($"Ip is empty or null.");
+                return null;
             }
 
             string url;
@@ -46,16 +53,27 @@ namespace umi3d.browserRuntime.connection
             return url;
         }
 
+        /// <summary>
+        /// Format the url to get a mediaDTO url.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         public static string URLToMediaURL(string url)
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                UnityEngine.Debug.LogError($"url is null or empty.");
+                return null;
+            }
+
             string mediaURL;
             if (url.EndsWith(UMI3DNetworkingKeys.media))
             {
-                mediaURL = url;
+                mediaURL = IpPortToURL(url, null);
             }
             else
             {
-                mediaURL = $"{url}{UMI3DNetworkingKeys.media}";
+                mediaURL = $"{IpPortToURL(url, null)}{UMI3DNetworkingKeys.media}";
             }
 
             return mediaURL;

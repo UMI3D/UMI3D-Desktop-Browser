@@ -13,26 +13,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using NUnit.Framework;
 
-using inetum.unityUtils;
-using System;
-
-namespace umi3d.browserRuntime.connection
+namespace umi3d.testsUtils
 {
-    public struct MasterServerStartedConnectionState : ISmartEnumeration, IConnectionState
+    public static class DiagWatchExtensions 
     {
-        public Guid Id
+        public static void CheckExecutionTime(this System.Diagnostics.Stopwatch watch, long ms)
         {
-            get
+            long _ms = watch.ElapsedMilliseconds;
+            if (_ms > ms)
             {
-                return id;
+                Assert.Fail($"Execution take too long. Requested: {ms}ms but was {_ms}");
             }
-        }
-        static Guid id;
-
-        static MasterServerStartedConnectionState()
-        {
-            id = Guid.NewGuid();
         }
     }
 }

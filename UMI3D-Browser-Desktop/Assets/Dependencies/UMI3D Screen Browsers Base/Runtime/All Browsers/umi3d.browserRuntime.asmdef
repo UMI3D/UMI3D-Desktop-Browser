@@ -1,0 +1,25 @@
+{
+    "name": "umi3d.browserRuntime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:84651a3751eca9349aac36a66bba901b",
+        "GUID:d0bf4ea2ef3a7c74e9160b8995fd902b",
+        "GUID:6e34c4b4c3202a14eb95e0a784041765",
+        "GUID:8537d47cf9ea6504d84cf56365c6d93b",
+        "GUID:86623230113704741b2575414446f181",
+        "GUID:29a403b1410bc9e44b9b0cbcfde58e71",
+        "GUID:5fcc83811144000419d9262c4c25c3e8",
+        "GUID:09603449e2002d4418d8adc054084195",
+        "GUID:007a934ecc176214d9afb0acb90820b8",
+        "GUID:18fffed3b3b27ed4a83657b28900e3d0"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

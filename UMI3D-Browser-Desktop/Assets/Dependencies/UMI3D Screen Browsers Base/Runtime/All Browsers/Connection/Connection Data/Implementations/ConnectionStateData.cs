@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using inetum.unityUtils;
 using System;
 using System.Collections.Generic;
 
@@ -20,7 +21,7 @@ namespace umi3d.browserRuntime.connection
 {
     public class ConnectionStateData : IConnectionStateData
     {
-        public event Action StateAdded;
+        public event Action<IConnectionState> StateAdded;
         public event Action Cleared;
 
         public IConnectionState this[int index]
@@ -40,44 +41,57 @@ namespace umi3d.browserRuntime.connection
         }
 
         List<IConnectionState> states = new();
+        List<Guid> stateIds = new();
 
-        public bool Add<T>(T data) where T : IConnectionState
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public bool Contains(Guid id)
+        {
+            return stateIds.Contains(id);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public bool Add(IConnectionState data, Guid id)
         {
             if (states.Count == 0)
             {
                 states.Add(data);
+                stateIds.Add(id);
+                StateAdded?.Invoke(data);
                 return true;
             }
             else
             {
-                if (states[states.Count - 1] is T)
+                if (stateIds.Contains(id))
                 {
                     return false;
                 }
                 else
                 {
                     states.Add(data);
+                    stateIds.Add(id);
+                    StateAdded?.Invoke(data);
                     return true;
                 }
             }
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void Clear()
         {
             states.Clear();
-        }
-
-        public bool ContainsStateByType<T>() where T : IConnectionState
-        {
-            for (int i = 0; i < states.Count; i++)
-            {
-                if (states[i] is T)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            stateIds.Clear();
+            Cleared?.Invoke();
         }
     }
 }
