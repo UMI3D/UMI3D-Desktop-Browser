@@ -244,8 +244,8 @@ namespace umi3d.baseBrowser.connection
             MainMobileAction.MenuCount = count;
 
             var ButtonsArea = TrailingArea.ButtonsArea;
-            // If action is down don't update.
-            if (m_isContextualMenuDown) return;
+            //// If action is down don't update.
+            //if (m_isContextualMenuDown) return;
 
             if (count == 0)
             {
@@ -303,8 +303,19 @@ namespace umi3d.baseBrowser.connection
                 //UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
 
                 UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
-                Game.Cursor.Action = null;
-                UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
+                ButtonDisplayer button = ObjectMenu.FirstOrDefault<ButtonDisplayer>();
+                Game.Cursor.Action = button.Text;
+                UpdateContextualMenuActions(ContextualMenuActionEnum.UpAndDown, null,
+                () =>
+                {
+                    m_isContextualMenuDown = true;
+                    button.menuItem.NotifyValueChange(true);
+                },
+                () =>
+                {
+                    m_isContextualMenuDown = false;
+                    button.menuItem.NotifyValueChange(false);
+                });
             }
         }
 
