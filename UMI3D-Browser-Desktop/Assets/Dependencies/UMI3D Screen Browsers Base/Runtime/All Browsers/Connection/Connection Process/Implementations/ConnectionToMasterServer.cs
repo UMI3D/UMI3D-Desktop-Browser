@@ -218,6 +218,7 @@ namespace umi3d.browserRuntime.connection
 
             var ConnectionTask = Task.Factory.StartNew(() =>
             {
+                // Connect in another thread.
                 UnityEngine.Debug.Log($"{Thread.CurrentThread.ManagedThreadId}");
                 client.Connect(ip_port[0], ushort.Parse(ip_port[1]));
             });
@@ -230,8 +231,8 @@ namespace umi3d.browserRuntime.connection
             if (!client.IsConnected)
             {
                 UnityEngine.Debug.Log($"pomme");
-                
-                
+                UnityEngine.Debug.Log($"{Thread.CurrentThread.ManagedThreadId}");
+
             }
             else
             {
