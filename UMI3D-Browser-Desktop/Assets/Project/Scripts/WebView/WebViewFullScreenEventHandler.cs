@@ -148,7 +148,7 @@ namespace BrowserDesktop
                 return;
 
             scroll = webview.browser.inputHandler.GetScroll();
-            scroll *= webview.browser.browserClient.BrowserTexture.height;
+            scroll *= webview.browser.browserClient.BrowserTexture?.height ?? 0;
 
             if (scroll != 0)
                 webview.browser.browserClient.SendMouseScroll(pointerPos, (int)scroll);
