@@ -15,6 +15,7 @@ limitations under the License.
 */
 using NUnit.Framework;
 using System.Collections;
+using System.Threading;
 using System.Threading.Tasks;
 using umi3d.browserRuntime.connection;
 using umi3d.common;

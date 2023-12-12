@@ -16,6 +16,7 @@ limitations under the License.
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using umi3d.common;
 using UnityEngine.Networking;

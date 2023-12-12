@@ -14,15 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Frame;
+using BeardedManStudios.Forge.Networking.Unity;
+using BeardedManStudios.SimpleJSON;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using umi3d.cdk.collaboration;
-using UnityEditor.Experimental.GraphView;
-using URL = System.String;
 
 namespace umi3d.browserRuntime.connection
 {
-    public class ConnectionToMasterServer : IConnectionTo
+    public class ConnectionToMasterServer : IConnectionTo/*, IConnectionToMasterServer*/
     {
         const string requestServerInfoKey = "info";
         const string requestSessionInfoKey = "get";
@@ -64,63 +66,64 @@ namespace umi3d.browserRuntime.connection
         /// </summary>
         public Task ConnectionOrDisconnectionTask { get; private set; }
 
-        public ConnectionToMasterServer(LaucherOnMasterServer masterServer, IWorldData worldData, IConnectionStateData connectionStateData)
-        { 
-            this.masterServer = masterServer;
-            this.worldData = worldData;
-            this.connectionStateData = connectionStateData;
-        }
+        //public ConnectionToMasterServer(LaucherOnMasterServer masterServer, IWorldData worldData, IConnectionStateData connectionStateData)
+        //{ 
+        //    this.masterServer = masterServer;
+        //    this.worldData = worldData;
+        //    this.connectionStateData = connectionStateData;
+        //}
+
+        //masterServer.ConnectToMasterServer
+        //(
+        //    callback: () =>
+        //    {
+        //        //if (connectionStateData.ContainsStateByType<MediaDTOFoundConnectionState>())
+        //        //{
+        //        //    connectionStateData.Add(new MasterServerStoppedConnectionState());
+        //        //    return;
+        //        //}
+
+        //        masterServer.RequestInfo
+        //        (
+        //            UIcallback: (name, icon) =>
+        //            {
+        //                //if (connectionStateData.ContainsStateByType<MediaDTOFoundConnectionState>())
+        //                //{
+        //                //    connectionStateData.Add(new MasterServerStoppedConnectionState());
+        //                //    return;
+        //                //}
+
+        //                worldData.World = new();
+        //                worldData.World.serverName = name;
+        //                worldData.World.serverIcon = icon;
+
+        //                //preferences.ServerPreferences.StoreUserData(currentServer);
+        //                //if (saveInfo) StoreServer();
+        //            },
+        //            failed: () =>
+        //            {
+        //                //connectionStateData.Add(new MasterServerFailedConnectionState());
+        //            }
+        //        );
+
+        //        //connectionStateData.Add(new MasterServerSessionConnectionState());
+        //        //DisplaySessions?.Invoke();
+        //    },
+        //    worldData.World.serverUrl,
+        //    failed: () =>
+        //    {
+        //        //connectionStateData.Add(new MasterServerFailedConnectionState());
+        //    }
+        //);
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public async Task Connect(URL url)
+        public async Task Connect(string url)
         {
             //connectionStateData.Add(new MasterServerStartedConnectionState());
-            //masterServer.ConnectToMasterServer
-            //(
-            //    callback: () =>
-            //    {
-            //        //if (connectionStateData.ContainsStateByType<MediaDTOFoundConnectionState>())
-            //        //{
-            //        //    connectionStateData.Add(new MasterServerStoppedConnectionState());
-            //        //    return;
-            //        //}
-
-            //        masterServer.RequestInfo
-            //        (
-            //            UIcallback: (name, icon) =>
-            //            {
-            //                //if (connectionStateData.ContainsStateByType<MediaDTOFoundConnectionState>())
-            //                //{
-            //                //    connectionStateData.Add(new MasterServerStoppedConnectionState());
-            //                //    return;
-            //                //}
-
-            //                worldData.World = new();
-            //                worldData.World.serverName = name;
-            //                worldData.World.serverIcon = icon;
-
-            //                //preferences.ServerPreferences.StoreUserData(currentServer);
-            //                //if (saveInfo) StoreServer();
-            //            },
-            //            failed: () =>
-            //            {
-            //                //connectionStateData.Add(new MasterServerFailedConnectionState());
-            //            }
-            //        );
-
-            //        //connectionStateData.Add(new MasterServerSessionConnectionState());
-            //        //DisplaySessions?.Invoke();
-            //    },
-            //    worldData.World.serverUrl,
-            //    failed: () =>
-            //    {
-            //        //connectionStateData.Add(new MasterServerFailedConnectionState());
-            //    }
-            //);
 
             if (Result == IConnectionTo.ConnectionToResult.Processing || Result == IConnectionTo.ConnectionToResult.Connected)
             {
@@ -141,8 +144,81 @@ namespace umi3d.browserRuntime.connection
                 return;
             }
 
+            client = new();
+
+            client.connectAttemptFailed += netWorker =>
+            {
+                Result = IConnectionTo.ConnectionToResult.Disconnected;
+                Error = $"Connection process failed.";
+                Canceled?.Invoke(this);
+                UnityEngine.Debug.Log($"{Thread.CurrentThread.ManagedThreadId}");
+            };
+
+            client.serverAccepted += netWorker =>
+            {
+                Result = IConnectionTo.ConnectionToResult.Connected;
+                Connected?.Invoke(this);
+            };
+
+            //client.textMessageReceived += (
+            //    NetworkingPlayer player,
+            //    Text frame,
+            //    NetWorker sender
+            //) =>
+            //{
+            //    JSONNode data = null;
+
+            //    try
+            //    {
+            //        // Get the list of hosts to iterate through from the frame payload
+            //        data = JSONNode.Parse(frame.ToString());
+            //        if (data == null)
+            //        {
+            //            throw new NullReferenceException($"Data null when trying to parse JSONNode.");
+            //        }
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Disconnect();
+
+            //        logger.Error(
+            //            $"{nameof(Connect)}",
+            //            $"Trying to get the received information cause an exception."
+            //        );
+            //        logger.Exception(
+            //            $"{nameof(Connect)}",
+            //            e
+            //        );
+
+            //        return;
+            //    }
+
+            //    if (data["name"] != null)
+            //    {
+            //        //requestServerInfSucceeded?.Invoke(
+            //        //(
+            //        //        serverName: data["name"],
+            //        //        icon: data["icon"]
+            //        //    )
+            //        //);
+            //    }
+            //    else if (data["hosts"] != null)
+            //    {
+            //        // Create a C# object for the response from the master server
+            //        var response = new MasterServerResponse(data["hosts"].AsArray);
+
+            //        // Go through all of the available hosts and add them to the server browser
+            //        foreach (MasterServerResponse.Server server in response.serverResponse)
+            //        {
+            //            // Update UI or something with the above data
+            //            //requestSessionInfSucceeded?.Invoke(server);
+            //        }
+            //    }
+            //};
+
             var ConnectionTask = Task.Factory.StartNew(() =>
             {
+                UnityEngine.Debug.Log($"{Thread.CurrentThread.ManagedThreadId}");
                 client.Connect(ip_port[0], ushort.Parse(ip_port[1]));
             });
 
@@ -153,17 +229,27 @@ namespace umi3d.browserRuntime.connection
 
             if (!client.IsConnected)
             {
-                Result = IConnectionTo.ConnectionToResult.Disconnected;
-                Error = $"Connection process failed.";
-                Connected?.Invoke(this);
+                UnityEngine.Debug.Log($"pomme");
+                
+                
             }
             else
             {
-                Result = IConnectionTo.ConnectionToResult.Connected;
+                UnityEngine.Debug.Log($"poire");
+                
             }
 
 
 
+        }
+
+        private void Client_textMessageReceived(
+            NetworkingPlayer player, 
+            Text frame, 
+            NetWorker sender
+        )
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -181,7 +267,7 @@ namespace umi3d.browserRuntime.connection
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public URL URLToFormattedURL(URL url)
+        public string URLToFormattedURL(string url)
         {
             string[] ip_port = url.Split(':');
             if (ip_port.Length > 2)

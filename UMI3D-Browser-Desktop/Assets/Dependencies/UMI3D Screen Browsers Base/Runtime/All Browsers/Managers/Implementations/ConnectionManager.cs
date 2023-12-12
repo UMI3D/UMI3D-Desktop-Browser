@@ -44,11 +44,11 @@ namespace umi3d.browserRuntime.managers
             worldData = new WorldData();
             connectionStateData = new ConnectionStateData();
 
-            connectionToMasterServer = new(
-                new LaucherOnMasterServer(),
-                worldData,
-                connectionStateData
-            );
+            //connectionToMasterServer = new(
+            //    new LaucherOnMasterServer(),
+            //    worldData,
+            //    connectionStateData
+            //);
             connectionToWorldController = new(
                 worldData,
                 connectionStateData

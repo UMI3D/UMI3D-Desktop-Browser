@@ -16,7 +16,6 @@ limitations under the License.
 
 using System;
 using System.Threading.Tasks;
-using URL = System.String;
 
 namespace umi3d.browserRuntime.connection
 {
@@ -82,7 +81,7 @@ namespace umi3d.browserRuntime.connection
         /// connect to this element.
         /// </summary>
         /// <returns></returns>
-        Task Connect(URL url);
+        Task Connect(string url);
         /// <summary>
         /// Disconnect if it was connected.
         /// </summary>
@@ -93,6 +92,6 @@ namespace umi3d.browserRuntime.connection
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        URL URLToFormattedURL(URL url);
+        string URLToFormattedURL(string url);
     }
 }

@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using NUnit.Framework;
 using umi3d.browserRuntime.connection;
 using UnityEngine;
@@ -22,6 +23,14 @@ using UnityEngine.TestTools;
 
 public class ConnectionToTest
 {
+    IConnectionTo MasterServerConnection
+    {
+        get
+        {
+            return new ConnectionToMasterServer();
+        }
+    }
+
     string ValidURL
     {
         get
@@ -31,11 +40,16 @@ public class ConnectionToTest
     }
 
     [UnityTest]
-    public IEnumerator ConnectionToTestSimplePasses()
+    public IEnumerator ConnectionToMasterServer()
     {
-        IConnectionTo connectionTo = null;
+        IConnectionTo connectionTo = MasterServerConnection;
 
-        var connectionTask = connectionTo.Connect(url: "failURL");
+        connectionTo.Canceled += connectionHandler =>
+        {
+            UnityEngine.Debug.Log($"{Thread.CurrentThread.ManagedThreadId}");
+        };
+
+        var connectionTask = connectionTo.Connect(url: "0:0");
 
         while (!connectionTask.IsCompleted)
         {
