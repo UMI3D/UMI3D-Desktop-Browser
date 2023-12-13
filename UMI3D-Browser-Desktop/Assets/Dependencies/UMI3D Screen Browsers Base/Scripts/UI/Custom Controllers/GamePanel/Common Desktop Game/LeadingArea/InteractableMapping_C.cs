@@ -151,6 +151,10 @@ namespace umi3d.commonDesktop.game
             row.AddMapping(name, Controller, action);
 
             S_interactionMapping.Add(interaction, row);
+            if (S_interactionMapping.Count == 1)
+            {
+                row.AddLeftClick();
+            }
             MappingAdded?.Invoke();
         }
 

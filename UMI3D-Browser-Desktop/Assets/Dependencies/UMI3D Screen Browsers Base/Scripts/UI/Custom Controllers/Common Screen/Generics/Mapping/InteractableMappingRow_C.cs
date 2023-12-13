@@ -152,6 +152,13 @@ namespace umi3d.commonScreen.Displayer
                     break;
             }
         }
+        public void AddLeftClick()
+        {
+            var map = CreateMapping();
+            map.Type = MappingType.Mouse;
+            Add(map);
+            MappingChildren.Add(map);
+        }
         /// <summary>
         /// Remove all mapping.
         /// </summary>

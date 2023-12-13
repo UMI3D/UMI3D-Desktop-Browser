@@ -90,6 +90,7 @@ namespace umi3d.commonScreen.Displayer
         public virtual string USSCustomClassType(MappingType type) => $"{UssCustomClass_Emc}-{type}".ToLower();
 
         public Text_C MappingNameText = new Text_C { name = "mapping-name" };
+        public VisualElement icon = new VisualElement() { name = "icon" };
 
         protected MappingType m_type;
 
@@ -97,6 +98,7 @@ namespace umi3d.commonScreen.Displayer
         {
             base.AttachStyleSheet();
             this.AddStyleSheetFromPath(StyleSheetPath_MainStyle);
+            Insert(0, icon);
         }
 
         protected override void SetProperties()
