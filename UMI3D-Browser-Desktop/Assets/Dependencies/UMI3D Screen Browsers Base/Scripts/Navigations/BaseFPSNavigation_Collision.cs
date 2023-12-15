@@ -79,7 +79,7 @@ namespace umi3d.baseBrowser.Navigation
             foreach (Transform foot in feetRaycastOrigin)
             {
                 if (
-                    UnityEngine.Physics.Raycast(foot.position + Vector3.up * maxStepHeight + direction, Vector3.down, out hit, 100, navmeshLayer)
+                    Physics.Raycast(foot.position + Vector3.up * maxStepHeight + direction, Vector3.down, out hit, 100, navmeshLayer)
                     && foundHit.distance > hit.distance
                     && Vector3.Angle(transform.up, hit.normal) <= maxSlopeAngle
                     )
@@ -99,6 +99,7 @@ namespace umi3d.baseBrowser.Navigation
             hasGroundHeightChangedLastFrame = false;
             return false;
         }
+
         /// <summary>
         /// Checks if there is an obstacle for the player and returns an allowed movement for the player.
         /// </summary>
