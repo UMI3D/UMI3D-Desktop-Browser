@@ -158,7 +158,7 @@ namespace umi3d.baseBrowser.Navigation
             if (!IsGrounded)
                 return false;
 
-            return !Physics.CapsuleCast(currentCapsuleBase, currentCapsuleEnd, playerRadius, transform.up, .5f, obstacleLayer);
+            return !Physics.CapsuleCast(currentCapsuleBase, currentCapsuleEnd, playerRadius, transform.up, data.MaxJumpHeight, obstacleLayer);
         }
 
         protected (Vector3, Vector3) GetCapsuleSphereCenters()
