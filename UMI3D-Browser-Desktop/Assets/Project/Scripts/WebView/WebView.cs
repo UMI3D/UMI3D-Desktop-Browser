@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 using System;
+using System.Text.RegularExpressions;
 using umi3d.baseBrowser.inputs.interactions;
 using umi3d.cdk;
 using umi3d.common;
@@ -22,6 +23,7 @@ using umi3d.common.interaction;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
 
 namespace BrowserDesktop
 {
@@ -54,6 +56,12 @@ namespace BrowserDesktop
         [SerializeField]
         private RectTransform homeRectTransform = null;
 
+        [SerializeField]
+        private RectTransform fullScreenRectTransform = null;
+
+        [SerializeField]
+        private RectTransform reduceScreenRectTransform = null;
+
         [Header("Top bar")]
         [SerializeField]
         private RectTransform topBarContainer = null;
@@ -72,9 +80,9 @@ namespace BrowserDesktop
         [SerializeField]
         private InputField urlText = null;
 
-        private ulong id;
-
         private string previousUrl;
+
+        private UMI3DWebViewDto dto;
 
         #endregion
 
@@ -88,32 +96,49 @@ namespace BrowserDesktop
 
             canvas.GetComponent<CanvasScaler>().dynamicPixelsPerUnit = 3;
 
-            browser.browserClient.OnUrlChanged += (url) =>
+            browser.browserClient.OnUrlChanged += OnUrlLoaded;
+        }
+
+        private void OnUrlLoaded(string url)
+        {
+            if (url == previousUrl)
             {
-                if (url == previousUrl)
+                return;
+            }
+
+            if (CheckIfUrlValid(url))
+            {
+                if (url.StartsWith("data:"))
                 {
-                    return;
+                    string title = Regex.Match(url, @"\<title\b[^>]*\>\s*(?<Title>[\s\S]*?)\</title\>", RegexOptions.IgnoreCase).Groups["Title"].Value;
+
+                    urlText.text = "HTML data:Title : " + title;
+                } else
+                {
+                    previousUrl = url;
+
+                    urlText.text = url;
+
+                    var request = new WebViewUrlChangedRequestDto
+                    {
+                        url = url,
+                        webViewId = dto.id
+                    };
+
+                    UMI3DClientServer.SendRequest(request, true);
                 }
 
-                previousUrl = url;
-
-                urlText.text = url;
-
-                var request = new WebViewUrlChangedRequestDto
-                {
-                    url = url,
-                    webViewId = id
-                };
-
-                UMI3DClientServer.SendRequest(request, true);
-            };
+            } else
+            {
+                LoadNotAccessibleWebPage(url);
+            }
         }
 
         public override void Init(UMI3DWebViewDto dto)
         {
             base.Init(dto);
 
-            id = dto.id;
+            this.dto = dto;
         }
 
         protected override void OnCanInteractChanged(bool canInteract)
@@ -127,35 +152,48 @@ namespace BrowserDesktop
 
         protected override void OnSizeChanged(Vector2 size)
         {
-            container.localScale = new Vector3(size.x, size.y, 1);
+            try
+            {
+                container.localScale = new Vector3(size.x, size.y, 1);
 
-            Vector3[] corners = new Vector3[4];
+                Vector3[] corners = new Vector3[4];
 
-            textureTransform.GetWorldCorners(corners);
+                textureTransform.GetWorldCorners(corners);
 
-            bottomBarContainer.position = (corners[0] + corners[3]) / 2f;
-            topBarContainer.position = (corners[1] + corners[2]) / 2f;
+                bottomBarContainer.position = (corners[0] + corners[3]) / 2f;
+                topBarContainer.position = (corners[1] + corners[2]) / 2f;
 
-            topBarContainer.localScale = new Vector3(topBarContainer.localScale.x,
-                topBarContainer.localScale.y / container.localScale.y, topBarContainer.localScale.z);
+                topBarContainer.localScale = new Vector3(topBarContainer.localScale.x,
+                    topBarContainer.localScale.y / container.localScale.y, topBarContainer.localScale.z);
 
-            bottomBarContainer.localScale = new Vector3(bottomBarContainer.localScale.x,
-                bottomBarContainer.localScale.y / container.localScale.y, bottomBarContainer.localScale.z);
+                bottomBarContainer.localScale = new Vector3(bottomBarContainer.localScale.x,
+                    bottomBarContainer.localScale.y / container.localScale.y, bottomBarContainer.localScale.z);
 
-            urlRectTransform.localScale = new Vector3(urlRectTransform.localScale.x * topBarContainer.localScale.y,
-                urlRectTransform.localScale.y, urlRectTransform.localScale.z);
+                urlRectTransform.localScale = new Vector3(urlRectTransform.localScale.x / container.localScale.x,
+                    urlRectTransform.localScale.y, urlRectTransform.localScale.z);
 
-            searchRectTransform.localScale = new Vector3(searchRectTransform.localScale.x * topBarContainer.localScale.y,
-                searchRectTransform.localScale.y, searchRectTransform.localScale.z);
+                searchRectTransform.localScale = new Vector3(searchRectTransform.localScale.x / container.localScale.x,
+                    searchRectTransform.localScale.y, searchRectTransform.localScale.z);
 
-            nextRectTransform.localScale = new Vector3(nextRectTransform.localScale.x * bottomBarContainer.localScale.y,
-                nextRectTransform.localScale.y, nextRectTransform.localScale.z);
+                nextRectTransform.localScale = new Vector3(nextRectTransform.localScale.x / container.localScale.x,
+                    nextRectTransform.localScale.y, nextRectTransform.localScale.z);
 
-            previousRectTransform.localScale = new Vector3(previousRectTransform.localScale.x * bottomBarContainer.localScale.y,
-                previousRectTransform.localScale.y, previousRectTransform.localScale.z);
+                previousRectTransform.localScale = new Vector3(previousRectTransform.localScale.x / container.localScale.x,
+                    previousRectTransform.localScale.y, previousRectTransform.localScale.z);
 
-            homeRectTransform.localScale = new Vector3(homeRectTransform.localScale.x * bottomBarContainer.localScale.y,
-                homeRectTransform.localScale.y, homeRectTransform.localScale.z);
+                homeRectTransform.localScale = new Vector3(homeRectTransform.localScale.x / container.localScale.x,
+                    homeRectTransform.localScale.y, homeRectTransform.localScale.z);
+
+                fullScreenRectTransform.localScale = new Vector3(fullScreenRectTransform.localScale.x / container.localScale.x,
+                    fullScreenRectTransform.localScale.y, fullScreenRectTransform.localScale.z);
+
+                reduceScreenRectTransform.localScale = new Vector3(reduceScreenRectTransform.localScale.x / container.localScale.x,
+                    reduceScreenRectTransform.localScale.y, reduceScreenRectTransform.localScale.z);
+
+            } catch (Exception e)
+            {
+                UMI3DLogger.LogException(e, DebugScope.CDK);
+            }
         }
 
         protected override async void OnTextureSizeChanged(Vector2 size)
@@ -170,7 +208,8 @@ namespace BrowserDesktop
             try
             {
                 browser.browserClient.Resize(new VoltstroStudios.UnityWebBrowser.Shared.Resolution((uint)size.x, (uint)size.y));
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Debug.LogError("Impossible to resize WebView.");
                 Debug.LogException(ex);
@@ -188,8 +227,10 @@ namespace BrowserDesktop
 
             try
             {
-                Debug.Log("URL " + url);
-                browser.browserClient.LoadUrl(url);
+                if (CheckIfUrlValid(url))
+                    browser.browserClient.LoadUrl(url);
+                else
+                    LoadNotAccessibleWebPage(url);
             }
             catch (Exception ex)
             {
@@ -214,6 +255,64 @@ namespace BrowserDesktop
             IsWebViewFocused = false;
 
             BaseKeyInteraction.IsEditingTextField = false;
+        }
+
+        public void SetWorldSpace()
+        {
+            OnSizeChanged(size);
+
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+        }
+
+        /// <summary>
+        /// Check if <paramref name="url"/> is allowed regarding whitelist/blacklist parameter.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public bool CheckIfUrlValid(string url)
+        {
+            if (url.StartsWith("data:"))
+                return true;
+
+            try
+            {
+                Uri uriToCheck = new Uri(url);
+
+                if (useBlackList)
+                {
+                    if (blackList.Contains(uriToCheck.Host))
+                    {
+                        UMI3DLogger.LogError("Trying to load a blacklisted url " + url, DebugScope.Networking);
+
+                        return false;
+                    }
+                }
+
+                if (useWhiteList)
+                {
+                    if (!whiteList.Contains(uriToCheck.Host))
+                    {
+                        UMI3DLogger.LogError("Trying to load an url not whitelisted " + url, DebugScope.Networking);
+
+                        return false;
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Displays a web page explaining that a <paramref name="notAuhtorizedUrl"/> was loaded but it was not allowed.
+        /// </summary>
+        /// <param name="notAuhtorizedUrl"></param>
+        public void LoadNotAccessibleWebPage(string notAuhtorizedUrl)
+        {
+            browser.LoadHtml("<html><head><meta charset=\"utf-8\"><title>Not authorized</title></head><body>Impossible to load " + notAuhtorizedUrl + ", this url is either blacklisted or not white listed. Contact your administrator.</body></html>");
         }
 
         #endregion

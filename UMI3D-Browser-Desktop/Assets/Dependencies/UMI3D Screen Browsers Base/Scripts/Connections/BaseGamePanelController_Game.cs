@@ -244,8 +244,8 @@ namespace umi3d.baseBrowser.connection
             MainMobileAction.MenuCount = count;
 
             var ButtonsArea = TrailingArea.ButtonsArea;
-            // If action is down don't update.
-            if (m_isContextualMenuDown) return;
+            //// If action is down don't update.
+            //if (m_isContextualMenuDown) return;
 
             if (count == 0)
             {
@@ -277,13 +277,13 @@ namespace umi3d.baseBrowser.connection
                         button.menuItem.NotifyValueChange(false);
                     });
                 }
-                else UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
-                //else
-                //{
-                //    UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
-                //    Game.Cursor.Action = null;
-                //    UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
-                //}
+                //else UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
+                else
+                {
+                    UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                    Game.Cursor.Action = null;
+                    UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
+                }
 
                 if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;
             }
@@ -300,11 +300,22 @@ namespace umi3d.baseBrowser.connection
 
                 if (!ButtonsArea.IsActionButtonDisplayed) ButtonsArea.IsActionButtonDisplayed = true;
 
-                UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
+                //UpdateContextualMenuActions(ContextualMenuActionEnum.OpenOrClose);
 
-                //UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
-                //Game.Cursor.Action = null;
-                //UpdateContextualMenuActions(ContextualMenuActionEnum.Null);
+                UnityEngine.Debug.Log("<color=red>Fix for Laval: </color>" + $"To be updated");
+                ButtonDisplayer button = ObjectMenu.FirstOrDefault<ButtonDisplayer>();
+                Game.Cursor.Action = button.Text;
+                UpdateContextualMenuActions(ContextualMenuActionEnum.UpAndDown, null,
+                () =>
+                {
+                    m_isContextualMenuDown = true;
+                    button.menuItem.NotifyValueChange(true);
+                },
+                () =>
+                {
+                    m_isContextualMenuDown = false;
+                    button.menuItem.NotifyValueChange(false);
+                });
             }
         }
 

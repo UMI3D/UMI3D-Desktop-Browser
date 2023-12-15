@@ -38,6 +38,13 @@ namespace umi3d.baseBrowser.inputs.interactions
 
         public NavigationEnum Navigation;
 
+        protected override void Start()
+        {
+            Key.started += KeyStarted;
+            Key.canceled += KeyCanceled;
+            Key.Enable();
+        }
+
         public static bool IsPressed(NavigationEnum navigation)
         {
             var _key = S_Navigations.Find(key => key.Navigation == navigation);

@@ -110,6 +110,8 @@ namespace umi3d.commonDesktop.game
             Add(Main);
             Main.Add(InteractableNameText);
             Main.Add(ScrollView);
+
+            pickingMode = PickingMode.Ignore;
         }
 
         protected override void SetProperties()
@@ -149,6 +151,10 @@ namespace umi3d.commonDesktop.game
             row.AddMapping(name, Controller, action);
 
             S_interactionMapping.Add(interaction, row);
+            if (S_interactionMapping.Count == 1)
+            {
+                row.AddLeftClick();
+            }
             MappingAdded?.Invoke();
         }
 
