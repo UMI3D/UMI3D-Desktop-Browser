@@ -23,11 +23,18 @@ using umi3d.common;
 using UnityEngine;
 using UnityEngine.AI;
 using Unity.AI.Navigation;
+using umi3d.cdk.interaction;
+using System.Collections.Generic;
+using System.Linq;
+using umi3d.common.interaction;
+using umi3d.common.userCapture;
 
 namespace BrowserDesktop
 {
     public class BatchmodeFPSController : AbstractNavigation
     {
+        public static bool simulateInteraction = false;
+
         #region Fields
 
         [SerializeField]
@@ -36,6 +43,8 @@ namespace BrowserDesktop
         [SerializeField]
         LayerMask navmeshLayer, obstacleLayer, layerToConsider;
 
+        #region Movement
+
         private Coroutine movementCoroutine = null;
         private bool isWalking = false;
 
@@ -43,6 +52,16 @@ namespace BrowserDesktop
         private NavMeshSurface surface;
 
         #endregion
+
+        #region Interaction
+
+        private List<Interactable> interactables = new ();
+
+        #endregion
+
+        #endregion
+
+        #region Methods
 
         void Start()
         {
@@ -75,6 +94,8 @@ namespace BrowserDesktop
             fpsController.Disable();
 
             BakeNavmesh();
+
+            BakeInteraction();
 
             agent = gameObject.AddComponent<NavMeshAgent>();
             agent.speed = 2f;
@@ -126,6 +147,19 @@ namespace BrowserDesktop
             surface.BuildNavMesh();
         }
 
+        private void BakeInteraction()
+        {
+            if (!simulateInteraction)
+                return;
+
+            InteractableContainer[] containers = FindObjectsOfType<InteractableContainer>();
+
+            foreach (var container in containers)
+            {
+                interactables.Add(container.Interactable);
+            }
+        }
+
         public static int ToLayer(int bitmask)
         {
             int result = bitmask > 0 ? 0 : 31;
@@ -154,6 +188,8 @@ namespace BrowserDesktop
                 }
                 else
                 {
+                    Interact();
+
                     RandomPoint(out target);
                     agent.SetDestination(target);
 
@@ -223,5 +259,67 @@ namespace BrowserDesktop
                 grounded = true,
             };
         }
+
+        private async void Interact()
+        {
+            if (!simulateInteraction || interactables.Count == 0)
+                return;
+
+            Interactable interactable = interactables[Random.Range(0, interactables.Count)];
+            Debug.Log("Try to interact with " + interactable.name);
+
+            if (interactable.interactions.Count == 0)
+                return;
+
+            List<EventDto> interactions = new();
+
+            foreach (var interactionTask in interactable.interactions)
+            {
+                if (await interactionTask is EventDto ev)
+                    interactions.Add(ev);
+            }
+
+            if (interactions.Count == 0)
+                return;
+
+            EventDto eventDto = interactions[Random.Range(0, interactions.Count)];
+            Debug.Log("Interact with " + eventDto.name);
+
+            if (eventDto.hold)
+            {
+                var answer = new EventStateChangedDto
+                {
+                    active = true,
+                    boneType = BoneType.Viewpoint,
+                    id = eventDto.id,
+                    toolId = interactable.id,
+                    hoveredObjectId = 0,
+                    bonePosition = transform.position.Dto(),
+                    boneRotation = transform.rotation.Dto()
+                };
+
+                UMI3DClientServer.SendRequest(answer, true);
+
+                await UMI3DAsyncManager.Delay(2000);
+
+                answer.active = false;
+                UMI3DClientServer.SendRequest(answer, true);
+            } else
+            {
+                var answer = new EventTriggeredDto
+                {
+                    boneType = BoneType.Viewpoint,
+                    id = eventDto.id,
+                    toolId = interactable.id,
+                    hoveredObjectId = 0,
+                    bonePosition = transform.position.Dto(),
+                    boneRotation = transform.rotation.Dto()
+                };
+
+                UMI3DClientServer.SendRequest(answer, true);
+            }
+        }
+
+        #endregion
     }
 }

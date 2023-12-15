@@ -30,6 +30,8 @@ namespace BrowserDesktop
 
         private const string urlArg = "-url";
 
+        private const string simulationInteractionArg = "-interaction";
+
         private Dictionary<string, string> formDataDictionary = new();
 
         #endregion
@@ -47,6 +49,7 @@ namespace BrowserDesktop
             {
                 InitWithArs(args);
             }
+
             BaseConnectionProcess.Instance.currentServer.serverUrl = "localhost:50043";
 
             await UMI3DAsyncManager.Yield();
@@ -133,10 +136,15 @@ namespace BrowserDesktop
                 {
                     i++;
                     BaseConnectionProcess.Instance.currentServer.serverUrl = args[i];
-                    Debug.Log("url set " + BaseConnectionProcess.Instance.currentServer.serverUrl);
-                } else
+                }
+                if (args[i] == simulationInteractionArg)
+                {
+                    BatchmodeFPSController.simulateInteraction = true;
+                }
+                else
                 {
                     string[] arg = args[i].Split(":");
+
                     if (arg.Length == 2)
                     {
                         formDataDictionary[arg[0].ToLower().Trim()] = arg[1];
