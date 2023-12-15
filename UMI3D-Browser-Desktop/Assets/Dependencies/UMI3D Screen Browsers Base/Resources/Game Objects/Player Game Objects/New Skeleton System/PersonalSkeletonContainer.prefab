@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 677918340405283884}
   - component: {fileID: 677918340405283886}
   - component: {fileID: 677918340405283883}
+  - component: {fileID: 8956175820272994288}
   m_Layer: 0
   m_Name: PersonalSkeletonContainer
   m_TagString: Untagged
@@ -92,6 +93,28 @@ MonoBehaviour:
   lastHeight: 0
   data: {fileID: 11400000, guid: b1b8335b07b7778438fdae464852b0d2, type: 2}
   navigation: 0
+--- !u!114 &8956175820272994288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677918340405283885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f1e0c4deec78e943a1b88af55280279, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fpsController: {fileID: 677918340405283883}
+  navmeshLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  layerToConsider:
+    serializedVersion: 2
+    m_Bits: 1536
 --- !u!1001 &5113404444379048072
 PrefabInstance:
   m_ObjectHideFlags: 0
