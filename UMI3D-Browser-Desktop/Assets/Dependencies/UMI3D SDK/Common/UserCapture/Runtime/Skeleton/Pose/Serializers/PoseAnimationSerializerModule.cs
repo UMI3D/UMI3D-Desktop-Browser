@@ -52,6 +52,7 @@ namespace umi3d.common.userCapture.pose
 
                         if (readable)
                         {
+                            UnityEngine.Debug.Log("<color=cyan>[SNAP] POSE CLIP READABLE -> " + isAnchored + ".</color>");
                             PoseClipDto poseDto = new()
                             {
                                 id = id,
@@ -78,6 +79,7 @@ namespace umi3d.common.userCapture.pose
 
                         if (readable)
                         {
+                            UnityEngine.Debug.Log("<color=cyan>[SNAP] POSE ANIMATOR READABLE.</color>");
                             PoseAnimatorDto poseOverriderDto = new()
                             {
                                 id = id,

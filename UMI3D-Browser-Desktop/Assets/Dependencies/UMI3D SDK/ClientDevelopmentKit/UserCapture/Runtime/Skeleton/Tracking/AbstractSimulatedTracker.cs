@@ -34,6 +34,15 @@ namespace umi3d.cdk.userCapture.tracking
             this.boneType = bonetype;
             this.positionOffset = posOffset;
             this.rotationOffset = rotOffset;
+
+            distantController = new DistantController()
+            {
+                boneType = boneType,
+                position = transform.position,
+                rotation = transform.rotation,
+                isActif = isActif,
+                isOverrider = isOverrider
+            };
         }
 
         void ISimulatedTracker.SimulatePosition() => this.SimulatePosition();

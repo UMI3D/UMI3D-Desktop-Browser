@@ -49,9 +49,13 @@ namespace umi3d.cdk.userCapture.pose
         /// <inheritdoc/>
         public override Task<PoseClip> Load(PoseClipDto dto)
         {
+            UnityEngine.Debug.Log("<color=cyan>[SNAP] LOAD POSE CLIP 1.</color>");
+
             PoseClip pose = new PoseClip(dto);
+            UnityEngine.Debug.Log("<color=cyan>[SNAP] LOAD POSE CLIP 2.</color>");
 
             environmentService.RegisterEntity(dto.id, dto, pose, () => Delete(dto.id)).NotifyLoaded();
+            UnityEngine.Debug.Log("<color=cyan>[SNAP] LOAD POSE CLIP 3.</color>");
 
             return Task.FromResult(pose);
         }

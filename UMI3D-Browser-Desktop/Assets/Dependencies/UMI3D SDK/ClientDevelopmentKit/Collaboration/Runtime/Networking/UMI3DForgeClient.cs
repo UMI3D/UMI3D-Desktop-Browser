@@ -685,6 +685,7 @@ namespace umi3d.cdk.collaboration
                         ulong poseOverriderId = UMI3DSerializer.Read<ulong>(container);
                         MainThreadManager.Run(() =>
                         {
+                            UnityEngine.Debug.Log("<color=cyan>[SNAP] ACTIVATION REQUEST.</color>");
                             PoseManager.Instance.TryActivatePoseAnimator(poseOverriderId);
                         });
                         break;

@@ -58,7 +58,7 @@ namespace umi3d.cdk.userCapture.pose
         public bool TryActivatePoseAnimator(ulong poseAnimatorId)
         {
             PoseAnimator poseAnimator = environmentManager.GetEntityObject<PoseAnimator>(poseAnimatorId);
-
+            UnityEngine.Debug.Log("<color=cyan>[SNAP] TRY ACTIVATE POSE ANIMATOR.</color>");
             return poseAnimator.TryActivate();
         }
 

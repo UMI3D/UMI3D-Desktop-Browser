@@ -60,16 +60,21 @@ namespace umi3d.cdk.userCapture.pose
         /// </summary>
         public override async Task<PoseAnimator> Load(PoseAnimatorDto dto)
         {
+            UnityEngine.Debug.Log("<color=cyan>[SNAP] LOAD.</color>");
+
             if (dto == null)
                 throw new System.ArgumentNullException(nameof(dto));
 
             IPoseCondition[] poseConditions = await Task.WhenAll(dto.poseConditions
                                                                 .Select(x => LoadPoseCondition(x)));
+            UnityEngine.Debug.Log("<color=cyan>[SNAP] 1.</color>");
 
             UMI3DEntityInstance poseClipInstance = await loadingService.WaitUntilEntityLoaded(dto.poseClipId, null);
             PoseClip poseClip = (PoseClip)poseClipInstance.Object;
+            UnityEngine.Debug.Log("<color=cyan>[SNAP] 2.</color>");
 
             PoseAnimator poseAnimator = new(dto, poseClip, poseConditions.Where(x => x is not null).ToArray());
+            UnityEngine.Debug.Log("<color=cyan>[SNAP] 3.</color>");
 
             if (poseAnimator.ActivationMode == (ushort)PoseAnimatorActivationMode.AUTO)
                 poseAnimator.StartWatchActivationConditions();

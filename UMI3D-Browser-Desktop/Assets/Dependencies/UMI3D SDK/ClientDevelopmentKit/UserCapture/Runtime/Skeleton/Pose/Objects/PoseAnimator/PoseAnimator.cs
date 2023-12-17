@@ -168,11 +168,14 @@ namespace umi3d.cdk.userCapture.pose
         /// </summary>
         public virtual bool TryActivate()
         {
+            UnityEngine.Debug.Log("<color=cyan>[SNAP] TRY ACTIVATE POSE.</color>");
+
             if (IsApplied)
                 return false;
 
             if (ActivationMode == (ushort)PoseAnimatorActivationMode.ON_REQUEST && CheckConditions())
             {
+                UnityEngine.Debug.Log("<color=cyan>[SNAP] TRY APPLY POSE.</color>");
                 Apply();
                 return true;
             }
@@ -185,6 +188,7 @@ namespace umi3d.cdk.userCapture.pose
         /// </summary>
         private void Apply()
         {
+            UnityEngine.Debug.Log("<color=cyan>[SNAP] APPLY POSE ANIMATOR.</color>");
             IsApplied = true;
             poseService.PlayPoseClip(poseClip);
             ConditionsValidated?.Invoke();
@@ -221,7 +225,10 @@ namespace umi3d.cdk.userCapture.pose
 
                 // check to enable/disable auto-watched poses (nonInteractional)
                 if (!IsApplied && CheckConditions())
+                {
+                    UnityEngine.Debug.Log("<color=cyan>[SNAP] TRY APPLY POSE.</color>");
                     Apply();
+                }
             }
             StopWatchActivationConditions();
         }

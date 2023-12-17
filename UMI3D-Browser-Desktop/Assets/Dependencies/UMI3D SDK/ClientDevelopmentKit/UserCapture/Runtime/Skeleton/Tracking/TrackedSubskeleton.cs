@@ -425,6 +425,7 @@ namespace umi3d.cdk.userCapture.tracking
             switch (poseAnchor)
             {
                 case NodePoseAnchorDto nodePose:
+                    Debug.Log("<color=cyan>[SNAP] NodePoseAnchorDto.</color>");
 
                     UMI3DNodeInstance nodeReference = (UMI3DNodeInstance) await loadingService.WaitUntilEntityLoaded(nodePose.node, null);
 
@@ -437,7 +438,8 @@ namespace umi3d.cdk.userCapture.tracking
                     break;
 
                 case BonePoseAnchorDto bonePose:
-                    
+                    Debug.Log("<color=cyan>[SNAP] BonePoseAnchorDto.</color>");
+
                     if (skeleton.Bones.TryGetValue(bonePose.otherBone, out ISkeleton.Transformation boneReference))
                     {
                         BoneAnchoredSimulatedTracker boneTracker = new GameObject("BoneTracker" + bonePose.otherBone).AddComponent<BoneAnchoredSimulatedTracker>();
@@ -448,16 +450,22 @@ namespace umi3d.cdk.userCapture.tracking
                     }
                     else
                     {
-                        throw new System.Exception("Bone not found for applying BonePoseAnchor.");
+                        await Task.Run(() => throw new System.Exception("Bone not found for applying BonePoseAnchor."));
                     }
 
                     break;
 
                 case FloorPoseAnchorDto floorPose:
-                    throw new System.NotImplementedException("FloorAnchor is not yet implemented.");
+                    Debug.Log("<color=cyan>[SNAP] FloorPoseAnchorDto.</color>");
+
+                    await Task.Run(() => throw new System.NotImplementedException("FloorAnchor is not yet implemented."));
+                    break;
 
                 default:
-                    throw new System.Exception("PoseAnchor not supported.");
+                    Debug.Log("<color=cyan>[SNAP] Default.</color>");
+
+                    await Task.FromException(new System.Exception("PoseAnchor not supported."));
+                    break;
             }
         }
 
@@ -494,6 +502,7 @@ namespace umi3d.cdk.userCapture.tracking
                     savedControllers.Add(oldController);
             }
 
+            //error here, 
             controllers.Add(newController);
         }
 
