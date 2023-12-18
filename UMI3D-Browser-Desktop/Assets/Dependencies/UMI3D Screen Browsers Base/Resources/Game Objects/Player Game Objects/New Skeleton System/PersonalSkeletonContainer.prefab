@@ -84,7 +84,7 @@ MonoBehaviour:
   - {fileID: 2547753940605043022}
   playerRadius: 0.2
   maxSlopeAngle: 45
-  maxStepHeight: 0.4
+  maxStepHeight: 0.3
   WantToJump: 0
   IsCrouching: 0
   WantToCrouch: 0
