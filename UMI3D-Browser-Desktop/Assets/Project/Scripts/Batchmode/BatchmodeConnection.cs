@@ -50,8 +50,6 @@ namespace BrowserDesktop
                 InitWithArs(args);
             }
 
-            BaseConnectionProcess.Instance.currentServer.serverUrl = "localhost:50043";
-
             await UMI3DAsyncManager.Yield();
 
             await BaseConnectionProcess.Instance.InitConnect();
