@@ -13,8 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-using System.Collections;
-using System.Collections.Generic;
+
+using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
@@ -25,24 +25,31 @@ namespace umi3d.baseBrowser.preferences
     {
         public static void StoreData<T>(T data, string dataType, string directories = null)
         {
-            string path;
-
-            if (!string.IsNullOrEmpty(directories))
+            try
             {
-                string directoriesPath = inetum.unityUtils.Path.Combine(Application.persistentDataPath, directories);
-                if (!Directory.Exists(directoriesPath)) Directory.CreateDirectory(directoriesPath);
-                path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, $"{directories}/{dataType}");
+                string path;
+
+                if (!string.IsNullOrEmpty(directories))
+                {
+                    string directoriesPath = inetum.unityUtils.Path.Combine(Application.persistentDataPath, directories);
+                    if (!Directory.Exists(directoriesPath)) Directory.CreateDirectory(directoriesPath);
+                    path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, $"{directories}/{dataType}");
+                }
+                else path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, dataType);
+
+                FileStream file;
+                if (File.Exists(path)) file = File.OpenWrite(path);
+                else file = File.Create(path);
+
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(file, data);
+
+                file.Close();
+
+            } catch(Exception ex)
+            {
+                Debug.LogError("PreferencesManager.StoreData " + ex.GetType());
             }
-            else path = inetum.unityUtils.Path.Combine(Application.persistentDataPath, dataType);
-
-            FileStream file;
-            if (File.Exists(path)) file = File.OpenWrite(path);
-            else file = File.Create(path);
-
-            BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(file, data);
-
-            file.Close();
         }
 
         public static bool TryGet<T>(out T data, string dataType, string directories = null) where T : new()
@@ -59,11 +66,14 @@ namespace umi3d.baseBrowser.preferences
                 return false;
             }
 
-            FileStream file = File.OpenRead(path);
             try
             {
+                FileStream file = File.OpenRead(path);
+
                 BinaryFormatter bf = new BinaryFormatter();
                 data = (T)bf.Deserialize(file);
+
+                file.Close();
             }
             catch
             {
@@ -71,7 +81,6 @@ namespace umi3d.baseBrowser.preferences
                 return false;
             }
 
-            file.Close();
             return true;
         }
 
@@ -81,20 +90,22 @@ namespace umi3d.baseBrowser.preferences
 
             if (!File.Exists(path)) return new T();
 
-            FileStream file = File.OpenRead(path);
             T data;
 
             try
             {
+                FileStream file = File.OpenRead(path);
+
                 BinaryFormatter bf = new BinaryFormatter();
                 data = (T)bf.Deserialize(file);
+
+                file.Close();
             }
             catch
             {
                 data = new T();
             }
 
-            file.Close();
             return data;
         }
     }

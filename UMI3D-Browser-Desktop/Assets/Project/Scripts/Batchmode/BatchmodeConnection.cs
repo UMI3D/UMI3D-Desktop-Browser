@@ -34,6 +34,8 @@ namespace BrowserDesktop
 
         private Dictionary<string, string> formDataDictionary = new();
 
+        private static bool hasTriedToConnect = false;
+
         #endregion
 
         #region Methods
@@ -41,6 +43,9 @@ namespace BrowserDesktop
         async void Start()
         {
             if (!Application.isBatchMode)
+                return;
+
+            if (hasTriedToConnect)
                 return;
 
             string[] args = Environment.GetCommandLineArgs();
@@ -52,12 +57,15 @@ namespace BrowserDesktop
 
             await UMI3DAsyncManager.Yield();
 
+            hasTriedToConnect = true;
+
             await BaseConnectionProcess.Instance.InitConnect();
+
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = 15;
 
             BaseConnectionProcess.Instance.GetParameterDtos += GetParametersDto;
 
-            BaseConnectionProcess.Instance.ConnectionSucces += (MediaDto dto) => Debug.Log("Connection success to " + dto.url);
-            BaseConnectionProcess.Instance.ConnectionFail += (error) => Debug.Log("Connection fail : " + error);
             BaseConnectionProcess.Instance.AskForDownloadingLibraries += (count, callback) => callback?.Invoke(true);
             BaseConnectionProcess.Instance.EnvironmentLoaded += EnvironmentLoaded;
             BaseConnectionProcess.Instance.EnvironmentLeave += EnvironmentLeave;
@@ -115,13 +123,12 @@ namespace BrowserDesktop
 
         private void EnvironmentLoaded()
         {
-            Debug.Log("Environment loaded");
-            Console.WriteLine("Environment loaded");
+            Debug.Log("Environment Loaded");
         }
 
         private void EnvironmentLeave()
         {
-            Debug.Log("Environment leave");
+            Debug.Log("Environment Leave");
         }
 
         private void InitWithArs(string[] args)
