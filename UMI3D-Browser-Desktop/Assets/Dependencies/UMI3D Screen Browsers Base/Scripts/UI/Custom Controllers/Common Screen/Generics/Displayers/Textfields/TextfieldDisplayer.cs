@@ -107,6 +107,12 @@ namespace umi3d.commonScreen.Displayer
                 textfield.isPasswordField = true;
                 textfield.DisplayMaskToggle = true;
             }
+
+            if (menuItem.isDisplayer)
+            {
+                textfield.HideTextInput();
+                textfield.LocaliseLabel = textfield.label.ToLower();
+            }
         }
 
         /// <summary>

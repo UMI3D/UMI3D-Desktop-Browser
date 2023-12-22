@@ -40,6 +40,7 @@ namespace umi3d.baseBrowser.preferences
         public struct GeneralData
         {
             public Language LanguageChoice;
+            public bool HasChosenLanguage;
         }
 
         public static bool TryGetGeneralData(out GeneralData data) => PreferencesManager.TryGet(out data, c_generalPath, c_dataFolderPath);

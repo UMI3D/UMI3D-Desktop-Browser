@@ -117,11 +117,11 @@ namespace umi3d.cdk
         void NotifyUpdate(float completed, float failed, string state)
         {
             if (completed != this.completed)
-                OnCompleteUpdated.Invoke(this.completed);
+                OnCompleteUpdated?.Invoke(this.completed);
             if (failed != this.failed)
-                OnFailedUpdated.Invoke(this.failed);
+                OnFailedUpdated?.Invoke(this.failed);
             if (state != this.currentState)
-                OnStatusUpdated.Invoke(this.currentState);
+                OnStatusUpdated?.Invoke(this.currentState);
         }
 
         void GetStatus(out float completed, out float failed, out string state)
@@ -429,7 +429,7 @@ namespace umi3d.cdk
         /// Add one more task to be processed to the process and set a specific <paramref name="status"/>.
         /// </summary>
         /// <param name="status"></param>
-        public virtual void AddAndSetStatus(string status) { completed += 1; currentState = status; OnStatusUpdated.Invoke(currentState); OnCompleteUpdated.Invoke(completed); }
+        public virtual void AddAndSetStatus(string status) { completed += 1; currentState = status; OnStatusUpdated?.Invoke(currentState); OnCompleteUpdated?.Invoke(completed); }
 
 
         public override string ToString()

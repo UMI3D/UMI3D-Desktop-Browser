@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using System.Collections.Generic;
+using System.Linq;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 
@@ -28,6 +29,14 @@ public abstract class AbstractSimpleContainer : AbstractMenuDisplayContainer
     {
         get => m_displayers[i];
         set => m_displayers[i] = value;
+    }
+
+    public T FirstOrDefault<T>() where T : AbstractDisplayer
+    {
+        return (T) m_displayers.FirstOrDefault(displayer =>
+        {
+            return displayer is T;
+        });
     }
 
     public override bool Contains(AbstractDisplayer element) => m_displayers.Contains(element);
