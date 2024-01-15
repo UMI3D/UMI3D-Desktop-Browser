@@ -198,6 +198,7 @@ namespace umi3d.cdk.collaboration
         {
             UMI3DLogger.Log($"Send GetPrivate {url}", k_Scope | DebugScope.Connection);
 
+            UnityEngine.Debug.Log(url);
             if (useParameterInsteadOfHeader)
             {
                 if (UMI3DResourcesManager.HasUrlGotParameters(url))
@@ -205,6 +206,7 @@ namespace umi3d.cdk.collaboration
                 else
                     url += "?" + UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + HeaderToken;
             }
+            UnityEngine.Debug.Log(url);
             int i = 0;
             while (i < 10)
             {

@@ -23,6 +23,7 @@ using umi3d.common;
 using umi3d.common.collaboration.dto.networking;
 using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.userCapture;
+using umi3d.worldController;
 using UnityEngine.Events;
 
 namespace umi3d.cdk.collaboration
@@ -48,6 +49,7 @@ namespace umi3d.cdk.collaboration
         public static PendingTransactionDto transactionPending = null;
 
         private static UMI3DWorldControllerClient worldControllerClient;
+        private static UMI3DWorldControllerClient loadingWorldControllerClient;
         private static UMI3DEnvironmentClient environmentClient;
 
         public static PublicIdentityDto PublicIdentity => worldControllerClient?.PublicIdentity;
@@ -168,8 +170,8 @@ namespace umi3d.cdk.collaboration
                 if (Exists)
                 {
                     Instance.status = StatusType.AWAY;
-                    UMI3DWorldControllerClient wc = worldControllerClient?.Redirection(redirection) ?? new UMI3DWorldControllerClient(redirection);
-                    if (await wc.Connect())
+                    loadingWorldControllerClient = worldControllerClient?.Redirection(redirection) ?? new UMI3DWorldControllerClient(redirection);
+                    if (await loadingWorldControllerClient.Connect())
                     {
                         Instance.OnRedirection.Invoke();
                         loadingEntities.Clear();
@@ -187,13 +189,14 @@ namespace umi3d.cdk.collaboration
                         //Connection will not restart without this...
                         await Task.Yield();
 
-                        worldControllerClient = wc;
+                        worldControllerClient = loadingWorldControllerClient;
 
                         MultiProgress progress = EnvironmentProgress?.Invoke() ?? new MultiProgress("Joinning Environment");
                         onProgress.Invoke(progress);
-                        environmentClient = await wc.ConnectToEnvironment(progress);
+                        environmentClient = await loadingWorldControllerClient.ConnectToEnvironment(progress);
                         environmentClient.status = StatusType.CREATED;
                     }
+                    loadingWorldControllerClient = null;
                 }
                 else
                 {
@@ -386,7 +389,7 @@ namespace umi3d.cdk.collaboration
             UMI3DLogger.Log($"GetFile {url}", scope);
             if (environmentClient != null)
                 return await environmentClient?.GetFile(url, useParameterInsteadOfHeader);
-            return await (worldControllerClient?.GetFile(url) ?? Task.FromResult<byte[]>(null));
+            return await UMI3DWorldControllerClient.GetFile(url, loadingWorldControllerClient?.globalToken ?? worldControllerClient?.globalToken ?? "");
         }
 
         /// <inheritdoc/>

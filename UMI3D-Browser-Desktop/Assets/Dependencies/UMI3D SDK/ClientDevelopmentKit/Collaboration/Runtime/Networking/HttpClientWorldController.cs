@@ -42,7 +42,7 @@ namespace umi3d.cdk.collaboration
         {
             public string GlobalToken;
             public string connectionDto;
-            public List<LibrariesDto> libraries;
+            public List<AssetLibraryDto> libraries;
 
             public PrivateIdentityDto ToPrivateIdentity()
             {
@@ -318,20 +318,27 @@ namespace umi3d.cdk.collaboration
 
         }
 
-        public static async Task<byte[]> SendGetWithoutAuth(string url, Func<RequestFailedArgument, bool> shouldTryAgain = null)
+        public static async Task<byte[]> SendGetWithoutAuth(string url, string pToken, Func<RequestFailedArgument, bool> shouldTryAgain = null)
         {
-            UMI3DLogger.Log($"Send GetWithoutAuth {url}",k_Scope | DebugScope.Connection);
+            UMI3DLogger.Log($"Send GetPrivate {url}", k_Scope | DebugScope.Connection);
 
+            var HeaderToken = UMI3DNetworkingKeys.bearer + pToken;
+            UnityEngine.Debug.Log(url);
+            if (UMI3DResourcesManager.HasUrlGotParameters(url))
+                url += "&" + UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + HeaderToken;
+            else
+                url += "?" + UMI3DNetworkingKeys.ResourceServerAuthorization + "=" + HeaderToken;
+            UnityEngine.Debug.Log(url);
             int i = 0;
             while (i < 10)
             {
                 i++;
-                using (UnityWebRequest uwr = await GetRequest(null, url, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e), false))
+                using (UnityWebRequest uwr = await GetRequestResourceServer(HeaderToken, url, (e) => shouldTryAgain?.Invoke(e) ?? DefaultShouldTryAgain(e), false))
                 {
-                    UMI3DLogger.Log($"Received GetWithoutAuth {url}\n{uwr?.responseCode}\n{uwr?.url}",k_Scope | DebugScope.Connection);
+                    UMI3DLogger.Log($"Received GetPrivate {url}\n{uwr?.responseCode}\n{uwr?.url}", k_Scope | DebugScope.Connection);
                     if (uwr?.responseCode != 204)
                         return uwr?.downloadHandler.data;
-                    UMI3DLogger.Log($"Resend GetPrivate Because responce code was 204 {url}",k_Scope | DebugScope.Connection);
+                    UMI3DLogger.Log($"Resend GetPrivate Because responce code was 204 {url}", k_Scope | DebugScope.Connection);
                     await UMI3DAsyncManager.Delay(1000);
                 }
             }

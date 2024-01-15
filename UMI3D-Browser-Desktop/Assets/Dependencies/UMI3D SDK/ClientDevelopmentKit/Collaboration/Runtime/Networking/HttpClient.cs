@@ -50,13 +50,44 @@ namespace umi3d.cdk.collaboration
             while (!operation.isDone)
                 await UMI3DAsyncManager.Yield();
 
+            UnityEngine.Debug.Log(new RequestFailedArgument(www, tryCount, date, ShouldTryAgain));
 #if UNITY_2020_1_OR_NEWER
             if (www.result > UnityWebRequest.Result.Success)
 #else
             if (www.isNetworkError || www.isHttpError)
 #endif
             {
+                if (UMI3DClientServer.Exists && await UMI3DClientServer.Instance.TryAgainOnHttpFail(new RequestFailedArgument(www, tryCount, date, ShouldTryAgain)))
+                    return await GetRequest(HeaderToken, url, ShouldTryAgain, UseCredential, headers, tryCount + 1);
+                else
+                    throw new Umi3dNetworkingException(www, "Failed to get ");
+            }
+            return www;
+        }
+        protected static async Task<UnityWebRequest> GetRequestResourceServer(string HeaderToken, string url, Func<RequestFailedArgument, bool> ShouldTryAgain, bool UseCredential = false, List<(string, string)> headers = null, int tryCount = 0)
+        {
+            var www = UnityWebRequest.Get(url);
+            if (UseCredential) www.SetRequestHeader(UMI3DNetworkingKeys.ResourceServerAuthorization, HeaderToken);
+            if (headers != null)
+            {
+                foreach ((string, string) item in headers)
+                {
+                    www.SetRequestHeader(item.Item1, item.Item2);
+                }
+            }
+            DateTime date = DateTime.UtcNow;
+            UnityWebRequestAsyncOperation operation = www.SendWebRequest();
+            while (!operation.isDone)
+                await UMI3DAsyncManager.Yield();
 
+            UnityEngine.Debug.Log(www.url);
+            UnityEngine.Debug.Log(www.GetRequestHeader(UMI3DNetworkingKeys.ResourceServerAuthorization));
+#if UNITY_2020_1_OR_NEWER
+            if (www.result > UnityWebRequest.Result.Success)
+#else
+            if (www.isNetworkError || www.isHttpError)
+#endif
+            {
                 if (UMI3DClientServer.Exists && await UMI3DClientServer.Instance.TryAgainOnHttpFail(new RequestFailedArgument(www, tryCount, date, ShouldTryAgain)))
                     return await GetRequest(HeaderToken, url, ShouldTryAgain, UseCredential, headers, tryCount + 1);
                 else

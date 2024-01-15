@@ -832,9 +832,9 @@ namespace umi3d.cdk
         #endregion
         #region libraries download
 
-        public static List<string> LibrariesToDownload(LibrariesDto libraries)
+        public static List<string> LibrariesToDownload(List<AssetLibraryDto> assetLibraries)
         {
-            return Instance._LibrariesToDownload(libraries.libraries);
+            return Instance._LibrariesToDownload(assetLibraries);
         }
 
         public List<string> _LibrariesToDownload(List<AssetLibraryDto> assetLibraries)
@@ -859,9 +859,9 @@ namespace umi3d.cdk
             return toDownload;
         }
 
-        public static async Task DownloadLibraries(LibrariesDto libraries, string applicationName, MultiProgress progress)
+        public static async Task DownloadLibraries(List<AssetLibraryDto> assetlibraries, string applicationName, MultiProgress progress)
         {
-            await Instance.DownloadResources(libraries.libraries, applicationName, progress);
+            await Instance.DownloadResources(assetlibraries, applicationName, progress);
         }
 
         private async Task DownloadResources(List<AssetLibraryDto> assetlibraries, string applicationName, MultiProgress progress)

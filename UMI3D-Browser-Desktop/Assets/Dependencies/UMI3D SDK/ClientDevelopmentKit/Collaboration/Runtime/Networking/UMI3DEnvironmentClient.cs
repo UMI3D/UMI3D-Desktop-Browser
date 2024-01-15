@@ -490,7 +490,7 @@ namespace umi3d.cdk.collaboration
 
                     // UMI3DLogger.Log($"Ask to download Libraries", scope | DebugScope.Connection);
                     bool b = await UMI3DCollaborationClientServer.Instance.Identifier.ShouldDownloadLibraries(
-                        UMI3DResourcesManager.LibrariesToDownload(LibrariesDto)
+                        UMI3DResourcesManager.LibrariesToDownload(LibrariesDto.libraries)
                         );
 
                     if (!b)
@@ -503,7 +503,7 @@ namespace umi3d.cdk.collaboration
                         libraryProgress.SetStatus("Downloading Libraries");
                         try
                         {
-                            await UMI3DResourcesManager.DownloadLibraries(LibrariesDto, worldControllerClient.name, libraryProgress);
+                            await UMI3DResourcesManager.DownloadLibraries(LibrariesDto.libraries, worldControllerClient.name, libraryProgress);
                             librariesUpdated = true;
                         }
                         catch (Exception e)
