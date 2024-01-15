@@ -175,9 +175,9 @@ namespace umi3d.cdk
         }
 
         /// <inheritdoc/>
-        public override UMI3DLocalAssetDirectoryDto ChooseVariant(AssetLibraryDto assetLibrary)
+        public override UMI3DLocalAssetFilesDto ChooseVariant(AssetLibraryDto assetLibrary)
         {
-            UMI3DLocalAssetDirectoryDto res = null;
+            UMI3DLocalAssetFilesDto res = null;
             foreach (var assetDir in assetLibrary.variants)
             {
                 bool ok = res == null;
