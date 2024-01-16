@@ -112,6 +112,30 @@ namespace umi3d.cdk
 
                         nodeInstance.IsTraversable = subDto.isTraversable;
                         nodeInstance.IsPartOfNavmesh = subDto.isPartOfNavmesh;
+
+                        int? shapeCount = nodeInstance.gameObject.GetComponentInChildren<SkinnedMeshRenderer>()?.sharedMesh?.blendShapeCount;
+                        if (shapeCount != null && shapeCount > 0)
+                        {
+                            SkinnedMeshRenderer skm = nodeInstance.gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
+                            nodeInstance.skmToUpdateWithBlendShapes = new List<SkinnedMeshRenderer>();
+
+                            if (skm.sharedMesh.blendShapeCount > 0)
+                            {
+
+                                nodeInstance.skmToUpdateWithBlendShapes.Add(skm);
+                                try
+                                {
+                                    for (int i = 0; i < skm.sharedMesh.blendShapeCount; i++)
+                                    {
+                                        skm.SetBlendShapeWeight(i, subDto.blendShapesValues[i]);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Debug.LogError("Cannot apply blendshape values. " + ex);
+                                }
+                            }
+                        }
                     });
 
                 }
