@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2019 - 2021 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,24 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using inetum.unityUtils;
+using UnityEngine;
 
-namespace umi3d.common
+namespace umi3d.cdk.userCapture.tracking
 {
-    /// <summary>
-    /// Reserved and fixed UMI3D ids.
-    /// </summary>
-    /// Those id will always be the same on every environment.
-    [System.Serializable]
-    public static class UMI3DGlobalID
+    public interface ISimulatedTracker
     {
-        /// <summary>
-        /// Reserved UMI3D id for the server.
-        /// </summary>
-        public const ulong ServerId = 100001;
+        uint Bonetype { get; }
 
-        /// <summary>
-        /// Reserved UMI3D id for the environment.
-        /// </summary>
-        public const ulong EnvironmentId = 100002;
+        Vector3 PositionOffset { get; }
+
+        Quaternion RotationOffset { get; }
+
+        void SimulatePosition();
     }
 }

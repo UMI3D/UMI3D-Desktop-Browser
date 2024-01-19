@@ -14,28 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 namespace umi3d.common.userCapture.pose
 {
     /// <summary>
-    /// The dto that forces the client to just play or stop a specific pose
+    /// 
     /// </summary>
-    public class PlayPoseClipDto : AbstractOperationDto
+    [System.Serializable]
+    public enum PoseAnchoringType
     {
         /// <summary>
-        /// Id of the user to apply the pose to. 
-        /// Specify <see cref="UMI3DGlobalID.EnvironmentId"/> to set an environment pose.
+        /// 
         /// </summary>
-        public ulong userID { get; set; }
+        Node,
 
         /// <summary>
-        /// Index in the list of poses
+        /// 
         /// </summary>
-        public ulong poseId { get; set; }
+        Bone,
 
         /// <summary>
-        /// Is it a message to stop or to start the related pose
+        /// 
         /// </summary>
-        public bool stopPose { get; set; }
+        Floor
     }
 }
