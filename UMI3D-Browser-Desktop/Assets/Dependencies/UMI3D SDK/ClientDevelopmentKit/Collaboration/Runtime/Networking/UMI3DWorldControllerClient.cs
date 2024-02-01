@@ -149,8 +149,9 @@ namespace umi3d.cdk.collaboration
             if (!shouldDownload) 
                 return;
 
-            MultiProgress progress = new MultiProgress("Downloading Libraries");
-            progress.SetStatus("Downloading Libraries");
+            MultiProgress progress = new MultiProgress("Searching for Libraries");
+            UMI3DCollaborationClientServer.onProgress.Invoke(progress);
+
             try
             {
                 await UMI3DResourcesManager.DownloadLibraries(privateIdentity.libraries, name, progress);

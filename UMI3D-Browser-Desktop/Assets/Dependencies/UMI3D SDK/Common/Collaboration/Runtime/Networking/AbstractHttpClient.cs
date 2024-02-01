@@ -696,8 +696,8 @@ namespace umi3d.common.collaboration
 #endif
             {
                 return
-                    await instance?.Sub__GetRequest(www, date, HeaderToken, url, ShouldTryAgain, UseCredential, headers, tryCount) 
-                    ?? throw new Umi3dNetworkingException(www, "Failed to get ");
+                    await (instance?.Sub__GetRequest(www, date, HeaderToken, url, ShouldTryAgain, UseCredential, headers, tryCount) 
+                    ?? throw new Umi3dNetworkingException(www, "Failed to get "));
 
             }
             return www;
@@ -741,8 +741,8 @@ namespace umi3d.common.collaboration
 #endif
             {
                 return
-                    await instance?.Sub_PostRequest(www, date, HeaderToken, url,contentType,bytes, ShouldTryAgain, UseCredential, headers, tryCount)
-                    ?? throw new Umi3dNetworkingException(www, "Failed to get ");
+                    await (instance?.Sub_PostRequest(www, date, HeaderToken, url,contentType,bytes, ShouldTryAgain, UseCredential, headers, tryCount)
+                    ?? throw new Umi3dNetworkingException(www, "Failed to get "));
 
             }
             return www;
