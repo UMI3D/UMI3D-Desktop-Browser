@@ -844,7 +844,7 @@ namespace umi3d.cdk
 
         public List<string> _LibrariesToDownload(List<AssetLibraryDto> assetLibraries)
         {
-            var toDownload = new List<string>();
+            var toDownload = new HashSet<string>();
             if (assetLibraries != null && assetLibraries.Count > 0)
             {
                 foreach (AssetLibraryDto assetLibrary in assetLibraries)
@@ -861,7 +861,7 @@ namespace umi3d.cdk
                     toDownload.Add(assetLibrary.libraryId);
                 }
             }
-            return toDownload;
+            return toDownload.ToList();
         }
 
         public static async Task DownloadLibraries(List<AssetLibraryDto> libraries, string applicationName, MultiProgress progress)
