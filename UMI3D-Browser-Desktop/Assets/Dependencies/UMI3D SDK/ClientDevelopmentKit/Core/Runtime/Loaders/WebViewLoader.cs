@@ -43,7 +43,8 @@ namespace umi3d.cdk
                 webView.transform.SetParent(data.node.transform);
                 webView.transform.localPosition = UnityEngine.Vector3.zero;
                 webView.transform.localRotation = UnityEngine.Quaternion.identity;
-            } else
+            }
+            else
             {
                 UMI3DLogger.LogError("Impossible to load WebView, not implemented on this browser", scope);
             }

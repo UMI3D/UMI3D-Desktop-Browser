@@ -15,6 +15,11 @@ limitations under the License.
 */
 
 using inetum.unityUtils;
+using System.Collections.Generic;
+using System.Linq;
+
+using umi3d.common;
+using umi3d.common.userCapture.description;
 
 namespace umi3d.cdk.userCapture.pose
 {
@@ -23,6 +28,10 @@ namespace umi3d.cdk.userCapture.pose
     /// </summary>
     public class PoseManager : Singleton<PoseManager>, IPoseManager
     {
+        private const DebugScope DEBUG_SCOPE = DebugScope.CDK | DebugScope.UserCapture;
+
+        private Dictionary<PoseClip, PoseAnchorDto> anchoredPoseClips = new();
+
         #region Dependency Injection
 
         private readonly ISkeletonManager skeletonManager;
@@ -55,20 +64,34 @@ namespace umi3d.cdk.userCapture.pose
         }
 
         /// <inheritdoc/>
-        public bool TryActivatePoseAnimator(ulong poseAnimatorId)
+        public bool TryActivatePoseAnimator(ulong environmentId, ulong poseAnimatorId)
         {
-            PoseAnimator poseAnimator = environmentManager.GetEntityObject<PoseAnimator>(poseAnimatorId);
+            if (!environmentManager.TryGetEntity(environmentId, poseAnimatorId, out PoseAnimator poseAnimator))
+            {
+                UMI3DLogger.LogWarning($"Unable to try to activate pose animator {environmentId} {poseAnimatorId}. Entity {poseAnimatorId} not found.", DEBUG_SCOPE);
+                return false;
+            }
 
             return poseAnimator.TryActivate();
         }
 
         /// <inheritdoc/>
-        public void PlayPoseClip(PoseClip poseClip)
+        public void PlayPoseClip(PoseClip poseClip, PoseAnchorDto anchor = null)
         {
             if (poseClip == null)
                 throw new System.ArgumentNullException(nameof(poseClip));
 
+            if (skeletonManager.PersonalSkeleton.PoseSubskeleton.AppliedPoses.Contains(poseClip))
+                return;
+
             skeletonManager.PersonalSkeleton.PoseSubskeleton.StartPose(poseClip);
+
+            if (anchor != null)
+                skeletonManager.PersonalSkeleton.TrackedSubskeleton.StartTrackerSimulation(anchor);
+            else
+                skeletonManager.PersonalSkeleton.TrackedSubskeleton.StartTrackerSimulation(poseClip.Pose.anchor);
+            
+            anchoredPoseClips.Add(poseClip, anchor);
         }
 
         /// <inheritdoc/>
@@ -77,7 +100,16 @@ namespace umi3d.cdk.userCapture.pose
             if (poseClip == null)
                 throw new System.ArgumentNullException(nameof(poseClip));
 
+            if (!skeletonManager.PersonalSkeleton.PoseSubskeleton.AppliedPoses.Contains(poseClip))
+                return;
+
             skeletonManager.PersonalSkeleton.PoseSubskeleton.StopPose(poseClip);
+
+            if (anchoredPoseClips.TryGetValue(poseClip, out PoseAnchorDto anchor))
+            {
+                skeletonManager.PersonalSkeleton.TrackedSubskeleton.StopTrackerSimulation(anchor);
+                anchoredPoseClips.Remove(poseClip);
+            }
         }
 
         /// <inheritdoc/>
@@ -87,9 +119,9 @@ namespace umi3d.cdk.userCapture.pose
         }
 
         /// <inheritdoc/>
-        public void ChangeEnvironmentPoseCondition(ulong poseConditionId, bool shouldBeValidated)
+        public void ChangeEnvironmentPoseCondition(ulong environmentId, ulong poseConditionId, bool shouldBeValidated)
         {
-            EnvironmentPoseCondition condition = environmentManager.GetEntityObject<EnvironmentPoseCondition>(poseConditionId);
+            EnvironmentPoseCondition condition = environmentManager.GetEntityObject<EnvironmentPoseCondition>(environmentId, poseConditionId);
 
             if (shouldBeValidated)
                 condition.Validate();

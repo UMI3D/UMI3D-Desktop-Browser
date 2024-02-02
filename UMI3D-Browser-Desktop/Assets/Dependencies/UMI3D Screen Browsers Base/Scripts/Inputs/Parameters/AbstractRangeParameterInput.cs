@@ -24,7 +24,7 @@ namespace umi3d.baseBrowser.parameters
     where ParameterType : common.interaction.AbstractRangeParameterDto<ValueType>
     {
 
-        public override void Associate(common.interaction.AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
+        public override void Associate(ulong environmentId, common.interaction.AbstractInteractionDto interaction, ulong toolId, ulong hoveredObjectId)
         {
             if (currentInteraction != null)
                 throw new System.Exception("This input is already associated to another interaction (" + currentInteraction + ")");

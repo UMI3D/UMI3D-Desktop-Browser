@@ -89,9 +89,15 @@ namespace umi3d.common
         public const uint LineStartWidth = 3012;
         public const uint LineEndWidth = 3013;
 
+        public const uint DistantEnvironmentReliable = 3014;
+        public const uint DistantEnvironmentUnreliable = 3015;
+        public const uint DistantEnvironmentResourceUrl = 3017;
+        public const uint DistantEnvironmentUseDto = 3018;
+
         public const uint IsTraversable = 3020;
         public const uint IsPartOfNavmesh = 3021;
 
+        public const uint BlendShapeValues = 3030;
         #endregion
 
         #region KHR_light
@@ -203,7 +209,7 @@ namespace umi3d.common
         public const uint AnimationEmote = 11007;
 
         public const uint Poses = 11008;
-        public const uint AllPoseOverriderContainers = 11009;
+        public const uint ValidationEnvironmentPoseCondition = 11009;
         #endregion
 
         #region notification

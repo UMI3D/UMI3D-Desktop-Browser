@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common.userCapture.pose
+namespace umi3d.common.userCapture.pose.editor
 {
     /// <summary>
-    /// <inheritdoc/><br/>
-    /// A condition to check the scale of the user
+    /// Global parameters for pose editor
     /// </summary>
-    [System.Serializable]
-    public class UserScaleConditionDto : AbstractPoseConditionDto
+    public static class PoseEditorParameters
     {
-        public Vector3Dto Scale { get; set; }
+        public static readonly string SKELETON_PREFAB_PATH = @"Assets/UMI3D SDK/Common/UserCapture/Editor/PoseSetter/SkeletonForPoseSetter.prefab";
+        public static readonly string POSE_FORMAT_EXTENSION = "umi3dpose";
+
+        public const string DEFAULT_POSE_NAME = "NewPose";
+        public const string DEFAULT_UNSAVED_POSE_NAME = "Unsaved Pose";
     }
 }
-

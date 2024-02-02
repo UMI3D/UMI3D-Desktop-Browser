@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-namespace umi3d.common.userCapture.pose
-{
-    [System.Serializable]
-    public class RangeConditionDto : AbstractPoseConditionDto
-    {
-        public AbstractPoseConditionDto ConditionA { get; set; }
 
-        public AbstractPoseConditionDto ConditionB { get; set; }
+#if UNITY_EDITOR
+namespace umi3d.common.userCapture.pose.editor
+{
+    public enum HandClosureGroup : int
+    {
+        THUMB,
+        INDEX,
+        MEDIAL_GROUP
     }
 }
+#endif
