@@ -75,7 +75,7 @@ namespace BrowserDesktop
         {
             if (form == null) callback.Invoke(null);
 
-            FormAnswerDto answer = new FormAnswerDto()
+            FormAnswerDto answer = new ()
             {
                 boneType = 0,
                 hoveredObjectId = 0,
@@ -94,14 +94,14 @@ namespace BrowserDesktop
 
                 paramName = param.name.ToLower().Trim();
 
-                if (formDataDictionary.ContainsKey(paramName))
+                if (this.formDataDictionary.ContainsKey(paramName))
                 {
                     try
                     {
                         switch (param)
                         {
                             case StringParameterDto:
-                                paramDto.parameter = formDataDictionary[paramName];
+                                paramDto.parameter = this.formDataDictionary[paramName];
                                 break;
                             case EnumParameterDto<string> enumStr:
                                 paramDto.parameter = enumStr.possibleValues[UnityEngine.Random.Range(0, enumStr.possibleValues.Count)];
@@ -133,7 +133,7 @@ namespace BrowserDesktop
 
         private void InitWithArs(string[] args)
         {
-            formDataDictionary.Clear();
+            this.formDataDictionary.Clear();
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -152,7 +152,7 @@ namespace BrowserDesktop
 
                     if (arg.Length == 2)
                     {
-                        formDataDictionary[arg[0].ToLower().Trim()] = arg[1];
+                        this.formDataDictionary[arg[0].ToLower().Trim()] = arg[1];
                         Debug.Log("Add " + arg[0] + " -> " + arg[1]);
                     }
                 }
